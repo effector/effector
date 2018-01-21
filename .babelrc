@@ -1,0 +1,25 @@
+{
+  "env": {
+    "test": {
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+    "commonjs": {
+      "plugins": [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+  },
+  "plugins": [
+    "@babel/plugin-transform-flow-strip-types",
+    ["@babel/plugin-proposal-object-rest-spread", {
+      "useBuiltIns": true
+    }],
+    "@babel/plugin-proposal-decorators",
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    ["@babel/plugin-transform-block-scoping", {
+      "throwIfClosureRequired": true
+    }]
+  ]
+}

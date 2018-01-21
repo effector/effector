@@ -1,0 +1,168 @@
+parser: babel-eslint
+parserOptions:
+  ecmaVersion: 8
+  ecmaFeatures:
+    experimentalObjectRestSpread: true
+extends:
+  - 'eslint:recommended'
+  - 'plugin:flowtype/recommended'
+plugins:
+  - babel
+  - promise
+  - flowtype
+  - jest
+  - jsdoc
+settings:
+  flowtype:
+    onlyFilesWithFlowAnnotation: true
+  import/resolver:
+    babel-module: {}
+globals:
+  __DEV__: true
+  preval: true
+env:
+  node: true
+  browser: false
+  worker: true
+  es6: true
+  jest: true
+  jasmine: true
+rules:
+  flowtype/no-weak-types: 'off'
+  flowtype/generic-spacing: 'off'
+  flowtype/space-after-type-colon: 'off'
+  no-console: 'off'
+  no-cond-assign: warn
+  no-unused-vars: warn
+  prefer-template: warn
+  no-nested-ternary: warn
+  no-unneeded-ternary: warn
+  no-underscore-dangle: warn
+  prefer-const: warn
+  no-unused-labels: 'off'
+  no-extra-bind: error
+  no-case-declarations: error
+  no-useless-call: error
+  prefer-arrow-callback:
+    - error
+    - allowNamedFunctions: true
+  object-shorthand:
+    - error
+    - always
+    - avoidQuotes: true
+      ignoreConstructors: true
+      avoidExplicitReturnArrows: true
+  no-extra-parens: 'off'
+  multiline-ternary: 'off'
+  arrow-body-style:
+    - error
+    - as-needed
+  no-var: error
+  no-duplicate-imports: 'off'
+  quotes:
+    - error
+    - single
+    - allowTemplateLiterals: true
+      avoidEscape: true
+  max-len:
+    - error
+    - code: 120
+      tabWidth: 2
+      comments: 220
+  key-spacing:
+    - warn
+    - beforeColon: false
+      afterColon: true
+      mode: strict
+  comma-spacing:
+    - error
+    - before: false
+      after: true
+  block-spacing:
+    - error
+    - always
+  object-curly-spacing:
+    - warn
+    - never
+    - arraysInObjects: false
+      objectsInObjects: true
+  semi-spacing:
+    - error
+    - before: false
+      after: true
+  indent:
+    - 1
+    - 2
+    - VariableDeclarator:
+        var: 2
+        let: 2
+        const: 3
+      FunctionDeclaration:
+        parameters: first
+      FunctionExpression:
+        parameters: first
+      MemberExpression: 1
+      SwitchCase: 1
+      CallExpression:
+        arguments: first
+      ArrayExpression: 1
+      ObjectExpression: first
+  operator-linebreak:
+    - warn
+    - after
+    - overrides:
+        '?': before
+        ':': before
+        '||': before
+        '&&': before
+  newline-per-chained-call:
+    - error
+    - ignoreChainWithDepth: 2
+  keyword-spacing:
+    - error
+    - before: true
+  space-unary-ops:
+    - error
+    - words: true
+      nonwords: false
+  no-whitespace-before-property: error
+  generator-star-spacing:
+    - error
+    - before: false
+      after: true
+  arrow-spacing:
+    - error
+    - before: true
+      after: true
+  space-before-function-paren:
+    - error
+    - never
+  rest-spread-spacing:
+    - error
+    - never
+  no-alert: error
+  no-bitwise: 0
+  no-caller: error
+  no-global-assign: error
+  no-eval: error
+  no-implied-eval: error
+  no-proto: error
+  no-iterator: error
+  no-lone-blocks: error
+  no-self-compare: error
+  no-self-assign:
+    - error
+    - props: true
+  no-invalid-regexp:
+    - error
+    - allowConstructorFlags:
+        - u
+        - 'y'
+  no-with: error
+  no-new-func: error
+  prefer-rest-params: error
+  prefer-spread: error
+  no-extra-semi: error
+  semi:
+    - error
+    - never

@@ -1,0 +1,17 @@
+{
+	"compilerOptions": {
+		"target": "es2015",
+    "module": "es6",
+    "experimentalDecorators": true,
+		"allowSyntheticDefaultImports": true,
+    "baseUrl": "./src",
+    "skipLibCheck": true,
+    "noLib": true,
+    "skipDefaultLibCheck": true
+  },
+	"exclude": [
+    "node_modules",
+    "lib",
+    "es"
+	]
+}

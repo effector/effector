@@ -1,0 +1,25 @@
+{
+  "collectCoverage": true,
+  "automock": false,
+  "browser": false,
+  "coverageDirectory": "coverage",
+  "coverageReporters": [
+    "lcov",
+    "html"
+  ],
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+  },
+  "roots": [
+    "<rootDir>/src/"
+  ],
+  "testMatch": [
+    "<rootDir>/src/**/__test__/**/*.test.js"
+  ],
+  "testPathIgnorePatterns": [
+    "<rootDir>/lib/",
+    "<rootDir>/es/",
+    "<rootDir>/node_modules/"
+  ]
+}
