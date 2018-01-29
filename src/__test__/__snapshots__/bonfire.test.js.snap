@@ -1,0 +1,37 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`update should do immutable update 1`] = `
+Object {
+  "bonfire": Bonfire {
+    "id": 1,
+    "seq": 1,
+    "value": Object {
+      "field": 1,
+    },
+  },
+  "parent": Object {
+    "another": "foo",
+    "target": Object {
+      "field": 1,
+    },
+  },
+}
+`;
+
+exports[`update should handle the same and undefined return value 1`] = `
+Object {
+  "bonfire": Bonfire {
+    "id": 1,
+    "seq": 1,
+    "value": Object {
+      "field": 0,
+    },
+  },
+  "parent": Object {
+    "another": "foo",
+    "target": Object {
+      "field": 0,
+    },
+  },
+}
+`;
