@@ -4,19 +4,14 @@ parserOptions:
   ecmaFeatures:
     experimentalObjectRestSpread: true
 extends:
-  - 'eslint:recommended'
   - 'plugin:flowtype/recommended'
 plugins:
   - babel
-  - promise
   - flowtype
   - jest
-  - jsdoc
 settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
-  import/resolver:
-    babel-module: {}
 globals:
   __DEV__: true
   preval: true

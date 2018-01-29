@@ -6,6 +6,7 @@ all=warn
 untyped-type-import=error
 
 [options]
+server.max_workers=1
 include_warnings=true
 max_header_tokens=5
 esproposal.class_instance_fields=enable
@@ -32,21 +33,21 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 
 [ignore]
 <PROJECT_ROOT>/src_alt/*
+<PROJECT_ROOT>/scripts/fastflow/primitives/__test__/__snapshots__/*
 <PROJECT_ROOT>/lib/*
 <PROJECT_ROOT>/es/*
-<PROJECT_ROOT>/node_modules/jss/*
-<PROJECT_ROOT>/node_modules/most/*
-<PROJECT_ROOT>/node_modules/fbjs/*
+<PROJECT_ROOT>/coverage/*
+<PROJECT_ROOT>/.vscode/*
 💩 🙈
 💩 ignored total:
-💩
+💩 
 💩 ignored typings:
-💩 eventemitter2, immutable, jest, most, redux, symbol-observable
+💩 eventemitter2, fs-extra, immutable, jest, most, most-subject, redux, symbol-observable
 💩 active:
-💩 fp-ts, most-subject, redux-act
+💩 fp-ts, redux-act
 💩 run again:
 💩 IGNORED="" node scripts/flow-ignore
-💩
+💩 
 <PROJECT_ROOT>/node_modules/.bin/*
 <PROJECT_ROOT>/node_modules/.yarn-integrity/*
 <PROJECT_ROOT>/node_modules/abab/*
@@ -412,6 +413,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/moment/*
 <PROJECT_ROOT>/node_modules/moment-timezone/*
 <PROJECT_ROOT>/node_modules/most/*
+<PROJECT_ROOT>/node_modules/most-subject/*
 <PROJECT_ROOT>/node_modules/ms/*
 <PROJECT_ROOT>/node_modules/mute-stream/*
 <PROJECT_ROOT>/node_modules/nan/*
