@@ -5,9 +5,12 @@
     "experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
-    "skipLibCheck": true,
+    "skipLibCheck": false,
     "noLib": true,
-    "skipDefaultLibCheck": true
+    "skipDefaultLibCheck": true,
+    "paths": {
+      "most": "./flow/most"
+    }
   },
 	"exclude": [
     "node_modules",
