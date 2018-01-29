@@ -1,6 +1,6 @@
 //@flow
 
-import {init, update} from '../bonfire'
+import {init, update} from '../reflector'
 
 test('init', () => {
   expect(init(
@@ -19,7 +19,7 @@ describe('update', () => {
     another: 'foo',
   }
 
-  const bonfire = init(
+  const reflector = init(
     {field: 0},
     ({target}) => target,
     (parent, target) => ({
@@ -31,20 +31,20 @@ describe('update', () => {
     expect(update(
       state,
       (parent, {field}) => ({field: field+1}),
-      bonfire
+      reflector
     )).toMatchSnapshot()
   })
   test('should handle the same and undefined return value', () => {
     expect(update(
       state,
       () => {},
-      bonfire
+      reflector
     )).toMatchSnapshot()
 
     expect(update(
       state,
       (parent, value) => value,
-      bonfire
+      reflector
     ).parent).toBe(state)
   })
 })

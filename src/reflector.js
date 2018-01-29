@@ -3,7 +3,7 @@
 import {type ID, createIDType} from './id'
 
 const nextID = createIDType()
-export class Bonfire<Field, State> {
+export class Reflector<Field, State> {
   id: ID
   seq: number
   value: $ReadOnly<Field>
@@ -16,8 +16,8 @@ export function init<Field, State>(
   defaultValue: Field,
   getter: (parent: State) => Field,
   setter: (parent: State, value: Field) => State
-): Bonfire<Field, State> {
-  const result = new Bonfire
+): Reflector<Field, State> {
+  const result = new Reflector
   result.id = nextID()
   result.seq = 0
   result.value = defaultValue
@@ -34,29 +34,29 @@ export function update<Field, State>(
     // ( (parent: State, value: Field) => Field )
     (parent: State, value: Field) => ( $NonMaybeType<Field> | void)
   ),
-  bonfire: Bonfire<Field, State>
+  reflector: Reflector<Field, State>
 ): {
-  bonfire: Bonfire<Field, State>,
+  reflector: Reflector<Field, State>,
   parent: State,
 } {
-  const value = bonfire.getter(parent)
+  const value = reflector.getter(parent)
   const nextValueRaw = updater(parent, value)
   let nextValue: $NonMaybeType<Field>
   if (nextValueRaw === undefined)
-    nextValue = bonfire.defaultValue
+    nextValue = reflector.defaultValue
   else
     nextValue = nextValueRaw
   if (nextValue === value) return {
-    bonfire,
+    reflector,
     parent,
   }
-  const nextState = bonfire.setter(parent, nextValue)
-  const result = new Bonfire
-  result.id = bonfire.id
-  result.seq = bonfire.seq + 1
+  const nextState = reflector.setter(parent, nextValue)
+  const result = new Reflector
+  result.id = reflector.id
+  result.seq = reflector.seq + 1
   result.value = nextValue
   return {
-    bonfire: result,
+    reflector: result,
     parent: nextState,
   }
 }
