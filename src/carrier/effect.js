@@ -142,34 +142,3 @@ export function effect<Params, Done, Fail, State>(
   Object.setPrototypeOf(actionBind, msg)
   return actionBind
 }
-
-// export function effect<Params, Done, Fail, State>(
-//   name: string,
-//   dispatch: Function,
-// ): Effect<Params, Done, Fail, State> {
-//   // const
-//   const msg = new Effect(
-//     name,
-//     (typeId, type, payload: Params) => {
-//       ''
-//       return runEffect(typeId, type, payload, dispatch, msg)
-//       // init.payload = payload
-//       // init.type = type
-//       // init.typeId = typeId
-//       // init.dispatch = dispatch
-//       // return init
-//     }
-//   )
-//   function message(payload: Params): Carrier<Params> {
-//     msg.used += 1
-//     return msg.actionConstructor(
-//       msg.typeId,
-//       msg.actionType,
-//       payload,
-//       dispatch,
-//     )
-//   }
-//   const actionBind: any = message.bind(msg)
-//   Object.setPrototypeOf(actionBind, msg)
-//   return actionBind
-// }
