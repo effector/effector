@@ -3,7 +3,7 @@
 import {async as subject, type Subject} from 'most-subject'
 
 import {either} from 'fp-ts'
-import {Message} from './message'
+import {Message, message} from './message'
 import {Carrier, carrier} from './carrier'
 import {Defer} from '../defer'
 
@@ -28,16 +28,19 @@ export class CarrierEffect<
   seq: ID = nextSEQ()
   defer: Defer<DoneType<Params, Done>, FailType<Params, Fail>> = new Defer
   done(): Promise<Done> {
+    this.dispatch(this)
     return this.defer
       .done
       .then(({result}) => result)
   }
   fail(): Promise<Fail> {
+    this.dispatch(this)
     return this.defer
       .fail
       .then(({error}) => error)
   }
   promise(): Promise<Done> {
+    this.dispatch(this)
     return Promise.race([
       this.done(),
       this.fail().then(err => Promise.reject(err))
@@ -52,10 +55,10 @@ export class Effect<
   State = any
 > extends Message<
   Params,
-  Params,
+  CarrierEffect<Params, Done, Fail>,
   State
 > {
-  // $call: (params: Params) => CarrierEffect<Params, Done, Fail>
+  $call: (params: Params) => CarrierEffect<Params, Done, Fail>
   done: Message<DoneType<Params, Done>, Carrier<DoneType<Params, Done>>, State>
   fail: Message<FailType<Params, Fail>, Carrier<FailType<Params, Fail>>, State>
   thunk: (params: Params) => Promise<Done> = never
@@ -65,13 +68,14 @@ export class Effect<
   }
 }
 
-async function never(props: any): Promise<any> {
+function never(props: any): Promise<any> {
   console.warn(`
 
 
   Running an effect without implementation
 
 `, props)
+  return new Promise(() => {})
 }
 
 function runEffect<Params, Done, Fail, State>(
@@ -80,6 +84,8 @@ function runEffect<Params, Done, Fail, State>(
   effect: Effect<Params, Done, Fail, State>
 ): CarrierEffect<Params, Done, Fail> {
   const init: CarrierEffect<Params, Done, Fail> = new CarrierEffect
+  init.defer.done.then(dispatch)
+  init.defer.fail.then(dispatch)
   init.payload = payload
   init.type = effect.actionType
   init.typeId = effect.typeId
@@ -129,6 +135,8 @@ export function effect<Params, Done, Fail, State>(
     name,
     (typeId, type, payload, dispatch) => runEffect(payload, dispatch, msg)
   )
+  msg.done = message(`${name} done`, dispatch)
+  msg.fail = message(`${name} fail`, dispatch)
   function messageCarrier(payload: Params) {
     msg.used += 1
     return msg.actionConstructor(

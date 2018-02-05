@@ -62,3 +62,32 @@ test('create store', () => {
   expect(event1).toBeDefined()
   const act = event1({foo: 'bar'})
 })
+
+function cleanActionLog([unused, ...actionLog]) {
+  return actionLog.map(([x]) => x)
+}
+
+test('execution correctness', async() => {
+  const fn = jest.fn()
+  const store = getStore('ok', (state, pl) => (fn(pl), state))
+  const send = store.dispatch
+  const message = store.effect('eff1')
+  const act1 = message({foo: 'bar', meta: 'first'})
+  expect(cleanActionLog(fn.mock.calls)).toHaveLength(0)
+  expect(act1).toBeDefined()
+  const prom = act1.done()
+  await act1.dispatched()
+  expect(cleanActionLog(fn.mock.calls)).toHaveLength(1)
+  send(act1)
+  expect(prom instanceof Promise).toBeTruthy()
+  expect(cleanActionLog(fn.mock.calls)).toHaveLength(1)
+  send(message({foo: 'bar', meta: 'first'}))
+  send(message({foo: 'bar', meta: 'second'}))
+  send(message({foo: 'bar', meta: 'third'}))
+  // await delay({}, 2e3)
+  // const actionLog = cleanActionLog(fn.mock.calls)
+  // expect(actionLog).toHaveLength(6)
+  // logs: {
+  //   console.log(actionLog)
+  // }
+})
