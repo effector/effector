@@ -60,5 +60,5 @@ export function getStore<State>(
   storeContext.dispatch = store.dispatch
   storeContext.getState = store.getState
 
-  return store
+  return storeContext
 }

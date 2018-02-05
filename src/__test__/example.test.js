@@ -5,6 +5,8 @@ import {createStore, applyMiddleware, combineReducers, type Middleware, type Sto
 
 import {actionFabric, type Action} from '../action'
 
+import {getStore} from '..'
+
 test('example', () => {
   type PayloadA = {
     result: 'foo',
@@ -51,4 +53,12 @@ test('action should be thennable', async() => {
   )
   const result: 'foo' = await action.push()
   expect(result).toBe('foo')
+})
+
+test('create store', () => {
+  const store = getStore('ok', (state, pl) => state)
+  expect(store).toBeDefined()
+  const event1 = store.event('event1')
+  expect(event1).toBeDefined()
+  const act = event1({foo: 'bar'})
 })

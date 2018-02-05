@@ -23,7 +23,7 @@ export type EpicF<P, State, R> = (
 
 
 export class Message<P, C, State = any> {
-  // $call: P => Carrier.Carrier<C>
+  $call: P => C
   id: ID = nextID()
   typeId: number
   used: number = 0
