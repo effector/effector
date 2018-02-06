@@ -24,3 +24,7 @@ src/**/*.draft.js
 test/storage.json
 flow-typed/npm/**
 **/.happypack/**
+
+
+src_unused
+src_alt
