@@ -1,8 +1,7 @@
 //@flow
 
 // import observable$$ from 'symbol-observable'
-import type {Dispatch} from 'redux'
-import type {Subscriber, Subscription, Stream} from 'most'
+import {of, fromPromise, type Stream} from 'most'
 import {type Subject, async as subject} from 'most-subject'
 
 import type {Named, Typed, WithStateLink, Emitter} from '../index.h'
@@ -113,6 +112,20 @@ implements Named, Typed, WithStateLink<State>, Emitter {
   // [observable$$]() {
   //   return this
   // }
+  watch<R>(handler: (data: P, state: State) => R): Stream<R> {
+    return this.epic(
+      (data$) => data$
+        .map(
+          ({data, state}) => {
+            const result = handler(data, state)
+            if (result instanceof Promise)
+              return fromPromise(result)
+            return of(result)
+          }
+        )
+        .join()
+    )
+  }
   epic: <R>(
     epic: EpicF<P, State, R>
   ) => Stream<R>

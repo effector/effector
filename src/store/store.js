@@ -16,9 +16,9 @@ const nextID = createIDType()
 export class Store<State>
 implements Named, WithStateLink<State>, Dispatcher {
   uniq = new UniqGuard
-  scopeName: string[]
+  scopeName: string
   * scope(): Iterable<string> {
-    yield* this.scopeName
+    yield this.scopeName
   }
   id: ID = nextID()
   seq: SEQ = createSeq()
@@ -32,10 +32,15 @@ implements Named, WithStateLink<State>, Dispatcher {
   getState(): Stream<State> {
     return this.state$
   }
+  stateGetter: () => State
+  reduxSubscribe: (handler: (action: any) => void) => any
   dispatch: Function
   dispatch$: Subject<any> = (() => {
     const subj = subject()
-    subj.observe((e) => this.dispatch(e))
+    subj.observe((e) => {
+      if (isAction(e))
+        this.dispatch(e)
+    })
     return subj
   })()
   mergeEvents(emitter: Emitter) {
@@ -55,9 +60,16 @@ implements Named, WithStateLink<State>, Dispatcher {
       description,
       this
     )
-    result.scope = () => this.scope()
     return result
   }
   // epic
 }
 
+function isAction(value: mixed): boolean /*::%checks*/ {
+  return (
+    typeof value === 'object'
+    && value != null
+    && typeof value.type === 'string'
+    && value.type.length > 0
+  )
+}

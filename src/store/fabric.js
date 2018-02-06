@@ -4,7 +4,7 @@ import type {Stream} from 'most'
 import type {Store} from './store'
 import {type Message, type EpicF, message} from '../carrier/message'
 import {Carrier} from '../carrier/carrier'
-import {type Effect, type CarrierEffect, effect} from '../carrier/effect'
+import {Effect, type CarrierEffect, effect} from '../carrier/effect'
 
 function reassign<P, State>(
   msg: Message<P, Carrier<P>, State>
@@ -25,8 +25,9 @@ function reassignEffect<Params, Done, Fail, State>(
     return msg.run(payload)
   }
   const actionBind: any = messageCarrier.bind(msg)
-  Object.setPrototypeOf(actionBind, msg)
+  Object.setPrototypeOf(actionBind, Effect.prototype)
   Object.assign(actionBind, msg)
+  actionBind.use = msg.use.bind(msg)
   return actionBind
 }
 

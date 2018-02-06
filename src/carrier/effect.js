@@ -87,7 +87,7 @@ function runEffect<Params, Done, Fail, State>(
   init.defer.done.then(dispatch)
   init.defer.fail.then(dispatch)
   init.payload = payload
-  init.type = effect.actionType
+  init.type = effect.getType()
   init.typeId = effect.typeId
   init.dispatch = dispatch
   init.dispatched().then(
