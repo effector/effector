@@ -97,7 +97,7 @@ function runEffect<Params, Done, Fail, State>(
         done.used += 1
         const result = done.actionConstructor(
           done.typeId,
-          done.actionType,
+          done.getType(),
           {params: payload, result: value},
           dispatch
         )
@@ -111,7 +111,7 @@ function runEffect<Params, Done, Fail, State>(
         fail.used += 1
         const result = fail.actionConstructor(
           fail.typeId,
-          fail.actionType,
+          fail.getType(),
           {params: payload, error: value},
           dispatch
         )
@@ -128,25 +128,11 @@ function runEffect<Params, Done, Fail, State>(
 declare function identity<T>(x: T): T
 
 export function effect<Params, Done, Fail, State>(
-  name: string,
-  dispatch: typeof identity,
+  name: string
 ): Effect<Params, Done, Fail, State> {
   const msg = new Effect(
     name,
     (typeId, type, payload, dispatch) => runEffect(payload, dispatch, msg)
   )
-  msg.done = message(`${name} done`, dispatch)
-  msg.fail = message(`${name} fail`, dispatch)
-  function messageCarrier(payload: Params) {
-    msg.used += 1
-    return msg.actionConstructor(
-      msg.typeId,
-      msg.actionType,
-      payload,
-      dispatch
-    )
-  }
-  const actionBind: any = messageCarrier.bind(msg)
-  Object.setPrototypeOf(actionBind, msg)
-  return actionBind
+  return msg
 }

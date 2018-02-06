@@ -50,7 +50,9 @@ export function getStore<State>(
   reducer: Reducer<State>,
 ) {
   const storeContext: Store<State> = new Store
-  storeContext.scope = [description]
+  storeContext.scopeName = [description]
+  //$off
+  // storeContext.scope = storeContext.scope.bind(storeContext)
   const store = createStore(
     reducer,
     applyMiddleware(

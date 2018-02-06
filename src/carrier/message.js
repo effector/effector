@@ -3,7 +3,9 @@
 // import observable$$ from 'symbol-observable'
 import type {Dispatch} from 'redux'
 import type {Subscriber, Subscription, Stream} from 'most'
-import {from} from 'most'
+import {type Subject, async as subject} from 'most-subject'
+
+import type {Named, Typed, WithStateLink, Emitter} from '../index.h'
 
 import {type ID, createIDType} from '../id'
 const nextID = createIDType()
@@ -22,26 +24,47 @@ export type EpicF<P, State, R> = (
 ) => Stream<R>
 
 
-export class Message<P, C, State = any> {
+export class Message<P, C, State = any>
+implements Named, Typed, WithStateLink<State>, Emitter {
   $call: P => C
   id: ID = nextID()
   typeId: number
   used: number = 0
   actionType: string
+  scope: () => Iterable<string>
+  getState: () => Stream<State>
   actionConstructor: (
     typeId: number,
     type: string,
     payload: P,
     dispatch: Function
   ) => C
+  run(payload: P): C {
+    this.used += 1
+    return this.actionConstructor(
+      this.typeId,
+      this.getType(),
+      payload,
+      e => this.emit(e)
+    )
+  }
   getType() {
-    return this.actionType
+    // if (!this.scope) {
+    //   console.log(this)
+    //   console.trace()
+    //   throw new Error('W T F')
+    // }
+    return [...this.scope(), this.actionType].join('/')
   }
-  toString() {
-    return this.getType()
-  }
-  inspect() {
-    return `Message #${this.typeId} { type: ${this.actionType}, used: ${this.used} }`
+  // toString() {
+  //   return this.getType()
+  // }
+  // inspect() {
+  //   return `Message #${this.typeId} { type: ${this.actionType}, used: ${this.used} }`
+  // }
+  event$: Subject<any> // = subject()
+  emit(value: any) {
+    this.event$.next(value)
   }
   constructor(
     description: string,
@@ -75,12 +98,7 @@ export class Message<P, C, State = any> {
    * @memberof Message
    */
   apply(that: any, args: [P]): C {
-    return this.actionConstructor(
-      this.typeId,
-      this.actionType,
-      args[0],
-      () => {}
-    )
+    return this.run(args[0])
   }
   // subscribe(subscriber: Subscriber<P>): Subscription<P> {
   //   const {actionDestructor, typeId} = this
@@ -98,27 +116,19 @@ export class Message<P, C, State = any> {
   epic: <R>(
     epic: EpicF<P, State, R>
   ) => Stream<R>
+  epic$: Stream<$Exact<{
+    state: State,
+    data: C,
+  }>>
 }
 declare function ident<T>(x: T): T
 export function message<P>(
   name: string,
-  dispatch: typeof ident,
 ): Message<P, Carrier.Carrier<P>> {
   const msg = new Message(
     name,
     Carrier.carrier
   )
-  function messageCarrier(payload: P): Carrier.Carrier<P> {
-    msg.used += 1
-    return msg.actionConstructor(
-      msg.typeId,
-      msg.actionType,
-      payload,
-      dispatch
-    )
-  }
-  const actionBind: any = messageCarrier.bind(msg)
-  Object.setPrototypeOf(actionBind, msg)
-  return actionBind
+  return msg
 }
 
