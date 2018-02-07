@@ -5,6 +5,51 @@
 
 import {getStore} from '..'
 
+test.skip('func instance', () => {
+  interface IData {
+    $call: () => string,
+    tag: string,
+    fn(): string,
+  }
+  class CData implements IData {
+    $call: () => string
+    tag: string
+    fn(): string {
+      return this.tag
+    }
+    constructor(tag: string) {
+      this.tag = tag
+    }
+  }
+  function inst(): string {
+    console.log(this)
+    return this.fn()
+  }
+  // Object.setPrototypeOf(inst, CData.prototype)
+  // inst.prototype.fn = function() {
+  //   return this.cdata.fn()
+  // }
+  function Data(tag: string): IData {
+    const src = new CData(tag)
+    const subInst = inst.bind(src)
+    const reinst = Object.setPrototypeOf(subInst, src)
+    Object.assign(reinst, src)
+    return reinst
+  }
+  const data = Data('test')
+  // console.log(data.__proto__)
+  expect(data()).toBe('test')
+  data.tag = 'not test'
+  expect(data.fn()).not.toBe('test')
+  expect(data.tag).not.toBe('test')
+
+  const nextData = Data('xxx')
+  expect(data()).toBe('test')
+  expect(nextData()).toBe('xxx')
+  // console.log(data.__proto__)
+  // console.log(data)
+})
+
 test('create store', () => {
   const store = getStore('ok', (state, pl) => state)
   console.log(store)
@@ -31,7 +76,7 @@ describe('getType', () => {
       .observe(fnEvent)
     const effect1 = store.effect('effect1')
     const fromUse = effect1.use((foo: 'foo') => Promise.resolve(foo))
-    expect(fromUse).not.toBe(effect1)
+    expect(fromUse).toBe(effect1)
     console.log(fromUse)
     console.log(effect1)
     expect(effect1.getType()).toBe('getTypeStore/effect1')
@@ -87,11 +132,71 @@ test('execution correctness', async() => {
   send(message({foo: 'bar', meta: 'first'}))
   send(message({foo: 'bar', meta: 'second'}))
   await send(message({foo: 'bar', meta: 'third'})).dispatched()
-  expect(fnEpic.mock.calls).toHaveLength(3)
+  expect(fnEpic).toHaveBeenCalledTimes(3)
   // await delay({}, 2e3)
   // const actionLog = cleanActionLog(fn.mock.calls)
   // expect(actionLog).toHaveLength(6)
   // logs: {
   //   console.log(actionLog)
   // }
+})
+
+test('event.watch', async() => {
+  const fn = jest.fn()
+  const fnDeb = jest.fn()
+  const defStore = {foo: 'bar'}
+  const store = getStore('watchStore', (state = defStore) => state)
+  const event = store.event('watched')
+  const nextEvent = store.event('next')
+  event.watch(async(data) => {
+    fnDeb(data)
+    await new Promise(rs => setTimeout(rs, 300))
+    const result = nextEvent(data)
+    return result
+  })
+  nextEvent.watch((data, store) => fn(data, store))
+
+  store.dispatch(event('run'))
+
+  // await event('run').dispatched()
+  await new Promise(rs => setTimeout(rs, 500))
+  expect(fnDeb).toHaveBeenCalledTimes(1)
+  expect(fn).toHaveBeenLastCalledWith('run', defStore)
+
+  event.watch(() => Promise.reject())
+  await store.dispatch(event('run')).dispatched()
+})
+
+test('await event().send()', async() => {
+  const fn = jest.fn()
+  const fnPl = jest.fn()
+  const defStore = {foo: 'bar'}
+  const store = getStore('event().send()', (state = defStore, pl) => (fnPl(pl), state))
+
+  const event = store.event('watched')
+  event.watch(e => (console.log(e), fn(e)))
+
+  event('a')
+  const act = event('b')
+  act.send()
+  const payload = await act.send()
+  expect(payload).toBe('b')
+  expect(fn).toHaveBeenCalledTimes(1)
+  // expect(cleanActionLog(fnPl.mock.calls)).toEqual(['b'])
+})
+
+test('call watch once', async() => {
+  const fnWatch = jest.fn()
+  const fnEpic = jest.fn()
+  const fnPl = jest.fn()
+  const defStore = {foo: 'bar'}
+  const store = getStore('once', (state = defStore, pl) => (fnPl(pl), state))
+  const event = store.event('probe')
+  event.watch(fnWatch)
+  event.epic(data$ => data$.map(fnEpic))
+  await event('a').send()
+  await event('b').send()
+  expect(fnPl).toHaveBeenCalledTimes(3)
+  expect(fnWatch).toHaveBeenCalledTimes(2)
+  expect(fnEpic).toHaveBeenCalledTimes(2)
 })

@@ -34,6 +34,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 
 [ignore]
 <PROJECT_ROOT>/src_alt/*
+<PROJECT_ROOT>/src_unused/*
 <PROJECT_ROOT>/scripts/fastflow/primitives/__test__/__snapshots__/*
 <PROJECT_ROOT>/lib/*
 <PROJECT_ROOT>/es/*

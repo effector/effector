@@ -24,3 +24,13 @@ export interface Emitter {
   event$: Subject<any>,
   emit(next: any): void,
 }
+
+export type DoneType<Params = void, Done = void> = $Exact<{
+  params: Params,
+  result: Done,
+}>
+
+export type FailType<Params = void, Fail = Error> = $Exact<{
+  params: Params,
+  error: Fail,
+}>

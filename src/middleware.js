@@ -60,6 +60,7 @@ export function getStore<State>(
   storeContext.dispatch = store.dispatch
   storeContext.stateGetter = store.getState
   storeContext.reduxSubscribe = store.subscribe
+  // store.subscribe(() => { storeContext.state$.next(store.getState()) })
   return hideProperties(storeContext)
 }
 

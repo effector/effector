@@ -23,6 +23,10 @@ export class Carrier<E = Obscure> {
       payload: this.payload
     }
   }
+  send(): Promise<E> {
+    this.dispatch(this)
+    return this.dispatched()
+  }
 }
 
 function id<T>(x): T {
@@ -33,7 +37,7 @@ export function carrier<E>(
   typeId: number,
   type: string,
   payload: E,
-  dispatch: Function = id
+  dispatch: Function
 ): Carrier<E> {
   const result = new Carrier
   result.payload = payload

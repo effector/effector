@@ -2,41 +2,42 @@
 import type {Stream} from 'most'
 
 import type {Store} from './store'
-import {type Message, type EpicF, message} from '../carrier/message'
-import {Carrier} from '../carrier/carrier'
-import {Effect, type CarrierEffect, effect} from '../carrier/effect'
+import {Event, type EpicF} from '../carrier/event'
+import {Carrier, carrier} from '../carrier/carrier'
+import {Effect} from '../carrier/effect'
+import type {CarrierEffect} from '../carrier/carrier-effect'
 
 function reassign<P, State>(
-  msg: Message<P, Carrier<P>, State>
-): Message<P, Carrier<P>, State> {
+  msg: Event<P, Carrier<P>, State>
+): Event<P, Carrier<P>, State> {
   function messageCarrier(payload: P): Carrier<P> {
-    return msg.run(payload)
+    return this.run(payload)
   }
   const actionBind: any = messageCarrier.bind(msg)
   Object.setPrototypeOf(actionBind, msg)
   Object.assign(actionBind, msg)
-  return actionBind
+  return msg
 }
 
 function reassignEffect<Params, Done, Fail, State>(
   msg: Effect<Params, Done, Fail, State>
 ): Effect<Params, Done, Fail, State> {
-  function messageCarrier(payload: Params) {
-    return msg.run(payload)
+  function effectCarrier(payload: Params) {
+    return this.run(payload)
   }
-  const actionBind: any = messageCarrier.bind(msg)
+  const actionBind: any = effectCarrier.bind(msg)
   Object.setPrototypeOf(actionBind, Effect.prototype)
   Object.assign(actionBind, msg)
-  actionBind.use = msg.use.bind(msg)
-  return actionBind
+  // actionBind.use = msg.use.bind(msg)
+  return msg
 }
 
 export function eventFabric<P, State>(
   description: string,
   store: Store<State>
-): Message<P, Carrier<P>, State> {
+): Event<P, Carrier<P>, State> {
   const {update$} = store
-  const result: Message<P, Carrier<P>, State> = message(description)
+  const result: Event<P, Carrier<P>, State> = new Event(description, carrier)
   result.scope = (() => store.scope())
   const epic$: Stream<$Exact<{
     state: State,
@@ -45,12 +46,15 @@ export function eventFabric<P, State>(
     .filter(
       ({data}) => data.typeId === result.typeId
     )
+    .skipRepeats()
     .multicast()
   const payload$: Stream<$Exact<{
     state: State,
     data: P
   }>> = epic$
     .map(({data, state}) => ({data: data.payload, state}))
+    .skipRepeats()
+    .tap(console.log.bind(console))
     .multicast()
 
   result.epic$ = epic$
@@ -79,7 +83,12 @@ export function effectFabric<Params, Done, Fail, State>(
   store: Store<State>
 ): Effect<Params, Done, Fail, State> {
   const {update$} = store
-  const result = effect(description)
+  function effectInstance(payload: Params) {
+    return effectInstance.run(payload)
+  }
+  Object.setPrototypeOf(effectInstance, Effect.prototype)
+  Effect.call(effectInstance, description)
+  const result: Effect<Params, Done, Fail, State> = effectInstance
   result.scope = (() => store.scope())
   result.done = eventFabric(`${description} done`, store)
   result.fail = eventFabric(`${description} fail`, store)

@@ -1,0 +1,71 @@
+//@flow
+
+import {Stream} from 'most'
+import {Subject} from 'most-subject'
+
+import type {Named, Typed, WithStateLink, Emitter} from '../index.h'
+import type {ID} from '../id'
+
+export type EpicF<P, State, R> = (
+  data$: Stream<$Exact<{data: P, state: State}>>,
+  state$: Stream<State>
+) => Stream<R>
+
+export class Event<P, C, State = any>
+implements Named, Typed, WithStateLink<State>, Emitter {
+  $call: P => C
+  id: ID
+  typeId: number
+  used: number
+  actionType: string
+  scope: () => Iterable<string>
+  getState: () => Stream<State>
+  actionConstructor: (
+    typeId: number,
+    type: string,
+    payload: P,
+    dispatch: Function
+  ) => C
+  /*::+*/run: (payload: P) => C
+  /*::+*/getType: () => string
+  // toString() {
+  //   return this.getType()
+  // }
+  // inspect() {
+  //   return `Event #${this.typeId} { type: ${this.actionType}, used: ${this.used} }`
+  // }
+  event$: Subject<any>
+  /*::+*/emit: (value: any) => void
+  constructor(
+    description: string,
+    actionConstructor: (
+      typeId: number,
+      type: string,
+      payload: P,
+      dispatch: Function,
+    ) => C,
+  ) {
+    this.actionConstructor = actionConstructor
+  }
+  // subscribe(subscriber: Subscriber<P>): Subscription<P> {
+  //   const {actionDestructor, typeId} = this
+  //   const handler = (x: A) => subscriber.next(
+  //     actionDestructor(x)
+  //   )
+  //   return {
+  //     unsubscribe: on(typeId, handler)
+  //   }
+  // }
+  //$ off
+  // [observable$$]() {
+  //   return this
+  // }
+  /*::+*/watch: <R>(handler: (data: P, state: State) => R) => Stream<R>
+  epic: <R>(
+    epic: EpicF<P, State, R>
+  ) => Stream<R>
+  epic$: Stream<$Exact<{
+    state: State,
+    data: C,
+  }>>
+}

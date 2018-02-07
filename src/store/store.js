@@ -4,7 +4,7 @@ import type {Stream} from 'most'
 
 import {async as subject, type Subject} from 'most-subject'
 
-import * as Carrier from '../carrier'
+import type {Carrier, Event} from '../carrier'
 import type {Effect} from '../carrier/effect'
 import {UniqGuard} from '../uniq'
 import {type ID, createIDType, type SEQ, createSeq} from '../id'
@@ -24,8 +24,9 @@ implements Named, WithStateLink<State>, Dispatcher {
   seq: SEQ = createSeq()
   update$: Subject<$Exact<{
     state: State,
-    data: Carrier.Carrier<any>
+    data: Carrier<any>
   }>> = subject()
+  // state$: Subject<State> = subject()
   state$: Stream<State> = this.update$
     .map(({state}) => state)
     .multicast()
@@ -37,20 +38,22 @@ implements Named, WithStateLink<State>, Dispatcher {
   dispatch: Function
   dispatch$: Subject<any> = (() => {
     const subj = subject()
-    subj.observe((e) => {
+    subj.skipRepeats().observe((e) => {
       if (isAction(e))
         this.dispatch(e)
     })
     return subj
   })()
   mergeEvents(emitter: Emitter) {
+    // emitter.event$ = subject()
     // emitter.event$.observe(e => this.dispatch$.next(e))
     emitter.event$ = this.dispatch$
   }
   event<P>(
     description: string
-  ): Carrier.Message<P, Carrier.Carrier<P>, State> {
+  ): Event<P, Carrier<P>, State> {
     const result = eventFabric(description, this)
+    // this.mergeEvents(result)
     return result
   }
   effect<Params, Done, Fail>(
@@ -60,6 +63,7 @@ implements Named, WithStateLink<State>, Dispatcher {
       description,
       this
     )
+    // this.mergeEvents(result)
     return result
   }
   // epic
