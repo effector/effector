@@ -50,7 +50,7 @@ export function getStore<State>(
   reducer: Reducer<State>,
 ): Store<State> {
   const storeContext: Store<State> = new Store
-  storeContext.scopeName = description
+  storeContext.scopeName = [description]
   const store = createStore(
     reducer,
     applyMiddleware(
@@ -61,30 +61,7 @@ export function getStore<State>(
   storeContext.stateGetter = store.getState
   storeContext.reduxSubscribe = store.subscribe
   // store.subscribe(() => { storeContext.state$.next(store.getState()) })
-  return hideProperties(storeContext)
+  return storeContext
 }
 
-function hideProperties<State>(store: Store<State>): Store<State> {
-  const {dispatch$, update$, state$} = store
-  Object.defineProperties(store, {
-    dispatch$: {
-      value: dispatch$,
-      ...nonEnumProp,
-    },
-    update$: {
-      value: update$,
-      ...nonEnumProp,
-    },
-    state$: {
-      value: state$,
-      ...nonEnumProp,
-    }
-  })
-  return store
-}
 
-const nonEnumProp = {
-  writable: true,
-  enumerable: false,
-  configurable: true,
-}

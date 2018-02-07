@@ -16,9 +16,9 @@ const nextID = createIDType()
 export class Store<State>
 implements Named, WithStateLink<State>, Dispatcher {
   uniq = new UniqGuard
-  scopeName: string
+  scopeName: string[]
   * scope(): Iterable<string> {
-    yield this.scopeName
+    yield* this.scopeName
   }
   id: ID = nextID()
   seq: SEQ = createSeq()
@@ -66,7 +66,39 @@ implements Named, WithStateLink<State>, Dispatcher {
     // this.mergeEvents(result)
     return result
   }
-  // epic
+  subdomain(name: string): Store<State> {
+    const result = new Store
+    result.dispatch = this.dispatch
+    result.stateGetter = this.stateGetter
+    result.reduxSubscribe = this.reduxSubscribe
+    result.dispatch$ = this.dispatch$
+    return result
+  }
+}
+
+export function hideProperties<State>(store: Store<State>): Store<State> {
+  const {dispatch$, update$, state$} = store
+  Object.defineProperties(store, {
+    dispatch$: {
+      value: dispatch$,
+      ...nonEnumProp,
+    },
+    update$: {
+      value: update$,
+      ...nonEnumProp,
+    },
+    state$: {
+      value: state$,
+      ...nonEnumProp,
+    }
+  })
+  return store
+}
+
+const nonEnumProp = {
+  writable: true,
+  enumerable: false,
+  configurable: true,
 }
 
 function isAction(value: mixed): boolean /*::%checks*/ {
