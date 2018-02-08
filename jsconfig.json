@@ -1,17 +1,26 @@
 {
 	"compilerOptions": {
-		"target": "es2015",
-    "module": "es6",
+		"target": "esnext",
+    "module": "es2015",
     "experimentalDecorators": true,
 		"allowSyntheticDefaultImports": true,
-    "baseUrl": "./src",
     "skipLibCheck": false,
-    "noLib": true,
-    "skipDefaultLibCheck": true,
+    "noLib": false,
+    "skipDefaultLibCheck": false,
+    "checkJs": true,
+    "alwaysStrict": true,
+    "strict": true,
     "paths": {
-      "most": "./flow/most"
+      "most": ["./flow/most"]
     }
   },
+  "typeAcquisition": {
+    "enable": true
+  },
+  "include": [
+    "src",
+    "flow"
+  ],
 	"exclude": [
     "node_modules",
     "lib",
