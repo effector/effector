@@ -1,10 +1,9 @@
-
 declare global {
   type TimeoutID = number
-  type $Shape<T> = T
+  type $Shape<T> = Partial<T>
   type $Exact<T> = T
   type $Spread<A, B> = A & B
-  type $ReadOnlyArray<T> = Array<T>
+  type $ReadOnlyArray<T> = ReadonlyArray<T>
   type $NonMaybeType<T> = T
   type $Subtype<T> = T
   type $Supertype<T> = T
@@ -16,7 +15,7 @@ declare global {
   type $Keys<T extends Object> = keyof T
   type Class<T, K = { new (...args: any[]): T }> = K
   type $Pred<N extends Number> = (value: any) => boolean
-  type $ReadOnly<T> = T
+  type $ReadOnly<T> = Readonly<T>
   type $Refine<T, P, N extends Number> = T
   type $Values<T, K extends keyof T = keyof T> = T[K]
   type $Either<A, B, C = never, D = never> = A | B | C | D
