@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Redux effects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -56,5 +56,10 @@
     "most-subject": "5.3.0",
     "redux": "^3.7.2",
     "symbol-observable": "^1.2.0"
-  }
+  },
+  "files": [
+    "es",
+    "lib",
+    "src"
+  ]
 }
