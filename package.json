@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Redux effects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -60,6 +60,7 @@
   "files": [
     "es",
     "lib",
-    "src"
+    "src",
+    "index.js.flow"
   ]
 }
