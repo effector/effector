@@ -1,10 +1,15 @@
 {
   "name": "effector",
   "version": "0.1.0",
-  "description": "~/ - /~",
-  "main": "index.js",
+  "description": "Redux effects",
+  "main": "lib/index.js",
+  "module": "es/index.js",
   "scripts": {
     "test": "jest --config=jest.json",
+    "prepublish": "npm run build",
+    "build": "npm run build:cjs && npm run build:es",
+    "build:cjs": "cross-env BABEL_ENV=commonjs babel src/ --ignore src/__test__ -d lib -s --delete-dir-on-start",
+    "build:es": "cross-env BABEL_ENV=es babel src/ --ignore src/__test__ -d es -s --delete-dir-on-start",
     "test:ff": "jest --config=jest-fastflow.json --watch",
     "test:watch": "jest --config=jest.json --watch",
     "flow": "pm2 start flow-effector.sh",
@@ -32,6 +37,7 @@
     "eslint-plugin-babel": "^4.1.2",
     "eslint-plugin-flowtype": "^2.42.0",
     "eslint-plugin-jest": "^21.7.0",
+    "redux-act": "^1.6.0",
     "flow-bin": "^0.65.0",
     "flow-typed": "^2.3.0",
     "fs-extra": "^5.0.0",
@@ -44,15 +50,10 @@
     "rimraf": "^2.6.2"
   },
   "dependencies": {
-    "@most/core": "^1.2.0",
-    "fp-ts": "^0.6.8",
-    "global": "^4.3.2",
-    "immutable": "^3.8.2",
-    "most": "^1.7.2",
+    "immutable": "^4.0.0-rc.9",
+    "most": "^1.7.3",
     "most-subject": "5.3.0",
-    "npm-check-updates": "^2.14.0",
     "redux": "^3.7.2",
-    "redux-act": "^1.6.0",
     "symbol-observable": "^1.2.0"
   }
 }
