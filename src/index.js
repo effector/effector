@@ -1,3 +1,4 @@
 //@flow
 
-export {getStore} from './middleware'
+export {getStore, effectorEnhancer} from './middleware'
+export {createReducer} from './reader'

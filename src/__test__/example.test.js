@@ -2,8 +2,8 @@
 
 // import type {Stream} from 'most'
 // import {createStore, applyMiddleware, combineReducers, type Middleware, type Store, type Reducer} from 'redux'
-
-import {getStore} from '..'
+import {combineReducers, type Reducer} from 'redux'
+import {getStore, createReducer} from '..'
 
 test.skip('func instance', () => {
   interface IData {
@@ -199,4 +199,18 @@ test('call watch once', async() => {
   expect(fnPl).toHaveBeenCalledTimes(3)
   expect(fnWatch).toHaveBeenCalledTimes(2)
   expect(fnEpic).toHaveBeenCalledTimes(2)
+})
+
+test('reducer', async() => {
+  const red: Reducer<{foo: 'bar'}> = createReducer({foo:{foo: 'bar'},inj: 'inj'})
+  expect(typeof red === 'function').toBeTruthy()
+  const store = getStore('foo', combineReducers({red}))
+  const substore = store.subdomain('bar')
+  const event = store.event('event')
+  const subevent = substore.event('sub')
+  await store.injector.importReducer('inj', () => Promise.resolve(() => 'inj'))
+  red.on(event, (data) => data)
+  await event('ee').send()
+  await subevent('run').send()
+  expect(store.stateGetter()).toHaveProperty('inj', 'inj')
 })

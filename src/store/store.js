@@ -10,12 +10,14 @@ import {UniqGuard} from '../uniq'
 import {type ID, createIDType, type SEQ, createSeq} from '../id'
 import {effectFabric, eventFabric} from './fabric'
 import type {Named, WithStateLink, Dispatcher, Emitter} from '../index.h'
+import {storeInjector} from '../inject-reducer'
 
 const nextID = createIDType()
 
 export class Store<State>
 implements Named, WithStateLink<State>, Dispatcher {
   uniq = new UniqGuard
+  injector: * = storeInjector()
   scopeName: string[]
   * scope(): Iterable<string> {
     yield* this.scopeName
@@ -72,6 +74,8 @@ implements Named, WithStateLink<State>, Dispatcher {
     result.stateGetter = this.stateGetter
     result.reduxSubscribe = this.reduxSubscribe
     result.dispatch$ = this.dispatch$
+    result.scopeName = [...this.scopeName, name]
+    result.injector = this.injector
     return result
   }
 }

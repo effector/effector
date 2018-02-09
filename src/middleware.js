@@ -3,6 +3,7 @@
 import {
   createStore,
   applyMiddleware,
+  type StoreCreator,
   type Reducer,
   type Middleware,
   type Dispatch,
@@ -45,21 +46,39 @@ function middlewareCurry<State>(
   }
 }
 
+export function effectorEnhancer<T>(
+  createStore: StoreCreator<T>
+): StoreCreator<T> {
+  return (reducer, preloadedState, enhancer): $todo => {
+    const storeContext: Store<T> = new Store
+    storeContext.scopeName = []
+    const store = createStore(reducer, preloadedState, enhancer)
+    storeContext.injector.setStore(store)
+    let dispatch = store.dispatch
+
+    const middlewareAPI = {
+      getState: () => (console.log(store.getState()), store.getState()),
+      dispatch: (action) => dispatch(action)
+    }
+    dispatch = middlewareCurry(storeContext)(middlewareAPI)(store.dispatch)
+    storeContext.dispatch = dispatch
+    storeContext.stateGetter = store.getState
+    storeContext.reduxSubscribe = store.subscribe
+
+    return storeContext
+  }
+}
+
 export function getStore<State>(
   description: string,
   reducer: Reducer<State>,
 ): Store<State> {
-  const storeContext: Store<State> = new Store
-  storeContext.scopeName = [description]
-  const store = createStore(
+  const storeContext: Store<State> = createStore(
     reducer,
-    applyMiddleware(
-      middlewareCurry(storeContext)
-    )
+    effectorEnhancer
   )
-  storeContext.dispatch = store.dispatch
-  storeContext.stateGetter = store.getState
-  storeContext.reduxSubscribe = store.subscribe
+  storeContext.scopeName = [description]
+  storeContext.injector.saveStatic(reducer)
   // store.subscribe(() => { storeContext.state$.next(store.getState()) })
   return storeContext
 }

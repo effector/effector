@@ -34,3 +34,16 @@ export type FailType<Params = void, Fail = Error> = $Exact<{
   params: Params,
   error: Fail,
 }>
+
+export type ReduxAction<T> = {
+  type: string,
+  payload: T,
+}
+
+export type ReducerRedux<State = void, T = any> = (
+  state: State, action: ReduxAction<T>
+) => State
+
+export type ReducerAct<State = void, T = any, M = void> = (
+  state: State, payload: T, meta: M
+) => State
