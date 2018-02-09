@@ -52,6 +52,7 @@ export function effectorEnhancer<T>(
   return (createStore: StoreCreator<T>): StoreCreator<T> => (
     reducer, preloadedState, enhancer
   ): $todo => {
+    //console.error('effect enhancer')
     const storeContext: Store<T> = new Store
     storeContext.scopeName = []
     const store = createStore(reducer, preloadedState, enhancer)
@@ -63,14 +64,20 @@ export function effectorEnhancer<T>(
       dispatch: (action) => dispatch(action)
     }
     dispatch = middlewareCurry(storeContext)(middlewareAPI)(store.dispatch)
-    storeContext.dispatch = dispatch
-    storeContext.stateGetter = store.getState
-    storeContext.reduxSubscribe = store.subscribe
-    storeContext.getState = storeContext.stateGetter
-    storeContext.subscribe = storeContext.reduxSubscribe
-    storeContext.replaceReducer = store.replaceReducer
+    //storeContext.dispatch = dispatch
+    //storeContext.stateGetter = store.getState
+    //storeContext.reduxSubscribe = store.subscribe
+    //storeContext.getState = storeContext.stateGetter
+    //storeContext.subscribe = storeContext.reduxSubscribe
+    //storeContext.replaceReducer = store.replaceReducer
     domains.forEach(dom => storeContext.connect(dom))
-    return storeContext
+    return {
+      ...storeContext,
+      ...store,
+      dispatch,
+      stateGetter: store.getState,
+      reduxSubscribe: store.subscribe
+    }
   }
 }
 
