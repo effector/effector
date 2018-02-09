@@ -64,7 +64,9 @@ export function effectorEnhancer<T>(
     storeContext.dispatch = dispatch
     storeContext.stateGetter = store.getState
     storeContext.reduxSubscribe = store.subscribe
-
+    storeContext.getState = storeContext.stateGetter
+    storeContext.subscribe = storeContext.reduxSubscribe
+    storeContext.replaceReducer = store.replaceReducer
     return storeContext
   }
 }

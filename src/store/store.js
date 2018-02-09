@@ -76,6 +76,9 @@ implements Named, WithStateLink<State>, Dispatcher {
     result.dispatch$ = this.dispatch$
     result.scopeName = [...this.scopeName, name]
     result.injector = this.injector
+    result.getState = this.stateGetter
+    result.subscribe = this.reduxSubscribe
+    result.replaceReducer = this.replaceReducer
     return result
   }
 }
