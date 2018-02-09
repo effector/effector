@@ -3,7 +3,7 @@
 // import type {Stream} from 'most'
 // import {createStore, applyMiddleware, combineReducers, type Middleware, type Store, type Reducer} from 'redux'
 import {combineReducers, type Reducer} from 'redux'
-import {getStore, createReducer} from '..'
+import {getStore, createReducer} from '../../lib'
 
 test.skip('func instance', () => {
   interface IData {

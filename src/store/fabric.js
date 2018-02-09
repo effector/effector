@@ -6,6 +6,7 @@ import {Event, type EpicF} from '../carrier/event'
 import {Carrier, carrier} from '../carrier/carrier'
 import {Effect} from '../carrier/effect'
 import type {CarrierEffect} from '../carrier/carrier-effect'
+import type {EventRunner} from '../index.h'
 
 function reassign<P, State>(
   msg: Event<P, Carrier<P>, State>
@@ -34,7 +35,7 @@ function reassignEffect<Params, Done, Fail, State>(
 
 export function eventFabric<P, State>(
   description: string,
-  store: Store<State>
+  store: EventRunner<State>
 ): Event<P, Carrier<P>, State> {
   const {update$} = store
   const result: Event<P, Carrier<P>, State> = new Event(description, carrier)
@@ -80,7 +81,7 @@ export function eventFabric<P, State>(
 
 export function effectFabric<Params, Done, Fail, State>(
   description: string,
-  store: Store<State>
+  store: EventRunner<State>
 ): Effect<Params, Done, Fail, State> {
   const {update$} = store
   function effectInstance(payload: Params) {

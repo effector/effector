@@ -2,7 +2,6 @@
 
 import {
   createStore,
-  applyMiddleware,
   type StoreCreator,
   type Reducer,
   type Middleware,
@@ -10,6 +9,7 @@ import {
 } from 'redux'
 
 import {type Carrier, is} from './carrier/carrier'
+import type {Domain} from './domain'
 import {Store} from './store'
 import {incSeq} from './id'
 
@@ -47,9 +47,11 @@ function middlewareCurry<State>(
 }
 
 export function effectorEnhancer<T>(
-  createStore: StoreCreator<T>
-): StoreCreator<T> {
-  return (reducer, preloadedState, enhancer): $todo => {
+  domains: Array<Domain<T>> = []
+) {
+  return (createStore: StoreCreator<T>): StoreCreator<T> => (
+    reducer, preloadedState, enhancer
+  ): $todo => {
     const storeContext: Store<T> = new Store
     storeContext.scopeName = []
     const store = createStore(reducer, preloadedState, enhancer)
@@ -67,6 +69,7 @@ export function effectorEnhancer<T>(
     storeContext.getState = storeContext.stateGetter
     storeContext.subscribe = storeContext.reduxSubscribe
     storeContext.replaceReducer = store.replaceReducer
+    domains.forEach(dom => storeContext.connect(dom))
     return storeContext
   }
 }
@@ -77,7 +80,7 @@ export function getStore<State>(
 ): Store<State> {
   const storeContext: Store<State> = createStore(
     reducer,
-    effectorEnhancer
+    effectorEnhancer()
   )
   storeContext.scopeName = [description]
   storeContext.injector.saveStatic(reducer)

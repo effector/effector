@@ -9,13 +9,14 @@ import type {Effect} from '../carrier/effect'
 import {UniqGuard} from '../uniq'
 import {type ID, createIDType, type SEQ, createSeq} from '../id'
 import {effectFabric, eventFabric} from './fabric'
-import type {Named, WithStateLink, Dispatcher, Emitter} from '../index.h'
+import type {Named, WithStateLink, Dispatcher, Emitter, EventRunner} from '../index.h'
+import {Domain} from '../domain'
 import {storeInjector} from '../inject-reducer'
 
 const nextID = createIDType()
 
 export class Store<State>
-implements Named, WithStateLink<State>, Dispatcher {
+implements Named, WithStateLink<State>, Dispatcher, EventRunner<State> {
   uniq = new UniqGuard
   injector: * = storeInjector()
   scopeName: string[]
@@ -80,6 +81,17 @@ implements Named, WithStateLink<State>, Dispatcher {
     result.subscribe = this.reduxSubscribe
     result.replaceReducer = this.replaceReducer
     return result
+  }
+  connect(domain: Domain<State>) {
+    domain.dispatch = this.dispatch
+    domain.stateGetter = this.stateGetter
+    domain.reduxSubscribe = this.reduxSubscribe
+    domain.dispatch$ = this.dispatch$
+    domain.scopeName = [...this.scope(), domain.domainName]
+    domain.injector = this.injector
+    // domain.getState = this.stateGetter
+    domain.subscribe = this.reduxSubscribe
+    domain.replaceReducer = this.replaceReducer
   }
 }
 

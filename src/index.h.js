@@ -3,6 +3,8 @@
 import type {Stream} from 'most'
 import type {Subject} from 'most-subject'
 
+import type {Carrier} from './carrier/carrier'
+
 export interface Named {
   scope(): Iterable<string>,
 }
@@ -23,6 +25,14 @@ export interface Dispatcher {
 export interface Emitter {
   event$: Subject<any>,
   emit(next: any): void,
+}
+
+export interface EventRunner<State> extends Named, Dispatcher {
+  update$: Subject<$Exact<{
+    state: State,
+    data: Carrier<any>
+  }>>,
+  /*::+*/getState: () => Stream<State>
 }
 
 export type DoneType<Params = void, Done = void> = $Exact<{
