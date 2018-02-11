@@ -2,53 +2,8 @@
 
 // import type {Stream} from 'most'
 // import {createStore, applyMiddleware, combineReducers, type Middleware, type Store, type Reducer} from 'redux'
-import {combineReducers, type Reducer} from 'redux'
+// import {combineReducers, type Reducer} from 'redux'
 import {getStore, createReducer, Store} from '..'
-
-test.skip('func instance', () => {
-  interface IData {
-    $call: () => string,
-    tag: string,
-    fn(): string,
-  }
-  class CData implements IData {
-    $call: () => string
-    tag: string
-    fn(): string {
-      return this.tag
-    }
-    constructor(tag: string) {
-      this.tag = tag
-    }
-  }
-  function inst(): string {
-    console.log(this)
-    return this.fn()
-  }
-  // Object.setPrototypeOf(inst, CData.prototype)
-  // inst.prototype.fn = function() {
-  //   return this.cdata.fn()
-  // }
-  function Data(tag: string): IData {
-    const src = new CData(tag)
-    const subInst = inst.bind(src)
-    const reinst = Object.setPrototypeOf(subInst, src)
-    Object.assign(reinst, src)
-    return reinst
-  }
-  const data = Data('test')
-  // console.log(data.__proto__)
-  expect(data()).toBe('test')
-  data.tag = 'not test'
-  expect(data.fn()).not.toBe('test')
-  expect(data.tag).not.toBe('test')
-
-  const nextData = Data('xxx')
-  expect(data()).toBe('test')
-  expect(nextData()).toBe('xxx')
-  // console.log(data.__proto__)
-  // console.log(data)
-})
 
 test('create store', () => {
   const store = getStore('ok', (state, pl) => state)
@@ -73,6 +28,7 @@ describe('getType', () => {
     const store = getStore('getTypeStore', (state, pl) => (fn(pl), state))
     store.update$
       .map(({data}) => data)
+      .tap(e => console.log(e))
       .observe(fnEvent)
     const effect1 = store.effect('effect1')
     const fromUse = effect1.use((foo: 'foo') => Promise.resolve(foo))
@@ -83,12 +39,38 @@ describe('getType', () => {
     await effect1('foo').done()
     effect1.use((foo: 'foo') => Promise.reject(foo))
     await effect1('foo').fail()
+    fnEvent.mock.calls.forEach(e => console.log(e))
     expect(fnEvent.mock.calls).toHaveLength(4)
     const [run1, done, run2, fail] = unwrapActions(fnEvent.mock.calls)
     expect(run1.type).toBe('getTypeStore/effect1')
     expect(run2.type).toBe('getTypeStore/effect1')
     expect(done.type).toBe('getTypeStore/effect1 done')
     expect(fail.type).toBe('getTypeStore/effect1 fail')
+  })
+  test('wtf', async() => {
+    const store = getStore('ok', (state: void, pl): void => (state))
+    const message = store.effect('eff1')
+    const event = store.event('evn1')
+    const act1 = message({foo: 'bar', meta: 'first'})
+    expect(act1).toBeDefined()
+    const prom = act1.done()
+    await act1.dispatched()
+    message.epic(
+      (data$) => data$.map(
+        ({data}) => event({...data, evt: true})
+      )
+        .tap(e => console.log(e))
+    )
+    message.done.epic(
+      data$ => data$.map(
+        // ({data}) => fnEpicDone(data)
+        e => console.log(e)
+      )
+    )
+    message.use(
+      params => new Promise(rs => setTimeout(rs, 500, params))
+    )
+    await message({foo: 'bar', meta: 'first'}).send()
   })
 })
 
@@ -140,30 +122,72 @@ test('execution correctness', async() => {
   // }
 })
 
-test('event.watch', async() => {
-  const fn = jest.fn()
-  const fnDeb = jest.fn()
-  const defStore = {foo: 'bar'}
-  const store = getStore('watchStore', (state = defStore) => state)
-  const event = store.event('watched')
-  const nextEvent = store.event('next')
-  event.watch(async(data) => {
-    fnDeb(data)
-    await new Promise(rs => setTimeout(rs, 300))
-    const result = nextEvent(data)
-    return result
+describe.only('event.watch', () => {
+  test.only('sync handler', async() => {
+    const fn = jest.fn((...args) => console.log(...args))
+    const fnDeb = jest.fn()
+    const defStore = {foo: 'bar'}
+    const store = getStore('watchStoreSync', (state = defStore) => state)
+    const event = store.event('watchedSync')
+    const nextEvent = store.event('nextSync')
+    event.watch((data) => {
+      fnDeb(data)
+      const result = nextEvent(data).send()
+      return result
+    })
+    event.watch((data) => {
+      fnDeb(data)
+      const result = nextEvent(data)
+      console.log(result)
+      return result
+    })
+    nextEvent.watch((data, store) => fn(data, store))
+
+    event('run')
+
+    await event('run').send()
+    await store.dispatch(event('run')).send()
+    await new Promise(rs => setTimeout(rs, 1500))
+    expect(fnDeb).toHaveBeenCalledTimes(4)
+    expect(fn).toHaveBeenCalledTimes(4)
+    expect(fn).toHaveBeenLastCalledWith('run', defStore)
   })
-  nextEvent.watch((data, store) => fn(data, store))
+  test('async handler', async() => {
+    const fn = jest.fn()
+    const fnDeb = jest.fn()
+    const defStore = {foo: 'bar'}
+    const store = getStore('watchStoreAsync', (state = defStore) => state)
+    const event = store.event('watchedAsync')
+    const nextEvent = store.event('nextAsync')
+    event.watch(async(data) => {
+      fnDeb(data)
+      await new Promise(rs => setTimeout(rs, 300))
+      const result = nextEvent(data)
+      return result
+    })
+    nextEvent.watch((data, store) => fn(data, store))
 
-  store.dispatch(event('run'))
+    store.dispatch(event('run'))
 
-  // await event('run').dispatched()
-  await new Promise(rs => setTimeout(rs, 500))
-  expect(fnDeb).toHaveBeenCalledTimes(1)
-  expect(fn).toHaveBeenLastCalledWith('run', defStore)
+    await event('run').dispatched()
+    await new Promise(rs => setTimeout(rs, 1500))
+    expect(fnDeb).toHaveBeenCalledTimes(1)
+    expect(fn).toHaveBeenLastCalledWith('run', defStore)
+  })
+  test('failed handler', async() => {
+    const fnDeb = jest.fn()
+    const defStore = {foo: 'bar'}
+    const store = getStore('watchStoreReject', (state = defStore) => state)
+    const event = store.event('watchedReject')
 
-  event.watch(() => Promise.reject())
-  await store.dispatch(event('run')).dispatched()
+    store.dispatch(event('run'))
+
+    await event('run').dispatched()
+
+    event.watch((data) => (fnDeb(data), Promise.reject()))
+    await store.dispatch(event('run')).dispatched()
+    expect(fnDeb).toHaveBeenCalledTimes(1)
+  })
 })
 
 test('await event().send()', async() => {
@@ -200,16 +224,16 @@ test('call watch once', async() => {
   expect(fnEpic).toHaveBeenCalledTimes(2)
 })
 
-test('reducer', async() => {
-  const red: Reducer<{foo: 'bar'}> = createReducer({foo:{foo: 'bar'},inj: 'inj'})
-  expect(typeof red === 'function').toBeTruthy()
-  const store = getStore('foo', combineReducers({red}))
-  const substore = store.subdomain('bar')
-  const event = store.event('event')
-  const subevent = substore.event('sub')
-  await store.injector.importReducer('inj', () => Promise.resolve(() => 'inj'))
-  red.on(event, (data) => data)
-  await event('ee').send()
-  await subevent('run').send()
-  expect(store.stateGetter()).toHaveProperty('inj', 'inj')
-})
+// test.skip('reducer', async() => {
+//   const red: Reducer<{foo: 'bar'}> = createReducer({foo:{foo: 'bar'}, inj: 'inj'})
+//   expect(typeof red === 'function').toBeTruthy()
+//   const store = getStore('foo', combineReducers({red}))
+//   const substore = store.subdomain('bar')
+//   const event = store.event('event')
+//   const subevent = substore.event('sub')
+//   // await store.injector.importReducer('inj', () => Promise.resolve(() => 'inj'))
+//   red.on(event, (data) => data)
+//   await event('ee').send()
+//   await subevent('run').send()
+//   expect(store.stateGetter()).toHaveProperty('inj', 'inj')
+// })

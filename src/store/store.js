@@ -9,19 +9,19 @@ import type {Effect} from '../carrier/effect'
 import {UniqGuard} from '../uniq'
 import {type ID, createIDType, type SEQ, createSeq} from '../id'
 import {effectFabric, eventFabric} from './fabric'
-import type {Named, WithStateLink, Dispatcher, Emitter, EventRunner} from '../index.h'
+// import type {Named, WithStateLink, Dispatcher, Emitter, EventRunner} from '../index.h'
 import {Domain} from '../domain'
-import {storeInjector} from '../inject-reducer'
+// import {storeInjector} from '../inject-reducer'
 
 const nextID = createIDType()
 
-export class Store<State>
-implements Named, WithStateLink<State>, Dispatcher, EventRunner<State> {
+export class Store<State> {
+// implements Named, WithStateLink<State>, EventRunner<State> {
   uniq = new UniqGuard
-  injector: * = storeInjector()
+  // injector: * = storeInjector()
   scopeName: string[]
-  * scope(): Iterable<string> {
-    yield* this.scopeName
+  scope(): string {
+    return this.scopeName.join('/')
   }
   id: ID = nextID()
   seq: SEQ = createSeq()
@@ -29,6 +29,22 @@ implements Named, WithStateLink<State>, Dispatcher, EventRunner<State> {
     state: State,
     data: Carrier<any>
   }>> = subject()
+  channels: {
+    poor: Subject<any>,
+    plain: Subject<{
+      type: string,
+      payload: *,
+      meta: {
+        typeId: number,
+        id: number,
+      },
+    }>,
+    carrier: Subject<Carrier<*>>,
+  } = {
+    poor: subject(),
+    plain: subject(),
+    carrier: subject(),
+  }
   // state$: Subject<State> = subject()
   state$: Stream<State> = this.update$
     .map(({state}) => state)
@@ -38,23 +54,16 @@ implements Named, WithStateLink<State>, Dispatcher, EventRunner<State> {
   }
   stateGetter: () => State
   reduxSubscribe: (handler: (action: any) => void) => any
-  dispatch: Function
-  dispatch$: Subject<any> = (() => {
-    const subj = subject()
-    subj.skipRepeats().observe((e) => {
-      if (isAction(e))
-        this.dispatch(e)
-    })
-    return subj
-  })()
-  mergeEvents(emitter: Emitter) {
-    // emitter.event$ = subject()
-    // emitter.event$.observe(e => this.dispatch$.next(e))
-    emitter.event$ = this.dispatch$
-  }
+  dispatch: <X>(x: X) => X
+  dispatch$: Subject<any>
+  // mergeEvents(emitter: Emitter) {
+  //   // emitter.event$ = subject()
+  //   // emitter.event$.observe(e => this.dispatch$.next(e))
+  //   emitter.event$ = this.dispatch$
+  // }
   event<P>(
     description: string
-  ): Event<P, Carrier<P>, State> {
+  ): Event<P, State> {
     const result = eventFabric(description, this)
     // this.mergeEvents(result)
     return result
@@ -76,49 +85,59 @@ implements Named, WithStateLink<State>, Dispatcher, EventRunner<State> {
     result.reduxSubscribe = this.reduxSubscribe
     result.dispatch$ = this.dispatch$
     result.scopeName = [...this.scopeName, name]
-    result.injector = this.injector
+    // result.injector = this.injector
     result.getState = this.stateGetter
     result.subscribe = this.reduxSubscribe
-    result.replaceReducer = this.replaceReducer
+    // result.replaceReducer = this.replaceReducer
     return result
   }
-  connect(domain: Domain<State>) {
-    domain.dispatch = this.dispatch
-    domain.stateGetter = this.stateGetter
-    domain.reduxSubscribe = this.reduxSubscribe
-    domain.dispatch$ = this.dispatch$
-    domain.scopeName = [...this.scope(), domain.domainName]
-    domain.injector = this.injector
-    // domain.getState = this.stateGetter
-    domain.subscribe = this.reduxSubscribe
-    domain.replaceReducer = this.replaceReducer
+  // connect(domain: Domain<State>) {
+  //   domain.dispatch = this.dispatch
+  //   domain.stateGetter = this.stateGetter
+  //   domain.reduxSubscribe = this.reduxSubscribe
+  //   domain.dispatch$ = this.dispatch$
+  //   domain.scopeName = [...this.scope(), domain.domainName]
+  //   // domain.injector = this.injector
+  //   // domain.getState = this.stateGetter
+  //   domain.subscribe = this.reduxSubscribe
+  //   domain.replaceReducer = this.replaceReducer
+  // }
+  constructor() {
+    const subj = subject()
+    subj.skipRepeats().observe((e) => {
+      if (isAction(e)) {
+        console.log(e)
+        this.dispatch(e)
+      }
+    })
+    this.dispatch$ = subj
   }
 }
 
-export function hideProperties<State>(store: Store<State>): Store<State> {
-  const {dispatch$, update$, state$} = store
-  Object.defineProperties(store, {
-    dispatch$: {
-      value: dispatch$,
-      ...nonEnumProp,
-    },
-    update$: {
-      value: update$,
-      ...nonEnumProp,
-    },
-    state$: {
-      value: state$,
-      ...nonEnumProp,
-    }
-  })
-  return store
-}
+// export function hideProperties<State>(store: Store<State>): Store<State> {
+//   const {dispatch$, update$, state$} = store
+//   Object.defineProperties(store, {
+//     dispatch$: {
+//       value: dispatch$,
+//       ...nonEnumProp,
+//     },
+//     update$: {
+//       value: update$,
+//       ...nonEnumProp,
+//     },
+//     state$: {
+//       value: state$,
+//       ...nonEnumProp,
+//     }
+//   })
+//   return store
+// }
 
-const nonEnumProp = {
-  writable: true,
-  enumerable: false,
-  configurable: true,
-}
+// const nonEnumProp = {
+//   writable: true,
+//   enumerable: false,
+//   configurable: true,
+// }
 
 function isAction(value: mixed): boolean /*::%checks*/ {
   return (

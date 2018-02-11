@@ -5,45 +5,46 @@ import {type ID, createIDType} from '../id'
 
 const nextID = createIDType()
 
-export /*::opaque*/ type Obscure/*: any*/ = mixed
-
-export class Carrier<E = Obscure> {
+export class Carrier<E = void> {
   id: ID = nextID()
   dispose: Dispose<E> = new Dispose
   dispatched(): Promise<E> {
     return this.dispose.done
   }
+  isSent: boolean = false
+  isScheduled: boolean = false
   typeId: number
   type: string
   payload: E
-  dispatch: Function
+  dispatch: () => void
   plain() {
     return {
       type: this.type,
-      payload: this.payload
+      payload: this.payload,
+      meta: {
+        typeId: this.typeId,
+        id: this.id,
+      },
     }
   }
   send(): Promise<E> {
-    this.dispatch(this)
+    this.dispatch()
     return this.dispatched()
   }
-}
-
-function id<T>(x): T {
-  return x
 }
 
 export function carrier<E>(
   typeId: number,
   type: string,
   payload: E,
-  dispatch: Function
+  dispatch: (result: Carrier<E>) => Carrier<E>
 ): Carrier<E> {
-  const result = new Carrier
+  const result: Carrier<E> = new Carrier
   result.payload = payload
   result.type = type
   result.typeId = typeId
-  result.dispatch = dispatch
+  result.dispatch = () => { dispatch(result) }
+  result.dispatched().then(() => result.isSent = true)
   return result
 }
 

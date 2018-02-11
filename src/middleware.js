@@ -10,7 +10,7 @@ import {
 
 import {type Carrier, is} from './carrier/carrier'
 import type {Domain} from './domain'
-import {Store} from './store'
+import {Store} from './store/store'
 import {incSeq} from './id'
 
 function middleware<State>({
@@ -29,8 +29,8 @@ function middleware<State>({
   const unwrapped = data.plain()
   next(unwrapped)
   store.seq = incSeq(store.seq)
+  data.dispose.disposed(unwrapped)
   store.update$.next({data, state: getState()})
-  data.dispose.disposed(data.payload)
   return data
 }
 
@@ -38,7 +38,16 @@ function middlewareCurry<State>(
   store: Store<State>
 ): Middleware<State> {
   return ({dispatch, getState}) => (next) => (data) => {
-    if (!is(data)) return next(data)
+    if (!is(data)) {
+      console.log(data, typeof data)
+      if (typeof data === 'object' && data != null && typeof data.type === 'string')
+        return next(data)
+      return
+    }
+    if (data.isSent) {
+      console.log('already sent', data)
+      return
+    }
     if (!store.uniq.isUniq(data)) return
     return middleware({
       dispatch, getState, next, data, store,
@@ -54,13 +63,14 @@ export function effectorEnhancer<T>(
     reducer, preloadedState, enhancer
   ): $todo => {
     //console.error('effect enhancer')
-    storeContext.scopeName = []
+    // storeContext.scopeName = []
+    //$off
     const store = createStore(reducer, preloadedState, enhancer)
-    storeContext.injector.setStore(store)
+    // storeContext.injector.setStore(store)
     let dispatch = store.dispatch
 
     const middlewareAPI = {
-      getState: () => (console.log(store.getState()), store.getState()),
+      getState: () => store.getState(),
       dispatch: (action) => dispatch(action)
     }
     dispatch = middlewareCurry(storeContext)(middlewareAPI)(store.dispatch)
@@ -70,11 +80,11 @@ export function effectorEnhancer<T>(
     //storeContext.getState = storeContext.stateGetter
     //storeContext.subscribe = storeContext.reduxSubscribe
     //storeContext.replaceReducer = store.replaceReducer
-    domains.forEach(dom => storeContext.connect(dom))
+    // domains.forEach(dom => storeContext.connect(dom))
     return {
       // ...storeContext,
       ...store,
-      ...middlewareAPI,
+      getState: middlewareAPI.getState,
       dispatch,
       // stateGetter: store.getState,
       // reduxSubscribe: store.subscribe
@@ -87,13 +97,15 @@ export function getStore<State>(
   reducer: Reducer<State>,
 ): Store<State> {
   const store: Store<State> = new Store
+  store.scopeName = [description]
   const storeContext = createStore(
-    reducer,
+    reducer, //$off
     effectorEnhancer([], store)
   )
-  store.scopeName = [description]
-  store.injector.saveStatic(reducer)
+  // store.injector.saveStatic(reducer)
   // store.subscribe(() => { storeContext.state$.next(store.getState()) })
+  //$off
+  store.ctx = storeContext
   return store
 }
 

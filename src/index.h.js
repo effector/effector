@@ -57,3 +57,8 @@ export type ReducerRedux<State = void, T = any> = (
 export type ReducerAct<State = void, T = any, M = void> = (
   state: State, payload: T, meta: M
 ) => State
+
+export type EpicFun<P, State, R> = (
+  data$: Stream<$Exact<{data: P, state: State}>>,
+  state$: Stream<State>
+) => Stream<R>

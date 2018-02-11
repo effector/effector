@@ -3,7 +3,9 @@
 import {type ID, createIDType} from './id'
 const nextID = createIDType()
 
-const never: Promise<any> = new Promise(() => {})
+function never(): Promise<any> {
+  return new Promise(() => {})
+}
 
 export type DeferStatus
   = 'resolved'
@@ -52,13 +54,13 @@ export class Defer<Rs, Rj> {
   }
   resolved(data: Rs) {
     this.done = Promise.resolve(data)
-    this.fail = never
+    this.fail = never()
     this.status = 'resolved'
     const rs = this./*::#*/rs
     rs(data)
   }
   rejected(error: Rj) {
-    this.done = never
+    this.done = never()
     this.fail = Promise.resolve(error)
     this.status = 'rejected'
     const rj = this./*::#*/rj

@@ -1,49 +1,42 @@
 //@flow
 
 import type {Effect} from './effect'
-import {CarrierEffect} from './carrier-effect'
+import {CarrierEffect, carrierEffect} from './carrier-effect'
 
 export function runEffect<Params, Done, Fail, State>(
   payload: Params,
-  dispatch: typeof identity,
   effect: Effect<Params, Done, Fail, State>
 ): CarrierEffect<Params, Done, Fail> {
-  const init: CarrierEffect<Params, Done, Fail> = new CarrierEffect
-  init.defer.done.then(dispatch)
-  init.defer.fail.then(dispatch)
-  init.payload = payload
-  init.type = effect.getType()
-  init.typeId = effect.typeId
-  init.dispatch = dispatch
+  const init: CarrierEffect<Params, Done, Fail> = carrierEffect(
+    payload, effect.getType(), effect.id, effect.dispatch
+  )
+  // init.defer.done.then(e => console.warn(e, effect.done.run(e).send()))
+  // init.defer.fail.then(e => console.warn(e, effect.fail.run(e)))
   init.dispatched().then(
     payload => effect.thunk(payload).then(
       (value: Done) => {
         const {done} = effect
         done.used += 1
-        const result = done.actionConstructor(
-          done.typeId,
-          done.getType(),
-          {params: payload, result: value},
-          dispatch
-        )
-        dispatch(result)
+        const result = done.run({
+          params: payload,
+          result: value,
+        })
         result.dispatched().then(
           rs => init.defer.resolved(rs)
         )
+        effect.dispatch(result)
       },
       (value: Fail) => {
         const {fail} = effect
         fail.used += 1
-        const result = fail.actionConstructor(
-          fail.typeId,
-          fail.getType(),
-          {params: payload, error: value},
-          dispatch
-        )
-        dispatch(result)
+        const result = fail.run({
+          params: payload,
+          error: value,
+        })
         result.dispatched().then(
           rs => init.defer.rejected(rs)
         )
+        effect.dispatch(result)
       }
     )
   )

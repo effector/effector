@@ -1,84 +1,57 @@
-//@noflow
+//@flow
 
-import {of, fromPromise, type Stream} from 'most'
+import {from, of, fromPromise, type Stream} from 'most'
 // import type {Subject} from 'most-subject'
 
 // import type {Named, Typed, WithStateLink, Emitter} from '../index.h'
-// import {carrier, type Carrier} from './carrier'
+import type {EpicFun} from '../index.h'
+import {carrier, type Carrier} from './carrier'
 import {type ID, createIDType} from '../id'
+import {BareEvent} from './bare-event'
 const nextID = createIDType()
 // import {registerType} from './register'
 // import {on} from './pubsub'
 // import {Act, type ActTag} from './act'
 
-import {check, add} from './register'
+import {add} from './register'
 
-export function Event<P, C, State>(
-  description: string,
-  actionConstructor: (
-    typeId: number,
-    type: string,
-    payload: P,
-    dispatch: Function,
-  ) => C,
-) {
-
-  this.id = nextID()
-  this.used = 0
-  const isSerializable = (typeof description === 'string')
-    && /^[0-9A-Z_]+$/.test(description)
-  if (isSerializable) {
-    check(description)
-    add(description)
-  } else {
-    ++id
+export class Event<P, State = any> extends BareEvent<P, Carrier<P>> {
+  $call: P => Carrier<P>
+  id: ID = nextID()
+  used: number = 0
+  dispatch: (x: Carrier<P>) => Carrier<P>
+  constructor(
+    description: string
+  ) {
+    super()
+    const isSerializable = (typeof description === 'string')
+      && /^[0-9A-Z_]+$/.test(description)
+    if (isSerializable) {
+      add(description)
+    }
   }
-  this.actionType = description
-  this.typeId = id
-  this.actionConstructor = actionConstructor
 
-  function event(payload) {
-    return event.run(payload)
+  run(payload: P): Carrier<P> {
+    this.used += 1
+    return carrier(
+      this.id,
+      this.getType(),
+      payload,
+      this.dispatch
+    )
   }
-  Object.setPrototypeOf(event, Event.prototype)
-  Object.assign(event, this)
-  return event
+
+  watch<R>(
+    handler: (data: P, state: State) => R
+  ): Stream<R> {
+    const result = this.epic(
+      (data$) => watcher(data$, handler)
+    )
+    // result.observe(e => this.emit(e))
+    return result
+  }
+  epic: <R>(epic: EpicFun<P, State, R>) => Stream<R>
 }
-
-Event.prototype.run = function run(payload: P): C {
-  this.used += 1
-  return this.actionConstructor(
-    this.typeId,
-    this.getType(),
-    payload,
-    e => this.emit(e)
-  )
-}
-
-Event.prototype.getType = function getType() {
-  return [...this.scope(), this.actionType].join('/')
-}
-
-Event.prototype.emit = function emit(value: any) {
-  this.event$.next(value)
-}
-
-Event.prototype.apply = function apply(that: any, args: [P]): C {
-  return this.run(args[0])
-}
-
-Event.prototype.watch = function watch<R>(
-  handler: (data: P, state: State) => R
-): Stream<R> {
-  const result = this.epic(
-    (data$) => watcher(data$, handler)
-  )
-  // result.observe(e => this.emit(e))
-  return result
-}
-
-let id = 0
-
 
 function watcher<P, State, R>(
   data$: Stream<$Exact<{data: P, state: State}>>,
@@ -86,16 +59,23 @@ function watcher<P, State, R>(
 ): Stream<R> {
   return data$
     .map(
-      async({data, state}) => {
+      async({data, state}): Promise<Stream<R>> => {
         try {
-          const result = await Promise.resolve(handler(data, state))
-          return result
+          const handled = handler(data, state)
+          let result: R
+          if (handled != null && typeof handled.then === 'function')
+            result = await handled
+          else
+            result = handled
+          return of(result)
         } catch (error) {
           console.warn(`\n  Watcher throw\n  ${error && error.message || ''}`)
+          const none: R[] = []
+          return from(none)
         }
-
       }
     )
     .map(fromPromise)
+    .join()
     .join()
 }

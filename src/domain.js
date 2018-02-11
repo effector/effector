@@ -51,7 +51,7 @@ export class Domain<State> implements Named, Dispatcher, EventRunner<State> {
   }
   event<P>(
     description: string
-  ): Event<P, Carrier<P>, State> {
+  ): Event<P, State> {
     const result = eventFabric(description, this)
     // this.mergeEvents(result)
     return result
@@ -62,10 +62,10 @@ export class Domain<State> implements Named, Dispatcher, EventRunner<State> {
     domain.reduxSubscribe = this.reduxSubscribe
     domain.dispatch$ = this.dispatch$
     domain.scopeName = [...this.scope(), domain.domainName]
-    domain.injector = this.injector
+    // domain.injector = this.injector
     // domain.getState = this.stateGetter
     domain.subscribe = this.subscribe
-    domain.replaceReducer = this.replaceReducer
+    // domain.replaceReducer = this.replaceReducer
   }
 }
 
