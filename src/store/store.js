@@ -37,13 +37,16 @@ export class Store<State> {
       meta: {
         typeId: number,
         id: number,
+        isNew: boolean,
       },
     }>,
     carrier: Subject<Carrier<*>>,
+    state: Subject<State>,
   } = {
     poor: subject(),
     plain: subject(),
     carrier: subject(),
+    state: subject(),
   }
   // state$: Subject<State> = subject()
   state$: Stream<State> = this.update$

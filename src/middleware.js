@@ -1,5 +1,6 @@
 //@flow
 
+import {from, Stream} from 'most'
 import {
   createStore,
   type StoreCreator,
@@ -29,6 +30,7 @@ function middleware<State>({
   const unwrapped = data.plain()
   next(unwrapped)
   store.seq = incSeq(store.seq)
+  store.channels.plain.next(unwrapped)
   data.dispose.disposed(unwrapped)
   store.update$.next({data, state: getState()})
   return data
@@ -39,9 +41,18 @@ function middlewareCurry<State>(
 ): Middleware<State> {
   return ({dispatch, getState}) => (next) => (data) => {
     if (!is(data)) {
-      console.log(data, typeof data)
-      if (typeof data === 'object' && data != null && typeof data.type === 'string')
+      // console.log(data, typeof data)
+      if (typeof data === 'object' && data != null && typeof data.type === 'string') {
+        if (
+          typeof data.meta === 'object'
+          && data.meta != null
+          && typeof data.meta.isNew === 'boolean'
+        ) {
+          if (!data.meta.isNew) return
+          data.meta.isNew = false
+        }
         return next(data)
+      }
       return
     }
     if (data.isSent) {
@@ -66,14 +77,37 @@ export function effectorEnhancer<T>(
     // storeContext.scopeName = []
     //$off
     const store = createStore(reducer, preloadedState, enhancer)
+    store.subscribe(() => {
+      storeContext.channels.state
+        .next(store.getState())
+    })
+    storeContext.channels.plain.observe(
+      e => e.meta.isNew && storeContext.dispatch(e)
+    )
     // storeContext.injector.setStore(store)
-    let dispatch = store.dispatch
+    const dispatchCheck = (data) => {
+
+      if (
+        typeof data === 'object'
+        && data != null
+        && typeof data.meta === 'object'
+        && data.meta != null
+        && typeof data.meta.isNew === 'boolean'
+      ) {
+        if (data.meta.isNew === false) {
+          console.count('dispatch check')
+          return data
+        }
+        data.meta.isNew = false
+      }
+      return store.dispatch(data)
+    }
 
     const middlewareAPI = {
       getState: () => store.getState(),
-      dispatch: (action) => dispatch(action)
+      dispatch: (action) => dispatchCheck(action)
     }
-    dispatch = middlewareCurry(storeContext)(middlewareAPI)(store.dispatch)
+    const dispatch = middlewareCurry(storeContext)(middlewareAPI)(dispatchCheck)
     storeContext.dispatch = dispatch
     storeContext.stateGetter = middlewareAPI.getState
     //storeContext.reduxSubscribe = store.subscribe

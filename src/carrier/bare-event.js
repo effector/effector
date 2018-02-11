@@ -1,5 +1,5 @@
 //@flow
-
+import type {Stream} from 'most'
 import {type ID, createIDType} from '../id'
 const nextID = createIDType()
 
@@ -22,6 +22,15 @@ export class BareEvent<Payload, Instance> {
     this.isMolten = event.isMolten = true
     return (event/*: any*/)
   }
+  listen: () => Stream<{
+    type: string,
+    payload: Payload,
+    meta: {
+      typeId: number,
+      id: number,
+      isNew: boolean,
+    },
+  }>
   //$off
   apply(that: any, [payload]: [Payload]): Instance {
     return this.run(payload)

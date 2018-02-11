@@ -132,8 +132,8 @@ describe.only('event.watch', () => {
     const nextEvent = store.event('nextSync')
     event.watch((data) => {
       fnDeb(data)
-      const result = nextEvent(data).send()
-      return result
+      const result = nextEvent(data)
+      result.send()
     })
     event.watch((data) => {
       fnDeb(data)
@@ -141,13 +141,15 @@ describe.only('event.watch', () => {
       console.log(result)
       return result
     })
+    event.watch(data => nextEvent(data).send())
     nextEvent.watch((data, store) => fn(data, store))
 
     event('run')
 
     await event('run').send()
-    await store.dispatch(event('run')).send()
+    await store.dispatch(event('run'))
     await new Promise(rs => setTimeout(rs, 1500))
+    console.log(cleanActionLog(fn.mock.calls))
     expect(fnDeb).toHaveBeenCalledTimes(4)
     expect(fn).toHaveBeenCalledTimes(4)
     expect(fn).toHaveBeenLastCalledWith('run', defStore)

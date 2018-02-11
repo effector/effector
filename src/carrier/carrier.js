@@ -24,6 +24,7 @@ export class Carrier<E = void> {
       meta: {
         typeId: this.typeId,
         id: this.id,
+        isNew: true,
       },
     }
   }
@@ -43,7 +44,10 @@ export function carrier<E>(
   result.payload = payload
   result.type = type
   result.typeId = typeId
-  result.dispatch = () => { dispatch(result) }
+  result.dispatch = () => {
+    result.dispatch = () => {}
+    dispatch(result)
+  }
   result.dispatched().then(() => result.isSent = true)
   return result
 }

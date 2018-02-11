@@ -45,8 +45,9 @@ export class Event<P, State = any> extends BareEvent<P, Carrier<P>> {
     handler: (data: P, state: State) => R
   ): Stream<R> {
     const result = this.epic(
-      (data$) => watcher(data$, handler)
+      (data$, state$) => watcher(data$, state$, handler)
     )
+    // result.observe(e => console.log(e))
     // result.observe(e => this.emit(e))
     return result
   }
@@ -55,6 +56,7 @@ export class Event<P, State = any> extends BareEvent<P, Carrier<P>> {
 
 function watcher<P, State, R>(
   data$: Stream<$Exact<{data: P, state: State}>>,
+  state$: Stream<State>,
   handler: (data: P, state: State) => R
 ): Stream<R> {
   return data$
