@@ -3,7 +3,7 @@
 // import type {Stream} from 'most'
 // import {createStore, applyMiddleware, combineReducers, type Middleware, type Store, type Reducer} from 'redux'
 import {combineReducers, type Reducer} from 'redux'
-import {getStore, createReducer} from '../../lib'
+import {getStore, createReducer, Store} from '..'
 
 test.skip('func instance', () => {
   interface IData {
@@ -52,7 +52,7 @@ test.skip('func instance', () => {
 
 test('create store', () => {
   const store = getStore('ok', (state, pl) => state)
-  console.log(store)
+  // console.log(store)
   expect(store).toBeDefined()
   const event1 = store.event('event1')
   expect(event1).toBeDefined()
@@ -78,7 +78,6 @@ describe('getType', () => {
     const fromUse = effect1.use((foo: 'foo') => Promise.resolve(foo))
     expect(fromUse).toBe(effect1)
     console.log(fromUse)
-    console.log(effect1)
     expect(effect1.getType()).toBe('getTypeStore/effect1')
     effect1('foo')
     await effect1('foo').done()

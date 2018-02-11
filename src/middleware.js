@@ -47,13 +47,13 @@ function middlewareCurry<State>(
 }
 
 export function effectorEnhancer<T>(
-  domains: Array<Domain<T>> = []
+  domains: Array<Domain<T>> = [],
+  storeContext: Store<T>
 ) {
   return (createStore: StoreCreator<T>): StoreCreator<T> => (
     reducer, preloadedState, enhancer
   ): $todo => {
     //console.error('effect enhancer')
-    const storeContext: Store<T> = new Store
     storeContext.scopeName = []
     const store = createStore(reducer, preloadedState, enhancer)
     storeContext.injector.setStore(store)
@@ -64,19 +64,20 @@ export function effectorEnhancer<T>(
       dispatch: (action) => dispatch(action)
     }
     dispatch = middlewareCurry(storeContext)(middlewareAPI)(store.dispatch)
-    //storeContext.dispatch = dispatch
-    //storeContext.stateGetter = store.getState
+    storeContext.dispatch = dispatch
+    storeContext.stateGetter = middlewareAPI.getState
     //storeContext.reduxSubscribe = store.subscribe
     //storeContext.getState = storeContext.stateGetter
     //storeContext.subscribe = storeContext.reduxSubscribe
     //storeContext.replaceReducer = store.replaceReducer
     domains.forEach(dom => storeContext.connect(dom))
     return {
-      ...storeContext,
+      // ...storeContext,
       ...store,
+      ...middlewareAPI,
       dispatch,
-      stateGetter: store.getState,
-      reduxSubscribe: store.subscribe
+      // stateGetter: store.getState,
+      // reduxSubscribe: store.subscribe
     }
   }
 }
@@ -85,14 +86,15 @@ export function getStore<State>(
   description: string,
   reducer: Reducer<State>,
 ): Store<State> {
-  const storeContext: Store<State> = createStore(
+  const store: Store<State> = new Store
+  const storeContext = createStore(
     reducer,
-    effectorEnhancer()
+    effectorEnhancer([], store)
   )
-  storeContext.scopeName = [description]
-  storeContext.injector.saveStatic(reducer)
+  store.scopeName = [description]
+  store.injector.saveStatic(reducer)
   // store.subscribe(() => { storeContext.state$.next(store.getState()) })
-  return storeContext
+  return store
 }
 
 

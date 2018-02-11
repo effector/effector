@@ -69,6 +69,7 @@ export class Domain<State> implements Named, Dispatcher, EventRunner<State> {
   }
 }
 
+
 export function createDomain<State>(name: string): Domain<State> {
   const result = new Domain
   result.domainName = name
