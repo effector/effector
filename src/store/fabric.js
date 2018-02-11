@@ -25,18 +25,8 @@ export function eventFabric<P, State>(
   }> = store.channels.plain
     .filter(({meta: {typeId} }) => result.id === typeId)
     .multicast()
-  const eventState$: Stream<$Exact<{
-    data: P,
-    state: State,
-  }>> = combine(
-    ({payload}, state) => ({
-      data: payload,
-      state,
-    }),
-    listen,
-    store.channels.state
-  )
-    .sampleWith(listen)
+  const eventState$: Stream<P> = listen
+    .map(e => e.payload)
     .multicast()
   result.listen = () => listen
   listen.observe(e => console.log(e))
@@ -45,6 +35,7 @@ export function eventFabric<P, State>(
     // console.log(data)
     // store.dispatch(data)
     if (data instanceof Carrier) {
+      data.dispose.disposed(data.payload)
       store.dispatch(data)
       return data
     } else if (

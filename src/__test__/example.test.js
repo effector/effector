@@ -154,7 +154,7 @@ describe.only('event.watch', () => {
     expect(fn).toHaveBeenCalledTimes(4)
     expect(fn).toHaveBeenLastCalledWith('run', defStore)
   })
-  test('async handler', async() => {
+  test.only('async handler', async() => {
     const fn = jest.fn()
     const fnDeb = jest.fn()
     const defStore = {foo: 'bar'}
@@ -164,19 +164,19 @@ describe.only('event.watch', () => {
     event.watch(async(data) => {
       fnDeb(data)
       await new Promise(rs => setTimeout(rs, 300))
-      const result = nextEvent(data)
+      const result = nextEvent(data).send()
       return result
     })
     nextEvent.watch((data, store) => fn(data, store))
 
     store.dispatch(event('run'))
 
-    await event('run').dispatched()
+    await event('run').send()
     await new Promise(rs => setTimeout(rs, 1500))
-    expect(fnDeb).toHaveBeenCalledTimes(1)
+    expect(fnDeb).toHaveBeenCalledTimes(2)
     expect(fn).toHaveBeenLastCalledWith('run', defStore)
   })
-  test('failed handler', async() => {
+  test.only('failed handler', async() => {
     const fnDeb = jest.fn()
     const defStore = {foo: 'bar'}
     const store = getStore('watchStoreReject', (state = defStore) => state)
@@ -184,10 +184,10 @@ describe.only('event.watch', () => {
 
     store.dispatch(event('run'))
 
-    await event('run').dispatched()
+    await event('run').send()
 
     event.watch((data) => (fnDeb(data), Promise.reject()))
-    await store.dispatch(event('run')).dispatched()
+    await store.dispatch(event('run')).send()
     expect(fnDeb).toHaveBeenCalledTimes(1)
   })
 })

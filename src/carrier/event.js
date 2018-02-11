@@ -55,11 +55,13 @@ export class Event<P, State = any> extends BareEvent<P, Carrier<P>> {
 }
 
 function watcher<P, State, R>(
-  data$: Stream<$Exact<{data: P, state: State}>>,
+  data$: Stream<P>,
   state$: Stream<State>,
   handler: (data: P, state: State) => R
 ): Stream<R> {
   return data$
+    .combine((data, state) => ({data, state}), state$)
+    .sampleWith(data$)
     .map(
       async({data, state}): Promise<Stream<R>> => {
         try {
