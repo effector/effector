@@ -11,7 +11,7 @@
     "alwaysStrict": true,
     "strict": true,
     "paths": {
-      "most": ["./flow/most"]
+      "most": ["./flow/most.js"]
     }
   },
   "typeAcquisition": {
