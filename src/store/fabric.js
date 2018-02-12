@@ -12,7 +12,6 @@ export function eventFabric<P, State>(
   description: string,
   store: Store<State>
 ): Event<P, State> {
-  const {update$} = store
   const result: Event<P, State> = new Event(description)
   const listen: Stream<{
     type: string,
@@ -156,31 +155,22 @@ export function effectFabric<Params, Done, Fail, State>(
   description: string,
   store: Store<State>
 ): Effect<Params, Done, Fail, State> {
-  const {update$} = store
   const result: Effect<Params, Done, Fail, State> = new Effect
   result.getType = () => [store.scope(), description].join('/')
   result.dispatch = store.dispatch
   result.done = eventFabric(`${description} done`, store)
   result.fail = eventFabric(`${description} fail`, store)
-  const epic$: Stream<$Exact<{
-    state: State,
-    data: CarrierEffect<Params, Done, Fail>
-  }>> = update$
-    .filter(
-      ({data}) => data.typeId === result.id
-    )
-    .map((e: any): $Exact<{data: CarrierEffect<Params, Done, Fail>, state: State}> => e)
+  const listen = store.channels.plain
+    .filter(({meta: {typeId} }) => result.id === typeId)
     .multicast()
-  const payload$: Stream<$Exact<{
-    state: State,
-    data: Params
-  }>> = epic$
-    .map(({data, state}) => ({data: data.payload, state}))
+  const eventState$ = listen
+    .map(e => e.payload)
     .multicast()
+  result.listen = () => listen
 
   // store.mergeEvents(result)
   result.epic = function<R>(epic: EpicFun<Params, State, R>): Stream<R> {
-    const epic$ = epic(payload$, store.state$)
+    const epic$ = epic(eventState$, store.state$)
     epic$.observe((value) => {
       if (value instanceof Carrier) {
         const uniq = store.uniq.isUniq(value)

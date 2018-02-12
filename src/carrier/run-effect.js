@@ -2,6 +2,7 @@
 
 import type {Effect} from './effect'
 import {CarrierEffect, carrierEffect} from './carrier-effect'
+import type {DoneType, FailType} from '../index.h'
 
 export function runEffect<Params, Done, Fail, State>(
   payload: Params,
@@ -13,7 +14,7 @@ export function runEffect<Params, Done, Fail, State>(
   // init.defer.done.then(e => console.warn(e, effect.done.run(e).send()))
   // init.defer.fail.then(e => console.warn(e, effect.fail.run(e)))
   init.dispatched().then(
-    payload => effect.thunk(payload).then(
+    ({payload, ...rest}) => effect.thunk(payload).then(
       (value: Done) => {
         const {done} = effect
         done.used += 1
@@ -21,6 +22,9 @@ export function runEffect<Params, Done, Fail, State>(
           params: payload,
           result: value,
         })
+        console.log(payload)
+        console.log(value)
+        console.log(rest)
         result.dispatched().then(
           rs => init.defer.resolved(rs)
         )
@@ -33,6 +37,9 @@ export function runEffect<Params, Done, Fail, State>(
           params: payload,
           error: value,
         })
+        console.log(payload)
+        console.log(value)
+        console.log(rest)
         result.dispatched().then(
           rs => init.defer.rejected(rs)
         )

@@ -46,14 +46,13 @@ export class CarrierEffect<
     ])
   }
   plain() {
-    const {type, payload, meta, ...rest} = super.plain()
+    const {type, payload, meta} = super.plain()
     //$off
     return {
       type, payload, meta: {
         ...meta,
         seq: this.seq,
       },
-      ...rest
     }
   }
 }
