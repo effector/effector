@@ -15,34 +15,45 @@ export class CarrierEffect<
 > extends Carrier<Params> {
   seq: ID = nextSEQ()
   defer: Defer<DoneType<Params, Done>, FailType<Params, Fail>> = new Defer
-  done(): Promise<Done> {
+  done(): Promise<DoneType<Params, Done>> {
     const result = this.defer
       .done
-      .then(({result}) => result)
+      .then(({payload}) => payload)
+      .then(({params, result}) => ({
+        params: params.payload,
+        result,
+      }))
     this.dispatch()
     return result
   }
-  fail(): Promise<Fail> {
+  fail(): Promise<FailType<Params, Fail>> {
     const result = this.defer
       .fail
-      .then(({error}) => error)
+      .then(e => (console.log(e), e))
+      .then(({payload}) => payload)
+      .then(({params, error, ...rest}) => ({
+        params: params.payload,
+        error,
+        ...rest
+      }))
     this.dispatch()
     return result
   }
-  promise(): Promise<Done> {
+  promise(): Promise<DoneType<Params, Done>> {
     return Promise.race([
       this.done(),
       this.fail().then(err => Promise.reject(err))
     ])
   }
   plain() {
-    const {type, payload, meta} = super.plain()
+    const {type, payload, meta, ...rest} = super.plain()
     //$off
     return {
       type, payload, meta: {
         ...meta,
         seq: this.seq,
-      }
+      },
+      ...rest
     }
   }
 }
