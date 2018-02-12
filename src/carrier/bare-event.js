@@ -10,6 +10,9 @@ export class BareEvent<Payload, Instance> {
   isMolten: boolean
   /*::+*/run: (payload: Payload) => Instance
   getType: () => string
+  toString() {
+    return this.getType()
+  }
   melt(): this {
     if (this.isMolten) {
       throw new Error(`Already molten instance`)
@@ -18,6 +21,7 @@ export class BareEvent<Payload, Instance> {
       return event.run(payload)
     }
     Object.setPrototypeOf(event, this.constructor.prototype)
+    //$off
     Object.assign(event, this)
     this.isMolten = event.isMolten = true
     return (event/*: any*/)

@@ -57,7 +57,7 @@ describe('getType', () => {
     await act1.dispatched()
     message.epic(
       (data$) => data$.map(
-        ({data}) => event({...data, evt: true})
+        (data) => event({...data, evt: true})
       )
         .tap(e => console.log(e))
     )
@@ -101,13 +101,13 @@ test('execution correctness', async() => {
   expect(cleanActionLog(fn.mock.calls)).toHaveLength(1)
   message.epic(
     (data$) => data$.map(
-      ({data}) => event({...data, evt: true})
+      (data) => event({...data, evt: true})
     )
       .tap(fnEpic)
   )
   message.done.epic(
     data$ => data$.map(
-      ({data}) => fnEpicDone(data)
+      (data) => fnEpicDone(data)
     )
   )
   send(message({foo: 'bar', meta: 'first'}))
