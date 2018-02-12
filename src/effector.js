@@ -7,11 +7,19 @@ import {async as subject, type Subject} from 'most-subject'
 import type {ID, Tag, Domain, Effect, Event} from './index.h'
 import {counter, toTag} from './index.h'
 
+import {PING, PONG, type Config} from './config'
+
 export function createDomain<State>(
   store: Store<State>,
-  domainName: string = '~'
+  domainName: string = ''
 ): Domain<State> {
   const redux: any = store
+  const config: Config = redux.dispatch({
+    type: PING,
+  }).payload
+  const addPlainHandler = (name, fn) => {
+    config.plain.set(name, fn)
+  }
   const state$: Stream<State> = from(redux)
     .map(() => store.getState())
     .multicast()
@@ -20,6 +28,8 @@ export function createDomain<State>(
     redux.dispatch,
     store.getState,
     state$,
+    new Map,
+    addPlainHandler,
   )
 }
 
@@ -46,7 +56,8 @@ function DomainConstructor<State>(
   dispatch: <T>(value: T) => T,
   getState: () => State,
   state$: Stream<State>,
-  events = new Map
+  events = new Map,
+  addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => {}
 ): Domain<State> {
   return {
     effect<Params, Done, Fail>(
@@ -61,13 +72,14 @@ function DomainConstructor<State>(
         name
       )
     },
-    domain(name: string) {
+    domain(name: string): Domain<State> {
       return DomainConstructor(
         [domainName, name].join('/'),
         dispatch,
         getState,
         state$,
         events,
+        addPlainHandler,
       )
     },
     event<Payload>(
@@ -81,7 +93,25 @@ function DomainConstructor<State>(
         events,
         name
       )
-    }
+    },
+    typeConstant<Payload>(
+      name: string
+    ): Event<Payload, State> {
+      const action$: Subject<Payload> = subject()
+      addPlainHandler(name, data => {
+        action$.next(data)
+      })
+      const result = EventConstructor(
+        '',
+        dispatch,
+        getState,
+        state$,
+        events,
+        name,
+        action$
+      )
+      return result
+    },
   }
 }
 
@@ -139,7 +169,7 @@ function EffectConstructor<State, Params, Done, Fail>(
         for (const handler of handlers) {
           handler(params, getState())
         }
-        action$.next(params)
+        // action$.next(params)
         run()
       }
     }
@@ -234,7 +264,8 @@ function EventConstructor<State, Payload>(
   getState: () => State,
   state$: Stream<State>,
   events,
-  name: string
+  name: string,
+  action$: Subject<Payload> = subject()
 ): Event<Payload, State> {
   const eventID = nextEventID()
   const nextSeq = counter()
@@ -245,7 +276,6 @@ function EventConstructor<State, Payload>(
   ) {
     handlers.add(fn)
   }
-  const action$: Subject<Payload> = subject()
   handlers.add((payload, state) => action$.next(payload))
   // handlers.add((payload, state) => state$.next(state))
   function epic<R>(
@@ -287,7 +317,7 @@ function EventConstructor<State, Payload>(
           for (const handler of handlers) {
             handler(payload, getState())
           }
-          action$.next(payload)
+          // action$.next(payload)
         }
         return toSend
       },
