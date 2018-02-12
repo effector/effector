@@ -47,6 +47,57 @@ export function domain<State>(
   )
 }
 
+export function rootDomain<State>(
+  domainName: string = ''
+): Domain<State> {
+
+  const addPlainHandler = (name, fn) => {
+    config.plain.set(name, fn)
+  }
+  let redux: any
+  let reduxStore: Store<State>
+  const config: Config = {
+    plain: new Map()
+  }
+  function dispatch<T>(data: T): T {
+    return redux.dispatch(data)
+  }
+  function getState(): State {
+    return reduxStore.getState()
+  }
+
+  const state$: Subject<State> = subject()
+  function register(store: Store<State>) {
+    redux = reduxStore = store
+    const pong = redux.dispatch({
+      type: PING,
+    })
+    if (pong) {
+      const plain: Map<*, *> = pong.payload.plain
+      const oldPlain = config.plain
+      for (const [key, val] of oldPlain.entries()) {
+        if (!plain.has(key)) {
+          plain.set(key, val)
+        }
+      }
+      config.plain = plain
+    }
+    //$off
+    from(store)
+      .map(() => getState())
+      .observe(state => state$.next(state))
+  }
+  const domain: Domain<State> = DomainConstructor(
+    domainName,
+    dispatch,
+    getState,
+    state$,
+    new Map,
+    addPlainHandler
+  )
+  domain.register = register
+  return domain
+}
 
 const nextPayloadID = counter()
 const nextEventID = counter()
@@ -59,7 +110,11 @@ function DomainConstructor<State>(
   events = new Map,
   addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => {}
 ): Domain<State> {
+
   return {
+    register(store) {
+      console.warn(`Not implemented`)
+    },
     effect<Params, Done, Fail>(
       name: string
     ): Effect<Params, Done, Fail, State> {

@@ -8,7 +8,7 @@ import {
   type Middleware,
   type Dispatch,
 } from 'redux'
-import {createDomain, type Domain, type Event, effectorMiddleware} from '..'
+import {createDomain, type Domain, type Event, rootDomain, effectorMiddleware} from '..'
 
 test('smoke', async() => {
   const fn = jest.fn()
@@ -72,7 +72,8 @@ test('both return and send', async() => {
       effectorMiddleware
     )
   )
-  const domain = createDomain(store)
+  const domain = rootDomain()
+
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -83,6 +84,7 @@ test('both return and send', async() => {
       e => effect(e).send()
     )
   )
+  domain.register(store)
   await event('ev').send()
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)

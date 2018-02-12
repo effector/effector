@@ -1,6 +1,7 @@
 //@flow
 
 import {Stream} from 'most'
+import type {Store} from 'redux'
 
 export /*::opaque*/ type Tag = string
 export /*::opaque*/ type ID = number
@@ -16,6 +17,7 @@ export type Domain<State = void> = {
   typeConstant<Payload>(
     name: string
   ): Event<Payload, State>,
+  register: (store: Store<State>) => void,
 }
 
 export type Event<Payload, State> = {
