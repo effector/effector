@@ -139,6 +139,7 @@ function EffectConstructor<State, Params, Done, Fail>(
         for (const handler of handlers) {
           handler(params, getState())
         }
+        action$.next(params)
         run()
       }
     }
@@ -181,7 +182,7 @@ function EffectConstructor<State, Params, Done, Fail>(
     getState,
     state$,
     events,
-    [getType(), 'done'].join(' ')
+    [name, 'done'].join(' ')
   )
   const fail: Event<{params: Params, error: Fail}, State> = EventConstructor(
     domainName,
@@ -189,10 +190,13 @@ function EffectConstructor<State, Params, Done, Fail>(
     getState,
     state$,
     events,
-    [getType(), 'fail'].join(' ')
+    [name, 'fail'].join(' ')
   )
   function watch<R>(fn: (params: Params, state: State) => R) {
-    handlers.add(fn)
+    handlers.add((params, state) => {
+      const result = fn(params, state)
+      safeDispatch(result, dispatch)
+    })
   }
   function epic<R>(
     handler: (
@@ -202,15 +206,7 @@ function EffectConstructor<State, Params, Done, Fail>(
   ): Stream<R> {
     const result = handler(action$, state$)
       .multicast()
-    result.observe(data => {
-      if (
-        typeof data === 'object'
-        && data != null
-        && typeof data.type === 'string'
-      ) {
-        dispatch(data)
-      }
-    })
+    result.observe(data => safeDispatch(data, dispatch))
     return result
   }
   effect.use = use
@@ -220,6 +216,16 @@ function EffectConstructor<State, Params, Done, Fail>(
   effect.watch = watch
   effect.epic = epic
   return effect
+}
+
+function safeDispatch(data, dispatch) {
+  if (
+    typeof data === 'object'
+    && data != null
+    && typeof data.type === 'string'
+  ) {
+    dispatch(data)
+  }
 }
 
 function EventConstructor<State, Payload>(
@@ -250,15 +256,7 @@ function EventConstructor<State, Payload>(
   ): Stream<R> {
     const result = handler(action$, state$)
       .multicast()
-    result.observe(data => {
-      if (
-        typeof data === 'object'
-        && data != null
-        && typeof data.type === 'string'
-      ) {
-        dispatch(data)
-      }
-    })
+    result.observe(data => safeDispatch(data, dispatch))
     return result
   }
   const create = (payload: Payload) => ({
@@ -289,6 +287,7 @@ function EventConstructor<State, Payload>(
           for (const handler of handlers) {
             handler(payload, getState())
           }
+          action$.next(payload)
         }
         return toSend
       },
