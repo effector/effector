@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reducer 1`] = `
+Object {
+  "actions": Array [
+    "bar",
+    "ev",
+  ],
+}
+`;
+
+exports[`reducer 2`] = `
+Object {
+  "actions": Array [
+    "bar",
+    "ev",
+    "ev2",
+  ],
+}
+`;
+
+exports[`reducer 3`] = `
+Object {
+  "actions": Array [
+    "bar",
+  ],
+}
+`;
