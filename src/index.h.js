@@ -32,6 +32,16 @@ export type Domain<State = void> = {
   port<R>(events$: Stream<R>): void,
 }
 
+export type Subscription<A> = {
+  unsubscribe(): void
+}
+
+export type Subscriber<A> = {
+  next(value: A): void,
+  error(err: Error): void,
+  complete(value?: A): void,
+}
+
 export type Event<Payload, State> = {
   (params: Payload): {
     send(dispatchHook?: <T>(value: T) => T): Promise<Payload>,
@@ -45,6 +55,7 @@ export type Event<Payload, State> = {
       state$: Stream<State>
     ) => Stream<R>
   ): Stream<R>,
+  subscribe(subscriber: Subscriber<Payload>): Subscription<Payload>,
 }
 
 export type Effect<Params, Done, Fail, State> = {
@@ -63,6 +74,7 @@ export type Effect<Params, Done, Fail, State> = {
     ) => Stream<R>
   ): Stream<R>,
   use(thunk: (params: Params) => Promise<Done>): void,
+  subscribe(subscriber: Subscriber<Params>): Subscription<Params>,
   done: Event<{params: Params, result: Done}, State>,
   fail: Event<{params: Params, error: Fail}, State>,
 }
