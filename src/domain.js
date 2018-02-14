@@ -1,11 +1,11 @@
 //@flow
 
 import type {Store} from 'redux'
-import {Stream, from} from 'most'
+import {type Stream, from} from 'most'
 import {async as subject, type Subject} from 'most-subject'
 
 import type {Domain, Effect, Event, RawAction} from './index.h'
-import {nextPayloadID, nextEventID, toTag, counter, type Tag} from './id'
+import type {Tag} from './id'
 
 import {PING, PONG, type Config} from './config'
 
@@ -33,20 +33,6 @@ export function createDomain<State>(
     state$,
     new Map,
     addPlainHandler,
-  )
-}
-
-export function domain<State>(
-  domainName: string,
-  dispatch: <T>(value: T) => T,
-  getState: () => State,
-  state$: Stream<State>,
-): Domain<State> {
-  return DomainConstructor(
-    domainName,
-    dispatch,
-    getState,
-    state$,
   )
 }
 
