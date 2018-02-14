@@ -1,10 +1,9 @@
 //@flow
 
-import type {Store} from 'redux'
 import {type Stream, from} from 'most'
 import {async as subject, type Subject} from 'most-subject'
 
-import type {Domain, Effect, Event, RawAction} from './index.h'
+import type {Domain, Effect, Event, Store} from './index.h'
 import type {Tag} from './id'
 
 import {PING, PONG, type Config} from './config'
@@ -61,9 +60,11 @@ export function rootDomain<State>(
     redux = reduxStore = store
     const pong = redux.dispatch({
       type: PING,
+      payload: undefined,
     })
     if (pong) {
-      const plain: Map<*, *> = pong.payload.plain
+      const payload: any = pong.payload
+      const plain: Map<*, *> = payload.plain
       const oldPlain = config.plain
       for (const [key, val] of oldPlain.entries()) {
         if (!plain.has(key)) {

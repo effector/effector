@@ -1,7 +1,7 @@
 //@flow
 /* eslint-disable no-unused-vars */
 
-import {Stream} from 'flow@most'
+import {Stream} from 'most'
 
 declare export
 class Subject<T> extends Stream<T> {
