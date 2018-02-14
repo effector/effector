@@ -1,6 +1,6 @@
 //@flow
 
-import {type Stream, subscribe} from 'most'
+import type {Stream} from 'most'
 import {async as subject, type Subject} from 'most-subject'
 
 import type {Effect, Event, RawAction} from './index.h'
@@ -131,7 +131,7 @@ export function EffectConstructor<State, Params, Done, Fail>(
   effect.fail = fail
   effect.watch = watch
   effect.epic = port(dispatch, state$, action$)
-  effect.subscribe = (subscriber) => subscribe(subscriber, action$)
+  effect.subscribe = (subscriber) => action$.subscribe(subscriber)
   return effect
 }
 

@@ -1,7 +1,7 @@
 //@flow
 
 // import type {Store} from 'redux'
-import {type Stream, subscribe} from 'most'
+import type {Stream} from 'most'
 import {async as subject, type Subject} from 'most-subject'
 
 import type {Event, RawAction} from './index.h'
@@ -70,7 +70,7 @@ export function EventConstructor<State, Payload>(
   eventInstance.toString = getType
   eventInstance.watch = watch
   eventInstance.epic = port(dispatch, state$, action$)
-  eventInstance.subscribe = (subscriber) => subscribe(subscriber, action$)
+  eventInstance.subscribe = (subscriber) => action$.subscribe(subscriber)
 
   events.set(getType(), eventInstance)
   return eventInstance
