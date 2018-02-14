@@ -80,7 +80,10 @@ export function createReducer<S>(
 
     const handler = handlers[String(action.type)] || opts.fallback
     if (handler) {
-      return handler(state, action.payload, action.meta) || opts.defaultState
+      const result = handler(state, action.payload, action.meta)
+      if (result === undefined)
+        return opts.defaultState
+      return result
     }
 
     return state
