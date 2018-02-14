@@ -9,7 +9,7 @@ import {nextPayloadID, nextEventID, toTag, counter, type Tag} from './id'
 import {EventConstructor} from './event'
 import {safeDispatch, port} from './port'
 
-import {basicCommon} from './event-common'
+import {basicCommon, observable} from './event-common'
 
 export function EffectConstructor<State, Params, Done, Fail>(
   domainName: string,
@@ -132,6 +132,7 @@ export function EffectConstructor<State, Params, Done, Fail>(
   effect.watch = watch
   effect.epic = port(dispatch, state$, action$)
   effect.subscribe = (subscriber) => action$.subscribe(subscriber)
+  observable(effect, action$)
   return effect
 }
 

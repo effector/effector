@@ -60,6 +60,7 @@ export type Event<Payload, State> = {
 
 export type Effect<Params, Done, Fail, State> = {
   (params: Params): {
+    raw(): RawAction<Params>,
     send(dispatchHook?: <T>(value: T) => T): Promise<Params>,
     done(): Promise<{params: Params, result: Done}>,
     fail(): Promise<{params: Params, error: Fail}>,

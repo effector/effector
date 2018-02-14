@@ -10,7 +10,7 @@ import {nextPayloadID, type Tag} from './id'
 
 import {port} from './port'
 
-import {basicCommon} from './event-common'
+import {basicCommon, observable} from './event-common'
 
 export function EventConstructor<State, Payload>(
   domainName: string,
@@ -71,7 +71,7 @@ export function EventConstructor<State, Payload>(
   eventInstance.watch = watch
   eventInstance.epic = port(dispatch, state$, action$)
   eventInstance.subscribe = (subscriber) => action$.subscribe(subscriber)
-
+  observable(eventInstance, action$)
   events.set(getType(), eventInstance)
   return eventInstance
 }

@@ -8,6 +8,7 @@ import {
   type Middleware,
   type Dispatch,
 } from 'redux'
+import {from} from 'most'
 import {createDomain, type Domain, type Event, rootDomain, effectorMiddleware} from '..'
 
 test('smoke', async() => {
@@ -111,4 +112,28 @@ test('typeConstant', async() => {
   expect(event).toBeDefined()
   await event('bar').send()
   expect(used).toHaveBeenCalledTimes(2)
+})
+
+test('subscription', async() => {
+  const fn = jest.fn()
+  const used = jest.fn(x => console.log(x))
+  const store: Store<{foo: 'bar'}> = createStore(
+    (s, x) => s,
+    applyMiddleware(
+      effectorMiddleware
+    )
+  )
+  const domain = createDomain(store)
+
+  const eff = domain.effect('TYPE_CONST')
+  expect(() => {
+    from(eff).observe(fn)
+  }).not.toThrow()
+  const event = domain.event('ev')
+  expect(() => {
+    from(event).observe(fn)
+  }).not.toThrow()
+  await event('').send()
+  await eff('').send()
+  expect(fn).toHaveBeenCalledTimes(2)
 })
