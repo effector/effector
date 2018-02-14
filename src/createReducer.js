@@ -14,7 +14,7 @@ function normalizeType(typeOrActionCreator) {
 }
 
 export function createReducer<S>(
-  defaultState: S, 
+  defaultState: S,
   handlers: Handlers<S> | OnOff<S> = {}
 ): Reducer<S> {
   const opts = {
@@ -72,7 +72,7 @@ export function createReducer<S>(
     if (!action || (typeof action.type !== 'string')) { return state }
     if (action.type.startsWith('@@redux/')) { return state }
 
-    const handler = handlers[action.type] || opts.fallback
+    const handler = handlers[String(action.type)] || opts.fallback
     if (handler) {
       return handler(state, action.payload, action.meta)
     }

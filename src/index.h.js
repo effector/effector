@@ -5,10 +5,14 @@ import type {Store} from 'redux'
 
 type Handler<S, P, M={}> = (state: S, payload: P, meta?: M) => S
 
-type RawAction<+P, +M = {}> = {
-  +type: string,
-  +payload: P,
-  +meta?: M
+export type RawAction<P> = {
+  type: string | Tag,
+  payload: P,
+  meta: {
+    index: ID,
+    eventID: ID,
+    seq: ID,
+  },
 }
 
 export /*::opaque*/ type Tag = string
@@ -31,7 +35,7 @@ export type Domain<State = void> = {
 export type Event<Payload, State> = {
   (params: Payload): {
     send(dispatchHook?: <T>(value: T) => T): Promise<Payload>,
-    raw(): RawAction<Payload, any>,
+    raw(): RawAction<Payload>,
   },
   getType(): Tag,
   watch<R>(fn: (params: Payload, state: State) => R): void,
@@ -90,7 +94,7 @@ export type Effect<Params, Done, Fail, State> = {
 }
 
 export type Reducer<S> = {
-  (state?: S, action: RawAction<any, any>): S,
+  (state?: S, action: RawAction<any>): S,
   options(opts: { fallback: boolean }): Reducer<S>,
   has(event: Event<any, any>): boolean,
   on<

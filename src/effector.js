@@ -4,7 +4,7 @@ import type {Store} from 'redux'
 import {Stream, from} from 'most'
 import {async as subject, type Subject} from 'most-subject'
 
-import type {ID, Tag, Domain, Effect, Event} from './index.h'
+import type {ID, Tag, Domain, Effect, Event, RawAction} from './index.h'
 import {counter, toTag} from './index.h'
 
 import {PING, PONG, type Config} from './config'
@@ -353,13 +353,13 @@ function EventConstructor<State, Payload>(
       seq: nextSeq(),
     },
   })
-  const eventInstance = (payload: Payload) => {
+  function eventInstance(payload: Payload) {
     const toSend = Promise.resolve(payload)
     const result = create(payload)
     let canDispatch = true
     return {
       ...result,
-      raw() {
+      raw(): RawAction<Payload> {
         return result
       },
       send(dispatchHook) {
