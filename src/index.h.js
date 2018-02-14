@@ -1,11 +1,17 @@
 //@flow
 
 import {Stream} from 'most'
-import type {Store} from 'redux'
 
 import type {ID, Tag} from './id'
 
 type Handler<S, P, M={}> = (state: S, payload: P, meta?: M) => S
+
+export type Store<S> = {
+  dispatch: <T>(x: T) => T,
+  getState(): S,
+  subscribe(listener: any): () => void,
+  replaceReducer(nextReducer: Reducer<S>): void,
+}
 
 export type RawAction<P> = {
   type: string | Tag,
