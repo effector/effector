@@ -3,6 +3,8 @@
 import {Stream} from 'most'
 import type {Store} from 'redux'
 
+import type {ID, Tag} from './id'
+
 type Handler<S, P, M={}> = (state: S, payload: P, meta?: M) => S
 
 export type RawAction<P> = {
@@ -14,9 +16,6 @@ export type RawAction<P> = {
     seq: ID,
   },
 }
-
-export /*::opaque*/ type Tag = string
-export /*::opaque*/ type ID = number
 
 export type Domain<State = void> = {
   effect<Params, Done, Fail>(
@@ -120,14 +119,3 @@ export type OnOff<S> = {
   (on: functionOn<S, any, any>, off: functionOff<S>): void;
 }
 
-
-export const counter = (): () => ID => {
-  let id: ID = 0
-  return (): ID => ++id
-}
-
-export function toTag(...tags: $ReadOnlyArray<string | Tag>): Tag {
-  return tags
-    .filter(str => str.length > 0)
-    .join('/')
-}

@@ -1,6 +1,7 @@
 // @flow
 
 import type {
+  RawAction,
   Reducer,
   Handlers,
   OnOff
@@ -68,13 +69,13 @@ export function createReducer<S>(
     factory(on, off)
   }
 
-  function reduce(state: S = defaultState, action) {
+  function reduce<P>(state: S = defaultState, action: RawAction<P>) {
     if (!action || (typeof action.type !== 'string')) { return state }
     if (action.type.startsWith('@@redux/')) { return state }
 
     const handler = handlers[String(action.type)] || opts.fallback
     if (handler) {
-      return handler(state, action.payload, action.meta)
+      return handler(state, action.payload, action.meta) || defaultState
     }
 
     return state
