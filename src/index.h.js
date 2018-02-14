@@ -62,34 +62,23 @@ export type Effect<Params, Done, Fail, State> = {
     ) => Stream<R>
   ): Stream<R>,
   use(thunk: (params: Params) => Promise<Done>): void,
-  done: {
-    epic<R>(
-      handler: (
-        data$: Stream<{params: Params, result: Done}>,
-        state$: Stream<State>
-      ) => Stream<R>
-    ): Stream<R>,
-    watch<R>(
-      handler: (
-        data: {params: Params, result: Done},
-        state: State,
-      ) => R
-    ): void,
-  },
-  fail: {
-    epic<R>(
-      handler: (
-        data$: Stream<{params: Params, error: Fail}>,
-        state$: Stream<State>
-      ) => Stream<R>
-    ): Stream<R>,
-    watch<R>(
-      handler: (
-        data: {params: Params, error: Fail},
-        state: State,
-      ) => R
-    ): void,
-  },
+  done: Event<{params: Params, result: Done}, State>,
+  fail: Event<{params: Params, error: Fail}, State>,
+}
+
+export type BaseEvent<Payload, State> = {
+  // add<Payload>(
+  //   event: Event<Payload, State>,
+  //   handler: (payload: Payload, state: State) => J
+  // ): Joint<J, State>,
+  getType(): Tag,
+  watch<R>(fn: (params: Payload, state: State) => R): void,
+  epic<R>(
+    handler: (
+      data$: Stream<Payload>,
+      state$: Stream<State>
+    ) => Stream<R>
+  ): Stream<R>,
 }
 
 export type Reducer<S> = {

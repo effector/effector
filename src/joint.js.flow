@@ -1,0 +1,49 @@
+//@flow
+
+import type {Reducer} from './index.h'
+
+declare export function joint<A, B, R>(
+  fn: (a: A, b: B) => R,
+  reducerA: Reducer<A>,
+  reducerB: Reducer<B>,
+  noc: void,
+  nod: void,
+  noe: void,
+  nof: void
+): Reducer<R>
+declare export function joint<A, B, C, R>(
+  fn: (a: A, b: B, c: C) => R,
+  reducerA: Reducer<A>,
+  reducerB: Reducer<B>,
+  reducerC: Reducer<C>,
+  nod: void,
+  noe: void,
+  nof: void
+): Reducer<R>
+declare export function joint<A, B, C, D, R>(
+  fn: (a: A, b: B, c: C, d: D) => R,
+  reducerA: Reducer<A>,
+  reducerB: Reducer<B>,
+  reducerC: Reducer<C>,
+  reducerD: Reducer<D>,
+  noe: void,
+  nof: void
+): Reducer<R>
+declare export function joint<A, B, C, D, E, R>(
+  fn: (a: A, b: B, c: C, d: D, e: E) => R,
+  reducerA: Reducer<A>,
+  reducerB: Reducer<B>,
+  reducerC: Reducer<C>,
+  reducerD: Reducer<D>,
+  reducerE: Reducer<E>,
+  nof: void
+): Reducer<R>
+declare export function joint<A, B, C, D, E, F, R>(
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+  reducerA: Reducer<A>,
+  reducerB: Reducer<B>,
+  reducerC: Reducer<C>,
+  reducerD: Reducer<D>,
+  reducerE: Reducer<E>,
+  reducerF: Reducer<F>
+): Reducer<R>

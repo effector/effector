@@ -107,6 +107,7 @@ test('typeConstant', async() => {
 
   console.log(event)
   store.dispatch({type: 'TYPE_CONST', payload: 'bar'})
+  expect(event('bar')).toMatchObject({type: 'TYPE_CONST', payload: 'bar'})
   expect(event).toBeDefined()
   await event('bar').send()
   expect(used).toHaveBeenCalledTimes(2)

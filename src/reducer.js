@@ -16,23 +16,28 @@ function normalizeType(typeOrActionCreator) {
 
 export function createReducer<S>(
   defaultState: S,
-  handlers: Handlers<S> | OnOff<S> = {}
+  handlers: Handlers<S> | OnOff<S> = {},
+  thisType?: Reducer<S>
 ): Reducer<S> {
   const opts = {
     fallback: null,
+    defaultState,
   }
 
   const reducer = Object.assign(reduce, {
     has, on, off, options, reset
   })
+  const returnType = thisType
+    ? thisType
+    : reducer
 
   function has(typeOrActionCreator) {
     return !!handlers[normalizeType(typeOrActionCreator)]
   }
 
   function reset(typeOrActionCreator) {
-    on(typeOrActionCreator, () => defaultState)
-    return reducer
+    on(typeOrActionCreator, () => opts.defaultState)
+    return returnType
   }
 
   function on(typeOrActionCreator, handler) {
@@ -44,7 +49,7 @@ export function createReducer<S>(
       handlers[normalizeType(typeOrActionCreator)] = handler
     }
 
-    return reducer
+    return returnType
   }
 
   function off(typeOrActionCreator) {
@@ -53,13 +58,13 @@ export function createReducer<S>(
     } else {
       delete handlers[normalizeType(typeOrActionCreator)]
     }
-    return reducer
+    return returnType
   }
 
   function options(newOpts) {
     // $off
     Object.keys(newOpts).forEach(name => opts[name] = newOpts[name])
-    return reducer
+    return returnType
   }
 
   if (typeof handlers === 'function') {
@@ -69,13 +74,13 @@ export function createReducer<S>(
     factory(on, off)
   }
 
-  function reduce<P>(state: S = defaultState, action: RawAction<P>) {
+  function reduce<P>(state: S = opts.defaultState, action: RawAction<P>) {
     if (!action || (typeof action.type !== 'string')) { return state }
     if (action.type.startsWith('@@redux/')) { return state }
 
     const handler = handlers[String(action.type)] || opts.fallback
     if (handler) {
-      return handler(state, action.payload, action.meta) || defaultState
+      return handler(state, action.payload, action.meta) || opts.defaultState
     }
 
     return state
