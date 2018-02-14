@@ -9,6 +9,7 @@ import type {Tag} from './id'
 
 import {PING, PONG, type Config} from './config'
 
+import {port} from './port'
 import {EventConstructor} from './event'
 import {EffectConstructor} from './effect'
 
@@ -100,6 +101,9 @@ function DomainConstructor<State>(
 ): Domain<State> {
 
   return {
+    port<R>(events$: Stream<R>) {
+      port(dispatch, state$, events$)
+    },
     register(store) {
       console.warn(`Not implemented`)
     },

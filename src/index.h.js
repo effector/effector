@@ -29,6 +29,7 @@ export type Domain<State = void> = {
     name: string
   ): Event<Payload, State>,
   register: (store: Store<State>) => void,
+  port<R>(events$: Stream<R>): void,
 }
 
 export type Event<Payload, State> = {
@@ -64,21 +65,6 @@ export type Effect<Params, Done, Fail, State> = {
   use(thunk: (params: Params) => Promise<Done>): void,
   done: Event<{params: Params, result: Done}, State>,
   fail: Event<{params: Params, error: Fail}, State>,
-}
-
-export type BaseEvent<Payload, State> = {
-  // add<Payload>(
-  //   event: Event<Payload, State>,
-  //   handler: (payload: Payload, state: State) => J
-  // ): Joint<J, State>,
-  getType(): Tag,
-  watch<R>(fn: (params: Payload, state: State) => R): void,
-  epic<R>(
-    handler: (
-      data$: Stream<Payload>,
-      state$: Stream<State>
-    ) => Stream<R>
-  ): Stream<R>,
 }
 
 export type Reducer<S> = {
