@@ -52,7 +52,7 @@ export type Subscriber<A> = {
   complete(value?: A): void,
 }
 
-export type Event<Payload, State = void> = {
+export type Event<Payload, State> = {
   (params: Payload): {
     send(dispatchHook?: <T>(value: T) => T): Promise<Payload>,
     raw(): RawAction<Payload>,
@@ -73,7 +73,7 @@ export type Event<Payload, State = void> = {
   // port<R>(events$: Stream<R>): Promise<void>,
 }
 
-export type Effect<Params, Done, Fail = Error, State = void> = {
+export type Effect<Params, Done, Fail, State> = {
   (params: Params): {
     raw(): RawAction<Params>,
     send(dispatchHook?: <T>(value: T) => T): Promise<Params>,
