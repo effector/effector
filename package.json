@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Redux effects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -71,5 +71,6 @@
     "lib",
     "src",
     "index.d.ts"
-  ]
+  ],
+  "repository": "https://gitlab.com/zerobias/effector"
 }
