@@ -3,13 +3,19 @@
 import {
   createStore,
   applyMiddleware,
-  type Store,
   type Reducer,
   type Middleware,
   type Dispatch,
 } from 'redux'
-import {from} from 'most'
-import {createDomain, type Domain, type Event, rootDomain, effectorMiddleware} from '..'
+import {from, periodic} from 'most'
+import {
+  createDomain,
+  type Store,
+  type Event,
+  type Domain,
+  rootDomain,
+  effectorMiddleware,
+} from '..'
 
 test('smoke', async() => {
   const fn = jest.fn()
@@ -17,9 +23,7 @@ test('smoke', async() => {
   const usedDone = jest.fn(x => Promise.resolve(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(
-      effectorMiddleware
-    )
+    applyMiddleware(effectorMiddleware),
   )
   const domain = createDomain(store)
 
@@ -43,9 +47,7 @@ test('epic', async() => {
   const usedDone = jest.fn(x => Promise.resolve(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(
-      effectorMiddleware
-    )
+    applyMiddleware(effectorMiddleware),
   )
   const domain = createDomain(store)
 
@@ -53,14 +55,37 @@ test('epic', async() => {
   effect.use(used)
   effect.done.watch(usedDone)
   const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
-  event.epic(
-    data$ => data$.map(
-      effect
-    )
-  )
+  event.epic(data$ => data$.map(effect))
   await event('ev').send()
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)
+})
+
+test('port', async() => {
+  const fn = jest.fn()
+  const used = jest.fn((state, x) => console.log(x, state))
+  const usedEff = jest.fn((state, x) => console.log(x, state))
+  const store: Store<{foo: 'bar'}> = createStore(
+    (s, x) => (fn(x), console.log(x), s),
+    applyMiddleware(effectorMiddleware),
+  )
+  const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+  const event = domain.event('port-event')
+  const eff = domain.event('port-effect')
+  event.watch(used)
+  eff.watch(usedEff)
+  const str$ = periodic(100)
+    .scan((a, b) => a + b, 0)
+    .take(10)
+    // .map(event)
+
+  domain.port(str$.map(event))
+  await new Promise(rs => setTimeout(rs, 1500))
+  expect(used).toHaveBeenCalledTimes(10)
+
+  domain.port(str$.map(eff))
+  await new Promise(rs => setTimeout(rs, 1500))
+  expect(usedEff).toHaveBeenCalledTimes(10)
 })
 
 test('both return and send', async() => {
@@ -69,22 +94,15 @@ test('both return and send', async() => {
   const usedDone = jest.fn(x => Promise.resolve(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(
-      effectorMiddleware
-    )
+    applyMiddleware(effectorMiddleware),
   )
   const domain = rootDomain()
-
 
   const effect = domain.effect('eff')
   effect.use(used)
   effect.done.watch(usedDone)
   const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
-  event.epic(
-    data$ => data$.map(
-      e => effect(e).send()
-    )
-  )
+  event.epic(data$ => data$.map(e => effect(e).send()))
   domain.register(store)
   await event('ev').send()
   expect(used).toHaveBeenCalledTimes(1)
@@ -96,15 +114,17 @@ test('typeConstant', async() => {
   const used = jest.fn(x => console.log(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(
-      effectorMiddleware
-    )
+    applyMiddleware(effectorMiddleware),
   )
   const domain = createDomain(store, 'with-prefix')
 
   const event = domain.typeConstant('TYPE_CONST')
   expect(event.getType()).toBe('TYPE_CONST')
-  event.epic(data$ => data$.map(e => { used(e) }))
+  event.epic(data$ =>
+    data$.map(e => {
+      used(e)
+    }),
+  )
 
   console.log(event)
   store.dispatch({type: 'TYPE_CONST', payload: 'bar'})
@@ -119,9 +139,7 @@ test('subscription', async() => {
   const used = jest.fn(x => console.log(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => s,
-    applyMiddleware(
-      effectorMiddleware
-    )
+    applyMiddleware(effectorMiddleware),
   )
   const domain = createDomain(store)
 

@@ -8,7 +8,7 @@ import type {Event, RawAction} from './index.h'
 
 import {nextPayloadID, type Tag} from './id'
 
-import {port} from './port'
+import {port, safeDispatch} from './port'
 
 import {basicCommon, observable} from './event-common'
 
@@ -71,6 +71,9 @@ export function EventConstructor<State, Payload>(
   eventInstance.watch = watch
   eventInstance.epic = port(dispatch, state$, action$)
   eventInstance.subscribe = (subscriber) => action$.subscribe(subscriber)
+  // eventInstance.port = function port<R>(events$: Stream<R>) {
+  //   return events$.observe(data => safeDispatch(data, dispatch))
+  // }
   observable(eventInstance, action$)
   events.set(getType(), eventInstance)
   return eventInstance

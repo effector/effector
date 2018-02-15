@@ -19,7 +19,10 @@ export function createReducer<S>(
   handlers: Handlers<S> | OnOff<S> = {},
   thisType?: Reducer<S>
 ): Reducer<S> {
-  const opts = {
+  const opts: {
+    defaultState: S,
+    fallback: null | (state: S, payload: any, meta: *) => S
+  } = {
     fallback: null,
     defaultState,
   }
@@ -36,7 +39,7 @@ export function createReducer<S>(
   }
 
   function reset(typeOrActionCreator) {
-    on(typeOrActionCreator, () => opts.defaultState)
+    on(typeOrActionCreator, (state: S, payload: any, meta: *) => opts.defaultState)
     return returnType
   }
 

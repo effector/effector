@@ -25,8 +25,8 @@ test('reducer', () => {
       actions: [...state.actions, payload]
     }))
     .reset(reset)
-
-  const state1 = reducer(undefined, event1('ev').raw())
+  const none: any = undefined
+  const state1 = reducer(none, event1('ev').raw())
   expect(state1).toMatchSnapshot()
   const state2 = reducer(state1, event2('ev2').raw())
   expect(state2).toMatchSnapshot()
@@ -39,7 +39,7 @@ test('joint', async() => {
   const event1: Event<'ev', State> = domain.event('event1')
   const event2: Event<'ev2', State> = domain.event('event2')
   const event3: Event<'ev3', State> = domain.event('event3')
-  const reset: Event<void, State> = domain.event('reset')
+  const reset: Event<mixed, State> = domain.event('reset')
 
   const reducerA: Reducer<{
     actions: string[]
@@ -51,7 +51,7 @@ test('joint', async() => {
   const reducerB: Reducer<{
     resets: number,
   }> = createReducer({resets: 0})
-    .on(reset, (state, payload) => ({
+    .on(reset, (state) => ({
       resets: state.resets + 1,
     }))
   const union = joint(
@@ -66,9 +66,11 @@ test('joint', async() => {
       ...state,
       resets: state.resets + 10,
     }))
-  const state1 = union(undefined, event1('ev').raw())
+    .on(event2, (e, event) => e)
+  const none: any = undefined
+  const state1 = union(none, event1('ev').raw())
   expect(state1).toMatchSnapshot()
-  const state2 = union(state1, reset().raw())
+  const state2 = union(state1, reset('').raw())
   expect(state2).toMatchSnapshot()
   const state3 = union(state2, event2('ev2').raw())
   expect(state3).toMatchObject({

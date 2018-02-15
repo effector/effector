@@ -4,13 +4,17 @@ import {Stream} from 'most'
 
 import type {ID, Tag} from './id'
 
-type Handler<S, P, M={}> = (state: S, payload: P, meta?: M) => S
+type Handler<S, P> = (state: S, payload: P, meta: {
+    index: ID,
+    eventID: ID,
+    seq: ID,
+  }) => S
 
 export type Store<S> = {
-  dispatch: <T>(x: T) => T,
+  dispatch: Function,
   getState(): S,
   subscribe(listener: any): () => void,
-  replaceReducer(nextReducer: Reducer<S>): void,
+  replaceReducer(nextReducer: (state: S, action: any) => S): void,
 }
 
 export type RawAction<P> = {
@@ -35,7 +39,7 @@ export type Domain<State = void> = {
     name: string
   ): Event<Payload, State>,
   register: (store: Store<State>) => void,
-  port<R>(events$: Stream<R>): void,
+  port<R>(events$: Stream<R>): Promise<void>,
 }
 
 export type Subscription<A> = {
@@ -62,6 +66,7 @@ export type Event<Payload, State> = {
     ) => Stream<R>
   ): Stream<R>,
   subscribe(subscriber: Subscriber<Payload>): Subscription<Payload>,
+  // port<R>(events$: Stream<R>): Promise<void>,
 }
 
 export type Effect<Params, Done, Fail, State> = {
@@ -80,6 +85,7 @@ export type Effect<Params, Done, Fail, State> = {
       state$: Stream<State>
     ) => Stream<R>
   ): Stream<R>,
+  // port<R>(events$: Stream<R>): Promise<void>,
   use(thunk: (params: Params) => Promise<Done>): void,
   subscribe(subscriber: Subscriber<Params>): Subscription<Params>,
   done: Event<{params: Params, result: Done}, State>,
@@ -87,13 +93,17 @@ export type Effect<Params, Done, Fail, State> = {
 }
 
 export type Reducer<S> = {
-  (state?: S, action: RawAction<any>): S,
+  (state: S, action: RawAction<any>): S,
   options(opts: { fallback: boolean }): Reducer<S>,
   has(event: Event<any, any>): boolean,
   on<
-    P, M,
+    P,
     A/*: Event<P, any> | $ReadOnlyArray<Event<any, any>>*/
-  >(event: A, handler: (state: S, payload: P, meta?: M) => S): Reducer<S>,
+  >(event: A, handler: (state: S, payload: P, meta: {
+    index: ID,
+    eventID: ID,
+    seq: ID,
+  }) => S): Reducer<S>,
   off<
     A/*: Event<any, any> | $ReadOnlyArray<Event<any, any>>*/
   >(event: A): Reducer<S>,
@@ -103,13 +113,13 @@ export type Reducer<S> = {
 }
 
 export type Handlers<S> = {
-  [propertyName: string]: Handler<S, any, any>
+  [propertyName: string]: Handler<S, any>
 }
 
-type functionOn<S, P, M={}> = (actionCreator: Event<P, any>, handler: Handler<S, P, M>) => Reducer<S>
+type functionOn<S, P> = (actionCreator: Event<P, any>, handler: Handler<S, P>) => Reducer<S>
 type functionOff<S> = (actionCreator: Event<any, any>) => Reducer<S>
 
 export type OnOff<S> = {
-  (on: functionOn<S, any, any>, off: functionOff<S>): void;
+  (on: functionOn<S, any>, off: functionOff<S>): void;
 }
 

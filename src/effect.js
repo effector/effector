@@ -131,6 +131,9 @@ export function EffectConstructor<State, Params, Done, Fail>(
   effect.fail = fail
   effect.watch = watch
   effect.epic = port(dispatch, state$, action$)
+  // effect.port = function port<R>(events$: Stream<R>) {
+  //   return events$.observe(data => safeDispatch(data, dispatch))
+  // }
   effect.subscribe = (subscriber) => action$.subscribe(subscriber)
   observable(effect, action$)
   return effect

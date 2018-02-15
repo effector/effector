@@ -10,10 +10,10 @@ export function joint<A, B, C, D, E, F, R>(
   const values = reducers
     .map(reducer => reducer(undefined, {type: '@@effector/void'}))
   const defaultValues = [...values]
-  const defaultState: C = combine(...values)
-  let lastState: C = defaultState
+  const defaultState: R = combine(...values)
+  let lastState: R = defaultState
   const combined = createReducer(defaultState, {}, combinedReducer)
-  function combinedReducer(state, action): C {
+  function combinedReducer(state, action): R {
     const changed: Set<number> = new Set()
     for (let i = 0; i < reducers.length; i++) {
       const prevValue = values[i]
