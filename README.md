@@ -14,7 +14,32 @@ Or using `yarn`
 yarn add effector
 ```
 
-## Usage
+## API
+
+```js
+import {
+  effectorMiddleware,
+  rootDomain,
+  createReducer,
+  joint,
+} from 'effector'
+
+```
+
+## Core types
+
+```js
+import type {Domain, Event, Effect, Reducer} from 'effector'
+```
+
+### Event
+
+Action creator, represented action type itself
+
+> (name: string) => Event
+
+
+## Example
 
 ```js
 import {createStore, applyMiddleware} from 'redux'
@@ -110,22 +135,4 @@ type Todo = {
   complete: boolean,
 }
 
-```
-
-## API
-
-```js
-import {
-  effectorMiddleware,
-  rootDomain,
-  createReducer,
-  joint,
-} from 'effector'
-
-```
-
-## Core types
-
-```js
-import type {Domain, Event, Effect, Reducer} from 'effector'
 ```
