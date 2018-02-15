@@ -1,7 +1,7 @@
 //@flow
 
 
-export /*::opaque*/ type Tag = string
+export /*::opaque*/ type Tag/*: string*/ = string
 export /*::opaque*/ type ID = number
 
 export const counter = (): () => ID => {

@@ -1,5 +1,5 @@
 {
-  "collectCoverage": false,
+  "collectCoverage": true,
   "automock": false,
   "browser": false,
   "coverageDirectory": "coverage",

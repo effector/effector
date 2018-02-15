@@ -1,7 +1,6 @@
 //@flow
 
 import type {Stream} from 'most'
-// import {type Subject, async as subject} from 'most-subject'
 
 function isAction(data): boolean %checks {
   return (

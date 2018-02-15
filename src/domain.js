@@ -1,10 +1,10 @@
 //@flow
 
 import {type Stream, from} from 'most'
-import {async as subject, type Subject} from 'most-subject'
+import {subject, type Subject} from './subject'
 
 import type {Domain, Effect, Event, Store} from './index.h'
-import type {Tag} from './id'
+import {type Tag, toTag} from './id'
 
 import {PING, PONG, type Config} from './config'
 
@@ -122,7 +122,7 @@ function DomainConstructor<State>(
     },
     domain(name: string): Domain<State> {
       return DomainConstructor(
-        [domainName, name].join('/'),
+        toTag(domainName, name),
         dispatch,
         getState,
         state$,

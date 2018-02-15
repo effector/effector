@@ -2,7 +2,7 @@
 
 // import type {Store} from 'redux'
 import type {Stream} from 'most'
-import {async as subject, type Subject} from 'most-subject'
+import {subject, type Subject} from './subject'
 
 import type {Event, RawAction} from './index.h'
 
