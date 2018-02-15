@@ -20,11 +20,11 @@ export function effectorMiddleware() {
         action.send(next)
         return action
       }
+      const result = next(action)
       if (handler && action.meta == null) {
         handler(action.payload)
         return action
       }
-      const result = next(action)
 
       return result
     }
