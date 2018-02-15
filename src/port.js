@@ -3,17 +3,21 @@
 import type {Stream} from 'most'
 // import {type Subject, async as subject} from 'most-subject'
 
+function isAction(data): boolean %checks {
+  return (
+    typeof data === 'object'
+    && data != null
+    && typeof data.type === 'string'
+  )
+}
+
 export function safeDispatch<R>(
   data: R,
   dispatch: <T>(value: T) => T
 ) {
-  if (
-    typeof data === 'object'
-    && data != null
-    && typeof data.type === 'string'
-  ) {
-    dispatch(data)
-  }
+  if (Array.isArray(data)) return data.filter(isAction).forEach(action => dispatch(action))
+  if (isAction(data)) return dispatch(data)
+  return
 }
 
 export function port<State, Payload>(
