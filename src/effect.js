@@ -131,6 +131,25 @@ export function EffectConstructor<State, Params, Done, Fail>(
   effect.fail = fail
   effect.watch = watch
   effect.epic = port(dispatch, state$, action$)
+  effect.trigger = function trigger(
+    query: (state: State) => Params,
+    eventName: string = 'trigger'
+  ): Event<void, State> {
+    const triggerEvent = EventConstructor(
+      domainName,
+      dispatch,
+      getState,
+      state$,
+      events,
+      [name, eventName].join(' ')
+    )
+    triggerEvent.watch((_, state) => {
+      const queryResult = query(state)
+      return effect(queryResult)
+    })
+
+    return triggerEvent
+  }
   // effect.port = function port<R>(events$: Stream<R>) {
   //   return events$.observe(data => safeDispatch(data, dispatch))
   // }

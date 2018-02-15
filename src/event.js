@@ -74,6 +74,25 @@ export function EventConstructor<State, Payload>(
   // eventInstance.port = function port<R>(events$: Stream<R>) {
   //   return events$.observe(data => safeDispatch(data, dispatch))
   // }
+  eventInstance.trigger = function trigger(
+    query: (state: State) => Payload,
+    eventName: string = 'trigger'
+  ): Event<void, State> {
+    const triggerEvent = EventConstructor(
+      domainName,
+      dispatch,
+      getState,
+      state$,
+      events,
+      [name, eventName].join(' ')
+    )
+    triggerEvent.watch((_, state) => {
+      const queryResult = query(state)
+      return eventInstance(queryResult)
+    })
+
+    return triggerEvent
+  }
   observable(eventInstance, action$)
   events.set(getType(), eventInstance)
   return eventInstance

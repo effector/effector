@@ -65,6 +65,10 @@ export type Event<Payload, State> = {
       state$: Stream<State>
     ) => Stream<R>
   ): Stream<R>,
+  trigger(
+    query: (state: State) => Payload,
+    eventName?: string,
+  ): Event<void, State>,
   subscribe(subscriber: Subscriber<Payload>): Subscription<Payload>,
   // port<R>(events$: Stream<R>): Promise<void>,
 }
@@ -87,6 +91,10 @@ export type Effect<Params, Done, Fail, State> = {
   ): Stream<R>,
   // port<R>(events$: Stream<R>): Promise<void>,
   use(thunk: (params: Params) => Promise<Done>): void,
+  trigger(
+    query: (state: State) => Params,
+    eventName?: string,
+  ): Event<void, State>,
   subscribe(subscriber: Subscriber<Params>): Subscription<Params>,
   done: Event<{params: Params, result: Done}, State>,
   fail: Event<{params: Params, error: Fail}, State>,
