@@ -26,7 +26,7 @@ export function EffectConstructor<State, Params, Done, Fail>(
 
   handlers.add((payload, state) => action$.next(payload))
   // handlers.add((payload, state) => state$.next(state))
-  let using: (params: Params) => Promise<Done> = never
+  let using: (params: Params) => Promise<Done> = getWarn({domainName, name})
   function use(thunk: (params: Params) => Promise<Done>) {
     using = thunk
   }
@@ -158,12 +158,20 @@ export function EffectConstructor<State, Params, Done, Fail>(
   return effect
 }
 
-function never(props: any): Promise<any> {
+const getWarn = ({domainName, name}) => function never(props: any): Promise<any> {
   console.warn(`
 
 
   Running an effect without implementation
 
-`, props)
+  Name:
+    ${name}
+  Domain:
+    ${domainName}
+  Arguments:
+    ${props}
+
+
+`)
   return new Promise(() => {})
 }
