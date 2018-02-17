@@ -3,12 +3,17 @@
 import {
   createReducer,
   createDomain,
+  createRootDomain,
   type Domain,
   type Event,
   type Reducer,
   rootDomain,
   joint,
+  effectorMiddleware,
 } from '..'
+
+import {periodic} from 'most'
+import {createStore, applyMiddleware, type Store, combineReducers} from 'redux'
 
 type State = {foo: 'bar'}
 
@@ -51,7 +56,7 @@ test('joint', async() => {
   const reducerB: Reducer<{
     resets: number,
   }> = createReducer({resets: 0})
-    .on(reset, (state) => ({
+    .on(reset, (state, p) => ({
       resets: state.resets + 1,
     }))
   const union = joint(
@@ -62,7 +67,7 @@ test('joint', async() => {
     reducerA,
     reducerB,
   )
-    .on(event3, (state) => ({
+    .on(event3, (state, p) => ({
       ...state,
       resets: state.resets + 10,
     }))
@@ -94,3 +99,42 @@ test('joint', async() => {
     }
   })
 })
+
+test('falsey values should been handled correctly', async() => {
+  const fn = jest.fn()
+
+  const domain: Domain<{loading: boolean}> = createRootDomain()
+  const timeout = domain.effect('timeout')
+  domain.port(
+    periodic(300)
+      .take(5)
+      .map(() => timeout())
+  )
+  const loading = createReducer(false)
+    .on(timeout, () => true)
+    .on(timeout.done, () => false)
+
+  const stateShape = combineReducers({
+    loading,
+  })
+
+  const store: Store<{loading: boolean}> = createStore(
+    (state, act) => {
+      const result = stateShape(state, act)
+      if (act.type === timeout.getType()) {
+        fn(state, result)
+        expect(result).toHaveProperty('loading', true)
+      } else
+        expect(result).toHaveProperty('loading', false)
+      return result
+    },
+    applyMiddleware(effectorMiddleware),
+  )
+  domain.register(store)
+  await delay(2e3)
+  expect(fn).toHaveBeenCalledTimes(5)
+})
+
+function delay(time: number) {
+  return new Promise(rs => setTimeout(rs, time))
+}

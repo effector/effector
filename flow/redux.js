@@ -23,7 +23,9 @@ export type Store<S, /*::-*/L/*::: S => void*/ = ((s: S) => void)> = {
   replaceReducer(nextReducer: Reducer<S>): void,
 };
 
-export type Reducer<S> = </*::-*/A>(state: S, action: A) => S
+export type Reducer<S> = <A/*: {
+  type: string,
+}*/>(state: S, action: A) => S
 
 export type CombinedReducer<S> = </*::-*/A>(state: $Shape<S> & {} | void, action: A) => S;
 

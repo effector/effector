@@ -4,11 +4,8 @@ import {Stream} from 'most'
 
 import type {ID, Tag} from './id'
 
-type Handler<S, P> = (state: S, payload: P, meta: {
-    index: ID,
-    eventID: ID,
-    seq: ID,
-  }) => S
+declare export function Dispatch<T>(value: T): T
+declare export function Dispatch<T, TT>(value: T): TT
 
 export type Store<S> = {
   dispatch: Function,
@@ -17,19 +14,23 @@ export type Store<S> = {
   replaceReducer(nextReducer: (state: S, action: any) => S): void,
 }
 
+export type Meta = {
+  index: ID,
+  eventID: ID,
+  seq: ID,
+  passed: boolean,
+}
+
 export type RawAction<P> = {
-  type: string | Tag,
+  type: string,
   payload: P,
-  meta: {
-    index: ID,
-    eventID: ID,
-    seq: ID,
-  },
+  meta: Meta,
 }
 
 export type Domain<State = void> = {
   effect<Params, Done, Fail>(
-    name: string
+    name: string,
+    opts?: $Shape<UserlandConfig>,
   ): Effect<Params, Done, Fail, State>,
   event<Payload>(
     name: string
@@ -54,7 +55,7 @@ export type Subscriber<A> = {
 
 export type Event<Payload, State> = {
   (params: Payload): {
-    send(dispatchHook?: <T>(value: T) => T): Promise<Payload>,
+    send(dispatchHook?: typeof Dispatch): Promise<Payload>,
     raw(): RawAction<Payload>,
   },
   getType(): Tag,
@@ -76,7 +77,7 @@ export type Event<Payload, State> = {
 export type Effect<Params, Done, Fail, State> = {
   (params: Params): {
     raw(): RawAction<Params>,
-    send(dispatchHook?: <T>(value: T) => T): Promise<Params>,
+    send(dispatchHook?: typeof Dispatch): Promise<Params>,
     done(): Promise<{params: Params, result: Done}>,
     fail(): Promise<{params: Params, error: Fail}>,
     promise(): Promise<{params: Params, result: Done}>,
@@ -101,17 +102,14 @@ export type Effect<Params, Done, Fail, State> = {
 }
 
 export type Reducer<S> = {
-  (state: S, action: RawAction<any>): S,
+  /*::<P>*/(state: S, action: RawAction<P>): S,
+  (state: S, action: any): S,
   options(opts: { fallback: boolean }): Reducer<S>,
   has(event: Event<any, any>): boolean,
   on<
     P,
     A/*: Event<P, any> | $ReadOnlyArray<Event<any, any>>*/
-  >(event: A, handler: (state: S, payload: P, meta: {
-    index: ID,
-    eventID: ID,
-    seq: ID,
-  }) => S): Reducer<S>,
+  >(event: A, handler: (state: S, payload: P, meta: Meta) => S): Reducer<S>,
   off<
     A/*: Event<any, any> | $ReadOnlyArray<Event<any, any>>*/
   >(event: A): Reducer<S>,
@@ -119,6 +117,8 @@ export type Reducer<S> = {
     A/*: Event<any, any> | $ReadOnlyArray<Event<any, any>>*/
   >(event: A): Reducer<S>
 }
+
+type Handler<S, P> = (state: S, payload: P, meta: Meta) => S
 
 export type Handlers<S> = {
   [propertyName: string]: Handler<S, any>
@@ -131,3 +131,17 @@ export type OnOff<S> = {
   (on: functionOn<S, any>, off: functionOff<S>): void;
 }
 
+export type WarnMode = 'off' | 'warn' | 'throw'
+
+export type WarnModeCheck = () => WarnMode
+
+export type DomainConfig = {
+  effectImplementationCheck: WarnModeCheck,
+  watchFailCheck: WarnModeCheck,
+  dispatch: typeof Dispatch,
+}
+
+export type UserlandConfig = {
+  effectImplementationCheck: WarnMode,
+  watchFailCheck: WarnMode,
+}

@@ -19,7 +19,12 @@ export function EventConstructor<State, Payload>(
   state$: Stream<State>,
   events: Map<string | Tag, Event<any, State>>,
   name: string,
-  action$: Subject<Payload> = subject()
+  action$: Subject<Payload> = subject(),
+  config: {
+    isPlain: boolean,
+  } = {
+    isPlain: false,
+  }
 ): Event<Payload, State> {
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
   const handlers = new Set
@@ -38,6 +43,8 @@ export function EventConstructor<State, Payload>(
       index: nextPayloadID(),
       eventID,
       seq: nextSeq(),
+      passed: false,
+      plain: config.isPlain,
     },
   })
   function eventInstance(payload: Payload) {

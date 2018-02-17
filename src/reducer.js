@@ -4,7 +4,8 @@ import type {
   RawAction,
   Reducer,
   Handlers,
-  OnOff
+  OnOff,
+  Meta,
 } from './index.h'
 
 function normalizeType(typeOrActionCreator) {
@@ -21,7 +22,7 @@ export function createReducer<S>(
 ): Reducer<S> {
   const opts: {
     defaultState: S,
-    fallback: null | (state: S, payload: any, meta: *) => S
+    fallback: null | (state: S, payload: any, meta: Meta) => S
   } = {
     fallback: null,
     defaultState,
@@ -39,7 +40,7 @@ export function createReducer<S>(
   }
 
   function reset(typeOrActionCreator) {
-    on(typeOrActionCreator, (state: S, payload: any, meta: *) => opts.defaultState)
+    on(typeOrActionCreator, (state: S, payload: any, meta: Meta) => opts.defaultState)
     return returnType
   }
 
@@ -77,7 +78,10 @@ export function createReducer<S>(
     factory(on, off)
   }
 
-  function reduce<P>(state: S = opts.defaultState, action: RawAction<P>) {
+  function reduce<P>(stateRaw: S, action: RawAction<P>): S {
+    const state: S = stateRaw === undefined
+      ? opts.defaultState
+      : stateRaw
     if (!action || (typeof action.type !== 'string')) { return state }
     if (action.type.startsWith('@@redux/')) { return state }
 

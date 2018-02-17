@@ -7,7 +7,13 @@
     },
     "commonjs": {
       "plugins": [
+        "babel-plugin-transform-inline-environment-variables",
         "@babel/plugin-transform-modules-commonjs"
+      ]
+    },
+    "es": {
+      "plugins": [
+        "babel-plugin-transform-inline-environment-variables"
       ]
     }
   },
@@ -16,8 +22,8 @@
     ["@babel/plugin-proposal-object-rest-spread", {
       "useBuiltIns": true
     }],
-    // "@babel/plugin-proposal-decorators",
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
-    "@babel/plugin-transform-block-scoping"
+    "@babel/plugin-transform-block-scoping",
+    "babel-plugin-dev-expression"
   ]
 }

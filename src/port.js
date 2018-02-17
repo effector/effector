@@ -14,9 +14,13 @@ export function safeDispatch<R>(
   data: R,
   dispatch: <T>(value: T) => T
 ) {
-  if (Array.isArray(data)) return data.filter(isAction).forEach(action => dispatch(action))
-  if (isAction(data)) return dispatch(data)
-  return
+  if (Array.isArray(data)) {
+    data
+      .filter(isAction)
+      .forEach(action => dispatch(action))
+  } else if (isAction(data))
+    dispatch(data)
+  return data
 }
 
 export function port<State, Payload>(

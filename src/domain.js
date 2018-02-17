@@ -3,7 +3,11 @@
 import {type Stream, from} from 'most'
 import {subject, type Subject} from './subject'
 
-import type {Domain, Effect, Event, Store} from './index.h'
+import type {
+  Domain, Effect, Event, Store, DomainConfig, UserlandConfig,
+  RawAction,
+} from './index.h'
+import typeof {Dispatch} from './index.h'
 import {type Tag, toTag} from './id'
 
 import {PING, PONG, type Config} from './config'
@@ -48,7 +52,7 @@ export function rootDomain<State>(
   const config: Config = {
     plain: new Map()
   }
-  function dispatch<T>(data: T): T {
+  const dispatch: Dispatch = function dispatch(data) {
     return redux.dispatch(data)
   }
   function getState(): State {
@@ -90,17 +94,54 @@ export function rootDomain<State>(
   return domain
 }
 
+function optsReducer([key, value]) {
+  if (!(key in this)) return
+  const newVal = () => value
+  ;(newVal: $ElementType<DomainConfig, typeof key>)
+  this[key] = newVal
+}
 
+function mergeEffectOpts(defaults: DomainConfig, opts?: $Shape<UserlandConfig>) {
+  if (opts === undefined) return {...defaults}
+  if (!(typeof opts === 'object' && opts != null)) {
+    throw new Error(`effect options should be object, got ${typeof opts}`)
+  }
+  const resultObj: DomainConfig = {...defaults}
+  Object
+    .keys(/*::Object.freeze*/(opts))
+    .map(key => [key, /*::Object.freeze*/(opts)[key]])
+    .forEach(optsReducer, resultObj)
+  return resultObj
+}
 
 function DomainConstructor<State>(
   domainName: string,
-  dispatch: <T>(value: T) => T,
+  dispatch: Dispatch,
   getState: () => State,
   state$: Stream<State>,
   events: Map<string | Tag, Event<any, State>> = new Map,
-  addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => {}
+  addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => { },
+  configGetter?: () => DomainConfig
 ): Domain<State> {
-
+  let getConfig: () => DomainConfig
+  if (typeof configGetter !== 'function') {
+    const config = {
+      effectImplementationCheck: () => 'warn',
+      watchFailCheck: () => 'warn',
+      dispatch,
+    }
+    getConfig = () => config
+  } else getConfig = configGetter
+  const disp = getDispatch(getConfig)
+  const effectOpts: DomainConfig = {
+    effectImplementationCheck() {
+      return getConfig().effectImplementationCheck()
+    },
+    watchFailCheck() {
+      return getConfig().watchFailCheck()
+    },
+    dispatch: disp,
+  }
   return {
     port<R>(events$: Stream<R>): Promise<void> {
       return events$.observe(data => { safeDispatch(data, dispatch) })
@@ -109,15 +150,18 @@ function DomainConstructor<State>(
       console.warn(`Not implemented`)
     },
     effect<Params, Done, Fail>(
-      name: string
+      name: string,
+      opts?: $Shape<UserlandConfig>,
     ): Effect<Params, Done, Fail, State> {
+      const optsFull = mergeEffectOpts(effectOpts, opts)
       return EffectConstructor(
         domainName,
         dispatch,
         getState,
         state$,
         events,
-        name
+        name,
+        optsFull
       )
     },
     domain(name: string): Domain<State> {
@@ -128,6 +172,7 @@ function DomainConstructor<State>(
         state$,
         events,
         addPlainHandler,
+        getConfig,
       )
     },
     event<Payload>(
@@ -147,7 +192,8 @@ function DomainConstructor<State>(
     ): Event<Payload, State> {
       const action$: Subject<Payload> = subject()
       addPlainHandler(name, data => {
-        action$.next(data)
+        const resultEvent = result(data)
+        effectOpts.dispatch(resultEvent)
       })
       const result = EventConstructor(
         '',
@@ -156,10 +202,18 @@ function DomainConstructor<State>(
         state$,
         events,
         name,
-        action$
+        action$,
+        {isPlain: true}
       )
       return result
     },
   }
 }
 
+function getDispatch(getConfig): Dispatch {
+  const dispatch: any = (value) => {
+    const result = getConfig().dispatch(value)
+    return result
+  }
+  return dispatch
+}

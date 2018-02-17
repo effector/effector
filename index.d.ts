@@ -7,14 +7,22 @@ import { Stream } from 'most'
 type Tag = string
 type ID = number
 
+export type WarnMode = 'off' | 'warn' | 'throw'
+export type EventConfig = {
+  effectImplementationCheck?: WarnMode,
+  watchFailCheck?: WarnMode,
+}
+
+export type Meta = {
+  index: ID,
+  eventID: ID,
+  seq: ID,
+}
+
 export type RawAction<P> = {
   type: string | Tag,
   payload: P,
-  meta: {
-    index: ID,
-    eventID: ID,
-    seq: ID,
-  },
+  meta: Meta,
 }
 
 export type Reducer<S> = {
@@ -24,18 +32,15 @@ export type Reducer<S> = {
   on<
     P,
     A extends Event<P, any>
-  >(event: A | A[], handler: (state: S, payload: P, meta: {
-    index: ID,
-    eventID: ID,
-    seq: ID,
-  }) => S): Reducer<S>,
+  >(event: A | A[], handler: (state: S, payload: P, meta: Meta) => S): Reducer<S>,
   off<A extends Event<any, any>>(event: A): Reducer<S>,
   reset<A extends Event<any, any>>(event: A | A[]): Reducer<S>,
 }
 
 export type Domain<State = void> = {
   effect<Params, Done, Fail>(
-    name: string
+    name: string,
+    options?: EventConfig,
   ): Effect<Params, Done, Fail, State>,
   event<Payload>(
     name: string
@@ -97,49 +102,72 @@ export function createRootDomain<State>(domainName?: string): Domain<State>
 
 export const effectorMiddleware: Middleware
 
+export function joint<A, R>(
+  fn: (a: A) => R,
+  setA: Reducer<A>,
+  ...none: Array<void>
+): Reducer<R>
 export function joint<A, B, R>(
   fn: (a: A, b: B) => R,
-  reducerA: Reducer<A>,
-  reducerB: Reducer<B>,
-  noc: void,
-  nod: void,
-  noe: void,
-  nof: void
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  ...none: Array<void>
 ): Reducer<R>
 export function joint<A, B, C, R>(
   fn: (a: A, b: B, c: C) => R,
-  reducerA: Reducer<A>,
-  reducerB: Reducer<B>,
-  reducerC: Reducer<C>,
-  nod: void,
-  noe: void,
-  nof: void
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  ...none: Array<void>
 ): Reducer<R>
 export function joint<A, B, C, D, R>(
   fn: (a: A, b: B, c: C, d: D) => R,
-  reducerA: Reducer<A>,
-  reducerB: Reducer<B>,
-  reducerC: Reducer<C>,
-  reducerD: Reducer<D>,
-  noe: void,
-  nof: void
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  setD: Reducer<D>,
+  ...none: Array<void>
 ): Reducer<R>
 export function joint<A, B, C, D, E, R>(
   fn: (a: A, b: B, c: C, d: D, e: E) => R,
-  reducerA: Reducer<A>,
-  reducerB: Reducer<B>,
-  reducerC: Reducer<C>,
-  reducerD: Reducer<D>,
-  reducerE: Reducer<E>,
-  nof: void
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  setD: Reducer<D>,
+  setE: Reducer<E>,
+  ...none: Array<void>
 ): Reducer<R>
 export function joint<A, B, C, D, E, F, R>(
   fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
-  reducerA: Reducer<A>,
-  reducerB: Reducer<B>,
-  reducerC: Reducer<C>,
-  reducerD: Reducer<D>,
-  reducerE: Reducer<E>,
-  reducerF: Reducer<F>
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  setD: Reducer<D>,
+  setE: Reducer<E>,
+  setF: Reducer<F>,
+  ...none: Array<void>
+): Reducer<R>
+export function joint<A, B, C, D, E, F, G, R>(
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  setD: Reducer<D>,
+  setE: Reducer<E>,
+  setF: Reducer<F>,
+  setG: Reducer<G>,
+  ...none: Array<void>
+): Reducer<R>
+export function joint<A, B, C, D, E, F, G, H, R>(
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+  setA: Reducer<A>,
+  setB: Reducer<B>,
+  setC: Reducer<C>,
+  setD: Reducer<D>,
+  setE: Reducer<E>,
+  setF: Reducer<F>,
+  setG: Reducer<G>,
+  setH: Reducer<H>,
+  ...none: Array<void>
 ): Reducer<R>
 
