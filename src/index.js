@@ -9,3 +9,4 @@ export {
 export {effectorMiddleware} from './middleware'
 export {createReducer} from './reducer'
 export {joint} from './joint'
+export {createHaltAction} from './config'

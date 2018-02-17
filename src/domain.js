@@ -10,7 +10,7 @@ import type {
 import typeof {Dispatch} from './index.h'
 import {type Tag, toTag} from './id'
 
-import {PING, PONG, type Config} from './config'
+import {PING, createHaltAction, type Config} from './config'
 
 import {safeDispatch} from './port'
 import {EventConstructor} from './event'
@@ -60,7 +60,17 @@ export function rootDomain<State>(
   }
 
   const state$: Subject<State> = subject()
+  let unsubscribe
+  function disablePrevious(previousDispatch) {
+    previousDispatch(createHaltAction())
+    if (typeof unsubscribe === 'function') {
+      unsubscribe()
+    }
+  }
   function register(store: Store<State>) {
+    const previousDispatch = redux != null
+      ? redux.dispatch
+      : (v) => v
     redux = reduxStore = store
     const pong = redux.dispatch({
       type: PING,
@@ -70,17 +80,31 @@ export function rootDomain<State>(
       const payload: any = pong.payload
       const plain: Map<*, *> = payload.plain
       const oldPlain = config.plain
-      for (const [key, val] of oldPlain.entries()) {
-        if (!plain.has(key)) {
-          plain.set(key, val)
-        }
-      }
+      oldPlain.clear()
+      // for (const [key, val] of oldPlain.entries()) {
+      //   // if (!plain.has(key)) {
+      //   plain.set(key, val)
+      //   // }
+      // }
       config.plain = plain
     }
+    disablePrevious(previousDispatch)
+
     //$off
-    from(store)
+    const unsub = from(store)
       .map(() => getState())
-      .observe(state => state$.next(state))
+      .subscribe({
+        next(value) {
+          state$.next(value)
+        },
+        error(err) {
+
+        },
+        complete() {
+
+        }
+      })
+    unsubscribe = () => unsub.unsubscribe()
   }
   const domain: Domain<State> = DomainConstructor(
     domainName,

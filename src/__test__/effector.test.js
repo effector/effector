@@ -128,6 +128,41 @@ test('both return and send', async() => {
   expect(usedDone).toHaveBeenCalledTimes(1)
 })
 
+test('hot reload support', async() => {
+  // const fn = jest.fn()
+  const fnA = jest.fn()
+  const fnB = jest.fn()
+  const used = jest.fn(x => Promise.resolve(x))
+  const usedDone = jest.fn(x => Promise.resolve(x))
+  const storeA: Store<{foo: 'bar'}> = createStore(
+    (s, x) => (fnA(x), console.log(x), s),
+    applyMiddleware(effectorMiddleware),
+  )
+  const domain = rootDomain()
+
+  const effect = domain.effect('eff')
+  effect.use(used)
+  effect.done.watch(usedDone)
+  const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
+  event.epic(data$ => data$.map(e => effect(e).send()))
+  domain.register(storeA)
+  await event('ev').send()
+  expect(used).toHaveBeenCalledTimes(1)
+  expect(usedDone).toHaveBeenCalledTimes(1)
+
+  const storeB: Store<{foo: 'bar'}> = createStore(
+    (s, x) => (fnB(x), console.log(x), s),
+    applyMiddleware(effectorMiddleware),
+  )
+
+  domain.register(storeB)
+  await event('ev').send()
+  expect(used).toHaveBeenCalledTimes(2)
+  expect(usedDone).toHaveBeenCalledTimes(2)
+  expect(fnA).toHaveBeenCalledTimes(5)
+  expect(fnB).toHaveBeenCalledTimes(4)
+})
+
 test('only return', async() => {
   const fn = jest.fn()
   const used = jest.fn(x => Promise.resolve(x))

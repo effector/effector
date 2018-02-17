@@ -1,12 +1,17 @@
 //@flow
 
-import {PING, PONG, type Config} from './config'
+import {PING, PONG, HALT, type Config} from './config'
 
-export function effectorMiddleware({dispatch}: {dispatch: Function}) {
+export function effectorMiddleware({ dispatch }: { dispatch: Function }) {
+  const plainMap = new Map
   const config: Config = {
-    plain: new Map()
+    plain: plainMap,
   }
+  let isActive = true
   return (next: Function) => (action: mixed) => {
+    if (!isActive) {
+      return action
+    }
     if (!(
       typeof action === 'object'
       && action != null
@@ -22,7 +27,12 @@ export function effectorMiddleware({dispatch}: {dispatch: Function}) {
         payload: config,
       }
     }
-    const handler = config.plain.get(action.type)
+    if (action.type === HALT) {
+      isActive = false
+      plainMap.clear()
+      return next(action)
+    }
+    const handler = plainMap.get(action.type)
 
     if (typeof action.send === 'function') {
       action.send(dispatch)

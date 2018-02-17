@@ -96,6 +96,8 @@ export type Effect<Params, Done, Fail, State> = {
   fail: Event<{params: Params, error: Fail}, State>,
 }
 
+export function createHaltAction(): RawAction<void>
+
 export function createDomain<State>(store: Store<State>, domainName?: string): Domain<State>
 
 export function createRootDomain<State>(domainName?: string): Domain<State>
