@@ -44,7 +44,6 @@ export function effectorMiddleware() {
     if (typeof action.send === 'function') {
       const {send, meta} = action
       if (handler) {
-        if (__DEV__) console.log(action)
         meta.passed = true
         send(next)
         handler(action)
@@ -54,8 +53,6 @@ export function effectorMiddleware() {
       return action
     } else {
       const {meta} = action
-      if (__DEV__)
-        console.log(action)
       if (handler) {
         if (meta.passed !== true) {
           meta.passed = true

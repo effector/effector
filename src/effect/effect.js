@@ -168,9 +168,7 @@ export function EffectConstructor<State, Params, Done, Fail>(
 
     return triggerEvent
   }
-  // effect.port = function port<R>(events$: Stream<R>) {
-  //   return events$.observe(data => safeDispatch(data, dispatch))
-  // }
+
   effect.subscribe = subscriber => action$.subscribe(subscriber)
   observable(effect, action$)
   return effect
@@ -182,9 +180,6 @@ function setToString(effect: any, getType) {
 
 function dispatcher(value, dispatchDefault, dispatchHook, isBatch = false) {
   if (!isAction(value)) {
-    if (__DEV__) {
-      console.warn(`Not an action`, value)
-    }
     return value
   }
   const dispatch =
