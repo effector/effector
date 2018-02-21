@@ -19,6 +19,7 @@ export type Meta = {
   eventID: ID,
   seq: ID,
   passed: boolean,
+  plain?: boolean,
 }
 
 export type RawAction<P> = {
@@ -57,6 +58,7 @@ export type Event<Payload, State> = {
   (params: Payload): {
     send(dispatchHook?: typeof Dispatch): Promise<Payload>,
     raw(): RawAction<Payload>,
+    meta: Meta,
   },
   getType(): Tag,
   watch<R>(fn: (params: Payload, state: State) => R): void,
@@ -80,7 +82,8 @@ export type Effect<Params, Done, Fail, State> = {
     send(dispatchHook?: typeof Dispatch): Promise<Params>,
     done(): Promise<{params: Params, result: Done}>,
     fail(): Promise<{params: Params, error: Fail}>,
-    promise(): Promise<{params: Params, result: Done}>,
+    promise(): Promise<{ params: Params, result: Done }>,
+    meta: Meta,
   },
   getType(): Tag,
   watch<R>(fn: (params: Params, state: State) => R): void,

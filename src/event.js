@@ -1,16 +1,17 @@
 //@flow
 
 // import type {Store} from 'redux'
-import type {Stream} from 'most'
+import {type Stream, combine} from 'most'
 import {subject, type Subject} from './subject'
 
 import type {Event, RawAction} from './index.h'
 
 import {nextPayloadID, type Tag} from './id'
 
-import {port, safeDispatch} from './port'
+import {port} from './port'
 
 import {basicCommon, observable} from './event-common'
+import {watchWarn} from './effect/warn'
 
 export function EventConstructor<State, Payload>(
   domainName: string,
@@ -28,12 +29,24 @@ export function EventConstructor<State, Payload>(
 ): Event<Payload, State> {
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
   const handlers = new Set
-  function watch<R>(
-    fn: (params: Payload, state: State) => R
-  ) {
-    handlers.add(fn)
+  function watch<R>(fn: (params: Payload, state: State) => R) {
+    eventInstance.epic(
+      ((data$, state$) => combine(
+        (data, state) => ({data, state}),
+        data$, state$
+      ).sampleWith(data$)
+        .map(({data, state}) => {
+          try {
+            const result = fn(data, state)
+            return result
+          } catch (err) {
+            watchWarn(domainName, name, err)
+          }
+        }))
+    )
   }
-  handlers.add((payload, state) => action$.next(payload))
+  if (!config.isPlain)
+    handlers.add((payload, state) => action$.next(payload))
   // handlers.add((payload, state) => state$.next(state))
 
   const create = (payload: Payload) => ({
@@ -72,6 +85,7 @@ export function EventConstructor<State, Payload>(
       },
     }
   }
+
   eventInstance.getType = getType
   //$off
   eventInstance.toString = getType

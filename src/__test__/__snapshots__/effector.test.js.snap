@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`port port errors should been catched 1`] = `"port failure 1"`;

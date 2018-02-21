@@ -1,0 +1,16 @@
+apps:
+  - name: effector-flow-watch
+    script: "sh ./flow-effector-watch.sh"
+    no-color: false
+    instances: 1
+    exec_mode: cluster
+    merge_logs: true
+    out_file: pmwatch.log
+    error_file: pmerror.log
+    interpreter: /usr/bin/bash
+    watch:
+      - ./src
+    watch_options:
+      followSymlinks: false
+      ignoreInitial: false
+

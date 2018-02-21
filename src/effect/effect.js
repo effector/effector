@@ -1,15 +1,16 @@
 //@flow
 
-import type {Stream} from 'most'
-import {async as subject, type Subject} from 'most-subject'
+import {type Stream, combine} from 'most'
+import {subject, type Subject} from '../subject'
 
-import type {Effect, Event, RawAction, DomainConfig} from './index.h'
-import {nextPayloadID, nextEventID, toTag, counter, type Tag} from './id'
+import type {Effect, Event, RawAction, DomainConfig} from '../index.h'
+import {nextPayloadID, nextEventID, toTag, counter, type Tag} from '../id'
 
-import {EventConstructor} from './event'
-import {safeDispatch, port} from './port'
+import {EventConstructor} from '../event'
+import {port} from '../port'
 
-import {basicCommon, observable} from './event-common'
+import {basicCommon, observable} from '../event-common'
+import {implWarn, implError, watchWarn} from './warn'
 
 export function EffectConstructor<State, Params, Done, Fail>(
   domainName: string,
@@ -26,7 +27,6 @@ export function EffectConstructor<State, Params, Done, Fail>(
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
 
   handlers.add((payload, state) => action$.next(payload))
-  // handlers.add((payload, state) => state$.next(state))
   let using: (params: Params) => Promise<Done> = getWarn({
     domainName,
     name,
@@ -50,7 +50,7 @@ export function EffectConstructor<State, Params, Done, Fail>(
       run = () => {}
       using(params).then(
         result => {
-          const data = { params, result }
+          const data = {params, result}
           dispatcher(done(data), dispatch)
           resolve(data)
         },
@@ -68,8 +68,8 @@ export function EffectConstructor<State, Params, Done, Fail>(
         for (const handler of handlers) {
           handler(params, getState())
         }
-        // action$.next(params)
         run()
+        // action$.next(params)
       }
     }
     let resolve = val => {}
@@ -122,43 +122,24 @@ export function EffectConstructor<State, Params, Done, Fail>(
     events,
     [name, 'fail'].join(' '),
   )
-  function watchFail(error) {
-    watchFailWarn({
-      name, domainName,
-      mode: opts.watchFailCheck()
-    }, error)
-  }
-  function justDispatch(result) {
-    return dispatcher(result, dispatch)
-  }
-  function watchHandler(fn, params, state) {
-    let result
-    try {
-      result = fn(params, state)
-    } catch (error) {
-      watchFail(error)
-      return
-    }
-    if (params === result) {
-      return
-    }
-    if (result === 'object' && result != null && typeof result.then === 'function') {
-      result.then(
-        result => {
-          if (result !== params) {
-            justDispatch(result)
-          }
-        },
-        watchFail
-      )
-      return
-    }
-    justDispatch(result)
-  }
   function watch<R>(fn: (params: Params, state: State) => R) {
-    handlers.add((params, state) => {
-      watchHandler(fn, params, state)
-    })
+    effect.epic(
+      (data$, state$) => combine(
+        (data, state) => ({ data, state }),
+        data$, state$
+      ).sampleWith(data$)
+        .map(({data, state}) => {
+          try {
+            const result = fn(data, state)
+            return result
+          } catch (err) {
+            watchFailWarn({
+              domainName, name,
+              mode: opts.watchFailCheck()
+            }, err)
+          }
+        })
+    )
   }
 
   effect.use = use
@@ -206,22 +187,19 @@ function dispatcher(value, dispatchDefault, dispatchHook, isBatch = false) {
     }
     return value
   }
-  const dispatch = typeof dispatchHook === 'function'
-    ? dispatchHook
-    : dispatchDefault
+  const dispatch =
+    typeof dispatchHook === 'function' ? dispatchHook : dispatchDefault
   const result = dispatch(value)
   return result
 }
 
 function isAction(data): boolean %checks {
   return (
-    typeof data === 'object'
-    && data != null
-    && typeof data.type === 'string'
+    typeof data === 'object' && data != null && typeof data.type === 'string'
   )
 }
 
-function watchFailWarn({ domainName, name, mode }, error) {
+function watchFailWarn({domainName, name, mode}, error) {
   switch (mode) {
     case 'throw': {
       throw error
@@ -240,9 +218,7 @@ const getWarn = ({domainName, name, mode}) =>
   function never(props: any): Promise<any> {
     switch (mode()) {
       case 'throw': {
-        return Promise.reject(
-          implError(domainName, name, props)
-        )
+        return Promise.reject(implError(domainName, name, props))
       }
       case 'warn': {
         implWarn(domainName, name, props)
@@ -253,51 +229,3 @@ const getWarn = ({domainName, name, mode}) =>
       }
     }
   }
-
-function watchWarn(domainName, name, error) {
-  console.warn(`
-
-
-  Watch function should not fail
-
-  Effect:
-    ${name}
-  Domain:
-    ${domainName}
-  Error:
-    ${error}
-
-`)
-}
-
-function implWarn(domainName, name, props) {
-  console.warn(`
-
-
-  Running an effect without implementation
-
-  Name:
-    ${name}
-  Domain:
-    ${domainName}
-  Arguments:
-    ${props}
-
-
-`)
-}
-
-function implError(domainName, name, props) {
-  const message = `Running an effect without implementation
-
-  Name:
-    ${name}
-  Domain:
-    ${domainName}
-  Arguments:
-    ${props}
-
-
-`
-  return new Error(message)
-}

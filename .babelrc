@@ -23,6 +23,7 @@
       "useBuiltIns": true
     }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "@babel/plugin-proposal-async-generator-functions",
     "@babel/plugin-transform-block-scoping",
     "babel-plugin-dev-expression"
   ]

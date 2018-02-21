@@ -4,7 +4,7 @@
 import $$observable from 'symbol-observable'
 import type {Stream} from 'most'
 import {nextEventID, toTag, counter, type Tag} from './id'
-import type {Event, Effect} from './index.h'
+// import type {Event, Effect} from './index.h'
 
 export function basicCommon(
   domainName: string, name: string

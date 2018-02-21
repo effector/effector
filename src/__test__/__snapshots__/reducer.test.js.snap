@@ -23,6 +23,29 @@ Object {
 }
 `;
 
+exports[`mill 1`] = `
+Object {
+  "resets": 0,
+  "value1": Object {
+    "actions": Array [
+      "bar",
+      "ev",
+    ],
+  },
+}
+`;
+
+exports[`mill 2`] = `
+Object {
+  "resets": 1,
+  "value1": Object {
+    "actions": Array [
+      "bar",
+    ],
+  },
+}
+`;
+
 exports[`reducer 1`] = `
 Object {
   "actions": Array [

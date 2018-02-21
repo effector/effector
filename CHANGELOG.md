@@ -1,9 +1,42 @@
 # Changelog
 
+## 0.10.0
+- **breaking** Removed `rootDomain` alias for `createRootDomain`
+- Fixed duplication of `typeConstant` events
+- Added sync event propagation
+- Catching of watch function errors
+- Added warning to port errors
+- Added type aliases `DomainAuto`, `EventAuto` and `EffectAuto`
+- Added `mill` fluent "AND" reducer combinator
+```js
+import {mill, type MillType, type Reducer} from 'effector'
+
+type A = 'foo'
+type B = 'bar'
+declare var reducerA: Reducer<A>
+declare var reducerB: Reducer<B>
+
+const tuple: MillType<A, B> = mill()
+  .and(reducerA)
+  .and(reducerB)
+
+const union: Reducer<{
+  a: A,
+  b: B,
+  staticField: string,
+}> = tuple.joint(
+  (a: A, b: B) => ({
+    a, b,
+    staticField: 'its ok',
+  })
+)
+
+```
+
 ## 0.9.1
 
-- Add hot reload support for root domains
-- Add support for dispatching halt action
+- Added hot reload support for root domains
+- Added support for dispatching halt action
 ```js
 import {createHaltAction} from 'effector'
 

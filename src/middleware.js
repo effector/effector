@@ -2,7 +2,7 @@
 
 import {PING, PONG, HALT, type Config} from './config'
 
-export function effectorMiddleware({ dispatch }: { dispatch: Function }) {
+export function effectorMiddleware() {
   const plainMap = new Map
   const config: Config = {
     plain: plainMap,
@@ -34,21 +34,40 @@ export function effectorMiddleware({ dispatch }: { dispatch: Function }) {
     }
     const handler = plainMap.get(action.type)
 
-    if (typeof action.send === 'function') {
-      action.send(dispatch)
-      return action
-    }
     if (!(typeof action.meta === 'object' && action.meta != null))
       action.meta = {}
     if (action.meta.passed === true)
       return action
-    action.meta.passed = true
-    const isFromHandler = action.meta.plain === true
-    const result = next(action)
-    if (handler && !isFromHandler) {
-      handler(action.payload)
+    if (handler)
+      action.meta.plain = true
+
+    if (typeof action.send === 'function') {
+      const {send, meta} = action
+      if (handler) {
+        if (__DEV__) console.log(action)
+        meta.passed = true
+        send(next)
+        handler(action)
+        return action
+      }
+      action.send(next)
+      return action
+    } else {
+      const {meta} = action
+      if (__DEV__)
+        console.log(action)
+      if (handler) {
+        if (meta.passed !== true) {
+          meta.passed = true
+          const result = next(action)
+          handler(action)
+          return result
+        }
+        action.meta.passed = true
+      }
+      action.meta.passed = true
+      return next(action)
     }
-    return result
   }
 }
 

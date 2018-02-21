@@ -4,7 +4,12 @@ import {type Stream, from} from 'most'
 import {subject, type Subject} from './subject'
 
 import type {
-  Domain, Effect, Event, Store, DomainConfig, UserlandConfig,
+  Domain,
+  Effect,
+  Event,
+  Store,
+  DomainConfig,
+  UserlandConfig,
   RawAction,
 } from './index.h'
 import typeof {Dispatch} from './index.h'
@@ -18,7 +23,7 @@ import {EffectConstructor} from './effect'
 
 export function createDomain<State>(
   store: Store<State>,
-  domainName: string = ''
+  domainName: string = '',
 ): Domain<State> {
   const redux: any = store
   const config: Config = redux.dispatch({
@@ -35,22 +40,21 @@ export function createDomain<State>(
     redux.dispatch,
     store.getState,
     state$,
-    new Map,
+    new Map(),
     addPlainHandler,
   )
 }
 
-export function rootDomain<State>(
-  domainName: string = ''
+export function createRootDomain<State>(
+  domainName: string = '',
 ): Domain<State> {
-
   const addPlainHandler = (name, fn) => {
     config.plain.set(name, fn)
   }
   let redux: any
   let reduxStore: Store<State>
   const config: Config = {
-    plain: new Map()
+    plain: new Map(),
   }
   const dispatch: Dispatch = function dispatch(data) {
     return redux.dispatch(data)
@@ -68,9 +72,7 @@ export function rootDomain<State>(
     }
   }
   function register(store: Store<State>) {
-    const previousDispatch = redux != null
-      ? redux.dispatch
-      : (v) => v
+    const previousDispatch = redux != null ? redux.dispatch : v => v
     redux = reduxStore = store
     const pong = redux.dispatch({
       type: PING,
@@ -97,12 +99,8 @@ export function rootDomain<State>(
         next(value) {
           state$.next(value)
         },
-        error(err) {
-
-        },
-        complete() {
-
-        }
+        error(err) {},
+        complete() {},
       })
     unsubscribe = () => unsub.unsubscribe()
   }
@@ -111,8 +109,8 @@ export function rootDomain<State>(
     dispatch,
     getState,
     state$,
-    new Map,
-    addPlainHandler
+    new Map(),
+    addPlainHandler,
   )
   domain.register = register
   return domain
@@ -125,15 +123,17 @@ function optsReducer([key, value]) {
   this[key] = newVal
 }
 
-function mergeEffectOpts(defaults: DomainConfig, opts?: $Shape<UserlandConfig>) {
+function mergeEffectOpts(
+  defaults: DomainConfig,
+  opts?: $Shape<UserlandConfig>,
+) {
   if (opts === undefined) return {...defaults}
   if (!(typeof opts === 'object' && opts != null)) {
     throw new Error(`effect options should be object, got ${typeof opts}`)
   }
   const resultObj: DomainConfig = {...defaults}
-  Object
-    .keys(/*::Object.freeze*/(opts))
-    .map(key => [key, /*::Object.freeze*/(opts)[key]])
+  Object.keys(/*::Object.freeze*/ (opts))
+    .map(key => [key, /*::Object.freeze*/ (opts)[key]])
     .forEach(optsReducer, resultObj)
   return resultObj
 }
@@ -143,9 +143,9 @@ function DomainConstructor<State>(
   dispatch: Dispatch,
   getState: () => State,
   state$: Stream<State>,
-  events: Map<string | Tag, Event<any, State>> = new Map,
-  addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => { },
-  configGetter?: () => DomainConfig
+  events: Map<string | Tag, Event<any, State>> = new Map(),
+  addPlainHandler: <T>(name: string, fn: (data: T) => any) => void = () => {},
+  configGetter?: () => DomainConfig,
 ): Domain<State> {
   let getConfig: () => DomainConfig
   if (typeof configGetter !== 'function') {
@@ -166,9 +166,22 @@ function DomainConstructor<State>(
     },
     dispatch: disp,
   }
+  function recoverable<R>(events$: Stream<R>): Stream<R> {
+    const str$ = events$
+      .multicast()
+    const failureHandler = e => {
+      portFailWarn({domainName}, e)
+      return str$
+    }
+    return str$
+      .recoverWith(failureHandler)
+  }
   return {
     port<R>(events$: Stream<R>): Promise<void> {
-      return events$.observe(data => { safeDispatch(data, dispatch) })
+      return recoverable(events$)
+        .observe(data => {
+          safeDispatch(data, dispatch)
+        })
     },
     register(store) {
       console.warn(`Not implemented`)
@@ -185,7 +198,7 @@ function DomainConstructor<State>(
         state$,
         events,
         name,
-        optsFull
+        optsFull,
       )
     },
     domain(name: string): Domain<State> {
@@ -199,25 +212,28 @@ function DomainConstructor<State>(
         getConfig,
       )
     },
-    event<Payload>(
-      name: string
-    ): Event<Payload, State> {
+    event<Payload>(name: string): Event<Payload, State> {
       return EventConstructor(
         domainName,
         dispatch,
         getState,
         state$,
         events,
-        name
+        name,
       )
     },
-    typeConstant<Payload>(
-      name: string
-    ): Event<Payload, State> {
+    typeConstant<Payload>(name: string): Event<Payload, State> {
       const action$: Subject<Payload> = subject()
+
       addPlainHandler(name, data => {
-        const resultEvent = result(data)
-        effectOpts.dispatch(resultEvent)
+        if (data.meta == null)
+          data.meta = {}
+        data.meta.plain = true
+        const resultEvent = result(data.payload)
+        resultEvent.meta.passed = true
+        resultEvent.meta.plain = true
+        action$.next(data.payload)
+        getConfig().dispatch(resultEvent)
       })
       const result = EventConstructor(
         '',
@@ -227,7 +243,7 @@ function DomainConstructor<State>(
         events,
         name,
         action$,
-        {isPlain: true}
+        {isPlain: true},
       )
       return result
     },
@@ -235,9 +251,26 @@ function DomainConstructor<State>(
 }
 
 function getDispatch(getConfig): Dispatch {
-  const dispatch: any = (value) => {
+  const dispatch: any = value => {
     const result = getConfig().dispatch(value)
     return result
   }
   return dispatch
+}
+
+function portFailWarn({
+  domainName,
+}, error) {
+  console.warn(`
+
+
+  Port stream should not fail.
+  Next failure will throw.
+
+  Domain:
+    ${domainName}
+  Error:
+    ${error}
+
+`)
 }

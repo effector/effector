@@ -2,7 +2,7 @@ import {
   Store,
   Middleware
 } from 'redux'
-import { Stream } from 'most'
+import {Stream} from 'most'
 
 type Tag = string
 type ID = number
@@ -17,6 +17,8 @@ export type Meta = {
   index: ID,
   eventID: ID,
   seq: ID,
+  passed: boolean,
+  plain?: boolean,
 }
 
 export type RawAction<P> = {
@@ -96,6 +98,19 @@ export type Effect<Params, Done, Fail, State> = {
   fail: Event<{params: Params, error: Fail}, State>,
 }
 
+export type DomainAuto = Domain<any>
+export type EventAuto<Payload> = Event<Payload, any>
+export type EffectAuto<Params, Done, Fail = Error> =
+  Effect<Params, Done, Fail, any>
+
+export function createEvent<Payload>(
+  name: string,
+): EventAuto<Payload>
+
+export function createEffect<Params, Done, Fail>(
+  name: string,
+): EffectAuto<Params, Done, Fail>
+
 export function createHaltAction(): RawAction<void>
 
 export function createDomain<State>(store: Store<State>, domainName?: string): Domain<State>
@@ -173,3 +188,40 @@ export function joint<A, B, C, D, E, F, G, H, R>(
   ...none: Array<void>
 ): Reducer<R>
 
+export function mill(): Mill
+
+export type MillType<
+  A = any,
+  B = any,
+  C = any,
+  D = any,
+> = Mill
+  | MillA<A>
+  | MillAB<A, B>
+  | MillABC<A, B, C>
+  | MillABCD<A, B, C, D>
+
+declare class Mill {
+  and<A>(red: Reducer<A>): MillA<A>;
+  joint<R>(fn: () => R): Reducer<R>;
+}
+
+declare class MillA<A> {
+  and<B>(red: Reducer<B>): MillAB<A, B>;
+  joint<R>(fn: (a: A) => R): Reducer<R>;
+}
+
+declare class MillAB<A, B> {
+  and<C>(red: Reducer<C>): MillABC<A, B, C>;
+  joint<R>(fn: (a: A, b: B) => R): Reducer<R>;
+}
+
+declare class MillABC<A, B, C> {
+  and<D>(red: Reducer<D>): MillABCD<A, B, C, D>;
+  joint<R>(fn: (a: A, b: B, c: C) => R): Reducer<R>;
+}
+
+declare class MillABCD<A, B, C, D> {
+  // and<D>(red: Reducer<D>): MillABCD<A, B, C, D>;
+  joint<R>(fn: (a: A, b: B, c: C, d: D) => R): Reducer<R>;
+}

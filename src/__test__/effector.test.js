@@ -13,7 +13,7 @@ import {
   type Store,
   type Event,
   type Domain,
-  rootDomain,
+  createRootDomain,
   effectorMiddleware,
 } from '..'
 
@@ -41,56 +41,202 @@ test('smoke', async() => {
   expect(usedDone).toHaveBeenCalledTimes(1)
 })
 
-test('epic', async() => {
-  const fn = jest.fn()
-  const used = jest.fn(x => Promise.resolve(x))
-  const usedDone = jest.fn(x => Promise.resolve(x))
-  const store: Store<{foo: 'bar'}> = createStore(
-    (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(effectorMiddleware),
-  )
-  const domain = createDomain(store)
+describe('epic', () => {
+  test('epic.done() should work', async() => {
+    const fn = jest.fn()
+    const used = jest.fn(x => Promise.resolve(x))
+    const usedDone = jest.fn(x => Promise.resolve(x))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain = createDomain(store)
 
-  const effect = domain.effect('eff')
-  effect.use(used)
-  effect.done.watch(usedDone)
-  const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
-  event.epic(data$ => data$.map(effect))
-  await event('ev').send()
-  expect(used).toHaveBeenCalledTimes(1)
-  expect(usedDone).toHaveBeenCalledTimes(1)
+    const effect = domain.effect('eff')
+    effect.use(used)
+    effect.done.watch(usedDone)
+    const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
+    event.epic(data$ => data$.map(effect))
+    await event('ev').send()
+    expect(used).toHaveBeenCalledTimes(1)
+    expect(usedDone).toHaveBeenCalledTimes(1)
+  })
+
+  test('epic.fail() should work', async() => {
+    const fn = jest.fn()
+    const used = jest.fn(x => Promise.reject(x))
+    const usedDone = jest.fn(x => Promise.resolve(x))
+    const usedFail = jest.fn(x => Promise.resolve(x))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain = createDomain(store)
+
+    const effect = domain.effect('eff')
+    effect.use(used)
+    effect.done.watch(usedDone)
+    effect.fail.watch(usedFail)
+    const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
+    event.epic(data$ => data$.map(effect))
+    await event('ev').send()
+    expect(used).toHaveBeenCalledTimes(1)
+    expect(usedFail).toHaveBeenCalledTimes(1)
+    expect(usedDone).not.toHaveBeenCalled()
+  })
+  test('epic.trigger should work', async() => {
+    const fn = jest.fn()
+    const fnTrig = jest.fn(x => 'ev trigger')
+    const used = jest.fn(x => Promise.resolve(x))
+    const usedDone = jest.fn(x => Promise.resolve(x))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain = createDomain(store)
+
+    const effect = domain.effect('eff')
+    effect.use(used)
+    effect.done.watch(usedDone)
+    const event = effect.trigger(fnTrig)
+    await event().send()
+    expect(used).toHaveBeenCalledTimes(1)
+    expect(usedDone).toHaveBeenCalledTimes(1)
+  })
 })
 
-test('port', async() => {
-  const fn = jest.fn()
-  const used = jest.fn((state, x) => console.log(x, state))
-  const usedEff = jest.fn((state, x) => console.log(x, state))
-  const store: Store<{foo: 'bar'}> = createStore(
-    (s, x) => (fn(x), console.log(x), s),
-    applyMiddleware(effectorMiddleware),
-  )
-  const domain: Domain<{ foo: 'bar' }> = createDomain(store)
-  const event = domain.event('port-event')
-  const eff = domain.event('port-effect')
-  event.watch(used)
-  eff.watch(usedEff)
-  const str$ = periodic(100)
-    .scan((a, b) => a + 1, 0)
-    .take(10)
+//TODO Add port throws handling
+describe('port', () => {
+  test('port should work correctly', async() => {
+    const fn = jest.fn()
+    const used = jest.fn((state, x) => console.log(x, state))
+    const usedEff = jest.fn((state, x) => console.log(x, state))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+    const event = domain.event('port-event')
+    const eff = domain.event('port-effect')
+    event.watch(used)
+    eff.watch(usedEff)
+    const str$ = periodic(100)
+      .scan((a, b) => a + 1, 0)
+      .take(10)
 
-    // .map(event)
+      // .map(event)
 
-  domain.port(str$.map(event))
-  await new Promise(rs => setTimeout(rs, 1500))
-  expect(used).toHaveBeenCalledTimes(10)
+    domain.port(str$.map(event))
+    await new Promise(rs => setTimeout(rs, 1500))
+    expect(used).toHaveBeenCalledTimes(10)
 
-  domain.port(str$.map(eff))
-  await new Promise(rs => setTimeout(rs, 1500))
-  expect(usedEff).toHaveBeenCalledTimes(10)
+    domain.port(str$.map(eff))
+    await new Promise(rs => setTimeout(rs, 1500))
+    expect(usedEff).toHaveBeenCalledTimes(10)
+  })
+  test('port errors should been catched', async() => {
+    const fn = jest.fn()
+    const used = jest.fn((state, x) => console.log(x, state))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+    const event = domain.event('port-event')
+    event.watch(used)
+    expect(async function() {
+      const str$ = periodic(100)
+        .scan((a, b) => a + 1, 0)
+        .take(2)
+        .map((n) => {
+          throw new Error(`port failure ${n}`)
+        })
+        // .map(event)
+
+      await domain.port(str$)
+      // await new Promise(rs => setTimeout(rs, 1500))
+    }()).rejects.toThrowErrorMatchingSnapshot()
+
+    expect(used).not.toHaveBeenCalled()
+  })
 })
 
 test('should handle return value', async() => {
   const fn = jest.fn()
+  const store: Store<{foo: 'bar'}> = createStore(
+    (s, x) => s,
+    applyMiddleware(effectorMiddleware),
+  )
+  const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+  const timeout = domain.effect('timeout')
+  timeout.watch(fn)
+  domain.port(
+    periodic(300)
+      .take(5)
+      .map(() => timeout())
+  )
+  await delay(2e3)
+  expect(fn).toHaveBeenCalledTimes(5)
+})
+
+test('effect.fail()', async() => {
+  const fn = jest.fn(
+    () => delay(500).then(
+      () => Promise.reject('fail!')
+    )
+  )
+  const store: Store<{foo: 'bar'}> = createStore(
+    (s, x) => s,
+    applyMiddleware(effectorMiddleware),
+  )
+  const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+  const timeout = domain.effect('timeout')
+  timeout.use(fn)
+  expect(
+    timeout('params').fail()
+  ).resolves.toMatchObject({
+    params: 'params',
+    error: 'fail!',
+  })
+})
+
+test('effect.promise()', async() => {
+  const fn = jest.fn(
+    () => delay(500).then(
+      () => Promise.reject('fail!')
+    )
+  )
+  const fn1 = jest.fn(
+    () => delay(500).then(
+      () => Promise.resolve('done!')
+    )
+  )
+  const store: Store<{foo: 'bar'}> = createStore(
+    (s, x) => s,
+    applyMiddleware(effectorMiddleware),
+  )
+  const domain: Domain<{ foo: 'bar' }> = createDomain(store)
+  const timeout = domain.effect('timeout')
+  timeout.use(fn)
+  await expect(
+    timeout('params').promise()
+  ).rejects.toMatchObject({
+    params: 'params',
+    error: 'fail!',
+  })
+  timeout.use(fn1)
+  await expect(
+    timeout('params').promise()
+  ).resolves.toMatchObject({
+    params: 'params',
+    result: 'done!',
+  })
+})
+
+test('should handle watcher`s errors', async() => {
+  const fn = jest.fn(e => {
+    throw new Error('Oops')
+  })
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => s,
     applyMiddleware(effectorMiddleware),
@@ -115,7 +261,7 @@ test('both return and send', async() => {
     (s, x) => (fn(x), console.log(x), s),
     applyMiddleware(effectorMiddleware),
   )
-  const domain = rootDomain()
+  const domain = createRootDomain()
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -138,7 +284,7 @@ test('hot reload support', async() => {
     (s, x) => (fnA(x), console.log(x), s),
     applyMiddleware(effectorMiddleware),
   )
-  const domain = rootDomain()
+  const domain = createRootDomain()
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -171,7 +317,7 @@ test('only return', async() => {
     (s, x) => (fn(x), console.log(x), s),
     applyMiddleware(effectorMiddleware),
   )
-  const domain = rootDomain()
+  const domain = createRootDomain()
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -186,7 +332,7 @@ test('only return', async() => {
 
 test('typeConstant', async() => {
   const fn = jest.fn()
-  const used = jest.fn(x => console.log(x))
+  const used = jest.fn((x: string) => console.log(x))
   const respFn = jest.fn(x => console.log(x))
   const store: Store<{foo: 'bar'}> = createStore(
     (s, x) => (fn(x), console.log(x), s),
@@ -201,18 +347,21 @@ test('typeConstant', async() => {
   event.epic(data$ =>
     data$.map(e => {
       used(e)
-      eventResp(e).send()
+      return eventResp(e)
     }),
   )
 
   log`type constant's event`(event)
-  store.dispatch({type: 'TYPE_CONST', payload: 'bar'})
-  expect(event('bar')).toMatchObject({type: 'TYPE_CONST', payload: 'bar'})
+  store.dispatch({type: 'TYPE_CONST', payload: 'raw'})
+  expect(event('test')).toMatchObject({type: 'TYPE_CONST', payload: 'test'})
   expect(event).toBeDefined()
-  await event('bar').send()
+  await event('run').send()
   await delay(500)
   expect(respFn).toHaveBeenCalledTimes(2)
   expect(used).toHaveBeenCalledTimes(2)
+  expect(used.mock.calls).toMatchObject( //$off
+    [['raw'], ['run']]
+  )
 })
 
 test('subscription', async() => {
