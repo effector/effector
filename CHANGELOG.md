@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.10.2
+- Fix overriding of flow modules
+
 ## 0.10.0
 - **breaking** Removed `rootDomain` alias for `createRootDomain`
 - Fixed duplication of `typeConstant` events

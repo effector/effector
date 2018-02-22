@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Redux effects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,8 +9,8 @@
   "scripts": {
     "test": "jest --config=jest.json",
     "prepublishOnly": "npm run build && npm run flow-copy",
-    "flow-copy:cjs": "flow-copy-source -i src/__test__ src lib && rimraf ./lib/__test__",
-    "flow-copy:es": "flow-copy-source -i src/__test__ src es && rimraf ./es/__test__",
+    "flow-copy:cjs": "flow-copy-source -i=__test__**\/* -i=joint* -i=mill* -i=subject* src lib && cp src\/*flow lib",
+    "flow-copy:es": "flow-copy-source -i=__test__**\/* -i=joint* -i=mill* -i=subject* src es && cp src\/*flow es",
     "flow-copy": "npm run flow-copy:cjs && npm run flow-copy:es",
     "build": "npm run build:cjs && npm run build:es",
     "build:cjs": "cross-env BABEL_ENV=commonjs babel src/ --ignore src/__test__ -d lib -s --delete-dir-on-start",
