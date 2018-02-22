@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0
+- Add support for sync functions in `.use`
+- **breaking** Rename config option `effectImplementationCheck` to `unused`
+
 ## 0.10.2
 - Fix overriding of flow modules
 

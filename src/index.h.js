@@ -94,7 +94,9 @@ export type Effect<Params, Done, Fail, State> = {
     ) => Stream<R>
   ): Stream<R>,
   // port<R>(events$: Stream<R>): Promise<void>,
-  use(thunk: (params: Params) => Promise<Done>): void,
+  use(thunk: (
+    (params: Params) => (Promise<Done>/*:: | Done*/)
+  )): void,
   trigger(
     query: (state: State) => Params,
     eventName?: string,
@@ -139,12 +141,12 @@ export type WarnMode = 'off' | 'warn' | 'throw'
 export type WarnModeCheck = () => WarnMode
 
 export type DomainConfig = {
-  effectImplementationCheck: WarnModeCheck,
+  unused: WarnModeCheck,
   watchFailCheck: WarnModeCheck,
   dispatch: typeof Dispatch,
 }
 
 export type UserlandConfig = {
-  effectImplementationCheck: WarnMode,
+  unused: WarnMode,
   watchFailCheck: WarnMode,
 }

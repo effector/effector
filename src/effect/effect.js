@@ -1,6 +1,6 @@
 //@flow
 
-import {type Stream, combine} from 'most'
+import type {Stream} from 'most'
 import {subject, type Subject} from '../subject'
 
 import type {Effect, Event, RawAction, DomainConfig} from '../index.h'
@@ -11,7 +11,7 @@ import {port} from '../port'
 
 import {basicCommon, observable} from '../event-common'
 import {implWarn, implError, watchWarn} from './warn'
-
+import {createWatcher} from './watch'
 export function EffectConstructor<State, Params, Done, Fail>(
   domainName: string,
   dispatch: <T>(value: T) => T,
@@ -27,12 +27,15 @@ export function EffectConstructor<State, Params, Done, Fail>(
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
 
   handlers.add((payload, state) => action$.next(payload))
-  let using: (params: Params) => Promise<Done> = getWarn({
+  let using: (((params: Params) => Promise<Done>)
+    | ((params: Params) => Done)) = getWarn({
     domainName,
     name,
-    mode: () => opts.effectImplementationCheck(),
+    mode: () => opts.unused(),
   })
-  function use(thunk: (params: Params) => Promise<Done>) {
+  function use(thunk: (
+    (params: Params) => (Promise<Done> | Done)
+  )) {
     using = thunk
   }
   const create = (payload: Params) => ({
@@ -47,8 +50,9 @@ export function EffectConstructor<State, Params, Done, Fail>(
   })
   const effect = (params: Params) => {
     let run = () => {
-      run = () => {}
-      using(params).then(
+      run = () => { }
+      const runned: Promise<Done> = ((runUsing(params, using))/*: any*/)
+      runned.then(
         result => {
           const data = {params, result}
           dispatcher(done(data), dispatch)
@@ -122,33 +126,19 @@ export function EffectConstructor<State, Params, Done, Fail>(
     events,
     [name, 'fail'].join(' '),
   )
-  function watch<R>(fn: (params: Params, state: State) => R) {
-    effect.epic(
-      (data$, state$) => combine(
-        (data, state) => ({ data, state }),
-        data$, state$
-      ).sampleWith(data$)
-        .map(({data, state}) => {
-          try {
-            const result = fn(data, state)
-            return result
-          } catch (err) {
-            watchFailWarn({
-              domainName, name,
-              mode: opts.watchFailCheck()
-            }, err)
-          }
-        })
-    )
-  }
 
   effect.use = use
   effect.getType = getType
   setToString(effect, getType)
   effect.done = done
   effect.fail = fail
-  effect.watch = watch
   effect.epic = port(dispatch, state$, action$)
+  effect.watch = createWatcher({
+    event: effect,
+    domainName,
+    name,
+    opts,
+  })
   effect.trigger = function trigger(
     query: (state: State) => Params,
     eventName: string = 'trigger',
@@ -176,6 +166,19 @@ export function EffectConstructor<State, Params, Done, Fail>(
 
 function setToString(effect: any, getType) {
   effect.toString = getType
+}
+
+function runUsing<P, Done>(params: P, using: (params: P) => *): Promise<Done> {
+  let response
+  try {
+    response = using(params)
+  } catch (err) {
+    return Promise.reject(err)
+  }
+  if (typeof response === 'object' && response != null && typeof response.then === 'function') {
+    return response
+  }
+  return Promise.resolve(response)
 }
 
 function dispatcher(value, dispatchDefault, dispatchHook, isBatch = false) {

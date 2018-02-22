@@ -4,7 +4,7 @@
 import {type Stream, combine} from 'most'
 import {subject, type Subject} from './subject'
 
-import type {Event, RawAction} from './index.h'
+import type {Event, RawAction, WarnMode} from './index.h'
 
 import {nextPayloadID, type Tag} from './id'
 
@@ -12,6 +12,7 @@ import {port} from './port'
 
 import {basicCommon, observable} from './event-common'
 import {watchWarn} from './effect/warn'
+import {createWatcher} from './effect/watch'
 
 export function EventConstructor<State, Payload>(
   domainName: string,
@@ -23,28 +24,14 @@ export function EventConstructor<State, Payload>(
   action$: Subject<Payload> = subject(),
   config: {
     isPlain: boolean,
+    watchFailCheck: WarnMode,
   } = {
     isPlain: false,
+    watchFailCheck: 'warn',
   }
 ): Event<Payload, State> {
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
   const handlers = new Set
-  function watch<R>(fn: (params: Payload, state: State) => R) {
-    eventInstance.epic(
-      ((data$, state$) => combine(
-        (data, state) => ({data, state}),
-        data$, state$
-      ).sampleWith(data$)
-        .map(({data, state}) => {
-          try {
-            const result = fn(data, state)
-            return result
-          } catch (err) {
-            watchWarn(domainName, name, err)
-          }
-        }))
-    )
-  }
   if (!config.isPlain)
     handlers.add((payload, state) => action$.next(payload))
   // handlers.add((payload, state) => state$.next(state))
@@ -89,7 +76,14 @@ export function EventConstructor<State, Payload>(
   eventInstance.getType = getType
   //$off
   eventInstance.toString = getType
-  eventInstance.watch = watch
+  eventInstance.watch = createWatcher({
+    event: eventInstance,
+    domainName,
+    name,
+    opts: {
+      watchFailCheck: () => config.watchFailCheck,
+    },
+  })
   eventInstance.epic = port(dispatch, state$, action$)
   eventInstance.subscribe = (subscriber) => action$.subscribe(subscriber)
   // eventInstance.port = function port<R>(events$: Stream<R>) {

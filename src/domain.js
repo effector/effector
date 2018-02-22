@@ -150,7 +150,7 @@ function DomainConstructor<State>(
   let getConfig: () => DomainConfig
   if (typeof configGetter !== 'function') {
     const config = {
-      effectImplementationCheck: () => 'warn',
+      unused: () => 'warn',
       watchFailCheck: () => 'warn',
       dispatch,
     }
@@ -158,8 +158,8 @@ function DomainConstructor<State>(
   } else getConfig = configGetter
   const disp = getDispatch(getConfig)
   const effectOpts: DomainConfig = {
-    effectImplementationCheck() {
-      return getConfig().effectImplementationCheck()
+    unused() {
+      return getConfig().unused()
     },
     watchFailCheck() {
       return getConfig().watchFailCheck()
@@ -243,7 +243,9 @@ function DomainConstructor<State>(
         events,
         name,
         action$,
-        {isPlain: true},
+        {
+          isPlain: true, watchFailCheck: effectOpts.watchFailCheck(),
+        },
       )
       return result
     },

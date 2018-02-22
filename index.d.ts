@@ -9,7 +9,7 @@ type ID = number
 
 export type WarnMode = 'off' | 'warn' | 'throw'
 export type EventConfig = {
-  effectImplementationCheck?: WarnMode,
+  unused?: WarnMode,
   watchFailCheck?: WarnMode,
 }
 
