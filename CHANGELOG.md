@@ -18,6 +18,7 @@
 - Added warning to port errors
 - Added type aliases `DomainAuto`, `EventAuto` and `EffectAuto`
 - Added `mill` fluent "AND" reducer combinator
+
 ```js
 import {mill, type MillType, type Reducer} from 'effector'
 
@@ -47,6 +48,7 @@ const union: Reducer<{
 
 - Added hot reload support for root domains
 - Added support for dispatching halt action
+
 ```js
 import {createHaltAction} from 'effector'
 
