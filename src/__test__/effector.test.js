@@ -84,6 +84,25 @@ describe('epic', () => {
     expect(usedFail).toHaveBeenCalledTimes(1)
     expect(usedDone).not.toHaveBeenCalled()
   })
+  test('sync effect.use', async() => {
+    const fn = jest.fn()
+    const used = jest.fn(x => x)
+    const usedDone = jest.fn(x => Promise.resolve(x))
+    const store: Store<{foo: 'bar'}> = createStore(
+      (s, x) => (fn(x), console.log(x), s),
+      applyMiddleware(effectorMiddleware),
+    )
+    const domain = createDomain(store)
+
+    const effect = domain.effect('eff')
+    effect.use(used)
+    effect.done.watch(usedDone)
+    const event: Event<'ev', {foo: 'bar'}> = domain.event('event1')
+    event.epic(data$ => data$.map(effect))
+    await event('ev').send()
+    expect(used).toHaveBeenCalledTimes(1)
+    expect(usedDone).toHaveBeenCalledTimes(1)
+  })
   test('epic.trigger should work', async() => {
     const fn = jest.fn()
     const fnTrig = jest.fn(x => 'ev trigger')
