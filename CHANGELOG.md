@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.11.1
+- Remove source files from npm release
+
 ## 0.11.0
 - Add support for sync functions in `.use`
 - **breaking** Rename config option `effectImplementationCheck` to `unused`
