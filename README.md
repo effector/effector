@@ -16,6 +16,12 @@ yarn add effector
 
 ## Usage
 
+See examples
+
+[![Edit Effective redux](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/5k41l10xpl?module=%2Fsrc%2Flogic.js)
+[![Edit 7ykkowx82j](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/7ykkowx82j?module=%2Fsrc%2Flogic.js)
+
+
 ```js
 import {createStore, applyMiddleware} from 'redux'
 
@@ -112,12 +118,15 @@ type Todo = {
 
 ```
 
+## Typings
+Effector supports both TypeScript and Flow type annotations out of the box.
+
 ## API
 
 ```js
 import {
   effectorMiddleware,
-  rootDomain,
+  createRootDomain,
   createReducer,
   joint,
 } from 'effector'
