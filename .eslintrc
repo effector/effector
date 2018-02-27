@@ -32,7 +32,7 @@ rules:
   prefer-template: warn
   no-nested-ternary: warn
   no-unneeded-ternary: warn
-  no-underscore-dangle: warn
+  no-underscore-dangle: off
   prefer-const: warn
   no-unused-labels: 'off'
   no-extra-bind: error

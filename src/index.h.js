@@ -44,7 +44,7 @@ export type Domain<State = void> = {
   port<R>(events$: Stream<R>): Promise<void>,
 }
 
-export type Subscription<A> = {
+export type Subscription/*::<A>*/ = {
   unsubscribe(): void
 }
 

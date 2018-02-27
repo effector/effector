@@ -1,7 +1,6 @@
 //@flow
 
-// import type {Store} from 'redux'
-import {type Stream, combine} from 'most'
+import type {Stream} from 'most'
 import {subject, type Subject} from './subject'
 
 import type {Event, RawAction, WarnMode} from './index.h'
@@ -11,7 +10,6 @@ import {nextPayloadID, type Tag} from './id'
 import {port} from './port'
 
 import {basicCommon, observable} from './event-common'
-import {watchWarn} from './effect/warn'
 import {createWatcher} from './effect/watch'
 
 export function EventConstructor<State, Payload>(
@@ -33,7 +31,7 @@ export function EventConstructor<State, Payload>(
   const {eventID, nextSeq, getType} = basicCommon(domainName, name)
   const handlers = new Set
   if (!config.isPlain)
-    handlers.add((payload, state) => action$.next(payload))
+    handlers.add((payload/*::, state*/) => action$.next(payload))
   // handlers.add((payload, state) => state$.next(state))
 
   const create = (payload: Payload) => ({
