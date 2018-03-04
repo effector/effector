@@ -10,6 +10,7 @@ export {createReducer} from './reducer'
 export {joint} from './joint'
 export {createHaltAction} from './config'
 
+import './proactive/index.h'
 
 // Experimental API
 

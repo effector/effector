@@ -1,0 +1,21 @@
+{
+  "collectCoverage": true,
+  "automock": false,
+  "browser": false,
+  "testEnvironment": "node",
+  "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+  },
+  "roots": [
+    "<rootDir>/scripts/fastflow/"
+  ],
+  "testMatch": [
+    "<rootDir>/scripts/fastflow/**/__test__/**/*.test.js"
+  ],
+  "testPathIgnorePatterns": [
+    "<rootDir>/lib/",
+    "<rootDir>/es/",
+    "<rootDir>/src/",
+    "<rootDir>/node_modules/"
+  ]
+}

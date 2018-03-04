@@ -3,7 +3,7 @@
 import {PING, PONG, HALT, type Config} from './config'
 
 export function effectorMiddleware() {
-  const plainMap = new Map
+  const plainMap = new Map()
   const config: Config = {
     plain: plainMap,
   }
@@ -12,10 +12,7 @@ export function effectorMiddleware() {
     if (!isActive) {
       return action
     }
-    if (!(
-      typeof action === 'object'
-      && action != null
-    )) {
+    if (!(typeof action === 'object' && action != null)) {
       return next(action)
     }
     if (typeof action.type !== 'string') {
@@ -36,10 +33,8 @@ export function effectorMiddleware() {
 
     if (!(typeof action.meta === 'object' && action.meta != null))
       action.meta = {}
-    if (action.meta.passed === true)
-      return action
-    if (handler)
-      action.meta.plain = true
+    if (action.meta.passed === true) return action
+    if (handler) action.meta.plain = true
 
     if (typeof action.send === 'function') {
       const {send, meta} = action
@@ -68,4 +63,9 @@ export function effectorMiddleware() {
   }
 }
 
-
+/*
+TODO Replace middleware with store enhancer,
+as domains needs access to replaceReducers
+to handle reducers on their own.
+Also, domain might be storeEnhancer itself
+*/
