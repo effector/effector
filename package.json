@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "description": "Redux effects",
   "main": "lib/index.js",
   "module": "es/index.js",
@@ -9,12 +9,16 @@
   "scripts": {
     "test": "jest --config=jest.json",
     "prepublishOnly": "npm run build && npm run flow-copy",
-    "flow-copy:cjs": "flow-copy-source -i=__test__**\/* -i=joint* -i=mill* -i=subject* src lib && cp src\/*flow lib",
-    "flow-copy:es": "flow-copy-source -i=__test__**\/* -i=joint* -i=mill* -i=subject* src es && cp src\/*flow es",
+    "flow-copy:cjs":
+      "flow-copy-source -i=__test__**/* -i=combine* -i=collect* -i=subject* src lib && cp src/*flow lib",
+    "flow-copy:es":
+      "flow-copy-source -i=__test__**/* -i=combine* -i=collect* -i=subject* src es && cp src/*flow es",
     "flow-copy": "npm run flow-copy:cjs && npm run flow-copy:es",
     "build": "npm run build:cjs && npm run build:es",
-    "build:cjs": "cross-env BABEL_ENV=commonjs babel src/ --ignore src/__test__ -d lib -s --delete-dir-on-start",
-    "build:es": "cross-env BABEL_ENV=es babel src/ --ignore src/__test__ -d es -s --delete-dir-on-start",
+    "build:cjs":
+      "cross-env BABEL_ENV=commonjs babel src/ --ignore src/__test__ -d lib -s --delete-dir-on-start",
+    "build:es":
+      "cross-env BABEL_ENV=es babel src/ --ignore src/__test__ -d es -s --delete-dir-on-start",
     "test:ff": "jest --config=jest-fastflow.json --watch",
     "test:watch": "jest --config=jest.json --watch",
     "flow": "pm2 start flow-effector.sh",
@@ -70,10 +74,6 @@
     "redux": "^3.7.2"
   },
   "sideEffects": false,
-  "files": [
-    "es",
-    "lib",
-    "index.d.ts"
-  ],
+  "files": ["es", "lib", "index.d.ts"],
   "repository": "https://gitlab.com/zerobias/effector"
 }

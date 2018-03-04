@@ -119,25 +119,25 @@ export function createRootDomain<State>(domainName?: string): Domain<State>
 
 export const effectorMiddleware: Middleware
 
-export function joint<A, R>(
+export function combine<A, R>(
   fn: (a: A) => R,
   setA: Reducer<A>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, R>(
+export function combine<A, B, R>(
   fn: (a: A, b: B) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, R>(
+export function combine<A, B, C, R>(
   fn: (a: A, b: B, c: C) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
   setC: Reducer<C>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, D, R>(
+export function combine<A, B, C, D, R>(
   fn: (a: A, b: B, c: C, d: D) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
@@ -145,7 +145,7 @@ export function joint<A, B, C, D, R>(
   setD: Reducer<D>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, D, E, R>(
+export function combine<A, B, C, D, E, R>(
   fn: (a: A, b: B, c: C, d: D, e: E) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
@@ -154,7 +154,7 @@ export function joint<A, B, C, D, E, R>(
   setE: Reducer<E>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, D, E, F, R>(
+export function combine<A, B, C, D, E, F, R>(
   fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
@@ -164,7 +164,7 @@ export function joint<A, B, C, D, E, F, R>(
   setF: Reducer<F>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, D, E, F, G, R>(
+export function combine<A, B, C, D, E, F, G, R>(
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
@@ -175,7 +175,7 @@ export function joint<A, B, C, D, E, F, G, R>(
   setG: Reducer<G>,
   ...none: Array<void>
 ): Reducer<R>
-export function joint<A, B, C, D, E, F, G, H, R>(
+export function combine<A, B, C, D, E, F, G, H, R>(
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
   setA: Reducer<A>,
   setB: Reducer<B>,
@@ -188,40 +188,40 @@ export function joint<A, B, C, D, E, F, G, H, R>(
   ...none: Array<void>
 ): Reducer<R>
 
-export function mill(): Mill
+export function collect(): Collect
 
-export type MillType<
+export type CollectType<
   A = any,
   B = any,
   C = any,
   D = any,
-> = Mill
-  | MillA<A>
-  | MillAB<A, B>
-  | MillABC<A, B, C>
-  | MillABCD<A, B, C, D>
+> = Collect
+  | CollectA<A>
+  | CollectAB<A, B>
+  | CollectABC<A, B, C>
+  | CollectABCD<A, B, C, D>
 
-declare class Mill {
-  and<A>(red: Reducer<A>): MillA<A>;
-  joint<R>(fn: () => R): Reducer<R>;
+declare class Collect {
+  and<A>(red: Reducer<A>): CollectA<A>;
+  combine<R>(fn: () => R): Reducer<R>;
 }
 
-declare class MillA<A> {
-  and<B>(red: Reducer<B>): MillAB<A, B>;
-  joint<R>(fn: (a: A) => R): Reducer<R>;
+declare class CollectA<A> {
+  and<B>(red: Reducer<B>): CollectAB<A, B>;
+  combine<R>(fn: (a: A) => R): Reducer<R>;
 }
 
-declare class MillAB<A, B> {
-  and<C>(red: Reducer<C>): MillABC<A, B, C>;
-  joint<R>(fn: (a: A, b: B) => R): Reducer<R>;
+declare class CollectAB<A, B> {
+  and<C>(red: Reducer<C>): CollectABC<A, B, C>;
+  combine<R>(fn: (a: A, b: B) => R): Reducer<R>;
 }
 
-declare class MillABC<A, B, C> {
-  and<D>(red: Reducer<D>): MillABCD<A, B, C, D>;
-  joint<R>(fn: (a: A, b: B, c: C) => R): Reducer<R>;
+declare class CollectABC<A, B, C> {
+  and<D>(red: Reducer<D>): CollectABCD<A, B, C, D>;
+  combine<R>(fn: (a: A, b: B, c: C) => R): Reducer<R>;
 }
 
-declare class MillABCD<A, B, C, D> {
-  // and<D>(red: Reducer<D>): MillABCD<A, B, C, D>;
-  joint<R>(fn: (a: A, b: B, c: C, d: D) => R): Reducer<R>;
+declare class CollectABCD<A, B, C, D> {
+  // and<D>(red: Reducer<D>): CollectABCD<A, B, C, D>;
+  combine<R>(fn: (a: A, b: B, c: C, d: D) => R): Reducer<R>;
 }

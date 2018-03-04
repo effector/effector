@@ -6,9 +6,9 @@ import {
   type Domain,
   type Event,
   type Reducer,
-  joint,
+  combine,
   effectorMiddleware,
-  mill,
+  collect,
 } from '..'
 
 import {periodic} from 'most'
@@ -23,10 +23,10 @@ test('reducer', () => {
   const reset: Event<void, State> = domain.event('reset')
 
   const reducer: Reducer<{
-    actions: string[]
+    actions: string[],
   }> = createReducer({actions: ['bar']})
     .on([event1, event2], (state, payload) => ({
-      actions: [...state.actions, payload]
+      actions: [...state.actions, payload],
     }))
     .reset(reset)
   const none: any = undefined
@@ -38,7 +38,7 @@ test('reducer', () => {
   expect(state3).toMatchSnapshot()
 })
 
-test('joint', async() => {
+test('combine', async() => {
   const domain = createRootDomain()
   const event1: Event<'ev', State> = domain.event('event1')
   const event2: Event<'ev2', State> = domain.event('event2')
@@ -46,19 +46,18 @@ test('joint', async() => {
   const reset: Event<mixed, State> = domain.event('reset')
 
   const reducerA: Reducer<{
-    actions: string[]
+    actions: string[],
   }> = createReducer({actions: ['bar']})
     .on([event1, event2, event3], (state, payload) => ({
-      actions: [...state.actions, payload]
+      actions: [...state.actions, payload],
     }))
     .reset(reset)
   const reducerB: Reducer<{
     resets: number,
-  }> = createReducer({resets: 0})
-    .on(reset, (state, p) => ({
-      resets: state.resets + 1,
-    }))
-  const union = joint(
+  }> = createReducer({resets: 0}).on(reset, (state, p) => ({
+    resets: state.resets + 1,
+  }))
+  const union = combine(
     (value1, {resets}) => ({
       value1,
       resets,
@@ -80,26 +79,19 @@ test('joint', async() => {
   expect(state3).toMatchObject({
     resets: 1,
     value1: {
-      actions: [
-        'bar',
-        'ev2',
-      ]
-    }
+      actions: ['bar', 'ev2'],
+    },
   })
   const state4 = union(state3, event3('ev3').raw())
   expect(state4).toMatchObject({
     resets: 11,
     value1: {
-      actions: [
-        'bar',
-        'ev2',
-        'ev3',
-      ]
-    }
+      actions: ['bar', 'ev2', 'ev3'],
+    },
   })
 })
 
-test('mill', async() => {
+test('collect', async() => {
   const domain = createRootDomain()
   const event1: Event<'ev', State> = domain.event('event1')
   const event2: Event<'ev2', State> = domain.event('event2')
@@ -107,23 +99,22 @@ test('mill', async() => {
   const reset: Event<mixed, State> = domain.event('reset')
 
   const reducerA: Reducer<{
-    actions: string[]
+    actions: string[],
   }> = createReducer({actions: ['bar']})
     .on([event1, event2, event3], (state, payload) => ({
-      actions: [...state.actions, payload]
+      actions: [...state.actions, payload],
     }))
     .reset(reset)
   const reducerB: Reducer<{
     resets: number,
-  }> = createReducer({resets: 0})
-    .on(reset, (state, p) => ({
-      resets: state.resets + 1,
-    }))
+  }> = createReducer({resets: 0}).on(reset, (state, p) => ({
+    resets: state.resets + 1,
+  }))
 
-  const union = mill() // Mill
+  const union = collect() // Mill
     .and(reducerA) // Mill<A>
     .and(reducerB) // Mill<A, B>
-    .joint((value1, {resets}) => ({
+    .combine((value1, {resets}) => ({
       value1,
       resets,
     })) // Reducer<{value1: A, resets: number}>
@@ -142,25 +133,17 @@ test('mill', async() => {
   expect(state3).toMatchObject({
     resets: 1,
     value1: {
-      actions: [
-        'bar',
-        'ev2',
-      ]
-    }
+      actions: ['bar', 'ev2'],
+    },
   })
   const state4 = union(state3, event3('ev3').raw())
   expect(state4).toMatchObject({
     resets: 11,
     value1: {
-      actions: [
-        'bar',
-        'ev2',
-        'ev3',
-      ]
-    }
+      actions: ['bar', 'ev2', 'ev3'],
+    },
   })
-  const emptyUnion = mill()
-    .joint(() => 'default')
+  const emptyUnion = collect().combine(() => 'default')
   const state5 = emptyUnion(state4, event3('ev3').raw())
   expect(state5).toBe('default')
 })
@@ -173,7 +156,7 @@ test('falsey values should been handled correctly', async() => {
   domain.port(
     periodic(300)
       .take(5)
-      .map(() => timeout())
+      .map(() => timeout()),
   )
   const loading = createReducer(false)
     .on(timeout, () => true)
@@ -183,18 +166,14 @@ test('falsey values should been handled correctly', async() => {
     loading,
   })
 
-  const store: Store<{loading: boolean}> = createStore(
-    (state, act) => {
-      const result = stateShape(state, act)
-      if (act.type === timeout.getType()) {
-        fn(state, result)
-        expect(result).toHaveProperty('loading', true)
-      } else
-        expect(result).toHaveProperty('loading', false)
-      return result
-    },
-    applyMiddleware(effectorMiddleware),
-  )
+  const store: Store<{loading: boolean}> = createStore((state, act) => {
+    const result = stateShape(state, act)
+    if (act.type === timeout.getType()) {
+      fn(state, result)
+      expect(result).toHaveProperty('loading', true)
+    } else expect(result).toHaveProperty('loading', false)
+    return result
+  }, applyMiddleware(effectorMiddleware))
   domain.register(store)
   await delay(2e3)
   expect(fn).toHaveBeenCalledTimes(5)

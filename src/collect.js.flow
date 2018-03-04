@@ -1,0 +1,122 @@
+//@flow
+
+import type {Reducer} from './index.h'
+import {createReducer} from './reducer'
+import {combine} from './combine'
+
+export type CollectType<A = mixed, B = mixed, C = mixed, D = mixed> =
+  | Collect
+  | CollectA<A>
+  | CollectAB<A, B>
+  | CollectABC<A, B, C>
+  | CollectABCD<A, B, C, D>
+export class Collect {
+  parts: {} = {}
+  and<A>(red: Reducer<A>): CollectA<A> {
+    return new CollectA({
+      a: red,
+    })
+  }
+  combine<R>(fn: () => R): Reducer<R> {
+    const reducer = createReducer()
+    const joined = combine(fn, reducer)
+    return joined
+  }
+}
+
+export class CollectA<A> {
+  parts: {
+    a: Reducer<A>,
+  }
+  constructor(parts: {a: Reducer<A>}) {
+    this.parts = parts
+  }
+  and<B>(red: Reducer<B>): CollectAB<A, B> {
+    return new CollectAB({
+      ...this.parts,
+      b: red,
+    })
+  }
+  combine<R>(fn: (a: A) => R): Reducer<R> {
+    const joined = combine(fn, this.parts.a)
+    return joined
+  }
+}
+
+export class CollectAB<A, B> {
+  parts: {
+    a: Reducer<A>,
+    b: Reducer<B>,
+  }
+  constructor(parts: {a: Reducer<A>, b: Reducer<B>}) {
+    this.parts = parts
+  }
+  and<C>(red: Reducer<C>): CollectABC<A, B, C> {
+    return new CollectABC({
+      ...this.parts,
+      c: red,
+    })
+  }
+  combine<R>(fn: (a: A, b: B) => R): Reducer<R> {
+    const joined = combine(fn, this.parts.a, this.parts.b)
+    return joined
+  }
+}
+
+export class CollectABC<A, B, C> {
+  parts: {
+    a: Reducer<A>,
+    b: Reducer<B>,
+    c: Reducer<C>,
+  }
+  constructor(parts: {a: Reducer<A>, b: Reducer<B>, c: Reducer<C>}) {
+    this.parts = parts
+  }
+  and<D>(red: Reducer<D>): CollectABCD<A, B, C, D> {
+    return new CollectABCD({
+      ...this.parts,
+      d: red,
+    })
+  }
+  combine<R>(fn: (a: A, b: B, c: C) => R): Reducer<R> {
+    const joined = combine(fn, this.parts.a, this.parts.b, this.parts.c)
+    return joined
+  }
+}
+
+export class CollectABCD<A, B, C, D> {
+  parts: {
+    a: Reducer<A>,
+    b: Reducer<B>,
+    c: Reducer<C>,
+    d: Reducer<D>,
+  }
+  constructor(parts: {
+    a: Reducer<A>,
+    b: Reducer<B>,
+    c: Reducer<C>,
+    d: Reducer<D>,
+  }) {
+    this.parts = parts
+  }
+  //eslint-disable-next-line no-unused-vars
+  and(red: empty): CollectABCD<A, B, C, D> {
+    return this
+  }
+  combine<R>(fn: (a: A, b: B, c: C, d: D) => R): Reducer<R> {
+    const joined = combine(
+      fn,
+      this.parts.a,
+      this.parts.b,
+      this.parts.c,
+      this.parts.d,
+    )
+    return joined
+  }
+}
+
+export function collect(): Collect {
+  return new Collect()
+}
+
+export {collect as mill}

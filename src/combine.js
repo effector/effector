@@ -3,12 +3,13 @@
 import type {Reducer} from './index.h'
 import {createReducer} from './reducer'
 
-export function joint<A, B, C, D, E, F, R>(
+export function combine<A, B, C, D, E, F, R>(
   combine: (A, B, C, D, E, F) => R,
   ...reducers: Array<Reducer<*>>
 ): Reducer<R> {
-  const values = reducers
-    .map(reducer => reducer(undefined, {type: '@@effector/void'}))
+  const values = reducers.map(reducer =>
+    reducer(undefined, {type: '@@effector/void'}),
+  )
   const defaultValues = [...values]
   const defaultState: R = combine(...values)
   let lastState: R = defaultState
@@ -20,27 +21,22 @@ export function joint<A, B, C, D, E, F, R>(
       const value = reducers[i](prevValue, action)
       if (value !== prevValue) {
         changed.add(i)
-        values[i] = value === undefined
-          ? defaultValues[i]
-          : value
+        values[i] = value === undefined ? defaultValues[i] : value
       }
     }
     const notChanged = changed.size === 0
     let rawResult
-    if (notChanged)
-      rawResult = lastState
+    if (notChanged) rawResult = lastState
     else {
-      lastState = rawResult = combine(
-        ...values
-      )
+      lastState = rawResult = combine(...values)
     }
-    if (rawResult === undefined)
-      lastState = rawResult = defaultState
+    if (rawResult === undefined) lastState = rawResult = defaultState
     const result = combined(rawResult, action)
-    if (result === undefined)
-      return lastState = defaultState
+    if (result === undefined) return (lastState = defaultState)
     return result
   }
   Object.assign(combinedReducer, combined)
   return combinedReducer
 }
+
+export {combine as joint}

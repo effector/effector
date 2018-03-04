@@ -1,26 +1,36 @@
 # Changelog
 
+## 0.12.0
+
+* Exclude coverage from npm build
+* Rename `mill` to `collect`
+* Rename `joint` to `combine`
+
 ## 0.11.1
-- Remove source files from npm release
+
+* Remove source files from npm release
 
 ## 0.11.0
-- Add support for sync functions in `.use`
-- **breaking** Rename config option `effectImplementationCheck` to `unused`
+
+* Add support for sync functions in `.use`
+* **breaking** Rename config option `effectImplementationCheck` to `unused`
 
 ## 0.10.2
-- Fix overriding of flow modules
+
+* Fix overriding of flow modules
 
 ## 0.10.0
-- **breaking** Removed `rootDomain` alias for `createRootDomain`
-- Fixed duplication of `typeConstant` events
-- Added sync event propagation
-- Catching of watch function errors
-- Added warning to port errors
-- Added type aliases `DomainAuto`, `EventAuto` and `EffectAuto`
-- Added `mill` fluent "AND" reducer combinator
+
+* **breaking** Removed `rootDomain` alias for `createRootDomain`
+* Fixed duplication of `typeConstant` events
+* Added sync event propagation
+* Catching of watch function errors
+* Added warning to port errors
+* Added type aliases `DomainAuto`, `EventAuto` and `EffectAuto`
+* Added `mill` fluent "AND" reducer combinator
 
 ```js
-import {mill, type MillType, type Reducer} from 'effector'
+import { mill, type MillType, type Reducer } from 'effector'
 
 type A = 'foo'
 type B = 'bar'
@@ -35,22 +45,20 @@ const union: Reducer<{
   a: A,
   b: B,
   staticField: string,
-}> = tuple.joint(
-  (a: A, b: B) => ({
-    a, b,
-    staticField: 'its ok',
-  })
-)
-
+}> = tuple.joint((a: A, b: B) => ({
+  a,
+  b,
+  staticField: 'its ok',
+}))
 ```
 
 ## 0.9.1
 
-- Added hot reload support for root domains
-- Added support for dispatching halt action
+* Added hot reload support for root domains
+* Added support for dispatching halt action
 
 ```js
-import {createHaltAction} from 'effector'
+import { createHaltAction } from 'effector'
 
 store.dispatch(createHaltAction()) //This store will be unsubscribed
 ```
