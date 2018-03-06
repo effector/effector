@@ -1,0 +1,54 @@
+//@flow
+/* eslint-disable flowtype/space-after-type-colon,no-unused-vars */
+type Task<A> = (a: A) => void
+
+type Canceller = Task<void>
+type Emit<A> = Task<void>
+
+type Event<A> = (task: Task<A>) => Canceller
+
+type EventT<A, B> = (e1: Event<A>) => Event<B>
+
+declare export function canceller(a: Canceller, b: Canceller): Canceller
+declare export function pure<A>(a: A): Event<A>
+declare export function map<A, B>(f: (a: A) => B): EventT<A, B>
+declare export var never: Event<any>
+declare export function apply<A, B>(e1: Event<(b: A) => B>): EventT<A, B>
+
+declare export function merge<A>(e1: Event<A>): EventT<A, A>
+declare export function fold<A, B>(
+  f: (a: A) => (b: B) => B,
+): (e: Event<A>) => (b: B) => Event<B>
+
+declare export function filter<A, B /*: $Subtype<A>*/, P /*: $Pred<1>*/>(
+  p: P,
+): EventT<A, B>
+declare export function sampleOn<A, B>(e1: Event<A>): EventT<(a: A) => B, B>
+
+declare export function subscribe<A>(
+  e: Event<A>,
+): (f: (a: A) => Canceller) => () => Canceller
+declare export function keepLatest<A>(e: Event<Event<A>>): Event<A>
+
+interface Ev<A> {
+  event: Event<A>;
+  push(a: A): Emit<A>;
+}
+
+declare export function create<A>(): Ev<A>
+
+declare export function fix<A>(
+  f: (
+    e: Event<A>,
+  ) => {
+    input: Event<A>,
+    output: Event<A>,
+  },
+): Event<A>
+
+declare export function count<A>(e: Event<A>): Event<number>
+declare export function withTime<A>(
+  e: Event<A>,
+): Event<{time: number, value: A}>
+declare export var animationFrame: Event<void>
+declare export function interval(n: number): Event<number>
