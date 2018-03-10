@@ -73,6 +73,16 @@
   "peerDependencies": {
     "redux": "^3.7.2"
   },
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
   "sideEffects": false,
   "files": ["es", "lib", "index.d.ts"],
   "repository": "https://gitlab.com/zerobias/effector"
