@@ -1,0 +1,97 @@
+//@flow strict
+
+import type {Lazy} from './instance'
+
+declare export function combineMany<R>(fn: () => R): Lazy<R>
+
+declare export function combineMany<A, R>(a: Lazy<A>, fn: (a: A) => R): Lazy<R>
+
+declare export function combineMany<A, B, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  fn: (a: A, b: B) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  fn: (a: A, b: B, c: C) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  fn: (a: A, b: B, c: C, d: D) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  fn: (a: A, b: B, c: C, d: D, e: E) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, F, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  f: Lazy<F>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, F, G, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  f: Lazy<F>,
+  g: Lazy<G>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, F, G, H, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  f: Lazy<F>,
+  g: Lazy<G>,
+  h: Lazy<H>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, F, G, H, I, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  f: Lazy<F>,
+  g: Lazy<G>,
+  h: Lazy<H>,
+  i: Lazy<I>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
+): Lazy<R>
+
+declare export function combineMany<A, B, C, D, E, F, G, H, I, J, R>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  c: Lazy<C>,
+  d: Lazy<D>,
+  e: Lazy<E>,
+  f: Lazy<F>,
+  g: Lazy<G>,
+  h: Lazy<H>,
+  i: Lazy<I>,
+  j: Lazy<J>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
+): Lazy<R>
