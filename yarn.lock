@@ -526,39 +526,6 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@collectable/core@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@collectable/core/-/core-5.0.1.tgz#f36ea4676b31d619681bfae8105c4114c205663d"
-  dependencies:
-    "@frptools/corelib" "^1.1.0"
-    "@frptools/structural" "^1.0.0"
-
-"@collectable/red-black-tree@^5.0.1":
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/@collectable/red-black-tree/-/red-black-tree-5.0.1.tgz#984659265daf753029b57c2ca213bcde792a8664"
-  dependencies:
-    "@collectable/core" "^5.0.1"
-
-"@frptools/corelib@^1.1.0", "@frptools/corelib@^1.1.1":
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/@frptools/corelib/-/corelib-1.1.1.tgz#92cf40d398225eb2f07330f0e1fb7bff1e4bc21a"
-  dependencies:
-    date-fns "^1.28.5"
-    glob "^7.1.2"
-    uuid "^3.1.0"
-
-"@frptools/propagate@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@frptools/propagate/-/propagate-1.0.0.tgz#2a3b9bfd3d21d7795cd4b7d51eb4462419a1477d"
-  dependencies:
-    "@frptools/corelib" "^1.1.1"
-
-"@frptools/structural@^1.0.0":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@frptools/structural/-/structural-1.0.2.tgz#40c78ca3bc09a3981747889a5748b9f33abaaf55"
-  dependencies:
-    "@frptools/corelib" "^1.1.1"
-
 "@most/multicast@^1.2.4", "@most/multicast@^1.2.5":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@most/multicast/-/multicast-1.3.0.tgz#e01574840df634478ac3fabd164c6e830fb3b966"
@@ -1475,10 +1442,6 @@ dashdash@^1.12.0:
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
   dependencies:
     assert-plus "^1.0.0"
-
-date-fns@^1.28.5:
-  version "1.29.0"
-  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-1.29.0.tgz#12e609cdcb935127311d04d33334e2960a2a54e6"
 
 debug@^2.1.2, debug@^2.2.0, debug@^2.3.3, debug@^2.6.3, debug@^2.6.8:
   version "2.6.9"
@@ -2538,6 +2501,12 @@ invariant@^2.2.0, invariant@^2.2.2:
   dependencies:
     loose-envify "^1.0.0"
 
+invariant@^2.2.4:
+  version "2.2.4"
+  resolved "https://registry.yarnpkg.com/invariant/-/invariant-2.2.4.tgz#610f3c92c9359ce1db616e538008d23ff35158e6"
+  dependencies:
+    loose-envify "^1.0.0"
+
 invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
@@ -3584,13 +3553,6 @@ moment-timezone@^0.5.x:
 "moment@>= 2.9.0", moment@^2.19:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
-
-most-node-streams@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/most-node-streams/-/most-node-streams-1.0.0.tgz#5d26aebd00109d4bfe5c67b98720461d137d8349"
-  dependencies:
-    "@most/multicast" "^1.2.4"
-    most "^1.1.0"
 
 most-subject@5.3.0:
   version "5.3.0"
