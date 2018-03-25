@@ -1,9 +1,9 @@
 //@flow strict
 
 import invariant from 'invariant'
-import {type Lazy, fromThunk, fromValue} from './instance'
+import {type Lazy, fromThunk, fromValue} from '../instance'
 import {combine} from './combine'
-import {map} from './methods'
+import {map} from '../methods'
 
 export function combineMany<R>(...args: Array<Lazy<any>>): Lazy<R> {
   invariant(args.length > 0, 'combineMany need at least 1 argument')

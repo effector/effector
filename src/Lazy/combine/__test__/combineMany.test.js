@@ -1,6 +1,7 @@
 //@flow strict
 
-import {combine, fromThunk, fromValue} from '..'
+import {combine} from '..'
+import {fromThunk, fromValue} from '../..'
 
 test("re-read don't change value", () => {
   const val1 = fromValue(0)

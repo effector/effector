@@ -20,14 +20,25 @@ test('should throw on self-references', () => {
 })
 
 describe('map', () => {
-  test("re-read don't change value", () => {
-    const val1 = fromValue(0)
-    const fn1 = (x: number) => x + 1
+  describe("re-read don't change map of ...", () => {
+    test('...value', () => {
+      const val1 = fromValue(0)
+      const fn1 = (x: number) => x + 1
 
-    expect(val1.read()).toBe(0)
-    const val2 = map(fn1, val1)
-    expect(val2.read()).toBe(1)
-    expect(val2.read()).toBe(1)
+      expect(val1.read()).toBe(0)
+      const val2 = map(fn1, val1)
+      expect(val2.read()).toBe(1)
+      expect(val2.read()).toBe(1)
+    })
+    test('...thunk', () => {
+      const val1 = fromThunk(() => 0)
+      const fn1 = (x: number) => x + 1
+
+      expect(val1.read()).toBe(0)
+      const val2 = map(fn1, val1)
+      expect(val2.read()).toBe(1)
+      expect(val2.read()).toBe(1)
+    })
   })
   test('apply value to function more than once', () => {
     const val1 = fromValue(0)
@@ -101,14 +112,26 @@ describe('tap', () => {
   })
 })
 describe('join', () => {
-  let data = 0
-  const value1 = fromThunk(() => data)
-  const value2 = fromValue(value1)
+  test('static value', () => {
+    let data = 0
+    const value1 = fromThunk(() => data)
+    const value2 = fromValue(value1)
 
-  const joined = join(value2)
-  expect(joined.read()).toBe(0)
-  data = 1
-  expect(joined.read()).toBe(1)
+    const joined = join(value2)
+    expect(joined.read()).toBe(0)
+    data = 1
+    expect(joined.read()).toBe(1)
+  })
+
+  test('thunk value', () => {
+    let data = 0
+    const value2 = fromThunk(() => fromThunk(() => data))
+
+    const joined = join(value2)
+    expect(joined.read()).toBe(0)
+    data = 1
+    expect(joined.read()).toBe(1)
+  })
 })
 
 describe('chain', () => {

@@ -1,6 +1,6 @@
 //@flow strict
 
-import type {Lazy} from './instance'
+import type {Lazy} from '../instance'
 
 declare export function combineMany<R>(fn: () => R): Lazy<R>
 

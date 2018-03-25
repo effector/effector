@@ -4,8 +4,21 @@ import invariant from 'invariant'
 
 // import {type ID, create} from '../ID'
 
+class Const</*::+*/ T> {
+  /*::+*/ read: () => T
+  isConst: boolean
+  constructor(value: T) {
+    this.read = () => value
+  }
+}
+
+Object.defineProperty(Const.prototype, 'isConst', {
+  value: true,
+})
+
 class Lazy</*::+*/ T> {
   /*::+*/ value: () => T
+  isConst: boolean
   // /*::+*/ id: ID = create()
   dispatching: boolean = false
   constructor(value: () => T) {
@@ -20,12 +33,21 @@ class Lazy</*::+*/ T> {
   }
 }
 
-export type {Lazy}
+Object.defineProperty(Lazy.prototype, 'isConst', {
+  value: false,
+})
 
-export function fromValue<T>(value: T): Lazy<T> {
-  return new Lazy(() => value)
+type Value</*::+*/ T> = {
+  /*::+*/ isConst: boolean,
+  read(): T,
 }
 
-export function fromThunk<T>(value: () => T): Lazy<T> {
+export type {Value as Lazy}
+
+export function fromValue<T>(value: T): Value<T> {
+  return new Const(value)
+}
+
+export function fromThunk<T>(value: () => T): Value<T> {
   return new Lazy(value)
 }
