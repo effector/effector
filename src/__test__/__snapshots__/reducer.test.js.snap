@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`joint 1`] = `
+exports[`collect 1`] = `
 Object {
   "resets": 0,
   "value1": Object {
@@ -12,7 +12,7 @@ Object {
 }
 `;
 
-exports[`joint 2`] = `
+exports[`collect 2`] = `
 Object {
   "resets": 1,
   "value1": Object {
@@ -23,7 +23,7 @@ Object {
 }
 `;
 
-exports[`mill 1`] = `
+exports[`combine 1`] = `
 Object {
   "resets": 0,
   "value1": Object {
@@ -35,7 +35,7 @@ Object {
 }
 `;
 
-exports[`mill 2`] = `
+exports[`combine 2`] = `
 Object {
   "resets": 1,
   "value1": Object {
