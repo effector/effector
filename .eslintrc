@@ -61,8 +61,8 @@ rules:
       avoidEscape: true
   max-len:
     - error
-    - code: 120
-      tabWidth: 2
+    - code: 100
+      tabWidth: 1
       comments: 220
   key-spacing:
     - warn
@@ -80,14 +80,14 @@ rules:
     - warn
     - never
     - arraysInObjects: false
-      objectsInObjects: true
+      objectsInObjects: false
   semi-spacing:
     - error
     - before: false
       after: true
   indent:
     - 1
-    - 2
+    - 1
     - VariableDeclarator:
         var: 2
         let: 2
