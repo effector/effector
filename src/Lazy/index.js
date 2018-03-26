@@ -3,6 +3,6 @@
 export type {Lazy} from './instance'
 export {fromThunk, fromValue} from './instance'
 
-export {map, chain, join, tap} from './methods'
+export {map, chain, join, tap, filter} from './methods'
 export {ap} from './ap'
 export {combine} from './combine'

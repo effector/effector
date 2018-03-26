@@ -24,6 +24,19 @@ export function join<T>(value: Lazy<Lazy<T>>): Lazy<T> {
  return value.read()
 }
 
+export function filter<T>(
+ pred: (x: T) => boolean,
+ defaultValue: T,
+ lazy: Lazy<T>,
+): Lazy<T> {
+ let val = defaultValue
+ return map(value => {
+  if (value === val) return val
+  if (pred(value)) val = value
+  return val
+ }, lazy)
+}
+
 export function chain<A, B>(fn: (x: A) => Lazy<B>, value: Lazy<A>): Lazy<B> {
  return join(map(fn, value))
 }

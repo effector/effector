@@ -1,6 +1,6 @@
 //@flow strict
 
-import {ap, map, tap, join, chain, fromThunk, fromValue} from '..'
+import {ap, map, filter, tap, join, chain, fromThunk, fromValue} from '..'
 
 test('engine smoke', async() => {
  const val1 = fromValue(0)
@@ -172,6 +172,15 @@ describe('chain', () => {
   expect(val3.read()).toEqual([0, 1, 2])
   expect(val3.read()).toBe(val3.read())
  })
+})
+test('filter', () => {
+ let i = 0
+ const val1 = fromThunk(() => ++i)
+ const value1 = filter(n => n % 2 === 0, 0, val1)
+ expect(value1.read()).toBe(0)
+ expect(value1.read()).toBe(2)
+ expect(value1.read()).toBe(2)
+ expect(value1.read()).toBe(4)
 })
 
 // test(`fn1.set(newFunc) should change derived value`, () => {

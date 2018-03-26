@@ -1,0 +1,29 @@
+//@flow strict
+
+import type {Lazy, Sync, Async} from '../instance'
+
+declare export function combine<A, B, C>(
+  a: Sync<A>,
+  b: Sync<B>,
+  fn: (a: A, b: B) => C,
+): Sync<C>
+declare export function combine<A, B, C>(
+  a: Async<A>,
+  b: Sync<B>,
+  fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+  a: Sync<A>,
+  b: Async<B>,
+  fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+  a: Async<A>,
+  b: Async<B>,
+  fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+  a: Lazy<A>,
+  b: Lazy<B>,
+  fn: (a: A, b: B) => C,
+): Async<C>
