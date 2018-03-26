@@ -4,50 +4,54 @@ import invariant from 'invariant'
 
 // import {type ID, create} from '../ID'
 
-class Const</*::+*/ T> {
-  /*::+*/ read: () => T
+export interface Lazy</*::+*/ T> {
+  /*::+*/ isConst: boolean;
+  read(): T;
+}
+
+class Sync</*::+*/ T> implements Lazy<T> {
+ /*::+*/ read: () => T
   isConst: boolean
   constructor(value: T) {
-    this.read = () => value
+   this.read = () => value
   }
 }
 
-Object.defineProperty(Const.prototype, 'isConst', {
-  value: true,
+Object.defineProperty(Sync.prototype, 'isConst', {
+ value: true,
 })
 
-class Lazy</*::+*/ T> {
-  /*::+*/ value: () => T
+class Async</*::+*/ T> implements Lazy<T> {
+ /*::+*/ value: () => T
   isConst: boolean
   // /*::+*/ id: ID = create()
   dispatching: boolean = false
   constructor(value: () => T) {
-    this.value = value
+   this.value = value
   }
   read(): T {
-    invariant(!this.dispatching, 'Self reference')
-    this.dispatching = true
-    const result = this.value()
-    this.dispatching = false
-    return result
+   invariant(!this.dispatching, 'Self reference')
+   this.dispatching = true
+   const result = this.value()
+   this.dispatching = false
+   return result
   }
 }
 
-Object.defineProperty(Lazy.prototype, 'isConst', {
-  value: false,
+Object.defineProperty(Async.prototype, 'isConst', {
+ value: false,
 })
 
-type Value</*::+*/ T> = {
-  /*::+*/ isConst: boolean,
-  read(): T,
+export type {Async, Sync}
+
+declare export function fromValue<T>(value: T): Sync<T> // | Lazy<T>
+// declare export function fromValue<T>(value: T): Lazy<T>
+export function fromValue<T>(value: T): Lazy<T> {
+ return new Sync(value)
 }
 
-export type {Value as Lazy}
-
-export function fromValue<T>(value: T): Value<T> {
-  return new Const(value)
-}
-
-export function fromThunk<T>(value: () => T): Value<T> {
-  return new Lazy(value)
+declare export function fromThunk<T>(value: () => T): Async<T> // | Lazy<T>
+// declare export function fromThunk<T>(value: () => T): Lazy<T>
+export function fromThunk<T>(value: () => T): Lazy<T> {
+ return new Async(value)
 }
