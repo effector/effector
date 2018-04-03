@@ -1,0 +1,35 @@
+//@flow strict
+
+import type {Lazy, Scalar, Async} from '../instance'
+
+declare export function combineWeak<A, B, C>(
+ a: Lazy<A>,
+ weak: Lazy<B>,
+ fn: (a: A, b: B) => C,
+): Lazy<C>
+
+declare export function combine<A, B, C>(
+ a: Scalar<A>,
+ b: Scalar<B>,
+ fn: (a: A, b: B) => C,
+): Scalar<C>
+declare export function combine<A, B, C>(
+ a: Async<A>,
+ b: Scalar<B>,
+ fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+ a: Scalar<A>,
+ b: Async<B>,
+ fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+ a: Async<A>,
+ b: Async<B>,
+ fn: (a: A, b: B) => C,
+): Async<C>
+declare export function combine<A, B, C>(
+ a: Lazy<A>,
+ b: Lazy<B>,
+ fn: (a: A, b: B) => C,
+): Async<C>

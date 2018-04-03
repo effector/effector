@@ -29,6 +29,8 @@ module.name_mapper='^redux-most$' -> '<PROJECT_ROOT>/flow/redux-most'
 module.name_mapper='^most-subject$' -> '<PROJECT_ROOT>/flow/most-subject'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
 module.name_mapper='^fp-ts\(.*\)$' -> '<PROJECT_ROOT>/node_modules/fp-ts\1'
+module.name_mapper='^\@effector/\(.*\)$' -> '<PROJECT_ROOT>/packages/\1/src'
+module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 module.name_mapper='^monocle-ts\(.*\)$' -> '<PROJECT_ROOT>/node_modules/monocle-ts\1'
 module.name_mapper='^\(.*\)redux\(.*\)$' -> '<PROJECT_ROOT>/node_modules/\1redux\2'
 module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
@@ -44,14 +46,14 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/.vscode/*
 💩 🙈
 💩 ignored total:
-💩 
+💩
 💩 ignored typings:
 💩 eventemitter2, fluture, fs-extra, immutable, jest, most, most-subject, redux, shelljs, symbol-observable
 💩 active:
-💩 
+💩
 💩 run again:
 💩 IGNORED="" node scripts/flow-ignore
-💩 
+💩
 <PROJECT_ROOT>/node_modules/.bin/*
 <PROJECT_ROOT>/node_modules/.yarn-integrity/*
 <PROJECT_ROOT>/node_modules/abab/*

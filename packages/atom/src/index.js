@@ -5,4 +5,5 @@ export {fromThunk, fromValue} from './instance'
 
 export {map, chain, join, tap, filter} from './methods'
 export {ap} from './ap'
-export {combine} from './combine'
+export {combine, combineWeak} from './combine'
+export {createEngine} from './engine'

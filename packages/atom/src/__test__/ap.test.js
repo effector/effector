@@ -1,6 +1,6 @@
 //@flow strict
 
-import {ap, fromThunk, fromValue} from '..'
+import {ap, fromThunk, fromValue, combineWeak} from '..'
 
 test("re-read don't change value", () => {
  const val1 = fromValue(0)
@@ -53,4 +53,20 @@ test('change of fn should change value', () => {
  isInc = false
  expect(fn1.read()).toBe(dec)
  expect(val2.read()).toBe(-1)
+})
+
+test('[ap weak] change of fn should not change value', () => {
+ const val1 = fromValue(0)
+ const inc = (x: number) => x + 1
+ const dec = (x: number) => x - 1
+ let isInc = true
+ const fn1 = fromThunk(() => (isInc ? inc : dec))
+
+ expect(fn1.read()).toBe(inc)
+
+ const val2 = combineWeak(val1, fn1, (val1, fn1) => fn1(val1))
+ expect(val2.read()).toBe(1)
+ isInc = false
+ expect(fn1.read()).toBe(dec)
+ expect(val2.read()).toBe(1)
 })

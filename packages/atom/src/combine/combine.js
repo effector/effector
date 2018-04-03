@@ -2,6 +2,48 @@
 
 import {type Lazy, fromThunk, fromValue} from '../instance'
 
+const noop = () => {}
+
+function withInit<T>(init: () => T, read: () => T): Lazy<T> {
+ let value /*:: = init()*/
+ let run = () => {
+  value = init()
+  run = read
+  return value
+ }
+ return fromThunk(() => run())
+}
+
+function bit<T>(lazy: Lazy<T>) {}
+
+export function combineWeak<A, B, C>(
+ a: Lazy<A>,
+ weak: Lazy<B>,
+ fn: (a: A, b: B) => C,
+): Lazy<C> {
+ let aCached = a.read()
+ let weakCached /*:: = weak.read()*/
+ let resultVal /*:: = fn(aCached, weakCached)*/
+ let init = () => {
+  aCached = a.read()
+  weakCached = weak.read()
+  resultVal = fn(aCached, weakCached)
+  init = read
+  return resultVal
+ }
+ const read = () => {
+  const aValue = a.read()
+  if (aValue !== aCached) {
+   aCached = aValue
+   weakCached = weak.read()
+   resultVal = fn(aCached, weakCached)
+  }
+  return resultVal
+ }
+
+ return withInit(init, read)
+}
+
 export function combine<A, B, C>(
  a: Lazy<A>,
  b: Lazy<B>,

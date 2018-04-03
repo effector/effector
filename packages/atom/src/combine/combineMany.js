@@ -1,7 +1,7 @@
 //@flow strict
 
 import invariant from 'invariant'
-import {type Lazy, type Sync, fromThunk, fromValue} from '../instance'
+import {type Lazy, type Scalar, fromThunk, fromValue} from '../instance'
 import {combine} from './combine'
 import {map} from '../methods'
 
@@ -27,7 +27,7 @@ export function combineMany<R>(...args: Array<Lazy<any>>): Lazy<R> {
  }
 }
 
-const voidAcc: Sync<any[]> = fromValue([])
+const voidAcc: Scalar<any[]> = fromValue([])
 
 function add(acc: any[], value: any): any[] {
  return [...acc, value]
