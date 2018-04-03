@@ -1,0 +1,13 @@
+{
+ "collectCoverage": false,
+ "automock": false,
+ "browser": false,
+ "coverageDirectory": "coverage",
+ "coverageReporters": ["lcov", "html"],
+ "testEnvironment": "node",
+ "roots": ["<rootDir>/src/"],
+ "testMatch": ["<rootDir>/src/**/*.test.js"],
+ "globals": {
+  "__DEV__": true
+ }
+}
