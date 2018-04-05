@@ -5,6 +5,7 @@ import invariant from 'invariant'
 import {
  getFromAnyMap,
  getFromEventsMap,
+ getFromDispatchMap,
  getListeners,
  getReferences,
  type Scope,
@@ -41,6 +42,18 @@ export function listenerCount(
  }
 
  return count
+}
+
+export function onDispatch<T>(
+ scope: Scope,
+ instance: Emittery,
+ fn: (_: T) => any,
+) {
+ getFromDispatchMap(scope, instance).add(fn)
+ return () => offDispatch(scope, instance, fn)
+}
+function offDispatch<T>(scope: Scope, instance: Emittery, fn: LongCb) {
+ getFromDispatchMap(scope, instance).delete(fn)
 }
 
 export function on(

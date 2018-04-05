@@ -7,7 +7,13 @@
  "jsnext:main": "es/index.js",
  "typings": "index.d.ts",
  "private": true,
- "workspaces": ["packages/emission", "packages/effector", "packages/lazy"],
+ "workspaces": [
+  "packages/emission",
+  "packages/effector",
+  "packages/lazy",
+  "packages/atom",
+  "packages/builder"
+ ],
  "scripts": {
   "test": "jest --config=jest.json",
   "prepublishOnly": "npm run build && npm run flow-copy",

@@ -1,0 +1,37 @@
+{
+ "name": "effector",
+ "version": "0.13.0-rc.2",
+ "description": "Redux effects",
+ "main": "effector.cjs.js",
+ "module": "effector.es.js",
+ "jsnext:main": "effector.es.js",
+ "typings": "index.d.ts",
+ "scripts": {
+  "test": "jest --config=jest.json"
+ },
+ "author": "Zero Bias",
+ "license": "MIT",
+ "devDependencies": {},
+ "dependencies": {
+  "invariant": "^2.2.4",
+  "most": "^1.7.3",
+  "most-subject": "5.3.0",
+  "symbol-observable": "^1.2.0"
+ },
+ "peerDependencies": {
+  "redux": "^3.7.2"
+ },
+ "maintainers": [
+  {
+   "name": "Zero Bias",
+   "email": "ribkatt@gmail.com"
+  },
+  {
+   "name": "goodmind",
+   "email": "andwebar@gmail.com"
+  }
+ ],
+ "sideEffects": false,
+ "files": ["effector.es.js", "effector.cjs.js", "index.d.ts"],
+ "repository": "https://github.com/zerobias/effector"
+}

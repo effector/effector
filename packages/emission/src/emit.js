@@ -2,10 +2,33 @@
 
 import invariant from 'invariant'
 
-import {getFromAnyMap, getListeners, getReferences, type Scope} from './scope'
+import {
+ getFromAnyMap,
+ getFromDispatchMap,
+ getListeners,
+ getReferences,
+ type Scope,
+} from './scope'
 import type {Emittery} from './index.h'
 
 const resolvedPromise = Promise.resolve()
+
+function emitRefs(scope: Scope, eventName, refs, eventData) {
+ if (refs.size === 0) return
+ invariant(!refs.has(eventName), 'circular reference')
+ for (const instance of [...refs]) {
+  emitSync(scope, instance, eventName, eventData)
+ }
+}
+
+function emitCallbacks(scope, eventName, eventData) {
+ const refs = getFromDispatchMap(scope, eventName)
+ //  console.log(eventName, eventData)
+ if (refs.size === 0) return
+ for (const instance of [...refs]) {
+  instance(eventData, eventName)
+ }
+}
 
 export function dispatchSync<T>(
  scope: Scope,
@@ -13,11 +36,8 @@ export function dispatchSync<T>(
  eventData: T,
 ) {
  const refs = getReferences(scope, eventName)
- if (refs.size === 0) return
- invariant(!refs.has(eventName), 'circular reference')
- for (const instance of [...refs]) {
-  emitSync(scope, instance, eventName, eventData)
- }
+ emitRefs(scope, eventName, refs, eventData)
+ emitCallbacks(scope, eventName, eventData)
 }
 
 export function emitSync<T>(
@@ -36,6 +56,7 @@ export function emitSync<T>(
  for (const listener of anyListeners) {
   listener(eventData, eventName)
  }
+ emitCallbacks(scope, eventName, eventData)
 }
 
 export async function emit(
@@ -50,6 +71,7 @@ export async function emit(
  const staticAnyListeners = [...anyListeners]
 
  await resolvedPromise
+ emitCallbacks(scope, eventName, eventData)
  return Promise.all([
   ...staticListeners.map(async listener => {
    if (listeners.has(listener)) {
@@ -87,4 +109,5 @@ export async function emitSerial(
    await listener(eventData, eventName)
   }
  }
+ emitCallbacks(scope, eventName, eventData)
 }

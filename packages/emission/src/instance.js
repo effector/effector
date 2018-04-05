@@ -5,6 +5,7 @@
 import {
  clearListeners,
  listenerCount,
+ onDispatch,
  on,
  off,
  once,
@@ -63,6 +64,9 @@ export class Emittery {
  }
  dispatchSync<T>(eventData: T, scope: Scope = defaultScope): void {
   return dispatchSync(scope, this, eventData)
+ }
+ onDispatch<T>(fn: T => any, scope: Scope = defaultScope): SideEffect {
+  return onDispatch(scope, this, fn)
  }
 
  onAny(listener: LongCb, scope: Scope = defaultScope): SideEffect {

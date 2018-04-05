@@ -4,6 +4,7 @@ import type {LongCb, SetMap, Emittery} from './index.h'
 
 export class Scope {
  anyMap: WeakMap<Emittery, Set<LongCb>> = new WeakMap()
+ dispatchMap: WeakMap<Emittery, Set<LongCb>> = new WeakMap()
  eventsMap: WeakMap<Emittery, Map<Emittery, Set<LongCb>>> = new WeakMap()
  referenceMap: WeakMap<Emittery, Set<Emittery>> = new WeakMap()
 }
@@ -26,6 +27,13 @@ function getFromSetMap<K, V>(setMap: SetMap<K, Set<V>>, that: K): Set<V> {
 
 export function getFromAnyMap(scope: Scope, instance: Emittery): Set<LongCb> {
  return getFromSetMap(scope.anyMap, instance)
+}
+
+export function getFromDispatchMap(
+ scope: Scope,
+ instance: Emittery,
+): Set<LongCb> {
+ return getFromSetMap(scope.dispatchMap, instance)
 }
 export function getFromEventsMap(
  scope: Scope,
