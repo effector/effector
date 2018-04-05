@@ -1,10 +1,7 @@
 {
- "name": "effector",
- "version": "0.12.1",
- "description": "Redux effects",
- "main": "lib/index.js",
- "module": "es/index.js",
- "jsnext:main": "es/index.js",
+ "name": "effector-dev",
+ "version": "0.13.0",
+ "description": "Reactive state manager",
  "typings": "index.d.ts",
  "private": true,
  "workspaces": [
@@ -16,17 +13,9 @@
  ],
  "scripts": {
   "test": "jest --config=jest.json",
-  "prepublishOnly": "npm run build && npm run flow-copy",
-  "flow-copy:cjs":
-   "flow-copy-source -i=__test__**/* -i=combine* -i=collect* -i=subject* src lib && cp src/*flow lib",
-  "flow-copy:es":
-   "flow-copy-source -i=__test__**/* -i=combine* -i=collect* -i=subject* src es && cp src/*flow es",
-  "flow-copy": "npm run flow-copy:cjs && npm run flow-copy:es",
-  "build": "npm run build:cjs && npm run build:es",
-  "build:cjs":
-   "cross-env BABEL_ENV=commonjs babel src/ --ignore src/__test__ -d lib -s --delete-dir-on-start",
-  "build:es":
-   "cross-env BABEL_ENV=es babel src/ --ignore src/__test__ -d es -s --delete-dir-on-start",
+  "prepublishOnly": "npm run build && npm run npm-copy",
+  "npm-copy": "sh prepublish.sh",
+  "build": "cd packages/builder && npm run build && cd ../..",
   "test:ff": "jest --config=jest-fastflow.json --watch",
   "test:watch": "jest --config=jest.json --watch",
   "flow": "pm2 start flow-effector.sh",

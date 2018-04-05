@@ -1,7 +1,7 @@
 {
  "name": "effector",
- "version": "0.13.0-rc.2",
- "description": "Redux effects",
+ "version": "0.13.0",
+ "description": "Reactive state manager",
  "main": "effector.cjs.js",
  "module": "effector.es.js",
  "jsnext:main": "effector.es.js",
@@ -32,6 +32,15 @@
   }
  ],
  "sideEffects": false,
- "files": ["effector.es.js", "effector.cjs.js", "index.d.ts"],
+ "files": [
+  "effector.es.js",
+  "effector.cjs.js",
+  "effector.es.js.map",
+  "effector.cjs.js.map",
+  "effector.es.js.flow",
+  "effector.cjs.js.flow",
+  "index.js.flow",
+  "index.d.ts"
+ ],
  "repository": "https://github.com/zerobias/effector"
 }

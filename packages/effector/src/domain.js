@@ -1,6 +1,9 @@
 //@flow
 
 import {type Stream, from} from 'most'
+
+import invariant from 'invariant'
+
 import {subject, type Subject} from './subject'
 
 import type {
@@ -128,9 +131,10 @@ function mergeEffectOpts(
  opts?: $Shape<UserlandConfig>,
 ) {
  if (opts === undefined) return {...defaults}
- if (!(typeof opts === 'object' && opts != null)) {
-  throw new Error(`effect options should be object, got ${typeof opts}`)
- }
+ invariant(
+   typeof opts === 'object' && opts != null,
+   'effect options should be object, got %s', typeof opts
+ )
  const resultObj: DomainConfig = {...defaults}
  Object.keys(opts)
   .map(key => [key, opts[key]])

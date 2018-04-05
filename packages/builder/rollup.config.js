@@ -34,15 +34,18 @@ export default {
  input: 'src/index.js',
  output: [
   {
-   file: 'npm/effector.es.js',
+   file: resolvePath(__dirname, '../..', 'npm/effector.es.js'),
    format: 'es',
+   name: 'effector',
+   sourcemap: true,
   },
   {
-   file: 'npm/effector.cjs.js',
+   file: resolvePath(__dirname, '../..', 'npm/effector.cjs.js'),
    format: 'cjs',
+   name: 'effector',
+   sourcemap: true,
   },
  ],
- name: 'effector',
 
  plugins: [
   alias({
