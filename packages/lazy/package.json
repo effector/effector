@@ -1,0 +1,38 @@
+{
+ "name": "@effector/lazy",
+ "version": "0.0.1",
+ "main": "src/index.js",
+ "jsnext:main": "es/index.js",
+ "module": "es/index.js",
+ "license": "MIT",
+ "scripts": {
+  "test": "jest --config=jest.json",
+  "prettier": "prettier-eslint src/**/*.js --write",
+  "prepublishOnly": "npm run clean && npm run build",
+  "build": "npm run build:es && npm run build:cjs",
+  "build:cjs":
+   "BABEL_ENV=commonjs ./node_modules/.bin/babel src/ --ignore __tests__ -d lib -s",
+  "build:es": "./node_modules/.bin/babel src/ --ignore __tests__ -d es -s",
+  "clean": "./node_modules/.bin/rimraf lib/ && ./node_modules/.bin/rimraf es/",
+  "watch": "npm run build:es -- --watch"
+ },
+ "dependencies": {
+  "@effector/emission": "^0.0.1",
+  "invariant": "^2.2.4",
+  "symbol-observable": "^1.2.0"
+ },
+ "devDependencies": {
+  "@babel/cli": "^7.0.0-beta.42",
+  "@babel/core": "^7.0.0-beta.42",
+  "@babel/plugin-proposal-class-properties": "^7.0.0-beta.42",
+  "@babel/preset-env": "^7.0.0-beta.42",
+  "@babel/preset-flow": "^7.0.0-beta.42",
+  "babel-core": "7.0.0-bridge.0",
+  "babel-jest": "^22.4.3",
+  "cross-env": "^5.1.4",
+  "fs-extra": "^5.0.0",
+  "jest": "^22.4.3",
+  "rimraf": "^2.6.2"
+ },
+ "files": ["lib", "src", "es", "flow"]
+}

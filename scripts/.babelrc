@@ -1,0 +1,18 @@
+{
+  "presets": [
+    "@babel/preset-flow",
+    ["@babel/preset-env", {
+      "target": {
+        "node": "current"
+      }
+    }]
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-object-rest-spread", {
+      "useBuiltIns": true
+    }],
+    ["@babel/plugin-proposal-class-properties", { "loose": true }],
+    "@babel/plugin-proposal-async-generator-functions",
+    "babel-plugin-dev-expression"
+  ]
+}

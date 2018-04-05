@@ -56,7 +56,7 @@ export type Domain<State = void> = {
 
 export type Event<Payload, State> = {
   (params: Payload): {
-    send(dispatchHook?: <T>(value: T) => T): Promise<Payload>,
+    send(): Promise<Payload>,
     raw(): RawAction<Payload>,
   },
   getType(): Tag,

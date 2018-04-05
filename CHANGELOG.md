@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.13.0
+
+* Build via rollup
+* New module architechture
+
 ## 0.12.0
 
 * Exclude coverage from npm build
@@ -38,17 +43,17 @@ declare var reducerA: Reducer<A>
 declare var reducerB: Reducer<B>
 
 const tuple: MillType<A, B> = mill()
-  .and(reducerA)
-  .and(reducerB)
+ .and(reducerA)
+ .and(reducerB)
 
 const union: Reducer<{
-  a: A,
-  b: B,
-  staticField: string,
+ a: A,
+ b: B,
+ staticField: string,
 }> = tuple.joint((a: A, b: B) => ({
-  a,
-  b,
-  staticField: 'its ok',
+ a,
+ b,
+ staticField: 'its ok',
 }))
 ```
 
