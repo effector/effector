@@ -38,6 +38,30 @@ test('reducer', () => {
  expect(state3).toMatchSnapshot()
 })
 
+test('reducer.off(handler)', () => {
+ const domain = createRootDomain()
+ const event1: Event<'ev1', State> = domain.event('event1')
+ const event2: Event<'ev2', State> = domain.event('event2')
+ const event3: Event<'ev3', State> = domain.event('event3')
+
+ const reducer: Reducer<{
+  actions: string[],
+ }> = createReducer({actions: ['bar']}).on(
+  [event1, event2],
+  (state, payload) => ({
+   actions: [...state.actions, payload],
+  }),
+ )
+ expect(reducer.has(event1)).toBe(true)
+ expect(reducer.has(event2)).toBe(true)
+ expect(reducer.has(event3)).toBe(false)
+ const red = reducer.off(event2)
+ expect(red).toBe(reducer)
+ expect(reducer.has(event1)).toBe(true)
+ expect(reducer.has(event2)).toBe(false)
+ expect(reducer.has(event3)).toBe(false)
+})
+
 test('combine', async() => {
  const domain = createRootDomain()
  const event1: Event<'ev', State> = domain.event('event1')
