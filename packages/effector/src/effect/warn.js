@@ -1,8 +1,9 @@
 //@flow
 
+import warning from '@effector/warning'
 
 export function watchWarn(domainName: string, name: string, error: *) {
-  console.warn(`
+ warning(`
 
 
   Watch function should not fail
@@ -18,7 +19,7 @@ export function watchWarn(domainName: string, name: string, error: *) {
 }
 
 export function implWarn(domainName: string, name: string, props: *) {
-  console.warn(`
+ warning(`
 
 
   Running an effect without implementation
@@ -35,7 +36,7 @@ export function implWarn(domainName: string, name: string, props: *) {
 }
 
 export function implError(domainName: string, name: string, props: *) {
-  const message = `Running an effect without implementation
+ const message = `Running an effect without implementation
 
   Name:
     ${name}
@@ -46,6 +47,5 @@ export function implError(domainName: string, name: string, props: *) {
 
 
 `
-  return new Error(message)
+ return new Error(message)
 }
-
