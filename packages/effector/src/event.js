@@ -3,8 +3,9 @@
 import type {Stream} from 'most'
 import {subject, type Subject} from './subject'
 
-import type {Event, RawAction, WarnMode} from './index.h'
+import {Emission} from '@effector/emission'
 
+import type {Event, RawAction, WarnMode} from './index.h'
 import {nextPayloadID, type Tag} from './id'
 
 import {port} from './port'
@@ -17,9 +18,9 @@ export function createEvent<Payload>({
  kind = '_',
  dispatch,
 }: {
-  name: string,
-  kind: '_' | 'plain',
-  dispatch: <T>(value: T) => T,
+ name: string,
+ kind: '_' | 'plain',
+ dispatch: <T>(value: T) => T,
 }) {}
 
 export function EventConstructor<State, Payload>(
@@ -31,18 +32,19 @@ export function EventConstructor<State, Payload>(
  name: string,
  action$: Subject<Payload> = subject(),
  config: {
-    isPlain: boolean,
-    watchFailCheck: WarnMode,
-  } = {
+  isPlain: boolean,
+  watchFailCheck: WarnMode,
+ } = {
   isPlain: false,
   watchFailCheck: 'warn',
  },
 ): Event<Payload, State> {
  const {eventID, nextSeq, getType} = basicCommon(domainName, name)
+ const emission = new Emission()
  const handlers = new Set()
  if (!config.isPlain)
   handlers.add((payload /*::, state*/) => action$.next(payload))
-  // handlers.add((payload, state) => state$.next(state))
+ // handlers.add((payload, state) => state$.next(state))
 
  const create = (payload: Payload) => ({
   type: getType(),
@@ -72,13 +74,14 @@ export function EventConstructor<State, Payload>(
      for (const handler of handlers) {
       handler(payload, getState())
      }
+     emission.dispatch(result)
      // action$.next(payload)
     }
     return toSend
    },
   }
  }
-
+ eventInstance.emission = emission
  eventInstance.getType = getType
  //$off
  eventInstance.toString = getType
