@@ -1,0 +1,22 @@
+//@flow
+
+export type Store<T> = {
+ subscribe(listner: () => void): () => void,
+ //  replaceReducer(
+ //   transform: (input: (_: T, p: any) => T) => (_: T, p: any) => T,
+ //  ): void,
+ replaceReducer(nextReducer: (_: T, p: any) => T): void,
+ getState(): T,
+ dispatch: (action: any) => any,
+}
+
+declare export function createStore<T>(
+ reducer: (store: T, payload: any) => T,
+ enhancerRaw: Function | $ReadOnlyArray<Function>,
+ none: void,
+): Store<T>
+declare export function createStore<T>(
+ reducer: (store: T, payload: any) => T,
+ preloadedStateRaw?: T,
+ enhancerRaw: Function | $ReadOnlyArray<Function>,
+): Store<T>
