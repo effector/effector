@@ -5,6 +5,7 @@ import {type Stream, from} from 'most'
 import invariant from 'invariant'
 
 import {subject, type Subject} from './subject'
+import warning from '@effector/warning'
 
 import type {
  Domain,
@@ -122,7 +123,7 @@ export function createRootDomain<State>(
 function optsReducer([key, value]) {
  if (!(key in this)) return
  const newVal = () => value
-  ;(newVal: $ElementType<DomainConfig, typeof key>)
+ ;(newVal: $ElementType<DomainConfig, typeof key>)
  this[key] = newVal
 }
 
@@ -132,8 +133,9 @@ function mergeEffectOpts(
 ) {
  if (opts === undefined) return {...defaults}
  invariant(
-   typeof opts === 'object' && opts != null,
-   'effect options should be object, got %s', typeof opts
+  typeof opts === 'object' && opts != null,
+  'effect options should be object, got %s',
+  typeof opts,
  )
  const resultObj: DomainConfig = {...defaults}
  Object.keys(opts)
@@ -185,7 +187,7 @@ function DomainConstructor<State>(
    })
   },
   register(store) {
-   console.warn(`Not implemented`)
+   warning(`Not implemented`)
   },
   effect<Params, Done, Fail>(
    name: string,
@@ -214,14 +216,7 @@ function DomainConstructor<State>(
    )
   },
   event<Payload>(name: string): Event<Payload, State> {
-   return EventConstructor(
-    domainName,
-    dispatch,
-    getState,
-    state$,
-    events,
-    name,
-   )
+   return EventConstructor(domainName, dispatch, getState, state$, events, name)
   },
   typeConstant<Payload>(name: string): Event<Payload, State> {
    const action$: Subject<Payload> = subject()
@@ -262,7 +257,7 @@ function getDispatch(getConfig): Dispatch {
 }
 
 function portFailWarn({domainName}, error) {
- console.warn(`
+ warning(`
 
 
   Port stream should not fail.
