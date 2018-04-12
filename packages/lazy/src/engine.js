@@ -11,8 +11,8 @@ export function createEngine<T>(
  reducer: (value: T, action: any) => T,
  defaults?: T,
  enhancer?: (
-    createStore: typeof createEngine,
-  ) => (reducer: (value: T, action: any) => T, preloadedState: T) => any,
+  createStore: typeof createEngine,
+ ) => (reducer: (value: T, action: any) => T, preloadedState: T) => any,
 ) {
  //$todo
  const defaultValue: T = defaults ? defaults : reducer()
@@ -52,7 +52,7 @@ export function createEngine<T>(
   return currentValue
  }
  function dispatch(value: mixed) {
-  console.log('dispatch', value)
+  // console.log('dispatch', value)
   if (value === action$) return value
   if (typeof value === 'object' && value != null) {
    if (typeof value.type === 'string') {
@@ -74,17 +74,18 @@ export function createEngine<T>(
  function observableState() {
   return {
    /**
-       * The minimal observable subscription method.
-       * @param {Object} observer Any object that can be used as an observer.
-       * The observer object should have a `next` method.
-       * @returns {subscription} An object with an `unsubscribe` method that can
-       * be used to unsubscribe the observable from the store, and prevent further
-       * emission of values from the observable.
-       */
+    * The minimal observable subscription method.
+    * @param {Object} observer Any object that can be used as an observer.
+    * The observer object should have a `next` method.
+    * @returns {subscription} An object with an `unsubscribe` method that can
+    * be used to unsubscribe the observable from the store, and prevent further
+    * emission of values from the observable.
+    */
    subscribe(observer: Object) {
-    if (typeof observer !== 'object') {
-     throw new TypeError('Expected the observer to be an object.')
-    }
+    invariant(
+     typeof observer === 'object',
+     'Expected the observer to be an object.',
+    )
     // const {next}: {next(val: T): any} = observer
     // console.log('observer', observer)
     // console.log('next', next)
