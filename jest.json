@@ -1,20 +1,15 @@
 {
-  "collectCoverage": true,
-  "automock": false,
-  "browser": false,
-  "coverageDirectory": "coverage",
-  "coverageReporters": [
-    "lcov",
-    "html"
-  ],
-  "testEnvironment": "node",
-  "roots": [
-    "<rootDir>/src/"
-  ],
-  "testMatch": [
-    "<rootDir>/src/**/*.test.js"
-  ],
-  "globals": {
-    "__DEV__": true
-  }
+ "collectCoverage": true,
+ "coverageDirectory": "coverage",
+ "coverageReporters": ["lcov", "html"],
+ "globals": {
+  "__DEV__": true
+ },
+ "projects": [
+  "<rootDir>/packages/atom/jest.json",
+  "<rootDir>/packages/effector/jest.json",
+  "<rootDir>/packages/emission/jest.json",
+  "<rootDir>/packages/lazy/jest.json",
+  "<rootDir>/packages/store/jest.json"
+ ]
 }

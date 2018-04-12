@@ -1,6 +1,6 @@
 {
  "name": "effector",
- "version": "0.13.0",
+ "version": "0.14.0",
  "description": "Reactive state manager",
  "main": "effector.cjs.js",
  "module": "effector.es.js",
@@ -17,9 +17,6 @@
   "most": "^1.7.3",
   "most-subject": "5.3.0",
   "symbol-observable": "^1.2.0"
- },
- "peerDependencies": {
-  "redux": "^3.7.2"
  },
  "maintainers": [
   {

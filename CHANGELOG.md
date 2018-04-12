@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.14.0
+
+* Add independent `createStore` method
+* Replace console.warn with console.error in warnings
+* Make reducers full-featured store elements (add `.get()`, `.set(x)` and `.map(fn)` methods)
+* Add observable declaration to effects, events and reducers, which allow interop in this way: `from(effect)`
+
 ## 0.13.0
 
 * Build via rollup

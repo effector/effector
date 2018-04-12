@@ -2,8 +2,6 @@
  "name": "@effector/atom",
  "version": "0.0.1",
  "main": "src/index.js",
- "jsnext:main": "es/index.js",
- "module": "es/index.js",
  "license": "MIT",
  "scripts": {
   "test": "jest --config=jest.json",
@@ -22,11 +20,11 @@
   "invariant": "^2.2.4"
  },
  "devDependencies": {
-  "@babel/cli": "^7.0.0-beta.42",
-  "@babel/core": "^7.0.0-beta.42",
-  "@babel/plugin-proposal-class-properties": "^7.0.0-beta.42",
-  "@babel/preset-env": "^7.0.0-beta.42",
-  "@babel/preset-flow": "^7.0.0-beta.42",
+  "@babel/cli": "^7.0.0-beta.44",
+  "@babel/core": "^7.0.0-beta.44",
+  "@babel/plugin-proposal-class-properties": "^7.0.0-beta.44",
+  "@babel/preset-env": "^7.0.0-beta.44",
+  "@babel/preset-flow": "^7.0.0-beta.44",
   "babel-core": "7.0.0-bridge.0",
   "babel-jest": "^22.4.3",
   "cross-env": "^5.1.4",

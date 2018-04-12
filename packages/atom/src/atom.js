@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 
-import {Emittery} from '@effector/emission'
+import {Emission} from '@effector/emission'
 
 import type {Atom} from './index.h'
 export function atom<T>(defaultValue: T): Atomic<T> {
@@ -22,11 +22,11 @@ function remote<T>(baseValue: () => T): Atom<T> {
 
 function createAtom<T>(ref: Atom<T>) {
  const active = remote(() => true)
- const emission = new Emittery()
- const set = new Emittery()
- const get = new Emittery()
- const offA = emission.on(set, ref.set)
- const offB = emission.on(get, (cb: T => void) => cb(ref.get()))
+ const emission = new Emission()
+ const set = new Emission()
+ const get = new Emission()
+ const offA = emission.watch(set, ref.set)
+ const offB = emission.watch(get, (cb: T => void) => cb(ref.get()))
  const off = () => {
   active.set(false)
   offA()
@@ -34,34 +34,36 @@ function createAtom<T>(ref: Atom<T>) {
  }
  return {get, set, off, active, emission}
 }
-function getSafe<T>(cb: T => void, get) {
- get.dispatchSync(cb)
-}
-function getReturn<T>(defaultValue: T, get): T {
- let value = defaultValue
- getSafe((newValue: T) => {
+
+function getReturn<T>(defaultValue: () => T, get): T {
+ let value: T | void
+ get.dispatch((newValue: T) => {
   value = newValue
- }, get)
+ })
+ if (value == null) return defaultValue()
  return value
 }
 export class Atomic<T> {
  meta: () => {
-  get: Emittery,
-  set: Emittery,
-  emission: Emittery,
+  get: Emission,
+  set: Emission,
+  emission: Emission,
   off(): void,
   active: Atom<boolean>,
   defaultValue(): T,
  }
  constructor(defaultValue: Atomic<T> | T) {
-  let defValue =
-   defaultValue instanceof Atomic
-    ? () => {
-     const result = defaultValue.get()
-     defValue = () => result
-     return result
-    }
-    : () => defaultValue
+  let fnValue: () => T
+  const defValue = () => fnValue()
+  if (defaultValue instanceof Atomic) {
+   fnValue = () => {
+    const result = defaultValue.get()
+    fnValue = () => result
+    return result
+   }
+  } else {
+   fnValue = () => defaultValue
+  }
   const {get, set, off, active, emission} = createAtom(remote(defValue))
   Object.defineProperty(this, 'meta', {
    value() {
@@ -72,12 +74,15 @@ export class Atomic<T> {
  get(): T {
   const {active, defaultValue, get} = this.meta()
   invariant(active.get(), 'inactive atom')
-  return getReturn(defaultValue(), get)
+  return getReturn(defaultValue, get)
  }
- set(newValue: T) {
+ set(newValue: ?T | void): void {
+  if (newValue == null) return
   const {active, set} = this.meta()
   invariant(active.get(), 'inactive atom')
-  set.dispatchSync(newValue)
+  const currentState = this.get()
+  if (currentState === newValue) return
+  set.dispatch(newValue)
 
   //  emission.emitSync(set, newValue)
  }
@@ -87,8 +92,9 @@ export class Atomic<T> {
  off() {
   this.meta().off()
  }
- watch(fn: (_: T) => any) {
-  return this.meta().set.onDispatch(fn)
+ watch(fn: (_: T) => any): () => void {
+  const {emission, set} = this.meta()
+  return emission.watch(set, fn)
  }
  map<S>(fn: T => S): Reference<S> {
   return new Reference((_: T) => [fn(_)], this)
@@ -115,10 +121,14 @@ export class Atomic<T> {
   const atom: Atomic<R> = new Atomic()
   return atom
  }
- combine<S, R>(b: Atomic<S>, fn: (a: T, b: S) => R): Atomic<R> {
+ combine<S, R>(b: Atomic<S>, fn: (a: T, b: S) => R | null): Atomic<R> {
   //  const halt = () => this.off()
+  let r
   const set = (a, b) => {
    const result = fn(a, b)
+   if (result == null) return
+   if (r === result) return
+   r = result
    atom.set(result)
   }
   const offB = b.watch(b => {
@@ -137,13 +147,16 @@ export class Atomic<T> {
   const atom: Atomic<R> = new Atomic()
   return atom
  }
- update(fn: T => T | void): this {
+ update(fn: T => ?T | void): this {
   const oldValue = this.get()
   const newValue = fn(oldValue)
   if (oldValue === newValue) return this
-  if (newValue === undefined) return this
+  if (newValue == null) return this
   this.set(newValue)
   return this
+ }
+ reset(): void {
+  return this.set(this.meta().defaultValue())
  }
 }
 
