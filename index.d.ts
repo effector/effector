@@ -1,7 +1,4 @@
-import {
-  Store,
-  Middleware
-} from 'redux'
+
 import {Stream} from 'most'
 
 type Tag = string
@@ -27,6 +24,29 @@ export type RawAction<P> = {
   meta: Meta,
 }
 
+export type Middleware<S> = (api: {
+ getState: () => S,
+ dispatch: (action: any) => any,
+}) => (next: any) => any
+
+
+export type Subscription = {
+  unsubscribe(): void,
+}
+
+export type Subscriber<A> = {
+  next(value: A): void,
+  // error(err: Error): void,
+  complete(): void,
+}
+
+export type Store<T> = {
+ subscribe(listner: () => void): () => void,
+ replaceReducer(nextReducer: (_: T, p: any) => T): void,
+ getState(): T,
+ dispatch: (action: any) => any,
+}
+
 export type Reducer<S> = {
   (state: S, action: RawAction<any>): S,
   options(opts: { fallback: boolean }): Reducer<S>,
@@ -37,6 +57,7 @@ export type Reducer<S> = {
   >(event: A | A[], handler: (state: S, payload: P, meta: Meta) => S): Reducer<S>,
   off<A extends Event<any, any>>(event: A): Reducer<S>,
   reset<A extends Event<any, any>>(event: A | A[]): Reducer<S>,
+  subscribe(subscriber: Subscriber<S>): Subscription,
 }
 
 export type Domain<State = void> = {
@@ -52,6 +73,7 @@ export type Domain<State = void> = {
     name: string
   ): Event<Payload, State>,
   register(store: Store<State>): void,
+  port<R>(events$: Stream<R>): Promise<void>,
 }
 
 export type Event<Payload, State> = {
@@ -71,6 +93,7 @@ export type Event<Payload, State> = {
     query: (state: State) => Payload,
     eventName?: string,
   ): Event<void, State>,
+  subscribe(subscriber: Subscriber<Payload>): Subscription,
 }
 
 export type Effect<Params, Done, Fail, State> = {
@@ -96,12 +119,26 @@ export type Effect<Params, Done, Fail, State> = {
   ): Event<void, State>,
   done: Event<{params: Params, result: Done}, State>,
   fail: Event<{params: Params, error: Fail}, State>,
+  subscribe(subscriber: Subscriber<Params>): Subscription,
 }
 
 export type DomainAuto = Domain<any>
 export type EventAuto<Payload> = Event<Payload, any>
 export type EffectAuto<Params, Done, Fail = Error> =
   Effect<Params, Done, Fail, any>
+
+export function createStore<T>(
+ reducer: (store: T, payload: any) => T,
+ enhancerRaw: Function | Function[],
+ none: void,
+): Store<T>
+export function createStore<T>(
+ reducer: (store: T, payload: any) => T,
+ preloadedStateRaw?: T,
+ enhancerRaw: Function | Function[],
+): Store<T>
+
+export function createReducer<S>(defaultState: S): Reducer<S>
 
 export function createEvent<Payload>(
   name: string,
@@ -119,74 +156,121 @@ export function createRootDomain<State>(domainName?: string): Domain<State>
 
 export const effectorMiddleware: Middleware
 
+
 export function combine<A, R>(
-  fn: (a: A) => R,
-  setA: Reducer<A>,
-  ...none: Array<void>
+ fn: (a: A) => R,
+ a: Reducer<A>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, R>(
-  fn: (a: A, b: B) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  ...none: Array<void>
+ fn: (a: A, b: B) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, R>(
-  fn: (a: A, b: B, c: C) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, D, R>(
-  fn: (a: A, b: B, c: C, d: D) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  setD: Reducer<D>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C, d: D) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, D, E, R>(
-  fn: (a: A, b: B, c: C, d: D, e: E) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  setD: Reducer<D>,
-  setE: Reducer<E>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C, d: D, e: E) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, D, E, F, R>(
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  setD: Reducer<D>,
-  setE: Reducer<E>,
-  setF: Reducer<F>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, D, E, F, G, R>(
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  setD: Reducer<D>,
-  setE: Reducer<E>,
-  setF: Reducer<F>,
-  setG: Reducer<G>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ g: Reducer<G>,
+ ...none: Array<void>
 ): Reducer<R>
 export function combine<A, B, C, D, E, F, G, H, R>(
-  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
-  setA: Reducer<A>,
-  setB: Reducer<B>,
-  setC: Reducer<C>,
-  setD: Reducer<D>,
-  setE: Reducer<E>,
-  setF: Reducer<F>,
-  setG: Reducer<G>,
-  setH: Reducer<H>,
-  ...none: Array<void>
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ g: Reducer<G>,
+ h: Reducer<H>,
+ ...none: Array<void>
 ): Reducer<R>
+export function combine<A, B, C, D, E, F, G, H, I, R>(
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ g: Reducer<G>,
+ h: Reducer<H>,
+ h: Reducer<H>,
+ i: Reducer<I>,
+ ...none: Array<void>
+): Reducer<R>
+export function combine<A, B, C, D, E, F, G, H, I, J, R>(
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ g: Reducer<G>,
+ h: Reducer<H>,
+ h: Reducer<H>,
+ i: Reducer<I>,
+ j: Reducer<J>,
+ ...none: Array<void>
+): Reducer<R>
+export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
+ a: Reducer<A>,
+ b: Reducer<B>,
+ c: Reducer<C>,
+ d: Reducer<D>,
+ e: Reducer<E>,
+ f: Reducer<F>,
+ g: Reducer<G>,
+ h: Reducer<H>,
+ h: Reducer<H>,
+ i: Reducer<I>,
+ j: Reducer<J>,
+ k: Reducer<K>,
+ ...none: Array<void>
+): Reducer<R>
+
 
 export function collect(): Collect
 
