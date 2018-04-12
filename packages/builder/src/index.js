@@ -18,6 +18,7 @@ export {
  createRootDomain,
  effectorMiddleware,
  createReducer,
+ createStore,
  combine,
  joint,
  createHaltAction,
