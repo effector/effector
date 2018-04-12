@@ -17,3 +17,4 @@ export {mill, collect} from './collect'
 export type {CollectType, CollectType as MillType} from './collect'
 
 export {Atomic, atom, Reference} from '@effector/atom'
+export {createStore} from '@effector/store'
