@@ -15,6 +15,7 @@
  },
  "dependencies": {
   "invariant": "^2.2.4",
+  "@effector/id": "^0.0.1",
   "@effector/warning": "^0.0.1"
  },
  "devDependencies": {

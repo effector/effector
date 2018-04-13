@@ -2,6 +2,7 @@
 
 import invariant from 'invariant'
 import warning from '@effector/warning'
+import {nextID, type ID} from '@effector/id'
 
 import {State, type Event} from './state'
 
@@ -10,14 +11,6 @@ export type Catch = (e: Event) => Promise<void>
 export type Handler</*::-*/ A> = (_: A, e: Event) => Promise<any>
 export type Keeper</*::-*/ T> = (_: T, e: Event) => Promise<any>
 export type DefaultKeeper = (_: Error, e: Event) => Promise<any>
-
-class ID {
- /*::+*/ id: string = (++ID.id).toString(36)
- static id: number = -1
- inspect() {
-  return this.id
- }
-}
 
 class ActorPrivateMeta {
  keepBy: ?Actor<any> = null
@@ -36,7 +29,7 @@ function getMeta(id: ID): ActorPrivateMeta {
 }
 
 export class Actor<T> {
- /*::+*/ id: ID = new ID()
+ /*::+*/ id: ID = nextID()
  state: State<T>
  get meta(): ActorPrivateMeta {
   return getMeta(this.id)
