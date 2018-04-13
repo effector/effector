@@ -1,0 +1,12 @@
+//@flow
+
+export /*:: opaque */ type Int /*: string*/ = number & string
+
+declare export function fromNumber(n: number): Int
+declare export function fromString(n: string): Int
+declare export function toNumber(n: Int): number
+
+declare export function inc(int: Int): Int
+declare export function count(): Int
+declare export function equals(a: Int, b: Int): boolean
+declare export function compare(a: Int, b: Int): -1 | 0 | 1

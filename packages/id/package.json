@@ -13,7 +13,9 @@
   "clean": "./node_modules/.bin/rimraf lib/ && ./node_modules/.bin/rimraf es/",
   "watch": "npm run build:es -- --watch"
  },
- "dependencies": {},
+ "dependencies": {
+  "invariant": "^2.2.4"
+ },
  "devDependencies": {
   "@babel/cli": "^7.0.0-beta.44",
   "@babel/core": "^7.0.0-beta.44",

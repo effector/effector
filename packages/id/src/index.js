@@ -1,16 +1,7 @@
 //@flow
 
-let id = 0
+export {serialize, deserialize} from './data'
 
-class ID {
- /*::+*/ id: string = (++id).toString(36)
- inspect() {
-  return this.id
- }
-}
+export type {ID, Int} from './index.h'
 
-export type {ID}
-
-export function nextID(): ID {
- return new ID()
-}
+export {nextID} from './class'
