@@ -23,6 +23,7 @@ export class Actor<T> {
 
  lookAfter<S>(keeper: DefaultKeeper<T>, actor: Actor<S>) {
   this.meta.keeperFor.set(actor.id, keeper)
+  // this.after()
   actor.meta.keepBy = this
  }
  async getState(): Promise<T> {
@@ -144,17 +145,24 @@ function after<A, B>(
   const filtered = fn(state, e)
   // console.log(filtered)
   if (filtered === null || filtered === undefined) return
-  const result = await handler(filtered, e, actor)
- }
- async function onCatch(err): Promise<void> {
-  const actorKeeper = actor.meta.keepBy
-  if (actorKeeper === null || actorKeeper === undefined) {
-   warning(`Actor without actor-keeper`)
-   return Promise.reject(err)
-  }
+  const result = await handler(filtered, e, actor).catch(err => {
+   console.error(err)
+  })
  }
 
- return (e: Event) => runner(e).catch(onCatch)
+ return (e: Event) =>
+  runner(e).catch(async(err): Promise<void> => {
+   const actorKeeper = actor.meta.keepBy
+   if (actorKeeper === null || actorKeeper === undefined) {
+    warning(`Actor without actor-keeper`)
+    return Promise.reject(err)
+   }
+   const handler = actorKeeper.meta.keeperFor.get(actor.id)
+   invariant(handler, 'impossible')
+   const result = await handler(err, e, actor).catch(err => {
+    console.error(err)
+   })
+  })
 }
 
 declare export function createActor<A, B, C>(value: [A, B, C]): Actor<[A, B, C]>
