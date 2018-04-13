@@ -1,0 +1,82 @@
+//@flow
+
+class PlainValue {
+ /*::+*/ id: number = ++PlainValue.id
+ static id: number = -1
+ value: any
+ constructor(value: any) {
+  this.value = value
+ }
+}
+
+export class Data<T> extends PlainValue {
+ value: T
+ constructor(value: T) {
+  super(value)
+ }
+ get(): T {
+  return this.value
+ }
+}
+
+class Data0 extends Data<[]> {
+ constructor() {
+  super([])
+ }
+}
+
+class Data1<A> extends Data<[A]> {
+ constructor(value: A) {
+  super([value])
+ }
+}
+
+class Data2<A, B> extends Data<[A, B]> {
+ constructor(a: A, b: B) {
+  super([a, b])
+ }
+}
+
+class Data3<A, B, C> extends Data<[A, B, C]> {
+ constructor(a: A, b: B, c: C) {
+  super([a, b, c])
+ }
+}
+
+class Data4<A, B, C, D> extends Data<[A, B, C, D]> {
+ constructor(a: A, b: B, c: C, d: D) {
+  super([a, b, c, d])
+ }
+}
+
+class Data5<A, B, C, D, E> extends Data<[A, B, C, D, E]> {
+ constructor(a: A, b: B, c: C, d: D, e: E) {
+  super([a, b, c, d, e])
+ }
+}
+
+class Data6<A, B, C, D, E, F> extends Data<[A, B, C, D, E, F]> {
+ constructor(a: A, b: B, c: C, d: D, e: E, f: F) {
+  super([a, b, c, d, e, f])
+ }
+}
+
+export type {Data0, Data1, Data2, Data3, Data4, Data5, Data6}
+
+declare export function createValue(value: []): Data0
+declare export function createValue<A>(value: [A]): Data1<A>
+declare export function createValue<A, B>(value: [A, B]): Data2<A, B>
+declare export function createValue<A, B, C>(value: [A, B, C]): Data3<A, B, C>
+declare export function createValue<A, B, C, D>(
+ value: [A, B, C, D],
+): Data4<A, B, C, D>
+declare export function createValue<A, B, C, D, E>(
+ value: [A, B, C, D, E],
+): Data5<A, B, C, D, E>
+declare export function createValue<A, B, C, D, E, F>(
+ value: [A, B, C, D, E, F],
+): Data6<A, B, C, D, E, F>
+
+export function single<A>(value: A): Data1<A> {
+ return createValue([value])
+}

@@ -11,7 +11,8 @@
   "packages/atom",
   "packages/builder",
   "packages/store",
-  "packages/warning"
+  "packages/warning",
+  "packages/actor"
  ],
  "scripts": {
   "test": "jest --config=jest.json",
