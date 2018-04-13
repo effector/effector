@@ -1,5 +1,191 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`after + new subscribers 1`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {},
+}
+`;
+
+exports[`after + new subscribers 2`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {
+    [Function],
+  },
+  "newIncoming": Set {},
+}
+`;
+
+exports[`after + new subscribers 3`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {
+    [Function],
+  },
+  "newIncoming": Set {
+    "inc",
+  },
+}
+`;
+
+exports[`after + new subscribers 4`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {
+    [Function],
+  },
+  "newIncoming": Set {
+    "inc",
+    "print count",
+  },
+}
+`;
+
+exports[`after + new subscribers 5`] = `
+ActorPrivateMeta {
+  "handlers": Set {
+    [Function],
+    [Function],
+  },
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {},
+}
+`;
+
+exports[`after + new subscribers 6`] = `
+Array [
+  Object {
+    "count": 1,
+    "foo": "bar",
+  },
+  Object {
+    "tag": "computed",
+    "value": 3,
+  },
+]
+`;
+
+exports[`after 1`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {
+    [Function],
+    [Function],
+  },
+  "newIncoming": Set {},
+}
+`;
+
+exports[`after 2`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {
+    [Function],
+    [Function],
+  },
+  "newIncoming": Set {
+    "inc",
+  },
+}
+`;
+
+exports[`after 3`] = `
+ActorPrivateMeta {
+  "handlers": Set {
+    [Function],
+    [Function],
+  },
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {},
+}
+`;
+
+exports[`after 4`] = `
+ActorPrivateMeta {
+  "handlers": Set {
+    [Function],
+    [Function],
+  },
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {
+    "inc",
+  },
+}
+`;
+
+exports[`after 5`] = `
+ActorPrivateMeta {
+  "handlers": Set {
+    [Function],
+    [Function],
+  },
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {
+    "inc",
+    "print count",
+  },
+}
+`;
+
+exports[`after 6`] = `
+Array [
+  Object {
+    "count": 2,
+    "foo": "bar",
+  },
+  Object {
+    "tag": "computed",
+    "value": 3,
+  },
+]
+`;
+
+exports[`after 7`] = `
+ActorPrivateMeta {
+  "handlers": Set {
+    [Function],
+    [Function],
+  },
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {},
+}
+`;
+
 exports[`async getState 1`] = `
 Array [
   Object {
@@ -13,56 +199,13 @@ Array [
 ]
 `;
 
-exports[`send message 1`] = `
-State {
-  "events": Set {},
-  "state": Array [
-    Object {
-      "count": 0,
-      "foo": "bar",
-    },
-    Object {
-      "tag": "computed",
-      "value": 3,
-    },
-  ],
-}
-`;
-
-exports[`send message 2`] = `
-State {
-  "events": Set {
-    "hello",
-    "how r u",
-  },
-  "state": Array [
-    Object {
-      "count": 0,
-      "foo": "bar",
-    },
-    Object {
-      "tag": "computed",
-      "value": 3,
-    },
-  ],
-}
-`;
-
-exports[`smoke 1`] = `
-State {
-  "events": Set {
-    "hello",
-    "how r u",
-  },
-  "state": Array [
-    Object {
-      "count": 0,
-      "foo": "bar",
-    },
-    Object {
-      "tag": "computed",
-      "value": 3,
-    },
-  ],
+exports[`async getState 2`] = `
+ActorPrivateMeta {
+  "handlers": Set {},
+  "incoming": Set {},
+  "keepBy": null,
+  "keeperFor": WeakMap {},
+  "newHandlers": Set {},
+  "newIncoming": Set {},
 }
 `;

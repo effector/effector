@@ -1,5 +1,4 @@
 //@flow
 
-export {createActor, Actor} from './actor'
-export {State} from './state'
+export {createActor, readAllIncoming, Actor} from './actor'
 export {createValue} from './value'
