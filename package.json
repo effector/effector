@@ -23,7 +23,7 @@
   "test:ff": "jest --config=jest-fastflow.json --watch",
   "test:watch": "jest --config=jest.json --watch",
   "flow": "pm2 start flow-effector.sh",
-  "flow:status": "flow status",
+  "flow:status": "node_modules/.bin/flow status",
   "flow:stop": "pm2 stop flow-effector"
  },
  "author": "Zero Bias",
@@ -43,10 +43,10 @@
   "@babel/preset-env": "^7.0.0-beta.44",
   "@babel/preset-flow": "^7.0.0-beta.44",
   "babel-core": "7.0.0-bridge.0",
-  "babel-eslint": "^8.2.2",
+  "babel-eslint": "^8.2.3",
   "babel-jest": "^22.4.3",
   "babel-plugin-dev-expression": "^0.2.1",
-  "babel-plugin-transform-inline-environment-variables": "^0.3.0",
+  "babel-plugin-transform-inline-environment-variables": "^0.4.0",
   "chokidar": "^2.0.3",
   "cross-env": "^5.1.4",
   "eslint": "^4.19.1",
@@ -61,24 +61,15 @@
   "immutable": "^4.0.0-rc.9",
   "jest": "^22.4.3",
   "js-yaml": "^3.11.0",
-  "lerna": "^2.9.1",
+  "lerna": "^2.10.1",
   "pm2": "^2.10.2",
-  "prettier": "^1.11.1",
+  "prettier": "^1.12.0",
   "prettier-eslint": "^8.8.1",
   "prettier-eslint-cli": "^4.7.1",
   "redux": "^3.7.2",
-  "redux-act": "^1.7.3",
+  "redux-act": "^1.7.4",
   "rimraf": "^2.6.2",
   "shelljs": "^0.8.1"
- },
- "dependencies": {
-  "invariant": "^2.2.4",
-  "most": "^1.7.3",
-  "most-subject": "5.3.0",
-  "symbol-observable": "^1.2.0"
- },
- "peerDependencies": {
-  "redux": "^3.7.2"
  },
  "maintainers": [
   {
@@ -90,7 +81,5 @@
    "email": "andwebar@gmail.com"
   }
  ],
- "sideEffects": false,
- "files": ["es", "lib", "index.d.ts"],
  "repository": "https://gitlab.com/zerobias/effector"
 }
