@@ -1,5 +1,6 @@
 //@flow
 
+import invariant from 'invariant'
 import type {
  OpaqueActor,
  OpaqueObserver,
@@ -70,6 +71,13 @@ export class OpaqueEvent {
   this.payload = payload
   this.meta = meta
  }
+ valueOf() {
+  return {
+   id: this.id,
+   payload: this.payload.get(),
+   type: this.type,
+  }
+ }
 }
 export type Reducer = (
  state: any,
@@ -84,17 +92,15 @@ export class EventFabric {
  constructor(type: any) {
   this.type = type
  }
- eventCreator(): Class<OpaqueEvent> {
-  return OpaqueEvent
- }
  create(
   payload: any,
   meta: any,
   system: PlainActorSystem = defaultActorSystem,
  ) {
   const box = new Quant(payload)
-  const Fab = this.eventCreator()
-  const event = new Fab(this.type, box, meta)
+  const event = new OpaqueEvent(this.type, box, meta)
+  // console.error(box, event)
+  invariant(event.payload, 'no payload')
   for (const actor of this.subscribers) {
    dispatch(event, actor, system)
   }
@@ -148,7 +154,7 @@ export class PlainActor {
  //  subscribe(observer: OpaqueObserver): void {}
 }
 
-function dispatch(
+export function dispatch(
  event: OpaqueEvent,
  actor: PlainActor,
  system: PlainActorSystem = defaultActorSystem,

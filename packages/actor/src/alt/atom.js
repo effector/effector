@@ -2,6 +2,10 @@
 
 import invariant from 'invariant'
 
+import {seq} from './seq'
+
+import {PlainActorSystem, defaultActorSystem} from './system'
+
 import {
  createEventFabric,
  EventFabric as OpaqueEventFabric,
@@ -10,6 +14,7 @@ import {
  PlainActor,
  OpaqueEvent,
  Quant,
+ dispatch,
 } from './actor'
 
 /*::
@@ -29,7 +34,8 @@ type IteratorInstance<T> = {
 export class Event<T> extends OpaqueEvent {
  /*::+*/ payload: Atom<T>
  constructor(type: string, value: T) {
-  super(type, new Atom(value))
+  const data = value instanceof Atom ? value : new Atom(value)
+  super(type, data)
  }
 }
 
@@ -39,17 +45,17 @@ export type TypedReducer<S, E> = (
  setState: (state: S) => void,
 ) => void
 
-declare function iter<T>(
- Statics: Class<IterableInstance<T>>,
-): Class<IteratorInstance<T>>
-function iter<T>(
- Statics: Class<IterableInstance<T>>,
-): Class<IterableInstance<T>> {
- Statics.prototype[Symbol.iterator] = function iterator() {
-  return this.iter()
- }
- return Statics
-}
+// declare function iter<T>(
+//  Statics: Class<IterableInstance<T>>,
+// ): Class<IteratorInstance<T>>
+// function iter<T>(
+//  Statics: Class<IterableInstance<T>>,
+// ): Class<IterableInstance<T>> {
+//  Statics.prototype[Symbol.iterator] = function iterator() {
+//   return this.iter()
+//  }
+//  return Statics
+// }
 
 export class Atom<T> extends Quant {
  /*::
@@ -72,26 +78,44 @@ export class Atom<T> extends Quant {
 }
 
 export class EventFabric<T> extends OpaqueEventFabric {
- /*::+*/ Event: Class<Event<T>> = class extends Event<T> {}
+ /*::+*/ Event: Class<Event<T>>
  constructor(type: string) {
   super(type)
+  class TypedEvent extends Event<T> {}
+  this.Event = TypedEvent
  }
- eventCreator(): Class<Event<T>> {
-  return this.Event
+ create(
+  payload: T,
+  meta: any,
+  system: PlainActorSystem = defaultActorSystem,
+ ): Event<T> {
+  const {Event} = this
+  // const box = new Atom(payload)
+  // console.error(payload)
+  const event = new Event(this.type, payload)
+  //$todo
+  event.payload = new Atom(payload)
+  // console.log(event)
+  invariant(event.payload, 'no payload')
+  for (const actor of this.subscribers) {
+   dispatch(event, actor, system)
+  }
+  seq(system)
+  return event
  }
- create(payload: T): Event<T> {
-  const opaqueEvent = super.create(payload)
-  invariant(opaqueEvent instanceof Event, 'wrong subclass')
-  return opaqueEvent
- }
+ //  create(payload: T): Event<T> {
+ //   const opaqueEvent = super.create(payload)
+ //   invariant(opaqueEvent instanceof Event, 'wrong subclass')
+ //   return opaqueEvent
+ //  }
  is(event: Event<any>) {
   return event instanceof this.Event
  }
 }
 
-export function createEvent<T>(type: string, value: T): Event<T> {
- return new Event(type, value)
-}
+// export function createEvent<T>(type: string, value: T): Event<T> {
+//  return new Event(type, value)
+// }
 
 export function eventFabric<T>(type: string): EventFabric<T> {
  return new EventFabric(type)
@@ -125,14 +149,25 @@ export class Actor<T> extends PlainActor {
  addReducer(reducer: TypedReducer<T, *>) {
   this.replaceReducer(_ => _.add(reducer))
  }
- on<S>(fabric: EventFabric<S>, handler: TypedReducer<T, S>): this {
-  fabric.add(this)
+ on<S>(
+  eventCreator: EventFabric<S> | Iterable<EventFabric<S>>,
+  handler: TypedReducer<T, S>,
+ ): this {
+  const fabric: Array<EventFabric<S>> =
+   eventCreator instanceof EventFabric ? [eventCreator] : [...eventCreator]
+  for (const fab of fabric) fab.add(this)
+  const isEvent = _ => fabric.some(fab => fab.is(_))
   this.addReducer((state, event: Event<S>, setState) => {
-   if (fabric.is(event)) {
+   //  console.trace('addRed')
+   //  console.log(`\n\n\n`, state, event)
+   if (isEvent(event)) {
     handler(state, event, setState)
    }
   })
   return this
+ }
+ raise<E, S>(value: E, fabric: EventFabric<E>, actor: Actor<S>) {
+  dispatch(fabric.create(value), actor)
  }
 
  //  dispatch(event: OpaqueEvent, system: PlainActorSystem = defaultActorSystem) {
