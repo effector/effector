@@ -17,12 +17,34 @@ export class Quant {
  value: any
  constructor(value: any = null) {
   this.value = value
+  //$off
+  Object.defineProperties(this, {
+   get: {
+    value: this.get.bind(this),
+    configurable: true,
+    writable: true,
+   },
+   set: {
+    value: this.set.bind(this),
+    configurable: true,
+    writable: true,
+   },
+  })
  }
- get = () => this.value
- set = (value: any) => {
+ get() {
+  return this.value
+ }
+ set(value: any) {
   if (value === this) return
   this.value = value
  }
+ map(fn: any => any): Quant {
+  return new Quant(fn(this.get()))
+ }
+}
+
+export function createQuant(value: any = null) {
+ return new Quant(value)
 }
 
 // const createSeqFromHandler = (handler: OpaqueHandler): OpaqueSeq =>
@@ -40,10 +62,10 @@ export class Quant {
 export class OpaqueEvent {
  /*::+*/ id: number = ++OpaqueEvent.id
  type: any
- payload: any
+ /*::+*/ payload: Quant
  meta: any
  static id = 0
- constructor(type: any, payload: any, meta: any) {
+ constructor(type: any, payload: Quant, meta: any) {
   this.type = type
   this.payload = payload
   this.meta = meta
@@ -54,7 +76,7 @@ export type Reducer = (
  event: OpaqueEvent,
  setState: (value: any) => void,
 ) => void
-class EventFabric {
+export class EventFabric {
  /*::+*/ id: number = ++EventFabric.id
  type: any
  subscribers: Set<PlainActor> = new Set()
@@ -62,12 +84,17 @@ class EventFabric {
  constructor(type: any) {
   this.type = type
  }
+ eventCreator(): Class<OpaqueEvent> {
+  return OpaqueEvent
+ }
  create(
   payload: any,
   meta: any,
   system: PlainActorSystem = defaultActorSystem,
  ) {
-  const event = new OpaqueEvent(this.type, payload, meta)
+  const box = new Quant(payload)
+  const Fab = this.eventCreator()
+  const event = new Fab(this.type, box, meta)
   for (const actor of this.subscribers) {
    dispatch(event, actor, system)
   }
@@ -79,18 +106,20 @@ class EventFabric {
  }
 }
 
-export function createEvent(type: string) {
+export function createEvent<T>(type: T) {
  return new EventFabric(type)
 }
+
+export {createEvent as createEventFabric}
 
 export function createActor(state: any) {
  return new PlainActor(state)
 }
 
 export class PlainActor {
- state: Quant
+ /*::+*/ state: Quant
  inbox: Set<OpaqueEvent>
- reducer: Set<Reducer>
+ reducer: Set<*>
  //  childActors: Set<OpaqueActor>
  constructor(
   state: any,
