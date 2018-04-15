@@ -53,7 +53,7 @@ export type Store<T> = {
 export type Reducer<S> = {
  (state: S, action: RawAction<any>): S,
  get(): S,
- watch(value: S): () => void,
+ watch(value: (_: S) => any): () => void,
  map<B>(fn: (_: S) => B): Reducer<B>,
  options(opts: {fallback: boolean}): Reducer<S>,
  has(event: Event<any, any>): boolean,
