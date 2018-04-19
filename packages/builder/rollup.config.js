@@ -1,6 +1,8 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import alias from 'rollup-plugin-path-alias'
+import cleanup from 'rollup-plugin-cleanup'
+
 import {resolve as resolvePath} from 'path'
 
 const resolvePackage = name =>
@@ -67,6 +69,9 @@ export default {
    presets,
    plugins,
    runtimeHelpers: true,
+  }),
+  cleanup({
+   comments: [/#/],
   }),
  ],
 }

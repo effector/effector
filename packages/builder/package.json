@@ -11,13 +11,12 @@
   "prepublishOnly": "npm run clean && npm run build && npm run fillNpm",
   "build": "rollup -c",
   "fillNpm": "cd ../.. && sh prepublish.sh",
-  "clean":
-   "./node_modules/.bin/rimraf npm/effector.cjs.js && ./node_modules/.bin/rimraf npm/effector.es.js",
+  "clean": "./node_modules/.bin/rimraf npm/effector.cjs.js && ./node_modules/.bin/rimraf npm/effector.es.js",
   "watch": "npm run build -- --watch"
  },
  "dependencies": {
-  "@effector/effector": "^0.0.1",
-  "@effector/avar": "^0.0.1"
+  "@effector/avar": "^0.0.1",
+  "@effector/effector": "^0.0.1"
  },
  "devDependencies": {
   "@babel/cli": "^7.0.0-beta.44",
@@ -33,8 +32,14 @@
   "rimraf": "^2.6.2",
   "rollup": "^0.57.1",
   "rollup-plugin-babel": "^4.0.0-beta.3",
+  "rollup-plugin-cleanup": "^2.0.1",
   "rollup-plugin-node-resolve": "^3.3.0",
   "rollup-plugin-path-alias": "^0.0.2"
  },
- "files": ["lib", "src", "es", "flow"]
+ "files": [
+  "lib",
+  "src",
+  "es",
+  "flow"
+ ]
 }
