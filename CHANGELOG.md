@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.15.0
+
+* Add AVar: low-level interface for asynchronous variables
+* Clean up builds before publishing
+* Add types dir into npm build
+
 ## 0.14.0
 
 * Add independent `createStore` method
