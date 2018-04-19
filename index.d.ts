@@ -1,6 +1,9 @@
 
 import {Stream} from 'most'
 
+export type {Eff, Cancel, Delegate, Status} from './types/avar'
+export {AVar, createAVar} from './types/avar'
+
 type Tag = string
 type ID = number
 
