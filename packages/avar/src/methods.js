@@ -137,7 +137,7 @@ export function _readVar<A>(avar: AVar<A>, cb: Delegate<A>): Cancel {
  * @returns {A | null}
  */
 export function _tryReadVar<A>(avar: AVar<A>): A | null {
- if (null == avar.value) {
+ if (null === avar.value || undefined === avar.value) {
   return null
  }
  return avar.value
