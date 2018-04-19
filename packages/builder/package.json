@@ -16,7 +16,8 @@
   "watch": "npm run build -- --watch"
  },
  "dependencies": {
-  "@effector/effector": "^0.0.1"
+  "@effector/effector": "^0.0.1",
+  "@effector/avar": "^0.0.1"
  },
  "devDependencies": {
   "@babel/cli": "^7.0.0-beta.44",

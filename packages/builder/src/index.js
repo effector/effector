@@ -29,3 +29,7 @@ export {
 } from '@effector/effector'
 
 export {Atomic, atom, Reference} from '@effector/atom'
+
+export {makeVar as createAVar} from '@effector/avar'
+
+export type {Cancel, Delegate, AVar} from '@effector/avar'

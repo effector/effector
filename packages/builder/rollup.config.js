@@ -51,6 +51,7 @@ export default {
   alias({
    paths: {
     '@effector/effector': resolvePackage('effector'),
+    '@effector/avar': resolvePackage('avar'),
 
     '@effector/atom': resolvePackage('atom'),
     '@effector/lazy': resolvePackage('lazy'),
