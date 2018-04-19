@@ -14,3 +14,8 @@ cp index.js.flow npm/effector.es.js.flow
 
 rm -f npm/effector.cjs.js.flow
 cp index.js.flow npm/effector.cjs.js.flow
+
+rm -rf npm/types
+cp -ri types npm
+
+node scripts/write-package.js
