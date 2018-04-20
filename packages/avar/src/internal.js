@@ -11,6 +11,8 @@ import type {AVar} from './class'
 declare export function writeAVar<B>(avar: AVar<any>, value: B): AVar<B>
 export function writeAVar(avar: AVar<any>, value: any) {
  avar.value = value
+ // if (value === undefined || value === null)
+
  return avar
 }
 
@@ -215,6 +217,7 @@ export function drainVar<A>(avar: AVar<A>) {
   }
 
   if (null !== p && undefined !== p) {
+   //  console.log('fn p value', value)
    runEff(void 0, p.next, p.error)
   }
 

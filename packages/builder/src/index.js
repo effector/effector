@@ -30,6 +30,13 @@ export {
 
 export {Atomic, atom, Reference} from '@effector/atom'
 
-export {makeVar as createAVar} from '@effector/avar'
+export {
+ event,
+ createActor,
+ ActorVar,
+ EventFabric,
+ Event as EventNew,
+} from '@effector/actor'
+// export {makeVar as createAVar} from '@effector/avar'
 
-export type {Cancel, Delegate, AVar} from '@effector/avar'
+// export type {Cancel, Delegate, AVar} from '@effector/avar'

@@ -1,6 +1,6 @@
 //@flow
 
-export {makeVar} from './class'
+export {makeVar, makeVar as createAVar} from './class'
 
 export type {AVar} from './class'
 

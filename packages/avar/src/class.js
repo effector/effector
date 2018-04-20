@@ -14,6 +14,9 @@ import {
  _tryPutVar,
  _tryTakeVar,
  _tryReadVar,
+ asyncReadVar,
+ asyncTakeVar,
+ asyncPutVar,
 } from './methods'
 
 export class AVar<T> {
@@ -39,6 +42,9 @@ export class AVar<T> {
  read(cb: Delegate<T>): Cancel {
   return _readVar(this, cb)
  }
+ asyncRead(): Promise<T> {
+  return asyncReadVar(this)
+ }
  /**
   * Sets the value of the AVar.
   *
@@ -56,6 +62,16 @@ export class AVar<T> {
  put(value: T, cb: Delegate<T>, error?: Delegate<Error>): Cancel {
   return _putVar(value, this, cb, error)
  }
+ asyncReplace(value: T): Promise<void> {
+  if (this.status().filled) {
+   this.tryTake()
+  }
+  this.tryPut(value)
+  return Promise.resolve()
+ }
+ asyncPut(value: T): Promise<T> {
+  return asyncPutVar(value, this)
+ }
  /**
   * Takes the AVar value, leaving it empty.
   * If the AVar is already empty, the callback will be queued until the AVar is filled.
@@ -69,6 +85,9 @@ export class AVar<T> {
   */
  take(cb: Delegate<T>): Cancel {
   return _takeVar(this, cb)
+ }
+ asyncTake(): Promise<T> {
+  return asyncTakeVar(this)
  }
  /**
   * Attempts to synchronously read an AVar

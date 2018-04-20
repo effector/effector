@@ -19,6 +19,7 @@
   "@effector/emission": "^0.0.1",
   "@effector/lazy": "^0.0.1",
   "@effector/warning": "^0.0.1",
+  "@effector/actor": "^0.0.1",
   "invariant": "^2.2.4"
  },
  "devDependencies": {

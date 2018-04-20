@@ -3,12 +3,26 @@
 import {type PlainActorSystem, defaultActorSystem} from './system'
 
 export type Seq = Generator<void, void, void>
+export type SeqM = (...seq: Seq[]) => Seq
+
+// export function* map(a: Seq, b: Seq, f: SeqM) {
+//  let aDone = false,
+//    bDone = false,
+//    fDone = false
+//  const fSeq = f(a, b)
+//  do {
+//   const aVal = a.next()
+//   const bVal = b.next()
+//   aDone = aVal.done
+//   bDone = bVal.done
+//   fDone = fDone.done
+//  } while (aDone === false && bDone === false)
+// }
 
 export function seq(system: PlainActorSystem = defaultActorSystem) {
  if (system.isDispatching) return
  system.isDispatching = true
- for (let done, _ = forPendingActors(system.pending); !done; )
-  ({done} = _.next())
+ for (const _ of forPendingActors(system.pending));
  system.isDispatching = false
 }
 
@@ -32,15 +46,16 @@ function* forReducer(event, reducer, state): Seq {
 
 function* untilEnd<T>(set: Set<T>): Iterable<T> {
  do {
-  for (const e of use(set)) {
+  for (const e of [...set]) {
+   set.delete(e)
    yield e
   }
  } while (set.size > 0)
 }
 
-function* use<T>(set: Set<T>): Iterable<T> {
- for (const e of [...set]) {
-  yield e
-  set.delete(e)
- }
-}
+// function* use<T>(set: Set<T>): Iterable<T> {
+//  for (const e of [...set]) {
+//   set.delete(e)
+//   yield e
+//  }
+// }

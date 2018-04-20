@@ -1,8 +1,10 @@
 
 import {Stream} from 'most'
 
-export type {Eff, Cancel, Delegate, Status} from './types/avar'
+export {Eff, Cancel, Delegate, Status} from './types/avar'
 export {AVar, createAVar} from './types/avar'
+
+import {Status} from './types/avar'
 
 type Tag = string
 type ID = number
@@ -124,6 +126,43 @@ export type Effect<Params, Done, Fail, State> = {
   fail: Event<{params: Params, error: Fail}, State>,
   subscribe(subscriber: Subscriber<Params>): Subscription,
 }
+
+
+export class EventNew<T> {
+ raw(): {type: string, payload: T};
+}
+
+export class EventFabric<T> {
+ create(payload: T): EventNew<T>;
+ //  create(payload: T): Event<T> {
+ //   const opaqueEvent = super.create(payload)
+ //   invariant(opaqueEvent instanceof Event, 'wrong subclass')
+ //   return opaqueEvent
+ //  }
+ is(event: EventNew<any>): boolean;
+}
+
+export function event<E>(name: string): EventFabric<E>
+
+export class ActorVar<T> {
+ on<E>(
+  event: EventFabric<E>,
+  reducer: (
+   state: T,
+   action: {type: string, payload: E},
+   setState: (T) => void,
+  ) => any,
+ ): this;
+ status(): Status;
+ take(): Promise<T>;
+ read(): Promise<T>;
+ put(value: T): Promise<T>;
+ readSync(): T | null;
+ takeSync(): T | null;
+ putSync(value: T): boolean;
+}
+
+export function createActor<T>(value?: T): ActorVar<T>
 
 export type DomainAuto = Domain<any>
 export type EventAuto<Payload> = Event<Payload, any>

@@ -70,6 +70,12 @@ export function _tryPutVar<A>(value: A, avar: AVar<A>): boolean {
  return false
 }
 
+export function asyncPutVar<A>(value: A, avar: AVar<A>): Promise<A> {
+ return new Promise(_ => {
+  _putVar(value, avar, _)
+ })
+}
+
 /**
  * Takes the AVar value, leaving it empty.
  * If the AVar is already empty, the callback will be queued until the AVar is filled.
@@ -108,6 +114,12 @@ export function _tryTakeVar<A>(avar: AVar<A>): A | null {
  return value
 }
 
+export function asyncTakeVar<A>(avar: AVar<A>): Promise<A> {
+ return new Promise(_ => {
+  _takeVar(avar, _)
+ })
+}
+
 /**
  * Reads the AVar value. Unlike takeVar, this will not leave the AVar empty.
  *
@@ -126,6 +138,12 @@ export function _readVar<A>(avar: AVar<A>, cb: Delegate<A>): Cancel {
  return () => {
   deleteCell(cell)
  }
+}
+
+export function asyncReadVar<A>(avar: AVar<A>): Promise<A> {
+ return new Promise(_ => {
+  _readVar(avar, _)
+ })
 }
 
 /**

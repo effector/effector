@@ -22,6 +22,7 @@ declare export class AVar<T> {
   * @memberof AVar
   */
  read(cb: Delegate<T>): Cancel;
+ asyncRead(): Promise<T>;
  /**
   * Sets the value of the AVar.
   *
@@ -37,6 +38,7 @@ declare export class AVar<T> {
   * @memberof AVar
   */
  put(value: T, cb: Delegate<T>, error?: Delegate<Error>): Cancel;
+ asyncPut(value: T): Promise<T>;
  /**
   * Takes the AVar value, leaving it empty.
   * If the AVar is already empty, the callback will be queued until the AVar is filled.
@@ -49,6 +51,7 @@ declare export class AVar<T> {
   * @memberof AVar
   */
  take(cb: Delegate<T>): Cancel;
+ asyncTake(): Promise<T>;
  /**
   * Attempts to synchronously read an AVar
   *

@@ -1,7 +1,7 @@
 {
  "name": "@effector/actor",
  "version": "0.0.1",
- "main": "src/index.js",
+ "main": "src/alt/index.js",
  "license": "MIT",
  "scripts": {
   "test": "jest --config=jest.json",
@@ -15,6 +15,7 @@
  },
  "dependencies": {
   "invariant": "^2.2.4",
+  "@effector/avar": "^0.0.1",
   "@effector/id": "^0.0.1",
   "@effector/warning": "^0.0.1"
  },

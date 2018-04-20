@@ -1,0 +1,12 @@
+//@flow
+
+export {
+ actor,
+ createActor,
+ ActorVar,
+ event,
+ Actor,
+ Event,
+ EventFabric,
+ Atom,
+} from './alt'

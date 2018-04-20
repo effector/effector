@@ -69,7 +69,7 @@ export class OpaqueEvent {
  constructor(type: any, payload: Quant, meta: any) {
   this.type = type
   this.payload = payload
-  this.meta = meta
+  this.meta = meta || {}
  }
  valueOf() {
   return {
@@ -78,6 +78,10 @@ export class OpaqueEvent {
    type: this.type,
   }
  }
+ raw() {
+  return this.valueOf()
+ }
+ send() {}
 }
 export type Reducer = (
  state: any,
