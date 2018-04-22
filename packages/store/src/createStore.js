@@ -1,26 +1,53 @@
 //@flow
 
 import invariant from 'invariant'
+import type {ComponentType, Node} from 'react'
 import $$observable from 'symbol-observable'
 
+import warning from '@effector/warning'
 import {INIT, REPLACE} from './actionTypes'
 
 import {applyMiddleware} from './applyMiddleware'
 
-export type Store<T> = {
- subscribe(listner: () => void): () => void,
- replaceReducer(
-  transform: (input: (_: T, p: any) => T) => (_: T, p: any) => T,
- ): void,
- getState(): T,
- dispatch(action: any): any,
+function isAction(value: mixed): boolean %checks {
+ return (
+  typeof value === 'object' && value !== null && typeof value.type === 'string'
+ )
 }
 
+export type Nest = {
+ get(): any,
+ set(state: any, action: any): any,
+}
+let id = 0
 function storeConstructor(props) {
+ const currentId = (++id).toString(36)
  let currentListeners = []
  let isDispatching = false
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
+ const nests = getNested(currentState)
+ nests
+  .add({
+   get() {
+    return getState()
+   },
+   set(state, action) {
+    return currentReducer(state, action)
+   },
+  })
+  .add({
+   get() {
+    return getState()
+   },
+   set(state, action) {
+    if (!isAction(action)) return state
+    if (action.type === `set state ${currentId}`) {
+     return action.payload
+    }
+    return state
+   },
+  })
  function ensureCanMutateNextListeners() {
   if (nextListeners === currentListeners) {
    nextListeners = currentListeners.slice()
@@ -34,7 +61,7 @@ function storeConstructor(props) {
     'The reducer has already received the state as an argument. ' +
     'Pass it down from the top reducer instead of reading it from the store.',
   )
-
+  console.log(currentState, typeof currentState)
   return currentState
  }
 
@@ -82,7 +109,9 @@ function storeConstructor(props) {
 
   try {
    isDispatching = true
-   currentState = currentReducer(currentState, action)
+   console.count('dispatch')
+   console.log(action)
+   currentState = setNested(currentState, action, nests)
   } finally {
    isDispatching = false
   }
@@ -111,7 +140,7 @@ function storeConstructor(props) {
   return {
    subscribe(observer) {
     invariant(
-     typeof observer === 'object' && observer != null,
+     typeof observer === 'object' && observer !== null,
      'Expected the observer to be an object.',
     )
 
@@ -131,26 +160,94 @@ function storeConstructor(props) {
    },
   }
  }
+ //TODO Implement reset
+ function reset() {
+  warning('store.reset is not implemented yet')
+ }
+ //TODO Implement on
+ function on(event: any, handler: Function) {
+  event.to(store, handler)
+  return store
+ }
+
+ function withProps(fn: Function) {
+  return props => fn(getState(), props)
+ }
+ //TODO Implement map
+ function map(fn: Function) {
+  warning('store.map is not implemented yet')
+  return store
+ }
+ //TODO Implement to
+ function to(fn: Function) {
+  warning('store.to is not implemented yet')
+  // return store
+ }
+ //TODO Implement epic
+ function epic(fn: Function) {
+  warning('store.epic is not implemented yet')
+  return store
+ }
+ function setState(value) {
+  if (value === currentState) return
+  dispatch({type: `set state ${currentId}`, payload: value})
+ }
 
  dispatch({type: INIT})
 
- return {
+ const store = {
+  /*::kind(){return 'store'},*/
+  id: currentId,
+  withProps,
+  setState,
   dispatch,
+  map,
+  on,
+  to,
+  epic,
   subscribe,
   getState,
   replaceReducer,
+  reset,
   //$off
   [$$observable]: observable,
+ }
+ Object.defineProperty(store, 'kind', {
+  writable: true,
+  configurable: true,
+  value() {
+   return 'store'
+  },
+ })
+
+ return store
+}
+
+function duckTypeStore(value: mixed): boolean %checks {
+ return (
+  typeof value === 'object'
+  && value !== null
+  && typeof value.getState === 'function'
+ )
+}
+
+function mergeNested(preloadedState) {
+ if (typeof preloadedState !== 'object' || preloadedState === null) return
+ for (const [key, value] of Object.entries(preloadedState)) {
+  if (duckTypeStore(value)) {
+   console.log(`derived state`, key, value)
+  }
  }
 }
 
 export function createStore<T>(
- reducer: Function,
  preloadedStateRaw?: T,
+ reducer: Function = _ => _,
  enhancerRaw: Function | Function[],
 ) {
  let enhancer = enhancerRaw
  let preloadedState = preloadedStateRaw
+ mergeNested(preloadedState)
  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
   enhancer = preloadedState
   preloadedState = undefined
@@ -173,4 +270,36 @@ export function createStore<T>(
   currentReducer: reducer,
   currentState: preloadedState,
  })
+}
+
+function setNested(initialState, action: any, nests: Set<Nest>) {
+ let currentState = initialState
+ for (const nest of nests) {
+  currentState = nest.set(currentState, action)
+ }
+ return currentState
+}
+function nest(value: any, key): Nest {
+ return {
+  get() {
+   return value.getState()
+  },
+  set(state, action) {
+   value.dispatch(action)
+   state[key] = value.getState()
+   return state
+  },
+ }
+}
+function getNested(initialState) {
+ const nests: Set<Nest> = new Set()
+ if (typeof initialState !== 'object' || initialState === null) return nests
+ for (const [key, value] of Object.entries({...initialState})) {
+  if (duckTypeStore(value)) {
+   nests.add(nest(value, key))
+   //$todo
+   initialState[key] = value.getState()
+  }
+ }
+ return nests
 }
