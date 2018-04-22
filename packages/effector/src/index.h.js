@@ -58,10 +58,14 @@ export type Event<Payload, State> = {
  },
  /*::+*/ emission: Emission,
  getType(): Tag,
- watch<R>(fn: (params: Payload, state: State) => R): void,
+ watch<R>(fn: (params: Payload, state: State) => R): () => void,
  epic<R>(
   handler: (data$: Stream<Payload>, state$: Stream<State>) => Stream<R>,
- ): Stream<R>,
+ ): Event<R, State>,
+ map<T>(fn: (_: Payload) => T): Event<T, State>,
+ +to: ((store: Event<Payload, any>, none: void) => void) &
+  ((store: Store<Payload>, none: void) => void) &
+  (<T>(store: Store<T>, reducer: (state: T, payload: Payload) => T) => void),
  trigger(
   query: (state: State) => Payload,
   eventName?: string,

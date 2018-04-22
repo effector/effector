@@ -1,9 +1,19 @@
 //@flow
 
+import invariant from 'invariant'
 import type {Stream} from 'most'
 import {subject, type Subject} from './subject'
 
+import warning from '@effector/warning'
 import {Emission} from '@effector/emission'
+import {
+ actor,
+ event,
+ type Event as ActorEvent,
+ type Atom,
+ type Actor,
+} from '@effector/actor'
+import {createStore} from '@effector/store'
 
 import type {Event, RawAction, WarnMode} from './index.h'
 import {nextPayloadID, type Tag} from './id'
@@ -13,15 +23,67 @@ import {port} from './port'
 import {basicCommon, observable} from './event-common'
 import {createWatcher} from './effect/watch'
 
-export function createEvent<Payload>({
- name,
- kind = '_',
- dispatch,
-}: {
+export type EventParams<Payload> = {
+ domainName: string,
  name: string,
- kind: '_' | 'plain',
- dispatch: <T>(value: T) => T,
-}) {}
+}
+
+export function createEvent<Payload>({name, domainName}: EventParams<Payload>) {
+ const fullName = [name, domainName].filter(str => str.length > 0).join('/')
+ const actorEvent = event(fullName)
+ const subscribers = new Set()
+ const unlockSymbol = {}
+ let isLocked = unlockSymbol
+ //$todo
+ const eventCreator = payload => {
+  invariant(isLocked === unlockSymbol || payload !== isLocked, 'already locked')
+  const lastLocked = isLocked
+  isLocked = payload
+  const result = actorEvent.create(payload)
+  for (const f of subscribers) {
+   f(payload, result)
+  }
+  isLocked = lastLocked
+  return result
+ }
+ eventCreator.getType = () => fullName
+ //$todo
+ eventCreator.toString = () => fullName //TODO that will throw
+ //TODO Implement epic
+ eventCreator.epic = (fn: Function) => {
+  warning('event.epic is not implemented yet')
+  return eventCreator
+ }
+ //TODO Implement map
+ eventCreator.map = (fn: Function) => {
+  const innerStore = createStore()
+  innerStore.on(eventCreator, (_, payload) => fn(payload))
+  return innerStore
+ }
+ //TODO Implement watch
+ eventCreator.watch = (fn: Function) => {
+  subscribers.add(fn)
+  return () => {
+   subscribers.delete(fn)
+  }
+ }
+
+ eventCreator.to = (action: Function, reduce) => {
+  const needReduce = action.kind() === 'store' && typeof reduce === 'function'
+  return eventCreator.watch(data => {
+   if (!needReduce) {
+    action(data)
+   } else {
+    const lastState = action.getState()
+    const reduced = reduce(lastState, data)
+    if (lastState !== reduced) action.setState(reduced)
+   }
+  })
+ }
+ type Thru = (_: typeof eventCreator) => typeof eventCreator
+ eventCreator.thru = (fn: Thru) => fn(eventCreator)
+ return eventCreator
+}
 
 export function EventConstructor<State, Payload>(
  domainName: string,
@@ -40,6 +102,7 @@ export function EventConstructor<State, Payload>(
  },
 ): Event<Payload, State> {
  const {eventID, nextSeq, getType} = basicCommon(domainName, name)
+ const actorEvent = event(getType())
  const emission = new Emission()
  const handlers = new Set()
  if (!config.isPlain)
@@ -112,12 +175,25 @@ export function EventConstructor<State, Payload>(
   )
   triggerEvent.watch((_, state) => {
    const queryResult = query(state)
-   return eventInstance(queryResult)
+   return altEvent(queryResult)
   })
 
   return triggerEvent
  }
- observable(eventInstance, action$)
- events.set(getType(), eventInstance)
- return eventInstance
+
+ const altEvent = payload => actorEvent.create(payload)
+
+ Object.assign(altEvent, eventInstance)
+ //  observable(eventInstance, action$)
+ observable(altEvent, action$)
+ events.set(getType(), altEvent)
+
+ Object.defineProperty(altEvent, 'kind', {
+  writable: true,
+  configurable: true,
+  value() {
+   return 'event'
+  },
+ })
+ return altEvent
 }

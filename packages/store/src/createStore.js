@@ -27,6 +27,7 @@ function storeConstructor(props) {
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
  const nests = getNested(currentState)
+ const defaultState = currentState
  nests
   .add({
    get() {
@@ -160,11 +161,14 @@ function storeConstructor(props) {
    },
   }
  }
- //TODO Implement reset
- function reset() {
-  warning('store.reset is not implemented yet')
+
+ function reset(event) {
+  on(event, () => {
+   setState(defaultState)
+  })
+  return store
  }
- //TODO Implement on
+
  function on(event: any, handler: Function) {
   event.to(store, handler)
   return store
@@ -173,15 +177,31 @@ function storeConstructor(props) {
  function withProps(fn: Function) {
   return props => fn(getState(), props)
  }
- //TODO Implement map
+
  function map(fn: Function) {
-  warning('store.map is not implemented yet')
-  return store
+  const innerStore = (createStore: any)(fn(getState()))
+  const unsub = subscribe(update => {
+   innerStore.setState(fn(update))
+  })
+  return innerStore
  }
- //TODO Implement to
- function to(fn: Function) {
-  warning('store.to is not implemented yet')
-  // return store
+
+ function to(action: Function, reduce) {
+  const needReduce = action.kind() === 'store' && typeof reduce === 'function'
+  return watch(data => {
+   if (!needReduce) {
+    action(data)
+   } else {
+    const lastState = action.getState()
+    const reduced = reduce(lastState, data)
+    if (lastState !== reduced) action.setState(reduced)
+   }
+  })
+ }
+ function watch(fn: Function) {
+  return subscribe(() => {
+   fn(getState())
+  })
  }
  //TODO Implement epic
  function epic(fn: Function) {
@@ -204,6 +224,7 @@ function storeConstructor(props) {
   map,
   on,
   to,
+  watch,
   epic,
   subscribe,
   getState,

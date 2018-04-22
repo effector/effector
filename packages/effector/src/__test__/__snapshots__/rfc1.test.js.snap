@@ -1,0 +1,30 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`event lock 1`] = `"already locked"`;
+
+exports[`rfc1 example implementation 1`] = `
+<span>
+  Clicked: 0 times
+</span>
+`;
+
+exports[`rfc1 example implementation 2`] = `
+<p>
+  Current text: 
+   
+  
+</p>
+`;
+
+exports[`rfc1 example implementation 3`] = `
+Array [
+  <span>
+    Clicked: 0 times
+  </span>,
+  <p>
+    Current text: 
+     
+    
+  </p>,
+]
+`;
