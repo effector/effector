@@ -2,6 +2,7 @@
 
 import invariant from 'invariant'
 import type {ComponentType, Node} from 'react'
+import {from} from 'most'
 import $$observable from 'symbol-observable'
 
 import warning from '@effector/warning'
@@ -62,7 +63,10 @@ function storeConstructor(props) {
     'The reducer has already received the state as an argument. ' +
     'Pass it down from the top reducer instead of reading it from the store.',
   )
-  console.log(currentState, typeof currentState)
+  if (__DEV__) {
+   console.count('__dev__')
+   console.log(currentState, typeof currentState)
+  }
   return currentState
  }
 
@@ -110,8 +114,10 @@ function storeConstructor(props) {
 
   try {
    isDispatching = true
-   console.count('dispatch')
-   console.log(action)
+   if (__DEV__) {
+    console.count('dispatch')
+    console.log(action)
+   }
    currentState = setNested(currentState, action, nests)
   } finally {
    isDispatching = false
@@ -120,7 +126,7 @@ function storeConstructor(props) {
   const listeners = (currentListeners = nextListeners)
   for (let i = 0; i < listeners.length; i++) {
    const listener = listeners[i]
-   listener()
+   listener(currentState, action)
   }
 
   return action
@@ -203,10 +209,14 @@ function storeConstructor(props) {
    fn(getState())
   })
  }
- //TODO Implement epic
+
  function epic(fn: Function) {
-  warning('store.epic is not implemented yet')
-  return store
+  //$off
+  const store$ = from(store).multicast()
+  const mapped$ = fn(store$).multicast()
+  const innerStore = (createStore: any)()
+  mapped$.observe(innerStore.setState)
+  return innerStore
  }
  function setState(value) {
   if (value === currentState) return
@@ -256,7 +266,7 @@ function mergeNested(preloadedState) {
  if (typeof preloadedState !== 'object' || preloadedState === null) return
  for (const [key, value] of Object.entries(preloadedState)) {
   if (duckTypeStore(value)) {
-   console.log(`derived state`, key, value)
+   if (__DEV__) console.log(`derived state`, key, value)
   }
  }
 }

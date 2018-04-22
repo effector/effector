@@ -4,6 +4,7 @@ import type {ComponentType, Node} from 'react'
 import type {Event} from '@effector/effector'
 
 export type Store<T> = {
+ /*::+['@@iterable']: () => Iterable<T>,*/
  subscribe(listner: () => void): () => void,
  //  replaceReducer(
  //   transform: (input: (_: T, p: any) => T) => (_: T, p: any) => T,

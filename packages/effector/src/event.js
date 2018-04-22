@@ -1,7 +1,9 @@
 //@flow
 
 import invariant from 'invariant'
+import observable$$ from 'symbol-observable'
 import type {Stream} from 'most'
+import {from} from 'most'
 import {subject, type Subject} from './subject'
 
 import warning from '@effector/warning'
@@ -46,29 +48,68 @@ export function createEvent<Payload>({name, domainName}: EventParams<Payload>) {
   isLocked = lastLocked
   return result
  }
- eventCreator.getType = () => fullName
+
+ eventCreator.getType = getType
  //$todo
- eventCreator.toString = () => fullName //TODO that will throw
- //TODO Implement epic
- eventCreator.epic = (fn: Function) => {
-  warning('event.epic is not implemented yet')
-  return eventCreator
+ eventCreator.toString = getType //TODO that will throw
+ //$off
+ eventCreator[observable$$] = observable
+ eventCreator.map = map
+ eventCreator.watch = watch
+ eventCreator.to = to
+ eventCreator.epic = epic
+ // eventCreator[Symbol.iterator] = observable
+ function getType() {
+  return fullName
  }
- //TODO Implement map
- eventCreator.map = (fn: Function) => {
+ function observable() {
+  const outerSubscribe = watch
+  return {
+   subscribe(observer) {
+    invariant(
+     typeof observer === 'object' && observer !== null,
+     'Expected the observer to be an object.',
+    )
+
+    function observeState(payload, result) {
+     if (observer.next) {
+      observer.next(payload)
+     }
+    }
+
+    // observeState()
+    const unsubscribe = outerSubscribe(observeState)
+    return {unsubscribe}
+   },
+   //$off
+   [observable$$]() {
+    return this
+   },
+  }
+ }
+ function epic(fn: Function) {
+  //$off
+  const event$ = from(eventCreator).multicast()
+  const mapped$ = fn(event$).multicast()
+  const innerStore = (createStore: any)()
+  mapped$.observe(innerStore.setState)
+  return innerStore
+ }
+
+ function map(fn: Function) {
   const innerStore = createStore()
   innerStore.on(eventCreator, (_, payload) => fn(payload))
   return innerStore
  }
- //TODO Implement watch
- eventCreator.watch = (fn: Function) => {
+
+ function watch(fn: (payload: any, result: any) => any) {
   subscribers.add(fn)
   return () => {
    subscribers.delete(fn)
   }
  }
 
- eventCreator.to = (action: Function, reduce) => {
+ function to(action: Function, reduce) {
   const needReduce = action.kind() === 'store' && typeof reduce === 'function'
   return eventCreator.watch(data => {
    if (!needReduce) {
@@ -81,7 +122,11 @@ export function createEvent<Payload>({name, domainName}: EventParams<Payload>) {
   })
  }
  type Thru = (_: typeof eventCreator) => typeof eventCreator
- eventCreator.thru = (fn: Thru) => fn(eventCreator)
+ function thru(fn: Thru) {
+  return fn(eventCreator)
+ }
+ eventCreator.thru = thru
+
  return eventCreator
 }
 
