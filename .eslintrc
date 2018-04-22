@@ -9,6 +9,7 @@ plugins:
   - babel
   - flowtype
   - jest
+  - react
 settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
