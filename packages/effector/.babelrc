@@ -4,7 +4,8 @@
    "plugins": ["@babel/plugin-transform-modules-commonjs"]
   },
   "test": {
-   "plugins": ["@babel/plugin-transform-modules-commonjs"]
+   "plugins": ["@babel/plugin-transform-modules-commonjs"],
+   "presets": ["@babel/preset-react"]
   }
  },
  "presets": [

@@ -1,10 +1,20 @@
-[include]
-./src
-
 [lints]
 all=warn
 untyped-type-import=error
 unclear-type=off
+
+
+💩 [include]
+💩 ./packages/actor/src/alt/*
+💩 ./packages/atom/src/*
+💩 ./packages/avar/src/*
+💩 ./packages/builder/src/*
+💩 ./packages/effector/src/*
+💩 ./packages/emission/src/*
+💩 ./packages/id/src/*
+💩 ./packages/lazy/src/*
+💩 ./packages/store/src/*
+💩 ./packages/warning/src/*
 
 [options]
 server.max_workers=1
@@ -36,6 +46,7 @@ module.name_mapper='^\(.*\)redux\(.*\)$' -> '<PROJECT_ROOT>/node_modules/\1redux
 module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 
 [ignore]
+<PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/src_alt/*
 <PROJECT_ROOT>/src_unused/*
 <PROJECT_ROOT>/scripts/fastflow/primitives/__test__/__snapshots__/*
@@ -55,7 +66,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 💩 @effector/actor, @effector/atom, @effector/avar, @effector/effector, @effector/emission, @effector/id, @effector/lazy, @effector/warning, react, react-dom
 💩 run again:
 💩 IGNORED="express,react-router,react-router-dom,styled-components" node scripts/flow-ignore
-💩 
+💩
 <PROJECT_ROOT>/node_modules/.bin/*
 <PROJECT_ROOT>/node_modules/.yarn-integrity/*
 <PROJECT_ROOT>/node_modules/JSONStream/*
