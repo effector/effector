@@ -1,7 +1,7 @@
 //@flow
 
 export type {Event, Effect, Domain, Reducer, Store} from './index.h'
-export {createDomain, createRootDomain} from './domain'
+export {createRootDomain as createDomain} from './domain-alt'
 export {effectorMiddleware} from './middleware'
 export {createReducer} from './reducer'
 export {combine, joint} from './combine'

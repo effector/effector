@@ -1,11 +1,11 @@
 //@flow
 
 import invariant from 'invariant'
-import type {ComponentType, Node} from 'react'
+// import type {ComponentType, Node} from 'react'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import warning from '@effector/warning'
+// import warning from '@effector/warning'
 import {INIT, REPLACE} from './actionTypes'
 
 import {applyMiddleware} from './applyMiddleware'
@@ -39,7 +39,8 @@ function storeConstructor(props) {
   if (!isDispatching) return setState(fn(currentState))
   pending.add(fn)
  })
- const defaultState = currentState
+ let defaultState = currentState
+ let needToSaveFirst = defaultState === undefined
  nests
   .add({
    get() {
@@ -54,9 +55,6 @@ function storeConstructor(props) {
     return getState()
    },
    set(state, action) {
-    if (__DEV__) {
-     console.log('add set', currentId, state, action, `~~`)
-    }
     if (!isAction(action)) return state
     if (action.type === `set state ${currentId}`) {
      return action.payload
@@ -77,10 +75,6 @@ function storeConstructor(props) {
     'The reducer has already received the state as an argument. ' +
     'Pass it down from the top reducer instead of reading it from the store.',
   )
-  if (__DEV__) {
-   console.count('__dev__')
-   console.log(currentState, typeof currentState)
-  }
   return currentState
  }
 
@@ -128,15 +122,15 @@ function storeConstructor(props) {
 
   try {
    isDispatching = true
-   if (__DEV__) {
-    console.count('dispatch')
-    console.log(action)
-   }
    currentState = setNested(currentState, action, nests)
    for (const fn of untilEnd(pending)) {
     currentState = fn(currentState)
    }
   } finally {
+   if (needToSaveFirst === true && currentState !== undefined) {
+    needToSaveFirst = false
+    defaultState = currentState
+   }
    isDispatching = false
   }
 
@@ -205,26 +199,8 @@ function storeConstructor(props) {
   const innerStore = (createStore: any)(fn(getState()))
   const unsub = watch(update => {
    const mapped = fn(update)
-   if (__DEV__) {
-    console.error(
-     `map\ncurrentState\n`,
-     currentState,
-     `\ninnerState\n`,
-     innerStore.getState(),
-     `\nmapped\n`,
-     mapped,
-    )
-   }
    innerStore.setState(mapped)
   })
-  if (__DEV__) {
-   console.log(
-    `map\ncurrentState\n`,
-    currentState,
-    `\ninnerState\n`,
-    innerStore.getState(),
-   )
-  }
   return innerStore
  }
 
@@ -253,25 +229,19 @@ function storeConstructor(props) {
   const innerStore = (createStore: any)()
   const subs = mapped$.subscribe({
    next(value) {
-    if (__DEV__) {
-     console.log('subscribed', value)
-    }
     innerStore.setState(value)
    },
    error(err) {
     console.error(err)
    },
    complete() {
-    if (__DEV__) {
-     console.warn('done')
-    }
     subs()
    },
   })
   return innerStore
  }
  function setState(value) {
-  // if (value === currentState) return
+  if (value === currentState) return
   dispatch({type: `set state ${currentId}`, payload: value})
  }
 
@@ -314,15 +284,6 @@ function duckTypeStore(value: mixed): boolean %checks {
  )
 }
 
-function mergeNested(preloadedState) {
- if (typeof preloadedState !== 'object' || preloadedState === null) return
- for (const [key, value] of Object.entries(preloadedState)) {
-  if (duckTypeStore(value)) {
-   if (__DEV__) console.log(`derived state`, key, value)
-  }
- }
-}
-
 export function createStore<T>(
  preloadedStateRaw?: T,
  reducer: Function = _ => _,
@@ -330,7 +291,6 @@ export function createStore<T>(
 ) {
  let enhancer = enhancerRaw
  let preloadedState = preloadedStateRaw
- mergeNested(preloadedState)
  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
   enhancer = preloadedState
   preloadedState = undefined
