@@ -2,6 +2,7 @@
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 
+import {from} from 'most'
 import {
  createEvent,
  createEffect,
@@ -104,29 +105,58 @@ test('rfc1 example implementation', async() => {
  const fetchSavedText: Effect<string, any, any, any> = createEffect(
   'fetch saved text',
  )
+
  fetchSavedText.use(() => Promise.resolve('~~ mock for saved text ~~'))
 
  const counter = createStore(0)
  const text = createStore('')
  const store = createStore({counter, text})
 
+ const fnWait = jest.fn()
+ const waitIncrement = createEffect('wait increment')
+ waitIncrement.use(
+  () =>
+   new Promise(_ => {
+    console.count('wait')
+    const unsub = increment.watch(() => {
+     console.count('wait done')
+     unsub()
+     _()
+    })
+   }),
+ )
+ click.watch(() => waitIncrement())
+ waitIncrement.done.watch(fnWait)
+ //  increment.watch(fnWait)
  counter.reset(resetForm)
  text.reset(resetForm)
 
  inputText
   .map(text => text.trim())
-  .epic(text$ => text$.debounce(500))
+  .epic(text$ => text$.tap(e => console.log(`inputText tap`, e)))
   .to(text)
-
- increment.to(counter, state => state + 1)
-
- click.epic(click$ => click$.throttle(500)).watch(async() => {
+ counter.watch(e => console.log('watch counter', e))
+ counter.on(
+  increment,
+  state =>
+   // throw new Error('to')
+   state + 1,
+ )
+ const fnClick = jest.fn()
+ click.watch(() => console.count(`click__watch fast`))
+ //  click.watch(waitIncrement)
+ const click$ = click.epic(click$ => click$.tap(e => console.log(`tap`, e)))
+ click$.watch(_ => console.count(`click$.watch`))
+ click$.watch(async() => {
+  console.log(`tap -> watch`)
   await new Promise(_ => setTimeout(_, 500))
+  console.log(`tap -> watch -> fnClick & increment`)
+  fnClick()
   increment()
  })
 
  //  fetchSavedText.done.map(({result}) => result).to(inputText)
-
+ store.watch(state => console.warn('new state', state))
  const ClickedTimes = store
   .map(({counter, text}) => 'Clicked: ' + counter + ' times')
   .withProps(state => {
@@ -151,9 +181,29 @@ test('rfc1 example implementation', async() => {
  expect(ClickedTimes).toBeDefined()
  expect(<ClickedTimes />).toBeDefined()
  expect(App).toBeDefined()
+ expect(() => {
+  TestRenderer.create(<ClickedTimes />).toJSON()
+  TestRenderer.create(<CurrentText prefix="Current text: " />).toJSON()
+  TestRenderer.create(<App />).toJSON()
+ }).not.toThrow()
  expect(TestRenderer.create(<ClickedTimes />).toJSON()).toMatchSnapshot()
  expect(
   TestRenderer.create(<CurrentText prefix="Current text: " />).toJSON(),
  ).toMatchSnapshot()
+ expect(TestRenderer.create(<App />).toJSON()).toMatchSnapshot()
+ expect(fnWait).not.toHaveBeenCalled()
+ expect(fnClick).not.toHaveBeenCalled()
+ click()
+ click()
+ console.log(store)
+ expect(fnWait).not.toHaveBeenCalled()
+ await new Promise(_ => setTimeout(_, 2200))
+ expect(fnWait).toHaveBeenCalledTimes(2)
+ expect(fnClick).toHaveBeenCalledTimes(2)
+ expect(counter.getState()).toBe(2)
+ expect(store.getState()).toMatchObject({
+  counter: 2,
+  text: '',
+ })
  expect(TestRenderer.create(<App />).toJSON()).toMatchSnapshot()
 })

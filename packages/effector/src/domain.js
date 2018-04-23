@@ -22,8 +22,7 @@ import {type Tag, toTag} from './id'
 import {PING, createHaltAction, type Config} from './config'
 
 import {safeDispatch} from './port'
-import {EventConstructor} from './event'
-import {EffectConstructor} from './effect'
+import {createEvent, createEffect} from './event'
 
 export function createDomain<State>(
  store: Store<State>,
@@ -194,15 +193,7 @@ function DomainConstructor<State>(
    opts?: $Shape<UserlandConfig>,
   ): Effect<Params, Done, Fail, State> {
    const optsFull = mergeEffectOpts(effectOpts, opts)
-   return EffectConstructor(
-    domainName,
-    dispatch,
-    getState,
-    state$,
-    events,
-    name,
-    optsFull,
-   )
+   return createEffect({domainName, name})
   },
   domain(name: string): Domain<State> {
    return DomainConstructor(
@@ -216,20 +207,27 @@ function DomainConstructor<State>(
    )
   },
   event<Payload>(name: string): Event<Payload, State> {
-   return EventConstructor(domainName, dispatch, getState, state$, events, name)
+   return createEvent({domainName, name})
+   //  return EventConstructor(domainName, dispatch, getState, state$, events, name)
   },
   typeConstant<Payload>(name: string): Event<Payload, State> {
    const action$: Subject<Payload> = subject()
 
    addPlainHandler(name, data => {
+    //TODO Remove payload manual unwrapping
     if (data.meta == null) data.meta = {}
     data.meta.plain = true
-    const resultEvent = result(data.payload)
+    const payloadValue =
+     (data.payload.get && data.payload.get()) || data.payload
+    const resultEvent = result(payloadValue)
     resultEvent.meta.passed = true
     resultEvent.meta.plain = true
-    action$.next(data.payload)
+    console.log(data)
+    console.log(resultEvent)
+    action$.next(payloadValue)
     getConfig().dispatch(resultEvent)
    })
+   return createEvent({domainName, name})
    const result = EventConstructor(
     '',
     dispatch,

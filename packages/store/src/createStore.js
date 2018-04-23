@@ -15,7 +15,14 @@ function isAction(value: mixed): boolean %checks {
   typeof value === 'object' && value !== null && typeof value.type === 'string'
  )
 }
-
+function* untilEnd<T>(set: Set<T>): Iterable<T> {
+ do {
+  for (const e of [...set]) {
+   set.delete(e)
+   yield e
+  }
+ } while (set.size > 0)
+}
 export type Nest = {
  get(): any,
  set(state: any, action: any): any,
@@ -24,10 +31,14 @@ let id = 0
 function storeConstructor(props) {
  const currentId = (++id).toString(36)
  let currentListeners = []
+ const pending = new Set()
  let isDispatching = false
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
- const nests = getNested(currentState)
+ const nests = getNested(currentState, fn => {
+  if (!isDispatching) return setState(fn(currentState))
+  pending.add(fn)
+ })
  const defaultState = currentState
  nests
   .add({
@@ -43,6 +54,9 @@ function storeConstructor(props) {
     return getState()
    },
    set(state, action) {
+    if (__DEV__) {
+     console.log('add set', currentId, state, action, `~~`)
+    }
     if (!isAction(action)) return state
     if (action.type === `set state ${currentId}`) {
      return action.payload
@@ -119,6 +133,9 @@ function storeConstructor(props) {
     console.log(action)
    }
    currentState = setNested(currentState, action, nests)
+   for (const fn of untilEnd(pending)) {
+    currentState = fn(currentState)
+   }
   } finally {
    isDispatching = false
   }
@@ -186,9 +203,28 @@ function storeConstructor(props) {
 
  function map(fn: Function) {
   const innerStore = (createStore: any)(fn(getState()))
-  const unsub = subscribe(update => {
-   innerStore.setState(fn(update))
+  const unsub = watch(update => {
+   const mapped = fn(update)
+   if (__DEV__) {
+    console.error(
+     `map\ncurrentState\n`,
+     currentState,
+     `\ninnerState\n`,
+     innerStore.getState(),
+     `\nmapped\n`,
+     mapped,
+    )
+   }
+   innerStore.setState(mapped)
   })
+  if (__DEV__) {
+   console.log(
+    `map\ncurrentState\n`,
+    currentState,
+    `\ninnerState\n`,
+    innerStore.getState(),
+   )
+  }
   return innerStore
  }
 
@@ -215,11 +251,27 @@ function storeConstructor(props) {
   const store$ = from(store).multicast()
   const mapped$ = fn(store$).multicast()
   const innerStore = (createStore: any)()
-  mapped$.observe(innerStore.setState)
+  const subs = mapped$.subscribe({
+   next(value) {
+    if (__DEV__) {
+     console.log('subscribed', value)
+    }
+    innerStore.setState(value)
+   },
+   error(err) {
+    console.error(err)
+   },
+   complete() {
+    if (__DEV__) {
+     console.warn('done')
+    }
+    subs()
+   },
+  })
   return innerStore
  }
  function setState(value) {
-  if (value === currentState) return
+  // if (value === currentState) return
   dispatch({type: `set state ${currentId}`, payload: value})
  }
 
@@ -322,12 +374,19 @@ function nest(value: any, key): Nest {
   },
  }
 }
-function getNested(initialState) {
+function getNested(initialState, setState) {
  const nests: Set<Nest> = new Set()
  if (typeof initialState !== 'object' || initialState === null) return nests
  for (const [key, value] of Object.entries({...initialState})) {
   if (duckTypeStore(value)) {
-   nests.add(nest(value, key))
+   const n = nest(value, key)
+   nests.add(n)
+   value.watch(e => {
+    setState(state => {
+     state[key] = e
+     return state
+    })
+   })
    //$todo
    initialState[key] = value.getState()
   }

@@ -28,3 +28,16 @@ Array [
   </p>,
 ]
 `;
+
+exports[`rfc1 example implementation 4`] = `
+Array [
+  <span>
+    Clicked: 2 times
+  </span>,
+  <p>
+    Current text: 
+     
+    
+  </p>,
+]
+`;
