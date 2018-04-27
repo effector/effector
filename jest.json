@@ -8,6 +8,7 @@
  "projects": [
   "<rootDir>/packages/effector/jest.json",
   "<rootDir>/packages/store/jest.json",
-  "<rootDir>/packages/derive/jest.json"
+  "<rootDir>/packages/derive/jest.json",
+  "<rootDir>/packages/react/jest.json"
  ]
 }

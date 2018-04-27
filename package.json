@@ -9,7 +9,8 @@
   "packages/derive",
   "packages/builder",
   "packages/warning",
-  "packages/store"
+  "packages/store",
+  "packages/react"
  ],
  "scripts": {
   "test": "jest --config=jest.json",

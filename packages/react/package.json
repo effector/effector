@@ -1,0 +1,17 @@
+{
+ "name": "@effector/react",
+ "version": "0.0.1",
+ "main": "src/index.js",
+ "license": "MIT",
+ "scripts": {
+  "test": "jest --config=jest.json",
+  "watch": "jest --config=jest.json --watch"
+ },
+ "dependencies": {
+  "@effector/effector": "^0.0.1",
+  "invariant": "^2.2.4",
+  "react": "^16.3.2"
+ },
+ "devDependencies": {},
+ "files": ["src"]
+}
