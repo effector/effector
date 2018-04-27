@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@babel/cli@^7.0.0-beta.44":
+"@babel/cli@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.0.0-beta.46.tgz#4fcede56d20659bf063b2c30c444267aa23f1bd3"
   dependencies:
@@ -29,7 +29,7 @@
   dependencies:
     "@babel/highlight" "7.0.0-beta.46"
 
-"@babel/core@^7.0.0-beta.44":
+"@babel/core@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.0.0-beta.46.tgz#dbe2189bcdef9a2c84becb1ec624878d31a95689"
   dependencies:
@@ -265,7 +265,7 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@babel/node@^7.0.0-beta.44":
+"@babel/node@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/node/-/node-7.0.0-beta.46.tgz#88ec3ca630b93829fa9422af4bd8ba964c2ddd76"
   dependencies:
@@ -277,7 +277,7 @@
     output-file-sync "^2.0.0"
     v8flags "^3.0.0"
 
-"@babel/plugin-proposal-async-generator-functions@7.0.0-beta.46", "@babel/plugin-proposal-async-generator-functions@^7.0.0-beta.44":
+"@babel/plugin-proposal-async-generator-functions@7.0.0-beta.46", "@babel/plugin-proposal-async-generator-functions@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.0.0-beta.46.tgz#395330d1d5d7fb76c33b7bd99750adeafc37c68c"
   dependencies:
@@ -285,7 +285,7 @@
     "@babel/helper-remap-async-to-generator" "7.0.0-beta.46"
     "@babel/plugin-syntax-async-generators" "7.0.0-beta.46"
 
-"@babel/plugin-proposal-class-properties@^7.0.0-beta.44":
+"@babel/plugin-proposal-class-properties@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0-beta.46.tgz#1c505f8df3a312beb41c88d74209d5b6d537fa3d"
   dependencies:
@@ -294,14 +294,14 @@
     "@babel/helper-replace-supers" "7.0.0-beta.46"
     "@babel/plugin-syntax-class-properties" "7.0.0-beta.46"
 
-"@babel/plugin-proposal-decorators@^7.0.0-beta.44":
+"@babel/plugin-proposal-decorators@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-decorators/-/plugin-proposal-decorators-7.0.0-beta.46.tgz#48c89fc48dc461db03f1260675c73f98afeeddcc"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
     "@babel/plugin-syntax-decorators" "7.0.0-beta.46"
 
-"@babel/plugin-proposal-object-rest-spread@7.0.0-beta.46", "@babel/plugin-proposal-object-rest-spread@^7.0.0-beta.44":
+"@babel/plugin-proposal-object-rest-spread@7.0.0-beta.46", "@babel/plugin-proposal-object-rest-spread@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.0.0-beta.46.tgz#fb3979488a52c1246cdced4a438ace0f47ac985b"
   dependencies:
@@ -385,7 +385,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
 
-"@babel/plugin-transform-block-scoping@7.0.0-beta.46", "@babel/plugin-transform-block-scoping@^7.0.0-beta.44":
+"@babel/plugin-transform-block-scoping@7.0.0-beta.46", "@babel/plugin-transform-block-scoping@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-block-scoping/-/plugin-transform-block-scoping-7.0.0-beta.46.tgz#da42dd17fbed675c72233988dbad9ace5ab9e4a7"
   dependencies:
@@ -438,14 +438,14 @@
     "@babel/helper-builder-binary-assignment-operator-visitor" "7.0.0-beta.46"
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
 
-"@babel/plugin-transform-flow-strip-types@7.0.0-beta.46", "@babel/plugin-transform-flow-strip-types@^7.0.0-beta.44":
+"@babel/plugin-transform-flow-strip-types@7.0.0-beta.46", "@babel/plugin-transform-flow-strip-types@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-strip-types/-/plugin-transform-flow-strip-types-7.0.0-beta.46.tgz#3c26def3c4027d5c0c3f98c3b6f161c715ab7fff"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
     "@babel/plugin-syntax-flow" "7.0.0-beta.46"
 
-"@babel/plugin-transform-for-of@7.0.0-beta.46", "@babel/plugin-transform-for-of@^7.0.0-beta.44":
+"@babel/plugin-transform-for-of@7.0.0-beta.46", "@babel/plugin-transform-for-of@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-for-of/-/plugin-transform-for-of-7.0.0-beta.46.tgz#ce643487384c96d1bd1f57a112b2ccba6c34da5c"
   dependencies:
@@ -471,7 +471,7 @@
     "@babel/helper-module-transforms" "7.0.0-beta.46"
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
 
-"@babel/plugin-transform-modules-commonjs@7.0.0-beta.46", "@babel/plugin-transform-modules-commonjs@^7.0.0-beta.44":
+"@babel/plugin-transform-modules-commonjs@7.0.0-beta.46", "@babel/plugin-transform-modules-commonjs@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-commonjs/-/plugin-transform-modules-commonjs-7.0.0-beta.46.tgz#9dcb42e1282b281c1a2075f98b4a850533acfd9c"
   dependencies:
@@ -595,7 +595,7 @@
     core-js "^2.5.3"
     regenerator-runtime "^0.11.1"
 
-"@babel/preset-env@^7.0.0-beta.44":
+"@babel/preset-env@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.0.0-beta.46.tgz#ae1b731ef71c2bb50c47e0cda4b6359ea2c61f09"
   dependencies:
@@ -639,14 +639,14 @@
     invariant "^2.2.2"
     semver "^5.3.0"
 
-"@babel/preset-flow@^7.0.0-beta.44":
+"@babel/preset-flow@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/preset-flow/-/preset-flow-7.0.0-beta.46.tgz#1491a70eb254c5bf3221af42edf04bcf0df95435"
   dependencies:
     "@babel/helper-plugin-utils" "7.0.0-beta.46"
     "@babel/plugin-transform-flow-strip-types" "7.0.0-beta.46"
 
-"@babel/preset-react@^7.0.0-beta.44":
+"@babel/preset-react@^7.0.0-beta.46":
   version "7.0.0-beta.46"
   resolved "https://registry.yarnpkg.com/@babel/preset-react/-/preset-react-7.0.0-beta.46.tgz#f2c7f05ce0c9f1bf25516f1acaf00ca0dfc1bfa5"
   dependencies:
@@ -1062,8 +1062,8 @@ babel-core@7.0.0-bridge.0:
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-7.0.0-bridge.0.tgz#95a492ddd90f9b4e9a4a1da14eb335b87b634ece"
 
 babel-core@^6.0.0, babel-core@^6.26.0:
-  version "6.26.2"
-  resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.26.2.tgz#b67a120521dcd6baf1a2ecceeceb595e223da06c"
+  version "6.26.3"
+  resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.26.3.tgz#b2e2f09e342d0f0c88e2f02e067794125e75c207"
   dependencies:
     babel-code-frame "^6.26.0"
     babel-generator "^6.26.0"
@@ -2652,7 +2652,7 @@ fbjs@^0.8.16:
     setimmediate "^1.0.5"
     ua-parser-js "^0.7.9"
 
-fclone@1.0.11, fclone@^1:
+fclone@1.0.11:
   version "1.0.11"
   resolved "https://registry.yarnpkg.com/fclone/-/fclone-1.0.11.tgz#10e85da38bfea7fc599341c296ee1d77266ee640"
 
@@ -3018,8 +3018,8 @@ glob@~7.0.6:
     path-is-absolute "^1.0.0"
 
 globals@^11.0.1, globals@^11.1.0:
-  version "11.4.0"
-  resolved "https://registry.yarnpkg.com/globals/-/globals-11.4.0.tgz#b85c793349561c16076a3c13549238a27945f1bc"
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-11.5.0.tgz#6bc840de6771173b191f13d3a9c94d441ee92642"
 
 globals@^9.18.0:
   version "9.18.0"
@@ -5275,12 +5275,11 @@ pluralize@^7.0.0:
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-7.0.0.tgz#298b89df8b93b0221dbf421ad2b1b1ea23fc6777"
 
-pm2-axon-rpc@0.5.0:
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/pm2-axon-rpc/-/pm2-axon-rpc-0.5.0.tgz#ad08d6a27f580d5c7be4d7bf9dddff398f868994"
+pm2-axon-rpc@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/pm2-axon-rpc/-/pm2-axon-rpc-0.5.1.tgz#ad3c43c43811c71f13e5eee2821194d03ceb03fe"
   dependencies:
     debug "^3.0"
-    fclone "^1"
 
 pm2-axon@3.1.0:
   version "3.1.0"
@@ -5305,8 +5304,8 @@ pm2-multimeter@^0.1.2:
     charm "~0.1.1"
 
 pm2@^2.10.2:
-  version "2.10.2"
-  resolved "https://registry.yarnpkg.com/pm2/-/pm2-2.10.2.tgz#73dae0691712a1b335ede30a3a0464eda11faf3c"
+  version "2.10.3"
+  resolved "https://registry.yarnpkg.com/pm2/-/pm2-2.10.3.tgz#0f33834a09a0610db65a3a0e10a281c123567732"
   dependencies:
     async "^2.5"
     blessed "^0.1.81"
@@ -5324,7 +5323,7 @@ pm2@^2.10.2:
     nssocket "0.6.0"
     pidusage "^1.2.0"
     pm2-axon "3.1.0"
-    pm2-axon-rpc "0.5.0"
+    pm2-axon-rpc "^0.5.1"
     pm2-deploy "^0.3.9"
     pm2-multimeter "^0.1.2"
     pmx "^1.6"
@@ -6440,7 +6439,7 @@ symbol-observable@^0.2.2:
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-0.2.4.tgz#95a83db26186d6af7e7a18dbd9760a2f86d08f40"
 
-symbol-observable@^1.0.2, symbol-observable@^1.0.3, symbol-observable@^1.2.0:
+symbol-observable@^1.0.2, symbol-observable@^1.0.3:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
 
