@@ -1,0 +1,73 @@
+// @flow
+
+export type Readable<T> = {
+ get(): T,
+}
+
+declare export class Derivable<T> {
+ derive<E>(f: (value: T) => E): Derivable<E>;
+ maybeDerive<E>(f: ($NonMaybeType<T>) => E): Derivable<?E>;
+ orDefault<E>(value: $NonMaybeType<E>): Derivable<$NonMaybeType<T> | E>;
+ react(f: (value: T) => void, options?: Lifecycle<T>): void;
+ maybeReact(f: (value: $NonMaybeType<T>) => void, options?: Lifecycle<T>): void;
+ get(): T;
+ is(other: mixed): Derivable<boolean>;
+ withEquality(equals: (a: T, b: T) => *): this;
+}
+
+declare export class Atom<T> extends Derivable<T> {
+ derive<E>(f: (value: T) => E): Atom<E>;
+ set(value: T): void;
+
+ update(f: (value: T) => T): void;
+ update<A>(f: (value: T, A) => T, A): void;
+ update<A, B>(f: (value: T, A, B) => T, A, B): void;
+ update<A, B, C>(f: (value: T, A, B, C) => T, A, B, C): void;
+ update<A, B, C, D>(f: (value: T, A, B, C, D) => T, A, B, C, D): void;
+}
+
+declare export class Lens<T> extends Atom<T> {}
+
+export type LensDescriptor<T> = {
+ get(): T,
+
+ set(value: T): void,
+}
+
+export type Lifecycle<T> = {
+ +from?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+
+ +when?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+
+ +until?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+
+ +skipFirst?: boolean,
+
+ +once?: boolean,
+}
+
+declare export function atom<T>(value: T): Atom<T>
+
+declare export function derive<T>(f: () => T): Derivable<T>
+
+declare export function lens<T>(descriptor: LensDescriptor<T>): Lens<T>
+
+declare export function transact(f: () => void): void
+
+declare export function transaction<F: Function>(f: F): F
+
+declare export function atomically(f: () => void): void
+
+declare export function atomic<F: Function>(f: F): F
+
+declare export function struct(obj: mixed): Derivable<mixed>
+
+declare export function unpack<T>(obj: Derivable<T> | T): T
+
+declare export function isAtom(obj: mixed): boolean
+
+declare export function isDerivable(obj: mixed): boolean
+
+declare export function isDerivation(obj: mixed): boolean
+
+declare export function isLens(obj: mixed): boolean

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.16.0
+
+* Removed most-subject dependency
+* New api
+
+## 0.15.0-rc.2
+
+* Add AVar: low-level interface for asynchronous variables
+* Clean up builds before publishing
+* Add types dir into npm build
+
 ## 0.14.0
 
 * Add independent `createStore` method

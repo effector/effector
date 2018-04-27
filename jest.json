@@ -1,15 +1,43 @@
 {
- "collectCoverage": true,
- "coverageDirectory": "coverage",
- "coverageReporters": ["lcov", "html"],
- "globals": {
-  "__DEV__": true
- },
  "projects": [
-  "<rootDir>/packages/atom/jest.json",
-  "<rootDir>/packages/effector/jest.json",
-  "<rootDir>/packages/emission/jest.json",
-  "<rootDir>/packages/lazy/jest.json",
-  "<rootDir>/packages/store/jest.json"
+  {
+   "displayName": "effector",
+   "testMatch": ["<rootDir>/src/effector/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/effector/"]
+  },
+  {
+   "displayName": "react",
+   "testMatch": ["<rootDir>/src/react/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/react/"]
+  },
+  {
+   "displayName": "derive",
+   "testMatch": ["<rootDir>/src/derive/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/derive/"]
+  }
  ]
 }
