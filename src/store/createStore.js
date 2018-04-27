@@ -260,7 +260,6 @@ function storeConstructor(props) {
 }
 
 export function epicStore(store, fn: Function) {
- //$off
  const store$ = from(store).multicast()
  const mapped$ = fn(store$).multicast()
  const innerStore = (createStore: any)()

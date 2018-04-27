@@ -144,20 +144,41 @@ test('event.to', () => {
  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
 })
 
-test('store.on', () => {
- const counter = createStore(0)
- const text = createStore('')
- const store = createStore({counter, text, foo: 'bar'})
+describe('store.on', () => {
+ test('store.on(event)', () => {
+  const counter = createStore(0)
+  const text = createStore('')
+  const store = createStore({counter, text, foo: 'bar'})
 
- const e1 = createEvent('e1')
- store.on(e1, (state, payload) => ({
-  ...state,
-  foo: payload,
- }))
+  const e1 = createEvent('e1')
+  store.on(e1, (state, payload) => ({
+   ...state,
+   foo: payload,
+  }))
 
- expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
- e1('baz')
- expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
+  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
+  e1('baz')
+  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
+ })
+ test('store.on(effect)', async() => {
+  const counter = createStore(0)
+  const text = createStore('')
+  const store = createStore({counter, text, foo: 0})
+  const fn = jest.fn()
+  const e1 = createEffect('e1')
+  store.on(e1.done, (state, payload) => {
+   fn(state, payload)
+   return {
+    ...state,
+    foo: payload,
+   }
+  })
+  e1.use(n => new Promise(_ => setTimeout(_, n, n)))
+
+  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
+  await e1(500).done()
+  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
+ })
 })
 
 test('event.watch', () => {
@@ -252,7 +273,7 @@ test('rfc1 example implementation', async() => {
  //  fetchSavedText.done.map(({result}) => result).to(inputText)
  store.watch(state => console.warn('new state', state))
  const ClickedTimes = store
-  .map(({counter, text}) => 'Clicked: ' + counter + ' times')
+  .map(({counter, text}) => `Clicked: ${counter} times`)
   .withProps(state => {
    console.log(state)
    expect(state).not.toBe(text)
