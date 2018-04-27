@@ -1,3 +1,0 @@
-//@flow
-
-declare export var compose: $Compose
