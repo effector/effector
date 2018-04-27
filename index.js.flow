@@ -19,6 +19,7 @@ declare export class Event<E> {
  map<T>(fn: (_: E) => T): Event<T>;
  subscribe(subscriber: Subscriber<E>): Subscription;
  to(store: Store<E>, _: void): void;
+ to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void;
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
@@ -37,6 +38,7 @@ declare export class Effect<Params, Done, Fail = Error> {
  //map<T>(fn: (_: E) => T): Event<T>,
  subscribe(subscriber: Subscriber<Params>): Subscription;
  to(store: Store<Params>, _: void): void;
+ to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void;
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
 }
 
@@ -69,6 +71,13 @@ declare export function createEffect<Params, Done, Fail>(
  effectName: string,
 ): Effect<Params, Done, Fail>
 
-declare export function createStore<State>(defaultState: State): Store<State>
+type MapStoreFields = (<O: {[string]: any}>(
+ _: O,
+) => $ObjMap<O, <S>(field: Store<S> | S) => S>) &
+ (<O>(_: O) => O)
+
+declare export function createStore<State>(
+ defaultState: State,
+): Store<$Call<MapStoreFields, State>>
 
 declare export function createDomain(domainName?: string): Domain

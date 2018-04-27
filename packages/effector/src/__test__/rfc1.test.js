@@ -133,7 +133,7 @@ test('event.to', () => {
  const text = createStore('')
  const store = createStore({counter, text, foo: 'bar'})
 
- const e1: Event<string, any> = createEvent('e1')
+ const e1: Event<string> = createEvent('e1')
  e1.to(store, (state, payload) => ({
   ...state,
   foo: payload,

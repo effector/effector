@@ -18,6 +18,7 @@ export class Event<E> {
  map<T>(fn: (_: E) => T): Event<T>;
  subscribe(subscriber: Subscriber<E>): Subscription;
  to(store: Store<E>, _: void): void;
+ to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void;
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
@@ -29,13 +30,14 @@ export class Effect<Params, Done, Fail = Error> {
   fail(): Promise<Fail>,
   promise(): Promise<Done>,
  };
- /*::+*/ done: Event<Done>;
- /*::+*/ fail: Event<Fail>;
+ done: Event<Done>;
+ fail: Event<Fail>;
  use(asyncFunction: (params: Params) => Promise<Done>): void;
  watch(watcher: (payload: Params) => any): void;
  //map<T>(fn: (_: E) => T): Event<T>,
  subscribe(subscriber: Subscriber<Params>): Subscription;
  to(store: Store<Params>, _: void): void;
+ to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void;
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
 }
 

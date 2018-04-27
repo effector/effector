@@ -1,15 +1,6 @@
 //@flow
 
-export type {
- Event,
- Effect,
- Domain,
- Reducer,
- Store,
- DomainAuto,
- EffectAuto,
- EventAuto,
-} from '@effector/effector'
+export type {Event, Effect, Domain, Store} from '@effector/effector'
 
 export {
  createDomain,
