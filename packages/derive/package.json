@@ -1,17 +1,15 @@
 {
- "name": "@effector/effector",
+ "name": "@effector/derive",
  "version": "0.0.1",
  "main": "src/index.js",
  "license": "MIT",
  "scripts": {
   "test": "jest --config=jest.json",
-  "watch": "jest --config=jest.json -- --watch"
+  "watch": "jest --config=jest.json --watch"
  },
  "dependencies": {
-  "@effector/derive": "^0.0.1",
-  "@effector/store": "^0.0.1",
-  "@effector/warning": "^0.0.1",
-  "invariant": "^2.2.4"
+  "invariant": "^2.2.4",
+  "@effector/warning": "^0.0.1"
  },
  "devDependencies": {
   "@babel/core": "^7.0.0-beta.44",

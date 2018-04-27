@@ -5,19 +5,13 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-// import warning from '@effector/warning'
 import {INIT, REPLACE} from './actionTypes'
 
 import {applyMiddleware} from './applyMiddleware'
 
-function isAction(value: mixed): boolean %checks {
- return (
-  typeof value === 'object' && value !== null && typeof value.type === 'string'
- )
-}
 function* untilEnd<T>(set: Set<T>): Iterable<T> {
  do {
-  for (const e of [...set]) {
+  for (const e of set) {
    set.delete(e)
    yield e
   }
@@ -41,27 +35,26 @@ function storeConstructor(props) {
  })
  let defaultState = currentState
  let needToSaveFirst = defaultState === undefined
- nests
-  .add({
-   get() {
-    return getState()
-   },
-   set(state, action) {
-    return currentReducer(state, action)
-   },
-  })
-  .add({
-   get() {
-    return getState()
-   },
-   set(state, action) {
-    if (!isAction(action)) return state
-    if (action.type === `set state ${currentId}`) {
-     return action.payload
-    }
-    return state
-   },
-  })
+ nests.add({
+  get() {
+   return getState()
+  },
+  set(state, action) {
+   return currentReducer(state, action)
+  },
+ })
+ // .add({
+ //  get() {
+ //   return getState()
+ //  },
+ //  set(state, action) {
+ //   if (!isAction(action)) return state
+ //   if (action.type === `set state ${currentId}`) {
+ //    return action.payload
+ //   }
+ //   return state
+ //  },
+ // })
  function ensureCanMutateNextListeners() {
   if (nextListeners === currentListeners) {
    nextListeners = currentListeners.slice()
@@ -120,8 +113,8 @@ function storeConstructor(props) {
 
   invariant(!isDispatching, 'Reducers may not dispatch actions.')
 
+  isDispatching = true
   try {
-   isDispatching = true
    currentState = setNested(currentState, action, nests)
    for (const fn of untilEnd(pending)) {
     currentState = fn(currentState)
@@ -223,25 +216,15 @@ function storeConstructor(props) {
  }
 
  function epic(fn: Function) {
-  //$off
-  const store$ = from(store).multicast()
-  const mapped$ = fn(store$).multicast()
-  const innerStore = (createStore: any)()
-  const subs = mapped$.subscribe({
-   next(value) {
-    innerStore.setState(value)
-   },
-   error(err) {
-    console.error(err)
-   },
-   complete() {
-    subs()
-   },
-  })
-  return innerStore
+  return epicStore(store, fn)
  }
- function setState(value) {
-  if (value === currentState) return
+ function stateSetter(_, payload) {
+  return payload
+ }
+ function setState(value, reduce?: Function) {
+  const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
+  currentState = currentReducer(currentState, value)
+  // if (value === currentState) return
   dispatch({type: `set state ${currentId}`, payload: value})
  }
 
@@ -276,11 +259,30 @@ function storeConstructor(props) {
  return store
 }
 
-function duckTypeStore(value: mixed): boolean %checks {
+export function epicStore(store, fn: Function) {
+ //$off
+ const store$ = from(store).multicast()
+ const mapped$ = fn(store$).multicast()
+ const innerStore = (createStore: any)()
+ const subs = mapped$.subscribe({
+  next(value) {
+   innerStore.setState(value)
+  },
+  error(err) {
+   if (__DEV__) console.error(err)
+  },
+  complete() {
+   subs()
+  },
+ })
+ return innerStore
+}
+
+function hasKind(value: mixed): boolean %checks {
  return (
   typeof value === 'object'
   && value !== null
-  && typeof value.getState === 'function'
+  && typeof value.kind === 'function'
  )
 }
 
@@ -338,14 +340,14 @@ function getNested(initialState, setState) {
  const nests: Set<Nest> = new Set()
  if (typeof initialState !== 'object' || initialState === null) return nests
  for (const [key, value] of Object.entries({...initialState})) {
-  if (duckTypeStore(value)) {
+  if (hasKind(value) && value.kind() === 'store') {
    const n = nest(value, key)
    nests.add(n)
    value.watch(e => {
-    setState(state => {
-     state[key] = e
-     return state
-    })
+    setState(state => ({
+     ...state,
+     [key]: e,
+    }))
    })
    //$todo
    initialState[key] = value.getState()

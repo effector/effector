@@ -1,4 +1,0 @@
-//@flow
-
-export {AVar, createAVar} from '../../../types/avar'
-export type {Status, Cancel, Delegate} from '../../../types/avar'

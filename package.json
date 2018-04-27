@@ -1,20 +1,15 @@
 {
  "name": "effector-dev",
- "version": "0.15.0-rc.2",
+ "version": "0.16.0-rc.2",
  "description": "Reactive state manager",
  "typings": "index.d.ts",
  "private": true,
  "workspaces": [
-  "packages/avar",
-  "packages/emission",
   "packages/effector",
-  "packages/lazy",
-  "packages/atom",
+  "packages/derive",
   "packages/builder",
-  "packages/store",
   "packages/warning",
-  "packages/actor",
-  "packages/id"
+  "packages/store"
  ],
  "scripts": {
   "test": "jest --config=jest.json",
@@ -64,12 +59,12 @@
   "fluture": "^8.0.2",
   "fs-extra": "^5.0.0",
   "idx.macro": "^2.0.1",
+  "invariant": "^2.2.4",
   "immutable": "^4.0.0-rc.9",
   "jest": "^22.4.3",
   "js-yaml": "^3.11.0",
   "lerna": "^2.10.1",
   "most": "^1.7.3",
-  "most-subject": "5.3.0",
   "penv.macro": "^0.2.0",
   "pm2": "^2.10.2",
   "prettier": "^1.12.0",

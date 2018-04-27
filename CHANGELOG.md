@@ -1,6 +1,11 @@
 # Changelog
 
-## 0.15.0
+## 0.16.0
+
+* Removed most-subject dependency
+* New api
+
+## 0.15.0-rc.2
 
 * Add AVar: low-level interface for asynchronous variables
 * Clean up builds before publishing

@@ -2,352 +2,73 @@
 
 import type {Stream} from 'most'
 
-export type {Eff, Cancel, Delegate, Status} from './types/avar'
-export {AVar, createAVar} from './types/avar'
-
-import type {Status} from './types/avar'
-
-type Tag = string
-type ID = number
-
-export type WarnMode = 'off' | 'warn' | 'throw'
-export type EventConfig = {
- unused?: WarnMode,
- watchFailCheck?: WarnMode,
-}
-
-export type Meta = {
- index: ID,
- eventID: ID,
- seq: ID,
- passed: boolean,
- plain?: boolean,
-}
-
-export type RawAction<P> = {
- type: Tag,
- payload: P,
- meta: Meta,
-}
-
-export type Subscription = {
- unsubscribe(): void,
-}
-
 export type Subscriber<A> = {
  next(value: A): void,
  // error(err: Error): void,
- complete(): void,
+ //complete(): void,
 }
 
-export type Middleware<S> = (api: {
- getState: () => S,
- dispatch: (action: any) => any,
-}) => (next: any) => any
-
-export type Store<T> = {
- subscribe(listner: () => void): () => void,
- //  replaceReducer(
- //   transform: (input: (_: T, p: any) => T) => (_: T, p: any) => T,
- //  ): void,
- replaceReducer(nextReducer: (_: T, p: any) => T): void,
- getState(): T,
- dispatch: (action: any) => any,
+export type Subscription = {
+ (): void,
+ unsubscribe(): void,
 }
 
-export type Reducer<S> = {
- (state: S, action: RawAction<any>): S,
- get(): S,
- watch(value: (_: S) => any): () => void,
- map<B>(fn: (_: S) => B): Reducer<B>,
- options(opts: {fallback: boolean}): Reducer<S>,
- has(event: Event<any, any>): boolean,
- on<P, A /*: Event<P, any>*/>(
-  event: A | A[],
-  handler: (state: S, payload: P, meta: Meta) => S,
- ): Reducer<S>,
- off<A /*: Event<any, any>*/>(event: A): Reducer<S>,
- reset<A /*: Event<any, any>*/>(event: A | A[]): Reducer<S>,
- subscribe(subscriber: Subscriber<S>): Subscription,
+declare export class Event<E> {
+ (payload: E): E;
+ watch(watcher: (payload: E) => any): void;
+ map<T>(fn: (_: E) => T): Event<T>;
+ subscribe(subscriber: Subscriber<E>): Subscription;
+ to(store: Store<E>, _: void): void;
+ epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
-export type Domain<State = void> = {
- effect<Params, Done, Fail>(
-  name: string,
-  options?: EventConfig,
- ): Effect<Params, Done, Fail, State>,
- event<Payload>(name: string): Event<Payload, State>,
- domain(name: string): Domain<State>,
- typeConstant<Payload>(name: string): Event<Payload, State>,
- register(store: Store<State>): void,
- port<R>(events$: Stream<R>): Promise<void>,
-}
-
-export type Event<Payload, State> = {
+declare export class Effect<Params, Done, Fail = Error> {
  (
-  params: Payload,
+  payload: Params,
  ): {
-  send(): Promise<Payload>,
-  raw(): RawAction<Payload>,
- },
- getType(): Tag,
- watch<R>(fn: (params: Payload, state: State) => R): void,
- epic<R>(
-  handler: (data$: Stream<Payload>, state$: Stream<State>) => Stream<R>,
- ): Stream<R>,
- trigger(
-  query: (state: State) => Payload,
-  eventName?: string,
- ): Event<void, State>,
- subscribe(subscriber: Subscriber<Payload>): Subscription,
+  done(): Promise<Done>,
+  fail(): Promise<Fail>,
+  promise(): Promise<Done>,
+ };
+ /*::+*/ done: Event<Done>;
+ /*::+*/ fail: Event<Fail>;
+ use(asyncFunction: (params: Params) => Promise<Done>): void;
+ watch(watcher: (payload: Params) => any): void;
+ //map<T>(fn: (_: E) => T): Event<T>,
+ subscribe(subscriber: Subscriber<Params>): Subscription;
+ to(store: Store<Params>, _: void): void;
+ epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
 }
 
-export type Effect<Params, Done, Fail, State> = {
- (
-  params: Params,
- ): {
-  raw(): RawAction<Params>,
-  send(dispatchHook?: <T>(value: T) => T): Promise<Params>,
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<{params: Params, result: Done}>,
- },
- getType(): Tag,
- watch<R>(fn: (params: Params, state: State) => R): void,
- epic<R>(
-  handler: (data$: Stream<Params>, state$: Stream<State>) => Stream<R>,
- ): Stream<R>,
- use(thunk: (params: Params) => Promise<Done>): void,
- trigger(
-  query: (state: State) => Params,
-  eventName?: string,
- ): Event<void, State>,
- done: Event<{params: Params, result: Done}, State>,
- fail: Event<{params: Params, error: Fail}, State>,
- subscribe(subscriber: Subscriber<Params>): Subscription,
-}
-
-declare export class EventNew<T> {
- raw(): {type: string, payload: T};
-}
-
-declare export class EventFabric<T> {
- create(payload: T): EventNew<T>;
- //  create(payload: T): Event<T> {
- //   const opaqueEvent = super.create(payload)
- //   invariant(opaqueEvent instanceof Event, 'wrong subclass')
- //   return opaqueEvent
- //  }
- is(event: EventNew<any>): boolean;
-}
-
-declare export function event<E>(name: string): EventFabric<E>
-
-declare export class ActorVar<T> {
+declare export class Store<State> {
+ reset(event: Event<any> | Effect<any, any, any>): this;
+ dispatch(action: any): any;
+ getState(): State;
+ withProps<Props, R>(
+  fn: (state: State, props: Props) => R,
+ ): (props: Props) => R;
+ map<T>(fn: (_: State) => T): Store<T>;
  on<E>(
-  event: EventFabric<E>,
-  reducer: (
-   state: T,
-   action: {type: string, payload: E},
-   setState: (T) => void,
-  ) => any,
+  event: Event<E> | Effect<E, any, any>,
+  handler: (state: State, payload: E) => State,
  ): this;
- status(): Status;
- take(): Promise<T>;
- read(): Promise<T>;
- put(value: T): Promise<T>;
- readSync(): T | null;
- takeSync(): T | null;
- putSync(value: T): boolean;
+ subscribe(listner: any): Subscription;
+ watch(watcher: (payload: State) => any): void;
 }
 
-declare export function createActor<T>(value?: T): ActorVar<T>
+declare export class Domain {
+ event<Payload>(name: string): Event<Payload>;
+ effect<Params, Done, Fail>(name: string): Effect<Params, Done, Fail>;
+ domain(name: string): Domain;
+ store<State>(defaultState: State): Store<State>;
+}
 
-export type DomainAuto = Domain<any>
-export type EventAuto<Payload> = Event<Payload, any>
-export type EffectAuto<Params, Done, Fail = Error> = Effect<
- Params,
- Done,
- Fail,
- any,
->
-
-declare export function createStore<T>(
- reducer: (store: T, payload: any) => T,
- enhancerRaw: Function | $ReadOnlyArray<Function>,
- none: void,
-): Store<T>
-declare export function createStore<T>(
- reducer: (store: T, payload: any) => T,
- preloadedStateRaw?: T,
- enhancerRaw: Function | $ReadOnlyArray<Function>,
-): Store<T>
-
-declare export function createReducer<S>(defaultState: S): Reducer<S>
-
-declare export function createEvent<Payload>(name: string): EventAuto<Payload>
+declare export function createEvent<E>(eventName: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
- name: string,
-): EffectAuto<Params, Done, Fail>
+ effectName: string,
+): Effect<Params, Done, Fail>
 
-declare export function createHaltAction(): RawAction<void>
+declare export function createStore<State>(defaultState: State): Store<State>
 
-declare export function createDomain<State>(
- store: Store<State>,
- domainName?: string,
-): Domain<State>
-
-declare export function createRootDomain<State>(
- domainName?: string,
-): Domain<State>
-
-declare export var effectorMiddleware: Middleware<*>
-
-declare export function combine<A, R>(
- fn: (a: A) => R,
- a: Reducer<A>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, R>(
- fn: (a: A, b: B) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, R>(
- fn: (a: A, b: B, c: C) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, R>(
- fn: (a: A, b: B, c: C, d: D) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, R>(
- fn: (a: A, b: B, c: C, d: D, e: E) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, G, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- g: Reducer<G>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, G, H, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- g: Reducer<G>,
- h: Reducer<H>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, G, H, I, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- g: Reducer<G>,
- h: Reducer<H>,
- h: Reducer<H>,
- i: Reducer<I>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, G, H, I, J, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- g: Reducer<G>,
- h: Reducer<H>,
- h: Reducer<H>,
- i: Reducer<I>,
- j: Reducer<J>,
- ...none: Array<void>
-): Reducer<R>
-declare export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
- a: Reducer<A>,
- b: Reducer<B>,
- c: Reducer<C>,
- d: Reducer<D>,
- e: Reducer<E>,
- f: Reducer<F>,
- g: Reducer<G>,
- h: Reducer<H>,
- h: Reducer<H>,
- i: Reducer<I>,
- j: Reducer<J>,
- k: Reducer<K>,
- ...none: Array<void>
-): Reducer<R>
-
-export type CollectType<A = any, B = any, C = any, D = any> =
- | Collect
- | CollectA<A>
- | CollectAB<A, B>
- | CollectABC<A, B, C>
- | CollectABCD<A, B, C, D>
-
-declare class Collect {
- and<A>(red: Reducer<A>): CollectA<A>;
- combine<R>(fn: () => R): Reducer<R>;
-}
-
-declare class CollectA<A> {
- and<B>(red: Reducer<B>): CollectAB<A, B>;
- combine<R>(fn: (a: A) => R): Reducer<R>;
-}
-
-declare class CollectAB<A, B> {
- and<C>(red: Reducer<C>): CollectABC<A, B, C>;
- combine<R>(fn: (a: A, b: B) => R): Reducer<R>;
-}
-
-declare class CollectABC<A, B, C> {
- and<D>(red: Reducer<D>): CollectABCD<A, B, C, D>;
- combine<R>(fn: (a: A, b: B, c: C) => R): Reducer<R>;
-}
-
-declare class CollectABCD<A, B, C, D> {
- // and<D>(red: Reducer<D>): CollectABCD<A, B, C, D>;
- combine<R>(fn: (a: A, b: B, c: C, d: D) => R): Reducer<R>;
-}
-
-declare export function collect(): Collect
+declare export function createDomain(domainName?: string): Domain

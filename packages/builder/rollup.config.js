@@ -5,32 +5,14 @@ import cleanup from 'rollup-plugin-cleanup'
 
 import {resolve as resolvePath} from 'path'
 
+const babelCfg = require('../../.babelrc.js')
+
 const resolvePackage = name =>
  resolvePath(__dirname, '..', `${name}/src/index.js`)
 
-const presets = [
- '@babel/preset-flow',
- [
-  '@babel/preset-env',
-  {
-   modules: false,
-   shippedProposals: true,
-   targets: {
-    node: '6',
-   },
-  },
- ],
-]
+const presets = babelCfg.presets
 
-const plugins = [
- [
-  '@babel/plugin-proposal-object-rest-spread',
-  {
-   useBuiltIns: true,
-  },
- ],
- ['@babel/plugin-proposal-class-properties', {loose: true}],
-]
+const plugins = babelCfg.plugins
 
 export default {
  input: 'src/index.js',
@@ -53,11 +35,8 @@ export default {
   alias({
    paths: {
     '@effector/effector': resolvePackage('effector'),
-    '@effector/avar': resolvePackage('avar'),
-
-    '@effector/atom': resolvePackage('atom'),
-    '@effector/lazy': resolvePackage('lazy'),
-    '@effector/emission': resolvePackage('emission'),
+    '@effector/store': resolvePackage('store'),
+    '@effector/derive': resolvePackage('derive'),
    },
    extensions: ['js'],
   }),

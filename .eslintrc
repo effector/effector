@@ -76,7 +76,7 @@ rules:
       after: true
   block-spacing:
     - error
-    - always
+    - never
   object-curly-spacing:
     - warn
     - never

@@ -1,0 +1,6 @@
+{
+ "automock": false,
+ "browser": false,
+ "testEnvironment": "node",
+ "testMatch": ["<rootDir>/src/**/*.test.js"]
+}

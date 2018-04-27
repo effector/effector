@@ -6,12 +6,8 @@
   "__DEV__": true
  },
  "projects": [
-  "<rootDir>/packages/atom/jest.json",
-  "<rootDir>/packages/avar/jest.json",
   "<rootDir>/packages/effector/jest.json",
-  "<rootDir>/packages/emission/jest.json",
-  "<rootDir>/packages/lazy/jest.json",
   "<rootDir>/packages/store/jest.json",
-  "<rootDir>/packages/actor/jest.json"
+  "<rootDir>/packages/derive/jest.json"
  ]
 }

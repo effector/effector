@@ -1,7 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`event lock 1`] = `"already locked"`;
-
 exports[`rfc1 example implementation 1`] = `
 <span>
   Clicked: 0 times

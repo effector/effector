@@ -1,7 +1,7 @@
 //@flow
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
-
+import invariant from 'invariant'
 import {from} from 'most'
 import {
  createEvent,
@@ -11,6 +11,115 @@ import {
  type Effect,
  type Store,
 } from '..'
+
+describe('symbol-observable support', () => {
+ test('from(event)', async() => {
+  expect(() => {
+   const event$ = from(createEvent('ev1'))
+  }).not.toThrow()
+  const ev1 = createEvent('ev1')
+  const ev2 = createEvent('ev2')
+  const ev1$ = from(ev1)
+  const fn1 = jest.fn()
+  ev1$.observe(fn1)
+  ev1(0)
+  ev1(1)
+  ev1(2)
+  ev2('should ignore')
+  expect(fn1).toHaveBeenCalledTimes(3)
+
+  expect(fn1.mock.calls).toEqual([[0], [1], [2]])
+ })
+
+ test('from(store)', async() => {
+  expect(() => {
+   const store$ = from(createStore(0))
+  }).not.toThrow()
+  const store1 = createStore(-1)
+  const ev1 = createEvent('ev1')
+  const ev2 = createEvent('ev2')
+  const store1$ = from(store1)
+  const fn1 = jest.fn()
+  store1$.observe(fn1)
+  store1.on(ev1, (state, payload) => state + 1)
+  ev1('foo')
+  ev1('bar')
+  ev1('baz')
+  ev2('should ignore')
+
+  expect(fn1.mock.calls).toEqual([[-1], [0], [1], [2]])
+  expect(fn1).toHaveBeenCalledTimes(4)
+  expect(store1.getState()).toBe(2)
+ })
+ describe('from(effect)', () => {
+  test('without implementation', async() => {
+   expect(() => {
+    const event$ = from(createEffect('ev1'))
+   }).not.toThrow()
+   const ev1 = createEffect('ev1')
+   const ev2 = createEffect('ev2')
+   const ev1$ = from(ev1)
+   const fn1 = jest.fn()
+   ev1$.observe(fn1)
+   ev1(0)
+   ev1(1)
+   ev1(2)
+   ev2('should ignore')
+   expect(fn1).toHaveBeenCalledTimes(3)
+
+   expect(fn1.mock.calls).toEqual([[0], [1], [2]])
+  })
+
+  test('with implementation', async() => {
+   expect(() => {
+    async function impl(_) {}
+    const eff1 = createEffect('ev1')
+    eff1.use(impl)
+    const event$ = from(eff1)
+   }).not.toThrow()
+   const ev1 = createEffect('ev1')
+   const ev2 = createEffect('ev2')
+   async function impl(_) {}
+   ev1.use(impl)
+   const ev1$ = from(ev1)
+   const fn1 = jest.fn()
+   ev1$.observe(fn1)
+   ev1(0)
+   ev1(1)
+   ev1(2)
+   ev2('should ignore')
+   expect(fn1).toHaveBeenCalledTimes(3)
+
+   expect(fn1.mock.calls).toEqual([[0], [1], [2]])
+  })
+ })
+})
+
+test('attt', () => {
+ const state = createStore({
+  foo: 1,
+  bar: [0],
+ })
+ const e1 = createEvent('nu ok')
+ expect(state.getState()).toMatchObject({
+  foo: 1,
+  bar: [0],
+ })
+ state.on(e1, (state, payload) => ({
+  foo: parseInt(payload, 36),
+  bar: [...state.bar, parseInt(payload, 36)],
+ }))
+ e1('10')
+ expect(state.getState()).toMatchObject({
+  foo: 36,
+  bar: [0, 36],
+ })
+ e1('11')
+ expect(state.getState()).toMatchObject({
+  foo: 37,
+  bar: [0, 36, 37],
+ })
+})
 
 test('createStore', () => {
  const counter = createStore(0)
@@ -35,51 +144,6 @@ test('event.to', () => {
  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
 })
 
-test('event lock', () => {
- const store = createStore({foo: ['_']})
- const fn1 = jest.fn()
- const fn2 = jest.fn()
- const e1: Event<string, *> = createEvent('e1')
- store.on(e1, ({foo}, payload) => ({
-  foo: [...foo, payload],
- }))
-
- const unsub1 = e1.watch(data => {
-  fn1(data)
-  switch (data) {
-   case 'a':
-    return e1('b')
-   case 'b':
-    return e1('c')
-  }
- })
- expect(store.getState()).toMatchObject({foo: ['_']})
- e1('a')
- expect(store.getState()).toMatchObject({foo: ['_', 'a', 'b', 'c']})
-
- unsub1()
-
- e1.watch(data => {
-  fn2(data)
-  switch (data) {
-   case 'a':
-    return e1('b')
-   case 'b':
-    return e1('c')
-   case 'c':
-    return e1('c')
-  }
- })
- expect(() => {
-  e1('a')
- }).toThrowErrorMatchingSnapshot()
- expect(fn1).toHaveBeenCalledTimes(3)
- expect(fn2).toHaveBeenCalledTimes(3)
- expect(store.getState()).toMatchObject({
-  foo: ['_', 'a', 'b', 'c', 'a', 'b', 'c'],
- })
-})
-
 test('store.on', () => {
  const counter = createStore(0)
  const text = createStore('')
@@ -96,17 +160,45 @@ test('store.on', () => {
  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
 })
 
+test('event.watch', () => {
+ const click = createEvent('click')
+ const clickEpicFn = jest.fn(e => console.log(`clickEpicFn`, e))
+ click.watch(clickEpicFn)
+ click()
+ click(1)
+ click(2)
+ expect(clickEpicFn).not.toHaveBeenCalledTimes(2)
+ expect(clickEpicFn).toHaveBeenCalledTimes(3)
+})
+
+test('store.watch', () => {
+ const click = createEvent('click')
+ const store1 = createStore(-1)
+ const fn1 = jest.fn()
+ store1.watch(fn1)
+ click.to(store1, (state, e) => state)
+ click()
+ click('a')
+ click('b')
+ expect(fn1).not.toHaveBeenCalledTimes(2)
+ expect(fn1).toHaveBeenCalledTimes(3)
+
+ expect(store1.getState()).toBe(-1)
+ expect(fn1.mock.calls).toEqual([[-1], [-1], [-1]])
+ //expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
+})
+
 test('rfc1 example implementation', async() => {
- const inputText: Event<string, *> = createEvent('input text')
- const click: Event<void, *> = createEvent('click')
- const resetForm: Event<void, *> = createEvent('reset')
- const increment: Event<void, *> = createEvent('increment')
+ const inputText = createEvent('input text')
+ const click = createEvent('click')
+ const resetForm = createEvent('reset')
+ const increment = createEvent('increment')
 
- const fetchSavedText: Effect<string, any, any, any> = createEffect(
-  'fetch saved text',
- )
+ //  const fetchSavedText: Effect<string, any, any, any> = createEffect(
+ //   'fetch saved text',
+ //  )
 
- fetchSavedText.use(() => Promise.resolve('~~ mock for saved text ~~'))
+ //  fetchSavedText.use(() => Promise.resolve('~~ mock for saved text ~~'))
 
  const counter = createStore(0)
  const text = createStore('')
@@ -120,7 +212,6 @@ test('rfc1 example implementation', async() => {
     console.count('wait')
     const unsub = increment.watch(() => {
      console.count('wait done')
-     unsub()
      _()
     })
    }),
@@ -145,7 +236,10 @@ test('rfc1 example implementation', async() => {
  const fnClick = jest.fn()
  click.watch(() => console.count(`click__watch fast`))
  //  click.watch(waitIncrement)
- const click$ = click.epic(click$ => click$.tap(e => console.log(`tap`, e)))
+ const clickEpicFn = jest.fn()
+ const click$ = click.epic(click$ =>
+  click$.tap(e => console.log(`tap`, e)).tap(clickEpicFn),
+ )
  click$.watch(_ => console.count(`click$.watch`))
  click$.watch(async() => {
   console.log(`tap -> watch`)
@@ -198,9 +292,10 @@ test('rfc1 example implementation', async() => {
  console.log(store)
  expect(fnWait).not.toHaveBeenCalled()
  await new Promise(_ => setTimeout(_, 2200))
- expect(fnWait).toHaveBeenCalledTimes(2)
- expect(fnClick).toHaveBeenCalledTimes(2)
+ expect(clickEpicFn).toHaveBeenCalledTimes(2)
  expect(counter.getState()).toBe(2)
+ expect(fnWait).toHaveBeenCalledTimes(2) //TODO why not?
+ expect(fnClick).toHaveBeenCalledTimes(2)
  expect(store.getState()).toMatchObject({
   counter: 2,
   text: '',
