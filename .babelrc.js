@@ -10,8 +10,8 @@ const defaultPresets = [
    loose: true,
    //  useBuiltIns: 'usage',
    targets: {
-    browsers: ['>0.25%', 'not ie 11', 'not op_mini all'],
-    //node: 'current',
+    // browsers: ['>0.25%', 'not ie 11', 'not op_mini all'],
+    node: 'current',
     // node: '6',
    },
   },
@@ -22,6 +22,7 @@ const defaultPlugins = [
  'macros',
  'babel-plugin-dev-expression',
  ['@babel/plugin-proposal-class-properties', {loose: true}],
+ '@babel/plugin-proposal-object-rest-spread',
 ]
 
 function config(presets = [], plugins = []) {
