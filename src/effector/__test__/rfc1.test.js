@@ -7,6 +7,7 @@ import {
  createEvent,
  createEffect,
  createStore,
+ createStoreObject,
  type Event,
  type Effect,
  type Store,
@@ -223,7 +224,7 @@ test('rfc1 example implementation', async() => {
 
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text})
+ const store = createStoreObject({counter, text})
 
  const fnWait = jest.fn()
  const waitIncrement = createEffect('wait increment')

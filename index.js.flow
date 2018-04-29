@@ -71,12 +71,18 @@ declare export function createEffect<Params, Done, Fail>(
  effectName: string,
 ): Effect<Params, Done, Fail>
 
+declare export function createStore<State>(
+ defaultState: State,
+): Store<State>
+
+
 type MapStoreFields = (<O: {[string]: any}>(
  _: O,
 ) => $ObjMap<O, <S>(field: Store<S> | S) => S>) &
  (<O>(_: O) => O)
 
-declare export function createStore<State>(
+
+declare export function createStoreObject<State>(
  defaultState: State,
 ): Store<$Call<MapStoreFields, State>>
 
