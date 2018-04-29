@@ -4,27 +4,20 @@ import invariant from 'invariant'
 import {isDerivable} from './types'
 
 import {Reactor} from './reactors'
-import typeof {derive} from './derivation'
-
-export type ReactorOpts = {
- once: boolean,
- skipFirst: boolean,
- from: *,
- until: *,
- when: *,
-}
+import type {Derivation} from './derivation'
+import type {Lifecycle} from './index.h'
 
 export function reactorFabric<T>(
- derive: derive<T>,
+ Derivation: Class<Derivation<T>>,
  derivable: *,
  f: Function,
- options: $Shape<$Exact<ReactorOpts>>,
+ options: *,
 ) {
  invariant(
   typeof f === 'function',
   'the first argument to .react must be a function',
  )
- const opts: ReactorOpts = {once: false, skipFirst: false, ...options}
+ const opts: Lifecycle<T> = {once: false, skipFirst: false, ...options}
 
  let skipFirst = opts.skipFirst
 
@@ -72,7 +65,7 @@ export function reactorFabric<T>(
  const $until = assertCondition(opts.until, 'until')
  const $when = assertCondition(opts.when, 'when')
 
- const $conds = derive(() => ({
+ const $conds = new Derivation((): any => ({
   from: getCondition($from, true),
   until: getCondition($until, false),
   when: getCondition($when, true),

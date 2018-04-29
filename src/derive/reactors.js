@@ -1,6 +1,5 @@
 //@flow
 
-import {REACTOR} from './types'
 import {addToArray} from './util'
 import {CHANGED} from './states'
 import {detach} from './detach'
@@ -12,7 +11,7 @@ export class Reactor {
  _active = false
  _reacting = false
  /*::
-  _type: *
+  _type = 'REACTOR'
  */
  constructor(parent: *, react: *) {
   this._parent = parent
@@ -59,6 +58,6 @@ export class Reactor {
 }
 
 Object.defineProperty(Reactor.prototype, '_type', {
- value: REACTOR,
+ value: ('REACTOR': 'REACTOR'),
  configurable: true,
 })

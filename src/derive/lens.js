@@ -1,26 +1,20 @@
 //@flow
 
-import {setEquals} from './util'
-import {LENS} from './types'
 import {Derivation} from './derivation'
 import {atomically} from './transactions'
 import {update} from './update'
 
-import type {LensDescriptor} from '.'
+import type {LensDescriptor} from './index.h'
 
 export class Lens<T> extends Derivation<T> {
  /*::
- _type: *
+ _type = ('LENS': 'LENS')
  */
  _descriptor: LensDescriptor<T>
 
  constructor(descriptor: LensDescriptor<T>) {
   super(descriptor.get)
   this._descriptor = descriptor
- }
-
- _clone() {
-  return setEquals(new Lens(this._descriptor), this._equals)
  }
 
  set(value: T) {
@@ -34,7 +28,7 @@ export class Lens<T> extends Derivation<T> {
 }
 
 Object.defineProperty(Lens.prototype, '_type', {
- value: LENS,
+ value: ('LENS': 'LENS'),
  configurable: true,
 })
 

@@ -1,6 +1,6 @@
 //@flow
 
-export function update(instance: *, f: Function, args: any[]) {
+export function update(instance: any, f: Function, args: any[]) {
  switch (args.length) {
   case 0:
    return instance.set(f(instance.get()))

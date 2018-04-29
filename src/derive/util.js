@@ -19,24 +19,24 @@ export function nextId() {
  return _nextId++
 }
 
-export const unique = {
- equals(arg: mixed) {
+export const unique: any = {
+ equals(arg: any): boolean {
   return false
  },
  inspect() {
   return 'Unique{_}'
  },
 }
-type Equals = (a: *, b: *) => boolean
-function defaultEquals(a, b) {
- return Object.is(a, b) || (a && typeof a.equals === 'function' && a.equals(b))
+
+function defaultEquals(a: any, b: any): boolean {
+ return (
+  Object.is(a, b)
+  || (a != null && typeof a.equals === 'function' && a.equals(b))
+ )
 }
 
-export function setEquals(derivable: {-_equals: Equals}, eq: Equals) {
- derivable._equals = eq
- return derivable
-}
-
-export function equals(ctx: *, a: *, b: *) {
- return (ctx._equals || defaultEquals)(a, b)
+// declare export function equals(ctx: any, a: any, b: any): boolean
+export function equals<T>(ctx: any, a: T, b: T) {
+ if (typeof ctx._equals === 'function') return ctx._equals(a, b)
+ return defaultEquals(a, b)
 }

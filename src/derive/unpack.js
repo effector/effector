@@ -1,9 +1,9 @@
 //@flow
 
-import type {Readable} from '.'
+import type {Readable} from './index.h'
 import {isDerivable} from './types'
 
-export function deepUnpack(thing: *) {
+export function deepUnpack(thing: any) {
  if (isDerivable(thing)) {
   return thing.get()
  } else if (Array.isArray(thing)) {

@@ -70,7 +70,7 @@ describe('epic', () => {
  })
  test('sync effect.use', async() => {
   const fn = jest.fn()
-  const used = jest.fn(x => x)
+  const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
   const store = domain.store({foo: 'bar'})

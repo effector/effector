@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 import {Derivation} from '../derivation'
-import type {Readable} from '..'
+import type {Readable} from '../index.h'
 
 export function deriveFrom<A, B>(
  readable: Readable<A>,

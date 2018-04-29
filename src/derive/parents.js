@@ -8,7 +8,7 @@ let child = null
 
 export function startCapturingParents(
  _child: Derivation<any> | void,
- parents: *,
+ parents: Array<Derivation<any> | Atom<any>>,
 ) {
  parentsStack.push({parents, offset: 0, child: _child})
  child = _child
@@ -22,7 +22,7 @@ export function stopCapturingParents() {
   parentsStack.length === 0 ? null : parentsStack[parentsStack.length - 1].child
 }
 
-export function maybeCaptureParent(p: Derivation<*> | Atom<any>) {
+export function maybeCaptureParent(p: Derivation<any> | Atom<any>) {
  if (child === null) return
  const frame = parentsStack[parentsStack.length - 1]
  if (frame.parents[frame.offset] === p) {
@@ -60,7 +60,9 @@ export function maybeCaptureParent(p: Derivation<*> | Atom<any>) {
  frame.offset++
 }
 
-export function captureDereferences(f: () => any) {
+export function captureDereferences(
+ f: () => any,
+): Array<Derivation<any> | Atom<any>> {
  const captured = []
  startCapturingParents(undefined, captured)
  try {

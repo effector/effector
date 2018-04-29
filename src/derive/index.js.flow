@@ -1,3 +1,21 @@
 //@flow
 
-export * from '../../types/derivable'
+export type {LensDescriptor, Lifecycle, Readable} from '../../types/derivable'
+export {
+ Derivable,
+ Atom,
+ Lens,
+ atom,
+ derive,
+ lens,
+ atomically,
+ atomic,
+ struct,
+ unpack,
+ is,
+ deriveFrom,
+ withEquality,
+ maybeDerive,
+ maybeReact,
+ orDefault,
+} from '../../types/derivable'

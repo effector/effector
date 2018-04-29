@@ -13,7 +13,8 @@
   "test:watch": "jest --config=jest.json --watch",
   "flow": "pm2 start flow-effector.sh",
   "flow:status": "node_modules/.bin/flow status",
-  "flow:stop": "pm2 stop flow-effector"
+  "flow:stop": "pm2 stop flow-effector",
+  "flow:restart": "yarn flow:stop && yarn flow"
  },
  "author": "Zero Bias",
  "license": "MIT",
@@ -47,7 +48,7 @@
   "eslint-plugin-flowtype": "^2.46.1",
   "eslint-plugin-jest": "^21.15.0",
   "eslint-plugin-react": "^7.7.0",
-  "flow-bin": "^0.70.0",
+  "flow-bin": "^0.71.0",
   "flow-copy-source": "^1.3.0",
   "flow-typed": "^2.4.0",
   "fluture": "^8.0.2",

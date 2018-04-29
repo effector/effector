@@ -2,28 +2,10 @@
 
 import invariant from 'invariant'
 import {equals} from './util'
-import {DERIVATION, LENS, REACTOR} from './types'
-import {UNKNOWN, UNCHANGED, CHANGED} from './states'
-
+import {UNCHANGED, CHANGED} from './states'
+import {mark} from './mark'
 import type {Reactor} from './reactors'
 
-function mark(node: *, reactors: Array<*>) {
- for (let i = 0, len = node._activeChildren.length; i < len; i++) {
-  const child = node._activeChildren[i]
-  switch (child._type) {
-   case DERIVATION:
-   case LENS:
-    if (child._state !== UNKNOWN) {
-     child._state = UNKNOWN
-     mark(child, reactors)
-    }
-    break
-   case REACTOR:
-    reactors.push(child)
-    break
-  }
- }
-}
 
 export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {

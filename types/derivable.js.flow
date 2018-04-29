@@ -5,19 +5,38 @@ export type Readable<T> = {
 }
 
 declare export class Derivable<T> {
- derive<E>(f: (value: T) => E): Derivable<E>;
- maybeDerive<E>(f: ($NonMaybeType<T>) => E): Derivable<?E>;
- orDefault<E>(value: $NonMaybeType<E>): Derivable<$NonMaybeType<T> | E>;
+ map<E>(f: (value: T) => E): Derivable<E>;
  react(f: (value: T) => void, options?: Lifecycle<T>): void;
- maybeReact(f: (value: $NonMaybeType<T>) => void, options?: Lifecycle<T>): void;
- get(): T;
- withEquality(equals: (a: T, b: T) => boolean): this;
+  get(): T;
+ /* eslint-disable */
+ // prettier-ignore-start
+ /*::+*/ thru: (
+   // prettier-ignore
+   & ((method: typeof withEquality, equals: (a: T, b: T) => boolean) => Derivable<T>)
+   // prettier-ignore
+   & ((method: typeof is, other: mixed) => Derivable<boolean>)
+   // prettier-ignore
+   & ((method: typeof maybeReact, f: (_: T) => void, options?: Lifecycle<T>) => Derivable<?T>)
+ );
+ // prettier-ignore-end
+ /* eslint-enable */
 }
 
 declare export class Atom<T> extends Derivable<T> {
- derive<E>(f: (value: T) => E): Atom<E>;
+ map<E>(f: (value: T) => E): Atom<E>;
  set(value: T): void;
-
+ /* eslint-disable */
+ // prettier-ignore-start
+ /*::+*/ thru: (
+   // prettier-ignore
+   & ((method: typeof withEquality, equals: (a: T, b: T) => boolean) => Atom<T>)
+   // prettier-ignore
+   & ((method: typeof is, other: mixed) => Atom<boolean>)
+   // prettier-ignore
+   & ((method: typeof maybeReact, f: (_: T) => void, options?: Lifecycle<T>) => Atom<?T>)
+ );
+ // prettier-ignore-end
+ /* eslint-enable */
  update(f: (value: T) => T): void;
  update<A>(f: (value: T, A) => T, A): void;
  update<A, B>(f: (value: T, A, B) => T, A, B): void;
@@ -25,7 +44,10 @@ declare export class Atom<T> extends Derivable<T> {
  update<A, B, C, D>(f: (value: T, A, B, C, D) => T, A, B, C, D): void;
 }
 
-declare export class Lens<T> extends Atom<T> {}
+declare export class Lens<T> extends Derivable<T> {
+ map<E>(f: (value: T) => E): Lens<E>;
+ set(value: T): void;
+}
 
 export type LensDescriptor<T> = {
  get(): T,
@@ -34,11 +56,11 @@ export type LensDescriptor<T> = {
 }
 
 export type Lifecycle<T> = {
- +from?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+ +from?: ((d: Derivable<T>) => boolean) | Atom<boolean> | Derivable<boolean>,
 
- +when?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+ +when?: ((d: Derivable<T>) => boolean) | Atom<boolean> | Derivable<boolean>,
 
- +until?: ((d: Derivable<T>) => boolean) | Derivable<boolean>,
+ +until?: ((d: Derivable<T>) => boolean) | Atom<boolean> | Derivable<boolean>,
 
  +skipFirst?: boolean,
 
@@ -63,10 +85,6 @@ declare export function isAtom(obj: mixed): boolean
 
 declare export function isDerivable(obj: mixed): boolean
 
-declare export function isDerivation(obj: mixed): boolean
-
-declare export function isLens(obj: mixed): boolean
-
 declare export function is<A>(
  readable: Readable<A>,
  other: mixed,
@@ -76,3 +94,66 @@ declare export function deriveFrom<A, B>(
  readable: Readable<A>,
  fn: (_: A) => B,
 ): Derivable<B>
+
+declare export function withEquality<A>(
+ value: Atom<A>,
+ equals: (a: A, b: A) => boolean,
+): Atom<A>
+
+declare export function withEquality<A>(
+ value: Lens<A>,
+ equals: (a: A, b: A) => boolean,
+): Lens<A>
+
+declare export function withEquality<A>(
+ value: Derivable<A>,
+ equals: (a: A, b: A) => boolean,
+): Derivable<A>
+
+declare export function maybeDerive<A, B>(
+ value: Atom<?A> | Atom<A>,
+ f: (A) => B,
+): Atom<?B>
+
+declare export function maybeDerive<A, B>(
+ value: Lens<?A> | Lens<A>,
+ f: (A) => B,
+): Lens<?B>
+
+declare export function maybeDerive<A, B>(
+ value: Derivable<?A> | Derivable<A>,
+ f: (A) => B,
+): Derivable<?B>
+
+declare export function maybeReact<A>(
+ value: Atom<?A> | Atom<A>,
+ f: (A) => void,
+ options?: Lifecycle<A>,
+): void
+
+declare export function maybeReact<A>(
+ value: Lens<?A> | Lens<A>,
+ f: (A) => void,
+ options?: Lifecycle<A>,
+): void
+
+declare export function maybeReact<A>(
+ value: Derivable<?A> | Derivable<A>,
+ f: (A) => void,
+ options?: Lifecycle<A>,
+): void
+
+declare export function orDefault<A>(
+  instance: Atom<?A> | Atom<A>,
+  value: $NonMaybeType<A>
+): Atom<A>
+
+declare export function orDefault<A>(
+  instance: Lens<?A> | Lens<A>,
+  value: $NonMaybeType<A>
+): Lens<A>
+
+declare export function orDefault<A>(
+  instance: Derivable<?A> | Derivable<A>,
+  value: $NonMaybeType<A>
+): Derivable<A>

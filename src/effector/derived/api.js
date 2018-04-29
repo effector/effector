@@ -22,7 +22,7 @@ function eventConstructor<Payload>({
  domainName: string,
 }) {
  const fullName = makeName(name, domainName)
- const eventState: Atom<Payload> = atom({payload: null})
+ const eventState: Atom<Payload> = atom(({payload: null}: any))
 
  const instance = (payload: Payload) => instance.create(payload, fullName)
 
@@ -104,11 +104,11 @@ function effectConstructor<Payload, Done>({
  })
  const eventCreate = instance.create
  const done = eventConstructor({
-  name: `${name  } done`,
+  name: `${name} done`,
   domainName,
  })
  const fail = eventConstructor({
-  name: `${name  } fail`,
+  name: `${name} fail`,
   domainName,
  })
  instance.done = done
@@ -142,8 +142,11 @@ function effectConstructor<Payload, Done>({
   }
   const isSyncError = syncError !== throwSymbol
   const isPromise = !isSyncError && hasPromise(req)
+  //$todo
   if (isPromise) req.then(done, fail)
+  //$todo
   else if (isSyncError) fail(syncError)
+  //$todo
   else done(req)
   eventCreate(payload, instance.getType())
   return {

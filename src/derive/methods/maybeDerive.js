@@ -2,13 +2,13 @@
 
 import invariant from 'invariant'
 import type {Derivation} from '../derivation'
-import type {Readable} from '..'
+import type {Readable} from '../index.h'
 
 export function maybeDerive<A, B>(
  Derivation: Class<Derivation<B | null>>,
  readable: Readable<A>,
  fn: (_: A) => B,
-): Derivation<B | null> {
+): Derivation<B> {
  invariant(typeof fn === 'function', 'maybeDerive requires function')
  return new Derivation(() => {
   const arg = readable.get()
