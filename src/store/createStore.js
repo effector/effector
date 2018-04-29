@@ -88,7 +88,7 @@ function storeConstructor(props) {
   ensureCanMutateNextListeners()
   nextListeners.push(listener)
 
-  return function unsubscribe() {
+  function unsubscribe() {
    if (!isSubscribed) {
     return
    }
@@ -103,6 +103,8 @@ function storeConstructor(props) {
    const index = nextListeners.indexOf(listener)
    nextListeners.splice(index, 1)
   }
+  unsubscribe.unsubscribe = unsubscribe
+  return unsubscribe
  }
 
  function dispatch(action) {
@@ -264,7 +266,7 @@ function storeConstructor(props) {
  return store
 }
 
-export function epicStore(store, fn: Function) {
+function epicStore(store, fn: Function) {
  const store$ = from(store).multicast()
  const mapped$ = fn(store$).multicast()
  const innerStore = (createStore: any)()
@@ -321,6 +323,8 @@ export function createStore<T>(
  })
 }
 
+export {createStore as createStoreObject}
+
 function setNested(initialState, action: any, nests: Set<Nest>) {
  let currentState = initialState
  for (const nest of nests) {
@@ -344,9 +348,11 @@ function getNested(initialState, setState) {
  const nests: Set<Nest> = new Set()
  if (typeof initialState !== 'object' || initialState === null) return nests
  for (const [key, value] of Object.entries({...initialState})) {
+  //$todo
   if (hasKind(value) && value.kind() === 'store') {
    const n = nest(value, key)
    nests.add(n)
+   //$todo
    value.watch(e => {
     setState(state => ({
      ...state,

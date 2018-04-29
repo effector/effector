@@ -23,7 +23,8 @@ typings.json
 typings/**
 src/**/*.draft.js
 test/storage.json
-flow-typed/npm/**
 **/.happypack/**
 
-npm
+npm/effector
+npm/react
+
