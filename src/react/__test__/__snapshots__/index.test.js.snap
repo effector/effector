@@ -3,3 +3,11 @@
 exports[`basic 1`] = `"foo"`;
 
 exports[`basic 2`] = `"bar"`;
+
+exports[`counter 1`] = `"Counter: 0Increment"`;
+
+exports[`counter 2`] = `"Counter: 1Increment"`;
+
+exports[`refined api 1`] = `"Text: fooCounter: 1"`;
+
+exports[`refined api 2`] = `"Text: barCounter: 1"`;
