@@ -1,6 +1,6 @@
 {
  "moduleNameMapper": {
-  "effector": "<rootDir>/src/effector",
+  "effector": "<rootDir>/src/effector/index.js",
   "effector-react": "<rootDir>/src/react"
  },
  "projects": [
@@ -26,6 +26,10 @@
    "testEnvironment": "node",
    "transform": {
     "^.+\\.jsx?$": "babel-jest"
+   },
+   "moduleNameMapper": {
+    "effector": "<rootDir>/src/effector/index.js",
+    "effector-react": "<rootDir>/src/react/index.js"
    },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
    "roots": ["<rootDir>/src/react/"],
