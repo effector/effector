@@ -45,17 +45,15 @@ export class Reactor {
  }
 
  _maybeReact() {
-  if (!this._reacting && this._active) {
-   if (this._governor !== null) {
-    this._governor._maybeReact()
-   }
-   // maybe the reactor was stopped by the parent
-   if (this._active) {
-    const nextValue = this._parent.get()
-    if (this._parent._state === CHANGED) {
-     this._force(nextValue)
-    }
-   }
+  if (this._reacting || !this._active) return
+  if (this._governor !== null) {
+   this._governor._maybeReact()
+  }
+  // maybe the reactor was stopped by the parent
+  if (!this._active) return
+  const nextValue = this._parent.get()
+  if (this._parent._state === CHANGED) {
+   this._force(nextValue)
   }
  }
 }

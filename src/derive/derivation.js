@@ -1,18 +1,14 @@
 //@flow
 
 import invariant from 'invariant'
-import {unique, equals, setEquals} from './util'
-import {
- startCapturingParents,
- retrieveParentsFrame,
- stopCapturingParents,
- maybeCaptureParent,
-} from './parents'
+import {unique} from './util'
+import {get} from './methods/recalculate'
 import {isDerivable, DERIVATION} from './types'
 import {CHANGED, UNCHANGED, UNKNOWN, DISCONNECTED} from './states'
-import {detach} from './detach'
 import {reactorFabric} from './reactorFabric'
-import {unpack} from './unpack'
+import {maybeDerive} from './methods/maybeDerive'
+import {withEquality} from './methods/withEquality'
+import type {Reactor} from './reactors'
 
 declare function some(x: mixed): boolean %checks(typeof x !== 'undefined' &&
  x !== null)
@@ -21,96 +17,27 @@ function some(x: mixed) {
 }
 
 export class Derivation<T> {
- _parents: * = null
- _value = unique
- _equals: * = null
+ /*::+*/ _deriver: () => T
+ _parents /*: null | Array<*> */ = null
+ _value: T = ((unique: any): T)
+ _equals /*: null | (a: mixed, b: mixed) => boolean*/ = null
  /*::
  _type = DERIVATION
  */
  _state = DISCONNECTED
- _deriver: *
 
- _meta: * /* */
- _activeChildren = []
- constructor(deriver: *, meta: * = null) {
+ _activeChildren: Array<Reactor | Derivation<*>> = []
+ constructor(deriver: () => T) {
   this._deriver = deriver
-  this._meta = meta
  }
- _clone() {
-  return setEquals(derive(this._deriver), this._equals)
- }
-
- _forceEval() {
-  let newVal = null
-  let newNumParents
-
-  try {
-   if (this._parents === null) {
-    this._parents = []
-   }
-   startCapturingParents(this, this._parents)
-   newVal = this._deriver()
-   newNumParents = retrieveParentsFrame().offset
-  } finally {
-   stopCapturingParents()
-  }
-
-  if (!equals(this, newVal, this._value)) {
-   this._state = CHANGED
-  } else {
-   this._state = UNCHANGED
-  }
-
-  for (let i = newNumParents, len = this._parents.length; i < len; i++) {
-   const oldParent = this._parents[i]
-   detach(oldParent, this)
-   this._parents[i] = null
-  }
-
-  this._parents.length = newNumParents
-
-  this._value = newVal
+ _clone(): Derivation<T> {
+  const result: Derivation<T> = new Derivation(this._deriver)
+  if (this._equals !== null) result._equals = this._equals
+  return result
  }
 
- _update() {
-  if (this._parents === null) {
-   // this._state === DISCONNECTED
-   this._forceEval()
-   // this._state === CHANGED ?
-   return
-  }
-  if (this._state !== UNKNOWN) return
-  const len = this._parents.length
-  for (let i = 0; i < len; i++) {
-   const parent = this._parents[i]
-
-   if (parent._state === UNKNOWN) {
-    parent._update()
-   }
-
-   if (parent._state === CHANGED) {
-    this._forceEval()
-    break
-   }
-  }
-  if (this._state === UNKNOWN) {
-   this._state = UNCHANGED
-  }
- }
-
- get() {
-  maybeCaptureParent(this)
-  if (this._activeChildren.length > 0) {
-   this._update()
-  } else {
-   startCapturingParents(void 0, [])
-   try {
-    this._value = this._deriver()
-   } finally {
-    stopCapturingParents()
-   }
-  }
-  return this._value
+ get(): T {
+  return get(this)
  }
 
  // DERIVABLE Prototype
@@ -120,12 +47,8 @@ export class Derivation<T> {
   return derive(() => f(this.get()))
  }
 
- maybeDerive(f: *): * {
-  invariant(typeof f === 'function', 'maybeDerive requires function')
-  return derive(() => {
-   const arg = this.get()
-   return some(arg) ? f(arg) : null
-  })
+ maybeDerive<S>(f: (_: *) => S): Derivation<S | null> {
+  return maybeDerive(Derivation, this, f)
  }
 
  orDefault(def: ?T) {
@@ -133,11 +56,11 @@ export class Derivation<T> {
   return this.derive(value => (some(value) ? value : def))
  }
 
- react(f, opts) {
+ react(f: *, opts: *) {
   reactorFabric(derive, this, f, opts)
  }
 
- maybeReact(f, opts) {
+ maybeReact(f: *, opts: *) {
   let maybeWhen = this.derive(Boolean)
   if (opts && 'when' in opts && opts.when !== true) {
    let when = opts.when
@@ -153,19 +76,8 @@ export class Derivation<T> {
   reactorFabric(derive, this, f, {...opts, when: maybeWhen})
  }
 
- is(other: any): * {
-  return derive(() => equals(this, this.get(), unpack(other)))
- }
-
- withEquality(equals: *) {
-  let selectedEquals = equals
-  if (equals) {
-   invariant(typeof equals === 'function', 'equals must be function')
-  } else {
-   selectedEquals = null
-  }
-
-  return setEquals(this._clone(), selectedEquals)
+ withEquality(equals: (a: mixed, b: mixed) => boolean): Derivation<T> {
+  return withEquality(this, equals)
  }
 }
 
@@ -174,7 +86,7 @@ Object.defineProperty(Derivation.prototype, '_type', {
  configurable: true,
 })
 
-export function derive<T>(f: Function, meta: *): Derivation<T> {
+export function derive<T>(f: Function): Derivation<T> {
  invariant(typeof f === 'function', 'derive requires function')
- return new Derivation(f, meta)
+ return new Derivation(f)
 }

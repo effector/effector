@@ -1,8 +1,11 @@
 //@flow
 
+import invariant from 'invariant'
 import {equals} from './util'
 import {DERIVATION, LENS, REACTOR} from './types'
 import {UNKNOWN, UNCHANGED, CHANGED} from './states'
+
+import type {Reactor} from './reactors'
 
 function mark(node: *, reactors: Array<*>) {
  for (let i = 0, len = node._activeChildren.length; i < len; i++) {
@@ -22,23 +25,17 @@ function mark(node: *, reactors: Array<*>) {
  }
 }
 
-export function processReactors(reactors: *) {
+export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {
   const r = reactors[i]
-  if (r._reacting) {
-   throw Error(
-    'Synchronous cyclical reactions disallowed. ' + 'Use setImmediate.',
-   )
-  }
+  invariant(
+   !r._reacting,
+   'Synchronous cyclical reactions disallowed. ' + 'Use setImmediate.',
+  )
   r._maybeReact()
  }
 }
 
-const TransactionAbortion = {}
-
-function initiateAbortion() {
- throw TransactionAbortion
-}
 class TransactionContext {
  id2originalValue: * = {}
  parent: *
@@ -47,6 +44,7 @@ class TransactionContext {
   this.parent = parent
  }
 }
+
 export function maybeTrack(atom: *) {
  if (currentCtx === null) return
  if (atom._id in currentCtx.id2originalValue) return
@@ -60,16 +58,16 @@ export function inTransaction() {
  return currentCtx !== null
 }
 
-function transact(f: *) {
+function transact(f) {
+ let fail = true
  beginTransaction()
  try {
-  f(initiateAbortion)
- } catch (e) {
-  abortTransaction()
-  if (e !== TransactionAbortion) {
-   throw e
+  f()
+  fail = false
+ } finally {
+  if (fail) {
+   abortTransaction()
   }
-  return
  }
  commitTransaction()
 }

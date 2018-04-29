@@ -14,8 +14,8 @@ export class Lens<T> extends Derivation<T> {
  */
  _descriptor: LensDescriptor<T>
 
- constructor(descriptor: LensDescriptor<T>, meta: *) {
-  super(descriptor.get, meta)
+ constructor(descriptor: LensDescriptor<T>) {
+  super(descriptor.get)
   this._descriptor = descriptor
  }
 
@@ -38,6 +38,6 @@ Object.defineProperty(Lens.prototype, '_type', {
  configurable: true,
 })
 
-export function lens<T>(descriptor: LensDescriptor<T>, meta: *): Lens<T> {
- return new Lens(descriptor, meta)
+export function lens<T>(descriptor: LensDescriptor<T>): Lens<T> {
+ return new Lens(descriptor)
 }

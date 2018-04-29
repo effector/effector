@@ -9,9 +9,15 @@ import {UNCHANGED, CHANGED, UNKNOWN} from './states'
 import {makeReactor} from './makeReactor'
 import {derive} from './derivation'
 import {update} from './update'
+import {deriveFrom} from './methods/deriveFrom'
+import {maybeDerive} from './methods/maybeDerive'
+import {withEquality} from './methods/withEquality'
+import type {Reactor} from './reactors'
+
+// import {Abstract} from './instance'
+import {Derivation} from './derivation'
 
 import type {Lifecycle} from '.'
-import {unpack} from './unpack'
 
 declare function some(x: mixed): boolean %checks(typeof x !== 'undefined' &&
  x !== null)
@@ -22,34 +28,28 @@ function some(x: mixed) {
 export class Atom<T> {
  /*::+*/ _id: number = nextId()
  _state = UNCHANGED
+ _equals /*: null | (a: mixed, b: mixed) => boolean*/ = null
+
  /*::
  _type = ATOM
  */
- _equals = null
  _value: T
- _meta: *
- _activeChildren = []
- constructor(value: T, meta: * = null) {
+ _activeChildren: Array<Reactor | Derivation<*>> = []
+ constructor(value: T) {
   this._value = value
-  this._meta = meta
  }
 
- derive(f: Function) {
-  invariant(typeof f === 'function', 'derive requires function')
-  return derive(() => f(this.get()))
+ derive<S>(f: (_: T) => S) {
+  return deriveFrom(this, f)
  }
 
- maybeDerive(f: Function) {
-  invariant(typeof f === 'function', 'maybeDerive requires function')
-  return derive(() => {
-   const arg = this.get()
-   return some(arg) ? f(arg) : null
-  })
+ maybeDerive<S>(f: (_: T) => S) {
+  return maybeDerive(Derivation, this, f)
  }
 
  orDefault(def: T) {
   invariant(some(def), 'orDefault requires non-null value')
-  return this.derive(value => (some(value) ? value : def))
+  return deriveFrom(this, value => (some(value) ? value : def))
  }
 
  react(f: Function, opts?: Lifecycle<T>) {
@@ -57,7 +57,7 @@ export class Atom<T> {
  }
 
  maybeReact(f: Function, opts?: Lifecycle<T>) {
-  let maybeWhen = this.derive(Boolean)
+  let maybeWhen = deriveFrom(this, Boolean)
   if (opts && 'when' in opts && opts.when !== true) {
    let when = opts.when
    if (typeof when === 'function' || when === false) {
@@ -72,23 +72,10 @@ export class Atom<T> {
   makeReactor(this, f, {...opts, when: maybeWhen})
  }
 
- is(other: *) {
-  return derive(() => equals(this, this.get(), unpack(other)))
- }
-
- withEquality(equals: Function) {
-  let eq = equals
-  if (eq) {
-   invariant(typeof equals === 'function', 'equals must be function')
-  } else {
-   eq = null
-  }
-
-  return setEquals(this._clone(), eq)
- }
-
- _clone() {
-  return setEquals(atom(this._value), this._equals)
+ _clone(): Atom<T> {
+  const result: Atom<T> = new Atom(this._value)
+  result._equals = this._equals
+  return result
  }
 
  set(value: T) {
@@ -97,21 +84,19 @@ export class Atom<T> {
   const oldValue = this._value
   this._value = value
 
-  if (!inTransaction()) {
-   if (!equals(this, value, oldValue)) {
-    try {
-     this._state = CHANGED
-     const reactors = []
-     mark(this, reactors)
-     processReactors(reactors)
-    } finally {
-     this._state = UNCHANGED
-    }
-   }
+  if (inTransaction()) return
+  if (equals(this, value, oldValue)) return
+  this._state = CHANGED
+  const reactors: Array<*> = []
+  try {
+   mark(this, reactors)
+   processReactors(reactors)
+  } finally {
+   this._state = UNCHANGED
   }
  }
 
- get() {
+ get(): T {
   if (typeof global.__DERIVABLE_DEVTOOLS_HOOK__ === 'function') {
    global.__DERIVABLE_DEVTOOLS_HOOK__('captureAtom', this)
   }
@@ -121,6 +106,9 @@ export class Atom<T> {
  update(f: Function, ...args: any[]) {
   return update(this, f, args)
  }
+ withEquality(equals: (a: mixed, b: mixed) => boolean) {
+  return withEquality(this, equals)
+ }
 }
 
 Object.defineProperty(Atom.prototype, '_type', {
@@ -128,11 +116,11 @@ Object.defineProperty(Atom.prototype, '_type', {
  configurable: true,
 })
 
-export function atom<T>(value: T, meta: *): Atom<T> {
- return new Atom(value, meta)
+export function atom<T>(value: T): Atom<T> {
+ return new Atom(value)
 }
 
-function mark<T>(node: Atom<T>, reactors: Array<*>) {
+function mark(node, reactors) {
  for (let i = 0, len = node._activeChildren.length; i < len; i++) {
   const child = node._activeChildren[i]
   switch (child._type) {

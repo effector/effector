@@ -11,8 +11,7 @@ declare export class Derivable<T> {
  react(f: (value: T) => void, options?: Lifecycle<T>): void;
  maybeReact(f: (value: $NonMaybeType<T>) => void, options?: Lifecycle<T>): void;
  get(): T;
- is(other: mixed): Derivable<boolean>;
- withEquality(equals: (a: T, b: T) => *): this;
+ withEquality(equals: (a: T, b: T) => boolean): this;
 }
 
 declare export class Atom<T> extends Derivable<T> {
@@ -67,3 +66,13 @@ declare export function isDerivable(obj: mixed): boolean
 declare export function isDerivation(obj: mixed): boolean
 
 declare export function isLens(obj: mixed): boolean
+
+declare export function is<A>(
+ readable: Readable<A>,
+ other: mixed,
+): Derivable<boolean>
+
+declare export function deriveFrom<A, B>(
+ readable: Readable<A>,
+ fn: (_: A) => B,
+): Derivable<B>

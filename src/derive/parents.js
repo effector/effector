@@ -1,11 +1,15 @@
 //@flow
 
 import {addToArray} from './util'
-
+import type {Derivation} from './derivation'
+import type {Atom} from './atom'
 const parentsStack = []
 let child = null
 
-export function startCapturingParents(_child: *, parents: *) {
+export function startCapturingParents(
+ _child: Derivation<any> | void,
+ parents: *,
+) {
  parentsStack.push({parents, offset: 0, child: _child})
  child = _child
 }
@@ -18,7 +22,7 @@ export function stopCapturingParents() {
   parentsStack.length === 0 ? null : parentsStack[parentsStack.length - 1].child
 }
 
-export function maybeCaptureParent(p: *) {
+export function maybeCaptureParent(p: Derivation<*> | Atom<any>) {
  if (child === null) return
  const frame = parentsStack[parentsStack.length - 1]
  if (frame.parents[frame.offset] === p) {
