@@ -41,6 +41,7 @@
   "chokidar": "^2.0.3",
   "cross-env": "^5.1.4",
   "enzyme": "^3.3.0",
+  "enzyme-adapter-react-16": "^1.1.1",
   "eslint": "^4.19.1",
   "eslint-plugin-babel": "^5.0.0",
   "eslint-plugin-flowtype": "^2.46.1",
@@ -52,10 +53,12 @@
   "fluture": "^8.0.2",
   "fs-extra": "^5.0.0",
   "idx.macro": "^2.0.1",
-  "invariant": "^2.2.4",
   "immutable": "^4.0.0-rc.9",
+  "invariant": "^2.2.4",
   "jest": "^22.4.3",
   "js-yaml": "^3.11.0",
+  "jsdom": "^11.9.0",
+  "jsdom-global": "^3.0.2",
   "lerna": "^2.10.1",
   "most": "^1.7.3",
   "penv.macro": "^0.2.0",
@@ -71,13 +74,13 @@
   "redux": "^3.7.2",
   "redux-act": "^1.7.4",
   "rimraf": "^2.6.2",
-  "scope.macro": "^1.0.0",
-  "shelljs": "^0.8.1",
   "rollup": "^0.57.1",
   "rollup-plugin-babel": "^4.0.0-beta.3",
   "rollup-plugin-cleanup": "^2.0.1",
   "rollup-plugin-node-resolve": "^3.3.0",
-  "rollup-plugin-path-alias": "^0.0.2"
+  "rollup-plugin-path-alias": "^0.0.2",
+  "scope.macro": "^1.0.0",
+  "shelljs": "^0.8.1"
  },
  "maintainers": [
   {
