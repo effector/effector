@@ -1,3 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`basic 1`] = `"hello"`;
+exports[`basic 1`] = `"foo"`;
+
+exports[`basic 2`] = `"bar"`;
