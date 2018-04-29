@@ -3,14 +3,15 @@
 import invariant from 'invariant'
 import $$observable from 'symbol-observable'
 import warning from '../../warning'
-import {from} from 'most'
+import {from, type Stream} from 'most'
 import {atom, type Atom} from '../../derive'
+import type {Event, Effect} from '../index.h'
 
-export function createEvent<Payload>(name: string) {
+export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})
 }
 
-export function createEffect<Payload, Done>(name: string) {
+export function createEffect<Payload, Done>(name: string): Effect<Payload, Done, *> {
  return effectConstructor({name, domainName: ''})
 }
 
@@ -20,12 +21,12 @@ function eventConstructor<Payload>({
 }: {
  name: string,
  domainName: string,
-}) {
+}): Event<Payload> {
  const fullName = makeName(name, domainName)
  const eventState: Atom<Payload> = atom(({payload: null}: any))
 
- const instance = (payload: Payload) => instance.create(payload, fullName)
-
+ const instance = (payload: Payload): Payload => instanceAsEvent.create(payload, fullName)
+ const instanceAsEvent: Event<Payload> = (instance: any)
  setProperty('create', create, instance)
  setProperty('eventState', eventState, instance)
  setProperty('toString', getType, instance)
@@ -38,8 +39,8 @@ function eventConstructor<Payload>({
  instance.subscribe = subscribe
  instance.to = to
  instance.epic = epic
- function epic(fn: Function) {
-  const instance$ = from(instance).multicast()
+ function epic<T>(fn: Stream<Payload> => Stream<T>): Event<T> {
+  const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
   const mapped = eventConstructor({name: `${name}$ ~> *`, domainName})
   epic$.observe(mapped)
@@ -57,13 +58,13 @@ function eventConstructor<Payload>({
  function create(payload, fullName) {
   let definedPayload = payload
   if (definedPayload === undefined) definedPayload = null
-  instance.eventState.set({payload})
+  instanceAsEvent.eventState.set({payload})
   return payload
  }
  function watch(watcher: (payload: Payload) => any) {
-  instance.eventState.react(
+  instanceAsEvent.eventState.react(
    () => {
-    watcher(instance.eventState.get().payload)
+    watcher(instanceAsEvent.eventState.get().payload)
    },
    {skipFirst: true},
   )
@@ -88,7 +89,7 @@ function eventConstructor<Payload>({
  function getType() {
   return fullName
  }
- return instance
+ return (instance: $todo)
 }
 
 function effectConstructor<Payload, Done>({
@@ -97,13 +98,14 @@ function effectConstructor<Payload, Done>({
 }: {
  name: string,
  domainName: string,
-}) {
- const instance = eventConstructor({
+}): Effect<Payload, Done, *> {
+ const instanceAsEvent: Event<Payload> = eventConstructor({
   name,
   domainName,
  })
- const eventCreate = instance.create
- const done = eventConstructor({
+ const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
+ const eventCreate = instanceAsEvent.create
+ const done: Event<Done> = eventConstructor({
   name: `${name} done`,
   domainName,
  })
@@ -122,14 +124,7 @@ function effectConstructor<Payload, Done>({
   /*::return result*/
  }
  function use(fn) {
-  thunk = fn /*params => {
-     let req
-     try {
-       req = fn(params)
-     } catch (err) {
-       return Promise.reject(err)
-     }
-   }*/
+  thunk = fn
  }
  function create(payload: Payload) {
   const throwSymbol = {}
@@ -144,11 +139,10 @@ function effectConstructor<Payload, Done>({
   const isPromise = !isSyncError && hasPromise(req)
   //$todo
   if (isPromise) req.then(done, fail)
-  //$todo
   else if (isSyncError) fail(syncError)
   //$todo
   else done(req)
-  eventCreate(payload, instance.getType())
+  eventCreate(payload, instanceAsEvent.getType())
   return {
    done() {
     return new Promise(rs => {
