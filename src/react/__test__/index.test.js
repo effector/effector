@@ -7,7 +7,7 @@ import {
  createStore,
  type Event,
  type Store,
-} from '../../../effector'
+} from '../../effector'
 import {createReactState} from '..'
 
 test('basic', () => {
