@@ -5,6 +5,7 @@ parserOptions:
     experimentalObjectRestSpread: true
 extends:
   - 'plugin:flowtype/recommended'
+  - 'plugin:react/recommended'
 plugins:
   - babel
   - flowtype
