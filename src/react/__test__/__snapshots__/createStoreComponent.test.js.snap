@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createStoreComponent attempt 1`] = `"Current state: foo"`;
+
+exports[`createStoreComponent attempt 2`] = `"Current state: bar"`;
