@@ -17,6 +17,7 @@ export type Store<T> = {
  on<E>(event: Event<E, T>, handler: (state: T, payload: E) => T): Store<T>,
  watch(watcher: (_: T) => any): () => void,
  map<S>(fn: (_: T) => S): Store<S>,
+ thru<U>(fn: (store: Store<T>) => U): U,
 }
 
 type MapStoreFields = (<O: {[string]: any}>(

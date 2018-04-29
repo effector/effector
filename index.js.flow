@@ -56,6 +56,7 @@ declare export class Store<State> {
  ): this;
  subscribe(listner: any): Subscription;
  watch(watcher: (payload: State) => any): void;
+ thru<U>(fn: (store: Store<State>) => U): U;
 }
 
 declare export class Domain {

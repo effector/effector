@@ -241,6 +241,7 @@ function storeConstructor(props) {
   to,
   watch,
   epic,
+  thru,
   subscribe,
   getState,
   replaceReducer,
@@ -255,6 +256,10 @@ function storeConstructor(props) {
    return 'store'
   },
  })
+
+ function thru(fn: Function) {
+  return fn(store)
+ }
 
  return store
 }
