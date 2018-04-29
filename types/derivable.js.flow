@@ -52,10 +52,6 @@ declare export function derive<T>(f: () => T): Derivable<T>
 
 declare export function lens<T>(descriptor: LensDescriptor<T>): Lens<T>
 
-declare export function transact(f: () => void): void
-
-declare export function transaction<F: Function>(f: F): F
-
 declare export function atomically(f: () => void): void
 
 declare export function atomic<F: Function>(f: F): F
