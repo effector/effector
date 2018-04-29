@@ -12,19 +12,14 @@ import {isDerivable, DERIVATION} from './types'
 import {CHANGED, UNCHANGED, UNKNOWN, DISCONNECTED} from './states'
 import {detach} from './detach'
 import {reactorFabric} from './reactorFabric'
+import {unpack} from './unpack'
 
 declare function some(x: mixed): boolean %checks(typeof x !== 'undefined' &&
  x !== null)
 function some(x: mixed) {
  return typeof x !== 'undefined' && x !== null
 }
-function unpack(thing) {
- if (isDerivable(thing)) {
-  return thing.get()
- } else {
-  return thing
- }
-}
+
 export class Derivation<T> {
  _parents: * = null
  _value = unique
@@ -82,23 +77,24 @@ export class Derivation<T> {
    // this._state === DISCONNECTED
    this._forceEval()
    // this._state === CHANGED ?
-  } else if (this._state === UNKNOWN) {
-   const len = this._parents.length
-   for (let i = 0; i < len; i++) {
-    const parent = this._parents[i]
+   return
+  }
+  if (this._state !== UNKNOWN) return
+  const len = this._parents.length
+  for (let i = 0; i < len; i++) {
+   const parent = this._parents[i]
 
-    if (parent._state === UNKNOWN) {
-     parent._update()
-    }
+   if (parent._state === UNKNOWN) {
+    parent._update()
+   }
 
-    if (parent._state === CHANGED) {
-     this._forceEval()
-     break
-    }
+   if (parent._state === CHANGED) {
+    this._forceEval()
+    break
    }
-   if (this._state === UNKNOWN) {
-    this._state = UNCHANGED
-   }
+  }
+  if (this._state === UNKNOWN) {
+   this._state = UNCHANGED
   }
  }
 

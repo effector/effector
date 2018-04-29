@@ -60,7 +60,7 @@ export function inTransaction() {
  return currentCtx !== null
 }
 
-export function transact(f: *) {
+function transact(f: *) {
  beginTransaction()
  try {
   f(initiateAbortion)
@@ -79,16 +79,6 @@ export function atomically(f: *) {
   transact(f)
  } else {
   f()
- }
-}
-
-export function transaction(f: *) {
- return (...args: *) => {
-  let result
-  transact(() => {
-   result = f(...args)
-  })
-  return result
  }
 }
 
