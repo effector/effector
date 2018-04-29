@@ -24,7 +24,8 @@
     "^.+\\.jsx?$": "babel-jest"
    },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
-   "roots": ["<rootDir>/src/react/"]
+   "roots": ["<rootDir>/src/react/"],
+   "setupTestFrameworkScriptFile": "<rootDir>/src/fixtures/setup.js"
   },
   {
    "displayName": "derive",
