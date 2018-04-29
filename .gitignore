@@ -1,5 +1,6 @@
 .DS_Store
 .idea
+.history
 .publish
 *.sublime-workspace
 .vscode
