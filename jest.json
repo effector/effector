@@ -1,4 +1,8 @@
 {
+ "moduleNameMapper": {
+  "effector": "<rootDir>/src/effector",
+  "effector-react": "<rootDir>/src/react"
+ },
  "projects": [
   {
    "displayName": "effector",
