@@ -3,27 +3,9 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
 import {createEvent, createStore} from '../../effector'
-import {createReactState, connect} from '..'
+import {connect} from '..'
 
-test('basic', () => {
- const store = createStore('foo')
- const changeText = createEvent('change text')
- changeText.to(store)
-
- const {Provider, Consumer} = createReactState(store)
-
- const tree = mount(
-  <Provider>
-   <Consumer>{({value, ref}) => <span>{value}</span>}</Consumer>
-  </Provider>,
- )
- expect(tree.text()).toMatchSnapshot()
- changeText('bar')
- expect(tree.text()).toMatchSnapshot()
- tree.unmount()
-})
-
-test('refined api', () => {
+test('connect api', () => {
  const store = createStore('foo')
  const changeText = createEvent('change text')
  changeText.to(store)
@@ -41,8 +23,9 @@ test('refined api', () => {
    )
   }
  }
- const mappedStore = store.map(text => ({text}))
- const ConnectedDisplay = mappedStore.thru(connect(Display))
+ const ConnectedDisplay = store
+  .map(text => ({text}))
+  .thru(connect(Display))
 
  const tree = mount(<ConnectedDisplay count={1} />)
  expect(tree.text()).toMatchSnapshot()

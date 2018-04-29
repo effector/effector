@@ -1,8 +1,8 @@
 //@flow
 
 import * as React from 'react'
-import {shallow, mount, render} from 'enzyme'
-import {createEvent, createStore, type Event, type Store} from 'effector'
+import {mount} from 'enzyme'
+import {createEvent, createStore} from 'effector'
 import {createStoreComponent} from '../createStoreComponent'
 
 test('createStoreComponent attempt', () => {

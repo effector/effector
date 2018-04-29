@@ -1,9 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`basic 1`] = `"foo"`;
-
-exports[`basic 2`] = `"bar"`;
-
 exports[`click counter 1`] = `"Counter: 0Increment"`;
 
 exports[`click counter 2`] = `"Counter: 1Increment"`;
