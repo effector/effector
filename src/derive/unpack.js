@@ -30,7 +30,6 @@ declare export function unpack<T>(thing: T): T
 export function unpack(thing: any) {
  if (isDerivable(thing)) {
   return thing.get()
- } else {
-  return thing
  }
+ return thing
 }

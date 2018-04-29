@@ -14,8 +14,8 @@ export type ReactorOpts = {
  when: *,
 }
 
-export function reactorFabric(
- derive: derive,
+export function reactorFabric<T>(
+ derive: derive<T>,
  derivable: *,
  f: Function,
  options: $Shape<$Exact<ReactorOpts>>,
@@ -33,16 +33,15 @@ export function reactorFabric(
  const reactor = new Reactor(derivable, val => {
   if (skipFirst) {
    skipFirst = false
-  } else {
-   f(val)
-   if (opts.once) {
-    reactor.stop()
-    controller.stop()
-   }
+   return
   }
+  f(val)
+  if (!opts.once) return
+  reactor.stop()
+  controller.stop()
  })
 
- const assertCondition = (condition, name) => {
+ function assertCondition(condition, name) {
   if (isDerivable(condition)) {
    return condition
   }
@@ -85,18 +84,17 @@ export function reactorFabric(
   if (conds.from) {
    started = true
   }
-  if (started) {
-   if (conds.until) {
-    reactor.stop()
-    controller.stop()
-   } else if (conds.when) {
-    if (!reactor._active) {
-     reactor.start()
-     reactor.force()
-    }
-   } else if (reactor._active) {
-    reactor.stop()
+  if (!started) return
+  if (conds.until) {
+   reactor.stop()
+   controller.stop()
+  } else if (conds.when) {
+   if (!reactor._active) {
+    reactor.start()
+    reactor.force()
    }
+  } else if (reactor._active) {
+   reactor.stop()
   }
  })
  controller.start()
