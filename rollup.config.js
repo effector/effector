@@ -86,7 +86,7 @@ export default [
   ],
  },
  {
-  input: 'src/react/index.js',
+  input: 'src/react/createStoreComponent.js',
   output: [
    {
     file: resolvePath(__dirname, 'npm/react/effector-react.es.js'),
