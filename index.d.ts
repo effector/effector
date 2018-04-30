@@ -54,7 +54,7 @@ export class Store<State> {
   handler: (state: State, payload: E) => State,
  ): this;
  subscribe(listner: any): Subscription;
- watch(watcher: (payload: State) => any): void;
+ watch<E>(watcher: (state: State, payload: E, type: string) => any): void;
 }
 
 export class Domain {

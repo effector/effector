@@ -4,4 +4,10 @@ export {createRootDomain as createDomain} from './domain'
 
 export {createEvent, createEffect} from './default-domain'
 
-export {createStore, createStoreObject} from '../store'
+export {
+ createStore,
+ createReduxStore,
+ applyMiddleware,
+ compose,
+ createStoreObject,
+} from '../store'

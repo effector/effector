@@ -55,7 +55,7 @@ declare export class Store<State> {
   handler: (state: State, payload: E) => State,
  ): this;
  subscribe(listner: any): Subscription;
- watch(watcher: (payload: State) => any): void;
+ watch<E>(watcher: (state: State, payload: E, type: string) => any): void;
  thru<U>(fn: (store: Store<State>) => U): U;
 }
 
@@ -72,16 +72,12 @@ declare export function createEffect<Params, Done, Fail>(
  effectName: string,
 ): Effect<Params, Done, Fail>
 
-declare export function createStore<State>(
- defaultState: State,
-): Store<State>
-
+declare export function createStore<State>(defaultState: State): Store<State>
 
 type MapStoreFields = (<O: {[string]: any}>(
  _: O,
 ) => $ObjMap<O, <S>(field: Store<S> | S) => S>) &
  (<O>(_: O) => O)
-
 
 declare export function createStoreObject<State>(
  defaultState: State,

@@ -24,8 +24,8 @@ export type Nest = {
 let id = 0
 function storeConstructor(props) {
  const currentId = (++id).toString(36)
- let currentListeners = []
- const pending = new Set()
+ let currentListeners: Array<(state: *, payload: *, type: string) => any> = []
+ const pending: Set<(state: *, payload: *, type: string) => any> = new Set()
  let isDispatching = false
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
@@ -119,7 +119,7 @@ function storeConstructor(props) {
   try {
    currentState = setNested(currentState, action, nests)
    for (const fn of untilEnd(pending)) {
-    currentState = fn(currentState)
+    currentState = fn(currentState, action.payload, action.type)
    }
   } finally {
    if (needToSaveFirst === true && currentState !== undefined) {
@@ -132,7 +132,7 @@ function storeConstructor(props) {
   const listeners = (currentListeners = nextListeners)
   for (let i = 0; i < listeners.length; i++) {
    const listener = listeners[i]
-   listener(currentState, action)
+   listener(currentState, action.payload, action.type)
   }
 
   return action
@@ -212,9 +212,7 @@ function storeConstructor(props) {
   })
  }
  function watch(fn: Function) {
-  return subscribe(() => {
-   fn(getState())
-  })
+  return subscribe(fn)
  }
 
  function epic(fn: Function) {
@@ -290,6 +288,16 @@ function hasKind(value: mixed): boolean %checks {
   && value !== null
   && typeof value.kind === 'function'
  )
+}
+
+export function createReduxStore<T>(
+ reducer: (state: T, event: any) => T,
+ preloadedState: T,
+ enhancer: Function,
+) {
+ const fullReducer = (state = preloadedState, event) =>
+  reducer(state, event) || preloadedState
+ return createStore(preloadedState, fullReducer, enhancer)
 }
 
 export function createStore<T>(

@@ -60,7 +60,7 @@ export type Store<State> = {
   handler: (state: State, payload: E) => State,
  ): Store<State>,
  subscribe(listner: any): Subscription,
- watch(watcher: (payload: State) => any): void,
+ watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
 }
 
 export type Domain = {

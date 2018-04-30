@@ -206,7 +206,11 @@ test('store.watch', () => {
  expect(fn1).toHaveBeenCalledTimes(3)
 
  expect(store1.getState()).toBe(-1)
- expect(fn1.mock.calls).toEqual([[-1], [-1], [-1]])
+ expect(fn1.mock.calls).toEqual([
+  [-1, undefined, 'set state g'],
+  [-1, 'a', 'set state g'],
+  [-1, 'b', 'set state g'],
+ ])
  //expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
 })
 
