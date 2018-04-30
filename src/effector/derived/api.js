@@ -11,7 +11,9 @@ export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})
 }
 
-export function createEffect<Payload, Done>(name: string): Effect<Payload, Done, *> {
+export function createEffect<Payload, Done>(
+ name: string,
+): Effect<Payload, Done, *> {
  return effectConstructor({name, domainName: ''})
 }
 
@@ -25,7 +27,8 @@ function eventConstructor<Payload>({
  const fullName = makeName(name, domainName)
  const eventState: Atom<Payload> = atom(({payload: null}: any))
 
- const instance = (payload: Payload): Payload => instanceAsEvent.create(payload, fullName)
+ const instance = (payload: Payload): Payload =>
+  instanceAsEvent.create(payload, fullName)
  const instanceAsEvent: Event<Payload> = (instance: any)
  setProperty('create', create, instance)
  setProperty('eventState', eventState, instance)
@@ -36,10 +39,11 @@ function eventConstructor<Payload>({
 
  instance.watch = watch
  instance.map = map
+ instance.prepend = prepend
  instance.subscribe = subscribe
  instance.to = to
  instance.epic = epic
- function epic<T>(fn: Stream<Payload> => Stream<T>): Event<T> {
+ function epic<T>(fn: (Stream<Payload>) => Stream<T>): Event<T> {
   const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
   const mapped = eventConstructor({name: `${name}$ ~> *`, domainName})
@@ -85,6 +89,16 @@ function eventConstructor<Payload>({
    mapped(fn(payload))
   })
   return mapped
+ }
+ function prepend<Before>(fn: Before => Payload) {
+  const contramapped: Event<Before> = eventConstructor({
+   name: `* → ${name}`,
+   domainName,
+  })
+  contramapped.watch((_: Before) => {
+   instance(fn(_))
+  })
+  return contramapped
  }
  function getType() {
   return fullName

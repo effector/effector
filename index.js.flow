@@ -17,6 +17,7 @@ declare export class Event<E> {
  (payload: E): E;
  watch(watcher: (payload: E) => any): void;
  map<T>(fn: (_: E) => T): Event<T>;
+ prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
  to(store: Store<E>, _: void): void;
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void;
@@ -35,6 +36,7 @@ declare export class Effect<Params, Done, Fail = Error> {
  /*::+*/ fail: Event<Fail>;
  use(asyncFunction: (params: Params) => Promise<Done>): void;
  watch(watcher: (payload: Params) => any): void;
+ prepend<Before>(fn: (_: Before) => Params): Event<Before>;
  //map<T>(fn: (_: E) => T): Event<T>,
  subscribe(subscriber: Subscriber<Params>): Subscription;
  to(store: Store<Params>, _: void): void;
