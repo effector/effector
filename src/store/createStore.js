@@ -6,7 +6,7 @@ import {from} from 'most'
 import $$observable from 'symbol-observable'
 
 import {INIT, REPLACE} from './actionTypes'
-
+import {readKind} from '../kind'
 import {applyMiddleware} from './applyMiddleware'
 
 function* untilEnd<T>(set: Set<T>): Iterable<T> {
@@ -200,7 +200,8 @@ function storeConstructor(props) {
  }
 
  function to(action: Function, reduce) {
-  const needReduce = action.kind() === 'store' && typeof reduce === 'function'
+  const needReduce =
+   readKind(action) === 'store' && typeof reduce === 'function'
   return watch(data => {
    if (!needReduce) {
     action(data)
@@ -282,14 +283,6 @@ function epicStore(store, fn: Function) {
  return innerStore
 }
 
-function hasKind(value: mixed): boolean %checks {
- return (
-  typeof value === 'object'
-  && value !== null
-  && typeof value.kind === 'function'
- )
-}
-
 export function createReduxStore<T>(
  reducer: (state: T, event: any) => T,
  preloadedState: T,
@@ -356,8 +349,7 @@ function getNested(initialState, setState) {
  const nests: Set<Nest> = new Set()
  if (typeof initialState !== 'object' || initialState === null) return nests
  for (const [key, value] of Object.entries({...initialState})) {
-  //$todo
-  if (hasKind(value) && value.kind() === 'store') {
+  if (readKind(value) === 'store') {
    const n = nest(value, key)
    nests.add(n)
    //$todo

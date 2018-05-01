@@ -6,6 +6,7 @@ import warning from '../../warning'
 import {from, type Stream} from 'most'
 import {atom, type Atom} from '../../derive'
 import type {Event, Effect} from '../index.h'
+import {readKind} from '../../kind'
 
 export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})
@@ -51,7 +52,10 @@ function eventConstructor<Payload>({
   return mapped
  }
  function to(target, handler?: Function) {
-  invariant(target.kind() === 'store', 'right now event.to support only stores')
+  invariant(
+   readKind(target) === 'store',
+   'right now event.to support only stores',
+  )
   invariant(
    typeof target.setState === 'function',
    'right now event.to support only stores',
