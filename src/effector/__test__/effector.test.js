@@ -4,12 +4,25 @@ import {from, periodic} from 'most'
 import {
  createStore,
  createDomain,
+ createEffect,
+ createEvent,
  type Store,
  type Event,
  type Domain,
 } from '..'
 
+import {readKind} from '../../kind'
+
 import warning from '../../warning'
+
+test('kind typechecks', () => {
+ expect(readKind(createStore(0))).toBe('store')
+ expect(readKind(createEvent('foo'))).toBe('event')
+ expect(readKind(createEffect('foo'))).toBe('effect')
+ expect(readKind()).toBe('none')
+ expect(readKind(null)).toBe('none')
+ expect(readKind('foo')).toBe('none')
+})
 
 test('smoke', async() => {
  const fn = jest.fn()
