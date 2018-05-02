@@ -24,7 +24,7 @@ import {Derivation} from './derivation'
 import type {Lifecycle} from './index.h'
 
 export class Atom<T> {
- /*::+*/ _id: number = nextId()
+ /*::+*/ id: number = nextId()
  _state = UNCHANGED
  _equals /*: null | (a: T, b: T) => boolean*/ = null
 

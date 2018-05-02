@@ -6,7 +6,6 @@ import {UNCHANGED, CHANGED} from './states'
 import {mark} from './mark'
 import type {Reactor} from './reactors'
 
-
 export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {
   const r = reactors[i]
@@ -29,9 +28,9 @@ class TransactionContext {
 
 export function maybeTrack(atom: *) {
  if (currentCtx === null) return
- if (atom._id in currentCtx.id2originalValue) return
+ if (atom.id in currentCtx.id2originalValue) return
  currentCtx.modifiedAtoms.push(atom)
- currentCtx.id2originalValue[atom._id] = atom._value
+ currentCtx.id2originalValue[atom.id] = atom._value
 }
 
 let currentCtx = null
@@ -84,7 +83,7 @@ function commitTransaction() {
  if (currentCtx !== null) return
  const reactors = []
  ctx.modifiedAtoms.forEach(a => {
-  if (equals(a, a._value, ctx.id2originalValue[a._id])) {
+  if (equals(a, a._value, ctx.id2originalValue[a.id])) {
    a._state = UNCHANGED
   } else {
    a._state = CHANGED
@@ -102,7 +101,7 @@ function abortTransaction() {
  const ctx = currentCtx
  currentCtx = ctx.parent
  ctx.modifiedAtoms.forEach(atom => {
-  atom._value = ctx.id2originalValue[atom._id]
+  atom._value = ctx.id2originalValue[atom.id]
   atom._state = UNCHANGED
   mark(atom, [])
  })
