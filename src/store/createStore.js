@@ -219,8 +219,17 @@ function storeConstructor(props) {
    }
   })
  }
- function watch(fn: Function) {
-  return subscribe(fn)
+ function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
+  if (
+   (readKind(eventOrFn) === 'event' || readKind(eventOrFn) === 'effect')
+   && typeof fn === 'function'
+  ) {
+   return eventOrFn.watch(payload =>
+    fn(store.getState(), payload, eventOrFn.getType()),
+   )
+  } else if (typeof eventOrFn === 'function') {
+   return subscribe(eventOrFn)
+  }
  }
 
  function epic<E>(event: Event<E>, fn: Function) {
