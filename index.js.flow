@@ -85,4 +85,10 @@ declare export function createStoreObject<State>(
  defaultState: State,
 ): Store<$Call<MapStoreFields, State>>
 
+declare export function createReduxStore<T>(
+ reducer: (state: T, event: any) => T,
+ preloadedState?: T,
+ enhancer?: Function | Function[],
+): Store<T>
+
 declare export function createDomain(domainName?: string): Domain

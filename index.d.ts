@@ -74,4 +74,14 @@ export function createEffect<Params, Done, Fail>(
 
 export function createStore<State>(defaultState: State): Store<State>
 
+declare export function createStoreObject<State>(
+ defaultState: State,
+): Store<any>
+
+export function createReduxStore<T>(
+ reducer: (state: T, event: any) => T,
+ preloadedState?: T,
+ enhancer?: Function | Function[],
+): Store<T>
+
 export function createDomain(domainName?: string): Domain

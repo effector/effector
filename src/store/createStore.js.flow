@@ -17,9 +17,9 @@ export type Store<T> = {
  replaceReducer(nextReducer: (_: T, p: any) => T): void,
  getState(): T,
  withProps<Props>(fn: (state: T, props: Props) => Node): ComponentType<Props>,
- reset(event: Event<*, *>): Store<T>,
+ reset(event: Event<*>): Store<T>,
  dispatch: (action: any) => any,
- on<E>(event: Event<E, T>, handler: (state: T, payload: E) => T): Store<T>,
+ on<E>(event: Event<E>, handler: (state: T, payload: E) => T): Store<T>,
  watch<E>(watcher: (state: T, payload: E, type: string) => any): void,
  map<S>(fn: (_: T) => S): Store<S>,
  thru<U>(fn: (store: Store<T>) => U): U,
@@ -35,6 +35,12 @@ type MapStoreFields = (<O: {[string]: any}>(
 declare export function createStoreObject<T>(
  preloadedState: T,
 ): Store<$Call<MapStoreFields, T>>
+
+declare export function createReduxStore<T>(
+ reducer: (state: T, event: any) => T,
+ preloadedState?: T,
+ enhancer?: Function | Function[],
+): Store<T>
 
 // declare export function createStore<T>(
 //  reducer: (store: T, payload: any) => T,
