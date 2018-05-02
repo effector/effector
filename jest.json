@@ -18,6 +18,19 @@
    "roots": ["<rootDir>/src/effector/"]
   },
   {
+   "displayName": "store",
+   "testMatch": ["<rootDir>/src/store/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/store/"]
+  },
+  {
    "displayName": "react",
    "testMatch": ["<rootDir>/src/react/**/__test__/**/*.test.js"],
    "collectCoverage": true,
