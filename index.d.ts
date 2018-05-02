@@ -56,7 +56,14 @@ export class Store<State> {
   handler: (state: State, payload: E) => State,
  ): this;
  subscribe(listner: any): Subscription;
- watch<E>(watcher: (state: State, payload: E, type: string) => any): void;
+ watch<E>(
+  watcher: (state: State, payload: E, type: string) => any,
+  _: void,
+ ): void;
+ watch<E>(
+  event: Event<E> | Effect<E, any, any>,
+  watcher: (state: State, payload: E, type: string) => any,
+ ): void;
  epic<T, S>(
   event: Event<T> | Effect<T, any, any>,
   fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
