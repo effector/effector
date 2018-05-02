@@ -108,10 +108,9 @@ function storeConstructor(props) {
  }
 
  function dispatch(action) {
-  invariant(
-   typeof action.type !== 'undefined',
-   'Actions may not have an undefined "type" property.',
-  )
+  if (action === undefined || action === null) return action
+  if (typeof action.type !== 'string' && typeof action.type !== 'number')
+   return action
 
   invariant(!isDispatching, 'Reducers may not dispatch actions.')
 
@@ -285,32 +284,55 @@ function epicStore(store, fn: Function) {
 
 export function createReduxStore<T>(
  reducer: (state: T, event: any) => T,
- preloadedState: T,
+ preloadedState?: T,
  enhancer: Function,
 ) {
- const fullReducer = (state = preloadedState, event) =>
-  reducer(state, event) || preloadedState
+ invariant(
+  typeof reducer === 'function',
+  'Expected reducer to be a function, got %s',
+  typeof reducer,
+ )
+ invariant(
+  Array.isArray(enhancer)
+   || typeof enhancer === 'undefined'
+   || typeof enhancer === 'function',
+  'enhancer should be function, array of functions or undefined',
+ )
+ if (preloadedState === undefined) {
+  return createStore(preloadedState, reducer, enhancer)
+ }
+ function fullReducer(state, event) {
+  return reducer(state, event)
+ }
+ if (enhancer === undefined) return createStore(preloadedState, fullReducer, [])
  return createStore(preloadedState, fullReducer, enhancer)
 }
 
 export function createStore<T>(
  preloadedStateRaw?: T,
- reducer: Function = _ => _,
+ reducerRaw: Function,
  enhancerRaw: Function | Function[],
 ) {
+ let reducer = reducerRaw
  let enhancer = enhancerRaw
  let preloadedState = preloadedStateRaw
  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
   enhancer = preloadedState
   preloadedState = undefined
+ } else if (typeof reducer === 'undefined') {
+  if (typeof enhancer === 'function') {
+   reducer = enhancer
+   enhancer = undefined
+  } else {
+   reducer = _ => _
+  }
  }
 
  if (typeof enhancer !== 'undefined') {
   if (typeof enhancer !== 'function') {
-   invariant(Array.isArray(enhancer), 'Expected the enhancer to be a function')
+   invariant(Array.isArray(enhancer), 'Expected the enhancer to be an array')
    enhancer = applyMiddleware(...enhancer)
   }
-
   return enhancer(createStore)(reducer, preloadedState)
  }
  invariant(
