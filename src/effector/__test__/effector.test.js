@@ -6,6 +6,7 @@ import {
  createDomain,
  createEffect,
  createEvent,
+ combine,
  type Store,
  type Event,
  type Domain,
@@ -22,6 +23,30 @@ test('kind typechecks', () => {
  expect(readKind()).toBe('none')
  expect(readKind(null)).toBe('none')
  expect(readKind('foo')).toBe('none')
+})
+
+test('combine', () => {
+ const fn = jest.fn()
+ const inc = createEvent('inc')
+ const dec = createEvent('dec')
+ const s1 = createStore(0)
+ const s2 = createStore(0)
+ const s3 = createStore(0)
+ const s4 = createStore(0)
+ const result = combine(s1, s2, s3, s4, (a, b, c, d) => ({a, b, c, d}))
+ result.watch(fn)
+ s1.on(inc, _ => _ + 1).on(dec, _ => _ - 10)
+ s2.on(inc, _ => _ + 10).on(dec, _ => _ - 1)
+
+ expect(result.getState()).toMatchObject({a: 0, b: 0, c: 0, d: 0})
+
+ inc()
+ dec()
+ expect(result.getState()).toMatchObject({a: -9, b: 9, c: 0, d: 0})
+ console.log(result.getState(), fn.mock.calls)
+ //TODO call only twice
+ expect(fn).not.toHaveBeenCalledTimes(2)
+ expect(fn).toHaveBeenCalledTimes(4)
 })
 
 test('smoke', async() => {
@@ -167,16 +192,29 @@ test('effect.fail()', async() => {
 })
 
 test('effect.promise()', async() => {
- const fn = jest.fn(() => delay(500).then(() => Promise.reject('fail!')))
- const fn1 = jest.fn(() => delay(500).then(() => Promise.resolve('done!')))
- const domain = createDomain()
- const store = domain.store({foo: 'bar'})
- const timeout = domain.effect('timeout')
+ function delay(time: number) {
+  return new Promise(rs => setTimeout(rs, time))
+ }
+ const fn = () =>
+  delay(500).then(() => {
+   throw 'fail!'
+  })
+ const fn1 = () => delay(500).then(() => 'done!')
+ const timeout = createEffect('timeout')
 
  timeout.use(fn)
- await expect(timeout('params').promise()).rejects.toMatch('fail!')
+ await timeout('params fail')
+  .promise()
+  .catch(err => {
+   console.warn(err)
+   expect(err).toBe('fail!')
+  })
  timeout.use(fn1)
- await expect(timeout('params').promise()).resolves.toMatch('done!')
+ await timeout('params done')
+  .promise()
+  .then(res => {
+   expect(res).toBe('done!')
+  })
 })
 
 test.skip('should handle watcher`s errors', async() => {

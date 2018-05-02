@@ -123,11 +123,11 @@ function effectConstructor<Payload, Done>({
  })
  const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
  const eventCreate = instanceAsEvent.create
- const done: Event<Done> = eventConstructor({
+ const done: Event<{params: Payload, result: Done}> = eventConstructor({
   name: `${name} done`,
   domainName,
  })
- const fail = eventConstructor({
+ const fail: Event<{params: Payload, error: *}> = eventConstructor({
   name: `${name} fail`,
   domainName,
  })
@@ -156,28 +156,32 @@ function effectConstructor<Payload, Done>({
   const isSyncError = syncError !== throwSymbol
   const isPromise = !isSyncError && hasPromise(req)
   //$todo
-  if (isPromise) req.then(done, fail)
-  else if (isSyncError) fail(syncError)
+  const onDone = result => done({params: payload, result})
+  const onFail = error => fail({params: payload, error})
   //$todo
-  else done(req)
+  if (isPromise) req.then(onDone, onFail)
+  else if (isSyncError) onFail(syncError)
+  else onDone(req)
   eventCreate(payload, instanceAsEvent.getType())
   return {
    done() {
     return new Promise(rs => {
-     if (isPromise) req.then(rs)
-     else if (!isSyncError) rs(req)
+     if (isPromise) req.then(result => rs({params: payload, result}))
+     else if (!isSyncError) rs({params: payload, result: req})
     })
    },
    fail() {
     return new Promise(rs => {
-     if (isPromise) req.catch(rs)
-     else if (isSyncError) rs(syncError)
+     if (isPromise) req.catch(error => rs({params: payload, error}))
+     else if (isSyncError) rs({params: payload, error: syncError})
     })
    },
    promise() {
-    if (isPromise) return req
-    if (isSyncError) return Promise.reject(syncError)
-    return Promise.resolve(req)
+    return new Promise((rs, rj) => {
+     if (isPromise) req.then(rs, rj)
+     else if (isSyncError) rj(syncError)
+     else rs(req)
+    })
    },
   }
  }

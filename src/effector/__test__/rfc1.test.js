@@ -167,17 +167,18 @@ describe('store.on', () => {
   const store = createStore({counter, text, foo: 0})
   const fn = jest.fn()
   const e1 = createEffect('e1')
-  store.on(e1.done, (state, payload) => {
-   fn(state, payload)
+  store.on(e1.done, (state, {params, result}) => {
+   fn(state, result)
    return {
     ...state,
-    foo: payload,
+    foo: result,
    }
   })
   e1.use(n => new Promise(_ => setTimeout(_, n, n)))
 
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-  await e1(500).done()
+  const result = await e1(500).done()
+  expect(result).toMatchObject({params: 500, result: 500})
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
  })
 })

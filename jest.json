@@ -15,7 +15,7 @@
     "^.+\\.jsx?$": "babel-jest"
    },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
-   "roots": ["<rootDir>/src/effector/"]
+   "roots": ["<rootDir>/src/"]
   },
   {
    "displayName": "store",
@@ -28,7 +28,7 @@
     "^.+\\.jsx?$": "babel-jest"
    },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
-   "roots": ["<rootDir>/src/store/"]
+   "roots": ["<rootDir>/src/"]
   },
   {
    "displayName": "react",

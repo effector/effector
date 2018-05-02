@@ -4,10 +4,12 @@ import invariant from 'invariant'
 // import type {ComponentType, Node} from 'react'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
-
+import {atom, type Atom} from '../derive'
 import {INIT, REPLACE} from './actionTypes'
 import {readKind} from '../kind'
 import {applyMiddleware} from './applyMiddleware'
+import type {Event} from '..'
+import warning from '../warning'
 
 function* untilEnd<T>(set: Set<T>): Iterable<T> {
  do {
@@ -30,11 +32,12 @@ function storeConstructor(props) {
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
  const nests = getNested(currentState, fn => {
-  if (!isDispatching) return setState(fn(currentState))
+  if (!isDispatching) return setState(fn(stateAtom.get()))
   pending.add(fn)
  })
  let defaultState = currentState
  let needToSaveFirst = defaultState === undefined
+ const stateAtom: Atom<*> = atom(defaultState)
  nests.add({
   get() {
    return getState()
@@ -43,6 +46,7 @@ function storeConstructor(props) {
    return currentReducer(state, action)
   },
  })
+
  // .add({
  //  get() {
  //   return getState()
@@ -62,13 +66,13 @@ function storeConstructor(props) {
  }
 
  function getState() {
-  invariant(
-   !isDispatching,
-   'You may not call store.getState() while the reducer is executing. ' +
-    'The reducer has already received the state as an argument. ' +
-    'Pass it down from the top reducer instead of reading it from the store.',
-  )
-  return currentState
+  if (isDispatching)
+   warning(
+    'You may not call store.getState() while the reducer is executing. ' +
+     'The reducer has already received the state as an argument. ' +
+     'Pass it down from the top reducer instead of reading it from the store.',
+   )
+  return stateAtom.get()
  }
 
  function subscribe(listener) {
@@ -115,15 +119,19 @@ function storeConstructor(props) {
   invariant(!isDispatching, 'Reducers may not dispatch actions.')
 
   isDispatching = true
+  let isDone = false
+  let currentState
   try {
-   currentState = setNested(currentState, action, nests)
+   currentState = setNested(stateAtom.get(), action, nests)
    for (const fn of untilEnd(pending)) {
     currentState = fn(currentState, action.payload, action.type)
    }
+   stateAtom.set(currentState)
+   isDone = true
   } finally {
-   if (needToSaveFirst === true && currentState !== undefined) {
+   if (isDone && needToSaveFirst === true && stateAtom.get() !== undefined) {
     needToSaveFirst = false
-    defaultState = currentState
+    defaultState = stateAtom.get()
    }
    isDispatching = false
   }
@@ -215,16 +223,19 @@ function storeConstructor(props) {
   return subscribe(fn)
  }
 
- function epic(fn: Function) {
-  return epicStore(store, fn)
+ function epic<E>(event: Event<E>, fn: Function) {
+  return epicStore(event, store, fn)
  }
  function stateSetter(_, payload) {
   return payload
  }
  function setState(value, reduce?: Function) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
-  currentState = currentReducer(currentState, value)
-  // if (value === currentState) return
+  stateAtom.update((state, payload) => {
+   const result = currentReducer(state, payload)
+   currentState = result
+   return result
+  }, value)
   dispatch({type: `set state ${currentId}`, payload: value})
  }
 
@@ -256,6 +267,12 @@ function storeConstructor(props) {
    return 'store'
   },
  })
+ //$todo
+ Object.defineProperty(store, 'stateAtom', {
+  writable: true,
+  configurable: true,
+  value: stateAtom,
+ })
 
  function thru(fn: Function) {
   return fn(store)
@@ -264,10 +281,11 @@ function storeConstructor(props) {
  return store
 }
 
-function epicStore(store, fn: Function) {
+function epicStore(event, store, fn: Function) {
  const store$ = from(store).multicast()
- const mapped$ = fn(store$).multicast()
- const innerStore = (createStore: any)()
+ const event$ = from(event).multicast()
+ const mapped$ = fn(event$, store$).multicast()
+ const innerStore = (createStore: any)(store.getState())
  const subs = mapped$.subscribe({
   next(value) {
    innerStore.setState(value)

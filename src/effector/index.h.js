@@ -33,12 +33,12 @@ export type Effect<Params, Done, Fail = Error> = {
  (
   payload: Params,
  ): {
-  done(): Promise<Done>,
-  fail(): Promise<Fail>,
+  done(): Promise<{params: Params, result: Done}>,
+  fail(): Promise<{params: Params, error: Fail}>,
   promise(): Promise<Done>,
  },
- done: Event<Done>,
- fail: Event<Fail>,
+ done: Event<{params: Params, result: Done}>,
+ fail: Event<{params: Params, error: Fail}>,
  use: (asyncFunction: (params: Params) => Promise<Done>) => void,
  watch(watcher: (payload: Params) => any): void,
  //map<T>(fn: (_: E) => T): Event<T>,

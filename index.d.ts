@@ -27,12 +27,12 @@ export class Effect<Params, Done, Fail = Error> {
  (
   payload: Params,
  ): {
-  done(): Promise<Done>,
-  fail(): Promise<Fail>,
+  done(): Promise<{params: Params, result: Done}>,
+  fail(): Promise<{params: Params, error: Fail}>,
   promise(): Promise<Done>,
  };
- done: Event<Done>;
- fail: Event<Fail>;
+ done: Event<{params: Params, result: Done}>;
+ fail: Event<{params: Params, error: Fail}>;
  use(asyncFunction: (params: Params) => Promise<Done>): void;
  watch(watcher: (payload: Params) => any): void;
  //map<T>(fn: (_: E) => T): Event<T>,
@@ -57,6 +57,10 @@ export class Store<State> {
  ): this;
  subscribe(listner: any): Subscription;
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void;
+ epic<T, S>(
+  event: Event<T> | Effect<T, any, any>,
+  fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
+ ): void;
 }
 
 export class Domain {
@@ -85,3 +89,105 @@ export function createReduxStore<T>(
 ): Store<T>
 
 export function createDomain(domainName?: string): Domain
+
+
+export function combine<A, R>(
+ a: Store<A>,
+ fn: (a: A) => R,
+): Store<R>
+export function combine<A, B, R>(
+ a: Store<A>,
+ b: Store<B>,
+ fn: (a: A, b: B) => R,
+): Store<R>
+export function combine<A, B, C, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ fn: (a: A, b: B, c: C) => R,
+): Store<R>
+export function combine<A, B, C, D, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ fn: (a: A, b: B, c: C, d: D) => R,
+): Store<R>
+export function combine<A, B, C, D, E, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ fn: (a: A, b: B, c: C, d: D, e: E) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, G, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ g: Store<G>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, G, H, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ g: Store<G>,
+ h: Store<H>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, G, H, I, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ g: Store<G>,
+ h: Store<H>,
+ i: Store<I>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, G, H, I, J, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ g: Store<G>,
+ h: Store<H>,
+ i: Store<I>,
+ j: Store<J>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
+): Store<R>
+export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
+ a: Store<A>,
+ b: Store<B>,
+ c: Store<C>,
+ d: Store<D>,
+ e: Store<E>,
+ f: Store<F>,
+ g: Store<G>,
+ h: Store<H>,
+ i: Store<I>,
+ j: Store<J>,
+ k: Store<K>,
+ fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
+): Store<R>
+

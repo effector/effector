@@ -1,7 +1,8 @@
 //@flow
 
 import type {ComponentType, Node} from 'react'
-import type {Event} from '../effector'
+import type {Event, Effect} from '../effector'
+import type {Stream} from 'most'
 
 export type Store<T> = {
  /*::+['@@iterable']: () => Iterable<T>,*/
@@ -23,6 +24,10 @@ export type Store<T> = {
  watch<E>(watcher: (state: T, payload: E, type: string) => any): void,
  map<S>(fn: (_: T) => S): Store<S>,
  thru<U>(fn: (store: Store<T>) => U): U,
+ epic<E, S>(
+  event: Event<E> | Effect<E, any, any>,
+  fn: (event$: Stream<E>, store$: Stream<T>) => Stream<S>,
+ ): void,
 }
 
 declare export function createStore<T>(preloadedState: T): Store<T>
