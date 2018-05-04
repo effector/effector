@@ -80,6 +80,7 @@
   "rollup-plugin-cleanup": "^2.0.1",
   "rollup-plugin-node-resolve": "^3.3.0",
   "rollup-plugin-path-alias": "^0.0.2",
+  "rollup-plugin-uglify": "^3.0.0",
   "scope.macro": "^1.0.0",
   "shelljs": "^0.8.1"
  },

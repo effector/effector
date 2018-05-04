@@ -2,6 +2,7 @@ import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 // import alias from 'rollup-plugin-path-alias'
 import cleanup from 'rollup-plugin-cleanup'
+import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
 
@@ -80,8 +81,21 @@ export default [
     plugins,
     runtimeHelpers: true,
    }),
-   cleanup({
-    comments: [/#/],
+   //  cleanup({
+   //   comments: [/#/],
+   //  }),
+   uglify({
+    mangle: {
+     toplevel: true,
+    },
+    compress: {
+     pure_getters: true,
+    },
+    output: {
+     comments: /#/i,
+     //  beautify: true,
+     //  indent_level: 2,
+    },
    }),
   ],
  },
@@ -120,8 +134,18 @@ export default [
     plugins,
     runtimeHelpers: true,
    }),
-   cleanup({
-    comments: [/#/],
+   uglify({
+    mangle: {
+     toplevel: true,
+    },
+    compress: {
+     pure_getters: true,
+    },
+    output: {
+     comments: /#/i,
+     //  beautify: true,
+     //  indent_level: 2,
+    },
    }),
   ],
  },

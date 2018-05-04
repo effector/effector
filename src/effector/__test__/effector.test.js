@@ -1,6 +1,6 @@
 //@flow
 
-import { from, periodic } from 'most'
+import {from, periodic} from 'most'
 
 import {
  createStore,
@@ -43,7 +43,7 @@ test('store.reset(event)', () => {
 
  const fullStore = createStoreObject({listSize, currentList, selected})
 
- const unsub = currentList.subscribe((state) => fn(state))
+ const unsub = currentList.subscribe(state => fn(state))
  inc()
  reset()
  unsub()
