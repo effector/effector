@@ -53,7 +53,7 @@ function transact(f) {
  commitTransaction()
 }
 
-export function atomically(f: *) {
+export function atomically(f: () => void) {
  if (!inTransaction()) {
   transact(f)
  } else {
@@ -61,14 +61,14 @@ export function atomically(f: *) {
  }
 }
 
-export function atomic(f: *) {
- return (...args: *) => {
-  let result
+export function atomic<F: Function>(f: F): F {
+ return ((...args: any[]) => {
+  let result /*::=f(...args)*/
   atomically(() => {
    result = f(...args)
   })
   return result
- }
+ }: any)
 }
 
 function beginTransaction() {

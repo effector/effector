@@ -125,14 +125,14 @@ test('attt', () => {
 test('createStore', () => {
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text, foo: 'bar'})
+ const store = createStoreObject({counter, text, foo: 'bar'})
  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
 test('event.to', () => {
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text, foo: 'bar'})
+ const store = createStoreObject({counter, text, foo: 'bar'})
 
  const e1: Event<string> = createEvent('e1')
  e1.to(store, (state, payload) => ({
@@ -149,7 +149,7 @@ describe('store.on', () => {
  test('store.on(event)', () => {
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStore({counter, text, foo: 'bar'})
+  const store = createStoreObject({counter, text, foo: 'bar'})
 
   const e1 = createEvent('e1')
   store.on(e1, (state, payload) => ({
@@ -164,7 +164,7 @@ describe('store.on', () => {
  test('store.on(effect)', async() => {
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStore({counter, text, foo: 0})
+  const store = createStoreObject({counter, text, foo: 0})
   const fn = jest.fn()
   const e1 = createEffect('e1')
   store.on(e1.done, (state, {params, result}) => {

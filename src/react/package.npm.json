@@ -11,7 +11,7 @@
  "devDependencies": {},
  "dependencies": {},
  "peerDependencies": {
-  "effector": "^0.16.1-beta.8",
+  "effector": "^0.16.1-beta.9",
   "react": "*"
  },
  "maintainers": [
@@ -29,7 +29,11 @@
   "effector-react.es.js",
   "effector-react.cjs.js",
   "effector-react.es.js.map",
-  "effector-react.cjs.js.map"
+  "effector-react.cjs.js.map",
+  "index.d.ts",
+  "index.js.flow",
+  "effector-react.cjs.js.flow",
+  "effector-react.es.js.flow"
  ],
  "repository": "https://github.com/zerobias/effector"
 }

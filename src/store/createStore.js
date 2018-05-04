@@ -410,10 +410,13 @@ function getNested(initialState, setState) {
    nests.add(n)
    //$todo
    value.watch(e => {
-    setState(state => ({
-     ...state,
-     [key]: e,
-    }))
+    setState(state => {
+     if (state[key] === e) return state
+     return {
+      ...state,
+      [key]: e,
+     }
+    })
    })
    //$todo
    initialState[key] = value.getState()
