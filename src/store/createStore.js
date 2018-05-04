@@ -24,20 +24,22 @@ export type Nest = {
  set(state: any, action: any): any,
 }
 let id = 0
-function storeConstructor(props) {
+function storeConstructor<State>(props) {
  const currentId = (++id).toString(36)
- let currentListeners: Array<(state: *, payload: *, type: string) => any> = []
+ let currentListeners: Array<
+  (state: State, payload: *, type: string) => any,
+ > = []
  const pending: Set<(state: *, payload: *, type: string) => any> = new Set()
  let isDispatching = false
  let {currentReducer, currentState} = props
  let nextListeners = currentListeners
  const nests = getNested(currentState, fn => {
-  if (!isDispatching) return setState(fn(stateAtom.get()))
+  if (!isDispatching) return setState(fn(getAtom().get()))
   pending.add(fn)
  })
  let defaultState = currentState
  let needToSaveFirst = defaultState === undefined
- const stateAtom: Atom<*> = atom(defaultState)
+ const stateAtom: Atom<State> = atom(defaultState)
  nests.add({
   get() {
    return getState()
@@ -47,18 +49,38 @@ function storeConstructor(props) {
   },
  })
 
- // .add({
- //  get() {
- //   return getState()
- //  },
- //  set(state, action) {
- //   if (!isAction(action)) return state
- //   if (action.type === `set state ${currentId}`) {
- //    return action.payload
- //   }
- //   return state
- //  },
- // })
+ const store = {
+  /*::kind(){return 'store'},*/
+  id: currentId,
+  withProps,
+  setState,
+  dispatch,
+  map,
+  on,
+  to,
+  watch,
+  epic,
+  thru,
+  subscribe,
+  getState,
+  replaceReducer,
+  reset,
+  //$off
+  [$$observable]: observable,
+ }
+ Object.defineProperty(store, 'kind', {
+  writable: true,
+  configurable: true,
+  value() {
+   return 'store'
+  },
+ })
+ //$todo
+ Object.defineProperty(store, 'stateAtom', {
+  writable: true,
+  configurable: true,
+  value: stateAtom,
+ })
  function ensureCanMutateNextListeners() {
   if (nextListeners === currentListeners) {
    nextListeners = currentListeners.slice()
@@ -72,7 +94,7 @@ function storeConstructor(props) {
      'The reducer has already received the state as an argument. ' +
      'Pass it down from the top reducer instead of reading it from the store.',
    )
-  return stateAtom.get()
+  return getAtom().get()
  }
 
  function subscribe(listener) {
@@ -122,16 +144,17 @@ function storeConstructor(props) {
   let isDone = false
   let currentState
   try {
-   currentState = setNested(stateAtom.get(), action, nests)
+   currentState = setNested(getAtom().get(), action, nests)
    for (const fn of untilEnd(pending)) {
     currentState = fn(currentState, action.payload, action.type)
    }
-   stateAtom.set(currentState)
+   getAtom().set(currentState)
    isDone = true
   } finally {
-   if (isDone && needToSaveFirst === true && stateAtom.get() !== undefined) {
+   const newState = getAtom().get()
+   if (isDone && needToSaveFirst && newState !== undefined) {
     needToSaveFirst = false
-    defaultState = stateAtom.get()
+    defaultState = newState
    }
    isDispatching = false
   }
@@ -182,9 +205,7 @@ function storeConstructor(props) {
  }
 
  function reset(event) {
-  on(event, () => {
-   setState(defaultState)
-  })
+  on(event, () => defaultState)
   return store
  }
 
@@ -196,6 +217,20 @@ function storeConstructor(props) {
  function withProps(fn: Function) {
   return props => fn(getState(), props)
  }
+
+ //  function map(fn: Function) {
+ //   const innerStore = (createStore: any)(fn(getState()))
+ //   const innerAtom = getAtom().map(fn)
+ //   innerStore
+
+ //   Object.defineProperty(innerStore, 'stateAtom', {
+ //    writable: true,
+ //    configurable: true,
+ //    value: innerAtom,
+ //   })
+
+ //   return innerStore
+ //  }
 
  function map(fn: Function) {
   const innerStore = (createStore: any)(fn(getState()))
@@ -220,15 +255,17 @@ function storeConstructor(props) {
   })
  }
  function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
-  if (
-   (readKind(eventOrFn) === 'event' || readKind(eventOrFn) === 'effect')
-   && typeof fn === 'function'
-  ) {
-   return eventOrFn.watch(payload =>
-    fn(store.getState(), payload, eventOrFn.getType()),
-   )
-  } else if (typeof eventOrFn === 'function') {
-   return subscribe(eventOrFn)
+  switch (readKind(eventOrFn)) {
+   case 'event':
+   case 'effect':
+    if (typeof fn === 'function')
+     return eventOrFn.watch(payload =>
+      fn(store.getState(), payload, eventOrFn.getType()),
+     )
+   default:
+    if (typeof eventOrFn === 'function') {
+     return subscribe(eventOrFn)
+    }
   }
  }
 
@@ -240,49 +277,19 @@ function storeConstructor(props) {
  }
  function setState(value, reduce?: Function) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
-  stateAtom.update((state, payload) => {
-   const result = currentReducer(state, payload)
-   currentState = result
-   return result
-  }, value)
+  const state = getAtom().get()
+  const result = currentReducer(state, value)
+  if (currentState === result && typeof reduce === 'undefined') return
+  getAtom().set(result)
   dispatch({type: `set state ${currentId}`, payload: value})
  }
 
  dispatch({type: INIT})
 
- const store = {
-  /*::kind(){return 'store'},*/
-  id: currentId,
-  withProps,
-  setState,
-  dispatch,
-  map,
-  on,
-  to,
-  watch,
-  epic,
-  thru,
-  subscribe,
-  getState,
-  replaceReducer,
-  reset,
-  //$off
-  [$$observable]: observable,
+ function getAtom(): typeof stateAtom {
+  const _: any = store
+  return _.stateAtom
  }
- Object.defineProperty(store, 'kind', {
-  writable: true,
-  configurable: true,
-  value() {
-   return 'store'
-  },
- })
- //$todo
- Object.defineProperty(store, 'stateAtom', {
-  writable: true,
-  configurable: true,
-  value: stateAtom,
- })
-
  function thru(fn: Function) {
   return fn(store)
  }

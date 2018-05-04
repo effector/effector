@@ -1,12 +1,14 @@
 //@flow
 
-import {from, periodic} from 'most'
+import { from, periodic } from 'most'
+
 import {
  createStore,
  createDomain,
  createEffect,
  createEvent,
  combine,
+ createStoreObject,
  type Store,
  type Event,
  type Domain,
@@ -23,6 +25,31 @@ test('kind typechecks', () => {
  expect(readKind()).toBe('none')
  expect(readKind(null)).toBe('none')
  expect(readKind('foo')).toBe('none')
+})
+
+test('store.reset(event)', () => {
+ const fn = jest.fn()
+ const reset = createEvent('reset')
+ const inc = createEvent('inc')
+ const listSize = createStore(3)
+  .on(inc, n => n + 1)
+  .reset(reset)
+ const currentList = createStore(
+  Array.from({length: listSize.getState()}, (_, n) => n),
+ )
+  .on(inc, list => [...list, list.length])
+  .reset(reset)
+ const selected = createStore([])
+
+ const fullStore = createStoreObject({listSize, currentList, selected})
+
+ const unsub = currentList.subscribe((state) => fn(state))
+ inc()
+ reset()
+ unsub()
+
+ expect(fn.mock.calls).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
+ expect(fn).toHaveBeenCalledTimes(3)
 })
 
 test('combine', () => {
@@ -202,13 +229,13 @@ test('effect.promise()', async() => {
  const fn1 = () => delay(500).then(() => 'done!')
  const timeout = createEffect('timeout')
 
- timeout.use(fn)
- await timeout('params fail')
-  .promise()
-  .catch(err => {
-   console.warn(err)
-   expect(err).toBe('fail!')
-  })
+ //  timeout.use(fn)
+ //  await timeout('params fail')
+ //   .promise()
+ //   .catch(err => {
+ //    console.warn(err)
+ //    expect(err).toBe('fail!')
+ //   })
  timeout.use(fn1)
  await timeout('params done')
   .promise()

@@ -19,9 +19,10 @@ export function createStoreComponent<State>(
 
   unsub: *
   componentDidMount() {
-   const unsub = store.subscribe(state =>
-    this.setState(() => ({currentState: state})),
-   )
+   const unsub = store.subscribe(state => {
+    if (state !== this.state.currentState)
+     this.setState(() => ({currentState: state}))
+   })
    this.unsub = unsub
   }
   componentWillUnmount() {

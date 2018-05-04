@@ -10,6 +10,7 @@ import {update} from './update'
 import {deriveFrom} from './methods/deriveFrom'
 import type {Reactor} from './reactors'
 import {mark} from './mark'
+import warning from '../warning'
 
 function equals(ctx, a: any, b: any): boolean {
  if (typeof ctx._equals === 'function') return ctx._equals(a, b)
@@ -55,11 +56,16 @@ export class Atom<T> {
   if (equals(this, value, oldValue)) return
   this._state = CHANGED
   const reactors: Array<*> = []
+  let isThrow = true
   try {
    mark(this, reactors)
    processReactors(reactors)
+   isThrow = false
   } finally {
    this._state = UNCHANGED
+   if (isThrow) {
+    warning(`Error during atom's setting`)
+   }
   }
  }
 

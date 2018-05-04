@@ -14,6 +14,10 @@
    "transform": {
     "^.+\\.jsx?$": "babel-jest"
    },
+   "moduleNameMapper": {
+    "effector": "<rootDir>/src/effector/index.js",
+    "effector-react": "<rootDir>/src/react/createStoreComponent.js"
+   },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
    "roots": ["<rootDir>/src/"]
   },

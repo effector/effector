@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import {mount} from 'enzyme'
-import {createEvent, createStore} from 'effector'
+import {createEvent, createStore, createStoreObject} from 'effector'
 import {createStoreComponent} from '../createStoreComponent'
 
 test('createStoreComponent attempt', () => {
@@ -17,4 +17,41 @@ test('createStoreComponent attempt', () => {
  changeText('bar')
  expect(tree.text()).toMatchSnapshot()
  tree.unmount()
+})
+
+test('no dull re-renders', () => {
+ const fn = jest.fn()
+ const reset = createEvent('reset')
+ const inc = createEvent('inc')
+ const listSize = createStore(3)
+  .on(inc, n => n + 1)
+  .reset(reset)
+ const currentList = createStore(
+  Array.from({length: listSize.getState()}, (_, n) => n),
+ )
+  .on(inc, list => [...list, list.length])
+  .reset(reset)
+ const selected = createStore([])
+
+ const fullStore = createStoreObject({listSize, currentList, selected})
+
+ const CurrentList = createStoreComponent(currentList)
+
+ const tree = mount(
+  <CurrentList>
+   {state => {
+    fn(state)
+    return <span>Current state: {String(state)}</span>
+   }}
+  </CurrentList>,
+ )
+ expect(tree.text()).toMatchSnapshot()
+ inc()
+ expect(tree.text()).toMatchSnapshot()
+ reset()
+ expect(tree.text()).toMatchSnapshot()
+ tree.unmount()
+
+ expect(fn.mock.calls).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
+ expect(fn).toHaveBeenCalledTimes(3)
 })

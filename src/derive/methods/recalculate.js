@@ -57,10 +57,10 @@ function forceEval<T>(instance: Derivation<T>) {
  let newVal = null
  let newNumParents
 
+ if (instance._parents === null) {
+  instance._parents = []
+ }
  try {
-  if (instance._parents === null) {
-   instance._parents = []
-  }
   startCapturingParents(instance, instance._parents)
   newVal = instance._deriver()
   newNumParents = retrieveParentsFrame().offset
