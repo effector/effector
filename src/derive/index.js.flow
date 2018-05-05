@@ -15,7 +15,7 @@ export {
  is,
  deriveFrom,
  withEquality,
- maybeDerive,
- maybeReact,
+ maybe,
+ maybeStatic,
  orDefault,
 } from '../../types/derivable'

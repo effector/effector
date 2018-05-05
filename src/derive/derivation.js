@@ -3,11 +3,12 @@
 import invariant from 'invariant'
 import {unique} from './util'
 import {get} from './methods/recalculate'
-import {DISCONNECTED} from './states'
+import {DISCONNECTED, type Status} from './status'
 import {reactorFabric} from './reactorFabric'
-import {maybeDerive} from './methods/maybeDerive'
+import {maybe} from './methods/maybe'
 import type {Reactor} from './reactors'
 import type {Lifecycle} from './index.h'
+import {setProperty} from '../setProperty'
 
 export class Derivation<T> {
  /*::+*/ _deriver: () => T
@@ -17,11 +18,12 @@ export class Derivation<T> {
  /*::
  _type = 'DERIVATION'
  */
- _state = DISCONNECTED
+ _state: Status = DISCONNECTED
 
  _activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(deriver: () => T) {
   this._deriver = deriver
+  setProperty('_type', ('DERIVATION': 'DERIVATION'), this)
  }
 
  get(): T {
@@ -47,11 +49,6 @@ export class Derivation<T> {
  }
 }
 
-Object.defineProperty(Derivation.prototype, '_type', {
- value: ('DERIVATION': 'DERIVATION'),
- configurable: true,
-})
-
 export function derive<T>(f: () => T): Derivation<T> {
  invariant(typeof f === 'function', 'derive requires function')
  return new Derivation(f)
@@ -61,5 +58,5 @@ export function maybeDeriveShort<A, B>(
  readable: Derivation<A>,
  fn: A => B,
 ): Derivation<B> {
- return maybeDerive(Derivation, readable, fn)
+ return maybe(Derivation, readable, fn)
 }

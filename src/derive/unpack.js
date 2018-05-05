@@ -2,13 +2,19 @@
 
 import type {Readable} from './index.h'
 import {isDerivable} from './types'
+import {readKind} from '../kind'
 
 export function deepUnpack(thing: any) {
  if (isDerivable(thing)) {
   return thing.get()
- } else if (Array.isArray(thing)) {
+ }
+ if (readKind(thing) === 'store') {
+  return deepUnpack(thing.stateAtom)
+ }
+ if (Array.isArray(thing)) {
   return thing.map(deepUnpack)
- } else if (thing.constructor === Object) {
+ }
+ if (thing.constructor === Object) {
   const result = {}
   const keys = Object.keys(thing)
   for (let i = keys.length; i--; ) {
@@ -16,9 +22,8 @@ export function deepUnpack(thing: any) {
    result[prop] = deepUnpack(thing[prop])
   }
   return result
- } else {
-  return thing
  }
+ return thing
 }
 
 /**

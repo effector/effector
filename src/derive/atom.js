@@ -4,13 +4,14 @@
 import {nextId} from './util'
 import {maybeTrack, inTransaction, processReactors} from './transactions'
 import {maybeCaptureParent} from './parents'
-import {UNCHANGED, CHANGED} from './states'
+import {UNCHANGED, CHANGED, type Status} from './status'
 import {reactorFabric} from './reactorFabric'
 import {update} from './update'
 import {deriveFrom} from './methods/deriveFrom'
 import type {Reactor} from './reactors'
 import {mark} from './mark'
 import warning from '../warning'
+import {setProperty} from '../setProperty'
 
 function equals(ctx, a: any, b: any): boolean {
  if (typeof ctx._equals === 'function') return ctx._equals(a, b)
@@ -26,7 +27,7 @@ import type {Lifecycle} from './index.h'
 
 export class Atom<T> {
  /*::+*/ id: number = nextId()
- _state = UNCHANGED
+ _state: Status = UNCHANGED
  _equals /*: null | (a: T, b: T) => boolean*/ = null
 
  /*::
@@ -36,6 +37,7 @@ export class Atom<T> {
  _activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(value: T) {
   this._value = value
+  setProperty('_type', ('ATOM': 'ATOM'), this)
  }
 
  map<S>(f: (_: T) => S) {
@@ -84,11 +86,6 @@ export class Atom<T> {
   return method(this, ...args)
  }
 }
-
-Object.defineProperty(Atom.prototype, '_type', {
- value: ('ATOM': 'ATOM'),
- configurable: true,
-})
 
 export function atom<T>(value: T): Atom<T> {
  return new Atom(value)

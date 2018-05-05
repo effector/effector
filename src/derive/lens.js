@@ -3,6 +3,7 @@
 import {Derivation} from './derivation'
 import {atomically} from './transactions'
 import {update} from './update'
+import {setProperty} from '../setProperty'
 
 import type {LensDescriptor} from './index.h'
 
@@ -15,6 +16,7 @@ export class Lens<T> extends Derivation<T> {
  constructor(descriptor: LensDescriptor<T>) {
   super(descriptor.get)
   this._descriptor = descriptor
+  setProperty('_type', ('LENS': 'LENS'), this)
  }
 
  set(value: T) {
@@ -26,11 +28,6 @@ export class Lens<T> extends Derivation<T> {
   return update(this, f, args)
  }
 }
-
-Object.defineProperty(Lens.prototype, '_type', {
- value: ('LENS': 'LENS'),
- configurable: true,
-})
 
 export function lens<T>(descriptor: LensDescriptor<T>): Lens<T> {
  return new Lens(descriptor)

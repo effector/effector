@@ -1,7 +1,7 @@
 //@flow
 
 import * as derivable from '..'
-import {is, maybeDerive, orDefault} from '..'
+import {is, maybe, orDefault} from '..'
 
 test('derive derivable value with function', () => {
  const a = derivable.atom(1)
@@ -27,11 +27,11 @@ test('derive derivable value with function', () => {
  }).toThrow()
 })
 
-test('maybe derive derivable (non-null) value with function', () => {
+test('maybeStatic derive derivable (non-null) value with function', () => {
  const a = derivable.atom(1)
  const q = derivable.atom(10)
- const b = maybeDerive(a, d => d + q.get())
- const c = maybeDerive(b, d => d * q.get())
+ const b = maybe(a, d => d + q.get())
+ const c = maybe(b, d => d * q.get())
  expect([b.get(), c.get()]).toEqual([11, 110])
 
  q.set(20)
@@ -42,7 +42,7 @@ test('maybe derive derivable (non-null) value with function', () => {
 
  expect(() => {
   //$off
-  maybeDerive(a)
+  maybe(a)
  }).toThrow()
 })
 
@@ -60,7 +60,7 @@ test('is method', () => {
  expect(snd.get()).toBeFalsy()
 })
 
-test('maybe default prefers passed value or derivable over null or undefined', () => {
+test('maybeStatic default prefers passed value or derivable over null or undefined', () => {
  const a = derivable.atom(null)
  const r = orDefault(a, 2)
  expect(r.get()).toBe(2)

@@ -1,7 +1,7 @@
 //@flow
 
 import {removeFromArray} from './util'
-import {DISCONNECTED} from './states'
+import {DISCONNECTED} from './status'
 import type {Derivation} from './derivation'
 import type {Reactor} from './reactors'
 

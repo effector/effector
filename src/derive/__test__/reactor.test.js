@@ -1,6 +1,6 @@
 //@flow
 
-import {atom, atomically, is, maybeReact, type Lifecycle} from '..'
+import {atom, atomically, is, maybeStatic, type Lifecycle} from '..'
 
 describe('anonymous reactors', () => {
  it('are created with the .react method', () => {
@@ -660,13 +660,13 @@ describe('the `when` optons to the `react` method', () => {
  })
 })
 
-describe('the .maybeReact method', () => {
+describe('the .maybeStatic method', () => {
  it('only reacts when the thing in the derivable is not null or undefined', () => {
   const a = atom(null)
 
   let _a = 'Tree'
 
-  maybeReact(a, d => {
+  maybeStatic(a, d => {
    _a = d
   })
 
@@ -687,7 +687,7 @@ describe('the .maybeReact method', () => {
 
   let _a = 'Tree'
 
-  maybeReact(
+  maybeStatic(
    a,
    d => {
     _a = d
@@ -724,7 +724,7 @@ describe('the .maybeReact method', () => {
 
   let _a = 'Tree'
 
-  maybeReact(
+  maybeStatic(
    a,
    d => {
     _a = d

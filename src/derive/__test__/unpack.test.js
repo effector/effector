@@ -1,6 +1,7 @@
 //@flow
 
 import {atom, unpack, struct, derive} from '..'
+import {createStore} from '../..'
 
 test('unpack extracts value from derivable', () => {
  const a = atom(1)
@@ -120,4 +121,25 @@ test('struct only accepts plain objects or arrays', () => {
   //$off expect error
   struct(/\d+/)
  }).toThrow()
+})
+
+test('struct can works with Store, public wrapper object', () => {
+ const store1 = createStore(0)
+ const struct1 = struct({
+  foo: 'bar',
+ })
+ const struct2 = struct({
+  struct1,
+  store1,
+ })
+ expect(struct2.get()).toMatchObject({
+  struct1: {foo: 'bar'},
+  store1: 0,
+ })
+ //$todo
+ store1.setState(1)
+ expect(struct2.get()).toMatchObject({
+  struct1: {foo: 'bar'},
+  store1: 1,
+ })
 })

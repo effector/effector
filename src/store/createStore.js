@@ -6,10 +6,12 @@ import {from} from 'most'
 import $$observable from 'symbol-observable'
 import {atom, type Atom} from '../derive'
 import {INIT, REPLACE} from './actionTypes'
-import {readKind} from '../kind'
 import {applyMiddleware} from './applyMiddleware'
 import type {Event} from '..'
+
+import {readKind} from '../kind'
 import warning from '../warning'
+import {setProperty} from '../setProperty'
 
 function* untilEnd<T>(set: Set<T>): Iterable<T> {
  do {
@@ -68,19 +70,9 @@ function storeConstructor<State>(props) {
   //$off
   [$$observable]: observable,
  }
- Object.defineProperty(store, 'kind', {
-  writable: true,
-  configurable: true,
-  value() {
-   return 'store'
-  },
- })
- //$todo
- Object.defineProperty(store, 'stateAtom', {
-  writable: true,
-  configurable: true,
-  value: stateAtom,
- })
+ setProperty('kind', () => 'store', store)
+ setProperty('stateAtom', stateAtom, store)
+
  function ensureCanMutateNextListeners() {
   if (nextListeners === currentListeners) {
    nextListeners = currentListeners.slice()
@@ -218,20 +210,6 @@ function storeConstructor<State>(props) {
   return props => fn(getState(), props)
  }
 
- //  function map(fn: Function) {
- //   const innerStore = (createStore: any)(fn(getState()))
- //   const innerAtom = getAtom().map(fn)
- //   innerStore
-
- //   Object.defineProperty(innerStore, 'stateAtom', {
- //    writable: true,
- //    configurable: true,
- //    value: innerAtom,
- //   })
-
- //   return innerStore
- //  }
-
  function map(fn: Function) {
   const innerStore = (createStore: any)(fn(getState()))
   const unsub = watch(update => {
@@ -279,7 +257,7 @@ function storeConstructor<State>(props) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
   const state = getAtom().get()
   const result = currentReducer(state, value)
-  if (currentState === result && typeof reduce === 'undefined') return
+  if (state === result && typeof reduce === 'undefined') return
   getAtom().set(result)
   dispatch({type: `set state ${currentId}`, payload: value})
  }

@@ -8,7 +8,7 @@ import {reactorFabric} from '../reactorFabric'
 import type {Lifecycle} from '../index.h'
 import {Derivation} from '../derivation'
 
-export function maybeReact<T>(
+export function maybeStatic<T>(
  instance: Derivation<T>,
  f: T => void,
  opts?: Lifecycle<T>,
@@ -17,6 +17,7 @@ export function maybeReact<T>(
  if (opts && 'when' in opts && opts.when !== true) {
   let when = opts.when
   if (typeof when === 'function' || when === false) {
+   //$todo
    when = new Derivation(when)
   }
   invariant(

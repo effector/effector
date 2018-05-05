@@ -1,7 +1,7 @@
 //@flow
 // import invariant from 'invariant'
 
-import {UNKNOWN} from './states'
+import {UNKNOWN} from './status'
 import type {Reactor} from './reactors'
 import type {Derivation} from './derivation'
 import type {Lens} from './lens'

@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 import {equals} from './util'
-import {UNCHANGED, CHANGED} from './states'
+import {UNCHANGED, CHANGED} from './status'
 import {mark} from './mark'
 import type {Reactor} from './reactors'
 

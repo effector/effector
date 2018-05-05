@@ -1,6 +1,6 @@
 //@flow
 
-import {atom, derive, is, withEquality, maybeDerive, type Lifecycle} from '..'
+import {atom, derive, is, withEquality, maybe, type Lifecycle} from '..'
 
 describe('a derivation', () => {
  const oneGigabyte = 1024 * 1024 * 1024
@@ -92,7 +92,7 @@ describe('a derivation', () => {
 describe('nested derivables', () => {
  it('should work in the appropriate fashion', () => {
   const $$A = atom(null)
-  const $a = maybeDerive($$A, d => d.get())
+  const $a = maybe($$A, d => d.get())
 
   expect($a.get() == null).toBeTruthy()
 
@@ -125,7 +125,7 @@ describe('nested derivables', () => {
 
  it('should let reactors adapt to changes in atoms', () => {
   const $$A = atom(null)
-  const $a = maybeDerive($$A, d => d.get())
+  const $a = maybe($$A, d => d.get())
 
   const $B = atom('junk')
 
@@ -149,7 +149,7 @@ describe('nested derivables', () => {
 
  it('should not interfere with lifecycle control', () => {
   const $$A = atom(null)
-  const $a = maybeDerive($$A, d => d.get()).map(b => !!b)
+  const $a = maybe($$A, d => d.get()).map(b => !!b)
 
   const $B = atom('junk')
 
@@ -177,7 +177,7 @@ describe('nested derivables', () => {
 
  it('should not interfere with boolean casting?!', () => {
   const $$Running = atom(null)
-  const $running = maybeDerive($$Running, d => d.get())
+  const $running = maybe($$Running, d => d.get())
 
   let running = null
   $running.map(x => Boolean(x)).react(r => {

@@ -7,6 +7,7 @@ import {from, type Stream} from 'most'
 import {atom, type Atom} from '../../derive'
 import type {Event, Effect} from '../index.h'
 import {readKind} from '../../kind'
+import {setProperty} from '../../setProperty'
 
 export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})
@@ -197,12 +198,4 @@ function hasPromise(req: mixed): boolean %checks {
 
 function makeName(name, domainName) {
  return [name, domainName].filter(str => str.length > 0).join('/')
-}
-
-function setProperty(prop, value, obj: any) {
- Object.defineProperty(obj, prop, {
-  value,
-  writable: true,
-  configurable: true,
- })
 }

@@ -8,7 +8,7 @@ import {
  stopCapturingParents,
  maybeCaptureParent,
 } from '../parents'
-import {CHANGED, UNCHANGED, UNKNOWN} from '../states'
+import {CHANGED, UNCHANGED, UNKNOWN} from '../status'
 import {detach} from '../detach'
 import type {Derivation} from '../derivation'
 

@@ -1,8 +1,9 @@
 //@flow
 
 import {addToArray} from './util'
-import {CHANGED} from './states'
+import {CHANGED} from './status'
 import {detach} from './detach'
+import {setProperty} from '../setProperty'
 
 export class Reactor {
  _governor: * = null
@@ -16,6 +17,7 @@ export class Reactor {
  constructor(parent: *, react: *) {
   this._parent = parent
   this.react = react
+  setProperty('_type', ('REACTOR': 'REACTOR'), this)
  }
  start() {
   this._active = true
@@ -56,8 +58,3 @@ export class Reactor {
   }
  }
 }
-
-Object.defineProperty(Reactor.prototype, '_type', {
- value: ('REACTOR': 'REACTOR'),
- configurable: true,
-})
