@@ -104,6 +104,7 @@ declare export function createReduxStore<T>(
 
 declare export function createDomain(domainName?: string): Domain
 
+declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
  a: Store<A>,

@@ -5,6 +5,7 @@ import {isDerivable} from './types'
 import {isStore} from '../kind'
 
 export function deepUnpack(thing: any) {
+ if (thing === undefined || thing === null) return thing
  if (isDerivable(thing)) {
   return thing.get()
  }

@@ -4,7 +4,7 @@ import invariant from 'invariant'
 import $$observable from 'symbol-observable'
 import warning from '../../warning'
 import {from, type Stream} from 'most'
-import {atom, type Atom} from '../../derive'
+import {atom, atomically, type Atom} from '../../derive'
 import type {Event, Effect} from '../index.h'
 import * as Kind from '../../kind'
 import {setProperty} from '../../setProperty'
@@ -19,6 +19,51 @@ export function createEffect<Payload, Done>(
  return effectConstructor({name, domainName: ''})
 }
 
+function link<A, B>(
+ a: Event<A> | Effect<A, any, any>,
+ b: Event<B> | Effect<B, any, any>,
+ ab: A => B,
+ ba: B => A,
+) {
+ let halt = false
+ // let active =
+ let current: 0 | 1 | 2 = 0
+ const whenAB = () => current !== 2
+ const whenBA = () => current !== 1
+ const until = () => halt
+ let lastAseq = -1
+ let lastBseq = -1
+ a.eventState.react(
+  ({payload, seq}) => {
+   if (seq === lastAseq) return
+   // atomically(() => {
+   lastAseq = seq
+   current = 1
+   const nextB = ab(payload)
+   b(nextB)
+   current = 0
+   // })
+  },
+  {until, skipFirst: true, when: whenAB},
+ )
+ b.eventState.react(
+  ({payload, seq}) => {
+   if (seq === lastBseq) return
+   // atomically(() => {
+   lastBseq = seq
+   current = 2
+   const nextA = ba(payload)
+   a(nextA)
+   current = 0
+   // })
+  },
+  {until, skipFirst: true, when: whenBA},
+ )
+ return () => {
+  halt = true
+ }
+}
+
 function eventConstructor<Payload>({
  name,
  domainName,
@@ -27,7 +72,9 @@ function eventConstructor<Payload>({
  domainName: string,
 }): Event<Payload> {
  const fullName = makeName(name, domainName)
- const eventState: Atom<Payload> = atom(({payload: null}: any))
+ const eventState: Atom<{payload: Payload, seq: string}> = atom(
+  ({payload: null, seq: -1}: any),
+ )
 
  const instance = (payload: Payload): Payload =>
   instanceAsEvent.create(payload, fullName)
@@ -45,40 +92,59 @@ function eventConstructor<Payload>({
  instance.subscribe = subscribe
  instance.to = to
  instance.epic = epic
+ // instance.link = (b, ab, ba) => link(instanceAsEvent, b, ab, ba)
  function epic<T>(fn: (Stream<Payload>) => Stream<T>): Event<T> {
   const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
   const mapped = eventConstructor({name: `${name}$ ~> *`, domainName})
-  epic$.observe(mapped)
+  epic$.observe(e => {
+   mapped.create(e, fullName)
+  })
   return mapped
  }
  function to(target, handler?: Function) {
-  invariant(Kind.isStore(target), 'right now event.to support only stores')
-  invariant(
-   typeof target.setState === 'function',
-   'right now event.to support only stores',
-  )
-  watch(payload => target.setState(payload, handler))
-  //return instance
+  switch (Kind.readKind(target)) {
+   case Kind.STORE:
+    return watch(payload => target.setState(payload, handler))
+   case Kind.EVENT:
+   case Kind.EFFECT:
+    return watch(target.create)
+   default: {
+    throw new TypeError(`Unsupported kind`)
+   }
+  }
  }
+ let seq = 0
  function create(payload, fullName) {
-  let definedPayload = payload
-  if (definedPayload === undefined) definedPayload = null
-  instanceAsEvent.eventState.set({payload})
+  atomically(() => {
+   instanceAsEvent.eventState.set({payload, seq: ++seq})
+  })
   return payload
  }
- function watch(watcher: (payload: Payload) => any) {
+ function watch(watcher: (payload: Payload, type: string) => any) {
+  let halt = false
+  let lastSeq = -1
+  const until = () => halt
   instanceAsEvent.eventState.react(
-   () => {
-    watcher(instanceAsEvent.eventState.get().payload)
+   ({payload, seq}) => {
+    console.warn(fullName, seq)
+    if (seq === lastSeq) return
+    lastSeq = seq
+    atomically(() => {
+     watcher(payload, fullName)
+    })
    },
-   {skipFirst: true},
+   {skipFirst: true, until},
   )
+  return () => {
+   halt = true
+  }
  }
+
  function subscribe(observer) {
-  watch(payload => observer.next(payload))
+  const unsub = watch(payload => observer.next(payload))
   function unsubscribe() {
-   warning('TODO event.unsubscribe is not implemented')
+   unsub()
   }
 
   unsubscribe.unsubscribe = unsubscribe

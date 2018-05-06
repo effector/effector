@@ -41,7 +41,8 @@ test('update with arguments', () => {
  expect(() => {
   //$off expect error
   n.update(sum, 1, 2, 3, 4, 5)
- }).toThrow()
+  expect(n.get()).toBe(35)
+ }).not.toThrow()
 })
 
 test('can include an equality-checking function', () => {
@@ -113,7 +114,7 @@ test('the concurrent modification of _reactors bug doesnt happen any more', () =
  expect(A_success).toBe(false)
  expect(C_success).toBe(false)
  // used to be that this would cause the 'from' controller on C to be ignored
- // during the ._maybeReact iteration in .set
+ // during the runReactor iteration in .set
  $A.set(true)
  expect(A_success).toBe(true)
  expect(C_success).toBe(false)

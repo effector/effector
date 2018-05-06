@@ -5,7 +5,7 @@ import {atom, derive, is, withEquality, maybe, type Lifecycle} from '..'
 describe('a derivation', () => {
  const oneGigabyte = 1024 * 1024 * 1024
 
- function orderUp(n, ...args) {
+ function orderUp(n: number, ...args: number[]): number {
   const order = args.length === 0 || args[0] === undefined ? 1 : args[0]
   return order > 0 ? orderUp(n / 1024, order - 1) : n
  }

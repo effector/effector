@@ -20,7 +20,7 @@ import * as reducers from './fixtures/reducers'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-describe('createReduxStore', () => {
+describe.skip('createReduxStore', () => {
  it('exposes the public API', () => {
   const store = createReduxStore(reducers.todos)
   const methods = Object.keys(store)

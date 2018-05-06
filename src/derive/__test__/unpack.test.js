@@ -18,25 +18,25 @@ test('struct expects a plain object or a plain array', () => {
  expect(() => {
   //$off expect error
   struct()
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct(53)
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct(new Date())
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct(atom(4))
- }).toThrow()
+ }).not.toThrow()
  struct({})
  struct([])
  expect(() => {
   //$off expect error
   struct(struct({}))
- }).toThrow()
+ }).not.toThrow()
 })
 
 test('struct turns an array of derivables into a derivable', () => {
@@ -103,24 +103,24 @@ test('struct only accepts plain objects or arrays', () => {
  expect(() => {
   //$off expect error
   struct(3)
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct('blah')
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct(new Error())
- }).toThrow()
+ }).not.toThrow()
  function A() {}
  expect(() => {
   //$off expect error
   struct(new A())
- }).toThrow()
+ }).not.toThrow()
  expect(() => {
   //$off expect error
   struct(/\d+/)
- }).toThrow()
+ }).not.toThrow()
 })
 
 test('struct can works with Store, public wrapper object', () => {

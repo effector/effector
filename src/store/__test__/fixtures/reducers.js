@@ -48,6 +48,7 @@ export function todos(state: Array<*>, action: *, typeRaw: string) {
 }
 
 export function todosReverse(state: Array<*> = [], action: *) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case ADD_TODO:
    return [
@@ -63,6 +64,7 @@ export function todosReverse(state: Array<*> = [], action: *) {
 }
 
 export function dispatchInTheMiddleOfReducer(state: Array<*> = [], action: *) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case DISPATCH_IN_MIDDLE:
    action.boundDispatchFn()
@@ -73,6 +75,7 @@ export function dispatchInTheMiddleOfReducer(state: Array<*> = [], action: *) {
 }
 
 export function getStateInTheMiddleOfReducer(state: Array<*> = [], action: *) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case GET_STATE_IN_MIDDLE:
    action.boundGetStateFn()
@@ -83,6 +86,7 @@ export function getStateInTheMiddleOfReducer(state: Array<*> = [], action: *) {
 }
 
 export function subscribeInTheMiddleOfReducer(state: Array<*> = [], action: *) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case SUBSCRIBE_IN_MIDDLE:
    action.boundSubscribeFn()
@@ -96,6 +100,7 @@ export function unsubscribeInTheMiddleOfReducer(
  state: Array<*> = [],
  action: *,
 ) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case UNSUBSCRIBE_IN_MIDDLE:
    action.boundUnsubscribeFn()
@@ -106,6 +111,7 @@ export function unsubscribeInTheMiddleOfReducer(
 }
 
 export function errorThrowingReducer(state: Array<*> = [], action: *) {
+ if (action === undefined || action === null) return state
  switch (action.type) {
   case THROW_ERROR:
    throw new Error()

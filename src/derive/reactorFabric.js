@@ -34,23 +34,6 @@ export function reactorFabric<T>(
   controller.stop()
  })
 
- function assertCondition(condition, name) {
-  if (isDerivable(condition)) {
-   return condition
-  }
-  if (typeof condition === 'function') {
-   return condition
-  }
-  if (typeof condition === 'undefined') {
-   return condition
-  }
-  throw Error(
-   `react ${name} condition must be derivable or function, got: ${JSON.stringify(
-    condition,
-   )}`,
-  )
- }
-
  function getCondition(condition: *, def) {
   if (!condition) return def
   if (typeof condition === 'function') return condition(derivable)
@@ -94,4 +77,21 @@ export function reactorFabric<T>(
  controller.force()
 
  reactor._governor = controller
+}
+
+function assertCondition(condition, name) {
+ if (isDerivable(condition)) {
+  return condition
+ }
+ if (typeof condition === 'function') {
+  return condition
+ }
+ if (typeof condition === 'undefined') {
+  return condition
+ }
+ throw Error(
+  `react ${name} condition must be derivable or function, got: ${JSON.stringify(
+   condition,
+  )}`,
+ )
 }

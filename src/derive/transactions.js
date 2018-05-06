@@ -5,6 +5,7 @@ import {equals} from './util'
 import {UNCHANGED, CHANGED} from './status'
 import {mark} from './mark'
 import type {Reactor} from './reactors'
+import {runReactor} from './methods/runReactor'
 
 export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {
@@ -13,7 +14,7 @@ export function processReactors(reactors: Array<Reactor>) {
    !r._reacting,
    'Synchronous cyclical reactions disallowed. ' + 'Use setImmediate.',
   )
-  r._maybeReact()
+  runReactor(r)
  }
 }
 

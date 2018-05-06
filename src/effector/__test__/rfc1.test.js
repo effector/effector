@@ -198,20 +198,24 @@ test('store.watch', () => {
  const click = createEvent('click')
  const store1 = createStore(-1)
  const fn1 = jest.fn()
+ const fn2 = jest.fn()
  store1.watch(fn1)
- click.to(store1, (state, e) => state)
+ click.to(store1, (state, e, type) => (fn2(state, e, type), state))
  click()
  click('a')
  click('b')
- expect(fn1).not.toHaveBeenCalledTimes(2)
- expect(fn1).toHaveBeenCalledTimes(3)
-
  expect(store1.getState()).toBe(-1)
- expect(fn1.mock.calls).toEqual([
-  [-1, undefined, 'set state g'],
-  [-1, 'a', 'set state g'],
-  [-1, 'b', 'set state g'],
+
+ expect(fn1).not.toHaveBeenCalledTimes(2)
+ expect(fn2).toHaveBeenCalledTimes(3)
+
+ expect(fn1).toHaveBeenCalledTimes(1)
+ expect(fn2.mock.calls).toEqual([
+  [-1, undefined, undefined],
+  [-1, 'a', undefined],
+  [-1, 'b', undefined],
  ])
+ expect(fn1.mock.calls).toEqual([[-1]])
  //expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
 })
 

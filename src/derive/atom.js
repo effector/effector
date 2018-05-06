@@ -3,9 +3,9 @@
 
 import {nextId} from './util'
 import {maybeCaptureParent} from './parents'
-import {UNCHANGED, CHANGED, type Status} from './status'
+import {UNCHANGED, type Status} from './status'
 import {reactorFabric} from './reactorFabric'
-import {update} from './update'
+import {update} from './methods/update'
 import {deriveFrom} from './methods/deriveFrom'
 import type {Reactor} from './reactors'
 import {ATOM} from '../kind/case/derive'

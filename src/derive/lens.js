@@ -1,8 +1,7 @@
 //@flow
 
 import {Derivation} from './derivation'
-import {atomically} from './transactions'
-import {update} from './update'
+import {update} from './methods/update'
 import {LENS} from '../kind/case/derive'
 import type {LensDescriptor} from './index.h'
 import {setLens} from './methods/set'

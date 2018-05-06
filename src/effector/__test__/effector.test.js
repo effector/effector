@@ -18,6 +18,66 @@ import * as Kind from '../../kind'
 
 import warning from '../../warning'
 
+test('will run in ecpected order', () => {
+ const fn = jest.fn()
+ const reset = createEvent('reset')
+ const add = createEvent('add')
+ const mult = createEvent('mult')
+ const listSize = createStore(3)
+  .on(add, (n, nn) => n + nn)
+  .on(mult, (n, q) => n * q)
+  .reset(reset)
+
+ // const halt = add.link(
+ //  mult, n => n%10, n => n + 10
+ // )
+ const currentList = createStore([])
+  .on(add, (list, pl) => [...list, {add: pl}])
+  .on(mult, (list, pl) => [...list, {mult: pl}])
+  .reset(reset)
+ const selected = createStore([])
+
+ const fullStore = createStoreObject({listSize, currentList, selected})
+
+ const unsub = currentList.subscribe(state => fn(state))
+ add(5)
+ mult(4)
+ unsub()
+ // halt()
+
+ expect(fn.mock.calls).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
+ expect(fn).toHaveBeenCalledTimes(3)
+})
+
+test.skip('event.link(event)', () => {
+ const fn = jest.fn()
+ const reset = createEvent('reset')
+ const add = createEvent('add')
+ const mult = createEvent('mult')
+ const listSize = createStore(3)
+  .on(add, (n, nn) => n + nn)
+  .on(mult, (n, q) => n * q)
+  .reset(reset)
+
+ const halt = add.link(mult, n => n % 10, n => n + 10)
+ const currentList = createStore([])
+  .on(add, (list, pl) => [...list, {add: pl}])
+  .on(mult, (list, pl) => [...list, {mult: pl}])
+  .reset(reset)
+ const selected = createStore([])
+
+ const fullStore = createStoreObject({listSize, currentList, selected})
+
+ const unsub = currentList.subscribe(state => fn(state))
+ add(5)
+ mult(4)
+ unsub()
+ halt()
+
+ expect(fn.mock.calls).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
+ expect(fn).toHaveBeenCalledTimes(3)
+})
+
 test('store.reset(event)', () => {
  const fn = jest.fn()
  const reset = createEvent('reset')
@@ -64,7 +124,7 @@ test('combine', () => {
  console.log(result.getState(), fn.mock.calls)
  //TODO call only twice
  expect(fn).not.toHaveBeenCalledTimes(2)
- expect(fn).toHaveBeenCalledTimes(4)
+ expect(fn).toHaveBeenCalledTimes(5)
 })
 
 test('smoke', async() => {

@@ -4,7 +4,14 @@ import invariant from 'invariant'
 // import type {ComponentType, Node} from 'react'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
-import {atom, type Atom} from '../derive'
+import {
+ atom,
+ struct,
+ lens,
+ atomically,
+ type Atom,
+ type Derivable,
+} from '../derive'
 import {INIT, REPLACE} from './actionTypes'
 import {applyMiddleware} from './applyMiddleware'
 import type {Event} from '..'
@@ -18,31 +25,45 @@ export type Nest = {
  set(state: any, action: any): any,
 }
 let id = 0
+export function createLiteStore(state: any) {
+ return storeConstructor({currentReducer: _ => _, currentState: state})
+}
 function storeConstructor<State>(props) {
  const currentId = (++id).toString(36)
- let currentListeners: Array<
-  (state: State, payload: *, type: string) => any,
- > = []
- const pending: Set<(state: *, payload: *, type: string) => any> = new Set()
- let isDispatching = false
  let {currentReducer, currentState} = props
- let nextListeners = currentListeners
- const nests = getNested(currentState, fn => {
-  if (!isDispatching) return setState(fn(getAtom().get()))
-  pending.add(fn)
+ const privateStruct: Derivable<State> = (struct(currentState): any)
+ let storeSeq = 0
+ const defaultState = privateStruct.get()
+ const privateAtom: Atom<{state: State, seq: number}> = atom({
+  state: defaultState,
+  seq: storeSeq,
  })
- let defaultState = currentState
- let needToSaveFirst = defaultState === undefined
- const stateAtom: Atom<State> = atom(defaultState)
- nests.add({
+ function forceSet(state: State) {
+  privateAtom.set({state, seq: ++storeSeq})
+ }
+ const privateLens = lens({
   get() {
-   return getState()
+   return privateAtom.get().state
   },
-  set(state, action) {
-   return currentReducer(state, action)
+  set(value) {
+   const oldValue = privateAtom.get().state
+
+   if (oldValue !== value) {
+    forceSet(value)
+   }
   },
+ })
+ let oldPrivateStruct = defaultState
+ privateStruct.react(state => {
+  if (state === oldPrivateStruct || privateLens.get() === state) {
+   oldPrivateStruct = state
+   return
+  }
+  oldPrivateStruct = state
+  privateLens.set(state)
  })
 
+ const stateAtom = privateLens
  const store = {
   kind: Kind.STORE,
   id: currentId,
@@ -64,19 +85,7 @@ function storeConstructor<State>(props) {
  }
  setProperty('stateAtom', stateAtom, store)
 
- function ensureCanMutateNextListeners() {
-  if (nextListeners === currentListeners) {
-   nextListeners = currentListeners.slice()
-  }
- }
-
  function getState() {
-  if (isDispatching)
-   warning(
-    'You may not call store.getState() while the reducer is executing. ' +
-     'The reducer has already received the state as an argument. ' +
-     'Pass it down from the top reducer instead of reading it from the store.',
-   )
   return getAtom().get()
  }
 
@@ -85,32 +94,13 @@ function storeConstructor<State>(props) {
    typeof listener === 'function',
    'Expected the listener to be a function.',
   )
-  invariant(
-   !isDispatching,
-   'You may not call store.subscribe() while the reducer is executing. ' +
-    'If you would like to be notified after the store has been updated, subscribe from a ' +
-    'component and invoke store.getState() in the callback to access the latest state',
-  )
 
-  let isSubscribed = true
-
-  ensureCanMutateNextListeners()
-  nextListeners.push(listener)
+  let halt = false
+  const until = () => halt
+  getAtom().react(listener, {until})
 
   function unsubscribe() {
-   if (!isSubscribed) {
-    return
-   }
-   invariant(
-    !isDispatching,
-    'You may not unsubscribe from a store listener while the reducer is executing',
-   )
-
-   isSubscribed = false
-
-   ensureCanMutateNextListeners()
-   const index = nextListeners.indexOf(listener)
-   nextListeners.splice(index, 1)
+   halt = true
   }
   unsubscribe.unsubscribe = unsubscribe
   return unsubscribe
@@ -120,36 +110,10 @@ function storeConstructor<State>(props) {
   if (action === undefined || action === null) return action
   if (typeof action.type !== 'string' && typeof action.type !== 'number')
    return action
-
-  invariant(!isDispatching, 'Reducers may not dispatch actions.')
-
-  isDispatching = true
-  let isDone = false
-  let currentState
-  try {
-   currentState = setNested(getAtom().get(), action, nests)
-   while (pending.size > 0) {
-    for (const fn of pending) {
-     pending.delete(fn)
-     currentState = fn(currentState, action.payload, action.type)
-    }
-   }
-   getAtom().set(currentState)
-   isDone = true
-  } finally {
-   const newState = getAtom().get()
-   if (isDone && needToSaveFirst && newState !== undefined) {
-    needToSaveFirst = false
-    defaultState = newState
-   }
-   isDispatching = false
-  }
-
-  const listeners = (currentListeners = nextListeners)
-  for (let i = 0; i < listeners.length; i++) {
-   const listener = listeners[i]
-   listener(currentState, action.payload, action.type)
-  }
+  atomically(() => {
+   const newValue = currentReducer(getState(), action.payload, action.type)
+   getAtom().set(newValue)
+  })
 
   return action
  }
@@ -161,11 +125,11 @@ function storeConstructor<State>(props) {
   )
 
   currentReducer = nextReducer
-  dispatch({type: REPLACE})
+  forceSet(getState())
+  // dispatch({type: REPLACE})
  }
 
  function observable() {
-  const outerSubscribe = subscribe
   return {
    subscribe(observer) {
     invariant(
@@ -173,14 +137,14 @@ function storeConstructor<State>(props) {
      'Expected the observer to be an object.',
     )
 
-    function observeState() {
+    function observeState(state) {
      if (observer.next) {
-      observer.next(getState())
+      observer.next(state)
      }
     }
 
-    observeState()
-    const unsubscribe = outerSubscribe(observeState)
+    // observeState(getState())
+    const unsubscribe = subscribe(observeState)
     return {unsubscribe}
    },
    //$off
@@ -191,12 +155,17 @@ function storeConstructor<State>(props) {
  }
 
  function reset(event) {
-  on(event, () => defaultState)
+  const off = watch(event, (state, payload, type) => {
+   getAtom().set(defaultState)
+  })
   return store
  }
 
  function on(event: any, handler: Function) {
-  event.to(store, handler)
+  const off = watch(event, (state, payload, type) => {
+   const newResult = handler(state, payload, type)
+   getAtom().set(newResult)
+  })
   return store
  }
 
@@ -233,10 +202,12 @@ function storeConstructor<State>(props) {
      return eventOrFn.watch(payload =>
       fn(store.getState(), payload, eventOrFn.getType()),
      )
+    else throw new TypeError('watch requires function handler')
+
    default:
     if (typeof eventOrFn === 'function') {
      return subscribe(eventOrFn)
-    }
+    } else throw new TypeError('watch requires function handler')
   }
  }
 
@@ -250,9 +221,9 @@ function storeConstructor<State>(props) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
   const state = getAtom().get()
   const result = currentReducer(state, value)
-  if (state === result && typeof reduce === 'undefined') return
+  // if (state === result && typeof reduce === 'undefined') return
   getAtom().set(result)
-  dispatch({type: `set state ${currentId}`, payload: value})
+  // dispatch({type: `set state ${currentId}`, payload: value})
  }
 
  dispatch({type: INIT})
@@ -352,46 +323,3 @@ export function createStore<T>(
 }
 
 export {createStore as createStoreObject}
-
-function setNested(initialState, action: any, nests: Set<Nest>) {
- let currentState = initialState
- for (const nest of nests) {
-  currentState = nest.set(currentState, action)
- }
- return currentState
-}
-function nest(value: any, key): Nest {
- return {
-  get() {
-   return value.getState()
-  },
-  set(state, action) {
-   value.dispatch(action)
-   state[key] = value.getState()
-   return state
-  },
- }
-}
-function getNested(initialState, setState) {
- const nests: Set<Nest> = new Set()
- if (typeof initialState !== 'object' || initialState === null) return nests
- for (const [key, value] of Object.entries({...initialState})) {
-  if (Kind.isStore(value)) {
-   const n = nest(value, key)
-   nests.add(n)
-   //$todo
-   value.watch(e => {
-    setState(state => {
-     if (state[key] === e) return state
-     return {
-      ...state,
-      [key]: e,
-     }
-    })
-   })
-   //$todo
-   initialState[key] = value.getState()
-  }
- }
- return nests
-}
