@@ -3,7 +3,7 @@
 import {addToArray} from './util'
 import {CHANGED} from './status'
 import {detach} from './detach'
-import {setProperty} from '../setProperty'
+import {REACTOR} from '../kind/case/derive'
 
 export class Reactor {
  _governor: * = null
@@ -11,13 +11,10 @@ export class Reactor {
  react: *
  _active = false
  _reacting = false
- /*::
-  _type = 'REACTOR'
- */
+ /*::;+*/ kind = REACTOR
  constructor(parent: *, react: *) {
   this._parent = parent
   this.react = react
-  setProperty('_type', ('REACTOR': 'REACTOR'), this)
  }
  start() {
   this._active = true

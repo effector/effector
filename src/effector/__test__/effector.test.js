@@ -14,18 +14,9 @@ import {
  type Domain,
 } from '..'
 
-import {readKind} from '../../kind'
+import * as Kind from '../../kind'
 
 import warning from '../../warning'
-
-test('kind typechecks', () => {
- expect(readKind(createStore(0))).toBe('store')
- expect(readKind(createEvent('foo'))).toBe('event')
- expect(readKind(createEffect('foo'))).toBe('effect')
- expect(readKind()).toBe('none')
- expect(readKind(null)).toBe('none')
- expect(readKind('foo')).toBe('none')
-})
 
 test('store.reset(event)', () => {
  const fn = jest.fn()

@@ -6,7 +6,7 @@ import warning from '../../warning'
 import {from, type Stream} from 'most'
 import {atom, type Atom} from '../../derive'
 import type {Event, Effect} from '../index.h'
-import {readKind} from '../../kind'
+import * as Kind from '../../kind'
 import {setProperty} from '../../setProperty'
 
 export function createEvent<Payload>(name: string): Event<Payload> {
@@ -36,7 +36,7 @@ function eventConstructor<Payload>({
  setProperty('eventState', eventState, instance)
  setProperty('toString', getType, instance)
  setProperty('getType', getType, instance)
- setProperty('kind', () => ('event': 'event'), instance)
+ setProperty('kind', Kind.EVENT, instance)
  setProperty($$observable, () => instance, instance)
 
  instance.watch = watch
@@ -53,10 +53,7 @@ function eventConstructor<Payload>({
   return mapped
  }
  function to(target, handler?: Function) {
-  invariant(
-   readKind(target) === 'store',
-   'right now event.to support only stores',
-  )
+  invariant(Kind.isStore(target), 'right now event.to support only stores')
   invariant(
    typeof target.setState === 'function',
    'right now event.to support only stores',
@@ -136,7 +133,7 @@ function effectConstructor<Payload, Done>({
  instance.fail = fail
  instance.use = use
  setProperty('create', create, instance)
- setProperty('kind', () => ('effect': 'effect'), instance)
+ setProperty('kind', Kind.EFFECT, instance)
  let thunk = async(value: Payload): Promise<Done> => {
   warning('no thunk used')
   declare var result: Done

@@ -8,22 +8,19 @@ import {reactorFabric} from './reactorFabric'
 import {maybe} from './methods/maybe'
 import type {Reactor} from './reactors'
 import type {Lifecycle} from './index.h'
-import {setProperty} from '../setProperty'
+import {DERIVATION} from '../kind/case/derive'
 
 export class Derivation<T> {
  /*::+*/ _deriver: () => T
  _parents /*: null | Array<*> */ = null
  _value: T = ((unique: any): T)
  _equals /*: null | (a: T, b: T) => boolean*/ = null
- /*::
- _type = 'DERIVATION'
- */
- _state: Status = DISCONNECTED
 
+ _state: Status = DISCONNECTED
+ /*::;+*/ kind = DERIVATION
  _activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(deriver: () => T) {
   this._deriver = deriver
-  setProperty('_type', ('DERIVATION': 'DERIVATION'), this)
  }
 
  get(): T {

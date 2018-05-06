@@ -1,20 +1,33 @@
 //@flow
+import * as Kind from '../kind'
 
-
-export function isDerivable(x: mixed): boolean %checks {
- return (
-  x !== undefined
-  && x !== null
-  && (x._type === 'DERIVATION' || x._type === 'ATOM' || x._type === 'LENS')
- )
+export function isDerivable(x: mixed): boolean {
+ switch (Kind.readKind(x)) {
+  case Kind.DERIVATION:
+  case Kind.ATOM:
+  case Kind.LENS:
+   return true
+  default:
+   return false
+ }
 }
 
-export function isAtom(x: mixed): boolean %checks {
- return x !== undefined && x !== null && (x._type === 'ATOM' || x._type === 'LENS')
+export function isAtom(x: mixed): boolean {
+ switch (Kind.readKind(x)) {
+  case Kind.ATOM:
+  case Kind.LENS:
+   return true
+  default:
+   return false
+ }
 }
 
-export function isDerivation(x: mixed): boolean %checks {
- return (
-  x !== undefined && x !== null && (x._type === 'DERIVATION' || x._type === 'LENS')
- )
+export function isDerivation(x: mixed): boolean {
+ switch (Kind.readKind(x)) {
+  case Kind.DERIVATION:
+  case Kind.LENS:
+   return true
+  default:
+   return false
+ }
 }

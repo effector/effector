@@ -9,18 +9,10 @@ import {INIT, REPLACE} from './actionTypes'
 import {applyMiddleware} from './applyMiddleware'
 import type {Event} from '..'
 
-import {readKind} from '../kind'
+import * as Kind from '../kind'
 import warning from '../warning'
 import {setProperty} from '../setProperty'
 
-function* untilEnd<T>(set: Set<T>): Iterable<T> {
- do {
-  for (const e of set) {
-   set.delete(e)
-   yield e
-  }
- } while (set.size > 0)
-}
 export type Nest = {
  get(): any,
  set(state: any, action: any): any,
@@ -52,7 +44,7 @@ function storeConstructor<State>(props) {
  })
 
  const store = {
-  /*::kind(){return 'store'},*/
+  kind: Kind.STORE,
   id: currentId,
   withProps,
   setState,
@@ -70,7 +62,6 @@ function storeConstructor<State>(props) {
   //$off
   [$$observable]: observable,
  }
- setProperty('kind', () => 'store', store)
  setProperty('stateAtom', stateAtom, store)
 
  function ensureCanMutateNextListeners() {
@@ -137,8 +128,11 @@ function storeConstructor<State>(props) {
   let currentState
   try {
    currentState = setNested(getAtom().get(), action, nests)
-   for (const fn of untilEnd(pending)) {
-    currentState = fn(currentState, action.payload, action.type)
+   while (pending.size > 0) {
+    for (const fn of pending) {
+     pending.delete(fn)
+     currentState = fn(currentState, action.payload, action.type)
+    }
    }
    getAtom().set(currentState)
    isDone = true
@@ -220,8 +214,7 @@ function storeConstructor<State>(props) {
  }
 
  function to(action: Function, reduce) {
-  const needReduce =
-   readKind(action) === 'store' && typeof reduce === 'function'
+  const needReduce = Kind.isStore(action) && typeof reduce === 'function'
   return watch(data => {
    if (!needReduce) {
     action(data)
@@ -233,9 +226,9 @@ function storeConstructor<State>(props) {
   })
  }
  function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
-  switch (readKind(eventOrFn)) {
-   case 'event':
-   case 'effect':
+  switch (Kind.readKind(eventOrFn)) {
+   case (2: Kind.Event):
+   case (3: Kind.Effect):
     if (typeof fn === 'function')
      return eventOrFn.watch(payload =>
       fn(store.getState(), payload, eventOrFn.getType()),
@@ -383,7 +376,7 @@ function getNested(initialState, setState) {
  const nests: Set<Nest> = new Set()
  if (typeof initialState !== 'object' || initialState === null) return nests
  for (const [key, value] of Object.entries({...initialState})) {
-  if (readKind(value) === 'store') {
+  if (Kind.isStore(value)) {
    const n = nest(value, key)
    nests.add(n)
    //$todo

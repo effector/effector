@@ -11,7 +11,7 @@ import {deriveFrom} from './methods/deriveFrom'
 import type {Reactor} from './reactors'
 import {mark} from './mark'
 import warning from '../warning'
-import {setProperty} from '../setProperty'
+import {ATOM} from '../kind/case/derive'
 
 function equals(ctx, a: any, b: any): boolean {
  if (typeof ctx._equals === 'function') return ctx._equals(a, b)
@@ -27,17 +27,14 @@ import type {Lifecycle} from './index.h'
 
 export class Atom<T> {
  /*::+*/ id: number = nextId()
+ /*::;+*/ kind = ATOM
  _state: Status = UNCHANGED
  _equals /*: null | (a: T, b: T) => boolean*/ = null
 
- /*::
- ;_type = ('ATOM': 'ATOM');
- */
  _value: T
  _activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(value: T) {
   this._value = value
-  setProperty('_type', ('ATOM': 'ATOM'), this)
  }
 
  map<S>(f: (_: T) => S) {

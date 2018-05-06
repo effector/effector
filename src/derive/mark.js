@@ -2,6 +2,7 @@
 // import invariant from 'invariant'
 
 import {UNKNOWN} from './status'
+import * as Kind from '../kind'
 import type {Reactor} from './reactors'
 import type {Derivation} from './derivation'
 import type {Lens} from './lens'
@@ -13,15 +14,17 @@ export function mark<T>(
 ) {
  for (let i = 0, len = node._activeChildren.length; i < len; i++) {
   const child = node._activeChildren[i]
-  switch (child._type) {
-   case 'DERIVATION':
-   case 'LENS':
+  switch (
+   Kind.readKind(child) //TODO Where is Atom?
+  ) {
+   case Kind.DERIVATION:
+   case Kind.LENS:
     if (child._state !== UNKNOWN) {
      ((child: any): Lens<T> | Derivation<T>)._state = UNKNOWN
      mark(((child: any): Lens<T> | Derivation<T>), reactors)
     }
     break
-   case 'REACTOR':
+   case Kind.REACTOR:
     reactors.push(((child: any): Reactor))
     break
   }
