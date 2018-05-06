@@ -1,7 +1,7 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 // import alias from 'rollup-plugin-path-alias'
-import cleanup from 'rollup-plugin-cleanup'
+// import cleanup from 'rollup-plugin-cleanup'
 import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
@@ -38,12 +38,44 @@ const babelCfg = {
  ],
 }
 
-// const resolvePackage = name =>
-//  resolvePath(__dirname, '..', `${name}/src/index.js`)
-
 const presets = babelCfg.presets
 
 const plugins = babelCfg.plugins
+const rollupPlugins = [
+ // alias({
+ //  paths: {
+ //   '@effector/effector': resolvePackage('effector'),
+ //   '@effector/store': resolvePackage('store'),
+ //   '@effector/derive': resolvePackage('derive'),
+ //  },
+ //  extensions: ['js'],
+ // }),
+ resolve({
+  jail: resolvePath(__dirname, 'src'),
+ }),
+ babel({
+  //  exclude: 'node_modules/**',
+  presets,
+  plugins,
+  runtimeHelpers: true,
+ }),
+ //  cleanup({
+ //   comments: [/#/],
+ //  }),
+ uglify({
+  mangle: {
+   toplevel: true,
+  },
+  compress: {
+   pure_getters: true,
+  },
+  output: {
+   comments: /#/i,
+     //  beautify: true,
+     //  indent_level: 2,
+  },
+ }),
+]
 
 export default [
  {
@@ -63,41 +95,7 @@ export default [
    },
   ],
 
-  plugins: [
-   // alias({
-   //  paths: {
-   //   '@effector/effector': resolvePackage('effector'),
-   //   '@effector/store': resolvePackage('store'),
-   //   '@effector/derive': resolvePackage('derive'),
-   //  },
-   //  extensions: ['js'],
-   // }),
-   resolve({
-    jail: resolvePath(__dirname, 'src'),
-   }),
-   babel({
-    //  exclude: 'node_modules/**',
-    presets,
-    plugins,
-    runtimeHelpers: true,
-   }),
-   //  cleanup({
-   //   comments: [/#/],
-   //  }),
-   uglify({
-    mangle: {
-     toplevel: true,
-    },
-    compress: {
-     pure_getters: true,
-    },
-    output: {
-     comments: /#/i,
-     //  beautify: true,
-     //  indent_level: 2,
-    },
-   }),
-  ],
+  plugins: rollupPlugins,
  },
  {
   input: 'src/react/createStoreComponent.js',
@@ -116,37 +114,6 @@ export default [
    },
   ],
 
-  plugins: [
-   // alias({
-   //  paths: {
-   //   '@effector/effector': resolvePackage('effector'),
-   //   '@effector/store': resolvePackage('store'),
-   //   '@effector/derive': resolvePackage('derive'),
-   //  },
-   //  extensions: ['js'],
-   // }),
-   resolve({
-    jail: resolvePath(__dirname, 'src'),
-   }),
-   babel({
-    //  exclude: 'node_modules/**',
-    presets,
-    plugins,
-    runtimeHelpers: true,
-   }),
-   uglify({
-    mangle: {
-     toplevel: true,
-    },
-    compress: {
-     pure_getters: true,
-    },
-    output: {
-     comments: /#/i,
-     //  beautify: true,
-     //  indent_level: 2,
-    },
-   }),
-  ],
+  plugins: rollupPlugins,
  },
 ]
