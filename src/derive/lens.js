@@ -5,6 +5,7 @@ import {atomically} from './transactions'
 import {update} from './update'
 import {LENS} from '../kind/case/derive'
 import type {LensDescriptor} from './index.h'
+import {setLens} from './methods/set'
 
 export class Lens<T> extends Derivation<T> {
  _descriptor: LensDescriptor<T>
@@ -16,9 +17,7 @@ export class Lens<T> extends Derivation<T> {
  }
 
  set(value: T) {
-  atomically(() => {
-   this._descriptor.set(value)
-  })
+  setLens(this, value)
  }
  update(f: Function, ...args: any[]) {
   return update(this, f, args)

@@ -2,24 +2,14 @@
 // import invariant from 'invariant'
 
 import {nextId} from './util'
-import {maybeTrack, inTransaction, processReactors} from './transactions'
 import {maybeCaptureParent} from './parents'
 import {UNCHANGED, CHANGED, type Status} from './status'
 import {reactorFabric} from './reactorFabric'
 import {update} from './update'
 import {deriveFrom} from './methods/deriveFrom'
 import type {Reactor} from './reactors'
-import {mark} from './mark'
-import warning from '../warning'
 import {ATOM} from '../kind/case/derive'
-
-function equals(ctx, a: any, b: any): boolean {
- if (typeof ctx._equals === 'function') return ctx._equals(a, b)
- return (
-  Object.is(a, b)
-  || (a != null && typeof a.equals === 'function' && a.equals(b))
- )
-}
+import {setAtom} from './methods/set'
 
 import {Derivation} from './derivation'
 
@@ -46,26 +36,7 @@ export class Atom<T> {
  }
 
  set(value: T) {
-  maybeTrack(this)
-
-  const oldValue = this._value
-  this._value = value
-
-  if (inTransaction()) return
-  if (equals(this, value, oldValue)) return
-  this._state = CHANGED
-  const reactors: Array<*> = []
-  let isThrow = true
-  try {
-   mark(this, reactors)
-   processReactors(reactors)
-   isThrow = false
-  } finally {
-   this._state = UNCHANGED
-   if (isThrow) {
-    warning(`Error during atom's setting`)
-   }
-  }
+  setAtom(this, value)
  }
 
  get(): T {

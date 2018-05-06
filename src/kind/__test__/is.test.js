@@ -11,9 +11,6 @@ import {
 
 import * as is from '../is'
 
-test('✅ (positive check)', () => {
- expect(is.isStore(createStore(0))).toBe(true)
-})
 describe('isStore', () => {
  test('✅ (positive check)', () => {
   expect(is.isStore(createStore(0))).toBe(true)

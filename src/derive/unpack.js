@@ -2,13 +2,13 @@
 
 import type {Readable} from './index.h'
 import {isDerivable} from './types'
-import {readKind} from '../kind'
+import {isStore} from '../kind'
 
 export function deepUnpack(thing: any) {
  if (isDerivable(thing)) {
   return thing.get()
  }
- if (readKind(thing) === 'store') {
+ if (isStore(thing)) {
   return deepUnpack(thing.stateAtom)
  }
  if (Array.isArray(thing)) {
