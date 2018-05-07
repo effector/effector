@@ -4,13 +4,15 @@ import {removeFromArray} from './util'
 import {DISCONNECTED} from './status'
 import type {Derivation} from './derivation'
 import type {Reactor} from './reactors'
+import type {Box} from './index.h'
 
 export function detach(
  parent: Derivation<*>,
  child: Derivation<any> | Reactor,
 ) {
  removeFromArray(parent._activeChildren, child)
- if (parent._activeChildren.length !== 0 || parent._parents == null) return
+ if (parent._parents == null) return
+ if (parent._activeChildren.length !== 0) return
  for (let i = 0; i < parent._parents.length; i++) {
   detach(parent._parents[i], parent)
  }

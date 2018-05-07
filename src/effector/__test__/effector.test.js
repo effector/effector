@@ -49,6 +49,32 @@ test('will run in ecpected order', () => {
  expect(fn).toHaveBeenCalledTimes(3)
 })
 
+test('reducer defaults', () => {
+ const fn1 = jest.fn()
+ const fn2 = jest.fn()
+ const fn3 = jest.fn()
+ const add = createEvent('add')
+ const sub = createEvent('sub')
+ const state1 = createStore(3)
+  .on(add, (state, payload, type) => {
+   fn1(state, payload, type)
+  })
+  .on(sub, (state, payload, type) => {
+   fn2(state, payload, type)
+   return state - payload
+  })
+ state1.watch(fn3)
+ sub(1)
+ add(10)
+ add(2)
+ expect({
+  add: fn1.mock.calls,
+  sub: fn2.mock.calls,
+  watch: fn3.mock.calls,
+  state: state1.getState(),
+ }).toMatchSnapshot()
+})
+
 test.skip('event.link(event)', () => {
  const fn = jest.fn()
  const reset = createEvent('reset')
@@ -58,7 +84,7 @@ test.skip('event.link(event)', () => {
   .on(add, (n, nn) => n + nn)
   .on(mult, (n, q) => n * q)
   .reset(reset)
-
+ //$off
  const halt = add.link(mult, n => n % 10, n => n + 10)
  const currentList = createStore([])
   .on(add, (list, pl) => [...list, {add: pl}])

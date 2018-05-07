@@ -3,15 +3,16 @@
 import {addToArray} from './util'
 import {detach} from './detach'
 import {REACTOR} from '../kind/case/derive'
+import type {Box} from './index.h'
 
 export class Reactor {
  _governor: Reactor | null = null
- _parent: *
+ _parent: Box<any>
  react: *
  _active = false
  _reacting = false
  /*::;+*/ kind = REACTOR
- constructor(parent: *, react: *) {
+ constructor(parent: Box<any>, react: *) {
   this._parent = parent
   this.react = react
  }

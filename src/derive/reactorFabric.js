@@ -5,8 +5,15 @@ import {isDerivable} from './types'
 
 import {Reactor} from './reactors'
 import type {Derivation} from './derivation'
+import type {Atom} from './atom'
 import type {Lifecycle} from './index.h'
-
+export type Conditions = {from: boolean, until: boolean, when: boolean}
+export type Condition =
+ | ((d: Derivation<*>) => boolean)
+ | Atom<boolean>
+ | Derivation<boolean>
+ | boolean
+ | void
 export function reactorFabric<T>(
  Derivation: Class<Derivation<T>>,
  derivable: *,
@@ -34,7 +41,8 @@ export function reactorFabric<T>(
   controller.stop()
  })
 
- function getCondition(condition: *, def) {
+ function getCondition(condition: Condition, def: boolean) {
+  if (typeof condition === 'boolean') return condition
   if (!condition) return def
   if (typeof condition === 'function') return condition(derivable)
   return condition.get()
@@ -48,7 +56,7 @@ export function reactorFabric<T>(
  const $until = assertCondition(opts.until, 'until')
  const $when = assertCondition(opts.when, 'when')
 
- const $conds = new Derivation((): any => ({
+ const $conds = new Derivation(() => ({
   from: getCondition($from, true),
   until: getCondition($until, false),
   when: getCondition($when, true),
@@ -56,7 +64,7 @@ export function reactorFabric<T>(
 
  let started = false
 
- const controller = new Reactor($conds, (conds: *) => {
+ const controller = new Reactor($conds, (conds: Conditions) => {
   if (conds.from) {
    started = true
   }

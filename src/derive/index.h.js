@@ -2,6 +2,8 @@
 
 import type {Derivation} from './derivation'
 import type {Atom} from './atom'
+import type {Lens} from './lens'
+export type Box<A> = Lens<A> | Atom<A> | Derivation<A>
 
 export type Readable<T> = {
  get(): T,

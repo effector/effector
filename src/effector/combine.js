@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 import type {Store} from '../store'
-import {createLiteStore} from '../store/createStore'
+import {createStore} from '../store/createStore'
 import {derive, atomically, struct, atom} from '../derive'
 
 export function combine(...args: Array<Store<any>>): Store<any> {
@@ -10,7 +10,7 @@ export function combine(...args: Array<Store<any>>): Store<any> {
  const handler: Function = (args[args.length - 1]: any)
  const stores = args.slice(0, -1)
  const rawStore = struct(stores)
- const resultStore = createLiteStore(
+ const resultStore = createStore(
   derive(() => {
    let result
    atomically(() => {

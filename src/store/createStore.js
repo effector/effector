@@ -25,7 +25,7 @@ export type Nest = {
  set(state: any, action: any): any,
 }
 let id = 0
-export function createLiteStore(state: any) {
+export function createStore<State>(state: State) {
  return storeConstructor({currentReducer: _ => _, currentState: state})
 }
 function storeConstructor<State>(props) {
@@ -111,8 +111,9 @@ function storeConstructor<State>(props) {
   if (typeof action.type !== 'string' && typeof action.type !== 'number')
    return action
   atomically(() => {
-   const newValue = currentReducer(getState(), action.payload, action.type)
-   getAtom().set(newValue)
+   const state = getState()
+   const newResult = currentReducer(state, action.payload, action.type)
+   setter(state, newResult)
   })
 
   return action
@@ -156,7 +157,7 @@ function storeConstructor<State>(props) {
 
  function reset(event) {
   const off = watch(event, (state, payload, type) => {
-   getAtom().set(defaultState)
+   setter(state, defaultState)
   })
   return store
  }
@@ -164,7 +165,7 @@ function storeConstructor<State>(props) {
  function on(event: any, handler: Function) {
   const off = watch(event, (state, payload, type) => {
    const newResult = handler(state, payload, type)
-   getAtom().set(newResult)
+   setter(state, newResult)
   })
   return store
  }
@@ -198,11 +199,11 @@ function storeConstructor<State>(props) {
   switch (Kind.readKind(eventOrFn)) {
    case (2: Kind.Event):
    case (3: Kind.Effect):
-    if (typeof fn === 'function')
+    if (typeof fn === 'function') {
      return eventOrFn.watch(payload =>
       fn(store.getState(), payload, eventOrFn.getType()),
      )
-    else throw new TypeError('watch requires function handler')
+    } else throw new TypeError('watch requires function handler')
 
    default:
     if (typeof eventOrFn === 'function') {
@@ -220,10 +221,13 @@ function storeConstructor<State>(props) {
  function setState(value, reduce?: Function) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
   const state = getAtom().get()
-  const result = currentReducer(state, value)
-  // if (state === result && typeof reduce === 'undefined') return
-  getAtom().set(result)
-  // dispatch({type: `set state ${currentId}`, payload: value})
+  const newResult = currentReducer(state, value)
+  setter(state, newResult)
+ }
+ function setter(oldState, newState) {
+  if (newState === undefined || newState === null || newState === oldState)
+   return
+  getAtom().set(newState)
  }
 
  dispatch({type: INIT})
@@ -275,16 +279,15 @@ export function createReduxStore<T>(
   'enhancer should be function, array of functions or undefined',
  )
  if (preloadedState === undefined) {
-  return createStore(preloadedState, reducer, enhancer)
+  return reduxStoreFabric(preloadedState, reducer, enhancer)
  }
- function fullReducer(state, event) {
-  return reducer(state, event)
- }
- if (enhancer === undefined) return createStore(preloadedState, fullReducer, [])
- return createStore(preloadedState, fullReducer, enhancer)
+
+ if (enhancer === undefined)
+  return reduxStoreFabric(preloadedState, reducer, [])
+ return reduxStoreFabric(preloadedState, reducer, enhancer)
 }
 
-export function createStore<T>(
+function reduxStoreFabric<T>(
  preloadedStateRaw?: T,
  reducerRaw: Function,
  enhancerRaw: Function | Function[],
@@ -309,7 +312,7 @@ export function createStore<T>(
    invariant(Array.isArray(enhancer), 'Expected the enhancer to be an array')
    enhancer = applyMiddleware(...enhancer)
   }
-  return enhancer(createStore)(reducer, preloadedState)
+  return enhancer(createReduxStore)(reducer, preloadedState)
  }
  invariant(
   typeof reducer === 'function',

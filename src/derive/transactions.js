@@ -5,7 +5,9 @@ import {equals} from './util'
 import {UNCHANGED, CHANGED} from './status'
 import {mark} from './mark'
 import type {Reactor} from './reactors'
+import type {Atom} from './atom'
 import {runReactor} from './methods/runReactor'
+import warning from '../warning'
 
 export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {
@@ -20,45 +22,53 @@ export function processReactors(reactors: Array<Reactor>) {
 
 class TransactionContext {
  id2originalValue: * = {}
- parent: *
- modifiedAtoms: * = []
- constructor(parent: *) {
+ /*::;+*/ parent: TransactionContext | null
+ /*::;+*/ level: number
+ modifiedAtoms: Array<Atom<any>> = []
+ constructor(parent: TransactionContext | null) {
+  this.level = parent === null ? 0 : parent.level + 1
   this.parent = parent
  }
 }
 
-export function maybeTrack(atom: *) {
+export function maybeTrack<T>(atom: Atom<T>) {
  if (currentCtx === null) return
  if (atom.id in currentCtx.id2originalValue) return
  currentCtx.modifiedAtoms.push(atom)
  currentCtx.id2originalValue[atom.id] = atom._value
 }
 
-let currentCtx = null
+let currentCtx: TransactionContext | null = null
 
 export function inTransaction() {
  return currentCtx !== null
 }
 
 function transact(f) {
- let fail = true
+ let fail = false
  beginTransaction()
  try {
   f()
-  fail = false
- } finally {
-  if (fail) {
-   abortTransaction()
-  }
+ } catch (err) {
+  warning(err)
+  fail = true
  }
- commitTransaction()
+ if (fail) {
+  abortTransaction()
+ } else {
+  commitTransaction()
+ }
 }
 
 export function atomically(f: () => void) {
  if (!inTransaction()) {
   transact(f)
  } else {
-  f()
+  try {
+   f()
+  } catch (err) {
+   warning(err)
+  }
  }
 }
 
