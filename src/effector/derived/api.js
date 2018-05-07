@@ -127,7 +127,6 @@ function eventConstructor<Payload>({
   const until = () => halt
   instanceAsEvent.eventState.react(
    ({payload, seq}) => {
-    console.warn(fullName, seq)
     if (seq === lastSeq) return
     lastSeq = seq
     atomically(() => {
