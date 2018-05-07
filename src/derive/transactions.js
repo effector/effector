@@ -12,11 +12,11 @@ import warning from '../warning'
 export function processReactors(reactors: Array<Reactor>) {
  for (let i = 0, len = reactors.length; i < len; i++) {
   const r = reactors[i]
-  invariant(
-   !r._reacting,
-   'Synchronous cyclical reactions disallowed. ' + 'Use setImmediate.',
-  )
-  runReactor(r)
+  if (r._reacting) {
+   warning('Synchronous cyclical reactions disallowed. Use setImmediate.')
+  } else {
+   runReactor(r)
+  }
  }
 }
 

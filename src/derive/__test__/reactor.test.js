@@ -564,7 +564,7 @@ describe('setting the values of atoms in a reaction phase', () => {
    b.react(d => {
     a.set(d)
    })
-  }).toThrow()
+  }).not.toThrow() // just exit safely
  })
 
  it('is not allowed if the atom in question is upstream of the reactor', () => {
@@ -584,7 +584,7 @@ describe('setting the values of atoms in a reaction phase', () => {
 
   expect(() => {
    n.set(2)
-  }).toThrow()
+  }).not.toThrow() // just exit safely
   // nmod2 becomes 0, reactor triggers n being set to 4
   // reactor caught up in sweep again, identified as cycle
  })
