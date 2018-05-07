@@ -1,3 +1,12 @@
+# Change Log
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+<a name="0.16.1-beta.12"></a>
+## [0.16.1-beta.12](https://gitlab.com/zerobias/effector/compare/v0.14.0...v0.16.1-beta.12) (2018-05-07)
+
+
+
 # Changelog
 
 ## 0.16.0
