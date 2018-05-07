@@ -53,7 +53,7 @@ export class Store<State> {
  map<T>(fn: (_: State) => T): Store<T>;
  on<E>(
   event: Event<E> | Effect<E, any, any>,
-  handler: (state: State, payload: E) => State,
+  handler: (state: State, payload: E) => (State | void | null),
  ): this;
  subscribe(listner: any): Subscription;
  watch<E>(
