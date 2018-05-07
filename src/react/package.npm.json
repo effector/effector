@@ -11,7 +11,7 @@
  "devDependencies": {},
  "dependencies": {},
  "peerDependencies": {
-  "effector": "^0.16.1-beta.10",
+  "effector": "^0.16.1-beta.11",
   "react": "*"
  },
  "maintainers": [
