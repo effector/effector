@@ -3,15 +3,18 @@
 import invariant from 'invariant'
 // import type {ComponentType, Node} from 'react'
 import {from} from 'most'
+import raf from 'raf'
 import $$observable from 'symbol-observable'
 import {
  atom,
  struct,
  lens,
+ derive,
  atomically,
  type Atom,
  type Derivable,
 } from '../derive'
+import {deepUnpack} from '../derive/unpack'
 import {INIT, REPLACE} from './actionTypes'
 import {applyMiddleware} from './applyMiddleware'
 import type {Event} from '..'
@@ -26,14 +29,66 @@ export type Nest = {
 }
 let id = 0
 export function createStore<State>(state: State) {
- return storeConstructor({currentReducer: _ => _, currentState: state})
+ return storeConstructor({
+  currentReducer: _ => _,
+  currentState: state,
+  isObject: false,
+ })
 }
+
+export function createStoreObject<State>(obj: State) {
+ const isArray = Array.isArray(obj)
+ const state = isArray ? [...obj] : {...obj}
+ const store = storeConstructor({
+  currentReducer: _ => _,
+  currentState: state,
+  isObject: true,
+ })
+ let temp = store.getState()
+ let pending = false
+ let lastCall = -1
+ let delta = Infinity
+ function update(key, value) {
+  const time = Date.now()
+  delta = time - lastCall
+  lastCall = time
+  if (isArray) {
+   const newList = [...temp]
+   newList[key] = value
+   temp = newList
+  } else {
+   temp = {...temp, [key]: value}
+  }
+  if (pending) return
+  if (delta > 60) {
+   store.setState(temp)
+   return
+  }
+  pending = true
+  raf(() => {
+   pending = false
+   store.setState(temp)
+  })
+ }
+ const iter = isArray ? state.map((e, i) => [i, e]) : Object.entries(state)
+ for (const [key, child] of iter) {
+  if (Kind.isStore(child)) {
+   child.watch(e => {
+    update(key, e)
+   })
+  }
+ }
+ return store
+}
+
 function storeConstructor<State>(props) {
  const currentId = (++id).toString(36)
- let {currentReducer, currentState} = props
- const privateStruct: Derivable<State> = (struct(currentState): any)
- let storeSeq = 0
+ let {currentReducer, currentState, isObject} = props
+ const privateStruct: Derivable<State> | Atom<State> = isObject
+  ? (derive(() => deepUnpack(currentState)): any)
+  : atom(currentState)
  const defaultState = privateStruct.get()
+ let storeSeq = 0
  const privateAtom: Atom<{state: State, seq: number}> = atom({
   state: defaultState,
   seq: storeSeq,
@@ -54,15 +109,16 @@ function storeConstructor<State>(props) {
   },
  })
  let oldPrivateStruct = defaultState
- privateStruct.react(state => {
-  if (state === oldPrivateStruct || privateLens.get() === state) {
+ if (isObject) {
+  privateStruct.react(state => {
+   //  if (state === oldPrivateStruct) {
+   //   oldPrivateStruct = state
+   //   return
+   //  }
    oldPrivateStruct = state
-   return
-  }
-  oldPrivateStruct = state
-  privateLens.set(state)
- })
-
+   privateLens.set(state)
+  })
+ }
  const stateAtom = privateLens
  const store = {
   kind: Kind.STORE,
@@ -94,13 +150,16 @@ function storeConstructor<State>(props) {
    typeof listener === 'function',
    'Expected the listener to be a function.',
   )
-
-  let halt = false
-  const until = () => halt
-  getAtom().react(listener, {until})
+  let active = true
+  const unsub = getAtom().react((...args) => {
+   if (!active) return
+   listener(...args)
+  })
 
   function unsubscribe() {
-   halt = true
+   if (!active) return
+   active = false
+   unsub()
   }
   unsubscribe.unsubscribe = unsubscribe
   return unsubscribe
@@ -144,9 +203,7 @@ function storeConstructor<State>(props) {
      }
     }
 
-    // observeState(getState())
-    const unsubscribe = subscribe(observeState)
-    return {unsubscribe}
+    return subscribe(observeState)
    },
    //$off
    [$$observable]() {
@@ -264,65 +321,27 @@ function epicStore(event, store, fn: Function) {
 
 export function createReduxStore<T>(
  reducer: (state: T, event: any) => T,
- preloadedState?: T,
- enhancer: Function,
+ preloadedStateRaw?: T,
+ enhancerRaw?: Function | Function[],
 ) {
  invariant(
   typeof reducer === 'function',
   'Expected reducer to be a function, got %s',
   typeof reducer,
  )
- invariant(
-  Array.isArray(enhancer)
-   || typeof enhancer === 'undefined'
-   || typeof enhancer === 'function',
-  'enhancer should be function, array of functions or undefined',
- )
- if (preloadedState === undefined) {
-  return reduxStoreFabric(preloadedState, reducer, enhancer)
- }
-
- if (enhancer === undefined)
-  return reduxStoreFabric(preloadedState, reducer, [])
- return reduxStoreFabric(preloadedState, reducer, enhancer)
-}
-
-function reduxStoreFabric<T>(
- preloadedStateRaw?: T,
- reducerRaw: Function,
- enhancerRaw: Function | Function[],
-) {
- let reducer = reducerRaw
  let enhancer = enhancerRaw
  let preloadedState = preloadedStateRaw
  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
   enhancer = preloadedState
   preloadedState = undefined
- } else if (typeof reducer === 'undefined') {
-  if (typeof enhancer === 'function') {
-   reducer = enhancer
-   enhancer = undefined
-  } else {
-   reducer = _ => _
-  }
  }
-
- if (typeof enhancer !== 'undefined') {
-  if (typeof enhancer !== 'function') {
-   invariant(Array.isArray(enhancer), 'Expected the enhancer to be an array')
-   enhancer = applyMiddleware(...enhancer)
-  }
+ if (Array.isArray(enhancer)) {
+  enhancer = applyMiddleware(...enhancer)
+ }
+ if (enhancer !== undefined)
   return enhancer(createReduxStore)(reducer, preloadedState)
- }
- invariant(
-  typeof reducer === 'function',
-  'Expected the reducer to be a function',
- )
-
  return storeConstructor({
   currentReducer: reducer,
   currentState: preloadedState,
  })
 }
-
-export {createStore as createStoreObject}

@@ -35,7 +35,7 @@ export class Derivation<T> {
  }
 
  react(f: (value: T) => void, options?: Lifecycle<T>): void {
-  reactorFabric(Derivation, this, f, options)
+  return reactorFabric(Derivation, this, f, options)
  }
 
  thru<Args, R>(

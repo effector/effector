@@ -4,7 +4,7 @@
 import {
  maybeTrack,
  inTransaction,
- processReactors,
+ processReactorsFull,
  atomically,
 } from '../transactions'
 
@@ -37,7 +37,7 @@ export function setAtom<T>(atom: Atom<T>, value: T) {
  let isThrow = true
  try {
   mark(atom, reactors)
-  processReactors(reactors)
+  processReactorsFull(reactors)
   isThrow = false
  } finally {
   atom._state = UNCHANGED

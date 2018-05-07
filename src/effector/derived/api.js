@@ -125,8 +125,9 @@ function eventConstructor<Payload>({
   let halt = false
   let lastSeq = -1
   const until = () => halt
-  instanceAsEvent.eventState.react(
+  const unsub = instanceAsEvent.eventState.react(
    ({payload, seq}) => {
+    if (halt) return
     if (seq === lastSeq) return
     lastSeq = seq
     atomically(() => {
@@ -136,7 +137,9 @@ function eventConstructor<Payload>({
    {skipFirst: true, until},
   )
   return () => {
+   if (halt) return
    halt = true
+   unsub()
   }
  }
 

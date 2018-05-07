@@ -7,7 +7,10 @@ import {isStore} from '../kind'
 export function deepUnpack(thing: any) {
  if (thing === undefined || thing === null) return thing
  if (isDerivable(thing)) {
-  return thing.get()
+  if (typeof thing.get !== 'function') {
+   return thing
+  }
+  return deepUnpack(thing.get())
  }
  if (isStore(thing)) {
   return deepUnpack(thing.stateAtom)

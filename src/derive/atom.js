@@ -32,7 +32,7 @@ export class Atom<T> {
  }
 
  react(f: Function, opts?: Lifecycle<T>) {
-  reactorFabric(Derivation, this, f, opts)
+  return reactorFabric(Derivation, this, f, opts)
  }
 
  set(value: T) {

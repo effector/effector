@@ -9,11 +9,15 @@ import type {Atom} from './atom'
 import {runReactor} from './methods/runReactor'
 import warning from '../warning'
 
-export function processReactors(reactors: Array<Reactor>) {
+export function processReactors(
+ reactors: Array<Reactor>,
+ pendings: Array<Reactor>,
+) {
  for (let i = 0, len = reactors.length; i < len; i++) {
   const r = reactors[i]
   if (r._reacting) {
    warning('Synchronous cyclical reactions disallowed. Use setImmediate.')
+   pendings.push(r)
   } else {
    runReactor(r)
   }
@@ -85,7 +89,18 @@ export function atomic<F: Function>(f: F): F {
 function beginTransaction() {
  currentCtx = new TransactionContext(currentCtx)
 }
-
+export function processReactorsFull(reactors: Array<Reactor>, cb: () => void) {
+ let pendings = reactors
+ let lastLength = reactors.length
+ do {
+  const newReactors = pendings
+  pendings = []
+  processReactors(newReactors, pendings)
+  if (typeof cb === 'function') cb()
+  if (pendings.length >= lastLength) return
+  lastLength = pendings.length
+ } while (pendings.length > 0)
+}
 function commitTransaction() {
  if (currentCtx === null) return
  const ctx = currentCtx
@@ -101,10 +116,11 @@ function commitTransaction() {
    mark(a, reactors)
   }
  })
- processReactors(reactors)
- ctx.modifiedAtoms.forEach(a => {
-  a._state = UNCHANGED
- })
+ processReactorsFull(reactors, () =>
+  ctx.modifiedAtoms.forEach(a => {
+   a._state = UNCHANGED
+  }),
+ )
 }
 
 function abortTransaction() {

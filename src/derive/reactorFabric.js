@@ -19,7 +19,7 @@ export function reactorFabric<T>(
  derivable: *,
  f: Function,
  options: *,
-) {
+): () => void {
  invariant(
   typeof f === 'function',
   'the first argument to .react must be a function',
@@ -85,6 +85,10 @@ export function reactorFabric<T>(
  controller.force()
 
  reactor._governor = controller
+ return () => {
+  reactor.stop()
+  controller.stop()
+ }
 }
 
 function assertCondition(condition, name) {
