@@ -1,6 +1,6 @@
 //@flow
 
-import type {ComponentType, Node} from 'react'
+import type {ComponentType, ElementConfig, Node} from 'react'
 import {Store} from 'effector'
 
 export type StoreComponent<State> = ComponentType<{
@@ -10,3 +10,9 @@ export type StoreComponent<State> = ComponentType<{
 declare export function createStoreComponent<State>(
  store: Store<State>,
 ): StoreComponent<State>
+
+declare export function connect<State: Object, Com: ComponentType<*>>(
+ Component: Com,
+): (
+ store: Store<State>,
+) => ComponentType<$Exact<$Diff<ElementConfig<Com>, State>>>
