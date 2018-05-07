@@ -28,3 +28,5 @@ export function connect<State: Object, Com: React.ComponentType<*>>(
 ) => React.ComponentType<$Exact<$Diff<React.ElementConfig<Com>, State>>> {
  return store => createReactState(store, Component)
 }
+
+export {createStoreComponent}
