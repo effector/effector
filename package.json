@@ -16,6 +16,7 @@
   "flow:stop": "pm2 stop flow-effector",
   "flow:restart": "yarn flow:stop && yarn flow"
  },
+ "packages": ["effector", "react"],
  "author": "Zero Bias",
  "license": "MIT",
  "devDependencies": {
