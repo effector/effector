@@ -12,15 +12,15 @@ export function mark<T>(
  node: Atom<T> | Lens<T> | Derivation<T>,
  reactors: Array<Reactor>,
 ) {
- for (let i = 0, len = node._activeChildren.length; i < len; i++) {
-  const child = node._activeChildren[i]
+ for (let i = 0, len = node.activeChildren.length; i < len; i++) {
+  const child = node.activeChildren[i]
   switch (
    Kind.readKind(child) //TODO Where is Atom?
   ) {
    case Kind.DERIVATION:
    case Kind.LENS:
-    if (child._state !== UNKNOWN) {
-     ((child: any): Lens<T> | Derivation<T>)._state = UNKNOWN
+    if (child.status !== UNKNOWN) {
+     ((child: any): Lens<T> | Derivation<T>).status = UNKNOWN
      mark(((child: any): Lens<T> | Derivation<T>), reactors)
     }
     break

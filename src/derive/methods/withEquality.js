@@ -29,7 +29,7 @@ export function withEquality(
 ) {
  invariant(typeof equals === 'function', 'equals must be function')
  const result = clone(instance)
- result._equals = equals
+ result.equality = equals
 
  return result
 }

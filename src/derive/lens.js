@@ -7,12 +7,12 @@ import type {LensDescriptor} from './index.h'
 import {setLens} from './methods/set'
 
 export class Lens<T> extends Derivation<T> {
- _descriptor: LensDescriptor<T>
+ descriptor: LensDescriptor<T>
 
  /*::+*/ kind = LENS
  constructor(descriptor: LensDescriptor<T>) {
   super(descriptor.get)
-  this._descriptor = descriptor
+  this.descriptor = descriptor
  }
 
  set(value: T) {

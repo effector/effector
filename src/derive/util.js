@@ -37,6 +37,6 @@ function defaultEquals(a: any, b: any): boolean {
 
 // declare export function equals(ctx: any, a: any, b: any): boolean
 export function equals<T>(ctx: any, a: T, b: T) {
- if (typeof ctx._equals === 'function') return ctx._equals(a, b)
+ if (typeof ctx.equality === 'function') return ctx.equality(a, b)
  return defaultEquals(a, b)
 }

@@ -39,7 +39,7 @@ export function maybeTrack<T>(atom: Atom<T>) {
  if (currentCtx === null) return
  if (atom.id in currentCtx.id2originalValue) return
  currentCtx.modifiedAtoms.push(atom)
- currentCtx.id2originalValue[atom.id] = atom._value
+ currentCtx.id2originalValue[atom.id] = atom.value
 }
 
 let currentCtx: TransactionContext | null = null
@@ -109,16 +109,16 @@ function commitTransaction() {
  if (currentCtx !== null) return
  const reactors = []
  ctx.modifiedAtoms.forEach(a => {
-  if (equals(a, a._value, ctx.id2originalValue[a.id])) {
-   a._state = UNCHANGED
+  if (equals(a, a.value, ctx.id2originalValue[a.id])) {
+   a.status = UNCHANGED
   } else {
-   a._state = CHANGED
+   a.status = CHANGED
    mark(a, reactors)
   }
  })
  processReactorsFull(reactors, () =>
   ctx.modifiedAtoms.forEach(a => {
-   a._state = UNCHANGED
+   a.status = UNCHANGED
   }),
  )
 }
@@ -128,8 +128,8 @@ function abortTransaction() {
  const ctx = currentCtx
  currentCtx = ctx.parent
  ctx.modifiedAtoms.forEach(atom => {
-  atom._value = ctx.id2originalValue[atom.id]
-  atom._state = UNCHANGED
+  atom.value = ctx.id2originalValue[atom.id]
+  atom.status = UNCHANGED
   mark(atom, [])
  })
 }

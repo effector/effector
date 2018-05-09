@@ -11,16 +11,16 @@ import type {Lifecycle} from './index.h'
 import {DERIVATION} from '../kind/case/derive'
 
 export class Derivation<T> {
- /*::+*/ _deriver: () => T
- _parents /*: null | Array<*> */ = null
- _value: T = ((unique: any): T)
- _equals /*: null | (a: T, b: T) => boolean*/ = null
+ /*::+*/ deriver: () => T
+ parents /*: null | Array<*> */ = null
+ value: T = ((unique: any): T)
+ equality /*: null | (a: T, b: T) => boolean*/ = null
 
- _state: Status = DISCONNECTED
+ status: Status = DISCONNECTED
  /*::;+*/ kind = DERIVATION
- _activeChildren: Array<Reactor | Derivation<*>> = []
+ activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(deriver: () => T) {
-  this._deriver = deriver
+  this.deriver = deriver
  }
 
  get(): T {

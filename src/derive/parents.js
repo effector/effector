@@ -49,7 +49,7 @@ export function maybeCaptureParent(p: Derivation<any> | Atom<any>) {
  // getting rid of it)
  // sneaky hack for doing captureDereferences
  if (child !== undefined) {
-  addToArray(p._activeChildren, child)
+  addToArray(p.activeChildren, child)
  }
  if (frame.offset === frame.parents.length) {
   frame.parents.push(p)

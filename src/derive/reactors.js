@@ -19,7 +19,7 @@ export class Reactor {
  start() {
   this._active = true
 
-  addToArray(this._parent._activeChildren, this)
+  addToArray(this._parent.activeChildren, this)
 
   this._parent.get()
  }

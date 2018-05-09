@@ -9,7 +9,7 @@ import type {Derivation} from '../derivation'
 export function is<T>(
  instance: {
   get(): T,
-  _equals: null | ((a: T, b: T) => boolean),
+  equality: null | ((a: T, b: T) => boolean),
  },
  other: mixed,
 ): Derivation<boolean> {

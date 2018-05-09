@@ -80,7 +80,7 @@ test('the unique object is not equal to anything according to its .equals method
  expect(unique.equals(unique)).toEqual(false)
 })
 
-test('equals uses _equals method in context if specified', () => {
- expect(equals({_equals: () => true}, 1, 2)).toEqual(true)
- expect(equals({_equals: () => false}, 1, 2)).toEqual(false)
+test('equals uses equality method in context if specified', () => {
+ expect(equals({equality: () => true}, 1, 2)).toEqual(true)
+ expect(equals({equality: () => false}, 1, 2)).toEqual(false)
 })

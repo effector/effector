@@ -17,7 +17,7 @@ import type {Lens} from '../lens'
 import * as Kind from '../../kind'
 
 function equalsAtom(ctx, a: any, b: any): boolean {
- if (typeof ctx._equals === 'function') return ctx._equals(a, b)
+ if (typeof ctx.equality === 'function') return ctx.equality(a, b)
  return (
   Object.is(a, b)
   || (a != null && typeof a.equals === 'function' && a.equals(b))
@@ -27,12 +27,12 @@ function equalsAtom(ctx, a: any, b: any): boolean {
 export function setAtom<T>(atom: Atom<T>, value: T) {
  maybeTrack(atom)
 
- const oldValue = atom._value
- atom._value = value
+ const oldValue = atom.value
+ atom.value = value
 
  if (inTransaction()) return
  if (equalsAtom(atom, value, oldValue)) return
- atom._state = CHANGED
+ atom.status = CHANGED
  const reactors: Array<*> = []
  let isThrow = true
  try {
@@ -40,7 +40,7 @@ export function setAtom<T>(atom: Atom<T>, value: T) {
   processReactorsFull(reactors)
   isThrow = false
  } finally {
-  atom._state = UNCHANGED
+  atom.status = UNCHANGED
   if (isThrow) {
    warning(`Error during atom's setting`)
   }
@@ -49,7 +49,7 @@ export function setAtom<T>(atom: Atom<T>, value: T) {
 
 export function setLens<T>(lens: Lens<T>, value: T) {
  atomically(() => {
-  lens._descriptor.set(value)
+  lens.descriptor.set(value)
  })
 }
 declare export function set<T>(instance: Lens<T> | Atom<T>, value: T): void

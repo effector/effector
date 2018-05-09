@@ -14,42 +14,42 @@ import type {Derivation} from '../derivation'
 
 export function get<T>(instance: Derivation<*>): T {
  maybeCaptureParent(instance)
- if (instance._activeChildren.length > 0) {
+ if (instance.activeChildren.length > 0) {
   update(instance)
  } else {
   startCapturingParents(void 0, [])
   try {
-   instance._value = instance._deriver()
+   instance.value = instance.deriver()
   } finally {
    stopCapturingParents()
   }
  }
- return instance._value
+ return instance.value
 }
 
 function update<T>(instance: Derivation<T>) {
- if (instance._parents === null) {
-  // this._state === DISCONNECTED
+ if (instance.parents === null) {
+  // this.status === DISCONNECTED
   forceEval(instance)
-  // this._state === CHANGED ?
+  // this.status === CHANGED ?
   return
  }
- if (instance._state !== UNKNOWN) return
- const len = instance._parents.length
+ if (instance.status !== UNKNOWN) return
+ const len = instance.parents.length
  for (let i = 0; i < len; i++) {
-  const parent = instance._parents[i]
+  const parent = instance.parents[i]
 
-  if (parent._state === UNKNOWN) {
+  if (parent.status === UNKNOWN) {
    update(parent)
   }
 
-  if (parent._state === CHANGED) {
+  if (parent.status === CHANGED) {
    forceEval(instance)
    break
   }
  }
- if (instance._state === UNKNOWN) {
-  instance._state = UNCHANGED
+ if (instance.status === UNKNOWN) {
+  instance.status = UNCHANGED
  }
 }
 
@@ -57,32 +57,32 @@ function forceEval<T>(instance: Derivation<T>) {
  let newVal = null
  let newNumParents
 
- if (instance._parents === null) {
-  instance._parents = []
+ if (instance.parents === null) {
+  instance.parents = []
  }
  try {
-  startCapturingParents(instance, instance._parents)
-  newVal = instance._deriver()
+  startCapturingParents(instance, instance.parents)
+  newVal = instance.deriver()
   newNumParents = retrieveParentsFrame().offset
  } finally {
   stopCapturingParents()
  }
 
- if (!equals(instance, newVal, instance._value)) {
-  instance._state = CHANGED
+ if (!equals(instance, newVal, instance.value)) {
+  instance.status = CHANGED
  } else {
-  instance._state = UNCHANGED
+  instance.status = UNCHANGED
  }
  /*::
- if (instance._parents === null) throw new Error('')
+ if (instance.parents === null) throw new Error('')
  */
- for (let i = newNumParents; i < instance._parents.length; i++) {
-  const oldParent = instance._parents[i]
+ for (let i = newNumParents; i < instance.parents.length; i++) {
+  const oldParent = instance.parents[i]
   detach(oldParent, instance)
-  if (instance._parents) instance._parents[i] = null
+  if (instance.parents) instance.parents[i] = null
  }
 
- instance._parents.length = newNumParents
+ instance.parents.length = newNumParents
 
- instance._value = newVal
+ instance.value = newVal
 }

@@ -18,13 +18,13 @@ import type {Lifecycle} from './index.h'
 export class Atom<T> {
  /*::+*/ id: number = nextId()
  /*::;+*/ kind = ATOM
- _state: Status = UNCHANGED
- _equals /*: null | (a: T, b: T) => boolean*/ = null
+ status: Status = UNCHANGED
+ equality /*: null | (a: T, b: T) => boolean*/ = null
 
- _value: T
- _activeChildren: Array<Reactor | Derivation<*>> = []
+ value: T
+ activeChildren: Array<Reactor | Derivation<*>> = []
  constructor(value: T) {
-  this._value = value
+  this.value = value
  }
 
  map<S>(f: (_: T) => S) {
@@ -41,7 +41,7 @@ export class Atom<T> {
 
  get(): T {
   maybeCaptureParent(this)
-  return this._value
+  return this.value
  }
  update(f: Function, ...args: any[]) {
   return update(this, f, args)

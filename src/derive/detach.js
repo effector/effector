@@ -10,12 +10,12 @@ export function detach(
  parent: Derivation<*>,
  child: Derivation<any> | Reactor,
 ) {
- removeFromArray(parent._activeChildren, child)
- if (parent._parents == null) return
- if (parent._activeChildren.length !== 0) return
- for (let i = 0; i < parent._parents.length; i++) {
-  detach(parent._parents[i], parent)
+ removeFromArray(parent.activeChildren, child)
+ if (parent.parents == null) return
+ if (parent.activeChildren.length !== 0) return
+ for (let i = 0; i < parent.parents.length; i++) {
+  detach(parent.parents[i], parent)
  }
- parent._parents = null
- parent._state = DISCONNECTED
+ parent.parents = null
+ parent.status = DISCONNECTED
 }
