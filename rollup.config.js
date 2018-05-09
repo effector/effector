@@ -98,7 +98,7 @@ export default [
   plugins: rollupPlugins,
  },
  {
-  input: 'src/react/createStoreComponent.js',
+  input: 'src/react/index.js',
   output: [
    {
     file: resolvePath(__dirname, 'npm/react/effector-react.es.js'),
