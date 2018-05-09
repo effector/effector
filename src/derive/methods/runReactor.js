@@ -10,8 +10,8 @@ export function runReactor(instance: Reactor) {
  }
  // maybe the reactor was stopped by the parent
  if (!instance._active) return
- const nextValue = instance._parent.get()
- if (instance._parent.status === CHANGED) {
+ const nextValue = instance.parent.get()
+ if (instance.parent.status === CHANGED) {
   instance._force(nextValue)
  }
 }

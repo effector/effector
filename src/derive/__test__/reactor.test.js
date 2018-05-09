@@ -517,7 +517,7 @@ test('reactor do not create derivation for lifecycle function', () => {
   when: () => when.get(),
  })
  //$todo
- expect(a.activeChildren[0]._governor._parent.parents).toEqual(
+ expect(a.activeChildren[0]._governor.parent.parents).toEqual(
   expect.arrayContaining([from, until, when]),
  )
 })

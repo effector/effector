@@ -89,7 +89,10 @@ export function atomic<F: Function>(f: F): F {
 function beginTransaction() {
  currentCtx = new TransactionContext(currentCtx)
 }
-export function processReactorsFull(reactors: Array<Reactor>, cb: () => void) {
+export function processReactorsFull(
+ reactors: Array<Reactor>,
+ cb: () => void = () => {},
+) {
  let pendings = reactors
  let lastLength = reactors.length
  do {

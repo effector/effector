@@ -4,24 +4,25 @@ import {addToArray} from './util'
 import {detach} from './detach'
 import {REACTOR} from '../kind/case/derive'
 import type {Box} from './index.h'
+import type {Derivation} from './derivation'
 
 export class Reactor {
  _governor: Reactor | null = null
- _parent: Box<any>
+ parent: Derivation<any>
  react: *
  _active = false
  _reacting = false
  /*::;+*/ kind = REACTOR
- constructor(parent: Box<any>, react: *) {
-  this._parent = parent
+ constructor(parent: Derivation<any>, react: *) {
+  this.parent = parent
   this.react = react
  }
  start() {
   this._active = true
 
-  addToArray(this._parent.activeChildren, this)
+  addToArray(this.parent.activeChildren, this)
 
-  this._parent.get()
+  this.parent.get()
  }
 
  _force(nextValue: *) {
@@ -34,11 +35,11 @@ export class Reactor {
  }
 
  force() {
-  this._force(this._parent.get())
+  this._force(this.parent.get())
  }
 
  stop() {
-  detach(this._parent, this)
+  detach(this.parent, this)
   this._active = false
  }
 }
