@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`with graph 1`] = `
+Object {
+  "safe": true,
+  "values": Map {
+    Object {
+      "target": RW {
+        "refs": Array [],
+        "value": 3,
+      },
+      "type": "set",
+      "value": 3,
+    } => 3,
+    Object {
+      "parent": RW {
+        "refs": Array [],
+        "value": 3,
+      },
+      "target": RW {
+        "refs": Array [],
+        "value": 4,
+      },
+      "type": "compute",
+      "value": [Function],
+    } => 4,
+  },
+}
+`;

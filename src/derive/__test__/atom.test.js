@@ -2,6 +2,81 @@
 
 import {atom, withEquality} from '..'
 
+import dag from '../../graph'
+
+class RW<A> {
+ value: A
+ refs: Array<(A) => void> = []
+ constructor(value: A) {
+  this.value = value
+ }
+ get(): A {
+  return this.value
+ }
+ set(value: A) {
+  this.value = value
+ }
+ watch(fn: (_: A) => void) {
+  this.refs.push(fn)
+ }
+}
+
+type SetTask<A> = {
+ type: 'set',
+ value: A,
+ target: RW<A>,
+}
+
+type ComputeTask<A> = {
+ type: 'compute',
+ value: A => A,
+ target: RW<A>,
+ parent: RW<A>,
+}
+
+test('with graph', async() => {
+ const val1 = atom(0)
+ const val2 = val1.map(n => {
+  const nn = n + 1
+  return nn
+ })
+ const v3 = new RW(0)
+ const v4 = new RW(-1)
+ const setV3: SetTask<number> = {
+  type: 'set',
+  value: 3,
+  target: v3,
+ }
+ const updV4: ComputeTask<number> = {
+  type: 'compute',
+  value(n) {
+   const nn = n + 1
+   return nn
+  },
+  target: v4,
+  parent: v3,
+ }
+ const upd = await dag({
+  graph: new Map([[setV3, []], [updV4, [setV3]]]),
+  async task<A>(task: SetTask<A> | ComputeTask<A>) {
+   switch (task.type) {
+    case 'set': {
+     task.target.set(task.value)
+     return task.value
+    }
+    case 'compute': {
+     const n = task.parent.get()
+     const result = task.value(n)
+     task.target.set(result)
+     return result
+    }
+   }
+  },
+ })
+ expect(upd).toMatchSnapshot()
+ expect(v4.get()).toBe(4)
+})
+
 test('can be dereferenced via .get to obtain its current state', () => {
  expect(atom(0).get()).toBe(0)
 })
