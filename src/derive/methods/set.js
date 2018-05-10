@@ -11,7 +11,7 @@ import {
 import {UNCHANGED, CHANGED, type Status} from '../status'
 
 import {mark} from '../mark'
-import warning from '../../warning'
+import warning from 'warning'
 import type {Atom} from '../atom'
 import type {Lens} from '../lens'
 import * as Kind from '../../kind'
@@ -41,9 +41,9 @@ export function setAtom<T>(atom: Atom<T>, value: T) {
   isThrow = false
  } finally {
   atom.status = UNCHANGED
-  if (isThrow) {
-   warning(`Error during atom's setting`)
-  }
+
+  warning(!isThrow, `Error during atom's setting`)
+
  }
 }
 

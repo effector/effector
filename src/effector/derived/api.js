@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 import $$observable from 'symbol-observable'
-import warning from '../../warning'
+import warning from 'warning'
 import {from, type Stream} from 'most'
 import {atom, atomically, type Atom} from '../../derive'
 import type {Event, Effect} from '../index.h'
@@ -203,7 +203,7 @@ function effectConstructor<Payload, Done>({
  setProperty('create', create, instance)
  setProperty('kind', Kind.EFFECT, instance)
  let thunk = async(value: Payload): Promise<Done> => {
-  warning('no thunk used')
+  warning(false, 'no thunk used')
   declare var result: Done
   /*::return result*/
  }

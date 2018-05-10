@@ -581,14 +581,19 @@ describe.skip('createReduxStore', () => {
 
  it('throws if action type is undefined', () => {
   const store = createReduxStore(reducers.todos)
+  //$off expect error
   expect(() => store.dispatch({type: undefined})).not.toThrow()
  })
 
  it('does not throw if action type is falsy', () => {
   const store = createReduxStore(reducers.todos)
+  //$off expect error
   expect(() => store.dispatch({type: false})).not.toThrow()
+  //$off expect error
   expect(() => store.dispatch({type: 0})).not.toThrow()
+  //$off expect error
   expect(() => store.dispatch({type: null})).not.toThrow()
+
   expect(() => store.dispatch({type: ''})).not.toThrow()
  })
 

@@ -182,7 +182,7 @@ describe('graph with cycle (force: false)', () => {
   const task = createTask([])
   expect(
    (() => graphRunner({graph, task, force: false}))(),
-  ).rejects.toThrowError()
+  ).rejects.toThrowErrorMatchingSnapshot()
  })
  test('sync', () => {
   const graph = new Map([
@@ -194,7 +194,7 @@ describe('graph with cycle (force: false)', () => {
   const task = createTaskSync([])
   expect(() =>
    graphRunner({graph, task, force: false, sync: true}),
-  ).toThrowError()
+  ).toThrowErrorMatchingSnapshot()
  })
 })
 
@@ -312,17 +312,9 @@ describe('task fails on one item', () => {
     order.push(`${item}:end`)
    })
   }
-  const req = graphRunner({graph, task, force: true})
-  expect(req).rejects.toThrowError()
-  await req.catch(res => {})
-  expect(order).toEqual([
-   'a:start',
-   'c:start',
-   'a:error',
-   'c:end',
-   'd:start',
-   'd:end',
-  ])
+  const result = await graphRunner({graph, task, force: true})
+  expect(order).toMatchSnapshot()
+  expect(result).toMatchSnapshot()
  })
  test('sync', () => {
   const graph = new Map([['a', []], ['b', ['a']], ['c', []], ['d', ['c']]])
@@ -335,16 +327,29 @@ describe('task fails on one item', () => {
    }
    order.push(`${item}:end`)
   }
+  let result
   expect(() => {
-   graphRunner({graph, task, force: true, sync: true})
-  }).toThrowError()
-  expect(order).toEqual([
-   'a:start',
-   'a:error',
-   'c:start',
-   'c:end',
-   'd:start',
-   'd:end',
-  ])
+   console.log((result = graphRunner({graph, task, force: true, sync: true})))
+  }).not.toThrowError()
+  expect(order).toMatchSnapshot()
+  expect(result).toMatchSnapshot()
  })
+})
+
+test('struct', async() => {
+ const taskFn = jest.fn()
+ const graph = new Map([['a', ['b']], ['b', ['a']], ['c', ['d']], ['d', ['c']]])
+ const order = []
+ const task = item => {
+  order.push(item)
+  taskFn(item, [...order])
+  return item.toUpperCase()
+ }
+ const result = graphRunner({graph, task, force: true, sync: true})
+ expect(result.safe).toBe(false)
+
+ expect(Array.from(result.values)).toMatchSnapshot('values')
+ expect(order).toMatchSnapshot('order')
+ expect(taskFn.mock.calls).toMatchSnapshot('taskFn')
+ expect(result).toMatchSnapshot('result')
 })

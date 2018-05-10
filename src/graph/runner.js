@@ -1,64 +1,86 @@
 // @flow
 
-import type {OptsAsync, OptsSync, Results} from './index.h'
+import type {Config, Results, Context} from './index.h'
+import * as Task from './task.h'
+import {asyncProvider, syncProvider} from './next'
 
-import {nextChunk} from './nextChunk'
-import {nextSync, nextAsync} from './next'
-
-export function graphRunnerAsync<Item, Result>(
- opts: OptsAsync<Item, Result>,
+export async function graphRunnerAsync<Item, Result>(
+ opts: Config<Item, Result, (item: Item) => Promise<Result>>,
 ): Promise<Results<Item, Result>> {
- const graph = opts.graph
- const task = opts.task
-
  let safe = true
- const queue = new Set(graph.keys())
+ const queue = new Set(opts.graph.keys())
  const running = new Set()
 
- const values = new Map()
-
- const getNextChunk = nextChunk(
-  opts,
-  newSafe => {
-   safe = newSafe
-  },
-  graph,
+ const values: Map<Item, Task.Try<Result>> = new Map()
+ const setSafe = newSafe => {
+  safe = newSafe
+ }
+ const ctx: Context<Item, Result> = {
   queue,
   running,
- )
- const next = () => nextAsync(getNextChunk, task, running, values, queue)
-
- return new Promise((rs, rj) => next().then(rs, rj)).then(() => ({
-  safe,
   values,
- }))
+  setSafe,
+  graph: opts.graph,
+  chunk: [],
+  current: new Map(),
+ }
+ await asyncProvider(opts, ctx)
+
+ const {results, errors} = splitResults(values)
+ return {
+  safe,
+  values: results,
+  errors,
+ }
 }
 
 export function graphRunnerSync<Item, Result>(
- opts: OptsSync<Item, Result>,
+ opts: Config<Item, Result, (item: Item) => Result>,
 ): Results<Item, Result> {
- const graph = opts.graph
- const task = opts.task
-
  let safe = true
- const queue = new Set(graph.keys())
+ const queue = new Set(opts.graph.keys())
  const running = new Set()
 
- const values = new Map()
-
- const getNextChunk = nextChunk(
-  opts,
-  newSafe => {
-   safe = newSafe
-  },
-  graph,
+ const values: Map<Item, Task.Try<Result>> = new Map()
+ const setSafe = newSafe => {
+  safe = newSafe
+ }
+ const ctx: Context<Item, Result> = {
   queue,
   running,
- )
-
- const results = nextSync(getNextChunk, task, running, values, queue)
+  values,
+  setSafe,
+  graph: opts.graph,
+  chunk: [],
+  current: new Map(),
+ }
+ const gen = syncProvider(opts, ctx)
+ for (const next of gen);
+ const {results, errors} = splitResults(values)
  return {
   safe,
-  values,
+  values: results,
+  errors,
  }
+}
+
+function splitResults<Item, Result>(
+ values: Map<Item, Task.Try<Result>>,
+): {
+ errors: Map<Item, any>,
+ results: Map<Item, Result>,
+} {
+ const results = new Map()
+ const errors = new Map()
+ for (const [key, val] of values) {
+  switch (val[0]) {
+   case (1: Task.Value):
+    results.set(key, (val[1]: Result))
+    break
+   case (2: Task.Throw):
+    errors.set(key, (val[1]: any))
+    break
+  }
+ }
+ return {results, errors}
 }

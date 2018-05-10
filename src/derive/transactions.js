@@ -7,7 +7,7 @@ import {mark} from './mark'
 import type {Reactor} from './reactors'
 import type {Atom} from './atom'
 import {runReactor} from './methods/runReactor'
-import warning from '../warning'
+import warning from 'warning'
 
 export function processReactors(
  reactors: Array<Reactor>,
@@ -16,7 +16,10 @@ export function processReactors(
  for (let i = 0, len = reactors.length; i < len; i++) {
   const r = reactors[i]
   if (r._reacting) {
-   warning('Synchronous cyclical reactions disallowed. Use setImmediate.')
+   warning(
+    false,
+    'Synchronous cyclical reactions disallowed. Use setImmediate.',
+   )
    pendings.push(r)
   } else {
    runReactor(r)
@@ -54,7 +57,7 @@ function transact(f) {
  try {
   f()
  } catch (err) {
-  warning(err)
+  warning(false, err)
   fail = true
  }
  if (fail) {
@@ -71,7 +74,7 @@ export function atomically(f: () => void) {
   try {
    f()
   } catch (err) {
-   warning(err)
+   warning(false, err)
   }
  }
 }

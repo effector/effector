@@ -16,7 +16,7 @@ import {
 
 import * as Kind from '../../kind'
 
-import warning from '../../warning'
+import warning from 'warning'
 
 test('will run in ecpected order', () => {
  const fn = jest.fn()
@@ -329,7 +329,7 @@ test.skip('should handle watcher`s errors', async() => {
  const store = domain.store({foo: 'bar'})
  const timeout = domain.effect('timeout')
  timeout.watch(fn)
- warning(`TODO domain.port not implemented`)
+ warning(false, `TODO domain.port not implemented`)
  //  domain.port(
  //   periodic(300)
  //    .take(5)

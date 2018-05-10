@@ -20,7 +20,7 @@ import {applyMiddleware} from './applyMiddleware'
 import type {Event} from '..'
 
 import * as Kind from '../kind'
-import warning from '../warning'
+import warning from 'warning'
 import {setProperty} from '../setProperty'
 
 export type Nest = {
