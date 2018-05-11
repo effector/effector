@@ -16,8 +16,10 @@ export function createReactState<
  const ConnectedComponent = props => (
   <Store>{state => <Component {...props} {...state} />}</Store>
  )
- ConnectedComponent.displayName = `Connect(${Component.displayName
-  || 'Unknown'})`
+ const wrappedComponentName = Component.displayName
+  || Component.name
+  || 'Unknown'
+ ConnectedComponent.displayName = `Connect(${wrappedComponentName})`
  return ConnectedComponent
 }
 
