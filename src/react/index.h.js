@@ -3,6 +3,11 @@
 import type {ComponentType, Node} from 'react'
 import {Store} from 'effector'
 
-export type StoreComponent<State> = ComponentType<{
+export type StoreConsumer<State> = ComponentType<{
  children: (state: State) => Node,
+}>
+
+export type StoreProvider<State> = ComponentType<{
+ value: State,
+ children?: Node,
 }>

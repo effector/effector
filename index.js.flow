@@ -70,6 +70,7 @@ declare export class Store<State> {
   event: Event<T> | Effect<T, any, any>,
   fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
  ): void;
+ displayName?: string;
 }
 
 declare export class Domain {

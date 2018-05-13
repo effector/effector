@@ -3,13 +3,13 @@
 import * as React from 'react'
 import {mount} from 'enzyme'
 import {createEvent, createStore, createStoreObject} from 'effector'
-import {createStoreComponent} from '../createStoreComponent'
+import {createStoreConsumer} from '../createStoreConsumer'
 
 test('createStoreComponent attempt', () => {
  const store1 = createStore('foo')
  const changeText = createEvent('change text')
  store1.on(changeText, (_, payload) => payload)
- const Store1 = createStoreComponent(store1)
+ const Store1 = createStoreConsumer(store1)
  const tree = mount(
   <Store1>{state => <span>Current state: {state}</span>}</Store1>,
  )
@@ -35,7 +35,7 @@ test('no dull re-renders', () => {
 
  const fullStore = createStoreObject({listSize, currentList, selected})
 
- const CurrentList = createStoreComponent(currentList)
+ const CurrentList = createStoreConsumer(currentList)
 
  const tree = mount(
   <CurrentList>

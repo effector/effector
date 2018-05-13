@@ -1,7 +1,8 @@
 //@flow
 
 import * as React from 'react'
-import {createStoreComponent} from './createStoreComponent'
+import {createStoreConsumer} from './createStoreConsumer'
+import {unstable_createStoreProvider} from './createStoreProvider'
 
 import type {Store} from 'effector'
 
@@ -12,7 +13,7 @@ export function createReactState<
  store: Store<State>,
  Component: Com,
 ): React.ComponentType<$Exact<$Diff<React.ElementConfig<Com>, State>>> {
- const Store = createStoreComponent(store)
+ const Store = createStoreConsumer(store)
  const ConnectedComponent = props => (
   <Store>{state => <Component {...props} {...state} />}</Store>
  )
@@ -31,4 +32,7 @@ export function connect<State: Object, Com: React.ComponentType<*>>(
  return store => createReactState(store, Component)
 }
 
-export {createStoreComponent}
+export {
+ createStoreConsumer,
+ unstable_createStoreProvider
+}

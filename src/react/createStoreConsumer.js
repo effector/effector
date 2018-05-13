@@ -4,17 +4,19 @@ import * as React from 'react'
 
 import type {Store} from 'effector'
 
-import type {StoreComponent} from './index.h'
+import type {StoreConsumer} from './index.h'
 
-export function createStoreComponent<State>(
+export function createStoreConsumer<State>(
  store: Store<State>,
-): StoreComponent<State> {
- return class StoreProvider extends React.Component<
+): StoreConsumer<State> {
+ return class StoreConsumer extends React.Component<
   {
    children: State => React.Node,
   },
   {currentState: State},
  > {
+  static displayName = `${store.displayName || 'Store'}.Consumer`
+
   state = {currentState: store.getState()}
 
   unsub: *
