@@ -29,3 +29,11 @@ declare export function createStoreConsumer<State>(
 declare export function unstable_createStoreProvider<State>(
  store: Store<State>,
 ): StoreProvider<State>
+
+declare export function createReactState<
+ State: Object,
+ Com: React.ComponentType<*>,
+>(
+ store: Store<State>,
+ Component: Com,
+): React.ComponentType<$Exact<$Diff<React.ElementConfig<Com>, State>>>

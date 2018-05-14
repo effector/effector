@@ -24,3 +24,11 @@ export function createStoreConsumer<State>(
 export function unstable_createStoreProvider<State>(
  store: Store<State>
 ): StoreProvider<State>
+
+export function createReactState<
+ State extends Object,
+ Com extends React.ComponentType<any>,
+>(
+ store: Store<State>,
+ Component: Com,
+): React.ComponentType<State>
