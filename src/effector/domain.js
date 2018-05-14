@@ -1,6 +1,6 @@
 //@flow
 
-import {createEvent, createEffect} from './derived'
+import {createEvent, createEffect} from './api'
 // import {createEffect} from './event'
 import {createStore} from '../store'
 import type {Store} from './index.h'

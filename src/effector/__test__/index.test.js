@@ -1,8 +1,8 @@
 //@flow
 
 import * as Api from '../api'
-import * as Type from '../../index.h'
-import {createStore} from '../../../store/createStore'
+import * as Type from '../index.h'
+import {createStore} from '../../store/createStore'
 import {show} from '../datatype/step/show'
 
 test('graphite', () => {

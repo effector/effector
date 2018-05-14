@@ -1,6 +1,6 @@
 //@flow
 // import invariant from 'invariant'
-import type {Event} from '../index.h'
+import type {Event} from './index.h'
 import * as Ctx from './datatype/context'
 import * as Step from './datatype/step'
 import * as Cmd from './datatype/cmd'

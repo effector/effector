@@ -2,9 +2,7 @@
 
 import type {Stream} from 'most'
 
-import {Atom} from '../derive'
-
-import type {Emit, Compute, Run} from './derived/datatype/cmd'
+import type {Emit, Compute} from './derived/datatype/cmd'
 import type {
  Multi as MultiStep,
  Seq as SeqStep,
@@ -31,14 +29,8 @@ export type GraphiteMeta = {
 
 export type Event<E> = {
  (payload: E): E,
- eventState: Atom<{payload: E}>,
  getType(): string,
  create(payload: E, type: string): E,
- link<B>(
-  b: Event<B> | Effect<B, any, any>,
-  ab: (E) => B,
-  ba: (B) => E,
- ): () => void,
  watch(watcher: (payload: E) => any): () => void,
  map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => E): Event<Before>,
@@ -63,11 +55,6 @@ export type Effect<Params, Done, Fail = Error> = {
  use: (asyncFunction: (params: Params) => Promise<Done>) => void,
  watch(watcher: (payload: Params) => any): void,
  //map<T>(fn: (_: E) => T): Event<T>,
- link<B>(
-  b: Event<B> | Effect<B, any, any>,
-  ab: (Params) => B,
-  ba: (B) => Params,
- ): () => void,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>,
  subscribe(subscriber: Subscriber<Params>): Subscription,
  to(store: Store<Params>, _: void): void,

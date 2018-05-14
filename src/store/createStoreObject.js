@@ -2,9 +2,9 @@
 
 // import invariant from 'invariant'
 
-import * as Cmd from '../effector/derived/datatype/cmd'
-import * as Step from '../effector/derived/datatype/step'
-import {createEvent} from '../effector/derived/api'
+import * as Cmd from '../effector/datatype/cmd'
+import * as Step from '../effector/datatype/step'
+import {createEvent} from '../effector/api'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
 import {storeConstructor} from './createStore'
