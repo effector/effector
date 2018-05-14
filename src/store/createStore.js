@@ -23,17 +23,15 @@ export function createStore<State>(state: State): Store<State> {
  return storeConstructor({
   currentReducer: _ => _,
   currentState: state,
-  isObject: false,
  })
 }
 
 export function storeConstructor<State>(props: {
  currentReducer: Function,
  currentState: State,
- isObject: boolean,
 }): Store<State> {
  const currentId = (++id).toString(36)
- let {currentReducer, currentState, isObject} = props
+ let {currentReducer, currentState} = props
  const defaultState = currentState
 
  const plainState = (defaultState => {
@@ -51,8 +49,8 @@ export function storeConstructor<State>(props: {
    plainState.set(newVal)
    return newVal
   },
+  shouldChange: true,
  })
- cmd.data.shouldChange = true
  const singleStep: Step.Single = Step.single(cmd)
  const nextSteps: Step.Multi = Step.multi()
  const fullSeq: Step.Seq = Step.seq([singleStep, nextSteps])
@@ -159,15 +157,15 @@ export function storeConstructor<State>(props: {
    reduce(_, newValue, ctx) {
     const lastState = getState()
     const result = handler(lastState, newValue, e.getType())
-    if (result === undefined || result === null) {
+    if (result === undefined) {
      ctx.isChanged = false
      return lastState
     }
     ctx.isChanged = result !== lastState
     return result
    },
+   shouldChange: true,
   })
-  computeCmd.data.shouldChange = true
   const step = Step.single(computeCmd)
   const nextSeq = Step.seq([step, ...store.graphite.seq.data])
   e.graphite.next.data.add(nextSeq)
@@ -190,6 +188,7 @@ export function storeConstructor<State>(props: {
      const result = fn(newValue)
      return result
     },
+    shouldChange: true,
    }),
   )
   const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
@@ -243,8 +242,7 @@ export function storeConstructor<State>(props: {
   setter(state, newResult)
  }
  function setter(oldState, newState) {
-  if (newState === undefined || newState === null || newState === oldState)
-   return
+  if (newState === undefined || newState === oldState) return
   updater(newState)
  }
 
@@ -267,7 +265,7 @@ function epicStore(event, store, fn: Function) {
    innerStore.setState(value)
   },
   error(err) {
-   if (__DEV__) console.error(err)
+   console.error(err)
   },
   complete() {
    subs()

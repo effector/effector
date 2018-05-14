@@ -101,7 +101,7 @@ function singleStep(
    try {
     const result = single.data.reduce(undefined, arg, ctx)
     newCtx.result = result
-    newCtx.isNone = result === undefined || result === null
+    newCtx.isNone = result === undefined
    } catch (err) {
     newCtx.isError = true
     newCtx.error = err
