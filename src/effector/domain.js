@@ -1,16 +1,17 @@
 //@flow
 
-import {createEvent, createEffect} from './derived'
+import {createEvent, createEffect} from './api'
 // import {createEffect} from './event'
-import {createStore, type Store} from '../store'
+import {createStore} from '../store'
+import type {Store} from './index.h'
 
 export function createDomain({domain}: {domain: string[]}) {
  return {
   event(name: string) {
-   return createEvent(name)
+   return createEvent(joinName([...domain, name]))
   },
   effect(name: string) {
-   return createEffect(name)
+   return createEffect(joinName([...domain, name]))
   },
   domain(name: string) {
    return createDomain({domain: [name].concat(domain)})
@@ -24,4 +25,8 @@ export function createDomain({domain}: {domain: string[]}) {
 export function createRootDomain(name?: string) {
  if (name === undefined) return createDomain({domain: []})
  return createDomain({domain: [name]})
+}
+
+function joinName(list) {
+ return list.filter(e => e.length > 0).join('/')
 }

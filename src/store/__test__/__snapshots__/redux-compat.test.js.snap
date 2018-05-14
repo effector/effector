@@ -1,0 +1,182 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createReduxStore only removes listener once when unsubscribe is called 1`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 1`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 2`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 3`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 4`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 5`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 6`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 7`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 8`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 9`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports multiple subscriptions 10`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      undefined,
+    ],
+    Array [
+      undefined,
+    ],
+  ],
+  "listenerB": Array [
+    Array [
+      undefined,
+    ],
+  ],
+}
+`;
+
+exports[`createReduxStore supports removing a subscription within a subscription 1`] = `
+Object {
+  "listenerA": Array [
+    Array [
+      Array [],
+    ],
+  ],
+  "listenerB": Array [
+    Array [],
+  ],
+  "listenerC": Array [
+    Array [
+      Array [],
+    ],
+  ],
+}
+`;

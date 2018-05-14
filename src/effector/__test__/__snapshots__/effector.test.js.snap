@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`reducer defaults 1`] = `
+Object {
+  "add": Array [
+    Array [
+      2,
+      10,
+      "add",
+    ],
+    Array [
+      2,
+      2,
+      "add",
+    ],
+  ],
+  "state": 2,
+  "sub": Array [
+    Array [
+      3,
+      1,
+      "sub",
+    ],
+  ],
+  "watch": Array [
+    Array [
+      3,
+    ],
+    Array [
+      2,
+    ],
+    Array [
+      2,
+    ],
+    Array [
+      2,
+    ],
+  ],
+}
+`;

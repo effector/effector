@@ -1,5 +1,6 @@
 .DS_Store
 .idea
+.history
 .publish
 *.sublime-workspace
 .vscode
@@ -22,19 +23,8 @@ typings.json
 typings/**
 src/**/*.draft.js
 test/storage.json
-flow-typed/npm/**
 **/.happypack/**
 
+npm/effector
+npm/react
 
-src_unused
-src_alt
-npm/effector.cjs.js
-npm/effector.cjs.js.map
-npm/effector.cjs.js.flow
-npm/effector.es.js
-npm/effector.es.js.map
-npm/effector.es.js.flow
-npm/index.d.ts
-npm/index.js.flow
-npm/CHANGELOG.md
-npm/README.md

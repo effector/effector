@@ -7,10 +7,19 @@ import {
  createEvent,
  createEffect,
  createStore,
- type Event,
- type Effect,
- type Store,
+ createStoreObject,
 } from '..'
+import type {Event, Effect, Store} from '../index.h'
+
+import flags from '../../flags'
+
+beforeAll(() => {
+ flags.useGraphite = true
+})
+
+afterAll(() => {
+ flags.useGraphite = false
+})
 
 describe('symbol-observable support', () => {
  test('from(event)', async() => {
@@ -124,14 +133,14 @@ test('attt', () => {
 test('createStore', () => {
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text, foo: 'bar'})
+ const store = createStoreObject({counter, text, foo: 'bar'})
  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
 test('event.to', () => {
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text, foo: 'bar'})
+ const store = createStoreObject({counter, text, foo: 'bar'})
 
  const e1: Event<string> = createEvent('e1')
  e1.to(store, (state, payload) => ({
@@ -148,7 +157,7 @@ describe('store.on', () => {
  test('store.on(event)', () => {
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStore({counter, text, foo: 'bar'})
+  const store = createStoreObject({counter, text, foo: 'bar'})
 
   const e1 = createEvent('e1')
   store.on(e1, (state, payload) => ({
@@ -163,20 +172,21 @@ describe('store.on', () => {
  test('store.on(effect)', async() => {
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStore({counter, text, foo: 0})
+  const store = createStoreObject({counter, text, foo: 0})
   const fn = jest.fn()
   const e1 = createEffect('e1')
-  store.on(e1.done, (state, payload) => {
-   fn(state, payload)
+  store.on(e1.done, (state, {params, result}) => {
+   fn(state, result)
    return {
     ...state,
-    foo: payload,
+    foo: result,
    }
   })
   e1.use(n => new Promise(_ => setTimeout(_, n, n)))
 
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-  await e1(500).done()
+  const result = await e1(500).done()
+  expect(result).toMatchObject({params: 500, result: 500})
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
  })
 })
@@ -196,16 +206,24 @@ test('store.watch', () => {
  const click = createEvent('click')
  const store1 = createStore(-1)
  const fn1 = jest.fn()
+ const fn2 = jest.fn()
  store1.watch(fn1)
- click.to(store1, (state, e) => state)
+ click.to(store1, (state, e, type) => (fn2(state, e, type), state))
  click()
  click('a')
  click('b')
- expect(fn1).not.toHaveBeenCalledTimes(2)
- expect(fn1).toHaveBeenCalledTimes(3)
-
  expect(store1.getState()).toBe(-1)
- expect(fn1.mock.calls).toEqual([[-1], [-1], [-1]])
+
+ expect(fn1).not.toHaveBeenCalledTimes(2)
+ expect(fn2).toHaveBeenCalledTimes(3)
+
+ expect(fn1).toHaveBeenCalledTimes(1)
+ expect(fn2.mock.calls).toEqual([
+  [-1, undefined, undefined],
+  [-1, 'a', undefined],
+  [-1, 'b', undefined],
+ ])
+ expect(fn1.mock.calls).toEqual([[-1]])
  //expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
 })
 
@@ -223,7 +241,7 @@ test('rfc1 example implementation', async() => {
 
  const counter = createStore(0)
  const text = createStore('')
- const store = createStore({counter, text})
+ const store = createStoreObject({counter, text})
 
  const fnWait = jest.fn()
  const waitIncrement = createEffect('wait increment')

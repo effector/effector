@@ -1,4 +1,8 @@
 {
+ "moduleNameMapper": {
+  "effector": "<rootDir>/src/effector/index.js",
+  "effector-react": "<rootDir>/src/react"
+ },
  "projects": [
   {
    "displayName": "effector",
@@ -10,8 +14,38 @@
    "transform": {
     "^.+\\.jsx?$": "babel-jest"
    },
+   "moduleNameMapper": {
+    "effector": "<rootDir>/src/effector/index.js",
+    "effector-react": "<rootDir>/src/react/createStoreComponent.js"
+   },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
-   "roots": ["<rootDir>/src/effector/"]
+   "roots": ["<rootDir>/src/"]
+  },
+  {
+   "displayName": "store",
+   "testMatch": ["<rootDir>/src/store/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/"]
+  },
+  {
+   "displayName": "graph",
+   "testMatch": ["<rootDir>/src/graph/**/__test__/**/*.test.js"],
+   "collectCoverage": true,
+   "automock": false,
+   "browser": false,
+   "testEnvironment": "node",
+   "transform": {
+    "^.+\\.jsx?$": "babel-jest"
+   },
+   "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
+   "roots": ["<rootDir>/src/"]
   },
   {
    "displayName": "react",
@@ -23,8 +57,13 @@
    "transform": {
     "^.+\\.jsx?$": "babel-jest"
    },
+   "moduleNameMapper": {
+    "effector": "<rootDir>/src/effector/index.js",
+    "effector-react": "<rootDir>/src/react/index.js"
+   },
    "testPathIgnorePatterns": ["<rootDir>/node_modules/"],
-   "roots": ["<rootDir>/src/react/"]
+   "roots": ["<rootDir>/src/react/"],
+   "setupTestFrameworkScriptFile": "<rootDir>/src/fixtures/setup.js"
   },
   {
    "displayName": "derive",

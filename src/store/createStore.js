@@ -5,70 +5,88 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import {INIT, REPLACE} from './actionTypes'
-
+import {createEvent} from '../effector/api'
+import {INIT} from './actionTypes'
+import * as Cmd from '../effector/datatype/cmd'
+import * as Step from '../effector/datatype/step'
 import {applyMiddleware} from './applyMiddleware'
+import type {Event, Store} from '../effector/index.h'
+import * as Kind from '../kind'
+// import warning from 'warning'
 
-function* untilEnd<T>(set: Set<T>): Iterable<T> {
- do {
-  for (const e of set) {
-   set.delete(e)
-   yield e
-  }
- } while (set.size > 0)
-}
 export type Nest = {
  get(): any,
  set(state: any, action: any): any,
 }
 let id = 0
-function storeConstructor(props) {
- const currentId = (++id).toString(36)
- let currentListeners = []
- const pending = new Set()
- let isDispatching = false
- let {currentReducer, currentState} = props
- let nextListeners = currentListeners
- const nests = getNested(currentState, fn => {
-  if (!isDispatching) return setState(fn(currentState))
-  pending.add(fn)
+export function createStore<State>(state: State): Store<State> {
+ return storeConstructor({
+  currentReducer: _ => _,
+  currentState: state,
+  isObject: false,
  })
- let defaultState = currentState
- let needToSaveFirst = defaultState === undefined
- nests.add({
-  get() {
-   return getState()
-  },
-  set(state, action) {
-   return currentReducer(state, action)
-  },
- })
- // .add({
- //  get() {
- //   return getState()
- //  },
- //  set(state, action) {
- //   if (!isAction(action)) return state
- //   if (action.type === `set state ${currentId}`) {
- //    return action.payload
- //   }
- //   return state
- //  },
- // })
- function ensureCanMutateNextListeners() {
-  if (nextListeners === currentListeners) {
-   nextListeners = currentListeners.slice()
-  }
- }
+}
 
- function getState() {
-  invariant(
-   !isDispatching,
-   'You may not call store.getState() while the reducer is executing. ' +
-    'The reducer has already received the state as an argument. ' +
-    'Pass it down from the top reducer instead of reading it from the store.',
-  )
-  return currentState
+export function storeConstructor<State>(props: {
+ currentReducer: Function,
+ currentState: State,
+ isObject: boolean,
+}): Store<State> {
+ const currentId = (++id).toString(36)
+ let {currentReducer, currentState, isObject} = props
+ const defaultState = currentState
+
+ const plainState = (defaultState => {
+  let state = defaultState
+  return {
+   get: () => state,
+   set(newState: typeof state) {
+    state = newState
+   },
+  }
+ })(defaultState)
+ const cmd: Cmd.Compute = Cmd.compute({
+  reduce(_, newVal, ctx) {
+   ctx.isChanged = newVal !== plainState.get()
+   plainState.set(newVal)
+   return newVal
+  },
+ })
+ cmd.data.shouldChange = true
+ const singleStep: Step.Single = Step.single(cmd)
+ const nextSteps: Step.Multi = Step.multi()
+ const fullSeq: Step.Seq = Step.seq([singleStep, nextSteps])
+
+ const updater: any = createEvent(`update ${currentId}`)
+
+ const store = {
+  graphite: {
+   cmd,
+   step: singleStep,
+   next: nextSteps,
+   seq: fullSeq,
+  },
+  kind: Kind.STORE,
+  id: currentId,
+  withProps,
+  setState,
+  dispatch,
+  map,
+  on,
+  to,
+  watch,
+  epic,
+  thru,
+  subscribe,
+  getState,
+  replaceReducer,
+  reset,
+  //$off
+  [$$observable]: observable,
+ }
+ on(updater, (_, payload) => payload)
+ function getState(): State {
+  return plainState.get()
  }
 
  function subscribe(listener) {
@@ -76,62 +94,24 @@ function storeConstructor(props) {
    typeof listener === 'function',
    'Expected the listener to be a function.',
   )
-  invariant(
-   !isDispatching,
-   'You may not call store.subscribe() while the reducer is executing. ' +
-    'If you would like to be notified after the store has been updated, subscribe from a ' +
-    'component and invoke store.getState() in the callback to access the latest state',
+  const runCmd = Step.single(
+   Cmd.run({
+    runner: listener,
+   }),
   )
-
-  let isSubscribed = true
-
-  ensureCanMutateNextListeners()
-  nextListeners.push(listener)
-
-  return function unsubscribe() {
-   if (!isSubscribed) {
-    return
-   }
-   invariant(
-    !isDispatching,
-    'You may not unsubscribe from a store listener while the reducer is executing',
-   )
-
-   isSubscribed = false
-
-   ensureCanMutateNextListeners()
-   const index = nextListeners.indexOf(listener)
-   nextListeners.splice(index, 1)
+  store.graphite.next.data.add(runCmd)
+  listener(getState())
+  function unsubscribe() {
+   store.graphite.next.data.delete(runCmd)
   }
+  unsubscribe.unsubscribe = unsubscribe
+  return unsubscribe
  }
 
  function dispatch(action) {
-  invariant(
-   typeof action.type !== 'undefined',
-   'Actions may not have an undefined "type" property.',
-  )
-
-  invariant(!isDispatching, 'Reducers may not dispatch actions.')
-
-  isDispatching = true
-  try {
-   currentState = setNested(currentState, action, nests)
-   for (const fn of untilEnd(pending)) {
-    currentState = fn(currentState)
-   }
-  } finally {
-   if (needToSaveFirst === true && currentState !== undefined) {
-    needToSaveFirst = false
-    defaultState = currentState
-   }
-   isDispatching = false
-  }
-
-  const listeners = (currentListeners = nextListeners)
-  for (let i = 0; i < listeners.length; i++) {
-   const listener = listeners[i]
-   listener(currentState, action)
-  }
+  if (action === undefined || action === null) return action
+  if (typeof action.type !== 'string' && typeof action.type !== 'number')
+   return action
 
   return action
  }
@@ -143,11 +123,11 @@ function storeConstructor(props) {
   )
 
   currentReducer = nextReducer
-  dispatch({type: REPLACE})
+  updater(getState())
+  // dispatch({type: REPLACE})
  }
 
  function observable() {
-  const outerSubscribe = subscribe
   return {
    subscribe(observer) {
     invariant(
@@ -155,15 +135,12 @@ function storeConstructor(props) {
      'Expected the observer to be an object.',
     )
 
-    function observeState() {
+    function observeState(state) {
      if (observer.next) {
-      observer.next(getState())
+      observer.next(state)
      }
     }
-
-    observeState()
-    const unsubscribe = outerSubscribe(observeState)
-    return {unsubscribe}
+    return subscribe(observeState)
    },
    //$off
    [$$observable]() {
@@ -173,14 +150,30 @@ function storeConstructor(props) {
  }
 
  function reset(event) {
-  on(event, () => {
-   setState(defaultState)
-  })
-  return store
+  return on(event, () => defaultState)
  }
 
  function on(event: any, handler: Function) {
-  event.to(store, handler)
+  const e: Event<any> = event
+  const computeCmd = Cmd.compute({
+   reduce(_, newValue, ctx) {
+    const lastState = getState()
+    const result = handler(lastState, newValue, e.getType())
+    if (result === undefined || result === null) {
+     ctx.isChanged = false
+     return lastState
+    }
+    ctx.isChanged = result !== lastState
+    return result
+   },
+  })
+  computeCmd.data.shouldChange = true
+  const step = Step.single(computeCmd)
+  const nextSeq = Step.seq([step, ...store.graphite.seq.data])
+  e.graphite.next.data.add(nextSeq)
+  const unsub = () => {
+   e.graphite.next.data.delete(nextSeq)
+  }
   return store
  }
 
@@ -189,16 +182,26 @@ function storeConstructor(props) {
  }
 
  function map(fn: Function) {
-  const innerStore = (createStore: any)(fn(getState()))
-  const unsub = watch(update => {
-   const mapped = fn(update)
-   innerStore.setState(mapped)
-  })
+  const innerStore: Store<any> = (createStore: any)(fn(getState()))
+
+  const computeCmd = Step.single(
+   Cmd.compute({
+    reduce(_, newValue, ctx) {
+     const result = fn(newValue)
+     return result
+    },
+   }),
+  )
+  const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
+  store.graphite.next.data.add(nextSeq)
+  const off = () => {
+   store.graphite.next.data.delete(nextSeq)
+  }
   return innerStore
  }
 
  function to(action: Function, reduce) {
-  const needReduce = action.kind() === 'store' && typeof reduce === 'function'
+  const needReduce = Kind.isStore(action) && typeof reduce === 'function'
   return watch(data => {
    if (!needReduce) {
     action(data)
@@ -209,60 +212,56 @@ function storeConstructor(props) {
    }
   })
  }
- function watch(fn: Function) {
-  return subscribe(() => {
-   fn(getState())
-  })
+ function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
+  switch (Kind.readKind(eventOrFn)) {
+   case (2: Kind.Event):
+   case (3: Kind.Effect):
+    if (typeof fn === 'function') {
+     return eventOrFn.watch(payload =>
+      fn(store.getState(), payload, eventOrFn.getType()),
+     )
+    } else throw new TypeError('watch requires function handler')
+
+   default:
+    if (typeof eventOrFn === 'function') {
+     return subscribe(eventOrFn)
+    } else throw new TypeError('watch requires function handler')
+  }
  }
 
- function epic(fn: Function) {
-  return epicStore(store, fn)
+ function epic<E>(event: Event<E>, fn: Function) {
+  return epicStore(event, store, fn)
  }
  function stateSetter(_, payload) {
   return payload
  }
  function setState(value, reduce?: Function) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
-  currentState = currentReducer(currentState, value)
-  // if (value === currentState) return
-  dispatch({type: `set state ${currentId}`, payload: value})
+  const state = getState()
+  const newResult = currentReducer(state, value)
+
+  setter(state, newResult)
+ }
+ function setter(oldState, newState) {
+  if (newState === undefined || newState === null || newState === oldState)
+   return
+  updater(newState)
  }
 
  dispatch({type: INIT})
 
- const store = {
-  /*::kind(){return 'store'},*/
-  id: currentId,
-  withProps,
-  setState,
-  dispatch,
-  map,
-  on,
-  to,
-  watch,
-  epic,
-  subscribe,
-  getState,
-  replaceReducer,
-  reset,
-  //$off
-  [$$observable]: observable,
+ function thru(fn: Function) {
+  return fn(store)
  }
- Object.defineProperty(store, 'kind', {
-  writable: true,
-  configurable: true,
-  value() {
-   return 'store'
-  },
- })
 
  return store
 }
 
-export function epicStore(store, fn: Function) {
+function epicStore(event, store, fn: Function) {
  const store$ = from(store).multicast()
- const mapped$ = fn(store$).multicast()
- const innerStore = (createStore: any)()
+ const event$ = from(event).multicast()
+ const mapped$ = fn(event$, store$).multicast()
+ const innerStore = (createStore: any)(store.getState())
  const subs = mapped$.subscribe({
   next(value) {
    innerStore.setState(value)
@@ -277,80 +276,29 @@ export function epicStore(store, fn: Function) {
  return innerStore
 }
 
-function hasKind(value: mixed): boolean %checks {
- return (
-  typeof value === 'object'
-  && value !== null
-  && typeof value.kind === 'function'
- )
-}
-
-export function createStore<T>(
+export function createReduxStore<T>(
+ reducer: (state: T, event: any) => T,
  preloadedStateRaw?: T,
- reducer: Function = _ => _,
- enhancerRaw: Function | Function[],
+ enhancerRaw?: Function | Function[],
 ) {
+ invariant(
+  typeof reducer === 'function',
+  'Expected reducer to be a function, got %s',
+  typeof reducer,
+ )
  let enhancer = enhancerRaw
  let preloadedState = preloadedStateRaw
  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
   enhancer = preloadedState
   preloadedState = undefined
  }
-
- if (typeof enhancer !== 'undefined') {
-  if (typeof enhancer !== 'function') {
-   invariant(Array.isArray(enhancer), 'Expected the enhancer to be a function')
-   enhancer = applyMiddleware(...enhancer)
-  }
-
-  return enhancer(createStore)(reducer, preloadedState)
+ if (Array.isArray(enhancer)) {
+  enhancer = applyMiddleware(...enhancer)
  }
- invariant(
-  typeof reducer === 'function',
-  'Expected the reducer to be a function',
- )
-
+ if (enhancer !== undefined)
+  return enhancer(createReduxStore)(reducer, preloadedState)
  return storeConstructor({
   currentReducer: reducer,
   currentState: preloadedState,
  })
-}
-
-function setNested(initialState, action: any, nests: Set<Nest>) {
- let currentState = initialState
- for (const nest of nests) {
-  currentState = nest.set(currentState, action)
- }
- return currentState
-}
-function nest(value: any, key): Nest {
- return {
-  get() {
-   return value.getState()
-  },
-  set(state, action) {
-   value.dispatch(action)
-   state[key] = value.getState()
-   return state
-  },
- }
-}
-function getNested(initialState, setState) {
- const nests: Set<Nest> = new Set()
- if (typeof initialState !== 'object' || initialState === null) return nests
- for (const [key, value] of Object.entries({...initialState})) {
-  if (hasKind(value) && value.kind() === 'store') {
-   const n = nest(value, key)
-   nests.add(n)
-   value.watch(e => {
-    setState(state => ({
-     ...state,
-     [key]: e,
-    }))
-   })
-   //$todo
-   initialState[key] = value.getState()
-  }
- }
- return nests
 }
