@@ -3,16 +3,29 @@
 import type {ComponentType, ElementConfig, Node} from 'react'
 import {Store} from 'effector'
 
-export type StoreComponent<State> = ComponentType<{
+export type StoreConsumer<State> = ComponentType<{
  children: (state: State) => Node,
 }>
 
-declare export function createStoreComponent<State>(
- store: Store<State>,
-): StoreComponent<State>
+export type StoreProvider<State> = ComponentType<{
+ value: State,
+ children?: Node,
+}>
+
+export type StoreComponent<State> = ComponentType<{
+ children: (state: State) => Node,
+}>
 
 declare export function connect<State: Object, Com: ComponentType<*>>(
  Component: Com,
 ): (
  store: Store<State>,
 ) => ComponentType<$Exact<$Diff<ElementConfig<Com>, State>>>
+
+declare export function createStoreConsumer<State>(
+ store: Store<State>,
+): StoreConsumer<State>
+
+declare export function unstable_createStoreProvider<State>(
+ store: Store<State>,
+): StoreProvider<State>
