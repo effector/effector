@@ -13,7 +13,7 @@ import {createStore} from '../..'
 
 import * as Path from '../path'
 
-test('smoke', async() => {
+test.skip('smoke', async() => {
  expect(() => {
   Path.getStorePath(() => ({key: 'abc'}))
  }).not.toThrow()

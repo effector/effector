@@ -2,7 +2,8 @@
 
 import {createEvent, createEffect} from './derived'
 // import {createEffect} from './event'
-import {createStore, type Store} from '../store'
+import {createStore} from '../store'
+import type {Store} from './index.h'
 
 export function createDomain({domain}: {domain: string[]}) {
  return {

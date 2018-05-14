@@ -1,6 +1,6 @@
 {
  "name": "effector-dev",
- "version": "0.16.1-beta.15",
+ "version": "0.17.0-rc.1",
  "description": "Reactive state manager",
  "typings": "index.d.ts",
  "private": true,
@@ -16,10 +16,7 @@
   "flow:stop": "pm2 stop flow-effector",
   "flow:restart": "yarn flow:stop && yarn flow"
  },
- "packages": [
-  "effector",
-  "react"
- ],
+ "packages": ["effector", "react"],
  "author": "Zero Bias",
  "license": "MIT",
  "devDependencies": {
@@ -61,6 +58,7 @@
   "immutable": "^4.0.0-rc.9",
   "invariant": "^2.2.4",
   "jest": "^22.4.3",
+  "jest-enzyme": "^6.0.0",
   "js-yaml": "^3.11.0",
   "jsdom": "^11.9.0",
   "jsdom-global": "^3.0.2",

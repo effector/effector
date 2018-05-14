@@ -3,17 +3,24 @@
 import {from, periodic} from 'most'
 
 import {
- createStore,
- createDomain,
- createEffect,
  createEvent,
- combine,
+ createEffect,
+ createStore,
  createStoreObject,
- type Store,
- type Event,
- type Domain,
+ createDomain,
+ combine,
 } from '..'
+import type {Event, Effect, Store} from '../index.h'
 
+import flags from '../../flags'
+
+beforeAll(() => {
+ flags.useGraphite = true
+})
+
+afterAll(() => {
+ flags.useGraphite = false
+})
 import * as Kind from '../../kind'
 
 import warning from 'warning'
@@ -148,9 +155,9 @@ test('combine', () => {
  dec()
  expect(result.getState()).toMatchObject({a: -9, b: 9, c: 0, d: 0})
  console.log(result.getState(), fn.mock.calls)
- //TODO call only twice
- expect(fn).not.toHaveBeenCalledTimes(2)
- expect(fn).toHaveBeenCalledTimes(5)
+
+ expect(fn).toHaveBeenCalledTimes(3)
+ // expect(fn).toHaveBeenCalledTimes(5)
 })
 
 test('smoke', async() => {

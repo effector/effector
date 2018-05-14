@@ -4,43 +4,43 @@ import type {Config, Context, Graph} from './index.h'
 
 export function defaultResolver<Item, Result>(
  opts: Config<Item, Result, *>,
- context: Context<Item, Result>,
+ ctx: Context<Item, Result>,
 ) {
- for (const key of context.queue) {
-  const deps = opts.graph.get(key) || []
-  const curr = deps.filter(dep => context.queue.has(dep))
+ for (const key of ctx.queue) {
+  const deps = ctx.graph.get(key) || []
+  const curr = deps.filter(dep => ctx.queue.has(dep))
 
-  context.current.set(key, curr)
+  ctx.current.set(key, curr)
 
   if (!curr.length) {
-   context.chunk.push(key)
+   ctx.chunk.push(key)
   }
  }
 }
 
 export function forceResolver<Item, Result>(
  opts: Config<Item, Result, *>,
- context: Context<Item, Result>,
+ ctx: Context<Item, Result>,
 ) {
  invariant(opts.force, 'Cycle detected in graph')
 
- const items = Array.from(context.queue)
+ const items = Array.from(ctx.queue)
  const sorted = items.sort((a, b) => {
-  const aCurr = context.current.get(a) || []
-  const bCurr = context.current.get(b) || []
+  const aCurr = ctx.current.get(a) || []
+  const bCurr = ctx.current.get(b) || []
   const deps = aCurr.length - bCurr.length
   if (deps !== 0) return deps
 
   const aChildren = items.filter(item =>
-   (context.current.get(item) || []).includes(a),
+   (ctx.current.get(item) || []).includes(a),
   )
   const bChildren = items.filter(item =>
-   (context.current.get(item) || []).includes(b),
+   (ctx.current.get(item) || []).includes(b),
   )
   return bChildren.length - aChildren.length
  })
 
  const first = sorted[0]
- context.chunk.push(first)
- context.setSafe(false)
+ ctx.chunk.push(first)
+ ctx.setSafe(false)
 }

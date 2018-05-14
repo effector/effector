@@ -35,7 +35,7 @@ export function* syncProvider<Item, Result>(
    ctx.running.add(key)
    let result: Task.Try<Result>
    try {
-    const value = opts.task(key)
+    const value = opts.task(key, ...(ctx.graph.get(key) || []))
     result = [(1: Task.Value), value]
    } catch (error) {
     const err = [(2: Task.Throw), error]

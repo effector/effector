@@ -16,6 +16,37 @@ Array [
             "dispatch": [Function],
             "epic": [Function],
             "getState": [Function],
+            "graphite": Object {
+              "cmd": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                },
+              },
+              "next": Multi {
+                "data": Set {},
+              },
+              "seq": Seq {
+                "data": Array [
+                  Single {
+                    "data": Compute {
+                      "data": Object {
+                        "reduce": [Function],
+                      },
+                    },
+                  },
+                  Multi {
+                    "data": Set {},
+                  },
+                ],
+              },
+              "step": Single {
+                "data": Compute {
+                  "data": Object {
+                    "reduce": [Function],
+                  },
+                },
+              },
+            },
             "id": "1",
             "kind": 1,
             "map": [Function],
@@ -51,6 +82,37 @@ Array [
             "dispatch": [Function],
             "epic": [Function],
             "getState": [Function],
+            "graphite": Object {
+              "cmd": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                },
+              },
+              "next": Multi {
+                "data": Set {},
+              },
+              "seq": Seq {
+                "data": Array [
+                  Single {
+                    "data": Compute {
+                      "data": Object {
+                        "reduce": [Function],
+                      },
+                    },
+                  },
+                  Multi {
+                    "data": Set {},
+                  },
+                ],
+              },
+              "step": Single {
+                "data": Compute {
+                  "data": Object {
+                    "reduce": [Function],
+                  },
+                },
+              },
+            },
             "id": "1",
             "kind": 1,
             "map": [Function],

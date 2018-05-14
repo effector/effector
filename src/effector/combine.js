@@ -1,8 +1,8 @@
 //@flow
 
 import invariant from 'invariant'
-import type {Store} from '../store'
-import {createStoreObject} from '../store/createStore'
+import type {Store} from './index.h'
+import {createStoreObject} from '../store/createStoreObject'
 // import {derive, atomically, struct, lens, atom} from '../derive'
 
 export function combine(...args: Array<Store<any>>): Store<any> {

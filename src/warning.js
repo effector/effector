@@ -1,12 +1,11 @@
 //@flow
 
-export default function warning(message: string) {
- if (typeof console !== 'undefined' && typeof console.error === 'function') {
-  console.error(message)
- }
- try {
-  throw new Error(message)
- } catch (e) {
-  // catch here
- }
+import warning from 'warning'
+
+export function notImplemented(message: string, ...args: any[]) {
+ warning(false, `[Not implemented]: ${message}`, ...args)
+}
+
+export function toDo(message: string, ...args: any[]) {
+ warning(false, `[TODO]: ${message}`, ...args)
 }

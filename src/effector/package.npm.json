@@ -12,7 +12,6 @@
  "dependencies": {
   "invariant": "^2.2.4",
   "most": "^1.7.3",
-  "raf": "^3.4.0",
   "symbol-observable": "^1.2.0"
  },
  "maintainers": [

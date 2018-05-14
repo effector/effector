@@ -8,10 +8,18 @@ import {
  createEffect,
  createStore,
  createStoreObject,
- type Event,
- type Effect,
- type Store,
 } from '..'
+import type {Event, Effect, Store} from '../index.h'
+
+import flags from '../../flags'
+
+beforeAll(() => {
+ flags.useGraphite = true
+})
+
+afterAll(() => {
+ flags.useGraphite = false
+})
 
 describe('symbol-observable support', () => {
  test('from(event)', async() => {

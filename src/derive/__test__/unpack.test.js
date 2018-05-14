@@ -123,7 +123,7 @@ test('struct only accepts plain objects or arrays', () => {
  }).not.toThrow()
 })
 
-test('struct can works with Store, public wrapper object', () => {
+test.skip('struct can works with Store, public wrapper object', () => {
  const store1 = createStore(0)
  const struct1 = struct({
   foo: 'bar',

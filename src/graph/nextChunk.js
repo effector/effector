@@ -20,13 +20,13 @@ export function nextChunk<Item, Result>(
   if (!isCycle) break
  }
  const newChunks = chunk.filter(key => {
-  const deps = opts.graph.get(key)
+  const deps = ctx.graph.get(key)
   if (deps === undefined) return false
-  return !deps.find(dep => ctx.running.has(dep))
+  return !deps.some(dep => ctx.running.has(dep))
  })
- // console.log(newChunks, chunk)
  for (const key of newChunks) {
   ctx.queue.delete(key)
  }
+ console.log(ctx.current)
  return newChunks
 }

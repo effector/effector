@@ -3,32 +3,23 @@
 import invariant from 'invariant'
 // import type {ComponentType, Node} from 'react'
 import {from} from 'most'
-import raf from 'raf'
 import $$observable from 'symbol-observable'
-import {
- atom,
- struct,
- lens,
- derive,
- atomically,
- type Atom,
- type Derivable,
-} from '../derive'
-import {deepUnpack} from '../derive/unpack'
-import {INIT, REPLACE} from './actionTypes'
-import {applyMiddleware} from './applyMiddleware'
-import type {Event} from '..'
 
+import {createEvent} from '../effector/derived/api'
+import {INIT} from './actionTypes'
+import * as Cmd from '../effector/derived/datatype/cmd'
+import * as Step from '../effector/derived/datatype/step'
+import {applyMiddleware} from './applyMiddleware'
+import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
-import warning from 'warning'
-import {setProperty} from '../setProperty'
+// import warning from 'warning'
 
 export type Nest = {
  get(): any,
  set(state: any, action: any): any,
 }
 let id = 0
-export function createStore<State>(state: State) {
+export function createStore<State>(state: State): Store<State> {
  return storeConstructor({
   currentReducer: _ => _,
   currentState: state,
@@ -36,91 +27,45 @@ export function createStore<State>(state: State) {
  })
 }
 
-export function createStoreObject<State>(obj: State) {
- const isArray = Array.isArray(obj)
- const state = isArray ? [...obj] : {...obj}
- const store = storeConstructor({
-  currentReducer: _ => _,
-  currentState: state,
-  isObject: true,
- })
- let temp = store.getState()
- let pending = false
- let lastCall = -1
- let delta = Infinity
- function update(key, value) {
-  const time = Date.now()
-  delta = time - lastCall
-  lastCall = time
-  if (isArray) {
-   const newList = [...temp]
-   newList[key] = value
-   temp = newList
-  } else {
-   temp = {...temp, [key]: value}
-  }
-  if (pending) return
-  if (delta > 60) {
-   store.setState(temp)
-   return
-  }
-  pending = true
-  raf(() => {
-   pending = false
-   store.setState(temp)
-  })
- }
- const iter = isArray ? state.map((e, i) => [i, e]) : Object.entries(state)
- for (const [key, child] of iter) {
-  if (Kind.isStore(child)) {
-   child.watch(e => {
-    update(key, e)
-   })
-  }
- }
- return store
-}
-
-function storeConstructor<State>(props) {
+export function storeConstructor<State>(props: {
+ currentReducer: Function,
+ currentState: State,
+ isObject: boolean,
+}): Store<State> {
  const currentId = (++id).toString(36)
  let {currentReducer, currentState, isObject} = props
- const privateStruct: Derivable<State> | Atom<State> = isObject
-  ? (derive(() => deepUnpack(currentState)): any)
-  : atom(currentState)
- const defaultState = privateStruct.get()
- let storeSeq = 0
- const privateAtom: Atom<{state: State, seq: number}> = atom({
-  state: defaultState,
-  seq: storeSeq,
- })
- function forceSet(state: State) {
-  privateAtom.set({state, seq: ++storeSeq})
- }
- const privateLens = lens({
-  get() {
-   return privateAtom.get().state
-  },
-  set(value) {
-   const oldValue = privateAtom.get().state
+ const defaultState = currentState
 
-   if (oldValue !== value) {
-    forceSet(value)
-   }
+ const plainState = (defaultState => {
+  let state = defaultState
+  return {
+   get: () => state,
+   set(newState: typeof state) {
+    state = newState
+   },
+  }
+ })(defaultState)
+ const cmd: Cmd.Compute = Cmd.compute({
+  reduce(_, newVal, ctx) {
+   ctx.isChanged = newVal !== plainState.get()
+   plainState.set(newVal)
+   return newVal
   },
  })
- let oldPrivateStruct = defaultState
- if (isObject) {
-  privateStruct.react(state => {
-   //  if (state === oldPrivateStruct) {
-   //   oldPrivateStruct = state
-   //   return
-   //  }
-   oldPrivateStruct = state
-   privateLens.set(state)
-  })
- }
- const stateAtom = privateLens
+ cmd.data.shouldChange = true
+ const singleStep: Step.Single = Step.single(cmd)
+ const nextSteps: Step.Multi = Step.multi()
+ const fullSeq: Step.Seq = Step.seq([singleStep, nextSteps])
+
+ const updater: any = createEvent(`update ${currentId}`)
+
  const store = {
+  graphite: {
+   cmd,
+   step: singleStep,
+   next: nextSteps,
+   seq: fullSeq,
+  },
   kind: Kind.STORE,
   id: currentId,
   withProps,
@@ -139,10 +84,9 @@ function storeConstructor<State>(props) {
   //$off
   [$$observable]: observable,
  }
- setProperty('stateAtom', stateAtom, store)
-
- function getState() {
-  return getAtom().get()
+ on(updater, (_, payload) => payload)
+ function getState(): State {
+  return plainState.get()
  }
 
  function subscribe(listener) {
@@ -150,16 +94,15 @@ function storeConstructor<State>(props) {
    typeof listener === 'function',
    'Expected the listener to be a function.',
   )
-  let active = true
-  const unsub = getAtom().react((...args) => {
-   if (!active) return
-   listener(...args)
-  })
-
+  const runCmd = Step.single(
+   Cmd.run({
+    runner: listener,
+   }),
+  )
+  store.graphite.next.data.add(runCmd)
+  listener(getState())
   function unsubscribe() {
-   if (!active) return
-   active = false
-   unsub()
+   store.graphite.next.data.delete(runCmd)
   }
   unsubscribe.unsubscribe = unsubscribe
   return unsubscribe
@@ -169,11 +112,6 @@ function storeConstructor<State>(props) {
   if (action === undefined || action === null) return action
   if (typeof action.type !== 'string' && typeof action.type !== 'number')
    return action
-  atomically(() => {
-   const state = getState()
-   const newResult = currentReducer(state, action.payload, action.type)
-   setter(state, newResult)
-  })
 
   return action
  }
@@ -185,7 +123,7 @@ function storeConstructor<State>(props) {
   )
 
   currentReducer = nextReducer
-  forceSet(getState())
+  updater(getState())
   // dispatch({type: REPLACE})
  }
 
@@ -202,7 +140,6 @@ function storeConstructor<State>(props) {
       observer.next(state)
      }
     }
-
     return subscribe(observeState)
    },
    //$off
@@ -213,17 +150,30 @@ function storeConstructor<State>(props) {
  }
 
  function reset(event) {
-  const off = watch(event, (state, payload, type) => {
-   setter(state, defaultState)
-  })
-  return store
+  return on(event, () => defaultState)
  }
 
  function on(event: any, handler: Function) {
-  const off = watch(event, (state, payload, type) => {
-   const newResult = handler(state, payload, type)
-   setter(state, newResult)
+  const e: Event<any> = event
+  const computeCmd = Cmd.compute({
+   reduce(_, newValue, ctx) {
+    const lastState = getState()
+    const result = handler(lastState, newValue, e.getType())
+    if (result === undefined || result === null) {
+     ctx.isChanged = false
+     return lastState
+    }
+    ctx.isChanged = result !== lastState
+    return result
+   },
   })
+  computeCmd.data.shouldChange = true
+  const step = Step.single(computeCmd)
+  const nextSeq = Step.seq([step, ...store.graphite.seq.data])
+  e.graphite.next.data.add(nextSeq)
+  const unsub = () => {
+   e.graphite.next.data.delete(nextSeq)
+  }
   return store
  }
 
@@ -232,11 +182,21 @@ function storeConstructor<State>(props) {
  }
 
  function map(fn: Function) {
-  const innerStore = (createStore: any)(fn(getState()))
-  const unsub = watch(update => {
-   const mapped = fn(update)
-   innerStore.setState(mapped)
-  })
+  const innerStore: Store<any> = (createStore: any)(fn(getState()))
+
+  const computeCmd = Step.single(
+   Cmd.compute({
+    reduce(_, newValue, ctx) {
+     const result = fn(newValue)
+     return result
+    },
+   }),
+  )
+  const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
+  store.graphite.next.data.add(nextSeq)
+  const off = () => {
+   store.graphite.next.data.delete(nextSeq)
+  }
   return innerStore
  }
 
@@ -277,22 +237,19 @@ function storeConstructor<State>(props) {
  }
  function setState(value, reduce?: Function) {
   const currentReducer = typeof reduce === 'function' ? reduce : stateSetter
-  const state = getAtom().get()
+  const state = getState()
   const newResult = currentReducer(state, value)
+
   setter(state, newResult)
  }
  function setter(oldState, newState) {
   if (newState === undefined || newState === null || newState === oldState)
    return
-  getAtom().set(newState)
+  updater(newState)
  }
 
  dispatch({type: INIT})
 
- function getAtom(): typeof stateAtom {
-  const _: any = store
-  return _.stateAtom
- }
  function thru(fn: Function) {
   return fn(store)
  }

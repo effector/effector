@@ -34,6 +34,7 @@ const babelCfg = {
   ['@babel/plugin-proposal-class-properties', {loose: true}],
   '@babel/plugin-proposal-async-generator-functions',
   '@babel/plugin-transform-block-scoping',
+  'babel-plugin-transform-inline-environment-variables',
   'babel-plugin-dev-expression',
  ],
 }
@@ -71,8 +72,8 @@ const rollupPlugins = [
   },
   output: {
    comments: /#/i,
-     //  beautify: true,
-     //  indent_level: 2,
+   // beautify: true,
+   // indent_level: 2,
   },
  }),
 ]

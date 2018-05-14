@@ -20,19 +20,19 @@ export type Context<Item, Result> = {
 
 export type OptsAsync<Item, Result> = {
  graph: Graph<Item>,
- task: (item: Item) => Promise<Result>,
+ task: (item: Item, ...deps: Item[]) => Promise<Result>,
  force?: boolean,
  sync?: false,
  resolvers?: Iterable<Resolver<Item, Result>>,
 }
 export type OptsSync<Item, Result> = {
  graph: Graph<Item>,
- task: (item: Item) => Result,
+ task: (item: Item, ...deps: Item[]) => Result,
  force?: boolean,
  sync: true,
  resolvers?: Iterable<Resolver<Item, Result>>,
 }
-export type Config<Item, Result, Task: Item => *> = {
+export type Config<Item, Result, Task: (item: Item, ...deps: Item[]) => *> = {
  +graph: Graph<Item>,
  +task: Task,
  +force: boolean,

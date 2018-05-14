@@ -2,7 +2,7 @@
 
 import type {Config, Results, Context} from './index.h'
 import * as Task from './task.h'
-import {asyncProvider, syncProvider} from './next'
+import {asyncProvider, syncProvider} from './providers'
 
 export async function graphRunnerAsync<Item, Result>(
  opts: Config<Item, Result, (item: Item) => Promise<Result>>,

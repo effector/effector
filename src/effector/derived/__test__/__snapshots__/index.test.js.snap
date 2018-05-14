@@ -1,0 +1,385 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`graphite: bar seq 1`] = `
+Seq {
+  "data": Array [
+    Single {
+      "data": Emit {
+        "data": Object {
+          "fullName": "foo → *",
+          "runner": [Function],
+          "subtype": "event",
+        },
+      },
+    },
+    Multi {
+      "data": Set {
+        Seq {
+          "data": Array [
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": true,
+                },
+              },
+            },
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": true,
+                },
+              },
+            },
+            Multi {
+              "data": Set {
+                Seq {
+                  "data": Array [
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": false,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Multi {
+                      "data": Set {},
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+        Single {
+          "data": Run {
+            "data": Object {
+              "runner": [Function],
+            },
+          },
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`graphite: bar seq 2`] = `
+Seq {
+  "data": Array [
+    Single {
+      "data": Emit {
+        "data": Object {
+          "fullName": "foo → *",
+          "runner": [Function],
+          "subtype": "event",
+        },
+      },
+    },
+    Multi {
+      "data": Set {
+        Seq {
+          "data": Array [
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": true,
+                },
+              },
+            },
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": true,
+                },
+              },
+            },
+            Multi {
+              "data": Set {
+                Seq {
+                  "data": Array [
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": false,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Multi {
+                      "data": Set {},
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`graphite: foo seq 1`] = `
+Seq {
+  "data": Array [
+    Single {
+      "data": Emit {
+        "data": Object {
+          "fullName": "foo",
+          "runner": [Function],
+          "subtype": "event",
+        },
+      },
+    },
+    Multi {
+      "data": Set {
+        Seq {
+          "data": Array [
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": false,
+                },
+              },
+            },
+            Single {
+              "data": Emit {
+                "data": Object {
+                  "fullName": "foo → *",
+                  "runner": [Function],
+                  "subtype": "event",
+                },
+              },
+            },
+            Multi {
+              "data": Set {
+                Seq {
+                  "data": Array [
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
+                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Multi {
+                      "data": Set {
+                        Seq {
+                          "data": Array [
+                            Single {
+                              "data": Compute {
+                                "data": Object {
+                                  "reduce": [Function],
+                                  "shouldChange": false,
+                                },
+                              },
+                            },
+                            Single {
+                              "data": Compute {
+                                "data": Object {
+                                  "reduce": [Function],
+                                  "shouldChange": true,
+                                },
+                              },
+                            },
+                            Multi {
+                              "data": Set {},
+                            },
+                          ],
+                        },
+                      },
+                    },
+                  ],
+                },
+                Single {
+                  "data": Run {
+                    "data": Object {
+                      "runner": [Function],
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`graphite: show bar 1`] = `
+"Seq [
+  1. Single Emit(foo → *),
+  2. Multi [
+     *  Seq [
+        1. Single Compute,
+        2. Single Compute,
+        3. Multi [
+           *  Seq [
+              1. Single Compute,
+              2. Single Compute,
+              3. Multi []
+           ]
+        ]
+     ],
+     *  Single Run
+  ]
+]"
+`;
+
+exports[`graphite: show bar 2`] = `
+"Seq [
+  1. Single Emit(foo → *),
+  2. Multi [
+     *  Seq [
+        1. Single Compute,
+        2. Single Compute,
+        3. Multi [
+           *  Seq [
+              1. Single Compute,
+              2. Single Compute,
+              3. Multi []
+           ]
+        ]
+     ]
+  ]
+]"
+`;
+
+exports[`graphite: show foo 1`] = `
+"Seq [
+  1. Single Emit(foo),
+  2. Multi [
+     *  Seq [
+        1. Single Compute,
+        2. Single Emit(foo → *),
+        3. Multi [
+           *  Seq [
+              1. Single Compute,
+              2. Single Compute,
+              3. Multi [
+                 *  Seq [
+                    1. Single Compute,
+                    2. Single Compute,
+                    3. Multi []
+                 ]
+              ]
+           ]
+        ]
+     ]
+  ]
+]"
+`;
+
+exports[`graphite: show store1 1`] = `
+"Seq [
+  1. Single Compute,
+  2. Multi [
+     *  Seq [
+        1. Single Compute,
+        2. Single Compute,
+        3. Multi []
+     ]
+  ]
+]"
+`;
+
+exports[`graphite: show store2 1`] = `
+"Seq [
+  1. Single Compute,
+  2. Multi []
+]"
+`;
+
+exports[`graphite: store1 seq 1`] = `
+Seq {
+  "data": Array [
+    Single {
+      "data": Compute {
+        "data": Object {
+          "reduce": [Function],
+          "shouldChange": true,
+        },
+      },
+    },
+    Multi {
+      "data": Set {
+        Seq {
+          "data": Array [
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": false,
+                },
+              },
+            },
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
+                  "shouldChange": true,
+                },
+              },
+            },
+            Multi {
+              "data": Set {},
+            },
+          ],
+        },
+      },
+    },
+  ],
+}
+`;
+
+exports[`graphite: store2 seq 1`] = `
+Seq {
+  "data": Array [
+    Single {
+      "data": Compute {
+        "data": Object {
+          "reduce": [Function],
+          "shouldChange": true,
+        },
+      },
+    },
+    Multi {
+      "data": Set {},
+    },
+  ],
+}
+`;

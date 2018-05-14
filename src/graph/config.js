@@ -2,14 +2,14 @@
 
 import type {OptsAsync, OptsSync, Config} from './index.h'
 
-import {defaultResolver, forceResolver} from './resolver'
+import {defaultResolver, forceResolver} from './resolvers'
 
 declare export function optsToConfig<Item, Result>(
  opts: OptsSync<Item, Result>,
-): Config<Item, (Item) => Result>
+): Config<Item, Result, (item: Item) => Result>
 declare export function optsToConfig<Item, Result>(
- opts: OptsAsync<Item, (Item) => Promise<Result>>,
-): Config<Item, Result>
+ opts: OptsAsync<Item, Result>,
+): Config<Item, Result, (item: Item) => Promise<Result>>
 // declare export function optsToConfig<Item, Result>(
 //  opts: Opts<Item, Result>,
 // ): Config<Item, Result>

@@ -1,6 +1,7 @@
 //@flow
 
-export {createStore, createReduxStore, createStoreObject} from './createStore'
-export type {Store} from './createStore'
+export {createStore, createReduxStore} from './createStore'
+export {createStoreObject} from './createStoreObject'
+// export type {Store} from './in'
 export {applyMiddleware} from './applyMiddleware'
 export {compose} from './compose'

@@ -4,6 +4,13 @@ import type {Stream} from 'most'
 
 import {Atom} from '../derive'
 
+import type {Emit, Compute, Run} from './derived/datatype/cmd'
+import type {
+ Multi as MultiStep,
+ Seq as SeqStep,
+ Single as SingleStep,
+} from './derived/datatype/step'
+
 export type Subscriber<A> = {
  next(value: A): void,
  // error(err: Error): void,
@@ -13,6 +20,13 @@ export type Subscriber<A> = {
 export type Subscription = {
  (): void,
  unsubscribe(): void,
+}
+
+export type GraphiteMeta = {
+ cmd: Emit,
+ step: SingleStep,
+ next: MultiStep,
+ seq: SeqStep,
 }
 
 export type Event<E> = {
@@ -32,6 +46,8 @@ export type Event<E> = {
  to(store: Store<E>, _: void): void,
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void,
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
+ getType(): string,
+ graphite: GraphiteMeta,
 }
 
 export type Effect<Params, Done, Fail = Error> = {
@@ -57,6 +73,8 @@ export type Effect<Params, Done, Fail = Error> = {
  to(store: Store<Params>, _: void): void,
  to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void,
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
+ getType(): string,
+ graphite: GraphiteMeta,
 }
 
 export type Store<State> = {
@@ -73,6 +91,12 @@ export type Store<State> = {
  ): Store<State>,
  subscribe(listner: any): Subscription,
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
+ graphite: {
+  cmd: Compute,
+  step: SingleStep,
+  next: MultiStep,
+  seq: SeqStep,
+ },
 }
 
 export type Domain = {

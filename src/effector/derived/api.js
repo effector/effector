@@ -1,13 +1,16 @@
 //@flow
 
-import invariant from 'invariant'
+// import invariant from 'invariant'
 import $$observable from 'symbol-observable'
 import warning from 'warning'
 import {from, type Stream} from 'most'
-import {atom, atomically, type Atom} from '../../derive'
-import type {Event, Effect} from '../index.h'
+import type {Event, Effect, GraphiteMeta} from '../index.h'
 import * as Kind from '../../kind'
 import {setProperty} from '../../setProperty'
+// import {runSyncGraph} from '../../graph'
+import * as Cmd from './datatype/cmd'
+import * as Step from './datatype/step'
+import {walkEvent} from './walk'
 
 export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})
@@ -19,51 +22,6 @@ export function createEffect<Payload, Done>(
  return effectConstructor({name, domainName: ''})
 }
 
-function link<A, B>(
- a: Event<A> | Effect<A, any, any>,
- b: Event<B> | Effect<B, any, any>,
- ab: A => B,
- ba: B => A,
-) {
- let halt = false
- // let active =
- let current: 0 | 1 | 2 = 0
- const whenAB = () => current !== 2
- const whenBA = () => current !== 1
- const until = () => halt
- let lastAseq = -1
- let lastBseq = -1
- a.eventState.react(
-  ({payload, seq}) => {
-   if (seq === lastAseq) return
-   // atomically(() => {
-   lastAseq = seq
-   current = 1
-   const nextB = ab(payload)
-   b(nextB)
-   current = 0
-   // })
-  },
-  {until, skipFirst: true, when: whenAB},
- )
- b.eventState.react(
-  ({payload, seq}) => {
-   if (seq === lastBseq) return
-   // atomically(() => {
-   lastBseq = seq
-   current = 2
-   const nextA = ba(payload)
-   a(nextA)
-   current = 0
-   // })
-  },
-  {until, skipFirst: true, when: whenBA},
- )
- return () => {
-  halt = true
- }
-}
-
 function eventConstructor<Payload>({
  name,
  domainName,
@@ -72,20 +30,35 @@ function eventConstructor<Payload>({
  domainName: string,
 }): Event<Payload> {
  const fullName = makeName(name, domainName)
- const eventState: Atom<{payload: Payload, seq: string}> = atom(
-  ({payload: null, seq: -1}: any),
- )
 
+ const cmd: Cmd.Emit = Cmd.emit({
+  subtype: 'event',
+  fullName,
+  runner: createGraphite,
+ })
+ const step: Step.Single = Step.single(cmd)
+ const nextSteps: Step.Multi = Step.multi()
+ const stepFull: Step.Seq = Step.seq([step, nextSteps])
+ const graphite: GraphiteMeta = {
+  cmd,
+  step,
+  next: nextSteps,
+  seq: stepFull,
+ }
  const instance = (payload: Payload): Payload =>
   instanceAsEvent.create(payload, fullName)
+ function createGraphite(payload: Payload): Payload {
+  return instanceAsEvent.create(payload, fullName)
+ }
  const instanceAsEvent: Event<Payload> = (instance: any)
+ instanceAsEvent.graphite = graphite
+
  setProperty('create', create, instance)
- setProperty('eventState', eventState, instance)
+
  setProperty('toString', getType, instance)
  setProperty('getType', getType, instance)
  setProperty('kind', Kind.EVENT, instance)
  setProperty($$observable, () => instance, instance)
-
  instance.watch = watch
  instance.map = map
  instance.prepend = prepend
@@ -114,32 +87,23 @@ function eventConstructor<Payload>({
    }
   }
  }
- let seq = 0
+ const seq = 0
+
  function create(payload, fullName) {
-  atomically(() => {
-   instanceAsEvent.eventState.set({payload, seq: ++seq})
-  })
+  walkEvent(payload, instanceAsEvent)
   return payload
  }
  function watch(watcher: (payload: Payload, type: string) => any) {
-  let halt = false
-  let lastSeq = -1
-  const until = () => halt
-  const unsub = instanceAsEvent.eventState.react(
-   ({payload, seq}) => {
-    if (halt) return
-    if (seq === lastSeq) return
-    lastSeq = seq
-    atomically(() => {
-     watcher(payload, fullName)
-    })
-   },
-   {skipFirst: true, until},
+  const runCmd = Step.single(
+   Cmd.run({
+    runner(newValue: Payload) {
+     return watcher(newValue, fullName)
+    },
+   }),
   )
+  instanceAsEvent.graphite.next.data.add(runCmd)
   return () => {
-   if (halt) return
-   halt = true
-   unsub()
+   instanceAsEvent.graphite.next.data.delete(runCmd)
   }
  }
 
@@ -155,9 +119,15 @@ function eventConstructor<Payload>({
  }
  function map<Next>(fn: Payload => Next) {
   const mapped = eventConstructor({name: `${name} → *`, domainName})
-  watch(payload => {
-   mapped(fn(payload))
-  })
+  const computeCmd = Step.single(
+   Cmd.compute({
+    reduce(_, newValue: Payload, ctx) {
+     return fn(newValue)
+    },
+   }),
+  )
+  const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
+  instanceAsEvent.graphite.next.data.add(nextSeq)
   return mapped
  }
  function prepend<Before>(fn: Before => Payload) {
@@ -165,9 +135,16 @@ function eventConstructor<Payload>({
    name: `* → ${name}`,
    domainName,
   })
-  contramapped.watch((_: Before) => {
-   instance(fn(_))
-  })
+
+  const computeCmd = Step.single(
+   Cmd.compute({
+    reduce(_, newValue: Before, ctx) {
+     return fn(newValue)
+    },
+   }),
+  )
+  const nextSeq = Step.seq([computeCmd, ...instanceAsEvent.graphite.seq.data])
+  contramapped.graphite.next.data.add(nextSeq)
   return contramapped
  }
  function getType() {
@@ -197,6 +174,8 @@ function effectConstructor<Payload, Done>({
   name: `${name} fail`,
   domainName,
  })
+
+ // instanceAsEvent.step.data.delete(instanceAsEvent.cmd)
  instance.done = done
  instance.fail = fail
  instance.use = use
