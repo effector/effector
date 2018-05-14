@@ -59,7 +59,6 @@ export function createStoreObject<State>(obj: State): Store<State> {
  const store = storeConstructor({
   currentReducer: _ => _,
   currentState: stateNew,
-  isObject: true,
  })
  store.on(updater, (_, payload) => payload)
  return store

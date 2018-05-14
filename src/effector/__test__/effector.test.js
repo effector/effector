@@ -12,15 +12,6 @@ import {
 } from '..'
 import type {Event, Effect, Store} from '../index.h'
 
-import flags from '../../flags'
-
-beforeAll(() => {
- flags.useGraphite = true
-})
-
-afterAll(() => {
- flags.useGraphite = false
-})
 import * as Kind from '../../kind'
 
 import warning from 'warning'
@@ -158,6 +149,33 @@ test('combine', () => {
 
  expect(fn).toHaveBeenCalledTimes(3)
  // expect(fn).toHaveBeenCalledTimes(5)
+})
+
+test('no dull updates', () => {
+ const store = createStore(false)
+ const e1 = createEvent('e1')
+ const e2 = createEvent('e2')
+ const fn1 = jest.fn()
+ const fn2 = jest.fn()
+ const fn3 = jest.fn()
+ store.watch(fn1)
+ store.on(e1, (_, payload): boolean => payload)
+ store.on(e2, (_, p) => _ === p)
+ const nextStore = store.map(x => (fn2(x), x))
+ nextStore.watch(fn3)
+ store.watch(e => console.log('store', e))
+ // nextStore.watch(e => console.log('next store', e))
+ e1(false)
+ e1(true)
+ e1(false)
+ e2(false)
+ e2(false)
+ expect(fn1.mock.calls).toMatchSnapshot()
+ expect(fn2.mock.calls).toMatchSnapshot()
+ expect(fn3.mock.calls).toMatchSnapshot()
+ expect(fn1).toHaveBeenCalledTimes(5)
+ expect(fn2).toHaveBeenCalledTimes(5)
+ expect(fn3).toHaveBeenCalledTimes(5)
 })
 
 test('smoke', async() => {
