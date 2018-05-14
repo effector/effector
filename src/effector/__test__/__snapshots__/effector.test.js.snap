@@ -1,5 +1,65 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`no dull updates 1`] = `
+Array [
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+]
+`;
+
+exports[`no dull updates 2`] = `
+Array [
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+]
+`;
+
+exports[`no dull updates 3`] = `
+Array [
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+  Array [
+    true,
+  ],
+  Array [
+    false,
+  ],
+]
+`;
+
 exports[`reducer defaults 1`] = `
 Object {
   "add": Array [
@@ -25,12 +85,6 @@ Object {
   "watch": Array [
     Array [
       3,
-    ],
-    Array [
-      2,
-    ],
-    Array [
-      2,
     ],
     Array [
       2,

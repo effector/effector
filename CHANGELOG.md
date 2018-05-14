@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.17.2
+
+* Memoize store.map and store updates
+
+## 0.17.0
+
+* Added sync graph reduction engine (it's internal)
+* Added store updates memoization
+* Introduced effector-react
+
 ## 0.16.0
 
 * Removed most-subject dependency
@@ -53,7 +63,7 @@
 * Added `mill` fluent "AND" reducer combinator
 
 ```js
-import { mill, type MillType, type Reducer } from 'effector'
+import {mill, type MillType, type Reducer} from 'effector'
 
 type A = 'foo'
 type B = 'bar'
@@ -81,7 +91,7 @@ const union: Reducer<{
 * Added support for dispatching halt action
 
 ```js
-import { createHaltAction } from 'effector'
+import {createHaltAction} from 'effector'
 
 store.dispatch(createHaltAction()) //This store will be unsubscribed
 ```

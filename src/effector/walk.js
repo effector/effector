@@ -99,7 +99,7 @@ function singleStep(
   case ('compute': Cmd.ComputeType): {
    const newCtx = Ctx.computeContext([undefined, arg, ctx])
    try {
-    const result = single.data.reduce(undefined, arg, ctx)
+    const result = single.data.reduce(undefined, arg, newCtx)
     newCtx.result = result
     newCtx.isNone = result === undefined
    } catch (err) {

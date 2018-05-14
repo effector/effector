@@ -92,14 +92,25 @@ export function storeConstructor<State>(props: {
    typeof listener === 'function',
    'Expected the listener to be a function.',
   )
+  let lastCall = getState()
+  let active = true
   const runCmd = Step.single(
    Cmd.run({
-    runner: listener,
+    runner(args) {
+     if (args === lastCall || !active) return
+     lastCall = args
+     try {
+      listener(args)
+     } catch (err) {
+      console.error(err)
+     }
+    },
    }),
   )
   store.graphite.next.data.add(runCmd)
-  listener(getState())
+  listener(lastCall)
   function unsubscribe() {
+   active = false
    store.graphite.next.data.delete(runCmd)
   }
   unsubscribe.unsubscribe = unsubscribe
@@ -157,11 +168,10 @@ export function storeConstructor<State>(props: {
    reduce(_, newValue, ctx) {
     const lastState = getState()
     const result = handler(lastState, newValue, e.getType())
-    if (result === undefined) {
+    if (result === undefined || result === lastState) {
      ctx.isChanged = false
      return lastState
     }
-    ctx.isChanged = result !== lastState
     return result
    },
    shouldChange: true,
@@ -180,12 +190,24 @@ export function storeConstructor<State>(props: {
  }
 
  function map(fn: Function) {
-  const innerStore: Store<any> = (createStore: any)(fn(getState()))
-
+  let lastValue = getState()
+  let lastResult = fn(lastValue)
+  const innerStore: Store<any> = (createStore: any)(lastResult)
   const computeCmd = Step.single(
    Cmd.compute({
     reduce(_, newValue, ctx) {
-     const result = fn(newValue)
+     if (newValue === lastValue) {
+      ctx.isChanged = false
+      return lastResult
+     }
+     lastValue = newValue
+     const lastState = innerStore.getState()
+     const result = fn(newValue, lastState)
+     if (result === undefined || result === lastState) {
+      ctx.isChanged = false
+      return lastState
+     }
+     lastResult = result
      return result
     },
     shouldChange: true,
