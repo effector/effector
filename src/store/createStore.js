@@ -6,10 +6,8 @@ import {from} from 'most'
 import $$observable from 'symbol-observable'
 
 import {createEvent} from '../effector/api'
-import {INIT} from './actionTypes'
 import * as Cmd from '../effector/datatype/cmd'
 import * as Step from '../effector/datatype/step'
-import {applyMiddleware} from './applyMiddleware'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
 // import warning from 'warning'
@@ -31,7 +29,8 @@ export function storeConstructor<State>(props: {
  currentState: State,
 }): Store<State> {
  const currentId = (++id).toString(36)
- let {currentReducer, currentState} = props
+ const {currentState} = props
+ let currentReducer = props?.currentReducer
  const defaultState = currentState
 
  const plainState = (defaultState => {
@@ -85,6 +84,12 @@ export function storeConstructor<State>(props: {
  on(updater, (_, payload) => payload)
  function getState(): State {
   return plainState.get()
+ }
+
+ function map<NextState>(
+  fn: (state: State, lastState?: NextState) => NextState,
+ ): Store<NextState> {
+  return mapStore(store, fn)
  }
 
  function subscribe(listener) {
@@ -189,38 +194,6 @@ export function storeConstructor<State>(props: {
   return props => fn(getState(), props)
  }
 
- function map(fn: Function) {
-  let lastValue = getState()
-  let lastResult = fn(lastValue)
-  const innerStore: Store<any> = (createStore: any)(lastResult)
-  const computeCmd = Step.single(
-   Cmd.compute({
-    reduce(_, newValue, ctx) {
-     if (newValue === lastValue) {
-      ctx.isChanged = false
-      return lastResult
-     }
-     lastValue = newValue
-     const lastState = innerStore.getState()
-     const result = fn(newValue, lastState)
-     if (result === undefined || result === lastState) {
-      ctx.isChanged = false
-      return lastState
-     }
-     lastResult = result
-     return result
-    },
-    shouldChange: true,
-   }),
-  )
-  const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
-  store.graphite.next.data.add(nextSeq)
-  const off = () => {
-   store.graphite.next.data.delete(nextSeq)
-  }
-  return innerStore
- }
-
  function to(action: Function, reduce) {
   const needReduce = Kind.isStore(action) && typeof reduce === 'function'
   return watch(data => {
@@ -268,13 +241,46 @@ export function storeConstructor<State>(props: {
   updater(newState)
  }
 
- dispatch({type: INIT})
-
  function thru(fn: Function) {
   return fn(store)
  }
 
  return store
+}
+
+function mapStore<A, B>(
+ store: Store<A>,
+ fn: (state: A, lastState?: B) => B,
+): Store<B> {
+ let lastValue = store.getState()
+ let lastResult = fn(lastValue)
+ const innerStore: Store<any> = (createStore: any)(lastResult)
+ const computeCmd = Step.single(
+  Cmd.compute({
+   reduce(_, newValue, ctx) {
+    if (newValue === lastValue) {
+     ctx.isChanged = false
+     return lastResult
+    }
+    lastValue = newValue
+    const lastState = innerStore.getState()
+    const result = fn(newValue, lastState)
+    if (result === undefined || result === lastState) {
+     ctx.isChanged = false
+     return lastState
+    }
+    lastResult = result
+    return result
+   },
+   shouldChange: true,
+  }),
+ )
+ const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
+ store.graphite.next.data.add(nextSeq)
+ const off = () => {
+  store.graphite.next.data.delete(nextSeq)
+ }
+ return innerStore
 }
 
 function epicStore(event, store, fn: Function) {
@@ -294,31 +300,4 @@ function epicStore(event, store, fn: Function) {
   },
  })
  return innerStore
-}
-
-export function createReduxStore<T>(
- reducer: (state: T, event: any) => T,
- preloadedStateRaw?: T,
- enhancerRaw?: Function | Function[],
-) {
- invariant(
-  typeof reducer === 'function',
-  'Expected reducer to be a function, got %s',
-  typeof reducer,
- )
- let enhancer = enhancerRaw
- let preloadedState = preloadedStateRaw
- if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-  enhancer = preloadedState
-  preloadedState = undefined
- }
- if (Array.isArray(enhancer)) {
-  enhancer = applyMiddleware(...enhancer)
- }
- if (enhancer !== undefined)
-  return enhancer(createReduxStore)(reducer, preloadedState)
- return storeConstructor({
-  currentReducer: reducer,
-  currentState: preloadedState,
- })
 }
