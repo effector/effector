@@ -1,47 +1,12 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 // import alias from 'rollup-plugin-path-alias'
-// import cleanup from 'rollup-plugin-cleanup'
 import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
 
-const babelCfg = {
- env: {
-  test: {
-   presets: ['@babel/preset-react'],
-   plugins: ['@babel/plugin-transform-modules-commonjs'],
-  },
-  commonjs: {
-   plugins: [
-    'babel-plugin-transform-inline-environment-variables',
-    '@babel/plugin-transform-modules-commonjs',
-   ],
-  },
-  es: {
-   plugins: ['babel-plugin-transform-inline-environment-variables'],
-  },
- },
- presets: ['@babel/preset-react'],
- plugins: [
-  '@babel/plugin-transform-flow-strip-types',
-  [
-   '@babel/plugin-proposal-object-rest-spread',
-   {
-    useBuiltIns: true,
-   },
-  ],
-  ['@babel/plugin-proposal-class-properties', {loose: true}],
-  '@babel/plugin-proposal-async-generator-functions',
-  '@babel/plugin-transform-block-scoping',
-  'babel-plugin-transform-inline-environment-variables',
-  'babel-plugin-dev-expression',
- ],
-}
+const {plugins, presets} = require('./.babelrc.js')
 
-const presets = babelCfg.presets
-
-const plugins = babelCfg.plugins
 const rollupPlugins = [
  // alias({
  //  paths: {
@@ -55,14 +20,10 @@ const rollupPlugins = [
   jail: resolvePath(__dirname, 'src'),
  }),
  babel({
-  //  exclude: 'node_modules/**',
   presets,
   plugins,
   runtimeHelpers: true,
  }),
- //  cleanup({
- //   comments: [/#/],
- //  }),
  uglify({
   mangle: {
    toplevel: true,
