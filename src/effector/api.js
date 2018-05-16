@@ -65,7 +65,13 @@ function eventConstructor<Payload>({
  instance.subscribe = subscribe
  instance.to = to
  instance.epic = epic
- // instance.link = (b, ab, ba) => link(instanceAsEvent, b, ab, ba)
+ instance.shortName = name
+ instance.domainName = domainName
+
+ function map<Next>(fn: Payload => Next): Event<Next> {
+  return mapEvent(instanceAsEvent, fn)
+ }
+
  function epic<T>(fn: (Stream<Payload>) => Stream<T>): Event<T> {
   const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
@@ -87,7 +93,6 @@ function eventConstructor<Payload>({
    }
   }
  }
- const seq = 0
 
  function create(payload, fullName) {
   walkEvent(payload, instanceAsEvent)
@@ -116,19 +121,6 @@ function eventConstructor<Payload>({
   unsubscribe.unsubscribe = unsubscribe
 
   return unsubscribe
- }
- function map<Next>(fn: Payload => Next) {
-  const mapped = eventConstructor({name: `${name} → *`, domainName})
-  const computeCmd = Step.single(
-   Cmd.compute({
-    reduce(_, newValue: Payload, ctx) {
-     return fn(newValue)
-    },
-   }),
-  )
-  const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
-  instanceAsEvent.graphite.next.data.add(nextSeq)
-  return mapped
  }
  function prepend<Before>(fn: Before => Payload) {
   const contramapped: Event<Before> = eventConstructor({
@@ -232,6 +224,28 @@ function effectConstructor<Payload, Done>({
  }
 
  return instance
+}
+
+declare function mapEvent<A, B>(event: Event<A>, fn: (_: A) => B): Event<B>
+declare function mapEvent<A, B>(
+ effect: Effect<A, any, any>,
+ fn: (_: A) => B,
+): Event<B>
+function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
+ const mapped = eventConstructor({
+  name: `${event.shortName} → *`,
+  domainName: event.domainName,
+ })
+ const computeCmd = Step.single(
+  Cmd.compute({
+   reduce(_, newValue: A, ctx) {
+    return fn(newValue)
+   },
+  }),
+ )
+ const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
+ event.graphite.next.data.add(nextSeq)
+ return mapped
 }
 
 function hasPromise(req: mixed): boolean %checks {

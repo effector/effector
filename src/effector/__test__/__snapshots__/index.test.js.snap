@@ -383,3 +383,36 @@ Seq {
   ],
 }
 `;
+
+exports[`showcase: event foo 1`] = `
+"Seq [
+  1. Single Emit(foo),
+  2. Multi [
+     *  Seq [
+        1. Single Compute,
+        2. Single Compute,
+        3. Multi [
+           *  Single Run
+        ]
+     ]
+  ]
+]"
+`;
+
+exports[`showcase: mapped 1`] = `
+"Seq [
+  1. Single Compute,
+  2. Multi [
+     *  Single Run
+  ]
+]"
+`;
+
+exports[`showcase: store a 1`] = `
+"Seq [
+  1. Single Compute,
+  2. Multi [
+     *  Single Run
+  ]
+]"
+`;
