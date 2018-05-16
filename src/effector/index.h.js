@@ -2,12 +2,12 @@
 
 import type {Stream} from 'most'
 
-import type {Emit, Compute} from './derived/datatype/cmd'
+import type {Emit, Compute} from './datatype/cmd'
 import type {
  Multi as MultiStep,
  Seq as SeqStep,
  Single as SingleStep,
-} from './derived/datatype/step'
+} from './datatype/step'
 
 export type Subscriber<A> = {
  next(value: A): void,
@@ -39,6 +39,8 @@ export type Event<E> = {
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void,
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
  getType(): string,
+ shortName: string,
+ domainName: string,
  graphite: GraphiteMeta,
 }
 
@@ -61,6 +63,8 @@ export type Effect<Params, Done, Fail = Error> = {
  to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void,
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
  getType(): string,
+ shortName: string,
+ domainName: string,
  graphite: GraphiteMeta,
 }
 
