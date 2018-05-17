@@ -5,7 +5,7 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import {createEvent} from '../effector/api'
+import {createEvent} from '../effector/event'
 import * as Cmd from '../effector/datatype/cmd'
 import * as Step from '../effector/datatype/step'
 import type {Event, Store} from '../effector/index.h'

@@ -1,7 +1,6 @@
 //@flow
 
-import * as Api from '../api'
-import {createEvent} from '../api'
+import {createEvent} from '../event'
 import {combine} from '../combine'
 import * as Type from '../index.h'
 import {createStore} from '../../store/createStore'
@@ -11,7 +10,7 @@ import {show} from '../datatype/step/show'
 test('graphite', () => {
  const fn = jest.fn()
  const fn1 = jest.fn()
- const foo: Type.Event<number> = Api.createEvent('foo')
+ const foo: Type.Event<number> = createEvent('foo')
  const bar = foo.map(x => (fn(x), x + 1))
  const store1: Type.Store<string> = createStore('foo').on(bar, (state, bar) =>
   [state, bar].join(' | '),
