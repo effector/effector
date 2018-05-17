@@ -2,7 +2,7 @@
 
 import type {Stream} from 'most'
 
-import type {Emit, Compute} from './datatype/cmd'
+import type {Emit, Update} from './datatype/cmd'
 import type {
  Multi as MultiStep,
  Seq as SeqStep,
@@ -83,7 +83,7 @@ export type Store<State> = {
  subscribe(listner: any): Subscription,
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
  graphite: {
-  cmd: Compute,
+  cmd: Update,
   step: SingleStep,
   next: MultiStep,
   seq: SeqStep,

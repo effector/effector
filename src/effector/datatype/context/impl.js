@@ -5,6 +5,7 @@ import type {
  EmitContext,
  ComputeContext,
  FilterContext,
+ UpdateContext,
 } from './index.h'
 import * as Type from './type'
 import {type Time, now} from '../../time'
@@ -23,6 +24,7 @@ class Compute extends Context {}
 class Emit extends Context {}
 class Run extends Context {}
 class Filter extends Context {}
+class Update extends Context {}
 
 Object.defineProperty(Compute.prototype, 'type', {
  value: Type.COMPUTE,
@@ -38,6 +40,10 @@ Object.defineProperty(Run.prototype, 'type', {
 })
 Object.defineProperty(Filter.prototype, 'type', {
  value: Type.FILTER,
+ configurable: true,
+})
+Object.defineProperty(Update.prototype, 'type', {
+ value: Type.UPDATE,
  configurable: true,
 })
 
@@ -70,6 +76,10 @@ export function computeContext(
   },
   time,
  )
+}
+
+export function updateContext(value: any, time: Time = now()): UpdateContext {
+ return new Update({value}, time)
 }
 
 export function emitContext(

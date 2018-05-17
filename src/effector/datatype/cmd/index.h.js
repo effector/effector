@@ -1,6 +1,14 @@
 //@flow
 
-import type {ComputeType, EmitType, RunType, FilterType} from './type.h'
+import type {
+ ComputeType,
+ EmitType,
+ RunType,
+ FilterType,
+ UpdateType,
+} from './type.h'
+
+import type {Atom} from '../../atom'
 
 export type Compute = {
  +type: ComputeType,
@@ -33,4 +41,11 @@ export type Filter = {
  },
 }
 
-export type Cmd = Run | Emit | Compute | Filter
+export type Update = {
+ +type: UpdateType,
+ +data: {
+  store: Atom<any>,
+ },
+}
+
+export type Cmd = Run | Emit | Compute | Filter | Update

@@ -11,6 +11,7 @@ import * as Ctx from '../effector/datatype/context'
 import * as Step from '../effector/datatype/step'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
+import {atom, type Atom} from '../effector/atom'
 // import warning from 'warning'
 
 export type Nest = {
@@ -34,25 +35,14 @@ export function storeConstructor<State>(props: {
  let currentReducer = props?.currentReducer
  const defaultState = currentState
 
- const plainState = (defaultState => {
-  let state = defaultState
-  return {
-   get: () => state,
-   set(newState: typeof state) {
-    state = newState
-   },
-  }
- })(defaultState)
+ const plainState: Atom<typeof defaultState> = atom(defaultState)
  const shouldChange: Cmd.Filter = Cmd.filter({
   filter(newValue, ctx) {
-   return newValue !== plainState.get()
+   return newValue !== plainState.get() && newValue !== undefined
   },
  })
- const cmd: Cmd.Compute = Cmd.compute({
-  reduce(_, newVal, ctx) {
-   plainState.set(newVal)
-   return newVal
-  },
+ const cmd: Cmd.Update = Cmd.update({
+  store: plainState,
  })
  const filterStep: Step.Single = Step.single(shouldChange)
  const singleStep: Step.Single = Step.single(cmd)
@@ -272,13 +262,6 @@ function mapStore<A, B>(
    },
   }),
  )
- const filterCmdPre = Step.single(
-  Cmd.filter({
-   filter(newValue, ctx) {
-    return newValue !== lastValue
-   },
-  }),
- )
  const filterCmdPost = Step.single(
   Cmd.filter({
    filter(result, ctx: Ctx.ComputeContext) {
@@ -292,7 +275,6 @@ function mapStore<A, B>(
   }),
  )
  const nextSeq = Step.seq([
-  filterCmdPre,
   computeCmd,
   filterCmdPost,
   ...innerStore.graphite.seq.data,

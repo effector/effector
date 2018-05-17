@@ -5,6 +5,12 @@ import * as Ctx from './datatype/context'
 import * as Step from './datatype/step'
 import * as Cmd from './datatype/cmd'
 
+type SingleStepValidContext =
+ | Ctx.EmitContext
+ | Ctx.ComputeContext
+ | Ctx.FilterContext
+ | Ctx.UpdateContext
+
 export function walkEvent<T>(payload: T, event: Event<T>) {
  // const ctx = Ctx.context()
  const steps: Step.Seq = event.graphite.seq
@@ -20,11 +26,11 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
 
 function walkSeq(
  steps: Step.Seq,
- prev: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
+ prev: SingleStepValidContext,
  transactions: Set<() => void>,
 ) {
  if (steps.data.length === 0) return
- let currentCtx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext = prev
+ let currentCtx: SingleStepValidContext = prev
  for (const step of steps.data) {
   const stepResult = walkStep(step, currentCtx, transactions)
   if (stepResult === undefined) return
@@ -35,9 +41,9 @@ function walkSeq(
 
 function walkStep(
  step: Step.Step,
- currentCtx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
+ currentCtx: SingleStepValidContext,
  transactions: Set<() => void>,
-): Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext | void {
+): SingleStepValidContext | void {
  switch (step.type) {
   case Step.SINGLE: {
    const innerData = step.data
@@ -63,15 +69,14 @@ function walkStep(
   }
  }
 }
-function stepArg(
- ctx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
-) {
+function stepArg(ctx: SingleStepValidContext) {
  switch (ctx.type) {
   case Ctx.EMIT:
    return ctx.data.payload
   case Ctx.COMPUTE:
    return ctx.data.result
   case Ctx.FILTER:
+  case Ctx.UPDATE:
    return ctx.data.value
   default:
    throw new Error('RunContext is not supported')
@@ -79,14 +84,9 @@ function stepArg(
 }
 function singleStep(
  single: Cmd.Cmd,
- ctx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
+ ctx: SingleStepValidContext,
  transactions: Set<() => void>,
-):
- | Ctx.EmitContext
- | Ctx.ComputeContext
- | Ctx.RunContext
- | Ctx.FilterContext
- | void {
+): SingleStepValidContext | Ctx.RunContext | void {
  const arg = stepArg(ctx)
  if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
  switch (single.type) {
@@ -119,6 +119,11 @@ function singleStep(
     console.error(err)
    }
    return Ctx.runContext([arg])
+  }
+  case Cmd.UPDATE: {
+   const newCtx = Ctx.updateContext(arg)
+   single.data.store.set(arg)
+   return newCtx
   }
   case Cmd.COMPUTE: {
    const newCtx = Ctx.computeContext([undefined, arg, ctx])

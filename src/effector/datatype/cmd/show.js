@@ -13,6 +13,8 @@ export function show(value: Type.Cmd): string {
    return 'Compute'
   case Name.FILTER:
    return 'Filter'
+  case Name.UPDATE:
+   return 'Update'
   default:
    /*::(value.type: empty)*/
    throw new Error('impossible type')

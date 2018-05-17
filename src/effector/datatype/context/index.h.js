@@ -43,6 +43,14 @@ export type FilterContext = {
  },
 }
 
+export type UpdateContext = {
+ type: Type.UpdateContextType,
+ +time: Time,
+ +data: {
+  value: any,
+ },
+}
+
 // export type Context = {
 //  +time: Time,
 //  +compute: Map<Compute, ComputeContext>,

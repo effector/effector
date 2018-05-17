@@ -38,9 +38,11 @@ Seq {
               },
             },
             Single {
-              "data": Compute {
+              "data": Update {
                 "data": Object {
-                  "reduce": [Function],
+                  "store": Atom {
+                    "value": "foo | 1 | 11",
+                  },
                 },
               },
             },
@@ -49,13 +51,6 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Filter {
-                        "data": Object {
-                          "filter": [Function],
-                        },
-                      },
-                    },
-                    Single {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
@@ -77,9 +72,11 @@ Seq {
                       },
                     },
                     Single {
-                      "data": Compute {
+                      "data": Update {
                         "data": Object {
-                          "reduce": [Function],
+                          "store": Atom {
+                            "value": 12,
+                          },
                         },
                       },
                     },
@@ -143,9 +140,11 @@ Seq {
               },
             },
             Single {
-              "data": Compute {
+              "data": Update {
                 "data": Object {
-                  "reduce": [Function],
+                  "store": Atom {
+                    "value": "foo | 1 | 11",
+                  },
                 },
               },
             },
@@ -154,13 +153,6 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Filter {
-                        "data": Object {
-                          "filter": [Function],
-                        },
-                      },
-                    },
-                    Single {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
@@ -182,9 +174,11 @@ Seq {
                       },
                     },
                     Single {
-                      "data": Compute {
+                      "data": Update {
                         "data": Object {
-                          "reduce": [Function],
+                          "store": Atom {
+                            "value": 12,
+                          },
                         },
                       },
                     },
@@ -261,9 +255,11 @@ Seq {
                       },
                     },
                     Single {
-                      "data": Compute {
+                      "data": Update {
                         "data": Object {
-                          "reduce": [Function],
+                          "store": Atom {
+                            "value": "foo | 1 | 11",
+                          },
                         },
                       },
                     },
@@ -272,13 +268,6 @@ Seq {
                         Seq {
                           "data": Array [
                             Single {
-                              "data": Filter {
-                                "data": Object {
-                                  "filter": [Function],
-                                },
-                              },
-                            },
-                            Single {
                               "data": Compute {
                                 "data": Object {
                                   "reduce": [Function],
@@ -300,9 +289,11 @@ Seq {
                               },
                             },
                             Single {
-                              "data": Compute {
+                              "data": Update {
                                 "data": Object {
-                                  "reduce": [Function],
+                                  "store": Atom {
+                                    "value": 12,
+                                  },
                                 },
                               },
                             },
@@ -340,15 +331,14 @@ exports[`graphite: show bar 1`] = `
         1. Single Compute,
         2. Single Filter,
         3. Single Filter,
-        4. Single Compute,
+        4. Single Update,
         5. Multi [
            *  Seq [
-              1. Single Filter,
-              2. Single Compute,
+              1. Single Compute,
+              2. Single Filter,
               3. Single Filter,
-              4. Single Filter,
-              5. Single Compute,
-              6. Multi []
+              4. Single Update,
+              5. Multi []
            ]
         ]
      ],
@@ -365,15 +355,14 @@ exports[`graphite: show bar 2`] = `
         1. Single Compute,
         2. Single Filter,
         3. Single Filter,
-        4. Single Compute,
+        4. Single Update,
         5. Multi [
            *  Seq [
-              1. Single Filter,
-              2. Single Compute,
+              1. Single Compute,
+              2. Single Filter,
               3. Single Filter,
-              4. Single Filter,
-              5. Single Compute,
-              6. Multi []
+              4. Single Update,
+              5. Multi []
            ]
         ]
      ]
@@ -393,15 +382,14 @@ exports[`graphite: show foo 1`] = `
               1. Single Compute,
               2. Single Filter,
               3. Single Filter,
-              4. Single Compute,
+              4. Single Update,
               5. Multi [
                  *  Seq [
-                    1. Single Filter,
-                    2. Single Compute,
+                    1. Single Compute,
+                    2. Single Filter,
                     3. Single Filter,
-                    4. Single Filter,
-                    5. Single Compute,
-                    6. Multi []
+                    4. Single Update,
+                    5. Multi []
                  ]
               ]
            ]
@@ -414,15 +402,14 @@ exports[`graphite: show foo 1`] = `
 exports[`graphite: show store1 1`] = `
 "Seq [
   1. Single Filter,
-  2. Single Compute,
+  2. Single Update,
   3. Multi [
      *  Seq [
-        1. Single Filter,
-        2. Single Compute,
+        1. Single Compute,
+        2. Single Filter,
         3. Single Filter,
-        4. Single Filter,
-        5. Single Compute,
-        6. Multi []
+        4. Single Update,
+        5. Multi []
      ]
   ]
 ]"
@@ -431,7 +418,7 @@ exports[`graphite: show store1 1`] = `
 exports[`graphite: show store2 1`] = `
 "Seq [
   1. Single Filter,
-  2. Single Compute,
+  2. Single Update,
   3. Multi []
 ]"
 `;
@@ -447,9 +434,11 @@ Seq {
       },
     },
     Single {
-      "data": Compute {
+      "data": Update {
         "data": Object {
-          "reduce": [Function],
+          "store": Atom {
+            "value": "foo | 1 | 11 | 101",
+          },
         },
       },
     },
@@ -458,13 +447,6 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Filter {
-                "data": Object {
-                  "filter": [Function],
-                },
-              },
-            },
-            Single {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
@@ -486,9 +468,11 @@ Seq {
               },
             },
             Single {
-              "data": Compute {
+              "data": Update {
                 "data": Object {
-                  "reduce": [Function],
+                  "store": Atom {
+                    "value": 18,
+                  },
                 },
               },
             },
@@ -514,9 +498,11 @@ Seq {
       },
     },
     Single {
-      "data": Compute {
+      "data": Update {
         "data": Object {
-          "reduce": [Function],
+          "store": Atom {
+            "value": 18,
+          },
         },
       },
     },
@@ -535,7 +521,7 @@ exports[`showcase: event foo 1`] = `
         1. Single Compute,
         2. Single Filter,
         3. Single Filter,
-        4. Single Compute,
+        4. Single Update,
         5. Multi [
            *  Single Run
         ]
@@ -547,7 +533,7 @@ exports[`showcase: event foo 1`] = `
 exports[`showcase: mapped 1`] = `
 "Seq [
   1. Single Filter,
-  2. Single Compute,
+  2. Single Update,
   3. Multi [
      *  Single Run
   ]
@@ -557,7 +543,7 @@ exports[`showcase: mapped 1`] = `
 exports[`showcase: store a 1`] = `
 "Seq [
   1. Single Filter,
-  2. Single Compute,
+  2. Single Update,
   3. Multi [
      *  Single Run
   ]
