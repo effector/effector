@@ -37,9 +37,7 @@ Object.defineProperty(Filter.prototype, 'type', {
 
 export function compute(data: {
  reduce(oldValue: any, newValue: any, ctx: any): any,
- shouldChange?: boolean,
 }): Type.Compute {
- if (data.shouldChange === undefined) data.shouldChange = false
  return new Compute(data)
 }
 

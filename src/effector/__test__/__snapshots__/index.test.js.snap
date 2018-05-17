@@ -20,7 +20,20 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": true,
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
                 },
               },
             },
@@ -28,7 +41,6 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": true,
                 },
               },
             },
@@ -37,10 +49,9 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Compute {
+                      "data": Filter {
                         "data": Object {
-                          "reduce": [Function],
-                          "shouldChange": true,
+                          "filter": [Function],
                         },
                       },
                     },
@@ -48,7 +59,27 @@ Seq {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
-                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
                         },
                       },
                     },
@@ -94,7 +125,20 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": true,
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
                 },
               },
             },
@@ -102,7 +146,6 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": true,
                 },
               },
             },
@@ -111,10 +154,9 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Compute {
+                      "data": Filter {
                         "data": Object {
-                          "reduce": [Function],
-                          "shouldChange": true,
+                          "filter": [Function],
                         },
                       },
                     },
@@ -122,7 +164,27 @@ Seq {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
-                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Compute {
+                        "data": Object {
+                          "reduce": [Function],
                         },
                       },
                     },
@@ -161,7 +223,6 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": false,
                 },
               },
             },
@@ -182,7 +243,20 @@ Seq {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
-                          "shouldChange": true,
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
+                        },
+                      },
+                    },
+                    Single {
+                      "data": Filter {
+                        "data": Object {
+                          "filter": [Function],
                         },
                       },
                     },
@@ -190,7 +264,6 @@ Seq {
                       "data": Compute {
                         "data": Object {
                           "reduce": [Function],
-                          "shouldChange": true,
                         },
                       },
                     },
@@ -199,10 +272,9 @@ Seq {
                         Seq {
                           "data": Array [
                             Single {
-                              "data": Compute {
+                              "data": Filter {
                                 "data": Object {
-                                  "reduce": [Function],
-                                  "shouldChange": true,
+                                  "filter": [Function],
                                 },
                               },
                             },
@@ -210,7 +282,27 @@ Seq {
                               "data": Compute {
                                 "data": Object {
                                   "reduce": [Function],
-                                  "shouldChange": true,
+                                },
+                              },
+                            },
+                            Single {
+                              "data": Filter {
+                                "data": Object {
+                                  "filter": [Function],
+                                },
+                              },
+                            },
+                            Single {
+                              "data": Filter {
+                                "data": Object {
+                                  "filter": [Function],
+                                },
+                              },
+                            },
+                            Single {
+                              "data": Compute {
+                                "data": Object {
+                                  "reduce": [Function],
                                 },
                               },
                             },
@@ -246,12 +338,17 @@ exports[`graphite: show bar 1`] = `
   2. Multi [
      *  Seq [
         1. Single Compute,
-        2. Single Compute,
-        3. Multi [
+        2. Single Filter,
+        3. Single Filter,
+        4. Single Compute,
+        5. Multi [
            *  Seq [
-              1. Single Compute,
+              1. Single Filter,
               2. Single Compute,
-              3. Multi []
+              3. Single Filter,
+              4. Single Filter,
+              5. Single Compute,
+              6. Multi []
            ]
         ]
      ],
@@ -266,12 +363,17 @@ exports[`graphite: show bar 2`] = `
   2. Multi [
      *  Seq [
         1. Single Compute,
-        2. Single Compute,
-        3. Multi [
+        2. Single Filter,
+        3. Single Filter,
+        4. Single Compute,
+        5. Multi [
            *  Seq [
-              1. Single Compute,
+              1. Single Filter,
               2. Single Compute,
-              3. Multi []
+              3. Single Filter,
+              4. Single Filter,
+              5. Single Compute,
+              6. Multi []
            ]
         ]
      ]
@@ -289,12 +391,17 @@ exports[`graphite: show foo 1`] = `
         3. Multi [
            *  Seq [
               1. Single Compute,
-              2. Single Compute,
-              3. Multi [
+              2. Single Filter,
+              3. Single Filter,
+              4. Single Compute,
+              5. Multi [
                  *  Seq [
-                    1. Single Compute,
+                    1. Single Filter,
                     2. Single Compute,
-                    3. Multi []
+                    3. Single Filter,
+                    4. Single Filter,
+                    5. Single Compute,
+                    6. Multi []
                  ]
               ]
            ]
@@ -306,12 +413,16 @@ exports[`graphite: show foo 1`] = `
 
 exports[`graphite: show store1 1`] = `
 "Seq [
-  1. Single Compute,
-  2. Multi [
+  1. Single Filter,
+  2. Single Compute,
+  3. Multi [
      *  Seq [
-        1. Single Compute,
+        1. Single Filter,
         2. Single Compute,
-        3. Multi []
+        3. Single Filter,
+        4. Single Filter,
+        5. Single Compute,
+        6. Multi []
      ]
   ]
 ]"
@@ -319,8 +430,9 @@ exports[`graphite: show store1 1`] = `
 
 exports[`graphite: show store2 1`] = `
 "Seq [
-  1. Single Compute,
-  2. Multi []
+  1. Single Filter,
+  2. Single Compute,
+  3. Multi []
 ]"
 `;
 
@@ -328,10 +440,16 @@ exports[`graphite: store1 seq 1`] = `
 Seq {
   "data": Array [
     Single {
+      "data": Filter {
+        "data": Object {
+          "filter": [Function],
+        },
+      },
+    },
+    Single {
       "data": Compute {
         "data": Object {
           "reduce": [Function],
-          "shouldChange": true,
         },
       },
     },
@@ -340,10 +458,9 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Compute {
+              "data": Filter {
                 "data": Object {
-                  "reduce": [Function],
-                  "shouldChange": true,
+                  "filter": [Function],
                 },
               },
             },
@@ -351,7 +468,27 @@ Seq {
               "data": Compute {
                 "data": Object {
                   "reduce": [Function],
-                  "shouldChange": true,
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
+                },
+              },
+            },
+            Single {
+              "data": Filter {
+                "data": Object {
+                  "filter": [Function],
+                },
+              },
+            },
+            Single {
+              "data": Compute {
+                "data": Object {
+                  "reduce": [Function],
                 },
               },
             },
@@ -370,10 +507,16 @@ exports[`graphite: store2 seq 1`] = `
 Seq {
   "data": Array [
     Single {
+      "data": Filter {
+        "data": Object {
+          "filter": [Function],
+        },
+      },
+    },
+    Single {
       "data": Compute {
         "data": Object {
           "reduce": [Function],
-          "shouldChange": true,
         },
       },
     },
@@ -390,8 +533,10 @@ exports[`showcase: event foo 1`] = `
   2. Multi [
      *  Seq [
         1. Single Compute,
-        2. Single Compute,
-        3. Multi [
+        2. Single Filter,
+        3. Single Filter,
+        4. Single Compute,
+        5. Multi [
            *  Single Run
         ]
      ]
@@ -401,8 +546,9 @@ exports[`showcase: event foo 1`] = `
 
 exports[`showcase: mapped 1`] = `
 "Seq [
-  1. Single Compute,
-  2. Multi [
+  1. Single Filter,
+  2. Single Compute,
+  3. Multi [
      *  Single Run
   ]
 ]"
@@ -410,8 +556,9 @@ exports[`showcase: mapped 1`] = `
 
 exports[`showcase: store a 1`] = `
 "Seq [
-  1. Single Compute,
-  2. Multi [
+  1. Single Filter,
+  2. Single Compute,
+  3. Multi [
      *  Single Run
   ]
 ]"

@@ -7,6 +7,7 @@ import $$observable from 'symbol-observable'
 
 import {createEvent} from '../effector/event'
 import * as Cmd from '../effector/datatype/cmd'
+import * as Ctx from '../effector/datatype/context'
 import * as Step from '../effector/datatype/step'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
@@ -42,17 +43,21 @@ export function storeConstructor<State>(props: {
    },
   }
  })(defaultState)
+ const shouldChange: Cmd.Filter = Cmd.filter({
+  filter(newValue, ctx) {
+   return newValue !== plainState.get()
+  },
+ })
  const cmd: Cmd.Compute = Cmd.compute({
   reduce(_, newVal, ctx) {
-   ctx.isChanged = newVal !== plainState.get()
    plainState.set(newVal)
    return newVal
   },
-  shouldChange: true,
  })
+ const filterStep: Step.Single = Step.single(shouldChange)
  const singleStep: Step.Single = Step.single(cmd)
  const nextSteps: Step.Multi = Step.multi()
- const fullSeq: Step.Seq = Step.seq([singleStep, nextSteps])
+ const fullSeq: Step.Seq = Step.seq([filterStep, singleStep, nextSteps])
 
  const updater: any = createEvent(`update ${currentId}`)
 
@@ -172,17 +177,19 @@ export function storeConstructor<State>(props: {
   const computeCmd = Cmd.compute({
    reduce(_, newValue, ctx) {
     const lastState = getState()
-    const result = handler(lastState, newValue, e.getType())
-    if (result === undefined || result === lastState) {
-     ctx.isChanged = false
-     return lastState
-    }
-    return result
+    return handler(lastState, newValue, e.getType())
    },
-   shouldChange: true,
+  })
+  const filterCmd = Cmd.filter({
+   filter(data, ctx: Ctx.ComputeContext) {
+    // const oldValue = ctx.data.args[1]
+    const lastState = getState()
+    return data !== lastState && data !== undefined
+   },
   })
   const step = Step.single(computeCmd)
-  const nextSeq = Step.seq([step, ...store.graphite.seq.data])
+  const filtStep = Step.single(filterCmd)
+  const nextSeq = Step.seq([step, filtStep, ...store.graphite.seq.data])
   e.graphite.next.data.add(nextSeq)
   const unsub = () => {
    e.graphite.next.data.delete(nextSeq)
@@ -258,24 +265,38 @@ function mapStore<A, B>(
  const computeCmd = Step.single(
   Cmd.compute({
    reduce(_, newValue, ctx) {
-    if (newValue === lastValue) {
-     ctx.isChanged = false
-     return lastResult
-    }
     lastValue = newValue
     const lastState = innerStore.getState()
     const result = fn(newValue, lastState)
-    if (result === undefined || result === lastState) {
-     ctx.isChanged = false
-     return lastState
-    }
-    lastResult = result
     return result
    },
-   shouldChange: true,
   }),
  )
- const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
+ const filterCmdPre = Step.single(
+  Cmd.filter({
+   filter(newValue, ctx) {
+    return newValue !== lastValue
+   },
+  }),
+ )
+ const filterCmdPost = Step.single(
+  Cmd.filter({
+   filter(result, ctx: Ctx.ComputeContext) {
+    const lastState = innerStore.getState()
+    const isChanged = result !== lastState && result !== undefined
+    if (isChanged) {
+     lastResult = result
+    }
+    return isChanged
+   },
+  }),
+ )
+ const nextSeq = Step.seq([
+  filterCmdPre,
+  computeCmd,
+  filterCmdPost,
+  ...innerStore.graphite.seq.data,
+ ])
  store.graphite.next.data.add(nextSeq)
  const off = () => {
   store.graphite.next.data.delete(nextSeq)

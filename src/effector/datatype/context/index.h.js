@@ -1,7 +1,5 @@
 //@flow
 
-import type {Compute, Emit, Run} from '../cmd'
-import type {Multi, Seq} from '../step'
 import type {Time} from '../../time'
 import * as Type from './type.h'
 
@@ -41,8 +39,6 @@ export type FilterContext = {
  +time: Time,
  +data: {
   +value: any,
-  result: any,
-  isNone: boolean,
   isChanged: boolean,
  },
 }

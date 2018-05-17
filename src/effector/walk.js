@@ -20,29 +20,31 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
 
 function walkSeq(
  steps: Step.Seq,
- prev: Ctx.EmitContext | Ctx.ComputeContext,
+ prev: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
  transactions: Set<() => void>,
 ) {
  if (steps.data.length === 0) return
- let currentCtx: Ctx.EmitContext | Ctx.ComputeContext = prev
+ let currentCtx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext = prev
  for (const step of steps.data) {
   const stepResult = walkStep(step, currentCtx, transactions)
   if (stepResult === undefined) return
+  if (stepResult.type === Ctx.FILTER && !stepResult.data.isChanged) return
   currentCtx = stepResult
  }
 }
 
 function walkStep(
  step: Step.Step,
- currentCtx: Ctx.EmitContext | Ctx.ComputeContext,
+ currentCtx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
  transactions: Set<() => void>,
-): Ctx.EmitContext | Ctx.ComputeContext | void {
+): Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext | void {
  switch (step.type) {
   case Step.SINGLE: {
    const innerData = step.data
    const result = singleStep(innerData, currentCtx, transactions)
    if (!result) return
    if (result.type === Ctx.RUN) return
+   if (result.type === Ctx.FILTER && !result.data.isChanged) return
    return (result: any)
   }
   case Step.MULTI: {
@@ -61,22 +63,32 @@ function walkStep(
   }
  }
 }
-function stepArg(ctx: Ctx.EmitContext | Ctx.ComputeContext) {
+function stepArg(
+ ctx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
+) {
  switch (ctx.type) {
   case Ctx.EMIT:
    return ctx.data.payload
   case Ctx.COMPUTE:
    return ctx.data.result
+  case Ctx.FILTER:
+   return ctx.data.value
   default:
    throw new Error('RunContext is not supported')
  }
 }
 function singleStep(
  single: Cmd.Cmd,
- ctx: Ctx.EmitContext | Ctx.ComputeContext,
+ ctx: Ctx.EmitContext | Ctx.ComputeContext | Ctx.FilterContext,
  transactions: Set<() => void>,
-): Ctx.EmitContext | Ctx.ComputeContext | Ctx.RunContext | void {
+):
+ | Ctx.EmitContext
+ | Ctx.ComputeContext
+ | Ctx.RunContext
+ | Ctx.FilterContext
+ | void {
  const arg = stepArg(ctx)
+ if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
  switch (single.type) {
   case Cmd.EMIT: {
    if (ctx.type === Ctx.EMIT) {
@@ -90,7 +102,13 @@ function singleStep(
    return Ctx.emitContext(arg, single.data.fullName)
   }
   case Cmd.FILTER: {
-   return
+   try {
+    const isChanged = single.data.filter(arg, ctx)
+    return Ctx.filterContext(arg, isChanged)
+   } catch (err) {
+    console.error(err)
+    return
+   }
   }
   case Cmd.RUN: {
    const transCtx = single.data.transactionContext

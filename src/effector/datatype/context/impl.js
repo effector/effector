@@ -1,6 +1,11 @@
 //@flow
 
-import type {RunContext, EmitContext, ComputeContext} from './index.h'
+import type {
+ RunContext,
+ EmitContext,
+ ComputeContext,
+ FilterContext,
+} from './index.h'
 import * as Type from './type'
 import {type Time, now} from '../../time'
 
@@ -36,6 +41,20 @@ Object.defineProperty(Filter.prototype, 'type', {
  configurable: true,
 })
 
+export function filterContext(
+ value: any,
+ isChanged: boolean,
+ time: Time = now(),
+): FilterContext {
+ return new Filter(
+  {
+   value,
+   isChanged,
+  },
+  time,
+ )
+}
+
 export function computeContext(
  args: Array<any>,
  time: Time = now(),
@@ -43,11 +62,6 @@ export function computeContext(
  return new Compute(
   {
    args,
-   meta: {
-    isCompute: true,
-    isRun: false,
-    isEmit: false,
-   },
    result: null,
    error: null,
    isError: false,
@@ -67,11 +81,6 @@ export function emitContext(
   {
    payload,
    eventName,
-   meta: {
-    isCompute: false,
-    isRun: false,
-    isEmit: true,
-   },
    needToRun: false,
   },
   time,
@@ -82,11 +91,6 @@ export function runContext(args: Array<any>, time: Time = now()): RunContext {
  return new Run(
   {
    args,
-   meta: {
-    isCompute: false,
-    isRun: true,
-    isEmit: false,
-   },
   },
   time,
  )

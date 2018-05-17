@@ -6,7 +6,6 @@ export type Compute = {
  +type: ComputeType,
  +data: {
   reduce(oldValue: any, newValue: any, ctx: any): any,
-  shouldChange: boolean,
  },
 }
 
