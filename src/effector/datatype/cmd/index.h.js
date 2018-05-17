@@ -1,6 +1,6 @@
 //@flow
 
-import type {ComputeType, EmitType, RunType} from './type.h'
+import type {ComputeType, EmitType, RunType, FilterType} from './type.h'
 
 export type Compute = {
  +type: ComputeType,
@@ -27,4 +27,11 @@ export type Run = {
  },
 }
 
-export type Cmd = Run | Emit | Compute
+export type Filter = {
+ +type: FilterType,
+ +data: {
+  filter(value: any, ctx: any): boolean,
+ },
+}
+
+export type Cmd = Run | Emit | Compute | Filter

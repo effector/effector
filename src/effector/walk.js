@@ -9,7 +9,7 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
  // const ctx = Ctx.context()
  const steps: Step.Seq = event.graphite.seq
  const eventCtx = Ctx.emitContext(payload, event.getType())
- eventCtx.needToRun = false
+ eventCtx.data.needToRun = false
  const transactions: Set<() => void> = new Set()
  // ctx.emit.set(event.graphite.cmd, eventCtx)
  walkSeq(steps, eventCtx, transactions)
@@ -38,55 +38,61 @@ function walkStep(
  transactions: Set<() => void>,
 ): Ctx.EmitContext | Ctx.ComputeContext | void {
  switch (step.type) {
-  case ('single': Step.SingleType): {
+  case Step.SINGLE: {
    const innerData = step.data
    const result = singleStep(innerData, currentCtx, transactions)
    if (!result) return
-   if (result.meta.isRun) return
+   if (result.type === Ctx.RUN) return
    return (result: any)
   }
-  case ('multi': Step.MultiType): {
+  case Step.MULTI: {
    if (step.data.size === 0) return
    for (const e of step.data) {
     walkStep(e, currentCtx, transactions)
    }
    return
   }
-  case ('seq': Step.SeqType): {
+  case Step.SEQ: {
    return walkSeq(step, currentCtx, transactions)
   }
   default: {
+   /*::(step.type: empty)*/
    throw new Error('impossible case')
   }
  }
 }
-
+function stepArg(ctx: Ctx.EmitContext | Ctx.ComputeContext) {
+ switch (ctx.type) {
+  case Ctx.EMIT:
+   return ctx.data.payload
+  case Ctx.COMPUTE:
+   return ctx.data.result
+  default:
+   throw new Error('RunContext is not supported')
+ }
+}
 function singleStep(
  single: Cmd.Cmd,
  ctx: Ctx.EmitContext | Ctx.ComputeContext,
  transactions: Set<() => void>,
 ): Ctx.EmitContext | Ctx.ComputeContext | Ctx.RunContext | void {
- let arg
- if (ctx.meta.isEmit) {
-  arg = ((ctx: any): Ctx.EmitContext).payload
- } else if (ctx.meta.isCompute) {
-  arg = ((ctx: any): Ctx.ComputeContext).result
- } else {
-  throw new Error(`RunContext is not supported`)
- }
+ const arg = stepArg(ctx)
  switch (single.type) {
-  case ('emit': Cmd.EmitType): {
-   if (ctx.meta.isEmit) {
-    const rectx = ((ctx: any): Ctx.EmitContext)
-    if (rectx.eventName === single.data.fullName && rectx.needToRun) {
-     rectx.needToRun = false
+  case Cmd.EMIT: {
+   if (ctx.type === Ctx.EMIT) {
+    const rectx = ctx //((ctx: any): Ctx.EmitContext)
+    if (rectx.data.eventName === single.data.fullName && rectx.data.needToRun) {
+     rectx.data.needToRun = false
      single.data.runner(arg)
     }
    }
 
    return Ctx.emitContext(arg, single.data.fullName)
   }
-  case ('run': Cmd.RunType): {
+  case Cmd.FILTER: {
+   return
+  }
+  case Cmd.RUN: {
    const transCtx = single.data.transactionContext
    if (transCtx) transactions.add(transCtx(arg))
    try {
@@ -96,22 +102,22 @@ function singleStep(
    }
    return Ctx.runContext([arg])
   }
-  case ('compute': Cmd.ComputeType): {
+  case Cmd.COMPUTE: {
    const newCtx = Ctx.computeContext([undefined, arg, ctx])
    try {
     const result = single.data.reduce(undefined, arg, newCtx)
-    newCtx.result = result
-    newCtx.isNone = result === undefined
+    newCtx.data.result = result
+    newCtx.data.isNone = result === undefined
    } catch (err) {
-    newCtx.isError = true
-    newCtx.error = err
-    newCtx.isChanged = false
+    newCtx.data.isError = true
+    newCtx.data.error = err
+    newCtx.data.isChanged = false
    }
-   if (!newCtx.isChanged) return
+   if (!newCtx.data.isChanged) return
    return newCtx
   }
-  default: {
+  default:
+   /*::(single.type: empty)*/
    throw new Error('impossible case')
-  }
  }
 }

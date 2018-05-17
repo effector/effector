@@ -1,8 +1,7 @@
 //@flow
 
 import * as Type from './index.h'
-import type {ComputeType, EmitType, RunType} from './type.h'
-
+import * as Name from './type'
 class Cmd {
  /*:: type: any;*/
  /*::+*/ data: any
@@ -14,19 +13,25 @@ class Cmd {
 class Compute extends Cmd {}
 class Run extends Cmd {}
 class Emit extends Cmd {}
+class Filter extends Cmd {}
 
 Object.defineProperty(Compute.prototype, 'type', {
- value: ('compute': ComputeType),
+ value: Name.COMPUTE,
  configurable: true,
 })
 
 Object.defineProperty(Run.prototype, 'type', {
- value: ('run': RunType),
+ value: Name.RUN,
  configurable: true,
 })
 
 Object.defineProperty(Emit.prototype, 'type', {
- value: ('emit': EmitType),
+ value: Name.EMIT,
+ configurable: true,
+})
+
+Object.defineProperty(Filter.prototype, 'type', {
+ value: Name.FILTER,
  configurable: true,
 })
 
@@ -48,4 +53,10 @@ export function emit(data: {
  runner(ctx: any): any,
 }): Type.Emit {
  return new Emit(data)
+}
+
+export function filter(data: {
+ filter(value: any, ctx: any): boolean,
+}): Type.Filter {
+ return new Filter(data)
 }

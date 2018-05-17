@@ -3,41 +3,47 @@
 import type {Compute, Emit, Run} from '../cmd'
 import type {Multi, Seq} from '../step'
 import type {Time} from '../../time'
+import * as Type from './type.h'
 
 export type ComputeContext = {
+ type: Type.ComputeContextType,
  +time: Time,
- +args: Array<any>,
- +meta: {
-  +isCompute: true,
-  +isRun: false,
-  +isEmit: false,
+ +data: {
+  +args: Array<any>,
+  result: any,
+  error: any,
+  isError: boolean,
+  isNone: boolean,
+  isChanged: boolean,
  },
- result: any,
- error: any,
- isError: boolean,
- isNone: boolean,
- isChanged: boolean,
 }
 
 export type EmitContext = {
+ type: Type.EmitContextType,
  +time: Time,
- +payload: any,
- +meta: {
-  +isCompute: false,
-  +isRun: false,
-  +isEmit: true,
+ +data: {
+  +payload: any,
+  needToRun: boolean,
+  +eventName: string,
  },
- needToRun: boolean,
- +eventName: string,
 }
 
 export type RunContext = {
+ type: Type.RunContextType,
  +time: Time,
- +args: Array<any>,
- +meta: {
-  +isCompute: false,
-  +isRun: true,
-  +isEmit: false,
+ +data: {
+  +args: Array<any>,
+ },
+}
+
+export type FilterContext = {
+ type: Type.FilterContextType,
+ +time: Time,
+ +data: {
+  +value: any,
+  result: any,
+  isNone: boolean,
+  isChanged: boolean,
  },
 }
 
