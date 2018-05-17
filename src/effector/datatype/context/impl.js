@@ -1,6 +1,6 @@
 //@flow
 
-import type {Context, RunContext, EmitContext, ComputeContext} from './index.h'
+import type {RunContext, EmitContext, ComputeContext} from './index.h'
 import {type Time, now} from '../../time'
 
 export function computeContext(
@@ -50,16 +50,5 @@ export function runContext(args: Array<any>, time: Time = now()): RunContext {
    isRun: true,
    isEmit: false,
   },
- }
-}
-
-export function context(time: Time = now()): Context {
- return {
-  time,
-  compute: new Map(),
-  emit: new Map(),
-  run: new Map(),
-  multi: new Map(),
-  seq: new Map(),
  }
 }

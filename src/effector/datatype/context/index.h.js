@@ -41,11 +41,11 @@ export type RunContext = {
  },
 }
 
-export type Context = {
- +time: Time,
- +compute: Map<Compute, ComputeContext>,
- +emit: Map<Emit, EmitContext>,
- +run: Map<Run, RunContext>,
- +multi: Map<Multi, Context>,
- +seq: Map<Seq, Array<Context>>,
-}
+// export type Context = {
+//  +time: Time,
+//  +compute: Map<Compute, ComputeContext>,
+//  +emit: Map<Emit, EmitContext>,
+//  +run: Map<Run, RunContext>,
+//  +multi: Map<Multi, Context>,
+//  +seq: Map<Seq, Array<Context>>,
+// }
