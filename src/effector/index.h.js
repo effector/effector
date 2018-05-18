@@ -2,6 +2,7 @@
 
 import type {Stream} from 'most'
 
+import * as Ctx from './datatype/context'
 import type {Emit, Update} from './datatype/cmd'
 import type {
  Multi as MultiStep,
@@ -14,6 +15,12 @@ export type Subscriber<A> = {
  // error(err: Error): void,
  //complete(): void,
 }
+
+export type SingleStepValidContext =
+ | Ctx.EmitContext
+ | Ctx.ComputeContext
+ | Ctx.FilterContext
+ | Ctx.UpdateContext
 
 export type Subscription = {
  (): void,

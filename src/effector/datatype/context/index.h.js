@@ -31,6 +31,7 @@ export type RunContext = {
  +time: Time,
  +data: {
   +args: Array<any>,
+  +parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
  },
 }
 

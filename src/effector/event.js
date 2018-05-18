@@ -9,7 +9,7 @@ import {setProperty} from '../setProperty'
 // import {runSyncGraph} from '../../graph'
 import * as Cmd from './datatype/cmd'
 import * as Step from './datatype/step'
-import {walkEvent} from './walk'
+import {walkEvent} from './graphite/walk'
 
 export function createEvent<Payload>(name: string): Event<Payload> {
  return eventConstructor({name, domainName: ''})

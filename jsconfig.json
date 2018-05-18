@@ -6,15 +6,12 @@
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": false,
   "noLib": false,
-  "skipDefaultLibCheck": false,
-  "checkJs": true,
+  "skipDefaultLibCheck": true,
   "alwaysStrict": true,
-  "strict": true,
-  "paths": {}
+  "strict": true
  },
  "typeAcquisition": {
   "enable": true
  },
- "include": ["./src/**/*.js", "./src/**/*.js.flow"],
- "exclude": ["node_modules", "lib", "es"]
+ "include": ["src"]
 }

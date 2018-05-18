@@ -97,10 +97,15 @@ export function emitContext(
  )
 }
 
-export function runContext(args: Array<any>, time: Time = now()): RunContext {
+export function runContext(
+ args: Array<any>,
+ parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
+ time: Time = now(),
+): RunContext {
  return new Run(
   {
    args,
+   parentContext,
   },
   time,
  )
