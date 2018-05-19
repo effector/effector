@@ -6,7 +6,7 @@ import type {Event, Effect} from '../effector/index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
-import {eventFabric} from '../event'
+import {eventFabric} from 'effector/event'
 
 export function effectFabric<Payload, Done>({
  name,

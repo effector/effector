@@ -1,5 +1,10 @@
 //@flow
 
+const moduleNameMapper = {
+ '^effector$': '<rootDir>/src/index.js',
+ '^effector/(.+)': '<rootDir>/src/$1',
+}
+
 const effectorConfig = {
  displayName: 'effector',
  testMatch: ['<rootDir>/src/effector/**/__test__/**/*.test.js'],
@@ -10,10 +15,7 @@ const effectorConfig = {
  transform: {
   '^.+\\.jsx?$': 'babel-jest',
  },
- // moduleNameMapper: {
- //  effector: '<rootDir>/src/effector/index.js',
- //  'effector-react': '<rootDir>/src/react/createStoreComponent.js',
- // },
+ moduleNameMapper,
  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
  roots: ['<rootDir>/src/'],
 }
@@ -32,6 +34,7 @@ const storeConfig = {
  transform: {
   '^.+\\.jsx?$': 'babel-jest',
  },
+ moduleNameMapper,
  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
  roots: ['<rootDir>/src/'],
 }
@@ -46,10 +49,7 @@ const reactConfig = {
  transform: {
   '^.+\\.jsx?$': 'babel-jest',
  },
- moduleNameMapper: {
-  '^effector$': '<rootDir>/src/effector/index.js',
-  'effector-react': '<rootDir>/src/react/index.js',
- },
+ moduleNameMapper,
  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
  roots: ['<rootDir>/src/'],
 }
@@ -73,6 +73,7 @@ function packageTest(displayName) {
   transform: {
    '^.+\\.jsx?$': 'babel-jest',
   },
+  moduleNameMapper,
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   roots: ['<rootDir>/src/'],
  }

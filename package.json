@@ -96,7 +96,7 @@
    "email": "andwebar@gmail.com"
   }
  ],
- "repository": "https://gitlab.com/zerobias/effector",
+ "repository": "https://github.com/zerobias/effector",
  "dependencies": {
   "warning": "^3.0.0"
  }

@@ -8,7 +8,12 @@
   "noLib": false,
   "skipDefaultLibCheck": true,
   "alwaysStrict": true,
-  "strict": true
+  "strict": true,
+  "baseUrl": "src",
+  "paths": {
+   "^effector$": ["./index.js"],
+   "^effector/(.+)": ["./$1"]
+  }
  },
  "typeAcquisition": {
   "enable": true

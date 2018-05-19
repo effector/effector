@@ -36,5 +36,8 @@
   "index.js.flow",
   "index.d.ts"
  ],
- "repository": "https://github.com/zerobias/effector"
+ "repository": "https://github.com/zerobias/effector",
+ "engines": {
+  "node": ">=6.0.0"
+ }
 }

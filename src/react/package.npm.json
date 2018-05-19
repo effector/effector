@@ -35,5 +35,8 @@
   "effector-react.cjs.js.flow",
   "effector-react.es.js.flow"
  ],
- "repository": "https://github.com/zerobias/effector"
+ "repository": "https://github.com/zerobias/effector",
+ "engines": {
+  "node": ">=6.0.0"
+ }
 }
