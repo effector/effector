@@ -1,6 +1,6 @@
 {
  "name": "effector-react",
- "description": "React bindings for Effector",
+ "description": "React bindings for effector",
  "main": "effector-react.cjs.js",
  "module": "effector-react.es.js",
  "jsnext:main": "effector-react.es.js",
@@ -26,6 +26,7 @@
  ],
  "sideEffects": false,
  "files": [
+  "README.md",
   "effector-react.es.js",
   "effector-react.cjs.js",
   "effector-react.es.js.map",

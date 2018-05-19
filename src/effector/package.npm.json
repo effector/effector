@@ -27,6 +27,7 @@
  ],
  "sideEffects": false,
  "files": [
+  "README.md",
   "effector.es.js",
   "effector.cjs.js",
   "effector.es.js.map",
