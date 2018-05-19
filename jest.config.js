@@ -1,60 +1,14 @@
 //@flow
 
-const moduleNameMapper = {
- '^effector$': '<rootDir>/src/index.js',
- '^effector/(.+)': '<rootDir>/src/$1',
-}
-
-const effectorConfig = {
- displayName: 'effector',
- testMatch: ['<rootDir>/src/effector/**/__test__/**/*.test.js'],
- collectCoverage: true,
- automock: false,
- browser: false,
- testEnvironment: 'node',
- transform: {
-  '^.+\\.jsx?$': 'babel-jest',
- },
- moduleNameMapper,
- testPathIgnorePatterns: ['<rootDir>/node_modules/'],
- roots: ['<rootDir>/src/'],
-}
-
+const effector = packageTest('effector')
 const effect = packageTest('effect')
-
 const event = packageTest('event')
+const store = packageTest('store')
+const react = packageTest('react', {
+ testEnvironment: 'jsdom',
+})
 
-const storeConfig = {
- displayName: 'store',
- testMatch: ['<rootDir>/src/store/**/__test__/**/*.test.js'],
- collectCoverage: true,
- automock: false,
- browser: false,
- testEnvironment: 'node',
- transform: {
-  '^.+\\.jsx?$': 'babel-jest',
- },
- moduleNameMapper,
- testPathIgnorePatterns: ['<rootDir>/node_modules/'],
- roots: ['<rootDir>/src/'],
-}
-
-const reactConfig = {
- displayName: 'react',
- testMatch: ['<rootDir>/src/react/**/__test__/**/*.test.js'],
- collectCoverage: true,
- automock: false,
- // browser: false,
- // testEnvironment: 'jsdom',
- transform: {
-  '^.+\\.jsx?$': 'babel-jest',
- },
- moduleNameMapper,
- testPathIgnorePatterns: ['<rootDir>/node_modules/'],
- roots: ['<rootDir>/src/'],
-}
-
-const projects = [effectorConfig, event, effect, storeConfig, reactConfig]
+const projects = [effector, event, effect, store, react]
 
 const config = {
  projects,
@@ -62,19 +16,25 @@ const config = {
 
 module.exports = config
 
-function packageTest(displayName) {
- return {
-  displayName,
-  testMatch: [`<rootDir>/src/${displayName}/__tests__/**/*.test.js`],
-  collectCoverage: true,
-  automock: false,
-  browser: false,
-  testEnvironment: 'node',
-  transform: {
-   '^.+\\.jsx?$': 'babel-jest',
+function packageTest(displayName, opts = {}) {
+ return Object.assign(
+  {
+   displayName,
+   testMatch: [`<rootDir>/src/${displayName}/__tests__/**/*.test.js`],
+   collectCoverage: true,
+   automock: false,
+   browser: false,
+   testEnvironment: 'node',
+   transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+   },
+   moduleNameMapper: {
+    '^effector$': '<rootDir>/src/index.js',
+    '^effector/(.+)': '<rootDir>/src/$1',
+   },
+   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+   roots: ['<rootDir>/src/'],
   },
-  moduleNameMapper,
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  roots: ['<rootDir>/src/'],
- }
+  opts,
+ )
 }
