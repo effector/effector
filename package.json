@@ -81,7 +81,6 @@
   "rollup": "^0.59.1",
   "rollup-plugin-babel": "^4.0.0-beta.4",
   "rollup-plugin-node-resolve": "^3.3.0",
-  "rollup-plugin-path-alias": "^0.0.2",
   "rollup-plugin-uglify": "^3.0.0",
   "scope.macro": "^1.0.0",
   "setimmediate": "^1.0.5",

@@ -1,6 +1,6 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-// import alias from 'rollup-plugin-path-alias'
+import alias from './rollup-alias'
 import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
@@ -8,14 +8,13 @@ import {resolve as resolvePath} from 'path'
 const {plugins, presets} = require('./.babelrc.js')
 
 const rollupPlugins = [
- // alias({
- //  paths: {
- //   '@effector/effector': resolvePackage('effector'),
- //   '@effector/store': resolvePackage('store'),
- //   '@effector/derive': resolvePackage('derive'),
- //  },
- //  extensions: ['js'],
- // }),
+ alias({
+  pathMap: new Map([
+   ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
+   ['effector/event', resolvePath(__dirname, 'src', 'event')],
+  ]),
+  extensions: ['js'],
+ }),
  resolve({
   jail: resolvePath(__dirname, 'src'),
  }),
