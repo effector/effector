@@ -5,8 +5,10 @@ import * as Name from './type'
 import * as Type from './index.h'
 
 class Step {
- /*:: type: any;*/
- /*::+*/ data: any
+ /*::
+ type: any;
+ +data: any;
+ */
  constructor(data: any) {
   this.data = data
  }
@@ -16,20 +18,9 @@ class Single extends Step {}
 class Multi extends Step {}
 class Seq extends Step {}
 
-Object.defineProperty(Single.prototype, 'type', {
- value: Name.SINGLE,
- configurable: true,
-})
-
-Object.defineProperty(Multi.prototype, 'type', {
- value: Name.MULTI,
- configurable: true,
-})
-
-Object.defineProperty(Seq.prototype, 'type', {
- value: Name.SEQ,
- configurable: true,
-})
+Single.prototype.type = Name.SINGLE
+Multi.prototype.type = Name.MULTI
+Seq.prototype.type = Name.SEQ
 
 export function single(data: Cmd): Type.Single {
  return new Single(data)

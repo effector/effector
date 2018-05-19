@@ -11,9 +11,11 @@ import * as Type from './type'
 import {type Time, now} from '../../time'
 
 class Context {
- /*:: type: any;*/
- /*::+*/ data: any
- /*::+*/ time: Time
+ /*::
+ type: any;
+ +data: any;
+ +time: Time;
+ */
  constructor(data: any, time: Time) {
   this.data = data
   this.time = time
@@ -26,26 +28,11 @@ class Run extends Context {}
 class Filter extends Context {}
 class Update extends Context {}
 
-Object.defineProperty(Compute.prototype, 'type', {
- value: Type.COMPUTE,
- configurable: true,
-})
-Object.defineProperty(Emit.prototype, 'type', {
- value: Type.EMIT,
- configurable: true,
-})
-Object.defineProperty(Run.prototype, 'type', {
- value: Type.RUN,
- configurable: true,
-})
-Object.defineProperty(Filter.prototype, 'type', {
- value: Type.FILTER,
- configurable: true,
-})
-Object.defineProperty(Update.prototype, 'type', {
- value: Type.UPDATE,
- configurable: true,
-})
+Compute.prototype.type = Type.COMPUTE
+Emit.prototype.type = Type.EMIT
+Run.prototype.type = Type.RUN
+Filter.prototype.type = Type.FILTER
+Update.prototype.type = Type.UPDATE
 
 export function filterContext(
  value: any,
