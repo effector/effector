@@ -53,8 +53,6 @@ export function storeConstructor<State>(props: {
 
  const store = {
   graphite: {
-   cmd,
-   step: singleStep,
    next: nextSteps,
    seq: fullSeq,
   },

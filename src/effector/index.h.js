@@ -28,8 +28,6 @@ export type Subscription = {
 }
 
 export type GraphiteMeta = {
- cmd: Emit,
- step: SingleStep,
  next: MultiStep,
  seq: SeqStep,
 }
@@ -90,8 +88,6 @@ export type Store<State> = {
  subscribe(listner: any): Subscription,
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
  graphite: {
-  cmd: Update,
-  step: SingleStep,
   next: MultiStep,
   seq: SeqStep,
  },

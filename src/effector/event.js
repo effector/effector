@@ -6,7 +6,7 @@ import {from, type Stream} from 'most'
 import type {Event, Effect, GraphiteMeta} from './index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
-// import {runSyncGraph} from '../../graph'
+
 import * as Cmd from './datatype/cmd'
 import * as Step from './datatype/step'
 import {walkEvent} from './graphite/walk'
@@ -33,8 +33,6 @@ export function eventConstructor<Payload>({
  const nextSteps: Step.Multi = Step.multi()
  const stepFull: Step.Seq = Step.seq([step, nextSteps])
  const graphite: GraphiteMeta = {
-  cmd,
-  step,
   next: nextSteps,
   seq: stepFull,
  }
