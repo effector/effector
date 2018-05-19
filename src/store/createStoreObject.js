@@ -4,7 +4,7 @@
 
 import * as Cmd from '../effector/datatype/cmd'
 import * as Step from '../effector/datatype/step'
-import {createEvent} from '../event'
+import {createEvent} from 'effector/event'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
 import {storeConstructor} from './createStore'

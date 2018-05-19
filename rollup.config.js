@@ -7,17 +7,7 @@ import {resolve as resolvePath} from 'path'
 
 const {plugins, presets} = require('./.babelrc.js')
 
-const rollupPlugins = [
- alias({
-  pathMap: new Map([
-   ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
-   ['effector/event', resolvePath(__dirname, 'src', 'event')],
-  ]),
-  extensions: ['js'],
- }),
- resolve({
-  jail: resolvePath(__dirname, 'src'),
- }),
+const staticPlugins = [
  babel({
   presets,
   plugins,
@@ -36,6 +26,19 @@ const rollupPlugins = [
    // indent_level: 2,
   },
  }),
+]
+const rollupPlugins = [
+ alias({
+  pathMap: new Map([
+   ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
+   ['effector/event', resolvePath(__dirname, 'src', 'event')],
+  ]),
+  extensions: ['js'],
+ }),
+ resolve({
+  jail: resolvePath(__dirname, 'src'),
+ }),
+ ...staticPlugins,
 ]
 
 export default [

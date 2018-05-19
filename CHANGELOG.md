@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.17.3
+
+* Fix effector-react typings
+* Build with node 6 target, add engine field to package.json
+* Add [warning](https://www.npmjs.com/package/warning) dependency
+
 ## 0.17.2
 
 * Memoize store.map and store updates
