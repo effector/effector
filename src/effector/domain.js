@@ -1,8 +1,7 @@
 //@flow
 
 import {createEvent} from './event'
-import {createEffect} from './effect'
-// import {createEffect} from './event'
+import {createEffect} from '../effect'
 import {createStore} from '../store'
 import type {Store} from './index.h'
 

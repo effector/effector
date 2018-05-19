@@ -2,30 +2,28 @@
 
 // import invariant from 'invariant'
 import warning from 'warning'
-import type {Event, Effect, GraphiteMeta} from './index.h'
+import type {
+ Event,
+ Effect as EffectType,
+ GraphiteMeta,
+} from '../effector/index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
-import {eventConstructor} from './event'
+import {eventConstructor} from '../effector/event'
 
-export function createEffect<Payload, Done>(
- name: string,
-): Effect<Payload, Done, *> {
- return effectConstructor({name, domainName: ''})
-}
-
-function effectConstructor<Payload, Done>({
+export function Effect<Payload, Done>({
  name,
  domainName,
 }: {
  name: string,
  domainName: string,
-}): Effect<Payload, Done, *> {
+}): EffectType<Payload, Done, *> {
  const instanceAsEvent: Event<Payload> = eventConstructor({
   name,
   domainName,
  })
- const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
+ const instance: EffectType<Payload, Done, any> = (instanceAsEvent: any)
  const eventCreate = instanceAsEvent.create
  const done: Event<{params: Payload, result: Done}> = eventConstructor({
   name: `${name} done`,
