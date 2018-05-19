@@ -5,7 +5,7 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import {createEvent} from '../effector/event'
+import {createEvent} from '../event'
 import * as Cmd from '../effector/datatype/cmd'
 import * as Ctx from '../effector/datatype/context'
 import * as Step from '../effector/datatype/step'

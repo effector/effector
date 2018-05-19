@@ -2,8 +2,8 @@
 
 export {createRootDomain as createDomain} from './domain'
 
-export {createEvent} from './default-domain'
 export {createEffect} from '../effect'
+export {createEvent} from '../event'
 
 export {combine} from './combine'
 
