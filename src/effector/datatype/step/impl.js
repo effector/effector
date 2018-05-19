@@ -1,7 +1,7 @@
 //@flow
 
 import type {Cmd} from '../cmd'
-import type {SingleType, MultiType, SeqType} from './type.h'
+import * as Name from './type'
 import * as Type from './index.h'
 
 class Step {
@@ -17,17 +17,17 @@ class Multi extends Step {}
 class Seq extends Step {}
 
 Object.defineProperty(Single.prototype, 'type', {
- value: ('single': SingleType),
+ value: Name.SINGLE,
  configurable: true,
 })
 
 Object.defineProperty(Multi.prototype, 'type', {
- value: ('multi': MultiType),
+ value: Name.MULTI,
  configurable: true,
 })
 
 Object.defineProperty(Seq.prototype, 'type', {
- value: ('seq': SeqType),
+ value: Name.SEQ,
  configurable: true,
 })
 

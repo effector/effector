@@ -2,7 +2,8 @@
 
 export {createRootDomain as createDomain} from './domain'
 
-export {createEvent, createEffect} from './default-domain'
+export {createEffect} from 'effector/effect'
+export {createEvent} from 'effector/event'
 
 export {combine} from './combine'
 
@@ -14,4 +15,4 @@ export {
  applyMiddleware,
  compose,
  createStoreObject,
-} from '../store'
+} from 'effector/store'

@@ -1,17 +1,24 @@
 //@flow
 
-import {createEvent, createEffect} from './api'
-// import {createEffect} from './event'
+import {eventFabric} from '../event'
+import {effectFabric} from '../effect'
 import {createStore} from '../store'
 import type {Store} from './index.h'
 
 export function createDomain({domain}: {domain: string[]}) {
+ const domainName = joinName(domain)
  return {
   event(name: string) {
-   return createEvent(joinName([...domain, name]))
+   return eventFabric({
+    name,
+    domainName,
+   })
   },
   effect(name: string) {
-   return createEffect(joinName([...domain, name]))
+   return effectFabric({
+    name,
+    domainName,
+   })
   },
   domain(name: string) {
    return createDomain({domain: [name].concat(domain)})

@@ -12,7 +12,8 @@
  "dependencies": {
   "invariant": "^2.2.4",
   "most": "^1.7.3",
-  "symbol-observable": "^1.2.0"
+  "symbol-observable": "^1.2.0",
+  "warning": "^3.0.0"
  },
  "maintainers": [
   {
@@ -26,6 +27,7 @@
  ],
  "sideEffects": false,
  "files": [
+  "README.md",
   "effector.es.js",
   "effector.cjs.js",
   "effector.es.js.map",
@@ -35,5 +37,8 @@
   "index.js.flow",
   "index.d.ts"
  ],
- "repository": "https://github.com/zerobias/effector"
+ "repository": "https://github.com/zerobias/effector",
+ "engines": {
+  "node": ">=6.0.0"
+ }
 }

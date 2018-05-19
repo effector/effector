@@ -1,14 +1,16 @@
 //@flow
 
-import * as Api from '../api'
+import {createEvent} from 'effector/event'
+import {combine} from '../combine'
 import * as Type from '../index.h'
 import {createStore} from '../../store/createStore'
+import {createStoreObject} from '../../store/createStoreObject'
 import {show} from '../datatype/step/show'
 
 test('graphite', () => {
  const fn = jest.fn()
  const fn1 = jest.fn()
- const foo: Type.Event<number> = Api.createEvent('foo')
+ const foo: Type.Event<number> = createEvent('foo')
  const bar = foo.map(x => (fn(x), x + 1))
  const store1: Type.Store<string> = createStore('foo').on(bar, (state, bar) =>
   [state, bar].join(' | '),
@@ -43,4 +45,38 @@ test('graphite', () => {
  expect(showFoo).toMatchSnapshot('show foo')
  expect(showStore).toMatchSnapshot('show store1')
  expect(showStore2).toMatchSnapshot('show store2')
+})
+
+test('showcase', () => {
+ const fn = jest.fn()
+ const foo = createEvent('foo')
+ const bar = createEvent('bar')
+
+ const a = createStore(1)
+ const b = createStore(2)
+ const bigStore = createStoreObject({a, b})
+ const mapped = bigStore.map(s => s.a)
+
+ a.on(foo, n => n + 1)
+ b.on(bar, n => n + 1)
+
+ mapped.watch(fn)
+
+ foo()
+ foo()
+
+ bar()
+ bar()
+ bar()
+ bar()
+
+ expect(show(a.graphite.seq)).toMatchSnapshot('store a')
+ expect(show(foo.graphite.seq)).toMatchSnapshot('event foo')
+ expect(show(mapped.graphite.seq)).toMatchSnapshot('mapped')
+ expect(fn).toHaveBeenCalledTimes(3)
+ const first = createStore('s')
+ const second = createStore('h')
+ const third = createStore('i')
+ const status = combine(first, second, third, (a, b, c) => [a, b, c].join(''))
+ expect(status.getState()).toBe('shi')
 })

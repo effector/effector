@@ -1,16 +1,20 @@
 //@flow
 
-import * as Name from './type.h'
+import * as Name from './type'
 import * as Type from './index.h'
 
 export function show(value: Type.Cmd): string {
  switch (value.type) {
-  case ('emit': Name.EmitType):
+  case Name.EMIT:
    return `Emit(${value.data.fullName})`
-  case ('run': Name.RunType):
+  case Name.RUN:
    return 'Run'
-  case ('compute': Name.ComputeType):
+  case Name.COMPUTE:
    return 'Compute'
+  case Name.FILTER:
+   return 'Filter'
+  case Name.UPDATE:
+   return 'Update'
   default:
    /*::(value.type: empty)*/
    throw new Error('impossible type')

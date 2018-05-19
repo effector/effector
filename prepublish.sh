@@ -7,6 +7,8 @@ rm -f npm/effector/CHANGELOG.md
 cp CHANGELOG.md npm/effector/CHANGELOG.md
 rm -f npm/effector/README.md
 cp README.md npm/effector/README.md
+rm -f npm/react/README.md
+cp src/react/README.md npm/react/README.md
 
 rm -f npm/effector/index.js.flow
 cp index.js.flow npm/effector/index.js.flow

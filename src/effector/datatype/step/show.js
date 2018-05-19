@@ -1,22 +1,22 @@
 //@flow
 
-import * as Name from './type.h'
+import * as Name from './type'
 import * as Type from './index.h'
 
 import {show as showCmd} from '../cmd/show'
 
 export function show(value: Type.Step): string {
  switch (value.type) {
-  case ('single': Name.SingleType):
+  case Name.SINGLE:
    return `Single ${showCmd(value.data)}`
-  case ('multi': Name.MultiType): {
+  case Name.MULTI: {
    if (value.data.size === 0) return 'Multi []'
    const inner = [...value.data]
     .map(e => move1(`  *  ${move2(show(e))}`))
     .join(`,\n`)
    return `Multi [\n${inner}\n]`
   }
-  case ('seq': Name.SeqType): {
+  case Name.SEQ: {
    if (value.data.length === 0) return 'Seq []'
    const inner = value.data
     .map((e, n) => move1(`  ${n + 1}. ${move2(show(e))}`))

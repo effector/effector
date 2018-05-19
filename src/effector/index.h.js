@@ -2,12 +2,13 @@
 
 import type {Stream} from 'most'
 
-import type {Emit, Compute} from './derived/datatype/cmd'
+import * as Ctx from './datatype/context'
+import type {Emit, Update} from './datatype/cmd'
 import type {
  Multi as MultiStep,
  Seq as SeqStep,
  Single as SingleStep,
-} from './derived/datatype/step'
+} from './datatype/step'
 
 export type Subscriber<A> = {
  next(value: A): void,
@@ -15,14 +16,18 @@ export type Subscriber<A> = {
  //complete(): void,
 }
 
+export type SingleStepValidContext =
+ | Ctx.EmitContext
+ | Ctx.ComputeContext
+ | Ctx.FilterContext
+ | Ctx.UpdateContext
+
 export type Subscription = {
  (): void,
  unsubscribe(): void,
 }
 
 export type GraphiteMeta = {
- cmd: Emit,
- step: SingleStep,
  next: MultiStep,
  seq: SeqStep,
 }
@@ -39,6 +44,8 @@ export type Event<E> = {
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void,
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
  getType(): string,
+ shortName: string,
+ domainName: string,
  graphite: GraphiteMeta,
 }
 
@@ -61,6 +68,8 @@ export type Effect<Params, Done, Fail = Error> = {
  to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void,
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
  getType(): string,
+ shortName: string,
+ domainName: string,
  graphite: GraphiteMeta,
 }
 
@@ -79,8 +88,6 @@ export type Store<State> = {
  subscribe(listner: any): Subscription,
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
  graphite: {
-  cmd: Compute,
-  step: SingleStep,
   next: MultiStep,
   seq: SeqStep,
  },

@@ -3,12 +3,7 @@ import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 import invariant from 'invariant'
 import {from} from 'most'
-import {
- createEvent,
- createEffect,
- createStore,
- createStoreObject,
-} from '..'
+import {createEvent, createEffect, createStore, createStoreObject} from '..'
 import type {Event, Effect, Store} from '../index.h'
 
 import flags from '../../flags'
@@ -22,24 +17,6 @@ afterAll(() => {
 })
 
 describe('symbol-observable support', () => {
- test('from(event)', async() => {
-  expect(() => {
-   const event$ = from(createEvent('ev1'))
-  }).not.toThrow()
-  const ev1 = createEvent('ev1')
-  const ev2 = createEvent('ev2')
-  const ev1$ = from(ev1)
-  const fn1 = jest.fn()
-  ev1$.observe(fn1)
-  ev1(0)
-  ev1(1)
-  ev1(2)
-  ev2('should ignore')
-  expect(fn1).toHaveBeenCalledTimes(3)
-
-  expect(fn1.mock.calls).toEqual([[0], [1], [2]])
- })
-
  test('from(store)', async() => {
   expect(() => {
    const store$ = from(createStore(0))
@@ -189,17 +166,6 @@ describe('store.on', () => {
   expect(result).toMatchObject({params: 500, result: 500})
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
  })
-})
-
-test('event.watch', () => {
- const click = createEvent('click')
- const clickEpicFn = jest.fn(e => console.log(`clickEpicFn`, e))
- click.watch(clickEpicFn)
- click()
- click(1)
- click(2)
- expect(clickEpicFn).not.toHaveBeenCalledTimes(2)
- expect(clickEpicFn).toHaveBeenCalledTimes(3)
 })
 
 test('store.watch', () => {

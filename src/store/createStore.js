@@ -5,13 +5,13 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import {createEvent} from '../effector/api'
-import {INIT} from './actionTypes'
+import {createEvent} from 'effector/event'
 import * as Cmd from '../effector/datatype/cmd'
+import * as Ctx from '../effector/datatype/context'
 import * as Step from '../effector/datatype/step'
-import {applyMiddleware} from './applyMiddleware'
 import type {Event, Store} from '../effector/index.h'
 import * as Kind from '../kind'
+import {atom, type Atom} from '../effector/atom'
 // import warning from 'warning'
 
 export type Nest = {
@@ -31,36 +31,28 @@ export function storeConstructor<State>(props: {
  currentState: State,
 }): Store<State> {
  const currentId = (++id).toString(36)
- let {currentReducer, currentState} = props
+ const {currentState} = props
+ let currentReducer = props?.currentReducer
  const defaultState = currentState
 
- const plainState = (defaultState => {
-  let state = defaultState
-  return {
-   get: () => state,
-   set(newState: typeof state) {
-    state = newState
-   },
-  }
- })(defaultState)
- const cmd: Cmd.Compute = Cmd.compute({
-  reduce(_, newVal, ctx) {
-   ctx.isChanged = newVal !== plainState.get()
-   plainState.set(newVal)
-   return newVal
+ const plainState: Atom<typeof defaultState> = atom(defaultState)
+ const shouldChange: Cmd.Filter = Cmd.filter({
+  filter(newValue, ctx) {
+   return newValue !== plainState.get() && newValue !== undefined
   },
-  shouldChange: true,
  })
+ const cmd: Cmd.Update = Cmd.update({
+  store: plainState,
+ })
+ const filterStep: Step.Single = Step.single(shouldChange)
  const singleStep: Step.Single = Step.single(cmd)
  const nextSteps: Step.Multi = Step.multi()
- const fullSeq: Step.Seq = Step.seq([singleStep, nextSteps])
+ const fullSeq: Step.Seq = Step.seq([filterStep, singleStep, nextSteps])
 
  const updater: any = createEvent(`update ${currentId}`)
 
  const store = {
   graphite: {
-   cmd,
-   step: singleStep,
    next: nextSteps,
    seq: fullSeq,
   },
@@ -85,6 +77,12 @@ export function storeConstructor<State>(props: {
  on(updater, (_, payload) => payload)
  function getState(): State {
   return plainState.get()
+ }
+
+ function map<NextState>(
+  fn: (state: State, lastState?: NextState) => NextState,
+ ): Store<NextState> {
+  return mapStore(store, fn)
  }
 
  function subscribe(listener) {
@@ -167,17 +165,19 @@ export function storeConstructor<State>(props: {
   const computeCmd = Cmd.compute({
    reduce(_, newValue, ctx) {
     const lastState = getState()
-    const result = handler(lastState, newValue, e.getType())
-    if (result === undefined || result === lastState) {
-     ctx.isChanged = false
-     return lastState
-    }
-    return result
+    return handler(lastState, newValue, e.getType())
    },
-   shouldChange: true,
+  })
+  const filterCmd = Cmd.filter({
+   filter(data, ctx: Ctx.ComputeContext) {
+    // const oldValue = ctx.data.args[1]
+    const lastState = getState()
+    return data !== lastState && data !== undefined
+   },
   })
   const step = Step.single(computeCmd)
-  const nextSeq = Step.seq([step, ...store.graphite.seq.data])
+  const filtStep = Step.single(filterCmd)
+  const nextSeq = Step.seq([step, filtStep, ...store.graphite.seq.data])
   e.graphite.next.data.add(nextSeq)
   const unsub = () => {
    e.graphite.next.data.delete(nextSeq)
@@ -187,38 +187,6 @@ export function storeConstructor<State>(props: {
 
  function withProps(fn: Function) {
   return props => fn(getState(), props)
- }
-
- function map(fn: Function) {
-  let lastValue = getState()
-  let lastResult = fn(lastValue)
-  const innerStore: Store<any> = (createStore: any)(lastResult)
-  const computeCmd = Step.single(
-   Cmd.compute({
-    reduce(_, newValue, ctx) {
-     if (newValue === lastValue) {
-      ctx.isChanged = false
-      return lastResult
-     }
-     lastValue = newValue
-     const lastState = innerStore.getState()
-     const result = fn(newValue, lastState)
-     if (result === undefined || result === lastState) {
-      ctx.isChanged = false
-      return lastState
-     }
-     lastResult = result
-     return result
-    },
-    shouldChange: true,
-   }),
-  )
-  const nextSeq = Step.seq([computeCmd, ...innerStore.graphite.seq.data])
-  store.graphite.next.data.add(nextSeq)
-  const off = () => {
-   store.graphite.next.data.delete(nextSeq)
-  }
-  return innerStore
  }
 
  function to(action: Function, reduce) {
@@ -268,13 +236,52 @@ export function storeConstructor<State>(props: {
   updater(newState)
  }
 
- dispatch({type: INIT})
-
  function thru(fn: Function) {
   return fn(store)
  }
 
  return store
+}
+
+function mapStore<A, B>(
+ store: Store<A>,
+ fn: (state: A, lastState?: B) => B,
+): Store<B> {
+ let lastValue = store.getState()
+ let lastResult = fn(lastValue)
+ const innerStore: Store<any> = (createStore: any)(lastResult)
+ const computeCmd = Step.single(
+  Cmd.compute({
+   reduce(_, newValue, ctx) {
+    lastValue = newValue
+    const lastState = innerStore.getState()
+    const result = fn(newValue, lastState)
+    return result
+   },
+  }),
+ )
+ const filterCmdPost = Step.single(
+  Cmd.filter({
+   filter(result, ctx: Ctx.ComputeContext) {
+    const lastState = innerStore.getState()
+    const isChanged = result !== lastState && result !== undefined
+    if (isChanged) {
+     lastResult = result
+    }
+    return isChanged
+   },
+  }),
+ )
+ const nextSeq = Step.seq([
+  computeCmd,
+  filterCmdPost,
+  ...innerStore.graphite.seq.data,
+ ])
+ store.graphite.next.data.add(nextSeq)
+ const off = () => {
+  store.graphite.next.data.delete(nextSeq)
+ }
+ return innerStore
 }
 
 function epicStore(event, store, fn: Function) {
@@ -294,31 +301,4 @@ function epicStore(event, store, fn: Function) {
   },
  })
  return innerStore
-}
-
-export function createReduxStore<T>(
- reducer: (state: T, event: any) => T,
- preloadedStateRaw?: T,
- enhancerRaw?: Function | Function[],
-) {
- invariant(
-  typeof reducer === 'function',
-  'Expected reducer to be a function, got %s',
-  typeof reducer,
- )
- let enhancer = enhancerRaw
- let preloadedState = preloadedStateRaw
- if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
-  enhancer = preloadedState
-  preloadedState = undefined
- }
- if (Array.isArray(enhancer)) {
-  enhancer = applyMiddleware(...enhancer)
- }
- if (enhancer !== undefined)
-  return enhancer(createReduxStore)(reducer, preloadedState)
- return storeConstructor({
-  currentReducer: reducer,
-  currentState: preloadedState,
- })
 }

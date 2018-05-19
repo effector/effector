@@ -1,18 +1,19 @@
 //@flow
 
-export type {Store, Event, Effect, Domain} from './effector'
+export type {Store, Domain} from './effector'
+
+export {createDomain, combine} from './effector'
+
+export {createEvent} from 'effector/event'
+export type {Event} from 'effector/event'
+
+export {createEffect} from 'effector/effect'
+export type {Effect} from 'effector/effect'
 
 export {
- createEvent,
- createEffect,
  createStore,
- createDomain,
- combine,
-} from './effector'
-
-export {
  createReduxStore,
  applyMiddleware,
  compose,
  createStoreObject,
-} from './store'
+} from 'effector/store'

@@ -4,7 +4,6 @@ import {from, periodic} from 'most'
 
 import {
  createEvent,
- createEffect,
  createStore,
  createStoreObject,
  createDomain,
@@ -12,11 +11,21 @@ import {
 } from '..'
 import type {Event, Effect, Store} from '../index.h'
 
-import * as Kind from '../../kind'
+import {delay, spy} from '../../fixtures/test-utils'
 
-import warning from 'warning'
+describe('fixtures works correctly', () => {
+ test('spy use', () => {
+  spy()
+  spy()
+  expect(spy).toHaveBeenCalledTimes(2)
+ })
+ test('spy reuse', () => {
+  spy()
+  expect(spy).toHaveBeenCalledTimes(1)
+ })
+})
 
-test('will run in ecpected order', () => {
+test('will run in expected order', () => {
  const fn = jest.fn()
  const reset = createEvent('reset')
  const add = createEvent('add')
@@ -71,35 +80,6 @@ test('reducer defaults', () => {
   watch: fn3.mock.calls,
   state: state1.getState(),
  }).toMatchSnapshot()
-})
-
-test.skip('event.link(event)', () => {
- const fn = jest.fn()
- const reset = createEvent('reset')
- const add = createEvent('add')
- const mult = createEvent('mult')
- const listSize = createStore(3)
-  .on(add, (n, nn) => n + nn)
-  .on(mult, (n, q) => n * q)
-  .reset(reset)
- //$off
- const halt = add.link(mult, n => n % 10, n => n + 10)
- const currentList = createStore([])
-  .on(add, (list, pl) => [...list, {add: pl}])
-  .on(mult, (list, pl) => [...list, {mult: pl}])
-  .reset(reset)
- const selected = createStore([])
-
- const fullStore = createStoreObject({listSize, currentList, selected})
-
- const unsub = currentList.subscribe(state => fn(state))
- add(5)
- mult(4)
- unsub()
- halt()
-
- expect(fn.mock.calls).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
- expect(fn).toHaveBeenCalledTimes(3)
 })
 
 test('store.reset(event)', () => {
@@ -299,68 +279,13 @@ describe('port', () => {
 
 test('should handle return value', async() => {
  const fn = jest.fn()
- const domain = createDomain()
- const store = domain.store({foo: 'bar'})
- const timeout = domain.effect('timeout')
+ const timeout = createEvent('timeout')
  timeout.watch(fn)
- //  domain.port(
+
  await periodic(300)
   .take(5)
   .observe(() => timeout())
 
- expect(fn).toHaveBeenCalledTimes(5)
-})
-
-test('effect.fail()', async() => {
- const fn = jest.fn(() => delay(500).then(() => Promise.reject('fail!')))
- const domain = createDomain()
- const store = domain.store({foo: 'bar'})
- const timeout = domain.effect('timeout')
- timeout.use(fn)
- expect(timeout('params').fail()).resolves.toMatch('fail!')
-})
-
-test('effect.promise()', async() => {
- function delay(time: number) {
-  return new Promise(rs => setTimeout(rs, time))
- }
- const fn = () =>
-  delay(500).then(() => {
-   throw 'fail!'
-  })
- const fn1 = () => delay(500).then(() => 'done!')
- const timeout = createEffect('timeout')
-
- //  timeout.use(fn)
- //  await timeout('params fail')
- //   .promise()
- //   .catch(err => {
- //    console.warn(err)
- //    expect(err).toBe('fail!')
- //   })
- timeout.use(fn1)
- await timeout('params done')
-  .promise()
-  .then(res => {
-   expect(res).toBe('done!')
-  })
-})
-
-test.skip('should handle watcher`s errors', async() => {
- const fn = jest.fn(e => {
-  throw new Error('Oops')
- })
- const domain = createDomain()
- const store = domain.store({foo: 'bar'})
- const timeout = domain.effect('timeout')
- timeout.watch(fn)
- warning(false, `TODO domain.port not implemented`)
- //  domain.port(
- //   periodic(300)
- //    .take(5)
- //    .map(() => timeout()),
- //  )
- await delay(2e3)
  expect(fn).toHaveBeenCalledTimes(5)
 })
 
@@ -476,10 +401,6 @@ test('subscription', async() => {
  await eff('')
  expect(fn).toHaveBeenCalledTimes(2)
 })
-
-function delay(time: number) {
- return new Promise(rs => setTimeout(rs, time))
-}
 
 const log = (tags = ['']) => (e, ...data) => {
  const tagList: string[] = Array.isArray(tags) ? tags : [tags]

@@ -1,29 +1,22 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-    "module": "es2015",
-    "experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-    "skipLibCheck": false,
-    "noLib": false,
-    "skipDefaultLibCheck": false,
-    "checkJs": true,
-    "alwaysStrict": true,
-    "strict": true,
-    "paths": {
-      "most": ["./flow/most.js"]
-    }
-  },
-  "typeAcquisition": {
-    "enable": true
-  },
-  "include": [
-    "src",
-    "flow"
-  ],
-	"exclude": [
-    "node_modules",
-    "lib",
-    "es"
-	]
+ "compilerOptions": {
+  "target": "esnext",
+  "module": "es2015",
+  "experimentalDecorators": true,
+  "allowSyntheticDefaultImports": true,
+  "skipLibCheck": false,
+  "noLib": false,
+  "skipDefaultLibCheck": true,
+  "alwaysStrict": true,
+  "strict": true,
+  "baseUrl": "src",
+  "paths": {
+   "^effector$": ["./index.js"],
+   "^effector/(.+)": ["./$1"]
+  }
+ },
+ "typeAcquisition": {
+  "enable": true
+ },
+ "include": ["src"]
 }

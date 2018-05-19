@@ -16,8 +16,6 @@ yarn add effector effector-react
 
 ## Usage
 
-See examples
-
 ```js
 import {
  createStore,

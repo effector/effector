@@ -1,68 +1,18 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-// import alias from 'rollup-plugin-path-alias'
-// import cleanup from 'rollup-plugin-cleanup'
+import alias from './rollup-alias'
 import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
 
-const babelCfg = {
- env: {
-  test: {
-   presets: ['@babel/preset-react'],
-   plugins: ['@babel/plugin-transform-modules-commonjs'],
-  },
-  commonjs: {
-   plugins: [
-    'babel-plugin-transform-inline-environment-variables',
-    '@babel/plugin-transform-modules-commonjs',
-   ],
-  },
-  es: {
-   plugins: ['babel-plugin-transform-inline-environment-variables'],
-  },
- },
- presets: ['@babel/preset-react'],
- plugins: [
-  '@babel/plugin-transform-flow-strip-types',
-  [
-   '@babel/plugin-proposal-object-rest-spread',
-   {
-    useBuiltIns: true,
-   },
-  ],
-  ['@babel/plugin-proposal-class-properties', {loose: true}],
-  '@babel/plugin-proposal-async-generator-functions',
-  '@babel/plugin-transform-block-scoping',
-  'babel-plugin-transform-inline-environment-variables',
-  'babel-plugin-dev-expression',
- ],
-}
+const {plugins, presets} = require('./.babelrc.js')
 
-const presets = babelCfg.presets
-
-const plugins = babelCfg.plugins
-const rollupPlugins = [
- // alias({
- //  paths: {
- //   '@effector/effector': resolvePackage('effector'),
- //   '@effector/store': resolvePackage('store'),
- //   '@effector/derive': resolvePackage('derive'),
- //  },
- //  extensions: ['js'],
- // }),
- resolve({
-  jail: resolvePath(__dirname, 'src'),
- }),
+const staticPlugins = [
  babel({
-  //  exclude: 'node_modules/**',
   presets,
   plugins,
   runtimeHelpers: true,
  }),
- //  cleanup({
- //   comments: [/#/],
- //  }),
  uglify({
   mangle: {
    toplevel: true,
@@ -76,6 +26,20 @@ const rollupPlugins = [
    // indent_level: 2,
   },
  }),
+]
+const rollupPlugins = [
+ alias({
+  pathMap: new Map([
+   ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
+   ['effector/event', resolvePath(__dirname, 'src', 'event')],
+   ['effector/store', resolvePath(__dirname, 'src', 'store')],
+  ]),
+  extensions: ['js'],
+ }),
+ resolve({
+  jail: resolvePath(__dirname, 'src'),
+ }),
+ ...staticPlugins,
 ]
 
 export default [

@@ -22,6 +22,7 @@ include_warnings=true
 max_header_tokens=5
 esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
+esproposal.optional_chaining=enable
 experimental.const_params=true
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_comment=\\(.\\|\n\\)*\\$off
@@ -35,45 +36,25 @@ module.use_strict=true
 esproposal.export_star_as=enable
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
-module.name_mapper='^redux-most$' -> '<PROJECT_ROOT>/flow/redux-most'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
-module.name_mapper='^fp-ts\(.*\)$' -> '<PROJECT_ROOT>/node_modules/fp-ts\1'
-module.name_mapper='^\@effector/\(.*\)$' -> '<PROJECT_ROOT>/packages/\1/src'
-module.name_mapper='^effector$' -> '<PROJECT_ROOT>/index.js.flow'
-module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
-module.name_mapper='^monocle-ts\(.*\)$' -> '<PROJECT_ROOT>/node_modules/monocle-ts\1'
-module.name_mapper='^\(.*\)redux\(.*\)$' -> '<PROJECT_ROOT>/node_modules/\1redux\2'
-module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
+module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/src'
 
 [ignore]
 <PROJECT_ROOT>/npm/*
-<PROJECT_ROOT>/src_alt/*
-<PROJECT_ROOT>/src_unused/*
 <PROJECT_ROOT>/scripts/fastflow/primitives/__test__/__snapshots__/*
 <PROJECT_ROOT>/coverage/*
-<PROJECT_ROOT>/packages/zgraph/*
-<PROJECT_ROOT>/packages/jsm/*
-<PROJECT_ROOT>/packages/myapp/*
-<PROJECT_ROOT>/packages/actor/*
-<PROJECT_ROOT>/packages/emission/*
-<PROJECT_ROOT>/packages/id/*
-<PROJECT_ROOT>/packages/lazy/*
-<PROJECT_ROOT>/packages/st/*
-<PROJECT_ROOT>/packages/avar/*
-<PROJECT_ROOT>/packages/atom/*
-<PROJECT_ROOT>/packages/effector/experimental/*
 .*/node_modules/.*
-💩 <PROJECT_ROOT>/packages/\(foo\|bar\)/node_modules/.*
 <PROJECT_ROOT>/.vscode/*
 💩 🙈
 💩 ignored total:
-💩 eventemitter2,fluture,fs-extra,immutable,invariant,jest,most,most-subject,raf,redux,shelljs,symbol-observable,express,react-router,react-router-dom,styled-components
+💩
 💩 ignored typings:
-💩 eventemitter2, fluture, fs-extra, immutable, invariant, jest, most, most-subject, raf, redux, shelljs, symbol-observable
+💩 enzyme, eventemitter2, fs-extra, immutable, invariant, jest, most, raf, react-test-renderer, redux, shelljs, symbol-observable, warning
 💩 active:
-💩 @effector/actor, @effector/atom, @effector/avar, @effector/effector, @effector/emission, @effector/id, @effector/lazy, @effector/warning, react, react-dom
+💩
 💩 run again:
-💩 IGNORED="express,react-router,react-router-dom,styled-components" node scripts/flow-ignore
+💩 IGNORED="" node scripts/flow-ignore
 💩
 <PROJECT_ROOT>/node_modules/.bin/*
 <PROJECT_ROOT>/node_modules/.yarn-integrity/*
@@ -81,7 +62,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/abab/*
 <PROJECT_ROOT>/node_modules/abbrev/*
 <PROJECT_ROOT>/node_modules/acorn/*
-<PROJECT_ROOT>/node_modules/acorn-dynamic-import/*
 <PROJECT_ROOT>/node_modules/acorn-globals/*
 <PROJECT_ROOT>/node_modules/acorn-jsx/*
 <PROJECT_ROOT>/node_modules/add-stream/*
@@ -94,7 +74,9 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/ansi-escapes/*
 <PROJECT_ROOT>/node_modules/ansi-regex/*
 <PROJECT_ROOT>/node_modules/ansi-styles/*
+<PROJECT_ROOT>/node_modules/any-observable/*
 <PROJECT_ROOT>/node_modules/anymatch/*
+<PROJECT_ROOT>/node_modules/app-root-path/*
 <PROJECT_ROOT>/node_modules/append-transform/*
 <PROJECT_ROOT>/node_modules/aproba/*
 <PROJECT_ROOT>/node_modules/are-we-there-yet/*
@@ -117,6 +99,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/astral-regex/*
 <PROJECT_ROOT>/node_modules/async/*
 <PROJECT_ROOT>/node_modules/async-each/*
+<PROJECT_ROOT>/node_modules/async-limiter/*
 <PROJECT_ROOT>/node_modules/async-listener/*
 <PROJECT_ROOT>/node_modules/asynckit/*
 <PROJECT_ROOT>/node_modules/atob/*
@@ -129,9 +112,12 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/babel-helpers/*
 <PROJECT_ROOT>/node_modules/babel-jest/*
 <PROJECT_ROOT>/node_modules/babel-messages/*
+<PROJECT_ROOT>/node_modules/babel-plugin-console/*
 <PROJECT_ROOT>/node_modules/babel-plugin-dev-expression/*
 <PROJECT_ROOT>/node_modules/babel-plugin-istanbul/*
 <PROJECT_ROOT>/node_modules/babel-plugin-jest-hoist/*
+<PROJECT_ROOT>/node_modules/babel-plugin-macros/*
+<PROJECT_ROOT>/node_modules/babel-plugin-preval/*
 <PROJECT_ROOT>/node_modules/babel-plugin-syntax-object-rest-spread/*
 <PROJECT_ROOT>/node_modules/babel-plugin-transform-inline-environment-variables/*
 <PROJECT_ROOT>/node_modules/babel-polyfill/*
@@ -149,7 +135,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/binary/*
 <PROJECT_ROOT>/node_modules/binary-extensions/*
 <PROJECT_ROOT>/node_modules/blessed/*
-<PROJECT_ROOT>/node_modules/block-stream/*
 <PROJECT_ROOT>/node_modules/bluebird/*
 <PROJECT_ROOT>/node_modules/boolbase/*
 <PROJECT_ROOT>/node_modules/boolify/*
@@ -182,11 +167,15 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/charm/*
 <PROJECT_ROOT>/node_modules/cheerio/*
 <PROJECT_ROOT>/node_modules/chokidar/*
+<PROJECT_ROOT>/node_modules/chownr/*
 <PROJECT_ROOT>/node_modules/ci-info/*
 <PROJECT_ROOT>/node_modules/circular-json/*
+<PROJECT_ROOT>/node_modules/circular-json-es6/*
 <PROJECT_ROOT>/node_modules/class-utils/*
 <PROJECT_ROOT>/node_modules/cli-cursor/*
+<PROJECT_ROOT>/node_modules/cli-spinners/*
 <PROJECT_ROOT>/node_modules/cli-table-redemption/*
+<PROJECT_ROOT>/node_modules/cli-truncate/*
 <PROJECT_ROOT>/node_modules/cli-width/*
 <PROJECT_ROOT>/node_modules/cliui/*
 <PROJECT_ROOT>/node_modules/clone/*
@@ -204,12 +193,11 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/common-tags/*
 <PROJECT_ROOT>/node_modules/commondir/*
 <PROJECT_ROOT>/node_modules/compare-func/*
+<PROJECT_ROOT>/node_modules/compare-versions/*
 <PROJECT_ROOT>/node_modules/component-emitter/*
 <PROJECT_ROOT>/node_modules/concat-map/*
 <PROJECT_ROOT>/node_modules/concat-stream/*
-<PROJECT_ROOT>/node_modules/concurrify/*
 <PROJECT_ROOT>/node_modules/console-control-strings/*
-<PROJECT_ROOT>/node_modules/content-type-parser/*
 <PROJECT_ROOT>/node_modules/continuation-local-storage/*
 <PROJECT_ROOT>/node_modules/conventional-changelog/*
 <PROJECT_ROOT>/node_modules/conventional-changelog-angular/*
@@ -232,6 +220,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/copy-descriptor/*
 <PROJECT_ROOT>/node_modules/core-js/*
 <PROJECT_ROOT>/node_modules/core-util-is/*
+<PROJECT_ROOT>/node_modules/cosmiconfig/*
 <PROJECT_ROOT>/node_modules/create-error-class/*
 <PROJECT_ROOT>/node_modules/cron/*
 <PROJECT_ROOT>/node_modules/cross-env/*
@@ -245,7 +234,8 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/currently-unhandled/*
 <PROJECT_ROOT>/node_modules/dargs/*
 <PROJECT_ROOT>/node_modules/dashdash/*
-<PROJECT_ROOT>/node_modules/date-time/*
+<PROJECT_ROOT>/node_modules/data-urls/*
+<PROJECT_ROOT>/node_modules/date-fns/*
 <PROJECT_ROOT>/node_modules/dateformat/*
 <PROJECT_ROOT>/node_modules/debug/*
 <PROJECT_ROOT>/node_modules/decamelize/*
@@ -253,6 +243,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/decode-uri-component/*
 <PROJECT_ROOT>/node_modules/decompress-response/*
 <PROJECT_ROOT>/node_modules/dedent/*
+<PROJECT_ROOT>/node_modules/deep-equal-ident/*
 <PROJECT_ROOT>/node_modules/deep-extend/*
 <PROJECT_ROOT>/node_modules/deep-is/*
 <PROJECT_ROOT>/node_modules/deep-metrics/*
@@ -263,7 +254,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/del/*
 <PROJECT_ROOT>/node_modules/delayed-stream/*
 <PROJECT_ROOT>/node_modules/delegates/*
-<PROJECT_ROOT>/node_modules/denque/*
 <PROJECT_ROOT>/node_modules/detect-indent/*
 <PROJECT_ROOT>/node_modules/detect-libc/*
 <PROJECT_ROOT>/node_modules/detect-newline/*
@@ -282,10 +272,15 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/duplexer3/*
 <PROJECT_ROOT>/node_modules/ecc-jsbn/*
 <PROJECT_ROOT>/node_modules/electron-to-chromium/*
+<PROJECT_ROOT>/node_modules/elegant-spinner/*
 <PROJECT_ROOT>/node_modules/emitter-listener/*
 <PROJECT_ROOT>/node_modules/encoding/*
 <PROJECT_ROOT>/node_modules/entities/*
 <PROJECT_ROOT>/node_modules/enzyme/*
+<PROJECT_ROOT>/node_modules/enzyme-adapter-react-16/*
+<PROJECT_ROOT>/node_modules/enzyme-adapter-utils/*
+<PROJECT_ROOT>/node_modules/enzyme-matchers/*
+<PROJECT_ROOT>/node_modules/enzyme-to-json/*
 <PROJECT_ROOT>/node_modules/error-ex/*
 <PROJECT_ROOT>/node_modules/es-abstract/*
 <PROJECT_ROOT>/node_modules/es-to-primitive/*
@@ -307,9 +302,11 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/estraverse/*
 <PROJECT_ROOT>/node_modules/estree-walker/*
 <PROJECT_ROOT>/node_modules/esutils/*
+<PROJECT_ROOT>/node_modules/eventemitter2/*
 <PROJECT_ROOT>/node_modules/exec-sh/*
 <PROJECT_ROOT>/node_modules/execa/*
 <PROJECT_ROOT>/node_modules/exit/*
+<PROJECT_ROOT>/node_modules/exit-hook/*
 <PROJECT_ROOT>/node_modules/expand-brackets/*
 <PROJECT_ROOT>/node_modules/expand-range/*
 <PROJECT_ROOT>/node_modules/expect/*
@@ -330,6 +327,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/fileset/*
 <PROJECT_ROOT>/node_modules/fill-range/*
 <PROJECT_ROOT>/node_modules/find-cache-dir/*
+<PROJECT_ROOT>/node_modules/find-parent-dir/*
 <PROJECT_ROOT>/node_modules/find-up/*
 <PROJECT_ROOT>/node_modules/flat-cache/*
 <PROJECT_ROOT>/node_modules/flow-bin/*
@@ -341,16 +339,18 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/forever-agent/*
 <PROJECT_ROOT>/node_modules/form-data/*
 <PROJECT_ROOT>/node_modules/fragment-cache/*
+<PROJECT_ROOT>/node_modules/fs-extra/*
+<PROJECT_ROOT>/node_modules/fs-minipass/*
 <PROJECT_ROOT>/node_modules/fs-readdir-recursive/*
 <PROJECT_ROOT>/node_modules/fs.realpath/*
 <PROJECT_ROOT>/node_modules/fsevents/*
 <PROJECT_ROOT>/node_modules/fstream/*
-<PROJECT_ROOT>/node_modules/fstream-ignore/*
 <PROJECT_ROOT>/node_modules/function-bind/*
 <PROJECT_ROOT>/node_modules/function.prototype.name/*
 <PROJECT_ROOT>/node_modules/functional-red-black-tree/*
 <PROJECT_ROOT>/node_modules/gauge/*
 <PROJECT_ROOT>/node_modules/get-caller-file/*
+<PROJECT_ROOT>/node_modules/get-own-enumerable-property-symbols/*
 <PROJECT_ROOT>/node_modules/get-pkg-repo/*
 <PROJECT_ROOT>/node_modules/get-port/*
 <PROJECT_ROOT>/node_modules/get-stdin/*
@@ -391,8 +391,11 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/html-encoding-sniffer/*
 <PROJECT_ROOT>/node_modules/htmlparser2/*
 <PROJECT_ROOT>/node_modules/http-signature/*
+<PROJECT_ROOT>/node_modules/husky/*
 <PROJECT_ROOT>/node_modules/iconv-lite/*
 <PROJECT_ROOT>/node_modules/ignore/*
+<PROJECT_ROOT>/node_modules/ignore-walk/*
+<PROJECT_ROOT>/node_modules/immutable/*
 <PROJECT_ROOT>/node_modules/import-local/*
 <PROJECT_ROOT>/node_modules/imurmurhash/*
 <PROJECT_ROOT>/node_modules/indent-string/*
@@ -400,10 +403,9 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/inherits/*
 <PROJECT_ROOT>/node_modules/ini/*
 <PROJECT_ROOT>/node_modules/inquirer/*
-<PROJECT_ROOT>/node_modules/inspect-f/*
 <PROJECT_ROOT>/node_modules/interpret/*
+<PROJECT_ROOT>/node_modules/invariant/*
 <PROJECT_ROOT>/node_modules/invert-kv/*
-<PROJECT_ROOT>/node_modules/irregular-plurals/*
 <PROJECT_ROOT>/node_modules/is/*
 <PROJECT_ROOT>/node_modules/is-accessor-descriptor/*
 <PROJECT_ROOT>/node_modules/is-arrayish/*
@@ -416,6 +418,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/is-data-descriptor/*
 <PROJECT_ROOT>/node_modules/is-date-object/*
 <PROJECT_ROOT>/node_modules/is-descriptor/*
+<PROJECT_ROOT>/node_modules/is-directory/*
 <PROJECT_ROOT>/node_modules/is-dotfile/*
 <PROJECT_ROOT>/node_modules/is-equal-shallow/*
 <PROJECT_ROOT>/node_modules/is-extendable/*
@@ -429,6 +432,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/is-number-object/*
 <PROJECT_ROOT>/node_modules/is-obj/*
 <PROJECT_ROOT>/node_modules/is-object/*
+<PROJECT_ROOT>/node_modules/is-observable/*
 <PROJECT_ROOT>/node_modules/is-odd/*
 <PROJECT_ROOT>/node_modules/is-path-cwd/*
 <PROJECT_ROOT>/node_modules/is-path-in-cwd/*
@@ -439,8 +443,8 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/is-primitive/*
 <PROJECT_ROOT>/node_modules/is-promise/*
 <PROJECT_ROOT>/node_modules/is-redirect/*
-<PROJECT_ROOT>/node_modules/is-reference/*
 <PROJECT_ROOT>/node_modules/is-regex/*
+<PROJECT_ROOT>/node_modules/is-regexp/*
 <PROJECT_ROOT>/node_modules/is-resolvable/*
 <PROJECT_ROOT>/node_modules/is-retry-allowed/*
 <PROJECT_ROOT>/node_modules/is-stream/*
@@ -464,13 +468,16 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/istanbul-lib-source-maps/*
 <PROJECT_ROOT>/node_modules/istanbul-reports/*
 <PROJECT_ROOT>/node_modules/isurl/*
+<PROJECT_ROOT>/node_modules/jest/*
 <PROJECT_ROOT>/node_modules/jest-changed-files/*
 <PROJECT_ROOT>/node_modules/jest-cli/*
 <PROJECT_ROOT>/node_modules/jest-config/*
 <PROJECT_ROOT>/node_modules/jest-diff/*
 <PROJECT_ROOT>/node_modules/jest-docblock/*
+<PROJECT_ROOT>/node_modules/jest-environment-enzyme/*
 <PROJECT_ROOT>/node_modules/jest-environment-jsdom/*
 <PROJECT_ROOT>/node_modules/jest-environment-node/*
+<PROJECT_ROOT>/node_modules/jest-enzyme/*
 <PROJECT_ROOT>/node_modules/jest-get-type/*
 <PROJECT_ROOT>/node_modules/jest-haste-map/*
 <PROJECT_ROOT>/node_modules/jest-jasmine2/*
@@ -492,6 +499,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/js-yaml/*
 <PROJECT_ROOT>/node_modules/jsbn/*
 <PROJECT_ROOT>/node_modules/jsdom/*
+<PROJECT_ROOT>/node_modules/jsdom-global/*
 <PROJECT_ROOT>/node_modules/jsesc/*
 <PROJECT_ROOT>/node_modules/json-parse-better-errors/*
 <PROJECT_ROOT>/node_modules/json-schema/*
@@ -514,27 +522,35 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/lerna/*
 <PROJECT_ROOT>/node_modules/leven/*
 <PROJECT_ROOT>/node_modules/levn/*
+<PROJECT_ROOT>/node_modules/lint-staged/*
 <PROJECT_ROOT>/node_modules/listenercount/*
+<PROJECT_ROOT>/node_modules/listr/*
+<PROJECT_ROOT>/node_modules/listr-silent-renderer/*
+<PROJECT_ROOT>/node_modules/listr-update-renderer/*
+<PROJECT_ROOT>/node_modules/listr-verbose-renderer/*
 <PROJECT_ROOT>/node_modules/load-json-file/*
-<PROJECT_ROOT>/node_modules/locate-character/*
 <PROJECT_ROOT>/node_modules/locate-path/*
 <PROJECT_ROOT>/node_modules/lodash/*
-<PROJECT_ROOT>/node_modules/lodash-es/*
+<PROJECT_ROOT>/node_modules/lodash._baseisequal/*
+<PROJECT_ROOT>/node_modules/lodash._bindcallback/*
+<PROJECT_ROOT>/node_modules/lodash._getnative/*
 <PROJECT_ROOT>/node_modules/lodash._reinterpolate/*
 <PROJECT_ROOT>/node_modules/lodash.assign/*
-<PROJECT_ROOT>/node_modules/lodash.endswith/*
 <PROJECT_ROOT>/node_modules/lodash.findindex/*
 <PROJECT_ROOT>/node_modules/lodash.flattendeep/*
+<PROJECT_ROOT>/node_modules/lodash.isarguments/*
+<PROJECT_ROOT>/node_modules/lodash.isarray/*
 <PROJECT_ROOT>/node_modules/lodash.isequal/*
-<PROJECT_ROOT>/node_modules/lodash.isfunction/*
-<PROJECT_ROOT>/node_modules/lodash.isstring/*
+<PROJECT_ROOT>/node_modules/lodash.istypedarray/*
+<PROJECT_ROOT>/node_modules/lodash.keys/*
 <PROJECT_ROOT>/node_modules/lodash.memoize/*
 <PROJECT_ROOT>/node_modules/lodash.merge/*
 <PROJECT_ROOT>/node_modules/lodash.sortby/*
-<PROJECT_ROOT>/node_modules/lodash.startswith/*
 <PROJECT_ROOT>/node_modules/lodash.template/*
 <PROJECT_ROOT>/node_modules/lodash.templatesettings/*
 <PROJECT_ROOT>/node_modules/lodash.unescape/*
+<PROJECT_ROOT>/node_modules/log-symbols/*
+<PROJECT_ROOT>/node_modules/log-update/*
 <PROJECT_ROOT>/node_modules/loglevel/*
 <PROJECT_ROOT>/node_modules/loglevel-colored-level-prefix/*
 <PROJECT_ROOT>/node_modules/longest/*
@@ -542,7 +558,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/loud-rejection/*
 <PROJECT_ROOT>/node_modules/lowercase-keys/*
 <PROJECT_ROOT>/node_modules/lru-cache/*
-<PROJECT_ROOT>/node_modules/magic-string/*
 <PROJECT_ROOT>/node_modules/make-dir/*
 <PROJECT_ROOT>/node_modules/make-plural/*
 <PROJECT_ROOT>/node_modules/makeerror/*
@@ -566,11 +581,14 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/minimatch/*
 <PROJECT_ROOT>/node_modules/minimist/*
 <PROJECT_ROOT>/node_modules/minimist-options/*
+<PROJECT_ROOT>/node_modules/minipass/*
+<PROJECT_ROOT>/node_modules/minizlib/*
 <PROJECT_ROOT>/node_modules/mixin-deep/*
 <PROJECT_ROOT>/node_modules/mkdirp/*
 <PROJECT_ROOT>/node_modules/modify-values/*
 <PROJECT_ROOT>/node_modules/moment/*
 <PROJECT_ROOT>/node_modules/moment-timezone/*
+<PROJECT_ROOT>/node_modules/most/*
 <PROJECT_ROOT>/node_modules/ms/*
 <PROJECT_ROOT>/node_modules/mute-stream/*
 <PROJECT_ROOT>/node_modules/nan/*
@@ -587,7 +605,11 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/nopt/*
 <PROJECT_ROOT>/node_modules/normalize-package-data/*
 <PROJECT_ROOT>/node_modules/normalize-path/*
+<PROJECT_ROOT>/node_modules/npm-bundled/*
+<PROJECT_ROOT>/node_modules/npm-packlist/*
+<PROJECT_ROOT>/node_modules/npm-path/*
 <PROJECT_ROOT>/node_modules/npm-run-path/*
+<PROJECT_ROOT>/node_modules/npm-which/*
 <PROJECT_ROOT>/node_modules/npmlog/*
 <PROJECT_ROOT>/node_modules/nssocket/*
 <PROJECT_ROOT>/node_modules/nth-check/*
@@ -610,6 +632,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/onetime/*
 <PROJECT_ROOT>/node_modules/optimist/*
 <PROJECT_ROOT>/node_modules/optionator/*
+<PROJECT_ROOT>/node_modules/ora/*
 <PROJECT_ROOT>/node_modules/os-homedir/*
 <PROJECT_ROOT>/node_modules/os-locale/*
 <PROJECT_ROOT>/node_modules/os-tmpdir/*
@@ -619,13 +642,13 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/p-finally/*
 <PROJECT_ROOT>/node_modules/p-limit/*
 <PROJECT_ROOT>/node_modules/p-locate/*
+<PROJECT_ROOT>/node_modules/p-map/*
 <PROJECT_ROOT>/node_modules/p-timeout/*
 <PROJECT_ROOT>/node_modules/p-try/*
 <PROJECT_ROOT>/node_modules/package-json/*
 <PROJECT_ROOT>/node_modules/parse-github-repo-url/*
 <PROJECT_ROOT>/node_modules/parse-glob/*
 <PROJECT_ROOT>/node_modules/parse-json/*
-<PROJECT_ROOT>/node_modules/parse-ms/*
 <PROJECT_ROOT>/node_modules/parse-passwd/*
 <PROJECT_ROOT>/node_modules/parse5/*
 <PROJECT_ROOT>/node_modules/pascalcase/*
@@ -636,6 +659,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/path-key/*
 <PROJECT_ROOT>/node_modules/path-parse/*
 <PROJECT_ROOT>/node_modules/path-type/*
+<PROJECT_ROOT>/node_modules/penv.macro/*
 <PROJECT_ROOT>/node_modules/performance-now/*
 <PROJECT_ROOT>/node_modules/pidusage/*
 <PROJECT_ROOT>/node_modules/pify/*
@@ -643,7 +667,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/pinkie-promise/*
 <PROJECT_ROOT>/node_modules/pirates/*
 <PROJECT_ROOT>/node_modules/pkg-dir/*
-<PROJECT_ROOT>/node_modules/plur/*
 <PROJECT_ROOT>/node_modules/pluralize/*
 <PROJECT_ROOT>/node_modules/pm2/*
 <PROJECT_ROOT>/node_modules/pm2-axon/*
@@ -660,7 +683,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/prettier-eslint/*
 <PROJECT_ROOT>/node_modules/prettier-eslint-cli/*
 <PROJECT_ROOT>/node_modules/pretty-format/*
-<PROJECT_ROOT>/node_modules/pretty-ms/*
+<PROJECT_ROOT>/node_modules/preval.macro/*
 <PROJECT_ROOT>/node_modules/private/*
 <PROJECT_ROOT>/node_modules/process-nextick-args/*
 <PROJECT_ROOT>/node_modules/progress/*
@@ -672,11 +695,16 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/q/*
 <PROJECT_ROOT>/node_modules/qs/*
 <PROJECT_ROOT>/node_modules/quick-lru/*
+<PROJECT_ROOT>/node_modules/raf/*
 <PROJECT_ROOT>/node_modules/railroad-diagrams/*
 <PROJECT_ROOT>/node_modules/randexp/*
 <PROJECT_ROOT>/node_modules/randomatic/*
+<PROJECT_ROOT>/node_modules/raw.macro/*
 <PROJECT_ROOT>/node_modules/rc/*
+<PROJECT_ROOT>/node_modules/react/*
+<PROJECT_ROOT>/node_modules/react-dom/*
 <PROJECT_ROOT>/node_modules/react-is/*
+<PROJECT_ROOT>/node_modules/react-reconciler/*
 <PROJECT_ROOT>/node_modules/react-test-renderer/*
 <PROJECT_ROOT>/node_modules/read/*
 <PROJECT_ROOT>/node_modules/read-cmd-shim/*
@@ -687,6 +715,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/realpath-native/*
 <PROJECT_ROOT>/node_modules/rechoir/*
 <PROJECT_ROOT>/node_modules/redent/*
+<PROJECT_ROOT>/node_modules/redux/*
 <PROJECT_ROOT>/node_modules/redux-act/*
 <PROJECT_ROOT>/node_modules/regenerate/*
 <PROJECT_ROOT>/node_modules/regenerate-unicode-properties/*
@@ -708,6 +737,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/request-promise-core/*
 <PROJECT_ROOT>/node_modules/request-promise-native/*
 <PROJECT_ROOT>/node_modules/require-directory/*
+<PROJECT_ROOT>/node_modules/require-from-string/*
 <PROJECT_ROOT>/node_modules/require-main-filename/*
 <PROJECT_ROOT>/node_modules/require-relative/*
 <PROJECT_ROOT>/node_modules/require-uncached/*
@@ -722,9 +752,9 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/rimraf/*
 <PROJECT_ROOT>/node_modules/rollup/*
 <PROJECT_ROOT>/node_modules/rollup-plugin-babel/*
-<PROJECT_ROOT>/node_modules/rollup-plugin-cleanup/*
 <PROJECT_ROOT>/node_modules/rollup-plugin-node-resolve/*
 <PROJECT_ROOT>/node_modules/rollup-plugin-path-alias/*
+<PROJECT_ROOT>/node_modules/rollup-plugin-uglify/*
 <PROJECT_ROOT>/node_modules/rollup-pluginutils/*
 <PROJECT_ROOT>/node_modules/rst-selector-parser/*
 <PROJECT_ROOT>/node_modules/run-async/*
@@ -732,19 +762,19 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/rx-lite-aggregates/*
 <PROJECT_ROOT>/node_modules/rxjs/*
 <PROJECT_ROOT>/node_modules/safe-buffer/*
+<PROJECT_ROOT>/node_modules/safe-regex/*
 <PROJECT_ROOT>/node_modules/safer-buffer/*
-<PROJECT_ROOT>/node_modules/sanctuary-type-classes/*
-<PROJECT_ROOT>/node_modules/sanctuary-type-identifiers/*
 <PROJECT_ROOT>/node_modules/sane/*
 <PROJECT_ROOT>/node_modules/sax/*
+<PROJECT_ROOT>/node_modules/scope.macro/*
 <PROJECT_ROOT>/node_modules/semver/*
 <PROJECT_ROOT>/node_modules/set-blocking/*
-<PROJECT_ROOT>/node_modules/set-getter/*
 <PROJECT_ROOT>/node_modules/set-immediate-shim/*
 <PROJECT_ROOT>/node_modules/set-value/*
 <PROJECT_ROOT>/node_modules/setimmediate/*
 <PROJECT_ROOT>/node_modules/shebang-command/*
 <PROJECT_ROOT>/node_modules/shebang-regex/*
+<PROJECT_ROOT>/node_modules/shelljs/*
 <PROJECT_ROOT>/node_modules/shellwords/*
 <PROJECT_ROOT>/node_modules/shimmer/*
 <PROJECT_ROOT>/node_modules/signal-exit/*
@@ -759,8 +789,8 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/source-map-resolve/*
 <PROJECT_ROOT>/node_modules/source-map-support/*
 <PROJECT_ROOT>/node_modules/source-map-url/*
-<PROJECT_ROOT>/node_modules/sourcemap-codec/*
 <PROJECT_ROOT>/node_modules/spdx-correct/*
+<PROJECT_ROOT>/node_modules/spdx-exceptions/*
 <PROJECT_ROOT>/node_modules/spdx-expression-parse/*
 <PROJECT_ROOT>/node_modules/spdx-license-ids/*
 <PROJECT_ROOT>/node_modules/split/*
@@ -769,11 +799,14 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/sprintf-js/*
 <PROJECT_ROOT>/node_modules/sshpk/*
 <PROJECT_ROOT>/node_modules/stack-utils/*
+<PROJECT_ROOT>/node_modules/staged-git-files/*
 <PROJECT_ROOT>/node_modules/static-extend/*
 <PROJECT_ROOT>/node_modules/stealthy-require/*
+<PROJECT_ROOT>/node_modules/stream-to-observable/*
 <PROJECT_ROOT>/node_modules/string-length/*
 <PROJECT_ROOT>/node_modules/string-width/*
 <PROJECT_ROOT>/node_modules/string_decoder/*
+<PROJECT_ROOT>/node_modules/stringify-object/*
 <PROJECT_ROOT>/node_modules/stringstream/*
 <PROJECT_ROOT>/node_modules/strip-ansi/*
 <PROJECT_ROOT>/node_modules/strip-bom/*
@@ -782,10 +815,10 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/strip-json-comments/*
 <PROJECT_ROOT>/node_modules/strong-log-transformer/*
 <PROJECT_ROOT>/node_modules/supports-color/*
+<PROJECT_ROOT>/node_modules/symbol-observable/*
 <PROJECT_ROOT>/node_modules/symbol-tree/*
 <PROJECT_ROOT>/node_modules/table/*
 <PROJECT_ROOT>/node_modules/tar/*
-<PROJECT_ROOT>/node_modules/tar-pack/*
 <PROJECT_ROOT>/node_modules/temp-dir/*
 <PROJECT_ROOT>/node_modules/temp-write/*
 <PROJECT_ROOT>/node_modules/tempfile/*
@@ -795,7 +828,6 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/throat/*
 <PROJECT_ROOT>/node_modules/through/*
 <PROJECT_ROOT>/node_modules/through2/*
-<PROJECT_ROOT>/node_modules/time-zone/*
 <PROJECT_ROOT>/node_modules/timed-out/*
 <PROJECT_ROOT>/node_modules/tmp/*
 <PROJECT_ROOT>/node_modules/tmpl/*
@@ -817,11 +849,10 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/typescript/*
 <PROJECT_ROOT>/node_modules/typescript-eslint-parser/*
 <PROJECT_ROOT>/node_modules/ua-parser-js/*
+<PROJECT_ROOT>/node_modules/uglify-es/*
 <PROJECT_ROOT>/node_modules/uglify-js/*
 <PROJECT_ROOT>/node_modules/uglify-to-browserify/*
-<PROJECT_ROOT>/node_modules/uid-number/*
 <PROJECT_ROOT>/node_modules/underscore/*
-<PROJECT_ROOT>/node_modules/underscore.string/*
 <PROJECT_ROOT>/node_modules/unicode-canonical-property-names-ecmascript/*
 <PROJECT_ROOT>/node_modules/unicode-match-property-ecmascript/*
 <PROJECT_ROOT>/node_modules/unicode-match-property-value-ecmascript/*
@@ -832,6 +863,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/unzip-response/*
 <PROJECT_ROOT>/node_modules/unzipper/*
 <PROJECT_ROOT>/node_modules/upath/*
+<PROJECT_ROOT>/node_modules/uri-js/*
 <PROJECT_ROOT>/node_modules/urix/*
 <PROJECT_ROOT>/node_modules/url-parse-lax/*
 <PROJECT_ROOT>/node_modules/url-to-options/*
@@ -844,14 +876,16 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/validate-npm-package-license/*
 <PROJECT_ROOT>/node_modules/verror/*
 <PROJECT_ROOT>/node_modules/vizion/*
-<PROJECT_ROOT>/node_modules/vlq/*
 <PROJECT_ROOT>/node_modules/vxx/*
+<PROJECT_ROOT>/node_modules/w3c-hr-time/*
 <PROJECT_ROOT>/node_modules/walker/*
+<PROJECT_ROOT>/node_modules/warning/*
 <PROJECT_ROOT>/node_modules/watch/*
 <PROJECT_ROOT>/node_modules/wcwidth/*
 <PROJECT_ROOT>/node_modules/webidl-conversions/*
 <PROJECT_ROOT>/node_modules/whatwg-encoding/*
 <PROJECT_ROOT>/node_modules/whatwg-fetch/*
+<PROJECT_ROOT>/node_modules/whatwg-mimetype/*
 <PROJECT_ROOT>/node_modules/whatwg-url/*
 <PROJECT_ROOT>/node_modules/which/*
 <PROJECT_ROOT>/node_modules/which-module/*
@@ -864,6 +898,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/write-file-atomic/*
 <PROJECT_ROOT>/node_modules/write-json-file/*
 <PROJECT_ROOT>/node_modules/write-pkg/*
+<PROJECT_ROOT>/node_modules/ws/*
 <PROJECT_ROOT>/node_modules/xml-name-validator/*
 <PROJECT_ROOT>/node_modules/xtend/*
 <PROJECT_ROOT>/node_modules/y18n/*
@@ -884,6 +919,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/@babel/helper-function-name/*
 <PROJECT_ROOT>/node_modules/@babel/helper-get-function-arity/*
 <PROJECT_ROOT>/node_modules/@babel/helper-hoist-variables/*
+<PROJECT_ROOT>/node_modules/@babel/helper-member-expression-to-functions/*
 <PROJECT_ROOT>/node_modules/@babel/helper-module-imports/*
 <PROJECT_ROOT>/node_modules/@babel/helper-module-transforms/*
 <PROJECT_ROOT>/node_modules/@babel/helper-optimise-call-expression/*
@@ -900,16 +936,22 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-async-generator-functions/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-class-properties/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-decorators/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-proposal-export-namespace-from/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-proposal-nullish-coalescing-operator/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-object-rest-spread/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-optional-catch-binding/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-proposal-optional-chaining/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-proposal-unicode-property-regex/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-async-generators/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-class-properties/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-decorators/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-syntax-export-namespace-from/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-flow/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-jsx/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-syntax-nullish-coalescing-operator/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-object-rest-spread/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-syntax-optional-catch-binding/*
+<PROJECT_ROOT>/node_modules/@babel/plugin-syntax-optional-chaining/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-transform-arrow-functions/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-transform-async-to-generator/*
 <PROJECT_ROOT>/node_modules/@babel/plugin-transform-block-scoped-functions/*
@@ -950,10 +992,7 @@ module.name_mapper='^flow\@\(.*\)$' -> '<PROJECT_ROOT>/flow/\1'
 <PROJECT_ROOT>/node_modules/@babel/template/*
 <PROJECT_ROOT>/node_modules/@babel/traverse/*
 <PROJECT_ROOT>/node_modules/@babel/types/*
-<PROJECT_ROOT>/node_modules/@effector/builder/*
-<PROJECT_ROOT>/node_modules/@effector/store/*
 <PROJECT_ROOT>/node_modules/@most/multicast/*
 <PROJECT_ROOT>/node_modules/@most/prelude/*
-<PROJECT_ROOT>/node_modules/@types/acorn/*
 <PROJECT_ROOT>/node_modules/@types/estree/*
 <PROJECT_ROOT>/node_modules/@types/node/*
