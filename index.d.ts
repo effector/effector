@@ -33,7 +33,10 @@ export class Effect<Params, Done, Fail = Error> {
  };
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
- use(asyncFunction: (params: Params) => Promise<Done>): void;
+ use: {
+  (asyncFunction: (params: Params) => Promise<Done>): void;
+  getCurrent(): (params: Params) => Promise<Done>;
+ };
  watch(watcher: (payload: Params) => any): void;
  //map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
