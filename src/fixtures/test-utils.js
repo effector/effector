@@ -1,0 +1,11 @@
+//@flow
+
+import {promisify} from 'util'
+
+export const delay = promisify(setTimeout)
+export let spy: Function = (...args: any[]): any => {
+ throw new Error('jest should replace this with spy function')
+}
+beforeEach(() => {
+ spy = jest.fn()
+})
