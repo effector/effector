@@ -1,6 +1,6 @@
 //@flow
 
-import {effectFabric} from './effect'
+import {effectFabric} from './effectFabric'
 import type {Effect} from '../effector/index.h'
 
 export function createEffect<Payload, Done>(

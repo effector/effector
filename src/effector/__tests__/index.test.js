@@ -1,6 +1,6 @@
 //@flow
 
-import {createEvent} from '../event'
+import {createEvent} from 'effector/event'
 import {combine} from '../combine'
 import * as Type from '../index.h'
 import {createStore} from '../../store/createStore'

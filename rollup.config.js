@@ -32,6 +32,7 @@ const rollupPlugins = [
   pathMap: new Map([
    ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
    ['effector/event', resolvePath(__dirname, 'src', 'event')],
+   ['effector/store', resolvePath(__dirname, 'src', 'store')],
   ]),
   extensions: ['js'],
  }),
