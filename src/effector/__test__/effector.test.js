@@ -16,6 +16,14 @@ import * as Kind from '../../kind'
 
 import warning from 'warning'
 
+import {promisify} from 'util'
+
+const delay = promisify(setTimeout)
+let spy: Function
+beforeEach(() => {
+ spy = jest.fn()
+})
+
 test('will run in ecpected order', () => {
  const fn = jest.fn()
  const reset = createEvent('reset')
@@ -311,39 +319,43 @@ test('should handle return value', async() => {
  expect(fn).toHaveBeenCalledTimes(5)
 })
 
-test('effect.fail()', async() => {
- const fn = jest.fn(() => delay(500).then(() => Promise.reject('fail!')))
- const domain = createDomain()
- const store = domain.store({foo: 'bar'})
- const timeout = domain.effect('timeout')
- timeout.use(fn)
- expect(timeout('params').fail()).resolves.toMatch('fail!')
+test('effect({...}).fail()', () => {
+ const timeout = createEffect('timeout')
+ timeout.use(async params => {
+  await delay(500)
+  spy(params)
+  throw 'fail!'
+ })
+ expect(timeout('not ok').fail()).resolves.toMatchObject({
+  error: 'fail!',
+  params: 'not ok',
+ })
 })
 
-test('effect.promise()', async() => {
- function delay(time: number) {
-  return new Promise(rs => setTimeout(rs, time))
- }
- const fn = () =>
-  delay(500).then(() => {
+describe('effect({...}).promise()', () => {
+ const effect = createEffect('long request')
+ test('on success', () => {
+  effect.use(async params => {
+   await delay(500)
+   spy(params)
+   return 'done!'
+  })
+  expect(effect('ok').promise()).resolves.toMatchObject({
+   result: 'done!',
+   params: 'ok',
+  })
+ })
+
+ test('in case of async error', () => {
+  effect.use(async() => {
+   await delay(500)
    throw 'fail!'
   })
- const fn1 = () => delay(500).then(() => 'done!')
- const timeout = createEffect('timeout')
-
- //  timeout.use(fn)
- //  await timeout('params fail')
- //   .promise()
- //   .catch(err => {
- //    console.warn(err)
- //    expect(err).toBe('fail!')
- //   })
- timeout.use(fn1)
- await timeout('params done')
-  .promise()
-  .then(res => {
-   expect(res).toBe('done!')
+  expect(effect('will throw').promise()).rejects.toMatchObject({
+   error: 'fail',
+   params: 'will throw',
   })
+ })
 })
 
 test.skip('should handle watcher`s errors', async() => {
@@ -476,10 +488,6 @@ test('subscription', async() => {
  await eff('')
  expect(fn).toHaveBeenCalledTimes(2)
 })
-
-function delay(time: number) {
- return new Promise(rs => setTimeout(rs, time))
-}
 
 const log = (tags = ['']) => (e, ...data) => {
  const tagList: string[] = Array.isArray(tags) ? tags : [tags]
