@@ -14,6 +14,7 @@ import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
 import * as Cmd from '../effector/datatype/cmd'
+import * as Ctx from '../effector/datatype/context'
 import * as Step from '../effector/datatype/step'
 import {walkEvent} from '../effector/graphite/walk'
 
@@ -60,6 +61,10 @@ export function eventFabric<Payload>({
  instance.epic = epic
  instance.shortName = name
  instance.domainName = domainName
+ instance.filter = filter
+ function filter<Next>(fn: Payload => Next | void): Event<Next> {
+  return filterEvent(instanceAsEvent, fn)
+ }
 
  function map<Next>(fn: Payload => Next): Event<Next> {
   return mapEvent(instanceAsEvent, fn)
@@ -158,6 +163,33 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   }),
  )
  const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
+ event.graphite.next.data.add(nextSeq)
+ return mapped
+}
+
+function filterEvent<A, B>(
+ event: Event<A> | Effect<A, any, any>,
+ fn: A => B | void,
+): Event<B> {
+ const mapped = eventFabric({
+  name: `${event.shortName} →? *`,
+  domainName: event.domainName,
+ })
+ const computeCmd = Step.single(
+  Cmd.compute({
+   reduce(_, newValue: A, ctx) {
+    return fn(newValue)
+   },
+  }),
+ )
+ const filterCmd = Step.single(
+  Cmd.filter({
+   filter(result, ctx: Ctx.EmitContext) {
+    return result !== undefined
+   },
+  }),
+ )
+ const nextSeq = Step.seq([computeCmd, filterCmd, ...mapped.graphite.seq.data])
  event.graphite.next.data.add(nextSeq)
  return mapped
 }
