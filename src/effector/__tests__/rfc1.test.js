@@ -3,8 +3,9 @@ import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 import invariant from 'invariant'
 import {from} from 'most'
-import {createEvent, createEffect, createStore, createStoreObject} from '..'
-import type {Event, Effect, Store} from '../index.h'
+import {createStore, createStoreObject} from 'effector/store'
+import {createEvent, type Event} from 'effector/event'
+import {createEffect} from 'effector/effect'
 
 import flags from '../../flags'
 

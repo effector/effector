@@ -40,8 +40,11 @@ export type Event<E> = {
  map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => E): Event<Before>,
  subscribe(subscriber: Subscriber<E>): Subscription,
- to(store: Store<E>, _: void): void,
- to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void,
+ //prettier-ignore
+ +to: (
+  & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => void)
+  & ((store: Store<E>, _: void) => void)
+ ),
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
@@ -67,8 +70,11 @@ export type Effect<Params, Done, Fail = Error> = {
  //map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>,
  subscribe(subscriber: Subscriber<Params>): Subscription,
- to(store: Store<Params>, _: void): void,
- to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void,
+ //prettier-ignore
+ +to: (
+  & ((store: Store<Params>, _: void) => void)
+  & (<T>(store: Store<T>, reducer: (state: T, payload: Params) => T) => void)
+ ),
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
@@ -88,12 +94,15 @@ export type Store<State> = {
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => State,
  ): Store<State>,
+ to<T>(store: Store<T>, reducer: (state: T, payload: State) => T): void,
  subscribe(listner: any): Subscription,
+ thru<U>(fn: (store: Store<State>) => U): U,
  watch<E>(watcher: (state: State, payload: E, type: string) => any): void,
  graphite: {
   next: MultiStep,
   seq: SeqStep,
  },
+ displayName?: string,
 }
 
 export type Domain = {
