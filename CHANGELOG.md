@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.17.4
+
+* **effector-react**: Add check for mounting of store consumer
+* Add `effect.use.getCurrent()` method to get current used function
+* Improve type inference in flow typing for `createStoreObject`
+* Improve public ts and flow typings
+
 ## 0.17.3
 
 * Fix effector-react typings

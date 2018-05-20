@@ -16,6 +16,8 @@ yarn add effector effector-react
 
 ## Usage
 
+[![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43)
+
 ```js
 import {
  createStore,

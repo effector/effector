@@ -5,8 +5,10 @@ import * as Name from './type'
 import type {Atom} from '../../atom'
 
 class Cmd {
- /*:: type: any;*/
- /*::+*/ data: any
+ /*::
+ type: any;
+ +data: any;
+ */
  constructor(data: any) {
   this.data = data
  }
@@ -18,30 +20,11 @@ class Emit extends Cmd {}
 class Filter extends Cmd {}
 class Update extends Cmd {}
 
-Object.defineProperty(Compute.prototype, 'type', {
- value: Name.COMPUTE,
- configurable: true,
-})
-
-Object.defineProperty(Run.prototype, 'type', {
- value: Name.RUN,
- configurable: true,
-})
-
-Object.defineProperty(Emit.prototype, 'type', {
- value: Name.EMIT,
- configurable: true,
-})
-
-Object.defineProperty(Filter.prototype, 'type', {
- value: Name.FILTER,
- configurable: true,
-})
-
-Object.defineProperty(Update.prototype, 'type', {
- value: Name.UPDATE,
- configurable: true,
-})
+Compute.prototype.type = Name.COMPUTE
+Run.prototype.type = Name.RUN
+Emit.prototype.type = Name.EMIT
+Filter.prototype.type = Name.FILTER
+Update.prototype.type = Name.UPDATE
 
 export function compute(data: {
  reduce(oldValue: any, newValue: any, ctx: any): any,

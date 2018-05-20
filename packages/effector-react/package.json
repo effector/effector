@@ -9,9 +9,10 @@
  "author": "Zero Bias",
  "license": "MIT",
  "devDependencies": {},
- "dependencies": {},
+ "dependencies": {
+  "effector": "*"
+ },
  "peerDependencies": {
-  "effector": "*",
   "react": "*"
  },
  "maintainers": [
@@ -27,6 +28,7 @@
  "sideEffects": false,
  "files": [
   "README.md",
+  "LICENSE",
   "effector-react.es.js",
   "effector-react.cjs.js",
   "effector-react.es.js.map",
@@ -39,5 +41,20 @@
  "repository": "https://github.com/zerobias/effector",
  "engines": {
   "node": ">=6.0.0"
- }
+ },
+ "bugs": "https://github.com/zerobias/effector/issues",
+ "keywords": [
+  "data",
+  "datastructure",
+  "functional",
+  "collection",
+  "state",
+  "store",
+  "reactive",
+  "streams",
+  "actions",
+  "effects",
+  "redux",
+  "react"
+ ]
 }

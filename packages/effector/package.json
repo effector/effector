@@ -28,6 +28,7 @@
  "sideEffects": false,
  "files": [
   "README.md",
+  "LICENSE",
   "effector.es.js",
   "effector.cjs.js",
   "effector.es.js.map",
@@ -40,5 +41,19 @@
  "repository": "https://github.com/zerobias/effector",
  "engines": {
   "node": ">=6.0.0"
- }
+ },
+ "bugs": "https://github.com/zerobias/effector/issues",
+ "keywords": [
+  "data",
+  "datastructure",
+  "functional",
+  "collection",
+  "state",
+  "store",
+  "reactive",
+  "streams",
+  "actions",
+  "effects",
+  "redux"
+ ]
 }

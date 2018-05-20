@@ -33,6 +33,7 @@ export function effectFabric<Payload, Done>({
  // instanceAsEvent.step.data.delete(instanceAsEvent.cmd)
  instance.done = done
  instance.fail = fail
+ use.getCurrent = getCurrent
  instance.use = use
  setProperty('create', create, instance)
  setProperty('kind', Kind.EFFECT, instance)
@@ -43,6 +44,9 @@ export function effectFabric<Payload, Done>({
  }
  function use(fn) {
   thunk = fn
+ }
+ function getCurrent() {
+  return thunk
  }
  function create(payload: Payload) {
   const throwSymbol = {}

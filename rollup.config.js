@@ -4,7 +4,10 @@ import alias from './rollup-alias'
 import uglify from 'rollup-plugin-uglify'
 
 import {resolve as resolvePath} from 'path'
+import {readPackageList, writePackages} from './scripts/monorepoTools'
 
+const packages = readPackageList()
+writePackages(packages)
 const {plugins, presets} = require('./.babelrc.js')
 
 const staticPlugins = [
@@ -42,43 +45,25 @@ const rollupPlugins = [
  ...staticPlugins,
 ]
 
-export default [
- {
-  input: 'src/index.js',
+function createBuild(name) {
+ return {
+  input: resolvePath(__dirname, 'packages', name, 'index.js'),
+  plugins: rollupPlugins,
   output: [
    {
-    file: resolvePath(__dirname, 'npm/effector/effector.es.js'),
+    file: resolvePath(__dirname, 'npm', name, `${name}.es.js`),
     format: 'es',
-    name: 'effector',
+    name,
     sourcemap: true,
    },
    {
-    file: resolvePath(__dirname, 'npm/effector/effector.cjs.js'),
+    file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
     format: 'cjs',
-    name: 'effector',
+    name,
     sourcemap: true,
    },
   ],
+ }
+}
 
-  plugins: rollupPlugins,
- },
- {
-  input: 'src/react/index.js',
-  output: [
-   {
-    file: resolvePath(__dirname, 'npm/react/effector-react.es.js'),
-    format: 'es',
-    name: 'effector-react',
-    sourcemap: true,
-   },
-   {
-    file: resolvePath(__dirname, 'npm/react/effector-react.cjs.js'),
-    format: 'cjs',
-    name: 'effector-react',
-    sourcemap: true,
-   },
-  ],
-
-  plugins: rollupPlugins,
- },
-]
+export default packages.map(createBuild)

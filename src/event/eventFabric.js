@@ -3,7 +3,13 @@
 // import invariant from 'invariant'
 import $$observable from 'symbol-observable'
 import {from, type Stream} from 'most'
-import type {Event, Effect, GraphiteMeta} from '../effector/index.h'
+import type {
+ Event,
+ Effect,
+ Store,
+ GraphiteMeta,
+ Subscription,
+} from '../effector/index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
@@ -68,7 +74,10 @@ export function eventFabric<Payload>({
   })
   return mapped
  }
- function to(target, handler?: Function) {
+ function to(
+  target: Store<any> & Event<any> & Effect<any, any, any>,
+  handler?: Function,
+ ): Subscription {
   switch (Kind.readKind(target)) {
    case Kind.STORE:
     return watch(payload => target.setState(payload, handler))
@@ -85,7 +94,9 @@ export function eventFabric<Payload>({
   walkEvent(payload, instanceAsEvent)
   return payload
  }
- function watch(watcher: (payload: Payload, type: string) => any) {
+ function watch(
+  watcher: (payload: Payload, type: string) => any,
+ ): Subscription {
   const runCmd = Step.single(
    Cmd.run({
     runner(newValue: Payload) {
@@ -94,20 +105,17 @@ export function eventFabric<Payload>({
    }),
   )
   instanceAsEvent.graphite.next.data.add(runCmd)
-  return () => {
+  const unsubscribe = () => {
    instanceAsEvent.graphite.next.data.delete(runCmd)
   }
+  unsubscribe.unsubscribe = () => {
+   instanceAsEvent.graphite.next.data.delete(runCmd)
+  }
+  return unsubscribe
  }
 
- function subscribe(observer) {
-  const unsub = watch(payload => observer.next(payload))
-  function unsubscribe() {
-   unsub()
-  }
-
-  unsubscribe.unsubscribe = unsubscribe
-
-  return unsubscribe
+ function subscribe(observer): Subscription {
+  return watch(payload => observer.next(payload))
  }
  function prepend<Before>(fn: Before => Payload) {
   const contramapped: Event<Before> = eventFabric({
