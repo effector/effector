@@ -14,12 +14,13 @@ export type Subscription = {
 
 export class Event<E> {
  (payload: E): E;
- watch(watcher: (payload: E) => any): void;
+ watch(watcher: (payload: E) => any): Subscription;
  map<T>(fn: (_: E) => T): Event<T>;
  prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
- to(store: Store<E>, _: void): void;
- to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): void;
+ to(store: Store<E>, _: void): Subscription;
+ to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): Subscription;
+ getType(): string;
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
@@ -37,13 +38,14 @@ export class Effect<Params, Done, Fail = Error> {
   (asyncFunction: (params: Params) => Promise<Done>): void;
   getCurrent(): (params: Params) => Promise<Done>;
  };
- watch(watcher: (payload: Params) => any): void;
+ watch(watcher: (payload: Params) => any): Subscription;
  //map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
  subscribe(subscriber: Subscriber<Params>): Subscription;
- to(store: Store<Params>, _: void): void;
- to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): void;
+ to(store: Store<Params>, _: void): Subscription;
+ to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): Subscription;
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
+ getType(): string;
 }
 
 export class Store<State> {
@@ -56,21 +58,24 @@ export class Store<State> {
  map<T>(fn: (_: State) => T): Store<T>;
  on<E>(
   event: Event<E> | Effect<E, any, any>,
-  handler: (state: State, payload: E) => (State | void | null),
+  handler: (state: State, payload: E) => (State | void),
  ): this;
+ replaceReducer(_: any): any;
  subscribe(listner: any): Subscription;
  watch<E>(
   watcher: (state: State, payload: E, type: string) => any,
   _: void,
- ): void;
+ ): Subscription;
  watch<E>(
   event: Event<E> | Effect<E, any, any>,
   watcher: (state: State, payload: E, type: string) => any,
- ): void;
+ ): Subscription;
+ thru<U>(fn: (store: Store<State>) => U): U;
  epic<T, S>(
   event: Event<T> | Effect<T, any, any>,
   fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
  ): void;
+ displayName?: string;
 }
 
 export class Domain {

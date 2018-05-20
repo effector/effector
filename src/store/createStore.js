@@ -82,7 +82,8 @@ export function storeConstructor<State>(props: {
  function map<NextState>(
   fn: (state: State, lastState?: NextState) => NextState,
  ): Store<NextState> {
-  return mapStore(store, fn)
+  //prettier-ignore
+  return mapStore/*::<State, NextState>*/(store, fn)
  }
 
  function subscribe(listener) {
@@ -112,7 +113,11 @@ export function storeConstructor<State>(props: {
    store.graphite.next.data.delete(runCmd)
   }
   unsubscribe.unsubscribe = unsubscribe
-  return unsubscribe
+  //$off
+  return (unsubscribe: {
+   (): void,
+   unsubscribe(): void,
+  })
  }
 
  function dispatch(action) {
@@ -189,7 +194,7 @@ export function storeConstructor<State>(props: {
   return props => fn(getState(), props)
  }
 
- function to(action: Function, reduce) {
+ function to(action: any, reduce) {
   const needReduce = Kind.isStore(action) && typeof reduce === 'function'
   return watch(data => {
    if (!needReduce) {
