@@ -91,14 +91,17 @@ declare export function createEffect<Params, Done, Fail>(
 
 declare export function createStore<State>(defaultState: State): Store<State>
 
-type MapStoreFields = (<O: {[string]: any}>(
- _: O,
-) => $ObjMap<O, <S>(field: Store<S> | S) => S>) &
- (<O>(_: O) => O)
-
-declare export function createStoreObject<State>(
- defaultState: State,
-): Store<$Call<MapStoreFields, State>>
+declare export function createStoreObject<
+ State: {-[key: string]: Store<any> | any},
+>(
+ obj: State,
+): Store<
+ $ObjMap<
+  State,
+  //prettier-ignore
+  <S>(field: Store<S> | S) => S,
+ >,
+>
 
 declare export function createReduxStore<T>(
  reducer: (state: T, event: any) => T,
