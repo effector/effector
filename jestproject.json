@@ -1,0 +1,27 @@
+{
+ "tests": [
+  "effector",
+  "effect",
+  "event",
+  "store",
+  "kind",
+  "redux",
+  "graphite",
+  [
+   "react",
+   {
+    "testEnvironment": "jsdom"
+   }
+  ]
+ ],
+ "include": {
+  "effector": true,
+  "effect": true,
+  "event": true,
+  "store": true,
+  "kind": true,
+  "redux": false,
+  "graphite": false,
+  "react": true
+ }
+}
