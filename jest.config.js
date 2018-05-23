@@ -6,6 +6,8 @@ const projects = addProjects({
   'effect',
   'event',
   'store',
+  'kind',
+  'redux',
   [
    'react',
    {
@@ -18,6 +20,8 @@ const projects = addProjects({
   effect: true,
   event: true,
   store: true,
+  kind: true,
+  redux: false,
   react: true,
  },
 })
