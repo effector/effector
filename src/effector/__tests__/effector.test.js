@@ -2,16 +2,13 @@
 
 import {from, periodic} from 'most'
 
-import {
- createEvent,
- createStore,
- createStoreObject,
- createDomain,
- combine,
-} from '..'
-import type {Event, Effect, Store} from '../index.h'
+import {combine} from '..'
 
-import {delay, spy} from '../../fixtures/test-utils'
+import {createDomain} from 'effector/domain'
+import {createEvent} from 'effector/event'
+import {createStore, createStoreObject} from 'effector/store'
+
+import {delay, spy, getSpyCalls} from 'effector/fixtures/test-utils'
 
 describe('fixtures works correctly', () => {
  test('spy use', () => {
@@ -26,7 +23,6 @@ describe('fixtures works correctly', () => {
 })
 
 test('will run in expected order', () => {
- const fn = jest.fn()
  const reset = createEvent('reset')
  const add = createEvent('add')
  const mult = createEvent('mult')
@@ -44,16 +40,16 @@ test('will run in expected order', () => {
   .reset(reset)
  const selected = createStore([])
 
- const fullStore = createStoreObject({listSize, currentList, selected})
+ createStoreObject({listSize, currentList, selected})
 
- const unsub = currentList.subscribe(state => fn(state))
+ const unsub = currentList.subscribe(state => spy(state))
  add(5)
  mult(4)
  unsub()
  // halt()
 
- expect(fn.mock.calls).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
- expect(fn).toHaveBeenCalledTimes(3)
+ expect(getSpyCalls()).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
+ expect(spy).toHaveBeenCalledTimes(3)
 })
 
 test('reducer defaults', () => {
@@ -83,7 +79,6 @@ test('reducer defaults', () => {
 })
 
 test('store.reset(event)', () => {
- const fn = jest.fn()
  const reset = createEvent('reset')
  const inc = createEvent('inc')
  const listSize = createStore(3)
@@ -96,19 +91,18 @@ test('store.reset(event)', () => {
   .reset(reset)
  const selected = createStore([])
 
- const fullStore = createStoreObject({listSize, currentList, selected})
+ createStoreObject({listSize, currentList, selected})
 
- const unsub = currentList.subscribe(state => fn(state))
+ const unsub = currentList.subscribe(state => spy(state))
  inc()
  reset()
  unsub()
 
- expect(fn.mock.calls).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
- expect(fn).toHaveBeenCalledTimes(3)
+ expect(getSpyCalls()).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
+ expect(spy).toHaveBeenCalledTimes(3)
 })
 
 test('combine', () => {
- const fn = jest.fn()
  const inc = createEvent('inc')
  const dec = createEvent('dec')
  const s1 = createStore(0)
@@ -116,7 +110,7 @@ test('combine', () => {
  const s3 = createStore(0)
  const s4 = createStore(0)
  const result = combine(s1, s2, s3, s4, (a, b, c, d) => ({a, b, c, d}))
- result.watch(fn)
+ result.watch(spy)
  s1.on(inc, _ => _ + 1).on(dec, _ => _ - 10)
  s2.on(inc, _ => _ + 10).on(dec, _ => _ - 1)
 
@@ -125,9 +119,9 @@ test('combine', () => {
  inc()
  dec()
  expect(result.getState()).toMatchObject({a: -9, b: 9, c: 0, d: 0})
- console.log(result.getState(), fn.mock.calls)
+ console.log(result.getState(), getSpyCalls())
 
- expect(fn).toHaveBeenCalledTimes(3)
+ expect(spy).toHaveBeenCalledTimes(3)
  // expect(fn).toHaveBeenCalledTimes(5)
 })
 
@@ -159,11 +153,9 @@ test('no dull updates', () => {
 })
 
 test('smoke', async() => {
- const fn = jest.fn()
  const used = jest.fn(x => Promise.resolve(x))
  const usedDone = jest.fn(x => Promise.resolve(x))
  const domain = createDomain('smoke')
- const store = domain.store({foo: 'bar'})
 
  const effect = domain.effect('eff')
  effect.use(used)
@@ -181,11 +173,9 @@ test('smoke', async() => {
 
 describe('epic', () => {
  test('epic.done() should work', async() => {
-  const fn = jest.fn()
   const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
-  const store = domain.store({foo: 'bar'})
   const effect = domain.effect('eff')
   effect.use(used)
   effect.done.watch(usedDone)
@@ -197,12 +187,10 @@ describe('epic', () => {
  })
 
  test('epic.fail() should work', async() => {
-  const fn = jest.fn()
   const used = jest.fn(x => Promise.reject(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const usedFail = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
-  const store = domain.store({foo: 'bar'})
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -216,11 +204,9 @@ describe('epic', () => {
   expect(usedDone).not.toHaveBeenCalled()
  })
  test('sync effect.use', async() => {
-  const fn = jest.fn()
   const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
-  const store = domain.store({foo: 'bar'})
 
   const effect = domain.effect('eff')
   effect.use(used)
@@ -252,11 +238,9 @@ describe('epic', () => {
 //TODO Add port throws handling
 describe('port', () => {
  test('port should work correctly', async() => {
-  const fn = jest.fn()
   const used = jest.fn(state => console.log(state))
   const usedEff = jest.fn(state => console.log(state))
   const domain = createDomain()
-  const store = domain.store({foo: 'bar'})
   const event = domain.event('port-event')
   const eff = domain.event('port-effect')
   event.watch(used)
@@ -278,23 +262,21 @@ describe('port', () => {
 })
 
 test('should handle return value', async() => {
- const fn = jest.fn()
+
  const timeout = createEvent('timeout')
- timeout.watch(fn)
+ timeout.watch(spy)
 
  await periodic(300)
   .take(5)
   .observe(() => timeout())
 
- expect(fn).toHaveBeenCalledTimes(5)
+ expect(spy).toHaveBeenCalledTimes(5)
 })
 
 test('both return and send', async() => {
- const fn = jest.fn()
  const used = jest.fn(x => Promise.resolve(x))
  const usedDone = jest.fn(x => Promise.resolve(x))
  const domain = createDomain()
- const store = domain.store({foo: 'bar'})
 
  const effect = domain.effect('eff')
  effect.use(used)
@@ -337,11 +319,9 @@ test.skip('hot reload support', async() => {
 })
 
 test('only return', async() => {
- const fn = jest.fn()
  const used = jest.fn(x => Promise.resolve(x))
  const usedDone = jest.fn(x => Promise.resolve(x))
  const domain = createDomain()
- const store = domain.store({foo: 'bar'})
 
  const effect = domain.effect('eff')
  effect.use(used)
@@ -385,21 +365,19 @@ test('typeConstant', async() => {
 })
 */
 test('subscription', async() => {
- const fn = jest.fn()
  const domain = createDomain()
- const store = domain.store({foo: 'bar'})
 
  const eff = domain.effect('TYPE_CONST')
  expect(() => {
-  from(eff).observe(fn)
+  from(eff).observe(spy)
  }).not.toThrow()
  const event = domain.event('ev')
  expect(() => {
-  from(event).observe(fn)
+  from(event).observe(spy)
  }).not.toThrow()
  await event('')
  await eff('')
- expect(fn).toHaveBeenCalledTimes(2)
+ expect(spy).toHaveBeenCalledTimes(2)
 })
 
 const log = (tags = ['']) => (e, ...data) => {

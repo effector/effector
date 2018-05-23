@@ -116,12 +116,6 @@ declare export function createStoreObject<
  >,
 >
 
-declare export function createReduxStore<T>(
- reducer: (state: T, event: any) => T,
- preloadedState?: T,
- enhancer?: Function | Function[],
-): Store<T>
-
 declare export function createDomain(domainName?: string): Domain
 
 declare export function combine<R>(fn: () => R): Store<R>
