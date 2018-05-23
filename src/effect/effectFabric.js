@@ -2,11 +2,11 @@
 
 // import invariant from 'invariant'
 import warning from 'warning'
-import type {Event, Effect} from '../effector/index.h'
+import type {Effect} from './index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
-import {eventFabric} from 'effector/event'
+import {eventFabric, type Event} from 'effector/event'
 
 export function effectFabric<Payload, Done>({
  name,
