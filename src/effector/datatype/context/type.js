@@ -1,20 +1,20 @@
 //@flow
 
-export type RunContextType = 'context:run'
-export type EmitContextType = 'context:emit'
-export type ComputeContextType = 'context:compute'
-export type FilterContextType = 'context:filter'
-export type UpdateContextType = 'context:update'
+export type ComputeContextType = 21
+export type EmitContextType = 22
+export type RunContextType = 23
+export type FilterContextType = 24
+export type UpdateContextType = 25
 
 export type ContextType =
- | RunContextType
- | EmitContextType
  | ComputeContextType
+ | EmitContextType
+ | RunContextType
  | FilterContextType
  | UpdateContextType
 
-export const RUN: RunContextType = 'context:run'
-export const EMIT: EmitContextType = 'context:emit'
-export const COMPUTE: ComputeContextType = 'context:compute'
-export const FILTER: FilterContextType = 'context:filter'
-export const UPDATE: UpdateContextType = 'context:update'
+export const COMPUTE: ComputeContextType = 21
+export const EMIT: EmitContextType = 22
+export const RUN: RunContextType = 23
+export const FILTER: FilterContextType = 24
+export const UPDATE: UpdateContextType = 25
