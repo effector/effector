@@ -1,10 +1,9 @@
 //@flow
 // import invariant from 'invariant'
-import type {Event, SingleStepValidContext} from '../index.h'
+import type {SingleStepValidContext} from '../index.h'
 import * as Ctx from '../datatype/context'
 import * as Step from '../datatype/step'
 import * as Cmd from '../datatype/cmd'
-import type {Atom} from '../atom'
 
 function stepArg(ctx: SingleStepValidContext) {
  switch (ctx.type) {

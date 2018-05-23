@@ -1,6 +1,7 @@
 //@flow
 // import invariant from 'invariant'
-import type {Event, SingleStepValidContext} from '../index.h'
+import type {SingleStepValidContext} from '../index.h'
+import type {Event} from 'effector/event'
 import * as Ctx from '../datatype/context'
 import * as Step from '../datatype/step'
 import {singleStep} from './single-step'
@@ -26,7 +27,9 @@ function walkSeq(
  if (steps.data.length === 0) return
  let currentCtx: SingleStepValidContext = prev
  for (const step of steps.data) {
+  const isMulti = step.type === Step.MULTI
   const stepResult = walkStep(step, currentCtx, transactions)
+  if (isMulti) continue
   if (stepResult === undefined) return
   if (stepResult.type === Ctx.FILTER && !stepResult.data.isChanged) return
   currentCtx = stepResult
