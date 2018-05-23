@@ -9,13 +9,13 @@ class ContextClass<+Data> {
  +data: Data;
  +time: Time;
  */
- constructor(data: Data, time: Time) {
+ constructor(data: Data) {
   this.data = data
-  this.time = time
+  this.time = now()
  }
 }
 
-class ComputeContext extends ContextClass<{
+export class ComputeContext extends ContextClass<{
  +args: Array<any>,
  result: any,
  error: any,
@@ -27,16 +27,15 @@ class ComputeContext extends ContextClass<{
  +type: Type.ComputeContextType;
  */
 }
-class EmitContext extends ContextClass<{
+export class EmitContext extends ContextClass<{
  +payload: any,
- needToRun: boolean,
  +eventName: string,
 }> {
  /*::
  +type: Type.EmitContextType;
  */
 }
-class RunContext extends ContextClass<{
+export class RunContext extends ContextClass<{
  +args: Array<any>,
  +parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
 }> {
@@ -44,7 +43,7 @@ class RunContext extends ContextClass<{
  +type: Type.RunContextType;
  */
 }
-class FilterContext extends ContextClass<{
+export class FilterContext extends ContextClass<{
  +value: any,
  isChanged: boolean,
 }> {
@@ -52,7 +51,7 @@ class FilterContext extends ContextClass<{
  +type: Type.FilterContextType;
  */
 }
-class UpdateContext extends ContextClass<{
+export class UpdateContext extends ContextClass<{
  value: any,
 }> {
  /*::
@@ -66,81 +65,9 @@ class UpdateContext extends ContextClass<{
 ;(FilterContext.prototype: any).type = (Type.FILTER: Type.FilterContextType)
 ;(UpdateContext.prototype: any).type = (Type.UPDATE: Type.UpdateContextType)
 
-export type {
- ComputeContext,
- EmitContext,
- RunContext,
- FilterContext,
- UpdateContext,
-}
-
 export type Context =
  | ComputeContext
  | EmitContext
  | RunContext
  | FilterContext
  | UpdateContext
-
-export function filterContext(
- value: any,
- isChanged: boolean,
- time: Time = now(),
-): FilterContext {
- return new FilterContext(
-  {
-   value,
-   isChanged,
-  },
-  time,
- )
-}
-
-export function computeContext(
- args: Array<any>,
- time: Time = now(),
-): ComputeContext {
- return new ComputeContext(
-  {
-   args,
-   result: null,
-   error: null,
-   isError: false,
-   isNone: true,
-   isChanged: true,
-  },
-  time,
- )
-}
-
-export function updateContext(value: any, time: Time = now()): UpdateContext {
- return new UpdateContext({value}, time)
-}
-
-export function emitContext(
- payload: any,
- eventName: string,
- time: Time = now(),
-): EmitContext {
- return new EmitContext(
-  {
-   payload,
-   eventName,
-   needToRun: false,
-  },
-  time,
- )
-}
-
-export function runContext(
- args: Array<any>,
- parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
- time: Time = now(),
-): RunContext {
- return new RunContext(
-  {
-   args,
-   parentContext,
-  },
-  time,
- )
-}

@@ -31,7 +31,7 @@ export function eventFabric<Payload>({
  const name = nameRaw || id
  const fullName = makeName(name, domainName)
  const compositeName = createName(name, parent)
- const cmd: Cmd.Emit = Cmd.emit({
+ const cmd = new Cmd.Emit({
   subtype: 'event',
   fullName,
   runner: createGraphite,
@@ -120,7 +120,7 @@ export function eventFabric<Payload>({
   })
 
   const computeCmd = Step.single(
-   Cmd.compute({
+   new Cmd.Compute({
     reduce(_, newValue: Before, ctx) {
      return fn(newValue)
     },
@@ -147,7 +147,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   domainName: event.domainName,
  })
  const computeCmd = Step.single(
-  Cmd.compute({
+  new Cmd.Compute({
    reduce(_, newValue: A, ctx) {
     return fn(newValue)
    },
@@ -167,14 +167,14 @@ function filterEvent<A, B>(
   domainName: event.domainName,
  })
  const computeCmd = Step.single(
-  Cmd.compute({
+  new Cmd.Compute({
    reduce(_, newValue: A, ctx) {
     return fn(newValue)
    },
   }),
  )
  const filterCmd = Step.single(
-  Cmd.filter({
+  new Cmd.Filter({
    filter(result, ctx: Ctx.EmitContext) {
     return result !== undefined
    },
@@ -189,7 +189,7 @@ export function watchEvent<Payload>(
  watcher: (payload: Payload, type: string) => any,
 ): Subscription {
  const singleCmd = Step.single(
-  Cmd.run({
+  new Cmd.Run({
    runner(newValue: Payload) {
     return watcher(newValue, instanceAsEvent.getType())
    },

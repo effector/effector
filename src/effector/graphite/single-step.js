@@ -32,20 +32,15 @@ export function singleStep(
  if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
  switch (single.type) {
   case Cmd.EMIT: {
-   if (ctx.type === Ctx.EMIT) {
-    const rectx = ctx //((ctx: any): Ctx.EmitContext)
-    if (rectx.data.eventName === single.data.fullName && rectx.data.needToRun) {
-     rectx.data.needToRun = false
-     single.data.runner(arg)
-    }
-   }
-
-   return Ctx.emitContext(arg, single.data.fullName)
+   return new Ctx.EmitContext({
+    payload: arg,
+    eventName: single.data.fullName,
+   })
   }
   case Cmd.FILTER: {
    try {
     const isChanged = single.data.filter(arg, ctx)
-    return Ctx.filterContext(arg, isChanged)
+    return new Ctx.FilterContext({value: arg, isChanged})
    } catch (err) {
     console.error(err)
     return
@@ -59,15 +54,22 @@ export function singleStep(
    } catch (err) {
     console.error(err)
    }
-   return Ctx.runContext([arg], ctx)
+   return new Ctx.RunContext({args: [arg], parentContext: ctx})
   }
   case Cmd.UPDATE: {
-   const newCtx = Ctx.updateContext(arg)
+   const newCtx = new Ctx.UpdateContext({value: arg})
    single.data.store.set(arg)
    return newCtx
   }
   case Cmd.COMPUTE: {
-   const newCtx = Ctx.computeContext([undefined, arg, ctx])
+   const newCtx = new Ctx.ComputeContext({
+    args: [undefined, arg, ctx],
+    result: null,
+    error: null,
+    isError: false,
+    isNone: true,
+    isChanged: true,
+   })
    try {
     const result = single.data.reduce(undefined, arg, newCtx)
     newCtx.data.result = result

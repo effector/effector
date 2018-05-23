@@ -36,12 +36,12 @@ export function storeConstructor<State>(props: {
  const defaultState = currentState
 
  const plainState: Atom<typeof defaultState> = atom(defaultState)
- const shouldChange: Cmd.Filter = Cmd.filter({
+ const shouldChange = new Cmd.Filter({
   filter(newValue, ctx) {
    return newValue !== plainState.get() && newValue !== undefined
   },
  })
- const cmd: Cmd.Update = Cmd.update({
+ const cmd = new Cmd.Update({
   store: plainState,
  })
  const filterStep: Step.Single = Step.single(shouldChange)
@@ -94,7 +94,7 @@ export function storeConstructor<State>(props: {
   let lastCall = getState()
   let active = true
   const runCmd = Step.single(
-   Cmd.run({
+   new Cmd.Run({
     runner(args) {
      if (args === lastCall || !active) return
      lastCall = args
@@ -167,13 +167,13 @@ export function storeConstructor<State>(props: {
 
  function on(event: any, handler: Function) {
   const e: Event<any> = event
-  const computeCmd = Cmd.compute({
+  const computeCmd = new Cmd.Compute({
    reduce(_, newValue, ctx) {
     const lastState = getState()
     return handler(lastState, newValue, e.getType())
    },
   })
-  const filterCmd = Cmd.filter({
+  const filterCmd = new Cmd.Filter({
    filter(data, ctx: Ctx.ComputeContext) {
     // const oldValue = ctx.data.args[1]
     const lastState = getState()
@@ -256,7 +256,7 @@ function mapStore<A, B>(
  let lastResult = fn(lastValue)
  const innerStore: Store<any> = (createStore: any)(lastResult)
  const computeCmd = Step.single(
-  Cmd.compute({
+  new Cmd.Compute({
    reduce(_, newValue, ctx) {
     lastValue = newValue
     const lastState = innerStore.getState()
@@ -266,7 +266,7 @@ function mapStore<A, B>(
   }),
  )
  const filterCmdPost = Step.single(
-  Cmd.filter({
+  new Cmd.Filter({
    filter(result, ctx: Ctx.ComputeContext) {
     const lastState = innerStore.getState()
     const isChanged = result !== lastState && result !== undefined
