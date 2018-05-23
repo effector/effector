@@ -36,6 +36,7 @@ const rollupPlugins = [
    ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
    ['effector/event', resolvePath(__dirname, 'src', 'event')],
    ['effector/store', resolvePath(__dirname, 'src', 'store')],
+   ['effector/domain', resolvePath(__dirname, 'src', 'domain')],
   ]),
   extensions: ['js'],
  }),

@@ -27,4 +27,6 @@ test/storage.json
 
 npm/effector/**
 npm/effector-react/**
-
+effector-reason
+bsconfig.json
+.merlin

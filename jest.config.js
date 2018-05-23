@@ -20,7 +20,7 @@ function packageTest(displayName, opts = {}) {
  return Object.assign(
   {
    displayName,
-   testMatch: [`<rootDir>/src/${displayName}/__tests__/**/*.test.js`],
+   testMatch: [`<rootDir>/src/${displayName}/__tests__/**/*.(test|spec).js`],
    collectCoverage: true,
    automock: false,
    browser: false,
