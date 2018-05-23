@@ -1,10 +1,9 @@
 //@flow
 
 import {from} from 'most'
-import {createEvent} from '..'
-import type {Event, Effect, Store} from '../../effector/index.h'
+import {createEvent, type Event} from '..'
 
-import {getSpyCalls, spy} from '../../fixtures/test-utils'
+import {getSpyCalls, spy} from 'effector/fixtures/test-utils'
 import {show} from '../../effector/datatype/step/show'
 
 describe('symbol-observable support', () => {

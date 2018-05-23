@@ -1,6 +1,6 @@
 //@flow
 
-export {eventFabric} from './eventFabric'
+export {eventFabric, watchEvent} from './eventFabric'
 export {createEvent} from './createEvent'
 
-export type {Event} from '../effector/index.h'
+export type {Event} from './index.h'
