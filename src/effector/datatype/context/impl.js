@@ -1,45 +1,92 @@
 //@flow
 
-import type {
- RunContext,
- EmitContext,
- ComputeContext,
- FilterContext,
- UpdateContext,
-} from './index.h'
 import * as Type from './type'
 import {type Time, now} from '../../time'
 
-class Context {
+class ContextClass<+Data> {
  /*::
- type: any;
- +data: any;
+ +type: $Subtype<Type.ContextType>;
+ +data: Data;
  +time: Time;
  */
- constructor(data: any, time: Time) {
+ constructor(data: Data, time: Time) {
   this.data = data
   this.time = time
  }
 }
 
-class Compute extends Context {}
-class Emit extends Context {}
-class Run extends Context {}
-class Filter extends Context {}
-class Update extends Context {}
+class ComputeContext extends ContextClass<{
+ +args: Array<any>,
+ result: any,
+ error: any,
+ isError: boolean,
+ isNone: boolean,
+ isChanged: boolean,
+}> {
+ /*::
+ +type: Type.ComputeContextType;
+ */
+}
+class EmitContext extends ContextClass<{
+ +payload: any,
+ needToRun: boolean,
+ +eventName: string,
+}> {
+ /*::
+ +type: Type.EmitContextType;
+ */
+}
+class RunContext extends ContextClass<{
+ +args: Array<any>,
+ +parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
+}> {
+ /*::
+ +type: Type.RunContextType;
+ */
+}
+class FilterContext extends ContextClass<{
+ +value: any,
+ isChanged: boolean,
+}> {
+ /*::
+ +type: Type.FilterContextType;
+ */
+}
+class UpdateContext extends ContextClass<{
+ value: any,
+}> {
+ /*::
+ +type: Type.UpdateContextType;
+ */
+}
 
-Compute.prototype.type = Type.COMPUTE
-Emit.prototype.type = Type.EMIT
-Run.prototype.type = Type.RUN
-Filter.prototype.type = Type.FILTER
-Update.prototype.type = Type.UPDATE
+(ComputeContext.prototype: any).type = (Type.COMPUTE: Type.ComputeContextType)
+;(EmitContext.prototype: any).type = (Type.EMIT: Type.EmitContextType)
+;(RunContext.prototype: any).type = (Type.RUN: Type.RunContextType)
+;(FilterContext.prototype: any).type = (Type.FILTER: Type.FilterContextType)
+;(UpdateContext.prototype: any).type = (Type.UPDATE: Type.UpdateContextType)
+
+export type {
+ ComputeContext,
+ EmitContext,
+ RunContext,
+ FilterContext,
+ UpdateContext,
+}
+
+export type Context =
+ | ComputeContext
+ | EmitContext
+ | RunContext
+ | FilterContext
+ | UpdateContext
 
 export function filterContext(
  value: any,
  isChanged: boolean,
  time: Time = now(),
 ): FilterContext {
- return new Filter(
+ return new FilterContext(
   {
    value,
    isChanged,
@@ -52,7 +99,7 @@ export function computeContext(
  args: Array<any>,
  time: Time = now(),
 ): ComputeContext {
- return new Compute(
+ return new ComputeContext(
   {
    args,
    result: null,
@@ -66,7 +113,7 @@ export function computeContext(
 }
 
 export function updateContext(value: any, time: Time = now()): UpdateContext {
- return new Update({value}, time)
+ return new UpdateContext({value}, time)
 }
 
 export function emitContext(
@@ -74,7 +121,7 @@ export function emitContext(
  eventName: string,
  time: Time = now(),
 ): EmitContext {
- return new Emit(
+ return new EmitContext(
   {
    payload,
    eventName,
@@ -89,7 +136,7 @@ export function runContext(
  parentContext: ComputeContext | EmitContext | FilterContext | UpdateContext,
  time: Time = now(),
 ): RunContext {
- return new Run(
+ return new RunContext(
   {
    args,
    parentContext,

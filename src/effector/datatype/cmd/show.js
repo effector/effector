@@ -1,7 +1,7 @@
 //@flow
 
 import * as Name from './type'
-import * as Type from './index.h'
+import * as Type from './impl'
 
 export function show(value: Type.Cmd): string {
  switch (value.type) {

@@ -1,7 +1,7 @@
 //@flow
 
 import * as Name from './type'
-import * as Type from './index.h'
+import * as Type from './impl'
 
 import {show as showCmd} from '../cmd/show'
 
@@ -29,7 +29,7 @@ export function show(value: Type.Step): string {
  }
 }
 
-const map1 = (s, i, l) => (i > 0 ? `  ${s}` : s)
+const map1 = (s, i) => (i > 0 ? `  ${s}` : s)
 const map2 = (s, i, l) => {
  if (i === 0) return s
  if (i === l.length - 1) return s

@@ -1,7 +1,12 @@
 //@flow
 
-import * as Type from './type.h'
+export type SingleType = 'step:single'
+export type MultiType = 'step:multi'
+export type SeqType = 'step:seq'
 
-export const SINGLE: Type.SingleType = 'single'
-export const MULTI: Type.MultiType = 'multi'
-export const SEQ: Type.SeqType = 'seq'
+export type StepType = SingleType | MultiType | SeqType
+export type OneOfStepType = SingleType & MultiType & SeqType
+
+export const SINGLE: SingleType = 'step:single'
+export const MULTI: MultiType = 'step:multi'
+export const SEQ: SeqType = 'step:seq'

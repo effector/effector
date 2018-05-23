@@ -2,38 +2,52 @@
 
 import type {Cmd} from '../cmd'
 import * as Name from './type'
-import * as Type from './index.h'
 
-class Step {
+class StepClass<+Data> {
  /*::
- type: any;
- +data: any;
+ +data: Data;
  */
- constructor(data: any) {
+ constructor(data: Data) {
   this.data = data
  }
 }
 
-class Single extends Step {}
-class Multi extends Step {}
-class Seq extends Step {}
+class Single extends StepClass<Cmd> {
+ /*::
+ +type: Name.SingleType;
+ +data: Cmd;
+ */
+}
+class Multi extends StepClass<Set<Step>> {
+ /*::
+ +type: Name.MultiType;
+ +data: Set<Step>;
+ */
+}
+class Seq extends StepClass<Array<Step>> {
+ /*::
+ +type: Name.SeqType;
+ +data: Array<Step>;
+ */
+}
 
-Single.prototype.type = Name.SINGLE
-Multi.prototype.type = Name.MULTI
-Seq.prototype.type = Name.SEQ
+(Single.prototype: any).type = (Name.SINGLE: Name.SingleType)
+;(Multi.prototype: any).type = (Name.MULTI: Name.MultiType)
+;(Seq.prototype: any).type = (Name.SEQ: Name.SeqType)
 
-export function single(data: Cmd): Type.Single {
+export type Step = Single | Multi | Seq
+export type {Single, Multi, Seq}
+
+export function single(data: Cmd): Single {
  return new Single(data)
 }
 
-export function multi(
- data: Set<Type.Step> | Type.Step[] = new Set(),
-): Type.Multi {
- const resultData: Set<Type.Step> = Array.isArray(data) ? new Set(data) : data
+export function multi(data: Set<Step> | Step[] = new Set()): Multi {
+ const resultData: Set<Step> = Array.isArray(data) ? new Set(data) : data
 
  return new Multi(resultData)
 }
 
-export function seq(data: Array<Type.Step>): Type.Seq {
+export function seq(data: Array<Step>): Seq {
  return new Seq(data)
 }
