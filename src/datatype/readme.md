@@ -1,4 +1,4 @@
-Low level data types
+## Low level data types
 
 | Class   | Type variant | Type id |
 | ------- | ------------ | ------- |

@@ -37,6 +37,8 @@ const rollupPlugins = [
    ['effector/event', resolvePath(__dirname, 'src', 'event')],
    ['effector/store', resolvePath(__dirname, 'src', 'store')],
    ['effector/domain', resolvePath(__dirname, 'src', 'domain')],
+   ['effector/datatype', resolvePath(__dirname, 'src', 'datatype')],
+   ['effector/graphite', resolvePath(__dirname, 'src', 'graphite')],
   ]),
   extensions: ['js'],
  }),

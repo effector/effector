@@ -2,8 +2,8 @@
 
 // import invariant from 'invariant'
 
-import * as Cmd from '../effector/datatype/cmd'
-import * as Step from '../effector/datatype/step'
+import * as Cmd from 'effector/datatype/cmd'
+import * as Step from 'effector/datatype/step'
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
 import * as Kind from '../kind'

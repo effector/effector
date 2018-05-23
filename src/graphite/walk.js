@@ -1,9 +1,9 @@
 //@flow
 // import invariant from 'invariant'
-import type {SingleStepValidContext} from '../index.h'
+import type {SingleStepValidContext} from '../effector/index.h'
 import type {Event} from 'effector/event'
-import * as Ctx from '../datatype/context'
-import * as Step from '../datatype/step'
+import * as Ctx from 'effector/datatype/context'
+import * as Step from 'effector/datatype/step'
 import {singleStep} from './single-step'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
@@ -12,10 +12,8 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
  const eventCtx = new Ctx.EmitContext({
   payload,
   eventName: event.getType(),
-  needToRun: false,
  })
  const transactions: Set<() => void> = new Set()
- // ctx.emit.set(event.graphite.cmd, eventCtx)
  walkSeq(steps, eventCtx, transactions)
  for (const transact of transactions) {
   transact()

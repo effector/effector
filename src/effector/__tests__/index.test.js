@@ -4,7 +4,7 @@ import {createEvent, type Event} from 'effector/event'
 import {combine} from '../combine'
 
 import {createStoreObject, createStore, type Store} from 'effector/store'
-import {show} from '../datatype/step/show'
+import {show} from 'effector/datatype/step/show'
 
 import {spy} from 'effector/fixtures/test-utils'
 
