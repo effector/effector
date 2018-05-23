@@ -1,8 +1,7 @@
-//@flow
+//@noflow
 
 import invariant from 'invariant'
-
-import type {Event, Store} from '../effector/index.h'
+import type {Store} from './index.h'
 import {storeConstructor} from './createStore'
 import {applyMiddleware} from './applyMiddleware'
 

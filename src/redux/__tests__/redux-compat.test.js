@@ -1,11 +1,13 @@
-//@flow
+//@noflow
 
 import {
  createReduxStore,
+} from '../createReduxStore'
+import {
  createStoreObject,
- createEvent,
  createStore,
-} from '../..'
+} from '..'
+import {createEvent} from 'effector/event'
 import {
  addTodo,
  dispatchInMiddle,
@@ -521,7 +523,7 @@ describe.skip('createReduxStore', () => {
 
   fooEvent()
   barEvent()
-  expect(foo.getState()).toBe(1);
+  expect(foo.getState()).toBe(1)
   expect(store.getState()).toEqual({
    foo: 1,
    bar: 2,

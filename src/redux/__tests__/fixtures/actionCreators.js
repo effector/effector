@@ -15,7 +15,7 @@ import {createEvent, type Event} from '../../..'
 export const addTodo: Event<string> = createEvent('ADD_TODO')
 
 export function addTodoAsync(text: string) {
- return dispatch =>
+ return (dispatch: *) =>
   new Promise(resolve =>
    setImmediate(() => {
     dispatch(addTodo(text))
@@ -25,7 +25,7 @@ export function addTodoAsync(text: string) {
 }
 
 export function addTodoIfEmpty(text: string) {
- return (dispatch, getState) => {
+ return (dispatch: *, getState: *) => {
   if (!getState().length) {
    dispatch(addTodo(text))
   }
