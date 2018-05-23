@@ -1,20 +1,27 @@
 //@flow
 
-const effector = packageTest('effector')
-const effect = packageTest('effect')
-const event = packageTest('event')
-const store = packageTest('store')
-const react = packageTest('react', {
- testEnvironment: 'jsdom',
+const projects = addProjects({
+ tests: [
+  'effector',
+  'effect',
+  'event',
+  'store',
+  [
+   'react',
+   {
+    testEnvironment: 'jsdom',
+   },
+  ],
+ ],
+ include: {
+  effector: true,
+  effect: true,
+  event: true,
+  store: true,
+  react: true,
+ },
 })
-
-const projects = [effector, event, effect, store, react]
-
-const config = {
- projects,
-}
-
-module.exports = config
+module.exports = {projects}
 
 function packageTest(displayName, opts = {}) {
  return Object.assign(
@@ -37,4 +44,19 @@ function packageTest(displayName, opts = {}) {
   },
   opts,
  )
+}
+
+function addProjects({tests, include}) {
+ const projects = []
+ for (const pkg of tests) {
+  if (typeof pkg === 'string') {
+   if (include[pkg]) projects.push(packageTest(pkg))
+  } else {
+   const [name, config] = pkg
+   if (include[name]) {
+    projects.push(packageTest(name, config))
+   }
+  }
+ }
+ return projects
 }
