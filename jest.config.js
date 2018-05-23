@@ -1,6 +1,30 @@
 //@flow
 
-const projects = addProjects(require('./jestproject.json'))
+const projects = addProjects({
+ tests: [
+  'effector',
+  'effect',
+  'event',
+  'store',
+  'kind',
+  'redux',
+  [
+   'react',
+   {
+    testEnvironment: 'jsdom',
+   },
+  ],
+ ],
+ include: {
+  effector: true,
+  effect: true,
+  event: true,
+  store: true,
+  kind: true,
+  redux: false,
+  react: true,
+ },
+})
 module.exports = {projects}
 
 function packageTest(displayName, opts = {}) {
