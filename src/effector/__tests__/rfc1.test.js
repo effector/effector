@@ -11,14 +11,6 @@ import {spy, delay, getSpyCalls} from 'effector/fixtures/test-utils'
 
 import flags from '../../flags'
 
-beforeAll(() => {
- flags.useGraphite = true
-})
-
-afterAll(() => {
- flags.useGraphite = false
-})
-
 describe('symbol-observable support', () => {
  test('from(store)', async() => {
   expect(() => {
