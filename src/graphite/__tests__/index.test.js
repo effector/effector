@@ -6,3 +6,4 @@ import * as Cmd from 'effector/datatype/cmd'
 import type {Atom} from '../../effector/atom'
 
 // import
+test('graphite smoke', () => {})
