@@ -1,8 +1,6 @@
 parser: babel-eslint
 parserOptions:
-  ecmaVersion: 8
-  ecmaFeatures:
-    experimentalObjectRestSpread: true
+  ecmaVersion: 2018
 extends:
   - 'plugin:flowtype/recommended'
   - 'plugin:react/recommended'
@@ -28,6 +26,7 @@ rules:
   flowtype/no-weak-types: 'off'
   flowtype/generic-spacing: 'off'
   flowtype/space-after-type-colon: 'off'
+  react/prop-types: 'off'
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn

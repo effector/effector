@@ -44,7 +44,6 @@ module.name_mapper='^effector$' -> '<PROJECT_ROOT>/src'
 
 [ignore]
 <PROJECT_ROOT>/npm/*
-<PROJECT_ROOT>/scripts/fastflow/primitives/__test__/__snapshots__/*
 <PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
 <PROJECT_ROOT>/.vscode/*
