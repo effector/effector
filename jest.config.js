@@ -1,6 +1,8 @@
 //@flow
 
-const projects = addProjects(require('./jestproject.json'))
+const {loadYamlSync} = require('./scripts/yaml-util')
+
+const projects = addProjects(loadYamlSync('./jestproject.yml'))
 module.exports = {projects}
 
 function packageTest(displayName, opts = {}) {
