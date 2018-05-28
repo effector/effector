@@ -1,7 +1,7 @@
 //@flow
 
 import * as Type from './type'
-import {type Time, now} from '../../effector/time'
+import {type Time, now} from '../../time'
 
 class ContextClass<+Data> {
  /*::
