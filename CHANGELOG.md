@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.17.5
+
+* Add ability to use createEvent, createEffect and createDomain without arguments (omit name)
+* Fix wrong order of effect names
+* Add `createWrappedDomain` to watch all nested events and updates
+* Add `extract` to watch only part of nested storages
+* Deprecate `.epic` method (library supports symbol-observable, so assumed that `most.from(event)` or `Observable.Of(store)` covered all use cases)
+
 ## 0.17.4
 
 * **effector-react**: Add check for mounting of store consumer
