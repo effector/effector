@@ -1,6 +1,7 @@
 //@flow
 
 // import invariant from 'invariant'
+import warning from 'warning'
 import $$observable from 'symbol-observable'
 import {from, type Stream} from 'most'
 import type {GraphiteMeta, Subscription} from '../effector/index.h'
@@ -56,6 +57,7 @@ export function eventFabric<Payload>({
  setProperty('getType', getType, instance)
  setProperty('kind', Kind.EVENT, instance)
  setProperty($$observable, () => instance, instance)
+ instance.id = id
  instance.watch = watch
  instance.map = map
  instance.prepend = prepend
@@ -75,6 +77,7 @@ export function eventFabric<Payload>({
  }
 
  function epic<T>(fn: (Stream<Payload>) => Stream<T>): Event<T> {
+  warning(false, '.epic is deprecated, use from(event) of Observable.of(event)')
   const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
   const mapped = eventFabric({name: `${name}$ ~> *`, domainName})

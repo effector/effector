@@ -94,10 +94,17 @@ export function createEffect<Params, Done, Fail>(
 
 export function createStore<State>(defaultState: State): Store<State>
 
-declare export function createStoreObject<State>(
+export function createStoreObject<State>(
  defaultState: State,
 ): Store<any>
 
+export function extract<
+ State,
+ NextState,
+>(
+ obj: Store<State>,
+ extractor: (_: State) => NextState,
+): Store<NextState>
 export function createDomain(domainName?: string): Domain
 export function createWrappedDomain(
  watcher: Function,

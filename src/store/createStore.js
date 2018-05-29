@@ -14,6 +14,8 @@ import * as Kind from '../kind'
 import {atom, type Atom} from '../effector/atom'
 // import warning from 'warning'
 
+import warning from 'warning'
+
 export type Nest = {
  get(): any,
  set(state: any, action: any): any,
@@ -56,6 +58,7 @@ export function storeConstructor<State>(props: {
    next: nextSteps,
    seq: fullSeq,
   },
+  defaultState,
   kind: Kind.STORE,
   id: currentId,
   withProps,
@@ -290,6 +293,7 @@ function mapStore<A, B>(
 }
 
 function epicStore(event, store, fn: Function) {
+ warning(false, '.epic is deprecated, use from(store) of Observable.of(store)')
  const store$ = from(store).multicast()
  const event$ = from(event).multicast()
  const mapped$ = fn(event$, store$).multicast()
