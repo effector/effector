@@ -6,6 +6,7 @@ import type {CompositeName} from '../compositeName'
 
 export type Event<E> = {
  (payload: E): E,
+ /*::+*/ id: string,
  getType(): string,
  create(payload: E, type: string): E,
  watch(watcher: (payload: E) => any): Subscription,

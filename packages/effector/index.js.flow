@@ -90,16 +90,16 @@ declare export class Store<State> {
 }
 
 declare export class Domain {
- event<Payload>(name: string): Event<Payload>;
- effect<Params, Done, Fail>(name: string): Effect<Params, Done, Fail>;
- domain(name: string): Domain;
+ event<Payload>(name?: string): Event<Payload>;
+ effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+ domain(name?: string): Domain;
  store<State>(defaultState: State): Store<State>;
 }
 
-declare export function createEvent<E>(eventName: string): Event<E>
+declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
- effectName: string,
+ effectName?: string,
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
@@ -117,7 +117,11 @@ declare export function createStoreObject<
 >
 
 declare export function createDomain(domainName?: string): Domain
-
+declare export function createWrappedDomain(
+ watcher: Function,
+ name?: string,
+ parent?: Domain,
+): Domain
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(

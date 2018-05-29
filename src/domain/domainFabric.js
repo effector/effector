@@ -5,10 +5,16 @@ import {type Store, createStore} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 import {createName, type CompositeName} from '../compositeName'
+import {stringRefcount} from '../refcount'
 
-export function domainFabric(name: string, parent?: CompositeName): Domain {
+const nextId = stringRefcount()
+
+export function domainFabric(nameRaw?: string, parent?: CompositeName): Domain {
+ const id = nextId()
+ const name = nameRaw || ''
  const compositeName = createName(name, parent)
  return {
+  id,
   compositeName,
   event<Payload>(name?: string): Event<Payload> {
    return eventFabric({
@@ -17,13 +23,14 @@ export function domainFabric(name: string, parent?: CompositeName): Domain {
     parent: compositeName,
    })
   },
-  effect<Params, Done, Fail>(name: string): Effect<Params, Done, Fail> {
+  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail> {
    return effectFabric({
     name,
     domainName: compositeName.fullName,
+    parent: compositeName,
    })
   },
-  domain(name: string) {
+  domain(name?: string) {
    return domainFabric(name, compositeName)
   },
   store<T>(state: T): Store<T> {

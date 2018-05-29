@@ -30,8 +30,8 @@ const staticPlugins = [
    },
    output: {
     comments: /#/i,
-    beautify: true,
-    indent_level: 2,
+    // beautify: true,
+    // indent_level: 2,
    },
   },
   require('uglify-es').minify,

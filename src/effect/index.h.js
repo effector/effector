@@ -15,6 +15,7 @@ export type Effect<Params, Done, Fail = Error> = {
  },
  done: Event<{params: Params, result: Done}>,
  fail: Event<{params: Params, error: Fail}>,
+ /*::+*/ id: string,
  use: {
   (asyncFunction: (params: Params) => Promise<Done>): void,
   getCurrent(): (params: Params) => Promise<Done>,
