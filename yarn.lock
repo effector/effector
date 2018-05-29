@@ -1409,6 +1409,14 @@ browserslist@^3.0.0:
     caniuse-lite "^1.0.30000830"
     electron-to-chromium "^1.3.42"
 
+bs-platform@^3.1.4:
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-3.1.4.tgz#fe8495443b35aff73dfb61cba1e6d7b88311910b"
+
+bsb-js@^1.0.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/bsb-js/-/bsb-js-1.1.3.tgz#98d8d26e8f8e7c746ed54a6b6019816d47159897"
+
 bser@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/bser/-/bser-2.0.0.tgz#9ac78d3ed5d915804fd87acb158bc797147a1719"
@@ -1743,7 +1751,7 @@ command-join@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/command-join/-/command-join-2.0.0.tgz#52e8b984f4872d952ff1bdc8b98397d27c7144cf"
 
-commander@2.13.0:
+commander@2.13.0, commander@~2.13.0:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
 
@@ -5725,6 +5733,12 @@ react@^16.4.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+read-bsconfig@^1.0.3:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/read-bsconfig/-/read-bsconfig-1.0.5.tgz#fef6b45b5ff43a26e138389f19282501c6d17d28"
+  dependencies:
+    json5 "^0.5.1"
+
 read-cmd-shim@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/read-cmd-shim/-/read-cmd-shim-1.0.1.tgz#2d5d157786a37c055d22077c32c53f8329e91c7b"
@@ -6066,7 +6080,7 @@ resolve@1.1.7:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-resolve@^1.1.6, resolve@^1.3.2:
+resolve@^1.1.6, resolve@^1.3.2, resolve@^1.5.0:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.7.1.tgz#aadd656374fd298aee895bc026b8297418677fd3"
   dependencies:
@@ -6109,6 +6123,15 @@ rollup-plugin-babel@^4.0.0-beta.4:
     "@babel/helper-module-imports" "7.0.0-beta.44"
     rollup-pluginutils "^2.0.1"
 
+rollup-plugin-bucklescript@^0.6.1:
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-bucklescript/-/rollup-plugin-bucklescript-0.6.1.tgz#684a93caaa8b3bf7891083b902f37bcb4b74b8fc"
+  dependencies:
+    bsb-js "^1.0.1"
+    read-bsconfig "^1.0.3"
+    resolve "^1.5.0"
+    rollup-pluginutils "^2.0.1"
+
 rollup-plugin-node-resolve@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.3.0.tgz#c26d110a36812cbefa7ce117cadcd3439aa1c713"
@@ -6123,6 +6146,13 @@ rollup-plugin-uglify@^4.0.0:
   dependencies:
     "@babel/code-frame" "^7.0.0-beta.47"
     uglify-js "^3.3.25"
+
+rollup-plugin-visualizer@^0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/rollup-plugin-visualizer/-/rollup-plugin-visualizer-0.6.0.tgz#c7b45b80aac9ab717291432f28b9561b4e3def29"
+  dependencies:
+    mkdirp "^0.5.1"
+    source-map "^0.7.2"
 
 rollup-pluginutils@^2.0.1:
   version "2.0.1"
@@ -6381,6 +6411,10 @@ source-map@^0.5.0, source-map@^0.5.3, source-map@^0.5.6, source-map@^0.5.7, sour
 source-map@^0.6.0, source-map@~0.6.1:
   version "0.6.1"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.6.1.tgz#74722af32e9614e9c287a8d0bbde48b5e2f1a263"
+
+source-map@^0.7.2:
+  version "0.7.3"
+  resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
 
 spdx-correct@^3.0.0:
   version "3.0.0"
@@ -6808,6 +6842,13 @@ typescript@^2.5.1:
 ua-parser-js@^0.7.9:
   version "0.7.17"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.17.tgz#e9ec5f9498b9ec910e7ae3ac626a805c4d09ecac"
+
+uglify-es@^3.3.9:
+  version "3.3.9"
+  resolved "https://registry.yarnpkg.com/uglify-es/-/uglify-es-3.3.9.tgz#0c1c4f0700bed8dbc124cdb304d2592ca203e677"
+  dependencies:
+    commander "~2.13.0"
+    source-map "~0.6.1"
 
 uglify-js@^2.6:
   version "2.8.29"

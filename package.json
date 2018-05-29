@@ -5,6 +5,9 @@
  "typings": "index.d.ts",
  "private": true,
  "scripts": {
+  "build:bs": "bsb -make-world",
+  "start:bs": "bsb -make-world -w",
+  "clean:bs": "bsb -clean-world",
   "test": "node_modules/.bin/jest --config=jest.config.js",
   "bench": "node --expose-gc bench/bench.test.js",
   "prepublish:all": "npm run build",
@@ -44,6 +47,7 @@
   "babel-plugin-dev-expression": "^0.2.1",
   "babel-plugin-macros": "^2.2.1",
   "babel-plugin-transform-inline-environment-variables": "^0.4.3",
+  "bs-platform": "^3.1.4",
   "chokidar": "^2.0.3",
   "codegen.macro": "^1.0.0",
   "cross-env": "^5.1.5",
@@ -86,11 +90,14 @@
   "rimraf": "^2.6.2",
   "rollup": "^0.59.3",
   "rollup-plugin-babel": "^4.0.0-beta.4",
+  "rollup-plugin-bucklescript": "^0.6.1",
   "rollup-plugin-node-resolve": "^3.3.0",
   "rollup-plugin-uglify": "^4.0.0",
+  "rollup-plugin-visualizer": "^0.6.0",
   "scope.macro": "^1.0.0",
   "setimmediate": "^1.0.5",
-  "shelljs": "^0.8.2"
+  "shelljs": "^0.8.2",
+  "uglify-es": "^3.3.9"
  },
  "maintainers": [
   {

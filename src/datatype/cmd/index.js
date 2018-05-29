@@ -1,4 +1,10 @@
 //@flow
 
 export * from './type'
-export * from './impl'
+export {
+ compute as Compute,
+ run as Run,
+ emit as Emit,
+ filter as Filter,
+ update as Update,
+} from './Cmd.bs'

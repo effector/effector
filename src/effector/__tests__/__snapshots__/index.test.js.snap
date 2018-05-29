@@ -4,12 +4,13 @@ exports[`graphite: bar seq 1`] = `
 Seq {
   "data": Array [
     Single {
-      "data": Emit {
+      "data": Object {
         "data": Object {
           "fullName": "foo → *",
           "runner": [Function],
           "subtype": "event",
         },
+        "type": 12,
       },
     },
     Multi {
@@ -17,33 +18,37 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Compute {
+              "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
+                "type": 11,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Update {
+              "data": Object {
                 "data": Object {
                   "store": Atom {
                     "value": "foo | 1 | 11",
                   },
                 },
+                "type": 15,
               },
             },
             Multi {
@@ -51,33 +56,37 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Compute {
+                      "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
+                        "type": 11,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Update {
+                      "data": Object {
                         "data": Object {
                           "store": Atom {
                             "value": 12,
                           },
                         },
+                        "type": 15,
                       },
                     },
                     Multi {
@@ -90,10 +99,11 @@ Seq {
           ],
         },
         Single {
-          "data": Run {
+          "data": Object {
             "data": Object {
               "runner": [Function],
             },
+            "type": 13,
           },
         },
       },
@@ -106,12 +116,13 @@ exports[`graphite: bar seq 2`] = `
 Seq {
   "data": Array [
     Single {
-      "data": Emit {
+      "data": Object {
         "data": Object {
           "fullName": "foo → *",
           "runner": [Function],
           "subtype": "event",
         },
+        "type": 12,
       },
     },
     Multi {
@@ -119,33 +130,37 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Compute {
+              "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
+                "type": 11,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Update {
+              "data": Object {
                 "data": Object {
                   "store": Atom {
                     "value": "foo | 1 | 11",
                   },
                 },
+                "type": 15,
               },
             },
             Multi {
@@ -153,33 +168,37 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Compute {
+                      "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
+                        "type": 11,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Update {
+                      "data": Object {
                         "data": Object {
                           "store": Atom {
                             "value": 12,
                           },
                         },
+                        "type": 15,
                       },
                     },
                     Multi {
@@ -201,12 +220,13 @@ exports[`graphite: foo seq 1`] = `
 Seq {
   "data": Array [
     Single {
-      "data": Emit {
+      "data": Object {
         "data": Object {
           "fullName": "foo",
           "runner": [Function],
           "subtype": "event",
         },
+        "type": 12,
       },
     },
     Multi {
@@ -214,19 +234,21 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Compute {
+              "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
+                "type": 11,
               },
             },
             Single {
-              "data": Emit {
+              "data": Object {
                 "data": Object {
                   "fullName": "foo → *",
                   "runner": [Function],
                   "subtype": "event",
                 },
+                "type": 12,
               },
             },
             Multi {
@@ -234,33 +256,37 @@ Seq {
                 Seq {
                   "data": Array [
                     Single {
-                      "data": Compute {
+                      "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
+                        "type": 11,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Filter {
+                      "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
+                        "type": 14,
                       },
                     },
                     Single {
-                      "data": Update {
+                      "data": Object {
                         "data": Object {
                           "store": Atom {
                             "value": "foo | 1 | 11",
                           },
                         },
+                        "type": 15,
                       },
                     },
                     Multi {
@@ -268,33 +294,37 @@ Seq {
                         Seq {
                           "data": Array [
                             Single {
-                              "data": Compute {
+                              "data": Object {
                                 "data": Object {
                                   "reduce": [Function],
                                 },
+                                "type": 11,
                               },
                             },
                             Single {
-                              "data": Filter {
+                              "data": Object {
                                 "data": Object {
                                   "filter": [Function],
                                 },
+                                "type": 14,
                               },
                             },
                             Single {
-                              "data": Filter {
+                              "data": Object {
                                 "data": Object {
                                   "filter": [Function],
                                 },
+                                "type": 14,
                               },
                             },
                             Single {
-                              "data": Update {
+                              "data": Object {
                                 "data": Object {
                                   "store": Atom {
                                     "value": 12,
                                   },
                                 },
+                                "type": 15,
                               },
                             },
                             Multi {
@@ -307,10 +337,11 @@ Seq {
                   ],
                 },
                 Single {
-                  "data": Run {
+                  "data": Object {
                     "data": Object {
                       "runner": [Function],
                     },
+                    "type": 13,
                   },
                 },
               },
@@ -427,19 +458,21 @@ exports[`graphite: store1 seq 1`] = `
 Seq {
   "data": Array [
     Single {
-      "data": Filter {
+      "data": Object {
         "data": Object {
           "filter": [Function],
         },
+        "type": 14,
       },
     },
     Single {
-      "data": Update {
+      "data": Object {
         "data": Object {
           "store": Atom {
             "value": "foo | 1 | 11 | 101",
           },
         },
+        "type": 15,
       },
     },
     Multi {
@@ -447,33 +480,37 @@ Seq {
         Seq {
           "data": Array [
             Single {
-              "data": Compute {
+              "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
+                "type": 11,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Filter {
+              "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
+                "type": 14,
               },
             },
             Single {
-              "data": Update {
+              "data": Object {
                 "data": Object {
                   "store": Atom {
                     "value": 18,
                   },
                 },
+                "type": 15,
               },
             },
             Multi {
@@ -491,19 +528,21 @@ exports[`graphite: store2 seq 1`] = `
 Seq {
   "data": Array [
     Single {
-      "data": Filter {
+      "data": Object {
         "data": Object {
           "filter": [Function],
         },
+        "type": 14,
       },
     },
     Single {
-      "data": Update {
+      "data": Object {
         "data": Object {
           "store": Atom {
             "value": 18,
           },
         },
+        "type": 15,
       },
     },
     Multi {
