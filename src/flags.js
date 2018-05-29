@@ -1,5 +1,8 @@
 //@flow
 
-export default {
- useGraphite: false,
-}
+/*::
+
+;(0 - 'prevent flow stale');
+*/
+
+export default {}

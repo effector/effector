@@ -1,21 +1,15 @@
 //@flow
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
-import invariant from 'invariant'
+// import invariant from 'invariant'
 import {from} from 'most'
 import {createStore, createStoreObject} from 'effector/store'
 import {createEvent, type Event} from 'effector/event'
 import {createEffect} from 'effector/effect'
 
+import {spy, delay, getSpyCalls} from 'effector/fixtures/test-utils'
+
 import flags from '../../flags'
-
-beforeAll(() => {
- flags.useGraphite = true
-})
-
-afterAll(() => {
- flags.useGraphite = false
-})
 
 describe('symbol-observable support', () => {
  test('from(store)', async() => {
@@ -26,16 +20,15 @@ describe('symbol-observable support', () => {
   const ev1 = createEvent('ev1')
   const ev2 = createEvent('ev2')
   const store1$ = from(store1)
-  const fn1 = jest.fn()
-  store1$.observe(fn1)
+  store1$.observe(spy)
   store1.on(ev1, (state, payload) => state + 1)
   ev1('foo')
   ev1('bar')
   ev1('baz')
   ev2('should ignore')
 
-  expect(fn1.mock.calls).toEqual([[-1], [0], [1], [2]])
-  expect(fn1).toHaveBeenCalledTimes(4)
+  expect(getSpyCalls()).toEqual([[-1], [0], [1], [2]])
+  expect(spy).toHaveBeenCalledTimes(4)
   expect(store1.getState()).toBe(2)
  })
  describe('from(effect)', () => {
@@ -46,15 +39,14 @@ describe('symbol-observable support', () => {
    const ev1 = createEffect('ev1')
    const ev2 = createEffect('ev2')
    const ev1$ = from(ev1)
-   const fn1 = jest.fn()
-   ev1$.observe(fn1)
+   ev1$.observe(spy)
    ev1(0)
    ev1(1)
    ev1(2)
    ev2('should ignore')
-   expect(fn1).toHaveBeenCalledTimes(3)
+   expect(spy).toHaveBeenCalledTimes(3)
 
-   expect(fn1.mock.calls).toEqual([[0], [1], [2]])
+   expect(getSpyCalls()).toEqual([[0], [1], [2]])
   })
 
   test('with implementation', async() => {
@@ -69,15 +61,14 @@ describe('symbol-observable support', () => {
    async function impl(_) {}
    ev1.use(impl)
    const ev1$ = from(ev1)
-   const fn1 = jest.fn()
-   ev1$.observe(fn1)
+   ev1$.observe(spy)
    ev1(0)
    ev1(1)
    ev1(2)
    ev2('should ignore')
-   expect(fn1).toHaveBeenCalledTimes(3)
+   expect(spy).toHaveBeenCalledTimes(3)
 
-   expect(fn1.mock.calls).toEqual([[0], [1], [2]])
+   expect(getSpyCalls()).toEqual([[0], [1], [2]])
   })
  })
 })
@@ -151,10 +142,9 @@ describe('store.on', () => {
   const counter = createStore(0)
   const text = createStore('')
   const store = createStoreObject({counter, text, foo: 0})
-  const fn = jest.fn()
   const e1 = createEffect('e1')
   store.on(e1.done, (state, {params, result}) => {
-   fn(state, result)
+   spy(state, result)
    return {
     ...state,
     foo: result,
@@ -249,7 +239,7 @@ test('rfc1 example implementation', async() => {
  click$.watch(_ => console.count(`click$.watch`))
  click$.watch(async() => {
   console.log(`tap -> watch`)
-  await new Promise(_ => setTimeout(_, 500))
+  await delay(500)
   console.log(`tap -> watch -> fnClick & increment`)
   fnClick()
   increment()

@@ -17,6 +17,7 @@ declare export class Event<E> {
  (payload: E): E;
  watch(watcher: (payload: E) => any): Subscription;
  map<T>(fn: (_: E) => T): Event<T>;
+ filter<T>(fn: (_: E) => T | void): Event<T>;
  prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
  //prettier-ignore
@@ -89,16 +90,16 @@ declare export class Store<State> {
 }
 
 declare export class Domain {
- event<Payload>(name: string): Event<Payload>;
- effect<Params, Done, Fail>(name: string): Effect<Params, Done, Fail>;
- domain(name: string): Domain;
+ event<Payload>(name?: string): Event<Payload>;
+ effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+ domain(name?: string): Domain;
  store<State>(defaultState: State): Store<State>;
 }
 
-declare export function createEvent<E>(eventName: string): Event<E>
+declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
- effectName: string,
+ effectName?: string,
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
@@ -114,15 +115,26 @@ declare export function createStoreObject<
   <S>(field: Store<S> | S) => S,
  >,
 >
-
-declare export function createReduxStore<T>(
- reducer: (state: T, event: any) => T,
- preloadedState?: T,
- enhancer?: Function | Function[],
-): Store<T>
+declare export function extract<
+ State: {-[key: string]: Store<any> | any},
+ NextState: {-[key: string]: Store<any> | any},
+>(
+ store: Store<State>,
+ extractor: (_: State) => NextState,
+): Store<
+ $ObjMap<
+  NextState,
+  //prettier-ignore
+  <S>(field: Store<S> | S) => S,
+ >,
+>
 
 declare export function createDomain(domainName?: string): Domain
-
+declare export function createWrappedDomain(
+ watcher: Function,
+ name?: string,
+ parent?: Domain,
+): Domain
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(

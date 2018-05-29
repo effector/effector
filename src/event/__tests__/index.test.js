@@ -1,10 +1,10 @@
 //@flow
 
 import {from} from 'most'
-import {createEvent} from '..'
-import type {Event, Effect, Store} from '../../effector/index.h'
+import {createEvent, type Event} from '..'
 
-import {getSpyCalls, spy} from '../../fixtures/test-utils'
+import {getSpyCalls, spy} from 'effector/fixtures/test-utils'
+import {show} from 'effector/datatype/step/show'
 
 describe('symbol-observable support', () => {
  test('most.from(event) //stream of events', () => {
@@ -37,4 +37,24 @@ test('event.watch(fn)', () => {
   [1, 'click'],
   [2, 'click'],
  ])
+})
+
+test('event.filter should drop undefined values', () => {
+ const num: Event<number> = createEvent('number')
+ const evenNum = num.filter(n => {
+  if (n % 2 === 0) return n * 2
+ })
+
+ evenNum.watch(e => spy(e))
+
+ num(0)
+ num(1)
+ num(2)
+ num(3)
+ num(4)
+
+ expect(getSpyCalls()).toEqual([[0], [4], [8]])
+
+ expect(show(num.graphite.seq)).toMatchSnapshot('num event graph')
+ expect(show(evenNum.graphite.seq)).toMatchSnapshot('evenNum event graph')
 })

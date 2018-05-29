@@ -1,10 +1,10 @@
 //@flow
 
 import {effectFabric} from './effectFabric'
-import type {Effect} from '../effector/index.h'
+import type {Effect} from './index.h'
 
 export function createEffect<Payload, Done>(
- name: string,
+ name?: string,
 ): Effect<Payload, Done, *> {
  return effectFabric({name, domainName: ''})
 }

@@ -2,31 +2,36 @@
 
 // import invariant from 'invariant'
 import warning from 'warning'
-import type {Event, Effect} from '../effector/index.h'
+import type {Effect} from './index.h'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
-import {eventFabric} from 'effector/event'
+import {eventFabric, type Event} from 'effector/event'
+import type {CompositeName} from '../compositeName'
 
 export function effectFabric<Payload, Done>({
  name,
  domainName,
+ parent,
 }: {
- name: string,
+ name?: string,
  domainName: string,
+ parent?: CompositeName,
 }): Effect<Payload, Done, *> {
  const instanceAsEvent: Event<Payload> = eventFabric({
   name,
   domainName,
+  parent,
  })
+ instanceAsEvent.id
  const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
  const eventCreate = instanceAsEvent.create
  const done: Event<{params: Payload, result: Done}> = eventFabric({
-  name: `${name} done`,
+  name: `${instanceAsEvent.shortName} done`,
   domainName,
  })
  const fail: Event<{params: Payload, error: *}> = eventFabric({
-  name: `${name} fail`,
+  name: `${instanceAsEvent.shortName} fail`,
   domainName,
  })
 

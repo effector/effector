@@ -25,6 +25,9 @@ src/**/*.draft.js
 test/storage.json
 **/.happypack/**
 
-npm/effector
-npm/react
-
+npm/effector/**
+npm/effector-react/**
+.merlin
+.bsb.lock
+npm-debug.log
+lib/bs/**

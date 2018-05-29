@@ -193,6 +193,23 @@ test('effector (immutable inner update)', prepared => {
  return effectorStore.getState()
 })
 
+test('effector (immutable subscribe)', prepared => {
+ //$off
+ const {createEvent, createStore} = require('../npm/effector/effector.cjs.js')
+ const updateEvent = createEvent('update')
+ const effectorStore = createStore(generateDraft()).on(updateEvent, draft => {
+  const newDraft = draft.concat([])
+  for (let i = 0; i < MAX * MODIFY_FACTOR; i++) {
+   newDraft[i] = Object.assign({}, newDraft[i], {done: true})
+  }
+  return newDraft
+ })
+ prepared()
+ effectorStore.subscribe(() => {})
+ updateEvent()
+ return effectorStore.getState()
+})
+
 // test('immer (proxy) - with autofreeze', () => {
 //  setUseProxies(true)
 //  setAutoFreeze(true)

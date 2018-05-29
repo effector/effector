@@ -9,7 +9,8 @@ configure({
 
 import * as React from 'react'
 import {mount} from 'enzyme'
-import {createEvent, createStore} from '../../effector'
+import {createStore} from 'effector/store'
+import {createEvent} from 'effector/event'
 import {connect} from '..'
 
 test('connect api', () => {

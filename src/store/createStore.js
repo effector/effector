@@ -5,14 +5,16 @@ import invariant from 'invariant'
 import {from} from 'most'
 import $$observable from 'symbol-observable'
 
-import {createEvent} from 'effector/event'
-import * as Cmd from '../effector/datatype/cmd'
-import * as Ctx from '../effector/datatype/context'
-import * as Step from '../effector/datatype/step'
-import type {Event, Store} from '../effector/index.h'
+import {createEvent, type Event} from 'effector/event'
+import * as Cmd from 'effector/datatype/cmd'
+import * as Ctx from 'effector/datatype/context'
+import * as Step from 'effector/datatype/step'
+import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {atom, type Atom} from '../effector/atom'
 // import warning from 'warning'
+
+import warning from 'warning'
 
 export type Nest = {
  get(): any,
@@ -36,12 +38,12 @@ export function storeConstructor<State>(props: {
  const defaultState = currentState
 
  const plainState: Atom<typeof defaultState> = atom(defaultState)
- const shouldChange: Cmd.Filter = Cmd.filter({
+ const shouldChange = new Cmd.Filter({
   filter(newValue, ctx) {
    return newValue !== plainState.get() && newValue !== undefined
   },
  })
- const cmd: Cmd.Update = Cmd.update({
+ const cmd = new Cmd.Update({
   store: plainState,
  })
  const filterStep: Step.Single = Step.single(shouldChange)
@@ -56,6 +58,7 @@ export function storeConstructor<State>(props: {
    next: nextSteps,
    seq: fullSeq,
   },
+  defaultState,
   kind: Kind.STORE,
   id: currentId,
   withProps,
@@ -94,7 +97,7 @@ export function storeConstructor<State>(props: {
   let lastCall = getState()
   let active = true
   const runCmd = Step.single(
-   Cmd.run({
+   new Cmd.Run({
     runner(args) {
      if (args === lastCall || !active) return
      lastCall = args
@@ -167,13 +170,13 @@ export function storeConstructor<State>(props: {
 
  function on(event: any, handler: Function) {
   const e: Event<any> = event
-  const computeCmd = Cmd.compute({
+  const computeCmd = new Cmd.Compute({
    reduce(_, newValue, ctx) {
     const lastState = getState()
     return handler(lastState, newValue, e.getType())
    },
   })
-  const filterCmd = Cmd.filter({
+  const filterCmd = new Cmd.Filter({
    filter(data, ctx: Ctx.ComputeContext) {
     // const oldValue = ctx.data.args[1]
     const lastState = getState()
@@ -256,7 +259,7 @@ function mapStore<A, B>(
  let lastResult = fn(lastValue)
  const innerStore: Store<any> = (createStore: any)(lastResult)
  const computeCmd = Step.single(
-  Cmd.compute({
+  new Cmd.Compute({
    reduce(_, newValue, ctx) {
     lastValue = newValue
     const lastState = innerStore.getState()
@@ -266,7 +269,7 @@ function mapStore<A, B>(
   }),
  )
  const filterCmdPost = Step.single(
-  Cmd.filter({
+  new Cmd.Filter({
    filter(result, ctx: Ctx.ComputeContext) {
     const lastState = innerStore.getState()
     const isChanged = result !== lastState && result !== undefined
@@ -290,6 +293,7 @@ function mapStore<A, B>(
 }
 
 function epicStore(event, store, fn: Function) {
+ warning(false, '.epic is deprecated, use from(store) of Observable.of(store)')
  const store$ = from(store).multicast()
  const event$ = from(event).multicast()
  const mapped$ = fn(event$, store$).multicast()

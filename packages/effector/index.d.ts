@@ -16,6 +16,7 @@ export class Event<E> {
  (payload: E): E;
  watch(watcher: (payload: E) => any): Subscription;
  map<T>(fn: (_: E) => T): Event<T>;
+ filter<T>(fn: (_: E) => T | void): Event<T>;
  prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
  to(store: Store<E>, _: void): Subscription;
@@ -79,31 +80,37 @@ export class Store<State> {
 }
 
 export class Domain {
- event<Payload>(name: string): Event<Payload>;
- effect<Params, Done, Fail>(name: string): Effect<Params, Done, Fail>;
- domain(name: string): Domain;
+ event<Payload>(name?: string): Event<Payload>;
+ effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+ domain(name?: string): Domain;
  store<State>(defaultState: State): Store<State>;
 }
 
-export function createEvent<E>(eventName: string): Event<E>
+export function createEvent<E>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
- effectName: string,
+ effectName?: string,
 ): Effect<Params, Done, Fail>
 
 export function createStore<State>(defaultState: State): Store<State>
 
-declare export function createStoreObject<State>(
+export function createStoreObject<State>(
  defaultState: State,
 ): Store<any>
 
-export function createReduxStore<T>(
- reducer: (state: T, event: any) => T,
- preloadedState?: T,
- enhancer?: Function | Function[],
-): Store<T>
-
+export function extract<
+ State,
+ NextState,
+>(
+ obj: Store<State>,
+ extractor: (_: State) => NextState,
+): Store<NextState>
 export function createDomain(domainName?: string): Domain
+export function createWrappedDomain(
+ watcher: Function,
+ name?: string,
+ parent?: Domain,
+): Domain
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(

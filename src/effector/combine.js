@@ -1,8 +1,7 @@
 //@flow
 
 import invariant from 'invariant'
-import type {Store} from './index.h'
-import {createStoreObject} from '../store/createStoreObject'
+import {type Store, createStoreObject} from 'effector/store'
 
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>

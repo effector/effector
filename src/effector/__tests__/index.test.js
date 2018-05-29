@@ -1,18 +1,19 @@
 //@flow
 
-import {createEvent} from 'effector/event'
+import {createEvent, type Event} from 'effector/event'
 import {combine} from '../combine'
-import * as Type from '../index.h'
-import {createStore} from '../../store/createStore'
-import {createStoreObject} from '../../store/createStoreObject'
-import {show} from '../datatype/step/show'
+
+import {createStoreObject, createStore, type Store} from 'effector/store'
+import {show} from 'effector/datatype/step/show'
+
+import {spy} from 'effector/fixtures/test-utils'
 
 test('graphite', () => {
  const fn = jest.fn()
  const fn1 = jest.fn()
- const foo: Type.Event<number> = createEvent('foo')
+ const foo: Event<number> = createEvent('foo')
  const bar = foo.map(x => (fn(x), x + 1))
- const store1: Type.Store<string> = createStore('foo').on(bar, (state, bar) =>
+ const store1: Store<string> = createStore('foo').on(bar, (state, bar) =>
   [state, bar].join(' | '),
  )
  const store2 = store1.map(e => e.length)
@@ -48,7 +49,6 @@ test('graphite', () => {
 })
 
 test('showcase', () => {
- const fn = jest.fn()
  const foo = createEvent('foo')
  const bar = createEvent('bar')
 
@@ -60,7 +60,7 @@ test('showcase', () => {
  a.on(foo, n => n + 1)
  b.on(bar, n => n + 1)
 
- mapped.watch(fn)
+ mapped.watch(spy)
 
  foo()
  foo()
@@ -73,7 +73,7 @@ test('showcase', () => {
  expect(show(a.graphite.seq)).toMatchSnapshot('store a')
  expect(show(foo.graphite.seq)).toMatchSnapshot('event foo')
  expect(show(mapped.graphite.seq)).toMatchSnapshot('mapped')
- expect(fn).toHaveBeenCalledTimes(3)
+ expect(spy).toHaveBeenCalledTimes(3)
  const first = createStore('s')
  const second = createStore('h')
  const third = createStore('i')

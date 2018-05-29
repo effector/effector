@@ -1,8 +1,7 @@
 //@flow
 import {createEffect} from '..'
-import type {Event, Effect, Store} from '../../effector/index.h'
 
-import {delay, spy} from '../../fixtures/test-utils'
+import {delay, spy} from 'effector/fixtures/test-utils'
 
 const effect = createEffect('long request')
 

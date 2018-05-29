@@ -1,7 +1,9 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import alias from './rollup-alias'
-import uglify from 'rollup-plugin-uglify'
+import {uglify} from 'rollup-plugin-uglify'
+import visualizer from 'rollup-plugin-visualizer'
+import bucklescript from 'rollup-plugin-bucklescript'
 
 import {resolve as resolvePath} from 'path'
 import {readPackageList, writePackages} from './scripts/monorepoTools'
@@ -15,20 +17,25 @@ const staticPlugins = [
   presets,
   plugins,
   runtimeHelpers: true,
+  exclude: /\.re/,
  }),
- uglify({
-  mangle: {
-   toplevel: true,
+ bucklescript({module: 'es6', inSource: true}),
+ uglify(
+  {
+   mangle: {
+    toplevel: true,
+   },
+   compress: {
+    pure_getters: true,
+   },
+   output: {
+    comments: /#/i,
+    // beautify: true,
+    // indent_level: 2,
+   },
   },
-  compress: {
-   pure_getters: true,
-  },
-  output: {
-   comments: /#/i,
-   // beautify: true,
-   // indent_level: 2,
-  },
- }),
+  require('uglify-es').minify,
+ ),
 ]
 const rollupPlugins = [
  alias({
@@ -36,8 +43,11 @@ const rollupPlugins = [
    ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
    ['effector/event', resolvePath(__dirname, 'src', 'event')],
    ['effector/store', resolvePath(__dirname, 'src', 'store')],
+   ['effector/domain', resolvePath(__dirname, 'src', 'domain')],
+   ['effector/datatype', resolvePath(__dirname, 'src', 'datatype')],
+   ['effector/graphite', resolvePath(__dirname, 'src', 'graphite')],
   ]),
-  extensions: ['js'],
+  extensions: ['re', 'bs', 'bs.js', 'js'],
  }),
  resolve({
   jail: resolvePath(__dirname, 'src'),
@@ -48,7 +58,13 @@ const rollupPlugins = [
 function createBuild(name) {
  return {
   input: resolvePath(__dirname, 'packages', name, 'index.js'),
-  plugins: rollupPlugins,
+  plugins: [
+   visualizer({
+    filename: `./stats-${name}.html`,
+    title: `${name} bundle stats`,
+   }),
+   ...rollupPlugins,
+  ],
   output: [
    {
     file: resolvePath(__dirname, 'npm', name, `${name}.es.js`),
