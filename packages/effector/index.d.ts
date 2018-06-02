@@ -12,7 +12,7 @@ export type Subscription = {
  unsubscribe(): void,
 }
 
-export class Event<E> {
+export interface Event<E> {
  (payload: E): E;
  watch(watcher: (payload: E) => any): Subscription;
  map<T>(fn: (_: E) => T): Event<T>;
@@ -25,7 +25,7 @@ export class Event<E> {
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
-export class Effect<Params, Done, Fail = Error> {
+export interface Effect<Params, Done, Fail = Error> {
  (
   payload: Params,
  ): {
@@ -65,7 +65,6 @@ export class Store<State> {
  subscribe(listner: any): Subscription;
  watch<E>(
   watcher: (state: State, payload: E, type: string) => any,
-  _: void,
  ): Subscription;
  watch<E>(
   event: Event<E> | Effect<E, any, any>,
@@ -96,7 +95,9 @@ export function createStore<State>(defaultState: State): Store<State>
 
 export function createStoreObject<State>(
  defaultState: State,
-): Store<any>
+): Store<{
+  [K in keyof State]: State[K] extends Store<infer U> ? U : any
+}>
 
 export function extract<
  State,
