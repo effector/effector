@@ -22,6 +22,9 @@ export function domainFabric(
  return {
   compositeName,
   id,
+  getType() {
+   return compositeName.fullName
+  },
   onCreateEvent(hook: (newEvent: Event<any>) => any) {
    return hooks.event.watch(hook)
   },

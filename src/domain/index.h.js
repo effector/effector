@@ -17,6 +17,7 @@ export type Domain = {
  domain(name?: string): Domain,
  store<State>(defaultState: State): Store<State>,
  compositeName: CompositeName,
+ getType(): string,
 }
 
 export type DomainHooks = {

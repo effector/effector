@@ -87,6 +87,7 @@ export class Domain {
  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
  domain(name?: string): Domain;
  store<State>(defaultState: State): Store<State>;
+ getType(): string;
 }
 
 export function createEvent<E>(eventName?: string): Event<E>
