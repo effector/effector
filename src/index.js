@@ -3,7 +3,7 @@
 export {combine} from './effector'
 
 export type {Domain} from 'effector/domain'
-export {createDomain, createWrappedDomain} from 'effector/domain'
+export {createDomain} from 'effector/domain'
 
 export type {Event} from 'effector/event'
 export {createEvent} from 'effector/event'
