@@ -22,7 +22,7 @@ export type Event<E> = {
  epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
- domainName: string,
+ domainName?: CompositeName,
  graphite: GraphiteMeta,
  compositeName: CompositeName,
 }
