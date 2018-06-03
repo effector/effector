@@ -79,6 +79,10 @@ export class Store<State> {
 }
 
 export class Domain {
+ onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
+ onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
+ onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
+ onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
  event<Payload>(name?: string): Event<Payload>;
  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
  domain(name?: string): Domain;
