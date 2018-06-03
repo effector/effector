@@ -1,32 +1,44 @@
 
 
 
-function ctxByType(c, data) {
+function compute(data) {
   return {
-          type: c + 21 | 0,
+          type: 21,
           data: data,
           time: Date.now()
         };
 }
 
-function compute(param) {
-  return ctxByType(/* ComputeType */0, param);
+function run(data) {
+  return {
+          type: 23,
+          data: data,
+          time: Date.now()
+        };
 }
 
-function run(param) {
-  return ctxByType(/* RunType */2, param);
+function emit(data) {
+  return {
+          type: 22,
+          data: data,
+          time: Date.now()
+        };
 }
 
-function emit(param) {
-  return ctxByType(/* EmitType */1, param);
+function filter(data) {
+  return {
+          type: 24,
+          data: data,
+          time: Date.now()
+        };
 }
 
-function filter(param) {
-  return ctxByType(/* FilterType */3, param);
-}
-
-function update(param) {
-  return ctxByType(/* UpdateType */4, param);
+function update(data) {
+  return {
+          type: 25,
+          data: data,
+          time: Date.now()
+        };
 }
 
 export {

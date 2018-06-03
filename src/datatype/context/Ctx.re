@@ -13,10 +13,9 @@ let ctxT =
   | FilterType => 24
   | UpdateType => 25;
 
-type time = int;
+type time;
 
-type date; /* abstract type for a document object */
-
+/* type date; abstract type for a document object */
 [@bs.scope "Date"] [@bs.val] external now : unit => time = "now";
 
 [@bs.deriving abstract]
@@ -27,10 +26,8 @@ type ctx = {
   time,
 };
 
-let ctxByType = (c: ctxType, data: Js.Json.t) : ctx => {
-  let ins = ctx(~type_=ctxT(c), ~data, ~time=now());
-  ins;
-};
+let ctxByType = (c: ctxType) =>
+  (. data: Js.Json.t) => ctx(~type_=ctxT(c), ~data, ~time=now());
 
 let compute = ctxByType(ComputeType);
 
