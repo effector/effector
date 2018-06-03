@@ -7,7 +7,7 @@ import {createStore, createStoreObject} from 'effector/store'
 import {createEvent, type Event} from 'effector/event'
 import {createEffect} from 'effector/effect'
 
-import {spy, delay, getSpyCalls} from 'effector/fixtures/test-utils'
+import {spy, delay, getSpyCalls} from 'effector/fixtures'
 
 import flags from '../../flags'
 

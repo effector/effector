@@ -8,7 +8,7 @@ import {createDomain} from 'effector/domain'
 import {createEvent} from 'effector/event'
 import {createStore, createStoreObject} from 'effector/store'
 
-import {delay, spy, getSpyCalls} from 'effector/fixtures/test-utils'
+import {delay, spy, getSpyCalls} from 'effector/fixtures'
 
 describe('fixtures works correctly', () => {
  test('spy use', () => {
