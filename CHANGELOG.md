@@ -18,6 +18,7 @@ const mount = mainPage.event('mount')
 const pageStore = mainPage.store(0)
 // => new store: 0
 ```
+* Improve TypeScript typings
 
 ## 0.17.5
 
