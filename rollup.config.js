@@ -63,6 +63,7 @@ function createBuild(name) {
    visualizer({
     filename: `./stats-${name}.html`,
     title: `${name} bundle stats`,
+    sourcemap: true,
    }),
    ...rollupPlugins,
   ],
