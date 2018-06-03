@@ -1,6 +1,3 @@
-/* include ReImpl; */
-/* [@bs.deriving accessors] */
-/* [@bs.deriving jsConverter] */
 type cmdType =
   | ComputeType
   | EmitType

@@ -1,11 +1,11 @@
 //@flow
 
 import * as Name from './type'
-import * as Type from './impl'
+import type {Step} from './impl'
 
 import {show as showCmd} from '../cmd/show'
 
-export function show(value: Type.Step): string {
+export function show(value: Step): string {
  switch (value.type) {
   case Name.SINGLE:
    return `Single ${showCmd(value.data)}`
