@@ -20,19 +20,18 @@ export function effectFabric<Payload, Done>({
 }): Effect<Payload, Done, *> {
  const instanceAsEvent: Event<Payload> = eventFabric({
   name,
-  domainName,
   parent,
  })
- instanceAsEvent.id
+
  const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
  const eventCreate = instanceAsEvent.create
  const done: Event<{params: Payload, result: Done}> = eventFabric({
   name: `${instanceAsEvent.shortName} done`,
-  domainName,
+  parent,
  })
  const fail: Event<{params: Payload, error: *}> = eventFabric({
   name: `${instanceAsEvent.shortName} fail`,
-  domainName,
+  parent,
  })
 
  // instanceAsEvent.step.data.delete(instanceAsEvent.cmd)

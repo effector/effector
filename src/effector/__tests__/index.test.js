@@ -6,7 +6,7 @@ import {combine} from '../combine'
 import {createStoreObject, createStore, type Store} from 'effector/store'
 import {show} from 'effector/datatype/step/show'
 
-import {spy} from 'effector/fixtures/test-utils'
+import {spy} from 'effector/fixtures'
 
 test('graphite', () => {
  const fn = jest.fn()

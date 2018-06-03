@@ -20,16 +20,14 @@ import {type CompositeName, createName} from '../compositeName'
 
 export function eventFabric<Payload>({
  name: nameRaw,
- domainName,
  parent,
 }: {
  name?: string,
- domainName: string,
  parent?: CompositeName,
 }): Event<Payload> {
  const id = eventRefcount()
  const name = nameRaw || id
- const fullName = makeName(name, domainName)
+ const fullName = makeName(name, parent)
  const compositeName = createName(name, parent)
  const cmd = new Cmd.Emit({
   subtype: 'event',
@@ -65,7 +63,7 @@ export function eventFabric<Payload>({
  instance.to = to
  instance.epic = epic
  instance.shortName = name
- instance.domainName = domainName
+ instance.domainName = parent
  instance.compositeName = compositeName
  instance.filter = filter
  function filter<Next>(fn: Payload => Next | void): Event<Next> {
@@ -80,7 +78,7 @@ export function eventFabric<Payload>({
   warning(false, '.epic is deprecated, use from(event) of Observable.of(event)')
   const instance$ = from(instanceAsEvent).multicast()
   const epic$ = fn(instance$).multicast()
-  const mapped = eventFabric({name: `${name}$ ~> *`, domainName})
+  const mapped = eventFabric({name: `${name}$ ~> *`, parent})
   epic$.observe(e => {
    mapped.create(e, fullName)
   })
@@ -97,7 +95,7 @@ export function eventFabric<Payload>({
    case Kind.EFFECT:
     return watch(target.create)
    default: {
-    throw new TypeError(`Unsupported kind`)
+    throw new TypeError('Unsupported kind')
    }
   }
  }
@@ -118,7 +116,7 @@ export function eventFabric<Payload>({
  function prepend<Before>(fn: Before => Payload) {
   const contramapped: Event<Before> = eventFabric({
    name: `* → ${name}`,
-   domainName,
+   parent,
   })
 
   const computeCmd = Step.single(
@@ -146,7 +144,7 @@ declare function mapEvent<A, B>(
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
  const mapped = eventFabric({
   name: `${event.shortName} → *`,
-  domainName: event.domainName,
+  parent: event.domainName,
  })
  const computeCmd = Step.single(
   new Cmd.Compute({
@@ -166,7 +164,7 @@ function filterEvent<A, B>(
 ): Event<B> {
  const mapped = eventFabric({
   name: `${event.shortName} →? *`,
-  domainName: event.domainName,
+  parent: event.domainName,
  })
  const computeCmd = Step.single(
   new Cmd.Compute({
@@ -221,6 +219,6 @@ export function watchEvent<Payload>(
  }
  return unsubscribe
 }
-function makeName(name, domainName) {
- return [domainName, name].filter(str => str.length > 0).join('/')
+function makeName(name: string, compositeName?: CompositeName) {
+ return [compositeName?.fullName, name].filter(Boolean).join('/')
 }

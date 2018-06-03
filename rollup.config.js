@@ -46,6 +46,7 @@ const rollupPlugins = [
    ['effector/domain', resolvePath(__dirname, 'src', 'domain')],
    ['effector/datatype', resolvePath(__dirname, 'src', 'datatype')],
    ['effector/graphite', resolvePath(__dirname, 'src', 'graphite')],
+   ['effector/fixtures', resolvePath(__dirname, 'src', 'fixtures')],
   ]),
   extensions: ['re', 'bs', 'bs.js', 'js'],
  }),
@@ -62,6 +63,7 @@ function createBuild(name) {
    visualizer({
     filename: `./stats-${name}.html`,
     title: `${name} bundle stats`,
+    sourcemap: true,
    }),
    ...rollupPlugins,
   ],

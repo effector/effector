@@ -62,6 +62,29 @@ const Form = () => (
 )
 ```
 
+### Domain hooks
+
+* onCreateEvent
+* onCreateEffect
+* onCreateStore
+* onCreateDomain (to handle nested domains)
+
+```js
+import {createDomain} from 'effector'
+const mainPage = createDomain('main page')
+mainPage.onCreateEvent(event => {
+ console.log('new event: ', event.getType())
+})
+mainPage.onCreateStore(store => {
+ console.log('new store: ', store.getState())
+})
+const mount = mainPage.event('mount')
+// => new event: main page/mount
+
+const pageStore = mainPage.store(0)
+// => new store: 0
+```
+
 ## Typings
 
 Effector supports both TypeScript and Flow type annotations out of the box.

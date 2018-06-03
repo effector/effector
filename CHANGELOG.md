@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.17.6
+
+* Add domain hooks for handle new events, effects or stores in domain.
+```js
+import {createDomain} from 'effector'
+const mainPage = createDomain('main page')
+mainPage.onCreateEvent(event => {
+ console.log('new event: ', event.getType())
+})
+mainPage.onCreateStore(store => {
+ console.log('new store: ', store.getState())
+})
+const mount = mainPage.event('mount')
+// => new event: main page/mount
+
+const pageStore = mainPage.store(0)
+// => new store: 0
+```
+* Improve TypeScript typings
+
 ## 0.17.5
 
 * Add ability to use createEvent, createEffect and createDomain without arguments (omit name)

@@ -35,7 +35,7 @@ export type Effect<Params, Done, Fail = Error> = {
  epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
- domainName: string,
+ domainName?: CompositeName,
  graphite: GraphiteMeta,
  compositeName: CompositeName,
 }

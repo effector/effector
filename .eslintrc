@@ -27,6 +27,7 @@ rules:
   flowtype/generic-spacing: 'off'
   flowtype/space-after-type-colon: 'off'
   react/prop-types: 'off'
+  react/display-name: 'off'
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn

@@ -1,6 +1,3 @@
-/* include ReImpl; */
-/* [@bs.deriving accessors] */
-/* [@bs.deriving jsConverter] */
 type cmdType =
   | ComputeType
   | EmitType
@@ -16,16 +13,11 @@ let cmdT =
   | FilterType => 14
   | UpdateType => 15;
 
-/* let cmdT = (value: cmdType) =>
-   switch (value) {
-   | ComputeType => 11
-   }; */
 [@bs.deriving abstract]
 type cmd = {
   [@bs.as "type"]
   type_: int,
   data: Js.Json.t,
-  /* name: string, */
 };
 
 let cmdByType = (c: cmdType, data: Js.Json.t) : cmd => {

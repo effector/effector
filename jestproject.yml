@@ -4,6 +4,7 @@ tests:
 - effect
 - event
 - store
+- domain
 - kind
 - redux
 - graphite
@@ -13,6 +14,7 @@ include:
  effect: true
  event: true
  store: true
+ domain: true
  kind: true
  redux: false
  graphite: true

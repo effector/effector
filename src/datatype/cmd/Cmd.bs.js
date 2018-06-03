@@ -1,17 +1,6 @@
 
 
 
-function cmdT(param) {
-  return param + 11 | 0;
-}
-
-function cmdByType(c, data) {
-  return {
-          type: c + 11 | 0,
-          data: data
-        };
-}
-
 function compute(param) {
   return {
           type: 11,
@@ -48,8 +37,6 @@ function update(param) {
 }
 
 export {
-  cmdT ,
-  cmdByType ,
   compute ,
   run ,
   emit ,

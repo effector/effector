@@ -1,9 +1,9 @@
 //@flow
 
 import * as Name from './type'
-import * as Type from './impl'
+import type {Cmd} from './impl'
 
-export function show(value: Type.Cmd): string {
+export function show(value: Cmd): string {
  switch (value.type) {
   case Name.EMIT:
    return `Emit(${value.data.fullName})`
