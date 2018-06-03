@@ -19,9 +19,10 @@ function packageTest(displayName, opts = {}) {
    },
    moduleNameMapper: {
     '^effector$': '<rootDir>/src/index.js',
+    'effector/fixtures': '<rootDir>/src/fixtures/index.js',
     '^effector/(.+)': '<rootDir>/src/$1',
    },
-   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/packages/'],
    roots: ['<rootDir>/src/'],
   },
   opts,
