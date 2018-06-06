@@ -7,84 +7,38 @@
   "title": "Eff",
   "branch": "develop",
   "style": {
-    "name": "Default",
+    "name": "Future",
     "componentSet": {
       "nav": "nav/BasicNav",
       "header": "header/BannerHeader",
       "article": "article/BasicArticle",
       "footer": "footer/BasicFooter"
     },
-    "fontFamily": "-apple-system, BlinkMacSystemFont, sans-serif",
-    "fontWeight": 400,
-    "bold": 600,
-    "lineHeight": 1.5,
-    "typeScale": [
-      72,
-      48,
-      24,
-      20,
-      16,
-      14,
-      12
-    ],
-    "monospace": "Menlo, monospace",
+    "fontFamily": "\"Avenir Next\", Helvetica, sans-serif",
     "heading": {
-      "fontFamily": null,
-      "fontStyle": null,
-      "fontWeight": 600,
-      "lineHeight": 1.25,
-      "textTransform": null,
-      "letterSpacing": null
+      "fontWeight": 500,
+      "textTransform": "uppercase",
+      "letterSpacing": "0.2em"
     },
-    "h0": {},
-    "h1": {},
-    "h2": {},
-    "h3": {},
-    "h4": {},
-    "h5": {},
-    "h6": {},
-    "alternativeText": {},
-    "space": [
-      0,
-      8,
-      16,
-      32,
-      48,
-      64,
-      96
-    ],
-    "layout": {
-      "maxWidth": 1024,
-      "centered": false
+    "alternativeText": {
+      "textTransform": "uppercase",
+      "fontWeight": 400,
+      "letterSpacing": "0.2em",
+      "opacity": 0.75
     },
     "colors": {
-      "text": "#111",
+      "text": "#333",
       "background": "#fff",
-      "primary": "#08e",
-      "secondary": "#059",
-      "highlight": "#e08",
-      "border": "#ddd",
-      "muted": "#eee"
+      "primary": "#666",
+      "secondary": "#888",
+      "highlight": "#1f80ff",
+      "muted": "#f6f6f6",
+      "border": "#eee"
     },
-    "border": {
-      "width": 1,
-      "radius": 2
-    },
-    "link": {},
-    "button": {
-      "hover": {
-        "boxShadow": "inset 0 0 0 999px rgba(0, 0, 0, .125)"
-      }
-    },
-    "input": {},
-    "body": {
-      "margin": 0
-    },
-    "breakpoints": {
-      "xs": "@media screen and (max-width:40em)",
-      "sm": "@media screen and (min-width:40em)",
-      "md": "@media screen and (min-width:52em)",
-      "lg": "@media screen and (min-width:64em)"
+    "layout": {
+      "centered": true,
+      "maxWidth": 1024,
+      "bannerHeight": "80vh"
     }
   },
   "content": [
@@ -94,10 +48,6 @@
         {
           "href": "https://github.com/zerobias/effector",
           "text": "GitHub"
-        },
-        {
-          "href": "https://npmjs.com/package/effector-dev",
-          "text": "npm"
         }
       ]
     },
@@ -116,8 +66,7 @@
           "user": "zerobias",
           "repo": "effector"
         }
-      ],
-      "text": "v0.17.6"
+      ]
     },
     {
       "component": "article",
