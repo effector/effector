@@ -1,0 +1,63 @@
+//@flow
+
+import * as Type from './type'
+import {type Time, now} from '../../time'
+
+class ContextClass<+Data> {
+ +type: $Subtype<Type.ContextType>;
+ +data: Data;
+ +time: Time;
+ constructor(data: Data) {
+  this.data = data
+  this.time = now()
+ }
+}
+
+export class compute extends ContextClass<{
+ +args: Array<any>,
+ result: any,
+ error: any,
+ isError: boolean,
+ isNone: boolean,
+ isChanged: boolean,
+}> {
+ +type: Type.ComputeContextType;
+}
+export class emit extends ContextClass<{
+ +payload: any,
+ +eventName: string,
+}> {
+ /*::
+ +type: Type.EmitContextType;
+ */
+}
+export class run extends ContextClass<{
+ +args: Array<any>,
+ +parentContext: compute | emit | filter | update,
+}> {
+ /*::
+ +type: Type.RunContextType;
+ */
+}
+export class filter extends ContextClass<{
+ +value: any,
+ isChanged: boolean,
+}> {
+ /*::
+ +type: Type.FilterContextType;
+ */
+}
+export class update extends ContextClass<{
+ value: any,
+}> {
+ /*::
+ +type: Type.UpdateContextType;
+ */
+}
+
+export type Context =
+ | compute
+ | emit
+ | run
+ | filter
+ | update

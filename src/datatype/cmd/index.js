@@ -8,3 +8,4 @@ export {
  filter as Filter,
  update as Update,
 } from './Cmd.bs'
+export type {Cmd} from './Cmd.bs'
