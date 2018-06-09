@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`graphite: bar seq 1`] = `
-Seq {
+Object {
   "data": Array [
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
@@ -12,36 +12,40 @@ Seq {
         },
         "type": 12,
       },
+      "type": 31,
     },
-    Multi {
+    Object {
       "data": Set {
-        Seq {
+        Object {
           "data": Array [
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
                 "type": 11,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "store": Atom {
@@ -50,36 +54,40 @@ Seq {
                 },
                 "type": 15,
               },
+              "type": 31,
             },
-            Multi {
+            Object {
               "data": Set {
-                Seq {
+                Object {
                   "data": Array [
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
                         "type": 11,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "store": Atom {
@@ -88,34 +96,42 @@ Seq {
                         },
                         "type": 15,
                       },
+                      "type": 31,
                     },
-                    Multi {
+                    Object {
                       "data": Set {},
+                      "type": 32,
                     },
                   ],
+                  "type": 33,
                 },
               },
+              "type": 32,
             },
           ],
+          "type": 33,
         },
-        Single {
+        Object {
           "data": Object {
             "data": Object {
               "runner": [Function],
             },
             "type": 13,
           },
+          "type": 31,
         },
       },
+      "type": 32,
     },
   ],
+  "type": 33,
 }
 `;
 
 exports[`graphite: bar seq 2`] = `
-Seq {
+Object {
   "data": Array [
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
@@ -124,36 +140,40 @@ Seq {
         },
         "type": 12,
       },
+      "type": 31,
     },
-    Multi {
+    Object {
       "data": Set {
-        Seq {
+        Object {
           "data": Array [
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
                 "type": 11,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "store": Atom {
@@ -162,36 +182,40 @@ Seq {
                 },
                 "type": 15,
               },
+              "type": 31,
             },
-            Multi {
+            Object {
               "data": Set {
-                Seq {
+                Object {
                   "data": Array [
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
                         "type": 11,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "store": Atom {
@@ -200,26 +224,33 @@ Seq {
                         },
                         "type": 15,
                       },
+                      "type": 31,
                     },
-                    Multi {
+                    Object {
                       "data": Set {},
+                      "type": 32,
                     },
                   ],
+                  "type": 33,
                 },
               },
+              "type": 32,
             },
           ],
+          "type": 33,
         },
       },
+      "type": 32,
     },
   ],
+  "type": 33,
 }
 `;
 
 exports[`graphite: foo seq 1`] = `
-Seq {
+Object {
   "data": Array [
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
@@ -228,20 +259,22 @@ Seq {
         },
         "type": 12,
       },
+      "type": 31,
     },
-    Multi {
+    Object {
       "data": Set {
-        Seq {
+        Object {
           "data": Array [
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
                 "type": 11,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "fullName": "foo → *",
@@ -250,36 +283,40 @@ Seq {
                 },
                 "type": 12,
               },
+              "type": 31,
             },
-            Multi {
+            Object {
               "data": Set {
-                Seq {
+                Object {
                   "data": Array [
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "reduce": [Function],
                         },
                         "type": 11,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "filter": [Function],
                         },
                         "type": 14,
                       },
+                      "type": 31,
                     },
-                    Single {
+                    Object {
                       "data": Object {
                         "data": Object {
                           "store": Atom {
@@ -288,36 +325,40 @@ Seq {
                         },
                         "type": 15,
                       },
+                      "type": 31,
                     },
-                    Multi {
+                    Object {
                       "data": Set {
-                        Seq {
+                        Object {
                           "data": Array [
-                            Single {
+                            Object {
                               "data": Object {
                                 "data": Object {
                                   "reduce": [Function],
                                 },
                                 "type": 11,
                               },
+                              "type": 31,
                             },
-                            Single {
+                            Object {
                               "data": Object {
                                 "data": Object {
                                   "filter": [Function],
                                 },
                                 "type": 14,
                               },
+                              "type": 31,
                             },
-                            Single {
+                            Object {
                               "data": Object {
                                 "data": Object {
                                   "filter": [Function],
                                 },
                                 "type": 14,
                               },
+                              "type": 31,
                             },
-                            Single {
+                            Object {
                               "data": Object {
                                 "data": Object {
                                   "store": Atom {
@@ -326,31 +367,41 @@ Seq {
                                 },
                                 "type": 15,
                               },
+                              "type": 31,
                             },
-                            Multi {
+                            Object {
                               "data": Set {},
+                              "type": 32,
                             },
                           ],
+                          "type": 33,
                         },
                       },
+                      "type": 32,
                     },
                   ],
+                  "type": 33,
                 },
-                Single {
+                Object {
                   "data": Object {
                     "data": Object {
                       "runner": [Function],
                     },
                     "type": 13,
                   },
+                  "type": 31,
                 },
               },
+              "type": 32,
             },
           ],
+          "type": 33,
         },
       },
+      "type": 32,
     },
   ],
+  "type": 33,
 }
 `;
 
@@ -455,17 +506,18 @@ exports[`graphite: show store2 1`] = `
 `;
 
 exports[`graphite: store1 seq 1`] = `
-Seq {
+Object {
   "data": Array [
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "filter": [Function],
         },
         "type": 14,
       },
+      "type": 31,
     },
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "store": Atom {
@@ -474,36 +526,40 @@ Seq {
         },
         "type": 15,
       },
+      "type": 31,
     },
-    Multi {
+    Object {
       "data": Set {
-        Seq {
+        Object {
           "data": Array [
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "reduce": [Function],
                 },
                 "type": 11,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "filter": [Function],
                 },
                 "type": 14,
               },
+              "type": 31,
             },
-            Single {
+            Object {
               "data": Object {
                 "data": Object {
                   "store": Atom {
@@ -512,30 +568,36 @@ Seq {
                 },
                 "type": 15,
               },
+              "type": 31,
             },
-            Multi {
+            Object {
               "data": Set {},
+              "type": 32,
             },
           ],
+          "type": 33,
         },
       },
+      "type": 32,
     },
   ],
+  "type": 33,
 }
 `;
 
 exports[`graphite: store2 seq 1`] = `
-Seq {
+Object {
   "data": Array [
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "filter": [Function],
         },
         "type": 14,
       },
+      "type": 31,
     },
-    Single {
+    Object {
       "data": Object {
         "data": Object {
           "store": Atom {
@@ -544,11 +606,14 @@ Seq {
         },
         "type": 15,
       },
+      "type": 31,
     },
-    Multi {
+    Object {
       "data": Set {},
+      "type": 32,
     },
   ],
+  "type": 33,
 }
 `;
 
