@@ -1,7 +1,7 @@
 //@flow
 
 import * as Name from './type'
-import type {Step} from './impl'
+import type {Step} from './Step.bs'
 
 import {show as showCmd} from '../cmd/show'
 

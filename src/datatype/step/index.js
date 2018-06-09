@@ -1,4 +1,4 @@
 //@flow
 
 export * from './type'
-export * from './impl'
+export * from './Step.bs'
