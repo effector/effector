@@ -50,9 +50,7 @@ const rollupPlugins = [
   ]),
   extensions: ['re', 'bs', 'bs.js', 'js'],
  }),
- resolve({
-  jail: resolvePath(__dirname, 'src'),
- }),
+ resolve({}),
  ...staticPlugins,
 ]
 
@@ -67,6 +65,7 @@ function createBuild(name) {
    }),
    ...rollupPlugins,
   ],
+  external: ['warning', 'invariant', 'react', 'most', 'symbol-observable'],
   output: [
    {
     file: resolvePath(__dirname, 'npm', name, `${name}.es.js`),
