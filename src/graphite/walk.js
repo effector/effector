@@ -9,10 +9,7 @@ import {singleStep} from './single-step'
 export function walkEvent<T>(payload: T, event: Event<T>) {
  // const ctx = Ctx.context()
  const steps: Step.Seq = event.graphite.seq
- const eventCtx = new Ctx.EmitContext({
-  payload,
-  eventName: event.getType(),
- })
+ const eventCtx = Ctx.EmitContext(event.getType(), payload)
  const transactions: Set<() => void> = new Set()
  walkSeq(steps, eventCtx, transactions)
  for (const transact of transactions) {

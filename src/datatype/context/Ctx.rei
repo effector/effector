@@ -1,11 +1,23 @@
-type ctx;
+type ctx('a);
 
-let compute: (. Js.Json.t) => ctx;
+type computeData;
 
-let run: (. Js.Json.t) => ctx;
+let compute:
+  (. array(Js.Json.t), Js.Json.t, Js.Json.t, bool, bool, bool) =>
+  ctx(computeData);
 
-let emit: (. Js.Json.t) => ctx;
+type emitData;
 
-let filter: (. Js.Json.t) => ctx;
+let emit: (. string, Js.Json.t) => ctx(emitData);
 
-let update: (. Js.Json.t) => ctx;
+type filterData;
+
+let filter: (. Js.Json.t, bool) => ctx(filterData);
+
+type updateData;
+
+let update: (. Js.Json.t) => ctx(updateData);
+
+type runData;
+
+let run: (. array(Js.Json.t), ctx(Js.Json.t)) => ctx(runData);

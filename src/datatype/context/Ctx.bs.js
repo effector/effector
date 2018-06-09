@@ -1,7 +1,15 @@
 
 
 
-function compute(data) {
+function compute(args, result, error, isError, isNone, isChanged) {
+  var data = {
+    args: args,
+    result: result,
+    error: error,
+    isError: isError,
+    isNone: isNone,
+    isChanged: isChanged
+  };
   return {
           type: 21,
           data: data,
@@ -9,7 +17,11 @@ function compute(data) {
         };
 }
 
-function run(data) {
+function run(args, parentContext) {
+  var data = {
+    args: args,
+    parentContext: parentContext
+  };
   return {
           type: 23,
           data: data,
@@ -17,7 +29,11 @@ function run(data) {
         };
 }
 
-function emit(data) {
+function emit(eventName, payload) {
+  var data = {
+    eventName: eventName,
+    payload: payload
+  };
   return {
           type: 22,
           data: data,
@@ -25,7 +41,11 @@ function emit(data) {
         };
 }
 
-function filter(data) {
+function filter(value, isChanged) {
+  var data = {
+    value: value,
+    isChanged: isChanged
+  };
   return {
           type: 24,
           data: data,
@@ -33,7 +53,10 @@ function filter(data) {
         };
 }
 
-function update(data) {
+function update(value) {
+  var data = {
+    value: value
+  };
   return {
           type: 25,
           data: data,
@@ -43,10 +66,10 @@ function update(data) {
 
 export {
   compute ,
-  run ,
   emit ,
   filter ,
   update ,
+  run ,
   
 }
 /* No side effect */

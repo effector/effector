@@ -4,9 +4,9 @@ import * as Type from './type'
 import {type Time, now} from '../../time'
 
 class ContextClass<+Data> {
- +type: $Subtype<Type.ContextType>;
- +data: Data;
- +time: Time;
+ +type: $Subtype<Type.ContextType>
+ +data: Data
+ +time: Time
  constructor(data: Data) {
   this.data = data
   this.time = now()
@@ -21,43 +21,79 @@ export class compute extends ContextClass<{
  isNone: boolean,
  isChanged: boolean,
 }> {
- +type: Type.ComputeContextType;
+ static $call: (
+  args: Array<any>,
+  result: any,
+  error: any,
+  isError: boolean,
+  isNone: boolean,
+  isChanged: boolean,
+ ) => compute
+ +type: Type.ComputeContextType
+ constructor(
+  args: Array<any>,
+  result: any,
+  error: any,
+  isError: boolean,
+  isNone: boolean,
+  isChanged: boolean,
+ ) {
+  super({
+   args,
+   result,
+   error,
+   isError,
+   isNone,
+   isChanged,
+  })
+ }
 }
 export class emit extends ContextClass<{
  +payload: any,
  +eventName: string,
 }> {
+ static $call: (eventName: string, payload: any) => emit
  /*::
  +type: Type.EmitContextType;
  */
+ constructor(eventName: string, payload: any) {
+  super({eventName, payload})
+ }
 }
 export class run extends ContextClass<{
  +args: Array<any>,
  +parentContext: compute | emit | filter | update,
 }> {
+ static $call: (args: Array<any>, parentContext: compute | emit | filter | update) => run
  /*::
  +type: Type.RunContextType;
  */
+ constructor(args: Array<any>, parentContext: compute | emit | filter | update) {
+  super({args, parentContext})
+ }
 }
 export class filter extends ContextClass<{
  +value: any,
  isChanged: boolean,
 }> {
+ static $call: (value: any, isChanged: boolean) => filter
  /*::
  +type: Type.FilterContextType;
  */
+ constructor(value: any, isChanged: boolean) {
+  super({value, isChanged})
+ }
 }
 export class update extends ContextClass<{
  value: any,
 }> {
+ static $call: (value: any) => update
  /*::
  +type: Type.UpdateContextType;
  */
+ constructor(value: any) {
+  super({value})
+ }
 }
 
-export type Context =
- | compute
- | emit
- | run
- | filter
- | update
+export type Context = compute | emit | run | filter | update

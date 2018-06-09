@@ -19,22 +19,78 @@ type time;
 [@bs.scope "Date"] [@bs.val] external now : unit => time = "now";
 
 [@bs.deriving abstract]
-type ctx = {
+type ctx('a) = {
   [@bs.as "type"]
   type_: int,
-  data: Js.Json.t,
+  data: 'a,
   time,
 };
 
-let ctxByType = (c: ctxType) =>
-  (. data: Js.Json.t) => ctx(~type_=ctxT(c), ~data, ~time=now());
+[@bs.deriving abstract]
+type computeData = {
+  args: array(Js.Json.t),
+  result: Js.Json.t,
+  error: Js.Json.t,
+  isError: bool,
+  isNone: bool,
+  isChanged: bool,
+};
 
-let compute = ctxByType(ComputeType);
+let compute =
+  (.
+    args: array(Js.Json.t),
+    result: Js.Json.t,
+    error: Js.Json.t,
+    isError: bool,
+    isNone: bool,
+    isChanged: bool,
+  ) => {
+    let data =
+      computeData(~args, ~result, ~error, ~isError, ~isNone, ~isChanged);
+    ctx(~type_=ctxT(ComputeType), ~time=now(), ~data);
+  };
 
-let run = ctxByType(RunType);
+[@bs.deriving abstract]
+type runData = {
+  args: array(Js.Json.t),
+  parentContext: ctx(Js.Json.t) /* compute | emit | filter | update */
+};
 
-let emit = ctxByType(EmitType);
+let run =
+  (. args: array(Js.Json.t), parentContext: ctx(Js.Json.t)) => {
+    let data = runData(~args, ~parentContext);
+    ctx(~type_=ctxT(RunType), ~time=now(), ~data);
+  };
 
-let filter = ctxByType(FilterType);
+[@bs.deriving abstract]
+type emitData = {
+  eventName: string,
+  payload: Js.Json.t,
+};
 
-let update = ctxByType(UpdateType);
+let emit =
+  (. eventName: string, payload: Js.Json.t) => {
+    let data = emitData(~payload, ~eventName);
+    ctx(~type_=ctxT(EmitType), ~time=now(), ~data);
+  };
+
+[@bs.deriving abstract]
+type filterData = {
+  value: Js.Json.t,
+  isChanged: bool,
+};
+
+let filter =
+  (. value: Js.Json.t, isChanged: bool) => {
+    let data = filterData(~value, ~isChanged);
+    ctx(~type_=ctxT(FilterType), ~time=now(), ~data);
+  };
+
+[@bs.deriving abstract]
+type updateData = {value: Js.Json.t};
+
+let update =
+  (. value: Js.Json.t) => {
+    let data = updateData(~value);
+    ctx(~type_=ctxT(UpdateType), ~time=now(), ~data);
+  };
