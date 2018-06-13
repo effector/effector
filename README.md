@@ -16,6 +16,8 @@ yarn add effector effector-react
 
 ## Usage
 
+> Main documentation on [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
+
 [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43)
 
 ```js
