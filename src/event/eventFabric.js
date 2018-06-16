@@ -1,9 +1,9 @@
 //@flow
 
 // import invariant from 'invariant'
-import warning from 'warning'
+// import warning from 'warning'
 import $$observable from 'symbol-observable'
-import {from, type Stream} from 'most'
+// import {from, type Stream} from 'most'
 import type {GraphiteMeta, Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import type {Store} from 'effector/store'
@@ -61,7 +61,7 @@ export function eventFabric<Payload>({
  instance.prepend = prepend
  instance.subscribe = subscribe
  instance.to = to
- instance.epic = epic
+ // instance.epic = epic
  instance.shortName = name
  instance.domainName = parent
  instance.compositeName = compositeName
@@ -74,16 +74,6 @@ export function eventFabric<Payload>({
   return mapEvent(instanceAsEvent, fn)
  }
 
- function epic<T>(fn: (Stream<Payload>) => Stream<T>): Event<T> {
-  warning(false, '.epic is deprecated, use from(event) of Observable.of(event)')
-  const instance$ = from(instanceAsEvent).multicast()
-  const epic$ = fn(instance$).multicast()
-  const mapped = eventFabric({name: `${name}$ ~> *`, parent})
-  epic$.observe(e => {
-   mapped.create(e, fullName)
-  })
-  return mapped
- }
  function to(
   target: Store<any> & Event<any> & Effect<any, any, any>,
   handler?: Function,

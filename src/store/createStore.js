@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 // import type {ComponentType, Node} from 'react'
-import {from} from 'most'
+
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
@@ -13,8 +13,6 @@ import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {atom, type Atom} from '../effector/atom'
 // import warning from 'warning'
-
-import warning from 'warning'
 
 export type Nest = {
  get(): any,
@@ -68,7 +66,7 @@ export function storeConstructor<State>(props: {
   on,
   to,
   watch,
-  epic,
+  // epic,
   thru,
   subscribe,
   getState,
@@ -226,9 +224,9 @@ export function storeConstructor<State>(props: {
   }
  }
 
- function epic<E>(event: Event<E>, fn: Function) {
-  return epicStore(event, store, fn)
- }
+ // function epic<E>(event: Event<E>, fn: Function) {
+ //  return epicStore(event, store, fn)
+ // }
  function stateSetter(_, payload) {
   return payload
  }
@@ -289,25 +287,5 @@ function mapStore<A, B>(
  const off = () => {
   store.graphite.next.data.delete(nextSeq)
  }
- return innerStore
-}
-
-function epicStore(event, store, fn: Function) {
- warning(false, '.epic is deprecated, use from(store) of Observable.of(store)')
- const store$ = from(store).multicast()
- const event$ = from(event).multicast()
- const mapped$ = fn(event$, store$).multicast()
- const innerStore = (createStore: any)(store.getState())
- const subs = mapped$.subscribe({
-  next(value) {
-   innerStore.setState(value)
-  },
-  error(err) {
-   console.error(err)
-  },
-  complete() {
-   subs()
-  },
- })
  return innerStore
 }
