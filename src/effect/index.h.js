@@ -1,5 +1,4 @@
 //@flow
-import type {Stream} from 'most'
 import type {Subscription, Subscriber, GraphiteMeta} from '../effector/index.h'
 import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
@@ -32,7 +31,7 @@ export type Effect<Params, Done, Fail = Error> = {
   ) => Subscription)
   & ((store: Store<Params>, _: void) => Subscription)
  ),
- epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
+ // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
  domainName?: CompositeName,

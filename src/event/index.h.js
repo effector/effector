@@ -1,5 +1,4 @@
 //@flow
-import type {Stream} from 'most'
 import type {Subscription, Subscriber, GraphiteMeta} from '../effector/index.h'
 import type {Store} from 'effector/store'
 import type {CompositeName} from '../compositeName'
@@ -19,7 +18,7 @@ export type Event<E> = {
   & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => Subscription)
   & ((store: Store<E>, _: void) => Subscription)
  ),
- epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
+ // epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
  getType(): string,
  shortName: string,
  domainName?: CompositeName,

@@ -1,6 +1,4 @@
 
-import {Stream} from 'most'
-
 export type Subscriber<A> = {
  next(value: A): void,
  // error(err: Error): void,
@@ -22,7 +20,6 @@ export interface Event<E> {
  to(store: Store<E>, _: void): Subscription;
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): Subscription;
  getType(): string;
- epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
 export interface Effect<Params, Done, Fail = Error> {
@@ -45,7 +42,6 @@ export interface Effect<Params, Done, Fail = Error> {
  subscribe(subscriber: Subscriber<Params>): Subscription;
  to(store: Store<Params>, _: void): Subscription;
  to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): Subscription;
- epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
  getType(): string;
 }
 
@@ -71,10 +67,6 @@ export class Store<State> {
   watcher: (state: State, payload: E, type: string) => any,
  ): Subscription;
  thru<U>(fn: (store: Store<State>) => U): U;
- epic<T, S>(
-  event: Event<T> | Effect<T, any, any>,
-  fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
- ): void;
  displayName?: string;
 }
 
