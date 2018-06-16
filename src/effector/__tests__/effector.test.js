@@ -5,7 +5,8 @@ import {from, periodic} from 'most'
 import {combine} from '..'
 
 import {createDomain} from 'effector/domain'
-import {createEvent, epic} from 'effector/event'
+import {createEvent} from 'effector/event'
+import {epic} from '../../event/epic'
 import {createStore, createStoreObject} from 'effector/store'
 
 import {delay, spy, getSpyCalls} from 'effector/fixtures'

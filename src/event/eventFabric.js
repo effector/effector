@@ -3,7 +3,6 @@
 // import invariant from 'invariant'
 // import warning from 'warning'
 import $$observable from 'symbol-observable'
-// import {from, type Stream} from 'most'
 import type {GraphiteMeta, Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import type {Store} from 'effector/store'

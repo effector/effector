@@ -9,7 +9,10 @@ function packageTest(displayName, opts = {}) {
  return Object.assign(
   {
    displayName,
-   testMatch: [`<rootDir>/src/${displayName}/__tests__/**/*.(test|spec).js`],
+   testMatch: [
+    `<rootDir>/src/${displayName}/__tests__/**/*.(test|spec).js`,
+    `<rootDir>/src/${displayName}/**/__tests__/**/*.(test|spec).js`,
+   ],
    collectCoverage: true,
    automock: false,
    browser: false,
@@ -22,7 +25,10 @@ function packageTest(displayName, opts = {}) {
     'effector/fixtures': '<rootDir>/src/fixtures/index.js',
     '^effector/(.+)': '<rootDir>/src/$1',
    },
-   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/packages/'],
+   testPathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    // '<rootDir>/packages/effector',
+   ],
    roots: ['<rootDir>/src/'],
   },
   opts,
