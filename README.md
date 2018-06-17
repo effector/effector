@@ -14,11 +14,15 @@ Or using `yarn`
 yarn add effector effector-react
 ```
 
+## Demo
+
+> [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
+
+> [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
+
+## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
+
 ## Usage
-
-> Main documentation on [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
-
-[![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43)
 
 ```js
 import {
@@ -102,6 +106,8 @@ import {
  createStoreObject,
 } from 'effector'
 ```
+
+> See also [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
 
 ## Core types
 
