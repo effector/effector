@@ -1,8 +1,6 @@
 //@flow
 
-// import invariant from 'invariant'
-
-import * as Cmd from 'effector/datatype/cmd'
+import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
 import * as Step from 'effector/datatype/step'
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'

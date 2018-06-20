@@ -2,7 +2,6 @@
 // import invariant from 'invariant'
 import type {SingleStepValidContext} from '../effector/index.h'
 import * as Ctx from 'effector/datatype/context'
-import * as Step from 'effector/datatype/step'
 import * as Cmd from 'effector/datatype/cmd'
 
 function stepArg(ctx: SingleStepValidContext) {

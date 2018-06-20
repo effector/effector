@@ -1,11 +1,7 @@
 //@flow
 
-import * as Ctx from 'effector/datatype/context'
-import type {
- Multi as MultiStep,
- Seq as SeqStep,
- Single as SingleStep,
-} from 'effector/datatype/step'
+import {ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
+import type {Multi as MultiStep, Seq as SeqStep} from 'effector/datatype/step'
 
 export type Subscriber<A> = {
  next(value: A): void,
