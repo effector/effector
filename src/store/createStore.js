@@ -175,7 +175,7 @@ export function storeConstructor<State>(props: {
    },
   })
   const filterCmd = new Cmd.filter({
-   filter(data, ctx: Ctx.ComputeContext) {
+   filter(data, ctx: Ctx.compute) {
     // const oldValue = ctx.data.args[1]
     const lastState = getState()
     return data !== lastState && data !== undefined
@@ -268,7 +268,7 @@ function mapStore<A, B>(
  )
  const filterCmdPost = Step.single(
   new Cmd.filter({
-   filter(result, ctx: Ctx.ComputeContext) {
+   filter(result, ctx: Ctx.compute) {
     const lastState = innerStore.getState()
     const isChanged = result !== lastState && result !== undefined
     if (isChanged) {

@@ -23,21 +23,21 @@ export function singleStep(
  ctx: SingleStepValidContext,
  transactions: Set<() => void>,
  // buffers: {
- //  sideEffects: Array<Ctx.RunContext>,
- //  updates: Map<Atom<any>, Array<Ctx.UpdateContext>>,
+ //  sideEffects: Array<Ctx.run>,
+ //  updates: Map<Atom<any>, Array<Ctx.update>>,
  //  // computations:
  // },
-): SingleStepValidContext | Ctx.RunContext | void {
+): SingleStepValidContext | Ctx.run | void {
  const arg = stepArg(ctx)
  if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
  switch (single.type) {
   case Cmd.EMIT: {
-   return Ctx.EmitContext(single.data.fullName, arg)
+   return Ctx.emit(single.data.fullName, arg)
   }
   case Cmd.FILTER: {
    try {
     const isChanged = single.data.filter(arg, ctx)
-    return Ctx.FilterContext(arg, isChanged)
+    return Ctx.filter(arg, isChanged)
    } catch (err) {
     console.error(err)
     return
@@ -51,15 +51,15 @@ export function singleStep(
    } catch (err) {
     console.error(err)
    }
-   return Ctx.RunContext([arg], ctx)
+   return Ctx.run([arg], ctx)
   }
   case Cmd.UPDATE: {
-   const newCtx = Ctx.UpdateContext(arg)
+   const newCtx = Ctx.update(arg)
    single.data.store.set(arg)
    return newCtx
   }
   case Cmd.COMPUTE: {
-   const newCtx = Ctx.ComputeContext(
+   const newCtx = Ctx.compute(
     [undefined, arg, ctx],
     null,
     null,

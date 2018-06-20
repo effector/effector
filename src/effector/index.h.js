@@ -14,10 +14,10 @@ export type Subscriber<A> = {
 }
 
 export type SingleStepValidContext =
- | Ctx.EmitContext
- | Ctx.ComputeContext
- | Ctx.FilterContext
- | Ctx.UpdateContext
+ | Ctx.emit
+ | Ctx.compute
+ | Ctx.filter
+ | Ctx.update
 
 export type Subscription = {
  (): void,

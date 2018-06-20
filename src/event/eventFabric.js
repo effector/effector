@@ -164,7 +164,7 @@ function filterEvent<A, B>(
  )
  const filterCmd = Step.single(
   new Cmd.filter({
-   filter(result, ctx: Ctx.EmitContext) {
+   filter(result, ctx: Ctx.emit) {
     return result !== undefined
    },
   }),
