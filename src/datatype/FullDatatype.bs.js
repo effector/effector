@@ -1,5 +1,6 @@
 
 
+import * as ShowJs from "./step/show.js";
 
 function compute(param) {
   return {
@@ -182,10 +183,15 @@ function seq$1(data) {
         };
 }
 
+function show$1(a) {
+  return ShowJs.show(a, show);
+}
+
 var Step = /* module */[
   /* single */single$1,
   /* multi */multi$1,
-  /* seq */seq$1
+  /* seq */seq$1,
+  /* show */show$1
 ];
 
 var step = {
@@ -204,6 +210,9 @@ var step = {
               data: data
             };
     }),
+  show: (function (a) {
+      return ShowJs.show(a, show);
+    }),
   SINGLE: 31,
   MULTI: 32,
   SEQ: 33
@@ -218,4 +227,4 @@ export {
   step ,
   
 }
-/* No side effect */
+/* ./step/show.js Not a pure module */

@@ -1,6 +1,10 @@
 //@flow
 
-import * as cmd from './cmd'
+import * as cmd_ from './cmd'
 import * as ctx from './context'
-import * as step from './step'
-export {cmd, ctx, step}
+import * as step_ from './step'
+declare function show(cmd: cmd_.Cmd): string
+declare function showStep(cmd: step_.Step): string
+export const cmd = {...cmd_, show}
+export const step = {...step_, show: showStep}
+export {ctx}

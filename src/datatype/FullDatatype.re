@@ -182,6 +182,7 @@ module Step: {
   let single: (~data: Cmd.cmd) => step(Cmd.cmd);
   let multi: unit => step(set('a));
   let seq: (~data: array(step('a))) => step(array(step('a)));
+  let show: step('a) => string;
 } = {
   [@bs.deriving abstract]
   type step('a) = {
@@ -208,12 +209,16 @@ module Step: {
   let single = (~data: Cmd.cmd) => step(~data, ~type_=Label.single);
   let multi = () => step(~data=createSet([||]), ~type_=Label.multi);
   let seq = (~data: array(step(_))) => step(~data, ~type_=Label.seq);
+  [@bs.module "./step/show.js"]
+  external show' : (step('a), Cmd.cmd => string) => string = "show";
+  let show = a => show'(a, Cmd.show);
 };
 
 let step = {
   "single": (~data: Cmd.cmd) => Step.single(~data),
   "multi": () => (Step.multi(): Step.step(Step.set(int))),
   "seq": (~data: array(Step.step(int))) => Step.seq(~data),
+  "show": (a: Step.step(int)) => Step.show(a),
   "SINGLE": 31,
   "MULTI": 32,
   "SEQ": 33,
