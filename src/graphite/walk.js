@@ -2,8 +2,7 @@
 // import invariant from 'invariant'
 import type {SingleStepValidContext} from '../effector/index.h'
 import type {Event} from 'effector/event'
-import * as Ctx from 'effector/datatype/context'
-import * as Step from 'effector/datatype/step'
+import {step as Step, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
 import {singleStep} from './single-step'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {

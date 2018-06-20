@@ -10,8 +10,11 @@ import type {Effect} from 'effector/effect'
 import * as Kind from '../kind'
 import {setProperty} from '../setProperty'
 
-import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
-import * as Step from 'effector/datatype/step'
+import {
+ cmd as Cmd,
+ ctx as Ctx,
+ step as Step,
+} from 'effector/datatype/FullDatatype.bs'
 import {walkEvent, frame, seq} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'

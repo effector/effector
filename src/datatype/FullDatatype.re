@@ -214,4 +214,7 @@ let step = {
   "single": (~data: Cmd.cmd) => Step.single(~data),
   "multi": () => (Step.multi(): Step.step(Step.set(int))),
   "seq": (~data: array(Step.step(int))) => Step.seq(~data),
+  "SINGLE": 31,
+  "MULTI": 32,
+  "SEQ": 33,
 };

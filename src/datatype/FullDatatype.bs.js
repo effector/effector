@@ -203,7 +203,10 @@ var step = {
               type: seq,
               data: data
             };
-    })
+    }),
+  SINGLE: 31,
+  MULTI: 32,
+  SEQ: 33
 };
 
 export {
