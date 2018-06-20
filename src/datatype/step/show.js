@@ -3,7 +3,7 @@
 import * as Name from './type'
 import type {Step} from './Step.bs'
 
-import {show as showCmd} from '../cmd/show'
+import {show as showCmd} from '../cmd/Cmd.bs'
 
 export function show(value: Step): string {
  switch (value.type) {

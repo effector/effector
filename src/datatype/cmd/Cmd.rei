@@ -9,3 +9,5 @@ let emit: Js.Json.t => cmd;
 let filter: Js.Json.t => cmd;
 
 let update: Js.Json.t => cmd;
+
+let show: cmd => string;

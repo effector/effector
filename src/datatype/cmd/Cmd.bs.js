@@ -36,12 +36,35 @@ function update(param) {
         };
 }
 
+function show(cmd) {
+  var match = cmd.type;
+  var switcher = match - 11 | 0;
+  if (switcher > 4 || switcher < 0) {
+    return "";
+  } else {
+    switch (switcher) {
+      case 0 : 
+          return "Compute";
+      case 1 : 
+          return "Emit(" + ((cmd.data.fullName) + ")");
+      case 2 : 
+          return "Run";
+      case 3 : 
+          return "Filter";
+      case 4 : 
+          return "Update";
+      
+    }
+  }
+}
+
 export {
   compute ,
   run ,
   emit ,
   filter ,
   update ,
+  show ,
   
 }
 /* No side effect */

@@ -1,6 +1,6 @@
 //@flow
 
-import {show as showCmd} from '../cmd/show'
+import {show as showCmd} from '../cmd/Cmd.bs'
 
 import type {Tree} from './index'
 

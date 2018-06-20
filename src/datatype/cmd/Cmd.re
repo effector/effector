@@ -34,3 +34,14 @@ let emit = cmdByType(EmitType);
 let filter = cmdByType(FilterType);
 
 let update = cmdByType(UpdateType);
+
+let show: cmd => string =
+  cmd =>
+    switch (cmd |. type_) {
+    | 11 => "Compute"
+    | 12 => "Emit(" ++ [%raw "cmd.data.fullName"] ++ ")"
+    | 13 => "Run"
+    | 14 => "Filter"
+    | 15 => "Update"
+    | _ => ""
+    };
