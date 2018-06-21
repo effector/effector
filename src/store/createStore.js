@@ -6,8 +6,11 @@ import invariant from 'invariant'
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
-import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
-import * as Step from 'effector/datatype/step'
+import {
+ cmd as Cmd,
+ ctx as Ctx,
+ step as Step,
+} from 'effector/datatype/FullDatatype.bs'
 import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {atom, type Atom} from '../effector/atom'

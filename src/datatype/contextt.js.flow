@@ -1,10 +1,29 @@
 //@flow
 
-import * as Type from './type'
-import {type Time, now} from '../../time'
+import {type Time, now} from '../time'
+
+export type ComputeContextType = 21
+export type EmitContextType = 22
+export type RunContextType = 23
+export type FilterContextType = 24
+export type UpdateContextType = 25
+
+export type ContextType =
+ | ComputeContextType
+ | EmitContextType
+ | RunContextType
+ | FilterContextType
+ | UpdateContextType
+
+export const COMPUTE: ComputeContextType = 21
+export const EMIT: EmitContextType = 22
+export const RUN: RunContextType = 23
+export const FILTER: FilterContextType = 24
+export const UPDATE: UpdateContextType = 25
+
 
 class ContextClass<+Data> {
- +type: $Subtype<Type.ContextType>
+ +type: $Subtype<ContextType>
  +data: Data
  +time: Time
  constructor(data: Data) {
@@ -29,7 +48,7 @@ export class compute extends ContextClass<{
   isNone: boolean,
   isChanged: boolean,
  ) => compute
- +type: Type.ComputeContextType
+ +type: ComputeContextType
  constructor(
   args: Array<any>,
   result: any,
@@ -54,7 +73,7 @@ export class emit extends ContextClass<{
 }> {
  static $call: (eventName: string, payload: any) => emit
  /*::
- +type: Type.EmitContextType;
+ +type: EmitContextType;
  */
  constructor(eventName: string, payload: any) {
   super({eventName, payload})
@@ -66,7 +85,7 @@ export class run extends ContextClass<{
 }> {
  static $call: (args: Array<any>, parentContext: compute | emit | filter | update) => run
  /*::
- +type: Type.RunContextType;
+ +type: RunContextType;
  */
  constructor(args: Array<any>, parentContext: compute | emit | filter | update) {
   super({args, parentContext})
@@ -78,7 +97,7 @@ export class filter extends ContextClass<{
 }> {
  static $call: (value: any, isChanged: boolean) => filter
  /*::
- +type: Type.FilterContextType;
+ +type: FilterContextType;
  */
  constructor(value: any, isChanged: boolean) {
   super({value, isChanged})
@@ -89,7 +108,7 @@ export class update extends ContextClass<{
 }> {
  static $call: (value: any) => update
  /*::
- +type: Type.UpdateContextType;
+ +type: UpdateContextType;
  */
  constructor(value: any) {
   super({value})

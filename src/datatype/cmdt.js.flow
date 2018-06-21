@@ -1,0 +1,72 @@
+//@flow
+
+
+import type {Atom} from '../effector/atom'
+export type ComputeType = 11
+export type EmitType = 12
+export type RunType = 13
+export type FilterType = 14
+export type UpdateType = 15
+
+export type CmdType = ComputeType | EmitType | RunType | FilterType | UpdateType
+
+export const COMPUTE: ComputeType = 11
+export const EMIT: EmitType = 12
+export const RUN: RunType = 13
+export const FILTER: FilterType = 14
+export const UPDATE: UpdateType = 15
+class CmdClass<+Data> {
+ /*::+data: Data;*/
+ constructor(data: Data) {
+  this.data = data
+ }
+}
+
+export class compute extends CmdClass<{
+ reduce(oldValue: any, newValue: any, ctx: any): any,
+}> {
+ /*::+type: ComputeType;*/
+}
+
+export class run extends CmdClass<{
+ transactionContext?: (data: any) => () => void,
+ runner(ctx: any): any,
+}> {
+ /*::+type: RunType;*/
+}
+export class emit extends CmdClass<{
+ +subtype: 'event' | 'effect',
+ +fullName: string,
+ runner(ctx: any): any,
+}> {
+ /*::+type: EmitType;*/
+}
+export class filter extends CmdClass<{
+ filter(value: any, ctx: any): boolean,
+}> {
+ /*::+type: FilterType;*/
+}
+export class update extends CmdClass<{
+ store: Atom<any>,
+}> {
+ /*::+type: UpdateType;*/
+}
+
+export type Cmd = run | emit | compute | filter | update
+export function show(value: Cmd): string {
+ switch (value.type) {
+  case EMIT:
+   return `Emit(${value.data.fullName})`
+  case RUN:
+   return 'Run'
+  case COMPUTE:
+   return 'Compute'
+  case FILTER:
+   return 'Filter'
+  case UPDATE:
+   return 'Update'
+  default:
+   /*::(value.type: empty)*/
+   throw new Error('impossible type')
+ }
+}

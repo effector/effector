@@ -1,6 +1,6 @@
 
 
-import * as ShowJs from "./step/show.js";
+import * as ShowstepJs from "./showstep.js";
 
 function compute(param) {
   return {
@@ -74,7 +74,12 @@ var cmd = {
   emit: emit,
   filter: filter,
   update: update,
-  show: show
+  show: show,
+  COMPUTE: 11,
+  EMIT: 12,
+  RUN: 13,
+  FILTER: 14,
+  UPDATE: 15
 };
 
 function compute$1(args, result, error, isError, isNone, isChanged) {
@@ -153,7 +158,12 @@ var ctx = {
   run: run$1,
   emit: emit$1,
   filter: filter$1,
-  update: update$1
+  update: update$1,
+  COMPUTE: 21,
+  EMIT: 22,
+  RUN: 23,
+  FILTER: 24,
+  UPDATE: 25
 };
 
 var single = 31;
@@ -184,7 +194,7 @@ function seq$1(data) {
 }
 
 function show$1(a) {
-  return ShowJs.show(a, show);
+  return ShowstepJs.show(a, show);
 }
 
 var Step = /* module */[
@@ -211,7 +221,7 @@ var step = {
             };
     }),
   show: (function (a) {
-      return ShowJs.show(a, show);
+      return ShowstepJs.show(a, show);
     }),
   SINGLE: 31,
   MULTI: 32,
@@ -227,4 +237,4 @@ export {
   step ,
   
 }
-/* ./step/show.js Not a pure module */
+/* ./showstep.js Not a pure module */

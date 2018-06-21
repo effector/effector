@@ -1,8 +1,7 @@
 //@flow
 // import invariant from 'invariant'
 import type {SingleStepValidContext} from '../effector/index.h'
-import * as Ctx from 'effector/datatype/context'
-import * as Cmd from 'effector/datatype/cmd'
+import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
 
 function stepArg(ctx: SingleStepValidContext) {
  switch (ctx.type) {

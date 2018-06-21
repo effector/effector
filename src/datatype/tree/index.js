@@ -1,6 +1,6 @@
 //@flow
 
-import type {Cmd} from '../cmd'
+import type {Cmd} from '../cmdt'
 import {intRefcount} from '../../refcount'
 export type TreeType = 41
 export const TREE: TreeType = 41

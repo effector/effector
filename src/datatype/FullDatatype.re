@@ -54,6 +54,11 @@ let cmd = {
   "filter": Cmd.filter,
   "update": Cmd.update,
   "show": Cmd.show,
+  "COMPUTE": 11,
+  "EMIT": 12,
+  "RUN": 13,
+  "FILTER": 14,
+  "UPDATE": 15,
 };
 
 module Ctx: {
@@ -161,6 +166,11 @@ let ctx = {
   "emit": Ctx.emit,
   "filter": Ctx.filter,
   "update": Ctx.update,
+  "COMPUTE": 21,
+  "EMIT": 22,
+  "RUN": 23,
+  "FILTER": 24,
+  "UPDATE": 25,
 };
 
 module Step: {
@@ -209,7 +219,7 @@ module Step: {
   let single = (~data: Cmd.cmd) => step(~data, ~type_=Label.single);
   let multi = () => step(~data=createSet([||]), ~type_=Label.multi);
   let seq = (~data: array(step(_))) => step(~data, ~type_=Label.seq);
-  [@bs.module "./step/show.js"]
+  [@bs.module "./showstep.js"]
   external show' : (step('a), Cmd.cmd => string) => string = "show";
   let show = a => show'(a, Cmd.show);
 };
