@@ -67,7 +67,7 @@
   "eslint-plugin-flowtype": "^2.49.3",
   "eslint-plugin-jest": "^21.17.0",
   "eslint-plugin-react": "^7.9.1",
-  "flow-bin": "^0.74.0",
+  "flow-bin": "^0.75.0",
   "flow-copy-source": "^2.0.0",
   "flow-typed": "^2.4.0",
   "fs-extra": "^6.0.1",
