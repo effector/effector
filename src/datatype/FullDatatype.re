@@ -1,12 +1,4 @@
-module Cmd: {
-  type cmd;
-  let compute: Js.Json.t => cmd;
-  let run: Js.Json.t => cmd;
-  let emit: Js.Json.t => cmd;
-  let filter: Js.Json.t => cmd;
-  let update: Js.Json.t => cmd;
-  let show: cmd => string;
-} = {
+module Cmd /*: {    type cmd;    let compute: Js.Json.t => cmd;    let run: Js.Json.t => cmd;    let emit: Js.Json.t => cmd;    let filter: Js.Json.t => cmd;    let update: Js.Json.t => cmd;    let show: cmd => string;  }*/ = {
   type cmdType =
     | ComputeType
     | EmitType
@@ -20,12 +12,21 @@ module Cmd: {
     | RunType => 13
     | FilterType => 14
     | UpdateType => 15;
+  let cmdUnTF =
+    fun
+    | 11 => ComputeType
+    | 12 => EmitType
+    | 13 => RunType
+    | 14 => FilterType
+    | 15 => UpdateType
+    | _ => ComputeType;
   [@bs.deriving abstract]
   type cmd = {
     [@bs.as "type"]
     type_: int,
     data: Js.Json.t,
   };
+  let cmdUnT = cmd => cmdUnTF(cmd |. type_);
   let cmdByType = (c: cmdType, data: Js.Json.t) : cmd => {
     let ins = cmd(~type_=cmdT(c), ~data);
     ins;
@@ -61,21 +62,8 @@ let cmd = {
   "UPDATE": 15,
 };
 
-module Ctx: {
-  type ctx('a);
-  type computeData;
-  let compute:
-    (. array(Js.Json.t), Js.Json.t, Js.Json.t, bool, bool, bool) =>
-    ctx(computeData);
-  type emitData;
-  let emit: (. string, Js.Json.t) => ctx(emitData);
-  type filterData;
-  let filter: (. Js.Json.t, bool) => ctx(filterData);
-  type updateData;
-  let update: (. Js.Json.t) => ctx(updateData);
-  type runData;
-  let run: (. array(Js.Json.t), ctx(Js.Json.t)) => ctx(runData);
-} = {
+/*: {    type time;    type ctx('a) = {      .      "type_": int,      "data": 'a,      "time": time,    };    type computeData;    let compute:      (. array(Js.Json.t), Js.Json.t, Js.Json.t, bool, bool, bool) =>      ctx(computeData);    type emitData;    let emit: (. string, Js.Json.t) => ctx(emitData);    type filterData;    let filter: (. Js.Json.t, bool) => ctx(filterData);    type updateData;    let update: (. Js.Json.t) => ctx(updateData);    type runData;    let run: (. array(Js.Json.t), ctx(Js.Json.t)) => ctx(runData);  }*/
+module Ctx = {
   type ctxType =
     | ComputeType
     | EmitType
@@ -99,6 +87,7 @@ module Ctx: {
     data: 'a,
     time,
   };
+  let getType = (ctx: ctx('a)) => ctx |. type_;
   [@bs.deriving abstract]
   type computeData = {
     args: array(Js.Json.t),
@@ -158,7 +147,15 @@ module Ctx: {
       let data = updateData(~value);
       ctx(~type_=ctxT(UpdateType), ~time=now(), ~data);
     };
+  type ctxg =
+    | ComputeG(ctx(computeData))
+    | EmitG(ctx(emitData))
+    | RunG(ctx(runData))
+    | FilterG(ctx(filterData))
+    | UpdateG(ctx(updateData));
 };
+
+let getCtxType = Ctx.getType;
 
 let ctx = {
   "compute": Ctx.compute,
@@ -173,27 +170,7 @@ let ctx = {
   "UPDATE": 25,
 };
 
-module Step: {
-  type step('a);
-  /* [@bs...] external step : (~type_: int, ~data: 'a) => step('a) = ""; */
-  /* external type_ : step('a) => int = "";
-
-     external data : step('a) => 'a = ""; */
-  /* module Label:
-     {
-       type stepType = SingleType | MultiType | SeqType;
-       let stepT: stepType => int;
-       let single: int;
-       let multi: int;
-       let seq: int;
-     }; */
-  type set('a);
-  /* [@bs...] external createSet: array('a) => set('a) = "Set"; */
-  let single: (~data: Cmd.cmd) => step(Cmd.cmd);
-  let multi: unit => step(set('a));
-  let seq: (~data: array(step('a))) => step(array(step('a)));
-  let show: step('a) => string;
-} = {
+module Step /*: {    type step('a);    /* [@bs...] external step : (~type_: int, ~data: 'a) => step('a) = ""; */    /* external type_ : step('a) => int = "";       external data : step('a) => 'a = ""; */    /* module Label:       {         type stepType = SingleType | MultiType | SeqType;         let stepT: stepType => int;         let single: int;         let multi: int;         let seq: int;       }; */    type set('a) = {. add: (. 'a) => set('a)};    let setAdd = (s: set('a), a: 'a) => s |. add(a);    /* [@bs...] external createSet: array('a) => set('a) = "Set"; */    let single: (~data: Cmd.cmd) => step(Cmd.cmd);    let multi: unit => step(set('a));    let seq: (~data: array(step('a))) => step(array(step('a)));    let show: step('a) => string;  }*/ = {
   [@bs.deriving abstract]
   type step('a) = {
     [@bs.as "type"]
@@ -214,7 +191,14 @@ module Step: {
     let multi = stepT(MultiType);
     let seq = stepT(SeqType);
   };
-  type set('a);
+  type set('a) = {. add: (. 'a) => set('a)};
+  let setAdd = (s: set('a), v: 'a) => {
+    s;
+    v;
+    %raw
+    "s.add(v)";
+    ();
+  };
   [@bs.new] external createSet : array('a) => set('a) = "Set";
   let single = (~data: Cmd.cmd) => step(~data, ~type_=Label.single);
   let multi = () => step(~data=createSet([||]), ~type_=Label.multi);

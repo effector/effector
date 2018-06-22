@@ -2,6 +2,30 @@
 
 import * as ShowstepJs from "./showstep.js";
 
+function cmdT(param) {
+  return param + 11 | 0;
+}
+
+function cmdUnTF(param) {
+  var switcher = param - 11 | 0;
+  if (switcher > 4 || switcher < 0) {
+    return /* ComputeType */0;
+  } else {
+    return switcher;
+  }
+}
+
+function cmdUnT(cmd) {
+  return cmdUnTF(cmd.type);
+}
+
+function cmdByType(c, data) {
+  return {
+          type: c + 11 | 0,
+          data: data
+        };
+}
+
 function compute(param) {
   return {
           type: 11,
@@ -60,6 +84,10 @@ function show(cmd) {
 }
 
 var Cmd = /* module */[
+  /* cmdT */cmdT,
+  /* cmdUnTF */cmdUnTF,
+  /* cmdUnT */cmdUnT,
+  /* cmdByType */cmdByType,
   /* compute */compute,
   /* run */run,
   /* emit */emit,
@@ -81,6 +109,14 @@ var cmd = {
   FILTER: 14,
   UPDATE: 15
 };
+
+function ctxT(param) {
+  return param + 21 | 0;
+}
+
+function getType(ctx) {
+  return ctx.type;
+}
 
 function compute$1(args, result, error, isError, isNone, isChanged) {
   var data = {
@@ -146,11 +182,13 @@ function update$1(value) {
 }
 
 var Ctx = /* module */[
+  /* ctxT */ctxT,
+  /* getType */getType,
   /* compute */compute$1,
+  /* run */run$1,
   /* emit */emit$1,
   /* filter */filter$1,
-  /* update */update$1,
-  /* run */run$1
+  /* update */update$1
 ];
 
 var ctx = {
@@ -166,11 +204,27 @@ var ctx = {
   UPDATE: 25
 };
 
+function stepT(param) {
+  return param + 31 | 0;
+}
+
 var single = 31;
 
 var multi = 32;
 
 var seq = 33;
+
+var Label = /* module */[
+  /* stepT */stepT,
+  /* single */single,
+  /* multi */multi,
+  /* seq */seq
+];
+
+function setAdd(_, _$1) {
+  ((s.add(v)));
+  return /* () */0;
+}
 
 function single$1(data) {
   return {
@@ -198,6 +252,8 @@ function show$1(a) {
 }
 
 var Step = /* module */[
+  /* Label */Label,
+  /* setAdd */setAdd,
   /* single */single$1,
   /* multi */multi$1,
   /* seq */seq$1,
@@ -228,10 +284,13 @@ var step = {
   SEQ: 33
 };
 
+var getCtxType = getType;
+
 export {
   Cmd ,
   cmd ,
   Ctx ,
+  getCtxType ,
   ctx ,
   Step ,
   step ,
