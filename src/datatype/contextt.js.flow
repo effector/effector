@@ -1,6 +1,6 @@
 //@flow
 
-import {type Time, now} from '../time'
+import type {Time} from '../time'
 
 export type ComputeContextType = 21
 export type EmitContextType = 22
@@ -22,17 +22,14 @@ export const FILTER: FilterContextType = 24
 export const UPDATE: UpdateContextType = 25
 
 
-class ContextClass<+Data> {
- +type: $Subtype<ContextType>
- +data: Data
- +time: Time
- constructor(data: Data) {
-  this.data = data
-  this.time = now()
- }
+declare class ContextClass<+Data> {
+ +type: $Subtype<ContextType>;
+ +data: Data;
+ +time: Time;
+ constructor(data: Data): ContextClass<Data>
 }
 
-export class compute extends ContextClass<{
+declare export class compute extends ContextClass<{
  +args: Array<any>,
  result: any,
  error: any,
@@ -40,15 +37,15 @@ export class compute extends ContextClass<{
  isNone: boolean,
  isChanged: boolean,
 }> {
- static $call: (
+ static [[call]]: (
   args: Array<any>,
   result: any,
   error: any,
   isError: boolean,
   isNone: boolean,
   isChanged: boolean,
- ) => compute
- +type: ComputeContextType
+ ) => compute;
+ +type: ComputeContextType;
  constructor(
   args: Array<any>,
   result: any,
@@ -56,63 +53,46 @@ export class compute extends ContextClass<{
   isError: boolean,
   isNone: boolean,
   isChanged: boolean,
- ) {
-  super({
-   args,
-   result,
-   error,
-   isError,
-   isNone,
-   isChanged,
-  })
- }
+ ): compute;
 }
-export class emit extends ContextClass<{
+declare export class emit extends ContextClass<{
  +payload: any,
  +eventName: string,
 }> {
- static $call: (eventName: string, payload: any) => emit
+ static [[call]]: (eventName: string, payload: any) => emit;
  /*::
  +type: EmitContextType;
  */
- constructor(eventName: string, payload: any) {
-  super({eventName, payload})
- }
+ constructor(eventName: string, payload: any): emit;
 }
-export class run extends ContextClass<{
+declare export class run extends ContextClass<{
  +args: Array<any>,
  +parentContext: compute | emit | filter | update,
 }> {
- static $call: (args: Array<any>, parentContext: compute | emit | filter | update) => run
+ static [[call]]: (args: Array<any>, parentContext: compute | emit | filter | update) => run;
  /*::
  +type: RunContextType;
  */
- constructor(args: Array<any>, parentContext: compute | emit | filter | update) {
-  super({args, parentContext})
- }
+ constructor(args: Array<any>, parentContext: compute | emit | filter | update): run
 }
-export class filter extends ContextClass<{
+declare export class filter extends ContextClass<{
  +value: any,
  isChanged: boolean,
 }> {
- static $call: (value: any, isChanged: boolean) => filter
+ static [[call]]: (value: any, isChanged: boolean) => filter;
  /*::
  +type: FilterContextType;
  */
- constructor(value: any, isChanged: boolean) {
-  super({value, isChanged})
- }
+ constructor(value: any, isChanged: boolean): filter;
 }
-export class update extends ContextClass<{
+declare export class update extends ContextClass<{
  value: any,
 }> {
- static $call: (value: any) => update
+ static [[call]]: (value: any) => update;
  /*::
  +type: UpdateContextType;
  */
- constructor(value: any) {
-  super({value})
- }
+ constructor(value: any): update
 }
 
 export type Context = compute | emit | run | filter | update
