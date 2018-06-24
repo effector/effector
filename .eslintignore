@@ -9,3 +9,4 @@
 **/npm/**
 **/*.bs.js
 **/effector.bundle.js
+**/effector.browser.js
