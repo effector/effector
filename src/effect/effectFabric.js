@@ -4,10 +4,11 @@
 import warning from 'warning'
 import type {Effect} from './index.h'
 import * as Kind from '../kind'
-import {setProperty} from '../setProperty'
 
 import {eventFabric, type Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
+import {exec} from './exec'
+import {callbacks} from './callbacks'
 
 export function effectFabric<Payload, Done>({
  name,
@@ -37,68 +38,23 @@ export function effectFabric<Payload, Done>({
  // instanceAsEvent.step.data.delete(instanceAsEvent.cmd)
  instance.done = done
  instance.fail = fail
- use.getCurrent = getCurrent
- instance.use = use
- setProperty('create', create, instance)
- setProperty('kind', Kind.EFFECT, instance)
- let thunk = async(value: Payload): Promise<Done> => {
-  warning(false, 'no thunk used')
-  declare var result: Done
-  /*::return result*/
- }
- function use(fn) {
+ instance.use = fn => {
   thunk = fn
  }
- function getCurrent() {
-  return thunk
+ instance.use.getCurrent = () => thunk
+ ;(instance: any).kind = Kind.EFFECT
+ ;(instance: any).create = (params: Payload) => {
+  eventCreate(params, instanceAsEvent.getType())
+  return exec(
+   params,
+   callbacks(thunk, result => void done(result), error => void fail(error)),
+  )
  }
- function create(payload: Payload) {
-  const throwSymbol = {}
-  let syncError = throwSymbol
-  let req
-  try {
-   req = thunk(payload)
-  } catch (err) {
-   syncError = err
-  }
-  const isSyncError = syncError !== throwSymbol
-  const isPromise = !isSyncError && hasPromise(req)
-  //$todo
-  const onDone = result => done({params: payload, result})
-  const onFail = error => fail({params: payload, error})
-  //$todo
-  if (isPromise) req.then(onDone, onFail)
-  else if (isSyncError) onFail(syncError)
-  else onDone(req)
-  eventCreate(payload, instanceAsEvent.getType())
-  return {
-   done() {
-    return new Promise(rs => {
-     if (isPromise) req.then(result => rs({params: payload, result}))
-     else if (!isSyncError) rs({params: payload, result: req})
-    })
-   },
-   fail() {
-    return new Promise(rs => {
-     if (isPromise) req.catch(error => rs({params: payload, error}))
-     else if (isSyncError) rs({params: payload, error: syncError})
-    })
-   },
-   promise() {
-    return new Promise((rs, rj) => {
-     if (isPromise) req.then(rs, rj)
-     else if (isSyncError) rj(syncError)
-     else rs(req)
-    })
-   },
-  }
+ let thunk = (value: Payload): Promise<Done> => {
+  warning(false, 'no thunk used')
+  const result: Promise<Done> = (Promise.resolve(): any)
+  return result
  }
 
  return instance
-}
-
-function hasPromise(req: mixed): boolean %checks {
- return (
-  typeof req === 'object' && req !== null && typeof req.then === 'function'
- )
 }

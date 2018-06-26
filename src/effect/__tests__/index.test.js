@@ -36,3 +36,23 @@ test('effect({...}).fail()', async() => {
   params: 'will throw',
  })
 })
+
+describe('future', () => {
+ test(`if used function will resolve`, async() => {
+  effect.use(async params => {
+   await delay(500)
+   spy(params)
+   return 'done!'
+  })
+  await expect(effect('ok')).resolves.toBe('done!')
+ })
+
+ test('if used function will throw', async() => {
+  effect.use(async params => {
+   await delay(500)
+   spy(params)
+   throw 'fail!'
+  })
+  await expect(effect('will throw')).rejects.toBe('fail!')
+ })
+})

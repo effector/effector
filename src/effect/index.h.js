@@ -3,15 +3,10 @@ import type {Subscription, Subscriber, GraphiteMeta} from '../effector/index.h'
 import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
+import type {Future} from './future'
 
 export type Effect<Params, Done, Fail = Error> = {
- (
-  payload: Params,
- ): {
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<Done>,
- },
+ (payload: Params): Future<Params, Done, Fail>,
  done: Event<{params: Params, result: Done}>,
  fail: Event<{params: Params, error: Fail}>,
  /*::+*/ id: string,
@@ -38,3 +33,10 @@ export type Effect<Params, Done, Fail = Error> = {
  graphite: GraphiteMeta,
  compositeName: CompositeName,
 }
+
+export type Thunk<Args, Done> = (_: Args) => Promise<Done>
+export type Callbacks<Args, Done, Fail> = [
+ (_: {result: Done, params: Args}) => void,
+ (_: {error: Fail, params: Args}) => void,
+ Thunk<Args, Done>,
+]
