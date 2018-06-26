@@ -22,22 +22,28 @@ declare export class Event<E> {
  +to: (
   & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => Subscription)
   & ((store: Store<E>, _: void) => Subscription)
+  );
+  getType(): string;
+ }
+
+declare export class Future<Params, Done, Fail> extends Promise<Done> {
+ /*::+*/ args: Params;
+ done(): Promise<{params: Params, result: Done}>;
+ fail(): Promise<{params: Params, error: Fail}>;
+ promise(): Promise<Done>;
+ cache(): Done | void;
+ /*::+*/ then: (
+  & (() => Promise<Done>)
+  & (<U>(onFulfill: (value: Done) => U) => Promise<U>)
  );
- getType(): string;
 }
 
 declare export class Effect<Params, Done, Fail = Error> {
- (
-  payload: Params,
- ): {
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<Done>,
- };
+ (payload: Params): Future<Params, Done, Fail>;
  /*::+*/ done: Event<{params: Params, result: Done}>;
  /*::+*/ fail: Event<{params: Params, error: Fail}>;
  /*::+*/ use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void,
+  (asyncFunction: ((params: Params) => (Promise<Done> | Done))): void,
   getCurrent(): (params: Params) => Promise<Done>,
  };
  watch(watcher: (payload: Params) => any): Subscription;

@@ -22,14 +22,16 @@ export interface Event<E> {
  getType(): string;
 }
 
+export interface Future<Params, Done, Fail> extends Promise<Done> {
+ args: Params;
+ done(): Promise<{params: Params, result: Done}>;
+ fail(): Promise<{params: Params, error: Fail}>;
+ promise(): Promise<Done>;
+ cache(): Done | void;
+}
+
 export interface Effect<Params, Done, Fail = Error> {
- (
-  payload: Params,
- ): {
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<Done>,
- };
+ (payload: Params): Future<Params, Done, Fail>;
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {

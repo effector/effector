@@ -21,9 +21,3 @@ export class Future<Args, Done, Fail = Error> /*:: extends Promise<Done> */ {
   this.args = args
  }
 }
-
-async function ok() {
- const fut = new Future<void, 'done!', 'fail!'>(undefined)
- const res = await fut
- return res
-}
