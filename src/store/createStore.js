@@ -84,9 +84,10 @@ export function storeConstructor<State>(props: {
 
  function map<NextState>(
   fn: (state: State, lastState?: NextState) => NextState,
+  firstState?: NextState,
  ): Store<NextState> {
   //prettier-ignore
-  return mapStore/*::<State, NextState>*/(store, fn)
+  return mapStore/*::<State, NextState>*/(store, fn, firstState)
  }
 
  function subscribe(listener) {
@@ -254,9 +255,10 @@ export function storeConstructor<State>(props: {
 function mapStore<A, B>(
  store: Store<A>,
  fn: (state: A, lastState?: B) => B,
+ firstState?: B
 ): Store<B> {
  let lastValue = store.getState()
- let lastResult = fn(lastValue)
+ let lastResult = fn(lastValue, firstState)
  const innerStore: Store<any> = (createStore: any)(lastResult)
  const computeCmd = Step.single(
   new Cmd.compute({

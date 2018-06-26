@@ -54,7 +54,8 @@ export class Store<State> {
  withProps<Props, R>(
   fn: (state: State, props: Props) => R,
  ): (props: Props) => R;
- map<T>(fn: (_: State) => T): Store<T>;
+ map<T>(fn: (_: State, lastState?: T) => T): Store<T>;
+ map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
  on<E>(
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => (State | void),
