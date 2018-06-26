@@ -21,22 +21,22 @@ const staticPlugins = [
   exclude: /(\.re|node_modules.*)/,
  }),
  bucklescript({module: 'es6', inSource: true}),
- // uglify(
- //  {
- //   mangle: {
- //    toplevel: true,
- //   },
- //   compress: {
- //    pure_getters: true,
- //   },
- //   output: {
- //    comments: /#/i,
- //    // beautify: true,
- //    // indent_level: 2,
- //   },
- //  },
- //  require('uglify-es').minify,
- // ),
+ uglify(
+  {
+   mangle: {
+    toplevel: true,
+   },
+   compress: {
+    pure_getters: true,
+   },
+   output: {
+    comments: /#/i,
+    // beautify: true,
+    // indent_level: 2,
+   },
+  },
+  require('uglify-es').minify,
+ ),
 ]
 if (process.env.BUILD_UMD) {
  staticPlugins.push(

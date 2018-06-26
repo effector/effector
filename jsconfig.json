@@ -2,21 +2,20 @@
  "compilerOptions": {
   "target": "esnext",
   "module": "es2015",
-  "experimentalDecorators": true,
   "allowSyntheticDefaultImports": true,
   "skipLibCheck": false,
   "noLib": false,
   "skipDefaultLibCheck": true,
   "alwaysStrict": true,
   "strict": true,
-  "baseUrl": "src",
+  "baseUrl": ".",
   "paths": {
-   "^effector$": ["./index.js"],
-   "^effector/(.+)": ["./$1"]
+   "effector": ["packages/effector"],
+   "effector/*": ["src/*"]
   }
  },
  "typeAcquisition": {
   "enable": true
  },
- "include": ["src"]
+ "include": ["src", "scripts", "packages", "bench"]
 }

@@ -25,6 +25,8 @@ module.exports = api => {
      'effector/datatype': resolvePath(__dirname, 'src', 'datatype'),
      'effector/graphite': resolvePath(__dirname, 'src', 'graphite'),
      'effector/fixtures': resolvePath(__dirname, 'src', 'fixtures'),
+     '^bs-platform/lib/es6/(.+)': ([, name]) =>
+      resolvePath(__dirname, 'stdlib/es6', name),
     },
    },
   ],

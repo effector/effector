@@ -63,9 +63,8 @@ rules:
       avoidEscape: true
   max-len:
     - error
-    - code: 100
+    - code: 80
       tabWidth: 1
-      comments: 220
   key-spacing:
     - warn
     - beforeColon: false

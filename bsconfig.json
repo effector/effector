@@ -11,7 +11,7 @@
  },
  "suffix": ".bs.js",
  "bs-dependencies": [],
- "bsc-flags": ["-bs-no-version-header"],
+ "bsc-flags": ["-bs-no-version-header", "-bs-g"],
  "reason": {
   "react-jsx": 2
  },
