@@ -4,7 +4,7 @@ import alias from './rollup-alias'
 import {uglify} from 'rollup-plugin-uglify'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
-import visualizer from 'rollup-plugin-visualizer'
+// import visualizer from 'rollup-plugin-visualizer'
 import bucklescript from 'rollup-plugin-bucklescript'
 
 import {resolve as resolvePath} from 'path'
@@ -48,21 +48,28 @@ if (process.env.BUILD_UMD) {
 }
 const rollupPlugins = [
  alias({
-  pathMap: new Map([
-   ['effector/effect', resolvePath(__dirname, 'src', 'effect')],
-   ['effector/event', resolvePath(__dirname, 'src', 'event')],
-   ['effector/store', resolvePath(__dirname, 'src', 'store')],
-   ['effector/domain', resolvePath(__dirname, 'src', 'domain')],
-   ['effector/datatype', resolvePath(__dirname, 'src', 'datatype')],
-   ['effector/graphite', resolvePath(__dirname, 'src', 'graphite')],
-   ['effector/fixtures', resolvePath(__dirname, 'src', 'fixtures')],
+  pathMap: getPathMap([
+   'effect',
+   'event',
+   'store',
+   'domain',
+   'datatype',
+   'graphite',
+   'fixtures',
+   'kind',
   ]),
   extensions: ['re', 'bs', 'bs.js', 'js'],
  }),
  resolve({}),
  ...staticPlugins,
 ]
-
+function getPathMap(list) {
+ const pairs = []
+ for (const item of list) {
+  pairs.push([`effector/${item}`, resolvePath(__dirname, 'src', item)])
+ }
+ return new Map(pairs)
+}
 function createBuild(name) {
  if (process.env.BUILD_UMD)
   return {
@@ -81,11 +88,11 @@ function createBuild(name) {
  return {
   input: resolvePath(__dirname, 'packages', name, 'index.js'),
   plugins: [
-   visualizer({
-    filename: `./stats-${name}.html`,
-    title: `${name} bundle stats`,
-    sourcemap: true,
-   }),
+   // visualizer({
+   //  filename: `./stats-${name}.html`,
+   //  title: `${name} bundle stats`,
+   //  sourcemap: true,
+   // }),
    ...rollupPlugins,
   ],
   external: ['warning', 'invariant', 'react', 'most', 'symbol-observable'],
