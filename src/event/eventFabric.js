@@ -8,7 +8,6 @@ import type {Event} from './index.h'
 import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
 import * as Kind from '../kind'
-import {setProperty} from '../setProperty'
 
 import {
  cmd as Cmd,
@@ -50,12 +49,17 @@ export function eventFabric<Payload>({
  const instanceAsEvent: Event<Payload> = (instance: any)
  instanceAsEvent.graphite = graphite
 
- setProperty('create', create, instance)
-
- setProperty('toString', getType, instance)
- setProperty('getType', getType, instance)
- setProperty('kind', Kind.EVENT, instance)
- setProperty($$observable, () => instance, instance)
+ Object.defineProperty((instance: any), 'toString', {
+  configurable: true,
+  value: getType,
+ })
+ instance.getType = getType
+ ;(instance: any).create = (payload, fullName) => {
+  walkEvent(payload, instanceAsEvent)
+  return payload
+ }
+ ;(instance: any).kind = Kind.EVENT
+ ;(instance: any)[$$observable] = () => instance
  instance.id = id
  instance.watch = watch
  instance.map = map
@@ -91,10 +95,6 @@ export function eventFabric<Payload>({
   }
  }
 
- function create(payload, fullName) {
-  walkEvent(payload, instanceAsEvent)
-  return payload
- }
  function watch(
   watcher: (payload: Payload, type: string) => any,
  ): Subscription {
