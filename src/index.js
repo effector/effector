@@ -17,4 +17,8 @@ export {
  createStoreObject,
  extract,
  createApi,
+ restore,
+ restoreEvent,
+ restoreEffect,
+ restoreObject,
 } from 'effector/store'

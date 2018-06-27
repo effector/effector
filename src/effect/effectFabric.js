@@ -38,10 +38,10 @@ export function effectFabric<Payload, Done>({
  // instanceAsEvent.step.data.delete(instanceAsEvent.cmd)
  instance.done = done
  instance.fail = fail
- instance.use = fn => {
+ ;(instance: any).use = fn => {
   thunk = fn
  }
- instance.use.getCurrent = () => thunk
+ ;(instance: any).use.getCurrent = (): any => thunk
  ;(instance: any).kind = Kind.EFFECT
  ;(instance: any).create = (params: Payload) => {
   eventCreate(params, instanceAsEvent.getType())
@@ -50,7 +50,7 @@ export function effectFabric<Payload, Done>({
    callbacks(thunk, result => void done(result), error => void fail(error)),
   )
  }
- let thunk = (value: Payload): Promise<Done> => {
+ let thunk: Function = (value: Payload): Promise<Done> => {
   warning(false, 'no thunk used')
   const result: Promise<Done> = (Promise.resolve(): any)
   return result

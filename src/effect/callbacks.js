@@ -13,8 +13,8 @@ const cbFail = function(value: any) {
  cb(value)
 }
 
-export const callbacks = <Args, Done, Fail>(
- thunk: Thunk<Args, Done>,
- onDone: (_: {result: Done, params: Args}) => void,
- onFail: (_: {error: Fail, params: Args}) => void,
-): Callbacks<Args, Done, Fail> => ([cbDone, cbFail, thunk, onDone, onFail]: any)
+export const callbacks = (
+ thunk: Function,
+ onDone: (_: *) => void,
+ onFail: (_: *) => void,
+): any => [cbDone, cbFail, thunk, onDone, onFail]

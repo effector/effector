@@ -141,6 +141,33 @@ declare export function createApi<
  store: Store<S>,
  api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
+declare export function restoreObject<State: {-[key: string]: Store<any> | any}>(
+ obj: State,
+): $ObjMap<
+ State,
+ //prettier-ignore
+ <S>(field: Store<S> | S) => Store<S>,
+>
+
+declare export function restoreEffect<Done>(
+ event: Effect<any, Done, any>,
+ defaultState: Done,
+): Store<Done>
+
+declare export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E>
+
+declare export function restore<Done>(
+ event: Effect<any, Done, any>,
+ defaultState: Done,
+): Store<Done>
+declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+declare export function restore<State: {-[key: string]: Store<any> | any}>(
+ obj: State,
+): $ObjMap<
+ State,
+ //prettier-ignore
+ <S>(field: Store<S> | S) => Store<S>,
+>
 declare export function createDomain(domainName?: string): Domain
 declare export function createWrappedDomain(
  watcher: Function,

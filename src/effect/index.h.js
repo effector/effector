@@ -11,7 +11,7 @@ export type Effect<Params, Done, Fail = Error> = {
  fail: Event<{params: Params, error: Fail}>,
  /*::+*/ id: string,
  use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void,
+  (asyncFunction: (params: Params) => Promise<Done> | Done): void,
   getCurrent(): (params: Params) => Promise<Done>,
  },
  watch(watcher: (payload: Params) => any): Subscription,
