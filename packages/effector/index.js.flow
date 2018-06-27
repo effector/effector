@@ -134,7 +134,13 @@ declare export function extract<
   <S>(field: Store<S> | S) => S,
  >,
 >
-
+declare export function createApi<
+ S,
+ Api: {-[name: string]: (store: S, e: any) => S},
+>(
+ store: Store<S>,
+ api: Api,
+): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
 declare export function createDomain(domainName?: string): Domain
 declare export function createWrappedDomain(
  watcher: Function,

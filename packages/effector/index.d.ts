@@ -98,6 +98,13 @@ export function createStoreObject<State>(
 ): Store<{
   [K in keyof State]: State[K] extends Store<infer U> ? U : any
 }>
+export function createApi<
+ S,
+ Api extends {[name: string]: (store: S, e: any) => S}
+>(
+ store: Store<S>,
+ api: Api,
+): Api //TODO
 
 export function extract<
  State,

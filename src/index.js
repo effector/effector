@@ -12,4 +12,9 @@ export type {Effect} from 'effector/effect'
 export {createEffect} from 'effector/effect'
 
 export type {Store} from 'effector/store'
-export {createStore, createStoreObject, extract} from 'effector/store'
+export {
+ createStore,
+ createStoreObject,
+ extract,
+ createApi,
+} from 'effector/store'

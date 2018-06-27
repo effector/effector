@@ -48,7 +48,7 @@ export function eventFabric<Payload>({
  }
  const instanceAsEvent: Event<Payload> = (instance: any)
  instanceAsEvent.graphite = graphite
-
+ const getType = () => compositeName.fullName
  Object.defineProperty((instance: any), 'toString', {
   configurable: true,
   value: getType,
@@ -121,9 +121,7 @@ export function eventFabric<Payload>({
   contramapped.graphite.next.data.add(nextSeq)
   return contramapped
  }
- function getType() {
-  return compositeName.fullName
- }
+
  return (instance: $todo)
 }
 
