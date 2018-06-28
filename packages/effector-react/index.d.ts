@@ -11,6 +11,11 @@ export type StoreProvider<State> = React.ComponentType<{
  children?: React.ReactNode,
 }>
 
+export function createComponent<Props, State>(
+ store: Store<State>,
+ renderProp: (props: Props, state: State) => React.Node,
+): React.ComponentType<Props>
+
 export function connect<State extends Object, Com extends React.ComponentType<any>>(
  Component: Com,
 ): (

@@ -16,6 +16,11 @@ export type StoreComponent<State> = ComponentType<{
  children: (state: State) => Node,
 }>
 
+declare export function createComponent<Props, State>(
+ store: Store<State>,
+ renderProp: (props: Props, state: State) => Node,
+): ComponentType<Props>
+
 declare export function connect<State: Object, Com: ComponentType<*>>(
  Component: Com,
 ): (
