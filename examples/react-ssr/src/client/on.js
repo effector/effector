@@ -9,14 +9,12 @@ import {
  nextID,
  filterStatus,
 } from '../app/store/shape'
-import {loadAll} from '../app/store/event'
+import {injectData} from '../app/store/event'
 
-const loaded = loadAll.done
-
-order.on(loaded, (_, {result}) => result.itemList.order)
-status.on(loaded, (_, {result}) => new Map(result.itemList.status))
-visible.on(loaded, (_, {result}) => new Map(result.itemList.visible))
-selected.on(loaded, (_, {result}) => result.itemList.selected)
-todos.on(loaded, (_, {result}) => result.todos)
-nextID.on(loaded, (_, {result}) => result.nextID)
-filterStatus.on(loaded, (_, {result}) => result.filterStatus)
+order.on(injectData, (_, {itemList}) => itemList.order)
+status.on(injectData, (_, {itemList}) => new Map(itemList.status))
+visible.on(injectData, (_, {itemList}) => new Map(itemList.visible))
+selected.on(injectData, (_, {itemList}) => itemList.selected)
+todos.on(injectData, (_, {todos}) => todos)
+nextID.on(injectData, (_, {nextID}) => nextID)
+filterStatus.on(injectData, (_, {filterStatus}) => filterStatus)

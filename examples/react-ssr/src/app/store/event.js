@@ -19,3 +19,5 @@ export const loadAll: Effect<
  PersistData,
  'nothing to load',
 > = createEffect('load all todos')
+
+export const injectData = loadAll.done.map(({result}) => result)
