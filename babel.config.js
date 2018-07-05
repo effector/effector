@@ -42,7 +42,7 @@ module.exports = api => {
     modules: false,
     shippedProposals: true,
     targets: {
-     node: '6',
+     node: '8',
     },
    },
   ],

@@ -3,10 +3,9 @@
   "target": "esnext",
   "module": "es2015",
   "allowSyntheticDefaultImports": true,
-  "skipLibCheck": false,
-  "noLib": false,
+  "skipLibCheck": true,
+  "noLib": true,
   "skipDefaultLibCheck": true,
-  "alwaysStrict": true,
   "strict": true,
   "baseUrl": ".",
   "paths": {
@@ -15,7 +14,7 @@
   }
  },
  "typeAcquisition": {
-  "enable": true
+  "enable": false
  },
  "include": ["src", "scripts", "packages", "bench"]
 }
