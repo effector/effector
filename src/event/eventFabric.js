@@ -184,7 +184,7 @@ export function watchEvent<Payload>(
    },
   }),
  )
- const sq = seq.get()
+ const sq = seq[1]()
  let runCmd
  let isWrited = false
  if (sq !== null) {

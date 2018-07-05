@@ -49,7 +49,7 @@ Object {
               "data": Object {
                 "data": Object {
                   "store": Array [
-                    1,
+                    3,
                     [Function],
                     [Function],
                     [Function],
@@ -96,7 +96,7 @@ Object {
                       "data": Object {
                         "data": Object {
                           "store": Array [
-                            2,
+                            4,
                             [Function],
                             [Function],
                             [Function],
@@ -187,7 +187,7 @@ Object {
               "data": Object {
                 "data": Object {
                   "store": Array [
-                    1,
+                    3,
                     [Function],
                     [Function],
                     [Function],
@@ -234,7 +234,7 @@ Object {
                       "data": Object {
                         "data": Object {
                           "store": Array [
-                            2,
+                            4,
                             [Function],
                             [Function],
                             [Function],
@@ -340,7 +340,7 @@ Object {
                       "data": Object {
                         "data": Object {
                           "store": Array [
-                            1,
+                            3,
                             [Function],
                             [Function],
                             [Function],
@@ -387,7 +387,7 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "store": Array [
-                                    2,
+                                    4,
                                     [Function],
                                     [Function],
                                     [Function],
@@ -551,7 +551,7 @@ Object {
       "data": Object {
         "data": Object {
           "store": Array [
-            1,
+            3,
             [Function],
             [Function],
             [Function],
@@ -598,7 +598,7 @@ Object {
               "data": Object {
                 "data": Object {
                   "store": Array [
-                    2,
+                    4,
                     [Function],
                     [Function],
                     [Function],
@@ -641,7 +641,7 @@ Object {
       "data": Object {
         "data": Object {
           "store": Array [
-            2,
+            4,
             [Function],
             [Function],
             [Function],
