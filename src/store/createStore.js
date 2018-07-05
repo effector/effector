@@ -15,6 +15,8 @@ import * as Kind from '../kind'
 import {createRef, type Ref} from '../ref/createRef'
 // import warning from 'warning'
 
+import {StepBox} from './StepBox'
+
 let id = 0
 export function createStore<State>(state: State): Store<State> {
  return storeConstructor({
@@ -30,9 +32,16 @@ export function storeConstructor<State>(props: {
  const defaultState = currentState
 
  const plainState: Ref<typeof defaultState> = createRef(defaultState)
+ const bx = new StepBox()
+  .modeSeq()
+  .filter(
+   (newValue, ctx) => newValue !== undefined && newValue !== plainState[1](),
+  )
+  .update(plainState)
+  .modePar()
  const shouldChange = new Cmd.filter({
   filter(newValue, ctx) {
-   return newValue !== plainState[1]() && newValue !== undefined
+   return newValue !== undefined && newValue !== plainState[1]()
   },
  })
  const cmd = new Cmd.update({
@@ -101,11 +110,13 @@ export function storeConstructor<State>(props: {
     },
    }),
   )
-  store.graphite.next.data.add(runCmd)
+  store.graphite.next.data.push(runCmd)
   listener(lastCall)
   function unsubscribe() {
    active = false
-   store.graphite.next.data.delete(runCmd)
+   const i = store.graphite.next.data.indexOf(runCmd)
+   if (i === -1) return
+   store.graphite.next.data.splice(i, 1)
   }
   unsubscribe.unsubscribe = unsubscribe
   //$off
@@ -167,9 +178,11 @@ export function storeConstructor<State>(props: {
   const step = Step.single(computeCmd)
   const filtStep = Step.single(filterCmd)
   const nextSeq = Step.seq([step, filtStep, ...store.graphite.seq.data])
-  e.graphite.next.data.add(nextSeq)
+  e.graphite.next.data.push(nextSeq)
   const unsub = () => {
-   e.graphite.next.data.delete(nextSeq)
+   const i = e.graphite.next.data.indexOf(nextSeq)
+   if (i === -1) return
+   e.graphite.next.data.splice(i, 1)
   }
   return store
  }
@@ -264,9 +277,11 @@ function mapStore<A, B>(
   filterCmdPost,
   ...innerStore.graphite.seq.data,
  ])
- store.graphite.next.data.add(nextSeq)
+ store.graphite.next.data.push(nextSeq)
  const off = () => {
-  store.graphite.next.data.delete(nextSeq)
+  const i = store.graphite.next.data.indexOf(nextSeq)
+  if (i === -1) return
+  store.graphite.next.data.splice(i, 1)
  }
  return innerStore
 }

@@ -48,11 +48,10 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
     return commit
    }
    stateNew[key] = substore.getState()
-   substore.graphite.next.data.add(Step.single(runCmd))
+   substore.graphite.next.data.push(Step.single(runCmd))
   }
  }
  const store = storeConstructor({
-  currentReducer: _ => _,
   currentState: stateNew,
  })
  //$todo
@@ -89,25 +88,23 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
  }
  let commit = committer()
  for (const [key, child] of Object.entries(state)) {
-  if (Kind.isStore(child)) {
-   const substore: Store<any> = (child: any)
-   const runCmd = new Cmd.run({
-    runner(newValue) {},
-   })
-   runCmd.data.transactionContext = data => {
-    updates.push(state => ({
-     ...state,
-     [key]: data,
-    }))
-    // commit()
-    return commit
-   }
-   stateNew[key] = substore.getState()
-   substore.graphite.next.data.add(Step.single(runCmd))
+  if (!Kind.isStore(child)) continue
+  const substore: Store<any> = (child: any)
+  const runCmd = new Cmd.run({
+   runner(newValue) {},
+  })
+  runCmd.data.transactionContext = data => {
+   updates.push(state => ({
+    ...state,
+    [key]: data,
+   }))
+   // commit()
+   return commit
   }
+  stateNew[key] = substore.getState()
+  substore.graphite.next.data.push(Step.single(runCmd))
  }
  const store = storeConstructor({
-  currentReducer: _ => _,
   currentState: stateNew,
  })
  //$todo
