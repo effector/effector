@@ -48,9 +48,14 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "store": Atom {
-                    "value": "foo | 1 | 11",
-                  },
+                  "store": Array [
+                    1,
+                    [Function],
+                    [Function],
+                    [Function],
+                    [Function],
+                    "foo | 1 | 11",
+                  ],
                 },
                 "type": 15,
               },
@@ -90,9 +95,14 @@ Object {
                     Object {
                       "data": Object {
                         "data": Object {
-                          "store": Atom {
-                            "value": 12,
-                          },
+                          "store": Array [
+                            2,
+                            [Function],
+                            [Function],
+                            [Function],
+                            [Function],
+                            12,
+                          ],
                         },
                         "type": 15,
                       },
@@ -176,9 +186,14 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "store": Atom {
-                    "value": "foo | 1 | 11",
-                  },
+                  "store": Array [
+                    1,
+                    [Function],
+                    [Function],
+                    [Function],
+                    [Function],
+                    "foo | 1 | 11",
+                  ],
                 },
                 "type": 15,
               },
@@ -218,9 +233,14 @@ Object {
                     Object {
                       "data": Object {
                         "data": Object {
-                          "store": Atom {
-                            "value": 12,
-                          },
+                          "store": Array [
+                            2,
+                            [Function],
+                            [Function],
+                            [Function],
+                            [Function],
+                            12,
+                          ],
                         },
                         "type": 15,
                       },
@@ -319,9 +339,14 @@ Object {
                     Object {
                       "data": Object {
                         "data": Object {
-                          "store": Atom {
-                            "value": "foo | 1 | 11",
-                          },
+                          "store": Array [
+                            1,
+                            [Function],
+                            [Function],
+                            [Function],
+                            [Function],
+                            "foo | 1 | 11",
+                          ],
                         },
                         "type": 15,
                       },
@@ -361,9 +386,14 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "store": Atom {
-                                    "value": 12,
-                                  },
+                                  "store": Array [
+                                    2,
+                                    [Function],
+                                    [Function],
+                                    [Function],
+                                    [Function],
+                                    12,
+                                  ],
                                 },
                                 "type": 15,
                               },
@@ -520,9 +550,14 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "store": Atom {
-            "value": "foo | 1 | 11 | 101",
-          },
+          "store": Array [
+            1,
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            "foo | 1 | 11 | 101",
+          ],
         },
         "type": 15,
       },
@@ -562,9 +597,14 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "store": Atom {
-                    "value": 18,
-                  },
+                  "store": Array [
+                    2,
+                    [Function],
+                    [Function],
+                    [Function],
+                    [Function],
+                    18,
+                  ],
                 },
                 "type": 15,
               },
@@ -600,9 +640,14 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "store": Atom {
-            "value": 18,
-          },
+          "store": Array [
+            2,
+            [Function],
+            [Function],
+            [Function],
+            [Function],
+            18,
+          ],
         },
         "type": 15,
       },

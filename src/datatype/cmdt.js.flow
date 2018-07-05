@@ -1,7 +1,7 @@
 //@flow
 
 
-import type {Atom} from '../effector/atom'
+import type {Ref} from '../ref/createRef'
 export type ComputeType = 11
 export type EmitType = 12
 export type RunType = 13
@@ -47,7 +47,7 @@ export class filter extends CmdClass<{
  /*::+type: FilterType;*/
 }
 export class update extends CmdClass<{
- store: Atom<any>,
+ store: Ref<any>,
 }> {
  /*::+type: UpdateType;*/
 }

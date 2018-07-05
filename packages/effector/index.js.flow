@@ -136,7 +136,7 @@ declare export function extract<
 >
 declare export function createApi<
  S,
- Api: {-[name: string]: (store: S, e: any) => S},
+ Api: {[name: string]: (store: S, e: any) => S},
 >(
  store: Store<S>,
  api: Api,
@@ -161,7 +161,7 @@ declare export function restore<Done>(
  defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {-[key: string]: Store<any> | any}>(
+declare export function restore<State: {+[key: string]: Store<any> | any}>(
  obj: State,
 ): $ObjMap<
  State,

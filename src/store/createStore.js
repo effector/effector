@@ -1,7 +1,6 @@
 //@flow
 
 import invariant from 'invariant'
-// import type {ComponentType, Node} from 'react'
 
 import $$observable from 'symbol-observable'
 
@@ -13,34 +12,27 @@ import {
 } from 'effector/datatype/FullDatatype.bs'
 import type {Store} from './index.h'
 import * as Kind from '../kind'
-import {atom, type Atom} from '../effector/atom'
+import {createRef, type Ref} from '../ref/createRef'
 // import warning from 'warning'
 
-export type Nest = {
- get(): any,
- set(state: any, action: any): any,
-}
 let id = 0
 export function createStore<State>(state: State): Store<State> {
  return storeConstructor({
-  currentReducer: _ => _,
   currentState: state,
  })
 }
 
 export function storeConstructor<State>(props: {
- currentReducer: Function,
  currentState: State,
 }): Store<State> {
  const currentId = (++id).toString(36)
  const {currentState} = props
- let currentReducer = props?.currentReducer
  const defaultState = currentState
 
- const plainState: Atom<typeof defaultState> = atom(defaultState)
+ const plainState: Ref<typeof defaultState> = createRef(defaultState)
  const shouldChange = new Cmd.filter({
   filter(newValue, ctx) {
-   return newValue !== plainState.get() && newValue !== undefined
+   return newValue !== plainState[1]() && newValue !== undefined
   },
  })
  const cmd = new Cmd.update({
@@ -72,14 +64,13 @@ export function storeConstructor<State>(props: {
   thru,
   subscribe,
   getState,
-  replaceReducer,
   reset,
   //$off
   [$$observable]: observable,
  }
  on(updater, (_, payload) => payload)
  function getState(): State {
-  return plainState.get()
+  return plainState[1]()
  }
 
  function map<NextState>(
@@ -130,17 +121,6 @@ export function storeConstructor<State>(props: {
    return action
 
   return action
- }
-
- function replaceReducer(nextReducer) {
-  invariant(
-   typeof nextReducer === 'function',
-   'Expected the nextReducer to be a function.',
-  )
-
-  currentReducer = nextReducer
-  updater(getState())
-  // dispatch({type: REPLACE})
  }
 
  function observable() {
@@ -227,9 +207,6 @@ export function storeConstructor<State>(props: {
   }
  }
 
- // function epic<E>(event: Event<E>, fn: Function) {
- //  return epicStore(event, store, fn)
- // }
  function stateSetter(_, payload) {
   return payload
  }
@@ -255,7 +232,7 @@ export function storeConstructor<State>(props: {
 function mapStore<A, B>(
  store: Store<A>,
  fn: (state: A, lastState?: B) => B,
- firstState?: B
+ firstState?: B,
 ): Store<B> {
  let lastValue = store.getState()
  let lastResult = fn(lastValue, firstState)
