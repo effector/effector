@@ -15,7 +15,7 @@ Object {
       "type": 31,
     },
     Object {
-      "data": Set {
+      "data": Array [
         Object {
           "data": Array [
             Object {
@@ -62,7 +62,7 @@ Object {
               "type": 31,
             },
             Object {
-              "data": Set {
+              "data": Array [
                 Object {
                   "data": Array [
                     Object {
@@ -109,13 +109,13 @@ Object {
                       "type": 31,
                     },
                     Object {
-                      "data": Set {},
+                      "data": Array [],
                       "type": 32,
                     },
                   ],
                   "type": 33,
                 },
-              },
+              ],
               "type": 32,
             },
           ],
@@ -130,7 +130,7 @@ Object {
           },
           "type": 31,
         },
-      },
+      ],
       "type": 32,
     },
   ],
@@ -153,7 +153,7 @@ Object {
       "type": 31,
     },
     Object {
-      "data": Set {
+      "data": Array [
         Object {
           "data": Array [
             Object {
@@ -200,7 +200,7 @@ Object {
               "type": 31,
             },
             Object {
-              "data": Set {
+              "data": Array [
                 Object {
                   "data": Array [
                     Object {
@@ -247,19 +247,19 @@ Object {
                       "type": 31,
                     },
                     Object {
-                      "data": Set {},
+                      "data": Array [],
                       "type": 32,
                     },
                   ],
                   "type": 33,
                 },
-              },
+              ],
               "type": 32,
             },
           ],
           "type": 33,
         },
-      },
+      ],
       "type": 32,
     },
   ],
@@ -282,7 +282,7 @@ Object {
       "type": 31,
     },
     Object {
-      "data": Set {
+      "data": Array [
         Object {
           "data": Array [
             Object {
@@ -306,7 +306,7 @@ Object {
               "type": 31,
             },
             Object {
-              "data": Set {
+              "data": Array [
                 Object {
                   "data": Array [
                     Object {
@@ -353,7 +353,7 @@ Object {
                       "type": 31,
                     },
                     Object {
-                      "data": Set {
+                      "data": Array [
                         Object {
                           "data": Array [
                             Object {
@@ -400,13 +400,13 @@ Object {
                               "type": 31,
                             },
                             Object {
-                              "data": Set {},
+                              "data": Array [],
                               "type": 32,
                             },
                           ],
                           "type": 33,
                         },
-                      },
+                      ],
                       "type": 32,
                     },
                   ],
@@ -421,13 +421,13 @@ Object {
                   },
                   "type": 31,
                 },
-              },
+              ],
               "type": 32,
             },
           ],
           "type": 33,
         },
-      },
+      ],
       "type": 32,
     },
   ],
@@ -564,7 +564,7 @@ Object {
       "type": 31,
     },
     Object {
-      "data": Set {
+      "data": Array [
         Object {
           "data": Array [
             Object {
@@ -611,13 +611,13 @@ Object {
               "type": 31,
             },
             Object {
-              "data": Set {},
+              "data": Array [],
               "type": 32,
             },
           ],
           "type": 33,
         },
-      },
+      ],
       "type": 32,
     },
   ],
@@ -654,7 +654,7 @@ Object {
       "type": 31,
     },
     Object {
-      "data": Set {},
+      "data": Array [],
       "type": 32,
     },
   ],

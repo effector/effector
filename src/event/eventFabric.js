@@ -118,7 +118,7 @@ export function eventFabric<Payload>({
    }),
   )
   const nextSeq = Step.seq([computeCmd, ...instanceAsEvent.graphite.seq.data])
-  contramapped.graphite.next.data.add(nextSeq)
+  contramapped.graphite.next.data.push(nextSeq)
   return contramapped
  }
 
@@ -143,7 +143,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   }),
  )
  const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
- event.graphite.next.data.add(nextSeq)
+ event.graphite.next.data.push(nextSeq)
  return mapped
 }
 
@@ -170,7 +170,7 @@ function filterEvent<A, B>(
   }),
  )
  const nextSeq = Step.seq([computeCmd, filterCmd, ...mapped.graphite.seq.data])
- event.graphite.next.data.add(nextSeq)
+ event.graphite.next.data.push(nextSeq)
  return mapped
 }
 export function watchEvent<Payload>(
@@ -191,7 +191,7 @@ export function watchEvent<Payload>(
   if (sq.data.length > 0) {
    const last = sq.data[sq.data.length - 1]
    if (last.type === Step.MULTI) {
-    last.data.add(singleCmd)
+    last.data.push(singleCmd)
    } else {
     sq.data.push(singleCmd)
    }
@@ -199,13 +199,14 @@ export function watchEvent<Payload>(
   }
   runCmd = isWrited ? sq : Step.seq(sq.data.concat([singleCmd]))
  } else runCmd = singleCmd
- instanceAsEvent.graphite.next.data.add(runCmd)
+ instanceAsEvent.graphite.next.data.push(runCmd)
  const unsubscribe = () => {
-  instanceAsEvent.graphite.next.data.delete(runCmd)
+  const i = instanceAsEvent.graphite.next.data.indexOf(runCmd)
+  if (i === -1) return
+
+  instanceAsEvent.graphite.next.data.splice(i, 1)
  }
- unsubscribe.unsubscribe = () => {
-  instanceAsEvent.graphite.next.data.delete(runCmd)
- }
+ unsubscribe.unsubscribe = unsubscribe
  return unsubscribe
 }
 function makeName(name: string, compositeName?: CompositeName) {

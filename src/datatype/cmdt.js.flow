@@ -22,33 +22,51 @@ class CmdClass<+Data> {
  }
 }
 
-export class compute extends CmdClass<{
+declare export class compute extends CmdClass<{
  reduce(oldValue: any, newValue: any, ctx: any): any,
 }> {
+ static [[call]](data: {
+  reduce(oldValue: any, newValue: any, ctx: any): any,
+ }): compute;
  /*::+type: ComputeType;*/
 }
 
-export class run extends CmdClass<{
+declare export class run extends CmdClass<{
  transactionContext?: (data: any) => () => void,
  runner(ctx: any): any,
 }> {
+ static [[call]](data: {
+  transactionContext?: (data: any) => () => void,
+  runner(ctx: any): any,
+ }): run;
  /*::+type: RunType;*/
 }
-export class emit extends CmdClass<{
+declare export class emit extends CmdClass<{
  +subtype: 'event' | 'effect',
  +fullName: string,
  runner(ctx: any): any,
 }> {
+ static [[call]](data: {
+ +subtype: 'event' | 'effect',
+ +fullName: string,
+ runner(ctx: any): any,
+}): emit;
  /*::+type: EmitType;*/
 }
-export class filter extends CmdClass<{
+declare export class filter extends CmdClass<{
  filter(value: any, ctx: any): boolean,
 }> {
+ static [[call]](data: {
+  filter(value: any, ctx: any): boolean,
+ }): filter;
  /*::+type: FilterType;*/
 }
-export class update extends CmdClass<{
+declare export class update extends CmdClass<{
  store: Ref<any>,
 }> {
+ static [[call]](data: {
+  store: Ref<any>,
+ }): update;
  /*::+type: UpdateType;*/
 }
 

@@ -3,80 +3,46 @@
 import type {SingleStepValidContext} from '../effector/index.h'
 import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
 
-function stepArg(ctx: SingleStepValidContext) {
- switch (ctx.type) {
-  case Ctx.EMIT:
-   return ctx.data.payload
-  case Ctx.COMPUTE:
-   return ctx.data.result
-  case Ctx.FILTER:
-  case Ctx.UPDATE:
-   return ctx.data.value
-  default:
-   throw new Error('RunContext is not supported')
- }
-}
+// function stepArg(ctx: SingleStepValidContext) {
+//  switch (ctx.type) {
+//   case Ctx.EMIT:
+//    return ctx.data.payload
+//   case Ctx.COMPUTE:
+//    return ctx.data.result
+//   case Ctx.FILTER:
+//   case Ctx.UPDATE:
+//    return ctx.data.value
+//   default:
+//    throw new Error('RunContext is not supported')
+//  }
+// }
+import {singleStep as singleStepRE, stepArg} from './Walk.bs'
+import {
+ singleCompute,
+ singleEmit,
+ singleFilter,
+ singleRun,
+ singleUpdate,
+} from './singleStep'
+
 export function singleStep(
  single: Cmd.Cmd,
  ctx: SingleStepValidContext,
- transactions: Set<() => void>,
- // buffers: {
- //  sideEffects: Array<Ctx.run>,
- //  updates: Map<Atom<any>, Array<Ctx.update>>,
- //  // computations:
- // },
+ transactions: Array<() => void>,
 ): SingleStepValidContext | Ctx.run | void {
  const arg = stepArg(ctx)
- if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
+ // if (ctx.type === Ctx.FILTER && !ctx.data.isChanged) return
  switch (single.type) {
-  case Cmd.EMIT: {
-   return Ctx.emit(single.data.fullName, arg)
-  }
-  case Cmd.FILTER: {
-   try {
-    const isChanged = single.data.filter(arg, ctx)
-    return Ctx.filter(arg, isChanged)
-   } catch (err) {
-    console.error(err)
-    return
-   }
-  }
-  case Cmd.RUN: {
-   const transCtx = single.data.transactionContext
-   if (transCtx) transactions.add(transCtx(arg))
-   try {
-    single.data.runner(arg)
-   } catch (err) {
-    console.error(err)
-   }
-   return Ctx.run([arg], ctx)
-  }
-  case Cmd.UPDATE: {
-   const newCtx = Ctx.update(arg)
-   single.data.store.set(arg)
-   return newCtx
-  }
-  case Cmd.COMPUTE: {
-   const newCtx = Ctx.compute(
-    [undefined, arg, ctx],
-    null,
-    null,
-    false,
-    true,
-    true,
-   )
-   try {
-    const result = single.data.reduce(undefined, arg, newCtx)
-    newCtx.data.result = result
-    newCtx.data.isNone = result === undefined
-   } catch (err) {
-    newCtx.data.isError = true
-    newCtx.data.error = err
-    newCtx.data.isChanged = false
-   }
-   if (!newCtx.data.isChanged) return
-   return newCtx
-  }
+  case Cmd.EMIT:
+   return singleEmit(arg, single, ctx, transactions)
+  case Cmd.FILTER:
+   return singleFilter(arg, single, ctx, transactions)
+  case Cmd.RUN:
+   return singleRun(arg, single, ctx, transactions)
+  case Cmd.UPDATE:
+   return singleUpdate(arg, single, ctx, transactions)
+  case Cmd.COMPUTE:
+   return singleCompute(arg, single, ctx, transactions)
   default:
    /*::(single.type: empty)*/
    throw new Error('impossible case')

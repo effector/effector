@@ -1,6 +1,8 @@
 
 
+import * as Block from "bs-platform/lib/es6/block.js";
 import * as ShowstepJs from "./showstep.js";
+import * as Murk$Graphite from "../effector/Command/murk/Murk.bs.js";
 
 function cmdT(param) {
   return param + 11 | 0;
@@ -83,18 +85,29 @@ function show(cmd) {
   }
 }
 
-var Cmd = /* module */[
-  /* cmdT */cmdT,
-  /* cmdUnTF */cmdUnTF,
-  /* cmdUnT */cmdUnT,
-  /* cmdByType */cmdByType,
-  /* compute */compute,
-  /* run */run,
-  /* emit */emit,
-  /* filter */filter,
-  /* update */update,
-  /* show */show
-];
+var Cmd = /* module */Block.localModule([
+    "cmdT",
+    "cmdUnTF",
+    "cmdUnT",
+    "cmdByType",
+    "compute",
+    "run",
+    "emit",
+    "filter",
+    "update",
+    "show"
+  ], [
+    cmdT,
+    cmdUnTF,
+    cmdUnT,
+    cmdByType,
+    compute,
+    run,
+    emit,
+    filter,
+    update,
+    show
+  ]);
 
 var cmd = {
   compute: compute,
@@ -181,15 +194,23 @@ function update$1(value) {
         };
 }
 
-var Ctx = /* module */[
-  /* ctxT */ctxT,
-  /* getType */getType,
-  /* compute */compute$1,
-  /* run */run$1,
-  /* emit */emit$1,
-  /* filter */filter$1,
-  /* update */update$1
-];
+var Ctx = /* module */Block.localModule([
+    "ctxT",
+    "getType",
+    "compute",
+    "run",
+    "emit",
+    "filter",
+    "update"
+  ], [
+    ctxT,
+    getType,
+    compute$1,
+    run$1,
+    emit$1,
+    filter$1,
+    update$1
+  ]);
 
 var ctx = {
   compute: compute$1,
@@ -214,17 +235,203 @@ var multi = 32;
 
 var seq = 33;
 
-var Label = /* module */[
-  /* stepT */stepT,
-  /* single */single,
-  /* multi */multi,
-  /* seq */seq
-];
+var Label = /* module */Block.localModule([
+    "stepT",
+    "single",
+    "multi",
+    "seq"
+  ], [
+    stepT,
+    single,
+    multi,
+    seq
+  ]);
 
-function setAdd(_, _$1) {
-  ((s.add(v)));
+var counter = [0];
+
+function id() {
+  counter[0] = counter[0] + 1 | 0;
+  return counter[0].toString(36);
+}
+
+var ExecId = /* module */Block.localModule(["id"], [id]);
+
+function emit$2(param_0) {
+  return /* Emit */Block.variant("Emit", 0, [param_0]);
+}
+
+function fullStoreUpdate(param_0) {
+  return /* FullStoreUpdate */Block.variant("FullStoreUpdate", 1, [param_0]);
+}
+
+function partialStoreUpdate(param_0, param_1) {
+  return /* PartialStoreUpdate */Block.variant("PartialStoreUpdate", 2, [
+            param_0,
+            param_1
+          ]);
+}
+
+function cloneStoreValue(param_0) {
+  return /* CloneStoreValue */Block.variant("CloneStoreValue", 3, [param_0]);
+}
+
+function sideEffect(param_0) {
+  return /* SideEffect */Block.variant("SideEffect", 4, [param_0]);
+}
+
+var UniEvent = /* module */Block.localModule([
+    "emit",
+    "fullStoreUpdate",
+    "partialStoreUpdate",
+    "cloneStoreValue",
+    "sideEffect"
+  ], [
+    emit$2,
+    fullStoreUpdate,
+    partialStoreUpdate,
+    cloneStoreValue,
+    sideEffect
+  ]);
+
+var UniContext = /* module */Block.localModule([], []);
+
+function oneStep(param_0) {
+  return /* OneStep */Block.variant("OneStep", 0, [param_0]);
+}
+
+function stepSeq(param_0) {
+  return /* StepSeq */Block.variant("StepSeq", 1, [param_0]);
+}
+
+function stepPar(param_0) {
+  return /* StepPar */Block.variant("StepPar", 2, [param_0]);
+}
+
+function ContextControl(Context) {
+  var cacheState = function (id, state) {
+    Context[/* storeCache */0][id] = state;
+    return /* () */0;
+  };
+  var getCached = function (id, state) {
+    var match = Context[/* storeCache */0][id];
+    if (match !== undefined) {
+      return match;
+    } else {
+      cacheState(id, state);
+      return state;
+    }
+  };
+  var getEventData = function (id) {
+    var data = Context[/* eventData */3][id];
+    Context[/* eventData */3][id] = Murk$Graphite.murking(undefined);
+    return data;
+  };
+  var setEventData = function (id, data) {
+    Context[/* eventData */3][id] = data;
+    return /* () */0;
+  };
+  return /* module */Block.localModule([
+            "cacheState",
+            "getCached",
+            "getEventData",
+            "setEventData"
+          ], [
+            cacheState,
+            getCached,
+            getEventData,
+            setEventData
+          ]);
+}
+
+var storeCache = { };
+
+var sideEffects = /* array */[];
+
+var pendingEvents = /* array */[];
+
+var eventData = { };
+
+var ContextExample = /* module */Block.localModule([
+    "storeCache",
+    "sideEffects",
+    "pendingEvents",
+    "eventData"
+  ], [
+    storeCache,
+    sideEffects,
+    pendingEvents,
+    eventData
+  ]);
+
+function cacheState(id, state) {
+  storeCache[id] = state;
   return /* () */0;
 }
+
+function getCached(id, state) {
+  var match = storeCache[id];
+  if (match !== undefined) {
+    return match;
+  } else {
+    cacheState(id, state);
+    return state;
+  }
+}
+
+function getEventData(id) {
+  var data = eventData[id];
+  eventData[id] = Murk$Graphite.murking(undefined);
+  return data;
+}
+
+function setEventData(id, data) {
+  eventData[id] = data;
+  return /* () */0;
+}
+
+var ControlledContext = /* module */Block.localModule([
+    "cacheState",
+    "getCached",
+    "getEventData",
+    "setEventData"
+  ], [
+    cacheState,
+    getCached,
+    getEventData,
+    setEventData
+  ]);
+
+cacheState("foo", Murk$Graphite.murking("bar"));
+
+var res = getCached("foo", Murk$Graphite.murking("or that"));
+
+var res1 = getCached("foos", Murk$Graphite.murking("or that"));
+
+var Uni = /* module */Block.localModule([
+    "ExecId",
+    "UniEvent",
+    "UniContext",
+    "oneStep",
+    "stepSeq",
+    "stepPar",
+    "ContextControl",
+    "ContextExample",
+    "ControlledContext",
+    "res",
+    "res1"
+  ], [
+    ExecId,
+    UniEvent,
+    UniContext,
+    oneStep,
+    stepSeq,
+    stepPar,
+    ContextControl,
+    ContextExample,
+    ControlledContext,
+    res,
+    res1
+  ]);
 
 function single$1(data) {
   return {
@@ -236,7 +443,7 @@ function single$1(data) {
 function multi$1() {
   return {
           type: multi,
-          data: new Set(/* array */[])
+          data: /* array */[]
         };
 }
 
@@ -251,14 +458,21 @@ function show$1(a) {
   return ShowstepJs.show(a, show);
 }
 
-var Step = /* module */[
-  /* Label */Label,
-  /* setAdd */setAdd,
-  /* single */single$1,
-  /* multi */multi$1,
-  /* seq */seq$1,
-  /* show */show$1
-];
+var Step = /* module */Block.localModule([
+    "Label",
+    "Uni",
+    "single",
+    "multi",
+    "seq",
+    "show"
+  ], [
+    Label,
+    Uni,
+    single$1,
+    multi$1,
+    seq$1,
+    show$1
+  ]);
 
 var step = {
   single: (function (data) {
@@ -268,7 +482,10 @@ var step = {
             };
     }),
   multi: (function () {
-      return multi$1(/* () */0);
+      return {
+              type: multi,
+              data: /* array */[]
+            };
     }),
   seq: (function (data) {
       return {
@@ -296,4 +513,4 @@ export {
   step ,
   
 }
-/* ./showstep.js Not a pure module */
+/*  Not a pure module */

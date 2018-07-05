@@ -191,17 +191,103 @@ module Step /*: {    type step('a);    /* [@bs...] external step : (~type_: int,
     let multi = stepT(MultiType);
     let seq = stepT(SeqType);
   };
-  type set('a) = {. add: (. 'a) => set('a)};
-  let setAdd = (s: set('a), v: 'a) => {
-    s;
-    v;
-    %raw
-    "s.add(v)";
-    ();
+  module Uni = {
+    type event('a);
+    type state = Murk.t;
+    type pendingEvent = (Murk.t, event(Murk.t));
+    type eventID = int;
+    module ExecId: {type t = string; let id: (. unit) => t;} = {
+      type t = string;
+      let counter = ref(0);
+      let id =
+        (.) => {
+          counter := counter^ + 1;
+          Js.Int.toStringWithRadix(counter^, ~radix=36);
+        };
+    };
+    type storeID = string;
+    type storeField = string;
+    type getState = (. unit) => Murk.t;
+    type setState = (. Murk.t) => unit;
+    type rwState = (getState, setState);
+    module UniEvent = {
+      [@bs.deriving accessors]
+      type t =
+        | Emit(eventID)
+        | FullStoreUpdate(storeID)
+        | PartialStoreUpdate(storeID, storeField)
+        | CloneStoreValue(storeID)
+        | SideEffect(Murk.t => Murk.t);
+    };
+    module UniContext = {
+      type t =
+        | Emit(eventID, Murk.t)
+        | FullStoreUpdate(storeID, rwState)
+        | PartialStoreUpdate(storeID, storeField, rwState)
+        | CloneStoreValue(storeID, rwState)
+        | SideEffect(Murk.t => Murk.t);
+    };
+    [@bs.deriving accessors]
+    type uniStep =
+      | OneStep(UniEvent.t)
+      | StepSeq(array(uniStep))
+      | StepPar(array(uniStep));
+    type cache = Js.Dict.t(state);
+    module type ContextData = {
+      let storeCache: cache;
+      let sideEffects: array(unit => unit);
+      let pendingEvents: array(pendingEvent);
+      let eventData: Js.Dict.t(Murk.t);
+    };
+    module ContextControl = (Context: ContextData) => {
+      let cacheState = (id: storeID, state) =>
+        Js.Dict.set(Context.storeCache, id, state);
+      let getCached = (id: storeID, state) =>
+        switch (Js.Dict.get(Context.storeCache, id)) {
+        | Some(state) => state
+        | None =>
+          cacheState(id, state);
+          state;
+        };
+      let getEventData = (id: ExecId.t) => {
+        let data = Js.Dict.unsafeGet(Context.eventData, id);
+        Js.Dict.set(Context.eventData, id, Murk.murking(. Js.undefined));
+        data;
+      };
+      let setEventData = (id: ExecId.t, data: Murk.t) =>
+        Js.Dict.set(Context.eventData, id, data);
+    };
+    module ContextExample: ContextData = {
+      let storeCache = Js.Dict.empty();
+      let sideEffects = [||];
+      let pendingEvents = [||];
+      let eventData = Js.Dict.empty();
+    };
+    module ControlledContext = ContextControl(ContextExample);
+    /* let eventToContext =
+       (. e: UniEvent.t, execID: ExecId.t) =>
+         switch (e) {
+         | UniEvent.Emit(id) =>
+           let data = ControlledContext.getEventData(execID);
+           UniContext.Emit(id, data);
+         | UniEvent.FullStoreUpdate(id) => ()
+         }; */
+    ControlledContext.cacheState("foo", Murk.murking(. "bar"));
+    let res = ControlledContext.getCached("foo", Murk.murking(. "or that"));
+    let res1 =
+      ControlledContext.getCached("foos", Murk.murking(. "or that"));
   };
+  type set('a) = {. add: (. 'a) => set('a)};
+  /* let setAdd = (s: set('a), v: 'a) => {
+       s;
+       v;
+       %raw
+       "s.add(v)";
+       ();
+     }; */
   [@bs.new] external createSet : array('a) => set('a) = "Set";
   let single = (~data: Cmd.cmd) => step(~data, ~type_=Label.single);
-  let multi = () => step(~data=createSet([||]), ~type_=Label.multi);
+  let multi = () => step(~data=[||], ~type_=Label.multi);
   let seq = (~data: array(step(_))) => step(~data, ~type_=Label.seq);
   [@bs.module "./showstep.js"]
   external show' : (step('a), Cmd.cmd => string) => string = "show";
@@ -210,7 +296,7 @@ module Step /*: {    type step('a);    /* [@bs...] external step : (~type_: int,
 
 let step = {
   "single": (~data: Cmd.cmd) => Step.single(~data),
-  "multi": () => (Step.multi(): Step.step(Step.set(int))),
+  "multi": () => (Step.multi(): Step.step(array(int))),
   "seq": (~data: array(Step.step(int))) => Step.seq(~data),
   "show": (a: Step.step(int)) => Step.show(a),
   "SINGLE": 31,

@@ -30,27 +30,37 @@ function stepArg(ctx) {
   }
   switch (exit) {
     case 1 : 
-        return (new Error('RunContext is not supported'));
+        return ((()=>{throw new Error('RunContext is not supported')})());
     case 2 : 
         return (ctx.data.value);
     
   }
 }
 
+function singleEmit(arg, single, _, _$1) {
+  FullDatatype$Graphite.Cmd[/* cmdUnT */2](single);
+  return FullDatatype$Graphite.Ctx[/* emit */4]((single.data.fullName), arg);
+}
+
+function singleFilter(arg, single, ctx, _) {
+  FullDatatype$Graphite.Cmd[/* cmdUnT */2](single);
+  FullDatatype$Graphite.Ctx[/* getType */1](ctx);
+  var isChanged = (single.data.filter(arg, ctx));
+  return FullDatatype$Graphite.Ctx[/* filter */5](arg, isChanged);
+}
+
 function singleStep(single, ctx, transactions) {
   var arg = stepArg(ctx);
   var match = FullDatatype$Graphite.Cmd[/* cmdUnT */2](single);
+  var r;
   switch (match) {
     case 0 : 
-        return ((()=>{
-         const newCtx = Ctx.compute(
-           [undefined, arg, ctx],
-           null,
-           null,
-           false,
-           true,
-           true,
-          )
+        var newCtx = FullDatatype$Graphite.Ctx[/* compute */2](/* array */[
+              (undefined),
+              arg,
+              (ctx)
+            ], (null), (null), false, true, true);
+        var fr = ((()=>{
           try {
            const result = single.data.reduce(undefined, arg, newCtx)
            newCtx.data.result = result
@@ -63,35 +73,46 @@ function singleStep(single, ctx, transactions) {
           if (!newCtx.data.isChanged) return
           return newCtx
        })());
+        console.log(newCtx);
+        r = fr;
+        break;
     case 1 : 
-        var em = FullDatatype$Graphite.Ctx[/* emit */4]((single.data.fullName), arg);
-        return /* EmitG */Block.__(1, [em]);
+        var em = singleEmit(arg, single, ctx, transactions);
+        r = /* EmitG */Block.variant("EmitG", 1, [em]);
+        break;
     case 2 : 
         var transCtx = (single.data.transactionContext);
         if (transCtx) {
-          FullDatatype$Graphite.Step[/* setAdd */1](transactions, transCtx);
+          transactions.push(transCtx);
         }
-        return /* EmitG */Block.__(1, [FullDatatype$Graphite.Ctx[/* emit */4]((single.data.fullName), arg)]);
+        r = /* EmitG */Block.variant("EmitG", 1, [FullDatatype$Graphite.Ctx[/* emit */4]((single.data.fullName), arg)]);
+        break;
     case 3 : 
-        return ((() => {
-     try {
-      const isChanged = single.data.filter(arg, ctx)
-      return Ctx.filter(arg, isChanged)
-     } catch (err) {
-      console.error(err)
-      return
-     }
-    })());
+        r = ((() => {
+           try {
+            const isChanged = single.data.filter(arg, ctx)
+            return Ctx.filter(arg, isChanged)
+           } catch (err) {
+            console.error(err)
+            return
+           }
+          })());
+        break;
     case 4 : 
-        var newCtx = FullDatatype$Graphite.Ctx[/* update */6](arg);
+        var newCtx$1 = FullDatatype$Graphite.Ctx[/* update */6](arg);
         ((single.data.store.set(arg)));
-        return /* UpdateG */Block.__(4, [newCtx]);
+        r = /* UpdateG */Block.variant("UpdateG", 4, [newCtx$1]);
+        break;
     
   }
+  ((r = r[0]));
+  return r;
 }
 
 export {
   stepArg ,
+  singleEmit ,
+  singleFilter ,
   singleStep ,
   
 }

@@ -19,7 +19,7 @@ class Single {
 }
 class Multi {
  +type: MultiType;
- +data: Set<Step>;
+ +data: Array<Step>;
 }
 class Seq {
  +type: SeqType;

@@ -18,7 +18,7 @@ export function show(value: Step, showCmd: Cmd => string): string {
   case SINGLE:
    return `Single ${showCmd(value.data)}`
   case MULTI: {
-   if (value.data.size === 0) return 'Multi []'
+   if (value.data.length === 0) return 'Multi []'
    const inner = [...value.data]
     .map(e => move1(`  *  ${move2(show(e, showCmd))}`))
     .join(`,\n`)
