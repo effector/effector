@@ -19,15 +19,28 @@ import type {
  ID,
 } from '../index.h'
 
-export const {order, status, visible, selected} = restore({
- order: ([]: ID[]),
- status: new Map<ID, TodoStatus>(),
- visible: new Map<ID, boolean>(),
- selected: (null: ID | null),
-})
+export const {order, status, visible, selected} = restore(
+ ({
+  order: [],
+  status: new Map(),
+  visible: new Map(),
+  selected: null,
+ }: {
+  order: ID[],
+  status: Map<ID, TodoStatus>,
+  visible: Map<ID, boolean>,
+  selected: ID | null,
+ }),
+)
 
-export const {todos, nextID, filterStatus} = restore({
- todos: ([]: TodoItem[]),
- nextID: (0: ID),
- filterStatus: ('all': ShowFilter),
-})
+export const {todos, nextID, filterStatus} = restore(
+ ({
+  todos: [],
+  nextID: 0,
+  filterStatus: 'all',
+ }: {
+  todos: TodoItem[],
+  nextID: ID,
+  filterStatus: ShowFilter,
+ }),
+)

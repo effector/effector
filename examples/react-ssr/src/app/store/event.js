@@ -1,5 +1,12 @@
 //@flow
-import {createEffect, createApi, type Effect} from 'effector'
+import {
+ createEffect,
+ createEvent,
+ createApi,
+ type Event,
+ type Effect,
+} from 'effector'
+
 import {todos} from './shape'
 import type {
  TodoStatus,
@@ -8,10 +15,13 @@ import type {
  PersistData,
  ID,
 } from '../index.h'
+
 export const {addTodo, removeTodo} = createApi(todos, {
  addTodo: (todos, newItem: TodoItem) => [...todos, newItem],
  removeTodo: (todos, id: ID) => todos.filter(item => item.id !== id),
 })
+
+export const injectData: Event<PersistData> = createEvent('load data to stores')
 
 export const saveAll: Effect<PersistData, void> = createEffect('save all todos')
 export const loadAll: Effect<
@@ -19,5 +29,3 @@ export const loadAll: Effect<
  PersistData,
  'nothing to load',
 > = createEffect('load all todos')
-
-export const injectData = loadAll.done.map(({result}) => result)

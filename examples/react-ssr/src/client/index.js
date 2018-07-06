@@ -1,6 +1,6 @@
 //@flow
 
 import './use'
-import './on'
+import '../app/store/on'
 
 import './render'

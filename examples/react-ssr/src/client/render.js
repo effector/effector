@@ -1,10 +1,10 @@
 //@flow
 
 import * as React from 'react'
-
-import {App} from '../app/component/App'
-import {injectData} from '../app/store/event'
 import {hydrate} from 'react-dom'
+
+import {App} from '../app'
+import {injectData} from '../app/store/event'
 
 injectData(window.__DATA__)
 

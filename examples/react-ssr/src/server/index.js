@@ -1,15 +1,21 @@
 //@flow
 
-import {render} from './render'
 //$todo
-const Express = require('express')
-const app = Express()
-const port = 3000
+import connect from 'connect'
+//$todo
+import serve from 'serve-static'
 
-app.use('/static', Express.static(`${__dirname}/`))
+import {render} from './render'
+
+const app = connect()
+
+app.use('/static', serve(__dirname))
 
 app.use((req, res) => {
- res.send(render())
+ res.setHeader('Content-Type', 'text/html; charset=utf-8')
+ res.end(render(), 'utf8')
 })
 
-app.listen(port)
+app.listen(3000)
+
+console.log(`SSR server started`)

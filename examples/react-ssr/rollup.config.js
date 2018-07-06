@@ -3,35 +3,32 @@ import resolver from 'rollup-plugin-node-resolve'
 // import {uglify} from 'rollup-plugin-uglify'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
+import json from 'rollup-plugin-json'
 
 import {resolve} from 'path'
 
+import {nodeInternals, reactExports} from './fixtures'
+
 export default {
  input: 'src/server/index.js',
+
  plugins: [
   resolver({
-   jsnext: true,
+   preferBuiltins: true,
   }),
-  babel({
-   runtimeHelpers: true,
+  json({}),
+  babel({}),
+  commonjs({
+   namedExports: reactExports,
   }),
-  commonjs({}),
   replace({
    'process.env.NODE_ENV': JSON.stringify('production'),
   }),
  ],
- external: [
-  'effector',
-  'effector-react',
-  'express',
-  'react',
-  'invariant',
-  'react-dom/server',
-  // 'path',
- ],
+ external: nodeInternals,
  output: [
   {
-   file: resolve(__dirname, 'dist', 'server.js'),
+   file: `${__dirname}/dist/server.js`,
    format: 'cjs',
    name: 'serverBundle',
    sourcemap: true,
