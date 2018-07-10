@@ -12,6 +12,31 @@ import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {createRef, type Ref} from '../ref/createRef'
 
+export function compute(
+ reduce: (oldValue: any, newValue: any, ctx: any) => any,
+) {
+ return Cmd.compute({reduce})
+}
+export function filter(filt: (value: any, ctx: any) => boolean) {
+ return Cmd.filter({filter: filt})
+}
+
+export function run(data: {
+ transactionContext?: (data: any) => () => void,
+ runner(ctx: any): any,
+}) {
+ return Cmd.run(data)
+}
+export function emit(
+ subtype: 'event' | 'effect',
+ fullName: string,
+ runner: (ctx: any) => any,
+) {
+ return Cmd.emit({subtype, fullName, runner})
+}
+export function update(store: Ref<any>) {
+ return Cmd.update({store})
+}
 export class StepBox</*::+*/ Mode: 'seq' | 'par'> {
  depth: number = 0
  mod: 'seq' | 'par' = 'seq'
@@ -37,26 +62,24 @@ export class StepBox</*::+*/ Mode: 'seq' | 'par'> {
   this.mod = 'par'
   return /*::toPar(*/ this /*::)*/
  }
- push(step: Cmd.Cmd) {
+ push(step: Cmd.Cmd): this {
   const solo = Step.single(step)
   this.current.data.push(solo)
+  return this
  }
  compute(reduce: (oldValue: any, newValue: any, ctx: any) => any): this {
-  const step = Cmd.compute({reduce})
-  const solo = Step.single(step)
+  this.push(compute(reduce))
   return this
  }
  filter(filt: (value: any, ctx: any) => boolean): this {
-  const step = Cmd.filter({filter: filt})
-  const solo = Step.single(step)
+  this.push(filter(filt))
   return this
  }
  run(data: {
   transactionContext?: (data: any) => () => void,
   runner(ctx: any): any,
  }): this {
-  const step = Cmd.run(data)
-  const solo = Step.single(step)
+  this.push(run(data))
   return this
  }
  emit(
@@ -64,13 +87,11 @@ export class StepBox</*::+*/ Mode: 'seq' | 'par'> {
   fullName: string,
   runner: (ctx: any) => any,
  ): this {
-  const step = Cmd.emit({subtype, fullName, runner})
-  const solo = Step.single(step)
+  this.push(emit(subtype, fullName, runner))
   return this
  }
  update(store: Ref<any>): this {
-  const step = Cmd.update({store})
-  const solo = Step.single(step)
+  this.push(update(store))
   return this
  }
  // step(...fabs: Array<(api: StepBox<*>) => StepBox<*>>) {

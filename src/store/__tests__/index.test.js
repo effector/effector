@@ -37,6 +37,41 @@ test('.map', () => {
  expect(spy).toHaveBeenCalledTimes(3)
 })
 
+test('.off', () => {
+ const newWord = createEvent<string>()
+ const a = createStore('word').on(newWord, (_, word) => word)
+
+ const b = a.map(word => word.length)
+
+ const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+
+ sum.watch(spy)
+
+ expect(a.getState()).toBe('word')
+ expect(b.getState()).toBe(4)
+ expect(sum.getState()).toBe(4)
+
+ newWord('lol')
+
+ expect(a.getState()).toBe('lol')
+ expect(b.getState()).toBe(3)
+ expect(sum.getState()).toBe(7)
+
+ a.off(newWord)
+
+ newWord('long word')
+
+ expect(a.getState()).toBe('lol')
+ expect(b.getState()).toBe(3)
+ expect(sum.getState()).toBe(7)
+
+ expect(spy).toHaveBeenCalledTimes(2)
+
+ newWord('')
+
+ expect(spy).toHaveBeenCalledTimes(2)
+})
+
 test('create api', () => {
  const shape = restore({
   todos: ['to do', 'list'],

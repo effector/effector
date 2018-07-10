@@ -15,7 +15,7 @@ import * as Kind from '../kind'
 import {createRef, type Ref} from '../ref/createRef'
 // import warning from 'warning'
 
-import {StepBox} from './StepBox'
+import * as Box from './StepBox'
 
 let id = 0
 export function createStore<State>(state: State): Store<State> {
@@ -32,41 +32,32 @@ export function storeConstructor<State>(props: {
  const defaultState = currentState
 
  const plainState: Ref<typeof defaultState> = createRef(defaultState)
- const bx = new StepBox()
+ const subscribers = new Map()
+ const shouldChange = Box.filter(
+  (newValue, ctx) => newValue !== undefined && newValue !== plainState[1](),
+ )
+ const cmd = Box.update(plainState)
+ const bx = new Box.StepBox()
   .modeSeq()
-  .filter(
-   (newValue, ctx) => newValue !== undefined && newValue !== plainState[1](),
-  )
-  .update(plainState)
+  .push(shouldChange)
+  .push(cmd)
   .modePar()
- const shouldChange = new Cmd.filter({
-  filter(newValue, ctx) {
-   return newValue !== undefined && newValue !== plainState[1]()
-  },
- })
- const cmd = new Cmd.update({
-  store: plainState,
- })
- const filterStep: Step.Single = Step.single(shouldChange)
- const singleStep: Step.Single = Step.single(cmd)
- const nextSteps: Step.Multi = Step.multi()
- const fullSeq: Step.Seq = Step.seq([filterStep, singleStep, nextSteps])
 
  const updater: any = createEvent(`update ${currentId}`)
 
  const store = {
   graphite: {
-   next: nextSteps,
-   seq: fullSeq,
+   next: bx.current,
+   seq: bx.prime,
   },
   defaultState,
   kind: Kind.STORE,
   id: currentId,
   withProps,
   setState,
-  dispatch,
   map,
   on,
+  off,
   to,
   watch,
   // epic,
@@ -77,6 +68,7 @@ export function storeConstructor<State>(props: {
   //$off
   [$$observable]: observable,
  }
+ ;(store: any).dispatch = dispatch
  on(updater, (_, payload) => payload)
  function getState(): State {
   return plainState[1]()
@@ -98,7 +90,7 @@ export function storeConstructor<State>(props: {
   let lastCall = getState()
   let active = true
   const runCmd = Step.single(
-   new Cmd.run({
+   Box.run({
     runner(args) {
      if (args === lastCall || !active) return
      lastCall = args
@@ -127,9 +119,9 @@ export function storeConstructor<State>(props: {
  }
 
  function dispatch(action) {
-  if (action === undefined || action === null) return action
-  if (typeof action.type !== 'string' && typeof action.type !== 'number')
-   return action
+  // if (action === undefined || action === null) return action
+  // if (typeof action.type !== 'string' && typeof action.type !== 'number')
+  //  return action
 
   return action
  }
@@ -159,31 +151,33 @@ export function storeConstructor<State>(props: {
  function reset(event) {
   return on(event, () => defaultState)
  }
-
+ function off(event: Event<any>) {
+  const currentSubscription = subscribers.get(event)
+  if (currentSubscription === undefined) return
+  currentSubscription()
+  subscribers.delete(event)
+ }
  function on(event: any, handler: Function) {
   const e: Event<any> = event
-  const computeCmd = new Cmd.compute({
-   reduce(_, newValue, ctx) {
-    const lastState = getState()
-    return handler(lastState, newValue, e.getType())
-   },
+  off(e)
+  const computeCmd = Box.compute((_, newValue, ctx) => {
+   const lastState = getState()
+   return handler(lastState, newValue, e.getType())
   })
-  const filterCmd = new Cmd.filter({
-   filter(data, ctx: Ctx.compute) {
-    // const oldValue = ctx.data.args[1]
-    const lastState = getState()
-    return data !== lastState && data !== undefined
-   },
+  const filterCmd = Box.filter((data, ctx: Ctx.compute) => {
+   const lastState = getState()
+   return data !== lastState && data !== undefined
   })
   const step = Step.single(computeCmd)
   const filtStep = Step.single(filterCmd)
   const nextSeq = Step.seq([step, filtStep, ...store.graphite.seq.data])
   e.graphite.next.data.push(nextSeq)
-  const unsub = () => {
+
+  subscribers.set(e, () => {
    const i = e.graphite.next.data.indexOf(nextSeq)
    if (i === -1) return
    e.graphite.next.data.splice(i, 1)
-  }
+  })
   return store
  }
 
@@ -251,25 +245,21 @@ function mapStore<A, B>(
  let lastResult = fn(lastValue, firstState)
  const innerStore: Store<any> = (createStore: any)(lastResult)
  const computeCmd = Step.single(
-  new Cmd.compute({
-   reduce(_, newValue, ctx) {
-    lastValue = newValue
-    const lastState = innerStore.getState()
-    const result = fn(newValue, lastState)
-    return result
-   },
+  Box.compute((_, newValue, ctx) => {
+   lastValue = newValue
+   const lastState = innerStore.getState()
+   const result = fn(newValue, lastState)
+   return result
   }),
  )
  const filterCmdPost = Step.single(
-  new Cmd.filter({
-   filter(result, ctx: Ctx.compute) {
-    const lastState = innerStore.getState()
-    const isChanged = result !== lastState && result !== undefined
-    if (isChanged) {
-     lastResult = result
-    }
-    return isChanged
-   },
+  Box.filter((result, ctx: Ctx.compute) => {
+   const lastState = innerStore.getState()
+   const isChanged = result !== lastState && result !== undefined
+   if (isChanged) {
+    lastResult = result
+   }
+   return isChanged
   }),
  )
  const nextSeq = Step.seq([
