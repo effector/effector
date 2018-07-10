@@ -6,7 +6,6 @@ import type {Effect} from 'effector/effect'
 
 export type Store<State> = {
  reset(event: Event<any> | Effect<any, any, any>): Store<State>,
- dispatch(action: any): any,
  getState(): State,
  //prettier-ignore
  +setState: (
@@ -25,6 +24,7 @@ export type Store<State> = {
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => State | void,
  ): Store<State>,
+ off(event: Event<any>): void,
  to<T>(store: Store<T>, reducer: (state: T, payload: State) => T): Subscription,
  subscribe(listner: any): Subscription,
  thru<U>(fn: (store: Store<State>) => U): U,

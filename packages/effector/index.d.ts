@@ -49,7 +49,6 @@ export interface Effect<Params, Done, Fail = Error> {
 
 export class Store<State> {
  reset(event: Event<any> | Effect<any, any, any>): this;
- dispatch(action: any): any;
  getState(): State;
  withProps<Props, R>(
   fn: (state: State, props: Props) => R,
@@ -60,7 +59,7 @@ export class Store<State> {
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => (State | void),
  ): this;
- replaceReducer(_: any): any;
+ off(event: Event<any> | Effect<any, any, any>): void;
  subscribe(listner: any): Subscription;
  watch<E>(
   watcher: (state: State, payload: E, type: string) => any,
