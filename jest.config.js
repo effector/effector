@@ -25,11 +25,8 @@ function packageTest(displayName, opts = {}) {
     'effector/fixtures': '<rootDir>/src/fixtures/index.js',
     '^effector/(.+)': '<rootDir>/src/$1',
    },
-   testPathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '!<rootDir>/node_modules/bs-platform',
-    // '<rootDir>/packages/effector',
-   ],
+   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+   transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
    roots: ['<rootDir>/src/'],
   },
   opts,
