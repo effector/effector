@@ -27,6 +27,7 @@ function packageTest(displayName, opts = {}) {
    },
    testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
+    '!<rootDir>/node_modules/bs-platform',
     // '<rootDir>/packages/effector',
    ],
    roots: ['<rootDir>/src/'],

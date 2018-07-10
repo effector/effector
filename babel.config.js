@@ -4,9 +4,9 @@ const {resolve: resolvePath} = require('path')
 
 module.exports = api => {
  // module.exports = api => {
- // api.cache(false)
- const env = api.cache(() => process.env.NODE_ENV)
- console.log(env)
+ api.cache(false)
+ // const env = api.cache(() => process.env.NODE_ENV)
+ // console.log(env)
  const plugins = [
   '@babel/plugin-proposal-export-namespace-from',
   '@babel/plugin-proposal-optional-chaining',
@@ -25,8 +25,10 @@ module.exports = api => {
      'effector/datatype': resolvePath(__dirname, 'src', 'datatype'),
      'effector/graphite': resolvePath(__dirname, 'src', 'graphite'),
      'effector/fixtures': resolvePath(__dirname, 'src', 'fixtures'),
-     '^bs-platform/lib/es6/(.+)': ([, name]) =>
-      resolvePath(__dirname, 'stdlib/es6', name),
+     // '^bs-platform/lib/es6/(.+)': ([, name]) =>
+     //  resolvePath(__dirname, 'node_modules/bs-platform/lib/es6', name),
+     // '^bs-platform/lib/es6/(.+)': ([, name]) =>
+     // resolvePath(__dirname, 'stdlib/es6', name),
     },
    },
   ],

@@ -4,7 +4,8 @@ untyped-type-import=error
 unclear-type=off
 
 
-💩 [include]
+[include]
+./scripts/prebuild/*
 💩 ./packages/actor/src/alt/*
 💩 ./packages/atom/src/*
 💩 ./packages/avar/src/*
@@ -40,8 +41,8 @@ module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
-module.name_mapper='^effector$' -> '<PROJECT_ROOT>/src'
-module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/src/react'
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
+module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
 
 [ignore]
 <PROJECT_ROOT>/npm/*

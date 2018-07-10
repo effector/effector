@@ -247,7 +247,7 @@ var Label = /* module */Block.localModule([
     seq
   ]);
 
-var counter = [0];
+var counter = /* record */Block.record(["contents"], [0]);
 
 function id() {
   counter[0] = counter[0] + 1 | 0;
