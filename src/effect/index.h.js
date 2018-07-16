@@ -4,6 +4,7 @@ import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 import type {Future} from './future'
+import type {Vertex} from 'effector/graphite/tarjan'
 
 export type Effect<Params, Done, Fail = Error> = {
  (payload: Params): Future<Params, Done, Fail>,
@@ -15,6 +16,7 @@ export type Effect<Params, Done, Fail = Error> = {
   getCurrent(): (params: Params) => Promise<Done>,
  },
  watch(watcher: (payload: Params) => any): Subscription,
+ getNode(): Vertex<['event', string]>,
  //map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>,
  subscribe(subscriber: Subscriber<Params>): Subscription,
