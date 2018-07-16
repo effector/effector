@@ -14,7 +14,11 @@ export function epic<T, Payload>(
  const epic$ = fn(instance$).multicast()
  const name = event.compositeName.shortName
  const fullName = event.compositeName.fullName
- const mapped = eventFabric({name: `${name}$ ~> *`, parent: event.domainName})
+ const mapped = eventFabric({
+  name: `${name}$ ~> *`,
+  parent: event.domainName,
+  vertex: event.getNode().createChild(['event', `${name}$ ~> *`]),
+ })
  epic$.observe(e => {
   mapped.create(e, fullName)
  })

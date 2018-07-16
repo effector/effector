@@ -15,15 +15,18 @@ import {
  step as Step,
 } from 'effector/datatype/FullDatatype.bs'
 import {walkEvent, frame, seq} from 'effector/graphite'
+import {Graph, type Vertex} from 'effector/graphite/tarjan'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
 
 export function eventFabric<Payload>({
  name: nameRaw,
  parent,
+ vertex,
 }: {
  name?: string,
  parent?: CompositeName,
+ vertex: Vertex<['event', string]>,
 }): Event<Payload> {
  const id = eventRefcount()
  const name = nameRaw || id
@@ -71,6 +74,7 @@ export function eventFabric<Payload>({
  instance.domainName = parent
  instance.compositeName = compositeName
  instance.filter = filter
+ instance.getNode = () => vertex
  function filter<Next>(fn: Payload => Next | void): Event<Next> {
   return filterEvent(instanceAsEvent, fn)
  }
@@ -105,9 +109,11 @@ export function eventFabric<Payload>({
   return watch(payload => observer.next(payload))
  }
  function prepend<Before>(fn: Before => Payload) {
+  const vert = vertex.createChild(['event', `* → ${name}`])
   const contramapped: Event<Before> = eventFabric({
    name: `* → ${name}`,
    parent,
+   vertex: vert,
   })
 
   const computeCmd = Step.single(
@@ -131,9 +137,11 @@ declare function mapEvent<A, B>(
  fn: (_: A) => B,
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
+ const vertex = event.getNode()
  const mapped = eventFabric({
   name: `${event.shortName} → *`,
   parent: event.domainName,
+  vertex: vertex.createChild(['event', `${event.shortName} → *`]),
  })
  const computeCmd = Step.single(
   new Cmd.compute({
@@ -151,9 +159,11 @@ function filterEvent<A, B>(
  event: Event<A> | Effect<A, any, any>,
  fn: A => B | void,
 ): Event<B> {
+ const vertex = event.getNode()
  const mapped = eventFabric({
   name: `${event.shortName} →? *`,
   parent: event.domainName,
+  vertex: vertex.createChild(['event', `${event.shortName} →? *`]),
  })
  const computeCmd = Step.single(
   new Cmd.compute({
