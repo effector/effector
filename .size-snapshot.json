@@ -1,0 +1,50 @@
+{
+  "/Users/zerobias/web/effector/npm/effector/effector.es.js": {
+    "bundled": 34617,
+    "minified": 34535,
+    "gzipped": 10202,
+    "treeshaked": {
+      "rollup": {
+        "code": 4191,
+        "import_statements": 60
+      },
+      "webpack": {
+        "code": 5521
+      }
+    }
+  },
+  "/Users/zerobias/web/effector/npm/effector/effector.cjs.js": {
+    "bundled": 34816,
+    "minified": 34734,
+    "gzipped": 10255
+  },
+  "/Users/zerobias/web/effector/npm/effector-react/effector-react.es.js": {
+    "bundled": 1638,
+    "minified": 1638,
+    "gzipped": 687,
+    "treeshaked": {
+      "rollup": {
+        "code": 14,
+        "import_statements": 14
+      },
+      "webpack": {
+        "code": 998
+      }
+    }
+  },
+  "/Users/zerobias/web/effector/npm/effector-react/effector-react.cjs.js": {
+    "bundled": 1765,
+    "minified": 1765,
+    "gzipped": 721
+  },
+  "/Users/zerobias/web/effector/npm/effector/effector.bundle.js": {
+    "bundled": 33351,
+    "minified": 33199,
+    "gzipped": 9814
+  },
+  "/Users/zerobias/web/effector/npm/effector-react/effector-react.bundle.js": {
+    "bundled": 1688,
+    "minified": 1688,
+    "gzipped": 689
+  }
+}

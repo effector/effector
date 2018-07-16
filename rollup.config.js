@@ -4,6 +4,7 @@ import alias from './rollup-alias'
 import {uglify} from 'rollup-plugin-uglify'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
+import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 // import visualizer from 'rollup-plugin-visualizer'
 import bucklescript from 'rollup-plugin-bucklescript'
 
@@ -62,6 +63,7 @@ const rollupPlugins = [
  }),
  resolve({}),
  ...staticPlugins,
+ sizeSnapshot(),
 ]
 function getPathMap(list) {
  const pairs = []

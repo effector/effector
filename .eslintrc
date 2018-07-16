@@ -2,7 +2,7 @@ parser: babel-eslint
 parserOptions:
   ecmaVersion: 2018
 extends:
-  - 'plugin:flowtype/recommended'
+  # - 'plugin:flowtype/recommended'
   - 'plugin:react/recommended'
 plugins:
   - babel
@@ -23,9 +23,9 @@ env:
   jest: true
   jasmine: true
 rules:
-  flowtype/no-weak-types: 'off'
-  flowtype/generic-spacing: 'off'
-  flowtype/space-after-type-colon: 'off'
+  # flowtype/no-weak-types: 'off'
+  # flowtype/generic-spacing: 'off'
+  # flowtype/space-after-type-colon: 'off'
   react/prop-types: 'off'
   react/display-name: 'off'
   no-console: 'off'
@@ -118,7 +118,7 @@ rules:
     - ignoreChainWithDepth: 2
   keyword-spacing:
     - error
-    - before: true
+    - before: false
   space-unary-ops:
     - error
     - words: true
@@ -130,8 +130,8 @@ rules:
       after: true
   arrow-spacing:
     - error
-    - before: true
-      after: true
+    - before: false
+      after: false
   space-before-function-paren:
     - error
     - never
@@ -163,4 +163,4 @@ rules:
   no-extra-semi: error
   semi:
     - error
-    - never
+    - [never, {beforeStatementContinuationChars: always}]

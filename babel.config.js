@@ -4,9 +4,10 @@ const {resolve: resolvePath} = require('path')
 
 module.exports = api => {
  // module.exports = api => {
- api.cache(false)
+ api && api.cache && api.cache.never && api.cache.never()
  // const env = api.cache(() => process.env.NODE_ENV)
  // console.log(env)
+ // console.log(api)
  const plugins = [
   '@babel/plugin-proposal-export-namespace-from',
   '@babel/plugin-proposal-optional-chaining',
