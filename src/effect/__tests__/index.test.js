@@ -6,7 +6,7 @@ import {delay, spy} from 'effector/fixtures'
 const effect = createEffect('long request')
 
 describe('effect({...}).promise()', () => {
- test(`if used function will resolve`, async() => {
+ test(`if used function will resolve`, async () => {
   effect.use(async params => {
    await delay(500)
    spy(params)
@@ -15,7 +15,7 @@ describe('effect({...}).promise()', () => {
   await expect(effect('ok').promise()).resolves.toBe('done!')
  })
 
- test('if used function will throw', async() => {
+ test('if used function will throw', async () => {
   effect.use(async params => {
    await delay(500)
    spy(params)
@@ -25,7 +25,7 @@ describe('effect({...}).promise()', () => {
  })
 })
 
-test('effect({...}).fail()', async() => {
+test('effect({...}).fail()', async () => {
  effect.use(async params => {
   await delay(500)
   spy(params)
@@ -38,7 +38,7 @@ test('effect({...}).fail()', async() => {
 })
 
 describe('future', () => {
- test(`if used function will resolve`, async() => {
+ test(`if used function will resolve`, async () => {
   effect.use(async params => {
    await delay(500)
    spy(params)
@@ -47,12 +47,32 @@ describe('future', () => {
   await expect(effect('ok')).resolves.toBe('done!')
  })
 
- test('if used function will throw', async() => {
+ test('if used function will throw', async () => {
   effect.use(async params => {
    await delay(500)
    spy(params)
    throw 'fail!'
   })
   await expect(effect('will throw')).rejects.toBe('fail!')
+ })
+})
+
+describe('effect({..}).anyway() aka .finally()', () => {
+ test(`if used function will resolve`, async () => {
+  effect.use(async params => {
+   await delay(500)
+   spy(params)
+   return 'done!'
+  })
+  await expect(effect('ok').anyway()).resolves.toBe(undefined)
+ })
+
+ test('if used function will throw', async () => {
+  effect.use(async params => {
+   await delay(500)
+   spy(params)
+   throw 'fail!'
+  })
+  await expect(effect('will throw').anyway()).resolves.toBe(undefined)
  })
 })
