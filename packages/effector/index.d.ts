@@ -26,6 +26,7 @@ export interface Future<Params, Done, Fail> extends Promise<Done> {
  args: Params;
  done(): Promise<{params: Params, result: Done}>;
  fail(): Promise<{params: Params, error: Fail}>;
+ anyway(): Promise<void>;
  promise(): Promise<Done>;
  cache(): Done | void;
 }

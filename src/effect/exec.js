@@ -27,6 +27,7 @@ export const exec = <Args, Done, Fail>(
  if (successSync === false) {
   future.cache = () => undefined
   future.promise = () => Promise.reject(syncError)
+  future.anyway = () => Promise.resolve(undefined)
   future.fail = () => Promise.resolve({error: syncError, params: args})
   future.done = () =>
    new Promise((rs, rj) => {
@@ -37,9 +38,9 @@ export const exec = <Args, Done, Fail>(
   return future
  }
  if (
-  typeof req === 'object'
-  && req !== null
-  && typeof req.then === 'function'
+  typeof req === 'object' &&
+  req !== null &&
+  typeof req.then === 'function'
  ) {
   const then: Promise<Done> = (req: any)
   future.promise = () => then
@@ -49,6 +50,18 @@ export const exec = <Args, Done, Fail>(
     then.then(result => {
      rs({params: args, result})
     })
+   })
+  }
+  future.anyway = () => {
+   return new Promise(rs => {
+    then.then(
+     () => {
+      rs()
+     },
+     () => {
+      rs()
+     },
+    )
    })
   }
   future.fail = () => {
@@ -69,6 +82,7 @@ export const exec = <Args, Done, Fail>(
  const done: Done = (req: any)
  future.cache = () => done
  future.promise = () => Promise.resolve(done)
+ future.anyway = () => Promise.resolve(undefined)
  future.done = () => {
   warn()
   return Promise.resolve({result: done, params: args})

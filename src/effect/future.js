@@ -13,6 +13,7 @@ export class Future<Args, Done, Fail = Error> /*:: extends Promise<Done> */ {
       onFulfill: (value: Done) => U
     ) => Promise<U>)
  )
+ anyway: () => Promise<void>
  constructor(args: Args) {
   /*::
   function sup(rs: (_: Done) => void, rj: (_: Fail) => void): void {}
