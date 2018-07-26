@@ -58,6 +58,7 @@ const rollupPlugins = [
    'graphite',
    'fixtures',
    'kind',
+   'perf',
   ]),
   extensions: ['re', 'bs', 'bs.js', 'js'],
  }),

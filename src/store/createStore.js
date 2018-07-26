@@ -1,6 +1,7 @@
 //@flow
 
 import invariant from 'invariant'
+import * as perf from 'effector/perf'
 
 import $$observable from 'symbol-observable'
 
@@ -74,6 +75,10 @@ export function storeConstructor<State>(props: {
   return plainState[1]()
  }
 
+ function getStoreName() {
+  return store.displayName || 'Unknown'
+ }
+
  function map<NextState>(
   fn: (state: State, lastState?: NextState) => NextState,
   firstState?: NextState,
@@ -83,6 +88,8 @@ export function storeConstructor<State>(props: {
  }
 
  function subscribe(listener) {
+  if (__DEV__)
+   perf.beginMark(`Start ${getStoreName()} subscribe (id: ${store.id})`)
   invariant(
    typeof listener === 'function',
    'Expected the listener to be a function.',
@@ -96,8 +103,18 @@ export function storeConstructor<State>(props: {
      lastCall = args
      try {
       listener(args)
+      if (__DEV__)
+       perf.endMark(
+        `Call ${getStoreName()} subscribe listener (id: ${store.id})`,
+        `Start ${getStoreName()} subscribe (id: ${store.id})`,
+       )
      } catch (err) {
       console.error(err)
+      if (__DEV__)
+       perf.endMark(
+        `Got error on ${getStoreName()} subscribe (id: ${store.id})`,
+        `Start ${getStoreName()} subscribe (id: ${store.id})`,
+       )
      }
     },
    }),
@@ -241,6 +258,10 @@ function mapStore<A, B>(
  fn: (state: A, lastState?: B) => B,
  firstState?: B,
 ): Store<B> {
+ if (__DEV__)
+  perf.beginMark(
+   `Start ${store.displayName || 'Unknown'} map (id: ${store.id})`,
+  )
  let lastValue = store.getState()
  let lastResult = fn(lastValue, firstState)
  const innerStore: Store<any> = (createStore: any)(lastResult)
@@ -249,6 +270,11 @@ function mapStore<A, B>(
    lastValue = newValue
    const lastState = innerStore.getState()
    const result = fn(newValue, lastState)
+   if (__DEV__)
+    perf.endMark(
+     `Map ${store.displayName || 'Unknown'} (id: ${store.id})`,
+     `Start ${store.displayName || 'Unknown'} subscribe (id: ${store.id})`,
+    )
    return result
   }),
  )
