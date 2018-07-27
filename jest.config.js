@@ -13,6 +13,9 @@ function packageTest(displayName, opts = {}) {
     `<rootDir>/src/${displayName}/__tests__/**/*.(test|spec).js`,
     `<rootDir>/src/${displayName}/**/__tests__/**/*.(test|spec).js`,
    ],
+   globals: {
+    __DEV__: true,
+   },
    collectCoverage: true,
    automock: false,
    browser: false,
