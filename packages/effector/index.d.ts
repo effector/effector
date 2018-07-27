@@ -70,7 +70,7 @@ export class Store<State> {
   watcher: (state: State, payload: E, type: string) => any,
  ): Subscription;
  thru<U>(fn: (store: Store<State>) => U): U;
- displayName?: string;
+ shortName: string;
 }
 
 export class Domain {
@@ -92,6 +92,7 @@ export function createEffect<Params, Done, Fail>(
 ): Effect<Params, Done, Fail>
 
 export function createStore<State>(defaultState: State): Store<State>
+export function setStoreName<State>(store: Store<State>, name: string): void
 
 export function createStoreObject<State>(
  defaultState: State,

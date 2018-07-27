@@ -87,7 +87,7 @@ declare export class Store<State> {
    watcher: (state: State, payload: E, type: string) => any,
   ) => Subscription);
  thru<U>(fn: (store: Store<State>) => U): U;
- displayName?: string;
+ shortName: string;
 }
 
 declare export class Domain {
@@ -109,6 +109,7 @@ declare export function createEffect<Params, Done, Fail>(
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
+declare export function setStoreName<State>(store: Store<State>, name: string): void
 
 declare export function createStoreObject<
  State: {-[key: string]: Store<any> | any},
