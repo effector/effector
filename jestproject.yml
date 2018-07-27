@@ -8,7 +8,13 @@ tests:
 - kind
 - redux
 - graphite
-- [react, testEnvironment: jsdom]
+- [
+   react, 
+   {
+    testEnvironment: jsdom,
+    setupFiles: ['<rootDir>/src/fixtures/performance.mock.js']
+   }
+  ]
 include:
  effector: true
  effect: true
