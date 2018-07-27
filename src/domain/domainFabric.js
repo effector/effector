@@ -1,7 +1,7 @@
 //@flow
 
 import type {Domain, DomainHooks} from './index.h'
-import {type Store, createStore} from 'effector/store'
+import {type Store, storeFabric} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 import {createName, type CompositeName} from '../compositeName'
@@ -79,7 +79,10 @@ export function domainFabric(
    return result
   },
   store<T>(state: T): Store<T> {
-   const result = createStore(state)
+   const result = storeFabric({
+    currentState: state,
+    parent: compositeName,
+   })
    hooks.store(result)
    return result
   },

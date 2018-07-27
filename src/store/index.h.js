@@ -3,12 +3,14 @@ import type {Subscription, Subscriber, GraphiteMeta} from '../effector/index.h'
 
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
+import type {CompositeName} from '../compositeName'
 
 export type Store<State> = {
+ /*::+*/ id: string,
  reset(event: Event<any> | Effect<any, any, any>): Store<State>,
  getState(): State,
  //prettier-ignore
- +setState: (
+ /*::+*/ setState: (
   & (<T>(newState: T, handler: (state: State, newState: T) => State) => void)
   & (<T>(newState: State, _: void) => void)
  ),
@@ -31,6 +33,8 @@ export type Store<State> = {
  watch<E>(
   watcher: (state: State, payload: E, type: string) => any,
  ): Subscription,
+ shortName: string,
+ domainName?: CompositeName,
  graphite: GraphiteMeta,
- displayName?: string,
+ compositeName?: CompositeName,
 }

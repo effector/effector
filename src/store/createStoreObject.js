@@ -4,7 +4,7 @@ import {cmd as Cmd, step as Step} from 'effector/datatype/FullDatatype.bs'
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
 import * as Kind from '../kind'
-import {storeConstructor} from './createStore'
+import {storeFabric, getDisplayName} from './storeFabric'
 
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
  obj: State,
@@ -51,7 +51,14 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
    substore.graphite.next.data.push(Step.single(runCmd))
   }
  }
- const store = storeConstructor({
+ const name = `combine(${obj
+  .map(store => {
+   if (!Kind.isStore(store)) return store.toString()
+   return getDisplayName(store)
+  })
+  .join(', ')})`
+ const store = storeFabric({
+  name,
   currentState: stateNew,
  })
  //$todo
@@ -104,7 +111,14 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   stateNew[key] = substore.getState()
   substore.graphite.next.data.push(Step.single(runCmd))
  }
- const store = storeConstructor({
+ const name = `combine(${(Object.values(obj): Array<$Values<typeof obj>>)
+  .map(store => {
+   if (!Kind.isStore(store)) return store.toString()
+   return getDisplayName(store)
+  })
+  .join(', ')})`
+ const store = storeFabric({
+  name,
   currentState: stateNew,
  })
  //$todo
