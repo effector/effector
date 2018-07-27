@@ -17,7 +17,7 @@ export function createStoreConsumer<State>(
  },
  {currentState: State},
 > {
-  static displayName = `${store.displayName || 'Store'}.Consumer`
+  static displayName = `${store.shortName}.Consumer`
 
   state = {currentState: store.getState()}
 

@@ -20,7 +20,7 @@ export function unstable_createStoreProvider<State>(
  {
   currentValue: React.Node,
  }> {
-  static displayName = `${store.displayName || 'Store'}.Provider`
+  static displayName = `${store.shortName}.Provider`
   static defaultProps = {
    children: null,
   }
