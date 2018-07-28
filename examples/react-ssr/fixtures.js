@@ -18,5 +18,12 @@ export const nodeInternals = [
 
 export const reactExports = {
  'react-dom/server': ['renderToString', 'renderToNodeStream'],
- react: ['Component', 'Fragment', 'createElement'],
+ react: [
+  'Component',
+  'PureComponent',
+  'Fragment',
+  'createElement',
+  'cloneElement',
+ ],
+ 'react-is': ['isValidElementType'],
 }

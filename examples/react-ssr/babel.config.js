@@ -1,5 +1,16 @@
 module.exports = api => {
  api.cache(() => `${process.env.NODE_ENV}/${process.env.TARGET}`)
+ const isClient = process.env.TARGET === 'client'
+ let targets = {
+  node: 'current',
+ }
+ let ssr = true
+ if (process.env.TARGET === 'client') {
+  targets = {
+   browsers: ['last 2 version', 'not dead'],
+  }
+  ssr = false
+ }
  return {
   presets: [
    '@babel/preset-flow',
@@ -8,23 +19,20 @@ module.exports = api => {
     '@babel/preset-env',
     {
      modules: false,
-     targets: getTargets(process.env.TARGET),
+     targets,
     },
    ],
   ],
- }
-}
-
-const getTargets = env => {
- switch (env) {
-  case 'client':
-   return {
-    browsers: ['last 2 version', 'not dead'],
-   }
-  case 'server':
-  default:
-   return {
-    node: 'current',
-   }
+  plugins: [
+   [
+    'babel-plugin-styled-components',
+    {
+     ssr: true,
+     displayName: true,
+     fileName: true,
+     transpileTemplateLiterals: true,
+    },
+   ],
+  ],
  }
 }

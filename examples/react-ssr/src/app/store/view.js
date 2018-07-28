@@ -41,3 +41,7 @@ export const todosView = combine(
   return result
  },
 )
+
+export const codeSource = todosView.map(list =>
+ list.map(e => `const ${e.text.replace(' ', '')} = createEvent('${e.text}')`),
+)

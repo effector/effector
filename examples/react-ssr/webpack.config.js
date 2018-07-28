@@ -1,3 +1,6 @@
+process.env.TARGET = 'client'
+process.env.NODE_ENV = 'production'
+
 module.exports = {
  entry: './src/client/index.js',
  target: 'web',
