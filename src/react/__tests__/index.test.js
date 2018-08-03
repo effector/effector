@@ -31,7 +31,9 @@ test('connect api', () => {
    )
   }
  }
- const ConnectedDisplay = store.map(text => ({text})).thru(connect(Display))
+ const ConnectedDisplay = store
+  .map(text => ({text}))
+  .thru((connect(Display): any))
 
  const tree = mount(<ConnectedDisplay count={1} />)
  expect(tree.text()).toMatchSnapshot()
@@ -60,7 +62,9 @@ test('click counter', () => {
    )
   }
  }
- const ConnectedDisplay = store.map(count => ({count})).thru(connect(Display))
+ const ConnectedDisplay = store
+  .map(count => ({count}))
+  .thru((connect(Display): any))
 
  const tree = mount(<ConnectedDisplay />)
  expect(tree.text()).toMatchSnapshot()

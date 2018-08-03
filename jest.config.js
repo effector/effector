@@ -25,6 +25,7 @@ function packageTest(displayName, opts = {}) {
    },
    moduleNameMapper: {
     '^effector$': '<rootDir>/src/index.js',
+    '^effector-react$': '<rootDir>/src/react/index.js',
     'effector/fixtures': '<rootDir>/src/fixtures/index.js',
     '^effector/(.+)': '<rootDir>/src/$1',
    },
