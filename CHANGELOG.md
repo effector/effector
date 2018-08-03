@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.18.0-beta.10
+
+- Add Gate
+
+```js
+import {type Gate, createGate} from 'effector-react'
+const AppGate = createGate('app')
+const MainPageGate = AppGate.childGate('main page')
+
+export default ({isLoading, meta}) => (
+ <div>
+  Application
+  <AppGate isLoading={isLoading} />
+  {!isLoading && (
+   <div>
+    Main page
+    <MainPageGate meta={meta} />
+   </div>
+  )}
+ </div>
+)
+AppGate.state.watch(({isLoading}) => isLoading)
+```
+
 ## 0.17.7
 
 - Keep and replay the whole domain history for every new hook
