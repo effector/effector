@@ -66,6 +66,7 @@ function singleStep(single, ctx, transactions) {
            newCtx.data.result = result
            newCtx.data.isNone = result === undefined
           } catch (err) {
+           console.error(err)
            newCtx.data.isError = true
            newCtx.data.error = err
            newCtx.data.isChanged = false
