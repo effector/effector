@@ -1,0 +1,62 @@
+#root {
+  display: grid;
+  grid-template-areas:
+    'input input input add'
+    'input input input clear'
+    'list list amount amount'
+    'credits credits credits credits';
+  font-family: sans-serif;
+  padding: 3rem;
+  margin: auto;
+  max-width: 500px;
+}
+
+.form {
+  display: contents;
+}
+
+.clear {
+  grid-area: clear;
+  cursor: pointer;
+}
+
+.input {
+  grid-area: input;
+}
+
+.amount {
+  grid-area: amount;
+  user-select: none;
+}
+
+.list {
+  grid-area: list;
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  user-select: none;
+  cursor: pointer;
+}
+
+.item:hover {
+  color: coral;
+}
+
+.credits {
+  margin-top: 3rem;
+  font-size: smaller;
+  grid-area: credits;
+  display: flex;
+  flex-direction: column;
+}
+
+.credits > * + * {
+  margin-top: 0.5rem;
+}
+
+.version {
+  margin-top: 1rem;
+  text-align: end;
+}
