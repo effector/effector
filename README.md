@@ -22,6 +22,8 @@ Effector provides events and reactive storages for node.js and browsers
 
 [repl](https://runkit.com/zerobias/effector-hello-world)
 
+[example file](/examples/hello-world.js)
+
 ```js
 const {createEvent} = require('effector')
 
@@ -37,6 +39,8 @@ messageEvent('hello world')
 ### Storages and events
 
 [repl](https://runkit.com/zerobias/effector-storages-and-events)
+
+[example file](/examples/storages-and-events.js)
 
 ```js
 const {createStore, createEvent} = require('effector')
