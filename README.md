@@ -18,7 +18,10 @@ yarn add effector effector-react
 
 Effector provides events and reactive storages for node.js and browsers
 
-Hello world with events and nodejs ([repl](https://runkit.com/zerobias/effector-hello-world))
+### Hello world with events and nodejs
+
+[repl](https://runkit.com/zerobias/effector-hello-world)
+
 ```js
 const {createEvent} = require('effector')
 
@@ -29,6 +32,39 @@ messageEvent.watch(text => console.log(`new message: ${text}`))
 
 messageEvent('hello world')
 // => new message: hello world
+```
+
+### Storages and events
+
+[repl](https://runkit.com/zerobias/effector-storages-and-events)
+
+```js
+const {createStore, createEvent} = require('effector')
+
+const turnOn = createEvent()
+const turnOff = createEvent()
+
+const status = createStore('offline')
+  .on(turnOn, () => 'online')
+  .on(turnOff, () => 'offline')
+
+status.watch(newStatus => {
+  console.log(`status changed: ${newStatus}`)
+})
+
+turnOff()
+turnOn()
+turnOff()
+turnOff() // Will not trigger watch function because nothing has changed
+
+/*
+result:
+
+status changed: offline
+status changed: online
+status changed: offline
+*/
+
 ```
 
 ## Demo
