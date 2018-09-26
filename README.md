@@ -14,6 +14,23 @@ Or using `yarn`
 yarn add effector effector-react
 ```
 
+## About
+
+Effector provides events and reactive storages for node.js and browsers
+
+Hello world with events and nodejs ([repl](https://runkit.com/zerobias/effector-hello-world))
+```js
+const {createEvent} = require('effector')
+
+
+const messageEvent = createEvent('message event (optional description)')
+
+messageEvent.watch(text => console.log(`new message: ${text}`))
+
+messageEvent('hello world')
+// => new message: hello world
+```
+
 ## Demo
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
