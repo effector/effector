@@ -16,7 +16,7 @@ export function createComponent<Props, State>(
  renderProp: (props: Props, state: State) => React.Node,
 ): React.ComponentType<Props>
 
-export type Gate<Props = {}> = React.ComponentType<Props>> & {
+export type Gate<Props = {}> = React.ComponentType<Props> & {
  isOpen: boolean,
  isTerminated: boolean,
  open: Event<void>,
