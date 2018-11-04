@@ -115,7 +115,8 @@
   "setimmediate": "^1.0.5",
   "shelljs": "^0.8.2",
   "styled-components": "^4.0.2",
-  "uglify-es": "^3.3.9"
+  "uglify-es": "^3.3.9",
+  "vue": "^2.5.17"
  },
  "maintainers": [
   {
