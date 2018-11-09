@@ -57,7 +57,7 @@ export function effectFabric<Payload, Done>({
   )
  }
  let thunk: Function = (value: Payload): Promise<Done> => {
-  warning(false, 'no thunk used')
+  warning(false, 'no thunk used in ' + instanceAsEvent.getType())
   const result: Promise<Done> = (Promise.resolve(): any)
   return result
  }
