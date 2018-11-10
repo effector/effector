@@ -12,7 +12,7 @@ export const effectorMixin = {
   }
   if (store) {
    //$off
-   Vue.util.defineReactive(vm, key, undefined)
+   Vue.util.defineReactive(vm, key, store.getState())
    if (!store.kind || store.kind !== 1) {
     console.warn(
      'Invalid Observable found in subscriptions option with key "' + key + '".',
