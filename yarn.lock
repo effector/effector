@@ -9780,6 +9780,11 @@ vue-eslint-parser@^2.0.2:
     esquery "^1.0.0"
     lodash "^4.17.4"
 
+vue@^2.5.17:
+  version "2.5.17"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
+  integrity sha512-mFbcWoDIJi0w0Za4emyLiW72Jae0yjANHbCVquMKijcavBGypqlF7zHRgMa5k4sesdv7hv2rB4JPdZfR+TPfhQ==
+
 vxx@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/vxx/-/vxx-1.2.2.tgz#741fb51c6f11d3383da6f9b92018a5d7ba807611"
