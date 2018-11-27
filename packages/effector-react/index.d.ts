@@ -15,6 +15,11 @@ export function createComponent<Props, State>(
  store: Store<State>,
  renderProp: (props: Props, state: State) => React.Node,
 ): React.ComponentType<Props>
+export function createContextComponent<Props, State, Context>(
+ store: Store<State>,
+ context: React.Context<Context>,
+ renderProp: (props: Props, state: State, context: Context) => React.ReactNode,
+): React.ComponentType<Props>
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {
  isOpen: boolean,

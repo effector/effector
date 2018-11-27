@@ -1,6 +1,12 @@
 //@flow
 
-import type {ComponentType, Component, ElementConfig, Node} from 'react'
+import type {
+ ComponentType,
+ Component,
+ ElementConfig,
+ Node,
+ Context as ContextType,
+} from 'react'
 import type {Store, Event} from 'effector'
 
 export type StoreConsumer<State> = ComponentType<{
@@ -32,6 +38,11 @@ declare export function createGate<Props>(name?: string): Gate<Props>
 declare export function createComponent<Props, State>(
  store: Store<State>,
  renderProp: (props: Props, state: State) => Node,
+): ComponentType<Props>
+declare export function createContextComponent<Props, State, Context>(
+ store: Store<State>,
+ context: ContextType<Context>,
+ renderProp: (props: Props, state: State, context: Context) => Node,
 ): ComponentType<Props>
 
 declare export function connect<State: Object, Com: ComponentType<*>>(
