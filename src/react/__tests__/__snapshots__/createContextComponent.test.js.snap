@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createContextComponent 1`] = `"Store text: fooContext text: bar"`;
+
+exports[`createContextComponent 2`] = `"Store text: barContext text: bar"`;
+
+exports[`createContextComponent 3`] = `"Store text: barContext text: test"`;
+
+exports[`createContextComponent 4`] = `"Store text: fooContext text: test"`;
