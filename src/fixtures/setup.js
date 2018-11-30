@@ -4,5 +4,5 @@ import 'jsdom-global/register'
 import Adapter from './ReactSixteenAdapter'
 
 configure({
- adapter: new Adapter()
+  adapter: new Adapter(),
 })

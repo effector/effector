@@ -13,13 +13,13 @@ export {createEffect} from 'effector/effect'
 
 export type {Store} from 'effector/store'
 export {
- createStore,
- createStoreObject,
- setStoreName,
- extract,
- createApi,
- restore,
- restoreEvent,
- restoreEffect,
- restoreObject,
+  createStore,
+  createStoreObject,
+  setStoreName,
+  extract,
+  createApi,
+  restore,
+  restoreEvent,
+  restoreEffect,
+  restoreObject,
 } from 'effector/store'

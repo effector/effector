@@ -2,14 +2,14 @@
 import type {Graph} from './Graph'
 import type {GraphVertex} from './GraphVertex'
 export type Callbacks = {
- allowTraversal?: (arg0: any, arg1: any) => boolean,
- enterVertex?: (arg0: any, arg1: any) => any,
- leaveVertex?: (arg0: any, arg1: any) => any,
+  allowTraversal?: (arg0: any, arg1: any) => boolean,
+  enterVertex?: (arg0: any, arg1: any) => any,
+  leaveVertex?: (arg0: any, arg1: any) => any,
 }
 type CallbacksFull = {
- allowTraversal: (arg0: any, arg1: any) => boolean,
- enterVertex: (arg0: any, arg1: any) => any,
- leaveVertex: (arg0: any, arg1: any) => any,
+  allowTraversal: (arg0: any, arg1: any) => boolean,
+  enterVertex: (arg0: any, arg1: any) => any,
+  leaveVertex: (arg0: any, arg1: any) => any,
 }
 /**
  * @typedef {Object} Callbacks
@@ -28,27 +28,27 @@ type CallbacksFull = {
  * @returns {Callbacks}
  */
 function initCallbacks(callbacks: Callbacks = {}): CallbacksFull {
- const initiatedCallback: $Shape<CallbacksFull> = callbacks
+  const initiatedCallback: $Shape<CallbacksFull> = callbacks
 
- const stubCallback = () => {}
+  const stubCallback = () => {}
 
- const allowTraversalCallback = (() => {
-  const seen = {}
-  return ({nextVertex}) => {
-   if (!seen[nextVertex.toString()]) {
-    seen[nextVertex.toString()] = true
-    return true
-   }
-   return false
-  }
- })()
+  const allowTraversalCallback = (() => {
+    const seen = {}
+    return ({nextVertex}) => {
+      if (!seen[nextVertex.toString()]) {
+        seen[nextVertex.toString()] = true
+        return true
+      }
+      return false
+    }
+  })()
 
- initiatedCallback.allowTraversal =
-  callbacks.allowTraversal || allowTraversalCallback
- initiatedCallback.enterVertex = callbacks.enterVertex || stubCallback
- initiatedCallback.leaveVertex = callbacks.leaveVertex || stubCallback
+  initiatedCallback.allowTraversal =
+    callbacks.allowTraversal || allowTraversalCallback
+  initiatedCallback.enterVertex = callbacks.enterVertex || stubCallback
+  initiatedCallback.leaveVertex = callbacks.leaveVertex || stubCallback
 
- return initiatedCallback
+  return initiatedCallback
 }
 
 /**
@@ -58,20 +58,20 @@ function initCallbacks(callbacks: Callbacks = {}): CallbacksFull {
  * @param {Callbacks} callbacks
  */
 function depthFirstSearchRecursive<T>(
- graph: Graph<T>,
- currentVertex: GraphVertex<T>,
- previousVertex: GraphVertex<T> | null,
- callbacks,
+  graph: Graph<T>,
+  currentVertex: GraphVertex<T>,
+  previousVertex: GraphVertex<T> | null,
+  callbacks,
 ) {
- callbacks.enterVertex({currentVertex, previousVertex})
+  callbacks.enterVertex({currentVertex, previousVertex})
 
- graph.getNeighbors(currentVertex).forEach(nextVertex => {
-  if (callbacks.allowTraversal({previousVertex, currentVertex, nextVertex})) {
-   depthFirstSearchRecursive(graph, nextVertex, currentVertex, callbacks)
-  }
- })
+  graph.getNeighbors(currentVertex).forEach(nextVertex => {
+    if (callbacks.allowTraversal({previousVertex, currentVertex, nextVertex})) {
+      depthFirstSearchRecursive(graph, nextVertex, currentVertex, callbacks)
+    }
+  })
 
- callbacks.leaveVertex({currentVertex, previousVertex})
+  callbacks.leaveVertex({currentVertex, previousVertex})
 }
 
 /**
@@ -80,15 +80,15 @@ function depthFirstSearchRecursive<T>(
  * @param {Callbacks} [callbacks]
  */
 export function depthFirstSearch<T>(
- graph: Graph<T>,
- startVertex: GraphVertex<T>,
- callbacks?: Callbacks,
+  graph: Graph<T>,
+  startVertex: GraphVertex<T>,
+  callbacks?: Callbacks,
 ) {
- const previousVertex = null
- depthFirstSearchRecursive(
-  graph,
-  startVertex,
-  previousVertex,
-  initCallbacks(callbacks),
- )
+  const previousVertex = null
+  depthFirstSearchRecursive(
+    graph,
+    startVertex,
+    previousVertex,
+    initCallbacks(callbacks),
+  )
 }

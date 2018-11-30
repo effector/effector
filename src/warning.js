@@ -3,9 +3,9 @@
 import warning from 'warning'
 
 export function notImplemented(message: string, ...args: any[]) {
- warning(false, `[Not implemented]: ${message}`, ...args)
+  warning(false, `[Not implemented]: ${message}`, ...args)
 }
 
 export function toDo(message: string, ...args: any[]) {
- warning(false, `[TODO]: ${message}`, ...args)
+  warning(false, `[TODO]: ${message}`, ...args)
 }
