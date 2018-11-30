@@ -12,6 +12,9 @@ plugins:
 settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
+  react:
+    version: 16.6
+    flowVersion: 0.87
 globals:
   __DEV__: true
   preval: true
@@ -64,7 +67,7 @@ rules:
   max-len:
     - error
     - code: 80
-      tabWidth: 1
+      tabWidth: 2
   key-spacing:
     - warn
     - beforeColon: false
@@ -80,29 +83,14 @@ rules:
   object-curly-spacing:
     - warn
     - never
-    - arraysInObjects: false
-      objectsInObjects: false
   semi-spacing:
     - error
     - before: false
       after: true
   indent:
-    - 1
-    - 1
-    - VariableDeclarator:
-        var: 2
-        let: 2
-        const: 3
-      FunctionDeclaration:
-        parameters: first
-      FunctionExpression:
-        parameters: first
-      MemberExpression: 1
-      SwitchCase: 1
-      CallExpression:
-        arguments: first
-      ArrayExpression: 1
-      ObjectExpression: first
+    - 2
+    - 2
+    - SwitchCase: 1
   operator-linebreak:
     - warn
     - after
@@ -115,10 +103,8 @@ rules:
         '&&': before
   newline-per-chained-call:
     - error
-    - ignoreChainWithDepth: 2
   keyword-spacing:
     - error
-    - before: false
   space-unary-ops:
     - error
     - words: true
@@ -130,8 +116,8 @@ rules:
       after: true
   arrow-spacing:
     - error
-    - before: false
-      after: false
+    - before: true
+      after: true
   space-before-function-paren:
     - error
     - never
@@ -160,7 +146,7 @@ rules:
   no-new-func: error
   prefer-rest-params: error
   prefer-spread: error
-  no-extra-semi: error
+  no-extra-semi: off
   semi:
     - error
-    - [never, {beforeStatementContinuationChars: always}]
+    - never
