@@ -8,42 +8,10 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
   const eventCtx = Ctx.emit(event.getType(), payload)
   const transactions: Array<() => void> = []
-  walkSeq(steps, eventCtx, transactions)
+  stepVisitor.seq(steps, eventCtx, transactions)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
-}
-
-function walkSeq(
-  steps: TypeDef<'seq', 'step'>,
-  prev: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-  transactions: Array<() => void>,
-) {
-  if (steps.data.length === 0) return
-  let currentCtx: TypeDef<
-    'compute' | 'emit' | 'filter' | 'update',
-    'ctx',
-  > = prev
-  let step
-  for (let i = 0; i < steps.data.length; i++) {
-    step = steps.data[i]
-    const isMulti = step.type === ('multi': 'multi')
-    const stepResult = walkStep(step, currentCtx, transactions)
-    if (isMulti) continue
-    if (stepResult === undefined) return
-    if (stepResult.type === ('filter': 'filter') && !stepResult.data.isChanged)
-      return
-    currentCtx = stepResult
-  }
-}
-
-function walkStep(
-  step: TypeDef<'seq', 'step'>,
-  currentCtx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-  transactions: Array<() => void>,
-): TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'> | void {
-  invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
-  return stepVisitor[step.type](step, currentCtx, transactions)
 }
 
 const stepVisitor = {
@@ -65,12 +33,37 @@ const stepVisitor = {
   },
   multi(step, currentCtx, transactions) {
     if (step.data.length === 0) return
-    for (let i = 0; i < step.data.length; i++) {
-      walkStep(step.data[i], currentCtx, transactions)
+    for (let i = 0, result, item; i < step.data.length; i++) {
+      item = step.data[i]
+      invariant(item.type in stepVisitor, 'impossible case "%s"', item.type)
+      result = stepVisitor[item.type](item, currentCtx, transactions)
     }
   },
-  seq(step, currentCtx, transactions) {
-    return walkSeq(step, currentCtx, transactions)
+  seq(
+    steps: TypeDef<'seq', 'step'>,
+    prev: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
+    transactions: Array<() => void>,
+  ) {
+    if (steps.data.length === 0) return
+    let currentCtx: TypeDef<
+      'compute' | 'emit' | 'filter' | 'update',
+      'ctx',
+    > = prev
+    let step
+    for (let i = 0; i < steps.data.length; i++) {
+      step = steps.data[i]
+      const isMulti = step.type === ('multi': 'multi')
+      invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+      const stepResult = stepVisitor[step.type](step, currentCtx, transactions)
+      if (isMulti) continue
+      if (stepResult === undefined) return
+      if (
+        stepResult.type === ('filter': 'filter')
+        && !stepResult.data.isChanged
+      )
+        return
+      currentCtx = stepResult
+    }
   },
 }
 
