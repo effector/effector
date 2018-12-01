@@ -9,13 +9,10 @@ import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
 import * as Kind from '../kind'
 
-import {
-  cmd as Cmd,
-  ctx as Ctx,
-  step as Step,
-} from 'effector/datatype/FullDatatype.bs'
-import {walkEvent, frame, seq} from 'effector/graphite'
-import {Graph, type Vertex} from 'effector/graphite/tarjan'
+import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
+import {step as Step} from 'effector/graphite/walk'
+import {walkEvent, seq} from 'effector/graphite'
+import type {Vertex} from 'effector/graphite/tarjan'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
 

@@ -4,10 +4,8 @@ import {from} from 'most'
 import {createEvent, type Event} from '..'
 
 import {getSpyCalls, spy} from 'effector/fixtures'
-// import {show} from 'effector/datatype/step/show'
 
-import {step} from 'effector/datatype/FullDatatype.bs'
-const show = step.show
+import {show} from 'effector/datatype/showstep'
 
 describe('symbol-observable support', () => {
   test('most.from(event) //stream of events', () => {

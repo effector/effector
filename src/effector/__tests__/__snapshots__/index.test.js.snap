@@ -12,7 +12,7 @@ Object {
         },
         "type": 12,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Array [
@@ -25,7 +25,7 @@ Object {
                 },
                 "type": 11,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -34,7 +34,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -43,7 +43,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -59,7 +59,7 @@ Object {
                 },
                 "type": 15,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Array [
@@ -72,7 +72,7 @@ Object {
                         },
                         "type": 11,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -81,7 +81,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -90,7 +90,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -106,20 +106,20 @@ Object {
                         },
                         "type": 15,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Array [],
-                      "type": 32,
+                      "type": "multi",
                     },
                   ],
-                  "type": 33,
+                  "type": "seq",
                 },
               ],
-              "type": 32,
+              "type": "multi",
             },
           ],
-          "type": 33,
+          "type": "seq",
         },
         Object {
           "data": Object {
@@ -128,13 +128,13 @@ Object {
             },
             "type": 13,
           },
-          "type": 31,
+          "type": "single",
         },
       ],
-      "type": 32,
+      "type": "multi",
     },
   ],
-  "type": 33,
+  "type": "seq",
 }
 `;
 
@@ -150,7 +150,7 @@ Object {
         },
         "type": 12,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Array [
@@ -163,7 +163,7 @@ Object {
                 },
                 "type": 11,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -172,7 +172,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -181,7 +181,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -197,7 +197,7 @@ Object {
                 },
                 "type": 15,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Array [
@@ -210,7 +210,7 @@ Object {
                         },
                         "type": 11,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -219,7 +219,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -228,7 +228,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -244,26 +244,26 @@ Object {
                         },
                         "type": 15,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Array [],
-                      "type": 32,
+                      "type": "multi",
                     },
                   ],
-                  "type": 33,
+                  "type": "seq",
                 },
               ],
-              "type": 32,
+              "type": "multi",
             },
           ],
-          "type": 33,
+          "type": "seq",
         },
       ],
-      "type": 32,
+      "type": "multi",
     },
   ],
-  "type": 33,
+  "type": "seq",
 }
 `;
 
@@ -279,7 +279,7 @@ Object {
         },
         "type": 12,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Array [
@@ -292,7 +292,7 @@ Object {
                 },
                 "type": 11,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -303,7 +303,7 @@ Object {
                 },
                 "type": 12,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Array [
@@ -316,7 +316,7 @@ Object {
                         },
                         "type": 11,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -325,7 +325,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -334,7 +334,7 @@ Object {
                         },
                         "type": 14,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Object {
@@ -350,7 +350,7 @@ Object {
                         },
                         "type": 15,
                       },
-                      "type": 31,
+                      "type": "single",
                     },
                     Object {
                       "data": Array [
@@ -363,7 +363,7 @@ Object {
                                 },
                                 "type": 11,
                               },
-                              "type": 31,
+                              "type": "single",
                             },
                             Object {
                               "data": Object {
@@ -372,7 +372,7 @@ Object {
                                 },
                                 "type": 14,
                               },
-                              "type": 31,
+                              "type": "single",
                             },
                             Object {
                               "data": Object {
@@ -381,7 +381,7 @@ Object {
                                 },
                                 "type": 14,
                               },
-                              "type": 31,
+                              "type": "single",
                             },
                             Object {
                               "data": Object {
@@ -397,20 +397,20 @@ Object {
                                 },
                                 "type": 15,
                               },
-                              "type": 31,
+                              "type": "single",
                             },
                             Object {
                               "data": Array [],
-                              "type": 32,
+                              "type": "multi",
                             },
                           ],
-                          "type": 33,
+                          "type": "seq",
                         },
                       ],
-                      "type": 32,
+                      "type": "multi",
                     },
                   ],
-                  "type": 33,
+                  "type": "seq",
                 },
                 Object {
                   "data": Object {
@@ -419,61 +419,160 @@ Object {
                     },
                     "type": 13,
                   },
-                  "type": 31,
+                  "type": "single",
                 },
               ],
-              "type": 32,
+              "type": "multi",
             },
           ],
-          "type": 33,
+          "type": "seq",
         },
       ],
-      "type": 32,
+      "type": "multi",
     },
   ],
-  "type": 33,
+  "type": "seq",
 }
 `;
 
 exports[`graphite: show bar 1`] = `
 "Seq [
-  1. Single Emit(foo → *),
+  1. Single {
+     \\"type\\": 12,
+     \\"data\\": {
+       \\"subtype\\": \\"event\\",
+       \\"fullName\\": \\"foo → *\\"
+     }
+  },
   2. Multi [
      *  Seq [
-        1. Single Compute,
-        2. Single Filter,
-        3. Single Filter,
-        4. Single Update,
+        1. Single {
+           \\"type\\": 11,
+           \\"data\\": {}
+        },
+        2. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        3. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        4. Single {
+           \\"type\\": 15,
+           \\"data\\": {
+             \\"store\\": [
+               3,
+               null,
+               null,
+               null,
+               null,
+               \\"foo | 1 | 11\\"
+             ]
+           }
+        },
         5. Multi [
            *  Seq [
-              1. Single Compute,
-              2. Single Filter,
-              3. Single Filter,
-              4. Single Update,
+              1. Single {
+                 \\"type\\": 11,
+                 \\"data\\": {}
+              },
+              2. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              3. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              4. Single {
+                 \\"type\\": 15,
+                 \\"data\\": {
+                   \\"store\\": [
+                     4,
+                     null,
+                     null,
+                     null,
+                     null,
+                     12
+                   ]
+                 }
+              },
               5. Multi []
            ]
         ]
      ],
-     *  Single Run
+     *  Single {
+        \\"type\\": 13,
+        \\"data\\": {}
+     }
   ]
 ]"
 `;
 
 exports[`graphite: show bar 2`] = `
 "Seq [
-  1. Single Emit(foo → *),
+  1. Single {
+     \\"type\\": 12,
+     \\"data\\": {
+       \\"subtype\\": \\"event\\",
+       \\"fullName\\": \\"foo → *\\"
+     }
+  },
   2. Multi [
      *  Seq [
-        1. Single Compute,
-        2. Single Filter,
-        3. Single Filter,
-        4. Single Update,
+        1. Single {
+           \\"type\\": 11,
+           \\"data\\": {}
+        },
+        2. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        3. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        4. Single {
+           \\"type\\": 15,
+           \\"data\\": {
+             \\"store\\": [
+               3,
+               null,
+               null,
+               null,
+               null,
+               \\"foo | 1 | 11\\"
+             ]
+           }
+        },
         5. Multi [
            *  Seq [
-              1. Single Compute,
-              2. Single Filter,
-              3. Single Filter,
-              4. Single Update,
+              1. Single {
+                 \\"type\\": 11,
+                 \\"data\\": {}
+              },
+              2. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              3. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              4. Single {
+                 \\"type\\": 15,
+                 \\"data\\": {
+                   \\"store\\": [
+                     4,
+                     null,
+                     null,
+                     null,
+                     null,
+                     12
+                   ]
+                 }
+              },
               5. Multi []
            ]
         ]
@@ -484,23 +583,80 @@ exports[`graphite: show bar 2`] = `
 
 exports[`graphite: show foo 1`] = `
 "Seq [
-  1. Single Emit(foo),
+  1. Single {
+     \\"type\\": 12,
+     \\"data\\": {
+       \\"subtype\\": \\"event\\",
+       \\"fullName\\": \\"foo\\"
+     }
+  },
   2. Multi [
      *  Seq [
-        1. Single Compute,
-        2. Single Emit(foo → *),
+        1. Single {
+           \\"type\\": 11,
+           \\"data\\": {}
+        },
+        2. Single {
+           \\"type\\": 12,
+           \\"data\\": {
+             \\"subtype\\": \\"event\\",
+             \\"fullName\\": \\"foo → *\\"
+           }
+        },
         3. Multi [
            *  Seq [
-              1. Single Compute,
-              2. Single Filter,
-              3. Single Filter,
-              4. Single Update,
+              1. Single {
+                 \\"type\\": 11,
+                 \\"data\\": {}
+              },
+              2. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              3. Single {
+                 \\"type\\": 14,
+                 \\"data\\": {}
+              },
+              4. Single {
+                 \\"type\\": 15,
+                 \\"data\\": {
+                   \\"store\\": [
+                     3,
+                     null,
+                     null,
+                     null,
+                     null,
+                     \\"foo | 1 | 11 | 101\\"
+                   ]
+                 }
+              },
               5. Multi [
                  *  Seq [
-                    1. Single Compute,
-                    2. Single Filter,
-                    3. Single Filter,
-                    4. Single Update,
+                    1. Single {
+                       \\"type\\": 11,
+                       \\"data\\": {}
+                    },
+                    2. Single {
+                       \\"type\\": 14,
+                       \\"data\\": {}
+                    },
+                    3. Single {
+                       \\"type\\": 14,
+                       \\"data\\": {}
+                    },
+                    4. Single {
+                       \\"type\\": 15,
+                       \\"data\\": {
+                         \\"store\\": [
+                           4,
+                           null,
+                           null,
+                           null,
+                           null,
+                           18
+                         ]
+                       }
+                    },
                     5. Multi []
                  ]
               ]
@@ -513,14 +669,50 @@ exports[`graphite: show foo 1`] = `
 
 exports[`graphite: show store1 1`] = `
 "Seq [
-  1. Single Filter,
-  2. Single Update,
+  1. Single {
+     \\"type\\": 14,
+     \\"data\\": {}
+  },
+  2. Single {
+     \\"type\\": 15,
+     \\"data\\": {
+       \\"store\\": [
+         3,
+         null,
+         null,
+         null,
+         null,
+         \\"foo | 1 | 11 | 101\\"
+       ]
+     }
+  },
   3. Multi [
      *  Seq [
-        1. Single Compute,
-        2. Single Filter,
-        3. Single Filter,
-        4. Single Update,
+        1. Single {
+           \\"type\\": 11,
+           \\"data\\": {}
+        },
+        2. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        3. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        4. Single {
+           \\"type\\": 15,
+           \\"data\\": {
+             \\"store\\": [
+               4,
+               null,
+               null,
+               null,
+               null,
+               18
+             ]
+           }
+        },
         5. Multi []
      ]
   ]
@@ -529,8 +721,23 @@ exports[`graphite: show store1 1`] = `
 
 exports[`graphite: show store2 1`] = `
 "Seq [
-  1. Single Filter,
-  2. Single Update,
+  1. Single {
+     \\"type\\": 14,
+     \\"data\\": {}
+  },
+  2. Single {
+     \\"type\\": 15,
+     \\"data\\": {
+       \\"store\\": [
+         4,
+         null,
+         null,
+         null,
+         null,
+         18
+       ]
+     }
+  },
   3. Multi []
 ]"
 `;
@@ -545,7 +752,7 @@ Object {
         },
         "type": 14,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Object {
@@ -561,7 +768,7 @@ Object {
         },
         "type": 15,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Array [
@@ -574,7 +781,7 @@ Object {
                 },
                 "type": 11,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -583,7 +790,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -592,7 +799,7 @@ Object {
                 },
                 "type": 14,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Object {
@@ -608,20 +815,20 @@ Object {
                 },
                 "type": 15,
               },
-              "type": 31,
+              "type": "single",
             },
             Object {
               "data": Array [],
-              "type": 32,
+              "type": "multi",
             },
           ],
-          "type": 33,
+          "type": "seq",
         },
       ],
-      "type": 32,
+      "type": "multi",
     },
   ],
-  "type": 33,
+  "type": "seq",
 }
 `;
 
@@ -635,7 +842,7 @@ Object {
         },
         "type": 14,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Object {
@@ -651,28 +858,58 @@ Object {
         },
         "type": 15,
       },
-      "type": 31,
+      "type": "single",
     },
     Object {
       "data": Array [],
-      "type": 32,
+      "type": "multi",
     },
   ],
-  "type": 33,
+  "type": "seq",
 }
 `;
 
 exports[`showcase: event foo 1`] = `
 "Seq [
-  1. Single Emit(foo),
+  1. Single {
+     \\"type\\": 12,
+     \\"data\\": {
+       \\"subtype\\": \\"event\\",
+       \\"fullName\\": \\"foo\\"
+     }
+  },
   2. Multi [
      *  Seq [
-        1. Single Compute,
-        2. Single Filter,
-        3. Single Filter,
-        4. Single Update,
+        1. Single {
+           \\"type\\": 11,
+           \\"data\\": {}
+        },
+        2. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        3. Single {
+           \\"type\\": 14,
+           \\"data\\": {}
+        },
+        4. Single {
+           \\"type\\": 15,
+           \\"data\\": {
+             \\"store\\": [
+               5,
+               null,
+               null,
+               null,
+               null,
+               3
+             ]
+           }
+        },
         5. Multi [
-           *  Single Run
+           *  Single {
+              \\"type\\": 13,
+              \\"data\\": {}
+           }
         ]
      ]
   ]
@@ -681,20 +918,56 @@ exports[`showcase: event foo 1`] = `
 
 exports[`showcase: mapped 1`] = `
 "Seq [
-  1. Single Filter,
-  2. Single Update,
+  1. Single {
+     \\"type\\": 14,
+     \\"data\\": {}
+  },
+  2. Single {
+     \\"type\\": 15,
+     \\"data\\": {
+       \\"store\\": [
+         8,
+         null,
+         null,
+         null,
+         null,
+         3
+       ]
+     }
+  },
   3. Multi [
-     *  Single Run
+     *  Single {
+        \\"type\\": 13,
+        \\"data\\": {}
+     }
   ]
 ]"
 `;
 
 exports[`showcase: store a 1`] = `
 "Seq [
-  1. Single Filter,
-  2. Single Update,
+  1. Single {
+     \\"type\\": 14,
+     \\"data\\": {}
+  },
+  2. Single {
+     \\"type\\": 15,
+     \\"data\\": {
+       \\"store\\": [
+         5,
+         null,
+         null,
+         null,
+         null,
+         3
+       ]
+     }
+  },
   3. Multi [
-     *  Single Run
+     *  Single {
+        \\"type\\": 13,
+        \\"data\\": {}
+     }
   ]
 ]"
 `;

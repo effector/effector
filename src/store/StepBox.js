@@ -1,16 +1,8 @@
 //@flow
 
-import invariant from 'invariant'
-
-import {createEvent, type Event} from 'effector/event'
-import {
-  cmd as Cmd,
-  ctx as Ctx,
-  step as Step,
-} from 'effector/datatype/FullDatatype.bs'
-import type {Store} from './index.h'
-import * as Kind from '../kind'
-import {createRef, type Ref} from '../ref/createRef'
+import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
+import {step as Step} from 'effector/graphite/walk'
+import type {Ref} from '../ref/createRef'
 
 export function compute(
   reduce: (oldValue: any, newValue: any, ctx: any) => any,

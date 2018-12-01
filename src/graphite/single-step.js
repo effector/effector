@@ -3,20 +3,7 @@
 import type {SingleStepValidContext} from '../effector/index.h'
 import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
 
-// function stepArg(ctx: SingleStepValidContext) {
-//  switch (ctx.type) {
-//   case Ctx.EMIT:
-//    return ctx.data.payload
-//   case Ctx.COMPUTE:
-//    return ctx.data.result
-//   case Ctx.FILTER:
-//   case Ctx.UPDATE:
-//    return ctx.data.value
-//   default:
-//    throw new Error('RunContext is not supported')
-//  }
-// }
-import {singleStep as singleStepRE, stepArg} from './Walk.bs'
+import {stepArg} from './Walk.bs'
 import {
   singleCompute,
   singleEmit,

@@ -4,11 +4,9 @@ import {createEvent, type Event} from 'effector/event'
 import {combine} from '../combine'
 
 import {createStoreObject, createStore, type Store} from 'effector/store'
-import {step} from 'effector/datatype/FullDatatype.bs'
+import {show} from 'effector/datatype/showstep'
 
 import {spy} from 'effector/fixtures'
-
-const show = step.show
 
 test('graphite', () => {
   const fn = jest.fn()

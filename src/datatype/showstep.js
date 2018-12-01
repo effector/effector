@@ -3,17 +3,14 @@
 import type {Step} from './stept'
 import type {Cmd} from './cmdt'
 
-export type SingleType = 31
-export type MultiType = 32
-export type SeqType = 33
+const SINGLE = 'single'
+const MULTI = 'multi'
+const SEQ = 'seq'
 
-export type StepType = SingleType | MultiType | SeqType
-
-export const SINGLE: SingleType = 31
-export const MULTI: MultiType = 32
-export const SEQ: SeqType = 33
-
-export function show(value: Step, showCmd: Cmd => string): string {
+export function show(
+  value: Step,
+  showCmd: Cmd => string = _ => JSON.stringify(_, null, 2),
+): string {
   switch (value.type) {
     case SINGLE:
       return `Single ${showCmd(value.data)}`

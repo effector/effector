@@ -1,10 +1,33 @@
 //@flow
-// import invariant from 'invariant'
+import invariant from 'invariant'
 import type {SingleStepValidContext} from '../effector/index.h'
 import type {Event} from 'effector/event'
-import {step as Step, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
+import {ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
+import {show} from 'effector/datatype/showstep'
 import {singleStep} from './single-step'
 
+const stepTag = {
+  single: 'single',
+  multi: 'multi',
+  seq: 'seq',
+}
+
+const Step = {
+  single: data => ({
+    type: stepTag.single,
+    data,
+  }),
+  multi: () => ({
+    type: stepTag.multi,
+    data: [],
+  }),
+  seq: data => ({
+    type: stepTag.seq,
+    data,
+  }),
+  show,
+}
+export {Step as step}
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: Step.Seq = event.graphite.seq
   const eventCtx = Ctx.emit(event.getType(), payload)
@@ -32,33 +55,31 @@ function walkSeq(
   }
 }
 
+const stepVisitor = {
+  single(step, currentCtx, transactions) {
+    const innerData = step.data
+    const result = singleStep(innerData, currentCtx, transactions)
+    if (!result) return
+    if (result.type === Ctx.RUN) return
+    if (result.type === Ctx.FILTER && !result.data.isChanged) return
+    return (result: any)
+  },
+  multi(step, currentCtx, transactions) {
+    if (step.data.length === 0) return
+    for (const e of step.data) {
+      walkStep(e, currentCtx, transactions)
+    }
+  },
+  seq(step, currentCtx, transactions) {
+    return walkSeq(step, currentCtx, transactions)
+  },
+}
+
 function walkStep(
   step: Step.Step,
   currentCtx: SingleStepValidContext,
   transactions: Array<() => void>,
 ): SingleStepValidContext | void {
-  switch (step.type) {
-    case Step.SINGLE: {
-      const innerData = step.data
-      const result = singleStep(innerData, currentCtx, transactions)
-      if (!result) return
-      if (result.type === Ctx.RUN) return
-      if (result.type === Ctx.FILTER && !result.data.isChanged) return
-      return (result: any)
-    }
-    case Step.MULTI: {
-      if (step.data.length === 0) return
-      for (const e of step.data) {
-        walkStep(e, currentCtx, transactions)
-      }
-      return
-    }
-    case Step.SEQ: {
-      return walkSeq(step, currentCtx, transactions)
-    }
-    default: {
-      /*::(step.type: empty)*/
-      throw new Error('impossible case')
-    }
-  }
+  invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+  return stepVisitor[step.type](step, currentCtx, transactions)
 }
