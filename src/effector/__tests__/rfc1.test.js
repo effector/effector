@@ -153,8 +153,8 @@ describe('store.on', () => {
     e1.use(n => new Promise(_ => setTimeout(_, n, n)))
 
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
-    const result = await e1(500).done()
-    expect(result).toMatchObject({params: 500, result: 500})
+    const result = await e1(500)
+    expect(result).toBe(500)
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 500})
   })
 })

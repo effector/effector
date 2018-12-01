@@ -1,12 +1,7 @@
 //@flow
 
-import warning from 'warning'
-
 import {Future} from './future'
 import type {Thunk, Callbacks} from './index.h'
-
-const warn = () =>
-  warning(false, 'future.done() and future.fail() are deprecated')
 
 export const exec = <Args, Done, Fail>(
   args: Args,
@@ -26,13 +21,7 @@ export const exec = <Args, Done, Fail>(
   }
   if (successSync === false) {
     future.cache = () => undefined
-    future.promise = () => Promise.reject(syncError)
     future.anyway = () => Promise.resolve(undefined)
-    future.fail = () => Promise.resolve({error: syncError, params: args})
-    future.done = () =>
-      new Promise((rs, rj) => {
-        warn()
-      })
     ;(future: any).then = (rs, rj) => Promise.reject(syncError).then(rs, rj)
     cbs[1]({error: syncError, params: args})
     return future
@@ -43,15 +32,6 @@ export const exec = <Args, Done, Fail>(
     && typeof req.then === 'function'
   ) {
     const then: Promise<Done> = (req: any)
-    future.promise = () => then
-    future.done = () => {
-      warn()
-      return new Promise(rs => {
-        then.then(result => {
-          rs({params: args, result})
-        })
-      })
-    }
     future.anyway = () =>
       new Promise(rs => {
         then.then(
@@ -63,14 +43,6 @@ export const exec = <Args, Done, Fail>(
           },
         )
       })
-    future.fail = () => {
-      warn()
-      return new Promise(rs => {
-        then.catch(error => {
-          rs({params: args, error})
-        })
-      })
-    }
     ;(future: any).then = (rs, rj) => then.then(rs, rj)
     then.then(
       result => {
@@ -83,16 +55,7 @@ export const exec = <Args, Done, Fail>(
   }
   const done: Done = (req: any)
   future.cache = () => done
-  future.promise = () => Promise.resolve(done)
   future.anyway = () => Promise.resolve(undefined)
-  future.done = () => {
-    warn()
-    return Promise.resolve({result: done, params: args})
-  }
-  future.fail = () =>
-    new Promise((rs, rj) => {
-      warn()
-    })
   ;(future: any).then = (rs, rj) => Promise.resolve(done).then(rs, rj)
   cbs[0]({result: done, params: args})
   return future
