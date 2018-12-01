@@ -7,7 +7,7 @@ import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
 import {ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
-import {step as Step} from 'effector/graphite/walk'
+import {Step} from 'effector/graphite/typedef'
 import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {setStoreName} from './setStoreName'

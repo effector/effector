@@ -1,7 +1,7 @@
 //@flow
 
 import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
-import {step as Step} from 'effector/graphite/walk'
+import {Step} from 'effector/graphite/typedef'
 
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'

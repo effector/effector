@@ -12,6 +12,7 @@ Object {
         },
         "type": 12,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -25,6 +26,7 @@ Object {
                 },
                 "type": 11,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -34,6 +36,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -43,6 +46,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -59,6 +63,7 @@ Object {
                 },
                 "type": 15,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -72,6 +77,7 @@ Object {
                         },
                         "type": 11,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -81,6 +87,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -90,6 +97,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -106,19 +114,24 @@ Object {
                         },
                         "type": 15,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
                       "data": Array [],
+                      "group": "step",
                       "type": "multi",
                     },
                   ],
+                  "group": "step",
                   "type": "seq",
                 },
               ],
+              "group": "step",
               "type": "multi",
             },
           ],
+          "group": "step",
           "type": "seq",
         },
         Object {
@@ -128,12 +141,15 @@ Object {
             },
             "type": 13,
           },
+          "group": "step",
           "type": "single",
         },
       ],
+      "group": "step",
       "type": "multi",
     },
   ],
+  "group": "step",
   "type": "seq",
 }
 `;
@@ -150,6 +166,7 @@ Object {
         },
         "type": 12,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -163,6 +180,7 @@ Object {
                 },
                 "type": 11,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -172,6 +190,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -181,6 +200,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -197,6 +217,7 @@ Object {
                 },
                 "type": 15,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -210,6 +231,7 @@ Object {
                         },
                         "type": 11,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -219,6 +241,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -228,6 +251,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -244,25 +268,32 @@ Object {
                         },
                         "type": 15,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
                       "data": Array [],
+                      "group": "step",
                       "type": "multi",
                     },
                   ],
+                  "group": "step",
                   "type": "seq",
                 },
               ],
+              "group": "step",
               "type": "multi",
             },
           ],
+          "group": "step",
           "type": "seq",
         },
       ],
+      "group": "step",
       "type": "multi",
     },
   ],
+  "group": "step",
   "type": "seq",
 }
 `;
@@ -279,6 +310,7 @@ Object {
         },
         "type": 12,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -292,6 +324,7 @@ Object {
                 },
                 "type": 11,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -303,6 +336,7 @@ Object {
                 },
                 "type": 12,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -316,6 +350,7 @@ Object {
                         },
                         "type": 11,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -325,6 +360,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -334,6 +370,7 @@ Object {
                         },
                         "type": 14,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -350,6 +387,7 @@ Object {
                         },
                         "type": 15,
                       },
+                      "group": "step",
                       "type": "single",
                     },
                     Object {
@@ -363,6 +401,7 @@ Object {
                                 },
                                 "type": 11,
                               },
+                              "group": "step",
                               "type": "single",
                             },
                             Object {
@@ -372,6 +411,7 @@ Object {
                                 },
                                 "type": 14,
                               },
+                              "group": "step",
                               "type": "single",
                             },
                             Object {
@@ -381,6 +421,7 @@ Object {
                                 },
                                 "type": 14,
                               },
+                              "group": "step",
                               "type": "single",
                             },
                             Object {
@@ -397,19 +438,24 @@ Object {
                                 },
                                 "type": 15,
                               },
+                              "group": "step",
                               "type": "single",
                             },
                             Object {
                               "data": Array [],
+                              "group": "step",
                               "type": "multi",
                             },
                           ],
+                          "group": "step",
                           "type": "seq",
                         },
                       ],
+                      "group": "step",
                       "type": "multi",
                     },
                   ],
+                  "group": "step",
                   "type": "seq",
                 },
                 Object {
@@ -419,18 +465,23 @@ Object {
                     },
                     "type": 13,
                   },
+                  "group": "step",
                   "type": "single",
                 },
               ],
+              "group": "step",
               "type": "multi",
             },
           ],
+          "group": "step",
           "type": "seq",
         },
       ],
+      "group": "step",
       "type": "multi",
     },
   ],
+  "group": "step",
   "type": "seq",
 }
 `;
@@ -752,6 +803,7 @@ Object {
         },
         "type": 14,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -768,6 +820,7 @@ Object {
         },
         "type": 15,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -781,6 +834,7 @@ Object {
                 },
                 "type": 11,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -790,6 +844,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -799,6 +854,7 @@ Object {
                 },
                 "type": 14,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
@@ -815,19 +871,24 @@ Object {
                 },
                 "type": 15,
               },
+              "group": "step",
               "type": "single",
             },
             Object {
               "data": Array [],
+              "group": "step",
               "type": "multi",
             },
           ],
+          "group": "step",
           "type": "seq",
         },
       ],
+      "group": "step",
       "type": "multi",
     },
   ],
+  "group": "step",
   "type": "seq",
 }
 `;
@@ -842,6 +903,7 @@ Object {
         },
         "type": 14,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
@@ -858,13 +920,16 @@ Object {
         },
         "type": 15,
       },
+      "group": "step",
       "type": "single",
     },
     Object {
       "data": Array [],
+      "group": "step",
       "type": "multi",
     },
   ],
+  "group": "step",
   "type": "seq",
 }
 `;

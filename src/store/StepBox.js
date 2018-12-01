@@ -1,7 +1,7 @@
 //@flow
 
 import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
-import {step as Step} from 'effector/graphite/walk'
+import {Step} from 'effector/graphite/typedef'
 import type {Ref} from '../ref/createRef'
 
 export function compute(
@@ -47,7 +47,7 @@ export class StepBox</*::+*/ Mode: 'seq' | 'par'> {
   modePar(): StepBox<'par'> {
     if (this.mod === 'seq') {
       const {prime} = this
-      const next = Step.multi()
+      const next = Step.multi([])
       prime.data.push(next)
       this.current = next
     }

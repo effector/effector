@@ -10,7 +10,7 @@ import type {Effect} from 'effector/effect'
 import * as Kind from '../kind'
 
 import {cmd as Cmd, ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
-import {step as Step} from 'effector/graphite/walk'
+import {Step} from 'effector/graphite/typedef'
 import {walkEvent, seq} from 'effector/graphite'
 import type {Vertex} from 'effector/graphite/tarjan'
 import {eventRefcount} from '../refcount'
@@ -34,9 +34,9 @@ export function eventFabric<Payload>({
     fullName,
     runner: createGraphite,
   })
-  const step: Step.Single = Step.single(cmd)
-  const nextSteps: Step.Multi = Step.multi()
-  const stepFull: Step.Seq = Step.seq([step, nextSteps])
+  const step = Step.single(cmd)
+  const nextSteps = Step.multi([])
+  const stepFull = Step.seq([step, nextSteps])
   const graphite: GraphiteMeta = {
     next: nextSteps,
     seq: stepFull,
@@ -197,7 +197,7 @@ export function watchEvent<Payload>(
   if (sq !== null) {
     if (sq.data.length > 0) {
       const last = sq.data[sq.data.length - 1]
-      if (last.type === Step.MULTI) {
+      if (last.type === ('multi': 'multi')) {
         last.data.push(singleCmd)
       } else {
         sq.data.push(singleCmd)
