@@ -1,9 +1,8 @@
 //@flow
 
-import {cmd} from '../FullDatatype.bs'
+import {show as showCmd} from 'effector/datatype/showstep'
 
 import type {Tree} from './index'
-const showCmd = cmd.show
 export function show(value: Tree): string {
   const cmdStr = showCmd(value.node)
   const id = value.id

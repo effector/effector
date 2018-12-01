@@ -1,7 +1,6 @@
 //@flow
 
-import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
-import {Step} from 'effector/graphite/typedef'
+import {Step, Cmd} from 'effector/graphite/typedef'
 
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
@@ -38,7 +37,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   for (const [key, child] of state.map((e, i) => [i, e])) {
     if (Kind.isStore(child)) {
       const substore: Store<any> = (child: any)
-      const runCmd = new Cmd.run({
+      const runCmd = Cmd.run({
         runner(newValue) {},
       })
       runCmd.data.transactionContext = data => {
@@ -99,7 +98,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   for (const [key, child] of Object.entries(state)) {
     if (!Kind.isStore(child)) continue
     const substore: Store<any> = (child: any)
-    const runCmd = new Cmd.run({
+    const runCmd = Cmd.run({
       runner(newValue) {},
     })
     runCmd.data.transactionContext = data => {

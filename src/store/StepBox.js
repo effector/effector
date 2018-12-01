@@ -1,7 +1,6 @@
 //@flow
 
-import {cmd as Cmd} from 'effector/datatype/FullDatatype.bs'
-import {Step} from 'effector/graphite/typedef'
+import {Step, Cmd} from 'effector/graphite/typedef'
 import type {Ref} from '../ref/createRef'
 
 export function compute(

@@ -1,29 +1,15 @@
 //@flow
-export type Declaration<+Type, +Group> = {
-  +type: Type,
-  +group: Group,
-  +data: any,
-}
-declare function declareType<T: {+[key: string]: any}, Group>(
-  group: Group,
-  t: T,
-): $ObjMapi<T, <K>(k: K) => (data: any) => Declaration<K, Group>>
-function declareType(group, t) {
-  const result = {}
-  for (const key in t) {
-    result[key] = data => ({type: key, group, data})
-  }
-  return result
-}
+import {typeDef} from 'effector/stdlib/typedef'
+
 const type = () => null
 
-export const Step = declareType(('step': 'step'), {
+export const Step = typeDef(('step': 'step'), {
   single: type(),
   multi: type(),
   seq: type(),
 })
 
-export const Cmd = declareType(('cmd': 'cmd'), {
+export const Cmd = typeDef(('cmd': 'cmd'), {
   compute: type(),
   emit: type(),
   run: type(),
@@ -31,10 +17,17 @@ export const Cmd = declareType(('cmd': 'cmd'), {
   update: type(),
 })
 
-export const Ctx = declareType(('ctx': 'ctx'), {
-  computeCtx: type(),
-  emitCtx: type(),
-  runCtx: type(),
-  filterCtx: type(),
-  updateCtx: type(),
+export const Ctx = typeDef(('ctx': 'ctx'), {
+  compute: (args, result, error, isError, isNone, isChanged) => ({
+    args,
+    result,
+    error,
+    isError,
+    isNone,
+    isChanged,
+  }),
+  emit: (eventName, payload) => ({eventName, payload}),
+  run: (args, parentContext) => ({args, parentContext}),
+  filter: (value, isChanged) => ({value, isChanged}),
+  update: value => ({value}),
 })

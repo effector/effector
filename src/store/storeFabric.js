@@ -6,8 +6,8 @@ import * as perf from 'effector/perf'
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
-import {ctx as Ctx} from 'effector/datatype/FullDatatype.bs'
 import {Step} from 'effector/graphite/typedef'
+import type {TypeDef} from 'effector/stdlib/typedef'
 import type {Store} from './index.h'
 import * as Kind from '../kind'
 import {setStoreName} from './setStoreName'
@@ -182,7 +182,7 @@ export function storeFabric<State>(props: {
       const lastState = getState()
       return handler(lastState, newValue, e.getType())
     })
-    const filterCmd = Box.filter((data, ctx: Ctx.compute) => {
+    const filterCmd = Box.filter((data, ctx: TypeDef<'compute', 'ctx'>) => {
       const lastState = getState()
       return data !== lastState && data !== undefined
     })
@@ -292,7 +292,7 @@ function mapStore<A, B>(
     }),
   )
   const filterCmdPost = Step.single(
-    Box.filter((result, ctx: Ctx.compute) => {
+    Box.filter((result, ctx: TypeDef<'compute', 'ctx'>) => {
       const lastState = innerStore.getState()
       const isChanged = result !== lastState && result !== undefined
       if (isChanged) {
