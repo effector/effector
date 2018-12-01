@@ -24,7 +24,9 @@ function walkSeq(
     'compute' | 'emit' | 'filter' | 'update',
     'ctx',
   > = prev
-  for (const step of steps.data) {
+  let step
+  for (let i = 0; i < steps.data.length; i++) {
+    step = steps.data[i]
     const isMulti = step.type === ('multi': 'multi')
     const stepResult = walkStep(step, currentCtx, transactions)
     if (isMulti) continue
