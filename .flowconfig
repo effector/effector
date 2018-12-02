@@ -4,7 +4,7 @@ untyped-type-import=error
 unclear-type=off
 
 [version]
->=0.80.0
+>=0.87.0
 
 [include]
 ./scripts/prebuild/*
