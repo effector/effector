@@ -6,6 +6,8 @@ export type TypeDef<+Type, +Group> = {
   +data: any,
 }
 
+export type GraphiteMeta = {+next: TypeDef<*, 'step'>, +seq: TypeDef<*, 'step'>}
+
 function fabricHandler(create) {
   if (typeof create === 'function') return create
   return _ => _
