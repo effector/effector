@@ -9,17 +9,18 @@ const SEQ = 'seq'
 
 export function show(
   value: Step,
-  showCmd: Cmd => string = _ => JSON.stringify(_, null, 2),
+  showCmd: Cmd => string = _ =>
+    `${_.type} {${JSON.stringify(_.data, null, 2)}}`,
 ): string {
   switch (value.type) {
     case SINGLE:
-      return `Single ${showCmd(value.data)}`
+      return showCmd(value.data)
     case MULTI: {
-      if (value.data.length === 0) return 'Multi []'
+      if (value.data.length === 0) return '[(empty list)]'
       const inner = [...value.data]
         .map(e => move1(`  *  ${move2(show(e, showCmd))}`))
         .join(`,\n`)
-      return `Multi [\n${inner}\n]`
+      return `[\n${inner}\n]`
     }
     case SEQ: {
       if (value.data.length === 0) return 'Seq []'
