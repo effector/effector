@@ -8,5 +8,6 @@
 **/logs/**
 **/npm/**
 **/*.bs.js
-**/effector.bundle.js
+**/*.bundle.js
 **/effector.browser.js
+scripts/browser/**

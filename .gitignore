@@ -27,6 +27,7 @@ test/storage.json
 
 npm/effector/**
 npm/effector-react/**
+npm/effector-vue/**
 .merlin
 .bsb.lock
 npm-debug.log
