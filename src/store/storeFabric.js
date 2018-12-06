@@ -286,11 +286,7 @@ export function storeFabric<State>(props: {
     const state = getState()
     const newResult = currentReducer(state, value)
 
-    setter(state, newResult)
-  }
-  function setter(oldState, newState) {
-    if (newState === undefined || newState === oldState) return
-    updater(newState)
+    updater(newResult)
   }
 
   function thru(fn: Function) {
