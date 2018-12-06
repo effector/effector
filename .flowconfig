@@ -28,7 +28,6 @@ esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
-experimental.const_params=true
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_comment=\\(.\\|\n\\)*\\$off
 suppress_comment=\\(.\\|\n\\)*\\$todo
