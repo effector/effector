@@ -519,162 +519,86 @@ Object {
 
 exports[`graphite: show bar 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"emit\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"subtype\\": \\"event\\",
-       \\"fullName\\": \\"foo → *\\"
-     }
-  },
-  2. Multi [
+  1. emit {{
+     \\"subtype\\": \\"event\\",
+     \\"fullName\\": \\"foo → *\\"
+  }},
+  2. [
      *  Seq [
-        1. Single {
-           \\"type\\": \\"compute\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        2. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        3. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        4. Single {
-           \\"type\\": \\"update\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {
-             \\"store\\": [
-               3,
-               null,
-               null,
-               null,
-               null,
-               \\"foo | 1 | 11\\"
-             ]
-           }
-        },
-        5. Multi [
+        1. compute {{}},
+        2. filter {{}},
+        3. filter {{}},
+        4. update {{
+           \\"store\\": [
+             3,
+             null,
+             null,
+             null,
+             null,
+             \\"foo | 1 | 11\\"
+           ]
+        }},
+        5. [
            *  Seq [
-              1. Single {
-                 \\"type\\": \\"compute\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              2. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              3. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              4. Single {
-                 \\"type\\": \\"update\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {
-                   \\"store\\": [
-                     4,
-                     null,
-                     null,
-                     null,
-                     null,
-                     12
-                   ]
-                 }
-              },
-              5. Multi []
+              1. compute {{}},
+              2. filter {{}},
+              3. filter {{}},
+              4. update {{
+                 \\"store\\": [
+                   4,
+                   null,
+                   null,
+                   null,
+                   null,
+                   12
+                 ]
+              }},
+              5. [(empty list)]
            ]
         ]
      ],
-     *  Single {
-        \\"type\\": \\"run\\",
-        \\"group\\": \\"cmd\\",
-        \\"data\\": {}
-     }
+     *  run {{}}
   ]
 ]"
 `;
 
 exports[`graphite: show bar 2`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"emit\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"subtype\\": \\"event\\",
-       \\"fullName\\": \\"foo → *\\"
-     }
-  },
-  2. Multi [
+  1. emit {{
+     \\"subtype\\": \\"event\\",
+     \\"fullName\\": \\"foo → *\\"
+  }},
+  2. [
      *  Seq [
-        1. Single {
-           \\"type\\": \\"compute\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        2. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        3. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        4. Single {
-           \\"type\\": \\"update\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {
-             \\"store\\": [
-               3,
-               null,
-               null,
-               null,
-               null,
-               \\"foo | 1 | 11\\"
-             ]
-           }
-        },
-        5. Multi [
+        1. compute {{}},
+        2. filter {{}},
+        3. filter {{}},
+        4. update {{
+           \\"store\\": [
+             3,
+             null,
+             null,
+             null,
+             null,
+             \\"foo | 1 | 11\\"
+           ]
+        }},
+        5. [
            *  Seq [
-              1. Single {
-                 \\"type\\": \\"compute\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              2. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              3. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              4. Single {
-                 \\"type\\": \\"update\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {
-                   \\"store\\": [
-                     4,
-                     null,
-                     null,
-                     null,
-                     null,
-                     12
-                   ]
-                 }
-              },
-              5. Multi []
+              1. compute {{}},
+              2. filter {{}},
+              3. filter {{}},
+              4. update {{
+                 \\"store\\": [
+                   4,
+                   null,
+                   null,
+                   null,
+                   null,
+                   12
+                 ]
+              }},
+              5. [(empty list)]
            ]
         ]
      ]
@@ -684,92 +608,48 @@ exports[`graphite: show bar 2`] = `
 
 exports[`graphite: show foo 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"emit\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"subtype\\": \\"event\\",
-       \\"fullName\\": \\"foo\\"
-     }
-  },
-  2. Multi [
+  1. emit {{
+     \\"subtype\\": \\"event\\",
+     \\"fullName\\": \\"foo\\"
+  }},
+  2. [
      *  Seq [
-        1. Single {
-           \\"type\\": \\"compute\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        2. Single {
-           \\"type\\": \\"emit\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {
-             \\"subtype\\": \\"event\\",
-             \\"fullName\\": \\"foo → *\\"
-           }
-        },
-        3. Multi [
+        1. compute {{}},
+        2. emit {{
+           \\"subtype\\": \\"event\\",
+           \\"fullName\\": \\"foo → *\\"
+        }},
+        3. [
            *  Seq [
-              1. Single {
-                 \\"type\\": \\"compute\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              2. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              3. Single {
-                 \\"type\\": \\"filter\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {}
-              },
-              4. Single {
-                 \\"type\\": \\"update\\",
-                 \\"group\\": \\"cmd\\",
-                 \\"data\\": {
-                   \\"store\\": [
-                     3,
-                     null,
-                     null,
-                     null,
-                     null,
-                     \\"foo | 1 | 11 | 101\\"
-                   ]
-                 }
-              },
-              5. Multi [
+              1. compute {{}},
+              2. filter {{}},
+              3. filter {{}},
+              4. update {{
+                 \\"store\\": [
+                   3,
+                   null,
+                   null,
+                   null,
+                   null,
+                   \\"foo | 1 | 11 | 101\\"
+                 ]
+              }},
+              5. [
                  *  Seq [
-                    1. Single {
-                       \\"type\\": \\"compute\\",
-                       \\"group\\": \\"cmd\\",
-                       \\"data\\": {}
-                    },
-                    2. Single {
-                       \\"type\\": \\"filter\\",
-                       \\"group\\": \\"cmd\\",
-                       \\"data\\": {}
-                    },
-                    3. Single {
-                       \\"type\\": \\"filter\\",
-                       \\"group\\": \\"cmd\\",
-                       \\"data\\": {}
-                    },
-                    4. Single {
-                       \\"type\\": \\"update\\",
-                       \\"group\\": \\"cmd\\",
-                       \\"data\\": {
-                         \\"store\\": [
-                           4,
-                           null,
-                           null,
-                           null,
-                           null,
-                           18
-                         ]
-                       }
-                    },
-                    5. Multi []
+                    1. compute {{}},
+                    2. filter {{}},
+                    3. filter {{}},
+                    4. update {{
+                       \\"store\\": [
+                         4,
+                         null,
+                         null,
+                         null,
+                         null,
+                         18
+                       ]
+                    }},
+                    5. [(empty list)]
                  ]
               ]
            ]
@@ -781,57 +661,33 @@ exports[`graphite: show foo 1`] = `
 
 exports[`graphite: show store1 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"filter\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {}
-  },
-  2. Single {
-     \\"type\\": \\"update\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"store\\": [
-         3,
-         null,
-         null,
-         null,
-         null,
-         \\"foo | 1 | 11 | 101\\"
-       ]
-     }
-  },
-  3. Multi [
+  1. filter {{}},
+  2. update {{
+     \\"store\\": [
+       3,
+       null,
+       null,
+       null,
+       null,
+       \\"foo | 1 | 11 | 101\\"
+     ]
+  }},
+  3. [
      *  Seq [
-        1. Single {
-           \\"type\\": \\"compute\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        2. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        3. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        4. Single {
-           \\"type\\": \\"update\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {
-             \\"store\\": [
-               4,
-               null,
-               null,
-               null,
-               null,
-               18
-             ]
-           }
-        },
-        5. Multi []
+        1. compute {{}},
+        2. filter {{}},
+        3. filter {{}},
+        4. update {{
+           \\"store\\": [
+             4,
+             null,
+             null,
+             null,
+             null,
+             18
+           ]
+        }},
+        5. [(empty list)]
      ]
   ]
 ]"
@@ -839,26 +695,18 @@ exports[`graphite: show store1 1`] = `
 
 exports[`graphite: show store2 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"filter\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {}
-  },
-  2. Single {
-     \\"type\\": \\"update\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"store\\": [
-         4,
-         null,
-         null,
-         null,
-         null,
-         18
-       ]
-     }
-  },
-  3. Multi []
+  1. filter {{}},
+  2. update {{
+     \\"store\\": [
+       4,
+       null,
+       null,
+       null,
+       null,
+       18
+     ]
+  }},
+  3. [(empty list)]
 ]"
 `;
 
@@ -1013,51 +861,27 @@ Object {
 
 exports[`showcase: event foo 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"emit\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"subtype\\": \\"event\\",
-       \\"fullName\\": \\"foo\\"
-     }
-  },
-  2. Multi [
+  1. emit {{
+     \\"subtype\\": \\"event\\",
+     \\"fullName\\": \\"foo\\"
+  }},
+  2. [
      *  Seq [
-        1. Single {
-           \\"type\\": \\"compute\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        2. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        3. Single {
-           \\"type\\": \\"filter\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {}
-        },
-        4. Single {
-           \\"type\\": \\"update\\",
-           \\"group\\": \\"cmd\\",
-           \\"data\\": {
-             \\"store\\": [
-               5,
-               null,
-               null,
-               null,
-               null,
-               3
-             ]
-           }
-        },
-        5. Multi [
-           *  Single {
-              \\"type\\": \\"run\\",
-              \\"group\\": \\"cmd\\",
-              \\"data\\": {}
-           }
+        1. compute {{}},
+        2. filter {{}},
+        3. filter {{}},
+        4. update {{
+           \\"store\\": [
+             5,
+             null,
+             null,
+             null,
+             null,
+             3
+           ]
+        }},
+        5. [
+           *  run {{}}
         ]
      ]
   ]
@@ -1066,62 +890,38 @@ exports[`showcase: event foo 1`] = `
 
 exports[`showcase: mapped 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"filter\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {}
-  },
-  2. Single {
-     \\"type\\": \\"update\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"store\\": [
-         8,
-         null,
-         null,
-         null,
-         null,
-         3
-       ]
-     }
-  },
-  3. Multi [
-     *  Single {
-        \\"type\\": \\"run\\",
-        \\"group\\": \\"cmd\\",
-        \\"data\\": {}
-     }
+  1. filter {{}},
+  2. update {{
+     \\"store\\": [
+       8,
+       null,
+       null,
+       null,
+       null,
+       3
+     ]
+  }},
+  3. [
+     *  run {{}}
   ]
 ]"
 `;
 
 exports[`showcase: store a 1`] = `
 "Seq [
-  1. Single {
-     \\"type\\": \\"filter\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {}
-  },
-  2. Single {
-     \\"type\\": \\"update\\",
-     \\"group\\": \\"cmd\\",
-     \\"data\\": {
-       \\"store\\": [
-         5,
-         null,
-         null,
-         null,
-         null,
-         3
-       ]
-     }
-  },
-  3. Multi [
-     *  Single {
-        \\"type\\": \\"run\\",
-        \\"group\\": \\"cmd\\",
-        \\"data\\": {}
-     }
+  1. filter {{}},
+  2. update {{
+     \\"store\\": [
+       5,
+       null,
+       null,
+       null,
+       null,
+       3
+     ]
+  }},
+  3. [
+     *  run {{}}
   ]
 ]"
 `;
