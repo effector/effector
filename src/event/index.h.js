@@ -1,5 +1,6 @@
 //@flow
-import type {Subscription, Subscriber, GraphiteMeta} from '../effector/index.h'
+import type {Subscription, Subscriber} from '../effector/index.h'
+import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {Store} from 'effector/store'
 import type {CompositeName} from '../compositeName'
 import type {Vertex} from 'effector/graphite/tarjan'

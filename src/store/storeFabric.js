@@ -3,13 +3,14 @@
 import invariant from 'invariant'
 import * as perf from 'effector/perf'
 
+import {Kind, matchKind, readKind, type kind} from 'effector/stdlib/kind'
+
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
 import {Step} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 import type {Store} from './index.h'
-import * as Kind from '../kind'
 import {setStoreName} from './setStoreName'
 import {createRef, type Ref} from '../ref/createRef'
 import {type CompositeName} from '../compositeName'
@@ -48,7 +49,7 @@ export function storeFabric<State>(props: {
       seq: bx.prime,
     },
     defaultState,
-    kind: Kind.STORE,
+    kind: Kind.store,
     id: currentId,
     shortName: currentId,
     domainName: parent,
@@ -202,34 +203,68 @@ export function storeFabric<State>(props: {
   function withProps(fn: Function) {
     return props => fn(getState(), props)
   }
-
-  function to(action: any, reduce) {
-    const needReduce = Kind.isStore(action) && typeof reduce === 'function'
-    return watch(data => {
-      if (!needReduce) {
+  const visitorTo = {
+    store(action, reduce) {
+      const needReduce = typeof reduce === 'function'
+      return watch(data => {
+        if (!needReduce) {
+          action(data)
+        } else {
+          const lastState = action.getState()
+          const reduced = reduce(lastState, data)
+          if (lastState !== reduced) action.setState(reduced)
+        }
+      })
+    },
+    __(action, reduce) {
+      return watch(data => {
         action(data)
-      } else {
-        const lastState = action.getState()
-        const reduced = reduce(lastState, data)
-        if (lastState !== reduced) action.setState(reduced)
-      }
-    })
+      })
+    },
+  }
+  function to(action: any, reduce) {
+    return matchKind(readKind(action), visitorTo)(action, reduce)
+  }
+  const visitorWatch = {
+    event(eventOrFn, fn) {
+      if (typeof fn === 'function') {
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
+      } else throw new TypeError('watch requires function handler')
+    },
+    effect(eventOrFn, fn) {
+      if (typeof fn === 'function') {
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
+      } else throw new TypeError('watch requires function handler')
+    },
+    __(eventOrFn, fn) {
+      if (typeof eventOrFn === 'function') {
+        return subscribe(eventOrFn)
+      } else throw new TypeError('watch requires function handler')
+    },
   }
   function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
-    switch (Kind.readKind(eventOrFn)) {
-      case (2: Kind.Event):
-      case (3: Kind.Effect):
-        if (typeof fn === 'function') {
-          return eventOrFn.watch(payload =>
-            fn(store.getState(), payload, eventOrFn.getType()),
-          )
-        } else throw new TypeError('watch requires function handler')
+    if (eventOrFn.kind !== undefined)
+      return matchKind(eventOrFn.kind, visitorWatch)(eventOrFn, fn)
+    return visitorWatch.__(eventOrFn, fn)
+    // return matchKind(readKind(eventOrFn), visitorWatch)(eventOrFn, fn)
+    // switch (Kind.readKind(eventOrFn)) {
+    //   case (2: Kind.Event):
+    //   case (3: Kind.Effect):
+    //     if (typeof fn === 'function') {
+    //       return eventOrFn.watch(payload =>
+    //         fn(store.getState(), payload, eventOrFn.getType()),
+    //       )
+    //     } else throw new TypeError('watch requires function handler')
 
-      default:
-        if (typeof eventOrFn === 'function') {
-          return subscribe(eventOrFn)
-        } else throw new TypeError('watch requires function handler')
-    }
+    //   default:
+    //     if (typeof eventOrFn === 'function') {
+    //       return subscribe(eventOrFn)
+    //     } else throw new TypeError('watch requires function handler')
+    // }
   }
 
   function stateSetter(_, payload) {

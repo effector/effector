@@ -4,7 +4,7 @@ import {Step, Cmd} from 'effector/graphite/typedef'
 
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
-import * as Kind from '../kind'
+import {Kind} from 'effector/stdlib/kind'
 import {storeFabric, getDisplayName} from './storeFabric'
 
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
@@ -35,7 +35,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   }
   let commit = committer()
   for (const [key, child] of state.map((e, i) => [i, e])) {
-    if (Kind.isStore(child)) {
+    if (child.kind === Kind.store) {
       const substore: Store<any> = (child: any)
       const runCmd = Cmd.run({
         runner(newValue) {},
@@ -54,7 +54,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   }
   const name = `combine(${obj
     .map(store => {
-      if (!Kind.isStore(store)) return store.toString()
+      if (store.kind !== Kind.store) return store.toString()
       return getDisplayName(store)
     })
     .join(', ')})`
@@ -96,7 +96,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   }
   let commit = committer()
   for (const [key, child] of Object.entries(state)) {
-    if (!Kind.isStore(child)) continue
+    if (child.kind !== Kind.store) continue
     const substore: Store<any> = (child: any)
     const runCmd = Cmd.run({
       runner(newValue) {},
@@ -114,7 +114,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   }
   const name = `combine(${(Object.values(obj): Array<$Values<typeof obj>>)
     .map(store => {
-      if (!Kind.isStore(store)) return store.toString()
+      if (store.kind !== Kind.store) return store.toString()
       return getDisplayName(store)
     })
     .join(', ')})`

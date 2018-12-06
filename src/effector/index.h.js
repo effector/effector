@@ -1,7 +1,5 @@
 //@flow
 
-import type {Multi as MultiStep, Seq as SeqStep} from 'effector/datatype/stept'
-
 export type Subscriber<A> = {
   next(value: A): void,
   // error(err: Error): void,
@@ -14,8 +12,3 @@ export type Subscription = {
 }
 
 export type Unsubscribe = () => void
-
-export type GraphiteMeta = {
-  next: MultiStep,
-  seq: SeqStep,
-}

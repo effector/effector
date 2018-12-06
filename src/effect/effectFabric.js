@@ -3,7 +3,7 @@
 // import invariant from 'invariant'
 import warning from 'warning'
 import type {Effect} from './index.h'
-import * as Kind from '../kind'
+import {Kind} from 'effector/stdlib/kind'
 
 import {eventFabric, type Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
@@ -48,7 +48,7 @@ export function effectFabric<Payload, Done>({
     thunk = fn
   }
   ;(instance: any).use.getCurrent = (): any => thunk
-  ;(instance: any).kind = Kind.EFFECT
+  ;(instance: any).kind = Kind.effect
   ;(instance: any).create = (params: Payload) => {
     eventCreate(params, instanceAsEvent.getType())
     return exec(

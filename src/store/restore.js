@@ -3,7 +3,7 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
 import {createStore} from './createStore'
-import * as Kind from 'effector/kind'
+import {Kind, matchKind} from 'effector/stdlib/kind'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -46,15 +46,12 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
+const visitorRestore = {
+  store: (obj, defaultState) => obj,
+  event: restoreEvent,
+  effect: restoreEffect,
+  __: (obj, defaultState) => restoreObject(obj),
+}
 export function restore(obj: any, defaultState: any): any {
-  switch (Kind.readKind(obj)) {
-    case Kind.STORE:
-      return obj
-    case Kind.EVENT:
-      return restoreEvent(obj, defaultState)
-    case Kind.EFFECT:
-      return restoreEffect(obj, defaultState)
-    default:
-      return restoreObject(obj)
-  }
+  return matchKind(obj.kind, visitorRestore)(obj, defaultState)
 }

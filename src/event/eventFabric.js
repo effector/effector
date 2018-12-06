@@ -3,18 +3,20 @@
 // import invariant from 'invariant'
 // import warning from 'warning'
 import $$observable from 'symbol-observable'
-import type {GraphiteMeta, Subscription} from '../effector/index.h'
+import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
-import * as Kind from '../kind'
+import {Kind, readKind, matchKind} from 'effector/stdlib/kind'
 
 import {Step, Cmd} from 'effector/graphite/typedef'
-import type {TypeDef} from 'effector/stdlib/typedef'
+// import type {TypeDef} from 'effector/stdlib/typedef'
 import {walkEvent, seq} from 'effector/graphite'
 import type {Vertex} from 'effector/graphite/tarjan'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
+
+import fabric from './concreteFabric'
 
 export function eventFabric<Payload>({
   name: nameRaw,
@@ -29,36 +31,30 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const cmd = Cmd.emit({
-    subtype: 'event',
+  const graphite = fabric.event({
     fullName,
-    runner: createGraphite,
+    runner(payload: Payload): Payload {
+      return instanceAsEvent.create(payload, fullName)
+    },
   })
-  const step = Step.single(cmd)
-  const nextSteps = Step.multi([])
-  const stepFull = Step.seq([step, nextSteps])
-  const graphite: GraphiteMeta = {
-    next: nextSteps,
-    seq: stepFull,
-  }
+
   const instance = (payload: Payload): Payload =>
     instanceAsEvent.create(payload, fullName)
-  function createGraphite(payload: Payload): Payload {
-    return instanceAsEvent.create(payload, fullName)
-  }
   const instanceAsEvent: Event<Payload> = (instance: any)
   instanceAsEvent.graphite = graphite
-  const getType = () => compositeName.fullName
+
   Object.defineProperty((instance: any), 'toString', {
     configurable: true,
-    value: getType,
+    value() {
+      return compositeName.fullName
+    },
   })
-  instance.getType = getType
+  instance.getType = instance.toString
   ;(instance: any).create = (payload, fullName) => {
     walkEvent(payload, instanceAsEvent)
     return payload
   }
-  ;(instance: any).kind = Kind.EVENT
+  ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
   instance.id = id
   instance.watch = watch
@@ -66,7 +62,6 @@ export function eventFabric<Payload>({
   instance.prepend = prepend
   instance.subscribe = subscribe
   instance.to = to
-  // instance.epic = epic
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
@@ -79,21 +74,30 @@ export function eventFabric<Payload>({
   function map<Next>(fn: Payload => Next): Event<Next> {
     return mapEvent(instanceAsEvent, fn)
   }
-
+  const visitorTo = {
+    store: (target, handler) =>
+      watch(payload => target.setState(payload, handler)),
+    event: (target, handler) => watch(target.create),
+    effect: (target, handler) => watch(target.create),
+    none(target, handler) {
+      throw new TypeError('Unsupported kind')
+    },
+  }
   function to(
     target: Store<any> & Event<any> & Effect<any, any, any>,
     handler?: Function,
   ): Subscription {
-    switch (Kind.readKind(target)) {
-      case Kind.STORE:
-        return watch(payload => target.setState(payload, handler))
-      case Kind.EVENT:
-      case Kind.EFFECT:
-        return watch(target.create)
-      default: {
-        throw new TypeError('Unsupported kind')
-      }
-    }
+    return matchKind(readKind(target), visitorTo)(target, handler)
+    // switch (Kind.readKind(target)) {
+    //   case Kind.STORE:
+    //     return watch(payload => target.setState(payload, handler))
+    //   case Kind.EVENT:
+    //   case Kind.EFFECT:
+    //     return watch(target.create)
+    //   default: {
+    //     throw new TypeError('Unsupported kind')
+    //   }
+    // }
   }
 
   function watch(
@@ -112,16 +116,11 @@ export function eventFabric<Payload>({
       parent,
       vertex: vert,
     })
-
-    const computeCmd = Step.single(
-      Cmd.compute({
-        reduce(_, newValue: Before, ctx) {
-          return fn(newValue)
-        },
-      }),
-    )
-    const nextSeq = Step.seq([computeCmd, ...instanceAsEvent.graphite.seq.data])
-    contramapped.graphite.next.data.push(nextSeq)
+    fabric.prependEvent({
+      fn,
+      graphite: contramapped.graphite,
+      parentGraphite: graphite,
+    })
     return contramapped
   }
 
@@ -140,15 +139,11 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     parent: event.domainName,
     vertex: vertex.createChild(['event', `${event.shortName} → *`]),
   })
-  const computeCmd = Step.single(
-    Cmd.compute({
-      reduce(_, newValue: A, ctx) {
-        return fn(newValue)
-      },
-    }),
-  )
-  const nextSeq = Step.seq([computeCmd, ...mapped.graphite.seq.data])
-  event.graphite.next.data.push(nextSeq)
+  fabric.mapEvent({
+    fn,
+    graphite: mapped.graphite,
+    parentGraphite: event.graphite,
+  })
   return mapped
 }
 
@@ -162,32 +157,21 @@ function filterEvent<A, B>(
     parent: event.domainName,
     vertex: vertex.createChild(['event', `${event.shortName} →? *`]),
   })
-  const computeCmd = Step.single(
-    Cmd.compute({
-      reduce(_, newValue: A, ctx) {
-        return fn(newValue)
-      },
-    }),
-  )
-  const filterCmd = Step.single(
-    Cmd.filter({
-      filter(result, ctx: TypeDef<'emitCtx', 'ctx'>) {
-        return result !== undefined
-      },
-    }),
-  )
-  const nextSeq = Step.seq([computeCmd, filterCmd, ...mapped.graphite.seq.data])
-  event.graphite.next.data.push(nextSeq)
+  fabric.filterEvent({
+    fn,
+    graphite: mapped.graphite,
+    parentGraphite: event.graphite,
+  })
   return mapped
 }
 export function watchEvent<Payload>(
-  instanceAsEvent: Event<Payload>,
+  event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
   const singleCmd = Step.single(
     Cmd.run({
       runner(newValue: Payload) {
-        return watcher(newValue, instanceAsEvent.getType())
+        return watcher(newValue, event.getType())
       },
     }),
   )
@@ -206,12 +190,12 @@ export function watchEvent<Payload>(
     }
     runCmd = isWrited ? sq : Step.seq(sq.data.concat([singleCmd]))
   } else runCmd = singleCmd
-  instanceAsEvent.graphite.next.data.push(runCmd)
+  event.graphite.next.data.push(runCmd)
   const unsubscribe = () => {
-    const i = instanceAsEvent.graphite.next.data.indexOf(runCmd)
+    const i = event.graphite.next.data.indexOf(runCmd)
     if (i === -1) return
 
-    instanceAsEvent.graphite.next.data.splice(i, 1)
+    event.graphite.next.data.splice(i, 1)
   }
   unsubscribe.unsubscribe = unsubscribe
   return unsubscribe
