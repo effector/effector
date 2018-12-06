@@ -7,7 +7,8 @@ import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
-import {Kind, readKind, matchKind} from 'effector/stdlib/kind'
+import {Kind, type kind} from 'effector/stdlib/kind'
+import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 import {Step, Cmd} from 'effector/graphite/typedef'
 // import type {TypeDef} from 'effector/stdlib/typedef'
@@ -74,30 +75,26 @@ export function eventFabric<Payload>({
   function map<Next>(fn: Payload => Next): Event<Next> {
     return mapEvent(instanceAsEvent, fn)
   }
-  const visitorTo = {
-    store: (target, handler) =>
-      watch(payload => target.setState(payload, handler)),
-    event: (target, handler) => watch(target.create),
-    effect: (target, handler) => watch(target.create),
-    none(target, handler) {
-      throw new TypeError('Unsupported kind')
+  const visitors = makeVisitorRecordMap({
+    to: {
+      visitor: {
+        store: (target, handler) =>
+          watch(payload => target.setState(payload, handler)),
+        event: (target, handler) => watch(target.create),
+        effect: (target, handler) => watch(target.create),
+        none(target, handler) {
+          throw new TypeError('Unsupported kind')
+        },
+      },
+      reader: target => ((target.kind: any): kind),
+      writer: (handler, target, handlerFn) => handler(target, handlerFn),
     },
-  }
+  })
   function to(
     target: Store<any> & Event<any> & Effect<any, any, any>,
     handler?: Function,
   ): Subscription {
-    return matchKind(readKind(target), visitorTo)(target, handler)
-    // switch (Kind.readKind(target)) {
-    //   case Kind.STORE:
-    //     return watch(payload => target.setState(payload, handler))
-    //   case Kind.EVENT:
-    //   case Kind.EFFECT:
-    //     return watch(target.create)
-    //   default: {
-    //     throw new TypeError('Unsupported kind')
-    //   }
-    // }
+    return visitors.to(target, handler)
   }
 
   function watch(

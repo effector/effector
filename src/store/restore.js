@@ -3,7 +3,7 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
 import {createStore} from './createStore'
-import {Kind, matchKind} from 'effector/stdlib/kind'
+import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -46,12 +46,20 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
-const visitorRestore = {
-  store: (obj, defaultState) => obj,
-  event: restoreEvent,
-  effect: restoreEffect,
-  __: (obj, defaultState) => restoreObject(obj),
-}
+
+const {visitorRestore} = makeVisitorRecordMap({
+  visitorRestore: {
+    visitor: {
+      store: (obj, defaultState) => obj,
+      event: (obj, defaultState) => restoreEvent(obj, defaultState),
+      effect: (obj, defaultState) => restoreEffect(obj, defaultState),
+      __: (obj, defaultState) => restoreObject(obj),
+    },
+    reader: obj => obj.kind,
+    writer: (handler, obj, defaultState) => handler(obj, defaultState),
+  },
+})
+
 export function restore(obj: any, defaultState: any): any {
-  return matchKind(obj.kind, visitorRestore)(obj, defaultState)
+  return visitorRestore(obj, defaultState)
 }

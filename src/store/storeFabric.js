@@ -3,7 +3,9 @@
 import invariant from 'invariant'
 import * as perf from 'effector/perf'
 
-import {Kind, matchKind, readKind, type kind} from 'effector/stdlib/kind'
+import {Kind, type kind} from 'effector/stdlib/kind'
+
+import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
@@ -71,9 +73,74 @@ export function storeFabric<State>(props: {
   if (name) setStoreName(store, name)
   ;(store: any).dispatch = dispatch
   on(updater, (_, payload) => payload)
-  function getState(): State {
+  function getState() {
     return plainState[1]()
   }
+
+  const visitors = makeVisitorRecordMap({
+    to: {
+      visitor: {
+        store(action, reduce) {
+          const needReduce = typeof reduce === 'function'
+          return watch(data => {
+            if (!needReduce) {
+              action(data)
+            } else {
+              const lastState = action.getState()
+              const reduced = reduce(lastState, data)
+              if (lastState !== reduced) action.setState(reduced)
+            }
+          })
+        },
+        __(action, reduce) {
+          return watch(data => {
+            action(data)
+          })
+        },
+      },
+      reader(eventOrFn) {
+        if (typeof eventOrFn === 'function') {
+          if (typeof eventOrFn.kind !== 'undefined')
+            return ((eventOrFn.kind: any): kind)
+        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
+          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
+        }
+      },
+      writer: (handler, action, reduce) => handler(action, reduce),
+    },
+    watch: {
+      visitor: {
+        event(eventOrFn, fn) {
+          if (typeof fn === 'function') {
+            return eventOrFn.watch(payload =>
+              fn(store.getState(), payload, eventOrFn.getType()),
+            )
+          } else throw new TypeError('watch requires function handler')
+        },
+        effect(eventOrFn, fn) {
+          if (typeof fn === 'function') {
+            return eventOrFn.watch(payload =>
+              fn(store.getState(), payload, eventOrFn.getType()),
+            )
+          } else throw new TypeError('watch requires function handler')
+        },
+        __(eventOrFn, fn) {
+          if (typeof eventOrFn === 'function') {
+            return subscribe(eventOrFn)
+          } else throw new TypeError('watch requires function handler')
+        },
+      },
+      reader(eventOrFn) {
+        if (typeof eventOrFn === 'function') {
+          if (typeof eventOrFn.kind !== 'undefined')
+            return ((eventOrFn.kind: any): kind)
+        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
+          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
+        }
+      },
+      writer: (handler, eventOrFn, fn) => handler(eventOrFn, fn),
+    },
+  })
 
   function map<NextState>(
     fn: (state: State, lastState?: NextState) => NextState,
@@ -203,68 +270,12 @@ export function storeFabric<State>(props: {
   function withProps(fn: Function) {
     return props => fn(getState(), props)
   }
-  const visitorTo = {
-    store(action, reduce) {
-      const needReduce = typeof reduce === 'function'
-      return watch(data => {
-        if (!needReduce) {
-          action(data)
-        } else {
-          const lastState = action.getState()
-          const reduced = reduce(lastState, data)
-          if (lastState !== reduced) action.setState(reduced)
-        }
-      })
-    },
-    __(action, reduce) {
-      return watch(data => {
-        action(data)
-      })
-    },
-  }
-  function to(action: any, reduce) {
-    return matchKind(readKind(action), visitorTo)(action, reduce)
-  }
-  const visitorWatch = {
-    event(eventOrFn, fn) {
-      if (typeof fn === 'function') {
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      } else throw new TypeError('watch requires function handler')
-    },
-    effect(eventOrFn, fn) {
-      if (typeof fn === 'function') {
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      } else throw new TypeError('watch requires function handler')
-    },
-    __(eventOrFn, fn) {
-      if (typeof eventOrFn === 'function') {
-        return subscribe(eventOrFn)
-      } else throw new TypeError('watch requires function handler')
-    },
-  }
-  function watch<E>(eventOrFn: Event<E> | Function, fn?: Function) {
-    if (eventOrFn.kind !== undefined)
-      return matchKind(eventOrFn.kind, visitorWatch)(eventOrFn, fn)
-    return visitorWatch.__(eventOrFn, fn)
-    // return matchKind(readKind(eventOrFn), visitorWatch)(eventOrFn, fn)
-    // switch (Kind.readKind(eventOrFn)) {
-    //   case (2: Kind.Event):
-    //   case (3: Kind.Effect):
-    //     if (typeof fn === 'function') {
-    //       return eventOrFn.watch(payload =>
-    //         fn(store.getState(), payload, eventOrFn.getType()),
-    //       )
-    //     } else throw new TypeError('watch requires function handler')
 
-    //   default:
-    //     if (typeof eventOrFn === 'function') {
-    //       return subscribe(eventOrFn)
-    //     } else throw new TypeError('watch requires function handler')
-    // }
+  function to(action: any, reduce) {
+    return visitors.to(action, reduce)
+  }
+  function watch(eventOrFn: Event<*> | Function, fn?: Function) {
+    return visitors.watch(eventOrFn, fn)
   }
 
   function stateSetter(_, payload) {
