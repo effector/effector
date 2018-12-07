@@ -29,8 +29,8 @@ module.exports = function(babel) {
       CallExpression(path) {
         if (t.isIdentifier(path.node.callee)) {
           if (path.node.callee.name === 'createStore') {
-            addImportDeclaration(findProgram(path, t), t)
             functionName = 'setStoreName'
+            addImportDeclaration(findProgram(path, t, functionName), t)
             const id = findCandidateNameForExpression(path)
             if (id) {
               setDisplayNameAfter(path, id, babel.types, functionName)
@@ -39,8 +39,8 @@ module.exports = function(babel) {
         }
         if (t.isMemberExpression(path.node.callee)) {
           if (path.node.callee.property.name === 'store') {
-            addImportDeclaration(findProgram(path, t), t)
             functionName = 'setStoreName'
+            addImportDeclaration(findProgram(path, t, functionName), t)
             const id = findCandidateNameForExpression(path)
             if (id) {
               setDisplayNameAfter(path, id, babel.types, functionName)
@@ -63,7 +63,6 @@ function addImportDeclaration(path, t) {
     t.stringLiteral(importName),
   )
   importDeclaration.leadingComments = path.node.body[0].leadingComments
-  //if (!hasImportNode) {
   path.unshiftContainer('body', importDeclaration)
 }
 
@@ -87,14 +86,21 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-function findProgram(path, t) {
+function findProgram(path, t, functionName) {
   let program
   path.find(path => {
     if (path.isProgram()) {
       const res = path.node.body.find(path => t.isImportDeclaration(path))
-      if (!res) return false
+      if (!res) {
+        program = path
+        return true
+      }
       if (res.source) {
-        if (res.source.value === importName) return false
+        if (
+          res.source.value === importName
+          && res.specifiers.some(node => node.local.name === functionName)
+        )
+          return false
         program = path
         return true
       }
