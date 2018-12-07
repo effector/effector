@@ -28,7 +28,7 @@ export default {
       },
     })
     const cmd = Step.single(unit)
-    const stepFull = Step.seq([cmd, ...parentGraphite.seq.data])
+    const stepFull = Step.seq([cmd, parentGraphite.seq])
     graphite.next.data.push(stepFull)
     return graphite
   },
@@ -44,7 +44,7 @@ export default {
       },
     })
     const cmd = Step.single(unit)
-    const stepFull = Step.seq([cmd, ...graphite.seq.data])
+    const stepFull = Step.seq([cmd, graphite.seq])
     parentGraphite.next.data.push(stepFull)
     return graphite
   },
@@ -66,7 +66,7 @@ export default {
     })
     const cmdCompute = Step.single(unitCompute)
     const cmdFilter = Step.single(unitFilter)
-    const stepFull = Step.seq([cmdCompute, cmdFilter, ...graphite.seq.data])
+    const stepFull = Step.seq([cmdCompute, cmdFilter, graphite.seq])
     parentGraphite.next.data.push(stepFull)
     return graphite
   },
