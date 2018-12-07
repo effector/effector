@@ -27,7 +27,7 @@ module.exports = function(babel) {
       CallExpression(path) {
         if (t.isIdentifier(path.node.callee)) {
           if (path.node.callee.name === 'createStore') {
-            addImportDeclaration(findProgram(path, t), t, functionName)
+            addImportDeclaration(findProgram(path, t), t)
             functionName = 'setStoreName'
             const id = findCandidateNameForExpression(path)
             if (id) {
@@ -37,7 +37,7 @@ module.exports = function(babel) {
         }
         if (t.isMemberExpression(path.node.callee)) {
           if (path.node.callee.property.name === 'store') {
-            addImportDeclaration(findProgram(path, t), t, functionName)
+            addImportDeclaration(findProgram(path, t), t)
             functionName = 'setStoreName'
             const id = findCandidateNameForExpression(path)
             if (id) {
@@ -58,7 +58,7 @@ function addImportDeclaration(path, t) {
   )
   const importDeclaration = t.importDeclaration(
     [setStoreName],
-    t.stringLiteral('effector/store'),
+    t.stringLiteral('effector'),
   )
   importDeclaration.leadingComments = path.node.body[0].leadingComments
   //if (!hasImportNode) {
