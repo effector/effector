@@ -1,5 +1,7 @@
 //@noflow
 
+const importName = 'effector'
+
 module.exports = function(babel) {
   let functionName
 
@@ -58,7 +60,7 @@ function addImportDeclaration(path, t) {
   )
   const importDeclaration = t.importDeclaration(
     [setStoreName],
-    t.stringLiteral('effector'),
+    t.stringLiteral(importName),
   )
   importDeclaration.leadingComments = path.node.body[0].leadingComments
   //if (!hasImportNode) {
@@ -92,7 +94,7 @@ function findProgram(path, t) {
       const res = path.node.body.find(path => t.isImportDeclaration(path))
       if (!res) return false
       if (res.source) {
-        if (res.source.value === 'effector/store') return false
+        if (res.source.value === importName) return false
         program = path
         return true
       }
