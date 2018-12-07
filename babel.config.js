@@ -53,6 +53,7 @@ module.exports = api => {
   ]
 
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
+    plugins.push('./src/babel-plugin')
     plugins.push('@babel/plugin-transform-modules-commonjs')
   }
 
