@@ -22,12 +22,14 @@ exports[`event.filter should drop undefined values: num event graph 1`] = `
      *  Seq [
         1. compute {{}},
         2. filter {{}},
-        3. emit {{
-           \\"subtype\\": \\"event\\",
-           \\"fullName\\": \\"number →? *\\"
-        }},
-        4. [
-           *  run {{}}
+        3. Seq [
+           1. emit {{
+              \\"subtype\\": \\"event\\",
+              \\"fullName\\": \\"number →? *\\"
+           }},
+           2. [
+              *  run {{}}
+           ]
         ]
      ]
   ]
