@@ -10,15 +10,39 @@ import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
-import {Step} from 'effector/graphite/typedef'
+import {Step, Cmd} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {createRef, type Ref} from '../ref/createRef'
 import {type CompositeName} from '../compositeName'
-// import warning from 'warning'
 
-import * as Box from './StepBox'
+// import * as stack from './stack'
+
+const Box = {
+  compute(reduce: (oldValue: any, newValue: any, ctx: any) => any) {
+    return Cmd.compute({reduce})
+  },
+  filter(filt: (value: any, ctx: any) => boolean) {
+    return Cmd.filter({filter: filt})
+  },
+  run(data: {
+    transactionContext?: (data: any) => () => void,
+    runner(ctx: any): any,
+  }) {
+    return Cmd.run(data)
+  },
+  emit(
+    subtype: 'event' | 'effect',
+    fullName: string,
+    runner: (ctx: any) => any,
+  ) {
+    return Cmd.emit({subtype, fullName, runner})
+  },
+  update(store: Ref<any>) {
+    return Cmd.update({store})
+  },
+}
 
 let id = 0
 
@@ -33,23 +57,33 @@ export function storeFabric<State>(props: {
 
   const plainState: Ref<typeof defaultState> = createRef(defaultState)
   const subscribers = new Map()
-  const shouldChange = Box.filter(
-    (newValue, ctx) => newValue !== undefined && newValue !== plainState[1](),
-  )
-  const cmd = Box.update(plainState)
-  const bx = new Box.StepBox()
-    .modeSeq()
-    .push(shouldChange)
-    .push(cmd)
-    .modePar()
+
+  const def = {}
+  def.seq = Step.seq([
+    //"should change"
+    Step.single(
+      Box.filter(
+        (newValue, ctx) =>
+          newValue !== undefined && newValue !== plainState[1](),
+      ),
+    ),
+    Step.single(Box.update(plainState)),
+    (def.next = Step.multi([])),
+  ])
+  // const prime1 = stack.node.seq(() => {
+  //   stack.leaf(shouldChange)
+  //   stack.leaf(cmd)
+  //   stack.node.par(() => {})
+  // })
+  // const nxt = stack.last(prime1)
+  // console.dir(prime1)
+  // console.dir(nxt)
+  // console.dir(stack.dataset)
 
   const updater: any = createEvent(`update ${currentId}`)
 
   const store = {
-    graphite: {
-      next: bx.current,
-      seq: bx.prime,
-    },
+    graphite: def,
     defaultState,
     kind: Kind.store,
     id: currentId,
@@ -62,7 +96,6 @@ export function storeFabric<State>(props: {
     off,
     to,
     watch,
-    // epic,
     thru,
     subscribe,
     getState,
@@ -72,7 +105,7 @@ export function storeFabric<State>(props: {
   }
   if (name) setStoreName(store, name)
   ;(store: any).dispatch = dispatch
-  on(updater, (_, payload) => payload)
+  store.on(updater, (_, payload) => payload)
   function getState() {
     return plainState[1]()
   }
@@ -82,7 +115,7 @@ export function storeFabric<State>(props: {
       visitor: {
         store(action, reduce) {
           const needReduce = typeof reduce === 'function'
-          return watch(data => {
+          return store.watch(data => {
             if (!needReduce) {
               action(data)
             } else {
@@ -93,7 +126,7 @@ export function storeFabric<State>(props: {
           })
         },
         __(action, reduce) {
-          return watch(data => {
+          return store.watch(data => {
             action(data)
           })
         },
@@ -111,23 +144,23 @@ export function storeFabric<State>(props: {
     watch: {
       visitor: {
         event(eventOrFn, fn) {
-          if (typeof fn === 'function') {
-            return eventOrFn.watch(payload =>
-              fn(store.getState(), payload, eventOrFn.getType()),
-            )
-          } else throw new TypeError('watch requires function handler')
+          invariant(typeof fn === 'function', 'watch requires function handler')
+          return eventOrFn.watch(payload =>
+            fn(store.getState(), payload, eventOrFn.getType()),
+          )
         },
         effect(eventOrFn, fn) {
-          if (typeof fn === 'function') {
-            return eventOrFn.watch(payload =>
-              fn(store.getState(), payload, eventOrFn.getType()),
-            )
-          } else throw new TypeError('watch requires function handler')
+          invariant(typeof fn === 'function', 'watch requires function handler')
+          return eventOrFn.watch(payload =>
+            fn(store.getState(), payload, eventOrFn.getType()),
+          )
         },
         __(eventOrFn, fn) {
-          if (typeof eventOrFn === 'function') {
-            return subscribe(eventOrFn)
-          } else throw new TypeError('watch requires function handler')
+          invariant(
+            typeof eventOrFn === 'function',
+            'watch requires function handler',
+          )
+          return subscribe(eventOrFn)
         },
       },
       reader(eventOrFn) {
@@ -142,12 +175,8 @@ export function storeFabric<State>(props: {
     },
   })
 
-  function map<NextState>(
-    fn: (state: State, lastState?: NextState) => NextState,
-    firstState?: NextState,
-  ): Store<NextState> {
-    //prettier-ignore
-    return mapStore/*::<State, NextState>*/(store, fn, firstState)
+  function map(fn, firstState) {
+    return mapStore(store, fn, firstState)
   }
 
   function subscribe(listener) {
@@ -205,10 +234,6 @@ export function storeFabric<State>(props: {
   }
 
   function dispatch(action) {
-    // if (action === undefined || action === null) return action
-    // if (typeof action.type !== 'string' && typeof action.type !== 'number')
-    //  return action
-
     return action
   }
 
@@ -235,7 +260,7 @@ export function storeFabric<State>(props: {
   }
 
   function reset(event) {
-    return on(event, () => defaultState)
+    return store.on(event, () => defaultState)
   }
   function off(event: Event<any>) {
     const currentSubscription = subscribers.get(event)
@@ -245,7 +270,7 @@ export function storeFabric<State>(props: {
   }
   function on(event: any, handler: Function) {
     const e: Event<any> = event
-    off(e)
+    store.off(e)
     const computeCmd = Box.compute((_, newValue, ctx) => {
       const lastState = getState()
       return handler(lastState, newValue, e.getType())
@@ -256,7 +281,7 @@ export function storeFabric<State>(props: {
     })
     const step = Step.single(computeCmd)
     const filtStep = Step.single(filterCmd)
-    const nextSeq = Step.seq([step, filtStep, ...store.graphite.seq.data])
+    const nextSeq = Step.seq([step, filtStep, store.graphite.seq])
     e.graphite.next.data.push(nextSeq)
 
     subscribers.set(e, () => {
@@ -343,11 +368,7 @@ function mapStore<A, B>(
       return isChanged
     }),
   )
-  const nextSeq = Step.seq([
-    computeCmd,
-    filterCmdPost,
-    ...innerStore.graphite.seq.data,
-  ])
+  const nextSeq = Step.seq([computeCmd, filterCmdPost, innerStore.graphite.seq])
   store.graphite.next.data.push(nextSeq)
   const off = () => {
     const i = store.graphite.next.data.indexOf(nextSeq)
