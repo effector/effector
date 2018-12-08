@@ -1,4 +1,6 @@
 //@flow
+//@jsx fx
+import fx from 'effector/stdlib/fx'
 
 import invariant from 'invariant'
 import * as perf from 'effector/perf'
@@ -10,39 +12,11 @@ import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
-import {Step, Cmd} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {createRef, type Ref} from '../ref/createRef'
 import {type CompositeName} from '../compositeName'
-
-// import * as stack from './stack'
-
-const Box = {
-  compute(reduce: (oldValue: any, newValue: any, ctx: any) => any) {
-    return Cmd.compute({reduce})
-  },
-  filter(filt: (value: any, ctx: any) => boolean) {
-    return Cmd.filter({filter: filt})
-  },
-  run(data: {
-    transactionContext?: (data: any) => () => void,
-    runner(ctx: any): any,
-  }) {
-    return Cmd.run(data)
-  },
-  emit(
-    subtype: 'event' | 'effect',
-    fullName: string,
-    runner: (ctx: any) => any,
-  ) {
-    return Cmd.emit({subtype, fullName, runner})
-  },
-  update(store: Ref<any>) {
-    return Cmd.update({store})
-  },
-}
 
 let id = 0
 
@@ -57,28 +31,23 @@ export function storeFabric<State>(props: {
 
   const plainState: Ref<typeof defaultState> = createRef(defaultState)
   const subscribers = new Map()
-
   const def = {}
-  def.seq = Step.seq([
-    //"should change"
-    Step.single(
-      Box.filter(
-        (newValue, ctx) =>
-          newValue !== undefined && newValue !== plainState[1](),
-      ),
-    ),
-    Step.single(Box.update(plainState)),
-    (def.next = Step.multi([])),
-  ])
-  // const prime1 = stack.node.seq(() => {
-  //   stack.leaf(shouldChange)
-  //   stack.leaf(cmd)
-  //   stack.node.par(() => {})
-  // })
-  // const nxt = stack.last(prime1)
-  // console.dir(prime1)
-  // console.dir(nxt)
-  // console.dir(stack.dataset)
+  def.next = <multi />
+  def.seq = (
+    <seq>
+      <single>
+        <filter
+          filter={(newValue, ctx) =>
+            newValue !== undefined && newValue !== plainState[1]()
+          }
+        />
+      </single>
+      <single>
+        <update store={plainState} />
+      </single>
+      {def.next}
+    </seq>
+  )
 
   const updater: any = createEvent(`update ${currentId}`)
 
@@ -190,32 +159,34 @@ export function storeFabric<State>(props: {
     )
     let lastCall = getState()
     let active = true
-    const runCmd = Step.single(
-      Box.run({
-        runner(args) {
-          if (args === lastCall || !active) return
-          lastCall = args
-          try {
-            listener(args)
-            if (__DEV__)
-              perf.endMark(
-                `Call ${getDisplayName(store)} subscribe listener (id: ${
-                  store.id
-                })`,
-                `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
-              )
-          } catch (err) {
-            console.error(err)
-            if (__DEV__)
-              perf.endMark(
-                `Got error on ${getDisplayName(store)} subscribe (id: ${
-                  store.id
-                })`,
-                `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
-              )
-          }
-        },
-      }),
+    const runCmd = (
+      <single>
+        <run
+          runner={args => {
+            if (args === lastCall || !active) return
+            lastCall = args
+            try {
+              listener(args)
+              if (__DEV__)
+                perf.endMark(
+                  `Call ${getDisplayName(store)} subscribe listener (id: ${
+                    store.id
+                  })`,
+                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                )
+            } catch (err) {
+              console.error(err)
+              if (__DEV__)
+                perf.endMark(
+                  `Got error on ${getDisplayName(store)} subscribe (id: ${
+                    store.id
+                  })`,
+                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                )
+            }
+          }}
+        />
+      </single>
     )
     store.graphite.next.data.push(runCmd)
     listener(lastCall)
@@ -270,18 +241,27 @@ export function storeFabric<State>(props: {
   }
   function on(event: any, handler: Function) {
     const e: Event<any> = event
-    store.off(e)
-    const computeCmd = Box.compute((_, newValue, ctx) => {
-      const lastState = getState()
-      return handler(lastState, newValue, e.getType())
-    })
-    const filterCmd = Box.filter((data, ctx: TypeDef<'compute', 'ctx'>) => {
-      const lastState = getState()
-      return data !== lastState && data !== undefined
-    })
-    const step = Step.single(computeCmd)
-    const filtStep = Step.single(filterCmd)
-    const nextSeq = Step.seq([step, filtStep, store.graphite.seq])
+    const nextSeq = (
+      <seq>
+        <single>
+          <compute
+            reduce={(_, newValue, ctx) => {
+              const lastState = getState()
+              return handler(lastState, newValue, e.getType())
+            }}
+          />
+        </single>
+        <single>
+          <filter
+            filter={(data, ctx: TypeDef<'compute', 'ctx'>) => {
+              const lastState = getState()
+              return data !== lastState && data !== undefined
+            }}
+          />
+        </single>
+        {store.graphite.seq}
+      </seq>
+    )
     e.graphite.next.data.push(nextSeq)
 
     subscribers.set(e, () => {
@@ -345,30 +325,38 @@ function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  const computeCmd = Step.single(
-    Box.compute((_, newValue, ctx) => {
-      lastValue = newValue
-      const lastState = innerStore.getState()
-      const result = fn(newValue, lastState)
-      if (__DEV__)
-        perf.endMark(
-          `Map ${getDisplayName(store)} (id: ${store.id})`,
-          `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
-        )
-      return result
-    }),
+  const nextSeq = (
+    <seq>
+      <single>
+        <compute
+          reduce={(_, newValue, ctx) => {
+            lastValue = newValue
+            const lastState = innerStore.getState()
+            const result = fn(newValue, lastState)
+            if (__DEV__)
+              perf.endMark(
+                `Map ${getDisplayName(store)} (id: ${store.id})`,
+                `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+              )
+            return result
+          }}
+        />
+      </single>
+      <single>
+        <filter
+          filter={(result, ctx: TypeDef<'compute', 'ctx'>) => {
+            const lastState = innerStore.getState()
+            const isChanged = result !== lastState && result !== undefined
+            if (isChanged) {
+              lastResult = result
+            }
+            return isChanged
+          }}
+        />
+      </single>
+      {innerStore.graphite.seq}
+    </seq>
   )
-  const filterCmdPost = Step.single(
-    Box.filter((result, ctx: TypeDef<'compute', 'ctx'>) => {
-      const lastState = innerStore.getState()
-      const isChanged = result !== lastState && result !== undefined
-      if (isChanged) {
-        lastResult = result
-      }
-      return isChanged
-    }),
-  )
-  const nextSeq = Step.seq([computeCmd, filterCmdPost, innerStore.graphite.seq])
   store.graphite.next.data.push(nextSeq)
   const off = () => {
     const i = store.graphite.next.data.indexOf(nextSeq)
