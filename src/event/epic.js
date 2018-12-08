@@ -17,7 +17,7 @@ export function epic<T, Payload>(
   const mapped = eventFabric({
     name: `${name}$ ~> *`,
     parent: event.domainName,
-    vertex: event.getNode().createChild(['event', `${name}$ ~> *`]),
+    // vertex: event.getNode().createChild(['event', `${name}$ ~> *`]),
   })
   epic$.observe(e => {
     mapped.create(e, fullName)
