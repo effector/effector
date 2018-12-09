@@ -1,5 +1,4 @@
 //@flow
-import invariant from 'invariant'
 export type TypeDef<+Type, +Group> = {
   +type: Type,
   +group: Group,
