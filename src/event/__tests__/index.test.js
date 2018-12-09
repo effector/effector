@@ -5,7 +5,7 @@ import {createEvent, type Event} from '..'
 
 import {getSpyCalls, spy} from 'effector/fixtures'
 
-import {show} from 'effector/datatype/showstep'
+import {show} from 'effector/fixtures/showstep'
 
 describe('symbol-observable support', () => {
   test('most.from(event) //stream of events', () => {
