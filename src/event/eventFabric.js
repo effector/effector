@@ -22,11 +22,9 @@ import fabric from './concreteFabric'
 export function eventFabric<Payload>({
   name: nameRaw,
   parent,
-}: // vertex,
-{
+}: {
   name?: string,
   parent?: CompositeName,
-  // vertex: Vertex<['event', string]>,
 }): Event<Payload> {
   const id = eventRefcount()
   const name = nameRaw || id
@@ -44,13 +42,7 @@ export function eventFabric<Payload>({
   const instanceAsEvent: Event<Payload> = (instance: any)
   instanceAsEvent.graphite = graphite
 
-  Object.defineProperty((instance: any), 'toString', {
-    configurable: true,
-    value() {
-      return compositeName.fullName
-    },
-  })
-  instance.getType = instance.toString
+  instance.getType = () => compositeName.fullName
   ;(instance: any).create = (payload, fullName) => {
     walkEvent(payload, instanceAsEvent)
     return payload
@@ -67,7 +59,6 @@ export function eventFabric<Payload>({
   instance.domainName = parent
   instance.compositeName = compositeName
   instance.filter = filter
-  // instance.getNode = () => vertex
   function filter<Next>(fn: Payload => Next | void): Event<Next> {
     return filterEvent(instanceAsEvent, fn)
   }
@@ -107,11 +98,9 @@ export function eventFabric<Payload>({
     return watch(payload => observer.next(payload))
   }
   function prepend<Before>(fn: Before => Payload) {
-    // const vert = vertex.createChild(['event', `* → ${name}`])
     const contramapped: Event<Before> = eventFabric({
       name: `* → ${name}`,
       parent,
-      // vertex: vert,
     })
     fabric.prependEvent({
       fn,
@@ -130,11 +119,9 @@ declare function mapEvent<A, B>(
   fn: (_: A) => B,
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
-  // const vertex = event.getNode()
   const mapped = eventFabric({
     name: `${event.shortName} → *`,
     parent: event.domainName,
-    // vertex: vertex.createChild(['event', `${event.shortName} → *`]),
   })
   fabric.mapEvent({
     fn,
@@ -148,11 +135,9 @@ function filterEvent<A, B>(
   event: Event<A> | Effect<A, any, any>,
   fn: A => B | void,
 ): Event<B> {
-  // const vertex = event.getNode()
   const mapped = eventFabric({
     name: `${event.shortName} →? *`,
     parent: event.domainName,
-    // vertex: vertex.createChild(['event', `${event.shortName} →? *`]),
   })
   fabric.filterEvent({
     fn,
@@ -161,7 +146,8 @@ function filterEvent<A, B>(
   })
   return mapped
 }
-export function watchEvent<Payload>(
+
+function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
