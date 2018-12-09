@@ -28,7 +28,7 @@ declare export default function fx(
 ): TypeDef<'compute', 'cmd'>
 declare export default function fx(
   tag: 'emit',
-  props: {subtype: 'event', fullName: string, runner: *},
+  props: {subtype: 'event', fullName: string},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'emit', 'cmd'>
 declare export default function fx(

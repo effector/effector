@@ -280,7 +280,16 @@ test('rfc1 example implementation', async() => {
   expect(fnClick).not.toHaveBeenCalled()
   click()
   click()
-  console.log(store)
+  console.log(
+    JSON.stringify(
+      store,
+      (key, val) => {
+        if (typeof val === 'function') return '() => {}'
+        return val
+      },
+      2,
+    ),
+  )
   expect(fnWait).not.toHaveBeenCalled()
   await new Promise(_ => setTimeout(_, 2200))
   //TODO Should be

@@ -31,9 +31,6 @@ export function eventFabric<Payload>({
   const compositeName = createName(name, parent)
   const graphite = fabric.event({
     fullName,
-    runner(payload: Payload): Payload {
-      return instanceAsEvent.create(payload, fullName)
-    },
   })
 
   const instance = (payload: Payload): Payload =>

@@ -9,12 +9,12 @@ import {
 } from 'effector/stdlib/typedef'
 
 export default {
-  event(args: {fullName: string, runner: Function}): GraphiteMeta {
+  event(args: {fullName: string}): GraphiteMeta {
     const nextSteps = <multi />
     const stepFull = (
       <seq>
         <single>
-          <emit subtype="event" fullName={args.fullName} runner={args.runner} />
+          <emit subtype="event" fullName={args.fullName} />
         </single>
         {nextSteps}
       </seq>
