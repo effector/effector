@@ -14,7 +14,7 @@ module.exports = api => {
     '@babel/plugin-proposal-nullish-coalescing-operator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],
     'macros',
-    'babel-plugin-dev-expression',
+    './src/babel/dev-expression',
     [
       'babel-plugin-module-resolver',
       {
