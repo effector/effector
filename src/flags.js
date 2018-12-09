@@ -5,4 +5,4 @@
 ;(0 - 'prevent flow stale');
 */
 
-export default {}
+export default ({}: {})

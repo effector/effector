@@ -8,21 +8,18 @@ import {createName, type CompositeName} from '../compositeName'
 import {stringRefcount} from '../refcount'
 import {DomainHistory, domainHooks} from './hook'
 
-import {Graph, type Vertex} from 'effector/graphite/tarjan'
-
 const nextId = stringRefcount()
 
 export function domainFabric(
   nameRaw?: string,
   parent?: CompositeName,
   parentHooks?: DomainHooks,
-  graph: Graph<any> = new Graph(),
 ): Domain {
   const id = nextId()
   const name = nameRaw || ''
   const compositeName = createName(name, parent)
   const history = new DomainHistory()
-  const hooks = domainHooks(history, compositeName, graph, parentHooks)
+  const hooks = domainHooks(history, compositeName, parentHooks)
 
   return {
     compositeName,
@@ -47,34 +44,24 @@ export function domainFabric(
       return hooks.domain.watch(hook)
     },
     event<Payload>(name?: string): Event<Payload> {
-      const vertex: Vertex<['event', string]> = graph.addNode([
-        'event',
-        compositeName.fullName,
-      ])
       const result = eventFabric({
         name,
         parent: compositeName,
-        vertex,
       })
       hooks.event(result)
       return result
     },
     effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail> {
-      const vertex: Vertex<['effect', string]> = graph.addNode([
-        'effect',
-        compositeName.fullName,
-      ])
       const result = effectFabric({
         name,
         domainName: compositeName.fullName,
         parent: compositeName,
-        vertex,
       })
       hooks.effect(result)
       return result
     },
     domain(name?: string) {
-      const result = domainFabric(name, compositeName, hooks, graph)
+      const result = domainFabric(name, compositeName, hooks)
       hooks.domain(result)
       return result
     },

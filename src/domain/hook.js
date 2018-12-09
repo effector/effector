@@ -5,7 +5,6 @@ import type {Store} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
-import type {Graph, Vertex} from 'effector/graphite/tarjan'
 export class DomainHistory {
   /*::;+*/ events: Set<Event<any>> = new Set()
   /*::;+*/ effects: Set<Effect<any, any, any>> = new Set()
@@ -16,7 +15,6 @@ export class DomainHistory {
 export function domainHooks(
   history: DomainHistory,
   compositeName: CompositeName,
-  graph: Graph<any>,
   parentHooks?: DomainHooks,
 ) {
   let hooks: {
@@ -28,7 +26,7 @@ export function domainHooks(
   if (parentHooks) {
     hooks = childDomainHooks(parentHooks)
   } else {
-    hooks = singleDomainHooks(compositeName, graph)
+    hooks = singleDomainHooks(compositeName)
   }
   hooks.domain.watch(domain => {
     history.domains.add(domain)
@@ -45,26 +43,21 @@ export function domainHooks(
   return hooks
 }
 
-const singleDomainHooks = (compositeName: CompositeName, graph) => {
+const singleDomainHooks = (compositeName: CompositeName) => {
   const event: Event<Event<any>> = eventFabric({
     name: `${compositeName.fullName} event hook`,
     parent: compositeName,
-    vertex: graph.addNode(['event', `${compositeName.fullName} event hook`]),
   })
   const effect: Event<Effect<any, any, any>> = eventFabric({
     name: `${compositeName.fullName} effect hook`,
     parent: compositeName,
-    vertex: graph.addNode(['event', `${compositeName.fullName} effect hook`]),
   })
   const store: Event<Store<any>> = eventFabric({
     name: `${compositeName.fullName} store hook`,
     parent: compositeName,
-    vertex: graph.addNode(['event', `${compositeName.fullName} store hook`]),
   })
   const domain: Event<Domain> = eventFabric({
-    name: graph.addNode(['event', `${compositeName.fullName} domain hook`]),
     parent: compositeName,
-    vertex: graph.addNode(['event', `${compositeName.fullName} domain hook`]),
   })
   return {event, effect, store, domain}
 }
