@@ -1,7 +1,5 @@
 //@flow
 
-import type {Stream} from 'most'
-
 export type Subscriber<A> = {
  next(value: A): void,
  // error(err: Error): void,
@@ -24,23 +22,29 @@ declare export class Event<E> {
  +to: (
   & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => Subscription)
   & ((store: Store<E>, _: void) => Subscription)
+  );
+  getType(): string;
+ }
+
+declare export class Future<Params, Done, Fail> extends Promise<Done> {
+ /*::+*/ args: Params;
+ done(): Promise<{params: Params, result: Done}>;
+ fail(): Promise<{params: Params, error: Fail}>;
+ anyway(): Promise<void>;
+ promise(): Promise<Done>;
+ cache(): Done | void;
+ /*::+*/ then: (
+  & (() => Promise<Done>)
+  & (<U>(onFulfill: (value: Done) => U) => Promise<U>)
  );
- getType(): string;
- epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
 }
 
 declare export class Effect<Params, Done, Fail = Error> {
- (
-  payload: Params,
- ): {
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<Done>,
- };
+ (payload: Params): Future<Params, Done, Fail>;
  /*::+*/ done: Event<{params: Params, result: Done}>;
  /*::+*/ fail: Event<{params: Params, error: Fail}>;
  /*::+*/ use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void,
+  (asyncFunction: ((params: Params) => (Promise<Done> | Done))): void,
   getCurrent(): (params: Params) => Promise<Done>,
  };
  watch(watcher: (payload: Params) => any): Subscription;
@@ -55,23 +59,24 @@ declare export class Effect<Params, Done, Fail = Error> {
   ) => Subscription)
   & ((store: Store<Params>, _: void) => Subscription)
  );
- epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
  getType(): string;
 }
 
 declare export class Store<State> {
  reset(event: Event<any> | Effect<any, any, any>): this;
- dispatch(action: any): any;
  getState(): State;
  withProps<Props, R>(
   fn: (state: State, props: Props) => R,
  ): (props: Props) => R;
- map<T>(fn: (_: State) => T): Store<T>;
+ /*::+*/ map: (
+  & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
+  & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
+ );
  on<E>(
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => State | void,
  ): this;
- replaceReducer(_: any): any;
+ off(event: Event<any> | Effect<any, any, any>): void,
  subscribe(listner: any): Subscription;
  /*::+*/ watch: (<E>(
   watcher: (state: State, payload: E, type: string) => any,
@@ -82,11 +87,7 @@ declare export class Store<State> {
    watcher: (state: State, payload: E, type: string) => any,
   ) => Subscription);
  thru<U>(fn: (store: Store<State>) => U): U;
- epic<T, S>(
-  event: Event<T> | Effect<T, any, any>,
-  fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
- ): void;
- displayName?: string;
+ shortName: string;
 }
 
 declare export class Domain {
@@ -108,6 +109,7 @@ declare export function createEffect<Params, Done, Fail>(
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
+declare export function setStoreName<State>(store: Store<State>, name: string): void
 
 declare export function createStoreObject<
  State: {-[key: string]: Store<any> | any},
@@ -133,7 +135,40 @@ declare export function extract<
   <S>(field: Store<S> | S) => S,
  >,
 >
+declare export function createApi<
+ S,
+ Api: {[name: string]: (store: S, e: any) => S},
+>(
+ store: Store<S>,
+ api: Api,
+): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
+declare export function restoreObject<State: {-[key: string]: Store<any> | any}>(
+ obj: State,
+): $ObjMap<
+ State,
+ //prettier-ignore
+ <S>(field: Store<S> | S) => Store<S>,
+>
 
+declare export function restoreEffect<Done>(
+ event: Effect<any, Done, any>,
+ defaultState: Done,
+): Store<Done>
+
+declare export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E>
+
+declare export function restore<Done>(
+ event: Effect<any, Done, any>,
+ defaultState: Done,
+): Store<Done>
+declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+declare export function restore<State: {+[key: string]: Store<any> | any}>(
+ obj: State,
+): $ObjMap<
+ State,
+ //prettier-ignore
+ <S>(field: Store<S> | S) => Store<S>,
+>
 declare export function createDomain(domainName?: string): Domain
 declare export function createWrappedDomain(
  watcher: Function,

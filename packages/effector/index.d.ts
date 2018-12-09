@@ -1,6 +1,4 @@
 
-import {Stream} from 'most'
-
 export type Subscriber<A> = {
  next(value: A): void,
  // error(err: Error): void,
@@ -22,17 +20,19 @@ export interface Event<E> {
  to(store: Store<E>, _: void): Subscription;
  to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): Subscription;
  getType(): string;
- epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>;
+}
+
+export interface Future<Params, Done, Fail> extends Promise<Done> {
+ args: Params;
+ done(): Promise<{params: Params, result: Done}>;
+ fail(): Promise<{params: Params, error: Fail}>;
+ anyway(): Promise<void>;
+ promise(): Promise<Done>;
+ cache(): Done | void;
 }
 
 export interface Effect<Params, Done, Fail = Error> {
- (
-  payload: Params,
- ): {
-  done(): Promise<{params: Params, result: Done}>,
-  fail(): Promise<{params: Params, error: Fail}>,
-  promise(): Promise<Done>,
- };
+ (payload: Params): Future<Params, Done, Fail>;
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {
@@ -45,23 +45,22 @@ export interface Effect<Params, Done, Fail = Error> {
  subscribe(subscriber: Subscriber<Params>): Subscription;
  to(store: Store<Params>, _: void): Subscription;
  to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): Subscription;
- epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>;
  getType(): string;
 }
 
 export class Store<State> {
  reset(event: Event<any> | Effect<any, any, any>): this;
- dispatch(action: any): any;
  getState(): State;
  withProps<Props, R>(
   fn: (state: State, props: Props) => R,
  ): (props: Props) => R;
- map<T>(fn: (_: State) => T): Store<T>;
+ map<T>(fn: (_: State, lastState?: T) => T): Store<T>;
+ map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
  on<E>(
   event: Event<E> | Effect<E, any, any>,
   handler: (state: State, payload: E) => (State | void),
  ): this;
- replaceReducer(_: any): any;
+ off(event: Event<any> | Effect<any, any, any>): void;
  subscribe(listner: any): Subscription;
  watch<E>(
   watcher: (state: State, payload: E, type: string) => any,
@@ -71,11 +70,7 @@ export class Store<State> {
   watcher: (state: State, payload: E, type: string) => any,
  ): Subscription;
  thru<U>(fn: (store: Store<State>) => U): U;
- epic<T, S>(
-  event: Event<T> | Effect<T, any, any>,
-  fn: (event$: Stream<T>, store$: Stream<State>) => Stream<S>,
- ): void;
- displayName?: string;
+ shortName: string;
 }
 
 export class Domain {
@@ -97,12 +92,20 @@ export function createEffect<Params, Done, Fail>(
 ): Effect<Params, Done, Fail>
 
 export function createStore<State>(defaultState: State): Store<State>
+export function setStoreName<State>(store: Store<State>, name: string): void
 
 export function createStoreObject<State>(
  defaultState: State,
 ): Store<{
   [K in keyof State]: State[K] extends Store<infer U> ? U : any
 }>
+export function createApi<
+ S,
+ Api extends {[name: string]: (store: S, e: any) => S}
+>(
+ store: Store<S>,
+ api: Api,
+): Api //TODO
 
 export function extract<
  State,

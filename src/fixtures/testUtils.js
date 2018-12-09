@@ -4,12 +4,12 @@ import {promisify} from 'util'
 
 export const delay = promisify(setTimeout)
 export let spy: Function = (...args: any[]): any => {
- throw new Error('jest should replace this with spy function')
+  throw new Error('jest should replace this with spy function')
 }
 export let getSpyCalls: () => Array<Array<any>> = (): any => {
- throw new Error('jest should replace this with spy function')
+  throw new Error('jest should replace this with spy function')
 }
 beforeEach(() => {
- spy = jest.fn()
- getSpyCalls = () => spy.mock.calls
+  spy = jest.fn()
+  getSpyCalls = () => spy.mock.calls
 })

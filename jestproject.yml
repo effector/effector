@@ -1,21 +1,28 @@
-
 tests:
-- effector
-- effect
-- event
-- store
-- domain
-- kind
-- redux
-- graphite
-- [react, testEnvironment: jsdom]
+  - effector
+  - effect
+  - event
+  - store
+  - domain
+  - redux
+  - kind
+  - graphite
+  - stdlib
+  - [
+      react,
+      {
+        testEnvironment: jsdom,
+        setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+      },
+    ]
 include:
- effector: true
- effect: true
- event: true
- store: true
- domain: true
- kind: true
- redux: false
- graphite: true
- react: true
+  effector: true
+  effect: true
+  event: true
+  store: true
+  domain: true
+  redux: false
+  kind: false
+  graphite: true
+  react: true
+  stdlib: true

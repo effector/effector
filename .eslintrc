@@ -2,7 +2,7 @@ parser: babel-eslint
 parserOptions:
   ecmaVersion: 2018
 extends:
-  - 'plugin:flowtype/recommended'
+  # - 'plugin:flowtype/recommended'
   - 'plugin:react/recommended'
 plugins:
   - babel
@@ -12,6 +12,9 @@ plugins:
 settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
+  react:
+    version: 16.6
+    flowVersion: 0.87
 globals:
   __DEV__: true
   preval: true
@@ -23,15 +26,17 @@ env:
   jest: true
   jasmine: true
 rules:
-  flowtype/no-weak-types: 'off'
-  flowtype/generic-spacing: 'off'
-  flowtype/space-after-type-colon: 'off'
+  # flowtype/no-weak-types: 'off'
+  # flowtype/generic-spacing: 'off'
+  # flowtype/space-after-type-colon: 'off'
+  react/react-in-jsx-scope: 'off'
+  react/no-children-prop: 'off'
   react/prop-types: 'off'
   react/display-name: 'off'
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn
-  prefer-template: warn
+  prefer-template: 'off'
   no-nested-ternary: warn
   no-unneeded-ternary: warn
   no-underscore-dangle: off
@@ -63,9 +68,8 @@ rules:
       avoidEscape: true
   max-len:
     - error
-    - code: 100
-      tabWidth: 1
-      comments: 220
+    - code: 80
+      tabWidth: 2
   key-spacing:
     - warn
     - beforeColon: false
@@ -81,29 +85,14 @@ rules:
   object-curly-spacing:
     - warn
     - never
-    - arraysInObjects: false
-      objectsInObjects: false
   semi-spacing:
     - error
     - before: false
       after: true
   indent:
-    - 1
-    - 1
-    - VariableDeclarator:
-        var: 2
-        let: 2
-        const: 3
-      FunctionDeclaration:
-        parameters: first
-      FunctionExpression:
-        parameters: first
-      MemberExpression: 1
-      SwitchCase: 1
-      CallExpression:
-        arguments: first
-      ArrayExpression: 1
-      ObjectExpression: first
+    - 2
+    - 2
+    - SwitchCase: 1
   operator-linebreak:
     - warn
     - after
@@ -116,10 +105,8 @@ rules:
         '&&': before
   newline-per-chained-call:
     - error
-    - ignoreChainWithDepth: 2
   keyword-spacing:
     - error
-    - before: true
   space-unary-ops:
     - error
     - words: true
@@ -161,7 +148,7 @@ rules:
   no-new-func: error
   prefer-rest-params: error
   prefer-spread: error
-  no-extra-semi: error
+  no-extra-semi: off
   semi:
     - error
     - never

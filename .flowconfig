@@ -3,18 +3,12 @@ all=warn
 untyped-type-import=error
 unclear-type=off
 
+[libs]
 
-💩 [include]
-💩 ./packages/actor/src/alt/*
-💩 ./packages/atom/src/*
-💩 ./packages/avar/src/*
-💩 ./packages/builder/src/*
-💩 ./packages/effector/src/*
-💩 ./packages/emission/src/*
-💩 ./packages/id/src/*
-💩 ./packages/lazy/src/*
-💩 ./packages/store/src/*
-💩 ./packages/warning/src/*
+[version]
+>=0.87.0
+
+[include]
 
 [options]
 all=false
@@ -25,7 +19,6 @@ esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
-experimental.const_params=true
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_comment=\\(.\\|\n\\)*\\$off
 suppress_comment=\\(.\\|\n\\)*\\$todo
@@ -40,14 +33,20 @@ module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
-module.name_mapper='^effector$' -> '<PROJECT_ROOT>/src'
-module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/src/react'
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
+module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
+module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
 [ignore]
 <PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
 <PROJECT_ROOT>/.vscode/*
+<PROJECT_ROOT>/examples/*
+<PROJECT_ROOT>/src/graphite/tarjan/*
+<PROJECT_ROOT>/src/DataStructures/*
+<PROJECT_ROOT>/src/redux/*
+<PROJECT_ROOT>/scripts/*
 💩 🙈
 💩 ignored total:
 💩

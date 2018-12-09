@@ -1,38 +1,10 @@
 //@flow
 
-import * as React from 'react'
-import {createStoreConsumer} from './createStoreConsumer'
-import {unstable_createStoreProvider} from './createStoreProvider'
+export {createStoreConsumer} from './createStoreConsumer'
+export {unstable_createStoreProvider} from './createStoreProvider'
 
-import type {Store} from 'effector'
-
-export function createReactState<
- State: Object,
- Com: React.ComponentType<*>,
->(
- store: Store<State>,
- Component: Com,
-): React.ComponentType<$Exact<$Diff<React.ElementConfig<Com>, State>>> {
- const Store = createStoreConsumer(store)
- const ConnectedComponent = props => (
-  <Store>{state => <Component {...props} {...state} />}</Store>
- )
- const wrappedComponentName = Component.displayName
-  || Component.name
-  || 'Unknown'
- ConnectedComponent.displayName = `Connect(${wrappedComponentName})`
- return ConnectedComponent
-}
-
-export function connect<State: Object, Com: React.ComponentType<*>>(
- Component: Com,
-): (
- store: Store<State>,
-) => React.ComponentType<$Exact<$Diff<React.ElementConfig<Com>, State>>> {
- return store => createReactState(store, Component)
-}
-
-export {
- createStoreConsumer,
- unstable_createStoreProvider
-}
+export {createContextComponent} from './createContextComponent'
+export {createComponent} from './createComponent'
+export {connect} from './connect'
+export {createReactState} from './createReactState'
+export {createGate} from './createGate'

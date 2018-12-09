@@ -17,7 +17,6 @@ cldr
 coverage/
 .nyc_output
 dist/**
-**/docs/**
 logs/**
 typings.json
 typings/**
@@ -27,6 +26,7 @@ test/storage.json
 
 npm/effector/**
 npm/effector-react/**
+npm/effector-vue/**
 .merlin
 .bsb.lock
 npm-debug.log

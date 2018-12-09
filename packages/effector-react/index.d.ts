@@ -11,6 +11,30 @@ export type StoreProvider<State> = React.ComponentType<{
  children?: React.ReactNode,
 }>
 
+export function createComponent<Props, State>(
+ store: Store<State>,
+ renderProp: (props: Props, state: State) => React.Node,
+): React.ComponentType<Props>
+export function createContextComponent<Props, State, Context>(
+ store: Store<State>,
+ context: React.Context<Context>,
+ renderProp: (props: Props, state: State, context: Context) => React.ReactNode,
+): React.ComponentType<Props>
+
+export type Gate<Props = {}> = React.ComponentType<Props> & {
+ isOpen: boolean,
+ isTerminated: boolean,
+ open: Event<void>,
+ close: Event<void>,
+ status: Store<boolean>,
+ destructor: Event<void>,
+ current: Props,
+ state: Store<Props>,
+ childGate<Next>(childName?: string): Gate<Next>,
+}
+
+export function createGate<Props>(name?: string): Gate<Props>
+
 export function connect<State extends Object, Com extends React.ComponentType<any>>(
  Component: Com,
 ): (

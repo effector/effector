@@ -21,7 +21,7 @@ function publish() {
    shell.exit(1)
    return
   }
-  console.log(child.stdout)
+  // console.log(child.stdout)
  }
 }
 
