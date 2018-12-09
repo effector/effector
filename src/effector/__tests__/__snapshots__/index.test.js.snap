@@ -7,7 +7,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -183,7 +182,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -348,7 +346,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -378,7 +375,6 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
-                      "runner": [Function],
                       "subtype": "event",
                     },
                     "group": "cmd",
