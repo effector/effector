@@ -18,16 +18,9 @@ export const Cmd = typeDef(('cmd': 'cmd'), {
 })
 
 export const Ctx = typeDef(('ctx': 'ctx'), {
-  compute: (args, result, error, isError, isNone, isChanged) => ({
-    args,
-    result,
-    error,
-    isError,
-    isNone,
-    isChanged,
-  }),
-  emit: (eventName, payload) => ({eventName, payload}),
-  run: (args, parentContext) => ({args, parentContext}),
-  filter: (value, isChanged) => ({value, isChanged}),
-  update: value => ({value}),
+  compute: type(),
+  emit: type(),
+  run: type(),
+  filter: type(),
+  update: type(),
 })

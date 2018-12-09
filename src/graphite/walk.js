@@ -6,7 +6,10 @@ import type {TypeDef} from 'effector/stdlib/typedef'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
-  const eventCtx = Ctx.emit(event.getType(), payload)
+  const eventCtx = Ctx.emit({
+    eventName: event.getType(),
+    payload,
+  })
   const transactions: Array<() => void> = []
   stepVisitor.seq(steps, eventCtx, transactions)
   for (let i = 0; i < transactions.length; i++) {
@@ -82,7 +85,10 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    return Ctx.emit(single.data.fullName, arg)
+    return Ctx.emit({
+      eventName: single.data.fullName,
+      payload: arg,
+    })
   },
   filter(
     arg: any,
@@ -92,7 +98,10 @@ const cmdVisitor = {
   ) {
     try {
       const isChanged = single.data.filter(arg, ctx)
-      return Ctx.filter(arg, isChanged)
+      return Ctx.filter({
+        value: arg,
+        isChanged,
+      })
     } catch (err) {
       console.error(err)
     }
@@ -110,7 +119,10 @@ const cmdVisitor = {
     } catch (err) {
       console.error(err)
     }
-    return Ctx.run([arg], ctx)
+    return Ctx.run({
+      args: [arg],
+      parentContext: ctx,
+    })
   },
   update(
     arg: any,
@@ -118,7 +130,7 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    const newCtx = Ctx.update(arg)
+    const newCtx = Ctx.update({value: arg})
     single.data.store[2](arg)
     return newCtx
   },
@@ -128,14 +140,14 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    const newCtx = Ctx.compute(
-      [undefined, arg, ctx],
-      null,
-      null,
-      false,
-      true,
-      true,
-    )
+    const newCtx = Ctx.compute({
+      args: [undefined, arg, ctx],
+      result: null,
+      error: null,
+      isError: false,
+      isNone: true,
+      isChanged: true,
+    })
     try {
       const result = single.data.reduce(undefined, arg, newCtx)
       newCtx.data.result = result
