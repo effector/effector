@@ -4,13 +4,11 @@ import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {kind} from 'effector/stdlib/kind'
 import type {Store} from 'effector/store'
 import type {CompositeName} from '../compositeName'
-import type {Vertex} from 'effector/graphite/tarjan'
 
 export type Event<E> = {
   (payload: E): E,
   /*::+*/ id: string,
   getType(): string,
-  getNode(): Vertex<['event', string]>,
   create(payload: E, type: string): E,
   watch(watcher: (payload: E) => any): Subscription,
   map<T>(fn: (_: E) => T): Event<T>,
