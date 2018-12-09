@@ -3,21 +3,12 @@ all=warn
 untyped-type-import=error
 unclear-type=off
 
+[libs]
+
 [version]
 >=0.87.0
 
 [include]
-./scripts/prebuild/*
-💩 ./packages/actor/src/alt/*
-💩 ./packages/atom/src/*
-💩 ./packages/avar/src/*
-💩 ./packages/builder/src/*
-💩 ./packages/effector/src/*
-💩 ./packages/emission/src/*
-💩 ./packages/id/src/*
-💩 ./packages/lazy/src/*
-💩 ./packages/store/src/*
-💩 ./packages/warning/src/*
 
 [options]
 all=false
@@ -51,6 +42,11 @@ module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 <PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
 <PROJECT_ROOT>/.vscode/*
+<PROJECT_ROOT>/examples/*
+<PROJECT_ROOT>/src/graphite/tarjan/*
+<PROJECT_ROOT>/src/DataStructures/*
+<PROJECT_ROOT>/src/redux/*
+<PROJECT_ROOT>/scripts/*
 💩 🙈
 💩 ignored total:
 💩
