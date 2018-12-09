@@ -1,9 +1,8 @@
 //@flow
 //@jsx fx
-
-// import invariant from 'invariant'
-// import warning from 'warning'
 import fx from 'effector/stdlib/fx'
+
+import {pushNext} from 'effector/stdlib/typedef'
 import $$observable from 'symbol-observable'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
@@ -156,7 +155,7 @@ function watchEvent<Payload>(
       <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
     </single>
   )
-  event.graphite.next.data.push(runCmd)
+  pushNext(runCmd, event.graphite.next)
   const unsubscribe = () => {
     const i = event.graphite.next.data.indexOf(runCmd)
     if (i === -1) return
