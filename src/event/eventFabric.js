@@ -13,7 +13,7 @@ import {Kind, type kind} from 'effector/stdlib/kind'
 import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 // import type {TypeDef} from 'effector/stdlib/typedef'
-import {walkEvent, seq} from 'effector/graphite'
+import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
 
@@ -151,26 +151,11 @@ function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  const singleCmd = (
+  const runCmd = (
     <single>
       <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
     </single>
   )
-  const sq = seq[1]()
-  let runCmd
-  let isWrited = false
-  if (sq !== null) {
-    if (sq.data.length > 0) {
-      const last = sq.data[sq.data.length - 1]
-      if (last.type === ('multi': 'multi')) {
-        last.data.push(singleCmd)
-      } else {
-        sq.data.push(singleCmd)
-      }
-      isWrited = true
-    }
-    runCmd = isWrited ? sq : <seq children={sq.data.concat([singleCmd])} />
-  } else runCmd = singleCmd
   event.graphite.next.data.push(runCmd)
   const unsubscribe = () => {
     const i = event.graphite.next.data.indexOf(runCmd)
