@@ -1,6 +1,7 @@
 //@flow
 import type {Subscription} from '../effector/index.h'
 import type {GraphiteMeta} from 'effector/stdlib/typedef'
+import type {kind} from 'effector/stdlib/kind'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
@@ -36,6 +37,7 @@ export type Store<State> = {
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription,
+  +kind: kind,
   shortName: string,
   domainName?: CompositeName,
   graphite: GraphiteMeta,

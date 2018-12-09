@@ -1,7 +1,9 @@
 //@flow
+//@jsx fx
 
 // import invariant from 'invariant'
 // import warning from 'warning'
+import fx from 'effector/stdlib/fx'
 import $$observable from 'symbol-observable'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
@@ -10,10 +12,8 @@ import type {Effect} from 'effector/effect'
 import {Kind, type kind} from 'effector/stdlib/kind'
 import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
-import {Step, Cmd} from 'effector/graphite/typedef'
 // import type {TypeDef} from 'effector/stdlib/typedef'
 import {walkEvent, seq} from 'effector/graphite'
-import type {Vertex} from 'effector/graphite/tarjan'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
 
@@ -22,11 +22,11 @@ import fabric from './concreteFabric'
 export function eventFabric<Payload>({
   name: nameRaw,
   parent,
-  vertex,
-}: {
+}: // vertex,
+{
   name?: string,
   parent?: CompositeName,
-  vertex: Vertex<['event', string]>,
+  // vertex: Vertex<['event', string]>,
 }): Event<Payload> {
   const id = eventRefcount()
   const name = nameRaw || id
@@ -67,7 +67,7 @@ export function eventFabric<Payload>({
   instance.domainName = parent
   instance.compositeName = compositeName
   instance.filter = filter
-  instance.getNode = () => vertex
+  // instance.getNode = () => vertex
   function filter<Next>(fn: Payload => Next | void): Event<Next> {
     return filterEvent(instanceAsEvent, fn)
   }
@@ -107,11 +107,11 @@ export function eventFabric<Payload>({
     return watch(payload => observer.next(payload))
   }
   function prepend<Before>(fn: Before => Payload) {
-    const vert = vertex.createChild(['event', `* → ${name}`])
+    // const vert = vertex.createChild(['event', `* → ${name}`])
     const contramapped: Event<Before> = eventFabric({
       name: `* → ${name}`,
       parent,
-      vertex: vert,
+      // vertex: vert,
     })
     fabric.prependEvent({
       fn,
@@ -130,11 +130,11 @@ declare function mapEvent<A, B>(
   fn: (_: A) => B,
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
-  const vertex = event.getNode()
+  // const vertex = event.getNode()
   const mapped = eventFabric({
     name: `${event.shortName} → *`,
     parent: event.domainName,
-    vertex: vertex.createChild(['event', `${event.shortName} → *`]),
+    // vertex: vertex.createChild(['event', `${event.shortName} → *`]),
   })
   fabric.mapEvent({
     fn,
@@ -148,11 +148,11 @@ function filterEvent<A, B>(
   event: Event<A> | Effect<A, any, any>,
   fn: A => B | void,
 ): Event<B> {
-  const vertex = event.getNode()
+  // const vertex = event.getNode()
   const mapped = eventFabric({
     name: `${event.shortName} →? *`,
     parent: event.domainName,
-    vertex: vertex.createChild(['event', `${event.shortName} →? *`]),
+    // vertex: vertex.createChild(['event', `${event.shortName} →? *`]),
   })
   fabric.filterEvent({
     fn,
@@ -165,12 +165,10 @@ export function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  const singleCmd = Step.single(
-    Cmd.run({
-      runner(newValue: Payload) {
-        return watcher(newValue, event.getType())
-      },
-    }),
+  const singleCmd = (
+    <single>
+      <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
+    </single>
   )
   const sq = seq[1]()
   let runCmd
@@ -185,7 +183,7 @@ export function watchEvent<Payload>(
       }
       isWrited = true
     }
-    runCmd = isWrited ? sq : Step.seq(sq.data.concat([singleCmd]))
+    runCmd = isWrited ? sq : <seq children={sq.data.concat([singleCmd])} />
   } else runCmd = singleCmd
   event.graphite.next.data.push(runCmd)
   const unsubscribe = () => {

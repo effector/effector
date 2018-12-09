@@ -29,6 +29,8 @@ rules:
   # flowtype/no-weak-types: 'off'
   # flowtype/generic-spacing: 'off'
   # flowtype/space-after-type-colon: 'off'
+  react/react-in-jsx-scope: 'off'
+  react/no-children-prop: 'off'
   react/prop-types: 'off'
   react/display-name: 'off'
   no-console: 'off'

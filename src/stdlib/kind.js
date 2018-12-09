@@ -1,7 +1,7 @@
 //@flow
 
 //prettier-ignore
-export opaque type kind =
+export opaque type kind: string =
   | 'none'
   | 'store'
   | 'event'
