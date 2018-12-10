@@ -57,12 +57,10 @@ export function storeFabric<State>(props: {
     id: currentId,
     shortName: currentId,
     domainName: parent,
-    withProps,
     setState,
     map,
     on,
     off,
-    to,
     watch,
     thru,
     subscribe,
@@ -79,36 +77,6 @@ export function storeFabric<State>(props: {
   }
 
   const visitors = makeVisitorRecordMap({
-    to: {
-      visitor: {
-        store(action, reduce) {
-          const needReduce = typeof reduce === 'function'
-          return store.watch(data => {
-            if (!needReduce) {
-              action(data)
-            } else {
-              const lastState = action.getState()
-              const reduced = reduce(lastState, data)
-              if (lastState !== reduced) action.setState(reduced)
-            }
-          })
-        },
-        __(action, reduce) {
-          return store.watch(data => {
-            action(data)
-          })
-        },
-      },
-      reader(eventOrFn) {
-        if (typeof eventOrFn === 'function') {
-          if (typeof eventOrFn.kind !== 'undefined')
-            return ((eventOrFn.kind: any): kind)
-        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
-          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
-        }
-      },
-      writer: (handler, action, reduce) => handler(action, reduce),
-    },
     watch: {
       visitor: {
         event(eventOrFn, fn) {
@@ -270,13 +238,6 @@ export function storeFabric<State>(props: {
     return store
   }
 
-  function withProps(fn: Function) {
-    return props => fn(getState(), props)
-  }
-
-  function to(action: any, reduce) {
-    return visitors.to(action, reduce)
-  }
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
     return visitors.watch(eventOrFn, fn)
   }
