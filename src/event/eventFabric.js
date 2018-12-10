@@ -9,7 +9,7 @@ import type {Event} from './index.h'
 import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
 import {Kind, type kind} from 'effector/stdlib/kind'
-import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
+// import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 // import type {TypeDef} from 'effector/stdlib/typedef'
 import {walkEvent} from 'effector/graphite'
@@ -50,7 +50,6 @@ export function eventFabric<Payload>({
   instance.map = map
   instance.prepend = prepend
   instance.subscribe = subscribe
-  instance.to = to
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
@@ -61,27 +60,6 @@ export function eventFabric<Payload>({
 
   function map<Next>(fn: Payload => Next): Event<Next> {
     return mapEvent(instanceAsEvent, fn)
-  }
-  const visitors = makeVisitorRecordMap({
-    to: {
-      visitor: {
-        store: (target, handler) =>
-          watch(payload => target.setState(payload, handler)),
-        event: (target, handler) => watch(target.create),
-        effect: (target, handler) => watch(target.create),
-        none(target, handler) {
-          throw new TypeError('Unsupported kind')
-        },
-      },
-      reader: target => ((target.kind: any): kind),
-      writer: (handler, target, handlerFn) => handler(target, handlerFn),
-    },
-  })
-  function to(
-    target: Store<any> & Event<any> & Effect<any, any, any>,
-    handler?: Function,
-  ): Subscription {
-    return visitors.to(target, handler)
   }
 
   function watch(

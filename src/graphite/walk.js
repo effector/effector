@@ -10,8 +10,12 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
     eventName: event.getType(),
     payload,
   })
+  walkNode(steps, eventCtx)
+}
+
+export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const transactions: Array<() => void> = []
-  stepVisitor.seq(steps, eventCtx, transactions)
+  stepVisitor.seq(seq, ctx, transactions)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
@@ -29,9 +33,14 @@ const stepVisitor = {
     const arg = stepArgVisitor[ctx.type](ctx.data)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
     const result = cmdVisitor[single.type](arg, single, ctx, transactions)
-    if (!result) return
-    if (result.type === ('run': 'run')) return
-    if (result.type === ('filter': 'filter') && !result.data.isChanged) return
+    if (!result) {
+      // console.warn('step, arg', step, arg)
+      return
+    }
+    if (result.type === ('run': 'run')) {
+      return
+    }
+    if (result?.type === ('filter': 'filter') && !result.data.isChanged) return
     return (result: any)
   },
   multi(step, currentCtx, transactions) {
