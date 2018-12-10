@@ -16,7 +16,7 @@ import {connect} from '..'
 test('connect api', () => {
   const store = createStore('foo')
   const changeText = createEvent('change text')
-  changeText.to(store)
+  store.on(changeText, (_, e) => e)
 
   class Display extends React.Component<{
     text: string,
@@ -31,9 +31,7 @@ test('connect api', () => {
       )
     }
   }
-  const ConnectedDisplay = store
-    .map(text => ({text}))
-    .thru((connect(Display): any))
+  const ConnectedDisplay = (connect(Display): any)(store.map(text => ({text})))
 
   const tree = mount(<ConnectedDisplay count={1} />)
   expect(tree.text()).toMatchSnapshot()
