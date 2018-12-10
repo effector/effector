@@ -2,11 +2,13 @@
 import type {Subscription, Subscriber} from '../effector/index.h'
 import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {kind} from 'effector/stdlib/kind'
-import type {Store} from 'effector/store'
+// import type {Store} from 'effector/store'
 import type {CompositeName} from '../compositeName'
 
 export type Event<E> = {
-  (payload: E): E,
+  /*::
+  [[call]](payload: E): E,
+  */
   /*::+*/ id: string,
   getType(): string,
   create(payload: E, type: string): E,
@@ -16,10 +18,11 @@ export type Event<E> = {
   prepend<Before>(fn: (_: Before) => E): Event<Before>,
   subscribe(subscriber: Subscriber<E>): Subscription,
   //prettier-ignore
-  +to: (
-  & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => Subscription)
-  & ((store: Store<E>, _: void) => Subscription)
- ),
+  //   +to: (
+  //   & (<T>(store: Store<T>,
+  // reducer: (state: T, payload: E) => T) => Subscription)
+  //   & ((store: Store<E>, _: void) => Subscription)
+  //  ),
   /*::+*/ kind: kind,
   // epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
   getType(): string,
