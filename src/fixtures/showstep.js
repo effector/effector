@@ -1,28 +1,22 @@
 //@flow
-
-import type {Step} from './stept'
-import type {Cmd} from './cmdt'
-
-const SINGLE = 'single'
-const MULTI = 'multi'
-const SEQ = 'seq'
+import type {TypeDef} from 'effector/stdlib/typedef'
 
 export function show(
-  value: Step,
-  showCmd: Cmd => string = _ =>
+  value: TypeDef<*, 'step'>,
+  showCmd: (TypeDef<*, 'cmd'>) => string = _ =>
     `${_.type} {${JSON.stringify(_.data, null, 2)}}`,
 ): string {
   switch (value.type) {
-    case SINGLE:
+    case 'single':
       return showCmd(value.data)
-    case MULTI: {
+    case 'multi': {
       if (value.data.length === 0) return '[(empty list)]'
       const inner = [...value.data]
         .map(e => move1(`  *  ${move2(show(e, showCmd))}`))
         .join(`,\n`)
       return `[\n${inner}\n]`
     }
-    case SEQ: {
+    case 'seq': {
       if (value.data.length === 0) return 'Seq []'
       const inner = value.data
         .map((e, n) => move1(`  ${n + 1}. ${move2(show(e, showCmd))}`))

@@ -7,7 +7,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -59,7 +58,7 @@ Object {
                   "data": Object {
                     "data": Object {
                       "store": Array [
-                        3,
+                        1,
                         [Function],
                         [Function],
                         [Function],
@@ -116,7 +115,7 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "store": Array [
-                                    4,
+                                    2,
                                     [Function],
                                     [Function],
                                     [Function],
@@ -183,7 +182,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -235,7 +233,7 @@ Object {
                   "data": Object {
                     "data": Object {
                       "store": Array [
-                        3,
+                        1,
                         [Function],
                         [Function],
                         [Function],
@@ -292,7 +290,7 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "store": Array [
-                                    4,
+                                    2,
                                     [Function],
                                     [Function],
                                     [Function],
@@ -348,7 +346,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
-          "runner": [Function],
           "subtype": "event",
         },
         "group": "cmd",
@@ -378,7 +375,6 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
-                      "runner": [Function],
                       "subtype": "event",
                     },
                     "group": "cmd",
@@ -430,7 +426,7 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "store": Array [
-                                    3,
+                                    1,
                                     [Function],
                                     [Function],
                                     [Function],
@@ -487,7 +483,7 @@ Object {
                                           "data": Object {
                                             "data": Object {
                                               "store": Array [
-                                                4,
+                                                2,
                                                 [Function],
                                                 [Function],
                                                 [Function],
@@ -573,7 +569,7 @@ exports[`graphite: show bar 1`] = `
            1. filter {{}},
            2. update {{
               \\"store\\": [
-                3,
+                1,
                 null,
                 null,
                 null,
@@ -589,7 +585,7 @@ exports[`graphite: show bar 1`] = `
                     1. filter {{}},
                     2. update {{
                        \\"store\\": [
-                         4,
+                         2,
                          null,
                          null,
                          null,
@@ -622,7 +618,7 @@ exports[`graphite: show bar 2`] = `
            1. filter {{}},
            2. update {{
               \\"store\\": [
-                3,
+                1,
                 null,
                 null,
                 null,
@@ -638,7 +634,7 @@ exports[`graphite: show bar 2`] = `
                     1. filter {{}},
                     2. update {{
                        \\"store\\": [
-                         4,
+                         2,
                          null,
                          null,
                          null,
@@ -678,7 +674,7 @@ exports[`graphite: show foo 1`] = `
                     1. filter {{}},
                     2. update {{
                        \\"store\\": [
-                         3,
+                         1,
                          null,
                          null,
                          null,
@@ -694,7 +690,7 @@ exports[`graphite: show foo 1`] = `
                              1. filter {{}},
                              2. update {{
                                 \\"store\\": [
-                                  4,
+                                  2,
                                   null,
                                   null,
                                   null,
@@ -720,7 +716,7 @@ exports[`graphite: show store1 1`] = `
   1. filter {{}},
   2. update {{
      \\"store\\": [
-       3,
+       1,
        null,
        null,
        null,
@@ -736,7 +732,7 @@ exports[`graphite: show store1 1`] = `
            1. filter {{}},
            2. update {{
               \\"store\\": [
-                4,
+                2,
                 null,
                 null,
                 null,
@@ -756,7 +752,7 @@ exports[`graphite: show store2 1`] = `
   1. filter {{}},
   2. update {{
      \\"store\\": [
-       4,
+       2,
        null,
        null,
        null,
@@ -786,7 +782,7 @@ Object {
       "data": Object {
         "data": Object {
           "store": Array [
-            3,
+            1,
             [Function],
             [Function],
             [Function],
@@ -843,7 +839,7 @@ Object {
                   "data": Object {
                     "data": Object {
                       "store": Array [
-                        4,
+                        2,
                         [Function],
                         [Function],
                         [Function],
@@ -898,7 +894,7 @@ Object {
       "data": Object {
         "data": Object {
           "store": Array [
-            4,
+            2,
             [Function],
             [Function],
             [Function],
@@ -937,7 +933,7 @@ exports[`showcase: event foo 1`] = `
            1. filter {{}},
            2. update {{
               \\"store\\": [
-                5,
+                3,
                 null,
                 null,
                 null,
@@ -959,7 +955,7 @@ exports[`showcase: mapped 1`] = `
   1. filter {{}},
   2. update {{
      \\"store\\": [
-       8,
+       6,
        null,
        null,
        null,
@@ -978,7 +974,7 @@ exports[`showcase: store a 1`] = `
   1. filter {{}},
   2. update {{
      \\"store\\": [
-       5,
+       3,
        null,
        null,
        null,

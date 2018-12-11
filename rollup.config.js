@@ -1,12 +1,12 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import alias from './rollup-alias'
-// import {uglify} from 'rollup-plugin-uglify'
+import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 // import visualizer from 'rollup-plugin-visualizer'
-import bucklescript from 'rollup-plugin-bucklescript'
+// import bucklescript from 'rollup-plugin-bucklescript'
 
 import {resolve as resolvePath} from 'path'
 import {readPackageList, writePackages} from './scripts/monorepoTools'
@@ -21,23 +21,7 @@ const staticPlugins = [
     runtimeHelpers: true,
     exclude: /(\.re|node_modules.*)/,
   }),
-  bucklescript({module: 'es6', inSource: true}),
-  //  uglify(
-  //   {
-  //    mangle: {
-  //     toplevel: true,
-  //    },
-  //    compress: {
-  //     pure_getters: true,
-  //    },
-  //    output: {
-  //     comments: /#/i,
-  //     // beautify: true,
-  //     // indent_level: 2,
-  //    },
-  //   },
-  //   require('uglify-es').minify,
-  //  ),
+  // bucklescript({module: 'es6', inSource: true}),
 ]
 if (process.env.BUILD_UMD) {
   staticPlugins.push(
@@ -65,6 +49,20 @@ const rollupPlugins = [
   }),
   resolve({}),
   ...staticPlugins,
+  terser({
+    ecma: 8,
+    mangle: {
+      toplevel: true,
+    },
+    compress: {
+      pure_getters: true,
+    },
+    output: {
+      comments: /#/i,
+      // beautify: true,
+      // indent_level: 2,
+    },
+  }),
   sizeSnapshot(),
 ]
 function getPathMap(list) {
@@ -76,20 +74,20 @@ function getPathMap(list) {
 }
 function createBuild(name) {
   if (process.env.BUILD_UMD)
-    return {
-      input: resolvePath(__dirname, 'packages', name, 'index.js'),
-      plugins: [...rollupPlugins],
-      external: ['react'],
-      output: [
-        {
+    return [
+      {
+        input: resolvePath(__dirname, 'packages', name, 'index.js'),
+        plugins: [...rollupPlugins],
+        external: ['react'],
+        output: {
           file: resolvePath(__dirname, 'npm', name, `${name}.bundle.js`),
           format: 'iife',
           name: name.replace(/\-/gi, ''),
           sourcemap: true,
         },
-      ],
-    }
-  return {
+      },
+    ]
+  const subconfig = output => ({
     input: resolvePath(__dirname, 'packages', name, 'index.js'),
     plugins: [
       // visualizer({
@@ -100,21 +98,24 @@ function createBuild(name) {
       ...rollupPlugins,
     ],
     external: ['warning', 'invariant', 'react', 'most', 'symbol-observable'],
-    output: [
-      {
-        file: resolvePath(__dirname, 'npm', name, `${name}.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-      },
-      {
-        file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-      },
-    ],
-  }
+    output,
+  })
+  return [
+    {
+      file: resolvePath(__dirname, 'npm', name, `${name}.es.js`),
+      format: 'es',
+      name,
+      sourcemap: true,
+    },
+    {
+      file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
+      format: 'cjs',
+      name,
+      sourcemap: true,
+    },
+  ].map(subconfig)
 }
 
-export default packages.map(createBuild)
+export default packages
+  .map(createBuild)
+  .reduce((list, items) => [...list, ...items], [])

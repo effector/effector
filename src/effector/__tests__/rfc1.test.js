@@ -3,7 +3,12 @@ import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 // import invariant from 'invariant'
 import {from} from 'most'
-import {createStore, createStoreObject} from 'effector/store'
+import {
+  createStore,
+  createStoreObject,
+  withProps,
+  type Store,
+} from 'effector/store'
 import {createEvent, type Event} from 'effector/event'
 import {createEffect} from 'effector/effect'
 
@@ -106,22 +111,25 @@ test('createStore', () => {
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
-test('event.to', () => {
-  const counter = createStore(0)
-  const text = createStore('')
-  const store = createStoreObject({counter, text, foo: 'bar'})
+describe.skip('pipe aka .to', () => {
+  test('event.to', () => {
+    const counter = createStore(0)
+    const text = createStore('')
+    const store = createStoreObject({counter, text, foo: 'bar'})
 
-  const e1: Event<string> = createEvent('e1')
-  e1.to(store, (state, payload) => ({
-    ...state,
-    foo: payload,
-  }))
+    const e1: Event<string> = createEvent('e1')
+    //$todo
+    e1.to(store, (state, payload) => ({
+      ...state,
+      foo: payload,
+    }))
 
-  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-  e1('baz')
-  expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
+    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
+    e1('baz')
+    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
+  })
+  test('store.to', () => {})
 })
-
 describe('store.on', () => {
   test('store.on(event)', () => {
     const counter = createStore(0)
@@ -165,7 +173,7 @@ test('store.watch', () => {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   store1.watch(fn1)
-  click.to(store1, (state, e, type) => (fn2(state, e, type), state))
+  store1.on(click, (state, e) => (fn2(state, e), state))
   click()
   click('a')
   click('b')
@@ -175,13 +183,9 @@ test('store.watch', () => {
   expect(fn2).toHaveBeenCalledTimes(3)
 
   expect(fn1).toHaveBeenCalledTimes(1)
-  expect(fn2.mock.calls).toEqual([
-    [-1, undefined, undefined],
-    [-1, 'a', undefined],
-    [-1, 'b', undefined],
-  ])
+  expect(fn2.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
   expect(fn1.mock.calls).toEqual([[-1]])
-  //expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
+  // expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
 })
 
 test('rfc1 example implementation', async() => {
@@ -239,19 +243,18 @@ test('rfc1 example implementation', async() => {
     fnClick()
     increment()
   })
-
-  //  fetchSavedText.done.map(({result}) => result).to(inputText)
   store.watch(state => console.warn('new state', state))
-  const ClickedTimes = store
-    .map(({counter, text}) => `Clicked: ${counter} times`)
-    .withProps(state => {
+  const ClickedTimes = withProps(
+    store.map(({counter, text}) => `Clicked: ${counter} times`),
+    state => {
       console.log(state)
       expect(state).not.toBe(text)
       expect(typeof state).toBe('string')
       return <span>{state}</span>
-    })
+    },
+  )
 
-  const CurrentText = store.withProps(({counter, text}, props) => (
+  const CurrentText = withProps(store, ({counter, text}, props) => (
     <p>
       {props.prefix} {text}
     </p>
@@ -280,7 +283,16 @@ test('rfc1 example implementation', async() => {
   expect(fnClick).not.toHaveBeenCalled()
   click()
   click()
-  console.log(store)
+  console.log(
+    JSON.stringify(
+      store,
+      (key, val) => {
+        if (typeof val === 'function') return '() => {}'
+        return val
+      },
+      2,
+    ),
+  )
   expect(fnWait).not.toHaveBeenCalled()
   await new Promise(_ => setTimeout(_, 2200))
   //TODO Should be

@@ -15,9 +15,9 @@ export type Store<State> = {
   & (<T>(newState: T, handler: (state: State, newState: T) => State) => void)
   & (<T>(newState: State, _: void) => void)
  ),
-  withProps<Props, R>(
-    fn: (state: State, props: Props) => R,
-  ): (props: Props) => R,
+  // withProps<Props, R>(
+  //   fn: (state: State, props: Props) => R,
+  // ): (props: Props) => R,
   //prettier-ignore
   /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
@@ -28,10 +28,10 @@ export type Store<State> = {
     handler: (state: State, payload: E) => State | void,
   ): Store<State>,
   off(event: Event<any>): void,
-  to<T>(
-    store: Store<T>,
-    reducer: (state: T, payload: State) => T,
-  ): Subscription,
+  // to<T>(
+  //   store: Store<T>,
+  //   reducer: (state: T, payload: State) => T,
+  // ): Subscription,
   subscribe(listner: any): Subscription,
   thru<U>(fn: (store: Store<State>) => U): U,
   watch<E>(

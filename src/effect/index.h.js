@@ -2,7 +2,7 @@
 import type {Subscription, Subscriber} from '../effector/index.h'
 import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {kind} from 'effector/stdlib/kind'
-import type {Store} from 'effector/store'
+// import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 // import type {Future} from './future'
@@ -17,7 +17,9 @@ export type Effect<Params, Done, Fail = Error> = {
   fail: Event<{params: Params, error: Fail}>,
   /*::+*/ id: string,
   use: {
-    (asyncFunction: (params: Params) => Promise<Done> | Done): void,
+    /*::
+    [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
+    */
     getCurrent(): (params: Params) => Promise<Done>,
   },
   watch(watcher: (payload: Params) => any): Subscription,
@@ -26,13 +28,13 @@ export type Effect<Params, Done, Fail = Error> = {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>,
   subscribe(subscriber: Subscriber<Params>): Subscription,
   //prettier-ignore
-  +to: (
-  & (<T>(
-   store: Store<T>,
-   reducer: (state: T, payload: Params) => T
-  ) => Subscription)
-  & ((store: Store<Params>, _: void) => Subscription)
- ),
+  //   +to: (
+  //   & (<T>(
+  //    store: Store<T>,
+  //    reducer: (state: T, payload: Params) => T
+  //   ) => Subscription)
+  //   & ((store: Store<Params>, _: void) => Subscription)
+  //  ),
   // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
   getType(): string,
   +kind: kind,

@@ -2,15 +2,19 @@
 //@jsx fx
 
 import fx from 'effector/stdlib/fx'
-import type {TypeDef, GraphiteMeta} from 'effector/stdlib/typedef'
+import {
+  type TypeDef,
+  type GraphiteMeta,
+  pushNext,
+} from 'effector/stdlib/typedef'
 
 export default {
-  event(args: {fullName: string, runner: Function}): GraphiteMeta {
+  event(args: {fullName: string}): GraphiteMeta {
     const nextSteps = <multi />
     const stepFull = (
       <seq>
         <single>
-          <emit subtype="event" fullName={args.fullName} runner={args.runner} />
+          <emit subtype="event" fullName={args.fullName} />
         </single>
         {nextSteps}
       </seq>
@@ -24,15 +28,15 @@ export default {
     parentGraphite: GraphiteMeta,
   |}): GraphiteMeta {
     const {fn, graphite, parentGraphite} = args
-    const stepFull = (
+    pushNext(
       <seq>
         <single>
           <compute reduce={(_, newValue, ctx) => fn(newValue)} />
         </single>
         {parentGraphite.seq}
-      </seq>
+      </seq>,
+      graphite.next,
     )
-    graphite.next.data.push(stepFull)
     return graphite
   },
   mapEvent(args: {|
@@ -41,15 +45,15 @@ export default {
     parentGraphite: GraphiteMeta,
   |}): GraphiteMeta {
     const {fn, graphite, parentGraphite} = args
-    const stepFull = (
+    pushNext(
       <seq>
         <single>
           <compute reduce={(_, newValue, ctx) => fn(newValue)} />
         </single>
         {graphite.seq}
-      </seq>
+      </seq>,
+      parentGraphite.next,
     )
-    parentGraphite.next.data.push(stepFull)
     return graphite
   },
   filterEvent(args: {|
@@ -58,7 +62,7 @@ export default {
     parentGraphite: GraphiteMeta,
   |}): GraphiteMeta {
     const {fn, graphite, parentGraphite} = args
-    const stepFull = (
+    pushNext(
       <seq>
         <single>
           <compute reduce={(_, newValue, ctx) => fn(newValue)} />
@@ -71,9 +75,9 @@ export default {
           />
         </single>
         {graphite.seq}
-      </seq>
+      </seq>,
+      parentGraphite.next,
     )
-    parentGraphite.next.data.push(stepFull)
     return graphite
   },
 }

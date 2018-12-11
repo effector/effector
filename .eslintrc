@@ -36,7 +36,7 @@ rules:
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn
-  prefer-template: warn
+  prefer-template: 'off'
   no-nested-ternary: warn
   no-unneeded-ternary: warn
   no-underscore-dangle: off

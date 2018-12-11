@@ -6,13 +6,12 @@ import invariant from 'invariant'
 import * as perf from 'effector/perf'
 
 import {Kind, type kind} from 'effector/stdlib/kind'
-
+import {pushNext, type TypeDef} from 'effector/stdlib/typedef'
 import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
-import type {TypeDef} from 'effector/stdlib/typedef'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {createRef, type Ref} from '../ref/createRef'
@@ -58,12 +57,10 @@ export function storeFabric<State>(props: {
     id: currentId,
     shortName: currentId,
     domainName: parent,
-    withProps,
     setState,
     map,
     on,
     off,
-    to,
     watch,
     thru,
     subscribe,
@@ -80,36 +77,6 @@ export function storeFabric<State>(props: {
   }
 
   const visitors = makeVisitorRecordMap({
-    to: {
-      visitor: {
-        store(action, reduce) {
-          const needReduce = typeof reduce === 'function'
-          return store.watch(data => {
-            if (!needReduce) {
-              action(data)
-            } else {
-              const lastState = action.getState()
-              const reduced = reduce(lastState, data)
-              if (lastState !== reduced) action.setState(reduced)
-            }
-          })
-        },
-        __(action, reduce) {
-          return store.watch(data => {
-            action(data)
-          })
-        },
-      },
-      reader(eventOrFn) {
-        if (typeof eventOrFn === 'function') {
-          if (typeof eventOrFn.kind !== 'undefined')
-            return ((eventOrFn.kind: any): kind)
-        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
-          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
-        }
-      },
-      writer: (handler, action, reduce) => handler(action, reduce),
-    },
     watch: {
       visitor: {
         event(eventOrFn, fn) {
@@ -188,7 +155,7 @@ export function storeFabric<State>(props: {
         />
       </single>
     )
-    store.graphite.next.data.push(runCmd)
+    pushNext(runCmd, store.graphite.next)
     listener(lastCall)
     function unsubscribe() {
       active = false
@@ -262,8 +229,7 @@ export function storeFabric<State>(props: {
         {store.graphite.seq}
       </seq>
     )
-    e.graphite.next.data.push(nextSeq)
-
+    pushNext(nextSeq, e.graphite.next)
     subscribers.set(e, () => {
       const i = e.graphite.next.data.indexOf(nextSeq)
       if (i === -1) return
@@ -272,13 +238,6 @@ export function storeFabric<State>(props: {
     return store
   }
 
-  function withProps(fn: Function) {
-    return props => fn(getState(), props)
-  }
-
-  function to(action: any, reduce) {
-    return visitors.to(action, reduce)
-  }
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
     return visitors.watch(eventOrFn, fn)
   }
@@ -357,7 +316,7 @@ function mapStore<A, B>(
       {innerStore.graphite.seq}
     </seq>
   )
-  store.graphite.next.data.push(nextSeq)
+  pushNext(nextSeq, store.graphite.next)
   const off = () => {
     const i = store.graphite.next.data.indexOf(nextSeq)
     if (i === -1) return

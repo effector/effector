@@ -1,13 +1,20 @@
 //@flow
-import invariant from 'invariant'
 export type TypeDef<+Type, +Group> = {
   +type: Type,
   +group: Group,
   +data: any,
 }
 
-export type GraphiteMeta = {+next: TypeDef<*, 'step'>, +seq: TypeDef<*, 'step'>}
-
+export type GraphiteMeta = {
+  +next: TypeDef<*, 'step'>,
+  +seq: TypeDef<'seq', 'step'>,
+}
+export function pushNext(
+  add: TypeDef<'multi' | 'seq' | 'single', 'step'>,
+  seq: TypeDef<'seq' | 'multi', 'step'>,
+) {
+  seq.data.push(add)
+}
 function fabricHandler(create) {
   if (typeof create === 'function') return create
   return _ => _

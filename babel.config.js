@@ -14,7 +14,7 @@ module.exports = api => {
     '@babel/plugin-proposal-nullish-coalescing-operator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],
     'macros',
-    'babel-plugin-dev-expression',
+    './src/babel/dev-expression',
     [
       'babel-plugin-module-resolver',
       {
@@ -53,7 +53,7 @@ module.exports = api => {
   ]
 
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
-    plugins.push('./src/babel-plugin')
+    plugins.push('./src/babel/babel-plugin')
     plugins.push('@babel/plugin-transform-modules-commonjs')
   }
 

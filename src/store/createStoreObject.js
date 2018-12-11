@@ -1,6 +1,8 @@
 //@flow
+//@jsx fx
+import fx from 'effector/stdlib/fx'
 
-import {Step, Cmd} from 'effector/graphite/typedef'
+import {pushNext} from 'effector/stdlib/typedef'
 
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
@@ -37,9 +39,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   for (const [key, child] of state.map((e, i) => [i, e])) {
     if (child.kind === Kind.store) {
       const substore: Store<any> = (child: any)
-      const runCmd = Cmd.run({
-        runner(newValue) {},
-      })
+      const runCmd = <run runner={newValue => {}} />
       runCmd.data.transactionContext = data => {
         updates.push(state => {
           const nextState = [...state]
@@ -49,7 +49,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
         return commit
       }
       stateNew[key] = substore.getState()
-      substore.graphite.next.data.push(Step.single(runCmd))
+      pushNext(<single>{runCmd}</single>, substore.graphite.next)
     }
   }
   const name = `combine(${obj
@@ -98,9 +98,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   for (const [key, child] of Object.entries(state)) {
     if (child.kind !== Kind.store) continue
     const substore: Store<any> = (child: any)
-    const runCmd = Cmd.run({
-      runner(newValue) {},
-    })
+    const runCmd = <run runner={newValue => {}} />
     runCmd.data.transactionContext = data => {
       updates.push(state => ({
         ...state,
@@ -110,7 +108,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
       return commit
     }
     stateNew[key] = substore.getState()
-    substore.graphite.next.data.push(Step.single(runCmd))
+    pushNext(<single>{runCmd}</single>, substore.graphite.next)
   }
   const name = `combine(${(Object.values(obj): Array<$Values<typeof obj>>)
     .map(store => {

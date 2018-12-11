@@ -6,9 +6,16 @@ import type {TypeDef} from 'effector/stdlib/typedef'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
-  const eventCtx = Ctx.emit(event.getType(), payload)
+  const eventCtx = Ctx.emit({
+    eventName: event.getType(),
+    payload,
+  })
+  walkNode(steps, eventCtx)
+}
+
+export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const transactions: Array<() => void> = []
-  stepVisitor.seq(steps, eventCtx, transactions)
+  stepVisitor.seq(seq, ctx, transactions)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
@@ -26,9 +33,14 @@ const stepVisitor = {
     const arg = stepArgVisitor[ctx.type](ctx.data)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
     const result = cmdVisitor[single.type](arg, single, ctx, transactions)
-    if (!result) return
-    if (result.type === ('run': 'run')) return
-    if (result.type === ('filter': 'filter') && !result.data.isChanged) return
+    if (!result) {
+      // console.warn('step, arg', step, arg)
+      return
+    }
+    if (result.type === ('run': 'run')) {
+      return
+    }
+    if (result?.type === ('filter': 'filter') && !result.data.isChanged) return
     return (result: any)
   },
   multi(step, currentCtx, transactions) {
@@ -82,7 +94,10 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    return Ctx.emit(single.data.fullName, arg)
+    return Ctx.emit({
+      eventName: single.data.fullName,
+      payload: arg,
+    })
   },
   filter(
     arg: any,
@@ -92,7 +107,10 @@ const cmdVisitor = {
   ) {
     try {
       const isChanged = single.data.filter(arg, ctx)
-      return Ctx.filter(arg, isChanged)
+      return Ctx.filter({
+        value: arg,
+        isChanged,
+      })
     } catch (err) {
       console.error(err)
     }
@@ -110,7 +128,10 @@ const cmdVisitor = {
     } catch (err) {
       console.error(err)
     }
-    return Ctx.run([arg], ctx)
+    return Ctx.run({
+      args: [arg],
+      parentContext: ctx,
+    })
   },
   update(
     arg: any,
@@ -118,7 +139,7 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    const newCtx = Ctx.update(arg)
+    const newCtx = Ctx.update({value: arg})
     single.data.store[2](arg)
     return newCtx
   },
@@ -128,14 +149,14 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
-    const newCtx = Ctx.compute(
-      [undefined, arg, ctx],
-      null,
-      null,
-      false,
-      true,
-      true,
-    )
+    const newCtx = Ctx.compute({
+      args: [undefined, arg, ctx],
+      result: null,
+      error: null,
+      isError: false,
+      isNone: true,
+      isChanged: true,
+    })
     try {
       const result = single.data.reduce(undefined, arg, newCtx)
       newCtx.data.result = result

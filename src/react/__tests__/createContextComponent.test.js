@@ -15,9 +15,9 @@ import {createContextComponent} from '..'
 
 test('createContextComponent', () => {
   const store = createStore('foo')
-  const Context = React.createContext('bar')
   const changeText = createEvent('change text')
-  changeText.to(store)
+  store.on(changeText, (_, e) => e)
+  const Context = React.createContext('bar')
 
   const Display = createContextComponent(
     store,
