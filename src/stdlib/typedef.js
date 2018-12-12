@@ -15,10 +15,7 @@ export function pushNext(
 ) {
   seq.data.push(add)
 }
-function fabricHandler(create) {
-  if (typeof create === 'function') return create
-  return _ => _
-}
+const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
 
 declare export function typeDef<T: {+[key: string]: any}, Group>(
   group: Group,
@@ -26,12 +23,14 @@ declare export function typeDef<T: {+[key: string]: any}, Group>(
 ): $ObjMapi<T, <K>(k: K) => (data: any) => TypeDef<K, Group>>
 export function typeDef(group, t) {
   const result = {}
-  for (const key in t) {
-    const handler = fabricHandler(t[key])
-    result[key] = (...args) => ({
-      type: key,
+  let key
+  for (key in t) {
+    const currentKey = key
+    const handler = fabricHandler(t[currentKey])
+    result[currentKey] = args => ({
+      type: currentKey,
       group,
-      data: handler(...args),
+      data: handler(args),
     })
   }
   return result

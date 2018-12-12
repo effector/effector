@@ -70,7 +70,7 @@ export default function fx(
     case 'multi':
       return Step.multi(childrens)
     case 'seq':
-      return Step.seq(childrens.filter(Boolean))
+      return Step.seq(childrens)
   }
   if (typeof tag === 'function') return tag(props, childrens)
   console.error('unknown node "%s"', tag)

@@ -48,7 +48,7 @@ export function storeFabric<State>(props: {
     </seq>
   )
 
-  const updater: any = createEvent(`update ${currentId}`)
+  const updater: any = createEvent('update ' + currentId)
 
   const store = {
     graphite: def,
@@ -118,7 +118,7 @@ export function storeFabric<State>(props: {
   function subscribe(listener) {
     if (__DEV__)
       perf.beginMark(
-        `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+        'Start ' + getDisplayName(store) + ' subscribe (id: ' + store.id + ')',
       )
     invariant(
       typeof listener === 'function',
@@ -136,19 +136,31 @@ export function storeFabric<State>(props: {
               listener(args)
               if (__DEV__)
                 perf.endMark(
-                  `Call ${getDisplayName(store)} subscribe listener (id: ${
-                    store.id
-                  })`,
-                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                  'Call ' +
+                    getDisplayName(store) +
+                    ' subscribe listener (id: ' +
+                    store.id +
+                    ')',
+                  'Start ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
                 )
             } catch (err) {
               console.error(err)
               if (__DEV__)
                 perf.endMark(
-                  `Got error on ${getDisplayName(store)} subscribe (id: ${
-                    store.id
-                  })`,
-                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                  'Got error on ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
+                  'Start ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
                 )
             }
           }}
@@ -280,7 +292,7 @@ function mapStore<A, B>(
   let lastValue = store.getState()
   let lastResult = fn(lastValue, firstState)
   const innerStore: Store<any> = storeFabric({
-    name: `${store.shortName} → *`,
+    name: '' + store.shortName + ' → *',
     currentState: lastResult,
     parent: store.domainName,
   })
@@ -294,8 +306,12 @@ function mapStore<A, B>(
             const result = fn(newValue, lastState)
             if (__DEV__)
               perf.endMark(
-                `Map ${getDisplayName(store)} (id: ${store.id})`,
-                `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                'Map ' + getDisplayName(store) + ' (id: ${store.id})',
+                'Start ' +
+                  getDisplayName(store) +
+                  ' subscribe (id: ' +
+                  store.id +
+                  ')',
               )
             return result
           }}

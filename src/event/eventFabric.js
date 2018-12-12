@@ -73,7 +73,7 @@ export function eventFabric<Payload>({
   }
   function prepend<Before>(fn: Before => Payload) {
     const contramapped: Event<Before> = eventFabric({
-      name: `* → ${name}`,
+      name: '* → ' + name,
       parent,
     })
     fabric.prependEvent({
@@ -94,7 +94,7 @@ declare function mapEvent<A, B>(
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   const mapped = eventFabric({
-    name: `${event.shortName} → *`,
+    name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
   fabric.mapEvent({
@@ -110,7 +110,7 @@ function filterEvent<A, B>(
   fn: A => B | void,
 ): Event<B> {
   const mapped = eventFabric({
-    name: `${event.shortName} →? *`,
+    name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
   fabric.filterEvent({
@@ -141,5 +141,10 @@ function watchEvent<Payload>(
   return unsubscribe
 }
 function makeName(name: string, compositeName?: CompositeName) {
-  return [compositeName?.fullName, name].filter(Boolean).join('/')
+  const fullName = compositeName?.fullName
+  if (!fullName) {
+    if (!name) return ''
+    return name
+  }
+  return '' + fullName + '/' + name
 }
