@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import {createStoreConsumer} from './createStoreConsumer'
-import {unstable_createStoreProvider} from './createStoreProvider'
 
 import type {Store} from 'effector'
 
