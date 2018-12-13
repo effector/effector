@@ -22,6 +22,13 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
 }
 
 const stepVisitor = {
+  choose(step, ctx, transactions) {
+    const innerData: {
+      map: {+[key: string]: TypeDef<*, 'cmd'>},
+      selector: TypeDef<'compute', 'cmd'>,
+    } = step.data
+    // const result = stepVisitor.single(innerData.selector)
+  },
   single(step, currentCtx, transactions) {
     const innerData = step.data
     const single: TypeDef<*, 'cmd'> = innerData
@@ -140,7 +147,7 @@ const cmdVisitor = {
     transactions: Array<() => void>,
   ) {
     const newCtx = Ctx.update({value: arg})
-    single.data.store[2](arg)
+    single.data.store.current = arg
     return newCtx
   },
   compute(

@@ -15,7 +15,6 @@ import {createEvent, type Event} from 'effector/event'
 import {__DEV__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
-import {createRef, type Ref} from '../ref/createRef'
 import {type CompositeName} from '../compositeName'
 
 let id = 0
@@ -29,7 +28,10 @@ export function storeFabric<State>(props: {
   const {currentState, name, parent} = props
   const defaultState = currentState
 
-  const plainState: Ref<typeof defaultState> = createRef(defaultState)
+  const plainState = {
+    id: currentId,
+    current: defaultState,
+  }
   const subscribers = new Map()
   const def = {}
   def.next = <multi />
@@ -38,7 +40,7 @@ export function storeFabric<State>(props: {
       <single>
         <filter
           filter={(newValue, ctx) =>
-            newValue !== undefined && newValue !== plainState[1]()
+            newValue !== undefined && newValue !== plainState.current
           }
         />
       </single>
@@ -74,7 +76,7 @@ export function storeFabric<State>(props: {
   ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
   function getState() {
-    return plainState[1]()
+    return plainState.current
   }
 
   const visitors = {
@@ -91,7 +93,7 @@ export function storeFabric<State>(props: {
           fn(store.getState(), payload, eventOrFn.getType()),
         )
       },
-      __({eventOrFn, fn}) {
+      __({eventOrFn}) {
         invariant(
           typeof eventOrFn === 'function',
           'watch requires function handler',
