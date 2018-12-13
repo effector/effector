@@ -1,5 +1,8 @@
 //@flow
+let nextID = 0
+export type ID = string
 export type TypeDef<+Type, +Group> = {
+  +id: ID,
   +type: Type,
   +group: Group,
   +data: any,
@@ -28,6 +31,7 @@ export function typeDef(group, t) {
     const currentKey = key
     const handler = fabricHandler(t[currentKey])
     result[currentKey] = args => ({
+      id: (++nextID).toString(36),
       type: currentKey,
       group,
       data: handler(args),
