@@ -57,14 +57,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "store": Array [
-                        1,
-                        [Function],
-                        [Function],
-                        [Function],
-                        [Function],
-                        "foo | 1 | 11",
-                      ],
+                      "store": Object {
+                        "current": "foo | 1 | 11",
+                        "id": "1",
+                      },
                     },
                     "group": "cmd",
                     "type": "update",
@@ -114,14 +110,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "store": Array [
-                                    2,
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    12,
-                                  ],
+                                  "store": Object {
+                                    "current": 12,
+                                    "id": "2",
+                                  },
                                 },
                                 "group": "cmd",
                                 "type": "update",
@@ -232,14 +224,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "store": Array [
-                        1,
-                        [Function],
-                        [Function],
-                        [Function],
-                        [Function],
-                        "foo | 1 | 11",
-                      ],
+                      "store": Object {
+                        "current": "foo | 1 | 11",
+                        "id": "1",
+                      },
                     },
                     "group": "cmd",
                     "type": "update",
@@ -289,14 +277,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "store": Array [
-                                    2,
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    12,
-                                  ],
+                                  "store": Object {
+                                    "current": 12,
+                                    "id": "2",
+                                  },
                                 },
                                 "group": "cmd",
                                 "type": "update",
@@ -425,14 +409,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "store": Array [
-                                    1,
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    [Function],
-                                    "foo | 1 | 11",
-                                  ],
+                                  "store": Object {
+                                    "current": "foo | 1 | 11",
+                                    "id": "1",
+                                  },
                                 },
                                 "group": "cmd",
                                 "type": "update",
@@ -482,14 +462,10 @@ Object {
                                         Object {
                                           "data": Object {
                                             "data": Object {
-                                              "store": Array [
-                                                2,
-                                                [Function],
-                                                [Function],
-                                                [Function],
-                                                [Function],
-                                                12,
-                                              ],
+                                              "store": Object {
+                                                "current": 12,
+                                                "id": "2",
+                                              },
                                             },
                                             "group": "cmd",
                                             "type": "update",
@@ -568,14 +544,10 @@ exports[`graphite: show bar 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": [
-                1,
-                null,
-                null,
-                null,
-                null,
-                \\"foo | 1 | 11\\"
-              ]
+              \\"store\\": {
+                \\"id\\": \\"1\\",
+                \\"current\\": \\"foo | 1 | 11\\"
+              }
            }},
            3. [
               *  Seq [
@@ -584,14 +556,10 @@ exports[`graphite: show bar 1`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": [
-                         2,
-                         null,
-                         null,
-                         null,
-                         null,
-                         12
-                       ]
+                       \\"store\\": {
+                         \\"id\\": \\"2\\",
+                         \\"current\\": 12
+                       }
                     }},
                     3. [(empty list)]
                  ]
@@ -617,14 +585,10 @@ exports[`graphite: show bar 2`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": [
-                1,
-                null,
-                null,
-                null,
-                null,
-                \\"foo | 1 | 11\\"
-              ]
+              \\"store\\": {
+                \\"id\\": \\"1\\",
+                \\"current\\": \\"foo | 1 | 11\\"
+              }
            }},
            3. [
               *  Seq [
@@ -633,14 +597,10 @@ exports[`graphite: show bar 2`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": [
-                         2,
-                         null,
-                         null,
-                         null,
-                         null,
-                         12
-                       ]
+                       \\"store\\": {
+                         \\"id\\": \\"2\\",
+                         \\"current\\": 12
+                       }
                     }},
                     3. [(empty list)]
                  ]
@@ -673,14 +633,10 @@ exports[`graphite: show foo 1`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": [
-                         1,
-                         null,
-                         null,
-                         null,
-                         null,
-                         \\"foo | 1 | 11 | 101\\"
-                       ]
+                       \\"store\\": {
+                         \\"id\\": \\"1\\",
+                         \\"current\\": \\"foo | 1 | 11 | 101\\"
+                       }
                     }},
                     3. [
                        *  Seq [
@@ -689,14 +645,10 @@ exports[`graphite: show foo 1`] = `
                           3. Seq [
                              1. filter {{}},
                              2. update {{
-                                \\"store\\": [
-                                  2,
-                                  null,
-                                  null,
-                                  null,
-                                  null,
-                                  18
-                                ]
+                                \\"store\\": {
+                                  \\"id\\": \\"2\\",
+                                  \\"current\\": 18
+                                }
                              }},
                              3. [(empty list)]
                           ]
@@ -715,14 +667,10 @@ exports[`graphite: show store1 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": [
-       1,
-       null,
-       null,
-       null,
-       null,
-       \\"foo | 1 | 11 | 101\\"
-     ]
+     \\"store\\": {
+       \\"id\\": \\"1\\",
+       \\"current\\": \\"foo | 1 | 11 | 101\\"
+     }
   }},
   3. [
      *  Seq [
@@ -731,14 +679,10 @@ exports[`graphite: show store1 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": [
-                2,
-                null,
-                null,
-                null,
-                null,
-                18
-              ]
+              \\"store\\": {
+                \\"id\\": \\"2\\",
+                \\"current\\": 18
+              }
            }},
            3. [(empty list)]
         ]
@@ -751,14 +695,10 @@ exports[`graphite: show store2 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": [
-       2,
-       null,
-       null,
-       null,
-       null,
-       18
-     ]
+     \\"store\\": {
+       \\"id\\": \\"2\\",
+       \\"current\\": 18
+     }
   }},
   3. [(empty list)]
 ]"
@@ -781,14 +721,10 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "store": Array [
-            1,
-            [Function],
-            [Function],
-            [Function],
-            [Function],
-            "foo | 1 | 11 | 101",
-          ],
+          "store": Object {
+            "current": "foo | 1 | 11 | 101",
+            "id": "1",
+          },
         },
         "group": "cmd",
         "type": "update",
@@ -838,14 +774,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "store": Array [
-                        2,
-                        [Function],
-                        [Function],
-                        [Function],
-                        [Function],
-                        18,
-                      ],
+                      "store": Object {
+                        "current": 18,
+                        "id": "2",
+                      },
                     },
                     "group": "cmd",
                     "type": "update",
@@ -893,14 +825,10 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "store": Array [
-            2,
-            [Function],
-            [Function],
-            [Function],
-            [Function],
-            18,
-          ],
+          "store": Object {
+            "current": 18,
+            "id": "2",
+          },
         },
         "group": "cmd",
         "type": "update",
@@ -932,14 +860,10 @@ exports[`showcase: event foo 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": [
-                3,
-                null,
-                null,
-                null,
-                null,
-                3
-              ]
+              \\"store\\": {
+                \\"id\\": \\"3\\",
+                \\"current\\": 3
+              }
            }},
            3. [
               *  run {{}}
@@ -954,14 +878,10 @@ exports[`showcase: mapped 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": [
-       6,
-       null,
-       null,
-       null,
-       null,
-       3
-     ]
+     \\"store\\": {
+       \\"id\\": \\"6\\",
+       \\"current\\": 3
+     }
   }},
   3. [
      *  run {{}}
@@ -973,14 +893,10 @@ exports[`showcase: store a 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": [
-       3,
-       null,
-       null,
-       null,
-       null,
-       3
-     ]
+     \\"store\\": {
+       \\"id\\": \\"3\\",
+       \\"current\\": 3
+     }
   }},
   3. [
      *  run {{}}
