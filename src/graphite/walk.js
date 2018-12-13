@@ -42,9 +42,6 @@ const stepVisitor = {
     if (!result) {
       return
     }
-    if (result.type === ('run': 'run')) {
-      return
-    }
     if (result?.type === ('filter': 'filter') && !result.data.isChanged) return
     return (result: any)
   },
@@ -133,10 +130,12 @@ const cmdVisitor = {
     } catch (err) {
       console.error(err)
     }
-    return Ctx.run({
+    /*
+    const run = Ctx.run({
       args: [arg],
       parentContext: ctx,
     })
+    */
   },
   update(
     arg: any,
