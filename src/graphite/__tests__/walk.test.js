@@ -101,3 +101,53 @@ test('walk after multi', () => {
   walkNode(e1.graphite.seq, ctx)
   console.log(ctx)
 })
+
+describe('<run /> execution cases', () => {
+  it('[a] tested correctly', () => {
+    const fn = jest.fn()
+    const trigger = createEvent('[run][a]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[a] tested correctly" />
+        </single>
+        <single>
+          <run runner={fn} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[run][a]()', trigger))
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn.mock.calls).toEqual([['[run][a]()']])
+  })
+  it(`
+| not return anything from <run/>
+| run is always last step in the branch`, () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const trigger = createEvent('[run][b]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[b] tested correctly" />
+        </single>
+        <single>
+          <run runner={fn1} />
+        </single>
+        <single>
+          <run runner={fn2} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[run][b]()', trigger))
+    expect(fn1).toHaveBeenCalledTimes(1)
+    expect(fn1.mock.calls).toEqual([['[run][b]()']])
+    expect(fn2).not.toHaveBeenCalled()
+  })
+})
