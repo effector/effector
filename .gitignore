@@ -31,3 +31,5 @@ npm/effector-vue/**
 .bsb.lock
 npm-debug.log
 lib/bs/**
+val/**
+.size-snapshot.json
