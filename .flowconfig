@@ -30,15 +30,18 @@ esproposal.decorators=ignore
 module.use_strict=true
 esproposal.export_star_as=enable
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
+module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^effector/flags$' -> '<PROJECT_ROOT>/src/flags.dev'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
 [ignore]
 <PROJECT_ROOT>/npm/*
+<PROJECT_ROOT>/dist/*
 <PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
 <PROJECT_ROOT>/.vscode/*
