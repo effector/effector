@@ -121,7 +121,7 @@ describe('<run /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[run][a]()', trigger))
     expect(fn).toHaveBeenCalledTimes(1)
-    expect(fn.mock.calls).toEqual([['[run][a]()']])
+    expect(fn).toBeCalledWith('[run][a]()')
   })
   it(`
 | not return anything from <run/>
@@ -147,7 +147,121 @@ describe('<run /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[run][b]()', trigger))
     expect(fn1).toHaveBeenCalledTimes(1)
-    expect(fn1.mock.calls).toEqual([['[run][b]()']])
+    expect(fn1).toBeCalledWith('[run][b]()')
+    expect(fn2).not.toHaveBeenCalled()
+  })
+})
+
+describe('<filter /> execution cases', () => {
+  it('[a] tested correctly', () => {
+    const fn = jest.fn()
+    const trigger = createEvent('[filter][a]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[a] tested correctly" />
+        </single>
+        <single>
+          <filter filter={fn} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[filter][a]()', trigger))
+    expect(fn).toHaveBeenCalledTimes(1)
+    expect(fn).toBeCalledWith('[filter][a]()', {
+      data: {eventName: '[a] tested correctly', payload: '[filter][a]()'},
+      group: 'ctx',
+      id: expect.any(String),
+      type: 'emit',
+    })
+  })
+  it('[b] return changes on resolve', () => {
+    const fn1 = jest.fn((...args) => true)
+    const fn2 = jest.fn()
+    const trigger = createEvent('[filter][b]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[b] tested correctly" />
+        </single>
+        <single>
+          <filter filter={fn1} />
+        </single>
+        <single>
+          <run runner={fn2} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[filter][b]()', trigger))
+    expect(fn1).toHaveBeenCalledTimes(1)
+    expect(fn1).toBeCalledWith('[filter][b]()', {
+      data: {eventName: '[b] tested correctly', payload: '[filter][b]()'},
+      group: 'ctx',
+      id: expect.any(String),
+      type: 'emit',
+    })
+    expect(fn2).toHaveBeenCalledTimes(1)
+    expect(fn2).toBeCalledWith('[filter][b]()')
+  })
+  it('[c] not return anything on reject', () => {
+    const fn1 = jest.fn((...args) => false)
+    const fn2 = jest.fn()
+    const trigger = createEvent('[filter][c]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[c] tested correctly" />
+        </single>
+        <single>
+          <filter filter={fn1} />
+        </single>
+        <single>
+          <run runner={fn2} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[filter][c]()', trigger))
+    expect(fn1).toHaveBeenCalledTimes(1)
+    expect(fn1).toBeCalledWith('[filter][c]()', {
+      data: {eventName: '[c] tested correctly', payload: '[filter][c]()'},
+      group: 'ctx',
+      id: expect.any(String),
+      type: 'emit',
+    })
+    expect(fn2).not.toHaveBeenCalled()
+  })
+  it('[d] not return anything on throw', () => {
+    const fn1 = (...args) => {
+      throw new Error('[expected error]')
+    }
+    const fn2 = jest.fn()
+    const trigger = createEvent('[filter][d]')
+    const next = Next()
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[d] tested correctly" />
+        </single>
+        <single>
+          <filter filter={fn1} />
+        </single>
+        <single>
+          <run runner={fn2} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[filter][d]()', trigger))
     expect(fn2).not.toHaveBeenCalled()
   })
 })
