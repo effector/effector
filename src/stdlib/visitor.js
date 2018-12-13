@@ -2,46 +2,32 @@
 
 import type {kind} from './kind'
 
-export type VisitorRecord<Args, +R, T> = {
-  +visitor: $Shape<{
-    +none: T,
-    +store: T,
-    +event: T,
-    +effect: T,
-    +__: T,
+export function visitRecord<Args, R>(
+  visitor: $Shape<{
+    none(_: Args): R,
+    store(_: Args): R,
+    event(_: Args): R,
+    effect(_: Args): R,
+    __(_: Args): R,
   }>,
-  reader(...args: Args): kind | void,
-  writer(t: T, ...args: Args): R,
+  cfg: {+__kind?: kind, +args: Args},
+): R {
+  const args = cfg.args
+  const value = cfg.__kind
+  if (value === undefined) {
+    if ('__' in visitor) return visitor.__(args)
+    throw new Error('unmatched undefined case')
+  }
+  if (value in visitor) return visitor[String(value)](args)
+  if ('__' in visitor) return visitor.__(args)
+  throw new Error('unmatched case ' + value)
 }
 
-//prettier-ignore
-declare export function makeVisitorRecordMap<
-  Rec
->(rec: Rec): $ObjMap<Rec, <T>(_: T) => $Call<
-    <Args, R, T>(
-      record: VisitorRecord<Args, R, T>,
-    ) => ((...args: Args) => R),
-    T,
-  >
->
-export function makeVisitorRecordMap(rec: Object) {
-  const result = {}
-  for (const key in rec) {
-    result[key] = visitRecordCurry(rec[key])
-  }
-  return result
-}
-function visitRecordCurry<Args, R, T>(record: VisitorRecord<Args, R, T>) {
-  return (...args: Args) => {
-    const value = record.reader(...args)
-    if (value === undefined) {
-      if ('__' in record.visitor)
-        return record.writer(record.visitor.__, ...args)
-      throw new Error('unmatched undefined case')
-    }
-    if (value in record.visitor)
-      return record.writer(record.visitor[value], ...args)
-    if ('__' in record.visitor) return record.writer(record.visitor.__, ...args)
-    throw new Error(`unmatched case ${value}`)
+export function kindReader(eventOrFn: any): kind | void {
+  if (typeof eventOrFn === 'function') {
+    if (typeof eventOrFn.kind !== 'undefined')
+      return ((eventOrFn.kind: any): kind)
+  } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
+    if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
   }
 }

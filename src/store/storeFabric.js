@@ -7,11 +7,12 @@ import * as perf from 'effector/perf'
 
 import {Kind, type kind} from 'effector/stdlib/kind'
 import {pushNext, type TypeDef} from 'effector/stdlib/typedef'
-import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
+import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createEvent, type Event} from 'effector/event'
+import {__DEV__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {createRef, type Ref} from '../ref/createRef'
@@ -76,40 +77,29 @@ export function storeFabric<State>(props: {
     return plainState[1]()
   }
 
-  const visitors = makeVisitorRecordMap({
+  const visitors = {
     watch: {
-      visitor: {
-        event(eventOrFn, fn) {
-          invariant(typeof fn === 'function', 'watch requires function handler')
-          return eventOrFn.watch(payload =>
-            fn(store.getState(), payload, eventOrFn.getType()),
-          )
-        },
-        effect(eventOrFn, fn) {
-          invariant(typeof fn === 'function', 'watch requires function handler')
-          return eventOrFn.watch(payload =>
-            fn(store.getState(), payload, eventOrFn.getType()),
-          )
-        },
-        __(eventOrFn, fn) {
-          invariant(
-            typeof eventOrFn === 'function',
-            'watch requires function handler',
-          )
-          return subscribe(eventOrFn)
-        },
+      event({eventOrFn, fn}) {
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
       },
-      reader(eventOrFn) {
-        if (typeof eventOrFn === 'function') {
-          if (typeof eventOrFn.kind !== 'undefined')
-            return ((eventOrFn.kind: any): kind)
-        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
-          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
-        }
+      effect({eventOrFn, fn}) {
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
       },
-      writer: (handler, eventOrFn, fn) => handler(eventOrFn, fn),
+      __({eventOrFn, fn}) {
+        invariant(
+          typeof eventOrFn === 'function',
+          'watch requires function handler',
+        )
+        return subscribe(eventOrFn)
+      },
     },
-  })
+  }
 
   function map(fn, firstState) {
     return mapStore(store, fn, firstState)
@@ -251,7 +241,10 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitors.watch(eventOrFn, fn)
+    return visitRecord(visitors.watch, {
+      __kind: kindReader(eventOrFn),
+      args: {eventOrFn, fn},
+    })
   }
 
   function stateSetter(_, payload) {
