@@ -29,19 +29,17 @@ const stepVisitor = {
     } = step.data
     // const result = stepVisitor.single(innerData.selector)
   },
-  single(step, currentCtx, transactions) {
-    const innerData = step.data
-    const single: TypeDef<*, 'cmd'> = innerData
-    const ctx: TypeDef<
-      'compute' | 'emit' | 'filter' | 'update',
-      'ctx',
-    > = currentCtx
+  single(
+    step: TypeDef<'single', 'step'>,
+    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
+    transactions,
+  ) {
+    const single: TypeDef<*, 'cmd'> = step.data
     invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
-    const arg = stepArgVisitor[ctx.type](ctx.data)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
+    const arg = stepArgVisitor[ctx.type](ctx.data)
     const result = cmdVisitor[single.type](arg, single, ctx, transactions)
     if (!result) {
-      // console.warn('step, arg', step, arg)
       return
     }
     if (result.type === ('run': 'run')) {
