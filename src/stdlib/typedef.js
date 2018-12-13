@@ -9,14 +9,14 @@ export type TypeDef<+Type, +Group> = {
 }
 
 export type GraphiteMeta = {
-  +next: TypeDef<*, 'step'>,
+  +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
 }
 export function pushNext(
   add: TypeDef<'multi' | 'seq' | 'single', 'step'>,
-  seq: TypeDef<'seq' | 'multi', 'step'>,
+  nexts: TypeDef<'multi', 'step'>,
 ) {
-  seq.data.push(add)
+  nexts.data.push(add)
 }
 const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
 
