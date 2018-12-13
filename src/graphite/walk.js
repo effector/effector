@@ -22,13 +22,6 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
 }
 
 const stepVisitor = {
-  choose(step, ctx, transactions) {
-    const innerData: {
-      map: {+[key: string]: TypeDef<*, 'cmd'>},
-      selector: TypeDef<'compute', 'cmd'>,
-    } = step.data
-    // const result = stepVisitor.single(innerData.selector)
-  },
   single(
     step: TypeDef<'single', 'step'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
@@ -42,7 +35,6 @@ const stepVisitor = {
     if (!result) {
       return
     }
-    if (result?.type === ('filter': 'filter') && !result.data.isChanged) return
     return (result: any)
   },
   multi(step, currentCtx, transactions) {
@@ -71,11 +63,6 @@ const stepVisitor = {
       const stepResult = stepVisitor[step.type](step, currentCtx, transactions)
       if (isMulti) continue
       if (stepResult === undefined) return
-      if (
-        stepResult.type === ('filter': 'filter')
-        && !stepResult.data.isChanged
-      )
-        return
       currentCtx = stepResult
     }
   },
@@ -107,14 +94,17 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
+    let isChanged = false
     try {
-      const isChanged = single.data.filter(arg, ctx)
+      isChanged = single.data.filter(arg, ctx)
+    } catch (err) {
+      console.error(err)
+    }
+    if (!!isChanged) {
       return Ctx.filter({
         value: arg,
         isChanged,
       })
-    } catch (err) {
-      console.error(err)
     }
   },
   run(
