@@ -11,27 +11,23 @@ import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
+import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
 import {__DEV__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {type CompositeName} from '../compositeName'
 
-let id = 0
-
 export function storeFabric<State>(props: {
   currentState: State,
   name?: string,
   parent?: CompositeName,
 }): Store<State> {
-  const currentId = (++id).toString(36)
   const {currentState, name, parent} = props
+  const plainState = createStateRef(currentState)
+  const currentId = plainState.id
   const defaultState = currentState
 
-  const plainState = {
-    id: currentId,
-    current: defaultState,
-  }
   const subscribers = new Map()
   const def = {}
   def.next = <multi />
