@@ -14,10 +14,10 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(steps, eventCtx)
 }
 const print = e => `${e.type} ${e.id}`
-const printFull = full => {
-  // const items = full.map(print)
-  // const itemsText = items.join(', ')
-  // console.log(`[${itemsText}]`)
+const printFull = (full, tag = '') => {
+  const items = full.map(print)
+  const itemsText = items.join(', ')
+  console.log(`${tag} [${itemsText}]`)
 }
 const callstack = {
   box: [],
@@ -27,28 +27,32 @@ const callstack = {
     this.item.push(item)
     this.full.push(item)
     dev: {
-      printFull(this.full)
+      // printFull(this.full)
+      // printFull(this.item, '(cmd)')
     }
   },
   popItem() {
     this.item.pop()
     this.full.pop()
     dev: {
-      printFull(this.full)
+      // printFull(this.full)
+      // printFull(this.item, '(cmd)')
     }
   },
   pushBox(box) {
     this.box.push(box)
     this.full.push(box)
     dev: {
-      printFull(this.full)
+      // printFull(this.full)
+      // printFull(this.box, '(box)')
     }
   },
   popBox() {
     this.box.pop()
     this.full.pop()
     dev: {
-      printFull(this.full)
+      // printFull(this.full)
+      // printFull(this.box, '(box)')
     }
   },
 }
