@@ -1,6 +1,7 @@
 //@flow
 import invariant from 'invariant'
 import type {Event} from 'effector/event'
+import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
@@ -58,7 +59,7 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
     transactions[i]()
   }
 }
-function runStep(step, ctx, transactions) {
+function runStep(step, ctx: *, transactions) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
   callstack.pushBox(step)
   const result = stepVisitor[step.type](step, ctx, transactions)
@@ -66,6 +67,38 @@ function runStep(step, ctx, transactions) {
   return result
 }
 const stepVisitor = {
+  choose(
+    step: TypeDef<'choose', 'step'>,
+    ctx: TypeDef<*, 'ctx'>,
+    transactions,
+  ) {
+    const ref: StateRef = step.data.ref
+    const selector: TypeDef<*, 'step'> = step.data.selector
+    const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
+    const selectorChainResult = runStep(selector, ctx, transactions)
+    // if (!selectorChainResult) {
+    //   return
+    // }
+    const caseName = ref.current
+    //optional
+    invariant(
+      typeof caseName === 'string',
+      'incorrect selector "%s" for id %s',
+      caseName,
+      ref.id,
+    )
+    let next
+    if (caseName in cases) {
+      next = cases[caseName]
+    } else if ('__' in cases) {
+      next = cases.__
+    } else {
+      console.error('no case "%s" exists', caseName)
+      return
+    }
+    return runStep(next, ctx, transactions)
+  },
+
   single(
     step: TypeDef<'single', 'step'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
