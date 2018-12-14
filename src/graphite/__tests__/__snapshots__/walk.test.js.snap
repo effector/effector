@@ -1,0 +1,238 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
+"Seq [
+  1. emit {{
+     subtype: event,
+     fullName: [a] at least not dangerous
+  }},
+  2. choose {{
+     ref: {
+       id: 1,
+       current: bar
+     },
+     selector: {
+       id: 2m,
+       type: seq,
+       group: step,
+       data: [
+         {
+           id: 2j,
+           type: single,
+           group: step,
+           data: {
+             id: 2i,
+             type: compute,
+             group: cmd,
+             data: {}
+           }
+         },
+         {
+           id: 2l,
+           type: single,
+           group: step,
+           data: {
+             id: 2k,
+             type: update,
+             group: cmd,
+             data: {
+               store: {
+                 id: 1,
+                 current: bar
+               }
+             }
+           }
+         }
+       ]
+     },
+     cases: {
+       foo: {
+         id: 2p,
+         type: seq,
+         group: step,
+         data: [
+           {
+             id: 2o,
+             type: single,
+             group: step,
+             data: {
+               id: 2n,
+               type: compute,
+               group: cmd,
+               data: {}
+             }
+           }
+         ]
+       },
+       bar: {
+         id: 2s,
+         type: seq,
+         group: step,
+         data: [
+           {
+             id: 2r,
+             type: single,
+             group: step,
+             data: {
+               id: 2q,
+               type: compute,
+               group: cmd,
+               data: {}
+             }
+           }
+         ]
+       }
+     }
+  }},
+  3. run {{}},
+  4. [
+     *  run {{}}
+  ]
+]"
+`;
+
+exports[`<choose /> execution cases [a] at least not dangerous 2`] = `
+Object {
+  "data": Array [
+    Object {
+      "data": Object {
+        "data": Object {
+          "fullName": "[a] at least not dangerous",
+          "subtype": "event",
+        },
+        "group": "cmd",
+        "id": "2t",
+        "type": "emit",
+      },
+      "group": "step",
+      "id": "2u",
+      "type": "single",
+    },
+    Object {
+      "data": Object {
+        "cases": Object {
+          "bar": Object {
+            "data": Array [
+              Object {
+                "data": Object {
+                  "data": Object {
+                    "reduce": [Function],
+                  },
+                  "group": "cmd",
+                  "id": "2q",
+                  "type": "compute",
+                },
+                "group": "step",
+                "id": "2r",
+                "type": "single",
+              },
+            ],
+            "group": "step",
+            "id": "2s",
+            "type": "seq",
+          },
+          "foo": Object {
+            "data": Array [
+              Object {
+                "data": Object {
+                  "data": Object {
+                    "reduce": [Function],
+                  },
+                  "group": "cmd",
+                  "id": "2n",
+                  "type": "compute",
+                },
+                "group": "step",
+                "id": "2o",
+                "type": "single",
+              },
+            ],
+            "group": "step",
+            "id": "2p",
+            "type": "seq",
+          },
+        },
+        "ref": Object {
+          "current": "bar",
+          "id": "1",
+        },
+        "selector": Object {
+          "data": Array [
+            Object {
+              "data": Object {
+                "data": Object {
+                  "reduce": [Function],
+                },
+                "group": "cmd",
+                "id": "2i",
+                "type": "compute",
+              },
+              "group": "step",
+              "id": "2j",
+              "type": "single",
+            },
+            Object {
+              "data": Object {
+                "data": Object {
+                  "store": Object {
+                    "current": "bar",
+                    "id": "1",
+                  },
+                },
+                "group": "cmd",
+                "id": "2k",
+                "type": "update",
+              },
+              "group": "step",
+              "id": "2l",
+              "type": "single",
+            },
+          ],
+          "group": "step",
+          "id": "2m",
+          "type": "seq",
+        },
+      },
+      "group": "step",
+      "id": "2v",
+      "type": "choose",
+    },
+    Object {
+      "data": Object {
+        "data": Object {
+          "runner": [MockFunction],
+        },
+        "group": "cmd",
+        "id": "2w",
+        "type": "run",
+      },
+      "group": "step",
+      "id": "2x",
+      "type": "single",
+    },
+    Object {
+      "data": Array [
+        Object {
+          "data": Object {
+            "data": Object {
+              "runner": [Function],
+            },
+            "group": "cmd",
+            "id": "2f",
+            "type": "run",
+          },
+          "group": "step",
+          "id": "2g",
+          "type": "single",
+        },
+      ],
+      "group": "step",
+      "id": "2h",
+      "type": "multi",
+    },
+  ],
+  "group": "step",
+  "id": "2y",
+  "type": "seq",
+}
+`;

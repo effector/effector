@@ -1,5 +1,7 @@
 //@flow
 //@jsx fx
+
+import {show} from 'effector/fixtures/showstep'
 import fx from 'effector/stdlib/fx'
 import {Ctx} from 'effector/graphite/typedef'
 import {createStateRef} from 'effector/stdlib/stateref'
@@ -246,6 +248,8 @@ describe('<choose /> execution cases', () => {
     })
     // expect(fnNext).toHaveBeenCalledTimes(1)
     // expect(fnNext).toBeCalledWith('case bar')
+    expect(show(exec)).toMatchSnapshot()
+    expect(exec).toMatchSnapshot()
   })
 })
 
