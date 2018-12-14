@@ -2,6 +2,7 @@
 //@jsx fx
 import fx from 'effector/stdlib/fx'
 import {Ctx} from 'effector/graphite/typedef'
+import {createStateRef} from 'effector/stdlib/stateref'
 
 import {createEvent} from 'effector/event'
 import {walkEvent, walkNode} from '../walk'
@@ -149,6 +150,102 @@ describe('<run /> execution cases', () => {
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[run][b]()')
     expect(fn2).not.toHaveBeenCalled()
+  })
+})
+
+describe('<choose /> execution cases', () => {
+  it('[a] at least not dangerous', () => {
+    const fnNext = jest.fn()
+    const fnSelector = jest.fn()
+    const fnFoo = jest.fn()
+    const fnBar = jest.fn()
+    const trigger = createEvent('[choose][a]')
+    const next = Next()
+    const state = createStateRef('foo')
+    // <single>
+    //       <run runner={fnSelector} />
+    //     </single>
+    const selector = (
+      <seq>
+        <single>
+          <compute reduce={(none, arg, ctx) => 'bar'} />
+        </single>
+        <single>
+          <update store={state} />
+        </single>
+      </seq>
+    )
+    const caseFoo = (
+      <seq>
+        <single>
+          <compute
+            reduce={(...args) => {
+              fnFoo(...args)
+              return 'case foo'
+            }}
+          />
+        </single>
+      </seq>
+    )
+    const caseBar = (
+      <seq>
+        <single>
+          <compute
+            reduce={(...args) => {
+              fnBar(...args)
+              return 'case bar'
+            }}
+          />
+        </single>
+      </seq>
+    )
+    const exec = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName="[a] at least not dangerous" />
+        </single>
+        <choose
+          ref={state}
+          selector={selector}
+          cases={{foo: caseFoo, bar: caseBar}}
+        />
+        <single>
+          <run runner={fnNext} />
+        </single>
+        {next}
+      </seq>
+    )
+    trigger.graphite = {seq: exec, next}
+    walkNode(exec, eventCtx('[choose][a]()', trigger))
+    expect(fnFoo).not.toHaveBeenCalled()
+    expect(fnBar).toHaveBeenCalledTimes(1)
+    expect(fnBar).toBeCalledWith(undefined, '[choose][a]()', {
+      data: {
+        args: [
+          undefined,
+          '[choose][a]()',
+          {
+            data: {
+              eventName: '[a] at least not dangerous',
+              payload: '[choose][a]()',
+            },
+            group: 'ctx',
+            id: expect.any(String),
+            type: 'emit',
+          },
+        ],
+        error: null,
+        isChanged: true,
+        isError: false,
+        isNone: false,
+        result: 'case bar',
+      },
+      group: 'ctx',
+      id: expect.any(String),
+      type: 'compute',
+    })
+    // expect(fnNext).toHaveBeenCalledTimes(1)
+    // expect(fnNext).toBeCalledWith('case bar')
   })
 })
 
