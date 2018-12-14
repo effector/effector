@@ -14,8 +14,6 @@ import {createEffect} from 'effector/effect'
 
 import {spy, delay, getSpyCalls} from 'effector/fixtures'
 
-import flags from '../../flags'
-
 describe('symbol-observable support', () => {
   test('from(store)', async() => {
     expect(() => {

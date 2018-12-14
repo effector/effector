@@ -21,7 +21,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   const state = [...obj]
   const stateNew = [...obj]
 
-  const updater: any = createEvent(`update ${Math.random().toString()}`)
+  const updater: any = createEvent('update ' + Math.random().toString())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -52,12 +52,15 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
       pushNext(<single>{runCmd}</single>, substore.graphite.next)
     }
   }
-  const name = `combine(${obj
-    .map(store => {
-      if (store.kind !== Kind.store) return store.toString()
-      return getDisplayName(store)
-    })
-    .join(', ')})`
+  const name =
+    'combine(' +
+    obj
+      .map(store => {
+        if (store.kind !== Kind.store) return store.toString()
+        return getDisplayName(store)
+      })
+      .join(', ') +
+    ')'
   const store = storeFabric({
     name,
     currentState: stateNew,
@@ -80,7 +83,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   const state = {...obj}
   const stateNew = {...obj}
 
-  const updater: any = createEvent(`update ${Math.random().toString()}`)
+  const updater: any = createEvent('update ' + Math.random().toString())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -110,12 +113,15 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     stateNew[key] = substore.getState()
     pushNext(<single>{runCmd}</single>, substore.graphite.next)
   }
-  const name = `combine(${(Object.values(obj): Array<$Values<typeof obj>>)
-    .map(store => {
-      if (store.kind !== Kind.store) return store.toString()
-      return getDisplayName(store)
-    })
-    .join(', ')})`
+  const name =
+    'combine(' +
+    (Object.values(obj): Array<$Values<typeof obj>>)
+      .map(store => {
+        if (store.kind !== Kind.store) return store.toString()
+        return getDisplayName(store)
+      })
+      .join(', ') +
+    ')'
   const store = storeFabric({
     name,
     currentState: stateNew,

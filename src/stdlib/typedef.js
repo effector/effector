@@ -1,24 +1,24 @@
 //@flow
+let nextID = 0
+export type ID = string
 export type TypeDef<+Type, +Group> = {
+  +id: ID,
   +type: Type,
   +group: Group,
   +data: any,
 }
 
 export type GraphiteMeta = {
-  +next: TypeDef<*, 'step'>,
+  +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
 }
 export function pushNext(
   add: TypeDef<'multi' | 'seq' | 'single', 'step'>,
-  seq: TypeDef<'seq' | 'multi', 'step'>,
+  nexts: TypeDef<'multi', 'step'>,
 ) {
-  seq.data.push(add)
+  nexts.data.push(add)
 }
-function fabricHandler(create) {
-  if (typeof create === 'function') return create
-  return _ => _
-}
+const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
 
 declare export function typeDef<T: {+[key: string]: any}, Group>(
   group: Group,
@@ -26,12 +26,15 @@ declare export function typeDef<T: {+[key: string]: any}, Group>(
 ): $ObjMapi<T, <K>(k: K) => (data: any) => TypeDef<K, Group>>
 export function typeDef(group, t) {
   const result = {}
-  for (const key in t) {
-    const handler = fabricHandler(t[key])
-    result[key] = (...args) => ({
-      type: key,
+  let key
+  for (key in t) {
+    const currentKey = key
+    const handler = fabricHandler(t[currentKey])
+    result[currentKey] = args => ({
+      id: (++nextID).toString(36),
+      type: currentKey,
       group,
-      data: handler(...args),
+      data: handler(args),
     })
   }
   return result

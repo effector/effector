@@ -1,4 +1,7 @@
 **/lib/**
+**/struct.js
+**/stdlib/visitor.js
+**/val/**
 **/es/**
 **/dist/**
 **/flow-typed/**

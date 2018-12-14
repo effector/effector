@@ -8,13 +8,13 @@ module.exports = api => {
   // const env = api.cache(() => process.env.NODE_ENV)
   // console.log(env)
   // console.log(api)
+  const isBuild = !!process.env.IS_BUILD
   const plugins = [
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],
     'macros',
-    './src/babel/dev-expression',
     [
       'babel-plugin-module-resolver',
       {
@@ -27,6 +27,11 @@ module.exports = api => {
           'effector/graphite': resolvePath(__dirname, 'src', 'graphite'),
           'effector/fixtures': resolvePath(__dirname, 'src', 'fixtures'),
           'effector/stdlib': resolvePath(__dirname, 'src', 'stdlib'),
+          'effector/flags': resolvePath(
+            __dirname,
+            'src',
+            isBuild ? 'flags.prod' : 'flags.dev',
+          ),
           // '^bs-platform/lib/es6/(.+)': ([, name]) =>
           //  resolvePath(__dirname, 'node_modules/bs-platform/lib/es6', name),
           // '^bs-platform/lib/es6/(.+)': ([, name]) =>

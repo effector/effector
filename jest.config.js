@@ -1,5 +1,6 @@
 //@flow
 
+//$off
 const {loadYamlSync} = require('./scripts/yaml-util')
 
 const projects = addProjects(loadYamlSync('./jestproject.yml'))
@@ -41,6 +42,7 @@ function packageTest(displayName, opts = {}) {
         '^effector$': '<rootDir>/src/index.js',
         '^effector-react$': '<rootDir>/src/react/index.js',
         'effector/fixtures': '<rootDir>/src/fixtures/index.js',
+        'effector/flags': '<rootDir>/src/flags.dev.js',
         '^effector/(.+)': '<rootDir>/src/$1',
       },
       testPathIgnorePatterns: ['<rootDir>/node_modules/'],

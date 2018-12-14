@@ -1,6 +1,7 @@
 //@flow
 import invariant from 'invariant'
 import type {Event} from 'effector/event'
+import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
@@ -12,43 +13,117 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   })
   walkNode(steps, eventCtx)
 }
-
+const print = e => `${e.type} ${e.id}`
+const printFull = (full, tag = '') => {
+  const items = full.map(print)
+  const itemsText = items.join(', ')
+  console.log(`${tag} [${itemsText}]`)
+}
+const callstack = {
+  box: [],
+  item: [],
+  full: [],
+  pushItem(item) {
+    this.item.push(item)
+    this.full.push(item)
+    dev: {
+      // printFull(this.full)
+      // printFull(this.item, '(cmd)')
+    }
+  },
+  popItem() {
+    this.item.pop()
+    this.full.pop()
+    dev: {
+      // printFull(this.full)
+      // printFull(this.item, '(cmd)')
+    }
+  },
+  pushBox(box) {
+    this.box.push(box)
+    this.full.push(box)
+    dev: {
+      // printFull(this.full)
+      // printFull(this.box, '(box)')
+    }
+  },
+  popBox() {
+    this.box.pop()
+    this.full.pop()
+    dev: {
+      // printFull(this.full)
+      // printFull(this.box, '(box)')
+    }
+  },
+}
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const transactions: Array<() => void> = []
-  stepVisitor.seq(seq, ctx, transactions)
+  runStep(seq, ctx, transactions)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
 }
-
+function runStep(step, ctx: *, transactions) {
+  invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+  callstack.pushBox(step)
+  const result = stepVisitor[step.type](step, ctx, transactions)
+  callstack.popBox()
+  return result
+}
 const stepVisitor = {
-  single(step, currentCtx, transactions) {
-    const innerData = step.data
-    const single: TypeDef<*, 'cmd'> = innerData
-    const ctx: TypeDef<
-      'compute' | 'emit' | 'filter' | 'update',
-      'ctx',
-    > = currentCtx
+  choose(
+    step: TypeDef<'choose', 'step'>,
+    ctx: TypeDef<*, 'ctx'>,
+    transactions,
+  ) {
+    const ref: StateRef = step.data.ref
+    const selector: TypeDef<*, 'step'> = step.data.selector
+    const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
+    const selectorChainResult = runStep(selector, ctx, transactions)
+    // if (!selectorChainResult) {
+    //   return
+    // }
+    const caseName = ref.current
+    //optional
+    invariant(
+      typeof caseName === 'string',
+      'incorrect selector "%s" for id %s',
+      caseName,
+      ref.id,
+    )
+    let next
+    if (caseName in cases) {
+      next = cases[caseName]
+    } else if ('__' in cases) {
+      next = cases.__
+    } else {
+      console.error('no case "%s" exists', caseName)
+      return
+    }
+    return runStep(next, ctx, transactions)
+  },
+
+  single(
+    step: TypeDef<'single', 'step'>,
+    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
+    transactions,
+  ) {
+    const single: TypeDef<*, 'cmd'> = step.data
     invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
-    const arg = stepArgVisitor[ctx.type](ctx.data)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
+    const arg = stepArgVisitor[ctx.type](ctx.data)
+    callstack.pushItem(single)
     const result = cmdVisitor[single.type](arg, single, ctx, transactions)
+    callstack.popItem()
     if (!result) {
-      // console.warn('step, arg', step, arg)
       return
     }
-    if (result.type === ('run': 'run')) {
-      return
-    }
-    if (result?.type === ('filter': 'filter') && !result.data.isChanged) return
     return (result: any)
   },
   multi(step, currentCtx, transactions) {
     if (step.data.length === 0) return
-    for (let i = 0, result, item; i < step.data.length; i++) {
-      item = step.data[i]
-      invariant(item.type in stepVisitor, 'impossible case "%s"', item.type)
-      result = stepVisitor[item.type](item, currentCtx, transactions)
+    for (let i = 0, result; i < step.data.length; i++) {
+      result = runStep(step.data[i], currentCtx, transactions)
     }
   },
   seq(
@@ -65,15 +140,9 @@ const stepVisitor = {
     for (let i = 0; i < steps.data.length; i++) {
       step = steps.data[i]
       const isMulti = step.type === ('multi': 'multi')
-      invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
-      const stepResult = stepVisitor[step.type](step, currentCtx, transactions)
+      const stepResult = runStep(step, currentCtx, transactions)
       if (isMulti) continue
-      if (stepResult === undefined) return
-      if (
-        stepResult.type === ('filter': 'filter')
-        && !stepResult.data.isChanged
-      )
-        return
+      if (stepResult === undefined) break
       currentCtx = stepResult
     }
   },
@@ -105,14 +174,17 @@ const cmdVisitor = {
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
     transactions: Array<() => void>,
   ) {
+    let isChanged = false
     try {
-      const isChanged = single.data.filter(arg, ctx)
+      isChanged = single.data.filter(arg, ctx)
+    } catch (err) {
+      console.error(err)
+    }
+    if (!!isChanged) {
       return Ctx.filter({
         value: arg,
         isChanged,
       })
-    } catch (err) {
-      console.error(err)
     }
   },
   run(
@@ -128,10 +200,12 @@ const cmdVisitor = {
     } catch (err) {
       console.error(err)
     }
-    return Ctx.run({
+    /*
+    const run = Ctx.run({
       args: [arg],
       parentContext: ctx,
     })
+    */
   },
   update(
     arg: any,
@@ -140,7 +214,7 @@ const cmdVisitor = {
     transactions: Array<() => void>,
   ) {
     const newCtx = Ctx.update({value: arg})
-    single.data.store[2](arg)
+    single.data.store.current = arg
     return newCtx
   },
   compute(

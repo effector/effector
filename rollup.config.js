@@ -44,7 +44,7 @@ const rollupPlugins = [
       'kind',
       'perf',
       'stdlib',
-    ]),
+    ]).set('effector/flags', resolvePath(__dirname, 'src', 'flags.prod')),
     extensions: ['re', 'bs', 'bs.js', 'js'],
   }),
   resolve({}),
@@ -57,11 +57,15 @@ const rollupPlugins = [
     compress: {
       pure_getters: true,
     },
-    output: {
-      comments: /#/i,
-      // beautify: true,
-      // indent_level: 2,
-    },
+    output: process.env.PRETTIFY
+      ? {
+        comments: /#/i,
+        beautify: true,
+        indent_level: 2,
+      }
+      : {
+        comments: /#/i,
+      },
   }),
   sizeSnapshot(),
 ]

@@ -2,7 +2,11 @@
 //@jsx fx
 import fx from 'effector/stdlib/fx'
 
-import {pushNext} from 'effector/stdlib/typedef'
+import {
+  pushNext,
+  type GraphiteMeta,
+  type TypeDef,
+} from 'effector/stdlib/typedef'
 import $$observable from 'symbol-observable'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
@@ -15,8 +19,6 @@ import {Kind, type kind} from 'effector/stdlib/kind'
 import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
-
-import fabric from './concreteFabric'
 
 export function eventFabric<Payload>({
   name: nameRaw,
@@ -73,7 +75,7 @@ export function eventFabric<Payload>({
   }
   function prepend<Before>(fn: Before => Payload) {
     const contramapped: Event<Before> = eventFabric({
-      name: `* → ${name}`,
+      name: '* → ' + name,
       parent,
     })
     fabric.prependEvent({
@@ -94,7 +96,7 @@ declare function mapEvent<A, B>(
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   const mapped = eventFabric({
-    name: `${event.shortName} → *`,
+    name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
   fabric.mapEvent({
@@ -110,7 +112,7 @@ function filterEvent<A, B>(
   fn: A => B | void,
 ): Event<B> {
   const mapped = eventFabric({
-    name: `${event.shortName} →? *`,
+    name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
   fabric.filterEvent({
@@ -141,5 +143,80 @@ function watchEvent<Payload>(
   return unsubscribe
 }
 function makeName(name: string, compositeName?: CompositeName) {
-  return [compositeName?.fullName, name].filter(Boolean).join('/')
+  const fullName = compositeName?.fullName
+  if (!fullName) {
+    if (!name) return ''
+    return name
+  }
+  return '' + fullName + '/' + name
+}
+const fabric = {
+  event(args: {fullName: string}): GraphiteMeta {
+    const nextSteps = <multi />
+    const stepFull = (
+      <seq>
+        <single>
+          <emit subtype="event" fullName={args.fullName} />
+        </single>
+        {nextSteps}
+      </seq>
+    )
+    const graphite = {next: nextSteps, seq: stepFull}
+    return graphite
+  },
+  prependEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+        </single>
+        {parentGraphite.seq}
+      </seq>,
+      graphite.next,
+    )
+  },
+  mapEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+        </single>
+        {graphite.seq}
+      </seq>,
+      parentGraphite.next,
+    )
+  },
+  filterEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+        </single>
+        <single>
+          <filter
+            filter={(result, ctx: TypeDef<'emitCtx', 'ctx'>) =>
+              result !== undefined
+            }
+          />
+        </single>
+        {graphite.seq}
+      </seq>,
+      parentGraphite.next,
+    )
+  },
 }

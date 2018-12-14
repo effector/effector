@@ -4,9 +4,12 @@ import type {TypeDef} from 'effector/stdlib/typedef'
 export function show(
   value: TypeDef<*, 'step'>,
   showCmd: (TypeDef<*, 'cmd'>) => string = _ =>
-    `${_.type} {${JSON.stringify(_.data, null, 2)}}`,
+    `${_.type} {${JSON.stringify(_.data, null, 2).replace(/\"/gi, '')}}`,
 ): string {
   switch (value.type) {
+    case 'choose':
+      //$todo
+      return showCmd(value)
     case 'single':
       return showCmd(value.data)
     case 'multi': {

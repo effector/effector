@@ -7,28 +7,27 @@ import * as perf from 'effector/perf'
 
 import {Kind, type kind} from 'effector/stdlib/kind'
 import {pushNext, type TypeDef} from 'effector/stdlib/typedef'
-import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
+import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
+import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
+import {__DEV__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
-import {createRef, type Ref} from '../ref/createRef'
 import {type CompositeName} from '../compositeName'
-
-let id = 0
 
 export function storeFabric<State>(props: {
   currentState: State,
   name?: string,
   parent?: CompositeName,
 }): Store<State> {
-  const currentId = (++id).toString(36)
   const {currentState, name, parent} = props
+  const plainState = createStateRef(currentState)
+  const currentId = plainState.id
   const defaultState = currentState
 
-  const plainState: Ref<typeof defaultState> = createRef(defaultState)
   const subscribers = new Map()
   const def = {}
   def.next = <multi />
@@ -37,7 +36,7 @@ export function storeFabric<State>(props: {
       <single>
         <filter
           filter={(newValue, ctx) =>
-            newValue !== undefined && newValue !== plainState[1]()
+            newValue !== undefined && newValue !== plainState.current
           }
         />
       </single>
@@ -48,7 +47,7 @@ export function storeFabric<State>(props: {
     </seq>
   )
 
-  const updater: any = createEvent(`update ${currentId}`)
+  const updater: any = createEvent('update ' + currentId)
 
   const store = {
     graphite: def,
@@ -73,43 +72,32 @@ export function storeFabric<State>(props: {
   ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
   function getState() {
-    return plainState[1]()
+    return plainState.current
   }
 
-  const visitors = makeVisitorRecordMap({
+  const visitors = {
     watch: {
-      visitor: {
-        event(eventOrFn, fn) {
-          invariant(typeof fn === 'function', 'watch requires function handler')
-          return eventOrFn.watch(payload =>
-            fn(store.getState(), payload, eventOrFn.getType()),
-          )
-        },
-        effect(eventOrFn, fn) {
-          invariant(typeof fn === 'function', 'watch requires function handler')
-          return eventOrFn.watch(payload =>
-            fn(store.getState(), payload, eventOrFn.getType()),
-          )
-        },
-        __(eventOrFn, fn) {
-          invariant(
-            typeof eventOrFn === 'function',
-            'watch requires function handler',
-          )
-          return subscribe(eventOrFn)
-        },
+      event({eventOrFn, fn}) {
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
       },
-      reader(eventOrFn) {
-        if (typeof eventOrFn === 'function') {
-          if (typeof eventOrFn.kind !== 'undefined')
-            return ((eventOrFn.kind: any): kind)
-        } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
-          if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
-        }
+      effect({eventOrFn, fn}) {
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
       },
-      writer: (handler, eventOrFn, fn) => handler(eventOrFn, fn),
+      __({eventOrFn}) {
+        invariant(
+          typeof eventOrFn === 'function',
+          'watch requires function handler',
+        )
+        return subscribe(eventOrFn)
+      },
     },
-  })
+  }
 
   function map(fn, firstState) {
     return mapStore(store, fn, firstState)
@@ -118,7 +106,7 @@ export function storeFabric<State>(props: {
   function subscribe(listener) {
     if (__DEV__)
       perf.beginMark(
-        `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+        'Start ' + getDisplayName(store) + ' subscribe (id: ' + store.id + ')',
       )
     invariant(
       typeof listener === 'function',
@@ -136,19 +124,31 @@ export function storeFabric<State>(props: {
               listener(args)
               if (__DEV__)
                 perf.endMark(
-                  `Call ${getDisplayName(store)} subscribe listener (id: ${
-                    store.id
-                  })`,
-                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                  'Call ' +
+                    getDisplayName(store) +
+                    ' subscribe listener (id: ' +
+                    store.id +
+                    ')',
+                  'Start ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
                 )
             } catch (err) {
               console.error(err)
               if (__DEV__)
                 perf.endMark(
-                  `Got error on ${getDisplayName(store)} subscribe (id: ${
-                    store.id
-                  })`,
-                  `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                  'Got error on ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
+                  'Start ' +
+                    getDisplayName(store) +
+                    ' subscribe (id: ' +
+                    store.id +
+                    ')',
                 )
             }
           }}
@@ -239,7 +239,10 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitors.watch(eventOrFn, fn)
+    return visitRecord(visitors.watch, {
+      __kind: kindReader(eventOrFn),
+      args: {eventOrFn, fn},
+    })
   }
 
   function stateSetter(_, payload) {
@@ -280,7 +283,7 @@ function mapStore<A, B>(
   let lastValue = store.getState()
   let lastResult = fn(lastValue, firstState)
   const innerStore: Store<any> = storeFabric({
-    name: `${store.shortName} → *`,
+    name: '' + store.shortName + ' → *',
     currentState: lastResult,
     parent: store.domainName,
   })
@@ -294,8 +297,12 @@ function mapStore<A, B>(
             const result = fn(newValue, lastState)
             if (__DEV__)
               perf.endMark(
-                `Map ${getDisplayName(store)} (id: ${store.id})`,
-                `Start ${getDisplayName(store)} subscribe (id: ${store.id})`,
+                'Map ' + getDisplayName(store) + ' (id: ${store.id})',
+                'Start ' +
+                  getDisplayName(store) +
+                  ' subscribe (id: ' +
+                  store.id +
+                  ')',
               )
             return result
           }}
