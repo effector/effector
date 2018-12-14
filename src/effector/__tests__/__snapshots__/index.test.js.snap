@@ -623,8 +623,8 @@ Object {
 exports[`graphite: show bar 1`] = `
 "Seq [
   1. emit {{
-     \\"subtype\\": \\"event\\",
-     \\"fullName\\": \\"foo → *\\"
+     subtype: event,
+     fullName: foo → *
   }},
   2. [
      *  Seq [
@@ -633,9 +633,9 @@ exports[`graphite: show bar 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": {
-                \\"id\\": \\"1\\",
-                \\"current\\": \\"foo | 1 | 11\\"
+              store: {
+                id: 1,
+                current: foo | 1 | 11
               }
            }},
            3. [
@@ -645,9 +645,9 @@ exports[`graphite: show bar 1`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": {
-                         \\"id\\": \\"2\\",
-                         \\"current\\": 12
+                       store: {
+                         id: 2,
+                         current: 12
                        }
                     }},
                     3. [(empty list)]
@@ -664,8 +664,8 @@ exports[`graphite: show bar 1`] = `
 exports[`graphite: show bar 2`] = `
 "Seq [
   1. emit {{
-     \\"subtype\\": \\"event\\",
-     \\"fullName\\": \\"foo → *\\"
+     subtype: event,
+     fullName: foo → *
   }},
   2. [
      *  Seq [
@@ -674,9 +674,9 @@ exports[`graphite: show bar 2`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": {
-                \\"id\\": \\"1\\",
-                \\"current\\": \\"foo | 1 | 11\\"
+              store: {
+                id: 1,
+                current: foo | 1 | 11
               }
            }},
            3. [
@@ -686,9 +686,9 @@ exports[`graphite: show bar 2`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": {
-                         \\"id\\": \\"2\\",
-                         \\"current\\": 12
+                       store: {
+                         id: 2,
+                         current: 12
                        }
                     }},
                     3. [(empty list)]
@@ -704,16 +704,16 @@ exports[`graphite: show bar 2`] = `
 exports[`graphite: show foo 1`] = `
 "Seq [
   1. emit {{
-     \\"subtype\\": \\"event\\",
-     \\"fullName\\": \\"foo\\"
+     subtype: event,
+     fullName: foo
   }},
   2. [
      *  Seq [
         1. compute {{}},
         2. Seq [
            1. emit {{
-              \\"subtype\\": \\"event\\",
-              \\"fullName\\": \\"foo → *\\"
+              subtype: event,
+              fullName: foo → *
            }},
            2. [
               *  Seq [
@@ -722,9 +722,9 @@ exports[`graphite: show foo 1`] = `
                  3. Seq [
                     1. filter {{}},
                     2. update {{
-                       \\"store\\": {
-                         \\"id\\": \\"1\\",
-                         \\"current\\": \\"foo | 1 | 11 | 101\\"
+                       store: {
+                         id: 1,
+                         current: foo | 1 | 11 | 101
                        }
                     }},
                     3. [
@@ -734,9 +734,9 @@ exports[`graphite: show foo 1`] = `
                           3. Seq [
                              1. filter {{}},
                              2. update {{
-                                \\"store\\": {
-                                  \\"id\\": \\"2\\",
-                                  \\"current\\": 18
+                                store: {
+                                  id: 2,
+                                  current: 18
                                 }
                              }},
                              3. [(empty list)]
@@ -756,9 +756,9 @@ exports[`graphite: show store1 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": {
-       \\"id\\": \\"1\\",
-       \\"current\\": \\"foo | 1 | 11 | 101\\"
+     store: {
+       id: 1,
+       current: foo | 1 | 11 | 101
      }
   }},
   3. [
@@ -768,9 +768,9 @@ exports[`graphite: show store1 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": {
-                \\"id\\": \\"2\\",
-                \\"current\\": 18
+              store: {
+                id: 2,
+                current: 18
               }
            }},
            3. [(empty list)]
@@ -784,9 +784,9 @@ exports[`graphite: show store2 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": {
-       \\"id\\": \\"2\\",
-       \\"current\\": 18
+     store: {
+       id: 2,
+       current: 18
      }
   }},
   3. [(empty list)]
@@ -962,8 +962,8 @@ Object {
 exports[`showcase: event foo 1`] = `
 "Seq [
   1. emit {{
-     \\"subtype\\": \\"event\\",
-     \\"fullName\\": \\"foo\\"
+     subtype: event,
+     fullName: foo
   }},
   2. [
      *  Seq [
@@ -972,9 +972,9 @@ exports[`showcase: event foo 1`] = `
         3. Seq [
            1. filter {{}},
            2. update {{
-              \\"store\\": {
-                \\"id\\": \\"3\\",
-                \\"current\\": 3
+              store: {
+                id: 3,
+                current: 3
               }
            }},
            3. [
@@ -990,9 +990,9 @@ exports[`showcase: mapped 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": {
-       \\"id\\": \\"6\\",
-       \\"current\\": 3
+     store: {
+       id: 6,
+       current: 3
      }
   }},
   3. [
@@ -1005,9 +1005,9 @@ exports[`showcase: store a 1`] = `
 "Seq [
   1. filter {{}},
   2. update {{
-     \\"store\\": {
-       \\"id\\": \\"3\\",
-       \\"current\\": 3
+     store: {
+       id: 3,
+       current: 3
      }
   }},
   3. [
