@@ -26,38 +26,30 @@ type Meta = {
  pathBuild: string,
 }
 */
-export function writePackages(names /*: string[]*/) {
-  const rootPackage = readPackage()
-  const version /*: string*/ = rootPackage.version
-  const pkgList = names.map(name => ({
-    name,
-    pathRoot: join(rootDir, 'packages', name),
-    pathBuild: join(rootDir, 'npm', name),
-  }))
-
-  for (const {name, pathRoot, pathBuild} of pkgList) {
+const stages = {
+  editPackage(pkg, names, version) {
+    pkg.version = version
+    if ('dependencies' in pkg) {
+      setVersion(names, pkg.dependencies, version)
+    }
+    if ('devDependencies' in pkg) {
+      setVersion(names, pkg.devDependencies, version)
+    }
+    if ('peerDependencies' in pkg) {
+      setVersion(names, pkg.peerDependencies, version)
+    }
+  },
+  cleanup(pathBuild) {
+    ensureDirSync(pathBuild)
+    emptyDirSync(pathBuild)
+  },
+  writePackage({name, pathRoot, pathBuild, version}, names) {
     const joinBuild = file => join(pathBuild, file)
     const joinSrc = file => join(pathRoot, file)
 
     const pkg = readPackage(pathRoot)
-
-    editPackage: {
-      pkg.version = version
-      if ('dependencies' in pkg) {
-        setVersion(names, pkg.dependencies, version)
-      }
-      if ('devDependencies' in pkg) {
-        setVersion(names, pkg.devDependencies, version)
-      }
-      if ('peerDependencies' in pkg) {
-        setVersion(names, pkg.peerDependencies, version)
-      }
-    }
-
-    cleanup: {
-      ensureDirSync(pathBuild)
-      emptyDirSync(pathBuild)
-    }
+    stages.editPackage(pkg, names, version)
+    stages.cleanup(pathBuild)
 
     writePkg: {
       const target = joinBuild('package.json')
@@ -99,13 +91,19 @@ export function writePackages(names /*: string[]*/) {
       const target = joinBuild('README.md')
       copySync(src, target)
     }
-    // changelog: {
-    //  if (name === 'effector') {
-    //   const src = joinRoot('CHANGELOG.md')
-    //   const target = joinBuild('CHANGELOG.md')
-    //   copySync(src, target)
-    //  }
-    // }
+  },
+}
+export function writePackages(names /*: string[]*/) {
+  const rootPackage = readPackage()
+  const version /*: string*/ = rootPackage.version
+  const pkgList = names.map(name => ({
+    name,
+    version,
+    pathRoot: join(rootDir, 'packages', name),
+    pathBuild: join(rootDir, 'npm', name),
+  }))
+  for (const pkg of pkgList) {
+    stages.writePackage(pkg, names)
   }
 }
 
