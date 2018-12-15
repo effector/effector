@@ -1,6 +1,5 @@
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-import alias from './rollup-alias'
 import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
@@ -32,21 +31,6 @@ if (process.env.BUILD_UMD) {
   )
 }
 const rollupPlugins = [
-  alias({
-    pathMap: getPathMap([
-      'effect',
-      'event',
-      'store',
-      'domain',
-      'datatype',
-      'graphite',
-      'fixtures',
-      'kind',
-      'perf',
-      'stdlib',
-    ]).set('effector/flags', resolvePath(__dirname, 'src', 'flags.prod')),
-    extensions: ['re', 'bs', 'bs.js', 'js'],
-  }),
   resolve({}),
   ...staticPlugins,
   terser({
@@ -69,13 +53,7 @@ const rollupPlugins = [
   }),
   sizeSnapshot(),
 ]
-function getPathMap(list) {
-  const pairs = []
-  for (const item of list) {
-    pairs.push([`effector/${item}`, resolvePath(__dirname, 'src', item)])
-  }
-  return new Map(pairs)
-}
+
 function createBuild(name) {
   if (process.env.BUILD_UMD)
     return [
