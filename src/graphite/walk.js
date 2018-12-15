@@ -28,9 +28,21 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
 }
 function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+
   callstack.pushBox(step)
   const result = stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
+  if (result !== undefined) {
+    invariant(
+      result.type in transitionVisitor,
+      'impossible case "%s"',
+      result.type,
+    )
+    if (transitionVisitor[result.type](result)) {
+      return result
+    }
+    return
+  }
   return result
 }
 const stepVisitor = {
@@ -64,11 +76,10 @@ const stepVisitor = {
 
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta) {
     const single: TypeDef<*, 'cmd'> = step.data
-    invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
-    const arg = stepArgVisitor[ctx.type](ctx.data)
     callstack.pushItem(single)
-    const result = cmdVisitor[single.type](arg, single, ctx, meta)
+    meta.arg = getArg(ctx)
+    const result = cmdVisitor[single.type](single, ctx, meta)
     callstack.popItem()
     if (!result) {
       return
@@ -104,7 +115,10 @@ const stepVisitor = {
     }
   },
 }
-
+function getArg(ctx) {
+  invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
+  return stepArgVisitor[ctx.type](ctx.data)
+}
 const stepArgVisitor = {
   compute: data => data.result,
   emit: data => data.payload,
@@ -112,29 +126,40 @@ const stepArgVisitor = {
   filter: data => data.value,
   update: data => data.value,
 }
+const transitionVisitor = {
+  emit: ctx => true,
+  filter: ctx => Boolean(ctx.data.isChanged),
+  run: ctx => false,
+  update: ctx => true,
+  compute: ctx => Boolean(ctx.data.isChanged),
+}
 
 const cmdVisitor = {
-  emit(arg: any, single: TypeDef<'emit', 'cmd'>, ctx: CommonCtx, meta) {
+  emit(single: TypeDef<'emit', 'cmd'>, ctx: CommonCtx, meta) {
+    const arg = meta.arg
+
     return Ctx.emit({
       eventName: single.data.fullName,
       payload: arg,
     })
   },
-  filter(arg: any, single: TypeDef<'filter', 'cmd'>, ctx: CommonCtx, meta) {
+  filter(single: TypeDef<'filter', 'cmd'>, ctx: CommonCtx, meta) {
+    const arg = meta.arg
+
     let isChanged = false
     try {
       isChanged = single.data.filter(arg, ctx)
     } catch (err) {
       console.error(err)
     }
-    if (!!isChanged) {
-      return Ctx.filter({
-        value: arg,
-        isChanged,
-      })
-    }
+    return Ctx.filter({
+      value: arg,
+      isChanged,
+    })
   },
-  run(arg: any, single: TypeDef<'run', 'cmd'>, ctx: CommonCtx, meta) {
+  run(single: TypeDef<'run', 'cmd'>, ctx: CommonCtx, meta) {
+    const arg = meta.arg
+
     const transCtx = single.data.transactionContext
     if (transCtx) meta.transactions.push(transCtx(arg))
     try {
@@ -142,19 +167,21 @@ const cmdVisitor = {
     } catch (err) {
       console.error(err)
     }
-    /*
-    const run = Ctx.run({
+    return Ctx.run({
       args: [arg],
       parentContext: ctx,
     })
-    */
   },
-  update(arg: any, single: TypeDef<'update', 'cmd'>, ctx: CommonCtx, meta) {
+  update(single: TypeDef<'update', 'cmd'>, ctx: CommonCtx, meta) {
+    const arg = meta.arg
+
     const newCtx = Ctx.update({value: arg})
     single.data.store.current = arg
     return newCtx
   },
-  compute(arg: any, single: TypeDef<'compute', 'cmd'>, ctx: CommonCtx, meta) {
+  compute(single: TypeDef<'compute', 'cmd'>, ctx: CommonCtx, meta) {
+    const arg = meta.arg
+
     const newCtx = Ctx.compute({
       args: [undefined, arg, ctx],
       result: null,
@@ -173,7 +200,7 @@ const cmdVisitor = {
       newCtx.data.error = err
       newCtx.data.isChanged = false
     }
-    if (!newCtx.data.isChanged) return
+    // if (!newCtx.data.isChanged) return
     return newCtx
   },
 }
