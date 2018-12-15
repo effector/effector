@@ -18,21 +18,21 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
 
 type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
-  const transactions: Array<() => void> = []
-  const meta = {}
-  meta.stop = false
-  meta.transactions = transactions
-  meta.currentCtx = ctx
-  runStep(seq, ctx, meta)
-  for (let i = 0; i < transactions.length; i++) {
-    transactions[i]()
+  const meta = {
+    transactions: ([]: Array<() => void>),
+    stop: false,
+    ctx,
   }
-  transactions.length = 0
+  runStep(seq, ctx, meta)
+  for (let i = 0; i < meta.transactions.length; i++) {
+    meta.transactions[i]()
+  }
+  meta.transactions.length = 0
 }
 function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
-  meta.stop = false
   callstack.pushBox(step)
+  meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
 }
@@ -68,42 +68,23 @@ const stepVisitor = {
     invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
     callstack.pushItem(single)
     meta.arg = stepArgVisitor[ctx.type](ctx.data)
-    const result = cmdVisitor[single.type](single, ctx, meta)
+    meta.ctx = cmdVisitor[single.type](single, ctx, meta)
+    meta.stop = !transitionVisitor[meta.ctx.type](meta.ctx)
     callstack.popItem()
-    if (transitionVisitor[result.type](result)) {
-      meta.stop = false
-      meta.currentCtx = result
-    } else {
-      meta.stop = true
-    }
   },
   multi(step, ctx, meta) {
-    if (step.data.length === 0) return
     for (let i = 0; i < step.data.length; i++) {
       runStep(step.data[i], ctx, meta)
     }
+    meta.stop = false
   },
   seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
-    if (steps.data.length === 0) return
-    for (
-      let i = 0,
-        step,
-        currentCtx: TypeDef<
-          'compute' | 'emit' | 'filter' | 'update',
-          'ctx',
-        > = prev;
-      i < steps.data.length;
-      i++
-    ) {
-      step = steps.data[i]
-      runStep(step, currentCtx, meta)
-      if (step.type === 'multi') continue
-
+    meta.ctx = prev
+    for (let i = 0; i < steps.data.length; i++) {
+      runStep(steps.data[i], meta.ctx, meta)
       if (meta.stop) {
         break
       }
-      //Here step.type is always 'single'
-      currentCtx = meta.currentCtx
     }
   },
 }
@@ -148,8 +129,8 @@ const cmdVisitor = {
   run(single: TypeDef<'run', 'cmd'>, ctx: CommonCtx, meta) {
     const arg = meta.arg
 
-    const transCtx = single.data.transactionContext
-    if (transCtx) meta.transactions.push(transCtx(arg))
+    if ('transactionContext' in single.data)
+      meta.transactions.push(single.data.transactionContext(arg))
     try {
       single.data.runner(arg)
     } catch (err) {
@@ -163,9 +144,8 @@ const cmdVisitor = {
   update(single: TypeDef<'update', 'cmd'>, ctx: CommonCtx, meta) {
     const arg = meta.arg
 
-    const newCtx = Ctx.update({value: arg})
     single.data.store.current = arg
-    return newCtx
+    return Ctx.update({value: arg})
   },
   compute(single: TypeDef<'compute', 'cmd'>, ctx: CommonCtx, meta) {
     const arg = meta.arg
