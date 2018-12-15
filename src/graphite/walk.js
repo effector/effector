@@ -25,6 +25,7 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
+  transactions.length = 0
 }
 function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
