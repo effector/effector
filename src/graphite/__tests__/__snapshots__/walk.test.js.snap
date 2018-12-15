@@ -12,27 +12,27 @@ exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
        current: bar
      },
      selector: {
-       id: 2r,
+       id: 2t,
        type: seq,
        group: step,
        data: [
-         {
-           id: 2o,
-           type: single,
-           group: step,
-           data: {
-             id: 2n,
-             type: compute,
-             group: cmd,
-             data: {}
-           }
-         },
          {
            id: 2q,
            type: single,
            group: step,
            data: {
              id: 2p,
+             type: compute,
+             group: cmd,
+             data: {}
+           }
+         },
+         {
+           id: 2s,
+           type: single,
+           group: step,
+           data: {
+             id: 2r,
              type: update,
              group: cmd,
              data: {
@@ -47,16 +47,16 @@ exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
      },
      cases: {
        foo: {
-         id: 2u,
+         id: 2w,
          type: seq,
          group: step,
          data: [
            {
-             id: 2t,
+             id: 2v,
              type: single,
              group: step,
              data: {
-               id: 2s,
+               id: 2u,
                type: compute,
                group: cmd,
                data: {}
@@ -65,16 +65,16 @@ exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
          ]
        },
        bar: {
-         id: 2x,
+         id: 2z,
          type: seq,
          group: step,
          data: [
            {
-             id: 2w,
+             id: 2y,
              type: single,
              group: step,
              data: {
-               id: 2v,
+               id: 2x,
                type: compute,
                group: cmd,
                data: {}
@@ -101,11 +101,11 @@ Object {
           "subtype": "event",
         },
         "group": "cmd",
-        "id": "2y",
+        "id": "30",
         "type": "emit",
       },
       "group": "step",
-      "id": "2z",
+      "id": "31",
       "type": "single",
     },
     Object {
@@ -119,16 +119,16 @@ Object {
                     "reduce": [Function],
                   },
                   "group": "cmd",
-                  "id": "2v",
+                  "id": "2x",
                   "type": "compute",
                 },
                 "group": "step",
-                "id": "2w",
+                "id": "2y",
                 "type": "single",
               },
             ],
             "group": "step",
-            "id": "2x",
+            "id": "2z",
             "type": "seq",
           },
           "foo": Object {
@@ -139,16 +139,16 @@ Object {
                     "reduce": [Function],
                   },
                   "group": "cmd",
-                  "id": "2s",
+                  "id": "2u",
                   "type": "compute",
                 },
                 "group": "step",
-                "id": "2t",
+                "id": "2v",
                 "type": "single",
               },
             ],
             "group": "step",
-            "id": "2u",
+            "id": "2w",
             "type": "seq",
           },
         },
@@ -164,11 +164,11 @@ Object {
                   "reduce": [Function],
                 },
                 "group": "cmd",
-                "id": "2n",
+                "id": "2p",
                 "type": "compute",
               },
               "group": "step",
-              "id": "2o",
+              "id": "2q",
               "type": "single",
             },
             Object {
@@ -180,34 +180,46 @@ Object {
                   },
                 },
                 "group": "cmd",
-                "id": "2p",
+                "id": "2r",
                 "type": "update",
               },
               "group": "step",
-              "id": "2q",
+              "id": "2s",
               "type": "single",
             },
           ],
           "group": "step",
-          "id": "2r",
+          "id": "2t",
           "type": "seq",
         },
       },
       "group": "step",
-      "id": "30",
+      "id": "32",
       "type": "choose",
     },
     Object {
       "data": Object {
         "data": Object {
-          "runner": [MockFunction],
+          "runner": [MockFunction] {
+            "calls": Array [
+              Array [
+                "case bar",
+              ],
+            ],
+            "results": Array [
+              Object {
+                "isThrow": false,
+                "value": undefined,
+              },
+            ],
+          },
         },
         "group": "cmd",
-        "id": "31",
+        "id": "33",
         "type": "run",
       },
       "group": "step",
-      "id": "32",
+      "id": "34",
       "type": "single",
     },
     Object {
@@ -218,21 +230,21 @@ Object {
               "runner": [Function],
             },
             "group": "cmd",
-            "id": "2k",
+            "id": "2m",
             "type": "run",
           },
           "group": "step",
-          "id": "2l",
+          "id": "2n",
           "type": "single",
         },
       ],
       "group": "step",
-      "id": "2m",
+      "id": "2o",
       "type": "multi",
     },
   ],
   "group": "step",
-  "id": "33",
+  "id": "35",
   "type": "seq",
 }
 `;
