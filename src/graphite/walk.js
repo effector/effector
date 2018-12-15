@@ -32,21 +32,8 @@ function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
   meta.stop = false
   callstack.pushBox(step)
-  const result = stepVisitor[step.type](step, ctx, meta)
+  stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
-  if (result !== undefined) {
-    invariant(
-      result.type in transitionVisitor,
-      'impossible case "%s"',
-      result.type,
-    )
-    if (transitionVisitor[result.type](result)) {
-      meta.stop = false
-      meta.currentCtx = result
-      return
-    }
-  }
-  meta.stop = true
 }
 const stepVisitor = {
   choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
@@ -82,7 +69,12 @@ const stepVisitor = {
     meta.arg = stepArgVisitor[ctx.type](ctx.data)
     const result = cmdVisitor[single.type](single, ctx, meta)
     callstack.popItem()
-    return (result: any)
+    if (transitionVisitor[result.type](result)) {
+      meta.stop = false
+      meta.currentCtx = result
+    } else {
+      meta.stop = true
+    }
   },
   multi(step, ctx, meta) {
     if (step.data.length === 0) return
