@@ -58,28 +58,26 @@ const callstack = {
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const transactions: Array<() => void> = []
-  runStep(seq, ctx, transactions)
+  const meta = {}
+  meta.transactions = transactions
+  runStep(seq, ctx, meta)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
   }
 }
-function runStep(step, ctx: *, transactions) {
+function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
   callstack.pushBox(step)
-  const result = stepVisitor[step.type](step, ctx, transactions)
+  const result = stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
   return result
 }
 const stepVisitor = {
-  choose(
-    step: TypeDef<'choose', 'step'>,
-    ctx: TypeDef<*, 'ctx'>,
-    transactions,
-  ) {
+  choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
     const ref: StateRef = step.data.ref
     const selector: TypeDef<*, 'step'> = step.data.selector
     const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
-    const selectorChainResult = runStep(selector, ctx, transactions)
+    const selectorChainResult = runStep(selector, ctx, meta)
     // if (!selectorChainResult) {
     //   return
     // }
@@ -100,36 +98,36 @@ const stepVisitor = {
       console.error('no case "%s" exists', caseName)
       return
     }
-    return runStep(next, ctx, transactions)
+    return runStep(next, ctx, meta)
   },
 
   single(
     step: TypeDef<'single', 'step'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions,
+    meta,
   ) {
     const single: TypeDef<*, 'cmd'> = step.data
     invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
     const arg = stepArgVisitor[ctx.type](ctx.data)
     callstack.pushItem(single)
-    const result = cmdVisitor[single.type](arg, single, ctx, transactions)
+    const result = cmdVisitor[single.type](arg, single, ctx, meta)
     callstack.popItem()
     if (!result) {
       return
     }
     return (result: any)
   },
-  multi(step, currentCtx, transactions) {
+  multi(step, currentCtx, meta) {
     if (step.data.length === 0) return
     for (let i = 0, result; i < step.data.length; i++) {
-      result = runStep(step.data[i], currentCtx, transactions)
+      result = runStep(step.data[i], currentCtx, meta)
     }
   },
   seq(
     steps: TypeDef<'seq', 'step'>,
     prev: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     if (steps.data.length === 0) return
     let currentCtx: TypeDef<
@@ -140,7 +138,7 @@ const stepVisitor = {
     for (let i = 0; i < steps.data.length; i++) {
       step = steps.data[i]
       const isMulti = step.type === ('multi': 'multi')
-      const stepResult = runStep(step, currentCtx, transactions)
+      const stepResult = runStep(step, currentCtx, meta)
       if (isMulti) continue
       if (stepResult === undefined) break
       currentCtx = stepResult
@@ -161,7 +159,7 @@ const cmdVisitor = {
     arg: any,
     single: TypeDef<'emit', 'cmd'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     return Ctx.emit({
       eventName: single.data.fullName,
@@ -172,7 +170,7 @@ const cmdVisitor = {
     arg: any,
     single: TypeDef<'filter', 'cmd'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     let isChanged = false
     try {
@@ -191,10 +189,10 @@ const cmdVisitor = {
     arg: any,
     single: TypeDef<'run', 'cmd'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     const transCtx = single.data.transactionContext
-    if (transCtx) transactions.push(transCtx(arg))
+    if (transCtx) meta.transactions.push(transCtx(arg))
     try {
       single.data.runner(arg)
     } catch (err) {
@@ -211,7 +209,7 @@ const cmdVisitor = {
     arg: any,
     single: TypeDef<'update', 'cmd'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     const newCtx = Ctx.update({value: arg})
     single.data.store.current = arg
@@ -221,7 +219,7 @@ const cmdVisitor = {
     arg: any,
     single: TypeDef<'compute', 'cmd'>,
     ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
+    meta,
   ) {
     const newCtx = Ctx.compute({
       args: [undefined, arg, ctx],
