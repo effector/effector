@@ -130,15 +130,21 @@ const stepVisitor = {
     meta,
   ) {
     if (steps.data.length === 0) return
-    let currentCtx: TypeDef<
-      'compute' | 'emit' | 'filter' | 'update',
-      'ctx',
-    > = prev
-    let step
-    for (let i = 0; i < steps.data.length; i++) {
+    for (
+      let i = 0,
+        step,
+        stepResult,
+        isMulti,
+        currentCtx: TypeDef<
+          'compute' | 'emit' | 'filter' | 'update',
+          'ctx',
+        > = prev;
+      i < steps.data.length;
+      i++
+    ) {
       step = steps.data[i]
-      const isMulti = step.type === ('multi': 'multi')
-      const stepResult = runStep(step, currentCtx, meta)
+      isMulti = step.type === ('multi': 'multi')
+      stepResult = runStep(step, currentCtx, meta)
       if (isMulti) continue
       if (stepResult === undefined) break
       currentCtx = stepResult
