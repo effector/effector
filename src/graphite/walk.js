@@ -22,6 +22,7 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {}
   meta.stop = false
   meta.transactions = transactions
+  meta.currentCtx = ctx
   runStep(seq, ctx, meta)
   for (let i = 0; i < transactions.length; i++) {
     transactions[i]()
