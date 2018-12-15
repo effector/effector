@@ -5,6 +5,8 @@ import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
+import callstack from './callstack'
+
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
   const eventCtx = Ctx.emit({
@@ -13,49 +15,8 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   })
   walkNode(steps, eventCtx)
 }
-const print = e => `${e.type} ${e.id}`
-const printFull = (full, tag = '') => {
-  const items = full.map(print)
-  const itemsText = items.join(', ')
-  console.log(`${tag} [${itemsText}]`)
-}
-const callstack = {
-  box: [],
-  item: [],
-  full: [],
-  pushItem(item) {
-    this.item.push(item)
-    this.full.push(item)
-    dev: {
-      // printFull(this.full)
-      // printFull(this.item, '(cmd)')
-    }
-  },
-  popItem() {
-    this.item.pop()
-    this.full.pop()
-    dev: {
-      // printFull(this.full)
-      // printFull(this.item, '(cmd)')
-    }
-  },
-  pushBox(box) {
-    this.box.push(box)
-    this.full.push(box)
-    dev: {
-      // printFull(this.full)
-      // printFull(this.box, '(box)')
-    }
-  },
-  popBox() {
-    this.box.pop()
-    this.full.pop()
-    dev: {
-      // printFull(this.full)
-      // printFull(this.box, '(box)')
-    }
-  },
-}
+
+type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const transactions: Array<() => void> = []
   const meta = {}
@@ -101,11 +62,7 @@ const stepVisitor = {
     return runStep(next, ctx, meta)
   },
 
-  single(
-    step: TypeDef<'single', 'step'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta) {
     const single: TypeDef<*, 'cmd'> = step.data
     invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
@@ -124,11 +81,7 @@ const stepVisitor = {
       result = runStep(step.data[i], currentCtx, meta)
     }
   },
-  seq(
-    steps: TypeDef<'seq', 'step'>,
-    prev: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
     if (steps.data.length === 0) return
     for (
       let i = 0,
@@ -161,23 +114,13 @@ const stepArgVisitor = {
 }
 
 const cmdVisitor = {
-  emit(
-    arg: any,
-    single: TypeDef<'emit', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  emit(arg: any, single: TypeDef<'emit', 'cmd'>, ctx: CommonCtx, meta) {
     return Ctx.emit({
       eventName: single.data.fullName,
       payload: arg,
     })
   },
-  filter(
-    arg: any,
-    single: TypeDef<'filter', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  filter(arg: any, single: TypeDef<'filter', 'cmd'>, ctx: CommonCtx, meta) {
     let isChanged = false
     try {
       isChanged = single.data.filter(arg, ctx)
@@ -191,12 +134,7 @@ const cmdVisitor = {
       })
     }
   },
-  run(
-    arg: any,
-    single: TypeDef<'run', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  run(arg: any, single: TypeDef<'run', 'cmd'>, ctx: CommonCtx, meta) {
     const transCtx = single.data.transactionContext
     if (transCtx) meta.transactions.push(transCtx(arg))
     try {
@@ -211,22 +149,12 @@ const cmdVisitor = {
     })
     */
   },
-  update(
-    arg: any,
-    single: TypeDef<'update', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  update(arg: any, single: TypeDef<'update', 'cmd'>, ctx: CommonCtx, meta) {
     const newCtx = Ctx.update({value: arg})
     single.data.store.current = arg
     return newCtx
   },
-  compute(
-    arg: any,
-    single: TypeDef<'compute', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    meta,
-  ) {
+  compute(arg: any, single: TypeDef<'compute', 'cmd'>, ctx: CommonCtx, meta) {
     const newCtx = Ctx.compute({
       args: [undefined, arg, ctx],
       result: null,
