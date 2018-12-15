@@ -4,6 +4,7 @@ untyped-type-import=error
 unclear-type=off
 
 [libs]
+./node_modules/@babel/types/lib/index.js.flow
 
 [version]
 >=0.87.0
@@ -995,7 +996,7 @@ module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 <PROJECT_ROOT>/node_modules/@babel/register/*
 <PROJECT_ROOT>/node_modules/@babel/template/*
 <PROJECT_ROOT>/node_modules/@babel/traverse/*
-<PROJECT_ROOT>/node_modules/@babel/types/*
+💩 <PROJECT_ROOT>/node_modules/@babel/types/*
 <PROJECT_ROOT>/node_modules/@most/multicast/*
 <PROJECT_ROOT>/node_modules/@most/prelude/*
 <PROJECT_ROOT>/node_modules/@types/estree/*
