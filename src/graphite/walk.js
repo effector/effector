@@ -77,8 +77,9 @@ const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta) {
     const single: TypeDef<*, 'cmd'> = step.data
     invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
+    invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
     callstack.pushItem(single)
-    meta.arg = getArg(ctx)
+    meta.arg = stepArgVisitor[ctx.type](ctx.data)
     const result = cmdVisitor[single.type](single, ctx, meta)
     callstack.popItem()
     return (result: any)
@@ -112,10 +113,6 @@ const stepVisitor = {
       currentCtx = meta.currentCtx
     }
   },
-}
-function getArg(ctx) {
-  invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
-  return stepArgVisitor[ctx.type](ctx.data)
 }
 const stepArgVisitor = {
   compute: data => data.result,
