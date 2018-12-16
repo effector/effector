@@ -165,7 +165,7 @@ const command = ({
       const arg = meta.arg
 
       const newCtx = Ctx.compute({
-        args: [undefined, arg, ctx],
+        args: [arg],
         result: null,
         error: null,
         isError: false,
@@ -173,7 +173,7 @@ const command = ({
         isChanged: true,
       })
       try {
-        const result = single.data.fn(undefined, arg, newCtx)
+        const result = single.data.fn(arg)
         newCtx.data.result = result
         newCtx.data.isNone = result === undefined
       } catch (err) {

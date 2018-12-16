@@ -212,7 +212,7 @@ export function storeFabric<State>(props: {
       <seq>
         <single>
           <compute
-            fn={(_, newValue, ctx) => {
+            fn={newValue => {
               const lastState = getState()
               return handler(lastState, newValue, e.getType())
             }}
@@ -291,7 +291,7 @@ function mapStore<A, B>(
     <seq>
       <single>
         <compute
-          fn={(_, newValue, ctx) => {
+          fn={newValue => {
             lastValue = newValue
             const lastState = innerStore.getState()
             const result = fn(newValue, lastState)

@@ -170,7 +170,7 @@ describe('<choose /> execution cases', () => {
     const selector = (
       <seq>
         <single>
-          <compute fn={(none, arg, ctx) => 'bar'} />
+          <compute fn={arg => 'bar'} />
         </single>
         <single>
           <update store={state} />
@@ -181,8 +181,8 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            fn={(...args) => {
-              fnFoo(...args)
+            fn={arg => {
+              fnFoo(arg)
               return 'case foo'
             }}
           />
@@ -193,8 +193,8 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            fn={(...args) => {
-              fnBar(...args)
+            fn={arg => {
+              fnBar(arg)
               return 'case bar'
             }}
           />
@@ -221,31 +221,7 @@ describe('<choose /> execution cases', () => {
     walkNode(exec, eventCtx('[choose][a]()', trigger))
     expect(fnFoo).not.toHaveBeenCalled()
     expect(fnBar).toHaveBeenCalledTimes(1)
-    expect(fnBar).toBeCalledWith(undefined, '[choose][a]()', {
-      data: {
-        args: [
-          undefined,
-          '[choose][a]()',
-          {
-            data: {
-              eventName: '[a] at least not dangerous',
-              payload: '[choose][a]()',
-            },
-            group: 'ctx',
-            id: expect.any(String),
-            type: 'emit',
-          },
-        ],
-        error: null,
-        isChanged: true,
-        isError: false,
-        isNone: false,
-        result: 'case bar',
-      },
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'compute',
-    })
+    expect(fnBar).toBeCalledWith('[choose][a]()')
     // expect(fnNext).toHaveBeenCalledTimes(1)
     // expect(fnNext).toBeCalledWith('case bar')
     expect(show(exec)).toMatchSnapshot()
