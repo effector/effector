@@ -7,7 +7,7 @@ exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
      fullName: [a] at least not dangerous
   }},
   2. choose {{
-     ref: {
+     state: {
        id: 1,
        current: bar
      },
@@ -152,10 +152,6 @@ Object {
             "type": "seq",
           },
         },
-        "ref": Object {
-          "current": "bar",
-          "id": "1",
-        },
         "selector": Object {
           "data": Array [
             Object {
@@ -191,6 +187,10 @@ Object {
           "group": "step",
           "id": "2t",
           "type": "seq",
+        },
+        "state": Object {
+          "current": "bar",
+          "id": "1",
         },
       },
       "group": "step",

@@ -44,17 +44,17 @@ function runStep(step, ctx: *, meta) {
 }
 const stepVisitor = {
   choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
-    const ref: StateRef = step.data.ref
+    const localState: StateRef = step.data.state
     const selector: TypeDef<*, 'step'> = step.data.selector
     const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
     runStep(selector, ctx, meta)
-    const caseName = ref.current
+    const caseName = localState.current
     //optional
     invariant(
       typeof caseName === 'string',
       'incorrect selector "%s" for id %s',
       caseName,
-      ref.id,
+      localState.id,
     )
     let next
     if (caseName in cases) {

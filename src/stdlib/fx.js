@@ -9,7 +9,7 @@ import {Step, Cmd} from 'effector/graphite/typedef'
 declare export default function fx(
   tag: 'choose',
   props: {
-    ref: StateRef,
+    state: StateRef,
     selector: TypeDef<*, 'step'>,
     cases: {+[key: string]: TypeDef<*, 'step'>},
   },

@@ -207,7 +207,7 @@ describe('<choose /> execution cases', () => {
           <emit subtype="event" fullName="[a] at least not dangerous" />
         </single>
         <choose
-          ref={state}
+          state={state}
           selector={selector}
           cases={{foo: caseFoo, bar: caseBar}}
         />
