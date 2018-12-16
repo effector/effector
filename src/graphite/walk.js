@@ -173,7 +173,7 @@ const command = ({
         isChanged: true,
       })
       try {
-        const result = single.data.reduce(undefined, arg, newCtx)
+        const result = single.data.fn(undefined, arg, newCtx)
         newCtx.data.result = result
         newCtx.data.isNone = result === undefined
       } catch (err) {

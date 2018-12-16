@@ -34,7 +34,7 @@ declare export default function fx(
 /* Cmd */
 declare export default function fx(
   tag: 'compute',
-  props: {reduce: *},
+  props: {fn: *},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'compute', 'cmd'>
 declare export default function fx(
