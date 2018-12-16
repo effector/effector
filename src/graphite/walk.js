@@ -121,7 +121,7 @@ const command = ({
 
       let isChanged = false
       try {
-        isChanged = single.data.filter(arg, ctx)
+        isChanged = single.data.filter(arg)
       } catch (err) {
         console.error(err)
       }

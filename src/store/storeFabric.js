@@ -35,7 +35,7 @@ export function storeFabric<State>(props: {
     <seq>
       <single>
         <filter
-          filter={(newValue, ctx) =>
+          filter={newValue =>
             newValue !== undefined && newValue !== plainState.current
           }
         />
@@ -220,7 +220,7 @@ export function storeFabric<State>(props: {
         </single>
         <single>
           <filter
-            filter={(data, ctx: TypeDef<'compute', 'ctx'>) => {
+            filter={data => {
               const lastState = getState()
               return data !== lastState && data !== undefined
             }}
@@ -310,7 +310,7 @@ function mapStore<A, B>(
       </single>
       <single>
         <filter
-          filter={(result, ctx: TypeDef<'compute', 'ctx'>) => {
+          filter={result => {
             const lastState = innerStore.getState()
             const isChanged = result !== lastState && result !== undefined
             if (isChanged) {

@@ -208,11 +208,7 @@ const fabric = {
           <compute fn={newValue => fn(newValue)} />
         </single>
         <single>
-          <filter
-            filter={(result, ctx: TypeDef<'emitCtx', 'ctx'>) =>
-              result !== undefined
-            }
-          />
+          <filter filter={result => result !== undefined} />
         </single>
         {graphite.seq}
       </seq>,

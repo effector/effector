@@ -36,7 +36,7 @@ describe('filter node will throw', () => {
         </single>
         <single>
           <filter
-            filter={(...args) => {
+            filter={arg => {
               throw new Error('[expected error]')
             }}
           />
@@ -63,7 +63,7 @@ describe('filter node will throw', () => {
         <multi>
           <single>
             <filter
-              filter={(...args) => {
+              filter={arg => {
                 throw new Error('[expected error]')
               }}
             />
@@ -248,12 +248,7 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][a]()', trigger))
     expect(fn).toHaveBeenCalledTimes(1)
-    expect(fn).toBeCalledWith('[filter][a]()', {
-      data: {eventName: '[a] tested correctly', payload: '[filter][a]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn).toBeCalledWith('[filter][a]()')
   })
   it('[b] return changes on resolve', () => {
     const fn1 = jest.fn((...args) => true)
@@ -277,17 +272,12 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][b]()', trigger))
     expect(fn1).toHaveBeenCalledTimes(1)
-    expect(fn1).toBeCalledWith('[filter][b]()', {
-      data: {eventName: '[b] tested correctly', payload: '[filter][b]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn1).toBeCalledWith('[filter][b]()')
     expect(fn2).toHaveBeenCalledTimes(1)
     expect(fn2).toBeCalledWith('[filter][b]()')
   })
   it('[c] not return anything on reject', () => {
-    const fn1 = jest.fn((...args) => false)
+    const fn1 = jest.fn(arg => false)
     const fn2 = jest.fn()
     const trigger = createEvent('[filter][c]')
     const next = Next()
@@ -308,16 +298,11 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][c]()', trigger))
     expect(fn1).toHaveBeenCalledTimes(1)
-    expect(fn1).toBeCalledWith('[filter][c]()', {
-      data: {eventName: '[c] tested correctly', payload: '[filter][c]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn1).toBeCalledWith('[filter][c]()')
     expect(fn2).not.toHaveBeenCalled()
   })
   it('[d] not return anything on throw', () => {
-    const fn1 = (...args) => {
+    const fn1 = arg => {
       throw new Error('[expected error]')
     }
     const fn2 = jest.fn()
