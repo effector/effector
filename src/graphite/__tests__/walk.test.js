@@ -170,7 +170,7 @@ describe('<choose /> execution cases', () => {
     const selector = (
       <seq>
         <single>
-          <compute reduce={(none, arg, ctx) => 'bar'} />
+          <compute fn={(none, arg, ctx) => 'bar'} />
         </single>
         <single>
           <update store={state} />
@@ -181,7 +181,7 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            reduce={(...args) => {
+            fn={(...args) => {
               fnFoo(...args)
               return 'case foo'
             }}
@@ -193,7 +193,7 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            reduce={(...args) => {
+            fn={(...args) => {
               fnBar(...args)
               return 'case bar'
             }}

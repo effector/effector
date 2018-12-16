@@ -24,7 +24,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "r",
@@ -85,7 +85,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1b",
@@ -219,7 +219,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "r",
@@ -280,7 +280,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1b",
@@ -401,7 +401,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "9",
@@ -434,7 +434,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "r",
@@ -495,7 +495,7 @@ Object {
                                     Object {
                                       "data": Object {
                                         "data": Object {
-                                          "reduce": [Function],
+                                          "fn": [Function],
                                         },
                                         "group": "cmd",
                                         "id": "1b",
@@ -832,7 +832,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "1b",

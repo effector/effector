@@ -116,7 +116,7 @@ Object {
               Object {
                 "data": Object {
                   "data": Object {
-                    "reduce": [Function],
+                    "fn": [Function],
                   },
                   "group": "cmd",
                   "id": "2x",
@@ -136,7 +136,7 @@ Object {
               Object {
                 "data": Object {
                   "data": Object {
-                    "reduce": [Function],
+                    "fn": [Function],
                   },
                   "group": "cmd",
                   "id": "2u",
@@ -161,7 +161,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "2p",
