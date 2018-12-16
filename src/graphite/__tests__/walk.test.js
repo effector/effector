@@ -32,7 +32,7 @@ describe('filter node will throw', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="emit before filter node will throw" />
+          <emit fullName="emit before filter node will throw" />
         </single>
         <single>
           <filter
@@ -43,7 +43,7 @@ describe('filter node will throw', () => {
         </single>
         <multi>
           <single>
-            <emit subtype="event" fullName="emit after filter node did throw" />
+            <emit fullName="emit after filter node did throw" />
           </single>
         </multi>
         {next}
@@ -58,7 +58,7 @@ describe('filter node will throw', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="emit before filter node will throw" />
+          <emit fullName="emit before filter node will throw" />
         </single>
         <multi>
           <single>
@@ -69,7 +69,7 @@ describe('filter node will throw', () => {
             />
           </single>
           <single>
-            <emit subtype="event" fullName="emit after filter node did throw" />
+            <emit fullName="emit after filter node did throw" />
           </single>
         </multi>
         {next}
@@ -86,13 +86,13 @@ test('walk after multi', () => {
   const exec = (
     <seq>
       <single>
-        <emit subtype="event" fullName="emit before multi" />
+        <emit fullName="emit before multi" />
       </single>
       <multi />
       <seq />
       <multi>
         <single>
-          <emit subtype="event" fullName="emit after multi" />
+          <emit fullName="emit after multi" />
         </single>
       </multi>
       {next}
@@ -113,7 +113,7 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] tested correctly" />
+          <emit fullName="[a] tested correctly" />
         </single>
         <single>
           <run runner={fn} />
@@ -136,7 +136,7 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[b] tested correctly" />
+          <emit fullName="[b] tested correctly" />
         </single>
         <single>
           <run runner={fn1} />
@@ -204,7 +204,7 @@ describe('<choose /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] at least not dangerous" />
+          <emit fullName="[a] at least not dangerous" />
         </single>
         <choose
           state={state}
@@ -237,7 +237,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] tested correctly" />
+          <emit fullName="[a] tested correctly" />
         </single>
         <single>
           <filter filter={fn} />
@@ -258,7 +258,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[b] tested correctly" />
+          <emit fullName="[b] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />
@@ -284,7 +284,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[c] tested correctly" />
+          <emit fullName="[c] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />
@@ -311,7 +311,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[d] tested correctly" />
+          <emit fullName="[d] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />

@@ -7,7 +7,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "6",
@@ -202,7 +201,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "6",
@@ -384,7 +382,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "2",
@@ -417,7 +414,6 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
-                      "subtype": "event",
                     },
                     "group": "cmd",
                     "id": "6",
@@ -623,7 +619,6 @@ Object {
 exports[`graphite: show bar 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo → *
   }},
   2. [
@@ -664,7 +659,6 @@ exports[`graphite: show bar 1`] = `
 exports[`graphite: show bar 2`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo → *
   }},
   2. [
@@ -704,7 +698,6 @@ exports[`graphite: show bar 2`] = `
 exports[`graphite: show foo 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo
   }},
   2. [
@@ -712,7 +705,6 @@ exports[`graphite: show foo 1`] = `
         1. compute {{}},
         2. Seq [
            1. emit {{
-              subtype: event,
               fullName: foo → *
            }},
            2. [
@@ -962,7 +954,6 @@ Object {
 exports[`showcase: event foo 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo
   }},
   2. [

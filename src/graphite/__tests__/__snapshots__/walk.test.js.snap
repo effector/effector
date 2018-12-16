@@ -3,7 +3,6 @@
 exports[`<choose /> execution cases [a] at least not dangerous 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: [a] at least not dangerous
   }},
   2. choose {{
@@ -98,7 +97,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "[a] at least not dangerous",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "30",

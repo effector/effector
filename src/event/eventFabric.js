@@ -156,7 +156,7 @@ const fabric = {
     const stepFull = (
       <seq>
         <single>
-          <emit subtype="event" fullName={args.fullName} />
+          <emit fullName={args.fullName} />
         </single>
         {nextSteps}
       </seq>
