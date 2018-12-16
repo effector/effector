@@ -173,7 +173,7 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={(_, newValue, ctx) => fn(newValue)} />
         </single>
         {parentGraphite.seq}
       </seq>,
@@ -189,7 +189,7 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={(_, newValue, ctx) => fn(newValue)} />
         </single>
         {graphite.seq}
       </seq>,
@@ -205,7 +205,7 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={(_, newValue, ctx) => fn(newValue)} />
         </single>
         <single>
           <filter
