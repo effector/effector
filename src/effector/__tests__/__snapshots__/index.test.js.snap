@@ -7,7 +7,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "6",
@@ -24,7 +23,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "r",
@@ -85,7 +84,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1b",
@@ -202,7 +201,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "6",
@@ -219,7 +217,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "r",
@@ -280,7 +278,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1b",
@@ -384,7 +382,6 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
-          "subtype": "event",
         },
         "group": "cmd",
         "id": "2",
@@ -401,7 +398,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "9",
@@ -417,7 +414,6 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
-                      "subtype": "event",
                     },
                     "group": "cmd",
                     "id": "6",
@@ -434,7 +430,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "reduce": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "r",
@@ -495,7 +491,7 @@ Object {
                                     Object {
                                       "data": Object {
                                         "data": Object {
-                                          "reduce": [Function],
+                                          "fn": [Function],
                                         },
                                         "group": "cmd",
                                         "id": "1b",
@@ -623,7 +619,6 @@ Object {
 exports[`graphite: show bar 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo → *
   }},
   2. [
@@ -664,7 +659,6 @@ exports[`graphite: show bar 1`] = `
 exports[`graphite: show bar 2`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo → *
   }},
   2. [
@@ -704,7 +698,6 @@ exports[`graphite: show bar 2`] = `
 exports[`graphite: show foo 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo
   }},
   2. [
@@ -712,7 +705,6 @@ exports[`graphite: show foo 1`] = `
         1. compute {{}},
         2. Seq [
            1. emit {{
-              subtype: event,
               fullName: foo → *
            }},
            2. [
@@ -832,7 +824,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "reduce": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "1b",
@@ -962,7 +954,6 @@ Object {
 exports[`showcase: event foo 1`] = `
 "Seq [
   1. emit {{
-     subtype: event,
      fullName: foo
   }},
   2. [

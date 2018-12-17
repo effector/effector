@@ -5,6 +5,8 @@ import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
+import callstack from './callstack'
+
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
   const eventCtx = Ctx.emit({
@@ -13,83 +15,46 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   })
   walkNode(steps, eventCtx)
 }
-const print = e => `${e.type} ${e.id}`
-const printFull = (full, tag = '') => {
-  const items = full.map(print)
-  const itemsText = items.join(', ')
-  console.log(`${tag} [${itemsText}]`)
-}
-const callstack = {
-  box: [],
-  item: [],
-  full: [],
-  pushItem(item) {
-    this.item.push(item)
-    this.full.push(item)
-    dev: {
-      // printFull(this.full)
-      // printFull(this.item, '(cmd)')
-    }
-  },
-  popItem() {
-    this.item.pop()
-    this.full.pop()
-    dev: {
-      // printFull(this.full)
-      // printFull(this.item, '(cmd)')
-    }
-  },
-  pushBox(box) {
-    this.box.push(box)
-    this.full.push(box)
-    dev: {
-      // printFull(this.full)
-      // printFull(this.box, '(box)')
-    }
-  },
-  popBox() {
-    this.box.pop()
-    this.full.pop()
-    dev: {
-      // printFull(this.full)
-      // printFull(this.box, '(box)')
-    }
-  },
+
+type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
+type Meta = {
+  ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
+  stop: boolean,
+  transactions: Array<() => void>,
+  arg: any,
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
-  const transactions: Array<() => void> = []
-  runStep(seq, ctx, transactions)
-  for (let i = 0; i < transactions.length; i++) {
-    transactions[i]()
+  const meta = {
+    transactions: ([]: Array<() => void>),
+    stop: false,
+    ctx,
   }
+  runStep(seq, ctx, meta)
+  for (let i = 0; i < meta.transactions.length; i++) {
+    meta.transactions[i]()
+  }
+  meta.transactions.length = 0
 }
-function runStep(step, ctx: *, transactions) {
+function runStep(step, ctx: *, meta) {
   invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
   callstack.pushBox(step)
-  const result = stepVisitor[step.type](step, ctx, transactions)
+  meta.stop = false
+  stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
-  return result
 }
 const stepVisitor = {
-  choose(
-    step: TypeDef<'choose', 'step'>,
-    ctx: TypeDef<*, 'ctx'>,
-    transactions,
-  ) {
-    const ref: StateRef = step.data.ref
+  choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+    const localState: StateRef = step.data.state
     const selector: TypeDef<*, 'step'> = step.data.selector
     const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
-    const selectorChainResult = runStep(selector, ctx, transactions)
-    // if (!selectorChainResult) {
-    //   return
-    // }
-    const caseName = ref.current
+    runStep(selector, ctx, meta)
+    const caseName = localState.current
     //optional
     invariant(
       typeof caseName === 'string',
       'incorrect selector "%s" for id %s',
       caseName,
-      ref.id,
+      localState.id,
     )
     let next
     if (caseName in cases) {
@@ -100,147 +65,132 @@ const stepVisitor = {
       console.error('no case "%s" exists', caseName)
       return
     }
-    return runStep(next, ctx, transactions)
+    runStep(next, ctx, meta)
   },
 
-  single(
-    step: TypeDef<'single', 'step'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions,
-  ) {
+  single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
     const single: TypeDef<*, 'cmd'> = step.data
-    invariant(ctx.type in stepArgVisitor, 'impossible case "%s"', ctx.type)
-    invariant(single.type in cmdVisitor, 'impossible case "%s"', single.type)
-    const arg = stepArgVisitor[ctx.type](ctx.data)
+    invariant(single.type in command, 'impossible case "%s"', single.type)
+    invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
     callstack.pushItem(single)
-    const result = cmdVisitor[single.type](arg, single, ctx, transactions)
+    meta.arg = command[ctx.type].stepArg(ctx.data)
+    meta.ctx = command[single.type].cmd(single, ctx, meta)
+    meta.stop = !command[meta.ctx.type].transition(meta.ctx)
     callstack.popItem()
-    if (!result) {
-      return
-    }
-    return (result: any)
   },
-  multi(step, currentCtx, transactions) {
-    if (step.data.length === 0) return
-    for (let i = 0, result; i < step.data.length; i++) {
-      result = runStep(step.data[i], currentCtx, transactions)
+  multi(step, ctx, meta) {
+    for (let i = 0; i < step.data.length; i++) {
+      runStep(step.data[i], ctx, meta)
     }
+    meta.stop = false
   },
-  seq(
-    steps: TypeDef<'seq', 'step'>,
-    prev: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    if (steps.data.length === 0) return
-    let currentCtx: TypeDef<
-      'compute' | 'emit' | 'filter' | 'update',
-      'ctx',
-    > = prev
-    let step
+  seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
+    meta.ctx = prev
     for (let i = 0; i < steps.data.length; i++) {
-      step = steps.data[i]
-      const isMulti = step.type === ('multi': 'multi')
-      const stepResult = runStep(step, currentCtx, transactions)
-      if (isMulti) continue
-      if (stepResult === undefined) break
-      currentCtx = stepResult
+      runStep(steps.data[i], meta.ctx, meta)
+      if (meta.stop) {
+        break
+      }
     }
   },
 }
 
-const stepArgVisitor = {
-  compute: data => data.result,
-  emit: data => data.payload,
-  run: data => (data, invariant(false, 'RunContext is not supported')),
-  filter: data => data.value,
-  update: data => data.value,
+type Command<tag> = /*:: interface */ {
+  cmd(
+    single: TypeDef<tag, 'cmd'>,
+    ctx: CommonCtx,
+    meta: Meta,
+  ): TypeDef<tag, 'ctx'>,
+  transition(ctx: CommonCtx): boolean,
+  stepArg(data: any): any,
 }
 
-const cmdVisitor = {
-  emit(
-    arg: any,
-    single: TypeDef<'emit', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    return Ctx.emit({
-      eventName: single.data.fullName,
-      payload: arg,
-    })
+const command = ({
+  emit: {
+    cmd: (single, ctx, meta) =>
+      Ctx.emit({
+        eventName: single.data.fullName,
+        payload: meta.arg,
+      }),
+    transition: ctx => true,
+    stepArg: data => data.payload,
   },
-  filter(
-    arg: any,
-    single: TypeDef<'filter', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    let isChanged = false
-    try {
-      isChanged = single.data.filter(arg, ctx)
-    } catch (err) {
-      console.error(err)
-    }
-    if (!!isChanged) {
+  filter: {
+    cmd(single, ctx, meta) {
+      const arg = meta.arg
+
+      let isChanged = false
+      try {
+        isChanged = single.data.filter(arg)
+      } catch (err) {
+        console.error(err)
+      }
       return Ctx.filter({
         value: arg,
         isChanged,
       })
-    }
+    },
+    transition: ctx => Boolean(ctx.data.isChanged),
+    stepArg: data => data.value,
   },
-  run(
-    arg: any,
-    single: TypeDef<'run', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    const transCtx = single.data.transactionContext
-    if (transCtx) transactions.push(transCtx(arg))
-    try {
-      single.data.runner(arg)
-    } catch (err) {
-      console.error(err)
-    }
-    /*
-    const run = Ctx.run({
-      args: [arg],
-      parentContext: ctx,
-    })
-    */
+  run: {
+    cmd(single, ctx, meta) {
+      const arg = meta.arg
+
+      if ('transactionContext' in single.data)
+        meta.transactions.push(single.data.transactionContext(arg))
+      try {
+        single.data.runner(arg)
+      } catch (err) {
+        console.error(err)
+      }
+      return Ctx.run({
+        args: [arg],
+        parentContext: ctx,
+      })
+    },
+    transition: ctx => false,
+    stepArg: data => invariant(false, 'RunContext is not supported'),
   },
-  update(
-    arg: any,
-    single: TypeDef<'update', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    const newCtx = Ctx.update({value: arg})
-    single.data.store.current = arg
-    return newCtx
+  update: {
+    cmd(single, ctx, meta) {
+      single.data.store.current = meta.arg
+      return Ctx.update({value: meta.arg})
+    },
+    transition: ctx => true,
+    stepArg: data => data.value,
   },
-  compute(
-    arg: any,
-    single: TypeDef<'compute', 'cmd'>,
-    ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-    transactions: Array<() => void>,
-  ) {
-    const newCtx = Ctx.compute({
-      args: [undefined, arg, ctx],
-      result: null,
-      error: null,
-      isError: false,
-      isNone: true,
-      isChanged: true,
-    })
-    try {
-      const result = single.data.reduce(undefined, arg, newCtx)
-      newCtx.data.result = result
-      newCtx.data.isNone = result === undefined
-    } catch (err) {
-      newCtx.data.isError = true
-      newCtx.data.error = err
-      newCtx.data.isChanged = false
-    }
-    if (!newCtx.data.isChanged) return
-    return newCtx
+  compute: {
+    cmd(single, ctx, meta) {
+      const arg = meta.arg
+
+      const newCtx = Ctx.compute({
+        args: [arg],
+        result: null,
+        error: null,
+        isError: false,
+        isNone: true,
+        isChanged: true,
+      })
+      try {
+        const result = single.data.fn(arg)
+        newCtx.data.result = result
+        newCtx.data.isNone = result === undefined
+      } catch (err) {
+        console.error(err)
+        newCtx.data.isError = true
+        newCtx.data.error = err
+        newCtx.data.isChanged = false
+      }
+      return newCtx
+    },
+    transition: ctx => Boolean(ctx.data.isChanged),
+    stepArg: data => data.result,
   },
-}
+}: {
+  emit: Command<'emit'>,
+  filter: Command<'filter'>,
+  run: Command<'run'>,
+  update: Command<'update'>,
+  compute: Command<'compute'>,
+})

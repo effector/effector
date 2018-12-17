@@ -9,7 +9,7 @@ import {Step, Cmd} from 'effector/graphite/typedef'
 declare export default function fx(
   tag: 'choose',
   props: {
-    ref: StateRef,
+    state: StateRef,
     selector: TypeDef<*, 'step'>,
     cases: {+[key: string]: TypeDef<*, 'step'>},
   },
@@ -34,12 +34,12 @@ declare export default function fx(
 /* Cmd */
 declare export default function fx(
   tag: 'compute',
-  props: {reduce: *},
+  props: {fn: *},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'compute', 'cmd'>
 declare export default function fx(
   tag: 'emit',
-  props: {subtype: 'event', fullName: string},
+  props: {fullName: string},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'emit', 'cmd'>
 declare export default function fx(

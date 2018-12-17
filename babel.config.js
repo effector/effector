@@ -2,6 +2,8 @@
 
 const {resolve: resolvePath} = require('path')
 
+const resolveSource = path => resolvePath(__dirname, 'src', path)
+
 module.exports = api => {
   // module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
@@ -19,23 +21,15 @@ module.exports = api => {
       'babel-plugin-module-resolver',
       {
         alias: {
-          'effector/effect': resolvePath(__dirname, 'src', 'effect'),
-          'effector/event': resolvePath(__dirname, 'src', 'event'),
-          'effector/store': resolvePath(__dirname, 'src', 'store'),
-          'effector/domain': resolvePath(__dirname, 'src', 'domain'),
-          'effector/datatype': resolvePath(__dirname, 'src', 'datatype'),
-          'effector/graphite': resolvePath(__dirname, 'src', 'graphite'),
-          'effector/fixtures': resolvePath(__dirname, 'src', 'fixtures'),
-          'effector/stdlib': resolvePath(__dirname, 'src', 'stdlib'),
-          'effector/flags': resolvePath(
-            __dirname,
-            'src',
-            isBuild ? 'flags.prod' : 'flags.dev',
-          ),
-          // '^bs-platform/lib/es6/(.+)': ([, name]) =>
-          //  resolvePath(__dirname, 'node_modules/bs-platform/lib/es6', name),
-          // '^bs-platform/lib/es6/(.+)': ([, name]) =>
-          // resolvePath(__dirname, 'stdlib/es6', name),
+          'effector/effect': resolveSource('effect'),
+          'effector/event': resolveSource('event'),
+          'effector/store': resolveSource('store'),
+          'effector/domain': resolveSource('domain'),
+          'effector/graphite': resolveSource('graphite'),
+          'effector/fixtures': resolveSource('fixtures'),
+          'effector/stdlib': resolveSource('stdlib'),
+          'effector/perf': resolveSource('perf'),
+          'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
         },
       },
     ],
@@ -52,6 +46,11 @@ module.exports = api => {
         shippedProposals: true,
         targets: {
           node: '10',
+          browsers: [
+            'last 2 Chrome versions',
+            'last 2 Firefox versions',
+            'last 2 Safari versions',
+          ],
         },
       },
     ],

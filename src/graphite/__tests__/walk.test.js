@@ -32,18 +32,18 @@ describe('filter node will throw', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="emit before filter node will throw" />
+          <emit fullName="emit before filter node will throw" />
         </single>
         <single>
           <filter
-            filter={(...args) => {
+            filter={arg => {
               throw new Error('[expected error]')
             }}
           />
         </single>
         <multi>
           <single>
-            <emit subtype="event" fullName="emit after filter node did throw" />
+            <emit fullName="emit after filter node did throw" />
           </single>
         </multi>
         {next}
@@ -58,18 +58,18 @@ describe('filter node will throw', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="emit before filter node will throw" />
+          <emit fullName="emit before filter node will throw" />
         </single>
         <multi>
           <single>
             <filter
-              filter={(...args) => {
+              filter={arg => {
                 throw new Error('[expected error]')
               }}
             />
           </single>
           <single>
-            <emit subtype="event" fullName="emit after filter node did throw" />
+            <emit fullName="emit after filter node did throw" />
           </single>
         </multi>
         {next}
@@ -86,13 +86,13 @@ test('walk after multi', () => {
   const exec = (
     <seq>
       <single>
-        <emit subtype="event" fullName="emit before multi" />
+        <emit fullName="emit before multi" />
       </single>
       <multi />
       <seq />
       <multi>
         <single>
-          <emit subtype="event" fullName="emit after multi" />
+          <emit fullName="emit after multi" />
         </single>
       </multi>
       {next}
@@ -113,7 +113,7 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] tested correctly" />
+          <emit fullName="[a] tested correctly" />
         </single>
         <single>
           <run runner={fn} />
@@ -136,7 +136,7 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[b] tested correctly" />
+          <emit fullName="[b] tested correctly" />
         </single>
         <single>
           <run runner={fn1} />
@@ -170,7 +170,7 @@ describe('<choose /> execution cases', () => {
     const selector = (
       <seq>
         <single>
-          <compute reduce={(none, arg, ctx) => 'bar'} />
+          <compute fn={arg => 'bar'} />
         </single>
         <single>
           <update store={state} />
@@ -181,8 +181,8 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            reduce={(...args) => {
-              fnFoo(...args)
+            fn={arg => {
+              fnFoo(arg)
               return 'case foo'
             }}
           />
@@ -193,8 +193,8 @@ describe('<choose /> execution cases', () => {
       <seq>
         <single>
           <compute
-            reduce={(...args) => {
-              fnBar(...args)
+            fn={arg => {
+              fnBar(arg)
               return 'case bar'
             }}
           />
@@ -204,10 +204,10 @@ describe('<choose /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] at least not dangerous" />
+          <emit fullName="[a] at least not dangerous" />
         </single>
         <choose
-          ref={state}
+          state={state}
           selector={selector}
           cases={{foo: caseFoo, bar: caseBar}}
         />
@@ -221,31 +221,7 @@ describe('<choose /> execution cases', () => {
     walkNode(exec, eventCtx('[choose][a]()', trigger))
     expect(fnFoo).not.toHaveBeenCalled()
     expect(fnBar).toHaveBeenCalledTimes(1)
-    expect(fnBar).toBeCalledWith(undefined, '[choose][a]()', {
-      data: {
-        args: [
-          undefined,
-          '[choose][a]()',
-          {
-            data: {
-              eventName: '[a] at least not dangerous',
-              payload: '[choose][a]()',
-            },
-            group: 'ctx',
-            id: expect.any(String),
-            type: 'emit',
-          },
-        ],
-        error: null,
-        isChanged: true,
-        isError: false,
-        isNone: false,
-        result: 'case bar',
-      },
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'compute',
-    })
+    expect(fnBar).toBeCalledWith('[choose][a]()')
     // expect(fnNext).toHaveBeenCalledTimes(1)
     // expect(fnNext).toBeCalledWith('case bar')
     expect(show(exec)).toMatchSnapshot()
@@ -261,7 +237,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[a] tested correctly" />
+          <emit fullName="[a] tested correctly" />
         </single>
         <single>
           <filter filter={fn} />
@@ -272,12 +248,7 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][a]()', trigger))
     expect(fn).toHaveBeenCalledTimes(1)
-    expect(fn).toBeCalledWith('[filter][a]()', {
-      data: {eventName: '[a] tested correctly', payload: '[filter][a]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn).toBeCalledWith('[filter][a]()')
   })
   it('[b] return changes on resolve', () => {
     const fn1 = jest.fn((...args) => true)
@@ -287,7 +258,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[b] tested correctly" />
+          <emit fullName="[b] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />
@@ -301,24 +272,19 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][b]()', trigger))
     expect(fn1).toHaveBeenCalledTimes(1)
-    expect(fn1).toBeCalledWith('[filter][b]()', {
-      data: {eventName: '[b] tested correctly', payload: '[filter][b]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn1).toBeCalledWith('[filter][b]()')
     expect(fn2).toHaveBeenCalledTimes(1)
     expect(fn2).toBeCalledWith('[filter][b]()')
   })
   it('[c] not return anything on reject', () => {
-    const fn1 = jest.fn((...args) => false)
+    const fn1 = jest.fn(arg => false)
     const fn2 = jest.fn()
     const trigger = createEvent('[filter][c]')
     const next = Next()
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[c] tested correctly" />
+          <emit fullName="[c] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />
@@ -332,16 +298,11 @@ describe('<filter /> execution cases', () => {
     trigger.graphite = {seq: exec, next}
     walkNode(exec, eventCtx('[filter][c]()', trigger))
     expect(fn1).toHaveBeenCalledTimes(1)
-    expect(fn1).toBeCalledWith('[filter][c]()', {
-      data: {eventName: '[c] tested correctly', payload: '[filter][c]()'},
-      group: 'ctx',
-      id: expect.any(String),
-      type: 'emit',
-    })
+    expect(fn1).toBeCalledWith('[filter][c]()')
     expect(fn2).not.toHaveBeenCalled()
   })
   it('[d] not return anything on throw', () => {
-    const fn1 = (...args) => {
+    const fn1 = arg => {
       throw new Error('[expected error]')
     }
     const fn2 = jest.fn()
@@ -350,7 +311,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <single>
-          <emit subtype="event" fullName="[d] tested correctly" />
+          <emit fullName="[d] tested correctly" />
         </single>
         <single>
           <filter filter={fn1} />

@@ -6,5 +6,5 @@ const {readdirSync} = require('fs-extra')
 const rootDir = process.cwd()
 
 module.exports = function readPackageList() {
- return readdirSync(join(rootDir, 'packages'))
+  return readdirSync(join(rootDir, 'packages'))
 }

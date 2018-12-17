@@ -156,7 +156,7 @@ const fabric = {
     const stepFull = (
       <seq>
         <single>
-          <emit subtype="event" fullName={args.fullName} />
+          <emit fullName={args.fullName} />
         </single>
         {nextSteps}
       </seq>
@@ -173,7 +173,7 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={newValue => fn(newValue)} />
         </single>
         {parentGraphite.seq}
       </seq>,
@@ -189,7 +189,7 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={newValue => fn(newValue)} />
         </single>
         {graphite.seq}
       </seq>,
@@ -205,14 +205,10 @@ const fabric = {
     pushNext(
       <seq>
         <single>
-          <compute reduce={(_, newValue, ctx) => fn(newValue)} />
+          <compute fn={newValue => fn(newValue)} />
         </single>
         <single>
-          <filter
-            filter={(result, ctx: TypeDef<'emitCtx', 'ctx'>) =>
-              result !== undefined
-            }
-          />
+          <filter filter={result => result !== undefined} />
         </single>
         {graphite.seq}
       </seq>,
