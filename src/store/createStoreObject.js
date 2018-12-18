@@ -80,8 +80,8 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  const state = {...obj}
-  const stateNew = {...obj}
+  const state = Object.assign({}, obj)
+  const stateNew = Object.assign({}, obj)
 
   const updater: any = createEvent('update ' + Math.random().toString())
 
@@ -103,10 +103,11 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     const substore: Store<any> = (child: any)
     const runCmd = <run runner={newValue => {}} />
     runCmd.data.transactionContext = data => {
-      updates.push(state => ({
-        ...state,
-        [key]: data,
-      }))
+      updates.push(state =>
+        Object.assign({}, state, {
+          [key]: data,
+        }),
+      )
       // commit()
       return commit
     }

@@ -4,8 +4,6 @@ tests:
   - event
   - store
   - domain
-  - redux
-  - kind
   - graphite
   - stdlib
   - [
@@ -21,8 +19,6 @@ include:
   event: true
   store: true
   domain: true
-  redux: false
-  kind: false
   graphite: true
   react: true
   stdlib: true

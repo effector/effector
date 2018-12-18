@@ -2,11 +2,8 @@
 import type {Subscription, Subscriber} from '../effector/index.h'
 import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {kind} from 'effector/stdlib/kind'
-// import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
-// import type {Future} from './future'
-// import type {Vertex} from 'effector/graphite/tarjan'
 
 export type Effect<Params, Done, Fail = Error> = {
   // (payload: Params): Future<Params, Done, Fail>,

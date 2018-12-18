@@ -5,11 +5,8 @@ const {resolve: resolvePath} = require('path')
 const resolveSource = path => resolvePath(__dirname, 'src', path)
 
 module.exports = api => {
-  // module.exports = api => {
-  api && api.cache && api.cache.never && api.cache.never()
-  // const env = api.cache(() => process.env.NODE_ENV)
-  // console.log(env)
-  // console.log(api)
+  // api && api.cache && api.cache.never && api.cache.never()
+  const env = api.cache(() => process.env.NODE_ENV)
   const isBuild = !!process.env.IS_BUILD
   const plugins = [
     '@babel/plugin-proposal-export-namespace-from',
@@ -30,6 +27,8 @@ module.exports = api => {
           'effector/stdlib': resolveSource('stdlib'),
           'effector/perf': resolveSource('perf'),
           'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
+          effector: resolvePath(__dirname, 'src'),
+          'effector-react': resolveSource('react'),
         },
       },
     ],
@@ -42,6 +41,7 @@ module.exports = api => {
       '@babel/preset-env',
       {
         loose: true,
+        useBuiltIns: false,
         modules: false,
         shippedProposals: true,
         targets: {
@@ -66,5 +66,5 @@ module.exports = api => {
     plugins.push('@babel/plugin-transform-modules-commonjs')
   }
 
-  return {plugins, presets, overrides}
+  return {plugins, presets, overrides, sourceMaps: true}
 }
