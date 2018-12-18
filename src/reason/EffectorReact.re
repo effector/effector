@@ -10,10 +10,7 @@ module CreateComponent = {
 
   let make = (store: Store.t('a)) => {
     ...component,
-    initialState: () => {
-      Js.log(store);
-      store##defaultState;
-    },
+    initialState: () => store##defaultState,
     didMount: self => {
       let callback = (state: 'a) => self.send(UpdateState(state));
 
