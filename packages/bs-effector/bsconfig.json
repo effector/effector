@@ -1,0 +1,14 @@
+{
+  "name": "bs-effector",
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "bsc-flags": ["-bs-no-version-header", "-bs-g"],
+  "reason": {
+    "react-jsx": 2
+  },
+  "bs-dev-dependencies": [],
+  "namespace": true,
+  "refmt": 3
+}
