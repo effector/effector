@@ -38,13 +38,7 @@ function packageTest(displayName, opts = {}) {
       transform: {
         '^.+\\.jsx?$': 'babel-jest',
       },
-      moduleNameMapper: {
-        '^effector$': '<rootDir>/src/index.js',
-        '^effector-react$': '<rootDir>/src/react/index.js',
-        'effector/fixtures': '<rootDir>/src/fixtures/index.js',
-        'effector/flags': '<rootDir>/src/flags.dev.js',
-        '^effector/(.+)': '<rootDir>/src/$1',
-      },
+      moduleNameMapper: {},
       testPathIgnorePatterns: ['<rootDir>/node_modules/'],
       transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
       roots: ['<rootDir>/src/'],

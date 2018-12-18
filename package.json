@@ -142,6 +142,7 @@
   },
   "alias": {
     "effector": "./src/index.js",
+    "effector-react": "./src/react",
     "effector/domain": "./src/domain",
     "effector/effect": "./src/effect",
     "effector/event": "./src/event",
@@ -153,6 +154,7 @@
     "effector/stdlib/kind": "./src/stdlib/kind",
     "effector/stdlib/typedef": "./src/stdlib/typedef",
     "effector/stdlib/visitor": "./src/stdlib/visitor",
+    "effector/stdlib/stateref": "./src/stdlib/stateref",
     "effector/flags": "./src/flags.prod",
     "effector/perf": "./src/perf"
   }
