@@ -44,10 +44,26 @@ describe('naming', () => {
   })
 
   test("doesn't accept wrong types", () => {
-    const foo = createEvent()
+    const spy = jest.spyOn(global.console, 'warn')
+    const foo = createEvent('foo')
     const i = 1
     //$off
     storeNaming({foo, i})
+    expect(spy).toHaveBeenNthCalledWith(
+      1,
+      'effector: Key "%s" must be store but instead received %s',
+      'foo',
+      'event',
+      foo,
+    )
+    expect(spy).toHaveBeenNthCalledWith(
+      2,
+      'effector: Key "%s" must be store but instead received %s',
+      'i',
+      '"number"',
+      i,
+    )
+    spy.mockRestore()
   })
 
   test('value store', () => {
