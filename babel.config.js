@@ -56,13 +56,16 @@ module.exports = api => {
     ],
   ]
 
-  const overrides = []
+  const overrides = [
+    {
+      test(filename) {
+        return filename.includes('__tests__')
+      },
+      plugins: ['./src/babel/babel-plugin'],
+    },
+  ]
 
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
-    overrides.push({
-      test: /\/__tests__\/.*\/.*\.(test|spec)\.js/g,
-      plugins: ['./src/babel/babel-plugin'],
-    })
     plugins.push('@babel/plugin-transform-modules-commonjs')
   }
 
