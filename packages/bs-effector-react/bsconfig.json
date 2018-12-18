@@ -1,0 +1,15 @@
+{
+  "name": "bs-effector-react",
+  "sources": {
+    "dir": "src",
+    "subdirs": true
+  },
+  "bs-dependencies": ["reason-react"],
+  "bsc-flags": ["-bs-no-version-header", "-bs-g"],
+  "reason": {
+    "react-jsx": 2
+  },
+  "bs-dev-dependencies": [],
+  "namespace": true,
+  "refmt": 3
+}
