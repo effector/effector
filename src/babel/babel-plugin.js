@@ -2,10 +2,10 @@
 
 const importName = 'effector'
 
-module.exports = function(babel, options) {
+module.exports = function(babel, options = {}) {
   const functionNames = []
   const storeCreators = new Set(
-    options.storeCreators || ['createStore', 'restoreEvent'],
+    options.storeCreators || ['createStore', 'restoreEvent', 'restoreEffect', 'restoreObject'],
   )
 
   const {types: t} = babel

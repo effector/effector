@@ -6,6 +6,7 @@ tests:
   - domain
   - graphite
   - stdlib
+  - babel
   - [
       react,
       {
@@ -22,3 +23,4 @@ include:
   graphite: true
   react: true
   stdlib: true
+  babel: true
