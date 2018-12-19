@@ -34,9 +34,27 @@ export type Store<State> = {
   // ): Subscription,
   subscribe(listner: any): Subscription,
   thru<U>(fn: (store: Store<State>) => U): U,
-  watch<E>(
-    watcher: (state: State, payload: E, type: string) => any,
-  ): Subscription,
+  //prettier-ignore
+  /*::+*/ watch: (
+    & (
+      <E>(
+        watcher: (state: State, payload: E, type: string) => any,
+        _: void,
+      ) => Subscription
+    )
+    & (
+      <E>(
+        event: Event<E>,
+        watcher: (state: State, payload: E, type: string) => any,
+      ) => Subscription
+    )
+    & (
+      <E>(
+        effect: Effect<E, any, any>,
+        watcher: (state: State, payload: E, type: string) => any,
+      ) => Subscription
+    )
+  ),
   +kind: kind,
   shortName: string,
   domainName?: CompositeName,
