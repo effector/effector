@@ -1,5 +1,6 @@
 //@flow
 //@jsx fx
+//eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
 
 import invariant from 'invariant'
@@ -102,6 +103,7 @@ export function storeFabric<State>(props: {
   }
 
   function map(fn, firstState) {
+    //$todo
     return mapStore(store, fn, firstState)
   }
 
@@ -325,10 +327,11 @@ function mapStore<A, B>(
     </seq>
   )
   pushNext(nextSeq, store.graphite.next)
-  const off = () => {
-    const i = store.graphite.next.data.indexOf(nextSeq)
-    if (i === -1) return
-    store.graphite.next.data.splice(i, 1)
-  }
+  //TODO
+  // const off = () => {
+  //   const i = store.graphite.next.data.indexOf(nextSeq)
+  //   if (i === -1) return
+  //   store.graphite.next.data.splice(i, 1)
+  // }
   return innerStore
 }

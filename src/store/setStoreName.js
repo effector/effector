@@ -3,7 +3,7 @@
 import type {Store} from './index.h'
 import {Kind} from 'effector/stdlib/kind'
 import {__DEBUG__} from 'effector/flags'
-import {type CompositeName, createName} from '../compositeName'
+import {createName} from '../compositeName'
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)
@@ -15,6 +15,7 @@ function isStoreObject(store: Store<any>) {
   return (
     typeof store.kind !== 'undefined'
     && store.kind === Kind.store
+    //$todo
     && typeof store.defaultShape !== 'undefined'
   )
 }
@@ -31,6 +32,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
 
     if (isStoreObject(store)) {
       setStoreName(store, storeName)
+      //$todo
       storeNaming(store.defaultShape, store)
       continue
     }
