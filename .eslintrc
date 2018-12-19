@@ -14,10 +14,7 @@ settings:
     onlyFilesWithFlowAnnotation: true
   react:
     version: 16.6
-    flowVersion: 0.87
-globals:
-  __DEV__: true
-  preval: true
+    flowVersion: 0.89
 env:
   node: true
   browser: false
