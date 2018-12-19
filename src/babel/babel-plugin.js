@@ -136,7 +136,7 @@ function setDisplayNameAfter(path, nameNodeId, t, functionName, displayName) {
   })
 
   if (blockLevelStmnt && displayName) {
-    const trailingComments = blockLevelStmnt.node.trailingComments
+    // const trailingComments = blockLevelStmnt.node.trailingComments
     delete blockLevelStmnt.node.trailingComments
 
     const setDisplayNameStmn = t.expressionStatement(
