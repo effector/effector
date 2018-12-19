@@ -28,6 +28,8 @@ module.exports = api => {
           'effector/perf': resolveSource('perf'),
           'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
           effector: resolvePath(__dirname, 'src'),
+          warning: resolveSource('warning'),
+          invariant: resolveSource('invariant'),
           'effector-react': resolveSource('react'),
         },
       },

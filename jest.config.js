@@ -1,9 +1,6 @@
 //@flow
 
 const createDefaultConfig = () => ({
-  globals: {
-    __DEV__: true,
-  },
   automock: false,
   browser: false,
   testEnvironment: 'node',
