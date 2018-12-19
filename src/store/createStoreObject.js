@@ -1,5 +1,6 @@
 //@flow
 //@jsx fx
+//eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
 
 import {pushNext} from 'effector/stdlib/typedef'
@@ -39,6 +40,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   for (const [key, child] of state.map((e, i) => [i, e])) {
     if (child.kind === Kind.store) {
       const substore: Store<any> = (child: any)
+      //eslint-disable-next-line no-unused-vars
       const runCmd = <run runner={newValue => {}} />
       runCmd.data.transactionContext = data => {
         updates.push(state => {
@@ -99,8 +101,9 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   }
   let commit = committer()
   for (const [key, child] of Object.entries(state)) {
-    if (child.kind !== Kind.store) continue
     const substore: Store<any> = (child: any)
+    if (substore.kind !== Kind.store) continue
+    //eslint-disable-next-line no-unused-vars
     const runCmd = <run runner={newValue => {}} />
     runCmd.data.transactionContext = data => {
       updates.push(state =>
@@ -108,7 +111,6 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
           [key]: data,
         }),
       )
-      // commit()
       return commit
     }
     stateNew[key] = substore.getState()
@@ -161,7 +163,7 @@ export function createStoreObject(obj: *) {
   }
   return createStoreObjectMap(obj)
 }
-
+//eslint-disable-next-line
 declare export function extract<
   State: $ReadOnlyArray<Store<any> | any>,
   NextState: $ReadOnlyArray<Store<any> | any>,

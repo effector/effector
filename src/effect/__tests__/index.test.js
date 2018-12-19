@@ -53,6 +53,7 @@ describe('effect({..}).anyway() aka .finally()', () => {
       spy(params)
       return 'done!'
     })
+    //$todo
     await expect(effect('ok').anyway()).resolves.toBe(undefined)
   })
 
@@ -62,6 +63,7 @@ describe('effect({..}).anyway() aka .finally()', () => {
       spy(params)
       throw 'fail!'
     })
+    //$todo
     await expect(effect('will throw').anyway()).resolves.toBe(undefined)
   })
 })
