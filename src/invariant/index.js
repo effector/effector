@@ -1,5 +1,5 @@
 'use strict'
-//@flow
+//@noflow
 /* eslint-disable */
 import {__DEV__} from 'effector/flags'
 

@@ -2,7 +2,7 @@
 
 import type {Store} from './index.h'
 import {Kind} from 'effector/stdlib/kind'
-import {__DEV__} from 'effector/flags'
+import {__DEBUG__} from 'effector/flags'
 import {type CompositeName, createName} from '../compositeName'
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
@@ -40,7 +40,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
       continue
     }
 
-    if (__DEV__)
+    if (__DEBUG__)
       console.warn(
         'effector: Key "%s" must be store but instead received %s',
         storeName,

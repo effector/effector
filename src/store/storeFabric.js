@@ -5,15 +5,15 @@ import fx from 'effector/stdlib/fx'
 import invariant from 'invariant'
 import * as perf from 'effector/perf'
 
-import {Kind, type kind} from 'effector/stdlib/kind'
-import {pushNext, type TypeDef} from 'effector/stdlib/typedef'
+import {Kind} from 'effector/stdlib/kind'
+import {pushNext} from 'effector/stdlib/typedef'
 import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
-import {__DEV__} from 'effector/flags'
+import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {type CompositeName} from '../compositeName'
@@ -68,6 +68,8 @@ export function storeFabric<State>(props: {
     //$off
     [$$observable]: observable,
   }
+  //TODO fix type
+  //$off
   if (name) setStoreName(store, name)
   ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
@@ -104,7 +106,7 @@ export function storeFabric<State>(props: {
   }
 
   function subscribe(listener) {
-    if (__DEV__)
+    if (__DEBUG__)
       perf.beginMark(
         'Start ' + getDisplayName(store) + ' subscribe (id: ' + store.id + ')',
       )
@@ -122,7 +124,7 @@ export function storeFabric<State>(props: {
             lastCall = args
             try {
               listener(args)
-              if (__DEV__)
+              if (__DEBUG__)
                 perf.endMark(
                   'Call ' +
                     getDisplayName(store) +
@@ -137,7 +139,7 @@ export function storeFabric<State>(props: {
                 )
             } catch (err) {
               console.error(err)
-              if (__DEV__)
+              if (__DEBUG__)
                 perf.endMark(
                   'Got error on ' +
                     getDisplayName(store) +
@@ -164,7 +166,6 @@ export function storeFabric<State>(props: {
       store.graphite.next.data.splice(i, 1)
     }
     unsubscribe.unsubscribe = unsubscribe
-    //$off
     return (unsubscribe: {
       (): void,
       unsubscribe(): void,
@@ -278,7 +279,7 @@ function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
-  if (__DEV__)
+  if (__DEBUG__)
     perf.beginMark(`Start ${getDisplayName(store)} map (id: ${store.id})`)
   let lastValue = store.getState()
   let lastResult = fn(lastValue, firstState)
@@ -295,7 +296,7 @@ function mapStore<A, B>(
             lastValue = newValue
             const lastState = innerStore.getState()
             const result = fn(newValue, lastState)
-            if (__DEV__)
+            if (__DEBUG__)
               perf.endMark(
                 'Map ' + getDisplayName(store) + ' (id: ${store.id})',
                 'Start ' +
