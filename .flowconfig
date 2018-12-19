@@ -34,6 +34,7 @@ module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
+module.name_mapper='^pts$' -> '<PROJECT_ROOT>/flow/pts'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^effector/flags$' -> '<PROJECT_ROOT>/src/flags.dev'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
@@ -41,16 +42,20 @@ module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
 [ignore]
-<PROJECT_ROOT>/npm/*
-<PROJECT_ROOT>/dist/*
-<PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
-<PROJECT_ROOT>/.vscode/*
-<PROJECT_ROOT>/examples/*
 <PROJECT_ROOT>/src/graphite/tarjan/*
+<PROJECT_ROOT>/src/web/*
+<PROJECT_ROOT>/\.vscode/*
+<PROJECT_ROOT>/\.cache/*
 <PROJECT_ROOT>/src/DataStructures/*
-<PROJECT_ROOT>/src/redux/*
+<PROJECT_ROOT>/bench/*
+<PROJECT_ROOT>/coverage/*
+<PROJECT_ROOT>/dist/*
+<PROJECT_ROOT>/docs/*
+<PROJECT_ROOT>/examples/*
+<PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/scripts/*
+<PROJECT_ROOT>/tools/*
 💩 🙈
 💩 ignored total:
 💩

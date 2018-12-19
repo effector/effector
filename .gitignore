@@ -33,3 +33,5 @@ npm-debug.log
 lib/bs/**
 val/**
 .size-snapshot.json
+.cache/**
+tools/**
