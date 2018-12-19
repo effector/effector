@@ -4,9 +4,13 @@ const importName = 'effector'
 
 module.exports = function(babel, options = {}) {
   const functionNames = []
-  const storeCreators = new Set(
-    options.storeCreators || ['createStore', 'restoreEvent', 'restoreEffect', 'restoreObject'],
-  )
+  const defaultCreators = [
+    'createStore',
+    'restoreEvent',
+    'restoreEffect',
+    'restoreObject',
+  ]
+  const storeCreators = new Set(options.storeCreators || defaultCreators)
 
   const {types: t} = babel
 
@@ -92,6 +96,7 @@ function findCandidateNameForExpression(path) {
 }
 
 function findProgram(path, t, functionNames) {
+  const isInFunctionNames = node => functionNames.includes(node.local.name)
   let program
   path.find(path => {
     if (path.isProgram()) {
@@ -105,7 +110,7 @@ function findProgram(path, t, functionNames) {
       if (res.source) {
         if (
           res.source.value === importName
-          && res.specifiers.some(node => functionNames.includes(node.local.name))
+          && res.specifiers.some(isInFunctionNames)
         ) {
           return false
         }

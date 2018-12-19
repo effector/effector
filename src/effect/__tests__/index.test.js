@@ -21,6 +21,7 @@ describe('effect({...})', () => {
       spy(params)
       throw 'fail!'
     })
+    //eslint-disable-next-line max-len
     await expect(effect('will throw')).rejects.toBe('fail!')
   })
 })

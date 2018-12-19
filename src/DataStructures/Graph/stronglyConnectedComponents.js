@@ -15,7 +15,8 @@ function getVerticesSortedByDfsFinishTime<T>(
   const visitedVerticesSet = {}
 
   // Stack of vertices by finish time.
-  // All vertices in this stack are ordered by finished time in decreasing order.
+  // All vertices in this stack are ordered by finished time
+  // in decreasing order.
   // Vertex that has been finished first will be at the bottom of the stack and
   // vertex that has been finished last will be at the top of the stack.
   const verticesByDfsFinishTime = new Stack((a, b) => {
@@ -51,7 +52,8 @@ function getVerticesSortedByDfsFinishTime<T>(
     },
   }
 
-  // Do FIRST DFS PASS traversal for all graph vertices to fill the verticesByFinishTime stack.
+  // Do FIRST DFS PASS traversal for all graph vertices
+  // to fill the verticesByFinishTime stack.
   while (Object.values(notVisitedVerticesSet).length) {
     // Peek any vertex to start DFS traversal from.
     const startVertexKey = Object.keys(notVisitedVerticesSet)[0]
@@ -71,7 +73,8 @@ function getSCCSets<T>(
   // Array of arrays of strongly connected vertices.
   const stronglyConnectedComponentsSets = []
 
-  // Array that will hold all vertices that are being visited during one DFS run.
+  // Array that will hold all vertices that are being
+  // visited during one DFS run.
   let stronglyConnectedComponentsSet = []
 
   // Visited vertices set.
@@ -88,8 +91,10 @@ function getSCCSets<T>(
     },
     leaveVertex({previousVertex}) {
       // Once DFS traversal is finished push the set of found strongly connected
-      // components during current DFS round to overall strongly connected components set.
-      // The sign that traversal is about to be finished is that we came back to start vertex
+      // components during current DFS round to overall
+      // strongly connected components set.
+      // The sign that traversal is about to be finished
+      // is that we came back to start vertex
       // which doesn't have parent.
       if (previousVertex === null) {
         stronglyConnectedComponentsSets.push([
@@ -118,10 +123,7 @@ function getSCCSets<T>(
 }
 
 /**
- * Kosaraju's algorithm.
- *
- * @param {Graph} graph
- * @return {*[]}
+ * Kosaraju's algorithm
  */
 export function stronglyConnectedComponents<T>(
   graph: Graph<T>,
@@ -129,7 +131,8 @@ export function stronglyConnectedComponents<T>(
   // In this algorithm we will need to do TWO DFS PASSES overt the graph.
 
   // Get stack of vertices ordered by DFS finish time.
-  // All vertices in this stack are ordered by finished time in decreasing order:
+  // All vertices in this stack are ordered
+  // by finished time in decreasing order:
   // Vertex that has been finished first will be at the bottom of the stack and
   // vertex that has been finished last will be at the top of the stack.
   const verticesByFinishTime = getVerticesSortedByDfsFinishTime(graph)
