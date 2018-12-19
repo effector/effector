@@ -1,21 +1,14 @@
 //@flow
 //@jsx fx
+//eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
 
-import {
-  pushNext,
-  type GraphiteMeta,
-  type TypeDef,
-} from 'effector/stdlib/typedef'
+import {pushNext, type GraphiteMeta} from 'effector/stdlib/typedef'
 import $$observable from 'symbol-observable'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
-import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
-import {Kind, type kind} from 'effector/stdlib/kind'
-// import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
-
-// import type {TypeDef} from 'effector/stdlib/typedef'
+import {Kind} from 'effector/stdlib/kind'
 import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
@@ -41,6 +34,7 @@ export function eventFabric<Payload>({
   instanceAsEvent.graphite = graphite
 
   instance.getType = () => compositeName.fullName
+  //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName) => {
     walkEvent(payload, instanceAsEvent)
     return payload

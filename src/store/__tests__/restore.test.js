@@ -1,16 +1,14 @@
 //@flow
 
 import {
-  createStore,
   restore,
-  createStoreObject,
   restoreEvent,
   restoreEffect,
   restoreObject,
 } from 'effector/store'
 import {createEvent} from 'effector/event'
 import {createEffect, type Effect} from 'effector/effect'
-import {spy, getSpyCalls} from 'effector/fixtures'
+import {spy} from 'effector/fixtures'
 
 describe('separate functions', () => {
   test('restore object', () => {
@@ -37,10 +35,10 @@ describe('separate functions', () => {
     const shape = restoreEffect(fx, -1)
     shape.watch(spy)
     expect(shape.getState()).toBe(-1)
-    const result = await fx('foo')
+    await fx('foo')
     expect(shape.getState()).toBe(3)
     expect(spy).toHaveBeenCalledTimes(2)
-    fx.use(text => {
+    fx.use(() => {
       throw 'err'
     })
     await expect(fx('bar')).rejects.toBe('err')
@@ -73,10 +71,10 @@ describe('single function', () => {
     const shape = restore(fx, -1)
     shape.watch(spy)
     expect(shape.getState()).toBe(-1)
-    const result = await fx('foo')
+    await fx('foo')
     expect(shape.getState()).toBe(3)
     expect(spy).toHaveBeenCalledTimes(2)
-    fx.use(text => {
+    fx.use(() => {
       throw 'err'
     })
     await expect(fx('bar')).rejects.toBe('err')

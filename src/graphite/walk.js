@@ -112,7 +112,7 @@ const command = ({
         eventName: single.data.fullName,
         payload: meta.arg,
       }),
-    transition: ctx => true,
+    transition: () => true,
     stepArg: data => data.payload,
   },
   filter: {
@@ -149,15 +149,15 @@ const command = ({
         parentContext: ctx,
       })
     },
-    transition: ctx => false,
-    stepArg: data => invariant(false, 'RunContext is not supported'),
+    transition: () => false,
+    stepArg: () => invariant(false, 'RunContext is not supported'),
   },
   update: {
     cmd(single, ctx, meta) {
       single.data.store.current = meta.arg
       return Ctx.update({value: meta.arg})
     },
-    transition: ctx => true,
+    transition: () => true,
     stepArg: data => data.value,
   },
   compute: {

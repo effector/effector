@@ -20,6 +20,7 @@ export function pushNext(
 }
 const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
 
+//eslint-disable-next-line no-unused-vars
 declare export function typeDef<T: {+[key: string]: any}, Group>(
   group: Group,
   t: T,

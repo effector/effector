@@ -1,8 +1,5 @@
 //@flow
 
-import type {Performance} from 'perf_hooks'
-
-let perf: Performance
 const effectorEmoji = '☄️'
 
 const useTimingAPI = typeof window !== 'undefined' && window.performance

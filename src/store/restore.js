@@ -34,6 +34,7 @@ export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
   return store
 }
 
+//eslint-disable-next-line no-unused-vars
 declare export function restore<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,

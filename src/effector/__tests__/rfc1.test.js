@@ -1,14 +1,8 @@
 //@flow
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
-// import invariant from 'invariant'
 import {from} from 'most'
-import {
-  createStore,
-  createStoreObject,
-  withProps,
-  type Store,
-} from 'effector/store'
+import {createStore, createStoreObject, withProps} from 'effector/store'
 import {createEvent, type Event} from 'effector/event'
 import {createEffect} from 'effector/effect'
 
@@ -17,14 +11,14 @@ import {spy, delay, getSpyCalls} from 'effector/fixtures'
 describe('symbol-observable support', () => {
   test('from(store)', async() => {
     expect(() => {
-      const store$ = from(createStore(0))
+      from(createStore(0))
     }).not.toThrow()
     const store1 = createStore(-1)
     const ev1 = createEvent('ev1')
     const ev2 = createEvent('ev2')
     const store1$ = from(store1)
     store1$.observe(spy)
-    store1.on(ev1, (state, payload) => state + 1)
+    store1.on(ev1, state => state + 1)
     ev1('foo')
     ev1('bar')
     ev1('baz')
@@ -37,7 +31,7 @@ describe('symbol-observable support', () => {
   describe('from(effect)', () => {
     test('without implementation', async() => {
       expect(() => {
-        const event$ = from(createEffect('ev1'))
+        from(createEffect('ev1'))
       }).not.toThrow()
       const ev1 = createEffect('ev1')
       const ev2 = createEffect('ev2')
@@ -54,14 +48,14 @@ describe('symbol-observable support', () => {
 
     test('with implementation', async() => {
       expect(() => {
-        async function impl(_) {}
+        async function impl() {}
         const eff1 = createEffect('ev1')
         eff1.use(impl)
-        const event$ = from(eff1)
+        from(eff1)
       }).not.toThrow()
       const ev1 = createEffect('ev1')
       const ev2 = createEffect('ev2')
-      async function impl(_) {}
+      async function impl() {}
       ev1.use(impl)
       const ev1$ = from(ev1)
       ev1$.observe(spy)
@@ -149,7 +143,7 @@ describe('store.on', () => {
     const text = createStore('')
     const store = createStoreObject({counter, text, foo: 0})
     const e1 = createEffect('e1')
-    store.on(e1.done, (state, {params, result}) => {
+    store.on(e1.done, (state, {result}) => {
       spy(state, result)
       return {
         ...state,
@@ -208,7 +202,7 @@ test('rfc1 example implementation', async() => {
     () =>
       new Promise(_ => {
         console.count('wait')
-        const unsub = increment.watch(() => {
+        increment.watch(() => {
           console.count('wait done')
           _()
         })
@@ -233,9 +227,9 @@ test('rfc1 example implementation', async() => {
     .tap(e => console.log(`tap`, e))
     .tap(clickEpicFn)
 
-  click$.observe(_ => console.count(`click$.watch`))
+  click$.observe(() => console.count('click$.watch'))
   click$.observe(async() => {
-    console.log(`tap -> watch`)
+    console.log('tap -> watch')
     await delay(500)
     console.log(`tap -> watch -> fnClick & increment`)
     fnClick()
@@ -243,7 +237,7 @@ test('rfc1 example implementation', async() => {
   })
   store.watch(state => console.warn('new state', state))
   const ClickedTimes = withProps(
-    store.map(({counter, text}) => `Clicked: ${counter} times`),
+    store.map(({counter}) => `Clicked: ${counter} times`),
     state => {
       console.log(state)
       expect(state).not.toBe(text)
@@ -252,7 +246,7 @@ test('rfc1 example implementation', async() => {
     },
   )
 
-  const CurrentText = withProps(store, ({counter, text}, props) => (
+  const CurrentText = withProps(store, ({text}, props) => (
     <p>
       {props.prefix} {text}
     </p>

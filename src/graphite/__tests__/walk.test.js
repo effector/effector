@@ -1,13 +1,13 @@
 //@flow
 //@jsx fx
-
-import {show} from 'effector/fixtures/showstep'
+//eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
+import {show} from 'effector/fixtures/showstep'
 import {Ctx} from 'effector/graphite/typedef'
 import {createStateRef} from 'effector/stdlib/stateref'
 
 import {createEvent} from 'effector/event'
-import {walkEvent, walkNode} from '../walk'
+import {walkNode} from '../walk'
 
 function eventCtx(payload, event) {
   return Ctx.emit({
@@ -36,7 +36,7 @@ describe('filter node will throw', () => {
         </single>
         <single>
           <filter
-            filter={arg => {
+            filter={() => {
               throw new Error('[expected error]')
             }}
           />
@@ -63,7 +63,7 @@ describe('filter node will throw', () => {
         <multi>
           <single>
             <filter
-              filter={arg => {
+              filter={() => {
                 throw new Error('[expected error]')
               }}
             />
@@ -158,7 +158,6 @@ describe('<run /> execution cases', () => {
 describe('<choose /> execution cases', () => {
   it('[a] at least not dangerous', () => {
     const fnNext = jest.fn()
-    const fnSelector = jest.fn()
     const fnFoo = jest.fn()
     const fnBar = jest.fn()
     const trigger = createEvent('[choose][a]')
@@ -170,7 +169,7 @@ describe('<choose /> execution cases', () => {
     const selector = (
       <seq>
         <single>
-          <compute fn={arg => 'bar'} />
+          <compute fn={() => 'bar'} />
         </single>
         <single>
           <update store={state} />
@@ -251,7 +250,7 @@ describe('<filter /> execution cases', () => {
     expect(fn).toBeCalledWith('[filter][a]()')
   })
   it('[b] return changes on resolve', () => {
-    const fn1 = jest.fn((...args) => true)
+    const fn1 = jest.fn(() => true)
     const fn2 = jest.fn()
     const trigger = createEvent('[filter][b]')
     const next = Next()
@@ -277,7 +276,7 @@ describe('<filter /> execution cases', () => {
     expect(fn2).toBeCalledWith('[filter][b]()')
   })
   it('[c] not return anything on reject', () => {
-    const fn1 = jest.fn(arg => false)
+    const fn1 = jest.fn(() => false)
     const fn2 = jest.fn()
     const trigger = createEvent('[filter][c]')
     const next = Next()
@@ -302,7 +301,7 @@ describe('<filter /> execution cases', () => {
     expect(fn2).not.toHaveBeenCalled()
   })
   it('[d] not return anything on throw', () => {
-    const fn1 = arg => {
+    const fn1 = () => {
       throw new Error('[expected error]')
     }
     const fn2 = jest.fn()

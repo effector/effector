@@ -3,6 +3,7 @@
 import invariant from 'invariant'
 import {type Store, createStoreObject} from 'effector/store'
 
+//eslint-disable-next-line no-unused-vars
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(

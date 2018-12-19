@@ -48,6 +48,7 @@ export function effectFabric<Payload, Done>({
       callbacks(thunk, result => void done(result), error => void fail(error)),
     )
   }
+  //eslint-disable-next-line no-unused-vars
   let thunk: Function = (value: Payload): Promise<Done> => {
     warning(false, 'no thunk used in %s', instanceAsEvent.getType())
     const result: Promise<Done> = (Promise.resolve(): any)
