@@ -138,11 +138,11 @@
   ],
   "repository": "https://github.com/zerobias/effector",
   "dependencies": {
-    "invariant": "^2.2.4",
-    "symbol-observable": "^1.2.0",
-    "warning": "^4.0.2"
+    "symbol-observable": "^1.2.0"
   },
   "alias": {
+    "warning": "./src/warning/index.js",
+    "invariant": "./src/invariant/index.js",
     "effector": "./src/index.js",
     "effector-react": "./src/react",
     "effector/domain": "./src/domain",
