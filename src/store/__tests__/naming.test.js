@@ -47,7 +47,6 @@ describe('naming', () => {
     const spy = jest.spyOn(global.console, 'warn')
     const foo = createEvent('foo')
     const i = 1
-    //$off
     storeNaming({foo, i})
     expect(spy).toHaveBeenNthCalledWith(
       1,
