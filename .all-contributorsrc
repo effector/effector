@@ -1,0 +1,58 @@
+{
+  "projectName": "effector",
+  "projectOwner": "zerobias",
+  "repoType": "github",
+  "files": [
+    "README.md"
+  ],
+  "contributors": [
+    {
+      "login": "zerobias",
+      "name": "Dmitry",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15912112?v=4",
+      "profile": "https://zerobias.net",
+      "contributions": [
+        "question",
+        "code",
+        "doc",
+        "example",
+        "ideas",
+        "infra",
+        "test"
+      ]
+    },
+    {
+      "login": "goodmind",
+      "name": "andretshurotshka",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3275424?v=4",
+      "profile": "https://github.com/goodmind",
+      "contributions": [
+        "question",
+        "code",
+        "doc",
+        "platform",
+        "test"
+      ]
+    },
+    {
+      "login": "sergeysova",
+      "name": "Sergey Sova",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5620073?v=4",
+      "profile": "https://sergeysova.com",
+      "contributions": [
+        "doc",
+        "example"
+      ]
+    },
+    {
+      "login": "artalar",
+      "name": "Arutyunyan Artyom",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/27290320?v=4",
+      "profile": "https://t.me/artalar",
+      "contributions": [
+        "doc",
+        "example"
+      ]
+    }
+  ]
+}
