@@ -3,7 +3,7 @@
 /* eslint-disable */
 import {__DEV__} from 'effector/flags'
 
-var invariant = function(condition, format, a, b, c, d, e, f) {
+export default function invariant(condition, format, a, b, c, d, e, f) {
   if (__DEV__) {
     if (format === undefined) {
       throw new Error('invariant requires an error message argument');
@@ -30,5 +30,3 @@ var invariant = function(condition, format, a, b, c, d, e, f) {
     throw error;
   }
 };
-
-module.exports = invariant;

@@ -53,4 +53,4 @@ if (__DEV__) {
   };
 }
 
-module.exports = warning;
+export default warning;
