@@ -17,6 +17,7 @@ Reactive state manager
 - [Typings](#typings)
 - [API](#api)
 - [Core types](#core-types)
+- [Contributors](#contributors)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
