@@ -1,25 +1,21 @@
 open Effector;
 
-module CreateComponent = {
-  type t;
+type action('a) =
+  | UpdateState('a);
 
-  type action =
-    | UpdateState(t);
+let component = ReasonReact.reducerComponent("Component");
 
-  let component = ReasonReact.reducerComponent("Component");
+let createComponent = (store: Store.t('a)) => {
+  ...component,
+  initialState: () => store##defaultState,
+  didMount: self => {
+    let callback = (state: 'a) => self.send(UpdateState(state));
 
-  let make = (store: Store.t('a)) => {
-    ...component,
-    initialState: () => store##defaultState,
-    didMount: self => {
-      let callback = (state: 'a) => self.send(UpdateState(state));
-
-      let unsubscribe = store |> Store.watch(callback);
-      self.onUnmount(() => unsubscribe());
+    let unsubscribe = store |> Store.watch(callback);
+    self.onUnmount(() => unsubscribe());
+  },
+  reducer: (action, _state) =>
+    switch (action) {
+    | UpdateState(state) => ReasonReact.Update(state)
     },
-    reducer: (action, _state) =>
-      switch (action) {
-      | UpdateState(state) => ReasonReact.Update(state)
-      },
-  };
 };
