@@ -1,4 +1,4 @@
-# Effector
+# ☄️ Effector  [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector)
 
 Reactive state manager
 
@@ -171,3 +171,7 @@ import {
 ```js
 import type {Domain, Event, Effect, Store} from 'effector'
 ```
+
+## License
+
+[MIT](LICENSE)
