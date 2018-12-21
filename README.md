@@ -6,6 +6,7 @@ Reactive state manager
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
+- [Installation](#installation)
 - [About](#about)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
   - [Storages and events](#storages-and-events)
