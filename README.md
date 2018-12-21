@@ -2,6 +2,25 @@
 
 Reactive state manager
 
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Installation](#installation)
+- [About](#about)
+  - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
+  - [Storages and events](#storages-and-events)
+- [Demo](#demo)
+- [Wiki](#wiki)
+- [Usage](#usage)
+  - [Domain hooks](#domain-hooks)
+- [Typings](#typings)
+- [API](#api)
+- [Core types](#core-types)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 ## Installation
 
 ```bash
