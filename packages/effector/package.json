@@ -38,6 +38,7 @@
     "index.d.ts"
   ],
   "repository": "https://github.com/zerobias/effector",
+  "homepage": "https://zerobias.github.io/effector/",
   "engines": {
     "node": ">=6.0.0"
   },
