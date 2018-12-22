@@ -114,6 +114,7 @@ function createBuild(name) {
       'warning',
       'invariant',
       'react',
+      'vue',
       'most',
       'symbol-observable',
       'effector',
