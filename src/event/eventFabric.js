@@ -28,14 +28,14 @@ export function eventFabric<Payload>({
     fullName,
   })
 
-  const instance = (payload: Payload): Payload =>
-    instanceAsEvent.create(payload, fullName)
+  const instance = (payload: Payload, ...args: any[]): Payload =>
+    instanceAsEvent.create(payload, fullName, args)
   const instanceAsEvent: Event<Payload> = (instance: any)
   instanceAsEvent.graphite = graphite
 
   instance.getType = () => compositeName.fullName
   //eslint-disable-next-line no-unused-vars
-  ;(instance: any).create = (payload, fullName) => {
+  ;(instance: any).create = (payload, fullName, args) => {
     walkEvent(payload, instanceAsEvent)
     return payload
   }

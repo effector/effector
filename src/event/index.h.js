@@ -11,7 +11,7 @@ export type Event<E> = {
   */
   /*::+*/ id: string,
   getType(): string,
-  create(payload: E, type: string): E,
+  create(payload: E, type: string, args: any[]): E,
   watch(watcher: (payload: E) => any): Subscription,
   map<T>(fn: (_: E) => T): Event<T>,
   filter<T>(fn: (_: E) => T | void): Event<T>,
