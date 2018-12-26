@@ -94,6 +94,14 @@ const rollupPlugins = [
 ]
 
 function createBuild(name) {
+  function sourcemapPathTransform(relativePath) {
+    let packagePath = join('../..', packageJson.alias[name])
+    if (extname(packagePath) !== '') {
+      packagePath = dirname(packagePath)
+    }
+    return join(`node_modules/${name}`, relative(packagePath, relativePath))
+  }
+  
   if (name.startsWith('bs')) return []
   if (process.env.BUILD_UMD)
     return [
@@ -129,36 +137,14 @@ function createBuild(name) {
       format: 'es',
       name,
       sourcemap: true,
-      sourcemapPathTransform(relativePath) {
-        let packagePath = join('../..', packageJson.alias[name])
-        if (extname(packagePath) !== '') {
-          packagePath = dirname(packagePath)
-        }
-        const isFromPackage = relativePath.startsWith(packagePath)
-        if (isFromPackage) {
-          return join(`node_modules/${name}`, relative('../..', relativePath))
-        } else {
-          return join(`node_modules/effector`, relative('../..', relativePath))
-        }
-      },
+      sourcemapPathTransform,
     },
     {
       file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
       format: 'cjs',
       name,
       sourcemap: true,
-      sourcemapPathTransform(relativePath) {
-        let packagePath = join('../..', packageJson.alias[name])
-        if (extname(packagePath) !== '') {
-          packagePath = dirname(packagePath)
-        }
-        const isFromPackage = relativePath.startsWith(packagePath)
-        if (isFromPackage) {
-          return join(`node_modules/${name}`, relative('../..', relativePath))
-        } else {
-          return join(`node_modules/effector`, relative('../..', relativePath))
-        }
-      },
+      sourcemapPathTransform,
     },
   ].map(subconfig)
 }
