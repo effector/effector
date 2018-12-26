@@ -1,6 +1,6 @@
 //@flow
 
-import {EffectorVue} from './'
+import type {EffectorVue} from './'
 import {type Store, createEvent, createStore} from 'effector'
 
 export function watchAsStore(
