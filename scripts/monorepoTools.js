@@ -92,6 +92,44 @@ const stages = {
       copySync(src, target)
     }
   },
+  writeBuckleScriptPackage({name, pathRoot, pathBuild, version}, names) {
+    const joinBuild = file => join(pathBuild, file)
+    const joinSrc = file => join(pathRoot, file)
+
+    const pkg = readPackage(pathRoot)
+    const bsconfig = readJsonSync(join(pathRoot, 'bsconfig.json'))
+    stages.editPackage(pkg, names, version)
+    stages.cleanup(pathBuild)
+
+    writePkg: {
+      const target = joinBuild('package.json')
+      outputJsonSync(target, pkg, {spaces: 2})
+    }
+
+    sources: {
+      const src = joinSrc('src')
+      const target = joinBuild('src')
+      copySync(src, target, {dereference: true})
+    }
+
+    bsconfig: {
+      const target = joinBuild('bsconfig.json')
+      outputJsonSync(target, bsconfig, {spaces: 2})
+    }
+
+    license: {
+      const src = joinRoot('LICENSE')
+      const target = joinBuild('LICENSE')
+      copySync(src, target)
+    }
+
+    readme: {
+      let src
+      src = joinSrc('README.md')
+      const target = joinBuild('README.md')
+      copySync(src, target)
+    }
+  },
 }
 export function writePackages(names /*: string[]*/) {
   const rootPackage = readPackage()
@@ -103,7 +141,11 @@ export function writePackages(names /*: string[]*/) {
     pathBuild: join(rootDir, 'npm', name),
   }))
   for (const pkg of pkgList) {
-    stages.writePackage(pkg, names)
+    if (pkg.name.startsWith('bs')) {
+      stages.writeBuckleScriptPackage(pkg, names)
+    } else {
+      stages.writePackage(pkg, names)
+    }
   }
 }
 
