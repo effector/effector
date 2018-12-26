@@ -145,6 +145,7 @@
     "invariant": "./src/invariant/index.js",
     "effector": "./src/index.js",
     "effector-react": "./src/react",
+    "effector-vue": "./src/vue",
     "effector/domain": "./src/domain",
     "effector/effect": "./src/effect",
     "effector/event": "./src/event",
