@@ -1,4 +1,4 @@
-import {resolve as resolvePath} from 'path'
+import {join, extname, dirname, resolve as resolvePath, relative} from 'path'
 
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
@@ -6,6 +6,7 @@ import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
+import packageJson from './package.json'
 
 import {readPackageList, writePackages} from './scripts/monorepoTools'
 
@@ -127,12 +128,36 @@ function createBuild(name) {
       format: 'es',
       name,
       sourcemap: true,
+      sourcemapPathTransform(relativePath) {
+        let packagePath = join('../..', packageJson.alias[name])
+        if (extname(packagePath) !== '') {
+          packagePath = dirname(packagePath)
+        }
+        const isFromPackage = relativePath.startsWith(packagePath)
+        if (isFromPackage) {
+          return join(`node_modules/${name}`, relative('../..', relativePath))
+        } else {
+          return join(`node_modules/effector`, relative('../..', relativePath))
+        }
+      },
     },
     {
       file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
       format: 'cjs',
       name,
       sourcemap: true,
+      sourcemapPathTransform(relativePath) {
+        let packagePath = join('../..', packageJson.alias[name])
+        if (extname(packagePath) !== '') {
+          packagePath = dirname(packagePath)
+        }
+        const isFromPackage = relativePath.startsWith(packagePath)
+        if (isFromPackage) {
+          return join(`node_modules/${name}`, relative('../..', relativePath))
+        } else {
+          return join(`node_modules/effector`, relative('../..', relativePath))
+        }
+      },
     },
   ].map(subconfig)
 }
