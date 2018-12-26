@@ -94,6 +94,7 @@ const rollupPlugins = [
 ]
 
 function createBuild(name) {
+  if (name.startsWith('bs')) return []
   if (process.env.BUILD_UMD)
     return [
       {
