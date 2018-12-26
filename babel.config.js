@@ -31,6 +31,7 @@ module.exports = api => {
           warning: resolveSource('warning'),
           invariant: resolveSource('invariant'),
           'effector-react': resolveSource('react'),
+          'effector-vue': resolveSource('vue'),
         },
       },
     ],
