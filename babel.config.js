@@ -8,6 +8,24 @@ module.exports = api => {
   // api && api.cache && api.cache.never && api.cache.never()
   const env = api.cache(() => process.env.NODE_ENV)
   const isBuild = !!process.env.IS_BUILD
+  const alias = {
+    'effector/effect': resolveSource('effect'),
+    'effector/event': resolveSource('event'),
+    'effector/store': resolveSource('store'),
+    'effector/domain': resolveSource('domain'),
+    'effector/graphite': resolveSource('graphite'),
+    'effector/fixtures': resolveSource('fixtures'),
+    'effector/stdlib': resolveSource('stdlib'),
+    'effector/perf': resolveSource('perf'),
+    'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
+    warning: resolveSource('warning'),
+    invariant: resolveSource('invariant'),
+    'effector-react': resolveSource('react'),
+    'effector-vue': resolveSource('vue'),
+  }
+  if (process.env.NODE_ENV === 'test') {
+    alias.effector = resolvePath(__dirname, 'src')
+  }
   const plugins = [
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
@@ -17,22 +35,7 @@ module.exports = api => {
     [
       'babel-plugin-module-resolver',
       {
-        alias: {
-          'effector/effect': resolveSource('effect'),
-          'effector/event': resolveSource('event'),
-          'effector/store': resolveSource('store'),
-          'effector/domain': resolveSource('domain'),
-          'effector/graphite': resolveSource('graphite'),
-          'effector/fixtures': resolveSource('fixtures'),
-          'effector/stdlib': resolveSource('stdlib'),
-          'effector/perf': resolveSource('perf'),
-          'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
-          effector: resolvePath(__dirname, 'src'),
-          warning: resolveSource('warning'),
-          invariant: resolveSource('invariant'),
-          'effector-react': resolveSource('react'),
-          'effector-vue': resolveSource('vue'),
-        },
+        alias,
       },
     ],
   ]
