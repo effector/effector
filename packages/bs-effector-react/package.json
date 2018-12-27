@@ -22,7 +22,7 @@
     }
   ],
   "files": [
-    "src/",
+    "src/EffectorReact.re",
     "bsconfig.json"
   ],
   "keywords": [

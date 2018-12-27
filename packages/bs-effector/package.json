@@ -20,7 +20,7 @@
     }
   ],
   "files": [
-    "src/",
+    "src/Effector.re",
     "bsconfig.json"
   ],
   "keywords": [
