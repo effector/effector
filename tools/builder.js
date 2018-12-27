@@ -180,6 +180,7 @@ module.exports = {
     "eslint-plugin-flowtype": "^3.2.0",
     "eslint-plugin-jest": "^22.1.2",
     "eslint-plugin-react": "^7.11.1",
+    "execa": "^1.0.0",
     "express": "^4.16.4",
     "flow-bin": "^0.89.0",
     "flow-copy-source": "^2.0.2",
@@ -766,6 +767,8 @@ exports.default = void 0;
 
 var fs = _interopRequireWildcard(require("fs-extra"));
 
+var _execa = _interopRequireDefault(require("execa"));
+
 var _rollup = require("./rollup");
 
 var _packages = _interopRequireDefault(require("./packages.config"));
@@ -778,17 +781,47 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+//$todo
+const publishScript = name => async () => {
+  const args = process.argv.slice(2);
+  if (args.length < 2) return;
+  const command = args.shift();
+  const argument = args.shift();
+
+  if (command === 'publish') {
+    if (argument === 'next') {
+      const {
+        stdout,
+        stderr
+      } = await (0, _execa.default)('npm', ['publish', '--tag', 'next'], {
+        cwd: `${process.cwd()}/npm/${name}`
+      });
+      console.log(stdout);
+      console.error(stderr);
+    } else if (argument === 'latest') {
+      const {
+        stdout,
+        stderr
+      } = await (0, _execa.default)('npm', ['publish', '--tag', 'latest'], {
+        cwd: `${process.cwd()}/npm/${name}`
+      });
+      console.log(stdout);
+      console.error(stderr);
+    }
+  }
+};
+
 var _default = (0, _utils.taskList)({
   tasks: {
-    effector: [() => (0, _utils.outputPackageJSON)('packages/effector/package.json', _packages.default.effector), () => (0, _utils.massCopy)('.', 'npm/effector', ['LICENSE', 'README.md']), () => (0, _utils.massCopy)('packages/effector', 'npm/effector', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector.cjs.js.flow', 'effector.es.js.flow', 'effector.bundle.js.flow']]]), _rollup.rollupEffector],
-    'effector-react': [() => (0, _utils.outputPackageJSON)('packages/effector-react/package.json', _packages.default['effector-react']), () => (0, _utils.massCopy)('.', 'npm/effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-react', 'npm/effector-react', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-react.cjs.js.flow', 'effector-react.es.js.flow', 'effector-react.bundle.js.flow']]]), _rollup.rollupEffectorReact],
-    'effector-vue': [() => (0, _utils.outputPackageJSON)('packages/effector-vue/package.json', _packages.default['effector-vue']), () => (0, _utils.massCopy)('.', 'npm/effector-vue', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]]), _rollup.rollupEffectorVue],
+    effector: [() => (0, _utils.outputPackageJSON)('packages/effector/package.json', _packages.default.effector), () => (0, _utils.massCopy)('.', 'npm/effector', ['LICENSE', 'README.md']), () => (0, _utils.massCopy)('packages/effector', 'npm/effector', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector.cjs.js.flow', 'effector.es.js.flow', 'effector.bundle.js.flow']]]), _rollup.rollupEffector, publishScript('effector')],
+    'effector-react': [() => (0, _utils.outputPackageJSON)('packages/effector-react/package.json', _packages.default['effector-react']), () => (0, _utils.massCopy)('.', 'npm/effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-react', 'npm/effector-react', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-react.cjs.js.flow', 'effector-react.es.js.flow', 'effector-react.bundle.js.flow']]]), _rollup.rollupEffectorReact, publishScript('effector-react')],
+    'effector-vue': [() => (0, _utils.outputPackageJSON)('packages/effector-vue/package.json', _packages.default['effector-vue']), () => (0, _utils.massCopy)('.', 'npm/effector-vue', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]]), _rollup.rollupEffectorVue, publishScript('effector-vue')],
     'bs-effector': [() => (0, _utils.outputPackageJSON)('packages/bs-effector/package.json', _packages.default['bs-effector']), () => fs.outputJSON('packages/bs-effector/bsconfig.json', _bsconfigs.default['bs-effector'], {
       spaces: 2
-    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json', 'src/Effector.re'])],
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json', 'src/Effector.re']), publishScript('bs-effector')],
     'bs-effector-react': [() => (0, _utils.outputPackageJSON)('packages/bs-effector-react/package.json', _packages.default['bs-effector-react']), () => fs.outputJSON('packages/bs-effector-react/bsconfig.json', _bsconfigs.default['bs-effector-react'], {
       spaces: 2
-    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json', 'src/EffectorReact.re'])]
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json', 'src/EffectorReact.re']), publishScript('bs-effector-react')]
   },
   hooks: {
     beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)]

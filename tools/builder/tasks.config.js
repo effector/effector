@@ -1,9 +1,41 @@
 //@flow
 import * as fs from 'fs-extra'
+//$todo
+import execa from 'execa'
 import {rollupEffector, rollupEffectorReact, rollupEffectorVue} from './rollup'
 import packages from './packages.config'
 import bsconfigs from './bsconfigs.config'
 import {taskList, massCopy, outputPackageJSON} from './utils'
+
+const publishScript = name => async() => {
+  const args = process.argv.slice(2)
+  if (args.length < 2) return
+  const command = args.shift()
+  const argument = args.shift()
+  if (command === 'publish') {
+    if (argument === 'next') {
+      const {stdout, stderr} = await execa(
+        'npm',
+        ['publish', '--tag', 'next'],
+        {
+          cwd: `${process.cwd()}/npm/${name}`,
+        },
+      )
+      console.log(stdout)
+      console.error(stderr)
+    } else if (argument === 'latest') {
+      const {stdout, stderr} = await execa(
+        'npm',
+        ['publish', '--tag', 'latest'],
+        {
+          cwd: `${process.cwd()}/npm/${name}`,
+        },
+      )
+      console.log(stdout)
+      console.error(stderr)
+    }
+  }
+}
 
 export default taskList({
   tasks: {
@@ -26,6 +58,7 @@ export default taskList({
           ],
         ]),
       rollupEffector,
+      publishScript('effector'),
     ],
     'effector-react': [
       () =>
@@ -50,6 +83,7 @@ export default taskList({
           ],
         ]),
       rollupEffectorReact,
+      publishScript('effector-react'),
     ],
     'effector-vue': [
       () =>
@@ -74,6 +108,7 @@ export default taskList({
           ],
         ]),
       rollupEffectorVue,
+      publishScript('effector-vue'),
     ],
     'bs-effector': [
       () =>
@@ -95,6 +130,7 @@ export default taskList({
           'bsconfig.json',
           'src/Effector.re',
         ]),
+      publishScript('bs-effector'),
     ],
     'bs-effector-react': [
       () =>
@@ -116,6 +152,7 @@ export default taskList({
           'bsconfig.json',
           'src/EffectorReact.re',
         ]),
+      publishScript('bs-effector-react'),
     ],
   },
   hooks: {
