@@ -17,6 +17,9 @@
     "publish:all": "node scripts/publish.js",
     "publish:next": "NEXT='true' node scripts/publish.js",
     "build": "yarn build:standart && yarn build:nodeps",
+    "build:builder": "npx parcel build --no-minify --no-source-maps --no-autoinstall -d tools -o builder.js -t node tools/builder/tasks.config.js",
+    "builder": "node tools/builder.js",
+    "postinstall": "yarn build:builder",
     "build:nodeps": "IS_BUILD='true' BUILD_UMD='true' rollup -c",
     "build:standart": "IS_BUILD='true' rollup -c",
     "test:watch": "npx jest --config=jest.config.js --watch",
@@ -158,6 +161,7 @@
     "effector/stdlib/typedef": "./src/stdlib/typedef",
     "effector/stdlib/visitor": "./src/stdlib/visitor",
     "effector/stdlib/stateref": "./src/stdlib/stateref",
+    "effector/stdlib/iterator": "./src/stdlib/iterator",
     "effector/flags": "./src/flags.prod",
     "effector/perf": "./src/perf"
   }
