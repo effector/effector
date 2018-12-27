@@ -167,7 +167,7 @@ export default {
       effector: '*',
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/Effector.re', 'bsconfig.json'],
     keywords: [
       'bucklescript',
       'reason',
@@ -201,7 +201,7 @@ export default {
       'reason-react': '*',
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/EffectorReact.re', 'bsconfig.json'],
     keywords: [
       'bucklescript',
       'reason',
