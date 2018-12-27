@@ -821,7 +821,7 @@ var _default = (0, _utils.taskList)({
     }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('src/reason', 'npm/bs-effector', [['Effector.re', 'src/Effector.re']]), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json']), publishScript('bs-effector')],
     'bs-effector-react': [() => (0, _utils.outputPackageJSON)('packages/bs-effector-react/package.json', _packages.default['bs-effector-react']), () => fs.outputJSON('packages/bs-effector-react/bsconfig.json', _bsconfigs.default['bs-effector-react'], {
       spaces: 2
-    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('src/reason', 'npm/bs-effector-react', [['EffectorReact.re', 'src/EffectorReact.re']]), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json', 'src/EffectorReact.re']), publishScript('bs-effector-react')]
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('src/reason', 'npm/bs-effector-react', [['EffectorReact.re', 'src/EffectorReact.re']]), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json']), publishScript('bs-effector-react')]
   },
   hooks: {
     beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)]
