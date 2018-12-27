@@ -263,57 +263,57 @@ declare module 'rollup' {
 
   declare export type OptionsPaths = {} | ((id: string) => string)
 
-  declare export interface OutputOptions {
+  declare export type OutputOptions = {
     // only required for bundle.write
-    file?: string;
+    file?: string,
     // only required for bundles.write
-    dir?: string;
+    dir?: string,
     // this is optional at the base-level of RollupWatchOptions,
     // which extends from this interface through config merge
-    format?: ModuleFormat;
-    name?: string;
-    globals?: GlobalsOption;
-    chunkFileNames?: string;
-    entryFileNames?: string;
-    assetFileNames?: string;
+    format?: ModuleFormat,
+    name?: string,
+    globals?: GlobalsOption,
+    chunkFileNames?: string,
+    entryFileNames?: string,
+    assetFileNames?: string,
 
-    paths?: OptionsPaths;
-    banner?: string | (() => string | Promise<string>);
-    footer?: string | (() => string | Promise<string>);
-    intro?: string | (() => string | Promise<string>);
-    outro?: string | (() => string | Promise<string>);
-    sourcemap?: boolean | 'inline';
-    sourcemapFile?: string;
-    interop?: boolean;
-    extend?: boolean;
+    paths?: OptionsPaths,
+    banner?: string | (() => string | Promise<string>),
+    footer?: string | (() => string | Promise<string>),
+    intro?: string | (() => string | Promise<string>),
+    outro?: string | (() => string | Promise<string>),
+    sourcemap?: boolean | 'inline',
+    sourcemapFile?: string,
+    interop?: boolean,
+    extend?: boolean,
 
-    exports?: 'default' | 'named' | 'none' | 'auto';
+    exports?: 'default' | 'named' | 'none' | 'auto',
     amd?: {
       id?: string,
       define?: string,
-    };
-    indent?: boolean;
-    strict?: boolean;
-    freeze?: boolean;
-    esModule?: boolean;
-    namespaceToStringTag?: boolean;
-    compact?: boolean;
+    },
+    indent?: boolean,
+    strict?: boolean,
+    freeze?: boolean,
+    esModule?: boolean,
+    namespaceToStringTag?: boolean,
+    compact?: boolean,
 
     // undocumented?
-    noConflict?: boolean;
+    noConflict?: boolean,
 
     // deprecated
-    dest?: string;
-    moduleId?: string;
+    dest?: string,
+    moduleId?: string,
   }
 
-  declare export interface OutputOptionsFile extends OutputOptions {
-    file?: string;
+  declare export type OutputOptionsFile = OutputOptions & {
+    file?: string,
   }
 
-  declare export interface OutputOptionsDir extends OutputOptions {
+  declare export type OutputOptionsDir = OutputOptions & {
     // only required for bundles.write
-    dir?: string;
+    dir?: string,
   }
 
   declare export interface RollupWarning {
