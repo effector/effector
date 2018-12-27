@@ -15,8 +15,9 @@ const version = {
   effector: '0.18.0-rc.3',
   'effector-react': '0.18.0-rc.3',
   'effector-vue': '0.18.0-rc.3',
-  'bs-effector': '0.18.0-rc.3',
-  'bs-effector-react': '0.18.0-rc.3',
+
+  'bs-effector': '0.18.0-rc.4',
+  'bs-effector-react': '0.18.0-rc.4',
 }
 
 const getFiles = name => [
