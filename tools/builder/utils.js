@@ -64,7 +64,7 @@ export function taskList({
   })
 }
 
-//eslint-disable-next-line max-len
+/* eslint-disable max-len */
 /**
  * @example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js
  */
