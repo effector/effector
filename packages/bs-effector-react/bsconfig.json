@@ -4,8 +4,14 @@
     "dir": "src",
     "subdirs": true
   },
-  "bs-dependencies": ["bs-effector", "reason-react"],
-  "bsc-flags": ["-bs-no-version-header", "-bs-g"],
+  "bs-dependencies": [
+    "bs-effector",
+    "reason-react"
+  ],
+  "bsc-flags": [
+    "-bs-no-version-header",
+    "-bs-g"
+  ],
   "reason": {
     "react-jsx": 2
   },
