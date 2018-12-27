@@ -124,11 +124,14 @@ export default taskList({
         ),
       () => massCopy('.', 'npm/bs-effector', ['LICENSE']),
       () =>
+        massCopy('src/reason', 'npm/bs-effector', [
+          ['Effector.re', 'src/Effector.re'],
+        ]),
+      () =>
         massCopy('packages/bs-effector', 'npm/bs-effector', [
           'README.md',
           'package.json',
           'bsconfig.json',
-          'src/Effector.re',
         ]),
       publishScript('bs-effector'),
     ],
@@ -146,11 +149,14 @@ export default taskList({
         ),
       () => massCopy('.', 'npm/bs-effector-react', ['LICENSE']),
       () =>
+        massCopy('src/reason', 'npm/bs-effector-react', [
+          ['EffectorReact.re', 'src/EffectorReact.re'],
+        ]),
+      () =>
         massCopy('packages/bs-effector-react', 'npm/bs-effector-react', [
           'README.md',
           'package.json',
           'bsconfig.json',
-          'src/EffectorReact.re',
         ]),
       publishScript('bs-effector-react'),
     ],
