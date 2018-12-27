@@ -589,8 +589,8 @@ const version = {
   effector: '0.18.0-rc.3',
   'effector-react': '0.18.0-rc.3',
   'effector-vue': '0.18.0-rc.3',
-  'bs-effector': '0.18.0-rc.3',
-  'bs-effector-react': '0.18.0-rc.3'
+  'bs-effector': '0.18.0-rc.4',
+  'bs-effector-react': '0.18.0-rc.4'
 };
 
 const getFiles = name => ['README.md', 'LICENSE', `${name}.es.js`, `${name}.cjs.js`, `${name}.es.js.map`, `${name}.cjs.js.map`, `${name}.cjs.js.flow`, `${name}.es.js.flow`, 'index.d.ts', 'index.js.flow'];
