@@ -1,12 +1,11 @@
 //@flow
 
-import type {Future} from './future'
-import type {Thunk, Callbacks} from './index.h'
+import type {Callbacks} from './index.h'
 
 export const exec = <Args, Done, Fail>(
   args: Args,
   cbs: Callbacks<Args, Done, Fail>,
-): Future<Args, Done, Fail> => {
+): Promise<Done> => {
   declare var throwSymbol: Fail
   declare var doneSymbol: Promise<Done> & Done
   let syncError: Fail /*:: = throwSymbol*/
@@ -23,8 +22,11 @@ export const exec = <Args, Done, Fail>(
     fpromise = new Promise((_, rj) => {
       rj(syncError)
     })
+    //TODO deprecate this
+    //$off
     fpromise.cache = () => undefined
     const anyway = Promise.resolve(undefined)
+    //$off
     fpromise.anyway = () => anyway
     cbs[1]({error: syncError, params: args})
     return fpromise
@@ -37,6 +39,7 @@ export const exec = <Args, Done, Fail>(
     const then: Promise<Done> = (req: any)
     fpromise = then.then(
       result => {
+        //$off
         fpromise.cache = () => result
         cbs[0]({result, params: args})
         return result
@@ -47,6 +50,7 @@ export const exec = <Args, Done, Fail>(
       },
     )
     const anyway = fpromise.then(() => {}, () => {})
+    //$off
     fpromise.anyway = () => anyway
     return fpromise
   }
@@ -54,8 +58,10 @@ export const exec = <Args, Done, Fail>(
   fpromise = new Promise(rs => {
     rs(done)
   })
+  //$off
   fpromise.cache = () => done
   const anyway = Promise.resolve(undefined)
+  //$off
   fpromise.anyway = () => anyway
   cbs[0]({result: done, params: args})
   return fpromise

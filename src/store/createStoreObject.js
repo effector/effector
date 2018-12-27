@@ -1,6 +1,9 @@
 //@flow
+//@jsx fx
+//eslint-disable-next-line no-unused-vars
+import fx from 'effector/stdlib/fx'
 
-import {Step, Cmd} from 'effector/graphite/typedef'
+import {pushNext} from 'effector/stdlib/typedef'
 
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
@@ -19,7 +22,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   const state = [...obj]
   const stateNew = [...obj]
 
-  const updater: any = createEvent(`update ${Math.random().toString()}`)
+  const updater: any = createEvent('update ' + Math.random().toString())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -37,9 +40,8 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   for (const [key, child] of state.map((e, i) => [i, e])) {
     if (child.kind === Kind.store) {
       const substore: Store<any> = (child: any)
-      const runCmd = Cmd.run({
-        runner(newValue) {},
-      })
+      //eslint-disable-next-line no-unused-vars
+      const runCmd = <run runner={newValue => {}} />
       runCmd.data.transactionContext = data => {
         updates.push(state => {
           const nextState = [...state]
@@ -49,15 +51,18 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
         return commit
       }
       stateNew[key] = substore.getState()
-      substore.graphite.next.data.push(Step.single(runCmd))
+      pushNext(<single>{runCmd}</single>, substore.graphite.next)
     }
   }
-  const name = `combine(${obj
-    .map(store => {
-      if (store.kind !== Kind.store) return store.toString()
-      return getDisplayName(store)
-    })
-    .join(', ')})`
+  const name =
+    'combine(' +
+    obj
+      .map(store => {
+        if (store.kind !== Kind.store) return store.toString()
+        return getDisplayName(store)
+      })
+      .join(', ') +
+    ')'
   const store = storeFabric({
     name,
     currentState: stateNew,
@@ -77,10 +82,10 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  const state = {...obj}
-  const stateNew = {...obj}
+  const state = Object.assign({}, obj)
+  const stateNew = Object.assign({}, obj)
 
-  const updater: any = createEvent(`update ${Math.random().toString()}`)
+  const updater: any = createEvent('update ' + Math.random().toString())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -96,28 +101,30 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   }
   let commit = committer()
   for (const [key, child] of Object.entries(state)) {
-    if (child.kind !== Kind.store) continue
     const substore: Store<any> = (child: any)
-    const runCmd = Cmd.run({
-      runner(newValue) {},
-    })
+    if (substore.kind !== Kind.store) continue
+    //eslint-disable-next-line no-unused-vars
+    const runCmd = <run runner={newValue => {}} />
     runCmd.data.transactionContext = data => {
-      updates.push(state => ({
-        ...state,
-        [key]: data,
-      }))
-      // commit()
+      updates.push(state =>
+        Object.assign({}, state, {
+          [key]: data,
+        }),
+      )
       return commit
     }
     stateNew[key] = substore.getState()
-    substore.graphite.next.data.push(Step.single(runCmd))
+    pushNext(<single>{runCmd}</single>, substore.graphite.next)
   }
-  const name = `combine(${(Object.values(obj): Array<$Values<typeof obj>>)
-    .map(store => {
-      if (store.kind !== Kind.store) return store.toString()
-      return getDisplayName(store)
-    })
-    .join(', ')})`
+  const name =
+    'combine(' +
+    (Object.values(obj): Array<$Values<typeof obj>>)
+      .map(store => {
+        if (store.kind !== Kind.store) return store.toString()
+        return getDisplayName(store)
+      })
+      .join(', ') +
+    ')'
   const store = storeFabric({
     name,
     currentState: stateNew,
@@ -156,7 +163,7 @@ export function createStoreObject(obj: *) {
   }
   return createStoreObjectMap(obj)
 }
-
+//eslint-disable-next-line
 declare export function extract<
   State: $ReadOnlyArray<Store<any> | any>,
   NextState: $ReadOnlyArray<Store<any> | any>,

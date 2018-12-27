@@ -14,10 +14,7 @@ settings:
     onlyFilesWithFlowAnnotation: true
   react:
     version: 16.6
-    flowVersion: 0.87
-globals:
-  __DEV__: true
-  preval: true
+    flowVersion: 0.89
 env:
   node: true
   browser: false
@@ -33,6 +30,8 @@ rules:
   react/no-children-prop: 'off'
   react/prop-types: 'off'
   react/display-name: 'off'
+  react/jsx-key: 'off'
+  react/no-unknown-property: 'off'
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn

@@ -1,20 +1,20 @@
 {
- "compilerOptions": {
-  "target": "esnext",
-  "module": "es2015",
-  "allowSyntheticDefaultImports": true,
-  "skipLibCheck": true,
-  "noLib": true,
-  "skipDefaultLibCheck": true,
-  "strict": true,
-  "baseUrl": ".",
-  "paths": {
-   "effector": ["packages/effector"],
-   "effector/*": ["src/*"]
-  }
- },
- "typeAcquisition": {
-  "enable": false
- },
- "include": ["src", "scripts", "packages", "bench"]
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "es2015",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "noLib": false,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "baseUrl": ".",
+    "paths": {
+      "effector": ["packages/effector"],
+      "effector/*": ["src/*"]
+    }
+  },
+  "typeAcquisition": {
+    "enable": false
+  },
+  "include": ["src", "scripts", "packages", "bench"]
 }

@@ -1,4 +1,7 @@
 **/lib/**
+**/struct.js
+**/stdlib/visitor.js
+**/val/**
 **/es/**
 **/dist/**
 **/flow-typed/**
@@ -11,3 +14,4 @@
 **/*.bundle.js
 **/effector.browser.js
 scripts/browser/**
+tools/builder.js

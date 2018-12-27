@@ -1,53 +1,69 @@
 //@flow
 
-const {loadYamlSync} = require('./scripts/yaml-util')
+const createDefaultConfig = () => ({
+  automock: false,
+  browser: false,
+  testEnvironment: 'node',
+  transform: {
+    '^.+\\.jsx?$': 'babel-jest',
+  },
+  // moduleNameMapper: {},
+  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
+  transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
+  // roots: ['<rootDir>/src/'],
+})
+const projects = [
+  'effector',
+  'effect',
+  'event',
+  'store',
+  'domain',
+  'graphite',
+  'stdlib',
+  'babel',
+  'DataStructures',
+]
+module.exports = {
+  collectCoverage: true,
+  collectCoverageFrom: [
+    '<rootDir>/src/**/*.js',
+    '!**/node_modules/**',
+    '!**/__tests__/**',
+    '!**/*.test.js',
+    '!**/*.spec.js',
+    '!<rootDir>/src/store/epic.js',
+    // '!**/DataStructures/**',
+    '!<rootDir>/src/graphite/tarjan/**',
+    '!<rootDir>/src/babel/**',
+    '!<rootDir>/src/fixtures/**',
+    '!<rootDir>/src/invariant/**',
+    '!<rootDir>/src/warning/**',
+  ],
 
-const projects = addProjects(loadYamlSync('./jestproject.yml'))
-module.exports = {projects}
-
-function packageTest(displayName, opts = {}) {
-  return Object.assign(
-    {
-      displayName,
+  watchPlugins: ['jest-runner-eslint/watch-fix'],
+  projects: [
+    ...projects.map(displayName =>
+      Object.assign({}, createDefaultConfig(), {
+        displayName,
+        testMatch: [
+          `<rootDir>/src/${displayName}/**/*.test.js`,
+          `<rootDir>/src/${displayName}/**/*.spec.js`,
+        ],
+      }),
+    ),
+    Object.assign({}, createDefaultConfig(), {
+      displayName: 'react',
+      testEnvironment: 'jsdom',
       testMatch: [
-        `<rootDir>/src/${displayName}/__tests__/**/*.(test|spec).js`,
-        `<rootDir>/src/${displayName}/**/__tests__/**/*.(test|spec).js`,
+        `<rootDir>/src/react/**/*.test.js`,
+        `<rootDir>/src/react/**/*.spec.js`,
       ],
-      globals: {
-        __DEV__: true,
-      },
-      collectCoverage: true,
-      automock: false,
-      browser: false,
-      testEnvironment: 'node',
-      transform: {
-        '^.+\\.jsx?$': 'babel-jest',
-      },
-      moduleNameMapper: {
-        '^effector$': '<rootDir>/src/index.js',
-        '^effector-react$': '<rootDir>/src/react/index.js',
-        'effector/fixtures': '<rootDir>/src/fixtures/index.js',
-        '^effector/(.+)': '<rootDir>/src/$1',
-      },
-      testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-      transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
-      roots: ['<rootDir>/src/'],
+      setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+    }),
+    {
+      runner: 'jest-runner-eslint',
+      displayName: 'lint',
+      testMatch: ['<rootDir>/src/**/*.js', '!**/DataStructures/**'],
     },
-    opts,
-  )
-}
-
-function addProjects({tests, include}) {
-  const projects = []
-  for (const pkg of tests) {
-    if (typeof pkg === 'string') {
-      if (include[pkg]) projects.push(packageTest(pkg))
-    } else {
-      const [name, config] = pkg
-      if (include[name]) {
-        projects.push(packageTest(name, config))
-      }
-    }
-  }
-  return projects
+  ],
 }

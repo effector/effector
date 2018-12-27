@@ -1,0 +1,47 @@
+{
+  "name": "bs-effector-react",
+  "version": "0.18.0-rc.2",
+  "description": "Reason bindings for effector-react",
+  "author": "Zero Bias",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "effector": "*"
+  },
+  "peerDependencies": {
+    "reason-react": "*"
+  },
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "files": [
+    "src/",
+    "bsconfig.json"
+  ],
+  "keywords": [
+    "bucklescript",
+    "reason",
+    "bsb",
+    "data",
+    "datastructure",
+    "functional",
+    "collection",
+    "state",
+    "store",
+    "reactive",
+    "streams",
+    "actions",
+    "effects",
+    "redux",
+    "react"
+  ],
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues"
+}

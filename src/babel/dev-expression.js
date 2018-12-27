@@ -24,8 +24,8 @@ module.exports = function(babel) {
           if (process.env.NODE_ENV === 'test') {
             return undefined
           }
-          // replace __DEV__ with process.env.NODE_ENV !== 'production'
-          if (path.isIdentifier({name: '__DEV__'})) {
+          // replace __DEBUG__ with process.env.NODE_ENV !== 'production'
+          if (path.isIdentifier({name: '__DEBUG__'})) {
             path.replaceWith(DEV_EXPRESSION)
           }
         },
@@ -98,7 +98,7 @@ module.exports = function(babel) {
             //
             // The goal is to strip out warning calls entirely in production. We
             // don't need the same optimizations for conditions that we use for
-            // invariant because we don't care about an extra call in __DEV__
+            // invariant because we don't care about an extra call in __DEBUG__
 
             node[SEEN_SYMBOL] = true
             path.replaceWith(

@@ -21,6 +21,7 @@ test('empty domain name should be skipped', () => {
   expect(subdomain.effect('bar').getType()).toBe('subdom/bar')
 })
 describe('empty name support', () => {
+  //eslint-disable-next-line max-len
   test('createEffect() should create effect with string id used as name', () => {
     expect(createEffect().getType()).not.toBe(undefined)
     expect(createEffect().getType()).not.toBe('')

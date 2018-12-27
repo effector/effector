@@ -4,6 +4,7 @@ untyped-type-import=error
 unclear-type=off
 
 [libs]
+./node_modules/@babel/types/lib/index.js.flow
 
 [version]
 >=0.87.0
@@ -30,22 +31,29 @@ esproposal.decorators=ignore
 module.use_strict=true
 esproposal.export_star_as=enable
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
+module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
+module.name_mapper='^effector/flags$' -> '<PROJECT_ROOT>/src/flags.dev'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
 [ignore]
-<PROJECT_ROOT>/npm/*
-<PROJECT_ROOT>/coverage/*
 .*/node_modules/.*
-<PROJECT_ROOT>/.vscode/*
-<PROJECT_ROOT>/examples/*
 <PROJECT_ROOT>/src/graphite/tarjan/*
+<PROJECT_ROOT>/src/web/*
+<PROJECT_ROOT>/\.vscode/*
+<PROJECT_ROOT>/\.cache/*
 <PROJECT_ROOT>/src/DataStructures/*
-<PROJECT_ROOT>/src/redux/*
+<PROJECT_ROOT>/bench/*
+<PROJECT_ROOT>/coverage/*
+<PROJECT_ROOT>/dist/*
+<PROJECT_ROOT>/docs/*
+<PROJECT_ROOT>/examples/*
+<PROJECT_ROOT>/tools/builder\.js
+<PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/scripts/*
 💩 🙈
 💩 ignored total:
@@ -992,7 +1000,7 @@ module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 <PROJECT_ROOT>/node_modules/@babel/register/*
 <PROJECT_ROOT>/node_modules/@babel/template/*
 <PROJECT_ROOT>/node_modules/@babel/traverse/*
-<PROJECT_ROOT>/node_modules/@babel/types/*
+💩 <PROJECT_ROOT>/node_modules/@babel/types/*
 <PROJECT_ROOT>/node_modules/@most/multicast/*
 <PROJECT_ROOT>/node_modules/@most/prelude/*
 <PROJECT_ROOT>/node_modules/@types/estree/*

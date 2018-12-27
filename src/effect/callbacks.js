@@ -1,7 +1,5 @@
 //@flow
 
-import type {Thunk, Callbacks} from './index.h'
-
 const cbDone = function(value: any) {
   const cb = this[3]
   this.length = 0

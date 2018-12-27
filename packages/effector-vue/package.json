@@ -1,60 +1,62 @@
 {
- "name": "effector-vue",
- "description": "Vue bindings for effector",
- "main": "effector-vue.cjs.js",
- "module": "effector-vue.es.js",
- "jsnext:main": "effector-vue.es.js",
- "typings": "index.d.ts",
- "scripts": {},
- "author": "Zero Bias",
- "license": "MIT",
- "devDependencies": {},
- "dependencies": {
-  "effector": "*"
- },
- "peerDependencies": {
-  "vue": "*"
- },
- "maintainers": [
-  {
-   "name": "Zero Bias",
-   "email": "ribkatt@gmail.com"
+  "name": "effector-vue",
+  "version": "0.18.0-rc.2",
+  "description": "Vue bindings for effector",
+  "main": "effector-vue.cjs.js",
+  "module": "effector-vue.es.js",
+  "jsnext:main": "effector-vue.es.js",
+  "typings": "index.d.ts",
+  "scripts": {},
+  "author": "Zero Bias",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {
+    "effector": "^0.18.0-rc.2"
   },
-  {
-   "name": "goodmind",
-   "email": "andwebar@gmail.com"
-  }
- ],
- "sideEffects": false,
- "files": [
-  "README.md",
-  "LICENSE",
-  "effector-vue.es.js",
-  "effector-vue.cjs.js",
-  "effector-vue.es.js.map",
-  "effector-vue.cjs.js.map",
-  "index.d.ts",
-  "index.js.flow",
-  "effector-vue.cjs.js.flow",
-  "effector-vue.es.js.flow"
- ],
- "repository": "https://github.com/zerobias/effector",
- "engines": {
-  "node": ">=6.0.0"
- },
- "bugs": "https://github.com/zerobias/effector/issues",
- "keywords": [
-  "data",
-  "datastructure",
-  "functional",
-  "collection",
-  "state",
-  "store",
-  "reactive",
-  "streams",
-  "actions",
-  "effects",
-  "redux",
-  "vue"
- ]
+  "peerDependencies": {
+    "vue": "*"
+  },
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "files": [
+    "README.md",
+    "LICENSE",
+    "effector-vue.es.js",
+    "effector-vue.cjs.js",
+    "effector-vue.es.js.map",
+    "effector-vue.cjs.js.map",
+    "effector-vue.cjs.js.flow",
+    "effector-vue.es.js.flow",
+    "index.d.ts",
+    "index.js.flow"
+  ],
+  "repository": "https://github.com/zerobias/effector",
+  "homepage": "https://zerobias.github.io/effector/",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "keywords": [
+    "data",
+    "datastructure",
+    "functional",
+    "collection",
+    "state",
+    "store",
+    "reactive",
+    "streams",
+    "actions",
+    "effects",
+    "redux",
+    "vue"
+  ]
 }

@@ -21,6 +21,7 @@ describe('effect({...})', () => {
       spy(params)
       throw 'fail!'
     })
+    //eslint-disable-next-line max-len
     await expect(effect('will throw')).rejects.toBe('fail!')
   })
 })
@@ -52,6 +53,7 @@ describe('effect({..}).anyway() aka .finally()', () => {
       spy(params)
       return 'done!'
     })
+    //$todo
     await expect(effect('ok').anyway()).resolves.toBe(undefined)
   })
 
@@ -61,6 +63,7 @@ describe('effect({..}).anyway() aka .finally()', () => {
       spy(params)
       throw 'fail!'
     })
+    //$todo
     await expect(effect('will throw').anyway()).resolves.toBe(undefined)
   })
 })

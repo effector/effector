@@ -22,4 +22,5 @@ export {
   restoreEvent,
   restoreEffect,
   restoreObject,
+  withProps,
 } from 'effector/store'

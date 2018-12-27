@@ -1,55 +1,19 @@
+import {join, extname, dirname, resolve as resolvePath, relative} from 'path'
+
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
-import alias from './rollup-alias'
 import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
-// import visualizer from 'rollup-plugin-visualizer'
-// import bucklescript from 'rollup-plugin-bucklescript'
+import packageJson from './package.json'
 
-import {resolve as resolvePath} from 'path'
 import {readPackageList, writePackages} from './scripts/monorepoTools'
 
 const packages = readPackageList()
 if (!process.env.BUILD_UMD) writePackages(packages)
-
-const staticPlugins = [
-  babel({
-    // presets,
-    // plugins,
-    runtimeHelpers: true,
-    exclude: /(\.re|node_modules.*)/,
-  }),
-  // bucklescript({module: 'es6', inSource: true}),
-]
-if (process.env.BUILD_UMD) {
-  staticPlugins.push(
-    replace({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
-    commonjs({}),
-  )
-}
-const rollupPlugins = [
-  alias({
-    pathMap: getPathMap([
-      'effect',
-      'event',
-      'store',
-      'domain',
-      'datatype',
-      'graphite',
-      'fixtures',
-      'kind',
-      'perf',
-      'stdlib',
-    ]),
-    extensions: ['re', 'bs', 'bs.js', 'js'],
-  }),
-  resolve({}),
-  ...staticPlugins,
-  terser({
+const minifyMode = {
+  normal: {
     ecma: 8,
     mangle: {
       toplevel: true,
@@ -57,28 +21,96 @@ const rollupPlugins = [
     compress: {
       pure_getters: true,
     },
-    output: {
-      comments: /#/i,
-      // beautify: true,
-      // indent_level: 2,
+    output: process.env.PRETTIFY
+      ? {
+        comments: /#/i,
+        beautify: true,
+        indent_level: 2,
+      }
+      : {
+        comments: /#/i,
+      },
+  },
+  extreme: {
+    ecma: 8,
+    // module: true,
+    // toplevel: true,
+    parse: {
+      bare_returns: true,
     },
-  }),
-  sizeSnapshot(),
-]
-function getPathMap(list) {
-  const pairs = []
-  for (const item of list) {
-    pairs.push([`effector/${item}`, resolvePath(__dirname, 'src', item)])
-  }
-  return new Map(pairs)
+    mangle: {
+      // toplevel: true,
+      // properties: true,
+    },
+    nameCache: {},
+    compress: {
+      pure_getters: true,
+      hoist_funs: true,
+      arguments: true,
+      keep_fargs: false,
+      passes: 2,
+      unsafe_arrows: true,
+      unsafe_comps: true,
+      unsafe_Function: true,
+      unsafe_math: true,
+      unsafe_methods: true,
+      unsafe_proto: true,
+      unsafe_regexp: true,
+    },
+    output: process.env.PRETTIFY
+      ? {
+        comments: /#/i,
+        beautify: true,
+        indent_level: 2,
+      }
+      : {
+        comments: /#/i,
+      },
+  },
 }
+const plugins = {
+  babel: babel({
+    // runtimeHelpers: true,
+    // exclude: /(\.re|node_modules.*)/,
+  }),
+  replace: replace({
+    'process.env.NODE_ENV': JSON.stringify('production'),
+  }),
+  commonjs: commonjs({}),
+  resolve: resolve({}),
+  terser: terser(minifyMode.normal),
+  sizeSnapshot: sizeSnapshot(),
+}
+
+const staticPlugins = [plugins.babel]
+if (process.env.BUILD_UMD) {
+  staticPlugins.push(plugins.replace, plugins.commonjs)
+}
+const rollupPlugins = [
+  plugins.resolve,
+  ...staticPlugins,
+  plugins.terser,
+  plugins.sizeSnapshot,
+]
+
 function createBuild(name) {
+  //eslint-disable-next-line max-len
+  /**@example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js*/
+  function sourcemapPathTransform(relativePath) {
+    let packagePath = join('../..', packageJson.alias[name])
+    if (extname(packagePath) !== '') {
+      packagePath = dirname(packagePath)
+    }
+    return join(`node_modules/${name}`, relative(packagePath, relativePath))
+  }
+
+  if (name.startsWith('bs')) return []
   if (process.env.BUILD_UMD)
     return [
       {
         input: resolvePath(__dirname, 'packages', name, 'index.js'),
-        plugins: [...rollupPlugins],
-        external: ['react'],
+        plugins: rollupPlugins,
+        external: ['react', 'effector'],
         output: {
           file: resolvePath(__dirname, 'npm', name, `${name}.bundle.js`),
           format: 'iife',
@@ -89,15 +121,16 @@ function createBuild(name) {
     ]
   const subconfig = output => ({
     input: resolvePath(__dirname, 'packages', name, 'index.js'),
-    plugins: [
-      // visualizer({
-      //  filename: `./stats-${name}.html`,
-      //  title: `${name} bundle stats`,
-      //  sourcemap: true,
-      // }),
-      ...rollupPlugins,
+    plugins: rollupPlugins,
+    external: [
+      'warning',
+      'invariant',
+      'react',
+      'vue',
+      'most',
+      'symbol-observable',
+      'effector',
     ],
-    external: ['warning', 'invariant', 'react', 'most', 'symbol-observable'],
     output,
   })
   return [
@@ -106,12 +139,14 @@ function createBuild(name) {
       format: 'es',
       name,
       sourcemap: true,
+      sourcemapPathTransform,
     },
     {
       file: resolvePath(__dirname, 'npm', name, `${name}.cjs.js`),
       format: 'cjs',
       name,
       sourcemap: true,
+      sourcemapPathTransform,
     },
   ].map(subconfig)
 }

@@ -7,6 +7,7 @@ export const Step = typeDef(('step': 'step'), {
   single: type(),
   multi: type(),
   seq: type(),
+  choose: type(),
 })
 
 export const Cmd = typeDef(('cmd': 'cmd'), {

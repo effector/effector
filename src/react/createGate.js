@@ -17,10 +17,12 @@ export type Gate<Props = {||}> = Class<React.Component<Props, any>> & {
   childGate<Next>(childName?: string): Gate<Next>,
 }
 
-export function createGate<Props>(name: string = 'gate'): Gate<Props> {
+export function createGate<Props>(
+  name: string = 'gate',
+  defaultState: Props = ({}: any),
+): Gate<Props> {
   const status = createStore(false)
-  const noState: Props = ({}: any)
-  const state: Store<Props> = createStore(noState)
+  const state: Store<Props> = createStore(defaultState)
   const {set} = createApi(state, {
     set: (_, state) => state,
   })
@@ -86,7 +88,7 @@ export function createGate<Props>(name: string = 'gate'): Gate<Props> {
   const unwatch = status.watch(status => (GateComponent.isOpen = status))
   const unwatch2 = state.watch(current => (GateComponent.current = current))
   const unwatch3 = status.map(status => {
-    if (!status) GateComponent.current = noState
+    if (!status) GateComponent.current = defaultState
   })
   state.reset(close)
 

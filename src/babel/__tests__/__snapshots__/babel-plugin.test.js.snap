@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`babel-plugin should create domain store 1`] = `
+"//@flow
+import { setStoreName } from \\"effector\\";
+import { createDomain } from 'effector';
+const domain = createDomain();
+const bar = domain.store('bar');
+setStoreName(bar, \\"bar\\");"
+`;
+
+exports[`babel-plugin should create store 1`] = `
+"//@flow
+import { setStoreName } from \\"effector\\";
+import { createStore } from 'effector';
+const foo = createStore('foo');
+setStoreName(foo, \\"foo\\");
+
+const f = a => createStore(a);
+
+setStoreName(f, \\"f\\");"
+`;

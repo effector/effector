@@ -9,7 +9,7 @@ import {createEvent} from 'effector/event'
 import {epic} from '../../event/epic'
 import {createStore, createStoreObject} from 'effector/store'
 
-import {delay, spy, getSpyCalls} from 'effector/fixtures'
+import {spy, getSpyCalls} from 'effector/fixtures'
 
 describe('fixtures works correctly', () => {
   test('spy use', () => {
@@ -183,7 +183,7 @@ describe('port', () => {
     event.watch(used)
     eff.watch(usedEff)
     const str$ = periodic(100)
-      .scan((a, b) => a + 1, 0)
+      .scan((a /*, b*/) => a + 1, 0)
       .take(10)
 
     // .map(event)
@@ -315,9 +315,3 @@ test('subscription', async() => {
   await eff('')
   expect(spy).toHaveBeenCalledTimes(2)
 })
-
-const log = (tags = ['']) => (e, ...data) => {
-  const tagList: string[] = Array.isArray(tags) ? tags : [tags]
-  console.log(...tagList, e, ...data)
-  return e
-}

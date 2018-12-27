@@ -3,7 +3,7 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
 import {createStore} from './createStore'
-import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
+import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -34,6 +34,7 @@ export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
   return store
 }
 
+//eslint-disable-next-line no-unused-vars
 declare export function restore<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,
@@ -47,19 +48,19 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   <S>(field: Store<S> | S) => Store<S>,
 >
 
-const {visitorRestore} = makeVisitorRecordMap({
-  visitorRestore: {
-    visitor: {
-      store: (obj, defaultState) => obj,
-      event: (obj, defaultState) => restoreEvent(obj, defaultState),
-      effect: (obj, defaultState) => restoreEffect(obj, defaultState),
-      __: (obj, defaultState) => restoreObject(obj),
-    },
-    reader: obj => obj.kind,
-    writer: (handler, obj, defaultState) => handler(obj, defaultState),
-  },
-})
+const visitorRestore = {
+  store: ({obj}) => obj,
+  event: ({obj, defaultState}) => restoreEvent(obj, defaultState),
+  effect: ({obj, defaultState}) => restoreEffect(obj, defaultState),
+  __: ({obj}) => restoreObject(obj),
+}
 
 export function restore(obj: any, defaultState: any): any {
-  return visitorRestore(obj, defaultState)
+  return visitRecord(visitorRestore, {
+    args: {
+      obj,
+      defaultState,
+    },
+    __kind: kindReader(obj),
+  })
 }

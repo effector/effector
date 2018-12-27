@@ -2,36 +2,40 @@
 
 const {resolve: resolvePath} = require('path')
 
+const resolveSource = path => resolvePath(__dirname, 'src', path)
+
 module.exports = api => {
-  // module.exports = api => {
-  api && api.cache && api.cache.never && api.cache.never()
-  // const env = api.cache(() => process.env.NODE_ENV)
-  // console.log(env)
-  // console.log(api)
+  // api && api.cache && api.cache.never && api.cache.never()
+  const env = api.cache(() => process.env.NODE_ENV)
+  const isBuild = !!process.env.IS_BUILD
+  const alias = {
+    'effector/effect': resolveSource('effect'),
+    'effector/event': resolveSource('event'),
+    'effector/store': resolveSource('store'),
+    'effector/domain': resolveSource('domain'),
+    'effector/graphite': resolveSource('graphite'),
+    'effector/fixtures': resolveSource('fixtures'),
+    'effector/stdlib': resolveSource('stdlib'),
+    'effector/perf': resolveSource('perf'),
+    'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
+    warning: resolveSource('warning'),
+    invariant: resolveSource('invariant'),
+    'effector-react': resolveSource('react'),
+    'effector-vue': resolveSource('vue'),
+  }
+  if (process.env.NODE_ENV === 'test') {
+    alias.effector = resolvePath(__dirname, 'src')
+  }
   const plugins = [
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
     ['@babel/plugin-proposal-class-properties', {loose: true}],
     'macros',
-    './src/babel/dev-expression',
     [
       'babel-plugin-module-resolver',
       {
-        alias: {
-          'effector/effect': resolvePath(__dirname, 'src', 'effect'),
-          'effector/event': resolvePath(__dirname, 'src', 'event'),
-          'effector/store': resolvePath(__dirname, 'src', 'store'),
-          'effector/domain': resolvePath(__dirname, 'src', 'domain'),
-          'effector/datatype': resolvePath(__dirname, 'src', 'datatype'),
-          'effector/graphite': resolvePath(__dirname, 'src', 'graphite'),
-          'effector/fixtures': resolvePath(__dirname, 'src', 'fixtures'),
-          'effector/stdlib': resolvePath(__dirname, 'src', 'stdlib'),
-          // '^bs-platform/lib/es6/(.+)': ([, name]) =>
-          //  resolvePath(__dirname, 'node_modules/bs-platform/lib/es6', name),
-          // '^bs-platform/lib/es6/(.+)': ([, name]) =>
-          // resolvePath(__dirname, 'stdlib/es6', name),
-        },
+        alias,
       },
     ],
   ]
@@ -43,19 +47,33 @@ module.exports = api => {
       '@babel/preset-env',
       {
         loose: true,
+        useBuiltIns: false,
         modules: false,
         shippedProposals: true,
         targets: {
           node: '10',
+          browsers: [
+            'last 2 Chrome versions',
+            'last 2 Firefox versions',
+            'last 2 Safari versions',
+          ],
         },
       },
     ],
   ]
 
+  const overrides = [
+    {
+      test(filename) {
+        return filename.includes('__tests__')
+      },
+      plugins: ['./src/babel/babel-plugin'],
+    },
+  ]
+
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
-    plugins.push('./src/babel/babel-plugin')
     plugins.push('@babel/plugin-transform-modules-commonjs')
   }
 
-  return {plugins, presets}
+  return {plugins, presets, overrides, sourceMaps: true}
 }

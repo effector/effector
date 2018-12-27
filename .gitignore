@@ -27,7 +27,12 @@ test/storage.json
 npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
+npm/bs-effector/**
+npm/bs-effector-react/**
 .merlin
 .bsb.lock
 npm-debug.log
 lib/bs/**
+val/**
+.size-snapshot.json
+.cache/**

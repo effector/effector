@@ -1,23 +1,17 @@
 //@flow
 //@jsx fx
-
-// import invariant from 'invariant'
-// import warning from 'warning'
+//eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
+
+import {pushNext, type GraphiteMeta} from 'effector/stdlib/typedef'
 import $$observable from 'symbol-observable'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
-import type {Store} from 'effector/store'
 import type {Effect} from 'effector/effect'
-import {Kind, type kind} from 'effector/stdlib/kind'
-import {makeVisitorRecordMap} from 'effector/stdlib/visitor'
-
-// import type {TypeDef} from 'effector/stdlib/typedef'
+import {Kind} from 'effector/stdlib/kind'
 import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
-
-import fabric from './concreteFabric'
 
 export function eventFabric<Payload>({
   name: nameRaw,
@@ -32,18 +26,16 @@ export function eventFabric<Payload>({
   const compositeName = createName(name, parent)
   const graphite = fabric.event({
     fullName,
-    runner(payload: Payload): Payload {
-      return instanceAsEvent.create(payload, fullName)
-    },
   })
 
-  const instance = (payload: Payload): Payload =>
-    instanceAsEvent.create(payload, fullName)
+  const instance = (payload: Payload, ...args: any[]): Payload =>
+    instanceAsEvent.create(payload, fullName, args)
   const instanceAsEvent: Event<Payload> = (instance: any)
   instanceAsEvent.graphite = graphite
 
   instance.getType = () => compositeName.fullName
-  ;(instance: any).create = (payload, fullName) => {
+  //eslint-disable-next-line no-unused-vars
+  ;(instance: any).create = (payload, fullName, args) => {
     walkEvent(payload, instanceAsEvent)
     return payload
   }
@@ -54,7 +46,6 @@ export function eventFabric<Payload>({
   instance.map = map
   instance.prepend = prepend
   instance.subscribe = subscribe
-  instance.to = to
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
@@ -65,27 +56,6 @@ export function eventFabric<Payload>({
 
   function map<Next>(fn: Payload => Next): Event<Next> {
     return mapEvent(instanceAsEvent, fn)
-  }
-  const visitors = makeVisitorRecordMap({
-    to: {
-      visitor: {
-        store: (target, handler) =>
-          watch(payload => target.setState(payload, handler)),
-        event: (target, handler) => watch(target.create),
-        effect: (target, handler) => watch(target.create),
-        none(target, handler) {
-          throw new TypeError('Unsupported kind')
-        },
-      },
-      reader: target => ((target.kind: any): kind),
-      writer: (handler, target, handlerFn) => handler(target, handlerFn),
-    },
-  })
-  function to(
-    target: Store<any> & Event<any> & Effect<any, any, any>,
-    handler?: Function,
-  ): Subscription {
-    return visitors.to(target, handler)
   }
 
   function watch(
@@ -99,7 +69,7 @@ export function eventFabric<Payload>({
   }
   function prepend<Before>(fn: Before => Payload) {
     const contramapped: Event<Before> = eventFabric({
-      name: `* → ${name}`,
+      name: '* → ' + name,
       parent,
     })
     fabric.prependEvent({
@@ -120,7 +90,7 @@ declare function mapEvent<A, B>(
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   const mapped = eventFabric({
-    name: `${event.shortName} → *`,
+    name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
   fabric.mapEvent({
@@ -136,7 +106,7 @@ function filterEvent<A, B>(
   fn: A => B | void,
 ): Event<B> {
   const mapped = eventFabric({
-    name: `${event.shortName} →? *`,
+    name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
   fabric.filterEvent({
@@ -156,7 +126,7 @@ function watchEvent<Payload>(
       <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
     </single>
   )
-  event.graphite.next.data.push(runCmd)
+  pushNext(runCmd, event.graphite.next)
   const unsubscribe = () => {
     const i = event.graphite.next.data.indexOf(runCmd)
     if (i === -1) return
@@ -167,5 +137,76 @@ function watchEvent<Payload>(
   return unsubscribe
 }
 function makeName(name: string, compositeName?: CompositeName) {
-  return [compositeName?.fullName, name].filter(Boolean).join('/')
+  const fullName = compositeName?.fullName
+  if (!fullName) {
+    if (!name) return ''
+    return name
+  }
+  return '' + fullName + '/' + name
+}
+const fabric = {
+  event(args: {fullName: string}): GraphiteMeta {
+    const nextSteps = <multi />
+    const stepFull = (
+      <seq>
+        <single>
+          <emit fullName={args.fullName} />
+        </single>
+        {nextSteps}
+      </seq>
+    )
+    const graphite = {next: nextSteps, seq: stepFull}
+    return graphite
+  },
+  prependEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute fn={newValue => fn(newValue)} />
+        </single>
+        {parentGraphite.seq}
+      </seq>,
+      graphite.next,
+    )
+  },
+  mapEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute fn={newValue => fn(newValue)} />
+        </single>
+        {graphite.seq}
+      </seq>,
+      parentGraphite.next,
+    )
+  },
+  filterEvent(args: {|
+    fn: Function,
+    graphite: GraphiteMeta,
+    parentGraphite: GraphiteMeta,
+  |}) {
+    const {fn, graphite, parentGraphite} = args
+    pushNext(
+      <seq>
+        <single>
+          <compute fn={newValue => fn(newValue)} />
+        </single>
+        <single>
+          <filter filter={result => result !== undefined} />
+        </single>
+        {graphite.seq}
+      </seq>,
+      parentGraphite.next,
+    )
+  },
 }

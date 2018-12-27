@@ -91,11 +91,7 @@ function strongconnect<T>(ctx: TarjanContext<T>, vertex: VertexRef) {
     ctx.scc.push(currentScc)
   }
 }
-function comparator<T>(a: Vertex<T>, b: Vertex<T>) {
-  if (a.id === b.id) return 0
-  if (a.id > b.id) return -1
-  return 1
-}
+
 export function decomposeGraph<T>(graph: Graph<T>) {
   //$todo wtf
   const blocks: Array<Array<T>> = tarjan(graph.verticles)
@@ -108,7 +104,6 @@ export function decomposeGraph<T>(graph: Graph<T>) {
   return result
 }
 export function tarjan<T>(nodes: Array<Vertex<T>>) {
-  // const nodes = nodes_.sort(comparator)
   const ctx = new TarjanContext<T>()
   ctx.vertices = nodes
   const values = new Array(nodes.length)

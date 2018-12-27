@@ -1,0 +1,90 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`event.create multiple arguments 1`] = `
+Array [
+  Array [
+    Array [
+      -2,
+      "foo",
+    ],
+    "bar",
+  ],
+  Array [
+    Array [
+      -3,
+      "bar",
+    ],
+    "bar",
+  ],
+  Array [
+    Array [
+      -2,
+      "baz",
+    ],
+    "bar",
+  ],
+]
+`;
+
+exports[`event.create multiple arguments 2`] = `
+Array [
+  Array [
+    -2,
+    "bar",
+    Array [
+      "foo",
+    ],
+  ],
+  Array [
+    -3,
+    "bar",
+    Array [
+      "bar",
+    ],
+  ],
+  Array [
+    -2,
+    "bar",
+    Array [
+      "baz",
+    ],
+  ],
+]
+`;
+
+exports[`event.create single argument 1`] = `
+Array [
+  Array [
+    100,
+    "foo",
+  ],
+  Array [
+    200,
+    "foo",
+  ],
+  Array [
+    300,
+    "foo",
+  ],
+]
+`;
+
+exports[`event.create single argument 2`] = `
+Array [
+  Array [
+    100,
+    "foo",
+    Array [],
+  ],
+  Array [
+    200,
+    "foo",
+    Array [],
+  ],
+  Array [
+    300,
+    "foo",
+    Array [],
+  ],
+]
+`;

@@ -2,48 +2,59 @@
 
 const importName = 'effector'
 
-module.exports = function(babel) {
-  let functionName
+module.exports = function(babel, options = {}) {
+  const functionNames = []
+  const defaultCreators = [
+    'createStore',
+    'restoreEvent',
+    'restoreEffect',
+    'restoreObject',
+  ]
+  const storeCreators = new Set(options.storeCreators || defaultCreators)
 
   const {types: t} = babel
 
   return {
     name: 'ast-transform', // not required
     visitor: {
-      // ImportDeclaration(path) {
-      //   const source = path.node.source.value
-      //   const specifiers = path.node.specifiers
-      //   if (source === 'effector') {
-      //     const specifier = specifiers.find(
-      //       s => s.imported && s.imported.name === 'setStoreName',
-      //     )
-      //     if (specifier) {
-      //       functionName = specifier.local.name
-      //     } else {
-      //       specifiers.push(setStoreName)
-      //       functionName = 'setStoreName'
-      //     }
-      //   }
-      // },
+      ImportDeclaration(path) {
+        const source = path.node.source.value
+        const specifiers = path.node.specifiers
+        if (source === importName) {
+          for (const specifier of specifiers.filter(
+            s => s.imported && storeCreators.has(s.imported.name),
+          )) {
+            storeCreators.add(specifier.local.name)
+          }
+        }
+      },
 
       CallExpression(path) {
         if (t.isIdentifier(path.node.callee)) {
-          if (path.node.callee.name === 'createStore') {
-            functionName = 'setStoreName'
-            addImportDeclaration(findProgram(path, t, functionName), t)
+          if (storeCreators.has(path.node.callee.name)) {
+            functionNames[0] = 'setStoreName'
+            addImportDeclaration(
+              findProgram(path, t, functionNames),
+              t,
+              functionNames,
+            )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionName)
+              setDisplayNameAfter(path, id, babel.types, functionNames[0])
             }
           }
         }
         if (t.isMemberExpression(path.node.callee)) {
           if (path.node.callee.property.name === 'store') {
-            functionName = 'setStoreName'
-            addImportDeclaration(findProgram(path, t, functionName), t)
+            functionNames[0] = 'setStoreName'
+            addImportDeclaration(
+              findProgram(path, t, functionNames),
+              t,
+              functionNames,
+            )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionName)
+              setDisplayNameAfter(path, id, babel.types, functionNames[0])
             }
           }
         }
@@ -52,14 +63,12 @@ module.exports = function(babel) {
   }
 }
 
-function addImportDeclaration(path, t) {
+function addImportDeclaration(path, t, names) {
   if (!path) return
-  const setStoreName = t.importSpecifier(
-    t.identifier('setStoreName'),
-    t.identifier('setStoreName'),
-  )
   const importDeclaration = t.importDeclaration(
-    [setStoreName],
+    names.map(name =>
+      t.importSpecifier(t.identifier(name), t.identifier(name)),
+    ),
     t.stringLiteral(importName),
   )
   importDeclaration.leadingComments = path.node.body[0].leadingComments
@@ -86,11 +95,14 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-function findProgram(path, t, functionName) {
+function findProgram(path, t, functionNames) {
+  const isInFunctionNames = node => functionNames.includes(node.local.name)
   let program
   path.find(path => {
     if (path.isProgram()) {
-      const res = path.node.body.find(path => t.isImportDeclaration(path))
+      const res = path.node.body.find(
+        node => t.isImportDeclaration(node) && node.source.value === importName,
+      )
       if (!res) {
         program = path
         return true
@@ -98,9 +110,10 @@ function findProgram(path, t, functionName) {
       if (res.source) {
         if (
           res.source.value === importName
-          && res.specifiers.some(node => node.local.name === functionName)
-        )
+          && res.specifiers.some(isInFunctionNames)
+        ) {
           return false
+        }
         program = path
         return true
       }
@@ -123,7 +136,7 @@ function setDisplayNameAfter(path, nameNodeId, t, functionName, displayName) {
   })
 
   if (blockLevelStmnt && displayName) {
-    const trailingComments = blockLevelStmnt.node.trailingComments
+    // const trailingComments = blockLevelStmnt.node.trailingComments
     delete blockLevelStmnt.node.trailingComments
 
     const setDisplayNameStmn = t.expressionStatement(
