@@ -1,7 +1,8 @@
 //@flow
 import * as fs from 'fs-extra'
-import {rollupEffector} from './rollup'
+import {rollupEffector, rollupEffectorReact, rollupEffectorVue} from './rollup'
 import packages from './packages.config'
+import bsconfigs from './bsconfigs.config'
 import {taskList, massCopy, outputPackageJSON} from './utils'
 
 export default taskList({
@@ -36,6 +37,7 @@ export default taskList({
       () =>
         massCopy('packages/effector-react', 'npm/effector-react', [
           'index.d.ts',
+          'README.md',
           'package.json',
           [
             'index.js.flow',
@@ -47,6 +49,7 @@ export default taskList({
             ],
           ],
         ]),
+      rollupEffectorReact,
     ],
     'effector-vue': [
       () =>
@@ -58,6 +61,7 @@ export default taskList({
       () =>
         massCopy('packages/effector-vue', 'npm/effector-vue', [
           'index.d.ts',
+          'README.md',
           'package.json',
           [
             'index.js.flow',
@@ -68,6 +72,49 @@ export default taskList({
               'effector-vue.bundle.js.flow',
             ],
           ],
+        ]),
+      rollupEffectorVue,
+    ],
+    'bs-effector': [
+      () =>
+        outputPackageJSON(
+          'packages/bs-effector/package.json',
+          packages['bs-effector'],
+        ),
+      () =>
+        fs.outputJSON(
+          'packages/bs-effector/bsconfig.json',
+          bsconfigs['bs-effector'],
+          {spaces: 2},
+        ),
+      () => massCopy('.', 'npm/bs-effector', ['LICENSE']),
+      () =>
+        massCopy('packages/bs-effector', 'npm/bs-effector', [
+          'README.md',
+          'package.json',
+          'bsconfig.json',
+          'src/Effector.re',
+        ]),
+    ],
+    'bs-effector-react': [
+      () =>
+        outputPackageJSON(
+          'packages/bs-effector-react/package.json',
+          packages['bs-effector-react'],
+        ),
+      () =>
+        fs.outputJSON(
+          'packages/bs-effector-react/bsconfig.json',
+          bsconfigs['bs-effector-react'],
+          {spaces: 2},
+        ),
+      () => massCopy('.', 'npm/bs-effector-react', ['LICENSE']),
+      () =>
+        massCopy('packages/bs-effector-react', 'npm/bs-effector-react', [
+          'README.md',
+          'package.json',
+          'bsconfig.json',
+          'src/EffectorReact.re',
         ]),
     ],
   },
