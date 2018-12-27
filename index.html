@@ -1,60 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Page Title</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <script src="npm/effector/effector.bundle.js"></script>
+    <meta charset="UTF-8" />
+    <title>effector ☄️ - Application state manager</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="description" content="Application state manager" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <!-- Theme: Simple -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/docsify-themeable/dist/css/theme-simple.css"
+    />
   </head>
   <body>
+    <div id="app">Please wait...</div>
     <script>
-      const {restore, createStoreObject, createApi} = effector
-      console.profile('createApi test')
-      for (let i = 0; i < 500; i++) {
-        const shape = restore({
-          todos: ['to do', 'list'],
-          newTodo: '',
-          selected: [1],
-        })
-        const full = createStoreObject(shape)
-        const listCmd = createApi(shape.todos, {
-          add(todos, item) {
-            return [...todos, item]
-          },
-          remove(todos, index) {
-            return [...todos].splice(index, 1)
-          },
-        })
-        shape.selected.on(listCmd.remove, (selected, index) => {
-          const pos = selected.indexOf(index)
-          if (pos === -1) return selected
-          return [...selected].splice(pos, 1)
-        })
-        const selectionCmd = createApi(shape.selected, {
-          add(selected, item) {
-            return [...selected, item]
-          },
-          remove(selected, index) {
-            return [...selected].splice(index, 1)
-          },
-        })
-        const fullState = full.getState()
-        // expect(full.getState()).toMatchObject({
-        //   todos: ['to do', 'list'],
-        //   newTodo: '',
-        //   selected: [1],
-        // })
-        listCmd.add('new todo')
-        selectionCmd.add(2)
-        const fullState2 = full.getState()
+      window.$docsify = {
+        name: 'effector',
+        repo: 'https://github.com/zerobias/effector',
+        coverpage: false,
+        routerMode: 'history',
       }
-      console.profileEnd()
-      // expect(full.getState()).toMatchObject({
-      //   todos: ['to do', 'list', 'new todo'],
-      //   newTodo: '',
-      //   selected: [1, 2],
-      // })
     </script>
+    <script src="//unpkg.com/docsify/lib/docsify.min.js"></script>
+    <script src="//unpkg.com/docsify-themeable"></script>
+    <script src="//unpkg.com/prismjs/components/prism-bash.min.js"></script>
+    <script src="//unpkg.com/prismjs/components/prism-flow.min.js"></script>
+    <script src="//unpkg.com/docsify-pagination/dist/docsify-pagination.min.js"></script>
   </body>
 </html>

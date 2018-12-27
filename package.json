@@ -5,7 +5,7 @@
   "typings": "index.d.ts",
   "private": true,
   "scripts": {
-    "docs": "docsify serve ./docs",
+    "docs": "docsify serve .",
     "build:bs": "bsb -make-world",
     "start:bs": "bsb -make-world -w",
     "clean:bs": "bsb -clean-world",
