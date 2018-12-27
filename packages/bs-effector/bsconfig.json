@@ -4,7 +4,10 @@
     "dir": "src",
     "subdirs": true
   },
-  "bsc-flags": ["-bs-no-version-header", "-bs-g"],
+  "bsc-flags": [
+    "-bs-no-version-header",
+    "-bs-g"
+  ],
   "reason": {
     "react-jsx": 2
   },
