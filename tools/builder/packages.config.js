@@ -11,6 +11,14 @@ const maintainers = [
   },
 ]
 
+const version = {
+  effector: '0.18.0-rc.2',
+  'effector-react': '0.18.0-rc.2',
+  'effector-vue': '0.18.0-rc.2',
+  'bs-effector': '0.18.0-rc.2',
+  'bs-effector-react': '0.18.0-rc.2',
+}
+
 const getFiles = name => [
   'README.md',
   'LICENSE',
@@ -27,7 +35,7 @@ const getFiles = name => [
 export default {
   effector: {
     name: 'effector',
-    version: '0.18.0-rc.2',
+    version: version['effector'],
     description: 'Reactive state manager',
     main: 'effector.cjs.js',
     module: 'effector.es.js',
@@ -65,7 +73,7 @@ export default {
   },
   'effector-react': {
     name: 'effector-react',
-    version: '0.18.0-rc.2',
+    version: version['effector-react'],
     description: 'React bindings for effector',
     main: 'effector-react.cjs.js',
     module: 'effector-react.es.js',
@@ -107,7 +115,7 @@ export default {
   },
   'effector-vue': {
     name: 'effector-vue',
-    version: '0.18.0-rc.2',
+    version: version['effector-vue'],
     description: 'Vue bindings for effector',
     main: 'effector-vue.cjs.js',
     module: 'effector-vue.es.js',
@@ -146,5 +154,72 @@ export default {
       'redux',
       'vue',
     ],
+  },
+  'bs-effector': {
+    name: 'bs-effector',
+    version: version['bs-effector'],
+    description: 'Reason bindings for effector',
+    author: 'Zero Bias',
+    license: 'MIT',
+    devDependencies: {},
+    dependencies: {},
+    peerDependencies: {
+      effector: '*',
+    },
+    maintainers,
+    files: ['src/', 'bsconfig.json'],
+    keywords: [
+      'bucklescript',
+      'reason',
+      'bsb',
+      'data',
+      'datastructure',
+      'functional',
+      'collection',
+      'state',
+      'store',
+      'reactive',
+      'streams',
+      'actions',
+      'effects',
+      'redux',
+    ],
+    repository: 'https://github.com/zerobias/effector',
+    bugs: 'https://github.com/zerobias/effector/issues',
+  },
+  'bs-effector-react': {
+    name: 'bs-effector-react',
+    version: version['bs-effector-react'],
+    description: 'Reason bindings for effector-react',
+    author: 'Zero Bias',
+    license: 'MIT',
+    devDependencies: {},
+    dependencies: {
+      effector: '*',
+    },
+    peerDependencies: {
+      'reason-react': '*',
+    },
+    maintainers,
+    files: ['src/', 'bsconfig.json'],
+    keywords: [
+      'bucklescript',
+      'reason',
+      'bsb',
+      'data',
+      'datastructure',
+      'functional',
+      'collection',
+      'state',
+      'store',
+      'reactive',
+      'streams',
+      'actions',
+      'effects',
+      'redux',
+      'react',
+    ],
+    repository: 'https://github.com/zerobias/effector',
+    bugs: 'https://github.com/zerobias/effector/issues',
   },
 }
