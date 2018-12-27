@@ -34,7 +34,6 @@ module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^redux$' -> '<PROJECT_ROOT>/flow/redux'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
-module.name_mapper='^pts$' -> '<PROJECT_ROOT>/flow/pts'
 module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/\1'
 module.name_mapper='^effector/flags$' -> '<PROJECT_ROOT>/src/flags.dev'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
@@ -53,9 +52,9 @@ module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 <PROJECT_ROOT>/dist/*
 <PROJECT_ROOT>/docs/*
 <PROJECT_ROOT>/examples/*
+<PROJECT_ROOT>/tools/builder\.js
 <PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/scripts/*
-<PROJECT_ROOT>/tools/*
 💩 🙈
 💩 ignored total:
 💩

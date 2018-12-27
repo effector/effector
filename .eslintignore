@@ -14,4 +14,4 @@
 **/*.bundle.js
 **/effector.browser.js
 scripts/browser/**
-**/web/projects/**
+tools/builder.js
