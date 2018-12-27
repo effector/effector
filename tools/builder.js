@@ -107,12 +107,12 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"OjAK":[function(require,module,exports) {
 module.exports = {
   "name": "effector-dev",
-  "version": "0.18.0-rc.1",
+  "version": "0.18.0-rc.2",
   "description": "Reactive state manager",
   "typings": "index.d.ts",
   "private": true,
   "scripts": {
-    "docs": "docsify serve ./docs",
+    "docs": "docsify serve .",
     "build:bs": "bsb -make-world",
     "start:bs": "bsb -make-world -w",
     "clean:bs": "bsb -clean-world",
