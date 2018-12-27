@@ -124,6 +124,10 @@ module.exports = {
     "publish:all": "node scripts/publish.js",
     "publish:next": "NEXT='true' node scripts/publish.js",
     "build": "yarn build:standart && yarn build:nodeps",
+    "build:builder": "npx parcel build --no-minify --no-source-maps --no-autoinstall -d tools -o builder.js -t node tools/builder/tasks.config.js",
+    "builder": "node tools/builder.js",
+    "builder:watch": "npx nodemon -w tools/builder/ -w src -i tools/builder.js -x 'yarn build:builder && yarn builder'",
+    "postinstall": "yarn build:builder",
     "build:nodeps": "IS_BUILD='true' BUILD_UMD='true' rollup -c",
     "build:standart": "IS_BUILD='true' rollup -c",
     "test:watch": "npx jest --config=jest.config.js --watch",
@@ -194,6 +198,7 @@ module.exports = {
     "micro": "^9.3.3",
     "micro-dev": "^3.0.0",
     "most": "^1.7.3",
+    "nodemon": "^1.18.9",
     "now": "^12.1.12",
     "parcel-bundler": "^1.10.3",
     "penv.macro": "^0.2.0",
@@ -242,8 +247,6 @@ module.exports = {
   }],
   "repository": "https://github.com/zerobias/effector",
   "dependencies": {
-    "d3": "^5.7.0",
-    "d3-sankey-circular": "^0.28.0",
     "symbol-observable": "^1.2.0"
   },
   "alias": {
@@ -345,7 +348,9 @@ function taskList({
   });
 } //eslint-disable-next-line max-len
 
-/**@example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js*/
+/**
+ * @example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js
+ */
 
 
 const getSourcemapPathTransform = name => function sourcemapPathTransform(relativePath) {
@@ -366,6 +371,8 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.rollupEffector = rollupEffector;
+exports.rollupEffectorReact = rollupEffectorReact;
+exports.rollupEffectorVue = rollupEffectorVue;
 exports.getPlugins = void 0;
 
 var _rollup = require("rollup");
@@ -394,11 +401,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //$off
 // import
 const minifyConfig = ({
-  prettify
+  prettify,
+  toplevel = true
 }) => ({
   ecma: 8,
   mangle: {
-    toplevel: true
+    toplevel
   },
   compress: {
     pure_getters: true
@@ -412,7 +420,7 @@ const minifyConfig = ({
   }
 });
 
-const getPlugins = () => ({
+const getPlugins = (name, type = 'cjs') => ({
   babel: (0, _rollupPluginBabel.default)({// runtimeHelpers: true,
     // exclude: /(\.re|node_modules.*)/,
   }),
@@ -422,7 +430,8 @@ const getPlugins = () => ({
   commonjs: (0, _rollupPluginCommonjs.default)({}),
   resolve: (0, _rollupPluginNodeResolve.default)({}),
   terser: (0, _rollupPluginTerser.terser)(minifyConfig({
-    prettify: !!process.env.PRETTIFY
+    prettify: !!process.env.PRETTIFY,
+    toplevel: type !== 'umd'
   })),
   sizeSnapshot: (0, _rollupPluginSizeSnapshot.sizeSnapshot)()
 });
@@ -430,10 +439,12 @@ const getPlugins = () => ({
 exports.getPlugins = getPlugins;
 
 async function rollupEffector() {
+  const name = 'effector';
+
   const run = async output => {
-    const plugins = getPlugins();
+    const plugins = getPlugins(name, output.format);
     const build = await (0, _rollup.rollup)({
-      input: (0, _utils.dir)('packages/effector/index.js'),
+      input: (0, _utils.dir)(`packages/${name}/index.js`),
       external: ['warning', 'invariant', 'react', 'vue', 'most', 'symbol-observable', 'effector'],
       plugins: [plugins.resolve, plugins.babel, plugins.terser, plugins.sizeSnapshot]
     });
@@ -441,33 +452,121 @@ async function rollupEffector() {
   };
 
   async function umd() {
-    const plugins = getPlugins(); //$off
+    const plugins = getPlugins(name, 'umd'); //$off
 
     const build = await (0, _rollup.rollup)({
-      input: String((0, _utils.dir)('packages/effector/index.js')),
+      input: String((0, _utils.dir)(`packages/${name}/index.js`)),
       plugins: [plugins.resolve, plugins.babel, plugins.replace, plugins.commonjs, plugins.terser, plugins.sizeSnapshot],
       external: ['react', 'effector']
     });
     await build.write({
-      file: (0, _utils.dir)('npm/effector/effctor.bundle.js'),
+      file: (0, _utils.dir)(`npm/${name}/${name}.bundle.js`),
       format: 'iife',
-      name: 'effector',
+      name,
       sourcemap: true
     });
   }
 
   await Promise.all([run({
-    file: (0, _utils.dir)('npm/effector/effector.cjs.js'),
+    file: (0, _utils.dir)(`npm/${name}/${name}.cjs.js`),
     format: 'cjs',
-    name: 'effector',
+    name,
     sourcemap: true,
-    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)('effector')
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
   }), run({
-    file: (0, _utils.dir)('npm/effector/effector.es.js'),
+    file: (0, _utils.dir)(`npm/${name}/${name}.es.js`),
     format: 'es',
-    name: 'effector',
+    name,
     sourcemap: true,
-    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)('effector')
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
+  }), umd()]);
+}
+
+async function rollupEffectorReact() {
+  const name = 'effector-react';
+
+  const run = async output => {
+    const plugins = getPlugins(name, output.format);
+    const build = await (0, _rollup.rollup)({
+      input: (0, _utils.dir)(`packages/${name}/index.js`),
+      external: ['warning', 'invariant', 'react', 'vue', 'most', 'symbol-observable', 'effector'],
+      plugins: [plugins.resolve, plugins.babel, plugins.terser, plugins.sizeSnapshot]
+    });
+    await build.write(output);
+  };
+
+  async function umd() {
+    const plugins = getPlugins(name, 'umd'); //$off
+
+    const build = await (0, _rollup.rollup)({
+      input: String((0, _utils.dir)(`packages/${name}/index.js`)),
+      plugins: [plugins.resolve, plugins.babel, plugins.replace, plugins.commonjs, plugins.terser, plugins.sizeSnapshot],
+      external: ['react', 'effector']
+    });
+    await build.write({
+      file: (0, _utils.dir)(`npm/${name}/${name}.bundle.js`),
+      format: 'iife',
+      name: 'effectorReact',
+      sourcemap: true
+    });
+  }
+
+  await Promise.all([run({
+    file: (0, _utils.dir)(`npm/${name}/${name}.cjs.js`),
+    format: 'cjs',
+    name,
+    sourcemap: true,
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
+  }), run({
+    file: (0, _utils.dir)(`npm/${name}/${name}.es.js`),
+    format: 'es',
+    name,
+    sourcemap: true,
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
+  }), umd()]);
+}
+
+async function rollupEffectorVue() {
+  const name = 'effector-vue';
+
+  const run = async output => {
+    const plugins = getPlugins(name, output.format);
+    const build = await (0, _rollup.rollup)({
+      input: (0, _utils.dir)(`packages/${name}/index.js`),
+      external: ['warning', 'invariant', 'react', 'vue', 'most', 'symbol-observable', 'effector'],
+      plugins: [plugins.resolve, plugins.babel, plugins.terser, plugins.sizeSnapshot]
+    });
+    await build.write(output);
+  };
+
+  async function umd() {
+    const plugins = getPlugins(name, 'umd'); //$off
+
+    const build = await (0, _rollup.rollup)({
+      input: String((0, _utils.dir)(`packages/${name}/index.js`)),
+      plugins: [plugins.resolve, plugins.babel, plugins.replace, plugins.commonjs, plugins.terser, plugins.sizeSnapshot],
+      external: ['vue', 'effector']
+    });
+    await build.write({
+      file: (0, _utils.dir)(`npm/${name}/${name}.bundle.js`),
+      format: 'iife',
+      name: 'effectorVue',
+      sourcemap: true
+    });
+  }
+
+  await Promise.all([run({
+    file: (0, _utils.dir)(`npm/${name}/${name}.cjs.js`),
+    format: 'cjs',
+    name,
+    sourcemap: true,
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
+  }), run({
+    file: (0, _utils.dir)(`npm/${name}/${name}.es.js`),
+    format: 'es',
+    name,
+    sourcemap: true,
+    sourcemapPathTransform: (0, _utils.getSourcemapPathTransform)(name)
   }), umd()]);
 }
 },{"./utils":"FO+Z"}],"WuXe":[function(require,module,exports) {
@@ -484,13 +583,20 @@ const maintainers = [{
   name: 'goodmind',
   email: 'andwebar@gmail.com'
 }];
+const version = {
+  effector: '0.18.0-rc.2',
+  'effector-react': '0.18.0-rc.2',
+  'effector-vue': '0.18.0-rc.2',
+  'bs-effector': '0.18.0-rc.2',
+  'bs-effector-react': '0.18.0-rc.2'
+};
 
 const getFiles = name => ['README.md', 'LICENSE', `${name}.es.js`, `${name}.cjs.js`, `${name}.es.js.map`, `${name}.cjs.js.map`, `${name}.cjs.js.flow`, `${name}.es.js.flow`, 'index.d.ts', 'index.js.flow'];
 
 var _default = {
   effector: {
     name: 'effector',
-    version: '0.18.0-rc.2',
+    version: version['effector'],
     description: 'Reactive state manager',
     main: 'effector.cjs.js',
     module: 'effector.es.js',
@@ -516,7 +622,7 @@ var _default = {
   },
   'effector-react': {
     name: 'effector-react',
-    version: '0.18.0-rc.2',
+    version: version['effector-react'],
     description: 'React bindings for effector',
     main: 'effector-react.cjs.js',
     module: 'effector-react.es.js',
@@ -545,7 +651,7 @@ var _default = {
   },
   'effector-vue': {
     name: 'effector-vue',
-    version: '0.18.0-rc.2',
+    version: version['effector-vue'],
     description: 'Vue bindings for effector',
     main: 'effector-vue.cjs.js',
     module: 'effector-vue.es.js',
@@ -571,6 +677,81 @@ var _default = {
     },
     bugs: 'https://github.com/zerobias/effector/issues',
     keywords: ['data', 'datastructure', 'functional', 'collection', 'state', 'store', 'reactive', 'streams', 'actions', 'effects', 'redux', 'vue']
+  },
+  'bs-effector': {
+    name: 'bs-effector',
+    version: version['bs-effector'],
+    description: 'Reason bindings for effector',
+    author: 'Zero Bias',
+    license: 'MIT',
+    devDependencies: {},
+    dependencies: {},
+    peerDependencies: {
+      effector: '*'
+    },
+    maintainers,
+    files: ['src/', 'bsconfig.json'],
+    keywords: ['bucklescript', 'reason', 'bsb', 'data', 'datastructure', 'functional', 'collection', 'state', 'store', 'reactive', 'streams', 'actions', 'effects', 'redux'],
+    repository: 'https://github.com/zerobias/effector',
+    bugs: 'https://github.com/zerobias/effector/issues'
+  },
+  'bs-effector-react': {
+    name: 'bs-effector-react',
+    version: version['bs-effector-react'],
+    description: 'Reason bindings for effector-react',
+    author: 'Zero Bias',
+    license: 'MIT',
+    devDependencies: {},
+    dependencies: {
+      effector: '*'
+    },
+    peerDependencies: {
+      'reason-react': '*'
+    },
+    maintainers,
+    files: ['src/', 'bsconfig.json'],
+    keywords: ['bucklescript', 'reason', 'bsb', 'data', 'datastructure', 'functional', 'collection', 'state', 'store', 'reactive', 'streams', 'actions', 'effects', 'redux', 'react'],
+    repository: 'https://github.com/zerobias/effector',
+    bugs: 'https://github.com/zerobias/effector/issues'
+  }
+};
+exports.default = _default;
+},{}],"Exye":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  'bs-effector': {
+    name: 'bs-effector',
+    sources: {
+      dir: 'src',
+      subdirs: true
+    },
+    'bsc-flags': ['-bs-no-version-header', '-bs-g'],
+    reason: {
+      'react-jsx': 2
+    },
+    'bs-dev-dependencies': [],
+    namespace: true,
+    refmt: 3
+  },
+  'bs-effector-react': {
+    name: 'bs-effector-react',
+    sources: {
+      dir: 'src',
+      subdirs: true
+    },
+    'bs-dependencies': ['bs-effector', 'reason-react'],
+    'bsc-flags': ['-bs-no-version-header', '-bs-g'],
+    reason: {
+      'react-jsx': 2
+    },
+    'bs-dev-dependencies': [],
+    namespace: true,
+    refmt: 3
   }
 };
 exports.default = _default;
@@ -588,6 +769,8 @@ var _rollup = require("./rollup");
 
 var _packages = _interopRequireDefault(require("./packages.config"));
 
+var _bsconfigs = _interopRequireDefault(require("./bsconfigs.config"));
+
 var _utils = require("./utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -597,8 +780,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 var _default = (0, _utils.taskList)({
   tasks: {
     effector: [() => (0, _utils.outputPackageJSON)('packages/effector/package.json', _packages.default.effector), () => (0, _utils.massCopy)('.', 'npm/effector', ['LICENSE', 'README.md']), () => (0, _utils.massCopy)('packages/effector', 'npm/effector', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector.cjs.js.flow', 'effector.es.js.flow', 'effector.bundle.js.flow']]]), _rollup.rollupEffector],
-    'effector-react': [() => (0, _utils.outputPackageJSON)('packages/effector-react/package.json', _packages.default['effector-react']), () => (0, _utils.massCopy)('.', 'npm/effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-react', 'npm/effector-react', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-react.cjs.js.flow', 'effector-react.es.js.flow', 'effector-react.bundle.js.flow']]])],
-    'effector-vue': [() => (0, _utils.outputPackageJSON)('packages/effector-vue/package.json', _packages.default['effector-vue']), () => (0, _utils.massCopy)('.', 'npm/effector-vue', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]])]
+    'effector-react': [() => (0, _utils.outputPackageJSON)('packages/effector-react/package.json', _packages.default['effector-react']), () => (0, _utils.massCopy)('.', 'npm/effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-react', 'npm/effector-react', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-react.cjs.js.flow', 'effector-react.es.js.flow', 'effector-react.bundle.js.flow']]]), _rollup.rollupEffectorReact],
+    'effector-vue': [() => (0, _utils.outputPackageJSON)('packages/effector-vue/package.json', _packages.default['effector-vue']), () => (0, _utils.massCopy)('.', 'npm/effector-vue', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]]), _rollup.rollupEffectorVue],
+    'bs-effector': [() => (0, _utils.outputPackageJSON)('packages/bs-effector/package.json', _packages.default['bs-effector']), () => fs.outputJSON('packages/bs-effector/bsconfig.json', _bsconfigs.default['bs-effector'], {
+      spaces: 2
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json', 'src/Effector.re'])],
+    'bs-effector-react': [() => (0, _utils.outputPackageJSON)('packages/bs-effector-react/package.json', _packages.default['bs-effector-react']), () => fs.outputJSON('packages/bs-effector-react/bsconfig.json', _bsconfigs.default['bs-effector-react'], {
+      spaces: 2
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json', 'src/EffectorReact.re'])]
   },
   hooks: {
     beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)]
@@ -606,4 +795,4 @@ var _default = (0, _utils.taskList)({
 });
 
 exports.default = _default;
-},{"./rollup":"OiEt","./packages.config":"WuXe","./utils":"FO+Z"}]},{},["J5sa"], null)
+},{"./rollup":"OiEt","./packages.config":"WuXe","./bsconfigs.config":"Exye","./utils":"FO+Z"}]},{},["J5sa"], null)
