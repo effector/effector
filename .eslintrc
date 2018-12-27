@@ -30,6 +30,8 @@ rules:
   react/no-children-prop: 'off'
   react/prop-types: 'off'
   react/display-name: 'off'
+  react/jsx-key: 'off'
+  react/no-unknown-property: 'off'
   no-console: 'off'
   no-cond-assign: warn
   no-unused-vars: warn
