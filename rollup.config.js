@@ -94,6 +94,8 @@ const rollupPlugins = [
 ]
 
 function createBuild(name) {
+  //eslint-disable-next-line max-len
+  /**@example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js*/
   function sourcemapPathTransform(relativePath) {
     let packagePath = join('../..', packageJson.alias[name])
     if (extname(packagePath) !== '') {
@@ -101,7 +103,7 @@ function createBuild(name) {
     }
     return join(`node_modules/${name}`, relative(packagePath, relativePath))
   }
-  
+
   if (name.startsWith('bs')) return []
   if (process.env.BUILD_UMD)
     return [
