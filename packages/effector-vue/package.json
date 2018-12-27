@@ -1,5 +1,6 @@
 {
   "name": "effector-vue",
+  "version": "0.18.0-rc.2",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
@@ -10,7 +11,7 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "effector": "*"
+    "effector": "^0.18.0-rc.2"
   },
   "peerDependencies": {
     "vue": "*"
@@ -33,10 +34,10 @@
     "effector-vue.cjs.js",
     "effector-vue.es.js.map",
     "effector-vue.cjs.js.map",
-    "index.d.ts",
-    "index.js.flow",
     "effector-vue.cjs.js.flow",
-    "effector-vue.es.js.flow"
+    "effector-vue.es.js.flow",
+    "index.d.ts",
+    "index.js.flow"
   ],
   "repository": "https://github.com/zerobias/effector",
   "homepage": "https://zerobias.github.io/effector/",

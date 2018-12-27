@@ -1,5 +1,6 @@
 {
   "name": "effector",
+  "version": "0.18.0-rc.2",
   "description": "Reactive state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
@@ -28,14 +29,12 @@
     "LICENSE",
     "effector.es.js",
     "effector.cjs.js",
-    "effector.bundle.js",
     "effector.es.js.map",
-    "effector.bundle.js.map",
     "effector.cjs.js.map",
-    "effector.es.js.flow",
     "effector.cjs.js.flow",
-    "index.js.flow",
-    "index.d.ts"
+    "effector.es.js.flow",
+    "index.d.ts",
+    "index.js.flow"
   ],
   "repository": "https://github.com/zerobias/effector",
   "homepage": "https://zerobias.github.io/effector/",
