@@ -65,7 +65,9 @@ export function taskList({
 }
 
 //eslint-disable-next-line max-len
-/**@example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js*/
+/**
+ * @example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js
+ */
 export const getSourcemapPathTransform = (name: string) =>
   function sourcemapPathTransform(relativePath: string) {
     let packagePath = join('../..', packageJson.alias[name])
