@@ -11,25 +11,30 @@ import callstack from './callstack'
 export function walkEvent<T>(payload: T, event: Event<T>) {
   const steps: TypeDef<'seq', 'step'> = event.graphite.seq
   const eventCtx = Ctx.emit({
-    eventName: event.getType(),
-    payload,
     __stepArg: payload,
   })
   walkNode(steps, eventCtx)
 }
 
 type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
+type Reg = {
+  isChanged: boolean,
+}
 type Meta = {
   ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
   stop: boolean,
   transactions: Array<() => void>,
   arg: any,
+  reg: Reg,
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
     transactions: ([]: Array<() => void>),
     stop: false,
     ctx,
+    reg: {
+      isChanged: true,
+    },
   }
   runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
@@ -58,7 +63,7 @@ const stepVisitor = {
     callstack.pushItem(single)
     meta.arg = ctx.data.__stepArg
     meta.ctx = command[single.type].cmd(single, ctx, meta)
-    meta.stop = !command[meta.ctx.type].transition(meta.ctx)
+    meta.stop = !command[meta.ctx.type].transition(meta.reg)
     callstack.popItem()
   },
   multi(step, ctx, meta) {
@@ -108,15 +113,13 @@ type Command<tag> = /*:: interface */ {
     ctx: CommonCtx,
     meta: Meta,
   ): TypeDef<tag, 'ctx'>,
-  transition(ctx: CommonCtx): boolean,
+  transition(reg: Reg): boolean,
 }
 
 const command = ({
   emit: {
     cmd: (single, ctx, meta) =>
       Ctx.emit({
-        eventName: single.data.fullName,
-        payload: meta.arg,
         __stepArg: meta.arg,
       }),
     transition: () => true,
@@ -131,13 +134,12 @@ const command = ({
       } catch (err) {
         console.error(err)
       }
+      meta.reg.isChanged = isChanged
       return Ctx.filter({
-        value: arg,
-        isChanged,
         __stepArg: arg,
       })
     },
-    transition: ctx => Boolean(ctx.data.isChanged),
+    transition: reg => Boolean(reg.isChanged),
   },
   run: {
     cmd(single, ctx, meta) {
@@ -161,7 +163,6 @@ const command = ({
     cmd(single, ctx, meta) {
       single.data.store.current = meta.arg
       return Ctx.update({
-        value: meta.arg,
         __stepArg: meta.arg,
       })
     },
@@ -172,27 +173,19 @@ const command = ({
       const arg = meta.arg
 
       const newCtx = Ctx.compute({
-        args: [arg],
-        result: null,
-        error: null,
-        isError: false,
-        isNone: true,
-        isChanged: true,
         __stepArg: null,
       })
       try {
         const result = single.data.fn(arg)
-        newCtx.data.result = newCtx.data.__stepArg = result
-        newCtx.data.isNone = result === undefined
+        newCtx.data.__stepArg = result
+        meta.reg.isChanged = result !== undefined
       } catch (err) {
         console.error(err)
-        newCtx.data.isError = true
-        newCtx.data.error = err
-        newCtx.data.isChanged = false
+        meta.reg.isChanged = false
       }
       return newCtx
     },
-    transition: ctx => Boolean(ctx.data.isChanged),
+    transition: reg => Boolean(reg.isChanged),
   },
 }: {
   emit: Command<'emit'>,
@@ -201,24 +194,3 @@ const command = ({
   update: Command<'update'>,
   compute: Command<'compute'>,
 })
-
-function iterator(step) {
-  return {
-    status: {
-      child: false,
-      sibling: false,
-    },
-    step,
-    stepStack: [],
-    stepPositionStack: [],
-    child() {
-      switch (this.step.type) {
-        case 'seq':
-          this.stepStack.push(this.step)
-          this.stepPositionStack.push(0)
-          this.step = this.step.data[0] //too weak consumption
-          break
-      }
-    },
-  }
-}
