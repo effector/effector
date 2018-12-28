@@ -16,9 +16,14 @@ import {
   getPixelEvent,
 } from './fixtures'
 
+import {updateStatus, updateOutput} from './dom'
+
 export function snake() {
-  const W = 60
-  const H = 40
+  updateStatus('running')
+  console.profile('full screen update')
+  const W = 6
+  const H = 4
+  const Q = 5
   const setProperty = createEvent<{
     x: number,
     y: number,
@@ -51,9 +56,9 @@ export function snake() {
   }
   // const pixels = []
   const rowStores = []
-  for (let y = 0; y < H; y++) {
+  for (let y = 0; y < H*Q; y++) {
     const row = []
-    for (let x = 0; x < W; x++) {
+    for (let x = 0; x < W*Q; x++) {
       const pxl = createPixel(x, y)
       row.push(pxl)
       // pixels.push(pxl)
@@ -79,15 +84,16 @@ export function snake() {
       '@': 'food',
     }
     console.log(text)
-    console.profile('full screen update')
-    for (let y = 0, row, prop; y < H; y++) {
-      row = text[(y / 10) | 0]
-      for (let x = 0, ch; x < W; x++) {
-        ch = row[(x / 10) | 0]
+
+    for (let y = 0, row, prop; y < H*Q; y++) {
+      row = text[(y / Q) | 0]
+      for (let x = 0, ch; x < W*Q; x++) {
+        //if (!(x % 2)) continue
+        ch = row[(x / Q) | 0]
         if (ch in map) setProperty({x, y, prop: map[ch], value: true})
       }
     }
-    console.profileEnd('full screen update')
+
     console.log('upds %d', upd)
   }
   filler(`
@@ -96,6 +102,12 @@ export function snake() {
 # ***#
 ######
 `)
-  console.log(fullTextStore.getState())
+
+  console.profileEnd('full screen update')
+  setTimeout(() => {
+    console.log(fullTextStore.getState())
+    updateStatus('ready')
+    updateOutput(fullTextStore.getState())
+  }, 100)
   return fullTextStore
 }

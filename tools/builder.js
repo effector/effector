@@ -119,6 +119,7 @@ module.exports = {
     "server": "micro",
     "test": "npx jest --config=jest.config.js",
     "bench": "node --expose-gc bench/bench.test.js",
+    "perfsnake": "npx parcel serve --no-hmr --no-autoinstall tools/perfsnake/index.html",
     "prepublish:all": "npm run build",
     "prepublish:next": "npm run build",
     "publish:all": "node scripts/publish.js",

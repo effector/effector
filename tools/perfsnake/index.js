@@ -1,6 +1,6 @@
 //@flow
 import {snake} from './app'
 
-global.__SNAKE__ = snake
+global.snake = snake
 
-snake()
+// snake()
