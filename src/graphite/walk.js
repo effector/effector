@@ -1,5 +1,6 @@
 //@flow
 import invariant from 'invariant'
+import {__DEBUG__} from 'effector/flags'
 import type {Event} from 'effector/event'
 import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
@@ -36,8 +37,11 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   }
   meta.transactions.length = 0
 }
+
 function runStep(step, ctx: *, meta) {
-  invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+  if (__DEBUG__) {
+    invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
+  }
   callstack.pushBox(step)
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
@@ -47,8 +51,10 @@ function runStep(step, ctx: *, meta) {
 const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
     const single: TypeDef<*, 'cmd'> = step.data
-    invariant(single.type in command, 'impossible case "%s"', single.type)
-    invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
+    if (__DEBUG__) {
+      invariant(single.type in command, 'impossible case "%s"', single.type)
+      invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
+    }
     callstack.pushItem(single)
     meta.arg = ctx.data.__stepArg
     meta.ctx = command[single.type].cmd(single, ctx, meta)
@@ -195,3 +201,24 @@ const command = ({
   update: Command<'update'>,
   compute: Command<'compute'>,
 })
+
+function iterator(step) {
+  return {
+    status: {
+      child: false,
+      sibling: false,
+    },
+    step,
+    stepStack: [],
+    stepPositionStack: [],
+    child() {
+      switch (this.step.type) {
+        case 'seq':
+          this.stepStack.push(this.step)
+          this.stepPositionStack.push(0)
+          this.step = this.step.data[0] //too weak consumption
+          break
+      }
+    },
+  }
+}
