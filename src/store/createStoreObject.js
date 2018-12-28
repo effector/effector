@@ -8,7 +8,8 @@ import {pushNext} from 'effector/stdlib/typedef'
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
 import {Kind} from 'effector/stdlib/kind'
-import {storeFabric, getDisplayName} from './storeFabric'
+import {storeObjectName, storeObjectArrayName} from './setStoreName'
+import {storeFabric} from './storeFabric'
 
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   obj: State,
@@ -54,15 +55,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
       pushNext(<single>{runCmd}</single>, substore.graphite.next)
     }
   }
-  const name =
-    'combine(' +
-    obj
-      .map(store => {
-        if (store.kind !== Kind.store) return store.toString()
-        return getDisplayName(store)
-      })
-      .join(', ') +
-    ')'
+  const name = storeObjectArrayName(obj)
   const store = storeFabric({
     name,
     currentState: stateNew,
@@ -116,15 +109,8 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     stateNew[key] = substore.getState()
     pushNext(<single>{runCmd}</single>, substore.graphite.next)
   }
-  const name =
-    'combine(' +
-    (Object.values(obj): Array<$Values<typeof obj>>)
-      .map(store => {
-        if (store.kind !== Kind.store) return store.toString()
-        return getDisplayName(store)
-      })
-      .join(', ') +
-    ')'
+  //$todo
+  const name = storeObjectName(obj)
   const store = storeFabric({
     name,
     currentState: stateNew,
