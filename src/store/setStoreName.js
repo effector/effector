@@ -10,16 +10,18 @@ const storeObjectMaxNames = 25
 
 export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
   let i = 0
+  const max = storeObjectMaxNames - 1
+  const maxLength = arr.length - 1
   let name = 'combine('
   for (const store of arr) {
-    if (i > storeObjectMaxNames) break
-    const comma = i === storeObjectMaxNames ? '' : ', '
+    const comma = i === max || maxLength === i ? '' : ', '
     if (store.kind !== Kind.store) {
       name += store.toString() + comma
     } else {
       name += getDisplayName(store) + comma
     }
     i += 1
+    if (comma === '') break
   }
   name += ')'
   return name
@@ -27,17 +29,20 @@ export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
 
 export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
   let i = 0
+  const keys = Object.keys(obj)
+  const max = storeObjectMaxNames - 1
+  const maxLength = keys.length - 1
   let name = 'combine('
   for (const key in obj) {
-    if (i > storeObjectMaxNames) break
+    const comma = i === max || maxLength === i ? '' : ', '
     const store = obj[key]
-    const comma = i === storeObjectMaxNames ? '' : ', '
     if (store.kind !== Kind.store) {
       name += store.toString() + comma
     } else {
       name += getDisplayName(store) + comma
     }
     i += 1
+    if (comma === '') break
   }
   name += ')'
   return name
