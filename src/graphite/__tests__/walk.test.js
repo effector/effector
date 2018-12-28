@@ -13,6 +13,7 @@ function eventCtx(payload, event) {
   return Ctx.emit({
     eventName: event.getType(),
     payload,
+    __stepArg: payload,
   })
 }
 const Next = () => (

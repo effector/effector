@@ -12,6 +12,7 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   const eventCtx = Ctx.emit({
     eventName: event.getType(),
     payload,
+    __stepArg: payload,
   })
   walkNode(steps, eventCtx)
 }
@@ -29,7 +30,7 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
     stop: false,
     ctx,
   }
-  runStep(seq, ctx, meta)
+  runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
     meta.transactions[i]()
   }
@@ -42,7 +43,33 @@ function runStep(step, ctx: *, meta) {
   stepVisitor[step.type](step, ctx, meta)
   callstack.popBox()
 }
+
 const stepVisitor = {
+  single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
+    const single: TypeDef<*, 'cmd'> = step.data
+    invariant(single.type in command, 'impossible case "%s"', single.type)
+    invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
+    callstack.pushItem(single)
+    meta.arg = ctx.data.__stepArg
+    meta.ctx = command[single.type].cmd(single, ctx, meta)
+    meta.stop = !command[meta.ctx.type].transition(meta.ctx)
+    callstack.popItem()
+  },
+  multi(step, ctx, meta) {
+    for (let i = 0; i < step.data.length; i++) {
+      runStep(step.data[i], ctx, meta)
+    }
+    meta.stop = false
+  },
+  seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
+    meta.ctx = prev
+    for (let i = 0; i < steps.data.length; i++) {
+      runStep(steps.data[i], meta.ctx, meta)
+      if (meta.stop) {
+        break
+      }
+    }
+  },
   choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
     const localState: StateRef = step.data.state
     const selector: TypeDef<*, 'step'> = step.data.selector
@@ -67,32 +94,6 @@ const stepVisitor = {
     }
     runStep(next, ctx, meta)
   },
-
-  single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
-    const single: TypeDef<*, 'cmd'> = step.data
-    invariant(single.type in command, 'impossible case "%s"', single.type)
-    invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
-    callstack.pushItem(single)
-    meta.arg = command[ctx.type].stepArg(ctx.data)
-    meta.ctx = command[single.type].cmd(single, ctx, meta)
-    meta.stop = !command[meta.ctx.type].transition(meta.ctx)
-    callstack.popItem()
-  },
-  multi(step, ctx, meta) {
-    for (let i = 0; i < step.data.length; i++) {
-      runStep(step.data[i], ctx, meta)
-    }
-    meta.stop = false
-  },
-  seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
-    meta.ctx = prev
-    for (let i = 0; i < steps.data.length; i++) {
-      runStep(steps.data[i], meta.ctx, meta)
-      if (meta.stop) {
-        break
-      }
-    }
-  },
 }
 
 type Command<tag> = /*:: interface */ {
@@ -102,7 +103,6 @@ type Command<tag> = /*:: interface */ {
     meta: Meta,
   ): TypeDef<tag, 'ctx'>,
   transition(ctx: CommonCtx): boolean,
-  stepArg(data: any): any,
 }
 
 const command = ({
@@ -111,9 +111,9 @@ const command = ({
       Ctx.emit({
         eventName: single.data.fullName,
         payload: meta.arg,
+        __stepArg: meta.arg,
       }),
     transition: () => true,
-    stepArg: data => data.payload,
   },
   filter: {
     cmd(single, ctx, meta) {
@@ -128,10 +128,10 @@ const command = ({
       return Ctx.filter({
         value: arg,
         isChanged,
+        __stepArg: arg,
       })
     },
     transition: ctx => Boolean(ctx.data.isChanged),
-    stepArg: data => data.value,
   },
   run: {
     cmd(single, ctx, meta) {
@@ -150,15 +150,16 @@ const command = ({
       })
     },
     transition: () => false,
-    stepArg: () => invariant(false, 'RunContext is not supported'),
   },
   update: {
     cmd(single, ctx, meta) {
       single.data.store.current = meta.arg
-      return Ctx.update({value: meta.arg})
+      return Ctx.update({
+        value: meta.arg,
+        __stepArg: meta.arg,
+      })
     },
     transition: () => true,
-    stepArg: data => data.value,
   },
   compute: {
     cmd(single, ctx, meta) {
@@ -171,10 +172,11 @@ const command = ({
         isError: false,
         isNone: true,
         isChanged: true,
+        __stepArg: null,
       })
       try {
         const result = single.data.fn(arg)
-        newCtx.data.result = result
+        newCtx.data.result = newCtx.data.__stepArg = result
         newCtx.data.isNone = result === undefined
       } catch (err) {
         console.error(err)
@@ -185,7 +187,6 @@ const command = ({
       return newCtx
     },
     transition: ctx => Boolean(ctx.data.isChanged),
-    stepArg: data => data.result,
   },
 }: {
   emit: Command<'emit'>,
