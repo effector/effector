@@ -62,7 +62,7 @@ const stepVisitor = {
     }
     callstack.pushItem(single)
     meta.arg = ctx.data.__stepArg
-    meta.ctx = command[single.type].cmd(single, ctx, meta)
+    meta.ctx = command[single.type].cmd(single, meta)
     meta.stop = !command[meta.ctx.type].transition(meta.reg)
     callstack.popItem()
   },
@@ -108,24 +108,20 @@ const stepVisitor = {
 }
 
 type Command<tag> = /*:: interface */ {
-  cmd(
-    single: TypeDef<tag, 'cmd'>,
-    ctx: CommonCtx,
-    meta: Meta,
-  ): TypeDef<tag, 'ctx'>,
+  cmd(single: TypeDef<tag, 'cmd'>, meta: Meta): TypeDef<tag, 'ctx'>,
   transition(reg: Reg): boolean,
 }
 
 const command = ({
   emit: {
-    cmd: (single, ctx, meta) =>
+    cmd: (single, meta) =>
       Ctx.emit({
         __stepArg: meta.arg,
       }),
     transition: () => true,
   },
   filter: {
-    cmd(single, ctx, meta) {
+    cmd(single, meta) {
       const arg = meta.arg
 
       let isChanged = false
@@ -142,7 +138,7 @@ const command = ({
     transition: reg => Boolean(reg.isChanged),
   },
   run: {
-    cmd(single, ctx, meta) {
+    cmd(single, meta) {
       const arg = meta.arg
 
       if ('transactionContext' in single.data)
@@ -152,15 +148,12 @@ const command = ({
       } catch (err) {
         console.error(err)
       }
-      return Ctx.run({
-        args: [arg],
-        parentContext: ctx,
-      })
+      return Ctx.run({})
     },
     transition: () => false,
   },
   update: {
-    cmd(single, ctx, meta) {
+    cmd(single, meta) {
       single.data.store.current = meta.arg
       return Ctx.update({
         __stepArg: meta.arg,
@@ -169,7 +162,7 @@ const command = ({
     transition: () => true,
   },
   compute: {
-    cmd(single, ctx, meta) {
+    cmd(single, meta) {
       const arg = meta.arg
 
       const newCtx = Ctx.compute({
