@@ -1,19 +1,19 @@
 //@flow
 import invariant from 'invariant'
-import {__DEBUG__} from 'effector/flags'
 import type {Event} from 'effector/event'
 import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
-import callstack from './callstack'
+// import callstack from './callstack'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
-  const steps: TypeDef<'seq', 'step'> = event.graphite.seq
-  const eventCtx = Ctx.emit({
-    __stepArg: payload,
-  })
-  walkNode(steps, eventCtx)
+  walkNode(
+    event.graphite.seq,
+    Ctx.emit({
+      __stepArg: payload,
+    }),
+  )
 }
 
 type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
@@ -26,15 +26,17 @@ type Meta = {
   transactions: Array<() => void>,
   arg: any,
   reg: Reg,
+  // stepStack: Array<TypeDef<'single' | 'multi' | 'seq' | 'choose', 'step'>>,
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
-    transactions: ([]: Array<() => void>),
+    transactions: [],
     stop: false,
     ctx,
     reg: {
       isChanged: true,
     },
+    // stepStack: [],
   }
   runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
@@ -44,27 +46,22 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
 }
 
 function runStep(step, ctx: *, meta) {
-  if (__DEBUG__) {
-    invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
-  }
-  callstack.pushBox(step)
+  // callstack.pushBox(step)
+  // meta.stepStack.push(step)
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
-  callstack.popBox()
+  // callstack.popBox()
+  // meta.stepStack.pop()
 }
 
 const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
     const single: TypeDef<*, 'cmd'> = step.data
-    if (__DEBUG__) {
-      invariant(single.type in command, 'impossible case "%s"', single.type)
-      invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
-    }
-    callstack.pushItem(single)
+    // callstack.pushItem(single)
     meta.arg = ctx.data.__stepArg
     meta.ctx = command[single.type].cmd(single, meta)
     meta.stop = !command[meta.ctx.type].transition(meta.reg)
-    callstack.popItem()
+    // callstack.popItem()
   },
   multi(step, ctx, meta) {
     for (let i = 0; i < step.data.length; i++) {
@@ -122,33 +119,33 @@ const command = ({
   },
   filter: {
     cmd(single, meta) {
-      const arg = meta.arg
-
-      let isChanged = false
-      try {
-        isChanged = single.data.filter(arg)
-      } catch (err) {
-        console.error(err)
-      }
-      meta.reg.isChanged = isChanged
-      return Ctx.filter({
-        __stepArg: arg,
+      const ctx = Ctx.filter({
+        __stepArg: meta.arg,
       })
+      const runCtx = tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.filter,
+      })
+      meta.reg.isChanged = Boolean(runCtx.result)
+      return ctx
     },
     transition: reg => Boolean(reg.isChanged),
   },
   run: {
     cmd(single, meta) {
-      const arg = meta.arg
+      const ctx = Ctx.run({})
 
       if ('transactionContext' in single.data)
-        meta.transactions.push(single.data.transactionContext(arg))
-      try {
-        single.data.runner(arg)
-      } catch (err) {
-        console.error(err)
-      }
-      return Ctx.run({})
+        meta.transactions.push(single.data.transactionContext(meta.arg))
+      tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.runner,
+      })
+      return ctx
     },
     transition: () => false,
   },
@@ -163,18 +160,18 @@ const command = ({
   },
   compute: {
     cmd(single, meta) {
-      const arg = meta.arg
-
       const newCtx = Ctx.compute({
         __stepArg: null,
       })
-      try {
-        const result = single.data.fn(arg)
-        newCtx.data.__stepArg = result
-        meta.reg.isChanged = result !== undefined
-      } catch (err) {
-        console.error(err)
-        meta.reg.isChanged = false
+      const runCtx = tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.fn,
+      })
+      meta.reg.isChanged = !runCtx.err && runCtx.result !== undefined
+      if (!runCtx.err) {
+        newCtx.data.__stepArg = runCtx.result
       }
       return newCtx
     },
@@ -187,3 +184,13 @@ const command = ({
   update: Command<'update'>,
   compute: Command<'compute'>,
 })
+
+function tryRun(ctx) {
+  try {
+    ctx.result = ctx.fn(ctx.arg)
+  } catch (err) {
+    console.error(err)
+    ctx.err = true
+  }
+  return ctx
+}
