@@ -4,7 +4,7 @@
 import fx from 'effector/stdlib/fx'
 
 import invariant from 'invariant'
-import * as perf from 'effector/perf'
+import {beginStoreMark, endStoreMark} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
@@ -108,10 +108,7 @@ export function storeFabric<State>(props: {
   }
 
   function subscribe(listener) {
-    if (__DEBUG__)
-      perf.beginMark(
-        'Start ' + getDisplayName(store) + ' subscribe (id: ' + store.id + ')',
-      )
+    beginStoreMark(store, 'subscribe')
     invariant(
       typeof listener === 'function',
       'Expected the listener to be a function.',
@@ -126,34 +123,10 @@ export function storeFabric<State>(props: {
             lastCall = args
             try {
               listener(args)
-              if (__DEBUG__)
-                perf.endMark(
-                  'Call ' +
-                    getDisplayName(store) +
-                    ' subscribe listener (id: ' +
-                    store.id +
-                    ')',
-                  'Start ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                )
+              endStoreMark(store, 'subscribe', null)
             } catch (err) {
               console.error(err)
-              if (__DEBUG__)
-                perf.endMark(
-                  'Got error on ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                  'Start ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                )
+              endStoreMark(store, 'subscribe', 'Got error')
             }
           }}
         />
@@ -281,8 +254,7 @@ function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
-  if (__DEBUG__)
-    perf.beginMark(`Start ${getDisplayName(store)} map (id: ${store.id})`)
+  beginStoreMark(store, 'map')
   let lastValue = store.getState()
   let lastResult = fn(lastValue, firstState)
   const innerStore: Store<any> = storeFabric({
@@ -298,15 +270,7 @@ function mapStore<A, B>(
             lastValue = newValue
             const lastState = innerStore.getState()
             const result = fn(newValue, lastState)
-            if (__DEBUG__)
-              perf.endMark(
-                'Map ' + getDisplayName(store) + ' (id: ${store.id})',
-                'Start ' +
-                  getDisplayName(store) +
-                  ' subscribe (id: ' +
-                  store.id +
-                  ')',
-              )
+            endStoreMark(store, 'map', null)
             return result
           }}
         />
