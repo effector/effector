@@ -1,11 +1,9 @@
 //@flow
-import invariant from 'invariant'
+// import invariant from 'invariant'
 import type {Event} from 'effector/event'
-import type {StateRef} from 'effector/stdlib/stateref'
+// import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
-
-// import callstack from './callstack'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(
@@ -26,7 +24,6 @@ type Meta = {
   transactions: Array<() => void>,
   arg: any,
   reg: Reg,
-  // stepStack: Array<TypeDef<'single' | 'multi' | 'seq' | 'choose', 'step'>>,
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
@@ -36,7 +33,6 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
     reg: {
       isChanged: true,
     },
-    // stepStack: [],
   }
   runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
@@ -46,22 +42,15 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
 }
 
 function runStep(step, ctx: *, meta) {
-  // callstack.pushBox(step)
-  // meta.stepStack.push(step)
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
-  // callstack.popBox()
-  // meta.stepStack.pop()
 }
 
 const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
-    const single: TypeDef<*, 'cmd'> = step.data
-    // callstack.pushItem(single)
     meta.arg = ctx.data.__stepArg
-    meta.ctx = command[single.type].cmd(single, meta)
+    meta.ctx = command[step.data.type].cmd(step.data, meta)
     meta.stop = !command[meta.ctx.type].transition(meta.reg)
-    // callstack.popItem()
   },
   multi(step, ctx, meta) {
     for (let i = 0; i < step.data.length; i++) {
@@ -79,18 +68,10 @@ const stepVisitor = {
     }
   },
   choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
-    const localState: StateRef = step.data.state
-    const selector: TypeDef<*, 'step'> = step.data.selector
-    const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
-    runStep(selector, ctx, meta)
-    const caseName = localState.current
-    //optional
-    invariant(
-      typeof caseName === 'string',
-      'incorrect selector "%s" for id %s',
-      caseName,
-      localState.id,
-    )
+    type Cases = {+[key: string]: TypeDef<*, 'step'>}
+    const cases: Cases = step.data.cases
+    runStep(step.data.selector, ctx, meta)
+    const caseName = String(step.data.state.current)
     let next
     if (caseName in cases) {
       next = cases[caseName]
