@@ -13,8 +13,8 @@ test('event.create single argument', () => {
   foo(100)
   foo(200)
   foo(300)
-  expect(baz.mock.calls).toMatchSnapshot()
-  expect(foo.create.mock.calls).toMatchSnapshot()
+  expect(baz.mock.calls).toMatchSnapshot('watch')
+  expect(foo.create.mock.calls).toMatchSnapshot('event')
 })
 
 type FnEvent<Fn> = Fn & Event<any>
@@ -30,6 +30,6 @@ test('event.create multiple arguments', () => {
   bar(-2, 'foo')
   bar(-3, 'bar')
   bar(-2, 'baz')
-  expect(baz.mock.calls).toMatchSnapshot()
-  expect(bar.create.mock.calls).toMatchSnapshot()
+  expect(baz.mock.calls).toMatchSnapshot('watch')
+  expect(bar.create.mock.calls).toMatchSnapshot('event')
 })
