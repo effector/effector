@@ -12,15 +12,7 @@ export function visitRecord<Args, R>(
   }>,
   cfg: {+__kind?: kind, +args: Args},
 ): R {
-  const args = cfg.args
-  const value = cfg.__kind
-  if (value === undefined) {
-    if ('__' in visitor) return visitor.__(args)
-    throw new Error('unmatched undefined case')
-  }
-  if (value in visitor) return visitor[String(value)](args)
-  if ('__' in visitor) return visitor.__(args)
-  throw new Error('unmatched case ' + value)
+  return visitor[String(cfg.__kind || '__')](cfg.args)
 }
 
 export function kindReader(eventOrFn: any): kind | void {
