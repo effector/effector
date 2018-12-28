@@ -6,13 +6,14 @@ import {Kind} from 'effector/stdlib/kind'
 import {__DEBUG__} from 'effector/flags'
 import {createName} from '../compositeName'
 
+const storeObjectMaxNames = 25
+
 export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
-  const max = 25
   let i = 0
   let name = 'combine('
   for (const store of arr) {
-    if (i > max) break
-    const comma = i === max ? '' : ', '
+    if (i > storeObjectMaxNames) break
+    const comma = i === storeObjectMaxNames ? '' : ', '
     if (store.kind !== Kind.store) {
       name += store.toString() + comma
     } else {
@@ -25,13 +26,12 @@ export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
 }
 
 export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
-  const max = 25
   let i = 0
   let name = 'combine('
   for (const key in obj) {
-    if (i > max) break
+    if (i > storeObjectMaxNames) break
     const store = obj[key]
-    const comma = i === max ? '' : ', '
+    const comma = i === storeObjectMaxNames ? '' : ', '
     if (store.kind !== Kind.store) {
       name += store.toString() + comma
     } else {
