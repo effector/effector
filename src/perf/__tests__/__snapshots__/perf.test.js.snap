@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`perf supports store.map 1`] = `
+"☄ 1.map Warning: Initial
+
+☄ 1 → *.subscribe Warning: Initial
+
+☄ 1.map
+
+☄ 1 → *.subscribe
+
+☄ 1.map
+
+☄ 1 → *.subscribe
+"
+`;
+
+exports[`perf supports store.subscribe 1`] = `
+"☄ 3.subscribe Warning: Initial
+
+☄ 3.subscribe
+
+☄ 3.subscribe
+"
+`;
+
+exports[`perf supports throwing error in store.subscribe 1`] = `
+"☄ 4.subscribe Warning: Got initial error
+
+☄ 4.subscribe Warning: Got error
+
+☄ 4.subscribe Warning: Got error
+"
+`;

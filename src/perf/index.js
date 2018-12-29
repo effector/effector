@@ -5,6 +5,10 @@ import {getDisplayName, type Store} from 'effector/store'
 
 type StoreMeasurementPhase = 'map' | 'subscribe'
 
+let currentPhase: StoreMeasurementPhase | null = null
+let currentPhaseStore: Store<any> | null = null
+//let hasScheduledUpdateInCurrentPhase: boolean = false
+
 const effectorEmoji = '\u2604'
 
 const supportsUserTiming =
@@ -34,15 +38,15 @@ function getStoreMarkName(label: string, debugID: string) {
   return `${label} (#${debugID})`
 }
 
-export function beginMark(markName: string) {
+function beginMark(markName: string) {
   performance.mark(formatMarkName(markName))
 }
 
-export function endMark(
-  label: string,
-  markName: string,
-  warning: string | null,
-) {
+function clearMark(markName: string) {
+  performance.clearMarks(formatMarkName(markName))
+}
+
+function endMark(label: string, markName: string, warning: string | null) {
   const formattedMarkName = formatMarkName(markName)
   const formattedLabel = formatLabel(label, warning)
   try {
@@ -53,32 +57,70 @@ export function endMark(
   performance.clearMeasures(formattedLabel)
 }
 
-export function beginStoreMark<S>(
-  store: Store<S>,
-  phase: StoreMeasurementPhase,
-) {
-  if (enableUserTimingAPI) {
-    if (!supportsUserTiming) return
-    const componentName = getDisplayName(store)
-    const debugID = store.id
-    const label = getStoreLabel(componentName, phase)
-    const markName = getStoreMarkName(label, debugID)
-    beginMark(markName)
-    return true
-  }
+function beginStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
+  const componentName = getDisplayName(store)
+  const debugID = store.id
+  const label = getStoreLabel(componentName, phase)
+  const markName = getStoreMarkName(label, debugID)
+  beginMark(markName)
+  return true
 }
 
-export function endStoreMark<S>(
+function clearStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
+  const componentName = getDisplayName(store)
+  const debugID = store.id
+  const label = getStoreLabel(componentName, phase)
+  const markName = getStoreMarkName(label, debugID)
+  clearMark(markName)
+}
+
+function endStoreMark<S>(
   store: Store<S>,
   phase: StoreMeasurementPhase,
   warning: string | null,
 ) {
+  const componentName = getDisplayName(store)
+  const debugID = store.id
+  const label = getStoreLabel(componentName, phase)
+  const markName = getStoreMarkName(label, debugID)
+  endMark(label, markName, warning)
+}
+
+const clearPendingPhaseMeasurement = () => {
+  if (currentPhase !== null && currentPhaseStore !== null) {
+    clearStoreMark(currentPhaseStore, currentPhase)
+  }
+  currentPhaseStore = null
+  currentPhase = null
+  //hasScheduledUpdateInCurrentPhase = false
+}
+
+export function startPhaseTimer<S>(
+  store: Store<S>,
+  phase: StoreMeasurementPhase,
+): void {
   if (enableUserTimingAPI) {
-    if (!supportsUserTiming) return
-    const componentName = getDisplayName(store)
-    const debugID = store.id
-    const label = getStoreLabel(componentName, phase)
-    const markName = getStoreMarkName(label, debugID)
-    endMark(label, markName, warning)
+    if (!supportsUserTiming) {
+      return
+    }
+    clearPendingPhaseMeasurement()
+    if (!beginStoreMark(store, phase)) {
+      return
+    }
+    currentPhaseStore = store
+    currentPhase = phase
+  }
+}
+
+export function stopPhaseTimer(warning: string | null): void {
+  if (enableUserTimingAPI) {
+    if (!supportsUserTiming) {
+      return
+    }
+    if (currentPhase !== null && currentPhaseStore !== null) {
+      endStoreMark(currentPhaseStore, currentPhase, warning)
+    }
+    currentPhase = null
+    currentPhaseStore = null
   }
 }
