@@ -195,9 +195,7 @@ const fabric = {
     pushNext(
       <seq>
         <compute fn={newValue => fn(newValue)} />
-        <single>
-          <filter filter={result => result !== undefined} />
-        </single>
+        <filter filter={result => result !== undefined} />
         {graphite.seq}
       </seq>,
       parentGraphite.next,

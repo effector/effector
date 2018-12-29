@@ -33,13 +33,11 @@ describe('filter node will throw', () => {
         <single>
           <emit fullName="emit before filter node will throw" />
         </single>
-        <single>
-          <filter
-            filter={() => {
-              throw new Error('[expected error]')
-            }}
-          />
-        </single>
+        <filter
+          filter={() => {
+            throw new Error('[expected error]')
+          }}
+        />
         <multi>
           <single>
             <emit fullName="emit after filter node did throw" />
@@ -60,13 +58,11 @@ describe('filter node will throw', () => {
           <emit fullName="emit before filter node will throw" />
         </single>
         <multi>
-          <single>
-            <filter
-              filter={() => {
-                throw new Error('[expected error]')
-              }}
-            />
-          </single>
+          <filter
+            filter={() => {
+              throw new Error('[expected error]')
+            }}
+          />
           <single>
             <emit fullName="emit after filter node did throw" />
           </single>
@@ -229,9 +225,7 @@ describe('<filter /> execution cases', () => {
         <single>
           <emit fullName="[a] tested correctly" />
         </single>
-        <single>
-          <filter filter={fn} />
-        </single>
+        <filter filter={fn} />
         {next}
       </seq>
     )
@@ -250,9 +244,7 @@ describe('<filter /> execution cases', () => {
         <single>
           <emit fullName="[b] tested correctly" />
         </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
+        <filter filter={fn1} />
         <single>
           <run runner={fn2} />
         </single>
@@ -276,9 +268,7 @@ describe('<filter /> execution cases', () => {
         <single>
           <emit fullName="[c] tested correctly" />
         </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
+        <filter filter={fn1} />
         <single>
           <run runner={fn2} />
         </single>
@@ -303,9 +293,7 @@ describe('<filter /> execution cases', () => {
         <single>
           <emit fullName="[d] tested correctly" />
         </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
+        <filter filter={fn1} />
         <single>
           <run runner={fn2} />
         </single>

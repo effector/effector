@@ -77,6 +77,7 @@ export default function fx(
     switch (tag_) {
       case 'compute':
       case 'update':
+      case 'filter':
         return Step.single(result)
     }
     return result

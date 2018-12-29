@@ -32,13 +32,11 @@ export function storeFabric<State>(props: {
   def.next = <multi />
   def.seq = (
     <seq>
-      <single>
-        <filter
-          filter={newValue =>
-            newValue !== undefined && newValue !== plainState.current
-          }
-        />
-      </single>
+      <filter
+        filter={newValue =>
+          newValue !== undefined && newValue !== plainState.current
+        }
+      />
       <update store={plainState} />
       {def.next}
     </seq>
@@ -191,14 +189,12 @@ export function storeFabric<State>(props: {
             return handler(lastState, newValue, e.getType())
           }}
         />
-        <single>
-          <filter
-            filter={data => {
-              const lastState = getState()
-              return data !== lastState && data !== undefined
-            }}
-          />
-        </single>
+        <filter
+          filter={data => {
+            const lastState = getState()
+            return data !== lastState && data !== undefined
+          }}
+        />
         {store.graphite.seq}
       </seq>
     )
@@ -287,18 +283,17 @@ function mapStore<A, B>(
           return result
         }}
       />
-      <single>
-        <filter
-          filter={result => {
-            const lastState = innerStore.getState()
-            const isChanged = result !== lastState && result !== undefined
-            if (isChanged) {
-              lastResult = result
-            }
-            return isChanged
-          }}
-        />
-      </single>
+      <filter
+        filter={result => {
+          const lastState = innerStore.getState()
+          const isChanged = result !== lastState && result !== undefined
+          if (isChanged) {
+            lastResult = result
+          }
+          stopPhaseTimer(null)
+          return isChanged
+        }}
+      />
       {innerStore.graphite.seq}
     </seq>
   )
