@@ -8,13 +8,11 @@ import {beginStoreMark, endStoreMark} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
-import {visitRecord} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
-import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {type CompositeName} from '../compositeName'
@@ -215,10 +213,7 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitRecord(visitors.watch, {
-      __kind: eventOrFn?.kind,
-      args: {eventOrFn, fn},
-    })
+    return visitors.watch[String(eventOrFn?.kind || '__')]({eventOrFn, fn})
   }
 
   function stateSetter(_, payload) {

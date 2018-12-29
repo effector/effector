@@ -163,7 +163,6 @@
     "effector/stdlib/fx": "./src/stdlib/fx",
     "effector/stdlib/kind": "./src/stdlib/kind",
     "effector/stdlib/typedef": "./src/stdlib/typedef",
-    "effector/stdlib/visitor": "./src/stdlib/visitor",
     "effector/stdlib/stateref": "./src/stdlib/stateref",
     "effector/stdlib/iterator": "./src/stdlib/iterator",
     "effector/flags": "./src/flags.prod",
