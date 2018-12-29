@@ -175,14 +175,12 @@ export function storeFabric<State>(props: {
     const e: Event<any> = event
     const nextSeq = (
       <seq>
-        <single>
-          <compute
-            fn={newValue => {
-              const lastState = getState()
-              return handler(lastState, newValue, e.getType())
-            }}
-          />
-        </single>
+        <compute
+          fn={newValue => {
+            const lastState = getState()
+            return handler(lastState, newValue, e.getType())
+          }}
+        />
         <single>
           <filter
             filter={data => {
@@ -253,17 +251,15 @@ function mapStore<A, B>(
   })
   const nextSeq = (
     <seq>
-      <single>
-        <compute
-          fn={newValue => {
-            lastValue = newValue
-            const lastState = innerStore.getState()
-            const result = fn(newValue, lastState)
-            endStoreMark(store, 'map', null)
-            return result
-          }}
-        />
-      </single>
+      <compute
+        fn={newValue => {
+          lastValue = newValue
+          const lastState = innerStore.getState()
+          const result = fn(newValue, lastState)
+          endStoreMark(store, 'map', null)
+          return result
+        }}
+      />
       <single>
         <filter
           filter={result => {

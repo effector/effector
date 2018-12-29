@@ -166,9 +166,7 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
         {parentGraphite.seq}
       </seq>,
       graphite.next,
@@ -182,9 +180,7 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
         {graphite.seq}
       </seq>,
       parentGraphite.next,
@@ -198,9 +194,7 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
         <single>
           <filter filter={result => result !== undefined} />
         </single>
