@@ -22,6 +22,7 @@ const projects = [
   'stdlib',
   'babel',
   'DataStructures',
+  'perf',
 ]
 module.exports = {
   collectCoverage: true,
