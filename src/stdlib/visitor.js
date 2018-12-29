@@ -14,12 +14,3 @@ export function visitRecord<Args, R>(
 ): R {
   return visitor[String(cfg.__kind || '__')](cfg.args)
 }
-
-export function kindReader(eventOrFn: any): kind | void {
-  if (typeof eventOrFn === 'function') {
-    if (typeof eventOrFn.kind !== 'undefined')
-      return ((eventOrFn.kind: any): kind)
-  } else if (typeof eventOrFn === 'object' && eventOrFn !== null) {
-    if ('kind' in eventOrFn) return (eventOrFn.kind: kind)
-  }
-}

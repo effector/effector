@@ -8,7 +8,7 @@ import {beginStoreMark, endStoreMark} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
-import {visitRecord, kindReader} from 'effector/stdlib/visitor'
+import {visitRecord} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
@@ -216,7 +216,7 @@ export function storeFabric<State>(props: {
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
     return visitRecord(visitors.watch, {
-      __kind: kindReader(eventOrFn),
+      __kind: eventOrFn?.kind,
       args: {eventOrFn, fn},
     })
   }
