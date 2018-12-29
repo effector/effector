@@ -73,7 +73,12 @@ export default function fx(
 ) {
   if (tag in Cmd) {
     const tag_: 'compute' | 'emit' | 'filter' | 'run' | 'update' = (tag: any)
-    return Cmd[tag_](props)
+    const result = Cmd[tag_](props)
+    switch (tag_) {
+      case 'compute':
+        return Step.single(result)
+    }
+    return result
   }
   const tag_: 'single' | 'multi' | 'seq' | 'choose' = (tag: any)
   switch (tag_) {
