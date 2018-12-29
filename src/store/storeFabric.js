@@ -8,13 +8,11 @@ import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
-import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
-import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {type CompositeName} from '../compositeName'
@@ -50,29 +48,29 @@ export function storeFabric<State>(props: {
 
   const updater: any = createEvent('update ' + currentId)
 
-  const store = {
+  const store: $Shape<Store<State>> = {
     graphite: def,
-    defaultState,
     kind: Kind.store,
     id: currentId,
     shortName: currentId,
     domainName: parent,
     setState,
-    map,
     on,
     off,
     watch,
-    thru,
     subscribe,
     getState,
     reset,
     //$off
     [$$observable]: observable,
   }
+  ;(store: any).defaultState = defaultState
+  ;(store: any).map = mapStore.bind(null, store)
+  ;(store: any).thru = thru.bind(store)
+  ;(store: any).dispatch = dispatch
   //TODO fix type
   //$off
   if (name) setStoreName(store, name)
-  ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
   function getState() {
     return plainState.current
@@ -100,11 +98,6 @@ export function storeFabric<State>(props: {
         return subscribe(eventOrFn)
       },
     },
-  }
-
-  function map(fn, firstState) {
-    //$todo
-    return mapStore(store, fn, firstState)
   }
 
   function subscribe(listener) {
@@ -156,10 +149,6 @@ export function storeFabric<State>(props: {
     })
   }
 
-  function dispatch(action) {
-    return action
-  }
-
   function observable() {
     return {
       subscribe(observer) {
@@ -195,14 +184,12 @@ export function storeFabric<State>(props: {
     const e: Event<any> = event
     const nextSeq = (
       <seq>
-        <single>
-          <compute
-            fn={newValue => {
-              const lastState = getState()
-              return handler(lastState, newValue, e.getType())
-            }}
-          />
-        </single>
+        <compute
+          fn={newValue => {
+            const lastState = getState()
+            return handler(lastState, newValue, e.getType())
+          }}
+        />
         <single>
           <filter
             filter={data => {
@@ -224,10 +211,7 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitRecord(visitors.watch, {
-      __kind: kindReader(eventOrFn),
-      args: {eventOrFn, fn},
-    })
+    return visitors.watch[String(eventOrFn?.kind || '__')]({eventOrFn, fn})
   }
 
   function stateSetter(_, payload) {
@@ -241,11 +225,14 @@ export function storeFabric<State>(props: {
     updater(newResult)
   }
 
-  function thru(fn: Function) {
-    return fn(store)
-  }
-
   return store
+}
+
+function thru(fn: Function) {
+  return fn(this)
+}
+function dispatch(action) {
+  return action
 }
 
 export function getDisplayName<A>(store: Store<A>) {
@@ -274,17 +261,15 @@ function mapStore<A, B>(
   })
   const nextSeq = (
     <seq>
-      <single>
-        <compute
-          fn={newValue => {
-            startPhaseTimer(store, 'map')
-            lastValue = newValue
-            const lastState = innerStore.getState()
-            const result = fn(newValue, lastState)
-            return result
-          }}
-        />
-      </single>
+      <compute
+        fn={newValue => {
+          startPhaseTimer(store, 'map')
+          lastValue = newValue
+          const lastState = innerStore.getState()
+          const result = fn(newValue, lastState)
+          return result
+        }}
+      />
       <single>
         <filter
           filter={result => {

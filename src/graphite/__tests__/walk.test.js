@@ -167,9 +167,7 @@ describe('<choose /> execution cases', () => {
     //     </single>
     const selector = (
       <seq>
-        <single>
-          <compute fn={() => 'bar'} />
-        </single>
+        <compute fn={() => 'bar'} />
         <single>
           <update store={state} />
         </single>
@@ -177,26 +175,22 @@ describe('<choose /> execution cases', () => {
     )
     const caseFoo = (
       <seq>
-        <single>
-          <compute
-            fn={arg => {
-              fnFoo(arg)
-              return 'case foo'
-            }}
-          />
-        </single>
+        <compute
+          fn={arg => {
+            fnFoo(arg)
+            return 'case foo'
+          }}
+        />
       </seq>
     )
     const caseBar = (
       <seq>
-        <single>
-          <compute
-            fn={arg => {
-              fnBar(arg)
-              return 'case bar'
-            }}
-          />
-        </single>
+        <compute
+          fn={arg => {
+            fnBar(arg)
+            return 'case bar'
+          }}
+        />
       </seq>
     )
     const exec = (

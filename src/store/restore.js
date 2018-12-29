@@ -3,7 +3,6 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
 import {createStore} from './createStore'
-import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -56,11 +55,8 @@ const visitorRestore = {
 }
 
 export function restore(obj: any, defaultState: any): any {
-  return visitRecord(visitorRestore, {
-    args: {
-      obj,
-      defaultState,
-    },
-    __kind: kindReader(obj),
+  return visitorRestore[String(obj?.kind || '__')]({
+    obj,
+    defaultState,
   })
 }
