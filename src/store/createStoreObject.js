@@ -43,7 +43,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
       const substore: Store<any> = (child: any)
       //eslint-disable-next-line no-unused-vars
       const runCmd = <run runner={newValue => {}} />
-      runCmd.data.transactionContext = data => {
+      runCmd.data.data.transactionContext = data => {
         updates.push(state => {
           const nextState = [...state]
           nextState[key] = data
@@ -52,7 +52,8 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
         return commit
       }
       stateNew[key] = substore.getState()
-      pushNext(<single>{runCmd}</single>, substore.graphite.next)
+      //$todo
+      pushNext(runCmd, substore.graphite.next)
     }
   }
   const name = storeObjectArrayName(obj)
@@ -98,7 +99,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     if (substore.kind !== Kind.store) continue
     //eslint-disable-next-line no-unused-vars
     const runCmd = <run runner={newValue => {}} />
-    runCmd.data.transactionContext = data => {
+    runCmd.data.data.transactionContext = data => {
       updates.push(state =>
         Object.assign({}, state, {
           [key]: data,
@@ -107,7 +108,8 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
       return commit
     }
     stateNew[key] = substore.getState()
-    pushNext(<single>{runCmd}</single>, substore.graphite.next)
+    //$todo
+    pushNext(runCmd, substore.graphite.next)
   }
   //$todo
   const name = storeObjectName(obj)

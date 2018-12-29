@@ -122,10 +122,9 @@ function watchEvent<Payload>(
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
   const runCmd = (
-    <single>
-      <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
-    </single>
+    <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
   )
+  //$todo
   pushNext(runCmd, event.graphite.next)
   const unsubscribe = () => {
     const i = event.graphite.next.data.indexOf(runCmd)

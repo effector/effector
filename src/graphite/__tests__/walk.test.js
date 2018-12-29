@@ -16,13 +16,11 @@ function eventCtx(payload) {
 }
 const Next = () => (
   <multi>
-    <single>
-      <run
-        runner={(...args) => {
-          console.log(...args)
-        }}
-      />
-    </single>
+    <run
+      runner={(...args) => {
+        console.log(...args)
+      }}
+    />
   </multi>
 )
 describe('filter node will throw', () => {
@@ -110,9 +108,7 @@ describe('<run /> execution cases', () => {
         <single>
           <emit fullName="[a] tested correctly" />
         </single>
-        <single>
-          <run runner={fn} />
-        </single>
+        <run runner={fn} />
         {next}
       </seq>
     )
@@ -133,12 +129,8 @@ describe('<run /> execution cases', () => {
         <single>
           <emit fullName="[b] tested correctly" />
         </single>
-        <single>
-          <run runner={fn1} />
-        </single>
-        <single>
-          <run runner={fn2} />
-        </single>
+        <run runner={fn1} />
+        <run runner={fn2} />
         {next}
       </seq>
     )
@@ -197,9 +189,7 @@ describe('<choose /> execution cases', () => {
           selector={selector}
           cases={{foo: caseFoo, bar: caseBar}}
         />
-        <single>
-          <run runner={fnNext} />
-        </single>
+        <run runner={fnNext} />
         {next}
       </seq>
     )
@@ -245,9 +235,7 @@ describe('<filter /> execution cases', () => {
           <emit fullName="[b] tested correctly" />
         </single>
         <filter filter={fn1} />
-        <single>
-          <run runner={fn2} />
-        </single>
+        <run runner={fn2} />
         {next}
       </seq>
     )
@@ -269,9 +257,7 @@ describe('<filter /> execution cases', () => {
           <emit fullName="[c] tested correctly" />
         </single>
         <filter filter={fn1} />
-        <single>
-          <run runner={fn2} />
-        </single>
+        <run runner={fn2} />
         {next}
       </seq>
     )
@@ -294,9 +280,7 @@ describe('<filter /> execution cases', () => {
           <emit fullName="[d] tested correctly" />
         </single>
         <filter filter={fn1} />
-        <single>
-          <run runner={fn2} />
-        </single>
+        <run runner={fn2} />
         {next}
       </seq>
     )

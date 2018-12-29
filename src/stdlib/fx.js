@@ -78,6 +78,7 @@ export default function fx(
       case 'compute':
       case 'update':
       case 'filter':
+      case 'run':
         return Step.single(result)
     }
     return result

@@ -105,23 +105,21 @@ export function storeFabric<State>(props: {
     let lastCall = getState()
     let active = true
     const runCmd = (
-      <single>
-        <run
-          runner={args => {
-            let stopPhaseTimerMessage = null
-            startPhaseTimer(store, 'subscribe')
-            if (args === lastCall || !active) return
-            lastCall = args
-            try {
-              listener(args)
-            } catch (err) {
-              console.error(err)
-              stopPhaseTimerMessage = 'Got error'
-            }
-            stopPhaseTimer(stopPhaseTimerMessage)
-          }}
-        />
-      </single>
+      <run
+        runner={args => {
+          let stopPhaseTimerMessage = null
+          startPhaseTimer(store, 'subscribe')
+          if (args === lastCall || !active) return
+          lastCall = args
+          try {
+            listener(args)
+          } catch (err) {
+            console.error(err)
+            stopPhaseTimerMessage = 'Got error'
+          }
+          stopPhaseTimer(stopPhaseTimerMessage)
+        }}
+      />
     )
     pushNext(runCmd, store.graphite.next)
 
