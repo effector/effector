@@ -148,9 +148,7 @@ const fabric = {
     const nextSteps = <multi />
     const stepFull = (
       <seq>
-        <single>
-          <emit fullName={args.fullName} />
-        </single>
+        <emit fullName={args.fullName} />
         {nextSteps}
       </seq>
     )
