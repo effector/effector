@@ -39,9 +39,7 @@ export function storeFabric<State>(props: {
           }
         />
       </single>
-      <single>
-        <update store={plainState} />
-      </single>
+      <update store={plainState} />
       {def.next}
     </seq>
   )

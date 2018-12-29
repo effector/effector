@@ -168,9 +168,7 @@ describe('<choose /> execution cases', () => {
     const selector = (
       <seq>
         <compute fn={() => 'bar'} />
-        <single>
-          <update store={state} />
-        </single>
+        <update store={state} />
       </seq>
     )
     const caseFoo = (

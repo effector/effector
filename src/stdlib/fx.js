@@ -76,6 +76,7 @@ export default function fx(
     const result = Cmd[tag_](props)
     switch (tag_) {
       case 'compute':
+      case 'update':
         return Step.single(result)
     }
     return result
