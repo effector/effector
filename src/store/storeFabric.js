@@ -4,7 +4,7 @@
 import fx from 'effector/stdlib/fx'
 
 import invariant from 'invariant'
-import {beginStoreMark, endStoreMark} from 'effector/perf'
+import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
@@ -108,7 +108,6 @@ export function storeFabric<State>(props: {
   }
 
   function subscribe(listener) {
-    beginStoreMark(store, 'subscribe')
     invariant(
       typeof listener === 'function',
       'Expected the listener to be a function.',
@@ -119,21 +118,31 @@ export function storeFabric<State>(props: {
       <single>
         <run
           runner={args => {
+            startPhaseTimer(store, 'subscribe')
             if (args === lastCall || !active) return
             lastCall = args
             try {
               listener(args)
-              endStoreMark(store, 'subscribe', null)
+              stopPhaseTimer(null)
             } catch (err) {
               console.error(err)
-              endStoreMark(store, 'subscribe', 'Got error')
+              stopPhaseTimer('Got error')
             }
           }}
         />
       </single>
     )
     pushNext(runCmd, store.graphite.next)
-    listener(lastCall)
+
+    startPhaseTimer(store, 'subscribe')
+    try {
+      listener(lastCall)
+      stopPhaseTimer('Initial')
+    } catch (err) {
+      console.error(err)
+      stopPhaseTimer('Got initial error')
+    }
+
     function unsubscribe() {
       active = false
       const i = store.graphite.next.data.indexOf(runCmd)
@@ -254,9 +263,10 @@ function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
-  beginStoreMark(store, 'map')
+  startPhaseTimer(store, 'map')
   let lastValue = store.getState()
   let lastResult = fn(lastValue, firstState)
+  stopPhaseTimer('Initial')
   const innerStore: Store<any> = storeFabric({
     name: '' + store.shortName + ' → *',
     currentState: lastResult,
@@ -267,10 +277,10 @@ function mapStore<A, B>(
       <single>
         <compute
           fn={newValue => {
+            startPhaseTimer(store, 'map')
             lastValue = newValue
             const lastState = innerStore.getState()
             const result = fn(newValue, lastState)
-            endStoreMark(store, 'map', null)
             return result
           }}
         />
@@ -283,6 +293,7 @@ function mapStore<A, B>(
             if (isChanged) {
               lastResult = result
             }
+            stopPhaseTimer(null)
             return isChanged
           }}
         />
