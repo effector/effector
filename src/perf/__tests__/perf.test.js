@@ -121,6 +121,21 @@ describe('perf', () => {
     expect(getFlameChart()).toMatchSnapshot()
   })
 
+  it('supports throwing error store.map', async() => {
+    const event = effector.createEvent('default update')
+    const parent = effector.createStore('wat')
+    parent.on(event, (_, p) => p)
+    const child = parent.map(v => {
+      throw new Error('wat')
+    })
+    child.watch(() => {})
+
+    event('a')
+    event('b')
+
+    expect(getFlameChart()).toMatchSnapshot()
+  })
+
   it('supports store.subscribe', async() => {
     const event = effector.createEvent('default update')
     const parent = effector.createStore('wat')
