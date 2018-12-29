@@ -252,8 +252,14 @@ function mapStore<A, B>(
 ): Store<B> {
   startPhaseTimer(store, 'map')
   let lastValue = store.getState()
-  let lastResult = fn(lastValue, firstState)
-  stopPhaseTimer('Initial')
+  let lastResult
+  try {
+    lastResult = fn(lastValue, firstState)
+    stopPhaseTimer('Initial')
+  } catch (err) {
+    console.error(err)
+    stopPhaseTimer('Got initial error')
+  }
   const innerStore: Store<any> = storeFabric({
     name: '' + store.shortName + ' → *',
     currentState: lastResult,
@@ -266,7 +272,14 @@ function mapStore<A, B>(
           startPhaseTimer(store, 'map')
           lastValue = newValue
           const lastState = innerStore.getState()
-          const result = fn(newValue, lastState)
+          let result
+          try {
+            result = fn(newValue, lastState)
+            stopPhaseTimer(null)
+          } catch (err) {
+            console.error(err)
+            stopPhaseTimer('Got error')
+          }
           return result
         }}
       />
@@ -278,7 +291,6 @@ function mapStore<A, B>(
             if (isChanged) {
               lastResult = result
             }
-            stopPhaseTimer(null)
             return isChanged
           }}
         />
