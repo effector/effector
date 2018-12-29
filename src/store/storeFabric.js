@@ -105,22 +105,24 @@ export function storeFabric<State>(props: {
       typeof listener === 'function',
       'Expected the listener to be a function.',
     )
+    let stopPhaseTimerMessage = null
     let lastCall = getState()
     let active = true
     const runCmd = (
       <single>
         <run
           runner={args => {
+            let stopPhaseTimerMessage = null
             startPhaseTimer(store, 'subscribe')
             if (args === lastCall || !active) return
             lastCall = args
             try {
               listener(args)
-              stopPhaseTimer(null)
             } catch (err) {
               console.error(err)
-              stopPhaseTimer('Got error')
+              stopPhaseTimerMessage = 'Got error'
             }
+            stopPhaseTimer(stopPhaseTimerMessage)
           }}
         />
       </single>
@@ -130,11 +132,12 @@ export function storeFabric<State>(props: {
     startPhaseTimer(store, 'subscribe')
     try {
       listener(lastCall)
-      stopPhaseTimer('Initial')
+      stopPhaseTimerMessage = 'Initial'
     } catch (err) {
       console.error(err)
-      stopPhaseTimer('Got initial error')
+      stopPhaseTimerMessage = 'Got initial error'
     }
+    stopPhaseTimer(stopPhaseTimerMessage)
 
     function unsubscribe() {
       active = false
@@ -253,13 +256,15 @@ function mapStore<A, B>(
   startPhaseTimer(store, 'map')
   let lastValue = store.getState()
   let lastResult
+  let stopPhaseTimerMessage = null
   try {
     lastResult = fn(lastValue, firstState)
-    stopPhaseTimer('Initial')
+    stopPhaseTimerMessage = 'Initial'
   } catch (err) {
     console.error(err)
-    stopPhaseTimer('Got initial error')
+    stopPhaseTimerMessage = 'Got initial error'
   }
+  stopPhaseTimer(stopPhaseTimerMessage)
   const innerStore: Store<any> = storeFabric({
     name: '' + store.shortName + ' → *',
     currentState: lastResult,
@@ -271,15 +276,16 @@ function mapStore<A, B>(
         fn={newValue => {
           startPhaseTimer(store, 'map')
           lastValue = newValue
+          let stopPhaseTimerMessage = null
           const lastState = innerStore.getState()
           let result
           try {
             result = fn(newValue, lastState)
-            stopPhaseTimer(null)
           } catch (err) {
             console.error(err)
-            stopPhaseTimer('Got error')
+            stopPhaseTimerMessage = 'Got error'
           }
+          stopPhaseTimer(stopPhaseTimerMessage)
           return result
         }}
       />
