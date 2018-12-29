@@ -48,29 +48,29 @@ export function storeFabric<State>(props: {
 
   const updater: any = createEvent('update ' + currentId)
 
-  const store = {
+  const store: $Shape<Store<State>> = {
     graphite: def,
-    defaultState,
     kind: Kind.store,
     id: currentId,
     shortName: currentId,
     domainName: parent,
     setState,
-    map,
     on,
     off,
     watch,
-    thru,
     subscribe,
     getState,
     reset,
     //$off
     [$$observable]: observable,
   }
+  ;(store: any).defaultState = defaultState
+  ;(store: any).map = mapStore.bind(null, store)
+  ;(store: any).thru = thru.bind(store)
+  ;(store: any).dispatch = dispatch
   //TODO fix type
   //$off
   if (name) setStoreName(store, name)
-  ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
   function getState() {
     return plainState.current
@@ -98,11 +98,6 @@ export function storeFabric<State>(props: {
         return subscribe(eventOrFn)
       },
     },
-  }
-
-  function map(fn, firstState) {
-    //$todo
-    return mapStore(store, fn, firstState)
   }
 
   function subscribe(listener) {
@@ -143,10 +138,6 @@ export function storeFabric<State>(props: {
       (): void,
       unsubscribe(): void,
     })
-  }
-
-  function dispatch(action) {
-    return action
   }
 
   function observable() {
@@ -227,11 +218,14 @@ export function storeFabric<State>(props: {
     updater(newResult)
   }
 
-  function thru(fn: Function) {
-    return fn(store)
-  }
-
   return store
+}
+
+function thru(fn: Function) {
+  return fn(this)
+}
+function dispatch(action) {
+  return action
 }
 
 export function getDisplayName<A>(store: Store<A>) {
