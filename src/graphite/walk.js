@@ -1,82 +1,56 @@
 //@flow
-import invariant from 'invariant'
+// import invariant from 'invariant'
 import type {Event} from 'effector/event'
-import type {StateRef} from 'effector/stdlib/stateref'
+// import type {StateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
 
-import callstack from './callstack'
-
 export function walkEvent<T>(payload: T, event: Event<T>) {
-  const steps: TypeDef<'seq', 'step'> = event.graphite.seq
-  const eventCtx = Ctx.emit({
-    eventName: event.getType(),
-    payload,
-  })
-  walkNode(steps, eventCtx)
+  walkNode(
+    event.graphite.seq,
+    Ctx.emit({
+      __stepArg: payload,
+    }),
+  )
 }
 
 type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
+type Reg = {
+  isChanged: boolean,
+}
 type Meta = {
   ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
   stop: boolean,
   transactions: Array<() => void>,
   arg: any,
+  reg: Reg,
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
-    transactions: ([]: Array<() => void>),
+    transactions: [],
     stop: false,
     ctx,
+    reg: {
+      isChanged: true,
+    },
   }
-  runStep(seq, ctx, meta)
+  runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
     meta.transactions[i]()
   }
   meta.transactions.length = 0
 }
+
 function runStep(step, ctx: *, meta) {
-  invariant(step.type in stepVisitor, 'impossible case "%s"', step.type)
-  callstack.pushBox(step)
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
-  callstack.popBox()
 }
-const stepVisitor = {
-  choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
-    const localState: StateRef = step.data.state
-    const selector: TypeDef<*, 'step'> = step.data.selector
-    const cases: {+[key: string]: TypeDef<*, 'step'>} = step.data.cases
-    runStep(selector, ctx, meta)
-    const caseName = localState.current
-    //optional
-    invariant(
-      typeof caseName === 'string',
-      'incorrect selector "%s" for id %s',
-      caseName,
-      localState.id,
-    )
-    let next
-    if (caseName in cases) {
-      next = cases[caseName]
-    } else if ('__' in cases) {
-      next = cases.__
-    } else {
-      console.error('no case "%s" exists', caseName)
-      return
-    }
-    runStep(next, ctx, meta)
-  },
 
+const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
-    const single: TypeDef<*, 'cmd'> = step.data
-    invariant(single.type in command, 'impossible case "%s"', single.type)
-    invariant(ctx.type in command, 'impossible case "%s"', ctx.type)
-    callstack.pushItem(single)
-    meta.arg = command[ctx.type].stepArg(ctx.data)
-    meta.ctx = command[single.type].cmd(single, ctx, meta)
-    meta.stop = !command[meta.ctx.type].transition(meta.ctx)
-    callstack.popItem()
+    meta.arg = ctx.data.__stepArg
+    meta.ctx = command[step.data.type].cmd(step.data, meta)
+    meta.stop = !command[meta.ctx.type].transition(meta.reg)
   },
   multi(step, ctx, meta) {
     for (let i = 0; i < step.data.length; i++) {
@@ -93,99 +67,96 @@ const stepVisitor = {
       }
     }
   },
+  choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+    type Cases = {+[key: string]: TypeDef<*, 'step'>}
+    const cases: Cases = step.data.cases
+    runStep(step.data.selector, ctx, meta)
+    const caseName = String(step.data.state.current)
+    let next
+    if (caseName in cases) {
+      next = cases[caseName]
+    } else if ('__' in cases) {
+      next = cases.__
+    } else {
+      console.error('no case "%s" exists', caseName)
+      return
+    }
+    runStep(next, ctx, meta)
+  },
 }
 
 type Command<tag> = /*:: interface */ {
-  cmd(
-    single: TypeDef<tag, 'cmd'>,
-    ctx: CommonCtx,
-    meta: Meta,
-  ): TypeDef<tag, 'ctx'>,
-  transition(ctx: CommonCtx): boolean,
-  stepArg(data: any): any,
+  cmd(single: TypeDef<tag, 'cmd'>, meta: Meta): TypeDef<tag, 'ctx'>,
+  transition(reg: Reg): boolean,
 }
 
 const command = ({
   emit: {
-    cmd: (single, ctx, meta) =>
+    cmd: (single, meta) =>
       Ctx.emit({
-        eventName: single.data.fullName,
-        payload: meta.arg,
+        __stepArg: meta.arg,
       }),
     transition: () => true,
-    stepArg: data => data.payload,
   },
   filter: {
-    cmd(single, ctx, meta) {
-      const arg = meta.arg
-
-      let isChanged = false
-      try {
-        isChanged = single.data.filter(arg)
-      } catch (err) {
-        console.error(err)
-      }
-      return Ctx.filter({
-        value: arg,
-        isChanged,
+    cmd(single, meta) {
+      const ctx = Ctx.filter({
+        __stepArg: meta.arg,
       })
+      const runCtx = tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.filter,
+      })
+      meta.reg.isChanged = Boolean(runCtx.result)
+      return ctx
     },
-    transition: ctx => Boolean(ctx.data.isChanged),
-    stepArg: data => data.value,
+    transition: reg => Boolean(reg.isChanged),
   },
   run: {
-    cmd(single, ctx, meta) {
-      const arg = meta.arg
+    cmd(single, meta) {
+      const ctx = Ctx.run({})
 
       if ('transactionContext' in single.data)
-        meta.transactions.push(single.data.transactionContext(arg))
-      try {
-        single.data.runner(arg)
-      } catch (err) {
-        console.error(err)
-      }
-      return Ctx.run({
-        args: [arg],
-        parentContext: ctx,
+        meta.transactions.push(single.data.transactionContext(meta.arg))
+      tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.runner,
       })
+      return ctx
     },
     transition: () => false,
-    stepArg: () => invariant(false, 'RunContext is not supported'),
   },
   update: {
-    cmd(single, ctx, meta) {
+    cmd(single, meta) {
       single.data.store.current = meta.arg
-      return Ctx.update({value: meta.arg})
+      return Ctx.update({
+        __stepArg: meta.arg,
+      })
     },
     transition: () => true,
-    stepArg: data => data.value,
   },
   compute: {
-    cmd(single, ctx, meta) {
-      const arg = meta.arg
-
+    cmd(single, meta) {
       const newCtx = Ctx.compute({
-        args: [arg],
-        result: null,
-        error: null,
-        isError: false,
-        isNone: true,
-        isChanged: true,
+        __stepArg: null,
       })
-      try {
-        const result = single.data.fn(arg)
-        newCtx.data.result = result
-        newCtx.data.isNone = result === undefined
-      } catch (err) {
-        console.error(err)
-        newCtx.data.isError = true
-        newCtx.data.error = err
-        newCtx.data.isChanged = false
+      const runCtx = tryRun({
+        err: false,
+        result: (null: any),
+        arg: meta.arg,
+        fn: single.data.fn,
+      })
+      meta.reg.isChanged = !runCtx.err && runCtx.result !== undefined
+      if (!runCtx.err) {
+        newCtx.data.__stepArg = runCtx.result
       }
       return newCtx
     },
-    transition: ctx => Boolean(ctx.data.isChanged),
-    stepArg: data => data.result,
+    transition: reg => Boolean(reg.isChanged),
   },
 }: {
   emit: Command<'emit'>,
@@ -194,3 +165,13 @@ const command = ({
   update: Command<'update'>,
   compute: Command<'compute'>,
 })
+
+function tryRun(ctx) {
+  try {
+    ctx.result = ctx.fn(ctx.arg)
+  } catch (err) {
+    console.error(err)
+    ctx.err = true
+  }
+  return ctx
+}

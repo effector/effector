@@ -4,17 +4,15 @@
 import fx from 'effector/stdlib/fx'
 
 import invariant from 'invariant'
-import * as perf from 'effector/perf'
+import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
 import {pushNext} from 'effector/stdlib/typedef'
-import {visitRecord, kindReader} from 'effector/stdlib/visitor'
 
 import $$observable from 'symbol-observable'
 
 import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent, type Event} from 'effector/event'
-import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
 import {type CompositeName} from '../compositeName'
@@ -34,133 +32,84 @@ export function storeFabric<State>(props: {
   def.next = <multi />
   def.seq = (
     <seq>
-      <single>
-        <filter
-          filter={newValue =>
-            newValue !== undefined && newValue !== plainState.current
-          }
-        />
-      </single>
-      <single>
-        <update store={plainState} />
-      </single>
+      <filter
+        filter={newValue =>
+          newValue !== undefined && newValue !== plainState.current
+        }
+      />
+      <update store={plainState} />
       {def.next}
     </seq>
   )
 
   const updater: any = createEvent('update ' + currentId)
 
-  const store = {
+  const store: $Shape<Store<State>> = {
     graphite: def,
-    defaultState,
     kind: Kind.store,
     id: currentId,
     shortName: currentId,
     domainName: parent,
     setState,
-    map,
     on,
     off,
     watch,
-    thru,
     subscribe,
     getState,
     reset,
     //$off
     [$$observable]: observable,
   }
+  ;(store: any).defaultState = defaultState
+  ;(store: any).map = mapStore.bind(null, store)
+  ;(store: any).thru = thru.bind(store)
+  ;(store: any).dispatch = dispatch
   //TODO fix type
   //$off
   if (name) setStoreName(store, name)
-  ;(store: any).dispatch = dispatch
   store.on(updater, (_, payload) => payload)
   function getState() {
     return plainState.current
   }
 
-  const visitors = {
-    watch: {
-      event({eventOrFn, fn}) {
-        invariant(typeof fn === 'function', 'watch requires function handler')
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      },
-      effect({eventOrFn, fn}) {
-        invariant(typeof fn === 'function', 'watch requires function handler')
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      },
-      __({eventOrFn}) {
-        invariant(
-          typeof eventOrFn === 'function',
-          'watch requires function handler',
-        )
-        return subscribe(eventOrFn)
-      },
-    },
-  }
-
-  function map(fn, firstState) {
-    //$todo
-    return mapStore(store, fn, firstState)
-  }
-
   function subscribe(listener) {
-    if (__DEBUG__)
-      perf.beginMark(
-        'Start ' + getDisplayName(store) + ' subscribe (id: ' + store.id + ')',
-      )
     invariant(
       typeof listener === 'function',
       'Expected the listener to be a function.',
     )
+    let stopPhaseTimerMessage = null
     let lastCall = getState()
     let active = true
     const runCmd = (
-      <single>
-        <run
-          runner={args => {
-            if (args === lastCall || !active) return
-            lastCall = args
-            try {
-              listener(args)
-              if (__DEBUG__)
-                perf.endMark(
-                  'Call ' +
-                    getDisplayName(store) +
-                    ' subscribe listener (id: ' +
-                    store.id +
-                    ')',
-                  'Start ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                )
-            } catch (err) {
-              console.error(err)
-              if (__DEBUG__)
-                perf.endMark(
-                  'Got error on ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                  'Start ' +
-                    getDisplayName(store) +
-                    ' subscribe (id: ' +
-                    store.id +
-                    ')',
-                )
-            }
-          }}
-        />
-      </single>
+      <run
+        runner={args => {
+          let stopPhaseTimerMessage = null
+          startPhaseTimer(store, 'subscribe')
+          if (args === lastCall || !active) return
+          lastCall = args
+          try {
+            listener(args)
+          } catch (err) {
+            console.error(err)
+            stopPhaseTimerMessage = 'Got error'
+          }
+          stopPhaseTimer(stopPhaseTimerMessage)
+        }}
+      />
     )
+    //$todo
     pushNext(runCmd, store.graphite.next)
-    listener(lastCall)
+
+    startPhaseTimer(store, 'subscribe')
+    try {
+      listener(lastCall)
+      stopPhaseTimerMessage = 'Initial'
+    } catch (err) {
+      console.error(err)
+      stopPhaseTimerMessage = 'Got initial error'
+    }
+    stopPhaseTimer(stopPhaseTimerMessage)
+
     function unsubscribe() {
       active = false
       const i = store.graphite.next.data.indexOf(runCmd)
@@ -168,14 +117,7 @@ export function storeFabric<State>(props: {
       store.graphite.next.data.splice(i, 1)
     }
     unsubscribe.unsubscribe = unsubscribe
-    return (unsubscribe: {
-      (): void,
-      unsubscribe(): void,
-    })
-  }
-
-  function dispatch(action) {
-    return action
+    return unsubscribe
   }
 
   function observable() {
@@ -213,22 +155,18 @@ export function storeFabric<State>(props: {
     const e: Event<any> = event
     const nextSeq = (
       <seq>
-        <single>
-          <compute
-            fn={newValue => {
-              const lastState = getState()
-              return handler(lastState, newValue, e.getType())
-            }}
-          />
-        </single>
-        <single>
-          <filter
-            filter={data => {
-              const lastState = getState()
-              return data !== lastState && data !== undefined
-            }}
-          />
-        </single>
+        <compute
+          fn={newValue => {
+            const lastState = getState()
+            return handler(lastState, newValue, e.getType())
+          }}
+        />
+        <filter
+          filter={data => {
+            const lastState = getState()
+            return data !== lastState && data !== undefined
+          }}
+        />
         {store.graphite.seq}
       </seq>
     )
@@ -242,10 +180,22 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitRecord(visitors.watch, {
-      __kind: kindReader(eventOrFn),
-      args: {eventOrFn, fn},
-    })
+    const kind = String(eventOrFn?.kind || '__')
+    switch (kind) {
+      case 'event':
+      case 'effect':
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
+      case '__':
+      default:
+        invariant(
+          typeof eventOrFn === 'function',
+          'watch requires function handler',
+        )
+        return subscribe(eventOrFn)
+    }
   }
 
   function stateSetter(_, payload) {
@@ -259,11 +209,14 @@ export function storeFabric<State>(props: {
     updater(newResult)
   }
 
-  function thru(fn: Function) {
-    return fn(store)
-  }
-
   return store
+}
+
+function thru(fn: Function) {
+  return fn(this)
+}
+function dispatch(action) {
+  return action
 }
 
 export function getDisplayName<A>(store: Store<A>) {
@@ -281,10 +234,18 @@ function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
-  if (__DEBUG__)
-    perf.beginMark(`Start ${getDisplayName(store)} map (id: ${store.id})`)
+  startPhaseTimer(store, 'map')
   let lastValue = store.getState()
-  let lastResult = fn(lastValue, firstState)
+  let lastResult
+  let stopPhaseTimerMessage = null
+  try {
+    lastResult = fn(lastValue, firstState)
+    stopPhaseTimerMessage = 'Initial'
+  } catch (err) {
+    console.error(err)
+    stopPhaseTimerMessage = 'Got initial error'
+  }
+  stopPhaseTimer(stopPhaseTimerMessage)
   const innerStore: Store<any> = storeFabric({
     name: '' + store.shortName + ' → *',
     currentState: lastResult,
@@ -292,37 +253,34 @@ function mapStore<A, B>(
   })
   const nextSeq = (
     <seq>
-      <single>
-        <compute
-          fn={newValue => {
-            lastValue = newValue
-            const lastState = innerStore.getState()
-            const result = fn(newValue, lastState)
-            if (__DEBUG__)
-              perf.endMark(
-                'Map ' + getDisplayName(store) + ' (id: ${store.id})',
-                'Start ' +
-                  getDisplayName(store) +
-                  ' subscribe (id: ' +
-                  store.id +
-                  ')',
-              )
-            return result
-          }}
-        />
-      </single>
-      <single>
-        <filter
-          filter={result => {
-            const lastState = innerStore.getState()
-            const isChanged = result !== lastState && result !== undefined
-            if (isChanged) {
-              lastResult = result
-            }
-            return isChanged
-          }}
-        />
-      </single>
+      <compute
+        fn={newValue => {
+          startPhaseTimer(store, 'map')
+          lastValue = newValue
+          let stopPhaseTimerMessage = null
+          const lastState = innerStore.getState()
+          let result
+          try {
+            result = fn(newValue, lastState)
+          } catch (err) {
+            console.error(err)
+            stopPhaseTimerMessage = 'Got error'
+          }
+          stopPhaseTimer(stopPhaseTimerMessage)
+          return result
+        }}
+      />
+      <filter
+        filter={result => {
+          const lastState = innerStore.getState()
+          const isChanged = result !== lastState && result !== undefined
+          if (isChanged) {
+            lastResult = result
+          }
+          stopPhaseTimer(null)
+          return isChanged
+        }}
+      />
       {innerStore.graphite.seq}
     </seq>
   )

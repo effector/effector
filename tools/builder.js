@@ -107,7 +107,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"OjAK":[function(require,module,exports) {
 module.exports = {
   "name": "effector-dev",
-  "version": "0.18.0-rc.2",
+  "version": "0.18.0",
   "description": "Reactive state manager",
   "typings": "index.d.ts",
   "private": true,
@@ -119,6 +119,7 @@ module.exports = {
     "server": "micro",
     "test": "npx jest --config=jest.config.js",
     "bench": "node --expose-gc bench/bench.test.js",
+    "perfsnake": "npx parcel serve --no-hmr --no-autoinstall tools/perfsnake/index.html",
     "prepublish:all": "npm run build",
     "prepublish:next": "npm run build",
     "publish:all": "node scripts/publish.js",
@@ -266,7 +267,6 @@ module.exports = {
     "effector/stdlib/fx": "./src/stdlib/fx",
     "effector/stdlib/kind": "./src/stdlib/kind",
     "effector/stdlib/typedef": "./src/stdlib/typedef",
-    "effector/stdlib/visitor": "./src/stdlib/visitor",
     "effector/stdlib/stateref": "./src/stdlib/stateref",
     "effector/stdlib/iterator": "./src/stdlib/iterator",
     "effector/flags": "./src/flags.prod",
@@ -403,12 +403,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 //$off
 // import
 const minifyConfig = ({
-  prettify,
-  toplevel = true
+  prettify
 }) => ({
   ecma: 8,
   mangle: {
-    toplevel
+    toplevel: true,
+    module: true,
+    reserved: ['effector', 'effectorVue', 'effectorReact', 'it']
   },
   compress: {
     pure_getters: true
@@ -432,8 +433,7 @@ const getPlugins = (name, type = 'cjs') => ({
   commonjs: (0, _rollupPluginCommonjs.default)({}),
   resolve: (0, _rollupPluginNodeResolve.default)({}),
   terser: (0, _rollupPluginTerser.terser)(minifyConfig({
-    prettify: !!process.env.PRETTIFY,
-    toplevel: type !== 'umd'
+    prettify: !!process.env.PRETTIFY
   })),
   sizeSnapshot: (0, _rollupPluginSizeSnapshot.sizeSnapshot)()
 });
@@ -586,11 +586,11 @@ const maintainers = [{
   email: 'andwebar@gmail.com'
 }];
 const version = {
-  effector: '0.18.0-rc.2',
-  'effector-react': '0.18.0-rc.2',
-  'effector-vue': '0.18.0-rc.2',
-  'bs-effector': '0.18.0-rc.2',
-  'bs-effector-react': '0.18.0-rc.2'
+  effector: '0.18.0',
+  'effector-react': '0.18.0',
+  'effector-vue': '0.18.0',
+  'bs-effector': '0.18.0',
+  'bs-effector-react': '0.18.0'
 };
 
 const getFiles = name => ['README.md', 'LICENSE', `${name}.es.js`, `${name}.cjs.js`, `${name}.es.js.map`, `${name}.cjs.js.map`, `${name}.cjs.js.flow`, `${name}.es.js.flow`, 'index.d.ts', 'index.js.flow'];
@@ -635,7 +635,7 @@ var _default = {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2'
+      effector: '^0.18.0'
     },
     peerDependencies: {
       react: '*'
@@ -664,7 +664,7 @@ var _default = {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2'
+      effector: '^0.18.0'
     },
     peerDependencies: {
       vue: '*'
@@ -692,7 +692,7 @@ var _default = {
       effector: '*'
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/Effector.re', 'bsconfig.json'],
     keywords: ['bucklescript', 'reason', 'bsb', 'data', 'datastructure', 'functional', 'collection', 'state', 'store', 'reactive', 'streams', 'actions', 'effects', 'redux'],
     repository: 'https://github.com/zerobias/effector',
     bugs: 'https://github.com/zerobias/effector/issues'
@@ -711,7 +711,7 @@ var _default = {
       'reason-react': '*'
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/EffectorReact.re', 'bsconfig.json'],
     keywords: ['bucklescript', 'reason', 'bsb', 'data', 'datastructure', 'functional', 'collection', 'state', 'store', 'reactive', 'streams', 'actions', 'effects', 'redux', 'react'],
     repository: 'https://github.com/zerobias/effector',
     bugs: 'https://github.com/zerobias/effector/issues'
@@ -818,10 +818,10 @@ var _default = (0, _utils.taskList)({
     'effector-vue': [() => (0, _utils.outputPackageJSON)('packages/effector-vue/package.json', _packages.default['effector-vue']), () => (0, _utils.massCopy)('.', 'npm/effector-vue', ['LICENSE']), () => (0, _utils.massCopy)('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]]), _rollup.rollupEffectorVue, publishScript('effector-vue')],
     'bs-effector': [() => (0, _utils.outputPackageJSON)('packages/bs-effector/package.json', _packages.default['bs-effector']), () => fs.outputJSON('packages/bs-effector/bsconfig.json', _bsconfigs.default['bs-effector'], {
       spaces: 2
-    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json', 'src/Effector.re']), publishScript('bs-effector')],
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector', ['LICENSE']), () => (0, _utils.massCopy)('src/reason', 'npm/bs-effector', [['Effector.re', 'src/Effector.re']]), () => (0, _utils.massCopy)('packages/bs-effector', 'npm/bs-effector', ['README.md', 'package.json', 'bsconfig.json']), publishScript('bs-effector')],
     'bs-effector-react': [() => (0, _utils.outputPackageJSON)('packages/bs-effector-react/package.json', _packages.default['bs-effector-react']), () => fs.outputJSON('packages/bs-effector-react/bsconfig.json', _bsconfigs.default['bs-effector-react'], {
       spaces: 2
-    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json', 'src/EffectorReact.re']), publishScript('bs-effector-react')]
+    }), () => (0, _utils.massCopy)('.', 'npm/bs-effector-react', ['LICENSE']), () => (0, _utils.massCopy)('src/reason', 'npm/bs-effector-react', [['EffectorReact.re', 'src/EffectorReact.re']]), () => (0, _utils.massCopy)('packages/bs-effector-react', 'npm/bs-effector-react', ['README.md', 'package.json', 'bsconfig.json']), publishScript('bs-effector-react')]
   },
   hooks: {
     beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)]

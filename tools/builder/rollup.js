@@ -16,17 +16,12 @@ import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 import {dir, getSourcemapPathTransform} from './utils'
 // import
 
-const minifyConfig = ({
-  prettify,
-  toplevel = true,
-}: {
-  prettify: boolean,
-  top_retain?: ?RegExp,
-  toplevel?: boolean,
-}) => ({
+const minifyConfig = ({prettify}: {prettify: boolean}) => ({
   ecma: 8,
   mangle: {
-    toplevel,
+    toplevel: true,
+    module: true,
+    reserved: ['effector', 'effectorVue', 'effectorReact', 'it'],
   },
   compress: {
     pure_getters: true,
@@ -58,7 +53,6 @@ export const getPlugins = (
   terser: terser(
     minifyConfig({
       prettify: !!process.env.PRETTIFY,
-      toplevel: type !== 'umd',
     }),
   ),
   sizeSnapshot: sizeSnapshot(),

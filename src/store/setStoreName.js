@@ -1,9 +1,52 @@
 //@flow
 
 import type {Store} from './index.h'
+import {getDisplayName} from 'effector/store'
 import {Kind} from 'effector/stdlib/kind'
 import {__DEBUG__} from 'effector/flags'
 import {createName} from '../compositeName'
+
+const storeObjectMaxNames = 25
+
+export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
+  let i = 0
+  const max = storeObjectMaxNames - 1
+  const maxLength = arr.length - 1
+  let name = 'combine('
+  for (const store of arr) {
+    const comma = i === max || maxLength === i ? '' : ', '
+    if (store.kind !== Kind.store) {
+      name += store.toString() + comma
+    } else {
+      name += getDisplayName(store) + comma
+    }
+    i += 1
+    if (comma === '') break
+  }
+  name += ')'
+  return name
+}
+
+export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
+  let i = 0
+  const keys = Object.keys(obj)
+  const max = storeObjectMaxNames - 1
+  const maxLength = keys.length - 1
+  let name = 'combine('
+  for (const key in obj) {
+    const comma = i === max || maxLength === i ? '' : ', '
+    const store = obj[key]
+    if (store.kind !== Kind.store) {
+      name += store.toString() + comma
+    } else {
+      name += getDisplayName(store) + comma
+    }
+    i += 1
+    if (comma === '') break
+  }
+  name += ')'
+  return name
+}
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)

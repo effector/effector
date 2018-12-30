@@ -9,21 +9,18 @@ import {createStateRef} from 'effector/stdlib/stateref'
 import {createEvent} from 'effector/event'
 import {walkNode} from '../walk'
 
-function eventCtx(payload, event) {
+function eventCtx(payload) {
   return Ctx.emit({
-    eventName: event.getType(),
-    payload,
+    __stepArg: payload,
   })
 }
 const Next = () => (
   <multi>
-    <single>
-      <run
-        runner={(...args) => {
-          console.log(...args)
-        }}
-      />
-    </single>
+    <run
+      runner={(...args) => {
+        console.log(...args)
+      }}
+    />
   </multi>
 )
 describe('filter node will throw', () => {
@@ -31,53 +28,41 @@ describe('filter node will throw', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="emit before filter node will throw" />
-        </single>
-        <single>
-          <filter
-            filter={() => {
-              throw new Error('[expected error]')
-            }}
-          />
-        </single>
+        <emit fullName="emit before filter node will throw" />
+        <filter
+          filter={() => {
+            throw new Error('[expected error]')
+          }}
+        />
         <multi>
-          <single>
-            <emit fullName="emit after filter node did throw" />
-          </single>
+          <emit fullName="emit after filter node did throw" />
         </multi>
         {next}
       </seq>
     )
     const e2 = createEvent('e2')
     e2.graphite = {seq: exec, next}
-    walkNode(e2.graphite.seq, eventCtx('e2()', e2))
+    walkNode(e2.graphite.seq, eventCtx('e2()'))
   })
   it('throw in a multi node', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="emit before filter node will throw" />
-        </single>
+        <emit fullName="emit before filter node will throw" />
         <multi>
-          <single>
-            <filter
-              filter={() => {
-                throw new Error('[expected error]')
-              }}
-            />
-          </single>
-          <single>
-            <emit fullName="emit after filter node did throw" />
-          </single>
+          <filter
+            filter={() => {
+              throw new Error('[expected error]')
+            }}
+          />
+          <emit fullName="emit after filter node did throw" />
         </multi>
         {next}
       </seq>
     )
     const e3 = createEvent('e3')
     e3.graphite = {seq: exec, next}
-    walkNode(e3.graphite.seq, eventCtx('e3()', e3))
+    walkNode(e3.graphite.seq, eventCtx('e3()'))
   })
 })
 test('walk after multi', () => {
@@ -85,22 +70,18 @@ test('walk after multi', () => {
   const next = Next()
   const exec = (
     <seq>
-      <single>
-        <emit fullName="emit before multi" />
-      </single>
+      <emit fullName="emit before multi" />
       <multi />
       <seq />
       <multi>
-        <single>
-          <emit fullName="emit after multi" />
-        </single>
+        <emit fullName="emit after multi" />
       </multi>
       {next}
     </seq>
   )
   e1.graphite = {seq: exec, next}
   console.log(exec)
-  const ctx = eventCtx('e1()', e1)
+  const ctx = eventCtx('e1()')
   walkNode(e1.graphite.seq, ctx)
   console.log(ctx)
 })
@@ -112,17 +93,13 @@ describe('<run /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[a] tested correctly" />
-        </single>
-        <single>
-          <run runner={fn} />
-        </single>
+        <emit fullName="[a] tested correctly" />
+        <run runner={fn} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[run][a]()', trigger))
+    walkNode(exec, eventCtx('[run][a]()'))
     expect(fn).toHaveBeenCalledTimes(1)
     expect(fn).toBeCalledWith('[run][a]()')
   })
@@ -135,20 +112,14 @@ describe('<run /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[b] tested correctly" />
-        </single>
-        <single>
-          <run runner={fn1} />
-        </single>
-        <single>
-          <run runner={fn2} />
-        </single>
+        <emit fullName="[b] tested correctly" />
+        <run runner={fn1} />
+        <run runner={fn2} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[run][b]()', trigger))
+    walkNode(exec, eventCtx('[run][b]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[run][b]()')
     expect(fn2).not.toHaveBeenCalled()
@@ -168,56 +139,44 @@ describe('<choose /> execution cases', () => {
     //     </single>
     const selector = (
       <seq>
-        <single>
-          <compute fn={() => 'bar'} />
-        </single>
-        <single>
-          <update store={state} />
-        </single>
+        <compute fn={() => 'bar'} />
+        <update store={state} />
       </seq>
     )
     const caseFoo = (
       <seq>
-        <single>
-          <compute
-            fn={arg => {
-              fnFoo(arg)
-              return 'case foo'
-            }}
-          />
-        </single>
+        <compute
+          fn={arg => {
+            fnFoo(arg)
+            return 'case foo'
+          }}
+        />
       </seq>
     )
     const caseBar = (
       <seq>
-        <single>
-          <compute
-            fn={arg => {
-              fnBar(arg)
-              return 'case bar'
-            }}
-          />
-        </single>
+        <compute
+          fn={arg => {
+            fnBar(arg)
+            return 'case bar'
+          }}
+        />
       </seq>
     )
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[a] at least not dangerous" />
-        </single>
+        <emit fullName="[a] at least not dangerous" />
         <choose
           state={state}
           selector={selector}
           cases={{foo: caseFoo, bar: caseBar}}
         />
-        <single>
-          <run runner={fnNext} />
-        </single>
+        <run runner={fnNext} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[choose][a]()', trigger))
+    walkNode(exec, eventCtx('[choose][a]()'))
     expect(fnFoo).not.toHaveBeenCalled()
     expect(fnBar).toHaveBeenCalledTimes(1)
     expect(fnBar).toBeCalledWith('[choose][a]()')
@@ -235,17 +194,13 @@ describe('<filter /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[a] tested correctly" />
-        </single>
-        <single>
-          <filter filter={fn} />
-        </single>
+        <emit fullName="[a] tested correctly" />
+        <filter filter={fn} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[filter][a]()', trigger))
+    walkNode(exec, eventCtx('[filter][a]()'))
     expect(fn).toHaveBeenCalledTimes(1)
     expect(fn).toBeCalledWith('[filter][a]()')
   })
@@ -256,20 +211,14 @@ describe('<filter /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[b] tested correctly" />
-        </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
-        <single>
-          <run runner={fn2} />
-        </single>
+        <emit fullName="[b] tested correctly" />
+        <filter filter={fn1} />
+        <run runner={fn2} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[filter][b]()', trigger))
+    walkNode(exec, eventCtx('[filter][b]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[filter][b]()')
     expect(fn2).toHaveBeenCalledTimes(1)
@@ -282,20 +231,14 @@ describe('<filter /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[c] tested correctly" />
-        </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
-        <single>
-          <run runner={fn2} />
-        </single>
+        <emit fullName="[c] tested correctly" />
+        <filter filter={fn1} />
+        <run runner={fn2} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[filter][c]()', trigger))
+    walkNode(exec, eventCtx('[filter][c]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[filter][c]()')
     expect(fn2).not.toHaveBeenCalled()
@@ -309,20 +252,14 @@ describe('<filter /> execution cases', () => {
     const next = Next()
     const exec = (
       <seq>
-        <single>
-          <emit fullName="[d] tested correctly" />
-        </single>
-        <single>
-          <filter filter={fn1} />
-        </single>
-        <single>
-          <run runner={fn2} />
-        </single>
+        <emit fullName="[d] tested correctly" />
+        <filter filter={fn1} />
+        <run runner={fn2} />
         {next}
       </seq>
     )
     trigger.graphite = {seq: exec, next}
-    walkNode(exec, eventCtx('[filter][d]()', trigger))
+    walkNode(exec, eventCtx('[filter][d]()'))
     expect(fn2).not.toHaveBeenCalled()
   })
 })

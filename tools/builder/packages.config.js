@@ -12,11 +12,12 @@ const maintainers = [
 ]
 
 const version = {
-  effector: '0.18.0-rc.2',
-  'effector-react': '0.18.0-rc.2',
-  'effector-vue': '0.18.0-rc.2',
-  'bs-effector': '0.18.0-rc.2',
-  'bs-effector-react': '0.18.0-rc.2',
+  effector: '0.18.0',
+  'effector-react': '0.18.0',
+  'effector-vue': '0.18.0',
+
+  'bs-effector': '0.18.0',
+  'bs-effector-react': '0.18.0',
 }
 
 const getFiles = name => [
@@ -84,7 +85,7 @@ export default {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2',
+      effector: '^0.18.0',
     },
     peerDependencies: {
       react: '*',
@@ -126,7 +127,7 @@ export default {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2',
+      effector: '^0.18.0',
     },
     peerDependencies: {
       vue: '*',
@@ -167,7 +168,7 @@ export default {
       effector: '*',
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/Effector.re', 'bsconfig.json'],
     keywords: [
       'bucklescript',
       'reason',
@@ -201,7 +202,7 @@ export default {
       'reason-react': '*',
     },
     maintainers,
-    files: ['src/', 'bsconfig.json'],
+    files: ['src/EffectorReact.re', 'bsconfig.json'],
     keywords: [
       'bucklescript',
       'reason',

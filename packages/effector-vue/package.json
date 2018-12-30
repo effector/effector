@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "0.18.0-rc.2",
+  "version": "0.18.0",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
@@ -11,7 +11,7 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "effector": "^0.18.0-rc.2"
+    "effector": "^0.18.0"
   },
   "peerDependencies": {
     "vue": "*"

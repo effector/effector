@@ -122,10 +122,9 @@ function watchEvent<Payload>(
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
   const runCmd = (
-    <single>
-      <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
-    </single>
+    <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
   )
+  //$todo
   pushNext(runCmd, event.graphite.next)
   const unsubscribe = () => {
     const i = event.graphite.next.data.indexOf(runCmd)
@@ -149,9 +148,7 @@ const fabric = {
     const nextSteps = <multi />
     const stepFull = (
       <seq>
-        <single>
-          <emit fullName={args.fullName} />
-        </single>
+        <emit fullName={args.fullName} />
         {nextSteps}
       </seq>
     )
@@ -166,9 +163,7 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
         {parentGraphite.seq}
       </seq>,
       graphite.next,
@@ -182,9 +177,7 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
         {graphite.seq}
       </seq>,
       parentGraphite.next,
@@ -198,12 +191,8 @@ const fabric = {
     const {fn, graphite, parentGraphite} = args
     pushNext(
       <seq>
-        <single>
-          <compute fn={newValue => fn(newValue)} />
-        </single>
-        <single>
-          <filter filter={result => result !== undefined} />
-        </single>
+        <compute fn={newValue => fn(newValue)} />
+        <filter filter={result => result !== undefined} />
         {graphite.seq}
       </seq>,
       parentGraphite.next,

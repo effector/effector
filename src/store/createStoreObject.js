@@ -8,7 +8,8 @@ import {pushNext} from 'effector/stdlib/typedef'
 import {createEvent} from 'effector/event'
 import type {Store} from './index.h'
 import {Kind} from 'effector/stdlib/kind'
-import {storeFabric, getDisplayName} from './storeFabric'
+import {storeObjectName, storeObjectArrayName} from './setStoreName'
+import {storeFabric} from './storeFabric'
 
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   obj: State,
@@ -42,7 +43,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
       const substore: Store<any> = (child: any)
       //eslint-disable-next-line no-unused-vars
       const runCmd = <run runner={newValue => {}} />
-      runCmd.data.transactionContext = data => {
+      runCmd.data.data.transactionContext = data => {
         updates.push(state => {
           const nextState = [...state]
           nextState[key] = data
@@ -51,18 +52,11 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
         return commit
       }
       stateNew[key] = substore.getState()
-      pushNext(<single>{runCmd}</single>, substore.graphite.next)
+      //$todo
+      pushNext(runCmd, substore.graphite.next)
     }
   }
-  const name =
-    'combine(' +
-    obj
-      .map(store => {
-        if (store.kind !== Kind.store) return store.toString()
-        return getDisplayName(store)
-      })
-      .join(', ') +
-    ')'
+  const name = storeObjectArrayName(obj)
   const store = storeFabric({
     name,
     currentState: stateNew,
@@ -105,7 +99,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     if (substore.kind !== Kind.store) continue
     //eslint-disable-next-line no-unused-vars
     const runCmd = <run runner={newValue => {}} />
-    runCmd.data.transactionContext = data => {
+    runCmd.data.data.transactionContext = data => {
       updates.push(state =>
         Object.assign({}, state, {
           [key]: data,
@@ -114,17 +108,11 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
       return commit
     }
     stateNew[key] = substore.getState()
-    pushNext(<single>{runCmd}</single>, substore.graphite.next)
+    //$todo
+    pushNext(runCmd, substore.graphite.next)
   }
-  const name =
-    'combine(' +
-    (Object.values(obj): Array<$Values<typeof obj>>)
-      .map(store => {
-        if (store.kind !== Kind.store) return store.toString()
-        return getDisplayName(store)
-      })
-      .join(', ') +
-    ')'
+  //$todo
+  const name = storeObjectName(obj)
   const store = storeFabric({
     name,
     currentState: stateNew,

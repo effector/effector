@@ -1,6 +1,6 @@
 {
   "name": "bs-effector-react",
-  "version": "0.18.0-rc.2",
+  "version": "0.18.0",
   "description": "Reason bindings for effector-react",
   "author": "Zero Bias",
   "license": "MIT",
@@ -22,7 +22,7 @@
     }
   ],
   "files": [
-    "src/",
+    "src/EffectorReact.re",
     "bsconfig.json"
   ],
   "keywords": [
