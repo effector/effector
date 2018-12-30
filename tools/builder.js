@@ -107,7 +107,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 })({"OjAK":[function(require,module,exports) {
 module.exports = {
   "name": "effector-dev",
-  "version": "0.18.0-rc.3",
+  "version": "0.18.0",
   "description": "Reactive state manager",
   "typings": "index.d.ts",
   "private": true,
@@ -267,7 +267,6 @@ module.exports = {
     "effector/stdlib/fx": "./src/stdlib/fx",
     "effector/stdlib/kind": "./src/stdlib/kind",
     "effector/stdlib/typedef": "./src/stdlib/typedef",
-    "effector/stdlib/visitor": "./src/stdlib/visitor",
     "effector/stdlib/stateref": "./src/stdlib/stateref",
     "effector/stdlib/iterator": "./src/stdlib/iterator",
     "effector/flags": "./src/flags.prod",
@@ -587,11 +586,11 @@ const maintainers = [{
   email: 'andwebar@gmail.com'
 }];
 const version = {
-  effector: '0.18.0-rc.3',
-  'effector-react': '0.18.0-rc.3',
-  'effector-vue': '0.18.0-rc.3',
-  'bs-effector': '0.18.0-rc.4',
-  'bs-effector-react': '0.18.0-rc.4'
+  effector: '0.18.0',
+  'effector-react': '0.18.0',
+  'effector-vue': '0.18.0',
+  'bs-effector': '0.18.0',
+  'bs-effector-react': '0.18.0'
 };
 
 const getFiles = name => ['README.md', 'LICENSE', `${name}.es.js`, `${name}.cjs.js`, `${name}.es.js.map`, `${name}.cjs.js.map`, `${name}.cjs.js.flow`, `${name}.es.js.flow`, 'index.d.ts', 'index.js.flow'];
@@ -636,7 +635,7 @@ var _default = {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2'
+      effector: '^0.18.0'
     },
     peerDependencies: {
       react: '*'
@@ -665,7 +664,7 @@ var _default = {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2'
+      effector: '^0.18.0'
     },
     peerDependencies: {
       vue: '*'

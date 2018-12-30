@@ -12,12 +12,12 @@ const maintainers = [
 ]
 
 const version = {
-  effector: '0.18.0-rc.3',
-  'effector-react': '0.18.0-rc.3',
-  'effector-vue': '0.18.0-rc.3',
+  effector: '0.18.0',
+  'effector-react': '0.18.0',
+  'effector-vue': '0.18.0',
 
-  'bs-effector': '0.18.0-rc.4',
-  'bs-effector-react': '0.18.0-rc.4',
+  'bs-effector': '0.18.0',
+  'bs-effector-react': '0.18.0',
 }
 
 const getFiles = name => [
@@ -85,7 +85,7 @@ export default {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2',
+      effector: '^0.18.0',
     },
     peerDependencies: {
       react: '*',
@@ -127,7 +127,7 @@ export default {
     license: 'MIT',
     devDependencies: {},
     dependencies: {
-      effector: '^0.18.0-rc.2',
+      effector: '^0.18.0',
     },
     peerDependencies: {
       vue: '*',

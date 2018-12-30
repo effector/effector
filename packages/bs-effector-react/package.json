@@ -1,6 +1,6 @@
 {
   "name": "bs-effector-react",
-  "version": "0.18.0-rc.4",
+  "version": "0.18.0",
   "description": "Reason bindings for effector-react",
   "author": "Zero Bias",
   "license": "MIT",
