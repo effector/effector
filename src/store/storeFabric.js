@@ -72,30 +72,6 @@ export function storeFabric<State>(props: {
     return plainState.current
   }
 
-  const visitors = {
-    watch: {
-      event({eventOrFn, fn}) {
-        invariant(typeof fn === 'function', 'watch requires function handler')
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      },
-      effect({eventOrFn, fn}) {
-        invariant(typeof fn === 'function', 'watch requires function handler')
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      },
-      __({eventOrFn}) {
-        invariant(
-          typeof eventOrFn === 'function',
-          'watch requires function handler',
-        )
-        return subscribe(eventOrFn)
-      },
-    },
-  }
-
   function subscribe(listener) {
     invariant(
       typeof listener === 'function',
@@ -121,6 +97,7 @@ export function storeFabric<State>(props: {
         }}
       />
     )
+    //$todo
     pushNext(runCmd, store.graphite.next)
 
     startPhaseTimer(store, 'subscribe')
@@ -140,10 +117,7 @@ export function storeFabric<State>(props: {
       store.graphite.next.data.splice(i, 1)
     }
     unsubscribe.unsubscribe = unsubscribe
-    return (unsubscribe: {
-      (): void,
-      unsubscribe(): void,
-    })
+    return unsubscribe
   }
 
   function observable() {
@@ -206,7 +180,22 @@ export function storeFabric<State>(props: {
   }
 
   function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    return visitors.watch[String(eventOrFn?.kind || '__')]({eventOrFn, fn})
+    const kind = String(eventOrFn?.kind || '__')
+    switch (kind) {
+      case 'event':
+      case 'effect':
+        invariant(typeof fn === 'function', 'watch requires function handler')
+        return eventOrFn.watch(payload =>
+          fn(store.getState(), payload, eventOrFn.getType()),
+        )
+      case '__':
+      default:
+        invariant(
+          typeof eventOrFn === 'function',
+          'watch requires function handler',
+        )
+        return subscribe(eventOrFn)
+    }
   }
 
   function stateSetter(_, payload) {
