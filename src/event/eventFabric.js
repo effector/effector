@@ -42,30 +42,17 @@ export function eventFabric<Payload>({
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
   instance.id = id
-  instance.watch = watch
-  instance.map = map
+  instance.watch = watchEvent.bind(null, instanceAsEvent)
+  instance.map = mapEvent.bind(null, instanceAsEvent)
+  instance.filter = filterEvent.bind(null, instanceAsEvent)
   instance.prepend = prepend
   instance.subscribe = subscribe
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
-  instance.filter = filter
-  function filter<Next>(fn: Payload => Next | void): Event<Next> {
-    return filterEvent(instanceAsEvent, fn)
-  }
-
-  function map<Next>(fn: Payload => Next): Event<Next> {
-    return mapEvent(instanceAsEvent, fn)
-  }
-
-  function watch(
-    watcher: (payload: Payload, type: string) => any,
-  ): Subscription {
-    return watchEvent(instanceAsEvent, watcher)
-  }
 
   function subscribe(observer): Subscription {
-    return watch(payload => observer.next(payload))
+    return instance.watch(payload => observer.next(payload))
   }
   function prepend<Before>(fn: Before => Payload) {
     const contramapped: Event<Before> = eventFabric({
