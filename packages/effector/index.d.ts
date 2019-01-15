@@ -34,7 +34,7 @@ export interface Effect<Params, Done, Fail = Error> {
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void;
+  (asyncFunction: (params: Params) => Promise<Done>): this;
   getCurrent(): (params: Params) => Promise<Done>;
  };
  watch(watcher: (payload: Params) => any): Subscription;
