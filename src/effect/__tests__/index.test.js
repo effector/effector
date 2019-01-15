@@ -84,3 +84,8 @@ describe('createEffect with config', () => {
     await expect(effect('ok')).resolves.toBe('done!')
   })
 })
+
+it('should return itself at .use call', () => {
+  const effect = createEffect('long request')
+  expect(effect.use((_: any) => 'done!')).toBe(effect)
+})
