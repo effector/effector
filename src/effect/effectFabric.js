@@ -13,10 +13,12 @@ export function effectFabric<Payload, Done>({
   name,
   domainName,
   parent,
+  handler,
 }: {
   name?: string,
   domainName: string,
   parent?: CompositeName,
+  handler?: (payload: Payload) => (Promise<Done> | Done),
 }): Effect<Payload, Done, *> {
   const instanceAsEvent: Event<Payload> = eventFabric({
     name,
@@ -49,11 +51,11 @@ export function effectFabric<Payload, Done>({
     )
   }
   //eslint-disable-next-line no-unused-vars
-  let thunk: Function = (value: Payload): Promise<Done> => {
-    warning(false, 'no thunk used in %s', instanceAsEvent.getType())
-    const result: Promise<Done> = (Promise.resolve(): any)
-    return result
-  }
+  let thunk: Function = handler || defaultThunk.bind(instanceAsEvent)
 
   return instance
+}
+function defaultThunk(value: *) {
+  warning(false, 'no thunk used in %s', this.getType())
+  return Promise.resolve()
 }
