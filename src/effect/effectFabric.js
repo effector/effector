@@ -40,6 +40,7 @@ export function effectFabric<Payload, Done>({
   instance.fail = fail
   ;(instance: any).use = fn => {
     thunk = fn
+    return instance
   }
   ;(instance: any).use.getCurrent = (): any => thunk
   ;(instance: any).kind = Kind.effect
