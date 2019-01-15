@@ -18,20 +18,12 @@ declare export class Event<E> {
  filter<T>(fn: (_: E) => T | void): Event<T>;
  prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
- //prettier-ignore
- +to: (
-  & (<T>(store: Store<T>, reducer: (state: T, payload: E) => T) => Subscription)
-  & ((store: Store<E>, _: void) => Subscription)
-  );
-  getType(): string;
- }
+ getType(): string;
+}
 
 declare export class Future<Params, Done, Fail> extends Promise<Done> {
  /*::+*/ args: Params;
- done(): Promise<{params: Params, result: Done}>;
- fail(): Promise<{params: Params, error: Fail}>;
  anyway(): Promise<void>;
- promise(): Promise<Done>;
  cache(): Done | void;
  /*::+*/ then: (
   & (() => Promise<Done>)
@@ -51,23 +43,12 @@ declare export class Effect<Params, Done, Fail = Error> {
  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
  //map<T>(fn: (_: E) => T): Event<T>,
  subscribe(subscriber: Subscriber<Params>): Subscription;
- //prettier-ignore
- +to: (
-  & (<T>(
-   store: Store<T>,
-   reducer: (state: T, payload: Params) => T
-  ) => Subscription)
-  & ((store: Store<Params>, _: void) => Subscription)
- );
  getType(): string;
 }
 
 declare export class Store<State> {
  reset(event: Event<any> | Effect<any, any, any>): this;
  getState(): State;
- withProps<Props, R>(
-  fn: (state: State, props: Props) => R,
- ): (props: Props) => R;
  /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
   & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
@@ -105,14 +86,16 @@ declare export class Domain {
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
- effectName?: string,
+ effectName?: string, config?: {
+   handler?: (params: Params) => (Promise<Done> | Done),
+ }
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
 declare export function setStoreName<State>(store: Store<State>, name: string): void
 
 declare export function createStoreObject<
- State: {-[key: string]: Store<any> | any},
+ State: {+[key: string]: Store<any> | any},
 >(
  obj: State,
 ): Store<
@@ -123,8 +106,8 @@ declare export function createStoreObject<
  >,
 >
 declare export function extract<
- State: {-[key: string]: Store<any> | any},
- NextState: {-[key: string]: Store<any> | any},
+ State: {+[key: string]: Store<any> | any},
+ NextState: {+[key: string]: Store<any> | any},
 >(
  store: Store<State>,
  extractor: (_: State) => NextState,
@@ -142,7 +125,7 @@ declare export function createApi<
  store: Store<S>,
  api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
-declare export function restoreObject<State: {-[key: string]: Store<any> | any}>(
+declare export function restoreObject<State: {+[key: string]: Store<any> | any}>(
  obj: State,
 ): $ObjMap<
  State,
