@@ -13,8 +13,8 @@ import replace from 'rollup-plugin-replace'
 //$off
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 
+import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
-// import
 
 const minifyConfig = ({prettify}: {prettify: boolean}) => ({
   ecma: 8,
@@ -37,10 +37,7 @@ const minifyConfig = ({prettify}: {prettify: boolean}) => ({
     },
 })
 
-export const getPlugins = (
-  name: string,
-  type: 'umd' | 'cjs' | 'es' = 'cjs',
-) => ({
+const getPlugins = () => ({
   babel: babel({
     // runtimeHelpers: true,
     // exclude: /(\.re|node_modules.*)/,
@@ -56,12 +53,17 @@ export const getPlugins = (
     }),
   ),
   sizeSnapshot: sizeSnapshot(),
+  graph: graphPlugin({
+    output: 'modules.dot',
+  }),
 })
 
 export async function rollupEffector() {
   const name = 'effector'
-  const run = async output => {
-    const plugins = getPlugins(name, output.format)
+  await Promise.all([cjsAndEs(), umd()])
+
+  async function cjsAndEs() {
+    const plugins = getPlugins()
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -76,15 +78,31 @@ export async function rollupEffector() {
       plugins: [
         plugins.resolve,
         plugins.babel,
+        plugins.graph,
         plugins.terser,
         plugins.sizeSnapshot,
       ],
     })
 
-    await build.write(output)
+    await Promise.all([
+      build.write({
+        file: dir(`npm/${name}/${name}.cjs.js`),
+        format: 'cjs',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+      build.write({
+        file: dir(`npm/${name}/${name}.es.js`),
+        format: 'es',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+    ])
   }
   async function umd() {
-    const plugins = getPlugins(name, 'umd')
+    const plugins = getPlugins()
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -106,29 +124,15 @@ export async function rollupEffector() {
       sourcemap: true,
     })
   }
-  await Promise.all([
-    run({
-      file: dir(`npm/${name}/${name}.cjs.js`),
-      format: 'cjs',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    run({
-      file: dir(`npm/${name}/${name}.es.js`),
-      format: 'es',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    umd(),
-  ])
 }
 
 export async function rollupEffectorReact() {
   const name = 'effector-react'
-  const run = async output => {
-    const plugins = getPlugins(name, output.format)
+
+  await Promise.all([cjsAndEs(), umd()])
+
+  async function cjsAndEs() {
+    const plugins = getPlugins()
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -148,10 +152,25 @@ export async function rollupEffectorReact() {
       ],
     })
 
-    await build.write(output)
+    await Promise.all([
+      build.write({
+        file: dir(`npm/${name}/${name}.cjs.js`),
+        format: 'cjs',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+      build.write({
+        file: dir(`npm/${name}/${name}.es.js`),
+        format: 'es',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+    ])
   }
   async function umd() {
-    const plugins = getPlugins(name, 'umd')
+    const plugins = getPlugins()
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -173,29 +192,14 @@ export async function rollupEffectorReact() {
       sourcemap: true,
     })
   }
-  await Promise.all([
-    run({
-      file: dir(`npm/${name}/${name}.cjs.js`),
-      format: 'cjs',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    run({
-      file: dir(`npm/${name}/${name}.es.js`),
-      format: 'es',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    umd(),
-  ])
 }
 
 export async function rollupEffectorVue() {
   const name = 'effector-vue'
-  const run = async output => {
-    const plugins = getPlugins(name, output.format)
+  await Promise.all([cjsAndEs(), umd()])
+
+  async function cjsAndEs() {
+    const plugins = getPlugins()
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -214,11 +218,25 @@ export async function rollupEffectorVue() {
         plugins.sizeSnapshot,
       ],
     })
-
-    await build.write(output)
+    await Promise.all([
+      build.write({
+        file: dir(`npm/${name}/${name}.cjs.js`),
+        format: 'cjs',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+      build.write({
+        file: dir(`npm/${name}/${name}.es.js`),
+        format: 'es',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+    ])
   }
   async function umd() {
-    const plugins = getPlugins(name, 'umd')
+    const plugins = getPlugins()
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -240,21 +258,4 @@ export async function rollupEffectorVue() {
       sourcemap: true,
     })
   }
-  await Promise.all([
-    run({
-      file: dir(`npm/${name}/${name}.cjs.js`),
-      format: 'cjs',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    run({
-      file: dir(`npm/${name}/${name}.es.js`),
-      format: 'es',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
-    umd(),
-  ])
 }

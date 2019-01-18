@@ -1,0 +1,178 @@
+digraph G {
+  edge [color="#aaaaaa",dir=back];
+  node [style=filled,color=white,fontsize="25px"];
+  graph [fontsize=15 compound=true];
+  rankdir=TB;
+  ranksep=".95 equally";
+  ratio=auto;
+  subgraph cluster_id_1d {
+    style="rounded,bold";
+    color="#62922a";
+    node [fontcolor="#62922a",fontsize="25px"];
+    id_c [label="/",group="effector"];
+    id_h [label="combine",group="effector"];
+    id_i [label="index.h",group="effector"];
+    fontcolor="#62922a";
+    fontsize="45px";
+    label = "effector";
+  }
+  subgraph cluster_id_1e {
+    style="rounded,bold";
+    color="#328a45";
+    node [fontcolor="#328a45",fontsize="25px"];
+    id_d [label="/",group="domain"];
+    id_j [label="domainFabric",group="domain"];
+    id_k [label="createDomain",group="domain"];
+    id_z [label="hook",group="domain"];
+    fontcolor="#328a45";
+    fontsize="45px";
+    label = "domain";
+  }
+  subgraph cluster_id_1f {
+    style="rounded,bold";
+    color="#007f5a";
+    node [fontcolor="#007f5a",fontsize="25px"];
+    id_e [label="/",group="event"];
+    id_l [label="eventFabric",group="event"];
+    id_m [label="createEvent",group="event"];
+    fontcolor="#007f5a";
+    fontsize="45px";
+    label = "event";
+  }
+  subgraph cluster_id_1g {
+    style="rounded,bold";
+    color="#007368";
+    node [fontcolor="#007368",fontsize="25px"];
+    id_f [label="/",group="effect"];
+    id_n [label="effectFabric",group="effect"];
+    id_o [label="createEffect",group="effect"];
+    id_16 [label="exec",group="effect"];
+    id_17 [label="callbacks",group="effect"];
+    fontcolor="#007368";
+    fontsize="45px";
+    label = "effect";
+  }
+  subgraph cluster_id_1h {
+    style="rounded,bold";
+    color="#00656c";
+    node [fontcolor="#00656c",fontsize="25px"];
+    id_g [label="/",group="store"];
+    id_p [label="storeFabric",group="store"];
+    id_q [label="createStore",group="store"];
+    id_r [label="setStoreName",group="store"];
+    id_s [label="createStoreObject",group="store"];
+    id_t [label="createApi",group="store"];
+    id_u [label="restore",group="store"];
+    id_v [label="staticMethods",group="store"];
+    fontcolor="#00656c";
+    fontsize="45px";
+    label = "store";
+  }
+  subgraph cluster_id_1i {
+    style="rounded,bold";
+    color="#085666";
+    node [fontcolor="#085666",fontsize="25px"];
+    id_10 [label="fx",group="stdlib"];
+    id_11 [label="typedef",group="stdlib"];
+    id_13 [label="kind",group="stdlib"];
+    id_19 [label="stateref",group="stdlib"];
+    fontcolor="#085666";
+    fontsize="45px";
+    label = "stdlib";
+  }
+  subgraph cluster_id_1j {
+    style="rounded,bold";
+    color="#2a4858";
+    node [fontcolor="#2a4858",fontsize="25px"];
+    id_14 [label="/",group="graphite"];
+    id_1b [label="typedef",group="graphite"];
+    id_1c [label="walk",group="graphite"];
+    fontcolor="#2a4858";
+    fontsize="45px";
+    label = "graphite";
+  }
+  id_a [label="packages/effector"];
+  id_b [label="index"];
+  id_w [label="invariant"];
+  id_x [label="compositeName"];
+  id_y [label="refcount"];
+  id_12 [label="symbol-observable"];
+  id_15 [label="warning"];
+  id_18 [label="perf"];
+  id_1a [label="flags.dev"];
+  id_d -> id_k [style="bold",color="#328a45"];
+  id_d -> id_j [style="bold",color="#328a45"];
+  id_k -> id_j [style="bold",color="#328a45"];
+  id_j -> id_x [style="dashed"];
+  id_j -> id_z [style="bold",color="#328a45"];
+  id_j -> id_f [style="dashed",lhead=cluster_id_1g];
+  id_j -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_j -> id_y [style="dashed"];
+  id_j -> id_g [style="dashed",lhead=cluster_id_1h];
+  id_z -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_f -> id_o [style="bold",color="#007368"];
+  id_f -> id_n [style="bold",color="#007368"];
+  id_o -> id_n [style="bold",color="#007368"];
+  id_n -> id_17 [style="bold",color="#007368"];
+  id_n -> id_16 [style="bold",color="#007368"];
+  id_n -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_n -> id_13 [style="dashed"];
+  id_n -> id_15 [style="dashed"];
+  id_c -> id_h [style="bold",color="#62922a"];
+  id_c -> id_i [style="bold",color="#62922a"];
+  id_h -> id_w [style="dashed"];
+  id_h -> id_g [style="dashed",lhead=cluster_id_1h];
+  id_e -> id_m [style="bold",color="#007f5a"];
+  id_e -> id_l [style="bold",color="#007f5a"];
+  id_m -> id_l [style="bold",color="#007f5a"];
+  id_l -> id_x [style="dashed"];
+  id_l -> id_14 [style="dashed",lhead=cluster_id_1j];
+  id_l -> id_y [style="dashed"];
+  id_l -> id_10 [style="dashed"];
+  id_l -> id_13 [style="dashed"];
+  id_l -> id_11 [style="dashed"];
+  id_l -> id_12 [style="dashed"];
+  id_14 -> id_1c [style="bold",color="#2a4858"];
+  id_1b -> id_11 [style="dashed"];
+  id_1c -> id_1b [style="bold",color="#2a4858"];
+  id_b -> id_d [style="dashed",lhead=cluster_id_1e];
+  id_b -> id_f [style="dashed",lhead=cluster_id_1g];
+  id_b -> id_c [style="dashed",lhead=cluster_id_1d];
+  id_b -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_b -> id_g [style="dashed",lhead=cluster_id_1h];
+  id_w -> id_1a [style="dashed"];
+  id_a -> id_b [style="dashed"];
+  id_18 -> id_1a [style="dashed"];
+  id_18 -> id_g [style="dashed",lhead=cluster_id_1h];
+  id_10 -> id_1b [style="dashed"];
+  id_g -> id_t [style="bold",color="#00656c"];
+  id_g -> id_q [style="bold",color="#00656c"];
+  id_g -> id_s [style="bold",color="#00656c"];
+  id_g -> id_u [style="bold",color="#00656c"];
+  id_g -> id_r [style="bold",color="#00656c"];
+  id_g -> id_v [style="bold",color="#00656c"];
+  id_g -> id_p [style="bold",color="#00656c"];
+  id_t -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_q -> id_p [style="bold",color="#00656c"];
+  id_s -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_s -> id_10 [style="dashed"];
+  id_s -> id_13 [style="dashed"];
+  id_s -> id_11 [style="dashed"];
+  id_s -> id_r [style="bold",color="#00656c"];
+  id_s -> id_p [style="bold",color="#00656c"];
+  id_u -> id_q [style="bold",color="#00656c"];
+  id_r -> id_x [style="dashed"];
+  id_r -> id_1a [style="dashed"];
+  id_r -> id_13 [style="dashed"];
+  id_r -> id_g [style="bold",color="#00656c"];
+  id_p -> id_e [style="dashed",lhead=cluster_id_1f];
+  id_p -> id_w [style="dashed"];
+  id_p -> id_18 [style="dashed"];
+  id_p -> id_10 [style="dashed"];
+  id_p -> id_13 [style="dashed"];
+  id_p -> id_19 [style="dashed"];
+  id_p -> id_11 [style="dashed"];
+  id_p -> id_r [style="bold",color="#00656c"];
+  id_p -> id_12 [style="dashed"];
+  id_15 -> id_1a [style="dashed"];
+}
