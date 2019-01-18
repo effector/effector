@@ -11,6 +11,7 @@ import type {Effect} from 'effector/effect'
 import {Kind} from 'effector/stdlib/kind'
 import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
+import {createUnsubscribe} from '../unsubscribe'
 import {type CompositeName, createName} from '../compositeName'
 
 export function eventFabric<Payload>({
@@ -113,14 +114,10 @@ function watchEvent<Payload>(
   )
   //$todo
   pushNext(runCmd, event.graphite.next)
-  const unsubscribe = () => {
-    const i = event.graphite.next.data.indexOf(runCmd)
-    if (i === -1) return
-
-    event.graphite.next.data.splice(i, 1)
-  }
-  unsubscribe.unsubscribe = unsubscribe
-  return unsubscribe
+  return createUnsubscribe({
+    child: runCmd,
+    parent: event.graphite,
+  })
 }
 function makeName(name: string, compositeName?: CompositeName) {
   const fullName = compositeName?.fullName
@@ -129,6 +126,16 @@ function makeName(name: string, compositeName?: CompositeName) {
     return name
   }
   return '' + fullName + '/' + name
+}
+export function forward<T>(opts: {from: Event<T>, to: Event<T>}): Subscription {
+  fabric.forwardEvent({
+    graphite: opts.to.graphite,
+    parentGraphite: opts.from.graphite,
+  })
+  return createUnsubscribe({
+    child: opts.to.graphite.seq,
+    parent: opts.from.graphite,
+  })
 }
 const fabric = {
   event(args: {fullName: string}): GraphiteMeta {
@@ -155,6 +162,10 @@ const fabric = {
       </seq>,
       graphite.next,
     )
+  },
+  forwardEvent(args: {|graphite: GraphiteMeta, parentGraphite: GraphiteMeta|}) {
+    const {graphite, parentGraphite} = args
+    pushNext(graphite.seq, parentGraphite.next)
   },
   mapEvent(args: {|
     fn: Function,
