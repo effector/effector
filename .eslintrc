@@ -13,8 +13,8 @@ settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
   react:
-    version: 16.6
-    flowVersion: 0.89
+    version: '16.7'
+    flowVersion: 0.91
 env:
   node: true
   browser: false
