@@ -7,7 +7,7 @@ export type Subscriber<A> = {
 }
 
 export type Subscription = {
-  (): void,
+  /*::[[call]](): void,*/
   unsubscribe(): void,
 }
 
