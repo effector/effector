@@ -4,11 +4,7 @@ import $$observable from 'symbol-observable'
 //eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
 
-import {
-  pushNext,
-  type GraphiteMeta,
-  type TypeDef,
-} from 'effector/stdlib/typedef'
+import type {GraphiteMeta, TypeDef} from 'effector/stdlib/typedef'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import type {Effect} from 'effector/effect'
@@ -171,13 +167,14 @@ type GraphiterSmall = {
   },
   /*::...*/
 }
+
 export function forward(opts: {
   from: Graphiter,
   to: GraphiterSmall,
 }): Subscription {
   const toSeq = opts.to.graphite.seq
   const fromGraphite = opts.from.graphite
-  pushNext(toSeq, fromGraphite.next)
+  fromGraphite.next.data.push(toSeq)
   return createUnsubscribe({
     child: toSeq,
     parent: fromGraphite,
