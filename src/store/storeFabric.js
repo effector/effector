@@ -49,6 +49,7 @@ export function storeFabric<State>(props: {
     domainName: parent,
     defaultState,
     plainState,
+    subscribers,
   }
   const store: $Shape<Store<State>> = {
     graphite: def,
@@ -57,15 +58,15 @@ export function storeFabric<State>(props: {
     shortName: currentId,
     domainName: parent,
     setState,
-    on,
     off,
-    watch,
-    subscribe,
+    watch: watch.bind(null, storeInstance),
+    subscribe: subscribe.bind(null, storeInstance),
     getState,
     reset,
     //$off
-    [$$observable]: observable,
+    [$$observable]: observable.bind(null, storeInstance),
   }
+  ;(store: any).on = on.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
   ;(store: any).map = mapStore.bind(null, store)
   ;(store: any).thru = thru.bind(store)
@@ -78,73 +79,6 @@ export function storeFabric<State>(props: {
     return plainState.current
   }
 
-  function subscribe(listener) {
-    invariant(
-      typeof listener === 'function',
-      'Expected the listener to be a function.',
-    )
-    let stopPhaseTimerMessage = null
-    let lastCall = storeInstance.plainState.current
-
-    startPhaseTimer(storeInstance, 'subscribe')
-    try {
-      listener(lastCall)
-      stopPhaseTimerMessage = 'Initial'
-    } catch (err) {
-      console.error(err)
-      stopPhaseTimerMessage = 'Got initial error'
-    }
-    stopPhaseTimer(stopPhaseTimerMessage)
-
-    return forward({
-      from: storeInstance,
-      to: {
-        graphite: {
-          seq: (
-            //$todo
-            <run
-              runner={args => {
-                let stopPhaseTimerMessage = null
-                startPhaseTimer(storeInstance, 'subscribe')
-                if (args === lastCall) return
-                lastCall = args
-                try {
-                  listener(args)
-                } catch (err) {
-                  console.error(err)
-                  stopPhaseTimerMessage = 'Got error'
-                }
-                stopPhaseTimer(stopPhaseTimerMessage)
-              }}
-            />
-          ),
-        },
-      },
-    })
-  }
-
-  function observable() {
-    return {
-      subscribe(observer) {
-        invariant(
-          typeof observer === 'object' && observer !== null,
-          'Expected the observer to be an object.',
-        )
-
-        function observeState(state) {
-          if (observer.next) {
-            observer.next(state)
-          }
-        }
-        return subscribe(observeState)
-      },
-      //$off
-      [$$observable]() {
-        return this
-      },
-    }
-  }
-
   function reset(event) {
     return store.on(event, () => defaultState)
   }
@@ -153,56 +87,6 @@ export function storeFabric<State>(props: {
     if (currentSubscription === undefined) return
     currentSubscription()
     subscribers.delete(event)
-  }
-  function on(event: any, handler: Function) {
-    const e: Event<any> = event
-    subscribers.set(
-      e,
-      forward({
-        from: e,
-        to: {
-          graphite: {
-            seq: (
-              <seq>
-                <compute
-                  fn={newValue => {
-                    const lastState = getState()
-                    return handler(lastState, newValue, e.getType())
-                  }}
-                />
-                <filter
-                  filter={data => {
-                    const lastState = getState()
-                    return data !== lastState && data !== undefined
-                  }}
-                />
-                {store.graphite.seq}
-              </seq>
-            ),
-          },
-        },
-      }),
-    )
-    return store
-  }
-
-  function watch(eventOrFn: Event<*> | Function, fn?: Function) {
-    const kind = String(eventOrFn?.kind || '__')
-    switch (kind) {
-      case 'event':
-      case 'effect':
-        invariant(typeof fn === 'function', 'watch requires function handler')
-        return eventOrFn.watch(payload =>
-          fn(store.getState(), payload, eventOrFn.getType()),
-        )
-      case '__':
-      default:
-        invariant(
-          typeof eventOrFn === 'function',
-          'watch requires function handler',
-        )
-        return subscribe(eventOrFn)
-    }
   }
 
   function stateSetter(_, payload) {
@@ -218,7 +102,120 @@ export function storeFabric<State>(props: {
 
   return store
 }
+function on(storeInstance, event: any, handler: Function) {
+  const e: Event<any> = event
+  storeInstance.subscribers.set(
+    e,
+    forward({
+      from: e,
+      to: {
+        graphite: {
+          seq: (
+            <seq>
+              <compute
+                fn={newValue => {
+                  const lastState = storeInstance.plainState.current
+                  return handler(lastState, newValue, e.getType())
+                }}
+              />
+              <filter
+                filter={data => {
+                  const lastState = storeInstance.plainState.current
+                  return data !== lastState && data !== undefined
+                }}
+              />
+              {storeInstance.graphite.seq}
+            </seq>
+          ),
+        },
+      },
+    }),
+  )
+  return this
+}
+function observable(storeInstance) {
+  return {
+    subscribe(observer) {
+      invariant(
+        typeof observer === 'object' && observer !== null,
+        'Expected the observer to be an object.',
+      )
 
+      function observeState(state) {
+        if (observer.next) {
+          observer.next(state)
+        }
+      }
+      return subscribe(storeInstance, observeState)
+    },
+    //$off
+    [$$observable]() {
+      return this
+    },
+  }
+}
+function watch(storeInstance, eventOrFn: Event<*> | Function, fn?: Function) {
+  const kind = String(eventOrFn?.kind || '__')
+  switch (kind) {
+    case 'event':
+    case 'effect':
+      invariant(typeof fn === 'function', 'watch requires function handler')
+      return eventOrFn.watch(payload =>
+        fn(storeInstance.plainState.current, payload, eventOrFn.getType()),
+      )
+    case '__':
+    default:
+      invariant(
+        typeof eventOrFn === 'function',
+        'watch requires function handler',
+      )
+      return subscribe(storeInstance, eventOrFn)
+  }
+}
+function subscribe(storeInstance, listener) {
+  invariant(
+    typeof listener === 'function',
+    'Expected the listener to be a function.',
+  )
+  let stopPhaseTimerMessage = null
+  let lastCall = storeInstance.plainState.current
+
+  startPhaseTimer(storeInstance, 'subscribe')
+  try {
+    listener(lastCall)
+    stopPhaseTimerMessage = 'Initial'
+  } catch (err) {
+    console.error(err)
+    stopPhaseTimerMessage = 'Got initial error'
+  }
+  stopPhaseTimer(stopPhaseTimerMessage)
+
+  return forward({
+    from: storeInstance,
+    to: {
+      graphite: {
+        seq: (
+          //$todo
+          <run
+            runner={args => {
+              let stopPhaseTimerMessage = null
+              startPhaseTimer(storeInstance, 'subscribe')
+              if (args === lastCall) return
+              lastCall = args
+              try {
+                listener(args)
+              } catch (err) {
+                console.error(err)
+                stopPhaseTimerMessage = 'Got error'
+              }
+              stopPhaseTimer(stopPhaseTimerMessage)
+            }}
+          />
+        ),
+      },
+    },
+  })
+}
 function thru(fn: Function) {
   return fn(this)
 }
