@@ -5,7 +5,25 @@ import type {TypeDef} from 'effector/stdlib/typedef'
 import type {StateRef} from 'effector/stdlib/stateref'
 import {Step, Cmd} from 'effector/graphite/typedef'
 
+type Fun = TypeDef<*, 'step' | 'cmd'>
+type Using = {
+  name: string,
+  reset?: any,
+}
+
 /* Step */
+declare export default function fx(
+  tag: 'loop',
+  props: {
+    branch: Fun,
+    iterator: Fun,
+    source: StateRef,
+    until: Using,
+    selector: Using,
+    item: Using,
+  },
+  ...childrens: $ReadOnlyArray<void>
+): TypeDef<'loop', 'step'>
 declare export default function fx(
   tag: 'choose',
   props: {
@@ -14,7 +32,7 @@ declare export default function fx(
     cases: {+[key: string]: TypeDef<*, 'step'>},
   },
   ...childrens: $ReadOnlyArray<void>
-): TypeDef<'single', 'step'>
+): TypeDef<'choose', 'step'>
 declare export default function fx(
   tag: 'single',
   props: null,
@@ -54,7 +72,7 @@ declare export default function fx(
 ): TypeDef<'run', 'cmd'>
 declare export default function fx(
   tag: 'update',
-  props: {store: *},
+  props: {|store: StateRef|} | {|val: string|},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'update', 'cmd'>
 export default function fx(
@@ -75,7 +93,7 @@ export default function fx(
     const tag_: 'compute' | 'emit' | 'filter' | 'run' | 'update' = (tag: any)
     return Step.single(Cmd[tag_](props))
   }
-  const tag_: 'single' | 'multi' | 'seq' | 'choose' = (tag: any)
+  const tag_: 'single' | 'multi' | 'seq' | 'choose' | 'loop' = (tag: any)
   switch (tag_) {
     case 'single':
       return Step.single(childrens[0])
@@ -85,6 +103,8 @@ export default function fx(
       return Step.seq(childrens)
     case 'choose':
       return Step.choose(props)
+    case 'loop':
+      return Step.loop(props)
   }
   if (typeof tag === 'function') return tag(props, childrens)
   console.error('unknown node "%s"', tag)

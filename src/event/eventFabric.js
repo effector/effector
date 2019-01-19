@@ -166,7 +166,7 @@ type Graphiter = {
 }
 type GraphiterSmall = {
   +graphite: {
-    +seq: TypeDef<'seq', 'step'>,
+    +seq: TypeDef<'seq' | 'loop', 'step'>,
     /*::...*/
   },
   /*::...*/
