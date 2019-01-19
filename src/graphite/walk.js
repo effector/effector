@@ -1,9 +1,10 @@
 //@flow
 // import invariant from 'invariant'
 import type {Event} from 'effector/event'
-// import type {StateRef} from 'effector/stdlib/stateref'
+import {type StateRef, createStateRef} from 'effector/stdlib/stateref'
 import {Ctx} from 'effector/graphite/typedef'
 import type {TypeDef} from 'effector/stdlib/typedef'
+import {__DEV__} from 'effector/flags'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(
@@ -24,6 +25,7 @@ type Meta = {
   transactions: Array<() => void>,
   arg: any,
   reg: Reg,
+  val: {[name: string]: StateRef},
 }
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
@@ -33,6 +35,7 @@ export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
     reg: {
       isChanged: true,
     },
+    val: {},
   }
   runStep(seq, meta.ctx, meta)
   for (let i = 0; i < meta.transactions.length; i++) {
@@ -45,7 +48,12 @@ function runStep(step, ctx: *, meta) {
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
 }
-
+const LOOP_TIMEOUT = 5e3
+const infiniteLoopProtection = start => {
+  if (Date.now() - start > LOOP_TIMEOUT) {
+    throw new Error('infinite loop protection')
+  }
+}
 const stepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
     meta.arg = ctx.data.__stepArg
@@ -65,6 +73,51 @@ const stepVisitor = {
       if (meta.stop) {
         break
       }
+    }
+  },
+  loop(step: TypeDef<'loop', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+    type Fun = TypeDef<*, 'step'>
+    type Using = {
+      name: string,
+      reset?: any,
+    }
+    type StepData = {
+      branch: Fun,
+      iterator: Fun,
+      source: StateRef,
+      until: Using,
+      selector: Using,
+      item: Using,
+    }
+    const data: StepData = step.data
+    const branch: Fun = data.branch
+    const iterator: Fun = data.iterator
+
+    const source: StateRef = data.source
+    const until = using(data.until, meta)
+    const selector = using(data.selector, meta)
+    const item = using(data.item, meta)
+
+    const now = Date.now()
+
+    while (until.current) {
+      if (__DEV__) {
+        infiniteLoopProtection(now)
+      }
+      item.current = source.current[selector.current]
+      runStep(branch, ctx, meta)
+      runStep(iterator, ctx, meta)
+    }
+
+    function using(opts, meta): StateRef {
+      const name = String(opts.name)
+      if ('reset' in opts) {
+        if (!(name in meta.val)) {
+          meta.val[name] = createStateRef(opts.reset)
+        }
+        meta.val[name].current = opts.reset
+      }
+      return meta.val[name]
     }
   },
   choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
@@ -107,6 +160,7 @@ const command = ({
         err: false,
         result: (null: any),
         arg: meta.arg,
+        val: meta.val,
         fn: single.data.filter,
       })
       meta.reg.isChanged = Boolean(runCtx.result)
@@ -124,6 +178,7 @@ const command = ({
         err: false,
         result: (null: any),
         arg: meta.arg,
+        val: meta.val,
         fn: single.data.runner,
       })
       return ctx
@@ -132,7 +187,14 @@ const command = ({
   },
   update: {
     cmd(single, meta) {
-      single.data.store.current = meta.arg
+      let store
+      if ('val' in single.data) {
+        store = meta.val[single.data.val] =
+          meta.val[single.data.val] || createStateRef(null)
+      } else {
+        store = single.data.store
+      }
+      store.current = meta.arg
       return Ctx.update({
         __stepArg: meta.arg,
       })
@@ -148,6 +210,7 @@ const command = ({
         err: false,
         result: (null: any),
         arg: meta.arg,
+        val: meta.val,
         fn: single.data.fn,
       })
       meta.reg.isChanged = !runCtx.err && runCtx.result !== undefined
@@ -168,7 +231,7 @@ const command = ({
 
 function tryRun(ctx) {
   try {
-    ctx.result = ctx.fn(ctx.arg)
+    ctx.result = ctx.fn.call(null, ctx.arg, ctx.val)
   } catch (err) {
     console.error(err)
     ctx.err = true
