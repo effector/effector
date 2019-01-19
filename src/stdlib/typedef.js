@@ -12,12 +12,7 @@ export type GraphiteMeta = {
   +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
 }
-export function pushNext(
-  add: TypeDef<'multi' | 'seq' | 'single', 'step'>,
-  nexts: TypeDef<'multi', 'step'>,
-) {
-  nexts.data.push(add)
-}
+
 const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
 
 //eslint-disable-next-line no-unused-vars
