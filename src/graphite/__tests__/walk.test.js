@@ -169,8 +169,6 @@ describe.only('<loop/> execution cases', () => {
     //   item: Using,
     // }
     const fnItem = jest.fn()
-    // const fnFoo = jest.fn()
-    // const fnBar = jest.fn()
 
     const state = createStateRef(['a', 'b', 'c'])
 
@@ -226,16 +224,6 @@ describe.only('<loop/> execution cases', () => {
     })
     runner('x')
     expect(fnItem.mock.calls).toEqual([['a'], ['b'], ['c']])
-    // walkNode(exec, eventCtx('[loop][a]()'))
-    // expect(fnFoo).not.toHaveBeenCalled()
-    // expect(fnBar).toHaveBeenCalledTimes(1)
-    // expect(fnBar).toBeCalledWith('[loop][a]()')
-
-    // expect(fnNext).toHaveBeenCalledTimes(1)
-    // expect(fnNext).toBeCalledWith('case bar')
-
-    // expect(show(exec)).toMatchSnapshot()
-    // expect(exec).toMatchSnapshot()
   })
 })
 describe('<choose /> execution cases', () => {
