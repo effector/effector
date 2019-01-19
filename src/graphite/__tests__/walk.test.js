@@ -6,7 +6,7 @@ import {show} from 'effector/fixtures/showstep'
 import {Ctx} from 'effector/graphite/typedef'
 import {createStateRef} from 'effector/stdlib/stateref'
 
-import {createEvent} from 'effector/event'
+import {createEvent, forward} from 'effector/event'
 import {walkNode} from '../walk'
 
 function eventCtx(payload) {
@@ -125,7 +125,119 @@ describe('<run /> execution cases', () => {
     expect(fn2).not.toHaveBeenCalled()
   })
 })
+describe.only('<loop/> execution cases', () => {
+  const VAL = 'current'
+  function values(val) {
+    const result = {}
+    for (const key in val) {
+      result[key] = val[key][VAL]
+    }
+    return result
+  }
+  function using(name, reset: any) {
+    if (typeof reset === 'undefined') return {name}
+    return {name, reset}
+  }
+  it('[a] should throw error after loop timeout', () => {
+    const runner = createEvent('loop runner')
+    forward({
+      from: runner,
+      to: {
+        graphite: {
+          seq: (
+            <loop
+              iterator={<multi />}
+              branch={<run runner={() => {}} />}
+              source={createStateRef(['a'])}
+              until={using('until', true)}
+              selector={using('select', 0)}
+              item={using('item', 'initial item')}
+            />
+          ),
+        },
+      },
+    })
+    expect(() => runner('x')).toThrowError('infinite loop protection')
+  })
+  it('[b] at least not dangerous', () => {
+    //   {
+    //   branch: Fun,
+    //   iterator: Fun,
+    //   source: StateRef,
+    //   until: Using,
+    //   selector: Using,
+    //   item: Using,
+    // }
+    const fnItem = jest.fn()
+    // const fnFoo = jest.fn()
+    // const fnBar = jest.fn()
 
+    const state = createStateRef(['a', 'b', 'c'])
+
+    const iterator = (
+      <seq>
+        <compute fn={(arg, val) => val.counter[VAL] + 1} />
+        <update val="counter" />
+        <update val="select" />
+        <compute fn={(arg, val) => val.counter[VAL] < val.max[VAL]} />
+        <update val="until" />
+      </seq>
+    )
+    const branch = (
+      <seq>
+        <compute
+          fn={(arg, val) => {
+            console.log('compute branch', arg, values(val))
+            return val.item[VAL]
+          }}
+        />
+        <run
+          runner={e => {
+            console.log('run branch', e)
+            fnItem(e)
+          }}
+        />
+      </seq>
+    )
+    const exec = (
+      <seq>
+        <compute fn={() => state[VAL].length} />
+        <update val="max" />
+        <compute fn={() => 0} />
+        <update val="counter" />
+        <loop
+          iterator={iterator}
+          branch={branch}
+          source={state}
+          until={using('until', true)}
+          selector={using('select', 0)}
+          item={using('item', 'initial item')}
+        />
+      </seq>
+    )
+    const runner = createEvent('loop runner')
+    forward({
+      from: runner,
+      to: {
+        graphite: {
+          seq: exec,
+        },
+      },
+    })
+    runner('x')
+    expect(fnItem.mock.calls).toEqual([['a'], ['b'], ['c']])
+    // walkNode(exec, eventCtx('[loop][a]()'))
+    // expect(fnFoo).not.toHaveBeenCalled()
+    // expect(fnBar).toHaveBeenCalledTimes(1)
+    // expect(fnBar).toBeCalledWith('[loop][a]()')
+
+    // expect(fnNext).toHaveBeenCalledTimes(1)
+    // expect(fnNext).toBeCalledWith('case bar')
+
+    // expect(show(exec)).toMatchSnapshot()
+    // expect(exec).toMatchSnapshot()
+  })
+})
 describe('<choose /> execution cases', () => {
   it('[a] at least not dangerous', () => {
     const fnNext = jest.fn()
