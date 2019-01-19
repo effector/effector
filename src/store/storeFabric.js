@@ -1,5 +1,6 @@
 //@flow
 //@jsx fx
+import $$observable from 'symbol-observable'
 //eslint-disable-next-line no-unused-vars
 import fx from 'effector/stdlib/fx'
 
@@ -7,15 +8,12 @@ import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
 import {Kind} from 'effector/stdlib/kind'
-import {pushNext} from 'effector/stdlib/typedef'
-
-import $$observable from 'symbol-observable'
 
 import {createStateRef} from 'effector/stdlib/stateref'
-import {createEvent, type Event} from 'effector/event'
+import {createEvent, forward, type Event} from 'effector/event'
 import type {Store} from './index.h'
 import {setStoreName} from './setStoreName'
-import {type CompositeName} from '../compositeName'
+import type {CompositeName} from '../compositeName'
 
 export function storeFabric<State>(props: {
   currentState: State,
@@ -43,7 +41,15 @@ export function storeFabric<State>(props: {
   )
 
   const updater: any = createEvent('update ' + currentId)
-
+  const storeInstance = {
+    graphite: def,
+    kind: Kind.store,
+    id: currentId,
+    shortName: currentId,
+    domainName: parent,
+    defaultState,
+    plainState,
+  }
   const store: $Shape<Store<State>> = {
     graphite: def,
     kind: Kind.store,
@@ -78,29 +84,9 @@ export function storeFabric<State>(props: {
       'Expected the listener to be a function.',
     )
     let stopPhaseTimerMessage = null
-    let lastCall = getState()
-    let active = true
-    const runCmd = (
-      <run
-        runner={args => {
-          let stopPhaseTimerMessage = null
-          startPhaseTimer(store, 'subscribe')
-          if (args === lastCall || !active) return
-          lastCall = args
-          try {
-            listener(args)
-          } catch (err) {
-            console.error(err)
-            stopPhaseTimerMessage = 'Got error'
-          }
-          stopPhaseTimer(stopPhaseTimerMessage)
-        }}
-      />
-    )
-    //$todo
-    pushNext(runCmd, store.graphite.next)
+    let lastCall = storeInstance.plainState.current
 
-    startPhaseTimer(store, 'subscribe')
+    startPhaseTimer(storeInstance, 'subscribe')
     try {
       listener(lastCall)
       stopPhaseTimerMessage = 'Initial'
@@ -110,14 +96,31 @@ export function storeFabric<State>(props: {
     }
     stopPhaseTimer(stopPhaseTimerMessage)
 
-    function unsubscribe() {
-      active = false
-      const i = store.graphite.next.data.indexOf(runCmd)
-      if (i === -1) return
-      store.graphite.next.data.splice(i, 1)
-    }
-    unsubscribe.unsubscribe = unsubscribe
-    return unsubscribe
+    return forward({
+      from: storeInstance,
+      to: {
+        graphite: {
+          seq: (
+            //$todo
+            <run
+              runner={args => {
+                let stopPhaseTimerMessage = null
+                startPhaseTimer(storeInstance, 'subscribe')
+                if (args === lastCall) return
+                lastCall = args
+                try {
+                  listener(args)
+                } catch (err) {
+                  console.error(err)
+                  stopPhaseTimerMessage = 'Got error'
+                }
+                stopPhaseTimer(stopPhaseTimerMessage)
+              }}
+            />
+          ),
+        },
+      },
+    })
   }
 
   function observable() {
@@ -153,29 +156,33 @@ export function storeFabric<State>(props: {
   }
   function on(event: any, handler: Function) {
     const e: Event<any> = event
-    const nextSeq = (
-      <seq>
-        <compute
-          fn={newValue => {
-            const lastState = getState()
-            return handler(lastState, newValue, e.getType())
-          }}
-        />
-        <filter
-          filter={data => {
-            const lastState = getState()
-            return data !== lastState && data !== undefined
-          }}
-        />
-        {store.graphite.seq}
-      </seq>
+    subscribers.set(
+      e,
+      forward({
+        from: e,
+        to: {
+          graphite: {
+            seq: (
+              <seq>
+                <compute
+                  fn={newValue => {
+                    const lastState = getState()
+                    return handler(lastState, newValue, e.getType())
+                  }}
+                />
+                <filter
+                  filter={data => {
+                    const lastState = getState()
+                    return data !== lastState && data !== undefined
+                  }}
+                />
+                {store.graphite.seq}
+              </seq>
+            ),
+          },
+        },
+      }),
     )
-    pushNext(nextSeq, e.graphite.next)
-    subscribers.set(e, () => {
-      const i = e.graphite.next.data.indexOf(nextSeq)
-      if (i === -1) return
-      e.graphite.next.data.splice(i, 1)
-    })
     return store
   }
 
@@ -219,7 +226,12 @@ function dispatch(action) {
   return action
 }
 
-export function getDisplayName<A>(store: Store<A>) {
+export function getDisplayName(store: {
+  compositeName?: CompositeName,
+  domainName?: CompositeName,
+  /*::+*/ id: string,
+  /*::...*/
+}) {
   if (store.compositeName) {
     return store.compositeName.fullName
   }
@@ -251,45 +263,45 @@ function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  const nextSeq = (
-    <seq>
-      <compute
-        fn={newValue => {
-          startPhaseTimer(store, 'map')
-          lastValue = newValue
-          let stopPhaseTimerMessage = null
-          const lastState = innerStore.getState()
-          let result
-          try {
-            result = fn(newValue, lastState)
-          } catch (err) {
-            console.error(err)
-            stopPhaseTimerMessage = 'Got error'
-          }
-          stopPhaseTimer(stopPhaseTimerMessage)
-          return result
-        }}
-      />
-      <filter
-        filter={result => {
-          const lastState = innerStore.getState()
-          const isChanged = result !== lastState && result !== undefined
-          if (isChanged) {
-            lastResult = result
-          }
-          stopPhaseTimer(null)
-          return isChanged
-        }}
-      />
-      {innerStore.graphite.seq}
-    </seq>
-  )
-  pushNext(nextSeq, store.graphite.next)
-  //TODO
-  // const off = () => {
-  //   const i = store.graphite.next.data.indexOf(nextSeq)
-  //   if (i === -1) return
-  //   store.graphite.next.data.splice(i, 1)
-  // }
+  forward({
+    from: store,
+    to: {
+      graphite: {
+        seq: (
+          <seq>
+            <compute
+              fn={newValue => {
+                startPhaseTimer(store, 'map')
+                lastValue = newValue
+                let stopPhaseTimerMessage = null
+                const lastState = innerStore.getState()
+                let result
+                try {
+                  result = fn(newValue, lastState)
+                } catch (err) {
+                  console.error(err)
+                  stopPhaseTimerMessage = 'Got error'
+                }
+                stopPhaseTimer(stopPhaseTimerMessage)
+                return result
+              }}
+            />
+            <filter
+              filter={result => {
+                const lastState = innerStore.getState()
+                const isChanged = result !== lastState && result !== undefined
+                if (isChanged) {
+                  lastResult = result
+                }
+                stopPhaseTimer(null)
+                return isChanged
+              }}
+            />
+            {innerStore.graphite.seq}
+          </seq>
+        ),
+      },
+    },
+  })
   return innerStore
 }
