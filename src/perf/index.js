@@ -1,13 +1,18 @@
 //@flow
 
 import {__DEBUG__} from 'effector/flags'
-import {getDisplayName, type Store} from 'effector/store'
+import type {CompositeName} from '../compositeName'
+import {getDisplayName} from 'effector/store'
 
 type StoreMeasurementPhase = 'map' | 'subscribe'
 
 let currentPhase: StoreMeasurementPhase | null = null
-let currentPhaseStore: Store<any> | null = null
-//let hasScheduledUpdateInCurrentPhase: boolean = false
+let currentPhaseStore: {
+  compositeName?: CompositeName,
+  domainName?: CompositeName,
+  /*::+*/ id: string,
+  /*::...*/
+} | null = null
 
 const effectorEmoji = '\u2604'
 
@@ -57,7 +62,7 @@ function endMark(label: string, markName: string, warning: string | null) {
   performance.clearMeasures(formattedLabel)
 }
 
-function beginStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
+function beginStoreMark(store, phase: StoreMeasurementPhase) {
   const componentName = getDisplayName(store)
   const debugID = store.id
   const label = getStoreLabel(componentName, phase)
@@ -66,7 +71,7 @@ function beginStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
   return true
 }
 
-function clearStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
+function clearStoreMark(store, phase: StoreMeasurementPhase) {
   const componentName = getDisplayName(store)
   const debugID = store.id
   const label = getStoreLabel(componentName, phase)
@@ -74,8 +79,8 @@ function clearStoreMark<S>(store: Store<S>, phase: StoreMeasurementPhase) {
   clearMark(markName)
 }
 
-function endStoreMark<S>(
-  store: Store<S>,
+function endStoreMark(
+  store,
   phase: StoreMeasurementPhase,
   warning: string | null,
 ) {
@@ -95,8 +100,13 @@ const clearPendingPhaseMeasurement = () => {
   //hasScheduledUpdateInCurrentPhase = false
 }
 
-export function startPhaseTimer<S>(
-  store: Store<S>,
+export function startPhaseTimer(
+  store: {
+    compositeName?: CompositeName,
+    domainName?: CompositeName,
+    /*::+*/ id: string,
+    /*::...*/
+  },
   phase: StoreMeasurementPhase,
 ): void {
   if (enableUserTimingAPI) {
