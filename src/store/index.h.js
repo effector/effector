@@ -6,6 +6,20 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
 
+import type {StateRef, ID} from 'effector/stdlib/stateref'
+
+export type ThisStore = {
+  compositeName?: CompositeName,
+  defaultState: any,
+  domainName?: CompositeName,
+  +graphite: GraphiteMeta,
+  +id: string,
+  kind: kind,
+  plainState: StateRef,
+  shortName: ID,
+  subscribers: Map<Event<any>, Subscription>,
+}
+
 export type Store<State> = {
   /*::+*/ id: string,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
