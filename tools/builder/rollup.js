@@ -1,5 +1,12 @@
 //@flow
 import {rollup} from 'rollup'
+import {readFile, outputFile} from 'fs-extra'
+//$off
+import Viz from 'viz.js'
+//$off
+import {Module, render} from 'viz.js/full.render.js'
+//$off
+import sharp from 'sharp'
 //$off
 import babel from 'rollup-plugin-babel'
 //$off
@@ -193,7 +200,25 @@ export async function rollupEffectorReact() {
     })
   }
 }
-
+export async function renderModulesGraph() {
+  const root = process.cwd()
+  const source = await readFile(root + '/modules.dot', 'utf8')
+  const viz = new Viz({Module, render})
+  const svg = await viz.renderString(source)
+  await outputFile(root + '/modules.svg', svg)
+  const buffer = await new Promise((rs, rj) => {
+    sharp(root + '/modules.svg')
+      // .resize(1024)
+      // .extract({left: 290, top: 760, width: 40, height: 40})
+      .toFormat('png')
+      .toBuffer((err, data, info) => {
+        if (err) return void rj(err)
+        info
+        rs(data)
+      })
+  })
+  await outputFile(root + '/modules.png', buffer)
+}
 export async function rollupEffectorVue() {
   const name = 'effector-vue'
   await Promise.all([cjsAndEs(), umd()])

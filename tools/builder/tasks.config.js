@@ -2,7 +2,12 @@
 import * as fs from 'fs-extra'
 //$todo
 import execa from 'execa'
-import {rollupEffector, rollupEffectorReact, rollupEffectorVue} from './rollup'
+import {
+  rollupEffector,
+  rollupEffectorReact,
+  rollupEffectorVue,
+  renderModulesGraph,
+} from './rollup'
 import packages from './packages.config'
 import bsconfigs from './bsconfigs.config'
 import {taskList, massCopy, outputPackageJSON} from './utils'
@@ -58,6 +63,7 @@ export default taskList({
           ],
         ]),
       rollupEffector,
+      renderModulesGraph,
       publishScript('effector'),
     ],
     'effector-react': [
