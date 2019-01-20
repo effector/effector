@@ -24,6 +24,8 @@ src/**/*.draft.js
 test/storage.json
 **/.happypack/**
 
+modules.dot
+modules.svg
 npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
