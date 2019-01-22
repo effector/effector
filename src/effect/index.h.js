@@ -1,39 +1,45 @@
 //@flow
+/* eslint-disable no-unused-vars */
 import type {Subscription, Subscriber} from '../effector/index.h'
 import type {GraphiteMeta} from 'effector/stdlib/typedef'
 import type {kind} from 'effector/stdlib/kind'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 
-export type Effect<Params, Done, Fail = Error> = {
-  // (payload: Params): Future<Params, Done, Fail>,
+//TODO: generalize or simplify type, or resolve inconsistensy
+//which leads to adding FnEffect definition
+export type Effect<
+  Params,
+  Done,
+  Fail = Error,
+  -Args = [Params],
+  +Fn = (...params: Args) => Promise<Done> | Done,
+> = {
   /*::
-  [[call]](payload: Params): Promise<Done>,
+  [[call]]: Fn,
   */
   done: Event<{params: Params, result: Done}>,
   fail: Event<{params: Params, error: Fail}>,
   /*::+*/ id: string,
-  use: {
+  /*::+*/ use: {
     /*::
-    [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
+    [[call]]<F>(
+      asyncFunction: (params: Params) => Promise<Done> | Done
+    ): Effect<
+      Params,
+      Done,
+      Fail,
+      Args,
+      Fn,
+    >,
     */
-    getCurrent(): (params: Params) => Promise<Done>,
+    getCurrent(): Fn,
   },
-  create(payload: Params, type: string, args: any[]): E,
+  create(payload: Params, type: string, args: any[]): $Call<Fn, Params>,
   watch(watcher: (payload: Params) => any): Subscription,
-  // getNode(): Vertex<['event', string]>,
   //map<T>(fn: (_: E) => T): Event<T>,
   prepend<Before>(fn: (_: Before) => Params): Event<Before>,
   subscribe(subscriber: Subscriber<Params>): Subscription,
-  //prettier-ignore
-  //   +to: (
-  //   & (<T>(
-  //    store: Store<T>,
-  //    reducer: (state: T, payload: Params) => T
-  //   ) => Subscription)
-  //   & ((store: Store<Params>, _: void) => Subscription)
-  //  ),
-  // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
   getType(): string,
   +kind: kind,
   shortName: string,
@@ -42,8 +48,12 @@ export type Effect<Params, Done, Fail = Error> = {
   compositeName: CompositeName,
 }
 
-export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
-  // (payload: Params): Future<Params, Done, Fail>,
+export type FnEffect<
+  Params,
+  Done,
+  Fail = Error,
+  +Fn = (...params: any[]) => Promise<Done> | Done,
+> = {
   /*::
   [[call]]: Fn,
   */
@@ -54,21 +64,11 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
     (asyncFunction: Fn): void,
     getCurrent(): Fn,
   },
-  create(payload: Params, type: string, args: any[]): E,
+  create(payload: Params, type: string, args: any[]): Promise<Done>,
   +watch: (watcher: (payload: Params) => any) => Subscription,
-  // getNode(): Vertex<['event', string]>,
   //map<T>(fn: (_: E) => T): Event<T>,
   prepend<Before>(fn: (_: Before) => Params): Event<Before>,
   subscribe(subscriber: Subscriber<Params>): Subscription,
-  //prettier-ignore
-  +to: (
-  & (<T>(
-   store: Store<T>,
-   reducer: (state: T, payload: Params) => T
-  ) => Subscription)
-  & ((store: Store<Params>, _: void) => Subscription)
- ),
-  // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
   getType(): string,
   +kind: kind,
   shortName: string,
