@@ -1,9 +1,8 @@
 //@flow
 /* eslint-disable no-unused-vars */
 
-import type {TypeDef} from 'effector/stdlib/typedef'
-import type {StateRef} from 'effector/stdlib/stateref'
-import {Step, Cmd} from 'effector/graphite/typedef'
+import type {StateRef} from './stateref'
+import {Step, Cmd, type TypeDef} from './typedef'
 
 type Fun = TypeDef<*, 'step' | 'cmd'>
 type Using = {
