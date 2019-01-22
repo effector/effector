@@ -1,9 +1,10 @@
 //@flow
 
-import type {TypeDef, GraphiteMeta} from 'effector/stdlib/typedef'
-import type {Subscription} from './effector/index.h'
+import type {TypeDef, GraphiteMeta} from 'effector/stdlib'
+import type {Watcher} from './index.h'
 
 const noopIndexOf = () => -1
+//eslint-disable-next-line no-unused-vars
 const noopSplice = (i: number, n: number) => []
 
 function unsubscriber() {
@@ -13,15 +14,15 @@ function unsubscriber() {
   this.indexOf = noopIndexOf
   this.splice = noopSplice
 }
-const initUnsubscribe = (obj): Subscription => {
+const initUnsubscribe = (obj): Watcher => {
   const result = unsubscriber.bind(obj)
   result.unsubscribe = result
   return (result: $todo)
 }
-export const createUnsubscribe = (opts: {
+export const createWatcher = (opts: {
   child: TypeDef<*, 'cmd' | 'step'>,
   parent: GraphiteMeta,
-}): Subscription => {
+}): Watcher => {
   const subscribers = opts.parent.next.data
   return initUnsubscribe({
     indexOf: subscribers.indexOf.bind(subscribers, opts.child),
