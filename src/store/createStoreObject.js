@@ -1,11 +1,10 @@
 //@flow
 //@jsx fx
 //eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
+import {fx, Kind} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
-import {Kind} from 'effector/stdlib/kind'
 import {storeObjectName, storeObjectArrayName} from './setStoreName'
 import {storeFabric} from './storeFabric'
 

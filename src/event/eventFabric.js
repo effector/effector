@@ -1,17 +1,16 @@
 //@flow
 //@jsx fx
 import $$observable from 'symbol-observable'
-//eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
 
-import type {GraphiteMeta, TypeDef} from 'effector/stdlib/typedef'
+//eslint-disable-next-line no-unused-vars
+import {fx, Kind, type GraphiteMeta, type TypeDef} from 'effector/stdlib'
+import {createWatcher} from 'effector/watcher'
+import type {Effect} from 'effector/effect'
+import {walkEvent} from 'effector/graphite'
+
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
-import type {Effect} from 'effector/effect'
-import {Kind} from 'effector/stdlib/kind'
-import {walkEvent} from 'effector/graphite'
 import {eventRefcount} from '../refcount'
-import {createUnsubscribe} from '../unsubscribe'
 import {type CompositeName, createName} from '../compositeName'
 
 export function eventFabric<Payload>({
@@ -175,7 +174,7 @@ export function forward(opts: {
   const toSeq = opts.to.graphite.seq
   const fromGraphite = opts.from.graphite
   fromGraphite.next.data.push(toSeq)
-  return createUnsubscribe({
+  return createWatcher({
     child: toSeq,
     parent: fromGraphite,
   })

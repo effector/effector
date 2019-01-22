@@ -1,12 +1,10 @@
 //@flow
 //@jsx fx
 //eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
+import {fx, createStateRef, Ctx} from 'effector/stdlib'
 import {show} from 'effector/fixtures/showstep'
-import {Ctx} from 'effector/graphite/typedef'
-import {createStateRef} from 'effector/stdlib/stateref'
-
 import {createEvent, forward} from 'effector/event'
+
 import {walkNode} from '../walk'
 
 function eventCtx(payload) {

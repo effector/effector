@@ -1,9 +1,7 @@
 //@flow
-// import invariant from 'invariant'
+
 import type {Event} from 'effector/event'
-import {type StateRef, createStateRef} from 'effector/stdlib/stateref'
-import {Ctx} from 'effector/graphite/typedef'
-import type {TypeDef} from 'effector/stdlib/typedef'
+import {type TypeDef, Ctx, type StateRef, createStateRef} from 'effector/stdlib'
 import {__DEV__} from 'effector/flags'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {

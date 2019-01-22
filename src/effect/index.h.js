@@ -1,7 +1,6 @@
 //@flow
 import type {Subscription, Subscriber} from '../effector/index.h'
-import type {GraphiteMeta} from 'effector/stdlib/typedef'
-import type {kind} from 'effector/stdlib/kind'
+import type {kind, GraphiteMeta} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 

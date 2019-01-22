@@ -2,12 +2,9 @@
 //@jsx fx
 import $$observable from 'symbol-observable'
 //eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
-
-import {Kind} from 'effector/stdlib/kind'
-
-import {createStateRef} from 'effector/stdlib/stateref'
+import {fx, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
+
 import type {Store, ThisStore} from './index.h'
 import {setStoreName} from './setStoreName'
 import type {CompositeName} from '../compositeName'
@@ -90,9 +87,7 @@ const createDef = plainState => {
   def.next = <multi />
   def.seq = (
     <seq>
-      <filter
-        filter={filterBeforeUpdate.bind(plainState)}
-      />
+      <filter filter={filterBeforeUpdate.bind(plainState)} />
       <update store={plainState} />
       {def.next}
     </seq>
