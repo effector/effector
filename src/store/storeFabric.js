@@ -34,23 +34,9 @@ export function storeFabric<State>(props: {
   const currentId = plainState.id
   const defaultState = currentState
 
-  const def = {}
-  def.next = <multi />
-  def.seq = (
-    <seq>
-      <filter
-        filter={newValue =>
-          newValue !== undefined && newValue !== plainState.current
-        }
-      />
-      <update store={plainState} />
-      {def.next}
-    </seq>
-  )
-
   const updater: any = createEvent('update ' + currentId)
   const storeInstance: ThisStore = {
-    graphite: def,
+    graphite: createDef(plainState),
     kind: Kind.store,
     id: currentId,
     shortName: currentId,
@@ -60,7 +46,7 @@ export function storeFabric<State>(props: {
     subscribers: new Map(),
   }
   const store: $Shape<Store<State>> = {
-    graphite: def,
+    graphite: storeInstance.graphite,
     kind: Kind.store,
     id: currentId,
     shortName: currentId,
@@ -94,4 +80,22 @@ export function storeFabric<State>(props: {
   }
 
   return store
+}
+
+function filterBeforeUpdate(newValue) {
+  return newValue !== undefined && newValue !== this.current
+}
+const createDef = plainState => {
+  const def = {}
+  def.next = <multi />
+  def.seq = (
+    <seq>
+      <filter
+        filter={filterBeforeUpdate.bind(plainState)}
+      />
+      <update store={plainState} />
+      {def.next}
+    </seq>
+  )
+  return def
 }
