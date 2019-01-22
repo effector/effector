@@ -1,0 +1,17 @@
+pulls:
+# Enable for pull requests
+  perform: true
+# Customize a comment to post on a pull request. Comment out to use the default
+#  comment:
+
+issues:
+# enable for issues
+  perform: true
+# issues with these labels will be considered. Set to `[]` to disable for issues
+  labels:
+    - RFC
+    - bug
+    - help wanted
+    - good first issue
+# Customize a comment to post on an issue. Comment out to use the default
+#  comment:
