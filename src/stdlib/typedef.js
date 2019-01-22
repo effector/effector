@@ -1,5 +1,6 @@
 //@flow
-let nextID = 0
+import {stringRefcount} from './refcount'
+const nextID = stringRefcount()
 export type ID = string
 export type TypeDef<+Type, +Group> = {
   +id: ID,
@@ -54,7 +55,7 @@ function typeDef(group, t) {
 }
 function type(data) {
   return {
-    id: (++nextID).toString(36),
+    id: nextID(),
     type: this.key,
     group: this.group,
     data,

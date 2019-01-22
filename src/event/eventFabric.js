@@ -2,16 +2,23 @@
 //@jsx fx
 import $$observable from 'symbol-observable'
 
-//eslint-disable-next-line no-unused-vars
-import {fx, Kind, type GraphiteMeta, type TypeDef} from 'effector/stdlib'
+import {
+  //eslint-disable-next-line no-unused-vars
+  fx,
+  Kind,
+  stringRefcount,
+  type GraphiteMeta,
+  type TypeDef,
+} from 'effector/stdlib'
 import {createWatcher} from 'effector/watcher'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
-import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
+
+const nextID = stringRefcount()
 
 export function eventFabric<Payload>({
   name: nameRaw,
@@ -20,7 +27,7 @@ export function eventFabric<Payload>({
   name?: string,
   parent?: CompositeName,
 }): Event<Payload> {
-  const id = eventRefcount()
+  const id = nextID()
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
