@@ -13,7 +13,7 @@ export type StoreProvider<State> = React.ComponentType<{
 
 export function createComponent<Props, State>(
  store: Store<State>,
- renderProp: (props: Props, state: State) => React.Node,
+ renderProp: (props: Props, state: State) => React.ReactNode,
 ): React.ComponentType<Props>
 export function createContextComponent<Props, State, Context>(
  store: Store<State>,
