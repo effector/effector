@@ -87,6 +87,7 @@ export function watch(
     case 'effect':
       invariant(typeof fn === 'function', 'watch requires function handler')
       return eventOrFn.watch(payload =>
+        //$todo
         fn(getState(storeInstance), payload, eventOrFn.getType()),
       )
     case '__':
