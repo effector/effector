@@ -18,21 +18,21 @@ export function effectFabric<Payload, Done>({
   name?: string,
   domainName: string,
   parent?: CompositeName,
-  handler?: (payload: Payload) => (Promise<Done> | Done),
+  handler?: (payload: Payload) => Promise<Done> | Done,
 }): Effect<Payload, Done, *> {
-  const instanceAsEvent: Event<Payload> = eventFabric({
+  //$off
+  const instance: Effect<Payload, Done, any> = eventFabric({
     name,
     parent,
   })
 
-  const instance: Effect<Payload, Done, any> = (instanceAsEvent: any)
-  const eventCreate = instanceAsEvent.create
+  const eventCreate = instance.create
   const done: Event<{params: Payload, result: Done}> = eventFabric({
-    name: '' + instanceAsEvent.shortName + ' done',
+    name: '' + instance.shortName + ' done',
     parent,
   })
   const fail: Event<{params: Payload, error: *}> = eventFabric({
-    name: '' + instanceAsEvent.shortName + ' fail',
+    name: '' + instance.shortName + ' fail',
     parent,
   })
 
@@ -45,18 +45,19 @@ export function effectFabric<Payload, Done>({
   ;(instance: any).use.getCurrent = (): any => thunk
   ;(instance: any).kind = Kind.effect
   ;(instance: any).create = (params: Payload, fullName, args) => {
-    eventCreate(params, instanceAsEvent.getType(), args)
+    eventCreate(params, instance.getType(), args)
     return exec(
       params,
       callbacks(thunk, result => void done(result), error => void fail(error)),
     )
   }
   //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler || defaultThunk.bind(instanceAsEvent)
+  let thunk: Function = handler || defaultThunk.bind(instance)
 
   return instance
 }
-function defaultThunk(value: *) {
+//eslint-disable-next-line no-unused-vars
+function defaultThunk(value) {
   warning(false, 'no thunk used in %s', this.getType())
   return Promise.resolve()
 }
