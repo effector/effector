@@ -133,7 +133,7 @@ rules:
   no-implied-eval: error
   no-proto: error
   no-iterator: error
-  no-lone-blocks: error
+  no-lone-blocks: 'off'
   no-self-compare: error
   no-self-assign:
     - error
