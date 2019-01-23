@@ -42,6 +42,9 @@ export function storeFabric<State>(props: {
     plainState,
     subscribers: new Map(),
   }
+  //TODO fix type
+  //$off
+  if (name) setStoreName(storeInstance, name)
   const store: $Shape<Store<State>> = {
     graphite: storeInstance.graphite,
     kind: Kind.store,
@@ -56,15 +59,15 @@ export function storeFabric<State>(props: {
     //$off
     [$$observable]: observable.bind(null, storeInstance),
   }
+  //TODO fix type
+  //$off
+  if (name) setStoreName(store, name)
   ;(store: any).reset = reset.bind(store, storeInstance)
   ;(store: any).on = on.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
   ;(store: any).map = mapStore.bind(storeFabric, store)
   ;(store: any).thru = thru.bind(store)
   ;(store: any).dispatch = dispatch.bind(null)
-  //TODO fix type
-  //$off
-  if (name) setStoreName(store, name)
   store.on(updater, (_, payload) => payload)
 
   function setState(value, reduce?: Function) {

@@ -127,7 +127,10 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
             runner={args => {
               let stopPhaseTimerMessage = null
               startPhaseTimer(storeInstance, 'subscribe')
-              if (args === lastCall) return
+              if (args === lastCall) {
+                stopPhaseTimer(stopPhaseTimerMessage)
+                return
+              }
               lastCall = args
               try {
                 listener(args)
