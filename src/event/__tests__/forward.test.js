@@ -1,6 +1,7 @@
 //@flow
 
 import {forward, createEvent} from '..'
+import {createStore} from 'effector/store'
 
 it('should forward data from one event to another', () => {
   const fn = jest.fn()
@@ -52,4 +53,37 @@ it('should stop forwarding after unsubscribe', () => {
     ['should been forwarded [1]'],
     ['should been forwarded [2]'],
   ])
+})
+
+it('should unsubscribe only from relevant watchers', async() => {
+  const dispatch = createEvent('dispatch')
+  const store = createStore([])
+  store.on(dispatch, (state, text) => [...state, text])
+  function subscribe(fn) {
+    let first = true
+    return store.watch(data => {
+      if (first) {
+        first = false
+        return
+      }
+      fn(data)
+    })
+  }
+  const listenerA = jest.fn()
+  const listenerB = jest.fn()
+  const listenerC = jest.fn()
+
+  subscribe(listenerA)
+  const unSubB = subscribe(data => {
+    listenerB(data)
+    unSubB()
+  })
+  subscribe(listenerC)
+
+  dispatch('item 1')
+  dispatch('item 2')
+
+  expect(listenerA.mock.calls.length).toBe(2)
+  expect(listenerB.mock.calls.length).toBe(1)
+  expect(listenerC.mock.calls.length).toBe(2)
 })
