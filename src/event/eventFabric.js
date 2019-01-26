@@ -35,30 +35,31 @@ export function eventFabric<Payload>({
     fullName,
   })
 
-  const instance = (payload: Payload, ...args: any[]): Payload =>
-    instanceAsEvent.create(payload, fullName, args)
-  const instanceAsEvent: Event<Payload> = (instance: any)
-  instanceAsEvent.graphite = graphite
-
-  instance.getType = () => compositeName.fullName
+  //$off
+  const instance: Event<Payload> = (
+    payload: Payload,
+    ...args: any[]
+  ): Payload => instance.create(payload, fullName, args)
+  ;(instance: any).getType = () => compositeName.fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
-    walkEvent(payload, instanceAsEvent)
+    walkEvent(payload, instance)
     return payload
   }
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
-  instance.id = id
-  instance.watch = watchEvent.bind(null, instanceAsEvent)
-  instance.map = mapEvent.bind(null, instanceAsEvent)
-  instance.filter = filterEvent.bind(null, instanceAsEvent)
-  instance.prepend = prepend.bind(null, instance)
-  instance.subscribe = subscribe.bind(null, instance)
+  ;(instance: any).id = id
+  ;(instance: any).watch = watchEvent.bind(null, instance)
+  ;(instance: any).map = mapEvent.bind(null, instance)
+  ;(instance: any).filter = filterEvent.bind(null, instance)
+  ;(instance: any).prepend = prepend.bind(null, instance)
+  ;(instance: any).subscribe = subscribe.bind(null, instance)
+  instance.graphite = graphite
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
 
-  return (instance: $todo)
+  return instance
 }
 
 function subscribe(event, observer): Subscription {
