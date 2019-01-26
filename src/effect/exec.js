@@ -28,7 +28,7 @@ export const exec = <Args, Done, Fail>(
     const anyway = Promise.resolve(undefined)
     //$off
     fpromise.anyway = () => anyway
-    cbs[1]({error: syncError, params: args})
+    cbs[1]({params: args, error: syncError})
     return fpromise
   }
   if (
@@ -41,11 +41,11 @@ export const exec = <Args, Done, Fail>(
       result => {
         //$off
         fpromise.cache = () => result
-        cbs[0]({result, params: args})
+        cbs[0]({params: args, result})
         return result
       },
       error => {
-        cbs[1]({error, params: args})
+        cbs[1]({params: args, error})
         throw error
       },
     )
@@ -63,6 +63,6 @@ export const exec = <Args, Done, Fail>(
   const anyway = Promise.resolve(undefined)
   //$off
   fpromise.anyway = () => anyway
-  cbs[0]({result: done, params: args})
+  cbs[0]({params: args, result: done})
   return fpromise
 }
