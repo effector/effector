@@ -59,15 +59,17 @@ const stepVisitor = {
     meta.stop = !command[meta.ctx.type].transition(meta.reg)
   },
   multi(step, ctx, meta) {
-    for (let i = 0; i < step.data.length; i++) {
-      runStep(step.data[i], ctx, meta)
+    const items = step.data.slice()
+    for (let i = 0; i < items.length; i++) {
+      runStep(items[i], ctx, meta)
     }
     meta.stop = false
   },
   seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
     meta.ctx = prev
-    for (let i = 0; i < steps.data.length; i++) {
-      runStep(steps.data[i], meta.ctx, meta)
+    const items = steps.data.slice()
+    for (let i = 0; i < items.length; i++) {
+      runStep(items[i], meta.ctx, meta)
       if (meta.stop) {
         break
       }
