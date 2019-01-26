@@ -1,5 +1,6 @@
 //@flow
-let nextID = 0
+import {stringRefcount} from './refcount'
+const nextID = stringRefcount()
 export type ID = string
 export type TypeDef<+Type, +Group> = {
   +id: ID,
@@ -12,31 +13,51 @@ export type GraphiteMeta = {
   +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
 }
-export function pushNext(
-  add: TypeDef<'multi' | 'seq' | 'single', 'step'>,
-  nexts: TypeDef<'multi', 'step'>,
-) {
-  nexts.data.push(add)
-}
-const fabricHandler = create => (typeof create === 'function' ? create : _ => _)
+
+export const Step = typeDef(('step': 'step'), {
+  single: null,
+  multi: null,
+  seq: null,
+  choose: null,
+  loop: null,
+})
+
+export const Cmd = typeDef(('cmd': 'cmd'), {
+  compute: null,
+  emit: null,
+  run: null,
+  filter: null,
+  update: null,
+})
+
+export const Ctx = typeDef(('ctx': 'ctx'), {
+  compute: null,
+  emit: null,
+  run: null,
+  filter: null,
+  update: null,
+})
 
 //eslint-disable-next-line no-unused-vars
-declare export function typeDef<T: {+[key: string]: any}, Group>(
+declare function typeDef<T: {+[key: string]: any}, Group>(
   group: Group,
   t: T,
 ): $ObjMapi<T, <K>(k: K) => (data: any) => TypeDef<K, Group>>
-export function typeDef(group, t) {
+function typeDef(group, t) {
   const result = {}
-  let key
-  for (key in t) {
-    const currentKey = key
-    const handler = fabricHandler(t[currentKey])
-    result[currentKey] = args => ({
-      id: (++nextID).toString(36),
-      type: currentKey,
+  for (const key in t) {
+    result[key] = type.bind({
+      key,
       group,
-      data: handler(args),
     })
   }
   return result
+}
+function type(data) {
+  return {
+    id: nextID(),
+    type: this.key,
+    group: this.group,
+    data,
+  }
 }

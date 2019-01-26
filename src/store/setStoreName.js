@@ -1,9 +1,9 @@
 //@flow
 
-import type {Store} from './index.h'
-import {getDisplayName} from 'effector/store'
-import {Kind} from 'effector/stdlib/kind'
+import {Kind} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
+import type {Store} from './index.h'
+import {getDisplayName} from './staticMethods'
 import {createName} from '../compositeName'
 
 const storeObjectMaxNames = 25

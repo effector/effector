@@ -57,7 +57,7 @@ describe('perf', () => {
             return (
               [
                 ...this.comments.map(c => '  '.repeat(this.indent) + '// ' + c),
-                '  '.repeat(this.indent) + this.label,
+                '  '.repeat(this.indent) + String(this.label),
                 ...this.children.map(c => c.toString()),
               ].join('\n') +
               // Extra newline after each root reconciliation

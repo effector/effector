@@ -40,6 +40,55 @@ test('event.watch(fn)', () => {
   ])
 })
 
+test('event.prepend(fn)', () => {
+  const click = createEvent('click')
+  const preclick = click.prepend(([n]) => n)
+  click.watch(spy)
+  preclick([])
+  preclick([1])
+  preclick([2])
+  /**
+   * TODO: It's a bug! Prepend should not skip empty returns
+   *
+   * should be
+   *
+   *     expect(spy).toHaveBeenCalledTimes(3)
+   *     expect(getSpyCalls()).toEqual([
+   *       [undefined, 'click'],
+   *       [1, 'click'],
+   *       [2, 'click'],
+   *     ])
+   *
+   */
+  expect(spy).not.toHaveBeenCalledTimes(3)
+  expect(spy).toHaveBeenCalledTimes(2)
+  expect(getSpyCalls()).not.toEqual([
+    [undefined, 'click'],
+    [1, 'click'],
+    [2, 'click'],
+  ])
+  expect(getSpyCalls()).toEqual([
+    // [undefined, 'click'],
+    [1, 'click'],
+    [2, 'click'],
+  ])
+})
+
+test('event.map(fn)', () => {
+  const click = createEvent('click')
+  const postclick = click.map(n => [n])
+  postclick.watch(spy)
+  click()
+  click(1)
+  click(2)
+  expect(spy).toHaveBeenCalledTimes(3)
+  expect(getSpyCalls()).toEqual([
+    [[undefined], 'click → *'],
+    [[1], 'click → *'],
+    [[2], 'click → *'],
+  ])
+})
+
 test('event.filter should infer type', () => {
   const num: Event<number | '-1'> = createEvent('number')
 

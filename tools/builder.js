@@ -5,6 +5,9 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var fs = require('fs-extra');
 var execa = _interopDefault(require('execa'));
 var rollup = require('rollup');
+var Viz = _interopDefault(require('viz.js'));
+var full_render_js = require('viz.js/full.render.js');
+var sharp = _interopDefault(require('sharp'));
 var babel = _interopDefault(require('rollup-plugin-babel'));
 var resolve = _interopDefault(require('rollup-plugin-node-resolve'));
 var rollupPluginTerser = require('rollup-plugin-terser');
@@ -19,9 +22,9 @@ const scale = chroma.scale([chroma('#fafa6e').darken(2), '#2A4858']).mode('lch')
 function toDot(modules, output) {
   const results = [];
   results.push('digraph G {');
-  results.push('  edge [color="#aaaaaa",dir=back];');
+  results.push('  edge [color="#999999",dir=back];');
   results.push('  node [style=filled,color=white,fontsize="25px"];');
-  results.push('  graph [fontsize=15 compound=true];');
+  results.push('  graph [fontsize=20 compound=true];');
   results.push('  rankdir=TB;');
   results.push('  ranksep=".95 equally";');
   results.push('  ratio=auto;');
@@ -115,7 +118,8 @@ function toDot(modules, output) {
     clusterRoots.colors[clusterName] = color;
     cluster.push(`  subgraph ${clusterName} {`);
     cluster.push(`    style="rounded,bold";`);
-    cluster.push(`    color="${color}";`);
+    cluster.push(`    color="${color}";`); // cluster.push(`    color="transparent";`)
+
     cluster.push(`    node [fontcolor="${color}",fontsize="25px"];`);
     childs.forEach(childName => {
       freeNodes.delete(childName);
@@ -321,6 +325,9 @@ var devDependencies = {
 	"eslint-plugin-react": "^7.12.4",
 	execa: "^1.0.0",
 	express: "^4.16.4",
+	fastify: "^1.13.3",
+	"fastify-babel": "^1.1.0",
+	"fastify-favicon": "^0.3.0",
 	"flow-bin": "^0.91.0",
 	"flow-copy-source": "^2.0.2",
 	flowgen: "^1.3.0",
@@ -368,9 +375,11 @@ var devDependencies = {
 	"rollup-plugin-visualizer": "^0.9.2",
 	serve: "^10.1.1",
 	setimmediate: "^1.0.5",
+	sharp: "^0.21.3",
 	shelljs: "^0.8.3",
 	"styled-components": "^4.1.3",
 	terser: "^3.14.1",
+	"viz.js": "^2.1.2",
 	vue: "^2.5.22"
 };
 var maintainers = [
@@ -621,6 +630,25 @@ async function rollupEffectorReact() {
     });
   }
 }
+async function renderModulesGraph() {
+  const root = process.cwd();
+  const source = await fs.readFile(root + '/modules.dot', 'utf8');
+  const viz = new Viz({
+    Module: full_render_js.Module,
+    render: full_render_js.render
+  });
+  const svg = await viz.renderString(source);
+  await fs.outputFile(root + '/modules.svg', svg);
+  const buffer = await new Promise((rs, rj) => {
+    sharp(root + '/modules.svg') // .resize(1024)
+    // .extract({left: 290, top: 760, width: 40, height: 40})
+    .toFormat('png').toBuffer((err, data, info) => {
+      if (err) return void rj(err);
+      rs(data);
+    });
+  });
+  await fs.outputFile(root + '/modules.png', buffer);
+}
 async function rollupEffectorVue() {
   const name = 'effector-vue';
   await Promise.all([cjsAndEs(), umd()]);
@@ -867,7 +895,7 @@ const publishScript = name => async () => {
 
 var tasks_config = taskList({
   tasks: {
-    effector: [() => outputPackageJSON('packages/effector/package.json', packages.effector), () => massCopy('.', 'npm/effector', ['LICENSE', 'README.md']), () => massCopy('packages/effector', 'npm/effector', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector.cjs.js.flow', 'effector.es.js.flow', 'effector.bundle.js.flow']]]), rollupEffector, publishScript('effector')],
+    effector: [() => outputPackageJSON('packages/effector/package.json', packages.effector), () => massCopy('.', 'npm/effector', ['LICENSE', 'README.md']), () => massCopy('packages/effector', 'npm/effector', ['index.d.ts', 'package.json', ['index.js.flow', ['index.js.flow', 'effector.cjs.js.flow', 'effector.es.js.flow', 'effector.bundle.js.flow']]]), rollupEffector, renderModulesGraph, publishScript('effector')],
     'effector-react': [() => outputPackageJSON('packages/effector-react/package.json', packages['effector-react']), () => massCopy('.', 'npm/effector-react', ['LICENSE']), () => massCopy('packages/effector-react', 'npm/effector-react', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-react.cjs.js.flow', 'effector-react.es.js.flow', 'effector-react.bundle.js.flow']]]), rollupEffectorReact, publishScript('effector-react')],
     'effector-vue': [() => outputPackageJSON('packages/effector-vue/package.json', packages['effector-vue']), () => massCopy('.', 'npm/effector-vue', ['LICENSE']), () => massCopy('packages/effector-vue', 'npm/effector-vue', ['index.d.ts', 'README.md', 'package.json', ['index.js.flow', ['index.js.flow', 'effector-vue.cjs.js.flow', 'effector-vue.es.js.flow', 'effector-vue.bundle.js.flow']]]), rollupEffectorVue, publishScript('effector-vue')],
     'bs-effector': [() => outputPackageJSON('packages/bs-effector/package.json', packages['bs-effector']), () => fs.outputJSON('packages/bs-effector/bsconfig.json', bsconfigs['bs-effector'], {

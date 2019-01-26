@@ -1,6 +1,5 @@
 //@flow
-
-export type ID = string
+import type {ID} from './typedef'
 let id = 0
 
 export type StateRef = {

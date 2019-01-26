@@ -1,10 +1,21 @@
 //@flow
 import type {Subscription} from '../effector/index.h'
-import type {GraphiteMeta} from 'effector/stdlib/typedef'
-import type {kind} from 'effector/stdlib/kind'
+import type {GraphiteMeta, kind, StateRef, ID} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
+
+export type ThisStore = {
+  compositeName?: CompositeName,
+  defaultState: any,
+  domainName?: CompositeName,
+  +graphite: GraphiteMeta,
+  +id: string,
+  kind: kind,
+  plainState: StateRef,
+  shortName: ID,
+  subscribers: Map<Event<any>, Subscription>,
+}
 
 export type Store<State> = {
   /*::+*/ id: string,

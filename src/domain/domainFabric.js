@@ -1,21 +1,22 @@
 //@flow
 
-import type {Domain, DomainHooks} from './index.h'
+import {stringRefcount} from 'effector/stdlib'
 import {type Store, storeFabric} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
+
+import type {Domain, DomainHooks} from './index.h'
 import {createName, type CompositeName} from '../compositeName'
-import {stringRefcount} from '../refcount'
 import {DomainHistory, domainHooks} from './hook'
 
-const nextId = stringRefcount()
+const nextID = stringRefcount()
 
 export function domainFabric(
   nameRaw?: string,
   parent?: CompositeName,
   parentHooks?: DomainHooks,
 ): Domain {
-  const id = nextId()
+  const id = nextID()
   const name = nameRaw || ''
   const compositeName = createName(name, parent)
   const history = new DomainHistory()

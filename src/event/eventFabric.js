@@ -1,17 +1,24 @@
 //@flow
 //@jsx fx
-//eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
-
-import {pushNext, type GraphiteMeta} from 'effector/stdlib/typedef'
 import $$observable from 'symbol-observable'
+
+import {
+  //eslint-disable-next-line no-unused-vars
+  fx,
+  Kind,
+  stringRefcount,
+  type GraphiteMeta,
+  type TypeDef,
+} from 'effector/stdlib'
+import {createWatcher} from 'effector/watcher'
+import type {Effect} from 'effector/effect'
+import {walkEvent} from 'effector/graphite'
+
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
-import type {Effect} from 'effector/effect'
-import {Kind} from 'effector/stdlib/kind'
-import {walkEvent} from 'effector/graphite'
-import {eventRefcount} from '../refcount'
 import {type CompositeName, createName} from '../compositeName'
+
+const nextID = stringRefcount()
 
 export function eventFabric<Payload>({
   name: nameRaw,
@@ -20,67 +27,64 @@ export function eventFabric<Payload>({
   name?: string,
   parent?: CompositeName,
 }): Event<Payload> {
-  const id = eventRefcount()
+  const id = nextID()
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = fabric.event({
+  const graphite = fabric({
     fullName,
   })
 
-  const instance = (payload: Payload, ...args: any[]): Payload =>
-    instanceAsEvent.create(payload, fullName, args)
-  const instanceAsEvent: Event<Payload> = (instance: any)
-  instanceAsEvent.graphite = graphite
-
-  instance.getType = () => compositeName.fullName
+  //$off
+  const instance: Event<Payload> = (
+    payload: Payload,
+    ...args: any[]
+  ): Payload => instance.create(payload, fullName, args)
+  ;(instance: any).getType = () => compositeName.fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
-    walkEvent(payload, instanceAsEvent)
+    walkEvent(payload, instance)
     return payload
   }
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
-  instance.id = id
-  instance.watch = watch
-  instance.map = map
-  instance.prepend = prepend
-  instance.subscribe = subscribe
+  ;(instance: any).id = id
+  ;(instance: any).watch = watchEvent.bind(null, instance)
+  ;(instance: any).map = mapEvent.bind(null, instance)
+  ;(instance: any).filter = filterEvent.bind(null, instance)
+  ;(instance: any).prepend = prepend.bind(null, instance)
+  ;(instance: any).subscribe = subscribe.bind(null, instance)
+  instance.graphite = graphite
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
-  instance.filter = filter
-  function filter<Next>(fn: Payload => Next | void): Event<Next> {
-    return filterEvent(instanceAsEvent, fn)
-  }
 
-  function map<Next>(fn: Payload => Next): Event<Next> {
-    return mapEvent(instanceAsEvent, fn)
-  }
+  return instance
+}
 
-  function watch(
-    watcher: (payload: Payload, type: string) => any,
-  ): Subscription {
-    return watchEvent(instanceAsEvent, watcher)
-  }
+function subscribe(event, observer): Subscription {
+  return event.watch(payload => observer.next(payload))
+}
 
-  function subscribe(observer): Subscription {
-    return watch(payload => observer.next(payload))
-  }
-  function prepend<Before>(fn: Before => Payload) {
-    const contramapped: Event<Before> = eventFabric({
-      name: '* → ' + name,
-      parent,
-    })
-    fabric.prependEvent({
-      fn,
-      graphite: contramapped.graphite,
-      parentGraphite: graphite,
-    })
-    return contramapped
-  }
-
-  return (instance: $todo)
+function prepend(event, fn: (_: any) => *) {
+  const contramapped: Event<any> = eventFabric({
+    name: '* → ' + event.shortName,
+    parent: event.domainName,
+  })
+  forward({
+    from: contramapped,
+    to: {
+      graphite: {
+        seq: (
+          <seq>
+            <compute fn={newValue => fn(newValue)} />
+            {event.graphite.seq}
+          </seq>
+        ),
+      },
+    },
+  })
+  return contramapped
 }
 
 declare function mapEvent<A, B>(event: Event<A>, fn: (_: A) => B): Event<B>
@@ -93,10 +97,18 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  fabric.mapEvent({
-    fn,
-    graphite: mapped.graphite,
-    parentGraphite: event.graphite,
+  forward({
+    from: event,
+    to: {
+      graphite: {
+        seq: (
+          <seq>
+            <compute fn={newValue => fn(newValue)} />
+            {mapped.graphite.seq}
+          </seq>
+        ),
+      },
+    },
   })
   return mapped
 }
@@ -109,10 +121,19 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  fabric.filterEvent({
-    fn,
-    graphite: mapped.graphite,
-    parentGraphite: event.graphite,
+  forward({
+    from: event,
+    to: {
+      graphite: {
+        seq: (
+          <seq>
+            <compute fn={newValue => fn(newValue)} />
+            <filter filter={result => result !== undefined} />
+            {mapped.graphite.seq}
+          </seq>
+        ),
+      },
+    },
   })
   return mapped
 }
@@ -121,19 +142,18 @@ function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  const runCmd = (
-    <run runner={(newValue: Payload) => watcher(newValue, event.getType())} />
-  )
-  //$todo
-  pushNext(runCmd, event.graphite.next)
-  const unsubscribe = () => {
-    const i = event.graphite.next.data.indexOf(runCmd)
-    if (i === -1) return
-
-    event.graphite.next.data.splice(i, 1)
-  }
-  unsubscribe.unsubscribe = unsubscribe
-  return unsubscribe
+  return forward({
+    from: event,
+    to: {
+      graphite: {
+        seq: ((
+          <run
+            runner={(newValue: Payload) => watcher(newValue, event.getType())}
+          />
+        ): $todo),
+      },
+    },
+  })
 }
 function makeName(name: string, compositeName?: CompositeName) {
   const fullName = compositeName?.fullName
@@ -143,59 +163,40 @@ function makeName(name: string, compositeName?: CompositeName) {
   }
   return '' + fullName + '/' + name
 }
-const fabric = {
-  event(args: {fullName: string}): GraphiteMeta {
-    const nextSteps = <multi />
-    const stepFull = (
+type Graphiter = {
+  +graphite: GraphiteMeta,
+  /*::...*/
+}
+type GraphiterSmall = {
+  +graphite: {
+    +seq: TypeDef<'seq' | 'loop', 'step'>,
+    /*::...*/
+  },
+  /*::...*/
+}
+
+export function forward(opts: {
+  from: Graphiter,
+  to: GraphiterSmall,
+}): Subscription {
+  const toSeq = opts.to.graphite.seq
+  const fromGraphite = opts.from.graphite
+  fromGraphite.next.data.push(toSeq)
+  return createWatcher({
+    child: toSeq,
+    parent: fromGraphite,
+  })
+}
+
+const fabric = (args: {fullName: string}): GraphiteMeta => {
+  const nextSteps = <multi />
+  return {
+    next: nextSteps,
+    seq: (
       <seq>
         <emit fullName={args.fullName} />
         {nextSteps}
       </seq>
-    )
-    const graphite = {next: nextSteps, seq: stepFull}
-    return graphite
-  },
-  prependEvent(args: {|
-    fn: Function,
-    graphite: GraphiteMeta,
-    parentGraphite: GraphiteMeta,
-  |}) {
-    const {fn, graphite, parentGraphite} = args
-    pushNext(
-      <seq>
-        <compute fn={newValue => fn(newValue)} />
-        {parentGraphite.seq}
-      </seq>,
-      graphite.next,
-    )
-  },
-  mapEvent(args: {|
-    fn: Function,
-    graphite: GraphiteMeta,
-    parentGraphite: GraphiteMeta,
-  |}) {
-    const {fn, graphite, parentGraphite} = args
-    pushNext(
-      <seq>
-        <compute fn={newValue => fn(newValue)} />
-        {graphite.seq}
-      </seq>,
-      parentGraphite.next,
-    )
-  },
-  filterEvent(args: {|
-    fn: Function,
-    graphite: GraphiteMeta,
-    parentGraphite: GraphiteMeta,
-  |}) {
-    const {fn, graphite, parentGraphite} = args
-    pushNext(
-      <seq>
-        <compute fn={newValue => fn(newValue)} />
-        <filter filter={result => result !== undefined} />
-        {graphite.seq}
-      </seq>,
-      parentGraphite.next,
-    )
-  },
+    ),
+  }
 }

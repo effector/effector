@@ -1,13 +1,10 @@
 //@flow
 //@jsx fx
 //eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
+import {fx, Kind} from 'effector/stdlib'
 
-import {pushNext} from 'effector/stdlib/typedef'
-
-import {createEvent} from 'effector/event'
+import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
-import {Kind} from 'effector/stdlib/kind'
 import {storeObjectName, storeObjectArrayName} from './setStoreName'
 import {storeFabric} from './storeFabric'
 
@@ -53,7 +50,12 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
       }
       stateNew[key] = substore.getState()
       //$todo
-      pushNext(runCmd, substore.graphite.next)
+      forward({
+        from: substore,
+        to: {
+          graphite: {seq: runCmd},
+        },
+      })
     }
   }
   const name = storeObjectArrayName(obj)
@@ -109,7 +111,12 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     }
     stateNew[key] = substore.getState()
     //$todo
-    pushNext(runCmd, substore.graphite.next)
+    forward({
+      from: substore,
+      to: {
+        graphite: {seq: runCmd},
+      },
+    })
   }
   //$todo
   const name = storeObjectName(obj)

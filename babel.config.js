@@ -17,6 +17,7 @@ module.exports = api => {
     'effector/fixtures': resolveSource('fixtures'),
     'effector/stdlib': resolveSource('stdlib'),
     'effector/perf': resolveSource('perf'),
+    'effector/watcher': resolveSource('watcher'),
     'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
     warning: resolveSource('warning'),
     invariant: resolveSource('invariant'),

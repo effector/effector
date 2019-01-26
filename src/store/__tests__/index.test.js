@@ -59,6 +59,30 @@ describe('.watch', () => {
 
     expect(spy).toHaveBeenCalledTimes(3)
   })
+  it('returns unsubscribe function', () => {
+    const newWord = createEvent<string>()
+    const a = createStore('word').on(newWord, (_, word) => word)
+
+    const b = a.map(word => word.length)
+
+    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+
+    const unsub = sum.watch(sum => {
+      console.warn('summ called', sum)
+      spy(sum)
+    })
+
+    newWord('lol')
+
+    newWord('long word [1]')
+
+    expect(spy).toHaveBeenCalledTimes(3)
+
+    unsub()
+
+    newWord('long word _ [2]')
+    expect(spy).toHaveBeenCalledTimes(3)
+  })
   it('supports events', () => {
     const newWord = createEvent<string>('new word')
     const spyEvent = createEvent('spy event')

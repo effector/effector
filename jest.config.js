@@ -25,7 +25,7 @@ const projects = [
   'perf',
 ]
 module.exports = {
-  collectCoverage: true,
+  collectCoverage: boolean(process.env.COVERAGE, true),
   collectCoverageFrom: [
     '<rootDir>/src/**/*.js',
     '!**/node_modules/**',
@@ -62,9 +62,37 @@ module.exports = {
       setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
     }),
     {
-      runner: 'jest-runner-eslint',
-      displayName: 'lint',
-      testMatch: ['<rootDir>/src/**/*.js', '!**/DataStructures/**'],
+      displayName: 'redux',
+      testMatch: [`<rootDir>/src/redux/test/**/*.spec.js`],
+      automock: false,
+      browser: false,
+      testEnvironment: 'node',
+      transform: {
+        '^.+\\.jsx?$': 'babel-jest',
+      },
     },
   ],
+}
+if (boolean(process.env.LINT, true)) {
+  module.exports.projects.push({
+    runner: 'jest-runner-eslint',
+    displayName: 'lint',
+    testMatch: ['<rootDir>/src/**/*.js', '!**/DataStructures/**'],
+  })
+}
+function boolean(value, defaults) {
+  switch (value) {
+    case 'no':
+    case 'false':
+    case false:
+      return false
+    case 'yes':
+    case 'true':
+    case true:
+      return true
+    case null:
+    case undefined:
+    default:
+      return defaults
+  }
 }

@@ -17,8 +17,6 @@ export interface Event<E> {
  filter<T>(fn: (_: E) => T | void): Event<T>;
  prepend<Before>(fn: (_: Before) => E): Event<Before>;
  subscribe(subscriber: Subscriber<E>): Subscription;
- to(store: Store<E>, _: void): Subscription;
- to<T>(store: Store<T>, reducer: (state: T, payload: E) => T): Subscription;
  getType(): string;
 }
 
@@ -36,24 +34,18 @@ export interface Effect<Params, Done, Fail = Error> {
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void;
+  (asyncFunction: (params: Params) => Promise<Done>): this;
   getCurrent(): (params: Params) => Promise<Done>;
  };
  watch(watcher: (payload: Params) => any): Subscription;
- //map<T>(fn: (_: E) => T): Event<T>,
  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
  subscribe(subscriber: Subscriber<Params>): Subscription;
- to(store: Store<Params>, _: void): Subscription;
- to<T>(store: Store<T>, reducer: (state: T, payload: Params) => T): Subscription;
  getType(): string;
 }
 
 export class Store<State> {
  reset(event: Event<any> | Effect<any, any, any>): this;
  getState(): State;
- withProps<Props, R>(
-  fn: (state: State, props: Props) => R,
- ): (props: Props) => R;
  map<T>(fn: (_: State, lastState?: T) => T): Store<T>;
  map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
  on<E>(
@@ -88,7 +80,9 @@ export class Domain {
 export function createEvent<E>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
- effectName?: string,
+ effectName?: string, config?: {
+   handler?: (params: Params) => (Promise<Done> | Done),
+ }
 ): Effect<Params, Done, Fail>
 
 export function createStore<State>(defaultState: State): Store<State>

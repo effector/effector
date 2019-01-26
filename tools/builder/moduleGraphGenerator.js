@@ -9,9 +9,9 @@ const scale = chroma.scale([chroma('#fafa6e').darken(2), '#2A4858']).mode('lch')
 function toDot(modules, output) {
   const results = []
   results.push('digraph G {')
-  results.push('  edge [color="#aaaaaa",dir=back];')
+  results.push('  edge [color="#999999",dir=back];')
   results.push('  node [style=filled,color=white,fontsize="25px"];')
-  results.push('  graph [fontsize=15 compound=true];')
+  results.push('  graph [fontsize=20 compound=true];')
   results.push('  rankdir=TB;')
   results.push('  ranksep=".95 equally";')
   results.push('  ratio=auto;')
@@ -66,7 +66,6 @@ function toDot(modules, output) {
       name,
       childs: moduleSet.filter(n => n === name || n.startsWith(`${name}/`)),
     }))
-  const clustersFirst = [...clusters]
   clusters = clusters
     .filter(({name}, i, clusters) =>
       clusters.every(({name: item, childs}) => {
@@ -92,6 +91,7 @@ function toDot(modules, output) {
     cluster.push(`  subgraph ${clusterName} {`)
     cluster.push(`    style="rounded,bold";`)
     cluster.push(`    color="${color}";`)
+    // cluster.push(`    color="transparent";`)
     cluster.push(`    node [fontcolor="${color}",fontsize="25px"];`)
     childs.forEach(childName => {
       freeNodes.delete(childName)

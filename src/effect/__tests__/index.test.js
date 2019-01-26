@@ -67,3 +67,25 @@ describe('effect({..}).anyway() aka .finally()', () => {
     await expect(effect('will throw').anyway()).resolves.toBe(undefined)
   })
 })
+describe('createEffect with config', () => {
+  it('supports empty config as second argument', async() => {
+    const effect = createEffect('long request', {})
+
+    await expect(effect('ok')).resolves.toBe(undefined)
+  })
+  it('supports default handler with config', async() => {
+    const effect = createEffect('long request', {
+      async handler(params) {
+        await delay(500)
+        spy(params)
+        return 'done!'
+      }
+    })
+    await expect(effect('ok')).resolves.toBe('done!')
+  })
+})
+
+it('should return itself at .use call', () => {
+  const effect = createEffect('long request')
+  expect(effect.use((_: any) => 'done!')).toBe(effect)
+})
