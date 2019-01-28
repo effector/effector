@@ -56,7 +56,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
   return this
 }
 export function observable(storeInstance: ThisStore) {
-  return {
+  const result = {
     subscribe(observer: Subscriber<any>) {
       invariant(
         typeof observer === 'object' && observer !== null,
@@ -70,11 +70,12 @@ export function observable(storeInstance: ThisStore) {
       }
       return subscribe(storeInstance, observeState)
     },
-    //$off
-    [$$observable]() {
-      return this
-    },
   }
+  //$off
+  result[$$observable] = function() {
+    return this
+  }
+  return result
 }
 export function watch(
   storeInstance: ThisStore,
