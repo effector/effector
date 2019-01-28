@@ -1,5 +1,4 @@
 **/lib/**
-**/struct.js
 **/stdlib/visitor.js
 **/val/**
 **/es/**
@@ -16,3 +15,4 @@
 scripts/browser/**
 tools/builder.js
 **/examples/**
+**/packages/**
