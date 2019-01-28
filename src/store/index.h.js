@@ -35,14 +35,10 @@ export type Store<State> = {
   & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
  ),
   on<E>(
-    event: Event<E> | Effect<E, any, any>,
+    event: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
   ): Store<State>,
   off(event: Event<any>): void,
-  // to<T>(
-  //   store: Store<T>,
-  //   reducer: (state: T, payload: State) => T,
-  // ): Subscription,
   subscribe(listner: any): Subscription,
   thru<U>(fn: (store: Store<State>) => U): U,
   //prettier-ignore
@@ -51,6 +47,12 @@ export type Store<State> = {
       <E>(
         watcher: (state: State, payload: E, type: string) => any,
         _: void,
+      ) => Subscription
+    )
+    & (
+      <E>(
+        trigger: Store<E>,
+        watcher: (state: State, payload: E, type: string) => any,
       ) => Subscription
     )
     & (

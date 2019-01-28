@@ -48,17 +48,17 @@ declare export class Store<State> {
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
   on<E>(
-    event: Event<E> | Effect<E, any, any>,
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
   ): this;
-  off(event: Event<any> | Effect<any, any, any>): void;
+  off(event: Event<any> | Effect<any, any, any> | Store<any>): void;
   subscribe(listner: any): Subscription;
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
     __: void,
   ): Subscription;
   watch<E>(
-    event: Event<E> | Effect<E, any, any>,
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
@@ -78,7 +78,7 @@ declare export class Domain {
   getType(): string;
 }
 
-declare export function forward<T>({
+declare export function forward<T>(opts: {
   /*::+*/ from: Event<T> | Store<T>,
   /*::+*/ to: Event<T> | Store<T> | Effect<T, any, any>,
 }): Subscription

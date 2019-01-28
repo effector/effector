@@ -2,7 +2,7 @@
 //@jsx fx
 import $$observable from 'symbol-observable'
 //eslint-disable-next-line no-unused-vars
-import fx from 'effector/stdlib/fx'
+import {fx, Kind} from 'effector/stdlib'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
@@ -24,6 +24,14 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
   currentSubscription()
   storeInstance.subscribers.delete(event)
 }
+const readName = (e: *): string => {
+  switch (e.kind) {
+    case Kind.store:
+      return e.shortName
+    default:
+      return e.getType()
+  }
+}
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
   const e: Event<any> = event
   storeInstance.subscribers.set(
@@ -37,7 +45,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               <compute
                 fn={newValue => {
                   const lastState = getState(storeInstance)
-                  return handler(lastState, newValue, e.getType())
+                  return handler(lastState, newValue, readName(e))
                 }}
               />
               <filter
@@ -84,12 +92,13 @@ export function watch(
 ) {
   const kind = String(eventOrFn?.kind || '__')
   switch (kind) {
+    case 'store':
     case 'event':
     case 'effect':
       invariant(typeof fn === 'function', 'watch requires function handler')
       return eventOrFn.watch(payload =>
         //$todo
-        fn(getState(storeInstance), payload, eventOrFn.getType()),
+        fn(getState(storeInstance), payload, readName(eventOrFn)),
       )
     case '__':
     default:
