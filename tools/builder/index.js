@@ -137,6 +137,11 @@ taskList({
     ],
   },
   hooks: {
-    beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)],
+    beforeAll: [
+      () => fs.emptyDir(`${process.cwd()}/npm`),
+      async() => {
+        process.env.IS_BUILD = 'true'
+      },
+    ],
   },
 })
