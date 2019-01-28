@@ -6,7 +6,7 @@ import commonjs from 'rollup-plugin-commonjs'
 import json from 'rollup-plugin-json'
 
 export default {
-  input: resolve(__dirname, 'tasks.config.js'),
+  input: resolve(__dirname, 'index.js'),
   plugins: [babel(), json(), resolvePlugin(), commonjs()],
   external: [
     'path',
@@ -16,6 +16,7 @@ export default {
     'viz.js',
     'viz.js/full.render.js',
     'sharp',
+    'chalk',
     'rollup',
     'rollup-plugin-json',
     'rollup-plugin-babel',
