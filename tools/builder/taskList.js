@@ -7,14 +7,14 @@ type TaskList = Array<() => Promise<any>>
 function onFinish(stats) {
   if (Object.keys(stats.fail).length === 0) {
     console.log(
-      chalk.bgGreen.black(' DONE '),
-      chalk.bgWhite.black('build complete'),
+      label(chalk.bgGreen, 'DONE'),
+      label(chalk.bgWhite, 'build complete'),
       chalk.greenBright('all tasks finished successfully'),
     )
     return
   }
   console.log(
-    chalk.bgKeyword('orange').black(' WARN '),
+    label(chalk.bgKeyword('orange'), 'WARN'),
     chalk.bold.keyword('orange')('some tasks are failed'),
   )
   for (const name in stats.fail) {

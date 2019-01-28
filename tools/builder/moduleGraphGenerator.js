@@ -217,7 +217,12 @@ export default function plugin(options: Opts = {}): any {
       if (Boolean(options.prune)) {
         prune(modules)
       }
-      toDot(modules, options.output)
+      try {
+        toDot(modules, options.output)
+      } catch (error) {
+        console.error('error during graph generation')
+        console.error(error)
+      }
     },
   }
 }
