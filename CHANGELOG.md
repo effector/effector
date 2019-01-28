@@ -2,6 +2,24 @@
 
 ## 0.18.1
 
+- Add `forward`: common function for forwarding updates and events
+
+```js
+import {forward} from 'effector'
+const unsubscribe = forward({
+  from: Event | Store,
+  to: Event | Store | Effect,
+})
+```
+
+- add support for storages in `store.on`
+
+```js
+import {createStore} from 'effector'
+const name = createStore('name')
+const counter = createStore(0).on(name, (count, name) => count++)
+```
+
 - Allow to pass `{handler: Function}` as second argument to `createEffect`
 
 ```js
@@ -19,16 +37,6 @@ const callApi = createEffect('call api', {
 ```js
 import {createEffect} from 'effector'
 const callApi = createEffect('call api').use(url => fetch(url))
-```
-
-- Add `forward`: common function for forwarding updates and events
-
-```js
-import {forward} from 'effector'
-const unsubscribe = forward({
-  from: Event | Store,
-  to: Event | Store | Effect,
-})
 ```
 
 ## 0.18.0
