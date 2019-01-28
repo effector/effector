@@ -2,7 +2,8 @@
 
 import type {Event} from 'effector/event'
 import {type TypeDef, Ctx, type StateRef, createStateRef} from 'effector/stdlib'
-import {__DEV__} from 'effector/flags'
+import {__DEV__, __DEBUG__} from 'effector/flags'
+import type {CommonCtx, Meta, Reg, Command} from './index.h'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(
@@ -13,18 +14,6 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   )
 }
 
-type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
-type Reg = {
-  isChanged: boolean,
-}
-type Meta = {
-  ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-  stop: boolean,
-  transactions: Array<() => void>,
-  arg: any,
-  reg: Reg,
-  val: {[name: string]: StateRef},
-}
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
     transactions: [],
