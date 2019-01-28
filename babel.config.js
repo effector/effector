@@ -4,26 +4,29 @@ const {resolve: resolvePath} = require('path')
 
 const resolveSource = path => resolvePath(__dirname, 'src', path)
 
+const aliases = {
+  'effector/effect': 'effect',
+  'effector/event': 'event',
+  'effector/store': 'store',
+  'effector/domain': 'domain',
+  'effector/graphite': 'graphite',
+  'effector/fixtures': 'fixtures',
+  'effector/stdlib': 'stdlib',
+  'effector/perf': 'perf',
+  'effector/watcher': 'watcher',
+  'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
+  warning: 'warning',
+  invariant: 'invariant',
+  'effector-react': 'react',
+  'effector-vue': 'vue',
+}
+
 module.exports = api => {
   // api && api.cache && api.cache.never && api.cache.never()
   const env = api.cache(() => process.env.NODE_ENV)
-  const isBuild = !!process.env.IS_BUILD
-  const alias = {
-    'effector/effect': resolveSource('effect'),
-    'effector/event': resolveSource('event'),
-    'effector/store': resolveSource('store'),
-    'effector/domain': resolveSource('domain'),
-    'effector/graphite': resolveSource('graphite'),
-    'effector/fixtures': resolveSource('fixtures'),
-    'effector/stdlib': resolveSource('stdlib'),
-    'effector/perf': resolveSource('perf'),
-    'effector/watcher': resolveSource('watcher'),
-    'effector/flags': resolveSource(isBuild ? 'flags.prod' : 'flags.dev'),
-    warning: resolveSource('warning'),
-    invariant: resolveSource('invariant'),
-    'effector-react': resolveSource('react'),
-    'effector-vue': resolveSource('vue'),
-  }
+  const alias = parseAliases(aliases, {
+    isBuild: !!process.env.IS_BUILD,
+  })
   if (process.env.NODE_ENV === 'test') {
     alias.effector = resolvePath(__dirname, 'src')
   }
@@ -78,4 +81,17 @@ module.exports = api => {
   }
 
   return {plugins, presets, overrides, sourceMaps: true}
+}
+
+function parseAliases(obj, meta) {
+  const result = {}
+  for (const key in obj) {
+    const value = obj[key]
+    if (typeof value === 'string') {
+      result[key] = resolveSource(value)
+    } else {
+      result[key] = resolveSource(value(meta))
+    }
+  }
+  return result
 }
