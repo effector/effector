@@ -1,10 +1,10 @@
 {
   "name": "bs-effector",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Reason bindings for effector",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^0.18.0"
+    "effector": "^0.18.1"
   },
   "files": [
     "src/Effector.re",

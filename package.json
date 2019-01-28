@@ -1,7 +1,7 @@
 {
   "name": "effector-dev",
-  "version": "0.18.0",
-  "description": "Reactive state manager",
+  "version": "0.18.1",
+  "description": "Application state manager",
   "typings": "index.d.ts",
   "private": true,
   "scripts": {
