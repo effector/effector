@@ -36,15 +36,25 @@ const version = {
 const getFiles = name => [
   'README.md',
   'LICENSE',
-  `${name}.es.js`,
-  `${name}.cjs.js`,
-  `${name}.es.js.map`,
-  `${name}.cjs.js.map`,
-  `${name}.cjs.js.flow`,
-  `${name}.es.js.flow`,
   'index.d.ts',
   'index.js.flow',
+  //js files
+  `${name}.es.js`,
+  `${name}.cjs.js`,
+  `${name}.bundle.js`,
+  //mappings
+  `${name}.es.js.map`,
+  `${name}.cjs.js.map`,
+  `${name}.bundle.js.map`,
+  //typings
+  `${name}.cjs.js.flow`,
+  `${name}.es.js.flow`,
+  `${name}.bundle.js.flow`,
 ]
+
+const dependsOnEffector = {
+  effector: `^${version.effector}`,
+}
 
 export default {
   effector: {
@@ -82,9 +92,7 @@ export default {
     module: 'effector-react.es.js',
     'jsnext:main': 'effector-react.es.js',
     typings: 'index.d.ts',
-    dependencies: {
-      effector: '^0.18.0',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       react: '*',
     },
@@ -113,9 +121,7 @@ export default {
     module: 'effector-vue.es.js',
     'jsnext:main': 'effector-vue.es.js',
     typings: 'index.d.ts',
-    dependencies: {
-      effector: '^0.18.0',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       vue: '*',
     },
@@ -141,10 +147,8 @@ export default {
     version: version['bs-effector'],
     description: 'Reason bindings for effector',
     dependencies: {},
-    peerDependencies: {
-      effector: '*',
-    },
-    files: ['src/Effector.re', 'bsconfig.json'],
+    peerDependencies: dependsOnEffector,
+    files: ['src/Effector.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
       'bucklescript',
       'reason',
@@ -167,13 +171,11 @@ export default {
     name: 'bs-effector-react',
     version: version['bs-effector-react'],
     description: 'Reason bindings for effector-react',
-    dependencies: {
-      effector: '*',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       'reason-react': '*',
     },
-    files: ['src/EffectorReact.re', 'bsconfig.json'],
+    files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
       'bucklescript',
       'reason',

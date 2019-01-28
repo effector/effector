@@ -3,14 +3,16 @@
   "version": "0.18.0",
   "description": "Reason bindings for effector-react",
   "dependencies": {
-    "effector": "*"
+    "effector": "^0.18.0"
   },
   "peerDependencies": {
     "reason-react": "*"
   },
   "files": [
     "src/EffectorReact.re",
-    "bsconfig.json"
+    "bsconfig.json",
+    "LICENSE",
+    "README.md"
   ],
   "keywords": [
     "bucklescript",

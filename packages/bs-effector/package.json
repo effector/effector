@@ -4,11 +4,13 @@
   "description": "Reason bindings for effector",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "*"
+    "effector": "^0.18.0"
   },
   "files": [
     "src/Effector.re",
-    "bsconfig.json"
+    "bsconfig.json",
+    "LICENSE",
+    "README.md"
   ],
   "keywords": [
     "bucklescript",

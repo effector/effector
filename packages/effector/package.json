@@ -12,14 +12,17 @@
   "files": [
     "README.md",
     "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
     "effector.es.js",
     "effector.cjs.js",
+    "effector.bundle.js",
     "effector.es.js.map",
     "effector.cjs.js.map",
+    "effector.bundle.js.map",
     "effector.cjs.js.flow",
     "effector.es.js.flow",
-    "index.d.ts",
-    "index.js.flow"
+    "effector.bundle.js.flow"
   ],
   "keywords": [
     "data",

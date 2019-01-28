@@ -15,14 +15,17 @@
   "files": [
     "README.md",
     "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
     "effector-vue.es.js",
     "effector-vue.cjs.js",
+    "effector-vue.bundle.js",
     "effector-vue.es.js.map",
     "effector-vue.cjs.js.map",
+    "effector-vue.bundle.js.map",
     "effector-vue.cjs.js.flow",
     "effector-vue.es.js.flow",
-    "index.d.ts",
-    "index.js.flow"
+    "effector-vue.bundle.js.flow"
   ],
   "keywords": [
     "data",
