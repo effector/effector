@@ -6,27 +6,12 @@
   "module": "effector-vue.es.js",
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
-  "scripts": {},
-  "author": "Zero Bias",
-  "license": "MIT",
-  "devDependencies": {},
   "dependencies": {
     "effector": "^0.18.0"
   },
   "peerDependencies": {
     "vue": "*"
   },
-  "maintainers": [
-    {
-      "name": "Zero Bias",
-      "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
-    }
-  ],
-  "sideEffects": false,
   "files": [
     "README.md",
     "LICENSE",
@@ -39,12 +24,6 @@
     "index.d.ts",
     "index.js.flow"
   ],
-  "repository": "https://github.com/zerobias/effector",
-  "homepage": "https://zerobias.github.io/effector/",
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "bugs": "https://github.com/zerobias/effector/issues",
   "keywords": [
     "data",
     "datastructure",
@@ -58,5 +37,26 @@
     "effects",
     "redux",
     "vue"
-  ]
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://zerobias.github.io/effector",
+  "engines": {
+    "node": ">=6.0.0"
+  }
 }
