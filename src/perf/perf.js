@@ -1,6 +1,6 @@
 //@flow
 
-import {__DEBUG__} from 'effector/flags'
+import {__DEV__} from 'effector/flags'
 import type {CompositeName} from '../compositeName'
 import {getDisplayName} from 'effector/store'
 
@@ -23,7 +23,7 @@ const supportsUserTiming =
   && typeof performance.measure === 'function'
   && typeof performance.clearMeasures === 'function'
 
-const enableUserTimingAPI = __DEBUG__
+const enableUserTimingAPI = __DEV__
 
 function formatMarkName(markName: string) {
   return `${effectorEmoji} ${markName}`
