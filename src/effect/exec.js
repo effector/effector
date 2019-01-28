@@ -19,9 +19,7 @@ export const exec = <Args, Done, Fail>(
     syncError = err
   }
   if (successSync === false) {
-    fpromise = new Promise((_, rj) => {
-      rj(syncError)
-    })
+    fpromise = Promise.reject(syncError)
     //TODO deprecate this
     //$off
     fpromise.cache = () => undefined
@@ -55,9 +53,7 @@ export const exec = <Args, Done, Fail>(
     return fpromise
   }
   const done: Done = (req: any)
-  fpromise = new Promise(rs => {
-    rs(done)
-  })
+  fpromise = Promise.resolve(done)
   //$off
   fpromise.cache = () => done
   const anyway = Promise.resolve(undefined)
