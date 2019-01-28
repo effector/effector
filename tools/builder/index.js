@@ -1,7 +1,5 @@
 //@flow
 import * as fs from 'fs-extra'
-//$todo
-import execa from 'execa'
 import {
   rollupEffector,
   rollupEffectorReact,
@@ -10,39 +8,10 @@ import {
 } from './rollup'
 import packages from './packages.config'
 import bsconfigs from './bsconfigs.config'
-import {taskList, massCopy, outputPackageJSON} from './utils'
+import {massCopy, publishScript, outputPackageJSON} from './utils'
+import {taskList} from './taskList'
 
-const publishScript = name => async() => {
-  const args = process.argv.slice(2)
-  if (args.length < 2) return
-  const command = args.shift()
-  const argument = args.shift()
-  if (command === 'publish') {
-    if (argument === 'next') {
-      const {stdout, stderr} = await execa(
-        'npm',
-        ['publish', '--tag', 'next'],
-        {
-          cwd: `${process.cwd()}/npm/${name}`,
-        },
-      )
-      console.log(stdout)
-      console.error(stderr)
-    } else if (argument === 'latest') {
-      const {stdout, stderr} = await execa(
-        'npm',
-        ['publish', '--tag', 'latest'],
-        {
-          cwd: `${process.cwd()}/npm/${name}`,
-        },
-      )
-      console.log(stdout)
-      console.error(stderr)
-    }
-  }
-}
-
-export default taskList({
+taskList({
   tasks: {
     effector: [
       () =>
@@ -168,6 +137,11 @@ export default taskList({
     ],
   },
   hooks: {
-    beforeAll: [() => fs.emptyDir(`${process.cwd()}/npm`)],
+    beforeAll: [
+      () => fs.emptyDir(`${process.cwd()}/npm`),
+      async() => {
+        process.env.IS_BUILD = 'true'
+      },
+    ],
   },
 })

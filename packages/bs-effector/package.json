@@ -1,27 +1,16 @@
 {
   "name": "bs-effector",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Reason bindings for effector",
-  "author": "Zero Bias",
-  "license": "MIT",
-  "devDependencies": {},
   "dependencies": {},
   "peerDependencies": {
-    "effector": "*"
+    "effector": "^0.18.1"
   },
-  "maintainers": [
-    {
-      "name": "Zero Bias",
-      "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
-    }
-  ],
   "files": [
     "src/Effector.re",
-    "bsconfig.json"
+    "bsconfig.json",
+    "LICENSE",
+    "README.md"
   ],
   "keywords": [
     "bucklescript",
@@ -39,6 +28,25 @@
     "effects",
     "redux"
   ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
   "repository": "https://github.com/zerobias/effector",
-  "bugs": "https://github.com/zerobias/effector/issues"
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://zerobias.github.io/effector",
+  "engines": {
+    "node": ">=6.0.0"
+  }
 }

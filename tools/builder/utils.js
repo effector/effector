@@ -1,6 +1,8 @@
 //@flow
 import {resolve, join, dirname, extname, relative} from 'path'
 import * as fs from 'fs-extra'
+//$todo
+import execa from 'execa'
 import packageJson from '../../package.json'
 
 const root = process.cwd()
@@ -16,6 +18,38 @@ export async function outputPackageJSON(
   if (path.endsWith('package.json')) fullPath = dir(path)
   else fullPath = dir(path, 'package.json')
   await fs.outputJSON(fullPath, config, {spaces: 2})
+}
+
+export function publishScript(name: string) {
+  return async() => {
+    const args = process.argv.slice(2)
+    if (args.length < 2) return
+    const command = args.shift()
+    const argument = args.shift()
+    if (command === 'publish') {
+      if (argument === 'next') {
+        const {stdout, stderr} = await execa(
+          'npm',
+          ['publish', '--tag', 'next'],
+          {
+            cwd: `${process.cwd()}/npm/${name}`,
+          },
+        )
+        console.log(stdout)
+        console.error(stderr)
+      } else if (argument === 'latest') {
+        const {stdout, stderr} = await execa(
+          'npm',
+          ['publish', '--tag', 'latest'],
+          {
+            cwd: `${process.cwd()}/npm/${name}`,
+          },
+        )
+        console.log(stdout)
+        console.error(stderr)
+      }
+    }
+  }
 }
 
 export function massCopy(
@@ -40,28 +74,6 @@ export function massCopy(
   }
 
   return Promise.all(jobs.map(([from, to]) => fs.copy(from, to)))
-}
-export type TaskList = Array<() => Promise<any>>
-export function taskList({
-  tasks,
-  hooks,
-}: {
-  tasks: {[pkg: string]: TaskList},
-  hooks: {
-    beforeAll: TaskList,
-  },
-}) {
-  const pending = []
-  const run = tasks =>
-    tasks.reduce((p, task) => p.then(task), Promise.resolve())
-
-  return run(hooks.beforeAll).then(() => {
-    for (const pkg in tasks) {
-      if (pkg === 'beforeAll') continue
-      pending.push(run(tasks[pkg]))
-    }
-    return Promise.all(pending)
-  })
 }
 
 /* eslint-disable max-len */

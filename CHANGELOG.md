@@ -1,5 +1,53 @@
 # Changelog
 
+## 0.18.1
+
+- Add `forward`: common function for forwarding updates and events
+
+```js
+import {forward} from 'effector'
+const unsubscribe = forward({
+  from: Event | Store,
+  to: Event | Store | Effect,
+})
+```
+
+- add support for storages in `store.on`
+
+```js
+import {createStore} from 'effector'
+const name = createStore('name')
+const counter = createStore(0).on(name, (count, name) => count++)
+```
+
+- Allow to pass `{handler: Function}` as second argument to `createEffect`
+
+```js
+import {createEffect} from 'effector'
+const callApi = createEffect('call api', {
+  async handler(url) {
+    const res = await fetch(url)
+    return res
+  },
+})
+```
+
+- Make `effect.use` return the same effect instead of void (ability to chain method calls)
+
+```js
+import {createEffect} from 'effector'
+const callApi = createEffect('call api').use(url => fetch(url))
+```
+
+## 0.18.0
+
+- Log events into Chrome devtools performance timeline
+- Add notifications about errors inside computation chain
+- Add `store.defaultState` property
+- **effector-react**: Add `createComponent`
+- Make `withProps` static function
+- Make effect return plain promise
+
 ## 0.18.0-beta.10
 
 - Add Gate
@@ -10,16 +58,16 @@ const AppGate = createGate('app')
 const MainPageGate = AppGate.childGate('main page')
 
 export default ({isLoading, meta}) => (
- <div>
-  Application
-  <AppGate isLoading={isLoading} />
-  {!isLoading && (
-   <div>
-    Main page
-    <MainPageGate meta={meta} />
-   </div>
-  )}
- </div>
+  <div>
+    Application
+    <AppGate isLoading={isLoading} />
+    {!isLoading && (
+      <div>
+        Main page
+        <MainPageGate meta={meta} />
+      </div>
+    )}
+  </div>
 )
 AppGate.state.watch(({isLoading}) => isLoading)
 ```
@@ -36,10 +84,10 @@ AppGate.state.watch(({isLoading}) => isLoading)
 import {createDomain} from 'effector'
 const mainPage = createDomain('main page')
 mainPage.onCreateEvent(event => {
- console.log('new event: ', event.getType())
+  console.log('new event: ', event.getType())
 })
 mainPage.onCreateStore(store => {
- console.log('new store: ', store.getState())
+  console.log('new store: ', store.getState())
 })
 const mount = mainPage.event('mount')
 // => new event: main page/mount
@@ -142,17 +190,17 @@ declare var reducerA: Reducer<A>
 declare var reducerB: Reducer<B>
 
 const tuple: MillType<A, B> = mill()
- .and(reducerA)
- .and(reducerB)
+  .and(reducerA)
+  .and(reducerB)
 
 const union: Reducer<{
- a: A,
- b: B,
- staticField: string,
+  a: A,
+  b: B,
+  staticField: string,
 }> = tuple.joint((a: A, b: B) => ({
- a,
- b,
- staticField: 'its ok',
+  a,
+  b,
+  staticField: 'its ok',
 }))
 ```
 

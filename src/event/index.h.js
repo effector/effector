@@ -15,14 +15,7 @@ export type Event<E> = {
   filter<T>(fn: (_: E) => T | void): Event<T>,
   prepend<Before>(fn: (_: Before) => E): Event<Before>,
   subscribe(subscriber: Subscriber<E>): Subscription,
-  //prettier-ignore
-  //   +to: (
-  //   & (<T>(store: Store<T>,
-  // reducer: (state: T, payload: E) => T) => Subscription)
-  //   & ((store: Store<E>, _: void) => Subscription)
-  //  ),
   /*::+*/ kind: kind,
-  // epic<T>(fn: (_: Stream<E>) => Stream<T>): Event<T>,
   getType(): string,
   shortName: string,
   domainName?: CompositeName,

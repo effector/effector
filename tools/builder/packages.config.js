@@ -1,63 +1,74 @@
 //@flow
 
-const maintainers = [
-  {
-    name: 'Zero Bias',
-    email: 'ribkatt@gmail.com',
+const common = {
+  author: 'Zero Bias',
+  maintainers: [
+    {
+      name: 'Zero Bias',
+      email: 'ribkatt@gmail.com',
+    },
+    {
+      name: 'goodmind',
+      email: 'andwebar@gmail.com',
+    },
+  ],
+  sideEffects: false,
+  license: 'MIT',
+  devDependencies: {},
+  scripts: {},
+  repository: 'https://github.com/zerobias/effector',
+  bugs: 'https://github.com/zerobias/effector/issues',
+  homepage: 'https://zerobias.github.io/effector',
+  engines: {
+    node: '>=6.0.0',
   },
-  {
-    name: 'goodmind',
-    email: 'andwebar@gmail.com',
-  },
-]
+}
 
 const version = {
-  effector: '0.18.0',
-  'effector-react': '0.18.0',
-  'effector-vue': '0.18.0',
+  effector: '0.18.1',
+  'effector-react': '0.18.1',
+  'effector-vue': '0.18.1',
 
-  'bs-effector': '0.18.0',
-  'bs-effector-react': '0.18.0',
+  'bs-effector': '0.18.1',
+  'bs-effector-react': '0.18.1',
 }
 
 const getFiles = name => [
   'README.md',
   'LICENSE',
-  `${name}.es.js`,
-  `${name}.cjs.js`,
-  `${name}.es.js.map`,
-  `${name}.cjs.js.map`,
-  `${name}.cjs.js.flow`,
-  `${name}.es.js.flow`,
   'index.d.ts',
   'index.js.flow',
+  //js files
+  `${name}.es.js`,
+  `${name}.cjs.js`,
+  `${name}.bundle.js`,
+  //mappings
+  `${name}.es.js.map`,
+  `${name}.cjs.js.map`,
+  `${name}.bundle.js.map`,
+  //typings
+  `${name}.cjs.js.flow`,
+  `${name}.es.js.flow`,
+  `${name}.bundle.js.flow`,
 ]
+
+const dependsOnEffector = {
+  effector: `^${version.effector}`,
+}
 
 export default {
   effector: {
     name: 'effector',
     version: version['effector'],
-    description: 'Reactive state manager',
+    description: 'Application state manager',
     main: 'effector.cjs.js',
     module: 'effector.es.js',
     'jsnext:main': 'effector.es.js',
     typings: 'index.d.ts',
-    scripts: {},
-    author: 'Zero Bias',
-    license: 'MIT',
-    devDependencies: {},
     dependencies: {
       'symbol-observable': '^1.2.0',
     },
-    maintainers,
-    sideEffects: false,
     files: getFiles('effector'),
-    repository: 'https://github.com/zerobias/effector',
-    homepage: 'https://zerobias.github.io/effector/',
-    engines: {
-      node: '>=6.0.0',
-    },
-    bugs: 'https://github.com/zerobias/effector/issues',
     keywords: [
       'data',
       'datastructure',
@@ -71,6 +82,7 @@ export default {
       'effects',
       'redux',
     ],
+    ...common,
   },
   'effector-react': {
     name: 'effector-react',
@@ -80,25 +92,11 @@ export default {
     module: 'effector-react.es.js',
     'jsnext:main': 'effector-react.es.js',
     typings: 'index.d.ts',
-    scripts: {},
-    author: 'Zero Bias',
-    license: 'MIT',
-    devDependencies: {},
-    dependencies: {
-      effector: '^0.18.0',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       react: '*',
     },
-    maintainers,
-    sideEffects: false,
     files: getFiles('effector-react'),
-    repository: 'https://github.com/zerobias/effector',
-    homepage: 'https://zerobias.github.io/effector/',
-    engines: {
-      node: '>=6.0.0',
-    },
-    bugs: 'https://github.com/zerobias/effector/issues',
     keywords: [
       'data',
       'datastructure',
@@ -113,6 +111,7 @@ export default {
       'redux',
       'react',
     ],
+    ...common,
   },
   'effector-vue': {
     name: 'effector-vue',
@@ -122,25 +121,11 @@ export default {
     module: 'effector-vue.es.js',
     'jsnext:main': 'effector-vue.es.js',
     typings: 'index.d.ts',
-    scripts: {},
-    author: 'Zero Bias',
-    license: 'MIT',
-    devDependencies: {},
-    dependencies: {
-      effector: '^0.18.0',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       vue: '*',
     },
-    maintainers,
-    sideEffects: false,
     files: getFiles('effector-vue'),
-    repository: 'https://github.com/zerobias/effector',
-    homepage: 'https://zerobias.github.io/effector/',
-    engines: {
-      node: '>=6.0.0',
-    },
-    bugs: 'https://github.com/zerobias/effector/issues',
     keywords: [
       'data',
       'datastructure',
@@ -155,20 +140,15 @@ export default {
       'redux',
       'vue',
     ],
+    ...common,
   },
   'bs-effector': {
     name: 'bs-effector',
     version: version['bs-effector'],
     description: 'Reason bindings for effector',
-    author: 'Zero Bias',
-    license: 'MIT',
-    devDependencies: {},
     dependencies: {},
-    peerDependencies: {
-      effector: '*',
-    },
-    maintainers,
-    files: ['src/Effector.re', 'bsconfig.json'],
+    peerDependencies: dependsOnEffector,
+    files: ['src/Effector.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
       'bucklescript',
       'reason',
@@ -185,24 +165,17 @@ export default {
       'effects',
       'redux',
     ],
-    repository: 'https://github.com/zerobias/effector',
-    bugs: 'https://github.com/zerobias/effector/issues',
+    ...common,
   },
   'bs-effector-react': {
     name: 'bs-effector-react',
     version: version['bs-effector-react'],
     description: 'Reason bindings for effector-react',
-    author: 'Zero Bias',
-    license: 'MIT',
-    devDependencies: {},
-    dependencies: {
-      effector: '*',
-    },
+    dependencies: dependsOnEffector,
     peerDependencies: {
       'reason-react': '*',
     },
-    maintainers,
-    files: ['src/EffectorReact.re', 'bsconfig.json'],
+    files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
       'bucklescript',
       'reason',
@@ -220,7 +193,6 @@ export default {
       'redux',
       'react',
     ],
-    repository: 'https://github.com/zerobias/effector',
-    bugs: 'https://github.com/zerobias/effector/issues',
+    ...common,
   },
 }

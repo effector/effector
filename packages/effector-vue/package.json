@@ -1,50 +1,32 @@
 {
   "name": "effector-vue",
-  "version": "0.18.0",
+  "version": "0.18.1",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
-  "scripts": {},
-  "author": "Zero Bias",
-  "license": "MIT",
-  "devDependencies": {},
   "dependencies": {
-    "effector": "^0.18.0"
+    "effector": "^0.18.1"
   },
   "peerDependencies": {
     "vue": "*"
   },
-  "maintainers": [
-    {
-      "name": "Zero Bias",
-      "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
-    }
-  ],
-  "sideEffects": false,
   "files": [
     "README.md",
     "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
     "effector-vue.es.js",
     "effector-vue.cjs.js",
+    "effector-vue.bundle.js",
     "effector-vue.es.js.map",
     "effector-vue.cjs.js.map",
+    "effector-vue.bundle.js.map",
     "effector-vue.cjs.js.flow",
     "effector-vue.es.js.flow",
-    "index.d.ts",
-    "index.js.flow"
+    "effector-vue.bundle.js.flow"
   ],
-  "repository": "https://github.com/zerobias/effector",
-  "homepage": "https://zerobias.github.io/effector/",
-  "engines": {
-    "node": ">=6.0.0"
-  },
-  "bugs": "https://github.com/zerobias/effector/issues",
   "keywords": [
     "data",
     "datastructure",
@@ -58,5 +40,26 @@
     "effects",
     "redux",
     "vue"
-  ]
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://zerobias.github.io/effector",
+  "engines": {
+    "node": ">=6.0.0"
+  }
 }

@@ -2,7 +2,8 @@
 
 import type {Event} from 'effector/event'
 import {type TypeDef, Ctx, type StateRef, createStateRef} from 'effector/stdlib'
-import {__DEV__} from 'effector/flags'
+import {__DEV__, __DEBUG__} from 'effector/flags'
+import type {CommonCtx, Meta, Reg, Command} from './index.h'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(
@@ -13,18 +14,6 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
   )
 }
 
-type CommonCtx = TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>
-type Reg = {
-  isChanged: boolean,
-}
-type Meta = {
-  ctx: TypeDef<'compute' | 'emit' | 'filter' | 'update', 'ctx'>,
-  stop: boolean,
-  transactions: Array<() => void>,
-  arg: any,
-  reg: Reg,
-  val: {[name: string]: StateRef},
-}
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
   const meta = {
     transactions: [],
@@ -46,13 +35,8 @@ function runStep(step, ctx: *, meta) {
   meta.stop = false
   stepVisitor[step.type](step, ctx, meta)
 }
-const LOOP_TIMEOUT = 5e3
-const infiniteLoopProtection = start => {
-  if (Date.now() - start > LOOP_TIMEOUT) {
-    throw new Error('infinite loop protection')
-  }
-}
-const stepVisitor = {
+
+const commonStepVisitor = {
   single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
     meta.arg = ctx.data.__stepArg
     meta.ctx = command[step.data.type].cmd(step.data, meta)
@@ -75,72 +59,85 @@ const stepVisitor = {
       }
     }
   },
-  loop(step: TypeDef<'loop', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
-    type Fun = TypeDef<*, 'step'>
-    type Using = {
-      name: string,
-      reset?: any,
-    }
-    type StepData = {
-      branch: Fun,
-      iterator: Fun,
-      source: StateRef,
-      until: Using,
-      selector: Using,
-      item: Using,
-    }
-    const data: StepData = step.data
-    const branch: Fun = data.branch
-    const iterator: Fun = data.iterator
-
-    const source: StateRef = data.source
-    const until = using(data.until, meta)
-    const selector = using(data.selector, meta)
-    const item = using(data.item, meta)
-
-    const now = Date.now()
-
-    while (until.current) {
-      if (__DEV__) {
-        infiniteLoopProtection(now)
-      }
-      item.current = source.current[selector.current]
-      runStep(branch, ctx, meta)
-      runStep(iterator, ctx, meta)
-    }
-
-    function using(opts, meta): StateRef {
-      const name = String(opts.name)
-      if ('reset' in opts) {
-        if (!(name in meta.val)) {
-          meta.val[name] = createStateRef(opts.reset)
-        }
-        meta.val[name].current = opts.reset
-      }
-      return meta.val[name]
-    }
-  },
-  choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
-    type Cases = {+[key: string]: TypeDef<*, 'step'>}
-    const cases: Cases = step.data.cases
-    runStep(step.data.selector, ctx, meta)
-    const caseName = String(step.data.state.current)
-    let next
-    if (caseName in cases) {
-      next = cases[caseName]
-    } else if ('__' in cases) {
-      next = cases.__
-    } else {
-      console.error('no case "%s" exists', caseName)
-      return
-    }
-    runStep(next, ctx, meta)
-  },
 }
+const stepVisitor = {}
+stepVisitor.single = commonStepVisitor.single
+stepVisitor.multi = commonStepVisitor.multi
+stepVisitor.seq = commonStepVisitor.seq
 
-type Command<tag> = /*:: interface */ {
-  cmd(single: TypeDef<tag, 'cmd'>, meta: Meta): TypeDef<tag, 'ctx'>,
-  transition(reg: Reg): boolean,
+if (__DEBUG__) {
+  const LOOP_TIMEOUT = 5e3
+  const infiniteLoopProtection = start => {
+    if (Date.now() - start > LOOP_TIMEOUT) {
+      throw new Error('infinite loop protection')
+    }
+  }
+  const stepVisitorNext = {
+    loop(step: TypeDef<'loop', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+      const VAL = 'current'
+      type Fun = TypeDef<*, 'step'>
+      type Using = {
+        name: string,
+        reset?: any,
+      }
+      type StepData = {
+        branch: Fun,
+        iterator: Fun,
+        source: StateRef,
+        until: Using,
+        selector: Using,
+        item: Using,
+      }
+      const data: StepData = step.data
+      const branch: Fun = data.branch
+      const iterator: Fun = data.iterator
+
+      const source: StateRef = data.source
+      const until = using(data.until, meta)
+      const selector = using(data.selector, meta)
+      const item = using(data.item, meta)
+
+      const now = Date.now()
+
+      while (until[VAL]) {
+        if (__DEV__) {
+          infiniteLoopProtection(now)
+        }
+        item[VAL] = source[VAL][selector[VAL]]
+        runStep(branch, ctx, meta)
+        runStep(iterator, ctx, meta)
+      }
+
+      function using(opts, meta): StateRef {
+        const name = String(opts.name)
+        if ('reset' in opts) {
+          if (!(name in meta.val)) {
+            meta.val[name] = createStateRef(opts.reset)
+          }
+          meta.val[name][VAL] = opts.reset
+        }
+        return meta.val[name]
+      }
+    },
+    choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+      type Cases = {+[key: string]: TypeDef<*, 'step'>}
+      const cases: Cases = step.data.cases
+      runStep(step.data.selector, ctx, meta)
+      const caseName = String(step.data.state.current)
+      let next
+      if (caseName in cases) {
+        next = cases[caseName]
+      } else if ('__' in cases) {
+        next = cases.__
+      } else {
+        console.error('no case "%s" exists', caseName)
+        return
+      }
+      runStep(next, ctx, meta)
+    },
+  }
+  stepVisitor.loop = stepVisitorNext.loop
+  stepVisitor.choose = stepVisitorNext.choose
 }
 
 const command = ({

@@ -38,3 +38,4 @@ lib/bs/**
 val/**
 .size-snapshot.json
 .cache/**
+tools/builder.js

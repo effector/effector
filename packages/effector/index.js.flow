@@ -1,257 +1,261 @@
 //@flow
 
 export type Subscriber<A> = {
- next(value: A): void,
- // error(err: Error): void,
- //complete(): void,
+  next(value: A): void,
+  // error(err: Error): void,
+  //complete(): void,
 }
 
 export type Subscription = {
- (): void,
- unsubscribe(): void,
+  (): void,
+  unsubscribe(): void,
 }
 
 declare export class Event<E> {
- (payload: E): E;
- watch(watcher: (payload: E) => any): Subscription;
- map<T>(fn: (_: E) => T): Event<T>;
- filter<T>(fn: (_: E) => T | void): Event<T>;
- prepend<Before>(fn: (_: Before) => E): Event<Before>;
- subscribe(subscriber: Subscriber<E>): Subscription;
- getType(): string;
+  (payload: E): E;
+  watch(watcher: (payload: E) => any): Subscription;
+  map<T>(fn: (_: E) => T): Event<T>;
+  filter<T>(fn: (_: E) => T | void): Event<T>;
+  prepend<Before>(fn: (_: Before) => E): Event<Before>;
+  subscribe(subscriber: Subscriber<E>): Subscription;
+  getType(): string;
 }
 
 declare export class Future<Params, Done, Fail> extends Promise<Done> {
- /*::+*/ args: Params;
- anyway(): Promise<void>;
- cache(): Done | void;
- /*::+*/ then: (
-  & (() => Promise<Done>)
-  & (<U>(onFulfill: (value: Done) => U) => Promise<U>)
- );
+  /*::+*/ args: Params;
+  anyway(): Promise<void>;
+  cache(): Done | void;
 }
 
 declare export class Effect<Params, Done, Fail = Error> {
- (payload: Params): Future<Params, Done, Fail>;
- /*::+*/ done: Event<{params: Params, result: Done}>;
- /*::+*/ fail: Event<{params: Params, error: Fail}>;
- /*::+*/ use: {
-  (asyncFunction: ((params: Params) => (Promise<Done> | Done))): this,
-  getCurrent(): (params: Params) => Promise<Done>,
- };
- watch(watcher: (payload: Params) => any): Subscription;
- prepend<Before>(fn: (_: Before) => Params): Event<Before>;
- //map<T>(fn: (_: E) => T): Event<T>,
- subscribe(subscriber: Subscriber<Params>): Subscription;
- getType(): string;
+  (payload: Params): Future<Params, Done, Fail>;
+  /*::+*/ done: Event<{params: Params, result: Done}>;
+  /*::+*/ fail: Event<{params: Params, error: Fail}>;
+  /*::+*/ use: {
+    (asyncFunction: (params: Params) => Promise<Done> | Done): this,
+    getCurrent(): (params: Params) => Promise<Done>,
+  };
+  watch(watcher: (payload: Params) => any): Subscription;
+  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
+  //map<T>(fn: (_: E) => T): Event<T>,
+  subscribe(subscriber: Subscriber<Params>): Subscription;
+  getType(): string;
 }
 
 declare export class Store<State> {
- reset(event: Event<any> | Effect<any, any, any>): this;
- getState(): State;
- /*::+*/ map: (
-  & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
-  & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
- );
- on<E>(
-  event: Event<E> | Effect<E, any, any>,
-  handler: (state: State, payload: E) => State | void,
- ): this;
- off(event: Event<any> | Effect<any, any, any>): void,
- subscribe(listner: any): Subscription;
- /*::+*/ watch: (<E>(
-  watcher: (state: State, payload: E, type: string) => any,
-  _: void,
- ) => Subscription) &
-  (<E>(
-   event: Event<E> | Effect<E, any, any>,
-   watcher: (state: State, payload: E, type: string) => any,
-  ) => Subscription);
- thru<U>(fn: (store: Store<State>) => U): U;
- shortName: string;
+  reset(event: Event<any> | Effect<any, any, any>): this;
+  getState(): State;
+  map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
+  map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
+  on<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    handler: (state: State, payload: E) => State | void,
+  ): this;
+  off(event: Event<any> | Effect<any, any, any> | Store<any>): void;
+  subscribe(listner: any): Subscription;
+  watch<E>(
+    watcher: (state: State, payload: E, type: string) => any,
+    __: void,
+  ): Subscription;
+  watch<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    watcher: (state: State, payload: E, type: string) => any,
+  ): Subscription;
+  thru<U>(fn: (store: Store<State>) => U): U;
+  shortName: string;
+  defaultState: State;
 }
 
 declare export class Domain {
- onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
- onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
- onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
- onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
- event<Payload>(name?: string): Event<Payload>;
- effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
- domain(name?: string): Domain;
- store<State>(defaultState: State): Store<State>;
- getType(): string;
+  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
+  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
+  onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
+  onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
+  event<Payload>(name?: string): Event<Payload>;
+  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+  domain(name?: string): Domain;
+  store<State>(defaultState: State): Store<State>;
+  getType(): string;
 }
+
+declare export function forward<T>(opts: {
+  /*::+*/ from: Event<T> | Store<T>,
+  /*::+*/ to: Event<T> | Store<T> | Effect<T, any, any>,
+}): Subscription
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
- effectName?: string, config?: {
-   handler?: (params: Params) => (Promise<Done> | Done),
- }
+  effectName?: string,
+  config?: {
+    handler?: (params: Params) => Promise<Done> | Done,
+  },
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
-declare export function setStoreName<State>(store: Store<State>, name: string): void
+declare export function setStoreName<State>(
+  store: Store<State>,
+  name: string,
+): void
 
 declare export function createStoreObject<
- State: {+[key: string]: Store<any> | any},
+  State: {+[key: string]: Store<any> | any},
 >(
- obj: State,
+  obj: State,
 ): Store<
- $ObjMap<
-  State,
-  //prettier-ignore
-  <S>(field: Store<S> | S) => S,
- >,
+  $ObjMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
 >
 declare export function extract<
- State: {+[key: string]: Store<any> | any},
- NextState: {+[key: string]: Store<any> | any},
+  State: {+[key: string]: Store<any> | any},
+  NextState: {+[key: string]: Store<any> | any},
 >(
- store: Store<State>,
- extractor: (_: State) => NextState,
+  store: Store<State>,
+  extractor: (_: State) => NextState,
 ): Store<
- $ObjMap<
-  NextState,
-  //prettier-ignore
-  <S>(field: Store<S> | S) => S,
- >,
+  $ObjMap<
+    NextState,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
 >
 declare export function createApi<
- S,
- Api: {[name: string]: (store: S, e: any) => S},
+  S,
+  Api: {[name: string]: (store: S, e: any) => S},
 >(
- store: Store<S>,
- api: Api,
+  store: Store<S>,
+  api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
-declare export function restoreObject<State: {+[key: string]: Store<any> | any}>(
- obj: State,
+declare export function restoreObject<
+  State: {+[key: string]: Store<any> | any},
+>(
+  obj: State,
 ): $ObjMap<
- State,
- //prettier-ignore
- <S>(field: Store<S> | S) => Store<S>,
+  State,
+  //prettier-ignore
+  <S>(field: Store<S> | S) => Store<S>,
 >
 
 declare export function restoreEffect<Done>(
- event: Effect<any, Done, any>,
- defaultState: Done,
+  event: Effect<any, Done, any>,
+  defaultState: Done,
 ): Store<Done>
 
-declare export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E>
+declare export function restoreEvent<E>(
+  event: Event<E>,
+  defaultState: E,
+): Store<E>
 
 declare export function restore<Done>(
- event: Effect<any, Done, any>,
- defaultState: Done,
+  event: Effect<any, Done, any>,
+  defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
 declare export function restore<State: {+[key: string]: Store<any> | any}>(
- obj: State,
+  obj: State,
 ): $ObjMap<
- State,
- //prettier-ignore
- <S>(field: Store<S> | S) => Store<S>,
+  State,
+  //prettier-ignore
+  <S>(field: Store<S> | S) => Store<S>,
 >
 declare export function createDomain(domainName?: string): Domain
-declare export function createWrappedDomain(
- watcher: Function,
- name?: string,
- parent?: Domain,
-): Domain
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
- a: Store<A>,
- b: Store<B>,
- fn: (a: A, b: B) => R,
+  a: Store<A>,
+  b: Store<B>,
+  fn: (a: A, b: B) => R,
 ): Store<R>
 declare export function combine<A, B, C, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- fn: (a: A, b: B, c: C) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  fn: (a: A, b: B, c: C) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- fn: (a: A, b: B, c: C, d: D) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  fn: (a: A, b: B, c: C, d: D) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- fn: (a: A, b: B, c: C, d: D, e: E) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  fn: (a: A, b: B, c: C, d: D, e: E) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, G, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- g: Store<G>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  g: Store<G>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, G, H, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- g: Store<G>,
- h: Store<H>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  g: Store<G>,
+  h: Store<H>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, G, H, I, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- g: Store<G>,
- h: Store<H>,
- i: Store<I>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  g: Store<G>,
+  h: Store<H>,
+  i: Store<I>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, G, H, I, J, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- g: Store<G>,
- h: Store<H>,
- i: Store<I>,
- j: Store<J>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  g: Store<G>,
+  h: Store<H>,
+  i: Store<I>,
+  j: Store<J>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J) => R,
 ): Store<R>
 declare export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
- a: Store<A>,
- b: Store<B>,
- c: Store<C>,
- d: Store<D>,
- e: Store<E>,
- f: Store<F>,
- g: Store<G>,
- h: Store<H>,
- i: Store<I>,
- j: Store<J>,
- k: Store<K>,
- fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
+  a: Store<A>,
+  b: Store<B>,
+  c: Store<C>,
+  d: Store<D>,
+  e: Store<E>,
+  f: Store<F>,
+  g: Store<G>,
+  h: Store<H>,
+  i: Store<I>,
+  j: Store<J>,
+  k: Store<K>,
+  fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
 ): Store<R>

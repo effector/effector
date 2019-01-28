@@ -197,17 +197,18 @@ test('rfc1 example implementation', async() => {
   const store = createStoreObject({counter, text})
 
   const fnWait = jest.fn()
-  const waitIncrement = createEffect('wait increment')
-  waitIncrement.use(
-    () =>
-      new Promise(_ => {
-        console.count('wait')
-        increment.watch(() => {
-          console.count('wait done')
-          _()
+  const waitIncrement = createEffect('wait increment', {
+    async handler() {
+      console.count('wait')
+      await new Promise(rs => {
+        const unsub = increment.watch(() => {
+          unsub()
+          rs()
         })
-      }),
-  )
+      })
+      console.count('wait done')
+    },
+  })
   click.watch(() => waitIncrement())
   waitIncrement.done.watch(fnWait)
   //  increment.watch(fnWait)
