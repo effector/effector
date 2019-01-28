@@ -43,7 +43,7 @@ declare export class Effect<Params, Done, Fail = Error> {
 }
 
 declare export class Store<State> {
-  reset(event: Event<any> | Effect<any, any, any>): this;
+  reset(event: Event<any> | Effect<any, any, any> | Store<any>): this;
   getState(): State;
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
