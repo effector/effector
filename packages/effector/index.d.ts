@@ -20,12 +20,9 @@ export interface Event<E> {
  getType(): string;
 }
 
-export interface Future<Params, Done, Fail> extends Promise<Done> {
+export class Future<Params, Done, Fail> extends Promise<Done> {
  args: Params;
- done(): Promise<{params: Params, result: Done}>;
- fail(): Promise<{params: Params, error: Fail}>;
  anyway(): Promise<void>;
- promise(): Promise<Done>;
  cache(): Done | void;
 }
 
@@ -34,7 +31,7 @@ export interface Effect<Params, Done, Fail = Error> {
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {
-  (asyncFunction: (params: Params) => Promise<Done>): this;
+  (asyncFunction: (params: Params) => Promise<Done> | Done): Effect<Params, Done, Fail>;
   getCurrent(): (params: Params) => Promise<Done>;
  };
  watch(watcher: (payload: Params) => any): Subscription;
@@ -63,6 +60,7 @@ export class Store<State> {
  ): Subscription;
  thru<U>(fn: (store: Store<State>) => U): U;
  shortName: string;
+ defaultState: State;
 }
 
 export class Domain {
@@ -77,10 +75,16 @@ export class Domain {
  getType(): string;
 }
 
+export function forward<T>({
+  from: Event<T> | Store<T>,
+  to: Event<T> | Store<T> | Effect<T, any, any>,
+}): Subscription
+
 export function createEvent<E>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
- effectName?: string, config?: {
+ effectName?: string,
+ config?: {
    handler?: (params: Params) => (Promise<Done> | Done),
  }
 ): Effect<Params, Done, Fail>
@@ -109,11 +113,6 @@ export function extract<
  extractor: (_: State) => NextState,
 ): Store<NextState>
 export function createDomain(domainName?: string): Domain
-export function createWrappedDomain(
- watcher: Function,
- name?: string,
- parent?: Domain,
-): Domain
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(
