@@ -5,6 +5,7 @@
   "typings": "index.d.ts",
   "private": true,
   "scripts": {
+    "integration": "sh integrations/webpack/run.sh",
     "docs": "docsify serve .",
     "build:bs": "bsb -make-world",
     "server": "micro",
