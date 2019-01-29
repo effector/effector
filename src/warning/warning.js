@@ -1,6 +1,6 @@
 //@flow
 /* eslint-disable */
-import {__DEV__} from 'effector/flags'
+import {__DEV__, __DEBUG__} from 'effector/flags'
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -23,15 +23,13 @@ if (__DEV__) {
       format.replace(/%s/g, function() {
         return args[argIndex++];
       });
-    if (typeof console !== 'undefined') {
-      console.error(message);
-    }
-    try {
-      // --- Welcome to debugging React ---
+    console.error(message);
+    // try {
+      // --- Welcome ---
       // This error was thrown as a convenience so that you can use this stack
       // to find the callsite that caused this warning to fire.
-      throw new Error(message);
-    } catch (x) {}
+      // throw new Error(message);
+    // } catch (x) {}
   }
 
   warning = function(condition: any, format: string, args: any) {
@@ -40,11 +38,13 @@ if (__DEV__) {
     for (var key = 2; key < len; key++) {
       args[key - 2] = arguments[key];
     }
-    if (format === undefined) {
-      throw new Error(
-          '`warning(condition, format, ...args)` requires a warning ' +
-          'message argument'
-      );
+    if (__DEBUG__) {
+      if (format === undefined) {
+        throw new Error(
+            '`warning(condition, format, ...args)` requires a warning ' +
+            'message argument'
+        );
+      }
     }
     if (!condition) {
       printWarning.apply(null, [format].concat(args));
