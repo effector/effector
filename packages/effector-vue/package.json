@@ -4,6 +4,7 @@
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
+  "umd:main": "effector-vue.umd.js",
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
   "dependencies": {
@@ -19,13 +20,13 @@
     "index.js.flow",
     "effector-vue.es.js",
     "effector-vue.cjs.js",
-    "effector-vue.bundle.js",
+    "effector-vue.umd.js",
     "effector-vue.es.js.map",
     "effector-vue.cjs.js.map",
-    "effector-vue.bundle.js.map",
+    "effector-vue.umd.js.map",
     "effector-vue.cjs.js.flow",
     "effector-vue.es.js.flow",
-    "effector-vue.bundle.js.flow"
+    "effector-vue.umd.js.flow"
   ],
   "keywords": [
     "data",

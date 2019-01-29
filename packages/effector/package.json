@@ -4,6 +4,7 @@
   "description": "Application state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
+  "umd:main": "effector.umd.js",
   "jsnext:main": "effector.es.js",
   "typings": "index.d.ts",
   "dependencies": {
@@ -16,13 +17,13 @@
     "index.js.flow",
     "effector.es.js",
     "effector.cjs.js",
-    "effector.bundle.js",
+    "effector.umd.js",
     "effector.es.js.map",
     "effector.cjs.js.map",
-    "effector.bundle.js.map",
+    "effector.umd.js.map",
     "effector.cjs.js.flow",
     "effector.es.js.flow",
-    "effector.bundle.js.flow"
+    "effector.umd.js.flow"
   ],
   "keywords": [
     "data",
