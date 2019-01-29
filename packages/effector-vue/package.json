@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "0.18.1",
+  "version": "0.18.2",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
@@ -8,7 +8,7 @@
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
   "dependencies": {
-    "effector": "^0.18.1"
+    "effector": "^0.18.2"
   },
   "peerDependencies": {
     "vue": "*"

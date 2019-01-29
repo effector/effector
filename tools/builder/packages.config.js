@@ -25,12 +25,12 @@ const common = {
 }
 
 const version = {
-  effector: '0.18.1',
-  'effector-react': '0.18.1',
-  'effector-vue': '0.18.1',
+  effector: '0.18.2',
+  'effector-react': '0.18.2',
+  'effector-vue': '0.18.2',
 
-  'bs-effector': '0.18.1',
-  'bs-effector-react': '0.18.1',
+  'bs-effector': '0.18.2',
+  'bs-effector-react': '0.18.2',
 }
 
 const getFiles = name => [
