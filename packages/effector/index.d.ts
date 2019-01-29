@@ -44,7 +44,7 @@ export interface Effect<Params, Done, Fail = Error> {
 }
 
 export class Store<State> {
-  reset(event: Event<any> | Effect<any, any, any>): this
+  reset(event: Event<any> | Effect<any, any, any> | Store<any>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
@@ -97,11 +97,16 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 
 export function createStoreObject<State>(
   defaultState: State,
-): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : any}>
+): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function createApi<
   S,
   Api extends {[name: string]: (store: S, e: any) => S}
->(store: Store<S>, api: Api): Api //TODO
+>(
+  store: Store<S>,
+  api: Api,
+): {
+  [K in keyof Api]: Api[K] extends (store: S, e: infer E) => S ? Event<E> : any
+}
 
 export function extract<State, NextState>(
   obj: Store<State>,

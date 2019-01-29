@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.18.2
+
+- Fix webpack usage issue. To prevent this in a future, webpack integration test was added.
+
+- Improve typescript typings for `createApi`. This code example became type checked
+
+```js
+import {createStore, createApi} from 'effector'
+
+const text = createStore('')
+
+const {addMessage, cut} = createApi(text, {
+  addMessage: (text, message) => text + `\n` + message
+  cut: (text, {fromIndex, size}) => text.slice(fromIndex, fromIndex + size),
+})
+
+```
+
+- Add umd bundle to npm. Therefore, you can use cdn to include library without bundlers
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/effector@0.18.2/effector.umd.js"></script>
+  </head>
+  <body>
+    <script>
+      const header = document.createElement('h1')
+      document.body.appendChild(header)
+      const text = effector.createStore('hello')
+      text.watch(str => (header.innerHTML = str))
+    </script>
+  </body>
+</html>
+```
+
 ## 0.18.1
 
 - Add `forward`: common function for forwarding updates and events
