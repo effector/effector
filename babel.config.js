@@ -75,6 +75,12 @@ module.exports = api => {
       },
       plugins: ['./src/babel/babel-plugin'],
     },
+    // {
+    //   test(filename) {
+    //     return filename.includes('graphite/walk')
+    //   },
+    //   plugins: ['./src/babel/get-step'],
+    // },
   ]
 
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
