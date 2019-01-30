@@ -3,8 +3,9 @@
 import type {Event} from 'effector/event'
 import {type TypeDef, Ctx, type StateRef, createStateRef} from 'effector/stdlib'
 import {__DEV__, __DEBUG__} from 'effector/flags'
-import type {CommonCtx, Meta, Reg, Command} from './index.h'
-
+import type {CommonCtx, Meta, Stage, Command} from './index.h'
+declare var __step: TypeDef<*, 'step'>
+declare var __single: any
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(
     event.graphite.seq,
@@ -13,51 +14,108 @@ export function walkEvent<T>(payload: T, event: Event<T>) {
     }),
   )
 }
+function getStage(def: TypeDef<*, *>): Stage {
+  if (def.type === 'run') return 'effect'
+  if (def.type === 'combine') return 'combine'
+  return 'solo'
+}
 
 export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: TypeDef<*, 'ctx'>) {
-  const meta = {
+  const meta: Meta = {
+    callstack: [],
     transactions: [],
+    tr: {},
+    tc: {},
+    replay: false,
     stop: false,
     ctx,
     reg: {
       isChanged: true,
     },
     val: {},
+    arg: null,
   }
   runStep(seq, meta.ctx, meta)
+  for (const id in meta.tr) {
+    replay(meta.tr[id])
+  }
   for (let i = 0; i < meta.transactions.length; i++) {
     meta.transactions[i]()
   }
   meta.transactions.length = 0
 }
-
+function replay({meta, ctx}) {
+  meta.replay = true
+  meta.stop = false
+  meta.arg = ctx.data.__stepArg
+  meta.ctx = command.run.cmd(meta)
+  meta.stop = true
+}
 function runStep(step, ctx: *, meta) {
   meta.stop = false
-  stepVisitor[step.type](step, ctx, meta)
+  meta.callstack.push(step)
+  stepVisitor[step.type](ctx, meta)
+  meta.callstack.pop()
+}
+
+function cloneMeta(meta: Meta): Meta {
+  return {
+    tr: meta.tr,
+    tc: meta.tc,
+    replay: true,
+    callstack: meta.callstack.slice(),
+    ctx: meta.ctx,
+    reg: meta.reg,
+    stop: meta.stop,
+    val: meta.val,
+    //TODO avoid this
+    transactions: meta.transactions,
+    arg: meta.arg,
+  }
 }
 
 const commonStepVisitor = {
-  single(step: TypeDef<'single', 'step'>, ctx: CommonCtx, meta: Meta) {
+  single(ctx: CommonCtx, meta: Meta) {
+    if (!meta.replay) {
+      if (__step.data.type === 'run') {
+        meta.tr[__step.data.id] = {
+          ctx,
+          meta: cloneMeta(meta),
+        }
+        meta.stop = true
+        return
+      }
+    }
     meta.arg = ctx.data.__stepArg
-    meta.ctx = command[step.data.type].cmd(step.data, meta)
+    meta.ctx = command[__step.data.type].cmd(meta)
     meta.stop = !command[meta.ctx.type].transition(meta.reg)
   },
-  multi(step, ctx, meta) {
-    const items = step.data.slice()
+  multi(ctx, meta) {
+    const items = __step.data.slice()
     for (let i = 0; i < items.length; i++) {
       runStep(items[i], ctx, meta)
     }
     meta.stop = false
   },
-  seq(steps: TypeDef<'seq', 'step'>, prev: CommonCtx, meta) {
+  seq(prev: CommonCtx, meta) {
     meta.ctx = prev
-    const items = steps.data.slice()
+    const items = __step.data.slice()
     for (let i = 0; i < items.length; i++) {
       runStep(items[i], meta.ctx, meta)
       if (meta.stop) {
         break
       }
     }
+  },
+  combine(ctx, meta: Meta) {
+    const id = String(__step.data.id)
+    const part = +__step.data.part
+    const arr = (meta.tc[id] = meta.tc[id] || [])
+    arr[part] = {
+      ctx,
+      meta: cloneMeta(meta),
+    }
+    meta.stop = true
   },
 }
 const stepVisitor = {}
@@ -73,7 +131,7 @@ if (__DEBUG__) {
     }
   }
   const stepVisitorNext = {
-    loop(step: TypeDef<'loop', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+    loop(ctx: TypeDef<*, 'ctx'>, meta) {
       const VAL = 'current'
       type Fun = TypeDef<*, 'step'>
       type Using = {
@@ -88,7 +146,7 @@ if (__DEBUG__) {
         selector: Using,
         item: Using,
       }
-      const data: StepData = step.data
+      const data: StepData = __step.data
       const branch: Fun = data.branch
       const iterator: Fun = data.iterator
 
@@ -119,11 +177,11 @@ if (__DEBUG__) {
         return meta.val[name]
       }
     },
-    choose(step: TypeDef<'choose', 'step'>, ctx: TypeDef<*, 'ctx'>, meta) {
+    choose(ctx: TypeDef<*, 'ctx'>, meta) {
       type Cases = {+[key: string]: TypeDef<*, 'step'>}
-      const cases: Cases = step.data.cases
-      runStep(step.data.selector, ctx, meta)
-      const caseName = String(step.data.state.current)
+      const cases: Cases = __step.data.cases
+      runStep(__step.data.selector, ctx, meta)
+      const caseName = String(__step.data.state.current)
       let next
       if (caseName in cases) {
         next = cases[caseName]
@@ -142,14 +200,14 @@ if (__DEBUG__) {
 
 const command = ({
   emit: {
-    cmd: (single, meta) =>
+    cmd: meta =>
       Ctx.emit({
         __stepArg: meta.arg,
       }),
     transition: () => true,
   },
   filter: {
-    cmd(single, meta) {
+    cmd(meta) {
       const ctx = Ctx.filter({
         __stepArg: meta.arg,
       })
@@ -158,7 +216,7 @@ const command = ({
         result: (null: any),
         arg: meta.arg,
         val: meta.val,
-        fn: single.data.filter,
+        fn: __single.filter,
       })
       meta.reg.isChanged = Boolean(runCtx.result)
       return ctx
@@ -166,30 +224,30 @@ const command = ({
     transition: reg => Boolean(reg.isChanged),
   },
   run: {
-    cmd(single, meta) {
+    cmd(meta) {
       const ctx = Ctx.run({})
 
-      if ('transactionContext' in single.data)
-        meta.transactions.push(single.data.transactionContext(meta.arg))
+      if ('transactionContext' in __single)
+        meta.transactions.push(__single.transactionContext(meta.arg))
       tryRun({
         err: false,
         result: (null: any),
         arg: meta.arg,
         val: meta.val,
-        fn: single.data.runner,
+        fn: __single.runner,
       })
       return ctx
     },
     transition: () => false,
   },
   update: {
-    cmd(single, meta) {
+    cmd(meta) {
       let store
-      if ('val' in single.data) {
-        store = meta.val[single.data.val] =
-          meta.val[single.data.val] || createStateRef(null)
+      if ('val' in __single) {
+        store = meta.val[__single.val] =
+          meta.val[__single.val] || createStateRef(null)
       } else {
-        store = single.data.store
+        store = __single.store
       }
       store.current = meta.arg
       return Ctx.update({
@@ -199,7 +257,7 @@ const command = ({
     transition: () => true,
   },
   compute: {
-    cmd(single, meta) {
+    cmd(meta) {
       const newCtx = Ctx.compute({
         __stepArg: null,
       })
@@ -208,7 +266,7 @@ const command = ({
         result: (null: any),
         arg: meta.arg,
         val: meta.val,
-        fn: single.data.fn,
+        fn: __single.fn,
       })
       meta.reg.isChanged = !runCtx.err && runCtx.result !== undefined
       if (!runCtx.err) {
