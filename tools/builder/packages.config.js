@@ -217,7 +217,9 @@ export default {
     repository: 'https://github.com/zerobias/effector',
     main: 'index.js',
     files: ['index.js'],
-    peerDependencies: dependsOnEffector,
+    peerDependencies: {
+      'effector-react': `^${version['effector-react']}`,
+    },
     keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
     ...common,
   },
