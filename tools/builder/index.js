@@ -4,12 +4,52 @@ import {
   rollupEffector,
   rollupEffectorReact,
   rollupEffectorVue,
+  rollupBabel,
   renderModulesGraph,
 } from './rollup'
 import packages from './packages.config'
 import bsconfigs from './bsconfigs.config'
 import {massCopy, publishScript, outputPackageJSON} from './utils'
 import {taskList} from './taskList'
+
+const scope = {
+  '@effector/babel-plugin': [
+    () =>
+      outputPackageJSON(
+        'packages/@effector/babel-plugin/package.json',
+        packages['@effector/babel-plugin'],
+      ),
+    () =>
+      massCopy('src/babel', 'packages/@effector/babel-plugin', [
+        ['babel-plugin.js', 'index.js'],
+      ]),
+    () =>
+      massCopy(
+        'packages/@effector/babel-plugin',
+        'npm/@effector/babel-plugin',
+        ['package.json'],
+      ),
+    () => rollupBabel('@effector/babel-plugin'),
+  ],
+  '@effector/babel-plugin-react': [
+    () =>
+      outputPackageJSON(
+        'packages/@effector/babel-plugin-react/package.json',
+        packages['@effector/babel-plugin-react'],
+      ),
+    () =>
+      massCopy('src/babel', 'packages/@effector/babel-plugin-react', [
+        ['babel-plugin-react.js', 'index.js'],
+      ]),
+    () =>
+      massCopy(
+        'packages/@effector/babel-plugin-react',
+        'npm/@effector/babel-plugin-react',
+        ['package.json'],
+      ),
+    () => rollupBabel('@effector/babel-plugin-react'),
+  ],
+}
 
 taskList({
   tasks: {
@@ -135,6 +175,7 @@ taskList({
         ]),
       publishScript('bs-effector-react'),
     ],
+    ...scope,
   },
   hooks: {
     beforeAll: [

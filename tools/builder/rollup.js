@@ -151,6 +151,22 @@ const getPlugins = () => ({
   }),
 })
 
+export async function rollupBabel(name) {
+  const plugins = getPlugins()
+  const build = await rollup({
+    input: (dir(`packages/${name}/index.js`): string),
+    plugins: [plugins.babel],
+  })
+  await Promise.all([
+    build.write({
+      file: dir(`npm/${name}/index.js`),
+      format: 'cjs',
+      name,
+      sourcemap: false,
+    }),
+  ])
+}
+
 export async function rollupEffector() {
   const name = 'effector'
   await Promise.all([cjsAndEs(), umd()])

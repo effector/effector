@@ -31,6 +31,9 @@ const version = {
 
   'bs-effector': '0.18.2',
   'bs-effector-react': '0.18.2',
+
+  '@effector/babel-plugin': '0.0.1',
+  '@effector/babel-plugin-react': '0.0.1',
 }
 
 const getFiles = name => [
@@ -196,6 +199,26 @@ export default {
       'redux',
       'react',
     ],
+    ...common,
+  },
+  '@effector/babel-plugin': {
+    name: '@effector/babel-plugin',
+    version: version['@effector/babel-plugin'],
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: ['index.js'],
+    peerDependencies: dependsOnEffector,
+    keywords: ['effector', 'babel-plugin', 'displayName'],
+    ...common,
+  },
+  '@effector/babel-plugin-react': {
+    name: '@effector/babel-plugin-react',
+    version: version['@effector/babel-plugin-react'],
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: ['index.js'],
+    peerDependencies: dependsOnEffector,
+    keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
     ...common,
   },
 }
