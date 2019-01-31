@@ -1,5 +1,11 @@
 # Changelog
 
+## [work in progress] 0.18.3
+
+- Publish babel-plugins
+
+- Improve naming for chrome performance timeline
+
 ## 0.18.2
 
 - Fix webpack usage issue. To prevent this in a future, webpack integration test was added.
