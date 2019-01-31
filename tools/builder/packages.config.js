@@ -203,16 +203,21 @@ export default {
   },
   '@effector/babel-plugin': {
     name: '@effector/babel-plugin',
+    description: 'Call setStoreName on createStore calls',
     version: version['@effector/babel-plugin'],
     repository: 'https://github.com/zerobias/effector',
     main: 'index.js',
     files: ['index.js'],
     peerDependencies: dependsOnEffector,
     keywords: ['effector', 'babel-plugin', 'displayName'],
+    publishConfig: {
+      access: 'public',
+    },
     ...common,
   },
   '@effector/babel-plugin-react': {
     name: '@effector/babel-plugin-react',
+    description: 'Add displayName to createComponent call',
     version: version['@effector/babel-plugin-react'],
     repository: 'https://github.com/zerobias/effector',
     main: 'index.js',
@@ -221,6 +226,9 @@ export default {
       'effector-react': `^${version['effector-react']}`,
     },
     keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
+    publishConfig: {
+      access: 'public',
+    },
     ...common,
   },
 }
