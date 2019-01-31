@@ -163,21 +163,6 @@ export function dispatch(action: any) {
   return action
 }
 
-export function getDisplayName(store: {
-  compositeName?: CompositeName,
-  domainName?: CompositeName,
-  /*::+*/ id: string,
-  /*::...*/
-}) {
-  if (store.compositeName) {
-    return store.compositeName.fullName
-  }
-  if (store.domainName) {
-    return store.domainName.fullName
-  }
-  return store.id
-}
-
 export function mapStore<A, B>(
   store: Store<A>,
   fn: (state: A, lastState?: B) => B,
