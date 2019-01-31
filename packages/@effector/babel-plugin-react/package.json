@@ -1,5 +1,6 @@
 {
   "name": "@effector/babel-plugin-react",
+  "description": "Add displayName to createComponent call",
   "version": "0.0.1",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
@@ -15,6 +16,9 @@
     "babel-plugin",
     "displayName"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Zero Bias",
   "maintainers": [
     {

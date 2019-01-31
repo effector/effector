@@ -1,5 +1,6 @@
 {
   "name": "@effector/babel-plugin",
+  "description": "Call setStoreName on createStore calls",
   "version": "0.0.1",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
@@ -14,6 +15,9 @@
     "babel-plugin",
     "displayName"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "author": "Zero Bias",
   "maintainers": [
     {
