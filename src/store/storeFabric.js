@@ -6,8 +6,7 @@ import {fx, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
-import {setStoreName} from './setStoreName'
-import type {CompositeName} from '../compositeName'
+import {createName, type CompositeName} from '../compositeName'
 import {
   reset,
   getState,
@@ -41,11 +40,10 @@ export function storeFabric<State>(props: {
     defaultState,
     plainState,
     subscribers: new Map(),
+    compositeName: createName(name || '', parent),
   }
-  //TODO fix type
-  //$off
-  if (name) setStoreName(storeInstance, name)
   const store: $Shape<Store<State>> = {
+    compositeName: storeInstance.compositeName,
     graphite: storeInstance.graphite,
     kind: Kind.store,
     id: currentId,
@@ -65,9 +63,6 @@ export function storeFabric<State>(props: {
   ;(store: any).dispatch = dispatch.bind(null)
   //$off
   store[$$observable] = observable.bind(null, storeInstance)
-  //TODO fix type
-  //$off
-  if (name) setStoreName(store, name)
   store.on(updater, (_, payload) => payload)
 
   function setState(value, reduce?: Function) {
