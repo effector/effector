@@ -4,7 +4,7 @@ import {Kind} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {getDisplayName} from './staticMethods'
-import {createName} from '../compositeName'
+import {createName, type CompositeName} from '../compositeName'
 
 const storeObjectMaxNames = 25
 
@@ -50,8 +50,11 @@ export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)
-  store.shortName = rawName
-  store.compositeName = compositeName
+  //TODO: fix this
+  //store.shortName = rawName
+  store.compositeName.path = compositeName.path
+  store.compositeName.shortName = compositeName.shortName
+  store.compositeName.fullName = compositeName.fullName
 }
 
 function isStoreObject(store: Store<any>) {
