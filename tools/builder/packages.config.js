@@ -25,12 +25,12 @@ const common = {
 }
 
 const version = {
-  effector: '0.18.1',
-  'effector-react': '0.18.1',
-  'effector-vue': '0.18.1',
+  effector: '0.18.2',
+  'effector-react': '0.18.2',
+  'effector-vue': '0.18.2',
 
-  'bs-effector': '0.18.1',
-  'bs-effector-react': '0.18.1',
+  'bs-effector': '0.18.2',
+  'bs-effector-react': '0.18.2',
 }
 
 const getFiles = name => [
@@ -41,15 +41,15 @@ const getFiles = name => [
   //js files
   `${name}.es.js`,
   `${name}.cjs.js`,
-  `${name}.bundle.js`,
+  `${name}.umd.js`,
   //mappings
   `${name}.es.js.map`,
   `${name}.cjs.js.map`,
-  `${name}.bundle.js.map`,
+  `${name}.umd.js.map`,
   //typings
   `${name}.cjs.js.flow`,
   `${name}.es.js.flow`,
-  `${name}.bundle.js.flow`,
+  `${name}.umd.js.flow`,
 ]
 
 const dependsOnEffector = {
@@ -63,6 +63,7 @@ export default {
     description: 'Application state manager',
     main: 'effector.cjs.js',
     module: 'effector.es.js',
+    'umd:main': 'effector.umd.js',
     'jsnext:main': 'effector.es.js',
     typings: 'index.d.ts',
     dependencies: {
@@ -90,6 +91,7 @@ export default {
     description: 'React bindings for effector',
     main: 'effector-react.cjs.js',
     module: 'effector-react.es.js',
+    'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.es.js',
     typings: 'index.d.ts',
     dependencies: dependsOnEffector,
@@ -119,6 +121,7 @@ export default {
     description: 'Vue bindings for effector',
     main: 'effector-vue.cjs.js',
     module: 'effector-vue.es.js',
+    'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.es.js',
     typings: 'index.d.ts',
     dependencies: dependsOnEffector,

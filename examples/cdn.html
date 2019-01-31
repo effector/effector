@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://unpkg.com/effector@0.18.2/effector.umd.js"></script>
+  </head>
+  <body>
+    <script>
+      const header = document.createElement('h1')
+      document.body.appendChild(header)
+      const text = effector.createStore('hello')
+      text.watch(str => (header.innerHTML = str))
+    </script>
+  </body>
+</html>

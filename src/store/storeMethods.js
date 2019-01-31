@@ -112,7 +112,7 @@ export function watch(
 export function subscribe(storeInstance: ThisStore, listener: Function) {
   invariant(
     typeof listener === 'function',
-    'Expected the listener to be a function.',
+    'Expected the listener to be a function',
   )
   let stopPhaseTimerMessage = null
   let lastCall = getState(storeInstance)

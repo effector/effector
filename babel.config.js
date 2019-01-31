@@ -22,8 +22,8 @@ const aliases = {
 }
 
 module.exports = api => {
-  // api && api.cache && api.cache.never && api.cache.never()
-  const env = api.cache(() => process.env.NODE_ENV)
+  api && api.cache && api.cache.never && api.cache.never()
+  // const env = api.cache(() => process.env.NODE_ENV)
   const alias = parseAliases(aliases, {
     isBuild: !!process.env.IS_BUILD,
   })
@@ -31,6 +31,7 @@ module.exports = api => {
     alias.effector = resolvePath(__dirname, 'src')
   }
   const plugins = [
+    './src/babel/get-step',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -74,6 +75,12 @@ module.exports = api => {
       },
       plugins: ['./src/babel/babel-plugin'],
     },
+    // {
+    //   test(filename) {
+    //     return filename.includes('graphite/walk')
+    //   },
+    //   plugins: ['./src/babel/get-step'],
+    // },
   ]
 
   if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {

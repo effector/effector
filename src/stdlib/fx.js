@@ -12,6 +12,14 @@ type Using = {
 
 /* Step */
 declare export default function fx(
+  tag: 'combine',
+  props: {
+    id: string,
+    part: number,
+  },
+  ...childrens: $ReadOnlyArray<void>
+): TypeDef<'combine', 'step'>
+declare export default function fx(
   tag: 'loop',
   props: {
     branch: Fun,
@@ -92,14 +100,22 @@ export default function fx(
     const tag_: 'compute' | 'emit' | 'filter' | 'run' | 'update' = (tag: any)
     return Step.single(Cmd[tag_](props))
   }
-  const tag_: 'single' | 'multi' | 'seq' | 'choose' | 'loop' = (tag: any)
+  const tag_:
+    | 'single'
+    | 'multi'
+    | 'seq'
+    | 'choose'
+    | 'loop'
+    | 'combine' = (tag: any)
   switch (tag_) {
-    case 'single':
-      return Step.single(childrens[0])
-    case 'multi':
-      return Step.multi(childrens)
     case 'seq':
       return Step.seq(childrens)
+    case 'multi':
+      return Step.multi(childrens)
+    case 'single':
+      return Step.single(childrens[0])
+    case 'combine':
+      return Step.loop(props)
     case 'choose':
       return Step.choose(props)
     case 'loop':
