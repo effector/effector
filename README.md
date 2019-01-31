@@ -8,6 +8,7 @@ Reactive state manager
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
 
+- [Motivation](#motivation)
 - [Installation](#installation)
 - [About](#about)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
@@ -23,6 +24,17 @@ Reactive state manager
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+
+## Motivation
+
+At the start (early 2018) we had a lot of state-managers, those solve actual problems, but not elegant and with some limitations.
+
+Effector tries to solve all [state-manager's] user problems and most parts of limitations. Primary:
+- [x] Developer-friendly, [static] type safe and inference, boilerplate free, insinuating API.
+- [x] Maximum update (state and subscribers) performance  or minimum library performance cost by compile time / initial runtime computation.
+- [x] Modular, isomorphic, flexible.
+- [x] Tiny bundle size.
 
 ## Installation
 
@@ -193,16 +205,6 @@ import {
 ```js
 import type {Domain, Event, Effect, Store} from 'effector'
 ```
-
-## Motivation
-
-At the start (early 2018) we had a lot of state-managers, those solve actual problems, but not elegant and with some limitations.
-
-Effector tries to solve all [state-manager's] user problems and most parts of limitations. Primary:
-- [x] Developer-friendly, [static] type safe and inference, boilerplate free, insinuating API.
-- [x] Maximum update (state and subscribers) performance  or minimum library performance cost by compile time / initial runtime computation.
-- [x] Modular, isomorphic, flexible.
-- [x] Tiny bundle size.
 
 ## Contributors
 
