@@ -24,7 +24,7 @@ const scope = {
       massCopy(
         'packages/@effector/babel-plugin',
         'npm/@effector/babel-plugin',
-        ['package.json'],
+        ['package.json', 'README.md'],
       ),
     () => rollupBabel('@effector/babel-plugin', 'src/babel/babel-plugin'),
     publishScript('@effector/babel-plugin'),
@@ -40,7 +40,7 @@ const scope = {
       massCopy(
         'packages/@effector/babel-plugin-react',
         'npm/@effector/babel-plugin-react',
-        ['package.json'],
+        ['package.json', 'README.md'],
       ),
     () =>
       rollupBabel(

@@ -32,8 +32,8 @@ const version = {
   'bs-effector': '0.18.2',
   'bs-effector-react': '0.18.2',
 
-  '@effector/babel-plugin': '0.0.1',
-  '@effector/babel-plugin-react': '0.0.1',
+  '@effector/babel-plugin': '0.0.2',
+  '@effector/babel-plugin-react': '0.0.2',
 }
 
 const getFiles = name => [
