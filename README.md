@@ -200,7 +200,7 @@ At the start (early 2018) we had a lot of state-managers, those solve actual pro
 
 Effector tries to solve all [state-manager's] user problems and most parts of limitations. Primary:
 - [x] Developer-friendly, [static] type safe and inference, boilerplate free, insinuating API.
-- [x] Maximum update () performance  or minimum library performance cost by compile time / initial runtime computation.
+- [x] Maximum update (state and subscribers) performance  or minimum library performance cost by compile time / initial runtime computation.
 - [x] Modular, isomorphic, flexible.
 - [x] Tiny bundle size.
 
