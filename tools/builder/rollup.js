@@ -151,10 +151,10 @@ const getPlugins = () => ({
   }),
 })
 
-export async function rollupBabel(name) {
+export async function rollupBabel(name, plugin) {
   const plugins = getPlugins()
   const build = await rollup({
-    input: (dir(`packages/${name}/index.js`): string),
+    input: (dir(plugin): string),
     plugins: [plugins.babel],
   })
   await Promise.all([

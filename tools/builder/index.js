@@ -20,16 +20,12 @@ const scope = {
         packages['@effector/babel-plugin'],
       ),
     () =>
-      massCopy('src/babel', 'packages/@effector/babel-plugin', [
-        ['babel-plugin.js', 'index.js'],
-      ]),
-    () =>
       massCopy(
         'packages/@effector/babel-plugin',
         'npm/@effector/babel-plugin',
         ['package.json'],
       ),
-    () => rollupBabel('@effector/babel-plugin'),
+    () => rollupBabel('@effector/babel-plugin', 'src/babel/babel-plugin'),
   ],
   '@effector/babel-plugin-react': [
     () =>
@@ -38,16 +34,16 @@ const scope = {
         packages['@effector/babel-plugin-react'],
       ),
     () =>
-      massCopy('src/babel', 'packages/@effector/babel-plugin-react', [
-        ['babel-plugin-react.js', 'index.js'],
-      ]),
-    () =>
       massCopy(
         'packages/@effector/babel-plugin-react',
         'npm/@effector/babel-plugin-react',
         ['package.json'],
       ),
-    () => rollupBabel('@effector/babel-plugin-react'),
+    () =>
+      rollupBabel(
+        '@effector/babel-plugin-react',
+        'src/babel/babel-plugin-react',
+      ),
   ],
 }
 
