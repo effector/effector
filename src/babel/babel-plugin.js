@@ -40,10 +40,11 @@ module.exports = function(babel, options = {}) {
             )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types, functionNames[0])
             }
           }
         }
+
         if (t.isMemberExpression(path.node.callee)) {
           if (path.node.callee.property.name === 'store') {
             functionNames[0] = 'setStoreName'
@@ -54,7 +55,7 @@ module.exports = function(babel, options = {}) {
             )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types, functionNames[0])
             }
           }
         }
@@ -96,7 +97,6 @@ function findCandidateNameForExpression(path) {
 }
 
 function findProgram(path, t, functionNames) {
-  const isInFunctionNames = node => functionNames.includes(node.local.name)
   let program
   path.find(path => {
     if (path.isProgram()) {
@@ -110,7 +110,7 @@ function findProgram(path, t, functionNames) {
       if (res.source) {
         if (
           res.source.value === importName
-          && res.specifiers.some(isInFunctionNames)
+          && res.specifiers.some(node => functionNames.includes(node.local.name))
         ) {
           return false
         }
@@ -122,7 +122,7 @@ function findProgram(path, t, functionNames) {
   return program
 }
 
-function setDisplayNameAfter(path, nameNodeId, t, functionName, displayName) {
+function setStoreNameAfter(path, nameNodeId, t, functionName, displayName) {
   if (!displayName) {
     displayName = nameNodeId.name
   }
@@ -136,16 +136,16 @@ function setDisplayNameAfter(path, nameNodeId, t, functionName, displayName) {
   })
 
   if (blockLevelStmnt && displayName) {
-    // const trailingComments = blockLevelStmnt.node.trailingComments
+    const trailingComments = blockLevelStmnt.node.trailingComments
     delete blockLevelStmnt.node.trailingComments
 
-    const setDisplayNameStmn = t.expressionStatement(
+    const setStoreNameStmn = t.expressionStatement(
       t.callExpression(t.identifier(functionName), [
         nameNodeId,
         t.stringLiteral(displayName),
       ]),
     )
 
-    blockLevelStmnt.insertAfter(setDisplayNameStmn)
+    blockLevelStmnt.insertAfter(setStoreNameStmn)
   }
 }
