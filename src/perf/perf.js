@@ -2,7 +2,7 @@
 
 import {__DEV__} from 'effector/flags'
 import type {CompositeName} from '../compositeName'
-import {getDisplayName} from 'effector/store'
+import {getDisplayName} from 'effector/store/staticMethods'
 
 type StoreMeasurementPhase = 'map' | 'subscribe'
 
