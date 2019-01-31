@@ -110,9 +110,10 @@ describe('perf', () => {
 
   it('supports store.map', async() => {
     const event = effector.createEvent('default update')
-    const parent = effector.createStore('wat')
-    parent.on(event, (_, p) => p)
-    const child = parent.map(v => `${v} - ok`)
+    const mapTest = effector.createStore('wat')
+    effector.setStoreName(mapTest, 'mapTest')
+    mapTest.on(event, (_, p) => p)
+    const child = mapTest.map(v => `${v} - ok`)
     child.watch(() => {})
 
     event('a')
@@ -123,9 +124,10 @@ describe('perf', () => {
 
   it('supports throwing error store.map', async() => {
     const event = effector.createEvent('default update')
-    const parent = effector.createStore('wat')
-    parent.on(event, (_, p) => p)
-    const child = parent.map(v => {
+    const mapErrorTest = effector.createStore('wat')
+    effector.setStoreName(mapErrorTest, 'mapErrorTest')
+    mapErrorTest.on(event, (_, p) => p)
+    const child = mapErrorTest.map(v => {
       throw new Error('wat')
     })
     child.watch(() => {})
@@ -138,9 +140,10 @@ describe('perf', () => {
 
   it('supports store.subscribe', async() => {
     const event = effector.createEvent('default update')
-    const parent = effector.createStore('wat')
-    parent.on(event, (_, p) => p)
-    parent.watch(() => {})
+    const subscribeTest = effector.createStore('wat')
+    effector.setStoreName(subscribeTest, 'subscribeTest')
+    subscribeTest.on(event, (_, p) => p)
+    subscribeTest.watch(() => {})
 
     event('a')
     event('b')
@@ -150,9 +153,10 @@ describe('perf', () => {
 
   it('supports throwing error in store.subscribe', async() => {
     const event = effector.createEvent('default update')
-    const parent = effector.createStore('wat')
-    parent.on(event, (_, p) => p)
-    parent.watch(() => {
+    const subscribeErrorTest = effector.createStore('wat')
+    effector.setStoreName(subscribeErrorTest, 'subscribeErrorTest')
+    subscribeErrorTest.on(event, (_, p) => p)
+    subscribeErrorTest.watch(() => {
       throw new Error('wat')
     })
 

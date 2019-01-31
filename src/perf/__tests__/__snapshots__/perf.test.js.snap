@@ -1,45 +1,45 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`perf supports store.map 1`] = `
-"☄ 1.map Warning: Initial
+"☄ mapTest.map Warning: Initial
 
 ☄ 1 → *.subscribe Warning: Initial
 
-☄ 1.map
+☄ mapTest.map
 
 ☄ 1 → *.subscribe
 
-☄ 1.map
+☄ mapTest.map
 
 ☄ 1 → *.subscribe
 "
 `;
 
 exports[`perf supports store.subscribe 1`] = `
-"☄ 5.subscribe Warning: Initial
+"☄ subscribeTest.subscribe Warning: Initial
 
-☄ 5.subscribe
+☄ subscribeTest.subscribe
 
-☄ 5.subscribe
+☄ subscribeTest.subscribe
 "
 `;
 
 exports[`perf supports throwing error in store.subscribe 1`] = `
-"☄ 6.subscribe Warning: Got initial error
+"☄ subscribeErrorTest.subscribe Warning: Got initial error
 
-☄ 6.subscribe Warning: Got error
+☄ subscribeErrorTest.subscribe Warning: Got error
 
-☄ 6.subscribe Warning: Got error
+☄ subscribeErrorTest.subscribe Warning: Got error
 "
 `;
 
 exports[`perf supports throwing error store.map 1`] = `
-"☄ 3.map Warning: Got initial error
+"☄ mapErrorTest.map Warning: Got initial error
 
 ☄ 3 → *.subscribe Warning: Initial
 
-☄ 3.map Warning: Got error
+☄ mapErrorTest.map Warning: Got error
 
-☄ 3.map Warning: Got error
+☄ mapErrorTest.map Warning: Got error
 "
 `;
