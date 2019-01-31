@@ -1,0 +1,38 @@
+{
+  "name": "@effector/babel-plugin-react",
+  "version": "0.0.1",
+  "repository": "https://github.com/zerobias/effector",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "peerDependencies": {
+    "effector-react": "^0.18.2"
+  },
+  "keywords": [
+    "effector",
+    "react",
+    "babel-plugin",
+    "displayName"
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://zerobias.github.io/effector",
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
