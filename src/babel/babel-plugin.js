@@ -1,4 +1,4 @@
-//@noflow
+//@flow
 
 const importName = 'effector'
 
@@ -15,7 +15,7 @@ module.exports = function(babel, options = {}) {
   const {types: t} = babel
 
   return {
-    name: 'ast-transform', // not required
+    name: '@effector/babel-plugin', // not required
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
