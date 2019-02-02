@@ -4543,10 +4543,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
   integrity sha1-2uRqnXj74lKSJYzB54CkHZXAN4I=
 
-flow-bin@^0.91.0:
-  version "0.91.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.91.0.tgz#f5c89729f74b2ccbd47df6fbfadbdcc89cc1e478"
-  integrity sha512-j+L+xNiUYnZZ27MjVI0y2c9474ZHOvdSQq0Tjwh56mEA7tfxYqp5Dcb6aZSwvs3tGMTjCrZow9aUlZf3OoRyDQ==
+flow-bin@^0.92.0:
+  version "0.92.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.92.0.tgz#f5bf3e808b17b480e067ac673829ca715a168bea"
+  integrity sha512-3ErXSAXZZlLV5/QPlaUDCWlDUXop1SiH32ifXL3SEiBwsmGbudCLim+HFVZfkegrn1nB4TcNSkMWtW8SnMPyAQ==
 
 flow-copy-source@^2.0.2:
   version "2.0.2"
@@ -4564,10 +4564,10 @@ flow-parser@0.*:
   resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.91.0.tgz#bc42c5bf9d12e3121dad6667b1dcdab09049aee6"
   integrity sha512-qvKoEaVmyZhTsRb2Qyp6hxewy7EEm1ahEb/fgrnB0rB6VgBvyLOuKoxpUpGgX1scd7oubShZqi0q56B97pfyOw==
 
-flowgen@^1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/flowgen/-/flowgen-1.3.0.tgz#8c58c57fbcc75c5b068cd60ef0012c342569d389"
-  integrity sha512-bT6KF5BrLFaPd1CED2VTdRVYZpn8FQJ0AkssMrCpl0WDtdlI+DNlOHmZj61D4MSHvzKT5sMddaC+KTgqvrH8lQ==
+flowgen@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.yarnpkg.com/flowgen/-/flowgen-1.4.0.tgz#b62b4a4b910a31606fb30149fba2050b63cc1519"
+  integrity sha512-yNRDEjCG9WqsN5JgBFbP23rDqP/qtHIESmyGQNy0LDohWXVPSPdTaOaz9qYhV+N6zkSc71VYp6RC1gpaVbqOOw==
   dependencies:
     commander "^2.11.0"
     lodash "^4.17.4"
