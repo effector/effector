@@ -1,7 +1,6 @@
 [lints]
 all=warn
 untyped-type-import=error
-unclear-type=off
 
 [libs]
 ./node_modules/@babel/types/lib/index.js.flow
@@ -42,7 +41,6 @@ module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
 [strict]
 nonstrict-import
-unclear-type
 unsafe-getters-setters
 untyped-import
 untyped-type-import
