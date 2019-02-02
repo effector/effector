@@ -40,7 +40,15 @@ module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 
+[strict]
+nonstrict-import
+unclear-type
+unsafe-getters-setters
+untyped-import
+untyped-type-import
+
 [ignore]
+.*/.history/.*
 .*/node_modules/.*
 <PROJECT_ROOT>/src/graphite/tarjan/*
 <PROJECT_ROOT>/src/web/*
