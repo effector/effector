@@ -1,6 +1,6 @@
 
 import * as React from 'react'
-import {Store} from 'effector'
+import {Store, Event} from 'effector'
 
 export type StoreConsumer<State> = React.ComponentType<{
  children: (state: State) => React.ReactNode,
