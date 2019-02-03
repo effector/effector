@@ -52,7 +52,7 @@ export class Store<State> {
     trigger: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
   ): this
-  off(event: Event<any> | Effect<any, any, any> | Store<E>): void
+  off<E>(event: Event<any> | Effect<any, any, any> | Store<E>): void
   subscribe(listner: any): Subscription
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
