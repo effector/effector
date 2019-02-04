@@ -114,7 +114,7 @@ export function extract<State, NextState>(
 ): Store<NextState>
 export function restoreObject<State extends {[key: string]: Store<any> | any}>(
   obj: State,
-): {[K in keyof State]: State[K] extends Store<S> ? Store<S> : State[K]}
+): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}
 export function restoreEffect<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,
@@ -127,7 +127,7 @@ export function restore<Done>(
 export function restore<E>(event: Event<E>, defaultState: E): Store<E>
 export function restore<State extends {[key: string]: Store<any> | any}>(
   obj: State,
-): {[K in keyof State]: State[K] extends Store<S> ? Store<S> : State[K]}
+): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}
 
 export function createDomain(domainName?: string): Domain
 
