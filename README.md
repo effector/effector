@@ -116,8 +116,8 @@ status changed: offline
 ## Usage
 
 ```js
-import { createStore, createEvent } from "effector";
-import { createComponent } from "effector-react";
+import {createStore, createEvent} from "effector";
+import {createComponent} from "effector-react";
 
 const increment = createEvent("increment");
 const decrement = createEvent("decrement");
