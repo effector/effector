@@ -116,47 +116,30 @@ status changed: offline
 ## Usage
 
 ```js
-import {
- createStore,
- createEvent,
- createEffect,
- createStoreObject,
-} from 'effector'
+import { createStore, createEvent } from "effector";
+import { createComponent } from "effector-react";
 
-import {createStoreConsumer} from 'effector-react'
+const increment = createEvent("increment");
+const decrement = createEvent("decrement");
+const resetCounter = createEvent("reset counter");
 
-const changeText = createEvent('change todo text')
-const clickSave = createEvent('click save')
-const toggleComplete = createEvent('toggle complete')
-const resetForm = createEvent('reset form')
-const addTodo = createEvent('add todo')
-const fetchSaveTodo = createEffect('save request')
+const counter = createStore(0)
+  .on(increment, state => state + 1)
+  .on(decrement, state => state - 1)
+  .reset(resetCounter);
 
-const todos = createStore([]).on(fetchSaveTodo.done, (state, {params}) => [
- ...state,
- params,
-])
+counter.watch(console.log);
 
-const text = createStore('').on(changeText, (_, newText) => newText)
-const complete = createStore(false).on(toggleComplete, complete => !complete)
+const Counter = createComponent(counter, (props, counter) => (
+  <>
+    <div>{counter}</div>
+    <button onClick={increment}>+</button>
+    <button onClick={decrement}>-</button>
+    <button onClick={resetCounter}>reset</button>
+  </>
+));
 
-const form = createStoreObject({
- text,
- complete,
-}).reset(resetForm)
-
-const FormStore = createStoreConsumer(form)
-
-const Form = () => (
- <FormStore>
-  {form => (
-   <form onSubmit={resetForm}>
-    <input type="text" onChange={e => changeText(e.currentTarget.value)} />
-    <button onClick={resetForm}>reset</button>
-   </form>
-  )}
- </FormStore>
-)
+const App = () => <Counter />;
 ```
 
 ### Domain hooks
