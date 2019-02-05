@@ -1,4 +1,4 @@
-//@flow
+//@flow strict
 
 export type Subscriber<A> = {
   next(value: A): void,
@@ -52,7 +52,7 @@ declare export class Store<State> {
     handler: (state: State, payload: E) => State | void,
   ): this;
   off(event: Event<any> | Effect<any, any, any> | Store<any>): void;
-  subscribe(listner: any): Subscription;
+  subscribe(listener: any): Subscription;
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
     __: void,
@@ -67,9 +67,9 @@ declare export class Store<State> {
 }
 
 declare export class Domain {
-  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
-  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
-  onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
+  onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
+  onCreateEffect(hook: (newEffect: Effect<mixed, mixed, mixed>) => any): Subscription;
+  onCreateStore(hook: (newStore: Store<mixed>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
   effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
