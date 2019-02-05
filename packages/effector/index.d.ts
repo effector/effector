@@ -19,7 +19,7 @@ export interface Event<E> {
   getType(): string
 }
 
-export class Future<Params, Done, Fail> extends Promise<Done> {
+export interface Future<Params, Done, Fail> extends Promise<Done> {
   args: Params
   anyway(): Promise<void>
   cache(): Done | void
@@ -67,9 +67,11 @@ export class Store<State> {
 }
 
 export class Domain {
-  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription
-  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription
-  onCreateStore(hook: (newStore: Store<any>) => any): Subscription
+  onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
+  onCreateEffect(
+    hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
+  ): Subscription
+  onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload>(name?: string): Event<Payload>
   effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
