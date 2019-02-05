@@ -1,4 +1,4 @@
-//@flow
+//@flow strict
 
 import type {
   ComponentType,
@@ -22,7 +22,7 @@ export type StoreComponent<State> = ComponentType<{
   children: (state: State) => Node,
 }>
 
-export type Gate<Props = {||}> = Class<Component<Props, any>> & {
+export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {
   isOpen: boolean,
   isTerminated: boolean,
   open: Event<void>,
@@ -46,7 +46,10 @@ declare export function createContextComponent<Props, State, Context>(
   renderProp: (props: Props, state: State, context: Context) => Node,
 ): ComponentType<Props>
 
-declare export function connect<State: Object, Com: ComponentType<*>>(
+declare export function connect<
+  State: {[key: string]: any},
+  Com: ComponentType<*>,
+>(
   Component: Com,
 ): (
   store: Store<State>,
@@ -60,7 +63,10 @@ declare export function unstable_createStoreProvider<State>(
   store: Store<State>,
 ): StoreProvider<State>
 
-declare export function createReactState<State: Object, Com: ComponentType<*>>(
+declare export function createReactState<
+  State: {[key: string]: any},
+  Com: ComponentType<*>,
+>(
   store: Store<State>,
   Component: Com,
 ): ComponentType<$Exact<$Diff<ElementConfig<Com>, State>>>
