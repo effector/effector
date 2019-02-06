@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useStore 1`] = `"Store text: foo"`;
+
+exports[`useStore 2`] = `"Store text: foo"`;
