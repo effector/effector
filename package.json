@@ -102,6 +102,7 @@
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
     "react-test-renderer": "^16.8.0",
+    "react-testing-library": "^5.4.4",
     "reason-react": "^0.5.3",
     "redux": "^4.0.1",
     "rimraf": "^2.6.3",
