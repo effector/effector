@@ -26,14 +26,14 @@ const common = {
 
 const version = {
   effector: '0.18.2',
-  'effector-react': '0.18.2',
+  'effector-react': '0.18.4',
   'effector-vue': '0.18.2',
 
   'bs-effector': '0.18.2',
   'bs-effector-react': '0.18.2',
 
-  '@effector/babel-plugin': '0.0.2',
-  '@effector/babel-plugin-react': '0.0.2',
+  '@effector/babel-plugin': '0.0.3',
+  '@effector/babel-plugin-react': '0.0.3',
 }
 
 const getFiles = name => [
@@ -99,7 +99,7 @@ export default {
     typings: 'index.d.ts',
     dependencies: dependsOnEffector,
     peerDependencies: {
-      react: '*',
+      react: '^16.8.0',
     },
     files: getFiles('effector-react'),
     keywords: [
@@ -223,7 +223,7 @@ export default {
     main: 'index.js',
     files: ['index.js'],
     peerDependencies: {
-      'effector-react': `^${version['effector-react']}`,
+      'effector-react': '*',
     },
     keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
     publishConfig: {
