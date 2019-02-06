@@ -1,16 +1,11 @@
 //@flow
 
-import {configure} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-configure({
-  adapter: new Adapter(),
-})
-
 import * as React from 'react'
-import {mount} from 'enzyme'
+import {render, cleanup, flushEffects} from 'react-testing-library'
 import {createStore, createEvent} from 'effector'
 import {useStore} from '..'
+
+afterEach(cleanup)
 
 test('useStore', () => {
   const store = createStore('foo')
@@ -22,10 +17,9 @@ test('useStore', () => {
     return <span>Store text: {state}</span>
   }
 
-  const tree = mount(<Display />)
-  expect(tree.text()).toMatchSnapshot()
+  const {container} = render(<Display />)
+  expect(container.firstChild).toMatchSnapshot()
   changeText('bar')
-  //TODO: fix test
-  expect(tree.text()).toMatchSnapshot()
-  tree.unmount()
+  flushEffects()
+  expect(container.firstChild).toMatchSnapshot()
 })

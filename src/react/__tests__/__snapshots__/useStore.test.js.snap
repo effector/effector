@@ -1,5 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`useStore 1`] = `"Store text: foo"`;
+exports[`useStore 1`] = `
+<span>
+  Store text: 
+  foo
+</span>
+`;
 
-exports[`useStore 2`] = `"Store text: foo"`;
+exports[`useStore 2`] = `
+<span>
+  Store text: 
+  bar
+</span>
+`;
