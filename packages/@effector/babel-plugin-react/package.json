@@ -1,14 +1,14 @@
 {
   "name": "@effector/babel-plugin-react",
   "description": "Add displayName to createComponent call",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
   "files": [
     "index.js"
   ],
   "peerDependencies": {
-    "effector-react": "^0.18.2"
+    "effector-react": "*"
   },
   "keywords": [
     "effector",
