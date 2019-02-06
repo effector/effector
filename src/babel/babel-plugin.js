@@ -4,12 +4,7 @@ const importName = 'effector'
 
 module.exports = function(babel, options = {}) {
   const functionNames = []
-  const defaultCreators = [
-    'createStore',
-    'restoreEvent',
-    'restoreEffect',
-    'restoreObject',
-  ]
+  const defaultCreators = ['createStore', 'restoreEvent', 'restoreEffect']
   const storeCreators = new Set(options.storeCreators || defaultCreators)
 
   const {types: t} = babel
