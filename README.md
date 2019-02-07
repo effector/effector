@@ -8,6 +8,18 @@ Effector is a effective multiple store state manager for Javascript apps, that a
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
+## Installation
+
+```bash
+npm install --save effector effector-react
+```
+
+Or using `yarn`
+
+```bash
+yarn add effector effector-react
+```
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 ## Table of Contents
@@ -39,18 +51,6 @@ Effector tries to solve all [state-manager's] user problems and most parts of li
 - [x] Maximum update (state and subscribers) performance  or minimum library performance cost by compile time / initial runtime computation.
 - [x] Modular, isomorphic, flexible.
 - [x] Tiny bundle size.
-
-## Installation
-
-```bash
-npm install --save effector effector-react
-```
-
-Or using `yarn`
-
-```bash
-yarn add effector effector-react
-```
 
 ## About
 
