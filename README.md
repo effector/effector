@@ -2,7 +2,7 @@
 
 Reactive and effective state manager.
 
-Effector is a effective multiple store state manager for Javascript apps, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
+Effector is a effective multiple store state manager for Javascript apps, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API. [Comparison with other State managers.]()
 
 [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
