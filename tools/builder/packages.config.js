@@ -26,7 +26,7 @@ const common = {
 
 const version = {
   effector: '0.18.2',
-  'effector-react': '0.18.4',
+  'effector-react': '0.18.5',
   'effector-vue': '0.18.2',
 
   'bs-effector': '0.18.2',
