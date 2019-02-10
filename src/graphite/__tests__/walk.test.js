@@ -123,7 +123,10 @@ describe('<run /> execution cases', () => {
     expect(fn2).not.toHaveBeenCalled()
   })
 })
-describe.only('<loop/> execution cases', () => {
+describe.only('walk no-op', () => {
+  test('walk no-op', () => {})
+})
+describe('<loop/> execution cases', () => {
   const VAL = 'current'
   function values(val) {
     const result = {}
