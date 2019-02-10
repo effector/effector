@@ -23,6 +23,8 @@ export type Gate<Props = {}> = React.ComponentType<Props> & {
 }
 
 export function useStore<State>(store: Store<State>): State
+export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
+
 export function createGate<Props>(name?: string): Gate<Props>
 export function createComponent<Props, State>(
   store: Store<State>,

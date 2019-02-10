@@ -1,6 +1,7 @@
 //@flow
 
 import * as React from 'react'
+import {useEffect} from 'react'
 import {createDomain, createApi, type Store, type Event} from 'effector'
 
 const {store: createStore} = createDomain('Gate')
@@ -14,7 +15,19 @@ export type Gate<Props = {||}> = Class<React.Component<Props, any>> & {
   destructor: Event<void>,
   current: Props,
   state: Store<Props>,
+  set: Event<Props>,
   childGate<Next>(childName?: string): Gate<Next>,
+}
+
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props?: Props = ({}: any),
+) {
+  useEffect(() => {
+    GateComponent.open()
+    return () => GateComponent.close()
+  })
+  GateComponent.set(props)
 }
 
 export function createGate<Props>(
