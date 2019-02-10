@@ -13,3 +13,17 @@ exports[`useStore 2`] = `
   bar
 </span>
 `;
+
+exports[`useStoreFast 1`] = `
+<span>
+  Store text: 
+  foo
+</span>
+`;
+
+exports[`useStoreFast 2`] = `
+<span>
+  Store text: 
+  bar
+</span>
+`;
