@@ -2,4 +2,6 @@
 
 exports[`child gate usage: child gate usage 1`] = `""`;
 
+exports[`gate with props hook: gate with props hook 1`] = `<section />`;
+
 exports[`gate with props: gate with props 1`] = `""`;
