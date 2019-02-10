@@ -9,12 +9,13 @@ plugins:
   - flowtype
   - jest
   - react
+  - react-hooks
 settings:
   flowtype:
     onlyFilesWithFlowAnnotation: true
   react:
     version: '16.7'
-    flowVersion: 0.91
+    flowVersion: '0.91'
 env:
   node: true
   browser: false
@@ -26,6 +27,7 @@ rules:
   # flowtype/no-weak-types: 'off'
   # flowtype/generic-spacing: 'off'
   # flowtype/space-after-type-colon: 'off'
+  react-hooks/rules-of-hooks: error
   react/react-in-jsx-scope: 'off'
   react/no-children-prop: 'off'
   react/prop-types: 'off'
