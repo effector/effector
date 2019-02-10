@@ -103,11 +103,12 @@ function findProgram(path, t, functionNames) {
         return true
       }
       if (res.source) {
-        if (
-          res.source.value === importName
-          && res.specifiers.some(node => functionNames.includes(node.local.name))
-        ) {
-          return false
+        if (res.source.value === importName) {
+          if (
+            res.specifiers.some(node => functionNames.includes(node.local.name))
+          ) {
+            return false
+          }
         }
         program = path
         return true
@@ -131,7 +132,7 @@ function setStoreNameAfter(path, nameNodeId, t, functionName, displayName) {
   })
 
   if (blockLevelStmnt && displayName) {
-    const trailingComments = blockLevelStmnt.node.trailingComments
+    // const trailingComments = blockLevelStmnt.node.trailingComments
     delete blockLevelStmnt.node.trailingComments
 
     const setStoreNameStmn = t.expressionStatement(
