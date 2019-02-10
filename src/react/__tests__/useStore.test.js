@@ -1,7 +1,8 @@
 //@flow
 
 import * as React from 'react'
-import {render, cleanup, flushEffects} from 'react-testing-library'
+//$todo
+import {render, cleanup} from 'react-testing-library'
 import {createStore, createEvent} from 'effector'
 import {useStore} from '..'
 
@@ -20,6 +21,6 @@ test('useStore', () => {
   const {container} = render(<Display />)
   expect(container.firstChild).toMatchSnapshot()
   changeText('bar')
-  flushEffects()
+  // flushEffects()
   expect(container.firstChild).toMatchSnapshot()
 })
