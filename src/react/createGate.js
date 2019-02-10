@@ -26,7 +26,7 @@ export function useGate<Props>(
   useEffect(() => {
     GateComponent.open()
     return () => GateComponent.close()
-  })
+  }, [GateComponent])
   GateComponent.set(props)
 }
 
