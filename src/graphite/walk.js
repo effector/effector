@@ -268,7 +268,7 @@ const command = ({
         val: meta.val,
         fn: __single.fn,
       })
-      meta.reg.isChanged = !runCtx.err && runCtx.result !== undefined
+      meta.reg.isChanged = !runCtx.err
       if (!runCtx.err) {
         newCtx.data.__stepArg = runCtx.result
       }
