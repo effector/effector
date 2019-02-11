@@ -3,6 +3,7 @@ import {resolve, join, dirname, extname, relative} from 'path'
 import * as fs from 'fs-extra'
 //$todo
 import execa from 'execa'
+import {load} from 'js-yaml'
 import packageJson from '../../package.json'
 
 const root = process.cwd()
@@ -88,3 +89,17 @@ export const getSourcemapPathTransform = (name: string) =>
     }
     return join(`node_modules/${name}`, relative(packagePath, relativePath))
   }
+
+export async function loadYaml(url: string) {
+  const text = await fs.readFile(resolve(process.cwd(), url), 'utf8')
+  const object = load(text)
+  return object
+}
+export function validateConfig(
+  obj: any,
+): {
+  categories: Array<{name: string, description: string}>,
+  packages: Array<{name: string, version: string, category: string}>,
+} {
+  return obj
+}

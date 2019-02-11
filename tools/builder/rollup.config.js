@@ -13,6 +13,7 @@ export default {
     'execa',
     'fs-extra',
     'chroma-js',
+    'js-yaml',
     'viz.js',
     'viz.js/full.render.js',
     'sharp',

@@ -9,7 +9,13 @@ import {
 } from './rollup'
 import packages from './packages.config'
 import bsconfigs from './bsconfigs.config'
-import {massCopy, publishScript, outputPackageJSON} from './utils'
+import {
+  massCopy,
+  publishScript,
+  outputPackageJSON,
+  validateConfig,
+  loadYaml,
+} from './utils'
 import {taskList} from './taskList'
 
 const scope = {
@@ -182,6 +188,10 @@ taskList({
       () => fs.emptyDir(`${process.cwd()}/npm`),
       async() => {
         process.env.IS_BUILD = 'true'
+      },
+      async() => {
+        const configRaw = await loadYaml('packages.yml')
+        const config = validateConfig(configRaw)
       },
     ],
   },
