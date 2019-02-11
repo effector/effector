@@ -4,7 +4,7 @@ import * as React from 'react'
 //$todo
 import {render, cleanup, act} from 'react-testing-library'
 import {createStore, createEvent} from 'effector'
-import {useStore, useStoreFast} from '..'
+import {useStore, useStoreFast} from '../useStore'
 
 afterEach(cleanup)
 
