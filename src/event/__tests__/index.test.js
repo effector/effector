@@ -47,28 +47,10 @@ test('event.prepend(fn)', () => {
   preclick([])
   preclick([1])
   preclick([2])
-  /**
-   * TODO: It's a bug! Prepend should not skip empty returns
-   *
-   * should be
-   *
-   *     expect(spy).toHaveBeenCalledTimes(3)
-   *     expect(getSpyCalls()).toEqual([
-   *       [undefined, 'click'],
-   *       [1, 'click'],
-   *       [2, 'click'],
-   *     ])
-   *
-   */
-  expect(spy).not.toHaveBeenCalledTimes(3)
-  expect(spy).toHaveBeenCalledTimes(2)
-  expect(getSpyCalls()).not.toEqual([
-    [undefined, 'click'],
-    [1, 'click'],
-    [2, 'click'],
-  ])
+
+  expect(spy).toHaveBeenCalledTimes(3)
   expect(getSpyCalls()).toEqual([
-    // [undefined, 'click'],
+    [undefined, 'click'],
     [1, 'click'],
     [2, 'click'],
   ])
