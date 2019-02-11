@@ -2,6 +2,8 @@
 
 ## [work in progress] 0.18.3
 
+- Fix `event.prepend` bug [#35](https://github.com/zerobias/effector/issues/35)
+
 - Publish babel-plugins
 
 - Improve naming for chrome performance timeline
