@@ -52,11 +52,17 @@ export function domainFabric(
       hooks.event(result)
       return result
     },
-    effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail> {
+    effect<Params, Done, Fail>(
+      name?: string,
+      config?: {
+        handler?: (payload: Params) => Promise<Done> | Done,
+      },
+    ): Effect<Params, Done, Fail> {
       const result = effectFabric({
         name,
         domainName: compositeName.fullName,
         parent: compositeName,
+        handler: config?.handler,
       })
       hooks.effect(result)
       return result
