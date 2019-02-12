@@ -74,7 +74,12 @@ declare export class Domain {
   onCreateStore(hook: (newStore: Store<mixed>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
-  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+  effect<Params, Done, Fail>(
+    name?: string,
+    config?: {
+      handler?: (params: Params) => Promise<Done> | Done,
+    },
+  ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
   store<State>(defaultState: State): Store<State>;
   getType(): string;
@@ -134,7 +139,7 @@ declare export function createApi<
 declare export function restoreObject<
   State: {+[key: string]: Store<any> | any},
 >(
-  obj: State,
+  state: State,
 ): $ObjMap<
   State,
   //prettier-ignore
@@ -142,7 +147,7 @@ declare export function restoreObject<
 >
 
 declare export function restoreEffect<Done>(
-  event: Effect<any, Done, any>,
+  effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
 
@@ -152,12 +157,12 @@ declare export function restoreEvent<E>(
 ): Store<E>
 
 declare export function restore<Done>(
-  event: Effect<any, Done, any>,
+  effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
 declare export function restore<State: {+[key: string]: Store<any> | any}>(
-  obj: State,
+  state: State,
 ): $ObjMap<
   State,
   //prettier-ignore
