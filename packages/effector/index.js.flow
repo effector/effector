@@ -43,7 +43,7 @@ declare export class Effect<Params, Done, Fail = Error> {
 }
 
 declare export class Store<State> {
-  reset(event: Event<any> | Effect<any, any, any> | Store<any>): this;
+  reset(trigger: Event<any> | Effect<any, any, any> | Store<any>): this;
   getState(): State;
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
@@ -51,7 +51,7 @@ declare export class Store<State> {
     trigger: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
   ): this;
-  off(event: Event<any> | Effect<any, any, any> | Store<any>): void;
+  off(trigger: Event<any> | Effect<any, any, any> | Store<any>): void;
   subscribe(listener: any): Subscription;
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
@@ -68,7 +68,9 @@ declare export class Store<State> {
 
 declare export class Domain {
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
-  onCreateEffect(hook: (newEffect: Effect<mixed, mixed, mixed>) => any): Subscription;
+  onCreateEffect(
+    hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
+  ): Subscription;
   onCreateStore(hook: (newStore: Store<mixed>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;

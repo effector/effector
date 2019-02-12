@@ -44,7 +44,7 @@ export interface Effect<Params, Done, Fail = Error> {
 }
 
 export class Store<State> {
-  reset(event: Event<any> | Effect<any, any, any> | Store<any>): this
+  reset(trigger: Event<any> | Effect<any, any, any> | Store<any>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
@@ -52,13 +52,13 @@ export class Store<State> {
     trigger: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
   ): this
-  off<E>(event: Event<any> | Effect<any, any, any> | Store<E>): void
-  subscribe(listner: any): Subscription
+  off<E>(trigger: Event<any> | Effect<any, any, any> | Store<E>): void
+  subscribe(listener: any): Subscription
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription
   watch<E>(
-    event: Event<E> | Effect<E, any, any> | Store<E>,
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
