@@ -4,6 +4,10 @@
 
 - Fix `event.prepend` bug [#35](https://github.com/zerobias/effector/issues/35)
 
+- Add effect handler to domain [4c6ae8](https://github.com/zerobias/effector/commit/4c6ae801b301067473f583b490eefde7b3287afc)
+
+- Add `relay` and `relayShape`
+
 - Publish babel-plugins
 
 - Improve naming for chrome performance timeline
