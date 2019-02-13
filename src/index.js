@@ -24,3 +24,6 @@ export {
   restoreObject,
   withProps,
 } from 'effector/store'
+
+export {Kind} from 'effector/stdlib'
+export type {kind} from 'effector/stdlib'
