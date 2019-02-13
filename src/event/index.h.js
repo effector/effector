@@ -1,6 +1,6 @@
 //@flow
 import type {Subscription, Subscriber} from '../effector/index.h'
-import type {kind, GraphiteMeta} from 'effector/stdlib'
+import type {kind, GraphiteMeta, TypeDef} from 'effector/stdlib'
 import type {CompositeName} from '../compositeName'
 
 export type Event<E> = {
@@ -21,4 +21,16 @@ export type Event<E> = {
   domainName?: CompositeName,
   graphite: GraphiteMeta,
   compositeName: CompositeName,
+}
+
+export type Graphiter = {
+  +graphite: GraphiteMeta,
+  ...
+}
+export type GraphiterSmall = {
+  +graphite: {
+    +seq: TypeDef<'seq' | 'loop' | 'combine', 'step'>,
+    ...
+  },
+  ...
 }
