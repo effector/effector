@@ -44,7 +44,7 @@ const run = ({tasks, name, stats}) =>
         label(chalk.bgWhite, name),
         chalk.redBright('task failed'),
       )
-      console.error(err.message)
+      console.error(err)
     })
 
 export function taskList({

@@ -132,8 +132,8 @@ const minifyConfig = ({beautify}: {beautify: boolean}) => ({
 
 const getPlugins = () => ({
   babel: babel({
-    // runtimeHelpers: true,
-    // exclude: /(\.re|node_modules.*)/,
+    runtimeHelpers: false,
+    exclude: /(\.re|node_modules.*)/,
   }),
   replace: replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
@@ -151,7 +151,7 @@ const getPlugins = () => ({
   }),
 })
 
-export async function rollupBabel(name, plugin) {
+export async function rollupBabel(name: string, plugin: *) {
   const plugins = getPlugins()
   const build = await rollup({
     input: (dir(plugin): string),
@@ -162,7 +162,7 @@ export async function rollupBabel(name, plugin) {
       file: dir(`npm/${name}/index.js`),
       format: 'cjs',
       name,
-      sourcemap: false,
+      sourcemap: true,
     }),
   ])
 }
@@ -220,7 +220,7 @@ export async function rollupEffector() {
         plugins.babel,
         plugins.replace,
         plugins.commonjs,
-        plugins.terser,
+        // plugins.terser,
         plugins.sizeSnapshot,
       ],
       external: ['react', 'effector'],
