@@ -18,9 +18,7 @@ export const Step = typeDef(('step': 'step'), {
   single: null,
   multi: null,
   seq: null,
-  choose: null,
-  loop: null,
-  combine: null,
+  query: null,
 })
 
 export const Cmd = typeDef(('cmd': 'cmd'), {

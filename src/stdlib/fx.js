@@ -4,42 +4,28 @@
 import type {StateRef} from './stateref'
 import {Step, Cmd, type TypeDef} from './typedef'
 
-type Fun = TypeDef<*, 'step' | 'cmd'>
-type Using = {
-  name: string,
-  reset?: any,
-}
-
 /* Step */
 declare export default function fx(
-  tag: 'combine',
+  tag: 'query',
   props: {
-    id: string,
-    part: number,
+    +mode: 'some',
+    +fn: (
+      arg: any,
+      ctx: any,
+      meta: *,
+    ) => {+arg: any, +list: Array<TypeDef<*, *>>},
   },
   ...childrens: $ReadOnlyArray<void>
-): TypeDef<'combine', 'step'>
+): TypeDef<'query', 'step'>
 declare export default function fx(
-  tag: 'loop',
+  tag: 'query',
   props: {
-    branch: Fun,
-    iterator: Fun,
-    source: StateRef,
-    until: Using,
-    selector: Using,
-    item: Using,
+    +mode: 'shape',
+    +shape: {[string]: TypeDef<*, *>},
+    +fn: (arg: any, ctx: any, meta: *) => {+[string]: any},
   },
   ...childrens: $ReadOnlyArray<void>
-): TypeDef<'loop', 'step'>
-declare export default function fx(
-  tag: 'choose',
-  props: {
-    state: StateRef,
-    selector: TypeDef<*, 'step'>,
-    cases: {+[key: string]: TypeDef<*, 'step'>},
-  },
-  ...childrens: $ReadOnlyArray<void>
-): TypeDef<'choose', 'step'>
+): TypeDef<'query', 'step'>
 declare export default function fx(
   tag: 'single',
   props: null,
@@ -84,10 +70,10 @@ declare export default function fx(
 ): TypeDef<'update', 'cmd'>
 export default function fx(
   tag:
-    | 'choose'
     | 'single'
     | 'multi'
     | 'seq'
+    | 'query'
     | 'compute'
     | 'emit'
     | 'filter'
@@ -100,13 +86,7 @@ export default function fx(
     const tag_: 'compute' | 'emit' | 'filter' | 'run' | 'update' = (tag: any)
     return Step.single(Cmd[tag_](props))
   }
-  const tag_:
-    | 'single'
-    | 'multi'
-    | 'seq'
-    | 'choose'
-    | 'loop'
-    | 'combine' = (tag: any)
+  const tag_: 'single' | 'multi' | 'seq' | 'query' = (tag: any)
   switch (tag_) {
     case 'seq':
       return Step.seq(childrens)
@@ -114,14 +94,10 @@ export default function fx(
       return Step.multi(childrens)
     case 'single':
       return Step.single(childrens[0])
-    case 'combine':
-      return Step.loop(props)
-    case 'choose':
-      return Step.choose(props)
-    case 'loop':
-      return Step.loop(props)
+    case 'query':
+      return Step.query(props)
   }
-  if (typeof tag === 'function') return tag(props, childrens)
-  console.error('unknown node "%s"', tag)
+  // if (typeof tag === 'function') return tag(props, childrens)
+  // console.error('unknown node "%s"', tag)
   return null
 }
