@@ -10,7 +10,7 @@ categories:
 packages:
   - name: effector
     category: core
-    version: 0.18.2
+    version: 0.18.3-beta.1
   - name: effector-react
     category: frameworkBinding
     version: 0.18.6

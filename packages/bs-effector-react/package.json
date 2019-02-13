@@ -3,7 +3,7 @@
   "version": "0.18.2",
   "description": "Reason bindings for effector-react",
   "dependencies": {
-    "effector": "^0.18.2"
+    "effector": "^0.18.3-beta.1"
   },
   "peerDependencies": {
     "reason-react": "*"
