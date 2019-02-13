@@ -32,6 +32,7 @@ module.exports = api => {
   }
   const plugins = [
     './src/babel/get-step',
+    './src/babel/stats-plugin',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
