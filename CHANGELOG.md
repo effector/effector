@@ -8,6 +8,12 @@
 
 - Add `relay` and `relayShape`
 
+- Add `kind` property to `Event`, `Effect` and `Store` types
+
+- Add `Kind` object with all `kind` variants
+
+- Add `Unit<T>` as common interface implemented by `Event`, `Effect` and `Store`
+
 - Publish babel-plugins
 
 - Improve naming for chrome performance timeline
