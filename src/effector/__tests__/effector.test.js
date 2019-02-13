@@ -5,8 +5,7 @@ import {from, periodic} from 'most'
 import {combine} from '..'
 
 import {createDomain} from 'effector/domain'
-import {createEvent} from 'effector/event'
-import {epic} from '../../event/epic'
+import {createEvent, fromObservable} from 'effector/event'
 import {createStore, createStoreObject} from 'effector/store'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
@@ -198,7 +197,7 @@ describe('port', () => {
   })
 })
 
-test('should handle return value', async() => {
+it('works with most use cases', async() => {
   const timeout = createEvent('timeout')
   timeout.watch(spy)
 
@@ -209,7 +208,7 @@ test('should handle return value', async() => {
   expect(spy).toHaveBeenCalledTimes(5)
 })
 
-test('both return and send', async() => {
+test.skip('fromObservable supports own events as sources', async() => {
   const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
@@ -218,12 +217,12 @@ test('both return and send', async() => {
   effect.use(used)
   effect.done.watch(usedDone)
   const event = domain.event('event1')
-  epic(event, data$ => data$.map(e => effect(e)))
+  fromObservable<string>(event).watch(e => effect(e))
   await event('ev')
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)
 })
-
+declare var epic: Function
 //TODO WTF?
 test.skip('hot reload support', async() => {
   // const fn = jest.fn()
@@ -254,20 +253,6 @@ test.skip('hot reload support', async() => {
   expect(fnB).toHaveBeenCalledTimes(4)
 })
 
-test('only return', async() => {
-  const used = jest.fn(x => Promise.resolve(x))
-  const usedDone = jest.fn(x => Promise.resolve(x))
-  const domain = createDomain()
-
-  const effect = domain.effect('eff')
-  effect.use(used)
-  effect.done.watch(usedDone)
-  const event = domain.event('event1')
-  epic(event, data$ => data$.map(e => effect(e)))
-  await event('ev')
-  expect(used).toHaveBeenCalledTimes(1)
-  expect(usedDone).toHaveBeenCalledTimes(1)
-})
 /*
 test('typeConstant', async() => {
  const fn = jest.fn()
