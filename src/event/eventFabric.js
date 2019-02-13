@@ -8,15 +8,14 @@ import {
   Kind,
   stringRefcount,
   type GraphiteMeta,
-  type TypeDef,
 } from 'effector/stdlib'
-import {createWatcher} from 'effector/watcher'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
+import {forward} from './forward'
 
 const nextID = stringRefcount()
 
@@ -163,31 +162,6 @@ function makeName(name: string, compositeName?: CompositeName) {
   }
   return '' + fullName + '/' + name
 }
-type Graphiter = {
-  +graphite: GraphiteMeta,
-  /*::...*/
-}
-type GraphiterSmall = {
-  +graphite: {
-    +seq: TypeDef<'seq' | 'loop', 'step'>,
-    /*::...*/
-  },
-  /*::...*/
-}
-
-export function forward(opts: {
-  from: Graphiter,
-  to: GraphiterSmall,
-}): Subscription {
-  const toSeq = opts.to.graphite.seq
-  const fromGraphite = opts.from.graphite
-  fromGraphite.next.data.push(toSeq)
-  return createWatcher({
-    child: toSeq,
-    parent: fromGraphite,
-  })
-}
-
 const fabric = (args: {fullName: string}): GraphiteMeta => {
   const nextSteps = <multi />
   return {
