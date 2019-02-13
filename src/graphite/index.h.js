@@ -13,17 +13,7 @@ export type CommonCtx = TypeDef<CtxKind, 'ctx'>
 export type Reg = {
   isChanged: boolean,
 }
-export type Stage = 'solo' | 'combine' | 'effect'
-
 export type Meta = {
-  tr: {[id: string]: {ctx: CommonCtx, meta: Meta}},
-  tc: {
-    [id: string]: Array<{
-      ctx: CommonCtx,
-      meta: Meta,
-    }>,
-  },
-  replay: boolean,
   callstack: Array<TypeDef<*, *>>,
   ctx: CommonCtx,
   stop: boolean,
@@ -33,7 +23,8 @@ export type Meta = {
   val: {[name: string]: StateRef},
 }
 
-export type Command<tag> = /*:: interface */ {
-  cmd(meta: Meta): TypeDef<tag, 'ctx'>,
-  transition(reg: Reg): boolean,
+export type Command = {
+  cmd(meta: Meta): TypeDef<*, 'ctx'>,
+  transition(meta: Meta): boolean,
 }
+export type StepVisitor = (ctx: CommonCtx, meta: Meta) => void
