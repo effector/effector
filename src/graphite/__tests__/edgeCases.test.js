@@ -2,7 +2,7 @@
 
 import {forward, createEvent, createStore} from 'effector'
 
-it('should not call one watcher twice during a walk', () => {
+it.skip('should not call one watcher twice during a walk', () => {
   const fn = jest.fn()
   const e1 = createEvent('e1')
   const e2 = e1.map(() => 'e2')
