@@ -9,20 +9,20 @@ import type {
 } from 'react'
 import type {Store, Event} from 'effector'
 
-export type StoreConsumer<State> = ComponentType<{
+export type StoreConsumer<State> = ComponentType<{|
   children: (state: State) => Node,
-}>
+|}>
 
-export type StoreProvider<State> = ComponentType<{
+export type StoreProvider<State> = ComponentType<{|
   value: State,
   children?: Node,
-}>
+|}>
 
-export type StoreComponent<State> = ComponentType<{
+export type StoreComponent<State> = ComponentType<{|
   children: (state: State) => Node,
-}>
+|}>
 
-export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {
+export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
   isOpen: boolean,
   isTerminated: boolean,
   open: Event<void>,
@@ -32,7 +32,7 @@ export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {
   current: Props,
   state: Store<Props>,
   childGate<Next>(childName?: string): Gate<Next>,
-}
+|}
 
 declare export function useStore<State>(store: Store<State>): State
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
@@ -49,7 +49,7 @@ declare export function createContextComponent<Props, State, Context>(
 ): ComponentType<Props>
 
 declare export function connect<
-  State: {[key: string]: any},
+  State: {[key: string]: any, ...},
   Com: ComponentType<*>,
 >(
   Component: Com,
@@ -66,7 +66,7 @@ declare export function unstable_createStoreProvider<State>(
 ): StoreProvider<State>
 
 declare export function createReactState<
-  State: {[key: string]: any},
+  State: {[key: string]: any, ...},
   Com: ComponentType<*>,
 >(
   store: Store<State>,

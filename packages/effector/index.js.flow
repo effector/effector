@@ -5,18 +5,17 @@ export type kind =
   | 'store'
   | 'event'
   | 'effect'
-declare export var Kind: {
+declare export var Kind: {|
   /*::+*/ store: 'store',
   /*::+*/ event: 'event',
   /*::+*/ effect: 'effect',
-}
-export type Subscriber<A> = {
-  next(value: A): void,
-}
+|}
+export type Subscriber<A> = { next(value: A): void, ... }
 
 export type Subscription = {
   (): void,
   unsubscribe(): void,
+  ...
 }
 export interface Unit<T> {
   /*::+*/ kind: kind;
@@ -42,12 +41,18 @@ declare export class Effect<Params, Done, Fail = Error>
   implements Unit<Params> {
   (payload: Params): Future<Params, Done, Fail>;
   /*::+*/ kind: kind;
-  /*::+*/ done: Event<{params: Params, result: Done}>;
-  /*::+*/ fail: Event<{params: Params, error: Fail}>;
-  /*::+*/ use: {
-    (asyncFunction: (params: Params) => Promise<Done> | Done): this,
-    getCurrent(): (params: Params) => Promise<Done>,
-  };
+  /*::+*/ done: Event<{|
+  params: Params,
+  result: Done,
+|}>;
+  /*::+*/ fail: Event<{|
+  params: Params,
+  error: Fail,
+|}>;
+  /*::+*/ use: {|
+  (asyncFunction: (params: Params) => Promise<Done> | Done): this,
+  getCurrent(): (params: Params) => Promise<Done>,
+|};
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   //map<T>(fn: (_: E) => T): Event<T>,
@@ -90,44 +95,46 @@ declare export class Domain {
   event<Payload>(name?: string): Event<Payload>;
   effect<Params, Done, Fail>(
     name?: string,
-    config?: {
-      handler?: (params: Params) => Promise<Done> | Done,
-    },
+    config?: { handler?: (params: Params) => Promise<Done> | Done, ... },
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
   store<State>(defaultState: State): Store<State>;
   getType(): string;
 }
 
-declare export function forward<T>(opts: {
+declare export function forward<T>(opts: {|
   /*::+*/ from: Unit<T>,
   /*::+*/ to: Unit<T>,
-}): Subscription
+|}): Subscription
 declare export function relayShape<
   E,
-  O: {/*::+*/ [field: string]: Unit<any>},
+  O: { /*::+*/ [field: string]: Unit<any>, ... },
   F: $ObjMap<O, <T>(_: Unit<T>) => T>,
->(opts: {
+>(opts: {|
   /*::+*/ from: Unit<E>,
   /*::+*/ shape: O,
   query(data: E): $Shape<F>,
-}): Subscription
+|}): Subscription
 declare export function relay<T, Arg>(
   from: Unit<T>,
-  query: (data: T) => {/*::+*/ arg: Arg, /*::+*/ list: Array<?Unit<Arg>>},
+  query: (data: T) => {|
+    /*::+*/ arg: Arg,
+    /*::+*/ list: Array<?Unit<Arg>>,
+  |},
 ): Subscription
-declare export function relay<T, Arg>(opts: {
+declare export function relay<T, Arg>(opts: {|
   /*::+*/ from: Unit<T>,
-  query(data: T): {/*::+*/ arg: Arg, /*::+*/ list: Array<?Unit<Arg>>},
-}): Subscription
+  query(data: T): {|
+    /*::+*/ arg: Arg,
+    /*::+*/ list: Array<?Unit<Arg>>,
+  |},
+|}): Subscription
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
-  config?: {
-    handler?: (params: Params) => Promise<Done> | Done,
-  },
+  config?: { handler?: (params: Params) => Promise<Done> | Done, ... },
 ): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(defaultState: State): Store<State>
@@ -137,7 +144,7 @@ declare export function setStoreName<State>(
 ): void
 
 declare export function createStoreObject<
-  State: {+[key: string]: Store<any> | any},
+  State: { +[key: string]: Store<any> | any, ... },
 >(
   obj: State,
 ): Store<
@@ -148,8 +155,8 @@ declare export function createStoreObject<
   >,
 >
 declare export function extract<
-  State: {+[key: string]: Store<any> | any},
-  NextState: {+[key: string]: Store<any> | any},
+  State: { +[key: string]: Store<any> | any, ... },
+  NextState: { +[key: string]: Store<any> | any, ... },
 >(
   store: Store<State>,
   extractor: (_: State) => NextState,
@@ -162,13 +169,13 @@ declare export function extract<
 >
 declare export function createApi<
   S,
-  Api: {[name: string]: (store: S, e: any) => S},
+  Api: { [name: string]: (store: S, e: any) => S, ... },
 >(
   store: Store<S>,
   api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
 declare export function restoreObject<
-  State: {+[key: string]: Store<any> | any},
+  State: { +[key: string]: Store<any> | any, ... },
 >(
   state: State,
 ): $ObjMap<
@@ -192,7 +199,7 @@ declare export function restore<Done>(
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {+[key: string]: Store<any> | any}>(
+declare export function restore<State: { +[key: string]: Store<any> | any, ... }>(
   state: State,
 ): $ObjMap<
   State,
