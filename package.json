@@ -87,6 +87,7 @@
     "jscodeshift": "^0.6.3",
     "jsdom": "^13.2.0",
     "jsdom-global": "^3.0.2",
+    "markdown-table": "^1.1.2",
     "micro": "^9.3.3",
     "micro-dev": "^3.0.0",
     "most": "^1.7.3",
