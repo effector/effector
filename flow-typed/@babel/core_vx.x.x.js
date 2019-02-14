@@ -527,7 +527,7 @@ information about `ConfigItem` fields.
 */
   declare export function loadPartialConfig(
     options?: TransformOptions,
-  ): Readonly<PartialConfig> | null
+  ): $ReadOnly<PartialConfig> | null
   declare export interface PartialConfig {
     options: TransformOptions;
     babelrc?: string;
