@@ -1,4 +1,4 @@
-//@flow
+//@noflow
 
 const importName = 'effector-react'
 
@@ -64,7 +64,7 @@ function setDisplayNameAfter(path, nameNodeId, t, displayName) {
   }
 
   let blockLevelStmnt
-  path.find((path) => {
+  path.find(path => {
     if (path.parentPath.isBlock()) {
       blockLevelStmnt = path
       return true

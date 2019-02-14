@@ -1,4 +1,4 @@
-//@flow
+//@noflow
 
 const importName = 'effector'
 
