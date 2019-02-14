@@ -6,7 +6,7 @@ import {createDomain, createApi, type Store, type Event} from 'effector'
 
 const {store: createStore} = createDomain('Gate')
 
-export type Gate<Props = {||}> = Class<React.Component<Props, any>> & {
+export type Gate<Props = {||}> = Class<React.Component<Props, any>> & {|
   isOpen: boolean,
   isTerminated: boolean,
   open: Event<void>,
@@ -17,7 +17,7 @@ export type Gate<Props = {||}> = Class<React.Component<Props, any>> & {
   state: Store<Props>,
   set: Event<Props>,
   childGate<Next>(childName?: string): Gate<Next>,
-}
+|}
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
