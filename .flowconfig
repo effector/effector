@@ -2,6 +2,9 @@
 all=warn
 # Disable until https://github.com/facebook/flow/issues/7473 resolved
 dynamic-export=off
+inexact-spread=error
+unnecessary-optional-chain=error
+unnecessary-invariant=error
 untyped-type-import=error
 
 [libs]
@@ -46,6 +49,9 @@ nonstrict-import
 unsafe-getters-setters
 untyped-import
 untyped-type-import
+inexact-spread
+unnecessary-optional-chain
+unnecessary-invariant
 
 [ignore]
 .*/.history/.*
