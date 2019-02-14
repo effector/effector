@@ -73,7 +73,7 @@
     "fastify": "^1.14.1",
     "fastify-babel": "^1.1.0",
     "fastify-favicon": "^0.3.1",
-    "flow-bin": "^0.92.1",
+    "flow-bin": "^0.93.0",
     "flow-copy-source": "^2.0.2",
     "flowgen": "^1.5.8",
     "fs-extra": "^7.0.1",

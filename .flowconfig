@@ -1,5 +1,7 @@
 [lints]
 all=warn
+# Disable until https://github.com/facebook/flow/issues/7473 resolved
+dynamic-export=off
 untyped-type-import=error
 
 [libs]
