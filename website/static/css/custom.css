@@ -1,0 +1,77 @@
+/* your custom css */
+
+.post article a, .post article a:active, .post article a:focus, .post article a:hover {
+  text-decoration: underline;
+  overflow: hidden;
+  position: relative;
+  transition: outline-offset .2s ease-in-out;
+}
+
+.getStarted {
+  background-color: $primaryColor;
+  color: #fff;
+}
+
+.projectTitleWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.projectTitleWrapper img {
+  width: 100px;
+  height: 100px;
+  padding: 2em;
+}
+
+.homeWrapperWrapper {
+  background-color: #f6f4f4;
+  overflow: hidden;
+  position: relative;
+}
+
+.homeWrapperInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  padding: 20px 0;
+}
+
+.homeTagLine {
+  font-size: 24px;
+  font-weight: 300;
+  max-width: 500px;
+  line-height: 1.5em;
+}
+
+.homeCodeSnippet {
+  background-color: #0000;
+  border: none;
+  text-align: initial;
+  padding-top: 20px;
+}
+
+.homeCodeSnippet .hljs {
+  background-color: #0000;
+  border: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  margin: 0;
+  color: #393939;
+  font-size: 14px;
+}
+
+@media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
+}
+
+@media only screen and (min-width: 1024px) {
+}
+
+@media only screen and (max-width: 1023px) {
+}
+
+@media only screen and (min-width: 1400px) {
+}
+
+@media only screen and (min-width: 1500px) {
+}
