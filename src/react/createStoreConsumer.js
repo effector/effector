@@ -25,8 +25,15 @@ export function createStoreConsumer<State>(
     componentDidMount() {
       this.subscribe()
     }
+    componentDidUpdate(prevProps, prevState) {
+      if (store !== prevState.currentState) {
+        if (this._unsubscribe) this.unsubscribe()
+
+        this.subscribe()
+      }
+    }
     componentWillUnmount() {
-      this.unsubscribe()
+      if (this._unsubscribe) this.unsubscribe()
       this._hasUnmounted = true
     }
     render() {
@@ -50,6 +57,12 @@ export function createStoreConsumer<State>(
       const unsubscribe = store.subscribe(callback)
 
       this._unsubscribe = unsubscribe
+
+      // Events might have been emitted between render and mount - handle those
+      const postMountStoreState = store.getState()
+      if (postMountStoreState !== this.state.currentState) {
+        this.setState({currentState: postMountStoreState})
+      }
     }
     unsubscribe() {
       if (typeof this._unsubscribe === 'function') {
