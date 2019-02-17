@@ -1,7 +1,7 @@
 FROM node:11.9.0-alpine
 
 RUN apk add git
-RUN apk add autoreconf
+RUN apk add autoconf
 
 LABEL "maintainer"="goodmind <andwebar@gmail.com>"
 LABEL "repository"="http://github.com/zerobias/effector"
