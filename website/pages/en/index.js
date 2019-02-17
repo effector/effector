@@ -189,10 +189,10 @@ class Index extends React.Component {
             content: 'Effector uses Rollup and Terser to provide small builds.',
             title: 'Tiny bundle size',
           },
-          {
-            content: '...',
-            title: 'Decentralized',
-          },
+          // {
+          //   content: '...',
+          //   title: 'Decentralized',
+          // },
           {
             content: 'Can work with any UI or server framework.',
             title: 'Flexible',
@@ -235,10 +235,10 @@ class Index extends React.Component {
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer">
           <Features />
-          <FeatureCallout />
-          <LearnHow />
-          <TryOut />
-          <Description />
+          {/*<FeatureCallout />*/}
+          {/*<LearnHow />*/}
+          {/*<TryOut />*/}
+          {/*<Description />*/}
           <Showcase />
         </div>
       </div>
