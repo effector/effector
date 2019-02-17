@@ -1,4 +1,6 @@
-FROM alpine/git:latest
+FROM node:11.9.0-alpine
+
+RUN apk add git
 
 LABEL "maintainer"="goodmind <andwebar@gmail.com>"
 LABEL "repository"="http://github.com/zerobias/effector"
