@@ -1,6 +1,6 @@
 workflow "New workflow" {
   on = "push"
-  resolves = ["./docusaurus/"]
+  resolves = ["Docusaurus"]
 }
 
 action "Master" {
@@ -8,8 +8,8 @@ action "Master" {
   args = "branch master"
 }
 
-action "./docusaurus/" {
-  uses = "./docusaurus/"
+action "Docusaurus" {
+  uses = "./.github/docusaurus"
   secrets = ["GITHUB_TOKEN"]
   needs = ["Master"]
 }
