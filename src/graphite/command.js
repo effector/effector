@@ -33,20 +33,19 @@ export const filter: Command = {
 }
 export const run: Command = {
   cmd(meta) {
-    const ctx = Ctx.run({})
-
     if ('transactionContext' in __single)
       meta.transactions.push(__single.transactionContext(meta.arg))
-    tryRun({
+    const runCtx = tryRun({
       err: false,
       result: (null: any),
       arg: meta.arg,
       val: meta.val,
       fn: __single.runner,
     })
-    return ctx
+    meta.reg.isFailed = runCtx.err
+    return Ctx.run({})
   },
-  transition: () => false,
+  transition: meta => Boolean(meta.reg.isFailed),
 }
 export const update: Command = {
   cmd(meta) {
@@ -66,9 +65,6 @@ export const update: Command = {
 }
 export const compute: Command = {
   cmd(meta) {
-    const newCtx = Ctx.compute({
-      __stepArg: null,
-    })
     const runCtx = tryRun({
       err: false,
       result: (null: any),
@@ -77,10 +73,10 @@ export const compute: Command = {
       fn: __single.fn,
     })
     meta.reg.isChanged = !runCtx.err
-    if (!runCtx.err) {
-      newCtx.data.__stepArg = runCtx.result
-    }
-    return newCtx
+
+    return Ctx.compute({
+      __stepArg: runCtx.err ? null : runCtx.result,
+    })
   },
   transition: meta => Boolean(meta.reg.isChanged),
 }

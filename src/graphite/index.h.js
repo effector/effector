@@ -12,6 +12,7 @@ export type CtxKind =
 export type CommonCtx = TypeDef<CtxKind, 'ctx'>
 export type Reg = {
   isChanged: boolean,
+  isFailed: boolean,
 }
 export type Meta = {
   callstack: Array<TypeDef<*, *>>,

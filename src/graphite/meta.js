@@ -20,6 +20,7 @@ export const newMeta = (ctx: TypeDef<*, 'ctx'>): Meta => ({
   ctx,
   reg: {
     isChanged: true,
+    isFailed: false,
   },
   val: stateRefs({
     watch(ctx) {
