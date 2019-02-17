@@ -1,6 +1,4 @@
-FROM node:11.9.0-alpine
-
-RUN apk add git autoconf automake
+FROM node:11.9.0-stretch
 
 LABEL "maintainer"="goodmind <andwebar@gmail.com>"
 LABEL "repository"="http://github.com/zerobias/effector"
