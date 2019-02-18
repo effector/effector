@@ -24,7 +24,7 @@ const siteConfig = {
   title: 'Effector', // Title for your website.
   tagline: 'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
   url: 'https://effector.js.org', // Your website URL
-  baseUrl: '', // Base URL for your project */
+  baseUrl: '/', // Base URL for your project */
   docsUrl: '',
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
