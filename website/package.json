@@ -3,12 +3,28 @@
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
     "build": "docusaurus-build",
+    "build:try": "parcel build try/index.js -d static/try -o try.js",
     "publish-gh-pages": "docusaurus-publish",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
     "rename-version": "docusaurus-rename-version"
   },
   "devDependencies": {
-    "docusaurus": "^1.7.2"
+    "@babel/core": "^7.0.0-0",
+    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.2.0",
+    "@babel/plugin-proposal-optional-chaining": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-flow": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
+    "docusaurus": "^1.7.2",
+    "parcel-bundler": "^1.11.0"
+  },
+  "dependencies": {
+    "codemirror": "^5.43.0",
+    "cross-fetch": "^3.0.1",
+    "effector": "^0.18.2",
+    "effector-react": "^0.18.6",
+    "react": "^16.8.0"
   }
 }

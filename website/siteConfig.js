@@ -41,10 +41,10 @@ const siteConfig = {
   headerLinks: [
     {doc: 'introduction/installation', label: 'Docs'},
     {doc: 'api/effector/effector', label: 'API'},
-    {page: 'help', label: 'Help'},
-    //{blog: true, label: 'Blog'},
+    // {page: 'help', label: 'Help'},
+    // {blog: true, label: 'Blog'},
     { languages: true },
-    //{ search: true },
+    // { search: true },
     { href: "https://github.com/zerobias/effector", label: "GitHub" },
   ],
 
@@ -86,6 +86,8 @@ const siteConfig = {
 
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js'],
+
+  separateCss: ["static/try"],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',

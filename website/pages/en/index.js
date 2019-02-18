@@ -100,7 +100,7 @@ class HomeSplash extends React.Component {
             </div>
           </div>
           <PromoSection>
-            <Button className="getStarted" href={docUrl('installation.html')}>Get started</Button>
+            <Button className="getStarted" href={docUrl('introduction/installation')}>Get started</Button>
           </PromoSection>
       </SplashContainer>
     );
@@ -222,7 +222,7 @@ class Index extends React.Component {
           <p>This project is used by all these people</p>
           <div className="logos">{showcase}</div>
           <div className="more-users">
-            <a className="button" href={pageUrl('users.html')}>
+            <a className="button" href={pageUrl('users')}>
               More {siteConfig.title} Users
             </a>
           </div>

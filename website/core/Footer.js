@@ -37,16 +37,16 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a href={this.docUrl('installation.html', this.props.language)}>
+            <a href={this.docUrl('introduction/installation', this.props.language)}>
               Getting Started
             </a>
-            <a href={this.docUrl('api/effector/effector.html', this.props.language)}>
+            <a href={this.docUrl('api/effector/effector', this.props.language)}>
               API Reference
             </a>
           </div>
           <div>
             <h5>Community</h5>
-            <a href={this.pageUrl('users.html', this.props.language)}>
+            <a href={this.pageUrl('users', this.props.language)}>
               User Showcase
             </a>
             <a
@@ -65,7 +65,7 @@ class Footer extends React.Component {
           </div>
           <div>
             <h5>More</h5>
-            <a href={`${this.props.config.baseUrl}blog`}>Blog</a>
+            {/*<a href={`${this.props.config.baseUrl}blog`}>Blog</a>*/}
             <a href="https://github.com/zerobias/effector">GitHub</a>
             <a
               className="github-button"

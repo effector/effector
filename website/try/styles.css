@@ -1,0 +1,184 @@
+:root {
+  --gutter: 30px;
+  --link-color: #007eff;
+  --text-color: #333;
+  --error-color: #fff0f0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+}
+
+#version {
+  font-size: 0.5em;
+  line-height: 0;
+  color: #fffc;
+}
+
+#version a {
+  color: inherit;
+  display: inline;
+}
+
+.try-inner {
+  display: grid;
+}
+.stats {
+  display: inline-grid;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+.stats > div {
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.editor {
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+.editor.sources {
+}
+
+.editor.results {
+}
+.errors {
+  margin: 0;
+  padding: 1rem;
+}
+.errors.has-errors {
+  z-index: 20;
+  background-color: var(--error-color);
+  border-left: 1px solid #ffd6d6;
+  color: #f00;
+}
+
+.errors.no-errors {
+  opacity: 0.5;
+}
+@media (max-width: 699px) {
+  .try-inner {
+    height: 100%;
+    width: 100vw;
+    overflow-x: hidden;
+    scroll-snap-type: mandatory;
+    grid-template-rows: repeat(7, minmax(100px, 33vh));
+  }
+  .stats {
+    scroll-snap-destination: top;
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+  .editor.sources {
+    scroll-snap-destination: top;
+    grid-column: 1 / span 1;
+    grid-row: 2 / span 3;
+  }
+
+  .editor.results {
+    scroll-snap-destination: top;
+    grid-column: 1 / span 1;
+    grid-row: 5 / span 3;
+  }
+  .errors {
+    scroll-snap-destination: top;
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 1;
+  }
+}
+@media (min-width: 700px) {
+  .try-inner {
+    overflow: hidden;
+    height: 100%;
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    grid-template-rows: repeat(3, minmax(100px, 1fr));
+  }
+  .stats {
+    grid-column: 2 / span 1;
+    grid-row: 3 / span 1;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+  .editor.sources {
+    grid-column: 1 / span 1;
+    grid-row: 1 / span 3;
+  }
+
+  .editor.results {
+    grid-column: 2 / span 1;
+    grid-row: 1 / span 2;
+  }
+  .errors {
+    grid-column: 2 / span 1;
+    grid-row: 3 / span 1;
+  }
+}
+
+.page-header {
+  height: 40px;
+  padding: 0.5rem 1.5rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: flex-end !important;
+}
+
+.page-title {
+  margin-right: auto !important;
+}
+
+.page-title .subtitle {
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.5rem;
+}
+
+.octicon {
+  display: inline-block;
+  vertical-align: text-top !important;
+  fill: currentColor;
+}
+
+.nav-link {
+  color: rgba(0, 0, 0, 0.5);
+  display: block;
+  padding: 0.5rem 1rem;
+}
+.nav-link:hover {
+  color: rgba(0, 0, 0, 0.7);
+  text-decoration: none;
+}
+.view-gituhb {
+  display: inline !important;
+}
+
+.editor {
+  box-sizing: border-box;
+  display: flex;
+  flex: 1 1 50%;
+  position: relative;
+}
+
+.CodeMirror {
+  height: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
+  line-height: 1;
+  margin-top: 0;
+}
+
+.page-body {
+  padding: var(--gutter) 0;
+  height: 100%;
+}
