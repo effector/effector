@@ -23,7 +23,7 @@ const users = [
 const siteConfig = {
   title: 'Effector', // Title for your website.
   tagline: 'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
-  url: 'https://zerobias.github.io', // Your website URL
+  url: 'https://effector.js.org', // Your website URL
   baseUrl: '/effector/', // Base URL for your project */
   docsUrl: '',
   // For github.io type URLs, you would set the url and baseUrl like:
