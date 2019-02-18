@@ -1,32 +1,33 @@
 # ☄️ Effector
 
-Reactive and effective state manager.
+Reactive state manager.
 
 [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
-![Gitter](https://img.shields.io/gitter/room/effector-js/community.svg?style=popout)
+[![Join the chat at https://
+.im/effector-js/community](https://img.shields.io/gitter/room/effector-js/community.svg?style=popout)](https://gitter.im/effector-js/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
 ## Introduction
 
-Effector is a effective multiple store state manager for Javascript apps, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API. 
+Effector is an effective multi store state manager for Javascript apps, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
 
 A more detailed comparison with other state managers can be found [here]()
 
 ### Installation
 
 ```bash
-npm install --save effector effector-react
+npm install --save effector
 ```
 
 Or using `yarn`
 
 ```bash
-yarn add effector effector-react
+yarn add effector
 ```
 
 ### The effector follows five basic principles:
-- __The application stores should be as easy as possible.__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
+- __Application stores should be as light as possible.__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
 - __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
 - 
 - 
