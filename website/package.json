@@ -2,10 +2,10 @@
   "scripts": {
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
-    "build": "docusaurus-build",
-    "build:try": "parcel build -d static/try -o try.js --public-url effector/try try/index.js",
+    "build": "npx docusaurus-build",
+    "build:try": "npx parcel build -d static/try -o try.js --public-url effector/try try/index.js",
     "publish-gh-pages": "docusaurus-publish",
-    "now-build": "yarn install && yarn build:try && yarn build",
+    "now-build": "yarn && yarn build:try && yarn build",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
     "rename-version": "docusaurus-rename-version"
