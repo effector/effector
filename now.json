@@ -1,7 +1,12 @@
 {
   "version": 2,
   "name": "effector",
+  "alias": ["effector.now.sh"],
   "builds": [
-    { "src": "website/package.json", "use": "@now/static-build" }
+    {
+      "src": "website/package.json",
+      "use": "@now/static-build",
+      "config": {"distDir": "website/build/effector"}
+    }
   ]
 }
