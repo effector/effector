@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "name": "effector",
+  "builds": [
+    { "src": "website/package.json", "use": "@now/static-build" }
+  ]
+}
