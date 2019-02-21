@@ -16,3 +16,4 @@ yarn build
 cd build/effector
 echo '{"name": "effector", "alias": ["effector.now.sh"], "version": 2}' > now.json
 npx now --token "${NOW_TOKEN}"
+npx now --token "${NOW_TOKEN}" alias 'effector.now.sh'
