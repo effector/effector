@@ -1,5 +1,4 @@
 import {createStore, createEffect} from 'effector'
-import files from '../files.json'
 import versions from '../versions.json'
 
 //import {loadEngine} from './loadEngine'
