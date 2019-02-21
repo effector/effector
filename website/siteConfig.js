@@ -18,15 +18,17 @@ const users = [
     infoLink: 'https://www.facebook.com',
     pinned: true,
   },
-];
+]
 
 const url = process.env.SITE_URL || 'https://effector.now.sh'
 
 const siteConfig = {
   title: 'Effector', // Title for your website.
-  tagline: 'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
+  tagline:
+    'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
   url, // Your website URL
   baseUrl: '/', // Base URL for your project */
+  editUrl: 'https://github.com/zerobias/effector/tree/master/docs/',
   docsUrl: '',
   // For github.io type URLs, you would set the url and baseUrl like:
   //   url: 'https://facebook.github.io',
@@ -90,7 +92,7 @@ const siteConfig = {
   // Add custom scripts here that would be placed in <script> tags.
   scripts: ['https://buttons.github.io/buttons.js'],
 
-  separateCss: ["static/try"],
+  separateCss: ['static/try'],
 
   // On page navigation for the current documentation page.
   onPageNav: 'separate',
@@ -110,6 +112,6 @@ const siteConfig = {
   // You may provide arbitrary config keys to be used as needed by your
   // template. For example, if you need your repo's URL...
   //   repoUrl: 'https://github.com/facebook/test-site',
-};
+}
 
-module.exports = siteConfig;
+module.exports = siteConfig
