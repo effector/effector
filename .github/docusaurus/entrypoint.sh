@@ -10,6 +10,7 @@ echo "machine github.com login ${GITHUB_ACTOR} password ${GITHUB_TOKEN}" > ~/.ne
 
 yarn install
 yarn add -D now
+node try/loadVersions.js
 yarn build:try
 SITE_URL=https://effector.js.org GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
 
