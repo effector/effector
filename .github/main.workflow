@@ -10,6 +10,9 @@ action "Master" {
 
 action "Docusaurus" {
   uses = "./.github/docusaurus"
-  secrets = ["GITHUB_TOKEN"]
+  secrets = [
+    "GITHUB_TOKEN",
+    "NOW_TOKEN",
+  ]
   needs = ["Master"]
 }
