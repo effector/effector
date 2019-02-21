@@ -3,6 +3,8 @@ id: prior-art
 title: Prior Art
 ---
 
+## API
+
 ### Flux
 
 ### Redux
@@ -12,3 +14,10 @@ title: Prior Art
 ### Redux-observable
 
 ### Most
+
+
+## Core
+
+### Zippers
+
+### Directed Acyclic Graph
