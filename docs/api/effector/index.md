@@ -20,7 +20,7 @@ title: API Reference
 
 ### Event API
 
-- [Event<Payload>](Event.md)
+- [Event\<Payload\>](Event.md)
 
 ### Effect API
 
@@ -28,7 +28,7 @@ title: API Reference
 
 ### Store API
 
-- [Store<State>](Store.md)
+- [Store\<State\>](Store.md)
 
 ### Domain API
 
