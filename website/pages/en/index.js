@@ -93,16 +93,16 @@ class HomeSplash extends React.Component {
     return (
       <SplashContainer>
         <ProjectTitle siteConfig={siteConfig} />
-          <div className="homeWrapperInner">
-            <p className="homeTagLine">{siteConfig.tagline}</p>
-            <div className="homeCodeSnippet">
-              <MarkdownBlock>{codeExample}</MarkdownBlock>
-            </div>
+        <div className="homeWrapperInner">
+          <p className="homeTagLine">{siteConfig.tagline}</p>
+          <div className="homeCodeSnippet">
+            <MarkdownBlock>{codeExample}</MarkdownBlock>
           </div>
-          <PromoSection>
-            <Button className="getStarted" href={docUrl('introduction/installation')}>Get started</Button>
-            <Button href={docUrl('try')}>Try it out</Button>
-          </PromoSection>
+        </div>
+        <PromoSection>
+          <Button className="getStarted" href={docUrl('introduction/installation')}>Get started</Button>
+          <Button href="/try">Try it out</Button>
+        </PromoSection>
       </SplashContainer>
     );
   }
