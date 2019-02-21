@@ -53,6 +53,15 @@
         "doc",
         "example"
       ]
+    },
+    {
+      "login": "Komar0ff",
+      "name": "Ilya",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/10588170?v=4",
+      "profile": "https://github.com/Komar0ff",
+      "contributions": [
+        "doc"
+      ]
     }
   ]
 }
