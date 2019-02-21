@@ -5,14 +5,26 @@
     "previous": "Previous",
     "tagline": "Effector lets you write simple, fast and type safe code and manage reactive state with ease.",
     "docs": {
+      "api/effector-react/createComponent": {
+        "title": "createComponent"
+      },
       "api/effector-react/createGate": {
         "title": "createGate"
+      },
+      "api/effector-react/createStoreConsumer": {
+        "title": "createStoreConsumer"
       },
       "api/effector-react/gate": {
         "title": "Gate"
       },
       "api/effector-react/effector-react": {
         "title": "API Reference"
+      },
+      "api/effector-react/useGate": {
+        "title": "useGate"
+      },
+      "api/effector-react/useStore": {
+        "title": "useStore"
       },
       "api/effector-vue/component-options": {
         "title": "ComponentOptions"

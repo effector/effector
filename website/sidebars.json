@@ -5,10 +5,7 @@
       "introduction/core-concepts",
       "introduction/prior-art"
     ],
-    "Other": [
-      "troubleshooting",
-      "glossary"
-    ],
+    "Other": ["troubleshooting", "glossary"],
     "FAQ": ["faq"]
   },
   "api": {
@@ -31,7 +28,11 @@
     ],
     "effector-react": [
       "api/effector-react/effector-react",
+      "api/effector-react/createStoreConsumer",
+      "api/effector-react/createComponent",
       "api/effector-react/createGate",
+      "api/effector-react/useGate",
+      "api/effector-react/useStore",
       "api/effector-react/gate"
     ],
     "effector-vue": [

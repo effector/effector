@@ -4,11 +4,18 @@
   text-transform: none;
 }
 
-.post article a, .post article a:active, .post article a:focus, .post article a:hover {
+.post article h1:first-child {
+  margin-top: 0;
+}
+
+.post article a,
+.post article a:active,
+.post article a:focus,
+.post article a:hover {
   text-decoration: underline;
   overflow: hidden;
   position: relative;
-  transition: outline-offset .2s ease-in-out;
+  transition: outline-offset 0.2s ease-in-out;
 }
 
 .getStarted {
