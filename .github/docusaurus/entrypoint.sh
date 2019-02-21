@@ -12,7 +12,7 @@ yarn install
 yarn add -D now
 node try/loadVersions.js
 yarn build:try
-SITE_URL=https://effector.js.org GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
+# SITE_URL=https://effector.js.org GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
 
 SITE_URL=https://effector.now.sh yarn build
 cd build/effector
