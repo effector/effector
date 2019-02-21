@@ -1,6 +1,9 @@
 ---
 id: createDomain
 title: createDomain
+hide_title: true
 ---
 
-Test
+# `createDomain(name?)`
+
+Creates a [domain](Domain.md)
