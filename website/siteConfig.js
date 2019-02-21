@@ -20,10 +20,12 @@ const users = [
   },
 ];
 
+const url = process.env.SITE_URL || 'https://effector.now.sh'
+
 const siteConfig = {
   title: 'Effector', // Title for your website.
   tagline: 'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
-  url: 'https://effector.now.sh', // Your website URL
+  url, // Your website URL
   baseUrl: '/', // Base URL for your project */
   docsUrl: '',
   // For github.io type URLs, you would set the url and baseUrl like:
