@@ -90,7 +90,12 @@ const siteConfig = {
   },
 
   // Add custom scripts here that would be placed in <script> tags.
-  scripts: ['https://buttons.github.io/buttons.js'],
+  scripts: [
+    'https://buttons.github.io/buttons.js',
+    'https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js',
+    '/js/try-button.js',
+  ],
+  stylesheets: ['/css/try-button.css'],
 
   separateCss: ['static/try'],
 
