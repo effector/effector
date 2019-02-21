@@ -24,32 +24,17 @@ window.addEventListener('load', function() {
   const tryIcon =
     '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>'
 
-  addButtons('.hljs', button('Try', 'Try it in playground', tryIcon, 'btnTry'))
+  addButtons(
+    '.hljs.language-js',
+    button('Try', 'Try it in playground', tryIcon, 'btnTry'),
+  )
 
-  document
-    .querySelectorAll('.btnTry')
-    .forEach(
-      btn =>
-        (btn.href =
-          window.location.origin +
-          '/try/?code=' +
-          LZString.compressToEncodedURIComponent(
-            btn.parentNode.querySelector('code').textContent,
-          )),
-    )
-
-  // const clipboard = new ClipboardJS('.btnTry', {
-  //   target: function(trigger) {
-  //     return trigger.parentNode.querySelector('code')
-  //   },
-  // })
-
-  // clipboard.on('success', function(event) {
-  //   event.clearSelection()
-  //   const textEl = event.trigger.querySelector('.btnIcon__label')
-  //   textEl.textContent = 'Copied'
-  //   setTimeout(function() {
-  //     textEl.textContent = 'Copy'
-  //   }, 2000)
-  // })
+  document.querySelectorAll('.btnTry').forEach(function(btn) {
+    btn.href =
+      window.location.origin +
+      '/try/?code=' +
+      LZString.compressToEncodedURIComponent(
+        btn.parentNode.querySelector('code').textContent,
+      )
+  })
 })
