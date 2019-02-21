@@ -11,7 +11,7 @@ _Event_ is an intention to change state.
 const event = createEvent() // unnamed event
 const onMessage = createEvent('message') // named event
 
-const socket = new WebSocket('wss://example.com:4000')
+const socket = new WebSocket('wss://echo.websocket.org')
 socket.onmessage = (msg) => onMessage(msg)
 
 const data = onMessage.map(msg => msg.data).map(JSON.parse)
