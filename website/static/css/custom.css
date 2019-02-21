@@ -1,5 +1,9 @@
 /* your custom css */
 
+.function-name-prevnext {
+  text-transform: none;
+}
+
 .post article a, .post article a:active, .post article a:focus, .post article a:hover {
   text-decoration: underline;
   overflow: hidden;
