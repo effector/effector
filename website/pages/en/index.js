@@ -92,7 +92,7 @@ class HomeSplash extends React.Component {
 
     return (
       <SplashContainer>
-          <ProjectTitle siteConfig={siteConfig} />
+        <ProjectTitle siteConfig={siteConfig} />
           <div className="homeWrapperInner">
             <p className="homeTagLine">{siteConfig.tagline}</p>
             <div className="homeCodeSnippet">
@@ -101,6 +101,7 @@ class HomeSplash extends React.Component {
           </div>
           <PromoSection>
             <Button className="getStarted" href={docUrl('introduction/installation')}>Get started</Button>
+            <Button href={docUrl('try')}>Try it out</Button>
           </PromoSection>
       </SplashContainer>
     );
