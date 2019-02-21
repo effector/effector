@@ -14,6 +14,6 @@ yarn build:try
 yarn build
 # GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
 cd build/effector
-echo '{"name": "effector", "alias": ["effector.js.org"], "version": 2}' > now.json
-npx now --token "${NOW_TOKEN}"
-npx now --token "${NOW_TOKEN}" alias 'effector.js.org'
+echo '{"name": "effector", "alias": ["effector.now.sh"], "version": 2}' > now.json
+npx now --token "${NOW_TOKEN}" --force --no-clipboard
+npx now --token "${NOW_TOKEN}" alias 'effector.now.sh'
