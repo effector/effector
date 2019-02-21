@@ -1,6 +1,6 @@
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom'
 
-import './dynamic';
-import view from './view';
+import './dynamic'
+import view from './view'
 
-ReactDOM.render(view, document.getElementById('try-wrapper'));
+ReactDOM.render(view, document.getElementById('try-wrapper'))

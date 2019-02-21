@@ -1,4 +1,5 @@
-import {forward} from 'effector';
+import {forward} from 'effector'
+import fetch from 'cross-fetch'
 
 import {
   changeSources,
@@ -16,21 +17,23 @@ import {
   logs,
   realmStatus,
   stats,
-} from './domain';
+  packageVersions,
+} from './domain'
+import {versionLoader} from './evaluator'
 
-import {switcher} from './switcher';
-import {evaluator} from './evaluator';
-import {printLogs} from './logs';
+import {switcher} from './switcher'
+import {evaluator} from './evaluator'
+import {printLogs} from './logs'
 
 logs.watch(realmLog, (logs, log) => {
-  logs.push(log);
-});
+  logs.push(log)
+})
 logs.watch(realmStatus, (logs, {active}) => {
   if (!active) {
-    printLogs(logs);
+    printLogs(logs)
   }
-  logs.length = 0;
-});
+  logs.length = 0
+})
 
 stats
   .on(realmEvent, ({event, store}, e) => ({
@@ -42,38 +45,38 @@ stats
     store: [...store, e],
   }))
   .on(realmStatus, (stats, {active}) => {
-    if (!active) return stats;
+    if (!active) return stats
     return {
       store: [],
       event: [],
-    };
-  });
+    }
+  })
 
 stats.watch(e => {
   //console.log('stats', e);
-});
+})
 
 forward({
   from: evalEffect,
   to: resetGraphiteState,
-});
-evalEffect.use(evaluator);
+})
+evalEffect.use(evaluator)
 
 const graphiteInvokeSetter = (state, event) => {
-  let result;
-  if (state.__shouldReset === true) result = {};
-  else result = {...state};
-  result[`${event.kind} '${event.shortName}'`] = event.graphite.seq;
-  return result;
-};
+  let result
+  if (state.__shouldReset === true) result = {}
+  else result = {...state}
+  result[`${event.kind} '${event.shortName}'`] = event.graphite.seq
+  return result
+}
 
 graphite
   .on(realmEvent, graphiteInvokeSetter)
   .on(realmStore, graphiteInvokeSetter)
   .on(resetGraphiteState, e => {
-    e.__shouldReset = true;
-    return e;
-  });
+    e.__shouldReset = true
+    return e
+  })
 
 switcher({
   event: realmInvoke,
@@ -89,7 +92,7 @@ switcher({
     realmEvent,
     realmStore,
   },
-});
+})
 
 // realmInvoke.watch(e => console.log('realm invoke', e));
 // realmEvent.watch(e => console.log('realm event', e.shortName));
@@ -105,10 +108,14 @@ codeError
     isError: true,
     message: e.error.message,
     stack: e.error.stack,
-  }));
+  }))
 
 forward({
   from: changeSources,
   to: sourceCode,
-});
-sourceCode.watch(e => evalEffect(e));
+})
+
+sourceCode.watch(e => evalEffect(e))
+sourceCode.watch(versionLoader, e => evalEffect(e))
+
+packageVersions.watch(console.log)
