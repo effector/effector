@@ -5,6 +5,7 @@ import {createComponent} from 'effector-react'
 
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
+import {ShareButton} from './components/ShareButton'
 import {VersionLink} from './components/VersionLink'
 import {VersionSelector} from './components/VersionSelector'
 import Panel from './components/CodeMirrorPanel'
@@ -18,8 +19,10 @@ import {
   changeSources,
   codeError,
   stats,
+  shareableUrl,
+  copyShareableUrl,
+  version,
 } from './domain'
-import {version} from './evaluator'
 
 const StatsView = createComponent(stats, ({}, {event, store}) => (
   <Stats event={event} store={store} />
@@ -56,6 +59,14 @@ const GraphiteView = createComponent(graphiteCode, ({}, graphite) => (
   />
 ))
 
+const ShareButtonView = createComponent(shareableUrl, ({}, shareableUrl) => (
+  <ShareButton
+    className="try-button try-button-share"
+    url={shareableUrl}
+    onClick={copyShareableUrl}
+  />
+))
+
 const VersionSelectorView = createComponent(
   createStoreObject({versions: packageVersions, selected: version}),
   ({}, {versions, selected}) => (
@@ -75,7 +86,10 @@ export default (
   <div className="try-inner">
     <VersionLinkView />
     <CodeView />
-    <VersionSelectorView />
+    <div className="header">
+      <VersionSelectorView />
+      <ShareButtonView />
+    </div>
     <GraphiteView />
     <ErrorsView />
     <StatsView />

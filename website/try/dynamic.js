@@ -18,6 +18,9 @@ import {
   realmStatus,
   stats,
   packageVersions,
+  selectVersion,
+  retrieveCode,
+  retrieveVersion,
 } from './domain'
 import {versionLoader} from './evaluator'
 
@@ -119,3 +122,6 @@ sourceCode.watch(e => evalEffect(e))
 sourceCode.watch(versionLoader, e => evalEffect(e))
 
 packageVersions.watch(console.log)
+
+changeSources(retrieveCode())
+selectVersion(retrieveVersion())

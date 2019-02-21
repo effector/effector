@@ -1,12 +1,9 @@
-import {createStore, createEffect} from 'effector'
-import versions from '../versions.json'
+import {createEffect} from 'effector'
 
 //import {loadEngine} from './loadEngine'
 import {prepareRuntime} from './prepareRuntime'
 import {evalExpr} from './evalExpr'
-import {selectVersion} from '../domain'
-
-export const version = createStore(versions[0])
+import {selectVersion, version} from '../domain'
 
 version.on(selectVersion, (_, p) => p)
 
