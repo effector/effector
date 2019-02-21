@@ -14,7 +14,7 @@ const users = [
     caption: 'User1',
     // You will need to prepend the image path with your baseUrl
     // if it is not '/', like: '/test-site/img/docusaurus.svg'.
-    image: '/effector/img/comet.png',
+    image: '/img/comet.png',
     infoLink: 'https://www.facebook.com',
     pinned: true,
   },
@@ -23,7 +23,7 @@ const users = [
 const siteConfig = {
   title: 'Effector', // Title for your website.
   tagline: 'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
-  url: 'https://effector.js.org', // Your website URL
+  url: 'https://effector.now.sh', // Your website URL
   baseUrl: '/', // Base URL for your project */
   docsUrl: '',
   // For github.io type URLs, you would set the url and baseUrl like:
