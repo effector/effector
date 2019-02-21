@@ -11,8 +11,8 @@ echo "machine github.com login ${GITHUB_ACTOR} password ${GITHUB_TOKEN}" > ~/.ne
 yarn install
 yarn add -D now
 yarn build:try
-yarn build
-GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
+SITE_URL=https://effector.js.org yarn build
+SITE_URL=https://effector.js.org GIT_USER="${GITHUB_ACTOR}" yarn run publish-gh-pages
 
 cd build/effector
 echo '{"name": "effector", "alias": ["effector.now.sh"], "version": 2}' > now.json
