@@ -42,12 +42,13 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'introduction/installation', label: 'Docs'},
+    {href: '/try', label: 'Try'},
     {doc: 'api/effector/effector', label: 'API'},
     // {page: 'help', label: 'Help'},
     // {blog: true, label: 'Blog'},
-    { languages: true },
+    {languages: true},
     // { search: true },
-    { href: "https://github.com/zerobias/effector", label: "GitHub" },
+    {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
   ],
 
   // If you have users set above, you add it here:
