@@ -40,12 +40,12 @@ declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 declare export function createGate<Props>(name?: string): Gate<Props>
 declare export function createComponent<Props, State>(
   store: Store<State>,
-  renderProp: (props: Props, state: State) => Node,
+  view: (props: Props, state: State) => Node,
 ): ComponentType<Props>
 declare export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: ContextType<Context>,
-  renderProp: (props: Props, state: State, context: Context) => Node,
+  view: (props: Props, state: State, context: Context) => Node,
 ): ComponentType<Props>
 
 declare export function connect<

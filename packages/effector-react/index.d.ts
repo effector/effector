@@ -28,12 +28,12 @@ export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 export function createGate<Props>(name?: string): Gate<Props>
 export function createComponent<Props, State>(
   store: Store<State>,
-  renderProp: (props: Props, state: State) => React.ReactNode,
+  view: (props: Props, state: State) => React.ReactNode,
 ): React.ComponentType<Props>
 export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: React.Context<Context>,
-  renderProp: (props: Props, state: State, context: Context) => React.ReactNode,
+  view: (props: Props, state: State, context: Context) => React.ReactNode,
 ): React.ComponentType<Props>
 
 export function connect<
