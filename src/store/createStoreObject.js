@@ -1,12 +1,14 @@
 //@flow
 //@jsx fx
 //eslint-disable-next-line no-unused-vars
-import {fx, Kind} from 'effector/stdlib'
+import {fx, Kind, stringRefcount} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
 import {storeObjectName, storeObjectArrayName} from './setStoreName'
 import {storeFabric} from './storeFabric'
+
+const nextUpdaterID = stringRefcount()
 
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   obj: State,
@@ -20,7 +22,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   const state = [...obj]
   const stateNew = [...obj]
 
-  const updater: any = createEvent('update ' + Math.random().toString())
+  const updater: any = createEvent('update ' + nextUpdaterID())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -65,7 +67,10 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   })
   //$todo
   store.defaultShape = obj
-  store.on(updater, (_, payload) => payload)
+  forward({
+    from: updater,
+    to: store,
+  })
   return store
 }
 
@@ -81,7 +86,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   const state = Object.assign({}, obj)
   const stateNew = Object.assign({}, obj)
 
-  const updater: any = createEvent('update ' + Math.random().toString())
+  const updater: any = createEvent('update ' + nextUpdaterID())
 
   let updates: Array<(state: any) => any> = []
   const committer = () => {
@@ -126,7 +131,10 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
   })
   //$todo
   store.defaultShape = obj
-  store.on(updater, (_, payload) => payload)
+  forward({
+    from: updater,
+    to: store,
+  })
   return store
 }
 
