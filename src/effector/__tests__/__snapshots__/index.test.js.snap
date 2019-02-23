@@ -969,7 +969,11 @@ exports[`showcase: event foo 1`] = `
               }
            }},
            3. [
-              *  run {{}}
+              *  Seq [
+                 1. compute {{}},
+                 2. filter {{}},
+                 3. run {{}}
+              ]
            ]
         ]
      ]
@@ -1002,7 +1006,11 @@ exports[`showcase: store a 1`] = `
      }
   }},
   3. [
-     *  run {{}}
+     *  Seq [
+        1. compute {{}},
+        2. filter {{}},
+        3. run {{}}
+     ]
   ]
 ]"
 `;
