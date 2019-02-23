@@ -47,6 +47,7 @@ test('relay', () => {
 test('relayShape', () => {
   const fnA = jest.fn()
   const fnB = jest.fn()
+  const fnC = jest.fn()
   const a = createEvent<string>('a')
   const b = createEvent<{+field: string}>('b')
 
@@ -58,7 +59,9 @@ test('relayShape', () => {
   const q1 = relayShape({
     from: source,
     shape: {left: a, right: b},
-    query({toB, data}) {
+    query(val) {
+      fnC(val)
+      const {toB, data} = val
       if (toB)
         return {
           left: data,
@@ -75,6 +78,10 @@ test('relayShape', () => {
   q1()
   source({data: 'third', toB: false})
 
+  // expect(fnC.mock.calls).toEqual([[]])
+  console.log('fnA', ...fnA.mock.calls)
+  console.log('fnB', ...fnB.mock.calls)
+  console.log('fnC', ...fnC.mock.calls)
   expect(fnA.mock.calls).toEqual([['first'], ['second']])
   expect(fnB.mock.calls).toEqual([[{field: 'second'}]])
 })

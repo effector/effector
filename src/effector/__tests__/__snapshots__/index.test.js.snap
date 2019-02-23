@@ -964,7 +964,7 @@ exports[`showcase: event foo 1`] = `
            1. filter {{}},
            2. update {{
               store: {
-                id: 9,
+                id: c,
                 current: 3
               }
            }},
@@ -982,7 +982,7 @@ exports[`showcase: mapped 1`] = `
   1. filter {{}},
   2. update {{
      store: {
-       id: c,
+       id: f,
        current: 3
      }
   }},
@@ -997,7 +997,7 @@ exports[`showcase: store a 1`] = `
   1. filter {{}},
   2. update {{
      store: {
-       id: 9,
+       id: c,
        current: 3
      }
   }},
