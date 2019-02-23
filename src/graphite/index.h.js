@@ -18,6 +18,10 @@ export type Meta = {
   callstack: Array<TypeDef<*, *>>,
   stop: boolean,
   transactions: Array<() => void>,
+  pendingEvents: Array<{
+    event: (data: any) => any,
+    data: any,
+  }>,
   reg: Reg,
   /**
    * @param volatile belongs to only one Meta instance

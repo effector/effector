@@ -20,8 +20,9 @@ const cmd = {
     local.isChanged = Boolean(runCtx.result)
   },
   run(meta, local) {
-    if ('transactionContext' in __single)
-      meta.transactions.push(__single.transactionContext(local.__stepArg))
+    if ('pushUpdate' in __single) {
+      __single.pushUpdate = data => meta.pendingEvents.push(data)
+    }
     const runCtx = tryRun({
       err: false,
       result: (null: any),

@@ -17,12 +17,14 @@ export const cloneMeta = (meta: Meta): Meta => {
     val,
     //TODO avoid this
     transactions,
+    pendingEvents: [],
     volatile: {runs: {}, runsIDs: []},
   }
 }
 export const newMeta = (ctx: CommonCtx): Meta => ({
   callstack: [],
   transactions: [],
+  pendingEvents: [],
   stop: false,
   ctx,
   reg: {

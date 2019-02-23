@@ -9,7 +9,69 @@ import {storeObjectName, storeObjectArrayName} from './setStoreName'
 import {storeFabric} from './storeFabric'
 
 const nextUpdaterID = stringRefcount()
-
+function getFreshArray() {
+  return this().slice()
+}
+function getFreshObject() {
+  return Object.assign({}, this())
+}
+function storeCombination(
+  obj: any,
+  {freshGetter, nameSetter, initializer}: any,
+) {
+  const updater: any = createEvent('update ' + nextUpdaterID())
+  const name = nameSetter(obj)
+  const {stateNew, pairs} = initializer(obj)
+  for (let i = 0; i < pairs.length; i++) {
+    const {key, child} = pairs[i]
+    if (child.kind !== Kind.store) continue
+    /*::;(child: Store<any>);*/
+    const runner = (
+      <run
+        runner={() => {
+          runner.data.data.pushUpdate({
+            event: updater,
+            data: getFresh,
+          })
+        }}
+      />
+    )
+    runner.data.data.pushUpdate = data => {}
+    const runCmd = (
+      <seq>
+        <compute
+          fn={state => {
+            const current = store.getState()
+            const changed = current[key] !== state
+            current[key] = state
+            return changed
+          }}
+        />
+        <filter filter={changed => changed} />
+        {runner}
+      </seq>
+    )
+    stateNew[key] = child.getState()
+    forward({
+      from: child,
+      to: {
+        graphite: {seq: runCmd},
+      },
+    })
+  }
+  const store = storeFabric({
+    name,
+    currentState: stateNew,
+  })
+  const getFresh = freshGetter.bind(store.getState)
+  //$todo
+  store.defaultShape = obj
+  forward({
+    from: updater.map(fn => fn()),
+    to: store,
+  })
+  return store
+}
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
   obj: State,
 ): Store<
@@ -19,59 +81,21 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  const state = [...obj]
-  const stateNew = [...obj]
-
-  const updater: any = createEvent('update ' + nextUpdaterID())
-
-  let updates: Array<(state: any) => any> = []
-  const committer = () => {
-    updates = []
-    return () => {
-      let current = store.getState()
-      for (const fn of updates) {
-        current = fn(current)
-      }
-      commit = committer()
-      updater(current)
-    }
-  }
-  let commit = committer()
-  for (const [key, child] of state.map((e, i) => [i, e])) {
-    if (child.kind === Kind.store) {
-      const substore: Store<any> = (child: any)
-      //eslint-disable-next-line no-unused-vars
-      const runCmd = <run runner={newValue => {}} />
-      runCmd.data.data.transactionContext = data => {
-        updates.push(state => {
-          const nextState = [...state]
-          nextState[key] = data
-          return nextState
+  return storeCombination(obj, {
+    freshGetter: getFreshArray,
+    nameSetter: storeObjectArrayName,
+    initializer(state) {
+      const pairs = []
+      const stateNew = [...obj]
+      for (let i = 0; i < state.length; i++) {
+        pairs.push({
+          key: i,
+          child: state[i],
         })
-        return commit
       }
-      stateNew[key] = substore.getState()
-      //$todo
-      forward({
-        from: substore,
-        to: {
-          graphite: {seq: runCmd},
-        },
-      })
-    }
-  }
-  const name = storeObjectArrayName(obj)
-  const store = storeFabric({
-    name,
-    currentState: stateNew,
+      return {stateNew, pairs}
+    },
   })
-  //$todo
-  store.defaultShape = obj
-  forward({
-    from: updater,
-    to: store,
-  })
-  return store
 }
 
 function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
@@ -83,59 +107,21 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  const state = Object.assign({}, obj)
-  const stateNew = Object.assign({}, obj)
-
-  const updater: any = createEvent('update ' + nextUpdaterID())
-
-  let updates: Array<(state: any) => any> = []
-  const committer = () => {
-    updates = []
-    return () => {
-      let current = store.getState()
-      for (const fn of updates) {
-        current = fn(current)
+  return storeCombination(obj, {
+    freshGetter: getFreshObject,
+    nameSetter: storeObjectName,
+    initializer(state) {
+      const pairs = []
+      const stateNew = Object.assign({}, obj)
+      for (const key in state) {
+        pairs.push({
+          key,
+          child: state[key],
+        })
       }
-      commit = committer()
-      updater(current)
-    }
-  }
-  let commit = committer()
-  for (const [key, child] of Object.entries(state)) {
-    const substore: Store<any> = (child: any)
-    if (substore.kind !== Kind.store) continue
-    //eslint-disable-next-line no-unused-vars
-    const runCmd = <run runner={newValue => {}} />
-    runCmd.data.data.transactionContext = data => {
-      updates.push(state =>
-        Object.assign({}, state, {
-          [key]: data,
-        }),
-      )
-      return commit
-    }
-    stateNew[key] = substore.getState()
-    //$todo
-    forward({
-      from: substore,
-      to: {
-        graphite: {seq: runCmd},
-      },
-    })
-  }
-  //$todo
-  const name = storeObjectName(obj)
-  const store = storeFabric({
-    name,
-    currentState: stateNew,
+      return {stateNew, pairs}
+    },
   })
-  //$todo
-  store.defaultShape = obj
-  forward({
-    from: updater,
-    to: store,
-  })
-  return store
 }
 
 declare export function createStoreObject<
