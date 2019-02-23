@@ -12,18 +12,7 @@ const createDefaultConfig = () => ({
   transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
   // roots: ['<rootDir>/src/'],
 })
-const projects = [
-  'effector',
-  'effect',
-  'event',
-  'store',
-  'domain',
-  'graphite',
-  'stdlib',
-  'babel',
-  'DataStructures',
-  'perf',
-]
+
 module.exports = {
   collectCoverage: boolean(process.env.COVERAGE, true),
   collectCoverageFrom: [
@@ -33,52 +22,81 @@ module.exports = {
     '!**/*.test.js',
     '!**/*.spec.js',
     '!<rootDir>/src/store/epic.js',
-    // '!**/DataStructures/**',
+    '!**/DataStructures/**',
     '!<rootDir>/src/graphite/tarjan/**',
     '!<rootDir>/src/babel/**',
     '!<rootDir>/src/fixtures/**',
     '!<rootDir>/src/invariant/**',
     '!<rootDir>/src/warning/**',
+    '!<rootDir>/src/redux/**',
   ],
 
   watchPlugins: ['jest-runner-eslint/watch-fix'],
-  projects: [
-    ...projects.map(displayName =>
-      Object.assign({}, createDefaultConfig(), {
-        displayName,
-        testMatch: [
-          `<rootDir>/src/${displayName}/**/*.test.js`,
-          `<rootDir>/src/${displayName}/**/*.spec.js`,
-        ],
-      }),
-    ),
-    Object.assign({}, createDefaultConfig(), {
-      displayName: 'react',
-      testEnvironment: 'jsdom',
-      testMatch: [
-        `<rootDir>/src/react/**/*.test.js`,
-        `<rootDir>/src/react/**/*.spec.js`,
-      ],
-      setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
-    }),
+  projects: createProjectList([
+    'effector',
+    'effect',
+    'event',
+    'store',
+    'domain',
+    'graphite',
+    'stdlib',
+    'babel',
+    // 'DataStructures',
+    'perf',
+    // 'redux',
     {
-      displayName: 'redux',
-      testMatch: [`<rootDir>/src/redux/test/**/*.spec.js`],
-      automock: false,
-      browser: false,
-      testEnvironment: 'node',
-      transform: {
-        '^.+\\.jsx?$': 'babel-jest',
+      react: {
+        testEnvironment: 'jsdom',
+        testMatch: [
+          `<rootDir>/src/react/**/*.test.js`,
+          `<rootDir>/src/react/**/*.spec.js`,
+        ],
+        setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
       },
     },
-  ],
+  ]),
 }
+
 if (boolean(process.env.LINT, true)) {
   module.exports.projects.push({
     runner: 'jest-runner-eslint',
     displayName: 'lint',
-    testMatch: ['<rootDir>/src/**/*.js', '!**/DataStructures/**'],
+    testMatch: [
+      '<rootDir>/src/**/*.js',
+      '!**/DataStructures/**',
+      '!**/redux/**',
+    ],
   })
+}
+
+function createProjectList(items) {
+  const list = []
+  for (const item of items) {
+    if (typeof item === 'string') {
+      const project = Object.assign({}, createDefaultConfig(), {
+        displayName: item,
+      })
+      list.push(project)
+    } else {
+      for (const key in item) {
+        const val = item[key]
+        const project = Object.assign(
+          {},
+          createDefaultConfig(),
+          {
+            testMatch: [
+              `<rootDir>/src/${key}/**/*.test.js`,
+              `<rootDir>/src/${key}/**/*.spec.js`,
+            ],
+          },
+          val,
+          {displayName: key},
+        )
+        list.push(project)
+      }
+    }
+  }
+  return list
 }
 function boolean(value, defaults) {
   switch (value) {
