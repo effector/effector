@@ -1,54 +1,37 @@
 //@flow
 
-import {type TypeDef, Ctx, createStateRef} from 'effector/stdlib'
+import {type TypeDef, createStateRef} from 'effector/stdlib'
 // import {__DEV__, __DEBUG__} from 'effector/flags'
-import type {Command} from './index.h'
+import type {CommandList} from './index.h'
 declare var __step: TypeDef<*, 'step'>
 declare var __single: any
 declare function __val(key: string, value: any): any
 
-export const emit: Command = {
-  cmd: meta =>
-    Ctx.emit({
-      __stepArg: meta.arg,
-    }),
-  transition: () => true,
-}
-export const filter: Command = {
-  cmd(meta) {
-    const ctx = Ctx.filter({
-      __stepArg: meta.arg,
-    })
+const cmd = {
+  emit(meta, local) {},
+  filter(meta, local) {
     const runCtx = tryRun({
       err: false,
       result: (null: any),
-      arg: meta.arg,
+      arg: local.__stepArg,
       val: meta.val,
       fn: __single.filter,
     })
-    meta.reg.isChanged = Boolean(runCtx.result)
-    return ctx
+    local.isChanged = Boolean(runCtx.result)
   },
-  transition: meta => Boolean(meta.reg.isChanged),
-}
-export const run: Command = {
-  cmd(meta) {
+  run(meta, local) {
     if ('transactionContext' in __single)
-      meta.transactions.push(__single.transactionContext(meta.arg))
+      meta.transactions.push(__single.transactionContext(local.__stepArg))
     const runCtx = tryRun({
       err: false,
       result: (null: any),
-      arg: meta.arg,
+      arg: local.__stepArg,
       val: meta.val,
       fn: __single.runner,
     })
-    meta.reg.isFailed = runCtx.err
-    return Ctx.run({})
+    local.isFailed = runCtx.err
   },
-  transition: meta => Boolean(meta.reg.isFailed),
-}
-export const update: Command = {
-  cmd(meta) {
+  update(meta, local) {
     let store
     if ('val' in __single) {
       store = meta.val[__single.val] =
@@ -56,30 +39,69 @@ export const update: Command = {
     } else {
       store = __single.store
     }
-    store.current = meta.arg
-    return Ctx.update({
-      __stepArg: meta.arg,
-    })
+    store.current = local.__stepArg
   },
-  transition: () => true,
-}
-export const compute: Command = {
-  cmd(meta) {
+  compute(meta, local) {
     const runCtx = tryRun({
       err: false,
       result: (null: any),
-      arg: meta.arg,
+      arg: local.__stepArg,
       val: meta.val,
       fn: __single.fn,
     })
-    meta.reg.isChanged = !runCtx.err
-
-    return Ctx.compute({
-      __stepArg: runCtx.err ? null : runCtx.result,
-    })
+    local.isChanged = !runCtx.err
+    ///TODO WARNING!! DIRTY HACK REMOVE ASAP
+    ///need to separate pre and post local variables
+    local.__stepArg = runCtx.err ? null : runCtx.result
   },
-  transition: meta => Boolean(meta.reg.isChanged),
 }
+
+const transition = {
+  emit: () => true,
+  filter: (meta, local) => local.isChanged,
+  run: (meta, local) => local.isFailed,
+  update: () => true,
+  compute: (meta, local) => local.isChanged,
+}
+
+const local = {
+  emit: meta => ({__stepArg: __val('scope').top.__stepArg}),
+  filter: meta => ({__stepArg: __val('scope').top.__stepArg, isChanged: false}),
+  run: meta => ({__stepArg: __val('scope').top.__stepArg, isFailed: true}),
+  update: meta => ({__stepArg: __val('scope').top.__stepArg}),
+  compute: meta => ({
+    __stepArg: __val('scope').top.__stepArg,
+    isChanged: false,
+  }),
+}
+
+export default ({
+  emit: {
+    cmd: cmd.emit,
+    transition: transition.emit,
+    local: local.emit,
+  },
+  filter: {
+    cmd: cmd.filter,
+    transition: transition.filter,
+    local: local.filter,
+  },
+  run: {
+    cmd: cmd.run,
+    transition: transition.run,
+    local: local.run,
+  },
+  update: {
+    cmd: cmd.update,
+    transition: transition.update,
+    local: local.update,
+  },
+  compute: {
+    cmd: cmd.compute,
+    transition: transition.compute,
+    local: local.compute,
+  },
+}: CommandList)
 
 const tryRun = ctx => {
   try {

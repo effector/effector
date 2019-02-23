@@ -1,96 +1,91 @@
 //@flow
-
-import {Ctx, type TypeDef} from 'effector/stdlib'
+import invariant from 'invariant'
+import {type TypeDef} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
-import type {CommonCtx, Meta, StepVisitor} from './index.h'
-import * as command from './command'
-import {cloneMeta} from './meta'
+import type {StepVisitor, CommonCtx, CommandList} from './index.h'
+import command from './command'
 import {runStep} from './runStep'
 
 declare var __step: TypeDef<*, 'step'>
 declare var __single: any
 declare function __val(key: string, value: any): any
 
-const querySome = (ctx, meta) => {
+const querySome = meta => {
   const data: {
     +mode: 'some',
-    +fn: (
-      arg: any,
-      ctx: any,
-      meta: *,
-    ) => {+arg: any, +list: Array<TypeDef<*, *>>},
+    +fn: (arg: any, meta: *) => {+arg: any, +list: Array<TypeDef<*, *>>},
   } = __step.data
   const fn = data.fn
-  const arg = meta.arg
-  const queryResult = fn(arg, ctx, meta)
-  const newCtx = Ctx.emit({
+  const arg = __val('scope').top.__stepArg
+  const queryResult = fn(arg, meta)
+  const newCtx = {
     __stepArg: queryResult.arg,
-  })
-  const items = queryResult.list
-  meta.arg = queryResult.arg
-  for (let i = 0; i < items.length; i++) {
-    runStep(items[i], newCtx, meta)
   }
-  meta.arg = arg
+  __val('scope').push(newCtx)
+  const items = queryResult.list
+  for (let i = 0; i < items.length; i++) {
+    runStep(items[i], meta)
+  }
   meta.stop = false
 }
-const queryShape = (ctx, meta) => {
+const queryShape = meta => {
   const data: {
     +mode: 'shape',
     +shape: {[string]: TypeDef<*, *>},
-    +fn: (arg: any, ctx: any, meta: *) => {[string]: any},
+    +fn: (arg: any, meta: *) => {[string]: any},
   } = __step.data
   const fn = data.fn
   const shape = data.shape
-  const arg = meta.arg
-  const queryResult = fn(arg, ctx, meta)
+  const arg = __val('scope').top.__stepArg
+
+  const queryResult = fn(arg, meta)
   for (const key in queryResult) {
     if (!(key in shape)) continue
     const def = shape[key]
     const subArg = queryResult[key]
-    const newCtx = Ctx.emit({
+    const newCtx = {
       __stepArg: subArg,
-    })
-    meta.arg = subArg
-    runStep(def, newCtx, meta)
+    }
+    __val('scope').push(newCtx)
+    runStep(def, meta)
+    __val('scope').pop()
   }
-  meta.arg = arg
   meta.stop = false
 }
 
-export const single: StepVisitor = (ctx, meta) => {
-  __val('ctx', ctx)
-  meta.arg = ctx.data.__stepArg
-  meta.ctx = command[__step.data.type].cmd(meta)
-  meta.stop = !command[meta.ctx.type].transition(meta)
+export const single: StepVisitor = meta => {
+  const type = __step.data.type
+  const local = command[type].local(meta)
+  __val('scope').push(local)
+  command[type].cmd(meta, local)
+  meta.stop = !command[type].transition(meta, local)
 }
-export const multi: StepVisitor = (ctx, meta) => {
+export const multi: StepVisitor = meta => {
   const items = __step.data.slice()
+  const scopeSize = __val('scope').full.length
   for (let i = 0; i < items.length; i++) {
-    runStep(items[i], ctx, meta)
+    __val('scope').full.length = scopeSize
+    runStep(items[i], meta)
   }
   meta.stop = false
-  return
 }
-export const seq: StepVisitor = (ctx, meta) => {
-  if (__DEBUG__) {
-    __val('watch')(__step)
-  }
-  meta.ctx = ctx
+export const seq: StepVisitor = meta => {
   const items = __step.data.slice()
+  const scopeSize = __val('scope').full.length
   for (let i = 0; i < items.length; i++) {
-    runStep(items[i], meta.ctx, meta)
+    runStep(items[i], meta)
     if (meta.stop) {
       break
     }
   }
+  __val('scope').full.length = scopeSize
 }
-export const query: StepVisitor = (ctx, meta) => {
+export const query: StepVisitor = meta => {
   switch (__step.data.mode) {
     case 'some':
-      return querySome(ctx, meta)
+      return querySome(meta)
     case 'shape':
-      return queryShape(ctx, meta)
+      return queryShape(meta)
   }
 }
 
