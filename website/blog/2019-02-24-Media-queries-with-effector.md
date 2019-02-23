@@ -21,6 +21,7 @@ const Button = () => (
   </>
 )
 ```
+
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 
@@ -38,6 +39,7 @@ mediaQueryList.addListener(e => {
   }
 })
 ```
+
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 
@@ -58,6 +60,7 @@ const orientationMediaQuery = window.matchMedia('(orientation: portrait)')
 orientationMediaQuery.addListener(orientationChange)
 
 ```
+
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 `orientationChange` is just a function
@@ -93,6 +96,7 @@ small.watch(isSmall => {
   console.log('is small screen?', isSmall)
 })
 ```
+
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 For my device currently it prints `is small screen? false` 
@@ -104,6 +108,8 @@ Lets make it single store, thereby creating common base to connect it to view fr
 
 <details><summary>mediaMatcher.js</summary>
 
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
 ```js
 import {createEvent, createStore} from 'effector'
 
@@ -117,8 +123,12 @@ export function mediaMatcher(query) {
 }
 ```
 
+<!--END_DOCUSAURUS_CODE_TABS-->
+
 </details>
 
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
 ```js
 import {createStoreObject} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
@@ -151,12 +161,15 @@ screenQueries.watch(queries => {
 })
 ```
 
+<!--END_DOCUSAURUS_CODE_TABS-->
 
 
 Now we could connect it to view framework, react, using `effector-react` library
 
 <details><summary>mediaMatcher.js</summary>
 
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
 ```js
 import {createEvent, createStore} from 'effector'
 
@@ -170,11 +183,15 @@ export function mediaMatcher(query) {
 }
 ```
 
+<!--END_DOCUSAURUS_CODE_TABS-->
+
 </details>
 
 <details><summary>screenQueries.js</summary>
 
-```js
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
+```flow
 import {createStoreObject} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
@@ -188,8 +205,13 @@ export const screenQueries = createStoreObject({
 })
 ```
 
+<!--END_DOCUSAURUS_CODE_TABS-->
+
 </details>
 
+
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
 ```js
 import {createComponent} from 'effector-react'
 import {screenQueries} from './screenQueries'
@@ -237,11 +259,14 @@ Screen.defaultProps = {
 ```
 
 
+<!--END_DOCUSAURUS_CODE_TABS-->
 
 Done!
 
 It support nesting out from a box
 
+<!--DOCUSAURUS_CODE_TABS-->
+<!--JavaScript-->
 ```jsx
 export const AppLogo = ({brandName, fullLogo, squareLogo}) => (
   <>
@@ -257,5 +282,7 @@ export const AppLogo = ({brandName, fullLogo, squareLogo}) => (
   </>
 )
 ```
+
+<!--END_DOCUSAURUS_CODE_TABS-->
 
 More advanced nesting example see [here](https://codesandbox.io/s/mj1n4466kj)
