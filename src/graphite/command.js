@@ -1,6 +1,6 @@
 //@flow
 
-import {type TypeDef, createStateRef} from 'effector/stdlib'
+import type {TypeDef} from 'effector/stdlib'
 // import {__DEV__, __DEBUG__} from 'effector/flags'
 import type {CommandList} from './index.h'
 declare var __step: TypeDef<*, 'step'>
@@ -32,14 +32,7 @@ const cmd = {
     local.isFailed = runCtx.err
   },
   update(meta, local) {
-    let store
-    if ('val' in __single) {
-      store = meta.val[__single.val] =
-        meta.val[__single.val] || createStateRef(null)
-    } else {
-      store = __single.store
-    }
-    store.current = local.__stepArg
+    local.store.current = local.__stepArg
   },
   compute(meta, local) {
     const runCtx = tryRun({
@@ -68,7 +61,10 @@ const local = {
   emit: meta => ({__stepArg: __val('scope').top.__stepArg}),
   filter: meta => ({__stepArg: __val('scope').top.__stepArg, isChanged: false}),
   run: meta => ({__stepArg: __val('scope').top.__stepArg, isFailed: true}),
-  update: meta => ({__stepArg: __val('scope').top.__stepArg}),
+  update: meta => ({
+    __stepArg: __val('scope').top.__stepArg,
+    store: __single.store,
+  }),
   compute: meta => ({
     __stepArg: __val('scope').top.__stepArg,
     isChanged: false,

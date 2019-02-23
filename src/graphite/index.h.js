@@ -40,7 +40,7 @@ export type CommandList = $ReadOnly<{
   emit: Command<{__stepArg: any}>,
   filter: Command<{__stepArg: any, isChanged: boolean}>,
   run: Command<{__stepArg: any, isFailed: boolean}>,
-  update: Command<{__stepArg: any}>,
+  update: Command<{__stepArg: any, store: StateRef}>,
   compute: Command<{__stepArg: any, isChanged: boolean}>,
 }>
 
