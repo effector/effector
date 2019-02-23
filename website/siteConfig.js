@@ -47,7 +47,7 @@ const siteConfig = {
     {href: '/try', label: 'Try'},
     {doc: 'api/effector/effector', label: 'API'},
     // {page: 'help', label: 'Help'},
-    // {blog: true, label: 'Blog'},
+    {blog: true, label: 'Blog'},
     {languages: true},
     // { search: true },
     {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
