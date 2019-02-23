@@ -6,6 +6,14 @@ import execa from 'execa'
 import {load} from 'js-yaml'
 import packageJson from '../../package.json'
 
+export const cliArgs: {
+  current: Array<string>,
+  +original: $ReadOnlyArray<string>,
+} = {
+  current: process.argv.slice(2),
+  original: process.argv.slice(2),
+}
+
 const root = process.cwd()
 export function dir(...paths: $ReadOnlyArray<string>): string {
   return resolve(root, ...paths)
@@ -23,7 +31,7 @@ export async function outputPackageJSON(
 
 export function publishScript(name: string) {
   return async() => {
-    const args = process.argv.slice(2)
+    const args = cliArgs.current.splice(0, 2)
     if (args.length < 2) return
     const command = args.shift()
     const argument = args.shift()

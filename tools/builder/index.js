@@ -1,5 +1,7 @@
 //@flow
+/* eslint-disable max-len */
 import * as fs from 'fs-extra'
+import {load} from 'js-yaml'
 import {
   rollupEffector,
   rollupEffectorReact,
@@ -15,8 +17,9 @@ import {
   outputPackageJSON,
   validateConfig,
   loadYaml,
+  cliArgs,
 } from './utils'
-import {taskList} from './taskList'
+import {taskList, setConfig} from './taskList'
 import table from 'markdown-table'
 
 const scope = {
@@ -191,6 +194,22 @@ taskList({
         process.env.IS_BUILD = 'true'
       },
       async() => {
+        if (cliArgs.current.length < 1) return
+        const argRaw = cliArgs.current[0]
+        let body
+        try {
+          body = load(argRaw)
+        } catch {
+          return
+        }
+        if (typeof body !== 'object' || body === null) return
+        cliArgs.current.splice(0, 1)
+        for (const field in body) {
+          //$todo
+          setConfig(field, body[field])
+        }
+      },
+      async() => {
         const configRaw = await loadYaml('packages.yml')
         const config = validateConfig(configRaw)
         const packagesByCategory = new Map()
@@ -199,6 +218,7 @@ taskList({
             packagesByCategory.set(pkg.category, [pkg])
           } else {
             packagesByCategory.set(pkg.category, [
+              //$todo
               ...packagesByCategory.get(pkg.category),
               pkg,
             ])
