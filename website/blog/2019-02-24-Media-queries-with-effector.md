@@ -8,7 +8,9 @@ Hi!
 In this article I will show how to make react component which will work like this
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```jsx
 const Button = () => (
   <>
@@ -28,7 +30,9 @@ const Button = () => (
 Media queries itself could been handled in such way:
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
 const mediaQueryList = window.matchMedia("(orientation: portrait)")
 mediaQueryList.addListener(e => {
@@ -48,7 +52,9 @@ But how this could been used in react components? (actually, we’ll make more u
 Effector can reacts on media queries changes and provide current query state as store
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
 import {createEvent, createStore} from 'effector'
 
@@ -70,7 +76,9 @@ orientationMediaQuery.addListener(orientationChange)
 We can rewrite it for reuse with any query
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
 import {createEvent, createStore} from 'effector'
 
@@ -105,12 +113,12 @@ For my device currently it prints `is small screen? false`
 
 Lets make it single store, thereby creating common base to connect it to view framework further
 
-
-<details><summary>mediaMatcher.js</summary>
-
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
+//mediaMatcher.js
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
@@ -125,10 +133,11 @@ export function mediaMatcher(query) {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-</details>
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
 import {createStoreObject} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
@@ -166,11 +175,12 @@ screenQueries.watch(queries => {
 
 Now we could connect it to view framework, react, using `effector-react` library
 
-<details><summary>mediaMatcher.js</summary>
-
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
+//mediaMatcher.js
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
@@ -185,13 +195,13 @@ export function mediaMatcher(query) {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-</details>
-
-<details><summary>screenQueries.js</summary>
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
-```flow
+
+```js
+//screenQueries.js
 import {createStoreObject} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
@@ -207,11 +217,12 @@ export const screenQueries = createStoreObject({
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-</details>
 
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```js
 import {createComponent} from 'effector-react'
 import {screenQueries} from './screenQueries'
@@ -258,7 +269,6 @@ Screen.defaultProps = {
 
 ```
 
-
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 Done!
@@ -266,7 +276,9 @@ Done!
 It support nesting out from a box
 
 <!--DOCUSAURUS_CODE_TABS-->
+
 <!--JavaScript-->
+
 ```jsx
 export const AppLogo = ({brandName, fullLogo, squareLogo}) => (
   <>
