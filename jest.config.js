@@ -73,9 +73,19 @@ function createProjectList(items) {
   const list = []
   for (const item of items) {
     if (typeof item === 'string') {
-      const project = Object.assign({}, createDefaultConfig(), {
-        displayName: item,
-      })
+      const project = Object.assign(
+        {},
+        createDefaultConfig(),
+        {
+          testMatch: [
+            `<rootDir>/src/${item}/**/*.test.js`,
+            `<rootDir>/src/${item}/**/*.spec.js`,
+          ],
+        },
+        {
+          displayName: item,
+        },
+      )
       list.push(project)
     } else {
       for (const key in item) {
