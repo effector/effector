@@ -5,6 +5,10 @@
   --error-color: #fff0f0;
 }
 
+.navPusher {
+  height: 100%;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -24,6 +28,7 @@ body {
 
 #try-wrapper {
   flex-grow: 1;
+  display: contents;
 }
 
 .try-inner {
