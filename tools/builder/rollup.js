@@ -302,10 +302,11 @@ export async function rollupEffectorReact() {
     })
   }
 }
+const viz = new Viz({Module, render})
 export async function renderModulesGraph() {
   const root = process.cwd()
   const source = await readFile(root + '/modules.dot', 'utf8')
-  const viz = new Viz({Module, render})
+
   const svg = await viz.renderString(source)
   await outputFile(root + '/modules.svg', svg)
   const buffer = await new Promise((rs, rj) => {
