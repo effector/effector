@@ -36,7 +36,7 @@ exports[`perf supports throwing error in store.subscribe 1`] = `
 exports[`perf supports throwing error store.map 1`] = `
 "☄ mapErrorTest.map Warning: Got initial error
 
-☄ 7 → *.subscribe Warning: Initial
+☄ 9 → *.subscribe Warning: Initial
 
 ☄ mapErrorTest.map Warning: Got error
 
