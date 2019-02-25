@@ -56,7 +56,7 @@ const minifyConfig = ({beautify}: {beautify: boolean}) => ({
     hoist_props: true,
     hoist_vars: false,
     if_return: true,
-    inline: false,
+    inline: true,
     join_vars: true, //?
 
     defaults: false,
@@ -78,10 +78,10 @@ const minifyConfig = ({beautify}: {beautify: boolean}) => ({
     unused: true,
     passes: 3,
 
-    unsafe_arrows: false,
+    unsafe_arrows: true,
     unsafe_Function: true,
     unsafe_math: true,
-    unsafe_proto: false,
+    unsafe_proto: true,
   },
   mangle: {
     reserved: ['effector', 'effectorVue', 'effectorReact', 'it', 'test'],
