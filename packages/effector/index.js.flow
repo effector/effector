@@ -85,6 +85,22 @@ declare export class Store<State> implements Unit<State> {
   defaultState: State;
 }
 
+declare export function isUnit(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  (obj instanceof Event || obj instanceof Store || obj instanceof Effect))
+declare export function isStore(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Store)
+declare export function isEvent(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Event)
+declare export function isEffect(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Effect)
 declare export class Domain {
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
   onCreateEffect(
