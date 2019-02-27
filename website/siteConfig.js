@@ -47,7 +47,7 @@ const siteConfig = {
     {href: '/try', label: 'Try'},
     {doc: 'api/effector/effector', label: 'API'},
     // {page: 'help', label: 'Help'},
-    // {blog: true, label: 'Blog'},
+    {blog: true, label: 'Blog'},
     {languages: true},
     // { search: true },
     {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
@@ -83,7 +83,7 @@ const siteConfig = {
 
   // This copyright info is used in /core/Footer.js and blog RSS/Atom feeds.
   copyright: `Copyright © ${new Date().getFullYear()} zerobias`,
-
+  usePrism: ['jsx', 'flow', 'typescript'],
   highlight: {
     // Highlight.js theme to use for syntax highlighting in code blocks.
     theme: 'default',
