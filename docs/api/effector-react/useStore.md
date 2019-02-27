@@ -1,6 +1,7 @@
 ---
 id: useStore
 title: useStore
+hide_title: true
 ---
 
-## Test
+# `useStore(store)`

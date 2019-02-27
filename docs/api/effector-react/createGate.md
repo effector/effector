@@ -1,6 +1,7 @@
 ---
 id: createGate
 title: createGate
+hide_title: true
 ---
 
-## Test
+# `createGate(name?)`

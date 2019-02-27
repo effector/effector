@@ -1,6 +1,7 @@
 ---
 id: useGate
 title: useGate
+hide_title: true
 ---
 
-## Test
+# `useGate(GateComponent, props)`
