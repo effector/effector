@@ -4,13 +4,20 @@
     "module": "es2015",
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
-    "noLib": false,
+    "noLib": true,
     "skipDefaultLibCheck": true,
     "strict": true,
     "baseUrl": ".",
     "paths": {
       "effector": ["packages/effector"],
-      "effector/*": ["src/*"]
+      "effector/*": ["src/*"],
+      "effector/flags": ["src/flags.dev"],
+      "effector/stdlib": ["src/stdlib"],
+      "effector/graphite": ["src/graphite"],
+      "effector/store": ["src/store"],
+      "effector/event": ["src/event"],
+      "effector/effect": ["src/effect"],
+      "effector/domain": ["src/domain"]
     }
   },
   "typeAcquisition": {
