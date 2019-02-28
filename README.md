@@ -49,7 +49,7 @@ yarn add effector
 
 ### Examples
 
-#### Incremet/decremet example
+#### Incremet/decremet
 ```js
 import {createStore, createEvent} from "effector";
 import {createComponent} from "effector-react";
@@ -125,17 +125,21 @@ status changed: offline
 
 [REPL](https://runkit.com/zerobias/effector-storages-and-events)
 
-
 ## Demo
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
-More examples you can check [THIS]()
+More examples/demos you can check [here]()
  
 
 ## Core concept
+### Core types
+
+```js
+import type {Domain, Event, Effect, Store} from 'effector'
+```
 
 
 ## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
@@ -163,10 +167,6 @@ const pageStore = mainPage.store(0)
 // => new store: 0
 ```
 
-## Typings
-
-Effector supports both TypeScript and Flow type annotations out of the box.
-
 ## API
 
 ```js
@@ -180,12 +180,6 @@ import {
 ```
 
 > See also [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
-
-## Core types
-
-```js
-import type {Domain, Event, Effect, Store} from 'effector'
-```
 
 ## Contributors
 
