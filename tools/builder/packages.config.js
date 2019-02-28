@@ -32,7 +32,7 @@ const version = {
   'bs-effector': '0.18.2',
   'bs-effector-react': '0.18.2',
 
-  '@effector/babel-plugin': '0.0.3',
+  '@effector/babel-plugin': '0.1.0',
   '@effector/babel-plugin-react': '0.0.3',
 }
 
