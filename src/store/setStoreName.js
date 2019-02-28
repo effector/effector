@@ -1,6 +1,6 @@
 //@flow
 
-import {Kind} from 'effector/stdlib'
+import {isStore} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {getDisplayName} from './staticMethods'
@@ -15,10 +15,10 @@ export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
   let name = 'combine('
   for (const store of arr) {
     const comma = i === max || maxLength === i ? '' : ', '
-    if (store.kind !== Kind.store) {
-      name += store.toString() + comma
-    } else {
+    if (isStore(store)) {
       name += getDisplayName(store) + comma
+    } else {
+      name += store.toString() + comma
     }
     i += 1
     if (comma === '') break
@@ -36,10 +36,10 @@ export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
   for (const key in obj) {
     const comma = i === max || maxLength === i ? '' : ', '
     const store = obj[key]
-    if (store.kind !== Kind.store) {
-      name += store.toString() + comma
-    } else {
+    if (isStore(store)) {
       name += getDisplayName(store) + comma
+    } else {
+      name += store.toString() + comma
     }
     i += 1
     if (comma === '') break
@@ -63,8 +63,7 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
 
 function isStoreObject(store: Store<any>) {
   return (
-    typeof store.kind !== 'undefined'
-    && store.kind === Kind.store
+    isStore(store)
     //$todo
     && typeof store.defaultShape !== 'undefined'
   )
@@ -76,7 +75,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
 ) {
   const entries: Array<[string, Store<any>]> = (Object.entries(object): any)
   for (const [storeName, store] of entries) {
-    if (parent && store.kind === Kind.store) {
+    if (parent && isStore(store)) {
       store.domainName = parent.compositeName || store.domainName
     }
 
@@ -87,7 +86,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
       continue
     }
 
-    if (store.kind === Kind.store) {
+    if (isStore(store)) {
       setStoreName(store, storeName)
       continue
     }

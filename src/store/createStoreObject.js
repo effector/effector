@@ -1,7 +1,7 @@
 //@flow
 //@jsx fx
 //eslint-disable-next-line no-unused-vars
-import {fx, Kind, stringRefcount} from 'effector/stdlib'
+import {fx, stringRefcount, isStore} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
@@ -24,7 +24,7 @@ function storeCombination(
   const {stateNew, pairs} = initializer(obj)
   for (let i = 0; i < pairs.length; i++) {
     const {key, child} = pairs[i]
-    if (child.kind !== Kind.store) continue
+    if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
     const runner = (
       <run
