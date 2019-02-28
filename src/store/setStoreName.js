@@ -50,8 +50,7 @@ export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)
-  //TODO: fix this
-  //store.shortName = rawName
+  store.shortName = rawName
   if (!store.compositeName) {
     store.compositeName = compositeName
     return
