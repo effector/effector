@@ -2,21 +2,52 @@
 
 exports[`babel-plugin should create domain store 1`] = `
 "//@flow
-import { setStoreName } from \\"effector\\";
 import { createDomain } from 'effector';
 const domain = createDomain();
-const bar = domain.store('bar');
-setStoreName(bar, \\"bar\\");"
+const a = domain.store('bar', {
+  name: \\"a\\"
+});
+const b = domain.store('h', {
+  ɔ: {
+    option: 'test',
+    ['na' + 'me']: 'LOL'
+  },
+  name: \\"b\\"
+});
+const c = domain.store('h', {
+  ɔ: {
+    name: 'test'
+  },
+  name: \\"c\\"
+});"
 `;
 
 exports[`babel-plugin should create store 1`] = `
 "//@flow
-import { setStoreName } from \\"effector\\";
 import { createStore } from 'effector';
-const foo = createStore('foo');
-setStoreName(foo, \\"foo\\");
+const foo = createStore('foo', {
+  name: \\"foo\\"
+});
+const a = createStore('h', {
+  name: \\"a\\"
+});
+const b = createStore('h', {
+  ɔ: {},
+  name: \\"b\\"
+});
+const c = createStore('h', {
+  ɔ: 23020,
+  name: \\"c\\"
+});
+const config = {
+  option: 0
+};
+const dod = createStore(null, {
+  ɔ: config,
+  name: \\"dod\\"
+});
 
-const f = a => createStore(a);
-
-setStoreName(f, \\"f\\");"
+const f = a => createStore(a, {
+  name: \\"f\\"
+});"
 `;

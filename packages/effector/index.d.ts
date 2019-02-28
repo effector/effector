@@ -66,6 +66,10 @@ export class Store<State> {
   defaultState: State
 }
 
+export function isUnit<T>(obj: unknown): obj is Unit<T>
+export function isStore<T>(obj: unknown): obj is Store<T>
+export function isEvent<T>(obj: unknown): obj is Event<T>
+export function isEffect<T>(obj: unknown): obj is Effect<T>
 export class Domain {
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(

@@ -153,9 +153,19 @@ const getPlugins = () => ({
 
 export async function rollupBabel(name: string, plugin: *) {
   const plugins = getPlugins()
+  const terserConfig = minifyConfig({
+    beautify: true,
+  })
   const build = await rollup({
     input: (dir(plugin): string),
-    plugins: [plugins.babel],
+    plugins: [plugins.babel, terser({
+      ...terserConfig, 
+      compress: false,
+      mangle: false, 
+      keep_classnames: true, 
+      keep_fnames: true,
+      toplevel: false,
+    })],
   })
   await Promise.all([
     build.write({

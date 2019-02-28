@@ -5,10 +5,10 @@ import {storeFabric} from './storeFabric'
 
 export function createStore<State>(
   state: State,
-  opts: {name?: string} = {},
+  config: {name?: string} = {},
 ): Store<State> {
   return storeFabric({
     currentState: state,
-    name: opts.name,
+    name: config.name,
   })
 }
