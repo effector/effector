@@ -32,7 +32,7 @@ export const fetchVersion = createEffect('fetch', {
   async handler(ver) {
     const url =
       ver === 'develop'
-        ? 'http://effector--canary.s3-website-eu-west-1.amazonaws.com/effector/effector.cjs.js'
+        ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.cjs.js'
         : `https://unpkg.com/effector@${ver}/effector.cjs.js`
     const req = await fetch(url)
     const text = await req.text()
