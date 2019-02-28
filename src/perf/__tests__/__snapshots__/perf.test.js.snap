@@ -3,15 +3,15 @@
 exports[`perf supports store.map 1`] = `
 "☄ mapTest.map Warning: Initial
 
-☄ 1 → *.subscribe Warning: Initial
+☄ mapTest → *.subscribe Warning: Initial
 
 ☄ mapTest.map
 
-☄ 1 → *.subscribe
+☄ mapTest → *.subscribe
 
 ☄ mapTest.map
 
-☄ 1 → *.subscribe
+☄ mapTest → *.subscribe
 "
 `;
 
@@ -36,7 +36,7 @@ exports[`perf supports throwing error in store.subscribe 1`] = `
 exports[`perf supports throwing error store.map 1`] = `
 "☄ mapErrorTest.map Warning: Got initial error
 
-☄ 9 → *.subscribe Warning: Initial
+☄ mapErrorTest → *.subscribe Warning: Initial
 
 ☄ mapErrorTest.map Warning: Got error
 
