@@ -49,6 +49,9 @@ yarn add effector
 
 ## Examples
 
+The following are simple examples that will give you a basic understanding of the work state manager
+
+
 ### Incremet/decremet
 ```js
 import {createStore, createEvent} from "effector";
@@ -76,9 +79,9 @@ const Counter = createComponent(counter, (props, counter) => (
 
 const App = () => <Counter />;
 ```
+<hr />
 
 ### Hello world with events and nodejs
-
 ```js
 const {createEvent} = require('effector')
 
@@ -91,6 +94,8 @@ messageEvent('hello world')
 // => new message: hello world
 ```
 #### [Run example](https://runkit.com/zerobias/effector-hello-world)
+
+<hr />
 
 ### Storages and events
 
@@ -124,6 +129,8 @@ status changed: offline
 ```
 
 #### [Run example](https://runkit.com/zerobias/effector-storages-and-events)
+
+<hr />
 
 ## Demo
 
