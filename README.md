@@ -10,9 +10,9 @@ Reactive state manager.
 
 ## Introduction
 
-Effector is an effective multi store state manager for Javascript apps, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
+Effector is an effective multi store state manager for Javascript apps(React/Vue/Node.js), that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
 
-A more detailed comparison with other state managers can be found [here]()
+A more detailed comparison with other state managers can be found [on site]()
 
 ### Installation
 
@@ -43,11 +43,11 @@ yarn add effector
 
 
 ### The effector follows five basic principles:
-- __Application stores should be as light as possible.__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
+- __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
+- __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
 - __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
-- 
-- 
-- 
+- __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, knowing how .watch works in events, you can guess how does function .watch in store.
+- __The application is built from simple elements__ - space and way to take any required business logic out of view, maximizing the simplicity of the components.
 
 ### Examples
  
