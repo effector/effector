@@ -21,7 +21,7 @@ A more detailed comparison with other state managers can be found [here]()
 - __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, knowing how .watch works in events, you can guess how does function .watch in store.
 - __The application is built from simple elements__ - space and way to take any required business logic out of view, maximizing the simplicity of the components.
 
-### Installation
+## Installation
 
 ```bash
 npm install --save effector
@@ -33,7 +33,7 @@ Or using `yarn`
 yarn add effector
 ```
 
-#### Additional packages:
+### Additional packages:
 * __For Web Framework/Libraries:__
 
   |               Package              |                                                       Version                                                       |                                                                             Dependencies                                                                             |
@@ -47,9 +47,9 @@ yarn add effector
   |       [`bs-effector`](bs-effector)       |       [![npm](https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector)       |       [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector)](https://david-dm.org/zerobias/effector?path=packages/bs-effector)       |
   | [`bs-effector-react`](bs-effector-react) | [![npm](https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react)](https://david-dm.org/zerobias/effector?path=packages/bs-effector-react) |
 
-### Examples
+## Examples
 
-#### Incremet/decremet
+### Incremet/decremet
 ```js
 import {createStore, createEvent} from "effector";
 import {createComponent} from "effector-react";
@@ -77,7 +77,7 @@ const Counter = createComponent(counter, (props, counter) => (
 const App = () => <Counter />;
 ```
 
-#### Hello world with events and nodejs
+### Hello world with events and nodejs
 
 ```js
 const {createEvent} = require('effector')
@@ -90,9 +90,9 @@ messageEvent.watch(text => console.log(`new message: ${text}`))
 messageEvent('hello world')
 // => new message: hello world
 ```
-[REPL](https://runkit.com/zerobias/effector-hello-world)
+#### [Run example](https://runkit.com/zerobias/effector-hello-world)
 
-#### Storages and events
+### Storages and events
 
 ```js
 const {createStore, createEvent} = require('effector')
@@ -123,7 +123,7 @@ status changed: offline
 
 ```
 
-[REPL](https://runkit.com/zerobias/effector-storages-and-events)
+#### [Run example](https://runkit.com/zerobias/effector-storages-and-events)
 
 ## Demo
 
@@ -131,7 +131,7 @@ status changed: offline
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
-More examples/demos you can check [here]()
+More examples/demo you can check [here]()
  
 
 ## Core concept
