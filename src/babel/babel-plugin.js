@@ -90,33 +90,6 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-// function findProgram(path, t, functionNames) {
-//   let program
-//   path.find(path => {
-//     if (path.isProgram()) {
-//       const res = path.node.body.find(
-//         node => t.isImportDeclaration(node) && node.source.value === importName,
-//       )
-//       if (!res) {
-//         program = path
-//         return true
-//       }
-//       if (res.source) {
-//         if (res.source.value === importName) {
-//           if (
-//             res.specifiers.some(node => functionNames.includes(node.local.name))
-//           ) {
-//             return false
-//           }
-//         }
-//         program = path
-//         return true
-//       }
-//     }
-//   })
-//   return program
-// }
-
 function setStoreNameAfter(path, nameNodeId, t) {
   let displayName
   if (!displayName) {
@@ -124,11 +97,9 @@ function setStoreNameAfter(path, nameNodeId, t) {
   }
 
   let args
-  let callExpr
   path.find(path => {
     if (path.isCallExpression()) {
       args = path.node.arguments
-      callExpr = path
       return true
     }
   })
