@@ -72,10 +72,11 @@ export function domainFabric(
       hooks.domain(result)
       return result
     },
-    store<T>(state: T): Store<T> {
+    store<T>(state: T, config?: {name?: string} = {}): Store<T> {
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
+        name: config.name,
       })
       hooks.store(result)
       return result

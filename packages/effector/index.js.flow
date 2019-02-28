@@ -114,7 +114,7 @@ declare export class Domain {
     config?: {handler?: (params: Params) => Promise<Done> | Done, ...},
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
-  store<State>(defaultState: State): Store<State>;
+  store<State>(defaultState: State, config?: {name?: string}): Store<State>;
   getType(): string;
 }
 
