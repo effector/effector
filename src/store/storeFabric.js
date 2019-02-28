@@ -35,7 +35,7 @@ export function storeFabric<State>(props: {
     graphite: createDef(plainState),
     kind: Kind.store,
     id: currentId,
-    shortName: currentId,
+    shortName: name || currentId,
     domainName: parent,
     defaultState,
     plainState,
