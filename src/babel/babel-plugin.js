@@ -3,8 +3,7 @@
 const importName = 'effector'
 
 module.exports = function(babel, options = {}) {
-  const functionNames = []
-  const defaultCreators = ['createStore', 'restoreEvent', 'restoreEffect']
+  const defaultCreators = ['createStore']
   const storeCreators = new Set(options.storeCreators || defaultCreators)
 
   const {types: t} = babel
@@ -27,30 +26,30 @@ module.exports = function(babel, options = {}) {
       CallExpression(path) {
         if (t.isIdentifier(path.node.callee)) {
           if (storeCreators.has(path.node.callee.name)) {
-            functionNames[0] = 'setStoreName'
-            addImportDeclaration(
-              findProgram(path, t, functionNames),
-              t,
-              functionNames,
-            )
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types)
             }
           }
         }
 
         if (t.isMemberExpression(path.node.callee)) {
           if (path.node.callee.property.name === 'store') {
-            functionNames[0] = 'setStoreName'
-            addImportDeclaration(
-              findProgram(path, t, functionNames),
-              t,
-              functionNames,
-            )
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types)
             }
           }
         }
@@ -59,17 +58,17 @@ module.exports = function(babel, options = {}) {
   }
 }
 
-function addImportDeclaration(path, t, names) {
-  if (!path) return
-  const importDeclaration = t.importDeclaration(
-    names.map(name =>
-      t.importSpecifier(t.identifier(name), t.identifier(name)),
-    ),
-    t.stringLiteral(importName),
-  )
-  importDeclaration.leadingComments = path.node.body[0].leadingComments
-  path.unshiftContainer('body', importDeclaration)
-}
+// function addImportDeclaration(path, t, names) {
+//   if (!path) return
+//   const importDeclaration = t.importDeclaration(
+//     names.map(name =>
+//       t.importSpecifier(t.identifier(name), t.identifier(name)),
+//     ),
+//     t.stringLiteral(importName),
+//   )
+//   importDeclaration.leadingComments = path.node.body[0].leadingComments
+//   path.unshiftContainer('body', importDeclaration)
+// }
 
 function findCandidateNameForExpression(path) {
   let id
@@ -91,57 +90,60 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-function findProgram(path, t, functionNames) {
-  let program
-  path.find(path => {
-    if (path.isProgram()) {
-      const res = path.node.body.find(
-        node => t.isImportDeclaration(node) && node.source.value === importName,
-      )
-      if (!res) {
-        program = path
-        return true
-      }
-      if (res.source) {
-        if (res.source.value === importName) {
-          if (
-            res.specifiers.some(node => functionNames.includes(node.local.name))
-          ) {
-            return false
-          }
-        }
-        program = path
-        return true
-      }
-    }
-  })
-  return program
-}
+// function findProgram(path, t, functionNames) {
+//   let program
+//   path.find(path => {
+//     if (path.isProgram()) {
+//       const res = path.node.body.find(
+//         node => t.isImportDeclaration(node) && node.source.value === importName,
+//       )
+//       if (!res) {
+//         program = path
+//         return true
+//       }
+//       if (res.source) {
+//         if (res.source.value === importName) {
+//           if (
+//             res.specifiers.some(node => functionNames.includes(node.local.name))
+//           ) {
+//             return false
+//           }
+//         }
+//         program = path
+//         return true
+//       }
+//     }
+//   })
+//   return program
+// }
 
-function setStoreNameAfter(path, nameNodeId, t, functionName, displayName) {
+function setStoreNameAfter(path, nameNodeId, t) {
+  let displayName
   if (!displayName) {
     displayName = nameNodeId.name
   }
 
-  let blockLevelStmnt
+  let args
+  let callExpr
   path.find(path => {
-    if (path.parentPath.isBlock()) {
-      blockLevelStmnt = path
+    if (path.isCallExpression()) {
+      args = path.node.arguments
+      callExpr = path
       return true
     }
   })
 
-  if (blockLevelStmnt && displayName) {
-    // const trailingComments = blockLevelStmnt.node.trailingComments
-    delete blockLevelStmnt.node.trailingComments
-
-    const setStoreNameStmn = t.expressionStatement(
-      t.callExpression(t.identifier(functionName), [
-        nameNodeId,
-        t.stringLiteral(displayName),
-      ]),
+  if (args && displayName) {
+    const oldConfig = args[1]
+    const nameExpr = t.objectExpression([])
+    const nameProp = t.objectProperty(
+      t.identifier('name'),
+      t.stringLiteral(displayName),
     )
-
-    blockLevelStmnt.insertAfter(setStoreNameStmn)
+    args[1] = nameExpr
+    if (oldConfig) {
+      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+    }
+    args[1].properties.push(nameProp)
   }
 }
