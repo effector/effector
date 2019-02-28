@@ -12,7 +12,7 @@
 
 Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
 
-A more detailed comparison with other state managers can be found [here]()
+> Detailed comparison with other state managers you can be found [here]()
 
 ### Effector follows five basic principles:
 - __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
