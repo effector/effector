@@ -1,7 +1,12 @@
 //@flow
 
 import {stringRefcount} from 'effector/stdlib'
-import {type Store, storeFabric} from 'effector/store'
+import {
+  type Store,
+  type StoreConfig,
+  storeFabric,
+  normalizeConfig,
+} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 
@@ -72,11 +77,12 @@ export function domainFabric(
       hooks.domain(result)
       return result
     },
-    store<T>(state: T, config?: {name?: string} = {}): Store<T> {
+    store<T>(state: T, config: StoreConfig = {}): Store<T> {
+      const opts = normalizeConfig(config)
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
-        name: config.name,
+        name: opts.name,
       })
       hooks.store(result)
       return result
