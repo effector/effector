@@ -10,11 +10,11 @@ Reactive state manager.
 
 ## Introduction
 
-Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
+Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
 
 A more detailed comparison with other state managers can be found [here]()
 
-### The effector follows five basic principles:
+### Effector follows five basic principles:
 - __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
 - __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
 - __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
@@ -49,6 +49,7 @@ yarn add effector
 
 ### Examples
 
+#### Incremet/decremet example
 ```js
 import {createStore, createEvent} from "effector";
 import {createComponent} from "effector-react";
@@ -78,10 +79,6 @@ const App = () => <Counter />;
 
 #### Hello world with events and nodejs
 
-[repl](https://runkit.com/zerobias/effector-hello-world)
-
-[example file](/examples/hello-world.js)
-
 ```js
 const {createEvent} = require('effector')
 
@@ -93,12 +90,9 @@ messageEvent.watch(text => console.log(`new message: ${text}`))
 messageEvent('hello world')
 // => new message: hello world
 ```
+[REPL](https://runkit.com/zerobias/effector-hello-world)
 
 #### Storages and events
-
-[repl](https://runkit.com/zerobias/effector-storages-and-events)
-
-[example file](/examples/storages-and-events.js)
 
 ```js
 const {createStore, createEvent} = require('effector')
@@ -128,11 +122,8 @@ status changed: offline
 */
 
 ```
- 
 
-## Core concept
-
-
+[REPL](https://runkit.com/zerobias/effector-storages-and-events)
 
 
 ## Demo
@@ -141,9 +132,13 @@ status changed: offline
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
-## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
+More examples you can check [THIS]()
+ 
 
-## Usage
+## Core concept
+
+
+## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
 
 ### Domain hooks
 
