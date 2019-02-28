@@ -25,7 +25,6 @@ export default {
     'rollup-plugin-terser',
     'rollup-plugin-commonjs',
     'rollup-plugin-replace',
-    'rollup-plugin-size-snapshot',
   ],
   output: {
     file: resolve(__dirname, '..', 'builder.js'),

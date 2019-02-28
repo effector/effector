@@ -17,8 +17,6 @@ import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 //$off
 import replace from 'rollup-plugin-replace'
-//$off
-import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
@@ -145,7 +143,6 @@ const getPlugins = () => ({
       beautify: !!process.env.PRETTIFY,
     }),
   ),
-  sizeSnapshot: sizeSnapshot(),
   graph: graphPlugin({
     output: 'modules.dot',
   }),
@@ -158,14 +155,17 @@ export async function rollupBabel(name: string, plugin: *) {
   })
   const build = await rollup({
     input: (dir(plugin): string),
-    plugins: [plugins.babel, terser({
-      ...terserConfig, 
-      compress: false,
-      mangle: false, 
-      keep_classnames: true, 
-      keep_fnames: true,
-      toplevel: false,
-    })],
+    plugins: [
+      plugins.babel,
+      terser({
+        ...terserConfig,
+        compress: false,
+        mangle: false,
+        keep_classnames: true,
+        keep_fnames: true,
+        toplevel: false,
+      }),
+    ],
   })
   await Promise.all([
     build.write({
