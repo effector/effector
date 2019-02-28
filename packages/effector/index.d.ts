@@ -94,7 +94,10 @@ export function createEffect<Params, Done, Fail>(
   },
 ): Effect<Params, Done, Fail>
 
-export function createStore<State>(defaultState: State): Store<State>
+export function createStore<State>(
+  defaultState: State,
+  config?: {name?: string},
+): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
 export function createStoreObject<State>(

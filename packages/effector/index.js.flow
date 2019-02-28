@@ -157,7 +157,10 @@ declare export function createEffect<Params, Done, Fail>(
   config?: {handler?: (params: Params) => Promise<Done> | Done, ...},
 ): Effect<Params, Done, Fail>
 
-declare export function createStore<State>(defaultState: State): Store<State>
+declare export function createStore<State>(
+  defaultState: State,
+  config?: {name?: string},
+): Store<State>
 declare export function setStoreName<State>(
   store: Store<State>,
   name: string,
