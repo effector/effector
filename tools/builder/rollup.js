@@ -17,6 +17,8 @@ import {terser} from 'rollup-plugin-terser'
 import commonjs from 'rollup-plugin-commonjs'
 //$off
 import replace from 'rollup-plugin-replace'
+//$off
+import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
