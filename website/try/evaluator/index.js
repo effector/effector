@@ -30,7 +30,11 @@ function createRealm(sourceCode) {
 
 export const fetchVersion = createEffect('fetch', {
   async handler(ver) {
-    const req = await fetch(`https://unpkg.com/effector@${ver}/effector.cjs.js`)
+    const url =
+      ver === 'develop'
+        ? 'http://effector--canary.s3-website-eu-west-1.amazonaws.com/effector/effector.cjs.js'
+        : `https://unpkg.com/effector@${ver}/effector.cjs.js`
+    const req = await fetch(url)
     const text = await req.text()
     return createRealm(text)
   },

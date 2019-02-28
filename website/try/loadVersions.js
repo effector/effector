@@ -9,7 +9,9 @@ async function main() {
   const files = {}
   const packages = await Promise.all(
     Object.keys(pkg.versions).map(v =>
-      fetch(`https://unpkg.com/effector@${v}/package.json`).then(d => d.json()),
+      fetch(`https://unpkg.com/effector@${v}/package.json`)
+        .then(d => d.json())
+        .catch(() => ({})),
     ),
   )
   for (const p of packages) {
@@ -22,6 +24,7 @@ async function main() {
       console.error('Wrong version', p.version)
     }
   }
+  versions.push('develop')
   await fs.outputJSON(path.join(__dirname, 'versions.json'), versions.reverse())
 }
 
