@@ -140,12 +140,12 @@ const getPlugins = () => ({
   }),
   commonjs: commonjs({}),
   resolve: resolve({}),
+  sizeSnapshot: sizeSnapshot(),
   terser: terser(
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
     }),
   ),
-  sizeSnapshot: sizeSnapshot(),
   graph: graphPlugin({
     output: 'modules.dot',
   }),
@@ -198,8 +198,8 @@ export async function rollupEffector() {
         plugins.resolve,
         plugins.babel,
         plugins.graph,
-        plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
       ],
     })
 
@@ -266,8 +266,8 @@ export async function rollupEffectorReact() {
       plugins: [
         plugins.resolve,
         plugins.babel,
-        plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
       ],
     })
 
@@ -298,8 +298,8 @@ export async function rollupEffectorReact() {
         plugins.babel,
         plugins.replace,
         plugins.commonjs,
-        plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
       ],
       external: ['react', 'effector'],
     })
@@ -352,8 +352,8 @@ export async function rollupEffectorVue() {
       plugins: [
         plugins.resolve,
         plugins.babel,
-        plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
       ],
     })
     await Promise.all([
@@ -383,8 +383,8 @@ export async function rollupEffectorVue() {
         plugins.babel,
         plugins.replace,
         plugins.commonjs,
-        plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
       ],
       external: ['vue', 'effector'],
     })
