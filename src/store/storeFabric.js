@@ -27,7 +27,7 @@ export function storeFabric<State>(props: {
 }): Store<State> {
   const {currentState, name, parent} = props
   const plainState = createStateRef(currentState)
-  const currentId = plainState.id
+  const currentId = name || plainState.id
   const defaultState = currentState
 
   const updater: any = createEvent('update ' + currentId)
@@ -35,7 +35,7 @@ export function storeFabric<State>(props: {
     graphite: createDef(plainState),
     kind: Kind.store,
     id: currentId,
-    shortName: name || currentId,
+    shortName: currentId,
     domainName: parent,
     defaultState,
     plainState,
