@@ -10,9 +10,16 @@ Reactive state manager.
 
 ## Introduction
 
-Effector is an effective multi store state manager for Javascript apps(React/Vue/Node.js), that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
+Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API.
 
-A more detailed comparison with other state managers can be found [on site]()
+A more detailed comparison with other state managers can be found [here]()
+
+### The effector follows five basic principles:
+- __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
+- __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
+- __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
+- __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, knowing how .watch works in events, you can guess how does function .watch in store.
+- __The application is built from simple elements__ - space and way to take any required business logic out of view, maximizing the simplicity of the components.
 
 ### Installation
 
@@ -40,57 +47,36 @@ yarn add effector
   |       [`bs-effector`](bs-effector)       |       [![npm](https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector)       |       [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector)](https://david-dm.org/zerobias/effector?path=packages/bs-effector)       |
   | [`bs-effector-react`](bs-effector-react) | [![npm](https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react)](https://david-dm.org/zerobias/effector?path=packages/bs-effector-react) |
 
-
-
-### The effector follows five basic principles:
-- __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
-- __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
-- __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
-- __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, knowing how .watch works in events, you can guess how does function .watch in store.
-- __The application is built from simple elements__ - space and way to take any required business logic out of view, maximizing the simplicity of the components.
-
 ### Examples
- 
 
-## Core concept
+```js
+import {createStore, createEvent} from "effector";
+import {createComponent} from "effector-react";
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-## Table of Contents
+const increment = createEvent("increment");
+const decrement = createEvent("decrement");
+const resetCounter = createEvent("reset counter");
 
-- [Motivation](#motivation)
-- [Installation](#installation)
-- [About](#about)
-  - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
-  - [Storages and events](#storages-and-events)
-- [Demo](#demo)
-- [Wiki](#wiki)
-- [Usage](#usage)
-  - [Domain hooks](#domain-hooks)
-- [Typings](#typings)
-- [API](#api)
-- [Core types](#core-types)
-- [Contributors](#contributors)
-- [License](#license)
+const counter = createStore(0)
+  .on(increment, state => state + 1)
+  .on(decrement, state => state - 1)
+  .reset(resetCounter);
 
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+counter.watch(console.log);
 
+const Counter = createComponent(counter, (props, counter) => (
+  <>
+    <div>{counter}</div>
+    <button onClick={increment}>+</button>
+    <button onClick={decrement}>-</button>
+    <button onClick={resetCounter}>reset</button>
+  </>
+));
 
-## Motivation
+const App = () => <Counter />;
+```
 
-At the start (early 2018) we had a lot of state-managers, those solve actual problems, but not elegant and with some limitations.
-
-Effector tries to solve all [state-manager's] user problems and most parts of limitations. Primary:
-- [x] Developer-friendly, [static] type safe and inference, boilerplate free, insinuating API.
-- [x] Maximum update (state and subscribers) performance  or minimum library performance cost by compile time / initial runtime computation.
-- [x] Modular, isomorphic, flexible.
-- [x] Tiny bundle size.
-
-## About
-
-Effector provides events and reactive storages for node.js and browsers
-
-### Hello world with events and nodejs
+#### Hello world with events and nodejs
 
 [repl](https://runkit.com/zerobias/effector-hello-world)
 
@@ -108,7 +94,7 @@ messageEvent('hello world')
 // => new message: hello world
 ```
 
-### Storages and events
+#### Storages and events
 
 [repl](https://runkit.com/zerobias/effector-storages-and-events)
 
@@ -142,6 +128,12 @@ status changed: offline
 */
 
 ```
+ 
+
+## Core concept
+
+
+
 
 ## Demo
 
@@ -152,33 +144,6 @@ status changed: offline
 ## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
 
 ## Usage
-
-```js
-import {createStore, createEvent} from "effector";
-import {createComponent} from "effector-react";
-
-const increment = createEvent("increment");
-const decrement = createEvent("decrement");
-const resetCounter = createEvent("reset counter");
-
-const counter = createStore(0)
-  .on(increment, state => state + 1)
-  .on(decrement, state => state - 1)
-  .reset(resetCounter);
-
-counter.watch(console.log);
-
-const Counter = createComponent(counter, (props, counter) => (
-  <>
-    <div>{counter}</div>
-    <button onClick={increment}>+</button>
-    <button onClick={decrement}>-</button>
-    <button onClick={resetCounter}>reset</button>
-  </>
-));
-
-const App = () => <Counter />;
-```
 
 ### Domain hooks
 
