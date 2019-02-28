@@ -55,9 +55,11 @@ unnecessary-invariant
 
 [ignore]
 .*/.history/.*
+.*/.cache/.*
+.*/dist/.*
 .*/node_modules/.*
 <PROJECT_ROOT>/src/graphite/tarjan/*
-<PROJECT_ROOT>/src/web/*
+<PROJECT_ROOT>/src/redux/*
 <PROJECT_ROOT>/\.vscode/*
 <PROJECT_ROOT>/\.cache/*
 <PROJECT_ROOT>/src/DataStructures/*
