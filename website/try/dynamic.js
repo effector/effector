@@ -101,9 +101,9 @@ graphite
 switcher({
   event: realmInvoke,
   selector: {
-    realmEvent: obj => obj.kind === 'event',
-    realmStore: obj => obj.kind === 'store',
-    realmEffect: obj => obj.kind === 'effect',
+    realmEvent: obj => obj.kind === 'event' || obj.kind === 2,
+    realmStore: obj => obj.kind === 'store' || obj.kind === 1,
+    realmEffect: obj => obj.kind === 'effect' || obj.kind === 3,
     realmDomain: obj => obj.onCreateDomain && obj.domain,
   },
   pre: {
