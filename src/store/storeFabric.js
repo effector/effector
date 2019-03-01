@@ -40,7 +40,9 @@ export function storeFabric<State>(props: {
     defaultState,
     plainState,
     subscribers: new Map(),
-    compositeName: createName(name || '', parent),
+  }
+  if (name) {
+    storeInstance.compositeName = createName(name, parent)
   }
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
