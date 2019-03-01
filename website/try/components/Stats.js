@@ -4,7 +4,7 @@ import React from 'react'
 import cx from 'classnames'
 import {stats} from '../domain'
 import {createComponent} from 'effector-react'
-import {createApi, createStore, Store} from 'effector'
+import {createApi, createStore, createStoreObject, Store} from 'effector'
 
 const tab: Store<'events' | 'storages' | 'effects' | 'domains'> = createStore(
   'events',
@@ -25,11 +25,10 @@ const api = createApi(tab, {
 
 const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
   //TODO: unify this
-  const mapper = item => (
-    <li key={item.kind + item.id + item.shortName}>
-      {item?.compositeName?.fullName || item?.shortName || item.id}
-    </li>
-  )
+  const mapper = item => {
+    const name = item?.compositeName?.fullName || item?.shortName || item.id
+    return <li key={item.kind + item.id + name}>{name}</li>
+  }
   switch (tab) {
     case 'events':
       return (

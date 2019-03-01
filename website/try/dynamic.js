@@ -126,7 +126,6 @@ realmEffect.watch(e => {
 })
 
 realmDomain.watch(domain => {
-  console.log(domain)
   domain.onCreateEvent(event => {
     //TODO: wrong behaviour?
     if (event.domainName !== domain.compositeName) return
