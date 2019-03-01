@@ -1,3 +1,5 @@
+//@flow
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStoreObject} from 'effector'
@@ -24,9 +26,7 @@ import {
   version,
 } from './domain'
 
-const StatsView = createComponent(stats, ({}, {event, store}) => (
-  <Stats event={event} store={store} />
-))
+const StatsView = createComponent(stats, ({}, stats) => <Stats {...stats} />)
 
 const ErrorsView = createComponent(
   codeError,

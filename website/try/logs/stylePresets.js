@@ -1,9 +1,11 @@
-import {css} from './css';
+//@flow
+
+import {css} from './css'
 
 const boldWhiteMixin = {
   color: 'white',
   fontWeight: 800,
-};
+}
 
 export const presets = style({
   log: {
@@ -18,12 +20,12 @@ export const presets = style({
     backgroundColor: 'rgb(155, 9, 9)',
     ...boldWhiteMixin,
   },
-});
+})
 
 function style(styleMap) {
-  const result = {};
+  const result = {}
   for (const key in styleMap) {
-    result[key] = css(styleMap[key]);
+    result[key] = css(styleMap[key])
   }
-  return result;
+  return result
 }

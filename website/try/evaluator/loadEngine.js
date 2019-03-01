@@ -1,3 +1,5 @@
+//@flow
+
 import fetch from 'cross-fetch'
 
 let cache

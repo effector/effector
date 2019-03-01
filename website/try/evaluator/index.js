@@ -1,3 +1,5 @@
+//@flow
+
 import {createEffect} from 'effector'
 
 //import {loadEngine} from './loadEngine'

@@ -1,3 +1,5 @@
+//@flow
+
 import {realmStatus} from '../domain'
 
 export function evalExpr(expr, vars) {

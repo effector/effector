@@ -1,3 +1,5 @@
+//@flow
+
 import {forward} from 'effector'
 
 export function switcher({event, selector, pre = {}, post = {}, target = {}}) {

@@ -1,3 +1,5 @@
+//@flow
+
 export default `const trigger = createEvent('trigger update')
 const repeat = createEvent('repeat')
 const fooStore = createStore(10)
@@ -20,4 +22,4 @@ trigger.watch(e => {
 trigger('first')
 trigger('second')
 
-`;
+`

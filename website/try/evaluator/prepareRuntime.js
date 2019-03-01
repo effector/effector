@@ -1,3 +1,5 @@
+//@flow
+
 import {realmInvoke, realmLog} from '../domain'
 
 export function prepareRuntime(effector) {
@@ -26,6 +28,7 @@ function assignRealm(target, EvalRealm, effector) {
     createEffect: effector.createEffect,
     createStore: effector.createStore,
     createStoreObject: effector.createStoreObject,
+    createDomain: effector.createDomain,
     restoreEvent: effector.restoreEvent,
     restoreEffect: effector.restoreEffect,
     restore: effector.restore,

@@ -1,3 +1,5 @@
+//@flow
+
 import React from 'react'
 
 export function VersionSelector({versions, selected, onChange}) {

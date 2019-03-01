@@ -1,3 +1,5 @@
+//@flow
+
 import ReactDOM from 'react-dom'
 
 import './dynamic'

@@ -1,3 +1,5 @@
+//@flow
+
 /*
 <ShareButton
             className="try-button try-button-share"

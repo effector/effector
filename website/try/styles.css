@@ -43,11 +43,38 @@ body {
   justify-content: space-between;
 }
 .stats {
-  display: inline-grid;
+  display: flex;
+  flex-direction: column;
+  background: #f7f7f7;
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
+.toolbar {
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.toolbar.show-storages .storages-tab,
+.toolbar.show-events .events-tab,
+.toolbar.show-effects .effects-tab,
+.toolbar.show-domains .domains-tab {
+  background: #f7f7f7;
+  border-bottom: 1px solid #f7f7f7;
+  margin-bottom: -1px;
+}
+.toolbar .tab {
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+  float: left;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 7px 15px;
+  margin: 0;
+}
 .stats > div {
+  flex: 1;
   padding: 10px;
   border-right: 1px solid #ddd;
 }
@@ -62,6 +89,7 @@ body {
 
 .editor.results {
 }
+
 .errors {
   margin: 0;
   padding: 1rem;
@@ -75,6 +103,7 @@ body {
 
 .errors.no-errors {
   opacity: 0.5;
+  z-index: -20;
 }
 
 .arrow {
