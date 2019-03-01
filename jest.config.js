@@ -33,6 +33,7 @@ module.exports = {
 
   watchPlugins: ['jest-runner-eslint/watch-fix'],
   projects: createProjectList([
+    'types',
     'effector',
     'effect',
     'event',
