@@ -1,9 +1,40 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel-plugin should create domain 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");"
+`;
+
+exports[`babel-plugin should create domain domain 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const foo = domain.domain(\\"foo\\");"
+`;
+
+exports[`babel-plugin should create domain effect 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const a = domain.effect(\\"a\\");
+
+const f = () => domain.effect(\\"f\\");"
+`;
+
+exports[`babel-plugin should create domain event 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const a = domain.event(\\"a\\");
+
+const f = () => domain.event(\\"f\\");"
+`;
+
 exports[`babel-plugin should create domain store 1`] = `
 "//@flow
 import { createDomain } from 'effector';
-const domain = createDomain();
+const domain = createDomain(\\"domain\\");
 const a = domain.store('bar', {
   name: \\"a\\"
 });
@@ -20,6 +51,24 @@ const c = domain.store('h', {
   },
   name: \\"c\\"
 });"
+`;
+
+exports[`babel-plugin should create effect 1`] = `
+"//@flow
+import { createEffect } from 'effector';
+const foo = createEffect(\\"foo\\");
+const bar = createEffect('hello');
+
+const f = () => createEffect(\\"f\\");"
+`;
+
+exports[`babel-plugin should create event 1`] = `
+"//@flow
+import { createEvent } from 'effector';
+const foo = createEvent(\\"foo\\");
+const bar = createEvent('hello');
+
+const f = () => createEvent(\\"f\\");"
 `;
 
 exports[`babel-plugin should create store 1`] = `
