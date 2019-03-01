@@ -3,7 +3,7 @@ id: fromObservable
 title: fromObservable
 ---
 
-Create an event containing all items from an Observable.
+Creates an event containing all items from an Observable.
 
 #### Arguments
 
@@ -11,7 +11,7 @@ Create an event containing all items from an Observable.
 
 #### Returns
 
-(_`Store`_)
+(_`Event`_)
 
 #### Example
 
