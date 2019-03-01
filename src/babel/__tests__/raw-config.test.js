@@ -11,7 +11,7 @@ describe('raw config', () => {
     const bar = domain.store(0)
     expect(bar.compositeName.fullName).toBe('bar')
     const e = combine(foo, bar, (a, b) => ({a, b}))
-    console.error(e)
+    expect(e.compositeName.fullName).toBe('combine(foo, bar) → *')
   })
 
   it('should prefer original name', () => {
