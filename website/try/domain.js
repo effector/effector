@@ -62,6 +62,7 @@ export function retrieveVersion() {
 
 export const realmEvent = createEvent('realm event created')
 export const realmStore = createEvent('realm store')
+export const realmEffect = createEvent('realm effect created')
 export const realmInvoke = createEvent('realm invoke')
 export const realmLog = createEvent('realm console.log call')
 export const realmStatus = createEvent('realm status update')

@@ -5,6 +5,7 @@ import {
   changeSources,
   realmEvent,
   realmStore,
+  realmEffect,
   realmInvoke,
   resetGraphiteState,
   evalEffect,
@@ -76,6 +77,7 @@ const graphiteInvokeSetter = (state, event) => {
 graphite
   .on(realmEvent, graphiteInvokeSetter)
   .on(realmStore, graphiteInvokeSetter)
+  .on(realmEffect, graphiteInvokeSetter)
   .on(resetGraphiteState, e => {
     e.__shouldReset = true
     return e
@@ -86,15 +88,23 @@ switcher({
   selector: {
     realmEvent: obj => obj.kind === 'event',
     realmStore: obj => obj.kind === 'store',
+    realmEffect: obj => obj.kind === 'effect',
   },
   pre: {
     realmEvent: data => data.instance || {},
     realmStore: data => data.instance || {},
+    realmEffect: data => data.instance || {},
   },
   post: {
     realmEvent,
     realmStore,
+    realmEffect,
   },
+})
+
+realmEffect.watch(e => {
+  realmEvent(e.done)
+  realmEvent(e.fail)
 })
 
 // realmInvoke.watch(e => console.log('realm invoke', e));

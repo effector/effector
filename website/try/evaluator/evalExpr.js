@@ -1,48 +1,48 @@
-import {realmStatus} from '../domain';
+import {realmStatus} from '../domain'
 
 export function evalExpr(expr, vars) {
-  const args = [];
-  const segments = [];
+  const args = []
+  const segments = []
   for (const key in vars) {
-    args.push(vars[key]);
-    segments.push(key);
+    args.push(vars[key])
+    segments.push(key)
   }
   segments.push(`
   try {
     ${expr}
   } catch (error) {
     throw error
-  }`);
-  status.init();
+  }`)
+  status.init()
   try {
     // Function(param1, ..., paramn, body)
-    const exprFunc = Function.apply(null, segments);
-    const results = exprFunc.apply(null, args);
-    status.done();
-    return results;
+    const exprFunc = Function(...segments)
+    const results = exprFunc(...args)
+    status.done()
+    return results
   } catch (error) {
-    status.fail();
-    throw error;
+    status.fail()
+    throw error
   }
 }
 
 const status = {
-  init: () => {
+  init() {
     realmStatus({
       active: true,
       throwError: false,
-    });
+    })
   },
-  done: () => {
+  done() {
     realmStatus({
       active: false,
       throwError: false,
-    });
+    })
   },
-  fail: () => {
+  fail() {
     realmStatus({
       active: false,
       throwError: true,
-    });
+    })
   },
-};
+}

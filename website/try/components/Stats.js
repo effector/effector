@@ -1,9 +1,11 @@
-import React from 'react';
+import React from 'react'
 
 export default function Stats({event, store}) {
   const mapper = item => (
-    <li key={item.kind + item.shortName}>{item.shortName}</li>
-  );
+    <li key={item.kind + item.id + item.shortName}>
+      {item.compositeName ? item.compositeName.fullName || item.shortName : item.shortName}
+    </li>
+  )
   return (
     <div className="stats">
       <div>
@@ -15,5 +17,5 @@ export default function Stats({event, store}) {
         <ol>{store.map(mapper)}</ol>
       </div>
     </div>
-  );
+  )
 }
