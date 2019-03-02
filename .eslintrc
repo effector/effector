@@ -68,7 +68,7 @@ rules:
     - allowTemplateLiterals: true
       avoidEscape: true
   max-len:
-    - error
+    - warn
     - code: 80
       tabWidth: 2
   key-spacing:
