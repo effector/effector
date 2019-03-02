@@ -5,7 +5,9 @@ import {createEffect} from 'effector'
 //import {loadEngine} from './loadEngine'
 import {prepareRuntime} from './prepareRuntime'
 import {evalExpr} from './evalExpr'
+import scopedEval from './scopedEval'
 import {selectVersion, version} from '../domain'
+import {consoleMap} from '../logs'
 
 version.on(selectVersion, (_, p) => p)
 
@@ -20,13 +22,24 @@ function createRealm(sourceCode) {
   }
   realm.exports = {}
   realm.module = {exports: realm.exports}
-  Function('process', 'require', 'exports', 'module', sourceCode).call(
-    window,
-    realm.process,
-    realm.require,
-    realm.exports,
-    realm.module,
-  )
+  realm.console = consoleMap()
+  scopedEval
+    .Function(
+      'process',
+      'require',
+      'exports',
+      'module',
+      'console',
+      `'use strict'; ${sourceCode}`,
+    )
+    .call(
+      window,
+      realm.process,
+      realm.require,
+      realm.exports,
+      realm.module,
+      realm.console,
+    )
   return realm.exports
 }
 

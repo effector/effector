@@ -1,7 +1,21 @@
 import {presets} from './stylePresets'
+import {realmLog} from '../domain'
 
 const CLEAR_CONSOLE = true
 const PRINT_IN_GROUP = false
+
+export function consoleMap() {
+  const console = {}
+
+  for (const method in global.console) {
+    console[method] = logger.bind(method)
+  }
+  return console
+}
+
+function logger(...args) {
+  realmLog({method: this, args})
+}
 
 export function printLogs(logs) {
   PRINT_IN_GROUP && console.group('runtime')

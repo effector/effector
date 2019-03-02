@@ -1,6 +1,7 @@
 //@flow
 
 import {realmStatus} from '../domain'
+import scopedEval from './scopedEval'
 
 export function evalExpr(expr, vars) {
   const args = []
@@ -10,6 +11,7 @@ export function evalExpr(expr, vars) {
     segments.push(key)
   }
   segments.push(`
+  'use strict';
   try {
     ${expr}
   } catch (error) {
@@ -18,7 +20,7 @@ export function evalExpr(expr, vars) {
   status.init()
   try {
     // Function(param1, ..., paramn, body)
-    const exprFunc = Function(...segments)
+    const exprFunc = scopedEval.Function(...segments)
     const results = exprFunc(...args)
     status.done()
     return results

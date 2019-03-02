@@ -1,6 +1,7 @@
 //@flow
 
-import {realmInvoke, realmLog} from '../domain'
+import {realmInvoke} from '../domain'
+import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector) {
   const EvalRealm = effector.createDomain('EvalRealm')
@@ -8,9 +9,9 @@ export function prepareRuntime(effector) {
   assignRealm(api, EvalRealm, effector)
   assignLibrary(api, effector)
   return {
+    console: consoleMap(),
     effector,
     ...api,
-    console: consoleMap(),
   }
 }
 
@@ -51,17 +52,4 @@ function apiFabric(key, ...args) {
   const instance = this(...args)
   realmInvoke({method: key, instance})
   return instance
-}
-
-function consoleMap() {
-  const console = {}
-
-  for (const method in global.console) {
-    console[method] = logger.bind(method)
-  }
-  return console
-}
-
-function logger(...args) {
-  realmLog({method: this, args})
 }
