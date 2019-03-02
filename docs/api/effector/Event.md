@@ -24,6 +24,8 @@ _Event_ is an intention to change state.
 
 ### <a id='map'></a>[`map(fn)`](#map)
 
+Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload.
+
 #### Returns
 
 (Event): New event
