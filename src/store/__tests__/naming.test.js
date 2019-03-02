@@ -9,7 +9,7 @@ import {
   storeObjectName,
 } from '../setStoreName'
 
-const rootDomain = createDomain()
+const rootDomain = createDomain('')
 
 describe('naming', () => {
   describe('domain', () => {
