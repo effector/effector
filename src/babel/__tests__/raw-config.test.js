@@ -3,7 +3,7 @@
 import {combine, createStore, createDomain} from 'effector'
 
 describe('raw config', () => {
-  const domain = createDomain()
+  const domain = createDomain('')
 
   it('should set name', () => {
     const foo = createStore(0)
@@ -33,13 +33,17 @@ describe('raw config', () => {
     const d = domain.store('h', {})
     const e = domain.store('h', 23020)
     const f = domain.store(null, config)
+    const g = domain.store('h', 'meme')
+    const h = domain.store('h', null)
+    const j = domain.store('h', true)
+    const k = domain.store('h', false)
     expect(d.compositeName.fullName).toBe('d')
     expect(e.compositeName.fullName).toBe('e')
     expect(f.compositeName.fullName).toBe('f')
   })
 
   it('should support onCreateStore', () => {
-    const domain = createDomain()
+    const domain = createDomain('')
     domain.onCreateStore(store => {
       expect(store.compositeName.fullName).toBe('foo')
     })
