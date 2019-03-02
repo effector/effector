@@ -8,23 +8,36 @@ import {useStore, useStoreFast} from '../useStore'
 
 afterEach(cleanup)
 
-test('useStore', () => {
-  const store = createStore('foo')
-  const changeText = createEvent('change text')
-  store.on(changeText, (_, e) => e)
+describe('useStore', () => {
+  it('should render', () => {
+    const store = createStore('foo')
+    const changeText = createEvent('change text')
+    store.on(changeText, (_, e) => e)
 
-  const Display = props => {
-    const state = useStore(store)
-    return <span>Store text: {state}</span>
-  }
+    const Display = props => {
+      const state = useStore(store)
+      return <span>Store text: {state}</span>
+    }
 
-  const {container} = render(<Display />)
-  expect(container.firstChild).toMatchSnapshot()
-  act(() => {
-    changeText('bar')
+    const {container} = render(<Display />)
+    expect(container.firstChild).toMatchSnapshot()
+    act(() => {
+      changeText('bar')
+    })
+    // flushEffects()
+    expect(container.firstChild).toMatchSnapshot()
   })
-  // flushEffects()
-  expect(container.firstChild).toMatchSnapshot()
+
+  it('should throw', () => {
+    const ErrorDisplay = props => {
+      const state = useStore(undefined)
+      return <span>Store text: {state}</span>
+    }
+
+    expect(() => {
+      render(<ErrorDisplay />)
+    }).toThrowErrorMatchingSnapshot()
+  })
 })
 
 test('useStoreFast', () => {
