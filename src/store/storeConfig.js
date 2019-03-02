@@ -1,5 +1,7 @@
 //@flow
 
+import warning from 'warning'
+
 type ConfigPart = {
   name?: string,
 }
@@ -10,7 +12,19 @@ export type Config = {
 }
 
 export function normalizeConfig(config?: Config = {}): ConfigPart {
+  warning(
+    typeof config === 'object' && config !== null,
+    'createStore: Second argument should be plain object, but you passed %s.',
+    config,
+  )
   if (typeof config === 'object' && config !== null) {
+    if (typeof config.ɔ !== 'undefined') {
+      warning(
+        typeof config.ɔ === 'object' && config.ɔ !== null,
+        'createStore: Second argument should be plain object, but you passed %s.',
+        config.ɔ,
+      )
+    }
     if (typeof config.ɔ === 'object' && config.ɔ !== null) {
       const newConfig = {...config.ɔ}
       if (!('name' in config.ɔ)) {
