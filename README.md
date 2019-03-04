@@ -10,16 +10,16 @@
 
 ## Introduction
 
-Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good support types and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
+Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
 
-> Detailed comparison with other state managers you can be found [here]()
+> Detailed comparison with other state managers can be found [here]()
 
 ### Effector follows five basic principles:
 - __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
 - __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
 - __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
-- __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, knowing how .watch works in events, you can guess how does function .watch in store.
-- __The application is built from simple elements__ - space and way to take any required business logic out of view, maximizing the simplicity of the components.
+- __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
+- __The application is built from simple elements__ - space and way to take any required business logic out of the view, maximizing the simplicity of the components.
 
 ## Installation
 
@@ -49,8 +49,7 @@ yarn add effector
 
 ## Examples
 
-The following are simple examples that will give you a basic understanding of the work state manager
-
+The following are simple examples that will give you a basic understanding how the state manager works:
 
 ### Incremet/decremet
 ```js
@@ -142,21 +141,18 @@ status changed: offline
  
 
 ## Core concept
+
+![Core](https://github.com/zerobias/effector/blob/master/modules.png)
+
 ### Core types
 
 ```js
 import type {Domain, Event, Effect, Store} from 'effector'
 ```
 
-
-## [Wiki](https://github.com/zerobias/effector/wiki/Glossary)
-
-### Domain hooks
-
-* onCreateEvent
-* onCreateEffect
-* onCreateStore
-* onCreateDomain (to handle nested domains)
+### Domain
+**Domain** is a namespace for your events, stores and effects.
+Domain can subscribe to event, effect, store or nested domain creation with **onCreateEvent**, **onCreateStore**, **onCreateEffect**, **onCreateDomain(to handle nested domains)** methods.
 
 ```js
 import {createDomain} from 'effector'
@@ -173,6 +169,69 @@ const mount = mainPage.event('mount')
 const pageStore = mainPage.store(0)
 // => new store: 0
 ```
+
+### Event
+Event is an intention to change state.
+```js
+  const event = createEvent() // unnamed event
+  const onMessage = createEvent('message') // named event
+
+  const socket = new WebSocket('wss://echo.websocket.org')
+  socket.onmessage = (msg) => onMessage(msg)
+
+  const data = onMessage.map(msg => msg.data).map(JSON.parse)
+
+  // Handle side effects
+  data.watch(console.log)
+```
+### Effect
+
+**Effect** is a container for async function.
+It can be safely used in place of the original async function.
+The only requirement for function - **Should have zero or one argument**
+```js
+  const getUser = createEffect('get user')
+    .use((params) => {
+      return fetch(`https://example.com/get-user/${params.id}`)
+        .then(res => res.json())
+    })
+
+  // subscribe to promise resolve
+  getUser.done.watch(({result, params}) => {
+    console.log(params) // {id: 1}
+    console.log(result) // resolved value
+  })
+
+  // subscribe to promise reject (or throw)
+  getUser.fail.watch(({error, params}) => {
+    console.error(params) // {id: 1}
+    console.error(error) // rejected value
+  })
+
+  // you can replace function anytime
+  getUser.use(() => promiseMock)
+
+  // call effect with your params
+  getUser({id: 1})
+
+  const data = await getUser({id: 2}) // handle promise
+```
+### Store
+**Store** is an object that holds the state tree. There can be multiple stores.
+
+```js
+const users = createStore([]) // <-- Default state
+  // add reducer for getUser.done event (fires when promise resolved)
+  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+
+const messages = createStore([])
+  // from WebSocket
+  .on(data, (state, message) => [...state, message])
+
+users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
+messages.watch(console.log)
+```
+> [Learn more](https://effector.now.sh/en/introduction/core-concepts)
 
 ## API
 
