@@ -49,7 +49,7 @@ yarn add effector
 
 ## Examples
 
-The following are simple examples that will give you a basic understanding how the state manager works:
+Three following examples that will give you a basic understanding how the state manager works:
 
 ### Incremet/decremet
 ```js
