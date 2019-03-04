@@ -244,6 +244,8 @@ import {
  createStoreObject,
 } from 'effector'
 ```
+## Sponsors
+Thank you to all our sponsors! 🙏
 
 ## Contributors
 
