@@ -1,0 +1,45 @@
+{
+  "docs": {
+    "Introduction": [
+      "introduction/installation",
+      "introduction/core-concepts",
+      "introduction/prior-art"
+    ],
+    "Other": ["troubleshooting", "glossary"],
+    "FAQ": ["faq"]
+  },
+  "api": {
+    "effector": [
+      "api/effector/effector",
+      "api/effector/createEvent",
+      "api/effector/event",
+      "api/effector/createEffect",
+      "api/effector/effect",
+      "api/effector/createStore",
+      "api/effector/store",
+      "api/effector/createDomain",
+      "api/effector/domain",
+      "api/effector/combine",
+      "api/effector/createStoreObject",
+      "api/effector/createApi",
+      "api/effector/restore",
+      "api/effector/forward",
+      "api/effector/fromObservable"
+    ],
+    "effector-react": [
+      "api/effector-react/effector-react",
+      "api/effector-react/createStoreConsumer",
+      "api/effector-react/createComponent",
+      "api/effector-react/createGate",
+      "api/effector-react/useGate",
+      "api/effector-react/useStore",
+      "api/effector-react/gate"
+    ],
+    "effector-vue": [
+      "api/effector-vue/effector-vue",
+      "api/effector-vue/vue-effector",
+      "api/effector-vue/component-options",
+      "api/effector-vue/vue"
+    ]
+  }
+}
