@@ -12,7 +12,7 @@
 
 Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
 
-> Detailed comparison with other state managers can be found [here]()
+> Detailed comparison with other state managers will be added soon
 
 ### Effector follows five basic principles:
 - __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
@@ -135,12 +135,9 @@ status changed: offline
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
-### More examples/demo you can check [here]()
+### More examples/demo you can check [here](https://github.com/zerobias/effector/tree/master/examples)
 
 ## Core concept
-
-![Core](https://github.com/zerobias/effector/blob/master/modules.png)
-
 ### Core types
 
 ```js
@@ -242,7 +239,9 @@ import {
 } from 'effector'
 ```
 ## Sponsors
-Thank you to all our sponsors! 🙏
+Thank you to all our sponsors 🙏
+
+<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
 
 ## Contributors
 
