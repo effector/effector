@@ -983,10 +983,10 @@
   resolved "https://registry.yarnpkg.com/@emotion/unitless/-/unitless-0.7.3.tgz#6310a047f12d21a1036fb031317219892440416f"
   integrity sha512-4zAPlpDEh2VwXswwr/t8xGNDGg8RQiPxtxZ3qQEXyQsBV39ptTdESCjuBvGze1nLMVrxmTIKmnO/nAV8Tqjjzg==
 
-"@goodmind/flow-js@^0.93.0-flow.28fb13fef-build.f6486aa":
-  version "0.93.0-flow.28fb13fef-build.f6486aa"
-  resolved "https://registry.yarnpkg.com/@goodmind/flow-js/-/flow-js-0.93.0-flow.28fb13fef-build.f6486aa.tgz#d280dcad25fa8536a2924f6a1918c2cd9af22b3e"
-  integrity sha512-dJmzv0KKgez5/BD6KecbQNnVO3vvx4n9+lyTTga0QTmK2cFTdWlbxE+5DGMgrBq6MIqMt3FrdnpjaZClghxJ7w==
+"@goodmind/flow-js@^0.94.0-flow.65802c614-build.f6486aa":
+  version "0.94.0-flow.65802c614-build.f6486aa"
+  resolved "https://registry.yarnpkg.com/@goodmind/flow-js/-/flow-js-0.94.0-flow.65802c614-build.f6486aa.tgz#286a37d16a143f90c4a92cb06dd3a220ecd6a611"
+  integrity sha512-FNWXYg44J3CqWiJrlZ/BtFPSVmpb6HZx9v/B0yhkOwTO3SPwHvLPX/iGnSAZIIoqBedSSiyPUZlI1a/X4mFKfg==
 
 "@goodmind/flowgen@^2.0.0":
   version "2.0.0"
@@ -3328,6 +3328,21 @@ cyclist@~0.2.2:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-0.2.2.tgz#1b33792e11e914a2fd6d6ed6447464444e5fa640"
   integrity sha1-GzN5LhHpFKL9bW7WRHRkRE5fpkA=
 
+d3-array@^1.2.1:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
+  integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
+
+d3-dag@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/d3-dag/-/d3-dag-0.2.3.tgz#0c55b00575894c036f61d4a61f0190ca78c3283e"
+  integrity sha512-4yE2afuUyp6Mg6Gw4PwWyQj1TJcwb8xx9C45G8f/4vWsbmPLI7KGfIcDonNPRqTZN0BJPf0vYYluJKzBTK8LuA==
+  dependencies:
+    d3-array "^1.2.1"
+    fastpriorityqueue "^0.5.0"
+    javascript-lp-solver "^0.4.5"
+    quadprog-js "^0.1.3"
+
 dashdash@^1.12.0:
   version "1.14.1"
   resolved "https://registry.yarnpkg.com/dashdash/-/dashdash-1.14.1.tgz#853cfa0f7cbe2fed5de20326b8dd581035f6e2f0"
@@ -4583,6 +4598,11 @@ fastify@^1.14.1:
     proxy-addr "^2.0.3"
     tiny-lru "^2.0.0"
 
+fastpriorityqueue@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/fastpriorityqueue/-/fastpriorityqueue-0.5.0.tgz#32d085507784de5ca1afd05d84d0555a5f72cab6"
+  integrity sha512-a+2x8fbu1sfuvqlVYh28RxVTy7HFaMyI/hsZWup0CBnFL3E54h9Dz3vKBHMev1/c5BAQ26z6789ddwmu/GfFCQ==
+
 fastq@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/fastq/-/fastq-1.6.0.tgz#4ec8a38f4ac25f21492673adb7eae9cfef47d1c2"
@@ -4784,10 +4804,10 @@ flatten@^1.0.2:
   resolved "https://registry.yarnpkg.com/flatten/-/flatten-1.0.2.tgz#dae46a9d78fbe25292258cc1e780a41d95c03782"
   integrity sha1-2uRqnXj74lKSJYzB54CkHZXAN4I=
 
-flow-bin@^0.93.0:
-  version "0.93.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.93.0.tgz#9192a08d88db2a8da0ff55e42420f44539791430"
-  integrity sha512-p8yq4ocOlpyJgOEBEj0v0GzCP25c9WP0ilFQ8hXSbrTR7RPKuR+Whr+OitlVyp8ocdX0j1MrIwQ8x28dacy1pg==
+flow-bin@^0.94.0:
+  version "0.94.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.94.0.tgz#b5d58fe7559705b73a18229f97edfc3ab6ffffcb"
+  integrity sha512-DYF7r9CJ/AksfmmB4+q+TyLMoeQPRnqtF1Pk7KY3zgfkB/nVuA3nXyzqgsIPIvnMSiFEXQcFK4z+iPxSLckZhQ==
 
 flow-parser@0.*:
   version "0.91.0"
@@ -6119,6 +6139,11 @@ iterall@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
   integrity sha512-yynBb1g+RFUPY64fTrFv7nsjRrENBQJaX2UL+2Szc9REFrSNm1rpSXHGzhmAy7a9uv3vlvgBlXnf9RqmPH1/DA==
+
+javascript-lp-solver@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/javascript-lp-solver/-/javascript-lp-solver-0.4.5.tgz#597106f586b4843a4ce51c7e6dc8a91f8a929c3f"
+  integrity sha1-WXEG9Ya0hDpM5Rx+bcipH4qSnD8=
 
 jest-changed-files@^24.0.0:
   version "24.0.0"
@@ -9544,6 +9569,11 @@ qs@6.5.2, qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
   integrity sha512-N5ZAX4/LxJmF+7wN74pUD6qAh9/wnvdQcjq9TZjevvXzSUo7bfmw91saqMjzGS2xq91/odN2dW/WOl7qQHNDGA==
+
+quadprog-js@^0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/quadprog-js/-/quadprog-js-0.1.3.tgz#1cc42eee6db8dd8884073c91c6bddae2eb86daef"
+  integrity sha512-515n4/g9cCDVHj+11rAhphUTNdgLFAENsU3MrnyoRd0tHSCMi8V4LecwliTu1zl0f81dlIFVgCWNgGUWkfHyxg==
 
 query-string@^4.1.0:
   version "4.3.4"
