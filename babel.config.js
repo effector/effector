@@ -19,6 +19,7 @@ const aliases = {
   invariant: 'invariant',
   'effector-react': 'react',
   'effector-vue': 'vue',
+  Builder: '../tools/builder',
 }
 
 module.exports = api => {
@@ -32,7 +33,7 @@ module.exports = api => {
   }
   const plugins = [
     './src/babel/get-step',
-    './src/babel/stats-plugin',
+    // './src/babel/stats-plugin',
     '@babel/plugin-proposal-export-namespace-from',
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-nullish-coalescing-operator',
