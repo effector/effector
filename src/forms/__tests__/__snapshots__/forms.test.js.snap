@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createFormApi submitEffect 1`] = `false`;
+
+exports[`createFormApi submitEffect 2`] = `
+Object {
+  "firstName": "bar",
+  "lastName": "",
+}
+`;
+
+exports[`createFormApi submitEffect 3`] = `true`;
+
+exports[`createFormApi submitEvent 1`] = `false`;
+
+exports[`createFormApi submitEvent 2`] = `
+Object {
+  "firstName": "foo",
+  "lastName": "",
+}
+`;
+
+exports[`createFormApi submitEvent 3`] = `true`;
+
+exports[`createFormApi validate 1`] = `
+Object {
+  "firstName": "",
+  "lastName": "",
+}
+`;
+
+exports[`createFormApi validate 2`] = `false`;
+
+exports[`createFormApi validate 3`] = `true`;
+
+exports[`createFormApi validate 4`] = `
+Object {
+  "firstName": "foobar",
+  "lastName": "",
+}
+`;
+
+exports[`createFormApi validate 5`] = `false`;
+
+exports[`createFormApi validate 6`] = `true`;
