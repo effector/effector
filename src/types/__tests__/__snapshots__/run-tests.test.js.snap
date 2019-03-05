@@ -6,40 +6,10 @@ Array [
     "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot call \`computed\` because a callable signature is missing in \`ComputedEvent\` [1].",
-  ],
-  Array [
     "Cannot assign \`createStore(...)\` to \`store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
-    "Cannot call \`c.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`c.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`c.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`c.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`c.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`c.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
     "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
-  ],
-  Array [
-    "Cannot call \`computed.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`computed.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-  ],
-  Array [
-    "Cannot call \`computed.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
   ],
   Array [
     "Cannot call \`createDomain\` with \`234\` bound to \`domainName\` because number [1] is incompatible with string [2].",
@@ -72,27 +42,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "    const check1: ComputedEvent<string> = computed",
+              "context": "    const check1: Event<string> = computed",
               "descr": "[1]",
-              "end": 38,
+              "end": 30,
               "endline": 29,
               "line": 29,
               "loc": Object {
                 "end": Object {
-                  "column": 38,
+                  "column": 30,
                   "line": 29,
-                  "offset": 509,
+                  "offset": 505,
                 },
                 "source": "types.test.js",
                 "start": Object {
-                  "column": 33,
+                  "column": 25,
                   "line": 29,
-                  "offset": 503,
+                  "offset": 499,
                 },
                 "type": "SourceFile",
               },
               "path": "types.test.js",
-              "start": 33,
+              "start": 25,
               "type": "Blame",
             },
           ],
@@ -100,27 +70,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "    const check2: ComputedEvent<number> = computed",
+              "context": "    const check2: Event<number> = computed",
               "descr": "[2]",
-              "end": 38,
+              "end": 30,
               "endline": 30,
               "line": 30,
               "loc": Object {
                 "end": Object {
-                  "column": 38,
+                  "column": 30,
                   "line": 30,
-                  "offset": 560,
+                  "offset": 548,
                 },
                 "source": "types.test.js",
                 "start": Object {
-                  "column": 33,
+                  "column": 25,
                   "line": 30,
-                  "offset": 554,
+                  "offset": 542,
                 },
                 "type": "SourceFile",
               },
               "path": "types.test.js",
-              "start": 33,
+              "start": 25,
               "type": "Blame",
             },
           ],
@@ -128,27 +98,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "declare export class ComputedEvent<Payload> implements Unit<Payload> {",
+              "context": "declare export class Event<Payload> implements Unit<Payload> {",
               "descr": "[3]",
-              "end": 42,
+              "end": 34,
               "endline": 23,
               "line": 23,
               "loc": Object {
                 "end": Object {
-                  "column": 42,
+                  "column": 34,
                   "line": 23,
-                  "offset": 423,
+                  "offset": 415,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
-                  "column": 36,
+                  "column": 28,
                   "line": 23,
-                  "offset": 416,
+                  "offset": 408,
                 },
                 "type": "SourceFile",
               },
               "path": "../../packages/effector/index.js.flow",
-              "start": 36,
+              "start": 28,
               "type": "Blame",
             },
           ],
@@ -158,102 +128,27 @@ Object {
       "level": "error",
       "message": Array [
         Object {
-          "context": "    const check2: ComputedEvent<number> = computed",
+          "context": "    const check2: Event<number> = computed",
           "descr": "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
-          "end": 50,
+          "end": 42,
           "endline": 30,
           "line": 30,
           "loc": Object {
             "end": Object {
-              "column": 50,
+              "column": 42,
               "line": 30,
-              "offset": 572,
+              "offset": 560,
             },
             "source": "types.test.js",
             "start": Object {
-              "column": 43,
+              "column": 35,
               "line": 30,
-              "offset": 564,
+              "offset": 552,
             },
             "type": "SourceFile",
           },
           "path": "types.test.js",
-          "start": 43,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "  map<T>(fn: (_: Payload) => T): ComputedEvent<T>;",
-              "descr": "[1]",
-              "end": 49,
-              "endline": 36,
-              "line": 36,
-              "loc": Object {
-                "end": Object {
-                  "column": 49,
-                  "line": 36,
-                  "offset": 1014,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 34,
-                  "line": 36,
-                  "offset": 998,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 34,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    computed('')",
-          "descr": "Cannot call \`computed\` because a callable signature is missing in \`ComputedEvent\` [1].",
-          "end": 12,
-          "endline": 32,
-          "line": 32,
-          "loc": Object {
-            "end": Object {
-              "column": 12,
-              "line": 32,
-              "offset": 598,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 5,
-              "line": 32,
-              "offset": 590,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 5,
+          "start": 35,
           "type": "Blame",
         },
       ],
@@ -287,13 +182,13 @@ Object {
                 "end": Object {
                   "column": 47,
                   "line": 45,
-                  "offset": 890,
+                  "offset": 878,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 47,
                   "line": 45,
-                  "offset": 889,
+                  "offset": 877,
                 },
                 "type": "SourceFile",
               },
@@ -315,13 +210,13 @@ Object {
                 "end": Object {
                   "column": 30,
                   "line": 45,
-                  "offset": 873,
+                  "offset": 861,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
                   "line": 45,
-                  "offset": 867,
+                  "offset": 855,
                 },
                 "type": "SourceFile",
               },
@@ -337,19 +232,19 @@ Object {
               "context": "declare export class Store<State> implements Unit<State> {",
               "descr": "[3]",
               "end": 32,
-              "endline": 92,
-              "line": 92,
+              "endline": 63,
+              "line": 63,
               "loc": Object {
                 "end": Object {
                   "column": 32,
-                  "line": 92,
-                  "offset": 2770,
+                  "line": 63,
+                  "offset": 1661,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
                   "column": 28,
-                  "line": 92,
-                  "offset": 2765,
+                  "line": 63,
+                  "offset": 1656,
                 },
                 "type": "SourceFile",
               },
@@ -373,13 +268,13 @@ Object {
             "end": Object {
               "column": 47,
               "line": 45,
-              "offset": 890,
+              "offset": 878,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 47,
               "line": 45,
-              "offset": 889,
+              "offset": 877,
             },
             "type": "SourceFile",
           },
@@ -409,477 +304,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "): ComputedStore<",
+              "context": "    const check1: Store<string> = computed",
               "descr": "[1]",
-              "end": 1,
-              "endline": 206,
-              "line": 200,
-              "loc": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 206,
-                  "offset": 6270,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 200,
-                  "offset": 6170,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.on(ev, (state, payload) => state)",
-          "descr": "Cannot call \`c.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-          "end": 8,
-          "endline": 52,
-          "line": 52,
-          "loc": Object {
-            "end": Object {
-              "column": 8,
-              "line": 52,
-              "offset": 1069,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 52,
-              "offset": 1067,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "): ComputedStore<",
-              "descr": "[1]",
-              "end": 1,
-              "endline": 206,
-              "line": 200,
-              "loc": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 206,
-                  "offset": 6270,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 200,
-                  "offset": 6170,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.reset(ev)",
-          "descr": "Cannot call \`c.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-          "end": 11,
-          "endline": 53,
-          "line": 53,
-          "loc": Object {
-            "end": Object {
-              "column": 11,
-              "line": 53,
-              "offset": 1112,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 53,
-              "offset": 1107,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "): ComputedStore<",
-              "descr": "[1]",
-              "end": 1,
-              "endline": 206,
-              "line": 200,
-              "loc": Object {
-                "end": Object {
-                  "column": 1,
-                  "line": 206,
-                  "offset": 6270,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 200,
-                  "offset": 6170,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.off(ev)",
-          "descr": "Cannot call \`c.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
-          "end": 9,
-          "endline": 54,
-          "line": 54,
-          "loc": Object {
-            "end": Object {
-              "column": 9,
-              "line": 54,
-              "offset": 1126,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 54,
-              "offset": 1123,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "): ComputedStore<R>",
-              "descr": "[1]",
-              "end": 19,
-              "endline": 268,
-              "line": 268,
-              "loc": Object {
-                "end": Object {
-                  "column": 19,
-                  "line": 268,
-                  "offset": 8110,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 268,
-                  "offset": 8094,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.on(ev, (state, payload) => state)",
-          "descr": "Cannot call \`c.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-          "end": 8,
-          "endline": 64,
-          "line": 64,
-          "loc": Object {
-            "end": Object {
-              "column": 8,
-              "line": 64,
-              "offset": 1394,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 64,
-              "offset": 1392,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "): ComputedStore<R>",
-              "descr": "[1]",
-              "end": 19,
-              "endline": 268,
-              "line": 268,
-              "loc": Object {
-                "end": Object {
-                  "column": 19,
-                  "line": 268,
-                  "offset": 8110,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 268,
-                  "offset": 8094,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.reset(ev)",
-          "descr": "Cannot call \`c.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-          "end": 11,
-          "endline": 65,
-          "line": 65,
-          "loc": Object {
-            "end": Object {
-              "column": 11,
-              "line": 65,
-              "offset": 1437,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 65,
-              "offset": 1432,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "): ComputedStore<R>",
-              "descr": "[1]",
-              "end": 19,
-              "endline": 268,
-              "line": 268,
-              "loc": Object {
-                "end": Object {
-                  "column": 19,
-                  "line": 268,
-                  "offset": 8110,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 4,
-                  "line": 268,
-                  "offset": 8094,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 4,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    c.off(ev)",
-          "descr": "Cannot call \`c.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
-          "end": 9,
-          "endline": 66,
-          "line": 66,
-          "loc": Object {
-            "end": Object {
-              "column": 9,
-              "line": 66,
-              "offset": 1451,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 7,
-              "line": 66,
-              "offset": 1448,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 7,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "    const check1: ComputedStore<string> = computed",
-              "descr": "[1]",
-              "end": 38,
+              "end": 30,
               "endline": 94,
               "line": 94,
               "loc": Object {
                 "end": Object {
-                  "column": 38,
+                  "column": 30,
                   "line": 94,
-                  "offset": 2229,
+                  "offset": 2209,
                 },
                 "source": "types.test.js",
                 "start": Object {
-                  "column": 33,
+                  "column": 25,
                   "line": 94,
-                  "offset": 2223,
+                  "offset": 2203,
                 },
                 "type": "SourceFile",
               },
               "path": "types.test.js",
-              "start": 33,
+              "start": 25,
               "type": "Blame",
             },
           ],
@@ -887,27 +332,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "    const check2: ComputedStore<number> = computed",
+              "context": "    const check2: Store<number> = computed",
               "descr": "[2]",
-              "end": 38,
+              "end": 30,
               "endline": 96,
               "line": 96,
               "loc": Object {
                 "end": Object {
-                  "column": 38,
+                  "column": 30,
                   "line": 96,
-                  "offset": 2285,
+                  "offset": 2257,
                 },
                 "source": "types.test.js",
                 "start": Object {
-                  "column": 33,
+                  "column": 25,
                   "line": 96,
-                  "offset": 2279,
+                  "offset": 2251,
                 },
                 "type": "SourceFile",
               },
               "path": "types.test.js",
-              "start": 33,
+              "start": 25,
               "type": "Blame",
             },
           ],
@@ -915,27 +360,27 @@ Object {
         Object {
           "message": Array [
             Object {
-              "context": "declare export class ComputedStore<State> implements Unit<State> {",
+              "context": "declare export class Store<State> implements Unit<State> {",
               "descr": "[3]",
-              "end": 40,
-              "endline": 73,
-              "line": 73,
+              "end": 32,
+              "endline": 63,
+              "line": 63,
               "loc": Object {
                 "end": Object {
-                  "column": 40,
-                  "line": 73,
-                  "offset": 2165,
+                  "column": 32,
+                  "line": 63,
+                  "offset": 1661,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
-                  "column": 36,
-                  "line": 73,
-                  "offset": 2160,
+                  "column": 28,
+                  "line": 63,
+                  "offset": 1656,
                 },
                 "type": "SourceFile",
               },
               "path": "../../packages/effector/index.js.flow",
-              "start": 36,
+              "start": 28,
               "type": "Blame",
             },
           ],
@@ -945,252 +390,27 @@ Object {
       "level": "error",
       "message": Array [
         Object {
-          "context": "    const check2: ComputedStore<number> = computed",
+          "context": "    const check2: Store<number> = computed",
           "descr": "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
-          "end": 50,
+          "end": 42,
           "endline": 96,
           "line": 96,
           "loc": Object {
             "end": Object {
-              "column": 50,
+              "column": 42,
               "line": 96,
-              "offset": 2297,
+              "offset": 2269,
             },
             "source": "types.test.js",
             "start": Object {
-              "column": 43,
+              "column": 35,
               "line": 96,
-              "offset": 2289,
+              "offset": 2261,
             },
             "type": "SourceFile",
           },
           "path": "types.test.js",
-          "start": 43,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "  map<T>(fn: (_: State, lastState?: T) => T, _: void): ComputedStore<T>;",
-              "descr": "[1]",
-              "end": 71,
-              "endline": 95,
-              "line": 95,
-              "loc": Object {
-                "end": Object {
-                  "column": 71,
-                  "line": 95,
-                  "offset": 2911,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 56,
-                  "line": 95,
-                  "offset": 2895,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 56,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    computed.reset(event)",
-          "descr": "Cannot call \`computed.reset\` because property \`reset\` is missing in \`ComputedStore\` [1].",
-          "end": 18,
-          "endline": 105,
-          "line": 105,
-          "loc": Object {
-            "end": Object {
-              "column": 18,
-              "line": 105,
-              "offset": 2486,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 14,
-              "line": 105,
-              "offset": 2481,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 14,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "  map<T>(fn: (_: State, lastState?: T) => T, _: void): ComputedStore<T>;",
-              "descr": "[1]",
-              "end": 71,
-              "endline": 95,
-              "line": 95,
-              "loc": Object {
-                "end": Object {
-                  "column": 71,
-                  "line": 95,
-                  "offset": 2911,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 56,
-                  "line": 95,
-                  "offset": 2895,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 56,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    computed.on(event, (state, payload) => state)",
-          "descr": "Cannot call \`computed.on\` because property \`on\` is missing in \`ComputedStore\` [1].",
-          "end": 15,
-          "endline": 114,
-          "line": 114,
-          "loc": Object {
-            "end": Object {
-              "column": 15,
-              "line": 114,
-              "offset": 2700,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 14,
-              "line": 114,
-              "offset": 2698,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 14,
-          "type": "Blame",
-        },
-      ],
-      "suppressions": Array [],
-    },
-    Object {
-      "extra": Array [
-        Object {
-          "message": Array [
-            Object {
-              "context": null,
-              "descr": "References:",
-              "end": 0,
-              "endline": 0,
-              "line": 0,
-              "path": "",
-              "start": 1,
-              "type": "Blame",
-            },
-          ],
-        },
-        Object {
-          "message": Array [
-            Object {
-              "context": "  map<T>(fn: (_: State, lastState?: T) => T, _: void): ComputedStore<T>;",
-              "descr": "[1]",
-              "end": 71,
-              "endline": 95,
-              "line": 95,
-              "loc": Object {
-                "end": Object {
-                  "column": 71,
-                  "line": 95,
-                  "offset": 2911,
-                },
-                "source": "../../packages/effector/index.js.flow",
-                "start": Object {
-                  "column": 56,
-                  "line": 95,
-                  "offset": 2895,
-                },
-                "type": "SourceFile",
-              },
-              "path": "../../packages/effector/index.js.flow",
-              "start": 56,
-              "type": "Blame",
-            },
-          ],
-        },
-      ],
-      "kind": "infer",
-      "level": "error",
-      "message": Array [
-        Object {
-          "context": "    computed.off(event)",
-          "descr": "Cannot call \`computed.off\` because property \`off\` is missing in \`ComputedStore\` [1].",
-          "end": 16,
-          "endline": 123,
-          "line": 123,
-          "loc": Object {
-            "end": Object {
-              "column": 16,
-              "line": 123,
-              "offset": 2917,
-            },
-            "source": "types.test.js",
-            "start": Object {
-              "column": 14,
-              "line": 123,
-              "offset": 2914,
-            },
-            "type": "SourceFile",
-          },
-          "path": "types.test.js",
-          "start": 14,
+          "start": 35,
           "type": "Blame",
         },
       ],
@@ -1224,13 +444,13 @@ Object {
                 "end": Object {
                   "column": 36,
                   "line": 178,
-                  "offset": 4444,
+                  "offset": 4408,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 34,
                   "line": 178,
-                  "offset": 4441,
+                  "offset": 4405,
                 },
                 "type": "SourceFile",
               },
@@ -1246,19 +466,19 @@ Object {
               "context": "declare export function createDomain(domainName?: string): Domain",
               "descr": "[2]",
               "end": 56,
-              "endline": 261,
-              "line": 261,
+              "endline": 232,
+              "line": 232,
               "loc": Object {
                 "end": Object {
                   "column": 56,
-                  "line": 261,
-                  "offset": 7824,
+                  "line": 232,
+                  "offset": 6314,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
                   "column": 51,
-                  "line": 261,
-                  "offset": 7818,
+                  "line": 232,
+                  "offset": 6308,
                 },
                 "type": "SourceFile",
               },
@@ -1282,13 +502,13 @@ Object {
             "end": Object {
               "column": 36,
               "line": 178,
-              "offset": 4444,
+              "offset": 4408,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 34,
               "line": 178,
-              "offset": 4441,
+              "offset": 4405,
             },
             "type": "SourceFile",
           },
@@ -1327,13 +547,13 @@ Object {
                 "end": Object {
                   "column": 44,
                   "line": 179,
-                  "offset": 4490,
+                  "offset": 4454,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 34,
                   "line": 179,
-                  "offset": 4479,
+                  "offset": 4443,
                 },
                 "type": "SourceFile",
               },
@@ -1349,19 +569,19 @@ Object {
               "context": "declare export function createDomain(domainName?: string): Domain",
               "descr": "[2]",
               "end": 56,
-              "endline": 261,
-              "line": 261,
+              "endline": 232,
+              "line": 232,
               "loc": Object {
                 "end": Object {
                   "column": 56,
-                  "line": 261,
-                  "offset": 7824,
+                  "line": 232,
+                  "offset": 6314,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
                   "column": 51,
-                  "line": 261,
-                  "offset": 7818,
+                  "line": 232,
+                  "offset": 6308,
                 },
                 "type": "SourceFile",
               },
@@ -1385,13 +605,13 @@ Object {
             "end": Object {
               "column": 44,
               "line": 179,
-              "offset": 4490,
+              "offset": 4454,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 34,
               "line": 179,
-              "offset": 4479,
+              "offset": 4443,
             },
             "type": "SourceFile",
           },
@@ -1412,28 +632,25 @@ Object {
 exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
-src/types/types.test.ts(30,11): error TS2322: Type 'ComputedEvent<string>' is not assignable to type 'ComputedEvent<number>'.
-  Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(32,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'ComputedEvent<string>' has no compatible call signatures.
+packages/effector/index.d.ts(69,49): error TS2304: Cannot find name 'Unit'.
+packages/effector/index.d.ts(72,51): error TS2707: Generic type 'Effect<Params, Done, Fail>' requires between 2 and 3 type arguments.
+src/types/types.test.ts(15,14): error TS2305: Module '\\"../../../../../../../../../../../Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/packages/effector\\"' has no exported member 'kind'.
+src/types/types.test.ts(17,3): error TS2305: Module '\\"../../../../../../../../../../../Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/packages/effector\\"' has no exported member 'relay'.
+src/types/types.test.ts(18,3): error TS2305: Module '\\"../../../../../../../../../../../Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/packages/effector\\"' has no exported member 'relayShape'.
+src/types/types.test.ts(30,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'string' is not assignable to type 'number'.
 src/types/types.test.ts(45,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
   Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(52,7): error TS2339: Property 'on' does not exist on type 'ComputedStore<{ a: string; b: number; }>'.
-src/types/types.test.ts(52,15): error TS7006: Parameter 'state' implicitly has an 'any' type.
-src/types/types.test.ts(52,22): error TS7006: Parameter 'payload' implicitly has an 'any' type.
-src/types/types.test.ts(53,7): error TS2339: Property 'reset' does not exist on type 'ComputedStore<{ a: string; b: number; }>'.
-src/types/types.test.ts(54,7): error TS2339: Property 'off' does not exist on type 'ComputedStore<{ a: string; b: number; }>'.
-src/types/types.test.ts(64,7): error TS2339: Property 'on' does not exist on type 'ComputedStore<string>'.
-src/types/types.test.ts(64,15): error TS7006: Parameter 'state' implicitly has an 'any' type.
-src/types/types.test.ts(64,22): error TS7006: Parameter 'payload' implicitly has an 'any' type.
-src/types/types.test.ts(65,7): error TS2339: Property 'reset' does not exist on type 'ComputedStore<string>'.
-src/types/types.test.ts(66,7): error TS2339: Property 'off' does not exist on type 'ComputedStore<string>'.
-src/types/types.test.ts(96,11): error TS2322: Type 'ComputedStore<string>' is not assignable to type 'ComputedStore<number>'.
+src/types/types.test.ts(72,30): error TS2339: Property 'kind' does not exist on type 'Store<number>'.
+src/types/types.test.ts(77,34): error TS2339: Property 'kind' does not exist on type 'Store<string>'.
+src/types/types.test.ts(96,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
   Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(105,14): error TS2339: Property 'reset' does not exist on type 'ComputedStore<string>'.
-src/types/types.test.ts(114,14): error TS2339: Property 'on' does not exist on type 'ComputedStore<string>'.
-src/types/types.test.ts(114,25): error TS7006: Parameter 'state' implicitly has an 'any' type.
-src/types/types.test.ts(114,32): error TS7006: Parameter 'payload' implicitly has an 'any' type.
-src/types/types.test.ts(123,14): error TS2339: Property 'off' does not exist on type 'ComputedStore<string>'.
+src/types/types.test.ts(141,13): error TS2322: Type '{}' is not assignable to type 'undefined'.
+src/types/types.test.ts(150,13): error TS2322: Type '{}' is not assignable to type 'undefined'.
 src/types/types.test.ts(178,34): error TS2345: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
 src/types/types.test.ts(179,34): error TS2345: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
 "

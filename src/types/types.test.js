@@ -10,8 +10,8 @@ import {
   Effect,
   Store,
   Event,
-  ComputedStore,
-  ComputedEvent,
+  //ComputedStore,
+  //ComputedEvent,
   /*::type*/ kind,
   forward,
   relay,
@@ -26,8 +26,8 @@ describe('Event', () => {
     const event: Event<number> = createEvent()
     const computed = event.map(() => 'foo')
 
-    const check1: ComputedEvent<string> = computed
-    const check2: ComputedEvent<number> = computed
+    const check1: Event<string> = computed
+    const check2: Event<number> = computed
     event(2)
     computed('')
   })
@@ -91,9 +91,9 @@ describe('Store', () => {
     const store = createStore(0)
     const computed = store.map(() => 'hello')
 
-    const check1: ComputedStore<string> = computed
+    const check1: Store<string> = computed
     
-    const check2: ComputedStore<number> = computed
+    const check2: Store<number> = computed
   })
 
   test('#reset', () => {
@@ -165,7 +165,7 @@ describe('Store', () => {
 
     const computed = store.map(() => 'hello')
     const result1 = computed.thru(store => {
-      const check: ComputedStore<string> = store
+      const check: Store<string> = store
       return check
     })
   })
