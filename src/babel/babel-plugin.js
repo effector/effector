@@ -129,7 +129,6 @@ module.exports = function(babel, options = {}) {
             //   t,
             //   functionNames,
             // )
-            console.log(path)
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, id, babel.types)
