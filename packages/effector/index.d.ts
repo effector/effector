@@ -1,3 +1,14 @@
+export type kind =
+  | 'store'
+  | 'event'
+  | 'effect'
+
+export const Kind: {
+  readonly store: 'store',
+  readonly event: 'event',
+  readonly effect: 'effect',
+}
+
 export type Subscriber<A> = {
   next(value: A): void
   // error(err: Error): void,
@@ -9,7 +20,12 @@ export type Subscription = {
   unsubscribe(): void
 }
 
-export interface Event<Payload> {
+export interface Unit<T> {
+  readonly kind: kind;
+  readonly __: T;
+}
+
+export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (_: Payload) => T): Event<T>
@@ -20,16 +36,16 @@ export interface Event<Payload> {
 }
 
 export interface Future<Params, Done, Fail> extends Promise<Done> {
-  args: Params
+  readonly args: Params
   anyway(): Promise<void>
   cache(): Done | void
 }
 
-export interface Effect<Params, Done, Fail = Error> {
+export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Future<Params, Done, Fail>
-  done: Event<{params: Params; result: Done}>
-  fail: Event<{params: Params; error: Fail}>
-  use: {
+  readonly done: Event<{params: Params; result: Done}>
+  readonly fail: Event<{params: Params; error: Fail}>
+  readonly use: {
     (asyncFunction: (params: Params) => Promise<Done> | Done): Effect<
       Params,
       Done,
@@ -43,22 +59,22 @@ export interface Effect<Params, Done, Fail = Error> {
   getType(): string
 }
 
-export class Store<State> {
-  reset(trigger: Event<any> | Effect<any, any, any> | Store<any>): this
+export class Store<State> extends Unit<State> {
+  reset(trigger: Unit<any>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
   on<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    trigger: Unit<E>,
     handler: (state: State, payload: E) => State | void,
   ): this
-  off<E>(trigger: Event<any> | Effect<any, any, any> | Store<E>): void
+  off(trigger: Unit<any>): void
   subscribe(listener: any): Subscription
   watch<E>(
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription
   watch<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    trigger: Unit<E>,
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
@@ -85,8 +101,35 @@ export class Domain {
 }
 
 export function forward<T>(opts: {
-from: Event<T> | Store<T>
-to: Event<T> | Store<T> | Effect<T, any, any>
+  from: Unit<T>
+  to: Unit<T>
+}): Subscription
+export function relayShape<
+  E,
+  O extends {[field: string]: Unit<any>},
+  F extends {[K in keyof O]: O[K] extends Unit<infer T> ? T : any},
+>(opts: {
+  from: Unit<E>,
+  shape: O,
+  query(data: E): Partial<F>,
+}): Subscription
+export function relay<T, Arg>(
+  from: Unit<T>,
+  query: (
+    data: T,
+  ) => {
+    arg: Arg,
+    list: Array<Unit<Arg> | null>,
+  },
+): Subscription
+export function relay<T, Arg>(opts: {
+  from: Unit<T>,
+  query(
+    data: T,
+  ): {
+    arg: Arg,
+    list: Array<Unit<Arg> | null>,
+  },
 }): Subscription
 
 export function createEvent<E>(eventName?: string): Event<E>
@@ -94,7 +137,7 @@ export function createEvent<E>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-  handler?: (params: Params) => Promise<Done> | Done
+    handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
 
