@@ -5,11 +5,15 @@ export type kind =
   | 'store'
   | 'event'
   | 'effect'
+  | 'domain'
+
 declare export var Kind: {|
-  /*::+*/ store: 'store',
-  /*::+*/ event: 'event',
-  /*::+*/ effect: 'effect',
+  /*::+*/ store: kind,
+  /*::+*/ event: kind,
+  /*::+*/ effect: kind,
+  /*::+*/ domain: kind,
 |}
+
 export type Subscriber<A> = {next(value: A): void, ...}
 
 export type Subscription = {
@@ -101,6 +105,10 @@ declare export function isEffect(obj: mixed): boolean %checks(typeof obj ===
   'object' &&
   obj !== null &&
   obj instanceof Effect)
+declare export function isDomain(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Domain)
 declare export class Domain {
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
   onCreateEffect(

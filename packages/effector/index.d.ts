@@ -1,12 +1,10 @@
-export type kind =
-  | 'store'
-  | 'event'
-  | 'effect'
+export type kind = 'store' | 'event' | 'effect' | 'domain'
 
 export const Kind: {
-  readonly store: 'store',
-  readonly event: 'event',
-  readonly effect: 'effect',
+readonly store: kind
+readonly event: kind
+readonly effect: kind
+readonly domain: kind
 }
 
 export type Subscriber<A> = {
@@ -21,8 +19,8 @@ export type Subscription = {
 }
 
 export interface Unit<T> {
-  readonly kind: kind;
-  readonly __: T;
+  readonly kind: kind
+  readonly __: T
 }
 
 export interface Event<Payload> extends Unit<Payload> {
@@ -86,6 +84,8 @@ export function isUnit<T>(obj: unknown): obj is Unit<T>
 export function isStore<T>(obj: unknown): obj is Store<T>
 export function isEvent<T>(obj: unknown): obj is Event<T>
 export function isEffect<T>(obj: unknown): obj is Effect<T>
+export function isDomain(obj: unknown): obj is Domain
+
 export class Domain {
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
@@ -100,36 +100,29 @@ export class Domain {
   getType(): string
 }
 
-export function forward<T>(opts: {
-  from: Unit<T>
-  to: Unit<T>
-}): Subscription
+export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 export function relayShape<
   E,
   O extends {[field: string]: Unit<any>},
-  F extends {[K in keyof O]: O[K] extends Unit<infer T> ? T : any},
->(opts: {
-  from: Unit<E>,
-  shape: O,
-  query(data: E): Partial<F>,
-}): Subscription
+  F extends {[K in keyof O]: O[K] extends Unit<infer T> ? T : any}
+>(opts: {from: Unit<E>; shape: O; query(data: E): Partial<F>}): Subscription
 export function relay<T, Arg>(
   from: Unit<T>,
   query: (
     data: T,
   ) => {
-    arg: Arg,
-    list: Array<Unit<Arg> | null>,
+  arg: Arg
+  list: Array<Unit<Arg> | null>
   },
 ): Subscription
 export function relay<T, Arg>(opts: {
-  from: Unit<T>,
-  query(
-    data: T,
-  ): {
-    arg: Arg,
-    list: Array<Unit<Arg> | null>,
-  },
+from: Unit<T>
+query(
+  data: T,
+): {
+arg: Arg
+list: Array<Unit<Arg> | null>
+}
 }): Subscription
 
 export function createEvent<E>(eventName?: string): Event<E>
@@ -137,7 +130,7 @@ export function createEvent<E>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: (params: Params) => Promise<Done> | Done
+  handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
 
