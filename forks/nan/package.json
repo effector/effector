@@ -1,0 +1,23 @@
+{
+  "name": "nan",
+  "version": "2.12.1",
+  "description": "Native Abstractions for Node.js: C++ header for Node 0.8 -> 11 compatibility",
+  "main": "noop",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nodejs/nan.git"
+  },
+  "scripts": {},
+  "contributors": [
+    "Rod Vagg <r@va.gg> (https://github.com/rvagg)",
+    "Benjamin Byholm <bbyholm@abo.fi> (https://github.com/kkoopa/)",
+    "Trevor Norris <trev.norris@gmail.com> (https://github.com/trevnorris)",
+    "Nathan Rajlich <nathan@tootallnate.net> (https://github.com/TooTallNate)",
+    "Brett Lawson <brett19@gmail.com> (https://github.com/brett19)",
+    "Ben Noordhuis <info@bnoordhuis.nl> (https://github.com/bnoordhuis)",
+    "David Siegel <david@artcom.de> (https://github.com/agnat)",
+    "Michael Ira Krufky <mkrufky@gmail.com> (https://github.com/mkrufky)"
+  ],
+  "devDependencies": {},
+  "license": "MIT"
+}

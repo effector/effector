@@ -135,7 +135,8 @@
     "terser": "^3.16.1",
     "typescript": "^3.3.3",
     "viz.js": "^2.1.2",
-    "vue": "^2.6.7"
+    "vue": "^2.6.7",
+    "ws": "^6.1.4"
   },
   "maintainers": [
     {
@@ -148,6 +149,10 @@
     }
   ],
   "repository": "https://github.com/zerobias/effector",
+  "resolutions": {
+    "v8-profiler-node8": "file:./forks/v8-profiler-node8",
+    "nan": "file:./forks/nan"
+  },
   "dependencies": {
     "symbol-observable": "^1.2.0"
   },

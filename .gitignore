@@ -16,7 +16,7 @@ npm-debug.log
 cldr
 coverage/
 .nyc_output
-dist/**
+**/dist/**
 logs/**
 typings.json
 typings/**
@@ -38,6 +38,6 @@ npm-debug.log
 lib/bs/**
 val/**
 .size-snapshot.json
-.cache/**
+**/.cache/**
 tools/builder.js
 integrations/webpack/npm/**

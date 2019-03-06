@@ -1,6 +1,6 @@
 //@flow
 
-import {stringRefcount} from 'effector/stdlib'
+import {stringRefcount, Kind} from 'effector/stdlib'
 import {
   type Store,
   type StoreConfig,
@@ -87,5 +87,6 @@ export function domainFabric(
       hooks.store(result)
       return result
     },
+    kind: Kind.domain,
   }
 }
