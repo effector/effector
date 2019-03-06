@@ -4,6 +4,7 @@
 ../../packages/effector
 ../../packages/effector-react
 ../../packages/effector-vue
+../../packages/@effector
 
 [libs]
 ../../node_modules/@babel/types/lib/index.js.flow
@@ -13,8 +14,9 @@
 
 [options]
 suppress_comment=\\(.\\|\n\\)*\\@ts-ignore
-module.name_mapper='^effector$' -> '../../packages/effector'
-module.name_mapper='^effector-react$' -> '../../packages/effector-react'
-module.name_mapper='^effector-vue$' -> '../../packages/effector-vue'
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/../../packages/effector'
+module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/../../packages/effector-react'
+module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/../../packages/effector-vue'
+module.name_mapper='^\@effector/\(.+\)$' -> '<PROJECT_ROOT>/../../packages/\@effector/\1'
 
 [strict]

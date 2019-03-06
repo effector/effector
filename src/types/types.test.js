@@ -17,6 +17,7 @@ import {
   relay,
   relayShape,
 } from 'effector'
+import {createFormApi} from '@effector/forms'
 
 describe('Event', () => {
   test('createEvent', () => {
@@ -92,7 +93,7 @@ describe('Store', () => {
     const computed = store.map(() => 'hello')
 
     const check1: Store<string> = computed
-    
+
     const check2: Store<number> = computed
   })
 
@@ -101,7 +102,7 @@ describe('Store', () => {
     const store = createStore(0)
     store.reset(event)
     const computed = store.map(() => 'hello')
-    
+
     computed.reset(event)
   })
 
@@ -110,7 +111,7 @@ describe('Store', () => {
     const store = createStore(0)
     store.on(event, (state, payload) => state)
     const computed = store.map(() => 'hello')
-    
+
     computed.on(event, (state, payload) => state)
   })
 
@@ -119,7 +120,7 @@ describe('Store', () => {
     const store = createStore(0)
     store.off(event)
     const computed = store.map(() => 'hello')
-    
+
     computed.off(event)
   })
 
@@ -182,12 +183,41 @@ describe('Domain', () => {
 
 describe('Graph', () => {
   test('forward', () => {
-
+    const a = createEvent<number>()
+    const b = createEvent<number>()
+    forward({from: a, to: b})
+    const c = createEffect<number>()
+    const d = createEffect<number>()
+    forward({from: c, to: d})
+    const e = createStore(0)
+    const f = createStore(0)
+    forward({from: e, to: f})
   })
+
   test('relay', () => {
 
   })
+
   test('relayShape', () => {
 
+  })
+})
+
+describe('effector-react', () => {
+
+})
+
+describe('effector-vue', () => {
+
+})
+
+describe('@effector/forms', () => {
+  describe('createFormApi', () => {
+    const form = createFormApi({
+      fields: {
+        firstName: '',
+        lastName: ''
+      }
+    })
   })
 })
