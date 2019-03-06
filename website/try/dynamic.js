@@ -165,8 +165,19 @@ forward({
   to: sourceCode,
 })
 
-sourceCode.watch(e => evalEffect(e))
-sourceCode.watch(versionLoader, e => evalEffect(e))
+{
+  let firstCall = true
+  sourceCode.watch(e => {
+    evalEffect(e)
+  })
+  sourceCode.watch(versionLoader, e => {
+    if (firstCall) {
+      firstCall = false
+      return
+    }
+    evalEffect(e)
+  })
+}
 
 packageVersions.watch(console.log)
 
