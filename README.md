@@ -51,7 +51,7 @@ yarn add effector
 
 Three following examples that will give you a basic understanding how the state manager works:
 
-### Incremet/decremet
+### Increment/decrement
 ```js
 import {createStore, createEvent} from "effector";
 import {createComponent} from "effector-react";
