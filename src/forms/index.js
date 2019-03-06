@@ -2,8 +2,6 @@
 
 import {
   createApi,
-  createStore,
-  createEvent,
   createDomain,
   type Domain,
   type Effect,
@@ -58,12 +56,13 @@ export type FormApi<Values, Errors: {[key: string]: any}> = {
   api: $ObjMap<Values, <V>(V) => Event<V>>
 }
 
-export function createFormValue<State>(name: string, defaultState: State) {
-  const value = createStore<State>(defaultState)
-  const update = createEvent<State>(`update ${name}`)
-  value.on(update, (_, p) => p)
-  return {value, update}
-}
+// TODO: split fields into stores
+// export function createFormValue<State>(name: string, defaultState: State) {
+//   const value = createStore<State>(defaultState)
+//   const update = createEvent<State>(`update ${name}`)
+//   value.on(update, (_, p) => p)
+//   return {value, update}
+// }
 
 const formDomain = createDomain('forms')
 
