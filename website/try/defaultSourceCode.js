@@ -10,13 +10,14 @@ const counter = createStore(0)
   .reset(resetCounter)
 
 counter.watch(n => console.log('counter: ', n))
+// counter: 0
 increment.watch(() => console.log('increment'))
 decrement.watch(() => console.log('decrement'))
 
 increment()
-// increment
 // counter: 1
+// increment
 decrement()
-// decrement
 // counter: 0
+// decrement
 `
