@@ -3,13 +3,14 @@
 import {realmInvoke} from '../domain'
 import {consoleMap} from '../logs'
 
-export function prepareRuntime(effector) {
+export function prepareRuntime(effector, version) {
   const EvalRealm = effector.createDomain('EvalRealm')
   const api = {}
   assignRealm(api, EvalRealm, effector)
   assignLibrary(api, effector)
   return {
     console: consoleMap(),
+    __VERSION__: version,
     effector,
     ...api,
   }

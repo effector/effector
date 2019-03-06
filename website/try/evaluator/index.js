@@ -13,7 +13,7 @@ version.on(selectVersion, (_, p) => p)
 
 const cache = new Map()
 
-function createRealm(sourceCode) {
+function createRealm(sourceCode, version) {
   const realm = {}
   realm.process = {env: 'development'}
   realm.require = path => {
@@ -24,22 +24,10 @@ function createRealm(sourceCode) {
   realm.module = {exports: realm.exports}
   realm.console = consoleMap()
   scopedEval
-    .Function(
-      'process',
-      'require',
-      'exports',
-      'module',
-      'console',
-      `'use strict'; ${sourceCode}`,
+    .runLibrary(
+      `'use strict'; ${sourceCode}\n//# sourceURL=effector.${version}.js`,
     )
-    .call(
-      window,
-      realm.process,
-      realm.require,
-      realm.exports,
-      realm.module,
-      realm.console,
-    )
+    .call(window, realm)
   return realm.exports
 }
 
@@ -51,7 +39,7 @@ export const fetchVersion = createEffect('fetch', {
         : `https://unpkg.com/effector@${ver}/effector.cjs.js`
     const req = await fetch(url)
     const text = await req.text()
-    return createRealm(text)
+    return createRealm(text, ver)
   },
 })
 
@@ -70,6 +58,6 @@ async function loadEngine() {
 
 export async function evaluator(code) {
   const effector = await loadEngine()
-  const env = prepareRuntime(effector)
+  const env = prepareRuntime(effector, version.getState())
   return evalExpr(code, env)
 }
