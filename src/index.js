@@ -31,5 +31,12 @@ export {
   withProps,
 } from 'effector/store'
 
-export {Kind, isUnit, isStore, isEvent, isEffect} from 'effector/stdlib'
+export {
+  Kind,
+  isUnit,
+  isStore,
+  isEvent,
+  isEffect,
+  isDomain,
+} from 'effector/stdlib'
 export type {kind} from 'effector/stdlib'
