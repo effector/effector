@@ -1,0 +1,39 @@
+{
+  "author": {
+    "name": "Danny Coates",
+    "email": "dannycoates@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/hyj1991/v8-profiler-node8/issues"
+  },
+  "contributors": [
+    {
+      "name": "Miroslav Bajtoš"
+    },
+    {
+      "name": "3y3",
+      "email": "3y3@bk.ru"
+    }
+  ],
+  "dependencies": {
+  },
+  "deprecated": false,
+  "description": "based on v8-profiler@5.7.0, solved the v8-profiler segment fault error in node 8.x",
+  "devDependencies": {
+  },
+  "homepage": "http://github.com/node-inspector/v8-profiler",
+  "keywords": [
+    "profiler",
+    "inspector"
+  ],
+  "license": "BSD-2-Clause",
+  "main": "noop",
+  "name": "v8-profiler-node8",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/node-inspector/v8-profiler.git"
+  },
+  "scripts": {
+  },
+  "version": "6.0.1"
+}
