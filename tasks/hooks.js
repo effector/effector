@@ -49,8 +49,8 @@ export default {
       const npmDepsBadge = name =>
         `[![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/${name})](https://david-dm.org/zerobias/effector?path=packages/${name})`
       const markdown = `
-      # Monorepo
-      ${config.categories
+# Monorepo
+${config.categories
     .map(({name, description}) => {
       const mdHeader = `### ${description}`
       const data = packagesByCategory.get(name) || []
@@ -65,13 +65,13 @@ export default {
       const mdTable = table(rawTable, {align: 'c'})
       return `
 
-      ${mdHeader}
+${mdHeader}
 
-      ${mdTable}
-      `
+${mdTable}
+`
     })
     .join('\n')}
-      `
+`
       await fs.outputFile('./packages/README.md', markdown)
     },
   ],
