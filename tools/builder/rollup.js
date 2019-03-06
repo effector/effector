@@ -248,6 +248,74 @@ export async function rollupEffector() {
   }
 }
 
+export async function rollupEffectorForms() {
+  const name = '@effector/forms'
+
+  await Promise.all([cjsAndEs(), umd()])
+
+  async function cjsAndEs() {
+    const plugins = getPlugins()
+    const build = await rollup({
+      input: (dir(`packages/${name}/index.js`): string),
+      external: [
+        'warning',
+        'invariant',
+        'react',
+        'vue',
+        'most',
+        'symbol-observable',
+        'effector',
+      ],
+      plugins: [
+        plugins.resolve,
+        plugins.babel,
+        plugins.sizeSnapshot,
+        plugins.terser,
+      ],
+    })
+
+    await Promise.all([
+      build.write({
+        file: dir(`npm/${name}/forms.cjs.js`),
+        format: 'cjs',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+      build.write({
+        file: dir(`npm/${name}/forms.es.js`),
+        format: 'es',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+    ])
+  }
+  async function umd() {
+    const plugins = getPlugins()
+    //$off
+    const build = await rollup({
+      input: String(dir(`packages/${name}/index.js`)),
+      plugins: [
+        plugins.resolve,
+        plugins.babel,
+        plugins.replace,
+        plugins.commonjs,
+        plugins.sizeSnapshot,
+        plugins.terser,
+      ],
+      external: ['react', 'effector'],
+    })
+
+    await build.write({
+      file: (dir(`npm/${name}/forms.umd.js`): string),
+      format: 'umd',
+      name: 'effectorForms',
+      sourcemap: true,
+    })
+  }
+}
+
 export async function rollupEffectorReact() {
   const name = 'effector-react'
 

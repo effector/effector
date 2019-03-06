@@ -18,7 +18,7 @@ const common = {
   scripts: {},
   repository: 'https://github.com/zerobias/effector',
   bugs: 'https://github.com/zerobias/effector/issues',
-  homepage: 'https://zerobias.github.io/effector',
+  homepage: 'https://effector.now.sh',
   engines: {
     node: '>=6.0.0',
   },
@@ -34,6 +34,7 @@ const version = {
 
   '@effector/babel-plugin': '0.1.0',
   '@effector/babel-plugin-react': '0.0.3',
+  '@effector/forms': '0.0.1',
 }
 
 const getFiles = name => [
@@ -229,6 +230,23 @@ export default {
     publishConfig: {
       access: 'public',
     },
+    ...common,
+  },
+  '@effector/forms': {
+    name: '@effector/forms',
+    description: '',
+    version: version['@effector/forms'],
+    main: 'forms.cjs.js',
+    module: 'forms.es.js',
+    'umd:main': 'forms.umd.js',
+    'jsnext:main': 'forms.es.js',
+    typings: 'index.d.ts',
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: getFiles('forms'),
+    dependencies: dependsOnEffector,
+    keywords: ['effector', 'forms'],
+    private: true,
     ...common,
   },
 }
