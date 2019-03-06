@@ -157,6 +157,7 @@
     "effector": "./src/index.js",
     "effector-react": "./src/react",
     "effector-vue": "./src/vue",
+    "@effector/forms": "./src/forms",
     "effector/domain": "./src/domain",
     "effector/effect": "./src/effect",
     "effector/event": "./src/event",
