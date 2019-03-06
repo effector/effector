@@ -57,7 +57,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   getType(): string
 }
 
-export class Store<State> extends Unit<State> {
+export interface Store<State> extends Unit<State> {
   reset(trigger: Unit<any>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
@@ -69,7 +69,7 @@ export class Store<State> extends Unit<State> {
   off(trigger: Unit<any>): void
   subscribe(listener: any): Subscription
   watch<E>(
-    watcher: (state: State, payload: E, type: string) => any,
+    watcher: (state: State, payload: undefined, type: string) => any,
   ): Subscription
   watch<E>(
     trigger: Unit<E>,
@@ -81,9 +81,9 @@ export class Store<State> extends Unit<State> {
 }
 
 export function isUnit<T>(obj: unknown): obj is Unit<T>
-export function isStore<T>(obj: unknown): obj is Store<T>
-export function isEvent<T>(obj: unknown): obj is Event<T>
-export function isEffect<T>(obj: unknown): obj is Effect<T>
+export function isStore<State>(obj: unknown): obj is Store<State>
+export function isEvent<Payload>(obj: unknown): obj is Event<Payload>
+export function isEffect<Params, Done, Error>(obj: unknown): obj is Effect<Params, Done, Error>
 export function isDomain(obj: unknown): obj is Domain
 
 export class Domain {
