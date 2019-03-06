@@ -17,6 +17,7 @@ const aliases = {
   'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
   warning: 'warning',
   invariant: 'invariant',
+  '@effector/forms': 'forms',
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
