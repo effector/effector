@@ -48,6 +48,7 @@
     "@babel/register": "^7.0.0",
     "@goodmind/flow-js": "^0.94.0-flow.65802c614-build.f6486aa",
     "@goodmind/flowgen": "^2.0.0",
+    "@types/jest": "^24.0.9",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.1.0",
