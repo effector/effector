@@ -1,0 +1,54 @@
+{
+  "name": "@effector/forms",
+  "description": "",
+  "version": "0.0.1",
+  "main": "index.js",
+  "module": "forms.es.js",
+  "umd:main": "forms.umd.js",
+  "jsnext:main": "forms.es.js",
+  "typings": "index.d.ts",
+  "repository": "https://github.com/zerobias/effector",
+  "files": [
+    "README.md",
+    "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
+    "forms.es.js",
+    "forms.cjs.js",
+    "forms.umd.js",
+    "forms.es.js.map",
+    "forms.cjs.js.map",
+    "forms.umd.js.map",
+    "forms.cjs.js.flow",
+    "forms.es.js.flow",
+    "forms.umd.js.flow"
+  ],
+  "dependencies": {
+    "effector": "^0.18.3"
+  },
+  "keywords": [
+    "effector",
+    "forms"
+  ],
+  "private": true,
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
