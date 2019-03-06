@@ -11,7 +11,7 @@ const form = createFormApi({
   },
 })
 
-describe('createFormField', () => {
+test('createFormField', () => {
   const Field = createFormField(form)
   const a = <Field name="firstName">{value => {}}</Field>
   const b = <Field name="lastName">{value => {}}</Field>
