@@ -26,12 +26,28 @@ function scopedEval(code: string, sourceMap: ?string) {
   getIframe().contentWindow.eval(code)
 }
 
-function scopedFunction(...segments) {
-  return getIframe().contentWindow.Function(...segments)
+function runCode(code) {
+  return function(env) {
+    for (const key in env) {
+      getIframe().contentWindow[key] = env[key]
+    }
+    return getIframe().contentWindow.eval(code)
+  }
+}
+
+function runLibrary(code) {
+  return function(env) {
+    for (const key in env) {
+      getIframe().contentWindow[key] = env[key]
+    }
+    return getIframe().contentWindow.eval(code)
+  }
 }
 
 export default {
   execute: scopedEval,
-  Function: scopedFunction,
+  //Function: scopedFunction,
+  runLibrary,
+  runCode,
   getIframe,
 }
