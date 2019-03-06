@@ -1,27 +1,30 @@
 //@flow
-// export function createFormField<Values: *, Errors>(
-//   formApi: FormApi<Values, Errors>
-// ) {
-//   const {values, handle} = formApi
-//   const valuesType = formApi['@@values']
-//   class Field<Key: *> extends React.Component<{
-//     name: Key,
-//     children: (
-//       value: $ElementType<typeof valuesType, Key>,
-//       onChange: (e: SyntheticEvent<*>) => any
-//     ) => React.Node
-//   }> {
-//     values: Values
-//     //$FlowFixMe
-//     store = values.map<*>(state => state[this.props.name])
-//     onChange = handle[this.props.name]
-//     Component = createComponent<{}, _>(this.store, (_, value) => {
-//       return this.props.children(value, this.onChange)
-//     })
-//     render() {
-//       const {Component} = this
-//       return <Component />
-//     }
-//   }
-//   return Field
-// }
+
+import * as React from 'react'
+import type {FormApi} from '../'
+import {useStore} from 'effector-react'
+
+export function createFormField<Values: {[key: string]: any}>(
+  formApi: FormApi<Values, any>,
+): {
+  <Key: $Keys<Values>>(props: {|
+    name: Key,
+    children: (
+      value: $ElementType<Values, Key>,
+      onChange: (e: any) => any,
+    ) => any,
+  |}): React.Node,
+} {
+  const {values, handle} = formApi
+  const Field = ({
+    name,
+    children,
+  }: {
+    name: any,
+    children: (value: any, onChange: (e: any) => any) => React.Node,
+  }) => {
+    const value = useStore(values.map(state => state[name]))
+    return children(value, handle[name])
+  }
+  return Field
+}

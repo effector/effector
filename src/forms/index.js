@@ -44,7 +44,7 @@ export function createFormHandler<
   })
 }
 
-export type FormApi<Values, Errors: {[key: string]: any}> = {
+export type FormApi<Values: {[key: string]: any}, Errors: {[key: string]: any}> = {
   values: Store<Values>,
   errors: Store<Errors>,
   isValid: Store<boolean>,
