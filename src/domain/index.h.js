@@ -5,6 +5,7 @@ import type {Subscription} from '../effector/index.h'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from 'effector/store'
+import type {kind} from 'effector/stdlib'
 
 export type Domain = {
   /*:: +*/ id: string,
@@ -18,6 +19,7 @@ export type Domain = {
   store<State>(defaultState: State): Store<State>,
   compositeName: CompositeName,
   getType(): string,
+  kind: kind,
 }
 
 export type DomainHooks = {
