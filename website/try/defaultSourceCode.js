@@ -1,25 +1,22 @@
 //@flow
 
-export default `const trigger = createEvent('trigger update')
-const repeat = createEvent('repeat')
-const fooStore = createStore(10)
-	.on(trigger, n => n + 1)
-setStoreName(fooStore, 'foo')
-const asText = fooStore.map(n => n.toString(36))
-setStoreName(asText, 'asText')
-const s3 = combine(fooStore, asText, (foo, text) => ({
-  foo, text,
-}))
+export default `const increment = createEvent('increment')
+const decrement = createEvent('decrement')
+const resetCounter = createEvent('reset counter')
 
-s3.watch(e => {
-  console.log('s3', e)
-})
+const counter = createStore(0)
+  .on(increment, state => state + 1)
+  .on(decrement, state => state - 1)
+  .reset(resetCounter)
 
-trigger.watch(e => {
-  console.warn('trigger', e)
-})
+counter.watch(n => console.log('counter: ', n))
+increment.watch(() => console.log('increment'))
+decrement.watch(() => console.log('decrement'))
 
-trigger('first')
-trigger('second')
-
+increment()
+// increment
+// counter: 1
+decrement()
+// decrement
+// counter: 0
 `
