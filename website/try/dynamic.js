@@ -10,6 +10,8 @@ import {
   realmEffect,
   realmDomain,
   realmInvoke,
+  realmInterval,
+  realmTimeout,
   resetGraphiteState,
   evalEffect,
   EvalRealm,
@@ -19,6 +21,8 @@ import {
   codeError,
   realmLog,
   logs,
+  intervals,
+  timeouts,
   realmStatus,
   stats,
   packageVersions,
@@ -31,6 +35,27 @@ import {versionLoader} from './evaluator'
 import {switcher} from './switcher'
 import {evaluator} from './evaluator'
 import {printLogs} from './logs'
+
+intervals
+  .on(realmInterval, (state, id) => [...state, id])
+  .on(changeSources, (state) => {
+    for (const id of state) {
+      global.clearInterval(id)
+    }
+    return []
+  })
+
+timeouts
+  .on(realmTimeout, (state, id) => [...state, id])
+  .on(changeSources, (state) => {
+    for (const id of state) {
+      global.clearTimeout(id)
+    }
+    return []
+  })
+
+timeouts.watch(console.log)
+intervals.watch(console.log)
 
 logs.watch(realmLog, (logs, log) => {
   logs.push(log)

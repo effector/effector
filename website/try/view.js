@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStoreObject} from 'effector'
 import {createComponent} from 'effector-react'
+import debounce from 'lodash.debounce'
 
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
@@ -37,12 +38,13 @@ const ErrorsView = createComponent(
 
 const jsonRef = React.createRef()
 
+const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
     value={sources}
     mode="application/javascript"
-    onChange={changeSources}
+    onChange={changeSourcesDebounced}
     lineWrapping
   />
 ))

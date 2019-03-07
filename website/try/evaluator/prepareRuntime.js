@@ -1,6 +1,6 @@
 //@flow
 
-import {realmInvoke} from '../domain'
+import {realmInvoke, realmInterval, realmTimeout} from '../domain'
 import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector, version) {
@@ -10,10 +10,24 @@ export function prepareRuntime(effector, version) {
   assignLibrary(api, effector)
   return {
     console: consoleMap(),
+    setInterval,
+    setTimeout,
     __VERSION__: version,
     effector,
     ...api,
   }
+}
+
+function setInterval(fn, timeout) {
+  const id = global.setInterval(fn, timeout)
+  realmInterval(id)
+  return id
+}
+
+function setTimeout(fn, timeout) {
+  const id = global.setTimeout(fn, timeout)
+  realmTimeout(id)
+  return id
 }
 
 function assignLibrary(target, effector) {
