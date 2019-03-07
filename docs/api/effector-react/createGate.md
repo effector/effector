@@ -14,7 +14,7 @@ Creates a [_`Gate`_](Gate.md)
 
 #### Returns
 
-(_`React.Component`_)
+(_`Gate`_)
 
 #### Example
 
