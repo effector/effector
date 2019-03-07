@@ -1,0 +1,17 @@
+//@flow
+/* eslint-disable no-unused-vars */
+
+import * as React from 'react'
+
+export type ReactProps = {
+  children: React.Node,
+  small: boolean,
+  medium: boolean,
+  large: boolean,
+  portrait: boolean,
+  landscape: boolean,
+}
+
+declare export var Screen: React.AbstractComponent<
+  React.Config<$Shape<ReactProps>, ReactProps>,
+>
