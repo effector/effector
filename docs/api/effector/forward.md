@@ -21,8 +21,6 @@ Sends data from one entity to another
 Send event data to store
 
 ```js
-import {forward, createEvent, createStore} from 'effector'
-
 const event = createEvent()
 const proxy = createStore(-1)
 
