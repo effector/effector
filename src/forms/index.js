@@ -6,7 +6,7 @@ import {
   type Domain,
   type Effect,
   type Event,
-  type Store
+  type Store,
 } from 'effector'
 
 interface PreventableEvent {
@@ -15,36 +15,39 @@ interface PreventableEvent {
 
 type SpreadProps<A, B> = $Exact<{
   ...$Call<(empty => {||}) & (<V>(V) => $Exact<V>), A>,
-  ...$Call<(empty => {||}) & (<V>(V) => $Exact<V>), B>
+  ...$Call<(empty => {||}) & (<V>(V) => $Exact<V>), B>,
 }>
 
 declare export function createFormHandler<T: EventTarget>(
-  e: Event<string>
+  e: Event<string>,
 ): Event<interface {currentTarget: T}>
 // eslint-disable-next-line no-redeclare
 declare export function createFormHandler<T: EventTarget>(
-  e: Event<boolean>
+  e: Event<boolean>,
 ): Event<interface {currentTarget: T}>
 // eslint-disable-next-line no-redeclare
 declare export function createFormHandler<T: EventTarget>(
-  e: Event<number>
+  e: Event<number>,
 ): Event<interface {currentTarget: T}>
 // eslint-disable-next-line no-redeclare
 export function createFormHandler<
-  T: EventTarget & {type: string, value: any, checked: boolean}
+  T: EventTarget & {type: string, value: any, checked: boolean},
 >(e: Event<any>): Event<interface {currentTarget: T}> {
   return e.prepend(e => {
     let parsed
     const {type, value, checked} = e.currentTarget
-    return /number|range/.test(type)
-      ? ((parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed)
-      : /checkbox/.test(type)
-      ? checked
-      : value
+    if (/number|range/.test(type)) {
+      return (parsed = parseFloat(value)), isNaN(parsed) ? '' : parsed
+    } else {
+      return /checkbox/.test(type) ? checked : value
+    }
   })
 }
 
-export type FormApi<Values: {[key: string]: any}, Errors: {[key: string]: any}> = {
+export type FormApi<
+  Values: {[key: string]: any},
+  Errors: {[key: string]: any},
+> = {
   values: Store<Values>,
   errors: Store<Errors>,
   isValid: Store<boolean>,
@@ -53,7 +56,7 @@ export type FormApi<Values: {[key: string]: any}, Errors: {[key: string]: any}> 
   handleSubmit: Event<void | PreventableEvent>,
   reset: Event<void>,
   handle: $ObjMap<Values, <V>(V) => Event<interface {currentTarget: V}>>,
-  api: $ObjMap<Values, <V>(V) => Event<V>>
+  api: $ObjMap<Values, <V>(V) => Event<V>>,
 }
 
 // TODO: split fields into stores
@@ -71,7 +74,7 @@ export function createFormApi<
   External: {[key: string]: any},
   Errors: {[key: string]: any},
   Data,
-  Error
+  Error,
 >({
   fields,
   external,
@@ -80,19 +83,19 @@ export function createFormApi<
   validate,
   initialValues,
   domain = formDomain,
-  resetOnSubmit = true
+  resetOnSubmit = true,
 }: {
   fields: Form,
   validate?: (
     values: SpreadProps<Form, External>,
-    data: {result?: Data, error?: Error}
+    data: {result?: Data, error?: Error},
   ) => Errors,
   external?: Store<External>,
   submitEvent?: Event<SpreadProps<Form, External>>,
   submitEffect?: Effect<SpreadProps<Form, External>, Data, Error>,
   initialValues?: Store<?Form> | Store<Form>,
   domain?: Domain,
-  resetOnSubmit?: boolean
+  resetOnSubmit?: boolean,
 }): FormApi<Form, Errors> {
   let initialValuesUnwatch = () => {}
 
@@ -117,16 +120,9 @@ export function createFormApi<
     }
   }
 
-  reducers.reset = (): Form => {
-    return (values: any).defaultState
-  }
-  reducers.set = (_: Form, payload: Form): Form => {
-    return payload
-  }
-  reducers.handleSubmit = (
-    state: Form,
-    e?: PreventableEvent
-  ) => {
+  reducers.reset = (): Form => (values: any).defaultState
+  reducers.set = (_: Form, payload: Form): Form => payload
+  reducers.handleSubmit = (state: Form, e?: PreventableEvent) => {
     if (e) e.preventDefault()
     const externalState = external ? external.getState() : {}
     if (submitEffect) submitEffect({...state, ...externalState})
@@ -141,10 +137,10 @@ export function createFormApi<
     if (submitEffect) {
       errors
         .on(submitEffect.done, (_, {params, result}) =>
-          validate(params, {result})
+          validate(params, {result}),
         )
         .on(submitEffect.fail, (_, {params, error}) =>
-          validate(params, {error})
+          validate(params, {error}),
         )
     } else if (submitEvent) {
       errors.on(submitEvent, (_, payload) => validate(payload, {}))
