@@ -21,42 +21,38 @@ const api = createApi(tab, {
   showStorages: () => 'storages',
   showEffects: () => 'effects',
   showDomains: () => 'domains',
+  //showDOM: () => 'dom'
 })
 
 const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
   //TODO: unify this
+  const className = `tab-content ${cx({
+    'show-events': tab === 'events',
+    'show-storages': tab === 'storages',
+    'show-effects': tab === 'effects',
+    'show-domains': tab === 'domains',
+    //'show-dom': tab === 'dom'
+  })}`
   const mapper = item => {
     const name = item?.compositeName?.fullName || item?.shortName || item.id
     return <li key={item.kind + item.id + name}>{name}</li>
   }
-  switch (tab) {
-    case 'events':
-      return (
-        <div>
-          <ol>{event.map(mapper)}</ol>
-        </div>
-      )
-    case 'storages':
-      return (
-        <div>
-          <ol>{store.map(mapper)}</ol>
-        </div>
-      )
-    case 'effects':
-      return (
-        <div>
-          <ol>{effect.map(mapper)}</ol>
-        </div>
-      )
-    case 'domains':
-      return (
-        <div>
-          <ol>{domain.map(mapper)}</ol>
-        </div>
-      )
-    default:
-    /*::;(tab: empty)*/
-  }
+  return (
+    <div className={className}>
+      <div className="events-tab-content">
+        <ol>{event.map(mapper)}</ol>
+      </div>
+      <div className="storages-tab-content">
+        <ol>{store.map(mapper)}</ol>
+      </div>
+      <div className="effects-tab-content">
+        <ol>{effect.map(mapper)}</ol>
+      </div>
+      <div className="domains-tab-content">
+        <ol>{domain.map(mapper)}</ol>
+      </div>
+    </div>
+  )
 })
 
 const ToolbarView = createComponent(
@@ -67,6 +63,7 @@ const ToolbarView = createComponent(
       'show-storages': tab === 'storages',
       'show-effects': tab === 'effects',
       'show-domains': tab === 'domains',
+      //'show-dom': tab === 'dom'
     })}`
     return (
       <ul className={className}>

@@ -26,7 +26,7 @@ export default class CodeMirrorPanel extends React.Component {
     lineWrapping: false,
     passive: false,
   }
-  _textareaRef = React.createRef()
+  _textareaRef = React.createRef<HTMLTextAreaElement>()
   _codeMirror = null
   _cached = ''
 

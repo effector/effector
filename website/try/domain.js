@@ -19,7 +19,7 @@ import defaultVersions from './versions.json'
 export const compress = lzString.compressToEncodedURIComponent
 export const decompress = lzString.decompressFromEncodedURIComponent
 
-export const generateShareableUrl = (version, code) => {
+export const generateShareableUrl = (version: string, code: string) => {
   const result =
     window.location.origin +
     window.location.pathname +
@@ -33,11 +33,11 @@ export const generateShareableUrl = (version, code) => {
 
 export const copyShareableUrl = () => {
   const input = document.getElementById('shareableUrl')
-  input.select()
+  if (input) input.select()
   document.execCommand('copy')
 }
 
-export function getUrlParameter(name) {
+export function getUrlParameter(name: string) {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
   const regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
   const results = regex.exec(location.search)
@@ -81,12 +81,12 @@ export const resetGraphiteState = createEvent('reset graphite state')
 export const selectVersion = createEvent('select version')
 
 export const logs = createStore([])
-export const intervals = createStore([])
-export const timeouts = createStore([])
+export const intervals = createStore<number[]>([])
+export const timeouts = createStore<number[]>([])
 
 export const version = createStore(defaultVersions[0])
 export const packageVersions = createStore(defaultVersions)
-export const sourceCode = createStore(defaultSourceCode)
+export const sourceCode = createStore<string>(defaultSourceCode)
 export const shareableUrl = combine(sourceCode, version, (code, version) =>
   generateShareableUrl(version, code),
 )

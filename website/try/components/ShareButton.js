@@ -10,7 +10,16 @@
 
 import * as React from 'react'
 
-export class ShareButton extends React.Component {
+export class ShareButton extends React.Component<
+  {|
+    onClick: () => void,
+    url: string,
+    className?: string,
+  |},
+  {|
+    showConfirmation: boolean,
+  |},
+> {
   state = {
     showConfirmation: false,
   }
