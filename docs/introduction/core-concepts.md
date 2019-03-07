@@ -12,7 +12,7 @@ const event = createEvent() // unnamed event
 const onMessage = createEvent('message') // named event
 
 const socket = new WebSocket('wss://echo.websocket.org')
-socket.onmessage = (msg) => onMessage(msg)
+socket.onmessage = msg => onMessage(msg)
 
 const data = onMessage.map(msg => msg.data).map(JSON.parse)
 
@@ -31,11 +31,16 @@ The only requirement for function:
 - **Should** have zero or one argument
 
 ```js
-const getUser = createEffect('get user')
-  .use((params) => {
-    return fetch(`https://example.com/get-user/${params.id}`)
-      .then(res => res.json())
-  })
+const getUser = createEffect('get user').use(params => {
+  return fetch(`https://example.com/get-user/${params.id}`).then(res =>
+    res.json(),
+  )
+})
+
+// subscribe to effect call
+getUser.watch(params => {
+  console.log(params) // {id: 1}
+})
 
 // subscribe to promise resolve
 getUser.done.watch(({result, params}) => {
