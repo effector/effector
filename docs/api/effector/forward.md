@@ -10,7 +10,7 @@ Sends data from one entity to another
 
 #### Arguments
 
-1. `config`? (_{from: Unit\<T\>, to: Unit\<T\>}_)
+1. `config` (_{from: Unit\<T\>, to: Unit\<T\>}_)
 
 #### Returns
 
