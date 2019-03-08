@@ -71,6 +71,7 @@ unnecessary-invariant
 <PROJECT_ROOT>/docs/*
 <PROJECT_ROOT>/examples/*
 <PROJECT_ROOT>/tools/builder\.js
+<PROJECT_ROOT>/tools/perfsnake
 <PROJECT_ROOT>/npm/*
 <PROJECT_ROOT>/scripts/*
 💩 🙈
