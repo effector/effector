@@ -30,6 +30,7 @@ describe('useStore', () => {
 
   it('should throw', () => {
     const ErrorDisplay = props => {
+      //$off
       const state = useStore(undefined)
       return <span>Store text: {state}</span>
     }
