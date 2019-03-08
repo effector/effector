@@ -8,7 +8,7 @@ configure({
 })
 
 import * as React from 'react'
-import {render, cleanup, act} from 'react-testing-library'
+import {render, cleanup} from 'react-testing-library'
 import {mount} from 'enzyme'
 import {createEvent, createStore, createStoreObject} from 'effector'
 import {createGate, useGate, type Gate as GateType} from '../createGate'
