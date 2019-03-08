@@ -15,7 +15,7 @@ const cache = new Map()
 
 function createRealm(sourceCode, version) {
   const realm = {}
-  realm.process = {env: 'development'}
+  realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
     console.log('require: ', path)
     return Symbol.observable
