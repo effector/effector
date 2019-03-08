@@ -4,7 +4,7 @@ import * as React from 'react'
 import type {Store} from 'effector'
 import {createStoreConsumer} from './createStoreConsumer'
 
-export function createComponent<Props, State>(
+export function createComponent<Props: {}, State>(
   store: Store<State>,
   renderProp: (props: Props, state: State) => React.Node,
 ): React.ComponentType<Props> {
