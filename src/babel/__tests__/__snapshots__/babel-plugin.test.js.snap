@@ -60,11 +60,13 @@ const c = domain.store('h', {
     name: 'test'
   },
   name: \\"c\\"
-});
+}); //$off
+
 const d = domain.store('h', {
   ɔ: null,
   name: \\"d\\"
-});
+}); //$off
+
 const e = domain.store('h', {
   ɔ: 4234,
   name: \\"e\\"
@@ -105,7 +107,8 @@ const a = createStore('h', {
 const b = createStore('h', {
   ɔ: {},
   name: \\"b\\"
-});
+}); //$off
+
 const c = createStore('h', {
   ɔ: 23020,
   name: \\"c\\"
