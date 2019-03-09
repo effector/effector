@@ -52,8 +52,8 @@ export const Step: {
 export const Cmd: {
   compute(props: {fn: Function}): TypeDef<'compute', 'cmd'>,
   emit(props: {fullName: string}): TypeDef<'emit', 'cmd'>,
-  filter(props: {filter: (data: any) => boolean}): TypeDef<'filter', 'cmd'>,
-  run(props: {runner: Function}): TypeDef<'run', 'cmd'>,
+  filter(props: {fn: (data: any) => boolean}): TypeDef<'filter', 'cmd'>,
+  run(props: {fn: Function}): TypeDef<'run', 'cmd'>,
   update(
     props: {|store: StateRef|} | {|val: string|},
   ): TypeDef<'update', 'cmd'>,

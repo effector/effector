@@ -36,7 +36,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "t",
@@ -51,7 +51,7 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
+                      "fn": [Function],
                     },
                     "group": "cmd",
                     "id": "h",
@@ -97,7 +97,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1d",
@@ -112,7 +112,7 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
+                                  "fn": [Function],
                                 },
                                 "group": "cmd",
                                 "id": "11",
@@ -172,7 +172,7 @@ Object {
         Object {
           "data": Object {
             "data": Object {
-              "runner": [Function],
+              "fn": [Function],
             },
             "group": "cmd",
             "id": "1g",
@@ -230,7 +230,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "t",
@@ -245,7 +245,7 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
+                      "fn": [Function],
                     },
                     "group": "cmd",
                     "id": "h",
@@ -291,7 +291,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "1d",
@@ -306,7 +306,7 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
+                                  "fn": [Function],
                                 },
                                 "group": "cmd",
                                 "id": "11",
@@ -443,7 +443,7 @@ Object {
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
                             },
                             "group": "cmd",
                             "id": "t",
@@ -458,7 +458,7 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
+                                  "fn": [Function],
                                 },
                                 "group": "cmd",
                                 "id": "h",
@@ -504,7 +504,7 @@ Object {
                                     Object {
                                       "data": Object {
                                         "data": Object {
-                                          "filter": [Function],
+                                          "fn": [Function],
                                         },
                                         "group": "cmd",
                                         "id": "1d",
@@ -519,7 +519,7 @@ Object {
                                         Object {
                                           "data": Object {
                                             "data": Object {
-                                              "filter": [Function],
+                                              "fn": [Function],
                                             },
                                             "group": "cmd",
                                             "id": "11",
@@ -579,7 +579,7 @@ Object {
                     Object {
                       "data": Object {
                         "data": Object {
-                          "runner": [Function],
+                          "fn": [Function],
                         },
                         "group": "cmd",
                         "id": "1g",
@@ -791,7 +791,7 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "filter": [Function],
+          "fn": [Function],
         },
         "group": "cmd",
         "id": "h",
@@ -837,7 +837,7 @@ Object {
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
                 },
                 "group": "cmd",
                 "id": "1d",
@@ -852,7 +852,7 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
+                      "fn": [Function],
                     },
                     "group": "cmd",
                     "id": "11",
@@ -912,7 +912,7 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "filter": [Function],
+          "fn": [Function],
         },
         "group": "cmd",
         "id": "11",

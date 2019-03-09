@@ -55,12 +55,12 @@ declare export default function fx(
 ): TypeDef<'emit', 'cmd'>
 declare export default function fx(
   tag: 'filter',
-  props: {filter: *},
+  props: {fn: *},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'filter', 'cmd'>
 declare export default function fx(
   tag: 'run',
-  props: {runner: *},
+  props: {fn: *},
   ...childrens: $ReadOnlyArray<void>
 ): TypeDef<'run', 'cmd'>
 declare export default function fx(

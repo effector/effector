@@ -15,7 +15,7 @@ function eventCtx(payload) {
 const Next = () => (
   <multi>
     <run
-      runner={(...args) => {
+      fn={(...args) => {
         console.log(...args)
       }}
     />
@@ -28,7 +28,7 @@ describe('filter node will throw', () => {
       <seq>
         <emit fullName="emit before filter node will throw" />
         <filter
-          filter={() => {
+          fn={() => {
             throw new Error('[expected error]')
           }}
         />
@@ -49,7 +49,7 @@ describe('filter node will throw', () => {
         <emit fullName="emit before filter node will throw" />
         <multi>
           <filter
-            filter={() => {
+            fn={() => {
               throw new Error('[expected error]')
             }}
           />
@@ -92,7 +92,7 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[a] tested correctly" />
-        <run runner={fn} />
+        <run fn={fn} />
         {next}
       </seq>
     )
@@ -111,8 +111,8 @@ describe('<run /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[b] tested correctly" />
-        <run runner={fn1} />
-        <run runner={fn2} />
+        <run fn={fn1} />
+        <run fn={fn2} />
         {next}
       </seq>
     )
@@ -135,7 +135,7 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[a] tested correctly" />
-        <filter filter={fn} />
+        <filter fn={fn} />
         {next}
       </seq>
     )
@@ -152,8 +152,8 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[b] tested correctly" />
-        <filter filter={fn1} />
-        <run runner={fn2} />
+        <filter fn={fn1} />
+        <run fn={fn2} />
         {next}
       </seq>
     )
@@ -172,8 +172,8 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[c] tested correctly" />
-        <filter filter={fn1} />
-        <run runner={fn2} />
+        <filter fn={fn1} />
+        <run fn={fn2} />
         {next}
       </seq>
     )
@@ -193,8 +193,8 @@ describe('<filter /> execution cases', () => {
     const exec = (
       <seq>
         <emit fullName="[d] tested correctly" />
-        <filter filter={fn1} />
-        <run runner={fn2} />
+        <filter fn={fn1} />
+        <run fn={fn2} />
         {next}
       </seq>
     )

@@ -85,7 +85,7 @@ const createDef = plainState => {
   def.seq = Step.seq([
     Step.single(
       Cmd.filter({
-        filter: filterBeforeUpdate.bind(plainState),
+        fn: filterBeforeUpdate.bind(plainState),
       }),
     ),
     Step.single(Cmd.update({store: plainState})),

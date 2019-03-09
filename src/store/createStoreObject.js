@@ -24,10 +24,10 @@ function storeCombination(
     const {key, child} = pairs[i]
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const runner = Step.single(
+    const fn = Step.single(
       Cmd.run({
-        runner() {
-          runner.data.data.pushUpdate({
+        fn() {
+          fn.data.data.pushUpdate({
             event: updater,
             data: getFresh,
           })
@@ -35,7 +35,7 @@ function storeCombination(
       }),
     )
 
-    runner.data.data.pushUpdate = data => {}
+    fn.data.data.pushUpdate = data => {}
     const runCmd = Step.seq([
       Step.single(
         Cmd.compute({
@@ -49,10 +49,10 @@ function storeCombination(
       ),
       Step.single(
         Cmd.filter({
-          filter: changed => changed,
+          fn: changed => changed,
         }),
       ),
-      runner,
+      fn,
     ])
     stateNew[key] = child.getState()
     forward({

@@ -49,7 +49,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
             ),
             Step.single(
               Cmd.filter({
-                filter(data) {
+                fn(data) {
                   const lastState = getState(storeInstance)
                   return data !== lastState && data !== undefined
                 },
@@ -135,7 +135,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
           //$todo
           Step.single(
             Cmd.run({
-              runner(args) {
+              fn(args) {
                 let stopPhaseTimerMessage = null
                 startPhaseTimer(storeInstance, 'subscribe')
                 if (args === lastCall) {
@@ -212,7 +212,7 @@ export function mapStore<A, B>(
           ),
           Step.single(
             Cmd.filter({
-              filter(result) {
+              fn(result) {
                 const lastState = innerStore.getState()
                 const isChanged = result !== lastState && result !== undefined
                 if (isChanged) {

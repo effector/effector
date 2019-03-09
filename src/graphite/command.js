@@ -15,7 +15,7 @@ const cmd = {
       result: (null: any),
       arg: local.__stepArg,
       val: meta.val,
-      fn: __single.filter,
+      fn: __single.fn,
     })
     local.isChanged = Boolean(runCtx.result)
   },
@@ -28,7 +28,7 @@ const cmd = {
       result: (null: any),
       arg: local.__stepArg,
       val: meta.val,
-      fn: __single.runner,
+      fn: __single.fn,
     })
     local.isFailed = runCtx.err
   },

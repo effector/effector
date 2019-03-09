@@ -135,7 +135,7 @@ function filterEvent<A, B>(
           ),
           Step.single(
             Cmd.filter({
-              filter: result => result !== undefined,
+              fn: result => result !== undefined,
             }),
           ),
           mapped.graphite.seq,
@@ -157,7 +157,7 @@ function watchEvent<Payload>(
         //$todo
         seq: Step.single(
           Cmd.run({
-            runner: (newValue: Payload) => watcher(newValue, event.getType()),
+            fn: (newValue: Payload) => watcher(newValue, event.getType()),
           }),
         ),
       },
