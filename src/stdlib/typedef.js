@@ -1,4 +1,5 @@
 //@flow
+import type {StateRef} from './stateref'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 export type ID = string
@@ -14,37 +15,10 @@ export type GraphiteMeta = {
   +seq: TypeDef<'seq', 'step'>,
 }
 
-export const Step = typeDef(('step': 'step'), {
-  single: null,
-  multi: null,
-  seq: null,
-  query: null,
-})
-
-export const Cmd = typeDef(('cmd': 'cmd'), {
-  compute: null,
-  emit: null,
-  run: null,
-  filter: null,
-  update: null,
-})
-
-export const Ctx = typeDef(('ctx': 'ctx'), {
-  compute: null,
-  emit: null,
-  run: null,
-  filter: null,
-  update: null,
-})
-
-//eslint-disable-next-line no-unused-vars
-declare function typeDef<T: {+[key: string]: any}, Group>(
-  group: Group,
-  t: T,
-): $ObjMapi<T, <K>(k: K) => (data: any) => TypeDef<K, Group>>
-function typeDef(group, t) {
+const typeDef = (group: string, t: $ReadOnlyArray<string>) => {
   const result = {}
-  for (const key in t) {
+  for (let i = 0; i < t.length; i++) {
+    const key = t[i]
     result[key] = type.bind({
       key,
       group,
@@ -52,6 +26,39 @@ function typeDef(group, t) {
   }
   return result
 }
+
+export const Step: {
+  +query: (
+    props:
+      | {|
+          +mode: 'some',
+          +fn: (
+            arg: any,
+            ctx: any,
+            meta: *,
+          ) => {+arg: any, +list: Array<TypeDef<*, *>>},
+        |}
+      | {|
+          +mode: 'shape',
+          +shape: {[string]: TypeDef<*, *>},
+          +fn: (arg: any, ctx: any, meta: *) => {+[string]: any},
+        |},
+  ) => TypeDef<'query', 'step'>,
+  single(props: TypeDef<*, 'cmd'>): TypeDef<'single', 'step'>,
+  multi(props: $ReadOnlyArray<TypeDef<*, *>>): TypeDef<'multi', 'step'>,
+  seq(props: $ReadOnlyArray<TypeDef<*, *>>): TypeDef<'seq', 'step'>,
+} = typeDef(('step': 'step'), ['single', 'multi', 'seq', 'query'])
+
+export const Cmd: {
+  compute(props: {fn: Function}): TypeDef<'compute', 'cmd'>,
+  emit(props: {fullName: string}): TypeDef<'emit', 'cmd'>,
+  filter(props: {filter: (data: any) => boolean}): TypeDef<'filter', 'cmd'>,
+  run(props: {runner: Function}): TypeDef<'run', 'cmd'>,
+  update(
+    props: {|store: StateRef|} | {|val: string|},
+  ): TypeDef<'update', 'cmd'>,
+} = typeDef(('cmd': 'cmd'), ['compute', 'emit', 'run', 'filter', 'update'])
+
 function type(data) {
   return {
     id: nextID(),
