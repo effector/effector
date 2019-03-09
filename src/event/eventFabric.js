@@ -1,14 +1,7 @@
 //@flow
-//@jsx fx
 import $$observable from 'symbol-observable'
 
-import {
-  //eslint-disable-next-line no-unused-vars
-  fx,
-  Kind,
-  stringRefcount,
-  type GraphiteMeta,
-} from 'effector/stdlib'
+import {fx, Kind, stringRefcount, type GraphiteMeta} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -74,11 +67,11 @@ function prepend(event, fn: (_: any) => *) {
     from: contramapped,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            {event.graphite.seq}
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('compute', {fn: newValue => fn(newValue)}),
+          event.graphite.seq,
         ),
       },
     },
@@ -100,11 +93,11 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     from: event,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            {mapped.graphite.seq}
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('compute', {fn: newValue => fn(newValue)}),
+          mapped.graphite.seq,
         ),
       },
     },
@@ -124,12 +117,12 @@ function filterEvent<A, B>(
     from: event,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            <filter filter={result => result !== undefined} />
-            {mapped.graphite.seq}
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('compute', {fn: newValue => fn(newValue)}),
+          fx('filter', {filter: result => result !== undefined}),
+          mapped.graphite.seq,
         ),
       },
     },
@@ -145,11 +138,9 @@ function watchEvent<Payload>(
     from: event,
     to: {
       graphite: {
-        seq: ((
-          <run
-            runner={(newValue: Payload) => watcher(newValue, event.getType())}
-          />
-        ): $todo),
+        seq: (fx('run', {
+          runner: (newValue: Payload) => watcher(newValue, event.getType()),
+        }): $todo),
       },
     },
   })
@@ -163,14 +154,9 @@ function makeName(name: string, compositeName?: CompositeName) {
   return '' + fullName + '/' + name
 }
 const fabric = (args: {fullName: string}): GraphiteMeta => {
-  const nextSteps = <multi />
+  const nextSteps = fx('multi', null)
   return {
     next: nextSteps,
-    seq: (
-      <seq>
-        <emit fullName={args.fullName} />
-        {nextSteps}
-      </seq>
-    ),
+    seq: fx('seq', null, fx('emit', {fullName: args.fullName}), nextSteps),
   }
 }

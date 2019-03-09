@@ -1,6 +1,4 @@
 //@flow
-//@jsx fx
-//eslint-disable-next-line no-unused-vars
 import {fx, stringRefcount, isStore} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
@@ -26,30 +24,28 @@ function storeCombination(
     const {key, child} = pairs[i]
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const runner = (
-      <run
-        runner={() => {
-          runner.data.data.pushUpdate({
-            event: updater,
-            data: getFresh,
-          })
-        }}
-      />
-    )
+    const runner = fx('run', {
+      runner() {
+        runner.data.data.pushUpdate({
+          event: updater,
+          data: getFresh,
+        })
+      },
+    })
     runner.data.data.pushUpdate = data => {}
-    const runCmd = (
-      <seq>
-        <compute
-          fn={state => {
-            const current = store.getState()
-            const changed = current[key] !== state
-            current[key] = state
-            return changed
-          }}
-        />
-        <filter filter={changed => changed} />
-        {runner}
-      </seq>
+    const runCmd = fx(
+      'seq',
+      null,
+      fx('compute', {
+        fn(state) {
+          const current = store.getState()
+          const changed = current[key] !== state
+          current[key] = state
+          return changed
+        },
+      }),
+      fx('filter', {filter: changed => changed}),
+      runner,
     )
     stateNew[key] = child.getState()
     forward({

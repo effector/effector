@@ -1,7 +1,6 @@
 //@flow
-//@jsx fx
 import $$observable from 'symbol-observable'
-//eslint-disable-next-line no-unused-vars
+
 import {fx, Kind} from 'effector/stdlib'
 
 import invariant from 'invariant'
@@ -10,7 +9,6 @@ import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 import {forward, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../effector/index.h'
-import type {CompositeName} from '../compositeName'
 
 export function reset(storeInstance: ThisStore, event: Event<any>) {
   return on.call(this, storeInstance, event, () => storeInstance.defaultState)
@@ -40,22 +38,22 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
       from: e,
       to: {
         graphite: {
-          seq: (
-            <seq>
-              <compute
-                fn={newValue => {
-                  const lastState = getState(storeInstance)
-                  return handler(lastState, newValue, readName(e))
-                }}
-              />
-              <filter
-                filter={data => {
-                  const lastState = getState(storeInstance)
-                  return data !== lastState && data !== undefined
-                }}
-              />
-              {storeInstance.graphite.seq}
-            </seq>
+          seq: fx(
+            'seq',
+            null,
+            fx('compute', {
+              fn(newValue) {
+                const lastState = getState(storeInstance)
+                return handler(lastState, newValue, readName(e))
+              },
+            }),
+            fx('filter', {
+              filter(data) {
+                const lastState = getState(storeInstance)
+                return data !== lastState && data !== undefined
+              },
+            }),
+            storeInstance.graphite.seq,
           ),
         },
       },
@@ -131,10 +129,10 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     from: storeInstance,
     to: {
       graphite: {
-        seq: (
+        seq:
           //$todo
-          <run
-            runner={args => {
+          fx('run', {
+            runner(args) {
               let stopPhaseTimerMessage = null
               startPhaseTimer(storeInstance, 'subscribe')
               if (args === lastCall) {
@@ -149,9 +147,8 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
                 stopPhaseTimerMessage = 'Got error'
               }
               stopPhaseTimer(stopPhaseTimerMessage)
-            }}
-          />
-        ),
+            },
+          }),
       },
     },
   })
@@ -189,38 +186,38 @@ export function mapStore<A, B>(
     from: store,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <compute
-              fn={newValue => {
-                startPhaseTimer(store, 'map')
-                lastValue = newValue
-                let stopPhaseTimerMessage = null
-                const lastState = innerStore.getState()
-                let result
-                try {
-                  result = fn(newValue, lastState)
-                } catch (err) {
-                  console.error(err)
-                  stopPhaseTimerMessage = 'Got error'
-                }
-                stopPhaseTimer(stopPhaseTimerMessage)
-                return result
-              }}
-            />
-            <filter
-              filter={result => {
-                const lastState = innerStore.getState()
-                const isChanged = result !== lastState && result !== undefined
-                if (isChanged) {
-                  lastResult = result
-                }
-                stopPhaseTimer(null)
-                return isChanged
-              }}
-            />
-            {innerStore.graphite.seq}
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('compute', {
+            fn(newValue) {
+              startPhaseTimer(store, 'map')
+              lastValue = newValue
+              let stopPhaseTimerMessage = null
+              const lastState = innerStore.getState()
+              let result
+              try {
+                result = fn(newValue, lastState)
+              } catch (err) {
+                console.error(err)
+                stopPhaseTimerMessage = 'Got error'
+              }
+              stopPhaseTimer(stopPhaseTimerMessage)
+              return result
+            },
+          }),
+          fx('filter', {
+            filter(result) {
+              const lastState = innerStore.getState()
+              const isChanged = result !== lastState && result !== undefined
+              if (isChanged) {
+                lastResult = result
+              }
+              stopPhaseTimer(null)
+              return isChanged
+            },
+          }),
+          innerStore.graphite.seq,
         ),
       },
     },

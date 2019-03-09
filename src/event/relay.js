@@ -1,10 +1,6 @@
 //@flow
-//@jsx fx
 
-import {
-  //eslint-disable-next-line no-unused-vars
-  fx,
-} from 'effector/stdlib'
+import {fx} from 'effector/stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../effector/index.h'
@@ -27,10 +23,14 @@ export function relayShape<
     from,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <query mode="shape" shape={shape} fn={query} />
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('query', {
+            mode: 'shape',
+            shape,
+            fn: query,
+          }),
         ),
       },
     },
@@ -67,10 +67,13 @@ function relayRaw<E, F>(opts: {
     from,
     to: {
       graphite: {
-        seq: (
-          <seq>
-            <query mode="some" fn={fn} />
-          </seq>
+        seq: fx(
+          'seq',
+          null,
+          fx('query', {
+            mode: 'some',
+            fn,
+          }),
         ),
       },
     },

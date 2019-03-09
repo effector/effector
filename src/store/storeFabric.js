@@ -1,7 +1,6 @@
 //@flow
-//@jsx fx
 import $$observable from 'symbol-observable'
-//eslint-disable-next-line no-unused-vars
+
 import {fx, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
@@ -40,7 +39,7 @@ export function storeFabric<State>(props: {
     defaultState,
     plainState,
     subscribers: new Map(),
-    compositeName: createName(currentId, parent)
+    compositeName: createName(currentId, parent),
   }
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
@@ -82,13 +81,13 @@ function filterBeforeUpdate(newValue) {
 }
 const createDef = plainState => {
   const def = {}
-  def.next = <multi />
-  def.seq = (
-    <seq>
-      <filter filter={filterBeforeUpdate.bind(plainState)} />
-      <update store={plainState} />
-      {def.next}
-    </seq>
+  def.next = fx('multi', null)
+  def.seq = fx(
+    'seq',
+    null,
+    fx('filter', {filter: filterBeforeUpdate.bind(plainState)}),
+    fx('update', {store: plainState}),
+    def.next,
   )
   return def
 }
