@@ -1,6 +1,6 @@
 //@flow
 
-import {fx} from 'effector/stdlib'
+import {Step, Cmd} from 'effector/stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../effector/index.h'
@@ -23,15 +23,13 @@ export function relayShape<
     from,
     to: {
       graphite: {
-        seq: fx(
-          'seq',
-          null,
-          fx('query', {
+        seq: Step.seq([
+          Step.query({
             mode: 'shape',
             shape,
             fn: query,
           }),
-        ),
+        ]),
       },
     },
   })
@@ -67,14 +65,12 @@ function relayRaw<E, F>(opts: {
     from,
     to: {
       graphite: {
-        seq: fx(
-          'seq',
-          null,
-          fx('query', {
+        seq: Step.seq([
+          Step.query({
             mode: 'some',
             fn,
           }),
-        ),
+        ]),
       },
     },
   })

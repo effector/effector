@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {fx, Kind, createStateRef} from 'effector/stdlib'
+import {Step, Cmd, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
@@ -81,13 +81,16 @@ function filterBeforeUpdate(newValue) {
 }
 const createDef = plainState => {
   const def = {}
-  def.next = fx('multi', null)
-  def.seq = fx(
-    'seq',
-    null,
-    fx('filter', {filter: filterBeforeUpdate.bind(plainState)}),
-    fx('update', {store: plainState}),
+  def.next = Step.multi([])
+  def.seq = Step.seq([
+    Step.single(
+      Cmd.filter({
+        filter: filterBeforeUpdate.bind(plainState),
+      }),
+    ),
+    Step.single(Cmd.update({store: plainState})),
     def.next,
-  )
+  ])
+
   return def
 }

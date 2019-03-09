@@ -1,5 +1,5 @@
 //@flow
-import {fx, stringRefcount, isStore} from 'effector/stdlib'
+import {Step, Cmd, stringRefcount, isStore} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
@@ -24,29 +24,36 @@ function storeCombination(
     const {key, child} = pairs[i]
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const runner = fx('run', {
-      runner() {
-        runner.data.data.pushUpdate({
-          event: updater,
-          data: getFresh,
-        })
-      },
-    })
-    runner.data.data.pushUpdate = data => {}
-    const runCmd = fx(
-      'seq',
-      null,
-      fx('compute', {
-        fn(state) {
-          const current = store.getState()
-          const changed = current[key] !== state
-          current[key] = state
-          return changed
+    const runner = Step.single(
+      Cmd.run({
+        runner() {
+          runner.data.data.pushUpdate({
+            event: updater,
+            data: getFresh,
+          })
         },
       }),
-      fx('filter', {filter: changed => changed}),
-      runner,
     )
+
+    runner.data.data.pushUpdate = data => {}
+    const runCmd = Step.seq([
+      Step.single(
+        Cmd.compute({
+          fn(state) {
+            const current = store.getState()
+            const changed = current[key] !== state
+            current[key] = state
+            return changed
+          },
+        }),
+      ),
+      Step.single(
+        Cmd.filter({
+          filter: changed => changed,
+        }),
+      ),
+      runner,
+    ])
     stateNew[key] = child.getState()
     forward({
       from: child,

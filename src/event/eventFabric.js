@@ -1,7 +1,13 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {fx, Kind, stringRefcount, type GraphiteMeta} from 'effector/stdlib'
+import {
+  Step,
+  Cmd,
+  Kind,
+  stringRefcount,
+  type GraphiteMeta,
+} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -67,12 +73,14 @@ function prepend(event, fn: (_: any) => *) {
     from: contramapped,
     to: {
       graphite: {
-        seq: fx(
-          'seq',
-          null,
-          fx('compute', {fn: newValue => fn(newValue)}),
+        seq: Step.seq([
+          Step.single(
+            Cmd.compute({
+              fn: newValue => fn(newValue),
+            }),
+          ),
           event.graphite.seq,
-        ),
+        ]),
       },
     },
   })
@@ -93,12 +101,14 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     from: event,
     to: {
       graphite: {
-        seq: fx(
-          'seq',
-          null,
-          fx('compute', {fn: newValue => fn(newValue)}),
+        seq: Step.seq([
+          Step.single(
+            Cmd.compute({
+              fn: newValue => fn(newValue),
+            }),
+          ),
           mapped.graphite.seq,
-        ),
+        ]),
       },
     },
   })
@@ -117,13 +127,19 @@ function filterEvent<A, B>(
     from: event,
     to: {
       graphite: {
-        seq: fx(
-          'seq',
-          null,
-          fx('compute', {fn: newValue => fn(newValue)}),
-          fx('filter', {filter: result => result !== undefined}),
+        seq: Step.seq([
+          Step.single(
+            Cmd.compute({
+              fn: newValue => fn(newValue),
+            }),
+          ),
+          Step.single(
+            Cmd.filter({
+              filter: result => result !== undefined,
+            }),
+          ),
           mapped.graphite.seq,
-        ),
+        ]),
       },
     },
   })
@@ -138,9 +154,12 @@ function watchEvent<Payload>(
     from: event,
     to: {
       graphite: {
-        seq: (fx('run', {
-          runner: (newValue: Payload) => watcher(newValue, event.getType()),
-        }): $todo),
+        //$todo
+        seq: Step.single(
+          Cmd.run({
+            runner: (newValue: Payload) => watcher(newValue, event.getType()),
+          }),
+        ),
       },
     },
   })
@@ -154,9 +173,12 @@ function makeName(name: string, compositeName?: CompositeName) {
   return '' + fullName + '/' + name
 }
 const fabric = (args: {fullName: string}): GraphiteMeta => {
-  const nextSteps = fx('multi', null)
+  const nextSteps = Step.multi([])
   return {
     next: nextSteps,
-    seq: fx('seq', null, fx('emit', {fullName: args.fullName}), nextSteps),
+    seq: Step.seq([
+      Step.single(Cmd.emit({fullName: args.fullName})),
+      nextSteps,
+    ]),
   }
 }
