@@ -1,6 +1,6 @@
 //@flow
 import type {Subscription, Subscriber} from '../effector/index.h'
-import type {kind, GraphiteMeta} from 'effector/stdlib'
+import type {kind, Graph} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 
@@ -37,7 +37,7 @@ export type Effect<Params, Done, Fail = Error> = {
   +kind: kind,
   shortName: string,
   domainName?: CompositeName,
-  graphite: GraphiteMeta,
+  graphite: Graph,
   compositeName: CompositeName,
 }
 
@@ -72,7 +72,7 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   +kind: kind,
   shortName: string,
   domainName?: CompositeName,
-  graphite: GraphiteMeta,
+  graphite: Graph,
   compositeName: CompositeName,
 }
 

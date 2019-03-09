@@ -1,13 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {
-  Step,
-  Cmd,
-  Kind,
-  stringRefcount,
-  type GraphiteMeta,
-} from 'effector/stdlib'
+import {Step, Cmd, Kind, stringRefcount, type Graph} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -172,7 +166,7 @@ function makeName(name: string, compositeName?: CompositeName) {
   }
   return '' + fullName + '/' + name
 }
-const fabric = (args: {fullName: string}): GraphiteMeta => {
+const fabric = (args: {fullName: string}): Graph => {
   const nextSteps = Step.multi([])
   return {
     next: nextSteps,

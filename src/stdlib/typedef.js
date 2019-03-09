@@ -10,11 +10,6 @@ export type TypeDef<+Type, +Group> = {
   +data: any,
 }
 
-export type GraphiteMeta = {
-  +next: TypeDef<'multi', 'step'>,
-  +seq: TypeDef<'seq', 'step'>,
-}
-
 const typeDef = (group: string, t: $ReadOnlyArray<string>) => {
   const result = {}
   for (let i = 0; i < t.length; i++) {
