@@ -23,14 +23,6 @@ export type Meta = {
     data: any,
   }>,
   reg: Reg,
-  /**
-   * @param volatile belongs to only one Meta instance
-   * and not preserves under copyMeta operation
-   */
-  volatile: {
-    // runs: {[id: string]: {meta: Meta, cmd: TypeDef<'single', 'step'>}},
-    // runsIDs: Array<string>,
-  },
   val: {[name: string]: StateRef},
 }
 

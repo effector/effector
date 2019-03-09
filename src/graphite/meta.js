@@ -18,9 +18,9 @@ export const cloneMeta = (meta: Meta): Meta => {
     //TODO avoid this
     transactions,
     pendingEvents: [],
-    volatile: {runs: {}, runsIDs: []},
   }
 }
+export const val = (tag: string, meta: Meta) => meta.val[tag].current
 export const newMeta = (ctx: CommonCtx): Meta => ({
   callstack: [],
   transactions: [],
@@ -60,7 +60,6 @@ export const newMeta = (ctx: CommonCtx): Meta => ({
       return result
     })(),
   }),
-  volatile: {runs: {}, runsIDs: []},
 })
 
 function ScopeIterator(full) {

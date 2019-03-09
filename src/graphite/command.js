@@ -1,11 +1,7 @@
 //@flow
 
-import type {TypeDef} from 'effector/stdlib'
-// import {__DEV__, __DEBUG__} from 'effector/flags'
 import type {CommandList} from './index.h'
-declare var __step: TypeDef<*, 'step'>
 declare var __single: any
-declare function __val(key: string, value: any): any
 
 const cmd = {
   emit(meta, local) {},
@@ -59,15 +55,15 @@ const transition = {
 }
 
 const local = {
-  emit: meta => ({__stepArg: __val('scope').top.__stepArg}),
-  filter: meta => ({__stepArg: __val('scope').top.__stepArg, isChanged: false}),
-  run: meta => ({__stepArg: __val('scope').top.__stepArg, isFailed: true}),
-  update: meta => ({
-    __stepArg: __val('scope').top.__stepArg,
+  emit: (meta, __stepArg) => ({__stepArg}),
+  filter: (meta, __stepArg) => ({__stepArg, isChanged: false}),
+  run: (meta, __stepArg) => ({__stepArg, isFailed: true}),
+  update: (meta, __stepArg) => ({
+    __stepArg,
     store: __single.store,
   }),
-  compute: meta => ({
-    __stepArg: __val('scope').top.__stepArg,
+  compute: (meta, __stepArg) => ({
+    __stepArg,
     isChanged: false,
   }),
 }
