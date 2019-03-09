@@ -1,11 +1,6 @@
 //@flow
-import type {ID} from './typedef'
+import type {StateRef} from './index.h'
 let id = 0
-
-export type StateRef = {
-  +id: ID,
-  current: any,
-}
 
 export function createStateRef(current: any): StateRef {
   return {

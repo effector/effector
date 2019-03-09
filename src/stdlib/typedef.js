@@ -1,14 +1,7 @@
 //@flow
-import type {StateRef} from './stateref'
+import type {StateRef, TypeDef} from './index.h'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
-export type ID = string
-export type TypeDef<+Type, +Group> = {
-  +id: ID,
-  +type: Type,
-  +group: Group,
-  +data: any,
-}
 
 const typeDef = (group: string, t: $ReadOnlyArray<string>) => {
   const result = {}

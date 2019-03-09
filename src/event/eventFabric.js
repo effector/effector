@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {Step, Cmd, Kind, stringRefcount, type Graph} from 'effector/stdlib'
+import {Cmd, Kind, stringRefcount, createGraph} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -23,9 +23,7 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = fabric({
-    fullName,
-  })
+  const graphite = createGraph({node: [Cmd.emit({fullName})]})
 
   //$off
   const instance: Event<Payload> = (
@@ -66,16 +64,14 @@ function prepend(event, fn: (_: any) => *) {
   forward({
     from: contramapped,
     to: {
-      graphite: {
-        seq: Step.seq([
-          Step.single(
-            Cmd.compute({
-              fn: newValue => fn(newValue),
-            }),
-          ),
+      graphite: createGraph({
+        node: [
+          Cmd.compute({
+            fn: newValue => fn(newValue),
+          }),
           event.graphite.seq,
-        ]),
-      },
+        ],
+      }),
     },
   })
   return contramapped
@@ -94,16 +90,14 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   forward({
     from: event,
     to: {
-      graphite: {
-        seq: Step.seq([
-          Step.single(
-            Cmd.compute({
-              fn: newValue => fn(newValue),
-            }),
-          ),
-          mapped.graphite.seq,
-        ]),
-      },
+      graphite: createGraph({
+        node: [
+          Cmd.compute({
+            fn: newValue => fn(newValue),
+          }),
+        ],
+        child: [mapped.graphite.seq],
+      }),
     },
   })
   return mapped
@@ -120,21 +114,17 @@ function filterEvent<A, B>(
   forward({
     from: event,
     to: {
-      graphite: {
-        seq: Step.seq([
-          Step.single(
-            Cmd.compute({
-              fn: newValue => fn(newValue),
-            }),
-          ),
-          Step.single(
-            Cmd.filter({
-              fn: result => result !== undefined,
-            }),
-          ),
+      graphite: createGraph({
+        node: [
+          Cmd.compute({
+            fn: newValue => fn(newValue),
+          }),
+          Cmd.filter({
+            fn: result => result !== undefined,
+          }),
           mapped.graphite.seq,
-        ]),
-      },
+        ],
+      }),
     },
   })
   return mapped
@@ -147,14 +137,13 @@ function watchEvent<Payload>(
   return forward({
     from: event,
     to: {
-      graphite: {
-        //$todo
-        seq: Step.single(
+      graphite: createGraph({
+        node: [
           Cmd.run({
             fn: (newValue: Payload) => watcher(newValue, event.getType()),
           }),
-        ),
-      },
+        ],
+      }),
     },
   })
 }
@@ -165,14 +154,4 @@ function makeName(name: string, compositeName?: CompositeName) {
     return name
   }
   return '' + fullName + '/' + name
-}
-const fabric = (args: {fullName: string}): Graph => {
-  const nextSteps = Step.multi([])
-  return {
-    next: nextSteps,
-    seq: Step.seq([
-      Step.single(Cmd.emit({fullName: args.fullName})),
-      nextSteps,
-    ]),
-  }
 }

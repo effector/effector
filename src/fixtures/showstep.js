@@ -1,5 +1,5 @@
 //@flow
-import type {TypeDef} from 'effector/stdlib/typedef'
+import type {TypeDef} from 'effector/stdlib'
 
 export function show(
   value: TypeDef<*, 'step'>,

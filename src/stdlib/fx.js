@@ -1,8 +1,8 @@
 //@flow
 /* eslint-disable no-unused-vars */
 
-import type {StateRef} from './stateref'
-import {Step, Cmd, type TypeDef} from './typedef'
+import type {StateRef, TypeDef} from './index.h'
+import {Step, Cmd} from './typedef'
 
 /* Step */
 declare export default function fx(
