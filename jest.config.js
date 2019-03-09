@@ -21,9 +21,6 @@ module.exports = {
     '!**/__tests__/**',
     '!**/*.test.js',
     '!**/*.spec.js',
-    '!<rootDir>/src/store/epic.js',
-    '!**/DataStructures/**',
-    '!<rootDir>/src/graphite/tarjan/**',
     '!<rootDir>/src/babel/**',
     '!<rootDir>/src/fixtures/**',
     '!<rootDir>/src/invariant/**',
@@ -43,7 +40,6 @@ module.exports = {
     'graphite',
     'stdlib',
     'babel',
-    // 'DataStructures',
     'perf',
     // 'redux',
     {
@@ -63,11 +59,7 @@ if (boolean(process.env.LINT, true)) {
   module.exports.projects.push({
     runner: 'jest-runner-eslint',
     displayName: 'lint',
-    testMatch: [
-      '<rootDir>/src/**/*.js',
-      '!**/DataStructures/**',
-      '!**/redux/**',
-    ],
+    testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
   })
 }
 
