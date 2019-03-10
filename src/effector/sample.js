@@ -7,7 +7,8 @@ import type {Effect} from 'effector/effect'
 import warning from 'warning'
 
 function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
-  const hold = {current: undefined, hasValue: false}
+  // [current, hasValue]
+  const hold = [undefined, false]
 
   const unit = storeFabric({
     currentState: source.defaultState,
@@ -17,12 +18,12 @@ function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
 
   //TODO: unsubscribe from this
   const unsub = source.watch(value => {
-    hold.current = value
-    hold.hasValue = true
+    hold[0] = value
+    hold[1] = true
   })
 
   sampler.watch(() => {
-    if (hold.hasValue) unit.setState(hold.current)    
+    if (hold[1]) unit.setState(hold[0])    
   })
 
   return unit
@@ -32,18 +33,19 @@ function sampleEvent(
   source: Event<any> | Effect<any, any, any>,
   sampler: Event<any> | Store<any>,
 ) {
-  const hold = {current: undefined, hasValue: false}
+  // [current, hasValue]
+  const hold = [undefined, false]
 
   const unit = eventFabric({name: source.shortName, parent: source.domainName})
 
   //TODO: unsubscribe from this
   const unsub = source.watch(value => {
-    hold.current = value
-    hold.hasValue = true
+    hold[0] = value
+    hold[1] = true
   })
 
   sampler.watch(() => {
-    if (hold.hasValue) unit(hold.current)
+    if (hold[1]) unit(hold[0])
   })
 
   return unit
