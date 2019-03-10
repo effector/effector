@@ -10,15 +10,10 @@ export function createGraph({
   node: Array<TypeDef<*, *>>,
   child?: Array<TypeDef<*, *>>,
 }): Graph {
-  const next = step('multi', normalizeNodes(child))
-  const items = normalizeNodes(node).concat([next])
+  const next = step('multi', child)
+  const items = node.concat([next])
   return {
     seq: step('seq', items),
     next,
   }
 }
-
-const normalizeNodes = (
-  nodes: Array<TypeDef<*, *>>,
-): Array<TypeDef<*, 'step'>> =>
-  nodes.map(node => (node.group === 'cmd' ? step('single', node) : node))
