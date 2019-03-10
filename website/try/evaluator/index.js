@@ -13,7 +13,7 @@ version.on(selectVersion, (_, p) => p)
 
 const cache = new Map()
 
-function createRealm(sourceCode, version) {
+function createRealm(sourceCode: string, version: string) {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
@@ -32,7 +32,7 @@ function createRealm(sourceCode, version) {
 }
 
 export const fetchVersion = createEffect('fetch', {
-  async handler(ver) {
+  async handler(ver: string) {
     const url =
       ver === 'develop'
         ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.cjs.js'
