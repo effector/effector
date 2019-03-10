@@ -9,7 +9,6 @@ import warning from 'warning'
 function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
   let current = undefined
   let hasValue = false
-  let firstCall = true
 
   const unit = storeFabric({
     currentState: source.defaultState,
@@ -19,10 +18,6 @@ function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
 
   //TODO: unsubscribe from this
   const unsub = source.watch(value => {
-    if (firstCall) {
-      firstCall = false
-      return
-    }
     current = value
     hasValue = true
   })
