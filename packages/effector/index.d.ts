@@ -176,6 +176,10 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
+export function sample<A, B>(source: Event<A>, sampler: Event<B> | Store<B>): Event<A>
+export function sample<A, B>(source: Store<A>, sampler: Event<B> | Store<B>): Store<A>
+export function sample<A, B>(source: Effect<A, any, any>, sampler: Event<B> | Store<B>): Event<A>
+
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 export function combine<A, B, R>(

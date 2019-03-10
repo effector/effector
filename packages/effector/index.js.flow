@@ -238,6 +238,20 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
   <S>(field: Store<S> | S) => Store<S>,
 >
 declare export function createDomain(domainName?: string): Domain
+
+declare export function sample<A, B>(
+  source: Event<A>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
+declare export function sample<A, B>(
+  source: Store<A>,
+  sampler: Event<B> | Store<B>,
+): Store<A>
+declare export function sample<A, B>(
+  source: Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
+
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
