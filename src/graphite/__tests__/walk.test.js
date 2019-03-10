@@ -39,7 +39,7 @@ describe('filter node will throw', () => {
       </seq>
     )
     const e2 = createEvent('e2')
-    e2.graphite = {seq: exec, next}
+    e2.graphite = {from: [], seq: exec, next}
     walkNode(e2.graphite.seq, eventCtx('e2()'))
   })
   it('throw in a multi node', () => {
@@ -59,7 +59,7 @@ describe('filter node will throw', () => {
       </seq>
     )
     const e3 = createEvent('e3')
-    e3.graphite = {seq: exec, next}
+    e3.graphite = {from: [], seq: exec, next}
     walkNode(e3.graphite.seq, eventCtx('e3()'))
   })
 })
@@ -77,7 +77,7 @@ test('walk after multi', () => {
       {next}
     </seq>
   )
-  e1.graphite = {seq: exec, next}
+  e1.graphite = {from: [], seq: exec, next}
   console.log(exec)
   const ctx = eventCtx('e1()')
   walkNode(e1.graphite.seq, ctx)
@@ -96,7 +96,7 @@ describe('<run /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[run][a]()'))
     expect(fn).toHaveBeenCalledTimes(1)
     expect(fn).toBeCalledWith('[run][a]()')
@@ -116,7 +116,7 @@ describe('<run /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[run][b]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[run][b]()')
@@ -139,7 +139,7 @@ describe('<filter /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[filter][a]()'))
     expect(fn).toHaveBeenCalledTimes(1)
     expect(fn).toBeCalledWith('[filter][a]()')
@@ -157,7 +157,7 @@ describe('<filter /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[filter][b]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[filter][b]()')
@@ -177,7 +177,7 @@ describe('<filter /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[filter][c]()'))
     expect(fn1).toHaveBeenCalledTimes(1)
     expect(fn1).toBeCalledWith('[filter][c]()')
@@ -198,7 +198,7 @@ describe('<filter /> execution cases', () => {
         {next}
       </seq>
     )
-    trigger.graphite = {seq: exec, next}
+    trigger.graphite = {from: [], seq: exec, next}
     walkNode(exec, eventCtx('[filter][d]()'))
     expect(fn2).not.toHaveBeenCalled()
   })
