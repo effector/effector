@@ -37,16 +37,6 @@ export const Step: {
   seq(props: $ReadOnlyArray<TypeDef<*, *>>): TypeDef<'seq', 'step'>,
 } = typeDef(('step': 'step'), ['single', 'multi', 'seq', 'query'])
 
-export const Cmd: {
-  compute(props: {fn: Function}): TypeDef<'compute', 'cmd'>,
-  emit(props: {fullName: string}): TypeDef<'emit', 'cmd'>,
-  filter(props: {fn: (data: any) => boolean}): TypeDef<'filter', 'cmd'>,
-  run(props: {fn: Function}): TypeDef<'run', 'cmd'>,
-  update(
-    props: {|store: StateRef|} | {|val: string|},
-  ): TypeDef<'update', 'cmd'>,
-} = typeDef(('cmd': 'cmd'), ['compute', 'emit', 'run', 'filter', 'update'])
-
 function type(data) {
   return {
     id: nextID(),
