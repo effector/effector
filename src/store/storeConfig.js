@@ -12,16 +12,14 @@ export type Config = {
 }
 
 export function normalizeConfig(config?: Config = {}): ConfigPart {
-  warning(
-    typeof config === 'object' && config !== null,
-    'createStore: Second argument should be plain object, but you passed %s.',
-    config,
-  )
+  const message =
+    'createStore: Second argument should be plain object, but you passed %s.'
+  warning(typeof config === 'object' && config !== null, message, config)
   if (typeof config === 'object' && config !== null) {
     if (typeof config.ɔ !== 'undefined') {
       warning(
         typeof config.ɔ === 'object' && config.ɔ !== null,
-        'createStore: Second argument should be plain object, but you passed %s.',
+        message,
         config.ɔ,
       )
     }
