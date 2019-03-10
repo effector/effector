@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {Cmd, Kind, stringRefcount, createGraph} from 'effector/stdlib'
+import {cmd, Kind, stringRefcount, createGraph} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -23,7 +23,7 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = createGraph({node: [Cmd.emit({fullName})]})
+  const graphite = createGraph({node: [cmd('emit', {fullName})]})
 
   //$off
   const instance: Event<Payload> = (
@@ -66,7 +66,7 @@ function prepend(event, fn: (_: any) => *) {
     to: {
       graphite: createGraph({
         node: [
-          Cmd.compute({
+          cmd('compute', {
             fn: newValue => fn(newValue),
           }),
           event.graphite.seq,
@@ -92,11 +92,11 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     to: {
       graphite: createGraph({
         node: [
-          Cmd.compute({
+          cmd('compute', {
             fn: newValue => fn(newValue),
           }),
+          mapped.graphite.seq,
         ],
-        child: [mapped.graphite.seq],
       }),
     },
   })
@@ -116,10 +116,10 @@ function filterEvent<A, B>(
     to: {
       graphite: createGraph({
         node: [
-          Cmd.compute({
+          cmd('compute', {
             fn: newValue => fn(newValue),
           }),
-          Cmd.filter({
+          cmd('filter', {
             fn: result => result !== undefined,
           }),
           mapped.graphite.seq,
@@ -139,7 +139,7 @@ function watchEvent<Payload>(
     to: {
       graphite: createGraph({
         node: [
-          Cmd.run({
+          cmd('run', {
             fn: (newValue: Payload) => watcher(newValue, event.getType()),
           }),
         ],

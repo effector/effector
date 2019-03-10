@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {Step, Cmd, Kind} from 'effector/stdlib'
+import {cmd, Kind, createGraph} from 'effector/stdlib'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
@@ -37,27 +37,23 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
     forward({
       from: e,
       to: {
-        graphite: {
-          seq: Step.seq([
-            Step.single(
-              Cmd.compute({
-                fn(newValue) {
-                  const lastState = getState(storeInstance)
-                  return handler(lastState, newValue, readName(e))
-                },
-              }),
-            ),
-            Step.single(
-              Cmd.filter({
-                fn(data) {
-                  const lastState = getState(storeInstance)
-                  return data !== lastState && data !== undefined
-                },
-              }),
-            ),
+        graphite: createGraph({
+          node: [
+            cmd('compute', {
+              fn(newValue) {
+                const lastState = getState(storeInstance)
+                return handler(lastState, newValue, readName(e))
+              },
+            }),
+            cmd('filter', {
+              fn(data) {
+                const lastState = getState(storeInstance)
+                return data !== lastState && data !== undefined
+              },
+            }),
             storeInstance.graphite.seq,
-          ]),
-        },
+          ],
+        }),
       },
     }),
   )
@@ -130,30 +126,28 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
   return forward({
     from: storeInstance,
     to: {
-      graphite: {
-        seq:
-          //$todo
-          Step.single(
-            Cmd.run({
-              fn(args) {
-                let stopPhaseTimerMessage = null
-                startPhaseTimer(storeInstance, 'subscribe')
-                if (args === lastCall) {
-                  stopPhaseTimer(stopPhaseTimerMessage)
-                  return
-                }
-                lastCall = args
-                try {
-                  listener(args)
-                } catch (err) {
-                  console.error(err)
-                  stopPhaseTimerMessage = 'Got error'
-                }
+      graphite: createGraph({
+        node: [
+          cmd('run', {
+            fn(args) {
+              let stopPhaseTimerMessage = null
+              startPhaseTimer(storeInstance, 'subscribe')
+              if (args === lastCall) {
                 stopPhaseTimer(stopPhaseTimerMessage)
-              },
-            }),
-          ),
-      },
+                return
+              }
+              lastCall = args
+              try {
+                listener(args)
+              } catch (err) {
+                console.error(err)
+                stopPhaseTimerMessage = 'Got error'
+              }
+              stopPhaseTimer(stopPhaseTimerMessage)
+            },
+          }),
+        ],
+      }),
     },
   })
 }
@@ -189,43 +183,39 @@ export function mapStore<A, B>(
   forward({
     from: store,
     to: {
-      graphite: {
-        seq: Step.seq([
-          Step.single(
-            Cmd.compute({
-              fn(newValue) {
-                startPhaseTimer(store, 'map')
-                lastValue = newValue
-                let stopPhaseTimerMessage = null
-                const lastState = innerStore.getState()
-                let result
-                try {
-                  result = fn(newValue, lastState)
-                } catch (err) {
-                  console.error(err)
-                  stopPhaseTimerMessage = 'Got error'
-                }
-                stopPhaseTimer(stopPhaseTimerMessage)
-                return result
-              },
-            }),
-          ),
-          Step.single(
-            Cmd.filter({
-              fn(result) {
-                const lastState = innerStore.getState()
-                const isChanged = result !== lastState && result !== undefined
-                if (isChanged) {
-                  lastResult = result
-                }
-                stopPhaseTimer(null)
-                return isChanged
-              },
-            }),
-          ),
+      graphite: createGraph({
+        node: [
+          cmd('compute', {
+            fn(newValue) {
+              startPhaseTimer(store, 'map')
+              lastValue = newValue
+              let stopPhaseTimerMessage = null
+              const lastState = innerStore.getState()
+              let result
+              try {
+                result = fn(newValue, lastState)
+              } catch (err) {
+                console.error(err)
+                stopPhaseTimerMessage = 'Got error'
+              }
+              stopPhaseTimer(stopPhaseTimerMessage)
+              return result
+            },
+          }),
+          cmd('filter', {
+            fn(result) {
+              const lastState = innerStore.getState()
+              const isChanged = result !== lastState && result !== undefined
+              if (isChanged) {
+                lastResult = result
+              }
+              stopPhaseTimer(null)
+              return isChanged
+            },
+          }),
           innerStore.graphite.seq,
-        ]),
-      },
+        ],
+      }),
     },
   })
   return innerStore

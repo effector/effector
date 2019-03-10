@@ -9,11 +9,11 @@ Object {
           "fullName": "foo → *",
         },
         "group": "cmd",
-        "id": "5",
+        "id": "6",
         "type": "emit",
       },
       "group": "step",
-      "id": "7",
+      "id": "5",
       "type": "single",
     },
     Object {
@@ -26,7 +26,7 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "s",
+                "id": "u",
                 "type": "compute",
               },
               "group": "step",
@@ -39,7 +39,7 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "u",
+                "id": "w",
                 "type": "filter",
               },
               "group": "step",
@@ -58,7 +58,7 @@ Object {
                     "type": "filter",
                   },
                   "group": "step",
-                  "id": "j",
+                  "id": "h",
                   "type": "single",
                 },
                 Object {
@@ -74,7 +74,7 @@ Object {
                     "type": "update",
                   },
                   "group": "step",
-                  "id": "l",
+                  "id": "j",
                   "type": "single",
                 },
                 Object {
@@ -87,11 +87,11 @@ Object {
                               "fn": [Function],
                             },
                             "group": "cmd",
-                            "id": "1c",
+                            "id": "1g",
                             "type": "compute",
                           },
                           "group": "step",
-                          "id": "1d",
+                          "id": "1f",
                           "type": "single",
                         },
                         Object {
@@ -100,11 +100,11 @@ Object {
                               "fn": [Function],
                             },
                             "group": "cmd",
-                            "id": "1e",
+                            "id": "1i",
                             "type": "filter",
                           },
                           "group": "step",
-                          "id": "1f",
+                          "id": "1h",
                           "type": "single",
                         },
                         Object {
@@ -115,7 +115,7 @@ Object {
                                   "fn": [Function],
                                 },
                                 "group": "cmd",
-                                "id": "12",
+                                "id": "14",
                                 "type": "filter",
                               },
                               "group": "step",
@@ -131,7 +131,7 @@ Object {
                                   },
                                 },
                                 "group": "cmd",
-                                "id": "14",
+                                "id": "16",
                                 "type": "update",
                               },
                               "group": "step",
@@ -141,22 +141,28 @@ Object {
                             Object {
                               "data": Array [],
                               "group": "step",
-                              "id": "11",
+                              "id": "17",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "16",
+                          "id": "18",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1j",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "1g",
+                      "id": "1k",
                       "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "h",
+                  "id": "l",
                   "type": "multi",
                 },
               ],
@@ -164,9 +170,15 @@ Object {
               "id": "m",
               "type": "seq",
             },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "x",
+              "type": "multi",
+            },
           ],
           "group": "step",
-          "id": "w",
+          "id": "y",
           "type": "seq",
         },
         Object {
@@ -177,27 +189,27 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "1h",
+                "id": "1m",
                 "type": "run",
               },
               "group": "step",
-              "id": "1j",
+              "id": "1l",
               "type": "single",
             },
             Object {
               "data": Array [],
               "group": "step",
-              "id": "1i",
+              "id": "1n",
               "type": "multi",
             },
           ],
           "group": "step",
-          "id": "1k",
+          "id": "1o",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "6",
+      "id": "7",
       "type": "multi",
     },
   ],
@@ -216,11 +228,11 @@ Object {
           "fullName": "foo → *",
         },
         "group": "cmd",
-        "id": "5",
+        "id": "6",
         "type": "emit",
       },
       "group": "step",
-      "id": "7",
+      "id": "5",
       "type": "single",
     },
     Object {
@@ -233,7 +245,7 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "s",
+                "id": "u",
                 "type": "compute",
               },
               "group": "step",
@@ -246,7 +258,7 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "u",
+                "id": "w",
                 "type": "filter",
               },
               "group": "step",
@@ -265,7 +277,7 @@ Object {
                     "type": "filter",
                   },
                   "group": "step",
-                  "id": "j",
+                  "id": "h",
                   "type": "single",
                 },
                 Object {
@@ -281,7 +293,7 @@ Object {
                     "type": "update",
                   },
                   "group": "step",
-                  "id": "l",
+                  "id": "j",
                   "type": "single",
                 },
                 Object {
@@ -294,11 +306,11 @@ Object {
                               "fn": [Function],
                             },
                             "group": "cmd",
-                            "id": "1c",
+                            "id": "1g",
                             "type": "compute",
                           },
                           "group": "step",
-                          "id": "1d",
+                          "id": "1f",
                           "type": "single",
                         },
                         Object {
@@ -307,11 +319,11 @@ Object {
                               "fn": [Function],
                             },
                             "group": "cmd",
-                            "id": "1e",
+                            "id": "1i",
                             "type": "filter",
                           },
                           "group": "step",
-                          "id": "1f",
+                          "id": "1h",
                           "type": "single",
                         },
                         Object {
@@ -322,7 +334,7 @@ Object {
                                   "fn": [Function],
                                 },
                                 "group": "cmd",
-                                "id": "12",
+                                "id": "14",
                                 "type": "filter",
                               },
                               "group": "step",
@@ -338,7 +350,7 @@ Object {
                                   },
                                 },
                                 "group": "cmd",
-                                "id": "14",
+                                "id": "16",
                                 "type": "update",
                               },
                               "group": "step",
@@ -348,22 +360,28 @@ Object {
                             Object {
                               "data": Array [],
                               "group": "step",
-                              "id": "11",
+                              "id": "17",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "16",
+                          "id": "18",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1j",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "1g",
+                      "id": "1k",
                       "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "h",
+                  "id": "l",
                   "type": "multi",
                 },
               ],
@@ -371,14 +389,20 @@ Object {
               "id": "m",
               "type": "seq",
             },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "x",
+              "type": "multi",
+            },
           ],
           "group": "step",
-          "id": "w",
+          "id": "y",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "6",
+      "id": "7",
       "type": "multi",
     },
   ],
@@ -397,11 +421,11 @@ Object {
           "fullName": "foo",
         },
         "group": "cmd",
-        "id": "1",
+        "id": "2",
         "type": "emit",
       },
       "group": "step",
-      "id": "3",
+      "id": "1",
       "type": "single",
     },
     Object {
@@ -414,32 +438,58 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "9",
+                "id": "a",
                 "type": "compute",
               },
               "group": "step",
-              "id": "b",
+              "id": "9",
               "type": "single",
             },
             Object {
               "data": Array [
                 Object {
+                  "data": Object {
+                    "data": Object {
+                      "fullName": "foo → *",
+                    },
+                    "group": "cmd",
+                    "id": "6",
+                    "type": "emit",
+                  },
+                  "group": "step",
+                  "id": "5",
+                  "type": "single",
+                },
+                Object {
                   "data": Array [
                     Object {
-                      "data": Object {
-                        "data": Object {
-                          "fullName": "foo → *",
-                        },
-                        "group": "cmd",
-                        "id": "5",
-                        "type": "emit",
-                      },
-                      "group": "step",
-                      "id": "7",
-                      "type": "single",
-                    },
-                    Object {
                       "data": Array [
+                        Object {
+                          "data": Object {
+                            "data": Object {
+                              "fn": [Function],
+                            },
+                            "group": "cmd",
+                            "id": "u",
+                            "type": "compute",
+                          },
+                          "group": "step",
+                          "id": "t",
+                          "type": "single",
+                        },
+                        Object {
+                          "data": Object {
+                            "data": Object {
+                              "fn": [Function],
+                            },
+                            "group": "cmd",
+                            "id": "w",
+                            "type": "filter",
+                          },
+                          "group": "step",
+                          "id": "v",
+                          "type": "single",
+                        },
                         Object {
                           "data": Array [
                             Object {
@@ -448,59 +498,59 @@ Object {
                                   "fn": [Function],
                                 },
                                 "group": "cmd",
-                                "id": "s",
-                                "type": "compute",
+                                "id": "i",
+                                "type": "filter",
                               },
                               "group": "step",
-                              "id": "t",
+                              "id": "h",
                               "type": "single",
                             },
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "fn": [Function],
+                                  "store": Object {
+                                    "current": "foo | 1 | 11",
+                                    "id": "1",
+                                  },
                                 },
                                 "group": "cmd",
-                                "id": "u",
-                                "type": "filter",
+                                "id": "k",
+                                "type": "update",
                               },
                               "group": "step",
-                              "id": "v",
+                              "id": "j",
                               "type": "single",
                             },
                             Object {
                               "data": Array [
                                 Object {
-                                  "data": Object {
-                                    "data": Object {
-                                      "fn": [Function],
-                                    },
-                                    "group": "cmd",
-                                    "id": "i",
-                                    "type": "filter",
-                                  },
-                                  "group": "step",
-                                  "id": "j",
-                                  "type": "single",
-                                },
-                                Object {
-                                  "data": Object {
-                                    "data": Object {
-                                      "store": Object {
-                                        "current": "foo | 1 | 11",
-                                        "id": "1",
-                                      },
-                                    },
-                                    "group": "cmd",
-                                    "id": "k",
-                                    "type": "update",
-                                  },
-                                  "group": "step",
-                                  "id": "l",
-                                  "type": "single",
-                                },
-                                Object {
                                   "data": Array [
+                                    Object {
+                                      "data": Object {
+                                        "data": Object {
+                                          "fn": [Function],
+                                        },
+                                        "group": "cmd",
+                                        "id": "1g",
+                                        "type": "compute",
+                                      },
+                                      "group": "step",
+                                      "id": "1f",
+                                      "type": "single",
+                                    },
+                                    Object {
+                                      "data": Object {
+                                        "data": Object {
+                                          "fn": [Function],
+                                        },
+                                        "group": "cmd",
+                                        "id": "1i",
+                                        "type": "filter",
+                                      },
+                                      "group": "step",
+                                      "id": "1h",
+                                      "type": "single",
+                                    },
                                     Object {
                                       "data": Array [
                                         Object {
@@ -509,127 +559,112 @@ Object {
                                               "fn": [Function],
                                             },
                                             "group": "cmd",
-                                            "id": "1c",
-                                            "type": "compute",
+                                            "id": "14",
+                                            "type": "filter",
                                           },
                                           "group": "step",
-                                          "id": "1d",
+                                          "id": "13",
                                           "type": "single",
                                         },
                                         Object {
                                           "data": Object {
                                             "data": Object {
-                                              "fn": [Function],
+                                              "store": Object {
+                                                "current": 12,
+                                                "id": "2",
+                                              },
                                             },
                                             "group": "cmd",
-                                            "id": "1e",
-                                            "type": "filter",
+                                            "id": "16",
+                                            "type": "update",
                                           },
                                           "group": "step",
-                                          "id": "1f",
+                                          "id": "15",
                                           "type": "single",
                                         },
                                         Object {
-                                          "data": Array [
-                                            Object {
-                                              "data": Object {
-                                                "data": Object {
-                                                  "fn": [Function],
-                                                },
-                                                "group": "cmd",
-                                                "id": "12",
-                                                "type": "filter",
-                                              },
-                                              "group": "step",
-                                              "id": "13",
-                                              "type": "single",
-                                            },
-                                            Object {
-                                              "data": Object {
-                                                "data": Object {
-                                                  "store": Object {
-                                                    "current": 12,
-                                                    "id": "2",
-                                                  },
-                                                },
-                                                "group": "cmd",
-                                                "id": "14",
-                                                "type": "update",
-                                              },
-                                              "group": "step",
-                                              "id": "15",
-                                              "type": "single",
-                                            },
-                                            Object {
-                                              "data": Array [],
-                                              "group": "step",
-                                              "id": "11",
-                                              "type": "multi",
-                                            },
-                                          ],
+                                          "data": Array [],
                                           "group": "step",
-                                          "id": "16",
-                                          "type": "seq",
+                                          "id": "17",
+                                          "type": "multi",
                                         },
                                       ],
                                       "group": "step",
-                                      "id": "1g",
+                                      "id": "18",
                                       "type": "seq",
+                                    },
+                                    Object {
+                                      "data": Array [],
+                                      "group": "step",
+                                      "id": "1j",
+                                      "type": "multi",
                                     },
                                   ],
                                   "group": "step",
-                                  "id": "h",
-                                  "type": "multi",
+                                  "id": "1k",
+                                  "type": "seq",
                                 },
                               ],
                               "group": "step",
-                              "id": "m",
-                              "type": "seq",
-                            },
-                          ],
-                          "group": "step",
-                          "id": "w",
-                          "type": "seq",
-                        },
-                        Object {
-                          "data": Array [
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "fn": [Function],
-                                },
-                                "group": "cmd",
-                                "id": "1h",
-                                "type": "run",
-                              },
-                              "group": "step",
-                              "id": "1j",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Array [],
-                              "group": "step",
-                              "id": "1i",
+                              "id": "l",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "1k",
+                          "id": "m",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "x",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "6",
-                      "type": "multi",
+                      "id": "y",
+                      "type": "seq",
+                    },
+                    Object {
+                      "data": Array [
+                        Object {
+                          "data": Object {
+                            "data": Object {
+                              "fn": [Function],
+                            },
+                            "group": "cmd",
+                            "id": "1m",
+                            "type": "run",
+                          },
+                          "group": "step",
+                          "id": "1l",
+                          "type": "single",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1n",
+                          "type": "multi",
+                        },
+                      ],
+                      "group": "step",
+                      "id": "1o",
+                      "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "8",
-                  "type": "seq",
+                  "id": "7",
+                  "type": "multi",
                 },
               ],
               "group": "step",
-              "id": "a",
+              "id": "8",
+              "type": "seq",
+            },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "b",
               "type": "multi",
             },
           ],
@@ -639,7 +674,7 @@ Object {
         },
       ],
       "group": "step",
-      "id": "2",
+      "id": "3",
       "type": "multi",
     },
   ],
@@ -679,10 +714,12 @@ exports[`graphite: show bar 1`] = `
                        }
                     }},
                     3. [(empty list)]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ],
      *  Seq [
         1. run {{}},
@@ -722,10 +759,12 @@ exports[`graphite: show bar 2`] = `
                        }
                     }},
                     3. [(empty list)]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -739,44 +778,45 @@ exports[`graphite: show foo 1`] = `
   2. [
      *  Seq [
         1. compute {{}},
-        2. [
-           *  Seq [
-              1. emit {{
-                 fullName: foo → *
-              }},
-              2. [
-                 *  Seq [
-                    1. compute {{}},
-                    2. filter {{}},
-                    3. Seq [
-                       1. filter {{}},
-                       2. update {{
-                          store: {
-                            id: 1,
-                            current: foo | 1 | 11 | 101
-                          }
-                       }},
-                       3. [
-                          *  Seq [
-                             1. compute {{}},
-                             2. filter {{}},
-                             3. Seq [
-                                1. filter {{}},
-                                2. update {{
-                                   store: {
-                                     id: 2,
-                                     current: 18
-                                   }
-                                }},
-                                3. [(empty list)]
-                             ]
-                          ]
+        2. Seq [
+           1. emit {{
+              fullName: foo → *
+           }},
+           2. [
+              *  Seq [
+                 1. compute {{}},
+                 2. filter {{}},
+                 3. Seq [
+                    1. filter {{}},
+                    2. update {{
+                       store: {
+                         id: 1,
+                         current: foo | 1 | 11 | 101
+                       }
+                    }},
+                    3. [
+                       *  Seq [
+                          1. compute {{}},
+                          2. filter {{}},
+                          3. Seq [
+                             1. filter {{}},
+                             2. update {{
+                                store: {
+                                  id: 2,
+                                  current: 18
+                                }
+                             }},
+                             3. [(empty list)]
+                          ],
+                          4. [(empty list)]
                        ]
                     ]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        3. [(empty list)]
      ]
   ]
 ]"
@@ -804,7 +844,8 @@ exports[`graphite: show store1 1`] = `
               }
            }},
            3. [(empty list)]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -836,7 +877,7 @@ Object {
         "type": "filter",
       },
       "group": "step",
-      "id": "j",
+      "id": "h",
       "type": "single",
     },
     Object {
@@ -852,7 +893,7 @@ Object {
         "type": "update",
       },
       "group": "step",
-      "id": "l",
+      "id": "j",
       "type": "single",
     },
     Object {
@@ -865,11 +906,11 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "1c",
+                "id": "1g",
                 "type": "compute",
               },
               "group": "step",
-              "id": "1d",
+              "id": "1f",
               "type": "single",
             },
             Object {
@@ -878,11 +919,11 @@ Object {
                   "fn": [Function],
                 },
                 "group": "cmd",
-                "id": "1e",
+                "id": "1i",
                 "type": "filter",
               },
               "group": "step",
-              "id": "1f",
+              "id": "1h",
               "type": "single",
             },
             Object {
@@ -893,7 +934,7 @@ Object {
                       "fn": [Function],
                     },
                     "group": "cmd",
-                    "id": "12",
+                    "id": "14",
                     "type": "filter",
                   },
                   "group": "step",
@@ -909,7 +950,7 @@ Object {
                       },
                     },
                     "group": "cmd",
-                    "id": "14",
+                    "id": "16",
                     "type": "update",
                   },
                   "group": "step",
@@ -919,22 +960,28 @@ Object {
                 Object {
                   "data": Array [],
                   "group": "step",
-                  "id": "11",
+                  "id": "17",
                   "type": "multi",
                 },
               ],
               "group": "step",
-              "id": "16",
+              "id": "18",
               "type": "seq",
+            },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "1j",
+              "type": "multi",
             },
           ],
           "group": "step",
-          "id": "1g",
+          "id": "1k",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "h",
+      "id": "l",
       "type": "multi",
     },
   ],
@@ -953,7 +1000,7 @@ Object {
           "fn": [Function],
         },
         "group": "cmd",
-        "id": "12",
+        "id": "14",
         "type": "filter",
       },
       "group": "step",
@@ -969,7 +1016,7 @@ Object {
           },
         },
         "group": "cmd",
-        "id": "14",
+        "id": "16",
         "type": "update",
       },
       "group": "step",
@@ -979,12 +1026,12 @@ Object {
     Object {
       "data": Array [],
       "group": "step",
-      "id": "11",
+      "id": "17",
       "type": "multi",
     },
   ],
   "group": "step",
-  "id": "16",
+  "id": "18",
   "type": "seq",
 }
 `;
@@ -1013,7 +1060,8 @@ exports[`showcase: event foo 1`] = `
                  3. run {{}}
               ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -1029,7 +1077,10 @@ exports[`showcase: mapped 1`] = `
      }
   }},
   3. [
-     *  run {{}}
+     *  Seq [
+        1. run {{}},
+        2. [(empty list)]
+     ]
   ]
 ]"
 `;
