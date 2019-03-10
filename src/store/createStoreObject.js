@@ -1,5 +1,5 @@
 //@flow
-import {Step, cmd, stringRefcount, isStore} from 'effector/stdlib'
+import {cmd, createGraph, stringRefcount, isStore} from 'effector/stdlib'
 
 import {createEvent, forward} from 'effector/event'
 import type {Store} from './index.h'
@@ -34,25 +34,27 @@ function storeCombination(
     })
 
     fn.data.data.pushUpdate = data => {}
-    const runCmd = Step.seq([
-      cmd('compute', {
-        fn(state) {
-          const current = store.getState()
-          const changed = current[key] !== state
-          current[key] = state
-          return changed
-        },
-      }),
-      cmd('filter', {
-        fn: changed => changed,
-      }),
-      fn,
-    ])
+
     stateNew[key] = child.getState()
     forward({
       from: child,
       to: {
-        graphite: {seq: runCmd},
+        graphite: createGraph({
+          node: [
+            cmd('compute', {
+              fn(state) {
+                const current = store.getState()
+                const changed = current[key] !== state
+                current[key] = state
+                return changed
+              },
+            }),
+            cmd('filter', {
+              fn: changed => changed,
+            }),
+            fn,
+          ],
+        }),
       },
     })
   }
