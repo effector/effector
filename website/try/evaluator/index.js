@@ -56,7 +56,7 @@ async function loadEngine() {
   return realm
 }
 
-export async function evaluator(code) {
+export async function evaluator(code: string) {
   const effector = await loadEngine()
   const env = prepareRuntime(effector, version.getState())
   return evalExpr(code, env)
