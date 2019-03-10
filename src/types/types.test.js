@@ -7,6 +7,7 @@ import {
   createStoreObject,
   createDomain,
   combine,
+  sample,
   Effect,
   Store,
   Event,
@@ -18,6 +19,29 @@ import {
   relayShape,
 } from 'effector'
 import {createFormApi} from '@effector/forms'
+
+describe('Unit', () => {
+  test('sample', () => {
+    const a = createEvent<number>()
+    const b = createEvent<boolean>()
+    const c = sample(a, b)
+
+    const check1: Event<number> = c
+    const check2: Event<string> = c
+
+    const d = createStore(0)
+    const e = sample(d, b)
+
+    const check3: Store<number> = e
+    const check4: Store<string> = e
+
+    const f = createEffect<string, any, any>()
+    const g = sample(f, b)
+
+    const check5: Event<string> = g
+    const check6: Event<number> = g
+  })
+})
 
 describe('Event', () => {
   test('createEvent', () => {
@@ -194,30 +218,22 @@ describe('Graph', () => {
     forward({from: e, to: f})
   })
 
-  test('relay', () => {
+  test('relay', () => {})
 
-  })
-
-  test('relayShape', () => {
-
-  })
+  test('relayShape', () => {})
 })
 
-describe('effector-react', () => {
+describe('effector-react', () => {})
 
-})
-
-describe('effector-vue', () => {
-
-})
+describe('effector-vue', () => {})
 
 describe('@effector/forms', () => {
   describe('createFormApi', () => {
     const form = createFormApi({
       fields: {
         firstName: '',
-        lastName: ''
-      }
+        lastName: '',
+      },
     })
   })
 })
