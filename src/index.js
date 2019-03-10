@@ -1,6 +1,6 @@
 //@flow
 
-export {combine} from './effector'
+export {combine, sample} from './effector'
 
 export type {Domain} from 'effector/domain'
 export {createDomain} from 'effector/domain'
