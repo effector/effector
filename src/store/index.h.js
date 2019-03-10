@@ -69,6 +69,7 @@ export type Store<State> = {
     )
   ),
   +kind: kind,
+  +defaultState: State,
   shortName: string,
   domainName?: CompositeName,
   graphite: Graph,
