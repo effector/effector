@@ -3,48 +3,44 @@ import type {StateRef, TypeDef} from './index.h'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 
-const typeDef = (group: string, t: $ReadOnlyArray<string>) => {
-  const result = {}
-  for (let i = 0; i < t.length; i++) {
-    const key = t[i]
-    result[key] = type.bind({
-      key,
-      group,
-    })
-  }
-  return result
-}
-
-export const Step: {
-  +query: (
-    props:
-      | {|
-          +mode: 'some',
-          +fn: (
-            arg: any,
-            ctx: any,
-            meta: *,
-          ) => {+arg: any, +list: Array<TypeDef<*, *>>},
-        |}
-      | {|
-          +mode: 'shape',
-          +shape: {[string]: TypeDef<*, *>},
-          +fn: (arg: any, ctx: any, meta: *) => {+[string]: any},
-        |},
-  ) => TypeDef<'query', 'step'>,
-  single(props: TypeDef<*, 'cmd'>): TypeDef<'single', 'step'>,
-  multi(props: $ReadOnlyArray<TypeDef<*, *>>): TypeDef<'multi', 'step'>,
-  seq(props: $ReadOnlyArray<TypeDef<*, *>>): TypeDef<'seq', 'step'>,
-} = typeDef(('step': 'step'), ['single', 'multi', 'seq', 'query'])
-
-function type(data) {
+declare export function step(
+  type: 'query',
+  data:
+    | {|
+        +mode: 'some',
+        +fn: (
+          arg: any,
+          ctx: any,
+          meta: *,
+        ) => {+arg: any, +list: Array<TypeDef<*, *>>},
+      |}
+    | {|
+        +mode: 'shape',
+        +shape: {[string]: TypeDef<*, *>},
+        +fn: (arg: any, ctx: any, meta: *) => {+[string]: any},
+      |},
+): TypeDef<'query', 'step'>
+declare export function step(
+  type: 'single',
+  data: TypeDef<*, 'cmd'>,
+): TypeDef<'single', 'step'>
+declare export function step(
+  type: 'multi',
+  data: $ReadOnlyArray<TypeDef<*, *>>,
+): TypeDef<'multi', 'step'>
+declare export function step(
+  type: 'seq',
+  data: $ReadOnlyArray<TypeDef<*, *>>,
+): TypeDef<'seq', 'step'>
+export function step(type: string, data: Object) {
   return {
     id: nextID(),
-    type: this.key,
-    group: this.group,
+    type,
+    group: 'step',
     data,
   }
 }
+
 //eslint-disable-next-line no-unused-vars
 declare export function cmd(
   tag: 'compute',
@@ -67,15 +63,10 @@ declare export function cmd(
   data: {|store: StateRef|} | {|val: string|},
 ): TypeDef<'single', 'step'>
 export function cmd(type: string, data: Object): TypeDef<'single', 'step'> {
-  return {
+  return step('single', {
     id: nextID(),
-    type: 'single',
-    group: 'step',
-    data: {
-      id: nextID(),
-      type,
-      group: 'cmd',
-      data,
-    },
-  }
+    type,
+    group: 'cmd',
+    data,
+  })
 }

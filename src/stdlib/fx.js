@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import type {StateRef, TypeDef} from './index.h'
-import {Step, cmd} from './typedef'
+import {step, cmd} from './typedef'
 
 /* Step */
 declare export default function fx(
@@ -84,13 +84,13 @@ export default function fx(
 ) {
   switch (tag) {
     case 'seq':
-      return Step.seq(childrens)
+      return step('seq', childrens)
     case 'multi':
-      return Step.multi(childrens)
+      return step('multi', childrens)
     case 'single':
-      return Step.single(childrens[0])
+      return step('single', childrens[0])
     case 'query':
-      return Step.query(props)
+      return step('query', props)
     default:
       return cmd(tag, props)
   }

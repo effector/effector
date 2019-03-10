@@ -1,6 +1,6 @@
 //@flow
 
-import {createGraph, Step} from 'effector/stdlib'
+import {createGraph, step} from 'effector/stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../effector/index.h'
@@ -24,7 +24,7 @@ export function relayShape<
     to: {
       graphite: createGraph({
         node: [
-          Step.query({
+          step('query', {
             mode: 'shape',
             shape,
             fn: query,
@@ -66,7 +66,7 @@ function relayRaw<E, F>(opts: {
     to: {
       graphite: createGraph({
         node: [
-          Step.query({
+          step('query', {
             mode: 'some',
             fn,
           }),
