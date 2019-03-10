@@ -19,4 +19,4 @@ cd build/effector
 echo '{"name": "effector", "alias": ["effector.now.sh"], "version": 2}' > now.json
 npx now --token "${NOW_TOKEN}" --force --no-clipboard
 npx now --token "${NOW_TOKEN}" alias 'effector.now.sh'
-npx now --token "${NOW_TOKEN}" domains verify 'effector.js.org'
+npx now --token "${NOW_TOKEN}" alias 'effector.js.org'
