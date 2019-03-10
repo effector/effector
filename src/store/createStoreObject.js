@@ -1,5 +1,5 @@
 //@flow
-import {Step, Cmd, stringRefcount, isStore} from 'effector/stdlib'
+import {cmd, createGraph, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName, unitObjectArrayName} from 'effector/naming'
 import {createEvent, forward} from 'effector/event'
 
@@ -24,41 +24,37 @@ function storeCombination(
     const {key, child} = pairs[i]
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const fn = Step.single(
-      Cmd.run({
-        fn() {
-          fn.data.data.pushUpdate({
-            event: updater,
-            data: getFresh,
-          })
-        },
-      }),
-    )
+    const fn = cmd('run', {
+      fn() {
+        fn.data.data.pushUpdate({
+          event: updater,
+          data: getFresh,
+        })
+      },
+    })
 
     fn.data.data.pushUpdate = data => {}
-    const runCmd = Step.seq([
-      Step.single(
-        Cmd.compute({
-          fn(state) {
-            const current = store.getState()
-            const changed = current[key] !== state
-            current[key] = state
-            return changed
-          },
-        }),
-      ),
-      Step.single(
-        Cmd.filter({
-          fn: changed => changed,
-        }),
-      ),
-      fn,
-    ])
+
     stateNew[key] = child.getState()
     forward({
       from: child,
       to: {
-        graphite: {seq: runCmd},
+        graphite: createGraph({
+          node: [
+            cmd('compute', {
+              fn(state) {
+                const current = store.getState()
+                const changed = current[key] !== state
+                current[key] = state
+                return changed
+              },
+            }),
+            cmd('filter', {
+              fn: changed => changed,
+            }),
+            fn,
+          ],
+        }),
       },
     })
   }

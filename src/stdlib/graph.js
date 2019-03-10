@@ -1,24 +1,22 @@
 //@flow
 
 import type {TypeDef, Graph} from './index.h'
-import {Step} from './typedef'
+import {step} from './typedef'
 
 export function createGraph({
   node,
   child = [],
+  from = [],
 }: {
   node: Array<TypeDef<*, *>>,
   child?: Array<TypeDef<*, *>>,
+  from?: Array<TypeDef<*, *>>,
 }): Graph {
-  const next = Step.multi(normalizeNodes(child))
-  const items = normalizeNodes(node).concat([next])
+  const next = step('multi', child)
+  const items = node.concat([next])
   return {
-    seq: Step.seq(items),
+    from,
+    seq: step('seq', items),
     next,
   }
 }
-
-const normalizeNodes = (
-  nodes: Array<TypeDef<*, *>>,
-): Array<TypeDef<*, 'step'>> =>
-  nodes.map(node => (node.group === 'cmd' ? Step.single(node) : node))

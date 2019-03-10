@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import type {StateRef, TypeDef} from './index.h'
-import {Step, Cmd} from './typedef'
+import {step, cmd} from './typedef'
 
 /* Step */
 declare export default function fx(
@@ -82,22 +82,16 @@ export default function fx(
   props: *,
   ...childrens: *
 ) {
-  if (tag in Cmd) {
-    const tag_: 'compute' | 'emit' | 'filter' | 'run' | 'update' = (tag: any)
-    return Step.single(Cmd[tag_](props))
-  }
-  const tag_: 'single' | 'multi' | 'seq' | 'query' = (tag: any)
-  switch (tag_) {
+  switch (tag) {
     case 'seq':
-      return Step.seq(childrens)
+      return step('seq', childrens)
     case 'multi':
-      return Step.multi(childrens)
+      return step('multi', childrens)
     case 'single':
-      return Step.single(childrens[0])
+      return step('single', childrens[0])
     case 'query':
-      return Step.query(props)
+      return step('query', props)
+    default:
+      return cmd(tag, props)
   }
-  // if (typeof tag === 'function') return tag(props, childrens)
-  // console.error('unknown node "%s"', tag)
-  return null
 }
