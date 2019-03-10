@@ -1,0 +1,47 @@
+body {
+  width: 100vw;
+  height: 100vh;
+  font-family: Helvetica;
+  background-color: var(--theme-background);
+  -webkit-overflow-scrolling: touch;
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+html,
+body {
+  overflow: hidden;
+}
+
+#app {
+  display: contents;
+}
+h1 {
+  color: var(--theme-color);
+  text-align: center;
+}
+:root {
+  --theme-color: #bb1f25;
+  --theme-background: #120309;
+}
+button {
+  font-size: 20px;
+  padding: 10px 30px;
+  border-radius: 8px;
+  outline: none;
+}
+button:nth-child(2) {
+  margin-left: 40px;
+}
+button:focus {
+  background: #7ca5ed;
+}
+button:active {
+  background: #5088ed;
+}
