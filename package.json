@@ -170,6 +170,7 @@
     "effector/stdlib/stateref": "./src/stdlib/stateref",
     "effector/stdlib/iterator": "./src/stdlib/iterator",
     "effector/flags": "./src/flags.prod",
+    "effector/naming": "./src/naming",
     "effector/perf": "./src/perf"
   }
 }
