@@ -28,6 +28,7 @@ export function storeFabric<State>(props: {
   const plainState = createStateRef(currentState)
   const currentId = name || plainState.id
   const defaultState = currentState
+  const compositeName = createName(currentId, parent)
 
   const updater: any = createEvent('update ' + currentId)
   const storeInstance: ThisStore = {
@@ -35,8 +36,9 @@ export function storeFabric<State>(props: {
       node: [
         cmd('filter', {
           fn: filterBeforeUpdate.bind(plainState),
+          fullName: compositeName.fullName
         }),
-        cmd('update', {store: plainState}),
+        cmd('update', {store: plainState, fullName: compositeName.fullName}),
       ],
     }),
     kind: Kind.store,
@@ -46,7 +48,7 @@ export function storeFabric<State>(props: {
     defaultState,
     plainState,
     subscribers: new Map(),
-    compositeName: createName(currentId, parent),
+    compositeName,
   }
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
