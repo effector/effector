@@ -55,3 +55,37 @@ function type(data) {
     data,
   }
 }
+//eslint-disable-next-line no-unused-vars
+declare export function cmd(
+  tag: 'compute',
+  data: {fn: Function},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'emit',
+  data: {fullName: string},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'filter',
+  data: {fn: (data: any) => boolean},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'run',
+  data: {fn: Function},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'update',
+  data: {|store: StateRef|} | {|val: string|},
+): TypeDef<'single', 'step'>
+export function cmd(type: string, data: Object): TypeDef<'single', 'step'> {
+  return {
+    id: nextID(),
+    type: 'single',
+    group: 'step',
+    data: {
+      id: nextID(),
+      type,
+      group: 'cmd',
+      data,
+    },
+  }
+}
