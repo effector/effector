@@ -3,11 +3,8 @@
 import {createDomain} from 'effector/domain'
 import {createEvent} from 'effector/event'
 import {createStore, createStoreObject} from 'effector/store'
-import {
-  storeNaming,
-  storeObjectArrayName,
-  storeObjectName,
-} from '../setStoreName'
+import {storeNaming} from '../setStoreName'
+import {unitObjectArrayName, unitObjectName} from '../../naming'
 
 const rootDomain = createDomain('')
 
@@ -111,12 +108,12 @@ describe('naming', () => {
 
 describe('naming scheme', () => {
   test('storeObjectArrayName', () => {
-    expect(storeObjectArrayName([1, 2, 3])).toBe('combine(1, 2, 3)')
+    expect(unitObjectArrayName([1, 2, 3])).toBe('combine(1, 2, 3)')
   })
 
   test('storeObjectName', () => {
     expect(
-      storeObjectName({
+      unitObjectName({
         a: 1,
         b: 2,
         c: 3,
@@ -127,13 +124,13 @@ describe('naming scheme', () => {
   test('storeObjectArrayName doesnt breaks maximum', () => {
     const mock = Array.from({length: 100}, (_, i) => i.toString(36))
     const obj2 = mock.slice(0, 25)
-    expect(storeObjectArrayName(mock)).toBe(`combine(${obj2.join(', ')})`)
+    expect(unitObjectArrayName(mock)).toBe(`combine(${obj2.join(', ')})`)
   })
 
   test('storeObjectName doesnt breaks maximum', () => {
     const mock = Array.from({length: 100}, (_, i) => i.toString(36))
     const obj = mock.reduce((acc, v) => ({...acc, [v]: v}), {})
     const obj2 = Object.values(obj).slice(0, 25)
-    expect(storeObjectName(obj)).toBe(`combine(${obj2.join(', ')})`)
+    expect(unitObjectName(obj)).toBe(`combine(${obj2.join(', ')})`)
   })
 })

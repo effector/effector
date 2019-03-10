@@ -1,9 +1,9 @@
 //@flow
 import {Step, Cmd, stringRefcount, isStore} from 'effector/stdlib'
-
+import {unitObjectName, unitObjectArrayName} from 'effector/naming'
 import {createEvent, forward} from 'effector/event'
+
 import type {Store} from './index.h'
-import {storeObjectName, storeObjectArrayName} from './setStoreName'
 import {storeFabric} from './storeFabric'
 
 const nextUpdaterID = stringRefcount()
@@ -86,7 +86,7 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
 > {
   return storeCombination(obj, {
     freshGetter: getFreshArray,
-    nameSetter: storeObjectArrayName,
+    nameSetter: unitObjectArrayName,
     initializer(state) {
       const pairs = []
       const stateNew = [...obj]
@@ -112,7 +112,7 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
 > {
   return storeCombination(obj, {
     freshGetter: getFreshObject,
-    nameSetter: storeObjectName,
+    nameSetter: unitObjectName,
     initializer(state) {
       const pairs = []
       const stateNew = Object.assign({}, obj)
