@@ -3,50 +3,7 @@
 import {isStore} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
-import {getDisplayName} from './staticMethods'
 import {createName, type CompositeName} from '../compositeName'
-
-const storeObjectMaxNames = 25
-
-export function storeObjectArrayName(arr: $ReadOnlyArray<Store<any> | any>) {
-  let i = 0
-  const max = storeObjectMaxNames - 1
-  const maxLength = arr.length - 1
-  let name = 'combine('
-  for (const store of arr) {
-    const comma = i === max || maxLength === i ? '' : ', '
-    if (isStore(store)) {
-      name += getDisplayName(store) + comma
-    } else {
-      name += store.toString() + comma
-    }
-    i += 1
-    if (comma === '') break
-  }
-  name += ')'
-  return name
-}
-
-export function storeObjectName(obj: {[key: string]: Store<any> | any}) {
-  let i = 0
-  const keys = Object.keys(obj)
-  const max = storeObjectMaxNames - 1
-  const maxLength = keys.length - 1
-  let name = 'combine('
-  for (const key in obj) {
-    const comma = i === max || maxLength === i ? '' : ', '
-    const store = obj[key]
-    if (isStore(store)) {
-      name += getDisplayName(store) + comma
-    } else {
-      name += store.toString() + comma
-    }
-    i += 1
-    if (comma === '') break
-  }
-  name += ')'
-  return name
-}
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)
