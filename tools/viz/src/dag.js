@@ -34,32 +34,44 @@ export default ({
       y: d => d.y,
     },
     nodeBackground: colorMap => ({
-      height: d => (isCmd(d) ? 8 : 2) * 2,
+      height: d => (isCmd(d) ? 8 : 0) * 2,
       width(d) {
+        if (!isCmd(d)) return 6
         const text = nodeTextSwitch(d.data.type)
-        const symbols = text.length
+        const fullName = d.data.data?.meta?.fullName ?? ''
+        const symbols = Math.max(text.length, fullName.length)
         return symbols * 4 + 8
       },
       fill(d) {
         return colorMap[d.id]
       },
       x(d) {
+        if (!isCmd(d)) return -3
         const width = (() => {
           const text = nodeTextSwitch(d.data.type)
-          const symbols = text.length
+          const fullName = d.data.data?.meta?.fullName ?? ''
+          const symbols = Math.max(text.length, fullName.length)
           return symbols * 4 + 8
         })()
         return -width / 2
       },
-      y: -8,
+      y(d) {
+        if (!isCmd(d)) return 0
+        return -8
+      },
     }),
     text: {
-      text(d) {
-        if (isCmd(d)) return nodeTextSwitch(d.data.type)
+      text1(d) {
+        return d.data.data?.meta?.fullName ?? ''
+      },
+      text2(d) {
+        if (isCmd(d)) {
+          return nodeTextSwitch(d.data.type)
+        }
         return ''
       },
-      fontSize: '10px',
-      fontWeight: '400',
+      fontSize: '5px',
+      fontWeight: '200',
       fontFamily: 'Helvetica',
       textAnchor: 'middle',
       alignment: 'middle',
@@ -169,15 +181,26 @@ function addNodeBackground(nodes, {width, height, fill, x, y}) {
 
 function addTextNode(
   nodes,
-  {text, fontSize, fontWeight, fontFamily, textAnchor, alignment, fill},
+  {text1, text2, fontSize, fontWeight, fontFamily, textAnchor, alignment, fill},
 ) {
   nodes
     .append('text')
-    .text(text)
+    .text(text1)
     .attr('font-weight', fontWeight)
     .attr('font-size', fontSize)
     .attr('font-family', fontFamily)
     .attr('text-anchor', textAnchor)
     .attr('alignment-baseline', alignment)
     .attr('fill', fill)
+    .attr('transform', 'translate(0, -3)')
+  nodes
+    .append('text')
+    .text(text2)
+    .attr('font-weight', fontWeight)
+    .attr('font-size', fontSize)
+    .attr('font-family', fontFamily)
+    .attr('text-anchor', textAnchor)
+    .attr('alignment-baseline', alignment)
+    .attr('fill', fill)
+    .attr('transform', 'translate(0, 3)')
 }
