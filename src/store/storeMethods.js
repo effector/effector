@@ -32,6 +32,10 @@ const readName = (e: *): string => {
 }
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
   const e: Event<any> = event
+  const meta = {
+    fullName: storeInstance.compositeName?.fullName,
+    section: storeInstance.id,
+  }
   storeInstance.subscribers.set(
     e,
     forward({
@@ -44,12 +48,14 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
                 const lastState = getState(storeInstance)
                 return handler(lastState, newValue, readName(e))
               },
+              meta,
             }),
             cmd('filter', {
               fn(data) {
                 const lastState = getState(storeInstance)
                 return data !== lastState && data !== undefined
               },
+              meta,
             }),
             storeInstance.graphite.seq,
           ],
@@ -99,10 +105,7 @@ export function watch(
       )
     case '__':
     default:
-      invariant(
-        typeof eventOrFn === 'function',
-        message,
-      )
+      invariant(typeof eventOrFn === 'function', message)
       return subscribe(storeInstance, eventOrFn)
   }
 }
@@ -123,7 +126,10 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     stopPhaseTimerMessage = 'Got initial error'
   }
   stopPhaseTimer(stopPhaseTimerMessage)
-
+  const meta = {
+    fullName: storeInstance.compositeName?.fullName,
+    section: storeInstance.id,
+  }
   return forward({
     from: storeInstance,
     to: {
@@ -146,6 +152,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
               }
               stopPhaseTimer(stopPhaseTimerMessage)
             },
+            meta,
           }),
         ],
       }),
@@ -181,6 +188,10 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
+  const meta = {
+    fullName: innerStore.compositeName?.fullName,
+    section: store.id,
+  }
   forward({
     from: store,
     to: {
@@ -202,6 +213,7 @@ export function mapStore<A, B>(
               stopPhaseTimer(stopPhaseTimerMessage)
               return result
             },
+            meta,
           }),
           cmd('filter', {
             fn(result) {
@@ -213,6 +225,7 @@ export function mapStore<A, B>(
               stopPhaseTimer(null)
               return isChanged
             },
+            meta,
           }),
           innerStore.graphite.seq,
         ],

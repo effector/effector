@@ -84,7 +84,12 @@
                         "id": "5j",
                         "type": "compute",
                         "group": "cmd",
-                        "data": {}
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
                       }
                     },
                     {
@@ -95,7 +100,12 @@
                         "id": "5l",
                         "type": "filter",
                         "group": "cmd",
-                        "data": {}
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
                       }
                     },
                     {
@@ -157,7 +167,12 @@
                                     "id": "65",
                                     "type": "compute",
                                     "group": "cmd",
-                                    "data": {}
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
                                   }
                                 },
                                 {
@@ -168,7 +183,12 @@
                                     "id": "67",
                                     "type": "filter",
                                     "group": "cmd",
-                                    "data": {}
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
                                   }
                                 },
                                 {
@@ -233,7 +253,12 @@
                                                 "id": "6r",
                                                 "type": "compute",
                                                 "group": "cmd",
-                                                "data": {}
+                                                "data": {
+                                                  "meta": {
+                                                    "fullName": "B → * → * → *",
+                                                    "section": "B → * → *"
+                                                  }
+                                                }
                                               }
                                             },
                                             {
@@ -244,7 +269,12 @@
                                                 "id": "6t",
                                                 "type": "filter",
                                                 "group": "cmd",
-                                                "data": {}
+                                                "data": {
+                                                  "meta": {
+                                                    "fullName": "B → * → * → *",
+                                                    "section": "B → * → *"
+                                                  }
+                                                }
                                               }
                                             },
                                             {
@@ -388,7 +418,12 @@
                         "id": "7d",
                         "type": "compute",
                         "group": "cmd",
-                        "data": {}
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
                       }
                     },
                     {
@@ -399,7 +434,12 @@
                         "id": "7f",
                         "type": "filter",
                         "group": "cmd",
-                        "data": {}
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
                       }
                     },
                     {
@@ -461,7 +501,12 @@
                                     "id": "7z",
                                     "type": "compute",
                                     "group": "cmd",
-                                    "data": {}
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
                                   }
                                 },
                                 {
@@ -472,7 +517,12 @@
                                     "id": "81",
                                     "type": "filter",
                                     "group": "cmd",
-                                    "data": {}
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
                                   }
                                 },
                                 {
