@@ -4,7 +4,9 @@
 import {line as lined3, curveCatmullRom, select, interpolateRainbow} from 'd3'
 import {real} from './data'
 import {layerings, decrossings, coords, sources, layouts} from './d3dag'
-
+function isCmd(d) {
+  return d.data.group === 'cmd'
+}
 export default ({
   width,
   height,
@@ -32,17 +34,28 @@ export default ({
       y: d => d.y,
     },
     nodeBackground: colorMap => ({
-      radius(d) {
-        if (d.data.group === 'cmd') return 11
-        return 3
+      height: d => (isCmd(d) ? 8 : 2) * 2,
+      width(d) {
+        const text = nodeTextSwitch(d.data.type)
+        const symbols = text.length
+        return symbols * 4 + 8
       },
       fill(d) {
         return colorMap[d.id]
       },
+      x(d) {
+        const width = (() => {
+          const text = nodeTextSwitch(d.data.type)
+          const symbols = text.length
+          return symbols * 4 + 8
+        })()
+        return -width / 2
+      },
+      y: -8,
     }),
     text: {
       text(d) {
-        if (d.data.group === 'cmd') return nodeTextSwitch(d.data.type)
+        if (isCmd(d)) return nodeTextSwitch(d.data.type)
         return ''
       },
       fontSize: '10px',
@@ -141,11 +154,14 @@ function initFull(data, cfg) {
   addTextNode(nodes, cfg.text)
 }
 
-function addNodeBackground(nodes, {radius, fill}) {
+function addNodeBackground(nodes, {width, height, fill, x, y}) {
   nodes
-    .append('circle')
-    .attr('r', radius)
+    .append('rect')
+    .attr('width', width)
+    .attr('height', height)
     .attr('fill', fill)
+    .attr('x', x)
+    .attr('y', y)
 }
 
 function addTextNode(
