@@ -137,11 +137,11 @@ function initFull(data, cfg) {
   const colorMap = initColorMap({dag, interpolate: cfg.interpolate})
   const line = initEdge(cfg.line)
   const nodes = initNodes({dag, line, colorMap, stroke: cfg.stroke})
-  addCircleNode(nodes, cfg.circle(colorMap))
+  addNodeBackground(nodes, cfg.circle(colorMap))
   addTextNode(nodes, cfg.text)
 }
 
-function addCircleNode(nodes, {radius, fill}) {
+function addNodeBackground(nodes, {radius, fill}) {
   nodes
     .append('circle')
     .attr('r', radius)
