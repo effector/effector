@@ -11,7 +11,13 @@
         "id": "4j",
         "type": "emit",
         "group": "cmd",
-        "data": {"fullName": "A"}
+        "data": {
+          "fullName": "A",
+          "meta": {
+            "fullName": "A",
+            "section": "a"
+          }
+        }
       }
     },
     {
@@ -28,7 +34,17 @@
               "id": "4s",
               "type": "single",
               "group": "step",
-              "data": {"id": "4r", "type": "filter", "group": "cmd", "data": {}}
+              "data": {
+                "id": "4r",
+                "type": "filter",
+                "group": "cmd",
+                "data": {
+                  "meta": {
+                    "fullName": "B",
+                    "section": "B"
+                  }
+                }
+              }
             },
             {
               "id": "4u",
@@ -38,7 +54,16 @@
                 "id": "4t",
                 "type": "update",
                 "group": "cmd",
-                "data": {"store": {"id": "d", "current": "end"}}
+                "data": {
+                  "store": {
+                    "id": "d",
+                    "current": "end"
+                  },
+                  "meta": {
+                    "fullName": "B",
+                    "section": "B"
+                  }
+                }
               }
             },
             {
@@ -86,7 +111,12 @@
                             "id": "57",
                             "type": "filter",
                             "group": "cmd",
-                            "data": {}
+                            "data": {
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
                           }
                         },
                         {
@@ -97,7 +127,16 @@
                             "id": "59",
                             "type": "update",
                             "group": "cmd",
-                            "data": {"store": {"id": "e", "current": 3}}
+                            "data": {
+                              "store": {
+                                "id": "e",
+                                "current": 3
+                              },
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
                           }
                         },
                         {
@@ -145,7 +184,12 @@
                                         "id": "5t",
                                         "type": "filter",
                                         "group": "cmd",
-                                        "data": {}
+                                        "data": {
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
                                       }
                                     },
                                     {
@@ -163,6 +207,10 @@
                                               "isEmpty": false,
                                               "ln": 3
                                             }
+                                          },
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
                                           }
                                         }
                                       }
@@ -212,7 +260,12 @@
                                                     "id": "6f",
                                                     "type": "filter",
                                                     "group": "cmd",
-                                                    "data": {}
+                                                    "data": {
+                                                      "meta": {
+                                                        "fullName": "B → * → * → *",
+                                                        "section": "B → * → * → *"
+                                                      }
+                                                    }
                                                   }
                                                 },
                                                 {
@@ -227,6 +280,10 @@
                                                       "store": {
                                                         "id": "g",
                                                         "current": "length: 3 empty: false"
+                                                      },
+                                                      "meta": {
+                                                        "fullName": "B → * → * → *",
+                                                        "section": "B → * → * → *"
                                                       }
                                                     }
                                                   }
@@ -310,7 +367,12 @@
                         }
                       ]
                     },
-                    {"id": "5n", "type": "multi", "group": "step", "data": []}
+                    {
+                      "id": "5n",
+                      "type": "multi",
+                      "group": "step",
+                      "data": []
+                    }
                   ]
                 },
                 {
@@ -353,7 +415,12 @@
                             "id": "71",
                             "type": "filter",
                             "group": "cmd",
-                            "data": {}
+                            "data": {
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
                           }
                         },
                         {
@@ -364,7 +431,16 @@
                             "id": "73",
                             "type": "update",
                             "group": "cmd",
-                            "data": {"store": {"id": "h", "current": "end"}}
+                            "data": {
+                              "store": {
+                                "id": "h",
+                                "current": "end"
+                              },
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
                           }
                         },
                         {
@@ -412,7 +488,12 @@
                                         "id": "7n",
                                         "type": "filter",
                                         "group": "cmd",
-                                        "data": {}
+                                        "data": {
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
                                       }
                                     },
                                     {
@@ -427,6 +508,10 @@
                                           "store": {
                                             "id": "i",
                                             "current": "text: \"end\""
+                                          },
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
                                           }
                                         }
                                       }
@@ -498,7 +583,12 @@
                         }
                       ]
                     },
-                    {"id": "7h", "type": "multi", "group": "step", "data": []}
+                    {
+                      "id": "7h",
+                      "type": "multi",
+                      "group": "step",
+                      "data": []
+                    }
                   ]
                 }
               ]

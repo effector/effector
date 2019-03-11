@@ -1,5 +1,6 @@
 //@flow
-
+import * as fs from 'fs-extra'
+import {resolve} from 'path'
 import {createEvent, forward} from 'effector/event'
 import {createStore} from '..'
 import {combine} from '../../effector'
@@ -80,4 +81,7 @@ test('olympic', async() => {
     ['text: "" length: 1 empty: false'],
     ['text: "end" length: 3 empty: false'],
   ])
+
+  const path = resolve(__dirname, '../../..', 'tools/viz/src', 'out.json')
+  await fs.outputJSON(path, A.graphite.seq, {spaces: 2})
 })
