@@ -4,7 +4,7 @@ export function css(obj) {
   return parseCssObject(normalizeCssObject(obj))
 }
 
-function decamelcase(word) {
+function decamelcase(word: string) {
   return word.replace(/[A-Z]+/g, ch => `-${ch.toLocaleLowerCase()}`)
 }
 function normalizeCssObject(obj) {
