@@ -1,5 +1,5 @@
 //@flow
-import type {StateRef, TypeDef} from './index.h'
+import type {StateRef, NodeMeta, TypeDef} from './index.h'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 
@@ -44,23 +44,43 @@ export function step(type: string, data: Object) {
 //eslint-disable-next-line no-unused-vars
 declare export function cmd(
   tag: 'compute',
-  data: {fn: Function},
+  data: {|
+    fn: Function,
+    meta?: NodeMeta,
+  |},
 ): TypeDef<'single', 'step'>
 declare export function cmd(
   tag: 'emit',
-  data: {fullName: string},
+  data: {|
+    fullName: string,
+    meta?: NodeMeta,
+  |},
 ): TypeDef<'single', 'step'>
 declare export function cmd(
   tag: 'filter',
-  data: {fn: (data: any) => boolean},
+  data: {|
+    fn: (data: any) => boolean,
+    meta?: NodeMeta,
+  |},
 ): TypeDef<'single', 'step'>
 declare export function cmd(
   tag: 'run',
-  data: {fn: Function},
+  data: {
+    fn: Function,
+    meta?: NodeMeta,
+  },
 ): TypeDef<'single', 'step'>
 declare export function cmd(
   tag: 'update',
-  data: {|store: StateRef|} | {|val: string|},
+  data:
+    | {|
+        store: StateRef,
+        meta?: NodeMeta,
+      |}
+    | {|
+        val: string,
+        meta?: NodeMeta,
+      |},
 ): TypeDef<'single', 'step'>
 export function cmd(type: string, data: Object): TypeDef<'single', 'step'> {
   return step('single', {

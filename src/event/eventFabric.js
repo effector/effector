@@ -23,7 +23,17 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = createGraph({node: [cmd('emit', {fullName})]})
+  const graphite = createGraph({
+    node: [
+      cmd('emit', {
+        fullName,
+        meta: {
+          fullName,
+          section: id,
+        },
+      }),
+    ],
+  })
 
   //$off
   const instance: Event<Payload> = (

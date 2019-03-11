@@ -5,6 +5,10 @@ export type StateRef = {
   +id: ID,
   current: any,
 }
+export type NodeMeta = {
+  fullName?: string,
+  section?: ID,
+}
 export type TypeDef<+Type, +Group> = {
   +id: ID,
   +type: Type,

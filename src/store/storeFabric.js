@@ -31,14 +31,21 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updater: any = createEvent('update ' + currentId)
+  const meta = {
+    fullName: compositeName.fullName,
+    section: currentId,
+  }
   const storeInstance: ThisStore = {
     graphite: createGraph({
       node: [
         cmd('filter', {
           fn: filterBeforeUpdate.bind(plainState),
-          fullName: compositeName.fullName
+          meta,
         }),
-        cmd('update', {store: plainState, fullName: compositeName.fullName}),
+        cmd('update', {
+          store: plainState,
+          meta,
+        }),
       ],
     }),
     kind: Kind.store,
