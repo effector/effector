@@ -29,6 +29,7 @@ function preprocessGraph(raw) {
       id: node.id,
       type: node.type,
       group: node.group,
+      data: node.data,
       parentIds: [],
     })
     if (parentId) {
@@ -41,6 +42,7 @@ function preprocessGraph(raw) {
           id: node.data.id,
           type: node.data.type,
           group: node.data.group,
+          data: node.data.data,
           parentIds: [parentId],
         })
         delete idMap[normNode.id]
