@@ -80,6 +80,7 @@ function nodeTextSwitch(type) {
       return type
   }
 }
+
 function initLayout({layout, size, layering, decross, coord}) {
   return layout()
     .size([size.width, size.height])
@@ -162,6 +163,8 @@ function addNodeBackground(nodes, {width, height, fill, x, y}) {
     .attr('fill', fill)
     .attr('x', x)
     .attr('y', y)
+    .attr('rx', 6)
+    .attr('ry', 6)
 }
 
 function addTextNode(
