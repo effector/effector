@@ -1,5 +1,13 @@
 //@flow
-
+const watchPathIgnorePatterns = [
+  '<rootDir>/node_modules/',
+  '<rootDir>/tools/',
+  '<rootDir>/npm/',
+  '<rootDir>/packages/',
+  '<rootDir>/flow/',
+  '<rootDir>/flow-typed/',
+  '<rootDir>/examples/',
+]
 const createDefaultConfig = () => ({
   automock: false,
   browser: false,
@@ -10,6 +18,7 @@ const createDefaultConfig = () => ({
   // moduleNameMapper: {},
   testPathIgnorePatterns: ['<rootDir>/node_modules/'],
   transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
+  watchPathIgnorePatterns,
   // roots: ['<rootDir>/src/'],
 })
 
@@ -29,6 +38,7 @@ module.exports = {
   ],
 
   watchPlugins: ['jest-runner-eslint/watch-fix'],
+  watchPathIgnorePatterns,
   projects: createProjectList([
     'types',
     'forms',
@@ -50,6 +60,7 @@ module.exports = {
           `<rootDir>/src/react/**/*.spec.js`,
         ],
         setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+        // watchPathIgnorePatterns,
       },
     },
   ]),
@@ -60,6 +71,7 @@ if (boolean(process.env.LINT, true)) {
     runner: 'jest-runner-eslint',
     displayName: 'lint',
     testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
+    // watchPathIgnorePatterns,
   })
 }
 
