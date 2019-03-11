@@ -31,7 +31,7 @@ export default ({
       x: d => d.x,
       y: d => d.y,
     },
-    circle: colorMap => ({
+    nodeBackground: colorMap => ({
       radius(d) {
         if (d.data.group === 'cmd') return 11
         return 3
@@ -137,7 +137,7 @@ function initFull(data, cfg) {
   const colorMap = initColorMap({dag, interpolate: cfg.interpolate})
   const line = initEdge(cfg.line)
   const nodes = initNodes({dag, line, colorMap, stroke: cfg.stroke})
-  addNodeBackground(nodes, cfg.circle(colorMap))
+  addNodeBackground(nodes, cfg.nodeBackground(colorMap))
   addTextNode(nodes, cfg.text)
 }
 
