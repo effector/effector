@@ -5,48 +5,68 @@ import {line as lined3, curveCatmullRom, select, interpolateRainbow} from 'd3'
 import {real} from './data'
 import {layerings, decrossings, coords, sources, layouts} from './d3dag'
 
-initFull(real, {
-  layout: {
-    layout: layouts.sugiyama,
-    size: {width: 500, height: 500},
-    layering: layerings.simplex,
-    decross: decrossings.optimal,
-    coord: coords.vertical,
-  },
-  sources: sources.grafo,
-  interpolate: interpolateRainbow,
-  line: {
-    curve: curveCatmullRom,
-    x: d => d.x,
-    y: d => d.y,
-  },
-  circle: colorMap => ({
-    radius(d) {
-      if (d.data.group === 'cmd') return 11
-      return 3
+export default ({
+  width,
+  height,
+  rmax,
+  config,
+}: {
+  width: number,
+  height: number,
+  rmax: number,
+  config: *,
+}) =>
+  initFull(real, {
+    layout: {
+      layout: layouts[config.layout],
+      size: {width: width - rmax, height: height - rmax},
+      layering: layerings[config.layering],
+      decross: decrossings[config.decrossing],
+      coord: coords[config.coords],
     },
-    fill(d) {
-      return colorMap[d.id]
+    sources: sources.grafo,
+    interpolate: interpolateRainbow,
+    line: {
+      curve: curveCatmullRom,
+      x: d => d.x,
+      y: d => d.y,
     },
-  }),
-  text: {
-    text(d) {
-      if (d.data.group === 'cmd') return d.id
-      return ''
+    circle: colorMap => ({
+      radius(d) {
+        if (d.data.group === 'cmd') return 11
+        return 3
+      },
+      fill(d) {
+        return colorMap[d.id]
+      },
+    }),
+    text: {
+      text(d) {
+        if (d.data.group === 'cmd') return nodeTextSwitch(d.data.type)
+        return ''
+      },
+      fontSize: '10px',
+      fontWeight: '400',
+      fontFamily: 'Helvetica',
+      textAnchor: 'middle',
+      alignment: 'middle',
+      fill: 'black',
     },
-    fontSize: '12px',
-    fontWeight: '400',
-    fontFamily: 'Helvetica',
-    textAnchor: 'middle',
-    alignment: 'middle',
-    fill: 'black',
-  },
-  stroke: {
-    fill: 'none',
-    width: 3,
-  },
-})
-
+    stroke: {
+      fill: 'none',
+      width: 3,
+    },
+  })
+function nodeTextSwitch(type) {
+  switch (type) {
+    case 'update':
+      return 'upd'
+    case 'compute':
+      return 'f(x)'
+    default:
+      return type
+  }
+}
 function initLayout({layout, size, layering, decross, coord}) {
   return layout()
     .size([size.width, size.height])

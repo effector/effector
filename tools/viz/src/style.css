@@ -45,3 +45,6 @@ button:focus {
 button:active {
   background: #5088ed;
 }
+.text {
+  color: whitesmoke;
+}

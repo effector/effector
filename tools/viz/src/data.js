@@ -12,7 +12,10 @@ function preprocessGraph(raw) {
   const idMap = {}
 
   traverse(raw, {parentId: null})
-  return Object.values(idMap)
+  const result = Object.values(idMap)
+  //$todo
+  result.sort((a, b) => parseInt(b.id, 36) - parseInt(a.id, 36))
+  return result
   function addToMap(normNode) {
     if (normNode.id in idMap) {
       idMap[normNode.id].parentIds.push(...normNode.parentIds)
@@ -31,6 +34,7 @@ function preprocessGraph(raw) {
     if (parentId) {
       normNode.parentIds.push(parentId)
     }
+    let nodeUsed = true
     switch (node.type) {
       case 'single': {
         addToMap({
@@ -40,20 +44,47 @@ function preprocessGraph(raw) {
           parentIds: [parentId],
         })
         delete idMap[normNode.id]
-        break
+        return String(node.data.id)
       }
-      case 'multi':
-      case 'seq': {
+      case 'multi': {
+        if (node.data.length === 0) {
+          delete idMap[normNode.id]
+          nodeUsed = false
+          break
+        }
         // console.log(node.data)
         for (const child of node.data) {
           traverse(child, {parentId: node.id})
         }
         break
       }
+      case 'seq': {
+        if (node.data.length === 0) {
+          delete idMap[normNode.id]
+          nodeUsed = false
+          break
+        }
+        // console.log(node.data)
+        let currentID = String(normNode.id)
+        let childSaved = false
+        let childID = currentID
+        for (const child of node.data) {
+          const nextID = traverse(child, {parentId: currentID})
+          if (typeof nextID === 'string') {
+            currentID = nextID
+            if (!childSaved) {
+              childID = nextID
+              childSaved = true
+            }
+          }
+        }
+        return childID
+      }
       default: {
         throw Error(`unknown type "${String(node.type)}"`)
       }
     }
+    if (nodeUsed) return String(node.id)
   }
 }
 /**
