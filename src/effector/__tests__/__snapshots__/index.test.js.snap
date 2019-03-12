@@ -7,6 +7,10 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
+          "meta": Object {
+            "fullName": "foo → *",
+            "section": "2",
+          },
         },
         "group": "cmd",
         "id": "5",
@@ -24,6 +28,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "t",
@@ -37,6 +45,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "v",
@@ -52,6 +64,10 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                     },
                     "group": "cmd",
                     "id": "h",
@@ -64,6 +80,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                       "store": Object {
                         "current": "foo | 1 | 11",
                         "id": "1",
@@ -85,6 +105,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "1f",
@@ -98,6 +122,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "1h",
@@ -113,6 +141,10 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
                                 },
                                 "group": "cmd",
                                 "id": "13",
@@ -125,6 +157,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
                                   "store": Object {
                                     "current": 12,
                                     "id": "2",
@@ -226,6 +262,10 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
+          "meta": Object {
+            "fullName": "foo → *",
+            "section": "2",
+          },
         },
         "group": "cmd",
         "id": "5",
@@ -243,6 +283,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "t",
@@ -256,6 +300,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "v",
@@ -271,6 +319,10 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                     },
                     "group": "cmd",
                     "id": "h",
@@ -283,6 +335,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                       "store": Object {
                         "current": "foo | 1 | 11",
                         "id": "1",
@@ -304,6 +360,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "1f",
@@ -317,6 +377,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "1h",
@@ -332,6 +396,10 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
                                 },
                                 "group": "cmd",
                                 "id": "13",
@@ -344,6 +412,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
                                   "store": Object {
                                     "current": 12,
                                     "id": "2",
@@ -419,6 +491,10 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
+          "meta": Object {
+            "fullName": "foo",
+            "section": "1",
+          },
         },
         "group": "cmd",
         "id": "1",
@@ -451,6 +527,10 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
+                      "meta": Object {
+                        "fullName": "foo → *",
+                        "section": "2",
+                      },
                     },
                     "group": "cmd",
                     "id": "5",
@@ -468,6 +548,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "t",
@@ -481,6 +565,10 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
                             "id": "v",
@@ -496,6 +584,10 @@ Object {
                               "data": Object {
                                 "data": Object {
                                   "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1",
+                                    "section": "store1",
+                                  },
                                 },
                                 "group": "cmd",
                                 "id": "h",
@@ -508,6 +600,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1",
+                                    "section": "store1",
+                                  },
                                   "store": Object {
                                     "current": "foo | 1 | 11",
                                     "id": "1",
@@ -529,6 +625,10 @@ Object {
                                       "data": Object {
                                         "data": Object {
                                           "fn": [Function],
+                                          "meta": Object {
+                                            "fullName": "store1 → *",
+                                            "section": "store1",
+                                          },
                                         },
                                         "group": "cmd",
                                         "id": "1f",
@@ -542,6 +642,10 @@ Object {
                                       "data": Object {
                                         "data": Object {
                                           "fn": [Function],
+                                          "meta": Object {
+                                            "fullName": "store1 → *",
+                                            "section": "store1",
+                                          },
                                         },
                                         "group": "cmd",
                                         "id": "1h",
@@ -557,6 +661,10 @@ Object {
                                           "data": Object {
                                             "data": Object {
                                               "fn": [Function],
+                                              "meta": Object {
+                                                "fullName": "store1 → *",
+                                                "section": "store1 → *",
+                                              },
                                             },
                                             "group": "cmd",
                                             "id": "13",
@@ -569,6 +677,10 @@ Object {
                                         Object {
                                           "data": Object {
                                             "data": Object {
+                                              "meta": Object {
+                                                "fullName": "store1 → *",
+                                                "section": "store1 → *",
+                                              },
                                               "store": Object {
                                                 "current": 12,
                                                 "id": "2",
@@ -687,30 +799,72 @@ Object {
 exports[`graphite: show bar 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo → *
+     fullName: foo → *,
+     meta: {
+       fullName: foo → *,
+       section: 2
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1,
+                section: store1
+              }
+           }},
            2. update {{
               store: {
                 id: 1,
                 current: foo | 1 | 11
+              },
+              meta: {
+                fullName: store1,
+                section: store1
               }
            }},
            3. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 2,
                          current: 12
+                       },
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
                        }
                     }},
                     3. [(empty list)]
@@ -732,30 +886,72 @@ exports[`graphite: show bar 1`] = `
 exports[`graphite: show bar 2`] = `
 "Seq [
   1. emit {{
-     fullName: foo → *
+     fullName: foo → *,
+     meta: {
+       fullName: foo → *,
+       section: 2
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1,
+                section: store1
+              }
+           }},
            2. update {{
               store: {
                 id: 1,
                 current: foo | 1 | 11
+              },
+              meta: {
+                fullName: store1,
+                section: store1
               }
            }},
            3. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 2,
                          current: 12
+                       },
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
                        }
                     }},
                     3. [(empty list)]
@@ -773,37 +969,83 @@ exports[`graphite: show bar 2`] = `
 exports[`graphite: show foo 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo
+     fullName: foo,
+     meta: {
+       fullName: foo,
+       section: 1
+     }
   }},
   2. [
      *  Seq [
         1. compute {{}},
         2. Seq [
            1. emit {{
-              fullName: foo → *
+              fullName: foo → *,
+              meta: {
+                fullName: foo → *,
+                section: 2
+              }
            }},
            2. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1,
+                         section: store1
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 1,
                          current: foo | 1 | 11 | 101
+                       },
+                       meta: {
+                         fullName: store1,
+                         section: store1
                        }
                     }},
                     3. [
                        *  Seq [
-                          1. compute {{}},
-                          2. filter {{}},
+                          1. compute {{
+                             meta: {
+                               fullName: store1 → *,
+                               section: store1
+                             }
+                          }},
+                          2. filter {{
+                             meta: {
+                               fullName: store1 → *,
+                               section: store1
+                             }
+                          }},
                           3. Seq [
-                             1. filter {{}},
+                             1. filter {{
+                                meta: {
+                                  fullName: store1 → *,
+                                  section: store1 → *
+                                }
+                             }},
                              2. update {{
                                 store: {
                                   id: 2,
                                   current: 18
+                                },
+                                meta: {
+                                  fullName: store1 → *,
+                                  section: store1 → *
                                 }
                              }},
                              3. [(empty list)]
@@ -824,23 +1066,51 @@ exports[`graphite: show foo 1`] = `
 
 exports[`graphite: show store1 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: store1,
+       section: store1
+     }
+  }},
   2. update {{
      store: {
        id: 1,
        current: foo | 1 | 11 | 101
+     },
+     meta: {
+       fullName: store1,
+       section: store1
      }
   }},
   3. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1 → *,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1 → *,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1 → *,
+                section: store1 → *
+              }
+           }},
            2. update {{
               store: {
                 id: 2,
                 current: 18
+              },
+              meta: {
+                fullName: store1 → *,
+                section: store1 → *
               }
            }},
            3. [(empty list)]
@@ -853,11 +1123,20 @@ exports[`graphite: show store1 1`] = `
 
 exports[`graphite: show store2 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: store1 → *,
+       section: store1 → *
+     }
+  }},
   2. update {{
      store: {
        id: 2,
        current: 18
+     },
+     meta: {
+       fullName: store1 → *,
+       section: store1 → *
      }
   }},
   3. [(empty list)]
@@ -871,6 +1150,10 @@ Object {
       "data": Object {
         "data": Object {
           "fn": [Function],
+          "meta": Object {
+            "fullName": "store1",
+            "section": "store1",
+          },
         },
         "group": "cmd",
         "id": "h",
@@ -883,6 +1166,10 @@ Object {
     Object {
       "data": Object {
         "data": Object {
+          "meta": Object {
+            "fullName": "store1",
+            "section": "store1",
+          },
           "store": Object {
             "current": "foo | 1 | 11 | 101",
             "id": "1",
@@ -904,6 +1191,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1 → *",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "1f",
@@ -917,6 +1208,10 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1 → *",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
                 "id": "1h",
@@ -932,6 +1227,10 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1 → *",
+                        "section": "store1 → *",
+                      },
                     },
                     "group": "cmd",
                     "id": "13",
@@ -944,6 +1243,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
+                      "meta": Object {
+                        "fullName": "store1 → *",
+                        "section": "store1 → *",
+                      },
                       "store": Object {
                         "current": 18,
                         "id": "2",
@@ -998,6 +1301,10 @@ Object {
       "data": Object {
         "data": Object {
           "fn": [Function],
+          "meta": Object {
+            "fullName": "store1 → *",
+            "section": "store1 → *",
+          },
         },
         "group": "cmd",
         "id": "13",
@@ -1010,6 +1317,10 @@ Object {
     Object {
       "data": Object {
         "data": Object {
+          "meta": Object {
+            "fullName": "store1 → *",
+            "section": "store1 → *",
+          },
           "store": Object {
             "current": 18,
             "id": "2",
@@ -1039,18 +1350,41 @@ Object {
 exports[`showcase: event foo 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo
+     fullName: foo,
+     meta: {
+       fullName: foo,
+       section: 5
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: a,
+             section: a
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: a,
+             section: a
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: a,
+                section: a
+              }
+           }},
            2. update {{
               store: {
                 id: c,
                 current: 3
+              },
+              meta: {
+                fullName: a,
+                section: a
               }
            }},
            3. [
@@ -1070,16 +1404,30 @@ exports[`showcase: event foo 1`] = `
 
 exports[`showcase: mapped 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: combine(a, b) → *,
+       section: combine(a, b) → *
+     }
+  }},
   2. update {{
      store: {
        id: f,
        current: 3
+     },
+     meta: {
+       fullName: combine(a, b) → *,
+       section: combine(a, b) → *
      }
   }},
   3. [
      *  Seq [
-        1. run {{}},
+        1. run {{
+           meta: {
+             fullName: combine(a, b) → *,
+             section: combine(a, b) → *
+           }
+        }},
         2. [(empty list)]
      ]
   ]
@@ -1088,11 +1436,20 @@ exports[`showcase: mapped 1`] = `
 
 exports[`showcase: store a 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: a,
+       section: a
+     }
+  }},
   2. update {{
      store: {
        id: c,
        current: 3
+     },
+     meta: {
+       fullName: a,
+       section: a
      }
   }},
   3. [
