@@ -12,29 +12,29 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
   meta.callstack.pop()
 }
 
-export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
+export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
   const scope = meta.val.scope.current
   //prettier-ignore
   const pos: {|
     head: number,
     +stack: Array<{|
       +list: $ReadOnlyArray<{|
-        +stepObj: TypeDef<*, 'step'>,
-        +postActions: Array<PostAction>,
+        +step: TypeDef<*, 'step'>,
+        +post: Array<PostAction>,
       |}>,
-      +postActions: Array<PostAction>,
+      +post: Array<PostAction>,
       index: number,
     |}>,
   |} = {
     head: 0,
     stack: [{
       list: [{
-        stepObj,
-        postActions: [
+        step,
+        post: [
           {type: 'callstack/pop'},
         ],
       }],
-      postActions: [],
+      post: [],
       index: 0,
     }],
   }
@@ -42,13 +42,13 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
     const stack = pos.stack[pos.head]
     while (stack.index < stack.list.length) {
       const ctx = stack.list[stack.index]
-      const postActions = ctx.postActions
-      const stepObj = ctx.stepObj
+      const post = ctx.post
+      const step = ctx.step
       meta.stop = false
-      meta.callstack.push(stepObj)
-      switch (stepObj.type) {
+      meta.callstack.push(step)
+      switch (step.type) {
         case 'single': {
-          const type = stepObj.data.type
+          const type = step.data.type
           const local = command[type].local(meta, scope.top.__stepArg)
           scope.push(local)
           command[type].cmd(meta, local)
@@ -56,14 +56,14 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           break
         }
         case 'multi': {
-          postActions.push({type: 'meta/!stop'})
-          const items = stepObj.data
+          post.push({type: 'meta/!stop'})
+          const items = step.data
           const list = Array(items.length)
           for (let i = 0; i < items.length; i++) {
             //prettier-ignore
             list[i] = {
-              stepObj: items[i],
-              postActions: [
+              step: items[i],
+              post: [
                 {type: 'callstack/pop'},
                 {type: 'scope/size', size: scope.full.length},
               ],
@@ -73,20 +73,20 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           pos.head += 1
           pos.stack[pos.head] = {
             list,
-            postActions,
+            post,
             index: 0,
           }
           continue headLoop
         }
         case 'seq': {
-          postActions.push({type: 'scope/size', size: scope.full.length})
-          const items = stepObj.data
+          post.push({type: 'scope/size', size: scope.full.length})
+          const items = step.data
           const list = Array(items.length)
           for (let i = 0; i < items.length; i++) {
             //prettier-ignore
             list[i] = {
-              stepObj: items[i],
-              postActions: [
+              step: items[i],
+              post: [
                 {type: 'callstack/pop'},
                 {type: 'meta/?stop'},
               ],
@@ -96,14 +96,14 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           pos.head += 1
           pos.stack[pos.head] = {
             list,
-            postActions,
+            post,
             index: 0,
           }
           continue headLoop
         }
         case 'query': {
-          postActions.push({type: 'meta/!stop'})
-          switch (stepObj.data.mode) {
+          post.push({type: 'meta/!stop'})
+          switch (step.data.mode) {
             case 'some': {
               const data: {
                 +mode: 'some',
@@ -111,7 +111,7 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
                   arg: any,
                   meta: *,
                 ) => {+arg: any, +list: Array<TypeDef<*, *>>},
-              } = stepObj.data
+              } = step.data
               const fn = data.fn
               const arg = scope.top.__stepArg
               const queryResult = fn(arg, meta)
@@ -129,7 +129,7 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
                 +mode: 'shape',
                 +shape: {[string]: TypeDef<*, *>},
                 +fn: (arg: any, meta: *) => {[string]: any},
-              } = stepObj.data
+              } = step.data
               const fn = data.fn
               const shape = data.shape
               const arg = scope.top.__stepArg
@@ -156,16 +156,16 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           break
         }
       }
-      runPostActions(postActions, stack)
+      runPostActions(post, stack)
       stack.index += 1
     }
-    runPostActions(stack.postActions, stack)
+    runPostActions(stack.post, stack)
     pos.head -= 1
   }
 
-  function runPostActions(postActions, stack) {
-    for (let i = postActions.length - 1; i >= 0; i--) {
-      const action = postActions[i]
+  function runPostActions(post, stack) {
+    for (let i = post.length - 1; i >= 0; i--) {
+      const action = post[i]
       switch (action.type) {
         case 'meta/?stop':
           if (meta.stop) stack.index = Infinity
