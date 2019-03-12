@@ -19,5 +19,5 @@ export type Graph<+Val: {[name: string]: any} = {||}> = {
   +from: Array<TypeDef<*, 'step'>>,
   +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
-  // +val:
+  +val: Val,
 }
