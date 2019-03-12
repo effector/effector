@@ -28,8 +28,7 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
     case 'multi': {
       const items = stepObj.data.slice()
       const scopeSize = scope.full.length
-      for (let i = 0; i < items.length; i++) {
-        scope.full.length = scopeSize
+      for (let i = 0; i < items.length; i++, scope.full.length = scopeSize) {
         runStepAlt(items[i], meta)
       }
       meta.stop = false
@@ -38,11 +37,8 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
     case 'seq': {
       const items = stepObj.data.slice()
       const scopeSize = scope.full.length
-      for (let i = 0; i < items.length; i++) {
+      for (let i = 0; i < items.length && !meta.stop; i++) {
         runStepAlt(items[i], meta)
-        if (meta.stop) {
-          break
-        }
       }
       scope.full.length = scopeSize
       break
@@ -81,15 +77,23 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           const arg = scope.top.__stepArg
 
           const queryResult = fn(arg, meta)
+          const scopes = []
           for (const key in queryResult) {
-            if (!(key in shape)) continue
-            scope.push({
-              __stepArg: queryResult[key],
-            })
-            runStepAlt(shape[key], meta)
-            scope.pop()
+            if (key in shape) {
+              scopes.push({
+                scope: {
+                  __stepArg: queryResult[key],
+                },
+                step: shape[key],
+              })
+            }
+          }
+          for (let i = 0; i < scopes.length; i++, scope.pop()) {
+            scope.push(scopes[i].scope)
+            runStepAlt(scopes[i].step, meta)
           }
           meta.stop = false
+          break
         }
       }
       break
