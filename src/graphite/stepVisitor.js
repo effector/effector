@@ -1,8 +1,7 @@
 //@flow
 // import invariant from 'invariant'
-import {type TypeDef} from 'effector/stdlib'
-// import {__DEBUG__} from 'effector/flags'
-import type {StepVisitor, CommonCtx, CommandList} from './index.h'
+import type {TypeDef} from 'effector/stdlib'
+import type {StepVisitor} from './index.h'
 import command from './command'
 import {runStep} from './runStep'
 import {val, step} from './meta'
@@ -15,10 +14,9 @@ const querySome = meta => {
   const fn = data.fn
   const arg = val('scope', meta).top.__stepArg
   const queryResult = fn(arg, meta)
-  const newCtx = {
+  val('scope', meta).push({
     __stepArg: queryResult.arg,
-  }
-  val('scope', meta).push(newCtx)
+  })
   const items = queryResult.list
   for (let i = 0; i < items.length; i++) {
     runStep(items[i], meta)
@@ -38,13 +36,10 @@ const queryShape = meta => {
   const queryResult = fn(arg, meta)
   for (const key in queryResult) {
     if (!(key in shape)) continue
-    const def = shape[key]
-    const subArg = queryResult[key]
-    const newCtx = {
-      __stepArg: subArg,
-    }
-    val('scope', meta).push(newCtx)
-    runStep(def, meta)
+    val('scope', meta).push({
+      __stepArg: queryResult[key],
+    })
+    runStep(shape[key], meta)
     val('scope', meta).pop()
   }
   meta.stop = false
