@@ -16,6 +16,11 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
   meta.stop = false
   meta.callstack.push(stepObj)
   const scope = meta.val.scope.current
+  const postActions: Array<PostAction> = [
+    {
+      type: 'callstack/pop',
+    },
+  ]
   switch (stepObj.type) {
     case 'single': {
       const type = stepObj.data.type
@@ -26,24 +31,24 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
       break
     }
     case 'multi': {
+      postActions.push({type: 'meta/!stop'})
       const items = stepObj.data.slice()
       const scopeSize = scope.full.length
       for (let i = 0; i < items.length; i++, scope.full.length = scopeSize) {
         runStepAlt(items[i], meta)
       }
-      meta.stop = false
       break
     }
     case 'seq': {
+      postActions.push({type: 'scope/size', size: scope.full.length})
       const items = stepObj.data.slice()
-      const scopeSize = scope.full.length
       for (let i = 0; i < items.length && !meta.stop; i++) {
         runStepAlt(items[i], meta)
       }
-      scope.full.length = scopeSize
       break
     }
     case 'query': {
+      postActions.push({type: 'meta/!stop'})
       switch (stepObj.data.mode) {
         case 'some': {
           const data: {
@@ -63,7 +68,6 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
           for (let i = 0; i < items.length; i++) {
             runStepAlt(items[i], meta)
           }
-          meta.stop = false
           break
         }
         case 'shape': {
@@ -92,12 +96,29 @@ export function runStepAlt(stepObj: TypeDef<*, 'step'>, meta: Meta) {
             scope.push(scopes[i].scope)
             runStepAlt(scopes[i].step, meta)
           }
-          meta.stop = false
           break
         }
       }
       break
     }
   }
-  meta.callstack.pop()
+  for (let i = postActions.length - 1; i >= 0; i--) {
+    const action = postActions[i]
+    switch (action.type) {
+      case 'callstack/pop':
+        meta.callstack.pop()
+        break
+      case 'meta/!stop':
+        meta.stop = false
+        break
+      case 'scope/size':
+        scope.full.length = action.size
+        break
+    }
+  }
 }
+
+type PostAction =
+  | {|+type: 'callstack/pop'|}
+  | {|+type: 'meta/!stop'|}
+  | {|+type: 'scope/size', +size: number|}
