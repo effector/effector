@@ -21,6 +21,9 @@ export const cloneMeta = (meta: Meta): Meta => {
   }
 }
 export const val = (tag: string, meta: Meta) => meta.val[tag].current
+export const step = (meta: Meta): TypeDef<*, 'step'> =>
+  meta.callstack[meta.callstack.length - 1]
+export const single = (meta: Meta) => step(meta).data.data
 export const newMeta = (ctx: CommonCtx): Meta => ({
   callstack: [],
   transactions: [],

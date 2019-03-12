@@ -5,16 +5,13 @@ import {type TypeDef} from 'effector/stdlib'
 import type {StepVisitor, CommonCtx, CommandList} from './index.h'
 import command from './command'
 import {runStep} from './runStep'
-import {val} from './meta'
-
-declare var __step: TypeDef<*, 'step'>
-declare var __single: any
+import {val, step} from './meta'
 
 const querySome = meta => {
   const data: {
     +mode: 'some',
     +fn: (arg: any, meta: *) => {+arg: any, +list: Array<TypeDef<*, *>>},
-  } = __step.data
+  } = step(meta).data
   const fn = data.fn
   const arg = val('scope', meta).top.__stepArg
   const queryResult = fn(arg, meta)
@@ -33,7 +30,7 @@ const queryShape = meta => {
     +mode: 'shape',
     +shape: {[string]: TypeDef<*, *>},
     +fn: (arg: any, meta: *) => {[string]: any},
-  } = __step.data
+  } = step(meta).data
   const fn = data.fn
   const shape = data.shape
   const arg = val('scope', meta).top.__stepArg
@@ -54,14 +51,14 @@ const queryShape = meta => {
 }
 
 export const single: StepVisitor = meta => {
-  const type = __step.data.type
+  const type = step(meta).data.type
   const local = command[type].local(meta, val('scope', meta).top.__stepArg)
   val('scope', meta).push(local)
   command[type].cmd(meta, local)
   meta.stop = !command[type].transition(meta, local)
 }
 export const multi: StepVisitor = meta => {
-  const items = __step.data.slice()
+  const items = step(meta).data.slice()
   const scopeSize = val('scope', meta).full.length
   for (let i = 0; i < items.length; i++) {
     val('scope', meta).full.length = scopeSize
@@ -70,7 +67,7 @@ export const multi: StepVisitor = meta => {
   meta.stop = false
 }
 export const seq: StepVisitor = meta => {
-  const items = __step.data.slice()
+  const items = step(meta).data.slice()
   const scopeSize = val('scope', meta).full.length
   for (let i = 0; i < items.length; i++) {
     runStep(items[i], meta)
@@ -81,7 +78,7 @@ export const seq: StepVisitor = meta => {
   val('scope', meta).full.length = scopeSize
 }
 export const query: StepVisitor = meta => {
-  switch (__step.data.mode) {
+  switch (step(meta).data.mode) {
     case 'some':
       return querySome(meta)
     case 'shape':

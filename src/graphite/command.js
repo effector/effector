@@ -1,7 +1,7 @@
 //@flow
 
 import type {CommandList} from './index.h'
-declare var __single: any
+import {single} from './meta'
 
 const cmd = {
   emit(meta, local) {},
@@ -11,20 +11,21 @@ const cmd = {
       result: (null: any),
       arg: local.__stepArg,
       val: meta.val,
-      fn: __single.fn,
+      fn: single(meta).fn,
     })
     local.isChanged = Boolean(runCtx.result)
   },
   run(meta, local) {
-    if ('pushUpdate' in __single) {
-      __single.pushUpdate = data => meta.pendingEvents.push(data)
+    const data = single(meta)
+    if ('pushUpdate' in data) {
+      data.pushUpdate = data => meta.pendingEvents.push(data)
     }
     const runCtx = tryRun({
       err: false,
       result: (null: any),
       arg: local.__stepArg,
       val: meta.val,
-      fn: __single.fn,
+      fn: data.fn,
     })
     local.isFailed = runCtx.err
   },
@@ -37,7 +38,7 @@ const cmd = {
       result: (null: any),
       arg: local.__stepArg,
       val: meta.val,
-      fn: __single.fn,
+      fn: single(meta).fn,
     })
     local.isChanged = !runCtx.err
     ///TODO WARNING!! DIRTY HACK REMOVE ASAP
@@ -60,7 +61,7 @@ const local = {
   run: (meta, __stepArg) => ({__stepArg, isFailed: true}),
   update: (meta, __stepArg) => ({
     __stepArg,
-    store: __single.store,
+    store: single(meta).store,
   }),
   compute: (meta, __stepArg) => ({
     __stepArg,
