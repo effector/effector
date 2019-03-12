@@ -17,7 +17,7 @@ function disposer() {
 
 export const createWatcher = (opts: {
   child: TypeDef<*, 'cmd' | 'step'>,
-  parent: Graph,
+  parent: Graph<>,
 }): Watcher => {
   const subscribers = opts.parent.next.data
   const instance = {

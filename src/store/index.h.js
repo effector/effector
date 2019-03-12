@@ -9,7 +9,7 @@ export type ThisStore = {
   compositeName?: CompositeName,
   defaultState: any,
   domainName?: CompositeName,
-  +graphite: Graph,
+  +graphite: Graph<>,
   +id: string,
   kind: kind,
   plainState: StateRef,
@@ -72,6 +72,6 @@ export type Store<State> = {
   +defaultState: State,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph,
+  graphite: Graph<>,
   compositeName?: CompositeName,
 }

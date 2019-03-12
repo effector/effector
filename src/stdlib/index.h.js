@@ -15,8 +15,9 @@ export type TypeDef<+Type, +Group> = {
   +group: Group,
   +data: any,
 }
-export type Graph = {
+export type Graph<+Val: {[name: string]: any} = {||}> = {
   +from: Array<TypeDef<*, 'step'>>,
   +next: TypeDef<'multi', 'step'>,
   +seq: TypeDef<'seq', 'step'>,
+  // +val:
 }

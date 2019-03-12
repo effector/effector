@@ -11,7 +11,7 @@ export function createGraph({
   node: Array<TypeDef<*, *>>,
   child?: Array<TypeDef<*, *>>,
   from?: Array<TypeDef<*, *>>,
-}): Graph {
+}): Graph<> {
   const next = step('multi', child)
   const items = node.concat([next])
   return {

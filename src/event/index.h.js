@@ -19,14 +19,16 @@ export type Event<E> = {
   getType(): string,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph,
+  graphite: Graph<>,
   compositeName: CompositeName,
 }
 
+///TODO remove
 export type Graphiter = {
-  +graphite: Graph,
+  +graphite: Graph<>,
   ...
 }
+///TODO remove
 export type GraphiterSmall = {
   +graphite: {
     +seq: TypeDef<'seq' | 'loop' | 'combine', 'step'>,

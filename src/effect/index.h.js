@@ -37,7 +37,7 @@ export type Effect<Params, Done, Fail = Error> = {
   +kind: kind,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph,
+  graphite: Graph<>,
   compositeName: CompositeName,
 }
 
@@ -72,7 +72,7 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   +kind: kind,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph,
+  graphite: Graph<>,
   compositeName: CompositeName,
 }
 
