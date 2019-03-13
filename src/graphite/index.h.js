@@ -18,6 +18,7 @@ export type Meta = {
   callstack: Array<TypeDef<*, *>>,
   stop: boolean,
   transactions: Array<() => void>,
+  scope: Array<any>,
   pendingEvents: Array<{
     event: (data: any) => any,
     data: any,

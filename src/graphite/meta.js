@@ -14,6 +14,7 @@ export const cloneMeta = (meta: Meta): Meta => {
     callstack: meta.callstack.slice(),
     reg,
     stop: meta.stop,
+    scope: meta.scope.slice(),
     val,
     //TODO avoid this
     transactions,
@@ -34,57 +35,9 @@ export const newMeta = (ctx: CommonCtx): Meta => ({
     isChanged: true,
     isFailed: false,
   },
-  val: stateRefs({
-    watch(ctx) {
-      // console.log('watch', ctx)
-    },
-    ctx: null,
-    scope: (() => {
-      const top = {guard: true}
-
-      const result = {
-        full: [top],
-        iterate() {
-          return new ScopeIterator(result.full)
-        },
-        get top() {
-          return result.full[result.full.length - 1]
-        },
-        get length() {
-          return result.full.length
-        },
-        push(value) {
-          result.full.push(value)
-        },
-        pop() {
-          result.full.pop()
-        },
-      }
-      return result
-    })(),
-  }),
+  scope: [],
+  val: {},
 })
-
-function ScopeIterator(full) {
-  this.index = full.length - 1
-  this.body = full
-}
-ScopeIterator.prototype.down = function() {
-  if (this.index >= this.body.length) return false
-  this.index += 1
-  return true
-}
-ScopeIterator.prototype.value = function() {
-  return this.body[this.index]
-}
-ScopeIterator.prototype.bottom = function() {
-  return this.body[this.body.length - 1]
-}
-ScopeIterator.prototype.up = function() {
-  if (this.index <= 0) return false
-  this.index -= 1
-  return true
-}
 
 const cloneVals = obj => {
   const result = {}

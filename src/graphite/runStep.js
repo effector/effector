@@ -4,16 +4,8 @@ import type {TypeDef} from 'effector/stdlib'
 import type {Meta} from './index.h'
 import command from './command'
 
-import * as stepVisitor from './stepVisitor'
-export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
-  meta.stop = false
-  meta.callstack.push(step)
-  stepVisitor[step.type](meta)
-  meta.callstack.pop()
-}
-
 export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
-  const scope = meta.val.scope.current
+  const scope = meta.scope
   //prettier-ignore
   const pos: {|
     head: number,
@@ -49,7 +41,10 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
       switch (step.type) {
         case 'single': {
           const type = step.data.type
-          const local = command[type].local(meta, scope.top.__stepArg)
+          const local = command[type].local(
+            meta,
+            scope[scope.length - 1].__stepArg,
+          )
           scope.push(local)
           command[type].cmd(meta, local)
           meta.stop = !command[type].transition(meta, local)
@@ -65,7 +60,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
               step: items[i],
               post: [
                 {type: 'callstack/pop'},
-                {type: 'scope/size', size: scope.full.length},
+                {type: 'scope/size', size: scope.length},
               ],
             }
           }
@@ -79,7 +74,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
           continue headLoop
         }
         case 'seq': {
-          post.push({type: 'scope/size', size: scope.full.length})
+          post.push({type: 'scope/size', size: scope.length})
           const items = step.data
           const list = Array(items.length)
           for (let i = 0; i < items.length; i++) {
@@ -113,7 +108,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
                 ) => {+arg: any, +list: Array<TypeDef<*, *>>},
               } = step.data
               const fn = data.fn
-              const arg = scope.top.__stepArg
+              const arg = scope[scope.length - 1].__stepArg
               const queryResult = fn(arg, meta)
               scope.push({
                 __stepArg: queryResult.arg,
@@ -132,7 +127,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
               } = step.data
               const fn = data.fn
               const shape = data.shape
-              const arg = scope.top.__stepArg
+              const arg = scope[scope.length - 1].__stepArg
 
               const queryResult = fn(arg, meta)
               const scopes = []
@@ -180,7 +175,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
           meta.stop = false
           break
         case 'scope/size':
-          scope.full.length = action.size
+          scope.length = action.size
           break
       }
     }
