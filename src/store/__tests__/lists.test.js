@@ -1,28 +1,40 @@
 //@flow
 
-import {createStore, createApi, type Event, type Store} from 'effector'
+import {
+  createStore,
+  createApi,
+  type Event,
+  type Store,
+  createEvent,
+} from 'effector'
 
 test('list', () => {
-  const {store, api} = storeList(['init'])
+  const done = createEvent()
+  const list = storeList([' >'])
+  const acc = createStore([])
+  acc.watch(list.self, (acc, list) => {
+    acc.push(list)
+  })
+  acc.watch(done, lists => {
+    console.log(lists.map(list => list.join(' ')).join(`\n`))
+  })
 
-  store.watch(list => console.log('list', list))
-
-  api.enter([
+  list.add([
     {
       offset: 0,
       entries: ['⚫️', '⚫️', '⚫️'],
     },
   ])
-  api.enter([
+  list.add([
     {
       offset: 1,
       entries: ['🔴', '🔴', '🔴'],
     },
   ])
-  api.enter([
+  list.add([
     {
       offset: 0,
-      entries: ['0️⃣', 'hello'],
+      entries: ['0️⃣', '   '],
     },
     {
       offset: -1,
@@ -30,18 +42,20 @@ test('list', () => {
     },
   ])
 
-  api.update([
+  list.replace([
     {
       offset: 0,
       entries: ['🔵', '🔵'],
     },
     {
-      offset: -1,
-      entries: ['✳️'],
+      offset(list, entries) {
+        return list.length - Math.min(entries.length, list.length)
+      },
+      entries: ['✳️ ', '✳️ '],
     },
   ])
 
-  api.exit([
+  list.delete([
     {
       offset: 3,
       amount: 2,
@@ -52,83 +66,88 @@ test('list', () => {
     },
   ])
 
+  done()
+
   function storeList<T>(
     initials: Array<T>,
   ): {
-    +store: Store<Array<T>>,
-    +api: {
-      enter: Event<
-        Array<{
-          +offset: number,
-          +entries: Array<T>,
-        }>,
-      >,
-      update: Event<
-        Array<{
-          +offset: number,
-          +entries: Array<T>,
-        }>,
-      >,
-      exit: Event<
-        Array<{
-          +offset: number,
-          +amount: number,
-        }>,
-      >,
-    },
+    +self: Store<$ReadOnlyArray<T>>,
+    +watch: $PropertyType<Store<Array<T>>, 'watch'>,
+    +on: $PropertyType<Store<Array<T>>, 'on'>,
+    // +self: $PropertyType<Store<Array<T>>, 'getState'>,
+    add: Event<
+      $ReadOnlyArray<{
+        +offset:
+          | number
+          | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+        +entries: $ReadOnlyArray<T>,
+      }>,
+    >,
+    replace: Event<
+      $ReadOnlyArray<{
+        +offset:
+          | number
+          | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+        +entries: $ReadOnlyArray<T>,
+      }>,
+    >,
+    delete: Event<
+      $ReadOnlyArray<{
+        +offset: number | ((list: $ReadOnlyArray<T>) => number),
+        +amount: number,
+      }>,
+    >,
   } {
     const store = createStore(initials)
-    return {
+    const model = {
       store,
       api: createApi(store, {
-        enter(
-          state,
-          segments: Array<{
-            +offset: number,
-            +entries: Array<any>,
-          }>,
-        ) {
+        add(state, segments) {
           if (segments.length === 0) return state
           const store = []
-          segments = sortSegments(segments, state)
+          const newSegments = sortSegments(segments, state)
           for (let i = 0; i < state.length; i++) {
             const item = state[i]
-            for (let j = 0; j < segments.length; j++) {
-              const {entries, offset} = segments[j]
-              if (offset !== i) continue
-              store.push(...entries)
+            for (let j = 0; j < newSegments.length; j++) {
+              if (newSegments[j].offset !== i) continue
+              store.push(...newSegments[j].entries)
             }
             store.push(item)
           }
-          for (let i = 0; i < segments.length; i++) {
-            if (segments[i].offset >= state.length) {
-              store.push(...segments[i].entries)
+          for (let i = 0; i < newSegments.length; i++) {
+            if (newSegments[i].offset >= state.length) {
+              store.push(...newSegments[i].entries)
             }
           }
           return store
         },
-        update(
+        replace(
           state,
-          segments: Array<{
-            +offset: number,
-            +entries: Array<any>,
+          segments: $ReadOnlyArray<{
+            +offset:
+              | number
+              | ((
+                  list: $ReadOnlyArray<T>,
+                  entries: $ReadOnlyArray<T>,
+                ) => number),
+            +entries: $ReadOnlyArray<T>,
           }>,
         ) {
           if (segments.length === 0) return state
           const store = [...state]
-          segments = sortSegments(segments, state)
-          for (let i = 0; i < segments.length; i++) {
-            const {entries, offset} = segments[i]
+          const newSegments = sortSegments(segments, state)
+          for (let i = 0; i < newSegments.length; i++) {
+            const {entries, offset} = newSegments[i]
             for (let j = 0; j < entries.length; j++) {
               store[j + offset] = entries[j]
             }
           }
           return store
         },
-        exit(
+        delete(
           state,
-          segments: Array<{
-            +offset: number,
+          segments: $ReadOnlyArray<{
+            +offset: number | ((list: $ReadOnlyArray<T>) => number),
             +amount: number,
           }>,
         ) {
@@ -138,14 +157,14 @@ test('list', () => {
           for (let j = 0; j < segments.length; j++) {
             const segment = segments[j]
             newSegments.push({
-              offset: normalizeOffset(segment.offset, state),
+              offset: normalizeOffset(segment.offset, state, []),
               amount: segment.amount,
             })
           }
-          segments = newSegments.sort((a, b) => a.offset - b.offset)
+          newSegments.sort((a, b) => a.offset - b.offset)
           const ids = Array(store.length).fill(true)
-          for (let i = 0; i < segments.length; i++) {
-            const {amount, offset} = segments[i]
+          for (let i = 0; i < newSegments.length; i++) {
+            const {amount, offset} = newSegments[i]
             for (let j = 0; j < amount; j++) {
               ids[j + offset] = false
             }
@@ -154,20 +173,46 @@ test('list', () => {
         },
       }),
     }
+
+    return {
+      delete: model.api.delete,
+      add: model.api.add,
+      replace: model.api.replace,
+      watch: model.store.watch,
+      on: model.store.on,
+      //$off
+      self: model.store,
+    }
   }
-  function normalizeOffset(offset, list) {
+  function normalizeOffset<T>(
+    offsetRaw:
+      | number
+      | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+    list: $ReadOnlyArray<T>,
+    entries: $ReadOnlyArray<T>,
+  ): number {
+    let offset
+    if (typeof offsetRaw === 'function') offset = offsetRaw(list, entries)
+    else offset = offsetRaw
     if (offset < 0) offset = list.length + offset + 1
     return offset
   }
   function sortSegments<T>(
-    segments: Array<{+entries: Array<T>, +offset: number}>,
-    list: Array<T>,
-  ) {
+    segments: $ReadOnlyArray<{
+      +entries: $ReadOnlyArray<T>,
+      +offset:
+        | number
+        | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+    }>,
+    list: $ReadOnlyArray<T>,
+  ): Array<{+entries: $ReadOnlyArray<T>, +offset: number}> {
     return segments
-      .map(({entries, offset}) => ({
-        entries,
-        offset: normalizeOffset(offset, list),
-      }))
+      .map(
+        ({entries, offset}): {entries: $ReadOnlyArray<T>, offset: number} => ({
+          entries,
+          offset: normalizeOffset<T>(offset, list, entries),
+        }),
+      )
       .sort((a, b) => a.offset - b.offset)
   }
 })
