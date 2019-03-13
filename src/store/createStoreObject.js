@@ -35,7 +35,7 @@ function storeCombination(
 
     fn.data.data.pushUpdate = data => {}
 
-    stateNew[key] = child.getState()
+    stateNew[key] = child.defaultState
     forward({
       from: child,
       to: {
@@ -63,8 +63,8 @@ function storeCombination(
     currentState: stateNew,
   })
   const getFresh = freshGetter.bind(store.getState)
-  //$todo
-  store.defaultShape = obj
+  ;(store: any).defaultShape = obj
+  ;(store: any).defaultState = {...stateNew}
   forward({
     from: updater.map(fn => fn()),
     to: store,
