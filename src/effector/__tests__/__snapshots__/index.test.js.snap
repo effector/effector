@@ -1379,7 +1379,7 @@ exports[`showcase: event foo 1`] = `
            }},
            2. update {{
               store: {
-                id: c,
+                id: 3,
                 current: 3
               },
               meta: {
@@ -1412,7 +1412,7 @@ exports[`showcase: mapped 1`] = `
   }},
   2. update {{
      store: {
-       id: f,
+       id: 6,
        current: 3
      },
      meta: {
@@ -1444,7 +1444,7 @@ exports[`showcase: store a 1`] = `
   }},
   2. update {{
      store: {
-       id: c,
+       id: 3,
        current: 3
      },
      meta: {
