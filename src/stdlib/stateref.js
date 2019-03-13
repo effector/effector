@@ -1,10 +1,10 @@
 //@flow
 import type {StateRef} from './index.h'
-let id = 0
-
+import {stringRefcount} from './refcount'
+const nextID = stringRefcount()
 export function createStateRef(current: any): StateRef {
   return {
-    id: (++id).toString(36),
+    id: nextID(),
     current,
   }
 }
