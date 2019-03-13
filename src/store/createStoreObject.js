@@ -19,7 +19,7 @@ function storeCombination(
 ) {
   const updater: any = createEvent('update ' + nextUpdaterID())
   const name = nameSetter(obj)
-  const {stateNew, pairs} = initializer(obj)
+  const {stateNew, defaultState, pairs} = initializer(obj)
   for (let i = 0; i < pairs.length; i++) {
     const {key, child} = pairs[i]
     if (!isStore(child)) continue
@@ -64,7 +64,7 @@ function storeCombination(
   })
   const getFresh = freshGetter.bind(store.getState)
   ;(store: any).defaultShape = obj
-  ;(store: any).defaultState = {...stateNew}
+  ;(store: any).defaultState = defaultState
   forward({
     from: updater.map(fn => fn()),
     to: store,
@@ -86,13 +86,15 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
     initializer(state) {
       const pairs = []
       const stateNew = [...obj]
+      const defaultState = []
       for (let i = 0; i < state.length; i++) {
         pairs.push({
           key: i,
           child: state[i],
         })
+        defaultState[i] = state[i].defaultState
       }
-      return {stateNew, pairs}
+      return {stateNew, pairs, defaultState}
     },
   })
 }
@@ -112,13 +114,15 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     initializer(state) {
       const pairs = []
       const stateNew = Object.assign({}, obj)
+      const defaultState = {}
       for (const key in state) {
         pairs.push({
           key,
           child: state[key],
         })
+        defaultState[key] = state[key].defaultState
       }
-      return {stateNew, pairs}
+      return {stateNew, pairs, defaultState}
     },
   })
 }
