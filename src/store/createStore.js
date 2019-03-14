@@ -1,5 +1,7 @@
 //@flow
 
+import invariant from 'invariant'
+
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 import {type Config, normalizeConfig} from './storeConfig'
