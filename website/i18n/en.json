@@ -98,6 +98,18 @@
       "introduction/prior-art": {
         "title": "Prior Art"
       },
+      "recipes/migrating-to-effector/from-redux": {
+        "title": "From Redux",
+        "sidebar_label": "From Redux"
+      },
+      "recipes/recipe-index": {
+        "title": "Recipes: Index",
+        "sidebar_label": "Recipes: Index"
+      },
+      "recipes/usage-with-typescript": {
+        "title": "Usage with TypeScript",
+        "sidebar_label": "Usage with TypeScript"
+      },
       "troubleshooting": {
         "title": "Troubleshooting"
       }
@@ -111,6 +123,7 @@
     },
     "categories": {
       "Introduction": "Introduction",
+      "Recipes": "Recipes",
       "Other": "Other",
       "FAQ": "FAQ",
       "effector": "effector",

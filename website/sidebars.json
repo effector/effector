@@ -5,6 +5,15 @@
       "introduction/core-concepts",
       "introduction/prior-art"
     ],
+    "Recipes": [
+      "recipes/recipe-index",
+      "recipes/usage-with-typescript",
+      {
+        "type": "subcategory",
+        "label": "Migrating to Effector",
+        "ids": ["recipes/migrating-to-effector/from-redux"]
+      }
+    ],
     "Other": ["troubleshooting", "glossary"],
     "FAQ": ["faq"]
   },

@@ -8,4 +8,5 @@ hide_title: true
 # Recipes
 
 - [Usage with TypeScript](usage-with-typescript.md)
-- [Migrating to Effector](migrating-to-effector.md)
+- Migrating to Effector
+  - [From Redux](migrating-to-effector/from-redux.md)
