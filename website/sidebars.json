@@ -6,7 +6,7 @@
       "introduction/prior-art"
     ],
     "Recipes": [
-      "recipes/recipe-index",
+      "recipes/recipes",
       "recipes/usage-with-typescript",
       {
         "type": "subcategory",
