@@ -5,6 +5,10 @@ import {createEvent} from 'effector/event'
 import {createEffect} from 'effector/effect'
 import {spy, getSpyCalls} from 'effector/fixtures'
 
+test('createStore', () => {
+  expect(() => createStore(undefined)).toThrowErrorMatchingSnapshot()
+})
+
 test('.map', () => {
   const newWord = createEvent<string>()
   const a = createStore('word').on(newWord, (_, word) => word)
