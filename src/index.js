@@ -40,3 +40,4 @@ export {
   isDomain,
 } from 'effector/stdlib'
 export type {kind} from 'effector/stdlib'
+export {version} from 'effector/flags'

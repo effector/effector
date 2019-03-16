@@ -1,5 +1,7 @@
 //@flow strict
 
+declare export var version: string
+
 //prettier-ignore
 export type kind =
   | 'store'

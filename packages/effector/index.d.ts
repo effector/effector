@@ -1,3 +1,5 @@
+export const version: string
+
 export type kind = 'store' | 'event' | 'effect' | 'domain'
 
 export const Kind: {

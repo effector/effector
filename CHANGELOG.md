@@ -6,6 +6,13 @@
 
 ## 0.18.3
 
+- Add version variable to public exports
+
+```js
+import {version} from 'effector'
+console.log(version)
+```
+
 - Add effect handler to domain [4c6ae8](https://github.com/zerobias/effector/commit/4c6ae801b301067473f583b490eefde7b3287afc)
 
 - Add `Unit<T>` as common interface implemented by `Event`, `Effect` and `Store`
