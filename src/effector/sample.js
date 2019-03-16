@@ -4,7 +4,8 @@ import {isStore, isEvent, isEffect} from 'effector/stdlib'
 import {type Event, forward, eventFabric} from 'effector/event'
 import {type Store, storeFabric} from 'effector/store'
 import type {Effect} from 'effector/effect'
-import warning from 'warning'
+
+import invariant from 'invariant'
 
 function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
   let current = undefined
@@ -63,7 +64,7 @@ export function sample(
     //$off
     return sampleEvent(source, sampler)
   }
-  warning(
+  invariant(
     false,
     'sample: First argument should be Event, Store or Effect, but you passed %s.',
     source,
