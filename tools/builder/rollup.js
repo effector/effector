@@ -19,6 +19,8 @@ import commonjs from 'rollup-plugin-commonjs'
 import replace from 'rollup-plugin-replace'
 //$off
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
+//$off
+import analyze from 'rollup-plugin-visualizer'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
@@ -130,7 +132,7 @@ const minifyConfig = ({beautify}: {beautify: boolean}) => ({
   warnings: true,
 })
 
-const getPlugins = () => ({
+const getPlugins = (name: string) => ({
   babel: babel({
     runtimeHelpers: false,
     exclude: /(\.re|node_modules.*)/,
@@ -141,6 +143,10 @@ const getPlugins = () => ({
   commonjs: commonjs({}),
   resolve: resolve({}),
   sizeSnapshot: sizeSnapshot(),
+  analyzer: analyze({
+    filename: `stats/${name}.html`,
+    sourcemap: true
+  }),
   terser: terser(
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
@@ -152,7 +158,7 @@ const getPlugins = () => ({
 })
 
 export async function rollupBabel(name: string, plugin: *) {
-  const plugins = getPlugins()
+  const plugins = getPlugins(name)
   const terserConfig = minifyConfig({
     beautify: true,
   })
@@ -185,7 +191,7 @@ export async function rollupEffector() {
   await Promise.all([cjsAndEs(), umd()])
 
   async function cjsAndEs() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(name)
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -203,6 +209,7 @@ export async function rollupEffector() {
         plugins.graph,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
     })
 
@@ -224,7 +231,7 @@ export async function rollupEffector() {
     ])
   }
   async function umd() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -233,8 +240,9 @@ export async function rollupEffector() {
         plugins.babel,
         plugins.replace,
         plugins.commonjs,
-        // plugins.terser,
         plugins.sizeSnapshot,
+        plugins.terser,
+        plugins.analyzer,
       ],
       external: ['react', 'effector'],
     })
@@ -254,7 +262,7 @@ export async function rollupEffectorForms() {
   await Promise.all([cjsAndEs(), umd()])
 
   async function cjsAndEs() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(name)
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -271,6 +279,7 @@ export async function rollupEffectorForms() {
         plugins.babel,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
     })
 
@@ -292,7 +301,7 @@ export async function rollupEffectorForms() {
     ])
   }
   async function umd() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -303,6 +312,7 @@ export async function rollupEffectorForms() {
         plugins.commonjs,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
       external: ['react', 'effector'],
     })
@@ -322,7 +332,7 @@ export async function rollupEffectorReact() {
   await Promise.all([cjsAndEs(), umd()])
 
   async function cjsAndEs() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(name)
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -339,6 +349,7 @@ export async function rollupEffectorReact() {
         plugins.babel,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
     })
 
@@ -360,7 +371,7 @@ export async function rollupEffectorReact() {
     ])
   }
   async function umd() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -371,6 +382,7 @@ export async function rollupEffectorReact() {
         plugins.commonjs,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
       external: ['react', 'effector'],
     })
@@ -408,7 +420,7 @@ export async function rollupEffectorVue() {
   await Promise.all([cjsAndEs(), umd()])
 
   async function cjsAndEs() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(name)
     const build = await rollup({
       input: (dir(`packages/${name}/index.js`): string),
       external: [
@@ -425,6 +437,7 @@ export async function rollupEffectorVue() {
         plugins.babel,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
     })
     await Promise.all([
@@ -445,7 +458,7 @@ export async function rollupEffectorVue() {
     ])
   }
   async function umd() {
-    const plugins = getPlugins()
+    const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
       input: String(dir(`packages/${name}/index.js`)),
@@ -456,6 +469,7 @@ export async function rollupEffectorVue() {
         plugins.commonjs,
         plugins.sizeSnapshot,
         plugins.terser,
+        plugins.analyzer,
       ],
       external: ['vue', 'effector'],
     })

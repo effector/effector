@@ -26,6 +26,7 @@ test/storage.json
 
 modules.dot
 modules.svg
+stats/**/*.html
 npm/@effector/**
 npm/effector/**
 npm/effector-react/**
