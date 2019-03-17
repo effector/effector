@@ -60,6 +60,9 @@ intervals.watch(console.log)
 logs.watch(realmLog, (logs, log) => {
   logs.push(log)
 })
+
+logs.on(realmStatus, (logs, {active}) => active ? [] : [...logs])
+
 logs.watch(realmStatus, (logs, {active}) => {
   if (!active) {
     printLogs(logs)
