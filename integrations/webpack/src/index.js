@@ -3,18 +3,24 @@ import {
   createStore as createStoreNPM,
   createStoreObject as createStoreObjectNPM,
 } from 'effector'
+import * as effectorNPM from 'effector'
+console.log('effector npm', effectorNPM)
 
 import {
   createEvent as createEventES,
   createStore as createStoreES,
   createStoreObject as createStoreObjectES,
-} from '../npm/effector/effector.es'
+} from '../npm/effector/effector.mjs'
+import * as effectorES from '../npm/effector/effector.mjs'
+console.log('effector es', effectorES)
 
 const {
   createEvent: createEventCJS,
   createStore: createStoreCJS,
   createStoreObject: createStoreObjectCJS,
-} = require('../npm/effector/effector.cjs')
+} = require('../npm/effector/effector.js')
+const effectorCJS = require('../npm/effector/effector.js')
+console.log('effector cjs', effectorCJS)
 
 const {
   createEvent: createEventUMD,

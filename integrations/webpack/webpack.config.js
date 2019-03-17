@@ -1,7 +1,7 @@
 const webpack = require('webpack')
 
 module.exports = {
-  entry: './src/index.js',
+  entry: ['./src/index.js', './src/ecma.mjs'],
   output: {
     path: __dirname + '/dist',
     publicPath: '/',
@@ -17,7 +17,7 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.mjs', '.js', '.jsx'],
   },
   devServer: {
     contentBase: './dist',
