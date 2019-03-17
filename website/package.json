@@ -3,8 +3,8 @@
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
     "build": "docusaurus-build",
-    "build:try": "npx parcel build -d static/try -o try.js --public-url try try/index.js",
-    "watch:try": "npx parcel watch -d static/try -o try.js --public-url try try/index.js",
+    "build:try": "npx parcel build -d static/try -o try.js --no-cache --public-url try try/index.js",
+    "watch:try": "npx parcel watch -d static/try -o try.js --no-cache --public-url try try/index.js",
     "publish-gh-pages": "docusaurus-publish",
     "now-build": "yarn && yarn build:try && yarn build",
     "write-translations": "docusaurus-write-translations",
@@ -20,9 +20,9 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@effector/babel-plugin-react": "^0.0.3",
+    "parcel-plugin-linaria": "link:./forks/parcel-plugin-linaria/",
     "docusaurus": "^1.7.2",
-    "parcel-bundler": "^1.11.0",
-    "parcel-plugin-linaria": "^0.1.0"
+    "terser": "^3.17.0"
   },
   "dependencies": {
     "classnames": "^2.2.6",
