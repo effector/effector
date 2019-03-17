@@ -21,8 +21,8 @@ Effector is an effective multi store state manager for Javascript apps __(React/
 - __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
 - __The application is built from simple elements__ - space and way to take any required business logic out of the view, maximizing the simplicity of the components.
 
-<pre>                                                                                            
-
+                                                                                           
+<pre style="background-color:#fff">
 
      ┌─────────────────────────────────────────────────────────────────────────────────────────┐
      │                                         Domain                                          │
@@ -75,8 +75,9 @@ Effector is an effective multi store state manager for Javascript apps __(React/
                                              │         │                                        
                                              │  World  │                                        
                                              │         │                                        
-                                             └─────────┘                                        </pre>
+                                             └─────────┘                                        
 
+</pre>
 
 ## Installation
 
