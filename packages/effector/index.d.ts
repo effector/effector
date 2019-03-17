@@ -89,6 +89,7 @@ export function isEffect<Params, Done, Error>(obj: unknown): obj is Effect<Param
 export function isDomain(obj: unknown): obj is Domain
 
 export class Domain {
+  readonly kind: kind;
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,

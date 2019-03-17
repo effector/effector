@@ -112,6 +112,7 @@ declare export function isDomain(obj: mixed): boolean %checks(typeof obj ===
   obj !== null &&
   obj instanceof Domain)
 declare export class Domain {
+  /*::+*/ kind: kind;
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
   onCreateEffect(
     hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
