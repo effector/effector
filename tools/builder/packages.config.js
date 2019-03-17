@@ -37,24 +37,34 @@ const version = {
   '@effector/forms': '0.0.1',
 }
 
+const cjsExt = 'js'
+const ecmaExt = 'mjs'
+
 const getFiles = name => [
   'README.md',
   'LICENSE',
   'index.d.ts',
   'index.js.flow',
   //js files
-  `${name}.es.js`,
-  `${name}.cjs.js`,
+  `${name}.${ecmaExt}`,
+  `${name}.${cjsExt}`,
   `${name}.umd.js`,
   //mappings
-  `${name}.es.js.map`,
-  `${name}.cjs.js.map`,
+  `${name}.${ecmaExt}.map`,
+  `${name}.${cjsExt}.map`,
   `${name}.umd.js.map`,
   //typings
-  `${name}.cjs.js.flow`,
-  `${name}.es.js.flow`,
+  `${name}.${cjsExt}.flow`,
+  `${name}.${ecmaExt}.flow`,
   `${name}.umd.js.flow`,
 ]
+
+const getModules = name => ({
+  main: `${name}`,
+  module: `${name}.${ecmaExt}`,
+  'umd:main': `${name}.umd.js`,
+  'jsnext:main': `${name}.${ecmaExt}`,
+})
 
 const dependsOnEffector = {
   effector: `^${version.effector}`,
@@ -65,10 +75,7 @@ export default {
     name: 'effector',
     version: version['effector'],
     description: 'Application state manager',
-    main: 'effector.cjs.js',
-    module: 'effector.es.js',
-    'umd:main': 'effector.umd.js',
-    'jsnext:main': 'effector.es.js',
+    ...getModules('effector'),
     typings: 'index.d.ts',
     dependencies: {
       'symbol-observable': '^1.2.0',
@@ -93,10 +100,7 @@ export default {
     name: 'effector-react',
     version: version['effector-react'],
     description: 'React bindings for effector',
-    main: 'effector-react.cjs.js',
-    module: 'effector-react.es.js',
-    'umd:main': 'effector-react.umd.js',
-    'jsnext:main': 'effector-react.es.js',
+    ...getModules('effector-react'),
     typings: 'index.d.ts',
     dependencies: dependsOnEffector,
     peerDependencies: {
@@ -123,10 +127,7 @@ export default {
     name: 'effector-vue',
     version: version['effector-vue'],
     description: 'Vue bindings for effector',
-    main: 'effector-vue.cjs.js',
-    module: 'effector-vue.es.js',
-    'umd:main': 'effector-vue.umd.js',
-    'jsnext:main': 'effector-vue.es.js',
+    ...getModules('effector-vue'),
     typings: 'index.d.ts',
     dependencies: dependsOnEffector,
     peerDependencies: {
@@ -236,13 +237,9 @@ export default {
     name: '@effector/forms',
     description: '',
     version: version['@effector/forms'],
-    main: 'forms.cjs.js',
-    module: 'forms.es.js',
-    'umd:main': 'forms.umd.js',
-    'jsnext:main': 'forms.es.js',
+    ...getModules('forms'),
     typings: 'index.d.ts',
     repository: 'https://github.com/zerobias/effector',
-    main: 'index.js',
     files: getFiles('forms'),
     dependencies: dependsOnEffector,
     keywords: ['effector', 'forms'],

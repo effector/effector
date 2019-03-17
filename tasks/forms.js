@@ -21,8 +21,8 @@ export default {
           'index.js.flow',
           [
             'index.js.flow',
-            'forms.cjs.js.flow',
-            'forms.es.js.flow',
+            'forms.js.flow',
+            'forms.mjs.flow',
             'forms.umd.js.flow',
           ],
         ],

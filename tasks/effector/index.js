@@ -9,6 +9,15 @@ import {
 import packages from 'Builder/packages.config'
 import renderModulesGraph from 'Builder/moduleGraphGenerator'
 
+const cjsExt = 'js'
+const ecmaExt = 'mjs'
+
+const getTypings = name => [
+  `${name}.${cjsExt}.flow`,
+  `${name}.${ecmaExt}.flow`,
+  `${name}.umd.js.flow`,
+]
+
 export default {
   effector: [
     () =>
@@ -18,15 +27,7 @@ export default {
       massCopy('packages/effector', 'npm/effector', [
         'index.d.ts',
         'package.json',
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector.cjs.js.flow',
-            'effector.es.js.flow',
-            'effector.umd.js.flow',
-          ],
-        ],
+        ['index.js.flow', ['index.js.flow', ...getTypings('effector')]],
       ]),
     rollupEffector,
     renderModulesGraph,
@@ -44,15 +45,7 @@ export default {
         'index.d.ts',
         'README.md',
         'package.json',
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector-react.cjs.js.flow',
-            'effector-react.es.js.flow',
-            'effector-react.umd.js.flow',
-          ],
-        ],
+        ['index.js.flow', ['index.js.flow', ...getTypings('effector-react')]],
       ]),
     rollupEffectorReact,
     publishScript('effector-react'),
@@ -69,15 +62,7 @@ export default {
         'index.d.ts',
         'README.md',
         'package.json',
-        [
-          'index.js.flow',
-          [
-            'index.js.flow',
-            'effector-vue.cjs.js.flow',
-            'effector-vue.es.js.flow',
-            'effector-vue.umd.js.flow',
-          ],
-        ],
+        ['index.js.flow', ['index.js.flow', ...getTypings('effector-vue')]],
       ]),
     rollupEffectorVue,
     publishScript('effector-vue'),

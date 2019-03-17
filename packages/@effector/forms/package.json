@@ -2,7 +2,7 @@
   "name": "@effector/forms",
   "description": "",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "forms",
   "module": "forms.mjs",
   "umd:main": "forms.umd.js",
   "jsnext:main": "forms.mjs",
