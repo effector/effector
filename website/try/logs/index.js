@@ -14,7 +14,7 @@ export function consoleMap() {
 }
 
 function logger(...args) {
-  realmLog({method: this, args})
+  realmLog({method: this.toString(), args})
 }
 
 export function printLogs(logs) {
