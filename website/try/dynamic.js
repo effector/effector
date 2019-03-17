@@ -63,12 +63,12 @@ logs.watch(realmLog, (logs, log) => {
 
 logs.on(realmStatus, (logs, {active}) => active ? [] : [...logs])
 
-logs.watch(realmStatus, (logs, {active}) => {
-  if (!active) {
-    printLogs(logs)
-  }
-  logs.length = 0
-})
+// logs.watch(realmStatus, (logs, {active}) => {
+//   if (!active) {
+//     printLogs(logs)
+//   }
+//   logs.length = 0
+// })
 
 stats
   .on(realmEvent, ({event, ...rest}, e) => ({

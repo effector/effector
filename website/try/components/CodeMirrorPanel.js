@@ -31,7 +31,16 @@ export default class CodeMirrorPanel extends React.Component {
   _cached = ''
 
   componentDidMount() {
-    const {passive, value, onChange, codeSample, ...props} = this.props
+    const {
+      className,
+      style,
+      passive,
+      value,
+      onChange,
+      codeSample,
+      ...props
+    } = this.props
+    console.log(props)
     const options = {
       foldGutter: true,
       tabSize: 2,
@@ -86,9 +95,9 @@ export default class CodeMirrorPanel extends React.Component {
   }
 
   render() {
-    const {className, value, mode, passive, onChange, tabSize, readOnly, ...props} = this.props
+    const {className} = this.props
     return (
-      <div {...props} className={'editor ' + this.props.className}>
+      <div className={'editor ' + className}>
         <textarea ref={this._textareaRef} />
       </div>
     )

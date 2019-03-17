@@ -67,21 +67,6 @@ body {
   margin-bottom: -1px;
 }
 
-.storages-tab-content,
-.events-tab-content,
-.effects-tab-content,
-.domains-tab-content,
-.dom-tab-content {
-  display: none;
-}
-.tab-content.show-storages .storages-tab-content,
-.tab-content.show-events .events-tab-content,
-.tab-content.show-effects .effects-tab-content,
-.tab-content.show-domains .domains-tab-content,
-.tab-content.show-dom .dom-tab-content {
-  display: block;
-}
-
 .toolbar .tab {
   border-right: 1px solid #ddd;
   cursor: pointer;

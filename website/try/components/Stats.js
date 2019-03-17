@@ -38,19 +38,19 @@ const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
     return <li key={item.kind + item.id + name}>{name}</li>
   }
   return (
-    <div className={className}>
-      <div className="events-tab-content">
+    <div>
+      {tab === 'events' && <div className="events-tab-content">
         <ol>{event.map(mapper)}</ol>
-      </div>
-      <div className="storages-tab-content">
+      </div>}
+      {tab === 'storages' && <div className="storages-tab-content">
         <ol>{store.map(mapper)}</ol>
-      </div>
-      <div className="effects-tab-content">
+      </div>}
+      {tab === 'effects' && <div className="effects-tab-content">
         <ol>{effect.map(mapper)}</ol>
-      </div>
-      <div className="domains-tab-content">
+      </div>}
+      {tab === 'domains' && <div className="domains-tab-content">
         <ol>{domain.map(mapper)}</ol>
-      </div>
+      </div>}
     </div>
   )
 })

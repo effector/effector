@@ -97,17 +97,22 @@ const VersionLinkView = createComponent(version, ({}, version) => (
 
 const TabsView = createComponent(tab, (_, tab) => (
   <>
-    <ul className={cx({
-      'show-graphite': tab === 'graphite',
-      'show-console': tab === 'console',
-      toolbar: true,
-      'header-tabs': true
-    })}>
-      <li class="tab graphite-tab" onClick={tabApi.showGraphite}>Graphite</li>
-      <li class="tab console-tab" onClick={tabApi.showConsole}>Console</li>
+    <ul
+      className={cx({
+        'show-graphite': tab === 'graphite',
+        'show-console': tab === 'console',
+        toolbar: true,
+        'header-tabs': true,
+      })}>
+      <li className="tab graphite-tab" onClick={tabApi.showGraphite}>
+        Graphite
+      </li>
+      <li className="tab console-tab" onClick={tabApi.showConsole}>
+        Console
+      </li>
     </ul>
-    <GraphiteView style={{display: tab !== 'graphite' ? 'none' : 'flex'}} />
-    <LogsView style={{display: tab !== 'console' ? 'none' : 'flex'}} />
+    {tab === 'graphite' && <GraphiteView />}
+    {tab === 'console' && <LogsView />}
   </>
 ))
 
