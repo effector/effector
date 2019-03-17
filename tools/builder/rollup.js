@@ -215,14 +215,14 @@ export async function rollupEffector() {
 
     await Promise.all([
       build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
+        file: dir(`npm/${name}/${name}.js`),
         format: 'cjs',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
       }),
       build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
+        file: dir(`npm/${name}/${name}.mjs`),
         format: 'es',
         name,
         sourcemap: true,
@@ -285,14 +285,14 @@ export async function rollupEffectorForms() {
 
     await Promise.all([
       build.write({
-        file: dir(`npm/${name}/forms.cjs.js`),
+        file: dir(`npm/${name}/forms.js`),
         format: 'cjs',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
       }),
       build.write({
-        file: dir(`npm/${name}/forms.es.js`),
+        file: dir(`npm/${name}/forms.mjs`),
         format: 'es',
         name,
         sourcemap: true,
@@ -355,14 +355,14 @@ export async function rollupEffectorReact() {
 
     await Promise.all([
       build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
+        file: dir(`npm/${name}/${name}.js`),
         format: 'cjs',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
       }),
       build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
+        file: dir(`npm/${name}/${name}.mjs`),
         format: 'es',
         name,
         sourcemap: true,
@@ -442,14 +442,14 @@ export async function rollupEffectorVue() {
     })
     await Promise.all([
       build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
+        file: dir(`npm/${name}/${name}.js`),
         format: 'cjs',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
       }),
       build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
+        file: dir(`npm/${name}/${name}.mjs`),
         format: 'es',
         name,
         sourcemap: true,
