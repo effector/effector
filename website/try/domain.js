@@ -8,6 +8,7 @@ import {
   restoreEffect,
   combine as combineFn,
   createDomain,
+  createApi,
   forward,
 } from 'effector'
 import * as lzString from 'lz-string'
@@ -80,7 +81,7 @@ export const changeSources = createEvent('change sources')
 export const resetGraphiteState = createEvent('reset graphite state')
 export const selectVersion = createEvent('select version')
 
-export const logs = createStore([])
+export const logs = createStore<any[]>([])
 export const intervals = createStore<number[]>([])
 export const timeouts = createStore<number[]>([])
 
@@ -103,6 +104,13 @@ export const graphiteCode = graphite.map(e => {
     result[key] = traverseGraphite(e[key])
   }
   return JSON.stringify(result, null, 2)
+})
+
+export const tab = createStore<'graphite' | 'console'>('graphite')
+
+export const tabApi = createApi(tab, {
+  showGraphite: () => 'graphite',
+  showConsole: () => 'console'
 })
 
 export const stats = createStore({
