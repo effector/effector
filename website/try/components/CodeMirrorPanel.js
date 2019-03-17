@@ -86,8 +86,9 @@ export default class CodeMirrorPanel extends React.Component {
   }
 
   render() {
+    const {className, value, mode, passive, onChange, tabSize, readOnly, ...props} = this.props
     return (
-      <div className={'editor ' + this.props.className}>
+      <div {...props} className={'editor ' + this.props.className}>
         <textarea ref={this._textareaRef} />
       </div>
     )
