@@ -108,6 +108,23 @@ body {
 .editor.results {
 }
 
+.header-tabs {
+  border-left: 1px solid #ddd;
+  background-color: #f7f7f7
+}
+.header-tabs.toolbar.show-graphite .graphite-tab,
+.header-tabs.toolbar.show-console .console-tab {
+  background: #fff;
+}
+
+.console {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  background-color: #fff;
+}
+
 .errors {
   margin: 0;
   padding: 1rem;
@@ -226,29 +243,38 @@ body {
     overflow: hidden;
     height: 100%;
     grid-template-columns: repeat(2, minmax(200px, 1fr));
-    grid-template-rows: 50px repeat(3, minmax(100px, 1fr));
-  }
-  .stats {
-    grid-column: 2 / span 1;
-    grid-row: 4 / span 1;
-    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
   }
   .header {
     grid-column: 2 / span 1;
     grid-row: 1 / span 1;
   }
+  .header-tabs {
+    grid-column: 2 / span 1;
+    grid-row: 2 / span 1;
+  }
+  .console {
+    grid-column: 2 / span 1;
+    grid-row: 3 / span 2;
+  }
   .editor.sources {
     grid-column: 1 / span 1;
-    grid-row: 1 / span 4;
+    grid-row: 1 / span 5;
   }
 
   .editor.results {
     grid-column: 2 / span 1;
-    grid-row: 2 / span 2;
+    grid-row: 3 / span 2;
   }
+
   .errors {
     grid-column: 2 / span 1;
-    grid-row: 4 / span 1;
+    grid-row: 5 / span 1;
+  }
+  .stats {
+    grid-column: 2 / span 1;
+    grid-row: 5 / span 1;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 }
 

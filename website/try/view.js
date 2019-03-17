@@ -2,6 +2,7 @@
 
 import React from 'react'
 import ReactDOM from 'react-dom'
+import cx from 'classnames'
 import {createStoreObject} from 'effector'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
@@ -14,8 +15,10 @@ import {VersionSelector} from './components/VersionSelector'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import Stats from './components/Stats'
+import Console from './components/Console'
 import {
   sourceCode,
+  logs,
   packageVersions,
   selectVersion,
   graphiteCode,
@@ -25,7 +28,14 @@ import {
   shareableUrl,
   copyShareableUrl,
   version,
+  tab,
+  tabApi,
 } from './domain'
+
+const LogsView = createComponent(
+  logs.map(logs => logs.map(({method, args}) => ({method, data: args}))),
+  ({style}, logs) => <Console className="console" style={style} logs={logs} />,
+)
 
 const StatsView = createComponent(stats, ({}, stats) => <Stats {...stats} />)
 
@@ -49,9 +59,10 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
   />
 ))
 
-const GraphiteView = createComponent(graphiteCode, ({}, graphite) => (
+const GraphiteView = createComponent(graphiteCode, ({style}, graphite) => (
   <Panel
     className="results"
+    style={style}
     readOnly={true}
     passive
     lineWrapping={false}
@@ -84,6 +95,22 @@ const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
 ))
 
+const TabsView = createComponent(tab, (_, tab) => (
+  <>
+    <ul className={cx({
+      'show-graphite': tab === 'graphite',
+      'show-console': tab === 'console',
+      toolbar: true,
+      'header-tabs': true
+    })}>
+      <li class="tab graphite-tab" onClick={tabApi.showGraphite}>Graphite</li>
+      <li class="tab console-tab" onClick={tabApi.showConsole}>Console</li>
+    </ul>
+    <GraphiteView style={{display: tab !== 'graphite' ? 'none' : 'flex'}} />
+    <LogsView style={{display: tab !== 'console' ? 'none' : 'flex'}} />
+  </>
+))
+
 export default (
   <div className="try-inner">
     <VersionLinkView />
@@ -92,7 +119,7 @@ export default (
       <VersionSelectorView />
       <ShareButtonView />
     </div>
-    <GraphiteView />
+    <TabsView />
     <ErrorsView />
     <StatsView />
   </div>
