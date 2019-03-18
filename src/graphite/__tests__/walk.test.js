@@ -9,7 +9,7 @@ import {walkNode} from '../walk'
 
 function eventCtx(payload) {
   return {
-    __stepArg: payload,
+    arg: payload,
   }
 }
 const Next = () => (

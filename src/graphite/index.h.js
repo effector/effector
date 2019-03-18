@@ -9,7 +9,7 @@ export type CtxKind =
   | 'update'
   | 'run'
   | 'combine'
-export type CommonCtx = {__stepArg: any, ...}
+export type CommonCtx = {arg: any, ...}
 export type Reg = {
   isChanged: boolean,
   isFailed: boolean,
@@ -34,11 +34,11 @@ export type Command<Local> = {
 }
 
 export type CommandList = $ReadOnly<{
-  emit: Command<{__stepArg: any}>,
-  filter: Command<{__stepArg: any, isChanged: boolean}>,
-  run: Command<{__stepArg: any, isFailed: boolean}>,
-  update: Command<{__stepArg: any, store: StateRef}>,
-  compute: Command<{__stepArg: any, isChanged: boolean}>,
+  emit: Command<{arg: any}>,
+  filter: Command<{arg: any, isChanged: boolean}>,
+  run: Command<{arg: any, isFailed: boolean}>,
+  update: Command<{arg: any, store: StateRef}>,
+  compute: Command<{arg: any, isChanged: boolean}>,
 }>
 
 export type StepVisitor = (meta: Meta) => void
