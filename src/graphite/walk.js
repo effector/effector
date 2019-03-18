@@ -2,19 +2,16 @@
 import type {Event} from 'effector/event'
 import type {TypeDef} from 'effector/stdlib'
 
-import {newMeta, val} from './meta'
+import {newMeta} from './meta'
 import {runStepAlt} from './runStep'
 
 export function walkEvent<T>(payload: T, event: Event<T>) {
   walkNode(event.graphite.seq, {
-    __stepArg: payload,
+    arg: payload,
   })
 }
 
-export function walkNode(
-  seq: TypeDef<'seq', 'step'>,
-  ctx: {__stepArg: any, ...},
-) {
+export function walkNode(seq: TypeDef<'seq', 'step'>, ctx: {arg: any, ...}) {
   const meta = newMeta(ctx)
   meta.scope.push(ctx)
   runStepAlt(seq, meta)
