@@ -8,7 +8,7 @@ const cmd = {
   filter(meta, local) {
     const runCtx = tryRun({
       err: false,
-      result: (null: any),
+      result: (null/*: any*/),
       arg: local.__stepArg,
       val: meta.val,
       fn: single(meta).fn,
@@ -22,7 +22,7 @@ const cmd = {
     }
     const runCtx = tryRun({
       err: false,
-      result: (null: any),
+      result: (null/*: any*/),
       arg: local.__stepArg,
       val: meta.val,
       fn: data.fn,
@@ -35,7 +35,7 @@ const cmd = {
   compute(meta, local) {
     const runCtx = tryRun({
       err: false,
-      result: (null: any),
+      result: (null/*: any*/),
       arg: local.__stepArg,
       val: meta.val,
       fn: single(meta).fn,
