@@ -47,53 +47,37 @@ const cmd = {
   },
 }
 
-const transition = {
-  emit: () => true,
-  filter: (meta, local) => local.isChanged,
-  run: (meta, local) => local.isFailed,
-  update: () => true,
-  compute: (meta, local) => local.isChanged,
-}
-
-const local = {
-  emit: (meta, __stepArg) => ({__stepArg}),
-  filter: (meta, __stepArg) => ({__stepArg, isChanged: false}),
-  run: (meta, __stepArg) => ({__stepArg, isFailed: true}),
-  update: (meta, __stepArg) => ({
-    __stepArg,
-    store: single(meta).store,
-  }),
-  compute: (meta, __stepArg) => ({
-    __stepArg,
-    isChanged: false,
-  }),
-}
-
 export default ({
   emit: {
     cmd: cmd.emit,
-    transition: transition.emit,
-    local: local.emit,
+    transition: () => true,
+    local: (meta, __stepArg) => ({__stepArg}),
   },
   filter: {
     cmd: cmd.filter,
-    transition: transition.filter,
-    local: local.filter,
+    transition: (meta, local) => local.isChanged,
+    local: (meta, __stepArg) => ({__stepArg, isChanged: false}),
   },
   run: {
     cmd: cmd.run,
-    transition: transition.run,
-    local: local.run,
+    transition: (meta, local) => local.isFailed,
+    local: (meta, __stepArg) => ({__stepArg, isFailed: true}),
   },
   update: {
     cmd: cmd.update,
-    transition: transition.update,
-    local: local.update,
+    transition: () => true,
+    local: (meta, __stepArg) => ({
+      __stepArg,
+      store: single(meta).store,
+    }),
   },
   compute: {
     cmd: cmd.compute,
-    transition: transition.compute,
-    local: local.compute,
+    transition: (meta, local) => local.isChanged,
+    local: (meta, __stepArg) => ({
+      __stepArg,
+      isChanged: false,
+    }),
   },
 }: CommandList)
 
