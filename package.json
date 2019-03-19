@@ -41,6 +41,7 @@
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/traverse": "^7.3.4",
+    "@glennsl/bs-jest": "^0.4.8",
     "@goodmind/flow-js": "^0.95.1-flow.238352724-build.f6486aa",
     "@goodmind/flowgen": "^2.2.1",
     "@types/jest": "^24.0.9",
