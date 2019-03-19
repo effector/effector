@@ -17,7 +17,7 @@ type Area = {|
   index: number,
 |}
 
-export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
+export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
   const scope = meta.scope
   //prettier-ignore
   const pos: {|
