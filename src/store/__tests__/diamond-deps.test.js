@@ -85,3 +85,55 @@ test('olympic', async() => {
   const path = resolve(__dirname, '../../..', 'tools/viz/src', 'out.json')
   await fs.outputJSON(path, A.graphite.seq, {spaces: 2})
 })
+
+test('display name', () => {
+  /*
+    Short description: `displayName = isFirstNameShort ? fullName : firstName`
+    `isFirstNameShort` and `fullName` depends by `firstName`
+    so `displayName` has three depends from `firstName`
+    and in "classic" EE `displayName` must updates three times (what unnecessary)
+    if `firstName` was updated
+  */
+  const updateFirstName = createEvent()
+
+  const firstName = createStore('John').on(updateFirstName, (_, name) => name)
+  const lastName = createStore('Doe')
+
+  const isFirstNameShortMap = jest.fn(v => v.length < 10)
+  const IsFirstNameShort = firstName.map(isFirstNameShortMap)
+
+  const fullNameMap = jest.fn((fn, ln) => [fn, ln].join(' '))
+  const fullName = combine(firstName, lastName, fullNameMap)
+
+  const displayNameMap = jest.fn((firstName, isFirstNameShort, fullName) =>
+    isFirstNameShort ? fullName : firstName,
+  )
+  const displayName = combine(
+    firstName,
+    IsFirstNameShort,
+    fullName,
+    displayNameMap,
+  )
+
+  const view = jest.fn()
+  displayName.watch(view)
+
+  expect(isFirstNameShortMap.mock.calls.length).toBe(1)
+  expect(fullNameMap.mock.calls.length).toBe(1)
+  expect(displayNameMap.mock.calls.length).toBe(1)
+  expect(view.mock.calls.length).toBe(1)
+
+  updateFirstName('Joseph')
+  expect(displayName.getState()).toBe('Joseph Doe')
+  expect(isFirstNameShortMap.mock.calls.length).toBe(2)
+  expect(fullNameMap.mock.calls.length).toBe(2)
+  expect(displayNameMap.mock.calls.length).toBe(2)
+  expect(view.mock.calls.length).toBe(2)
+
+  updateFirstName('Jooooooooooooooseph')
+  expect(displayName.getState()).toBe('Jooooooooooooooseph')
+  expect(isFirstNameShortMap.mock.calls.length).toBe(3)
+  expect(fullNameMap.mock.calls.length).toBe(3)
+  expect(displayNameMap.mock.calls.length).toBe(3)
+  expect(view.mock.calls.length).toBe(3)
+})
