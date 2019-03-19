@@ -87,6 +87,13 @@ test('olympic', async() => {
 })
 
 test('display name', () => {
+  /*
+    Short description: `displayName = isFirstNameShort ? fullName : firstName`
+    `isFirstNameShort` and `fullName` depends by `firstName`
+    so `displayName` has three depends from `firstName`
+    and in "classic" EE `displayName` must updates three times (what unnecessary)
+    if `firstName` was updated
+  */
   const updateFirstName = createEvent()
 
   const firstName = createStore('John').on(updateFirstName, (_, name) => name)
