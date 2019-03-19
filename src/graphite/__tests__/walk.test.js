@@ -1,26 +1,10 @@
 //@flow
 //@jsx fx
-//eslint-disable-next-line no-unused-vars
-import {fx} from 'effector/stdlib'
-// import {show} from 'effector/fixtures/showstep'
+import {step, cmd} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import {walkNode} from '../walk'
 
-function eventCtx(payload) {
-  return {
-    __stepArg: payload,
-  }
-}
-const Next = () => (
-  <multi>
-    <run
-      fn={(...args) => {
-        console.log(...args)
-      }}
-    />
-  </multi>
-)
 describe('filter node will throw', () => {
   it('throw in a single node', () => {
     const next = Next()
@@ -203,3 +187,47 @@ describe('<filter /> execution cases', () => {
     expect(fn2).not.toHaveBeenCalled()
   })
 })
+
+//eslint-disable-next-line no-unused-vars
+function fx(
+  tag:
+    | 'single'
+    | 'multi'
+    | 'seq'
+    | 'query'
+    | 'compute'
+    | 'emit'
+    | 'filter'
+    | 'run'
+    | 'update',
+  props: any,
+  ...childrens: Array<any>
+): any {
+  switch (tag) {
+    case 'seq':
+      return step('seq', childrens)
+    case 'multi':
+      return step('multi', childrens)
+    case 'single':
+      return step('single', childrens[0])
+    case 'query':
+      return step('query', props)
+    default:
+      return cmd(tag, props)
+  }
+}
+
+function eventCtx(payload) {
+  return {
+    arg: payload,
+  }
+}
+const Next = () => (
+  <multi>
+    <run
+      fn={(...args) => {
+        console.log(...args)
+      }}
+    />
+  </multi>
+)

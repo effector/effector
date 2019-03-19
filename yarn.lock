@@ -865,10 +865,10 @@
   dependencies:
     jest "^24.3.1"
 
-"@goodmind/flow-js@^0.95.1-flow.238352724-build.f6486aa":
-  version "0.95.1-flow.238352724-build.f6486aa"
-  resolved "https://registry.yarnpkg.com/@goodmind/flow-js/-/flow-js-0.95.1-flow.238352724-build.f6486aa.tgz#22d8b4bd111a046bdbdc44c343260f24e633514b"
-  integrity sha512-CAFSMcpPxg2PI3soNmhMLmCoHGW0YzPbBatx/Z1vjgwTxqotHcshDDqqKy7a7pfnTRztasFmYBIrdlM7XPFweg==
+"@goodmind/flow-js@^0.95.1-flow.96e2ba480-build.f6486aa":
+  version "0.95.1-flow.96e2ba480-build.f6486aa"
+  resolved "https://registry.yarnpkg.com/@goodmind/flow-js/-/flow-js-0.95.1-flow.96e2ba480-build.f6486aa.tgz#4d358f23bf1f9fb40a688aa1e4097742b3c26943"
+  integrity sha512-nrmBx7At+d18PMkmDxRkb5jI9n5ZxV0lsxIpODZUD9LKzOQ6C3+7w+tsZB9zJvLglY458sxQHBXgPnsm67prUQ==
 
 "@goodmind/flowgen@^2.2.1":
   version "2.2.1"

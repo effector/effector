@@ -50,10 +50,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
       switch (step.type) {
         case 'single': {
           const type = step.data.type
-          const local = command[type].local(
-            meta,
-            scope[scope.length - 1].__stepArg,
-          )
+          const local = command[type].local(meta, scope[scope.length - 1].arg)
           scope.push(local)
           command[type].cmd(meta, local)
           meta.stop = !command[type].transition(meta, local)
@@ -121,7 +118,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
                 ) => {+arg: any, +list: Array<TypeDef<*, *>>},
               } = step.data
               const fn = data.fn
-              const arg = scope[scope.length - 1].__stepArg
+              const arg = scope[scope.length - 1].arg
               const queryResult = fn(arg, meta)
 
               const items = queryResult.list
@@ -133,7 +130,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
                     {
                       type: 'scope/push',
                       scope: {
-                        __stepArg: queryResult.arg,
+                        arg: queryResult.arg,
                       },
                     },
                   ],
@@ -154,7 +151,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
               } = step.data
               const fn = data.fn
               const shape = data.shape
-              const arg = scope[scope.length - 1].__stepArg
+              const arg = scope[scope.length - 1].arg
 
               const queryResult = fn(arg, meta)
               for (const key in queryResult) {
@@ -165,7 +162,7 @@ export function runStepAlt(step: TypeDef<*, 'step'>, meta: Meta) {
                       {
                         type: 'scope/push',
                         scope: {
-                          __stepArg: queryResult[key],
+                          arg: queryResult[key],
                         },
                       },
                     ],
@@ -235,4 +232,4 @@ type PostAction =
   | {|+type: 'head/--'|}
   | {|+type: 'callstack/pop'|}
   | {|+type: 'scope/size', +size: number|}
-  | {|+type: 'scope/push', +scope: {+__stepArg: any}|}
+  | {|+type: 'scope/push', +scope: {+arg: any}|}

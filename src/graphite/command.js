@@ -9,7 +9,7 @@ const cmd = {
     const runCtx = tryRun({
       err: false,
       result: (null/*: any*/),
-      arg: local.__stepArg,
+      arg: local.arg,
       val: meta.val,
       fn: single(meta).fn,
     })
@@ -23,77 +23,61 @@ const cmd = {
     const runCtx = tryRun({
       err: false,
       result: (null/*: any*/),
-      arg: local.__stepArg,
+      arg: local.arg,
       val: meta.val,
       fn: data.fn,
     })
     local.isFailed = runCtx.err
   },
   update(meta, local) {
-    local.store.current = local.__stepArg
+    local.store.current = local.arg
   },
   compute(meta, local) {
     const runCtx = tryRun({
       err: false,
       result: (null/*: any*/),
-      arg: local.__stepArg,
+      arg: local.arg,
       val: meta.val,
       fn: single(meta).fn,
     })
     local.isChanged = !runCtx.err
     ///TODO WARNING!! DIRTY HACK REMOVE ASAP
     ///need to separate pre and post local variables
-    local.__stepArg = runCtx.err ? null : runCtx.result
+    local.arg = runCtx.err ? null : runCtx.result
   },
-}
-
-const transition = {
-  emit: () => true,
-  filter: (meta, local) => local.isChanged,
-  run: (meta, local) => local.isFailed,
-  update: () => true,
-  compute: (meta, local) => local.isChanged,
-}
-
-const local = {
-  emit: (meta, __stepArg) => ({__stepArg}),
-  filter: (meta, __stepArg) => ({__stepArg, isChanged: false}),
-  run: (meta, __stepArg) => ({__stepArg, isFailed: true}),
-  update: (meta, __stepArg) => ({
-    __stepArg,
-    store: single(meta).store,
-  }),
-  compute: (meta, __stepArg) => ({
-    __stepArg,
-    isChanged: false,
-  }),
 }
 
 export default ({
   emit: {
     cmd: cmd.emit,
-    transition: transition.emit,
-    local: local.emit,
+    transition: () => true,
+    local: (meta, arg) => ({arg}),
   },
   filter: {
     cmd: cmd.filter,
-    transition: transition.filter,
-    local: local.filter,
+    transition: (meta, local) => local.isChanged,
+    local: (meta, arg) => ({arg, isChanged: false}),
   },
   run: {
     cmd: cmd.run,
-    transition: transition.run,
-    local: local.run,
+    transition: (meta, local) => local.isFailed,
+    local: (meta, arg) => ({arg, isFailed: true}),
   },
   update: {
     cmd: cmd.update,
-    transition: transition.update,
-    local: local.update,
+    transition: () => true,
+    local: (meta, arg) => ({
+      arg,
+      store: single(meta).store,
+    }),
   },
   compute: {
     cmd: cmd.compute,
-    transition: transition.compute,
-    local: local.compute,
+    transition: (meta, local) => local.isChanged,
+    local: (meta, arg) => ({
+      arg,
+      isChanged: false,
+    }),
   },
 }: CommandList)
 
