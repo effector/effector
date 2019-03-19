@@ -112,7 +112,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     typeof listener === 'function',
     'Expected the listener to be a function',
   )
-  let stopPhaseTimerMessage = null
+  let stopPhaseTimerMessage = 'Got initial error'
   let lastCall = getState(storeInstance)
 
   startPhaseTimer(storeInstance, 'subscribe')
@@ -121,7 +121,6 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     stopPhaseTimerMessage = 'Initial'
   } catch (err) {
     console.error(err)
-    stopPhaseTimerMessage = 'Got initial error'
   }
   stopPhaseTimer(stopPhaseTimerMessage)
   const meta = {
@@ -170,13 +169,12 @@ export function mapStore<A, B>(
   startPhaseTimer(store, 'map')
   let lastValue = store.getState()
   let lastResult
-  let stopPhaseTimerMessage = null
+  let stopPhaseTimerMessage = 'Got initial error'
   try {
     lastResult = fn(lastValue, firstState)
     stopPhaseTimerMessage = 'Initial'
   } catch (err) {
     console.error(err)
-    stopPhaseTimerMessage = 'Got initial error'
   }
   stopPhaseTimer(stopPhaseTimerMessage)
   const innerStore: Store<any> = this({
@@ -196,14 +194,13 @@ export function mapStore<A, B>(
           fn(newValue) {
             startPhaseTimer(store, 'map')
             lastValue = newValue
-            let stopPhaseTimerMessage = null
+            const stopPhaseTimerMessage = 'Got error'
             const lastState = innerStore.getState()
             let result
             try {
               result = fn(newValue, lastState)
             } catch (err) {
               console.error(err)
-              stopPhaseTimerMessage = 'Got error'
             }
             stopPhaseTimer(stopPhaseTimerMessage)
             return result
@@ -217,7 +214,6 @@ export function mapStore<A, B>(
             if (isChanged) {
               lastResult = result
             }
-            stopPhaseTimer(null)
             return isChanged
           },
           meta,
