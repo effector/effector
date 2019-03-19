@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {cmd, Kind, stringRefcount, createGraph} from 'effector/stdlib'
+import {cmd, Kind, stringRefcount, createNode} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
@@ -23,17 +23,15 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = createGraph({
-    node: [
-      cmd('emit', {
+  const graphite = createNode(
+    cmd('emit', {
+      fullName,
+      meta: {
         fullName,
-        meta: {
-          fullName,
-          section: id,
-        },
-      }),
-    ],
-  })
+        section: id,
+      },
+    }),
+  )
 
   //$off
   const instance: Event<Payload> = (
@@ -74,14 +72,12 @@ function prepend(event, fn: (_: any) => *) {
   forward({
     from: contramapped,
     to: {
-      graphite: createGraph({
-        node: [
-          cmd('compute', {
-            fn: newValue => fn(newValue),
-          }),
-          event.graphite.seq,
-        ],
-      }),
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        event.graphite.seq,
+      ),
     },
   })
   return contramapped
@@ -100,14 +96,12 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   forward({
     from: event,
     to: {
-      graphite: createGraph({
-        node: [
-          cmd('compute', {
-            fn: newValue => fn(newValue),
-          }),
-          mapped.graphite.seq,
-        ],
-      }),
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        mapped.graphite.seq,
+      ),
     },
   })
   return mapped
@@ -124,17 +118,15 @@ function filterEvent<A, B>(
   forward({
     from: event,
     to: {
-      graphite: createGraph({
-        node: [
-          cmd('compute', {
-            fn: newValue => fn(newValue),
-          }),
-          cmd('filter', {
-            fn: result => result !== undefined,
-          }),
-          mapped.graphite.seq,
-        ],
-      }),
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        cmd('filter', {
+          fn: result => result !== undefined,
+        }),
+        mapped.graphite.seq,
+      ),
     },
   })
   return mapped
@@ -147,13 +139,11 @@ function watchEvent<Payload>(
   return forward({
     from: event,
     to: {
-      graphite: createGraph({
-        node: [
-          cmd('run', {
-            fn: (newValue: Payload) => watcher(newValue, event.getType()),
-          }),
-        ],
-      }),
+      graphite: createNode(
+        cmd('run', {
+          fn: (newValue: Payload) => watcher(newValue, event.getType()),
+        }),
+      ),
     },
   })
 }

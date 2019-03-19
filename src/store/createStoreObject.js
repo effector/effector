@@ -1,5 +1,5 @@
 //@flow
-import {cmd, createGraph, stringRefcount, isStore} from 'effector/stdlib'
+import {cmd, createNode, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName, unitObjectArrayName} from 'effector/naming'
 import {createEvent, forward} from 'effector/event'
 
@@ -39,22 +39,20 @@ function storeCombination(
     forward({
       from: child,
       to: {
-        graphite: createGraph({
-          node: [
-            cmd('compute', {
-              fn(state) {
-                const current = store.getState()
-                const changed = current[key] !== state
-                current[key] = state
-                return changed
-              },
-            }),
-            cmd('filter', {
-              fn: changed => changed,
-            }),
-            fn,
-          ],
-        }),
+        graphite: createNode(
+          cmd('compute', {
+            fn(state) {
+              const current = store.getState()
+              const changed = current[key] !== state
+              current[key] = state
+              return changed
+            },
+          }),
+          cmd('filter', {
+            fn: changed => changed,
+          }),
+          fn,
+        ),
       },
     })
   }

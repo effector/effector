@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {cmd, createGraph, Kind, createStateRef} from 'effector/stdlib'
+import {cmd, createNode, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
@@ -36,18 +36,16 @@ export function storeFabric<State>(props: {
     section: currentId,
   }
   const storeInstance: ThisStore = {
-    graphite: createGraph({
-      node: [
-        cmd('filter', {
-          fn: filterBeforeUpdate.bind(plainState),
-          meta,
-        }),
-        cmd('update', {
-          store: plainState,
-          meta,
-        }),
-      ],
-    }),
+    graphite: createNode(
+      cmd('filter', {
+        fn: filterBeforeUpdate.bind(plainState),
+        meta,
+      }),
+      cmd('update', {
+        store: plainState,
+        meta,
+      }),
+    ),
     kind: Kind.store,
     id: currentId,
     shortName: currentId,

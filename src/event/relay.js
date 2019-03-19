@@ -1,6 +1,6 @@
 //@flow
 
-import {createGraph, step} from 'effector/stdlib'
+import {createNode, step} from 'effector/stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../effector/index.h'
@@ -22,15 +22,13 @@ export function relayShape<
   const unsub = forward({
     from,
     to: {
-      graphite: createGraph({
-        node: [
-          step('query', {
-            mode: 'shape',
-            shape,
-            fn: query,
-          }),
-        ],
-      }),
+      graphite: createNode(
+        step('query', {
+          mode: 'shape',
+          shape,
+          fn: query,
+        }),
+      ),
     },
   })
   return unsub
@@ -61,20 +59,17 @@ function relayRaw<E, F>(opts: {
   const from = opts.from
   const fn = queryFn.bind(query)
 
-  const unsub = forward({
+  return forward({
     from,
     to: {
-      graphite: createGraph({
-        node: [
-          step('query', {
-            mode: 'some',
-            fn,
-          }),
-        ],
-      }),
+      graphite: createNode(
+        step('query', {
+          mode: 'some',
+          fn,
+        }),
+      ),
     },
   })
-  return unsub
 
   function queryFn(arg, ctx: any, meta) {
     const query = this

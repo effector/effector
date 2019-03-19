@@ -3,6 +3,9 @@
 import type {TypeDef, Graph} from './index.h'
 import {step} from './typedef'
 
+export const createNode = (...node: Array<TypeDef<*, *>>): Graph<> =>
+  createGraph({node})
+
 //eslint-disable-next-line no-unused-vars
 declare export function createGraph(opts: {|
   +node: Array<TypeDef<*, *>>,
