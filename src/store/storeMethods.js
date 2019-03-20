@@ -194,11 +194,12 @@ export function mapStore<A, B>(
           fn(newValue) {
             startPhaseTimer(store, 'map')
             lastValue = newValue
-            const stopPhaseTimerMessage = 'Got error'
+            let stopPhaseTimerMessage = 'Got error'
             const lastState = innerStore.getState()
             let result
             try {
               result = fn(newValue, lastState)
+              stopPhaseTimerMessage = null
             } catch (err) {
               console.error(err)
             }
