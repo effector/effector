@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`warning 1`] = `
+Array [
+  Array [
+    "Warning: Expected number but you passed %s.",
+    Object {
+      "bar": "foo",
+    },
+  ],
+]
+`;
