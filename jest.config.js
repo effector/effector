@@ -51,6 +51,7 @@ module.exports = {
     'stdlib',
     'babel',
     'perf',
+    'warning',
     // 'redux',
     {
       react: {
@@ -61,6 +62,11 @@ module.exports = {
         ],
         setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
         // watchPathIgnorePatterns,
+      },
+    },
+    {
+      reason: {
+        testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
   ]),
