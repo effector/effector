@@ -47,7 +47,7 @@
     "@types/jest": "^24.0.9",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.1.0",
+    "babel-jest": "^24.5.0",
     "babel-literal-to-ast": "^2.1.0",
     "babel-plugin-dev-expression": "^0.2.1",
     "babel-plugin-macros": "^2.5.0",
