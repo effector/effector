@@ -2,7 +2,7 @@
 
 import {type Store, isStore} from 'effector'
 import invariant from 'invariant'
-import {useState, useReducer, useEffect} from 'react'
+import {useReducer, useEffect} from 'react'
 
 export function useStore<State>(store: Store<State>): State {
   invariant(
