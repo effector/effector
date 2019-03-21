@@ -8,6 +8,8 @@
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
+<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+
 ## Introduction
 
 Effector is an effective multi store state manager for Javascript apps __(React/Vue/Node.js)__, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both TypeScript and Flow type annotations out of the box.
