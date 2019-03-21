@@ -1,6 +1,9 @@
 //@flow
 
-// The secret knowledge is... Effector is more like a big ball of wibbly wobbly... time-y wimey... stuff
+/*
+ * The secret knowledge is... 
+ * Effector is more like a big ball of wibbly wobbly... time-y wimey... stuff
+ */
 
 export {combine} from './effector'
 
