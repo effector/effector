@@ -57,11 +57,13 @@ timeouts
 timeouts.watch(console.log)
 intervals.watch(console.log)
 
-logs.watch(realmLog, (logs, log) => {
-  logs.push(log)
-})
+// logs.watch(realmLog, (logs, log) => {
+//   logs.push(log)
+// })
 
-logs.on(realmStatus, (logs, {active}) => active ? [] : [...logs])
+logs
+  .on(realmLog, (logs, log) => logs.concat(log))
+  .on(changeSources, () => [])
 
 // logs.watch(realmStatus, (logs, {active}) => {
 //   if (!active) {

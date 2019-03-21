@@ -95,7 +95,7 @@ body {
 
 .header-tabs {
   border-left: 1px solid #ddd;
-  background-color: #f7f7f7
+  background-color: #f7f7f7;
 }
 .header-tabs.toolbar.show-graphite .graphite-tab,
 .header-tabs.toolbar.show-console .console-tab {
@@ -103,11 +103,10 @@ body {
 }
 
 .console {
-  display: flex;
-  flex-direction: column;
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   background-color: #fff;
+  overflow: auto;
 }
 
 .errors {

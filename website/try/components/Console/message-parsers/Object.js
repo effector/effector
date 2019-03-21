@@ -4,7 +4,7 @@ import * as React from 'react'
 import type {Theme, Message} from '../index.h'
 import {Root} from '../react-inspector/elements'
 
-//import * as Linkify from 'linkifyjs/react'
+import Linkify from 'linkifyjs/react'
 import Inspector from '../react-inspector'
 
 import {theme} from '../theme/default'
@@ -13,8 +13,6 @@ type Props = {|
   log: Message,
   quoted: boolean,
 |}
-
-const Linkify = ({children}) => <>{children}</>
 
 class ObjectTree extends React.Component<Props, any> {
   render() {

@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import type {Message} from '../index.h'
-import * as Linkify from 'linkifyjs/react'
+import Linkify from 'linkifyjs/react'
 
 type Props = {|
   log: Message,

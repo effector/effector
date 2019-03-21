@@ -15,7 +15,7 @@ const styles = (props: Props): Styles => ({
   /**
    * Default log styles
    */
-  // LOG_COLOR: 'rgba(255,255,255,0.9)',
+  LOG_COLOR: 'rgba(0,0,0,0.9)',
   LOG_BACKGROUND: 'transparent',
   LOG_BORDER: '#F1F1F1',
   LOG_ICON_WIDTH: 10,
@@ -26,9 +26,9 @@ const styles = (props: Props): Styles => ({
    * Log types
    */
   LOG_WARN_ICON: `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACkSURBVChTbY7BCoJQFERn0Q/3BX1JuxQjsSCXiV8gtCgxhCIrKIRIqKDVzXl5w5cNHBjm6eGinXiAXu5inY2xYm/mbpIh+vcFhLA3sx0athNUhymEsP+10lAEEA17x8o/9wFuNGnYuVlWve0SQl7P0sBu3aq2R1Q/1JzSkYGd29eqNv2wjdnUuvNRciC/N+qe+7gidbA8zyHkOINsvA/sumcOkjcabcBmw2+mMgAAAABJRU5ErkJggg==)`,
-  LOG_WARN_BACKGROUND: '#332b00',
+  LOG_WARN_BACKGROUND: '#FEFBE7',
   LOG_WARN_COLOR: '#ffdc9e',
-  LOG_WARN_BORDER: '#650',
+  LOG_WARN_BORDER: '#fef4c7',
 
   LOG_ERROR_ICON: `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADESURBVChTY4CB7ZI8tmfU5E6e01b+DMIgNkgMKg0BR9Vkux6YWPx/bemIgkFiIDmwogOaqrYPzazAEm8DwuGKYGyQHEgNw0VT05Mwib9v3v7/kJEHxiA2TDFIDcNNU4vPMFPACj58/P/v40cwGyYOUsNwy8IZRSFIEUgxskKQGoZrzp4ErQapYbgYHG371M4dLACTQGaD5EBqwD6/FpzQ9dTBE64IhkFiIDmwIhi4mlJqey8o4eR9r8jPIAxig8QgsgwMAFZz1YtGPXgjAAAAAElFTkSuQmCC)`,
   LOG_ERROR_BACKGROUND: '#fff0f0',
@@ -59,5 +59,5 @@ const styles = (props: Props): Styles => ({
 
 export const theme: Theme = {
   variant: 'light',
-  styles: styles({variant: 'light', logs: []})
+  styles: styles({variant: 'light', logs: []}),
 }
