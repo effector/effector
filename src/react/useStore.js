@@ -2,7 +2,7 @@
 
 import {type Store, isStore} from 'effector'
 import invariant from 'invariant'
-import {useState, useReducer, useEffect} from 'react'
+import {useReducer, useEffect} from 'react'
 
 export function useStore<State>(store: Store<State>): State {
   invariant(
@@ -10,7 +10,7 @@ export function useStore<State>(store: Store<State>): State {
     'useStore: The argument must be Store, but you passed %s.',
     store,
   )
-  const [state, setState] = useState(store.getState)
-  useEffect(() => store.watch(newState => setState(() => newState)), [store])
-  return state
+  const [, dispatch] = useReducer((_, payload) => payload)
+  useEffect(() => store.watch(dispatch), [store])
+  return store.getState()
 }
