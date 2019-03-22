@@ -21,8 +21,8 @@ export function eventFabric<Payload>({
 }): Event<Payload> {
   const id = nextID()
   const name = nameRaw || id
-  const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
+  const fullName = compositeName.fullName
   const graphite = createNode(
     cmd('emit', {
       fullName,
@@ -38,7 +38,7 @@ export function eventFabric<Payload>({
     payload: Payload,
     ...args: any[]
   ): Payload => instance.create(payload, fullName, args)
-  ;(instance: any).getType = () => compositeName.fullName
+  ;(instance: any).getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
     walkEvent(payload, instance)
@@ -146,12 +146,4 @@ function watchEvent<Payload>(
       ),
     },
   })
-}
-function makeName(name: string, compositeName?: CompositeName) {
-  const fullName = compositeName?.fullName
-  if (!fullName) {
-    if (!name) return ''
-    return name
-  }
-  return '' + fullName + '/' + name
 }
