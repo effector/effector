@@ -1,6 +1,6 @@
 //@flow
 import {cmd, createNode, stringRefcount, isStore} from 'effector/stdlib'
-import {unitObjectName, unitObjectArrayName} from 'effector/naming'
+import {unitObjectName} from 'effector/naming'
 import {createEvent, forward} from 'effector/event'
 
 import type {Store} from './index.h'
@@ -15,13 +15,16 @@ function getFreshObject() {
 }
 function storeCombination(
   obj: any,
-  {freshGetter, nameSetter, initializer}: any,
+  freshGetter,
+  stateNew: any,
+  defaultState: any,
 ) {
   const updater: any = createEvent('update ' + nextUpdaterID())
-  const name = nameSetter(obj)
-  const {stateNew, defaultState, pairs} = initializer(obj)
-  for (let i = 0; i < pairs.length; i++) {
-    const {key, child} = pairs[i]
+  const name = unitObjectName(obj)
+  //const {stateNew} = initializer(obj)
+  for (const key in obj) {
+    const child = obj[key]
+    defaultState[key] = isStore(child) ? child.defaultState : child
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
     const fn = cmd('run', {
@@ -78,23 +81,25 @@ function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  return storeCombination(obj, {
-    freshGetter: getFreshArray,
-    nameSetter: unitObjectArrayName,
-    initializer(state) {
-      const pairs = []
-      const stateNew = [...obj]
-      const defaultState = []
-      for (let i = 0; i < state.length; i++) {
-        pairs.push({
-          key: i,
-          child: state[i],
-        })
-        defaultState[i] = state[i].defaultState
-      }
-      return {stateNew, pairs, defaultState}
-    },
-  })
+  return storeCombination(
+    obj,
+    getFreshArray,
+    obj.slice(),
+    [],
+    // initializer(state) {
+    //   const pairs = []
+    //   const stateNew = [...obj]
+    //   const defaultState = []
+    //   for (let i = 0; i < state.length; i++) {
+    //     pairs.push({
+    //       key: i,
+    //       child: state[i],
+    //     })
+    //     defaultState[i] = state[i].defaultState
+    //   }
+    //   return {stateNew, pairs, defaultState}
+    // },
+  )
 }
 
 function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
@@ -106,23 +111,25 @@ function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
     <S>(field: Store<S> | S) => S,
   >,
 > {
-  return storeCombination(obj, {
-    freshGetter: getFreshObject,
-    nameSetter: unitObjectName,
-    initializer(state) {
-      const pairs = []
-      const stateNew = Object.assign({}, obj)
-      const defaultState = {}
-      for (const key in state) {
-        pairs.push({
-          key,
-          child: state[key],
-        })
-        defaultState[key] = state[key].defaultState
-      }
-      return {stateNew, pairs, defaultState}
-    },
-  })
+  return storeCombination(
+    obj,
+    getFreshObject,
+    Object.assign({}, obj),
+    {},
+    // initializer(state) {
+    //   const pairs = []
+    //   const stateNew = Object.assign({}, obj)
+    //   const defaultState = {}
+    //   for (const key in state) {
+    //     pairs.push({
+    //       key,
+    //       child: state[key],
+    //     })
+    //     defaultState[key] = state[key].defaultState
+    //   }
+    //   return {stateNew, pairs, defaultState}
+    // },
+  )
 }
 
 declare export function createStoreObject<

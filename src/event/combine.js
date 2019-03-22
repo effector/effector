@@ -1,6 +1,6 @@
 //@flow
 
-import {unitObjectArrayName} from 'effector/naming'
+import {unitObjectName} from 'effector/naming'
 
 import type {Event} from './index.h'
 import {eventFabric} from './eventFabric'
@@ -10,7 +10,7 @@ export function combine<T>(
   ...events: $ReadOnlyArray<Event<any>>
 ): Event<T> {
   const unit = eventFabric({
-    name: unitObjectArrayName(events),
+    name: unitObjectName(events),
   })
   const l = events.length
   let awaiting = l
