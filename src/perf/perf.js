@@ -16,9 +16,17 @@ let currentPhaseStore: {
 
 const enableUserTimingAPI = __DEV__
 
-function startPhaseTimer() {}
+function startPhaseTimer(/*::
+  store: {
+    compositeName?: CompositeName,
+    domainName?: CompositeName,
+    +id: string,
+    ...
+  },
+  phase: StoreMeasurementPhase,
+*/) {}
 
-function stopPhaseTimer() {}
+function stopPhaseTimer(/*::warning: string | null*/) {}
 
 if (enableUserTimingAPI) {
   const effectorEmoji = '\u2604'
