@@ -25,12 +25,12 @@ const common = {
 }
 
 const version = {
-  effector: '0.18.3-beta.2',
-  'effector-react': '0.18.7-beta.1',
-  'effector-vue': '0.18.3-beta.1',
+  effector: '0.18.3',
+  'effector-react': '0.18.7',
+  'effector-vue': '0.18.3',
 
   'bs-effector': '0.18.2',
-  'bs-effector-react': '0.18.3-beta.1',
+  'bs-effector-react': '0.18.3',
 
   '@effector/babel-plugin': '0.1.0',
   '@effector/babel-plugin-react': '0.0.3',
