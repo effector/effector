@@ -31,33 +31,37 @@ export async function outputPackageJSON(
 
 export function publishScript(name: string) {
   return async() => {
-    const args = cliArgs.current.splice(0, 2)
+    const args = [...cliArgs.original]
     if (args.length < 2) return
     const command = args.shift()
     const argument = args.shift()
     if (command === 'publish') {
       if (argument === 'next') {
-        const {stdout, stderr} = await execa(
-          'npm',
-          ['publish', '--tag', 'next'],
-          {
-            cwd: `${process.cwd()}/npm/${name}`,
-            env: process.env,
-          },
-        )
-        console.log(stdout)
-        console.error(stderr)
+        try {
+          const {stdout, stderr} = await execa(
+            'npm',
+            ['publish', '--tag', 'next'],
+            {
+              cwd: `${process.cwd()}/npm/${name}`,
+              env: process.env,
+            },
+          )
+          console.log(stdout)
+          console.error(stderr)
+        } catch {}
       } else if (argument === 'latest') {
-        const {stdout, stderr} = await execa(
-          'npm',
-          ['publish', '--tag', 'latest'],
-          {
-            cwd: `${process.cwd()}/npm/${name}`,
-            env: process.env,
-          },
-        )
-        console.log(stdout)
-        console.error(stderr)
+        try {
+          const {stdout, stderr} = await execa(
+            'npm',
+            ['publish', '--tag', 'latest'],
+            {
+              cwd: `${process.cwd()}/npm/${name}`,
+              env: process.env,
+            },
+          )
+          console.log(stdout)
+          console.error(stderr)
+        } catch {}
       }
     }
   }
