@@ -2,7 +2,7 @@
 
 import {createEvent, relay, relayShape} from 'effector/event'
 
-test('relay', () => {
+test.skip('relay', () => {
   const fnA = jest.fn()
   const fnB = jest.fn()
   const fnC = jest.fn()
@@ -44,7 +44,7 @@ test('relay', () => {
   expect(fnC.mock.calls).toEqual([['second']])
 })
 
-test('relayShape', () => {
+test.skip('relayShape', () => {
   const fnA = jest.fn()
   const fnB = jest.fn()
   const fnC = jest.fn()
