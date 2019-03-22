@@ -1,6 +1,6 @@
 {
   "name": "bs-effector-react",
-  "version": "0.18.3-beta.1",
+  "version": "0.18.3",
   "description": "Reason bindings for effector-react",
   "peerDependencies": {
     "reason-react": "*",
