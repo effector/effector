@@ -25,12 +25,12 @@ const common = {
 }
 
 const version = {
-  effector: '0.18.3',
-  'effector-react': '0.18.6',
-  'effector-vue': '0.18.2',
+  effector: '0.18.3-beta.2',
+  'effector-react': '0.18.7-beta.1',
+  'effector-vue': '0.18.3-beta.1',
 
   'bs-effector': '0.18.2',
-  'bs-effector-react': '0.18.2',
+  'bs-effector-react': '0.18.3-beta.1',
 
   '@effector/babel-plugin': '0.1.0',
   '@effector/babel-plugin-react': '0.0.3',
@@ -98,9 +98,9 @@ export default {
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.es.js',
     typings: 'index.d.ts',
-    dependencies: dependsOnEffector,
     peerDependencies: {
       react: '^16.8.0',
+      effector: '*',
     },
     files: getFiles('effector-react'),
     keywords: [
@@ -128,9 +128,9 @@ export default {
     'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.es.js',
     typings: 'index.d.ts',
-    dependencies: dependsOnEffector,
     peerDependencies: {
       vue: '*',
+      effector: '*',
     },
     files: getFiles('effector-vue'),
     keywords: [
@@ -178,9 +178,9 @@ export default {
     name: 'bs-effector-react',
     version: version['bs-effector-react'],
     description: 'Reason bindings for effector-react',
-    dependencies: dependsOnEffector,
     peerDependencies: {
       'reason-react': '*',
+      effector: '*',
     },
     files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
