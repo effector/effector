@@ -14,9 +14,7 @@ declare export function createApi<
 export function createApi(store: Store<any>, setters: {[string]: Function}) {
   const result = {}
   for (const [key, handler] of Object.entries(setters)) {
-    const event = createEvent(key)
-    store.on(event, (handler: any))
-    result[key] = event
+    store.on((result[key] = createEvent(key)), (handler: any))
   }
   return result
 }
