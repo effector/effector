@@ -114,19 +114,14 @@ const status = createStore('offline')
 status.watch(newStatus => {
   console.log(`status changed: ${newStatus}`)
 })
+// for store watchs callback invokes immediately
+// "status changed: offline"
 
-turnOff()
-turnOn()
-turnOff()
-turnOff() // Will not trigger watch function because nothing has changed
+turnOff() // nothing has changed, callback is not triggered
+turnOn() // "status changed: online"
+turnOff() // "status changed: offline"
+turnOff() // nothing has changed
 
-/*
-result:
-
-status changed: offline
-status changed: online
-status changed: offline
-*/
 ```
 
 #### [Run example](https://runkit.com/zerobias/effector-storages-and-events)
