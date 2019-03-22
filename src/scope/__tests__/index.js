@@ -43,8 +43,11 @@ describe('scope', () => {
     expect(storeA.getState()).toBe(1.2)
     expect(store.getState()).toBe(1.3)
 
+    // when new node attach to the scope
+    // all node dependencies inserting to scope
+
     scopeA(event2)(1.4)
-    expect(storeA.getState()).toBe(1.2)
+    expect(storeA.getState()).toBe(1.4)
     expect(store.getState()).toBe(1.3)
 
     // any dependencies changes inside the scope is not affect dependencies outside the scope
@@ -57,19 +60,13 @@ describe('scope', () => {
     expect(storeA.getState()).toBe(1.5)
     expect(store.getState()).toBe(1.3)
 
-    // optional, need to discus
-    // refresh dependencies when "rescoping"
-    exect(scopeA(store) === scopeA).toBe(true);
-
-    scopeA(event2)(1.6)
-    expect(storeA.getState()).toBe(1.6)
-    expect(store.getState()).toBe(1.3)
-
     // a new scope can recreate infinity times
     const scopeB = createScope()
-    scopeB(event1A)(2.0)
-    expect(scopeB(storeA)/*<-- update scope*/.getState()).not.toBe(2.0)
-    scopeB(event1A)(2.1)
-    expect(scopeB(storeA).getState()).toBe(2.1)
+    const event1AB = scopeB(event1A)
+    event1AB(2.0)
+    expect(scopeB(storeA).getState()).toBe(2.0)
+
+    // Discussion: need to reupdate dependenies fo third-party scope?
+    // expect(scopeB(store).getState()).toBe(2.0) // ??
   })
 })
