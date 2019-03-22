@@ -1,17 +1,15 @@
 {
   "name": "effector-react",
-  "version": "0.18.6",
+  "version": "0.18.7-beta.1",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
   "umd:main": "effector-react.umd.js",
   "jsnext:main": "effector-react.es.js",
   "typings": "index.d.ts",
-  "dependencies": {
-    "effector": "^0.18.3"
-  },
   "peerDependencies": {
-    "react": "^16.8.0"
+    "react": "^16.8.0",
+    "effector": "*"
   },
   "files": [
     "README.md",

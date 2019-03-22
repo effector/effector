@@ -1,17 +1,15 @@
 {
   "name": "effector-vue",
-  "version": "0.18.2",
+  "version": "0.18.3-beta.1",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
   "umd:main": "effector-vue.umd.js",
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
-  "dependencies": {
-    "effector": "^0.18.3"
-  },
   "peerDependencies": {
-    "vue": "*"
+    "vue": "*",
+    "effector": "*"
   },
   "files": [
     "README.md",

@@ -1,12 +1,10 @@
 {
   "name": "bs-effector-react",
-  "version": "0.18.2",
+  "version": "0.18.3-beta.1",
   "description": "Reason bindings for effector-react",
-  "dependencies": {
-    "effector": "^0.18.3"
-  },
   "peerDependencies": {
-    "reason-react": "*"
+    "reason-react": "*",
+    "effector": "*"
   },
   "files": [
     "src/EffectorReact.re",
