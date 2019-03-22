@@ -5,6 +5,8 @@ import type {Store} from './index.h'
 import {createStore} from './createStore'
 import {storeFabric} from './storeFabric'
 
+import {isStore, isEvent, isEffect} from 'effector/stdlib'
+
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
 ): $ObjMap<
@@ -55,17 +57,15 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
-
-const visitorRestore = {
-  store: ({obj}) => obj,
-  event: ({obj, defaultState}) => restoreEvent(obj, defaultState),
-  effect: ({obj, defaultState}) => restoreEffect(obj, defaultState),
-  __: ({obj}) => restoreObject(obj),
-}
-
 export function restore(obj: any, defaultState: any): any {
-  return visitorRestore[String(obj?.kind || '__')]({
-    obj,
-    defaultState,
-  })
+  if (isStore(obj)) {
+    return obj
+  }
+  if (isEvent(obj)) {
+    return restoreEvent(obj, defaultState)
+  }
+  if (isEffect(obj)) {
+    return restoreEffect(obj, defaultState)
+  }
+  return restoreObject(obj)
 }
