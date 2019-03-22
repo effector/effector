@@ -105,7 +105,7 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
           }
           continue headLoop
         }
-        case 'query': {
+        /*case 'query': {
           line.post.push({type: 'meta/!stop'})
           const areaList: Array<Line> = []
           switch (step.data.mode) {
@@ -186,7 +186,7 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
             index: 0,
           }
           continue headLoop
-        }
+        }*/
       }
       runActions(line.post, area)
       area.index += 1
