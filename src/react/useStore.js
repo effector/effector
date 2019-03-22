@@ -1,7 +1,6 @@
 //@flow
 
-import {type Store, isStore} from 'effector'
-import invariant from 'invariant'
+import {type Store, isStore, invariant} from 'effector'
 import {useReducer, useEffect} from 'react'
 
 export function useStore<State>(store: Store<State>): State {
