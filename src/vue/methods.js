@@ -20,7 +20,6 @@ export function watchAsStore(
     _unwatch = vm.$watch(
       expOrFn,
       (newValue, oldValue) => {
-        console.log(newValue, oldValue)
         update({oldValue, newValue})
       },
       options,
