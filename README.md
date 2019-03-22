@@ -114,7 +114,7 @@ const status = createStore('offline')
 status.watch(newStatus => {
   console.log(`status changed: ${newStatus}`)
 })
-// watchs callback is call immediately
+// for store watchs callback invokes immediately
 // "status changed: offline"
 
 turnOff() // nothing has changed, callback is not triggered
