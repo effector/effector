@@ -57,6 +57,7 @@
     "chroma-js": "^2.0.3",
     "codegen.macro": "^3.0.0",
     "connect": "^3.6.6",
+    "core-js": "^3.0.0",
     "cross-env": "^5.2.0",
     "cross-fetch": "^3.0.1",
     "d3-dag": "^0.2.3",
