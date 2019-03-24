@@ -1,9 +1,5 @@
 # Changelog
 
-## [work in progress] 0.18.4
-
-- Add `relay` and `relayShape`
-
 ## 0.18.3
 
 - Add version variable to public exports
