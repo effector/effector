@@ -10,6 +10,8 @@ import sharp from 'sharp'
 //$off
 import babel from 'rollup-plugin-babel'
 //$off
+import json from 'rollup-plugin-json'
+//$off
 import resolve from 'rollup-plugin-node-resolve'
 //$off
 import {terser} from 'rollup-plugin-terser'
@@ -145,7 +147,7 @@ const getPlugins = (name: string) => ({
   sizeSnapshot: sizeSnapshot(),
   analyzer: analyze({
     filename: `stats/${name}.html`,
-    sourcemap: true
+    sourcemap: true,
   }),
   terser: terser(
     minifyConfig({
@@ -154,6 +156,10 @@ const getPlugins = (name: string) => ({
   ),
   graph: graphPlugin({
     output: 'modules.dot',
+  }),
+  json: json({
+    preferConst: true,
+    indent: '  ',
   }),
 })
 
@@ -205,6 +211,7 @@ export async function rollupEffector() {
       ],
       plugins: [
         plugins.resolve,
+        plugins.json,
         plugins.babel,
         plugins.graph,
         plugins.sizeSnapshot,
@@ -237,6 +244,7 @@ export async function rollupEffector() {
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,
+        plugins.json,
         plugins.babel,
         plugins.replace,
         plugins.commonjs,
@@ -322,6 +330,10 @@ export async function rollupEffectorForms() {
       format: 'umd',
       name: 'effectorForms',
       sourcemap: true,
+      globals: {
+        effector: 'effector',
+        react: 'React',
+      },
     })
   }
 }
@@ -392,6 +404,10 @@ export async function rollupEffectorReact() {
       format: 'umd',
       name: 'effectorReact',
       sourcemap: true,
+      globals: {
+        effector: 'effector',
+        react: 'React',
+      },
     })
   }
 }
@@ -479,6 +495,10 @@ export async function rollupEffectorVue() {
       format: 'umd',
       name: 'effectorVue',
       sourcemap: true,
+      globals: {
+        effector: 'effector',
+        vue: 'Vue',
+      },
     })
   }
 }
