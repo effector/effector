@@ -1,17 +1,15 @@
 {
   "name": "effector-vue",
-  "version": "0.18.2",
+  "version": "0.18.3",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
   "umd:main": "effector-vue.umd.js",
   "jsnext:main": "effector-vue.es.js",
   "typings": "index.d.ts",
-  "dependencies": {
-    "effector": "^0.18.2"
-  },
   "peerDependencies": {
-    "vue": "*"
+    "vue": "*",
+    "effector": "*"
   },
   "files": [
     "README.md",
@@ -59,7 +57,7 @@
   "scripts": {},
   "repository": "https://github.com/zerobias/effector",
   "bugs": "https://github.com/zerobias/effector/issues",
-  "homepage": "https://zerobias.github.io/effector",
+  "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
   }

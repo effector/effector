@@ -1,15 +1,10 @@
 //@flow
-import type {ID} from './typedef'
-let id = 0
-
-export type StateRef = {
-  +id: ID,
-  current: any,
-}
-
+import type {StateRef} from './index.h'
+import {stringRefcount} from './refcount'
+const nextID = stringRefcount()
 export function createStateRef(current: any): StateRef {
   return {
-    id: (++id).toString(36),
+    id: nextID(),
     current,
   }
 }

@@ -1,0 +1,31 @@
+categories:
+  - name: core
+    description: Core packages
+  - name: frameworkBinding
+    description: Bindings for web frameworks
+  - name: languageBinding
+    description: Bindings for another languages
+  - name: babelPlugin
+    description: Babel plugin
+packages:
+  - name: effector
+    category: core
+    version: 0.18.3
+  - name: effector-react
+    category: frameworkBinding
+    version: 0.18.6
+  - name: effector-vue
+    category: frameworkBinding
+    version: 0.18.2
+  - name: bs-effector
+    category: languageBinding
+    version: 0.18.2
+  - name: bs-effector-react
+    category: languageBinding
+    version: 0.18.2
+  - name: "@effector/babel-plugin"
+    category: babelPlugin
+    version: 0.0.3
+  - name: "@effector/babel-plugin-react"
+    category: babelPlugin
+    version: 0.0.3

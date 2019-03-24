@@ -5,6 +5,7 @@ import {createEvent, type Event} from '..'
 test('event.create single argument', () => {
   const foo = createEvent<number>('foo')
   const oldCreate = foo.create
+  //$off
   foo.create = jest.fn((payload, fullName, args) =>
     oldCreate(payload, fullName, args),
   )

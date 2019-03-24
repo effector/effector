@@ -1,7 +1,12 @@
 //@flow
 
-import {stringRefcount} from 'effector/stdlib'
-import {type Store, storeFabric} from 'effector/store'
+import {stringRefcount, Kind} from 'effector/stdlib'
+import {
+  type Store,
+  type StoreConfig,
+  storeFabric,
+  normalizeConfig,
+} from 'effector/store'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 
@@ -52,11 +57,17 @@ export function domainFabric(
       hooks.event(result)
       return result
     },
-    effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail> {
+    effect<Params, Done, Fail>(
+      name?: string,
+      config?: {
+        handler?: (payload: Params) => Promise<Done> | Done,
+      },
+    ): Effect<Params, Done, Fail> {
       const result = effectFabric({
         name,
         domainName: compositeName.fullName,
         parent: compositeName,
+        handler: config?.handler,
       })
       hooks.effect(result)
       return result
@@ -66,13 +77,16 @@ export function domainFabric(
       hooks.domain(result)
       return result
     },
-    store<T>(state: T): Store<T> {
+    store<T>(state: T, config: StoreConfig = {}): Store<T> {
+      const opts = normalizeConfig(config)
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
+        name: opts.name,
       })
       hooks.store(result)
       return result
     },
+    kind: Kind.domain,
   }
 }

@@ -1,8 +1,7 @@
-//@flow
+//@flow strict
 
 import fs from 'fs'
 import path from 'path'
-//$todo
 import {transformFileSync} from '@babel/core'
 
 describe('babel-plugin', () => {
@@ -17,7 +16,7 @@ describe('babel-plugin', () => {
         const fixturePath = path.join(fixtureDir, 'index.js')
         const fixture = transformFileSync(fixturePath, {
           configFile: path.join(__dirname, '.babelrc'),
-        }).code
+        })?.code
 
         expect(fixture).toMatchSnapshot()
       })

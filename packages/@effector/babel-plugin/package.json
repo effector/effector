@@ -1,0 +1,41 @@
+{
+  "name": "@effector/babel-plugin",
+  "description": "Call setStoreName on createStore calls",
+  "version": "0.1.0",
+  "repository": "https://github.com/zerobias/effector",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "peerDependencies": {
+    "effector": "^0.18.4"
+  },
+  "keywords": [
+    "effector",
+    "babel-plugin",
+    "displayName"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}

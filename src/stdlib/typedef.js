@@ -1,63 +1,92 @@
 //@flow
+import type {StateRef, NodeMeta, TypeDef} from './index.h'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
-export type ID = string
-export type TypeDef<+Type, +Group> = {
-  +id: ID,
-  +type: Type,
-  +group: Group,
-  +data: any,
-}
 
-export type GraphiteMeta = {
-  +next: TypeDef<'multi', 'step'>,
-  +seq: TypeDef<'seq', 'step'>,
-}
-
-export const Step = typeDef(('step': 'step'), {
-  single: null,
-  multi: null,
-  seq: null,
-  choose: null,
-  loop: null,
-})
-
-export const Cmd = typeDef(('cmd': 'cmd'), {
-  compute: null,
-  emit: null,
-  run: null,
-  filter: null,
-  update: null,
-})
-
-export const Ctx = typeDef(('ctx': 'ctx'), {
-  compute: null,
-  emit: null,
-  run: null,
-  filter: null,
-  update: null,
-})
-
-//eslint-disable-next-line no-unused-vars
-declare function typeDef<T: {+[key: string]: any}, Group>(
-  group: Group,
-  t: T,
-): $ObjMapi<T, <K>(k: K) => (data: any) => TypeDef<K, Group>>
-function typeDef(group, t) {
-  const result = {}
-  for (const key in t) {
-    result[key] = type.bind({
-      key,
-      group,
-    })
-  }
-  return result
-}
-function type(data) {
+declare export function step(
+  type: 'query',
+  data:
+    | {|
+        +mode: 'some',
+        +fn: (
+          arg: any,
+          ctx: any,
+          meta: *,
+        ) => {+arg: any, +list: Array<TypeDef<*, *>>},
+      |}
+    | {|
+        +mode: 'shape',
+        +shape: {[string]: TypeDef<*, *>},
+        +fn: (arg: any, ctx: any, meta: *) => {+[string]: any},
+      |},
+): TypeDef<'query', 'step'>
+declare export function step(
+  type: 'single',
+  data: TypeDef<*, 'cmd'>,
+): TypeDef<'single', 'step'>
+declare export function step(
+  type: 'multi',
+  data: $ReadOnlyArray<TypeDef<*, *>>,
+): TypeDef<'multi', 'step'>
+declare export function step(
+  type: 'seq',
+  data: $ReadOnlyArray<TypeDef<*, *>>,
+): TypeDef<'seq', 'step'>
+export function step(type: string, data: Object) {
   return {
     id: nextID(),
-    type: this.key,
-    group: this.group,
+    type,
+    group: 'step',
     data,
   }
+}
+
+//eslint-disable-next-line no-unused-vars
+declare export function cmd(
+  tag: 'compute',
+  data: {|
+    fn: Function,
+    meta?: NodeMeta,
+  |},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'emit',
+  data: {|
+    fullName: string,
+    meta?: NodeMeta,
+  |},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'filter',
+  data: {|
+    fn: (data: any) => boolean,
+    meta?: NodeMeta,
+  |},
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'run',
+  data: {
+    fn: Function,
+    meta?: NodeMeta,
+  },
+): TypeDef<'single', 'step'>
+declare export function cmd(
+  tag: 'update',
+  data:
+    | {|
+        store: StateRef,
+        meta?: NodeMeta,
+      |}
+    | {|
+        val: string,
+        meta?: NodeMeta,
+      |},
+): TypeDef<'single', 'step'>
+export function cmd(type: string, data: Object): TypeDef<'single', 'step'> {
+  return step('single', {
+    id: nextID(),
+    type,
+    group: 'cmd',
+    data,
+  })
 }

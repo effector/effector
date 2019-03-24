@@ -1,6 +1,6 @@
 //@flow
 
-import type {TypeDef, GraphiteMeta} from 'effector/stdlib'
+import type {TypeDef, Graph} from 'effector/stdlib'
 import type {Watcher} from './index.h'
 
 const noopIndexOf = () => -1
@@ -17,7 +17,7 @@ function disposer() {
 
 export const createWatcher = (opts: {
   child: TypeDef<*, 'cmd' | 'step'>,
-  parent: GraphiteMeta,
+  parent: Graph<>,
 }): Watcher => {
   const subscribers = opts.parent.next.data
   const instance = {

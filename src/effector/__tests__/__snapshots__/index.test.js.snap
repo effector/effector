@@ -7,13 +7,17 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
+          "meta": Object {
+            "fullName": "foo → *",
+            "section": "2",
+          },
         },
         "group": "cmd",
-        "id": "6",
+        "id": "5",
         "type": "emit",
       },
       "group": "step",
-      "id": "7",
+      "id": "6",
       "type": "single",
     },
     Object {
@@ -24,26 +28,34 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "r",
+                "id": "t",
                 "type": "compute",
               },
               "group": "step",
-              "id": "s",
+              "id": "u",
               "type": "single",
             },
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "t",
+                "id": "v",
                 "type": "filter",
               },
               "group": "step",
-              "id": "u",
+              "id": "w",
               "type": "single",
             },
             Object {
@@ -51,7 +63,11 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
+                      "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                     },
                     "group": "cmd",
                     "id": "h",
@@ -64,6 +80,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                       "store": Object {
                         "current": "foo | 1 | 11",
                         "id": "1",
@@ -85,26 +105,34 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "1b",
+                            "id": "1f",
                             "type": "compute",
                           },
                           "group": "step",
-                          "id": "1c",
+                          "id": "1g",
                           "type": "single",
                         },
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "1d",
+                            "id": "1h",
                             "type": "filter",
                           },
                           "group": "step",
-                          "id": "1e",
+                          "id": "1i",
                           "type": "single",
                         },
                         Object {
@@ -112,79 +140,112 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
-                                },
-                                "group": "cmd",
-                                "id": "11",
-                                "type": "filter",
-                              },
-                              "group": "step",
-                              "id": "12",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "store": Object {
-                                    "current": 12,
-                                    "id": "2",
+                                  "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
                                   },
                                 },
                                 "group": "cmd",
                                 "id": "13",
-                                "type": "update",
+                                "type": "filter",
                               },
                               "group": "step",
                               "id": "14",
                               "type": "single",
                             },
                             Object {
+                              "data": Object {
+                                "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
+                                  "store": Object {
+                                    "current": 12,
+                                    "id": "2",
+                                  },
+                                },
+                                "group": "cmd",
+                                "id": "15",
+                                "type": "update",
+                              },
+                              "group": "step",
+                              "id": "16",
+                              "type": "single",
+                            },
+                            Object {
                               "data": Array [],
                               "group": "step",
-                              "id": "10",
+                              "id": "17",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "15",
+                          "id": "18",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1j",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "1f",
+                      "id": "1k",
                       "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "g",
+                  "id": "l",
                   "type": "multi",
                 },
               ],
               "group": "step",
-              "id": "l",
+              "id": "m",
               "type": "seq",
+            },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "x",
+              "type": "multi",
             },
           ],
           "group": "step",
-          "id": "v",
+          "id": "y",
           "type": "seq",
         },
         Object {
-          "data": Object {
-            "data": Object {
-              "runner": [Function],
+          "data": Array [
+            Object {
+              "data": Object {
+                "data": Object {
+                  "fn": [Function],
+                },
+                "group": "cmd",
+                "id": "1l",
+                "type": "run",
+              },
+              "group": "step",
+              "id": "1m",
+              "type": "single",
             },
-            "group": "cmd",
-            "id": "1g",
-            "type": "run",
-          },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "1n",
+              "type": "multi",
+            },
+          ],
           "group": "step",
-          "id": "1h",
-          "type": "single",
+          "id": "1o",
+          "type": "seq",
         },
       ],
       "group": "step",
-      "id": "5",
+      "id": "7",
       "type": "multi",
     },
   ],
@@ -201,13 +262,17 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo → *",
+          "meta": Object {
+            "fullName": "foo → *",
+            "section": "2",
+          },
         },
         "group": "cmd",
-        "id": "6",
+        "id": "5",
         "type": "emit",
       },
       "group": "step",
-      "id": "7",
+      "id": "6",
       "type": "single",
     },
     Object {
@@ -218,26 +283,34 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "r",
+                "id": "t",
                 "type": "compute",
               },
               "group": "step",
-              "id": "s",
+              "id": "u",
               "type": "single",
             },
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "t",
+                "id": "v",
                 "type": "filter",
               },
               "group": "step",
-              "id": "u",
+              "id": "w",
               "type": "single",
             },
             Object {
@@ -245,7 +318,11 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
+                      "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                     },
                     "group": "cmd",
                     "id": "h",
@@ -258,6 +335,10 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
+                      "meta": Object {
+                        "fullName": "store1",
+                        "section": "store1",
+                      },
                       "store": Object {
                         "current": "foo | 1 | 11",
                         "id": "1",
@@ -279,26 +360,34 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "1b",
+                            "id": "1f",
                             "type": "compute",
                           },
                           "group": "step",
-                          "id": "1c",
+                          "id": "1g",
                           "type": "single",
                         },
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1 → *",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "1d",
+                            "id": "1h",
                             "type": "filter",
                           },
                           "group": "step",
-                          "id": "1e",
+                          "id": "1i",
                           "type": "single",
                         },
                         Object {
@@ -306,66 +395,86 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
-                                },
-                                "group": "cmd",
-                                "id": "11",
-                                "type": "filter",
-                              },
-                              "group": "step",
-                              "id": "12",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "store": Object {
-                                    "current": 12,
-                                    "id": "2",
+                                  "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
                                   },
                                 },
                                 "group": "cmd",
                                 "id": "13",
-                                "type": "update",
+                                "type": "filter",
                               },
                               "group": "step",
                               "id": "14",
                               "type": "single",
                             },
                             Object {
+                              "data": Object {
+                                "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1 → *",
+                                    "section": "store1 → *",
+                                  },
+                                  "store": Object {
+                                    "current": 12,
+                                    "id": "2",
+                                  },
+                                },
+                                "group": "cmd",
+                                "id": "15",
+                                "type": "update",
+                              },
+                              "group": "step",
+                              "id": "16",
+                              "type": "single",
+                            },
+                            Object {
                               "data": Array [],
                               "group": "step",
-                              "id": "10",
+                              "id": "17",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "15",
+                          "id": "18",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1j",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "1f",
+                      "id": "1k",
                       "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "g",
+                  "id": "l",
                   "type": "multi",
                 },
               ],
               "group": "step",
-              "id": "l",
+              "id": "m",
               "type": "seq",
+            },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "x",
+              "type": "multi",
             },
           ],
           "group": "step",
-          "id": "v",
+          "id": "y",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "5",
+      "id": "7",
       "type": "multi",
     },
   ],
@@ -382,13 +491,17 @@ Object {
       "data": Object {
         "data": Object {
           "fullName": "foo",
+          "meta": Object {
+            "fullName": "foo",
+            "section": "1",
+          },
         },
         "group": "cmd",
-        "id": "2",
+        "id": "1",
         "type": "emit",
       },
       "group": "step",
-      "id": "3",
+      "id": "2",
       "type": "single",
     },
     Object {
@@ -414,13 +527,17 @@ Object {
                   "data": Object {
                     "data": Object {
                       "fullName": "foo → *",
+                      "meta": Object {
+                        "fullName": "foo → *",
+                        "section": "2",
+                      },
                     },
                     "group": "cmd",
-                    "id": "6",
+                    "id": "5",
                     "type": "emit",
                   },
                   "group": "step",
-                  "id": "7",
+                  "id": "6",
                   "type": "single",
                 },
                 Object {
@@ -431,26 +548,34 @@ Object {
                           "data": Object {
                             "data": Object {
                               "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "r",
+                            "id": "t",
                             "type": "compute",
                           },
                           "group": "step",
-                          "id": "s",
+                          "id": "u",
                           "type": "single",
                         },
                         Object {
                           "data": Object {
                             "data": Object {
-                              "filter": [Function],
+                              "fn": [Function],
+                              "meta": Object {
+                                "fullName": "store1",
+                                "section": "store1",
+                              },
                             },
                             "group": "cmd",
-                            "id": "t",
+                            "id": "v",
                             "type": "filter",
                           },
                           "group": "step",
-                          "id": "u",
+                          "id": "w",
                           "type": "single",
                         },
                         Object {
@@ -458,7 +583,11 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
-                                  "filter": [Function],
+                                  "fn": [Function],
+                                  "meta": Object {
+                                    "fullName": "store1",
+                                    "section": "store1",
+                                  },
                                 },
                                 "group": "cmd",
                                 "id": "h",
@@ -471,6 +600,10 @@ Object {
                             Object {
                               "data": Object {
                                 "data": Object {
+                                  "meta": Object {
+                                    "fullName": "store1",
+                                    "section": "store1",
+                                  },
                                   "store": Object {
                                     "current": "foo | 1 | 11",
                                     "id": "1",
@@ -492,26 +625,34 @@ Object {
                                       "data": Object {
                                         "data": Object {
                                           "fn": [Function],
+                                          "meta": Object {
+                                            "fullName": "store1 → *",
+                                            "section": "store1",
+                                          },
                                         },
                                         "group": "cmd",
-                                        "id": "1b",
+                                        "id": "1f",
                                         "type": "compute",
                                       },
                                       "group": "step",
-                                      "id": "1c",
+                                      "id": "1g",
                                       "type": "single",
                                     },
                                     Object {
                                       "data": Object {
                                         "data": Object {
-                                          "filter": [Function],
+                                          "fn": [Function],
+                                          "meta": Object {
+                                            "fullName": "store1 → *",
+                                            "section": "store1",
+                                          },
                                         },
                                         "group": "cmd",
-                                        "id": "1d",
+                                        "id": "1h",
                                         "type": "filter",
                                       },
                                       "group": "step",
-                                      "id": "1e",
+                                      "id": "1i",
                                       "type": "single",
                                     },
                                     Object {
@@ -519,79 +660,112 @@ Object {
                                         Object {
                                           "data": Object {
                                             "data": Object {
-                                              "filter": [Function],
-                                            },
-                                            "group": "cmd",
-                                            "id": "11",
-                                            "type": "filter",
-                                          },
-                                          "group": "step",
-                                          "id": "12",
-                                          "type": "single",
-                                        },
-                                        Object {
-                                          "data": Object {
-                                            "data": Object {
-                                              "store": Object {
-                                                "current": 12,
-                                                "id": "2",
+                                              "fn": [Function],
+                                              "meta": Object {
+                                                "fullName": "store1 → *",
+                                                "section": "store1 → *",
                                               },
                                             },
                                             "group": "cmd",
                                             "id": "13",
-                                            "type": "update",
+                                            "type": "filter",
                                           },
                                           "group": "step",
                                           "id": "14",
                                           "type": "single",
                                         },
                                         Object {
+                                          "data": Object {
+                                            "data": Object {
+                                              "meta": Object {
+                                                "fullName": "store1 → *",
+                                                "section": "store1 → *",
+                                              },
+                                              "store": Object {
+                                                "current": 12,
+                                                "id": "2",
+                                              },
+                                            },
+                                            "group": "cmd",
+                                            "id": "15",
+                                            "type": "update",
+                                          },
+                                          "group": "step",
+                                          "id": "16",
+                                          "type": "single",
+                                        },
+                                        Object {
                                           "data": Array [],
                                           "group": "step",
-                                          "id": "10",
+                                          "id": "17",
                                           "type": "multi",
                                         },
                                       ],
                                       "group": "step",
-                                      "id": "15",
+                                      "id": "18",
                                       "type": "seq",
+                                    },
+                                    Object {
+                                      "data": Array [],
+                                      "group": "step",
+                                      "id": "1j",
+                                      "type": "multi",
                                     },
                                   ],
                                   "group": "step",
-                                  "id": "1f",
+                                  "id": "1k",
                                   "type": "seq",
                                 },
                               ],
                               "group": "step",
-                              "id": "g",
+                              "id": "l",
                               "type": "multi",
                             },
                           ],
                           "group": "step",
-                          "id": "l",
+                          "id": "m",
                           "type": "seq",
+                        },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "x",
+                          "type": "multi",
                         },
                       ],
                       "group": "step",
-                      "id": "v",
+                      "id": "y",
                       "type": "seq",
                     },
                     Object {
-                      "data": Object {
-                        "data": Object {
-                          "runner": [Function],
+                      "data": Array [
+                        Object {
+                          "data": Object {
+                            "data": Object {
+                              "fn": [Function],
+                            },
+                            "group": "cmd",
+                            "id": "1l",
+                            "type": "run",
+                          },
+                          "group": "step",
+                          "id": "1m",
+                          "type": "single",
                         },
-                        "group": "cmd",
-                        "id": "1g",
-                        "type": "run",
-                      },
+                        Object {
+                          "data": Array [],
+                          "group": "step",
+                          "id": "1n",
+                          "type": "multi",
+                        },
+                      ],
                       "group": "step",
-                      "id": "1h",
-                      "type": "single",
+                      "id": "1o",
+                      "type": "seq",
                     },
                   ],
                   "group": "step",
-                  "id": "5",
+                  "id": "7",
                   "type": "multi",
                 },
               ],
@@ -599,14 +773,20 @@ Object {
               "id": "8",
               "type": "seq",
             },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "b",
+              "type": "multi",
+            },
           ],
           "group": "step",
-          "id": "b",
+          "id": "c",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "1",
+      "id": "3",
       "type": "multi",
     },
   ],
@@ -619,39 +799,86 @@ Object {
 exports[`graphite: show bar 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo → *
+     fullName: foo → *,
+     meta: {
+       fullName: foo → *,
+       section: 2
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1,
+                section: store1
+              }
+           }},
            2. update {{
               store: {
                 id: 1,
                 current: foo | 1 | 11
+              },
+              meta: {
+                fullName: store1,
+                section: store1
               }
            }},
            3. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 2,
                          current: 12
+                       },
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
                        }
                     }},
                     3. [(empty list)]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ],
-     *  run {{}}
+     *  Seq [
+        1. run {{}},
+        2. [(empty list)]
+     ]
   ]
 ]"
 `;
@@ -659,37 +886,81 @@ exports[`graphite: show bar 1`] = `
 exports[`graphite: show bar 2`] = `
 "Seq [
   1. emit {{
-     fullName: foo → *
+     fullName: foo → *,
+     meta: {
+       fullName: foo → *,
+       section: 2
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1,
+                section: store1
+              }
+           }},
            2. update {{
               store: {
                 id: 1,
                 current: foo | 1 | 11
+              },
+              meta: {
+                fullName: store1,
+                section: store1
               }
            }},
            3. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1 → *,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 2,
                          current: 12
+                       },
+                       meta: {
+                         fullName: store1 → *,
+                         section: store1 → *
                        }
                     }},
                     3. [(empty list)]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -698,47 +969,96 @@ exports[`graphite: show bar 2`] = `
 exports[`graphite: show foo 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo
+     fullName: foo,
+     meta: {
+       fullName: foo,
+       section: 1
+     }
   }},
   2. [
      *  Seq [
         1. compute {{}},
         2. Seq [
            1. emit {{
-              fullName: foo → *
+              fullName: foo → *,
+              meta: {
+                fullName: foo → *,
+                section: 2
+              }
            }},
            2. [
               *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
+                 1. compute {{
+                    meta: {
+                      fullName: store1,
+                      section: store1
+                    }
+                 }},
+                 2. filter {{
+                    meta: {
+                      fullName: store1,
+                      section: store1
+                    }
+                 }},
                  3. Seq [
-                    1. filter {{}},
+                    1. filter {{
+                       meta: {
+                         fullName: store1,
+                         section: store1
+                       }
+                    }},
                     2. update {{
                        store: {
                          id: 1,
                          current: foo | 1 | 11 | 101
+                       },
+                       meta: {
+                         fullName: store1,
+                         section: store1
                        }
                     }},
                     3. [
                        *  Seq [
-                          1. compute {{}},
-                          2. filter {{}},
+                          1. compute {{
+                             meta: {
+                               fullName: store1 → *,
+                               section: store1
+                             }
+                          }},
+                          2. filter {{
+                             meta: {
+                               fullName: store1 → *,
+                               section: store1
+                             }
+                          }},
                           3. Seq [
-                             1. filter {{}},
+                             1. filter {{
+                                meta: {
+                                  fullName: store1 → *,
+                                  section: store1 → *
+                                }
+                             }},
                              2. update {{
                                 store: {
                                   id: 2,
                                   current: 18
+                                },
+                                meta: {
+                                  fullName: store1 → *,
+                                  section: store1 → *
                                 }
                              }},
                              3. [(empty list)]
-                          ]
+                          ],
+                          4. [(empty list)]
                        ]
                     ]
-                 ]
+                 ],
+                 4. [(empty list)]
               ]
            ]
-        ]
+        ],
+        3. [(empty list)]
      ]
   ]
 ]"
@@ -746,27 +1066,56 @@ exports[`graphite: show foo 1`] = `
 
 exports[`graphite: show store1 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: store1,
+       section: store1
+     }
+  }},
   2. update {{
      store: {
        id: 1,
        current: foo | 1 | 11 | 101
+     },
+     meta: {
+       fullName: store1,
+       section: store1
      }
   }},
   3. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: store1 → *,
+             section: store1
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: store1 → *,
+             section: store1
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: store1 → *,
+                section: store1 → *
+              }
+           }},
            2. update {{
               store: {
                 id: 2,
                 current: 18
+              },
+              meta: {
+                fullName: store1 → *,
+                section: store1 → *
               }
            }},
            3. [(empty list)]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -774,11 +1123,20 @@ exports[`graphite: show store1 1`] = `
 
 exports[`graphite: show store2 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: store1 → *,
+       section: store1 → *
+     }
+  }},
   2. update {{
      store: {
        id: 2,
        current: 18
+     },
+     meta: {
+       fullName: store1 → *,
+       section: store1 → *
      }
   }},
   3. [(empty list)]
@@ -791,7 +1149,11 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "filter": [Function],
+          "fn": [Function],
+          "meta": Object {
+            "fullName": "store1",
+            "section": "store1",
+          },
         },
         "group": "cmd",
         "id": "h",
@@ -804,6 +1166,10 @@ Object {
     Object {
       "data": Object {
         "data": Object {
+          "meta": Object {
+            "fullName": "store1",
+            "section": "store1",
+          },
           "store": Object {
             "current": "foo | 1 | 11 | 101",
             "id": "1",
@@ -825,26 +1191,34 @@ Object {
               "data": Object {
                 "data": Object {
                   "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1 → *",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "1b",
+                "id": "1f",
                 "type": "compute",
               },
               "group": "step",
-              "id": "1c",
+              "id": "1g",
               "type": "single",
             },
             Object {
               "data": Object {
                 "data": Object {
-                  "filter": [Function],
+                  "fn": [Function],
+                  "meta": Object {
+                    "fullName": "store1 → *",
+                    "section": "store1",
+                  },
                 },
                 "group": "cmd",
-                "id": "1d",
+                "id": "1h",
                 "type": "filter",
               },
               "group": "step",
-              "id": "1e",
+              "id": "1i",
               "type": "single",
             },
             Object {
@@ -852,56 +1226,70 @@ Object {
                 Object {
                   "data": Object {
                     "data": Object {
-                      "filter": [Function],
-                    },
-                    "group": "cmd",
-                    "id": "11",
-                    "type": "filter",
-                  },
-                  "group": "step",
-                  "id": "12",
-                  "type": "single",
-                },
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "store": Object {
-                        "current": 18,
-                        "id": "2",
+                      "fn": [Function],
+                      "meta": Object {
+                        "fullName": "store1 → *",
+                        "section": "store1 → *",
                       },
                     },
                     "group": "cmd",
                     "id": "13",
-                    "type": "update",
+                    "type": "filter",
                   },
                   "group": "step",
                   "id": "14",
                   "type": "single",
                 },
                 Object {
+                  "data": Object {
+                    "data": Object {
+                      "meta": Object {
+                        "fullName": "store1 → *",
+                        "section": "store1 → *",
+                      },
+                      "store": Object {
+                        "current": 18,
+                        "id": "2",
+                      },
+                    },
+                    "group": "cmd",
+                    "id": "15",
+                    "type": "update",
+                  },
+                  "group": "step",
+                  "id": "16",
+                  "type": "single",
+                },
+                Object {
                   "data": Array [],
                   "group": "step",
-                  "id": "10",
+                  "id": "17",
                   "type": "multi",
                 },
               ],
               "group": "step",
-              "id": "15",
+              "id": "18",
               "type": "seq",
+            },
+            Object {
+              "data": Array [],
+              "group": "step",
+              "id": "1j",
+              "type": "multi",
             },
           ],
           "group": "step",
-          "id": "1f",
+          "id": "1k",
           "type": "seq",
         },
       ],
       "group": "step",
-      "id": "g",
+      "id": "l",
       "type": "multi",
     },
   ],
   "group": "step",
-  "id": "l",
+  "id": "m",
   "type": "seq",
 }
 `;
@@ -912,41 +1300,49 @@ Object {
     Object {
       "data": Object {
         "data": Object {
-          "filter": [Function],
-        },
-        "group": "cmd",
-        "id": "11",
-        "type": "filter",
-      },
-      "group": "step",
-      "id": "12",
-      "type": "single",
-    },
-    Object {
-      "data": Object {
-        "data": Object {
-          "store": Object {
-            "current": 18,
-            "id": "2",
+          "fn": [Function],
+          "meta": Object {
+            "fullName": "store1 → *",
+            "section": "store1 → *",
           },
         },
         "group": "cmd",
         "id": "13",
-        "type": "update",
+        "type": "filter",
       },
       "group": "step",
       "id": "14",
       "type": "single",
     },
     Object {
+      "data": Object {
+        "data": Object {
+          "meta": Object {
+            "fullName": "store1 → *",
+            "section": "store1 → *",
+          },
+          "store": Object {
+            "current": 18,
+            "id": "2",
+          },
+        },
+        "group": "cmd",
+        "id": "15",
+        "type": "update",
+      },
+      "group": "step",
+      "id": "16",
+      "type": "single",
+    },
+    Object {
       "data": Array [],
       "group": "step",
-      "id": "10",
+      "id": "17",
       "type": "multi",
     },
   ],
   "group": "step",
-  "id": "15",
+  "id": "18",
   "type": "seq",
 }
 `;
@@ -954,24 +1350,53 @@ Object {
 exports[`showcase: event foo 1`] = `
 "Seq [
   1. emit {{
-     fullName: foo
+     fullName: foo,
+     meta: {
+       fullName: foo,
+       section: 5
+     }
   }},
   2. [
      *  Seq [
-        1. compute {{}},
-        2. filter {{}},
+        1. compute {{
+           meta: {
+             fullName: a,
+             section: a
+           }
+        }},
+        2. filter {{
+           meta: {
+             fullName: a,
+             section: a
+           }
+        }},
         3. Seq [
-           1. filter {{}},
+           1. filter {{
+              meta: {
+                fullName: a,
+                section: a
+              }
+           }},
            2. update {{
               store: {
                 id: 3,
                 current: 3
+              },
+              meta: {
+                fullName: a,
+                section: a
               }
            }},
            3. [
-              *  run {{}}
+              *  Seq [
+                 1. compute {{}},
+                 2. filter {{}},
+                 3. run {{}},
+                 4. [(empty list)]
+              ]
            ]
-        ]
+        ],
+        4. [(empty list)]
      ]
   ]
 ]"
@@ -979,30 +1404,61 @@ exports[`showcase: event foo 1`] = `
 
 exports[`showcase: mapped 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: combine(a, b) → *,
+       section: combine(a, b) → *
+     }
+  }},
   2. update {{
      store: {
        id: 6,
        current: 3
+     },
+     meta: {
+       fullName: combine(a, b) → *,
+       section: combine(a, b) → *
      }
   }},
   3. [
-     *  run {{}}
+     *  Seq [
+        1. run {{
+           meta: {
+             fullName: combine(a, b) → *,
+             section: combine(a, b) → *
+           }
+        }},
+        2. [(empty list)]
+     ]
   ]
 ]"
 `;
 
 exports[`showcase: store a 1`] = `
 "Seq [
-  1. filter {{}},
+  1. filter {{
+     meta: {
+       fullName: a,
+       section: a
+     }
+  }},
   2. update {{
      store: {
        id: 3,
        current: 3
+     },
+     meta: {
+       fullName: a,
+       section: a
      }
   }},
   3. [
-     *  run {{}}
+     *  Seq [
+        1. compute {{}},
+        2. filter {{}},
+        3. run {{}},
+        4. [(empty list)]
+     ]
   ]
 ]"
 `;

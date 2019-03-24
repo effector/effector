@@ -1,6 +1,6 @@
 //@flow
 import type {Subscription} from '../effector/index.h'
-import type {GraphiteMeta, kind, StateRef, ID} from 'effector/stdlib'
+import type {Graph, kind, StateRef, ID} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
@@ -9,7 +9,7 @@ export type ThisStore = {
   compositeName?: CompositeName,
   defaultState: any,
   domainName?: CompositeName,
-  +graphite: GraphiteMeta,
+  +graphite: Graph<>,
   +id: string,
   kind: kind,
   plainState: StateRef,
@@ -69,8 +69,9 @@ export type Store<State> = {
     )
   ),
   +kind: kind,
+  +defaultState: State,
   shortName: string,
   domainName?: CompositeName,
-  graphite: GraphiteMeta,
+  graphite: Graph<>,
   compositeName?: CompositeName,
 }

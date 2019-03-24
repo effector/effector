@@ -1,5 +1,55 @@
 # Changelog
 
+## 0.18.3
+
+- Add version variable to public exports
+
+```js
+import {version} from 'effector'
+console.log(version)
+```
+
+- Add effect handler to domain [4c6ae8](https://github.com/zerobias/effector/commit/4c6ae801b301067473f583b490eefde7b3287afc)
+
+- Add `Unit<T>` as common interface implemented by `Event`, `Effect` and `Store`
+
+- Add `isStore`, `isEvent`, `isEffect` and `isUnit` validators
+
+```js
+import {createStore, createEvent, isStore, isEvent, isUnit} from 'effector'
+const store = createStore('value')
+const event = createEvent('some event')
+
+isStore(store) // => true
+isEvent(store) // => false
+isUnit(store) // => true
+
+isStore(event) // => false
+isEvent(event) // => true
+isUnit(event) // => true
+
+isStore(null) // => false
+isEvent(null) // => false
+isUnit(null) // => false
+```
+
+- Add extended `createStore` with config
+
+```js
+import {createStore} from 'effector'
+const store = createStore('value', {
+  name: 'value store',
+})
+```
+
+- Publish babel-plugins
+
+- Improve naming for chrome performance timeline
+
+- Fix typescript typings [#45](https://github.com/zerobias/effector/issues/45)
+
+- Fix `event.prepend` bug [#35](https://github.com/zerobias/effector/issues/35)
+
 ## 0.18.2
 
 - Fix webpack usage issue. To prevent this in a future, webpack integration test was added.

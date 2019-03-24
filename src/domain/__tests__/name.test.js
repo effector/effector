@@ -12,7 +12,7 @@ test('subdomains should has full path in name', () => {
   expect(subdomain.domain('bar').getType()).toBe('dom/subdom/bar')
 })
 test('empty domain name should be skipped', () => {
-  const domain = createDomain()
+  const domain = createDomain('')
   const subdomain = domain.domain('subdom')
   expect(domain.domain('foo').getType()).toBe('foo')
   expect(subdomain.domain('bar').getType()).toBe('subdom/bar')

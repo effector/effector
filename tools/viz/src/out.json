@@ -1,0 +1,651 @@
+{
+  "id": "4m",
+  "type": "seq",
+  "group": "step",
+  "data": [
+    {
+      "id": "4k",
+      "type": "single",
+      "group": "step",
+      "data": {
+        "id": "4j",
+        "type": "emit",
+        "group": "cmd",
+        "data": {
+          "fullName": "A",
+          "meta": {
+            "fullName": "A",
+            "section": "a"
+          }
+        }
+      }
+    },
+    {
+      "id": "4l",
+      "type": "multi",
+      "group": "step",
+      "data": [
+        {
+          "id": "4w",
+          "type": "seq",
+          "group": "step",
+          "data": [
+            {
+              "id": "4s",
+              "type": "single",
+              "group": "step",
+              "data": {
+                "id": "4r",
+                "type": "filter",
+                "group": "cmd",
+                "data": {
+                  "meta": {
+                    "fullName": "B",
+                    "section": "B"
+                  }
+                }
+              }
+            },
+            {
+              "id": "4u",
+              "type": "single",
+              "group": "step",
+              "data": {
+                "id": "4t",
+                "type": "update",
+                "group": "cmd",
+                "data": {
+                  "store": {
+                    "id": "d",
+                    "current": "end"
+                  },
+                  "meta": {
+                    "fullName": "B",
+                    "section": "B"
+                  }
+                }
+              }
+            },
+            {
+              "id": "4v",
+              "type": "multi",
+              "group": "step",
+              "data": [
+                {
+                  "id": "5o",
+                  "type": "seq",
+                  "group": "step",
+                  "data": [
+                    {
+                      "id": "5k",
+                      "type": "single",
+                      "group": "step",
+                      "data": {
+                        "id": "5j",
+                        "type": "compute",
+                        "group": "cmd",
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "5m",
+                      "type": "single",
+                      "group": "step",
+                      "data": {
+                        "id": "5l",
+                        "type": "filter",
+                        "group": "cmd",
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "5c",
+                      "type": "seq",
+                      "group": "step",
+                      "data": [
+                        {
+                          "id": "58",
+                          "type": "single",
+                          "group": "step",
+                          "data": {
+                            "id": "57",
+                            "type": "filter",
+                            "group": "cmd",
+                            "data": {
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "5a",
+                          "type": "single",
+                          "group": "step",
+                          "data": {
+                            "id": "59",
+                            "type": "update",
+                            "group": "cmd",
+                            "data": {
+                              "store": {
+                                "id": "e",
+                                "current": 3
+                              },
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "5b",
+                          "type": "multi",
+                          "group": "step",
+                          "data": [
+                            {
+                              "id": "6a",
+                              "type": "seq",
+                              "group": "step",
+                              "data": [
+                                {
+                                  "id": "66",
+                                  "type": "single",
+                                  "group": "step",
+                                  "data": {
+                                    "id": "65",
+                                    "type": "compute",
+                                    "group": "cmd",
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "68",
+                                  "type": "single",
+                                  "group": "step",
+                                  "data": {
+                                    "id": "67",
+                                    "type": "filter",
+                                    "group": "cmd",
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "5y",
+                                  "type": "seq",
+                                  "group": "step",
+                                  "data": [
+                                    {
+                                      "id": "5u",
+                                      "type": "single",
+                                      "group": "step",
+                                      "data": {
+                                        "id": "5t",
+                                        "type": "filter",
+                                        "group": "cmd",
+                                        "data": {
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "5w",
+                                      "type": "single",
+                                      "group": "step",
+                                      "data": {
+                                        "id": "5v",
+                                        "type": "update",
+                                        "group": "cmd",
+                                        "data": {
+                                          "store": {
+                                            "id": "f",
+                                            "current": {
+                                              "isEmpty": false,
+                                              "ln": 3
+                                            }
+                                          },
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "5x",
+                                      "type": "multi",
+                                      "group": "step",
+                                      "data": [
+                                        {
+                                          "id": "6w",
+                                          "type": "seq",
+                                          "group": "step",
+                                          "data": [
+                                            {
+                                              "id": "6s",
+                                              "type": "single",
+                                              "group": "step",
+                                              "data": {
+                                                "id": "6r",
+                                                "type": "compute",
+                                                "group": "cmd",
+                                                "data": {
+                                                  "meta": {
+                                                    "fullName": "B → * → * → *",
+                                                    "section": "B → * → *"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "id": "6u",
+                                              "type": "single",
+                                              "group": "step",
+                                              "data": {
+                                                "id": "6t",
+                                                "type": "filter",
+                                                "group": "cmd",
+                                                "data": {
+                                                  "meta": {
+                                                    "fullName": "B → * → * → *",
+                                                    "section": "B → * → *"
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            {
+                                              "id": "6k",
+                                              "type": "seq",
+                                              "group": "step",
+                                              "data": [
+                                                {
+                                                  "id": "6g",
+                                                  "type": "single",
+                                                  "group": "step",
+                                                  "data": {
+                                                    "id": "6f",
+                                                    "type": "filter",
+                                                    "group": "cmd",
+                                                    "data": {
+                                                      "meta": {
+                                                        "fullName": "B → * → * → *",
+                                                        "section": "B → * → * → *"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "id": "6i",
+                                                  "type": "single",
+                                                  "group": "step",
+                                                  "data": {
+                                                    "id": "6h",
+                                                    "type": "update",
+                                                    "group": "cmd",
+                                                    "data": {
+                                                      "store": {
+                                                        "id": "g",
+                                                        "current": "length: 3 empty: false"
+                                                      },
+                                                      "meta": {
+                                                        "fullName": "B → * → * → *",
+                                                        "section": "B → * → * → *"
+                                                      }
+                                                    }
+                                                  }
+                                                },
+                                                {
+                                                  "id": "6j",
+                                                  "type": "multi",
+                                                  "group": "step",
+                                                  "data": [
+                                                    {
+                                                      "id": "8o",
+                                                      "type": "seq",
+                                                      "group": "step",
+                                                      "data": [
+                                                        {
+                                                          "id": "8k",
+                                                          "type": "single",
+                                                          "group": "step",
+                                                          "data": {
+                                                            "id": "8j",
+                                                            "type": "compute",
+                                                            "group": "cmd",
+                                                            "data": {}
+                                                          }
+                                                        },
+                                                        {
+                                                          "id": "8m",
+                                                          "type": "single",
+                                                          "group": "step",
+                                                          "data": {
+                                                            "id": "8l",
+                                                            "type": "filter",
+                                                            "group": "cmd",
+                                                            "data": {}
+                                                          }
+                                                        },
+                                                        {
+                                                          "id": "8i",
+                                                          "type": "single",
+                                                          "group": "step",
+                                                          "data": {
+                                                            "id": "8h",
+                                                            "type": "run",
+                                                            "group": "cmd",
+                                                            "data": {}
+                                                          }
+                                                        },
+                                                        {
+                                                          "id": "8n",
+                                                          "type": "multi",
+                                                          "group": "step",
+                                                          "data": []
+                                                        }
+                                                      ]
+                                                    }
+                                                  ]
+                                                }
+                                              ]
+                                            },
+                                            {
+                                              "id": "6v",
+                                              "type": "multi",
+                                              "group": "step",
+                                              "data": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "69",
+                                  "type": "multi",
+                                  "group": "step",
+                                  "data": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "5n",
+                      "type": "multi",
+                      "group": "step",
+                      "data": []
+                    }
+                  ]
+                },
+                {
+                  "id": "7i",
+                  "type": "seq",
+                  "group": "step",
+                  "data": [
+                    {
+                      "id": "7e",
+                      "type": "single",
+                      "group": "step",
+                      "data": {
+                        "id": "7d",
+                        "type": "compute",
+                        "group": "cmd",
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "7g",
+                      "type": "single",
+                      "group": "step",
+                      "data": {
+                        "id": "7f",
+                        "type": "filter",
+                        "group": "cmd",
+                        "data": {
+                          "meta": {
+                            "fullName": "B → *",
+                            "section": "B"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "id": "76",
+                      "type": "seq",
+                      "group": "step",
+                      "data": [
+                        {
+                          "id": "72",
+                          "type": "single",
+                          "group": "step",
+                          "data": {
+                            "id": "71",
+                            "type": "filter",
+                            "group": "cmd",
+                            "data": {
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "74",
+                          "type": "single",
+                          "group": "step",
+                          "data": {
+                            "id": "73",
+                            "type": "update",
+                            "group": "cmd",
+                            "data": {
+                              "store": {
+                                "id": "h",
+                                "current": "end"
+                              },
+                              "meta": {
+                                "fullName": "B → *",
+                                "section": "B → *"
+                              }
+                            }
+                          }
+                        },
+                        {
+                          "id": "75",
+                          "type": "multi",
+                          "group": "step",
+                          "data": [
+                            {
+                              "id": "84",
+                              "type": "seq",
+                              "group": "step",
+                              "data": [
+                                {
+                                  "id": "80",
+                                  "type": "single",
+                                  "group": "step",
+                                  "data": {
+                                    "id": "7z",
+                                    "type": "compute",
+                                    "group": "cmd",
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "82",
+                                  "type": "single",
+                                  "group": "step",
+                                  "data": {
+                                    "id": "81",
+                                    "type": "filter",
+                                    "group": "cmd",
+                                    "data": {
+                                      "meta": {
+                                        "fullName": "B → * → *",
+                                        "section": "B → *"
+                                      }
+                                    }
+                                  }
+                                },
+                                {
+                                  "id": "7s",
+                                  "type": "seq",
+                                  "group": "step",
+                                  "data": [
+                                    {
+                                      "id": "7o",
+                                      "type": "single",
+                                      "group": "step",
+                                      "data": {
+                                        "id": "7n",
+                                        "type": "filter",
+                                        "group": "cmd",
+                                        "data": {
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "7q",
+                                      "type": "single",
+                                      "group": "step",
+                                      "data": {
+                                        "id": "7p",
+                                        "type": "update",
+                                        "group": "cmd",
+                                        "data": {
+                                          "store": {
+                                            "id": "i",
+                                            "current": "text: \"end\""
+                                          },
+                                          "meta": {
+                                            "fullName": "B → * → *",
+                                            "section": "B → * → *"
+                                          }
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "id": "7r",
+                                      "type": "multi",
+                                      "group": "step",
+                                      "data": [
+                                        {
+                                          "id": "8g",
+                                          "type": "seq",
+                                          "group": "step",
+                                          "data": [
+                                            {
+                                              "id": "8c",
+                                              "type": "single",
+                                              "group": "step",
+                                              "data": {
+                                                "id": "8b",
+                                                "type": "compute",
+                                                "group": "cmd",
+                                                "data": {}
+                                              }
+                                            },
+                                            {
+                                              "id": "8e",
+                                              "type": "single",
+                                              "group": "step",
+                                              "data": {
+                                                "id": "8d",
+                                                "type": "filter",
+                                                "group": "cmd",
+                                                "data": {}
+                                              }
+                                            },
+                                            {
+                                              "id": "8a",
+                                              "type": "single",
+                                              "group": "step",
+                                              "data": {
+                                                "id": "89",
+                                                "type": "run",
+                                                "group": "cmd",
+                                                "data": {}
+                                              }
+                                            },
+                                            {
+                                              "id": "8f",
+                                              "type": "multi",
+                                              "group": "step",
+                                              "data": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "id": "83",
+                                  "type": "multi",
+                                  "group": "step",
+                                  "data": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "id": "7h",
+                      "type": "multi",
+                      "group": "step",
+                      "data": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

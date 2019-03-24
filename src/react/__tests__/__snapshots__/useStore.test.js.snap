@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`useStore should render 1`] = `
+<span>
+  Store text: 
+  foo
+</span>
+`;
+
+exports[`useStore should render 2`] = `
+<span>
+  Store text: 
+  bar
+</span>
+`;
+
+exports[`useStore should throw 1`] = `"useStore: The argument must be Store, but you passed undefined."`;

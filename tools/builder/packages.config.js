@@ -18,19 +18,23 @@ const common = {
   scripts: {},
   repository: 'https://github.com/zerobias/effector',
   bugs: 'https://github.com/zerobias/effector/issues',
-  homepage: 'https://zerobias.github.io/effector',
+  homepage: 'https://effector.now.sh',
   engines: {
     node: '>=6.0.0',
   },
 }
 
 const version = {
-  effector: '0.18.2',
-  'effector-react': '0.18.2',
-  'effector-vue': '0.18.2',
+  effector: '0.18.4',
+  'effector-react': '0.18.7',
+  'effector-vue': '0.18.3',
 
   'bs-effector': '0.18.2',
-  'bs-effector-react': '0.18.2',
+  'bs-effector-react': '0.18.3',
+
+  '@effector/babel-plugin': '0.1.0',
+  '@effector/babel-plugin-react': '0.0.3',
+  '@effector/forms': '0.0.1',
 }
 
 const getFiles = name => [
@@ -94,9 +98,9 @@ export default {
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.es.js',
     typings: 'index.d.ts',
-    dependencies: dependsOnEffector,
     peerDependencies: {
-      react: '*',
+      react: '^16.8.0',
+      effector: '*',
     },
     files: getFiles('effector-react'),
     keywords: [
@@ -124,9 +128,9 @@ export default {
     'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.es.js',
     typings: 'index.d.ts',
-    dependencies: dependsOnEffector,
     peerDependencies: {
       vue: '*',
+      effector: '*',
     },
     files: getFiles('effector-vue'),
     keywords: [
@@ -174,9 +178,9 @@ export default {
     name: 'bs-effector-react',
     version: version['bs-effector-react'],
     description: 'Reason bindings for effector-react',
-    dependencies: dependsOnEffector,
     peerDependencies: {
       'reason-react': '*',
+      effector: '*',
     },
     files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
     keywords: [
@@ -196,6 +200,53 @@ export default {
       'redux',
       'react',
     ],
+    ...common,
+  },
+  '@effector/babel-plugin': {
+    name: '@effector/babel-plugin',
+    description: 'Call setStoreName on createStore calls',
+    version: version['@effector/babel-plugin'],
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: ['index.js'],
+    peerDependencies: dependsOnEffector,
+    keywords: ['effector', 'babel-plugin', 'displayName'],
+    publishConfig: {
+      access: 'public',
+    },
+    ...common,
+  },
+  '@effector/babel-plugin-react': {
+    name: '@effector/babel-plugin-react',
+    description: 'Add displayName to createComponent call',
+    version: version['@effector/babel-plugin-react'],
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: ['index.js'],
+    peerDependencies: {
+      'effector-react': '*',
+    },
+    keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
+    publishConfig: {
+      access: 'public',
+    },
+    ...common,
+  },
+  '@effector/forms': {
+    name: '@effector/forms',
+    description: '',
+    version: version['@effector/forms'],
+    main: 'forms.cjs.js',
+    module: 'forms.es.js',
+    'umd:main': 'forms.umd.js',
+    'jsnext:main': 'forms.es.js',
+    typings: 'index.d.ts',
+    repository: 'https://github.com/zerobias/effector',
+    main: 'index.js',
+    files: getFiles('forms'),
+    dependencies: dependsOnEffector,
+    keywords: ['effector', 'forms'],
+    private: true,
     ...common,
   },
 }

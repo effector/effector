@@ -3,6 +3,9 @@ import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
 import {createStore} from './createStore'
+import {storeFabric} from './storeFabric'
+
+import {isStore, isEvent, isEffect} from 'effector/stdlib'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -22,13 +25,21 @@ export function restoreEffect<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done> {
-  const store = createStore(defaultState)
+  const store = storeFabric({
+    currentState: defaultState,
+    parent: event.domainName,
+    name: event.shortName,
+  })
   store.on(event.done, (_, {result}) => result)
   return store
 }
 
 export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
-  const store = createStore(defaultState)
+  const store = storeFabric({
+    currentState: defaultState,
+    parent: event.domainName,
+    name: event.shortName,
+  })
   store.on(event, (_, v) => v)
   return store
 }
@@ -46,17 +57,15 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
-
-const visitorRestore = {
-  store: ({obj}) => obj,
-  event: ({obj, defaultState}) => restoreEvent(obj, defaultState),
-  effect: ({obj, defaultState}) => restoreEffect(obj, defaultState),
-  __: ({obj}) => restoreObject(obj),
-}
-
 export function restore(obj: any, defaultState: any): any {
-  return visitorRestore[String(obj?.kind || '__')]({
-    obj,
-    defaultState,
-  })
+  if (isStore(obj)) {
+    return obj
+  }
+  if (isEvent(obj)) {
+    return restoreEvent(obj, defaultState)
+  }
+  if (isEffect(obj)) {
+    return restoreEffect(obj, defaultState)
+  }
+  return restoreObject(obj)
 }

@@ -13,7 +13,7 @@ test('effect from domains should has full path in name', () => {
   expect(subdomain.effect('bar').getType()).toBe('dom/subdom/bar')
 })
 test('empty domain name should be skipped', () => {
-  const domain = createDomain()
+  const domain = createDomain('')
   const subdomain = domain.domain('subdom')
   expect(domain.effect('foo').getType()).toBe('foo')
   expect(domain.effect('foo').done.getType()).toBe('foo done')

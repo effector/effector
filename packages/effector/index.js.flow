@@ -1,23 +1,39 @@
-//@flow
+//@flow strict
 
-export type Subscriber<A> = {
-  next(value: A): void,
-  // error(err: Error): void,
-  //complete(): void,
-}
+declare export var version: string
+
+//prettier-ignore
+export type kind =
+  | 'store'
+  | 'event'
+  | 'effect'
+  | 'domain'
+
+declare export var Kind: {|
+  /*::+*/ store: kind,
+  /*::+*/ event: kind,
+  /*::+*/ effect: kind,
+  /*::+*/ domain: kind,
+|}
+
+export type Subscriber<A> = {next(value: A): void, ...}
 
 export type Subscription = {
   (): void,
   unsubscribe(): void,
+  ...
 }
-
-declare export class Event<E> {
-  (payload: E): E;
-  watch(watcher: (payload: E) => any): Subscription;
-  map<T>(fn: (_: E) => T): Event<T>;
-  filter<T>(fn: (_: E) => T | void): Event<T>;
-  prepend<Before>(fn: (_: Before) => E): Event<Before>;
-  subscribe(subscriber: Subscriber<E>): Subscription;
+export interface Unit<T> {
+  /*::+*/ kind: kind;
+}
+declare export class Event<Payload> implements Unit<Payload> {
+  (payload: Payload): Payload;
+  /*::+*/ kind: kind;
+  watch(watcher: (payload: Payload) => any): Subscription;
+  map<T>(fn: (_: Payload) => T): Event<T>;
+  filter<T>(fn: (_: Payload) => T | void): Event<T>;
+  prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
+  subscribe(subscriber: Subscriber<Payload>): Subscription;
   getType(): string;
 }
 
@@ -27,14 +43,22 @@ declare export class Future<Params, Done, Fail> extends Promise<Done> {
   cache(): Done | void;
 }
 
-declare export class Effect<Params, Done, Fail = Error> {
+declare export class Effect<Params, Done, Fail = Error>
+  implements Unit<Params> {
   (payload: Params): Future<Params, Done, Fail>;
-  /*::+*/ done: Event<{params: Params, result: Done}>;
-  /*::+*/ fail: Event<{params: Params, error: Fail}>;
-  /*::+*/ use: {
+  /*::+*/ kind: kind;
+  /*::+*/ done: Event<{|
+    params: Params,
+    result: Done,
+  |}>;
+  /*::+*/ fail: Event<{|
+    params: Params,
+    error: Fail,
+  |}>;
+  /*::+*/ use: {|
     (asyncFunction: (params: Params) => Promise<Done> | Done): this,
     getCurrent(): (params: Params) => Promise<Done>,
-  };
+  |};
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   //map<T>(fn: (_: E) => T): Event<T>,
@@ -42,23 +66,24 @@ declare export class Effect<Params, Done, Fail = Error> {
   getType(): string;
 }
 
-declare export class Store<State> {
-  reset(event: Event<any> | Effect<any, any, any> | Store<any>): this;
+declare export class Store<State> implements Unit<State> {
+  /*::+*/ kind: kind;
+  reset(trigger: Unit<any>): this;
   getState(): State;
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;
   on<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    trigger: Unit<E>,
     handler: (state: State, payload: E) => State | void,
   ): this;
-  off(event: Event<any> | Effect<any, any, any> | Store<any>): void;
-  subscribe(listner: any): Subscription;
+  off(trigger: Unit<any>): void;
+  subscribe(listener: any): Subscription;
   watch<E>(
-    watcher: (state: State, payload: E, type: string) => any,
+    watcher: (state: State, payload: void, type: string) => any,
     __: void,
   ): Subscription;
   watch<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    trigger: Unit<E>,
     watcher: (state: State, payload: E, type: string) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
@@ -66,40 +91,94 @@ declare export class Store<State> {
   defaultState: State;
 }
 
+declare export function isUnit(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  (obj instanceof Event || obj instanceof Store || obj instanceof Effect))
+declare export function isStore(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Store)
+declare export function isEvent(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Event)
+declare export function isEffect(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Effect)
+declare export function isDomain(obj: mixed): boolean %checks(typeof obj ===
+  'object' &&
+  obj !== null &&
+  obj instanceof Domain)
 declare export class Domain {
-  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
-  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
-  onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
+  /*::+*/ kind: kind;
+  onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
+  onCreateEffect(
+    hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
+  ): Subscription;
+  onCreateStore(hook: (newStore: Store<mixed>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
-  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
+  effect<Params, Done, Fail>(
+    name?: string,
+    config?: {handler?: (params: Params) => Promise<Done> | Done, ...},
+  ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
-  store<State>(defaultState: State): Store<State>;
+  store<State>(defaultState: State, config?: {name?: string}): Store<State>;
   getType(): string;
 }
 
-declare export function forward<T>(opts: {
-  /*::+*/ from: Event<T> | Store<T>,
-  /*::+*/ to: Event<T> | Store<T> | Effect<T, any, any>,
-}): Subscription
+declare export function forward<T>(opts: {|
+  /*::+*/ from: Unit<T>,
+  /*::+*/ to: Unit<T>,
+|}): Subscription
+declare export function relayShape<
+  E,
+  O: {/*::+*/ [field: string]: Unit<any>, ...},
+  F: $ObjMap<O, <T>(_: Unit<T>) => T>,
+>(opts: {|
+  /*::+*/ from: Unit<E>,
+  /*::+*/ shape: O,
+  query(data: E): $Shape<F>,
+|}): Subscription
+declare export function relay<T, Arg>(
+  from: Unit<T>,
+  query: (
+    data: T,
+  ) => {|
+    /*::+*/ arg: Arg,
+    /*::+*/ list: Array<?Unit<Arg>>,
+  |},
+): Subscription
+declare export function relay<T, Arg>(opts: {|
+  /*::+*/ from: Unit<T>,
+  query(
+    data: T,
+  ): {|
+    /*::+*/ arg: Arg,
+    /*::+*/ list: Array<?Unit<Arg>>,
+  |},
+|}): Subscription
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
-  config?: {
-    handler?: (params: Params) => Promise<Done> | Done,
-  },
+  config?: {handler?: (params: Params) => Promise<Done> | Done, ...},
 ): Effect<Params, Done, Fail>
 
-declare export function createStore<State>(defaultState: State): Store<State>
+declare export function createStore<State>(
+  defaultState: State,
+  config?: {name?: string},
+): Store<State>
 declare export function setStoreName<State>(
   store: Store<State>,
   name: string,
 ): void
 
 declare export function createStoreObject<
-  State: {+[key: string]: Store<any> | any},
+  State: {+[key: string]: Store<any> | any, ...},
 >(
   obj: State,
 ): Store<
@@ -110,8 +189,8 @@ declare export function createStoreObject<
   >,
 >
 declare export function extract<
-  State: {+[key: string]: Store<any> | any},
-  NextState: {+[key: string]: Store<any> | any},
+  State: {+[key: string]: Store<any> | any, ...},
+  NextState: {+[key: string]: Store<any> | any, ...},
 >(
   store: Store<State>,
   extractor: (_: State) => NextState,
@@ -124,15 +203,15 @@ declare export function extract<
 >
 declare export function createApi<
   S,
-  Api: {[name: string]: (store: S, e: any) => S},
+  Api: {[name: string]: (store: S, e: any) => S, ...},
 >(
   store: Store<S>,
   api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
 declare export function restoreObject<
-  State: {+[key: string]: Store<any> | any},
+  State: {+[key: string]: Store<any> | any, ...},
 >(
-  obj: State,
+  state: State,
 ): $ObjMap<
   State,
   //prettier-ignore
@@ -140,7 +219,7 @@ declare export function restoreObject<
 >
 
 declare export function restoreEffect<Done>(
-  event: Effect<any, Done, any>,
+  effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
 
@@ -150,18 +229,32 @@ declare export function restoreEvent<E>(
 ): Store<E>
 
 declare export function restore<Done>(
-  event: Effect<any, Done, any>,
+  effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {+[key: string]: Store<any> | any}>(
-  obj: State,
+declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
+  state: State,
 ): $ObjMap<
   State,
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
 declare export function createDomain(domainName?: string): Domain
+
+declare export function sample<A, B>(
+  source: Event<A>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
+declare export function sample<A, B>(
+  source: Store<A>,
+  sampler: Event<B> | Store<B>,
+): Store<A>
+declare export function sample<A, B>(
+  source: Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
+
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(

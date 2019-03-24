@@ -2,20 +2,48 @@
 
 const importName = 'effector'
 
+const normalizeOptions = options => {
+  const defaultStoreCreators = ['createStore']
+  const defaultEventCreators = ['createEvent']
+  const defaultEffectCreators = ['createEffect']
+  const defaultDomainCreators = ['createDomain']
+
+  return {
+    stores: typeof options.stores === 'undefined' 
+      ? true 
+      : Boolean(options.stores),
+    events: typeof options.events === 'undefined' 
+      ? true 
+      : Boolean(options.events),
+    effects: typeof options.effects === 'undefined'
+      ? true 
+      : Boolean(options.effects),
+    domains: typeof options.domains === 'undefined' 
+      ? true 
+      : Boolean(options.domains),
+    storeCreators: new Set(options.storeCreators || defaultStoreCreators),
+    eventCreators: new Set(options.eventCreators || defaultEventCreators),
+    effectCreators: new Set(options.effectCreators || defaultEffectCreators),
+    domainCreators: new Set(options.domainCreators || defaultDomainCreators)
+  }
+}
+
 module.exports = function(babel, options = {}) {
-  const functionNames = []
-  const defaultCreators = [
-    'createStore',
-    'restoreEvent',
-    'restoreEffect',
-    'restoreObject',
-  ]
-  const storeCreators = new Set(options.storeCreators || defaultCreators)
+  const {
+    stores, 
+    events, 
+    effects, 
+    domains,
+    storeCreators, 
+    eventCreators,
+    effectCreators,
+    domainCreators,
+  } = normalizeOptions(options)
 
   const {types: t} = babel
 
   return {
-    name: 'ast-transform', // not required
+    name: '@effector/babel-plugin', // not required
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
@@ -31,30 +59,103 @@ module.exports = function(babel, options = {}) {
 
       CallExpression(path) {
         if (t.isIdentifier(path.node.callee)) {
-          if (storeCreators.has(path.node.callee.name)) {
-            functionNames[0] = 'setStoreName'
-            addImportDeclaration(
-              findProgram(path, t, functionNames),
-              t,
-              functionNames,
-            )
+          if (stores && storeCreators.has(path.node.callee.name)) {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types)
+            }
+          }
+          if (events && eventCreators.has(path.node.callee.name)) {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
+            }
+          }
+          if (effects && effectCreators.has(path.node.callee.name)) {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
+            }
+          }
+          if (domains && domainCreators.has(path.node.callee.name)) {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
             }
           }
         }
+
         if (t.isMemberExpression(path.node.callee)) {
-          if (path.node.callee.property.name === 'store') {
-            functionNames[0] = 'setStoreName'
-            addImportDeclaration(
-              findProgram(path, t, functionNames),
-              t,
-              functionNames,
-            )
+          if (stores && path.node.callee.property.name === 'store') {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setDisplayNameAfter(path, id, babel.types, functionNames[0])
+              setStoreNameAfter(path, id, babel.types)
+            }
+          }
+          if (events && path.node.callee.property.name === 'event') {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
+            }
+          }
+          if (effects && path.node.callee.property.name === 'effect') {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
+            }
+          }
+          if (domains && path.node.callee.property.name === 'domain') {
+            // functionNames[0] = 'setStoreName'
+            // addImportDeclaration(
+            //   findProgram(path, t, functionNames),
+            //   t,
+            //   functionNames,
+            // )
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setEventNameAfter(path, id, babel.types)
             }
           }
         }
@@ -63,17 +164,17 @@ module.exports = function(babel, options = {}) {
   }
 }
 
-function addImportDeclaration(path, t, names) {
-  if (!path) return
-  const importDeclaration = t.importDeclaration(
-    names.map(name =>
-      t.importSpecifier(t.identifier(name), t.identifier(name)),
-    ),
-    t.stringLiteral(importName),
-  )
-  importDeclaration.leadingComments = path.node.body[0].leadingComments
-  path.unshiftContainer('body', importDeclaration)
-}
+// function addImportDeclaration(path, t, names) {
+//   if (!path) return
+//   const importDeclaration = t.importDeclaration(
+//     names.map(name =>
+//       t.importSpecifier(t.identifier(name), t.identifier(name)),
+//     ),
+//     t.stringLiteral(importName),
+//   )
+//   importDeclaration.leadingComments = path.node.body[0].leadingComments
+//   path.unshiftContainer('body', importDeclaration)
+// }
 
 function findCandidateNameForExpression(path) {
   let id
@@ -95,57 +196,53 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-function findProgram(path, t, functionNames) {
-  const isInFunctionNames = node => functionNames.includes(node.local.name)
-  let program
-  path.find(path => {
-    if (path.isProgram()) {
-      const res = path.node.body.find(
-        node => t.isImportDeclaration(node) && node.source.value === importName,
-      )
-      if (!res) {
-        program = path
-        return true
-      }
-      if (res.source) {
-        if (
-          res.source.value === importName
-          && res.specifiers.some(isInFunctionNames)
-        ) {
-          return false
-        }
-        program = path
-        return true
-      }
-    }
-  })
-  return program
-}
-
-function setDisplayNameAfter(path, nameNodeId, t, functionName, displayName) {
+function setStoreNameAfter(path, nameNodeId, t) {
+  let displayName
   if (!displayName) {
     displayName = nameNodeId.name
   }
 
-  let blockLevelStmnt
+  let args
   path.find(path => {
-    if (path.parentPath.isBlock()) {
-      blockLevelStmnt = path
+    if (path.isCallExpression()) {
+      args = path.node.arguments
       return true
     }
   })
 
-  if (blockLevelStmnt && displayName) {
-    // const trailingComments = blockLevelStmnt.node.trailingComments
-    delete blockLevelStmnt.node.trailingComments
-
-    const setDisplayNameStmn = t.expressionStatement(
-      t.callExpression(t.identifier(functionName), [
-        nameNodeId,
-        t.stringLiteral(displayName),
-      ]),
+  if (args && displayName) {
+    const oldConfig = args[1]
+    const nameExpr = t.objectExpression([])
+    const nameProp = t.objectProperty(
+      t.identifier('name'),
+      t.stringLiteral(displayName),
     )
-
-    blockLevelStmnt.insertAfter(setDisplayNameStmn)
+    if (!args[0]) return
+    args[1] = nameExpr
+    if (oldConfig) {
+      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+    }
+    args[1].properties.push(nameProp)
   }
 }
+
+function setEventNameAfter(path, nameNodeId, t) {
+  let displayName
+  if (!displayName) {
+    displayName = nameNodeId.name
+  }
+
+  let args
+  path.find(path => {
+    if (path.isCallExpression()) {
+      args = path.node.arguments
+      return true
+    }
+  })
+
+  if (args && displayName) {
+    const name = t.stringLiteral(displayName)
+    if (!args[0]) args[0] = name
+  }
+}
+

@@ -1,22 +1,14 @@
 //@flow
-//@jsx fx
 import $$observable from 'symbol-observable'
 
-import {
-  //eslint-disable-next-line no-unused-vars
-  fx,
-  Kind,
-  stringRefcount,
-  type GraphiteMeta,
-  type TypeDef,
-} from 'effector/stdlib'
-import {createWatcher} from 'effector/watcher'
+import {cmd, Kind, stringRefcount, createNode} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {walkEvent} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
+import {forward} from './forward'
 
 const nextID = stringRefcount()
 
@@ -29,18 +21,24 @@ export function eventFabric<Payload>({
 }): Event<Payload> {
   const id = nextID()
   const name = nameRaw || id
-  const fullName = makeName(name, parent)
   const compositeName = createName(name, parent)
-  const graphite = fabric({
-    fullName,
-  })
+  const fullName = compositeName.fullName
+  const graphite = createNode(
+    cmd('emit', {
+      fullName,
+      meta: {
+        fullName,
+        section: id,
+      },
+    }),
+  )
 
   //$off
   const instance: Event<Payload> = (
     payload: Payload,
     ...args: any[]
   ): Payload => instance.create(payload, fullName, args)
-  ;(instance: any).getType = () => compositeName.fullName
+  ;(instance: any).getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
     walkEvent(payload, instance)
@@ -74,14 +72,12 @@ function prepend(event, fn: (_: any) => *) {
   forward({
     from: contramapped,
     to: {
-      graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            {event.graphite.seq}
-          </seq>
-        ),
-      },
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        event.graphite.seq,
+      ),
     },
   })
   return contramapped
@@ -100,14 +96,12 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   forward({
     from: event,
     to: {
-      graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            {mapped.graphite.seq}
-          </seq>
-        ),
-      },
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        mapped.graphite.seq,
+      ),
     },
   })
   return mapped
@@ -124,15 +118,15 @@ function filterEvent<A, B>(
   forward({
     from: event,
     to: {
-      graphite: {
-        seq: (
-          <seq>
-            <compute fn={newValue => fn(newValue)} />
-            <filter filter={result => result !== undefined} />
-            {mapped.graphite.seq}
-          </seq>
-        ),
-      },
+      graphite: createNode(
+        cmd('compute', {
+          fn: newValue => fn(newValue),
+        }),
+        cmd('filter', {
+          fn: result => result !== undefined,
+        }),
+        mapped.graphite.seq,
+      ),
     },
   })
   return mapped
@@ -145,58 +139,11 @@ function watchEvent<Payload>(
   return forward({
     from: event,
     to: {
-      graphite: {
-        seq: ((
-          <run
-            runner={(newValue: Payload) => watcher(newValue, event.getType())}
-          />
-        ): $todo),
-      },
+      graphite: createNode(
+        cmd('run', {
+          fn: (newValue: Payload) => watcher(newValue, event.getType()),
+        }),
+      ),
     },
   })
-}
-function makeName(name: string, compositeName?: CompositeName) {
-  const fullName = compositeName?.fullName
-  if (!fullName) {
-    if (!name) return ''
-    return name
-  }
-  return '' + fullName + '/' + name
-}
-type Graphiter = {
-  +graphite: GraphiteMeta,
-  /*::...*/
-}
-type GraphiterSmall = {
-  +graphite: {
-    +seq: TypeDef<'seq' | 'loop', 'step'>,
-    /*::...*/
-  },
-  /*::...*/
-}
-
-export function forward(opts: {
-  from: Graphiter,
-  to: GraphiterSmall,
-}): Subscription {
-  const toSeq = opts.to.graphite.seq
-  const fromGraphite = opts.from.graphite
-  fromGraphite.next.data.push(toSeq)
-  return createWatcher({
-    child: toSeq,
-    parent: fromGraphite,
-  })
-}
-
-const fabric = (args: {fullName: string}): GraphiteMeta => {
-  const nextSteps = <multi />
-  return {
-    next: nextSteps,
-    seq: (
-      <seq>
-        <emit fullName={args.fullName} />
-        {nextSteps}
-      </seq>
-    ),
-  }
 }

@@ -12,10 +12,8 @@ export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State> {
   return class StoreConsumer extends React.Component<
-    {
-      children: State => React.Node,
-    },
-    {currentState: State},
+    {children: State => React.Node, ...},
+    {|+currentState: State|},
   > {
     static displayName = `${store.shortName}.Consumer`
 

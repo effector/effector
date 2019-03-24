@@ -1,9 +1,18 @@
 //@flow
 import {resolve, join, dirname, extname, relative} from 'path'
 import * as fs from 'fs-extra'
-//$todo
+
 import execa from 'execa'
+import {load} from 'js-yaml'
 import packageJson from '../../package.json'
+
+export const cliArgs: {
+  current: Array<string>,
+  +original: $ReadOnlyArray<string>,
+} = {
+  current: process.argv.slice(2),
+  original: process.argv.slice(2),
+}
 
 const root = process.cwd()
 export function dir(...paths: $ReadOnlyArray<string>): string {
@@ -22,31 +31,37 @@ export async function outputPackageJSON(
 
 export function publishScript(name: string) {
   return async() => {
-    const args = process.argv.slice(2)
+    const args = [...cliArgs.original]
     if (args.length < 2) return
     const command = args.shift()
     const argument = args.shift()
     if (command === 'publish') {
       if (argument === 'next') {
-        const {stdout, stderr} = await execa(
-          'npm',
-          ['publish', '--tag', 'next'],
-          {
-            cwd: `${process.cwd()}/npm/${name}`,
-          },
-        )
-        console.log(stdout)
-        console.error(stderr)
+        try {
+          const {stdout, stderr} = await execa(
+            'npm',
+            ['publish', '--tag', 'next'],
+            {
+              cwd: `${process.cwd()}/npm/${name}`,
+              env: process.env,
+            },
+          )
+          console.log(stdout)
+          console.error(stderr)
+        } catch {}
       } else if (argument === 'latest') {
-        const {stdout, stderr} = await execa(
-          'npm',
-          ['publish', '--tag', 'latest'],
-          {
-            cwd: `${process.cwd()}/npm/${name}`,
-          },
-        )
-        console.log(stdout)
-        console.error(stderr)
+        try {
+          const {stdout, stderr} = await execa(
+            'npm',
+            ['publish', '--tag', 'latest'],
+            {
+              cwd: `${process.cwd()}/npm/${name}`,
+              env: process.env,
+            },
+          )
+          console.log(stdout)
+          console.error(stderr)
+        } catch {}
       }
     }
   }
@@ -88,3 +103,17 @@ export const getSourcemapPathTransform = (name: string) =>
     }
     return join(`node_modules/${name}`, relative(packagePath, relativePath))
   }
+
+export async function loadYaml(url: string) {
+  const text = await fs.readFile(resolve(process.cwd(), url), 'utf8')
+  const object = load(text)
+  return object
+}
+export function validateConfig(
+  obj: any,
+): {
+  categories: Array<{name: string, description: string}>,
+  packages: Array<{name: string, version: string, category: string}>,
+} {
+  return obj
+}

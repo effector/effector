@@ -2,7 +2,25 @@
 
 const {resolve: resolvePath} = require('path')
 
-const resolveSource = path => resolvePath(__dirname, 'src', path)
+module.exports = api => {
+  api && api.cache && api.cache.never && api.cache.never()
+  // const env = api.cache(() => process.env.NODE_ENV)
+  return generateConfig(meta, babelConfig)
+
+  function generateConfig(meta, config) {
+    const result = {}
+    for (const key in config) {
+      const value = config[key]
+      result[key] = typeof value === 'function' ? value(meta) : value
+    }
+    return result
+  }
+}
+
+const meta = {
+  isBuild: !!process.env.IS_BUILD,
+  isTest: process.env.NODE_ENV === 'test',
+}
 
 const aliases = {
   'effector/effect': 'effect',
@@ -15,43 +33,29 @@ const aliases = {
   'effector/perf': 'perf',
   'effector/watcher': 'watcher',
   'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
+  'effector/naming': 'naming',
   warning: 'warning',
   invariant: 'invariant',
+  '@effector/forms': 'forms',
   'effector-react': 'react',
   'effector-vue': 'vue',
+  Builder: '../tools/builder',
+  effector({isTest, isBuild}) {
+    if (isBuild) return null
+    if (isTest) return '.'
+    return '../npm/effector'
+  },
 }
 
-module.exports = api => {
-  // api && api.cache && api.cache.never && api.cache.never()
-  const env = api.cache(() => process.env.NODE_ENV)
-  const alias = parseAliases(aliases, {
-    isBuild: !!process.env.IS_BUILD,
-  })
-  if (process.env.NODE_ENV === 'test') {
-    alias.effector = resolvePath(__dirname, 'src')
-  }
-  const plugins = [
-    '@babel/plugin-proposal-export-namespace-from',
-    '@babel/plugin-proposal-optional-chaining',
-    '@babel/plugin-proposal-nullish-coalescing-operator',
-    ['@babel/plugin-proposal-class-properties', {loose: true}],
-    'macros',
-    [
-      'babel-plugin-module-resolver',
-      {
-        alias,
-      },
-    ],
-  ]
-
-  const presets = [
+const babelConfig = {
+  presets: [
     '@babel/preset-flow',
     '@babel/preset-react',
     [
       '@babel/preset-env',
       {
         loose: true,
-        useBuiltIns: false,
+        useBuiltIns: 'entry',
         modules: false,
         shippedProposals: true,
         targets: {
@@ -60,38 +64,51 @@ module.exports = api => {
             'last 2 Chrome versions',
             'last 2 Firefox versions',
             'last 2 Safari versions',
-            'last 2 Edge versions',
+            'last 1 Edge versions',
           ],
         },
       },
     ],
-  ]
+  ],
+  plugins(meta) {
+    const alias = parseAliases(meta, aliases)
+    const result = [
+      './src/babel/get-step',
+      '@babel/plugin-proposal-export-namespace-from',
+      '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-proposal-nullish-coalescing-operator',
+      ['@babel/plugin-proposal-class-properties', {loose: true}],
+      'macros',
+      [
+        'babel-plugin-module-resolver',
+        {
+          alias,
+        },
+      ],
+    ]
+    if (meta.isTest) {
+      result.push('@babel/plugin-transform-modules-commonjs')
+    }
+    return result
 
-  const overrides = [
+    function parseAliases(meta, obj) {
+      const result = {}
+      for (const key in obj) {
+        const value = obj[key]
+        const name = typeof value === 'function' ? value(meta) : value
+        if (name === undefined || name === null) continue
+        result[key] = resolvePath(__dirname, 'src', name)
+      }
+      return result
+    }
+  },
+  overrides: [
     {
       test(filename) {
         return filename.includes('__tests__')
       },
       plugins: ['./src/babel/babel-plugin'],
     },
-  ]
-
-  if (process.env.NODE_ENV === 'test' || process.env.IS_SERVER != null) {
-    plugins.push('@babel/plugin-transform-modules-commonjs')
-  }
-
-  return {plugins, presets, overrides, sourceMaps: true}
-}
-
-function parseAliases(obj, meta) {
-  const result = {}
-  for (const key in obj) {
-    const value = obj[key]
-    if (typeof value === 'string') {
-      result[key] = resolveSource(value)
-    } else {
-      result[key] = resolveSource(value(meta))
-    }
-  }
-  return result
+  ],
+  sourceMaps: true,
 }

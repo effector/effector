@@ -1,22 +1,127 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel-plugin should create domain 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const foo = createDomain('bar');"
+`;
+
+exports[`babel-plugin should create domain domain 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const foo = domain.domain(\\"foo\\");
+const bar = domain.domain('baz');"
+`;
+
+exports[`babel-plugin should create domain effect 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const a = domain.effect(\\"a\\");
+
+const f = () => domain.effect(\\"f\\");
+
+const b = domain.effect('hello');
+
+const g = () => domain.effect('baz');"
+`;
+
+exports[`babel-plugin should create domain event 1`] = `
+"//@flow
+import { createDomain } from 'effector';
+const domain = createDomain(\\"domain\\");
+const a = domain.event(\\"a\\");
+
+const f = () => domain.event(\\"f\\");
+
+const b = domain.event('asm');
+
+const g = () => domain.event('tasm');"
+`;
+
 exports[`babel-plugin should create domain store 1`] = `
 "//@flow
-import { setStoreName } from \\"effector\\";
 import { createDomain } from 'effector';
-const domain = createDomain();
-const bar = domain.store('bar');
-setStoreName(bar, \\"bar\\");"
+const domain = createDomain(\\"domain\\");
+const a = domain.store('bar', {
+  name: \\"a\\"
+});
+const b = domain.store('h', {
+  ɔ: {
+    option: 'test',
+    ['na' + 'me']: 'LOL'
+  },
+  name: \\"b\\"
+});
+const c = domain.store('h', {
+  ɔ: {
+    name: 'test'
+  },
+  name: \\"c\\"
+}); //$off
+
+const d = domain.store('h', {
+  ɔ: null,
+  name: \\"d\\"
+}); //$off
+
+const e = domain.store('h', {
+  ɔ: 4234,
+  name: \\"e\\"
+});
+const f = domain.store('h', {
+  ɔ: {},
+  name: \\"f\\"
+});"
+`;
+
+exports[`babel-plugin should create effect 1`] = `
+"//@flow
+import { createEffect } from 'effector';
+const foo = createEffect(\\"foo\\");
+const bar = createEffect('hello');
+
+const f = () => createEffect(\\"f\\");"
+`;
+
+exports[`babel-plugin should create event 1`] = `
+"//@flow
+import { createEvent } from 'effector';
+const foo = createEvent(\\"foo\\");
+const bar = createEvent('hello');
+
+const f = () => createEvent(\\"f\\");"
 `;
 
 exports[`babel-plugin should create store 1`] = `
 "//@flow
-import { setStoreName } from \\"effector\\";
 import { createStore } from 'effector';
-const foo = createStore('foo');
-setStoreName(foo, \\"foo\\");
+const foo = createStore('foo', {
+  name: \\"foo\\"
+});
+const a = createStore('h', {
+  name: \\"a\\"
+});
+const b = createStore('h', {
+  ɔ: {},
+  name: \\"b\\"
+}); //$off
 
-const f = a => createStore(a);
+const c = createStore('h', {
+  ɔ: 23020,
+  name: \\"c\\"
+});
+const config = {
+  option: 0
+};
+const dod = createStore(null, {
+  ɔ: config,
+  name: \\"dod\\"
+});
 
-setStoreName(f, \\"f\\");"
+const f = a => createStore(a, {
+  name: \\"f\\"
+});"
 `;

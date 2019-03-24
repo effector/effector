@@ -5,6 +5,7 @@ import chalk from 'chalk'
 type TaskList = Array<() => Promise<any>>
 
 function onFinish(stats) {
+  setConfig = noop
   if (Object.keys(stats.fail).length === 0) {
     console.log(
       label(chalk.bgGreen, 'DONE'),
@@ -44,8 +45,17 @@ const run = ({tasks, name, stats}) =>
         label(chalk.bgWhite, name),
         chalk.redBright('task failed'),
       )
-      console.error(err.message)
+      console.error(err)
     })
+const noop: Function = () => {}
+type Config = {
+  ignore: Array<string>,
+  only: Array<string>,
+}
+export let setConfig: <Field: $Keys<Config>>(
+  field: Field,
+  data: $ElementType<Config, Field>,
+) => void = noop
 
 export function taskList({
   tasks,
@@ -61,14 +71,21 @@ export function taskList({
     done: {},
     fail: {},
   }
-
+  const config: Config = {ignore: [], only: []}
+  setConfig = (field, data) => {
+    config[field] = data
+  }
   return run({
     tasks: hooks.beforeAll,
     name: 'beforeAll',
     stats,
   })
     .then(() => {
+      console.log('running with config')
+      console.dir(config)
       for (const pkg in tasks) {
+        if (config.ignore.includes(pkg)) continue
+        if (config.only.length > 0 && !config.only.includes(pkg)) continue
         pending.push(
           run({
             tasks: tasks[pkg],
