@@ -24,13 +24,14 @@ export function normalizeConfig(config?: Config = {}): ConfigPart {
       )
     }
     if (typeof config.ɔ === 'object' && config.ɔ !== null) {
-      const newConfig = {...config.ɔ}
-      if (!('name' in config.ɔ)) {
+      const newConfig = Object.assign({}, config.ɔ)
+      if (!('name' in newConfig)) {
         newConfig.name = config.name
       }
       return newConfig
     }
-    const {ɔ, ...newConfig} = config
+    const newConfig = Object.assign({}, config)
+    delete newConfig.ɔ
     return newConfig
   }
   return {}
