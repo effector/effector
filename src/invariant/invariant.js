@@ -1,34 +1,24 @@
-//@noflow
+//@flow
 /* eslint-disable */
-import {__DEV__, __DEBUG__} from 'effector/flags'
+import {formatter} from '../effector/logger'
+import {__DEV__} from 'effector/flags'
 
-var invariant = function(condition) {
+let invariant = function(condition: any /*::, format: string, ...args: any*/) {
   if (!condition) {
-    var error = new Error(
-      'Minified exception occurred; use the non-minified dev environment ' +
-      'for the full error message and additional helpful warnings.'
-    );
-    error.framesToPop = 1; // we don't care about invariant's own frame
-    throw error;
+    throw Error('Minified exception occurred')
   }
 }
 
 if (__DEV__) {
-  invariant = function(condition, format, a, b, c, d, e, f) {
-    if (__DEBUG__) {
-      if (format === undefined) {
-        throw new Error('invariant requires an error message argument');
-      }
-    }
+  invariant = function(condition: any, format: string, ...args: any) {
     if (!condition) {
-      var args = [a, b, c, d, e, f];
-      var argIndex = 0;
-      var error = new Error(
-        format.replace(/%s/g, function() { return args[argIndex++]; })
-      );
-      error.name = 'Invariant Violation';
-      error.framesToPop = 1; // we don't care about invariant's own frame
-      throw error;
+      const error = Error()
+      if (Error.captureStackTrace) {
+        Error.captureStackTrace(error, invariant)
+      }
+      error.name = 'Invariant Violation'
+      error.message = formatter(format, ...args)
+      throw error
     }
   }
 }
