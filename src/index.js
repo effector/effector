@@ -1,8 +1,9 @@
 //@flow
 
 /*
- * The secret knowledge is... 
- * Effector is more like a big ball of wibbly wobbly... time-y wimey... stuff
+ * People assume that time is a strict progression of cause to effect,
+ * but actually from a non-linear, non-subjective viewpoint - 
+ * it's more like a big ball of wibbly wobbly time-y wimey stuff
  */
 
 export {combine} from './effector'
