@@ -1,6 +1,6 @@
 //@flow
 
-import type {TypeDef, Graph} from 'effector/stdlib'
+import type {TypeDef, Graph, Step} from 'effector/stdlib'
 import type {Meta, CommandList} from './index.h'
 
 type Line = {|
@@ -24,8 +24,8 @@ type PostAction =
   | {|+type: 'scope/size', +size: number|}
   | {|+type: 'scope/push', +scope: {+arg: any}|}
 
-const step = (meta: Meta): TypeDef<*, 'step'> =>
-  meta.callstack[meta.callstack.length - 1]
+const last = <T>(list: $ReadOnlyArray<T>): T => list[list.length - 1]
+const step = (meta: Meta): TypeDef<*, 'step'> => last(meta.callstack)
 const single = (meta: Meta) => step(meta).data.data
 
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
@@ -43,7 +43,7 @@ export function runtime(graph: Graph<any>, payload: any) {
     ],
     val: {},
   }
-  runStep(graph.seq, meta)
+  runStep(graph.seq, meta, graph.val)
   runPendings(meta.pendingEvents)
 }
 const runPendings = pendings => {
@@ -62,8 +62,9 @@ const runPendings = pendings => {
     item.event(item.data)
   }
 }
-const runStep = (step: TypeDef<*, 'step'>, meta: Meta) => {
+const runStep = (step: Step, meta: Meta, valRaw) => {
   const scope = meta.scope
+  const valStack: Array<typeof valRaw> = [valRaw]
   //prettier-ignore
   const pos: {|
     head: number,
@@ -90,6 +91,7 @@ const runStep = (step: TypeDef<*, 'step'>, meta: Meta) => {
       const line = area.list[area.index]
       const step = line.step
       meta.stop = false
+      //$todo
       meta.callstack.push(step)
       runActions(line.pre, area)
       switch (step.type) {
@@ -97,7 +99,7 @@ const runStep = (step: TypeDef<*, 'step'>, meta: Meta) => {
           const type = step.data.type
           const local = command[type].local(meta, scope[scope.length - 1].arg)
           scope.push(local)
-          command[type].cmd(meta, local)
+          command[type].cmd(meta, local, last(valStack))
           meta.stop = !command[type].transition(meta, local)
           break
         }
@@ -190,38 +192,32 @@ const runStep = (step: TypeDef<*, 'step'>, meta: Meta) => {
 }
 
 const cmd = {
-  emit(meta, local) {},
-  filter(meta, local) {
+  emit(meta, local, val) {},
+  filter(meta, local, val) {
     const runCtx = tryRun({
-      err: false,
-      result: (null /*: any*/),
       arg: local.arg,
       val: meta.val,
       fn: single(meta).fn,
     })
     local.isChanged = Boolean(runCtx.result)
   },
-  run(meta, local) {
+  run(meta, local, val) {
     const data = single(meta)
     if ('pushUpdate' in data) {
       data.pushUpdate = data => meta.pendingEvents.push(data)
     }
     const runCtx = tryRun({
-      err: false,
-      result: (null /*: any*/),
       arg: local.arg,
       val: meta.val,
       fn: data.fn,
     })
     local.isFailed = runCtx.err
   },
-  update(meta, local) {
+  update(meta, local, val) {
     local.store.current = local.arg
   },
-  compute(meta, local) {
+  compute(meta, local, val) {
     const runCtx = tryRun({
-      err: false,
-      result: (null /*: any*/),
       arg: local.arg,
       val: meta.val,
       fn: single(meta).fn,
@@ -268,11 +264,15 @@ const command = ({
 }: CommandList)
 
 const tryRun = ctx => {
+  const result = {
+    err: false,
+    result: null,
+  }
   try {
-    ctx.result = ctx.fn.call(null, ctx.arg, ctx.val)
+    result.result = ctx.fn.call(null, ctx.arg, ctx.val)
   } catch (err) {
     console.error(err)
-    ctx.err = true
+    result.err = true
   }
-  return ctx
+  return result
 }
