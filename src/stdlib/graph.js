@@ -1,21 +1,20 @@
 //@flow
 
-import type {TypeDef, Graph} from './index.h'
+import type {Graph, Step} from './index.h'
 import {step} from './typedef'
 
-export const createNode = (...node: Array<TypeDef<*, *>>): Graph<> =>
-  createGraph({node})
+export const createNode = (...node: Array<Step>): Graph<> => createGraph({node})
 
 //eslint-disable-next-line no-unused-vars
 declare export function createGraph(opts: {|
-  +node: Array<TypeDef<*, *>>,
-  +child?: Array<TypeDef<*, *>>,
-  +from?: Array<TypeDef<*, *>>,
+  +node: Array<Step>,
+  +child?: Array<Step>,
+  +from?: Array<Step>,
 |}): Graph<>
 declare export function createGraph<Val: {[name: string]: any}>(opts: {|
-  +node: Array<TypeDef<*, *>>,
-  +child?: Array<TypeDef<*, *>>,
-  +from?: Array<TypeDef<*, *>>,
+  +node: Array<Step>,
+  +child?: Array<Step>,
+  +from?: Array<Step>,
   +val: Val,
 |}): Graph<Val>
 export function createGraph({
@@ -24,9 +23,9 @@ export function createGraph({
   from = [],
   val = {},
 }: {
-  +node: Array<TypeDef<*, *>>,
-  +child?: Array<TypeDef<*, *>>,
-  +from?: Array<TypeDef<*, *>>,
+  +node: Array<Step>,
+  +child?: Array<Step>,
+  +from?: Array<Step>,
   val?: {[name: string]: any},
 }): Graph<any> {
   const next = step('multi', child)

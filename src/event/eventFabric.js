@@ -3,7 +3,7 @@ import $$observable from 'symbol-observable'
 
 import {cmd, Kind, stringRefcount, createNode} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
-import {walkEvent} from 'effector/graphite'
+import {runtime} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
@@ -41,7 +41,7 @@ export function eventFabric<Payload>({
   ;(instance: any).getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
-    walkEvent(payload, instance)
+    runtime(instance.graphite, payload)
     return payload
   }
   ;(instance: any).kind = Kind.event

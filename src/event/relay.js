@@ -1,4 +1,4 @@
-//@flow
+//@noflow
 
 import {createNode, step} from 'effector/stdlib'
 import {forward} from './forward'

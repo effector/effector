@@ -22,17 +22,3 @@ export type Event<E> = {
   graphite: Graph<>,
   compositeName: CompositeName,
 }
-
-///TODO remove
-export type Graphiter = {
-  +graphite: Graph<>,
-  ...
-}
-///TODO remove
-export type GraphiterSmall = {
-  +graphite: {
-    +seq: TypeDef<'seq' | 'loop' | 'combine', 'step'>,
-    ...
-  },
-  ...
-}
