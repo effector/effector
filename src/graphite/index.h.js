@@ -1,18 +1,12 @@
 //@flow
 
-import type {TypeDef, StateRef} from 'effector/stdlib'
+import type {StateRef, Step} from 'effector/stdlib'
 
-export type CtxKind =
-  | 'compute'
-  | 'emit'
-  | 'filter'
-  | 'update'
-  | 'run'
-  | 'combine'
+export type CtxKind = 'compute' | 'emit' | 'filter' | 'update' | 'run'
 export type CommonCtx = {arg: any, ...}
 
 export type Meta = {|
-  callstack: Array<TypeDef<*, *>>,
+  callstack: Array<Step>,
   stop: boolean,
   scope: Array<any>,
   pendingEvents: Array<{
@@ -23,7 +17,7 @@ export type Meta = {|
 |}
 
 export type Command<Local> = {
-  cmd(meta: Meta, local: Local): void,
+  cmd(meta: Meta, local: Local, val: Object): void,
   transition(meta: Meta, local: Local): boolean,
   local(meta: Meta): Local,
 }
@@ -39,7 +33,7 @@ export type CommandList = $ReadOnly<{
 export type StepVisitor = (meta: Meta) => void
 
 export type Line = {|
-  +step: TypeDef<*, 'step'>,
+  +step: Step,
   +pre: Array<PostAction>,
   +post: Array<PostAction>,
 |}
