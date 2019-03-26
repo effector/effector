@@ -1,8 +1,7 @@
 //@flow
 
 import React from 'react'
-import ReactDOM from 'react-dom'
-import cx from 'classnames'
+import {cx} from 'linaria'
 import {createStoreObject} from 'effector'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
@@ -98,12 +97,12 @@ const VersionLinkView = createComponent(version, ({}, version) => (
 const TabsView = createComponent(tab, (_, tab) => (
   <>
     <ul
-      className={cx({
-        'show-graphite': tab === 'graphite',
-        'show-console': tab === 'console',
-        toolbar: true,
-        'header-tabs': true,
-      })}>
+      className={cx(
+        tab === 'graphite' && 'show-graphite',
+        tab === 'console' && 'show-console',
+        'toolbar',
+        'header-tabs',
+      )}>
       <li className="tab graphite-tab" onClick={tabApi.showGraphite}>
         Graphite
       </li>
