@@ -43,7 +43,7 @@
     "@babel/traverse": "^7.4.0",
     "@glennsl/bs-jest": "^0.4.8",
     "@goodmind/flow-js": "^0.95.2-flow.3dddd0603-build.f6486aa",
-    "@goodmind/flowgen": "^2.2.1",
+    "flowgen": "^1.8.0",
     "@types/jest": "^24.0.11",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
