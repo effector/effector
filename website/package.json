@@ -19,6 +19,7 @@
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
+    "@babel/standalone": "^7.4.2",
     "@effector/babel-plugin": "^0.1.0",
     "@effector/babel-plugin-react": "^0.0.3",
     "docusaurus": "^1.7.2",
