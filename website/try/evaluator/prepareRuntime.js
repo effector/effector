@@ -1,6 +1,9 @@
 //@flow
+
 import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import * as EffectorReact from 'effector-react'
+
 import {realmInvoke, realmInterval, realmTimeout} from '../domain'
 import {consoleMap} from '../logs'
 
@@ -12,6 +15,7 @@ export function prepareRuntime(effector, version) {
   assignLibrary(api, EffectorReact)
   return {
     React,
+    ReactDOM,
     console: consoleMap(),
     setInterval,
     setTimeout,
