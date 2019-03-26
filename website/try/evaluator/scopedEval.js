@@ -1,14 +1,20 @@
 // @flow
 
+import {sourceCode, selectVersion} from '../domain'
+
 let iframe = null
 
 function getIframe() {
   if (iframe === null) {
-    iframe = document.createElement('iframe')
-    iframe.style.display = 'none'
+    //iframe = document.createElement('iframe')
+    iframe = document.getElementById('dom') || document.createElement('iframe')
+    //iframe.style.display = 'none'
 
-    // $FlowFixMe
-    document.body.append(iframe)
+    //$off
+    //document.body.append(iframe)
+
+    sourceCode.watch(() => (iframe.contentDocument.body.innerHTML = ''))
+    selectVersion.watch(() => (iframe.contentDocument.body.innerHTML = ''))
   }
 
   return iframe

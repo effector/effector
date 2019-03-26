@@ -6,10 +6,11 @@ import {stats} from '../domain'
 import {createComponent} from 'effector-react'
 import {createApi, createStore, createStoreObject, Store} from 'effector'
 
-const tab: Store<'events' | 'storages' | 'effects' | 'domains'> = createStore(
-  'events',
-)
+const tab: Store<
+  'events' | 'storages' | 'effects' | 'domains' | 'dom',
+> = createStore('events')
 tab.on(stats, (tab, {event, store, effect, domain}) => {
+  if (tab === 'dom') return 'dom'
   if (event.length > 0) return 'events'
   if (store.length > 0) return 'storages'
   if (effect.length > 0) return 'effects'
@@ -21,7 +22,7 @@ const api = createApi(tab, {
   showStorages: () => 'storages',
   showEffects: () => 'effects',
   showDomains: () => 'domains',
-  //showDOM: () => 'dom'
+  showDOM: () => 'dom',
 })
 
 const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
@@ -31,6 +32,7 @@ const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
     tab === 'storages' && 'show-storages',
     tab === 'effects' && 'show-effects',
     tab === 'domains' && 'show-domains',
+    tab === 'dom' && 'show-dom',
   )}`
   const mapper = item => {
     const name = item?.compositeName?.fullName || item?.shortName || item.id
@@ -58,6 +60,11 @@ const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
           <ol>{domain.map(mapper)}</ol>
         </div>
       )}
+      <div
+        style={{display: tab === 'dom' ? 'block' : 'none'}}
+        className="dom-tab-content">
+        <iframe id="dom" />
+      </div>
     </div>
   )
 })
@@ -70,6 +77,7 @@ const ToolbarView = createComponent(
       tab === 'storages' && 'show-storages',
       tab === 'effects' && 'show-effects',
       tab === 'domains' && 'show-domains',
+      tab === 'dom' && 'show-dom',
     )}`
     return (
       <ul className={className}>
@@ -93,29 +101,24 @@ const ToolbarView = createComponent(
             Domains
           </li>
         )}
+        <li onClick={api.showDOM} className="tab dom-tab">
+          DOM
+        </li>
       </ul>
     )
   },
 )
 
 export default function Stats({event, store, effect, domain}: *) {
-  const isStats =
-    event.length > 0
-    || store.length > 0
-    || effect.length > 0
-    || domain.length > 0
-  if (isStats) {
-    return (
-      <div className="stats has-stats">
-        <ToolbarView
-          event={event}
-          store={store}
-          effect={effect}
-          domain={domain}
-        />
-        <TabView event={event} store={store} effect={effect} domain={domain} />
-      </div>
-    )
-  }
-  return <div className="stats no-stats" />
+  return (
+    <div className="stats has-stats">
+      <ToolbarView
+        event={event}
+        store={store}
+        effect={effect}
+        domain={domain}
+      />
+      <TabView event={event} store={store} effect={effect} domain={domain} />
+    </div>
+  )
 }
