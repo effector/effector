@@ -14,10 +14,13 @@ function getIframe() {
   return iframe
 }
 
+// workaround for bundlers, which understand
+// surce mapping urls
+const tag = `# source`
 function scopedEval(code: string, sourceMap: ?string) {
   // Append source map footer so errors map to pre-compiled code.
   if (sourceMap) {
-    code = `${code}\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,${btoa(
+    code = `${code}\n//${tag}MappingURL=data:application/json;charset=utf-8;base64,${btoa(
       unescape(encodeURIComponent(sourceMap)),
     )}`
   }

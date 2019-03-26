@@ -2,7 +2,6 @@
 
 import {createEffect} from 'effector'
 
-//import {loadEngine} from './loadEngine'
 import {prepareRuntime} from './prepareRuntime'
 import {evalExpr} from './evalExpr'
 import scopedEval from './scopedEval'
@@ -13,11 +12,13 @@ version.on(selectVersion, (_, p) => p)
 
 const cache = new Map()
 
+const tag = `# source`
 function createRealm(sourceCode: string, version: string) {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
     console.log('require: ', path)
+    //$todo
     return Symbol.observable
   }
   realm.exports = {}
@@ -25,13 +26,13 @@ function createRealm(sourceCode: string, version: string) {
   realm.console = consoleMap()
   scopedEval
     .runLibrary(
-      `'use strict'; ${sourceCode}\n//# sourceURL=effector.${version}.js`,
+      `'use strict'; ${sourceCode}\n//${tag}URL=effector.${version}.js`,
     )
     .call(window, realm)
   return realm.exports
 }
 
-export const fetchVersion = createEffect('fetch', {
+export const fetchVersion = createEffect/*:: <string, *, *> */('fetch', {
   async handler(ver: string) {
     const url =
       ver === 'develop'
@@ -43,8 +44,9 @@ export const fetchVersion = createEffect('fetch', {
   },
 })
 
-export const versionLoader = version.map(v => {
-  if (cache.has(v)) return cache.get(v)
+export const versionLoader = version.map/*::<*>*/(v => {
+  const cached = cache.get(v)
+  if (cached) return cached
   const req = fetchVersion(v)
   cache.set(v, req)
   return req

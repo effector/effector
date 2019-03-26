@@ -1,3 +1,5 @@
 //@flow
 
-export {walkEvent} from './walk'
+export * from './walk'
+export * from './runStep'
+export * from './exec'

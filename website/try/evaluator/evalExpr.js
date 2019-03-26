@@ -2,17 +2,17 @@
 
 import {realmStatus} from '../domain'
 import scopedEval from './scopedEval'
-
+import {transformCode} from './compiler'
 export function evalExpr(expr, vars) {
   status.init()
   try {
-    // Function(param1, ..., paramn, body)
-    const exprFunc = scopedEval.runCode(`
-'use strict';
+    const compiled = transformCode(`'use strict';
 {
-  ${expr}
-}
-`)
+
+${expr}
+
+}`)
+    const exprFunc = scopedEval.runCode(compiled)
     const results = exprFunc(vars)
     status.done()
     return results

@@ -1,7 +1,7 @@
 //@flow
 
 import React from 'react'
-import cx from 'classnames'
+import {cx} from 'linaria'
 import {stats} from '../domain'
 import {createComponent} from 'effector-react'
 import {createApi, createStore, createStoreObject, Store} from 'effector'
@@ -26,31 +26,38 @@ const api = createApi(tab, {
 
 const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
   //TODO: unify this
-  const className = `tab-content ${cx({
-    'show-events': tab === 'events',
-    'show-storages': tab === 'storages',
-    'show-effects': tab === 'effects',
-    'show-domains': tab === 'domains',
-    //'show-dom': tab === 'dom'
-  })}`
+  const className = `tab-content ${cx(
+    tab === 'events' && 'show-events',
+    tab === 'storages' && 'show-storages',
+    tab === 'effects' && 'show-effects',
+    tab === 'domains' && 'show-domains',
+  )}`
   const mapper = item => {
     const name = item?.compositeName?.fullName || item?.shortName || item.id
     return <li key={item.kind + item.id + name}>{name}</li>
   }
   return (
     <div>
-      {tab === 'events' && <div className="events-tab-content">
-        <ol>{event.map(mapper)}</ol>
-      </div>}
-      {tab === 'storages' && <div className="storages-tab-content">
-        <ol>{store.map(mapper)}</ol>
-      </div>}
-      {tab === 'effects' && <div className="effects-tab-content">
-        <ol>{effect.map(mapper)}</ol>
-      </div>}
-      {tab === 'domains' && <div className="domains-tab-content">
-        <ol>{domain.map(mapper)}</ol>
-      </div>}
+      {tab === 'events' && (
+        <div className="events-tab-content">
+          <ol>{event.map(mapper)}</ol>
+        </div>
+      )}
+      {tab === 'storages' && (
+        <div className="storages-tab-content">
+          <ol>{store.map(mapper)}</ol>
+        </div>
+      )}
+      {tab === 'effects' && (
+        <div className="effects-tab-content">
+          <ol>{effect.map(mapper)}</ol>
+        </div>
+      )}
+      {tab === 'domains' && (
+        <div className="domains-tab-content">
+          <ol>{domain.map(mapper)}</ol>
+        </div>
+      )}
     </div>
   )
 })
@@ -58,13 +65,12 @@ const TabView = createComponent(tab, ({event, store, effect, domain}, tab) => {
 const ToolbarView = createComponent(
   tab,
   ({event, store, effect, domain}, tab) => {
-    const className = `toolbar ${cx({
-      'show-events': tab === 'events',
-      'show-storages': tab === 'storages',
-      'show-effects': tab === 'effects',
-      'show-domains': tab === 'domains',
-      //'show-dom': tab === 'dom'
-    })}`
+    const className = `toolbar ${cx(
+      tab === 'events' && 'show-events',
+      tab === 'storages' && 'show-storages',
+      tab === 'effects' && 'show-effects',
+      tab === 'domains' && 'show-domains',
+    )}`
     return (
       <ul className={className}>
         {event.length > 0 && (
@@ -92,7 +98,7 @@ const ToolbarView = createComponent(
   },
 )
 
-export default function Stats({event, store, effect, domain}) {
+export default function Stats({event, store, effect, domain}: *) {
   const isStats =
     event.length > 0
     || store.length > 0

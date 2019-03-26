@@ -1,12 +1,11 @@
 //@flow
-
-import type {Graphiter, GraphiterSmall} from './index.h'
+import type {Graph} from 'effector/stdlib'
 import type {Subscription} from '../effector/index.h'
 import {createWatcher} from 'effector/watcher'
 
 export function forward(opts: {
-  from: Graphiter,
-  to: GraphiterSmall,
+  from: {+graphite: Graph<any>, ...},
+  to: {+graphite: Graph<any>, ...},
 }): Subscription {
   const toSeq = opts.to.graphite.seq
   const fromGraphite = opts.from.graphite

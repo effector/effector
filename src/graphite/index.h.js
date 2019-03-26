@@ -1,34 +1,23 @@
 //@flow
 
-import type {TypeDef, StateRef} from 'effector/stdlib'
+import type {StateRef, Step} from 'effector/stdlib'
 
-export type CtxKind =
-  | 'compute'
-  | 'emit'
-  | 'filter'
-  | 'update'
-  | 'run'
-  | 'combine'
+export type CtxKind = 'compute' | 'emit' | 'filter' | 'update' | 'run'
 export type CommonCtx = {arg: any, ...}
-export type Reg = {
-  isChanged: boolean,
-  isFailed: boolean,
-}
-export type Meta = {
-  callstack: Array<TypeDef<*, *>>,
+
+export type Meta = {|
+  callstack: Array<Step>,
   stop: boolean,
-  transactions: Array<() => void>,
   scope: Array<any>,
   pendingEvents: Array<{
     event: (data: any) => any,
     data: any,
   }>,
-  reg: Reg,
   val: {[name: string]: StateRef},
-}
+|}
 
 export type Command<Local> = {
-  cmd(meta: Meta, local: Local): void,
+  cmd(meta: Meta, local: Local, val: Object): void,
   transition(meta: Meta, local: Local): boolean,
   local(meta: Meta): Local,
 }
@@ -42,11 +31,28 @@ export type CommandList = $ReadOnly<{
 }>
 
 export type StepVisitor = (meta: Meta) => void
-export type ScopeIterator = {
-  +index: number,
-  +body: Array<any>,
-  value(): any,
-  bottom(): any,
-  down(): boolean,
-  up(): boolean,
-}
+
+export type Line = {|
+  +step: Step,
+  +pre: Array<PostAction>,
+  +post: Array<PostAction>,
+|}
+
+export type Area = {|
+  +list: $ReadOnlyArray<Line>,
+  +pre: Array<PostAction>,
+  +post: Array<PostAction>,
+  index: number,
+  active: boolean,
+|}
+export type Pos = {|
+  head: number,
+  +stack: Array<Area>,
+|}
+export type PostAction =
+  | {|+type: 'meta/?stop'|}
+  | {|+type: 'meta/!stop'|}
+  | {|+type: 'head/--'|}
+  | {|+type: 'callstack/pop'|}
+  | {|+type: 'scope/size', +size: number|}
+  | {|+type: 'scope/push', +scope: {+arg: any}|}
