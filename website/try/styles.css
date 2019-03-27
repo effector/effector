@@ -173,7 +173,7 @@ body {
   outline: none;
 }
 .try-button-share:hover input {
-  width: 25vw;
+  width: 15vw;
   margin-right: 1em;
 }
 .try-button-share:hover .try-tooltip {
