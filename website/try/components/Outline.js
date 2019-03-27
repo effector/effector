@@ -43,8 +43,8 @@ export default function({domain, event, effect, store}) {
   return (
     <Outline>
       <OutlineSection list={event} title="Events" />
-      <OutlineSection list={store} title="Storages" />
       <OutlineSection list={effect} title="Effects" />
+      <OutlineSection list={store} title="Storages" />
       <OutlineSection list={domain} title="Domains" />
     </Outline>
   )
