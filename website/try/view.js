@@ -48,7 +48,7 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
     value={sources}
-    mode="application/javascript"
+    mode="text/jsx"
     onChange={changeSourcesDebounced}
     lineWrapping
   />

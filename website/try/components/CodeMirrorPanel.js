@@ -2,8 +2,8 @@
 
 import React from 'react'
 import CodeMirror from 'codemirror'
-import 'codemirror/mode/javascript/javascript'
-// import 'codemirror/mode/jsx/jsx';
+//import 'codemirror/mode/javascript/javascript'
+import 'codemirror/mode/jsx/jsx'
 
 import 'codemirror/addon/comment/comment'
 import 'codemirror/addon/wrap/hardwrap'
