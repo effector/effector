@@ -18,8 +18,10 @@ function createRealm(sourceCode: string, version: string) {
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
     console.log('require: ', path)
-    //$todo
-    return Symbol.observable
+    if (path === 'symbol-observable') {
+      //$todo
+      return Symbol.observable
+    }
   }
   realm.exports = {}
   realm.module = {exports: realm.exports}

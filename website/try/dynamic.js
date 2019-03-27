@@ -163,6 +163,19 @@ switcher({
   },
 })
 
+realmInvoke.watch(({method, instance}) => {
+  if (method === 'restore') {
+    for (const key in instance) {
+      realmStore(instance[key])
+    }
+  }
+  if (method === 'createApi') {
+    for (const key in instance) {
+      realmEvent(instance[key])
+    }
+  }
+})
+
 realmEffect.watch(e => {
   realmEvent(e.done)
   realmEvent(e.fail)
@@ -202,6 +215,11 @@ codeError
     message: e.error.message,
     stack: e.error.stack,
   }))
+
+
+changeSources.watch(code => {
+  localStorage.setItem('code', code)
+})
 
 forward({
   from: changeSources,

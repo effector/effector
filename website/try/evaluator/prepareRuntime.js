@@ -10,7 +10,8 @@ import {consoleMap} from '../logs'
 export function prepareRuntime(effector, version) {
   const EvalRealm = effector.createDomain('EvalRealm')
   const api = {}
-  assignRealm(api, EvalRealm, effector)
+  assignEffectorRealm(api, EvalRealm, effector)
+  assignEffectorReactRealm(api, EvalRealm, EffectorReact)
   assignLibrary(api, effector)
   assignLibrary(api, EffectorReact)
   return {
@@ -45,13 +46,14 @@ function assignLibrary(target, effector) {
   return target
 }
 
-function assignRealm(target, EvalRealm, effector) {
+function assignEffectorRealm(target, EvalRealm, effector) {
   return apiMap(target, {
     createEvent: effector.createEvent,
     createEffect: effector.createEffect,
     createStore: effector.createStore,
     createStoreObject: effector.createStoreObject,
     createDomain: effector.createDomain,
+    createApi: effector.createApi,
     restoreEvent: effector.restoreEvent,
     restoreEffect: effector.restoreEffect,
     restore: effector.restore,
@@ -60,6 +62,12 @@ function assignRealm(target, EvalRealm, effector) {
     //createStore: EvalRealm.store,
     //createEffect: EvalRealm.effect,
     //createDomain: EvalRealm.domain,
+  })
+}
+
+function assignEffectorReactRealm(target, EvalRealm, effector) {
+  return apiMap(target, {
+    createComponent: effector.createComponent,
   })
 }
 

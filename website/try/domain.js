@@ -52,6 +52,9 @@ export function retrieveCode() {
   if (code) {
     return decompress(code)
   }
+  if (localStorage.getItem('code')) {
+    return localStorage.getItem('code')
+  }
   return defaultSourceCode
 }
 
@@ -67,6 +70,7 @@ export const realmEvent = createEvent('realm event created')
 export const realmStore = createEvent('realm store')
 export const realmEffect = createEvent('realm effect created')
 export const realmDomain = createEvent('realm domain created')
+export const realmComponent = createEvent('realm component created')
 export const realmInvoke = createEvent('realm invoke')
 export const realmLog = createEvent('realm console.log call')
 export const realmStatus = createEvent('realm status update')
