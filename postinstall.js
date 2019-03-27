@@ -2,8 +2,7 @@
 // @flow
 
 const fs = require('fs-extra')
-const semver = require('semver')
-const flowgen = require('../../../../desktop/projects/pending/flowgen')
+const flowgen = require('flowgen')
 const execa = require('execa')
 const pkg = require('./package.json')
 
