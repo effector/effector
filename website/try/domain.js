@@ -110,7 +110,7 @@ export const tab = createStore<'graphite' | 'console'>('graphite')
 
 export const tabApi = createApi(tab, {
   showGraphite: () => 'graphite',
-  showConsole: () => 'console'
+  showConsole: () => 'console',
 })
 
 export const stats = createStore({
