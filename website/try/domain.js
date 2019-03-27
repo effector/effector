@@ -106,11 +106,11 @@ export const graphiteCode = graphite.map(e => {
   return JSON.stringify(result, null, 2)
 })
 
-export const tab = createStore<'graphite' | 'console'>('console')
+export const tab = createStore<'graphite' | 'dom'>('dom')
 
 export const tabApi = createApi(tab, {
   showGraphite: () => 'graphite',
-  showConsole: () => 'console',
+  showDOM: () => 'dom'
 })
 
 export const stats = createStore({

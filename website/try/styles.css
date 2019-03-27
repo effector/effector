@@ -42,28 +42,28 @@ body {
   padding: 10px;
   justify-content: space-between;
 }
-.stats {
+.secondanary-tabs {
   display: flex;
   flex-direction: column;
-  background: #f7f7f7;
+  background: #fff;
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 }
+.secondanary-tabs .toolbar {
+  /* TODO: fix this */
+  border-bottom: 2px solid #ddd;
+}
 .toolbar {
-  background: #fff;
+  background: #f7f7f7;
   border-bottom: 1px solid #ddd;
   list-style: none;
   margin: 0;
   padding: 0;
 }
 
-.toolbar.show-storages .storages-tab,
-.toolbar.show-events .events-tab,
-.toolbar.show-effects .effects-tab,
-.toolbar.show-domains .domains-tab,
-.toolbar.show-dom .dom-tab {
-  background: #f7f7f7;
-  border-bottom: 1px solid #f7f7f7;
+.toolbar.show-console .console-tab {
+  background: #fff;
+  border-bottom: 1px solid #fff;
   margin-bottom: -1px;
 }
 
@@ -76,11 +76,11 @@ body {
   padding: 7px 15px;
   margin: 0;
 }
-.stats > div {
+/* .stats > div {
   flex: 1;
   padding: 10px;
   border-right: 1px solid #ddd;
-}
+} */
 
 .editor {
   border-left: 1px solid #ddd;
@@ -98,15 +98,19 @@ body {
   background-color: #f7f7f7;
 }
 .header-tabs.toolbar.show-graphite .graphite-tab,
-.header-tabs.toolbar.show-console .console-tab {
+.header-tabs.toolbar.show-dom .dom-tab {
   background: #fff;
 }
 
-.console {
+.dom {
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   background-color: #fff;
   overflow: auto;
+}
+
+.console > :first-child {
+  border-top: 1px solid #fff;
 }
 
 .errors {
@@ -199,22 +203,30 @@ body {
     grid-column: 1 / span 1;
     grid-row: 1 / span 1;
   }
-  .stats {
+  .header-tabs {
+    grid-column: 1 / span 1;
+    grid-row: 9 / span 1;
+  }
+  .secondanary-tabs {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 10 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
   .editor.sources {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 3 / span 3;
+    grid-row: 2 / span 3;
   }
-
+  .dom {
+    scroll-snap-destination: top;
+    grid-column: 1 / span 1;
+    grid-row: 5 / span 4;
+  }
   .editor.results {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 6 / span 3;
+    grid-row: 5 / span 4;
   }
   .errors {
     scroll-snap-destination: top;
@@ -226,37 +238,37 @@ body {
   .try-inner {
     overflow: hidden;
     height: 100%;
-    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    grid-template-columns: 200px minmax(200px, 2fr) minmax(200px, 1fr);
     grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
   }
   .header {
-    grid-column: 2 / span 1;
+    grid-column: 3 / span 1;
     grid-row: 1 / span 1;
   }
   .header-tabs {
-    grid-column: 2 / span 1;
+    grid-column: 3 / span 1;
     grid-row: 2 / span 1;
   }
-  .console {
-    grid-column: 2 / span 1;
+  .dom {
+    grid-column: 3 / span 1;
     grid-row: 3 / span 2;
   }
   .editor.sources {
-    grid-column: 1 / span 1;
+    grid-column: 2 / span 1;
     grid-row: 1 / span 5;
   }
 
   .editor.results {
-    grid-column: 2 / span 1;
+    grid-column: 3 / span 1;
     grid-row: 3 / span 2;
   }
 
   .errors {
-    grid-column: 2 / span 1;
+    grid-column: 3 / span 1;
     grid-row: 5 / span 1;
   }
-  .stats {
-    grid-column: 2 / span 1;
+  .secondanary-tabs {
+    grid-column: 3 / span 1;
     grid-row: 5 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
