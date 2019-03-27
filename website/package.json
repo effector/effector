@@ -24,7 +24,7 @@
     "@effector/babel-plugin-react": "^0.0.3",
     "docusaurus": "^1.7.2",
     "parcel-bundler": "^1.12.3",
-    "parcel-plugin-linaria": "link:./forks/parcel-plugin-linaria/",
+    "parcel-plugin-linaria": "^0.1.1",
     "terser": "^3.17.0"
   },
   "dependencies": {
