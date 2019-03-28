@@ -13,7 +13,8 @@ function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
 
   const unit = storeFabric({
     currentState: source.defaultState,
-    name: source.shortName,
+    //TODO: add location
+    config: {name: source.shortName},
     parent: source.domainName,
   })
 
