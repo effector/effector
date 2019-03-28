@@ -82,7 +82,7 @@ export function domainFabric(
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
-        name: opts.name,
+        config: opts,
       })
       hooks.store(result)
       return result

@@ -28,7 +28,8 @@ export function restoreEffect<Done>(
   const store = storeFabric({
     currentState: defaultState,
     parent: event.domainName,
-    name: event.shortName,
+    //TODO: add location
+    config: {name: event.shortName},
   })
   store.on(event.done, (_, {result}) => result)
   return store
@@ -38,7 +39,8 @@ export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
   const store = storeFabric({
     currentState: defaultState,
     parent: event.domainName,
-    name: event.shortName,
+    //TODO: add location
+    config: {name: event.shortName},
   })
   store.on(event, (_, v) => v)
   return store

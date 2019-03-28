@@ -178,7 +178,7 @@ export function mapStore<A, B>(
   }
   stopPhaseTimer(stopPhaseTimerMessage)
   const innerStore: Store<any> = this({
-    name: '' + store.shortName + ' → *',
+    config: {name: '' + store.shortName + ' → *'},
     currentState: lastResult,
     parent: store.domainName,
   })

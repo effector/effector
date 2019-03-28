@@ -5,6 +5,7 @@ import {cmd, createNode, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
+import type {ConfigPart} from './storeConfig'
 import {createName, type CompositeName} from '../compositeName'
 import {
   reset,
@@ -21,10 +22,11 @@ import {
 
 export function storeFabric<State>(props: {
   currentState: State,
-  name?: string,
+  config: ConfigPart,
   parent?: CompositeName,
 }): Store<State> {
-  const {currentState, name, parent} = props
+  const {currentState, config, parent} = props
+  const {name} = config
   const plainState = createStateRef(currentState)
   const currentId = name || plainState.id
   const defaultState = currentState
@@ -47,9 +49,10 @@ export function storeFabric<State>(props: {
       }),
     ),
     kind: Kind.store,
-    id: currentId,
+    id: plainState.id,
     shortName: currentId,
     domainName: parent,
+    defaultConfig: config,
     defaultState,
     plainState,
     subscribers: new Map(),
@@ -58,8 +61,9 @@ export function storeFabric<State>(props: {
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
     graphite: storeInstance.graphite,
+    defaultConfig: storeInstance.defaultConfig,
     kind: Kind.store,
-    id: currentId,
+    id: plainState.id,
     shortName: currentId,
     domainName: parent,
     setState,
