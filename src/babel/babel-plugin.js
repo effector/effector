@@ -9,32 +9,28 @@ const normalizeOptions = options => {
   const defaultDomainCreators = ['createDomain']
 
   return {
-    stores: typeof options.stores === 'undefined' 
-      ? true 
-      : Boolean(options.stores),
-    events: typeof options.events === 'undefined' 
-      ? true 
-      : Boolean(options.events),
-    effects: typeof options.effects === 'undefined'
-      ? true 
-      : Boolean(options.effects),
-    domains: typeof options.domains === 'undefined' 
-      ? true 
-      : Boolean(options.domains),
+    stores:
+      typeof options.stores === 'undefined' ? true : Boolean(options.stores),
+    events:
+      typeof options.events === 'undefined' ? true : Boolean(options.events),
+    effects:
+      typeof options.effects === 'undefined' ? true : Boolean(options.effects),
+    domains:
+      typeof options.domains === 'undefined' ? true : Boolean(options.domains),
     storeCreators: new Set(options.storeCreators || defaultStoreCreators),
     eventCreators: new Set(options.eventCreators || defaultEventCreators),
     effectCreators: new Set(options.effectCreators || defaultEffectCreators),
-    domainCreators: new Set(options.domainCreators || defaultDomainCreators)
+    domainCreators: new Set(options.domainCreators || defaultDomainCreators),
   }
 }
 
 module.exports = function(babel, options = {}) {
   const {
-    stores, 
-    events, 
-    effects, 
+    stores,
+    events,
+    effects,
     domains,
-    storeCreators, 
+    storeCreators,
     eventCreators,
     effectCreators,
     domainCreators,
@@ -49,113 +45,95 @@ module.exports = function(babel, options = {}) {
         const source = path.node.source.value
         const specifiers = path.node.specifiers
         if (source === importName) {
-          for (const specifier of specifiers.filter(
-            s => s.imported && storeCreators.has(s.imported.name),
-          )) {
-            storeCreators.add(specifier.local.name)
+          for (const {name, store, event, effect, domain} of specifiers
+            .filter(s => s.imported)
+            .map(s => ({
+              name: s.local.name,
+              store: storeCreators.has(s.imported.name),
+              event: eventCreators.has(s.imported.name),
+              effect: effectCreators.has(s.imported.name),
+              domain: domainCreators.has(s.imported.name),
+            }))) {
+            if (store) {
+              storeCreators.add(name)
+            } else if (event) {
+              eventCreators.add(name)
+            } else if (effect) {
+              effectCreators.add(name)
+            } else if (domain) {
+              domainCreators.add(name)
+            }
           }
         }
       },
 
-      CallExpression(path) {
+      CallExpression(path, state) {
+        if (!state.fileNameIdentifier) {
+          const fileName = state.filename || ''
+
+          const fileNameIdentifier = path.scope.generateUidIdentifier(
+            '_effectorFileName',
+          )
+          const scope = path.hub.getScope()
+          if (scope) {
+            scope.push({
+              id: fileNameIdentifier,
+              init: t.stringLiteral(fileName),
+            })
+          }
+          state.fileNameIdentifier = fileNameIdentifier
+        }
+
         if (t.isIdentifier(path.node.callee)) {
           if (stores && storeCreators.has(path.node.callee.name)) {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, id, babel.types)
+              setStoreNameAfter(path, state, id, babel.types)
             }
           }
           if (events && eventCreators.has(path.node.callee.name)) {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
           if (effects && effectCreators.has(path.node.callee.name)) {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
           if (domains && domainCreators.has(path.node.callee.name)) {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
         }
 
         if (t.isMemberExpression(path.node.callee)) {
           if (stores && path.node.callee.property.name === 'store') {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, id, babel.types)
+              setStoreNameAfter(path, state, id, babel.types)
             }
           }
           if (events && path.node.callee.property.name === 'event') {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
           if (effects && path.node.callee.property.name === 'effect') {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
           if (domains && path.node.callee.property.name === 'domain') {
-            // functionNames[0] = 'setStoreName'
-            // addImportDeclaration(
-            //   findProgram(path, t, functionNames),
-            //   t,
-            //   functionNames,
-            // )
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types)
             }
           }
         }
@@ -196,53 +174,89 @@ function findCandidateNameForExpression(path) {
   return id
 }
 
-function setStoreNameAfter(path, nameNodeId, t) {
+function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
+  const fileLineLiteral =
+    lineNumber != null ? t.numericLiteral(lineNumber) : t.numericLiteral(-1)
+  const fileColumnLiteral =
+    columnNumber != null ? t.numericLiteral(columnNumber) : t.numericLiteral(-1)
+  const fileProperty = t.objectProperty(
+    t.identifier('file'),
+    fileNameIdentifier,
+  )
+  const lineProperty = t.objectProperty(t.identifier('line'), fileLineLiteral)
+  const columnProperty = t.objectProperty(
+    t.identifier('column'),
+    fileColumnLiteral,
+  )
+  return t.objectExpression([fileProperty, lineProperty, columnProperty])
+}
+
+function setStoreNameAfter(path, state, nameNodeId, t) {
   let displayName
   if (!displayName) {
     displayName = nameNodeId.name
   }
 
   let args
+  let loc
   path.find(path => {
     if (path.isCallExpression()) {
       args = path.node.arguments
+      loc = path.node.loc.start
       return true
     }
   })
 
   if (args && displayName) {
     const oldConfig = args[1]
-    const nameExpr = t.objectExpression([])
+    const configExpr = t.objectExpression([])
     const nameProp = t.objectProperty(
       t.identifier('name'),
       t.stringLiteral(displayName),
     )
+    const locProp = t.objectProperty(
+      t.identifier('loc'),
+      makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+    )
     if (!args[0]) return
-    args[1] = nameExpr
+    args[1] = configExpr
     if (oldConfig) {
       args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
+    args[1].properties.push(locProp)
     args[1].properties.push(nameProp)
   }
 }
 
-function setEventNameAfter(path, nameNodeId, t) {
+function setEventNameAfter(path, state, nameNodeId, t) {
   let displayName
   if (!displayName) {
     displayName = nameNodeId.name
   }
 
   let args
+  let loc
   path.find(path => {
     if (path.isCallExpression()) {
       args = path.node.arguments
+      loc = path.node.loc.start
       return true
     }
   })
 
   if (args && displayName) {
+    const oldConfig = args[1]
+    const configExpr = t.objectExpression([])
+    const locProp = t.objectProperty(
+      t.identifier('loc'),
+      makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+    )
     const name = t.stringLiteral(displayName)
     if (!args[0]) args[0] = name
+    args[1] = configExpr
+    if (oldConfig) {
+      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+    }
+    args[1].properties.push(locProp)
   }
 }
-
