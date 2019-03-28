@@ -93,6 +93,17 @@ function setLockfilePackage(
   }
 }
 
+function hasLockfilePackage(name/*:string*/) {
+  let hasPackage = false
+  const types = ['flowgen', 'custom', 'flowTyped', 'stub', 'builtin']
+  for (const type of types) {
+    if (typeof lockfile.packages[type][name] !== 'undefined') {
+      hasPackage = true
+    }
+  }
+  return hasPackage
+}
+
 function fileName(input) {
   if (input.startsWith('@types')) {
     const name = input.replace('@types/', '')
@@ -108,7 +119,10 @@ function fileName(input) {
 }
 
 async function getTypescriptFile(packageName) {
-  if (!lockfile.packages[fileName(packageName)]) {
+  if (hasLockfilePackage(fileName(packageName))) {
+    console.log(`Package ${packageName} already exists.`)
+    return
+  } else {
     setLockfilePackage('custom', fileName(packageName), '')
   }
 
