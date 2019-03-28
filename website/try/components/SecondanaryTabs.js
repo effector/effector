@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {cx} from 'linaria'
+import {styled} from 'linaria/react'
 import Console from './Console'
 import {logs, stats} from '../domain'
 import {createComponent} from 'effector-react'
@@ -25,6 +26,10 @@ const api = createApi(tab, {
   showConsole: () => 'console'
 })
 
+const TabContent = styled('div')`
+  overflow: auto;
+`
+
 const LogsView = createComponent(
   logs.map(logs => logs.map(({method, args}) => ({method, data: args}))),
   ({style}, logs) => <Console className="console" style={style} logs={logs} />,
@@ -44,9 +49,9 @@ const TabView = createComponent(tab, ({}, tab) => {
     return <li key={item.kind + item.id + name}>{name}</li>
   }
   return (
-    <div>
+    <TabContent>
       {tab === 'console' && <LogsView />}
-    </div>
+    </TabContent>
   )
 })
 
