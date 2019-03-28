@@ -44,10 +44,22 @@ intervals
     }
     return []
   })
+  .on(selectVersion, (state) => {
+    for (const id of state) {
+      global.clearInterval(id)
+    }
+    return []
+  })
 
 timeouts
   .on(realmTimeout, (state, id) => [...state, id])
   .on(changeSources, (state) => {
+    for (const id of state) {
+      global.clearTimeout(id)
+    }
+    return []
+  })
+  .on(selectVersion, (state) => {
     for (const id of state) {
       global.clearTimeout(id)
     }
@@ -63,7 +75,8 @@ intervals.watch(console.log)
 
 logs
   .on(realmLog, (logs, log) => logs.concat(log))
-  .on(changeSources, () => [])
+  .reset(changeSources)
+  .reset(selectVersion)
 
 // logs.watch(realmStatus, (logs, {active}) => {
 //   if (!active) {
