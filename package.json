@@ -13,7 +13,7 @@
     "build:builder": "npx rollup -c tools/builder/rollup.config.js",
     "builder": "node tools/builder.js",
     "builder:watch": "npx nodemon -w tools/builder/ -w src -i tools/builder.js -x 'yarn build'",
-    "postinstall": "yarn build:builder; node postinstall.js",
+    "postinstall": "yarn build:builder",
     "test:watch": "npx jest --config=jest.config.js --watch",
     "repack": "npx prepack 'npm/effector/effector.bundle.js' --inlineExpressions --compatibility browser --out 'npm/effector/effector.prepack-bundle.js'"
   },
