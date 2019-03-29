@@ -9,6 +9,7 @@ const Outline = styled('div')`
   grid-row: 11 / span 1;
   background-color: #fff;
   font-size: 0.8rem;
+  overflow: auto;
   
   @media (min-width: 700px) {
     grid-column: 1 / span 1;
