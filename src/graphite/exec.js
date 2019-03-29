@@ -1,10 +1,26 @@
 //@flow
 
-import type {TypeDef, Graph, Step} from 'effector/stdlib'
-import type {Meta, CommandList} from './index.h'
+import type {Graph, Step, StateRef, Single} from 'effector/stdlib'
+
+type Meta = {|
+  callstack: Array<Step>,
+  stop: boolean,
+  scope: Array<any>,
+  pendingEvents: Array<{
+    event: (data: any) => any,
+    data: any,
+  }>,
+  val: {[name: string]: StateRef},
+|}
+
+type Command<Local> = {
+  cmd(meta: Meta, local: Local, val: Object): void,
+  transition(meta: Meta, local: Local): boolean,
+  local(meta: Meta): Local,
+}
 
 type Line = {|
-  +step: TypeDef<*, 'step'>,
+  +step: Step,
   +post: Array<PostAction>,
 |}
 
@@ -21,8 +37,9 @@ type PostAction =
   | {|+type: 'scope/size', +size: number|}
 
 const last = <T>(list: $ReadOnlyArray<T>): T => list[list.length - 1]
-const step = (meta: Meta): TypeDef<*, 'step'> => last(meta.callstack)
-const single = (meta: Meta) => step(meta).data.data
+const step = (meta: Meta): Step => last(meta.callstack)
+//$todo
+const single = (meta: Meta): any => step(meta).data.data
 
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
   runtime(unit.graphite, payload)
@@ -57,6 +74,7 @@ const runPendings = pendings => {
     const item = ordered[i]
     item.event(item.data)
   }
+  console.warn('orderedIDs', orderedIDs)
 }
 const runStep = (step: Step, meta: Meta, valRaw) => {
   const scope = meta.scope
@@ -84,7 +102,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
       const line = area.list[area.index]
       const step = line.step
       meta.stop = false
-      //$todo
       meta.callstack.push(step)
       switch (step.type) {
         case 'single': {
@@ -119,7 +136,7 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
         }
         case 'seq': {
           line.post.push({type: 'scope/size', size: scope.length})
-          const items: Array<TypeDef<*, 'step'>> = step.data
+          const items: Array<Step> = step.data
           const list: Array<Line> = Array(items.length)
           for (let i = 0; i < items.length; i++) {
             //prettier-ignore
@@ -243,7 +260,13 @@ const command = ({
       isChanged: false,
     }),
   },
-}: CommandList)
+}: $ReadOnly<{
+  emit: Command<{arg: any}>,
+  filter: Command<{arg: any, isChanged: boolean}>,
+  run: Command<{arg: any, isFailed: boolean}>,
+  update: Command<{arg: any, store: StateRef}>,
+  compute: Command<{arg: any, isChanged: boolean}>,
+}>)
 
 const tryRun = ctx => {
   const result = {
