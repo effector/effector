@@ -28,8 +28,7 @@
     - [Run example](#run-example-1)
 - [Demo](#demo)
   - [More examples/demo you can check here](#more-examplesdemo-you-can-check-here)
-- [Core concept](#core-concept)
-  - [Core types](#core-types)
+- [Core concepts](#core-concepts)
   - [Domain](#domain)
   - [Event](#event)
   - [Effect](#effect)
@@ -167,8 +166,7 @@ turnOff() // nothing has changed
 
 ### More examples/demo you can check [here](https://github.com/zerobias/effector/tree/master/examples)
 
-## Core concept
-### Core types
+## Core concepts
 
 ```js
 import type {Domain, Event, Effect, Store} from 'effector'
@@ -268,6 +266,7 @@ import {
   createStoreObject,
 } from 'effector'
 ```
+
 ## Sponsors
 Thank you to all our sponsors 🙏
 
