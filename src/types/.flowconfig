@@ -8,7 +8,7 @@
 
 [libs]
 ../../node_modules/@babel/types/lib/index.js.flow
-../../flow-typed
+../../flow-typed/jest.js
 
 [lints]
 
