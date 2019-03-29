@@ -72,8 +72,8 @@ const defaultLockfile = {
 const lockfileData = fs.existsSync('./flow-typed/flow.lock')
 const lockfile /*: Lockfile*/ = lockfileData
   ? fs.readJSONSync('./flow-typed/flow.lock', {
-    encoding: 'utf8',
-  })
+      encoding: 'utf8',
+    })
   : defaultLockfile
 
 function setLockfilePackage(
@@ -92,7 +92,7 @@ function setLockfilePackage(
   }
 }
 
-function hasLockfilePackage(name/*:string*/) {
+function hasLockfilePackage(name /*:string*/) {
   let hasPackage = false
   const types = ['flowgen', 'custom', 'flowTyped', 'stub', 'builtin']
   for (const type of types) {
@@ -138,6 +138,7 @@ async function getTypescriptFile(packageName) {
 
   let typescriptFile
   let hasFlowBuiltin = false
+  //$off
   const json = require(`${packageName}/package.json`)
   try {
     const flowTypingsPath = require.resolve(`${packageName}/index.js.flow`)
@@ -176,8 +177,8 @@ async function getTypescriptFile(packageName) {
     //console.log(packageName, name, path)
     const file = await fs.readFile(path, 'utf8')
     const hasHeader =
-      file.includes(`declare module '${name}'`)
-      || file.includes(`declare module "${name}"`)
+      file.includes(`declare module '${name}'`) ||
+      file.includes(`declare module "${name}"`)
     const template = hasHeader
       ? file
       : `
@@ -242,6 +243,7 @@ ${code}
   }
 }
 
+//$off
 const packagePattern = JSON.parse(process.env.npm_config_argv).original[1]
 
 if (!packagePattern) {
