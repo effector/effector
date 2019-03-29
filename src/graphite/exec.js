@@ -5,13 +5,11 @@ import type {Meta, CommandList} from './index.h'
 
 type Line = {|
   +step: TypeDef<*, 'step'>,
-  +pre: Array<PostAction>,
   +post: Array<PostAction>,
 |}
 
 type Area = {|
   +list: $ReadOnlyArray<Line>,
-  +pre: Array<PostAction>,
   +post: Array<PostAction>,
   index: number,
 |}
@@ -19,10 +17,8 @@ type Area = {|
 type PostAction =
   | {|+type: 'meta/?stop'|}
   | {|+type: 'meta/!stop'|}
-  | {|+type: 'head/--'|}
   | {|+type: 'callstack/pop'|}
   | {|+type: 'scope/size', +size: number|}
-  | {|+type: 'scope/push', +scope: {+arg: any}|}
 
 const last = <T>(list: $ReadOnlyArray<T>): T => list[list.length - 1]
 const step = (meta: Meta): TypeDef<*, 'step'> => last(meta.callstack)
@@ -74,26 +70,22 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
     stack: [{
       list: [{
         step,
-        pre: [],
         post: [
           {type: 'callstack/pop'},
         ],
       }],
-      pre: [],
       post: [],
       index: 0,
     }],
   }
   headLoop: while (pos.head >= 0) {
     const area = pos.stack[pos.head]
-    runActions(area.pre, area)
     while (area.index < area.list.length) {
       const line = area.list[area.index]
       const step = line.step
       meta.stop = false
       //$todo
       meta.callstack.push(step)
-      runActions(line.pre, area)
       switch (step.type) {
         case 'single': {
           const type = step.data.type
@@ -110,7 +102,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
           for (let i = 0; i < items.length; i++) {
             list[i] = {
               step: items[i],
-              pre: [],
               post: [
                 {type: 'callstack/pop'},
                 {type: 'scope/size', size: scope.length},
@@ -121,7 +112,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
           pos.head += 1
           pos.stack[pos.head] = {
             list,
-            pre: [],
             post: line.post,
             index: 0,
           }
@@ -135,7 +125,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
             //prettier-ignore
             list[i] = {
               step: items[i],
-              pre: [],
               post: [
                 {type: 'callstack/pop'},
                 {type: 'meta/?stop'},
@@ -146,7 +135,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
           pos.head += 1
           pos.stack[pos.head] = {
             list,
-            pre: [],
             post: line.post,
             index: 0,
           }
@@ -167,9 +155,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
         case 'meta/?stop':
           if (meta.stop) area.index = Infinity
           break
-        case 'head/--':
-          pos.head -= 1
-          break
         case 'callstack/pop':
           meta.callstack.pop()
           break
@@ -178,9 +163,6 @@ const runStep = (step: Step, meta: Meta, valRaw) => {
           break
         case 'scope/size':
           scope.length = action.size
-          break
-        case 'scope/push':
-          scope.push(action.scope)
           break
         /*::
         default:
@@ -224,7 +206,7 @@ const cmd = {
     })
     local.isChanged = !runCtx.err
     ///TODO WARNING!! DIRTY HACK REMOVE ASAP
-    ///need to separate pre and post local variables
+    ///need to separate post local variables
     local.arg = runCtx.err ? null : runCtx.result
   },
 }
