@@ -1,1464 +1,244 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`graphite: bar seq 1`] = `
-Object {
-  "data": Array [
-    Object {
-      "data": Object {
-        "data": Object {
-          "fullName": "foo → *",
-          "meta": Object {
-            "fullName": "foo → *",
-            "section": "2",
-          },
-        },
-        "group": "cmd",
-        "id": "5",
-        "type": "emit",
-      },
-      "group": "step",
-      "id": "6",
-      "type": "single",
-    },
-    Object {
-      "data": Array [
-        Object {
-          "data": Array [
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "t",
-                "type": "compute",
-              },
-              "group": "step",
-              "id": "u",
-              "type": "single",
-            },
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "v",
-                "type": "filter",
-              },
-              "group": "step",
-              "id": "w",
-              "type": "single",
-            },
-            Object {
-              "data": Array [
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "fn": [Function],
-                      "meta": Object {
-                        "fullName": "store1",
-                        "section": "store1",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "h",
-                    "type": "filter",
-                  },
-                  "group": "step",
-                  "id": "i",
-                  "type": "single",
-                },
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "meta": Object {
-                        "fullName": "store1",
-                        "section": "store1",
-                      },
-                      "store": Object {
-                        "current": "foo | 1 | 11",
-                        "id": "1",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "j",
-                    "type": "update",
-                  },
-                  "group": "step",
-                  "id": "k",
-                  "type": "single",
-                },
-                Object {
-                  "data": Array [
-                    Object {
-                      "data": Array [
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1 → *",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "1f",
-                            "type": "compute",
-                          },
-                          "group": "step",
-                          "id": "1g",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1 → *",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "1h",
-                            "type": "filter",
-                          },
-                          "group": "step",
-                          "id": "1i",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Array [
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "fn": [Function],
-                                  "meta": Object {
-                                    "fullName": "store1 → *",
-                                    "section": "store1 → *",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "13",
-                                "type": "filter",
-                              },
-                              "group": "step",
-                              "id": "14",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "meta": Object {
-                                    "fullName": "store1 → *",
-                                    "section": "store1 → *",
-                                  },
-                                  "store": Object {
-                                    "current": 12,
-                                    "id": "2",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "15",
-                                "type": "update",
-                              },
-                              "group": "step",
-                              "id": "16",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Array [],
-                              "group": "step",
-                              "id": "17",
-                              "type": "multi",
-                            },
-                          ],
-                          "group": "step",
-                          "id": "18",
-                          "type": "seq",
-                        },
-                        Object {
-                          "data": Array [],
-                          "group": "step",
-                          "id": "1j",
-                          "type": "multi",
-                        },
-                      ],
-                      "group": "step",
-                      "id": "1k",
-                      "type": "seq",
-                    },
-                  ],
-                  "group": "step",
-                  "id": "l",
-                  "type": "multi",
-                },
-              ],
-              "group": "step",
-              "id": "m",
-              "type": "seq",
-            },
-            Object {
-              "data": Array [],
-              "group": "step",
-              "id": "x",
-              "type": "multi",
-            },
-          ],
-          "group": "step",
-          "id": "y",
-          "type": "seq",
-        },
-        Object {
-          "data": Array [
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                },
-                "group": "cmd",
-                "id": "1l",
-                "type": "run",
-              },
-              "group": "step",
-              "id": "1m",
-              "type": "single",
-            },
-            Object {
-              "data": Array [],
-              "group": "step",
-              "id": "1n",
-              "type": "multi",
-            },
-          ],
-          "group": "step",
-          "id": "1o",
-          "type": "seq",
-        },
-      ],
-      "group": "step",
-      "id": "7",
-      "type": "multi",
-    },
-  ],
-  "group": "step",
-  "id": "8",
-  "type": "seq",
-}
-`;
-
-exports[`graphite: bar seq 2`] = `
-Object {
-  "data": Array [
-    Object {
-      "data": Object {
-        "data": Object {
-          "fullName": "foo → *",
-          "meta": Object {
-            "fullName": "foo → *",
-            "section": "2",
-          },
-        },
-        "group": "cmd",
-        "id": "5",
-        "type": "emit",
-      },
-      "group": "step",
-      "id": "6",
-      "type": "single",
-    },
-    Object {
-      "data": Array [
-        Object {
-          "data": Array [
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "t",
-                "type": "compute",
-              },
-              "group": "step",
-              "id": "u",
-              "type": "single",
-            },
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "v",
-                "type": "filter",
-              },
-              "group": "step",
-              "id": "w",
-              "type": "single",
-            },
-            Object {
-              "data": Array [
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "fn": [Function],
-                      "meta": Object {
-                        "fullName": "store1",
-                        "section": "store1",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "h",
-                    "type": "filter",
-                  },
-                  "group": "step",
-                  "id": "i",
-                  "type": "single",
-                },
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "meta": Object {
-                        "fullName": "store1",
-                        "section": "store1",
-                      },
-                      "store": Object {
-                        "current": "foo | 1 | 11",
-                        "id": "1",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "j",
-                    "type": "update",
-                  },
-                  "group": "step",
-                  "id": "k",
-                  "type": "single",
-                },
-                Object {
-                  "data": Array [
-                    Object {
-                      "data": Array [
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1 → *",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "1f",
-                            "type": "compute",
-                          },
-                          "group": "step",
-                          "id": "1g",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1 → *",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "1h",
-                            "type": "filter",
-                          },
-                          "group": "step",
-                          "id": "1i",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Array [
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "fn": [Function],
-                                  "meta": Object {
-                                    "fullName": "store1 → *",
-                                    "section": "store1 → *",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "13",
-                                "type": "filter",
-                              },
-                              "group": "step",
-                              "id": "14",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "meta": Object {
-                                    "fullName": "store1 → *",
-                                    "section": "store1 → *",
-                                  },
-                                  "store": Object {
-                                    "current": 12,
-                                    "id": "2",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "15",
-                                "type": "update",
-                              },
-                              "group": "step",
-                              "id": "16",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Array [],
-                              "group": "step",
-                              "id": "17",
-                              "type": "multi",
-                            },
-                          ],
-                          "group": "step",
-                          "id": "18",
-                          "type": "seq",
-                        },
-                        Object {
-                          "data": Array [],
-                          "group": "step",
-                          "id": "1j",
-                          "type": "multi",
-                        },
-                      ],
-                      "group": "step",
-                      "id": "1k",
-                      "type": "seq",
-                    },
-                  ],
-                  "group": "step",
-                  "id": "l",
-                  "type": "multi",
-                },
-              ],
-              "group": "step",
-              "id": "m",
-              "type": "seq",
-            },
-            Object {
-              "data": Array [],
-              "group": "step",
-              "id": "x",
-              "type": "multi",
-            },
-          ],
-          "group": "step",
-          "id": "y",
-          "type": "seq",
-        },
-      ],
-      "group": "step",
-      "id": "7",
-      "type": "multi",
-    },
-  ],
-  "group": "step",
-  "id": "8",
-  "type": "seq",
-}
-`;
-
-exports[`graphite: foo seq 1`] = `
-Object {
-  "data": Array [
-    Object {
-      "data": Object {
-        "data": Object {
-          "fullName": "foo",
-          "meta": Object {
-            "fullName": "foo",
-            "section": "1",
-          },
-        },
-        "group": "cmd",
-        "id": "1",
-        "type": "emit",
-      },
-      "group": "step",
-      "id": "2",
-      "type": "single",
-    },
-    Object {
-      "data": Array [
-        Object {
-          "data": Array [
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                },
-                "group": "cmd",
-                "id": "9",
-                "type": "compute",
-              },
-              "group": "step",
-              "id": "a",
-              "type": "single",
-            },
-            Object {
-              "data": Array [
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "fullName": "foo → *",
-                      "meta": Object {
-                        "fullName": "foo → *",
-                        "section": "2",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "5",
-                    "type": "emit",
-                  },
-                  "group": "step",
-                  "id": "6",
-                  "type": "single",
-                },
-                Object {
-                  "data": Array [
-                    Object {
-                      "data": Array [
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "t",
-                            "type": "compute",
-                          },
-                          "group": "step",
-                          "id": "u",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                              "meta": Object {
-                                "fullName": "store1",
-                                "section": "store1",
-                              },
-                            },
-                            "group": "cmd",
-                            "id": "v",
-                            "type": "filter",
-                          },
-                          "group": "step",
-                          "id": "w",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Array [
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "fn": [Function],
-                                  "meta": Object {
-                                    "fullName": "store1",
-                                    "section": "store1",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "h",
-                                "type": "filter",
-                              },
-                              "group": "step",
-                              "id": "i",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Object {
-                                "data": Object {
-                                  "meta": Object {
-                                    "fullName": "store1",
-                                    "section": "store1",
-                                  },
-                                  "store": Object {
-                                    "current": "foo | 1 | 11",
-                                    "id": "1",
-                                  },
-                                },
-                                "group": "cmd",
-                                "id": "j",
-                                "type": "update",
-                              },
-                              "group": "step",
-                              "id": "k",
-                              "type": "single",
-                            },
-                            Object {
-                              "data": Array [
-                                Object {
-                                  "data": Array [
-                                    Object {
-                                      "data": Object {
-                                        "data": Object {
-                                          "fn": [Function],
-                                          "meta": Object {
-                                            "fullName": "store1 → *",
-                                            "section": "store1",
-                                          },
-                                        },
-                                        "group": "cmd",
-                                        "id": "1f",
-                                        "type": "compute",
-                                      },
-                                      "group": "step",
-                                      "id": "1g",
-                                      "type": "single",
-                                    },
-                                    Object {
-                                      "data": Object {
-                                        "data": Object {
-                                          "fn": [Function],
-                                          "meta": Object {
-                                            "fullName": "store1 → *",
-                                            "section": "store1",
-                                          },
-                                        },
-                                        "group": "cmd",
-                                        "id": "1h",
-                                        "type": "filter",
-                                      },
-                                      "group": "step",
-                                      "id": "1i",
-                                      "type": "single",
-                                    },
-                                    Object {
-                                      "data": Array [
-                                        Object {
-                                          "data": Object {
-                                            "data": Object {
-                                              "fn": [Function],
-                                              "meta": Object {
-                                                "fullName": "store1 → *",
-                                                "section": "store1 → *",
-                                              },
-                                            },
-                                            "group": "cmd",
-                                            "id": "13",
-                                            "type": "filter",
-                                          },
-                                          "group": "step",
-                                          "id": "14",
-                                          "type": "single",
-                                        },
-                                        Object {
-                                          "data": Object {
-                                            "data": Object {
-                                              "meta": Object {
-                                                "fullName": "store1 → *",
-                                                "section": "store1 → *",
-                                              },
-                                              "store": Object {
-                                                "current": 12,
-                                                "id": "2",
-                                              },
-                                            },
-                                            "group": "cmd",
-                                            "id": "15",
-                                            "type": "update",
-                                          },
-                                          "group": "step",
-                                          "id": "16",
-                                          "type": "single",
-                                        },
-                                        Object {
-                                          "data": Array [],
-                                          "group": "step",
-                                          "id": "17",
-                                          "type": "multi",
-                                        },
-                                      ],
-                                      "group": "step",
-                                      "id": "18",
-                                      "type": "seq",
-                                    },
-                                    Object {
-                                      "data": Array [],
-                                      "group": "step",
-                                      "id": "1j",
-                                      "type": "multi",
-                                    },
-                                  ],
-                                  "group": "step",
-                                  "id": "1k",
-                                  "type": "seq",
-                                },
-                              ],
-                              "group": "step",
-                              "id": "l",
-                              "type": "multi",
-                            },
-                          ],
-                          "group": "step",
-                          "id": "m",
-                          "type": "seq",
-                        },
-                        Object {
-                          "data": Array [],
-                          "group": "step",
-                          "id": "x",
-                          "type": "multi",
-                        },
-                      ],
-                      "group": "step",
-                      "id": "y",
-                      "type": "seq",
-                    },
-                    Object {
-                      "data": Array [
-                        Object {
-                          "data": Object {
-                            "data": Object {
-                              "fn": [Function],
-                            },
-                            "group": "cmd",
-                            "id": "1l",
-                            "type": "run",
-                          },
-                          "group": "step",
-                          "id": "1m",
-                          "type": "single",
-                        },
-                        Object {
-                          "data": Array [],
-                          "group": "step",
-                          "id": "1n",
-                          "type": "multi",
-                        },
-                      ],
-                      "group": "step",
-                      "id": "1o",
-                      "type": "seq",
-                    },
-                  ],
-                  "group": "step",
-                  "id": "7",
-                  "type": "multi",
-                },
-              ],
-              "group": "step",
-              "id": "8",
-              "type": "seq",
-            },
-            Object {
-              "data": Array [],
-              "group": "step",
-              "id": "b",
-              "type": "multi",
-            },
-          ],
-          "group": "step",
-          "id": "c",
-          "type": "seq",
-        },
-      ],
-      "group": "step",
-      "id": "3",
-      "type": "multi",
-    },
-  ],
-  "group": "step",
-  "id": "4",
-  "type": "seq",
-}
-`;
-
 exports[`graphite: show bar 1`] = `
-"Seq [
-  1. emit {{
-     fullName: foo → *,
-     meta: {
-       fullName: foo → *,
-       section: 2
-     }
-  }},
-  2. [
-     *  Seq [
-        1. compute {{
-           meta: {
-             fullName: store1,
-             section: store1
-           }
-        }},
-        2. filter {{
-           meta: {
-             fullName: store1,
-             section: store1
-           }
-        }},
-        3. Seq [
-           1. filter {{
-              meta: {
-                fullName: store1,
-                section: store1
-              }
-           }},
-           2. update {{
-              store: {
-                id: 1,
-                current: foo | 1 | 11
-              },
-              meta: {
-                fullName: store1,
-                section: store1
-              }
-           }},
-           3. [
-              *  Seq [
-                 1. compute {{
-                    meta: {
-                      fullName: store1 → *,
-                      section: store1
-                    }
-                 }},
-                 2. filter {{
-                    meta: {
-                      fullName: store1 → *,
-                      section: store1
-                    }
-                 }},
-                 3. Seq [
-                    1. filter {{
-                       meta: {
-                         fullName: store1 → *,
-                         section: store1 → *
-                       }
-                    }},
-                    2. update {{
-                       store: {
-                         id: 2,
-                         current: 12
-                       },
-                       meta: {
-                         fullName: store1 → *,
-                         section: store1 → *
-                       }
-                    }},
-                    3. [(empty list)]
-                 ],
-                 4. [(empty list)]
-              ]
-           ]
-        ],
-        4. [(empty list)]
-     ],
-     *  Seq [
-        1. run {{}},
-        2. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. emit {{
+       fullName: foo → *
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq [
+              1. filter {{}},
+              2. update {{
+                 store: {
+                   id: 1,
+                   current: foo | 1 | 11
+                 }
+              }}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. filter {{}}
+                 ]
+                [(empty list)]}
+           ]}
+      ]},
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. run {{}}
+       ]
+      [(empty list)]}
+  ]}"
 `;
 
 exports[`graphite: show bar 2`] = `
-"Seq [
-  1. emit {{
-     fullName: foo → *,
-     meta: {
-       fullName: foo → *,
-       section: 2
-     }
-  }},
-  2. [
-     *  Seq [
-        1. compute {{
-           meta: {
-             fullName: store1,
-             section: store1
-           }
-        }},
-        2. filter {{
-           meta: {
-             fullName: store1,
-             section: store1
-           }
-        }},
-        3. Seq [
-           1. filter {{
-              meta: {
-                fullName: store1,
-                section: store1
-              }
-           }},
-           2. update {{
-              store: {
-                id: 1,
-                current: foo | 1 | 11
-              },
-              meta: {
-                fullName: store1,
-                section: store1
-              }
-           }},
-           3. [
-              *  Seq [
-                 1. compute {{
-                    meta: {
-                      fullName: store1 → *,
-                      section: store1
-                    }
-                 }},
-                 2. filter {{
-                    meta: {
-                      fullName: store1 → *,
-                      section: store1
-                    }
-                 }},
-                 3. Seq [
-                    1. filter {{
-                       meta: {
-                         fullName: store1 → *,
-                         section: store1 → *
-                       }
-                    }},
-                    2. update {{
-                       store: {
-                         id: 2,
-                         current: 12
-                       },
-                       meta: {
-                         fullName: store1 → *,
-                         section: store1 → *
-                       }
-                    }},
-                    3. [(empty list)]
-                 ],
-                 4. [(empty list)]
-              ]
-           ]
-        ],
-        4. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. emit {{
+       fullName: foo → *
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq [
+              1. filter {{}},
+              2. update {{
+                 store: {
+                   id: 1,
+                   current: foo | 1 | 11
+                 }
+              }}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. filter {{}}
+                 ]
+                [(empty list)]}
+           ]}
+      ]}
+  ]}"
 `;
 
 exports[`graphite: show foo 1`] = `
-"Seq [
-  1. emit {{
-     fullName: foo,
-     meta: {
-       fullName: foo,
-       section: 1
-     }
-  }},
-  2. [
-     *  Seq [
-        1. compute {{}},
-        2. Seq [
-           1. emit {{
-              fullName: foo → *,
-              meta: {
-                fullName: foo → *,
-                section: 2
-              }
-           }},
-           2. [
-              *  Seq [
-                 1. compute {{
-                    meta: {
-                      fullName: store1,
-                      section: store1
-                    }
-                 }},
-                 2. filter {{
-                    meta: {
-                      fullName: store1,
-                      section: store1
-                    }
-                 }},
-                 3. Seq [
-                    1. filter {{
-                       meta: {
-                         fullName: store1,
-                         section: store1
-                       }
-                    }},
-                    2. update {{
-                       store: {
-                         id: 1,
-                         current: foo | 1 | 11 | 101
-                       },
-                       meta: {
-                         fullName: store1,
-                         section: store1
-                       }
-                    }},
-                    3. [
-                       *  Seq [
-                          1. compute {{
-                             meta: {
-                               fullName: store1 → *,
-                               section: store1
-                             }
-                          }},
-                          2. filter {{
-                             meta: {
-                               fullName: store1 → *,
-                               section: store1
-                             }
-                          }},
-                          3. Seq [
-                             1. filter {{
-                                meta: {
-                                  fullName: store1 → *,
-                                  section: store1 → *
-                                }
-                             }},
-                             2. update {{
-                                store: {
-                                  id: 2,
-                                  current: 18
-                                },
-                                meta: {
-                                  fullName: store1 → *,
-                                  section: store1 → *
-                                }
-                             }},
-                             3. [(empty list)]
-                          ],
-                          4. [(empty list)]
-                       ]
-                    ]
-                 ],
-                 4. [(empty list)]
-              ]
-           ]
-        ],
-        3. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. emit {{
+       fullName: foo
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq [
+              1. emit {{
+                 fullName: foo → *
+              }}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. filter {{}}
+                 ]
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             id: 1,
+                             current: foo | 1 | 11 | 101
+                           }
+                        }}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. compute {{}},
+                             2. filter {{}}
+                           ]
+                          [(empty list)]}
+                     ]}
+                ]}
+           ]}
+      ]}
+  ]}"
 `;
 
 exports[`graphite: show store1 1`] = `
-"Seq [
-  1. filter {{
-     meta: {
-       fullName: store1,
-       section: store1
-     }
-  }},
-  2. update {{
-     store: {
-       id: 1,
-       current: foo | 1 | 11 | 101
-     },
-     meta: {
-       fullName: store1,
-       section: store1
-     }
-  }},
-  3. [
-     *  Seq [
-        1. compute {{
-           meta: {
-             fullName: store1 → *,
-             section: store1
-           }
-        }},
-        2. filter {{
-           meta: {
-             fullName: store1 → *,
-             section: store1
-           }
-        }},
-        3. Seq [
-           1. filter {{
-              meta: {
-                fullName: store1 → *,
-                section: store1 → *
-              }
-           }},
-           2. update {{
-              store: {
-                id: 2,
-                current: 18
-              },
-              meta: {
-                fullName: store1 → *,
-                section: store1 → *
-              }
-           }},
-           3. [(empty list)]
-        ],
-        4. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. filter {{}},
+    2. update {{
+       store: {
+         id: 1,
+         current: foo | 1 | 11 | 101
+       }
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}}
+       ]
+      [(empty list)]}
+  ]}"
 `;
 
 exports[`graphite: show store2 1`] = `
-"Seq [
-  1. filter {{
-     meta: {
-       fullName: store1 → *,
-       section: store1 → *
-     }
-  }},
-  2. update {{
-     store: {
-       id: 2,
-       current: 18
-     },
-     meta: {
-       fullName: store1 → *,
-       section: store1 → *
-     }
-  }},
-  3. [(empty list)]
-]"
-`;
-
-exports[`graphite: store1 seq 1`] = `
-Object {
-  "data": Array [
-    Object {
-      "data": Object {
-        "data": Object {
-          "fn": [Function],
-          "meta": Object {
-            "fullName": "store1",
-            "section": "store1",
-          },
-        },
-        "group": "cmd",
-        "id": "h",
-        "type": "filter",
-      },
-      "group": "step",
-      "id": "i",
-      "type": "single",
-    },
-    Object {
-      "data": Object {
-        "data": Object {
-          "meta": Object {
-            "fullName": "store1",
-            "section": "store1",
-          },
-          "store": Object {
-            "current": "foo | 1 | 11 | 101",
-            "id": "1",
-          },
-        },
-        "group": "cmd",
-        "id": "j",
-        "type": "update",
-      },
-      "group": "step",
-      "id": "k",
-      "type": "single",
-    },
-    Object {
-      "data": Array [
-        Object {
-          "data": Array [
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1 → *",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "1f",
-                "type": "compute",
-              },
-              "group": "step",
-              "id": "1g",
-              "type": "single",
-            },
-            Object {
-              "data": Object {
-                "data": Object {
-                  "fn": [Function],
-                  "meta": Object {
-                    "fullName": "store1 → *",
-                    "section": "store1",
-                  },
-                },
-                "group": "cmd",
-                "id": "1h",
-                "type": "filter",
-              },
-              "group": "step",
-              "id": "1i",
-              "type": "single",
-            },
-            Object {
-              "data": Array [
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "fn": [Function],
-                      "meta": Object {
-                        "fullName": "store1 → *",
-                        "section": "store1 → *",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "13",
-                    "type": "filter",
-                  },
-                  "group": "step",
-                  "id": "14",
-                  "type": "single",
-                },
-                Object {
-                  "data": Object {
-                    "data": Object {
-                      "meta": Object {
-                        "fullName": "store1 → *",
-                        "section": "store1 → *",
-                      },
-                      "store": Object {
-                        "current": 18,
-                        "id": "2",
-                      },
-                    },
-                    "group": "cmd",
-                    "id": "15",
-                    "type": "update",
-                  },
-                  "group": "step",
-                  "id": "16",
-                  "type": "single",
-                },
-                Object {
-                  "data": Array [],
-                  "group": "step",
-                  "id": "17",
-                  "type": "multi",
-                },
-              ],
-              "group": "step",
-              "id": "18",
-              "type": "seq",
-            },
-            Object {
-              "data": Array [],
-              "group": "step",
-              "id": "1j",
-              "type": "multi",
-            },
-          ],
-          "group": "step",
-          "id": "1k",
-          "type": "seq",
-        },
-      ],
-      "group": "step",
-      "id": "l",
-      "type": "multi",
-    },
-  ],
-  "group": "step",
-  "id": "m",
-  "type": "seq",
-}
-`;
-
-exports[`graphite: store2 seq 1`] = `
-Object {
-  "data": Array [
-    Object {
-      "data": Object {
-        "data": Object {
-          "fn": [Function],
-          "meta": Object {
-            "fullName": "store1 → *",
-            "section": "store1 → *",
-          },
-        },
-        "group": "cmd",
-        "id": "13",
-        "type": "filter",
-      },
-      "group": "step",
-      "id": "14",
-      "type": "single",
-    },
-    Object {
-      "data": Object {
-        "data": Object {
-          "meta": Object {
-            "fullName": "store1 → *",
-            "section": "store1 → *",
-          },
-          "store": Object {
-            "current": 18,
-            "id": "2",
-          },
-        },
-        "group": "cmd",
-        "id": "15",
-        "type": "update",
-      },
-      "group": "step",
-      "id": "16",
-      "type": "single",
-    },
-    Object {
-      "data": Array [],
-      "group": "step",
-      "id": "17",
-      "type": "multi",
-    },
-  ],
-  "group": "step",
-  "id": "18",
-  "type": "seq",
-}
+"Graph {
+  Seq [
+    1. filter {{}},
+    2. update {{
+       store: {
+         id: 2,
+         current: 3
+       }
+    }}
+  ]
+  [(empty list)]}"
 `;
 
 exports[`showcase: event foo 1`] = `
-"Seq [
-  1. emit {{
-     fullName: foo,
-     meta: {
-       fullName: foo,
-       section: 5
-     }
-  }},
-  2. [
-     *  Seq [
-        1. compute {{
-           meta: {
-             fullName: a,
-             section: a
-           }
-        }},
-        2. filter {{
-           meta: {
-             fullName: a,
-             section: a
-           }
-        }},
-        3. Seq [
-           1. filter {{
-              meta: {
-                fullName: a,
-                section: a
-              }
-           }},
-           2. update {{
-              store: {
-                id: 3,
-                current: 3
-              },
-              meta: {
-                fullName: a,
-                section: a
-              }
-           }},
-           3. [
-              *  Seq [
-                 1. compute {{}},
-                 2. filter {{}},
-                 3. run {{}},
-                 4. [(empty list)]
-              ]
-           ]
-        ],
-        4. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. emit {{
+       fullName: foo
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq [
+              1. filter {{}},
+              2. update {{
+                 store: {
+                   id: 3,
+                   current: 3
+                 }
+              }}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. filter {{}},
+                   3. run {{}}
+                 ]
+                [(empty list)]}
+           ]}
+      ]}
+  ]}"
 `;
 
 exports[`showcase: mapped 1`] = `
-"Seq [
-  1. filter {{
-     meta: {
-       fullName: combine(a, b) → *,
-       section: combine(a, b) → *
-     }
-  }},
-  2. update {{
-     store: {
-       id: 6,
-       current: 3
-     },
-     meta: {
-       fullName: combine(a, b) → *,
-       section: combine(a, b) → *
-     }
-  }},
-  3. [
-     *  Seq [
-        1. run {{
-           meta: {
-             fullName: combine(a, b) → *,
-             section: combine(a, b) → *
-           }
-        }},
-        2. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. filter {{}},
+    2. update {{
+       store: {
+         id: 6,
+         current: 1
+       }
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. run {{}}
+       ]
+      [(empty list)]}
+  ]}"
 `;
 
 exports[`showcase: store a 1`] = `
-"Seq [
-  1. filter {{
-     meta: {
-       fullName: a,
-       section: a
-     }
-  }},
-  2. update {{
-     store: {
-       id: 3,
-       current: 3
-     },
-     meta: {
-       fullName: a,
-       section: a
-     }
-  }},
-  3. [
-     *  Seq [
-        1. compute {{}},
-        2. filter {{}},
-        3. run {{}},
-        4. [(empty list)]
-     ]
+"Graph {
+  Seq [
+    1. filter {{}},
+    2. update {{
+       store: {
+         id: 3,
+         current: 3
+       }
+    }}
   ]
-]"
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}},
+         3. run {{}}
+       ]
+      [(empty list)]}
+  ]}"
 `;
