@@ -104,7 +104,8 @@
       "enzyme": "",
       "react-test-renderer": "",
       "markdown-table": "",
-      "react-testing-library": ""
+      "react-testing-library": "",
+      "flow-bin": ""
     },
     "stub": {},
     "builtin": {
