@@ -7,11 +7,23 @@ export function forward(opts: {
   from: {+graphite: Graph<any>, ...},
   to: {+graphite: Graph<any>, ...},
 }): Subscription {
-  const toSeq = opts.to.graphite.seq
-  const fromGraphite = opts.from.graphite
-  fromGraphite.next.data.push(toSeq)
+  return linkGraphs({
+    from: opts.from.graphite,
+    to: opts.to.graphite,
+  })
+}
+export const linkGraphs = ({
+  from,
+  to,
+}: {
+  from: Graph<any>,
+  to: Graph<any>,
+}): Subscription => {
+  from.next.push(to)
+  //TODO push parent to .from field
+  // to.from.push(from)
   return createWatcher({
-    child: toSeq,
-    parent: fromGraphite,
+    child: to,
+    parent: from,
   })
 }

@@ -1,12 +1,12 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {cmd, Kind, createNode} from 'effector/stdlib'
+import {cmd, Kind, createNode, createGraph} from 'effector/stdlib'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
-import {forward, type Event} from 'effector/event'
+import {linkGraphs, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../effector/index.h'
 
@@ -38,10 +38,10 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
   }
   storeInstance.subscribers.set(
     e,
-    forward({
-      from: e,
-      to: {
-        graphite: createNode(
+    linkGraphs({
+      from: e.graphite,
+      to: createGraph({
+        node: [
           cmd('compute', {
             fn(newValue) {
               const lastState = getState(storeInstance)
@@ -56,9 +56,9 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
             },
             meta,
           }),
-          storeInstance.graphite.seq,
-        ),
-      },
+        ],
+        child: [storeInstance.graphite],
+      }),
     }),
   )
   return this
@@ -127,31 +127,29 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
-  return forward({
-    from: storeInstance,
-    to: {
-      graphite: createNode(
-        cmd('run', {
-          fn(args) {
-            let stopPhaseTimerMessage = null
-            startPhaseTimer(storeInstance, 'subscribe')
-            if (args === lastCall) {
-              stopPhaseTimer(stopPhaseTimerMessage)
-              return
-            }
-            lastCall = args
-            try {
-              listener(args)
-            } catch (err) {
-              console.error(err)
-              stopPhaseTimerMessage = 'Got error'
-            }
+  return linkGraphs({
+    from: storeInstance.graphite,
+    to: createNode(
+      cmd('run', {
+        fn(args) {
+          let stopPhaseTimerMessage = null
+          startPhaseTimer(storeInstance, 'subscribe')
+          if (args === lastCall) {
             stopPhaseTimer(stopPhaseTimerMessage)
-          },
-          meta,
-        }),
-      ),
-    },
+            return
+          }
+          lastCall = args
+          try {
+            listener(args)
+          } catch (err) {
+            console.error(err)
+            stopPhaseTimerMessage = 'Got error'
+          }
+          stopPhaseTimer(stopPhaseTimerMessage)
+        },
+        meta,
+      }),
+    ),
   })
 }
 export function thru(fn: Function) {
@@ -186,10 +184,10 @@ export function mapStore<A, B>(
     fullName: innerStore.compositeName?.fullName,
     section: store.id,
   }
-  forward({
-    from: store,
-    to: {
-      graphite: createNode(
+  linkGraphs({
+    from: store.graphite,
+    to: createGraph({
+      node: [
         cmd('compute', {
           fn(newValue) {
             startPhaseTimer(store, 'map')
@@ -219,9 +217,9 @@ export function mapStore<A, B>(
           },
           meta,
         }),
-        innerStore.graphite.seq,
-      ),
-    },
+      ],
+      next: [innerStore.graphite],
+    }),
   })
   return innerStore
 }
