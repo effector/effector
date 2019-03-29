@@ -30,6 +30,7 @@ import {
   version,
   tab,
   tabApi,
+  codeSetCursor,
 } from './domain'
 
 const OutlineView = createComponent(stats, ({}, stats) => <Outline {...stats} />)
@@ -47,6 +48,7 @@ const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
+    setCursor={codeSetCursor}
     value={sources}
     mode="text/jsx"
     onChange={changeSourcesDebounced}

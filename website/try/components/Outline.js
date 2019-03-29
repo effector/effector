@@ -2,6 +2,7 @@
 
 import * as React from 'react'
 import {styled} from 'linaria/react'
+import {codeSetCursor} from '../domain'
 
 const Outline = styled('div')`
   grid-column: 1 / span 1;
@@ -26,9 +27,17 @@ const Section = styled('section')`
   padding: 5px;
 `
 
+const Item = styled('li')`
+  cursor: ${props => Boolean(props.loc) ? 'pointer': 'inherit'};
+`
+
 const mapper = item => {
+  const loc = item?.defaultConfig?.loc
   const name = item?.compositeName?.fullName || item?.shortName || item.id
-  return <li key={item.kind + item.id + name}>{name}</li>
+  const onClick = () => {
+    if (loc) codeSetCursor(loc)
+  }
+  return <Item loc={loc} onClick={onClick} key={item.kind + item.id + name}>{name}</Item>
 }
 
 const OutlineSection = ({list, title}) => {

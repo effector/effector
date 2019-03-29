@@ -1,6 +1,7 @@
 //@flow
 
 import React from 'react'
+import {createEvent} from 'effector'
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/jsx/jsx'
@@ -25,6 +26,7 @@ export default class CodeMirrorPanel extends React.Component {
     //keyMap: 'sublime',
     lineWrapping: false,
     passive: false,
+    setCursor: createEvent()
   }
   _textareaRef = React.createRef<HTMLTextAreaElement>()
   _codeMirror = null
@@ -40,7 +42,6 @@ export default class CodeMirrorPanel extends React.Component {
       codeSample,
       ...props
     } = this.props
-    console.log(props)
     const options = {
       foldGutter: true,
       tabSize: 2,
@@ -58,6 +59,11 @@ export default class CodeMirrorPanel extends React.Component {
     this._codeMirror.on('focus', this.handleFocus)
 
     this._codeMirror.setValue((this._cached = this.props.value || ''))
+
+    this.props.setCursor.watch(({line, column}) => {
+      this._codeMirror.focus()
+      this._codeMirror.setCursor({line: line - 1, ch: column})
+    })
   }
 
   componentWillUnmount() {
