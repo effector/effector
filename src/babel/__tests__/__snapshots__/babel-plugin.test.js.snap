@@ -1,51 +1,157 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`babel-plugin should create domain 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain/index.js\\";
+//@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\");
-const foo = createDomain('bar');"
+const domain = createDomain(\\"domain\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  }
+});
+const foo = createDomain('bar', {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  }
+});"
 `;
 
 exports[`babel-plugin should create domain domain 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-domain/index.js\\";
+//@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\");
-const foo = domain.domain(\\"foo\\");
-const bar = domain.domain('baz');"
+const domain = createDomain(\\"domain\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  }
+});
+const foo = domain.domain(\\"foo\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  }
+});
+const bar = domain.domain('baz', {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 12
+  }
+});"
 `;
 
 exports[`babel-plugin should create domain effect 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-effect/index.js\\";
+//@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\");
-const a = domain.effect(\\"a\\");
+const domain = createDomain(\\"domain\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  }
+});
+const a = domain.effect(\\"a\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 10
+  }
+});
 
-const f = () => domain.effect(\\"f\\");
+const f = () => domain.effect(\\"f\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 16
+  }
+});
 
-const b = domain.effect('hello');
+const b = domain.effect('hello', {
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 10
+  }
+});
 
-const g = () => domain.effect('baz');"
+const g = () => domain.effect('baz', {
+  loc: {
+    file: _effectorFileName,
+    line: 9,
+    column: 16
+  }
+});"
 `;
 
 exports[`babel-plugin should create domain event 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-event/index.js\\";
+//@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\");
-const a = domain.event(\\"a\\");
+const domain = createDomain(\\"domain\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  }
+});
+const a = domain.event(\\"a\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 10
+  }
+});
 
-const f = () => domain.event(\\"f\\");
+const f = () => domain.event(\\"f\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 16
+  }
+});
 
-const b = domain.event('asm');
+const b = domain.event('asm', {
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 10
+  }
+});
 
-const g = () => domain.event('tasm');"
+const g = () => domain.event('tasm', {
+  loc: {
+    file: _effectorFileName,
+    line: 9,
+    column: 16
+  }
+});"
 `;
 
 exports[`babel-plugin should create domain store 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-store/index.js\\";
+//@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\");
+const domain = createDomain(\\"domain\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 15
+  }
+});
 const a = domain.store('bar', {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 10
+  },
   name: \\"a\\"
 });
 const b = domain.store('h', {
@@ -53,64 +159,148 @@ const b = domain.store('h', {
     option: 'test',
     ['na' + 'me']: 'LOL'
   },
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 10
+  },
   name: \\"b\\"
 });
 const c = domain.store('h', {
   ɔ: {
     name: 'test'
   },
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 10
+  },
   name: \\"c\\"
 }); //$off
 
 const d = domain.store('h', {
   ɔ: null,
+  loc: {
+    file: _effectorFileName,
+    line: 10,
+    column: 10
+  },
   name: \\"d\\"
 }); //$off
 
 const e = domain.store('h', {
   ɔ: 4234,
+  loc: {
+    file: _effectorFileName,
+    line: 12,
+    column: 10
+  },
   name: \\"e\\"
 });
 const f = domain.store('h', {
   ɔ: {},
+  loc: {
+    file: _effectorFileName,
+    line: 13,
+    column: 10
+  },
   name: \\"f\\"
 });"
 `;
 
 exports[`babel-plugin should create effect 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-effect/index.js\\";
+//@flow
 import { createEffect } from 'effector';
-const foo = createEffect(\\"foo\\");
-const bar = createEffect('hello');
+const foo = createEffect(\\"foo\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  }
+});
+const bar = createEffect('hello', {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 12
+  }
+});
 
-const f = () => createEffect(\\"f\\");"
+const f = () => createEffect(\\"f\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 16
+  }
+});"
 `;
 
 exports[`babel-plugin should create event 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-event/index.js\\";
+//@flow
 import { createEvent } from 'effector';
-const foo = createEvent(\\"foo\\");
-const bar = createEvent('hello');
+const foo = createEvent(\\"foo\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  }
+});
+const bar = createEvent('hello', {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 12
+  }
+});
 
-const f = () => createEvent(\\"f\\");"
+const f = () => createEvent(\\"f\\", {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 16
+  }
+});"
 `;
 
 exports[`babel-plugin should create store 1`] = `
-"//@flow
+"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-store/index.js\\";
+//@flow
 import { createStore } from 'effector';
 const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 4,
+    column: 12
+  },
   name: \\"foo\\"
 });
 const a = createStore('h', {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 10
+  },
   name: \\"a\\"
 });
 const b = createStore('h', {
   ɔ: {},
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 10
+  },
   name: \\"b\\"
 }); //$off
 
 const c = createStore('h', {
   ɔ: 23020,
+  loc: {
+    file: _effectorFileName,
+    line: 8,
+    column: 10
+  },
   name: \\"c\\"
 });
 const config = {
@@ -118,10 +308,20 @@ const config = {
 };
 const dod = createStore(null, {
   ɔ: config,
+  loc: {
+    file: _effectorFileName,
+    line: 10,
+    column: 12
+  },
   name: \\"dod\\"
 });
 
 const f = a => createStore(a, {
+  loc: {
+    file: _effectorFileName,
+    line: 12,
+    column: 15
+  },
   name: \\"f\\"
 });"
 `;
