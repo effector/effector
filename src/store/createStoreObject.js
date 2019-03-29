@@ -64,7 +64,6 @@ function storeCombination(
     //TODO: add location
     config: {name},
   })
-  console.log(name)
   const getFresh = freshGetter.bind(store.getState)
   ;(store: any).defaultShape = obj
   ;(store: any).defaultState = defaultState
