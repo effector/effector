@@ -25,6 +25,11 @@ export type EventConfigPart = {
   ...
 }
 
+export type DomainConfigPart = {
+  loc?: SourceLocation,
+  ...
+}
+
 export type Config<Part> = {
   ɔ?: Part,
   ...Part,

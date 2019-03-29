@@ -13,16 +13,23 @@ import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 
 import type {Domain, DomainHooks} from './index.h'
+import type {DomainConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
 import {DomainHistory, domainHooks} from './hook'
 
 const nextID = stringRefcount()
 
-export function domainFabric(
-  nameRaw?: string,
+export function domainFabric({
+  name: nameRaw,
+  config = {},
+  parent,
+  parentHooks,
+}: {
+  name?: string,
+  config?: DomainConfigPart,
   parent?: CompositeName,
   parentHooks?: DomainHooks,
-): Domain {
+}): Domain {
   const id = nextID()
   const name = nameRaw || ''
   const compositeName = createName(name, parent)
@@ -32,6 +39,7 @@ export function domainFabric(
   return {
     compositeName,
     id,
+    defaultConfig: config,
     getType() {
       return compositeName.fullName
     },
@@ -78,8 +86,14 @@ export function domainFabric(
       hooks.effect(result)
       return result
     },
-    domain(name?: string) {
-      const result = domainFabric(name, compositeName, hooks)
+    domain(name?: string, config: Config<DomainConfigPart> = {}) {
+      const opts = normalizeConfig(config)
+      const result = domainFabric({
+        name,
+        parent: compositeName,
+        parentHooks: hooks,
+        config: opts,
+      })
       hooks.domain(result)
       return result
     },
