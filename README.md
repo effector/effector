@@ -1,6 +1,6 @@
 # ☄️ Effector
 
-### Reactive state manager
+> Reactive state manager
 
 [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
 [![Join the chat at https://
@@ -9,6 +9,35 @@
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
 <a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Introduction](#introduction)
+  - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
+- [Installation](#installation)
+  - [Additional packages:](#additional-packages)
+- [Examples](#examples)
+  - [Increment/decrement](#incrementdecrement)
+  - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
+    - [Run example](#run-example)
+  - [Storages and events](#storages-and-events)
+    - [Run example](#run-example-1)
+- [Demo](#demo)
+  - [More examples/demo you can check here](#more-examplesdemo-you-can-check-here)
+- [Core concept](#core-concept)
+  - [Core types](#core-types)
+  - [Domain](#domain)
+  - [Event](#event)
+  - [Effect](#effect)
+  - [Store](#store)
+- [API](#api)
+- [Sponsors](#sponsors)
+- [Contributors](#contributors)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
 
