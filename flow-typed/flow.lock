@@ -2,8 +2,6 @@
   "version": 2,
   "packages": {
     "flowgen": {
-      "babel-core": "flow-typed/flowgen/babel-core_v6.25.5.js",
-      "connect": "flow-typed/flowgen/connect_v3.4.32.js",
       "immer": "flow-typed/flowgen/immer_v1.12.1.js",
       "jest-enzyme": "flow-typed/flowgen/jest-enzyme_v7.0.1.js",
       "most": "flow-typed/flowgen/most_v1.7.3.js",
@@ -12,6 +10,7 @@
       "terser": "flow-typed/flowgen/terser_v3.14.1.js"
     },
     "custom": {
+      "babel-core": "",
       "@babel/cli": "",
       "@babel/node": "",
       "@babel/plugin-proposal-async-generator-functions": "",
