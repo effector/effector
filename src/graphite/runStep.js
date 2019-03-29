@@ -105,88 +105,6 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
           }
           continue headLoop
         }
-        /*case 'query': {
-          line.post.push({type: 'meta/!stop'})
-          const areaList: Array<Line> = []
-          switch (step.data.mode) {
-            case 'some': {
-              const data: {
-                +mode: 'some',
-                +fn: (
-                  arg: any,
-                  meta: *,
-                ) => {+arg: any, +list: Array<TypeDef<*, *>>},
-              } = step.data
-              const fn = data.fn
-              const arg = scope[scope.length - 1].arg
-              const queryResult = fn(arg, meta)
-
-              const items = queryResult.list
-
-              for (let i = 0; i < items.length; i++) {
-                areaList.push({
-                  step: items[i],
-                  pre: [
-                    {
-                      type: 'scope/push',
-                      scope: {
-                        arg: queryResult.arg,
-                      },
-                    },
-                  ],
-                  post: [
-                    {type: 'callstack/pop'},
-                    {type: 'scope/size', size: scope.length},
-                    {type: 'meta/!stop'},
-                  ],
-                })
-              }
-              break
-            }
-            case 'shape': {
-              const data: {
-                +mode: 'shape',
-                +shape: {[string]: TypeDef<*, *>},
-                +fn: (arg: any, meta: *) => {[string]: any},
-              } = step.data
-              const fn = data.fn
-              const shape = data.shape
-              const arg = scope[scope.length - 1].arg
-
-              const queryResult = fn(arg, meta)
-              for (const key in queryResult) {
-                if (key in shape) {
-                  areaList.push({
-                    step: shape[key],
-                    pre: [
-                      {
-                        type: 'scope/push',
-                        scope: {
-                          arg: queryResult[key],
-                        },
-                      },
-                    ],
-                    post: [
-                      {type: 'callstack/pop'},
-                      {type: 'scope/size', size: scope.length},
-                      {type: 'meta/!stop'},
-                    ],
-                  })
-                }
-              }
-              break
-            }
-          }
-          area.index += 1
-          pos.head += 1
-          pos.stack[pos.head] = {
-            list: areaList,
-            pre: [],
-            post: line.post,
-            index: 0,
-          }
-          continue headLoop
-        }*/
       }
       runActions(line.post, area)
       area.index += 1
@@ -202,9 +120,6 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
         case 'meta/?stop':
           if (meta.stop) area.index = Infinity
           break
-        case 'head/--':
-          pos.head -= 1
-          break
         case 'callstack/pop':
           meta.callstack.pop()
           break
@@ -213,9 +128,6 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
           break
         case 'scope/size':
           scope.length = action.size
-          break
-        case 'scope/push':
-          scope.push(action.scope)
           break
         /*::
         default:
@@ -229,7 +141,5 @@ export function runStep(step: TypeDef<*, 'step'>, meta: Meta) {
 type PostAction =
   | {|+type: 'meta/?stop'|}
   | {|+type: 'meta/!stop'|}
-  | {|+type: 'head/--'|}
   | {|+type: 'callstack/pop'|}
   | {|+type: 'scope/size', +size: number|}
-  | {|+type: 'scope/push', +scope: {+arg: any}|}
