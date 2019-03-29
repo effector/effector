@@ -1,5 +1,4 @@
 //@flow
 
-export * from './walk'
-export * from './runStep'
+export * from './index.h'
 export * from './exec'
