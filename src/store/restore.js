@@ -16,7 +16,10 @@ export function restoreObject<State: {-[key: string]: Store<any> | any}>(
 > {
   const result = {}
   for (const [key, value] of Object.entries(obj)) {
-    result[key] = createStore(value)
+    result[key] = storeFabric({
+      currentState: value,
+      config: {name: key},
+    })
   }
   return result
 }
