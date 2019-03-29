@@ -1,3 +1,3 @@
 //@flow
 
-export * from './exec'
+export * from './kernel'
