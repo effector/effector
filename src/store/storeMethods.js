@@ -130,6 +130,9 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
   return linkGraphs({
     from: storeInstance.graphite,
     to: createNode(
+      cmd('compute', {
+        fn: n => n,
+      }),
       cmd('run', {
         fn(args) {
           let stopPhaseTimerMessage = null
