@@ -9,6 +9,10 @@ const normalizeOptions = options => {
   const defaultDomainCreators = ['createDomain']
 
   return {
+    filename:
+      typeof options.filename === 'undefined'
+        ? true
+        : Boolean(options.filename),
     stores:
       typeof options.stores === 'undefined' ? true : Boolean(options.stores),
     events:
@@ -26,6 +30,7 @@ const normalizeOptions = options => {
 
 module.exports = function(babel, options = {}) {
   const {
+    filename: enableFileName,
     stores,
     events,
     effects,
@@ -69,7 +74,7 @@ module.exports = function(babel, options = {}) {
 
       CallExpression(path, state) {
         if (!state.fileNameIdentifier) {
-          const fileName = state.filename || ''
+          const fileName = enableFileName ? state.filename || '' : ''
 
           const fileNameIdentifier = path.scope.generateUidIdentifier(
             '_effectorFileName',

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`babel-plugin should create domain 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -21,7 +21,7 @@ const foo = createDomain('bar', {
 `;
 
 exports[`babel-plugin should create domain domain 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-domain/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -48,7 +48,7 @@ const bar = domain.domain('baz', {
 `;
 
 exports[`babel-plugin should create domain effect 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-effect/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -92,7 +92,7 @@ const g = () => domain.effect('baz', {
 `;
 
 exports[`babel-plugin should create domain event 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-event/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -136,7 +136,7 @@ const g = () => domain.event('tasm', {
 `;
 
 exports[`babel-plugin should create domain store 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-domain-store/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -209,7 +209,7 @@ const f = domain.store('h', {
 `;
 
 exports[`babel-plugin should create effect 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-effect/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createEffect } from 'effector';
 const foo = createEffect(\\"foo\\", {
@@ -237,7 +237,7 @@ const f = () => createEffect(\\"f\\", {
 `;
 
 exports[`babel-plugin should create event 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-event/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createEvent } from 'effector';
 const foo = createEvent(\\"foo\\", {
@@ -265,7 +265,7 @@ const f = () => createEvent(\\"f\\", {
 `;
 
 exports[`babel-plugin should create store 1`] = `
-"var _effectorFileName = \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector/src/babel/__tests__/fixtures/create-store/index.js\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createStore } from 'effector';
 const foo = createStore('foo', {
