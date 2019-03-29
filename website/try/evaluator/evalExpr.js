@@ -7,7 +7,6 @@ export function evalExpr(expr, vars) {
   status.init()
   try {
     const compiled = transformCode(expr)
-    console.log('compiled code', compiled)
     const exprFunc = scopedEval.runCode(compiled)
     const results = exprFunc(vars)
     status.done()
