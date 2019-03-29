@@ -145,6 +145,9 @@ function watchEvent<Payload>(
   return linkGraphs({
     from: event.graphite,
     to: createNode(
+      cmd('compute', {
+        fn: n => n,
+      }),
       cmd('run', {
         fn: (newValue: Payload) => watcher(newValue, event.getType()),
       }),
