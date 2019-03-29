@@ -29,18 +29,19 @@ function storeCombination(
     /*::;(child: Store<any>);*/
     const fn = cmd('run', {
       fn() {
-        fn.data.data.pushUpdate({
+        //$todo
+        fn.data.pushUpdate({
           event: updater,
           data: getFresh,
         })
       },
     })
 
-    fn.data.data.pushUpdate = data => {}
+    fn.data.pushUpdate = data => {}
 
     stateNew[key] = child.defaultState
     linkGraphs({
-      from: child,
+      from: child.graphite,
       to: createNode(
         cmd('compute', {
           fn(state) {
