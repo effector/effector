@@ -61,7 +61,7 @@ test('olympic', async() => {
   const G = F.map(text => `text: "${text}"`)
   const H = combine(G, E, (text, stats) => `${text} ${stats}`)
   const I = H.map(result => result)
-  const watcher = I.watch(result => {
+  I.watch(result => {
     console.log(result)
     fn(result)
   })
@@ -87,35 +87,44 @@ test('olympic', async() => {
 })
 
 test.skip('display name', () => {
+  const isFirstNameShortMap = jest.fn()
+  const fullNameMap = jest.fn()
+  const displayNameMap = jest.fn()
+  const view = jest.fn()
+
   /*
     Short description: `displayName = isFirstNameShort ? fullName : firstName`
     `isFirstNameShort` and `fullName` depends by `firstName`
     so `displayName` has three depends from `firstName`
-    and in "classic" EE `displayName` must updates three times (what unnecessary)
-    if `firstName` was updated
+    and in "classic" EE `displayName` must updates
+    three times (what unnecessary) if `firstName` was updated
   */
   const updateFirstName = createEvent()
 
   const firstName = createStore('John').on(updateFirstName, (_, name) => name)
   const lastName = createStore('Doe')
 
-  const isFirstNameShortMap = jest.fn(v => v.length < 10)
-  const IsFirstNameShort = firstName.map(isFirstNameShortMap)
+  const IsFirstNameShort = firstName.map(v => {
+    isFirstNameShortMap(v)
+    return v.length < 10
+  })
 
-  const fullNameMap = jest.fn((fn, ln) => [fn, ln].join(' '))
-  const fullName = combine(firstName, lastName, fullNameMap)
+  const fullName = combine(firstName, lastName, (fn, ln) => {
+    fullNameMap(fn, ln)
 
-  const displayNameMap = jest.fn((firstName, isFirstNameShort, fullName) =>
-    isFirstNameShort ? fullName : firstName,
-  )
+    return `${fn} ${ln}`
+  })
+
   const displayName = combine(
     firstName,
     IsFirstNameShort,
     fullName,
-    displayNameMap,
+    (firstName, isFirstNameShort, fullName) => {
+      displayNameMap(firstName, isFirstNameShort, fullName)
+      return isFirstNameShort ? fullName : firstName
+    },
   )
 
-  const view = jest.fn()
   displayName.watch(view)
 
   expect(isFirstNameShortMap.mock.calls.length).toBe(1)
@@ -131,6 +140,16 @@ test.skip('display name', () => {
   expect(view.mock.calls.length).toBe(2)
 
   updateFirstName('Jooooooooooooooseph')
+  console.log('displayNameMap.mock.calls')
+  console.table(
+    displayNameMap.mock.calls.map(
+      ([firstName, isFirstNameShort, fullName]) => ({
+        firstName,
+        isFirstNameShort,
+        fullName,
+      }),
+    ),
+  )
   expect(displayName.getState()).toBe('Jooooooooooooooseph')
   expect(isFirstNameShortMap.mock.calls.length).toBe(3)
   expect(fullNameMap.mock.calls.length).toBe(3)
