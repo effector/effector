@@ -1,7 +1,7 @@
 //@flow
 
 export {storeFabric} from './storeFabric'
-export {normalizeConfig} from './storeConfig'
+export {normalizeConfig} from '../config'
 export {createStore} from './createStore'
 export {setStoreName, storeNaming} from './setStoreName'
 export {createStoreObject, extract} from './createStoreObject'
@@ -10,5 +10,4 @@ export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'
 
 export {withProps} from './staticMethods'
 
-export type {Config as StoreConfig} from './storeConfig'
 export type {Store} from './index.h'

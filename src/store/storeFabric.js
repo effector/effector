@@ -5,7 +5,7 @@ import {cmd, createNode, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
-import type {ConfigPart} from './storeConfig'
+import type {StoreConfigPart as ConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
 import {
   reset,

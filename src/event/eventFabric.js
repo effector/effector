@@ -6,6 +6,7 @@ import type {Effect} from 'effector/effect'
 import {runtime} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
+import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
 import {forward} from './forward'
@@ -15,9 +16,11 @@ const nextID = stringRefcount()
 export function eventFabric<Payload>({
   name: nameRaw,
   parent,
+  config = {},
 }: {
   name?: string,
   parent?: CompositeName,
+  config?: EventConfigPart,
 }): Event<Payload> {
   const id = nextID()
   const name = nameRaw || id
@@ -56,6 +59,7 @@ export function eventFabric<Payload>({
   instance.shortName = name
   instance.domainName = parent
   instance.compositeName = compositeName
+  instance.defaultConfig = config
 
   return instance
 }

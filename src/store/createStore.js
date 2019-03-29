@@ -4,11 +4,11 @@ import invariant from 'invariant'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
-import {type Config, normalizeConfig} from './storeConfig'
+import {type Config, type StoreConfigPart, normalizeConfig} from '../config'
 
 export function createStore<State>(
   state: State,
-  config: Config = {},
+  config: Config<StoreConfigPart> = {},
 ): Store<State> {
   invariant(
     typeof state !== 'undefined',

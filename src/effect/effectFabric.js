@@ -5,6 +5,7 @@ import type {Effect} from './index.h'
 import {Kind} from 'effector/stdlib'
 
 import {eventFabric, type Event} from 'effector/event'
+import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 import {exec} from './exec'
 import {callbacks} from './callbacks'
@@ -13,28 +14,36 @@ export function effectFabric<Payload, Done>({
   name,
   domainName,
   parent,
-  handler,
+  config,
 }: {
   name?: string,
   domainName: string,
   parent?: CompositeName,
-  handler?: (payload: Payload) => Promise<Done> | Done,
+  config: EffectConfigPart<Payload, Done>,
 }): Effect<Payload, Done, *> {
+  const {handler} = config
+
   //$off
   const instance: Effect<Payload, Done, any> = eventFabric({
     name,
     parent,
+    config,
   })
 
   const eventCreate = instance.create
   const done: Event<{params: Payload, result: Done}> = eventFabric({
     name: '' + instance.shortName + ' done',
     parent,
+    config,
   })
   const fail: Event<{params: Payload, error: *}> = eventFabric({
     name: '' + instance.shortName + ' fail',
     parent,
+    config,
   })
+
+  //eslint-disable-next-line no-unused-vars
+  let thunk: Function = handler || defaultThunk.bind(instance)
 
   instance.done = done
   instance.fail = fail
@@ -51,8 +60,6 @@ export function effectFabric<Payload, Done>({
       callbacks(thunk, result => void done(result), error => void fail(error)),
     )
   }
-  //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler || defaultThunk.bind(instance)
 
   return instance
 }

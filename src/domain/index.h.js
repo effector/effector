@@ -4,7 +4,13 @@ import type {CompositeName} from '../compositeName'
 import type {Subscription} from '../effector/index.h'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
-import type {Store, StoreConfig} from 'effector/store'
+import type {Store} from 'effector/store'
+import type {
+  Config,
+  StoreConfigPart,
+  EventConfigPart,
+  EffectConfigPart,
+} from '../config'
 import type {kind} from 'effector/stdlib'
 
 export type Domain = {
@@ -13,13 +19,19 @@ export type Domain = {
   onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription,
   onCreateStore(hook: (newStore: Store<any>) => any): Subscription,
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription,
-  event<Payload>(name?: string): Event<Payload>,
+  event<Payload>(
+    name?: string,
+    config?: Config<EventConfigPart>,
+  ): Event<Payload>,
   effect<Params, Done, Fail>(
     name?: string,
-    config?: {handler?: (params: Params) => Promise<Done> | Done, ...},
+    config?: Config<EffectConfigPart<Params, Done>>,
   ): Effect<Params, Done, Fail>,
   domain(name?: string): Domain,
-  store<State>(defaultState: State, config?: StoreConfig): Store<State>,
+  store<State>(
+    defaultState: State,
+    config?: Config<StoreConfigPart>,
+  ): Store<State>,
   compositeName: CompositeName,
   getType(): string,
   kind: kind,

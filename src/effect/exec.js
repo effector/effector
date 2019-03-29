@@ -30,9 +30,9 @@ export const exec = <Args, Done, Fail>(
     return fpromise
   }
   if (
-    typeof req === 'object'
-    && req !== null
-    && typeof req.then === 'function'
+    typeof req === 'object' &&
+    req !== null &&
+    typeof req.then === 'function'
   ) {
     const then: Promise<Done> = (req: any)
     fpromise = then.then(

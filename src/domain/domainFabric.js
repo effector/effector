@@ -1,12 +1,14 @@
 //@flow
 
 import {stringRefcount, Kind} from 'effector/stdlib'
+import {type Store, storeFabric} from 'effector/store'
 import {
-  type Store,
-  type StoreConfig,
-  storeFabric,
   normalizeConfig,
-} from 'effector/store'
+  type Config,
+  type EffectConfigPart,
+  type EventConfigPart,
+  type StoreConfigPart,
+} from '../config'
 import {type Event, eventFabric} from 'effector/event'
 import {type Effect, effectFabric} from 'effector/effect'
 
@@ -49,25 +51,29 @@ export function domainFabric(
       history.domains.forEach(hook)
       return hooks.domain.watch(hook)
     },
-    event<Payload>(name?: string): Event<Payload> {
+    event<Payload>(
+      name?: string,
+      config: Config<EventConfigPart> = {},
+    ): Event<Payload> {
+      const opts = normalizeConfig(config)
       const result = eventFabric({
         name,
         parent: compositeName,
+        config: opts,
       })
       hooks.event(result)
       return result
     },
     effect<Params, Done, Fail>(
       name?: string,
-      config?: {
-        handler?: (payload: Params) => Promise<Done> | Done,
-      },
+      config: Config<EffectConfigPart<Params, Done>> = {},
     ): Effect<Params, Done, Fail> {
+      const opts = normalizeConfig(config)
       const result = effectFabric({
         name,
         domainName: compositeName.fullName,
         parent: compositeName,
-        handler: config?.handler,
+        config: opts,
       })
       hooks.effect(result)
       return result
@@ -77,7 +83,7 @@ export function domainFabric(
       hooks.domain(result)
       return result
     },
-    store<T>(state: T, config: StoreConfig = {}): Store<T> {
+    store<T>(state: T, config: Config<StoreConfigPart> = {}): Store<T> {
       const opts = normalizeConfig(config)
       const result = storeFabric({
         currentState: state,
