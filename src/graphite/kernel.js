@@ -51,7 +51,7 @@ export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
 }
 export function runtime(graph: Graph<any>, payload: any) {
   const pendingEvents = []
-  runStep2(graph, payload, pendingEvents)
+  runStep(graph, payload, pendingEvents)
   runPendings(pendingEvents)
 }
 const runPendings = pendings => {
@@ -113,7 +113,7 @@ class Local {
     this.arg = arg
   }
 }
-const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
+const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
   const voidStack = new Stack(null, null)
   const fifo = new FIFO({
     step,
