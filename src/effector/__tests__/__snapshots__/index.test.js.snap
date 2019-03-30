@@ -30,7 +30,19 @@ exports[`graphite: show bar 1`] = `
                    1. compute {{}},
                    2. filter {{}}
                  ]
-                [(empty list)]}
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             id: 2,
+                             current: 12
+                           }
+                        }}
+                      ]
+                     [(empty list)]}
+                ]}
            ]}
       ]},
     *  Graph {
@@ -72,7 +84,19 @@ exports[`graphite: show bar 2`] = `
                    1. compute {{}},
                    2. filter {{}}
                  ]
-                [(empty list)]}
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             id: 2,
+                             current: 12
+                           }
+                        }}
+                      ]
+                     [(empty list)]}
+                ]}
            ]}
       ]}
   ]}"
@@ -120,7 +144,19 @@ exports[`graphite: show foo 1`] = `
                              1. compute {{}},
                              2. filter {{}}
                            ]
-                          [(empty list)]}
+                           Next [
+                             *  Graph {
+                                Seq [
+                                  1. filter {{}},
+                                  2. update {{
+                                     store: {
+                                       id: 2,
+                                       current: 18
+                                     }
+                                  }}
+                                ]
+                               [(empty list)]}
+                          ]}
                      ]}
                 ]}
            ]}
@@ -145,7 +181,19 @@ exports[`graphite: show store1 1`] = `
          1. compute {{}},
          2. filter {{}}
        ]
-      [(empty list)]}
+       Next [
+         *  Graph {
+            Seq [
+              1. filter {{}},
+              2. update {{
+                 store: {
+                   id: 2,
+                   current: 18
+                 }
+              }}
+            ]
+           [(empty list)]}
+      ]}
   ]}"
 `;
 
@@ -156,7 +204,7 @@ exports[`graphite: show store2 1`] = `
     2. update {{
        store: {
          id: 2,
-         current: 3
+         current: 18
        }
     }}
   ]
@@ -207,7 +255,7 @@ exports[`showcase: mapped 1`] = `
     2. update {{
        store: {
          id: 6,
-         current: 1
+         current: 3
        }
     }}
   ]
