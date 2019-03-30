@@ -124,10 +124,11 @@ function filterEvent<A, B>(
   linkGraphs({
     from: event.graphite,
     to: createGraph({
+      val: {fn},
       node: [
         cmd('compute', {
           fn(newValue, scope) {
-            return fn(newValue)
+            return scope.fn(newValue)
           },
         }),
         cmd('filter', {
