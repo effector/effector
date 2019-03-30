@@ -135,19 +135,20 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
         meta.stop = false
       }
     }
-    if (!resetStop && meta.stop) return
-    for (let stepn = 0; stepn < graph.next.length; stepn++) {
-      /**
-       * copy head of scope stack to feel free
-       * to override it during seq execution
-       */
-      const subscope = new Stack(scope.value, scope)
-      addFifo({
-        step: graph.next[stepn],
-        firstIndex: 0,
-        scope: subscope,
-        resetStop: true,
-      })
+    if (!meta.stop) {
+      for (let stepn = 0; stepn < graph.next.length; stepn++) {
+        /**
+         * copy head of scope stack to feel free
+         * to override it during seq execution
+         */
+        const subscope = new Stack(scope.value, scope)
+        addFifo({
+          step: graph.next[stepn],
+          firstIndex: 0,
+          scope: subscope,
+          resetStop: true,
+        })
+      }
     }
     if (resetStop) {
       meta.stop = false
