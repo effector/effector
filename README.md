@@ -242,17 +242,31 @@ The only requirement for function - **Should have zero or one argument**
 **Store** is an object that holds the state tree. There can be multiple stores.
 
 ```js
-const users = createStore([]) // <-- Default state
-  // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+// `getUsers` - is an effect
+// `addUser` - is an event
+const defaultState = [{ name: Joe }];
+const users = createStore(defaultState)
+  // subscribe store reducers to events
+  .on(getUsers.done, (oldState, payload) => payload)
+  .on(addUser, (oldState, payload) => [...oldState, payload]))
 
-const messages = createStore([])
-  // from WebSocket
-  .on(data, (state, message) => [...state, message])
-
-users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
-messages.watch(console.log)
+// subscribe side-effects
+const callback = (newState) => console.log(newState)
+users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
+// `callback` will be triggered each time when `.on` handler returns the new state
 ```
+
+Most profit thing of stores is their compositions:
+
+```js
+// `.map` accept state of parent store and return new memoized store. No more reselect ;)
+const firstUser = users.map(list => list[0]);
+firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user name: Joe"
+
+addUser({ name: Joseph }) // `firstUser` is not updated
+getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
+```
+
 > [Learn more](https://effector.now.sh/en/introduction/core-concepts)
 
 ## API
