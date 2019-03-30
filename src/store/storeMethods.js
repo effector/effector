@@ -221,7 +221,7 @@ export function mapStore<A, B>(
           meta,
         }),
       ],
-      next: [innerStore.graphite],
+      child: [innerStore.graphite],
     }),
   })
   return innerStore
