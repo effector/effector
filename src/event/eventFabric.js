@@ -126,10 +126,20 @@ function filterEvent<A, B>(
     to: createGraph({
       node: [
         cmd('compute', {
-          fn: newValue => fn(newValue),
+          fn(newValue, scope) {
+            return fn(newValue)
+          },
         }),
         cmd('filter', {
-          fn: result => result !== undefined,
+          fn(result, scope) {
+            scope.val = result
+            return result !== undefined
+          },
+        }),
+        cmd('compute', {
+          fn(newValue, scope) {
+            return scope.val
+          },
         }),
       ],
       child: [mapped.graphite],
