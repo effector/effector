@@ -187,7 +187,6 @@ const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
         val: meta.val,
         fn: step.fn,
       })
-      console.log('filter result', runCtx.result)
       //$todo
       local.isChanged = Boolean(runCtx.result)
       return local.arg
@@ -238,7 +237,7 @@ const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
     run: {
       cmd: cmd.run,
       //$todo
-      transition: local => local.isFailed,
+      transition: local => !local.isFailed,
       local: (arg): {arg: any, isFailed: boolean} => ({
         arg,
         isFailed: true,
