@@ -9,42 +9,7 @@ import type {
   Update,
   Filter,
   Compute,
-  Single,
 } from 'effector/stdlib'
-
-type Meta = {|
-  callstack: Array<Cmd>,
-  stop: boolean,
-  scope: Array<any>,
-  pendingEvents: Array<{
-    event: (data: any) => any,
-    data: any,
-  }>,
-  val: {[name: string]: StateRef},
-|}
-
-type Command<Local> = {
-  cmd(meta: Meta, local: Local, val: Object): void,
-  transition(meta: Meta, local: Local): boolean,
-  local(meta: Meta): Local,
-}
-
-type Line = {|
-  +step: Graph<any>,
-  +post: Array<PostAction>,
-|}
-
-type Area = {|
-  +list: $ReadOnlyArray<Line>,
-  +post: Array<PostAction>,
-  index: number,
-|}
-
-type PostAction =
-  | {|+type: 'meta/?stop'|}
-  | {|+type: 'meta/!stop'|}
-  | {|+type: 'callstack/pop'|}
-  | {|+type: 'scope/size', +size: number|}
 
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
   runtime(unit.graphite, payload)
