@@ -2,7 +2,6 @@
 
 import type {
   Graph,
-  Step,
   StateRef,
   Cmd,
   Emit,
@@ -102,7 +101,18 @@ class FIFO {
     this.child = null
   }
 }
-
+class Local {
+  /*::
+  isChanged: boolean
+  isFailed: boolean
+  arg: any
+  */
+  constructor(arg: any) {
+    this.isChanged = true
+    this.isFailed = false
+    this.arg = arg
+  }
+}
 const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
   const voidStack = new Stack(null, null)
   const fifo = new FIFO({
@@ -148,11 +158,16 @@ const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
         return
       }
       const cmd = command[step.type]
-      const local = cmd.local(scope.value)
+      const local = new Local(scope.value)
       //$todo
-      scope.value = cmd.cmd(meta, local, step.data)
-      //$todo
-      meta.stop = !cmd.transition(local)
+      scope.value = cmd(meta, local, step.data)
+      if (local.isFailed) {
+        meta.stop = true
+      } else if (!local.isChanged) {
+        meta.stop = true
+      } else {
+        meta.stop = false
+      }
     }
     if (!resetStop && meta.stop) return
     for (let stepn = 0; stepn < graph.next.length; stepn++) {
@@ -179,91 +194,50 @@ const runStep2 = (step: Graph<any>, payload: any, pendingEvents) => {
     scope: [],
     val: {},
   }
-  const cmd = {
-    emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
-    filter(meta, local, step: $PropertyType<Filter, 'data'>) {
-      const runCtx = tryRun({
-        arg: local.arg,
-        val: meta.val,
-        fn: step.fn,
-      })
-      //$todo
-      local.isChanged = Boolean(runCtx.result)
-      return local.arg
-    },
-    run(meta, local, step: $PropertyType<Run, 'data'>) {
-      if ('pushUpdate' in step) {
-        step.pushUpdate = data => meta.pendingEvents.push(data)
-      }
-      const runCtx = tryRun({
-        arg: local.arg,
-        val: meta.val,
-        fn: step.fn,
-      })
-      //$todo
-      local.isFailed = runCtx.err
-      return local.arg
-    },
-    update(meta, local, step: $PropertyType<Update, 'data'>) {
-      return (step.store.current = local.arg)
-    },
-    compute(meta, local, step: $PropertyType<Compute, 'data'>) {
-      const runCtx = tryRun({
-        arg: local.arg,
-        val: meta.val,
-        fn: step.fn,
-      })
-      //$todo
-      local.isChanged = !runCtx.err
-      return runCtx.err ? null : runCtx.result
-    },
-  }
-
-  const command = {
-    emit: {
-      cmd: cmd.emit,
-      transition: () => true,
-      local: (arg): {arg: any} => ({arg}),
-    },
-    filter: {
-      cmd: cmd.filter,
-      //$todo
-      transition: local => local.isChanged,
-      local: (arg): {arg: any, isChanged: boolean} => ({
-        arg,
-        isChanged: false,
-      }),
-    },
-    run: {
-      cmd: cmd.run,
-      //$todo
-      transition: local => !local.isFailed,
-      local: (arg): {arg: any, isFailed: boolean} => ({
-        arg,
-        isFailed: true,
-      }),
-    },
-    update: {
-      cmd: cmd.update,
-      transition: () => true,
-      local: (arg): {arg: any} => ({
-        arg,
-      }),
-    },
-    compute: {
-      cmd: cmd.compute,
-      //$todo
-      transition: local => local.isChanged,
-      local: (arg): {arg: any, isChanged: boolean} => ({
-        arg,
-        isChanged: false,
-      }),
-    },
-  }
 
   runFifo()
 }
-
+const command = {
+  emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
+  filter(meta, local, step: $PropertyType<Filter, 'data'>) {
+    const runCtx = tryRun({
+      arg: local.arg,
+      val: meta.val,
+      fn: step.fn,
+    })
+    /**
+     * .isFailed assignment is not needed because in such case
+     * runCtx.result will be null
+     * thereby successfully forcing that branch to stop
+     */
+    local.isChanged = Boolean(runCtx.result)
+    return local.arg
+  },
+  run(meta, local, step: $PropertyType<Run, 'data'>) {
+    if ('pushUpdate' in step) {
+      step.pushUpdate = data => meta.pendingEvents.push(data)
+    }
+    const runCtx = tryRun({
+      arg: local.arg,
+      val: meta.val,
+      fn: step.fn,
+    })
+    local.isFailed = runCtx.err
+    return runCtx.result
+  },
+  update(meta, local, step: $PropertyType<Update, 'data'>) {
+    return (step.store.current = local.arg)
+  },
+  compute(meta, local, step: $PropertyType<Compute, 'data'>) {
+    const runCtx = tryRun({
+      arg: local.arg,
+      val: meta.val,
+      fn: step.fn,
+    })
+    local.isFailed = runCtx.err
+    return runCtx.result
+  },
+}
 const tryRun = ctx => {
   const result = {
     err: false,
