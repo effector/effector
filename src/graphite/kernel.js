@@ -142,6 +142,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
   }
   const runGraph = (fifo: FIFO) => {
     const {step: graph, firstIndex, scope, resetStop} = fifo.value
+    meta.val = graph.val
     for (
       let stepn = firstIndex;
       stepn < graph.seq.length && !meta.stop;
@@ -187,12 +188,10 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
       meta.stop = false
     }
   }
-  const meta: Meta = {
-    callstack: [],
+  const meta = {
     pendingEvents,
     stop: false,
-    scope: [],
-    val: {},
+    val: step.val,
   }
 
   runFifo()
