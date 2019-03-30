@@ -244,7 +244,7 @@ The only requirement for function - **Should have zero or one argument**
 ```js
 // `getUsers` - is a effect
 // `addUser` - is a event
-const defaultState = [];
+const defaultState = [{ name: Joe }];
 const users = createStore(defaultState)
   // subscribe store reducers to events
   .on(getUsers.done, (oldState, payload) => payload)
@@ -252,7 +252,7 @@ const users = createStore(defaultState)
 
 // subscribe side-effects
 const callback = (newState) => console.log(newState)
-users.watch(callback) // `.watch` for a store is triggered immidiatly: `[]`
+users.watch(callback) // `.watch` for a store is triggered immidiatly: `[{ name: Joe }]`
 // the `callback` will triggered each time when `.on` handler returns new state
 ```
 
@@ -261,9 +261,9 @@ Most profit thing of stores is their compositions:
 ```js
 // `.map` accept state of parent store and return new memoized store
 const firstUser = users.map(list => list[0]);
-firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user ..."
+firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user name: Joe"
 
-addUser({/* user data */}) // `firstUser` is not updated
+addUser({ name: Joseph }) // `firstUser` is not updated
 getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
 ```
 
