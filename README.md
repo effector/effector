@@ -242,8 +242,8 @@ The only requirement for function - **Should have zero or one argument**
 **Store** is an object that holds the state tree. There can be multiple stores.
 
 ```js
-// `getUsers` - is a effect
-// `addUser` - is a event
+// `getUsers` - is an effect
+// `addUser` - is an event
 const defaultState = [{ name: Joe }];
 const users = createStore(defaultState)
   // subscribe store reducers to events
@@ -252,14 +252,14 @@ const users = createStore(defaultState)
 
 // subscribe side-effects
 const callback = (newState) => console.log(newState)
-users.watch(callback) // `.watch` for a store is triggered immidiatly: `[{ name: Joe }]`
-// the `callback` will triggered each time when `.on` handler returns new state
+users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
+// `callback` will be triggered each time when `.on` handler returns the new state
 ```
 
 Most profit thing of stores is their compositions:
 
 ```js
-// `.map` accept state of parent store and return new memoized store
+// `.map` accept state of parent store and return new memoized store. No more reselect ;)
 const firstUser = users.map(list => list[0]);
 firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user name: Joe"
 
