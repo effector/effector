@@ -1,7 +1,7 @@
 //@flow
 import {cmd, createNode, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
-import {createEvent, forward} from 'effector/event'
+import {createEvent, linkGraphs} from 'effector/event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
@@ -29,34 +29,33 @@ function storeCombination(
     /*::;(child: Store<any>);*/
     const fn = cmd('run', {
       fn() {
-        fn.data.data.pushUpdate({
+        //$todo
+        fn.data.pushUpdate({
           event: updater,
           data: getFresh,
         })
       },
     })
 
-    fn.data.data.pushUpdate = data => {}
+    fn.data.pushUpdate = data => {}
 
     stateNew[key] = child.defaultState
-    forward({
-      from: child,
-      to: {
-        graphite: createNode(
-          cmd('compute', {
-            fn(state) {
-              const current = store.getState()
-              const changed = current[key] !== state
-              current[key] = state
-              return changed
-            },
-          }),
-          cmd('filter', {
-            fn: changed => changed,
-          }),
-          fn,
-        ),
-      },
+    linkGraphs({
+      from: child.graphite,
+      to: createNode(
+        cmd('compute', {
+          fn(state) {
+            const current = store.getState()
+            const changed = current[key] !== state
+            current[key] = state
+            return changed
+          },
+        }),
+        cmd('filter', {
+          fn: changed => changed,
+        }),
+        fn,
+      ),
     })
   }
   const store = storeFabric({
@@ -66,9 +65,9 @@ function storeCombination(
   const getFresh = freshGetter.bind(store.getState)
   ;(store: any).defaultShape = obj
   ;(store: any).defaultState = defaultState
-  forward({
-    from: updater.map(fn => fn()),
-    to: store,
+  linkGraphs({
+    from: updater.map(fn => fn()).graphite,
+    to: store.graphite,
   })
   return store
 }

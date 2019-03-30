@@ -1,14 +1,20 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {cmd, Kind, stringRefcount, createNode} from 'effector/stdlib'
+import {
+  cmd,
+  Kind,
+  stringRefcount,
+  createNode,
+  createGraph,
+} from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {runtime} from 'effector/graphite'
 
 import type {Subscription} from '../effector/index.h'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
-import {forward} from './forward'
+import {linkGraphs} from './forward'
 
 const nextID = stringRefcount()
 
@@ -69,16 +75,16 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  forward({
-    from: contramapped,
-    to: {
-      graphite: createNode(
+  linkGraphs({
+    from: contramapped.graphite,
+    to: createGraph({
+      node: [
         cmd('compute', {
           fn: newValue => fn(newValue),
         }),
-        event.graphite.seq,
-      ),
-    },
+      ],
+      child: [event.graphite],
+    }),
   })
   return contramapped
 }
@@ -93,16 +99,16 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  forward({
-    from: event,
-    to: {
-      graphite: createNode(
+  linkGraphs({
+    from: event.graphite,
+    to: createGraph({
+      node: [
         cmd('compute', {
           fn: newValue => fn(newValue),
         }),
-        mapped.graphite.seq,
-      ),
-    },
+      ],
+      child: [mapped.graphite],
+    }),
   })
   return mapped
 }
@@ -115,19 +121,30 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  forward({
-    from: event,
-    to: {
-      graphite: createNode(
+  linkGraphs({
+    from: event.graphite,
+    to: createGraph({
+      val: {fn},
+      node: [
         cmd('compute', {
-          fn: newValue => fn(newValue),
+          fn(newValue, scope) {
+            return scope.fn(newValue)
+          },
         }),
         cmd('filter', {
-          fn: result => result !== undefined,
+          fn(result, scope) {
+            scope.val = result
+            return result !== undefined
+          },
         }),
-        mapped.graphite.seq,
-      ),
-    },
+        cmd('compute', {
+          fn(newValue, scope) {
+            return scope.val
+          },
+        }),
+      ],
+      child: [mapped.graphite],
+    }),
   })
   return mapped
 }
@@ -136,14 +153,15 @@ function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  return forward({
-    from: event,
-    to: {
-      graphite: createNode(
-        cmd('run', {
-          fn: (newValue: Payload) => watcher(newValue, event.getType()),
-        }),
-      ),
-    },
+  return linkGraphs({
+    from: event.graphite,
+    to: createNode(
+      cmd('compute', {
+        fn: n => n,
+      }),
+      cmd('run', {
+        fn: (newValue: Payload) => watcher(newValue, event.getType()),
+      }),
+    ),
   })
 }

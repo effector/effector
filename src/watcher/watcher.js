@@ -16,10 +16,10 @@ function disposer() {
 }
 
 export const createWatcher = (opts: {
-  child: TypeDef<*, 'cmd' | 'step'>,
+  child: Graph<any>,
   parent: Graph<>,
 }): Watcher => {
-  const subscribers = opts.parent.next.data
+  const subscribers = opts.parent.next
   const instance = {
     indexOf: subscribers.indexOf.bind(subscribers, opts.child),
     splice: subscribers.splice.bind(subscribers),

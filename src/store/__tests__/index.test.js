@@ -10,7 +10,7 @@ test('createStore', () => {
 })
 
 test('.map', () => {
-  const newWord = createEvent<string>()
+  const newWord = createEvent/*:: <string> */()
   const a = createStore('word').on(newWord, (_, word) => word)
 
   const b = a.map(word => word.length)
@@ -44,7 +44,7 @@ test('.map', () => {
 
 describe('.watch', () => {
   it('supports functions', () => {
-    const newWord = createEvent<string>()
+    const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -64,7 +64,7 @@ describe('.watch', () => {
     expect(spy).toHaveBeenCalledTimes(3)
   })
   it('returns unsubscribe function', () => {
-    const newWord = createEvent<string>()
+    const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -79,7 +79,7 @@ describe('.watch', () => {
     newWord('lol')
 
     newWord('long word [1]')
-
+    console.log(getSpyCalls())
     expect(spy).toHaveBeenCalledTimes(3)
 
     unsub()
@@ -88,7 +88,7 @@ describe('.watch', () => {
     expect(spy).toHaveBeenCalledTimes(3)
   })
   it('supports events', () => {
-    const newWord = createEvent<string>('new word')
+    const newWord = createEvent/*:: <string> */('new word')
     const spyEvent = createEvent('spy event')
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -115,7 +115,7 @@ describe('.watch', () => {
     expect(getSpyCalls()).toEqual([[7, 1], [7, 2], [8, 3]])
   })
   it('supports effects', () => {
-    const newWord = createEvent<string>('new word')
+    const newWord = createEvent/*:: <string> */('new word')
     const spyEvent = createEffect('spy effect')
     spyEvent.use(args => (console.log(args), args))
     const a = createStore('word').on(newWord, (_, word) => word)
@@ -145,7 +145,7 @@ describe('.watch', () => {
 })
 
 test('.off', () => {
-  const newWord = createEvent<string>()
+  const newWord = createEvent/*:: <string> */()
   const a = createStore('word').on(newWord, (_, word) => word)
 
   const b = a.map(word => word.length)

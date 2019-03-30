@@ -1,63 +1,23 @@
 //@flow
 
-import type {Graph, Step, StateRef, Single} from 'effector/stdlib'
-
-type Meta = {|
-  callstack: Array<Step>,
-  stop: boolean,
-  scope: Array<any>,
-  pendingEvents: Array<{
-    event: (data: any) => any,
-    data: any,
-  }>,
-  val: {[name: string]: StateRef},
-|}
-
-type Command<Local> = {
-  cmd(meta: Meta, local: Local, val: Object): void,
-  transition(meta: Meta, local: Local): boolean,
-  local(meta: Meta): Local,
-}
-
-type Line = {|
-  +step: Step,
-  +post: Array<PostAction>,
-|}
-
-type Area = {|
-  +list: $ReadOnlyArray<Line>,
-  +post: Array<PostAction>,
-  index: number,
-|}
-
-type PostAction =
-  | {|+type: 'meta/?stop'|}
-  | {|+type: 'meta/!stop'|}
-  | {|+type: 'callstack/pop'|}
-  | {|+type: 'scope/size', +size: number|}
-
-const last = <T>(list: $ReadOnlyArray<T>): T => list[list.length - 1]
-const step = (meta: Meta): Step => last(meta.callstack)
-//$todo
-const single = (meta: Meta): any => step(meta).data.data
+import type {
+  Graph,
+  StateRef,
+  Cmd,
+  Emit,
+  Run,
+  Update,
+  Filter,
+  Compute,
+} from 'effector/stdlib'
 
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
   runtime(unit.graphite, payload)
 }
 export function runtime(graph: Graph<any>, payload: any) {
-  const meta: Meta = {
-    callstack: [],
-    pendingEvents: [],
-    stop: false,
-    scope: [
-      {
-        arg: payload,
-      },
-    ],
-    val: {},
-  }
-  runStep(graph.seq, meta, graph.val)
-  runPendings(meta.pendingEvents)
+  const pendingEvents = []
+  runStep(graph, payload, pendingEvents)
+  runPendings(pendingEvents)
 }
 const runPendings = pendings => {
   if (pendings.length === 0) return
@@ -76,198 +36,173 @@ const runPendings = pendings => {
   }
   console.warn('orderedIDs', orderedIDs)
 }
-const runStep = (step: Step, meta: Meta, valRaw) => {
-  const scope = meta.scope
-  const valStack: Array<typeof valRaw> = [valRaw]
-  //prettier-ignore
-  const pos: {|
-    head: number,
-    +stack: Array<Area>,
-  |} = {
-    head: 0,
-    stack: [{
-      list: [{
-        step,
-        post: [
-          {type: 'callstack/pop'},
-        ],
-      }],
-      post: [],
-      index: 0,
-    }],
-  }
-  headLoop: while (pos.head >= 0) {
-    const area = pos.stack[pos.head]
-    while (area.index < area.list.length) {
-      const line = area.list[area.index]
-      const step = line.step
-      meta.stop = false
-      meta.callstack.push(step)
-      switch (step.type) {
-        case 'single': {
-          const type = step.data.type
-          const local = command[type].local(meta, scope[scope.length - 1].arg)
-          scope.push(local)
-          command[type].cmd(meta, local, last(valStack))
-          meta.stop = !command[type].transition(meta, local)
-          break
-        }
-        case 'multi': {
-          line.post.push({type: 'meta/!stop'})
-          const items = step.data
-          const list: Array<Line> = Array(items.length)
-          for (let i = 0; i < items.length; i++) {
-            list[i] = {
-              step: items[i],
-              post: [
-                {type: 'callstack/pop'},
-                {type: 'scope/size', size: scope.length},
-              ],
-            }
-          }
-          area.index += 1
-          pos.head += 1
-          pos.stack[pos.head] = {
-            list,
-            post: line.post,
-            index: 0,
-          }
-          continue headLoop
-        }
-        case 'seq': {
-          line.post.push({type: 'scope/size', size: scope.length})
-          const items: Array<Step> = step.data
-          const list: Array<Line> = Array(items.length)
-          for (let i = 0; i < items.length; i++) {
-            //prettier-ignore
-            list[i] = {
-              step: items[i],
-              post: [
-                {type: 'callstack/pop'},
-                {type: 'meta/?stop'},
-              ],
-            }
-          }
-          area.index += 1
-          pos.head += 1
-          pos.stack[pos.head] = {
-            list,
-            post: line.post,
-            index: 0,
-          }
-          continue headLoop
-        }
-      }
-      runActions(line.post, area)
-      area.index += 1
-    }
-    runActions(area.post, area)
-    pos.head -= 1
-  }
-
-  function runActions(post: Array<PostAction>, area: Area) {
-    for (let i = post.length - 1; i >= 0; i--) {
-      const action = post[i]
-      switch (action.type) {
-        case 'meta/?stop':
-          if (meta.stop) area.index = Infinity
-          break
-        case 'callstack/pop':
-          meta.callstack.pop()
-          break
-        case 'meta/!stop':
-          meta.stop = false
-          break
-        case 'scope/size':
-          scope.length = action.size
-          break
-        /*::
-        default:
-          (action.type: empty)
-        */
-      }
-    }
+class Stack {
+  /*::
+  value: any
+  parent: Stack | null
+  */
+  constructor(value: any, parent: Stack | null) {
+    this.value = value
+    this.parent = parent
   }
 }
+class FIFO {
+  /*::
+  value: {
+    step: Graph<any>,
+    firstIndex: number,
+    scope: Stack,
+    resetStop: boolean,
+  }
+  child: FIFO | null
+  */
+  constructor(value: {
+    step: Graph<any>,
+    firstIndex: number,
+    scope: Stack,
+    resetStop: boolean,
+  }) {
+    this.value = value
+    this.child = null
+  }
+}
+class Local {
+  /*::
+  isChanged: boolean
+  isFailed: boolean
+  arg: any
+  */
+  constructor(arg: any) {
+    this.isChanged = true
+    this.isFailed = false
+    this.arg = arg
+  }
+}
+const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
+  const voidStack = new Stack(null, null)
+  const fifo = new FIFO({
+    step,
+    firstIndex: 0,
+    scope: new Stack(payload, voidStack),
+    resetStop: false,
+  })
+  const addFifo = (opts: {
+    step: Graph<any>,
+    firstIndex: number,
+    scope: Stack,
+    resetStop: boolean,
+  }) => {
+    const next = new FIFO(opts)
+    last.child = next
+    last = next
+  }
 
-const cmd = {
-  emit(meta, local, val) {},
-  filter(meta, local, val) {
+  let last = fifo
+  const runFifo = () => {
+    let current = fifo
+    while (current) {
+      runGraph(current)
+      current = current.child
+    }
+  }
+  const runGraph = (fifo: FIFO) => {
+    const {step: graph, firstIndex, scope, resetStop} = fifo.value
+    meta.val = graph.val
+    for (
+      let stepn = firstIndex;
+      stepn < graph.seq.length && !meta.stop;
+      stepn++
+    ) {
+      const step = graph.seq[stepn]
+      if (stepn !== firstIndex && step.type === 'run') {
+        addFifo({
+          step: graph,
+          firstIndex: stepn,
+          scope,
+          resetStop,
+        })
+        return
+      }
+      const cmd = command[step.type]
+      const local = new Local(scope.value)
+      //$todo
+      scope.value = cmd(meta, local, step.data)
+      if (local.isFailed) {
+        meta.stop = true
+      } else if (!local.isChanged) {
+        meta.stop = true
+      } else {
+        meta.stop = false
+      }
+    }
+    if (!meta.stop) {
+      for (let stepn = 0; stepn < graph.next.length; stepn++) {
+        /**
+         * copy head of scope stack to feel free
+         * to override it during seq execution
+         */
+        const subscope = new Stack(scope.value, scope)
+        addFifo({
+          step: graph.next[stepn],
+          firstIndex: 0,
+          scope: subscope,
+          resetStop: true,
+        })
+      }
+    }
+    if (resetStop) {
+      meta.stop = false
+    }
+  }
+  const meta = {
+    pendingEvents,
+    stop: false,
+    val: step.val,
+  }
+
+  runFifo()
+}
+const command = {
+  emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
+  filter(meta, local, step: $PropertyType<Filter, 'data'>) {
     const runCtx = tryRun({
       arg: local.arg,
       val: meta.val,
-      fn: single(meta).fn,
+      fn: step.fn,
     })
+    /**
+     * .isFailed assignment is not needed because in such case
+     * runCtx.result will be null
+     * thereby successfully forcing that branch to stop
+     */
     local.isChanged = Boolean(runCtx.result)
+    return local.arg
   },
-  run(meta, local, val) {
-    const data = single(meta)
-    if ('pushUpdate' in data) {
-      data.pushUpdate = data => meta.pendingEvents.push(data)
+  run(meta, local, step: $PropertyType<Run, 'data'>) {
+    if ('pushUpdate' in step) {
+      step.pushUpdate = data => meta.pendingEvents.push(data)
     }
     const runCtx = tryRun({
       arg: local.arg,
       val: meta.val,
-      fn: data.fn,
+      fn: step.fn,
     })
     local.isFailed = runCtx.err
+    return runCtx.result
   },
-  update(meta, local, val) {
-    local.store.current = local.arg
+  update(meta, local, step: $PropertyType<Update, 'data'>) {
+    return (step.store.current = local.arg)
   },
-  compute(meta, local, val) {
+  compute(meta, local, step: $PropertyType<Compute, 'data'>) {
     const runCtx = tryRun({
       arg: local.arg,
       val: meta.val,
-      fn: single(meta).fn,
+      fn: step.fn,
     })
-    local.isChanged = !runCtx.err
-    ///TODO WARNING!! DIRTY HACK REMOVE ASAP
-    ///need to separate post local variables
-    local.arg = runCtx.err ? null : runCtx.result
+    local.isFailed = runCtx.err
+    return runCtx.result
   },
 }
-
-const command = ({
-  emit: {
-    cmd: cmd.emit,
-    transition: () => true,
-    local: (meta, arg) => ({arg}),
-  },
-  filter: {
-    cmd: cmd.filter,
-    transition: (meta, local) => local.isChanged,
-    local: (meta, arg) => ({arg, isChanged: false}),
-  },
-  run: {
-    cmd: cmd.run,
-    transition: (meta, local) => local.isFailed,
-    local: (meta, arg) => ({arg, isFailed: true}),
-  },
-  update: {
-    cmd: cmd.update,
-    transition: () => true,
-    local: (meta, arg) => ({
-      arg,
-      store: single(meta).store,
-    }),
-  },
-  compute: {
-    cmd: cmd.compute,
-    transition: (meta, local) => local.isChanged,
-    local: (meta, arg) => ({
-      arg,
-      isChanged: false,
-    }),
-  },
-}: $ReadOnly<{
-  emit: Command<{arg: any}>,
-  filter: Command<{arg: any, isChanged: boolean}>,
-  run: Command<{arg: any, isFailed: boolean}>,
-  update: Command<{arg: any, store: StateRef}>,
-  compute: Command<{arg: any, isChanged: boolean}>,
-}>)
-
 const tryRun = ctx => {
   const result = {
     err: false,
