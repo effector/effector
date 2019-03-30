@@ -15,7 +15,7 @@ const nextID = stringRefcount()
 declare export function cmd(
   tag: 'compute',
   data: {|
-    fn: Function,
+    fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
   |},
 ): Compute
@@ -29,14 +29,14 @@ declare export function cmd(
 declare export function cmd(
   tag: 'filter',
   data: {|
-    fn: (data: any) => boolean,
+    fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
   |},
 ): Filter
 declare export function cmd(
   tag: 'run',
   data: {
-    fn: Function,
+    fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
   },
 ): Run

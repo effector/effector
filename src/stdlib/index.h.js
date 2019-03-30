@@ -37,7 +37,7 @@ export type Run = {|
   +type: 'run',
   +group: 'cmd',
   +data: {|
-    fn: Function,
+    fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
     pushUpdate?: (data: any) => number | void,
   |},
@@ -48,7 +48,7 @@ export type Filter = {|
   +type: 'filter',
   +group: 'cmd',
   +data: {|
-    fn: (data: any) => boolean,
+    fn: (data: any, scope: {[string]: any}) => boolean,
     meta?: NodeMeta,
   |},
 |}
@@ -66,7 +66,7 @@ export type Compute = {|
   +type: 'compute',
   +group: 'cmd',
   +data: {|
-    fn: Function,
+    fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
   |},
 |}
