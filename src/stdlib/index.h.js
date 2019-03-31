@@ -77,22 +77,3 @@ export type Graph<+Val: {[name: string]: any} = {||}> = {
   +seq: Array<Cmd>,
   +val: Val,
 }
-export type Step = Single | Seq | Multi
-export type Single = {
-  +id: ID,
-  +type: 'single',
-  +group: 'step',
-  +data: TypeDef<any, 'cmd'>,
-}
-export type Seq = {
-  +id: ID,
-  +type: 'seq',
-  +group: 'step',
-  +data: Array<Step>,
-}
-export type Multi = {
-  +id: ID,
-  +type: 'multi',
-  +group: 'step',
-  +data: Array<Step>,
-}
