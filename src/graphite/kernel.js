@@ -35,7 +35,9 @@ const runPendings = pendings => {
     const item = ordered[i]
     item.event(item.data)
   }
-  console.warn('orderedIDs', orderedIDs)
+  if (__DEBUG__) {
+    console.warn('orderedIDs', orderedIDs)
+  }
 }
 class Stack {
   /*::
