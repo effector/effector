@@ -57,10 +57,12 @@ type Layer = {|
 |}
 
 export class Leftist {
+  /*::
   left: leftist
   right: leftist
   value: Layer
   rank: number
+  */
   constructor(value: Layer, rank: number, left: leftist, right: leftist) {
     this.value = value
     this.rank = rank
@@ -69,27 +71,16 @@ export class Leftist {
   }
 }
 export type leftist = null | Leftist
-function insert(
-  x: Layer,
-  t: leftist,
-  comparator: (Layer, Layer) => boolean,
-): leftist {
-  return merge(new Leftist(x, 1, null, null), t, comparator)
+function insert(x: Layer, t: leftist): leftist {
+  return merge(new Leftist(x, 1, null, null), t)
 }
-function deleteMin(
-  param: leftist,
-  comparator: (Layer, Layer) => boolean,
-): leftist {
+function deleteMin(param: leftist): leftist {
   if (param) {
-    return merge(param.left, param.right, comparator)
+    return merge(param.left, param.right)
   }
   return null
 }
-function merge(
-  _t1: leftist,
-  _t2: leftist,
-  comparator: (Layer, Layer) => boolean,
-): leftist {
+function merge(_t1: leftist, _t2: leftist): leftist {
   let t2
   let t1
   let k1
@@ -104,12 +95,12 @@ function merge(
       if (t2) {
         k1 = t1.value
         l = t1.left
-        if (comparator(k1, t2.value)) {
+        if (layerComparator(k1, t2.value)) {
           _t2 = t1
           _t1 = t2
           continue
         }
-        merged = merge(t1.right, t2, comparator)
+        merged = merge(t1.right, t2)
         rank_left = l?.rank ?? 0
         rank_right = merged?.rank ?? 0
         if (rank_left >= rank_right) {
@@ -167,7 +158,7 @@ function iterate(tree: leftist) {
   const results = []
   while (tree) {
     results.push(tree.value)
-    tree = deleteMin(tree, layerComparator)
+    tree = deleteMin(tree)
   }
   return results
 }
@@ -193,12 +184,11 @@ const printLayers = list => {
 }
 let layerID = 0
 const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
-  const voidStack = new Stack(null, null)
   let heap = new Leftist(
     {
       step,
       firstIndex: 0,
-      scope: new Stack(payload, voidStack),
+      scope: new Stack(payload, new Stack(null, null)),
       resetStop: false,
       type: 'layer',
       id: ++layerID,
@@ -207,15 +197,14 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
     null,
     null,
   )
-  const addFifo = (opts: Layer) => {
-    heap = insert(opts, heap, layerComparator)
+  const pushHeap = (opts: Layer) => {
+    heap = insert(opts, heap)
   }
 
-  // let last = fifo
-  const runFifo = () => {
+  const runHeap = () => {
     while (heap) {
       runGraph(heap.value)
-      heap = deleteMin(heap, layerComparator)
+      heap = deleteMin(heap)
       if (__DEBUG__) {
         const list = iterate(heap)
         if (list.length > 4) {
@@ -224,8 +213,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
       }
     }
   }
-  const runGraph = (layer: Layer) => {
-    const {step: graph, firstIndex, scope, resetStop} = layer
+  const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer) => {
     meta.val = graph.val
     for (
       let stepn = firstIndex;
@@ -234,7 +222,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
     ) {
       const step = graph.seq[stepn]
       if (stepn !== firstIndex && step.type === 'run') {
-        addFifo({
+        pushHeap({
           step: graph,
           firstIndex: stepn,
           scope,
@@ -263,7 +251,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
          * to override it during seq execution
          */
         const subscope = new Stack(scope.value, scope)
-        addFifo({
+        pushHeap({
           step: graph.next[stepn],
           firstIndex: 0,
           scope: subscope,
@@ -283,7 +271,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
     val: step.val,
   }
 
-  runFifo()
+  runHeap()
 }
 const command = {
   emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
