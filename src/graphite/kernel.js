@@ -171,6 +171,26 @@ function iterate(tree: leftist) {
   }
   return results
 }
+const flattenLayer = (layer: Layer) => {
+  const result = {}
+  const scope = []
+  let currentScope = layer.scope
+  while (currentScope) {
+    scope.push(currentScope.value)
+    currentScope = currentScope.parent
+  }
+  result.id = layer.id
+  result.type = layer.type
+  result.scope = scope
+  return result
+}
+const printLayers = list => {
+  const flatten = list.map(flattenLayer)
+  console.table((flatten: any))
+  for (let i = 0; i < flatten.length; i++) {
+    console.table((flatten[i].scope.reverse(): any))
+  }
+}
 let layerID = 0
 const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
   const voidStack = new Stack(null, null)
@@ -199,7 +219,7 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
       if (__DEBUG__) {
         const list = iterate(heap)
         if (list.length > 4) {
-          console.table((list: any))
+          printLayers(list)
         }
       }
     }
