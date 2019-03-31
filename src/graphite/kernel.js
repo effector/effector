@@ -10,6 +10,7 @@ import type {
   Filter,
   Compute,
 } from 'effector/stdlib'
+import {__DEBUG__} from 'effector/flags'
 
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
   runtime(unit.graphite, payload)
@@ -46,25 +47,81 @@ class Stack {
     this.parent = parent
   }
 }
-class FIFO {
-  /*::
-  value: {
-    step: Graph<any>,
-    firstIndex: number,
-    scope: Stack,
-    resetStop: boolean,
-  }
-  child: FIFO | null
-  */
-  constructor(value: {
-    step: Graph<any>,
-    firstIndex: number,
-    scope: Stack,
-    resetStop: boolean,
-  }) {
+type Layer = {|
+  +step: Graph<any>,
+  +firstIndex: number,
+  +scope: Stack,
+  +resetStop: boolean,
+  +type: 'layer' | 'merge' | 'effect',
+  +id: number,
+|}
+
+export class Leftist {
+  left: leftist
+  right: leftist
+  value: Layer
+  rank: number
+  constructor(value: Layer, rank: number, left: leftist, right: leftist) {
     this.value = value
-    this.child = null
+    this.rank = rank
+    this.left = left
+    this.right = right
   }
+}
+export type leftist = null | Leftist
+function insert(
+  x: Layer,
+  t: leftist,
+  comparator: (Layer, Layer) => boolean,
+): leftist {
+  return merge(new Leftist(x, 1, null, null), t, comparator)
+}
+function deleteMin(
+  param: leftist,
+  comparator: (Layer, Layer) => boolean,
+): leftist {
+  if (param) {
+    return merge(param.left, param.right, comparator)
+  }
+  return null
+}
+function merge(
+  _t1: leftist,
+  _t2: leftist,
+  comparator: (Layer, Layer) => boolean,
+): leftist {
+  let t2
+  let t1
+  let k1
+  let l
+  let merged
+  let rank_left
+  let rank_right
+  while (true) {
+    t2 = _t2
+    t1 = _t1
+    if (t1) {
+      if (t2) {
+        k1 = t1.value
+        l = t1.left
+        if (comparator(k1, t2.value)) {
+          _t2 = t1
+          _t1 = t2
+          continue
+        }
+        merged = merge(t1.right, t2, comparator)
+        rank_left = l?.rank ?? 0
+        rank_right = merged?.rank ?? 0
+        if (rank_left >= rank_right) {
+          return new Leftist(k1, rank_right + 1, l, merged)
+        }
+        return new Leftist(k1, rank_left + 1, merged, l)
+      }
+      return t1
+    }
+    return t2
+  }
+  /*::return _t1*/
 }
 class Local {
   /*::
@@ -78,35 +135,77 @@ class Local {
     this.arg = arg
   }
 }
+const layerComparator = (a: Layer, b: Layer) => {
+  if (a.type === b.type) return a.id > b.id
+  let arank = -1
+  switch (a.type) {
+    case 'layer':
+      arank = 0
+      break
+    case 'merge':
+      arank = 1
+      break
+    case 'effect':
+      arank = 2
+      break
+  }
+  let brank = -1
+  switch (b.type) {
+    case 'layer':
+      brank = 0
+      break
+    case 'merge':
+      brank = 1
+      break
+    case 'effect':
+      brank = 2
+      break
+  }
+  return arank > brank
+}
+function iterate(tree: leftist) {
+  const results = []
+  while (tree) {
+    results.push(tree.value)
+    tree = deleteMin(tree, layerComparator)
+  }
+  return results
+}
+let layerID = 0
 const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
   const voidStack = new Stack(null, null)
-  const fifo = new FIFO({
-    step,
-    firstIndex: 0,
-    scope: new Stack(payload, voidStack),
-    resetStop: false,
-  })
-  const addFifo = (opts: {
-    step: Graph<any>,
-    firstIndex: number,
-    scope: Stack,
-    resetStop: boolean,
-  }) => {
-    const next = new FIFO(opts)
-    last.child = next
-    last = next
+  let heap = new Leftist(
+    {
+      step,
+      firstIndex: 0,
+      scope: new Stack(payload, voidStack),
+      resetStop: false,
+      type: 'layer',
+      id: ++layerID,
+    },
+    1,
+    null,
+    null,
+  )
+  const addFifo = (opts: Layer) => {
+    heap = insert(opts, heap, layerComparator)
   }
 
-  let last = fifo
+  // let last = fifo
   const runFifo = () => {
-    let current = fifo
-    while (current) {
-      runGraph(current)
-      current = current.child
+    while (heap) {
+      runGraph(heap.value)
+      heap = deleteMin(heap, layerComparator)
+      if (__DEBUG__) {
+        const list = iterate(heap)
+        if (list.length > 4) {
+          console.table((list: any))
+        }
+      }
     }
   }
-  const runGraph = (fifo: FIFO) => {
-    const {step: graph, firstIndex, scope, resetStop} = fifo.value
+  const runGraph = (layer: Layer) => {
+    const {step: graph, firstIndex, scope, resetStop} = layer
     meta.val = graph.val
     for (
       let stepn = firstIndex;
@@ -120,6 +219,8 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
           firstIndex: stepn,
           scope,
           resetStop,
+          type: 'effect',
+          id: ++layerID,
         })
         return
       }
@@ -147,6 +248,8 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
           firstIndex: 0,
           scope: subscope,
           resetStop: true,
+          type: 'layer',
+          id: ++layerID,
         })
       }
     }
