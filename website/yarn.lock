@@ -766,6 +766,13 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/helper-regex" "^7.0.0"
 
+"@babel/plugin-transform-strict-mode@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-strict-mode/-/plugin-transform-strict-mode-7.2.0.tgz#1aff4b99ce987b47152566a987e9469e47b96626"
+  integrity sha512-BJ5BF9+9zWTVCLe+nfLSfHUC0V/ly+ipMxVUdFjwlHFJ+Ue8WudbNh0ddzN0NnAQX5Kg0uk+DgRoGOJdnfNJgg==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+
 "@babel/plugin-transform-template-literals@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-transform-template-literals/-/plugin-transform-template-literals-7.2.0.tgz#d87ed01b8eaac7a92473f608c97c089de2ba1e5b"
@@ -6164,7 +6171,7 @@ pako@~1.0.5:
   resolved "https://registry.yarnpkg.com/pako/-/pako-1.0.8.tgz#6844890aab9c635af868ad5fecc62e8acbba3ea4"
   integrity sha512-6i0HVbUfcKaTv+EG8ZTr75az7GFXcLYk9UyLEg7Notv/Ma+z/UG3TCoz6GiNeOrn1E/e63I0X/Hpw18jHOTUnA==
 
-parcel-bundler@^1.12.0, parcel-bundler@^1.12.3:
+parcel-bundler@^1.12.3:
   version "1.12.3"
   resolved "https://registry.yarnpkg.com/parcel-bundler/-/parcel-bundler-1.12.3.tgz#2bbf70bfa2d06097f071653285040bd125684d09"
   integrity sha512-8bq6lj0hhQeGxD9f9xEkFMXQ3d8TIlf2+isKxoi9bciB0KVEILRGllaPkUgp++5t0anToBh9+tG6ZyInXOC1/A==
@@ -6227,9 +6234,10 @@ parcel-bundler@^1.12.0, parcel-bundler@^1.12.3:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
-"parcel-plugin-linaria@link:./forks/parcel-plugin-linaria":
-  version "0.0.0"
-  uid ""
+parcel-plugin-linaria@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/parcel-plugin-linaria/-/parcel-plugin-linaria-0.1.1.tgz#ce02f82e10479f3eab7f9509ca40d622bd0a91d3"
+  integrity sha512-2naQ0SwsNXhAvpV+XH5Q1qgvzrSu8JW0WbXINdQrhMvE+VRVX8D6dX79BqBKv/ctoEwAZxpaDvslyw26pF39bA==
 
 parse-asn1@^5.0.0:
   version "5.1.4"

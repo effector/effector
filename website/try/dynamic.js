@@ -75,6 +75,10 @@ intervals.watch(console.log)
 
 logs
   .on(realmLog, (logs, log) => logs.concat(log))
+  .on(realmStatus, (logs, {active}) => {
+    if (!active) return logs
+    return []
+  })
   .reset(changeSources)
   .reset(selectVersion)
 
@@ -105,12 +109,14 @@ stats
   .on(realmStatus, (stats, {active}) => {
     if (!active) return stats
     return {
-      store: [],
       event: [],
+      store: [],
       effect: [],
       domain: [],
     }
   })
+  .reset(changeSources)
+  .reset(selectVersion)
 
 stats.watch(e => {
   //console.log('stats', e);
@@ -163,6 +169,19 @@ switcher({
   },
 })
 
+realmInvoke.watch(({method, instance}) => {
+  if (method === 'restore') {
+    for (const key in instance) {
+      realmStore(instance[key])
+    }
+  }
+  if (method === 'createApi') {
+    for (const key in instance) {
+      realmEvent(instance[key])
+    }
+  }
+})
+
 realmEffect.watch(e => {
   realmEvent(e.done)
   realmEvent(e.fail)
@@ -202,6 +221,11 @@ codeError
     message: e.error.message,
     stack: e.error.stack,
   }))
+
+
+changeSources.watch(code => {
+  localStorage.setItem('code', code)
+})
 
 forward({
   from: changeSources,

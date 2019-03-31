@@ -1,7 +1,7 @@
 //@flow
 
 import {isStore, isEvent, isEffect} from 'effector/stdlib'
-import {type Event, forward, eventFabric} from 'effector/event'
+import {type Event, eventFabric} from 'effector/event'
 import {type Store, storeFabric} from 'effector/store'
 import type {Effect} from 'effector/effect'
 

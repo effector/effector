@@ -106,6 +106,6 @@ test('event.filter should drop undefined values', () => {
 
   expect(getSpyCalls()).toEqual([[0], [4], [8]])
 
-  expect(show(num.graphite.seq)).toMatchSnapshot('num event graph')
-  expect(show(evenNum.graphite.seq)).toMatchSnapshot('evenNum event graph')
+  expect(show(num.graphite)).toMatchSnapshot('num event graph')
+  expect(show(evenNum.graphite)).toMatchSnapshot('evenNum event graph')
 })

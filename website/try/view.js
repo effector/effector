@@ -13,8 +13,9 @@ import {VersionLink} from './components/VersionLink'
 import {VersionSelector} from './components/VersionSelector'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
-import Stats from './components/Stats'
+import SecondanaryTabs from './components/SecondanaryTabs'
 import Console from './components/Console'
+import Outline from './components/Outline'
 import {
   sourceCode,
   logs,
@@ -29,14 +30,10 @@ import {
   version,
   tab,
   tabApi,
+  codeSetCursor,
 } from './domain'
 
-const LogsView = createComponent(
-  logs.map(logs => logs.map(({method, args}) => ({method, data: args}))),
-  ({style}, logs) => <Console className="console" style={style} logs={logs} />,
-)
-
-const StatsView = createComponent(stats, ({}, stats) => <Stats {...stats} />)
+const OutlineView = createComponent(stats, ({}, stats) => <Outline {...stats} />)
 
 const ErrorsView = createComponent(
   codeError,
@@ -51,8 +48,9 @@ const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
+    setCursor={codeSetCursor}
     value={sources}
-    mode="application/javascript"
+    mode="text/jsx"
     onChange={changeSourcesDebounced}
     lineWrapping
   />
@@ -99,32 +97,37 @@ const TabsView = createComponent(tab, (_, tab) => (
     <ul
       className={cx(
         tab === 'graphite' && 'show-graphite',
-        tab === 'console' && 'show-console',
+        tab === 'dom' && 'show-dom',
         'toolbar',
         'header-tabs',
       )}>
       <li className="tab graphite-tab" onClick={tabApi.showGraphite}>
         Graphite
       </li>
-      <li className="tab console-tab" onClick={tabApi.showConsole}>
-        Console
+      <li className="tab dom-tab" onClick={tabApi.showDOM}>
+        DOM
       </li>
     </ul>
     {tab === 'graphite' && <GraphiteView />}
-    {tab === 'console' && <LogsView />}
+    <div
+      style={{display: tab === 'dom' ? 'block' : 'none'}}
+      className="dom">
+      <iframe id="dom" />
+    </div>
   </>
 ))
 
 export default (
   <div className="try-inner">
     <VersionLinkView />
+    <OutlineView />
     <CodeView />
     <div className="header">
       <VersionSelectorView />
       <ShareButtonView />
     </div>
     <TabsView />
+    <SecondanaryTabs />
     <ErrorsView />
-    <StatsView />
   </div>
 )

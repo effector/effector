@@ -1,6 +1,6 @@
 # ☄️ Effector
 
-### Reactive state manager
+> Reactive state manager
 
 [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
 [![Join the chat at https://
@@ -9,6 +9,36 @@
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
 <a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Introduction](#introduction)
+  - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
+- [Installation](#installation)
+  - [Additional packages:](#additional-packages)
+- [Examples](#examples)
+  - [Increment/decrement](#incrementdecrement)
+  - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
+    - [Run example](#run-example)
+  - [Storages and events](#storages-and-events)
+    - [Run example](#run-example-1)
+- [Demo](#demo)
+  - [More examples/demo you can check here](#more-examplesdemo-you-can-check-here)
+- [Core concepts](#core-concepts)
+  - [Domain](#domain)
+  - [Event](#event)
+  - [Effect](#effect)
+  - [Store](#store)
+- [API](#api)
+- [Sponsors](#sponsors)
+- [Contributors](#contributors)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Introduction
 
@@ -136,8 +166,7 @@ turnOff() // nothing has changed
 
 ### More examples/demo you can check [here](https://github.com/zerobias/effector/tree/master/examples)
 
-## Core concept
-### Core types
+## Core concepts
 
 ```js
 import type {Domain, Event, Effect, Store} from 'effector'
@@ -213,17 +242,31 @@ The only requirement for function - **Should have zero or one argument**
 **Store** is an object that holds the state tree. There can be multiple stores.
 
 ```js
-const users = createStore([]) // <-- Default state
-  // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+// `getUsers` - is an effect
+// `addUser` - is an event
+const defaultState = [{ name: Joe }];
+const users = createStore(defaultState)
+  // subscribe store reducers to events
+  .on(getUsers.done, (oldState, payload) => payload)
+  .on(addUser, (oldState, payload) => [...oldState, payload]))
 
-const messages = createStore([])
-  // from WebSocket
-  .on(data, (state, message) => [...state, message])
-
-users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
-messages.watch(console.log)
+// subscribe side-effects
+const callback = (newState) => console.log(newState)
+users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
+// `callback` will be triggered each time when `.on` handler returns the new state
 ```
+
+Most profit thing of stores is their compositions:
+
+```js
+// `.map` accept state of parent store and return new memoized store. No more reselect ;)
+const firstUser = users.map(list => list[0]);
+firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) // "first user name: Joe"
+
+addUser({ name: Joseph }) // `firstUser` is not updated
+getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
+```
+
 > [Learn more](https://effector.now.sh/en/introduction/core-concepts)
 
 ## API
@@ -237,6 +280,7 @@ import {
   createStoreObject,
 } from 'effector'
 ```
+
 ## Sponsors
 Thank you to all our sponsors 🙏
 

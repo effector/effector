@@ -6,12 +6,7 @@ import {transformCode} from './compiler'
 export function evalExpr(expr, vars) {
   status.init()
   try {
-    const compiled = transformCode(`'use strict';
-{
-
-${expr}
-
-}`)
+    const compiled = transformCode(expr)
     const exprFunc = scopedEval.runCode(compiled)
     const results = exprFunc(vars)
     status.done()

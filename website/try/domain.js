@@ -52,6 +52,9 @@ export function retrieveCode() {
   if (code) {
     return decompress(code)
   }
+  if (localStorage.getItem('code')) {
+    return localStorage.getItem('code')
+  }
   return defaultSourceCode
 }
 
@@ -67,6 +70,7 @@ export const realmEvent = createEvent('realm event created')
 export const realmStore = createEvent('realm store')
 export const realmEffect = createEvent('realm effect created')
 export const realmDomain = createEvent('realm domain created')
+export const realmComponent = createEvent('realm component created')
 export const realmInvoke = createEvent('realm invoke')
 export const realmLog = createEvent('realm console.log call')
 export const realmStatus = createEvent('realm status update')
@@ -88,6 +92,7 @@ export const timeouts = createStore<number[]>([])
 export const version = createStore(defaultVersions[0])
 export const packageVersions = createStore(defaultVersions)
 export const sourceCode = createStore<string>(defaultSourceCode)
+export const codeSetCursor = createEvent()
 export const shareableUrl = combine(sourceCode, version, (code, version) =>
   generateShareableUrl(version, code),
 )
@@ -106,11 +111,11 @@ export const graphiteCode = graphite.map(e => {
   return JSON.stringify(result, null, 2)
 })
 
-export const tab = createStore<'graphite' | 'console'>('graphite')
+export const tab = createStore<'graphite' | 'dom'>('dom')
 
 export const tabApi = createApi(tab, {
   showGraphite: () => 'graphite',
-  showConsole: () => 'console',
+  showDOM: () => 'dom'
 })
 
 export const stats = createStore({
