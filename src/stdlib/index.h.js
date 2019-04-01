@@ -77,3 +77,8 @@ export type Graph<+Val: {[name: string]: any} = {||}> = {
   +seq: Array<Cmd>,
   +val: Val,
 }
+
+//prettier-ignore
+export type Graphite =
+  | {+graphite: Graph<any>, ...}
+  | Graph<any>
