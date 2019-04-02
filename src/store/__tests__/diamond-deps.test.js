@@ -86,7 +86,7 @@ test('olympic', async() => {
   await fs.outputJSON(path, A.graphite.seq, {spaces: 2})
 })
 
-test.skip('display name', () => {
+test('display name', () => {
   const isFirstNameShortMap = jest.fn()
   const fullNameMap = jest.fn()
   const displayNameMap = jest.fn()
@@ -136,7 +136,8 @@ test.skip('display name', () => {
   expect(displayName.getState()).toBe('Joseph Doe')
   expect(isFirstNameShortMap.mock.calls.length).toBe(2)
   expect(fullNameMap.mock.calls.length).toBe(2)
-  expect(displayNameMap.mock.calls.length).toBe(3)
+  console.log(displayNameMap.mock.calls)
+  expect(displayNameMap.mock.calls.length).toBe(2)
   expect(view.mock.calls.length).toBe(2)
 
   updateFirstName('Jooooooooooooooseph')
