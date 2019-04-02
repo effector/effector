@@ -185,28 +185,18 @@ const printLayers = list => {
   }
 }
 let layerID = 0
+let heap: leftist = null
 const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
-  let heap = new Leftist(
-    {
-      step,
-      firstIndex: 0,
-      scope: new Stack(payload, new Stack(null, null)),
-      resetStop: false,
-      type: 'layer',
-      id: ++layerID,
-    },
-    1,
-    null,
-    null,
-  )
   const pushHeap = (opts: Layer) => {
     heap = insert(opts, heap)
   }
 
   const runHeap = () => {
+    let value
     while (heap) {
-      runGraph(heap.value)
+      value = heap.value
       heap = deleteMin(heap)
+      runGraph(value)
       if (__DEBUG__) {
         const list = iterate(heap)
         if (list.length > 4) {
@@ -272,7 +262,14 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
     stop: false,
     val: step.val,
   }
-
+  pushHeap({
+    step,
+    firstIndex: 0,
+    scope: new Stack(payload, new Stack(null, null)),
+    resetStop: false,
+    type: 'layer',
+    id: ++layerID,
+  })
   runHeap()
 }
 const command = {
