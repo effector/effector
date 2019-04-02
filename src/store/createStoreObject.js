@@ -1,5 +1,5 @@
 //@flow
-import {cmd, createNode, stringRefcount, isStore} from 'effector/stdlib'
+import {step, createNode, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
 import {createEvent, linkGraphs} from 'effector/event'
 
@@ -27,7 +27,7 @@ function storeCombination(
     defaultState[key] = isStore(child) ? child.defaultState : child
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const fn = cmd('run', {
+    const fn = step.run({
       fn() {
         //$todo
         fn.data.pushUpdate({
@@ -43,7 +43,7 @@ function storeCombination(
     linkGraphs({
       from: child.graphite,
       to: createNode(
-        cmd('compute', {
+        step.compute({
           fn(state) {
             const current = store.getState()
             const changed = current[key] !== state
@@ -51,7 +51,7 @@ function storeCombination(
             return changed
           },
         }),
-        cmd('filter', {
+        step.filter({
           fn: changed => changed,
         }),
         fn,

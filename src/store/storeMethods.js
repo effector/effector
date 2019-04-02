@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {cmd, Kind, createNode, createGraph} from 'effector/stdlib'
+import {step, Kind, createNode, createGraph} from 'effector/stdlib'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
@@ -42,14 +42,14 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
       from: e.graphite,
       to: createGraph({
         node: [
-          cmd('compute', {
+          step.compute({
             fn(newValue) {
               const lastState = getState(storeInstance)
               return handler(lastState, newValue, readName(e))
             },
             meta,
           }),
-          cmd('filter', {
+          step.filter({
             fn(data) {
               const lastState = getState(storeInstance)
               return data !== lastState && data !== undefined
@@ -130,10 +130,10 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
   return linkGraphs({
     from: storeInstance.graphite,
     to: createNode(
-      cmd('compute', {
+      step.compute({
         fn: n => n,
       }),
-      cmd('run', {
+      step.run({
         fn(args) {
           let stopPhaseTimerMessage = null
           startPhaseTimer(storeInstance, 'subscribe')
@@ -191,7 +191,7 @@ export function mapStore<A, B>(
     from: store.graphite,
     to: createGraph({
       node: [
-        cmd('compute', {
+        step.compute({
           fn(newValue) {
             startPhaseTimer(store, 'map')
             lastValue = newValue
@@ -209,7 +209,7 @@ export function mapStore<A, B>(
           },
           meta,
         }),
-        cmd('filter', {
+        step.filter({
           fn(result) {
             const lastState = innerStore.getState()
             const isChanged = result !== lastState && result !== undefined

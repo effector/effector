@@ -2,7 +2,7 @@
 import $$observable from 'symbol-observable'
 
 import {
-  cmd,
+  step,
   Kind,
   stringRefcount,
   createNode,
@@ -33,7 +33,7 @@ export function eventFabric<Payload>({
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createNode(
-    cmd('emit', {
+    step.emit({
       fullName,
       meta: {
         fullName,
@@ -83,7 +83,7 @@ function prepend(event, fn: (_: any) => *) {
     from: contramapped.graphite,
     to: createGraph({
       node: [
-        cmd('compute', {
+        step.compute({
           fn: newValue => fn(newValue),
         }),
       ],
@@ -107,7 +107,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     from: event.graphite,
     to: createGraph({
       node: [
-        cmd('compute', {
+        step.compute({
           fn: newValue => fn(newValue),
         }),
       ],
@@ -130,18 +130,18 @@ function filterEvent<A, B>(
     to: createGraph({
       val: {fn},
       node: [
-        cmd('compute', {
+        step.compute({
           fn(newValue, scope) {
             return scope.fn(newValue)
           },
         }),
-        cmd('filter', {
+        step.filter({
           fn(result, scope) {
             scope.val = result
             return result !== undefined
           },
         }),
-        cmd('compute', {
+        step.compute({
           fn(newValue, scope) {
             return scope.val
           },
@@ -160,10 +160,10 @@ function watchEvent<Payload>(
   return linkGraphs({
     from: event.graphite,
     to: createNode(
-      cmd('compute', {
+      step.compute({
         fn: n => n,
       }),
-      cmd('run', {
+      step.run({
         fn: (newValue: Payload) => watcher(newValue, event.getType()),
       }),
     ),
