@@ -9,6 +9,7 @@ import type {
   Update,
   Filter,
   Compute,
+  Barrier,
 } from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
 
@@ -54,7 +55,7 @@ type Layer = {|
   +firstIndex: number,
   +scope: Stack,
   +resetStop: boolean,
-  +type: 'layer' | 'merge' | 'effect',
+  +type: 'layer' | 'barrier' | 'effect',
   +id: number,
 |}
 
@@ -74,15 +75,15 @@ export class Leftist {
 }
 export type leftist = null | Leftist
 function insert(x: Layer, t: leftist): leftist {
-  return merge(new Leftist(x, 1, null, null), t)
+  return barrier(new Leftist(x, 1, null, null), t)
 }
 function deleteMin(param: leftist): leftist {
   if (param) {
-    return merge(param.left, param.right)
+    return barrier(param.left, param.right)
   }
   return null
 }
-function merge(_t1: leftist, _t2: leftist): leftist {
+function barrier(_t1: leftist, _t2: leftist): leftist {
   let t2
   let t1
   let k1
@@ -102,7 +103,7 @@ function merge(_t1: leftist, _t2: leftist): leftist {
           _t1 = t2
           continue
         }
-        merged = merge(t1.right, t2)
+        merged = barrier(t1.right, t2)
         rank_left = l?.rank ?? 0
         rank_right = merged?.rank ?? 0
         if (rank_left >= rank_right) {
@@ -135,7 +136,7 @@ const layerComparator = (a: Layer, b: Layer) => {
     case 'layer':
       arank = 0
       break
-    case 'merge':
+    case 'barrier':
       arank = 1
       break
     case 'effect':
@@ -147,7 +148,7 @@ const layerComparator = (a: Layer, b: Layer) => {
     case 'layer':
       brank = 0
       break
-    case 'merge':
+    case 'barrier':
       brank = 1
       break
     case 'effect':
@@ -186,11 +187,11 @@ const printLayers = list => {
 }
 let layerID = 0
 let heap: leftist = null
+const barriers = new Set()
+const pushHeap = (opts: Layer) => {
+  heap = insert(opts, heap)
+}
 const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
-  const pushHeap = (opts: Layer) => {
-    heap = insert(opts, heap)
-  }
-
   const runHeap = () => {
     let value
     while (heap) {
@@ -213,16 +214,38 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
       stepn++
     ) {
       const step = graph.seq[stepn]
-      if (stepn !== firstIndex && step.type === 'run') {
-        pushHeap({
-          step: graph,
-          firstIndex: stepn,
-          scope,
-          resetStop,
-          type: 'effect',
-          id: ++layerID,
-        })
-        return
+      if (stepn === firstIndex) {
+        if (step.type === 'barrier') {
+          barriers.delete(step.data.barrierID)
+        }
+      } else {
+        switch (step.type) {
+          case 'run':
+            pushHeap({
+              step: graph,
+              firstIndex: stepn,
+              scope,
+              resetStop,
+              type: 'effect',
+              id: ++layerID,
+            })
+            return
+          case 'barrier': {
+            const id = step.data.barrierID
+            if (!barriers.has(id)) {
+              barriers.add(id)
+              pushHeap({
+                step: graph,
+                firstIndex: stepn,
+                scope,
+                resetStop,
+                type: 'barrier',
+                id: ++layerID,
+              })
+            }
+            return
+          }
+        }
       }
       const cmd = command[step.type]
       const local = new Local(scope.value)
@@ -273,6 +296,11 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
   runHeap()
 }
 const command = {
+  barrier(meta, local, step: $PropertyType<Barrier, 'data'>) {
+    local.isFailed = false
+    local.isChanged = true
+    return local.arg
+  },
   emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
   filter(meta, local, step: $PropertyType<Filter, 'data'>) {
     const runCtx = tryRun({
