@@ -16,30 +16,7 @@ import {__DEBUG__} from 'effector/flags'
 export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
   runtime(unit.graphite, payload)
 }
-export function runtime(graph: Graph<any>, payload: any) {
-  const pendingEvents = []
-  runStep(graph, payload, pendingEvents)
-  runPendings(pendingEvents)
-}
-const runPendings = pendings => {
-  if (pendings.length === 0) return
-  const ordered = []
-  const orderedIDs = []
-  for (let i = pendings.length - 1; i >= 0; i--) {
-    const item = pendings[i]
-    if (orderedIDs.indexOf(item.event.id) !== -1) continue
-    orderedIDs.push(item.event.id)
-    ordered.push(item)
-  }
-  if (ordered.length === 0) return
-  for (let i = ordered.length - 1; i >= 0; i--) {
-    const item = ordered[i]
-    item.event(item.data)
-  }
-  if (__DEBUG__) {
-    console.warn('orderedIDs', orderedIDs)
-  }
-}
+
 class Stack {
   /*::
   value: any
@@ -75,15 +52,15 @@ export class Leftist {
 }
 export type leftist = null | Leftist
 function insert(x: Layer, t: leftist): leftist {
-  return barrier(new Leftist(x, 1, null, null), t)
+  return merge(new Leftist(x, 1, null, null), t)
 }
 function deleteMin(param: leftist): leftist {
   if (param) {
-    return barrier(param.left, param.right)
+    return merge(param.left, param.right)
   }
   return null
 }
-function barrier(_t1: leftist, _t2: leftist): leftist {
+function merge(_t1: leftist, _t2: leftist): leftist {
   let t2
   let t1
   let k1
@@ -103,7 +80,7 @@ function barrier(_t1: leftist, _t2: leftist): leftist {
           _t1 = t2
           continue
         }
-        merged = barrier(t1.right, t2)
+        merged = merge(t1.right, t2)
         rank_left = l?.rank ?? 0
         rank_right = merged?.rank ?? 0
         if (rank_left >= rank_right) {
@@ -191,7 +168,7 @@ const barriers = new Set()
 const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
-const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
+export const runtime = (step: Graph<any>, payload: any) => {
   const runHeap = () => {
     let value
     while (heap) {
@@ -281,7 +258,6 @@ const runStep = (step: Graph<any>, payload: any, pendingEvents) => {
     }
   }
   const meta = {
-    pendingEvents,
     stop: false,
     val: step.val,
   }
@@ -317,9 +293,6 @@ const command = {
     return local.arg
   },
   run(meta, local, step: $PropertyType<Run, 'data'>) {
-    if ('pushUpdate' in step) {
-      step.pushUpdate = data => meta.pendingEvents.push(data)
-    }
     const runCtx = tryRun({
       arg: local.arg,
       val: meta.val,

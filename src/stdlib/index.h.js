@@ -50,7 +50,6 @@ export type Run = {|
   +data: {|
     fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
-    pushUpdate?: (data: any) => number | void,
   |},
 |}
 
