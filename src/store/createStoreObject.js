@@ -1,12 +1,12 @@
 //@flow
 import {step, createNode, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
-import {createEvent, linkGraphs} from 'effector/event'
+import {linkGraphs} from 'effector/event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
-const nextUpdaterID = stringRefcount()
+const nextBarrierID = stringRefcount()
 function getFreshArray() {
   return this().slice()
 }
@@ -19,43 +19,39 @@ function storeCombination(
   stateNew: any,
   defaultState: any,
 ) {
-  const updater: any = createEvent('update ' + nextUpdaterID())
   const name = unitObjectName(obj)
-  //const {stateNew} = initializer(obj)
+  const barrierID = nextBarrierID()
+  const nodes = []
   for (const key in obj) {
     const child = obj[key]
     defaultState[key] = isStore(child) ? child.defaultState : child
     if (!isStore(child)) continue
     /*::;(child: Store<any>);*/
-    const fn = step.run({
-      fn() {
-        //$todo
-        fn.data.pushUpdate({
-          event: updater,
-          data: getFresh,
-        })
-      },
-    })
-
-    fn.data.pushUpdate = data => {}
 
     stateNew[key] = child.defaultState
+    const node = createNode(
+      step.compute({
+        fn(state) {
+          const current = store.getState()
+          const changed = current[key] !== state
+          current[key] = state
+          return changed
+        },
+      }),
+      step.filter({
+        fn: changed => changed,
+      }),
+      step.barrier({barrierID}),
+      step.compute({
+        fn(state) {
+          return getFresh()
+        },
+      }),
+    )
+    nodes.push(node)
     linkGraphs({
       from: child.graphite,
-      to: createNode(
-        step.compute({
-          fn(state) {
-            const current = store.getState()
-            const changed = current[key] !== state
-            current[key] = state
-            return changed
-          },
-        }),
-        step.filter({
-          fn: changed => changed,
-        }),
-        fn,
-      ),
+      to: node,
     })
   }
   const store = storeFabric({
@@ -63,13 +59,15 @@ function storeCombination(
     //TODO: add location
     config: {name},
   })
+  for (const node of nodes) {
+    linkGraphs({
+      from: node,
+      to: store.graphite,
+    })
+  }
   const getFresh = freshGetter.bind(store.getState)
   ;(store: any).defaultShape = obj
   ;(store: any).defaultState = defaultState
-  linkGraphs({
-    from: updater.map(fn => fn()).graphite,
-    to: store.graphite,
-  })
   return store
 }
 function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
