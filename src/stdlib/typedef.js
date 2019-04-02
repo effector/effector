@@ -11,6 +11,35 @@ import type {
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 
+export const step: {
+  emit(data: {|
+    fullName: string,
+    meta?: NodeMeta,
+  |}): Emit,
+  compute(data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  |}): Compute,
+  filter(data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  |}): Filter,
+  run(data: {
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  }): Run,
+  update(data: {|
+    store: StateRef,
+    meta?: NodeMeta,
+  |}): Update,
+} = {
+  compute: cmd.bind(null, 'compute'),
+  emit: cmd.bind(null, 'emit'),
+  filter: cmd.bind(null, 'filter'),
+  run: cmd.bind(null, 'run'),
+  update: cmd.bind(null, 'update'),
+}
+
 //eslint-disable-next-line no-unused-vars
 declare export function cmd(
   tag: 'compute',
