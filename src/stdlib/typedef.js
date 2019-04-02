@@ -7,11 +7,17 @@ import type {
   Filter,
   Emit,
   Compute,
+  Barrier,
+  ID,
 } from './index.h'
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 
 export const step: {
+  barrier(data: {|
+    +barrierID: ID,
+    meta?: NodeMeta,
+  |}): Barrier,
   emit(data: {|
     fullName: string,
     meta?: NodeMeta,
@@ -33,6 +39,7 @@ export const step: {
     meta?: NodeMeta,
   |}): Update,
 } = {
+  barrier: cmd.bind(null, 'barrier'),
   compute: cmd.bind(null, 'compute'),
   emit: cmd.bind(null, 'emit'),
   filter: cmd.bind(null, 'filter'),
@@ -41,6 +48,13 @@ export const step: {
 }
 
 //eslint-disable-next-line no-unused-vars
+declare export function cmd(
+  tag: 'barrier',
+  data: {|
+    +barrierID: ID,
+    meta?: NodeMeta,
+  |},
+): Barrier
 declare export function cmd(
   tag: 'compute',
   data: {|

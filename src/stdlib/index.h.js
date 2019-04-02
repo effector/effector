@@ -22,6 +22,17 @@ export type Cmd =
   | Filter
   | Emit
   | Compute
+  | Barrier
+
+export type Barrier = {|
+  +id: ID,
+  +type: 'barrier',
+  +group: 'cmd',
+  +data: {|
+    +barrierID: ID,
+    meta?: NodeMeta,
+  |},
+|}
 
 export type Update = {|
   +id: ID,
