@@ -11,6 +11,8 @@ Object {
 
 exports[`createFormApi submitEffect 3`] = `true`;
 
+exports[`createFormApi submitEffect 4`] = `false`;
+
 exports[`createFormApi submitEvent 1`] = `false`;
 
 exports[`createFormApi submitEvent 2`] = `
@@ -22,6 +24,8 @@ Object {
 
 exports[`createFormApi submitEvent 3`] = `true`;
 
+exports[`createFormApi submitEvent 4`] = `false`;
+
 exports[`createFormApi validate 1`] = `
 Object {
   "firstName": "",
@@ -29,9 +33,9 @@ Object {
 }
 `;
 
-exports[`createFormApi validate 2`] = `false`;
+exports[`createFormApi validate 2`] = `true`;
 
-exports[`createFormApi validate 3`] = `true`;
+exports[`createFormApi validate 3`] = `false`;
 
 exports[`createFormApi validate 4`] = `
 Object {
@@ -40,6 +44,6 @@ Object {
 }
 `;
 
-exports[`createFormApi validate 5`] = `false`;
+exports[`createFormApi validate 5`] = `true`;
 
-exports[`createFormApi validate 6`] = `true`;
+exports[`createFormApi validate 6`] = `false`;
