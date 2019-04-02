@@ -168,99 +168,81 @@ const barriers = new Set()
 const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
-export const runtime = (step: Graph<any>, payload: any) => {
-  const runHeap = () => {
-    let value
-    while (heap) {
-      value = heap.value
-      heap = deleteMin(heap)
-      runGraph(value)
-      if (__DEBUG__) {
-        const list = iterate(heap)
-        if (list.length > 4) {
-          printLayers(list)
-        }
+const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
+  meta.val = graph.val
+  for (
+    let stepn = firstIndex;
+    stepn < graph.seq.length && !meta.stop;
+    stepn++
+  ) {
+    const step = graph.seq[stepn]
+    if (stepn === firstIndex) {
+      if (step.type === 'barrier') {
+        barriers.delete(step.data.barrierID)
       }
-    }
-  }
-  const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer) => {
-    meta.val = graph.val
-    for (
-      let stepn = firstIndex;
-      stepn < graph.seq.length && !meta.stop;
-      stepn++
-    ) {
-      const step = graph.seq[stepn]
-      if (stepn === firstIndex) {
-        if (step.type === 'barrier') {
-          barriers.delete(step.data.barrierID)
-        }
-      } else {
-        switch (step.type) {
-          case 'run':
+    } else {
+      switch (step.type) {
+        case 'run':
+          pushHeap({
+            step: graph,
+            firstIndex: stepn,
+            scope,
+            resetStop,
+            type: 'effect',
+            id: ++layerID,
+          })
+          return
+        case 'barrier': {
+          const id = step.data.barrierID
+          if (!barriers.has(id)) {
+            barriers.add(id)
             pushHeap({
               step: graph,
               firstIndex: stepn,
               scope,
               resetStop,
-              type: 'effect',
+              type: 'barrier',
               id: ++layerID,
             })
-            return
-          case 'barrier': {
-            const id = step.data.barrierID
-            if (!barriers.has(id)) {
-              barriers.add(id)
-              pushHeap({
-                step: graph,
-                firstIndex: stepn,
-                scope,
-                resetStop,
-                type: 'barrier',
-                id: ++layerID,
-              })
-            }
-            return
           }
+          return
         }
       }
-      const cmd = command[step.type]
-      const local = new Local(scope.value)
-      //$todo
-      scope.value = cmd(meta, local, step.data)
-      if (local.isFailed) {
-        meta.stop = true
-      } else if (!local.isChanged) {
-        meta.stop = true
-      } else {
-        meta.stop = false
-      }
     }
-    if (!meta.stop) {
-      for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        /**
-         * copy head of scope stack to feel free
-         * to override it during seq execution
-         */
-        const subscope = new Stack(scope.value, scope)
-        pushHeap({
-          step: graph.next[stepn],
-          firstIndex: 0,
-          scope: subscope,
-          resetStop: true,
-          type: 'layer',
-          id: ++layerID,
-        })
-      }
-    }
-    if (resetStop) {
+    const cmd = command[step.type]
+    const local = new Local(scope.value)
+    //$todo
+    scope.value = cmd(meta, local, step.data)
+    if (local.isFailed) {
+      meta.stop = true
+    } else if (!local.isChanged) {
+      meta.stop = true
+    } else {
       meta.stop = false
     }
   }
-  const meta = {
-    stop: false,
-    val: step.val,
+  if (!meta.stop) {
+    for (let stepn = 0; stepn < graph.next.length; stepn++) {
+      /**
+       * copy head of scope stack to feel free
+       * to override it during seq execution
+       */
+      const subscope = new Stack(scope.value, scope)
+      pushHeap({
+        step: graph.next[stepn],
+        firstIndex: 0,
+        scope: subscope,
+        resetStop: true,
+        type: 'layer',
+        id: ++layerID,
+      })
+    }
   }
+  if (resetStop) {
+    meta.stop = false
+  }
+}
+export const runtime = (step: Graph<any>, payload: any) => {
   pushHeap({
     step,
     firstIndex: 0,
@@ -269,7 +251,22 @@ export const runtime = (step: Graph<any>, payload: any) => {
     type: 'layer',
     id: ++layerID,
   })
-  runHeap()
+  const meta = {
+    stop: false,
+    val: step.val,
+  }
+  let value
+  while (heap) {
+    value = heap.value
+    heap = deleteMin(heap)
+    runGraph(value, meta)
+    if (__DEBUG__) {
+      const list = iterate(heap)
+      if (list.length > 4) {
+        printLayers(list)
+      }
+    }
+  }
 }
 const command = {
   barrier(meta, local, step: $PropertyType<Barrier, 'data'>) {
