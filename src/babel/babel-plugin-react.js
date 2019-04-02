@@ -43,8 +43,8 @@ function findCandidateNameForExpression(path) {
   path.find(path => {
     if (path.isAssignmentExpression()) {
       id = path.node.left
-      // } else if (path.isObjectProperty()) {
-      // id = path.node.key;
+    } else if (path.isObjectProperty()) {
+      id = path.node.key
     } else if (path.isVariableDeclarator()) {
       id = path.node.id
     } else if (path.isStatement()) {
