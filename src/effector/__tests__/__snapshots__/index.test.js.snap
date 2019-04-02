@@ -240,9 +240,53 @@ exports[`showcase: event foo 1`] = `
                  Seq [
                    1. compute {{}},
                    2. filter {{}},
-                   3. run {{}}
+                   3. barrier {{
+                      barrierID: 1
+                   }},
+                   4. compute {{}}
                  ]
-                [(empty list)]}
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             id: 5,
+                             current: {
+                               a: 3,
+                               b: 6
+                             }
+                           }
+                        }}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. compute {{}},
+                             2. filter {{}}
+                           ]
+                           Next [
+                             *  Graph {
+                                Seq [
+                                  1. filter {{}},
+                                  2. update {{
+                                     store: {
+                                       id: 6,
+                                       current: 3
+                                     }
+                                  }}
+                                ]
+                                Next [
+                                  *  Graph {
+                                     Seq [
+                                       1. compute {{}},
+                                       2. run {{}}
+                                     ]
+                                    [(empty list)]}
+                               ]}
+                          ]}
+                     ]}
+                ]}
            ]}
       ]}
   ]}"
@@ -285,8 +329,52 @@ exports[`showcase: store a 1`] = `
        Seq [
          1. compute {{}},
          2. filter {{}},
-         3. run {{}}
+         3. barrier {{
+            barrierID: 1
+         }},
+         4. compute {{}}
        ]
-      [(empty list)]}
+       Next [
+         *  Graph {
+            Seq [
+              1. filter {{}},
+              2. update {{
+                 store: {
+                   id: 5,
+                   current: {
+                     a: 3,
+                     b: 6
+                   }
+                 }
+              }}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. filter {{}}
+                 ]
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             id: 6,
+                             current: 3
+                           }
+                        }}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. compute {{}},
+                             2. run {{}}
+                           ]
+                          [(empty list)]}
+                     ]}
+                ]}
+           ]}
+      ]}
   ]}"
 `;
