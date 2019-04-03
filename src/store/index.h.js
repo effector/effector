@@ -1,6 +1,6 @@
 //@flow
 import type {Subscription} from '../effector/index.h'
-import type {Graph, kind, StateRef, ID} from 'effector/stdlib'
+import type {Graph, kind, StateRef, ID, Unit} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {CompositeName} from '../compositeName'
@@ -17,7 +17,7 @@ export type ThisStore = {
   subscribers: Map<Event<any>, Subscription>,
 }
 
-export type Store<State> = {
+export type Store<State> = /*::interface extends Unit*/ {
   /*::+*/ id: string,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
   getState(): State,
@@ -72,6 +72,6 @@ export type Store<State> = {
   +defaultState: State,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph<>,
+  +graphite: Graph<>,
   compositeName?: CompositeName,
 }

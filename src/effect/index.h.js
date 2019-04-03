@@ -1,10 +1,10 @@
 //@flow
 import type {Subscription, Subscriber} from '../effector/index.h'
-import type {kind, Graph} from 'effector/stdlib'
+import type {kind, Graph, Unit} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {CompositeName} from '../compositeName'
 
-export type Effect<Params, Done, Fail = Error> = {
+export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
   // (payload: Params): Future<Params, Done, Fail>,
   /*::
   [[call]](payload: Params): Promise<Done>,

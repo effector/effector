@@ -92,3 +92,7 @@ export type Graph<+Val: {[name: string]: any} = {||}> = {
 export type Graphite =
   | {+graphite: Graph<any>, ...}
   | Graph<any>
+
+export type Unit = /*::interface*/ {
+  +graphite: Graph<>,
+}
