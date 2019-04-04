@@ -5,6 +5,7 @@ import fetch from 'cross-fetch'
 
 import {
   changeSources,
+  codeCursorActivity,
   realmEvent,
   realmStore,
   realmEffect,
@@ -29,22 +30,39 @@ import {
   selectVersion,
   retrieveCode,
   retrieveVersion,
+  version,
 } from './domain'
+import {typeAtPos} from './flow/domain'
 import {versionLoader} from './evaluator'
 
 import {switcher} from './switcher'
 import {evaluator} from './evaluator'
 import {printLogs} from './logs'
 
+version.on(selectVersion, (_, p) => p)
+
+codeCursorActivity.watch(editor => {
+  const cursor = editor.getCursor()
+  const body = editor.getValue()
+  const line = cursor.line + 1
+  const col = cursor.ch
+  typeAtPos({
+    filename: '/static/repl.js',
+    body,
+    line,
+    col,
+  })
+})
+
 intervals
   .on(realmInterval, (state, id) => [...state, id])
-  .on(changeSources, (state) => {
+  .on(changeSources, state => {
     for (const id of state) {
       global.clearInterval(id)
     }
     return []
   })
-  .on(selectVersion, (state) => {
+  .on(selectVersion, state => {
     for (const id of state) {
       global.clearInterval(id)
     }
@@ -53,13 +71,13 @@ intervals
 
 timeouts
   .on(realmTimeout, (state, id) => [...state, id])
-  .on(changeSources, (state) => {
+  .on(changeSources, state => {
     for (const id of state) {
       global.clearTimeout(id)
     }
     return []
   })
-  .on(selectVersion, (state) => {
+  .on(selectVersion, state => {
     for (const id of state) {
       global.clearTimeout(id)
     }
@@ -222,7 +240,6 @@ codeError
     stack: e.error.stack,
   }))
 
-
 changeSources.watch(code => {
   localStorage.setItem('code', code)
 })
@@ -248,5 +265,7 @@ forward({
 
 packageVersions.watch(console.log)
 
-changeSources(retrieveCode())
-selectVersion(retrieveVersion())
+setTimeout(() => {
+  changeSources(retrieveCode())
+  selectVersion(retrieveVersion())
+}, 0)

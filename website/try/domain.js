@@ -93,6 +93,7 @@ export const version = createStore(defaultVersions[0])
 export const packageVersions = createStore(defaultVersions)
 export const sourceCode = createStore<string>(defaultSourceCode)
 export const codeSetCursor = createEvent()
+export const codeCursorActivity = createEvent()
 export const shareableUrl = combine(sourceCode, version, (code, version) =>
   generateShareableUrl(version, code),
 )
