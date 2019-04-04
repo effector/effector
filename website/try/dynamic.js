@@ -265,7 +265,5 @@ forward({
 
 packageVersions.watch(console.log)
 
-setTimeout(() => {
-  changeSources(retrieveCode())
-  selectVersion(retrieveVersion())
-}, 0)
+changeSources(retrieveCode())
+selectVersion(retrieveVersion())
