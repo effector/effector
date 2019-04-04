@@ -15,4 +15,8 @@ export const typeAtPos = createEffect<
   mixed,
 >()
 
-export const checkContent = createEffect<string, mixed, mixed>()
+export const checkContent = createEffect<
+  string,
+  {|code: Array<any>, success: boolean, processTime: number, service: 'flow'|},
+  mixed,
+>()

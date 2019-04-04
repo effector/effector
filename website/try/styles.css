@@ -191,7 +191,10 @@ body {
     width: 100vw;
     overflow-x: hidden;
     scroll-snap-type: mandatory;
-    grid-template-rows: 50px auto repeat(7, minmax(100px, 33vh));
+    grid-template-rows: 50px auto repeat(7, minmax(100px, 33vh)) auto repeat(
+        3,
+        minmax(100px, 33vh)
+      );
   }
   .header {
     grid-column: 1 / span 1;

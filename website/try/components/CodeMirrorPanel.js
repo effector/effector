@@ -2,10 +2,13 @@
 
 import React from 'react'
 import {createEvent} from 'effector'
+import {checkContent} from '../flow/domain'
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'
 import 'codemirror/mode/jsx/jsx'
 
+import 'codemirror/addon/lint/lint.css'
+import 'codemirror/addon/lint/lint'
 import 'codemirror/addon/comment/comment'
 import 'codemirror/addon/wrap/hardwrap'
 import 'codemirror/addon/fold/foldgutter'
@@ -14,6 +17,35 @@ import 'codemirror/addon/fold/comment-fold'
 import 'codemirror/keymap/sublime'
 // import 'codemirror/addon/fold/xml-fold';
 import 'codemirror/addon/fold/foldgutter.css'
+
+function getAnnotations(text, callback, options, editor) {
+  checkContent(text)
+    .then(({code}) => code)
+    .then(errors => {
+      CodeMirror.signal(editor, 'flowErrors', errors)
+
+      const lint = errors.map(err => {
+        let messages = err.message
+        let firstLoc = messages[0].loc
+        let message = messages
+          .map(msg => {
+            return msg.descr
+          })
+          .join('\n')
+        return {
+          from: CodeMirror.Pos(
+            firstLoc.start.line - 1,
+            firstLoc.start.column - 1,
+          ),
+          to: CodeMirror.Pos(firstLoc.end.line - 1, firstLoc.end.column),
+          severity: err.level,
+          message,
+        }
+      })
+      callback(lint)
+    })
+}
+getAnnotations.async = true
 
 export default class CodeMirrorPanel extends React.Component {
   static defaultProps = {
@@ -49,6 +81,10 @@ export default class CodeMirrorPanel extends React.Component {
       dragDrop: false,
       keyMap: 'sublime',
       gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+      lint: {
+        getAnnotations,
+        lintOnChange: true,
+      },
       ...props,
     }
 

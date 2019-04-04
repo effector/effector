@@ -16,7 +16,7 @@ typeAtPos.use(({filename, body, line, col}) =>
   }),
 )
 
-sourceCode.watch(code => checkContent(code))
+//sourceCode.watch(code => checkContent(code))
 
 typeHint.watch(console.log)
 

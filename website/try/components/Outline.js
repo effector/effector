@@ -6,11 +6,11 @@ import {codeSetCursor} from '../domain'
 
 const Outline = styled('div')`
   grid-column: 1 / span 1;
-  grid-row: 11 / span 1;
+  grid-row: 12 / span 2;
   background-color: #fff;
   font-size: 0.8rem;
   overflow: auto;
-  
+
   @media (min-width: 700px) {
     grid-column: 1 / span 1;
     grid-row: 1 / span 5;
@@ -29,7 +29,7 @@ const Section = styled('section')`
 `
 
 const Item = styled('li')`
-  cursor: ${props => Boolean(props.loc) ? 'pointer': 'inherit'};
+  cursor: ${props => (Boolean(props.loc) ? 'pointer' : 'inherit')};
 `
 
 const mapper = item => {
@@ -38,15 +38,23 @@ const mapper = item => {
   const onClick = () => {
     if (loc) codeSetCursor(loc)
   }
-  return <Item loc={loc} onClick={onClick} key={item.kind + item.id + name}>{name}</Item>
+  return (
+    <Item loc={loc} onClick={onClick} key={item.kind + item.id + name}>
+      {name}
+    </Item>
+  )
 }
 
 const OutlineSection = ({list, title}) => {
   if (list.length === 0) return null
-  return <>
-    <Header>{title}</Header>
-    <Section><ol>{list.map(mapper)}</ol></Section>
-  </>
+  return (
+    <>
+      <Header>{title}</Header>
+      <Section>
+        <ol>{list.map(mapper)}</ol>
+      </Section>
+    </>
+  )
 }
 
 export default function({domain, event, effect, store}) {
