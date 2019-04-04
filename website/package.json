@@ -3,8 +3,8 @@
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
     "build": "docusaurus-build",
-    "build:try": "npx parcel build -d static/try -o try.js --no-autoinstall --no-cache --public-url try try/index.js",
-    "watch:try": "npx parcel watch -d static/try -o try.js --no-autoinstall --no-cache --public-url try try/index.js",
+    "build:try": "npx parcel build -d static/try -o try.js --no-autoinstall --public-url /try try/index.js",
+    "watch:try": "npx parcel watch -d static/try -o try.js --no-autoinstall --public-url /try try/index.js",
     "publish-gh-pages": "docusaurus-publish",
     "now-build": "yarn && yarn build:try && yarn build",
     "write-translations": "docusaurus-write-translations",
@@ -29,6 +29,7 @@
     "terser": "^3.17.0"
   },
   "dependencies": {
+    "@zerobias/codebox": "^1.1.0",
     "codemirror": "^5.45.0",
     "cross-fetch": "^3.0.1",
     "effector": "^0.18.4",
