@@ -47,11 +47,6 @@ body {
   flex-direction: column;
   background: #fff;
   border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-}
-.secondanary-tabs .toolbar {
-  /* TODO: fix this */
-  border-bottom: 2px solid #ddd;
 }
 .toolbar {
   background: #f7f7f7;
@@ -84,7 +79,6 @@ body {
 
 .editor {
   border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
 }
 
 .editor.sources {
@@ -197,7 +191,7 @@ body {
     width: 100vw;
     overflow-x: hidden;
     scroll-snap-type: mandatory;
-    grid-template-rows: 50px repeat(7, minmax(100px, 33vh));
+    grid-template-rows: 50px auto repeat(7, minmax(100px, 33vh));
   }
   .header {
     grid-column: 1 / span 1;
@@ -205,33 +199,36 @@ body {
   }
   .header-tabs {
     grid-column: 1 / span 1;
-    grid-row: 9 / span 1;
+    grid-row: 10 / span 1;
   }
   .secondanary-tabs {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 10 / span 1;
+    grid-row: 11 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
   .editor.sources {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 2 / span 3;
+    grid-row: 3 / span 3;
   }
   .dom {
+    border-top: 1px solid #ddd;
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 5 / span 4;
+    grid-row: 6 / span 4;
   }
   .editor.results {
+    border-top: 1px solid #ddd;
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
-    grid-row: 5 / span 4;
+    grid-row: 6 / span 4;
   }
   .errors {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 2 / span 1;
+    border-bottom: 1px solid #ffd6d6;
   }
 }
 @media (min-width: 700px) {
@@ -269,7 +266,7 @@ body {
   }
   .secondanary-tabs {
     grid-column: 3 / span 1;
-    grid-row: 5 / span 1;
+    grid-row: 5 / span 2;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 }

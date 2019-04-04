@@ -1,15 +1,12 @@
 //@flow
 
 import {createEffect} from 'effector'
-
 import {prepareRuntime} from './prepareRuntime'
 import {evalExpr} from './evalExpr'
 import scopedEval from './scopedEval'
 import {selectVersion, version} from '../domain'
 import {consoleMap} from '../logs'
 import {registerPlugin} from '@babel/standalone'
-
-version.on(selectVersion, (_, p) => p)
 
 const tag = `# source`
 function createRealm(sourceCode: string, version: string) {

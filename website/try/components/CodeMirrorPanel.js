@@ -26,10 +26,11 @@ export default class CodeMirrorPanel extends React.Component {
     //keyMap: 'sublime',
     lineWrapping: false,
     passive: false,
-    setCursor: createEvent()
+    setCursor: createEvent(),
+    onCursorActivity() {},
   }
   _textareaRef = React.createRef<HTMLTextAreaElement>()
-  _codeMirror = null
+  _codeMirror: any = null
   _cached = ''
 
   componentDidMount() {
@@ -57,6 +58,7 @@ export default class CodeMirrorPanel extends React.Component {
     )
     this._codeMirror.on('change', this.handleChange)
     this._codeMirror.on('focus', this.handleFocus)
+    this._codeMirror.on('cursorActivity', this.props.onCursorActivity)
 
     this._codeMirror.setValue((this._cached = this.props.value || ''))
 

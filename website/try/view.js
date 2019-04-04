@@ -16,6 +16,7 @@ import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
 import Console from './components/Console'
 import Outline from './components/Outline'
+import {TypeHintView} from './flow/view'
 import {
   sourceCode,
   logs,
@@ -30,10 +31,13 @@ import {
   version,
   tab,
   tabApi,
+  codeCursorActivity,
   codeSetCursor,
 } from './domain'
 
-const OutlineView = createComponent(stats, ({}, stats) => <Outline {...stats} />)
+const OutlineView = createComponent(stats, ({}, stats) => (
+  <Outline {...stats} />
+))
 
 const ErrorsView = createComponent(
   codeError,
@@ -49,6 +53,7 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
     setCursor={codeSetCursor}
+    onCursorActivity={codeCursorActivity}
     value={sources}
     mode="text/jsx"
     onChange={changeSourcesDebounced}
@@ -109,9 +114,7 @@ const TabsView = createComponent(tab, (_, tab) => (
       </li>
     </ul>
     {tab === 'graphite' && <GraphiteView />}
-    <div
-      style={{display: tab === 'dom' ? 'block' : 'none'}}
-      className="dom">
+    <div style={{display: tab === 'dom' ? 'block' : 'none'}} className="dom">
       <iframe id="dom" />
     </div>
   </>
@@ -122,6 +125,7 @@ export default (
     <VersionLinkView />
     <OutlineView />
     <CodeView />
+    <TypeHintView />
     <div className="header">
       <VersionSelectorView />
       <ShareButtonView />
