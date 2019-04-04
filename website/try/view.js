@@ -3,7 +3,7 @@
 import React from 'react'
 import {cx} from 'linaria'
 import {createStoreObject} from 'effector'
-import {createComponent} from 'effector-react'
+import {useStore, createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
 import 'codemirror/lib/codemirror.css'
@@ -82,16 +82,19 @@ const ShareButtonView = createComponent(shareableUrl, ({}, shareableUrl) => (
   />
 ))
 
-const VersionSelectorView = createComponent(
-  createStoreObject({versions: packageVersions, selected: version}),
-  ({}, {versions, selected}) => (
+const VersionSelectorView = () => {
+  const versions = useStore(packageVersions)
+  const selected = useStore(version)
+  //TODO: bug in createComponent, probably actually in watchers
+  //createStoreObject({versions: packageVersions, selected: version}),
+  return (
     <VersionSelector
       versions={versions}
       selected={selected}
       onChange={selectVersion}
     />
-  ),
-)
+  )
+}
 
 const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
