@@ -93,6 +93,7 @@ const siteConfig = {
   scripts: [
     'https://buttons.github.io/buttons.js',
     'https://unpkg.com/lz-string@1.4.4/libs/lz-string.min.js',
+    'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.umd.js',
     '/js/try-button.js',
   ],
   stylesheets: ['/css/try-button.css'],
