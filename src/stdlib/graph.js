@@ -31,7 +31,7 @@ export function createGraph({
     from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
-    val: scope,
+    scope,
   }
 }
 export const clearNode = (

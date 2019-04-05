@@ -85,7 +85,7 @@ export type Graph<+Val: {[name: string]: any} = {||}> = {
   +from: Array<Graph<any>>,
   +next: Array<Graph<any>>,
   +seq: Array<Cmd>,
-  +val: Val,
+  +scope: Val,
 }
 
 //prettier-ignore

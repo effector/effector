@@ -169,7 +169,7 @@ const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
 const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
-  meta.val = graph.val
+  meta.val = graph.scope
   for (
     let stepn = firstIndex;
     stepn < graph.seq.length && !meta.stop;
@@ -253,7 +253,7 @@ export const runtime = (step: Graph<any>, payload: any) => {
   })
   const meta = {
     stop: false,
-    val: step.val,
+    val: step.scope,
   }
   let value
   while (heap) {
