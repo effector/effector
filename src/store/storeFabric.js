@@ -1,8 +1,9 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, createNode, Kind, createStateRef} from 'effector/stdlib'
+import {step, createGraph, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
+import {filterChanged} from 'effector/blocks'
 
 import type {Store, ThisStore} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'
@@ -38,16 +39,16 @@ export function storeFabric<State>(props: {
     section: currentId,
   }
   const storeInstance: ThisStore = {
-    graphite: createNode(
-      step.filter({
-        fn: filterBeforeUpdate.bind(plainState),
-        meta,
-      }),
-      step.update({
-        store: plainState,
-        meta,
-      }),
-    ),
+    graphite: createGraph({
+      scope: {state: plainState},
+      node: [
+        filterChanged,
+        step.update({
+          store: plainState,
+          meta,
+        }),
+      ],
+    }),
     kind: Kind.store,
     id: plainState.id,
     shortName: currentId,
@@ -93,8 +94,4 @@ export function storeFabric<State>(props: {
   }
 
   return store
-}
-
-function filterBeforeUpdate(newValue) {
-  return newValue !== undefined && newValue !== this.current
 }
