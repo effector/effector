@@ -2,6 +2,7 @@
 import $$observable from 'symbol-observable'
 
 import {step, Kind, createNode, createGraph} from 'effector/stdlib'
+import {filterChanged} from 'effector/blocks'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
@@ -53,13 +54,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
             ),
             meta,
           }),
-          step.filter({
-            fn: (data, {state}) => (
-              data !== state.current
-              && data !== undefined
-            ),
-            meta,
-          }),
+          filterChanged,
         ]
       }),
     }),
@@ -171,11 +166,10 @@ export function mapStore<A, B>(
   firstState?: B,
 ): Store<B> {
   startPhaseTimer(store, 'map')
-  let lastValue = store.getState()
   let lastResult
   let stopPhaseTimerMessage = 'Got initial error'
   try {
-    lastResult = fn(lastValue, firstState)
+    lastResult = fn(store.getState(), firstState)
     stopPhaseTimerMessage = 'Initial'
   } catch (err) {
     console.error(err)
@@ -194,16 +188,15 @@ export function mapStore<A, B>(
     from: store,
     to: createGraph({
       child: [innerStore],
+      scope: {store, handler: fn, state: innerStore.stateRef},
       node: [
         step.compute({
-          fn(newValue) {
+          fn(newValue, {state, store, handler}) {
             startPhaseTimer(store, 'map')
-            lastValue = newValue
             let stopPhaseTimerMessage = 'Got error'
-            const lastState = innerStore.getState()
             let result
             try {
-              result = fn(newValue, lastState)
+              result = handler(newValue, state.current)
               stopPhaseTimerMessage = null
             } catch (err) {
               console.error(err)
@@ -213,17 +206,7 @@ export function mapStore<A, B>(
           },
           meta,
         }),
-        step.filter({
-          fn(result) {
-            const lastState = innerStore.getState()
-            const isChanged = result !== lastState && result !== undefined
-            if (isChanged) {
-              lastResult = result
-            }
-            return isChanged
-          },
-          meta,
-        }),
+        filterChanged,
       ],
     }),
   })
