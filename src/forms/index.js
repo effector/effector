@@ -102,6 +102,7 @@ export function createFormApi<
   const form = {}
   const reducers = {}
 
+  const handleSubmit = domain.event('handle submit')
   const values = domain.store(fields, {name: 'values'})
   const errors = domain.store(({}: any), {name: 'errors'})
   const isValid = errors.map(errors => Object.keys(errors).length === 0)
@@ -115,22 +116,24 @@ export function createFormApi<
 
   for (const key in fields) {
     reducers[key] = (state, field) => {
-      initialValuesUnwatch()
       return {...state, [key]: field}
     }
   }
 
   reducers.reset = (): Form => (values: any).defaultState
   reducers.set = (_: Form, payload: Form): Form => payload
-  reducers.handleSubmit = (state: Form, e?: PreventableEvent) => {
+
+  const {reset, set, ...api} = createApi(values, reducers)
+
+  values.watch(handleSubmit, (state: Form, e?: PreventableEvent) => {
     if (e) e.preventDefault()
     const externalState = external ? external.getState() : {}
-    if (submitEffect) submitEffect({...state, ...externalState})
-    else if (submitEvent) submitEvent({...state, ...externalState})
-    return state
-  }
-
-  const {handleSubmit, reset, set, ...api} = createApi(values, reducers)
+    if (submitEffect) {
+      submitEffect({...state, ...externalState})
+    } else if (submitEvent) {
+      submitEvent({...state, ...externalState})
+    }
+  })
 
   errors.reset(reset)
   if (validate) {
@@ -177,6 +180,7 @@ export function createFormApi<
   form.api = api
 
   for (const method in api) {
+    api[method].watch(() => initialValuesUnwatch())
     form.handle[method] = createFormHandler(api[method])
   }
 

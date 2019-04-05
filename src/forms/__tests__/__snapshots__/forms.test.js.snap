@@ -1,30 +1,79 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createFormApi submitEffect 1`] = `false`;
+exports[`createFormApi initial values: initial values 1`] = `
+Object {
+  "firstName": "Ollie",
+  "lastName": "Keebler",
+}
+`;
 
-exports[`createFormApi submitEffect 2`] = `
+exports[`createFormApi initial values: initial values 2`] = `
+Object {
+  "firstName": "Lola",
+  "lastName": "Conn",
+}
+`;
+
+exports[`createFormApi initial values: initial values 3`] = `
+Object {
+  "firstName": "Dagmar",
+  "lastName": "Howell",
+}
+`;
+
+exports[`createFormApi initial values: initial values 4`] = `
+Object {
+  "firstName": "Nelson",
+  "lastName": "Jones",
+}
+`;
+
+exports[`createFormApi initial values: values 1`] = `
+Object {
+  "firstName": "Ollie",
+  "lastName": "Keebler",
+}
+`;
+
+exports[`createFormApi initial values: values 2`] = `
+Object {
+  "firstName": "Lola",
+  "lastName": "Conn",
+}
+`;
+
+exports[`createFormApi initial values: values 3`] = `
+Object {
+  "firstName": "Alan",
+  "lastName": "Conn",
+}
+`;
+
+exports[`createFormApi submitEffect 1`] = `
 Object {
   "firstName": "bar",
   "lastName": "",
 }
 `;
 
-exports[`createFormApi submitEffect 3`] = `true`;
+exports[`createFormApi submitEffect: submitted 1`] = `false`;
 
-exports[`createFormApi submitEffect 4`] = `false`;
+exports[`createFormApi submitEffect: submitted 2`] = `true`;
 
-exports[`createFormApi submitEvent 1`] = `false`;
+exports[`createFormApi submitEffect: submitted 3`] = `false`;
 
-exports[`createFormApi submitEvent 2`] = `
+exports[`createFormApi submitEvent 1`] = `
 Object {
   "firstName": "foo",
   "lastName": "",
 }
 `;
 
-exports[`createFormApi submitEvent 3`] = `true`;
+exports[`createFormApi submitEvent: submitted 1`] = `false`;
 
-exports[`createFormApi submitEvent 4`] = `false`;
+exports[`createFormApi submitEvent: submitted 2`] = `true`;
+
+exports[`createFormApi submitEvent: submitted 3`] = `false`;
 
 exports[`createFormApi validate 1`] = `
 Object {
@@ -33,17 +82,19 @@ Object {
 }
 `;
 
-exports[`createFormApi validate 2`] = `true`;
-
-exports[`createFormApi validate 3`] = `false`;
-
-exports[`createFormApi validate 4`] = `
+exports[`createFormApi validate 2`] = `
 Object {
   "firstName": "foobar",
   "lastName": "",
 }
 `;
 
-exports[`createFormApi validate 5`] = `true`;
+exports[`createFormApi validate: submitted 1`] = `false`;
 
-exports[`createFormApi validate 6`] = `false`;
+exports[`createFormApi validate: submitted 2`] = `true`;
+
+exports[`createFormApi validate: submitted 3`] = `false`;
+
+exports[`createFormApi validate: submitted 4`] = `true`;
+
+exports[`createFormApi validate: submitted 5`] = `false`;
