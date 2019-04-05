@@ -6,7 +6,7 @@ import {step, Kind, createNode, createGraph} from 'effector/stdlib'
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 
-import {linkGraphs, type Event} from 'effector/event'
+import {forward, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../effector/index.h'
 
@@ -38,7 +38,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
   }
   storeInstance.subscribers.set(
     e,
-    linkGraphs({
+    forward({
       from: e.graphite,
       to: createGraph({
         node: [
@@ -127,7 +127,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
-  return linkGraphs({
+  return forward({
     from: storeInstance.graphite,
     to: createNode(
       step.compute({
@@ -187,7 +187,7 @@ export function mapStore<A, B>(
     fullName: innerStore.compositeName?.fullName,
     section: store.id,
   }
-  linkGraphs({
+  forward({
     from: store.graphite,
     to: createGraph({
       node: [

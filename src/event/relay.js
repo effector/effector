@@ -1,7 +1,7 @@
 //@noflow
 
 import {createNode, step} from 'effector/stdlib'
-import {linkGraphs} from './forward'
+import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../effector/index.h'
 
@@ -19,7 +19,7 @@ export function relayShape<
     shape[key] = map[key].graphite.seq
   }
 
-  const unsub = linkGraphs({
+  const unsub = forward({
     from: from.graphite,
     to: createNode(
       step('query', {
@@ -57,7 +57,7 @@ function relayRaw<E, F>(opts: {
   const from = opts.from
   const fn = queryFn.bind(query)
 
-  return linkGraphs({
+  return forward({
     from: from.graphite,
     to: createNode(
       step('query', {

@@ -1,7 +1,7 @@
 //@flow
 import {step, createNode, stringRefcount, isStore} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
-import {linkGraphs} from 'effector/event'
+import {forward} from 'effector/event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
@@ -49,7 +49,7 @@ function storeCombination(
       }),
     )
     nodes.push(node)
-    linkGraphs({
+    forward({
       from: child.graphite,
       to: node,
     })
@@ -60,7 +60,7 @@ function storeCombination(
     config: {name},
   })
   for (const node of nodes) {
-    linkGraphs({
+    forward({
       from: node,
       to: store.graphite,
     })

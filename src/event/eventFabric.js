@@ -15,7 +15,7 @@ import type {Subscription} from '../effector/index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
-import {linkGraphs} from './forward'
+import {forward} from './forward'
 
 const nextID = stringRefcount()
 
@@ -79,7 +79,7 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  linkGraphs({
+  forward({
     from: contramapped.graphite,
     to: createGraph({
       node: [
@@ -103,7 +103,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  linkGraphs({
+  forward({
     from: event.graphite,
     to: createGraph({
       node: [
@@ -125,7 +125,7 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  linkGraphs({
+  forward({
     from: event.graphite,
     to: createGraph({
       val: {fn},
@@ -157,7 +157,7 @@ function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  return linkGraphs({
+  return forward({
     from: event.graphite,
     to: createNode(
       step.compute({
