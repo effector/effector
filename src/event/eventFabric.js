@@ -7,9 +7,11 @@ import {
   stringRefcount,
   createNode,
   createGraph,
+  type Unit,
 } from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
 import {runtime} from 'effector/graphite'
+import {noop} from 'effector/blocks'
 
 import type {Subscription} from '../effector/index.h'
 import type {EventConfigPart} from '../config'
@@ -80,14 +82,15 @@ function prepend(event, fn: (_: any) => *) {
     parent: event.domainName,
   })
   forward({
-    from: contramapped.graphite,
+    from: contramapped,
     to: createGraph({
+      child: [event],
+      scope: {handler: fn},
       node: [
         step.compute({
-          fn: newValue => fn(newValue),
+          fn: (newValue, {handler}) => handler(newValue),
         }),
       ],
-      child: [event.graphite],
     }),
   })
   return contramapped
@@ -104,14 +107,15 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     parent: event.domainName,
   })
   forward({
-    from: event.graphite,
+    from: event,
     to: createGraph({
+      child: [mapped],
+      scope: {handler: fn},
       node: [
         step.compute({
-          fn: newValue => fn(newValue),
+          fn: (payload, {handler}) => handler(payload),
         }),
       ],
-      child: [mapped.graphite],
     }),
   })
   return mapped
@@ -126,14 +130,13 @@ function filterEvent<A, B>(
     parent: event.domainName,
   })
   forward({
-    from: event.graphite,
+    from: event,
     to: createGraph({
-      scope: {fn},
+      scope: {handler: fn},
+      child: [mapped],
       node: [
         step.compute({
-          fn(newValue, scope) {
-            return scope.fn(newValue)
-          },
+          fn: (payload, {handler}) => handler(payload),
         }),
         step.filter({
           fn(result, scope) {
@@ -147,25 +150,37 @@ function filterEvent<A, B>(
           },
         }),
       ],
-      child: [mapped.graphite],
     }),
   })
   return mapped
 }
-
+//TODO merge duplicated code
+const readName = (e: *): string => {
+  switch (e.kind) {
+    case Kind.store:
+      return e.shortName
+    default:
+      return e.getType()
+  }
+}
 function watchEvent<Payload>(
-  event: Event<Payload>,
+  event: Unit,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
   return forward({
-    from: event.graphite,
-    to: createNode(
-      step.compute({
-        fn: n => n,
-      }),
-      step.run({
-        fn: (newValue: Payload) => watcher(newValue, event.getType()),
-      }),
-    ),
+    from: event,
+    to: createGraph({
+      scope: {trigger: event, handler: watcher},
+      //prettier-ignore
+      node: [
+        noop,
+        step.run({
+          fn: (payload: Payload, {trigger, handler}) => handler(
+            payload,
+            readName(trigger),
+          ),
+        }),
+      ]
+    }),
   })
 }

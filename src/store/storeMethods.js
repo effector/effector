@@ -2,7 +2,7 @@
 import $$observable from 'symbol-observable'
 
 import {step, Kind, createNode, createGraph} from 'effector/stdlib'
-import {filterChanged} from 'effector/blocks'
+import {filterChanged, noop} from 'effector/blocks'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
@@ -128,9 +128,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
   return forward({
     from: storeInstance.graphite,
     to: createNode(
-      step.compute({
-        fn: n => n,
-      }),
+      noop,
       step.run({
         fn(args) {
           let stopPhaseTimerMessage = null
