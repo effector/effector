@@ -15,8 +15,6 @@ import {
   //ComputedEvent,
   /*::type*/ kind,
   forward,
-  relay,
-  relayShape,
 } from 'effector'
 import {createFormApi} from '@effector/forms'
 
@@ -217,10 +215,6 @@ describe('Graph', () => {
     const f = createStore(0)
     forward({from: e, to: f})
   })
-
-  test('relay', () => {})
-
-  test('relayShape', () => {})
 })
 
 describe('effector-react', () => {})
