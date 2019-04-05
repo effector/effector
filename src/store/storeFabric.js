@@ -61,7 +61,6 @@ export function storeFabric<State>(props: {
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
     graphite: storeInstance.graphite,
-    defaultConfig: storeInstance.defaultConfig,
     kind: Kind.store,
     id: plainState.id,
     shortName: currentId,
@@ -72,6 +71,7 @@ export function storeFabric<State>(props: {
     subscribe: subscribe.bind(null, storeInstance),
     getState: getState.bind(null, storeInstance),
   }
+  ;(store: any).defaultConfig = storeInstance.defaultConfig
   ;(store: any).reset = reset.bind(store, storeInstance)
   ;(store: any).on = on.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
