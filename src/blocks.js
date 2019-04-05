@@ -9,3 +9,7 @@ export const filterChanged = step.filter({
     && data !== undefined
   ),
 })
+
+export const noop = step.compute({
+  fn: n => n,
+})
