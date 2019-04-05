@@ -7,13 +7,13 @@ export const createNode = (...node: Array<Cmd>): Graph<> => createGraph({node})
 //eslint-disable-next-line no-unused-vars
 declare export function createGraph(opts: {|
   +node: Array<Cmd>,
-  +child?: Array<Graph<any>>,
-  +from?: Array<Graph<any>>,
+  +child?: Array<Graphite>,
+  +from?: Array<Graphite>,
 |}): Graph<>
 declare export function createGraph<Val: {[name: string]: any}>(opts: {|
   +node: Array<Cmd>,
-  +child?: Array<Graph<any>>,
-  +from?: Array<Graph<any>>,
+  +child?: Array<Graphite>,
+  +from?: Array<Graphite>,
   +val: Val,
 |}): Graph<Val>
 export function createGraph({
@@ -23,14 +23,14 @@ export function createGraph({
   val = {},
 }: {
   +node: Array<Cmd>,
-  +child?: Array<Graph<any>>,
-  +from?: Array<Graph<any>>,
+  +child?: Array<Graphite>,
+  +from?: Array<Graphite>,
   val?: {[name: string]: any},
 }): Graph<any> {
   return {
-    from,
+    from: from.map(getGraph),
     seq: node,
-    next: child,
+    next: child.map(getGraph),
     val,
   }
 }
