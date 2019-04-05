@@ -276,11 +276,16 @@ test('rfc1 example implementation', async() => {
   expect(fnClick).not.toHaveBeenCalled()
   click()
   click()
+  const used = new Set()
   console.log(
     JSON.stringify(
       store,
       (key, val) => {
         if (typeof val === 'function') return '() => {}'
+        if (typeof val === 'object' && val !== null) {
+          if (used.has(val)) return '[Circular]'
+          used.add(val)
+        }
         return val
       },
       2,
