@@ -70,6 +70,7 @@ export function storeFabric<State>(props: {
     watch: watch.bind(null, storeInstance),
     subscribe: subscribe.bind(null, storeInstance),
     getState: getState.bind(null, storeInstance),
+    stateRef: plainState,
   }
   ;(store: any).defaultConfig = storeInstance.defaultConfig
   ;(store: any).reset = reset.bind(store, storeInstance)

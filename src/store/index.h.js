@@ -19,6 +19,7 @@ export type ThisStore = {
 
 export type Store<State> = /*::interface extends Unit*/ {
   /*::+*/ id: string,
+  /*::+*/ stateRef: StateRef,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
   getState(): State,
   //prettier-ignore
