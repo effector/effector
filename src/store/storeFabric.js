@@ -72,7 +72,7 @@ export function storeFabric<State>(props: {
     getState: getState.bind(null, storeInstance),
     stateRef: plainState,
   }
-  ;(store: any).defaultConfig = storeInstance.defaultConfig
+  ;(store: any).defaultConfig = config
   ;(store: any).reset = reset.bind(store, storeInstance)
   ;(store: any).on = on.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
