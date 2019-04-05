@@ -88,9 +88,8 @@ export function watch(
   eventOrFn: Event<*> | Function,
   fn?: Function,
 ) {
-  const kind = String(eventOrFn?.kind || '__')
   const message = 'watch requires function handler'
-  switch (kind) {
+  switch (eventOrFn?.kind) {
     case 'store':
     case 'event':
     case 'effect':
@@ -99,7 +98,6 @@ export function watch(
         //$todo
         fn(getState(storeInstance), payload, readName(eventOrFn)),
       )
-    case '__':
     default:
       invariant(typeof eventOrFn === 'function', message)
       return subscribe(storeInstance, eventOrFn)
