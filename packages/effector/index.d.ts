@@ -96,7 +96,7 @@ export class Domain {
   ): Subscription
   onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
-  event<Payload>(name?: string): Event<Payload>
+  event<Payload = void>(name?: string): Event<Payload>
   effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
   domain(name?: string): Domain
   store<State>(defaultState: State): Store<State>
@@ -128,7 +128,7 @@ list: Array<Unit<Arg> | null>
 }
 }): Subscription
 
-export function createEvent<E>(eventName?: string): Event<E>
+export function createEvent<E = void>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
