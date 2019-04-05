@@ -47,7 +47,7 @@ it('support watchers for storages', () => {
 
 it('support watchers for mapped storages', () => {
   const addMetaTag = (tag, unit: any) => {
-    unit.graphite.val.tag = tag
+    unit.graphite.scope.tag = tag
   }
   const fn = jest.fn()
   const event = createEvent('trigger')
