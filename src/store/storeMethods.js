@@ -31,33 +31,36 @@ const readName = (e: *): string => {
   }
 }
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
-  const e: Event<any> = event
+  const from: Event<any> = event
   const meta = {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
   storeInstance.subscribers.set(
-    e,
+    from,
     forward({
-      from: e.graphite,
+      from,
       to: createGraph({
+        val: {handler, state: storeInstance.plainState, trigger: from},
+        child: [storeInstance],
+        //prettier-ignore
         node: [
           step.compute({
-            fn(newValue) {
-              const lastState = getState(storeInstance)
-              return handler(lastState, newValue, readName(e))
-            },
+            fn: (newValue, {handler, state, trigger}) => handler(
+              state.current,
+              newValue,
+              readName(trigger),
+            ),
             meta,
           }),
           step.filter({
-            fn(data) {
-              const lastState = getState(storeInstance)
-              return data !== lastState && data !== undefined
-            },
+            fn: (data, {state}) => (
+              data !== state.current
+              && data !== undefined
+            ),
             meta,
           }),
-        ],
-        child: [storeInstance.graphite],
+        ]
       }),
     }),
   )
