@@ -115,9 +115,7 @@ export function createFormApi<
   form.handle = {}
 
   for (const key in fields) {
-    reducers[key] = (state, field) => {
-      return {...state, [key]: field}
-    }
+    reducers[key] = (state, field) => ({...state, [key]: field})
   }
 
   reducers.reset = (): Form => (values: any).defaultState
