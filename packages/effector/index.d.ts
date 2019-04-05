@@ -104,29 +104,6 @@ export class Domain {
 }
 
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
-export function relayShape<
-  E,
-  O extends {[field: string]: Unit<any>},
-  F extends {[K in keyof O]: O[K] extends Unit<infer T> ? T : any}
->(opts: {from: Unit<E>; shape: O; query(data: E): Partial<F>}): Subscription
-export function relay<T, Arg>(
-  from: Unit<T>,
-  query: (
-    data: T,
-  ) => {
-  arg: Arg
-  list: Array<Unit<Arg> | null>
-  },
-): Subscription
-export function relay<T, Arg>(opts: {
-from: Unit<T>
-query(
-  data: T,
-): {
-arg: Arg
-list: Array<Unit<Arg> | null>
-}
-}): Subscription
 
 export function createEvent<E = void>(eventName?: string): Event<E>
 

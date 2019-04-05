@@ -133,33 +133,6 @@ declare export function forward<T>(opts: {|
   /*::+*/ from: Unit<T>,
   /*::+*/ to: Unit<T>,
 |}): Subscription
-declare export function relayShape<
-  E,
-  O: {/*::+*/ [field: string]: Unit<any>, ...},
-  F: $ObjMap<O, <T>(_: Unit<T>) => T>,
->(opts: {|
-  /*::+*/ from: Unit<E>,
-  /*::+*/ shape: O,
-  query(data: E): $Shape<F>,
-|}): Subscription
-declare export function relay<T, Arg>(
-  from: Unit<T>,
-  query: (
-    data: T,
-  ) => {|
-    /*::+*/ arg: Arg,
-    /*::+*/ list: Array<?Unit<Arg>>,
-  |},
-): Subscription
-declare export function relay<T, Arg>(opts: {|
-  /*::+*/ from: Unit<T>,
-  query(
-    data: T,
-  ): {|
-    /*::+*/ arg: Arg,
-    /*::+*/ list: Array<?Unit<Arg>>,
-  |},
-|}): Subscription
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
