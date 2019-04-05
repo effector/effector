@@ -14,24 +14,24 @@ declare export function createGraph<Val: {[name: string]: any}>(opts: {|
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
   +from?: Array<Graphite>,
-  +val: Val,
+  +scope: Val,
 |}): Graph<Val>
 export function createGraph({
   node,
   child = [],
   from = [],
-  val = {},
+  scope = {},
 }: {
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
   +from?: Array<Graphite>,
-  val?: {[name: string]: any},
+  scope?: {[name: string]: any},
 }): Graph<any> {
   return {
     from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
-    val,
+    val: scope,
   }
 }
 export const clearNode = (

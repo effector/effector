@@ -128,7 +128,7 @@ function filterEvent<A, B>(
   forward({
     from: event.graphite,
     to: createGraph({
-      val: {fn},
+      scope: {fn},
       node: [
         step.compute({
           fn(newValue, scope) {

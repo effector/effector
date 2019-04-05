@@ -41,7 +41,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
     forward({
       from,
       to: createGraph({
-        val: {handler, state: storeInstance.plainState, trigger: from},
+        scope: {handler, state: storeInstance.plainState, trigger: from},
         child: [storeInstance],
         //prettier-ignore
         node: [
@@ -191,8 +191,9 @@ export function mapStore<A, B>(
     section: store.id,
   }
   forward({
-    from: store.graphite,
+    from: store,
     to: createGraph({
+      child: [innerStore],
       node: [
         step.compute({
           fn(newValue) {
@@ -224,7 +225,6 @@ export function mapStore<A, B>(
           meta,
         }),
       ],
-      child: [innerStore.graphite],
     }),
   })
   return innerStore
