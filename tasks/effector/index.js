@@ -5,9 +5,9 @@ import {
   rollupEffector,
   rollupEffectorReact,
   rollupEffectorVue,
+  renderModulesGraph,
 } from 'Builder/rollup'
 import packages from 'Builder/packages.config'
-import renderModulesGraph from 'Builder/moduleGraphGenerator'
 
 export default {
   effector: [

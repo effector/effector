@@ -9,7 +9,6 @@ import {Module, render} from 'viz.js/full.render.js'
 import sharp from 'sharp'
 //$off
 import babel from 'rollup-plugin-babel'
-//$off
 import json from 'rollup-plugin-json'
 //$off
 import resolve from 'rollup-plugin-node-resolve'
@@ -213,24 +212,24 @@ export async function rollupEffector() {
         plugins.resolve,
         plugins.json,
         plugins.babel,
-        plugins.graph,
         plugins.sizeSnapshot,
         plugins.terser,
         plugins.analyzer,
+        plugins.graph,
       ],
     })
 
     await Promise.all([
       build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
-        format: 'cjs',
+        file: dir(`npm/${name}/${name}.es.js`),
+        format: 'es',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
       }),
       build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
-        format: 'es',
+        file: dir(`npm/${name}/${name}.cjs.js`),
+        format: 'cjs',
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
@@ -425,7 +424,6 @@ export async function renderModulesGraph() {
       .toFormat('png')
       .toBuffer((err, data, info) => {
         if (err) return void rj(err)
-        info
         rs(data)
       })
   })
