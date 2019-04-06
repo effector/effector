@@ -172,26 +172,6 @@ turnOff() // nothing has changed
 import type {Domain, Event, Effect, Store} from 'effector'
 ```
 
-### Domain
-**Domain** is a namespace for your events, stores and effects.
-Domain can subscribe to event, effect, store or nested domain creation with **onCreateEvent**, **onCreateStore**, **onCreateEffect**, **onCreateDomain(to handle nested domains)** methods.
-
-```js
-import {createDomain} from 'effector'
-const mainPage = createDomain('main page')
-mainPage.onCreateEvent(event => {
-  console.log('new event: ', event.getType())
-})
-mainPage.onCreateStore(store => {
-  console.log('new store: ', store.getState())
-})
-const mount = mainPage.event('mount')
-// => new event: main page/mount
-
-const pageStore = mainPage.store(0)
-// => new store: 0
-```
-
 ### Event
 Event is an intention to change state.
 ```js
@@ -265,6 +245,25 @@ firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) //
 
 addUser({ name: Joseph }) // `firstUser` is not updated
 getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
+```
+### Domain
+**Domain** is a namespace for your events, stores and effects.
+Domain can subscribe to event, effect, store or nested domain creation with **onCreateEvent**, **onCreateStore**, **onCreateEffect**, **onCreateDomain(to handle nested domains)** methods.
+
+```js
+import {createDomain} from 'effector'
+const mainPage = createDomain('main page')
+mainPage.onCreateEvent(event => {
+  console.log('new event: ', event.getType())
+})
+mainPage.onCreateStore(store => {
+  console.log('new store: ', store.getState())
+})
+const mount = mainPage.event('mount')
+// => new event: main page/mount
+
+const pageStore = mainPage.store(0)
+// => new store: 0
 ```
 
 > [Learn more](https://effector.now.sh/en/introduction/core-concepts)
