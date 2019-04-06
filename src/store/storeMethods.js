@@ -37,6 +37,8 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
+  const oldLink = storeInstance.subscribers.get(from)
+  if (oldLink) oldLink()
   storeInstance.subscribers.set(
     from,
     forward({
