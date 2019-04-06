@@ -155,6 +155,7 @@ const getPlugins = (name: string) => ({
   ),
   graph: graphPlugin({
     output: 'modules.dot',
+    exclude: 'effector/package.json',
   }),
   json: json({
     preferConst: true,
