@@ -141,7 +141,7 @@ export type Run = {
   type: 'run'
   group: 'cmd'
   data: {
-    fn: (data: any, scope: {[string]: any}) => any
+    fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
 
@@ -150,7 +150,7 @@ export type Filter = {
   type: 'filter'
   group: 'cmd'
   data: {
-    fn: (data: any, scope: {[string]: any}) => boolean
+    fn: (data: any, scope: {[field: string]: any}) => boolean
   }
 }
 export type Emit = {
@@ -166,21 +166,25 @@ export type Compute = {
   type: 'compute'
   group: 'cmd'
   data: {
-    fn: (data: any, scope: {[string]: any}) => any
+    fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
 export type Step = {
   from: Array<Step>
   next: Array<Step>
   seq: Array<Cmd>
-  scope: {[string]: any}
+  scope: {[field: string]: any}
 }
 export const step: {
 emit(data: {fullName: string}): Emit
-compute(data: {fn: (data: any, scope: {[string]: any}) => any}): Compute
-filter(data: {fn: (data: any, scope: {[string]: any}) => boolean}): Filter
+compute(data: {
+  fn: (data: any, scope: {[field: string]: any}) => any
+  }): Compute
+filter(data: {
+  fn: (data: any, scope: {[field: string]: any}) => boolean
+  }): Filter
 update(data: {store: StateRef}): Update
-run(data: {fn: (data: any, scope: {[string]: any}) => any}): Run
+run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 export function clearNode(unit: Unit<any>, opts?: {deep?: boolean}): void
@@ -188,7 +192,7 @@ export function createNode(opts: {
 node: Array<Cmd>
 child?: Array<Unit<any> | Step>
 from?: Array<Unit<any> | Step>
-scope?: {[string]: any}
+scope?: {[field: string]: any}
 }): Step
 export function createEvent<E = void>(eventName?: string): Event<E>
 
