@@ -128,11 +128,107 @@ declare export class Domain {
   store<State>(defaultState: State, config?: {name?: string}): Store<State>;
   getType(): string;
 }
+export type ID = string
+export type StateRef = {
+  current: any,
+  id: ID,
+}
+//prettier-ignore
+export type Cmd =
+  | Update
+  | Run
+  | Filter
+  | Emit
+  | Compute
+  | Barrier
 
+export type Barrier = {|
+  +id: ID,
+  +type: 'barrier',
+  +group: 'cmd',
+  +data: {|
+    +barrierID: ID,
+  |},
+|}
+
+export type Update = {|
+  +id: ID,
+  +type: 'update',
+  +group: 'cmd',
+  +data: {|
+    store: StateRef,
+  |},
+|}
+export type Run = {|
+  +id: ID,
+  +type: 'run',
+  +group: 'cmd',
+  +data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+  |},
+|}
+
+export type Filter = {|
+  +id: ID,
+  +type: 'filter',
+  +group: 'cmd',
+  +data: {|
+    fn: (data: any, scope: {[string]: any}) => boolean,
+  |},
+|}
+export type Emit = {|
+  +id: ID,
+  +type: 'emit',
+  +group: 'cmd',
+  +data: {|
+    fullName: string,
+  |},
+|}
+export type Compute = {|
+  +id: ID,
+  +type: 'compute',
+  +group: 'cmd',
+  +data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+  |},
+|}
+export type Step = {
+  +from: Array<Step>,
+  +next: Array<Step>,
+  +seq: Array<Cmd>,
+  +scope: {[string]: any},
+}
+declare export var step: {|
+  emit(data: {|
+    fullName: string,
+  |}): Emit,
+  compute(data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+  |}): Compute,
+  filter(data: {|
+    fn: (data: any, scope: {[string]: any}) => boolean,
+  |}): Filter,
+  update(data: {|
+    store: StateRef,
+  |}): Update,
+  run(data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+  |}): Run,
+|}
 declare export function forward<T>(opts: {|
   /*::+*/ from: Unit<T>,
   /*::+*/ to: Unit<T>,
 |}): Subscription
+declare export function clearNode(
+  unit: Unit<any>,
+  opts?: {deep?: boolean},
+): void
+declare export function createNode(opts: {|
+  +node: Array<Cmd>,
+  +child?: Array<Unit<any> | Step>,
+  +from?: Array<Unit<any> | Step>,
+  +scope?: {[string]: any},
+|}): Step
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
