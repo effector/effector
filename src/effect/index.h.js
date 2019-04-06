@@ -77,8 +77,3 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
 }
 
 export type Thunk<Args, Done> = (_: Args) => Promise<Done>
-export type Callbacks<Args, Done, Fail> = [
-  (_: {result: Done, params: Args}) => void,
-  (_: {error: Fail, params: Args}) => void,
-  Thunk<Args, Done>,
-]
