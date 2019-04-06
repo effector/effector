@@ -4,12 +4,59 @@ import warning from 'warning'
 import type {Effect} from './index.h'
 import {Kind} from 'effector/stdlib'
 
+import {step} from 'effector/stdlib'
 import {eventFabric, type Event} from 'effector/event'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
-import {exec} from './exec'
-import {callbacks} from './callbacks'
 
+function OnResolve(result) {
+  const {event, params, handler} = this
+  //prettier-ignore
+  event({
+    handler,
+    toHandler: result,
+    result: {
+      params,
+      result,
+    },
+  })
+}
+function OnReject(error) {
+  const {event, params, handler} = this
+  //prettier-ignore
+  event({
+    handler,
+    toHandler: error,
+    result: {
+      params,
+      error,
+    },
+  })
+}
+
+function Def() {
+  /*::
+  this.rs = result => {}
+  this.rj = error => {}
+  */
+  const req = new Promise((rs, rj) => {
+    this.rs = rs
+    this.rj = rj
+  })
+  //$off
+  req.anyway = () => {
+    warning(false, '.anyway is deprecated, use .finally')
+    return req.then(() => {}, () => {})
+  }
+  this.req = req
+}
+
+const notifyHandler = step.run({
+  fn({handler, toHandler, result}, scope) {
+    handler(toHandler)
+    return result
+  },
+})
 export function effectFabric<Payload, Done>({
   name,
   domainName,
@@ -41,9 +88,10 @@ export function effectFabric<Payload, Done>({
     parent,
     config,
   })
-
+  done.graphite.seq.push(notifyHandler)
+  fail.graphite.seq.push(notifyHandler)
   //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler || defaultThunk.bind(instance)
+  let thunk: Function = handler ?? defaultThunk.bind(instance)
 
   instance.done = done
   instance.fail = fail
@@ -51,14 +99,42 @@ export function effectFabric<Payload, Done>({
     thunk = fn
     return instance
   }
-  ;(instance: any).use.getCurrent = (): any => thunk
+  const getCurrent = (): any => thunk
+  ;(instance: any).use.getCurrent = getCurrent
   ;(instance: any).kind = Kind.effect
+  //assume that fresh event has empty scope
+  ;(instance: any).graphite.scope = {done, fail, getHandler: getCurrent}
+  instance.graphite.seq.push(
+    step.compute({
+      fn(params, scope) {
+        if (typeof params === 'object' && params !== null) {
+          if ('ɔ' in params) return params.ɔ
+        }
+        return {
+          params,
+          req: {
+            rs(data) {},
+            rj(data) {},
+          },
+        }
+      },
+    }),
+    step.run({
+      fn({params, req}, {getHandler, done, fail}) {
+        Promise.resolve(params)
+          .then(getHandler())
+          .then(
+            OnResolve.bind({event: done, params, handler: req.rs}),
+            OnReject.bind({event: fail, params, handler: req.rj}),
+          )
+        return params
+      },
+    }),
+  )
   ;(instance: any).create = (params: Payload, fullName, args) => {
-    eventCreate(params, instance.getType(), args)
-    return exec(
-      params,
-      callbacks(thunk, result => void done(result), error => void fail(error)),
-    )
+    const req = new Def()
+    eventCreate({ɔ: {params, req}}, instance.getType(), args)
+    return req.req
   }
 
   return instance
