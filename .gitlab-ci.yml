@@ -1,28 +1,24 @@
-# This file is a template, and might need editing before it works on your project.
-# Official framework image. Look for the different tagged releases at:
-# https://hub.docker.com/r/library/node/tags/
-image: node:latest
+image: node:11
 
-# Pick zero or more services to be used on all builds.
-# Only needed when using a docker container to run your tests in.
-# Check out: http://docs.gitlab.com/ce/ci/docker/using_docker_images.html#what-is-a-service
-services:
-  - mysql:latest
-  - redis:latest
-  - postgres:latest
-
-# This folder is cached between builds
-# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
 cache:
   paths:
-  - node_modules/
+    - node_modules/
 
-test_async:
-  script:
-   - npm install
-   - node ./specs/start.js ./specs/async.spec.js
+stages:
+  - test
+  # - deploy
 
-test_db:
+test_all:
+  stage: test
   script:
-   - npm install
-   - node ./specs/start.js ./specs/db-postgres.spec.js
+    - yarn
+    - yarn test
+# publish_next_to_npm:
+#   stage: deploy
+#   artifacts:
+#     name: "$CI_COMMIT_TAG"
+#     paths:
+#       - npm/
+#   script:
+#     - yarn
+#     - node tools/builder.js publish next
