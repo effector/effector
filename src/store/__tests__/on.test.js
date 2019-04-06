@@ -59,6 +59,25 @@ it('supports events', () => {
     [3, 'long word'],
   ])
 })
+it('replace old links', () => {
+  const event = createEvent('event')
+
+  const store = createStore('')
+    .on(event, () => 'a')
+    .on(event, () => 'b')
+
+  event()
+
+  expect(store.getState()).toBe('b')
+
+  store.off(event)
+
+  store.setState('x')
+
+  event()
+
+  expect(store.getState()).toBe('x')
+})
 // it('supports effects', () => {
 //   const newWord = createEvent<string>('new word')
 //   const spyEvent = createEffect('spy effect')
