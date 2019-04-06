@@ -1,6 +1,7 @@
 //@flow
 
-import {createEvent, relay, relayShape} from 'effector/event'
+import {createEvent} from 'effector/event'
+import {relay, relayShape} from '../relay'
 
 test.skip('relay', () => {
   const fnA = jest.fn()
