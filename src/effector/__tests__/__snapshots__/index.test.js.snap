@@ -238,8 +238,8 @@ exports[`showcase: event foo 1`] = `
             Next [
               *  Graph {
                  Seq [
-                   1. compute {{}},
-                   2. filter {{}},
+                   1. filter {{}},
+                   2. compute {{}},
                    3. barrier {{
                       barrierID: 1
                    }},
@@ -327,8 +327,8 @@ exports[`showcase: store a 1`] = `
   Next [
     *  Graph {
        Seq [
-         1. compute {{}},
-         2. filter {{}},
+         1. filter {{}},
+         2. compute {{}},
          3. barrier {{
             barrierID: 1
          }},
