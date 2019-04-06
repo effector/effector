@@ -30,6 +30,7 @@ const aliases = {
   'effector/graphite': 'graphite',
   'effector/fixtures': 'fixtures',
   'effector/stdlib': 'stdlib',
+  'effector/blocks': 'blocks',
   'effector/perf': 'perf',
   'effector/watcher': 'watcher',
   'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
