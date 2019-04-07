@@ -13,6 +13,7 @@ import type {Effect} from 'effector/effect'
 import {runtime} from 'effector/graphite'
 import {noop} from 'effector/blocks'
 
+import {getDisplayName} from '../naming'
 import type {Subscription} from '../effector/index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
@@ -154,15 +155,7 @@ function filterEvent<A, B>(
   })
   return mapped
 }
-//TODO merge duplicated code
-const readName = (e: *): string => {
-  switch (e.kind) {
-    case Kind.store:
-      return e.shortName
-    default:
-      return e.getType()
-  }
-}
+
 function watchEvent<Payload>(
   event: Unit,
   watcher: (payload: Payload, type: string) => any,
@@ -177,7 +170,7 @@ function watchEvent<Payload>(
         step.run({
           fn: (payload: Payload, {trigger, handler}) => handler(
             payload,
-            readName(trigger),
+            getDisplayName(trigger),
           ),
         }),
       ]

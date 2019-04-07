@@ -1,12 +1,12 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, Kind, createNode, createGraph} from 'effector/stdlib'
+import {step, createNode, createGraph} from 'effector/stdlib'
 import {filterChanged, noop} from 'effector/blocks'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
-
+import {getDisplayName} from '../naming'
 import {forward, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../effector/index.h'
@@ -23,14 +23,7 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
   currentSubscription()
   storeInstance.subscribers.delete(event)
 }
-const readName = (e: *): string => {
-  switch (e.kind) {
-    case Kind.store:
-      return e.shortName
-    default:
-      return e.getType()
-  }
-}
+
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
   const from: Event<any> = event
   const meta = {
@@ -53,7 +46,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               const result = handler(
                 state.current,
                 newValue,
-                readName(trigger),
+                getDisplayName(trigger),
               )
               if (result === undefined) return
               state.current = result
@@ -102,7 +95,7 @@ export function watch(
       invariant(typeof fn === 'function', message)
       return eventOrFn.watch(payload =>
         //$todo
-        fn(getState(storeInstance), payload, readName(eventOrFn)),
+        fn(getState(storeInstance), payload, getDisplayName(eventOrFn)),
       )
     default:
       invariant(typeof eventOrFn === 'function', message)
