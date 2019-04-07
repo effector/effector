@@ -27,12 +27,13 @@ class Stack {
     this.parent = parent
   }
 }
+type LayerType = 'layer' | 'barrier' | 'effect'
 type Layer = {|
   +step: Graph<any>,
   +firstIndex: number,
   +scope: Stack,
   +resetStop: boolean,
-  +type: 'layer' | 'barrier' | 'effect',
+  +type: LayerType,
   +id: number,
 |}
 
@@ -111,25 +112,25 @@ const layerComparator = (a: Layer, b: Layer) => {
   let arank = -1
   switch (a.type) {
     case 'layer':
-      arank = 0
-      break
-    case 'barrier':
       arank = 1
       break
-    case 'effect':
+    case 'barrier':
       arank = 2
+      break
+    case 'effect':
+      arank = 3
       break
   }
   let brank = -1
   switch (b.type) {
     case 'layer':
-      brank = 0
-      break
-    case 'barrier':
       brank = 1
       break
-    case 'effect':
+    case 'barrier':
       brank = 2
+      break
+    case 'effect':
+      brank = 3
       break
   }
   return arank > brank
@@ -159,7 +160,8 @@ const printLayers = list => {
   const flatten = list.map(flattenLayer)
   console.table((flatten: any))
   for (let i = 0; i < flatten.length; i++) {
-    console.table((flatten[i].scope.reverse(): any))
+    console.log(flatten[i].id, flatten[i].type)
+    console.table((flatten[i].scope.slice().reverse(): any))
   }
 }
 let layerID = 0

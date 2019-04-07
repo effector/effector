@@ -49,14 +49,18 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
         //prettier-ignore
         node: [
           step.compute({
-            fn: (newValue, {handler, state, trigger}) => handler(
-              state.current,
-              newValue,
-              readName(trigger),
-            ),
+            fn(newValue, {handler, state, trigger}) {
+              const result = handler(
+                state.current,
+                newValue,
+                readName(trigger),
+              )
+              if (result === undefined) return
+              state.current = result
+              return result
+            },
             meta,
           }),
-          filterChanged,
         ]
       }),
     }),

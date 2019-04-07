@@ -3,7 +3,6 @@ import $$observable from 'symbol-observable'
 
 import {step, createGraph, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
-import {filterChanged} from 'effector/blocks'
 
 import type {Store, ThisStore} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'
@@ -40,12 +39,22 @@ export function storeFabric<State>(props: {
   }
   const storeInstance: ThisStore = {
     graphite: createGraph({
-      scope: {state: plainState},
+      scope: {state: plainState, oldState: currentState},
       node: [
-        filterChanged,
+        step.filter({
+          fn: upd => upd !== undefined,
+          meta,
+        }),
         step.update({
           store: plainState,
           meta,
+        }),
+        step.filter({
+          fn(upd, scope) {
+            if (upd === scope.oldState) return false
+            scope.oldState = upd
+            return true
+          },
         }),
       ],
     }),
