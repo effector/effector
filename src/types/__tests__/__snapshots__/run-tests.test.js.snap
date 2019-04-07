@@ -1025,7 +1025,7 @@ Object {
       "suppressions": Array [],
     },
   ],
-  "flowVersion": "0.95.1",
+  "flowVersion": "0.96.0",
   "jsonVersion": "1",
   "passed": false,
 }
@@ -1035,19 +1035,11 @@ exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
 src/types/types.test.ts(28,11): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
-  Types of property 'watch' are incompatible.
-    Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-      Types of parameters 'watcher' and 'watcher' are incompatible.
-        Types of parameters 'payload' and 'payload' are incompatible.
-          Type 'number' is not assignable to type 'string'.
+  Type 'number' is not assignable to type 'string'.
 src/types/types.test.ts(34,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
   Type 'number' is not assignable to type 'string'.
 src/types/types.test.ts(40,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
-  Types of property 'watch' are incompatible.
-    Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-      Types of parameters 'watcher' and 'watcher' are incompatible.
-        Types of parameters 'payload' and 'payload' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+  Type 'string' is not assignable to type 'number'.
 src/types/types.test.ts(53,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
 src/types/types.test.ts(68,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
 src/types/types.test.ts(119,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
