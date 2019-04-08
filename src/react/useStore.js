@@ -9,7 +9,11 @@ export function useStore<State>(store: Store<State>): State {
     'useStore: The argument must be Store, but you passed %s.',
     store,
   )
-  const [, dispatch] = useReducer((_, payload) => payload)
+  const [, dispatch] = useReducer(
+    (_, payload) => payload,
+    undefined,
+    store.getState,
+  )
   useEffect(() => store.watch(dispatch), [store])
   return store.getState()
 }
