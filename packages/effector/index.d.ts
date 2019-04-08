@@ -187,13 +187,14 @@ update(data: {store: StateRef}): Update
 run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
-export function clearNode(unit: Unit<any>, opts?: {deep?: boolean}): void
+export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
 node: Array<Cmd>
 child?: Array<Unit<any> | Step>
 from?: Array<Unit<any> | Step>
 scope?: {[field: string]: any}
 }): Step
+export function launch(unit: Unit<any> | Step, payload: any): void
 export function createEvent<E = void>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(

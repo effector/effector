@@ -42,6 +42,7 @@ export {
   createGraph as createNode,
   step,
 } from 'effector/stdlib'
+export {launch} from 'effector/graphite'
 export type {kind} from 'effector/stdlib'
 
 export {default as invariant} from 'invariant'

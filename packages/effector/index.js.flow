@@ -220,7 +220,7 @@ declare export function forward<T>(opts: {|
   /*::+*/ to: Unit<T>,
 |}): Subscription
 declare export function clearNode(
-  unit: Unit<any>,
+  unit: Unit<any> | Step,
   opts?: {deep?: boolean},
 ): void
 declare export function createNode(opts: {|
@@ -229,6 +229,8 @@ declare export function createNode(opts: {|
   +from?: Array<Unit<any> | Step>,
   +scope?: {[field: string]: any},
 |}): Step
+
+declare export function launch(unit: Unit<any> | Step, payload: any): void
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
