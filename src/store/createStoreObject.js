@@ -1,29 +1,55 @@
 //@flow
-import {step, createGraph, nextBarrierID, isStore} from 'effector/stdlib'
+import {
+  step,
+  createGraph,
+  nextBarrierID,
+  isStore,
+  type StateRef,
+} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
 import {forward} from 'effector/event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
+type CombinationScope = {
+  key: any,
+  target: StateRef,
+  clone(value: any): any,
+  isFresh: boolean,
+}
+
 const storeCombination = (obj: any, clone: Function, defaultState: any) => {
   const node = [
     //prettier-ignore
     step.filter({
-      fn: (upd, {target, key}) => (
+      fn: (upd, {target, key}: CombinationScope) => (
         upd !== target.current[key]
-        && upd !== undefined
+      && upd !== undefined
       ),
     }),
     step.compute({
-      fn(upd, {target, key}) {
+      fn(upd, scope: CombinationScope) {
+        if (!scope.isFresh) {
+          const {target, clone} = scope
+          target.current = clone(target.current)
+          scope.isFresh = true
+        }
+        return upd
+      },
+    }),
+    step.compute({
+      fn(upd, {target, key}: CombinationScope) {
         target.current[key] = upd
         return null
       },
     }),
     step.barrier({barrierID: nextBarrierID()}),
     step.compute({
-      fn: (none, {target, clone}) => clone(target.current),
+      fn(none, scope: CombinationScope) {
+        scope.isFresh = false
+        return scope.target.current
+      },
     }),
   ]
   const stateNew = clone(defaultState)
@@ -43,7 +69,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     forward({
       from: child,
       to: createGraph({
-        scope: {key, clone, target: store.stateRef},
+        scope: {key, clone, target: store.stateRef, isFresh: false},
         node,
         child: [store],
       }),
