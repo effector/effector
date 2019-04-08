@@ -242,7 +242,7 @@ export function restore<Done>(
 export function restore<E>(event: Event<E>, defaultState: E): Store<E>
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
-): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}
+): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : Store<State[K]>}
 
 export function createDomain(domainName?: string): Domain
 
