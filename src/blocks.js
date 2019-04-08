@@ -1,11 +1,11 @@
 //@flow
 
-import {step} from 'effector/stdlib'
+import {step, readRef} from 'effector/stdlib'
 
 //prettier-ignore
 export const filterChanged = step.filter({
   fn: (data, {state}) => (
-    data !== state.current
+    data !== readRef(state)
     && data !== undefined
   ),
 })

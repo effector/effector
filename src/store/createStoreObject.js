@@ -4,6 +4,9 @@ import {
   createGraph,
   nextBarrierID,
   isStore,
+  createStateRef,
+  readRef,
+  writeRef,
   type StateRef,
 } from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
@@ -16,7 +19,7 @@ type CombinationScope = {
   key: any,
   target: StateRef,
   clone(value: any): any,
-  isFresh: boolean,
+  isFresh: StateRef,
 }
 
 const storeCombination = (obj: any, clone: Function, defaultState: any) => {
@@ -24,31 +27,30 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     //prettier-ignore
     step.filter({
       fn: (upd, {target, key}: CombinationScope) => (
-        upd !== target.current[key]
+        upd !== readRef(target)[key]
       && upd !== undefined
       ),
     }),
     step.compute({
-      fn(upd, scope: CombinationScope) {
-        if (!scope.isFresh) {
-          const {target, clone} = scope
-          target.current = clone(target.current)
-          scope.isFresh = true
+      fn(upd, {isFresh, target, clone}: CombinationScope) {
+        if (!readRef(isFresh)) {
+          writeRef(target, clone(readRef(target)))
+          writeRef(isFresh, true)
         }
         return upd
       },
     }),
     step.compute({
       fn(upd, {target, key}: CombinationScope) {
-        target.current[key] = upd
+        readRef(target)[key] = upd
         return null
       },
     }),
     step.barrier({barrierID: nextBarrierID()}),
     step.compute({
-      fn(none, scope: CombinationScope) {
-        scope.isFresh = false
-        return scope.target.current
+      fn(none, {isFresh, target}: CombinationScope) {
+        writeRef(isFresh, false)
+        return readRef(target)
       },
     }),
   ]
@@ -58,18 +60,19 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     //TODO: add location
     config: {name: unitObjectName(obj)},
   })
-
+  const isFresh = createStateRef(false)
   for (const key in obj) {
     const child = obj[key]
     if (!isStore(child)) {
       stateNew[key] = defaultState[key] = child
       continue
     }
-    stateNew[key] = defaultState[key] = child.defaultState
+    defaultState[key] = child.defaultState
+    stateNew[key] = child.getState()
     forward({
       from: child,
       to: createGraph({
-        scope: {key, clone, target: store.stateRef, isFresh: false},
+        scope: {key, clone, target: store.stateRef, isFresh},
         node,
         child: [store],
       }),

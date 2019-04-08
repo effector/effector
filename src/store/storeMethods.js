@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, createNode, createGraph} from 'effector/stdlib'
+import {step, createNode, createGraph, readRef, writeRef} from 'effector/stdlib'
 import {filterChanged, noop} from 'effector/blocks'
 
 import invariant from 'invariant'
@@ -15,7 +15,7 @@ export function reset(storeInstance: ThisStore, event: Event<any>) {
   return on.call(this, storeInstance, event, () => storeInstance.defaultState)
 }
 export function getState(storeInstance: ThisStore) {
-  return storeInstance.plainState.current
+  return readRef(storeInstance.plainState)
 }
 export function off(storeInstance: ThisStore, event: Event<any>) {
   const currentSubscription = storeInstance.subscribers.get(event)
@@ -44,13 +44,12 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
           step.compute({
             fn(newValue, {handler, state, trigger}) {
               const result = handler(
-                state.current,
+                readRef(state),
                 newValue,
                 getDisplayName(trigger),
               )
               if (result === undefined) return
-              state.current = result
-              return result
+              return writeRef(state, result)
             },
             meta,
           }),
@@ -191,7 +190,7 @@ export function mapStore<A, B>(
             let stopPhaseTimerMessage = 'Got error'
             let result
             try {
-              result = handler(newValue, state.current)
+              result = handler(newValue, readRef(state))
               stopPhaseTimerMessage = null
             } catch (err) {
               console.error(err)

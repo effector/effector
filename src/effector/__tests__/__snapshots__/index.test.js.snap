@@ -279,7 +279,7 @@ exports[`showcase: event foo 1`] = `
                                   1. filter {{}},
                                   2. update {{
                                      store: {
-                                       id: 6,
+                                       id: 7,
                                        current: 3
                                      }
                                   }},
@@ -307,7 +307,7 @@ exports[`showcase: mapped 1`] = `
     1. filter {{}},
     2. update {{
        store: {
-         id: 6,
+         id: 7,
          current: 3
        }
     }},
@@ -373,7 +373,7 @@ exports[`showcase: store a 1`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 6,
+                             id: 7,
                              current: 3
                            }
                         }},
