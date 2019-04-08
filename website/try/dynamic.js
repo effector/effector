@@ -221,9 +221,8 @@ codeError
 let textMarker
 codeError.watch(async ({stackFrames}) => {
   if (textMarker) textMarker.clear()
-
-  const frame = stackFrames[0]
-  if (frame) {
+  for (const frame of stackFrames) {
+    if (frame._originalFileName !== 'repl.js') continue
     const line = (frame._originalLineNumber || 0) - 1
     const ch = frame._originalColumnNumber || 0
     textMarker = await codeMarkLine({
