@@ -21,8 +21,6 @@ import {
   graphite,
   graphiteCode,
   codeError,
-  realmLog,
-  logs,
   intervals,
   timeouts,
   realmStatus,
@@ -38,7 +36,6 @@ import {versionLoader} from './evaluator'
 
 import {switcher} from './switcher'
 import {evaluator} from './evaluator'
-import {printLogs} from './logs'
 
 version.on(selectVersion, (_, p) => p)
 
@@ -87,26 +84,6 @@ timeouts
 
 timeouts.watch(console.log)
 intervals.watch(console.log)
-
-// logs.watch(realmLog, (logs, log) => {
-//   logs.push(log)
-// })
-
-logs
-  .on(realmLog, (logs, log) => logs.concat(log))
-  .on(realmStatus, (logs, {active}) => {
-    if (!active) return logs
-    return []
-  })
-  .reset(changeSources)
-  .reset(selectVersion)
-
-// logs.watch(realmStatus, (logs, {active}) => {
-//   if (!active) {
-//     printLogs(logs)
-//   }
-//   logs.length = 0
-// })
 
 stats
   .on(realmEvent, ({event, ...rest}, e) => ({

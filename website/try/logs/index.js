@@ -1,5 +1,5 @@
 import {presets} from './stylePresets'
-import {realmLog} from '../domain'
+import {realmLog} from './domain'
 
 const CLEAR_CONSOLE = false
 const PRINT_IN_GROUP = false

@@ -74,7 +74,6 @@ export const realmEffect = createEvent('realm effect created')
 export const realmDomain = createEvent('realm domain created')
 export const realmComponent = createEvent('realm component created')
 export const realmInvoke = createEvent('realm invoke')
-export const realmLog = createEvent('realm console.log call')
 export const realmStatus = createEvent('realm status update')
 
 export const realmInterval = createEvent('realm setInterval call')
@@ -87,7 +86,6 @@ export const changeSources = createEvent('change sources')
 export const resetGraphiteState = createEvent('reset graphite state')
 export const selectVersion = createEvent('select version')
 
-export const logs = createStore<any[]>([])
 export const intervals = createStore<number[]>([])
 export const timeouts = createStore<number[]>([])
 

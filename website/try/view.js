@@ -19,7 +19,6 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {
   sourceCode,
-  logs,
   packageVersions,
   selectVersion,
   graphiteCode,

@@ -110,6 +110,8 @@ body {
 .errors {
   margin: 0;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 .errors.has-errors {
   z-index: 20;
