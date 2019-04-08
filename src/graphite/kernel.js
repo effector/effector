@@ -187,7 +187,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
             step: graph,
             firstIndex: stepn,
             scope,
-            resetStop,
+            resetStop: false,
             type: 'effect',
             id: ++layerID,
           })
@@ -200,7 +200,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
               step: graph,
               firstIndex: stepn,
               scope,
-              resetStop,
+              resetStop: false,
               type: 'barrier',
               id: ++layerID,
             })
