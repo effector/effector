@@ -85,6 +85,7 @@ test('olympic', async() => {
     ['text: "text" length: 4 empty: false'],
     ['text: "word" length: 4 empty: false'],
     ['text: "" length: 0 empty: true'],
+    ['text: "" length: 1 empty: false'],
     ['text: "end" length: 3 empty: false'],
   ])
 
