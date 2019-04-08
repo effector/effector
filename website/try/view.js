@@ -50,16 +50,18 @@ const jsonRef = React.createRef()
 
 const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
-  <Panel
-    className="sources"
-    markLine={codeMarkLine}
-    setCursor={codeSetCursor}
-    onCursorActivity={codeCursorActivity}
-    value={sources}
-    mode="text/jsx"
-    onChange={changeSourcesDebounced}
-    lineWrapping
-  />
+  <div className="sources">
+    <Panel
+      markLine={codeMarkLine}
+      setCursor={codeSetCursor}
+      onCursorActivity={codeCursorActivity}
+      value={sources}
+      mode="text/jsx"
+      onChange={changeSourcesDebounced}
+      lineWrapping
+    />
+    <TypeHintView />
+  </div>
 ))
 
 const GraphiteView = createComponent(graphiteCode, ({style}, graphite) => (
@@ -129,7 +131,6 @@ export default (
     <VersionLinkView />
     <OutlineView />
     <CodeView />
-    <TypeHintView />
     <div className="header">
       <VersionSelectorView />
       <ShareButtonView />

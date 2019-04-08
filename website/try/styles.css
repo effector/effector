@@ -85,7 +85,9 @@ body {
   border-left: 1px solid #ddd;
 }
 
-.editor.sources {
+.sources {
+  display: grid;
+  grid-template-rows: 1fr auto;
 }
 
 .editor.results {
@@ -216,7 +218,7 @@ body {
     grid-row: 11 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
-  .editor.sources {
+  .sources {
     scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 3 / span 3;
@@ -259,7 +261,7 @@ body {
     grid-column: 3 / span 1;
     grid-row: 3 / span 2;
   }
-  .editor.sources {
+  .sources {
     grid-column: 2 / span 1;
     grid-row: 1 / span 5;
   }
