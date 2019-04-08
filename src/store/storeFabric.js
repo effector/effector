@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, createNode, Kind, createStateRef} from 'effector/stdlib'
+import {step, createGraph, Kind, createStateRef} from 'effector/stdlib'
 import {createEvent} from 'effector/event'
 
 import type {Store, ThisStore} from './index.h'
@@ -38,16 +38,26 @@ export function storeFabric<State>(props: {
     section: currentId,
   }
   const storeInstance: ThisStore = {
-    graphite: createNode(
-      step.filter({
-        fn: filterBeforeUpdate.bind(plainState),
-        meta,
-      }),
-      step.update({
-        store: plainState,
-        meta,
-      }),
-    ),
+    graphite: createGraph({
+      scope: {state: plainState, oldState: currentState},
+      node: [
+        step.filter({
+          fn: upd => upd !== undefined,
+          meta,
+        }),
+        step.update({
+          store: plainState,
+          meta,
+        }),
+        step.filter({
+          fn(upd, scope) {
+            if (upd === scope.oldState) return false
+            scope.oldState = upd
+            return true
+          },
+        }),
+      ],
+    }),
     kind: Kind.store,
     id: plainState.id,
     shortName: currentId,
@@ -61,7 +71,6 @@ export function storeFabric<State>(props: {
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
     graphite: storeInstance.graphite,
-    defaultConfig: storeInstance.defaultConfig,
     kind: Kind.store,
     id: plainState.id,
     shortName: currentId,
@@ -71,7 +80,9 @@ export function storeFabric<State>(props: {
     watch: watch.bind(null, storeInstance),
     subscribe: subscribe.bind(null, storeInstance),
     getState: getState.bind(null, storeInstance),
+    stateRef: plainState,
   }
+  ;(store: any).defaultConfig = config
   ;(store: any).reset = reset.bind(store, storeInstance)
   ;(store: any).on = on.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
@@ -92,8 +103,4 @@ export function storeFabric<State>(props: {
   }
 
   return store
-}
-
-function filterBeforeUpdate(newValue) {
-  return newValue !== undefined && newValue !== this.current
 }

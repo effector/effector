@@ -54,19 +54,19 @@ Object {
               "context": "    const a = createEvent<number>()",
               "descr": "[1]",
               "end": 32,
-              "endline": 25,
-              "line": 25,
+              "endline": 23,
+              "line": 23,
               "loc": Object {
                 "end": Object {
                   "column": 32,
-                  "line": 25,
-                  "offset": 389,
+                  "line": 23,
+                  "offset": 366,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 27,
-                  "line": 25,
-                  "offset": 383,
+                  "line": 23,
+                  "offset": 360,
                 },
                 "type": "SourceFile",
               },
@@ -82,19 +82,19 @@ Object {
               "context": "    const check2: Event<string> = c",
               "descr": "[2]",
               "end": 30,
-              "endline": 30,
-              "line": 30,
+              "endline": 28,
+              "line": 28,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 30,
-                  "offset": 524,
+                  "line": 28,
+                  "offset": 501,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 30,
-                  "offset": 518,
+                  "line": 28,
+                  "offset": 495,
                 },
                 "type": "SourceFile",
               },
@@ -140,19 +140,19 @@ Object {
           "context": "    const check2: Event<string> = c",
           "descr": "Cannot assign \`c\` to \`check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
           "end": 35,
-          "endline": 30,
-          "line": 30,
+          "endline": 28,
+          "line": 28,
           "loc": Object {
             "end": Object {
               "column": 35,
-              "line": 30,
-              "offset": 529,
+              "line": 28,
+              "offset": 506,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 35,
-              "line": 30,
-              "offset": 528,
+              "line": 28,
+              "offset": 505,
             },
             "type": "SourceFile",
           },
@@ -185,19 +185,19 @@ Object {
               "context": "    const check3: Store<number> = e",
               "descr": "[1]",
               "end": 30,
-              "endline": 35,
-              "line": 35,
+              "endline": 33,
+              "line": 33,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 35,
-                  "offset": 618,
+                  "line": 33,
+                  "offset": 595,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 35,
-                  "offset": 612,
+                  "line": 33,
+                  "offset": 589,
                 },
                 "type": "SourceFile",
               },
@@ -213,19 +213,19 @@ Object {
               "context": "    const check4: Store<string> = e",
               "descr": "[2]",
               "end": 30,
-              "endline": 36,
-              "line": 36,
+              "endline": 34,
+              "line": 34,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 36,
-                  "offset": 654,
+                  "line": 34,
+                  "offset": 631,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 36,
-                  "offset": 648,
+                  "line": 34,
+                  "offset": 625,
                 },
                 "type": "SourceFile",
               },
@@ -271,19 +271,19 @@ Object {
           "context": "    const check4: Store<string> = e",
           "descr": "Cannot assign \`e\` to \`check4\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
           "end": 35,
-          "endline": 36,
-          "line": 36,
+          "endline": 34,
+          "line": 34,
           "loc": Object {
             "end": Object {
               "column": 35,
-              "line": 36,
-              "offset": 659,
+              "line": 34,
+              "offset": 636,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 35,
-              "line": 36,
-              "offset": 658,
+              "line": 34,
+              "offset": 635,
             },
             "type": "SourceFile",
           },
@@ -316,19 +316,19 @@ Object {
               "context": "    const f = createEffect<string, any, any>()",
               "descr": "[1]",
               "end": 33,
-              "endline": 38,
-              "line": 38,
+              "endline": 36,
+              "line": 36,
               "loc": Object {
                 "end": Object {
                   "column": 33,
-                  "line": 38,
-                  "offset": 694,
+                  "line": 36,
+                  "offset": 671,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 28,
-                  "line": 38,
-                  "offset": 688,
+                  "line": 36,
+                  "offset": 665,
                 },
                 "type": "SourceFile",
               },
@@ -344,19 +344,19 @@ Object {
               "context": "    const check6: Event<number> = g",
               "descr": "[2]",
               "end": 30,
-              "endline": 42,
-              "line": 42,
+              "endline": 40,
+              "line": 40,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 42,
-                  "offset": 802,
+                  "line": 40,
+                  "offset": 779,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 42,
-                  "offset": 796,
+                  "line": 40,
+                  "offset": 773,
                 },
                 "type": "SourceFile",
               },
@@ -402,19 +402,19 @@ Object {
           "context": "    const check6: Event<number> = g",
           "descr": "Cannot assign \`g\` to \`check6\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
           "end": 35,
-          "endline": 42,
-          "line": 42,
+          "endline": 40,
+          "line": 40,
           "loc": Object {
             "end": Object {
               "column": 35,
-              "line": 42,
-              "offset": 807,
+              "line": 40,
+              "offset": 784,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 35,
-              "line": 42,
-              "offset": 806,
+              "line": 40,
+              "offset": 783,
             },
             "type": "SourceFile",
           },
@@ -447,19 +447,19 @@ Object {
               "context": "    const check1: Event<string> = computed",
               "descr": "[1]",
               "end": 30,
-              "endline": 54,
-              "line": 54,
+              "endline": 52,
+              "line": 52,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 54,
-                  "offset": 1071,
+                  "line": 52,
+                  "offset": 1048,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 54,
-                  "offset": 1065,
+                  "line": 52,
+                  "offset": 1042,
                 },
                 "type": "SourceFile",
               },
@@ -475,19 +475,19 @@ Object {
               "context": "    const check2: Event<number> = computed",
               "descr": "[2]",
               "end": 30,
-              "endline": 55,
-              "line": 55,
+              "endline": 53,
+              "line": 53,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 55,
-                  "offset": 1114,
+                  "line": 53,
+                  "offset": 1091,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 55,
-                  "offset": 1108,
+                  "line": 53,
+                  "offset": 1085,
                 },
                 "type": "SourceFile",
               },
@@ -533,19 +533,19 @@ Object {
           "context": "    const check2: Event<number> = computed",
           "descr": "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
           "end": 42,
-          "endline": 55,
-          "line": 55,
+          "endline": 53,
+          "line": 53,
           "loc": Object {
             "end": Object {
               "column": 42,
-              "line": 55,
-              "offset": 1126,
+              "line": 53,
+              "offset": 1103,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 35,
-              "line": 55,
-              "offset": 1118,
+              "line": 53,
+              "offset": 1095,
             },
             "type": "SourceFile",
           },
@@ -578,19 +578,19 @@ Object {
               "context": "    const store2: Store<string> = createStore(0)",
               "descr": "[1]",
               "end": 47,
-              "endline": 70,
-              "line": 70,
+              "endline": 68,
+              "line": 68,
               "loc": Object {
                 "end": Object {
                   "column": 47,
-                  "line": 70,
-                  "offset": 1444,
+                  "line": 68,
+                  "offset": 1421,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 47,
-                  "line": 70,
-                  "offset": 1443,
+                  "line": 68,
+                  "offset": 1420,
                 },
                 "type": "SourceFile",
               },
@@ -606,19 +606,19 @@ Object {
               "context": "    const store2: Store<string> = createStore(0)",
               "descr": "[2]",
               "end": 30,
-              "endline": 70,
-              "line": 70,
+              "endline": 68,
+              "line": 68,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 70,
-                  "offset": 1427,
+                  "line": 68,
+                  "offset": 1404,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 70,
-                  "offset": 1421,
+                  "line": 68,
+                  "offset": 1398,
                 },
                 "type": "SourceFile",
               },
@@ -664,19 +664,19 @@ Object {
           "context": "    const store2: Store<string> = createStore(0)",
           "descr": "Cannot assign \`createStore(...)\` to \`store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
           "end": 47,
-          "endline": 70,
-          "line": 70,
+          "endline": 68,
+          "line": 68,
           "loc": Object {
             "end": Object {
               "column": 47,
-              "line": 70,
-              "offset": 1444,
+              "line": 68,
+              "offset": 1421,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 47,
-              "line": 70,
-              "offset": 1443,
+              "line": 68,
+              "offset": 1420,
             },
             "type": "SourceFile",
           },
@@ -709,19 +709,19 @@ Object {
               "context": "    const check1: Store<string> = computed",
               "descr": "[1]",
               "end": 30,
-              "endline": 119,
-              "line": 119,
+              "endline": 117,
+              "line": 117,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 119,
-                  "offset": 2775,
+                  "line": 117,
+                  "offset": 2752,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 119,
-                  "offset": 2769,
+                  "line": 117,
+                  "offset": 2746,
                 },
                 "type": "SourceFile",
               },
@@ -737,19 +737,19 @@ Object {
               "context": "    const check2: Store<number> = computed",
               "descr": "[2]",
               "end": 30,
-              "endline": 121,
-              "line": 121,
+              "endline": 119,
+              "line": 119,
               "loc": Object {
                 "end": Object {
                   "column": 30,
-                  "line": 121,
-                  "offset": 2819,
+                  "line": 119,
+                  "offset": 2796,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 25,
-                  "line": 121,
-                  "offset": 2813,
+                  "line": 119,
+                  "offset": 2790,
                 },
                 "type": "SourceFile",
               },
@@ -795,19 +795,19 @@ Object {
           "context": "    const check2: Store<number> = computed",
           "descr": "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
           "end": 42,
-          "endline": 121,
-          "line": 121,
+          "endline": 119,
+          "line": 119,
           "loc": Object {
             "end": Object {
               "column": 42,
-              "line": 121,
-              "offset": 2831,
+              "line": 119,
+              "offset": 2808,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 35,
-              "line": 121,
-              "offset": 2823,
+              "line": 119,
+              "offset": 2800,
             },
             "type": "SourceFile",
           },
@@ -840,19 +840,19 @@ Object {
               "context": "    const domain3 = createDomain(234)",
               "descr": "[1]",
               "end": 36,
-              "endline": 203,
-              "line": 203,
+              "endline": 201,
+              "line": 201,
               "loc": Object {
                 "end": Object {
                   "column": 36,
-                  "line": 203,
-                  "offset": 4958,
+                  "line": 201,
+                  "offset": 4935,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 34,
-                  "line": 203,
-                  "offset": 4955,
+                  "line": 201,
+                  "offset": 4932,
                 },
                 "type": "SourceFile",
               },
@@ -868,19 +868,19 @@ Object {
               "context": "declare export function createDomain(domainName?: string): Domain",
               "descr": "[2]",
               "end": 56,
-              "endline": 243,
-              "line": 243,
+              "endline": 314,
+              "line": 314,
               "loc": Object {
                 "end": Object {
                   "column": 56,
-                  "line": 243,
-                  "offset": 6538,
+                  "line": 314,
+                  "offset": 7805,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
                   "column": 51,
-                  "line": 243,
-                  "offset": 6532,
+                  "line": 314,
+                  "offset": 7799,
                 },
                 "type": "SourceFile",
               },
@@ -898,19 +898,19 @@ Object {
           "context": "    const domain3 = createDomain(234)",
           "descr": "Cannot call \`createDomain\` with \`234\` bound to \`domainName\` because number [1] is incompatible with string [2].",
           "end": 36,
-          "endline": 203,
-          "line": 203,
+          "endline": 201,
+          "line": 201,
           "loc": Object {
             "end": Object {
               "column": 36,
-              "line": 203,
-              "offset": 4958,
+              "line": 201,
+              "offset": 4935,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 34,
-              "line": 203,
-              "offset": 4955,
+              "line": 201,
+              "offset": 4932,
             },
             "type": "SourceFile",
           },
@@ -943,19 +943,19 @@ Object {
               "context": "    const domain4 = createDomain({foo: true})",
               "descr": "[1]",
               "end": 44,
-              "endline": 204,
-              "line": 204,
+              "endline": 202,
+              "line": 202,
               "loc": Object {
                 "end": Object {
                   "column": 44,
-                  "line": 204,
-                  "offset": 5004,
+                  "line": 202,
+                  "offset": 4981,
                 },
                 "source": "types.test.js",
                 "start": Object {
                   "column": 34,
-                  "line": 204,
-                  "offset": 4993,
+                  "line": 202,
+                  "offset": 4970,
                 },
                 "type": "SourceFile",
               },
@@ -971,19 +971,19 @@ Object {
               "context": "declare export function createDomain(domainName?: string): Domain",
               "descr": "[2]",
               "end": 56,
-              "endline": 243,
-              "line": 243,
+              "endline": 314,
+              "line": 314,
               "loc": Object {
                 "end": Object {
                   "column": 56,
-                  "line": 243,
-                  "offset": 6538,
+                  "line": 314,
+                  "offset": 7805,
                 },
                 "source": "../../packages/effector/index.js.flow",
                 "start": Object {
                   "column": 51,
-                  "line": 243,
-                  "offset": 6532,
+                  "line": 314,
+                  "offset": 7799,
                 },
                 "type": "SourceFile",
               },
@@ -1001,19 +1001,19 @@ Object {
           "context": "    const domain4 = createDomain({foo: true})",
           "descr": "Cannot call \`createDomain\` with object literal bound to \`domainName\` because object literal [1] is incompatible with string [2].",
           "end": 44,
-          "endline": 204,
-          "line": 204,
+          "endline": 202,
+          "line": 202,
           "loc": Object {
             "end": Object {
               "column": 44,
-              "line": 204,
-              "offset": 5004,
+              "line": 202,
+              "offset": 4981,
             },
             "source": "types.test.js",
             "start": Object {
               "column": 34,
-              "line": 204,
-              "offset": 4993,
+              "line": 202,
+              "offset": 4970,
             },
             "type": "SourceFile",
           },
@@ -1025,7 +1025,7 @@ Object {
       "suppressions": Array [],
     },
   ],
-  "flowVersion": "0.95.1",
+  "flowVersion": "0.96.0",
   "jsonVersion": "1",
   "passed": false,
 }
@@ -1034,25 +1034,17 @@ Object {
 exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
-src/types/types.test.ts(30,11): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
-  Types of property 'watch' are incompatible.
-    Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-      Types of parameters 'watcher' and 'watcher' are incompatible.
-        Types of parameters 'payload' and 'payload' are incompatible.
-          Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(36,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
+src/types/types.test.ts(28,11): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
   Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(42,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
-  Types of property 'watch' are incompatible.
-    Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-      Types of parameters 'watcher' and 'watcher' are incompatible.
-        Types of parameters 'payload' and 'payload' are incompatible.
-          Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(55,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
-src/types/types.test.ts(70,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
-src/types/types.test.ts(121,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
+src/types/types.test.ts(34,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
+  Type 'number' is not assignable to type 'string'.
+src/types/types.test.ts(40,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
   Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(203,34): error TS2345: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
-src/types/types.test.ts(204,34): error TS2345: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
+src/types/types.test.ts(53,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
+src/types/types.test.ts(68,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
+src/types/types.test.ts(119,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
+  Type 'string' is not assignable to type 'number'.
+src/types/types.test.ts(201,34): error TS2345: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
+src/types/types.test.ts(202,34): error TS2345: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
 "
 `;

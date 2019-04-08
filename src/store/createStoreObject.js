@@ -1,133 +1,84 @@
 //@flow
-import {step, createNode, stringRefcount, isStore} from 'effector/stdlib'
+import {
+  step,
+  createGraph,
+  nextBarrierID,
+  isStore,
+  type StateRef,
+} from 'effector/stdlib'
 import {unitObjectName} from 'effector/naming'
-import {linkGraphs} from 'effector/event'
+import {forward} from 'effector/event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
-const nextBarrierID = stringRefcount()
-function getFreshArray() {
-  return this().slice()
+type CombinationScope = {
+  key: any,
+  target: StateRef,
+  clone(value: any): any,
+  isFresh: boolean,
 }
-function getFreshObject() {
-  return Object.assign({}, this())
-}
-function storeCombination(
-  obj: any,
-  freshGetter,
-  stateNew: any,
-  defaultState: any,
-) {
-  const name = unitObjectName(obj)
-  const barrierID = nextBarrierID()
-  const nodes = []
-  for (const key in obj) {
-    const child = obj[key]
-    defaultState[key] = isStore(child) ? child.defaultState : child
-    if (!isStore(child)) continue
-    /*::;(child: Store<any>);*/
 
-    stateNew[key] = child.defaultState
-    const node = createNode(
-      step.compute({
-        fn(state) {
-          const current = store.getState()
-          const changed = current[key] !== state
-          current[key] = state
-          return changed
-        },
-      }),
-      step.filter({
-        fn: changed => changed,
-      }),
-      step.barrier({barrierID}),
-      step.compute({
-        fn(state) {
-          return getFresh()
-        },
-      }),
-    )
-    nodes.push(node)
-    linkGraphs({
-      from: child.graphite,
-      to: node,
-    })
-  }
+const storeCombination = (obj: any, clone: Function, defaultState: any) => {
+  const node = [
+    //prettier-ignore
+    step.filter({
+      fn: (upd, {target, key}: CombinationScope) => (
+        upd !== target.current[key]
+      && upd !== undefined
+      ),
+    }),
+    step.compute({
+      fn(upd, scope: CombinationScope) {
+        if (!scope.isFresh) {
+          const {target, clone} = scope
+          target.current = clone(target.current)
+          scope.isFresh = true
+        }
+        return upd
+      },
+    }),
+    step.compute({
+      fn(upd, {target, key}: CombinationScope) {
+        target.current[key] = upd
+        return null
+      },
+    }),
+    step.barrier({barrierID: nextBarrierID()}),
+    step.compute({
+      fn(none, scope: CombinationScope) {
+        scope.isFresh = false
+        return scope.target.current
+      },
+    }),
+  ]
+  const stateNew = clone(defaultState)
   const store = storeFabric({
     currentState: stateNew,
     //TODO: add location
-    config: {name},
+    config: {name: unitObjectName(obj)},
   })
-  for (const node of nodes) {
-    linkGraphs({
-      from: node,
-      to: store.graphite,
+
+  for (const key in obj) {
+    const child = obj[key]
+    if (!isStore(child)) {
+      stateNew[key] = defaultState[key] = child
+      continue
+    }
+    stateNew[key] = defaultState[key] = child.defaultState
+    forward({
+      from: child,
+      to: createGraph({
+        scope: {key, clone, target: store.stateRef, isFresh: false},
+        node,
+        child: [store],
+      }),
     })
   }
-  const getFresh = freshGetter.bind(store.getState)
+
   ;(store: any).defaultShape = obj
   ;(store: any).defaultState = defaultState
   return store
-}
-function createStoreArray<State: $ReadOnlyArray<Store<any> | any>>(
-  obj: State,
-): Store<
-  $TupleMap<
-    State,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
-> {
-  return storeCombination(
-    obj,
-    getFreshArray,
-    obj.slice(),
-    [],
-    // initializer(state) {
-    //   const pairs = []
-    //   const stateNew = [...obj]
-    //   const defaultState = []
-    //   for (let i = 0; i < state.length; i++) {
-    //     pairs.push({
-    //       key: i,
-    //       child: state[i],
-    //     })
-    //     defaultState[i] = state[i].defaultState
-    //   }
-    //   return {stateNew, pairs, defaultState}
-    // },
-  )
-}
-
-function createStoreObjectMap<State: {-[key: string]: Store<any> | any}>(
-  obj: State,
-): Store<
-  $ObjMap<
-    State,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
-> {
-  return storeCombination(
-    obj,
-    getFreshObject,
-    Object.assign({}, obj),
-    {},
-    // initializer(state) {
-    //   const pairs = []
-    //   const stateNew = Object.assign({}, obj)
-    //   const defaultState = {}
-    //   for (const key in state) {
-    //     pairs.push({
-    //       key,
-    //       child: state[key],
-    //     })
-    //     defaultState[key] = state[key].defaultState
-    //   }
-    //   return {stateNew, pairs, defaultState}
-    // },
-  )
 }
 
 declare export function createStoreObject<
@@ -152,11 +103,20 @@ declare export function createStoreObject<
     <S>(field: Store<S> | S) => S,
   >,
 >
+//prettier-ignore
 export function createStoreObject(obj: *) {
   if (Array.isArray(obj)) {
-    return createStoreArray(obj)
+    return storeCombination(
+      obj,
+      list => list.slice(),
+      [],
+    )
   }
-  return createStoreObjectMap(obj)
+  return storeCombination(
+    obj,
+    obj => Object.assign({}, obj),
+    {},
+  )
 }
 //eslint-disable-next-line
 declare export function extract<

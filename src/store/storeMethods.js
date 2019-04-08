@@ -1,12 +1,13 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, Kind, createNode, createGraph} from 'effector/stdlib'
+import {step, createNode, createGraph} from 'effector/stdlib'
+import {filterChanged, noop} from 'effector/blocks'
 
 import invariant from 'invariant'
 import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
-
-import {linkGraphs, type Event} from 'effector/event'
+import {getDisplayName} from '../naming'
+import {forward, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../effector/index.h'
 
@@ -22,42 +23,38 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
   currentSubscription()
   storeInstance.subscribers.delete(event)
 }
-const readName = (e: *): string => {
-  switch (e.kind) {
-    case Kind.store:
-      return e.shortName
-    default:
-      return e.getType()
-  }
-}
+
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
-  const e: Event<any> = event
+  const from: Event<any> = event
   const meta = {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
+  const oldLink = storeInstance.subscribers.get(from)
+  if (oldLink) oldLink()
   storeInstance.subscribers.set(
-    e,
-    linkGraphs({
-      from: e.graphite,
+    from,
+    forward({
+      from,
       to: createGraph({
+        scope: {handler, state: storeInstance.plainState, trigger: from},
+        child: [storeInstance],
+        //prettier-ignore
         node: [
           step.compute({
-            fn(newValue) {
-              const lastState = getState(storeInstance)
-              return handler(lastState, newValue, readName(e))
+            fn(newValue, {handler, state, trigger}) {
+              const result = handler(
+                state.current,
+                newValue,
+                getDisplayName(trigger),
+              )
+              if (result === undefined) return
+              state.current = result
+              return result
             },
             meta,
           }),
-          step.filter({
-            fn(data) {
-              const lastState = getState(storeInstance)
-              return data !== lastState && data !== undefined
-            },
-            meta,
-          }),
-        ],
-        child: [storeInstance.graphite],
+        ]
       }),
     }),
   )
@@ -90,18 +87,16 @@ export function watch(
   eventOrFn: Event<*> | Function,
   fn?: Function,
 ) {
-  const kind = String(eventOrFn?.kind || '__')
   const message = 'watch requires function handler'
-  switch (kind) {
+  switch (eventOrFn?.kind) {
     case 'store':
     case 'event':
     case 'effect':
       invariant(typeof fn === 'function', message)
       return eventOrFn.watch(payload =>
         //$todo
-        fn(getState(storeInstance), payload, readName(eventOrFn)),
+        fn(getState(storeInstance), payload, getDisplayName(eventOrFn)),
       )
-    case '__':
     default:
       invariant(typeof eventOrFn === 'function', message)
       return subscribe(storeInstance, eventOrFn)
@@ -127,12 +122,10 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     fullName: storeInstance.compositeName?.fullName,
     section: storeInstance.id,
   }
-  return linkGraphs({
+  return forward({
     from: storeInstance.graphite,
     to: createNode(
-      step.compute({
-        fn: n => n,
-      }),
+      noop,
       step.run({
         fn(args) {
           let stopPhaseTimerMessage = null
@@ -168,11 +161,10 @@ export function mapStore<A, B>(
   firstState?: B,
 ): Store<B> {
   startPhaseTimer(store, 'map')
-  let lastValue = store.getState()
   let lastResult
   let stopPhaseTimerMessage = 'Got initial error'
   try {
-    lastResult = fn(lastValue, firstState)
+    lastResult = fn(store.getState(), firstState)
     stopPhaseTimerMessage = 'Initial'
   } catch (err) {
     console.error(err)
@@ -187,19 +179,19 @@ export function mapStore<A, B>(
     fullName: innerStore.compositeName?.fullName,
     section: store.id,
   }
-  linkGraphs({
-    from: store.graphite,
+  forward({
+    from: store,
     to: createGraph({
+      child: [innerStore],
+      scope: {store, handler: fn, state: innerStore.stateRef},
       node: [
         step.compute({
-          fn(newValue) {
+          fn(newValue, {state, store, handler}) {
             startPhaseTimer(store, 'map')
-            lastValue = newValue
             let stopPhaseTimerMessage = 'Got error'
-            const lastState = innerStore.getState()
             let result
             try {
-              result = fn(newValue, lastState)
+              result = handler(newValue, state.current)
               stopPhaseTimerMessage = null
             } catch (err) {
               console.error(err)
@@ -209,19 +201,8 @@ export function mapStore<A, B>(
           },
           meta,
         }),
-        step.filter({
-          fn(result) {
-            const lastState = innerStore.getState()
-            const isChanged = result !== lastState && result !== undefined
-            if (isChanged) {
-              lastResult = result
-            }
-            return isChanged
-          },
-          meta,
-        }),
+        filterChanged,
       ],
-      child: [innerStore.graphite],
     }),
   })
   return innerStore

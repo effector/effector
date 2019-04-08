@@ -10,8 +10,7 @@ exports[`graphite: show bar 1`] = `
   Next [
     *  Graph {
        Seq [
-         1. compute {{}},
-         2. filter {{}}
+         1. compute {{}}
        ]
        Next [
          *  Graph {
@@ -22,7 +21,8 @@ exports[`graphite: show bar 1`] = `
                    id: 1,
                    current: foo | 1 | 11
                  }
-              }}
+              }},
+              3. filter {{}}
             ]
             Next [
               *  Graph {
@@ -39,7 +39,8 @@ exports[`graphite: show bar 1`] = `
                              id: 2,
                              current: 12
                            }
-                        }}
+                        }},
+                        3. filter {{}}
                       ]
                      [(empty list)]}
                 ]}
@@ -64,8 +65,7 @@ exports[`graphite: show bar 2`] = `
   Next [
     *  Graph {
        Seq [
-         1. compute {{}},
-         2. filter {{}}
+         1. compute {{}}
        ]
        Next [
          *  Graph {
@@ -76,7 +76,8 @@ exports[`graphite: show bar 2`] = `
                    id: 1,
                    current: foo | 1 | 11
                  }
-              }}
+              }},
+              3. filter {{}}
             ]
             Next [
               *  Graph {
@@ -93,7 +94,8 @@ exports[`graphite: show bar 2`] = `
                              id: 2,
                              current: 12
                            }
-                        }}
+                        }},
+                        3. filter {{}}
                       ]
                      [(empty list)]}
                 ]}
@@ -124,8 +126,7 @@ exports[`graphite: show foo 1`] = `
             Next [
               *  Graph {
                  Seq [
-                   1. compute {{}},
-                   2. filter {{}}
+                   1. compute {{}}
                  ]
                  Next [
                    *  Graph {
@@ -136,7 +137,8 @@ exports[`graphite: show foo 1`] = `
                              id: 1,
                              current: foo | 1 | 11 | 101
                            }
-                        }}
+                        }},
+                        3. filter {{}}
                       ]
                       Next [
                         *  Graph {
@@ -153,7 +155,8 @@ exports[`graphite: show foo 1`] = `
                                        id: 2,
                                        current: 18
                                      }
-                                  }}
+                                  }},
+                                  3. filter {{}}
                                 ]
                                [(empty list)]}
                           ]}
@@ -173,7 +176,8 @@ exports[`graphite: show store1 1`] = `
          id: 1,
          current: foo | 1 | 11 | 101
        }
-    }}
+    }},
+    3. filter {{}}
   ]
   Next [
     *  Graph {
@@ -190,7 +194,8 @@ exports[`graphite: show store1 1`] = `
                    id: 2,
                    current: 18
                  }
-              }}
+              }},
+              3. filter {{}}
             ]
            [(empty list)]}
       ]}
@@ -206,7 +211,8 @@ exports[`graphite: show store2 1`] = `
          id: 2,
          current: 18
        }
-    }}
+    }},
+    3. filter {{}}
   ]
   [(empty list)]}"
 `;
@@ -221,8 +227,7 @@ exports[`showcase: event foo 1`] = `
   Next [
     *  Graph {
        Seq [
-         1. compute {{}},
-         2. filter {{}}
+         1. compute {{}}
        ]
        Next [
          *  Graph {
@@ -233,17 +238,19 @@ exports[`showcase: event foo 1`] = `
                    id: 3,
                    current: 3
                  }
-              }}
+              }},
+              3. filter {{}}
             ]
             Next [
               *  Graph {
                  Seq [
-                   1. compute {{}},
-                   2. filter {{}},
-                   3. barrier {{
+                   1. filter {{}},
+                   2. compute {{}},
+                   3. compute {{}},
+                   4. barrier {{
                       barrierID: 1
                    }},
-                   4. compute {{}}
+                   5. compute {{}}
                  ]
                  Next [
                    *  Graph {
@@ -257,7 +264,8 @@ exports[`showcase: event foo 1`] = `
                                b: 6
                              }
                            }
-                        }}
+                        }},
+                        3. filter {{}}
                       ]
                       Next [
                         *  Graph {
@@ -274,7 +282,8 @@ exports[`showcase: event foo 1`] = `
                                        id: 6,
                                        current: 3
                                      }
-                                  }}
+                                  }},
+                                  3. filter {{}}
                                 ]
                                 Next [
                                   *  Graph {
@@ -301,7 +310,8 @@ exports[`showcase: mapped 1`] = `
          id: 6,
          current: 3
        }
-    }}
+    }},
+    3. filter {{}}
   ]
   Next [
     *  Graph {
@@ -322,17 +332,19 @@ exports[`showcase: store a 1`] = `
          id: 3,
          current: 3
        }
-    }}
+    }},
+    3. filter {{}}
   ]
   Next [
     *  Graph {
        Seq [
-         1. compute {{}},
-         2. filter {{}},
-         3. barrier {{
+         1. filter {{}},
+         2. compute {{}},
+         3. compute {{}},
+         4. barrier {{
             barrierID: 1
          }},
-         4. compute {{}}
+         5. compute {{}}
        ]
        Next [
          *  Graph {
@@ -346,7 +358,8 @@ exports[`showcase: store a 1`] = `
                      b: 6
                    }
                  }
-              }}
+              }},
+              3. filter {{}}
             ]
             Next [
               *  Graph {
@@ -363,7 +376,8 @@ exports[`showcase: store a 1`] = `
                              id: 6,
                              current: 3
                            }
-                        }}
+                        }},
+                        3. filter {{}}
                       ]
                       Next [
                         *  Graph {

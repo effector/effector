@@ -7,15 +7,18 @@ import {
   stringRefcount,
   createNode,
   createGraph,
+  type Unit,
 } from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
-import {runtime} from 'effector/graphite'
+import {launch} from 'effector/graphite'
+import {noop} from 'effector/blocks'
 
+import {getDisplayName} from '../naming'
 import type {Subscription} from '../effector/index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
-import {linkGraphs} from './forward'
+import {forward} from './forward'
 
 const nextID = stringRefcount()
 
@@ -50,7 +53,7 @@ export function eventFabric<Payload>({
   ;(instance: any).getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
-    runtime(instance.graphite, payload)
+    launch(instance, payload)
     return payload
   }
   ;(instance: any).kind = Kind.event
@@ -79,15 +82,16 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  linkGraphs({
-    from: contramapped.graphite,
+  forward({
+    from: contramapped,
     to: createGraph({
+      child: [event],
+      scope: {handler: fn},
       node: [
         step.compute({
-          fn: newValue => fn(newValue),
+          fn: (newValue, {handler}) => handler(newValue),
         }),
       ],
-      child: [event.graphite],
     }),
   })
   return contramapped
@@ -103,15 +107,16 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  linkGraphs({
-    from: event.graphite,
+  forward({
+    from: event,
     to: createGraph({
+      child: [mapped],
+      scope: {handler: fn},
       node: [
         step.compute({
-          fn: newValue => fn(newValue),
+          fn: (payload, {handler}) => handler(payload),
         }),
       ],
-      child: [mapped.graphite],
     }),
   })
   return mapped
@@ -125,15 +130,14 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  linkGraphs({
-    from: event.graphite,
+  forward({
+    from: event,
     to: createGraph({
-      val: {fn},
+      scope: {handler: fn},
+      child: [mapped],
       node: [
         step.compute({
-          fn(newValue, scope) {
-            return scope.fn(newValue)
-          },
+          fn: (payload, {handler}) => handler(payload),
         }),
         step.filter({
           fn(result, scope) {
@@ -147,25 +151,29 @@ function filterEvent<A, B>(
           },
         }),
       ],
-      child: [mapped.graphite],
     }),
   })
   return mapped
 }
 
 function watchEvent<Payload>(
-  event: Event<Payload>,
+  event: Unit,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  return linkGraphs({
-    from: event.graphite,
-    to: createNode(
-      step.compute({
-        fn: n => n,
-      }),
-      step.run({
-        fn: (newValue: Payload) => watcher(newValue, event.getType()),
-      }),
-    ),
+  return forward({
+    from: event,
+    to: createGraph({
+      scope: {trigger: event, handler: watcher},
+      //prettier-ignore
+      node: [
+        noop,
+        step.run({
+          fn: (payload: Payload, {trigger, handler}) => handler(
+            payload,
+            getDisplayName(trigger),
+          ),
+        }),
+      ]
+    }),
   })
 }

@@ -1,6 +1,6 @@
 //@flow
 import {createEffect} from '..'
-
+import {forward} from 'effector/event'
 import {delay, spy} from 'effector/fixtures'
 
 const effect = createEffect('long request')
@@ -79,7 +79,7 @@ describe('createEffect with config', () => {
         await delay(500)
         spy(params)
         return 'done!'
-      }
+      },
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
@@ -88,4 +88,38 @@ describe('createEffect with config', () => {
 it('should return itself at .use call', () => {
   const effect = createEffect('long request')
   expect(effect.use((_: any) => 'done!')).toBe(effect)
+})
+
+it('should support forward', async() => {
+  const fnHandler = jest.fn()
+  const fnWatcher = jest.fn()
+  const fetchData = createEffect('fetch', {
+    async handler(payload) {
+      return 'fetchData result'
+    },
+  })
+
+  const logRequest = createEffect('log', {
+    async handler(payload) {
+      fnHandler(payload)
+      console.warn('logRequest', payload)
+      return 'logRequest result'
+    },
+  })
+
+  logRequest.done.watch(d => {
+    fnWatcher(d)
+    console.log(d)
+  })
+
+  forward({
+    from: fetchData,
+    to: logRequest,
+  })
+
+  await fetchData({url: 'xxx'})
+  expect(fnHandler.mock.calls).toEqual([[{url: 'xxx'}]])
+  expect(fnWatcher.mock.calls).toEqual([
+    [{params: {url: 'xxx'}, result: 'logRequest result'}],
+  ])
 })

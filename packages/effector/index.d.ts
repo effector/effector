@@ -85,11 +85,13 @@ export interface Store<State> extends Unit<State> {
 export function isUnit<T>(obj: unknown): obj is Unit<T>
 export function isStore<State>(obj: unknown): obj is Store<State>
 export function isEvent<Payload>(obj: unknown): obj is Event<Payload>
-export function isEffect<Params, Done, Error>(obj: unknown): obj is Effect<Params, Done, Error>
+export function isEffect<Params, Done, Error>(
+  obj: unknown,
+): obj is Effect<Params, Done, Error>
 export function isDomain(obj: unknown): obj is Domain
 
 export class Domain {
-  readonly kind: kind;
+  readonly kind: kind
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
@@ -103,8 +105,96 @@ export class Domain {
   getType(): string
 }
 
-export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+export type ID = string
+export type StateRef = {
+  current: any
+  id: ID
+}
+//prettier-ignore
+export type Cmd =
+  | Update
+  | Run
+  | Filter
+  | Emit
+  | Compute
+  | Barrier
 
+export type Barrier = {
+  id: ID
+  type: 'barrier'
+  group: 'cmd'
+  data: {
+    barrierID: ID
+  }
+}
+
+export type Update = {
+  id: ID
+  type: 'update'
+  group: 'cmd'
+  data: {
+    store: StateRef
+  }
+}
+export type Run = {
+  id: ID
+  type: 'run'
+  group: 'cmd'
+  data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }
+}
+
+export type Filter = {
+  id: ID
+  type: 'filter'
+  group: 'cmd'
+  data: {
+    fn: (data: any, scope: {[field: string]: any}) => boolean
+  }
+}
+export type Emit = {
+  id: ID
+  type: 'emit'
+  group: 'cmd'
+  data: {
+    fullName: string
+  }
+}
+export type Compute = {
+  id: ID
+  type: 'compute'
+  group: 'cmd'
+  data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }
+}
+export type Step = {
+  from: Array<Step>
+  next: Array<Step>
+  seq: Array<Cmd>
+  scope: {[field: string]: any}
+}
+export const step: {
+emit(data: {fullName: string}): Emit
+compute(data: {
+  fn: (data: any, scope: {[field: string]: any}) => any
+  }): Compute
+filter(data: {
+  fn: (data: any, scope: {[field: string]: any}) => boolean
+  }): Filter
+update(data: {store: StateRef}): Update
+run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
+}
+export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
+export function createNode(opts: {
+node: Array<Cmd>
+child?: Array<Unit<any> | Step>
+from?: Array<Unit<any> | Step>
+scope?: {[field: string]: any}
+}): Step
+export function launch(unit: Unit<any> | Step, payload: any): void
 export function createEvent<E = void>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
@@ -156,9 +246,18 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A, B>(source: Event<A>, sampler: Event<B> | Store<B>): Event<A>
-export function sample<A, B>(source: Store<A>, sampler: Event<B> | Store<B>): Store<A>
-export function sample<A, B>(source: Effect<A, any, any>, sampler: Event<B> | Store<B>): Event<A>
+export function sample<A, B>(
+  source: Event<A>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
+export function sample<A, B>(
+  source: Store<A>,
+  sampler: Event<B> | Store<B>,
+): Store<A>
+export function sample<A, B>(
+  source: Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+): Event<A>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>

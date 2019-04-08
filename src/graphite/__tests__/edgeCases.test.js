@@ -1,6 +1,6 @@
 //@flow
 
-import {forward, createEvent, createStore} from 'effector'
+import {createEvent, createStore} from 'effector'
 
 it.skip('should not call one watcher twice during a walk', () => {
   const fn = jest.fn()
@@ -17,4 +17,28 @@ it.skip('should not call one watcher twice during a walk', () => {
   e1('first call')
   e1('second call')
   expect(fn).toBeCalledTimes(3)
+})
+
+it('should avoid data races', () => {
+  const fnIdx = jest.fn()
+  const routePush = createEvent()
+
+  const history = createStore([]).on(routePush, (state, route) => {
+    console.log('history.on routePush; history = ', state)
+    return [...state, route]
+  })
+  const currentIdx = createStore(-2).on(routePush, () => {
+    console.log('currentIdx.on routePush; history = ', history.getState())
+    return history.getState().length - 1
+  })
+
+  history.watch(e => console.log('history', e))
+  currentIdx.watch(e => {
+    console.log('currentIdx', e)
+    fnIdx(e)
+  })
+
+  routePush('v 1')
+  routePush('v 2')
+  expect(fnIdx.mock.calls).toEqual([[-2], [0], [1]])
 })
