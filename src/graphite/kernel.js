@@ -25,7 +25,7 @@ class Stack {
     this.parent = parent
   }
 }
-type LayerType = 'layer' | 'barrier' | 'effect'
+type LayerType = 'pure' | 'barrier' | 'effect'
 type Layer = {|
   +step: Graph<any>,
   +firstIndex: number,
@@ -109,7 +109,7 @@ const layerComparator = (a: Layer, b: Layer) => {
   if (a.type === b.type) return a.id > b.id
   let arank = -1
   switch (a.type) {
-    case 'layer':
+    case 'pure':
       arank = 1
       break
     case 'barrier':
@@ -121,7 +121,7 @@ const layerComparator = (a: Layer, b: Layer) => {
   }
   let brank = -1
   switch (b.type) {
-    case 'layer':
+    case 'pure':
       brank = 1
       break
     case 'barrier':
@@ -233,7 +233,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
         firstIndex: 0,
         scope: subscope,
         resetStop: true,
-        type: 'layer',
+        type: 'pure',
         id: ++layerID,
       })
     }
@@ -249,7 +249,7 @@ export const launch = (unit: Graphite, payload: any) => {
     firstIndex: 0,
     scope: new Stack(payload, new Stack(null, null)),
     resetStop: false,
-    type: 'layer',
+    type: 'pure',
     id: ++layerID,
   })
   const meta = {
