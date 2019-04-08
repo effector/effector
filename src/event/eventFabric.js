@@ -10,7 +10,7 @@ import {
   type Unit,
 } from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
-import {runtime} from 'effector/graphite'
+import {launch} from 'effector/graphite'
 import {noop} from 'effector/blocks'
 
 import {getDisplayName} from '../naming'
@@ -53,7 +53,7 @@ export function eventFabric<Payload>({
   ;(instance: any).getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   ;(instance: any).create = (payload, fullName, args) => {
-    runtime(instance.graphite, payload)
+    launch(instance, payload)
     return payload
   }
   ;(instance: any).kind = Kind.event

@@ -2,6 +2,7 @@
 
 import type {
   Graph,
+  Graphite,
   StateRef,
   Cmd,
   Emit,
@@ -11,11 +12,8 @@ import type {
   Compute,
   Barrier,
 } from 'effector/stdlib'
+import {getGraph} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
-
-export function exec(unit: {+graphite: Graph<any>, ...}, payload: any) {
-  runtime(unit.graphite, payload)
-}
 
 class Stack {
   /*::
@@ -52,16 +50,16 @@ export class Leftist {
   }
 }
 export type leftist = null | Leftist
-function insert(x: Layer, t: leftist): leftist {
-  return merge(new Leftist(x, 1, null, null), t)
-}
-function deleteMin(param: leftist): leftist {
+const insert = (x: Layer, t: leftist): leftist =>
+  merge(new Leftist(x, 1, null, null), t)
+
+const deleteMin = (param: leftist): leftist => {
   if (param) {
     return merge(param.left, param.right)
   }
   return null
 }
-function merge(_t1: leftist, _t2: leftist): leftist {
+const merge = (_t1: leftist, _t2: leftist): leftist => {
   let t2
   let t1
   let k1
@@ -244,7 +242,8 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
     meta.stop = false
   }
 }
-export const runtime = (step: Graph<any>, payload: any) => {
+export const launch = (unit: Graphite, payload: any) => {
+  const step = getGraph(unit)
   pushHeap({
     step,
     firstIndex: 0,
