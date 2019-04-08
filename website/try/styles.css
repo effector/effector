@@ -5,6 +5,10 @@
   --error-color: #fff0f0;
 }
 
+.CodeMirror-lint-tooltip {
+  z-index: 10000;
+}
+
 .navPusher {
   height: 100%;
 }
