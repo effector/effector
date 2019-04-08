@@ -12,7 +12,7 @@ import type {
   Compute,
   Barrier,
 } from 'effector/stdlib'
-import {getGraph} from 'effector/stdlib'
+import {getGraph, writeRef} from 'effector/stdlib'
 import {__DEBUG__} from 'effector/flags'
 
 class Stack {
@@ -300,7 +300,7 @@ const command = {
     return runCtx.result
   },
   update(meta, local, step: $PropertyType<Update, 'data'>) {
-    return (step.store.current = local.arg)
+    return writeRef(step.store, local.arg)
   },
   compute(meta, local, step: $PropertyType<Compute, 'data'>) {
     const runCtx = tryRun({
