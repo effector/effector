@@ -6,6 +6,7 @@ import fetch from 'cross-fetch'
 import {
   changeSources,
   codeCursorActivity,
+  codeMarkLine,
   realmEvent,
   realmStore,
   realmEffect,
@@ -231,14 +232,29 @@ realmDomain.watch(domain => {
 codeError
   .on(evalEffect.done, () => ({
     isError: false,
-    message: null,
-    stack: null,
+    error: null,
+    stackFrames: [],
   }))
   .on(evalEffect.fail, (_, e) => ({
     isError: true,
-    message: e.error.message,
-    stack: e.error.stack,
+    error: e.error.original,
+    stackFrames: e.error.stackFrames,
   }))
+
+let textMarker
+codeError.watch(async ({stackFrames}) => {
+  if (textMarker) textMarker.clear()
+
+  const frame = stackFrames[0]
+  if (frame) {
+    const line = (frame._originalLineNumber || 0) - 1
+    const ch = frame._originalColumnNumber || 0
+    textMarker = await codeMarkLine({
+      from: {line, ch},
+      options: {className: 'CodeMirror-lint-mark-error'},
+    })
+  }
+})
 
 changeSources.watch(code => {
   localStorage.setItem('code', code)

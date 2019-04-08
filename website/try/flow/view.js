@@ -6,11 +6,17 @@ import {createComponent} from 'effector-react'
 import {typeHint} from './domain'
 import {styled} from 'linaria/react'
 
+const lineHeight = 1.5
+const lines = 3
+
 const TypeHint = styled.pre`
   grid-column: 1 / span 1;
   grid-row: 2 / span 1;
   border-bottom: 1px solid #ddd;
   border-left: 1px solid #ddd;
+  line-height: ${lineHeight}em;
+  max-height: ${lineHeight * lines}em;
+  overflow: auto;
   font-family: monospace;
   word-wrap: break-word;
   white-space: pre-wrap;

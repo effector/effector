@@ -1,7 +1,7 @@
 //@flow
 
 import React from 'react'
-import {createEvent} from 'effector'
+import {createEvent, createEffect} from 'effector'
 import {checkContent} from '../flow/domain'
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'
@@ -59,6 +59,7 @@ export default class CodeMirrorPanel extends React.Component {
     lineWrapping: false,
     passive: false,
     setCursor: createEvent(),
+    markLine: createEffect(),
     onCursorActivity() {},
   }
   _textareaRef = React.createRef<HTMLTextAreaElement>()
@@ -102,6 +103,15 @@ export default class CodeMirrorPanel extends React.Component {
       this._codeMirror.focus()
       this._codeMirror.setCursor({line: line - 1, ch: column})
     })
+
+    this.props.markLine.use(({
+      from, 
+      to = {
+        line: from.line,
+        ch: this._codeMirror.getLine(from.line)?.length || from.ch
+      },
+      options
+    }) => this._codeMirror.markText(from, to, options))
   }
 
   componentWillUnmount() {

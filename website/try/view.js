@@ -31,6 +31,7 @@ import {
   version,
   tab,
   tabApi,
+  codeMarkLine,
   codeCursorActivity,
   codeSetCursor,
 } from './domain'
@@ -41,8 +42,8 @@ const OutlineView = createComponent(stats, ({}, stats) => (
 
 const ErrorsView = createComponent(
   codeError,
-  ({}, {message, isError, stack}) => (
-    <Errors isError={isError} message={message} stack={stack} />
+  ({}, {isError, error, stackFrames}) => (
+    <Errors isError={isError} error={error} stackFrames={stackFrames} />
   ),
 )
 
@@ -52,6 +53,7 @@ const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
   <Panel
     className="sources"
+    markLine={codeMarkLine}
     setCursor={codeSetCursor}
     onCursorActivity={codeCursorActivity}
     value={sources}

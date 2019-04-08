@@ -17,6 +17,8 @@ import {traverseGraphite} from './traverseGraphite'
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from './versions.json'
 
+import type {StackFrame} from './evaluator/stackframe/stack-frame'
+
 export const compress = lzString.compressToEncodedURIComponent
 export const decompress = lzString.decompressFromEncodedURIComponent
 
@@ -92,15 +94,30 @@ export const timeouts = createStore<number[]>([])
 export const version = createStore(defaultVersions[0])
 export const packageVersions = createStore(defaultVersions)
 export const sourceCode = createStore<string>(defaultSourceCode)
+export const compiledCode = createStore<string>('')
+
 export const codeSetCursor = createEvent()
 export const codeCursorActivity = createEvent()
+export const codeMarkLine = createEffect()
+
 export const shareableUrl = combine(sourceCode, version, (code, version) =>
   generateShareableUrl(version, code),
 )
-export const codeError = createStore({
+export const codeError = createStore<
+  | {|
+      isError: true,
+      error: Error,
+      stackFrames: StackFrame[],
+    |}
+  | {|
+      isError: false,
+      error: null,
+      stackFrames: StackFrame[],
+    |},
+>({
   isError: false,
-  message: null,
-  stack: null,
+  error: null,
+  stackFrames: [],
 })
 export const graphite = createStore({})
 
@@ -116,7 +133,7 @@ export const tab = createStore<'graphite' | 'dom'>('dom')
 
 export const tabApi = createApi(tab, {
   showGraphite: () => 'graphite',
-  showDOM: () => 'dom'
+  showDOM: () => 'dom',
 })
 
 export const stats = createStore({

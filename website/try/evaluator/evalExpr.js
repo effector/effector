@@ -1,20 +1,31 @@
 //@flow
 
-import {realmStatus} from '../domain'
+import {realmStatus, compiledCode} from '../domain'
 import scopedEval from './scopedEval'
 import {transformCode} from './compiler'
-export function evalExpr(expr, vars) {
+import {getStackFrames} from './stackframe/getStackFrames'
+
+export async function evalExpr(expr, vars) {
   status.init()
+  //TODO: split into two effects
   try {
-    const compiled = transformCode(expr)
-    const exprFunc = scopedEval.runCode(compiled)
+    const compiled = `${transformCode(expr)}
+//# sourceURL=repl.js`
+    //$off
+    compiledCode.setState(compiled)
+  } catch (error) {
+    status.fail()
+    throw {type: 'babel-error', original: error, stackFrames: []}
+  }
+  try {
+    const exprFunc = scopedEval.runCode(compiledCode.getState())
     const results = exprFunc(vars)
     status.done()
     return results
   } catch (error) {
     status.fail()
-    console.error(error)
-    throw error
+    const stackFrames = await getStackFrames(error)
+    throw {type: 'runtime-error', original: error, stackFrames}
   }
 }
 

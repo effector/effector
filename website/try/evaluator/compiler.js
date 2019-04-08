@@ -32,18 +32,20 @@ import {transform, registerPlugin, registerPreset} from '@babel/standalone'
 
 registerPlugin('@effector/babel-plugin', PluginEffector)
 registerPlugin('@effector/babel-plugin-react', PluginEffectorReact)
-registerPlugin('@effector/repl-remove-imports', function (babel) {
+registerPlugin('@effector/repl-remove-imports', function(babel) {
   return {
     visitor: {
       ImportDeclaration(path) {
         path.remove()
-      }
-    }
-  };
+      },
+    },
+  }
 })
 
 const compileAll = (code: string): string =>
   transform(code, {
+    filename: 'repl.js',
+    sourceFileName: 'repl.js',
     presets: ['react', 'flow'],
     plugins: [
       'transform-strict-mode',
@@ -52,7 +54,8 @@ const compileAll = (code: string): string =>
       ['proposal-class-properties', {loose: true}],
       '@effector/babel-plugin-react',
       '@effector/babel-plugin',
-      '@effector/repl-remove-imports'
+      '@effector/repl-remove-imports',
     ],
+    sourceMaps: 'inline',
   }).code
 export const transformCode = (code: string): string => compileAll(code)
