@@ -6,15 +6,15 @@ import PluginEffectorReact from '@effector/babel-plugin-react'
 import PluginEffector from '@effector/babel-plugin'
 //$todo
 // import PresetReact from '@babel/preset-react'
-// //$todo
+//$todo
 // import PresetFlow from '@babel/preset-flow'
-// //$todo
+//$todo
 // import PluginStrictMode from '@babel/plugin-transform-strict-mode'
-// //$todo
+//$todo
 // import PluginClassProps from '@babel/plugin-proposal-class-properties'
-// //$todo
+//$todo
 // import PluginNullish from '@babel/plugin-proposal-nullish-coalescing-operator'
-// //$todo
+//$todo
 // import PluginOptional from '@babel/plugin-proposal-optional-chaining'
 //$todo
 import {transform, registerPlugin, registerPreset} from '@babel/standalone'
@@ -46,7 +46,7 @@ const compileAll = (code: string): string =>
   transform(code, {
     filename: 'repl.js',
     sourceFileName: 'repl.js',
-    presets: ['react', 'flow'],
+    presets: ['react', ['flow', {all: true}]],
     plugins: [
       'transform-strict-mode',
       'proposal-nullish-coalescing-operator',
