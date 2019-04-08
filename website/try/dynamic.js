@@ -212,11 +212,20 @@ codeError
     error: null,
     stackFrames: [],
   }))
-  .on(evalEffect.fail, (_, e) => ({
-    isError: true,
-    error: e.error.original,
-    stackFrames: e.error.stackFrames,
-  }))
+  .on(evalEffect.fail, (_, e) => {
+    if (e.error instanceof Error) {
+      return {
+        isError: true,
+        error: e.error,
+        stackFrames: [],
+      }
+    }
+    return {
+      isError: true,
+      error: e.error.original,
+      stackFrames: e.error.stackFrames,
+    }
+  })
 
 let textMarker
 codeError.watch(async ({stackFrames}) => {
