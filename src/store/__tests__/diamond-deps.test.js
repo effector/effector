@@ -47,6 +47,13 @@ updated branches     └────┘                └────┘
                                 ┌────┐
                                 │ I  │
                                 └────┘
+
+
+wonder why it called "olympic"?
+
+   C   D   E
+     F   G
+
 */
 test('olympic', async() => {
   const fn = jest.fn()
