@@ -20,7 +20,7 @@ import 'codemirror/addon/fold/foldgutter.css'
 
 function getAnnotations(text, callback, options, editor) {
   checkContent(text)
-    .then(({code}) => code)
+    .then(({code}) => (code === 'fail' ? [] : code))
     .then(errors => {
       CodeMirror.signal(editor, 'flowErrors', errors)
 
@@ -104,14 +104,16 @@ export default class CodeMirrorPanel extends React.Component {
       this._codeMirror.setCursor({line: line - 1, ch: column})
     })
 
-    this.props.markLine.use(({
-      from, 
-      to = {
-        line: from.line,
-        ch: this._codeMirror.getLine(from.line)?.length || from.ch
-      },
-      options
-    }) => this._codeMirror.markText(from, to, options))
+    this.props.markLine.use(
+      ({
+        from,
+        to = {
+          line: from.line,
+          ch: this._codeMirror.getLine(from.line)?.length || from.ch,
+        },
+        options,
+      }) => this._codeMirror.markText(from, to, options),
+    )
   }
 
   componentWillUnmount() {
