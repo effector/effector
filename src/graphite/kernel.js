@@ -13,7 +13,7 @@ import type {
   Barrier,
 } from 'effector/stdlib'
 import {getGraph, writeRef} from 'effector/stdlib'
-import {__DEBUG__} from 'effector/flags'
+import {__CANARY__} from 'effector/flags'
 
 class Stack {
   /*::
@@ -25,7 +25,7 @@ class Stack {
     this.parent = parent
   }
 }
-type LayerType = 'pure' | 'barrier' | 'effect'
+type LayerType = 'child' | 'pure' | 'barrier' | 'effect'
 type Layer = {|
   +step: Graph<any>,
   +firstIndex: number,
@@ -109,6 +109,9 @@ const layerComparator = (a: Layer, b: Layer) => {
   if (a.type === b.type) return a.id > b.id
   let arank = -1
   switch (a.type) {
+    case 'child':
+      arank = 0
+      break
     case 'pure':
       arank = 1
       break
@@ -121,6 +124,9 @@ const layerComparator = (a: Layer, b: Layer) => {
   }
   let brank = -1
   switch (b.type) {
+    case 'child':
+      brank = 0
+      break
     case 'pure':
       brank = 1
       break
@@ -157,10 +163,10 @@ const flattenLayer = (layer: Layer) => {
 const printLayers = list => {
   const flatten = list.map(flattenLayer)
   console.table((flatten: any))
-  for (let i = 0; i < flatten.length; i++) {
-    console.log(flatten[i].id, flatten[i].type)
-    console.table((flatten[i].scope.slice().reverse(): any))
-  }
+  // for (let i = 0; i < flatten.length; i++) {
+  //   console.log(flatten[i].id, flatten[i].type)
+  //   console.table((flatten[i].scope.slice().reverse(): any))
+  // }
 }
 let layerID = 0
 let heap: leftist = null
@@ -233,7 +239,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
         firstIndex: 0,
         scope: subscope,
         resetStop: true,
-        type: 'pure',
+        type: 'child',
         id: ++layerID,
       })
     }
@@ -261,7 +267,7 @@ export const launch = (unit: Graphite, payload: any) => {
     value = heap.value
     heap = deleteMin(heap)
     runGraph(value, meta)
-    if (__DEBUG__) {
+    if (__CANARY__) {
       const list = iterate(heap)
       if (list.length > 4) {
         printLayers(list)
