@@ -23,28 +23,28 @@ const meta = {
 }
 
 const aliases = {
-  'effector/effect': 'effect',
-  'effector/validate': 'validate',
-  'effector/event': 'event',
-  'effector/store': 'store',
-  'effector/domain': 'domain',
-  'effector/graphite': 'graphite',
-  'effector/fixtures': 'fixtures',
-  'effector/stdlib': 'stdlib',
-  'effector/blocks': 'blocks',
-  'effector/perf': 'perf',
-  'effector/watcher': 'watcher',
+  'effector/effect': 'effector/effect',
+  'effector/validate': 'effector/validate',
+  'effector/event': 'effector/event',
+  'effector/store': 'effector/store',
+  'effector/domain': 'effector/domain',
+  'effector/graphite': 'effector/graphite',
+  'effector/stdlib': 'effector/stdlib',
+  'effector/blocks': 'effector/blocks',
+  'effector/perf': 'effector/perf',
+  'effector/watcher': 'effector/watcher',
+  'effector/naming': 'effector/naming',
+  invariant: 'effector/validate/invariant',
+  warning: 'effector/validate/warning',
   'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
-  'effector/naming': 'naming',
-  invariant: 'validate/invariant',
-  warning: 'validate/warning',
+  'effector/fixtures': 'fixtures',
   '@effector/forms': 'forms',
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
   effector({isTest, isBuild}) {
     if (isBuild) return null
-    if (isTest) return '.'
+    if (isTest) return './effector'
     return '../npm/effector'
   },
 }
