@@ -90,6 +90,14 @@ export function isEffect<Params, Done, Error>(
 ): obj is Effect<Params, Done, Error>
 export function isDomain(obj: unknown): obj is Domain
 
+export const is: {
+  unit(obj: unknown): boolean
+  store(obj: unknown): boolean
+  event(obj: unknown): boolean
+  effect(obj: unknown): boolean
+  domain(obj: unknown): boolean
+}
+
 export class Domain {
   readonly kind: kind
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
