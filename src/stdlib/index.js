@@ -1,6 +1,7 @@
 //@flow
 
-export * from './kind'
+//eslint-disable-next-line
+export * as Kind from './kind'
 export * from './typedef'
 export * from './graph'
 export * from './stateref'

@@ -1,6 +1,14 @@
 //@flow
 
 export type ID = string
+
+//prettier-ignore
+export type kind =
+  | 'store'
+  | 'event'
+  | 'effect'
+  | 'domain'
+
 export type StateRef = {
   +id: ID,
   current: any,
