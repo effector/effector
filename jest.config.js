@@ -51,7 +51,7 @@ module.exports = {
     'stdlib',
     'babel',
     'perf',
-    'warning',
+    'validate',
     // 'redux',
     {
       react: {

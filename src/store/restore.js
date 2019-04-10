@@ -2,10 +2,9 @@
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from './index.h'
-import {createStore} from './createStore'
 import {storeFabric} from './storeFabric'
 
-import {isStore, isEvent, isEffect} from 'effector/stdlib'
+import {is} from 'effector/validate'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,
@@ -16,7 +15,7 @@ export function restoreObject<State: {-[key: string]: Store<any> | any}>(
 > {
   const result = {}
   for (const [key, value] of Object.entries(obj)) {
-    if (isStore(value)) {
+    if (is.store(value)) {
       result[key] = value
     } else {
       result[key] = storeFabric({
@@ -67,13 +66,13 @@ declare export function restore<State: {-[key: string]: Store<any> | any}>(
   <S>(field: Store<S> | S) => Store<S>,
 >
 export function restore(obj: any, defaultState: any): any {
-  if (isStore(obj)) {
+  if (is.store(obj)) {
     return obj
   }
-  if (isEvent(obj)) {
+  if (is.event(obj)) {
     return restoreEvent(obj, defaultState)
   }
-  if (isEffect(obj)) {
+  if (is.effect(obj)) {
     return restoreEffect(obj, defaultState)
   }
   return restoreObject(obj)

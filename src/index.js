@@ -31,22 +31,20 @@ export {
   withProps,
 } from 'effector/store'
 
+export {Kind, clearNode, createGraph as createNode, step} from 'effector/stdlib'
+export {launch} from 'effector/graphite'
+export type {kind} from 'effector/stdlib'
+
 export {
-  Kind,
+  invariant,
+  warning,
   isUnit,
   isStore,
   isEvent,
   isEffect,
   isDomain,
-  clearNode,
-  createGraph as createNode,
-  step,
-} from 'effector/stdlib'
-export {launch} from 'effector/graphite'
-export type {kind} from 'effector/stdlib'
-
-export {default as invariant} from 'invariant'
-export {default as warning} from 'warning'
+  is,
+} from 'effector/validate'
 export {version} from 'effector/flags'
 
 //eslint-disable-next-line

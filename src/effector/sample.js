@@ -1,6 +1,6 @@
 //@flow
 
-import {isStore, isEvent, isEffect} from 'effector/stdlib'
+import {is} from 'effector/validate'
 import {type Event, eventFabric} from 'effector/event'
 import {type Store, storeFabric} from 'effector/store'
 import type {Effect} from 'effector/effect'
@@ -57,17 +57,16 @@ export function sample(
   source: Event<any> | Store<any> | Effect<any, any, any>,
   sampler: Event<any> | Store<any>,
 ): any {
-  if (isStore(source)) {
-    //$off
+  if (is.store(source)) {
     return sampleStore(source, sampler)
   }
-  if (isEvent(source) || isEffect(source)) {
-    //$off
+  if (is.event(source) || is.effect(source)) {
     return sampleEvent(source, sampler)
   }
   invariant(
     false,
-    'sample: First argument should be Event, Store or Effect, but you passed %s.',
+    'sample: First argument should be Event, ' +
+      'Store or Effect, but you passed %s',
     source,
   )
 }

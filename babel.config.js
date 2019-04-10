@@ -24,6 +24,7 @@ const meta = {
 
 const aliases = {
   'effector/effect': 'effect',
+  'effector/validate': 'validate',
   'effector/event': 'event',
   'effector/store': 'store',
   'effector/domain': 'domain',
@@ -35,8 +36,8 @@ const aliases = {
   'effector/watcher': 'watcher',
   'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
   'effector/naming': 'naming',
-  warning: 'warning',
-  invariant: 'invariant',
+  invariant: 'validate/invariant',
+  warning: 'validate/warning',
   '@effector/forms': 'forms',
   'effector-react': 'react',
   'effector-vue': 'vue',

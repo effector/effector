@@ -1,9 +1,9 @@
 //@flow
 
-import {isStore} from 'effector/stdlib'
+import {is} from 'effector/validate'
 import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
-import {createName, type CompositeName} from '../compositeName'
+import {createName} from '../compositeName'
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)
@@ -19,7 +19,7 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
 
 function isStoreObject(store: Store<any>) {
   return (
-    isStore(store)
+    is.store(store)
     //$todo
     && typeof store.defaultShape !== 'undefined'
   )
@@ -31,7 +31,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
 ) {
   const entries: Array<[string, Store<any>]> = (Object.entries(object): any)
   for (const [storeName, store] of entries) {
-    if (parent && isStore(store)) {
+    if (parent && is.store(store)) {
       store.domainName = parent.compositeName || store.domainName
     }
 
@@ -42,7 +42,7 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
       continue
     }
 
-    if (isStore(store)) {
+    if (is.store(store)) {
       setStoreName(store, storeName)
       continue
     }

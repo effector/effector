@@ -3,12 +3,12 @@ import {
   step,
   createGraph,
   nextBarrierID,
-  isStore,
   createStateRef,
   readRef,
   writeRef,
   type StateRef,
 } from 'effector/stdlib'
+import {is} from 'effector/validate'
 import {unitObjectName} from 'effector/naming'
 import {forward} from 'effector/event'
 
@@ -63,7 +63,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
   const isFresh = createStateRef(false)
   for (const key in obj) {
     const child = obj[key]
-    if (!isStore(child)) {
+    if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child
       continue
     }

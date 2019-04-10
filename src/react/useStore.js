@@ -1,12 +1,12 @@
 //@flow
 
-import {type Store, isStore, invariant} from 'effector'
+import {type Store, is, invariant} from 'effector'
 import {useReducer, useEffect} from 'react'
 
 export function useStore<State>(store: Store<State>): State {
   invariant(
-    isStore(store),
-    'useStore: The argument must be Store, but you passed %s.',
+    is.store(store),
+    'useStore: The argument must be Store, but you passed %s',
     store,
   )
   const [, dispatch] = useReducer(

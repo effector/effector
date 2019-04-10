@@ -1,7 +1,7 @@
 //@flow
 
 import type {CompositeName} from './compositeName'
-import {isStore, isEvent, isEffect} from 'effector/stdlib'
+import {is} from 'effector/validate'
 import type {Store} from 'effector/store'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
@@ -37,7 +37,7 @@ export function unitObjectName(
   let name = 'combine('
   for (const unit of arr) {
     const comma = i === max || maxLength === i ? '' : ', '
-    if (isStore(unit) || isEvent(unit) || isEffect(unit)) {
+    if (is.store(unit) || is.event(unit) || is.effect(unit)) {
       name += getDisplayName(unit) + comma
     } else {
       name += unit.toString() + comma
