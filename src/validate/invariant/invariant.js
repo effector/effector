@@ -1,6 +1,6 @@
 //@flow
 /* eslint-disable */
-import {formatter} from '../effector/logger'
+import {formatter} from '../../effector/logger'
 import {__DEV__} from 'effector/flags'
 
 let invariant = function(condition: any /*::, format: string, ...args: any*/) {
