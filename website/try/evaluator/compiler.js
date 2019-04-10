@@ -5,6 +5,8 @@ import PluginEffectorReact from '@effector/babel-plugin-react'
 //$todo
 import PluginEffector from '@effector/babel-plugin'
 //$todo
+import PluginBigInt from '@babel/plugin-syntax-bigint'
+//$todo
 // import PresetReact from '@babel/preset-react'
 //$todo
 // import PresetFlow from '@babel/preset-flow'
@@ -18,6 +20,8 @@ import PluginEffector from '@effector/babel-plugin'
 // import PluginOptional from '@babel/plugin-proposal-optional-chaining'
 //$todo
 import {transform, registerPlugin, registerPreset} from '@babel/standalone'
+
+registerPlugin('syntax-bigint', PluginBigInt)
 
 // registerPreset('@babel/preset-react', PresetReact)
 // registerPreset('@babel/preset-flow', PresetFlow)
@@ -49,6 +53,8 @@ const compileAll = (code: string): string =>
     presets: ['react', ['flow', {all: true}]],
     plugins: [
       'transform-strict-mode',
+      'syntax-bigint',
+      'proposal-numeric-separator',
       'proposal-nullish-coalescing-operator',
       'proposal-optional-chaining',
       ['proposal-class-properties', {loose: true}],

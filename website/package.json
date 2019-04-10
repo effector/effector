@@ -30,6 +30,7 @@
     "terser": "^3.17.0"
   },
   "dependencies": {
+    "@babel/plugin-syntax-bigint": "^7.4.3",
     "@zerobias/codebox": "^1.1.0",
     "codemirror": "^5.45.0",
     "cross-fetch": "^3.0.1",

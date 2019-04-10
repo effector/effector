@@ -411,6 +411,13 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.0.0"
 
+"@babel/plugin-syntax-bigint@^7.4.3":
+  version "7.4.3"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-bigint/-/plugin-syntax-bigint-7.4.3.tgz#be47962307fe1b12f7bcf6763ee1f856f3e4dd42"
+  integrity sha512-OeWz3nYN4ir1m6slDaJp128HYUa4ZMGY0wT8/ZIFxjrAHQ13ONR/7vsUsoS0I+U5JkPtGsyPjkYylXNFgvwtDQ==
+  dependencies:
+    "@babel/helper-plugin-utils" "^7.0.0"
+
 "@babel/plugin-syntax-dynamic-import@^7.2.0":
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-dynamic-import/-/plugin-syntax-dynamic-import-7.2.0.tgz#69c159ffaf4998122161ad8ebc5e6d1f55df8612"
