@@ -1,5 +1,5 @@
 //@flow
-import type {Subscription} from '../effector/index.h'
+import type {Subscription} from '../index.h'
 import type {Graph, kind, StateRef, ID, Unit} from 'effector/stdlib'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'

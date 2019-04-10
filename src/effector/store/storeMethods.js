@@ -9,7 +9,7 @@ import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
 import {getDisplayName} from '../naming'
 import {forward, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
-import type {Subscriber} from '../effector/index.h'
+import type {Subscriber} from '../index.h'
 
 export function reset(storeInstance: ThisStore, event: Event<any>) {
   return on.call(this, storeInstance, event, () => storeInstance.defaultState)

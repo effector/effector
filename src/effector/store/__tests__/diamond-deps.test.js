@@ -3,7 +3,7 @@ import * as fs from 'fs-extra'
 import {resolve} from 'path'
 import {createEvent, forward} from 'effector/event'
 import {createStore} from '..'
-import {combine} from '../../effector'
+import {combine} from '../../combine'
 
 test('diamonds', async() => {
   const fn = jest.fn()

@@ -1,6 +1,6 @@
 //@flow
 import {type Graphite, getGraph} from 'effector/stdlib'
-import type {Subscription} from '../effector/index.h'
+import type {Subscription} from '../index.h'
 import {createWatcher} from 'effector/watcher'
 
 export const forward = (opts: {from: Graphite, to: Graphite}): Subscription => {

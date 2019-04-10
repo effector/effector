@@ -6,7 +6,8 @@
  * it's more like a big ball of wibbly wobbly time-y wimey stuff
  */
 
-export {combine, sample} from './effector'
+export {combine} from './combine'
+export {sample} from './sample'
 
 export type {Domain} from 'effector/domain'
 export {createDomain} from 'effector/domain'
@@ -32,7 +33,7 @@ export {
 } from 'effector/store'
 
 export {Kind, clearNode, createGraph as createNode, step} from 'effector/stdlib'
-export {launch} from 'effector/graphite'
+export {launch} from 'effector/kernel'
 export type {kind} from 'effector/stdlib'
 
 export {

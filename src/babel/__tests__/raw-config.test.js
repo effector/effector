@@ -1,26 +1,27 @@
 //@flow
 
-import {combine} from 'effector/effector'
-import {createDomain} from 'effector/domain'
-import {createStore} from 'effector/store'
+import {combine, createDomain, createStore} from 'effector'
+
+//$todo
+const readFullName = unit => unit.compositeName?.fullName
 
 describe('raw config', () => {
   const domain = createDomain('')
 
   it('should set name', () => {
     const foo = createStore(0)
-    expect(foo.compositeName?.fullName).toBe('foo')
+    expect(readFullName(foo)).toBe('foo')
     const bar = domain.store(0)
-    expect(bar.compositeName?.fullName).toBe('bar')
+    expect(readFullName(bar)).toBe('bar')
     const e = combine(foo, bar, (a, b) => ({a, b}))
-    expect(e.compositeName?.fullName).toBe('combine(foo, bar) → *')
+    expect(readFullName(e)).toBe('combine(foo, bar) → *')
   })
 
   it('should prefer original name', () => {
     const foo = createStore(0, {name: 'bar'})
-    expect(foo.compositeName?.fullName).toBe('bar')
+    expect(readFullName(foo)).toBe('bar')
     const bar = domain.store(0, {name: 'foo'})
-    expect(bar.compositeName?.fullName).toBe('foo')
+    expect(readFullName(bar)).toBe('foo')
   })
 
   it('should ignore wrong config', () => {
@@ -29,9 +30,9 @@ describe('raw config', () => {
     const b = createStore('h', 23020)
     const config = {option: 0}
     const c = createStore(null, config)
-    expect(a.compositeName?.fullName).toBe('a')
-    expect(b.compositeName?.fullName).toBe('b')
-    expect(c.compositeName?.fullName).toBe('c')
+    expect(readFullName(a)).toBe('a')
+    expect(readFullName(b)).toBe('b')
+    expect(readFullName(c)).toBe('c')
 
     const d = domain.store('h', {})
     //$off
@@ -45,15 +46,15 @@ describe('raw config', () => {
     const j = domain.store('h', true)
     //$off
     const k = domain.store('h', false)
-    expect(d.compositeName?.fullName).toBe('d')
-    expect(e.compositeName?.fullName).toBe('e')
-    expect(f.compositeName?.fullName).toBe('f')
+    expect(readFullName(d)).toBe('d')
+    expect(readFullName(e)).toBe('e')
+    expect(readFullName(f)).toBe('f')
   })
 
   it('should support onCreateStore', () => {
     const domain = createDomain('')
     domain.onCreateStore(store => {
-      expect(store.compositeName?.fullName).toBe('foo')
+      expect(readFullName(store)).toBe('foo')
     })
     const foo = domain.store(0)
   })

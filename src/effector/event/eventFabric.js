@@ -10,11 +10,11 @@ import {
   type Unit,
 } from 'effector/stdlib'
 import type {Effect} from 'effector/effect'
-import {launch} from 'effector/graphite'
+import {launch} from 'effector/kernel'
 import {noop} from 'effector/blocks'
 
 import {getDisplayName} from '../naming'
-import type {Subscription} from '../effector/index.h'
+import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'

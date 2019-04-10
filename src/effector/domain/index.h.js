@@ -1,7 +1,7 @@
 //@flow
 
 import type {CompositeName} from '../compositeName'
-import type {Subscription} from '../effector/index.h'
+import type {Subscription} from '../index.h'
 import type {Event} from 'effector/event'
 import type {Effect} from 'effector/effect'
 import type {Store} from 'effector/store'

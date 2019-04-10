@@ -1,5 +1,5 @@
 //@flow
-import type {Subscription, Subscriber} from '../effector/index.h'
+import type {Subscription, Subscriber} from '../index.h'
 import type {kind, Graph, Unit} from 'effector/stdlib'
 import type {CompositeName} from '../compositeName'
 

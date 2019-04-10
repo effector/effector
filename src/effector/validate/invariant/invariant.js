@@ -1,6 +1,5 @@
 //@flow
 /* eslint-disable */
-import {formatter} from '../../effector/logger'
 import {__DEV__} from 'effector/flags'
 
 let invariant = function(condition: any /*::, format: string, ...args: any*/) {
@@ -10,6 +9,10 @@ let invariant = function(condition: any /*::, format: string, ...args: any*/) {
 }
 
 if (__DEV__) {
+  function formatter(message: string, ...args: Array<any>) {
+    let argIndex = 0
+    return message.replace(/%s/g, () => args[argIndex++])
+  }
   invariant = function(condition: any, format: string, ...args: any) {
     if (!condition) {
       const error = Error()

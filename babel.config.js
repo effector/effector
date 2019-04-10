@@ -28,7 +28,7 @@ const aliases = {
   'effector/event': 'effector/event',
   'effector/store': 'effector/store',
   'effector/domain': 'effector/domain',
-  'effector/graphite': 'effector/graphite',
+  'effector/kernel': 'effector/kernel',
   'effector/stdlib': 'effector/stdlib',
   'effector/blocks': 'effector/blocks',
   'effector/perf': 'effector/perf',

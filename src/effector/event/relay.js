@@ -3,7 +3,7 @@
 import {createNode, step} from 'effector/stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
-import type {Subscription} from '../effector/index.h'
+import type {Subscription} from '../index.h'
 
 export function relayShape<
   E,

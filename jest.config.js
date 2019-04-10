@@ -40,12 +40,19 @@ module.exports = {
   watchPlugins: ['jest-runner-eslint/watch-fix'],
   watchPathIgnorePatterns,
   projects: createProjectList([
-    'effector/effector',
+    {
+      effector: {
+        testMatch: [
+          `<rootDir>/src/effector/__tests__/**/*.test.js`,
+          `<rootDir>/src/effector/__tests__/**/*.spec.js`,
+        ],
+      },
+    },
     'effector/effect',
     'effector/event',
     'effector/store',
     'effector/domain',
-    'effector/graphite',
+    'effector/kernel',
     'effector/stdlib',
     'effector/perf',
     'effector/validate',
