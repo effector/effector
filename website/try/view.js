@@ -69,6 +69,7 @@ const GraphiteView = createComponent(graphiteCode, ({style}, graphite) => (
     className="results"
     style={style}
     readOnly={true}
+    lint={null}
     passive
     lineWrapping={false}
     ref={jsonRef}
