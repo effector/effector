@@ -56,7 +56,7 @@ is 'active' and may be implemented with the goal of eventual inclusion
 into Effector.
 
 - Fork the RFC repo http://github.com/zerobias/effector
-- Copy `rfc/#0. Template.md` to `accepted/#0. My Feature.md` (where
+- Copy `rfc/#0. Template.md` to `rfc/accepted/#0. My Feature.md` (where
   'My Feature' is descriptive. don't assign an RFC number yet).
 - Fill in the RFC. Put care into the details: **RFCs that do not
   present convincing motivation, demonstrate understanding of the
