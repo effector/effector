@@ -10,7 +10,7 @@ export const Kind: {
 }
 
 export type Subscriber<A> = {
-  next(value: A): void
+  readonly next?: (value: A) => void
   // error(err: Error): void,
   //complete(): void,
 }

@@ -45,9 +45,9 @@ export type Subscription<A> = {
 }
 
 export type Subscriber<A> = {
-  next(value: A): void,
-  error(err: Error): void,
-  complete(value?: A): void
+  +next?: (value: A) => void,
+  +error?: (err: Error) => void,
+  +complete?: (value?: A) => void
 }
 
 export type Observable<A> = {

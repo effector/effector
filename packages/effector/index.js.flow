@@ -16,7 +16,7 @@ declare export var Kind: {|
   /*::+*/ domain: kind,
 |}
 
-export type Subscriber<A> = {next(value: A): void, ...}
+export type Subscriber<A> = {+next?: (value: A) => void, ...}
 
 export type Subscription = {
   (): void,
