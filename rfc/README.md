@@ -10,7 +10,7 @@ core team.
 The "RFC" (request for comments) process is intended to provide a
 consistent and controlled path for new features to enter the project.
 
-[Active RFC List](https://github.com/Effectorpkg/rfcs/pulls)
+[Active RFC List](https://github.com/zerobias/effector/pulls?q=is%3Aopen+is%3Apr+label%3ARFC)
 
 As a new project, Effector is still **actively developing** this process,
 and it will still change as more features are implemented and the
@@ -22,12 +22,12 @@ You should consider using this process if you intend to make "substantial"
 changes to Effector or its documentation. Some examples that would benefit
 from an RFC are:
 
-   - A new feature that creates new API surface area, and would
-     require a feature flag if introduced.
-   - The removal of features that already shipped as part of the release
-     channel.
-   - The introduction of new idiomatic usage or conventions, even if they
-     do not include code changes to Effector itself.
+- A new feature that creates new API surface area, and would
+  require a feature flag if introduced.
+- The removal of features that already shipped as part of the release
+  channel.
+- The introduction of new idiomatic usage or conventions, even if they
+  do not include code changes to Effector itself.
 
 The RFC process is a great opportunity to get more eyeballs on your proposal
 before it becomes a part of a released version of Effector. Quite often, even
@@ -41,12 +41,12 @@ implemented.
 
 Some changes do not require an RFC:
 
-   - Rephrasing, reorganizing or refactoring
-   - Addition or removal of warnings
-   - Additions that strictly improve objective, numerical quality
-criteria (speedup, better browser support)
-   - Additions only likely to be _noticed by_ other implementors-of-Effector,
-invisible to users-of-Effector.
+- Rephrasing, reorganizing or refactoring
+- Addition or removal of warnings
+- Additions that strictly improve objective, numerical quality
+  criteria (speedup, better browser support)
+- Additions only likely to be _noticed by_ other implementors-of-Effector,
+  invisible to users-of-Effector.
 
 ## What the process is
 
@@ -55,32 +55,32 @@ the RFC merged into the RFC repo as a markdown file. At that point the RFC
 is 'active' and may be implemented with the goal of eventual inclusion
 into Effector.
 
-* Fork the RFC repo http://github.com/zerobias/effector
-* Copy `rfc/#0. Template.md` to `accepted/#0. My Feature.md` (where
-'My Feature' is descriptive. don't assign an RFC number yet).
-* Fill in the RFC. Put care into the details: **RFCs that do not
-present convincing motivation, demonstrate understanding of the
-impact of the design, or are disingenuous about the drawbacks or
-alternatives tend to be poorly-received**.
-* Submit a pull request. As a pull request the RFC will receive design
-feedback from the larger community, and the author should be prepared
-to revise it in response.
-* Build consensus and integrate feedback. RFCs that have broad support
-are much more likely to make progress than those that don't receive any
-comments.
-* Eventually, the team will decide whether the RFC is a candidate
-for inclusion in Effector.
-* RFCs that are candidates for inclusion in Effector will enter a "final comment
-period" lasting 7 days. The beginning of this period will be signaled with a
-comment and tag on the RFC's pull request.
-* An RFC can be modified based upon feedback from the team and community.
-Significant modifications may trigger a new final comment period.
-* An RFC may be rejected by the team after public discussion has settled
-and comments have been made summarizing the rationale for rejection. A member of
-the team should then close the RFC's associated pull request.
-* An RFC may be accepted at the close of its final comment period. A team
-member will merge the RFC's associated pull request, at which point the RFC will
-become 'active'.
+- Fork the RFC repo http://github.com/zerobias/effector
+- Copy `rfc/#0. Template.md` to `accepted/#0. My Feature.md` (where
+  'My Feature' is descriptive. don't assign an RFC number yet).
+- Fill in the RFC. Put care into the details: **RFCs that do not
+  present convincing motivation, demonstrate understanding of the
+  impact of the design, or are disingenuous about the drawbacks or
+  alternatives tend to be poorly-received**.
+- Submit a pull request. As a pull request the RFC will receive design
+  feedback from the larger community, and the author should be prepared
+  to revise it in response.
+- Build consensus and integrate feedback. RFCs that have broad support
+  are much more likely to make progress than those that don't receive any
+  comments.
+- Eventually, the team will decide whether the RFC is a candidate
+  for inclusion in Effector.
+- RFCs that are candidates for inclusion in Effector will enter a "final comment
+  period" lasting 7 days. The beginning of this period will be signaled with a
+  comment and tag on the RFC's pull request.
+- An RFC can be modified based upon feedback from the team and community.
+  Significant modifications may trigger a new final comment period.
+- An RFC may be rejected by the team after public discussion has settled
+  and comments have been made summarizing the rationale for rejection. A member of
+  the team should then close the RFC's associated pull request.
+- An RFC may be accepted at the close of its final comment period. A team
+  member will merge the RFC's associated pull request, at which point the RFC will
+  become 'active'.
 
 ## The RFC life-cycle
 
@@ -124,7 +124,7 @@ the feature and its progress.
 
 **Effector's RFC process owes its inspiration to the [React RFC process], [Yarn RFC process], [Rust RFC process] and the [Ember RFC process]**
 
-[React RFC process]: https://github.com/reactjs/rfcs
-[Yarn RFC process]: https://github.com/yarnpkg/rfcs
-[Rust RFC process]: https://github.com/rust-lang/rfcs
-[Ember RFC process]: https://github.com/emberjs/rfcs
+[react rfc process]: https://github.com/reactjs/rfcs
+[yarn rfc process]: https://github.com/yarnpkg/rfcs
+[rust rfc process]: https://github.com/rust-lang/rfcs
+[ember rfc process]: https://github.com/emberjs/rfcs
