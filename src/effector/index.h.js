@@ -1,7 +1,7 @@
 //@flow
 
 export type Subscriber<A> = {
-  next(value: A): void,
+  +next?: (value: A) => void,
   // error(err: Error): void,
   //complete(): void,
 }
