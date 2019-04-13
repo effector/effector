@@ -1,7 +1,7 @@
 //@flow
 
-export {default as invariant} from './invariant'
-export {default as warning} from './warning'
+export {invariant} from './invariant'
+export {warning} from './warning'
 
 export {
   unit as isUnit,
