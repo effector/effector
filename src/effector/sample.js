@@ -8,7 +8,7 @@ import type {Effect} from 'effector/effect'
 import invariant from 'invariant'
 
 function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
-  let current = undefined
+  let current
   let hasValue = false
 
   const unit = storeFabric({
@@ -35,7 +35,7 @@ function sampleEvent(
   source: Event<any> | Effect<any, any, any>,
   sampler: Event<any> | Store<any>,
 ) {
-  let current = undefined
+  let current
   let hasValue = false
 
   const unit = eventFabric({name: source.shortName, parent: source.domainName})
