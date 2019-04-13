@@ -1,6 +1,6 @@
 //@flow
 
-import {warning} from '../warning'
+import warning from '../warning'
 
 let globalConsole
 beforeAll(() => {

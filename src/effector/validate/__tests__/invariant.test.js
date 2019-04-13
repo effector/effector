@@ -1,6 +1,6 @@
 //@flow
 
-import {invariant} from '../invariant'
+import invariant from '../invariant'
 
 test('invariant', () => {
   const oldConsoleError = global.console.error

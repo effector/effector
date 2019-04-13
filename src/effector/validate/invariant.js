@@ -3,7 +3,7 @@
 import {__DEV__} from 'effector/flags'
 
 //prettier-ignore
-export let invariant = function(condition: any /*::, format: string, ...args: any*/) {
+let invariant = function(condition: any /*::, format: string, ...args: any*/) {
   if (!condition) {
     throw Error('Minified exception occurred')
   }
@@ -26,3 +26,5 @@ if (__DEV__) {
     }
   }
 }
+
+export default invariant
