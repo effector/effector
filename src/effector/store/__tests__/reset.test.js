@@ -22,14 +22,14 @@ describe('reset before computation', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-          Array [
-            "init",
-            "init + [1]",
-            "init",
-            "init + [2]",
-            "init",
-          ]
-      `)
+                      Array [
+                        "init",
+                        "init + [1]",
+                        "init",
+                        "init + [2]",
+                        "init",
+                      ]
+              `)
   })
 
   it("doesnt depend on methods' ordering", () => {
@@ -49,14 +49,14 @@ describe('reset before computation', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-          Array [
-            "init",
-            "init + [1]",
-            "init",
-            "init + [2]",
-            "init",
-          ]
-      `)
+                      Array [
+                        "init",
+                        "init + [1]",
+                        "init",
+                        "init + [2]",
+                        "init",
+                      ]
+              `)
   })
 })
 
@@ -78,13 +78,13 @@ describe('computation before reset', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-      Array [
-        "init",
-        "init + [1]->B",
-        "init",
-        "init + [2]->B",
-      ]
-    `)
+                  Array [
+                    "init",
+                    "init + [1]->B",
+                    "init",
+                    "init + [2]->B",
+                  ]
+            `)
   })
 
   it("doesnt depend on methods' ordering", () => {
@@ -104,11 +104,44 @@ describe('computation before reset', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+                  Array [
+                    "init",
+                    "init + [1]->B",
+                    "init",
+                    "init + [2]->B",
+                  ]
+            `)
+  })
+})
+
+describe('dependencies of resettable stores', () => {
+  test('dependencies of resettable stores', () => {
+    const fn = jest.fn()
+    const run = createEvent('run')
+    const reset = run.map(d => `${d}->reset`)
+    const A = createStore('A')
+    const B = A.map(d => `${d}->B`)
+
+    A.on(run, (state, d) => `${state} + ${d}`).reset(reset)
+    B.on(run, (state, d) => `${state} + ${d}`).reset(reset)
+
+    B.watch(e => {
+      fn(e)
+    })
+    run('run()')
+    run('run()')
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
-        "init",
-        "init + [1]->B",
-        "init",
-        "init + [2]->B",
+        "A->B",
+        "A->B + run()",
+        "A->B",
+        "A + run()->B",
+        "A->B",
+        "A->B + run()",
+        "A->B",
+        "A + run()->B",
+        "A->B",
       ]
     `)
   })
