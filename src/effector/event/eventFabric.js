@@ -5,7 +5,6 @@ import {
   step,
   Kind,
   stringRefcount,
-  createNode,
   createGraph,
   type Unit,
 } from 'effector/stdlib'
@@ -35,15 +34,17 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
-  const graphite = createNode(
-    step.emit({
-      fullName,
-      meta: {
+  const graphite = createGraph({
+    node: [
+      step.emit({
         fullName,
-        section: id,
-      },
-    }),
-  )
+        meta: {
+          fullName,
+          section: id,
+        },
+      }),
+    ],
+  })
 
   //$off
   const instance: Event<Payload> = (

@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, createNode, createGraph, readRef, writeRef} from 'effector/stdlib'
+import {step, createGraph, readRef, writeRef} from 'effector/stdlib'
 import {filterChanged, noop} from 'effector/blocks'
 
 import invariant from 'invariant'
@@ -122,29 +122,31 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     section: storeInstance.id,
   }
   return forward({
-    from: storeInstance.graphite,
-    to: createNode(
-      noop,
-      step.run({
-        fn(args) {
-          let stopPhaseTimerMessage = null
-          startPhaseTimer(storeInstance, 'subscribe')
-          if (args === lastCall) {
+    from: storeInstance,
+    to: createGraph({
+      node: [
+        noop,
+        step.run({
+          fn(args) {
+            let stopPhaseTimerMessage = null
+            startPhaseTimer(storeInstance, 'subscribe')
+            if (args === lastCall) {
+              stopPhaseTimer(stopPhaseTimerMessage)
+              return
+            }
+            lastCall = args
+            try {
+              listener(args)
+            } catch (err) {
+              console.error(err)
+              stopPhaseTimerMessage = 'Got error'
+            }
             stopPhaseTimer(stopPhaseTimerMessage)
-            return
-          }
-          lastCall = args
-          try {
-            listener(args)
-          } catch (err) {
-            console.error(err)
-            stopPhaseTimerMessage = 'Got error'
-          }
-          stopPhaseTimer(stopPhaseTimerMessage)
-        },
-        meta,
-      }),
-    ),
+          },
+          meta,
+        }),
+      ],
+    }),
   })
 }
 export function thru(fn: Function) {
