@@ -1,7 +1,7 @@
 //@flow
 
 import {createStore} from '..'
-import {createEvent} from 'effector/event'
+import {createEvent, forward} from 'effector/event'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('reset before computation', () => {
@@ -22,14 +22,14 @@ describe('reset before computation', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-                                                                      Array [
-                                                                        "init",
-                                                                        "init + [1]",
-                                                                        "init",
-                                                                        "init + [2]",
-                                                                        "init",
-                                                                      ]
-                                              `)
+      Array [
+        "init",
+        "init + [1]",
+        "init",
+        "init + [2]",
+        "init",
+      ]
+    `)
   })
 
   it("doesnt depend on methods' ordering", () => {
@@ -49,14 +49,14 @@ describe('reset before computation', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-                                                                      Array [
-                                                                        "init",
-                                                                        "init + [1]",
-                                                                        "init",
-                                                                        "init + [2]",
-                                                                        "init",
-                                                                      ]
-                                              `)
+      Array [
+        "init",
+        "init + [1]",
+        "init",
+        "init + [2]",
+        "init",
+      ]
+    `)
   })
 })
 
@@ -78,13 +78,13 @@ describe('computation before reset', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-                                                                  Array [
-                                                                    "init",
-                                                                    "init + [1]->B",
-                                                                    "init",
-                                                                    "init + [2]->B",
-                                                                  ]
-                                            `)
+      Array [
+        "init",
+        "init + [1]->B",
+        "init",
+        "init + [2]->B",
+      ]
+    `)
   })
 
   it("doesnt depend on methods' ordering", () => {
@@ -104,16 +104,43 @@ describe('computation before reset', () => {
     A('[2]')
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-                                                                  Array [
-                                                                    "init",
-                                                                    "init + [1]->B",
-                                                                    "init",
-                                                                    "init + [2]->B",
-                                                                  ]
-                                            `)
+      Array [
+        "init",
+        "init + [1]->B",
+        "init",
+        "init + [2]->B",
+      ]
+    `)
   })
 })
 
+test('late forwarding', () => {
+  const shallowEqual = (obj1, obj2) =>
+    Object.keys(obj1).length === Object.keys(obj2).length &&
+    Object.keys(obj1).every(
+      key => obj2.hasOwnProperty(key) && obj1[key] === obj2[key],
+    )
+
+  const foo = createStore({foo: true})
+  const bar = createStore({bar: true})
+  const reset = createEvent()
+
+  foo.reset(reset)
+  bar.reset(reset)
+
+  forward({from: foo, to: bar})
+
+  foo.setState({name: 'Monica'})
+  reset()
+
+  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
+  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
+  console.log(bar.getState(), shallowEqual(bar.getState(), {bar: true}))
+
+  reset()
+  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
+  console.log(bar.getState(), shallowEqual(bar.getState(), {bar: true}))
+})
 describe('dependencies of resettable stores', () => {
   test('dependencies of resettable stores', () => {
     const fnA = jest.fn()
@@ -136,27 +163,27 @@ describe('dependencies of resettable stores', () => {
     run('run')
 
     expect(argumentHistory(fnA)).toMatchInlineSnapshot(`
-      Array [
-        "A",
-        "run(A)",
-        "A",
-        "run(A)",
-        "A",
-      ]
-    `)
+            Array [
+              "A",
+              "run(A)",
+              "A",
+              "run(A)",
+              "A",
+            ]
+        `)
 
     expect(argumentHistory(fnB)).toMatchInlineSnapshot(`
-      Array [
-        "B(A)",
-        "run(B(A))",
-        "B(A)",
-        "B(run(A))",
-        "B(A)",
-        "run(B(A))",
-        "B(A)",
-        "B(run(A))",
-        "B(A)",
-      ]
-    `)
+            Array [
+              "B(A)",
+              "run(B(A))",
+              "B(A)",
+              "B(run(A))",
+              "B(A)",
+              "run(B(A))",
+              "B(A)",
+              "B(run(A))",
+              "B(A)",
+            ]
+        `)
   })
 })
