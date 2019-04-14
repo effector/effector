@@ -1,6 +1,6 @@
 {
   "name": "effector-dev",
-  "version": "0.18.5-beta.6",
+  "version": "0.18.5",
   "description": "Application state manager",
   "private": true,
   "scripts": {
@@ -93,6 +93,7 @@
     "jsdom": "^14.0.0",
     "jsdom-global": "^3.0.2",
     "markdown-table": "^1.1.2",
+    "mermaid": "^8.0.0",
     "micro": "^9.3.3",
     "micro-dev": "^3.0.0",
     "most": "^1.7.3",
