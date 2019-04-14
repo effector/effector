@@ -15,6 +15,8 @@ import type {
 import {getGraph, writeRef} from 'effector/stdlib'
 import {__CANARY__} from 'effector/flags'
 
+import {getPriority} from './getPriority'
+
 class Stack {
   /*::
   value: any
@@ -107,37 +109,7 @@ class Local {
 }
 const layerComparator = (a: Layer, b: Layer) => {
   if (a.type === b.type) return a.id > b.id
-  let arank = -1
-  switch (a.type) {
-    case 'child':
-      arank = 0
-      break
-    case 'pure':
-      arank = 1
-      break
-    case 'barrier':
-      arank = 2
-      break
-    case 'effect':
-      arank = 3
-      break
-  }
-  let brank = -1
-  switch (b.type) {
-    case 'child':
-      brank = 0
-      break
-    case 'pure':
-      brank = 1
-      break
-    case 'barrier':
-      brank = 2
-      break
-    case 'effect':
-      brank = 3
-      break
-  }
-  return arank > brank
+  return getPriority(a.type) > getPriority(b.type)
 }
 function iterate(tree: leftist) {
   const results = []
