@@ -115,33 +115,27 @@ describe('computation before reset', () => {
 })
 
 test('late forwarding', () => {
-  const shallowEqual = (obj1, obj2) =>
-    Object.keys(obj1).length === Object.keys(obj2).length
-    && Object.keys(obj1).every(
-      //$off
-      key => obj2.hasOwnProperty(key) && obj1[key] === obj2[key],
-    )
-
-  const foo = createStore({foo: true})
-  const bar = createStore({bar: true})
+  const A = createStore('A')
+  const B = createStore('B')
   const reset = createEvent()
 
-  foo.reset(reset)
-  bar.reset(reset)
+  A.reset(reset)
+  B.reset(reset)
 
-  forward({from: foo, to: bar})
+  forward({from: A, to: B})
 
-  foo.setState({name: 'Monica'})
-  reset()
+  A.setState('C')
+  reset() // reset
 
-  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
-  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
-  console.log(bar.getState(), shallowEqual(bar.getState(), {bar: true}))
+  expect(A.getState()).toMatchInlineSnapshot(`"A"`)
+  expect(B.getState()).toMatchInlineSnapshot(`"A"`) // should be B
 
-  reset()
-  console.log(foo.getState(), shallowEqual(foo.getState(), {foo: true}))
-  console.log(bar.getState(), shallowEqual(bar.getState(), {bar: true}))
+  reset() // reset again
+
+  expect(A.getState()).toMatchInlineSnapshot(`"A"`)
+  expect(B.getState()).toMatchInlineSnapshot(`"B"`)
 })
+
 describe('dependencies of resettable stores', () => {
   test('dependencies of resettable stores', () => {
     const fnA = jest.fn()
