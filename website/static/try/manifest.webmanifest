@@ -4,5 +4,5 @@
   "display": "standalone",
   "background_color": "#e95801",
   "theme_color": "#e95801",
-  "scope": "/try"
+  "scope": "/try/"
 }
