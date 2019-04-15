@@ -213,30 +213,25 @@ body {
     grid-row: 10 / span 1;
   }
   .secondanary-tabs {
-    scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 11 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
   .sources {
-    scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 3 / span 3;
   }
   .dom {
     border-top: 1px solid #ddd;
-    scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 6 / span 4;
   }
   .editor.results {
     border-top: 1px solid #ddd;
-    scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 6 / span 4;
   }
   .errors {
-    scroll-snap-destination: top;
     grid-column: 1 / span 1;
     grid-row: 2 / span 1;
     border-bottom: 1px solid #ffd6d6;

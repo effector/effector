@@ -2,8 +2,6 @@
 
 import type {Graph, Graphite, Cmd} from './index.h'
 
-export const createNode = (...node: Array<Cmd>): Graph<> => createGraph({node})
-
 //eslint-disable-next-line no-unused-vars
 declare export function createGraph(opts: {|
   +node: Array<Cmd>,

@@ -121,12 +121,12 @@ export function effectFabric<Payload, Done>({
     }),
     step.run({
       fn({params, req}, {getHandler, done, fail}) {
-        Promise.resolve(params)
-          .then(getHandler())
-          .then(
-            OnResolve.bind({event: done, params, handler: req.rs}),
-            OnReject.bind({event: fail, params, handler: req.rj}),
-          )
+        runEffect(
+          getHandler(),
+          params,
+          OnResolve.bind({event: done, params, handler: req.rs}),
+          OnReject.bind({event: fail, params, handler: req.rj}),
+        )
         return params
       },
     }),
@@ -138,6 +138,28 @@ export function effectFabric<Payload, Done>({
   }
 
   return instance
+}
+function runEffect(handler, params, onResolve, onReject) {
+  let failedSync = false
+  let syncError
+  let rawResult
+  try {
+    rawResult = handler(params)
+  } catch (err) {
+    failedSync = true
+    syncError = err
+  }
+  if (failedSync) {
+    onReject(syncError)
+    return
+  }
+  if (typeof rawResult === 'object' && rawResult !== null) {
+    if (typeof rawResult.then === 'function') {
+      rawResult.then(onResolve, onReject)
+      return
+    }
+  }
+  onResolve(rawResult)
 }
 //eslint-disable-next-line no-unused-vars
 function defaultThunk(value) {

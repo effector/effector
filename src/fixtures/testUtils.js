@@ -15,3 +15,9 @@ beforeEach(() => {
   spy = jest.fn()
   getSpyCalls = () => spy.mock.calls
 })
+/*::
+const mockFN = jest.fn()
+*/
+type MockFN = typeof mockFN
+export const argumentHistory = (fn: MockFN) =>
+  fn.mock.calls.map<any>(([arg]) => arg)

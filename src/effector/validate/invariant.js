@@ -2,6 +2,7 @@
 /* eslint-disable */
 import {__DEV__} from 'effector/flags'
 
+//prettier-ignore
 let invariant = function(condition: any /*::, format: string, ...args: any*/) {
   if (!condition) {
     throw Error('Minified exception occurred')
