@@ -116,8 +116,9 @@ describe('computation before reset', () => {
 
 test('late forwarding', () => {
   const shallowEqual = (obj1, obj2) =>
-    Object.keys(obj1).length === Object.keys(obj2).length &&
-    Object.keys(obj1).every(
+    Object.keys(obj1).length === Object.keys(obj2).length
+    && Object.keys(obj1).every(
+      //$off
       key => obj2.hasOwnProperty(key) && obj1[key] === obj2[key],
     )
 
