@@ -10,7 +10,7 @@ import view from './view'
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('./serviceworker.js', {
-      scope: '/try',
+      scope: '/try/',
     })
     .then(
       registration => {
