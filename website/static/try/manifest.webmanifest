@@ -5,5 +5,5 @@
   "start_url": "./try",
   "background_color": "#e95801",
   "theme_color": "#e95801",
-  "scope": "/try/"
+  "scope": "/try"
 }
