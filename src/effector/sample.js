@@ -8,24 +8,15 @@ import type {Effect} from 'effector/effect'
 import invariant from 'invariant'
 
 function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
-  let current
-  let hasValue = false
-
   const unit = storeFabric({
-    currentState: source.defaultState,
+    currentState: source.getState(),
     //TODO: add location
     config: {name: source.shortName},
     parent: source.domainName,
   })
 
-  //TODO: unsubscribe from this
-  const unsub = source.watch(value => {
-    current = value
-    hasValue = true
-  })
-
   sampler.watch(() => {
-    if (hasValue) unit.setState(current)
+    unit.setState(source.getState())
   })
 
   return unit
