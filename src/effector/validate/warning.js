@@ -1,14 +1,10 @@
 //@flow
 import {__DEV__} from 'effector/flags'
 
-//eslint-disable-next-line max-len
-let warning = function(/*::condition: any, format: string, ...args: any*/) {}
-if (__DEV__) {
-  warning = function(condition: any, format: string, ...args: any) {
+export default (__DEV__
+  ? (condition: any, format: string, ...args: any) => {
     if (!condition) {
       console.error('Warning: ' + format, ...args)
     }
   }
-}
-
-export default warning
+  : (/*::condition: any, format: string, ...args: any*/) => {})
