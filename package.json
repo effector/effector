@@ -19,7 +19,7 @@
   },
   "author": "Zero Bias",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/helper-plugin-utils": "^7.0.0",
@@ -134,6 +134,7 @@
     "sharp": "^0.22.0",
     "shelljs": "^0.8.3",
     "styled-components": "^4.2.0",
+    "symbol-observable": "^1.2.0",
     "terser": "^3.17.0",
     "typescript": "^3.4.3",
     "viz.js": "^2.1.2",
@@ -155,9 +156,6 @@
   "resolutions": {
     "v8-profiler-node8": "file:./forks/v8-profiler-node8",
     "nan": "file:./forks/nan"
-  },
-  "dependencies": {
-    "symbol-observable": "^1.2.0"
   },
   "alias": {
     "warning": "./src/warning/index.js",
