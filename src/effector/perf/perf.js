@@ -56,6 +56,14 @@ if (enableUserTimingAPI) {
     return `${label} (#${debugID})`
   }
 
+  function getStoreMark(store, phase: StoreMeasurementPhase) {
+    const componentName = getDisplayName(store)
+    const debugID = store.id
+    const label = getStoreLabel(componentName, phase)
+    const markName = getStoreMarkName(label, debugID)
+    return {label, markName}
+  }
+
   function beginMark(markName: string) {
     performance.mark(formatMarkName(markName))
   }
@@ -76,19 +84,13 @@ if (enableUserTimingAPI) {
   }
 
   function beginStoreMark(store, phase: StoreMeasurementPhase) {
-    const componentName = getDisplayName(store)
-    const debugID = store.id
-    const label = getStoreLabel(componentName, phase)
-    const markName = getStoreMarkName(label, debugID)
+    const {markName} = getStoreMark(store, phase)
     beginMark(markName)
     return true
   }
 
   function clearStoreMark(store, phase: StoreMeasurementPhase) {
-    const componentName = getDisplayName(store)
-    const debugID = store.id
-    const label = getStoreLabel(componentName, phase)
-    const markName = getStoreMarkName(label, debugID)
+    const {markName} = getStoreMark(store, phase)
     clearMark(markName)
   }
 
@@ -97,10 +99,7 @@ if (enableUserTimingAPI) {
     phase: StoreMeasurementPhase,
     warning: string | null,
   ) {
-    const componentName = getDisplayName(store)
-    const debugID = store.id
-    const label = getStoreLabel(componentName, phase)
-    const markName = getStoreMarkName(label, debugID)
+    const {label, markName} = getStoreMark(store, phase)
     endMark(label, markName, warning)
   }
 
