@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 
 const root = document.getElementById('version')
+if (!root) throw Error('no #version node')
 
 export const VersionLink = ({version}: {version: string}) => {
   const match = version.match(/^pr-(\d+)$/)

@@ -9,7 +9,7 @@ import view from './view'
 
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker
-    .register('./serviceworker.js', {
+    ?.register('./serviceworker.js', {
       scope: '/try/',
     })
     .then(
@@ -27,4 +27,5 @@ if ('serviceWorker' in navigator) {
     )
 }
 
-ReactDOM.render(view, document.getElementById('try-wrapper'))
+const domNode = document.getElementById('try-wrapper')
+domNode && ReactDOM.render(view, domNode)
