@@ -1,60 +1,43 @@
 //@flow
 import $$observable from 'symbol-observable'
 import {createStore, createEvent, forward} from 'effector'
+import {ActionTypes} from './actionTypes'
 
-function normalizeArgs<T>(
-  reducers,
-  defaultState,
-  enhancer,
-):
-  | {|
-      +willContinue: false,
-      +result: *,
-    |}
-  | {|
-      +willContinue: true,
-      +defaultState: T,
-    |} {
-  if (typeof reducers !== 'function') throw Error('not a function')
-  if (typeof defaultState === undefined)
-    //$off
-    defaultState = reducers(undefined, {type: 'HI'})
-  if (typeof enhancer === 'function')
-    return {
-      result: enhancer(createReduxStore)(reducers, defaultState),
-      willContinue: false,
-    }
-  if (typeof enhancer === 'undefined' && typeof defaultState === 'function') {
-    return {
-      //$off
-      result: defaultState(createReduxStore)(
-        reducers,
-        //$off
-        reducers(undefined, {type: 'HI'}),
-      ),
-      willContinue: false,
-    }
+function normalizeArgs<T>(reducer, defaultState, enhancer) {
+  if (typeof defaultState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = defaultState
+    defaultState = undefined
   }
-  return {
-    //$off
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.')
+    }
+    return enhancer(createReduxStore)(reducer, defaultState)
+  }
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.')
+  }
+  return reduxStoreFabric({
+    reducer,
     defaultState,
-    willContinue: true,
-  }
+  })
 }
 
 function reduxStoreFabric<T>({
   defaultState,
-  reducers,
+  reducer,
 }: {
   defaultState: T,
-  reducers: (state: T, payload: {+type: string, payload?: any, ...}) => T,
+  reducer: (state: T, payload: {+type: string, payload?: any, ...}) => T,
 }) {
+  let currentReducer = reducer
+
   const dispatch = createEvent<{+type: string, payload?: any, ...}>('dispatch')
   const update = createEvent('update')
   const store = createStore<T>(defaultState)
   store.on(dispatch, (state, event) => {
     try {
-      return reducers(state, event)
+      return currentReducer(state, event)
     } catch (err) {
       console.error(err)
     }
@@ -74,32 +57,43 @@ function reduxStoreFabric<T>({
    * NOTE that's mean that symbol.observable subscribers
    * will always been called before ones which used .subscribe
    */
-  wrapper.subscribe = (fn: (data: T) => any) =>
-    update.watch((data, x) => {
-      console.log('update.watch', data, x)
-      try {
-        fn(data)
-      } catch (err) {
-        console.error(err)
-      }
+  wrapper.subscribe = (listener: (data: T) => any) => {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.')
+    }
+    return update.watch((data, x) => {
+      //console.log('update.watch', data, x)
+      listener(data)
     })
-
-  wrapper.replaceReducer = (newReducers: typeof reducers) => {
-    reducers = newReducers
-    dispatch({type: 'HI'})
   }
+
+  wrapper.replaceReducer = (nextReducer: typeof currentReducer) => {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.')
+    }
+    currentReducer = nextReducer
+    dispatch({type: ActionTypes.REPLACE})
+  }
+
+  dispatch({type: ActionTypes.INIT})
+
   return wrapper
 }
 
 export function createReduxStore<T>(
-  reducers: (state: T, payload: {+type: string, payload?: any, ...}) => T,
+  reducer: (state: T, payload: {+type: string, payload?: any, ...}) => T,
   defaultState: T,
   enhancer: Function,
 ) {
-  const normalized = normalizeArgs<T>(reducers, defaultState, enhancer)
-  if (!normalized.willContinue) return normalized.result
-  return reduxStoreFabric({
-    reducers,
-    defaultState: normalized.defaultState,
-  })
+  if (
+    (typeof defaultState === 'function' && typeof enhancer === 'function') ||
+    (typeof enhancer === 'function' && typeof arguments[3] === 'function')
+  ) {
+    throw new Error(
+      'It looks like you are passing several store enhancers to ' +
+        'createStore(). This is not supported. Instead, compose them ' +
+        'together to a single function'
+    )
+  }
+  return normalizeArgs<T>(reducer, defaultState, enhancer)
 }

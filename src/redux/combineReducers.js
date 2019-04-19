@@ -2,6 +2,7 @@
 
 import warning from 'warning'
 import {__DEV__} from 'effector/flags'
+import {ActionTypes} from './actionTypes'
 
 function getUndefinedStateErrorMessage(key, action) {
   const actionType = action && action.type
@@ -24,7 +25,7 @@ function getUnexpectedStateShapeWarningMessage(
 ) {
   const reducerKeys = Object.keys(reducers)
   const argumentName =
-    action && action.type === 'hi'
+    action && action.type === ActionTypes.INIT
       ? 'preloadedState argument passed to createStore'
       : 'previous state received by the reducer'
 
@@ -43,7 +44,7 @@ function getUnexpectedStateShapeWarningMessage(
     unexpectedKeyCache[key] = true
   })
 
-  if (action && action.type === '@@effector/replace') return
+  if (action && action.type === ActionTypes.REPLACE) return
 
   if (unexpectedKeys.length > 0) {
     return (
@@ -58,7 +59,7 @@ function getUnexpectedStateShapeWarningMessage(
 function assertReducerShape(reducers) {
   Object.keys(reducers).forEach(key => {
     const reducer = reducers[key]
-    const initialState = reducer(undefined, {type: 'hi'})
+    const initialState = reducer(undefined, { type: ActionTypes.INIT })
 
     if (typeof initialState === 'undefined') {
       throw new Error(
@@ -67,6 +68,23 @@ function assertReducerShape(reducers) {
           `explicitly return the initial state. The initial state may ` +
           `not be undefined. If you don't want to set a value for this ` +
           `reducer, you can use null instead of undefined`,
+      )
+    }
+
+    if (
+      typeof reducer(undefined, {
+        type: ActionTypes.PROBE_UNKNOWN_ACTION()
+      }) === 'undefined'
+    ) {
+      throw new Error(
+        `Reducer "${key}" returned undefined when probed with a random type. ` +
+          `Don't try to handle ${
+            ActionTypes.INIT
+          } or other actions in "redux/*" ` +
+          `namespace. They are considered private. Instead, you must return the ` +
+          `current state for any unknown actions, unless it is undefined, ` +
+          `in which case you must return the initial state, regardless of the ` +
+          `action type. The initial state may not be undefined, but can be null.`
       )
     }
   })
