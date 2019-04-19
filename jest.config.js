@@ -16,8 +16,12 @@ const createDefaultConfig = () => ({
     '^.+\\.jsx?$': 'babel-jest',
   },
   // moduleNameMapper: {},
-  testPathIgnorePatterns: ['<rootDir>/node_modules/'],
-  transformIgnorePatterns: ['node_modules/(?!(bs-platform)/)'],
+  modulePathIgnorePatterns: watchPathIgnorePatterns,
+  testPathIgnorePatterns: watchPathIgnorePatterns,
+  transformIgnorePatterns: [
+    ...watchPathIgnorePatterns,
+    'node_modules/(?!(bs-platform)/)',
+  ],
   watchPathIgnorePatterns,
   // roots: ['<rootDir>/src/'],
 })
@@ -59,7 +63,7 @@ module.exports = {
     'types',
     'forms',
     'babel',
-    // 'redux',
+    'redux',
     {
       react: {
         testEnvironment: 'jsdom',

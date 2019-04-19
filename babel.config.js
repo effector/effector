@@ -107,7 +107,7 @@ const babelConfig = {
   overrides: [
     {
       test(filename) {
-        return filename.includes('__tests__')
+        return filename.includes('__tests__') && !filename.includes('redux')
       },
       plugins: ['./src/babel/babel-plugin'],
     },
