@@ -2,6 +2,7 @@
 
 import invariant from 'invariant'
 import {type Store, createStoreObject} from 'effector/store'
+import {is} from 'effector/validate'
 
 //eslint-disable-next-line no-unused-vars
 declare export function combine<R>(fn: () => R): Store<R>
@@ -104,9 +105,58 @@ declare export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
 
 export function combine(...args: Array<Store<any>>): Store<any> {
   invariant(args.length > 0, 'at least one argument required')
-  const handler: Function = (args[args.length - 1]: any)
-  const stores = args.slice(0, -1)
-  const structStore = createStoreObject(stores)
+  let handler
+  let stores
+  {
+    const rawHandler = args[args.length - 1]
+    if (typeof rawHandler === 'function') {
+      stores = args.slice(0, -1)
+      handler = rawHandler
+    } else {
+      stores = args
+    }
+  }
 
-  return structStore.map(list => handler(...list))
+  let structStoreShape
+
+  makeShape: {
+    if (stores.length === 1) {
+      const obj = stores[0]
+      /*
+      without edge case combine(Color, (Color) => '~')
+      */
+      if (!is.store(obj)) {
+        /*
+        case combine([R,G,B], ([R,G,B]) => '~')
+        case combine({R,G,B}, ({R,G,B}) => '~')
+
+        edge case combine([Color], ([Color]) => '~')
+        edge case combine({Color}, ({Color}) => '~')
+
+        edge case combine([R,G,B])
+        edge case combine({R,G,B})
+
+        edge case combine([Color])
+        edge case combine({Color})
+        */
+        structStoreShape = obj
+        break makeShape
+      }
+    }
+    /*
+    case combine(R,G,B, (R,G,B) => '~')
+    */
+    structStoreShape = stores
+    /*
+    without edge case combine(R,G,B)
+    without edge case combine(Color)
+    */
+    if (handler) {
+      handler = spreadArgs(handler)
+    }
+  }
+  //$off
+  return createStoreObject(structStoreShape, handler)
 }
+
+const spreadArgs = fn => list => fn(...list)
