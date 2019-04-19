@@ -75,6 +75,12 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
         scope: {key, clone, target: store.stateRef, isFresh},
         node,
         child: [store],
+        meta: {
+          isUnit: false,
+          isLink: true,
+          isWatch: false,
+          link: 'StoreObject',
+        },
       }),
     })
   }
@@ -107,19 +113,21 @@ declare export function createStoreObject<
   >,
 >
 //prettier-ignore
-export function createStoreObject(obj: *) {
-  if (Array.isArray(obj)) {
-    return storeCombination(
+export function createStoreObject(obj: *, fn?: Function) {
+  const mergedStore = Array.isArray(obj)
+    ? storeCombination(
       obj,
       list => list.slice(),
       [],
     )
-  }
-  return storeCombination(
-    obj,
-    obj => Object.assign({}, obj),
-    {},
-  )
+    : storeCombination(
+      obj,
+      obj => Object.assign({}, obj),
+      {},
+    )
+  return fn
+    ? mergedStore.map(fn)
+    : mergedStore
 }
 //eslint-disable-next-line
 declare export function extract<
