@@ -158,20 +158,23 @@
     "nan": "file:./forks/nan"
   },
   "alias": {
-    "warning": "./src/warning/index.js",
-    "invariant": "./src/invariant/index.js",
-    "effector": "./src/index.js",
+    "warning": "./src/effector/validate/warning.js",
+    "invariant": "./src/effector/validate/invariant.js",
+    "effector": "./src/effector/index.js",
     "effector-react": "./src/react",
     "effector-vue": "./src/vue",
     "@effector/forms": "./src/forms",
-    "effector/domain": "./src/domain",
-    "effector/effect": "./src/effect",
-    "effector/event": "./src/event",
-    "effector/store": "./src/store",
-    "effector/graphite": "./src/graphite",
-    "effector/stdlib": "./src/stdlib",
+    "effector/validate": "./src/effector/validate",
+    "effector/domain": "./src/effector/domain",
+    "effector/effect": "./src/effector/effect",
+    "effector/event": "./src/effector/event",
+    "effector/store": "./src/effector/store",
+    "effector/kernel": "./src/effector/kernel",
+    "effector/stdlib": "./src/effector/stdlib",
+    "effector/blocks": "./src/effector/blocks",
     "effector/flags": "./src/flags.prod",
-    "effector/naming": "./src/naming",
-    "effector/perf": "./src/perf"
+    "effector/watcher": "./src/effector/watcher",
+    "effector/naming": "./src/effector/naming",
+    "effector/perf": "./src/effector/perf"
   }
 }
