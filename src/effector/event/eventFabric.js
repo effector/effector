@@ -44,6 +44,14 @@ export function eventFabric<Payload>({
         },
       }),
     ],
+    meta: {
+      isUnit: true,
+      isLink: false,
+      isWatch: false,
+      unit: 'Event',
+      name: fullName,
+      id,
+    },
   })
 
   //$off
@@ -93,6 +101,12 @@ function prepend(event, fn: (_: any) => *) {
           fn: (newValue, {handler}) => handler(newValue),
         }),
       ],
+      meta: {
+        isUnit: false,
+        isLink: true,
+        isWatch: false,
+        link: 'prepend',
+      },
     }),
   })
   return contramapped
@@ -118,6 +132,12 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
           fn: (payload, {handler}) => handler(payload),
         }),
       ],
+      meta: {
+        isUnit: false,
+        isLink: true,
+        isWatch: false,
+        link: 'map',
+      },
     }),
   })
   return mapped
@@ -152,6 +172,12 @@ function filterEvent<A, B>(
           },
         }),
       ],
+      meta: {
+        isUnit: false,
+        isLink: true,
+        isWatch: false,
+        link: 'filter',
+      },
     }),
   })
   return mapped
@@ -174,7 +200,12 @@ function watchEvent<Payload>(
             getDisplayName(trigger),
           ),
         }),
-      ]
+      ],
+      meta: {
+        isUnit: false,
+        isLink: false,
+        isWatch: true,
+      },
     }),
   })
 }

@@ -29,7 +29,7 @@ class Stack {
 }
 type LayerType = 'child' | 'pure' | 'barrier' | 'effect'
 type Layer = {|
-  +step: Graph<any>,
+  +step: Graph,
   +firstIndex: number,
   +scope: Stack,
   +resetStop: boolean,

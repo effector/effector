@@ -19,6 +19,6 @@ export type Event<E> = /*::interface extends Unit*/ {
   getType(): string,
   shortName: string,
   domainName?: CompositeName,
-  graphite: Graph<>,
+  graphite: Graph,
   compositeName: CompositeName,
 }

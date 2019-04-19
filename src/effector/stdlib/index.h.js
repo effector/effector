@@ -89,18 +89,19 @@ export type Compute = {|
   |},
 |}
 
-export type Graph<+Val: {[name: string]: any} = {||}> = {
-  +from: Array<Graph<any>>,
-  +next: Array<Graph<any>>,
+export type Graph = {
+  +from: Array<Graph>,
+  +next: Array<Graph>,
   +seq: Array<Cmd>,
-  +scope: Val,
+  +scope: {[string]: any},
+  +meta: {[tag: string]: any},
 }
 
 //prettier-ignore
 export type Graphite =
-  | {+graphite: Graph<any>, ...}
-  | Graph<any>
+  | {+graphite: Graph, ...}
+  | Graph
 
 export type Unit = /*::interface*/ {
-  +graphite: Graph<>,
+  +graphite: Graph,
 }

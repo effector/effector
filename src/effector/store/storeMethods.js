@@ -53,7 +53,13 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
             },
             meta,
           }),
-        ]
+        ],
+        meta: {
+          isUnit: false,
+          isLink: true,
+          isWatch: false,
+          link: 'on',
+        },
       }),
     }),
   )
@@ -146,6 +152,12 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
           meta,
         }),
       ],
+      meta: {
+        isUnit: false,
+        isLink: true,
+        isWatch: false,
+        link: 'subscribe',
+      },
     }),
   })
 }
@@ -204,6 +216,12 @@ export function mapStore<A, B>(
         }),
         filterChanged,
       ],
+      meta: {
+        isUnit: false,
+        isLink: true,
+        isWatch: false,
+        link: 'map',
+      },
     }),
   })
   return innerStore
