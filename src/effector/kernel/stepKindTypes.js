@@ -14,7 +14,7 @@ export const pure = stepKind('pure', {
   from: [child],
   to: [barrier],
 })
-// export const reset = stepKind('reset', {
-//   from: [pure],
-//   to: [barrier],
+// export const procedure = stepKind('procedure', {
+//   from: [child],
+//   to: [],
 // })

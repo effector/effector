@@ -4,6 +4,7 @@ import type {
   NodeMeta,
   Update,
   Run,
+  Tap,
   Filter,
   Emit,
   Compute,
@@ -34,6 +35,10 @@ export const step: {
     fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
   }): Run,
+  tap(data: {
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  }): Tap,
   update(data: {|
     store: StateRef,
     meta?: NodeMeta,
@@ -44,6 +49,7 @@ export const step: {
   emit: cmd.bind(null, 'emit'),
   filter: cmd.bind(null, 'filter'),
   run: cmd.bind(null, 'run'),
+  tap: cmd.bind(null, 'tap'),
   update: cmd.bind(null, 'update'),
 }
 
@@ -78,6 +84,13 @@ declare export function cmd(
 ): Filter
 declare export function cmd(
   tag: 'run',
+  data: {
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  },
+): Run
+declare export function cmd(
+  tag: 'tap',
   data: {
     fn: (data: any, scope: {[string]: any}) => any,
     meta?: NodeMeta,
