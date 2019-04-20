@@ -33,21 +33,15 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updater: any = createEvent('update ' + currentId)
-  const meta = {
-    fullName: compositeName.fullName,
-    section: currentId,
-  }
   const storeInstance: ThisStore = {
     graphite: createGraph({
       scope: {state: plainState, oldState: currentState},
       node: [
         step.filter({
           fn: upd => upd !== undefined,
-          meta,
         }),
         step.update({
           store: plainState,
-          meta,
         }),
         step.filter({
           fn(upd, scope) {
@@ -57,14 +51,6 @@ export function storeFabric<State>(props: {
           },
         }),
       ],
-      meta: {
-        isUnit: true,
-        isLink: false,
-        isWatch: false,
-        unit: 'Store',
-        name: compositeName.fullName,
-        id: plainState.id,
-      },
     }),
     kind: Kind.store,
     id: plainState.id,

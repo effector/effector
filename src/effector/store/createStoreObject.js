@@ -72,12 +72,6 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
         scope: {key, clone, target: store.stateRef, isFresh},
         node,
         child: [store],
-        meta: {
-          isUnit: false,
-          isLink: true,
-          isWatch: false,
-          link: 'StoreObject',
-        },
       }),
     })
   }
