@@ -72,6 +72,10 @@
   font-size: 14px;
 }
 
+.blockElement {
+  margin-bottom: 24px;
+}
+
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 

@@ -188,18 +188,29 @@ class Index extends React.Component {
       <Block layout="threeColumn">
         {[
           {
-            content:
-              'TypeScript and Flow support out of box, simple API surface and helpful community.',
+            content: 'TypeScript and Flow support out of box.',
+            title: 'Type safe',
+            image: baseUrl + 'img/shield.svg',
+            imageAlign: 'top',
+          },
+          {
+            content: 'Simple API surface and helpful community.',
             title: 'Developer-friendly',
+            image: baseUrl + 'img/laptop.svg',
+            imageAlign: 'top',
           },
           {
             content:
               'Static initialization provides boost in performance for runtime.',
             title: 'Maximum performance',
+            image: baseUrl + 'img/bolt.svg',
+            imageAlign: 'top',
           },
           {
             content: 'Effector uses Rollup and Terser to provide small builds.',
             title: 'Tiny bundle size',
+            image: baseUrl + 'img/box.svg',
+            imageAlign: 'top',
           },
           // {
           //   content: '...',
@@ -208,6 +219,8 @@ class Index extends React.Component {
           {
             content: 'Can work with any UI or server framework.',
             title: 'Flexible',
+            image: siteConfig.baseUrl + 'img/settings.svg',
+            imageAlign: 'top',
           },
         ]}
       </Block>
@@ -246,10 +259,10 @@ class Index extends React.Component {
       <div>
         <HomeSplash siteConfig={siteConfig} language={language} />
         <div className="mainContainer">
-          <Features />
           {/*<FeatureCallout />*/}
-          {/*<LearnHow />*/}
-          {/*<TryOut />*/}
+          <Features />
+          <LearnHow />
+          <TryOut />
           {/*<Description />*/}
           {/*<Showcase />*/}
         </div>

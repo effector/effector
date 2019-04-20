@@ -102,6 +102,14 @@
         "title": "From Redux",
         "sidebar_label": "From Redux"
       },
+      "recipes/react/example-effects": {
+        "title": "Example: Effects",
+        "sidebar_label": "Example: Effects"
+      },
+      "recipes/react/example": {
+        "title": "Example",
+        "sidebar_label": "Example"
+      },
       "recipes/recipes": {
         "title": "Recipes: Index",
         "sidebar_label": "Recipes: Index"

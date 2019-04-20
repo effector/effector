@@ -12,6 +12,14 @@
         "type": "subcategory",
         "label": "Migrating to Effector",
         "ids": ["recipes/migrating-to-effector/from-redux"]
+      },
+      {
+        "type": "subcategory",
+        "label": "React",
+        "ids": [
+          "recipes/react/example",
+          "recipes/react/example-effects"
+        ]
       }
     ],
     "Other": ["troubleshooting", "glossary"],
