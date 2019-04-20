@@ -23,7 +23,9 @@
     "effector.umd.js.map",
     "effector.cjs.js.flow",
     "effector.es.js.flow",
-    "effector.umd.js.flow"
+    "effector.umd.js.flow",
+    "babel-plugin.js",
+    "babel-plugin-react.js"
   ],
   "keywords": [
     "data",

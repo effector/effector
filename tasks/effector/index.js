@@ -28,6 +28,11 @@ export default {
           ],
         ],
       ]),
+    () =>
+      massCopy('src/babel', 'npm/effector', [
+        'babel-plugin.js',
+        'babel-plugin-react.js',
+      ]),
     rollupEffector,
     renderModulesGraph,
     publishScript('effector'),

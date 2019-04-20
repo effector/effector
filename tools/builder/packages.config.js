@@ -73,7 +73,11 @@ export default {
     dependencies: {
       'symbol-observable': '^1.2.0',
     },
-    files: getFiles('effector'),
+    files: [
+      ...getFiles('effector'),
+      'babel-plugin.js',
+      'babel-plugin-react.js',
+    ],
     keywords: [
       'data',
       'datastructure',
