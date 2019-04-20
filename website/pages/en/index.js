@@ -261,8 +261,8 @@ class Index extends React.Component {
         <div className="mainContainer">
           {/*<FeatureCallout />*/}
           <Features />
-          <LearnHow />
-          <TryOut />
+          {/*<LearnHow />*/}
+          {/*<TryOut />*/}
           {/*<Description />*/}
           {/*<Showcase />*/}
         </div>
