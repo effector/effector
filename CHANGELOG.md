@@ -1,6 +1,161 @@
 # Changelog
 
-## 0.18.3
+## 0.18.5-0.18.6
+
+- Optimize combined stores: no intermediate steps no more
+
+```js
+import {createStore, createEvent, createStoreObject, combine} from 'effector'
+
+const field = createStore('')
+const isEmpty = field.map(value => value.length === 0)
+const isTooLong = field.map(value => value.length > 12)
+const isValid = combine(
+  isEmpty,
+  isTooLong,
+  (isEmpty, isTooLong) => !isEmpty && !isTooLong,
+)
+
+const updateField = createEvent('update field value')
+
+field.on(updateField, (state, upd) => upd.trim())
+
+createStoreObject({
+  field,
+  isEmpty,
+  isTooLong,
+  isValid,
+}).watch(data => {
+  console.log(data)
+})
+
+// => {field: '', isEmpty: true, isTooLong: false, isValid: false}
+
+updateField('bobby')
+
+// => {field: 'bobby', isEmpty: false, isTooLong: false, isValid: true}
+```
+
+- Use the new kernel. Provide improved eventual consistency: any side effects will be triggered only after performing all pure computations
+
+- Add `is` namespace for all type validators
+
+```js
+import {createStore, createEvent, is} from 'effector'
+const store = createStore('value')
+const event = createEvent('some event')
+
+is.store(store) // => true
+is.event(store) // => false
+is.unit(store) // => true
+
+is.store(event) // => false
+is.event(event) // => true
+is.unit(event) // => true
+
+is.store(null) // => false
+is.event(null) // => false
+is.unit(null) // => false
+```
+
+- Add `clearNode` to break references and subscriptions between events, stores, etc
+
+- Add support for custom datatypes by making `step` constructors, `createNode` and `launch` functions public
+
+```js
+import {createNode, launch, step, createStore} from 'effector'
+
+const target = createStore(0)
+target.watch(n => console.log('current n = ', n))
+// => current n = 0
+
+const customNode = createNode({
+  scope: {max: 100, lastValue: -1, add: 10},
+  child: [target], // you can forward later as well
+  node: [
+    step.compute({
+      fn: (arg, {add}) => arg + add,
+    }),
+    step.filter({
+      fn: (arg, {max, lastValue}) => arg < max && arg !== lastValue,
+    }),
+    step.compute({
+      fn(arg, scope) {
+        scope.lastValue = arg
+        return arg
+      },
+    }),
+  ],
+})
+
+launch(customNode, 3)
+// => current n = 13
+launch(customNode, 95)
+// no reaction, as 95 + 10 > 100
+launch(customNode, 5)
+// => current n = 15
+launch(customNode, 5)
+// no reaction, as we filtered it out with step.filter
+```
+
+- Fix `fromObservable`, ensure it works with `redux` as a typical library with [`Symbol.observable`](https://github.com/benlesh/symbol-observable) support
+
+```js
+import {fromObservable} from 'effector'
+import * as redux from 'redux'
+
+const INCREMENT_STATE = 'INCREMENT_STATE'
+const reduxStore = redux.createStore((state = 1, action) => {
+  switch (action.type) {
+    case INCREMENT_STATE:
+      return state + 1
+    default:
+      return state
+  }
+})
+
+const updateEvent = fromObservable(reduxStore)
+updateEvent.watch(state => {
+  console.log('redux state = ', state)
+})
+
+reduxStore.dispatch({type: INCREMENT_STATE})
+// => redux state = 1
+```
+
+- Fix `version`, now it always equals version in package.json
+
+```js
+import {version} from 'effector'
+console.log(version)
+// => 0.18.6
+```
+
+- Add support forwarding to effects
+
+```js
+import {createEffect, createEvent, forward} from 'effector'
+
+const trigger = createEvent()
+
+const sideEffect = createEffect('side-effect', {
+  async handler(args) {
+    await new Promise(rs => setTimeout(rs, 500))
+    console.log('args: ', args)
+  },
+})
+
+forward({
+  from: trigger,
+  to: sideEffect,
+})
+
+trigger('payload')
+// ~ after 500 ms
+// => args: payload
+```
+
+## 0.18.3-0.18.4
 
 - Add version variable to public exports
 
