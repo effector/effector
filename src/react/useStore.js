@@ -1,7 +1,9 @@
 //@flow
 
 import {type Store, is, invariant} from 'effector'
-import {useReducer, useEffect} from 'react'
+import {useReducer, useLayoutEffect} from 'react'
+
+const stateReducer = (_: any, payload: any) => payload
 
 export function useStore<State>(store: Store<State>): State {
   invariant(
@@ -9,11 +11,7 @@ export function useStore<State>(store: Store<State>): State {
     'useStore: The argument must be Store, but you passed %s',
     store,
   )
-  const [, dispatch] = useReducer(
-    (_, payload) => payload,
-    undefined,
-    store.getState,
-  )
-  useEffect(() => store.watch(dispatch), [store])
+  const dispatch = useReducer(stateReducer, undefined, store.getState)[1]
+  useLayoutEffect(() => store.watch(dispatch), [store])
   return store.getState()
 }
