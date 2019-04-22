@@ -63,7 +63,7 @@ module.exports = {
     'types',
     'forms',
     'babel',
-    'redux',
+    // 'redux',
     {
       react: {
         testEnvironment: 'jsdom',
