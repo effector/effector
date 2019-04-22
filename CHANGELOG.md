@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 0.18.9
+
+- Replace `useEffect` with `useLayoutEffect` in `useStore` hook to responce to state changes immediately
+
 ## 0.18.5-0.18.6
 
 - Optimize combined stores: no intermediate steps no more
