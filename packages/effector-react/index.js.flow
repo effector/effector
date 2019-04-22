@@ -34,6 +34,11 @@ export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
   childGate<Next>(childName?: string): Gate<Next>,
 |}
 
+export type StoreView<State, Props = {||}> = ComponentType<Props> & {|
+  mounted: Event<{|props: Props, state: State|}>,
+  unmounted: Event<{|props: Props, state: State|}>,
+|}
+
 declare export function useStore<State>(store: Store<State>): State
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
@@ -41,7 +46,7 @@ declare export function createGate<Props>(name?: string): Gate<Props>
 declare export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => Node,
-): ComponentType<Props>
+): StoreView<State, Props>
 declare export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: ContextType<Context>,
