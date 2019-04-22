@@ -1,6 +1,7 @@
 //@flow
 
 import * as React from 'react'
+//$todo add invariant to effector public typings
 import {type Store, is, invariant, createStoreObject} from 'effector'
 
 type Unsubscribe = () => void
