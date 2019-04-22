@@ -1,15 +1,22 @@
 //@flow
 
 import * as React from 'react'
-//$todo add invariant to effector public typings
-import {type Store, is, invariant, createStoreObject} from 'effector'
+import {
+  type Store,
+  is,
+  //$todo add invariant to effector public typings
+  invariant,
+  createStoreObject,
+  createEvent,
+} from 'effector'
+import type {StoreView} from './index.h'
 
 type Unsubscribe = () => void
 
 export function createComponent<Props: {}, State>(
   shape: Store<State>,
   renderProp: (props: Props, state: State) => React.Node,
-): React.ComponentType<Props> {
+): StoreView<State, Props> {
   let store
   if (is.store(shape)) {
     store = shape
@@ -20,22 +27,27 @@ export function createComponent<Props: {}, State>(
     )
     store = createStoreObject(shape)
   }
+  const mounted = createEvent(`${store.shortName}.View mounted`)
+  const unmounted = createEvent(`${store.shortName}.View unmounted`)
   return class RenderComponent extends React.Component<
     Props,
     {currentState: State},
   > {
     static displayName = `${store.shortName}.View`
+    static mounted = mounted
+    static unmounted = unmounted
     _unsubscribe: Unsubscribe | null = null
     _hasUnmounted: boolean = false
     state = {currentState: store.getState()}
     componentDidMount() {
+      mounted({props: this.props, state: store.getState()})
       this.subscribe()
     }
     componentWillUnmount() {
+      unmounted({props: this.props, state: store.getState()})
       this.unsubscribe()
       this._hasUnmounted = true
     }
-    renderProp = (state: State) => renderProp(this.props, state)
     render() {
       return renderProp(this.props, this.state.currentState)
     }
