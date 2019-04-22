@@ -2,7 +2,7 @@
 
 ## effector-react 0.18.9
 
-- Replace `useEffect` with `useLayoutEffect` in `useStore` hook to responce to state changes immediately
+- Replace `useEffect` with `useLayoutEffect` in `useStore` hook to response to state changes immediately
 
 ## 0.18.5-0.18.6
 
