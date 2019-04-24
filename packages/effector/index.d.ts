@@ -1,3 +1,5 @@
+/// <reference types="symbol-observable" />
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -9,10 +11,15 @@ export const Kind: {
   readonly domain: kind
 }
 
-export type Subscriber<A> = {
+export type Observer<A> = {
   readonly next?: (value: A) => void
   // error(err: Error): void,
   //complete(): void,
+}
+
+export type Observable<T> = {
+  subscribe: (observer: Observer<T>) => Subscription
+  [Symbol.observable](): Observable<T>
 }
 
 export type Subscription = {
@@ -31,8 +38,9 @@ export interface Event<Payload> extends Unit<Payload> {
   map<T>(fn: (_: Payload) => T): Event<T>
   filter<T>(fn: (_: Payload) => T | void): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
-  subscribe(subscriber: Subscriber<Payload>): Subscription
+  subscribe(observer: Observer<Payload>): Subscription
   getType(): string
+  [Symbol.observable](): Observable<Payload>
 }
 
 export interface Future<Params, Done, Fail> extends Promise<Done> {
@@ -55,8 +63,9 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   }
   watch(watcher: (payload: Params) => any): Subscription
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
-  subscribe(subscriber: Subscriber<Params>): Subscription
+  subscribe(observer: Observer<Params>): Subscription
   getType(): string
+  [Symbol.observable](): Observable<Params>
 }
 
 export interface Store<State> extends Unit<State> {
@@ -80,6 +89,7 @@ export interface Store<State> extends Unit<State> {
   thru<U>(fn: (store: Store<State>) => U): U
   shortName: string
   defaultState: State
+  [Symbol.observable](): Observable<State>
 }
 
 export function isUnit<T>(obj: unknown): obj is Unit<T>

@@ -16,7 +16,7 @@ declare export var Kind: {|
   /*::+*/ domain: kind,
 |}
 
-export type Subscriber<A> = {+next?: (value: A) => void, ...}
+export type Observer<A> = {+next?: (value: A) => void, ...}
 
 export type Subscription = {
   (): void,
@@ -33,7 +33,7 @@ declare export class Event<Payload> implements Unit<Payload> {
   map<T>(fn: (_: Payload) => T): Event<T>;
   filter<T>(fn: (_: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
-  subscribe(subscriber: Subscriber<Payload>): Subscription;
+  subscribe(observer: Observer<Payload>): Subscription;
   getType(): string;
 }
 
@@ -62,7 +62,7 @@ declare export class Effect<Params, Done, Fail = Error>
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   //map<T>(fn: (_: E) => T): Event<T>,
-  subscribe(subscriber: Subscriber<Params>): Subscription;
+  subscribe(observer: Observer<Params>): Subscription;
   getType(): string;
 }
 
