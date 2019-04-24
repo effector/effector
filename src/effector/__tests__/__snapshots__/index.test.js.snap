@@ -245,8 +245,8 @@ exports[`showcase: event foo 1`] = `
               *  Graph {
                  Seq [
                    1. filter {{}},
-                   2. compute {{}},
-                   3. compute {{}},
+                   2. tap {{}},
+                   3. tap {{}},
                    4. barrier {{
                       barrierID: 1
                    }},
@@ -339,8 +339,8 @@ exports[`showcase: store a 1`] = `
     *  Graph {
        Seq [
          1. filter {{}},
-         2. compute {{}},
-         3. compute {{}},
+         2. tap {{}},
+         3. tap {{}},
          4. barrier {{
             barrierID: 1
          }},

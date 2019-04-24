@@ -31,6 +31,7 @@ export type Cmd =
   | Emit
   | Compute
   | Barrier
+  | Tap
 
 export type Barrier = {|
   +id: ID,
@@ -82,6 +83,16 @@ export type Emit = {|
 export type Compute = {|
   +id: ID,
   +type: 'compute',
+  +group: 'cmd',
+  +data: {|
+    fn: (data: any, scope: {[string]: any}) => any,
+    meta?: NodeMeta,
+  |},
+|}
+
+export type Tap = {|
+  +id: ID,
+  +type: 'tap',
   +group: 'cmd',
   +data: {|
     fn: (data: any, scope: {[string]: any}) => any,

@@ -11,6 +11,7 @@ import type {
   Filter,
   Compute,
   Barrier,
+  Tap,
 } from 'effector/stdlib'
 import {getGraph, writeRef} from 'effector/stdlib'
 import {__CANARY__} from 'effector/flags'
@@ -288,6 +289,15 @@ const command = {
     })
     local.isFailed = runCtx.err
     return runCtx.result
+  },
+  tap(meta, local, step: $PropertyType<Tap, 'data'>) {
+    const runCtx = tryRun({
+      arg: local.arg,
+      val: meta.val,
+      fn: step.fn,
+    })
+    local.isFailed = runCtx.err
+    return local.arg
   },
 }
 const tryRun = ctx => {

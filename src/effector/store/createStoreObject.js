@@ -31,19 +31,16 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       && upd !== undefined
       ),
     }),
-    step.compute({
+    step.tap({
       fn(upd, {isFresh, target, clone}: CombinationScope) {
-        if (!readRef(isFresh)) {
-          writeRef(target, clone(readRef(target)))
-          writeRef(isFresh, true)
-        }
-        return upd
+        if (readRef(isFresh)) return
+        writeRef(target, clone(readRef(target)))
+        writeRef(isFresh, true)
       },
     }),
-    step.compute({
+    step.tap({
       fn(upd, {target, key}: CombinationScope) {
         readRef(target)[key] = upd
-        return null
       },
     }),
     step.barrier({barrierID: nextBarrierID()}),
@@ -75,12 +72,6 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
         scope: {key, clone, target: store.stateRef, isFresh},
         node,
         child: [store],
-        meta: {
-          isUnit: false,
-          isLink: true,
-          isWatch: false,
-          link: 'StoreObject',
-        },
       }),
     })
   }

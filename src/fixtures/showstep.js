@@ -11,7 +11,7 @@ const showCmdDef = (_: Cmd) =>
     2,
   ).replace(/\"/gi, '')}}`
 export function show(
-  value: Graph<any>,
+  value: Graph,
   showCmd: (cmd: Cmd) => string = showCmdDef,
 ): string {
   const print = {

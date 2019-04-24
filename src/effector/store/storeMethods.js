@@ -26,10 +26,6 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
 
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
   const from: Event<any> = event
-  const meta = {
-    fullName: storeInstance.compositeName?.fullName,
-    section: storeInstance.id,
-  }
   const oldLink = storeInstance.subscribers.get(from)
   if (oldLink) oldLink()
   storeInstance.subscribers.set(
@@ -51,15 +47,8 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               if (result === undefined) return
               return writeRef(state, result)
             },
-            meta,
           }),
-        ],
-        meta: {
-          isUnit: false,
-          isLink: true,
-          isWatch: false,
-          link: 'on',
-        },
+        ]
       }),
     }),
   )
@@ -123,10 +112,6 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     console.error(err)
   }
   stopPhaseTimer(stopPhaseTimerMessage)
-  const meta = {
-    fullName: storeInstance.compositeName?.fullName,
-    section: storeInstance.id,
-  }
   return forward({
     from: storeInstance,
     to: createGraph({
@@ -149,15 +134,8 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
             }
             stopPhaseTimer(stopPhaseTimerMessage)
           },
-          meta,
         }),
       ],
-      meta: {
-        isUnit: false,
-        isLink: true,
-        isWatch: false,
-        link: 'subscribe',
-      },
     }),
   })
 }
@@ -188,10 +166,6 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  const meta = {
-    fullName: innerStore.compositeName?.fullName,
-    section: store.id,
-  }
   forward({
     from: store,
     to: createGraph({
@@ -212,16 +186,9 @@ export function mapStore<A, B>(
             stopPhaseTimer(stopPhaseTimerMessage)
             return result
           },
-          meta,
         }),
         filterChanged,
       ],
-      meta: {
-        isUnit: false,
-        isLink: true,
-        isWatch: false,
-        link: 'map',
-      },
     }),
   })
   return innerStore
