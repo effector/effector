@@ -47,7 +47,7 @@ Effector is an effective multi store state manager for Javascript apps __(React/
 > Detailed comparison with other state managers will be added soon
 
 ### Effector follows five basic principles:
-- __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer. Stores should be freely combined - the idea is that the data that an application needs can be distributed statically, showing how it will be converted during application operation.
+- __Application stores should be as light as possible__ - the idea of adding a store for specific needs should not be frightening or damaging to the developer.
 - __Application stores should be freely combined__ - data that the application needs can be statically distributed, showing how it will be converted in runtime.
 - __Autonomy from controversial concepts__ - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
 - __Predictability and clarity of API__ - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
