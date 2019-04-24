@@ -1,4 +1,5 @@
 //@flow
+
 import $$observable from 'symbol-observable'
 import {createStore, createEvent, forward} from 'effector'
 import {ActionTypes} from './actionTypes'
@@ -92,8 +93,10 @@ export function createReduxStore<T>(
     throw new Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
-        'together to a single function'
+        'together to a single function',
     )
   }
   return normalizeArgs<T>(reducer, defaultState, enhancer)
 }
+
+export {combineReducers} from './combineReducers'
