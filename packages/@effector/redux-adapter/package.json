@@ -1,0 +1,63 @@
+{
+  "name": "@effector/redux-adapter",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Effector adapter for Redux",
+  "main": "adapter.cjs.js",
+  "module": "adapter.es.js",
+  "umd:main": "adapter.umd.js",
+  "jsnext:main": "adapter.es.js",
+  "typings": "index.d.ts",
+  "peerDependencies": {
+    "effector": "*"
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "index.d.ts",
+    "index.js.flow",
+    "adapter.es.js",
+    "adapter.cjs.js",
+    "adapter.umd.js",
+    "adapter.es.js.map",
+    "adapter.cjs.js.map",
+    "adapter.umd.js.map",
+    "adapter.cjs.js.flow",
+    "adapter.es.js.flow",
+    "adapter.umd.js.flow"
+  ],
+  "keywords": [
+    "data",
+    "datastructure",
+    "functional",
+    "collection",
+    "state",
+    "store",
+    "reactive",
+    "streams",
+    "actions",
+    "effects",
+    "redux"
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}

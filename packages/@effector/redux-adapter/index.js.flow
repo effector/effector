@@ -1,0 +1,53 @@
+//@flow
+
+export type Action<T> = {
+  type: T,
+}
+
+export type DispatchAPI<A> = (action: A) => A
+
+export type Dispatch<A: {type: *}> = DispatchAPI<A>
+
+export type Store<S, A, D = Dispatch<A>> = {
+  // rewrite MiddlewareAPI members in order to get nicer error messages (intersections produce long messages)
+  dispatch: D,
+  getState(): S,
+  subscribe(listener: () => void): () => void,
+  replaceReducer(nextReducer: Reducer<S, A>): void,
+}
+
+export type Reducer<S, A> = (state: S | void, action: A) => S
+
+export type CombinedReducer<S, A> = (
+  state: ($Shape<S> & {}) | void,
+  action: A,
+) => S
+
+export type StoreCreator<S, A, D = Dispatch<A>> = {
+  (reducer: Reducer<S, A>, enhancer?: StoreEnhancer<S, A, D>): Store<S, A, D>,
+  (
+    reducer: Reducer<S, A>,
+    preloadedState: S,
+    enhancer?: StoreEnhancer<S, A, D>,
+  ): Store<S, A, D>,
+}
+
+export type StoreEnhancer<S, A, D = Dispatch<A>> = (
+  next: StoreCreator<S, A, D>,
+) => StoreCreator<S, A, D>
+
+declare export function createReduxStore<S, A, D>(
+  reducer: Reducer<S, A>,
+  enhancer?: StoreEnhancer<S, A, D>,
+): Store<S, A, D>
+declare export function createReduxStore<S, A, D>(
+  reducer: Reducer<S, A>,
+  preloadedState?: S,
+  enhancer?: StoreEnhancer<S, A, D>,
+): Store<S, A, D>
+
+declare export function combineReducers<O: {}, A>(
+  reducers: O,
+): CombinedReducer<$ObjMap<O, <S>(r: Reducer<S, any>) => S>, A>
+
+declare export var compose: $Compose
