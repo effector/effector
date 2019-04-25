@@ -31,11 +31,11 @@ const IntHook = () => {
 }
 
 const App = () => (
-  <main>
+  <div>
     <button onClick={plus}>click</button>
     <IntView/>
     <IntHook/>
-  </main>
+  </div>
 )
 
 const div = document.createElement('div')
