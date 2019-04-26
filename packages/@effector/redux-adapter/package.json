@@ -1,16 +1,11 @@
 {
   "name": "@effector/redux-adapter",
-  "version": "0.0.0",
-  "private": true,
   "description": "Effector adapter for Redux",
+  "version": "0.0.1",
   "main": "adapter.cjs.js",
   "module": "adapter.es.js",
   "umd:main": "adapter.umd.js",
   "jsnext:main": "adapter.es.js",
-  "typings": "index.d.ts",
-  "peerDependencies": {
-    "effector": "*"
-  },
   "files": [
     "README.md",
     "LICENSE",
@@ -26,6 +21,7 @@
     "adapter.es.js.flow",
     "adapter.umd.js.flow"
   ],
+  "typings": "index.d.ts",
   "keywords": [
     "data",
     "datastructure",

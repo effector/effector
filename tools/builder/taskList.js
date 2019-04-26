@@ -16,7 +16,7 @@ function onFinish(stats) {
   }
   console.log(
     label(chalk.bgKeyword('orange'), 'WARN'),
-    chalk.bold.keyword('orange')('some tasks are failed'),
+    chalk.bold.keyword('orange')('some tasks failed'),
   )
   for (const name in stats.fail) {
     console.log(chalk.keyword('orange')(`  - ${name}`))

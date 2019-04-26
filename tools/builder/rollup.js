@@ -264,6 +264,81 @@ export async function rollupEffector() {
   }
 }
 
+export async function rollupEffectorReduxAdapter() {
+  const name = '@effector/redux-adapter'
+
+  await Promise.all([cjsAndEs(), umd()])
+
+  async function cjsAndEs() {
+    const plugins = getPlugins(name)
+    const build = await rollup({
+      input: (dir(`packages/${name}/index.js`): string),
+      external: [
+        'warning',
+        'invariant',
+        'react',
+        'vue',
+        'most',
+        'symbol-observable',
+        'effector',
+      ],
+      plugins: [
+        plugins.resolve,
+        plugins.json,
+        plugins.babel,
+        plugins.sizeSnapshot,
+        plugins.terser,
+        plugins.analyzer,
+      ],
+    })
+
+    await Promise.all([
+      build.write({
+        file: dir(`npm/${name}/adapter.cjs.js`),
+        format: 'cjs',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+      build.write({
+        file: dir(`npm/${name}/adapter.es.js`),
+        format: 'es',
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
+    ])
+  }
+  async function umd() {
+    const plugins = getPlugins(`${name}.umd`)
+    //$off
+    const build = await rollup({
+      input: String(dir(`packages/${name}/index.js`)),
+      plugins: [
+        plugins.resolve,
+        plugins.json,
+        plugins.babel,
+        plugins.replace,
+        plugins.commonjs,
+        plugins.sizeSnapshot,
+        plugins.terser,
+        plugins.analyzer,
+      ],
+      external: ['effector'],
+    })
+
+    await build.write({
+      file: (dir(`npm/${name}/adapter.umd.js`): string),
+      format: 'umd',
+      name: 'effectorReduxAdapter',
+      sourcemap: true,
+      globals: {
+        effector: 'effector',
+      },
+    })
+  }
+}
+
 export async function rollupEffectorForms() {
   const name = '@effector/forms'
 

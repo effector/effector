@@ -164,6 +164,7 @@
     "effector-react": "./src/react",
     "effector-vue": "./src/vue",
     "@effector/forms": "./src/forms",
+    "@effector/redux-adapter": "./src/redux",
     "effector/validate": "./src/effector/validate",
     "effector/domain": "./src/effector/domain",
     "effector/effect": "./src/effector/effect",
