@@ -4,7 +4,23 @@ title: From Redux
 sidebar_label: From Redux
 ---
 
-Soon.
+> Work in Progress
+
+## Preparation
+
+Install Redux adapter
+
+**Prerequisite**: either NPM (comes with [node](https://nodejs.org/en/)) or [Yarn](https://yarnpkg.com/en/).
+
+To install the stable version:
+
+```sh
+npm install --save @effector/redux-adapter
+```
+
+```sh
+yarn add @effector/redux-adapter
+```
 
 ## Concepts
 
@@ -53,3 +69,12 @@ Soon.
 
   </tbody>
 </table>
+
+## Migrating
+
+Replace your `createStore` call with `createReduxStore`:
+
+```diff
+-import {createStore} from 'redux'
++import {createReduxStore} from '@effector/redux-adapter'
+```
