@@ -28,7 +28,7 @@ https://gitpod.io/#https://github.com/zerobias/effector
 
 ### `yarn build`
 
-This command uses [`./tasks`](https://github.com/zerobias/effector/tree/master/tasks) to generate package.json for each npm-package from `./packages`.
+This command uses [`./tasks`](https://github.com/zerobias/effector/tree/master/tasks) to generate package.json for each npm-package from `./packages` and build sources.
 Rollup builds source files to `./npm` directory.
 
 
