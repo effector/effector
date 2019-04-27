@@ -17,6 +17,25 @@ Another way is to use [gitpod](https://gitpod.io):
 
 https://gitpod.io/#https://github.com/zerobias/effector
 
+### Structure
+
+- `docs` is a directory with .md files to build [effector.now.sh](https://effector.now.sh)
+- `src` contains all source files of effector, effector-react, ...
+- `packages` contains all files required to publish npm-packages
+- `tasks` is a directory with scripts to build npm-packages
+- `website` contains source files of [effector.now.sh](https://effector.now.sh)
+
+
+### `yarn build`
+
+This command uses [`./tasks`](https://github.com/zerobias/effector/tree/master/tasks) to generate package.json for each npm-package from `./packages`.
+Rollup builds source files to `./npm` directory.
+
+
+### Tests
+
+Just use `yarn test` and `yarn test:watch`.
+
 ### New Features
 
 Please open an issue with a proposal for a new feature or refactoring before starting on the work.
