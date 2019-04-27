@@ -13,6 +13,10 @@ Fork, then clone the repo:
 git clone https://github.com/your-username/effector.git
 ```
 
+Another way is to use [gitpod](https://gitpod.io):
+
+https://gitpod.io/#https://github.com/zerobias/effector
+
 ### New Features
 
 Please open an issue with a proposal for a new feature or refactoring before starting on the work.
