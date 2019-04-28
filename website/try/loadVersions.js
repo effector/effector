@@ -24,7 +24,7 @@ async function main() {
       console.error('Wrong version', p.version)
     }
   }
-  versions.push('develop')
+  versions.push('master')
   await fs.outputJSON(path.join(__dirname, 'versions.json'), versions.reverse())
 }
 

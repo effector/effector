@@ -38,7 +38,7 @@ const cache = {
 export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
   async handler(ver: string) {
     const url =
-      ver === 'develop'
+      ver === 'master'
         ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.cjs.js'
         : `https://unpkg.com/effector@${ver}/effector.cjs.js`
     const req = await fetch(url)
@@ -50,7 +50,7 @@ export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector'
 export const fetchBabelPlugin = createEffect('fetch babel plugin', {
   async handler(ver: string) {
     const url =
-      ver === 'develop'
+      ver === 'master'
         ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/@effector/babel-plugin/index.js'
         : `https://unpkg.com/@effector/babel-plugin@latest/index.js`
     const req = await fetch(url)
