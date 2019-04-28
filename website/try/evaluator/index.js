@@ -47,6 +47,8 @@ export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector'
   },
 })
 
+fetchEffector.fail.watch(() => selectVersion('master'))
+
 export const fetchBabelPlugin = createEffect('fetch babel plugin', {
   async handler(ver: string) {
     const url =
@@ -58,6 +60,8 @@ export const fetchBabelPlugin = createEffect('fetch babel plugin', {
     return createRealm(text, ver)
   },
 })
+
+fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
   'effector': fetchEffector,

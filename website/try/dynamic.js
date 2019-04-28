@@ -213,7 +213,7 @@ codeError
     stackFrames: [],
   }))
   .on(evalEffect.fail, (_, e) => {
-    if (e.error instanceof Error) {
+    if ('stack' in e.error) {
       return {
         isError: true,
         error: e.error,
