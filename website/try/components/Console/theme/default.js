@@ -12,6 +12,8 @@ const styles = (props: Props): Styles => ({
    */
   PADDING: '3px 22px 2px 0',
 
+  BASE_BACKGROUND_COLOR: 'transparent',
+
   /**
    * Default log styles
    */
@@ -26,7 +28,7 @@ const styles = (props: Props): Styles => ({
    * Log types
    */
   LOG_WARN_ICON: `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAACkSURBVChTbY7BCoJQFERn0Q/3BX1JuxQjsSCXiV8gtCgxhCIrKIRIqKDVzXl5w5cNHBjm6eGinXiAXu5inY2xYm/mbpIh+vcFhLA3sx0athNUhymEsP+10lAEEA17x8o/9wFuNGnYuVlWve0SQl7P0sBu3aq2R1Q/1JzSkYGd29eqNv2wjdnUuvNRciC/N+qe+7gidbA8zyHkOINsvA/sumcOkjcabcBmw2+mMgAAAABJRU5ErkJggg==)`,
-  LOG_WARN_BACKGROUND: '#FEFBE7',
+  LOG_WARN_BACKGROUND: 'rgb(254, 251, 231)',
   LOG_WARN_COLOR: '#7a653c',
   LOG_WARN_BORDER: '#fef4c7',
 
