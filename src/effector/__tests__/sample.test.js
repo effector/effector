@@ -73,4 +73,66 @@ describe('sample', () => {
     expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
     expect(spy).toHaveBeenCalledTimes(1)
   })
+
+  test('store has the same state as source', () => {
+    const stop = createEvent()
+
+    const s1 = createStore(0)
+    s1.setState(1)
+
+    const s2 = sample(s1, stop)
+
+    expect(s2.getState()).toEqual(s1.getState())
+  })
+
+  test('store has its own defaultState', () => {
+    const stop = createEvent()
+
+    const s1 = createStore(0)
+    s1.setState(1)
+
+    const s2 = sample(s1, stop)
+
+    expect(s2.defaultState).toEqual(1)
+  })
+
+  test('store updates if source updates', () => {
+    const stop = createEvent()
+
+    const s1 = createStore(0)
+    s1.setState(1)
+
+    const s2 = sample(s1, stop)
+
+    s2.watch(value => spy(value)) // 1st call
+
+    // Source updates
+    s1.setState(2)
+    s1.setState(0) // to initial state
+
+    stop() // 2nd call
+    expect(spy).toHaveBeenCalledTimes(2)
+  })
+
+  test('store updates only if source is changed', () => {
+    const stop = createEvent()
+
+    const s1 = createStore(0)
+    const s2 = sample(s1, stop)
+
+    s2.watch(value => spy(value)) // 1st call
+
+    stop()
+    s1.setState(0)
+    stop()
+
+    expect(spy).toHaveBeenCalledTimes(1)
+
+    s1.setState(1)
+    s1.setState(2)
+    stop() // 2nd call
+    stop()
+
+    expect(spy).toHaveBeenCalledTimes(2)
+  })
 })
