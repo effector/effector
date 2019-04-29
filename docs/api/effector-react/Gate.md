@@ -5,7 +5,12 @@ title: Gate
 
 _Gate_ is a hook to React rendering.
 
-It allows you to send props back to effector context (store).
+It allows you to send props back to Store.
+
+Gate can have two states:
+
+- **Open**, which means mounted
+- **Closed**, which means unmounted
 
 ### Gate Methods
 
@@ -26,7 +31,7 @@ It allows you to send props back to effector context (store).
 
 ### <a id='childGate'></a>[`childGate(childName?)`](#childGate)
 
-Returns child gate which won't render if parent gate is closed
+Returns child gate which won't render if parent gate is closed.
 
 #### Returns
 
@@ -49,5 +54,21 @@ Returns child gate which won't render if parent gate is closed
 #### Returns
 
 (boolean)
+
+<hr>
+
+### <a id='open'></a>[`open`](#open)
+
+### Returns
+
+(Event)
+
+<hr>
+
+### <a id='close'></a>[`close`](#close)
+
+### Returns
+
+(Event)
 
 <hr>
