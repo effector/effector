@@ -72,3 +72,35 @@ Returns child gate which won't render if parent gate is closed.
 (Event)
 
 <hr>
+
+### <a id='status'></a>[`status`](#status)
+
+### Returns
+
+(Store)
+
+<hr>
+
+### <a id='destructor'></a>[`destructor`](#destructor)
+
+### Returns
+
+(Event)
+
+<hr>
+
+### <a id='current'></a>[`current`](#current)
+
+### Returns
+
+(Props)
+
+<hr>
+
+### <a id='state'></a>[`state`](#state)
+
+### Returns
+
+(Store)
+
+<hr>
