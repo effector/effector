@@ -248,7 +248,8 @@ exports[`showcase: event foo 1`] = `
                    2. tap {{}},
                    3. tap {{}},
                    4. barrier {{
-                      barrierID: 1
+                      barrierID: 1,
+                      priority: barrier
                    }},
                    5. compute {{}}
                  ]
@@ -342,7 +343,8 @@ exports[`showcase: store a 1`] = `
          2. tap {{}},
          3. tap {{}},
          4. barrier {{
-            barrierID: 1
+            barrierID: 1,
+            priority: barrier
          }},
          5. compute {{}}
        ]

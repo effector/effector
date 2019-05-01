@@ -14,9 +14,17 @@ import type {
 import {stringRefcount} from './refcount'
 const nextID = stringRefcount()
 
+const cmd = (type: any, data: any): any => ({
+  id: nextID(),
+  type,
+  group: 'cmd',
+  data,
+})
+
 export const step: {
   barrier(data: {|
     +barrierID: ID,
+    +priority?: 'barrier' | 'sampler',
     meta?: NodeMeta,
   |}): Barrier,
   emit(data: {|
@@ -44,70 +52,15 @@ export const step: {
     meta?: NodeMeta,
   |}): Update,
 } = {
-  barrier: cmd.bind(null, 'barrier'),
+  barrier: ({barrierID, priority = 'barrier'}) =>
+    cmd('barrier', {
+      barrierID,
+      priority,
+    }),
   compute: cmd.bind(null, 'compute'),
   emit: cmd.bind(null, 'emit'),
   filter: cmd.bind(null, 'filter'),
   run: cmd.bind(null, 'run'),
   tap: cmd.bind(null, 'tap'),
   update: cmd.bind(null, 'update'),
-}
-
-//eslint-disable-next-line no-unused-vars
-declare export function cmd(
-  tag: 'barrier',
-  data: {|
-    +barrierID: ID,
-    meta?: NodeMeta,
-  |},
-): Barrier
-declare export function cmd(
-  tag: 'compute',
-  data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
-    meta?: NodeMeta,
-  |},
-): Compute
-declare export function cmd(
-  tag: 'emit',
-  data: {|
-    fullName: string,
-    meta?: NodeMeta,
-  |},
-): Emit
-declare export function cmd(
-  tag: 'filter',
-  data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
-    meta?: NodeMeta,
-  |},
-): Filter
-declare export function cmd(
-  tag: 'run',
-  data: {
-    fn: (data: any, scope: {[string]: any}) => any,
-    meta?: NodeMeta,
-  },
-): Run
-declare export function cmd(
-  tag: 'tap',
-  data: {
-    fn: (data: any, scope: {[string]: any}) => any,
-    meta?: NodeMeta,
-  },
-): Run
-declare export function cmd(
-  tag: 'update',
-  data: {|
-    store: StateRef,
-    meta?: NodeMeta,
-  |},
-): Update
-export function cmd(type: string, data: Object) {
-  return {
-    id: nextID(),
-    type,
-    group: 'cmd',
-    data,
-  }
 }
