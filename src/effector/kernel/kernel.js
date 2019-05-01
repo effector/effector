@@ -16,7 +16,7 @@ import type {
 import {getGraph, writeRef} from 'effector/stdlib'
 import {__CANARY__} from 'effector/flags'
 
-import {getPriority} from './getPriority'
+import {getPriority, type PriorityTag} from './getPriority'
 
 class Stack {
   /*::
@@ -28,13 +28,13 @@ class Stack {
     this.parent = parent
   }
 }
-type LayerType = 'child' | 'pure' | 'barrier' | 'effect'
+
 type Layer = {|
   +step: Graph,
   +firstIndex: number,
   +scope: Stack,
   +resetStop: boolean,
-  +type: LayerType,
+  +type: PriorityTag,
   +id: number,
 |}
 
@@ -180,7 +180,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
               firstIndex: stepn,
               scope,
               resetStop: false,
-              type: 'barrier',
+              type: step.data.priority,
               id: ++layerID,
             })
           }
