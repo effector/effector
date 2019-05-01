@@ -62,5 +62,5 @@ export function sample(source: any, sampler: Graphite): any {
     from: sampler,
     to: link,
   })
-  return link
+  return target
 }
