@@ -8,7 +8,6 @@ import {
   createGraph,
   step,
   type Graphite,
-  getGraph,
   createStateRef,
   readRef,
   nextBarrierID,
