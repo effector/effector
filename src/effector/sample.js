@@ -1,9 +1,8 @@
 //@flow
 
 import {is} from 'effector/validate'
-import {type Event, eventFabric, forward} from 'effector/event'
-import {type Store, storeFabric} from 'effector/store'
-import type {Effect} from 'effector/effect'
+import {eventFabric, forward} from 'effector/event'
+import {storeFabric} from 'effector/store'
 import {
   createGraph,
   step,
@@ -16,18 +15,31 @@ import {noop} from './blocks'
 
 import invariant from 'invariant'
 
-const samplerFabric = ({
-  source,
-  clock,
-  initial,
-}: {
-  source: Graphite,
-  clock: Graphite,
-  initial?: any,
-}) => {
+export function sample(source: any, sampler: Graphite): any {
+  invariant(
+    is.unit(source),
+    'sample: First argument should be Event, ' +
+      'Store or Effect, but you passed %s',
+    source,
+  )
+  let initial
+  let target
+  const name = source.shortName
+  const parent = source.domainName
+  if (is.store(source)) {
+    initial = source.getState()
+    target = storeFabric({
+      currentState: initial,
+      config: {name},
+      parent,
+    })
+  } else {
+    target = eventFabric({name, parent})
+  }
   const state = createStateRef(initial)
-  const sampler = createGraph({
+  const link = createGraph({
     scope: {state},
+    child: [target],
     node: [
       noop,
       step.barrier({
@@ -47,55 +59,8 @@ const samplerFabric = ({
     }),
   })
   forward({
-    from: clock,
-    to: sampler,
-  })
-  return sampler
-}
-
-function sampleStore(source: Store<any>, clock: Graphite) {
-  const initial = source.getState()
-  const sampler = samplerFabric({source, clock, initial})
-
-  const unit = storeFabric({
-    currentState: initial,
-    //TODO: add location
-    config: {name: source.shortName},
-    parent: source.domainName,
-  })
-  forward({
     from: sampler,
-    to: unit,
+    to: link,
   })
-  return unit
-}
-
-function sampleEvent(
-  source: Event<any> | Effect<any, any, any>,
-  clock: Graphite,
-) {
-  const sampler = samplerFabric({source, clock})
-  const unit = eventFabric({name: source.shortName, parent: source.domainName})
-  forward({
-    from: sampler,
-    to: unit,
-  })
-
-  return unit
-}
-
-export function sample(
-  source: Event<any> | Store<any> | Effect<any, any, any>,
-  sampler: Graphite,
-): any {
-  invariant(
-    is.unit(source),
-    'sample: First argument should be Event, ' +
-      'Store or Effect, but you passed %s',
-    source,
-  )
-  if (is.store(source)) {
-    return sampleStore(source, sampler)
-  }
-  return sampleEvent(source, sampler)
+  return link
 }
