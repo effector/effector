@@ -79,6 +79,17 @@
 @media only screen and (min-device-width: 360px) and (max-device-width: 736px) {
 }
 
+@media only screen and (max-width: 768px) {
+  .homeWrapperInner {
+    flex-direction: column;
+  }
+
+  .homeCodeSnippet {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
 @media only screen and (min-width: 1024px) {
 }
 
