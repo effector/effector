@@ -16,19 +16,16 @@ import {noop} from './blocks'
 
 import invariant from 'invariant'
 
-const sampleStore = (source, sampler) => {
-  const state = createStateRef()
+const sampleStore = (source, sampler, fn) => {
+  const state = source.stateRef
   const target = storeFabric({
-    currentState: writeRef(state, source.getState()),
+    currentState: readRef(state),
     config: {name: source.shortName},
     parent: source.domainName,
   })
 
-  createLink(source, {
-    node: [step.update({store: state})],
-  })
   createLink(sampler, {
-    scope: {state},
+    scope: {state, fn},
     child: [target],
     node: [
       noop,
@@ -37,14 +34,16 @@ const sampleStore = (source, sampler) => {
         priority: 'sampler',
       }),
       step.compute({
-        fn: (upd, {state}) => readRef(state),
+        fn: fn
+          ? (upd, {state, fn}) => readRef(fn)(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
       }),
     ],
   })
   return target
 }
 
-const sampleEvent = (source, sampler) => {
+const sampleEvent = (source, sampler, fn) => {
   const state = createStateRef()
   const target = eventFabric({
     name: source.shortName,
@@ -69,6 +68,7 @@ const sampleEvent = (source, sampler) => {
     scope: {
       state,
       hasValue,
+      fn,
     },
     child: [target],
     node: [
@@ -80,14 +80,20 @@ const sampleEvent = (source, sampler) => {
         priority: 'sampler',
       }),
       step.compute({
-        fn: (upd, {state}) => readRef(state),
+        fn: fn
+          ? (upd, {state, fn}) => readRef(fn)(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
       }),
     ],
   })
   return target
 }
 
-export function sample(source: any, sampler: Graphite): any {
+export function sample(
+  source: any,
+  sampler: Graphite,
+  fn?: (source: any, sampler: any) => any,
+): any {
   invariant(
     is.unit(source),
     'sample: First argument should be Event, ' +
@@ -95,8 +101,8 @@ export function sample(source: any, sampler: Graphite): any {
     source,
   )
   return is.store(source)
-    ? sampleStore(source, sampler)
-    : sampleEvent(source, sampler)
+    ? sampleStore(source, sampler, fn)
+    : sampleEvent(source, sampler, fn)
 }
 
 const createLink = (from, config) => {
