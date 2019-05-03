@@ -17,38 +17,29 @@ import {noop} from './blocks'
 import invariant from 'invariant'
 
 const sampleStore = (source, sampler) => {
-  const name = source.shortName
-  const parent = source.domainName
   const state = createStateRef()
-  let target
-  const readerNode = [step.update({store: state})]
-  const readerScope = {}
-  const linkNode = [
-    noop,
-    step.barrier({
-      barrierID: nextBarrierID(),
-      priority: 'sampler',
-    }),
-    step.compute({
-      fn: (upd, {state}) => readRef(state),
-    }),
-  ]
-  const linkScope = {}
-  linkScope.state = state
-  target = storeFabric({
+  const target = storeFabric({
     currentState: writeRef(state, source.getState()),
-    config: {name},
-    parent,
+    config: {name: source.shortName},
+    parent: source.domainName,
   })
 
   createLink(source, {
-    scope: readerScope,
-    node: readerNode,
+    node: [step.update({store: state})],
   })
   createLink(sampler, {
-    scope: linkScope,
+    scope: {state},
     child: [target],
-    node: linkNode,
+    node: [
+      noop,
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+      step.compute({
+        fn: (upd, {state}) => readRef(state),
+      }),
+    ],
   })
   return target
 }
