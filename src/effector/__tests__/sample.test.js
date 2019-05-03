@@ -67,7 +67,7 @@ describe('sample', () => {
         expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
         expect(spy).toHaveBeenCalledTimes(1)
         add(4)
-        expect(getSpyCalls()).toEqual([[{x: 'baz'}, {x: 'baz'}]])
+        expect(getSpyCalls()).toEqual([[{x: 'baz'}], [{x: 'baz'}]])
         expect(spy).toHaveBeenCalledTimes(2)
       },
     )
