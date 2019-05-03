@@ -28,6 +28,23 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
+    test('no updates until first source update', () => {
+      const data = createEvent('data')
+      const stop = createEvent('stop')
+
+      const lastData = sample(data, stop)
+
+      lastData.watch(value => spy(value))
+
+      stop()
+      stop()
+      expect(spy).not.toHaveBeenCalled()
+      data({x: 'baz'})
+      expect(spy).not.toHaveBeenCalled()
+      stop()
+      expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
   describe('sample with effect as source', () => {
     test('effect', () => {
