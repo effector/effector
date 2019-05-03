@@ -61,10 +61,12 @@ describe('sample', () => {
         add(2)
         expect(spy).not.toHaveBeenCalled()
         data({x: 'baz'})
+        add(0) //edge case: store will not be updated
+        expect(spy).not.toHaveBeenCalled()
+        add(3)
         expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
         expect(spy).toHaveBeenCalledTimes(1)
-        add(0) //edge case: store will not be updated
-        add(3)
+        add(4)
         expect(getSpyCalls()).toEqual([[{x: 'baz'}, {x: 'baz'}]])
         expect(spy).toHaveBeenCalledTimes(2)
       },
