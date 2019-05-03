@@ -9,130 +9,133 @@ import {createEffect} from 'effector/effect'
 import {spy, getSpyCalls} from 'effector/fixtures'
 
 describe('sample', () => {
-  test('store', () => {
-    const inc = createEvent('inc')
-    const dec = createEvent('dec')
-    const stop = createEvent('stop')
+  describe('sample with event as source', () => {
+    test('event', () => {
+      const data = createEvent('data')
+      const stop = createEvent('stop')
 
-    const s1 = createStore(0)
-    const s2 = sample(s1, stop)
+      const lastData = sample(data, stop)
 
-    s2.watch(value => spy(value))
+      lastData.watch(value => spy(value))
 
-    s1.on(inc, n => n + 1).on(dec, n => n - 1)
+      data({foo: 'bar'})
+      data(true)
+      data(false)
+      data({x: 'baz'})
 
-    inc()
-    dec()
-    inc()
-    inc()
+      stop()
 
-    stop()
-
-    expect(getSpyCalls()).toEqual([[0], [2]])
-    expect(spy).toHaveBeenCalledTimes(2)
-  })
-
-  test('event', () => {
-    const data = createEvent('data')
-    const stop = createEvent('stop')
-
-    const lastData = sample(data, stop)
-
-    lastData.watch(value => spy(value))
-
-    data({foo: 'bar'})
-    data(true)
-    data(false)
-    data({x: 'baz'})
-
-    stop()
-
-    expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
-    expect(spy).toHaveBeenCalledTimes(1)
-  })
-
-  test('effect', () => {
-    const data = createEffect('data', {
-      handler() {
-        return 'resolved'
-      },
+      expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
+      expect(spy).toHaveBeenCalledTimes(1)
     })
-    const stop = createEvent('stop')
-
-    const lastData = sample(data, stop)
-
-    lastData.watch(value => spy(value))
-
-    data({foo: 'bar'})
-    data(true)
-    data(false)
-    data({x: 'baz'})
-
-    stop()
-
-    expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
-    expect(spy).toHaveBeenCalledTimes(1)
   })
+  describe('sample with effect as source', () => {
+    test('effect', () => {
+      const data = createEffect('data', {
+        handler() {
+          return 'resolved'
+        },
+      })
+      const stop = createEvent('stop')
 
-  test('store has the same state as source', () => {
-    const stop = createEvent()
+      const lastData = sample(data, stop)
 
-    const s1 = createStore(0)
-    s1.setState(1)
+      lastData.watch(value => spy(value))
 
-    const s2 = sample(s1, stop)
+      data({foo: 'bar'})
+      data(true)
+      data(false)
+      data({x: 'baz'})
 
-    expect(s2.getState()).toEqual(s1.getState())
+      stop()
+
+      expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
+      expect(spy).toHaveBeenCalledTimes(1)
+    })
   })
+  describe('sample with store as source', () => {
+    test('store', () => {
+      const inc = createEvent('inc')
+      const dec = createEvent('dec')
+      const stop = createEvent('stop')
 
-  test('store has its own defaultState', () => {
-    const stop = createEvent()
+      const s1 = createStore(0)
+      const s2 = sample(s1, stop)
 
-    const s1 = createStore(0)
-    s1.setState(1)
+      s2.watch(value => spy(value))
 
-    const s2 = sample(s1, stop)
+      s1.on(inc, n => n + 1).on(dec, n => n - 1)
 
-    expect(s2.defaultState).toEqual(1)
-  })
+      inc()
+      dec()
+      inc()
+      inc()
 
-  test('store updates if source updates', () => {
-    const stop = createEvent()
+      stop()
 
-    const s1 = createStore(0)
-    s1.setState(1)
+      expect(getSpyCalls()).toEqual([[0], [2]])
+      expect(spy).toHaveBeenCalledTimes(2)
+    })
+    test('store has the same state as source', () => {
+      const stop = createEvent()
 
-    const s2 = sample(s1, stop)
+      const s1 = createStore(0)
+      s1.setState(1)
 
-    s2.watch(value => spy(value)) // 1st call
+      const s2 = sample(s1, stop)
 
-    // Source updates
-    s1.setState(2)
-    s1.setState(0) // to initial state
+      expect(s2.getState()).toEqual(s1.getState())
+    })
 
-    stop() // 2nd call
-    expect(spy).toHaveBeenCalledTimes(2)
-  })
+    test('store has its own defaultState', () => {
+      const stop = createEvent()
 
-  test('store updates only if source is changed', () => {
-    const stop = createEvent()
+      const s1 = createStore(0)
+      s1.setState(1)
 
-    const s1 = createStore(0)
-    const s2 = sample(s1, stop)
+      const s2 = sample(s1, stop)
 
-    s2.watch(value => spy(value)) // 1st call
+      expect(s2.defaultState).toEqual(1)
+    })
 
-    stop()
-    s1.setState(0)
-    stop()
+    test('store updates if source updates', () => {
+      const stop = createEvent()
 
-    expect(spy).toHaveBeenCalledTimes(1)
+      const s1 = createStore(0)
+      s1.setState(1)
 
-    s1.setState(1)
-    s1.setState(2)
-    stop() // 2nd call
-    stop()
+      const s2 = sample(s1, stop)
 
-    expect(spy).toHaveBeenCalledTimes(2)
+      s2.watch(value => spy(value)) // 1st call
+
+      // Source updates
+      s1.setState(2)
+      s1.setState(0) // to initial state
+
+      stop() // 2nd call
+      expect(spy).toHaveBeenCalledTimes(2)
+    })
+
+    test('store updates only if source is changed', () => {
+      const stop = createEvent()
+
+      const s1 = createStore(0)
+      const s2 = sample(s1, stop)
+
+      s2.watch(value => spy(value)) // 1st call
+
+      stop()
+      s1.setState(0)
+      stop()
+
+      expect(spy).toHaveBeenCalledTimes(1)
+
+      s1.setState(1)
+      s1.setState(2)
+      stop() // 2nd call
+      stop()
+
+      expect(spy).toHaveBeenCalledTimes(2)
+    })
   })
 })
