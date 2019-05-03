@@ -16,41 +16,19 @@ import {noop} from './blocks'
 
 import invariant from 'invariant'
 
-const sampleStore = (source, sampler, fn) => {
-  const state = source.stateRef
-  const target = storeFabric({
-    currentState: readRef(state),
-    config: {name: source.shortName},
-    parent: source.domainName,
-  })
-
-  createLink(sampler, {
-    scope: {state, fn},
-    child: [target],
-    node: [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
-      step.compute({
-        fn: fn
-          ? (upd, {state, fn}) => readRef(fn)(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
-      }),
-    ],
-  })
-  return target
-}
-
-const sampleEvent = (source, sampler, fn) => {
+const sampleFabric = ({
+  source,
+  sampler,
+  fn,
+  target,
+}: {
+  source: Graphite,
+  sampler: Graphite,
+  fn?: (source: any, sampler: any) => any,
+  target: Graphite,
+}) => {
   const state = createStateRef()
-  const target = eventFabric({
-    name: source.shortName,
-    parent: source.domainName,
-  })
   const hasValue = createStateRef(false)
-
   createLink(source, {
     scope: {
       hasValue,
@@ -64,7 +42,7 @@ const sampleEvent = (source, sampler, fn) => {
       }),
     ],
   })
-  createLink(sampler, {
+  return createLink(sampler, {
     scope: {
       state,
       hasValue,
@@ -86,7 +64,6 @@ const sampleEvent = (source, sampler, fn) => {
       }),
     ],
   })
-  return target
 }
 
 export function sample(
@@ -94,18 +71,38 @@ export function sample(
   sampler: Graphite,
   fn?: (source: any, sampler: any) => any,
 ): any {
+  if (!sampler) {
+    return sampleFabric(source)
+  }
+
+  let target
+  if (is.store(source)) {
+    target = storeFabric({
+      currentState: readRef(source.stateRef),
+      config: {name: source.shortName},
+      parent: source.domainName,
+    })
+  } else {
+    target = eventFabric({
+      name: source.shortName,
+      parent: source.domainName,
+    })
+  }
   if (Array.isArray(source)) {
     const shape = createStoreObject(source)
-    return sampleStore(shape, sampler, fn)
+    return sampleFabric({
+      source: shape,
+      sampler,
+      fn,
+      target,
+    })
   }
   if (is.unit(source)) {
-    return is.store(source)
-      ? sampleStore(source, sampler, fn)
-      : sampleEvent(source, sampler, fn)
+    return sampleFabric({source, sampler, fn, target})
   }
   if (typeof source === 'object' && source !== null) {
     const shape = createStoreObject(source)
-    return sampleStore(shape, sampler, fn)
+    return sampleFabric({source: shape, sampler, fn, target})
   }
   invariant(
     false,
