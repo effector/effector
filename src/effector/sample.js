@@ -2,7 +2,7 @@
 
 import {is} from 'effector/validate'
 import {eventFabric, forward} from 'effector/event'
-import {storeFabric} from 'effector/store'
+import {storeFabric, createStoreObject} from 'effector/store'
 import {
   createGraph,
   step,
@@ -94,15 +94,25 @@ export function sample(
   sampler: Graphite,
   fn?: (source: any, sampler: any) => any,
 ): any {
+  if (Array.isArray(source)) {
+    const shape = createStoreObject(source)
+    return sampleStore(shape, sampler, fn)
+  }
+  if (is.unit(source)) {
+    return is.store(source)
+      ? sampleStore(source, sampler, fn)
+      : sampleEvent(source, sampler, fn)
+  }
+  if (typeof source === 'object' && source !== null) {
+    const shape = createStoreObject(source)
+    return sampleStore(shape, sampler, fn)
+  }
   invariant(
-    is.unit(source),
+    false,
     'sample: First argument should be Event, ' +
-      'Store or Effect, but you passed %s',
-    source,
+      'Store, Effect [store, store, ...], or ' +
+      '{foo: store, bar: store}',
   )
-  return is.store(source)
-    ? sampleStore(source, sampler, fn)
-    : sampleEvent(source, sampler, fn)
 }
 
 const createLink = (from, config) => {
