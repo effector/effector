@@ -45,6 +45,30 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
+    test(
+      'edge case: no updates until first source update ' +
+        'even when clock is store',
+      () => {
+        const data = createEvent('data')
+        const add = createEvent('+ n')
+        const stop = createStore(0).on(add, (x, n) => x + n)
+
+        const lastData = sample(data, stop)
+
+        lastData.watch(value => spy(value))
+
+        add(1)
+        add(2)
+        expect(spy).not.toHaveBeenCalled()
+        data({x: 'baz'})
+        expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
+        expect(spy).toHaveBeenCalledTimes(1)
+        add(0) //edge case: store will not be updated
+        add(3)
+        expect(getSpyCalls()).toEqual([[{x: 'baz'}, {x: 'baz'}]])
+        expect(spy).toHaveBeenCalledTimes(2)
+      },
+    )
   })
   describe('sample with effect as source', () => {
     test('effect', () => {
