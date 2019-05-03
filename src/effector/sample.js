@@ -64,22 +64,20 @@ export function sample(source: any, sampler: Graphite): any {
       }),
     )
   }
-  const link = createGraph({
+
+  createLink(source, {
+    scope: readerScope,
+    node: readerNode,
+  })
+  createLink(sampler, {
     scope: linkScope,
     child: [target],
     node: linkNode,
   })
-
-  forward({
-    from: source,
-    to: createGraph({
-      scope: readerScope,
-      node: readerNode,
-    }),
-  })
-  forward({
-    from: sampler,
-    to: link,
-  })
   return target
+}
+
+const createLink = (from, config) => {
+  const to = createGraph(config)
+  return forward({from, to})
 }
