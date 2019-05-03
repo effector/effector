@@ -54,48 +54,44 @@ const sampleStore = (source, sampler) => {
 }
 
 const sampleEvent = (source, sampler) => {
-  const name = source.shortName
-  const parent = source.domainName
   const state = createStateRef()
-  let target
-  const readerNode = [step.update({store: state})]
-  const readerScope = {}
-  const linkNode = [
-    noop,
-    step.barrier({
-      barrierID: nextBarrierID(),
-      priority: 'sampler',
-    }),
-    step.compute({
-      fn: (upd, {state}) => readRef(state),
-    }),
-  ]
-  const linkScope = {}
-  linkScope.state = state
-
-  target = eventFabric({name, parent})
-  const hasValue = createStateRef(false)
-  linkScope.hasValue = hasValue
-  readerScope.hasValue = hasValue
-  linkNode[0] = step.filter({
-    fn: (upd, {hasValue}) => readRef(hasValue),
+  const target = eventFabric({
+    name: source.shortName,
+    parent: source.domainName,
   })
-  readerNode.push(
-    step.tap({
-      fn(upd, {hasValue}) {
-        writeRef(hasValue, true)
-      },
-    }),
-  )
+  const hasValue = createStateRef(false)
 
   createLink(source, {
-    scope: readerScope,
-    node: readerNode,
+    scope: {
+      hasValue,
+    },
+    node: [
+      step.update({store: state}),
+      step.tap({
+        fn(upd, {hasValue}) {
+          writeRef(hasValue, true)
+        },
+      }),
+    ],
   })
   createLink(sampler, {
-    scope: linkScope,
+    scope: {
+      state,
+      hasValue,
+    },
     child: [target],
-    node: linkNode,
+    node: [
+      step.filter({
+        fn: (upd, {hasValue}) => readRef(hasValue),
+      }),
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+      step.compute({
+        fn: (upd, {state}) => readRef(state),
+      }),
+    ],
   })
   return target
 }
