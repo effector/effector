@@ -1,9 +1,0 @@
-{
-  "short_name": "Try",
-  "name": "Effector Try",
-  "display": "standalone",
-  "start_url": "./try",
-  "background_color": "#e95801",
-  "theme_color": "#e95801",
-  "scope": "/try"
-}
