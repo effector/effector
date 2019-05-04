@@ -57,7 +57,7 @@ const sampleFabric = ({
       }),
       step.compute({
         fn: fn
-          ? (upd, {state, fn}) => readRef(fn)(readRef(state), upd)
+          ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
     ],
