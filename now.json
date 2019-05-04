@@ -11,12 +11,12 @@
     {
       "src": "website/client/package.json",
       "use": "@now/static-build",
-      "config": { "distDir": "website/client/build/effector" }
+      "config": { "distDir": "build/effector" }
     },
     {
       "src": "website/editor/package.json",
       "use": "@now/static-build",
-      "config": { "distDir": "website/editor/dist" }
+      "config": { "distDir": "dist" }
     },
     {
       "src": "website/media/*.*",
