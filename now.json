@@ -58,19 +58,19 @@
     },
     {
       "src": "/try/(?<file>[^/]+)",
-      "dest": "/website/editor/dist/$file"
+      "dest": "/website/editor/$file"
     },
     {
       "src": "/try/?(?<qr>[^/]*)",
-      "dest": "/website/editor/dist/index.html?$qr"
+      "dest": "/website/editor/index.html?$qr"
     },
     {
       "src": "/try",
-      "dest": "/website/editor/dist/index.html"
+      "dest": "/website/editor/index.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/website/client/build/effector/$1"
+      "dest": "/website/client/$1"
     }
   ]
 }
