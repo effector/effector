@@ -3,11 +3,8 @@
     "examples": "docusaurus-examples",
     "start": "docusaurus-start",
     "build": "docusaurus-build",
-    "start:try": "npx parcel try/index.html",
-    "build:try": "npx parcel build -d static/try -o try.js --no-autoinstall --public-url /try try/index.js",
-    "watch:try": "npx parcel watch -d static/try -o try.js --no-autoinstall --public-url /try try/index.js",
     "publish-gh-pages": "docusaurus-publish",
-    "now-build": "yarn && yarn build:try && yarn build",
+    "now-build": "cp -rf ../../docs ../docs && yarn build",
     "write-translations": "docusaurus-write-translations",
     "version": "docusaurus-version",
     "rename-version": "docusaurus-rename-version"
