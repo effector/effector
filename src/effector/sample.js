@@ -1,10 +1,9 @@
 //@flow
 
 import {is} from 'effector/validate'
-import {eventFabric, forward} from 'effector/event'
+import {eventFabric, createLink} from 'effector/event'
 import {storeFabric, createStoreObject} from 'effector/store'
 import {
-  createGraph,
   step,
   type Graphite,
   createStateRef,
@@ -12,7 +11,6 @@ import {
   writeRef,
   nextBarrierID,
 } from 'effector/stdlib'
-import {noop} from './blocks'
 
 import invariant from 'invariant'
 
@@ -123,9 +121,4 @@ export function sample(
       'Store, Effect [store, store, ...], or ' +
       '{foo: store, bar: store}',
   )
-}
-
-const createLink = (from, config) => {
-  const to = createGraph(config)
-  return forward({from, to})
 }
