@@ -71,6 +71,21 @@ describe('sample', () => {
         expect(spy).toHaveBeenCalledTimes(2)
       },
     )
+    test('handler works', () => {
+      const release = createEvent()
+      const emit = createEvent()
+      const received = sample(emit, release, (last, payload) => [last, payload])
+      received.watch(value => spy(value))
+      release(0)
+      emit(1)
+      emit(2)
+      release(3)
+      release(4)
+      emit(5)
+      expect(getSpyCalls()).toEqual([
+        [[2, 3]], [[2, 4]]
+      ])
+    })
   })
   describe('sample with effect as source', () => {
     test('effect', () => {
