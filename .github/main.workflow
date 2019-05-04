@@ -1,11 +1,6 @@
-workflow "New workflow" {
-  on = "push"
-  resolves = ["Docusaurus"]
-}
-
-action "Master" {
+action "Master (disabled)" {
   uses = "actions/bin/filter@master"
-  args = "branch master"
+  args = "branch workflow"
 }
 
 action "Docusaurus" {
@@ -14,5 +9,5 @@ action "Docusaurus" {
     "GITHUB_TOKEN",
     "NOW_TOKEN",
   ]
-  needs = ["Master"]
+  needs = ["Master (disabled)"]
 }
