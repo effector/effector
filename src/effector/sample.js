@@ -90,19 +90,32 @@ export function sample(
   }
   if (Array.isArray(source)) {
     const shape = createStoreObject(source)
-    return sampleFabric({
+    target = storeFabric({
+      currentState: readRef(shape.stateRef),
+      config: {name: shape.shortName},
+      parent: shape.domainName,
+    })
+    sampleFabric({
       source: shape,
       sampler,
       fn,
       target,
     })
+    return target
   }
   if (is.unit(source)) {
-    return sampleFabric({source, sampler, fn, target})
+    sampleFabric({source, sampler, fn, target})
+    return target
   }
   if (typeof source === 'object' && source !== null) {
     const shape = createStoreObject(source)
-    return sampleFabric({source: shape, sampler, fn, target})
+    target = storeFabric({
+      currentState: readRef(shape.stateRef),
+      config: {name: shape.shortName},
+      parent: shape.domainName,
+    })
+    sampleFabric({source: shape, sampler, fn, target})
+    return target
   }
   invariant(
     false,
