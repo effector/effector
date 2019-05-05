@@ -22,17 +22,36 @@ The only requirement for function:
 #### Example
 
 ```js
+const getUser = createEffect('get user')
 
-// Unnamed effect without thunk
-const effectA = createEffect()
-
-// Named effect without thunk
-const effectB = createEffect("name")
-
-// Named effect with thunk
-const effectC = createEffect("name", {
-  handler: (params) => {},
+getUser.use(params => {
+  return fetch(`https://example.com/get-user/${params.id}`)
+    .then(res => res.json())
 })
+
+const users = createStore([]) // <-- Default state
+  // add reducer for getUser.done event (fires when promise resolved)
+  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+
+// subscribe to promise resolve
+getUser.done.watch(({result, params}) => {
+  console.log(params) // {id: 1}
+  console.log(result) // resolved value
+})
+
+// subscribe to promise reject (or throw)
+getUser.fail.watch(({error, params}) => {
+  console.error(params) // {id: 1}
+  console.error(error) // rejected value
+})
+
+// you can replace function anytime
+getUser.use(() => promiseMock)
+
+// call effect with your params
+getUser({id: 1})
+
+const data = await getUser({id: 2}) // handle promise
 ```
 
 ### Effect Methods
