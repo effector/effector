@@ -91,7 +91,7 @@ Creates a derived store. It will call a provided function with the state, when t
 
 - (_`Function`_): Function that receives `state` and returns a new state for the derived store
 
-The new store will not be updated, if the function returns an old state or if it returns `undefined`
+ If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
 #### Returns
 
