@@ -9,13 +9,11 @@ It can be safely used in place of the original async function.
 
 The only requirement for function:
 
-- **Should** have zero, one or two arguments
+- **Should** have zero or one argument
 
 #### Arguments
 
-1. `effect name` (_String_): Just for visual clarity
-2. `params` (_Params_): parameters
-    - `handler` (_Function_): thunk to handler effect calls, also can be set with [`use(thunk)`](#use)
+1. `params` (_Params_): parameters passed to effect
 
 #### Returns
 
