@@ -25,11 +25,37 @@ There can be multiple stores.
 
 ### <a id='reset'></a>[`reset(eventOrStore)`](#reset)
 
-Resets store state to initial value when event occurs
+Resets store state to initial value when event occurs.
+
+Reset state when Event/Effect triggered or another Store is changed.
+
+#### Arguments
+
+([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
-(Store): Current store
+(_`Store`_): Current store
+
+#### Example
+
+```js
+const store = createStore(0)
+const increment = createEvent()
+const reset = createEvent()
+
+store
+  .on(increment, (state) => state + 1)
+  .reset(reset)
+
+store.watch(state => console.log("changed", state))
+// changed 0
+// watch call its fn immediatly
+
+increment() // changed 1
+increment() // changed 2
+reset() // changed 0
+```
 
 <hr>
 
@@ -39,23 +65,85 @@ Returns current state of store
 
 #### Returns
 
-(State): Current state of store
+(`State`): Current state of store
+
+#### Example
+
+```js
+const store = createStore(0)
+const updated = createEvent()
+
+store.on(updated, (state, value) => state + value)
+
+updated(2)
+updated(3)
+
+console.log(store.getState()) // 5
+```
 
 <hr>
 
 ### <a id='map'></a>[`map(fn)`](#map)
 
+Create derived store. Map value from original store to derived with `fn`.
+
+#### Arguments
+
+(_`Function`_): Function receive `state` should return state for a new store
+
+The new store will not be called, if function returns same state as previous.
+
 #### Returns
 
-(Store): New store
+(_`Store`_): New store
+
+#### Example
+
+```js
+const title = createStore("")
+const changed = createEvent()
+
+const length = title.map((title) => title.length)
+
+title.on(changed, (_, newTitle) => newTitle)
+
+length.watch((length) => console.log("new length", length)) // new length 0
+
+changed("hello") // new length 5
+changed("world") // 
+changed("hello world") // new length 11
+```
 
 <hr>
 
 ### <a id='on'></a>[`on(trigger, handler)`](#on)
 
+Update state when trigger triggered, just call `hander`.
+
+#### Arguments
+
+([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+(_`Function`_): Reducer function receive `state` and `params` and must return new state
+   - `state`: Current state of store
+   - `params`: Parameters passed to event call
+
 #### Returns
 
 (Store): Current store
+
+#### Example
+
+```js
+const store = createStore(0)
+const changed = createEvent()
+
+store.on(changed, (state, params) => state + params)
+
+store.watch((value) => console.log("updated", value))
+
+changed(2) // updated 2
+changed(2) // updated 4
+```
 
 <hr>
 
