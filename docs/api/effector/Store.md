@@ -31,7 +31,7 @@ Reset state when Event/Effect triggered or another Store is changed.
 
 #### Arguments
 
-([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
