@@ -71,13 +71,12 @@ const data = await getUser({id: 2}) // handle promise
 
 Provides a function, which will be called when an effect is triggered.
 
-It will replase the previous function inside if there is one,
+It will replace the previous function inside (if any).
 
 #### Arguments
 
-There can only be one argument and the function receives `params`
 
-(_`thunk`_): Function, that receive arguments passed to effect call
+(_`thunk`_): Function, that receives the first argument passed to an effect call
 
 #### Returns
 
@@ -104,11 +103,11 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): Function that receives `params` and `effect name`
+(_`watcher`_): A function that receives `params` and `effect name`
 
 #### Returns
 
-(_`Subscription`_): Function that unsubscribes the watcher
+(_`Subscription`_): A function that unsubscribes the watcher
 
 #### Example
 
@@ -169,7 +168,7 @@ _Event_ triggered when promise from _thunk_ is *rejected* or thunk throws.
 Event triggered with object of `params` and `error`:
 
 (_`params`_): An argument passed to effect call
-(_`error`_): An error catched from thunk
+(_`error`_): An error catched from the thunk
 
 #### Example
 
