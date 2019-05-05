@@ -69,13 +69,14 @@ const data = await getUser({id: 2}) // handle promise
 
 ### <a id='use'></a>[`use(thunk)`](#use)
 
-Setup function to call when effect trigger.
+Provides a function, which will be called when an effect is triggered.
 
-Replaces previous function inside.
+It will replace the previous function inside (if any).
 
 #### Arguments
 
-(_`thunk`_): Function, that receive arguments passed to effect call
+
+(_`thunk`_): Function, that receives the first argument passed to an effect call
 
 #### Returns
 
@@ -102,11 +103,11 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): Listener that receives `params` and `effect name`
+(_`watcher`_): A function that receives `params` and `effect name`
 
 #### Returns
 
-(_`Subscription`_): Unsubscribe function
+(_`Subscription`_): A function that unsubscribes the watcher
 
 #### Example
 
@@ -140,8 +141,8 @@ _Event_ triggered when promise from _thunk_ is *resolved*
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): Arguments passed to effect call
-(_`result`_): Result of resolved promise
+(_`params`_): An argument passed to the effect call
+(_`result`_): A result of the resolved promise
 
 #### Example
 
@@ -166,8 +167,8 @@ _Event_ triggered when promise from _thunk_ is *rejected* or thunk throws.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): Arguments passed to effect call
-(_`error`_): Error catched from thunk
+(_`params`_): An argument passed to effect call
+(_`error`_): An error catched from the thunk
 
 #### Example
 
