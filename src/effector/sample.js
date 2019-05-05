@@ -86,33 +86,18 @@ export function sample(
       parent: source.domainName,
     })
   }
-  if (Array.isArray(source)) {
-    const shape = createStoreObject(source)
-    target = storeFabric({
-      currentState: readRef(shape.stateRef),
-      config: {name: shape.shortName},
-      parent: shape.domainName,
-    })
-    sampleFabric({
-      source: shape,
-      sampler,
-      fn,
-      target,
-    })
-    return target
-  }
   if (is.unit(source)) {
     sampleFabric({source, sampler, fn, target})
     return target
   }
-  if (typeof source === 'object' && source !== null) {
-    const shape = createStoreObject(source)
+  if (Array.isArray(source) || (typeof source === 'object' && source !== null)) {
+    const store = createStoreObject(source)
     target = storeFabric({
       currentState: readRef(shape.stateRef),
       config: {name: shape.shortName},
       parent: shape.domainName,
     })
-    sampleFabric({source: shape, sampler, fn, target})
+    sampleFabric({source: store, sampler, fn, target})
     return target
   }
   invariant(
