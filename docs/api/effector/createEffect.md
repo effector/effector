@@ -21,8 +21,12 @@ Creates an [effect](Effect.md)
 #### Example
 
 ```js
-const getUser = createEffect('get user')
+const getUser = createEffect('get user', {
+  handler: params => fetch(`https://example.com/get-user/${params.id}`)
+    .then(res => res.json())
+})
 
+// OR
 getUser.use(params => {
   return fetch(`https://example.com/get-user/${params.id}`)
     .then(res => res.json())
