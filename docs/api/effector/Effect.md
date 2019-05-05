@@ -67,7 +67,10 @@ Replaces previous function inside.
 ```js
 const effect = createEffect("effect name")
 
-effect.use((params) => console.log("effect called with", params))
+effect.use((params) => {
+  console.log("effect called with", params)
+  return fetch("/some-resource")
+})
 
 effect(1) // >> effect called with 1
 ```
@@ -154,9 +157,9 @@ const effect = createEffect()
 
 effect.use((value) => Promise.reject(value - 1))
 
-effect.fail.watch(({ params, result }) => {
-  console.log("Fail with params", params, "and result", result)
+effect.fail.watch(({ params, error }) => {
+  console.log("Fail with params", params, "and error", error)
 })
 
-effect(2) // >> Fail with params 2 and result 1
+effect(2) // >> Fail with params 2 and error 1
 ```
