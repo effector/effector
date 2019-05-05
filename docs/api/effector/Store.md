@@ -89,7 +89,7 @@ Create derived store. Map value from original store to derived with `fn`.
 
 #### Arguments
 
-(_`Function`_): Function receive `state` should return state for a new store
+- (_`Function`_): Function receive `state` should return state for a new store
 
 The new store will not be called, if function returns same state as previous.
 
@@ -122,8 +122,8 @@ Update state when trigger triggered, just call `hander`.
 
 #### Arguments
 
-([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
-(_`Function`_): Reducer function receive `state` and `params` and must return new state
+- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Function`_): Reducer function receive `state` and `params` and must return new state
    - `state`: Current state of store
    - `params`: Parameters passed to event call
 
