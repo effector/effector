@@ -25,9 +25,9 @@ There can be multiple stores.
 
 ### <a id='reset'></a>[`reset(eventOrStore)`](#reset)
 
-Resets store state to initial value when event occurs.
+Resets store state to the default value.
 
-Reset state when Event/Effect triggered or another Store is changed.
+A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
 
 #### Arguments
 
@@ -50,7 +50,7 @@ store
 
 store.watch(state => console.log("changed", state))
 // changed 0
-// watch call its fn immediatly
+// watch method calls its function immediately
 
 increment() // changed 1
 increment() // changed 2
@@ -65,7 +65,7 @@ Returns current state of store
 
 #### Returns
 
-(`State`): Current state of store
+(`State`): Current state of the store
 
 #### Example
 
@@ -85,13 +85,13 @@ console.log(store.getState()) // 5
 
 ### <a id='map'></a>[`map(fn)`](#map)
 
-Create derived store. Map value from original store to derived with `fn`.
+Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
 #### Arguments
 
-- (_`Function`_): Function receive `state` should return state for a new store
+- (_`Function`_): Function that receives `state` and returns a new state for the derived store
 
-The new store will not be called, if function returns same state as previous.
+The new store will not be updated, if the function returns an old state or if it returns `undefined`
 
 #### Returns
 
@@ -118,15 +118,15 @@ changed("hello world") // new length 11
 
 ### <a id='on'></a>[`on(trigger, handler)`](#on)
 
-Update state when trigger triggered, just call `hander`.
+Updates state when `trigger` is triggered by using `hander`.
 
 #### Arguments
 
 - ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
-- (_`Function`_): Reducer function receive `state` and `params` and must return new state
+- (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
    - `state`: Current state of store
    - `params`: Parameters passed to event call
-
+A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
 #### Returns
 
 (Store): Current store
