@@ -11,6 +11,8 @@ Creates an [effect](Effect.md)
 #### Arguments
 
 1. `name`? _(string)_: [Effect](Effect.md) name
+2. `params`? (_Params_): Setup effect
+    - `handler` (_Function_): thunk to handle effect calls, also can be set with [`use(thunk)`](#use)
 
 #### Returns
 
@@ -19,10 +21,15 @@ Creates an [effect](Effect.md)
 #### Example
 
 ```js
-const getUser = createEffect('get user').use(params => {
-  return fetch(`https://example.com/get-user/${params.id}`).then(res =>
-    res.json(),
-  )
+const getUser = createEffect('get user', {
+  handler: params => fetch(`https://example.com/get-user/${params.id}`)
+    .then(res => res.json())
+})
+
+// OR
+getUser.use(params => {
+  return fetch(`https://example.com/get-user/${params.id}`)
+    .then(res => res.json())
 })
 
 const users = createStore([]) // <-- Default state
