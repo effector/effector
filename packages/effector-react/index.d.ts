@@ -30,10 +30,22 @@ export function useStore<State>(store: Store<State>): State
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 export function createGate<Props>(name?: string): Gate<Props>
+
 export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
+export function createComponent<Props, Shape extends object>(
+  store: Shape,
+  view: (
+    props: Props,
+    state: {[K in keyof Shape]: Shape[K] extends Store<infer U> ? U : Shape[K]},
+  ) => React.ReactNode,
+): StoreView<
+  {[K in keyof Shape]: Shape[K] extends Store<infer U> ? U : Shape[K]},
+  Props
+>
+
 export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: React.Context<Context>,
