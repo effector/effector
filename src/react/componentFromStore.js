@@ -18,10 +18,12 @@ export function componentFromStore<Props: {}>(
     propsEmitter: Event<Props> = createEvent()
 
     // Stream of props
-    props$: Store<Props> = createStore((({}: any): Props)).on(
-      this.propsEmitter,
-      (_, props) => props,
-    )
+    props$: Store<Props> = createStore((null: any))
+      .on(this.propsEmitter, (_, props) => props)
+      .map(props => {
+        if (props) return props
+        /*::return props*/
+      })
 
     // Stream of vdom
     vdom$ = propsToVdom(this.props$)
