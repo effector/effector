@@ -82,9 +82,41 @@ describe('sample', () => {
       release(3)
       release(4)
       emit(5)
-      expect(getSpyCalls()).toEqual([
-        [[2, 3]], [[2, 4]]
-      ])
+      expect(getSpyCalls()).toEqual([[[2, 3]], [[2, 4]]])
+    })
+    test('store as clock', () => {
+      const source = createEvent()
+      const clock = createStore(0)
+      const result = sample(source, clock)
+      result.watch(value => spy(value))
+      clock.setState(1)
+      expect(spy).not.toHaveBeenCalled()
+      source('run')
+      expect(spy).not.toHaveBeenCalled()
+      clock.setState(2)
+      expect(getSpyCalls()).toEqual([['run']])
+    })
+    test('store as clock with handler', () => {
+      const spy = jest.fn()
+      const handler = jest.fn(x => x)
+      const source = createEvent()
+      const clock = createStore(0)
+      const result = sample(source, clock, (source, clock) =>
+        handler({
+          source,
+          clock,
+        }),
+      )
+      result.watch(value => spy(value))
+      clock.setState(1)
+      expect(spy).not.toHaveBeenCalled()
+      expect(handler).not.toHaveBeenCalled()
+      source('run')
+      expect(spy).not.toHaveBeenCalled()
+      expect(handler).not.toHaveBeenCalled()
+      clock.setState(2)
+      expect(spy.mock.calls).toEqual([[{source: 'run', clock: 2}]])
+      expect(handler.mock.calls).toEqual([[{source: 'run', clock: 2}]])
     })
   })
   describe('sample with effect as source', () => {
