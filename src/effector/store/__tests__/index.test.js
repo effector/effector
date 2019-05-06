@@ -9,37 +9,52 @@ test('createStore', () => {
   expect(() => createStore(undefined)).toThrowErrorMatchingSnapshot()
 })
 
-test('.map', () => {
-  const newWord = createEvent/*:: <string> */()
-  const a = createStore('word').on(newWord, (_, word) => word)
+describe('.map', () => {
+  it('supports basic mapping', () => {
+    const newWord = createEvent/*:: <string> */()
+    const a = createStore('word').on(newWord, (_, word) => word)
 
-  const b = a.map(word => word.length)
+    const b = a.map(word => word.length)
 
-  const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-  sum.watch(spy)
+    sum.watch(spy)
 
-  expect(a.getState()).toBe('word')
-  expect(b.getState()).toBe(4)
-  expect(sum.getState()).toBe(4)
+    expect(a.getState()).toBe('word')
+    expect(b.getState()).toBe(4)
+    expect(sum.getState()).toBe(4)
 
-  newWord('lol')
+    newWord('lol')
 
-  expect(a.getState()).toBe('lol')
-  expect(b.getState()).toBe(3)
-  expect(sum.getState()).toBe(7)
+    expect(a.getState()).toBe('lol')
+    expect(b.getState()).toBe(3)
+    expect(sum.getState()).toBe(7)
 
-  newWord('long word')
+    newWord('long word')
 
-  expect(a.getState()).toBe('long word')
-  expect(b.getState()).toBe(9)
-  expect(sum.getState()).toBe(16)
+    expect(a.getState()).toBe('long word')
+    expect(b.getState()).toBe(9)
+    expect(sum.getState()).toBe(16)
 
-  expect(spy).toHaveBeenCalledTimes(3)
+    expect(spy).toHaveBeenCalledTimes(3)
 
-  newWord('')
+    newWord('')
 
-  expect(spy).toHaveBeenCalledTimes(3)
+    expect(spy).toHaveBeenCalledTimes(3)
+  })
+
+  it('supports nested mapping with updates skipping', () => {
+    const a = createStore(null)
+    const f = jest.fn(a => {
+      if (a) return a.id
+    })
+    const g = jest.fn(a => a.nice)
+    const b = a.map(f)
+    const c = b.map(g)
+
+    expect(c.getState()).toBe(undefined)
+    expect(g).toHaveBeenCalledTimes(0)
+  })
 })
 
 describe('.watch', () => {
