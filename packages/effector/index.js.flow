@@ -323,17 +323,47 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
 declare export function createDomain(domainName?: string): Domain
 
 declare export function sample<A, B>(
+  config: {
+    source: Event<A> | Store<A> | Effect<A, any, any>,
+    sampler: Event<B> | Store<B>,
+    target: Event<A> | Store<A>,
+  },
+): Node
+declare export function sample<A, B, C>(
+  config: {
+    source: Event<A> | Store<A> | Effect<A, any, any>,
+    sampler: Event<B> | Store<B>,
+    target: Event<C> | Store<C>,
+    fn: (source: A, sampler: B) => C
+  },
+): Node
+declare export function sample<A, B>(
   source: Event<A>,
-  sampler: Event<B> | Store<B>,
+  sampler: Event<B> | Store<B>
 ): Event<A>
 declare export function sample<A, B>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
+  sampler: Event<B> | Store<B>
 ): Store<A>
 declare export function sample<A, B>(
   source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
+  sampler: Event<B> | Store<B>
 ): Event<A>
+declare export function sample<A, B, C>(
+  source: Event<A>,
+  sampler: Event<B> | Store<B>,
+  fn: (source: A, sampler: B) => C
+): Event<C>
+declare export function sample<A, B, C>(
+  source: Store<A>,
+  sampler: Event<B> | Store<B>,
+  fn: (source: A, sampler: B) => C
+): Store<C>
+declare export function sample<A, B, C>(
+  source: Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+  fn: (source: A, sampler: B) => C
+): Event<C>
 
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
