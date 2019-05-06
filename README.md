@@ -95,12 +95,12 @@ const increment = createEvent('increment')
 const decrement = createEvent('decrement')
 const resetCounter = createEvent('reset counter')
 
-const $counter = createStore(0)
+const counter = createStore(0)
   .on(increment, state => state + 1)
   .on(decrement, state => state - 1)
   .reset(resetCounter)
 
-$counter.watch(console.log)
+counter.watch(console.log)
 
 const Counter = () => {
   const counter = useStore($couter)
@@ -145,11 +145,11 @@ const {createStore, createEvent} = require('effector')
 const turnOn = createEvent()
 const turnOff = createEvent()
 
-const $status = createStore('offline')
+const status = createStore('offline')
   .on(turnOn, () => 'online')
   .on(turnOff, () => 'offline')
 
-$status.watch(newStatus => {
+status.watch(newStatus => {
   console.log(`status changed: ${newStatus}`)
 })
 // for store watchs callback invokes immediately
