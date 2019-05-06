@@ -3,7 +3,7 @@
 import * as React from 'react'
 import {
   type Store,
-  is,
+  isStore,
   //$todo add invariant to effector public typings
   invariant,
   createStoreObject,
@@ -14,11 +14,11 @@ import type {StoreView} from './index.h'
 type Unsubscribe = () => void
 
 export function createComponent<Props: {}, State>(
-  shape: Store<State>,
+  shape: Store<State> | {+[key: string]: Store<any> | any},
   renderProp: (props: Props, state: State) => React.Node,
 ): StoreView<State, Props> {
-  let store
-  if (is.store(shape)) {
+  let store: Store<any>
+  if (isStore(shape)) {
     store = shape
   } else {
     invariant(
