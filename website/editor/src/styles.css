@@ -109,6 +109,11 @@ body {
   overflow: auto;
 }
 
+.dom iframe {
+  width: 100%;
+  height: 100%;
+}
+
 .console > :first-child {
   border-top: 1px solid #fff;
 }
