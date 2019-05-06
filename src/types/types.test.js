@@ -16,6 +16,7 @@ import {
   /*::type*/ kind,
   forward,
 } from 'effector'
+import {createComponent} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
 describe('Unit', () => {
@@ -217,7 +218,25 @@ describe('Graph', () => {
   })
 })
 
-describe('effector-react', () => {})
+describe('effector-react', () => {
+  test('createComponent', () => {
+    const ImplicitObject = createComponent(
+      {
+        a: createStore<number>(0),
+        b: createStore<number>(1),
+      },
+      (props, state) => {
+        const check1: number = state.a
+        const check2: number = state.b
+        return null
+      },
+    )
+    const Store = createComponent(createStore(0), (props, state) => {
+      const check1: number = state
+      return null
+    })
+  })
+})
 
 describe('effector-vue', () => {})
 
