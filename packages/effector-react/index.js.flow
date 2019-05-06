@@ -35,18 +35,47 @@ export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
 |}
 
 export type StoreView<State, Props = {||}> = ComponentType<Props> & {|
-  mounted: Event<{|props: Props, state: State|}>,
-  unmounted: Event<{|props: Props, state: State|}>,
+  mounted: Event<{|
+    props: Props,
+    state: State,
+  |}>,
+  unmounted: Event<{|
+    props: Props,
+    state: State,
+  |}>,
 |}
 
 declare export function useStore<State>(store: Store<State>): State
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 declare export function createGate<Props>(name?: string): Gate<Props>
+
+declare export function createComponent<
+  Props,
+  Shape: {+[key: string]: Store<any> | any, ...},
+>(
+  store: Shape,
+  view: (
+    props: Props,
+    state: $ObjMap<
+      Shape,
+      //prettier-ignore
+      <S>(field: Store<S> | S) => S,
+    >,
+  ) => Node,
+): StoreView<
+  $ObjMap<
+    Shape,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+  Props,
+>
 declare export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => Node,
 ): StoreView<State, Props>
+
 declare export function createContextComponent<Props, State, Context>(
   store: Store<State>,
   context: ContextType<Context>,
