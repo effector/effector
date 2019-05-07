@@ -103,7 +103,7 @@ const counter = createStore(0)
 counter.watch(console.log)
 
 const Counter = () => {
-  const counter = useStore($couter)
+  const counter = useStore(couter)
 
   return (
     <>
