@@ -1,2 +1,3 @@
 static/try
 .cache
+build/effector/**/*.*
