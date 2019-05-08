@@ -9,12 +9,16 @@ export async function evalExpr(expr, vars) {
   status.init()
   //TODO: split into two effects
   try {
-    const compiled = `${transformCode(expr)}
+    const compiled = `async function main() {
+  ${transformCode(expr)}
+}
+main()
 //# sourceURL=repl.js`
     //$off
     compiledCode.setState(compiled)
   } catch (error) {
     status.fail()
+    console.error('Babel ERR', error)
     throw {type: 'babel-error', original: error, stackFrames: []}
   }
   try {
@@ -24,6 +28,7 @@ export async function evalExpr(expr, vars) {
     return results
   } catch (error) {
     status.fail()
+    console.error('Runtime ERR', error)
     const stackFrames = await getStackFrames(error)
     throw {type: 'runtime-error', original: error, stackFrames}
   }
