@@ -177,5 +177,8 @@
     "effector/watcher": "./src/effector/watcher",
     "effector/naming": "./src/effector/naming",
     "effector/perf": "./src/effector/perf"
+  },
+  "devDependencies": {
+    "@types/react": "^16.8.16"
   }
 }
