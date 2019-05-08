@@ -50,8 +50,16 @@ declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 declare export function createGate<Props>(name?: string): Gate<Props>
 
+declare export function createComponent<+Props, State>(
+  storeFactory: (initialProps: Props) => Store<State>,
+  view: (props: Props, state: State) => Node,
+): StoreView<State, Props>
+declare export function createComponent<+Props, State>(
+  store: Store<State>,
+  view: (props: Props, state: State) => Node,
+): StoreView<State, Props>
 declare export function createComponent<
-  Props,
+  +Props,
   Shape: {+[key: string]: Store<any> | any, ...},
 >(
   store: Shape,
@@ -71,14 +79,6 @@ declare export function createComponent<
   >,
   Props,
 >
-declare export function createComponent<Props, State>(
-  storeFactory: (initialProps: Props) => Store<State>,
-  view: (props: Props, state: State) => Node,
-): StoreView<State, Props>
-declare export function createComponent<Props, State>(
-  store: Store<State>,
-  view: (props: Props, state: State) => Node,
-): StoreView<State, Props>
 
 declare export function createContextComponent<Props, State, Context>(
   store: Store<State>,

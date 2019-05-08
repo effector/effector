@@ -33,7 +33,7 @@ export function createGate<Props>(name?: string): Gate<Props>
 
 export function createComponent<Props, State>(
   storeFactory: (initialProps: Props) => Store<State>,
-  view: (props: Props, state: State) => Node,
+  view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
 export function createComponent<Props, State>(
   store: Store<State>,
