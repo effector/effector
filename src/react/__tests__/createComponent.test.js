@@ -9,9 +9,8 @@ configure({
 
 import * as React from 'react'
 import {mount} from 'enzyme'
-import {createStore, createStoreObject} from 'effector/store'
-import {createEvent} from 'effector/event'
-import {createComponent} from '..'
+import {type Store, createStore, createStoreObject, createEvent} from 'effector'
+import {createComponent} from 'effector-react'
 
 describe('createComponent', () => {
   const a = createStore(0)
@@ -41,19 +40,22 @@ describe('createComponent', () => {
   })
 
   test('initial props', () => {
-    const update = createEvent<{
+    type ListItem = {|
+      text: string,
+    |}
+    const update = createEvent<{|
       id: number,
-      data: {text: string},
-    }>()
-    const list: Store<{[key: number]: {text: string}}> = createStore({}).on(
-      update,
-      (state, {id, data}) => ({
-        ...state,
-        [id]: {...state[id], ...data},
-      }),
-    )
+      data: ListItem,
+    |}>()
+    const list: Store<{
+      [key: number]: ListItem,
+    }> = createStore({}).on(update, (state, {id, data}) => ({
+      ...state,
+      [id]: {...state[id], ...data},
+    }))
     const Foo = createComponent(
-      props => list.map(list => list[props.id] ?? {text: 'Loading...'}),
+      initialProps =>
+        list.map(list => list[initialProps.id] ?? {text: 'Loading...'}),
       (_, state) => <div>{state.text}</div>,
     )
     const tree = mount(<Foo id={24} />)
