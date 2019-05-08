@@ -21,7 +21,13 @@ declare module 'linaria/react' {
   declare export type StyledTag<T> = (
     strings: string[],
     ...exprs: Array<
-      string | number | CSSProperties | (T => string | number) | void | null,
+      | string
+      | number
+      | StyledComponent<any>
+      | CSSProperties
+      | (T => string | number)
+      | void
+      | null,
     >
   ) => StyledComponent<T>
 

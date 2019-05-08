@@ -63,7 +63,22 @@ const sampleFabric = ({
     ],
   })
 }
-
+const handleFirstState = (source, clock, fn) => {
+  //assume that source is store
+  const sourceState = readRef(source.stateRef)
+  let firstState
+  if (fn) {
+    if (is.store(clock)) {
+      firstState = fn(sourceState, readRef((clock: any).stateRef))
+    } else {
+      //TODO it must be result of calling fn(source, clockEvent)
+      firstState = sourceState
+    }
+  } else {
+    firstState = sourceState
+  }
+  return firstState
+}
 export function sample(
   source: any,
   sampler: Graphite,
@@ -76,7 +91,7 @@ export function sample(
   let target
   if (is.store(source)) {
     target = storeFabric({
-      currentState: readRef(source.stateRef),
+      currentState: handleFirstState(source, sampler, fn),
       config: {name: source.shortName},
       parent: source.domainName,
     })
@@ -91,12 +106,12 @@ export function sample(
     return target
   }
   if (
-    Array.isArray(source) ||
-    (typeof source === 'object' && source !== null)
+    Array.isArray(source)
+    || (typeof source === 'object' && source !== null)
   ) {
     const store = createStoreObject(source)
     target = storeFabric({
-      currentState: readRef(store.stateRef),
+      currentState: handleFirstState(source, sampler, fn),
       config: {name: store.shortName},
       parent: store.domainName,
     })
