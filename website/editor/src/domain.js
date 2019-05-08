@@ -13,7 +13,6 @@ import {
 } from 'effector'
 import * as lzString from 'lz-string'
 
-import {traverseGraphite} from './traverseGraphite'
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from './versions.json'
 
