@@ -72,6 +72,10 @@ declare export function createComponent<
   Props,
 >
 declare export function createComponent<Props, State>(
+  storeFactory: (initialProps: Props) => Store<State>,
+  view: (props: Props, state: State) => Node,
+): StoreView<State, Props>
+declare export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => Node,
 ): StoreView<State, Props>

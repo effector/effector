@@ -32,6 +32,10 @@ export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 export function createGate<Props>(name?: string): Gate<Props>
 
 export function createComponent<Props, State>(
+  storeFactory: (initialProps: Props) => Store<State>,
+  view: (props: Props, state: State) => Node,
+): StoreView<State, Props>
+export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props>
