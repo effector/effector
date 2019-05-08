@@ -307,6 +307,17 @@ export function sample<A, B, C>(
   fn: (source: A, sampler: B) => C,
 ): Event<C>
 
+export function invariant(
+  condition: boolean,
+  format: string,
+  ...args: any[]
+): void
+export function warning(
+  condition: boolean,
+  format: string,
+  ...args: any[]
+): void
+
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 export function combine<A, B, R>(
