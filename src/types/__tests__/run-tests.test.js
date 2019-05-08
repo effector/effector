@@ -27,7 +27,6 @@ test('Flow', async() => {
     const data = JSON.parse(
       err.message.substring(err.message.indexOf('\n') + 1).trim(),
     )
-    expect(data).toMatchSnapshot('json rejected')
     expect(
       data.errors.map(error => error.message.map(p => p.descr)),
     ).toMatchSnapshot('json messages')

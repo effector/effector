@@ -1,5 +1,6 @@
 // @flow
 
+import * as React from 'react'
 import {
   createStore,
   createEvent,
@@ -235,6 +236,25 @@ describe('effector-react', () => {
       const check1: number = state
       return null
     })
+
+    const list = createStore<{
+      [key: number]: {
+        text: string,
+      },
+    }>({})
+    const InitialProps = createComponent(
+      (initialProps: {id: number}) => {
+        const check1: number = initialProps.id
+        const check2: string = initialProps.id
+        const check3: string = initialProps.unknownProp
+        return list.map(list => list[initialProps.id] || {text: 'Loading...'})
+      },
+      (_, state) => {
+        const check1: string = state.text
+        const check2: number = state.text
+        return null
+      },
+    )
   })
 })
 
