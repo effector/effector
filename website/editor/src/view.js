@@ -17,11 +17,11 @@ import SecondanaryTabs from './components/SecondanaryTabs'
 import Console from './components/Console'
 import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
+import {GraphiteView} from './graphite/view'
 import {
   sourceCode,
   packageVersions,
   selectVersion,
-  graphiteCode,
   changeSources,
   codeError,
   stats,
@@ -46,8 +46,6 @@ const ErrorsView = createComponent(
   ),
 )
 
-const jsonRef = React.createRef()
-
 const changeSourcesDebounced = debounce(changeSources, 500)
 const CodeView = createComponent(sourceCode, ({}, sources) => (
   <div className="sources">
@@ -62,20 +60,6 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
     />
     <TypeHintView />
   </div>
-))
-
-const GraphiteView = createComponent(graphiteCode, ({style}, graphite) => (
-  <Panel
-    className="results"
-    style={style}
-    readOnly={true}
-    lint={null}
-    passive
-    lineWrapping={false}
-    ref={jsonRef}
-    value={graphite}
-    mode="application/json"
-  />
 ))
 
 const ShareButtonView = createComponent(shareableUrl, ({}, shareableUrl) => (

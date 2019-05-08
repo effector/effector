@@ -14,12 +14,8 @@ import {
   realmInvoke,
   realmInterval,
   realmTimeout,
-  resetGraphiteState,
   evalEffect,
-  EvalRealm,
   sourceCode,
-  graphite,
-  graphiteCode,
   codeError,
   intervals,
   timeouts,
@@ -32,6 +28,7 @@ import {
   version,
 } from './domain'
 import {typeAtPos} from './flow/domain'
+import {resetGraphiteState} from './graphite/domain'
 import {versionLoader} from './evaluator'
 
 import {switcher} from './switcher'
@@ -123,25 +120,6 @@ forward({
   to: resetGraphiteState,
 })
 evalEffect.use(evaluator)
-
-const graphiteInvokeSetter = (state, event) => {
-  let result
-  if (state.__shouldReset === true) result = {}
-  else result = {...state}
-  result[
-    `${event.kind} '${event?.compositeName?.fullName || event.shortName}'`
-  ] = event.graphite.seq
-  return result
-}
-
-graphite
-  .on(realmEvent, graphiteInvokeSetter)
-  .on(realmStore, graphiteInvokeSetter)
-  .on(realmEffect, graphiteInvokeSetter)
-  .on(resetGraphiteState, e => {
-    e.__shouldReset = true
-    return e
-  })
 
 switcher({
   event: realmInvoke,

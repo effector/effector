@@ -83,7 +83,6 @@ export const evalEffect = createEffect('eval realm code')
 
 export const changeSources = createEvent('change sources')
 
-export const resetGraphiteState = createEvent('reset graphite state')
 export const selectVersion = createEvent('select version')
 
 export const intervals = createStore<number[]>([])
@@ -116,15 +115,6 @@ export const codeError = createStore<
   isError: false,
   error: null,
   stackFrames: [],
-})
-export const graphite = createStore({})
-
-export const graphiteCode = graphite.map(e => {
-  const result = {}
-  for (const key in e) {
-    result[key] = traverseGraphite(e[key])
-  }
-  return JSON.stringify(result, null, 2)
 })
 
 export const tab = createStore<'graphite' | 'dom'>('dom')
