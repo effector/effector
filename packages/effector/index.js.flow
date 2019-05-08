@@ -68,7 +68,7 @@ declare export class Effect<Params, Done, Fail = Error>
 
 declare export class Store<State> implements Unit<State> {
   /*::+*/ kind: kind;
-  reset(trigger: Unit<any>): this;
+  reset(...triggers: Array<Unit<any>>): this;
   getState(): State;
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>;

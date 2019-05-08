@@ -11,8 +11,10 @@ import {createLink, type Event} from 'effector/event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../index.h'
 
-export function reset(storeInstance: ThisStore, event: Event<any>) {
-  return on.call(this, storeInstance, event, () => storeInstance.defaultState)
+export function reset(storeInstance: ThisStore, ...events: Array<Event<any>>) {
+  for (const event of events)
+    on.call(this, storeInstance, event, () => storeInstance.defaultState)
+  return this
 }
 export function getState(storeInstance: ThisStore) {
   return readRef(storeInstance.plainState)

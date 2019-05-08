@@ -69,7 +69,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 }
 
 export interface Store<State> extends Unit<State> {
-  reset(trigger: Unit<any>): this
+  reset(...triggers: Array<Unit<any>>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
