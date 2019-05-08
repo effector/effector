@@ -51,9 +51,13 @@ const compileAll = (code: string): string =>
     filename: 'repl.js',
     sourceFileName: 'repl.js',
     presets: ['react', ['flow', {all: true}]],
+    parserOpts: {
+      allowAwaitOutsideFunction: true,
+    },
     plugins: [
       'transform-strict-mode',
       'syntax-bigint',
+      'syntax-dynamic-import',
       'proposal-numeric-separator',
       'proposal-nullish-coalescing-operator',
       'proposal-optional-chaining',
