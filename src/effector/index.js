@@ -6,7 +6,7 @@
  * it's more like a big ball of wibbly wobbly time-y wimey stuff
  */
 
-export {combine} from './combine'
+export {combine, combine as createStoreObject} from './combine'
 export {sample} from './sample'
 
 export type {Domain} from 'effector/domain'
@@ -21,7 +21,6 @@ export {createEffect} from 'effector/effect'
 export type {Store} from 'effector/store'
 export {
   createStore,
-  createStoreObject,
   setStoreName,
   extract,
   createApi,
