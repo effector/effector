@@ -191,13 +191,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
     const cmd = command[step.type]
     //$todo
     cmd(local, step.data, scope.value)
-    if (local.isFailed) {
-      meta.stop = true
-    } else if (!local.isChanged) {
-      meta.stop = true
-    } else {
-      meta.stop = false
-    }
+    meta.stop = local.isFailed || !local.isChanged
   }
   if (!meta.stop) {
     for (let stepn = 0; stepn < graph.next.length; stepn++) {
@@ -263,7 +257,7 @@ const command = {
      * runCtx.result will be null
      * thereby successfully forcing that branch to stop
      */
-    local.isChanged = Boolean(runCtx.result)
+    local.isChanged = !!runCtx.result
   },
   run(local, step: $PropertyType<Run, 'data'>, val: StateRef) {
     const runCtx = tryRun({
