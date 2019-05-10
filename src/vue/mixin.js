@@ -11,16 +11,18 @@ export const effectorMixin = {
     if (typeof store === 'function') {
       store = store.call(vm)
     }
-    invariant(
-      isStore(store), 
-      'effector-vue: Property should Store, but you passed %s',
-      store
-    )
-    //$off
-    Vue.util.defineReactive(vm, key, store.getState())
-    vm._subscription = store.subscribe(value => {
-      vm[key] = value
-    })
+    if (store) {
+      invariant(
+        isStore(store),
+        'effector-vue: Property should Store, but you passed %s',
+        store,
+      )
+      //$off
+      Vue.util.defineReactive(vm, key, store.getState())
+      vm._subscription = store.subscribe(value => {
+        vm[key] = value
+      })
+    }
   },
   beforeDestroy() {
     if (this._subscription) {

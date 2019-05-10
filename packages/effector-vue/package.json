@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "0.18.3",
+  "version": "0.18.5",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
