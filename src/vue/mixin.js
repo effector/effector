@@ -1,6 +1,7 @@
 //@flow
 
 import Vue from 'vue'
+import {invariant, isStore} from 'effector'
 
 export const effectorMixin = {
   created() {
@@ -10,20 +11,16 @@ export const effectorMixin = {
     if (typeof store === 'function') {
       store = store.call(vm)
     }
-    if (store) {
-      //$off
-      Vue.util.defineReactive(vm, key, store.getState())
-      if (!store.kind || store.kind !== 1) {
-        console.warn(
-          `Invalid Observable found in subscriptions option with key "${key}".`,
-          vm,
-        )
-        return
-      }
-      vm._subscription = store.subscribe(value => {
-        vm[key] = value
-      })
-    }
+    invariant(
+      isStore(store), 
+      'effector-vue: Property should Store, but you passed %s',
+      store
+    )
+    //$off
+    Vue.util.defineReactive(vm, key, store.getState())
+    vm._subscription = store.subscribe(value => {
+      vm[key] = value
+    })
   },
   beforeDestroy() {
     if (this._subscription) {
