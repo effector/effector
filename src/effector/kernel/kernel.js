@@ -225,10 +225,7 @@ export const launch = (unit: Graphite, payload: any) => {
   pushHeap({
     step,
     firstIndex: 0,
-    scope: new Stack(
-      createStateRef(payload),
-      new Stack(createStateRef(null), null),
-    ),
+    scope: new Stack(createStateRef(payload), null),
     resetStop: false,
     type: 'pure',
     id: ++layerID,
