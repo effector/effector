@@ -6,6 +6,7 @@ const showCmdDef = (_: Cmd) =>
     _.data,
     (key, val) => {
       if (key === 'meta') return
+      if (_.type === 'update' && key === 'store') return {current: val.current}
       return val
     },
     2,
