@@ -12,8 +12,11 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
     store.compositeName = compositeName
     return
   }
+  //$todo
   store.compositeName.path = compositeName.path
+  //$todo
   store.compositeName.shortName = compositeName.shortName
+  //$todo
   store.compositeName.fullName = compositeName.fullName
 }
 

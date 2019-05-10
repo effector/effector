@@ -18,7 +18,6 @@ exports[`graphite: show bar 1`] = `
               1. filter {{}},
               2. update {{
                  store: {
-                   id: 1,
                    current: foo | 1 | 11
                  }
               }},
@@ -36,7 +35,6 @@ exports[`graphite: show bar 1`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 2,
                              current: 12
                            }
                         }},
@@ -73,7 +71,6 @@ exports[`graphite: show bar 2`] = `
               1. filter {{}},
               2. update {{
                  store: {
-                   id: 1,
                    current: foo | 1 | 11
                  }
               }},
@@ -91,7 +88,6 @@ exports[`graphite: show bar 2`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 2,
                              current: 12
                            }
                         }},
@@ -134,7 +130,6 @@ exports[`graphite: show foo 1`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 1,
                              current: foo | 1 | 11 | 101
                            }
                         }},
@@ -152,7 +147,6 @@ exports[`graphite: show foo 1`] = `
                                   1. filter {{}},
                                   2. update {{
                                      store: {
-                                       id: 2,
                                        current: 18
                                      }
                                   }},
@@ -173,7 +167,6 @@ exports[`graphite: show store1 1`] = `
     1. filter {{}},
     2. update {{
        store: {
-         id: 1,
          current: foo | 1 | 11 | 101
        }
     }},
@@ -191,7 +184,6 @@ exports[`graphite: show store1 1`] = `
               1. filter {{}},
               2. update {{
                  store: {
-                   id: 2,
                    current: 18
                  }
               }},
@@ -208,7 +200,6 @@ exports[`graphite: show store2 1`] = `
     1. filter {{}},
     2. update {{
        store: {
-         id: 2,
          current: 18
        }
     }},
@@ -235,7 +226,6 @@ exports[`showcase: event foo 1`] = `
               1. filter {{}},
               2. update {{
                  store: {
-                   id: 3,
                    current: 3
                  }
               }},
@@ -259,7 +249,6 @@ exports[`showcase: event foo 1`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 5,
                              current: {
                                a: 3,
                                b: 6
@@ -280,7 +269,6 @@ exports[`showcase: event foo 1`] = `
                                   1. filter {{}},
                                   2. update {{
                                      store: {
-                                       id: 7,
                                        current: 3
                                      }
                                   }},
@@ -308,7 +296,6 @@ exports[`showcase: mapped 1`] = `
     1. filter {{}},
     2. update {{
        store: {
-         id: 7,
          current: 3
        }
     }},
@@ -330,7 +317,6 @@ exports[`showcase: store a 1`] = `
     1. filter {{}},
     2. update {{
        store: {
-         id: 3,
          current: 3
        }
     }},
@@ -354,7 +340,6 @@ exports[`showcase: store a 1`] = `
               1. filter {{}},
               2. update {{
                  store: {
-                   id: 5,
                    current: {
                      a: 3,
                      b: 6
@@ -375,7 +360,6 @@ exports[`showcase: store a 1`] = `
                         1. filter {{}},
                         2. update {{
                            store: {
-                             id: 7,
                              current: 3
                            }
                         }},
