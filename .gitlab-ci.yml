@@ -6,13 +6,28 @@ cache:
 
 stages:
   - test
-  # - deploy
+  - deploy
 
 test_all:
   stage: test
   script:
     - yarn
     - yarn test
+npm_next:
+  stage: deploy
+  script:
+    - echo "publish npm next"
+    - yarn
+    - yarn test
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - yarn build:builder
+    - node tools/builder.js publish next
+  environment:
+    name: npm
+    url: https://www.npmjs.com/package/effector
+  when: manual
+  only:
+    - master
 # publish_next_to_npm:
 #   stage: deploy
 #   artifacts:
