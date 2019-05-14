@@ -12,7 +12,7 @@ test_all:
   stage: test
   script:
     - yarn
-    - yarn test
+    - yarn test-full
 npm_next:
   stage: deploy
   script:
