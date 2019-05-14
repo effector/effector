@@ -249,7 +249,6 @@ export default {
     files: getFiles('forms'),
     dependencies: dependsOnEffector,
     keywords: ['effector', 'forms'],
-    private: true,
     ...common,
   },
   '@effector/redux-adapter': {
