@@ -1853,10 +1853,10 @@ code-point-at@^1.0.0:
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
   integrity sha1-DQcLTQQ6W+ozovGkDi7bPZpMz3c=
 
-codemirror@^5.45.0:
-  version "5.45.0"
-  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.45.0.tgz#db5ebbb3bf44028c684053f3954d011efcec27ad"
-  integrity sha512-c19j644usCE8gQaXa0jqn2B/HN9MnB2u6qPIrrhrMkB+QAP42y8G4QnTwuwbVSoUS1jEl7JU9HZMGhCDL0nsAw==
+codemirror@^5.46.0:
+  version "5.46.0"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.46.0.tgz#be3591572f88911e0105a007c324856a9ece0fb7"
+  integrity sha512-3QpMge0vg4QEhHW3hBAtCipJEWjTJrqLLXdIaWptJOblf1vHFeXLNtFhPai/uX2lnFCehWNk4yOdaMR853Z02w==
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -2536,10 +2536,10 @@ effector-react@^0.18.10:
   resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-0.18.10.tgz#6ad812d4320301b48df4998471ab2487ce624703"
   integrity sha512-vY2RMQm+acHNQqJcoHyOkOgh6WByl3bUjPGFHYItsARsDCipMfuj3ydFx72ys9yA4YES1bpJkgzUYbLYc67x1A==
 
-effector@^0.18.6:
-  version "0.18.6"
-  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.6.tgz#4187b6390623a58d28985c18193f53f0140932a2"
-  integrity sha512-LAHfZ0WrV4bvq0HBjC9meNhBUSNgUMruuUSNLprxOk73KMh1ehn6y84A2/MX/wJ8bHmzcolHr8VpOLBM1tEkow==
+effector@^0.18.7:
+  version "0.18.7"
+  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.7.tgz#83203bd2db43b14b5b9cfdc621c98613733acd9e"
+  integrity sha512-oGafXrdJL3LyvsfWk796Gy6M34DRkokz0FYH9UR/8QtWpFTy9N2qg3JHlDd6BGFRvDzmiVhAQkPUTVwYHeNLWg==
   dependencies:
     symbol-observable "^1.2.0"
 
