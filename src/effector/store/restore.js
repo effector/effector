@@ -6,7 +6,7 @@ import {storeFabric} from './storeFabric'
 
 import {is} from '../validate'
 
-export function restoreObject<State: {-[key: string]: Store<any> | any}>(
+export function restoreObject<State: {+[key: string]: Store<any> | any}>(
   obj: State,
 ): $ObjMap<
   State,
@@ -14,7 +14,8 @@ export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   <S>(field: Store<S> | S) => Store<S>,
 > {
   const result = {}
-  for (const [key, value] of Object.entries(obj)) {
+  for (const key in obj) {
+    const value = obj[key]
     if (is.store(value)) {
       result[key] = value
     } else {

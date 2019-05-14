@@ -16,7 +16,8 @@ export function combine<T>(
   let awaiting = l
   const values = new Array(l)
   const hasValue = new Array(l).fill(false)
-  for (const [index, event] of events.entries()) {
+  for (let index = 0; index < l; index++) {
+    const event = events[index]
     event.watch(value => {
       if (awaiting > 0) {
         if (!hasValue[index]) {

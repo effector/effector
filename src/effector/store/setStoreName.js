@@ -32,8 +32,8 @@ export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
   object: Obj,
   parent?: Store<any>,
 ) {
-  const entries: Array<[string, Store<any>]> = (Object.entries(object): any)
-  for (const [storeName, store] of entries) {
+  for (const storeName in object) {
+    const store: Store<any> = object[storeName]
     if (parent && is.store(store)) {
       store.domainName = parent.compositeName || store.domainName
     }
