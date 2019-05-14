@@ -13,6 +13,21 @@ test_all:
   script:
     - yarn
     - yarn test-full
+npm_latest:
+  stage: deploy
+  script:
+    - echo "publish npm latest"
+    - yarn
+    - yarn test
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - yarn build:builder
+    - node tools/builder.js publish latest
+  environment:
+    name: npm
+    url: https://www.npmjs.com/package/effector
+  when: manual
+  only:
+    - master
 npm_next:
   stage: deploy
   script:
