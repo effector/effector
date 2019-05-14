@@ -71,6 +71,7 @@ export type Store<State> = /*::interface extends Unit*/ {
   ),
   +kind: kind,
   +defaultState: State,
+  defaultShape?: Object,
   shortName: string,
   domainName?: CompositeName,
   +graphite: Graph,
