@@ -9,19 +9,13 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "effector": ["packages/effector"],
+      "effector": ["src/effector"],
       "effector/*": ["src/*"],
-      "effector/flags": ["src/flags.dev"],
-      "effector/stdlib": ["src/stdlib"],
-      "effector/graphite": ["src/graphite"],
-      "effector/store": ["src/store"],
-      "effector/event": ["src/event"],
-      "effector/effect": ["src/effect"],
-      "effector/domain": ["src/domain"]
+      "effector/flags": ["src/effector/flags.dev"]
     }
   },
   "typeAcquisition": {
     "enable": false
   },
-  "include": ["src", "scripts", "packages", "bench"]
+  "include": ["src", "packages"]
 }

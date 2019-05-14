@@ -36,7 +36,8 @@ const aliases = {
   'effector/naming': 'effector/naming',
   invariant: 'effector/validate/invariant',
   warning: 'effector/validate/warning',
-  'effector/flags': ({isBuild}) => (isBuild ? 'flags.prod' : 'flags.dev'),
+  'effector/flags': ({isBuild}) =>
+    isBuild ? 'effector/flags.prod' : 'effector/flags.dev',
   'effector/fixtures': 'fixtures',
   '@effector/forms': 'forms',
   'effector-react': 'react',
