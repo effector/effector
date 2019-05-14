@@ -1,8 +1,8 @@
 //@flow
 
-import {createStore, createApi, restore, createStoreObject} from '..'
-import {createEvent} from 'effector/event'
-import {createEffect} from 'effector/effect'
+import {createStore} from '..'
+import {createEvent} from '../../event'
+import {createEffect} from '../../effect'
 import {spy, getSpyCalls} from 'effector/fixtures'
 
 test('createStore', () => {

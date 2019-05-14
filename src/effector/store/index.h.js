@@ -1,8 +1,8 @@
 //@flow
 import type {Subscription} from '../index.h'
-import type {Graph, kind, StateRef, ID, Unit} from 'effector/stdlib'
-import type {Event} from 'effector/event'
-import type {Effect} from 'effector/effect'
+import type {Graph, kind, StateRef, ID, Unit} from '../stdlib'
+import type {Event} from '../event'
+import type {Effect} from '../effect'
 import type {CompositeName} from '../compositeName'
 
 export type ThisStore = {

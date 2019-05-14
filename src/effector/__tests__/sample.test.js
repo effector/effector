@@ -2,9 +2,9 @@
 
 import {sample} from '../'
 
-import {createEvent} from 'effector/event'
-import {createStore} from 'effector/store'
-import {createEffect} from 'effector/effect'
+import {createEvent} from '../event'
+import {createStore} from '../store'
+import {createEffect} from '../effect'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 

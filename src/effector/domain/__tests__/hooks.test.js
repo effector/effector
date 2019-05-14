@@ -1,8 +1,8 @@
 //@flow
 
 import {createDomain} from '..'
-import {createEvent} from 'effector/event'
-import {createEffect} from 'effector/effect'
+import {createEvent} from '../../event'
+import {createEffect} from '../../effect'
 import {spy} from 'effector/fixtures'
 
 test('domain.onCreateEvent(fn)', () => {

@@ -1,6 +1,6 @@
 //@flow
 
-import {is} from 'effector/validate'
+import {is} from '../validate'
 import {__DEBUG__} from 'effector/flags'
 import type {Store} from './index.h'
 import {createName} from '../compositeName'

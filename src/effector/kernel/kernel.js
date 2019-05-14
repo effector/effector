@@ -12,9 +12,8 @@ import type {
   Compute,
   Barrier,
   Tap,
-} from 'effector/stdlib'
-import {getGraph, writeRef, readRef, createStateRef} from 'effector/stdlib'
-import {__CANARY__} from 'effector/flags'
+} from '../stdlib'
+import {getGraph, writeRef, readRef, createStateRef} from '../stdlib'
 
 import {getPriority, type PriorityTag} from './getPriority'
 

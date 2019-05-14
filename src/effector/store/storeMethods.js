@@ -1,13 +1,12 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, readRef, writeRef} from 'effector/stdlib'
-import {filterChanged, noop} from 'effector/blocks'
-
 import invariant from 'invariant'
-import {startPhaseTimer, stopPhaseTimer} from 'effector/perf'
+import {step, readRef, writeRef} from '../stdlib'
+import {filterChanged, noop} from '../blocks'
+import {startPhaseTimer, stopPhaseTimer} from '../perf'
 import {getDisplayName} from '../naming'
-import {createLink, type Event} from 'effector/event'
+import {createLink, type Event} from '../event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../index.h'
 

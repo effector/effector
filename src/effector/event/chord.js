@@ -7,7 +7,7 @@ import {
   readRef,
   writeRef,
   type StateRef,
-} from 'effector/stdlib'
+} from '../stdlib'
 
 import type {Event} from './index.h'
 import {createEvent} from './createEvent'

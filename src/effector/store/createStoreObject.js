@@ -6,10 +6,10 @@ import {
   readRef,
   writeRef,
   type StateRef,
-} from 'effector/stdlib'
-import {is} from 'effector/validate'
-import {unitObjectName} from 'effector/naming'
-import {createLink} from 'effector/event'
+} from '../stdlib'
+import {is} from '../validate'
+import {unitObjectName} from '../naming'
+import {createLink} from '../event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'

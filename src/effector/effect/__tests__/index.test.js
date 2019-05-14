@@ -1,6 +1,6 @@
 //@flow
 import {createEffect} from '..'
-import {forward} from 'effector/event'
+import {forward} from '../../event'
 import {delay, spy} from 'effector/fixtures'
 
 const effect = createEffect('long request')

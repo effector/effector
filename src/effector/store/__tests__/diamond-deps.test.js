@@ -1,7 +1,7 @@
 //@flow
 import * as fs from 'fs-extra'
 import {resolve} from 'path'
-import {createEvent, forward} from 'effector/event'
+import {createEvent, forward} from '../../event'
 import {createStore} from '..'
 import {combine} from '../../combine'
 

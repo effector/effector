@@ -1,6 +1,6 @@
 //@flow
 import invariant from 'invariant'
-import {is} from 'effector/validate'
+import {is} from '../validate'
 import type {Event} from './index.h'
 
 export const filter = <T>(

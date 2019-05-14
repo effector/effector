@@ -1,10 +1,10 @@
 //@flow
 
 import type {CompositeName} from './compositeName'
-import {is} from 'effector/validate'
-import type {Store} from 'effector/store'
-import type {Event} from 'effector/event'
-import type {Effect} from 'effector/effect'
+import {is} from './validate'
+import type {Store} from './store'
+import type {Event} from './event'
+import type {Effect} from './effect'
 
 export function getDisplayName(unit: {
   compositeName?: CompositeName,

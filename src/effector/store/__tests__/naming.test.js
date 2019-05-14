@@ -1,8 +1,8 @@
 //@flow
 
-import {createDomain} from 'effector/domain'
-import {createEvent} from 'effector/event'
-import {createStore, createStoreObject} from 'effector/store'
+import {createDomain} from '../../domain'
+import {createEvent} from '../../event'
+import {createStore, createStoreObject} from '..'
 import {storeNaming} from '../setStoreName'
 import {unitObjectName} from '../../naming'
 

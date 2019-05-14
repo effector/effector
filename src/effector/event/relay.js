@@ -1,6 +1,6 @@
 //@noflow
 
-import {createGraph, step} from 'effector/stdlib'
+import {createGraph, step} from '../stdlib'
 import {forward} from './forward'
 import type {Event} from './index.h'
 import type {Subscription} from '../index.h'

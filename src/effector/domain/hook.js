@@ -1,9 +1,9 @@
 //@flow
 
 import type {Domain, DomainHooks} from './index.h'
-import type {Store} from 'effector/store'
-import {type Event, eventFabric} from 'effector/event'
-import type {Effect} from 'effector/effect'
+import type {Store} from '../store'
+import {type Event, eventFabric} from '../event'
+import type {Effect} from '../effect'
 import type {CompositeName} from '../compositeName'
 export class DomainHistory {
   /*::;+*/ events: Set<Event<any>> = new Set()

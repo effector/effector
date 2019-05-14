@@ -1,10 +1,10 @@
 //@flow
-import type {Event} from 'effector/event'
-import type {Effect} from 'effector/effect'
+import type {Event} from '../event'
+import type {Effect} from '../effect'
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
-import {is} from 'effector/validate'
+import {is} from '../validate'
 
 export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   obj: State,

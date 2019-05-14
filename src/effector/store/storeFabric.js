@@ -1,8 +1,8 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, createGraph, Kind, createStateRef} from 'effector/stdlib'
-import {createEvent} from 'effector/event'
+import {step, createGraph, Kind, createStateRef} from '../stdlib'
+import {createEvent} from '../event'
 
 import type {Store, ThisStore} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'

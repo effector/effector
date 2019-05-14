@@ -1,6 +1,6 @@
 //@flow
 
-import {createEvent} from 'effector/event'
+import {createEvent} from '..'
 import {relay, relayShape} from '../relay'
 
 test.skip('relay', () => {

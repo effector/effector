@@ -9,16 +9,16 @@
 export {combine, combine as createStoreObject} from './combine'
 export {sample} from './sample'
 
-export type {Domain} from 'effector/domain'
-export {createDomain} from 'effector/domain'
+export type {Domain} from './domain'
+export {createDomain} from './domain'
 
-export type {Event} from 'effector/event'
-export {createEvent, forward, fromObservable} from 'effector/event'
+export type {Event} from './event'
+export {createEvent, forward, fromObservable} from './event'
 
-export type {Effect} from 'effector/effect'
-export {createEffect} from 'effector/effect'
+export type {Effect} from './effect'
+export {createEffect} from './effect'
 
-export type {Store} from 'effector/store'
+export type {Store} from './store'
 export {
   createStore,
   setStoreName,
@@ -29,11 +29,11 @@ export {
   restoreEffect,
   restoreObject,
   withProps,
-} from 'effector/store'
+} from './store'
 
-export {Kind, clearNode, createGraph as createNode, step} from 'effector/stdlib'
-export {launch} from 'effector/kernel'
-export type {kind} from 'effector/stdlib'
+export {Kind, clearNode, createGraph as createNode, step} from './stdlib'
+export {launch} from './kernel'
+export type {kind} from './stdlib'
 
 export {
   invariant,
@@ -44,8 +44,8 @@ export {
   isEffect,
   isDomain,
   is,
-} from 'effector/validate'
+} from './validate'
 export {version} from 'effector/flags'
 
 //eslint-disable-next-line
-export * as blocks from 'effector/blocks'
+export * as blocks from './blocks'

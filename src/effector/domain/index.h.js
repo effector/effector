@@ -2,16 +2,16 @@
 
 import type {CompositeName} from '../compositeName'
 import type {Subscription} from '../index.h'
-import type {Event} from 'effector/event'
-import type {Effect} from 'effector/effect'
-import type {Store} from 'effector/store'
+import type {Event} from '../event'
+import type {Effect} from '../effect'
+import type {Store} from '../store'
 import type {
   Config,
   StoreConfigPart,
   EventConfigPart,
   EffectConfigPart,
 } from '../config'
-import type {kind} from 'effector/stdlib'
+import type {kind} from '../stdlib'
 
 export type Domain = {
   /*:: +*/ id: string,

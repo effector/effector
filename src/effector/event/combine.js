@@ -1,6 +1,6 @@
 //@flow
 
-import {unitObjectName} from 'effector/naming'
+import {unitObjectName} from '../naming'
 
 import type {Event} from './index.h'
 import {eventFabric} from './eventFabric'
