@@ -49,6 +49,7 @@
     "@types/core-js": "^2.5.0",
     "@types/jest": "^24.0.12",
     "@types/ws": "^6.0.1",
+    "aws-sdk": "^2.453.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.7.1",
@@ -165,18 +166,7 @@
     "effector-vue": "./src/vue",
     "@effector/forms": "./src/forms",
     "@effector/redux-adapter": "./src/redux",
-    "effector/validate": "./src/effector/validate",
-    "effector/domain": "./src/effector/domain",
-    "effector/effect": "./src/effector/effect",
-    "effector/event": "./src/effector/event",
-    "effector/store": "./src/effector/store",
-    "effector/kernel": "./src/effector/kernel",
-    "effector/stdlib": "./src/effector/stdlib",
-    "effector/blocks": "./src/effector/blocks",
-    "effector/flags": "./src/flags.prod",
-    "effector/watcher": "./src/effector/watcher",
-    "effector/naming": "./src/effector/naming",
-    "effector/perf": "./src/effector/perf"
+    "effector/flags": "./src/effector/flags.prod"
   },
   "devDependencies": {
     "@types/react": "^16.8.16"
