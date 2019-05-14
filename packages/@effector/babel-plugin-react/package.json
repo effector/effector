@@ -16,9 +16,6 @@
     "babel-plugin",
     "displayName"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "author": "Zero Bias",
   "maintainers": [
     {
@@ -38,5 +35,8 @@
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

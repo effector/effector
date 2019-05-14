@@ -22,6 +22,9 @@ const common = {
   engines: {
     node: '>=6.0.0',
   },
+  publishConfig: {
+    access: 'public',
+  },
 }
 
 const version = {
@@ -216,9 +219,6 @@ export default {
     files: ['index.js'],
     peerDependencies: dependsOnEffector,
     keywords: ['effector', 'babel-plugin', 'displayName'],
-    publishConfig: {
-      access: 'public',
-    },
     ...common,
   },
   '@effector/babel-plugin-react': {
@@ -232,9 +232,6 @@ export default {
       'effector-react': '*',
     },
     keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
-    publishConfig: {
-      access: 'public',
-    },
     ...common,
   },
   '@effector/forms': {
