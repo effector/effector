@@ -5,6 +5,20 @@ import {createDomain} from '../../domain'
 
 test("should return it's own name on effect.getType()", () => {
   expect(createEffect('foo').getType()).toBe('foo')
+  expect(createEffect('foo', {name: 'bar'}).getType()).toBe('foo')
+  expect(createEffect({name: 'foo'}).getType()).toBe('foo')
+  expect(createEffect({handler: () => 'done!', name: 'foo'}).getType()).toBe(
+    'foo',
+  )
+  expect(createEffect({handler: () => 'done!'}, {name: 'foo'}).getType()).toBe(
+    'foo',
+  )
+  expect(
+    createEffect(
+      {handler: () => 'done!', name: 'foo'},
+      {name: 'bar'},
+    ).getType(),
+  ).toBe('foo')
 })
 test('effect from domains should has full path in name', () => {
   const domain = createDomain('dom')

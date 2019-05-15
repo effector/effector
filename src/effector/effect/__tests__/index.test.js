@@ -83,6 +83,16 @@ describe('createEffect with config', () => {
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
+  it('supports default handler without name', async() => {
+    const effect = createEffect({
+      async handler(params) {
+        await delay(500)
+        spy(params)
+        return 'done!'
+      },
+    })
+    await expect(effect('ok')).resolves.toBe('done!')
+  })
 })
 
 it('should return itself at .use call', () => {
