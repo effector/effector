@@ -12,9 +12,8 @@ import type {
   Compute,
   Barrier,
   Tap,
-} from 'effector/stdlib'
-import {getGraph, writeRef, readRef, createStateRef} from 'effector/stdlib'
-import {__CANARY__} from 'effector/flags'
+} from '../stdlib'
+import {getGraph, writeRef, readRef, createStateRef} from '../stdlib'
 
 import {getPriority, type PriorityTag} from './getPriority'
 
@@ -23,8 +22,8 @@ class Stack {
   value: StateRef
   parent: Stack | null
   */
-  constructor(value: StateRef, parent: Stack | null) {
-    this.value = value
+  constructor(value: any, parent: Stack | null) {
+    this.value = createStateRef(value)
     this.parent = parent
   }
 }
@@ -112,35 +111,6 @@ const layerComparator = (a: Layer, b: Layer) => {
   if (a.type === b.type) return a.id > b.id
   return getPriority(a.type) > getPriority(b.type)
 }
-function iterate(tree: leftist) {
-  const results = []
-  while (tree) {
-    results.push(tree.value)
-    tree = deleteMin(tree)
-  }
-  return results
-}
-const flattenLayer = (layer: Layer) => {
-  const result = {}
-  const scope = []
-  let currentScope = layer.scope
-  while (currentScope) {
-    scope.push(currentScope.value)
-    currentScope = currentScope.parent
-  }
-  result.id = layer.id
-  result.type = layer.type
-  result.scope = scope
-  return result
-}
-const printLayers = list => {
-  const flatten = list.map(flattenLayer)
-  console.table((flatten: any))
-  // for (let i = 0; i < flatten.length; i++) {
-  //   console.log(flatten[i].id, flatten[i].type)
-  //   console.table((flatten[i].scope.slice().reverse(): any))
-  // }
-}
 let layerID = 0
 let heap: leftist = null
 const barriers = new Set()
@@ -199,7 +169,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
        * copy head of scope stack to feel free
        * to override it during seq execution
        */
-      const subscope = new Stack(createStateRef(readRef(scope.value)), scope)
+      const subscope = new Stack(readRef(scope.value), scope)
       pushHeap({
         step: graph.next[stepn],
         firstIndex: 0,
@@ -219,7 +189,7 @@ export const launch = (unit: Graphite, payload: any) => {
   pushHeap({
     step,
     firstIndex: 0,
-    scope: new Stack(createStateRef(payload), null),
+    scope: new Stack(payload, null),
     resetStop: false,
     type: 'pure',
     id: ++layerID,
@@ -232,12 +202,6 @@ export const launch = (unit: Graphite, payload: any) => {
     value = heap.value
     heap = deleteMin(heap)
     runGraph(value, meta)
-    if (__CANARY__) {
-      const list = iterate(heap)
-      if (list.length > 4) {
-        printLayers(list)
-      }
-    }
   }
 }
 const command = {
@@ -289,13 +253,13 @@ const command = {
     local.isFailed = runCtx.err
   },
 }
-const tryRun = ctx => {
+const tryRun = ({fn, arg, val}: any) => {
   const result = {
     err: false,
     result: null,
   }
   try {
-    result.result = ctx.fn.call(null, ctx.arg, ctx.val)
+    result.result = fn(arg, val)
   } catch (err) {
     console.error(err)
     result.err = true

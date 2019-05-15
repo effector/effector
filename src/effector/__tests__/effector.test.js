@@ -4,9 +4,9 @@ import {from, periodic} from 'most'
 
 import {combine} from '..'
 
-import {createDomain} from 'effector/domain'
-import {createEvent, fromObservable} from 'effector/event'
-import {createStore, createStoreObject} from 'effector/store'
+import {createDomain} from '../domain'
+import {createEvent, fromObservable} from '../event'
+import {createStore, createStoreObject} from '../store'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 

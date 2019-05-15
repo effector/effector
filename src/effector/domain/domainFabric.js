@@ -1,7 +1,7 @@
 //@flow
 
-import {stringRefcount, Kind} from 'effector/stdlib'
-import {type Store, storeFabric} from 'effector/store'
+import {stringRefcount, Kind} from '../stdlib'
+import {type Store, storeFabric} from '../store'
 import {
   normalizeConfig,
   type Config,
@@ -9,8 +9,8 @@ import {
   type EventConfigPart,
   type StoreConfigPart,
 } from '../config'
-import {type Event, eventFabric} from 'effector/event'
-import {type Effect, effectFabric} from 'effector/effect'
+import {type Event, eventFabric} from '../event'
+import {type Effect, effectFabric} from '../effect'
 
 import type {Domain, DomainHooks} from './index.h'
 import type {DomainConfigPart} from '../config'

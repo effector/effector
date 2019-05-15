@@ -1,7 +1,7 @@
 //@flow
-import {type Graphite, type Cmd, getGraph, createGraph} from 'effector/stdlib'
+import {type Graphite, type Cmd, getGraph, createGraph} from '../stdlib'
 import type {Subscription} from '../index.h'
-import {createWatcher} from 'effector/watcher'
+import {createWatcher} from '../watcher'
 
 export const createLink = (
   from: Graphite,

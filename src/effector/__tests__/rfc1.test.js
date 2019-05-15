@@ -2,9 +2,9 @@
 import * as React from 'react'
 import TestRenderer from 'react-test-renderer'
 import {from} from 'most'
-import {createStore, createStoreObject, withProps} from 'effector/store'
-import {createEvent, type Event} from 'effector/event'
-import {createEffect} from 'effector/effect'
+import {createStore, createStoreObject, withProps} from '../store'
+import {createEvent, type Event} from '../event'
+import {createEffect} from '../effect'
 
 import {spy, delay, getSpyCalls} from 'effector/fixtures'
 

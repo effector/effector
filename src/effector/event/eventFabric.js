@@ -1,16 +1,10 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {
-  step,
-  Kind,
-  stringRefcount,
-  createGraph,
-  type Unit,
-} from 'effector/stdlib'
-import type {Effect} from 'effector/effect'
-import {launch} from 'effector/kernel'
-import {noop} from 'effector/blocks'
+import {step, Kind, stringRefcount, createGraph, type Unit} from '../stdlib'
+import type {Effect} from '../effect'
+import {launch} from '../kernel'
+import {noop} from '../blocks'
 
 import {getDisplayName} from '../naming'
 import type {Subscription} from '../index.h'

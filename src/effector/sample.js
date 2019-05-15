@@ -1,8 +1,8 @@
 //@flow
 
-import {is} from 'effector/validate'
-import {eventFabric, createLink} from 'effector/event'
-import {storeFabric, createStoreObject} from 'effector/store'
+import {is} from './validate'
+import {eventFabric, createLink} from './event'
+import {storeFabric, createStoreObject} from './store'
 import {
   step,
   type Graphite,
@@ -10,7 +10,7 @@ import {
   readRef,
   writeRef,
   nextBarrierID,
-} from 'effector/stdlib'
+} from './stdlib'
 
 import invariant from 'invariant'
 

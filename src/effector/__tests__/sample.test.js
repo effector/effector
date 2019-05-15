@@ -2,9 +2,9 @@
 
 import {sample} from '../'
 
-import {createEvent} from 'effector/event'
-import {createStore} from 'effector/store'
-import {createEffect} from 'effector/effect'
+import {createEvent} from '../event'
+import {createStore} from '../store'
+import {createEffect} from '../effect'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 
@@ -251,5 +251,42 @@ describe('sample', () => {
       unsub()
     })
     test('store source with effect as target', () => {})
+  })
+  test('store with handler', () => {
+    const stop = createEvent()
+
+    const s1 = createStore(0)
+    s1.setState(1)
+
+    const s2 = sample(s1, stop, (s1, stop) => [s1, stop])
+
+    s2.watch(value => spy(value))
+    expect(getSpyCalls()).toEqual([[1]])
+    s1.setState(2)
+    s1.setState(0)
+
+    stop()
+    expect(getSpyCalls()).toEqual([[1], [[0, undefined]]])
+    expect(spy).toHaveBeenCalledTimes(2)
+  })
+  test('store x store x handler', () => {
+    const stop = createStore(false)
+
+    const s1 = createStore(0)
+    s1.setState(1)
+
+    const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
+
+    s2.watch(value => spy(value))
+    expect(getSpyCalls()).toEqual([[{s1: 1, stop: false}]])
+    s1.setState(2)
+    s1.setState(0)
+
+    stop.setState(true)
+    expect(getSpyCalls()).toEqual([
+      [{s1: 1, stop: false}],
+      [{s1: 0, stop: true}],
+    ])
+    expect(spy).toHaveBeenCalledTimes(2)
   })
 })

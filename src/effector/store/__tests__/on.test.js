@@ -1,7 +1,7 @@
 //@flow
 
 import {spy, getSpyCalls} from 'effector/fixtures'
-import {createEvent} from 'effector/event'
+import {createEvent} from '../../event'
 import {createStore} from '..'
 
 it('supports stores', () => {

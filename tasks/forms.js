@@ -28,6 +28,6 @@ export default {
         ],
       ]),
     rollupEffectorForms,
-    //publishScript('@effector/forms'),
+    publishScript('@effector/forms'),
   ],
 }

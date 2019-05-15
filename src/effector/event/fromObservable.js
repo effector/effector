@@ -2,7 +2,7 @@
 
 import invariant from 'invariant'
 import $$observable from 'symbol-observable'
-import {clearNode} from 'effector/stdlib'
+import {clearNode} from '../stdlib'
 import {createEvent} from './createEvent'
 import type {Event} from './index.h'
 

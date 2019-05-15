@@ -27,7 +27,7 @@ const createDefaultConfig = () => ({
 })
 
 module.exports = {
-  collectCoverage: boolean(process.env.COVERAGE, true),
+  collectCoverage: boolean(process.env.COVERAGE, false),
   collectCoverageFrom: [
     '<rootDir>/src/**/*.js',
     '!**/node_modules/**',
@@ -83,7 +83,7 @@ module.exports = {
   ]),
 }
 
-if (boolean(process.env.LINT, true)) {
+if (boolean(process.env.LINT, false)) {
   module.exports.projects.push({
     runner: 'jest-runner-eslint',
     displayName: 'lint',

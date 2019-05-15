@@ -4,7 +4,6 @@ import * as React from 'react'
 import {
   type Store,
   isStore,
-  //$todo add invariant to effector public typings
   invariant,
   createStoreObject,
   createEvent,

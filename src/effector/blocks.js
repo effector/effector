@@ -1,6 +1,6 @@
 //@flow
 
-import {step, readRef} from 'effector/stdlib'
+import {step, readRef} from './stdlib'
 
 //prettier-ignore
 export const filterChanged = step.filter({

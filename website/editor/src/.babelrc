@@ -8,8 +8,8 @@
         "loose": true
       }
     ],
-    "@effector/babel-plugin",
-    "@effector/babel-plugin-react"
+    "effector/babel-plugin",
+    "effector/babel-plugin-react"
   ],
   "presets": [
     "@babel/preset-flow",

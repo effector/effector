@@ -1,8 +1,8 @@
 //@flow
 
 import invariant from 'invariant'
-import {type Store, createStoreObject} from 'effector/store'
-import {is} from 'effector/validate'
+import {type Store, createStoreObject} from './store'
+import {is} from './validate'
 
 //eslint-disable-next-line no-unused-vars
 declare export function combine<R>(fn: () => R): Store<R>

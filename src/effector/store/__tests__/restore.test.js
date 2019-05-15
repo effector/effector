@@ -1,13 +1,8 @@
 //@flow
 
-import {
-  restore,
-  restoreEvent,
-  restoreEffect,
-  restoreObject,
-} from 'effector/store'
-import {createEvent} from 'effector/event'
-import {createEffect, type Effect} from 'effector/effect'
+import {restore, restoreEvent, restoreEffect, restoreObject} from '..'
+import {createEvent} from '../../event'
+import {createEffect, type Effect} from '../../effect'
 import {spy} from 'effector/fixtures'
 
 describe('separate functions', () => {

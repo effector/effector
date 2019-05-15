@@ -20,7 +20,6 @@ describe('createComponent', () => {
   const spy = jest.fn()
 
   test('createStoreObject', () => {
-    //$todo
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -30,7 +29,9 @@ describe('createComponent', () => {
         </select>
       </>
     ))
+    //$todo
     a.setState(2)
+    //$todo
     b.setState('foo')
     c.watch(spy)
     const tree = mount(<Foo />)

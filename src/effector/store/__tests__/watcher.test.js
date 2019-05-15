@@ -1,7 +1,7 @@
 //@flow
 
-import {createStore} from 'effector/store'
-import {createEvent} from 'effector/event'
+import {createStore} from '..'
+import {createEvent} from '../../event'
 
 it('support watchers for event', () => {
   const fn = jest.fn()

@@ -23,13 +23,12 @@
     "forms.umd.js.flow"
   ],
   "dependencies": {
-    "effector": "^0.18.7-rc.1"
+    "effector": "^0.18.7"
   },
   "keywords": [
     "effector",
     "forms"
   ],
-  "private": true,
   "author": "Zero Bias",
   "maintainers": [
     {
@@ -50,5 +49,8 @@
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

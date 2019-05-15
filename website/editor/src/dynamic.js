@@ -36,17 +36,21 @@ import {evaluator} from './evaluator'
 
 version.on(selectVersion, (_, p) => p)
 
+const __ENABLE_TYPE_AT_POS__ = false
+
 codeCursorActivity.watch(editor => {
   const cursor = editor.getCursor()
   const body = editor.getValue()
   const line = cursor.line + 1
   const col = cursor.ch
-  typeAtPos({
-    filename: '/static/repl.js',
-    body,
-    line,
-    col,
-  })
+  if (__ENABLE_TYPE_AT_POS__) {
+    typeAtPos({
+      filename: '/static/repl.js',
+      body,
+      line,
+      col,
+    })
+  }
 })
 
 intervals
@@ -206,7 +210,7 @@ codeError
   })
 
 let textMarker
-codeError.watch(async ({stackFrames}) => {
+codeError.watch(async({stackFrames}) => {
   if (textMarker) textMarker.clear()
   for (const frame of stackFrames) {
     if (frame._originalFileName !== 'repl.js') continue

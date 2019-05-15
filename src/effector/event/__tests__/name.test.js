@@ -1,7 +1,7 @@
 //@flow
 
 import {createEvent} from '..'
-import {createDomain} from 'effector/domain'
+import {createDomain} from '../../domain'
 
 test("should return it's own name on event.getType()", () => {
   expect(createEvent('foo').getType()).toBe('foo')

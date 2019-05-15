@@ -1,5 +1,5 @@
 //@flow
-import type {Graph, Cmd} from 'effector/stdlib'
+import type {Graph, Cmd} from '../effector/stdlib'
 
 const showCmdDef = (_: Cmd) =>
   `${_.type} {${JSON.stringify(

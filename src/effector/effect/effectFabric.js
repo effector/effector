@@ -2,10 +2,9 @@
 
 import warning from 'warning'
 import type {Effect} from './index.h'
-import {Kind} from 'effector/stdlib'
+import {Kind, step} from '../stdlib'
 
-import {step} from 'effector/stdlib'
-import {eventFabric, type Event} from 'effector/event'
+import {eventFabric, type Event} from '../event'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
