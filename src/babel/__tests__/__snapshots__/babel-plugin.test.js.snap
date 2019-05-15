@@ -9,14 +9,16 @@ const domain = createDomain(\\"domain\\", {
     file: _effectorFileName,
     line: 4,
     column: 15
-  }
+  },
+  name: \\"domain\\"
 });
 const foo = createDomain('bar', {
   loc: {
     file: _effectorFileName,
     line: 5,
     column: 12
-  }
+  },
+  name: \\"foo\\"
 });"
 `;
 
@@ -29,21 +31,24 @@ const domain = createDomain(\\"domain\\", {
     file: _effectorFileName,
     line: 4,
     column: 15
-  }
+  },
+  name: \\"domain\\"
 });
 const foo = domain.domain(\\"foo\\", {
   loc: {
     file: _effectorFileName,
     line: 5,
     column: 12
-  }
+  },
+  name: \\"foo\\"
 });
 const bar = domain.domain('baz', {
   loc: {
     file: _effectorFileName,
     line: 6,
     column: 12
-  }
+  },
+  name: \\"bar\\"
 });"
 `;
 
@@ -56,14 +61,16 @@ const domain = createDomain(\\"domain\\", {
     file: _effectorFileName,
     line: 4,
     column: 15
-  }
+  },
+  name: \\"domain\\"
 });
 const a = domain.effect(\\"a\\", {
   loc: {
     file: _effectorFileName,
     line: 6,
     column: 10
-  }
+  },
+  name: \\"a\\"
 });
 
 const f = () => domain.effect(\\"f\\", {
@@ -71,7 +78,8 @@ const f = () => domain.effect(\\"f\\", {
     file: _effectorFileName,
     line: 7,
     column: 16
-  }
+  },
+  name: \\"f\\"
 });
 
 const b = domain.effect('hello', {
@@ -79,7 +87,8 @@ const b = domain.effect('hello', {
     file: _effectorFileName,
     line: 8,
     column: 10
-  }
+  },
+  name: \\"b\\"
 });
 
 const g = () => domain.effect('baz', {
@@ -87,7 +96,8 @@ const g = () => domain.effect('baz', {
     file: _effectorFileName,
     line: 9,
     column: 16
-  }
+  },
+  name: \\"g\\"
 });"
 `;
 
@@ -100,14 +110,16 @@ const domain = createDomain(\\"domain\\", {
     file: _effectorFileName,
     line: 4,
     column: 15
-  }
+  },
+  name: \\"domain\\"
 });
 const a = domain.event(\\"a\\", {
   loc: {
     file: _effectorFileName,
     line: 6,
     column: 10
-  }
+  },
+  name: \\"a\\"
 });
 
 const f = () => domain.event(\\"f\\", {
@@ -115,7 +127,8 @@ const f = () => domain.event(\\"f\\", {
     file: _effectorFileName,
     line: 7,
     column: 16
-  }
+  },
+  name: \\"f\\"
 });
 
 const b = domain.event('asm', {
@@ -123,7 +136,8 @@ const b = domain.event('asm', {
     file: _effectorFileName,
     line: 8,
     column: 10
-  }
+  },
+  name: \\"b\\"
 });
 
 const g = () => domain.event('tasm', {
@@ -131,7 +145,8 @@ const g = () => domain.event('tasm', {
     file: _effectorFileName,
     line: 9,
     column: 16
-  }
+  },
+  name: \\"g\\"
 });"
 `;
 
@@ -144,7 +159,8 @@ const domain = createDomain(\\"domain\\", {
     file: _effectorFileName,
     line: 4,
     column: 15
-  }
+  },
+  name: \\"domain\\"
 });
 const a = domain.store('bar', {
   loc: {
@@ -217,22 +233,52 @@ const foo = createEffect(\\"foo\\", {
     file: _effectorFileName,
     line: 5,
     column: 12
-  }
+  },
+  name: \\"foo\\"
 });
 const bar = createEffect('hello', {
   loc: {
     file: _effectorFileName,
     line: 6,
     column: 12
+  },
+  name: \\"bar\\"
+});
+const baz = createEffect({
+  handler() {
+    return 0;
   }
+
+}, {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 12
+  },
+  name: \\"baz\\"
+});
+const quux = createEffect('nice', {
+  ɔ: {
+    handler() {
+      return 0;
+    }
+
+  },
+  loc: {
+    file: _effectorFileName,
+    line: 12,
+    column: 13
+  },
+  name: \\"quux\\"
 });
 
 const f = () => createEffect(\\"f\\", {
   loc: {
     file: _effectorFileName,
-    line: 7,
+    line: 17,
     column: 16
-  }
+  },
+  name: \\"f\\"
 });"
 `;
 
@@ -245,22 +291,35 @@ const foo = createEvent(\\"foo\\", {
     file: _effectorFileName,
     line: 5,
     column: 12
-  }
+  },
+  name: \\"foo\\"
 });
 const bar = createEvent('hello', {
   loc: {
     file: _effectorFileName,
     line: 6,
     column: 12
-  }
+  },
+  name: \\"bar\\"
+});
+const baz = createEvent({
+  name: 'nice'
+}, {
+  loc: {
+    file: _effectorFileName,
+    line: 7,
+    column: 12
+  },
+  name: \\"baz\\"
 });
 
 const f = () => createEvent(\\"f\\", {
   loc: {
     file: _effectorFileName,
-    line: 7,
+    line: 8,
     column: 16
-  }
+  },
+  name: \\"f\\"
 });"
 `;
 
