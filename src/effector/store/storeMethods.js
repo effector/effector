@@ -80,7 +80,7 @@ export function watch(
   fn?: Function,
 ) {
   const message = 'watch requires function handler'
-  switch (eventOrFn?.kind) {
+  switch (fn && eventOrFn?.kind) {
     case 'store':
     case 'event':
     case 'effect':
