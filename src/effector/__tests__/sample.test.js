@@ -1,12 +1,24 @@
 //@flow
 
-import {sample} from '../'
+import {sample, Kind} from '../'
 
 import {createEvent} from '../event'
 import {createStore} from '../store'
 import {createEffect} from '../effect'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
+
+describe('sample type', () => {
+  test.each`
+    source            | clock             | kind
+    ${createStore(0)} | ${createStore(0)} | ${Kind.store}
+    ${createStore(0)} | ${createEvent()}  | ${Kind.event}
+    ${createEvent()}  | ${createStore(0)} | ${Kind.event}
+    ${createEvent()}  | ${createEvent()}  | ${Kind.event}
+  `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
+  expect(sample(source, clock).kind).toBe(kind)
+})
+})
 
 describe('sample', () => {
   describe('sample with event as source', () => {
@@ -234,7 +246,20 @@ describe('sample', () => {
       expect(spy).toHaveBeenCalledTimes(2)
     })
 
-    test('store source with event as target', () => {
+    test('store source with event as target plain', () => {
+      const foo = createStore([1, 2, 3])
+      const bar = createStore([4, 5, 6])
+      const stop = createEvent()
+
+      const baz = sample(bar, stop)
+
+      foo.on(baz, (store1, store2) => [...store1, ...store2])
+
+      console.log(baz)
+      stop(['stop'])
+      expect(foo.getState()).toBe([1, 2, 3, 4, 5, 6])
+    })
+    test.skip('store source with event as target', () => {
       const foo = createStore([1, 2, 3])
       const bar = createStore([4, 5, 6])
       const stop = createEvent()
@@ -244,7 +269,7 @@ describe('sample', () => {
 
       foo.on(baz, (store1, store2) => [...store1, ...store2])
 
-      stop()
+      stop(['stop'])
 
       expect(foo.getState()).toBe([1, 2, 3, 4, 5, 6])
 
