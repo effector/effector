@@ -18,6 +18,20 @@ describe('sample type', () => {
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
   expect(sample(source, clock).kind).toBe(kind)
 })
+  test.each`
+    source            | clock             | kind
+    ${createStore(0)} | ${createStore(0)} | ${Kind.store}
+    ${createStore(0)} | ${createEvent()}  | ${Kind.event}
+    ${createEvent()}  | ${createStore(0)} | ${Kind.event}
+    ${createEvent()}  | ${createEvent()}  | ${Kind.event}
+  `(
+  `$kind <- $source.kind by $clock.kind with handler`,
+  ({source, clock, kind}) => {
+    expect(
+      sample(source, clock, (source, clock) => ({source, clock})).kind,
+    ).toBe(kind)
+  },
+)
 })
 
 describe('sample', () => {
