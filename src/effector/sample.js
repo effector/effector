@@ -16,13 +16,13 @@ import invariant from 'invariant'
 
 const sampleFabric = ({
   source,
-  sampler,
+  clock,
   fn,
   target,
 }: {
   source: Graphite,
-  sampler: Graphite,
-  fn?: (source: any, sampler: any) => any,
+  clock: Graphite,
+  fn?: (source: any, clock: any) => any,
   target: Graphite,
 }) => {
   const state = createStateRef()
@@ -40,7 +40,7 @@ const sampleFabric = ({
       }),
     ],
   })
-  return createLink(sampler, {
+  return createLink(clock, {
     scope: {
       state,
       hasValue,
@@ -81,17 +81,17 @@ const handleFirstState = (source, clock, fn) => {
 }
 export function sample(
   source: any,
-  sampler: Graphite,
-  fn?: (source: any, sampler: any) => any,
+  clock: Graphite,
+  fn?: (source: any, clock: any) => any,
 ): any {
-  if (!sampler) {
+  if (!clock) {
     return sampleFabric(source)
   }
 
   let target
   if (is.store(source)) {
     target = storeFabric({
-      currentState: handleFirstState(source, sampler, fn),
+      currentState: handleFirstState(source, clock, fn),
       config: {name: source.shortName},
       parent: source.domainName,
     })
@@ -102,7 +102,7 @@ export function sample(
     })
   }
   if (is.unit(source)) {
-    sampleFabric({source, sampler, fn, target})
+    sampleFabric({source, clock, fn, target})
     return target
   }
   if (
@@ -111,11 +111,11 @@ export function sample(
   ) {
     const store = createStoreObject(source)
     target = storeFabric({
-      currentState: handleFirstState(source, sampler, fn),
+      currentState: handleFirstState(source, clock, fn),
       config: {name: store.shortName},
       parent: store.domainName,
     })
-    sampleFabric({source: store, sampler, fn, target})
+    sampleFabric({source: store, clock, fn, target})
     return target
   }
   invariant(
