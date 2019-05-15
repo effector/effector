@@ -118,6 +118,9 @@ describe('sample', () => {
       expect(spy.mock.calls).toEqual([[{source: 'run', clock: 2}]])
       expect(handler.mock.calls).toEqual([[{source: 'run', clock: 2}]])
     })
+
+    test('event source with store as target', () => {})
+    test('event source with effect as target', () => {})
   })
   describe('sample with effect as source', () => {
     test('effect', () => {
@@ -142,6 +145,9 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
+
+    test('effect source with store as target', () => {})
+    test('effect source with effect as target', () => {})
   })
   describe('sample with store as source', () => {
     test('store', () => {
@@ -227,5 +233,23 @@ describe('sample', () => {
 
       expect(spy).toHaveBeenCalledTimes(2)
     })
+
+    test('store source with event as target', () => {
+      const foo = createStore([1, 2, 3])
+      const bar = createStore([4, 5, 6])
+      const stop = createEvent()
+
+      const baz = createEvent()
+      const unsub = sample({source: bar, sampler: stop, target: baz})
+
+      foo.on(baz, (store1, store2) => [...store1, ...store2])
+
+      stop()
+
+      expect(foo.getState()).toBe([1, 2, 3, 4, 5, 6])
+
+      unsub()
+    })
+    test('store source with effect as target', () => {})
   })
 })
