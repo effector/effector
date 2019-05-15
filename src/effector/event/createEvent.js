@@ -1,16 +1,20 @@
 //@flow
 
 import {eventFabric} from './eventFabric'
-import {normalizeConfig, type EventConfigPart, type Config} from '../config'
+import {
+  normalizeEventConfig,
+  type EventConfigPart,
+  type Config,
+} from '../config'
 import type {Event} from './index.h'
 
 export function createEvent<Payload>(
-  name?: string,
-  config: Config<EventConfigPart> = {},
+  nameOrConfig?: string | EventConfigPart,
+  opts?: Config<EventConfigPart> = {},
 ): Event<Payload> {
-  const opts = normalizeConfig(config)
+  const {config, name} = normalizeEventConfig(nameOrConfig, opts)
   return eventFabric({
     name,
-    config: opts,
+    config,
   })
 }
