@@ -45,6 +45,45 @@ it('support watchers for storages', () => {
   expect(fn.mock.calls).toEqual([['none'], ['3'], ['1']])
 })
 
+it('support event watchers for storages', () => {
+  const fn = jest.fn()
+  const event = createEvent()
+  const update = createEvent()
+  const store = createStore(0).on(update, (s, fn) => fn(s))
+
+  const watcher = event.watch(e => fn(e))
+
+  const watcher2 = store.watch(event)
+
+  update(a => a + 2)
+  update(a => a + 10)
+
+  expect(fn.mock.calls).toEqual([[0], [2], [12]])
+
+  watcher()
+  watcher2()
+})
+
+it('support event watchers for storages', () => {
+  const fn = jest.fn()
+  const sample = createEvent()
+  const store = createStore(0)
+
+  const watcher = store.watch(sample, fn)
+
+  sample()
+  sample()
+  sample()
+
+  expect(fn.mock.calls).toEqual([
+    [0, undefined, 'sample'],
+    [0, undefined, 'sample'],
+    [0, undefined, 'sample'],
+  ])
+
+  watcher()
+})
+
 it('support watchers for mapped storages', () => {
   const addMetaTag = (tag, unit: any) => {
     unit.graphite.scope.tag = tag
