@@ -13,17 +13,17 @@ import type {
   Barrier,
   Tap,
 } from '../stdlib'
-import {getGraph, writeRef, readRef, createStateRef} from '../stdlib'
+import {getGraph, writeRef, readRef} from '../stdlib'
 
 import {getPriority, type PriorityTag} from './getPriority'
 
 class Stack {
   /*::
-  value: StateRef
+  value: {current: any}
   parent: Stack | null
   */
   constructor(value: any, parent: Stack | null) {
-    this.value = createStateRef(value)
+    this.value = {current: value}
     this.parent = parent
   }
 }
