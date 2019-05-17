@@ -3,15 +3,16 @@
 import warning from 'warning'
 import type {Effect} from './index.h'
 import {Kind, step} from '../stdlib'
-
+import {upsertLaunch} from '../kernel'
 import {eventFabric, type Event} from '../event'
+import {createStore, type Store} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
 function OnResolve(result) {
   const {event, params, handler} = this
   //prettier-ignore
-  event({
+  upsertLaunch(event, {
     handler,
     toHandler: result,
     result: {
@@ -23,7 +24,7 @@ function OnResolve(result) {
 function OnReject(error) {
   const {event, params, handler} = this
   //prettier-ignore
-  event({
+  upsertLaunch(event, {
     handler,
     toHandler: error,
     result: {
@@ -135,7 +136,10 @@ export function effectFabric<Payload, Done>({
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
-
+  instance.pending = createStore(false)
+    .on(instance, () => true)
+    .reset(done)
+    .reset(fail)
   return instance
 }
 function runEffect(handler, params, onResolve, onReject) {
