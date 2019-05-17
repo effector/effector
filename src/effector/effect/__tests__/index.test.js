@@ -133,3 +133,15 @@ it('should support forward', async() => {
     [{params: {url: 'xxx'}, result: 'logRequest result'}],
   ])
 })
+
+it('handle sync effect watchers in correct order', async() => {
+  const fn = jest.fn()
+  const eff = createEffect('eff sync', {
+    handler: () => [1, 2, 3],
+  })
+
+  eff.watch(e => fn(e))
+  eff.done.watch(e => fn(e))
+  await eff('run')
+  expect(fn.mock.calls).toEqual([['run'], [{params: 'run', result: [1, 2, 3]}]])
+})
