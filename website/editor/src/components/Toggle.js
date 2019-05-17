@@ -30,10 +30,10 @@ const Input = styled.input`
   --shadow-intense: 0.4;
   top: -1px;
   position: relative;
-  height: 1em;
+  height: 2em;
   width: calc(100% - 0.6em);
-  max-width: 2em;
-  border-radius: 0.5em;
+  max-width: 4em;
+  border-radius: 2em;
   -webkit-appearance: none;
   outline: none;
   margin: 0 0.6em 0 0;
@@ -44,10 +44,10 @@ const Input = styled.input`
     background-color: var(--color-second);
   }
   &:checked::after {
-    left: calc(100% - 9px);
+    left: calc(100% - 20px);
   }
   &:not(:checked)::after {
-    left: 2px;
+    left: 4px;
   }
   &::before {
     content: '';
@@ -56,19 +56,19 @@ const Input = styled.input`
     height: 100%;
     width: 100%;
     padding: 2px;
-    border-radius: 1em;
+    border-radius: 2em;
     top: 0;
     left: 0;
     box-sizing: content-box;
-    box-shadow: inset 0.5px 0.5px 1px rgba(0, 0, 0, var(--shadow-intense));
+    box-shadow: inset 1.5px 1px 2px rgba(0, 0, 0, var(--shadow-intense));
   }
   &::after {
     content: '';
     position: absolute;
     display: block;
-    height: 1em;
-    width: 1em;
-    top: 2px;
+    height: 1.8em;
+    width: 1.8em;
+    top: 3px;
     border-radius: 1em;
     background: white;
     box-shadow: 0 0px 1px rgba(0, 0, 0, var(--shadow-intense)),
