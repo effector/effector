@@ -1,5 +1,64 @@
 # Changelog
 
+## effector-react 0.18.10
+
+- Add initial props factory to `createComponent`
+
+```js
+import {users} from './feature'
+
+const UserItem = createComponent(
+  initialProps => users.map(users => users[initialProps.id]),
+  (_, user) => {
+    return <div>{user.username}</div>
+  }
+)
+
+const UserList = createComponent(users, (_, users) => {
+  return users.map(user => <TodoItem key={user.id} id={user.id} />)
+})
+```
+
+- Implicitly convert objects to `createStoreObject` in `createComponent`
+
+```js
+const deposit = createEvent()
+const username = createStore('zerobias')
+const balance = createStore(0)
+
+const Profile = createComponent({username, balance}, (_, {username, balance}) => {
+  return <div>
+    Hello, {username}. Your balance is {balance}
+    <button onClick={deposit}>Deposit</button>
+  </div>
+})
+```
+
+- Add `mounted` and `unmounted` events to components created by `createComponent`
+
+```js
+import {counter, increment} from './feature'
+
+const Counter = createComponent(counter, (_, state) => {
+  return (
+    <div>
+      {state}
+      <button onClick={increment}>+</button>
+    </div>
+  )
+})
+
+Counter.mounted.watch(({props, state}) => {
+  counter.on(increment, s => s + 1)
+})
+
+Counter.unmounted.watch(({props, state}) => {
+  counter.off(increment)
+})
+```
+
+- Replace `useLayoutEffect` with `useIsomorphicLayoutEffect` to support server-side rendering
+
 ## effector-react 0.18.9
 
 - Replace `useEffect` with `useLayoutEffect` in `useStore` hook to response to state changes immediately
