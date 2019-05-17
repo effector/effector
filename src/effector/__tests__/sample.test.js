@@ -195,8 +195,7 @@ describe('sample', () => {
 
       stop()
 
-      expect(getSpyCalls()).toEqual([[0], [2]])
-      expect(spy).toHaveBeenCalledTimes(2)
+      expect(getSpyCalls()).toEqual([[2]])
     })
     test('store has the same state as source', () => {
       const stop = createEvent()
@@ -205,12 +204,13 @@ describe('sample', () => {
       s1.setState(1)
 
       const s2 = sample(s1, stop)
-
-      expect(s2.getState()).toEqual(s1.getState())
+      s2.watch(e => spy(e))
+      stop()
+      expect(getSpyCalls()).toEqual([[1]])
     })
 
     test('store has its own defaultState', () => {
-      const stop = createEvent()
+      const stop = createStore(0)
 
       const s1 = createStore(0)
       s1.setState(1)
@@ -218,46 +218,6 @@ describe('sample', () => {
       const s2 = sample(s1, stop)
 
       expect(s2.defaultState).toEqual(1)
-    })
-
-    test('store updates if source updates', () => {
-      const stop = createEvent()
-
-      const s1 = createStore(0)
-      s1.setState(1)
-
-      const s2 = sample(s1, stop)
-
-      s2.watch(value => spy(value)) // 1st call
-
-      // Source updates
-      s1.setState(2)
-      s1.setState(0) // to initial state
-
-      stop() // 2nd call
-      expect(spy).toHaveBeenCalledTimes(2)
-    })
-
-    test('store updates only if source is changed', () => {
-      const stop = createEvent()
-
-      const s1 = createStore(0)
-      const s2 = sample(s1, stop)
-
-      s2.watch(value => spy(value)) // 1st call
-
-      stop()
-      s1.setState(0)
-      stop()
-
-      expect(spy).toHaveBeenCalledTimes(1)
-
-      s1.setState(1)
-      s1.setState(2)
-      stop() // 2nd call
-      stop()
-
-      expect(spy).toHaveBeenCalledTimes(2)
     })
 
     test('store source with event as target plain', () => {
@@ -271,23 +231,7 @@ describe('sample', () => {
 
       console.log(baz)
       stop(['stop'])
-      expect(foo.getState()).toBe([1, 2, 3, 4, 5, 6])
-    })
-    test.skip('store source with event as target', () => {
-      const foo = createStore([1, 2, 3])
-      const bar = createStore([4, 5, 6])
-      const stop = createEvent()
-
-      const baz = createEvent()
-      const unsub = sample({source: bar, sampler: stop, target: baz})
-
-      foo.on(baz, (store1, store2) => [...store1, ...store2])
-
-      stop(['stop'])
-
-      expect(foo.getState()).toBe([1, 2, 3, 4, 5, 6])
-
-      unsub()
+      expect(foo.getState()).toEqual([1, 2, 3, 4, 5, 6])
     })
     test('store source with effect as target', () => {})
   })
@@ -297,16 +241,15 @@ describe('sample', () => {
     const s1 = createStore(0)
     s1.setState(1)
 
-    const s2 = sample(s1, stop, (s1, stop) => [s1, stop])
+    const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => spy(value))
-    expect(getSpyCalls()).toEqual([[1]])
+    expect(spy).toHaveBeenCalledTimes(0)
     s1.setState(2)
-    s1.setState(0)
 
-    stop()
-    expect(getSpyCalls()).toEqual([[1], [[0, undefined]]])
-    expect(spy).toHaveBeenCalledTimes(2)
+    stop('x')
+    expect(getSpyCalls()).toEqual([[{s1: 2, stop: 'x'}]])
+    expect(spy).toHaveBeenCalledTimes(1)
   })
   test('store x store x handler', () => {
     const stop = createStore(false)
