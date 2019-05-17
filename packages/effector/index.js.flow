@@ -48,17 +48,18 @@ declare export class Effect<Params, Done, Fail = Error>
   (payload: Params): Future<Params, Done, Fail>;
   /*::+*/ kind: kind;
   /*::+*/ done: Event<{|
-    params: Params,
-    result: Done,
+    /*::+*/ params: Params,
+    /*::+*/ result: Done,
   |}>;
   /*::+*/ fail: Event<{|
-    params: Params,
-    error: Fail,
+    /*::+*/ params: Params,
+    /*::+*/ error: Fail,
   |}>;
   /*::+*/ use: {|
     (asyncFunction: (params: Params) => Promise<Done> | Done): this,
     getCurrent(): (params: Params) => Promise<Done>,
   |};
+  pending: Store<boolean>;
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   //map<T>(fn: (_: E) => T): Event<T>,
@@ -322,47 +323,43 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
 >
 declare export function createDomain(domainName?: string): Domain
 
-declare export function sample<A, B>(
-  config: {
-    source: Event<A> | Store<A> | Effect<A, any, any>,
-    sampler: Event<B> | Store<B>,
-    target: Event<A> | Store<A>,
-  },
-): Node
-declare export function sample<A, B, C>(
-  config: {
-    source: Event<A> | Store<A> | Effect<A, any, any>,
-    sampler: Event<B> | Store<B>,
-    target: Event<C> | Store<C>,
-    fn: (source: A, sampler: B) => C
-  },
-): Node
+declare export function sample<A, B>(config: {
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+  target: Event<A> | Store<A>,
+}): Node
+declare export function sample<A, B, C>(config: {
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  sampler: Event<B> | Store<B>,
+  target: Event<C> | Store<C>,
+  fn: (source: A, sampler: B) => C,
+}): Node
 declare export function sample<A, B>(
   source: Event<A>,
-  sampler: Event<B> | Store<B>
+  sampler: Event<B> | Store<B>,
 ): Event<A>
 declare export function sample<A, B>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>
+  sampler: Event<B> | Store<B>,
 ): Store<A>
 declare export function sample<A, B>(
   source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>
+  sampler: Event<B> | Store<B>,
 ): Event<A>
 declare export function sample<A, B, C>(
   source: Event<A>,
   sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C
+  fn: (source: A, sampler: B) => C,
 ): Event<C>
 declare export function sample<A, B, C>(
   source: Store<A>,
   sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C
+  fn: (source: A, sampler: B) => C,
 ): Store<C>
 declare export function sample<A, B, C>(
   source: Effect<A, any, any>,
   sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C
+  fn: (source: A, sampler: B) => C,
 ): Event<C>
 
 declare export function invariant(

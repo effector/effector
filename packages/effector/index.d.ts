@@ -5,10 +5,10 @@ export const version: string
 export type kind = 'store' | 'event' | 'effect' | 'domain'
 
 export const Kind: {
-  readonly store: kind
-  readonly event: kind
-  readonly effect: kind
-  readonly domain: kind
+readonly store: kind
+readonly event: kind
+readonly effect: kind
+readonly domain: kind
 }
 
 export type Observer<A> = {
@@ -61,6 +61,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
     >
     getCurrent(): (params: Params) => Promise<Done>
   }
+  pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
@@ -101,11 +102,11 @@ export function isEffect<Params, Done, Error>(
 export function isDomain(obj: unknown): obj is Domain
 
 export const is: {
-  unit(obj: unknown): boolean
-  store(obj: unknown): boolean
-  event(obj: unknown): boolean
-  effect(obj: unknown): boolean
-  domain(obj: unknown): boolean
+unit(obj: unknown): boolean
+store(obj: unknown): boolean
+event(obj: unknown): boolean
+effect(obj: unknown): boolean
+domain(obj: unknown): boolean
 }
 
 export class Domain {
@@ -194,23 +195,23 @@ export type Step = {
   scope: {[field: string]: any}
 }
 export const step: {
-  emit(data: {fullName: string}): Emit
-  compute(data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
+emit(data: {fullName: string}): Emit
+compute(data: {
+  fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
-  filter(data: {
-    fn: (data: any, scope: {[field: string]: any}) => boolean
+filter(data: {
+  fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter
-  update(data: {store: StateRef}): Update
-  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
+update(data: {store: StateRef}): Update
+run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
-  node: Array<Cmd>
-  child?: Array<Unit<any> | Step>
-  from?: Array<Unit<any> | Step>
-  scope?: {[field: string]: any}
+node: Array<Cmd>
+child?: Array<Unit<any> | Step>
+from?: Array<Unit<any> | Step>
+scope?: {[field: string]: any}
 }): Step
 export function launch(unit: Unit<any> | Step, payload: any): void
 export function createEvent<E = void>(eventName?: string): Event<E>
@@ -218,7 +219,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: (params: Params) => Promise<Done> | Done
+  handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
 
@@ -269,15 +270,15 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 export function createDomain(domainName?: string): Domain
 
 export function sample<A, B>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>
-  sampler: Event<B> | Store<B>
-  target: Event<A> | Store<A>
+source: Event<A> | Store<A> | Effect<A, any, any>
+sampler: Event<B> | Store<B>
+target: Event<A> | Store<A>
 }): Node
 export function sample<A, B, C>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>
-  sampler: Event<B> | Store<B>
-  target: Event<C> | Store<C>
-  fn: (source: A, sampler: B) => C
+source: Event<A> | Store<A> | Effect<A, any, any>
+sampler: Event<B> | Store<B>
+target: Event<C> | Store<C>
+fn: (source: A, sampler: B) => C
 }): Node
 export function sample<A, B>(
   source: Event<A>,
