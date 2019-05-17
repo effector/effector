@@ -1,8 +1,9 @@
 //@flow
-
+/* eslint-disable no-nested-ternary */
 import {is} from './validate'
 import {eventFabric, createLink} from './event'
 import {storeFabric, createStoreObject} from './store'
+import {noop} from './blocks'
 import {
   step,
   type Graphite,
@@ -12,19 +13,63 @@ import {
   nextBarrierID,
 } from './stdlib'
 
-import invariant from 'invariant'
+const storeByEvent = (source: any, clock: any, fn) => {
+  const target = eventFabric({
+    name: source.shortName,
+    parent: source.domainName,
+  })
+  createLink(clock, {
+    scope: {
+      state: source.stateRef,
+      fn,
+    },
+    child: [target],
+    node: [
+      noop,
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+      step.compute({
+        fn: fn
+          ? (upd, {state, fn}) => fn(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
+      }),
+    ],
+  })
+  return target
+}
+const storeByStore = (source: any, clock: any, fn) => {
+  const sourceState = readRef(source.stateRef)
 
-const sampleFabric = ({
-  source,
-  clock,
-  fn,
-  target,
-}: {
-  source: Graphite,
-  clock: Graphite,
-  fn?: (source: any, clock: any) => any,
-  target: Graphite,
-}) => {
+  const target = storeFabric({
+    currentState: fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState,
+    config: {name: source.shortName},
+    parent: source.domainName,
+  })
+  createLink(clock, {
+    scope: {
+      state: source.stateRef,
+      fn,
+    },
+    child: [target],
+    node: [
+      noop,
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+      step.compute({
+        fn: fn
+          ? (upd, {state, fn}) => fn(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
+      }),
+    ],
+  })
+  return target
+}
+
+const eventByStore = (source: any, clock: any, fn) => {
   const state = createStateRef()
   const hasValue = createStateRef(false)
   createLink(source, {
@@ -40,7 +85,11 @@ const sampleFabric = ({
       }),
     ],
   })
-  return createLink(clock, {
+  const target = eventFabric({
+    name: source.shortName,
+    parent: source.domainName,
+  })
+  createLink(clock, {
     scope: {
       state,
       hasValue,
@@ -62,66 +111,72 @@ const sampleFabric = ({
       }),
     ],
   })
+  return target
 }
-const handleFirstState = (source, clock, fn) => {
-  //assume that source is store
-  const sourceState = readRef(source.stateRef)
-  let firstState
-  if (fn) {
-    if (is.store(clock)) {
-      firstState = fn(sourceState, readRef((clock: any).stateRef))
-    } else {
-      //TODO it must be result of calling fn(source, clockEvent)
-      firstState = sourceState
-    }
-  } else {
-    firstState = sourceState
-  }
-  return firstState
+const eventByEvent = (source: any, clock: any, fn) => {
+  const state = createStateRef()
+  const hasValue = createStateRef(false)
+  createLink(source, {
+    scope: {
+      hasValue,
+    },
+    node: [
+      step.update({store: state}),
+      step.tap({
+        fn(upd, {hasValue}) {
+          writeRef(hasValue, true)
+        },
+      }),
+    ],
+  })
+  const target = eventFabric({
+    name: source.shortName,
+    parent: source.domainName,
+  })
+  createLink(clock, {
+    scope: {
+      state,
+      hasValue,
+      fn,
+    },
+    child: [target],
+    node: [
+      step.filter({
+        fn: (upd, {hasValue}) => readRef(hasValue),
+      }),
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+      step.compute({
+        fn: fn
+          ? (upd, {state, fn}) => fn(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
+      }),
+    ],
+  })
+  return target
 }
 export function sample(
   source: any,
   clock: Graphite,
   fn?: (source: any, clock: any) => any,
 ): any {
-  if (!clock) {
-    return sampleFabric(source)
-  }
-
-  let target
-  if (is.store(source)) {
-    target = storeFabric({
-      currentState: handleFirstState(source, clock, fn),
-      config: {name: source.shortName},
-      parent: source.domainName,
-    })
-  } else {
-    target = eventFabric({
-      name: source.shortName,
-      parent: source.domainName,
-    })
-  }
-  if (is.unit(source)) {
-    sampleFabric({source, clock, fn, target})
-    return target
-  }
-  if (
-    Array.isArray(source)
-    || (typeof source === 'object' && source !== null)
-  ) {
-    const store = createStoreObject(source)
-    target = storeFabric({
-      currentState: handleFirstState(source, clock, fn),
-      config: {name: store.shortName},
-      parent: store.domainName,
-    })
-    sampleFabric({source: store, clock, fn, target})
-    return target
-  }
-  invariant(
-    false,
-    'sample: First argument should be Event, ' +
-      'Store, Effect [store, store, ...], or ' +
-      '{foo: store, bar: store}',
-  )
+  const sourceNorm = unitOrCombine(source)
+  const clockNorm = unitOrCombine(clock)
+  //prettier-ignore
+  const combinator =
+    is.store(sourceNorm)
+      ? is.store(clockNorm)
+        ? storeByStore
+        : storeByEvent
+      : is.store(clockNorm)
+        ? eventByStore
+        : eventByEvent
+  return combinator(sourceNorm, clockNorm, fn)
 }
+
+//prettier-ignore
+const unitOrCombine = (obj: any) => is.unit(obj)
+  ? obj
+  : createStoreObject(obj)
