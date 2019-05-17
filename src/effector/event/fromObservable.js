@@ -12,13 +12,16 @@ export function fromObservable<T>(observable: mixed): Event<T> {
       || (typeof observable === 'object' && observable !== null),
     'expect observable to be object or function',
   )
-  invariant(
+  const observableItem: any =
     //$off
-    ($$observable: '@@observable') in observable,
-    'expect observable to have property Symbol.observable',
+    ($$observable: '@@observable') in observable
+      ? //$off
+      observable[(($$observable: any): '@@observable')]()
+      : observable
+  invariant(
+    'subscribe' in observableItem,
+    'expect observable to have .subscribe',
   )
-  //$off
-  const observableItem = observable[(($$observable: any): '@@observable')]()
   const event: Event<T> = createEvent()
   const disposer = clearNode.bind(null, event, {})
   observableItem.subscribe({
