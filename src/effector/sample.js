@@ -97,12 +97,13 @@ const eventByStore = (source: any, clock: any, fn) => {
     },
     child: [target],
     node: [
-      step.filter({
-        fn: (upd, {hasValue}) => readRef(hasValue),
-      }),
+      noop,
       step.barrier({
         barrierID: nextBarrierID(),
         priority: 'sampler',
+      }),
+      step.filter({
+        fn: (upd, {hasValue}) => readRef(hasValue),
       }),
       step.compute({
         fn: fn
@@ -141,12 +142,13 @@ const eventByEvent = (source: any, clock: any, fn) => {
     },
     child: [target],
     node: [
-      step.filter({
-        fn: (upd, {hasValue}) => readRef(hasValue),
-      }),
+      noop,
       step.barrier({
         barrierID: nextBarrierID(),
         priority: 'sampler',
+      }),
+      step.filter({
+        fn: (upd, {hasValue}) => readRef(hasValue),
       }),
       step.compute({
         fn: fn
