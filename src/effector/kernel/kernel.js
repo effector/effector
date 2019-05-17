@@ -184,16 +184,23 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
     meta.stop = false
   }
 }
-export const launch = (unit: Graphite, payload: any) => {
-  const step = getGraph(unit)
+
+let alreadyStarted = false
+
+const addSingleBranch = (unit: Graphite, payload: any) => {
   pushHeap({
-    step,
+    step: getGraph(unit),
     firstIndex: 0,
     scope: new Stack(payload, null),
     resetStop: false,
     type: 'pure',
     id: ++layerID,
   })
+}
+
+const exec = () => {
+  const lastStartedState = alreadyStarted
+  alreadyStarted = true
   const meta = {
     stop: false,
   }
@@ -203,6 +210,16 @@ export const launch = (unit: Graphite, payload: any) => {
     heap = deleteMin(heap)
     runGraph(value, meta)
   }
+  alreadyStarted = lastStartedState
+}
+export const launch = (unit: Graphite, payload: any) => {
+  addSingleBranch(unit, payload)
+  exec()
+}
+export const upsertLaunch = (unit: Graphite, payload: any) => {
+  addSingleBranch(unit, payload)
+  if (alreadyStarted) return
+  exec()
 }
 const command = {
   barrier(local, step: $PropertyType<Barrier, 'data'>, val: StateRef) {
