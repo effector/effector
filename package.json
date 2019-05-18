@@ -1,6 +1,6 @@
 {
   "name": "effector-dev",
-  "version": "0.18.7",
+  "version": "0.18.8",
   "description": "Application state manager",
   "private": true,
   "scripts": {
@@ -89,6 +89,7 @@
     "graphql-tag": "^2.10.1",
     "immer": "^3.1.1",
     "immutable": "^4.0.0-rc.12",
+    "ink": "^2.1.1",
     "jest": "^24.7.1",
     "jest-enzyme": "^7.0.2",
     "jest-runner-eslint": "^0.7.3",
