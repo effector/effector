@@ -27,7 +27,11 @@ import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
 
 const nameCache = {}
-
+const onwarn = (warning, rollupWarn: any) => {
+  if (warning.code !== 'CIRCULAR_DEPENDENCY') {
+    rollupWarn(warning)
+  }
+}
 const minifyConfig = ({beautify}: {beautify: boolean}) => ({
   parse: {
     bare_returns: false,
@@ -199,6 +203,7 @@ export async function rollupEffector() {
   async function cjsAndEs() {
     const plugins = getPlugins(name)
     const build = await rollup({
+      onwarn,
       input: (dir(`packages/${name}/index.js`): string),
       external: [
         'warning',
@@ -241,6 +246,7 @@ export async function rollupEffector() {
     const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
+      onwarn,
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,
@@ -272,6 +278,7 @@ export async function rollupEffectorReduxAdapter() {
   async function cjsAndEs() {
     const plugins = getPlugins(name)
     const build = await rollup({
+      onwarn,
       input: (dir(`packages/${name}/index.js`): string),
       external: [
         'warning',
@@ -313,6 +320,7 @@ export async function rollupEffectorReduxAdapter() {
     const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
+      onwarn,
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,
@@ -347,6 +355,7 @@ export async function rollupEffectorForms() {
   async function cjsAndEs() {
     const plugins = getPlugins(name)
     const build = await rollup({
+      onwarn,
       input: (dir(`packages/${name}/index.js`): string),
       external: [
         'warning',
@@ -387,6 +396,7 @@ export async function rollupEffectorForms() {
     const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
+      onwarn,
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,
@@ -421,6 +431,7 @@ export async function rollupEffectorReact() {
   async function cjsAndEs() {
     const plugins = getPlugins(name)
     const build = await rollup({
+      onwarn,
       input: (dir(`packages/${name}/index.js`): string),
       external: [
         'warning',
@@ -461,6 +472,7 @@ export async function rollupEffectorReact() {
     const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
+      onwarn,
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,
@@ -512,6 +524,7 @@ export async function rollupEffectorVue() {
   async function cjsAndEs() {
     const plugins = getPlugins(name)
     const build = await rollup({
+      onwarn,
       input: (dir(`packages/${name}/index.js`): string),
       external: [
         'warning',
@@ -551,6 +564,7 @@ export async function rollupEffectorVue() {
     const plugins = getPlugins(`${name}.umd`)
     //$off
     const build = await rollup({
+      onwarn,
       input: String(dir(`packages/${name}/index.js`)),
       plugins: [
         plugins.resolve,

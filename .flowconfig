@@ -20,7 +20,6 @@ all=false
 server.max_workers=1
 include_warnings=false
 max_header_tokens=5
-experimental.const_params=true
 esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
 esproposal.optional_chaining=enable

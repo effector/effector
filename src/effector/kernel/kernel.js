@@ -77,9 +77,7 @@ const merge = (_t1: leftist, _t2: leftist): leftist => {
     k1 = t1.value
     l = t1.left
     if (layerComparator(k1, t2.value)) {
-      //$off
       _t2 = t1
-      //$off
       _t1 = t2
       continue
     }
