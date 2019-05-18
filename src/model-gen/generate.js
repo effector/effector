@@ -4,7 +4,7 @@ const recast = require('recast')
 const {visit, namedTypes: n, builders: b} = require('ast-types')
 const fs = require('fs')
 
-const code = fs.readFileSync('./fixture.js')
+const code = fs.readFileSync('./fixture.js').toString()
 const ast = recast.parse(code, {
   parser: require('recast/parsers/flow'),
 })
