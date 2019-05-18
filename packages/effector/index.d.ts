@@ -81,11 +81,11 @@ export interface Store<State> extends Unit<State> {
   off(trigger: Unit<any>): void
   subscribe(listener: any): Subscription
   watch<E>(
-    watcher: (state: State, payload: undefined, type: string) => any,
+    watcher: (state: State, payload: undefined) => any,
   ): Subscription
   watch<E>(
     trigger: Unit<E>,
-    watcher: (state: State, payload: E, type: string) => any,
+    watcher: (state: State, payload: E) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
   shortName: string
@@ -136,6 +136,7 @@ export type Cmd =
   | Filter
   | Emit
   | Compute
+  | Tap
   | Barrier
 
 export type Barrier = {
@@ -188,6 +189,14 @@ export type Compute = {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
+export type Tap = {
+  id: ID
+  type: 'tap'
+  group: 'cmd'
+  data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }
+}
 export type Step = {
   from: Array<Step>
   next: Array<Step>
@@ -199,6 +208,9 @@ export const step: {
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
+  tap(data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }): Tap
   filter(data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter
@@ -269,43 +281,42 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A, B>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>
-  sampler: Event<B> | Store<B>
-  target: Event<A> | Store<A>
-}): Node
+export function sample<A>(config: {
+  source: Unit<A>,
+  clock: Unit<any>,
+  target?: Unit<A>,
+  greedy?: boolean,
+}): Unit<A>
 export function sample<A, B, C>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>
-  sampler: Event<B> | Store<B>
-  target: Event<C> | Store<C>
-  fn: (source: A, sampler: B) => C
-}): Node
-export function sample<A, B>(
-  source: Event<A>,
-  sampler: Event<B> | Store<B>,
-): Event<A>
-export function sample<A, B>(
+  source: Unit<A>,
+  clock: Unit<B>,
+  target?: Unit<C>,
+  greedy?: boolean,
+  fn(source: A, clock: B): C,
+}): Unit<C>
+
+export function sample<A>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
+  clock: Store<any>,
+  greedy?: boolean,
 ): Store<A>
-export function sample<A, B>(
-  source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
+export function sample<A>(
+  source: Unit<A>,
+  clock: Unit<any>,
+  greedy?: boolean,
 ): Event<A>
-export function sample<A, B, C>(
-  source: Event<A>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
-): Event<C>
+
 export function sample<A, B, C>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
+  clock: Store<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
+  source: Unit<A>,
+  clock: Unit<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Event<C>
 
 export function invariant(

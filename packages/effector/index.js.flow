@@ -10,10 +10,10 @@ export type kind =
   | 'domain'
 
 declare export var Kind: {|
-  /*::+*/ store: kind,
-  /*::+*/ event: kind,
-  /*::+*/ effect: kind,
-  /*::+*/ domain: kind,
+  +store: kind,
+  +event: kind,
+  +effect: kind,
+  +domain: kind,
 |}
 
 export type Observer<A> = {+next?: (value: A) => void, ...}
@@ -24,11 +24,11 @@ export type Subscription = {
   ...
 }
 export interface Unit<T> {
-  /*::+*/ kind: kind;
+  +kind: kind;
 }
 declare export class Event<Payload> implements Unit<Payload> {
   (payload: Payload): Payload;
-  /*::+*/ kind: kind;
+  +kind: kind;
   watch(watcher: (payload: Payload) => any): Subscription;
   map<T>(fn: (_: Payload) => T): Event<T>;
   filter<T>(fn: (_: Payload) => T | void): Event<T>;
@@ -38,7 +38,7 @@ declare export class Event<Payload> implements Unit<Payload> {
 }
 
 declare export class Future<Params, Done, Fail> extends Promise<Done> {
-  /*::+*/ args: Params;
+  +args: Params;
   anyway(): Promise<void>;
   cache(): Done | void;
 }
@@ -46,16 +46,16 @@ declare export class Future<Params, Done, Fail> extends Promise<Done> {
 declare export class Effect<Params, Done, Fail = Error>
   implements Unit<Params> {
   (payload: Params): Future<Params, Done, Fail>;
-  /*::+*/ kind: kind;
-  /*::+*/ done: Event<{|
-    /*::+*/ params: Params,
-    /*::+*/ result: Done,
+  +kind: kind;
+  +done: Event<{|
+    +params: Params,
+    +result: Done,
   |}>;
-  /*::+*/ fail: Event<{|
-    /*::+*/ params: Params,
-    /*::+*/ error: Fail,
+  +fail: Event<{|
+    +params: Params,
+    +error: Fail,
   |}>;
-  /*::+*/ use: {|
+  +use: {|
     (asyncFunction: (params: Params) => Promise<Done> | Done): this,
     getCurrent(): (params: Params) => Promise<Done>,
   |};
@@ -68,7 +68,7 @@ declare export class Effect<Params, Done, Fail = Error>
 }
 
 declare export class Store<State> implements Unit<State> {
-  /*::+*/ kind: kind;
+  +kind: kind;
   reset(...triggers: Array<Unit<any>>): this;
   getState(): State;
   map<T>(fn: (_: State, lastState?: T) => T, _: void): Store<T>;
@@ -80,12 +80,12 @@ declare export class Store<State> implements Unit<State> {
   off(trigger: Unit<any>): void;
   subscribe(listener: any): Subscription;
   watch<E>(
-    watcher: (state: State, payload: void, type: string) => any,
-    __: void,
+    watcher: (state: State, payload: void) => any,
+    _: void,
   ): Subscription;
   watch<E>(
     trigger: Unit<E>,
-    watcher: (state: State, payload: E, type: string) => any,
+    watcher: (state: State, payload: E) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
   shortName: string;
@@ -122,7 +122,7 @@ declare export var is: {|
 |}
 
 declare export class Domain {
-  /*::+*/ kind: kind;
+  +kind: kind;
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
   onCreateEffect(
     hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
@@ -150,6 +150,7 @@ export type Cmd =
   | Filter
   | Emit
   | Compute
+  | Tap
   | Barrier
 
 export type Barrier = {|
@@ -160,7 +161,6 @@ export type Barrier = {|
     +barrierID: ID,
   |},
 |}
-
 export type Update = {|
   +id: ID,
   +type: 'update',
@@ -177,7 +177,6 @@ export type Run = {|
     fn: (data: any, scope: {[field: string]: any}) => any,
   |},
 |}
-
 export type Filter = {|
   +id: ID,
   +type: 'filter',
@@ -202,6 +201,14 @@ export type Compute = {|
     fn: (data: any, scope: {[field: string]: any}) => any,
   |},
 |}
+export type Tap = {|
+  +id: ID,
+  +type: 'tap',
+  +group: 'cmd',
+  +data: {|
+    fn: (data: any, scope: {[field: string]: any}) => any,
+  |},
+|}
 export type Step = {
   +from: Array<Step>,
   +next: Array<Step>,
@@ -215,6 +222,9 @@ declare export var step: {|
   compute(data: {|
     fn: (data: any, scope: {[field: string]: any}) => any,
   |}): Compute,
+  tap(data: {|
+    fn: (data: any, scope: {[field: string]: any}) => any,
+  |}): Tap,
   filter(data: {|
     fn: (data: any, scope: {[field: string]: any}) => boolean,
   |}): Filter,
@@ -226,8 +236,8 @@ declare export var step: {|
   |}): Run,
 |}
 declare export function forward<T>(opts: {|
-  /*::+*/ from: Unit<T>,
-  /*::+*/ to: Unit<T>,
+  +from: Unit<T>,
+  +to: Unit<T>,
 |}): Subscription
 declare export function clearNode(
   unit: Unit<any> | Step,
@@ -323,43 +333,54 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
 >
 declare export function createDomain(domainName?: string): Domain
 
-declare export function sample<A, B>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
-  target: Event<A> | Store<A>,
-}): Node
-declare export function sample<A, B, C>(config: {
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
-  target: Event<C> | Store<C>,
-  fn: (source: A, sampler: B) => C,
-}): Node
-declare export function sample<A, B>(
-  source: Event<A>,
-  sampler: Event<B> | Store<B>,
-): Event<A>
-declare export function sample<A, B>(
+declare export function sample<A>(
+  config: {|
+    +source: Unit<A>,
+    +clock: Unit<any>,
+    +target?: Unit<A>,
+    +greedy?: boolean,
+  |},
+  _: void,
+  _: void,
+  _: void,
+): Unit<A>
+declare export function sample<A, B, C>(
+  config: {|
+    +source: Unit<A>,
+    +clock: Unit<B>,
+    +target?: Unit<C>,
+    +greedy?: boolean,
+    fn(source: A, clock: B): C,
+  |},
+  _: void,
+  _: void,
+  _: void,
+): Unit<C>
+
+declare export function sample<A>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
+  clock: Store<any>,
+  greedy?: boolean,
+  _: void,
 ): Store<A>
-declare export function sample<A, B>(
-  source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
+declare export function sample<A>(
+  source: Unit<A>,
+  clock: Unit<any>,
+  greedy?: boolean,
+  _: void,
 ): Event<A>
-declare export function sample<A, B, C>(
-  source: Event<A>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
-): Event<C>
+
 declare export function sample<A, B, C>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
+  clock: Store<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Store<C>
 declare export function sample<A, B, C>(
-  source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
-  fn: (source: A, sampler: B) => C,
+  source: Unit<A>,
+  clock: Unit<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Event<C>
 
 declare export function invariant(
