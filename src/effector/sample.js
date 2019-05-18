@@ -13,11 +13,7 @@ import {
   nextBarrierID,
 } from './stdlib'
 
-const storeByEvent = (source: any, clock: any, fn) => {
-  const target = eventFabric({
-    name: source.shortName,
-    parent: source.domainName,
-  })
+const storeBy = (source, clock, fn, target) => {
   createLink(clock, {
     scope: {
       state: source.stateRef,
@@ -39,37 +35,33 @@ const storeByEvent = (source: any, clock: any, fn) => {
   })
   return target
 }
+
+const storeByEvent = (source: any, clock: any, fn) =>
+  storeBy(
+    source,
+    clock,
+    fn,
+    eventFabric({
+      name: source.shortName,
+      parent: source.domainName,
+    }),
+  )
+
 const storeByStore = (source: any, clock: any, fn) => {
   const sourceState = readRef(source.stateRef)
-
-  const target = storeFabric({
-    currentState: fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState,
-    config: {name: source.shortName},
-    parent: source.domainName,
-  })
-  createLink(clock, {
-    scope: {
-      state: source.stateRef,
-      fn,
-    },
-    child: [target],
-    node: [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
-      step.compute({
-        fn: fn
-          ? (upd, {state, fn}) => fn(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
-      }),
-    ],
-  })
-  return target
+  return storeBy(
+    source,
+    clock,
+    fn,
+    storeFabric({
+      currentState: fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState,
+      config: {name: source.shortName},
+      parent: source.domainName,
+    }),
+  )
 }
 
-const eventByStore = (source: any, clock: any, fn) => {
+const eventBy = (source: any, clock: any, fn) => {
   const state = createStateRef()
   const hasValue = createStateRef(false)
   createLink(source, {
@@ -114,51 +106,7 @@ const eventByStore = (source: any, clock: any, fn) => {
   })
   return target
 }
-const eventByEvent = (source: any, clock: any, fn) => {
-  const state = createStateRef()
-  const hasValue = createStateRef(false)
-  createLink(source, {
-    scope: {
-      hasValue,
-    },
-    node: [
-      step.update({store: state}),
-      step.tap({
-        fn(upd, {hasValue}) {
-          writeRef(hasValue, true)
-        },
-      }),
-    ],
-  })
-  const target = eventFabric({
-    name: source.shortName,
-    parent: source.domainName,
-  })
-  createLink(clock, {
-    scope: {
-      state,
-      hasValue,
-      fn,
-    },
-    child: [target],
-    node: [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
-      step.filter({
-        fn: (upd, {hasValue}) => readRef(hasValue),
-      }),
-      step.compute({
-        fn: fn
-          ? (upd, {state, fn}) => fn(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
-      }),
-    ],
-  })
-  return target
-}
+
 export function sample(
   source: any,
   clock: Graphite,
@@ -172,9 +120,7 @@ export function sample(
       ? is.store(clockNorm)
         ? storeByStore
         : storeByEvent
-      : is.store(clockNorm)
-        ? eventByStore
-        : eventByEvent
+      : eventBy
   return combinator(sourceNorm, clockNorm, fn)
 }
 
