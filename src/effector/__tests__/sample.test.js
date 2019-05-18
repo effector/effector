@@ -35,6 +35,12 @@ describe('sample type', () => {
 })
 
 describe('sample', () => {
+  it('works with config', () => {
+    const foo = createStore('')
+    const bar = createStore('')
+
+    sample({sampler: foo, source: foo, target: bar})
+  })
   describe('sample with event as source', () => {
     it.each`
       greedy
@@ -46,6 +52,7 @@ describe('sample', () => {
   sample(B, A, B => B, greedy).watch(e => spy(e))
   A(1)
   A(2)
+  A(3)
   expect(getSpyCalls()).toEqual([[{x: 1}], [{x: 2}]])
 })
 
@@ -302,7 +309,6 @@ describe('sample', () => {
 
       foo.on(baz, (store1, store2) => [...store1, ...store2])
 
-      console.log(baz)
       stop(['stop'])
       expect(foo.getState()).toEqual([1, 2, 3, 4, 5, 6])
     })
