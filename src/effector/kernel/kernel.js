@@ -72,26 +72,24 @@ const merge = (_t1: leftist, _t2: leftist): leftist => {
   while (true) {
     t2 = _t2
     t1 = _t1
-    if (t1) {
-      if (t2) {
-        k1 = t1.value
-        l = t1.left
-        if (layerComparator(k1, t2.value)) {
-          _t2 = t1
-          _t1 = t2
-          continue
-        }
-        merged = merge(t1.right, t2)
-        rank_left = l?.rank ?? 0
-        rank_right = merged?.rank ?? 0
-        if (rank_left >= rank_right) {
-          return new Leftist(k1, rank_right + 1, l, merged)
-        }
-        return new Leftist(k1, rank_left + 1, merged, l)
-      }
-      return t1
+    if (!t1) return t2
+    if (!t2) return t1
+    k1 = t1.value
+    l = t1.left
+    if (layerComparator(k1, t2.value)) {
+      //$off
+      _t2 = t1
+      //$off
+      _t1 = t2
+      continue
     }
-    return t2
+    merged = merge(t1.right, t2)
+    rank_left = l?.rank ?? 0
+    rank_right = merged?.rank ?? 0
+    if (rank_left >= rank_right) {
+      return new Leftist(k1, rank_right + 1, l, merged)
+    }
+    return new Leftist(k1, rank_left + 1, merged, l)
   }
   /*::return _t1*/
 }

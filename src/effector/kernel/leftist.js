@@ -39,7 +39,9 @@ export function merge<A>(
         const k1 = t1.value
         const l = t1.left
         if (comparator(k1, t2.value)) {
+          //$off
           _t2 = t1
+          //$off
           _t1 = t2
           continue
         }
@@ -90,6 +92,7 @@ export function iterate<A>(
   while (tree) {
     const extracted = delete_min(tree, comparator)
     results.push(extracted[0])
+    //$off
     tree = extracted[1]
   }
   return results
