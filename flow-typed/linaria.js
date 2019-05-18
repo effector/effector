@@ -20,15 +20,7 @@ declare module 'linaria/react' {
 
   declare export type StyledTag<T> = (
     strings: string[],
-    ...exprs: Array<
-      | string
-      | number
-      | StyledComponent<any>
-      | CSSProperties
-      | (T => string | number)
-      | void
-      | null,
-    >
+    ...exprs: $ReadOnlyArray<any>
   ) => StyledComponent<T>
 
   declare export type StyledJSXIntrinsics = $ObjMap<
