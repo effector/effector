@@ -21,25 +21,41 @@ import {createComponent} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
 describe('Unit', () => {
-  test('sample', () => {
-    const a = createEvent<number>()
-    const b = createEvent<boolean>()
-    const c = sample(a, b)
+  describe('sample', () => {
+    test('event by event', () => {
+      const a = createEvent<number>()
+      const b = createEvent<boolean>()
+      const c = sample(a, b)
 
-    const check1: Event<number> = c
-    const check2: Event<string> = c
+      const check1: Event<number> = c
+      const check2: Event<string> = c
+    })
 
-    const d = createStore(0)
-    const e = sample(d, b)
+    test('store by event', () => {
+      const d = createStore(0)
+      const b = createEvent<boolean>()
+      const e = sample(d, b)
 
-    const check3: Store<number> = e
-    const check4: Store<string> = e
+      const check3: Event<number> = e
+      const check4: Event<string> = e
+    })
 
-    const f = createEffect<string, any, any>()
-    const g = sample(f, b)
+    test('effect by event', () => {
+      const f = createEffect<string, any, any>()
+      const g = sample(f, b)
 
-    const check5: Event<string> = g
-    const check6: Event<number> = g
+      const check5: Event<string> = g
+      const check6: Event<number> = g
+    })
+
+    test('store by store', () => {
+      const a = createStore(false)
+      const b = createStore(0)
+      const c = sample(a, b)
+
+      const check1: Store<boolean> = c
+      const check2: Store<string> = c
+    })
   })
 })
 
