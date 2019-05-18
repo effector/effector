@@ -128,12 +128,16 @@ export function sample(
   let target
   //config case
   if (clock === undefined) {
-    clock = source.clock || source.sampler || source.source
+    clock = source.clock || source.sampler
     fn = source.fn
     greedy = source.greedy
     //optional target accepted only from config
     target = source.target
     source = source.source
+  }
+  if (clock === undefined) {
+    //still undefined!
+    clock = source
   }
   const sourceNorm = unitOrCombine(source)
   const clockNorm = unitOrCombine(clock)
