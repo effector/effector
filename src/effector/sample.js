@@ -13,55 +13,67 @@ import {
   nextBarrierID,
 } from './stdlib'
 
-const storeBy = (source, clock, fn, target) => {
+const withGreediness = (greedy, node) =>
+  greedy
+    ? node
+    : [
+      noop,
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
+      }),
+    ].concat(node)
+
+const storeBy = (source, clock, fn, greedy, target) => {
   createLink(clock, {
     scope: {
       state: source.stateRef,
       fn,
     },
     child: [target],
-    node: [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
+    node: withGreediness(greedy, [
       step.compute({
         fn: fn
           ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
-    ],
+    ]),
   })
   return target
 }
 
-const storeByEvent = (source: any, clock: any, fn) =>
+const storeByEvent = (source: any, clock: any, fn: any, greedy, target) =>
   storeBy(
     source,
     clock,
     fn,
-    eventFabric({
-      name: source.shortName,
-      parent: source.domainName,
-    }),
+    greedy,
+    target
+      || eventFabric({
+        name: source.shortName,
+        parent: source.domainName,
+      }),
   )
 
-const storeByStore = (source: any, clock: any, fn) => {
+const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
   const sourceState = readRef(source.stateRef)
   return storeBy(
     source,
     clock,
     fn,
-    storeFabric({
-      currentState: fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState,
-      config: {name: source.shortName},
-      parent: source.domainName,
-    }),
+    greedy,
+    target
+      || storeFabric({
+        currentState: fn
+          ? fn(sourceState, readRef(clock.stateRef))
+          : sourceState,
+        config: {name: source.shortName},
+        parent: source.domainName,
+      }),
   )
 }
 
-const eventBy = (source: any, clock: any, fn) => {
+const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
   const state = createStateRef()
   const hasValue = createStateRef(false)
   createLink(source, {
@@ -77,10 +89,12 @@ const eventBy = (source: any, clock: any, fn) => {
       }),
     ],
   })
-  const target = eventFabric({
-    name: source.shortName,
-    parent: source.domainName,
-  })
+  target =
+    target
+    || eventFabric({
+      name: source.shortName,
+      parent: source.domainName,
+    })
   createLink(clock, {
     scope: {
       state,
@@ -88,12 +102,7 @@ const eventBy = (source: any, clock: any, fn) => {
       fn,
     },
     child: [target],
-    node: [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
+    node: withGreediness(greedy, [
       step.filter({
         fn: (upd, {hasValue}) => readRef(hasValue),
       }),
@@ -102,7 +111,7 @@ const eventBy = (source: any, clock: any, fn) => {
           ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
-    ],
+    ]),
   })
   return target
 }
@@ -110,18 +119,33 @@ const eventBy = (source: any, clock: any, fn) => {
 export function sample(
   source: any,
   clock: Graphite,
-  fn?: (source: any, clock: any) => any,
+  fn?: boolean | ((source: any, clock: any) => any),
+  greedy: boolean = false,
 ): any {
+  let target
+  //config case
+  if (clock === undefined) {
+    clock = source.clock || source.sampler
+    fn = source.fn
+    greedy = source.greedy
+    //optional target accepted only from config
+    target = source.target
+    source = source.source
+  }
   const sourceNorm = unitOrCombine(source)
   const clockNorm = unitOrCombine(clock)
+  if (typeof fn === 'boolean') {
+    greedy = fn
+    fn = undefined
+  }
   //prettier-ignore
   const combinator =
     is.store(sourceNorm)
       ? is.store(clockNorm)
         ? storeByStore
         : storeByEvent
-      : eventBy
-  return combinator(sourceNorm, clockNorm, fn)
+      : eventByUnit
+  return combinator(sourceNorm, clockNorm, fn, greedy, target)
 }
 
 //prettier-ignore
