@@ -128,7 +128,7 @@ export function sample(
   let target
   //config case
   if (clock === undefined) {
-    clock = source.clock || source.sampler
+    clock = source.clock || source.sampler || source.source
     fn = source.fn
     greedy = source.greedy
     //optional target accepted only from config
