@@ -36,14 +36,19 @@ describe('sample type', () => {
 
 describe('sample', () => {
   describe('sample with event as source', () => {
-    it('not depended on order of execution', () => {
-      const A = createEvent()
-      const B = A.map(x => ({x}))
-      sample(B, A).watch(e => spy(e))
-      A(1)
-      A(2)
-      expect(getSpyCalls()).toEqual([[{x: 1}], [{x: 2}]])
-    })
+    it.each`
+      greedy
+      ${true}
+      ${false}
+    `('not depended on order of execution (greedy = $greedy)', ({greedy}) => {
+  const A = createEvent()
+  const B = A.map(x => ({x}))
+  sample(B, A, B => B, greedy).watch(e => spy(e))
+  A(1)
+  A(2)
+  expect(getSpyCalls()).toEqual([[{x: 1}], [{x: 2}]])
+})
+
     test('event', () => {
       const data = createEvent('data')
       const stop = createEvent('stop')
