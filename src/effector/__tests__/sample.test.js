@@ -179,7 +179,25 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
+    it('support watchers as usual', async() => {
+      const fn1 = jest.fn()
+      const fn2 = jest.fn()
+      const hello = createEffect({
+        handler() {
+          return Promise.resolve(200)
+        },
+      })
+      const run = createEvent()
 
+      sample(hello, run).watch(e => fn1(e))
+      sample(hello.done, run).watch(e => fn2(e))
+
+      await hello('test')
+
+      run()
+      expect(fn1).toHaveBeenCalledTimes(1)
+      expect(fn2).toHaveBeenCalledTimes(1)
+    })
     test('effect source with store as target', () => {})
     test('effect source with effect as target', () => {})
   })
