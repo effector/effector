@@ -13,17 +13,6 @@ import {
   nextBarrierID,
 } from './stdlib'
 
-const withGreediness = (greedy, node) =>
-  greedy
-    ? node
-    : [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
-    ].concat(node)
-
 const storeBy = (source, clock, fn, greedy, target) => {
   createLink(clock, {
     scope: {
@@ -31,13 +20,21 @@ const storeBy = (source, clock, fn, greedy, target) => {
       fn,
     },
     child: [target],
-    node: withGreediness(greedy, [
+    node: [
+      //$off
+      !greedy && noop,
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
       step.compute({
         fn: fn
           ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
-    ]),
+    ].filter(Boolean),
   })
   return target
 }
@@ -102,16 +99,22 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
       fn,
     },
     child: [target],
-    node: withGreediness(greedy, [
+    node: [
       step.filter({
         fn: (upd, {hasValue}) => readRef(hasValue),
       }),
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
       step.compute({
         fn: fn
           ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
-    ]),
+    ].filter(Boolean),
   })
   return target
 }
