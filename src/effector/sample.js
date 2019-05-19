@@ -101,17 +101,19 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
       step.filter({
         fn: (upd, {hasSource}) => readRef(hasSource),
       }),
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
       step.compute({
         fn: fn
           ? (upd, {sourceState, clockState, fn}) =>
             fn(readRef(sourceState), readRef(clockState))
           : (upd, {sourceState}) => readRef(sourceState),
       }),
-    ],
+    ].filter(Boolean),
   })
   return target
 }

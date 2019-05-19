@@ -47,36 +47,39 @@ describe('sample', () => {
     sample(foo)
   })
   describe('sample with event as source', () => {
-    //prettier-ignore
-    describe('not depended on order of execution', () => {
-      test('direct order', () => {
-        const A = createEvent()
-        const B = A.map(x => ({x}))
+    describe.each`
+      greedy   | resultDirect                      | resultBacktracking
+      ${false} | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 2}], [{x: 3}]]}
+      ${true}  | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 1}], [{x: 2}]]}
+    `(
+  'depended on order of execution (greedy = $greedy)',
+  ({greedy, resultDirect, resultBacktracking}) => {
+    test('direct order', () => {
+      const A = createEvent()
+      const B = A.map(x => ({x}))
 
-        sample(A, B, (A, B) => B).watch(e => spy(e))
+      sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
 
-        A(1); A(2); A(3)
+      A(1)
+      A(2)
+      A(3)
 
-        expect(getSpyCalls()).toEqual([
-          [{x: 1}],
-          [{x: 2}],
-          [{x: 3}],
-        ])
-      })
-      test('backtracking', () => {
-        const A = createEvent()
-        const B = A.map(x => ({x}))
-
-        sample(B, A, B => B).watch(e => spy(e))
-
-        A(1); A(2); A(3)
-
-        expect(getSpyCalls()).toEqual([
-          [{x: 2}],
-          [{x: 3}],
-        ])
-      })
+      expect(getSpyCalls()).toEqual(resultDirect)
     })
+    test('backtracking', () => {
+      const A = createEvent()
+      const B = A.map(x => ({x}))
+
+      sample(B, A, B => B, greedy).watch(e => spy(e))
+
+      A(1)
+      A(2)
+      A(3)
+
+      expect(getSpyCalls()).toEqual(resultBacktracking)
+    })
+  },
+)
 
     test('event', () => {
       const data = createEvent('data')
