@@ -126,7 +126,7 @@ export function sample(
 ): any {
   let target
   //config case
-  if (clock === undefined && !is.unit(source)) {
+  if (clock === undefined && 'source' in source) {
     clock = source.clock || source.sampler
     fn = source.fn
     greedy = source.greedy
