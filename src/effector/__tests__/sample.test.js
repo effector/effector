@@ -41,20 +41,42 @@ describe('sample', () => {
 
     sample({sampler: foo, source: foo, target: bar})
   })
+  it('works with single source', () => {
+    const foo = createStore('')
+
+    sample(foo)
+  })
   describe('sample with event as source', () => {
-    it.each`
-      greedy
-      ${true}
-      ${false}
-    `('not depended on order of execution (greedy = $greedy)', ({greedy}) => {
-  const A = createEvent()
-  const B = A.map(x => ({x}))
-  sample(B, A, B => B, greedy).watch(e => spy(e))
-  A(1)
-  A(2)
-  A(3)
-  expect(getSpyCalls()).toEqual([[{x: 1}], [{x: 2}]])
-})
+    //prettier-ignore
+    describe('not depended on order of execution', () => {
+      test('direct order', () => {
+        const A = createEvent()
+        const B = A.map(x => ({x}))
+
+        sample(A, B, (A, B) => B).watch(e => spy(e))
+
+        A(1); A(2); A(3)
+
+        expect(getSpyCalls()).toEqual([
+          [{x: 1}],
+          [{x: 2}],
+          [{x: 3}],
+        ])
+      })
+      test('backtracking', () => {
+        const A = createEvent()
+        const B = A.map(x => ({x}))
+
+        sample(B, A, B => B).watch(e => spy(e))
+
+        A(1); A(2); A(3)
+
+        expect(getSpyCalls()).toEqual([
+          [{x: 2}],
+          [{x: 3}],
+        ])
+      })
+    })
 
     test('event', () => {
       const data = createEvent('data')
@@ -211,46 +233,27 @@ describe('sample', () => {
       expect(fn2).toHaveBeenCalledTimes(1)
     })
     describe('event call will not break watchers', () => {
-      it('works with greedy', async() => {
-        const fn1 = jest.fn()
-        const fn2 = jest.fn()
-        const hello = createEffect({
-          handler() {
-            return Promise.resolve(200)
-          },
-        })
-        const run = createEvent()
+      it.each`
+        greedy
+        ${false}
+        ${true}
+      `(
+  'event call will not break watchers (greedy = $greedy)',
+  async({greedy}) => {
+    const fn1 = jest.fn()
+    const hello = createEvent()
+    const run = createEvent()
 
-        sample(hello, run, (a, b) => ({a, b}), true).watch(e => fn1(e))
-        sample(hello.done, run, (a, b) => ({a, b}), true).watch(e => fn2(e))
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
-        run()
-        await hello('test')
+    run('R')
+    hello('hello')
 
-        run()
-        expect(fn1).toHaveBeenCalledTimes(1)
-        expect(fn2).toHaveBeenCalledTimes(1)
-      })
-      it('works with batched', async() => {
-        const fn1 = jest.fn()
-        const fn2 = jest.fn()
-        const hello = createEffect({
-          handler() {
-            return Promise.resolve(200)
-          },
-        })
-        const run = createEvent()
-
-        sample(hello, run, (a, b) => ({a, b}), false).watch(e => fn1(e))
-        sample(hello.done, run, (a, b) => ({a, b}), false).watch(e => fn2(e))
-
-        run()
-        await hello('test')
-
-        run()
-        expect(fn1).toHaveBeenCalledTimes(1)
-        expect(fn2).toHaveBeenCalledTimes(1)
-      })
+    run('RR')
+    expect(fn1).toHaveBeenCalledTimes(1)
+  },
+)
     })
     test('effect source with store as target', () => {})
     test('effect source with effect as target', () => {})
