@@ -31,6 +31,14 @@ describe('Unit', () => {
       const check1: Event<number> = c
       const check2: Event<string> = c
     })
+    test('event by event with handler', () => {
+      const a = createEvent<string>()
+      const b = createEvent<boolean>()
+      const c = sample(a, b, (a, b) => ({a, b}))
+
+      const check1: Event<{a: string, b: boolean}> = c
+      const check2: Event<string> = c
+    })
 
     test('store by event', () => {
       const d = createStore(0)
@@ -38,6 +46,14 @@ describe('Unit', () => {
       const e = sample(d, b)
 
       const check3: Event<number> = e
+      const check4: Event<string> = e
+    })
+    test('store by event with handler', () => {
+      const d = createStore('')
+      const b = createEvent<boolean>()
+      const e = sample(d, b, (a, b) => ({a, b}))
+
+      const check3: Event<{a: string, b: boolean}> = e
       const check4: Event<string> = e
     })
 
@@ -49,6 +65,14 @@ describe('Unit', () => {
       const check5: Event<string> = g
       const check6: Event<number> = g
     })
+    test('effect by event with handler', () => {
+      const f = createEffect<string, any, any>()
+      const b = createEvent<boolean>()
+      const g = sample(f, b, (a, b) => ({a, b}))
+
+      const check5: Event<{a: string, b: boolean}> = g
+      const check6: Event<number> = g
+    })
 
     test('store by store', () => {
       const a = createStore(false)
@@ -56,6 +80,14 @@ describe('Unit', () => {
       const c = sample(a, b)
 
       const check1: Store<boolean> = c
+      const check2: Store<string> = c
+    })
+    test('store by store with handler', () => {
+      const a = createStore('')
+      const b = createStore(true)
+      const c = sample(a, b, (a, b) => ({a, b}))
+
+      const check1: Store<{a: string, b: boolean}> = c
       const check2: Store<string> = c
     })
   })
