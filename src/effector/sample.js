@@ -1,7 +1,7 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {is} from './validate'
-import {eventFabric, createLink} from './event'
+import {eventFabric, createLink, forward} from './event'
 import {storeFabric, createStoreObject} from './store'
 import {noop} from './blocks'
 import {
@@ -71,50 +71,47 @@ const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
 }
 
 const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
-  const state = createStateRef()
-  const hasValue = createStateRef(false)
-  createLink(source, {
-    scope: {
-      hasValue,
-    },
-    node: [
-      step.update({store: state}),
-      step.tap({
-        fn(upd, {hasValue}) {
-          writeRef(hasValue, true)
-        },
-      }),
-    ],
-  })
   target =
     target
     || eventFabric({
       name: source.shortName,
       parent: source.domainName,
     })
+  const hasSource = createStateRef(false)
+  const sourceState = createStateRef()
+  const clockState = createStateRef()
+
+  createLink(source, {
+    scope: {hasSource},
+    node: [
+      step.update({store: sourceState}),
+      step.tap({
+        fn(upd, {hasSource}) {
+          writeRef(hasSource, true)
+        },
+      }),
+    ],
+  })
+
   createLink(clock, {
-    scope: {
-      state,
-      hasValue,
-      fn,
-    },
+    scope: {sourceState, clockState, hasSource, fn},
     child: [target],
     node: [
+      step.update({store: clockState}),
       step.filter({
-        fn: (upd, {hasValue}) => readRef(hasValue),
+        fn: (upd, {hasSource}) => readRef(hasSource),
+      }),
+      step.barrier({
+        barrierID: nextBarrierID(),
+        priority: 'sampler',
       }),
       step.compute({
         fn: fn
-          ? (upd, {state, fn}) => fn(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
+          ? (upd, {sourceState, clockState, fn}) =>
+            fn(readRef(sourceState), readRef(clockState))
+          : (upd, {sourceState}) => readRef(sourceState),
       }),
-      //$off
-      !greedy
-        && step.barrier({
-          barrierID: nextBarrierID(),
-          priority: 'sampler',
-        }),
-    ].filter(Boolean),
+    ],
   })
   return target
 }
@@ -127,7 +124,7 @@ export function sample(
 ): any {
   let target
   //config case
-  if (clock === undefined) {
+  if (clock === undefined && !is.unit(source)) {
     clock = source.clock || source.sampler
     fn = source.fn
     greedy = source.greedy
