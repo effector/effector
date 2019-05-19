@@ -60,7 +60,7 @@ module.exports = {
     'effector/stdlib',
     'effector/perf',
     'effector/validate',
-    // 'types',
+    'types',
     'forms',
     'babel',
     // 'redux',
