@@ -251,7 +251,11 @@ export function createApi<
   store: Store<S>,
   api: Api,
 ): {
-  [K in keyof Api]: Api[K] extends (store: S, e: infer E) => S ? Event<E> : any
+  [K in keyof Api]: Api[K] extends (store: S, e: void) => S
+    ? Event<void>
+    : Api[K] extends (store: S, e: infer E) => S
+    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    : any
 }
 
 export function extract<State, NextState>(
