@@ -211,20 +211,20 @@ describe('Store', () => {
   test('#watch', () => {
     const event: Event<number> = createEvent()
     const store = createStore(0)
-    store.watch((state, payload, type) => {
+    store.watch((state, payload) => {
       const check1: number = state
       const check2: typeof undefined = payload
     })
-    store.watch(event, (state, payload, type) => {
+    store.watch(event, (state, payload) => {
       const check1: number = state
       const check2: number = payload
     })
     const computed = store.map(() => 'hello')
-    computed.watch((state, payload, type) => {
+    computed.watch((state, payload) => {
       const check1: string = state
       const check2: typeof undefined = payload
     })
-    computed.watch(event, (state, payload, type) => {
+    computed.watch(event, (state, payload) => {
       const check1: string = state
       const check2: number = payload
     })
