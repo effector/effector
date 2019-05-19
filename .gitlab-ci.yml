@@ -47,5 +47,8 @@ npm_canary:
     - yarn build
     - VERSION_HASH=${CI_COMMIT_SHA:0:8} node tools/versionHash
     - cd npm/effector && npm publish
+  environment:
+    name: npm_canary
+    url: https://www.npmjs.com/package/@effector/canary
   only:
     - master
