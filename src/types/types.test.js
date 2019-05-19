@@ -42,6 +42,7 @@ describe('Unit', () => {
 
     test('effect by event', () => {
       const f = createEffect<string, any, any>()
+      const b = createEvent<boolean>()
       const g = sample(f, b)
 
       const check5: Event<string> = g
