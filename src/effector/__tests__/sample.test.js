@@ -41,6 +41,10 @@ describe('sample', () => {
 
     sample({sampler: foo, source: foo, target: bar})
   })
+  it('handles object combination', () => {
+    const foo = createStore('')
+    sample({foo})
+  })
   it('works with single source', () => {
     const foo = createStore('')
 
@@ -80,6 +84,7 @@ describe('sample', () => {
     })
   },
 )
+
     it('works with sibling events', () => {
       const fn1 = jest.fn()
       const fn2 = jest.fn()
