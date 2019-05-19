@@ -7,6 +7,7 @@ import {
   createEffect,
   createStoreObject,
   createDomain,
+  createApi,
   combine,
   sample,
   Effect,
@@ -95,7 +96,39 @@ describe('Store', () => {
     c.reset(ev)
     c.off(ev)
   })
-  test('createApi', () => {})
+  test('createApi', () => {
+    const store: Store<number> = createStore(0)
+    {
+      const {event} = createApi(store, {
+        event: (n, x: number) => x,
+      })
+      const check: Event<number> = event
+    }
+    {
+      const {event} = createApi(store, {
+        event: (n, x: number) => x,
+      })
+      const check: Event<string> = event
+    }
+    {
+      const {event} = createApi(store, {
+        event: (n, x) => x,
+      })
+      const check: Event<string> = event
+    }
+  })
+  test('createApi voids', () => {
+    const store = createStore(0)
+    const api = createApi(store, {
+      increment: count => count + 1,
+      decrement: count => count - 1,
+      double: count => count * 2,
+      multiply: (count, mp = 2) => count * mp,
+    })
+
+    api.double() // Expected 1 arguments, but got 0.
+    api.multiply() // Expected 1 arguments, but got 0.
+  })
   test('setStoreName', () => {})
   test('extract', () => {})
   test('combine', () => {
