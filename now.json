@@ -69,10 +69,6 @@
       "dest": "/website/editor/index.html"
     },
     {
-      "src": "/size-report",
-      "dest": "http://effector-size-report.s3-website-eu-west-1.amazonaws.com"
-    },
-    {
       "src": "/(.*)",
       "dest": "/website/client/$1"
     }
