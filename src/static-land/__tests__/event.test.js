@@ -1,10 +1,11 @@
 //@flow
 
-import * as jv from 'jsverify'
+// import * as jv from 'jsverify'
 import * as Event from '../event'
 import {createEvent, createStore} from 'effector'
-import type {Event as EventType} from 'effector'
+// import type {Event as EventType} from 'effector'
 
+//$todo
 import {ApplyLaws, FunctorLaws} from 'funland-laws'
 
 import {FilterableLaws} from './laws/filterable'
@@ -55,9 +56,7 @@ describe('Functor<Event>', () => {
       .on(equiv.rh, (list, b) => [...list, b])
       .map(list => {
         if (list.length === 0) return false
-        return list.every(x => {
-          return x === {f_box: {g_box: 0}}
-        })
+        return list.every(x => x === {f_box: {g_box: 0}})
       })
 
     deferWatch(equal, data => {
@@ -102,7 +101,7 @@ describe('Apply<Event>', () => {
 })
 
 describe('Filterable<Event>', () => {
-  const laws = new FilterableLaws(Event)
+  new FilterableLaws(Event)
 })
 
 describe('Contravariant<Event>', () => {
