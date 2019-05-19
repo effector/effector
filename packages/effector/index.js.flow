@@ -333,54 +333,42 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
 >
 declare export function createDomain(domainName?: string): Domain
 
-declare export function sample<A>(
-  config: {|
-    +source: Unit<A>,
-    +clock: Unit<any>,
-    +target?: Unit<A>,
-    +greedy?: boolean,
-  |},
-  _: void,
-  _: void,
-  _: void,
-): Unit<A>
-declare export function sample<A, B, C>(
-  config: {|
-    +source: Unit<A>,
-    +clock: Unit<B>,
-    +target?: Unit<C>,
-    +greedy?: boolean,
-    fn(source: A, clock: B): C,
-  |},
-  _: void,
-  _: void,
-  _: void,
-): Unit<C>
+declare export function sample<A>(config: {|
+  +source: Unit<A>,
+  +clock: Unit<any>,
+  +target?: Unit<A>,
+|}): Unit<A>
+declare export function sample<A, B, C>(config: {|
+  +source: Unit<A>,
+  +clock: Unit<B>,
+  +target?: Unit<C>,
+  fn(source: A, clock: B): C,
+|}): Unit<C>
 
+declare export function sample<A>(source: Store<A>, clock: Store<any>): Store<A>
 declare export function sample<A>(
-  source: Store<A>,
+  source: Event<A> | Effect<A, any, any>,
   clock: Store<any>,
-  greedy?: boolean,
-  _: void,
-): Store<A>
+): Event<A>
 declare export function sample<A>(
-  source: Unit<A>,
-  clock: Unit<any>,
-  greedy?: boolean,
-  _: void,
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<any> | Effect<any, any, any>,
 ): Event<A>
 
 declare export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
 ): Store<C>
 declare export function sample<A, B, C>(
-  source: Unit<A>,
-  clock: Unit<B>,
+  source: Event<A> | Effect<A, any, any>,
+  clock: Store<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
+): Event<A>
+declare export function sample<A, B, C>(
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<B> | Effect<B, any, any>,
+  fn: (source: A, clock: B) => C,
 ): Event<C>
 
 declare export function invariant(
