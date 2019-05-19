@@ -80,7 +80,33 @@ describe('sample', () => {
     })
   },
 )
+    it('works with sibling events', () => {
+      const fn1 = jest.fn()
+      const fn2 = jest.fn()
+      const A = createEvent()
+      const B = A.map(b => ({b}))
+      const C = A.filter(x => {
+        if (x > 5) return `${x} > 5`
+      })
 
+      sample(B, C, ({b}, c) => ({b, c})).watch(e => fn1(e))
+      sample(C, B, (c, {b}) => ({b, c})).watch(e => fn2(e))
+
+      A(2)
+      A(6)
+      A(3)
+      A(4)
+      A(10)
+      expect(fn1.mock.calls).toEqual([
+        [{b: 6, c: `6 > 5`}],
+        [{b: 10, c: `10 > 5`}],
+      ])
+      expect(fn2.mock.calls).toEqual([
+        [{b: 3, c: `6 > 5`}],
+        [{b: 4, c: `6 > 5`}],
+        [{b: 10, c: `10 > 5`}],
+      ])
+    })
     test('event', () => {
       const data = createEvent('data')
       const stop = createEvent('stop')
