@@ -39,3 +39,13 @@ npm_next:
   when: manual
   only:
     - master
+npm_canary:
+  stage: deploy
+  script:
+    - yarn
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - yarn build
+    - VERSION_HASH=${CI_COMMIT_SHA:0:8} node tools/versionHash
+    - cd npm/effector && npm publish
+  only:
+    - master
