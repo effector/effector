@@ -136,8 +136,11 @@ export function effectFabric<Payload, Done>({
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
-  instance.pending = createStore(false)
-    .on(instance, () => true)
+  /* terser will minify true and false to 1 and 0,
+    thereby we need to define true as Boolean(1)
+    and false as Boolean(0) */
+  instance.pending = createStore(Boolean(0))
+    .on(instance, () => Boolean(1))
     .reset(done)
     .reset(fail)
   return instance
