@@ -1,5 +1,147 @@
 # Changelog
 
+## effector 0.18.7-0.18.8
+
+- Add support for passing multiply items at once in `store.reset`
+
+```js
+import {createStore, createEvent} from 'effector'
+
+const firstTrigger = createEvent()
+const secondTrigger = createEvent()
+
+const target = createStore(0).reset(firstTrigger, secondTrigger)
+```
+
+- Add support for `createEvent` and `createEffect` with config (see next code example)
+
+- Add `.pending` property for effects
+
+```js
+import {createEffect} from 'effector'
+import {createComponent} from 'effector-react'
+import React from 'react'
+const fetchApi = createEffect({
+  handler: n => new Promise(resolve => setTimeout(resolve, n)),
+})
+
+fetchApi.pending.watch(console.log)
+
+const Loading = createComponent(
+  fetchApi.pending,
+  (props, pending) => pending && <div>Loading...</div>,
+)
+
+fetchApi(5000)
+```
+
+it's a shorthand for common use case
+
+```js
+import {createEffect, createStore} from 'effector'
+
+const fetchApi = createEffect()
+
+//now you can use fetchApi.pending instead
+const isLoading = createStore(false)
+  .on(fetchApi, () => true)
+  .on(fetchApi.done, () => false)
+  .on(fetchApi.fail, () => false)
+```
+
+[try it](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0FEBm+6KcAvgvjFGAgOTqHFyy2iSyKobboDC10AHbpBZClRr1GJWAFpuJVuGjwEAJSwlx1OgrisUUQQGdEROCgAWAQQggEAXgRosOAkRIAKJMAQJLmIIAJgA26DAAXAieggCUjgB8CMIA7ggAChIgxuieGMZQIQBu6IkIOXAAKuDoUACucHnoBcXoADTJsbFtwKSxwMDmVrYgAHQQIkEgggDmoynYVp6GJoXooyFQM-3AK6YIADJQmFOzjs7cOPzswqKeQzZ245PTMx2eEFQQxh0Twa-xBxJTy+BB-U4zBAAMihCAAPBAEkcTq9Rmi4QB6RHALoDB4jTwARgArAAGUk7PaIWwQc6eQHA4AASDhUyKCVBfjhACMGsxBAgjLwQiAUABrBxIellfF2IlkimkBIoEXihDMBB1CBBHiY3lwfkcvxc5EQjFG+EYtkcylGfZUKCIJxBKAoOpgERwUYuHi4MIeu60Nm0fout0Br3cqBBACeo0wEHBvEsIBCQTyUEdOw0mBIABEAPIAWVGGGC4U8cJp5o6DrgsSAA)
+
+- Introduce `sample`. Sample allows to integrate rapidly changed values with common ui states
+
+```js
+import {createStore, createEvent, sample} from 'effector'
+import {createComponent} from 'effector-react'
+import React from 'react'
+
+const tickEvent = createEvent()
+const tick = createStore(0).on(tickEvent, n => n + 1)
+
+setInterval(tickEvent, 1000 / 60)
+
+const mouseClick = createEvent()
+const clicks = createStore(0).on(mouseClick, n => n + 1)
+
+const sampled = sample(tick, clicks, (tick, clicks) => ({
+  tick,
+  clicks,
+}))
+
+const Monitor = createComponent(sampled, (props, {tick, clicks}) => (
+  <p>
+    <b>tick: </b>
+    {tick}
+    <br />
+    <b>clicks: </b>
+    {clicks}
+  </p>
+))
+
+const App = () => (
+  <div>
+    <Monitor />
+    <button onClick={mouseClick}>click to update</button>
+  </div>
+)
+```
+
+[see sample in action here](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0GU6zoA0CaWOAogG7oB2cJAzppADboC+CAZjFGAgDk6bt3QoCMQaEixEqDNnQBhftFp04XXvyEixE2AFpFE6eGjwEAJSwSefAYNNxzsq7cwSAIgHkAsg66znZwRgAm-NLAKFC0jIhwICgA1tSaCAC8pIqUNPQAFACUMXEJCEmpWTnkeJLoBQAMJQCQAHRxBZVp+QwIBbRFWQB8CLQIANQIAIwlwIzocACS9OgwVJisXck9miTTjYcIAPQIAGzNwKXxiGBQAK4Lyqw71WRK6YUlsTekL6mMN65OqEJqtDq0Ap3R4qf4pEgDIaZUbjKazK4-crMNjocLVbEQdjbVIkFBwxgI7qk8lI0YFJDABAVHbUnYU4AcIpzTGIfxxECSIG1VSyDSFAnscIIiB8CAU5BUv5szkjfqMhAAHggw3VTI1ACNht0AFya46GpDdDi6zX6mDHHVMvWGsls00a83DVDk61647a4BcjFlRAAQQgEGqxVVBWALQ14RAVEdTo1fNoAtgDptBvucAI4zizx2mSQ0KecI4w1dVQICHuEHCSg9+rzBZTHsTycDwd+fCgiGykRQ9zAmja70o7DHhUEXcEJWHo-H+qg4QAnm1MBG6OFlAALECscIFftwOaeHwBNoYWjhNYFDXhiAOkhnopAA)
+
+[Sampling (signal processing)](<https://en.wikipedia.org/wiki/Sampling_(signal_processing)>)
+
+- Add babel plugin for automatic naming of events, effects and stores (useful for identifying resources with SSR)
+- Add babel plugin for automatic displayName for react components
+
+```js
+import {createStore, createEvent} from 'effector'
+import {createComponent} from 'effector-react'
+import React from 'react'
+
+const title = createStore('welcome')
+
+console.log('store.shortName', title.shortName)
+// store.shortName title
+
+const clickTitle = createEvent()
+
+console.log('event.shortName', clickTitle.shortName)
+// store.shortName clickTitle
+
+const Title = createComponent(title, (props, title) => <h1>{title}</h1>)
+
+console.log('Component.displayName', Title.displayName)
+// Component.displayName Title
+```
+
+Plugins are available out from a box
+
+`.babelrc`:
+
+```json
+{
+  "plugins": ["effector/babel-plugin", "effector/babel-plugin-react"]
+}
+```
+
+[see plugins in action](https://effector.now.sh/try?version=master&code=MYewdgzgLgBFCWUA2BTGBeGwBOKCGUKAylCLgBQDkA7ikqALYqUCUAUG6JCKgHRIgA5lWhkUvCAAsyUAHJ4mlADRxEfKTPlN2ncNCxJ4wANYAVNWkw58hAKIA3FGCjkdXCD3EDhlFI+cS0thyCswqwIYm5sjiGsFaKG56sNGoGFi4BCgAwiAMAA7gTi4IMSrk+dgg+RAqpagsGAB8MORsMDAAPJIAjDDg2ZHG6ADeEUZmFgC+TSP1KFOdAPS9TWwsSdx83lS5BUUBACbwEPlIeACeCcowqeLHp+dXoexAA)
+
+- Add support for passing events and effects to watchers
+
+```js
+import {createStore, createEvent} from 'effector'
+
+const updates = createEvent()
+const state = createStore(0)
+state.watch(updates)
+```
+
+- Improve execution order for sync effects
+- Improve typescript typings for createApi (#102)
+
 ## effector-react 0.18.10
 
 - Add initial props factory to `createComponent`
@@ -11,7 +153,7 @@ const UserItem = createComponent(
   initialProps => users.map(users => users[initialProps.id]),
   (_, user) => {
     return <div>{user.username}</div>
-  }
+  },
 )
 
 const UserList = createComponent(users, (_, users) => {
@@ -26,12 +168,17 @@ const deposit = createEvent()
 const username = createStore('zerobias')
 const balance = createStore(0)
 
-const Profile = createComponent({username, balance}, (_, {username, balance}) => {
-  return <div>
-    Hello, {username}. Your balance is {balance}
-    <button onClick={deposit}>Deposit</button>
-  </div>
-})
+const Profile = createComponent(
+  {username, balance},
+  (_, {username, balance}) => {
+    return (
+      <div>
+        Hello, {username}. Your balance is {balance}
+        <button onClick={deposit}>Deposit</button>
+      </div>
+    )
+  },
+)
 ```
 
 - Add `mounted` and `unmounted` events to components created by `createComponent`
