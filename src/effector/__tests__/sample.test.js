@@ -1,10 +1,6 @@
 //@flow
 
-import {sample, Kind} from '../'
-
-import {createEvent} from '../event'
-import {createStore} from '../store'
-import {createEffect} from '../effect'
+import {sample, Kind, createEvent, createStore, createEffect} from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 

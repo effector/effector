@@ -1,8 +1,6 @@
 //@flow
 
-import {createStore} from '../store'
-import {createEvent, forward} from '../event'
-import {clearNode} from '../stdlib'
+import {clearNode, createEvent, forward, createStore} from 'effector'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
