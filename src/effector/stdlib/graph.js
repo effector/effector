@@ -44,7 +44,7 @@ export const clearNode = (
 }
 
 export const getGraph = (graph: Graphite): Graph =>
-  (graph: any).graphite ?? graph
+  (graph: any).graphite || graph
 
 export const traverse = (
   graphite: Graphite,

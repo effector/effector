@@ -82,8 +82,8 @@ const merge = (_t1: leftist, _t2: leftist): leftist => {
       continue
     }
     merged = merge(t1.right, t2)
-    rank_left = l?.rank ?? 0
-    rank_right = merged?.rank ?? 0
+    rank_left = l?.rank || 0
+    rank_right = merged?.rank || 0
     if (rank_left >= rank_right) {
       return new Leftist(k1, rank_right + 1, l, merged)
     }

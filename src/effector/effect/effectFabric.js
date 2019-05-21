@@ -91,7 +91,7 @@ export function effectFabric<Payload, Done>({
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
   //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler ?? defaultThunk.bind(instance)
+  let thunk: Function = handler || defaultThunk.bind(instance)
 
   instance.done = done
   instance.fail = fail
