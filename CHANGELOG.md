@@ -1,5 +1,10 @@
 # Changelog
 
+## effector 0.18.9
+
+- Allow `clearNode` to erase information from the node itself, in addition to the existing opportunity to erase subscribers (thanks @artalar)
+  > [use cases for `clearNode` checked in tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/clearNode.test.js)
+
 ## effector 0.18.7-0.18.8
 
 - Add support for passing multiply items at once in `store.reset`
