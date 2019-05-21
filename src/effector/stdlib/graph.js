@@ -38,6 +38,9 @@ export const clearNode = (
   })
   graph.from.length = 0
   graph.next.length = 0
+  graph.seq.length = 0
+  //$off
+  graph.scope = null
 }
 
 export const getGraph = (graph: Graphite): Graph =>
