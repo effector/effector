@@ -1,5 +1,27 @@
 # Changelog
 
+## effector 0.18.10
+
+- Implement event `store.updates`, representing updates of given store. Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
+  > [see spec for `store.updates` in tests](https://github.com/zerobias/effector/blob/master/src/effector/store/__tests__/updates.test.js)
+
+```js
+import {createStore, is} from 'effector'
+
+const clicksAmount = createStore(0)
+is.event(clicksAmount.updates) // => true
+
+clicksAmount.watch(amount => {
+  console.log('will be triggered with current state, immediately, sync', amount)
+})
+
+clicksAmount.updates.watch(amount => {
+  console.log('will not be triggered unless store value is changed', amount)
+})
+```
+
+[try it](https://effector.now.sh/try?version=0.18.10&code=JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGjmAGcBfOAMyghDgHJVLLUk8p6AoTpCAOxLwkAG2BIA1iQCCICAFc+8ALxwUGLLnwAKAAwBKTqQB0qAG6pFWkWMkz5io3LAATTKhJ64Aei9wlAPjgYKDlUbmsJaVkFGCMAd0wkAAstdGjFP0CETjhVfhIIYVQjYQgAcy16OOBhYTgAI1QgqGAystQ0Z2IQEFRnYDdhAE8iEiG+JHoiNPsYAzIDHlFIuxjHFzcSeMSUmZjMxBy8gULi0oqqmrq+CHhG5tb2zrgFIpISOEF8OFN0YVDiB9kug+O1nFM4HtFPM9EA)
+
 ## effector 0.18.9
 
 - Allow `clearNode` to erase information from the node itself, in addition to the existing opportunity to erase subscribers (thanks @artalar)
