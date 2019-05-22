@@ -1225,10 +1225,10 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.5.0.tgz#146c2a29ee7d3bae4bf2fcb274636e264c813c45"
   integrity sha512-41qEJgBH/TWgo5NFSvBCJ1qkoi3Q6ONSF2avrHq1LVEZfYpdHmj0y9SuTK+u9ZhG1sYQKBL1AWXKyLWP4RaUoQ==
 
-"@zerobias/codebox@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@zerobias/codebox/-/codebox-1.1.0.tgz#f1ce830bff431dd193b9489407163e94b2584536"
-  integrity sha512-cHbv+moLuBlq3KSxJqxTxAnliaOTIiwjILivgesd0ZCnxKd4lrQc6CzGZL/9+h1NxvGbauhF3gbTU8+jym34XA==
+"@zerobias/codebox@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@zerobias/codebox/-/codebox-1.2.0.tgz#818be986b06b84b2e67470b779e566d745210d44"
+  integrity sha512-QuFQy5Lac/G6HkGOlrvsyHiwoviPcamsrHJkNeZ5lpxgs/JgyF90jiXoef78ERcaI1wu7i0X9kXa+kq2L1FOBQ==
   dependencies:
     cross-fetch "^3.0.2"
 
@@ -2550,10 +2550,10 @@ effector-react@^0.18.10:
   resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-0.18.10.tgz#6ad812d4320301b48df4998471ab2487ce624703"
   integrity sha512-vY2RMQm+acHNQqJcoHyOkOgh6WByl3bUjPGFHYItsARsDCipMfuj3ydFx72ys9yA4YES1bpJkgzUYbLYc67x1A==
 
-effector@^0.18.8:
-  version "0.18.8"
-  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.8.tgz#907b132e75edaaad13ea5d13769c63df1684220f"
-  integrity sha512-0EvR+5INBAU3q1gTv8Il5Vmx55d4oWncEupzyYDex58b8EX1+OJSFWj5gcmXyR7Mp/148Cntr1R/LIuywFnZpQ==
+effector@^0.18.9:
+  version "0.18.9"
+  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.9.tgz#cfbb6f4203ce0a9208d01c735adb5dceba3e3307"
+  integrity sha512-YA12eeA4UU7m7IX5Qrsdv/6+amxwbarR95pFDw9Y30h8eVbXZtPpA6wqzVWIO3U2Ux6qr8becCFEtwixXc+drQ==
   dependencies:
     symbol-observable "^1.2.0"
 
