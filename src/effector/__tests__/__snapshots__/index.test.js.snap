@@ -26,6 +26,13 @@ exports[`graphite: show bar 1`] = `
             Next [
               *  Graph {
                  Seq [
+                   1. emit {{
+                      fullName: update store1
+                   }}
+                 ]
+                [(empty list)]},
+              *  Graph {
+                 Seq [
                    1. compute {{}},
                    2. filter {{}}
                  ]
@@ -40,7 +47,15 @@ exports[`graphite: show bar 1`] = `
                         }},
                         3. filter {{}}
                       ]
-                     [(empty list)]}
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. emit {{
+                                fullName: update store1 → *
+                             }}
+                           ]
+                          [(empty list)]}
+                     ]}
                 ]}
            ]}
       ]},
@@ -79,6 +94,13 @@ exports[`graphite: show bar 2`] = `
             Next [
               *  Graph {
                  Seq [
+                   1. emit {{
+                      fullName: update store1
+                   }}
+                 ]
+                [(empty list)]},
+              *  Graph {
+                 Seq [
                    1. compute {{}},
                    2. filter {{}}
                  ]
@@ -93,7 +115,15 @@ exports[`graphite: show bar 2`] = `
                         }},
                         3. filter {{}}
                       ]
-                     [(empty list)]}
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. emit {{
+                                fullName: update store1 → *
+                             }}
+                           ]
+                          [(empty list)]}
+                     ]}
                 ]}
            ]}
       ]}
@@ -138,6 +168,13 @@ exports[`graphite: show foo 1`] = `
                       Next [
                         *  Graph {
                            Seq [
+                             1. emit {{
+                                fullName: update store1
+                             }}
+                           ]
+                          [(empty list)]},
+                        *  Graph {
+                           Seq [
                              1. compute {{}},
                              2. filter {{}}
                            ]
@@ -152,7 +189,15 @@ exports[`graphite: show foo 1`] = `
                                   }},
                                   3. filter {{}}
                                 ]
-                               [(empty list)]}
+                                Next [
+                                  *  Graph {
+                                     Seq [
+                                       1. emit {{
+                                          fullName: update store1 → *
+                                       }}
+                                     ]
+                                    [(empty list)]}
+                               ]}
                           ]}
                      ]}
                 ]}
@@ -175,6 +220,13 @@ exports[`graphite: show store1 1`] = `
   Next [
     *  Graph {
        Seq [
+         1. emit {{
+            fullName: update store1
+         }}
+       ]
+      [(empty list)]},
+    *  Graph {
+       Seq [
          1. compute {{}},
          2. filter {{}}
        ]
@@ -189,7 +241,15 @@ exports[`graphite: show store1 1`] = `
               }},
               3. filter {{}}
             ]
-           [(empty list)]}
+            Next [
+              *  Graph {
+                 Seq [
+                   1. emit {{
+                      fullName: update store1 → *
+                   }}
+                 ]
+                [(empty list)]}
+           ]}
       ]}
   ]}"
 `;
@@ -205,7 +265,15 @@ exports[`graphite: show store2 1`] = `
     }},
     3. filter {{}}
   ]
-  [(empty list)]}"
+  Next [
+    *  Graph {
+       Seq [
+         1. emit {{
+            fullName: update store1 → *
+         }}
+       ]
+      [(empty list)]}
+  ]}"
 `;
 
 exports[`showcase: event foo 1`] = `
@@ -234,6 +302,13 @@ exports[`showcase: event foo 1`] = `
             Next [
               *  Graph {
                  Seq [
+                   1. emit {{
+                      fullName: update a
+                   }}
+                 ]
+                [(empty list)]},
+              *  Graph {
+                 Seq [
                    1. filter {{}},
                    2. tap {{}},
                    3. tap {{}},
@@ -260,6 +335,13 @@ exports[`showcase: event foo 1`] = `
                       Next [
                         *  Graph {
                            Seq [
+                             1. emit {{
+                                fullName: update combine(a, b)
+                             }}
+                           ]
+                          [(empty list)]},
+                        *  Graph {
+                           Seq [
                              1. compute {{}},
                              2. filter {{}}
                            ]
@@ -275,6 +357,13 @@ exports[`showcase: event foo 1`] = `
                                   3. filter {{}}
                                 ]
                                 Next [
+                                  *  Graph {
+                                     Seq [
+                                       1. emit {{
+                                          fullName: update combine(a, b) → *
+                                       }}
+                                     ]
+                                    [(empty list)]},
                                   *  Graph {
                                      Seq [
                                        1. compute {{}},
@@ -304,6 +393,13 @@ exports[`showcase: mapped 1`] = `
   Next [
     *  Graph {
        Seq [
+         1. emit {{
+            fullName: update combine(a, b) → *
+         }}
+       ]
+      [(empty list)]},
+    *  Graph {
+       Seq [
          1. compute {{}},
          2. run {{}}
        ]
@@ -323,6 +419,13 @@ exports[`showcase: store a 1`] = `
     3. filter {{}}
   ]
   Next [
+    *  Graph {
+       Seq [
+         1. emit {{
+            fullName: update a
+         }}
+       ]
+      [(empty list)]},
     *  Graph {
        Seq [
          1. filter {{}},
@@ -351,6 +454,13 @@ exports[`showcase: store a 1`] = `
             Next [
               *  Graph {
                  Seq [
+                   1. emit {{
+                      fullName: update combine(a, b)
+                   }}
+                 ]
+                [(empty list)]},
+              *  Graph {
+                 Seq [
                    1. compute {{}},
                    2. filter {{}}
                  ]
@@ -366,6 +476,13 @@ exports[`showcase: store a 1`] = `
                         3. filter {{}}
                       ]
                       Next [
+                        *  Graph {
+                           Seq [
+                             1. emit {{
+                                fullName: update combine(a, b) → *
+                             }}
+                           ]
+                          [(empty list)]},
                         *  Graph {
                            Seq [
                              1. compute {{}},
