@@ -80,6 +80,7 @@ export interface Store<State> extends Unit<State> {
   ): this
   off(trigger: Unit<any>): void
   subscribe(listener: any): Subscription
+  updates: Event<State>
   watch<E>(
     watcher: (state: State, payload: undefined) => any,
   ): Subscription
