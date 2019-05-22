@@ -23,7 +23,7 @@
     "forms.umd.js.flow"
   ],
   "dependencies": {
-    "effector": "^0.18.9"
+    "effector": "^0.18.10"
   },
   "keywords": [
     "effector",
