@@ -1,8 +1,9 @@
 //@flow
 import $$observable from 'symbol-observable'
 
+import {launch} from '../kernel'
 import {step, createGraph, Kind, createStateRef} from '../stdlib'
-import {createEvent} from '../event'
+import {createEvent, forward} from '../event'
 
 import type {Store, ThisStore} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'
@@ -32,7 +33,7 @@ export function storeFabric<State>(props: {
   const defaultState = currentState
   const compositeName = createName(currentId, parent)
 
-  const updater: any = createEvent('update ' + currentId)
+  const updates: any = createEvent('update ' + currentId)
   const storeInstance: ThisStore = {
     graphite: createGraph({
       scope: {state: plainState, oldState: currentState},
@@ -72,6 +73,7 @@ export function storeFabric<State>(props: {
     setState,
     off: off.bind(null, storeInstance),
     watch: watch.bind(null, storeInstance),
+    updates,
     subscribe: subscribe.bind(null, storeInstance),
     getState: getState.bind(null, storeInstance),
     stateRef: plainState,
@@ -85,15 +87,17 @@ export function storeFabric<State>(props: {
   ;(store: any).dispatch = dispatch.bind(null)
   //$off
   store[$$observable] = observable.bind(null, storeInstance)
-  store.on(updater, (_, payload) => payload)
+  forward({
+    from: store,
+    to: updates,
+  })
 
   function setState(value, reduce?: Function) {
-    const currentReducer =
-      typeof reduce === 'function' ? reduce : (_, payload) => payload
     const state = getState(storeInstance)
-    const newResult = currentReducer(state, value)
+    const newResult =
+      typeof reduce === 'function' ? reduce(state, value) : value
 
-    updater(newResult)
+    launch(store, newResult)
   }
 
   return store
