@@ -103,7 +103,7 @@ setLanguage('es'); // set es culture
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Окей, теперь, когда основа нашего приложения почти готова, давайте создадим реакт-компонент, который позволит использовать нам переводы. Создадим файл Translate.tsx
+Now, when the basis of our app is almost finished, let's create React-Component, that allow us to use translations. We'll create the "translate.tsx" file.
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -158,7 +158,8 @@ export const getTranslate = (path: string): string => {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Как видите, создание подобной штуки не заняло много времени. Бонусом является то, что мы можем подписаться на стор локализаций и изменять переводы даже там, где это нельзя было бы сделать обычным способом. Например, мы можем создать класс-хелпер, позволяющий удобно работать с локализацией в приложении: 
+As you can see, creating such a thing didn't take long.
+The benefits is that now we can subscribe to our localisation store and change translations even where it couldn't be done in the usual way. For example, we can create a helper class that allow us easy to interact with localisation in the app: 
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -214,7 +215,7 @@ $language.watch((lang) => set(lang)); // set app culture on each store update
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-и пример использования 
+Here's example of using:
 
 <!--DOCUSAURUS_CODE_TABS-->
 
