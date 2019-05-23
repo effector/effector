@@ -93,3 +93,174 @@ setLanguage('es'); // set es culture
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
+
+Окей, теперь, когда основа нашего приложения почти готова, давайте создадим реакт-компонент, который позволит использовать нам переводы. Создадим файл Translate.tsx
+
+<!--DOCUSAURUS_CODE_TABS-->
+
+<!--TypeScript-->
+
+```tsx
+type TranslateProps = {
+    id: string,
+    children?: ((props: string) => React.ReactNode) | string,
+};
+
+const _getTranslate = (
+    id: string,
+    value: string | undefined | null,
+    children: string | undefined
+) => {
+    if (value) {
+        return value;
+    }
+
+    if (children) {
+        return children;
+    }
+
+    return `{{${id}}}`;
+};
+
+export const Translate =
+    createComponent<TranslateProps, StoreTypes>(
+        $localizeStore,
+        (props, state) => {
+            const { children, id } = props;
+            const { translates, currentLanguage } = state;
+
+            const translate = translates[currentLanguage][id];
+            const value = _getTranslate(id, translate, typeof children !== 'function' ? children : undefined);
+
+            return typeof children === 'function'
+                ? children(value)
+                : value;
+        });
+
+// and define translate function
+export const getTranslate = (path: string): string => {
+    const {
+        currentLanguage,
+        translates
+    } = $localizeStore.getState()
+    return _getTranslate(path, translates[currentLanguage][path], path);
+}; 
+```
+
+<!--END_DOCUSAURUS_CODE_TABS-->
+
+Как видите, создание подобной штуки не заняло много времени. Бонусом является то, что мы можем подписаться на стор локализаций и изменять переводы даже там, где это нельзя было бы сделать обычным способом. Например: 
+
+<!--DOCUSAURUS_CODE_TABS-->
+
+<!--TypeScript-->
+
+```ts  
+// userCulture.ts
+class UserCulture {
+    private _userCulture: string | null;
+    public set = (lang: string) => this._userCulture = lang;
+    public getCurrentCulture = (): string => {
+        const culture = this._userCulture;
+        if (!!culture) {
+            return culture;
+        }
+
+        throw new Error('culture is undefined');
+    }
+
+    public localize = (data: any) => {
+        if (data.ru !== null && this._isRu()) {
+            return data.ru;
+        }
+
+        if (data.en !== null && this._isEn()) {
+            return data.en;
+        }
+
+        if (data.es !== null && this._isEs()) {
+            return data.es;
+        }
+
+        if (data.tr !== null && this._isTr()) {
+            return data.tr;
+        }
+
+        if (data.zh !== null && this._isZh()) {
+            return data.zh;
+        }
+
+        if (data.de !== null && this._isDe()) {
+            return data.de;
+        }
+
+        if (data.fr !== null && this._isFr()) {
+            return data.fr;
+        }
+
+        return data.en;
+    }
+
+    private _isRu = () => {
+        return this._isCulture('ru');
+    }
+
+    private _isEn = () => {
+        return this._isCulture('en');
+    }
+
+    private _isEs = () => {
+        return this._isCulture('es');
+    }
+
+    private _isDe = () => {
+        return this._isCulture('de');
+    }
+
+    private _isFr = () => {
+        return this._isCulture('fr');
+    }
+
+    private _isTr = () => {
+        return this._isCulture('tr');
+    }
+
+    private _isZh = () => {
+        return this._isCulture('zh');
+    }
+
+    private _isCulture = (culture: string) => {
+        if (!!this._userCulture) {
+            return this._userCulture.toLowerCase() === culture;
+        }
+
+        throw new Error('culture must be a set');
+    }
+}
+
+export const { localize, set, getCurrentCulture } = new UserCulture(); 
+
+
+// store.ts
+$language.watch((lang) => set(lang)); // update app culture
+
+// api.ts
+const url = `https://some.url/?age=20&culture=${getCurrentCulture()}`; 
+
+// pluralize.ts
+export const pluralizeWeeks = (value: number, language: string) => {
+    return pluralizeInternal(value, language, "неделя", "недели", "недель", "week", "weeks", "semana", "semanas", "hafta", "hafta")
+}; 
+
+// store2.ts
+export const $weeks = createStore<Array<{value: number, name: string}>([]); 
+
+// on2.ts
+$weeks.on(
+    $language, 
+    (state, culture) => {
+        return state.map(({value}) => ({name: pluralizeWeeks(value, culture), value}); 
+    }); 
+```
+
+<!--END_DOCUSAURUS_CODE_TABS-->
