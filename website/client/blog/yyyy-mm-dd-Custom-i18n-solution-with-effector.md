@@ -170,15 +170,15 @@ class UserCulture {
     }
 
     public localize = (data: any) => {
-        if (data.ru !== null && this._isCulture('ru')) {
+        if (!!data.ru && this._isCulture('ru')) {
             return data.ru;
         }
 
-        if (data.en !== null && this._isCulture('en')) {
+        if (!!data.en && this._isCulture('en')) {
             return data.en;
         } 
 
-        if (data.de !== null && this._isCulture('de')) {
+        if (!!data.de && this._isCulture('de')) {
             return data.de;
         } 
 
