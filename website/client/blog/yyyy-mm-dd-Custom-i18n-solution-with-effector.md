@@ -67,7 +67,13 @@ export const setLanguage = createEvent<string>('@@i18n/language/set');
 $translates.on(
     addTranslates,
     (state, payload) => {
-         throw new Error('not implemented'); 
+         return {
+            ...state, 
+            [payload.language]: {
+                ...state[payload.language], 
+                ...payload.translates
+            }
+         }; 
     });
 
 $language.on(
@@ -195,6 +201,12 @@ class UserCulture {
 }
 
 export const { localize, set, getCurrentCulture } = new UserCulture();  
+ 
+
+// store.ts
+import {set} from './userCulture'; 
+
+$language.watch((lang) => set(lang)); // set app culture on each store update 
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
@@ -205,13 +217,7 @@ export const { localize, set, getCurrentCulture } = new UserCulture();
 
 <!--TypeScript-->
 
-```ts  
-
-// store.ts
-import {set} from './userCulture'; 
-
-$language.watch((lang) => set(lang)); // update app culture
-
+```ts
 // api.ts
 import {getCurrentCulture} from './userCulture'; 
 const url = `https://some.url/?age=20&culture=${getCurrentCulture()}`; 
