@@ -210,7 +210,7 @@ export const { localize, set, getCurrentCulture } = new UserCulture();
 // store.ts
 import {set} from './userCulture'; 
 
-$language.watch((lang) => set(lang)); // set app culture on each store update 
+$language.watch((lang) => set(lang)); // !!side-effect!! set app culture on each store update 
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
