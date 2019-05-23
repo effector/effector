@@ -40,9 +40,10 @@ export const $localizedStore = createStoreObject({language: $language, translate
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Отлично, стейт мы создали. В нём будет хранится вся информация о переводах и текущем языке. Теперь необходимо добавить возможность динамического добавления переводов, а так же смену языка. 
+ok, we created the state for our i18n library. This state will store information about the current language and a set of translations.
+Now we should to provide the language switching at runtime and dynamically adding the sets of the translates.  
 
-Для этого в файле events.ts определим два события: 
+I created two events in the file events.ts: 
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -57,13 +58,15 @@ export const setLanguage = createEvent<string>('@@i18n/language/set');
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-После этого мы должны подписать наши сторы на эти события. Сделаем это в файле on.ts 
+Thereafter whe should to subscribe our stores to this events
 
 <!--DOCUSAURUS_CODE_TABS-->
 
 <!--TypeScript-->
 
 ```ts  
+// on.ts 
+
 $translates.on(
     addTranslates,
     (state, payload) => {
@@ -87,7 +90,7 @@ $language.on(
 
 
 
-Теперь мы можем с лёгкостью сменить язык нашего приложения, вот так: 
+Now we can switch the language in our application with the event call: 
 <!--DOCUSAURUS_CODE_TABS-->
 
 <!--TypeScript-->
