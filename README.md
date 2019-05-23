@@ -103,11 +103,11 @@ const counter = createStore(0)
 counter.watch(console.log)
 
 const Counter = () => {
-  const counter = useStore(couter)
+  const value = useStore(counter)
 
   return (
     <>
-      <div>{counter}</div>
+      <div>{value}</div>
       <button onClick={increment}>+</button>
       <button onClick={decrement}>-</button>
       <button onClick={resetCounter}>reset</button>
