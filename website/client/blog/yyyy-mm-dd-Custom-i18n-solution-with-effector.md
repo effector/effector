@@ -251,3 +251,65 @@ $weeks.on(
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
+
+And at the end i will show some simple, but very useful components
+
+
+
+<!--DOCUSAURUS_CODE_TABS-->
+
+<!--TypeScript-->
+
+```ts
+ // cultureProvider.tsx
+ type CultureProviderProps = {
+    children: ((props: string) => React.ReactNode)
+};
+
+export const CultureProvider =
+    createComponent<CultureProviderProps, StoreTypes>(
+        $localizeStore,
+        (props, state) => {
+            return props.children(state.currentLanguage)
+        }); 
+        
+        
+// usage
+<CultureProvider>
+    {(language) => <div>current language<div>}
+</CultureProvider>
+
+
+// CultureRenderer
+type CultureRendererProps = {
+    children: ((props: string) => React.ReactNode),
+    cultures: Array<string>
+};
+
+export const CultureRenderer =
+    createComponent<CultureRendererProps, StoreTypes>(
+        $localizeStore,
+        (props, state) => {
+            const langInLower = state.currentLanguage.toLowerCase();
+            const hasCulture = props.cultures.some((c) => {
+                if (!!c && c.toLowerCase() === langInLower) {
+                    return true;
+                }
+
+                return false;
+            })
+
+            return hasCulture
+                ? props.children(langInLower)
+                : null;
+        }); 
+        
+        
+// usage
+
+<CultureRenderer cultures={['en']}>
+    {(culture) => <div>specific information {culture}</div>}
+</CultureRenderer>
+```
+
+<!--END_DOCUSAURUS_CODE_TABS-->
