@@ -1,15 +1,15 @@
 //@flow
 
 import {domainFabric} from './domainFabric'
-import {normalizeConfig, type Config, type DomainConfigPart} from '../config'
+import {normalizeEventConfig, type Config, type DomainConfigPart} from '../config'
 
 export function createDomain(
-  name?: string,
-  config?: Config<DomainConfigPart> = {},
+  nameOrConfig?: string | DomainConfigPart,
+  opts?: Config<DomainConfigPart> = {},
 ) {
-  const opts = normalizeConfig(config)
+  const {config, name} = normalizeEventConfig(nameOrConfig, opts)
   return domainFabric({
     name: name === undefined ? '' : name,
-    config: opts,
+    config,
   })
 }

@@ -1,23 +1,17 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {
-  step,
-  Kind,
-  stringRefcount,
-  createGraph,
-  type Unit,
-} from 'effector/stdlib'
-import type {Effect} from 'effector/effect'
-import {launch} from 'effector/kernel'
-import {noop} from 'effector/blocks'
+import {step, Kind, stringRefcount, createGraph, type Unit} from '../stdlib'
+import type {Effect} from '../effect'
+import {launch} from '../kernel'
+import {noop} from '../blocks'
 
 import {getDisplayName} from '../naming'
 import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
-import {forward} from './forward'
+import {createLink} from './forward'
 
 const nextID = stringRefcount()
 
@@ -79,17 +73,14 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  forward({
-    from: contramapped,
-    to: createGraph({
-      child: [event],
-      scope: {handler: fn},
-      node: [
-        step.compute({
-          fn: (newValue, {handler}) => handler(newValue),
-        }),
-      ],
-    }),
+  createLink(contramapped, {
+    child: [event],
+    scope: {handler: fn},
+    node: [
+      step.compute({
+        fn: (newValue, {handler}) => handler(newValue),
+      }),
+    ],
   })
   return contramapped
 }
@@ -104,17 +95,14 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  forward({
-    from: event,
-    to: createGraph({
-      child: [mapped],
-      scope: {handler: fn},
-      node: [
-        step.compute({
-          fn: (payload, {handler}) => handler(payload),
-        }),
-      ],
-    }),
+  createLink(event, {
+    child: [mapped],
+    scope: {handler: fn},
+    node: [
+      step.compute({
+        fn: (payload, {handler}) => handler(payload),
+      }),
+    ],
   })
   return mapped
 }
@@ -127,28 +115,25 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  forward({
-    from: event,
-    to: createGraph({
-      scope: {handler: fn},
-      child: [mapped],
-      node: [
-        step.compute({
-          fn: (payload, {handler}) => handler(payload),
-        }),
-        step.filter({
-          fn(result, scope) {
-            scope.val = result
-            return result !== undefined
-          },
-        }),
-        step.compute({
-          fn(newValue, scope) {
-            return scope.val
-          },
-        }),
-      ],
-    }),
+  createLink(event, {
+    scope: {handler: fn},
+    child: [mapped],
+    node: [
+      step.compute({
+        fn: (payload, {handler}) => handler(payload),
+      }),
+      step.filter({
+        fn(result, scope) {
+          scope.val = result
+          return result !== undefined
+        },
+      }),
+      step.compute({
+        fn(newValue, scope) {
+          return scope.val
+        },
+      }),
+    ],
   })
   return mapped
 }
@@ -157,20 +142,17 @@ function watchEvent<Payload>(
   event: Unit,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  return forward({
-    from: event,
-    to: createGraph({
-      scope: {trigger: event, handler: watcher},
-      //prettier-ignore
-      node: [
-        noop,
-        step.run({
-          fn: (payload: Payload, {trigger, handler}) => handler(
-            payload,
-            getDisplayName(trigger),
-          ),
-        }),
-      ]
-    }),
+  return createLink(event, {
+    scope: {trigger: event, handler: watcher},
+    //prettier-ignore
+    node: [
+      noop,
+      step.run({
+        fn: (payload: Payload, {trigger, handler}) => handler(
+          payload,
+          getDisplayName(trigger),
+        ),
+      }),
+    ]
   })
 }

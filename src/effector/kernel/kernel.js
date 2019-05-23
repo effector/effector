@@ -12,29 +12,28 @@ import type {
   Compute,
   Barrier,
   Tap,
-} from 'effector/stdlib'
-import {getGraph, writeRef} from 'effector/stdlib'
-import {__CANARY__} from 'effector/flags'
+} from '../stdlib'
+import {getGraph, writeRef, readRef} from '../stdlib'
 
-import {getPriority} from './getPriority'
+import {getPriority, type PriorityTag} from './getPriority'
 
 class Stack {
   /*::
-  value: any
+  value: {current: any}
   parent: Stack | null
   */
   constructor(value: any, parent: Stack | null) {
-    this.value = value
+    this.value = {current: value}
     this.parent = parent
   }
 }
-type LayerType = 'child' | 'pure' | 'barrier' | 'effect'
+
 type Layer = {|
   +step: Graph,
   +firstIndex: number,
   +scope: Stack,
   +resetStop: boolean,
-  +type: LayerType,
+  +type: PriorityTag,
   +id: number,
 |}
 
@@ -73,26 +72,22 @@ const merge = (_t1: leftist, _t2: leftist): leftist => {
   while (true) {
     t2 = _t2
     t1 = _t1
-    if (t1) {
-      if (t2) {
-        k1 = t1.value
-        l = t1.left
-        if (layerComparator(k1, t2.value)) {
-          _t2 = t1
-          _t1 = t2
-          continue
-        }
-        merged = merge(t1.right, t2)
-        rank_left = l?.rank ?? 0
-        rank_right = merged?.rank ?? 0
-        if (rank_left >= rank_right) {
-          return new Leftist(k1, rank_right + 1, l, merged)
-        }
-        return new Leftist(k1, rank_left + 1, merged, l)
-      }
-      return t1
+    if (!t1) return t2
+    if (!t2) return t1
+    k1 = t1.value
+    l = t1.left
+    if (layerComparator(k1, t2.value)) {
+      _t2 = t1
+      _t1 = t2
+      continue
     }
-    return t2
+    merged = merge(t1.right, t2)
+    rank_left = l?.rank || 0
+    rank_right = merged?.rank || 0
+    if (rank_left >= rank_right) {
+      return new Leftist(k1, rank_right + 1, l, merged)
+    }
+    return new Leftist(k1, rank_left + 1, merged, l)
   }
   /*::return _t1*/
 }
@@ -100,46 +95,17 @@ class Local {
   /*::
   isChanged: boolean
   isFailed: boolean
-  arg: any
+  scope: {[key: string]: any}
   */
-  constructor(arg: any) {
+  constructor(scope: {[key: string]: any}) {
     this.isChanged = true
     this.isFailed = false
-    this.arg = arg
+    this.scope = scope
   }
 }
 const layerComparator = (a: Layer, b: Layer) => {
   if (a.type === b.type) return a.id > b.id
   return getPriority(a.type) > getPriority(b.type)
-}
-function iterate(tree: leftist) {
-  const results = []
-  while (tree) {
-    results.push(tree.value)
-    tree = deleteMin(tree)
-  }
-  return results
-}
-const flattenLayer = (layer: Layer) => {
-  const result = {}
-  const scope = []
-  let currentScope = layer.scope
-  while (currentScope) {
-    scope.push(currentScope.value)
-    currentScope = currentScope.parent
-  }
-  result.id = layer.id
-  result.type = layer.type
-  result.scope = scope
-  return result
-}
-const printLayers = list => {
-  const flatten = list.map(flattenLayer)
-  console.table((flatten: any))
-  // for (let i = 0; i < flatten.length; i++) {
-  //   console.log(flatten[i].id, flatten[i].type)
-  //   console.table((flatten[i].scope.slice().reverse(): any))
-  // }
 }
 let layerID = 0
 let heap: leftist = null
@@ -148,7 +114,7 @@ const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
 const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
-  meta.val = graph.scope
+  const local = new Local(graph.scope)
   for (
     let stepn = firstIndex;
     stepn < graph.seq.length && !meta.stop;
@@ -180,7 +146,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
               firstIndex: stepn,
               scope,
               resetStop: false,
-              type: 'barrier',
+              type: step.data.priority,
               id: ++layerID,
             })
           }
@@ -189,16 +155,9 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
       }
     }
     const cmd = command[step.type]
-    const local = new Local(scope.value)
     //$todo
-    scope.value = cmd(meta, local, step.data)
-    if (local.isFailed) {
-      meta.stop = true
-    } else if (!local.isChanged) {
-      meta.stop = true
-    } else {
-      meta.stop = false
-    }
+    cmd(local, step.data, scope.value)
+    meta.stop = local.isFailed || !local.isChanged
   }
   if (!meta.stop) {
     for (let stepn = 0; stepn < graph.next.length; stepn++) {
@@ -206,7 +165,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
        * copy head of scope stack to feel free
        * to override it during seq execution
        */
-      const subscope = new Stack(scope.value, scope)
+      const subscope = new Stack(readRef(scope.value), scope)
       pushHeap({
         step: graph.next[stepn],
         firstIndex: 0,
@@ -221,44 +180,53 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
     meta.stop = false
   }
 }
-export const launch = (unit: Graphite, payload: any) => {
-  const step = getGraph(unit)
+
+let alreadyStarted = false
+
+const addSingleBranch = (unit: Graphite, payload: any) => {
   pushHeap({
-    step,
+    step: getGraph(unit),
     firstIndex: 0,
-    scope: new Stack(payload, new Stack(null, null)),
+    scope: new Stack(payload, null),
     resetStop: false,
     type: 'pure',
     id: ++layerID,
   })
+}
+
+const exec = () => {
+  const lastStartedState = alreadyStarted
+  alreadyStarted = true
   const meta = {
     stop: false,
-    val: step.scope,
   }
   let value
   while (heap) {
     value = heap.value
     heap = deleteMin(heap)
     runGraph(value, meta)
-    if (__CANARY__) {
-      const list = iterate(heap)
-      if (list.length > 4) {
-        printLayers(list)
-      }
-    }
   }
+  alreadyStarted = lastStartedState
+}
+export const launch = (unit: Graphite, payload: any) => {
+  addSingleBranch(unit, payload)
+  exec()
+}
+export const upsertLaunch = (unit: Graphite, payload: any) => {
+  addSingleBranch(unit, payload)
+  if (alreadyStarted) return
+  exec()
 }
 const command = {
-  barrier(meta, local, step: $PropertyType<Barrier, 'data'>) {
+  barrier(local, step: $PropertyType<Barrier, 'data'>, val: StateRef) {
     local.isFailed = false
     local.isChanged = true
-    return local.arg
   },
-  emit: (meta, local, step: $PropertyType<Emit, 'data'>) => local.arg,
-  filter(meta, local, step: $PropertyType<Filter, 'data'>) {
+  emit(local, step: $PropertyType<Emit, 'data'>, val: StateRef) {},
+  filter(local, step: $PropertyType<Filter, 'data'>, val: StateRef) {
     const runCtx = tryRun({
-      arg: local.arg,
-      val: meta.val,
+      arg: readRef(val),
+      val: local.scope,
       fn: step.fn,
     })
     /**
@@ -266,47 +234,45 @@ const command = {
      * runCtx.result will be null
      * thereby successfully forcing that branch to stop
      */
-    local.isChanged = Boolean(runCtx.result)
-    return local.arg
+    local.isChanged = !!runCtx.result
   },
-  run(meta, local, step: $PropertyType<Run, 'data'>) {
+  run(local, step: $PropertyType<Run, 'data'>, val: StateRef) {
     const runCtx = tryRun({
-      arg: local.arg,
-      val: meta.val,
+      arg: readRef(val),
+      val: local.scope,
       fn: step.fn,
     })
     local.isFailed = runCtx.err
-    return runCtx.result
+    writeRef(val, runCtx.result)
   },
-  update(meta, local, step: $PropertyType<Update, 'data'>) {
-    return writeRef(step.store, local.arg)
+  update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
+    writeRef(step.store, readRef(val))
   },
-  compute(meta, local, step: $PropertyType<Compute, 'data'>) {
+  compute(local, step: $PropertyType<Compute, 'data'>, val: StateRef) {
     const runCtx = tryRun({
-      arg: local.arg,
-      val: meta.val,
+      arg: readRef(val),
+      val: local.scope,
       fn: step.fn,
     })
     local.isFailed = runCtx.err
-    return runCtx.result
+    writeRef(val, runCtx.result)
   },
-  tap(meta, local, step: $PropertyType<Tap, 'data'>) {
+  tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
     const runCtx = tryRun({
-      arg: local.arg,
-      val: meta.val,
+      arg: readRef(val),
+      val: local.scope,
       fn: step.fn,
     })
     local.isFailed = runCtx.err
-    return local.arg
   },
 }
-const tryRun = ctx => {
+const tryRun = ({fn, arg, val}: any) => {
   const result = {
     err: false,
     result: null,
   }
   try {
-    result.result = ctx.fn.call(null, ctx.arg, ctx.val)
+    result.result = fn(arg, val)
   } catch (err) {
     console.error(err)
     result.err = true

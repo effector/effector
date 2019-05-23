@@ -22,12 +22,15 @@ const common = {
   engines: {
     node: '>=6.0.0',
   },
+  publishConfig: {
+    access: 'public',
+  },
 }
 
 const version = {
-  effector: '0.18.6',
-  'effector-react': '0.18.9',
-  'effector-vue': '0.18.3',
+  effector: '0.18.10',
+  'effector-react': '0.18.10',
+  'effector-vue': '0.18.5',
 
   'bs-effector': '0.18.2',
   'bs-effector-react': '0.18.3',
@@ -216,9 +219,6 @@ export default {
     files: ['index.js'],
     peerDependencies: dependsOnEffector,
     keywords: ['effector', 'babel-plugin', 'displayName'],
-    publishConfig: {
-      access: 'public',
-    },
     ...common,
   },
   '@effector/babel-plugin-react': {
@@ -232,9 +232,6 @@ export default {
       'effector-react': '*',
     },
     keywords: ['effector', 'react', 'babel-plugin', 'displayName'],
-    publishConfig: {
-      access: 'public',
-    },
     ...common,
   },
   '@effector/forms': {
@@ -249,7 +246,6 @@ export default {
     files: getFiles('forms'),
     dependencies: dependsOnEffector,
     keywords: ['effector', 'forms'],
-    private: true,
     ...common,
   },
   '@effector/redux-adapter': {

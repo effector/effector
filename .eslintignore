@@ -16,3 +16,4 @@ scripts/browser/**
 tools/builder.js
 **/examples/**
 **/packages/**
+src/model-gen/**

@@ -1,12 +1,12 @@
 //@flow
-import type {Event} from 'effector/event'
-import type {Effect} from 'effector/effect'
+import type {Event} from '../event'
+import type {Effect} from '../effect'
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
-import {is} from 'effector/validate'
+import {is} from '../validate'
 
-export function restoreObject<State: {-[key: string]: Store<any> | any}>(
+export function restoreObject<State: {+[key: string]: Store<any> | any}>(
   obj: State,
 ): $ObjMap<
   State,
@@ -14,7 +14,8 @@ export function restoreObject<State: {-[key: string]: Store<any> | any}>(
   <S>(field: Store<S> | S) => Store<S>,
 > {
   const result = {}
-  for (const [key, value] of Object.entries(obj)) {
+  for (const key in obj) {
+    const value = obj[key]
     if (is.store(value)) {
       result[key] = value
     } else {

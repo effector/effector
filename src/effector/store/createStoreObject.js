@@ -1,16 +1,15 @@
 //@flow
 import {
   step,
-  createGraph,
   nextBarrierID,
   createStateRef,
   readRef,
   writeRef,
   type StateRef,
-} from 'effector/stdlib'
-import {is} from 'effector/validate'
-import {unitObjectName} from 'effector/naming'
-import {forward} from 'effector/event'
+} from '../stdlib'
+import {is} from '../validate'
+import {unitObjectName} from '../naming'
+import {createLink} from '../event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
@@ -66,13 +65,10 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    forward({
-      from: child,
-      to: createGraph({
-        scope: {key, clone, target: store.stateRef, isFresh},
-        node,
-        child: [store],
-      }),
+    createLink(child, {
+      scope: {key, clone, target: store.stateRef, isFresh},
+      node,
+      child: [store],
     })
   }
 

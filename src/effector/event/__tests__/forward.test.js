@@ -1,7 +1,7 @@
 //@flow
 
 import {forward, createEvent} from '..'
-import {createStore} from 'effector/store'
+import {createStore} from '../../store'
 
 it('should forward data from one event to another', () => {
   const fn = jest.fn()

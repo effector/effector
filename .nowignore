@@ -1,0 +1,15 @@
+.github
+.vscode
+bench/**
+examples/**
+flow/**
+flow-typed/**
+forks/**
+integrations/**
+packages/**
+recipes/**
+rfc/**
+scripts/**
+src/**
+tasks/**
+tools/**

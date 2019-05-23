@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "0.18.6",
+  "version": "0.18.10",
   "description": "Application state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
@@ -60,5 +60,8 @@
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

@@ -4,7 +4,7 @@
   "description": "Reason bindings for effector",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^0.18.6"
+    "effector": "^0.18.10"
   },
   "files": [
     "src/Effector.re",
@@ -48,5 +48,8 @@
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

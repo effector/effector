@@ -1,6 +1,6 @@
 //@flow
 
-import {Kind, type kind} from 'effector/stdlib'
+import {Kind, type kind} from '../stdlib'
 
 export const unit = (obj: mixed) =>
   (typeof obj === 'function' || (typeof obj === 'object' && obj !== null))

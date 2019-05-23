@@ -1,7 +1,8 @@
 //@flow
 import type {Subscription, Subscriber} from '../index.h'
-import type {kind, Graph, Unit} from 'effector/stdlib'
-import type {Event} from 'effector/event'
+import type {kind, Graph, Unit} from '../stdlib'
+import type {Event} from '../event'
+import type {Store} from '../store'
 import type {CompositeName} from '../compositeName'
 
 export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
@@ -19,6 +20,7 @@ export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
     getCurrent(): (params: Params) => Promise<Done>,
   },
   create(payload: Params, type: string, args: any[]): Params,
+  pending: Store<boolean>,
   watch(watcher: (payload: Params) => any): Subscription,
   // getNode(): Vertex<['event', string]>,
   //map<T>(fn: (_: E) => T): Event<T>,

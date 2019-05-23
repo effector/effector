@@ -1,72 +1,160 @@
 //@flow
+/* eslint-disable no-nested-ternary */
+import {is} from './validate'
+import {eventFabric, createLink, forward} from './event'
+import {storeFabric, createStoreObject} from './store'
+import {noop} from './blocks'
+import {
+  step,
+  type Graphite,
+  createStateRef,
+  readRef,
+  writeRef,
+  nextBarrierID,
+} from './stdlib'
 
-import {is} from 'effector/validate'
-import {type Event, eventFabric} from 'effector/event'
-import {type Store, storeFabric} from 'effector/store'
-import type {Effect} from 'effector/effect'
-
-import invariant from 'invariant'
-
-function sampleStore(source: Store<any>, sampler: Event<any> | Store<any>) {
-  let current
-  let hasValue = false
-
-  const unit = storeFabric({
-    currentState: source.defaultState,
-    //TODO: add location
-    config: {name: source.shortName},
-    parent: source.domainName,
+const storeBy = (source, clock, fn, greedy, target) => {
+  createLink(clock, {
+    scope: {
+      state: source.stateRef,
+      fn,
+    },
+    child: [target],
+    node: [
+      //$off
+      !greedy && noop,
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
+      step.compute({
+        fn: fn
+          ? (upd, {state, fn}) => fn(readRef(state), upd)
+          : (upd, {state}) => readRef(state),
+      }),
+    ].filter(Boolean),
   })
-
-  //TODO: unsubscribe from this
-  const unsub = source.watch(value => {
-    current = value
-    hasValue = true
-  })
-
-  sampler.watch(() => {
-    if (hasValue) unit.setState(current)
-  })
-
-  return unit
+  return target
 }
 
-function sampleEvent(
-  source: Event<any> | Effect<any, any, any>,
-  sampler: Event<any> | Store<any>,
-) {
-  let current
-  let hasValue = false
+const storeByEvent = (source: any, clock: any, fn: any, greedy, target) =>
+  storeBy(
+    source,
+    clock,
+    fn,
+    greedy,
+    target
+      || eventFabric({
+        name: source.shortName,
+        parent: source.domainName,
+      }),
+  )
 
-  const unit = eventFabric({name: source.shortName, parent: source.domainName})
+const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
+  const sourceState = readRef(source.stateRef)
+  return storeBy(
+    source,
+    clock,
+    fn,
+    greedy,
+    target
+      || storeFabric({
+        currentState: fn
+          ? fn(sourceState, readRef(clock.stateRef))
+          : sourceState,
+        config: {name: source.shortName},
+        parent: source.domainName,
+      }),
+  )
+}
 
-  //TODO: unsubscribe from this
-  const unsub = source.watch(value => {
-    current = value
-    hasValue = true
+const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
+  target =
+    target
+    || eventFabric({
+      name: source.shortName,
+      parent: source.domainName,
+    })
+  const hasSource = createStateRef(false)
+  const sourceState = createStateRef()
+  const clockState = createStateRef()
+
+  createLink(source, {
+    scope: {hasSource},
+    node: [
+      step.update({store: sourceState}),
+      step.tap({
+        fn(upd, {hasSource}) {
+          writeRef(hasSource, true)
+        },
+      }),
+    ],
   })
 
-  sampler.watch(() => {
-    if (hasValue) unit(current)
+  createLink(clock, {
+    scope: {sourceState, clockState, hasSource, fn},
+    child: [target],
+    node: [
+      step.update({store: clockState}),
+      step.filter({
+        fn: (upd, {hasSource}) => readRef(hasSource),
+      }),
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
+      step.compute({
+        fn: fn
+          ? (upd, {sourceState, clockState, fn}) =>
+            fn(readRef(sourceState), readRef(clockState))
+          : (upd, {sourceState}) => readRef(sourceState),
+      }),
+    ].filter(Boolean),
   })
-
-  return unit
+  return target
 }
 
 export function sample(
-  source: Event<any> | Store<any> | Effect<any, any, any>,
-  sampler: Event<any> | Store<any>,
+  source: any,
+  clock: Graphite,
+  fn?: boolean | ((source: any, clock: any) => any),
+  greedy: boolean = false,
 ): any {
-  if (is.store(source)) {
-    return sampleStore(source, sampler)
+  let target
+  //config case
+  if (clock === undefined && 'source' in source) {
+    clock = source.clock || source.sampler
+    fn = source.fn
+    greedy = source.greedy
+    //optional target accepted only from config
+    target = source.target
+    source = source.source
   }
-  if (is.event(source) || is.effect(source)) {
-    return sampleEvent(source, sampler)
+  if (clock === undefined) {
+    //still undefined!
+    clock = source
   }
-  invariant(
-    false,
-    'sample: First argument should be Event, ' +
-      'Store or Effect, but you passed %s',
-    source,
-  )
+  const sourceNorm = unitOrCombine(source)
+  const clockNorm = unitOrCombine(clock)
+  if (typeof fn === 'boolean') {
+    greedy = fn
+    fn = undefined
+  }
+  //prettier-ignore
+  const combinator =
+    is.store(sourceNorm)
+      ? is.store(clockNorm)
+        ? storeByStore
+        : storeByEvent
+      : eventByUnit
+  return combinator(sourceNorm, clockNorm, fn, greedy, target)
 }
+
+//prettier-ignore
+const unitOrCombine = (obj: any) => is.unit(obj)
+  ? obj
+  : createStoreObject(obj)

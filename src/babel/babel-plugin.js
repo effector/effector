@@ -252,6 +252,10 @@ function setEventNameAfter(path, state, nameNodeId, t) {
   if (args && displayName) {
     const oldConfig = args[1]
     const configExpr = t.objectExpression([])
+    const nameProp = t.objectProperty(
+      t.identifier('name'),
+      t.stringLiteral(displayName),
+    )
     const locProp = t.objectProperty(
       t.identifier('loc'),
       makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
@@ -263,5 +267,6 @@ function setEventNameAfter(path, state, nameNodeId, t) {
       args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
     args[1].properties.push(locProp)
+    args[1].properties.push(nameProp)
   }
 }

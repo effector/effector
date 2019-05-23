@@ -1,6 +1,6 @@
 //@flow
 import {createEffect} from '..'
-import {forward} from 'effector/event'
+import {forward} from '../../event'
 import {delay, spy} from 'effector/fixtures'
 
 const effect = createEffect('long request')
@@ -83,6 +83,16 @@ describe('createEffect with config', () => {
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
+  it('supports default handler without name', async() => {
+    const effect = createEffect({
+      async handler(params) {
+        await delay(500)
+        spy(params)
+        return 'done!'
+      },
+    })
+    await expect(effect('ok')).resolves.toBe('done!')
+  })
 })
 
 it('should return itself at .use call', () => {
@@ -122,4 +132,16 @@ it('should support forward', async() => {
   expect(fnWatcher.mock.calls).toEqual([
     [{params: {url: 'xxx'}, result: 'logRequest result'}],
   ])
+})
+
+it('handle sync effect watchers in correct order', async() => {
+  const fn = jest.fn()
+  const eff = createEffect('eff sync', {
+    handler: () => [1, 2, 3],
+  })
+
+  eff.watch(e => fn(e))
+  eff.done.watch(e => fn(e))
+  await eff('run')
+  expect(fn.mock.calls).toEqual([['run'], [{params: 'run', result: [1, 2, 3]}]])
 })

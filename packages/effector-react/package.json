@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "0.18.9",
+  "version": "0.18.10",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
@@ -60,5 +60,8 @@
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

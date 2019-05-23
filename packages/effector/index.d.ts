@@ -61,6 +61,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
     >
     getCurrent(): (params: Params) => Promise<Done>
   }
+  pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
@@ -69,7 +70,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 }
 
 export interface Store<State> extends Unit<State> {
-  reset(trigger: Unit<any>): this
+  reset(...triggers: Array<Unit<any>>): this
   getState(): State
   map<T>(fn: (_: State, lastState?: T) => T): Store<T>
   map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
@@ -79,12 +80,13 @@ export interface Store<State> extends Unit<State> {
   ): this
   off(trigger: Unit<any>): void
   subscribe(listener: any): Subscription
+  updates: Event<State>
   watch<E>(
-    watcher: (state: State, payload: undefined, type: string) => any,
+    watcher: (state: State, payload: undefined) => any,
   ): Subscription
   watch<E>(
     trigger: Unit<E>,
-    watcher: (state: State, payload: E, type: string) => any,
+    watcher: (state: State, payload: E) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
   shortName: string
@@ -135,6 +137,7 @@ export type Cmd =
   | Filter
   | Emit
   | Compute
+  | Tap
   | Barrier
 
 export type Barrier = {
@@ -187,6 +190,14 @@ export type Compute = {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
+export type Tap = {
+  id: ID
+  type: 'tap'
+  group: 'cmd'
+  data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }
+}
 export type Step = {
   from: Array<Step>
   next: Array<Step>
@@ -198,6 +209,9 @@ export const step: {
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
+  tap(data: {
+    fn: (data: any, scope: {[field: string]: any}) => any
+  }): Tap
   filter(data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter
@@ -238,7 +252,11 @@ export function createApi<
   store: Store<S>,
   api: Api,
 ): {
-  [K in keyof Api]: Api[K] extends (store: S, e: infer E) => S ? Event<E> : any
+  [K in keyof Api]: Api[K] extends (store: S, e: void) => S
+    ? Event<void>
+    : Api[K] extends (store: S, e: infer E) => S
+    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    : any
 }
 
 export function extract<State, NextState>(
@@ -268,18 +286,57 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A, B>(
-  source: Event<A>,
-  sampler: Event<B> | Store<B>,
-): Event<A>
-export function sample<A, B>(
+export function sample<A>(config: {
+  source: Unit<A>,
+  clock: Unit<any>,
+  target?: Unit<A>,
+}): Unit<A>
+export function sample<A, B, C>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  target?: Unit<C>,
+  fn(source: A, clock: B): C,
+}): Unit<C>
+
+export function sample<A>(
   source: Store<A>,
-  sampler: Event<B> | Store<B>,
+  clock: Store<any>,
 ): Store<A>
-export function sample<A, B>(
-  source: Effect<A, any, any>,
-  sampler: Event<B> | Store<B>,
+export function sample<A>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Store<any>,
 ): Event<A>
+export function sample<A>(
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<any> | Effect<any, any, any>,
+): Event<A>
+
+export function sample<A, B, C>(
+  source: Store<A>,
+  clock: Store<B>,
+  fn: (source: A, clock: B) => C,
+): Store<C>
+export function sample<A, B, C>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Store<B>,
+  fn: (source: A, clock: B) => C,
+): Event<A>
+export function sample<A, B, C>(
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<B> | Effect<B, any, any>,
+  fn: (source: A, clock: B) => C,
+): Event<C>
+
+export function invariant(
+  condition: boolean,
+  format: string,
+  ...args: any[]
+): void
+export function warning(
+  condition: boolean,
+  format: string,
+  ...args: any[]
+): void
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>

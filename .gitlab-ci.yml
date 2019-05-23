@@ -6,19 +6,49 @@ cache:
 
 stages:
   - test
-  # - deploy
+  - deploy
 
 test_all:
   stage: test
   script:
     - yarn
-    - yarn test
-# publish_next_to_npm:
-#   stage: deploy
-#   artifacts:
-#     name: "$CI_COMMIT_TAG"
-#     paths:
-#       - npm/
-#   script:
-#     - yarn
-#     - node tools/builder.js publish next
+    - yarn test-full
+npm_latest:
+  stage: deploy
+  script:
+    - echo "publish npm latest"
+    - yarn
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - node tools/builder.js publish latest
+  environment:
+    name: npm
+    url: https://www.npmjs.com/package/effector
+  when: manual
+  only:
+    - master
+npm_next:
+  stage: deploy
+  script:
+    - echo "publish npm next"
+    - yarn
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - node tools/builder.js publish next
+  environment:
+    name: npm
+    url: https://www.npmjs.com/package/effector
+  when: manual
+  only:
+    - master
+npm_canary:
+  stage: deploy
+  script:
+    - yarn
+    - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+    - yarn build
+    - VERSION_HASH=${CI_COMMIT_SHA:0:8} node tools/versionHash
+    - cd npm/effector && npm publish
+  environment:
+    name: npm_canary
+    url: https://www.npmjs.com/package/@effector/canary
+  only:
+    - master

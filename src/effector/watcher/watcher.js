@@ -1,6 +1,6 @@
 //@flow
 
-import type {TypeDef, Graph} from 'effector/stdlib'
+import type {TypeDef, Graph} from '../stdlib'
 import type {Watcher} from './index.h'
 
 const noopIndexOf = () => -1

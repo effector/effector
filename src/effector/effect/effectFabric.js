@@ -2,17 +2,17 @@
 
 import warning from 'warning'
 import type {Effect} from './index.h'
-import {Kind} from 'effector/stdlib'
-
-import {step} from 'effector/stdlib'
-import {eventFabric, type Event} from 'effector/event'
+import {Kind, step} from '../stdlib'
+import {upsertLaunch} from '../kernel'
+import {eventFabric, type Event} from '../event'
+import {createStore, type Store} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
 function OnResolve(result) {
   const {event, params, handler} = this
   //prettier-ignore
-  event({
+  upsertLaunch(event, {
     handler,
     toHandler: result,
     result: {
@@ -24,7 +24,7 @@ function OnResolve(result) {
 function OnReject(error) {
   const {event, params, handler} = this
   //prettier-ignore
-  event({
+  upsertLaunch(event, {
     handler,
     toHandler: error,
     result: {
@@ -91,7 +91,7 @@ export function effectFabric<Payload, Done>({
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
   //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler ?? defaultThunk.bind(instance)
+  let thunk: Function = handler || defaultThunk.bind(instance)
 
   instance.done = done
   instance.fail = fail
@@ -136,7 +136,13 @@ export function effectFabric<Payload, Done>({
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
-
+  /* terser will minify true and false to 1 and 0,
+    thereby we need to define true as Boolean(1)
+    and false as Boolean(0) */
+  instance.pending = createStore(Boolean(0))
+    .on(instance, () => Boolean(1))
+    .reset(done)
+    .reset(fail)
   return instance
 }
 function runEffect(handler, params, onResolve, onReject) {

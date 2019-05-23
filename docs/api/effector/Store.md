@@ -25,11 +25,37 @@ There can be multiple stores.
 
 ### <a id='reset'></a>[`reset(eventOrStore)`](#reset)
 
-Resets store state to initial value when event occurs
+Resets store state to the default value.
+
+A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
+
+#### Arguments
+
+- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
-(Store): Current store
+(_`Store`_): Current store
+
+#### Example
+
+```js
+const store = createStore(0)
+const increment = createEvent()
+const reset = createEvent()
+
+store
+  .on(increment, (state) => state + 1)
+  .reset(reset)
+
+store.watch(state => console.log("changed", state))
+// changed 0
+// watch method calls its function immediately
+
+increment() // changed 1
+increment() // changed 2
+reset() // changed 0
+```
 
 <hr>
 
@@ -39,23 +65,85 @@ Returns current state of store
 
 #### Returns
 
-(State): Current state of store
+(`State`): Current state of the store
+
+#### Example
+
+```js
+const store = createStore(0)
+const updated = createEvent()
+
+store.on(updated, (state, value) => state + value)
+
+updated(2)
+updated(3)
+
+console.log(store.getState()) // 5
+```
 
 <hr>
 
 ### <a id='map'></a>[`map(fn)`](#map)
 
+Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
+
+#### Arguments
+
+- (_`Function`_): Function that receives `state` and returns a new state for the derived store
+
+ If the function returns an old state or if it returns `undefined`, the new store will not be updated.
+
 #### Returns
 
-(Store): New store
+(_`Store`_): New store
+
+#### Example
+
+```js
+const title = createStore("")
+const changed = createEvent()
+
+const length = title.map((title) => title.length)
+
+title.on(changed, (_, newTitle) => newTitle)
+
+length.watch((length) => console.log("new length", length)) // new length 0
+
+changed("hello") // new length 5
+changed("world") // 
+changed("hello world") // new length 11
+```
 
 <hr>
 
 ### <a id='on'></a>[`on(trigger, handler)`](#on)
 
+Updates state when `trigger` is triggered by using `hander`.
+
+#### Arguments
+
+- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
+   - `state`: Current state of store
+   - `params`: Parameters passed to event call
+A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
 #### Returns
 
 (Store): Current store
+
+#### Example
+
+```js
+const store = createStore(0)
+const changed = createEvent()
+
+store.on(changed, (state, params) => state + params)
+
+store.watch((value) => console.log("updated", value))
+
+changed(2) // updated 2
+changed(2) // updated 4
+```
 
 <hr>
 

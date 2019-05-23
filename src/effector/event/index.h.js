@@ -1,6 +1,6 @@
 //@flow
 import type {Subscription, Subscriber} from '../index.h'
-import type {kind, Graph, Unit} from 'effector/stdlib'
+import type {kind, Graph, Unit} from '../stdlib'
 import type {CompositeName} from '../compositeName'
 
 export type Event<E> = /*::interface extends Unit*/ {

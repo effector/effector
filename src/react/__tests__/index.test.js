@@ -1,6 +1,6 @@
 //@flow
 
-import {configure} from 'enzyme'
+import {configure, mount} from 'enzyme'
 import Adapter from 'enzyme-adapter-react-16'
 
 configure({
@@ -8,9 +8,7 @@ configure({
 })
 
 import * as React from 'react'
-import {mount} from 'enzyme'
-import {createStore} from 'effector/store'
-import {createEvent} from 'effector/event'
+import {createStore, createEvent} from 'effector'
 import {connect} from '..'
 
 test('connect api', () => {

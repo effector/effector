@@ -39,6 +39,7 @@ export type Barrier = {|
   +group: 'cmd',
   +data: {|
     +barrierID: ID,
+    +priority: 'barrier' | 'sampler',
     meta?: NodeMeta,
   |},
 |}

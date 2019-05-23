@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createComponent createStoreObject 1`] = `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`;
+
+exports[`createComponent createStoreObject 2`] = `
+Array [
+  Array [
+    Object {
+      "a": 2,
+      "b": "foo",
+    },
+  ],
+]
+`;
+
+exports[`createComponent initial props 1`] = `"<div>nice</div>"`;

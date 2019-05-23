@@ -2,12 +2,11 @@
   "name": "@effector/forms",
   "description": "",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "forms.cjs.js",
   "module": "forms.es.js",
   "umd:main": "forms.umd.js",
   "jsnext:main": "forms.es.js",
   "typings": "index.d.ts",
-  "repository": "https://github.com/zerobias/effector",
   "files": [
     "README.md",
     "LICENSE",
@@ -24,13 +23,12 @@
     "forms.umd.js.flow"
   ],
   "dependencies": {
-    "effector": "^0.18.6"
+    "effector": "^0.18.10"
   },
   "keywords": [
     "effector",
     "forms"
   ],
-  "private": true,
   "author": "Zero Bias",
   "maintainers": [
     {
@@ -46,9 +44,13 @@
   "license": "MIT",
   "devDependencies": {},
   "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
   "bugs": "https://github.com/zerobias/effector/issues",
   "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

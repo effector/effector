@@ -1,10 +1,13 @@
 //@flow
 
 import {createEvent} from '..'
-import {createDomain} from 'effector/domain'
+import {createDomain} from '../../domain'
 
 test("should return it's own name on event.getType()", () => {
   expect(createEvent('foo').getType()).toBe('foo')
+  expect(createEvent({name: 'foo'}).getType()).toBe('foo')
+  expect(createEvent('foo', {name: 'bar'}).getType()).toBe('foo')
+  expect(createEvent(undefined, {name: 'bar'}).getType()).toBe('bar')
 })
 test('event from domains should has full path in name', () => {
   const domain = createDomain('dom')

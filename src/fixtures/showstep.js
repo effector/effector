@@ -1,11 +1,12 @@
 //@flow
-import type {Graph, Cmd} from 'effector/stdlib'
+import type {Graph, Cmd} from '../effector/stdlib'
 
 const showCmdDef = (_: Cmd) =>
   `${_.type} {${JSON.stringify(
     _.data,
     (key, val) => {
       if (key === 'meta') return
+      if (_.type === 'update' && key === 'store') return {current: val.current}
       return val
     },
     2,

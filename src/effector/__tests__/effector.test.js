@@ -2,11 +2,14 @@
 
 import {from, periodic} from 'most'
 
-import {combine} from '..'
-
-import {createDomain} from 'effector/domain'
-import {createEvent, fromObservable} from 'effector/event'
-import {createStore, createStoreObject} from 'effector/store'
+import {
+  combine,
+  createDomain,
+  createEvent,
+  fromObservable,
+  createStore,
+  createStoreObject,
+} from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 
@@ -50,6 +53,24 @@ test('will run in expected order', () => {
 
   expect(getSpyCalls()).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
   expect(spy).toHaveBeenCalledTimes(3)
+})
+it('safe with nested triggers', () => {
+  const a = createEvent()
+  const b = createEvent()
+  const c = createEvent()
+  const target = createStore(0)
+    .on(a, n => n + 1)
+    .on(c, n => n + 1)
+  let result
+  a.watch(() => {
+    b()
+    result = target.getState()
+  })
+  b.watch(() => {
+    c()
+  })
+  a()
+  expect(result).toBe(2)
 })
 
 test('reducer defaults', () => {

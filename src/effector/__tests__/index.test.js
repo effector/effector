@@ -1,9 +1,13 @@
 //@flow
 
-import {createEvent, type Event} from 'effector/event'
-import {combine} from '../combine'
-
-import {createStoreObject, createStore, type Store} from 'effector/store'
+import {
+  createStoreObject,
+  createStore,
+  type Store,
+  combine,
+  createEvent,
+  type Event,
+} from 'effector'
 import {show} from 'effector/fixtures/showstep'
 
 import {spy} from 'effector/fixtures'

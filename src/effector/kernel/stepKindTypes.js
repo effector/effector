@@ -14,7 +14,7 @@ export const pure = stepKind('pure', {
   from: [child],
   to: [barrier],
 })
-// export const procedure = stepKind('procedure', {
-//   from: [child],
-//   to: [],
-// })
+export const sampler = stepKind('sampler', {
+  from: [pure, barrier],
+  to: [effect],
+})

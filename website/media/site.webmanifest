@@ -1,0 +1,20 @@
+{
+    "name": "effector editor",
+    "short_name": "effector",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png?v=fav1",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png?v=fav1",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#e95801",
+    "background_color": "#dd7840",
+    "start_url": "https://effector.now.sh/try",
+    "display": "standalone"
+}
