@@ -149,7 +149,7 @@ export const getTranslate = (path: string): string => {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Как видите, создание подобной штуки не заняло много времени. Бонусом является то, что мы можем подписаться на стор локализаций и изменять переводы даже там, где это нельзя было бы сделать обычным способом. Например: 
+Как видите, создание подобной штуки не заняло много времени. Бонусом является то, что мы можем подписаться на стор локализаций и изменять переводы даже там, где это нельзя было бы сделать обычным способом. Например, мы можем создать класс-хелпер, позволяющий удобно работать с локализацией в приложении: 
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -176,27 +176,11 @@ class UserCulture {
 
         if (data.en !== null && this._isEn()) {
             return data.en;
-        }
-
-        if (data.es !== null && this._isEs()) {
-            return data.es;
-        }
-
-        if (data.tr !== null && this._isTr()) {
-            return data.tr;
-        }
-
-        if (data.zh !== null && this._isZh()) {
-            return data.zh;
-        }
+        } 
 
         if (data.de !== null && this._isDe()) {
             return data.de;
-        }
-
-        if (data.fr !== null && this._isFr()) {
-            return data.fr;
-        }
+        } 
 
         return data.en;
     }
@@ -207,27 +191,11 @@ class UserCulture {
 
     private _isEn = () => {
         return this._isCulture('en');
-    }
-
-    private _isEs = () => {
-        return this._isCulture('es');
-    }
+    } 
 
     private _isDe = () => {
         return this._isCulture('de');
-    }
-
-    private _isFr = () => {
-        return this._isCulture('fr');
-    }
-
-    private _isTr = () => {
-        return this._isCulture('tr');
-    }
-
-    private _isZh = () => {
-        return this._isCulture('zh');
-    }
+    } 
 
     private _isCulture = (culture: string) => {
         if (!!this._userCulture) {
@@ -238,13 +206,26 @@ class UserCulture {
     }
 }
 
-export const { localize, set, getCurrentCulture } = new UserCulture(); 
+export const { localize, set, getCurrentCulture } = new UserCulture();  
+```
 
+<!--END_DOCUSAURUS_CODE_TABS-->
+
+и пример использования 
+
+<!--DOCUSAURUS_CODE_TABS-->
+
+<!--TypeScript-->
+
+```ts  
 
 // store.ts
+import {set} from './userCulture'; 
+
 $language.watch((lang) => set(lang)); // update app culture
 
 // api.ts
+import {getCurrentCulture} from './userCulture'; 
 const url = `https://some.url/?age=20&culture=${getCurrentCulture()}`; 
 
 // pluralize.ts
@@ -253,6 +234,14 @@ export const pluralizeWeeks = (value: number, language: string) => {
 }; 
 
 // store2.ts
+// en 
+// {value: 1, name: 'week'}
+// {value: 10, name: 'weeks'}
+// 
+// ru
+// {value: 1, name: 'неделя'}
+// {value: 10, name: 'недель'}
+
 export const $weeks = createStore<Array<{value: number, name: string}>([]); 
 
 // on2.ts
