@@ -170,31 +170,19 @@ class UserCulture {
     }
 
     public localize = (data: any) => {
-        if (data.ru !== null && this._isRu()) {
+        if (data.ru !== null && this._isCulture('ru')) {
             return data.ru;
         }
 
-        if (data.en !== null && this._isEn()) {
+        if (data.en !== null && this._isCulture('en')) {
             return data.en;
         } 
 
-        if (data.de !== null && this._isDe()) {
+        if (data.de !== null && this._isCulture('de')) {
             return data.de;
         } 
 
         return data.en;
-    }
-
-    private _isRu = () => {
-        return this._isCulture('ru');
-    }
-
-    private _isEn = () => {
-        return this._isCulture('en');
-    } 
-
-    private _isDe = () => {
-        return this._isCulture('de');
     } 
 
     private _isCulture = (culture: string) => {
