@@ -67,6 +67,11 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
       Done,
       Fail
     >
+    (asyncFunction: Effect<Params, Done, Fail>): Effect<
+      Params,
+      Done,
+      Fail
+    >,
     getCurrent(): (params: Params) => Promise<Done>
   }
   pending: Store<boolean>
@@ -131,9 +136,14 @@ export class Domain {
   onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
-  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
+  effect<Params, Done, Fail>(
+    name?: string,
+    config?: {
+      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done), 
+    },
+  ): Effect<Params, Done, Fail>
   domain(name?: string): Domain
-  store<State>(defaultState: State): Store<State>
+  store<State>(defaultState: State, config?: {name?: string}): Store<State>
   getType(): string
 }
 
@@ -244,7 +254,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: (params: Params) => Promise<Done> | Done
+    handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done)
   },
 ): Effect<Params, Done, Fail>
 
