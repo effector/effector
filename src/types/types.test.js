@@ -2,11 +2,18 @@
 
 import * as React from 'react'
 import {
+  invariant,
+  warning,
+  step,
   createStore,
+  createNode,
   createEvent,
   createEffect,
+  createApi,
   createStoreObject,
   createDomain,
+  clearNode,
+  restoreEffect,
   combine,
   sample,
   Effect,
@@ -16,9 +23,17 @@ import {
   //ComputedEvent,
   /*::type*/ kind,
   forward,
+  launch
 } from 'effector'
 import {createComponent} from 'effector-react'
 import {createFormApi} from '@effector/forms'
+
+type F = Number
+
+const tm: unknown = 1
+
+tm.toString()
+
 
 describe('Unit', () => {
   describe('sample', () => {
@@ -67,10 +82,25 @@ describe('Event', () => {
     const event: Event<number> = createEvent()
     const computed = event.map(() => 'foo')
 
-    const check1: Event<string> = computed
+    //const check1: Event<string> = computed
     const check2: Event<number> = computed
     event(2)
     computed('')
+  })
+  test('#watch', () => {
+    const event: Event<number> = createEvent()
+    event.watch(state => {
+      const check1: number = state
+      return state
+    })
+    event.watch(state => {
+      return 'foo'
+    })
+    event.watch(state => {
+      return
+    })
+    event.watch(state => {
+    })
   })
 })
 
@@ -94,7 +124,16 @@ describe('Store', () => {
     c.reset(ev)
     c.off(ev)
   })
-  test('createApi', () => {})
+  test('createApi', () => {
+    const store = createStore(0)
+    const api = createApi(store, {
+      increment: (count) => count + 1,
+      decrement: count => count - 1,
+    })
+
+    api.increment()
+    api.decrement()
+  })
   test('setStoreName', () => {})
   test('extract', () => {})
   test('combine', () => {
@@ -106,7 +145,10 @@ describe('Store', () => {
     c.reset(ev)
     c.off(ev)
   })
-  test('restore', () => {})
+  test('restore', () => {
+    const eff = createEffect<{foo: number}, {bar: string}, any>()
+    const foo = restoreEffect(eff, {bar: ''})
+  })
 
   test('#(properties)', () => {
     const store = createStore(0)
@@ -177,20 +219,20 @@ describe('Store', () => {
   test('#watch', () => {
     const event: Event<number> = createEvent()
     const store = createStore(0)
-    store.watch((state, payload, type) => {
+    store.watch((state, payload) => {
       const check1: number = state
       const check2: typeof undefined = payload
     })
-    store.watch(event, (state, payload, type) => {
+    store.watch(event, (state, payload) => {
       const check1: number = state
       const check2: number = payload
     })
     const computed = store.map(() => 'hello')
-    computed.watch((state, payload, type) => {
+    computed.watch((state, payload) => {
       const check1: string = state
       const check2: typeof undefined = payload
     })
-    computed.watch(event, (state, payload, type) => {
+    computed.watch(event, (state, payload) => {
       const check1: string = state
       const check2: number = payload
     })
@@ -219,6 +261,34 @@ describe('Domain', () => {
     const domain3 = createDomain(234)
     const domain4 = createDomain({foo: true})
   })
+
+  test('#onCreateStore', () => {
+    const root = createDomain('root')
+    root.onCreateStore(store => {
+      const snapshot = localStorage.getItem(store.shortName)
+      if (typeof snapshot === 'string') store.setState(JSON.parse(snapshot))
+
+      let isFirstSkiped = false
+      store.watch(newState => {
+        if (isFirstSkiped) {
+          localStorage.setItem(store.shortName, JSON.stringify(newState))
+        }
+        isFirstSkiped = true
+      })
+      return store
+    })
+
+    root.onCreateStore(foo => {
+      const object = createStoreObject({foo})
+      object.watch(data => {
+
+
+        data.foo
+      })
+
+      clearNode(foo)
+    })
+  })
 })
 
 describe('Graph', () => {
@@ -233,6 +303,39 @@ describe('Graph', () => {
     const f = createStore(0)
     forward({from: e, to: f})
   })
+
+  test('launch', () => {
+    const foo = createEvent<number>()
+    const customNode = createNode({
+      scope: {max: 100, lastValue: -1, add: 10},
+      child: [foo],
+      node: [
+        step.compute({
+          fn: (arg, {add}) => arg + add,
+        }),
+        step.filter({
+          fn: (arg, {max, lastValue}) => arg < max && arg !== lastValue,
+        }),
+        step.compute({
+          fn(arg, scope) {
+            scope.lastValue = arg
+            return arg
+          },
+        }),
+      ],
+    })
+    launch(foo, '')
+    launch(customNode, 100)
+  })
+})
+
+describe('invariant', () => {
+  const foo: boolean = false
+  invariant(foo, 'test', 1, 2)
+})
+
+describe('warning', () => {
+  warning(true, 'foo bar', 'test', 3)
 })
 
 describe('effector-react', () => {
