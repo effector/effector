@@ -9,6 +9,14 @@ export type kind =
   | 'effect'
   | 'domain'
 
+export type mixed_non_void =
+  | null
+  | string
+  | number
+  | boolean
+  | {}
+  | $ReadOnlyArray<mixed>
+
 declare export var Kind: {|
   +store: kind,
   +event: kind,
@@ -78,7 +86,7 @@ declare export class Store<State> implements Unit<State> {
     handler: (state: State, payload: E) => State | void,
   ): this;
   off(trigger: Unit<any>): void;
-  subscribe(listener: any): Subscription;
+  subscribe(listener: (state: State) => any): Subscription;
   watch<E>(
     watcher: (state: State, payload: void) => any,
     _: void,
@@ -121,13 +129,18 @@ declare export var is: {|
   domain(obj: mixed): boolean,
 |}
 
+
+declare class InternalStore<State> extends Store<State> implements Unit<State> {
+  setState(state: State): void
+}
+
 declare export class Domain {
   +kind: kind;
   onCreateEvent(hook: (newEvent: Event<mixed>) => any): Subscription;
   onCreateEffect(
     hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
   ): Subscription;
-  onCreateStore(hook: (newStore: Store<mixed>) => any): Subscription;
+  onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
   effect<Params, Done, Fail>(
@@ -250,7 +263,7 @@ declare export function createNode(opts: {|
   +scope?: {[field: string]: any},
 |}): Step
 
-declare export function launch(unit: Unit<any> | Step, payload: any): void
+declare export function launch<T>(unit: Unit<T> | Step, payload: T): void
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
@@ -294,7 +307,7 @@ declare export function extract<
 >
 declare export function createApi<
   S,
-  Api: {[name: string]: (store: S, e: any) => S, ...},
+  Api: {+[name: string]: (store: S, e: any) => S, ...},
 >(
   store: Store<S>,
   api: Api,
@@ -340,9 +353,6 @@ declare export function sample<A>(
     +target?: Unit<A>,
     +greedy?: boolean,
   |},
-  _: void,
-  _: void,
-  _: void,
 ): Unit<A>
 declare export function sample<A, B, C>(
   config: {|
@@ -352,22 +362,17 @@ declare export function sample<A, B, C>(
     +greedy?: boolean,
     fn(source: A, clock: B): C,
   |},
-  _: void,
-  _: void,
-  _: void,
 ): Unit<C>
 
 declare export function sample<A>(
   source: Store<A>,
   clock: Store<any>,
   greedy?: boolean,
-  _: void,
 ): Store<A>
 declare export function sample<A>(
   source: Unit<A>,
   clock: Unit<any>,
   greedy?: boolean,
-  _: void,
 ): Event<A>
 
 declare export function sample<A, B, C>(
@@ -386,12 +391,12 @@ declare export function sample<A, B, C>(
 declare export function invariant(
   condition: boolean,
   format: string,
-  ...args: any[]
+  ...args: mixed[]
 ): void
 declare export function warning(
   condition: boolean,
   format: string,
-  ...args: any[]
+  ...args: mixed[]
 ): void
 
 declare export function combine<R>(fn: () => R): Store<R>

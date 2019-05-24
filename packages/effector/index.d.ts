@@ -4,6 +4,14 @@ export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
 
+export type mixed_non_void =
+  | null
+  | string
+  | number
+  | boolean
+  | {}
+  | $ReadOnlyArray<unknown>
+
 export const Kind: {
   readonly store: kind
   readonly event: kind
@@ -79,7 +87,7 @@ export interface Store<State> extends Unit<State> {
     handler: (state: State, payload: E) => State | void,
   ): this
   off(trigger: Unit<any>): void
-  subscribe(listener: any): Subscription
+  subscribe(listener: (state: State) => any): Subscription
   watch<E>(
     watcher: (state: State, payload: undefined) => any,
   ): Subscription
@@ -109,13 +117,17 @@ export const is: {
   domain(obj: unknown): boolean
 }
 
+interface InternalStore<State> extends Store<State> {
+  setState(state: State): void
+}
+
 export class Domain {
   readonly kind: kind
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
   ): Subscription
-  onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
+  onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
   effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
@@ -225,7 +237,7 @@ export function createNode(opts: {
   from?: Array<Unit<any> | Step>
   scope?: {[field: string]: any}
 }): Step
-export function launch(unit: Unit<any> | Step, payload: any): void
+export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function createEvent<E = void>(eventName?: string): Event<E>
 
 export function createEffect<Params, Done, Fail>(
@@ -322,12 +334,12 @@ export function sample<A, B, C>(
 export function invariant(
   condition: boolean,
   format: string,
-  ...args: any[]
+  ...args: unknown[]
 ): void
 export function warning(
   condition: boolean,
   format: string,
-  ...args: any[]
+  ...args: unknown[]
 ): void
 
 export function combine<R>(fn: () => R): Store<R>
