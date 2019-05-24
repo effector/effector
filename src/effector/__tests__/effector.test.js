@@ -2,11 +2,14 @@
 
 import {from, periodic} from 'most'
 
-import {combine} from '..'
-
-import {createDomain} from '../domain'
-import {createEvent, fromObservable} from '../event'
-import {createStore, createStoreObject} from '../store'
+import {
+  combine,
+  createDomain,
+  createEvent,
+  fromObservable,
+  createStore,
+  createStoreObject,
+} from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 

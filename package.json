@@ -1,6 +1,6 @@
 {
   "name": "effector-dev",
-  "version": "0.18.8",
+  "version": "0.18.10",
   "description": "Application state manager",
   "private": true,
   "scripts": {
@@ -81,7 +81,7 @@
     "fastify": "^2.3.0",
     "fastify-babel": "^1.2.0",
     "fastify-favicon": "^2.0.0",
-    "flow-bin": "^0.98.0",
+    "flow-bin": "^0.98.1",
     "flowgen": "^1.8.2",
     "fs-extra": "^7.0.1",
     "graphlib": "^2.1.7",

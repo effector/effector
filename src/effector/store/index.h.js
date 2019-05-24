@@ -75,5 +75,6 @@ export type Store<State> = /*::interface extends Unit*/ {
   shortName: string,
   domainName?: CompositeName,
   +graphite: Graph,
+  +updates: Event<State>,
   compositeName?: CompositeName,
 }

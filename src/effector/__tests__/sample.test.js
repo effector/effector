@@ -1,10 +1,6 @@
 //@flow
 
-import {sample, Kind} from '../'
-
-import {createEvent} from '../event'
-import {createStore} from '../store'
-import {createEffect} from '../effect'
+import {sample, Kind, createEvent, createStore, createEffect} from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 
@@ -35,14 +31,82 @@ describe('sample type', () => {
 })
 
 describe('sample', () => {
+  it('works with config', () => {
+    const foo = createStore('')
+    const bar = createStore('')
+
+    sample({sampler: foo, source: foo, target: bar})
+  })
+  it('handles object combination', () => {
+    const foo = createStore('')
+    sample({foo})
+  })
+  it('works with single source', () => {
+    const foo = createStore('')
+
+    sample(foo)
+  })
   describe('sample with event as source', () => {
-    it('not depended on order of execution', () => {
+    describe.each`
+      greedy   | resultDirect                      | resultBacktracking
+      ${false} | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 2}], [{x: 3}]]}
+      ${true}  | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 1}], [{x: 2}]]}
+    `(
+  'depended on order of execution (greedy = $greedy)',
+  ({greedy, resultDirect, resultBacktracking}) => {
+    test('direct order', () => {
       const A = createEvent()
       const B = A.map(x => ({x}))
-      sample(B, A).watch(e => spy(e))
+
+      sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
+
       A(1)
       A(2)
-      expect(getSpyCalls()).toEqual([[{x: 1}], [{x: 2}]])
+      A(3)
+
+      expect(getSpyCalls()).toEqual(resultDirect)
+    })
+    test('backtracking', () => {
+      const A = createEvent()
+      const B = A.map(x => ({x}))
+
+      sample(B, A, B => B, greedy).watch(e => spy(e))
+
+      A(1)
+      A(2)
+      A(3)
+
+      expect(getSpyCalls()).toEqual(resultBacktracking)
+    })
+  },
+)
+
+    it('works with sibling events', () => {
+      const fn1 = jest.fn()
+      const fn2 = jest.fn()
+      const A = createEvent()
+      const B = A.map(b => ({b}))
+      const C = A.filter(x => {
+        if (x > 5) return `${x} > 5`
+      })
+
+      sample(B, C, ({b}, c) => ({b, c})).watch(e => fn1(e))
+      sample(C, B, (c, {b}) => ({b, c})).watch(e => fn2(e))
+
+      A(2)
+      A(6)
+      A(3)
+      A(4)
+      A(10)
+      expect(fn1.mock.calls).toEqual([
+        [{b: 6, c: `6 > 5`}],
+        [{b: 10, c: `10 > 5`}],
+      ])
+      expect(fn2.mock.calls).toEqual([
+        [{b: 3, c: `6 > 5`}],
+        [{b: 4, c: `6 > 5`}],
+        [{b: 10, c: `10 > 5`}],
+      ])
     })
     test('event', () => {
       const data = createEvent('data')
@@ -198,25 +262,28 @@ describe('sample', () => {
       expect(fn1).toHaveBeenCalledTimes(1)
       expect(fn2).toHaveBeenCalledTimes(1)
     })
-    it('event call will not break watchers', async() => {
-      const fn1 = jest.fn()
-      const fn2 = jest.fn()
-      const hello = createEffect({
-        handler() {
-          return Promise.resolve(200)
-        },
-      })
-      const run = createEvent()
+    describe('event call will not break watchers', () => {
+      it.each`
+        greedy
+        ${false}
+        ${true}
+      `(
+  'event call will not break watchers (greedy = $greedy)',
+  async({greedy}) => {
+    const fn1 = jest.fn()
+    const hello = createEvent()
+    const run = createEvent()
 
-      sample(hello, run).watch(e => fn1(e))
-      sample(hello.done, run).watch(e => fn2(e))
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
-      run()
-      await hello('test')
+    run('R')
+    hello('hello')
 
-      run()
-      expect(fn1).toHaveBeenCalledTimes(1)
-      expect(fn2).toHaveBeenCalledTimes(1)
+    run('RR')
+    expect(fn1).toHaveBeenCalledTimes(1)
+  },
+)
     })
     test('effect source with store as target', () => {})
     test('effect source with effect as target', () => {})
@@ -275,7 +342,6 @@ describe('sample', () => {
 
       foo.on(baz, (store1, store2) => [...store1, ...store2])
 
-      console.log(baz)
       stop(['stop'])
       expect(foo.getState()).toEqual([1, 2, 3, 4, 5, 6])
     })

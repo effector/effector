@@ -88,6 +88,7 @@ export interface Store<State> extends Unit<State> {
   ): this
   off(trigger: Unit<any>): void
   subscribe(listener: (state: State) => any): Subscription
+  updates: Event<State>
   watch<E>(
     watcher: (state: State, payload: undefined) => any,
   ): Subscription
@@ -263,7 +264,11 @@ export function createApi<
   store: Store<S>,
   api: Api,
 ): {
-  [K in keyof Api]: Api[K] extends (store: S, e: infer E) => S ? Event<E> : any
+  [K in keyof Api]: Api[K] extends (store: S, e: void) => S
+    ? Event<void>
+    : Api[K] extends (store: S, e: infer E) => S
+    ? Event<E extends void ? Exclude<E, undefined> | void : E>
+    : any
 }
 
 export function extract<State, NextState>(
@@ -297,38 +302,41 @@ export function sample<A>(config: {
   source: Unit<A>,
   clock: Unit<any>,
   target?: Unit<A>,
-  greedy?: boolean,
 }): Unit<A>
 export function sample<A, B, C>(config: {
   source: Unit<A>,
   clock: Unit<B>,
   target?: Unit<C>,
-  greedy?: boolean,
   fn(source: A, clock: B): C,
 }): Unit<C>
 
 export function sample<A>(
   source: Store<A>,
   clock: Store<any>,
-  greedy?: boolean,
 ): Store<A>
 export function sample<A>(
-  source: Unit<A>,
-  clock: Unit<any>,
-  greedy?: boolean,
+  source: Event<A> | Effect<A, any, any>,
+  clock: Store<any>,
+): Event<A>
+export function sample<A>(
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<any> | Effect<any, any, any>,
 ): Event<A>
 
 export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Unit<A>,
-  clock: Unit<B>,
+  source: Event<A> | Effect<A, any, any>,
+  clock: Store<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
+): Event<A>
+export function sample<A, B, C>(
+  source: Event<A> | Store<A> | Effect<A, any, any>,
+  clock: Event<B> | Effect<B, any, any>,
+  fn: (source: A, clock: B) => C,
 ): Event<C>
 
 export function invariant(

@@ -6,16 +6,40 @@ Array [
     "Cannot assign \`c\` to \`check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`e\` to \`check4\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
+    "Cannot assign \`c\` to \`check2\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`e\` to \`check4\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`e\` to \`check4\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
     "Cannot assign \`g\` to \`check6\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`g\` to \`check6\` because object type [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`c\` to \`check2\` because boolean [1] is incompatible with string [2] in type argument \`State\` [3].",
+  ],
+  Array [
+    "Cannot assign \`c\` to \`check2\` because object type [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
     "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
     "Cannot assign \`createStore(...)\` to \`store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
+  ],
+  Array [
+    "Cannot assign \`event\` to \`check\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot call \`createApi\` with object literal bound to \`api\` because string [1] is incompatible with number [2] in the return value of property \`event\`.",
+  ],
+  Array [
+    "Cannot assign \`event\` to \`check\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
     "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
@@ -78,20 +102,33 @@ src/types/types.test.ts(254,15): error TS2322: Type 'string' is not assignable t
 exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
-src/types/types.test.ts(30,11): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
-  Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(36,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
-  Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(42,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
+src/types/types.test.ts(32,13): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
+src/types/types.test.ts(40,13): error TS2322: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+src/types/types.test.ts(49,13): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
+src/types/types.test.ts(57,13): error TS2322: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
+  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+src/types/types.test.ts(66,13): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
+src/types/types.test.ts(74,13): error TS2322: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
+  Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
+src/types/types.test.ts(83,13): error TS2322: Type 'Store<boolean>' is not assignable to type 'Store<string>'.
+  Type 'boolean' is not assignable to type 'string'.
+src/types/types.test.ts(91,13): error TS2322: Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
+  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+src/types/types.test.ts(105,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
   Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(55,11): error TS2322: Type 'Event<string>' is not assignable to type 'Event<number>'.
-src/types/types.test.ts(70,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
-src/types/types.test.ts(121,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
+src/types/types.test.ts(120,11): error TS2322: Type 'Store<number>' is not assignable to type 'Store<string>'.
+  Type 'number' is not assignable to type 'string'.
+src/types/types.test.ts(143,13): error TS2322: Type 'Event<number>' is not assignable to type 'Event<string>'.
+  Type 'number' is not assignable to type 'string'.
+src/types/types.test.ts(149,13): error TS2322: Type 'Event<void>' is not assignable to type 'Event<string>'.
+  Type 'void' is not assignable to type 'string'.
+src/types/types.test.ts(203,11): error TS2322: Type 'Store<string>' is not assignable to type 'Store<number>'.
   Type 'string' is not assignable to type 'number'.
-src/types/types.test.ts(203,34): error TS2345: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
-src/types/types.test.ts(204,34): error TS2345: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
-src/types/types.test.ts(248,15): error TS2322: Type 'number' is not assignable to type 'string'.
-src/types/types.test.ts(249,45): error TS2339: Property 'unknownProp' does not exist on type '{ id: number; }'.
-src/types/types.test.ts(254,15): error TS2322: Type 'string' is not assignable to type 'number'.
+src/types/types.test.ts(285,34): error TS2345: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
+src/types/types.test.ts(286,34): error TS2345: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
+src/types/types.test.ts(330,15): error TS2322: Type 'number' is not assignable to type 'string'.
+src/types/types.test.ts(331,45): error TS2339: Property 'unknownProp' does not exist on type '{ id: number; }'.
+src/types/types.test.ts(336,15): error TS2322: Type 'string' is not assignable to type 'number'.
 "
 `;

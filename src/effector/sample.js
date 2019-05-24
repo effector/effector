@@ -1,7 +1,7 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {is} from './validate'
-import {eventFabric, createLink} from './event'
+import {eventFabric, createLink, forward} from './event'
 import {storeFabric, createStoreObject} from './store'
 import {noop} from './blocks'
 import {
@@ -13,17 +13,6 @@ import {
   nextBarrierID,
 } from './stdlib'
 
-const withGreediness = (greedy, node) =>
-  greedy
-    ? node
-    : [
-      noop,
-      step.barrier({
-        barrierID: nextBarrierID(),
-        priority: 'sampler',
-      }),
-    ].concat(node)
-
 const storeBy = (source, clock, fn, greedy, target) => {
   createLink(clock, {
     scope: {
@@ -31,13 +20,21 @@ const storeBy = (source, clock, fn, greedy, target) => {
       fn,
     },
     child: [target],
-    node: withGreediness(greedy, [
+    node: [
+      //$off
+      !greedy && noop,
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
       step.compute({
         fn: fn
           ? (upd, {state, fn}) => fn(readRef(state), upd)
           : (upd, {state}) => readRef(state),
       }),
-    ]),
+    ].filter(Boolean),
   })
   return target
 }
@@ -74,44 +71,49 @@ const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
 }
 
 const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
-  const state = createStateRef()
-  const hasValue = createStateRef(false)
-  createLink(source, {
-    scope: {
-      hasValue,
-    },
-    node: [
-      step.update({store: state}),
-      step.tap({
-        fn(upd, {hasValue}) {
-          writeRef(hasValue, true)
-        },
-      }),
-    ],
-  })
   target =
     target
     || eventFabric({
       name: source.shortName,
       parent: source.domainName,
     })
-  createLink(clock, {
-    scope: {
-      state,
-      hasValue,
-      fn,
-    },
-    child: [target],
-    node: withGreediness(greedy, [
-      step.filter({
-        fn: (upd, {hasValue}) => readRef(hasValue),
+  const hasSource = createStateRef(false)
+  const sourceState = createStateRef()
+  const clockState = createStateRef()
+
+  createLink(source, {
+    scope: {hasSource},
+    node: [
+      step.update({store: sourceState}),
+      step.tap({
+        fn(upd, {hasSource}) {
+          writeRef(hasSource, true)
+        },
       }),
+    ],
+  })
+
+  createLink(clock, {
+    scope: {sourceState, clockState, hasSource, fn},
+    child: [target],
+    node: [
+      step.update({store: clockState}),
+      step.filter({
+        fn: (upd, {hasSource}) => readRef(hasSource),
+      }),
+      //$off
+      !greedy
+        && step.barrier({
+          barrierID: nextBarrierID(),
+          priority: 'sampler',
+        }),
       step.compute({
         fn: fn
-          ? (upd, {state, fn}) => fn(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
+          ? (upd, {sourceState, clockState, fn}) =>
+            fn(readRef(sourceState), readRef(clockState))
+          : (upd, {sourceState}) => readRef(sourceState),
       }),
-    ]),
+    ].filter(Boolean),
   })
   return target
 }
@@ -124,13 +126,17 @@ export function sample(
 ): any {
   let target
   //config case
-  if (clock === undefined) {
+  if (clock === undefined && 'source' in source) {
     clock = source.clock || source.sampler
     fn = source.fn
     greedy = source.greedy
     //optional target accepted only from config
     target = source.target
     source = source.source
+  }
+  if (clock === undefined) {
+    //still undefined!
+    clock = source
   }
   const sourceNorm = unitOrCombine(source)
   const clockNorm = unitOrCombine(clock)

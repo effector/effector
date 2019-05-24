@@ -1,0 +1,10 @@
+[
+  {
+    "id": "13",
+    "type": "emit",
+    "group": "cmd",
+    "data": {
+      "fullName": "A"
+    }
+  }
+]

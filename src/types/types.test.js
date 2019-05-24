@@ -45,6 +45,14 @@ describe('Unit', () => {
       const check1: Event<number> = c
       const check2: Event<string> = c
     })
+    test('event by event with handler', () => {
+      const a = createEvent<string>()
+      const b = createEvent<boolean>()
+      const c = sample(a, b, (a, b) => ({a, b}))
+
+      const check1: Event<{a: string, b: boolean}> = c
+      const check2: Event<string> = c
+    })
 
     test('store by event', () => {
       const d = createStore(0)
@@ -54,12 +62,29 @@ describe('Unit', () => {
       const check3: Event<number> = e
       const check4: Event<string> = e
     })
+    test('store by event with handler', () => {
+      const d = createStore('')
+      const b = createEvent<boolean>()
+      const e = sample(d, b, (a, b) => ({a, b}))
+
+      const check3: Event<{a: string, b: boolean}> = e
+      const check4: Event<string> = e
+    })
 
     test('effect by event', () => {
       const f = createEffect<string, any, any>()
+      const b = createEvent<boolean>()
       const g = sample(f, b)
 
       const check5: Event<string> = g
+      const check6: Event<number> = g
+    })
+    test('effect by event with handler', () => {
+      const f = createEffect<string, any, any>()
+      const b = createEvent<boolean>()
+      const g = sample(f, b, (a, b) => ({a, b}))
+
+      const check5: Event<{a: string, b: boolean}> = g
       const check6: Event<number> = g
     })
 
@@ -69,6 +94,14 @@ describe('Unit', () => {
       const c = sample(a, b)
 
       const check1: Store<boolean> = c
+      const check2: Store<string> = c
+    })
+    test('store by store with handler', () => {
+      const a = createStore('')
+      const b = createStore(true)
+      const c = sample(a, b, (a, b) => ({a, b}))
+
+      const check1: Store<{a: string, b: boolean}> = c
       const check2: Store<string> = c
     })
   })
@@ -125,14 +158,37 @@ describe('Store', () => {
     c.off(ev)
   })
   test('createApi', () => {
+    const store: Store<number> = createStore(0)
+    {
+      const {event} = createApi(store, {
+        event: (n, x: number) => x,
+      })
+      const check: Event<number> = event
+    }
+    {
+      const {event} = createApi(store, {
+        event: (n, x: number) => x,
+      })
+      const check: Event<string> = event
+    }
+    {
+      const {event} = createApi(store, {
+        event: (n, x) => x,
+      })
+      const check: Event<string> = event
+    }
+  })
+  test('createApi voids', () => {
     const store = createStore(0)
     const api = createApi(store, {
-      increment: (count) => count + 1,
+      increment: count => count + 1,
       decrement: count => count - 1,
+      double: count => count * 2,
+      multiply: (count, mp = 2) => count * mp,
     })
 
-    api.increment()
-    api.decrement()
+    api.double() // Expected 1 arguments, but got 0.
+    api.multiply() // Expected 1 arguments, but got 0.
   })
   test('setStoreName', () => {})
   test('extract', () => {})

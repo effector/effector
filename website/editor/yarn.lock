@@ -1225,10 +1225,10 @@
   resolved "https://registry.yarnpkg.com/@types/semver/-/semver-5.5.0.tgz#146c2a29ee7d3bae4bf2fcb274636e264c813c45"
   integrity sha512-41qEJgBH/TWgo5NFSvBCJ1qkoi3Q6ONSF2avrHq1LVEZfYpdHmj0y9SuTK+u9ZhG1sYQKBL1AWXKyLWP4RaUoQ==
 
-"@zerobias/codebox@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@zerobias/codebox/-/codebox-1.1.0.tgz#f1ce830bff431dd193b9489407163e94b2584536"
-  integrity sha512-cHbv+moLuBlq3KSxJqxTxAnliaOTIiwjILivgesd0ZCnxKd4lrQc6CzGZL/9+h1NxvGbauhF3gbTU8+jym34XA==
+"@zerobias/codebox@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@zerobias/codebox/-/codebox-1.2.0.tgz#818be986b06b84b2e67470b779e566d745210d44"
+  integrity sha512-QuFQy5Lac/G6HkGOlrvsyHiwoviPcamsrHJkNeZ5lpxgs/JgyF90jiXoef78ERcaI1wu7i0X9kXa+kq2L1FOBQ==
   dependencies:
     cross-fetch "^3.0.2"
 
@@ -1814,6 +1814,15 @@ cli-table3@^0.5.0:
     string-width "^2.1.1"
   optionalDependencies:
     colors "^1.1.2"
+
+clipboard@^2.0.0:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/clipboard/-/clipboard-2.0.4.tgz#836dafd66cf0fea5d71ce5d5b0bf6e958009112d"
+  integrity sha512-Vw26VSLRpJfBofiVaFb/I8PVfdI1OxKcYShe6fm0sP/DtmiWQNCjhM/okTvdCo0G+lMMm1rMYbk4IK4x1X+kgQ==
+  dependencies:
+    good-listener "^1.2.2"
+    select "^1.1.2"
+    tiny-emitter "^2.0.0"
 
 cliui@^4.0.0:
   version "4.1.0"
@@ -2405,6 +2414,11 @@ delayed-stream@~1.0.0:
   resolved "https://registry.yarnpkg.com/delayed-stream/-/delayed-stream-1.0.0.tgz#df3ae199acadfb7d440aaae0b29e2272b24ec619"
   integrity sha1-3zrhmayt+31ECqrgsp4icrJOxhk=
 
+delegate@^3.1.2:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/delegate/-/delegate-3.2.0.tgz#b66b71c3158522e8ab5744f720d8ca0c2af59166"
+  integrity sha512-IofjkYBZaZivn0V8nnsMJGBr4jVLxHDheKSW88PyxS5QC4Vo9ZbZVvhzlSxY87fVq3STR6r+4cGepyHkcWOQSw==
+
 delegates@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/delegates/-/delegates-1.0.0.tgz#84c6e159b81904fdca59a0ef44cd870d31250f9a"
@@ -2536,10 +2550,10 @@ effector-react@^0.18.10:
   resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-0.18.10.tgz#6ad812d4320301b48df4998471ab2487ce624703"
   integrity sha512-vY2RMQm+acHNQqJcoHyOkOgh6WByl3bUjPGFHYItsARsDCipMfuj3ydFx72ys9yA4YES1bpJkgzUYbLYc67x1A==
 
-effector@^0.18.7:
-  version "0.18.7"
-  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.7.tgz#83203bd2db43b14b5b9cfdc621c98613733acd9e"
-  integrity sha512-oGafXrdJL3LyvsfWk796Gy6M34DRkokz0FYH9UR/8QtWpFTy9N2qg3JHlDd6BGFRvDzmiVhAQkPUTVwYHeNLWg==
+effector@^0.18.9:
+  version "0.18.9"
+  resolved "https://registry.yarnpkg.com/effector/-/effector-0.18.9.tgz#cfbb6f4203ce0a9208d01c735adb5dceba3e3307"
+  integrity sha512-YA12eeA4UU7m7IX5Qrsdv/6+amxwbarR95pFDw9Y30h8eVbXZtPpA6wqzVWIO3U2Ux6qr8becCFEtwixXc+drQ==
   dependencies:
     symbol-observable "^1.2.0"
 
@@ -3023,6 +3037,13 @@ globals@^11.1.0:
   version "11.11.0"
   resolved "https://registry.yarnpkg.com/globals/-/globals-11.11.0.tgz#dcf93757fa2de5486fbeed7118538adf789e9c2e"
   integrity sha512-WHq43gS+6ufNOEqlrDBxVEbb8ntfXrfAUU2ZOpCxrBdGKW3gyv8mCxAfIBD0DroPKGrJ2eSsXsLtY9MPntsyTw==
+
+good-listener@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/good-listener/-/good-listener-1.2.2.tgz#d53b30cdf9313dffb7dc9a0d477096aa6d145c50"
+  integrity sha1-1TswzfkxPf+33JoNR3CWqm0UXFA=
+  dependencies:
+    delegate "^3.1.2"
 
 graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
   version "4.1.15"
@@ -5000,6 +5021,13 @@ prelude-ls@~1.1.2:
   resolved "https://registry.yarnpkg.com/prelude-ls/-/prelude-ls-1.1.2.tgz#21932a549f5e52ffd9a827f570e04be62a97da54"
   integrity sha1-IZMqVJ9eUv/ZqCf1cOBL5iqX2lQ=
 
+prismjs@^1.16.0:
+  version "1.16.0"
+  resolved "https://registry.yarnpkg.com/prismjs/-/prismjs-1.16.0.tgz#406eb2c8aacb0f5f0f1167930cb83835d10a4308"
+  integrity sha512-OA4MKxjFZHSvZcisLGe14THYsug/nF6O1f0pAJc0KN0wTyAcLqmsbE+lTGKSpyh+9pEW57+k6pg2AfYR+coyHA==
+  optionalDependencies:
+    clipboard "^2.0.0"
+
 private@^0.1.6:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"
@@ -5518,6 +5546,11 @@ scheduler@^0.13.6:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
 
+select@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/select/-/select-1.1.2.tgz#0e7350acdec80b1108528786ec1d4418d11b396d"
+  integrity sha1-DnNQrN7ICxEIUoeG7B1EGNEbOW0=
+
 semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.6.0.tgz#7e74256fbaa49c75aa7c7a205cc22799cac80004"
@@ -6021,6 +6054,11 @@ timsort@^0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/timsort/-/timsort-0.3.0.tgz#405411a8e7e6339fe64db9a234de11dc31e02bd4"
   integrity sha1-QFQRqOfmM5/mTbmiNN4R3DHgK9Q=
+
+tiny-emitter@^2.0.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+  integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
 
 tiny-inflate@^1.0.0:
   version "1.0.2"

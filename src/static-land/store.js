@@ -1,5 +1,5 @@
 //@flow
-
+/* eslint-disable no-unused-vars */
 import {createStore, combine, type Store} from 'effector'
 
 // Functor
@@ -25,5 +25,5 @@ export function extract<A>(a: Store<A>): A {
   return a.getState()
 }
 
-function leftAdjunct<A, B>(f: (a: Event<A>) => B, a: A): Store<B>;
-function rightAdjunct<A, B>(f: (a: A) => Store<B>, a: Event<A>): B;
+declare function leftAdjunct<A, B>(f: (a: Event<A>) => B, a: A): Store<B>
+declare function rightAdjunct<A, B>(f: (a: A) => Store<B>, a: Event<A>): B
