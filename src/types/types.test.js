@@ -28,13 +28,6 @@ import {
 import {createComponent} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
-type F = Number
-
-const tm: unknown = 1
-
-tm.toString()
-
-
 describe('Unit', () => {
   describe('sample', () => {
     test('event by event', () => {
