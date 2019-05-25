@@ -4,7 +4,9 @@ authorURL: https://github.com/dpr-dev
 title: Create custom i18n provider with effector and typescript
 ---
 
-Today I will show you how to create your own i18n solution with effector, typescript and react.  
+Today I will show you how to create your own i18n solution with effector, typescript and react.
+
+codesandbox https://codesandbox.io/s/react-i18n-with-effector-and-ts-gtet4
 
 First of all, we should design the state of our provider, consisting of two parts: 
 - current language
@@ -290,26 +292,7 @@ And at the end i will show some simple, but very useful components
 
 <!--TypeScript-->
 
-```ts
- // cultureProvider.tsx
- type CultureProviderProps = {
-    children: ((props: string) => React.ReactNode)
-};
-
-export const CultureProvider =
-    createComponent<CultureProviderProps, StoreTypes>(
-        $localizeStore,
-        (props, state) => {
-            return props.children(state.currentLanguage)
-        }); 
-        
-        
-// usage
-<CultureProvider>
-    {(language) => <div>current language<div>}
-</CultureProvider>
-
-
+```ts 
 // CultureRenderer
 type CultureRendererProps = {
     children: ((props: string) => React.ReactNode),
