@@ -50,7 +50,7 @@ I created two events in the file events.ts:
 <!--TypeScript-->
 
 ```ts 
-export type AddTranslatesEventType = { language: string, translates: Dictionary<string, string> };
+export type AddTranslates = { language: string, translates: Dictionary<string, string> };
 
 export const addTranslates = createEvent<AddTranslates>('@@i18n/translates/add');
 export const setLanguage = createEvent<string>('@@i18n/language/set');
