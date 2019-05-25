@@ -144,16 +144,7 @@ export const Translate =
             return typeof children === 'function'
                 ? children(value)
                 : value;
-        });
-
-// and define translate function
-export const getTranslate = (path: string): string => {
-    const {
-        currentLanguage,
-        translates
-    } = $localizeStore.getState()
-    return _getTranslate(path, translates[currentLanguage][path], path);
-}; 
+        }); 
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
@@ -169,7 +160,11 @@ The benefits is that now we can subscribe to our localisation store and change t
 // userCulture.ts
 class UserCulture {
     private _userCulture: string | null;
+    private _translations: Dictionary<string, string>; 
+    
     public set = (lang: string) => this._userCulture = lang;
+    public setTranslations = (value: Dictionary<string, string) => this._translations = value; 
+    
     public getCurrentCulture = (): string => {
         const culture = this._userCulture;
         if (!!culture) {
@@ -194,6 +189,18 @@ class UserCulture {
 
         return data.en;
     } 
+    
+    public translate = (key: string) => {
+        if(!!this._translations) {
+            if(!!key) {
+                return this._translations[key]; 
+            }
+            
+            throw new Error('invalid resource key'); 
+        }
+        
+        throw new Error('translations must be a set');
+    }
 
     private _isCulture = (culture: string) => {
         if (!!this._userCulture) {
@@ -204,13 +211,36 @@ class UserCulture {
     }
 }
 
-export const { localize, set, getCurrentCulture } = new UserCulture();  
+export const { localize, set, getCurrentCulture, translate, setTranslations } = new UserCulture();  
  
 
 // store.ts
-import {set} from './userCulture'; 
+import {set, setTranslations} from './userCulture'; 
 
-$language.watch((lang) => set(lang)); // !!side-effect!! set app culture on each store update 
+// !!side-effect!! set app culture on each store update 
+$language.watch((lang) => set(lang)); 
+
+// !!side-effect!! update the translations set in our culture manager on each culture switching
+$translates.watch($language, (t, l) => {
+    setTranslations(t[l]); 
+}); 
+```
+
+<!--END_DOCUSAURUS_CODE_TABS-->
+
+Then we can define the *translate function* and call it from anywhere in our code. 
+
+<!--DOCUSAURUS_CODE_TABS-->
+
+<!--TypeScript-->
+
+```tsx
+// translate.tsx, put this code after Translate component
+// import {translate} from './userCulture'; 
+export const getTranslate = (path: string): string => { 
+    return _getTranslate(path, translate(path), path);
+}; 
+
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
