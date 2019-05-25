@@ -37,13 +37,13 @@ type Translates = Dictionary<Dictionary<string, string>, string>; // type from t
 
 export const $language = createStore<string>('en'); 
 export const $translates = createStore<Translates>({}); 
-export const $localizedStore = createStoreObject({language: $language, translates: $translates}); 
+export const $i18n = createStoreObject({language: $language, translates: $translates}); 
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 Ok, we created the state for our i18n library. This state will store information about the current language and a set of translations.
-Now we should to provide the language switching at runtime and dynamically adding the sets of the translates.  
+Now we should provide the language switching at runtime and dynamically adding the sets of the translates.  
 
 I created two events in the file events.ts: 
 
@@ -165,7 +165,7 @@ class UserCulture {
     private _translations: Dictionary<string, string>; 
     
     public set = (lang: string) => this._userCulture = lang;
-    public setTranslations = (value: Dictionary<string, string) => this._translations = value; 
+    public setTranslations = (value: Dictionary<string, string>) => this._translations = value; 
     
     public getCurrentCulture = (): string => {
         const culture = this._userCulture;
@@ -223,9 +223,9 @@ import {set, setTranslations} from './userCulture';
 $language.watch((lang) => set(lang)); 
 
 // !!side-effect!! update the translations set in our culture manager on each culture switching
-$translates.watch($language, (t, l) => {
-    setTranslations(t[l]); 
-}); 
+$i18n.watch(state => {
+  setTranslations(state.translates[state.language]);
+});
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
@@ -256,12 +256,7 @@ Here's example of using:
 ```ts
 // api.ts
 import {getCurrentCulture} from './userCulture'; 
-const url = `https://some.url/?age=20&culture=${getCurrentCulture()}`; 
-
-// pluralize.ts
-export const pluralizeWeeks = (value: number, language: string) => {
-    return pluralizeInternal(value, language, "неделя", "недели", "недель", "week", "weeks", "semana", "semanas", "hafta", "hafta")
-}; 
+const url = `https://some.url/?age=20&culture=${getCurrentCulture()}`;  
 
 // store2.ts
 // en 
@@ -272,14 +267,21 @@ export const pluralizeWeeks = (value: number, language: string) => {
 // {value: 1, name: 'неделя'}
 // {value: 10, name: 'недель'}
 
-export const $weeks = createStore<Array<{value: number, name: string}>([]); 
 
-// on2.ts
-$weeks.on(
-    $language, 
-    (state, culture) => {
-        return state.map(({value}) => ({name: pluralizeWeeks(value, culture), value}); 
-    }); 
+export const weeks = (n: number, lang: string) => {
+  return pluralize(n, "неделя", "недели", "недель", "week", "weeks")[lang];
+};
+
+const numbers = Array.from({ length: 10 }).map((_, item) => item + 1);
+
+export const $weeks = $language.map(lang => {
+  return numbers.map(value => {
+    return {
+      value: value,
+      name: weeks(value, lang)
+    };
+  });
+});
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
