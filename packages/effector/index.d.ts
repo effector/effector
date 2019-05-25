@@ -360,6 +360,20 @@ export function warning(
   ...args: unknown[]
 ): void
 
+export function combine<
+  Dependencies extends readonly Store<any>[] | { [K in string]: Store<any> },
+>(
+  storesCollection: Dependencies,
+): Store<{ [K in keyof Dependencies]: Dependencies[K]['defaultState'] }>
+export function combine<
+  State,
+  Dependencies extends readonly Store<any>[] | { [K in string]: Store<any> },
+>(
+  storesCollection: Dependencies,
+  reducer: (
+    a: { [K in keyof Dependencies]: Dependencies[K]['defaultState'] }
+  ) => State = a => a
+): Store<State>
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 export function combine<A, B, R>(
