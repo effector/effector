@@ -60,7 +60,7 @@ export const setLanguage = createEvent<string>('@@i18n/language/set');
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Thereafter wee should subscribe our stores to this events
+Thereafter we should subscribe our stores to this events
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -131,6 +131,11 @@ const _getTranslate = (
     }
 
     return `{{${id}}}`;
+};
+
+export type StoreType = {
+  language: string;
+  translates: Dictionary<Dictionary<string, string>>;
 };
 
 export const Translate =
@@ -301,8 +306,13 @@ type CultureRendererProps = {
     cultures: Array<string>
 };
 
+export type Store = {
+  language: string;
+  translates: Dictionary<Dictionary<string, string>>;
+};
+
 export const CultureRenderer =
-    createComponent<CultureRendererProps, StoreTypes>(
+    createComponent<CultureRendererProps, Store>(
         $i18n,
         (props, state) => {
             const langInLower = state.language.toLowerCase();
@@ -325,9 +335,11 @@ export const CultureRenderer =
 <CultureRenderer cultures={["ru"]}>
     {culture => <h4>info for {culture} culture</h4>}
 </CultureRenderer>
+
 <CultureRenderer cultures={["en"]}>
     {culture => <h4>info for {culture} culture</h4>}
 </CultureRenderer>
+
 <CultureRenderer cultures={["en", "ru"]}>
     {culture => <h4>info for all cultures, current = {culture}</h4>}
 </CultureRenderer>
