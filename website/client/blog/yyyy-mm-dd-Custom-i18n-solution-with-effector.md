@@ -134,13 +134,13 @@ const _getTranslate = (
 };
 
 export const Translate =
-    createComponent<TranslateProps, StoreTypes>(
-        $localizeStore,
+    createComponent<TranslateProps, StoreType>(
+        $i18n,
         (props, state) => {
             const { children, id } = props;
-            const { translates, currentLanguage } = state;
+            const { translates, language } = state;
 
-            const translate = translates[currentLanguage][id];
+            const translate = translates[language][id];
             const value = _getTranslate(id, translate, typeof children !== 'function' ? children : undefined);
 
             return typeof children === 'function'
@@ -303,9 +303,9 @@ type CultureRendererProps = {
 
 export const CultureRenderer =
     createComponent<CultureRendererProps, StoreTypes>(
-        $localizeStore,
+        $i18n,
         (props, state) => {
-            const langInLower = state.currentLanguage.toLowerCase();
+            const langInLower = state.language.toLowerCase();
             const hasCulture = props.cultures.some((c) => {
                 if (!!c && c.toLowerCase() === langInLower) {
                     return true;
@@ -322,8 +322,14 @@ export const CultureRenderer =
         
 // usage
 
-<CultureRenderer cultures={['en']}>
-    {(culture) => <div>specific information {culture}</div>}
+<CultureRenderer cultures={["ru"]}>
+    {culture => <h4>info for {culture} culture</h4>}
+</CultureRenderer>
+<CultureRenderer cultures={["en"]}>
+    {culture => <h4>info for {culture} culture</h4>}
+</CultureRenderer>
+<CultureRenderer cultures={["en", "ru"]}>
+    {culture => <h4>info for all cultures, current = {culture}</h4>}
 </CultureRenderer>
 ```
 
