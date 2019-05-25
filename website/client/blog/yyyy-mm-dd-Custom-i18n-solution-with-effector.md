@@ -343,3 +343,6 @@ export const CultureRenderer =
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
+
+
+#### Thank you for reading!
