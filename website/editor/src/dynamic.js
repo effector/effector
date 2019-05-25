@@ -26,6 +26,7 @@ import {
   retrieveCode,
   retrieveVersion,
   version,
+  compress
 } from './domain'
 import {typeAtPos} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
@@ -223,8 +224,8 @@ codeError.watch(async({stackFrames}) => {
   }
 })
 
-changeSources.watch(code => {
-  localStorage.setItem('code', code)
+changeSources.map(code => compress(code)).watch(code => {
+  localStorage.setItem('code-compressed', code)
 })
 
 forward({

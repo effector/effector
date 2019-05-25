@@ -53,8 +53,8 @@ export function retrieveCode() {
   if (code) {
     return decompress(code)
   }
-  if (localStorage.getItem('code')) {
-    return localStorage.getItem('code')
+  if (localStorage.getItem('code-compressed')) {
+    return decompress(localStorage.getItem('code-compressed'))
   }
   return defaultSourceCode
 }
