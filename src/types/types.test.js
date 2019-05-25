@@ -133,6 +133,15 @@ describe('Event', () => {
 describe('Effect', () => {
   test('createEffect', () => {
     const effect1: Effect<number, string> = createEffect()
+    const effect2 = createEffect('', {handler: effect1})
+  })
+
+  test('#use', () => {
+    const effect1 = createEffect()
+    const foo = createEffect<number, string, any>()
+
+    effect1.use(params => Promise.resolve('foo'))
+    effect1.use(foo)
   })
 })
 
@@ -309,6 +318,26 @@ describe('Domain', () => {
     const domain2 = createDomain('hello')
     const domain3 = createDomain(234)
     const domain4 = createDomain({foo: true})
+  })
+
+  test('#event', () => {
+    const domain = createDomain()
+    const event = domain.event<string>()
+  })
+
+  test('#effect', () => {
+    const domain = createDomain()
+    const effect1: Effect<string, number, Error> = domain.effect()
+    const effect2 = domain.effect('', {
+      handler(params: string) {
+        return 256
+      }
+    })
+    effect2(20)
+    const effect3 = domain.effect('', {
+      handler: effect1
+    })
+    effect3(20)
   })
 
   test('#onCreateStore', () => {
