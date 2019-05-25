@@ -4,11 +4,11 @@ authorURL: https://github.com/dpr-dev
 title: Create custom i18n provider with effector and typescript
 ---
 
-Today i will show your how to create your own i18n solution with effector and typescript and react.  
+Today I will show you how to create your own i18n solution with effector, typescript and react.  
 
-First of all, we should to design the state of our provider, consisting of two parts: 
+First of all, we should design the state of our provider, consisting of two parts: 
 - current language
-- translates
+- translations
 
 Ok, let's do it. Create a file store.ts and write the following code:
 
@@ -40,7 +40,7 @@ export const $localizedStore = createStoreObject({language: $language, translate
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-ok, we created the state for our i18n library. This state will store information about the current language and a set of translations.
+Ok, we created the state for our i18n library. This state will store information about the current language and a set of translations.
 Now we should to provide the language switching at runtime and dynamically adding the sets of the translates.  
 
 I created two events in the file events.ts: 
@@ -58,7 +58,7 @@ export const setLanguage = createEvent<string>('@@i18n/language/set');
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Thereafter whe should to subscribe our stores to this events
+Thereafter wee should subscribe our stores to this events
 
 <!--DOCUSAURUS_CODE_TABS-->
 
