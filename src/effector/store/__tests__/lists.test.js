@@ -19,19 +19,19 @@ test('list', () => {
     console.log(lists.map(list => list.join(' ')).join(`\n`))
   })
 
-  list.add([
+  list.insert([
     {
       offset: 0,
       entries: ['⚫️', '⚫️', '⚫️'],
     },
   ])
-  list.add([
+  list.insert([
     {
       offset: 1,
       entries: ['🔴', '🔴', '🔴'],
     },
   ])
-  list.add([
+  list.insert([
     {
       offset: 0,
       entries: ['0️⃣', '   '],
@@ -75,7 +75,19 @@ test('list', () => {
     +watch: $PropertyType<Store<Array<T>>, 'watch'>,
     +on: $PropertyType<Store<Array<T>>, 'on'>,
     // +self: $PropertyType<Store<Array<T>>, 'getState'>,
-    add: Event<
+    swap: Event<
+      $ReadOnlyArray<[
+        number | ((list: $ReadOnlyArray<T>) => number),
+        number | ((list: $ReadOnlyArray<T>) => number)
+      ]>
+    >;
+    move: Event<
+      $ReadOnlyArray<[
+        number | ((list: $ReadOnlyArray<T>) => number),
+        number | ((list: $ReadOnlyArray<T>) => number)
+      ]>,
+    >;
+    insert: Event<
       $ReadOnlyArray<{
         +offset:
           | number
@@ -91,18 +103,34 @@ test('list', () => {
         +entries: $ReadOnlyArray<T>,
       }>,
     >,
+    update: Event<
+      $ReadOnlyArray<{
+        +index:
+          | number
+          | ((list: $ReadOnlyArray<T>) => number),
+        +updater: (value: T) => T
+      }>
+    >;
     delete: Event<
       $ReadOnlyArray<{
         +offset: number | ((list: $ReadOnlyArray<T>) => number),
         +amount: number,
       }>,
     >,
+
+    // Simple actions
+    push: Event<$ReadOnlyArray<T>>,
+    unshift: Event<$ReadOnlyArray<T>>;
+    reverse: Event<void>;
+    shift: Event<void>;
+    pop: Event<void>;
+    clear: Event<void>;
   } {
     const store = createStore(initials)
     const model = {
       store,
       api: createApi(store, {
-        add(state, segments) {
+        insert(state, segments) {
           if (segments.length === 0) return state
           const store = []
           const newSegments = sortSegments(segments, state)
@@ -176,7 +204,7 @@ test('list', () => {
 
     return {
       delete: model.api.delete,
-      add: model.api.add,
+      insert: model.api.insert,
       replace: model.api.replace,
       watch: model.store.watch,
       on: model.store.on,
