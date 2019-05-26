@@ -403,6 +403,7 @@ describe('Graph', () => {
       ],
     })
     launch(foo, '')
+    launch(foo, 0)
     launch(customNode, 100)
   })
 })
