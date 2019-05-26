@@ -1,5 +1,5 @@
 // @flow
-
+/* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {
   invariant,
@@ -35,16 +35,16 @@ describe('Unit', () => {
       const b = createEvent<boolean>()
       const c = sample(a, b)
 
-      const check1: Event<number> = c
-      const check2: Event<string> = c
+      const sample_ee_check1: Event<number> = c
+      const sample_ee_check2: Event<string> = c
     })
     test('event by event with handler', () => {
       const a = createEvent<string>()
       const b = createEvent<boolean>()
       const c = sample(a, b, (a, b) => ({a, b}))
 
-      const check1: Event<{a: string, b: boolean}> = c
-      const check2: Event<string> = c
+      const sample_eeh_check1: Event<{a: string, b: boolean}> = c
+      const sample_eeh_check2: Event<string> = c
     })
 
     test('store by event', () => {
@@ -52,16 +52,16 @@ describe('Unit', () => {
       const b = createEvent<boolean>()
       const e = sample(d, b)
 
-      const check3: Event<number> = e
-      const check4: Event<string> = e
+      const sample_se_check1: Event<number> = e
+      const sample_se_check2: Event<string> = e
     })
     test('store by event with handler', () => {
       const d = createStore('')
       const b = createEvent<boolean>()
       const e = sample(d, b, (a, b) => ({a, b}))
 
-      const check3: Event<{a: string, b: boolean}> = e
-      const check4: Event<string> = e
+      const sample_seh_check1: Event<{a: string, b: boolean}> = e
+      const sample_seh_check2: Event<string> = e
     })
 
     test('effect by event', () => {
@@ -69,16 +69,16 @@ describe('Unit', () => {
       const b = createEvent<boolean>()
       const g = sample(f, b)
 
-      const check5: Event<string> = g
-      const check6: Event<number> = g
+      const sample_efe_check1: Event<string> = g
+      const sample_efe_check2: Event<number> = g
     })
     test('effect by event with handler', () => {
       const f = createEffect<string, any, any>()
       const b = createEvent<boolean>()
       const g = sample(f, b, (a, b) => ({a, b}))
 
-      const check5: Event<{a: string, b: boolean}> = g
-      const check6: Event<number> = g
+      const sample_efeh_check1: Event<{a: string, b: boolean}> = g
+      const sample_efeh_check2: Event<number> = g
     })
 
     test('store by store', () => {
@@ -86,30 +86,30 @@ describe('Unit', () => {
       const b = createStore(0)
       const c = sample(a, b)
 
-      const check1: Store<boolean> = c
-      const check2: Store<string> = c
+      const sample_ss_check1: Store<boolean> = c
+      const sample_ss_check2: Store<string> = c
     })
     test('store by store with handler', () => {
       const a = createStore('')
       const b = createStore(true)
       const c = sample(a, b, (a, b) => ({a, b}))
 
-      const check1: Store<{a: string, b: boolean}> = c
-      const check2: Store<string> = c
+      const sample_ssh_check1: Store<{a: string, b: boolean}> = c
+      const sample_ssh_check2: Store<string> = c
     })
   })
 })
 
 describe('Event', () => {
   test('createEvent', () => {
-    const event1: Event<number> = createEvent()
+    const createEvent_event1: Event<number> = createEvent()
   })
   test('#map', () => {
     const event: Event<number> = createEvent()
     const computed = event.map(() => 'foo')
 
     //const check1: Event<string> = computed
-    const check2: Event<number> = computed
+    const event_map_check2: Event<number> = computed
     event(2)
     computed('')
   })
@@ -132,8 +132,8 @@ describe('Event', () => {
 
 describe('Effect', () => {
   test('createEffect', () => {
-    const effect1: Effect<number, string> = createEffect()
-    const effect2 = createEffect('', {handler: effect1})
+    const createEffect_effect1: Effect<number, string> = createEffect()
+    const createEffect_effect2 = createEffect('', {handler: createEffect_effect1})
   })
 
   test('#use', () => {
@@ -147,8 +147,8 @@ describe('Effect', () => {
 
 describe('Store', () => {
   test('createStore', () => {
-    const store1: Store<number> = createStore(0)
-    const store2: Store<string> = createStore(0)
+    const createStore_store1: Store<number> = createStore(0)
+    const createStore_store2: Store<string> = createStore(0)
   })
   test('createStoreObject', () => {
     const ev = createEvent()
@@ -165,19 +165,19 @@ describe('Store', () => {
       const {event} = createApi(store, {
         event: (n, x: number) => x,
       })
-      const check: Event<number> = event
+      const createApi_check1: Event<number> = event
     }
     {
       const {event} = createApi(store, {
         event: (n, x: number) => x,
       })
-      const check: Event<string> = event
+      const createApi_check2: Event<string> = event
     }
     {
       const {event} = createApi(store, {
         event: (n, x) => x,
       })
-      const check: Event<string> = event
+      const createApi_check3: Event<string> = event
     }
   })
   test('createApi voids', () => {
@@ -232,9 +232,9 @@ describe('Store', () => {
     const store = createStore(0)
     const computed = store.map(() => 'hello')
 
-    const check1: Store<string> = computed
+    const map_check1: Store<string> = computed
 
-    const check2: Store<number> = computed
+    const map_check2: Store<number> = computed
   })
 
   test('#reset', () => {
@@ -278,21 +278,21 @@ describe('Store', () => {
     const event: Event<number> = createEvent()
     const store = createStore(0)
     store.watch((state, payload) => {
-      const check1: number = state
-      const check2: typeof undefined = payload
+      const store_watch_check1: number = state
+      const store_watch_check2: typeof undefined = payload
     })
     store.watch(event, (state, payload) => {
-      const check1: number = state
-      const check2: number = payload
+      const store_watchBy_check1: number = state
+      const store_watchBy_check2: number = payload
     })
     const computed = store.map(() => 'hello')
     computed.watch((state, payload) => {
-      const check1: string = state
-      const check2: typeof undefined = payload
+      const store_watchComputed_check1: string = state
+      const store_watchComputed_check2: typeof undefined = payload
     })
     computed.watch(event, (state, payload) => {
-      const check1: string = state
-      const check2: number = payload
+      const store_watchByComputed_check1: string = state
+      const store_watchByComputed_check2: number = payload
     })
   })
 
@@ -300,14 +300,14 @@ describe('Store', () => {
     const event = createEvent()
     const store = createStore(0)
     const result = store.thru(store => {
-      const check: Store<number> = store
-      return check
+      const thru_check1: Store<number> = store
+      return thru_check1
     })
 
     const computed = store.map(() => 'hello')
     const result1 = computed.thru(store => {
-      const check: Store<string> = store
-      return check
+      const thru_computed_check1: Store<string> = store
+      return thru_computed_check1
     })
   })
 })
@@ -370,16 +370,39 @@ describe('Domain', () => {
 })
 
 describe('Graph', () => {
-  test('forward', () => {
-    const a = createEvent<number>()
-    const b = createEvent<number>()
-    forward({from: a, to: b})
-    const c = createEffect<number, string, string>()
-    const d = createEffect<number, string, string>()
-    forward({from: c, to: d})
-    const e = createStore(0)
-    const f = createStore(0)
-    forward({from: e, to: f})
+  describe('forward', () => {
+    test('forward between events', () => {
+      const forward_event1 = createEvent<number>()
+      const forward_event2 = createEvent<number>()
+      forward({
+        from: forward_event1,
+        to: forward_event2,
+      })
+    })
+    describe('forward between effects', () => {
+      test('start in parallel with the same payload', () => {
+        const forward_effect_par1 = createEffect<number, string, string>()
+        const forward_effect_par2 = createEffect<number, string, string>()
+        forward({
+          from: forward_effect_par1,
+          to: forward_effect_par2,
+        })
+      })
+      test('start sequentially', () => {
+        const forward_effect_seq1 = createEffect<number, string, string>()
+        const forward_effect_seq2 = createEffect<string, boolean, boolean>()
+        forward({
+          from: forward_effect_seq1.done.map(({result}) => result),
+          to: forward_effect_seq2,
+        })
+      })
+    })
+
+    test('forward between stores', () => {
+      const e = createStore(0)
+      const f = createStore(0)
+      forward({from: e, to: f})
+    })
   })
 
   test('launch', () => {
@@ -425,13 +448,13 @@ describe('effector-react', () => {
         b: createStore<number>(1),
       },
       (props, state) => {
-        const check1: number = state.a
-        const check2: number = state.b
+        const createComponent_implicitObject_check1: number = state.a
+        const createComponent_implicitObject_check2: number = state.b
         return null
       },
     )
     const Store = createComponent(createStore(0), (props, state) => {
-      const check1: number = state
+      const createComponent_createStore_check1: number = state
       return null
     })
 
@@ -442,14 +465,14 @@ describe('effector-react', () => {
     }>({})
     const InitialProps = createComponent(
       (initialProps: {id: number}) => {
-        const check1: number = initialProps.id
-        const check2: string = initialProps.id
-        const check3: string = initialProps.unknownProp
+        const createComponent_initialProps_check1: number = initialProps.id
+        const createComponent_initialProps_check2: string = initialProps.id
+        const createComponent_initialProps_check3: string = initialProps.unknownProp
         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
       },
       (_, state) => {
-        const check1: string = state.text
-        const check2: number = state.text
+        const createComponent_initialProps_check4: string = state.text
+        const createComponent_initialProps_check5: number = state.text
         return null
       },
     )
