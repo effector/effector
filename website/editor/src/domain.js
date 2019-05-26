@@ -11,15 +11,11 @@ import {
   createApi,
   forward,
 } from 'effector'
-import * as lzString from 'lz-string'
 
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from './versions.json'
-
+import {compress, decompress} from './compression'
 import type {StackFrame} from './evaluator/stackframe/stack-frame'
-
-export const compress = lzString.compressToEncodedURIComponent
-export const decompress = lzString.decompressFromEncodedURIComponent
 
 export const generateShareableUrl = (version: string, code: string) => {
   const result =
