@@ -37,7 +37,7 @@ import {evaluator} from './evaluator'
 
 version.on(selectVersion, (_, p) => p)
 
-const __ENABLE_TYPE_AT_POS__ = false
+const __ENABLE_TYPE_AT_POS__ = true
 
 codeCursorActivity.watch(editor => {
   const cursor = editor.getCursor()
