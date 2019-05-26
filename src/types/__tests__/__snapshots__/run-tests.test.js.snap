@@ -3,49 +3,49 @@
 exports[`Flow: json messages 1`] = `
 Array [
   Array [
-    "Cannot assign \`c\` to \`check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`c\` to \`sample_ee_check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`c\` to \`check2\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`c\` to \`sample_eeh_check2\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`e\` to \`check4\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`e\` to \`sample_se_check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`e\` to \`check4\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`e\` to \`sample_seh_check2\` because object type [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`g\` to \`check6\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`g\` to \`sample_efe_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`g\` to \`check6\` because object type [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`g\` to \`sample_efeh_check2\` because object type [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`c\` to \`check2\` because boolean [1] is incompatible with string [2] in type argument \`State\` [3].",
+    "Cannot assign \`c\` to \`sample_ss_check2\` because boolean [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
-    "Cannot assign \`c\` to \`check2\` because object type [1] is incompatible with string [2] in type argument \`State\` [3].",
+    "Cannot assign \`c\` to \`sample_ssh_check2\` because object type [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
-    "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`computed\` to \`event_map_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`computed\` to \`event_map_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`createStore(...)\` to \`store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
+    "Cannot assign \`createStore(...)\` to \`createStore_store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
-    "Cannot assign \`event\` to \`check\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`event\` to \`createApi_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
     "Cannot call \`createApi\` with object literal bound to \`api\` because string [1] is incompatible with number [2] in the return value of property \`event\`.",
   ],
   Array [
-    "Cannot assign \`event\` to \`check\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+    "Cannot assign \`event\` to \`createApi_check3\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
-    "Cannot assign \`computed\` to \`check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
+    "Cannot assign \`computed\` to \`map_check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
   ],
   Array [
     "Cannot call \`createDomain\` with \`234\` bound to \`domainName\` because number [1] is incompatible with string [2].",
@@ -60,13 +60,13 @@ Array [
     "Cannot call \`effect3\` with \`20\` bound to \`payload\` because number [1] is incompatible with string [2].",
   ],
   Array [
-    "Cannot assign \`initialProps.id\` to \`check2\` because number [1] is incompatible with string [2].",
+    "Cannot assign \`initialProps.id\` to \`createComponent_initialProps_check2\` because number [1] is incompatible with string [2].",
   ],
   Array [
     "Cannot get \`initialProps.unknownProp\` because property \`unknownProp\` is missing in object type [1].",
   ],
   Array [
-    "Cannot assign \`state.text\` to \`check2\` because string [1] is incompatible with number [2].",
+    "Cannot assign \`state.text\` to \`createComponent_initialProps_check5\` because string [1] is incompatible with number [2].",
   ],
 ]
 `;
