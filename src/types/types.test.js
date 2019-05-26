@@ -408,7 +408,7 @@ describe('Graph', () => {
 })
 
 describe('invariant', () => {
-  const foo: boolean = false
+  const foo: boolean = true
   invariant(foo, 'test', 1, 2)
 })
 
