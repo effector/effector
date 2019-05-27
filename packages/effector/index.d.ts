@@ -76,6 +76,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   }
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
+  map<T>(fn: (_: Params) => T): Event<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
