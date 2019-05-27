@@ -10,7 +10,7 @@ export type mixed_non_void =
   | number
   | boolean
   | {}
-  | $ReadOnlyArray<unknown>
+  | ReadonlyArray<unknown>
 
 export const Kind: {
   readonly store: kind
@@ -139,7 +139,7 @@ export class Domain {
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
-      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done), 
+      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done),
     },
   ): Effect<Params, Done, Fail>
   domain(name?: string): Domain

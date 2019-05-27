@@ -25,19 +25,17 @@ import {
   selectVersion,
   retrieveCode,
   retrieveVersion,
-  version,
-  compress
+  version
 } from './domain'
 import {typeAtPos} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
-import {versionLoader} from './evaluator'
-
+import {compress} from './compression'
+import {versionLoader, evaluator} from './evaluator'
 import {switcher} from './switcher'
-import {evaluator} from './evaluator'
 
 version.on(selectVersion, (_, p) => p)
 
-const __ENABLE_TYPE_AT_POS__ = false
+const __ENABLE_TYPE_AT_POS__ = true
 
 codeCursorActivity.watch(editor => {
   const cursor = editor.getCursor()
@@ -224,7 +222,7 @@ codeError.watch(async({stackFrames}) => {
   }
 })
 
-changeSources.map(code => compress(code)).watch(code => {
+changeSources.map(compress).watch(code => {
   localStorage.setItem('code-compressed', code)
 })
 

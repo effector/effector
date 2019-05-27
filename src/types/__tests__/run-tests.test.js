@@ -9,7 +9,8 @@ test('TypeScript', async() => {
     const data = await execa('npx', ['tsc', '-p', 'src/types'])
     expect(data).toMatchSnapshot('resolved')
   } catch (err) {
-    expect(err.message).toMatchSnapshot('rejected')
+    const replaceRegex = /src\/types\/types\.test\.ts\(\d+,\d+\): error TS\d+: /gm
+    expect(err.message.replace(replaceRegex, '')).toMatchSnapshot('rejected')
   }
 })
 

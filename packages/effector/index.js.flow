@@ -31,7 +31,7 @@ export type Subscription = {
   unsubscribe(): void,
   ...
 }
-export interface Unit<T> {
+export type Unit<T> = /*::interface*/ {
   +kind: kind;
 }
 declare export class Event<Payload> implements Unit<Payload> {
@@ -148,7 +148,7 @@ declare export class Domain {
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
-      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done), 
+      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done),
       ...
     },
   ): Effect<Params, Done, Fail>;
@@ -227,7 +227,7 @@ export type Tap = {|
     fn: (data: any, scope: {[field: string]: any}) => any,
   |},
 |}
-export type Step = {
+export type Step = /*::interface extends Unit<any>*/ {
   +from: Array<Step>,
   +next: Array<Step>,
   +seq: Array<Cmd>,
@@ -268,14 +268,14 @@ declare export function createNode(opts: {|
   +scope?: {[field: string]: any},
 |}): Step
 
-declare export function launch<T>(unit: Unit<T> | Step, payload: T): void
+declare export function launch<T>(unit: Unit<T>, payload: T): void
 
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done) , 
+    handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done) ,
     ...
   },
 ): Effect<Params, Done, Fail>
