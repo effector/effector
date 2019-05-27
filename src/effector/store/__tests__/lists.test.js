@@ -76,17 +76,21 @@ test('list', () => {
     +on: $PropertyType<Store<Array<T>>, 'on'>,
     // +self: $PropertyType<Store<Array<T>>, 'getState'>,
     swap: Event<
-      $ReadOnlyArray<[
-        number | ((list: $ReadOnlyArray<T>) => number),
-        number | ((list: $ReadOnlyArray<T>) => number)
-      ]>
-    >;
+      $ReadOnlyArray<
+        [
+          number | ((list: $ReadOnlyArray<T>) => number),
+          number | ((list: $ReadOnlyArray<T>) => number),
+        ],
+      >,
+    >,
     move: Event<
-      $ReadOnlyArray<[
-        number | ((list: $ReadOnlyArray<T>) => number),
-        number | ((list: $ReadOnlyArray<T>) => number)
-      ]>,
-    >;
+      $ReadOnlyArray<
+        [
+          number | ((list: $ReadOnlyArray<T>) => number),
+          number | ((list: $ReadOnlyArray<T>) => number),
+        ],
+      >,
+    >,
     insert: Event<
       $ReadOnlyArray<{
         +offset:
@@ -105,12 +109,10 @@ test('list', () => {
     >,
     update: Event<
       $ReadOnlyArray<{
-        +index:
-          | number
-          | ((list: $ReadOnlyArray<T>) => number),
-        +updater: (value: T) => T
-      }>
-    >;
+        +index: number | ((list: $ReadOnlyArray<T>) => number),
+        +updater: (value: T) => T,
+      }>,
+    >,
     delete: Event<
       $ReadOnlyArray<{
         +offset: number | ((list: $ReadOnlyArray<T>) => number),
@@ -120,92 +122,172 @@ test('list', () => {
 
     // Simple actions
     push: Event<$ReadOnlyArray<T>>,
-    unshift: Event<$ReadOnlyArray<T>>;
-    reverse: Event<void>;
-    shift: Event<void>;
-    pop: Event<void>;
-    clear: Event<void>;
+    unshift: Event<$ReadOnlyArray<T>>,
+    reverse: Event<void>,
+    shift: Event<void>,
+    pop: Event<void>,
+    clear: Event<void>,
   } {
     const store = createStore(initials)
+    const reducers = {
+      insert(
+        state: Array<T>,
+        segments: $ReadOnlyArray<{
+          +offset:
+            | number
+            | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+          +entries: $ReadOnlyArray<T>,
+        }>,
+      ) {
+        if (segments.length === 0) return state
+        const store = []
+        const newSegments = sortSegments(segments, state)
+        for (let i = 0; i < state.length; i++) {
+          const item = state[i]
+          for (let j = 0; j < newSegments.length; j++) {
+            if (newSegments[j].offset !== i) continue
+            store.push(...newSegments[j].entries)
+          }
+          store.push(item)
+        }
+        for (let i = 0; i < newSegments.length; i++) {
+          if (newSegments[i].offset >= state.length) {
+            store.push(...newSegments[i].entries)
+          }
+        }
+        return store
+      },
+      replace(
+        state: Array<T>,
+        segments: $ReadOnlyArray<{
+          +offset:
+            | number
+            | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
+          +entries: $ReadOnlyArray<T>,
+        }>,
+      ) {
+        if (segments.length === 0) return state
+        const store = [...state]
+        const newSegments = sortSegments(segments, state)
+        for (let i = 0; i < newSegments.length; i++) {
+          const {entries, offset} = newSegments[i]
+          for (let j = 0; j < entries.length; j++) {
+            store[j + offset] = entries[j]
+          }
+        }
+        return store
+      },
+      update(
+        state: Array<T>,
+        segments: $ReadOnlyArray<{
+          +index: number | ((list: $ReadOnlyArray<T>) => number),
+          +updater: (value: T) => T,
+        }>,
+      ) {
+        if (segments.length === 0) return state
+        const store = [...state]
+        const newSegments: Array<{
+          index: number,
+          updater(value: T): T,
+        }> = segments
+          .map(({updater, index}) => ({
+            updater,
+            index: normalizeOffset<T>(index, state, []),
+          }))
+          .sort((a, b) => a.index - b.index)
+        for (let i = 0; i < newSegments.length; i++) {
+          const {updater, index} = newSegments[i]
+          store[index] = updater(store[index])
+        }
+        return store
+      },
+      delete(
+        state: Array<T>,
+        segments: $ReadOnlyArray<{
+          +offset: number | ((list: $ReadOnlyArray<T>) => number),
+          +amount: number,
+        }>,
+      ) {
+        if (segments.length === 0) return state
+        const store = [...state]
+        const newSegments = []
+        for (let j = 0; j < segments.length; j++) {
+          const segment = segments[j]
+          newSegments.push({
+            offset: normalizeOffset(segment.offset, state, []),
+            amount: segment.amount,
+          })
+        }
+        newSegments.sort((a, b) => a.offset - b.offset)
+        const ids = Array(store.length).fill(true)
+        for (let i = 0; i < newSegments.length; i++) {
+          const {amount, offset} = newSegments[i]
+          for (let j = 0; j < amount; j++) {
+            ids[j + offset] = false
+          }
+        }
+        return store.filter((_, i) => ids[i])
+      },
+
+      // Simple actions
+      push(state: Array<T>, entries: $ReadOnlyArray<T>) {
+        if (entries.length === 0) return state
+        return reducers.insert(state, [
+          {
+            offset: -1,
+            entries,
+          },
+        ])
+      },
+      unshift(state: Array<T>, entries: $ReadOnlyArray<T>) {
+        if (entries.length === 0) return state
+        return reducers.insert(state, [
+          {
+            offset: 0,
+            entries,
+          },
+        ])
+      },
+      reverse(state: Array<T>, payload: void) {
+        const store = [...state]
+        store.reverse()
+        return store
+      },
+      shift(state: Array<T>, payload: void) {
+        const store = [...state]
+        store.shift()
+        return store
+      },
+      pop(state: Array<T>, payload: void) {
+        const store = [...state]
+        store.pop()
+        return store
+      },
+      clear(state: Array<T>, payload: void) {
+        return []
+      },
+    }
     const model = {
       store,
-      api: createApi(store, {
-        insert(state, segments) {
-          if (segments.length === 0) return state
-          const store = []
-          const newSegments = sortSegments(segments, state)
-          for (let i = 0; i < state.length; i++) {
-            const item = state[i]
-            for (let j = 0; j < newSegments.length; j++) {
-              if (newSegments[j].offset !== i) continue
-              store.push(...newSegments[j].entries)
-            }
-            store.push(item)
-          }
-          for (let i = 0; i < newSegments.length; i++) {
-            if (newSegments[i].offset >= state.length) {
-              store.push(...newSegments[i].entries)
-            }
-          }
-          return store
-        },
-        replace(
-          state,
-          segments: $ReadOnlyArray<{
-            +offset:
-              | number
-              | ((
-                  list: $ReadOnlyArray<T>,
-                  entries: $ReadOnlyArray<T>,
-                ) => number),
-            +entries: $ReadOnlyArray<T>,
-          }>,
-        ) {
-          if (segments.length === 0) return state
-          const store = [...state]
-          const newSegments = sortSegments(segments, state)
-          for (let i = 0; i < newSegments.length; i++) {
-            const {entries, offset} = newSegments[i]
-            for (let j = 0; j < entries.length; j++) {
-              store[j + offset] = entries[j]
-            }
-          }
-          return store
-        },
-        delete(
-          state,
-          segments: $ReadOnlyArray<{
-            +offset: number | ((list: $ReadOnlyArray<T>) => number),
-            +amount: number,
-          }>,
-        ) {
-          if (segments.length === 0) return state
-          const store = [...state]
-          const newSegments = []
-          for (let j = 0; j < segments.length; j++) {
-            const segment = segments[j]
-            newSegments.push({
-              offset: normalizeOffset(segment.offset, state, []),
-              amount: segment.amount,
-            })
-          }
-          newSegments.sort((a, b) => a.offset - b.offset)
-          const ids = Array(store.length).fill(true)
-          for (let i = 0; i < newSegments.length; i++) {
-            const {amount, offset} = newSegments[i]
-            for (let j = 0; j < amount; j++) {
-              ids[j + offset] = false
-            }
-          }
-          return store.filter((_, i) => ids[i])
-        },
-      }),
+      api: createApi(store, reducers),
     }
 
     return {
       delete: model.api.delete,
       insert: model.api.insert,
+      update: model.api.update,
       replace: model.api.replace,
+      move: model.api.move,
+      swap: model.api.swap,
+
+      // Simple actions
+      push: model.api.push,
+      clear: model.api.clear,
+      pop: model.api.pop,
+      reverse: model.api.reverse,
+      shift: model.api.shift,
+      unshift: model.api.unshift,
+
       watch: model.store.watch,
       on: model.store.on,
       //$off
