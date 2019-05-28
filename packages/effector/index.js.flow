@@ -154,14 +154,14 @@ declare export class Domain {
     },
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
-  store<State>(defaultState: State, config?: {name?: string}): Store<State>;
+  store<State>(defaultState: State, config?: {name?: string, ...}): Store<State>;
   getType(): string;
 }
 export type ID = string
-export type StateRef = {
+export type StateRef = {|
   current: any,
   id: ID,
-}
+|}
 //prettier-ignore
 export type Cmd =
   | Update
@@ -193,7 +193,7 @@ export type Run = {|
   +type: 'run',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |},
 |}
 export type Filter = {|
@@ -201,7 +201,7 @@ export type Filter = {|
   +type: 'filter',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[field: string]: any}) => boolean,
+    fn: (data: any, scope: {[field: string]: any, ...}) => boolean,
   |},
 |}
 export type Emit = {|
@@ -217,7 +217,7 @@ export type Compute = {|
   +type: 'compute',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |},
 |}
 export type Tap = {|
@@ -225,33 +225,33 @@ export type Tap = {|
   +type: 'tap',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |},
 |}
 export type Step = /*::interface extends Unit<any>*/ {
   +from: Array<Step>,
   +next: Array<Step>,
   +seq: Array<Cmd>,
-  +scope: {[field: string]: any},
+  +scope: {[field: string]: any, ...},
 }
 declare export var step: {|
   emit(data: {|
     fullName: string,
   |}): Emit,
   compute(data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |}): Compute,
   tap(data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |}): Tap,
   filter(data: {|
-    fn: (data: any, scope: {[field: string]: any}) => boolean,
+    fn: (data: any, scope: {[field: string]: any, ...}) => boolean,
   |}): Filter,
   update(data: {|
     store: StateRef,
   |}): Update,
   run(data: {|
-    fn: (data: any, scope: {[field: string]: any}) => any,
+    fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |}): Run,
 |}
 declare export function forward<T>(opts: {|
@@ -260,13 +260,13 @@ declare export function forward<T>(opts: {|
 |}): Subscription
 declare export function clearNode(
   unit: Unit<any> | Step,
-  opts?: {deep?: boolean},
+  opts?: {deep?: boolean, ...},
 ): void
 declare export function createNode(opts: {|
   +node: Array<Cmd>,
   +child?: Array<Unit<any> | Step>,
   +from?: Array<Unit<any> | Step>,
-  +scope?: {[field: string]: any},
+  +scope?: {[field: string]: any, ...},
 |}): Step
 
 declare export function launch<T>(unit: Unit<T>, payload: T): void
@@ -283,7 +283,7 @@ declare export function createEffect<Params, Done, Fail>(
 
 declare export function createStore<State>(
   defaultState: State,
-  config?: {name?: string},
+  config?: {name?: string, ...},
 ): Store<State>
 declare export function setStoreName<State>(
   store: Store<State>,
