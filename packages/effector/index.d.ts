@@ -322,6 +322,7 @@ export function sample<A, B, C>(config: {
   fn(source: A, clock: B): C,
 }): Unit<C>
 
+export function sample<A>(source: Store<A>): Store<A>
 export function sample<A>(
   source: Store<A>,
   clock: Store<any>,
