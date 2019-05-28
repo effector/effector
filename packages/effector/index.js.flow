@@ -42,6 +42,7 @@ declare export class Event<Payload> implements Unit<Payload> {
   filter<T>(fn: (_: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
   subscribe(observer: Observer<Payload>): Subscription;
+  thru<U>(fn: (event: Event<Payload>) => U): U;
   getType(): string;
 }
 
@@ -71,7 +72,7 @@ declare export class Effect<Params, Done, Fail = Error>
   pending: Store<boolean>;
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
-  //map<T>(fn: (_: E) => T): Event<T>,
+  map<T>(fn: (params: Params) => T): Event<T>;
   subscribe(observer: Observer<Params>): Subscription;
   getType(): string;
 }

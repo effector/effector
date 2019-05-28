@@ -47,6 +47,7 @@ export interface Event<Payload> extends Unit<Payload> {
   filter<T>(fn: (_: Payload) => T | void): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
+  thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
   [Symbol.observable](): Observable<Payload>
 }
@@ -76,7 +77,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   }
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
-  map<T>(fn: (_: Params) => T): Event<T>
+  map<T>(fn: (params: Params) => T): Event<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string

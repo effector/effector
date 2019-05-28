@@ -8,6 +8,7 @@ import {createEvent, forward} from '../event'
 import type {Store, ThisStore} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
+import {thru} from '../thru'
 import {
   reset,
   getState,
@@ -16,7 +17,6 @@ import {
   observable,
   watch,
   subscribe,
-  thru,
   dispatch,
   mapStore,
 } from './storeMethods'

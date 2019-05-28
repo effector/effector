@@ -11,6 +11,7 @@ import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
+import {thru} from '../thru'
 import {createLink} from './forward'
 
 const nextID = stringRefcount()
@@ -55,6 +56,7 @@ export function eventFabric<Payload>({
   ;(instance: any).filter = filterEvent.bind(null, instance)
   ;(instance: any).prepend = prepend.bind(null, instance)
   ;(instance: any).subscribe = subscribe.bind(null, instance)
+  ;(instance: any).thru = thru.bind(instance)
   instance.graphite = graphite
   instance.shortName = name
   instance.domainName = parent
