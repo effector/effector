@@ -228,6 +228,62 @@ test('list', () => {
         }
         return store.filter((_, i) => ids[i])
       },
+      move(
+        state: Array<T>,
+        segments: $ReadOnlyArray<
+          [
+            number | ((list: $ReadOnlyArray<T>) => number),
+            number | ((list: $ReadOnlyArray<T>) => number),
+          ],
+        >,
+      ) {
+        if (segments.length === 0) return state
+        const store = [...state]
+        const newSegments: Array<{
+          from: number,
+          to: number,
+        }> = segments
+          .map(([indexA, indexB]) => ({
+            from: normalizeOffset<T>(indexA, state, []),
+            to: normalizeOffset<T>(indexB, state, []),
+          }))
+          .sort((a, b) => a.from - b.from)
+        for (let i = 0; i < newSegments.length; i++) {
+          const {from, to} = newSegments[i]
+          const value = store[from]
+          store.splice(from, 1)
+          store.splice(to, 0, value)
+        }
+        return store
+      },
+      swap(
+        state: Array<T>,
+        segments: $ReadOnlyArray<
+          [
+            number | ((list: $ReadOnlyArray<T>) => number),
+            number | ((list: $ReadOnlyArray<T>) => number),
+          ],
+        >,
+      ) {
+        if (segments.length === 0) return state
+        const store = [...state]
+        const newSegments: Array<{
+          from: number,
+          to: number,
+        }> = segments
+          .map(([indexA, indexB]) => ({
+            from: normalizeOffset<T>(indexA, state, []),
+            to: normalizeOffset<T>(indexB, state, []),
+          }))
+          .sort((a, b) => a.from - b.from)
+        for (let i = 0; i < newSegments.length; i++) {
+          const {from, to} = newSegments[i]
+          const value = store[from]
+          store[from] = store[to]
+          store[to] = value
+        }
+        return store
+      },
 
       // Simple actions
       push(state: Array<T>, entries: $ReadOnlyArray<T>) {
