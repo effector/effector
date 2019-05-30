@@ -31,7 +31,7 @@ export type Subscription = {
   unsubscribe(): void,
   ...
 }
-export type Unit<T> = /*::interface*/ {
+export interface Unit<T> {
   +kind: kind;
 }
 declare export class Event<Payload> implements Unit<Payload> {
