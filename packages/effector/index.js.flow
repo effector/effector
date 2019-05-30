@@ -66,7 +66,6 @@ declare export class Effect<Params, Done, Fail = Error>
   |}>;
   +use: {|
     (asyncFunction: (params: Params) => Promise<Done> | Done): this,
-    (asyncFunction: Effect<Params, Done, Fail>): this,
     getCurrent(): (params: Params) => Promise<Done>,
   |};
   pending: Store<boolean>;
@@ -149,7 +148,7 @@ declare export class Domain {
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
-      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done),
+      handler?: (params: Params) => Promise<Done> | Done,
       ...
     },
   ): Effect<Params, Done, Fail>;
@@ -278,7 +277,7 @@ declare export function createEvent<E>(eventName?: string): Event<E>
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done) ,
+    handler?: (params: Params) => Promise<Done> | Done,
     ...
   },
 ): Effect<Params, Done, Fail>

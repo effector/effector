@@ -67,13 +67,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
       Params,
       Done,
       Fail
-    >
-    (asyncFunction: Effect<Params, Done, Fail>): Effect<
-      Params,
-      Done,
-      Fail
     >,
-    getCurrent(): (params: Params) => Promise<Done>
+    getCurrent(): (params: Params) => Promise<Done>,
   }
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
@@ -141,7 +136,7 @@ export class Domain {
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
-      handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done),
+      handler?: (params: Params) => Promise<Done> | Done,
     },
   ): Effect<Params, Done, Fail>
   domain(name?: string): Domain
@@ -257,7 +252,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
-    handler?: Effect<Params, Done, Fail> | ((params: Params) => Promise<Done> | Done)
+    handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
 
