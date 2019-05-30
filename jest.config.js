@@ -1,4 +1,5 @@
 //@flow
+
 const watchPathIgnorePatterns = [
   '<rootDir>/node_modules/',
   '<rootDir>/tools/',
@@ -60,6 +61,7 @@ module.exports = {
     'effector/stdlib',
     'effector/perf',
     'effector/validate',
+    'static-land',
     'types',
     'forms',
     'babel',
@@ -131,7 +133,11 @@ function createProjectList(items) {
   }
   return list
 }
-function boolean(value, defaults) {
+
+function boolean(
+  value: string | boolean | null | void,
+  defaults: boolean,
+): boolean {
   switch (value) {
     case 'no':
     case 'false':
