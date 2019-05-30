@@ -135,9 +135,9 @@ function createProjectList(items) {
 }
 
 function boolean(
-  value: string | boolean | null | void,
-  defaults: boolean,
-): boolean {
+  value/*: string | boolean | null | void*/,
+  defaults/*: boolean*/,
+)/*: boolean*/ {
   switch (value) {
     case 'no':
     case 'false':
