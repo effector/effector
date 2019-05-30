@@ -134,13 +134,19 @@ describe('Effect', () => {
   test('createEffect', () => {
     const createEffect_effect1: Effect<number, string> = createEffect()
     const createEffect_effect2 = createEffect('', {handler: createEffect_effect1})
+
+    const createEffect_effect3 = createEffect('', {
+      handler() {
+        return 'foo'
+      }
+    })
   })
 
   test('#use', () => {
     const effect1 = createEffect()
     const foo = createEffect<number, string, any>()
 
-    effect1.use(params => Promise.resolve('foo'))
+    effect1.use((params) => Promise.resolve('foo'))
     effect1.use(foo)
   })
 })
