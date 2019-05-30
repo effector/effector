@@ -7,7 +7,7 @@
  * @flow
  */
 
-import {ASTNode, type Type as TypeT, AnyType, Field} from './lib/types'
+import {ASTNode, type Type as TypeT, AnyType, type Field} from './lib/types'
 
 import type {NodePath as NodePathT, NodePathConstructor} from './lib/node-path'
 import type {PathConstructor} from './lib/path'
@@ -75,7 +75,6 @@ declare export {
   builtInTypes,
   defineMethod,
   eachField,
-  Field,
   finalize,
   getBuilderName,
   getFieldNames,

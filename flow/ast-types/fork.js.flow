@@ -7,56 +7,76 @@
  * @flow
  */
 
-import type { Def, Plugin } from "./types";
+import type {Def, Plugin} from './types'
 declare export default function fn(
-  defs: Def[]
+  defs: Def[],
 ): {
   Type: {
-    or(...types: any[]): $Exports<"./lib/types">,
-    from<T>(value: any, name?: string | void): $Exports<"./lib/types">,
-    def(typeName: string): $Exports<"./lib/types">,
-    hasDef(typeName: string): boolean
+    //$todo
+    or(...types: any[]): $Exports<'./lib/types'>,
+    //$todo
+    from<T>(value: any, name?: string | void): $Exports<'./lib/types'>,
+    //$todo
+    def(typeName: string): $Exports<'./lib/types'>,
+    hasDef(typeName: string): boolean,
   },
   builtInTypes: {
-    string: $Exports<"./lib/types">,
-    function: $Exports<"./lib/types">,
-    array: $Exports<"./lib/types">,
-    object: $Exports<"./lib/types">,
-    RegExp: $Exports<"./lib/types">,
-    Date: $Exports<"./lib/types">,
-    number: $Exports<"./lib/types">,
-    boolean: $Exports<"./lib/types">,
-    null: $Exports<"./lib/types">,
-    undefined: $Exports<"./lib/types">
+    //$todo
+    string: $Exports<'./lib/types'>,
+    //$todo
+    function: $Exports<'./lib/types'>,
+    //$todo
+    array: $Exports<'./lib/types'>,
+    //$todo
+    object: $Exports<'./lib/types'>,
+    //$todo
+    RegExp: $Exports<'./lib/types'>,
+    //$todo
+    Date: $Exports<'./lib/types'>,
+    //$todo
+    number: $Exports<'./lib/types'>,
+    //$todo
+    boolean: $Exports<'./lib/types'>,
+    //$todo
+    null: $Exports<'./lib/types'>,
+    //$todo
+    undefined: $Exports<'./lib/types'>,
   },
-  namedTypes: $Exports<"./gen/namedTypes">,
-  builders: $Exports<"./gen/builders">,
+  //$todo
+  namedTypes: $Exports<'./gen/namedTypes'>,
+  //$todo
+  builders: $Exports<'./gen/builders'>,
   defineMethod: (name: any, func?: Function | void) => Function,
   getFieldNames: (object: any) => string[],
   getFieldValue: (object: any, fieldName: any) => any,
   eachField: (
     object: any,
     callback: (name: any, value: any) => any,
-    context?: any
+    context?: any,
   ) => void,
   someField: (
     object: any,
     callback: (name: any, value: any) => any,
-    context?: any
+    context?: any,
   ) => boolean,
   getSupertypeNames: (typeName: string) => string[],
   getBuilderName: (typeName: any) => any,
   astNodesAreEquivalent: {
     (a: any, b: any, problemPath?: any): boolean,
-    assert(a: any, b: any): void
+    assert(a: any, b: any): void,
   },
   finalize: () => void,
-  Path: $Exports<"./lib/path">,
-  NodePath: $Exports<"./lib/node-path">,
-  PathVisitor: $Exports<"./lib/path-visitor">,
+  //$todo
+  Path: $Exports<'./lib/path'>,
+  //$todo
+  NodePath: $Exports<'./lib/node-path'>,
+  //$todo
+  PathVisitor: $Exports<'./lib/path-visitor'>,
   use: <T>(plugin: Plugin<T>) => T,
   visit: <M>(
-    node: $Exports<"./lib/types">,
-    methods?: $Exports<"./main"> | void
-  ) => any
-};
+    //$todo
+    node: $Exports<'./lib/types'>,
+    //$todo
+    methods?: $Exports<'./main'> | void,
+  ) => any,
+}

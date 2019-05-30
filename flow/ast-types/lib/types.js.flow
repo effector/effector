@@ -115,7 +115,7 @@ declare class Field<T> {
   }): any;
 }
 declare type FieldType<T> = Field<T>
-declare export {FieldType as Field}
+export type {FieldType as Field}
 export interface ASTNode {
   type: string;
 }
