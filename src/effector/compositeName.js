@@ -1,10 +1,10 @@
 //@flow
 
-export type CompositeName = {
+export type CompositeName = {|
   +shortName: string,
   +fullName: string,
   +path: Array<string>,
-}
+|}
 
 function Name(shortName: string, fullName: string, path: Array<string>) {
   this.shortName = shortName
