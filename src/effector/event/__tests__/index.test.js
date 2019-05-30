@@ -109,3 +109,10 @@ test('event.filter should drop undefined values', () => {
   expect(show(num.graphite)).toMatchSnapshot('num event graph')
   expect(show(evenNum.graphite)).toMatchSnapshot('evenNum event graph')
 })
+
+test('event.thru(fn)', () => {
+  const click = createEvent('click')
+  const postclick = click.thru(event => {
+    console.log(event)
+  })
+})
