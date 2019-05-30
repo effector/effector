@@ -133,7 +133,7 @@ export class Domain {
   onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
-  effect<Params, Done, Fail>(
+  effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done,
