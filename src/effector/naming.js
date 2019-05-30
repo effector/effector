@@ -28,6 +28,7 @@ export function unitObjectName(
     | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any>
     | {
         [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any,
+        ...
       },
 ) {
   let i = 0
