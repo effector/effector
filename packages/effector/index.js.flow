@@ -271,6 +271,8 @@ declare export function createNode(opts: {|
 
 declare export function launch<T>(unit: Unit<T>, payload: T): void
 
+declare export function fromObservable<T>(observable: mixed): Event<T>
+
 declare export function createEvent<E>(eventName?: string): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
