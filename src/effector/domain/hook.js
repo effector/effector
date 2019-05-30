@@ -17,12 +17,12 @@ export function domainHooks(
   compositeName: CompositeName,
   parentHooks?: DomainHooks,
 ) {
-  let hooks: {
+  let hooks: {|
     domain: Event<Domain>,
     effect: Event<Effect<any, any, any>>,
     event: Event<Event<any>>,
     store: Event<any>,
-  }
+  |}
   if (parentHooks) {
     hooks = childDomainHooks(parentHooks)
   } else {

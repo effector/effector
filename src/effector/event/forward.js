@@ -8,8 +8,8 @@ export const createLink = (
   opts: {|
     +node: Array<Cmd>,
     +child?: Array<Graphite>,
-    scope?: {[name: string]: any},
-    meta?: {[name: string]: any},
+    scope?: {[name: string]: any, ...},
+    meta?: {[name: string]: any, ...},
   |},
 ) =>
   forward({
@@ -17,7 +17,10 @@ export const createLink = (
     to: createGraph(opts),
   })
 
-export const forward = (opts: {from: Graphite, to: Graphite}): Subscription => {
+export const forward = (opts: {|
+  from: Graphite,
+  to: Graphite
+|}): Subscription => {
   const from = getGraph(opts.from)
   const to = getGraph(opts.to)
   from.next.push(to)

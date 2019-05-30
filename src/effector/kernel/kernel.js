@@ -95,9 +95,9 @@ class Local {
   /*::
   isChanged: boolean
   isFailed: boolean
-  scope: {[key: string]: any}
+  scope: {[key: string]: any, ...}
   */
-  constructor(scope: {[key: string]: any}) {
+  constructor(scope: {[key: string]: any, ...}) {
     this.isChanged = true
     this.isFailed = false
     this.scope = scope

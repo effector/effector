@@ -12,8 +12,9 @@ export function createGraph({
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
   +from?: Array<Graphite>,
-  scope?: {[name: string]: any},
-  meta?: {[name: string]: any},
+  scope?: {[name: string]: any, ...},
+  meta?: {[name: string]: any, ...},
+  ...
 }): Graph {
   return {
     from: from.map(getGraph),
@@ -25,7 +26,10 @@ export function createGraph({
 }
 export const clearNode = (
   graphite: Graphite,
-  {deep}: {deep?: boolean} = {},
+  {deep}: {
+    deep?: boolean,
+    ...
+  } = {},
 ) => {
   const graph = getGraph(graphite)
   if (deep) {
@@ -48,7 +52,7 @@ export const getGraph = (graph: Graphite): Graph =>
 
 export const traverse = (
   graphite: Graphite,
-  {ctx, pre, post}: {ctx: any, pre: Function, post: Function},
+  {ctx, pre, post}: {ctx: any, pre: Function, post: Function, ...},
 ) => {
   const visited = new Set()
   const stack = []

@@ -35,11 +35,12 @@ export type Domain = {
   compositeName: CompositeName,
   getType(): string,
   kind: kind,
+  ...
 }
 
-export type DomainHooks = {
+export type DomainHooks = {|
   domain: Event<Domain>,
   effect: Event<Effect<any, any, any>>,
   event: Event<Event<any>>,
   store: Event<Store<any>>,
-}
+|}

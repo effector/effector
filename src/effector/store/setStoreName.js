@@ -20,7 +20,7 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
   store.compositeName.fullName = compositeName.fullName
 }
 
-export function storeNaming<Obj: {[key: string]: Store<any> | Object}>(
+export function storeNaming<Obj: {[key: string]: Store<any> | Object, ...}>(
   object: Obj,
   parent?: Store<any>,
 ) {

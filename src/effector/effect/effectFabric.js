@@ -5,7 +5,7 @@ import type {Effect} from './index.h'
 import {Kind, step} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {eventFabric, type Event} from '../event'
-import {createStore, type Store} from '../store'
+import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
@@ -67,6 +67,7 @@ export function effectFabric<Payload, Done>({
   domainName: string,
   parent?: CompositeName,
   config: EffectConfigPart<Payload, Done>,
+  ...
 }): Effect<Payload, Done, *> {
   const {handler} = config
 
@@ -78,12 +79,18 @@ export function effectFabric<Payload, Done>({
   })
 
   const eventCreate = instance.create
-  const done: Event<{params: Payload, result: Done}> = eventFabric({
+  const done: Event<{|
+    params: Payload,
+    result: Done
+  |}> = eventFabric({
     name: '' + instance.shortName + ' done',
     parent,
     config,
   })
-  const fail: Event<{params: Payload, error: *}> = eventFabric({
+  const fail: Event<{|
+    params: Payload,
+    error: *
+  |}> = eventFabric({
     name: '' + instance.shortName + ' fail',
     parent,
     config,

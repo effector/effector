@@ -7,7 +7,7 @@ import {outputFile, readFile} from 'fs-extra'
 import type {StepKind} from '../stepKind'
 import * as kinds from '../stepKindTypes'
 
-type TopoGraph = {[string]: string[]}
+type TopoGraph = {[string]: string[], ...}
 
 function createStepKindGraph(kinds: StepKind[]): TopoGraph {
   const graph: TopoGraph = {}

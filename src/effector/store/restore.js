@@ -6,7 +6,7 @@ import {storeFabric} from './storeFabric'
 
 import {is} from '../validate'
 
-export function restoreObject<State: {+[key: string]: Store<any> | any}>(
+export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
   obj: State,
 ): $ObjMap<
   State,
@@ -59,7 +59,7 @@ declare export function restore<Done>(
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {-[key: string]: Store<any> | any}>(
+declare export function restore<State: {-[key: string]: Store<any> | any, ...}>(
   obj: State,
 ): $ObjMap<
   State,

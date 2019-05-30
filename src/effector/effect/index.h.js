@@ -10,15 +10,21 @@ export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
   /*::
   [[call]](payload: Params): Promise<Done>,
   */
-  done: Event<{params: Params, result: Done}>,
-  fail: Event<{params: Params, error: Fail}>,
+  done: Event<{|
+    params: Params,
+    result: Done
+  |}>,
+  fail: Event<{|
+    params: Params,
+    error: Fail
+  |}>,
   /*::+*/ id: string,
-  use: {
+  use: {|
     /*::
     [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
     */
     getCurrent(): (params: Params) => Promise<Done>,
-  },
+  |},
   create(payload: Params, type: string, args: any[]): Params,
   pending: Store<boolean>,
   watch(watcher: (payload: Params) => any): Subscription,
@@ -48,13 +54,19 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   /*::
   [[call]]: Fn,
   */
-  +done: Event<{params: Params, result: Done}>,
-  +fail: Event<{params: Params, error: Fail}>,
+  +done: Event<{|
+    params: Params,
+    result: Done
+  |}>,
+  +fail: Event<{|
+    params: Params,
+    error: Fail
+  |}>,
   /*::+*/ id: string,
-  +use: {
+  +use: {|
     (asyncFunction: Fn): void,
     getCurrent(): Fn,
-  },
+  |},
   create(payload: Params, type: string, args: any[]): Params,
   +watch: (watcher: (payload: Params) => any) => Subscription,
   // getNode(): Vertex<['event', string]>,

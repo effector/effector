@@ -24,6 +24,7 @@ export function eventFabric<Payload>({
   name?: string,
   parent?: CompositeName,
   config?: EventConfigPart,
+  ...
 }): Event<Payload> {
   const id = nextID()
   const name = nameRaw || id

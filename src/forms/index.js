@@ -47,7 +47,7 @@ export function createFormHandler<
 export type FormApi<
   Values: {[key: string]: any},
   Errors: {[key: string]: any},
-> = {
+> = {|
   values: Store<Values>,
   errors: Store<Errors>,
   isValid: Store<boolean>,
@@ -57,7 +57,7 @@ export type FormApi<
   reset: Event<void>,
   handle: $ObjMap<Values, <V>(V) => Event<interface {currentTarget: V}>>,
   api: $ObjMap<Values, <V>(V) => Event<V>>,
-}
+|}
 
 // TODO: split fields into stores
 // export function createFormValue<State>(name: string, defaultState: State) {

@@ -19,6 +19,7 @@ type CombinationScope = {
   target: StateRef,
   clone(value: any): any,
   isFresh: StateRef,
+  ...
 }
 
 const storeCombination = (obj: any, clone: Function, defaultState: any) => {
@@ -89,7 +90,7 @@ declare export function createStoreObject<
   >,
 >
 declare export function createStoreObject<
-  State: {-[key: string]: Store<any> | any},
+  State: {-[key: string]: Store<any> | any, ...},
 >(
   obj: State,
 ): Store<
@@ -131,8 +132,8 @@ declare export function extract<
   >,
 >
 declare export function extract<
-  State: {-[key: string]: Store<any> | any},
-  NextState: {-[key: string]: Store<any> | any},
+  State: {-[key: string]: Store<any> | any, ...},
+  NextState: {-[key: string]: Store<any> | any, ...},
 >(
   obj: Store<State>,
   extractor: (_: State) => NextState,

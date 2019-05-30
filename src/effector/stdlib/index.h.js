@@ -9,20 +9,20 @@ export type kind =
   | 'effect'
   | 'domain'
 
-export type StateRef = {
+export type StateRef = {|
   +id: ID,
   current: any,
-}
-export type NodeMeta = {
+|}
+export type NodeMeta = {|
   fullName?: string,
   section?: ID,
-}
-export type TypeDef<+Type, +Group> = {
+|}
+export type TypeDef<+Type, +Group> = {|
   +id: ID,
   +type: Type,
   +group: Group,
   +data: any,
-}
+|}
 //prettier-ignore
 export type Cmd =
   | Update
@@ -58,7 +58,7 @@ export type Run = {|
   +type: 'run',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |},
 |}
@@ -68,7 +68,7 @@ export type Filter = {|
   +type: 'filter',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[string]: any}) => boolean,
+    fn: (data: any, scope: {[string]: any, ...}) => boolean,
     meta?: NodeMeta,
   |},
 |}
@@ -86,7 +86,7 @@ export type Compute = {|
   +type: 'compute',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |},
 |}
@@ -96,7 +96,7 @@ export type Tap = {|
   +type: 'tap',
   +group: 'cmd',
   +data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |},
 |}
@@ -105,8 +105,9 @@ export type Graph = {
   +from: Array<Graph>,
   +next: Array<Graph>,
   +seq: Array<Cmd>,
-  +scope: {[string]: any},
-  +meta: {[tag: string]: any},
+  +scope: {[string]: any, ...},
+  +meta: {[tag: string]: any, ...},
+  ...
 }
 
 //prettier-ignore

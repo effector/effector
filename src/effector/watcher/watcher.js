@@ -15,7 +15,7 @@ function disposer() {
   this.splice = noopSplice
 }
 
-export const createWatcher = (opts: {child: Graph, parent: Graph}): Watcher => {
+export const createWatcher = (opts: {|child: Graph, parent: Graph|}): Watcher => {
   const subscribers = opts.parent.next
   const instance = {
     indexOf: subscribers.indexOf.bind(subscribers, opts.child),

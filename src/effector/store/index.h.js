@@ -4,8 +4,9 @@ import type {Graph, kind, StateRef, ID, Unit} from '../stdlib'
 import type {Event} from '../event'
 import type {Effect} from '../effect'
 import type {CompositeName} from '../compositeName'
+import type {StoreConfigPart} from '../config'
 
-export type ThisStore = {
+export type ThisStore = {|
   compositeName?: CompositeName,
   defaultState: any,
   domainName?: CompositeName,
@@ -15,7 +16,8 @@ export type ThisStore = {
   plainState: StateRef,
   shortName: ID,
   subscribers: Map<Event<any>, Subscription>,
-}
+  defaultConfig: StoreConfigPart,
+|}
 
 export type Store<State> = /*::interface extends Unit*/ {
   /*::+*/ id: string,
@@ -71,6 +73,7 @@ export type Store<State> = /*::interface extends Unit*/ {
   ),
   +kind: kind,
   +defaultState: State,
+  +defaultConfig: StoreConfigPart,
   defaultShape?: Object,
   shortName: string,
   domainName?: CompositeName,

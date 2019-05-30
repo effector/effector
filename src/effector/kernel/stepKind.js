@@ -7,7 +7,7 @@ export type StepKind = {|
 |}
 export function stepKind(
   tag: string,
-  {from = [], to = []}: {from?: StepKind[], to?: StepKind[]} = {},
+  {from = [], to = []}: {from?: StepKind[], to?: StepKind[], ...} = {},
 ): StepKind {
   return {tag, from, to}
 }

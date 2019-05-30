@@ -29,6 +29,7 @@ export function domainFabric({
   config?: DomainConfigPart,
   parent?: CompositeName,
   parentHooks?: DomainHooks,
+  ...
 }): Domain {
   const id = nextID()
   const name = nameRaw || ''

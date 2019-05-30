@@ -21,7 +21,7 @@ const cmd = (type: any, data: any): any => ({
   data,
 })
 
-export const step: {
+export const step: {|
   barrier(data: {|
     +barrierID: ID,
     +priority?: 'barrier' | 'sampler',
@@ -32,26 +32,26 @@ export const step: {
     meta?: NodeMeta,
   |}): Emit,
   compute(data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |}): Compute,
   filter(data: {|
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |}): Filter,
   run(data: {
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   }): Run,
   tap(data: {
-    fn: (data: any, scope: {[string]: any}) => any,
+    fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   }): Tap,
   update(data: {|
     store: StateRef,
     meta?: NodeMeta,
   |}): Update,
-} = {
+|} = {
   barrier: ({barrierID, priority = 'barrier'}) =>
     cmd('barrier', {
       barrierID,
