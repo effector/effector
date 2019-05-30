@@ -10,12 +10,12 @@ export function orientationCheck(
     portrait: boolean,
     ...
   },
-) {
+): boolean {
   //if there no constraint on orientation
   if (!props.portrait && !props.landscape) return true
   return (
-    (props.portrait && queries.portrait)
-    || (props.landscape && !queries.portrait)
+    (props.portrait && queries.portrait) ||
+    (props.landscape && !queries.portrait)
   )
 }
 
@@ -32,12 +32,12 @@ export function screenSizeCheck(
     large: boolean,
     ...
   },
-) {
+): boolean {
   //if there no constraint on screen size
   if (!props.small && !props.medium && !props.large) return true
   return (
-    (props.small && queries.small)
-    || (props.medium && queries.medium)
-    || (props.large && queries.large)
+    (props.small && queries.small) ||
+    (props.medium && queries.medium) ||
+    (props.large && queries.large)
   )
 }
