@@ -249,7 +249,7 @@ export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
 export function createEvent<E = void>(eventName?: string): Event<E>
 
-export function createEffect<Params, Done, Fail>(
+export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
