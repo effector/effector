@@ -92,32 +92,32 @@ test('list', () => {
       >,
     >,
     insert: Event<
-      $ReadOnlyArray<{
+      $ReadOnlyArray<{|
         +offset:
           | number
           | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
         +entries: $ReadOnlyArray<T>,
-      }>,
+      |}>,
     >,
     replace: Event<
-      $ReadOnlyArray<{
+      $ReadOnlyArray<{|
         +offset:
           | number
           | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
         +entries: $ReadOnlyArray<T>,
-      }>,
+      |}>,
     >,
     update: Event<
-      $ReadOnlyArray<{
+      $ReadOnlyArray<{|
         +index: number | ((list: $ReadOnlyArray<T>) => number),
         +updater: (value: T) => T,
-      }>,
+      |}>,
     >,
     delete: Event<
-      $ReadOnlyArray<{
+      $ReadOnlyArray<{|
         +offset: number | ((list: $ReadOnlyArray<T>) => number),
         +amount: number,
-      }>,
+      |}>,
     >,
 
     // Simple actions
@@ -132,12 +132,12 @@ test('list', () => {
     const reducers = {
       insert(
         state: Array<T>,
-        segments: $ReadOnlyArray<{
+        segments: $ReadOnlyArray<{|
           +offset:
             | number
             | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
           +entries: $ReadOnlyArray<T>,
-        }>,
+        |}>,
       ) {
         if (segments.length === 0) return state
         const store = []
@@ -159,12 +159,12 @@ test('list', () => {
       },
       replace(
         state: Array<T>,
-        segments: $ReadOnlyArray<{
+        segments: $ReadOnlyArray<{|
           +offset:
             | number
             | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
           +entries: $ReadOnlyArray<T>,
-        }>,
+        |}>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
@@ -179,10 +179,10 @@ test('list', () => {
       },
       update(
         state: Array<T>,
-        segments: $ReadOnlyArray<{
+        segments: $ReadOnlyArray<{|
           +index: number | ((list: $ReadOnlyArray<T>) => number),
           +updater: (value: T) => T,
-        }>,
+        |}>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
@@ -203,10 +203,10 @@ test('list', () => {
       },
       delete(
         state: Array<T>,
-        segments: $ReadOnlyArray<{
+        segments: $ReadOnlyArray<{|
           +offset: number | ((list: $ReadOnlyArray<T>) => number),
           +amount: number,
-        }>,
+        |}>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
@@ -286,24 +286,6 @@ test('list', () => {
       },
 
       // Simple actions
-      push(state: Array<T>, entries: $ReadOnlyArray<T>) {
-        if (entries.length === 0) return state
-        return reducers.insert(state, [
-          {
-            offset: -1,
-            entries,
-          },
-        ])
-      },
-      unshift(state: Array<T>, entries: $ReadOnlyArray<T>) {
-        if (entries.length === 0) return state
-        return reducers.insert(state, [
-          {
-            offset: 0,
-            entries,
-          },
-        ])
-      },
       reverse(state: Array<T>, payload: void) {
         const store = [...state]
         store.reverse()
@@ -337,12 +319,22 @@ test('list', () => {
       swap: model.api.swap,
 
       // Simple actions
-      push: model.api.push,
+      push: model.api.insert.prepend(entries => [
+        {
+          offset: -1,
+          entries,
+        },
+      ]),
+      unshift: model.api.insert.prepend(entries => [
+        {
+          offset: 0,
+          entries,
+        },
+      ]),
       clear: model.api.clear,
       pop: model.api.pop,
       reverse: model.api.reverse,
       shift: model.api.shift,
-      unshift: model.api.unshift,
 
       watch: model.store.watch,
       on: model.store.on,
@@ -364,17 +356,17 @@ test('list', () => {
     return offset
   }
   function sortSegments<T>(
-    segments: $ReadOnlyArray<{
+    segments: $ReadOnlyArray<{|
       +entries: $ReadOnlyArray<T>,
       +offset:
         | number
         | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-    }>,
+    |}>,
     list: $ReadOnlyArray<T>,
-  ): Array<{+entries: $ReadOnlyArray<T>, +offset: number}> {
+  ): Array<{|+entries: $ReadOnlyArray<T>, +offset: number|}> {
     return segments
       .map(
-        ({entries, offset}): {entries: $ReadOnlyArray<T>, offset: number} => ({
+        ({entries, offset}): {|entries: $ReadOnlyArray<T>, offset: number|} => ({
           entries,
           offset: normalizeOffset<T>(offset, list, entries),
         }),
