@@ -11,17 +11,6 @@ import {ApplyLaws, FunctorLaws} from 'funland-laws'
 import {FilterableLaws} from './laws/filterable'
 import {ContravariantLaws} from './laws/contravariant'
 
-function deferWatch(store, fn) {
-  let isFirstCall = true
-  return store.watch(data => {
-    if (isFirstCall) {
-      isFirstCall = false
-    } else {
-      fn(data)
-    }
-  })
-}
-
 describe('Functor<Event>', () => {
   const laws = new FunctorLaws(Event)
 
@@ -37,7 +26,7 @@ describe('Functor<Event>', () => {
         return list.every(x => x === 0)
       })
 
-    deferWatch(equal, data => {
+    equal.updates.watch(data => {
       expect(data).toBe(true)
       //done()
     })
@@ -59,7 +48,7 @@ describe('Functor<Event>', () => {
         return list.every(x => x === {f_box: {g_box: 0}})
       })
 
-    deferWatch(equal, data => {
+    equal.updates.watch(data => {
       console.log(data)
       expect(data).toBe(true)
       //done()
@@ -71,7 +60,7 @@ describe('Functor<Event>', () => {
 
 describe('Apply<Event>', () => {
   const laws = new ApplyLaws(Event)
-  it('apply.composition', done => {
+  it('apply.composition', () => {
     const fa = createEvent()
     const fab = createEvent()
     const fbc = createEvent()
@@ -88,10 +77,9 @@ describe('Apply<Event>', () => {
         })
       })
 
-    deferWatch(equal, data => {
+    equal.updates.watch(data => {
       console.log(data)
       expect(data).toBe(true)
-      done()
     })
 
     fa(0)
@@ -119,9 +107,8 @@ describe('Contravariant<Event>', () => {
         return list.every(x => x === 0)
       })
 
-    deferWatch(equal, data => {
+    equal.updates.watch(data => {
       expect(data).toBe(true)
-      //done()
     })
 
     fa(0)
@@ -141,11 +128,9 @@ describe('Contravariant<Event>', () => {
         return list.every(x => x === {f_box: {g_box: 0}})
       })
 
-    deferWatch(equal, data => {
+    equal.updates.watch(data => {
       expect(data).toBe(true)
-      //done()
     })
-
     fa(0)
   })
 })
