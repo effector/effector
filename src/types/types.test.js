@@ -97,6 +97,28 @@ describe('Unit', () => {
       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
       const sample_ssh_check2: Store<string> = c
     })
+    describe('sample(Store<T>):Store<T>', () => {
+      test('correct case', () => {
+        const a = createStore('')
+        const sample_s_correct: Store<string> = sample(a)
+      })
+      test('incorrect case', () => {
+        const a = createStore('')
+        const sample_s_incorrect: Store<number> = sample(a)
+      })
+      describe('edge case', () => {
+        test('correct case', () => {
+          const a = createStore('')
+          const clock = createEvent()
+          const sample_s_edge_correct: Event<string> = sample(a, clock)
+        })
+        test('incorrect case', () => {
+          const a = createStore('')
+          const clock = createEvent()
+          const sample_s_edge_incorrect: Event<number> = sample(a, clock)
+        })
+      })
+    })
   })
 })
 

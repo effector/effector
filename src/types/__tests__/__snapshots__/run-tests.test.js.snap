@@ -27,6 +27,12 @@ Array [
     "Cannot assign \`c\` to \`sample_ssh_check2\` because object type [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
+    "Cannot assign \`sample(...)\` to \`sample_s_incorrect\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
+  ],
+  Array [
+    "Cannot assign \`sample(...)\` to \`sample_s_edge_incorrect\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
     "Cannot assign \`computed\` to \`event_map_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
@@ -93,6 +99,8 @@ Type 'Store<boolean>' is not assignable to type 'Store<string>'.
   Type 'boolean' is not assignable to type 'string'.
 Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
   Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+Type 'Store<string>' is not assignable to type 'Store<number>'.
+Type 'Event<string>' is not assignable to type 'Event<number>'.
 Type 'Event<string>' is not assignable to type 'Event<number>'.
   Type 'string' is not assignable to type 'number'.
 Type 'Event<string>' is not assignable to type 'Event<number>'.
