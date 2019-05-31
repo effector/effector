@@ -128,6 +128,20 @@ describe('Event', () => {
     event.watch(state => {
     })
   })
+  describe('#filter', () => {
+    test('#filter ok', () => {
+      const event: Event<number> = createEvent()
+      const filteredEvent_ok: Event<string> = event.filter(n => {
+        if (n % 2) return n.toString()
+      })
+    })
+    test('#filter incorrect', () => {
+      const event: Event<number> = createEvent()
+      const filteredEvent_error: Event<number> = event.filter(n => {
+        if (n % 2) return n.toString()
+      })
+    })
+  })
 })
 
 describe('Effect', () => {
