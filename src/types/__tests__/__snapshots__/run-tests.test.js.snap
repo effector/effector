@@ -60,6 +60,9 @@ Array [
     "Cannot call \`effect3\` with \`20\` bound to \`payload\` because number [1] is incompatible with string [2].",
   ],
   Array [
+    "Cannot call \`launch\` with empty string bound to \`payload\` because string [1] is incompatible with number [2].",
+  ],
+  Array [
     "Cannot assign \`initialProps.id\` to \`createComponent_initialProps_check2\` because number [1] is incompatible with string [2].",
   ],
   Array [
@@ -89,8 +92,9 @@ Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string
   Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 Type 'Event<string>' is not assignable to type 'Event<number>'.
   Type 'string' is not assignable to type 'number'.
-Argument of type 'Effect<number, string, any>' is not assignable to parameter of type 'Effect<{}, {}, {}>'.
-  Type '{}' is not assignable to type 'number'.
+Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
+  Types of parameters 'payload' and 'params' are incompatible.
+    Type '{}' is not assignable to type 'number'.
 Type 'Store<number>' is not assignable to type 'Store<string>'.
   Type 'number' is not assignable to type 'string'.
 Type 'Event<number>' is not assignable to type 'Event<string>'.
