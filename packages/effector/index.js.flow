@@ -368,7 +368,7 @@ declare export function sample<A, B, C>(config: {|
   +target?: Unit<C>,
   fn(source: A, clock: B): C,
 |}): Unit<C>
-declare export function sample<A>(source: Store<A>, clock: Store<any>): Store<A>
+declare export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 declare export function sample<A>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<any>,
