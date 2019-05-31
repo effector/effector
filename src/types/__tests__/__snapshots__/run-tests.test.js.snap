@@ -33,6 +33,9 @@ Array [
     "Cannot assign \`computed\` to \`event_map_check2\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
   ],
   Array [
+    "Cannot assign \`event.filter(...)\` to \`filteredEvent_error\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
     "Cannot assign \`createStore(...)\` to \`createStore_store2\` because number [1] is incompatible with string [2] in type argument \`State\` [3].",
   ],
   Array [
@@ -92,6 +95,7 @@ Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string
   Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 Type 'Event<string>' is not assignable to type 'Event<number>'.
   Type 'string' is not assignable to type 'number'.
+Type 'Event<string>' is not assignable to type 'Event<number>'.
 Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
   Types of parameters 'payload' and 'params' are incompatible.
     Type '{}' is not assignable to type 'number'.
