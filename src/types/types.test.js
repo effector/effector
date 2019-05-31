@@ -185,6 +185,19 @@ describe('Effect', () => {
     effect1.use((params) => Promise.resolve('foo'))
     effect1.use(foo)
   })
+
+  describe('void params', () => {
+    test('with handler', () => {
+      const handler = () => console.log();
+      const effect = createEffect('', {handler});
+      effect();
+    })
+    test('with use', () => {
+      const handler = () => console.log();
+      const effect = createEffect('').use(handler);
+      effect();
+    })
+  })
 })
 
 describe('Store', () => {

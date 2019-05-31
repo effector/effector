@@ -107,6 +107,9 @@ Type 'Event<string>' is not assignable to type 'Event<number>'.
 Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
   Types of parameters 'payload' and 'params' are incompatible.
     Type '{}' is not assignable to type 'number'.
+Expected 1 arguments, but got 0.
+Argument of type '() => void' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
+  Type 'void' is not assignable to type '{} | Promise<{}>'.
 Type 'Store<number>' is not assignable to type 'Store<string>'.
   Type 'number' is not assignable to type 'string'.
 Type 'Event<number>' is not assignable to type 'Event<string>'.
