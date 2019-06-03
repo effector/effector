@@ -23,7 +23,7 @@ npm_latest:
   environment:
     name: npm
     url: https://www.npmjs.com/package/effector
-  when: manual
+  # when: manual
   only:
     - master
 npm_next:
