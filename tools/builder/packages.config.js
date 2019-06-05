@@ -28,12 +28,12 @@ const common = {
 }
 
 const version = {
-  effector: '0.18.11',
-  'effector-react': '0.18.10',
-  'effector-vue': '0.18.6',
+  effector: '19.0.0',
+  'effector-react': '19.0.0',
+  'effector-vue': '19.0.0',
 
-  'bs-effector': '0.18.2',
-  'bs-effector-react': '0.18.3',
+  'bs-effector': '19.0.0',
+  'bs-effector-react': '19.0.0',
 
   '@effector/babel-plugin': '0.1.0',
   '@effector/babel-plugin-react': '0.0.3',
