@@ -35,25 +35,9 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updates: any = createEvent('update ' + currentId)
-  updates.graphite.meta.event.bound = {
-    type: 'updates',
-    updates: {
-      store: plainState.id,
-    },
-  }
   const storeInstance: ThisStore = {
     graphite: createGraph({
       scope: {state: plainState, oldState: currentState},
-      meta: {
-        subtype: 'node',
-        node: 'store',
-        store: {
-          id: plainState.id,
-          name: currentId,
-          state: plainState,
-          bound: null,
-        },
-      },
       node: [
         step.filter({
           fn: upd => upd !== undefined,

@@ -31,15 +31,6 @@ export function eventFabric<Payload>({
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createGraph({
-    meta: {
-      subtype: 'node',
-      node: 'event',
-      event: {
-        id,
-        name: fullName,
-        bound: null,
-      },
-    },
     node: [
       step.emit({
         fullName,
@@ -85,12 +76,6 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  contramapped.graphite.meta.event.bound = {
-    type: 'prepend',
-    prepend: {
-      event: event.id,
-    },
-  }
   createLink(contramapped, {
     child: [event],
     scope: {handler: fn},
@@ -99,14 +84,6 @@ function prepend(event, fn: (_: any) => *) {
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_prepend',
-      event_prepend: {
-        from: contramapped.id,
-        to: event.id,
-      },
-    },
   })
   return contramapped
 }
@@ -121,12 +98,6 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  mapped.graphite.meta.event.bound = {
-    type: 'map',
-    map: {
-      event: event.id,
-    },
-  }
   createLink(event, {
     child: [mapped],
     scope: {handler: fn},
@@ -135,14 +106,6 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_map',
-      event_map: {
-        from: event.id,
-        to: mapped.id,
-      },
-    },
   })
   return mapped
 }
@@ -155,12 +118,6 @@ function filterEvent<A, B>(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  mapped.graphite.meta.event.bound = {
-    type: 'filter',
-    filter: {
-      event: event.id,
-    },
-  }
   createLink(event, {
     scope: {handler: fn},
     child: [mapped],
@@ -180,14 +137,6 @@ function filterEvent<A, B>(
         },
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_filter',
-      event_filter: {
-        from: event.id,
-        to: mapped.id,
-      },
-    },
   })
   return mapped
 }
@@ -207,13 +156,6 @@ function watchEvent<Payload>(
           getDisplayName(trigger),
         ),
       }),
-    ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_watch',
-      event_watch: {
-        event: event.id,
-      },
-    },
+    ]
   })
 }

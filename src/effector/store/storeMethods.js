@@ -47,15 +47,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
             return writeRef(state, result)
           },
         }),
-      ],
-      meta: {
-        subtype: 'crosslink',
-        crosslink: 'on',
-        on: {
-          from: event.id,
-          to: storeInstance.id,
-        },
-      },
+      ]
     }),
   )
   return this
@@ -140,13 +132,6 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
         },
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'subscribe',
-      subscribe: {
-        store: storeInstance.id,
-      },
-    },
   })
 }
 export function dispatch(action: any) {
@@ -176,10 +161,6 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  innerStore.graphite.meta.bound = {
-    type: 'map',
-    store: store.id,
-  }
   createLink(store, {
     child: [innerStore],
     scope: {store, handler: fn, state: innerStore.stateRef},
@@ -201,14 +182,6 @@ export function mapStore<A, B>(
       }),
       filterChanged,
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'store_map',
-      store_map: {
-        from: store.id,
-        to: innerStore.id,
-      },
-    },
   })
   return innerStore
 }
