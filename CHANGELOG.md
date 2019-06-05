@@ -1,6 +1,10 @@
 # Changelog
 
-## effector 0.18.10
+## effector, effector-react, effector-vue 19.0.0
+
+To indicate the stability of the project, we adopting semantic versioning and happy to announce version 19.0.0 for all packages. And to make the transition easier, that release contains no breaking changes; simple replacement of "^0.18.\*" to "^19.0.0" is safe for sure ☄️
+
+## effector 0.18.10-0.18.11
 
 - Implement event `store.updates`, representing updates of given store. Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
   > [see spec for `store.updates` in tests](https://github.com/zerobias/effector/blob/master/src/effector/store/__tests__/updates.test.js)
