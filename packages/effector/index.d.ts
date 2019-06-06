@@ -13,10 +13,10 @@ export type mixed_non_void =
   | ReadonlyArray<unknown>
 
 export const Kind: {
-  readonly store: kind
-  readonly event: kind
-  readonly effect: kind
-  readonly domain: kind
+readonly store: kind
+readonly event: kind
+readonly effect: kind
+readonly domain: kind
 }
 
 export type Observer<A> = {
@@ -44,6 +44,7 @@ export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
+  filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   filter<T>(fn: (payload: Payload) => T | undefined): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
@@ -67,8 +68,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
       Params,
       Done,
       Fail
-    >,
-    getCurrent(): (params: Params) => Promise<Done>,
+    >
+    getCurrent(): (params: Params) => Promise<Done>
   }
   pending: Store<boolean>
   watch(watcher: (payload: Params) => any): Subscription
@@ -91,9 +92,7 @@ export interface Store<State> extends Unit<State> {
   off(trigger: Unit<any>): void
   subscribe(listener: (state: State) => any): Subscription
   updates: Event<State>
-  watch<E>(
-    watcher: (state: State, payload: undefined) => any,
-  ): Subscription
+  watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
   watch<E>(
     trigger: Unit<E>,
     watcher: (state: State, payload: E) => any,
@@ -113,11 +112,11 @@ export function isEffect<Params, Done, Error>(
 export function isDomain(obj: unknown): obj is Domain
 
 export const is: {
-  unit(obj: unknown): boolean
-  store(obj: unknown): boolean
-  event(obj: unknown): boolean
-  effect(obj: unknown): boolean
-  domain(obj: unknown): boolean
+unit(obj: unknown): boolean
+store(obj: unknown): boolean
+event(obj: unknown): boolean
+effect(obj: unknown): boolean
+domain(obj: unknown): boolean
 }
 
 interface InternalStore<State> extends Store<State> {
@@ -130,13 +129,15 @@ export class Domain {
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
   ): Subscription
-  onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription
+  onCreateStore(
+    hook: (newStore: InternalStore<mixed_non_void>) => any,
+  ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
-      handler?: (params: Params) => Promise<Done> | Done,
+    handler?: (params: Params) => Promise<Done> | Done
     },
   ): Effect<Params, Done, Fail>
   domain(name?: string): Domain
@@ -224,26 +225,24 @@ export type Step = {
   scope: {[field: string]: any}
 }
 export const step: {
-  emit(data: {fullName: string}): Emit
-  compute(data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
+emit(data: {fullName: string}): Emit
+compute(data: {
+  fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
-  tap(data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
-  }): Tap
-  filter(data: {
-    fn: (data: any, scope: {[field: string]: any}) => boolean
+tap(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Tap
+filter(data: {
+  fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter
-  update(data: {store: StateRef}): Update
-  run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
+update(data: {store: StateRef}): Update
+run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
-  node: Array<Cmd>
-  child?: Array<Unit<any> | Step>
-  from?: Array<Unit<any> | Step>
-  scope?: {[field: string]: any}
+node: Array<Cmd>
+child?: Array<Unit<any> | Step>
+from?: Array<Unit<any> | Step>
+scope?: {[field: string]: any}
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
@@ -252,7 +251,7 @@ export function createEvent<E = void>(eventName?: string): Event<E>
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
-    handler?: (params: Params) => Promise<Done> | Done
+  handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
 
@@ -307,21 +306,18 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 export function createDomain(domainName?: string): Domain
 
 export function sample<A>(config: {
-  source: Unit<A>,
-  clock: Unit<any>,
-  target?: Unit<A>,
+source: Unit<A>
+clock: Unit<any>
+target?: Unit<A>
 }): Unit<A>
 export function sample<A, B, C>(config: {
-  source: Unit<A>,
-  clock: Unit<B>,
-  target?: Unit<C>,
-  fn(source: A, clock: B): C,
+source: Unit<A>
+clock: Unit<B>
+target?: Unit<C>
+fn(source: A, clock: B): C
 }): Unit<C>
 
-export function sample<A>(
-  source: Store<A>,
-  clock?: Store<any>,
-): Store<A>
+export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<any>,
