@@ -43,8 +43,8 @@ export interface Unit<T> {
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
-  map<T>(fn: (_: Payload) => T): Event<T>
-  filter<T>(fn: (_: Payload) => T | undefined): Event<T>
+  map<T>(fn: (payload: Payload) => T): Event<T>
+  filter<T>(fn: (payload: Payload) => T | undefined): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
@@ -82,8 +82,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
   getState(): State
-  map<T>(fn: (_: State, lastState?: T) => T): Store<T>
-  map<T>(fn: (_: State, lastState: T) => T, firstState: T): Store<T>
+  map<T>(fn: (state: State, lastState?: T) => T): Store<T>
+  map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
   on<E>(
     trigger: Unit<E>,
     handler: (state: State, payload: E) => State | void,
