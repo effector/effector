@@ -8,7 +8,7 @@
     "index.js"
   ],
   "peerDependencies": {
-    "effector": "^19.0.0"
+    "effector": "^19.1.0"
   },
   "keywords": [
     "effector",
