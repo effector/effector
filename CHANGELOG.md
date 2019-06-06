@@ -1,5 +1,25 @@
 # Changelog
 
+## effector 19.1.0
+
+- Add support for `event.filter` with common predicate functions
+
+```js
+import {createEvent} from 'effector'
+
+const event = createEvent()
+
+// that event will be triggered only when fn returns true
+const filtered = event.filter({
+  fn: x => x > 0,
+})
+
+filtered.watch(x => console.log('x =', x))
+
+event(-2) // nothing happens
+event(2) // => x = 2
+```
+
 ## effector-vue 19.0.1
 
 - Fix typescript typings [#116](https://github.com/zerobias/effector/pull/116)
