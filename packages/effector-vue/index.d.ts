@@ -1,4 +1,4 @@
-import Vue, {ComponentOptions, WatchOptions} from 'vue'
+import Vue, {ComponentOptions, WatchOptions, VueConstructor} from 'vue'
 import {Store} from 'effector'
 
 declare module 'vue/types/vue' {
