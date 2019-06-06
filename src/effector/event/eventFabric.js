@@ -110,33 +110,39 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   return mapped
 }
 
-function filterEvent<A, B>(
-  event: Event<A> | Effect<A, any, any>,
-  fn: A => B | void,
-): Event<B> {
+function filterEvent(
+  event: Event<any> | Effect<any, any, any>,
+  fn: {|fn(_: any): boolean|} | (any => any | void),
+): any {
   const mapped = eventFabric({
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  createLink(event, {
-    scope: {handler: fn},
-    child: [mapped],
-    node: [
+  let node
+  let scope
+  //null values not allowed
+  if (typeof fn === 'object') {
+    scope = {fn: fn.fn}
+    node = [
+      step.filter({
+        fn: (upd, {fn}) => fn(upd),
+      }),
+    ]
+  } else {
+    scope = {fn}
+    node = [
       step.compute({
-        fn: (payload, {handler}) => handler(payload),
+        fn: (payload, {fn}) => fn(payload),
       }),
       step.filter({
-        fn(result, scope) {
-          scope.val = result
-          return result !== undefined
-        },
+        fn: result => result !== undefined,
       }),
-      step.compute({
-        fn(newValue, scope) {
-          return scope.val
-        },
-      }),
-    ],
+    ]
+  }
+  createLink(event, {
+    scope,
+    child: [mapped],
+    node,
   })
   return mapped
 }
