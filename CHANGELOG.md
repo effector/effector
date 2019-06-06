@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-vue 19.0.1
+
+- Fix typescript typings [#116](https://github.com/zerobias/effector/pull/116)
+
 ## effector, effector-react, effector-vue 19.0.0
 
 To indicate the stability of the project, we adopting semantic versioning and happy to announce version 19.0.0 for all packages. And to make the transition easier, that release contains no breaking changes; simple replacement of "^0.18.\*" to "^19.0.0" is safe for sure ☄️
