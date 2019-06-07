@@ -64,6 +64,7 @@ const data = await getUser({id: 2}) // handle promise
 
 - [`done`](#done)
 - [`fail`](#fail)
+- [`pending`](#pending)
 
 ## Effect Methods
 
@@ -182,4 +183,43 @@ effect.fail.watch(({ params, error }) => {
 })
 
 effect(2) // >> Fail with params 2 and error 1
+```
+
+### <a id='pending'></a>[`.pending`](#pending)
+
+_Store_ will update when `done` or `fail` are triggered.
+_Store_ contains a `true` value until the effect is resolved.
+
+#### Example
+
+```js
+import {createEffect} from 'effector'
+import {createComponent} from 'effector-react'
+import React from 'react'
+const fetchApi = createEffect({
+  handler: n => new Promise(resolve => setTimeout(resolve, n)),
+})
+
+fetchApi.pending.watch(console.log)
+
+const Loading = createComponent(
+  fetchApi.pending,
+  (props, pending) => pending && <div>Loading...</div>,
+)
+
+fetchApi(5000)
+```
+
+It's a shorthand for common use case
+
+```js
+import {createEffect, createStore} from 'effector'
+
+const fetchApi = createEffect()
+
+//now you can use fetchApi.pending instead
+const isLoading = createStore(false)
+  .on(fetchApi, () => true)
+  .on(fetchApi.done, () => false)
+  .on(fetchApi.fail, () => false)
 ```
