@@ -205,6 +205,11 @@ const getUser = createEffect('get user').use(params => {
   )
 })
 
+// subscribe to pending store status
+getUser.pending.watch((isPending) => {
+  console.log(isPending) // false
+})
+
 // subscribe to promise resolve
 getUser.done.watch(({result, params}) => {
   console.log(params) // {id: 1}
