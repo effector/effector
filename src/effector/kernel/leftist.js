@@ -1,96 +1,70 @@
 //@flow
 
-export class Leftist<A> {
-  left: leftist<A>
-  right: leftist<A>
-  value: A
+import {type Layer, layerComparator} from './layer'
+
+/**
+ * Lestist heap tree
+ *
+ * See http://www.dgp.toronto.edu/people/JamesStewart/378notes/10leftist/
+ */
+export class Leftist {
+  /*::
+  left: leftist
+  right: leftist
+  value: Layer
   rank: number
-  constructor(value: A, rank: number, left: leftist<A>, right: leftist<A>) {
+  */
+  constructor(value: Layer, rank: number, left: leftist, right: leftist) {
     this.value = value
     this.rank = rank
     this.left = left
     this.right = right
   }
 }
-export type leftist<A> = null | Leftist<A>
+/**
+ * Although Leftist is a class, in most cases it acts as nullable value,
+ * therefore, it seems reasonable to express this explicitly
+ */
+export type leftist = null | Leftist
+export const insert = (x: Layer, t: leftist): leftist =>
+  merge(new Leftist(x, 1, null, null), t)
 
-export function singleton<A>(k: A): leftist<A> {
-  return new Leftist(k, 1, null, null)
-}
-
-export function rank<A>(tree: leftist<A>): number {
-  if (tree) {
-    return tree.rank
-  } else {
-    return 0
+export const deleteMin = (param: leftist): leftist => {
+  if (param) {
+    return merge(param.left, param.right)
   }
+  return null
 }
-
-export function merge<A>(
-  _t1: leftist<A>,
-  _t2: leftist<A>,
-  comparator: (A, A) => boolean,
-): leftist<A> {
+/**
+ * Used to maintain priority queue being sorted
+ */
+const merge = (_t1: leftist, _t2: leftist): leftist => {
+  let t2
+  let t1
+  let k1
+  let l
+  let merged
+  let rank_left
+  let rank_right
   while (true) {
-    const t2 = _t2
-    const t1 = _t1
-    if (t1) {
-      if (t2) {
-        const k1 = t1.value
-        const l = t1.left
-        if (comparator(k1, t2.value)) {
-          _t2 = t1
-          _t1 = t2
-          continue
-        }
-        const merged = merge(t1.right, t2, comparator)
-        const rank_left = rank(l)
-        const rank_right = rank(merged)
-        if (rank_left >= rank_right) {
-          return new Leftist(k1, rank_right + 1, l, merged)
-        }
-        return new Leftist(k1, rank_left + 1, merged, l)
-      }
-      return t1
+    t2 = _t2
+    t1 = _t1
+    if (!t1) return t2
+    if (!t2) return t1
+    k1 = t1.value
+    l = t1.left
+    if (layerComparator(k1, t2.value)) {
+      _t2 = t1
+      _t1 = t2
+      continue
     }
-    return t2
+    merged = merge(t1.right, t2)
+    rank_left = l?.rank || 0
+    rank_right = merged?.rank || 0
+    if (rank_left >= rank_right) {
+      return new Leftist(k1, rank_right + 1, l, merged)
+    }
+    return new Leftist(k1, rank_left + 1, merged, l)
   }
   /*::return _t1*/
-}
-
-export function insert<A>(
-  x: A,
-  t: leftist<A>,
-  comparator: (A, A) => boolean,
-): leftist<A> {
-  return merge(singleton(x), t, comparator)
-}
-
-export function get_min<A>(param: leftist<A>): A | void {
-  if (param) {
-    return param.value
-  }
-}
-
-export function delete_min<A>(
-  param: leftist<A>,
-  comparator: (A, A) => boolean,
-): [A, leftist<A>] {
-  if (param) {
-    return [param.value, merge(param.left, param.right, comparator)]
-  }
-  throw Error('Failure: empty')
-}
-
-export function iterate<A>(
-  tree: leftist<A>,
-  comparator: (A, A) => boolean,
-): Array<A> {
-  const results = []
-  while (tree) {
-    const extracted = delete_min(tree, comparator)
-    results.push(extracted[0])
-    tree = extracted[1]
-  }
-  return results
 }

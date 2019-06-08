@@ -1,10 +1,8 @@
 //@flow
 
 import type {
-  Graph,
   Graphite,
   StateRef,
-  Cmd,
   Emit,
   Run,
   Update,
@@ -14,83 +12,13 @@ import type {
   Tap,
 } from '../stdlib'
 import {getGraph, writeRef, readRef} from '../stdlib'
+import type {Layer} from './layer'
+import {type leftist, insert, deleteMin} from './leftist'
+import {Stack} from './stack'
 
-import {getPriority, type PriorityTag} from './getPriority'
-
-class Stack {
-  /*::
-  value: {current: any}
-  parent: Stack | null
-  */
-  constructor(value: any, parent: Stack | null) {
-    this.value = {current: value}
-    this.parent = parent
-  }
-}
-
-type Layer = {|
-  +step: Graph,
-  +firstIndex: number,
-  +scope: Stack,
-  +resetStop: boolean,
-  +type: PriorityTag,
-  +id: number,
-|}
-
-export class Leftist {
-  /*::
-  left: leftist
-  right: leftist
-  value: Layer
-  rank: number
-  */
-  constructor(value: Layer, rank: number, left: leftist, right: leftist) {
-    this.value = value
-    this.rank = rank
-    this.left = left
-    this.right = right
-  }
-}
-export type leftist = null | Leftist
-const insert = (x: Layer, t: leftist): leftist =>
-  merge(new Leftist(x, 1, null, null), t)
-
-const deleteMin = (param: leftist): leftist => {
-  if (param) {
-    return merge(param.left, param.right)
-  }
-  return null
-}
-const merge = (_t1: leftist, _t2: leftist): leftist => {
-  let t2
-  let t1
-  let k1
-  let l
-  let merged
-  let rank_left
-  let rank_right
-  while (true) {
-    t2 = _t2
-    t1 = _t1
-    if (!t1) return t2
-    if (!t2) return t1
-    k1 = t1.value
-    l = t1.left
-    if (layerComparator(k1, t2.value)) {
-      _t2 = t1
-      _t1 = t2
-      continue
-    }
-    merged = merge(t1.right, t2)
-    rank_left = l?.rank || 0
-    rank_right = merged?.rank || 0
-    if (rank_left >= rank_right) {
-      return new Leftist(k1, rank_right + 1, l, merged)
-    }
-    return new Leftist(k1, rank_left + 1, merged, l)
-  }
-  /*::return _t1*/
-}
+/**
+ * Dedicated local metadata
+ */
 class Local {
   /*::
   isChanged: boolean
@@ -103,10 +31,7 @@ class Local {
     this.scope = scope
   }
 }
-const layerComparator = (a: Layer, b: Layer) => {
-  if (a.type === b.type) return a.id > b.id
-  return getPriority(a.type) > getPriority(b.type)
-}
+
 let layerID = 0
 let heap: leftist = null
 const barriers = new Set()
