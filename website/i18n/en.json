@@ -92,11 +92,17 @@
       "introduction/core-concepts": {
         "title": "Core Concepts"
       },
+      "introduction/gettingStarted": {
+        "title": "Getting Started"
+      },
       "introduction/installation": {
         "title": "Installation"
       },
       "introduction/prior-art": {
         "title": "Prior Art"
+      },
+      "introduction/whatis": {
+        "title": "What is Effector?"
       },
       "recipes/migrating-to-effector/from-redux": {
         "title": "From Redux",

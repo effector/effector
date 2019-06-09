@@ -1,10 +1,21 @@
 {
   "docs": {
     "Introduction": [
+      "introduction/whatis",
       "introduction/installation",
-      "introduction/core-concepts",
+      "introduction/gettingStarted",
       "introduction/prior-art"
     ],
+
+    "Main concept": [
+      "main concept/events",
+      "main concept/effects",
+      "main concept/store",
+      "main concept/domain"
+    ],
+
+    
+
     "Recipes": [
       "recipes/recipes",
       "recipes/usage-with-typescript",
