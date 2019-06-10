@@ -26,7 +26,9 @@ export function createGraph({
 }
 export const clearNode = (
   graphite: Graphite,
-  {deep}: {
+  {
+    deep,
+  }: {
     deep?: boolean,
     ...
   } = {},
@@ -52,7 +54,11 @@ export const getGraph = (graph: Graphite): Graph =>
 
 export const traverse = (
   graphite: Graphite,
-  {ctx, pre, post}: {ctx: any, pre: Function, post: Function, ...},
+  {
+    ctx = {},
+    pre = (step, ctx, stack, layer) => {},
+    post = (step, ctx, stack, layer) => {},
+  }: {ctx: any, pre: Function, post: Function, ...},
 ) => {
   const visited = new Set()
   const stack = []
