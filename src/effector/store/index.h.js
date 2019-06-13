@@ -79,5 +79,9 @@ export type Store<State> = /*::interface extends Unit*/ {
   domainName?: CompositeName,
   +graphite: Graph,
   +updates: Event<State>,
+  +fail: Event<{|
+    error: mixed,
+    state: State
+  |}>,
   compositeName?: CompositeName,
 }

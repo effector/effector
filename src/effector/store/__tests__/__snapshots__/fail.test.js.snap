@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`triggers after failed .map 1`] = `
+Array [
+  Array [
+    Object {
+      "error": [Error: Unknown error],
+      "state": 1,
+    },
+  ],
+]
+`;
+
+exports[`triggers after failed .on 1`] = `
+Array [
+  Array [
+    Object {
+      "error": [Error: Unknown error],
+      "state": 1,
+    },
+  ],
+]
+`;

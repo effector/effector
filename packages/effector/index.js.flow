@@ -39,7 +39,9 @@ declare export class Event<Payload> implements Unit<Payload> {
   +kind: kind;
   watch(watcher: (payload: Payload) => any): Subscription;
   map<T>(fn: (payload: Payload) => T): Event<T>;
-  filter(config: {|fn(payload: Payload): boolean|}): Event<Payload>,
+  filter(config: {|
+    fn(payload: Payload): boolean
+  |}): Event<Payload>,
   filter<T>(fn: (payload: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
   subscribe(observer: Observer<Payload>): Subscription;
@@ -90,6 +92,10 @@ declare export class Store<State> implements Unit<State> {
   off(trigger: Unit<any>): void;
   subscribe(listener: (state: State) => any): Subscription;
   +updates: Event<State>;
+  +fail: Event<{|
+    error: mixed,
+    state: State
+  |}>;
   watch<E>(
     watcher: (state: State, payload: void) => any,
     _: void,

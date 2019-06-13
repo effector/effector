@@ -32,19 +32,29 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
   storeInstance.subscribers.set(
     from,
     createLink(from, {
-      scope: {handler, state: storeInstance.plainState, trigger: from},
+      scope: {
+        handler,
+        state: storeInstance.plainState,
+        trigger: from,
+        fail: this.fail,
+      },
       child: [storeInstance],
       //prettier-ignore
       node: [
         step.compute({
-          fn(newValue, {handler, state, trigger}) {
-            const result = handler(
-              readRef(state),
-              newValue,
-              getDisplayName(trigger),
-            )
-            if (result === undefined) return
-            return writeRef(state, result)
+          fn(newValue, {handler, state, trigger, fail}) {
+            try {
+              const result = handler(
+                readRef(state),
+                newValue,
+                getDisplayName(trigger),
+              )
+              if (result === undefined) return
+              return writeRef(state, result)
+            } catch (error) {
+              fail({error, state: readRef(state)})
+              throw error
+            }
           },
         }),
       ],
@@ -192,8 +202,9 @@ export function mapStore<A, B>(
           try {
             result = handler(newValue, readRef(state))
             stopPhaseTimerMessage = null
-          } catch (err) {
-            console.error(err)
+          } catch (error) {
+            innerStore.fail({error, state: readRef(state)})
+            console.error(error)
           }
           stopPhaseTimer(stopPhaseTimerMessage)
           return result

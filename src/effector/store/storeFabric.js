@@ -34,7 +34,8 @@ export function storeFabric<State>(props: {
   const defaultState = currentState
   const compositeName = createName(currentId, parent)
 
-  const updates: any = createEvent('update ' + currentId)
+  const updates = createEvent('update ' + currentId)
+  const fail = createEvent('fail ' + currentId)
   updates.graphite.meta.event.bound = {
     type: 'updates',
     updates: {
@@ -91,6 +92,7 @@ export function storeFabric<State>(props: {
     off: off.bind(null, storeInstance),
     watch: watch.bind(null, storeInstance),
     updates,
+    fail,
     subscribe: subscribe.bind(null, storeInstance),
     getState: getState.bind(null, storeInstance),
     stateRef: plainState,
