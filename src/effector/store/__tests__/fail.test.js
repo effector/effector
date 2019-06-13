@@ -54,54 +54,104 @@ it('triggers after failed .map', () => {
   `)
 })
 
-test("doesn't prevent other stores from updating", () => {
-  const fooFn = jest.fn()
-  const barFn = jest.fn()
-  const bazFn = jest.fn()
+describe("doesn't prevent other stores from updating", () => {
+  test('sanity check', () => {
+    const fooFn = jest.fn()
+    const barFn = jest.fn()
+    const bazFn = jest.fn()
 
-  const trigger = createEvent()
+    const trigger = createEvent()
 
-  const baz = createStore(0).on(trigger, (_, p) => p)
+    const baz = createStore(0).on(trigger, (_, p) => p)
 
-  const foo = createStore(0).on(trigger, (state, payload) => {
-    if (payload > 25) throw new Error('error')
-    return state
+    const foo = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+    const bar = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+
+    baz.watch(p => bazFn(p))
+    foo.watch(p => fooFn(p))
+    bar.watch(p => barFn(p))
+
+    const statusFooFn = jest.fn()
+    const statusFoo = combine(foo, baz, (foo, baz) => `Foo is: ${foo + baz}`)
+
+    statusFoo.watch(p => statusFooFn(p))
+
+    const statusBarFn = jest.fn()
+    const statusBar = combine(bar, baz, (bar, baz) => `Bar is: ${bar + baz}`)
+
+    statusBar.watch(p => statusBarFn(p)) // where is watch?
+
+    trigger(30)
+
+    expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
+      Array [
+        "Foo is: 0",
+        "Foo is: 30",
+      ]
+    `)
+    expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
+      Array [
+        "Bar is: 0",
+        "Bar is: 30",
+      ]
+    `)
   })
-  const bar = createStore(0).on(trigger, (state, payload) => {
-    if (payload > 25) throw new Error('error')
-    return state
+
+  test('actual test', () => {
+    const fooFn = jest.fn()
+    const barFn = jest.fn()
+    const bazFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const baz = createStore(0).on(trigger, (_, p) => p)
+
+    const foo = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+    const bar = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+
+    baz.watch(p => bazFn(p))
+    foo.watch(p => fooFn(p))
+    bar.watch(p => barFn(p))
+
+    // My lord, is that... legal?
+    foo.fail.watch(({state}) => {
+      foo.setState(state)
+    })
+
+    const statusFooFn = jest.fn()
+    const statusFoo = combine(foo, baz, (foo, baz) => `Foo is: ${foo + baz}`)
+
+    statusFoo.watch(p => statusFooFn(p))
+
+    const statusBarFn = jest.fn()
+    const statusBar = combine(bar, baz, (bar, baz) => `Bar is: ${bar + baz}`)
+
+    statusBar.watch(p => statusBarFn(p)) // where is watch?
+
+    trigger(30)
+
+    expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
+      Array [
+        "Foo is: 0",
+      ]
+    `)
+    expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
+      Array [
+        "Bar is: 0",
+        "Bar is: 30"
+      ]
+    `)
   })
-
-  baz.watch(p => bazFn(p))
-  foo.watch(p => fooFn(p))
-  bar.watch(p => barFn(p))
-
-  // My lord, is that... legal?
-  foo.fail.watch(({state}) => {
-    foo.setState(state)
-  })
-
-  const statusFooFn = jest.fn()
-  const statusFoo = combine(foo, baz, (foo, baz) => `Foo is: ${foo + baz}`)
-
-  statusFoo.watch(p => statusFooFn(p))
-
-  const statusBarFn = jest.fn()
-  const statusBar = combine(bar, baz, (bar, baz) => `Bar is: ${bar + baz}`)
-
-  statusBar.watch(p => statusBarFn(p)) // where is watch?
-
-  trigger(30)
-
-  expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
-    Array [
-      "Foo is: 0",
-    ]
-  `)
-  expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
-    Array [
-      "Bar is: 0",
-      "Bar is: 30",
-    ]
-  `)
 })
