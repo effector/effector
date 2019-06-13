@@ -1,6 +1,11 @@
 //@flow
 
-import {combine, createEvent, createStore, is} from 'effector'
+import {
+  createStoreObject,
+  createEvent,
+  createStore,
+  is,
+} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 test('store.fail is event', () => {
@@ -22,13 +27,13 @@ it('triggers after failed .on', () => {
   trigger()
   expect(fn).toBeCalledTimes(1)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "error": [Error: Unknown error],
-        "state": 1,
-      },
-    ]
-  `)
+        Array [
+          Object {
+            "error": [Error: Unknown error],
+            "state": 1,
+          },
+        ]
+    `)
 })
 
 it('triggers after failed .map', () => {
@@ -45,13 +50,13 @@ it('triggers after failed .map', () => {
   store.setState(6)
   expect(fn).toBeCalledTimes(1)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "error": [Error: Unknown error],
-        "state": 1,
-      },
-    ]
-  `)
+        Array [
+          Object {
+            "error": [Error: Unknown error],
+            "state": 1,
+          },
+        ]
+    `)
 })
 
 describe("doesn't prevent other stores from updating", () => {
@@ -78,12 +83,12 @@ describe("doesn't prevent other stores from updating", () => {
     bar.watch(p => barFn(p))
 
     const statusFooFn = jest.fn()
-    const statusFoo = combine(foo, baz, (foo, baz) => `Foo is: ${foo + baz}`)
+    const statusFoo = createStoreObject({foo, baz})
 
     statusFoo.watch(p => statusFooFn(p))
 
     const statusBarFn = jest.fn()
-    const statusBar = combine(bar, baz, (bar, baz) => `Bar is: ${bar + baz}`)
+    const statusBar = createStoreObject({bar, baz})
 
     statusBar.watch(p => statusBarFn(p)) // where is watch?
 
@@ -91,14 +96,26 @@ describe("doesn't prevent other stores from updating", () => {
 
     expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
       Array [
-        "Foo is: 0",
-        "Foo is: 30",
+        Object {
+          "baz": 0,
+          "foo": 0,
+        },
+        Object {
+          "baz": 30,
+          "foo": 0,
+        },
       ]
     `)
     expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
       Array [
-        "Bar is: 0",
-        "Bar is: 30",
+        Object {
+          "bar": 0,
+          "baz": 0,
+        },
+        Object {
+          "bar": 0,
+          "baz": 30,
+        },
       ]
     `)
   })
@@ -131,12 +148,12 @@ describe("doesn't prevent other stores from updating", () => {
     })
 
     const statusFooFn = jest.fn()
-    const statusFoo = combine(foo, baz, (foo, baz) => `Foo is: ${foo + baz}`)
+    const statusFoo = createStoreObject({foo, baz})
 
     statusFoo.watch(p => statusFooFn(p))
 
     const statusBarFn = jest.fn()
-    const statusBar = combine(bar, baz, (bar, baz) => `Bar is: ${bar + baz}`)
+    const statusBar = createStoreObject({bar, baz})
 
     statusBar.watch(p => statusBarFn(p)) // where is watch?
 
@@ -144,13 +161,22 @@ describe("doesn't prevent other stores from updating", () => {
 
     expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
       Array [
-        "Foo is: 0",
+        Object {
+          "baz": 0,
+          "foo": 0,
+        },
       ]
     `)
     expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
       Array [
-        "Bar is: 0",
-        "Bar is: 30",
+        Object {
+          "bar": 0,
+          "baz": 0,
+        },
+        Object {
+          "bar": 0,
+          "baz": 30,
+        },
       ]
     `)
   })
@@ -170,47 +196,47 @@ test('throw inside store.fail handler', () => {
   })
   trigger()
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "error": [Error: trigger],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 1],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 2],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 3],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 4],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 5],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 6],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 7],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 8],
-        "state": 0,
-      },
-      Object {
-        "error": [Error: Throw: 9],
-        "state": 0,
-      },
-    ]
-  `)
+        Array [
+          Object {
+            "error": [Error: trigger],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 1],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 2],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 3],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 4],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 5],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 6],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 7],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 8],
+            "state": 0,
+          },
+          Object {
+            "error": [Error: Throw: 9],
+            "state": 0,
+          },
+        ]
+    `)
 })
