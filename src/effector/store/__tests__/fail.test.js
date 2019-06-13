@@ -65,11 +65,11 @@ describe("doesn't prevent other stores from updating", () => {
     const baz = createStore(0).on(trigger, (_, p) => p)
 
     const foo = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('foo error')
       return state
     })
     const bar = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('bar error')
       return state
     })
 
@@ -125,11 +125,11 @@ describe("doesn't prevent other stores from updating", () => {
     const baz = createStore(0).on(trigger, (_, p) => p)
 
     const foo = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('foo error')
       return state
     })
     const bar = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('bar error')
       return state
     })
 
@@ -176,6 +176,7 @@ describe("doesn't prevent other stores from updating", () => {
   })
 
   test('correct update', () => {
+    const failFn = jest.fn()
     const fooFn = jest.fn()
     const barFn = jest.fn()
     const bazFn = jest.fn()
@@ -185,11 +186,11 @@ describe("doesn't prevent other stores from updating", () => {
     const baz = createStore(0).on(trigger, (_, p) => p)
 
     const foo = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('foo error')
       return state
     })
     const bar = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('bar error')
       return state
     })
 
@@ -199,8 +200,9 @@ describe("doesn't prevent other stores from updating", () => {
 
     // My lord, is that... legal?
     // This is no-op
-    foo.fail.watch(({state}) => {
-      foo.setState(state)
+    foo.fail.watch((err) => {
+      failFn(err)
+      foo.setState(err.state)
     })
 
     const statusFooFn = jest.fn()
@@ -215,6 +217,7 @@ describe("doesn't prevent other stores from updating", () => {
 
     trigger(20)
 
+    expect(argumentHistory(failFn)).toEqual([])
     expect(argumentHistory(bazFn)).toEqual([0, 20])
     expect(argumentHistory(fooFn)).toEqual([0])
     expect(argumentHistory(barFn)).toEqual([0])
@@ -246,6 +249,7 @@ describe("doesn't prevent other stores from updating", () => {
   })
 
   test('actual test', () => {
+    const failFn = jest.fn()
     const fooFn = jest.fn()
     const barFn = jest.fn()
     const bazFn = jest.fn()
@@ -255,11 +259,11 @@ describe("doesn't prevent other stores from updating", () => {
     const baz = createStore(0).on(trigger, (_, p) => p)
 
     const foo = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('foo error')
       return state
     })
     const bar = createStore(0).on(trigger, (state, payload) => {
-      if (payload > 25) throw new Error('error')
+      if (payload > 25) throw new Error('bar error')
       return state
     })
 
@@ -268,8 +272,9 @@ describe("doesn't prevent other stores from updating", () => {
     bar.watch(p => barFn(p))
 
     // My lord, is that... legal?
-    foo.fail.watch(({state}) => {
-      foo.setState(state)
+    foo.fail.watch((err) => {
+      failFn(err)
+      foo.setState(err.state)
     })
 
     const statusFooFn = jest.fn()
@@ -284,6 +289,9 @@ describe("doesn't prevent other stores from updating", () => {
 
     trigger(30)
 
+    expect(argumentHistory(failFn)).toEqual([
+      {error: new Error('foo error'), state: 0}
+    ])
     expect(argumentHistory(bazFn)).toEqual([0, 30])
     expect(argumentHistory(fooFn)).toEqual([0])
     expect(argumentHistory(barFn)).toEqual([0])
