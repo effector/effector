@@ -22,13 +22,13 @@ it('triggers after failed .on', () => {
   trigger()
   expect(fn).toBeCalledTimes(1)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "error": [Error: Unknown error],
-            "state": 1,
-          },
-        ]
-    `)
+    Array [
+      Object {
+        "error": [Error: Unknown error],
+        "state": 1,
+      },
+    ]
+  `)
 })
 
 it('triggers after failed .map', () => {
@@ -45,13 +45,13 @@ it('triggers after failed .map', () => {
   store.setState(6)
   expect(fn).toBeCalledTimes(1)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          Object {
-            "error": [Error: Unknown error],
-            "state": 1,
-          },
-        ]
-    `)
+    Array [
+      Object {
+        "error": [Error: Unknown error],
+        "state": 1,
+      },
+    ]
+  `)
 })
 
 describe("doesn't prevent other stores from updating", () => {
@@ -90,17 +90,17 @@ describe("doesn't prevent other stores from updating", () => {
     trigger(30)
 
     expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
-            Array [
-              "Foo is: 0",
-              "Foo is: 30",
-            ]
-        `)
+      Array [
+        "Foo is: 0",
+        "Foo is: 30",
+      ]
+    `)
     expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
-            Array [
-              "Bar is: 0",
-              "Bar is: 30",
-            ]
-        `)
+      Array [
+        "Bar is: 0",
+        "Bar is: 30",
+      ]
+    `)
   })
 
   test('actual test', () => {
@@ -143,16 +143,16 @@ describe("doesn't prevent other stores from updating", () => {
     trigger(30)
 
     expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
-            Array [
-              "Foo is: 0",
-            ]
-        `)
+      Array [
+        "Foo is: 0",
+      ]
+    `)
     expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
-            Array [
-              "Bar is: 0",
-              "Bar is: 30"
-            ]
-        `)
+      Array [
+        "Bar is: 0",
+        "Bar is: 30",
+      ]
+    `)
   })
 })
 
@@ -173,6 +173,42 @@ test('throw inside store.fail handler', () => {
     Array [
       Object {
         "error": [Error: trigger],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 1],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 2],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 3],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 4],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 5],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 6],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 7],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 8],
+        "state": 0,
+      },
+      Object {
+        "error": [Error: Throw: 9],
         "state": 0,
       },
     ]
