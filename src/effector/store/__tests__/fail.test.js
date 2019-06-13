@@ -1,11 +1,6 @@
 //@flow
 
-import {
-  createStoreObject,
-  createEvent,
-  createStore,
-  is,
-} from 'effector'
+import {createStoreObject, createEvent, createStore, is} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 test('store.fail is event', () => {
@@ -120,6 +115,136 @@ describe("doesn't prevent other stores from updating", () => {
     `)
   })
 
+  test('sanity check 2', () => {
+    const fooFn = jest.fn()
+    const barFn = jest.fn()
+    const bazFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const baz = createStore(0).on(trigger, (_, p) => p)
+
+    const foo = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+    const bar = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+
+    baz.watch(p => bazFn(p))
+    foo.watch(p => fooFn(p))
+    bar.watch(p => barFn(p))
+
+    const statusFooFn = jest.fn()
+    const statusFoo = createStoreObject({foo, baz})
+
+    statusFoo.watch(p => statusFooFn(p))
+
+    const statusBarFn = jest.fn()
+    const statusBar = createStoreObject({bar, baz})
+
+    statusBar.watch(p => statusBarFn(p)) // where is watch?
+
+    trigger(20)
+
+    expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "baz": 0,
+          "foo": 0,
+        },
+        Object {
+          "baz": 20,
+          "foo": 0,
+        },
+      ]
+    `)
+    expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "bar": 0,
+          "baz": 0,
+        },
+        Object {
+          "bar": 0,
+          "baz": 20,
+        },
+      ]
+    `)
+  })
+
+  test('correct update', () => {
+    const fooFn = jest.fn()
+    const barFn = jest.fn()
+    const bazFn = jest.fn()
+
+    const trigger = createEvent()
+
+    const baz = createStore(0).on(trigger, (_, p) => p)
+
+    const foo = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+    const bar = createStore(0).on(trigger, (state, payload) => {
+      if (payload > 25) throw new Error('error')
+      return state
+    })
+
+    baz.watch(p => bazFn(p))
+    foo.watch(p => fooFn(p))
+    bar.watch(p => barFn(p))
+
+    // My lord, is that... legal?
+    // This is no-op
+    foo.fail.watch(({state}) => {
+      foo.setState(state)
+    })
+
+    const statusFooFn = jest.fn()
+    const statusFoo = createStoreObject({foo, baz})
+
+    statusFoo.watch(p => statusFooFn(p))
+
+    const statusBarFn = jest.fn()
+    const statusBar = createStoreObject({bar, baz})
+
+    statusBar.watch(p => statusBarFn(p)) // where is watch?
+
+    trigger(20)
+
+    expect(argumentHistory(bazFn)).toEqual([0, 20])
+    expect(argumentHistory(fooFn)).toEqual([0])
+    expect(argumentHistory(barFn)).toEqual([0])
+
+    expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "baz": 0,
+          "foo": 0,
+        },
+        Object {
+          "baz": 20,
+          "foo": 0,
+        },
+      ]
+    `)
+    expect(argumentHistory(statusBarFn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "bar": 0,
+          "baz": 0,
+        },
+        Object {
+          "bar": 0,
+          "baz": 20,
+        },
+      ]
+    `)
+  })
+
   test('actual test', () => {
     const fooFn = jest.fn()
     const barFn = jest.fn()
@@ -158,6 +283,10 @@ describe("doesn't prevent other stores from updating", () => {
     statusBar.watch(p => statusBarFn(p)) // where is watch?
 
     trigger(30)
+
+    expect(argumentHistory(bazFn)).toEqual([0, 30])
+    expect(argumentHistory(fooFn)).toEqual([0])
+    expect(argumentHistory(barFn)).toEqual([0])
 
     expect(argumentHistory(statusFooFn)).toMatchInlineSnapshot(`
       Array [
