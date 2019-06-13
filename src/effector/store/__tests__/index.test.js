@@ -159,37 +159,44 @@ describe('.watch', () => {
   })
 })
 
-test('.off', () => {
-  const newWord = createEvent/*:: <string> */()
-  const a = createStore('word').on(newWord, (_, word) => word)
+describe('.off', () => {
+  it('allows to unsubscribe store from event', () => {
+    const newWord = createEvent/*:: <string> */()
+    const a = createStore('word').on(newWord, (_, word) => word)
 
-  const b = a.map(word => word.length)
+    const b = a.map(word => word.length)
 
-  const sum = b.map((ln, prevLn) => ln + prevLn, 0)
+    const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-  sum.watch(spy)
+    sum.watch(spy)
 
-  expect(a.getState()).toBe('word')
-  expect(b.getState()).toBe(4)
-  expect(sum.getState()).toBe(4)
+    expect(a.getState()).toBe('word')
+    expect(b.getState()).toBe(4)
+    expect(sum.getState()).toBe(4)
 
-  newWord('lol')
+    newWord('lol')
 
-  expect(a.getState()).toBe('lol')
-  expect(b.getState()).toBe(3)
-  expect(sum.getState()).toBe(7)
+    expect(a.getState()).toBe('lol')
+    expect(b.getState()).toBe(3)
+    expect(sum.getState()).toBe(7)
 
-  a.off(newWord)
+    a.off(newWord)
 
-  newWord('long word')
+    newWord('long word')
 
-  expect(a.getState()).toBe('lol')
-  expect(b.getState()).toBe(3)
-  expect(sum.getState()).toBe(7)
+    expect(a.getState()).toBe('lol')
+    expect(b.getState()).toBe(3)
+    expect(sum.getState()).toBe(7)
 
-  expect(spy).toHaveBeenCalledTimes(2)
+    expect(spy).toHaveBeenCalledTimes(2)
 
-  newWord('')
+    newWord('')
 
-  expect(spy).toHaveBeenCalledTimes(2)
+    expect(spy).toHaveBeenCalledTimes(2)
+  })
+  it('returns store itself', () => {
+    const newWord = createEvent()
+    const a = createStore('word').on(newWord, (_, word) => word)
+    expect(a.off(newWord)).toBe(a)
+  })
 })
