@@ -25,6 +25,7 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
   if (currentSubscription === undefined) return
   currentSubscription()
   storeInstance.subscribers.delete(event)
+  return this
 }
 
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
@@ -194,7 +195,12 @@ export function mapStore<A, B>(
   }
   createLink(store, {
     child: [innerStore],
-    scope: {store, handler: fn, state: innerStore.stateRef, fail: innerStore.fail},
+    scope: {
+      store,
+      handler: fn,
+      state: innerStore.stateRef,
+      fail: innerStore.fail,
+    },
     node: [
       step.compute({
         fn(newValue, {state, store, handler, fail}) {

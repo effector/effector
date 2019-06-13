@@ -89,7 +89,6 @@ export function storeFabric<State>(props: {
     shortName: currentId,
     domainName: parent,
     setState,
-    off: off.bind(null, storeInstance),
     watch: watch.bind(null, storeInstance),
     updates,
     fail,
@@ -100,6 +99,7 @@ export function storeFabric<State>(props: {
   ;(store: any).defaultConfig = config
   ;(store: any).reset = reset.bind(store, storeInstance)
   ;(store: any).on = on.bind(store, storeInstance)
+  ;(store: any).off = off.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
   ;(store: any).map = mapStore.bind(storeFabric, store)
   ;(store: any).thru = thru.bind(store)
