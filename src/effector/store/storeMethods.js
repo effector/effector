@@ -30,7 +30,6 @@ export function off(storeInstance: ThisStore, event: Event<any>) {
 
 export function on(storeInstance: ThisStore, event: any, handler: Function) {
   const from: Event<any> = event
-  const isFail = from === this.fail
   const oldLink = storeInstance.subscribers.get(from)
   if (oldLink) oldLink()
   storeInstance.subscribers.set(
@@ -56,7 +55,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
-              if (!isFail) upsertLaunch(fail, {error, state: readRef(state)})
+              upsertLaunch(fail, {error, state: readRef(state)})
               throw error
             }
           },
