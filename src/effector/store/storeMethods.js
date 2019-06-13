@@ -2,6 +2,8 @@
 import $$observable from 'symbol-observable'
 
 import invariant from 'invariant'
+
+import {upsertLaunch} from '../kernel'
 import {step, readRef, writeRef} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
 import {startPhaseTimer, stopPhaseTimer} from '../perf'
@@ -52,7 +54,7 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
-              fail({error, state: readRef(state)})
+              upsertLaunch(fail, {error, state: readRef(state)})
               throw error
             }
           },
