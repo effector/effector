@@ -194,10 +194,10 @@ export function mapStore<A, B>(
   }
   createLink(store, {
     child: [innerStore],
-    scope: {store, handler: fn, state: innerStore.stateRef},
+    scope: {store, handler: fn, state: innerStore.stateRef, fail: innerStore.fail},
     node: [
       step.compute({
-        fn(newValue, {state, store, handler}) {
+        fn(newValue, {state, store, handler, fail}) {
           startPhaseTimer(store, 'map')
           let stopPhaseTimerMessage = 'Got error'
           let result
@@ -205,7 +205,7 @@ export function mapStore<A, B>(
             result = handler(newValue, readRef(state))
             stopPhaseTimerMessage = null
           } catch (error) {
-            innerStore.fail({error, state: readRef(state)})
+            fail({error, state: readRef(state)})
             console.error(error)
           }
           stopPhaseTimer(stopPhaseTimerMessage)
