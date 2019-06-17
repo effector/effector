@@ -55,7 +55,8 @@ export const ShareButton = styled(Button)`
   border-radius: 2px;
   padding: 0.5rem 1rem;
   border-width: 0;
-  margin-right: 1rem;
+  margin: 1rem;
+  align-self: center;
 `
 
 export const ShareGroup = styled.div`

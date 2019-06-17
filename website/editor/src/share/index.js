@@ -5,13 +5,8 @@ import {useStore} from 'effector-react'
 import {shareCode} from '../graphql'
 import {sourceCode} from '../domain'
 import {ShareGroup, ShareButton, SharedUrl} from './styled'
-import {
-  sharedUrl,
-  canShare,
-  urlRef,
-  clickShare,
-  copyMessage,
-} from './controller'
+import {sharedUrl, canShare, urlRef, clickShare} from './controller'
+import {isShareAPISupported} from '../device'
 
 const Save = () => {
   const pending = useStore(shareCode.pending)
@@ -25,9 +20,10 @@ const Save = () => {
 
 const Copy = () => {
   const shareAllowed = useStore(canShare)
+  const copyMessage = <>copy&nbsp;to&nbsp;clipboard</>
   return (
     <ShareButton onClick={clickShare} disabled={!shareAllowed}>
-      {copyMessage}
+      {isShareAPISupported ? 'share' : copyMessage}
     </ShareButton>
   )
 }

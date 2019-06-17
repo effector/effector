@@ -34,7 +34,7 @@ const sharing: Sharing = createEffect('sharing url', {
   async handler({slug, sharedUrl}) {
     if (isShareAPISupported) {
       await (navigator: any).share({
-        title: `Notebook ${slug}`,
+        title: `Share url ${slug}`,
         url: sharedUrl,
       })
       return
@@ -57,4 +57,3 @@ forward({
 })
 
 export const urlRef: any = React.createRef()
-export const copyMessage = isShareAPISupported ? 'share' : 'copy to clipboard'
