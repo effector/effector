@@ -24,29 +24,55 @@ export const sharedUrl: Store<string | null> = sharedSlug.map(url => {
   return `https://share.effector.dev/${url}`
 })
 
+export const clickInputUrl: Event<*> = createEvent('click input url')
 export const clickShare: Event<*> = createEvent('click "share"')
 
 const showingConfirmation = createEffect('show confirmation', {
   handler: () => new Promise(rs => setTimeout(rs, 2000)),
 })
 
-const showConfirmation = createStore(false)
-  .on(showingConfirmation, () => true)
-  .on(showingConfirmation.done, () => false)
+const confirmationStatus: Store<
+  'init' | 'pending' | 'done' | 'fail',
+> = createStore('init')
+  .reset(showingConfirmation.done)
+  .on(shareCode, () => 'pending')
+  .on(shareCode.done, () => 'done')
+  .on(shareCode.fail, () => 'fail')
 
-export const message: Store<string> = showConfirmation.map(show =>
-  show ? 'Copied' : 'Click to copy to clipboard',
-)
-forward({
-  from: sample(sourceCode, clickShare),
-  to: shareCode,
+export const message: Store<string> = confirmationStatus.map(status => {
+  switch (status) {
+    case 'init':
+      return 'click to share'
+    case 'done':
+      return 'copied to clipboard'
+    case 'fail':
+      return 'share error :('
+    case 'pending':
+    default:
+      return 'in progress...'
+  }
 })
 
+{
+  const validClickShare = sample(shareCode.pending, clickShare).filter({
+    fn: pending => !pending,
+  })
+  const shareCodeMessage = sample(sourceCode, validClickShare)
+
+  forward({
+    from: shareCodeMessage,
+    to: shareCode,
+  })
+}
 forward({
   from: shareCode.done,
   to: showingConfirmation,
 })
 
+clickInputUrl.watch(e => {
+  e.currentTarget.select()
+  document.execCommand('copy')
+})
 shareCode.done.watch(() => {
   const input = inputRef.current
   if (input) input.select()
