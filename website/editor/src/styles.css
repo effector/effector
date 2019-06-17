@@ -38,14 +38,7 @@ body {
 .try-inner {
   display: grid;
 }
-.header {
-  border-left: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  justify-content: space-between;
-}
+
 .secondanary-tabs {
   display: flex;
   flex-direction: column;
@@ -150,10 +143,7 @@ body {
         minmax(100px, 33vh)
       );
   }
-  .header {
-    grid-column: 1 / span 1;
-    grid-row: 1 / span 1;
-  }
+
   .header-tabs {
     grid-column: 1 / span 1;
     grid-row: 10 / span 1;
@@ -179,7 +169,7 @@ body {
   }
   .errors {
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 2;
     border-bottom: 1px solid #ffd6d6;
   }
 }
@@ -190,13 +180,9 @@ body {
     grid-template-columns: 200px minmax(200px, 2fr) minmax(200px, 1fr);
     grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
   }
-  .header {
-    grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
-  }
   .header-tabs {
     grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 2;
   }
   .dom {
     grid-column: 3 / span 1;

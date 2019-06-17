@@ -103,11 +103,12 @@ export const codeError = createStore<
   stackFrames: [],
 })
 
-export const tab = createStore<'graphite' | 'dom'>('dom')
+export const tab = createStore<'graphite' | 'dom' | 'share'>('dom')
 
 export const tabApi = createApi(tab, {
   showGraphite: () => 'graphite',
   showDOM: () => 'dom',
+  showShare: () => 'share',
 })
 
 export const stats = createStore({

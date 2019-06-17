@@ -75,6 +75,9 @@ const TabsView = createComponent(tab, (_, tab) => (
       <li className="tab dom-tab" onClick={tabApi.showDOM}>
         DOM
       </li>
+      <li className="tab dom-tab" onClick={tabApi.showShare}>
+        Share
+      </li>
     </ul>
     {tab === 'graphite' && <GraphiteView />}
     <div style={{display: tab === 'dom' ? 'block' : 'none'}} className="dom">
@@ -88,9 +91,6 @@ export default (
     <VersionLinkView />
     <OutlineView />
     <CodeView />
-    <div className="header">
-      <Share />
-    </div>
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />
