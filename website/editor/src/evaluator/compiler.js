@@ -1,9 +1,9 @@
 //@flow
 //$todo
-import PluginEffectorReact from '@effector/babel-plugin-react'
+import PluginEffectorReact from 'effector/babel-plugin-react'
 
 //$todo
-import PluginEffector from '@effector/babel-plugin'
+import PluginEffector from 'effector/babel-plugin'
 //$todo
 import PluginBigInt from '@babel/plugin-syntax-bigint'
 //$todo
@@ -34,17 +34,15 @@ registerPlugin('syntax-bigint', PluginBigInt)
 // registerPlugin('@babel/plugin-proposal-optional-chaining', PluginOptional)
 // registerPlugin('@babel/plugin-transform-strict-mode', PluginStrictMode)
 
-registerPlugin('@effector/babel-plugin', PluginEffector)
-registerPlugin('@effector/babel-plugin-react', PluginEffectorReact)
-registerPlugin('@effector/repl-remove-imports', function(babel) {
-  return {
-    visitor: {
-      ImportDeclaration(path) {
-        path.remove()
-      },
+registerPlugin('effector/babel-plugin', PluginEffector)
+registerPlugin('effector/babel-plugin-react', PluginEffectorReact)
+registerPlugin('@effector/repl-remove-imports', (babel) => ({
+  visitor: {
+    ImportDeclaration(path) {
+      path.remove()
     },
-  }
-})
+  },
+}))
 
 const compileAll = (code: string): string =>
   transform(code, {
@@ -62,8 +60,8 @@ const compileAll = (code: string): string =>
       'proposal-nullish-coalescing-operator',
       'proposal-optional-chaining',
       ['proposal-class-properties', {loose: true}],
-      '@effector/babel-plugin-react',
-      '@effector/babel-plugin',
+      'effector/babel-plugin-react',
+      'effector/babel-plugin',
       '@effector/repl-remove-imports',
     ],
     sourceMaps: 'inline',
