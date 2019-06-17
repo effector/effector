@@ -1129,16 +1129,6 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@effector/babel-plugin-react@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@effector/babel-plugin-react/-/babel-plugin-react-0.0.3.tgz#a71df9dbb6a2f4e1a6cb4ddf105efb076783a5a8"
-  integrity sha512-56TQtXq8VoOxM9xegAaj7l0pFE4qsAwfxaDjaIADe5HEV+3rqTnVR2VbtVtj/O4ywDJlhTFDl2Heo2V2D4F5og==
-
-"@effector/babel-plugin@^0.1.0":
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/@effector/babel-plugin/-/babel-plugin-0.1.0.tgz#1b2c8488b3af98b41c369b7c066a6e362c4470da"
-  integrity sha512-dpfpkCkuTL3UHMaw7WV0iTuchG5LZeixQlhKl19tQYfth2M5zaf8sreCaQLW7xqWElfJ3rSjr1QlLwdrzcmh3w==
-
 "@emotion/is-prop-valid@^0.7.3":
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.7.3.tgz#a6bf4fa5387cbba59d44e698a4680f481a8da6cc"

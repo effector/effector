@@ -14,8 +14,6 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/standalone": "^7.4.3",
-    "@effector/babel-plugin": "^0.1.0",
-    "@effector/babel-plugin-react": "^0.0.3",
     "fs-extra": "^7.0.1",
     "parcel-bundler": "^1.12.3",
     "parcel-plugin-linaria": "^0.1.1",
