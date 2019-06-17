@@ -2,14 +2,14 @@
 
 import React from 'react'
 import {cx} from 'linaria'
-import {useStore, createComponent} from 'effector-react'
+import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
+//$off
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
-import {ShareButton} from './components/ShareButton'
+import {Share} from './share'
 import {VersionLink} from './components/VersionLink'
-import {VersionSelector} from './components/VersionSelector'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
@@ -18,8 +18,6 @@ import {TypeHintView} from './flow/view'
 import {GraphiteView} from './graphite/view'
 import {
   sourceCode,
-  packageVersions,
-  selectVersion,
   changeSources,
   codeError,
   stats,
@@ -58,20 +56,6 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
   </div>
 ))
 
-const VersionSelectorView = () => {
-  const versions = useStore(packageVersions)
-  const selected = useStore(version)
-  //TODO: bug in createComponent, probably actually in watchers
-  //createStoreObject({versions: packageVersions, selected: version}),
-  return (
-    <VersionSelector
-      versions={versions}
-      selected={selected}
-      onChange={selectVersion}
-    />
-  )
-}
-
 const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
 ))
@@ -105,8 +89,7 @@ export default (
     <OutlineView />
     <CodeView />
     <div className="header">
-      <VersionSelectorView />
-      <ShareButton />
+      <Share />
     </div>
     <TabsView />
     <SecondanaryTabs />
