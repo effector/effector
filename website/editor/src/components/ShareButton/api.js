@@ -1,15 +1,28 @@
 //@flow
-
+import {createRef} from 'react'
 import {
   createStore,
   createEffect,
   createEvent,
   forward,
+  sample,
   type Event,
   type Store,
 } from 'effector'
 
-import {copyShareableUrl} from '../../domain'
+import {sourceCode} from '../../domain'
+import {shareCode} from '../../graphql'
+
+export const inputRef: any = createRef()
+
+const sharedSlug: Store<string | null> = createStore(null)
+  .on(shareCode.done, (state, {result: {slug}}) => slug)
+  .reset(shareCode.fail)
+
+export const sharedUrl: Store<string | null> = sharedSlug.map(url => {
+  if (url === null) return null
+  return `https://share.effector.dev/${url}`
+})
 
 export const clickShare: Event<*> = createEvent('click "share"')
 
@@ -24,10 +37,18 @@ const showConfirmation = createStore(false)
 export const message: Store<string> = showConfirmation.map(show =>
   show ? 'Copied' : 'Click to copy to clipboard',
 )
+forward({
+  from: sample(sourceCode, clickShare),
+  to: shareCode,
+})
 
 forward({
-  from: clickShare,
+  from: shareCode.done,
   to: showingConfirmation,
 })
 
-clickShare.watch(copyShareableUrl)
+shareCode.done.watch(() => {
+  const input = inputRef.current
+  if (input) input.select()
+  document.execCommand('copy')
+})

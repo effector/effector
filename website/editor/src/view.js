@@ -2,7 +2,6 @@
 
 import React from 'react'
 import {cx} from 'linaria'
-import {createStoreObject} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
@@ -14,7 +13,6 @@ import {VersionSelector} from './components/VersionSelector'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
-import Console from './components/Console'
 import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {GraphiteView} from './graphite/view'
@@ -25,8 +23,6 @@ import {
   changeSources,
   codeError,
   stats,
-  shareableUrl,
-  copyShareableUrl,
   version,
   tab,
   tabApi,
@@ -60,14 +56,6 @@ const CodeView = createComponent(sourceCode, ({}, sources) => (
     />
     <TypeHintView />
   </div>
-))
-
-const ShareButtonView = createComponent(shareableUrl, ({}, shareableUrl) => (
-  <ShareButton
-    className="try-button try-button-share"
-    url={shareableUrl}
-    onClick={copyShareableUrl}
-  />
 ))
 
 const VersionSelectorView = () => {
@@ -118,7 +106,7 @@ export default (
     <CodeView />
     <div className="header">
       <VersionSelectorView />
-      <ShareButtonView />
+      <ShareButton />
     </div>
     <TabsView />
     <SecondanaryTabs />

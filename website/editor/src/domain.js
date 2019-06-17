@@ -29,12 +29,6 @@ export const generateShareableUrl = (version: string, code: string) => {
   return result
 }
 
-export const copyShareableUrl = () => {
-  const input = document.getElementById('shareableUrl')
-  if (input) input.select()
-  document.execCommand('copy')
-}
-
 export function getUrlParameter(name: string) {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
   const regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
@@ -92,9 +86,6 @@ export const codeSetCursor = createEvent()
 export const codeCursorActivity = createEvent()
 export const codeMarkLine = createEffect()
 
-export const shareableUrl = combine(sourceCode, version, (code, version) =>
-  generateShareableUrl(version, code),
-)
 export const codeError = createStore<
   | {|
       isError: true,
