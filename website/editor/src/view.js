@@ -2,6 +2,7 @@
 
 import React from 'react'
 import {cx} from 'linaria'
+import {styled} from 'linaria/react'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
@@ -60,6 +61,17 @@ const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
 ))
 
+const TabHeader = styled.li`
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+  float: left;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 7px 15px;
+  margin: 0;
+  background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
+`
+
 const TabsView = createComponent(tab, (_, tab) => (
   <>
     <ul
@@ -69,20 +81,21 @@ const TabsView = createComponent(tab, (_, tab) => (
         'toolbar',
         'header-tabs',
       )}>
-      <li className="tab graphite-tab" onClick={tabApi.showGraphite}>
+      <TabHeader onClick={tabApi.showGraphite} isActive={tab === 'graphite'}>
         Graphite
-      </li>
-      <li className="tab dom-tab" onClick={tabApi.showDOM}>
+      </TabHeader>
+      <TabHeader onClick={tabApi.showDOM} isActive={tab === 'dom'}>
         DOM
-      </li>
-      <li className="tab dom-tab" onClick={tabApi.showShare}>
+      </TabHeader>
+      <TabHeader onClick={tabApi.showShare} isActive={tab === 'share'}>
         Share
-      </li>
+      </TabHeader>
     </ul>
     {tab === 'graphite' && <GraphiteView />}
     <div style={{display: tab === 'dom' ? 'block' : 'none'}} className="dom">
       <iframe id="dom" />
     </div>
+    {tab === 'share' && <Share />}
   </>
 ))
 

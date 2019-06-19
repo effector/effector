@@ -45,6 +45,7 @@ export const SharedUrl = styled.input`
   padding: 0.5rem 1rem;
   border: none;
   outline: none;
+  width: 100%;
 
   &[value=''] {
     visibility: hidden;
@@ -62,4 +63,11 @@ export const ShareButton = styled(Button)`
 export const ShareGroup = styled.div`
   width: calc(100% - 1.5rem * 2);
   display: flex;
+  flex-wrap: wrap;
+  grid-column: 3 / span 1;
+  grid-row: 2 / span 3;
+  @media (max-width: 699px) {
+    grid-column: 1 / span 1;
+    grid-row: 6 / span 4;
+  }
 `
