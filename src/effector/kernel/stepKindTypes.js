@@ -18,3 +18,7 @@ export const sampler = stepKind('sampler', {
   from: [pure, barrier],
   to: [effect],
 })
+export const fx = stepKind('fx', {
+  from: [sampler],
+  to: [effect],
+})
