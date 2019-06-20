@@ -16,6 +16,8 @@ import type {Layer} from './layer'
 import {type leftist, insert, deleteMin} from './leftist'
 import {Stack} from './stack'
 
+const noop = () => {}
+
 /**
  * Dedicated local metadata
  */
@@ -195,7 +197,7 @@ const command = {
     local.isFailed = runCtx.err
   },
 }
-const tryRun = ({fn, arg, val, fail = () => {}}: any) => {
+const tryRun = ({fn, arg, val, fail = noop}: any) => {
   const result = {
     err: false,
     result: null,
