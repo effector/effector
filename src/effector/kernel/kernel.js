@@ -16,8 +16,6 @@ import type {Layer} from './layer'
 import {type leftist, insert, deleteMin} from './leftist'
 import {Stack} from './stack'
 
-const noop = () => {}
-
 /**
  * Dedicated local metadata
  */
@@ -169,13 +167,7 @@ const command = {
       val: local.scope,
       fn: step.fn,
     })
-    local.isFailed = runCtx.isError
-    if (local.isFailed && step.fail) {
-      launch(step.fail, {
-        error: runCtx.error,
-        params: readRef(val),
-      })
-    }
+    local.isFailed = runCtx.err
     writeRef(val, runCtx.result)
   },
   update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
@@ -187,7 +179,7 @@ const command = {
       val: local.scope,
       fn: step.fn,
     })
-    local.isFailed = runCtx.isError
+    local.isFailed = runCtx.err
     writeRef(val, runCtx.result)
   },
   tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
@@ -196,21 +188,19 @@ const command = {
       val: local.scope,
       fn: step.fn,
     })
-    local.isFailed = runCtx.isError
+    local.isFailed = runCtx.err
   },
 }
 const tryRun = ({fn, arg, val}: any) => {
   const result = {
-    isError: false,
-    error: null,
+    err: false,
     result: null,
   }
   try {
     result.result = fn(arg, val)
   } catch (err) {
     console.error(err)
-    result.isError = true
-    result.error = err
+    result.err = true
   }
   return result
 }

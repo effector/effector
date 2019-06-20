@@ -59,7 +59,6 @@ export type Run = {|
   +group: 'cmd',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    fail?: Graphite,
     meta?: NodeMeta,
   |},
 |}
