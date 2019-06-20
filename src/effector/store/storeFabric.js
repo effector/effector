@@ -35,10 +35,16 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updates = createEvent('update ' + currentId)
-  const fail = createEvent('fail ' + currentId)
   updates.graphite.meta.event.bound = {
     type: 'updates',
     updates: {
+      store: plainState.id,
+    },
+  }
+  const fail = createEvent('fail ' + currentId)
+  fail.graphite.meta.event.bound = {
+    type: 'fail',
+    fail: {
       store: plainState.id,
     },
   }

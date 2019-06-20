@@ -8,6 +8,7 @@ import {step, readRef, writeRef} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
 import {startPhaseTimer, stopPhaseTimer} from '../perf'
 import {getDisplayName} from '../naming'
+import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
 import type {Store, ThisStore} from './index.h'
 import type {Subscriber} from '../index.h'
@@ -120,39 +121,22 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
     typeof listener === 'function',
     'Expected the listener to be a function',
   )
-  let stopPhaseTimerMessage = 'Got initial error'
-  let lastCall = getState(storeInstance)
-
-  startPhaseTimer(storeInstance, 'subscribe')
-  try {
-    listener(lastCall)
-    stopPhaseTimerMessage = 'Initial'
-  } catch (err) {
-    console.error(err)
-  }
-  stopPhaseTimer(stopPhaseTimerMessage)
-  return createLink(storeInstance, {
+  const watcherEffect = effectFabric({
+    name: storeInstance.shortName + ' watcher',
+    domainName: '',
+    parent: storeInstance.domainName,
+    config: {
+      handler: listener,
+    },
+  })
+  watcherEffect(getState(storeInstance))
+  const subscription = createLink(storeInstance, {
+    //prettier-ignore
     node: [
       noop,
-      step.run({
-        fn(args) {
-          let stopPhaseTimerMessage = null
-          startPhaseTimer(storeInstance, 'subscribe')
-          if (args === lastCall) {
-            stopPhaseTimer(stopPhaseTimerMessage)
-            return
-          }
-          lastCall = args
-          try {
-            listener(args)
-          } catch (err) {
-            console.error(err)
-            stopPhaseTimerMessage = 'Got error'
-          }
-          stopPhaseTimer(stopPhaseTimerMessage)
-        },
-      }),
+      step.run({fn: x => x})
     ],
+    child: [watcherEffect],
     meta: {
       subtype: 'crosslink',
       crosslink: 'subscribe',
@@ -161,6 +145,11 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
       },
     },
   })
+  //$todo
+  subscription.fail = watcherEffect.fail
+  //$todo
+  subscription.done = watcherEffect.done
+  return subscription
 }
 export function dispatch(action: any) {
   return action
@@ -171,19 +160,19 @@ export function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
-  startPhaseTimer(store, 'map')
   let lastResult
-  let stopPhaseTimerMessage = 'Got initial error'
+  startPhaseTimer(store, 'map')
   try {
     const storeState = store.getState()
     if (storeState !== undefined) {
       lastResult = fn(storeState, firstState)
     }
-    stopPhaseTimerMessage = 'Initial'
+    stopPhaseTimer('Initial')
   } catch (err) {
-    console.error(err)
+    stopPhaseTimer('Got initial error')
+    throw err
   }
-  stopPhaseTimer(stopPhaseTimerMessage)
+
   const innerStore: Store<any> = this({
     config: {name: '' + store.shortName + ' → *'},
     currentState: lastResult,
