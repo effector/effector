@@ -93,7 +93,7 @@ export interface Store<State> extends Unit<State> {
   subscribe(listener: (state: State) => any): Subscription
   updates: Event<State>
   fail: Event<{
-    error: unknown,
+    error: unknown
     state: State
   }>
   watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
@@ -241,6 +241,8 @@ export const step: {
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+
+export function merge<T>(...events: ReadonlyArray<Event<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>

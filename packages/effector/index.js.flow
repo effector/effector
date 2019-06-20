@@ -40,8 +40,8 @@ declare export class Event<Payload> implements Unit<Payload> {
   watch(watcher: (payload: Payload) => any): Subscription;
   map<T>(fn: (payload: Payload) => T): Event<T>;
   filter(config: {|
-    fn(payload: Payload): boolean
-  |}): Event<Payload>,
+    fn(payload: Payload): boolean,
+  |}): Event<Payload>;
   filter<T>(fn: (payload: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
   subscribe(observer: Observer<Payload>): Subscription;
@@ -94,7 +94,7 @@ declare export class Store<State> implements Unit<State> {
   +updates: Event<State>;
   +fail: Event<{|
     error: mixed,
-    state: State
+    state: State,
   |}>;
   watch<E>(
     watcher: (state: State, payload: void) => any,
@@ -138,9 +138,8 @@ declare export var is: {|
   domain(obj: mixed): boolean,
 |}
 
-
 declare class InternalStore<State> extends Store<State> implements Unit<State> {
-  setState(state: State): void
+  setState(state: State): void;
 }
 
 declare export class Domain {
@@ -149,7 +148,9 @@ declare export class Domain {
   onCreateEffect(
     hook: (newEffect: Effect<mixed, mixed, mixed>) => any,
   ): Subscription;
-  onCreateStore(hook: (newStore: InternalStore<mixed_non_void>) => any): Subscription;
+  onCreateStore(
+    hook: (newStore: InternalStore<mixed_non_void>) => any,
+  ): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
   effect<Params, Done, Fail>(
@@ -160,7 +161,10 @@ declare export class Domain {
     },
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
-  store<State>(defaultState: State, config?: {name?: string, ...}): Store<State>;
+  store<State>(
+    defaultState: State,
+    config?: {name?: string, ...},
+  ): Store<State>;
   getType(): string;
 }
 export type ID = string
@@ -264,6 +268,9 @@ declare export function forward<T>(opts: {|
   +from: Unit<T>,
   +to: Unit<T>,
 |}): Subscription
+
+declare export function merge<T>(...events: $ReadOnlyArray<Event<T>>): Event<T>
+
 declare export function clearNode(
   unit: Unit<any> | Step,
   opts?: {deep?: boolean, ...},
@@ -363,7 +370,6 @@ declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
 >
 declare export function createDomain(domainName?: string): Domain
 
-
 declare export function sample<A>(config: {|
   +source: Unit<A>,
   +clock: Unit<any>,
@@ -375,7 +381,10 @@ declare export function sample<A, B, C>(config: {|
   +target?: Unit<C>,
   fn(source: A, clock: B): C,
 |}): Unit<C>
-declare export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
+declare export function sample<A>(
+  source: Store<A>,
+  clock?: Store<any>,
+): Store<A>
 declare export function sample<A>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<any>,
