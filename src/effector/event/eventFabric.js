@@ -2,8 +2,8 @@
 import $$observable from 'symbol-observable'
 
 import {step, Kind, stringRefcount, createGraph, type Unit} from '../stdlib'
-import type {Effect} from '../effect'
-import {launch} from '../kernel'
+import {type Effect, effectFabric} from '../effect'
+import {launch, upsertLaunch} from '../kernel'
 import {noop} from '../blocks'
 
 import {getDisplayName} from '../naming'
@@ -149,7 +149,11 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
 
 function filterEvent(
   event: Event<any> | Effect<any, any, any>,
-  fn: {|fn(_: any): boolean|} | (any => any | void),
+  fn:
+    | {|
+        fn(_: any): boolean,
+      |}
+    | (any => any | void),
 ): any {
   const mapped = eventFabric({
     name: '' + event.shortName + ' →? *',
@@ -202,23 +206,23 @@ function watchEvent<Payload>(
   event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  const fail = eventFabric({
-    name: 'fail ' + event.shortName,
+  const watcherEffect = effectFabric({
+    name: event.shortName + ' watcher',
+    domainName: '',
     parent: event.domainName,
+    config: {
+      handler(payload) {
+        return watcher(payload, getDisplayName(event))
+      },
+    },
   })
   const subscription = createLink(event, {
-    scope: {trigger: event, handler: watcher},
     //prettier-ignore
     node: [
       noop,
-      step.run({
-        fn: (payload: Payload, {trigger, handler}) => handler(
-          payload,
-          getDisplayName(trigger),
-        ),
-        fail,
-      }),
+      step.run({fn: x => x})
     ],
+    child: [watcherEffect],
     meta: {
       subtype: 'crosslink',
       crosslink: 'event_watch',
@@ -228,6 +232,8 @@ function watchEvent<Payload>(
     },
   })
   //$todo
-  subscription.fail = fail
+  subscription.fail = watcherEffect.fail
+  //$todo
+  subscription.done = watcherEffect.done
   return subscription
 }

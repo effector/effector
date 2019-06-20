@@ -1,7 +1,7 @@
 // @flow
 
 import {createEvent, is} from 'effector'
-import {argumentHistory} from 'effector/fixtures'
+import {argumentHistory, delay} from 'effector/fixtures'
 
 test('watcher.fail is event', () => {
   const foo = createEvent('foo')
@@ -25,6 +25,54 @@ it('triggers after failed .watch', () => {
           Object {
             "error": [Error: Unknown error],
             "params": "bar",
+          },
+        ]
+    `)
+})
+
+it('triggers after failed async .watch', async () => {
+  const fn = jest.fn()
+  const foo = createEvent()
+  const sub = foo.watch(async () => {
+    throw new Error('Unknown error')
+  })
+  sub.fail.watch(e => {
+    fn(e)
+  })
+
+  expect(fn).not.toBeCalled()
+  foo('bar')
+  await delay(500)
+  expect(fn).toBeCalledTimes(1)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "error": [Error: Unknown error],
+            "params": "bar",
+          },
+        ]
+    `)
+})
+
+it('triggers after successful async .watch', async () => {
+  const fn = jest.fn()
+  const foo = createEvent()
+  const sub = foo.watch(async () => {
+    return Promise.resolve(200)
+  })
+  sub.done.watch(e => {
+    fn(e)
+  })
+
+  expect(fn).not.toBeCalled()
+  foo('bar')
+  await delay(500)
+  expect(fn).toBeCalledTimes(1)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "params": "bar",
+            "result": 200,
           },
         ]
     `)
