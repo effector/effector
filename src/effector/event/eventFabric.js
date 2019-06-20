@@ -199,11 +199,15 @@ function filterEvent(
 }
 
 function watchEvent<Payload>(
-  event: Unit,
+  event: Event<Payload>,
   watcher: (payload: Payload, type: string) => any,
 ): Subscription {
-  return createLink(event, {
-    scope: {trigger: event, handler: watcher},
+  const fail = eventFabric({
+    name: 'fail ' + event.shortName,
+    parent: event.domainName,
+  })
+  const subscription = createLink(event, {
+    scope: {trigger: event, handler: watcher, fail},
     //prettier-ignore
     node: [
       noop,
@@ -212,6 +216,7 @@ function watchEvent<Payload>(
           payload,
           getDisplayName(trigger),
         ),
+        fail: (error: mixed, {fail}) => fail({error})
       }),
     ],
     meta: {
@@ -222,4 +227,7 @@ function watchEvent<Payload>(
       },
     },
   })
+  //$todo
+  subscription.fail = fail
+  return subscription
 }
