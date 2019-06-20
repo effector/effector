@@ -31,6 +31,27 @@ it('triggers after failed .on', () => {
     `)
 })
 
+it('triggers after failed .watch', () => {
+  const fn = jest.fn()
+  const store = createStore(0)
+  const sub = store.watch(v => {
+    if (v > 0) throw new Error('Unknown error')
+  })
+  sub.fail.watch(e => fn(e))
+
+  expect(fn).not.toBeCalled()
+  store.setState(1)
+  expect(fn).toBeCalledTimes(1)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "error": [Error: Unknown error],
+            "params": 1,
+          },
+        ]
+    `)
+})
+
 it('triggers after failed .map', () => {
   const fn = jest.fn()
   const store = createStore(0)
