@@ -153,6 +153,7 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
+      fail: step.fail,
     })
     /**
      * .isFailed assignment is not needed because in such case
@@ -166,6 +167,7 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
+      fail: step.fail,
     })
     local.isFailed = runCtx.err
     writeRef(val, runCtx.result)
@@ -178,6 +180,7 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
+      fail: step.fail,
     })
     local.isFailed = runCtx.err
     writeRef(val, runCtx.result)
@@ -187,11 +190,12 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
+      fail: step.fail,
     })
     local.isFailed = runCtx.err
   },
 }
-const tryRun = ({fn, arg, val}: any) => {
+const tryRun = ({fn, arg, val, fail = () => {}}: any) => {
   const result = {
     err: false,
     result: null,
@@ -200,6 +204,7 @@ const tryRun = ({fn, arg, val}: any) => {
     result.result = fn(arg, val)
   } catch (err) {
     console.error(err)
+    fail(err, val)
     result.err = true
   }
   return result
