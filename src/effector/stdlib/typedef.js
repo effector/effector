@@ -33,18 +33,22 @@ export const step: {|
   |}): Emit,
   compute(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
+    fail?: (data: mixed, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |}): Compute,
   filter(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
+    fail?: (data: mixed, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |}): Filter,
   run(data: {
     fn: (data: any, scope: {[string]: any, ...}) => any,
+    fail?: (data: mixed, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   }): Run,
   tap(data: {
     fn: (data: any, scope: {[string]: any, ...}) => any,
+    fail?: (data: mixed, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   }): Tap,
   update(data: {|
