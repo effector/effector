@@ -1,6 +1,7 @@
 // @flow
 
 const recast = require('recast')
+const camelCase = require('camelcase')
 const {visit, namedTypes: n, builders: b} = require('ast-types')
 const fs = require('fs')
 
@@ -32,7 +33,9 @@ visit(ast, {
         idProperty = property
       }
 
-      const id = b.identifier(property.key.name)
+      const id = b.identifier(
+        camelCase(path.node.id.name + '_' + property.key.name),
+      )
       id.typeAnnotation = b.typeAnnotation(
         b.genericTypeAnnotation(
           b.identifier('Store'),
@@ -44,17 +47,81 @@ visit(ast, {
           ]),
         ),
       )
-      const init = b.callExpression(
-        b.identifier('createStore'),
-        [b.newExpression(b.identifier('Map'), [])],
-        [b.identifier('meme')],
-      )
+      const init = b.callExpression(b.identifier('createStore'), [
+        b.newExpression(b.identifier('Map'), []),
+      ])
       path.parentPath.insertAfter(
         b.exportNamedDeclaration(
           b.variableDeclaration('const', [b.variableDeclarator(id, init)]),
         ),
       )
     }
+
+    let paramId = b.identifier(path.node.id.name.toLowerCase())
+    paramId.typeAnnotation = b.typeAnnotation(
+      b.genericTypeAnnotation(path.node.id, null),
+    )
+    let singleStoreId = b.identifier(path.node.id.name.toLowerCase())
+    singleStoreId.typeAnnotation = b.typeAnnotation(
+      b.genericTypeAnnotation(
+        b.identifier('Store'),
+        b.typeParameterInstantiation([
+          b.unionTypeAnnotation([
+            b.genericTypeAnnotation(path.node.id, null),
+            b.nullTypeAnnotation(),
+          ]),
+        ]),
+      ),
+    )
+    let listStoreId = b.identifier(camelCase(path.node.id.name + 'List'))
+    listStoreId.typeAnnotation = b.typeAnnotation(
+      b.genericTypeAnnotation(
+        b.identifier('Store'),
+        b.typeParameterInstantiation([
+          b.arrayTypeAnnotation(b.genericTypeAnnotation(path.node.id, null)),
+        ]),
+      ),
+    )
+    path.parentPath.insertAfter(
+      b.exportNamedDeclaration(
+        b.variableDeclaration('const', [
+          b.variableDeclarator(
+            listStoreId,
+            b.callExpression(b.identifier('createStore'), [
+              b.arrayExpression([]),
+            ]),
+          ),
+        ]),
+      ),
+    )
+    path.parentPath.insertAfter(
+      b.exportNamedDeclaration(
+        b.variableDeclaration('const', [
+          b.variableDeclarator(
+            singleStoreId,
+            b.callExpression(b.identifier('createStore'), [
+              b.identifier('null'),
+            ]),
+          ),
+        ]),
+      ),
+    )
+    path.parentPath.insertAfter(
+      b.exportNamedDeclaration(
+        b.variableDeclaration('const', [
+          b.variableDeclarator(
+            b.identifier(camelCase('get' + path.node.id.name + 'ID')),
+            b.arrowFunctionExpression(
+              [paramId],
+              b.memberExpression(
+                b.identifier(path.node.id.name.toLowerCase()),
+                b.identifier(idProperty.key.name),
+              ),
+            ),
+          ),
+        ]),
+      ),
+    )
 
     this.traverse(path)
   },
