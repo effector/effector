@@ -18,12 +18,13 @@ it('triggers after failed .watch', () => {
   sub.fail.watch(e => fn(e))
 
   expect(fn).not.toBeCalled()
-  foo()
+  foo('bar')
   expect(fn).toBeCalledTimes(1)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
         Array [
           Object {
             "error": [Error: Unknown error],
+            "params": "bar",
           },
         ]
     `)

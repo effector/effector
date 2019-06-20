@@ -155,7 +155,6 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
-      fail: step.fail,
     })
     /**
      * .isFailed assignment is not needed because in such case
@@ -169,9 +168,14 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
-      fail: step.fail,
     })
-    local.isFailed = runCtx.err
+    local.isFailed = runCtx.isError
+    if (local.isFailed && step.fail) {
+      launch(step.fail, {
+        error: runCtx.error,
+        params: readRef(val),
+      })
+    }
     writeRef(val, runCtx.result)
   },
   update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
@@ -182,9 +186,8 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
-      fail: step.fail,
     })
-    local.isFailed = runCtx.err
+    local.isFailed = runCtx.isError
     writeRef(val, runCtx.result)
   },
   tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
@@ -192,22 +195,22 @@ const command = {
       arg: readRef(val),
       val: local.scope,
       fn: step.fn,
-      fail: step.fail,
     })
-    local.isFailed = runCtx.err
+    local.isFailed = runCtx.isError
   },
 }
-const tryRun = ({fn, arg, val, fail = noop}: any) => {
+const tryRun = ({fn, arg, val}: any) => {
   const result = {
-    err: false,
+    isError: false,
+    error: null,
     result: null,
   }
   try {
     result.result = fn(arg, val)
   } catch (err) {
     console.error(err)
-    fail(err, val)
-    result.err = true
+    result.isError = true
+    result.error = err
   }
   return result
 }

@@ -207,7 +207,7 @@ function watchEvent<Payload>(
     parent: event.domainName,
   })
   const subscription = createLink(event, {
-    scope: {trigger: event, handler: watcher, fail},
+    scope: {trigger: event, handler: watcher},
     //prettier-ignore
     node: [
       noop,
@@ -216,7 +216,7 @@ function watchEvent<Payload>(
           payload,
           getDisplayName(trigger),
         ),
-        fail: (error: mixed, {fail}) => fail({error})
+        fail,
       }),
     ],
     meta: {
