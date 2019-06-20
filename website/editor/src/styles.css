@@ -38,13 +38,6 @@ body {
 .try-inner {
   display: grid;
 }
-
-.secondanary-tabs {
-  display: flex;
-  flex-direction: column;
-  background: #fff;
-  border-left: 1px solid #ddd;
-}
 .toolbar {
   background: #f7f7f7;
   border-bottom: 1px solid #ddd;
@@ -143,15 +136,9 @@ body {
         minmax(100px, 33vh)
       );
   }
-
   .header-tabs {
     grid-column: 1 / span 1;
     grid-row: 10 / span 1;
-  }
-  .secondanary-tabs {
-    grid-column: 1 / span 1;
-    grid-row: 11 / span 1;
-    grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
   .sources {
     grid-column: 1 / span 1;
@@ -182,7 +169,7 @@ body {
   }
   .header-tabs {
     grid-column: 3 / span 1;
-    grid-row: 1 / span 2;
+    grid-row: 2 / span 1;
   }
   .dom {
     grid-column: 3 / span 1;
@@ -201,11 +188,6 @@ body {
   .errors {
     grid-column: 3 / span 1;
     grid-row: 5 / span 1;
-  }
-  .secondanary-tabs {
-    grid-column: 3 / span 1;
-    grid-row: 5 / span 2;
-    grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 }
 

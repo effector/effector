@@ -3,7 +3,7 @@
 import React from 'react'
 import {cx} from 'linaria'
 import {styled} from 'linaria/react'
-import {createComponent} from 'effector-react'
+import {useStore, createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
 //$off
@@ -11,6 +11,8 @@ import 'codemirror/lib/codemirror.css'
 import './styles.css'
 import {Share} from './share'
 import {VersionLink} from './components/VersionLink'
+import {VersionSelector} from './components/VersionSelector'
+import {Header} from './components/Header'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
@@ -18,6 +20,7 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {GraphiteView} from './graphite/view'
 import {
+  selectVersion,
   sourceCode,
   changeSources,
   codeError,
@@ -28,6 +31,7 @@ import {
   codeMarkLine,
   codeCursorActivity,
   codeSetCursor,
+  packageVersions,
 } from './domain'
 
 const OutlineView = createComponent(stats, ({}, stats) => (
@@ -99,11 +103,31 @@ const TabsView = createComponent(tab, (_, tab) => (
   </>
 ))
 
+const VersionSelectorView = createComponent(
+  {versions: packageVersions, selected: version},
+  (_, {versions, selected}) => {
+    // const versions = useStore(packageVersions)
+    // const selected = useStore(version)
+    //TODO: bug in createComponent, probably actually in watchers
+    //,
+    return (
+      <VersionSelector
+        versions={versions}
+        selected={selected}
+        onChange={selectVersion}
+      />
+    )
+  },
+)
+
 export default (
   <div className="try-inner">
     <VersionLinkView />
     <OutlineView />
     <CodeView />
+    <Header>
+      <VersionSelectorView />
+    </Header>
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />

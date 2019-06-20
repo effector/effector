@@ -2,12 +2,13 @@
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import * as Effector from 'effector'
 import * as EffectorReact from 'effector-react'
 
 import {realmInvoke, realmInterval, realmTimeout} from '../domain'
 import {consoleMap} from '../logs'
 
-export function prepareRuntime(effector, version) {
+export function prepareRuntime(effector: typeof Effector, version: string) {
   const EvalRealm = effector.createDomain('EvalRealm')
   const api = {}
   assignEffectorRealm(api, EvalRealm, effector)
@@ -26,14 +27,22 @@ export function prepareRuntime(effector, version) {
   }
 }
 
-function setInterval(fn, timeout) {
-  const id = global.setInterval(fn, timeout)
+function setInterval<TArguments: Array<mixed>>(
+  callback: (...args: TArguments) => mixed,
+  timeout?: number,
+  ...args: TArguments
+) {
+  const id = global.setInterval(callback, timeout, ...args)
   realmInterval(id)
   return id
 }
 
-function setTimeout(fn, timeout) {
-  const id = global.setTimeout(fn, timeout)
+function setTimeout<TArguments: Array<mixed>>(
+  callback: (...args: TArguments) => mixed,
+  timeout?: number,
+  ...args: TArguments
+) {
+  const id = global.setTimeout(callback, timeout, ...args)
   realmTimeout(id)
   return id
 }

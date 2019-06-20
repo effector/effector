@@ -10,7 +10,7 @@ import {SourceMapConsumer} from 'source-map'
 class SourceMap {
   __source_map: SourceMapConsumer
 
-  constructor(sourceMap) {
+  constructor(sourceMap: SourceMapConsumer) {
     this.__source_map = sourceMap
   }
 

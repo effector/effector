@@ -60,11 +60,30 @@ const ToolbarView = createComponent(tab, ({}, tab) => {
   )
 })
 
-export default function SecondanaryTabs() {
+const SecondanaryTabs = styled.div`
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-left: 1px solid #ddd;
+
+  @media (max-width: 699px) {
+    grid-column: 1 / span 1;
+    grid-row: 11 / span 1;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+
+  @media (min-width: 700px) {
+    grid-column: 3 / span 1;
+    grid-row: 5 / span 2;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+  }
+`
+
+export default function() {
   return (
-    <div className="secondanary-tabs">
+    <SecondanaryTabs>
       <ToolbarView />
       <TabView />
-    </div>
+    </SecondanaryTabs>
   )
 }

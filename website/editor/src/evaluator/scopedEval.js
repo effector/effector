@@ -2,19 +2,29 @@
 
 import {sourceCode, selectVersion} from '../domain'
 
-let iframe = null
+let iframe: HTMLIFrameElement | null = null
 
-function getIframe() {
+function getIframe(): HTMLIFrameElement {
   if (iframe === null) {
     //iframe = document.createElement('iframe')
-    iframe = document.getElementById('dom') || document.createElement('iframe')
+    iframe =
+      ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
+      document.createElement('iframe')
     //iframe.style.display = 'none'
 
     //$off
     //document.body.append(iframe)
 
-    sourceCode.watch(() => (iframe.contentDocument.body.innerHTML = ''))
-    selectVersion.watch(() => (iframe.contentDocument.body.innerHTML = ''))
+    sourceCode.watch(() => {
+      if (iframe === null) return
+      if (iframe.contentDocument.body === null) return
+      iframe.contentDocument.body.innerHTML = ''
+    })
+    selectVersion.watch(() => {
+      if (iframe === null) return
+      if (iframe.contentDocument.body === null) return
+      iframe.contentDocument.body.innerHTML = ''
+    })
   }
 
   return iframe
@@ -35,7 +45,7 @@ function scopedEval(code: string, sourceMap: ?string) {
   getIframe().contentWindow.eval(code)
 }
 
-function runCode(code) {
+function runCode(code: string) {
   return function(env) {
     for (const key in env) {
       getIframe().contentWindow[key] = env[key]
@@ -44,7 +54,7 @@ function runCode(code) {
   }
 }
 
-function runLibrary(code) {
+function runLibrary(code: string) {
   return function(env) {
     for (const key in env) {
       getIframe().contentWindow[key] = env[key]

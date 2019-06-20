@@ -5,7 +5,7 @@ import scopedEval from './scopedEval'
 import {transformCode} from './compiler'
 import {getStackFrames} from './stackframe/getStackFrames'
 
-export async function evalExpr(expr, vars) {
+export async function evalExpr(expr: string, vars) {
   status.init()
   //TODO: split into two effects
   try {

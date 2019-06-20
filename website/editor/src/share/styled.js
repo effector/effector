@@ -62,6 +62,8 @@ export const ShareButton = styled(Button)`
 
 export const ShareGroup = styled.div`
   width: calc(100% - 1.5rem * 2);
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
   display: flex;
   flex-wrap: wrap;
   grid-column: 3 / span 1;

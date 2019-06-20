@@ -1,20 +1,24 @@
 /* @flow */
 
+import invariant from 'invariant'
 import StackFrame from './stack-frame'
 
 const regexExtractLocation = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/
 
 function extractLocation(token: string): [string, number, number] {
-  return regexExtractLocation
-    .exec(token)
-    .slice(1)
-    .map(v => {
-      const p = Number(v)
-      if (!isNaN(p)) {
-        return p
-      }
-      return v
-    })
+  const match = regexExtractLocation.exec(token)
+  invariant(match !== null, "extractLocation: match shouldn't be null")
+  const data = match.slice(1).map(v => {
+    const p = Number(v)
+    if (!isNaN(p)) {
+      return p
+    }
+    return v
+  })
+  invariant(typeof data[0] === 'string')
+  invariant(typeof data[1] === 'number')
+  invariant(typeof data[2] === 'number')
+  return [data[0], data[1], data[2]]
 }
 
 const regexValidFrame_Chrome = /^\s*(at|in)\s.+(:\d+)/

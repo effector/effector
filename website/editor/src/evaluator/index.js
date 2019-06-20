@@ -9,7 +9,7 @@ import {consoleMap} from '../logs'
 import {registerPlugin} from '@babel/standalone'
 
 const tag = `# source`
-function createRealm(sourceCode: string, version: string) {
+function createRealm(sourceCode: string, version: string): $todo {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
@@ -49,8 +49,8 @@ export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector'
 
 fetchEffector.fail.watch(() => selectVersion('master'))
 
-export const fetchBabelPlugin = createEffect('fetch babel plugin', {
-  async handler(ver: string) {
+export const fetchBabelPlugin = createEffect<string, {[key: string]: any}, mixed>('fetch babel plugin', {
+  async handler(ver): $todo {
     const url =
       ver === 'master'
         ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/@effector/babel-plugin/index.js'
