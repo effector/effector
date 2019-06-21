@@ -101,12 +101,19 @@ export type Tap = {|
   |},
 |}
 
+export type Family = {|
+  type: 'regular' | 'crosslink',
+  links: Graph[],
+  +owners: Graph[],
+|}
+
 export type Graph = {
   +from: Array<Graph>,
   +next: Array<Graph>,
   +seq: Array<Cmd>,
   +scope: {[string]: any, ...},
   +meta: {[tag: string]: any, ...},
+  +family: Family,
   ...
 }
 

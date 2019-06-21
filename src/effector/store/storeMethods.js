@@ -3,10 +3,9 @@ import $$observable from 'symbol-observable'
 
 import invariant from 'invariant'
 
-import {upsertLaunch} from '../kernel'
+import {upsertLaunch, launch} from '../kernel'
 import {step, readRef, writeRef} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
-import {startPhaseTimer, stopPhaseTimer} from '../perf'
 import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
@@ -56,19 +55,15 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
-              upsertLaunch(fail, {error, state: readRef(state)})
-              throw error
+              launch(fail, {error, state: readRef(state)})
+              // throw error
             }
           },
         }),
       ],
-      meta: {
-        subtype: 'crosslink',
-        crosslink: 'on',
-        on: {
-          from: event.id,
-          to: storeInstance.id,
-        },
+      family: {
+        type: 'crosslink',
+        owners: [from, storeInstance],
       },
     }),
   )
@@ -137,12 +132,9 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'subscribe',
-      subscribe: {
-        store: storeInstance.id,
-      },
+    family: {
+      type: 'crosslink',
+      owners: [storeInstance],
     },
   })
   //$todo
@@ -161,16 +153,9 @@ export function mapStore<A, B>(
   firstState?: B,
 ): Store<B> {
   let lastResult
-  startPhaseTimer(store, 'map')
-  try {
-    const storeState = store.getState()
-    if (storeState !== undefined) {
-      lastResult = fn(storeState, firstState)
-    }
-    stopPhaseTimer('Initial')
-  } catch (err) {
-    stopPhaseTimer('Got initial error')
-    throw err
+  const storeState = store.getState()
+  if (storeState !== undefined) {
+    lastResult = fn(storeState, firstState)
   }
 
   const innerStore: Store<any> = this({
@@ -178,10 +163,6 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  innerStore.graphite.meta.bound = {
-    type: 'map',
-    store: store.id,
-  }
   createLink(store, {
     child: [innerStore],
     scope: {
@@ -193,29 +174,21 @@ export function mapStore<A, B>(
     node: [
       step.compute({
         fn(newValue, {state, store, handler, fail}) {
-          startPhaseTimer(store, 'map')
-          let stopPhaseTimerMessage = 'Got error'
           let result
           try {
             result = handler(newValue, readRef(state))
-            stopPhaseTimerMessage = null
           } catch (error) {
             fail({error, state: readRef(state)})
             console.error(error)
           }
-          stopPhaseTimer(stopPhaseTimerMessage)
           return result
         },
       }),
       filterChanged,
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'store_map',
-      store_map: {
-        from: store.id,
-        to: innerStore.id,
-      },
+    family: {
+      type: 'crosslink',
+      owners: [store, innerStore],
     },
   })
   return innerStore

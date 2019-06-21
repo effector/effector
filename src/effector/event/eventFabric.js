@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, Kind, stringRefcount, createGraph, type Unit} from '../stdlib'
+import {step, Kind, stringRefcount, createNode, type Unit} from '../stdlib'
 import {type Effect, effectFabric} from '../effect'
 import {launch, upsertLaunch} from '../kernel'
 import {noop} from '../blocks'
@@ -30,7 +30,7 @@ export function eventFabric<Payload>({
   const name = nameRaw || id
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
-  const graphite = createGraph({
+  const graphite = createNode({
     meta: {
       subtype: 'node',
       node: 'event',
@@ -85,12 +85,7 @@ function prepend(event, fn: (_: any) => *) {
     name: '* → ' + event.shortName,
     parent: event.domainName,
   })
-  contramapped.graphite.meta.event.bound = {
-    type: 'prepend',
-    prepend: {
-      event: event.id,
-    },
-  }
+
   createLink(contramapped, {
     child: [event],
     scope: {handler: fn},
@@ -99,13 +94,9 @@ function prepend(event, fn: (_: any) => *) {
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_prepend',
-      event_prepend: {
-        from: contramapped.id,
-        to: event.id,
-      },
+    family: {
+      type: 'crosslink',
+      links: [event],
     },
   })
   return contramapped
@@ -121,12 +112,6 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  mapped.graphite.meta.event.bound = {
-    type: 'map',
-    map: {
-      event: event.id,
-    },
-  }
   createLink(event, {
     child: [mapped],
     scope: {handler: fn},
@@ -135,13 +120,9 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_map',
-      event_map: {
-        from: event.id,
-        to: mapped.id,
-      },
+    family: {
+      type: 'crosslink',
+      links: [event],
     },
   })
   return mapped
@@ -159,12 +140,6 @@ function filterEvent(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  mapped.graphite.meta.event.bound = {
-    type: 'filter',
-    filter: {
-      event: event.id,
-    },
-  }
   let node
   let scope
   //null values not allowed
@@ -190,13 +165,9 @@ function filterEvent(
     scope,
     child: [mapped],
     node,
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_filter',
-      event_filter: {
-        from: event.id,
-        to: mapped.id,
-      },
+    family: {
+      type: 'crosslink',
+      links: [mapped],
     },
   })
   return mapped
@@ -223,12 +194,9 @@ function watchEvent<Payload>(
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'event_watch',
-      event_watch: {
-        event: event.id,
-      },
+    family: {
+      type: 'crosslink',
+      links: [watcherEffect],
     },
   })
   //$todo

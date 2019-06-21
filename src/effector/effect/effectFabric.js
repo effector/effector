@@ -77,40 +77,24 @@ export function effectFabric<Payload, Done>({
     parent,
     config,
   })
-  //$off
-  instance.graphite.meta = {
-    subtype: 'node',
-    node: 'effect',
-    effect: {name},
-  }
 
   const eventCreate = instance.create
   const done: Event<{|
     params: Payload,
-    result: Done
+    result: Done,
   |}> = eventFabric({
     name: '' + instance.shortName + ' done',
     parent,
     config,
   })
-  done.graphite.meta.event.bound = {
-    type: 'effect',
-    subtype: 'done',
-    effect: {name},
-  }
   const fail: Event<{|
     params: Payload,
-    error: *
+    error: *,
   |}> = eventFabric({
     name: '' + instance.shortName + ' fail',
     parent,
     config,
   })
-  fail.graphite.meta.event.bound = {
-    type: 'effect',
-    subtype: 'fail',
-    effect: {name},
-  }
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
   //eslint-disable-next-line no-unused-vars
@@ -159,14 +143,25 @@ export function effectFabric<Payload, Done>({
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
+
   /* terser will minify true and false to 1 and 0,
     thereby we need to define true as Boolean(1)
     and false as Boolean(0) */
-  instance.pending = createStore(Boolean(0))
+  const pending = createStore(Boolean(0))
     .on(instance, () => Boolean(1))
     .reset(done)
     .reset(fail)
+  instance.pending = pending
+
+  makeCrosslink(instance, done)
+  makeCrosslink(instance, fail)
+  makeCrosslink(instance, pending)
   return instance
+}
+const makeCrosslink = ({graphite: owner}, {graphite: link}) => {
+  link.family.type = 'crosslink'
+  link.family.owners.push(owner)
+  owner.family.links.push(link)
 }
 function runEffect(handler, params, onResolve, onReject) {
   let failedSync = false

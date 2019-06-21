@@ -1,8 +1,8 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {launch} from '../kernel'
-import {step, createGraph, Kind, createStateRef} from '../stdlib'
+import {launch, upsertLaunch} from '../kernel'
+import {step, createNode, Kind, createStateRef} from '../stdlib'
 import {createEvent, forward} from '../event'
 
 import type {Store, ThisStore} from './index.h'
@@ -35,32 +35,10 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updates = createEvent('update ' + currentId)
-  updates.graphite.meta.event.bound = {
-    type: 'updates',
-    updates: {
-      store: plainState.id,
-    },
-  }
   const fail = createEvent('fail ' + currentId)
-  fail.graphite.meta.event.bound = {
-    type: 'fail',
-    fail: {
-      store: plainState.id,
-    },
-  }
   const storeInstance: ThisStore = {
-    graphite: createGraph({
+    graphite: createNode({
       scope: {state: plainState, oldState: currentState},
-      meta: {
-        subtype: 'node',
-        node: 'store',
-        store: {
-          id: plainState.id,
-          name: currentId,
-          state: plainState,
-          bound: null,
-        },
-      },
       node: [
         step.filter({
           fn: upd => upd !== undefined,
@@ -76,6 +54,7 @@ export function storeFabric<State>(props: {
           },
         }),
       ],
+      family: {type: 'regular', links: [updates, fail]},
     }),
     kind: Kind.store,
     id: plainState.id,
@@ -87,6 +66,8 @@ export function storeFabric<State>(props: {
     subscribers: new Map(),
     compositeName,
   }
+  updates.graphite.family.type = 'crosslink'
+  fail.graphite.family.type = 'crosslink'
   const store: $Shape<Store<State>> = {
     compositeName: storeInstance.compositeName,
     graphite: storeInstance.graphite,
@@ -121,8 +102,7 @@ export function storeFabric<State>(props: {
     const state = getState(storeInstance)
     const newResult =
       typeof reduce === 'function' ? reduce(state, value) : value
-
-    launch(store, newResult)
+    upsertLaunch(store, newResult)
   }
 
   return store
