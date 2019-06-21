@@ -266,19 +266,19 @@ describe("doesn't prevent other stores from updating", () => {
     `)
   })
 
-  test('actual test', () => {
+  test.only('actual test', () => {
     const failFn = jest.fn()
     const fooFn = jest.fn()
     const barFn = jest.fn()
     const bazFn = jest.fn()
-    const fooBazFn = jest.fn()
+    // const fooBazFn = jest.fn()
     const barBazFn = jest.fn()
 
     const trigger = createEvent()
     const baz = createStore(0)
     const foo = createStore(0)
     const bar = createStore(0)
-    const fooBaz = createStoreObject({foo, baz})
+    // const fooBaz = createStoreObject({foo, baz})
     const barBaz = createStoreObject({bar, baz})
 
     baz.on(trigger, (_, p) => p)
@@ -298,10 +298,10 @@ describe("doesn't prevent other stores from updating", () => {
     // My lord, is that... legal?
     foo.fail.watch(err => {
       failFn(err)
-      foo.setState(err.state)
+      // foo.setState(err.state)
     })
 
-    fooBaz.watch(p => fooBazFn(p))
+    // fooBaz.watch(p => fooBazFn(p))
     barBaz.watch(p => barBazFn(p)) // where is watch?
 
     trigger(30)
@@ -313,14 +313,18 @@ describe("doesn't prevent other stores from updating", () => {
     expect(argumentHistory(fooFn)).toEqual([0])
     expect(argumentHistory(barFn)).toEqual([0])
 
-    expect(argumentHistory(fooBazFn)).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "baz": 0,
-          "foo": 0,
-        },
-      ]
-    `)
+    // expect(argumentHistory(fooBazFn)).toMatchInlineSnapshot(`
+    //   Array [
+    //     Object {
+    //       "baz": 0,
+    //       "foo": 0,
+    //     },
+    //     Object {
+    //       "baz": 30,
+    //       "foo": 0,
+    //     },
+    //   ]
+    // `)
     expect(argumentHistory(barBazFn)).toMatchInlineSnapshot(`
       Array [
         Object {

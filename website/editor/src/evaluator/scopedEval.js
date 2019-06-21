@@ -8,8 +8,8 @@ function getIframe(): HTMLIFrameElement {
   if (iframe === null) {
     //iframe = document.createElement('iframe')
     iframe =
-      ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
-      document.createElement('iframe')
+      ((document.getElementById('dom'): any): HTMLIFrameElement | null)
+      || document.createElement('iframe')
     //iframe.style.display = 'none'
 
     //$off
@@ -18,12 +18,12 @@ function getIframe(): HTMLIFrameElement {
     sourceCode.watch(() => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
-      iframe.contentDocument.body.innerHTML = ''
+      iframe.contentDocument.body.innerHTML = '<div id="root"></div>'
     })
     selectVersion.watch(() => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
-      iframe.contentDocument.body.innerHTML = ''
+      iframe.contentDocument.body.innerHTML = '<div id="root"></div>'
     })
   }
 

@@ -3,33 +3,33 @@ import $$observable from 'symbol-observable'
 
 import invariant from 'invariant'
 
-import {upsertLaunch} from '../kernel'
+import {upsertLaunch, launch} from '../kernel'
 import {step, readRef, writeRef} from '../stdlib'
+import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
-import {startPhaseTimer, stopPhaseTimer} from '../perf'
 import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
-import type {Store, ThisStore} from './index.h'
+import {storeFabric} from './storeFabric'
+import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
 
-export function reset(storeInstance: ThisStore, ...events: Array<Event<any>>) {
+export function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   for (const event of events)
-    on.call(this, storeInstance, event, () => storeInstance.defaultState)
-  return this
-}
-export function getState(storeInstance: ThisStore) {
-  return readRef(storeInstance.plainState)
-}
-export function off(storeInstance: ThisStore, event: Event<any>) {
-  const currentSubscription = storeInstance.subscribers.get(event)
-  if (currentSubscription === undefined) return
-  currentSubscription()
-  storeInstance.subscribers.delete(event)
-  return this
+    on(storeInstance, event, () => storeInstance.defaultState)
+  return storeInstance
 }
 
-export function on(storeInstance: ThisStore, event: any, handler: Function) {
+export function off(storeInstance: Store<any>, event: Event<any>) {
+  const currentSubscription = storeInstance.subscribers.get(event)
+  if (currentSubscription !== undefined) {
+    currentSubscription()
+    storeInstance.subscribers.delete(event)
+  }
+  return storeInstance
+}
+
+export function on(storeInstance: Store<any>, event: any, handler: Function) {
   const from: Event<any> = event
   const oldLink = storeInstance.subscribers.get(from)
   if (oldLink) oldLink()
@@ -38,9 +38,9 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
     createLink(from, {
       scope: {
         handler,
-        state: storeInstance.plainState,
+        state: storeInstance.stateRef,
         trigger: from,
-        fail: this.fail,
+        fail: storeInstance.fail,
       },
       child: [storeInstance],
       //prettier-ignore
@@ -57,37 +57,31 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
               return writeRef(state, result)
             } catch (error) {
               upsertLaunch(fail, {error, state: readRef(state)})
-              throw error
+              // throw error
             }
           },
         }),
       ],
-      meta: {
-        subtype: 'crosslink',
-        crosslink: 'on',
-        on: {
-          from: event.id,
-          to: storeInstance.id,
-        },
+      family: {
+        type: 'crosslink',
+        owners: [from, storeInstance],
       },
     }),
   )
-  return this
+  return storeInstance
 }
-export function observable(storeInstance: ThisStore) {
+export function observable(storeInstance: Store<any>) {
   const result = {
     subscribe(observer: Subscriber<any>) {
       invariant(
         typeof observer === 'object' && observer !== null,
-        'Expected the observer to be an object.',
+        'Expected the observer to be an object',
       )
-
-      function observeState(state) {
+      return subscribe(storeInstance, state => {
         if (observer.next) {
           observer.next(state)
         }
-      }
-      return subscribe(storeInstance, observeState)
+      })
     },
   }
   //$off
@@ -97,26 +91,22 @@ export function observable(storeInstance: ThisStore) {
   return result
 }
 export function watch(
-  storeInstance: ThisStore,
+  storeInstance: Store<any>,
   eventOrFn: Event<*> | Function,
   fn?: Function,
 ) {
   const message = 'watch requires function handler'
-  switch (fn && eventOrFn?.kind) {
-    case 'store':
-    case 'event':
-    case 'effect':
-      invariant(typeof fn === 'function', message)
-      return eventOrFn.watch(payload =>
-        //$todo
-        fn(getState(storeInstance), payload, getDisplayName(eventOrFn)),
-      )
-    default:
-      invariant(typeof eventOrFn === 'function', message)
-      return subscribe(storeInstance, eventOrFn)
+  if (!fn || !is.unit(eventOrFn)) {
+    invariant(typeof eventOrFn === 'function', message)
+    return subscribe(storeInstance, eventOrFn)
   }
+  invariant(typeof fn === 'function', message)
+  return eventOrFn.watch(payload =>
+    //$todo
+    fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
+  )
 }
-export function subscribe(storeInstance: ThisStore, listener: Function) {
+export function subscribe(storeInstance: Store<any>, listener: Function) {
   invariant(
     typeof listener === 'function',
     'Expected the listener to be a function',
@@ -129,7 +119,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
       handler: listener,
     },
   })
-  watcherEffect(getState(storeInstance))
+  watcherEffect(storeInstance.getState())
   const subscription = createLink(storeInstance, {
     //prettier-ignore
     node: [
@@ -137,12 +127,9 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'subscribe',
-      subscribe: {
-        store: storeInstance.id,
-      },
+    family: {
+      type: 'crosslink',
+      owners: [storeInstance],
     },
   })
   //$todo
@@ -151,9 +138,6 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
   subscription.done = watcherEffect.done
   return subscription
 }
-export function dispatch(action: any) {
-  return action
-}
 
 export function mapStore<A, B>(
   store: Store<A>,
@@ -161,27 +145,16 @@ export function mapStore<A, B>(
   firstState?: B,
 ): Store<B> {
   let lastResult
-  startPhaseTimer(store, 'map')
-  try {
-    const storeState = store.getState()
-    if (storeState !== undefined) {
-      lastResult = fn(storeState, firstState)
-    }
-    stopPhaseTimer('Initial')
-  } catch (err) {
-    stopPhaseTimer('Got initial error')
-    throw err
+  const storeState = store.getState()
+  if (storeState !== undefined) {
+    lastResult = fn(storeState, firstState)
   }
 
-  const innerStore: Store<any> = this({
+  const innerStore: Store<any> = storeFabric({
     config: {name: '' + store.shortName + ' → *'},
     currentState: lastResult,
     parent: store.domainName,
   })
-  innerStore.graphite.meta.bound = {
-    type: 'map',
-    store: store.id,
-  }
   createLink(store, {
     child: [innerStore],
     scope: {
@@ -193,29 +166,21 @@ export function mapStore<A, B>(
     node: [
       step.compute({
         fn(newValue, {state, store, handler, fail}) {
-          startPhaseTimer(store, 'map')
-          let stopPhaseTimerMessage = 'Got error'
           let result
           try {
             result = handler(newValue, readRef(state))
-            stopPhaseTimerMessage = null
           } catch (error) {
-            fail({error, state: readRef(state)})
+            upsertLaunch(fail, {error, state: readRef(state)})
             console.error(error)
           }
-          stopPhaseTimer(stopPhaseTimerMessage)
           return result
         },
       }),
       filterChanged,
     ],
-    meta: {
-      subtype: 'crosslink',
-      crosslink: 'store_map',
-      store_map: {
-        from: store.id,
-        to: innerStore.id,
-      },
+    family: {
+      type: 'crosslink',
+      owners: [store, innerStore],
     },
   })
   return innerStore

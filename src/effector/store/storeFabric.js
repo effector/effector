@@ -1,23 +1,21 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {launch} from '../kernel'
-import {step, createGraph, Kind, createStateRef} from '../stdlib'
+import {launch, upsertLaunch} from '../kernel'
+import {step, createNode, Kind, createStateRef, readRef, bind} from '../stdlib'
 import {createEvent, forward} from '../event'
 
-import type {Store, ThisStore} from './index.h'
+import type {Store} from './index.h'
 import type {StoreConfigPart as ConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
 import {thru} from '../thru'
 import {
   reset,
-  getState,
   off,
   on,
   observable,
   watch,
   subscribe,
-  dispatch,
   mapStore,
 } from './storeMethods'
 
@@ -35,32 +33,14 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updates = createEvent('update ' + currentId)
-  updates.graphite.meta.event.bound = {
-    type: 'updates',
-    updates: {
-      store: plainState.id,
-    },
-  }
   const fail = createEvent('fail ' + currentId)
-  fail.graphite.meta.event.bound = {
-    type: 'fail',
-    fail: {
-      store: plainState.id,
-    },
-  }
-  const storeInstance: ThisStore = {
-    graphite: createGraph({
+  updates.graphite.family.type = 'crosslink'
+  fail.graphite.family.type = 'crosslink'
+  const store: $Shape<Store<State>> = {
+    subscribers: new Map(),
+    compositeName,
+    graphite: createNode({
       scope: {state: plainState, oldState: currentState},
-      meta: {
-        subtype: 'node',
-        node: 'store',
-        store: {
-          id: plainState.id,
-          name: currentId,
-          state: plainState,
-          bound: null,
-        },
-      },
       node: [
         step.filter({
           fn: upd => upd !== undefined,
@@ -76,53 +56,40 @@ export function storeFabric<State>(props: {
           },
         }),
       ],
+      family: {type: 'regular', links: [updates, fail]},
     }),
     kind: Kind.store,
     id: plainState.id,
     shortName: currentId,
     domainName: parent,
-    defaultConfig: config,
-    defaultState,
-    plainState,
-    subscribers: new Map(),
-    compositeName,
-  }
-  const store: $Shape<Store<State>> = {
-    compositeName: storeInstance.compositeName,
-    graphite: storeInstance.graphite,
-    kind: Kind.store,
-    id: plainState.id,
-    shortName: currentId,
-    domainName: parent,
     setState,
-    watch: watch.bind(null, storeInstance),
     updates,
     fail,
-    subscribe: subscribe.bind(null, storeInstance),
-    getState: getState.bind(null, storeInstance),
+    getState: bind(readRef, plainState),
     stateRef: plainState,
   }
   ;(store: any).defaultConfig = config
-  ;(store: any).reset = reset.bind(store, storeInstance)
-  ;(store: any).on = on.bind(store, storeInstance)
-  ;(store: any).off = off.bind(store, storeInstance)
   ;(store: any).defaultState = defaultState
-  ;(store: any).map = mapStore.bind(storeFabric, store)
+  ;(store: any).dispatch = payload => payload
+  ;(store: any).subscribe = bind(subscribe, store)
+  ;(store: any).watch = bind(watch, store)
+  ;(store: any).reset = bind(reset, store)
+  ;(store: any).on = bind(on, store)
+  ;(store: any).off = bind(off, store)
+  ;(store: any).map = bind(mapStore, store)
   ;(store: any).thru = thru.bind(store)
-  ;(store: any).dispatch = dispatch.bind(null)
   //$off
-  store[$$observable] = observable.bind(null, storeInstance)
+  store[$$observable] = bind(observable, store)
   forward({
     from: store,
     to: updates,
   })
 
   function setState(value, reduce?: Function) {
-    const state = getState(storeInstance)
+    const state = store.getState()
     const newResult =
       typeof reduce === 'function' ? reduce(state, value) : value
-
-    launch(store, newResult)
+    upsertLaunch(store, newResult)
   }
 
   return store

@@ -31,13 +31,7 @@ export {
   withProps,
 } from './store'
 
-export {
-  Kind,
-  clearNode,
-  createGraph as createNode,
-  step,
-  traverse,
-} from './stdlib'
+export {Kind, clearNode, createNode, step, traverse} from './stdlib'
 export {launch} from './kernel'
 export type {kind} from './stdlib'
 

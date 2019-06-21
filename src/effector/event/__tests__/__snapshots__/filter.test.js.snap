@@ -2,28 +2,49 @@
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: evenNum event graph 1`] = `
 "Graph {
-  Seq [
-    1. emit {{
-       fullName: number →? *
-    }}
-  ]
+  Seq []
   Next [
     *  Graph {
        Seq [
          1. compute {{}},
          2. run {{}}
        ]
-      [(empty list)]}
+       Next [
+         *  Graph {
+            Seq [
+              1. compute {{}},
+              2. run {{}}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}}
+                 ]
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             current: false
+                           }
+                        }},
+                        3. filter {{}}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq []
+                          [(empty list)]}
+                     ]}
+                ]}
+           ]}
+      ]}
   ]}"
 `;
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: num event graph 1`] = `
 "Graph {
-  Seq [
-    1. emit {{
-       fullName: number
-    }}
-  ]
+  Seq []
   Next [
     *  Graph {
        Seq [
@@ -32,18 +53,43 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
        ]
        Next [
          *  Graph {
-            Seq [
-              1. emit {{
-                 fullName: number →? *
-              }}
-            ]
+            Seq []
             Next [
               *  Graph {
                  Seq [
                    1. compute {{}},
                    2. run {{}}
                  ]
-                [(empty list)]}
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. compute {{}},
+                        2. run {{}}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. compute {{}}
+                           ]
+                           Next [
+                             *  Graph {
+                                Seq [
+                                  1. filter {{}},
+                                  2. update {{
+                                     store: {
+                                       current: false
+                                     }
+                                  }},
+                                  3. filter {{}}
+                                ]
+                                Next [
+                                  *  Graph {
+                                     Seq []
+                                    [(empty list)]}
+                               ]}
+                          ]}
+                     ]}
+                ]}
            ]}
       ]}
   ]}"
