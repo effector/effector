@@ -5,6 +5,7 @@ import invariant from 'invariant'
 
 import {upsertLaunch, launch} from '../kernel'
 import {step, readRef, writeRef} from '../stdlib'
+import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
 import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
@@ -95,19 +96,15 @@ export function watch(
   fn?: Function,
 ) {
   const message = 'watch requires function handler'
-  switch (fn && eventOrFn?.kind) {
-    case 'store':
-    case 'event':
-    case 'effect':
-      invariant(typeof fn === 'function', message)
-      return eventOrFn.watch(payload =>
-        //$todo
-        fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
-      )
-    default:
-      invariant(typeof eventOrFn === 'function', message)
-      return subscribe(storeInstance, eventOrFn)
+  if (!fn || !is.unit(eventOrFn)) {
+    invariant(typeof eventOrFn === 'function', message)
+    return subscribe(storeInstance, eventOrFn)
   }
+  invariant(typeof fn === 'function', message)
+  return eventOrFn.watch(payload =>
+    //$todo
+    fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
+  )
 }
 export function subscribe(storeInstance: Store<any>, listener: Function) {
   invariant(
