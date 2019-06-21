@@ -28,14 +28,15 @@ export function unitObjectName(
     | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any>
     | {
         [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any,
-        ...
+        ...,
       },
+  method: string = 'combine',
 ) {
   let i = 0
   const arr: Array<any> = Object.values(objOrArr)
   const max = unitObjectMaxNames - 1
   const maxLength = arr.length - 1
-  let name = 'combine('
+  let name = method + '('
   for (const unit of arr) {
     const comma = i === max || maxLength === i ? '' : ', '
     if (is.store(unit) || is.event(unit) || is.effect(unit)) {
