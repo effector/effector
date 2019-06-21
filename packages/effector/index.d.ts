@@ -63,6 +63,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Future<Params, Done, Fail>
   readonly done: Event<{params: Params; result: Done}>
   readonly fail: Event<{params: Params; error: Fail}>
+  readonly finally: Event<{params: Params}>
   readonly use: {
     (asyncFunction: (params: Params) => Promise<Done> | Done): Effect<
       Params,
@@ -242,7 +243,7 @@ export const step: {
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 
-export function merge<T>(...events: ReadonlyArray<Event<T>>): Event<T>
+export function merge<T>(events: ReadonlyArray<Event<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>

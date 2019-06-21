@@ -10,7 +10,7 @@ import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
 function OnResolve(result) {
-  const {event, params, handler} = this
+  const {event, anyway, params, handler} = this
   //prettier-ignore
   upsertLaunch(event, {
     handler,
@@ -20,9 +20,10 @@ function OnResolve(result) {
       result,
     },
   })
+  upsertLaunch(anyway, {params})
 }
 function OnReject(error) {
-  const {event, params, handler} = this
+  const {event, anyway, params, handler} = this
   //prettier-ignore
   upsertLaunch(event, {
     handler,
@@ -32,6 +33,7 @@ function OnReject(error) {
       error,
     },
   })
+  upsertLaunch(anyway, {params})
 }
 
 function Def() {
@@ -87,7 +89,7 @@ export function effectFabric<Payload, Done>({
   const eventCreate = instance.create
   const done: Event<{|
     params: Payload,
-    result: Done
+    result: Done,
   |}> = eventFabric({
     name: '' + instance.shortName + ' done',
     parent,
@@ -100,7 +102,7 @@ export function effectFabric<Payload, Done>({
   }
   const fail: Event<{|
     params: Payload,
-    error: *
+    error: *,
   |}> = eventFabric({
     name: '' + instance.shortName + ' fail',
     parent,
@@ -111,6 +113,13 @@ export function effectFabric<Payload, Done>({
     subtype: 'fail',
     effect: {name},
   }
+  const anyway: Event<{|
+    params: Payload,
+  |}> = eventFabric({
+    name: '' + instance.shortName + ' finally',
+    parent,
+    config,
+  })
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
   //eslint-disable-next-line no-unused-vars
@@ -118,6 +127,7 @@ export function effectFabric<Payload, Done>({
 
   instance.done = done
   instance.fail = fail
+  instance.finally = anyway
   ;(instance: any).use = fn => {
     thunk = fn
     return instance
@@ -126,7 +136,12 @@ export function effectFabric<Payload, Done>({
   ;(instance: any).use.getCurrent = getCurrent
   ;(instance: any).kind = Kind.effect
   //assume that fresh event has empty scope
-  ;(instance: any).graphite.scope = {done, fail, getHandler: getCurrent}
+  ;(instance: any).graphite.scope = {
+    done,
+    fail,
+    anyway,
+    getHandler: getCurrent,
+  }
   instance.graphite.seq.push(
     step.compute({
       fn(params, scope) {
@@ -143,12 +158,12 @@ export function effectFabric<Payload, Done>({
       },
     }),
     step.run({
-      fn({params, req}, {getHandler, done, fail}) {
+      fn({params, req}, {getHandler, done, fail, anyway}) {
         runEffect(
           getHandler(),
           params,
-          OnResolve.bind({event: done, params, handler: req.rs}),
-          OnReject.bind({event: fail, params, handler: req.rj}),
+          OnResolve.bind({event: done, anyway, params, handler: req.rs}),
+          OnReject.bind({event: fail, anyway, params, handler: req.rj}),
         )
         return params
       },

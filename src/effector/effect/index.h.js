@@ -12,11 +12,14 @@ export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
   */
   done: Event<{|
     params: Params,
-    result: Done
+    result: Done,
   |}>,
   fail: Event<{|
     params: Params,
-    error: Fail
+    error: Fail,
+  |}>,
+  finally: Event<{|
+    params: Params,
   |}>,
   /*::+*/ id: string,
   use: {|
@@ -56,11 +59,11 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   */
   +done: Event<{|
     params: Params,
-    result: Done
+    result: Done,
   |}>,
   +fail: Event<{|
     params: Params,
-    error: Fail
+    error: Fail,
   |}>,
   /*::+*/ id: string,
   +use: {|
