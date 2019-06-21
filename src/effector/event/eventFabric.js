@@ -1,7 +1,14 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, Kind, stringRefcount, createNode, type Unit} from '../stdlib'
+import {
+  step,
+  Kind,
+  stringRefcount,
+  createNode,
+  type Unit,
+  bind,
+} from '../stdlib'
 import {type Effect, effectFabric} from '../effect'
 import {launch, upsertLaunch} from '../kernel'
 import {noop} from '../blocks'
@@ -31,20 +38,10 @@ export function eventFabric<Payload>({
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createNode({
-    meta: {
-      subtype: 'node',
-      node: 'event',
-      event: {
-        id,
-        name: fullName,
-        bound: null,
-      },
+    node: [],
+    family: {
+      type: 'regular',
     },
-    node: [
-      step.emit({
-        fullName,
-      }),
-    ],
   })
 
   //$off
@@ -61,11 +58,11 @@ export function eventFabric<Payload>({
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
   ;(instance: any).id = id
-  ;(instance: any).watch = watchEvent.bind(null, instance)
-  ;(instance: any).map = mapEvent.bind(null, instance)
-  ;(instance: any).filter = filterEvent.bind(null, instance)
-  ;(instance: any).prepend = prepend.bind(null, instance)
-  ;(instance: any).subscribe = subscribe.bind(null, instance)
+  ;(instance: any).watch = bind(watchEvent, instance)
+  ;(instance: any).map = bind(mapEvent, instance)
+  ;(instance: any).filter = bind(filterEvent, instance)
+  ;(instance: any).prepend = bind(prepend, instance)
+  ;(instance: any).subscribe = bind(subscribe, instance)
   ;(instance: any).thru = thru.bind(instance)
   instance.graphite = graphite
   instance.shortName = name

@@ -2,7 +2,7 @@
 import $$observable from 'symbol-observable'
 
 import {launch, upsertLaunch} from '../kernel'
-import {step, createNode, Kind, createStateRef, readRef} from '../stdlib'
+import {step, createNode, Kind, createStateRef, readRef, bind} from '../stdlib'
 import {createEvent, forward} from '../event'
 
 import type {Store} from './index.h'
@@ -16,7 +16,6 @@ import {
   observable,
   watch,
   subscribe,
-  dispatch,
   mapStore,
 } from './storeMethods'
 
@@ -71,13 +70,13 @@ export function storeFabric<State>(props: {
   }
   ;(store: any).defaultConfig = config
   ;(store: any).defaultState = defaultState
-  ;(store: any).dispatch = dispatch
+  ;(store: any).dispatch = payload => payload
   ;(store: any).subscribe = bind(subscribe, store)
   ;(store: any).watch = bind(watch, store)
   ;(store: any).reset = bind(reset, store)
   ;(store: any).on = bind(on, store)
   ;(store: any).off = bind(off, store)
-  ;(store: any).map = mapStore.bind(storeFabric, store)
+  ;(store: any).map = bind(mapStore, store)
   ;(store: any).thru = thru.bind(store)
   //$off
   store[$$observable] = bind(observable, store)
@@ -95,4 +94,3 @@ export function storeFabric<State>(props: {
 
   return store
 }
-const bind = (fn: Function, target: any) => fn.bind(null, target)

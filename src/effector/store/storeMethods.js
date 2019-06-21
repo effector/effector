@@ -9,6 +9,7 @@ import {filterChanged, noop} from '../blocks'
 import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
+import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
 
@@ -54,7 +55,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
-              launch(fail, {error, state: readRef(state)})
+              upsertLaunch(fail, {error, state: readRef(state)})
               // throw error
             }
           },
@@ -73,15 +74,13 @@ export function observable(storeInstance: Store<any>) {
     subscribe(observer: Subscriber<any>) {
       invariant(
         typeof observer === 'object' && observer !== null,
-        'Expected the observer to be an object.',
+        'Expected the observer to be an object',
       )
-
-      function observeState(state) {
+      return subscribe(storeInstance, state => {
         if (observer.next) {
           observer.next(state)
         }
-      }
-      return subscribe(storeInstance, observeState)
+      })
     },
   }
   //$off
@@ -142,9 +141,6 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
   subscription.done = watcherEffect.done
   return subscription
 }
-export function dispatch(action: any) {
-  return action
-}
 
 export function mapStore<A, B>(
   store: Store<A>,
@@ -157,7 +153,7 @@ export function mapStore<A, B>(
     lastResult = fn(storeState, firstState)
   }
 
-  const innerStore: Store<any> = this({
+  const innerStore: Store<any> = storeFabric({
     config: {name: '' + store.shortName + ' → *'},
     currentState: lastResult,
     parent: store.domainName,
@@ -177,7 +173,7 @@ export function mapStore<A, B>(
           try {
             result = handler(newValue, readRef(state))
           } catch (error) {
-            fail({error, state: readRef(state)})
+            upsertLaunch(fail, {error, state: readRef(state)})
             console.error(error)
           }
           return result
