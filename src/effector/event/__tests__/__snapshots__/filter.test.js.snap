@@ -2,11 +2,7 @@
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: evenNum event graph 1`] = `
 "Graph {
-  Seq [
-    1. emit {{
-       fullName: number →? *
-    }}
-  ]
+  Seq []
   Next [
     *  Graph {
        Seq [
@@ -16,11 +12,8 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
        Next [
          *  Graph {
             Seq [
-              1. emit {{
-                 fullName: number →? * watcher
-              }},
-              2. compute {{}},
-              3. run {{}}
+              1. compute {{}},
+              2. run {{}}
             ]
             Next [
               *  Graph {
@@ -40,11 +33,7 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
                       ]
                       Next [
                         *  Graph {
-                           Seq [
-                             1. emit {{
-                                fullName: update 4
-                             }}
-                           ]
+                           Seq []
                           [(empty list)]}
                      ]}
                 ]}
@@ -55,11 +44,7 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: num event graph 1`] = `
 "Graph {
-  Seq [
-    1. emit {{
-       fullName: number
-    }}
-  ]
+  Seq []
   Next [
     *  Graph {
        Seq [
@@ -68,11 +53,7 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
        ]
        Next [
          *  Graph {
-            Seq [
-              1. emit {{
-                 fullName: number →? *
-              }}
-            ]
+            Seq []
             Next [
               *  Graph {
                  Seq [
@@ -82,11 +63,8 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
                  Next [
                    *  Graph {
                       Seq [
-                        1. emit {{
-                           fullName: number →? * watcher
-                        }},
-                        2. compute {{}},
-                        3. run {{}}
+                        1. compute {{}},
+                        2. run {{}}
                       ]
                       Next [
                         *  Graph {
@@ -106,11 +84,7 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
                                 ]
                                 Next [
                                   *  Graph {
-                                     Seq [
-                                       1. emit {{
-                                          fullName: update 4
-                                       }}
-                                     ]
+                                     Seq []
                                     [(empty list)]}
                                ]}
                           ]}
