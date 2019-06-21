@@ -58,6 +58,7 @@ export const step: {|
       priority,
     }),
   compute: cmd.bind(null, 'compute'),
+  //TODO remove emit
   emit: cmd.bind(null, 'emit'),
   filter: cmd.bind(null, 'filter'),
   run: cmd.bind(null, 'run'),
