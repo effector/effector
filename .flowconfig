@@ -11,29 +11,35 @@ untyped-type-import=error
 ./node_modules/@babel/types/lib/index.js.flow
 
 [version]
->=0.96.0
+>=0.101.0
 
 [include]
 
 [options]
 all=false
+emoji=true
 server.max_workers=1
 include_warnings=false
 max_header_tokens=5
+experimental.strict_call_arity=true
+lazy_mode=ide
+# experimental.well_formed_exports=true
+# experimental.types_first=true
 esproposal.class_instance_fields=enable
 esproposal.class_static_fields=enable
 esproposal.optional_chaining=enable
 esproposal.nullish_coalescing=enable
+esproposal.decorators=ignore
+esproposal.export_star_as=enable
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 suppress_comment=\\(.\\|\n\\)*\\$off
 suppress_comment=\\(.\\|\n\\)*\\$todo
 suppress_type=$FlowIssue
 suppress_type=$off
 suppress_type=$todo
-emoji=true
-esproposal.decorators=ignore
 module.use_strict=true
-esproposal.export_star_as=enable
+
+module.name_mapper='^codemirror\(.+\)$' -> '<PROJECT_ROOT>/flow/codemirror\1'
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
@@ -61,6 +67,8 @@ unnecessary-invariant
 .*/.cache/.*
 .*/dist/.*
 .*/node_modules/.*
+!.*/node_modules/@zerobias/codebox
+<PROJECT_ROOT>/website/try/evaluator/flow/*
 <PROJECT_ROOT>/src/graphite/tarjan/*
 <PROJECT_ROOT>/src/redux/*
 <PROJECT_ROOT>/\.vscode/*
