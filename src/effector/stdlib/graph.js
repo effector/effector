@@ -1,27 +1,72 @@
 //@flow
 
-import type {Graph, Graphite, Cmd} from './index.h'
+import type {Graph, Graphite, Cmd, Family} from './index.h'
 
-export function createGraph({
+export function createNode({
   node,
   child = [],
   from = [],
   scope = {},
   meta = {},
+  family = {},
 }: {
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
   +from?: Array<Graphite>,
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
+  family: {
+    type: 'regular' | 'crosslink',
+    links?: Graphite[],
+    owners?: Graphite[],
+  },
   ...
 }): Graph {
-  return {
+  const links: Graph[] = family.links ? family.links.map(getGraph) : []
+  const owners: Graph[] = family.owners ? family.owners.map(getGraph) : []
+  const result: Graph = {
     from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
     meta,
     scope,
+    family: {
+      type: family.type,
+      links,
+      owners,
+    },
+  }
+  for (let i = 0; i < links.length; i++) {
+    links[i].family.owners.push(result)
+  }
+  for (let i = 0; i < owners.length; i++) {
+    owners[i].family.links.push(result)
+  }
+  return result
+}
+// const upwardClearing = (graph: Graph, deep: boolean, )
+const removeItem = (list, item) => {
+  const pos = list.indexOf(item)
+  if (pos !== -1) {
+    list.splice(pos, 1)
+  }
+}
+const clearFam = (node: Graph, deep: boolean) => {
+  const links = node.family.links
+  const owners = node.family.owners
+  while (links.length) {
+    const child = links.pop()
+    removeItem(child.family.owners, node)
+    if (child.family.type === 'crosslink') {
+      clearFam(child, deep)
+    }
+  }
+  while (owners.length) {
+    const owner = owners.pop()
+    removeItem(owner.family.links, node)
+    if (owner.family.type === 'crosslink') {
+      clearFam(owner, deep)
+    }
   }
 }
 export const clearNode = (
@@ -34,6 +79,8 @@ export const clearNode = (
   } = {},
 ) => {
   const graph = getGraph(graphite)
+  // clearFam(graph, !!deep)
+
   if (deep) {
     graph.next.forEach(node => clearNode(node, {deep}))
   }
