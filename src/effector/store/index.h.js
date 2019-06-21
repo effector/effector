@@ -6,20 +6,8 @@ import type {Effect} from '../effect'
 import type {CompositeName} from '../compositeName'
 import type {StoreConfigPart} from '../config'
 
-export type ThisStore = {|
-  compositeName?: CompositeName,
-  defaultState: any,
-  domainName?: CompositeName,
-  +graphite: Graph,
-  +id: string,
-  kind: kind,
-  plainState: StateRef,
-  shortName: ID,
-  subscribers: Map<Event<any>, Subscription>,
-  defaultConfig: StoreConfigPart,
-|}
-
 export type Store<State> = /*::interface extends Unit*/ {
+  subscribers: Map<Event<any>, Subscription>,
   /*::+*/ id: string,
   /*::+*/ stateRef: StateRef,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
@@ -81,7 +69,7 @@ export type Store<State> = /*::interface extends Unit*/ {
   +updates: Event<State>,
   +fail: Event<{|
     error: mixed,
-    state: State
+    state: State,
   |}>,
   compositeName?: CompositeName,
 }

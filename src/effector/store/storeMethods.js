@@ -9,26 +9,25 @@ import {filterChanged, noop} from '../blocks'
 import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
-import type {Store, ThisStore} from './index.h'
+import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
 
-export function reset(storeInstance: ThisStore, ...events: Array<Event<any>>) {
+export function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   for (const event of events)
-    on.call(this, storeInstance, event, () => storeInstance.defaultState)
-  return this
-}
-export function getState(storeInstance: ThisStore) {
-  return readRef(storeInstance.plainState)
-}
-export function off(storeInstance: ThisStore, event: Event<any>) {
-  const currentSubscription = storeInstance.subscribers.get(event)
-  if (currentSubscription === undefined) return
-  currentSubscription()
-  storeInstance.subscribers.delete(event)
-  return this
+    on(storeInstance, event, () => storeInstance.defaultState)
+  return storeInstance
 }
 
-export function on(storeInstance: ThisStore, event: any, handler: Function) {
+export function off(storeInstance: Store<any>, event: Event<any>) {
+  const currentSubscription = storeInstance.subscribers.get(event)
+  if (currentSubscription !== undefined) {
+    currentSubscription()
+    storeInstance.subscribers.delete(event)
+  }
+  return storeInstance
+}
+
+export function on(storeInstance: Store<any>, event: any, handler: Function) {
   const from: Event<any> = event
   const oldLink = storeInstance.subscribers.get(from)
   if (oldLink) oldLink()
@@ -37,9 +36,9 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
     createLink(from, {
       scope: {
         handler,
-        state: storeInstance.plainState,
+        state: storeInstance.stateRef,
         trigger: from,
-        fail: this.fail,
+        fail: storeInstance.fail,
       },
       child: [storeInstance],
       //prettier-ignore
@@ -67,9 +66,9 @@ export function on(storeInstance: ThisStore, event: any, handler: Function) {
       },
     }),
   )
-  return this
+  return storeInstance
 }
-export function observable(storeInstance: ThisStore) {
+export function observable(storeInstance: Store<any>) {
   const result = {
     subscribe(observer: Subscriber<any>) {
       invariant(
@@ -92,7 +91,7 @@ export function observable(storeInstance: ThisStore) {
   return result
 }
 export function watch(
-  storeInstance: ThisStore,
+  storeInstance: Store<any>,
   eventOrFn: Event<*> | Function,
   fn?: Function,
 ) {
@@ -104,14 +103,14 @@ export function watch(
       invariant(typeof fn === 'function', message)
       return eventOrFn.watch(payload =>
         //$todo
-        fn(getState(storeInstance), payload, getDisplayName(eventOrFn)),
+        fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
       )
     default:
       invariant(typeof eventOrFn === 'function', message)
       return subscribe(storeInstance, eventOrFn)
   }
 }
-export function subscribe(storeInstance: ThisStore, listener: Function) {
+export function subscribe(storeInstance: Store<any>, listener: Function) {
   invariant(
     typeof listener === 'function',
     'Expected the listener to be a function',
@@ -124,7 +123,7 @@ export function subscribe(storeInstance: ThisStore, listener: Function) {
       handler: listener,
     },
   })
-  watcherEffect(getState(storeInstance))
+  watcherEffect(storeInstance.getState())
   const subscription = createLink(storeInstance, {
     //prettier-ignore
     node: [
