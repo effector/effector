@@ -243,7 +243,7 @@ export const step: {
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
 
-export function merge<T>(events: ReadonlyArray<Event<T>>): Event<T>
+export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>

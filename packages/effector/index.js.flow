@@ -272,7 +272,7 @@ declare export function forward<T>(opts: {|
   +to: Unit<T>,
 |}): Subscription
 
-declare export function merge<T>(events: $ReadOnlyArray<Event<T>>): Event<T>
+declare export function merge<T>(events: $ReadOnlyArray<Unit<T>>): Event<T>
 
 declare export function clearNode(
   unit: Unit<any> | Step,
