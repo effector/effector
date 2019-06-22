@@ -28,6 +28,10 @@ const Section = styled('section')`
   padding: 5px;
 `
 
+const EmptySection = styled('section')`
+  padding: 15px;
+`
+
 const Item = styled('li')`
   cursor: ${props => (Boolean(props.loc) ? 'pointer' : 'inherit')};
 `
@@ -63,8 +67,17 @@ const OutlineSection = ({list, title}) => {
 }
 
 export default function({style, component, domain, event, effect, store}) {
+  const isEmpty =
+    event.length === 0 &&
+    effect.length === 0 &&
+    store.length === 0 &&
+    domain.length === 0 &&
+    component.length === 0
   return (
     <Outline style={style}>
+      {isEmpty && (
+        <EmptySection>Symbols weren&apos;t found in this file</EmptySection>
+      )}
       <OutlineSection list={event} title="Events" />
       <OutlineSection list={effect} title="Effects" />
       <OutlineSection list={store} title="Storages" />
