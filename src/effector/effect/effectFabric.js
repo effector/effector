@@ -156,6 +156,7 @@ export function effectFabric<Payload, Done>({
   ;(instance: any).create = (params: Payload, fullName, args) => {
     const req = new Def()
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
+    req.req.catch(err => {})
     return req.req
   }
 
