@@ -8,54 +8,36 @@ import {createComponent} from 'effector-react'
 import {createApi, createStore, createStoreObject, Store} from 'effector'
 
 const tab: Store<'console'> = createStore('console')
-// tab.on(stats, (tab, {event, store, effect, domain}) => {
-//   if (event.length > 0) return 'events'
-//   if (store.length > 0) return 'storages'
-//   if (effect.length > 0) return 'effects'
-//   if (domain.length > 0) return 'domains'
-//   return 'events'
-// })
 const api = createApi(tab, {
-  // showEvents: () => 'events',
-  // showStorages: () => 'storages',
-  // showEffects: () => 'effects',
-  // showDomains: () => 'domains',
   showConsole: () => 'console',
 })
+
+const Tab = styled.li`
+  border-right: 1px solid #ddd;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 7px 15px;
+  margin: 0;
+  background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
+  border-bottom: ${({isActive}) => (isActive ? '1px solid #fff' : 'none')};
+  margin-bottom: ${({isActive}) => (isActive ? '-1px' : '0')};
+`
 
 const TabContent = styled('div')`
   overflow: auto;
 `
 
-const TabView = createComponent(tab, ({}, tab) => {
-  //TODO: unify this
-  const className = `tab-content ${cx(
-    // tab === 'events' && 'show-events',
-    // tab === 'storages' && 'show-storages',
-    // tab === 'effects' && 'show-effects',
-    // tab === 'domains' && 'show-domains',
-    tab === 'console' && 'show-console',
-  )}`
-  const mapper = item => {
-    const name = item?.compositeName?.fullName || item?.shortName || item.id
-    return <li key={item.kind + item.id + name}>{name}</li>
-  }
-  return <TabContent>{tab === 'console' && <LogsView />}</TabContent>
-})
+const TabView = createComponent(tab, ({}, tab) => (
+  <TabContent>{tab === 'console' && <LogsView />}</TabContent>
+))
 
 const ToolbarView = createComponent(tab, ({}, tab) => {
-  const className = `toolbar ${cx(
-    // tab === 'events' && 'show-events',
-    // tab === 'storages' && 'show-storages',
-    // tab === 'effects' && 'show-effects',
-    // tab === 'domains' && 'show-domains',
-    tab === 'console' && 'show-console',
-  )}`
   return (
-    <ul className={className}>
-      <li onClick={api.showConsole} className="tab console-tab">
+    <ul className="toolbar">
+      <Tab onClick={api.showConsole} isActive={tab === 'console'}>
         Console
-      </li>
+      </Tab>
     </ul>
   )
 })

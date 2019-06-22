@@ -92,7 +92,6 @@ const VersionLinkView = createComponent(version, ({}, version) => (
 const TabHeader = styled.li`
   border-right: 1px solid #ddd;
   cursor: pointer;
-  float: left;
   font-size: 14px;
   font-weight: bold;
   padding: 7px 15px;
@@ -102,13 +101,7 @@ const TabHeader = styled.li`
 
 const TabsView = createComponent(tab, (_, tab) => (
   <>
-    <ul
-      className={cx(
-        tab === 'graphite' && 'show-graphite',
-        tab === 'dom' && 'show-dom',
-        'toolbar',
-        'header-tabs',
-      )}>
+    <ul className={cx('toolbar', 'header-tabs')}>
       <Media query="(max-width: 699px)">
         <>
           <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
