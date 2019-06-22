@@ -2,15 +2,14 @@
 //@flow
 /* eslint-disable */
 
-export type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'fx' | 'effect'
+export type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
 export const getPriority = (t: PriorityTag) => {
   switch(t) {
     case 'child': return 0
     case 'pure': return 1
     case 'barrier': return 2
     case 'sampler': return 3
-    case 'fx': return 4
-    case 'effect': return 5
+    case 'effect': return 4
     default: return -1
   }
 }
