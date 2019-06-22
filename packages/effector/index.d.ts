@@ -46,6 +46,7 @@ export interface Event<Payload> extends Unit<Payload> {
   map<T>(fn: (payload: Payload) => T): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   filter<T>(fn: (payload: Payload) => T | undefined): Event<T>
+  filterMap<T>(fn: (payload: Payload) => T | undefined): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U

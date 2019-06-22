@@ -15,6 +15,7 @@ export type Event<E> = /*::interface extends Unit*/ {
   map<T>(fn: (_: E) => T): Event<T>,
   filter(config: {|fn(_: E): boolean|}): Event<E>,
   filter<T>(fn: (_: E) => T | void): Event<T>,
+  filterMap<T>(fn: (_: E) => T | void): Event<T>,
   prepend<Before>(fn: (_: Before) => E): Event<Before>,
   subscribe(subscriber: Subscriber<E>): Subscription,
   thru<U>(fn: (event: Event<E>) => U): U,

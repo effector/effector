@@ -1,0 +1,96 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`event.filterMap event.filterMap should drop undefined values: evenNum event graph 1`] = `
+"Graph {
+  Seq []
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. run {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq [
+              1. compute {{}},
+              2. run {{}}
+            ]
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}}
+                 ]
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. filter {{}},
+                        2. update {{
+                           store: {
+                             current: false
+                           }
+                        }},
+                        3. filter {{}}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq []
+                          [(empty list)]}
+                     ]}
+                ]}
+           ]}
+      ]}
+  ]}"
+`;
+
+exports[`event.filterMap event.filterMap should drop undefined values: num event graph 1`] = `
+"Graph {
+  Seq []
+  Next [
+    *  Graph {
+       Seq [
+         1. compute {{}},
+         2. filter {{}}
+       ]
+       Next [
+         *  Graph {
+            Seq []
+            Next [
+              *  Graph {
+                 Seq [
+                   1. compute {{}},
+                   2. run {{}}
+                 ]
+                 Next [
+                   *  Graph {
+                      Seq [
+                        1. compute {{}},
+                        2. run {{}}
+                      ]
+                      Next [
+                        *  Graph {
+                           Seq [
+                             1. compute {{}}
+                           ]
+                           Next [
+                             *  Graph {
+                                Seq [
+                                  1. filter {{}},
+                                  2. update {{
+                                     store: {
+                                       current: false
+                                     }
+                                  }},
+                                  3. filter {{}}
+                                ]
+                                Next [
+                                  *  Graph {
+                                     Seq []
+                                    [(empty list)]}
+                               ]}
+                          ]}
+                     ]}
+                ]}
+           ]}
+      ]}
+  ]}"
+`;

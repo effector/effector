@@ -43,6 +43,7 @@ declare export class Event<Payload> implements Unit<Payload> {
     fn(payload: Payload): boolean,
   |}): Event<Payload>;
   filter<T>(fn: (payload: Payload) => T | void): Event<T>;
+  filterMap<T>(fn: (payload: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
   subscribe(observer: Observer<Payload>): Subscription;
   thru<U>(fn: (event: Event<Payload>) => U): U;

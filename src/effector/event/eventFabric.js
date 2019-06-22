@@ -1,5 +1,6 @@
 //@flow
 import $$observable from 'symbol-observable'
+import warning from 'warning'
 
 import {
   step,
@@ -61,6 +62,7 @@ export function eventFabric<Payload>({
   ;(instance: any).watch = bind(watchEvent, instance)
   ;(instance: any).map = bind(mapEvent, instance)
   ;(instance: any).filter = bind(filterEvent, instance)
+  ;(instance: any).filterMap = bind(filterMapEvent, instance)
   ;(instance: any).prepend = bind(prepend, instance)
   ;(instance: any).subscribe = bind(subscribe, instance)
   ;(instance: any).thru = thru.bind(instance)
@@ -148,6 +150,10 @@ function filterEvent(
       }),
     ]
   } else {
+    warning(
+      false,
+      'filter: This form is deprecated, use `filterMap` method instead.',
+    )
     scope = {fn}
     node = [
       step.compute({
@@ -162,6 +168,33 @@ function filterEvent(
     scope,
     child: [mapped],
     node,
+    family: {
+      type: 'crosslink',
+      links: [mapped],
+    },
+  })
+  return mapped
+}
+
+function filterMapEvent(
+  event: Event<any> | Effect<any, any, any>,
+  fn: any => any | void,
+): any {
+  const mapped = eventFabric({
+    name: '' + event.shortName + ' →? *',
+    parent: event.domainName,
+  })
+  createLink(event, {
+    scope: {fn},
+    child: [mapped],
+    node: [
+      step.compute({
+        fn: (payload, {fn}) => fn(payload),
+      }),
+      step.filter({
+        fn: result => result !== undefined,
+      }),
+    ],
     family: {
       type: 'crosslink',
       links: [mapped],
