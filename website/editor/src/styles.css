@@ -75,6 +75,9 @@ body {
   display: grid;
   grid-template-rows: 1fr auto;
 }
+.graphite {
+  border-bottom: 1px solid #ddd;
+}
 
 .editor.results {
 }
@@ -138,21 +141,21 @@ body {
   }
   .header-tabs {
     grid-column: 1 / span 1;
-    grid-row: 10 / span 1;
+    grid-row: 2 / span 1;
   }
   .sources {
     grid-column: 1 / span 1;
-    grid-row: 3 / span 3;
+    grid-row: 3 / span 7;
   }
   .dom {
     border-top: 1px solid #ddd;
     grid-column: 1 / span 1;
-    grid-row: 6 / span 4;
+    grid-row: 3 / span 7;
   }
   .editor.results {
     border-top: 1px solid #ddd;
     grid-column: 1 / span 1;
-    grid-row: 6 / span 4;
+    grid-row: 3 / span 7;
   }
   .errors {
     grid-column: 1 / span 1;

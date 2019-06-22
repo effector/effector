@@ -6,7 +6,7 @@ import {codeSetCursor} from '../domain'
 
 const Outline = styled('div')`
   grid-column: 1 / span 1;
-  grid-row: 12 / span 2;
+  grid-row: 3 / span 7;
   background-color: #fff;
   font-size: 0.8rem;
   overflow: auto;
@@ -62,9 +62,9 @@ const OutlineSection = ({list, title}) => {
   )
 }
 
-export default function({component, domain, event, effect, store}) {
+export default function({style, component, domain, event, effect, store}) {
   return (
-    <Outline>
+    <Outline style={style}>
       <OutlineSection list={event} title="Events" />
       <OutlineSection list={effect} title="Effects" />
       <OutlineSection list={store} title="Storages" />

@@ -11,7 +11,7 @@ export const GraphiteView = createComponent<{style?: any}, string>(
   graphiteCode,
   ({style}, graphite) => (
     <Panel
-      className="results"
+      className="results graphite"
       style={style}
       readOnly={true}
       lint={null}

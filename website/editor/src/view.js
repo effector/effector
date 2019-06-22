@@ -3,8 +3,10 @@
 import React from 'react'
 import {cx} from 'linaria'
 import {styled} from 'linaria/react'
+import {combine} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
+import Media from 'react-media'
 
 //$off
 import 'codemirror/lib/codemirror.css'
@@ -19,6 +21,7 @@ import SecondanaryTabs from './components/SecondanaryTabs'
 import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {GraphiteView} from './graphite/view'
+import {isDesktopChanges, tab, tabApi} from './tabs/domain'
 import {
   selectVersion,
   sourceCode,
@@ -26,17 +29,26 @@ import {
   codeError,
   stats,
   version,
-  tab,
-  tabApi,
   codeMarkLine,
   codeCursorActivity,
   codeSetCursor,
   packageVersions,
 } from './domain'
 
-const OutlineView = createComponent(stats, ({}, stats) => (
-  <Outline {...stats} />
-))
+const OutlineView = createComponent(
+  {
+    displayOutline: combine(tab, isDesktopChanges, (tab, isDesktop) =>
+      isDesktop ? true : tab === 'outline',
+    ),
+    stats,
+  },
+  ({}, {displayOutline, stats}) => (
+    <Outline
+      style={{visibility: displayOutline ? 'visible' : 'hidden'}}
+      {...stats}
+    />
+  ),
+)
 
 const ErrorsView = createComponent(
   codeError,
@@ -46,20 +58,32 @@ const ErrorsView = createComponent(
 )
 
 const changeSourcesDebounced = debounce(changeSources, 500)
-const CodeView = createComponent(sourceCode, ({}, sources) => (
-  <div className="sources">
-    <Panel
-      markLine={codeMarkLine}
-      setCursor={codeSetCursor}
-      onCursorActivity={codeCursorActivity}
-      value={sources}
-      mode="text/jsx"
-      onChange={changeSourcesDebounced}
-      lineWrapping
-    />
-    <TypeHintView />
-  </div>
-))
+const CodeView = createComponent(
+  {
+    displayEditor: combine(tab, isDesktopChanges, (tab, isDesktop) =>
+      isDesktop ? true : tab === 'editor',
+    ),
+    sourceCode,
+  },
+  ({}, {displayEditor, sourceCode}) => {
+    return (
+      <div
+        className="sources"
+        style={{visibility: displayEditor ? 'visible' : 'hidden'}}>
+        <Panel
+          markLine={codeMarkLine}
+          setCursor={codeSetCursor}
+          onCursorActivity={codeCursorActivity}
+          value={sourceCode}
+          mode="text/jsx"
+          onChange={changeSourcesDebounced}
+          lineWrapping
+        />
+        <TypeHintView />
+      </div>
+    )
+  },
+)
 
 const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
@@ -85,6 +109,16 @@ const TabsView = createComponent(tab, (_, tab) => (
         'toolbar',
         'header-tabs',
       )}>
+      <Media query="(max-width: 699px)">
+        <>
+          <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
+            Editor
+          </TabHeader>
+          <TabHeader onClick={tabApi.showOutline} isActive={tab === 'outline'}>
+            Outline
+          </TabHeader>
+        </>
+      </Media>
       <TabHeader onClick={tabApi.showGraphite} isActive={tab === 'graphite'}>
         Graphite
       </TabHeader>
@@ -96,7 +130,9 @@ const TabsView = createComponent(tab, (_, tab) => (
       </TabHeader>
     </ul>
     {tab === 'graphite' && <GraphiteView />}
-    <div style={{display: tab === 'dom' ? 'block' : 'none'}} className="dom">
+    <div
+      style={{visibility: tab === 'dom' ? 'visible' : 'hidden'}}
+      className="dom">
       <iframe id="dom" />
     </div>
     {tab === 'share' && <Share />}
