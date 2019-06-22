@@ -57,8 +57,9 @@ export function retrieveVersion() {
   return defaultVersions[0]
 }
 
+export const realmClearNode = createEvent('realm clear node')
 export const realmEvent = createEvent('realm event created')
-export const realmStore = createEvent('realm store')
+export const realmStore = createEvent('realm store created')
 export const realmEffect = createEvent('realm effect created')
 export const realmDomain = createEvent('realm domain created')
 export const realmComponent = createEvent('realm component created')
@@ -116,4 +117,5 @@ export const stats = createStore({
   store: [],
   effect: [],
   domain: [],
+  component: [],
 })

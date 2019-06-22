@@ -1,12 +1,13 @@
 //@flow
 
-import {forward} from 'effector'
+import {forward, is} from 'effector'
 import fetch from 'cross-fetch'
 
 import {
   changeSources,
   codeCursorActivity,
   codeMarkLine,
+  realmClearNode,
   realmEvent,
   realmStore,
   realmEffect,
@@ -14,6 +15,7 @@ import {
   realmInvoke,
   realmInterval,
   realmTimeout,
+  realmComponent,
   evalEffect,
   sourceCode,
   codeError,
@@ -25,7 +27,7 @@ import {
   selectVersion,
   retrieveCode,
   retrieveVersion,
-  version
+  version,
 } from './domain'
 import {typeAtPos} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
@@ -102,6 +104,10 @@ stats
     ...rest,
     domain: [...domain, e],
   }))
+  .on(realmComponent, ({component, ...rest}, e) => ({
+    ...rest,
+    component: [...component, e],
+  }))
   .on(realmStatus, (stats, {active}) => {
     if (!active) return stats
     return {
@@ -109,7 +115,29 @@ stats
       store: [],
       effect: [],
       domain: [],
+      component: [],
     }
+  })
+  .on(realmClearNode, (stats, unit) => {
+    if (is.store(unit)) {
+      return {
+        ...stats,
+        store: [...stats.store.filter(store => store !== unit)],
+      }
+    }
+    if (is.event(unit)) {
+      return {
+        ...stats,
+        event: [...stats.event.filter(event => event !== unit)],
+      }
+    }
+    if (is.effect(unit)) {
+      return {
+        ...stats,
+        effect: [...stats.effect.filter(effect => effect !== unit)],
+      }
+    }
+    return stats
   })
   .reset(changeSources)
   .reset(selectVersion)
@@ -146,7 +174,7 @@ switcher({
   },
 })
 
-realmInvoke.watch(({method, instance}) => {
+realmInvoke.watch(({method, params, instance}) => {
   if (method === 'restore') {
     for (const key in instance) {
       realmStore(instance[key])
@@ -156,6 +184,12 @@ realmInvoke.watch(({method, instance}) => {
     for (const key in instance) {
       realmEvent(instance[key])
     }
+  }
+  if (method === 'createComponent') {
+    realmComponent(instance)
+  }
+  if (method === 'clearNode') {
+    realmClearNode(params[0])
   }
 })
 
@@ -209,7 +243,7 @@ codeError
   })
 
 let textMarker
-codeError.watch(async({stackFrames}) => {
+codeError.watch(async ({stackFrames}) => {
   if (textMarker) textMarker.clear()
   for (const frame of stackFrames) {
     if (frame._originalFileName !== 'repl.js') continue

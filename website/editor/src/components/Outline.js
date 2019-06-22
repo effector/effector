@@ -34,12 +34,17 @@ const Item = styled('li')`
 
 const mapper = item => {
   const loc = item?.defaultConfig?.loc
-  const name = item?.compositeName?.fullName || item?.shortName || item.id
+  const name =
+    item?.compositeName?.fullName ||
+    item?.shortName ||
+    item.id ||
+    item.displayName
+  const key = item.kind && item.id ? item.kind + item.id + name : name
   const onClick = () => {
     if (loc) codeSetCursor(loc)
   }
   return (
-    <Item loc={loc} onClick={onClick} key={item.kind + item.id + name}>
+    <Item loc={loc} onClick={onClick} key={key}>
       {name}
     </Item>
   )
@@ -57,13 +62,14 @@ const OutlineSection = ({list, title}) => {
   )
 }
 
-export default function({domain, event, effect, store}) {
+export default function({component, domain, event, effect, store}) {
   return (
     <Outline>
       <OutlineSection list={event} title="Events" />
       <OutlineSection list={effect} title="Effects" />
       <OutlineSection list={store} title="Storages" />
       <OutlineSection list={domain} title="Domains" />
+      <OutlineSection list={component} title="Components" />
     </Outline>
   )
 }

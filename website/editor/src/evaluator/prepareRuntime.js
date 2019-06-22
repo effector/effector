@@ -69,6 +69,7 @@ function assignEffectorRealm(target, EvalRealm, effector) {
     combine: effector.combine,
     sample: effector.sample,
     merge: effector.merge,
+    clearNode: effector.clearNode,
     //createEvent: EvalRealm.event,
     //createStore: EvalRealm.store,
     //createEffect: EvalRealm.effect,
@@ -91,6 +92,6 @@ function apiMap(target, obj) {
 
 function apiFabric(key, ...args) {
   const instance = this(...args)
-  realmInvoke({method: key, instance})
+  realmInvoke({method: key, params: args, instance})
   return instance
 }
