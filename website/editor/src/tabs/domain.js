@@ -11,6 +11,7 @@ export const tab = createStore<
 
 tab.on(isDesktopChanges, (state, isDesktop) => {
   if (state === 'editor' && isDesktop) return 'dom'
+  if (state === 'outline' && isDesktop) return 'dom'
   return state
 })
 
