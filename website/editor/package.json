@@ -37,5 +37,10 @@
     "react-media": "^1.9.2",
     "settle-promise": "^1.0.0"
   },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions"
+  ],
   "license": "MIT"
 }
