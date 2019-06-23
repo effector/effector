@@ -1,96 +1,104 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: evenNum event graph 1`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}},
-         2. run {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. compute {{}},
-              2. run {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq [
-                   1. compute {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: false
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: x => x,
+        run: watcher
+      ],
+      next: [
+        Node {
+          seq: [
+            compute: Function,
+            run: watcher
+          ],
+          next: [
+            Node {
+              seq: [
+                compute: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
 
 exports[`event.filter with function (T) => S | void event.filter should drop undefined values: num event graph 1`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}},
-         2. filter {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq []
-            Next [
-              *  Graph {
-                 Seq [
-                   1. compute {{}},
-                   2. run {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. compute {{}},
-                        2. run {{}}
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: Function,
+        filter: Function
+      ],
+      next: [
+        Node {
+          seq: [],
+          next: [
+            Node {
+              seq: [
+                compute: x => x,
+                run: watcher
+              ],
+              next: [
+                Node {
+                  seq: [
+                    compute: Function,
+                    run: watcher
+                  ],
+                  next: [
+                    Node {
+                      seq: [
+                        compute: Function
+                      ],
+                      next: [
+                        Node {
+                          seq: [
+                            filter: upd => upd !== undefined,
+                            update: {
+                              store: {
+                                state: false
+                              }
+                            },
+                            filter: upd => upd !== state
+                          ],
+                          next: [
+                            Node {seq: [], next: []}
+                          ]
+                        }
                       ]
-                      Next [
-                        *  Graph {
-                           Seq [
-                             1. compute {{}}
-                           ]
-                           Next [
-                             *  Graph {
-                                Seq [
-                                  1. filter {{}},
-                                  2. update {{
-                                     store: {
-                                       current: false
-                                     }
-                                  }},
-                                  3. filter {{}}
-                                ]
-                                Next [
-                                  *  Graph {
-                                     Seq []
-                                    [(empty list)]}
-                               ]}
-                          ]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;

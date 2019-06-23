@@ -1,529 +1,539 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`graphite: show bar 1`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. filter {{}},
-              2. update {{
-                 store: {
-                   current: foo | 1 | 11
-                 }
-              }},
-              3. filter {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq []
-                [(empty list)]},
-              *  Graph {
-                 Seq [
-                   1. compute {{}},
-                   2. filter {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: 12
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]}
-                     ]}
-                ]}
-           ]}
-      ]},
-    *  Graph {
-       Seq [
-         1. compute {{}},
-         2. run {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. compute {{}},
-              2. run {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq [
-                   1. compute {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: false
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: Function
+      ],
+      next: [
+        Node {
+          seq: [
+            filter: upd => upd !== undefined,
+            update: {
+              store: {
+                state: foo | 1 | 11
+              }
+            },
+            filter: upd => upd !== state
+          ],
+          next: [
+            Node {seq: [], next: []},
+            Node {
+              seq: [
+                compute: Function,
+                filter: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: 12
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    Node {
+      seq: [
+        compute: x => x,
+        run: watcher
+      ],
+      next: [
+        Node {
+          seq: [
+            compute: Function,
+            run: watcher
+          ],
+          next: [
+            Node {
+              seq: [
+                compute: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
 
 exports[`graphite: show bar 2`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. filter {{}},
-              2. update {{
-                 store: {
-                   current: foo | 1 | 11
-                 }
-              }},
-              3. filter {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq []
-                [(empty list)]},
-              *  Graph {
-                 Seq [
-                   1. compute {{}},
-                   2. filter {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: 12
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: Function
+      ],
+      next: [
+        Node {
+          seq: [
+            filter: upd => upd !== undefined,
+            update: {
+              store: {
+                state: foo | 1 | 11
+              }
+            },
+            filter: upd => upd !== state
+          ],
+          next: [
+            Node {seq: [], next: []},
+            Node {
+              seq: [
+                compute: Function,
+                filter: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: 12
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
 
 exports[`graphite: show foo 1`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq []
-            Next [
-              *  Graph {
-                 Seq [
-                   1. compute {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: foo | 1 | 11 | 101
-                           }
-                        }},
-                        3. filter {{}}
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: Function
+      ],
+      next: [
+        Node {
+          seq: [],
+          next: [
+            Node {
+              seq: [
+                compute: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: foo | 1 | 11 | 101
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []},
+                    Node {
+                      seq: [
+                        compute: Function,
+                        filter: Function
+                      ],
+                      next: [
+                        Node {
+                          seq: [
+                            filter: upd => upd !== undefined,
+                            update: {
+                              store: {
+                                state: 18
+                              }
+                            },
+                            filter: upd => upd !== state
+                          ],
+                          next: [
+                            Node {seq: [], next: []}
+                          ]
+                        }
                       ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]},
-                        *  Graph {
-                           Seq [
-                             1. compute {{}},
-                             2. filter {{}}
-                           ]
-                           Next [
-                             *  Graph {
-                                Seq [
-                                  1. filter {{}},
-                                  2. update {{
-                                     store: {
-                                       current: 18
-                                     }
-                                  }},
-                                  3. filter {{}}
-                                ]
-                                Next [
-                                  *  Graph {
-                                     Seq []
-                                    [(empty list)]}
-                               ]}
-                          ]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
 
 exports[`graphite: show store1 1`] = `
-"Graph {
-  Seq [
-    1. filter {{}},
-    2. update {{
-       store: {
-         current: foo | 1 | 11 | 101
-       }
-    }},
-    3. filter {{}}
+"Node {
+  seq: [
+    filter: upd => upd !== undefined,
+    update: {
+      store: {
+        state: foo | 1 | 11 | 101
+      }
+    },
+    filter: upd => upd !== state
+  ],
+  next: [
+    Node {seq: [], next: []},
+    Node {
+      seq: [
+        compute: Function,
+        filter: Function
+      ],
+      next: [
+        Node {
+          seq: [
+            filter: upd => upd !== undefined,
+            update: {
+              store: {
+                state: 18
+              }
+            },
+            filter: upd => upd !== state
+          ],
+          next: [
+            Node {seq: [], next: []}
+          ]
+        }
+      ]
+    }
   ]
-  Next [
-    *  Graph {
-       Seq []
-      [(empty list)]},
-    *  Graph {
-       Seq [
-         1. compute {{}},
-         2. filter {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. filter {{}},
-              2. update {{
-                 store: {
-                   current: 18
-                 }
-              }},
-              3. filter {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq []
-                [(empty list)]}
-           ]}
-      ]}
-  ]}"
+}"
 `;
 
 exports[`graphite: show store2 1`] = `
-"Graph {
-  Seq [
-    1. filter {{}},
-    2. update {{
-       store: {
-         current: 18
-       }
-    }},
-    3. filter {{}}
+"Node {
+  seq: [
+    filter: upd => upd !== undefined,
+    update: {
+      store: {
+        state: 18
+      }
+    },
+    filter: upd => upd !== state
+  ],
+  next: [
+    Node {seq: [], next: []}
   ]
-  Next [
-    *  Graph {
-       Seq []
-      [(empty list)]}
-  ]}"
+}"
 `;
 
 exports[`showcase: event foo 1`] = `
-"Graph {
-  Seq []
-  Next [
-    *  Graph {
-       Seq [
-         1. compute {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. filter {{}},
-              2. update {{
-                 store: {
-                   current: 3
-                 }
-              }},
-              3. filter {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq []
-                [(empty list)]},
-              *  Graph {
-                 Seq [
-                   1. filter {{}},
-                   2. tap {{}},
-                   3. tap {{}},
-                   4. barrier {{
-                      barrierID: 1,
-                      priority: barrier
-                   }},
-                   5. compute {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: {
-                               a: 3,
-                               b: 6
-                             }
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]},
-                        *  Graph {
-                           Seq [
-                             1. compute {{}},
-                             2. filter {{}}
-                           ]
-                           Next [
-                             *  Graph {
-                                Seq [
-                                  1. filter {{}},
-                                  2. update {{
-                                     store: {
-                                       current: 3
-                                     }
-                                  }},
-                                  3. filter {{}}
-                                ]
-                                Next [
-                                  *  Graph {
-                                     Seq []
-                                    [(empty list)]},
-                                  *  Graph {
-                                     Seq [
-                                       1. compute {{}},
-                                       2. run {{}}
-                                     ]
-                                     Next [
-                                       *  Graph {
-                                          Seq [
-                                            1. compute {{}},
-                                            2. run {{}}
+"Node {
+  seq: [],
+  next: [
+    Node {
+      seq: [
+        compute: Function
+      ],
+      next: [
+        Node {
+          seq: [
+            filter: upd => upd !== undefined,
+            update: {
+              store: {
+                state: 3
+              }
+            },
+            filter: upd => upd !== state
+          ],
+          next: [
+            Node {seq: [], next: []},
+            Node {
+              seq: [
+                filter: Function,
+                tap: {},
+                tap: {},
+                barrier: {
+                  barrierID: 1,
+                  priority: barrier
+                },
+                compute: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: {
+                          a: 3,
+                          b: 6
+                        }
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []},
+                    Node {
+                      seq: [
+                        compute: Function,
+                        filter: Function
+                      ],
+                      next: [
+                        Node {
+                          seq: [
+                            filter: upd => upd !== undefined,
+                            update: {
+                              store: {
+                                state: 3
+                              }
+                            },
+                            filter: upd => upd !== state
+                          ],
+                          next: [
+                            Node {seq: [], next: []},
+                            Node {
+                              seq: [
+                                compute: x => x,
+                                run: watcher
+                              ],
+                              next: [
+                                Node {
+                                  seq: [
+                                    compute: Function,
+                                    run: watcher
+                                  ],
+                                  next: [
+                                    Node {
+                                      seq: [
+                                        compute: Function
+                                      ],
+                                      next: [
+                                        Node {
+                                          seq: [
+                                            filter: upd => upd !== undefined,
+                                            update: {
+                                              store: {
+                                                state: false
+                                              }
+                                            },
+                                            filter: upd => upd !== state
+                                          ],
+                                          next: [
+                                            Node {seq: [], next: []}
                                           ]
-                                          Next [
-                                            *  Graph {
-                                               Seq [
-                                                 1. compute {{}}
-                                               ]
-                                               Next [
-                                                 *  Graph {
-                                                    Seq [
-                                                      1. filter {{}},
-                                                      2. update {{
-                                                         store: {
-                                                           current: false
-                                                         }
-                                                      }},
-                                                      3. filter {{}}
-                                                    ]
-                                                    Next [
-                                                      *  Graph {
-                                                         Seq []
-                                                        [(empty list)]}
-                                                   ]}
-                                              ]}
-                                         ]}
-                                    ]}
-                               ]}
-                          ]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
 
 exports[`showcase: mapped 1`] = `
-"Graph {
-  Seq [
-    1. filter {{}},
-    2. update {{
-       store: {
-         current: 3
-       }
-    }},
-    3. filter {{}}
+"Node {
+  seq: [
+    filter: upd => upd !== undefined,
+    update: {
+      store: {
+        state: 3
+      }
+    },
+    filter: upd => upd !== state
+  ],
+  next: [
+    Node {seq: [], next: []},
+    Node {
+      seq: [
+        compute: x => x,
+        run: watcher
+      ],
+      next: [
+        Node {
+          seq: [
+            compute: Function,
+            run: watcher
+          ],
+          next: [
+            Node {
+              seq: [
+                compute: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []}
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
-  Next [
-    *  Graph {
-       Seq []
-      [(empty list)]},
-    *  Graph {
-       Seq [
-         1. compute {{}},
-         2. run {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. compute {{}},
-              2. run {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq [
-                   1. compute {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: false
-                           }
-                        }},
-                        3. filter {{}}
-                      ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+}"
 `;
 
 exports[`showcase: store a 1`] = `
-"Graph {
-  Seq [
-    1. filter {{}},
-    2. update {{
-       store: {
-         current: 3
-       }
-    }},
-    3. filter {{}}
-  ]
-  Next [
-    *  Graph {
-       Seq []
-      [(empty list)]},
-    *  Graph {
-       Seq [
-         1. filter {{}},
-         2. tap {{}},
-         3. tap {{}},
-         4. barrier {{
-            barrierID: 1,
-            priority: barrier
-         }},
-         5. compute {{}}
-       ]
-       Next [
-         *  Graph {
-            Seq [
-              1. filter {{}},
-              2. update {{
-                 store: {
-                   current: {
-                     a: 3,
-                     b: 6
-                   }
-                 }
-              }},
-              3. filter {{}}
-            ]
-            Next [
-              *  Graph {
-                 Seq []
-                [(empty list)]},
-              *  Graph {
-                 Seq [
-                   1. compute {{}},
-                   2. filter {{}}
-                 ]
-                 Next [
-                   *  Graph {
-                      Seq [
-                        1. filter {{}},
-                        2. update {{
-                           store: {
-                             current: 3
-                           }
-                        }},
-                        3. filter {{}}
+"Node {
+  seq: [
+    filter: upd => upd !== undefined,
+    update: {
+      store: {
+        state: 3
+      }
+    },
+    filter: upd => upd !== state
+  ],
+  next: [
+    Node {seq: [], next: []},
+    Node {
+      seq: [
+        filter: Function,
+        tap: {},
+        tap: {},
+        barrier: {
+          barrierID: 1,
+          priority: barrier
+        },
+        compute: Function
+      ],
+      next: [
+        Node {
+          seq: [
+            filter: upd => upd !== undefined,
+            update: {
+              store: {
+                state: {
+                  a: 3,
+                  b: 6
+                }
+              }
+            },
+            filter: upd => upd !== state
+          ],
+          next: [
+            Node {seq: [], next: []},
+            Node {
+              seq: [
+                compute: Function,
+                filter: Function
+              ],
+              next: [
+                Node {
+                  seq: [
+                    filter: upd => upd !== undefined,
+                    update: {
+                      store: {
+                        state: 3
+                      }
+                    },
+                    filter: upd => upd !== state
+                  ],
+                  next: [
+                    Node {seq: [], next: []},
+                    Node {
+                      seq: [
+                        compute: x => x,
+                        run: watcher
+                      ],
+                      next: [
+                        Node {
+                          seq: [
+                            compute: Function,
+                            run: watcher
+                          ],
+                          next: [
+                            Node {
+                              seq: [
+                                compute: Function
+                              ],
+                              next: [
+                                Node {
+                                  seq: [
+                                    filter: upd => upd !== undefined,
+                                    update: {
+                                      store: {
+                                        state: false
+                                      }
+                                    },
+                                    filter: upd => upd !== state
+                                  ],
+                                  next: [
+                                    Node {seq: [], next: []}
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
                       ]
-                      Next [
-                        *  Graph {
-                           Seq []
-                          [(empty list)]},
-                        *  Graph {
-                           Seq [
-                             1. compute {{}},
-                             2. run {{}}
-                           ]
-                           Next [
-                             *  Graph {
-                                Seq [
-                                  1. compute {{}},
-                                  2. run {{}}
-                                ]
-                                Next [
-                                  *  Graph {
-                                     Seq [
-                                       1. compute {{}}
-                                     ]
-                                     Next [
-                                       *  Graph {
-                                          Seq [
-                                            1. filter {{}},
-                                            2. update {{
-                                               store: {
-                                                 current: false
-                                               }
-                                            }},
-                                            3. filter {{}}
-                                          ]
-                                          Next [
-                                            *  Graph {
-                                               Seq []
-                                              [(empty list)]}
-                                         ]}
-                                    ]}
-                               ]}
-                          ]}
-                     ]}
-                ]}
-           ]}
-      ]}
-  ]}"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}"
 `;
