@@ -7,8 +7,8 @@ import {
   ObjectLabel,
   ObjectName,
   ObjectRootLabel,
-} from 'react-inspector'
-import ObjectPreview from 'react-inspector/lib/object-inspector/ObjectPreview'
+} from './fork'
+import ObjectPreview from './fork/object-inspector/ObjectPreview'
 
 import type {Context} from '../index.h'
 import type {Methods} from '../methods'
@@ -56,9 +56,9 @@ class CustomInspector extends React.PureComponent<Props, any> {
     const constructor = data && data.constructor ? data.constructor.name : null
 
     if (
-      data &&
-      data[Symbol.toStringTag] &&
-      data[Symbol.toStringTag] === 'Module'
+      data
+      && data[Symbol.toStringTag]
+      && data[Symbol.toStringTag] === 'Module'
     )
       return <span>Module</span>
 

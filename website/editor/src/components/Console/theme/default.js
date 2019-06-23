@@ -1,16 +1,10 @@
 //@flow
 
-import {chromeDark, chromeLight} from 'react-inspector'
-import type {Props, Theme, Styles} from '../index.h'
+import {chromeLight} from '../react-inspector/fork'
+import type {Theme} from '../index.h'
 
-console.log(chromeLight)
-
-const styles = (props: Props): Styles => ({
-  ...((props.variant || 'light') === 'light' ? chromeLight : chromeDark),
-  /**
-   * General
-   */
-  PADDING: '3px 22px 2px 0',
+const styles = {
+  ...chromeLight,
 
   BASE_BACKGROUND_COLOR: 'transparent',
 
@@ -20,8 +14,6 @@ const styles = (props: Props): Styles => ({
   LOG_COLOR: 'rgba(0,0,0,0.9)',
   LOG_BACKGROUND: 'transparent',
   LOG_BORDER: '#F1F1F1',
-  LOG_ICON_WIDTH: 10,
-  LOG_ICON_HEIGHT: 18,
   LOG_ICON: 'none',
 
   /**
@@ -57,9 +49,9 @@ const styles = (props: Props): Styles => ({
   //  */
   // ARROW_FONT_SIZE: 10,
   // OBJECT_VALUE_STRING_COLOR: 'rgb(233,63,59)',
-})
+}
 
 export const theme: Theme = {
   variant: 'light',
-  styles: styles({variant: 'light', logs: []}),
+  styles,
 }

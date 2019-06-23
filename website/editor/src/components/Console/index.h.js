@@ -22,10 +22,6 @@ export type Context = {|
 |}
 
 export type Styles = {
-  // Log icons
-  LOG_ICON_WIDTH?: string | number,
-  LOG_ICON_HEIGHT?: string | number,
-
   // Log colors
   // LOG_ICON => CSS background-image property
   LOG_COLOR?: string,
@@ -62,9 +58,6 @@ export type Styles = {
   BASE_FONT_FAMILY?: any,
   BASE_FONT_SIZE?: any,
   BASE_LINE_HEIGHT?: any,
-
-  // Spacing
-  PADDING?: string,
 
   // react-inspector
   BASE_BACKGROUND_COLOR?: any,

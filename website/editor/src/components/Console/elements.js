@@ -30,34 +30,34 @@ export const Root = styled.div`
  * console-message
  */
 export const Message = styled.div`
-    position: relative;
-    display: flex;
-    margin-top: -1px;
-    margin-bottom: ${props => +/^warn|error$/.test(props.method)};
-    padding-left: 10px;
+  position: relative;
+  display: flex;
+  margin-top: -1px;
+  margin-bottom: ${props => +/^warn|error$/.test(props.method)};
+  padding-left: 10px;
+  box-sizing: border-box;
+  color: ${props => Themed('color', props.method, styles)};
+  background-color: ${props => Themed('background', props.method, styles)};
+  border-top: 1px solid ${props => Themed('border', props.method, styles)};
+  border-bottom: 1px solid ${props => Themed('border', props.method, styles)};
+  & * {
+    vertical-align: top;
     box-sizing: border-box;
-    color: ${props => Themed('color', props.method, styles)};
-    background-color: ${props => Themed('background', props.method, styles)};
-    border-top: 1px solid ${props => Themed('border', props.method, styles)};
-    border-bottom: 1px solid ${props => Themed('border', props.method, styles)};
-    & * {
-      vertical-align: top;
-      box-sizing: border-box;
-      font-family: ${styles.BASE_FONT_FAMILY};
-      white-space: pre-wrap;
-      font-size: ${styles.BASE_FONT_SIZE};
-    }
-    & a {
-      color: rgb(177, 177, 177);
-    }
+    font-family: Menlo, monospace;
+    white-space: pre-wrap;
+    font-size: 11px;
+  }
+  & a {
+    color: rgb(177, 177, 177);
+  }
 `
 
 /**
  * message-icon
  */
 export const Icon = styled.div`
-  width: ${styles.LOG_ICON_WIDTH};
-  height: ${styles.LOG_ICON_HEIGHT};
+  width: 10px;
+  height: 18px;
   background-image: ${props => Themed('icon', props.method, styles)};
   background-repeat: no-repeat;
   background-position: 50% 50%;
@@ -69,7 +69,7 @@ export const Icon = styled.div`
 export const Content = styled.div`
   clear: right;
   position: relative;
-  padding: ${styles.PADDING};
+  padding: 3px 22px 2px 0;
   margin-left: 15px;
   min-height: 18px;
   flex: auto;
