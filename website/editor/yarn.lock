@@ -5185,11 +5185,6 @@ react-dom@^16.8.6:
     prop-types "^15.6.2"
     scheduler "^0.13.6"
 
-"react-inspector@file:./forks/react-inspector":
-  version "2.3.1"
-  dependencies:
-    prop-types "^15.7.2"
-
 react-is@^16.8.1:
   version "16.8.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.2.tgz#09891d324cad1cb0c1f2d91f70a71a4bee34df0f"
