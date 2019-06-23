@@ -1,0 +1,10 @@
+{
+  "name": "react-inspector",
+  "version": "2.3.1",
+  "license": "MIT",
+  "author": "Xiaoyi Chen <cxychina@gmail.com> (http://github.com/xyc)",
+  "main": "src/index.js",
+  "dependencies": {
+    "prop-types": "^15.7.2"
+  }
+}
