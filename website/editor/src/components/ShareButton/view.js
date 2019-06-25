@@ -26,15 +26,17 @@ export const Arrow = styled.span`
 `
 
 export const TryButton = styled.div`
+  position: relative;
   font-size: 14px;
   display: flex;
   flex-direction: row;
   padding: 1em 2em;
   align-items: center;
+
   &:hover {
     cursor: pointer;
   }
-  position: relative;
+
   & input {
     background: #f6f4f4;
     transition: all 250ms;
@@ -43,18 +45,22 @@ export const TryButton = styled.div`
     border: none;
     outline: none;
   }
+
   &:hover input {
     width: 15vw;
     margin-right: 1em;
   }
+
   & ${Tooltip} {
     display: none;
     right: 1em;
     white-space: nowrap;
   }
+
   &:hover ${Tooltip} {
     display: block;
   }
+
   & ${Tooltip} ${Arrow} {
     right: 2.5em;
   }
