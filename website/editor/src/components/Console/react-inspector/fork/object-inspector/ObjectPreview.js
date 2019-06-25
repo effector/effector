@@ -1,30 +1,30 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import ObjectValue from '../object/ObjectValue';
-import ObjectName from '../object/ObjectName';
+import ObjectValue from '../object/ObjectValue'
+import ObjectName from '../object/ObjectName'
 
 /* NOTE: Chrome console.log is italic */
 const styles = {
   preview: {
     fontStyle: 'italic',
   },
-};
+}
 
 /* intersperse arr with separator */
 function intersperse(arr, sep) {
   if (arr.length === 0) {
-    return [];
+    return []
   }
 
-  return arr.slice(1).reduce((xs, x) => xs.concat([sep, x]), [arr[0]]);
+  return arr.slice(1).reduce((xs, x) => xs.concat([sep, x]), [arr[0]])
 }
 
 /**
  * A preview of the object
  */
-const ObjectPreview = ({ data, maxProperties }) => {
-  const object = data;
+const ObjectPreview = ({data, maxProperties}) => {
+  const object = data
 
   if (
     typeof object !== 'object' ||
@@ -32,7 +32,7 @@ const ObjectPreview = ({ data, maxProperties }) => {
     object instanceof Date ||
     object instanceof RegExp
   ) {
-    return <ObjectValue object={object} />;
+    return <ObjectValue object={object} />
   }
 
   if (Array.isArray(object)) {
@@ -40,23 +40,25 @@ const ObjectPreview = ({ data, maxProperties }) => {
       <span style={styles.preview}>
         [
         {intersperse(
-          object.map((element, index) => <ObjectValue key={index} object={element} />),
+          object.map((element, index) => (
+            <ObjectValue key={index} object={element} />
+          )),
           ', ',
         )}
         ]
       </span>
-    );
+    )
   } else {
-    let propertyNodes = [];
+    let propertyNodes = []
     for (let propertyName in object) {
-      const propertyValue = object[propertyName];
-      if (object.hasOwnProperty(propertyName)) {
-        let ellipsis;
+      const propertyValue = object[propertyName]
+      if (Object.prototype.hasOwnProperty.call(object, propertyName)) {
+        let ellipsis
         if (
           propertyNodes.length === maxProperties - 1 &&
           Object.keys(object).length > maxProperties
         ) {
-          ellipsis = <span key={'ellipsis'}>…</span>;
+          ellipsis = <span key={'ellipsis'}>…</span>
         }
         propertyNodes.push(
           <span key={propertyName}>
@@ -65,29 +67,29 @@ const ObjectPreview = ({ data, maxProperties }) => {
             <ObjectValue object={propertyValue} />
             {ellipsis}
           </span>,
-        );
-        if (ellipsis) break;
+        )
+        if (ellipsis) break
       }
     }
 
     return (
       <span style={styles.preview}>
-        {`${object.constructor.name} {`}
+        {`${object[Symbol.toStringTag] || ''} {`}
         {intersperse(propertyNodes, ', ')}
         {'}'}
       </span>
-    );
+    )
   }
-};
+}
 
 ObjectPreview.propTypes = {
   /**
    * max number of properties shown in the property view
    */
   maxProperties: PropTypes.number,
-};
+}
 ObjectPreview.defaultProps = {
   maxProperties: 5,
-};
+}
 
-export default ObjectPreview;
+export default ObjectPreview

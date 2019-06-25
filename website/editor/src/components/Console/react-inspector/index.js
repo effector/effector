@@ -55,13 +55,6 @@ class CustomInspector extends React.PureComponent<Props, any> {
     const {styles} = theme
     const constructor = data && data.constructor ? data.constructor.name : null
 
-    if (
-      data
-      && data[Symbol.toStringTag]
-      && data[Symbol.toStringTag] === 'Module'
-    )
-      return <span>Module</span>
-
     if (constructor === 'Function')
       return (
         <span style={{fontStyle: 'italic'}}>
