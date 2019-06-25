@@ -2,8 +2,9 @@
 
 import * as React from 'react'
 
-import {createComponent} from 'effector-react'
-import {typeHint} from './domain'
+import {useStore} from 'effector-react'
+import {typeErrors, typeHint} from './domain'
+import type {FlowMessage, FlowInfoTree} from './index.h'
 import {styled} from 'linaria/react'
 
 const lineHeight = 1.5
@@ -23,6 +24,125 @@ const TypeHint = styled.pre`
   margin: 0;
 `
 
-export const TypeHintView = createComponent<{||}, _>(typeHint, ({}, type) => {
+const TypeErrors = styled.pre`
+  display: flex;
+  margin: 0;
+  position: static;
+  font-size: 80%;
+  font-family: Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
+    monospace;
+  border-left: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  padding: 7px 10px;
+  grid-column: 3 / span 1;
+  grid-row: 3 / span 2;
+
+  @media (max-width: 699px) {
+    grid-column: 1 / span 1;
+    grid-row: 3 / span 7;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li + li {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+  }
+`
+
+const Scroll = styled.div`
+  overflow: auto;
+`
+
+export const TypeHintView = () => {
+  const type = useStore(typeHint)
   return <TypeHint>{type}</TypeHint>
-})
+}
+
+const ErrorMessage = ({type, loc, context, descr}: FlowMessage) => {
+  if (loc && loc.source != null && context != null) {
+    const basename = loc.source.replace(/.*\//, '')
+    console.log(basename)
+    const filename = basename !== 'repl.js' ? `${loc.source}:` : ''
+    const prefix = `${filename}${loc.start.line}: `
+
+    const before = context.slice(0, loc.start.column - 1)
+    const highlight =
+      loc.start.line === loc.end.line
+        ? context.slice(loc.start.column - 1, loc.end.column)
+        : context.slice(loc.start.column - 1)
+    const after =
+      loc.start.line === loc.end.line ? context.slice(loc.end.column) : ''
+
+    const offset = loc.start.column + prefix.length - 1
+    const arrow = `${(prefix + before).replace(/[^ ]/g, ' ')}^ `
+
+    return (
+      <>
+        <div>
+          {prefix + before}
+          <strong className="msgHighlight">{highlight}</strong>
+          {after}
+        </div>
+        {arrow}
+        <span className="msgType">{descr}</span>
+      </>
+    )
+  } else if (type === 'Comment') {
+    return `. ${descr}\n`
+  } else {
+    return `${descr}\n`
+  }
+}
+
+const Extra = ({message, children}: FlowInfoTree) => {
+  return (
+    <ul>
+      {message && (
+        <li>
+          {message.map(message => (
+            <ErrorMessage {...message} />
+          ))}
+        </li>
+      )}
+      {children && (
+        <li>
+          {children.map(extra => (
+            <Extra {...extra} />
+          ))}
+        </li>
+      )}
+    </ul>
+  )
+}
+
+export const TypeErrorsView = () => {
+  const errors = useStore(typeErrors)
+  return (
+    <TypeErrors>
+      <Scroll>
+        <ul>
+          {errors.map(error => {
+            // TODO: hide libdefs until errors are fixed
+            if (error.message[0].loc?.type === 'LibFile') return null
+            return (
+              <li>
+                {error.message.map(message => (
+                  <ErrorMessage {...message} />
+                ))}
+                {error.extra.map(extra => (
+                  <Extra {...extra} />
+                ))}
+              </li>
+            )
+          })}
+        </ul>
+      </Scroll>
+    </TypeErrors>
+  )
+}

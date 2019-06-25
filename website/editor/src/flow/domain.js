@@ -1,8 +1,11 @@
 //@flow
 
 import {createEffect, createStore} from 'effector'
+import type {FlowError} from './index.h'
 
 export const typeHint = createStore<string>('')
+
+export const typeErrors = createStore<Array<FlowError>>([])
 
 export const typeAtPos = createEffect<
   {|
@@ -23,7 +26,7 @@ export const typeAtPos = createEffect<
 export const checkContent = createEffect<
   string,
   {|
-    code: Array<any> | 'fail',
+    code: Array<FlowError> | 'fail',
     success: boolean,
     processTime: number,
     service: 'flow',

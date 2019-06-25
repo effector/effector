@@ -6,6 +6,8 @@ import {Toggle} from '../components/Toggle'
 import {flowToggle, flowToggleChange} from './domain'
 import {useStore} from 'effector-react'
 
+export {flowToggle}
+
 export const Settings = () => {
   return (
     <SettingsGroup>

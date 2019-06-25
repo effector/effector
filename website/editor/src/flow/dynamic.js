@@ -3,7 +3,7 @@
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
 import {sourceCode} from '../domain'
 import {flowToggle} from '../settings/domain'
-import {checkContent, typeAtPos, typeHint} from './domain'
+import {checkContent, typeAtPos, typeHint, typeErrors} from './domain'
 
 if (process.env.NODE_ENV === 'development') {
   checkContent.fail.watch(data => console.error('checkContent', data))
@@ -30,6 +30,13 @@ flowToggle.watch(enabled => {
     })
   }
 })
+
+typeErrors
+  .on(checkContent.done, (state, {result}) => {
+    if (result.code === 'fail') return state
+    return result.code
+  })
+  .reset(checkContent.fail)
 
 typeHint
   .on(typeAtPos.done, (_, {result}) => result.code.c)
