@@ -5,23 +5,22 @@ import {styled} from 'linaria/react'
 import {createStore, createEvent, type Store, type Event} from 'effector'
 import {createComponent, type StoreView} from 'effector-react'
 
-export function createToggle(
-  defaultState: boolean = false,
-): $ReadOnly<{
-  Toggle: StoreView<boolean, {name?: string}>,
-  state: Store<boolean>,
-  toggle: Event<void>,
-  onChange: Event<*>,
-}> {
-  const toggle = createEvent('toggle toggle')
-  const onChange = createEvent('on checkbox change')
-  const state = createStore(defaultState)
-    .on(toggle, state => !state)
-    .on(onChange, (state, e) => e.target.checked)
-  const Toggle = createComponent(state, ({name}: {name?: string}, state) => (
-    <Input type="checkbox" checked={state} onChange={onChange} name={name} />
-  ))
-  return {Toggle, toggle, state, onChange}
+export function Toggle({
+  name,
+  checked,
+  onChange,
+}: {
+  name: string,
+  checked: boolean,
+  onChange: (e: SyntheticEvent<HTMLInputElement>) => mixed,
+}) {
+  return (
+    <Input type="checkbox" checked={checked} onChange={onChange} name={name} />
+  )
+}
+Toggle.defaultProps = {
+  checked: false,
+  onChange() {},
 }
 
 const Input = styled.input`
@@ -32,11 +31,12 @@ const Input = styled.input`
   position: relative;
   height: 2em;
   width: calc(100% - 0.6em);
-  max-width: 4em;
+  min-width: 4em;
   border-radius: 2em;
   -webkit-appearance: none;
   outline: none;
   margin: 0 0.6em 0 0;
+  cursor: pointer;
   &:checked::before {
     background-color: var(--color-main);
   }
