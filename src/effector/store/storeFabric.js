@@ -62,7 +62,6 @@ export function storeFabric<State>(props: {
     id: plainState.id,
     shortName: currentId,
     domainName: parent,
-    setState,
     updates,
     fail,
     getState: bind(readRef, plainState),
@@ -78,19 +77,13 @@ export function storeFabric<State>(props: {
   ;(store: any).off = bind(off, store)
   ;(store: any).map = bind(mapStore, store)
   ;(store: any).thru = bind(thru, store)
+  ;(store: any).setState = bind(upsertLaunch, store)
   //$off
   store[$$observable] = bind(observable, store)
   forward({
     from: store,
     to: updates,
   })
-
-  function setState(value, reduce?: Function) {
-    const state = store.getState()
-    const newResult =
-      typeof reduce === 'function' ? reduce(state, value) : value
-    upsertLaunch(store, newResult)
-  }
 
   return store
 }
