@@ -16,7 +16,7 @@ export function createComponent<Props: {}, State>(
   let storeFn: (props: Props) => Store<any>
   let store: Store<any>
   if (is.store(shape)) {
-    store = shape
+    store = (shape: any)
   } else if (typeof shape === 'function') {
     storeFn = shape
   } else {
