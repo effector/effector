@@ -13,7 +13,7 @@ import type {Subscriber} from '../index.h'
 
 export function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   for (const event of events)
-    on(storeInstance, event, () => storeInstance.defaultState)
+    storeInstance.on(event, () => storeInstance.defaultState)
   return storeInstance
 }
 
@@ -27,8 +27,7 @@ export function off(storeInstance: Store<any>, event: Event<any>) {
 }
 
 export function on(storeInstance: Store<any>, event: any, handler: Function) {
-  const oldLink = storeInstance.subscribers.get(event)
-  if (oldLink) oldLink()
+  storeInstance.off(event)
   storeInstance.subscribers.set(
     event,
     createLink(event, storeInstance, {
@@ -37,15 +36,11 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
         state: storeInstance.stateRef,
         fail: storeInstance.fail,
       },
-      //prettier-ignore
       node: [
         step.compute({
           fn(newValue, {handler, state, fail}) {
             try {
-              const result = handler(
-                readRef(state),
-                newValue,
-              )
+              const result = handler(readRef(state), newValue)
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
@@ -54,7 +49,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
             }
           },
         }),
-      ]
+      ],
     }),
   )
   return storeInstance
