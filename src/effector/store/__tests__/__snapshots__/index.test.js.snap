@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`createStore 1`] = `"createStore: First argument can't be undefined, use null instead."`;
+exports[`createStore 1`] = `"current state can't be undefined, use null instead"`;
