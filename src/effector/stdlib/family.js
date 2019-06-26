@@ -1,7 +1,7 @@
 //@flow
 
 import type {Graphite} from './index.h'
-import {getGraph} from './graph'
+import {getGraph, getOwners, getLinks} from './getter'
 
 export const createCrosslink = (...owners: Graphite[]) => ({
   type: ('crosslink': 'crosslink'),
@@ -12,6 +12,6 @@ export const addLinkToOwner = (ownerUnit: Graphite, linkUnit: Graphite) => {
   const owner = getGraph(ownerUnit)
   const link = getGraph(linkUnit)
   link.family.type = 'crosslink'
-  link.family.owners.push(owner)
-  owner.family.links.push(link)
+  getOwners(link).push(owner)
+  getLinks(owner).push(link)
 }

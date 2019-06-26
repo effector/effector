@@ -2,6 +2,8 @@
 
 import type {Graph, Graphite, Cmd, Family} from './index.h'
 
+import {getGraph, getOwners, getLinks} from './getter'
+
 export function createNode({
   node,
   child = [],
@@ -22,49 +24,47 @@ export function createNode({
   },
   ...
 }): Graph {
-  const family: Family = {
-    type: familyRaw.type || 'regular',
-    links: (familyRaw.links || []).map(getGraph),
-    owners: (familyRaw.owners || []).map(getGraph),
-  }
+  const links = (familyRaw.links || []).map(getGraph)
+  const owners = (familyRaw.owners || []).map(getGraph)
   const result: Graph = {
     from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
     meta,
     scope,
-    family,
+    family: {
+      type: familyRaw.type || 'regular',
+      links,
+      owners,
+    },
   }
-  for (let i = 0; i < family.links.length; i++) {
-    family.links[i].family.owners.push(result)
+  for (let i = 0; i < links.length; i++) {
+    getOwners(links[i]).push(result)
   }
-  for (let i = 0; i < family.owners.length; i++) {
-    family.owners[i].family.links.push(result)
+  for (let i = 0; i < owners.length; i++) {
+    getLinks(owners[i]).push(result)
   }
   return result
 }
-// const upwardClearing = (graph: Graph, deep: boolean, )
+
 const removeItem = (list, item) => {
   const pos = list.indexOf(item)
   if (pos !== -1) {
     list.splice(pos, 1)
   }
 }
-const clearFam = (node: Graph, deep: boolean) => {
-  const links = node.family.links
-  const owners = node.family.owners
-  while (links.length) {
-    const child = links.pop()
-    removeItem(child.family.owners, node)
-    if (child.family.type === 'crosslink') {
-      clearFam(child, deep)
+const clearFam = (targetNode: Graph, deep: boolean) => {
+  let currentNode
+  while ((currentNode = getLinks(targetNode).pop())) {
+    removeItem(getOwners(currentNode), targetNode)
+    if (deep || currentNode.family.type === 'crosslink') {
+      clearFam(currentNode, deep)
     }
   }
-  while (owners.length) {
-    const owner = owners.pop()
-    removeItem(owner.family.links, node)
-    if (owner.family.type === 'crosslink') {
-      clearFam(owner, deep)
+  while ((currentNode = getOwners(targetNode).pop())) {
+    removeItem(getLinks(currentNode), targetNode)
+    if (currentNode.family.type === 'crosslink') {
+      clearFam(currentNode, deep)
     }
   }
 }
@@ -83,20 +83,12 @@ export const clearNode = (
   if (deep) {
     graph.next.forEach(node => clearNode(node, {deep}))
   }
-  graph.from.forEach(node => {
-    const index = node.next.indexOf(graph)
-    if (index === -1) return
-    node.next.splice(index, 1)
-  })
   graph.from.length = 0
   graph.next.length = 0
   graph.seq.length = 0
   //$off
   graph.scope = null
 }
-
-export const getGraph = (graph: Graphite): Graph =>
-  (graph: any).graphite || graph
 
 export const traverse = (
   graphite: Graphite,
