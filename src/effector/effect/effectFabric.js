@@ -174,6 +174,7 @@ export function effectFabric<Payload, Done>({
 
   addLinkToOwner(instance, done)
   addLinkToOwner(instance, fail)
+  addLinkToOwner(instance, anyway)
   addLinkToOwner(instance, pending)
   return instance
 }
