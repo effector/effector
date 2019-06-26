@@ -23,21 +23,6 @@ const meta = {
 }
 
 const aliases = {
-  'effector/effect': 'effector/effect',
-  'effector/validate': 'effector/validate',
-  'effector/event': 'effector/event',
-  'effector/store': 'effector/store',
-  'effector/domain': 'effector/domain',
-  'effector/kernel': 'effector/kernel',
-  'effector/stdlib': 'effector/stdlib',
-  'effector/blocks': 'effector/blocks',
-  'effector/perf': 'effector/perf',
-  'effector/watcher': 'effector/watcher',
-  'effector/naming': 'effector/naming',
-  invariant: 'effector/validate/invariant',
-  warning: 'effector/validate/warning',
-  'effector/flags': ({isBuild}) =>
-    isBuild ? 'effector/flags.prod' : 'effector/flags.dev',
   'effector/fixtures': 'fixtures',
   '@effector/forms': 'forms',
   'effector-react': 'react',
@@ -109,9 +94,9 @@ const babelConfig = {
     {
       test(filename) {
         return (
-          filename &&
-          filename.includes('__tests__') &&
-          !filename.includes('redux')
+          filename
+          && filename.includes('__tests__')
+          && !filename.includes('redux')
         )
       },
       plugins: ['./src/babel/babel-plugin'],
