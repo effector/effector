@@ -11,16 +11,15 @@ import {
   readRef,
   writeRef,
   nextBarrierID,
-  createCrosslink,
 } from './stdlib'
 
 const storeBy = (source, clock, fn, greedy, target) => {
-  createLink(clock, {
+  //TODO define source, target and clock as owners explicitly
+  createLink(clock, target, {
     scope: {
       state: source.stateRef,
       fn,
     },
-    child: [target],
     node: [
       //$off
       !greedy && noop,
@@ -36,7 +35,6 @@ const storeBy = (source, clock, fn, greedy, target) => {
           : (upd, {state}) => readRef(state),
       }),
     ].filter(Boolean),
-    family: createCrosslink([source, clock, target], [target]),
   })
   //TODO we need addLinkToOwner there, aren't we?
   return target
@@ -84,22 +82,23 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
   const sourceState = createStateRef()
   const clockState = createStateRef()
 
-  createLink(source, {
+  //TODO define source, target and clock as owners explicitly
+  createLink(source, target, {
     scope: {hasSource},
     node: [
       step.update({store: sourceState}),
-      step.tap({
+      step.compute({
         fn(upd, {hasSource}) {
           writeRef(hasSource, true)
         },
       }),
+      step.filter({fn: () => false}),
     ],
-    family: createCrosslink([source, clock, target], [target]),
   })
 
-  createLink(clock, {
+  //TODO define source, target and clock as owners explicitly
+  createLink(clock, target, {
     scope: {sourceState, clockState, hasSource, fn},
-    child: [target],
     node: [
       step.update({store: clockState}),
       step.filter({
@@ -118,7 +117,6 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
           : (upd, {sourceState}) => readRef(sourceState),
       }),
     ].filter(Boolean),
-    family: createCrosslink([source, clock, target], [target]),
   })
   return target
 }

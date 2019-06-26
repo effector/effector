@@ -8,7 +8,6 @@ import {
   createNode,
   type Unit,
   bind,
-  createCrosslink,
   addLinkToOwner,
 } from '../stdlib'
 import {type Effect, effectFabric} from '../effect'
@@ -82,15 +81,13 @@ function prepend(event, fn: (_: any) => *) {
     parent: event.domainName,
   })
 
-  createLink(contramapped, {
-    child: [event],
+  createLink(contramapped, event, {
     scope: {handler: fn},
     node: [
       step.compute({
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
-    family: createCrosslink([event, contramapped], [event]),
   })
   return contramapped
 }
@@ -105,15 +102,13 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  createLink(event, {
-    child: [mapped],
+  createLink(event, mapped, {
     scope: {handler: fn},
     node: [
       step.compute({
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
-    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -152,11 +147,9 @@ function filterEvent(
       }),
     ]
   }
-  createLink(event, {
+  createLink(event, mapped, {
     scope,
-    child: [mapped],
     node,
-    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -169,9 +162,8 @@ function filterMapEvent(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  createLink(event, {
+  createLink(event, mapped, {
     scope: {fn},
-    child: [mapped],
     node: [
       step.compute({
         fn: (payload, {fn}) => fn(payload),
@@ -180,7 +172,6 @@ function filterMapEvent(
         fn: result => result !== undefined,
       }),
     ],
-    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -195,14 +186,8 @@ function watchEvent<Payload>(
     parent: event.domainName,
     config: {handler: watcher},
   })
-  const subscription = createLink(event, {
-    //prettier-ignore
-    node: [
-      noop,
-      step.run({fn: x => x})
-    ],
-    child: [watcherEffect],
-    family: createCrosslink([event, watcherEffect], [watcherEffect]),
+  const subscription = createLink(event, watcherEffect, {
+    node: [noop, step.run({fn: x => x})],
   })
   addLinkToOwner(event, watcherEffect)
   //$todo

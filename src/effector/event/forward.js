@@ -5,21 +5,30 @@ import {createWatcher} from '../watcher'
 
 export const createLink = (
   from: Graphite,
-  opts: {|
+  child: Graphite,
+  {
+    node,
+    scope,
+    meta,
+  }: {|
     +node: Array<Cmd>,
-    +child?: Array<Graphite>,
     scope?: {[name: string]: any, ...},
     meta?: {[name: string]: any, ...},
-    family?: {
-      type?: 'regular' | 'crosslink',
-      links?: Graphite[],
-      owners?: Graphite[],
-    },
   |},
 ) =>
   forward({
     from,
-    to: createNode(opts),
+    to: createNode({
+      node,
+      child: [child],
+      scope,
+      meta,
+      family: {
+        type: 'crosslink',
+        owners: [from, child],
+        links: [child],
+      },
+    }),
   })
 
 export const forward = (opts: {|

@@ -5,7 +5,6 @@ import {
   createStateRef,
   readRef,
   writeRef,
-  createCrosslink,
   type StateRef,
 } from '../stdlib'
 import {is} from '../validate'
@@ -67,11 +66,9 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    createLink(child, {
+    createLink(child, store, {
       scope: {key, clone, target: store.stateRef, isFresh},
       node,
-      child: [store],
-      family: createCrosslink([store, child], [store]),
     })
   }
 
