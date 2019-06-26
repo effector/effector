@@ -2,8 +2,6 @@
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
 import {
-  invariant,
-  warning,
   step,
   createStore,
   createNode,
@@ -23,7 +21,7 @@ import {
   //ComputedEvent,
   /*::type*/ kind,
   forward,
-  launch
+  launch,
 } from 'effector'
 import {createComponent} from 'effector-react'
 import {createFormApi} from '@effector/forms'
@@ -141,14 +139,11 @@ describe('Event', () => {
       const check1: number = state
       return state
     })
-    event.watch(state => {
-      return 'foo'
-    })
+    event.watch(state => 'foo')
     event.watch(state => {
       return
     })
-    event.watch(state => {
-    })
+    event.watch(state => {})
   })
   describe('#filter', () => {
     test('#filter ok', () => {
@@ -169,12 +164,14 @@ describe('Event', () => {
 describe('Effect', () => {
   test('createEffect', () => {
     const createEffect_effect1: Effect<number, string> = createEffect()
-    const createEffect_effect2 = createEffect('', {handler: createEffect_effect1})
+    const createEffect_effect2 = createEffect('', {
+      handler: createEffect_effect1,
+    })
 
     const createEffect_effect3 = createEffect('', {
       handler() {
         return 'foo'
-      }
+      },
     })
   })
 
@@ -182,20 +179,20 @@ describe('Effect', () => {
     const effect1 = createEffect()
     const foo = createEffect<number, string, any>()
 
-    effect1.use((params) => Promise.resolve('foo'))
+    effect1.use(params => Promise.resolve('foo'))
     effect1.use(foo)
   })
 
   describe('void params', () => {
     test('with handler', () => {
-      const handler = () => console.log();
-      const effect = createEffect('', {handler});
-      effect();
+      const handler = () => console.log()
+      const effect = createEffect('', {handler})
+      effect()
     })
     test('with use', () => {
-      const handler = () => console.log();
-      const effect = createEffect('').use(handler);
-      effect();
+      const handler = () => console.log()
+      const effect = createEffect('').use(handler)
+      effect()
     })
   })
 })
@@ -386,11 +383,11 @@ describe('Domain', () => {
     const effect2 = domain.effect('', {
       handler(params: string) {
         return 256
-      }
+      },
     })
     effect2(20)
     const effect3 = domain.effect('', {
-      handler: effect1
+      handler: effect1,
     })
     effect3(20)
   })
@@ -414,8 +411,6 @@ describe('Domain', () => {
     root.onCreateStore(foo => {
       const object = createStoreObject({foo})
       object.watch(data => {
-
-
         data.foo
       })
 
@@ -486,15 +481,6 @@ describe('Graph', () => {
   })
 })
 
-describe('invariant', () => {
-  const foo: boolean = true
-  invariant(foo, 'test', 1, 2)
-})
-
-describe('warning', () => {
-  warning(true, 'foo bar', 'test', 3)
-})
-
 describe('effector-react', () => {
   test('createComponent', () => {
     const ImplicitObject = createComponent(
@@ -522,7 +508,8 @@ describe('effector-react', () => {
       (initialProps: {id: number}) => {
         const createComponent_initialProps_check1: number = initialProps.id
         const createComponent_initialProps_check2: string = initialProps.id
-        const createComponent_initialProps_check3: string = initialProps.unknownProp
+        const createComponent_initialProps_check3: string =
+          initialProps.unknownProp
         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
       },
       (_, state) => {
