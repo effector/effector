@@ -1,6 +1,5 @@
 //@flow
 import $$observable from 'symbol-observable'
-import warning from 'warning'
 
 import {
   step,
@@ -150,10 +149,7 @@ function filterEvent(
       }),
     ]
   } else {
-    warning(
-      false,
-      'filter: This form is deprecated, use `filterMap` method instead.',
-    )
+    console.error('.filter(fn) deprecated, use .filterMap instead')
     scope = {fn}
     node = [
       step.compute({

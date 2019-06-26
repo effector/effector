@@ -1,6 +1,5 @@
 //@flow
 
-import warning from 'warning'
 import type {Effect} from './index.h'
 import {Kind, step} from '../stdlib'
 import {upsertLaunch} from '../kernel'
@@ -47,7 +46,7 @@ function Def() {
   })
   //$off
   req.anyway = () => {
-    warning(false, '.anyway is deprecated, use .finally')
+    console.error('.anyway is deprecated, use .finally')
     return req.then(() => {}, () => {})
   }
   this.req = req
@@ -106,8 +105,12 @@ export function effectFabric<Payload, Done>({
   })
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
-  //eslint-disable-next-line no-unused-vars
-  let thunk: Function = handler || defaultThunk.bind(instance)
+  let thunk: Function =
+    handler
+    || (value => {
+      console.error(`no handler used in ${instance.getType()}`)
+      return Promise.resolve()
+    })
 
   instance.done = done
   instance.fail = fail
@@ -200,9 +203,4 @@ function runEffect(handler, params, onResolve, onReject) {
     }
   }
   onResolve(rawResult)
-}
-//eslint-disable-next-line no-unused-vars
-function defaultThunk(value) {
-  warning(false, 'no thunk used in %s', this.getType())
-  return Promise.resolve()
 }
