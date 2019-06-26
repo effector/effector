@@ -62,48 +62,44 @@ export function domainFabric({
     },
     event<Payload>(
       name?: string,
-      config: Config<EventConfigPart> = {},
+      config?: Config<EventConfigPart>,
     ): Event<Payload> {
-      const opts = normalizeConfig(config)
       const result = eventFabric({
         name,
         parent: compositeName,
-        config: opts,
+        config: normalizeConfig(config),
       })
       hooks.event(result)
       return result
     },
     effect<Params, Done, Fail>(
       name?: string,
-      config: Config<EffectConfigPart<Params, Done>> = {},
+      config?: Config<EffectConfigPart<Params, Done>>,
     ): Effect<Params, Done, Fail> {
-      const opts = normalizeConfig(config)
       const result = effectFabric({
         name,
         domainName: compositeName.fullName,
         parent: compositeName,
-        config: opts,
+        config: normalizeConfig(config),
       })
       hooks.effect(result)
       return result
     },
-    domain(name?: string, config: Config<DomainConfigPart> = {}) {
-      const opts = normalizeConfig(config)
+    domain(name?: string, config?: Config<DomainConfigPart>) {
       const result = domainFabric({
         name,
         parent: compositeName,
         parentHooks: hooks,
-        config: opts,
+        config: normalizeConfig(config),
       })
       hooks.domain(result)
       return result
     },
-    store<T>(state: T, config: Config<StoreConfigPart> = {}): Store<T> {
-      const opts = normalizeConfig(config)
+    store<T>(state: T, config?: Config<StoreConfigPart>): Store<T> {
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
-        config: opts,
+        config: normalizeConfig(config),
       })
       hooks.store(result)
       return result
