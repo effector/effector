@@ -55,6 +55,11 @@ export function eventFabric<Payload>({
     launch(instance, payload)
     return payload
   }
+  instance.graphite = graphite
+  instance.shortName = name
+  instance.domainName = parent
+  instance.compositeName = compositeName
+  instance.defaultConfig = config
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
   ;(instance: any).id = id
@@ -64,12 +69,7 @@ export function eventFabric<Payload>({
   ;(instance: any).filterMap = bind(filterMapEvent, instance)
   ;(instance: any).prepend = bind(prepend, instance)
   ;(instance: any).subscribe = bind(subscribe, instance)
-  ;(instance: any).thru = thru.bind(instance)
-  instance.graphite = graphite
-  instance.shortName = name
-  instance.domainName = parent
-  instance.compositeName = compositeName
-  instance.defaultConfig = config
+  ;(instance: any).thru = bind(thru, instance)
 
   return instance
 }

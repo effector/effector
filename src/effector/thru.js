@@ -1,5 +1,3 @@
 //@flow
 
-export function thru(fn: Function) {
-  return fn(this)
-}
+export const thru = (instance: any, fn: Function) => fn(instance)

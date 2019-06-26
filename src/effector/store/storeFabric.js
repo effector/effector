@@ -77,7 +77,7 @@ export function storeFabric<State>(props: {
   ;(store: any).on = bind(on, store)
   ;(store: any).off = bind(off, store)
   ;(store: any).map = bind(mapStore, store)
-  ;(store: any).thru = thru.bind(store)
+  ;(store: any).thru = bind(thru, store)
   //$off
   store[$$observable] = bind(observable, store)
   forward({
