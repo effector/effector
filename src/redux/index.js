@@ -85,12 +85,13 @@ export function createReduxStore<T>(
   reducer: (state: T, payload: {+type: string, payload?: any, ...}) => T,
   defaultState: T,
   enhancer: Function,
+  wrongEnhancer?: any,
 ) {
   if (
-    (typeof defaultState === 'function' && typeof enhancer === 'function') ||
-    (typeof enhancer === 'function' && typeof arguments[3] === 'function')
+    (typeof defaultState === 'function' && typeof enhancer === 'function')
+    || (typeof enhancer === 'function' && typeof wrongEnhancer === 'function')
   ) {
-    throw new Error(
+    throw Error(
       'It looks like you are passing several store enhancers to ' +
         'createStore(). This is not supported. Instead, compose them ' +
         'together to a single function',
