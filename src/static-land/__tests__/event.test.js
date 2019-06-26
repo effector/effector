@@ -49,7 +49,6 @@ describe('Functor<Event>', () => {
       })
 
     equal.updates.watch(data => {
-      console.log(data)
       expect(data).toBe(true)
       //done()
     })
@@ -71,14 +70,10 @@ describe('Apply<Event>', () => {
       .on(equiv.rh, (list, b) => [...list, b])
       .map(list => {
         if (list.length === 0) return false
-        return list.every(x => {
-          console.log('wtf', x)
-          return x === {f_box: {g_box: 0}}
-        })
+        return list.every(x => x === {f_box: {g_box: 0}})
       })
 
     equal.updates.watch(data => {
-      console.log(data)
       expect(data).toBe(true)
     })
 

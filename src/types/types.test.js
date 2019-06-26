@@ -185,12 +185,12 @@ describe('Effect', () => {
 
   describe('void params', () => {
     test('with handler', () => {
-      const handler = () => console.log()
+      const handler = () => {}
       const effect = createEffect('', {handler})
       effect()
     })
     test('with use', () => {
-      const handler = () => console.log()
+      const handler = () => {}
       const effect = createEffect('').use(handler)
       effect()
     })

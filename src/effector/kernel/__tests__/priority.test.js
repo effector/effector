@@ -51,9 +51,6 @@ it('generates runtime ordering', async() => {
   const stepKindGraph = createStepKindGraph(Object.values(kinds))
   const sortedOrder = toposort(stepKindGraph)
   const switchFn = generateSwitch(sortedOrder)
-  console.log(stepKindGraph)
-  console.log(sortedOrder)
-  console.log(switchFn)
   const getPriorityModulePath = resolve(__dirname, '..', 'getPriority.js')
   const currentSource = await readFile(getPriorityModulePath, 'utf8')
   if (currentSource !== switchFn) {

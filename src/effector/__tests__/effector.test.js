@@ -137,7 +137,6 @@ test('combine', () => {
   inc()
   dec()
   expect(result.getState()).toMatchObject({a: -9, b: 9, c: 0, d: 0})
-  console.log(result.getState(), getSpyCalls())
 
   expect(spy).toHaveBeenCalledTimes(3)
   // expect(fn).toHaveBeenCalledTimes(5)
@@ -155,8 +154,7 @@ test('no dull updates', () => {
   store.on(e2, (_, p) => _ === p)
   const nextStore = store.map(x => (fn2(x), x))
   nextStore.watch(fn3)
-  store.watch(e => console.log('store', e))
-  // nextStore.watch(e => console.log('next store', e))
+  store.watch(e => {})
   e1(false)
   e1(true)
   e1(false)
@@ -179,8 +177,6 @@ test('smoke', async() => {
   effect.use(used)
   effect.done.watch(usedDone)
   const event = domain.event('event1')
-  console.log(effect)
-  console.log(event)
   expect(effect).toBeDefined()
   expect(event).toBeDefined()
   event('bar')
@@ -189,21 +185,18 @@ test('smoke', async() => {
   expect(usedDone).toHaveBeenCalledTimes(1)
 })
 
-//TODO Add port throws handling
 describe('port', () => {
   test('port should work correctly', async() => {
-    const used = jest.fn(state => console.log(state))
-    const usedEff = jest.fn(state => console.log(state))
+    const used = jest.fn()
+    const usedEff = jest.fn()
     const domain = createDomain()
     const event = domain.event('port-event')
     const eff = domain.event('port-effect')
     event.watch(used)
     eff.watch(usedEff)
     const str$ = periodic(100)
-      .scan((a /*, b*/) => a + 1, 0)
+      .scan(a => a + 1, 0)
       .take(10)
-
-    // .map(event)
 
     str$.map(event).drain()
     await new Promise(rs => setTimeout(rs, 1500))
@@ -240,69 +233,7 @@ test.skip('fromObservable supports own events as sources', async() => {
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)
 })
-declare var epic: Function
-//TODO WTF?
-test.skip('hot reload support', async() => {
-  // const fn = jest.fn()
-  const fnA = jest.fn()
-  const fnB = jest.fn()
-  const used = jest.fn(x => Promise.resolve(x))
-  const usedDone = jest.fn(x => Promise.resolve(x))
-  const domain = createDomain()
-  const storeA = domain.store({foo: 'bar'})
-  storeA.watch((s, x) => (fnA(x), console.log(x), s))
 
-  const effect = domain.effect('eff')
-  effect.use(used)
-  effect.done.watch(usedDone)
-  const event = domain.event('event1')
-  epic(event, data$ => data$.map(e => effect(e)))
-  await event('ev')
-  expect(used).toHaveBeenCalledTimes(1)
-  expect(usedDone).toHaveBeenCalledTimes(1)
-
-  const storeB = domain.store({foo: 'bar'})
-  storeB.watch((s, x) => (fnB(x), console.log(x), s))
-
-  await event('ev')
-  expect(used).toHaveBeenCalledTimes(2)
-  expect(usedDone).toHaveBeenCalledTimes(2)
-  expect(fnA).toHaveBeenCalledTimes(5)
-  expect(fnB).toHaveBeenCalledTimes(4)
-})
-
-/*
-test('typeConstant', async() => {
- const fn = jest.fn()
- const used = jest.fn((x: string) => console.log(x))
- const respFn = jest.fn(x => console.log(x))
- const domain = createDomain('with-prefix')
- const store = domain.store({foo: 'bar'})
- const event = domain.typeConstant('TYPE_CONST')
- const eventResp = domain.typeConstant('RESP')
- eventResp.watch(respFn)
- expect(event.getType()).toBe('TYPE_CONST')
- event.epic(data$ =>
-  data$.map(e => {
-   used(e)
-   return eventResp(e)
-  }),
- )
-
- log`type constant's event`(event)
- store.dispatch({type: 'TYPE_CONST', payload: 'raw'})
- expect(event('test')).toMatchObject({type: 'TYPE_CONST', payload: 'test'})
- expect(event).toBeDefined()
- await event('run')
- await delay(500)
- expect(respFn).toHaveBeenCalledTimes(2)
- expect(used).toHaveBeenCalledTimes(2)
- expect(used.mock.calls).toMatchObject(
-  //$ off
-  [['raw'], ['run']],
- )
-})
-*/
 test('subscription', async() => {
   const domain = createDomain()
 

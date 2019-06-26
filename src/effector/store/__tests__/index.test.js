@@ -87,14 +87,12 @@ describe('.watch', () => {
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
     const unsub = sum.watch(sum => {
-      console.warn('summ called', sum)
       spy(sum)
     })
 
     newWord('lol')
 
     newWord('long word [1]')
-    console.log(getSpyCalls())
     expect(spy).toHaveBeenCalledTimes(3)
 
     unsub()
@@ -132,7 +130,7 @@ describe('.watch', () => {
   it('supports effects', () => {
     const newWord = createEvent/*:: <string> */('new word')
     const spyEvent = createEffect('spy effect')
-    spyEvent.use(args => (console.log(args), args))
+    spyEvent.use(args => args)
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
