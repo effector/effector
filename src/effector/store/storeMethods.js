@@ -2,13 +2,7 @@
 import $$observable from 'symbol-observable'
 
 import {upsertLaunch} from '../kernel'
-import {
-  step,
-  readRef,
-  writeRef,
-  createCrosslink,
-  addLinkToOwner,
-} from '../stdlib'
+import {step, readRef, writeRef, addLinkToOwner} from '../stdlib'
 import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
 import {effectFabric} from '../effect'
@@ -19,7 +13,7 @@ import type {Subscriber} from '../index.h'
 
 export function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   for (const event of events)
-    on(storeInstance, event, () => storeInstance.defaultState)
+    storeInstance.on(event, () => storeInstance.defaultState)
   return storeInstance
 }
 
@@ -33,26 +27,20 @@ export function off(storeInstance: Store<any>, event: Event<any>) {
 }
 
 export function on(storeInstance: Store<any>, event: any, handler: Function) {
-  const oldLink = storeInstance.subscribers.get(event)
-  if (oldLink) oldLink()
+  storeInstance.off(event)
   storeInstance.subscribers.set(
     event,
-    createLink(event, {
+    createLink(event, storeInstance, {
       scope: {
         handler,
         state: storeInstance.stateRef,
         fail: storeInstance.fail,
       },
-      child: [storeInstance],
-      //prettier-ignore
       node: [
         step.compute({
           fn(newValue, {handler, state, fail}) {
             try {
-              const result = handler(
-                readRef(state),
-                newValue,
-              )
+              const result = handler(readRef(state), newValue)
               if (result === undefined) return
               return writeRef(state, result)
             } catch (error) {
@@ -62,7 +50,6 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
           },
         }),
       ],
-      family: createCrosslink([event, storeInstance], [storeInstance]),
     }),
   )
   return storeInstance
@@ -111,14 +98,12 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
     },
   })
   watcherEffect(storeInstance.getState())
-  const subscription = createLink(storeInstance, {
+  const subscription = createLink(storeInstance, watcherEffect, {
     //prettier-ignore
     node: [
       noop,
       step.run({fn: x => x})
-    ],
-    child: [watcherEffect],
-    family: createCrosslink([storeInstance, watcherEffect], [watcherEffect]),
+    ]
   })
   //$todo
   subscription.fail = watcherEffect.fail
@@ -144,8 +129,7 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  createLink(store, {
-    child: [innerStore],
+  createLink(store, innerStore, {
     scope: {
       handler: fn,
       state: innerStore.stateRef,
@@ -166,7 +150,6 @@ export function mapStore<A, B>(
       }),
       filterChanged,
     ],
-    family: createCrosslink([store, innerStore], [innerStore]),
   })
   return innerStore
 }
