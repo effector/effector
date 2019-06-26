@@ -56,6 +56,7 @@ const TypeErrors = styled.pre`
 `
 
 const Scroll = styled.div`
+  display: flex;
   overflow: auto;
 `
 
@@ -132,12 +133,9 @@ export const TypeErrorsView = () => {
             if (error.message[0].loc?.type === 'LibFile') return null
             return (
               <li>
-                {error.message.map(message => (
-                  <ErrorMessage {...message} />
-                ))}
-                {error.extra.map(extra => (
-                  <Extra {...extra} />
-                ))}
+                {error.message &&
+                  error.message.map(message => <ErrorMessage {...message} />)}
+                {error.extra && error.extra.map(extra => <Extra {...extra} />)}
               </li>
             )
           })}
