@@ -141,7 +141,7 @@ function filterEvent(
       }),
     ]
   } else {
-    console.error('.filter(fn) deprecated, use .filterMap instead')
+    console.error('.filter(fn) is deprecated, use .filterMap instead')
     scope = {fn}
     node = [
       step.compute({
