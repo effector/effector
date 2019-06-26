@@ -172,7 +172,6 @@ export type Cmd =
 export type Barrier = {
   id: ID
   type: 'barrier'
-  group: 'cmd'
   data: {
     barrierID: ID
   }
@@ -181,7 +180,6 @@ export type Barrier = {
 export type Update = {
   id: ID
   type: 'update'
-  group: 'cmd'
   data: {
     store: StateRef
   }
@@ -189,7 +187,6 @@ export type Update = {
 export type Run = {
   id: ID
   type: 'run'
-  group: 'cmd'
   data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
@@ -198,7 +195,6 @@ export type Run = {
 export type Filter = {
   id: ID
   type: 'filter'
-  group: 'cmd'
   data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }
@@ -206,7 +202,6 @@ export type Filter = {
 export type Emit = {
   id: ID
   type: 'emit'
-  group: 'cmd'
   data: {
     fullName: string
   }
@@ -214,7 +209,6 @@ export type Emit = {
 export type Compute = {
   id: ID
   type: 'compute'
-  group: 'cmd'
   data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
@@ -222,13 +216,11 @@ export type Compute = {
 export type Tap = {
   id: ID
   type: 'tap'
-  group: 'cmd'
   data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
 export type Step = {
-  from: Array<Step>
   next: Array<Step>
   seq: Array<Cmd>
   scope: {[field: string]: any}
@@ -252,7 +244,6 @@ export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>
   child?: Array<Unit<any> | Step>
-  from?: Array<Unit<any> | Step>
   scope?: {[field: string]: any}
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void

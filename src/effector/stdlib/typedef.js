@@ -17,7 +17,6 @@ const nextID = stringRefcount()
 const cmd = (type: any, data: any): any => ({
   id: nextID(),
   type,
-  group: 'cmd',
   data,
 })
 
