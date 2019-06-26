@@ -30,7 +30,7 @@ export function useStore<State>(store: Store<State>): State
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 export function createGate<Props extends object>(name?: string): Gate<Props>
-export function createGate<Props>(name?: string, defaultState: Props): Gate<Props>
+export function createGate<Props>(name: string, defaultState: Props): Gate<Props>
 
 export function createComponent<Props, State>(
   storeFactory: (initialProps: Props) => Store<State>,
