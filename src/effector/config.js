@@ -1,7 +1,5 @@
 //@flow
 
-import warning from 'warning'
-
 export type SourceLocation = {|
   file: string,
   column: number,
@@ -39,34 +37,13 @@ export type Config<Part> = {
   ...
 }
 
-declare export function normalizeConfig<Payload, Done>(
-  config?: Config<EffectConfigPart<Payload, Done>>,
-): EffectConfigPart<Payload, Done>
-declare export function normalizeConfig(
-  config?: Config<StoreConfigPart>,
-): StoreConfigPart
-declare export function normalizeConfig(
-  config?: Config<EventConfigPart>,
-): EventConfigPart
-declare export function normalizeConfig(
-  config?: Config<DomainConfigPart>,
-): DomainConfigPart
-export function normalizeConfig(config: any = {}): any {
-  const message =
-    'createStore: Second argument should be plain object, but you passed %s.'
-  warning(typeof config === 'object' && config !== null, message, config)
-  if (typeof config?.ɔ !== 'undefined') {
-    warning(
-      typeof config.ɔ === 'object' && config.ɔ !== null,
-      message,
-      config.ɔ,
-    )
-  }
-  const rawConfig = typeof config.ɔ === 'object' ? config.ɔ : {}
-  const newConfig = Object.assign({}, config, rawConfig)
-  delete newConfig.ɔ
-  return newConfig
-}
+//prettier-ignore
+export const normalizeConfig:
+  | (<Params, Done>(config?: Config<EffectConfigPart<Params, Done>>) => EffectConfigPart<Params, Done>)
+  | ((config?: Config<StoreConfigPart>) => StoreConfigPart)
+  | ((config?: Config<EventConfigPart>) => EventConfigPart)
+  | ((config?: Config<DomainConfigPart>) => DomainConfigPart) =
+  (config: any = {}): any => Object.assign({}, config, config.ɔ || {})
 
 declare export function normalizeEventConfig<Payload, Done>(
   nameOrConfig?: string | EffectConfigPart<Payload, Done>,
