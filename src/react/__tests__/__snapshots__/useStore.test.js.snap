@@ -14,4 +14,4 @@ exports[`useStore should render 2`] = `
 </span>
 `;
 
-exports[`useStore should throw 1`] = `"useStore: The argument must be Store, but you passed undefined"`;
+exports[`useStore should throw 1`] = `"expect useStore argument to be a store"`;

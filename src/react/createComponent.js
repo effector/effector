@@ -1,13 +1,7 @@
 //@flow
 
 import * as React from 'react'
-import {
-  type Store,
-  isStore,
-  invariant,
-  createStoreObject,
-  createEvent,
-} from 'effector'
+import {type Store, is, createStoreObject, createEvent} from 'effector'
 import type {StoreView} from './index.h'
 
 type Unsubscribe = () => void
@@ -21,17 +15,14 @@ export function createComponent<Props: {}, State>(
 ): StoreView<State, Props> {
   let storeFn: (props: Props) => Store<any>
   let store: Store<any>
-  if (isStore(shape)) {
+  if (is.store(shape)) {
     store = shape
   } else if (typeof shape === 'function') {
     storeFn = shape
   } else {
-    invariant(
-      typeof shape === 'object' && shape !== null,
-      'shape should be store or object with stores',
-    )
-    const obj = createStoreObject(shape)
-    store = obj
+    if (typeof shape === 'object' && shape !== null) {
+      store = createStoreObject(shape)
+    } else throw Error('shape should be a store or object with stores')
   }
   const storeName = store?.shortName ?? 'Unknown'
   const mounted = createEvent(`${storeName}.View mounted`)
