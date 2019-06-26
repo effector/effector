@@ -1,7 +1,7 @@
 //@flow
 
 import Vue from 'vue'
-import {invariant, isStore} from 'effector'
+import {is} from 'effector'
 
 export const effectorMixin = {
   created() {
@@ -12,11 +12,7 @@ export const effectorMixin = {
       store = store.call(vm)
     }
     if (store) {
-      invariant(
-        isStore(store),
-        'effector-vue: Property should Store, but you passed %s',
-        store,
-      )
+      if (!is.store(store)) throw Error('property should Store')
       //$off
       Vue.util.defineReactive(vm, key, store.getState())
       vm._subscription = store.subscribe(value => {
