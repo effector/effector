@@ -1,6 +1,5 @@
 //@flow
 
-import invariant from 'invariant'
 import {type Store, createStoreObject} from './store'
 import {is} from './validate'
 
@@ -104,7 +103,7 @@ declare export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
 ): Store<R>
 
 export function combine(...args: Array<Store<any>>): Store<any> {
-  invariant(args.length > 0, 'at least one argument required')
+  if (args.length === 0) throw Error('at least one argument required')
   let handler
   let stores
   {

@@ -1,6 +1,5 @@
 //@flow
 
-import invariant from 'invariant'
 import {resolve} from 'path'
 import {outputFile, readFile} from 'fs-extra'
 
@@ -78,7 +77,7 @@ function toposort(graph: TopoGraph): string[] {
     const neighbors = graph[node]
     for (let i = 0; i < neighbors.length; i++) {
       const n = neighbors[i]
-      invariant(!temp[n], 'found cycle in DAG')
+      if (temp[n]) throw Error('found cycle in DAG')
       if (!visited[n]) {
         topologicalSortHelper(n, visited, temp, graph, result)
       }

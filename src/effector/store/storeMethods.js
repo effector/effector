@@ -1,8 +1,6 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import invariant from 'invariant'
-
 import {upsertLaunch, launch} from '../kernel'
 import {step, readRef, writeRef} from '../stdlib'
 import {is} from '../validate'
@@ -73,10 +71,8 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
 export function observable(storeInstance: Store<any>) {
   const result = {
     subscribe(observer: Subscriber<any>) {
-      invariant(
-        typeof observer === 'object' && observer !== null,
-        'Expected the observer to be an object',
-      )
+      if (observer !== Object(observer))
+        throw Error('expect observer to be an object') // or function
       return subscribe(storeInstance, state => {
         if (observer.next) {
           observer.next(state)
@@ -95,22 +91,21 @@ export function watch(
   eventOrFn: Event<*> | Function,
   fn?: Function,
 ) {
-  const message = 'watch requires function handler'
   if (!fn || !is.unit(eventOrFn)) {
-    invariant(typeof eventOrFn === 'function', message)
+    if (typeof eventOrFn !== 'function')
+      throw Error('watch requires function handler')
     return subscribe(storeInstance, eventOrFn)
   }
-  invariant(typeof fn === 'function', message)
+  if (typeof fn !== 'function')
+    throw Error('second argument should be a function')
   return eventOrFn.watch(payload =>
     //$todo
     fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
   )
 }
 export function subscribe(storeInstance: Store<any>, listener: Function) {
-  invariant(
-    typeof listener === 'function',
-    'Expected the listener to be a function',
-  )
+  if (typeof listener !== 'function')
+    throw Error('expect listener to be a function')
   const watcherEffect = effectFabric({
     name: storeInstance.shortName + ' watcher',
     domainName: '',
