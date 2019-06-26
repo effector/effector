@@ -2,7 +2,15 @@
 import $$observable from 'symbol-observable'
 
 import {launch, upsertLaunch} from '../kernel'
-import {step, createNode, Kind, createStateRef, readRef, bind} from '../stdlib'
+import {
+  addLinkToOwner,
+  step,
+  createNode,
+  Kind,
+  createStateRef,
+  readRef,
+  bind,
+} from '../stdlib'
 import {createEvent, forward} from '../event'
 
 import type {Store} from './index.h'
@@ -34,8 +42,7 @@ export function storeFabric<State>(props: {
 
   const updates = createEvent('update ' + currentId)
   const fail = createEvent('fail ' + currentId)
-  updates.graphite.family.type = 'crosslink'
-  fail.graphite.family.type = 'crosslink'
+
   const store: $Shape<Store<State>> = ({
     subscribers: new Map(),
     compositeName,
@@ -56,7 +63,6 @@ export function storeFabric<State>(props: {
           },
         }),
       ],
-      family: {type: 'regular', links: [updates, fail]},
     }),
     kind: Kind.store,
     id: plainState.id,
@@ -83,6 +89,7 @@ export function storeFabric<State>(props: {
     from: store,
     to: updates,
   })
-
+  addLinkToOwner(store, updates)
+  addLinkToOwner(store, fail)
   return store
 }

@@ -10,8 +10,8 @@ export const createLink = (
     +child?: Array<Graphite>,
     scope?: {[name: string]: any, ...},
     meta?: {[name: string]: any, ...},
-    family: {
-      type: 'regular' | 'crosslink',
+    family?: {
+      type?: 'regular' | 'crosslink',
       links?: Graphite[],
       owners?: Graphite[],
     },
@@ -29,8 +29,6 @@ export const forward = (opts: {|
   const from = getGraph(opts.from)
   const to = getGraph(opts.to)
   from.next.push(to)
-  //TODO push parent to .from field
-  // to.from.push(from)
   return createWatcher({
     child: to,
     parent: from,

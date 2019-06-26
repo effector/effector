@@ -11,6 +11,7 @@ import {
   readRef,
   writeRef,
   nextBarrierID,
+  createCrosslink,
 } from './stdlib'
 
 const storeBy = (source, clock, fn, greedy, target) => {
@@ -35,11 +36,9 @@ const storeBy = (source, clock, fn, greedy, target) => {
           : (upd, {state}) => readRef(state),
       }),
     ].filter(Boolean),
-    family: {
-      type: 'crosslink',
-      owners: [source, clock, target],
-    },
+    family: createCrosslink(source, clock, target),
   })
+  //TODO we need addLinkToOwner there, aren't we?
   return target
 }
 
@@ -95,10 +94,7 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
         },
       }),
     ],
-    family: {
-      type: 'crosslink',
-      owners: [source, clock, target],
-    },
+    family: createCrosslink(source, clock, target),
   })
 
   createLink(clock, {
@@ -122,10 +118,7 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
           : (upd, {sourceState}) => readRef(sourceState),
       }),
     ].filter(Boolean),
-    family: {
-      type: 'crosslink',
-      owners: [source, clock, target],
-    },
+    family: createCrosslink(source, clock, target),
   })
   return target
 }

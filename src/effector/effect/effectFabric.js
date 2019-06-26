@@ -1,7 +1,7 @@
 //@flow
 
 import type {Effect} from './index.h'
-import {Kind, step} from '../stdlib'
+import {Kind, step, addLinkToOwner} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {eventFabric, type Event} from '../event'
 import {createStore} from '../store'
@@ -172,16 +172,12 @@ export function effectFabric<Payload, Done>({
     .reset(fail)
   instance.pending = pending
 
-  makeCrosslink(instance, done)
-  makeCrosslink(instance, fail)
-  makeCrosslink(instance, pending)
+  addLinkToOwner(instance, done)
+  addLinkToOwner(instance, fail)
+  addLinkToOwner(instance, pending)
   return instance
 }
-const makeCrosslink = ({graphite: owner}, {graphite: link}) => {
-  link.family.type = 'crosslink'
-  link.family.owners.push(owner)
-  owner.family.links.push(link)
-}
+
 function runEffect(handler, params, onResolve, onReject) {
   let failedSync = false
   let syncError

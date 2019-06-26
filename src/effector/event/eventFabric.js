@@ -8,6 +8,8 @@ import {
   createNode,
   type Unit,
   bind,
+  createCrosslink,
+  addLinkToOwner,
 } from '../stdlib'
 import {type Effect, effectFabric} from '../effect'
 import {launch, upsertLaunch} from '../kernel'
@@ -39,9 +41,6 @@ export function eventFabric<Payload>({
   const fullName = compositeName.fullName
   const graphite = createNode({
     node: [],
-    family: {
-      type: 'regular',
-    },
   })
 
   //$off
@@ -92,10 +91,7 @@ function prepend(event, fn: (_: any) => *) {
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
-    family: {
-      type: 'crosslink',
-      links: [event],
-    },
+    family: createCrosslink(event, contramapped),
   })
   return contramapped
 }
@@ -118,10 +114,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
-    family: {
-      type: 'crosslink',
-      links: [event],
-    },
+    family: createCrosslink(event, mapped),
   })
   return mapped
 }
@@ -164,10 +157,7 @@ function filterEvent(
     scope,
     child: [mapped],
     node,
-    family: {
-      type: 'crosslink',
-      links: [mapped],
-    },
+    family: createCrosslink(event, mapped),
   })
   return mapped
 }
@@ -191,10 +181,7 @@ function filterMapEvent(
         fn: result => result !== undefined,
       }),
     ],
-    family: {
-      type: 'crosslink',
-      links: [mapped],
-    },
+    family: createCrosslink(event, mapped),
   })
   return mapped
 }
@@ -220,11 +207,9 @@ function watchEvent<Payload>(
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    family: {
-      type: 'crosslink',
-      links: [watcherEffect],
-    },
+    family: createCrosslink(event, watcherEffect),
   })
+  addLinkToOwner(event, watcherEffect)
   //$todo
   subscription.fail = watcherEffect.fail
   //$todo

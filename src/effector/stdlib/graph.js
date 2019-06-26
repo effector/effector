@@ -8,39 +8,38 @@ export function createNode({
   from = [],
   scope = {},
   meta = {},
-  family = {},
+  family: familyRaw = {},
 }: {
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
   +from?: Array<Graphite>,
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
-  family: {
-    type: 'regular' | 'crosslink',
+  family?: {
+    type?: 'regular' | 'crosslink',
     links?: Graphite[],
     owners?: Graphite[],
   },
   ...
 }): Graph {
-  const links: Graph[] = family.links ? family.links.map(getGraph) : []
-  const owners: Graph[] = family.owners ? family.owners.map(getGraph) : []
+  const family: Family = {
+    type: familyRaw.type || 'regular',
+    links: (familyRaw.links || []).map(getGraph),
+    owners: (familyRaw.owners || []).map(getGraph),
+  }
   const result: Graph = {
     from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
     meta,
     scope,
-    family: {
-      type: family.type,
-      links,
-      owners,
-    },
+    family,
   }
-  for (let i = 0; i < links.length; i++) {
-    links[i].family.owners.push(result)
+  for (let i = 0; i < family.links.length; i++) {
+    family.links[i].family.owners.push(result)
   }
-  for (let i = 0; i < owners.length; i++) {
-    owners[i].family.links.push(result)
+  for (let i = 0; i < family.owners.length; i++) {
+    family.owners[i].family.links.push(result)
   }
   return result
 }
@@ -79,7 +78,7 @@ export const clearNode = (
   } = {},
 ) => {
   const graph = getGraph(graphite)
-  // clearFam(graph, !!deep)
+  clearFam(graph, !!deep)
 
   if (deep) {
     graph.next.forEach(node => clearNode(node, {deep}))

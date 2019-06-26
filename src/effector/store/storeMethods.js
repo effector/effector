@@ -2,7 +2,13 @@
 import $$observable from 'symbol-observable'
 
 import {upsertLaunch, launch} from '../kernel'
-import {step, readRef, writeRef} from '../stdlib'
+import {
+  step,
+  readRef,
+  writeRef,
+  createCrosslink,
+  addLinkToOwner,
+} from '../stdlib'
 import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
 import {getDisplayName} from '../naming'
@@ -60,10 +66,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
           },
         }),
       ],
-      family: {
-        type: 'crosslink',
-        owners: [from, storeInstance],
-      },
+      family: createCrosslink(from, storeInstance),
     }),
   )
   return storeInstance
@@ -122,15 +125,13 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    family: {
-      type: 'crosslink',
-      owners: [storeInstance],
-    },
+    family: createCrosslink(storeInstance, watcherEffect),
   })
   //$todo
   subscription.fail = watcherEffect.fail
   //$todo
   subscription.done = watcherEffect.done
+  addLinkToOwner(storeInstance, watcherEffect)
   return subscription
 }
 
@@ -173,10 +174,7 @@ export function mapStore<A, B>(
       }),
       filterChanged,
     ],
-    family: {
-      type: 'crosslink',
-      owners: [store, innerStore],
-    },
+    family: createCrosslink(store, innerStore),
   })
   return innerStore
 }
