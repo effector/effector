@@ -23,7 +23,7 @@ import {
   forward,
   launch,
 } from 'effector'
-import {createComponent} from 'effector-react'
+import {createComponent, createGate, useGate} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
 describe('Unit', () => {
@@ -518,6 +518,22 @@ describe('effector-react', () => {
         return null
       },
     )
+  })
+
+  test('createGate', () => {
+    const Foo = createGate<number>('foo')
+    const Bar = createGate<{a: number}>('bar')
+    const Baz = createGate<number | null>('baz', null)
+
+    const Component = () => {
+      useGate(Foo, 1)
+      useGate(Bar, 1)
+      useGate(Bar, {a: 1})
+      useGate(Bar, {})
+
+      useGate(Baz, null)
+      useGate(Baz, 1)
+    }
   })
 })
 

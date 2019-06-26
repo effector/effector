@@ -48,7 +48,8 @@ export type StoreView<State, Props = {||}> = ComponentType<Props> & {|
 declare export function useStore<State>(store: Store<State>): State
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
-declare export function createGate<Props>(name?: string): Gate<Props>
+declare export function createGate<Props: {}>(name?: string): Gate<Props>
+declare export function createGate<Props>(name?: string, defaultState: Props): Gate<Props>
 
 declare export function createComponent<
   Props,
