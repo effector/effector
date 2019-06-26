@@ -36,7 +36,7 @@ export {launch} from './kernel'
 export type {kind} from './stdlib'
 
 export {isUnit, isStore, isEvent, isEffect, isDomain, is} from './validate'
-export {version} from 'effector/flags'
+export {version} from './flags'
 
 //eslint-disable-next-line
 export * as blocks from './blocks'
