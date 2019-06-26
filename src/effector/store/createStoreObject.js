@@ -71,7 +71,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       scope: {key, clone, target: store.stateRef, isFresh},
       node,
       child: [store],
-      family: createCrosslink(store, child),
+      family: createCrosslink([store, child], [store]),
     })
   }
 

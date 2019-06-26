@@ -36,7 +36,7 @@ const storeBy = (source, clock, fn, greedy, target) => {
           : (upd, {state}) => readRef(state),
       }),
     ].filter(Boolean),
-    family: createCrosslink(source, clock, target),
+    family: createCrosslink([source, clock, target], [target]),
   })
   //TODO we need addLinkToOwner there, aren't we?
   return target
@@ -94,7 +94,7 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
         },
       }),
     ],
-    family: createCrosslink(source, clock, target),
+    family: createCrosslink([source, clock, target], [target]),
   })
 
   createLink(clock, {
@@ -118,7 +118,7 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
           : (upd, {sourceState}) => readRef(sourceState),
       }),
     ].filter(Boolean),
-    family: createCrosslink(source, clock, target),
+    family: createCrosslink([source, clock, target], [target]),
   })
   return target
 }

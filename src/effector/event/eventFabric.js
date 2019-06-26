@@ -91,7 +91,7 @@ function prepend(event, fn: (_: any) => *) {
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
-    family: createCrosslink(event, contramapped),
+    family: createCrosslink([event, contramapped], [event]),
   })
   return contramapped
 }
@@ -114,7 +114,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
-    family: createCrosslink(event, mapped),
+    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -157,7 +157,7 @@ function filterEvent(
     scope,
     child: [mapped],
     node,
-    family: createCrosslink(event, mapped),
+    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -181,7 +181,7 @@ function filterMapEvent(
         fn: result => result !== undefined,
       }),
     ],
-    family: createCrosslink(event, mapped),
+    family: createCrosslink([event, mapped], [mapped]),
   })
   return mapped
 }
@@ -207,7 +207,7 @@ function watchEvent<Payload>(
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    family: createCrosslink(event, watcherEffect),
+    family: createCrosslink([event, watcherEffect], [watcherEffect]),
   })
   addLinkToOwner(event, watcherEffect)
   //$todo

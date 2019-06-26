@@ -65,7 +65,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
           },
         }),
       ],
-      family: createCrosslink(event, storeInstance),
+      family: createCrosslink([event, storeInstance], [storeInstance]),
     }),
   )
   return storeInstance
@@ -124,7 +124,7 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
       step.run({fn: x => x})
     ],
     child: [watcherEffect],
-    family: createCrosslink(storeInstance, watcherEffect),
+    family: createCrosslink([storeInstance, watcherEffect], [watcherEffect]),
   })
   //$todo
   subscription.fail = watcherEffect.fail
@@ -173,7 +173,7 @@ export function mapStore<A, B>(
       }),
       filterChanged,
     ],
-    family: createCrosslink(store, innerStore),
+    family: createCrosslink([store, innerStore], [innerStore]),
   })
   return innerStore
 }
