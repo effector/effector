@@ -69,7 +69,6 @@ export function storeFabric<State>(props: {
   }
   ;(store: any).defaultConfig = config
   ;(store: any).defaultState = defaultState
-  ;(store: any).dispatch = payload => payload
   ;(store: any).subscribe = bind(subscribe, store)
   ;(store: any).watch = bind(watch, store)
   ;(store: any).reset = bind(reset, store)
