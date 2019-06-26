@@ -36,7 +36,7 @@ export function storeFabric<State>(props: {
   const fail = createEvent('fail ' + currentId)
   updates.graphite.family.type = 'crosslink'
   fail.graphite.family.type = 'crosslink'
-  const store: $Shape<Store<State>> = {
+  const store: $Shape<Store<State>> = ({
     subscribers: new Map(),
     compositeName,
     graphite: createNode({
@@ -64,11 +64,11 @@ export function storeFabric<State>(props: {
     domainName: parent,
     updates,
     fail,
+    defaultConfig: config,
+    defaultState,
     getState: bind(readRef, plainState),
     stateRef: plainState,
-  }
-  ;(store: any).defaultConfig = config
-  ;(store: any).defaultState = defaultState
+  }: any)
   ;(store: any).subscribe = bind(subscribe, store)
   ;(store: any).watch = bind(watch, store)
   ;(store: any).reset = bind(reset, store)
