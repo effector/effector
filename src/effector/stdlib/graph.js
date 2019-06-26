@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graph, Graphite, Cmd, Family} from './index.h'
+import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
 
@@ -50,18 +50,23 @@ const removeItem = (list, item) => {
     list.splice(pos, 1)
   }
 }
-const clearFam = (targetNode: Graph, deep: boolean) => {
+
+const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
+  targetNode.next.length = 0
+  targetNode.seq.length = 0
+  //$off
+  targetNode.scope = null
   let currentNode
   while ((currentNode = getLinks(targetNode).pop())) {
     removeItem(getOwners(currentNode), targetNode)
     if (deep || currentNode.family.type === 'crosslink') {
-      clearFam(currentNode, deep)
+      clearNodeNormalized(currentNode, deep)
     }
   }
   while ((currentNode = getOwners(targetNode).pop())) {
     removeItem(getLinks(currentNode), targetNode)
     if (currentNode.family.type === 'crosslink') {
-      clearFam(currentNode, deep)
+      clearNodeNormalized(currentNode, deep)
     }
   }
 }
@@ -73,18 +78,7 @@ export const clearNode = (
     deep?: boolean,
     ...
   } = {},
-) => {
-  const graph = getGraph(graphite)
-  clearFam(graph, !!deep)
-
-  if (deep) {
-    graph.next.forEach(node => clearNode(node, {deep}))
-  }
-  graph.next.length = 0
-  graph.seq.length = 0
-  //$off
-  graph.scope = null
-}
+) => clearNodeNormalized(getGraph(graphite), !!deep)
 
 export const traverse = (
   graphite: Graphite,
