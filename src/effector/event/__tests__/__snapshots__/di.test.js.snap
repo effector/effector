@@ -33,21 +33,18 @@ Array [
       -2,
       "foo",
     ],
-    "bar",
   ],
   Array [
     Array [
       -3,
       "bar",
     ],
-    "bar",
   ],
   Array [
     Array [
       -2,
       "baz",
     ],
-    "bar",
   ],
 ]
 `;
@@ -76,15 +73,12 @@ exports[`event.create single argument: watch 1`] = `
 Array [
   Array [
     100,
-    "foo",
   ],
   Array [
     200,
-    "foo",
   ],
   Array [
     300,
-    "foo",
   ],
 ]
 `;

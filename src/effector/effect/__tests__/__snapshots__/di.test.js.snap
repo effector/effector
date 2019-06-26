@@ -53,7 +53,6 @@ Array [
       ],
       "result": "done!",
     },
-    "long request done",
   ],
   Array [
     Object {
@@ -63,7 +62,6 @@ Array [
       ],
       "result": "done!",
     },
-    "long request done",
   ],
   Array [
     Object {
@@ -73,7 +71,6 @@ Array [
       ],
       "result": "done!",
     },
-    "long request done",
   ],
 ]
 `;
@@ -105,21 +102,18 @@ Array [
       "params": 100,
       "result": "done!",
     },
-    "long request done",
   ],
   Array [
     Object {
       "params": 200,
       "result": "done!",
     },
-    "long request done",
   ],
   Array [
     Object {
       "params": 300,
       "result": "done!",
     },
-    "long request done",
   ],
 ]
 `;

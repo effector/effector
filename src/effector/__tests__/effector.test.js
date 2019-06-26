@@ -34,9 +34,6 @@ test('will run in expected order', () => {
     .on(mult, (n, q) => n * q)
     .reset(reset)
 
-  // const halt = add.link(
-  //  mult, n => n%10, n => n + 10
-  // )
   const currentList = createStore([])
     .on(add, (list, pl) => [...list, {add: pl}])
     .on(mult, (list, pl) => [...list, {mult: pl}])
@@ -80,11 +77,11 @@ test('reducer defaults', () => {
   const add = createEvent('add')
   const sub = createEvent('sub')
   const state1 = createStore(3)
-    .on(add, (state, payload, type) => {
-      fn1(state, payload, type)
+    .on(add, (state, payload) => {
+      fn1(state, payload)
     })
-    .on(sub, (state, payload, type) => {
-      fn2(state, payload, type)
+    .on(sub, (state, payload) => {
+      fn2(state, payload)
       return state - payload
     })
   state1.watch(fn3)
@@ -238,7 +235,7 @@ test.skip('fromObservable supports own events as sources', async() => {
   effect.use(used)
   effect.done.watch(usedDone)
   const event = domain.event('event1')
-  fromObservable<string>(event).watch(e => effect(e))
+  fromObservable/*:: <string> */(event).watch(e => effect(e))
   await event('ev')
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)

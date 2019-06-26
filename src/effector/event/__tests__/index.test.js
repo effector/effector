@@ -3,7 +3,7 @@
 import {from} from 'most'
 import {createEvent} from '..'
 
-import {getSpyCalls, spy} from 'effector/fixtures'
+import {argumentHistory, spy} from 'effector/fixtures'
 
 describe('symbol-observable support', () => {
   test('most.from(event) //stream of events', () => {
@@ -20,7 +20,13 @@ describe('symbol-observable support', () => {
     ev2('should ignore')
     expect(spy).toHaveBeenCalledTimes(3)
 
-    expect(spy.mock.calls).toEqual([[0], [1], [2]])
+    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+        2,
+      ]
+    `)
   })
 })
 
@@ -31,11 +37,13 @@ test('event.watch(fn)', () => {
   click(1)
   click(2)
   expect(spy).toHaveBeenCalledTimes(3)
-  expect(getSpyCalls()).toEqual([
-    [undefined, 'click'],
-    [1, 'click'],
-    [2, 'click'],
-  ])
+  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    Array [
+      undefined,
+      1,
+      2,
+    ]
+  `)
 })
 
 test('event.prepend(fn)', () => {
@@ -47,11 +55,13 @@ test('event.prepend(fn)', () => {
   preclick([2])
 
   expect(spy).toHaveBeenCalledTimes(3)
-  expect(getSpyCalls()).toEqual([
-    [undefined, 'click'],
-    [1, 'click'],
-    [2, 'click'],
-  ])
+  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    Array [
+      undefined,
+      1,
+      2,
+    ]
+  `)
 })
 
 test('event.map(fn)', () => {
@@ -62,16 +72,23 @@ test('event.map(fn)', () => {
   click(1)
   click(2)
   expect(spy).toHaveBeenCalledTimes(3)
-  expect(getSpyCalls()).toEqual([
-    [[undefined], 'click → *'],
-    [[1], 'click → *'],
-    [[2], 'click → *'],
-  ])
+  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        undefined,
+      ],
+      Array [
+        1,
+      ],
+      Array [
+        2,
+      ],
+    ]
+  `)
 })
 
 test('event.thru(fn)', () => {
   const click = createEvent('click')
-  const postclick = click.thru(event => {
-    console.log(event)
-  })
+  const postclick = click.thru(event => event)
+  expect(postclick).toBe(click)
 })
