@@ -34,16 +34,15 @@ export function off(storeInstance: Store<any>, event: Event<any>) {
 }
 
 export function on(storeInstance: Store<any>, event: any, handler: Function) {
-  const from: Event<any> = event
-  const oldLink = storeInstance.subscribers.get(from)
+  const oldLink = storeInstance.subscribers.get(event)
   if (oldLink) oldLink()
   storeInstance.subscribers.set(
-    from,
-    createLink(from, {
+    event,
+    createLink(event, {
       scope: {
         handler,
         state: storeInstance.stateRef,
-        trigger: from,
+        trigger: event,
         fail: storeInstance.fail,
       },
       child: [storeInstance],
@@ -66,7 +65,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
           },
         }),
       ],
-      family: createCrosslink(from, storeInstance),
+      family: createCrosslink(event, storeInstance),
     }),
   )
   return storeInstance

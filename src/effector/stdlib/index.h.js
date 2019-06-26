@@ -108,7 +108,6 @@ export type Family = {|
 |}
 
 export type Graph = {
-  +from: Array<Graph>,
   +next: Array<Graph>,
   +seq: Array<Cmd>,
   +scope: {[string]: any, ...},

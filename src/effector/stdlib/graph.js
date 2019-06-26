@@ -7,14 +7,12 @@ import {getGraph, getOwners, getLinks} from './getter'
 export function createNode({
   node,
   child = [],
-  from = [],
   scope = {},
   meta = {},
   family: familyRaw = {},
 }: {
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
-  +from?: Array<Graphite>,
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
   family?: {
@@ -27,7 +25,6 @@ export function createNode({
   const links = (familyRaw.links || []).map(getGraph)
   const owners = (familyRaw.owners || []).map(getGraph)
   const result: Graph = {
-    from: from.map(getGraph),
     seq: node,
     next: child.map(getGraph),
     meta,
@@ -83,7 +80,6 @@ export const clearNode = (
   if (deep) {
     graph.next.forEach(node => clearNode(node, {deep}))
   }
-  graph.from.length = 0
   graph.next.length = 0
   graph.seq.length = 0
   //$off
