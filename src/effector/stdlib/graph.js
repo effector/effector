@@ -64,6 +64,7 @@ const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
     }
   }
   while ((currentNode = getOwners(targetNode).pop())) {
+    removeItem(currentNode.next, targetNode)
     removeItem(getLinks(currentNode), targetNode)
     if (currentNode.family.type === 'crosslink') {
       clearNodeNormalized(currentNode, deep)
