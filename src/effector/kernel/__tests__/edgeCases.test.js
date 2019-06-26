@@ -11,7 +11,6 @@ it.skip('should not call one watcher twice during a walk', () => {
     .on(e2, (_, x) => x)
 
   st1.watch(x => {
-    console.warn('st1', x)
     fn(x)
   })
   e1('first call')
@@ -23,18 +22,17 @@ it('should avoid data races', () => {
   const fnIdx = jest.fn()
   const routePush = createEvent()
 
-  const history = createStore([]).on(routePush, (state, route) => {
-    console.log('history.on routePush; history = ', state)
-    return [...state, route]
-  })
-  const currentIdx = createStore(-2).on(routePush, () => {
-    console.log('currentIdx.on routePush; history = ', history.getState())
-    return history.getState().length - 1
-  })
+  const history = createStore([]).on(routePush, (state, route) => [
+    ...state,
+    route,
+  ])
+  const currentIdx = createStore(-2).on(
+    routePush,
+    () => history.getState().length - 1,
+  )
 
-  history.watch(e => console.log('history', e))
+  history.watch(() => {})
   currentIdx.watch(e => {
-    console.log('currentIdx', e)
     fnIdx(e)
   })
 

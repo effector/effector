@@ -69,7 +69,6 @@ test('olympic', async() => {
   const H = combine(G, E, (text, stats) => `${text} ${stats}`)
   const I = H.map(result => result)
   I.watch(result => {
-    console.log(result)
     fn(result)
   })
   forward({
@@ -143,12 +142,10 @@ test('display name', () => {
   expect(displayName.getState()).toBe('Joseph Doe')
   expect(isFirstNameShortMap.mock.calls.length).toBe(2)
   expect(fullNameMap.mock.calls.length).toBe(2)
-  console.log(displayNameMap.mock.calls)
   expect(displayNameMap.mock.calls.length).toBe(2)
   expect(view.mock.calls.length).toBe(2)
 
   updateFirstName('Jooooooooooooooseph')
-  console.log('displayNameMap.mock.calls')
   console.table(
     displayNameMap.mock.calls.map(
       ([firstName, isFirstNameShort, fullName]) => ({

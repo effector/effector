@@ -12,10 +12,9 @@ import {
   addLinkToOwner,
 } from '../stdlib'
 import {type Effect, effectFabric} from '../effect'
-import {launch, upsertLaunch} from '../kernel'
+import {launch} from '../kernel'
 import {noop} from '../blocks'
 
-import {getDisplayName} from '../naming'
 import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
@@ -188,17 +187,13 @@ function filterMapEvent(
 
 function watchEvent<Payload>(
   event: Event<Payload>,
-  watcher: (payload: Payload, type: string) => any,
+  watcher: (payload: Payload) => any,
 ): Subscription {
   const watcherEffect = effectFabric({
     name: event.shortName + ' watcher',
     domainName: '',
     parent: event.domainName,
-    config: {
-      handler(payload) {
-        return watcher(payload, getDisplayName(event))
-      },
-    },
+    config: {handler: watcher},
   })
   const subscription = createLink(event, {
     //prettier-ignore

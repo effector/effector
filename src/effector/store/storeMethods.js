@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {upsertLaunch, launch} from '../kernel'
+import {upsertLaunch} from '../kernel'
 import {
   step,
   readRef,
@@ -11,7 +11,6 @@ import {
 } from '../stdlib'
 import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
-import {getDisplayName} from '../naming'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'
 import {storeFabric} from './storeFabric'
@@ -42,19 +41,17 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
       scope: {
         handler,
         state: storeInstance.stateRef,
-        trigger: event,
         fail: storeInstance.fail,
       },
       child: [storeInstance],
       //prettier-ignore
       node: [
         step.compute({
-          fn(newValue, {handler, state, trigger, fail}) {
+          fn(newValue, {handler, state, fail}) {
             try {
               const result = handler(
                 readRef(state),
                 newValue,
-                getDisplayName(trigger),
               )
               if (result === undefined) return
               return writeRef(state, result)
@@ -100,10 +97,7 @@ export function watch(
   }
   if (typeof fn !== 'function')
     throw Error('second argument should be a function')
-  return eventOrFn.watch(payload =>
-    //$todo
-    fn(storeInstance.getState(), payload, getDisplayName(eventOrFn)),
-  )
+  return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
 }
 export function subscribe(storeInstance: Store<any>, listener: Function) {
   if (typeof listener !== 'function')
@@ -153,14 +147,13 @@ export function mapStore<A, B>(
   createLink(store, {
     child: [innerStore],
     scope: {
-      store,
       handler: fn,
       state: innerStore.stateRef,
       fail: innerStore.fail,
     },
     node: [
       step.compute({
-        fn(newValue, {state, store, handler, fail}) {
+        fn(newValue, {state, handler, fail}) {
           let result
           try {
             result = handler(newValue, readRef(state))

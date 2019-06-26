@@ -205,14 +205,12 @@ test('rfc1 example implementation', async() => {
   const fnWait = jest.fn()
   const waitIncrement = createEffect('wait increment', {
     async handler() {
-      console.count('wait')
       await new Promise(rs => {
         const unsub = increment.watch(() => {
           unsub()
           rs()
         })
       })
-      console.count('wait done')
     },
   })
   click.watch(() => waitIncrement())
@@ -224,29 +222,23 @@ test('rfc1 example implementation', async() => {
 
   text.on(trimmedInput, (_, text) => text)
 
-  counter.watch(e => console.log('watch counter', e))
+  counter.watch(() => {})
   counter.on(increment, state => state + 1)
   const fnClick = jest.fn()
-  click.watch(() => console.count(`click__watch fast`))
-  //  click.watch(waitIncrement)
+  click.watch(() => {})
   const clickEpicFn = jest.fn()
-  const click$ = from(click)
-    .tap(e => console.log(`tap`, e))
-    .tap(clickEpicFn)
+  const click$ = from(click).tap(clickEpicFn)
 
-  click$.observe(() => console.count('click$.watch'))
+  click$.observe(() => {})
   click$.observe(async() => {
-    console.log('tap -> watch')
     await delay(500)
-    console.log(`tap -> watch -> fnClick & increment`)
     fnClick()
     increment()
   })
-  store.watch(state => console.warn('new state', state))
+  store.watch(() => {})
   const ClickedTimes = withProps(
     store.map(({counter}) => `Clicked: ${counter} times`),
     state => {
-      console.log(state)
       expect(state).not.toBe(text)
       expect(typeof state).toBe('string')
       return <span>{state}</span>
@@ -282,29 +274,10 @@ test('rfc1 example implementation', async() => {
   expect(fnClick).not.toHaveBeenCalled()
   click()
   click()
-  const used = new Set()
-  console.log(
-    JSON.stringify(
-      store,
-      (key, val) => {
-        if (typeof val === 'function') return '() => {}'
-        if (typeof val === 'object' && val !== null) {
-          if (used.has(val)) return '[Circular]'
-          used.add(val)
-        }
-        return val
-      },
-      2,
-    ),
-  )
   expect(fnWait).not.toHaveBeenCalled()
   await new Promise(_ => setTimeout(_, 2200))
-  //TODO Should be
-  // expect(clickEpicFn).toHaveBeenCalledTimes(2)
-  expect(clickEpicFn).not.toHaveBeenCalledTimes(2)
-
   expect(counter.getState()).toBe(2)
-  expect(fnWait).toHaveBeenCalledTimes(2) //TODO why not?
+  expect(fnWait).toHaveBeenCalledTimes(2)
   expect(fnClick).toHaveBeenCalledTimes(2)
   expect(store.getState()).toMatchObject({
     counter: 2,

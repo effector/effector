@@ -2,12 +2,12 @@
 
 import {createStore} from '..'
 import {createEvent} from '../../event'
+import {argumentHistory} from 'effector/fixtures'
 
 it('support watchers for event', () => {
   const fn = jest.fn()
   const event = createEvent('trigger')
   const watcher = event.watch(e => {
-    console.log('e', e)
     fn(e)
   })
 
@@ -15,13 +15,19 @@ it('support watchers for event', () => {
   event()
   event(1)
 
-  console.log('fn.mock.calls', ...fn.mock.calls)
-  expect(fn.mock.calls).toEqual([[3], [undefined], [1]])
+  expect(fn).toBeCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          3,
+          undefined,
+          1,
+        ]
+    `)
 
   watcher()
 
   event(4)
-  expect(fn.mock.calls).toEqual([[3], [undefined], [1]])
+  expect(fn).toBeCalledTimes(3)
 })
 
 it('support watchers for storages', () => {
@@ -29,20 +35,25 @@ it('support watchers for storages', () => {
   const event = createEvent('trigger')
   const store = createStore('none').on(event, (_, e) => e.toString())
   const watcher = store.watch(e => {
-    console.log('store', e)
     fn(e)
   })
 
   event(3)
   event(1)
 
-  console.log('fn.mock.calls', ...fn.mock.calls)
-  expect(fn.mock.calls).toEqual([['none'], ['3'], ['1']])
+  expect(fn).toBeCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "none",
+          "3",
+          "1",
+        ]
+    `)
 
   watcher()
 
   event(4)
-  expect(fn.mock.calls).toEqual([['none'], ['3'], ['1']])
+  expect(fn).toBeCalledTimes(3)
 })
 
 it('support event watchers for storages', () => {
@@ -58,7 +69,13 @@ it('support event watchers for storages', () => {
   update(a => a + 2)
   update(a => a + 10)
 
-  expect(fn.mock.calls).toEqual([[0], [2], [12]])
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          0,
+          2,
+          12,
+        ]
+    `)
 
   watcher()
   watcher2()
@@ -75,11 +92,13 @@ it('support event watchers for storages', () => {
   sample()
   sample()
 
-  expect(fn.mock.calls).toEqual([
-    [0, undefined, 'sample'],
-    [0, undefined, 'sample'],
-    [0, undefined, 'sample'],
-  ])
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      0,
+      0,
+      0,
+    ]
+  `)
 
   watcher()
 })
@@ -98,19 +117,21 @@ it('support watchers for mapped storages', () => {
   addMetaTag('store', store)
 
   const watcher = store.watch(e => {
-    console.log('store', e)
     fn(e)
   })
 
-  console.log('event(3)')
   event(3)
 
-  console.log('fn.mock.calls', ...fn.mock.calls)
-  expect(fn.mock.calls).toEqual([['/none'], ['/3']])
+  expect(fn).toBeCalledTimes(2)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          "/none",
+          "/3",
+        ]
+    `)
 
   watcher()
 
-  console.log('event(4)')
   event(4)
-  expect(fn.mock.calls).toEqual([['/none'], ['/3']])
+  expect(fn).toBeCalledTimes(2)
 })
