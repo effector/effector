@@ -106,15 +106,15 @@ const Extra = ({message, children}: FlowInfoTree) => {
     <ul>
       {message && (
         <li>
-          {message.map(message => (
-            <ErrorMessage {...message} />
+          {message.map((message, key) => (
+            <ErrorMessage key={key} {...message} />
           ))}
         </li>
       )}
       {children && (
         <li>
-          {children.map(extra => (
-            <Extra {...extra} />
+          {children.map((extra, key) => (
+            <Extra key={key} {...extra} />
           ))}
         </li>
       )}
@@ -128,14 +128,23 @@ export const TypeErrorsView = () => {
     <TypeErrors>
       <Scroll>
         <ul>
-          {errors.map(error => {
+          {errors.map((error, key) => {
             // TODO: hide libdefs until errors are fixed
-            if (error.message[0].loc?.type === 'LibFile') return null
+            if (
+              process.env.NODE_ENV === 'production' &&
+              error.message[0].loc?.type === 'LibFile'
+            )
+              return null
+
             return (
-              <li>
-                {error.message &&
-                  error.message.map(message => <ErrorMessage {...message} />)}
-                {error.extra && error.extra.map(extra => <Extra {...extra} />)}
+              <li key={key}>
+                {error.message.map((message, key) => (
+                  <ErrorMessage key={key} {...message} />
+                ))}
+                {error.extra &&
+                  error.extra.map((extra, key) => (
+                    <Extra key={key} {...extra} />
+                  ))}
               </li>
             )
           })}

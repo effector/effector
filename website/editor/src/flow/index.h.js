@@ -53,6 +53,6 @@ export type FlowError = {|
   level: FlowErrorSeverity,
   suppressions: Array<{|loc: FlowLocation|}>,
 
-  extra: Array<FlowInfoTree>,
+  extra?: Array<FlowInfoTree>,
   message: Array<FlowMessage>,
 |}
