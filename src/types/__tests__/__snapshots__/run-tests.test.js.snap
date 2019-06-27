@@ -80,6 +80,12 @@ Array [
   Array [
     "Cannot assign \`state.text\` to \`createComponent_initialProps_check5\` because string [1] is incompatible with number [2].",
   ],
+  Array [
+    "Cannot call \`createGate\` because number [1] is incompatible with object type [2] in type argument \`Props\`.",
+  ],
+  Array [
+    "Cannot call \`useGate\` with \`1\` bound to \`props\` because number [1] is incompatible with object type [2].",
+  ],
 ]
 `;
 
@@ -126,5 +132,9 @@ Argument of type '\\"\\"' is not assignable to parameter of type 'number'.
 Type 'number' is not assignable to type 'string'.
 Property 'unknownProp' does not exist on type '{ id: number; }'.
 Type 'string' is not assignable to type 'number'.
+Type 'number' does not satisfy the constraint 'object'.
+Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
+Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
+  Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 "
 `;
