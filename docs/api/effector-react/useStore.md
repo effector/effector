@@ -19,6 +19,8 @@ Creates hook function, which subscribe to watcher, that observe to changes in cu
 #### Example
 
 ```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {createStore, createApi} from 'effector'
 import {useStore} from 'effector-react'
 
