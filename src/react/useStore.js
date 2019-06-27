@@ -17,11 +17,11 @@ export function useStore<State>(store: Store<State>): State {
 
 export function useStoreMap<State, Result, Keys: $ReadOnlyArray<any>>({
   store,
-  keys = [],
+  keys,
   fn,
 }: {|
   +store: Store<State>,
-  +keys?: Keys,
+  +keys: Keys,
   fn(state: State, keys: Keys): Result,
 |}): Result {
   if (!is.store(store)) throw Error('useStoreMap expects a store')

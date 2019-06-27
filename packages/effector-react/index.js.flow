@@ -55,10 +55,6 @@ declare export function useStoreMap<
   +keys: Keys,
   fn(state: State, keys: Keys): Result,
 |}): Result
-declare function useStoreMap<State, Result>(opts: {|
-  +store: State,
-  fn(state: State, keys: []): Result,
-|}): Result
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 declare export function createGate<Props: {}>(name?: string): Gate<Props>
