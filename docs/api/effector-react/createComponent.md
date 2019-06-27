@@ -22,6 +22,8 @@ Note: **You can't use hooks in `createComponent`**.
 #### Example
 
 ```js
+import React from 'react'
+import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
