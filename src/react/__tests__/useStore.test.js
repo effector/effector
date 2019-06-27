@@ -4,7 +4,7 @@ import * as React from 'react'
 //$todo
 import {render, cleanup, act} from 'react-testing-library'
 import {createStore, createEvent} from 'effector'
-import {useStore} from '../useStore'
+import {useStore, useStoreMap} from '../useStore'
 
 afterEach(cleanup)
 
@@ -39,4 +39,57 @@ describe('useStore', () => {
       render(<ErrorDisplay />)
     }).toThrowErrorMatchingSnapshot()
   })
+})
+
+test('useStoreMap', () => {
+  const removeUser = createEvent()
+  const changeUserAge = createEvent()
+  const users = createStore({
+    alex: {age: 20, name: 'Alex'},
+    john: {age: 30, name: 'John'},
+  })
+  users.on(removeUser, (users, nickname) => {
+    const upd = {...users}
+    delete upd[nickname]
+    return upd
+  })
+  users.on(changeUserAge, (users, {nickname, age}) => ({
+    ...users,
+    [nickname]: {...users[nickname], age},
+  }))
+
+  const Card = ({nickname}) => {
+    const {name, age} = useStoreMap({
+      store: users,
+      keys: [nickname],
+      fn: (users, [nickname]) => users[nickname],
+    })
+    return (
+      <li>
+        {name}: {age}
+      </li>
+    )
+  }
+
+  const Cards = () => {
+    const userList = Object.keys(useStore(users))
+    return (
+      <ul>
+        {userList.map(name => (
+          <Card nickname={name} key={name} />
+        ))}
+      </ul>
+    )
+  }
+  const {container} = render(<Cards />)
+  expect(container.firstChild).toMatchSnapshot()
+  act(() => {
+    changeUserAge({nickname: 'alex', age: 21})
+  })
+
+  expect(container.firstChild).toMatchSnapshot()
+  act(() => {
+    removeUser('alex')
+  })
+  expect(container.firstChild).toMatchSnapshot()
 })
