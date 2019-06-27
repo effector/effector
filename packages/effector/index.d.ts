@@ -164,7 +164,6 @@ export type Cmd =
   | Update
   | Run
   | Filter
-  | Emit
   | Compute
   | Tap
   | Barrier
@@ -199,13 +198,7 @@ export type Filter = {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }
 }
-export type Emit = {
-  id: ID
-  type: 'emit'
-  data: {
-    fullName: string
-  }
-}
+
 export type Compute = {
   id: ID
   type: 'compute'
@@ -226,7 +219,6 @@ export type Step = {
   scope: {[field: string]: any}
 }
 export const step: {
-  emit(data: {fullName: string}): Emit
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute

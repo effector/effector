@@ -6,7 +6,6 @@ import type {
   Run,
   Tap,
   Filter,
-  Emit,
   Compute,
   Barrier,
   ID,
@@ -26,10 +25,6 @@ export const step: {|
     +priority?: 'barrier' | 'sampler',
     meta?: NodeMeta,
   |}): Barrier,
-  emit(data: {|
-    fullName: string,
-    meta?: NodeMeta,
-  |}): Emit,
   compute(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
@@ -57,8 +52,6 @@ export const step: {|
       priority,
     }),
   compute: cmd.bind(null, 'compute'),
-  //TODO remove emit
-  emit: cmd.bind(null, 'emit'),
   filter: cmd.bind(null, 'filter'),
   run: cmd.bind(null, 'run'),
   tap: cmd.bind(null, 'tap'),
