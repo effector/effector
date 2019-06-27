@@ -2,8 +2,8 @@
 
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
 import {sourceCode, performLint} from '../domain'
-import {flowToggle} from '../settings/domain'
-import {checkContent, typeAtPos, typeHint, typeErrors} from './domain'
+import {flowToggle, typeHoverToggle} from '../settings/domain'
+import {checkContent, typeAtPos, typeHint, typeErrors, typeNode} from './domain'
 
 if (process.env.NODE_ENV === 'development') {
   checkContent.fail.watch(data => console.error('checkContent', data))
@@ -42,3 +42,27 @@ typeErrors
 typeHint
   .on(typeAtPos.done, (_, {result}) => result.code.c)
   .reset(typeAtPos.fail)
+
+typeHoverToggle.watch(enabled => {
+  if (enabled) {
+    typeNode.show.watch(() => {
+      typeNode.current.style.opacity = '1'
+      typeNode.current.style.visibility = 'inherit'
+    })
+    typeNode.hide.watch(() => {
+      typeNode.current.style.opacity = '0'
+      typeNode.current.style.visibility = 'hidden'
+    })
+
+    typeAtPos.fail.watch(() => typeNode.hide())
+
+    typeHint
+      .map(data => {
+        if (data === null) return 'Loading...'
+        return data
+      })
+      .watch(hint => {
+        typeNode.current.innerText = hint
+      })
+  }
+})

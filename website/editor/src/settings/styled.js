@@ -3,6 +3,7 @@
 import {styled} from 'linaria/react'
 
 export const SettingsGroup = styled.div`
+  background-color: #f7f7f7;
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   grid-column: 3 / span 1;
@@ -21,4 +22,13 @@ export const Label = styled.label`
   padding: 15px;
   border-bottom: 1px solid #ddd;
   font-weight: bold;
+`
+
+export const Section = styled.section`
+  background-color: #fff;
+  border-bottom: 15px solid #f7f7f7;
+
+  & + & {
+    border-top: 1px solid #ddd;
+  }
 `

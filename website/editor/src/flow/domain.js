@@ -1,9 +1,16 @@
 //@flow
 
-import {createEffect, createStore} from 'effector'
+import {createEffect, createStore, createEvent} from 'effector'
 import type {FlowError} from './index.h'
 
-export const typeHint = createStore<string>('')
+export const typeNode = {
+  current: document.createElement('div'),
+  show: createEvent<void>(),
+  hide: createEvent<void>()
+}
+typeNode.current.className = 'type-hover'
+
+export const typeHint = createStore<string | null>(null)
 
 export const typeErrors = createStore<Array<FlowError>>([])
 

@@ -29,29 +29,48 @@ import {
   retrieveVersion,
   version,
 } from './domain'
-import {typeAtPos} from './flow/domain'
+import {typeAtPos, typeNode} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
 import {compress} from './compression'
 import {versionLoader, evaluator} from './evaluator'
-import {typechecker} from './settings/domain'
+import {typechecker, typeHoverToggle} from './settings/domain'
 import {switcher} from './switcher'
 
 version.on(selectVersion, (_, p) => p)
-
-const __ENABLE_TYPE_AT_POS__ = true
 
 codeCursorActivity.watch(editor => {
   const cursor = editor.getCursor()
   const body = editor.getValue()
   const line = cursor.line + 1
   const col = cursor.ch
-  if (__ENABLE_TYPE_AT_POS__) {
-    typeAtPos({
-      filename: '/static/repl.js',
-      body,
-      line,
-      col,
-    })
+  typeAtPos({
+    filename: '/static/repl.js',
+    body,
+    line,
+    col,
+  })
+})
+
+sample({
+  source: typeHoverToggle,
+  clock: codeCursorActivity,
+  fn: (enabled, editor) => ({enabled, editor}),
+}).watch(({enabled, editor}) => {
+  const cursor = editor.getCursor()
+  if (cursor.line === 0 && cursor.ch === 0) return
+  if (enabled) {
+    editor.addWidget(
+      {
+        line: cursor.line,
+        ch: cursor.ch,
+      },
+      typeNode.current,
+    )
+    if (cursor.outside) {
+      typeNode.hide()
+    } else {
+      typeNode.show()
+    }
   }
 })
 

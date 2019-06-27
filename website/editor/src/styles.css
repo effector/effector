@@ -9,6 +9,31 @@
   z-index: 10000 !important;
 }
 
+@keyframes fadein {
+  0% {
+    opacity: 0;
+    visibility: hidden;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.type-hover {
+  z-index: 50;
+  border: 1px solid #c8c8c8;
+  background-color: #f3f3f3;
+  user-select: text;
+  box-sizing: initial;
+  animation: fadein 0.1s linear;
+  line-height: 1.5em;
+  overflow: hidden;
+  cursor: default;
+  padding: 4px 8px;
+  visibility: hidden;
+  opacity: 0;
+}
+
 .navPusher {
   height: 100%;
 }
@@ -71,7 +96,7 @@ body {
 .header-tabs {
   border-left: 1px solid #ddd;
   background-color: #f7f7f7;
-  height: 35px;
+  height: 36px;
   overflow-y: auto;
 }
 

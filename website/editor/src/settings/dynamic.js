@@ -5,18 +5,20 @@ import {
   flowToggleChange,
   tsToggle,
   tsToggleChange,
+  typeHoverToggle,
+  typeHoverToggleChange,
 } from './domain'
 
-flowToggle
-  .on(flowToggleChange, (_, e) => e.currentTarget.checked)
-  .on(tsToggleChange, (state, e) => {
-    if (e.currentTarget.checked) return false
-    return state
-  })
+const handler = (_, e) => e.currentTarget.checked
 
-tsToggle
-  .on(tsToggleChange, (_, e) => e.currentTarget.checked)
-  .on(flowToggleChange, (state, e) => {
-    if (e.currentTarget.checked) return false
-    return state
-  })
+flowToggle.on(flowToggleChange, handler).on(tsToggleChange, (state, e) => {
+  if (e.currentTarget.checked) return false
+  return state
+})
+
+tsToggle.on(tsToggleChange, handler).on(flowToggleChange, (state, e) => {
+  if (e.currentTarget.checked) return false
+  return state
+})
+
+typeHoverToggle.on(typeHoverToggleChange, handler)

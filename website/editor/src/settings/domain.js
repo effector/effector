@@ -23,6 +23,11 @@ export const flowToggleChange = domain.event<SyntheticEvent<HTMLInputElement>>()
 export const tsToggle = domain.store<boolean>(false)
 export const tsToggleChange = domain.event<SyntheticEvent<HTMLInputElement>>()
 
+export const typeHoverToggle = domain.store<boolean>(false)
+export const typeHoverToggleChange = domain.event<
+  SyntheticEvent<HTMLInputElement>,
+>()
+
 export const typechecker: Store<'flow' | 'typescript' | null> = combine(
   tsToggle,
   flowToggle,

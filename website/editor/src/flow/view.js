@@ -4,6 +4,7 @@ import * as React from 'react'
 
 import {useStore} from 'effector-react'
 import {typeErrors, typeHint} from './domain'
+import {typeHoverToggle} from '../settings/domain'
 import type {FlowMessage, FlowInfoTree} from './index.h'
 import {styled} from 'linaria/react'
 
@@ -62,7 +63,8 @@ const Scroll = styled.div`
 
 export const TypeHintView = () => {
   const type = useStore(typeHint)
-  return <TypeHint>{type}</TypeHint>
+  const enabled = useStore(typeHoverToggle)
+  return enabled ? null : <TypeHint>{type}</TypeHint>
 }
 
 const ErrorMessage = ({type, loc, context, descr}: FlowMessage) => {

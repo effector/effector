@@ -94,6 +94,15 @@ export default class CodeMirrorPanel extends React.Component<any> {
     this._codeMirror.on('focus', this.handleFocus)
     this._codeMirror.on('cursorActivity', this.props.onCursorActivity)
 
+    CodeMirror.on(this._codeMirror.getWrapperElement(), 'mouseover', e => {
+      const target = e.target || e.srcElement
+      const box = target.getBoundingClientRect(),
+        x = (box.left + box.right) / 2,
+        y = (box.top + box.bottom) / 2
+      const pos = this._codeMirror.coordsChar({left: x, top: y}, 'client')
+      // console.log(pos)
+    })
+
     this._codeMirror.setValue((this._cached = this.props.value || ''))
 
     this.props.setCursor.watch(({line, column}) => {
