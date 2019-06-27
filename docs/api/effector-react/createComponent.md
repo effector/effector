@@ -37,9 +37,9 @@ const MyCounter = createComponent(counter, (props, state) => (
   </div>
 ))
 
-const MyOwnComponent = () =>{
-  //any staff here
-  return(
+const MyOwnComponent = () => {
+  // any staff here
+  return (
     <MyCounter />
   )
 }
