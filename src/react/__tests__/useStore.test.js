@@ -48,6 +48,10 @@ test('useStoreMap', () => {
     alex: {age: 20, name: 'Alex'},
     john: {age: 30, name: 'John'},
   })
+  const userNames = createStore(['alex', 'john']).on(
+    removeUser,
+    (list, username) => list.filter(item => item !== username),
+  )
   users.on(removeUser, (users, nickname) => {
     const upd = {...users}
     delete upd[nickname]
@@ -72,7 +76,7 @@ test('useStoreMap', () => {
   }
 
   const Cards = () => {
-    const userList = Object.keys(useStore(users))
+    const userList = useStore(userNames)
     return (
       <ul>
         {userList.map(name => (
