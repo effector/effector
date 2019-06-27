@@ -6,6 +6,8 @@ hide_title: true
 
 # `useStore(store)`
 
+Creates hook function, which subscribe to watcher, that observe to changes in current store, so when recording results, the component will update automatically.
+
 #### Arguments
 
 1. `store` (_Store_)
@@ -36,4 +38,6 @@ const Counter = () => {
     </div>
   )
 }
+
+ReactDOM.render(<Counter />, document.getElementById("root"));
 ```
