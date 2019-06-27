@@ -57,17 +57,22 @@ export interface Event<Payload> extends Unit<Payload> {
   [Symbol.observable](): Observable<Payload>
 }
 
-export interface Future<Params, Done, Fail> extends Promise<Done> {
-  readonly args: Params
-  anyway(): Promise<void>
-  cache(): Done | void
-}
-
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
-  (payload: Params): Future<Params, Done, Fail>
+  (payload: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly fail: Event<{params: Params; error: Fail}>
-  readonly finally: Event<{params: Params}>
+  readonly finally: Event<
+    | {
+        status: 'done'
+        params: Params
+        result: Done
+      }
+    | {
+        status: 'fail'
+        params: Params
+        error: Fail
+      }
+  >
   readonly use: {
     (asyncFunction: (params: Params) => Promise<Done> | Done): Effect<
       Params,

@@ -6,7 +6,6 @@ import type {Store} from '../store'
 import type {CompositeName} from '../compositeName'
 
 export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
-  // (payload: Params): Future<Params, Done, Fail>,
   /*::
   [[call]](payload: Params): Promise<Done>,
   */
@@ -18,9 +17,18 @@ export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
     params: Params,
     error: Fail,
   |}>,
-  finally: Event<{|
-    params: Params,
-  |}>,
+  finally: Event<
+    | {|
+        +status: 'done',
+        +params: Params,
+        +result: Done,
+      |}
+    | {|
+        +status: 'fail',
+        +params: Params,
+        +error: *,
+      |},
+  >,
   /*::+*/ id: string,
   use: {|
     /*::
@@ -53,7 +61,6 @@ export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
 }
 
 export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
-  // (payload: Params): Future<Params, Done, Fail>,
   /*::
   [[call]]: Fn,
   */
