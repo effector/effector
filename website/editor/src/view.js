@@ -31,6 +31,7 @@ import {
   codeSetCursor,
   packageVersions,
 } from './domain'
+import {typechecker} from './settings/domain'
 
 const OutlineView = createComponent(
   {
@@ -61,8 +62,12 @@ const CodeView = createComponent(
       isDesktop ? true : tab === 'editor',
     ),
     sourceCode,
+    mode: typechecker.map(typechecker => {
+      if (typechecker === 'typescript') return 'text/typescript-jsx'
+      return 'text/flow-jsx'
+    }),
   },
-  ({}, {displayEditor, sourceCode}) => {
+  ({}, {displayEditor, mode, sourceCode}) => {
     return (
       <div
         className="sources"
@@ -73,7 +78,7 @@ const CodeView = createComponent(
           performLint={performLint}
           onCursorActivity={codeCursorActivity}
           value={sourceCode}
-          mode="text/jsx"
+          mode={mode}
           onChange={changeSourcesDebounced}
           lineWrapping
         />

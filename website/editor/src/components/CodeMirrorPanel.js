@@ -5,7 +5,7 @@ import {createEvent, createEffect} from 'effector'
 import {checkContent} from '../flow/domain'
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'
-import 'codemirror/mode/jsx/jsx'
+import '../mode/jsx'
 
 import 'codemirror/addon/lint/lint.css'
 import 'codemirror/addon/lint/lint'
