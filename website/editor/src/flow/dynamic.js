@@ -1,7 +1,7 @@
 //@flow
 
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
-import {sourceCode} from '../domain'
+import {sourceCode, performLint} from '../domain'
 import {flowToggle} from '../settings/domain'
 import {checkContent, typeAtPos, typeHint, typeErrors} from './domain'
 
@@ -29,6 +29,7 @@ flowToggle.watch(enabled => {
       return Promise.reject()
     })
   }
+  performLint()
 })
 
 typeErrors

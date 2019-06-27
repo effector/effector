@@ -22,6 +22,7 @@ import {
   selectVersion,
   sourceCode,
   changeSources,
+  performLint,
   codeError,
   stats,
   version,
@@ -69,6 +70,7 @@ const CodeView = createComponent(
         <Panel
           markLine={codeMarkLine}
           setCursor={codeSetCursor}
+          performLint={performLint}
           onCursorActivity={codeCursorActivity}
           value={sourceCode}
           mode="text/jsx"

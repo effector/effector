@@ -18,20 +18,16 @@ import 'codemirror/keymap/sublime'
 // import 'codemirror/addon/fold/xml-fold';
 import 'codemirror/addon/fold/foldgutter.css'
 
-function getAnnotations(text, callback, options, editor) {
+function getAnnotations(text: string, callback, options, editor) {
   checkContent(text)
     .then(({code}) => (code === 'fail' ? [] : code))
     .then(errors => {
       CodeMirror.signal(editor, 'flowErrors', errors)
 
       const lint = errors.map(err => {
-        let messages = err.message
-        let firstLoc = messages[0].loc
-        let message = messages
-          .map(msg => {
-            return msg.descr
-          })
-          .join('\n')
+        const messages = err.message
+        const firstLoc = messages[0].loc
+        const message = messages.map(msg => msg.descr).join('\n')
         return {
           from: CodeMirror.Pos(
             firstLoc.start.line - 1,
@@ -47,7 +43,7 @@ function getAnnotations(text, callback, options, editor) {
 }
 getAnnotations.async = true
 
-export default class CodeMirrorPanel extends React.Component {
+export default class CodeMirrorPanel extends React.Component<any> {
   static defaultProps = {
     lineNumbers: true,
     tabSize: 2,
@@ -60,6 +56,7 @@ export default class CodeMirrorPanel extends React.Component {
     passive: false,
     setCursor: createEvent(),
     markLine: createEffect(),
+    performLint: createEvent<void>(),
     onCursorActivity() {},
   }
   _textareaRef = React.createRef<HTMLTextAreaElement>()
@@ -102,6 +99,10 @@ export default class CodeMirrorPanel extends React.Component {
     this.props.setCursor.watch(({line, column}) => {
       this._codeMirror.focus()
       this._codeMirror.setCursor({line: line - 1, ch: column})
+    })
+
+    this.props.performLint.watch(() => {
+      this._codeMirror.performLint()
     })
 
     this.props.markLine.use(

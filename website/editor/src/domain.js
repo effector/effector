@@ -71,6 +71,7 @@ export const realmTimeout = createEvent('realm setTimeout call')
 
 export const evalEffect = createEffect('eval realm code')
 
+export const performLint = createEvent<void>('perform lint')
 export const changeSources = createEvent('change sources')
 
 export const selectVersion = createEvent('select version')
