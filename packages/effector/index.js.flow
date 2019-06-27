@@ -53,15 +53,9 @@ declare export class Event<Payload> implements Unit<Payload> {
   getType(): string;
 }
 
-declare export class Future<Params, Done, Fail> extends Promise<Done> {
-  +args: Params;
-  anyway(): Promise<void>;
-  cache(): Done | void;
-}
-
 declare export class Effect<Params, Done, Fail = Error>
   implements Unit<Params> {
-  (payload: Params): Future<Params, Done, Fail>;
+  (payload: Params): Promise<Done>;
   +kind: kind;
   +done: Event<{|
     +params: Params,
@@ -71,9 +65,18 @@ declare export class Effect<Params, Done, Fail = Error>
     +params: Params,
     +error: Fail,
   |}>;
-  +finally: Event<{|
-    params: Params,
-  |}>;
+  +finally: Event<
+    | {|
+        +status: 'done',
+        +params: Params,
+        +result: Done,
+      |}
+    | {|
+        +status: 'fail',
+        +params: Params,
+        +error: Fail,
+      |},
+  >;
   +use: {|
     (asyncFunction: (params: Params) => Promise<Done> | Done): this,
     getCurrent(): (params: Params) => Promise<Done>,

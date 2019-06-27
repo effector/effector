@@ -27,6 +27,15 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
 }
 
 export function useStore<State>(store: Store<State>): State
+export function useStoreMap<
+  State,
+  Result,
+  Keys extends readonly any[],
+>(opts: {
+  readonly store: Store<State>,
+  readonly keys: Keys,
+  readonly fn: (state: State, keys: Keys) => Result,
+}): Result
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 export function createGate<Props extends object>(name?: string): Gate<Props>

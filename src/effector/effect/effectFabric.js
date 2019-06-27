@@ -1,16 +1,19 @@
 //@flow
 
 import type {Effect} from './index.h'
-import {Kind, step, addLinkToOwner} from '../stdlib'
+import {Kind, step, addLinkToOwner, bind} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {eventFabric, type Event} from '../event'
 import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
 
-function OnResolve(result) {
-  const {event, anyway, params, handler} = this
-  //prettier-ignore
+const onResolve = ({event, anyway, params, handler}, result) => {
+  upsertLaunch(anyway, {
+    status: 'done',
+    params,
+    result,
+  })
   upsertLaunch(event, {
     handler,
     toHandler: result,
@@ -19,11 +22,13 @@ function OnResolve(result) {
       result,
     },
   })
-  upsertLaunch(anyway, {params})
 }
-function OnReject(error) {
-  const {event, anyway, params, handler} = this
-  //prettier-ignore
+const onReject = ({event, anyway, params, handler}, error) => {
+  upsertLaunch(anyway, {
+    status: 'fail',
+    params,
+    error,
+  })
   upsertLaunch(event, {
     handler,
     toHandler: error,
@@ -32,7 +37,6 @@ function OnReject(error) {
       error,
     },
   })
-  upsertLaunch(anyway, {params})
 }
 
 function Def() {
@@ -44,11 +48,6 @@ function Def() {
     this.rs = rs
     this.rj = rj
   })
-  //$off
-  req.anyway = () => {
-    console.error('.anyway is deprecated, use .finally')
-    return req.then(() => {}, () => {})
-  }
   this.req = req
 }
 
@@ -96,9 +95,18 @@ export function effectFabric<Payload, Done>({
     parent,
     config,
   })
-  const anyway: Event<{|
-    params: Payload,
-  |}> = eventFabric({
+  const anyway: Event<
+    | {|
+        +status: 'done',
+        +params: Payload,
+        +result: Done,
+      |}
+    | {|
+        +status: 'fail',
+        +params: Payload,
+        +error: *,
+      |},
+  > = eventFabric({
     name: '' + instance.shortName + ' finally',
     parent,
     config,
@@ -149,8 +157,8 @@ export function effectFabric<Payload, Done>({
         runEffect(
           getHandler(),
           params,
-          OnResolve.bind({event: done, anyway, params, handler: req.rs}),
-          OnReject.bind({event: fail, anyway, params, handler: req.rj}),
+          bind(onResolve, {event: done, anyway, params, handler: req.rs}),
+          bind(onReject, {event: fail, anyway, params, handler: req.rj}),
         )
         return params
       },
@@ -158,8 +166,8 @@ export function effectFabric<Payload, Done>({
   )
   ;(instance: any).create = (params: Payload, fullName, args) => {
     const req = new Def()
-    eventCreate({ɔ: {params, req}}, instance.getType(), args)
     req.req.catch(err => {})
+    eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
 

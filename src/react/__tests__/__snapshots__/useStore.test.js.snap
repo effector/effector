@@ -15,3 +15,43 @@ exports[`useStore should render 2`] = `
 `;
 
 exports[`useStore should throw 1`] = `"expect useStore argument to be a store"`;
+
+exports[`useStoreMap 1`] = `
+<ul>
+  <li>
+    Alex
+    : 
+    20
+  </li>
+  <li>
+    John
+    : 
+    30
+  </li>
+</ul>
+`;
+
+exports[`useStoreMap 2`] = `
+<ul>
+  <li>
+    Alex
+    : 
+    21
+  </li>
+  <li>
+    John
+    : 
+    30
+  </li>
+</ul>
+`;
+
+exports[`useStoreMap 3`] = `
+<ul>
+  <li>
+    John
+    : 
+    30
+  </li>
+</ul>
+`;

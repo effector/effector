@@ -12,7 +12,7 @@ export const amount = todos.map(todos => {
     case 1:
       return "one todo";
     case 2:
-      return "two todo";
+      return "two todos";
     default:
       return "todos amount: " + todos.length;
   }
