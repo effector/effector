@@ -99,11 +99,7 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
   })
   watcherEffect(storeInstance.getState())
   const subscription = createLink(storeInstance, watcherEffect, {
-    //prettier-ignore
-    node: [
-      noop,
-      step.run({fn: x => x})
-    ]
+    node: [noop, step.run({fn: x => x})],
   })
   //$todo
   subscription.fail = watcherEffect.fail
