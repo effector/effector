@@ -27,7 +27,6 @@ export type Cmd =
   | Update
   | Run
   | Filter
-  | Emit
   | Compute
   | Barrier
   | Tap
@@ -64,14 +63,6 @@ export type Filter = {|
   +type: 'filter',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => boolean,
-    meta?: NodeMeta,
-  |},
-|}
-export type Emit = {|
-  +id: ID,
-  +type: 'emit',
-  +data: {|
-    fullName: string,
     meta?: NodeMeta,
   |},
 |}

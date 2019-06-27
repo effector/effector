@@ -147,8 +147,6 @@ const command = {
     local.isFailed = false
     local.isChanged = true
   },
-  //TODO remove emit
-  emit(local, step: $PropertyType<Emit, 'data'>, val: StateRef) {},
   filter(local, step: $PropertyType<Filter, 'data'>, val: StateRef) {
     const runCtx = tryRun({
       arg: readRef(val),
