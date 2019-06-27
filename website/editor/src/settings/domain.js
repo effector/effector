@@ -1,6 +1,6 @@
 // @flow
 
-import {createEvent, createStore, createDomain} from 'effector'
+import {combine, type Store, createDomain} from 'effector'
 
 const domain = createDomain('settings')
 
@@ -20,4 +20,15 @@ domain.onCreateStore(store => {
 export const flowToggle = domain.store<boolean>(false)
 export const flowToggleChange = domain.event<SyntheticEvent<HTMLInputElement>>()
 
-console.log(domain, flowToggle)
+export const tsToggle = domain.store<boolean>(false)
+export const tsToggleChange = domain.event<SyntheticEvent<HTMLInputElement>>()
+
+export const typechecker: Store<'flow' | 'typescript' | null> = combine(
+  tsToggle,
+  flowToggle,
+  (tsEnabled, flowEnabled) => {
+    if (flowEnabled) return 'flow'
+    if (tsEnabled) return 'typescript'
+    return null
+  },
+)

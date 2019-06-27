@@ -3,10 +3,10 @@
 import * as React from 'react'
 import {Label, SettingsGroup} from './styled'
 import {Toggle} from '../components/Toggle'
-import {flowToggle, flowToggleChange} from './domain'
+import {flowToggle, flowToggleChange, tsToggle, tsToggleChange} from './domain'
 import {useStore} from 'effector-react'
 
-export {flowToggle}
+export {flowToggle, tsToggle}
 
 export const Settings = () => {
   return (
@@ -18,6 +18,14 @@ export const Settings = () => {
           onChange={flowToggleChange}
         />
         Flow
+      </Label>
+      <Label>
+        <Toggle
+          name="typescript"
+          checked={useStore(tsToggle)}
+          onChange={tsToggleChange}
+        />
+        TypeScript
       </Label>
       {/*<Label>
         <Toggle

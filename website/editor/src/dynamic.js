@@ -1,6 +1,6 @@
 //@flow
 
-import {forward, is} from 'effector'
+import {createStoreObject, sample, forward, is} from 'effector'
 import fetch from 'cross-fetch'
 
 import {
@@ -33,6 +33,7 @@ import {typeAtPos} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
 import {compress} from './compression'
 import {versionLoader, evaluator} from './evaluator'
+import {typechecker} from './settings/domain'
 import {switcher} from './switcher'
 
 version.on(selectVersion, (_, p) => p)
@@ -266,16 +267,14 @@ forward({
 })
 
 {
-  let firstCall = true
-  sourceCode.watch(e => {
-    evalEffect(e)
+  const initStore = createStoreObject({
+    sourceCode,
+    versionLoader,
+    typechecker,
   })
-  sourceCode.watch(versionLoader, e => {
-    if (firstCall) {
-      firstCall = false
-      return
-    }
-    evalEffect(e)
+  initStore.watch(data => {
+    console.log('init store update', data)
+    evalEffect(data.sourceCode)
   })
 }
 

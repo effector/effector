@@ -4,20 +4,20 @@ import {
   createEvent,
   createEffect,
   createStore,
-  combine,
-  restoreEffect,
-  combine as combineFn,
-  createDomain,
-  createApi,
-  forward,
+  type Unit,
+  type Event,
+  type Store,
+  type Effect,
+  type Domain,
 } from 'effector'
+import type {StoreView} from 'effector-react'
 
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from './versions.json'
 import {compress, decompress} from './compression'
 import type {StackFrame} from './evaluator/stackframe/stack-frame'
 
-export const generateShareableUrl = (version: string, code: string) => {
+export function generateShareableUrl(version: string, code: string): string {
   const result =
     window.location.origin +
     window.location.pathname +
@@ -29,7 +29,7 @@ export const generateShareableUrl = (version: string, code: string) => {
   return result
 }
 
-export function getUrlParameter(name: string) {
+export function getUrlParameter(name: string): string {
   name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
   const regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
   const results = regex.exec(location.search)
@@ -38,18 +38,22 @@ export function getUrlParameter(name: string) {
     : decodeURIComponent(results[1].replace(/\+/g, ' '))
 }
 
-export function retrieveCode() {
+export function retrieveCode(): string {
+  if (window.__code__) {
+    return window.__code__?.content || defaultSourceCode
+  }
   const code = getUrlParameter('code')
   if (code) {
     return decompress(code)
   }
-  if (localStorage.getItem('code-compressed')) {
-    return decompress(localStorage.getItem('code-compressed'))
+  const storageCode = localStorage.getItem('code-compressed')
+  if (storageCode != null) {
+    return decompress(storageCode)
   }
   return defaultSourceCode
 }
 
-export function retrieveVersion() {
+export function retrieveVersion(): string {
   const version = getUrlParameter('version')
   if (version) {
     return version
@@ -57,31 +61,42 @@ export function retrieveVersion() {
   return defaultVersions[0]
 }
 
-export const realmClearNode = createEvent('realm clear node')
-export const realmEvent = createEvent('realm event created')
-export const realmStore = createEvent('realm store created')
-export const realmEffect = createEvent('realm effect created')
-export const realmDomain = createEvent('realm domain created')
-export const realmComponent = createEvent('realm component created')
-export const realmInvoke = createEvent('realm invoke')
-export const realmStatus = createEvent('realm status update')
+export const realmClearNode = createEvent<Unit<any>>('realm clear node')
+export const realmEvent = createEvent<Event<any>>('realm event created')
+export const realmStore = createEvent<Store<any>>('realm store created')
+export const realmEffect = createEvent<Effect<any, any, any>>(
+  'realm effect created',
+)
+export const realmDomain = createEvent<Domain>('realm domain created')
+export const realmComponent = createEvent<StoreView<any, any>>(
+  'realm component created',
+)
+export const realmInvoke = createEvent<{|
+  method: string,
+  params: Array<any>,
+  instance: any,
+|}>('realm invoke')
+export const realmStatus = createEvent<{|
+  active: boolean,
+  throwError: boolean,
+|}>('realm status update')
 
-export const realmInterval = createEvent('realm setInterval call')
-export const realmTimeout = createEvent('realm setTimeout call')
+export const realmInterval = createEvent<IntervalID>('realm setInterval call')
+export const realmTimeout = createEvent<TimeoutID>('realm setTimeout call')
 
-export const evalEffect = createEffect('eval realm code')
+export const evalEffect = createEffect<string, any, any>('eval realm code')
 
 export const performLint = createEvent<void>('perform lint')
-export const changeSources = createEvent('change sources')
+export const changeSources = createEvent<string>('change sources')
 
-export const selectVersion = createEvent('select version')
+export const selectVersion = createEvent<string>('select version')
 
-export const intervals = createStore<number[]>([])
-export const timeouts = createStore<number[]>([])
+export const intervals = createStore<IntervalID[]>([])
+export const timeouts = createStore<TimeoutID[]>([])
 
-export const version = createStore(defaultVersions[0])
-export const packageVersions = createStore(defaultVersions)
-export const sourceCode = createStore<string>(defaultSourceCode)
+export const version = createStore<string>(defaultVersions[0])
+export const packageVersions = createStore<string[]>(defaultVersions)
+export const sourceCode = createStore<string>(retrieveCode())
 export const compiledCode = createStore<string>('')
 
 export const codeSetCursor = createEvent()
@@ -105,7 +120,13 @@ export const codeError = createStore<
   stackFrames: [],
 })
 
-export const stats = createStore({
+export const stats = createStore<{|
+  event: Event<any>[],
+  store: Store<any>[],
+  effect: Effect<any, any, any>[],
+  domain: Domain[],
+  component: StoreView<any, any>[],
+|}>({
   event: [],
   store: [],
   effect: [],

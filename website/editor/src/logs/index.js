@@ -1,3 +1,5 @@
+// @flow
+
 import {presets} from './stylePresets'
 import {realmLog} from './domain'
 
