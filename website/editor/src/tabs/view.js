@@ -7,8 +7,10 @@ import {GraphiteView} from '../graphite/view'
 import {Settings, flowToggle as _flowToggle} from '../settings'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
-import Media from 'react-media'
 import {TabHeader, TabHeaderList} from './styled'
+import {mediaQuery} from '../components/mediaQuery'
+
+const SmallScreens = mediaQuery('(max-width: 699px)')
 
 export const TabsView = () => {
   const tab = useStore(_tab)
@@ -16,18 +18,14 @@ export const TabsView = () => {
   return (
     <>
       <TabHeaderList className="header-tabs">
-        <Media query="(max-width: 699px)">
-          <>
-            <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
-              Editor
-            </TabHeader>
-            <TabHeader
-              onClick={tabApi.showOutline}
-              isActive={tab === 'outline'}>
-              Outline
-            </TabHeader>
-          </>
-        </Media>
+        <SmallScreens>
+          <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
+            Editor
+          </TabHeader>
+          <TabHeader onClick={tabApi.showOutline} isActive={tab === 'outline'}>
+            Outline
+          </TabHeader>
+        </SmallScreens>
         {flowToggle && (
           <TabHeader onClick={tabApi.showErrors} isActive={tab === 'errors'}>
             Errors
