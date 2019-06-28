@@ -58,16 +58,6 @@ export const Settings = () => (
         Type hover
       </Label>
     </Section>
-    <Section>
-      <Label>
-        <Toggle
-          name="typehover"
-          checked={useStore(typeHoverToggle)}
-          onChange={typeHoverToggleChange}
-        />
-        Type hover
-      </Label>
-    </Section>
     <Prettify />
     {/*<Label>
         <Toggle

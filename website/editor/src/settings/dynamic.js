@@ -32,7 +32,7 @@ typeHoverToggle.on(typeHoverToggleChange, handler)
 
 prettier.use(async code => {
   const result = await prettierRequest(code)
-  if (!result.success) {
+  if (typeof result.code !== 'string') {
     console.error('prettier request error', result)
     throw Error('request failed')
   }
