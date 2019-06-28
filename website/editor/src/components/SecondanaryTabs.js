@@ -2,9 +2,10 @@
 
 import React from 'react'
 import {styled} from 'linaria/react'
-import {LogsView} from '../logs/view'
 import {createComponent} from 'effector-react'
 import {createApi, createStore, Store} from 'effector'
+import {LogsView} from '../logs/view'
+import {TabHeaderList} from '../tabs/styled'
 
 const tab: Store<'console'> = createStore('console')
 const api = createApi(tab, {
@@ -32,11 +33,11 @@ const TabView = createComponent(tab, ({}, tab) => (
 ))
 
 const ToolbarView = createComponent(tab, ({}, tab) => (
-  <ul className="toolbar">
+  <TabHeaderList>
     <Tab onClick={api.showConsole} isActive={tab === 'console'}>
       Console
     </Tab>
-  </ul>
+  </TabHeaderList>
 ))
 
 const SecondanaryTabs = styled.div`

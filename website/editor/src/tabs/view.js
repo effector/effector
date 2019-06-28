@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react'
-import {cx} from 'linaria'
 import {useStore} from 'effector-react'
 import {tab as _tab, tabApi} from './domain'
 import {GraphiteView} from '../graphite/view'
@@ -9,14 +8,14 @@ import {Settings, flowToggle as _flowToggle} from '../settings'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
 import Media from 'react-media'
-import {TabHeader} from './styled'
+import {TabHeader, TabHeaderList} from './styled'
 
 export const TabsView = () => {
   const tab = useStore(_tab)
   const flowToggle = useStore(_flowToggle)
   return (
     <>
-      <ul className={cx('toolbar', 'header-tabs')}>
+      <TabHeaderList className="header-tabs">
         <Media query="(max-width: 699px)">
           <>
             <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
@@ -43,7 +42,7 @@ export const TabsView = () => {
         <TabHeader onClick={tabApi.showSettings} isActive={tab === 'settings'}>
           Settings
         </TabHeader>
-      </ul>
+      </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div
         style={{visibility: tab === 'dom' ? 'visible' : 'hidden'}}

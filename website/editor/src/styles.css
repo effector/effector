@@ -63,14 +63,6 @@ body {
 .try-inner {
   display: grid;
 }
-.toolbar {
-  background: #f7f7f7;
-  border-bottom: 1px solid #ddd;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-}
 
 /* .stats > div {
   flex: 1;
