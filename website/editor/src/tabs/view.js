@@ -2,7 +2,6 @@
 
 import * as React from 'react'
 import {cx} from 'linaria'
-import {styled} from 'linaria/react'
 import {useStore} from 'effector-react'
 import {tab as _tab, tabApi} from './domain'
 import {GraphiteView} from '../graphite/view'
@@ -10,16 +9,7 @@ import {Settings, flowToggle as _flowToggle} from '../settings'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
 import Media from 'react-media'
-
-const TabHeader = styled.li`
-  border-right: 1px solid #ddd;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 7px 15px;
-  margin: 0;
-  background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
-`
+import {TabHeader} from './styled'
 
 export const TabsView = () => {
   const tab = useStore(_tab)
