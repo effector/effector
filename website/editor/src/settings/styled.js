@@ -32,3 +32,43 @@ export const Section = styled.section`
     border-top: 1px solid #ddd;
   }
 `
+
+export const Button = styled.button`
+  --color-main: #e95801;
+  display: inline-block;
+  border: none;
+  border-radius: 2px;
+  border-width: 0;
+  padding: 0.5rem 1rem;
+  margin: 0;
+  text-decoration: none;
+  background: var(--color-main);
+  color: #ffffff;
+  font-family: sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+  text-align: center;
+  transition: background 70ms ease-in-out, transform 150ms ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  &:hover,
+  &:focus {
+    background: #0053ba;
+  }
+
+  &:focus {
+    outline: 1px solid #fff;
+    outline-offset: -4px;
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    background: hsl(213, 50%, 45%);
+    color: hsla(0, 0%, 100%, 0.9);
+    cursor: not-allowed;
+  }
+`
