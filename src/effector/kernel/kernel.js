@@ -3,7 +3,6 @@
 import type {
   Graphite,
   StateRef,
-  Emit,
   Run,
   Update,
   Filter,
