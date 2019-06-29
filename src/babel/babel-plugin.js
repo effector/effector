@@ -181,7 +181,6 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
 
 function setStoreNameAfter(path, state, nameNodeId, t) {
   const displayName = nameNodeId.name
-
   let args
   let loc
   path.find(path => {
@@ -205,12 +204,25 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
       t.identifier('loc'),
       makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
     )
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+        ),
+      ),
+    )
 
     if (oldConfig) {
       configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
     configExpr.properties.push(locProp)
     configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
   }
 }
 
@@ -240,11 +252,31 @@ function setEventNameAfter(path, state, nameNodeId, t) {
       t.identifier('loc'),
       makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
     )
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+        ),
+      ),
+    )
 
     if (oldConfig) {
       configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
     configExpr.properties.push(locProp)
     configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
   }
+}
+
+/**
+ * "foo src/index.js [12,30]"
+ */
+function generateStableID(babelRoot, fileName, varName, line, column) {
+  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]}`
 }

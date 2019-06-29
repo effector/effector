@@ -10,7 +10,8 @@ const domain = createDomain(\\"domain\\", {
     line: 4,
     column: 15
   },
-  name: \\"domain\\"
+  name: \\"domain\\",
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain/index.js [4, 15]}\\"
 });
 const foo = createDomain('bar', {
   loc: {
@@ -18,7 +19,8 @@ const foo = createDomain('bar', {
     line: 5,
     column: 12
   },
-  name: \\"foo\\"
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-domain/index.js [5, 12]}\\"
 });"
 `;
 
@@ -32,7 +34,8 @@ const domain = createDomain(\\"domain\\", {
     line: 4,
     column: 15
   },
-  name: \\"domain\\"
+  name: \\"domain\\",
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-domain/index.js [4, 15]}\\"
 });
 const foo = domain.domain(\\"foo\\", {
   loc: {
@@ -40,7 +43,8 @@ const foo = domain.domain(\\"foo\\", {
     line: 5,
     column: 12
   },
-  name: \\"foo\\"
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-domain-domain/index.js [5, 12]}\\"
 });
 const bar = domain.domain('baz', {
   loc: {
@@ -48,7 +52,8 @@ const bar = domain.domain('baz', {
     line: 6,
     column: 12
   },
-  name: \\"bar\\"
+  name: \\"bar\\",
+  sid: \\"bar /src/babel/__tests__/fixtures/create-domain-domain/index.js [6, 12]}\\"
 });"
 `;
 
@@ -62,7 +67,8 @@ const domain = createDomain(\\"domain\\", {
     line: 4,
     column: 15
   },
-  name: \\"domain\\"
+  name: \\"domain\\",
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-effect/index.js [4, 15]}\\"
 });
 const a = domain.effect(\\"a\\", {
   loc: {
@@ -70,7 +76,8 @@ const a = domain.effect(\\"a\\", {
     line: 6,
     column: 10
   },
-  name: \\"a\\"
+  name: \\"a\\",
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-effect/index.js [6, 10]}\\"
 });
 
 const f = () => domain.effect(\\"f\\", {
@@ -79,7 +86,8 @@ const f = () => domain.effect(\\"f\\", {
     line: 7,
     column: 16
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-effect/index.js [7, 16]}\\"
 });
 
 const b = domain.effect('hello', {
@@ -88,7 +96,8 @@ const b = domain.effect('hello', {
     line: 8,
     column: 10
   },
-  name: \\"b\\"
+  name: \\"b\\",
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-effect/index.js [8, 10]}\\"
 });
 
 const g = () => domain.effect('baz', {
@@ -97,7 +106,8 @@ const g = () => domain.effect('baz', {
     line: 9,
     column: 16
   },
-  name: \\"g\\"
+  name: \\"g\\",
+  sid: \\"g /src/babel/__tests__/fixtures/create-domain-effect/index.js [9, 16]}\\"
 });"
 `;
 
@@ -111,7 +121,8 @@ const domain = createDomain(\\"domain\\", {
     line: 4,
     column: 15
   },
-  name: \\"domain\\"
+  name: \\"domain\\",
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-event/index.js [4, 15]}\\"
 });
 const a = domain.event(\\"a\\", {
   loc: {
@@ -119,7 +130,8 @@ const a = domain.event(\\"a\\", {
     line: 6,
     column: 10
   },
-  name: \\"a\\"
+  name: \\"a\\",
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-event/index.js [6, 10]}\\"
 });
 
 const f = () => domain.event(\\"f\\", {
@@ -128,7 +140,8 @@ const f = () => domain.event(\\"f\\", {
     line: 7,
     column: 16
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-event/index.js [7, 16]}\\"
 });
 
 const b = domain.event('asm', {
@@ -137,7 +150,8 @@ const b = domain.event('asm', {
     line: 8,
     column: 10
   },
-  name: \\"b\\"
+  name: \\"b\\",
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-event/index.js [8, 10]}\\"
 });
 
 const g = () => domain.event('tasm', {
@@ -146,7 +160,8 @@ const g = () => domain.event('tasm', {
     line: 9,
     column: 16
   },
-  name: \\"g\\"
+  name: \\"g\\",
+  sid: \\"g /src/babel/__tests__/fixtures/create-domain-event/index.js [9, 16]}\\"
 });"
 `;
 
@@ -160,7 +175,8 @@ const domain = createDomain(\\"domain\\", {
     line: 4,
     column: 15
   },
-  name: \\"domain\\"
+  name: \\"domain\\",
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-store/index.js [4, 15]}\\"
 });
 const a = domain.store('bar', {
   loc: {
@@ -168,7 +184,8 @@ const a = domain.store('bar', {
     line: 6,
     column: 10
   },
-  name: \\"a\\"
+  name: \\"a\\",
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-store/index.js [6, 10]}\\"
 });
 const b = domain.store('h', {
   ɔ: {
@@ -180,7 +197,8 @@ const b = domain.store('h', {
     line: 7,
     column: 10
   },
-  name: \\"b\\"
+  name: \\"b\\",
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-store/index.js [7, 10]}\\"
 });
 const c = domain.store('h', {
   ɔ: {
@@ -191,7 +209,8 @@ const c = domain.store('h', {
     line: 8,
     column: 10
   },
-  name: \\"c\\"
+  name: \\"c\\",
+  sid: \\"c /src/babel/__tests__/fixtures/create-domain-store/index.js [8, 10]}\\"
 }); //$off
 
 const d = domain.store('h', {
@@ -201,7 +220,8 @@ const d = domain.store('h', {
     line: 10,
     column: 10
   },
-  name: \\"d\\"
+  name: \\"d\\",
+  sid: \\"d /src/babel/__tests__/fixtures/create-domain-store/index.js [10, 10]}\\"
 }); //$off
 
 const e = domain.store('h', {
@@ -211,7 +231,8 @@ const e = domain.store('h', {
     line: 12,
     column: 10
   },
-  name: \\"e\\"
+  name: \\"e\\",
+  sid: \\"e /src/babel/__tests__/fixtures/create-domain-store/index.js [12, 10]}\\"
 });
 const f = domain.store('h', {
   ɔ: {},
@@ -220,7 +241,8 @@ const f = domain.store('h', {
     line: 13,
     column: 10
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-store/index.js [13, 10]}\\"
 });"
 `;
 
@@ -234,7 +256,8 @@ const foo = createEffect(\\"foo\\", {
     line: 5,
     column: 12
   },
-  name: \\"foo\\"
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-effect/index.js [5, 12]}\\"
 });
 const bar = createEffect('hello', {
   loc: {
@@ -242,7 +265,8 @@ const bar = createEffect('hello', {
     line: 6,
     column: 12
   },
-  name: \\"bar\\"
+  name: \\"bar\\",
+  sid: \\"bar /src/babel/__tests__/fixtures/create-effect/index.js [6, 12]}\\"
 });
 const baz = createEffect({
   handler() {
@@ -255,7 +279,8 @@ const baz = createEffect({
     line: 7,
     column: 12
   },
-  name: \\"baz\\"
+  name: \\"baz\\",
+  sid: \\"baz /src/babel/__tests__/fixtures/create-effect/index.js [7, 12]}\\"
 });
 const quux = createEffect('nice', {
   ɔ: {
@@ -269,7 +294,8 @@ const quux = createEffect('nice', {
     line: 12,
     column: 13
   },
-  name: \\"quux\\"
+  name: \\"quux\\",
+  sid: \\"quux /src/babel/__tests__/fixtures/create-effect/index.js [12, 13]}\\"
 });
 
 const f = () => createEffect(\\"f\\", {
@@ -278,7 +304,8 @@ const f = () => createEffect(\\"f\\", {
     line: 17,
     column: 16
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-effect/index.js [17, 16]}\\"
 });"
 `;
 
@@ -292,7 +319,8 @@ const foo = createEvent(\\"foo\\", {
     line: 5,
     column: 12
   },
-  name: \\"foo\\"
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-event/index.js [5, 12]}\\"
 });
 const bar = createEvent('hello', {
   loc: {
@@ -300,7 +328,8 @@ const bar = createEvent('hello', {
     line: 6,
     column: 12
   },
-  name: \\"bar\\"
+  name: \\"bar\\",
+  sid: \\"bar /src/babel/__tests__/fixtures/create-event/index.js [6, 12]}\\"
 });
 const baz = createEvent({
   name: 'nice'
@@ -310,7 +339,8 @@ const baz = createEvent({
     line: 7,
     column: 12
   },
-  name: \\"baz\\"
+  name: \\"baz\\",
+  sid: \\"baz /src/babel/__tests__/fixtures/create-event/index.js [7, 12]}\\"
 });
 
 const f = () => createEvent(\\"f\\", {
@@ -319,7 +349,8 @@ const f = () => createEvent(\\"f\\", {
     line: 8,
     column: 16
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-event/index.js [8, 16]}\\"
 });"
 `;
 
@@ -333,7 +364,8 @@ const foo = createStore('foo', {
     line: 4,
     column: 12
   },
-  name: \\"foo\\"
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-store/index.js [4, 12]}\\"
 });
 const a = createStore('h', {
   loc: {
@@ -341,7 +373,8 @@ const a = createStore('h', {
     line: 5,
     column: 10
   },
-  name: \\"a\\"
+  name: \\"a\\",
+  sid: \\"a /src/babel/__tests__/fixtures/create-store/index.js [5, 10]}\\"
 });
 const b = createStore('h', {
   ɔ: {},
@@ -350,7 +383,8 @@ const b = createStore('h', {
     line: 6,
     column: 10
   },
-  name: \\"b\\"
+  name: \\"b\\",
+  sid: \\"b /src/babel/__tests__/fixtures/create-store/index.js [6, 10]}\\"
 }); //$off
 
 const c = createStore('h', {
@@ -360,7 +394,8 @@ const c = createStore('h', {
     line: 8,
     column: 10
   },
-  name: \\"c\\"
+  name: \\"c\\",
+  sid: \\"c /src/babel/__tests__/fixtures/create-store/index.js [8, 10]}\\"
 });
 const config = {
   option: 0
@@ -372,7 +407,8 @@ const dod = createStore(null, {
     line: 10,
     column: 12
   },
-  name: \\"dod\\"
+  name: \\"dod\\",
+  sid: \\"dod /src/babel/__tests__/fixtures/create-store/index.js [10, 12]}\\"
 });
 
 const f = a => createStore(a, {
@@ -381,6 +417,7 @@ const f = a => createStore(a, {
     line: 12,
     column: 15
   },
-  name: \\"f\\"
+  name: \\"f\\",
+  sid: \\"f /src/babel/__tests__/fixtures/create-store/index.js [12, 15]}\\"
 });"
 `;
