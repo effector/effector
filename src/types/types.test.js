@@ -22,11 +22,70 @@ import {
   /*::type*/ kind,
   forward,
   launch,
+  split,
 } from 'effector'
 import {createComponent, createGate, useGate} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
 describe('Unit', () => {
+  describe('split', () => {
+    describe('split infer result', () => {
+      test('split result no false-negative', () => {
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement, __: commonList} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofneg__user_defined: Event<string[]> = emptyList
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement, __} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofneg__defaults: Event<string[]> = __
+        }
+      })
+      test('split result no false-positive', () => {
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__user_defined_1: Event<number> = emptyList
+          const split_result__nofpos__user_defined_2: null = oneElement
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {__} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__defaults_1: Event<number> = __
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {__} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__defaults_2: null = __
+        }
+      })
+    })
+
+    test('split arguments no false-positive', () => {
+      const source: Event<string[]> = createEvent()
+      split(source, {
+        wrongResult: list => null,
+        wrongArg_1: (list: null) => true,
+        wrongArg_2: (list: number[]) => true,
+      })
+    })
+  })
   describe('sample', () => {
     test('event by event', () => {
       const a = createEvent<number>()

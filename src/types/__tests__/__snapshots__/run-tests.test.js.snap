@@ -3,6 +3,27 @@
 exports[`Flow: json messages 1`] = `
 Array [
   Array [
+    "Cannot assign \`emptyList\` to \`split_result__nofpos__user_defined_1\` because array type [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`oneElement\` to \`split_result__nofpos__user_defined_2\` because \`Event\` [1] is incompatible with null [2].",
+  ],
+  Array [
+    "Cannot assign \`__\` to \`split_result__nofpos__defaults_1\` because array type [1] is incompatible with number [2] in type argument \`Payload\` [3].",
+  ],
+  Array [
+    "Cannot assign \`__\` to \`split_result__nofpos__defaults_2\` because \`Event\` [1] is incompatible with null [2].",
+  ],
+  Array [
+    "Cannot call \`split\` with object literal bound to \`cases\` because null [1] is incompatible with boolean [2] in the return value of property \`wrongResult\`.",
+  ],
+  Array [
+    "Cannot call \`split\` with object literal bound to \`cases\` because null [1] is incompatible with array type [2] in the first argument of property \`wrongArg_1\`.",
+  ],
+  Array [
+    "Cannot call \`split\` with object literal bound to \`cases\` because number [1] is incompatible with string [2] in array element of the first argument of property \`wrongArg_2\`.",
+  ],
+  Array [
     "Cannot assign \`c\` to \`sample_ee_check2\` because number [1] is incompatible with string [2] in type argument \`Payload\` [3].",
   ],
   Array [
@@ -92,6 +113,19 @@ Array [
 exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
+Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+  Type 'string[]' is not assignable to type 'number'.
+Type 'Event<string[]>' is not assignable to type 'null'.
+Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+Type 'Event<string[]>' is not assignable to type 'null'.
+Type 'null' is not assignable to type 'boolean'.
+Type '(list: null) => true' is not assignable to type '(payload: string[]) => boolean'.
+  Types of parameters 'list' and 'payload' are incompatible.
+    Type 'string[]' is not assignable to type 'null'.
+Type '(list: number[]) => true' is not assignable to type '(payload: string[]) => boolean'.
+  Types of parameters 'list' and 'payload' are incompatible.
+    Type 'string[]' is not assignable to type 'number[]'.
+      Type 'string' is not assignable to type 'number'.
 Type 'Event<number>' is not assignable to type 'Event<string>'.
 Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
   Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
