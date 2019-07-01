@@ -13,7 +13,7 @@ export type {Domain} from './domain'
 export {createDomain} from './domain'
 
 export type {Event} from './event'
-export {createEvent, merge, forward, fromObservable} from './event'
+export {createEvent, merge, split, forward, fromObservable} from './event'
 
 export type {Effect} from './effect'
 export {createEffect} from './effect'
