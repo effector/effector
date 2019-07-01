@@ -263,6 +263,14 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
+export function split<
+  S,
+  Obj extends {[name: string]: (payload: S) => boolean},
+>(
+  source: Unit<S>,
+  cases: Obj,
+): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
+
 export function createApi<
   S,
   Api extends {[name: string]: (store: S, e: any) => S}

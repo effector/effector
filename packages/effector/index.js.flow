@@ -326,6 +326,19 @@ declare export function createApi<
   store: Store<S>,
   api: Api,
 ): $ObjMap<Api, <E>(h: (store: S, e: E) => S) => Event<E>>
+declare export function split<
+  S,
+  Obj: {
+    +[name: string]: (payload: S) => boolean,
+    ...,
+  },
+>(
+  source: Unit<S>,
+  cases: Obj,
+): $ObjMap<
+  {...Obj, __: (payload: S) => boolean},
+  (h: (payload: S) => boolean) => Event<S>,
+>
 declare export function restoreObject<
   State: {+[key: string]: Store<any> | any, ...},
 >(
