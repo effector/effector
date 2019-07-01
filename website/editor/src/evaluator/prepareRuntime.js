@@ -69,6 +69,7 @@ function assignEffectorRealm(target, EvalRealm, effector) {
     combine: effector.combine,
     sample: effector.sample,
     merge: effector.merge,
+    split: effector.split,
     clearNode: effector.clearNode,
     //createEvent: EvalRealm.event,
     //createStore: EvalRealm.store,
