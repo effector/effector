@@ -14,7 +14,7 @@ Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Q
 
 1. `sourceStore` _(Store)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell)
+3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
 
 #### Returns
 
@@ -44,7 +44,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 1. `sourceEvent` _(Event)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell)
+3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
 
 #### Returns
 
@@ -74,7 +74,7 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 1. `event` _(Event)_: Source event
 2. `store` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell)
+3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
 
 #### Returns
 
@@ -109,7 +109,7 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 1. `sourceStore` _(Store)_: Source store
 2. `clockStore` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell)
+3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
 
 #### Returns
 
