@@ -11,7 +11,9 @@
       {
         "type": "subcategory",
         "label": "Migrating to Effector",
-        "ids": ["recipes/migrating-to-effector/from-redux"]
+        "ids": [
+          "recipes/migrating-to-effector/from-redux"
+        ]
       },
       {
         "type": "subcategory",
@@ -22,8 +24,13 @@
         ]
       }
     ],
-    "Other": ["troubleshooting", "glossary"],
-    "FAQ": ["faq"]
+    "Other": [
+      "troubleshooting",
+      "glossary"
+    ],
+    "FAQ": [
+      "faq"
+    ]
   },
   "api": {
     "effector": [
@@ -34,6 +41,7 @@
       "api/effector/effect",
       "api/effector/createStore",
       "api/effector/store",
+      "api/effector/sample",
       "api/effector/createDomain",
       "api/effector/domain",
       "api/effector/combine",
