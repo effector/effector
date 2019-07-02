@@ -3,13 +3,14 @@ id: effector
 title: API Reference
 ---
 
-### Top-Level Exports 
+### Top-Level Exports
 
 - [createEvent(name?)](createEvent.md)
 - [createEffect(name?)](createEffect.md)
 - [createStore(defaultState)](createStore.md)
 - [createDomain(name?)](createDomain.md)
 - [combine(...stores, f)](combine.md)
+- [sample(store, trigger, fn?, greedy)](sample.md)
 - [createStoreObject({storeA, storeB})](createStoreObject.md)
 - [createApi(store, api)](createApi.md)
 - [restore(event, defaultState)](restore.md)

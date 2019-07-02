@@ -80,6 +80,9 @@
       "api/effector/restore": {
         "title": "restore"
       },
+      "api/effector/sample": {
+        "title": "sample"
+      },
       "api/effector/store": {
         "title": "Store"
       },
