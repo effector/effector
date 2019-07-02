@@ -254,6 +254,20 @@ describe('Effect', () => {
       effect()
     })
   })
+  describe('nested effects', () => {
+    describe('with handler', () => {
+      test('no false-positive (should be type error)', () => {
+        const nestedEffect: Effect<string, string> = createEffect()
+        const parentEffect: Effect<number, number> = createEffect(
+          'should not throw',
+          {
+            handler: nestedEffect,
+          },
+        )
+      })
+    })
+    test('with use', () => {})
+  })
 })
 
 describe('Store', () => {
