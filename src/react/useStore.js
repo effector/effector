@@ -1,25 +1,17 @@
 //@flow
 
-import {type Store, is, clearNode, sample} from 'effector'
-import {useEffect, useLayoutEffect, useMemo, useState} from 'react'
+import {type Store, is, clearNode, createStore} from 'effector'
+import {useEffect, useLayoutEffect, useReducer, useMemo} from 'react'
 
 const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect
 
+const stateReducer = (_: any, payload: any) => payload
+
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throw Error('expect useStore argument to be a store')
-  const hitUpdate = useState({})[1]
-  const sampled = useMemo(() => {
-    const sampled = sample(store)
-    sampled.updates.watch(() => hitUpdate({}))
-    return sampled
-  }, [store])
-  useIsomorphicLayoutEffect(
-    () => () => {
-      clearNode(sampled, {deep: true})
-    },
-    [store],
-  )
+  const dispatch = useReducer(stateReducer, undefined, store.getState)[1]
+  useIsomorphicLayoutEffect(() => store.watch(dispatch), [store])
   return store.getState()
 }
 
@@ -36,10 +28,19 @@ export function useStoreMap<State, Result, Keys: $ReadOnlyArray<any>>({
   if (!Array.isArray(keys)) throw Error('useStoreMap expects an array as keys')
   if (typeof fn !== 'function') throw Error('useStoreMap expects a function')
   const result: Store<Result> = useMemo(
-    () => store.map(state => fn(state, keys)),
+    () =>
+      createStore(fn(store.getState(), keys)).on(store, (_, state) =>
+        fn(state, keys),
+      ),
     keys,
   )
   const state = useStore(result)
-  useIsomorphicLayoutEffect(() => () => clearNode(result, {deep: true}), keys)
+  useIsomorphicLayoutEffect(
+    () => () => {
+      result.off(store)
+      clearNode(result, {deep: true})
+    },
+    keys,
+  )
   return state
 }
