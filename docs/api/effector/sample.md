@@ -10,31 +10,48 @@ _Note: [_`Unit`_](Unit.md) chapter may come in handy, to be aware of way of usin
 
 Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect thunk invocation.
 
+Returned Unit may be observed (via `watch`), since it's valid graph node.
+
 #### Arguments
 
 1. `sourceStore` _(Store)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
+3. `fn`? _(Function)_: Callable handler, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node;
 
 #### Returns
 
 ([_`Event`_](Event.md)) - Event, which fires upon clock is triggered
 
-#### Example
+#### Example 1
 
-```js
-const clock = createEvent();
-const inc = createEvent();
-const store = createStore(0)
-  .on(inc, (state) => state + 1);
+```javascript
+const store = createStore('foo');
+const event = createEvent();
 
-const sampled = sample(store, clock, (i) => `Current count is ${i}`);
-sampled.watch(console.log);
+const sampled = sample(store, event);
+sampled.watch(console.log); // Use this watcher for side-effects
 
-inc()
-clock(); // => Current count is 1
+event() // => hello zerobias
+```
+[try it](https://share.effector.dev/yQQ3y1rR)
+
+#### Example 2
+
+```javascript
+const login = createStore('peter');
+
+const sendMessage = createEvent();
+const fullMessage = sample(login, sendMessage, (login, text) => ({login, text}));
+
+fullMessage.watch(({login, text}) => { // Use this watcher for side-effects
+  console.log(`[${login}]: ${text}`);
+})
+sendMessage('hello'); // => [peter]: hello
+sendMessage('how r u?'); // => [peter]: how r u?
 
 ```
+[try it](https://share.effector.dev/H8v43HFg)
+
 
 # `sample(sourceEvent, clockEvent, fn)`
 
@@ -44,7 +61,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 1. `sourceEvent` _(Event)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
+3. `fn`? _(Function)_: Callable handler, should be **pure**
 
 #### Returns
 
@@ -65,6 +82,7 @@ event2("effector!"); // => Hello effector!
 
 sampled("Can be invoked too!"); // => Can be invoked too!
 ```
+[try it](https://share.effector.dev/DiJmvmbo)
 
 # `sample(event, store, fn)`
 
@@ -74,7 +92,7 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 1. `event` _(Event)_: Source event
 2. `store` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
+3. `fn`? _(Function)_: Callable handler, should be **pure**
 
 #### Returns
 
@@ -98,8 +116,8 @@ inc() // => Current count is 2, last event invocation: foo
 
 event("bar");
 inc(); // => Current count is 3, last event invocation: bar 
-
 ```
+[try it](https://share.effector.dev/nlqvcb0f)
 
 # `sample(sourceStore, clockStore, fn)`
 
@@ -109,7 +127,7 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 1. `sourceStore` _(Store)_: Source store
 2. `clockStore` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler (may be [_`Event`_](Event.md) or [_`Effect`_](Effect.md) aswell), should be **pure**
+3. `fn`? _(Function)_: Callable handler, should be **pure**
 
 #### Returns
 
@@ -132,9 +150,9 @@ sampled.watch(console.log);
  // => John has 0 coins (initial store update triggered sampled store)
 
 setName("Doe");
-inc(); // => Doe has 1 coins 
-
+inc(); // => Doe has 1 coins
 ```
+[try it](https://share.effector.dev/vx6fdb21)
 
 # `sample({source, clock, fn, greedy?})`
 
@@ -195,3 +213,4 @@ clickButton('click B')
   // => greedy update {isEnabled: false, data: "close modal"}
   // => non greedy update {isEnabled: false, data: "click B"}
 ```
+[try it](https://share.effector.dev/fUNURePx)
