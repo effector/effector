@@ -25,32 +25,42 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 #### Example 1
 
 ```javascript
+import {createStore, createEvent, sample} from "effector";
+
 const store = createStore('foo');
 const event = createEvent();
 
 const sampled = sample(store, event);
-sampled.watch(console.log); // Use this watcher for side-effects
+sampled.watch(console.log);
 
 event() // => hello zerobias
 ```
-[try it](https://share.effector.dev/yQQ3y1rR)
+[try it](https://share.effector.dev/FLaJ4Nfp)
 
 #### Example 2
 
 ```javascript
-const login = createStore('peter');
+import {createStore, createEvent, sample} from "effector";
 
-const sendMessage = createEvent();
-const fullMessage = sample(login, sendMessage, (login, text) => ({login, text}));
+const login = createStore('peter')
+const sendMessage = createEvent()
 
-fullMessage.watch(({login, text}) => { // Use this watcher for side-effects
-  console.log(`[${login}]: ${text}`);
+const fullMessage = sample(
+  login,
+  sendMessage,
+  (login, text) => ({login, text}),
+)
+
+fullMessage.watch(({login, text}) => {
+   console.log(`[${login}]: ${text}`)
 })
-sendMessage('hello'); // => [peter]: hello
-sendMessage('how r u?'); // => [peter]: how r u?
+
+sendMessage('hello')
+sendMessage('how r u?')
+
 
 ```
-[try it](https://share.effector.dev/H8v43HFg)
+[try it](https://share.effector.dev/dkR4NbTo)
 
 
 # `sample(sourceEvent, clockEvent, fn)`
@@ -70,6 +80,8 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 #### Example
 
 ```js
+import {createEvent, sample} from "effector"
+
 const event1 = createEvent();
 const event2 = createEvent();
 
@@ -82,7 +94,7 @@ event2("effector!"); // => Hello effector!
 
 sampled("Can be invoked too!"); // => Can be invoked too!
 ```
-[try it](https://share.effector.dev/DiJmvmbo)
+[try it](https://share.effector.dev/vXKWDhwL)
 
 # `sample(event, store, fn)`
 
@@ -101,6 +113,8 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 #### Example
 
 ```js
+import {createEvent, createStore, sample} from "effector"
+
 const event = createEvent();
 const inc = createEvent();
 const count = createStore(0)
@@ -117,7 +131,7 @@ inc() // => Current count is 2, last event invocation: foo
 event("bar");
 inc(); // => Current count is 3, last event invocation: bar 
 ```
-[try it](https://share.effector.dev/nlqvcb0f)
+[try it](https://share.effector.dev/L4nbGjxM)
 
 # `sample(sourceStore, clockStore, fn)`
 
@@ -136,6 +150,8 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 #### Example
 
 ```js
+import {createEvent, createStore, sample} from "effector";
+
 const inc = createEvent();
 const setName = createEvent();
 
@@ -152,7 +168,7 @@ sampled.watch(console.log);
 setName("Doe");
 inc(); // => Doe has 1 coins
 ```
-[try it](https://share.effector.dev/vx6fdb21)
+[try it](https://share.effector.dev/h3zED3yW)
 
 # `sample({source, clock, fn, greedy?})`
 
@@ -171,12 +187,17 @@ Object-like arguments passing, working exactly the same sa examples above.
 #### Example
 
 ```js
+import {createEvent, createStore, sample} from "effector"
+
+const clickButton = createEvent()
+const closeModal = clickButton.map(() => 'close modal')
+
 const lastEvent = createStore(null)
   .on(clickButton, (_, data) => data)
   .on(closeModal, () => 'modal')
 
 lastEvent.updates.watch(data => {
-  //here we need everything
+  // here we need everything
   //console.log(`sending important analytics event: ${data}`)
 })
 
@@ -204,13 +225,7 @@ commonSampling.watch(data => console.log('non greedy update', data))
 greedySampling.watch(data => console.log('greedy update', data))
 
 clickButton('click A')
-  // => greedy update {isEnabled: false, data: "click A"}
-  // => greedy update {isEnabled: false, data: "close modal"}
-  // => non greedy update {isEnabled: false, data: "click A"}
-
 clickButton('click B')
-  // => greedy update {isEnabled: false, data: "click B"}
-  // => greedy update {isEnabled: false, data: "close modal"}
-  // => non greedy update {isEnabled: false, data: "click B"}
+
 ```
-[try it](https://share.effector.dev/fUNURePx)
+[try it](https://share.effector.dev/yI70z0nd)
