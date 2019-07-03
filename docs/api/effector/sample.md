@@ -40,7 +40,7 @@ event() // => hello zerobias
 #### Example 2
 
 ```javascript
-import {createStore, createEvent, sample} from "effector";
+import {createStore, createEvent, sample} from "effector"
 
 const login = createStore('peter')
 const sendMessage = createEvent()
@@ -56,11 +56,12 @@ fullMessage.watch(({login, text}) => {
 })
 
 sendMessage('hello')
+// => [peter]: hello
 sendMessage('how r u?')
-
+// => [peter]: how r u?
 
 ```
-[try it](https://share.effector.dev/dkR4NbTo)
+[try it](https://share.effector.dev/0ZP1xn8d)
 
 
 # `sample(sourceEvent, clockEvent, fn)`
