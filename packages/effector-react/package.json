@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "19.1.1",
+  "version": "19.1.2",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
