@@ -27,7 +27,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 ```javascript
 import {createStore, createEvent, sample} from "effector";
 
-const store = createStore('foo');
+const store = createStore('hello zerobias');
 const event = createEvent();
 
 const sampled = sample(store, event);
@@ -35,7 +35,7 @@ sampled.watch(console.log);
 
 event() // => hello zerobias
 ```
-[try it](https://share.effector.dev/FLaJ4Nfp)
+[try it](https://share.effector.dev/IMXnU270)
 
 #### Example 2
 
