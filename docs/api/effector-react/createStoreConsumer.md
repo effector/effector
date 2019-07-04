@@ -6,6 +6,9 @@ hide_title: true
 
 # `createStoreConsumer(store)`
 
+The `createStoreConsumer` creates a consumer who is watching for changes in the store. Based on _Render Props_ technique.
+
+
 #### Arguments
 
 1. `store` (_Store_)
@@ -17,18 +20,19 @@ hide_title: true
 #### Example
 
 ```js
-import {createStore} from 'effector'
-import {createStoreConsumer} from 'effector-react'
+import React from 'react'
+import ReactDOM from 'react-dom'
+import { createStore } from 'effector'
+import { createStoreConsumer } from 'effector-react'
+
 
 const firstName = createStore('Alan')
 
 const FirstName = createStoreConsumer(firstName)
 
 const App = () => (
-  <Layout>
-    <Header>
       <FirstName>{name => <h1>{name}</h1>}</FirstName>
-    </Header>
-  </Layout>
 )
+
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
