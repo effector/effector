@@ -9,12 +9,9 @@ import {realmInvoke, realmInterval, realmTimeout} from '../domain'
 import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector: typeof Effector, version: string) {
-  const EvalRealm = effector.createDomain('EvalRealm')
   const api = {}
-  assignEffectorRealm(api, EvalRealm, effector)
-  assignEffectorReactRealm(api, EvalRealm, EffectorReact)
-  assignLibrary(api, effector)
-  assignLibrary(api, EffectorReact)
+  assignEffector(api, effector)
+  assignEffectorReact(api, EffectorReact)
   return {
     React,
     ReactDOM,
@@ -55,8 +52,8 @@ function assignLibrary(target, effector) {
   return target
 }
 
-function assignEffectorRealm(target, EvalRealm, effector) {
-  return apiMap(target, {
+function assignEffector(target, effector) {
+  apiMap(target, {
     createEvent: effector.createEvent,
     createEffect: effector.createEffect,
     createStore: effector.createStore,
@@ -71,28 +68,26 @@ function assignEffectorRealm(target, EvalRealm, effector) {
     merge: effector.merge,
     split: effector.split,
     clearNode: effector.clearNode,
-    //createEvent: EvalRealm.event,
-    //createStore: EvalRealm.store,
-    //createEffect: EvalRealm.effect,
-    //createDomain: EvalRealm.domain,
   })
+  assignLibrary(target, effector)
 }
 
-function assignEffectorReactRealm(target, EvalRealm, effector) {
-  return apiMap(target, {
-    createComponent: effector.createComponent,
+function assignEffectorReact(target, effectorReact) {
+  apiMap(target, {
+    createComponent: effectorReact.createComponent,
   })
+  assignLibrary(target, effectorReact)
 }
 
 function apiMap(target, obj) {
   for (const key in obj) {
-    target[key] = apiFabric.bind(obj[key], key)
+    target[key] = apiFabric.bind(null, obj[key], key)
   }
   return target
 }
 
-function apiFabric(key, ...args) {
-  const instance = this(...args)
+function apiFabric(fn, key, ...args) {
+  const instance = fn(...args)
   realmInvoke({method: key, params: args, instance})
   return instance
 }
