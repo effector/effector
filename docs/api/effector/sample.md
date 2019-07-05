@@ -16,7 +16,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 1. `sourceStore` _(Store)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node;
+3. `fn`? _((source, clock) => result)_:  Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node;
 
 #### Returns
 
@@ -72,7 +72,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 1. `sourceEvent` _(Event)_: Source event
 2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _(Function)_: Callable handler, should be **pure**
+3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
 
 #### Returns
 
@@ -105,7 +105,7 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 1. `event` _(Event)_: Source event
 2. `store` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler, should be **pure**
+3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
 
 #### Returns
 
@@ -142,7 +142,7 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 1. `sourceStore` _(Store)_: Source store
 2. `clockStore` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _(Function)_: Callable handler, should be **pure**
+3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
 
 #### Returns
 
