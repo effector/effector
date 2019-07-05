@@ -1,5 +1,42 @@
 # Changelog
 
+## effector-react 19.1.2
+
+- Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/zerobias/effector/issues/118)
+
+```js
+import {createStore} from 'effector'
+import {useStore, useStoreMap} from 'effector-react'
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const User = ({id}) => {
+  const user = useStoreMap({
+    store: user$,
+    keys: [id],
+    fn: (users, [id]) => users[id],
+  })
+  return (
+    <div>
+      {user.name} ({user.age})
+    </div>
+  )
+}
+
+const UserList = () => useStore(userID$).map(id => <User id={id} key={id} />)
+
+const user$ = createStore({
+  alex: {age: 20, name: 'Alex'},
+  john: {age: 30, name: 'John'},
+})
+
+const userID$ = user$.map(users => Object.keys(users))
+
+ReactDOM.render(<UserList />, document.getElementById('root'))
+```
+
+[try it](https://share.effector.dev/EbyvGcQX)
+
 ## effector 19.1.0
 
 - Add support for `event.filter` with common predicate functions
