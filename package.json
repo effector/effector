@@ -58,6 +58,7 @@
     "babel-literal-to-ast": "^2.1.0",
     "babel-plugin-macros": "^2.5.1",
     "babel-plugin-module-resolver": "^3.2.0",
+    "benchmark": "^2.1.4",
     "bs-platform": "^5.0.3",
     "chalk": "^2.4.2",
     "chokidar": "^2.1.5",
