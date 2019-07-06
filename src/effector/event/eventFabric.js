@@ -121,35 +121,21 @@ function filterEvent(
       |}
     | (any => any | void),
 ): any {
+  if (typeof fn === 'function') {
+    console.error('.filter(fn) is deprecated, use .filterMap instead')
+    return filterMapEvent(event, fn)
+  }
   const mapped = eventFabric({
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  let node
-  let scope
-  //null values not allowed
-  if (typeof fn === 'object') {
-    scope = {fn: fn.fn}
-    node = [
+  createLink(event, mapped, {
+    scope: {fn: fn.fn},
+    node: [
       step.filter({
         fn: (upd, {fn}) => fn(upd),
       }),
-    ]
-  } else {
-    console.error('.filter(fn) is deprecated, use .filterMap instead')
-    scope = {fn}
-    node = [
-      step.compute({
-        fn: (payload, {fn}) => fn(payload),
-      }),
-      step.filter({
-        fn: result => result !== undefined,
-      }),
-    ]
-  }
-  createLink(event, mapped, {
-    scope,
-    node,
+    ],
   })
   return mapped
 }
