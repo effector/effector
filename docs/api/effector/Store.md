@@ -6,24 +6,9 @@ title: Store
 _Store_ is an object that holds the state tree.
 There can be multiple stores.
 
-### Store Methods
-
-- [`reset(trigger)`](#reset)
-- [`getState()`](#getState)
-- [`map(fn)`](#map)
-- [`on(trigger, handler)`](#on)
-- [`off(trigger)`](#off)
-- [`watch(trigger, watcher) | watch(watcher)`](#watch)
-- [`thru(fn)`](#thru)
-
-### Store Properties
-
-- [`shortName`](#shortName)
-- [`defaultState`](#defaultState)
-
 ## Store Methods
 
-### <a id='reset'></a>[`reset(eventOrStore)`](#reset)
+### `reset(eventOrStore)`
 
 Resets store state to the default value.
 
@@ -59,7 +44,7 @@ reset() // changed 0
 
 <hr>
 
-### <a id='getState'></a>[`getState()`](#getState)
+### `getState()`
 
 Returns current state of store
 
@@ -83,7 +68,7 @@ console.log(store.getState()) // 5
 
 <hr>
 
-### <a id='map'></a>[`map(fn)`](#map)
+### `map(fn)`
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
@@ -116,7 +101,7 @@ changed('hello world') // new length 11
 
 <hr>
 
-### <a id='on'></a>[`on(trigger, handler)`](#on)
+### `on(trigger, handler)`
 
 Updates state when `trigger` is triggered by using `hander`.
 
@@ -148,7 +133,7 @@ changed(2) // updated 4
 
 <hr>
 
-### <a id='off'></a>[`off(trigger)`](#off)
+### `off(trigger)`
 
 #### Returns
 
@@ -156,7 +141,7 @@ changed(2) // updated 4
 
 <hr>
 
-### <a id='watch'></a>[`watch(trigger, watcher) | watch(watcher)`](#watch)
+### `watch(trigger, watcher) | watch(watcher)`
 
 Run `watcher` only when `trigger` event triggered. <br/>
 If `trigger` not passed, run `watcher` on each event that linked with store.
@@ -349,7 +334,7 @@ https://runkit.com/embed/lwo1u4m8yhz0
 
 <hr>
 
-### <a id='thru'></a>[`thru(fn)`](#thru)
+### `thru(fn)`
 
 #### Returns
 
