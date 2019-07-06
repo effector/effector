@@ -102,10 +102,6 @@ declare export class Store<State> implements Unit<State> {
   off(trigger: Unit<any>): void;
   subscribe(listener: (state: State) => any): Subscription;
   +updates: Event<State>;
-  +fail: Event<{|
-    error: mixed,
-    state: State,
-  |}>;
   watch<E>(
     watcher: (state: State, payload: void) => any,
     _: void,

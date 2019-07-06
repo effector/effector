@@ -102,10 +102,6 @@ export interface Store<State> extends Unit<State> {
   off(trigger: Unit<any>): void
   subscribe(listener: (state: State) => any): Subscription
   updates: Event<State>
-  fail: Event<{
-    error: unknown
-    state: State
-  }>
   watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
   watch<E>(
     trigger: Unit<E>,
