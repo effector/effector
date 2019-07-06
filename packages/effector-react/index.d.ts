@@ -5,11 +5,6 @@ export type StoreConsumer<State> = React.ComponentType<{
   children: (state: State) => React.ReactNode
 }>
 
-export type StoreProvider<State> = React.ComponentType<{
-  value: State
-  children?: React.ReactNode
-}>
-
 export type Gate<Props = {}> = React.ComponentType<Props> & {
   isOpen: boolean
   isTerminated: boolean
@@ -74,10 +69,6 @@ export function connect<
 export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
-
-export function unstable_createStoreProvider<State>(
-  store: Store<State>,
-): StoreProvider<State>
 
 export function createReactState<
   State extends object,
