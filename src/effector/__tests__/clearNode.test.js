@@ -62,3 +62,32 @@ it('deep cleaning', () => {
   target.setState(2) //dead as well
   expect(fn2).toBeCalledTimes(1)
 })
+
+describe('itermediate steps should not stay', () => {
+  it('support store.map', () => {
+    const fn = jest.fn()
+    const source = createStore(0)
+    const target = source.map(x => {
+      fn(x)
+      return x
+    })
+    source.setState(1)
+    expect(fn).toBeCalledTimes(2)
+    clearNode(target)
+    source.setState(2)
+    expect(fn).toBeCalledTimes(2)
+  })
+  it('support event.map', () => {
+    const fn = jest.fn()
+    const source = createEvent()
+    const target = source.map(x => {
+      fn(x)
+      return x
+    })
+    source(1)
+    expect(fn).toBeCalledTimes(1)
+    clearNode(target)
+    source(2)
+    expect(fn).toBeCalledTimes(1)
+  })
+})
