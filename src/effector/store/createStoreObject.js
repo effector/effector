@@ -116,36 +116,3 @@ export function createStoreObject(obj: *, fn?: Function) {
     ? mergedStore.map(fn)
     : mergedStore
 }
-//eslint-disable-next-line
-declare export function extract<
-  State: $ReadOnlyArray<Store<any> | any>,
-  NextState: $ReadOnlyArray<Store<any> | any>,
->(
-  store: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<
-  $TupleMap<
-    NextState,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-declare export function extract<
-  State: {-[key: string]: Store<any> | any, ...},
-  NextState: {-[key: string]: Store<any> | any, ...},
->(
-  obj: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<
-  $ObjMap<
-    NextState,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-export function extract(store: Store<any>, extractor: any => any) {
-  let result
-  if ('defaultShape' in store) result = extractor((store: any).defaultShape)
-  else result = extractor((store: any).defaultState)
-  return createStoreObject(result)
-}

@@ -318,7 +318,6 @@ describe('Store', () => {
     api.multiply() // Expected 1 arguments, but got 0.
   })
   test('setStoreName', () => {})
-  test('extract', () => {})
   test('combine', () => {
     const ev = createEvent()
     const a = createStore('')

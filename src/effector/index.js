@@ -22,7 +22,6 @@ export type {Store} from './store'
 export {
   createStore,
   setStoreName,
-  extract,
   createApi,
   restore,
   restoreEvent,
