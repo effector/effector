@@ -1,10 +1,8 @@
 //@flow
 
 import {type Store, is, clearNode, createStore} from 'effector'
-import {useEffect, useLayoutEffect, useReducer, useMemo} from 'react'
-
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect
+import {useReducer, useMemo} from 'react'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 
 const stateReducer = (_: any, payload: any) => payload
 
