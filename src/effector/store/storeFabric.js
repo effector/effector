@@ -41,7 +41,6 @@ export function storeFabric<State>(props: {
   const compositeName = createName(currentId, parent)
 
   const updates = createEvent('update ' + currentId)
-  const fail = createEvent('fail ' + currentId)
 
   const store: $Shape<Store<State>> = ({
     subscribers: new Map(),
@@ -69,7 +68,6 @@ export function storeFabric<State>(props: {
     shortName: currentId,
     domainName: parent,
     updates,
-    fail,
     defaultConfig: config,
     defaultState,
     getState: bind(readRef, plainState),
@@ -90,6 +88,5 @@ export function storeFabric<State>(props: {
     to: updates,
   })
   addLinkToOwner(store, updates)
-  addLinkToOwner(store, fail)
   return store
 }
