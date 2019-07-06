@@ -12,11 +12,7 @@ export type Store<State> = /*::interface extends Unit*/ {
   /*::+*/ stateRef: StateRef,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
   getState(): State,
-  //prettier-ignore
-  /*::+*/ setState: (
-  & (<T>(newState: T, handler: (state: State, newState: T) => State) => void)
-  & (<T>(newState: State, _: void) => void)
- ),
+  setState(newState: State): void,
   //prettier-ignore
   /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
