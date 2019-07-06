@@ -272,7 +272,7 @@ You can subscribe to triggering effect by `fail` and `done` events.
 
 ```js
 const effect = createEffect().use(
-  value => new Promise(res => setTimeout(res, value, 200)),
+  value => new Promise(res => setTimeout(res, 200, value)),
 )
 
 const store = createStore('initial')
