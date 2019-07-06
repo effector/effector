@@ -17,9 +17,6 @@ export type Store<State> = /*::interface extends Unit*/ {
   & (<T>(newState: T, handler: (state: State, newState: T) => State) => void)
   & (<T>(newState: State, _: void) => void)
  ),
-  // withProps<Props, R>(
-  //   fn: (state: State, props: Props) => R,
-  // ): (props: Props) => R,
   //prettier-ignore
   /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)

@@ -28,7 +28,6 @@ export {
   restoreEvent,
   restoreEffect,
   restoreObject,
-  withProps,
 } from './store'
 
 export {Kind, clearNode, createNode, step} from './stdlib'
