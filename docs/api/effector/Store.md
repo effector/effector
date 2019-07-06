@@ -29,9 +29,7 @@ const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store
-  .on(increment, state => state + 1)
-  .reset(reset)
+store.on(increment, state => state + 1).reset(reset)
 
 store.watch(state => console.log('changed', state))
 // changed 0
@@ -339,5 +337,23 @@ https://runkit.com/embed/lwo1u4m8yhz0
 #### Returns
 
 (any)
+
+<hr>
+
+## Store Properties
+
+### `shortName`
+
+#### Returns
+
+(string): ID or short name of store
+
+<hr>
+
+### `defaultState`
+
+#### Returns
+
+(`State`): Default state of store
 
 <hr>
