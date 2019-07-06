@@ -34,7 +34,7 @@ export {Kind, clearNode, createNode, step} from './stdlib'
 export {launch} from './kernel'
 export type {kind} from './stdlib'
 
-export {isUnit, isStore, isEvent, isEffect, isDomain, is} from './validate'
+export {is} from './validate'
 export {version} from './flags'
 
 //eslint-disable-next-line

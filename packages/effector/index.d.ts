@@ -113,14 +113,6 @@ export interface Store<State> extends Unit<State> {
   [Symbol.observable](): Observable<State>
 }
 
-export function isUnit<T>(obj: unknown): obj is Unit<T>
-export function isStore<State>(obj: unknown): obj is Store<State>
-export function isEvent<Payload>(obj: unknown): obj is Event<Payload>
-export function isEffect<Params, Done, Error>(
-  obj: unknown,
-): obj is Effect<Params, Done, Error>
-export function isDomain(obj: unknown): obj is Domain
-
 export const is: {
   unit(obj: unknown): boolean
   store(obj: unknown): boolean
