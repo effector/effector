@@ -5,7 +5,7 @@
 - Add `merge` for merging events
 
 ```js
-import {createEvent} from 'effector'
+import {createEvent, merge} from 'effector'
 const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])
@@ -16,6 +16,8 @@ foo(1)
 bar(2)
 // => merged event triggered: 2
 ```
+
+[try it](https://share.effector.dev/WxUgr6dZ)
 
 - Add `split` for pattern-matching over events
 
@@ -48,6 +50,8 @@ message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
+[try it](https://share.effector.dev/QXZsR5yM)
+
 - Allow `clearNode` to automatically dispose all related intermediate steps
 
 ```js
@@ -64,6 +68,8 @@ source()
 clearNode(target)
 source() // ~ no reaction ~
 ```
+
+[try it](https://share.effector.dev/Ip5FAXiR)
 
 - Fix promise warning for effects
 
@@ -89,10 +95,12 @@ await fetchApi(10)
 // => {status: 'fail', error: Error, params: 10}
 ```
 
+[try it](https://share.effector.dev/9Aoba2lk)
+
 - Add types for createEvent with config instead of string
 - Add types for createEffect with config instead of string
 - Add `event.filterMap` as new alias for `event.filter(fn)`
-- Remove `extract`, `withProps`, `is.*` reexports
+- Remove `extract`, `withProps`, `is.*` re-exports
 
 ## effector-react 20.0.0
 
