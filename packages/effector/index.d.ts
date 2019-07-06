@@ -273,10 +273,6 @@ export function createApi<
     : any
 }
 
-export function extract<State, NextState>(
-  obj: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<NextState>
 export function restoreObject<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}
