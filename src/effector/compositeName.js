@@ -6,13 +6,18 @@ export type CompositeName = {|
   +path: Array<string>,
 |}
 
-function Name(shortName: string, fullName: string, path: Array<string>) {
-  this.shortName = shortName
-  this.fullName = fullName
-  this.path = path
+class Name {
+  shortName: string
+  fullName: string
+  path: Array<string>
+  constructor(shortName: string, fullName: string, path: Array<string>) {
+    this.shortName = shortName
+    this.fullName = fullName
+    this.path = path
+  }
 }
 
-export function createName(name: string, parent?: CompositeName) {
+export function createName(name: string, parent?: CompositeName): Name {
   let path
   let fullName
   const shortName = name
