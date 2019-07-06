@@ -45,10 +45,10 @@ const increment = createEvent()
 const reset = createEvent()
 
 store
-  .on(increment, (state) => state + 1)
+  .on(increment, state => state + 1)
   .reset(reset)
 
-store.watch(state => console.log("changed", state))
+store.watch(state => console.log('changed', state))
 // changed 0
 // watch method calls its function immediately
 
@@ -91,7 +91,7 @@ Creates a derived store. It will call a provided function with the state, when t
 
 - (_`Function`_): Function that receives `state` and returns a new state for the derived store
 
- If the function returns an old state or if it returns `undefined`, the new store will not be updated.
+If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
 #### Returns
 
@@ -100,18 +100,18 @@ Creates a derived store. It will call a provided function with the state, when t
 #### Example
 
 ```js
-const title = createStore("")
+const title = createStore('')
 const changed = createEvent()
 
-const length = title.map((title) => title.length)
+const length = title.map(title => title.length)
 
 title.on(changed, (_, newTitle) => newTitle)
 
-length.watch((length) => console.log("new length", length)) // new length 0
+length.watch(length => console.log('new length', length)) // new length 0
 
-changed("hello") // new length 5
-changed("world") // 
-changed("hello world") // new length 11
+changed('hello') // new length 5
+changed('world') //
+changed('hello world') // new length 11
 ```
 
 <hr>
@@ -124,9 +124,10 @@ Updates state when `trigger` is triggered by using `hander`.
 
 - ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 - (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
-   - `state`: Current state of store
-   - `params`: Parameters passed to event call
-A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
+  - `state`: Current state of store
+  - `params`: Parameters passed to event call
+    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
+
 #### Returns
 
 (Store): Current store
@@ -139,7 +140,7 @@ const changed = createEvent()
 
 store.on(changed, (state, params) => state + params)
 
-store.watch((value) => console.log("updated", value))
+store.watch(value => console.log('updated', value))
 
 changed(2) // updated 2
 changed(2) // updated 4
@@ -266,8 +267,8 @@ Output
 
 #### Example with Effect
 
-Effect is an Event with 2 events for `fail` and `done`.<br/>
-You can subscribe to triggering effect, fail event and done.
+Effect is an Event with 2 additional events such as `fail` and `done`.<br/>
+You can subscribe to triggering effect by `fail` and `done` events.
 
 ```js
 const effect = createEffect().use(
