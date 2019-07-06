@@ -7,9 +7,11 @@ export type CompositeName = {|
 |}
 
 class Name {
+  /*::
   shortName: string
   fullName: string
   path: Array<string>
+  */
   constructor(shortName: string, fullName: string, path: Array<string>) {
     this.shortName = shortName
     this.fullName = fullName
