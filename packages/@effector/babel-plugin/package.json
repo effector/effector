@@ -1,14 +1,14 @@
 {
   "name": "@effector/babel-plugin",
   "description": "Call setStoreName on createStore calls",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
   "files": [
     "index.js"
   ],
   "peerDependencies": {
-    "effector": "^19.1.0"
+    "effector": "^20.0.0"
   },
   "keywords": [
     "effector",
