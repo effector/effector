@@ -268,7 +268,7 @@ Output
 #### Example with Effect
 
 Effect is an Event with 2 additional events such as `fail` and `done`.<br/>
-You can subscribe to triggering effect by fail and done events.
+You can subscribe to triggering effect by `fail` and `done` events.
 
 ```js
 const effect = createEffect().use(
