@@ -1,4 +1,4 @@
-//@flow
+//@noflow
 
 import {clearNode, createEvent, forward, createStore} from 'effector'
 
@@ -88,6 +88,19 @@ describe('itermediate steps should not stay', () => {
     expect(fn).toBeCalledTimes(1)
     clearNode(target)
     source(2)
+    expect(fn).toBeCalledTimes(1)
+  })
+  it('support store.on', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const store = createStore(0).on(trigger, x => {
+      fn(x)
+      return x + 1
+    })
+    trigger()
+    expect(fn).toBeCalledTimes(1)
+    clearNode(store)
+    trigger()
     expect(fn).toBeCalledTimes(1)
   })
 })
