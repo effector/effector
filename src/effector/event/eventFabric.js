@@ -19,7 +19,7 @@ import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
 import {thru} from '../thru'
-import {createLink} from './forward'
+import {createLink, createLinkNode} from './forward'
 
 const nextID = stringRefcount()
 
@@ -81,7 +81,7 @@ function prepend(event, fn: (_: any) => *) {
     parent: event.domainName,
   })
 
-  createLink(contramapped, event, {
+  createLinkNode(contramapped, event, {
     scope: {handler: fn},
     node: [
       step.compute({
@@ -102,7 +102,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  createLink(event, mapped, {
+  createLinkNode(event, mapped, {
     scope: {handler: fn},
     node: [
       step.compute({
@@ -129,7 +129,7 @@ function filterEvent(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  createLink(event, mapped, {
+  createLinkNode(event, mapped, {
     scope: {fn: fn.fn},
     node: [
       step.filter({
@@ -148,7 +148,7 @@ function filterMapEvent(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  createLink(event, mapped, {
+  createLinkNode(event, mapped, {
     scope: {fn},
     node: [
       step.compute({

@@ -1,6 +1,6 @@
 //@flow
 /* eslint-disable no-nested-ternary */
-import {eventFabric, createLink} from './event'
+import {eventFabric, createLinkNode} from './event'
 import {storeFabric, createStoreObject} from './store'
 import {noop} from './blocks'
 import {
@@ -11,32 +11,34 @@ import {
   writeRef,
   nextBarrierID,
   is,
+  addLinkToOwner,
 } from './stdlib'
 
 const storeBy = (source, clock, fn, greedy, target) => {
-  //TODO define source, target and clock as owners explicitly
-  createLink(clock, target, {
-    scope: {
-      state: source.stateRef,
-      fn,
-    },
-    node: [
-      //$off
-      !greedy && noop,
-      //$off
-      !greedy
-        && step.barrier({
-          barrierID: nextBarrierID(),
-          priority: 'sampler',
+  addLinkToOwner(
+    source,
+    createLinkNode(clock, target, {
+      scope: {
+        state: source.stateRef,
+        fn,
+      },
+      node: [
+        //$off
+        !greedy && noop,
+        //$off
+        !greedy
+          && step.barrier({
+            barrierID: nextBarrierID(),
+            priority: 'sampler',
+          }),
+        step.compute({
+          fn: fn
+            ? (upd, {state, fn}) => fn(readRef(state), upd)
+            : (upd, {state}) => readRef(state),
         }),
-      step.compute({
-        fn: fn
-          ? (upd, {state, fn}) => fn(readRef(state), upd)
-          : (upd, {state}) => readRef(state),
-      }),
-    ].filter(Boolean),
-  })
-  //TODO we need addLinkToOwner there, aren't we?
+      ].filter(Boolean),
+    }),
+  )
   return target
 }
 
@@ -82,42 +84,45 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
   const sourceState = createStateRef()
   const clockState = createStateRef()
 
-  //TODO define source, target and clock as owners explicitly
-  createLink(source, target, {
-    scope: {hasSource},
-    node: [
-      step.update({store: sourceState}),
-      step.compute({
-        fn(upd, {hasSource}) {
-          writeRef(hasSource, true)
-        },
-      }),
-      step.filter({fn: () => false}),
-    ],
-  })
-
-  //TODO define source, target and clock as owners explicitly
-  createLink(clock, target, {
-    scope: {sourceState, clockState, hasSource, fn},
-    node: [
-      step.update({store: clockState}),
-      step.filter({
-        fn: (upd, {hasSource}) => readRef(hasSource),
-      }),
-      //$off
-      !greedy
-        && step.barrier({
-          barrierID: nextBarrierID(),
-          priority: 'sampler',
+  addLinkToOwner(
+    clock,
+    createLinkNode(source, target, {
+      scope: {hasSource},
+      node: [
+        step.update({store: sourceState}),
+        step.compute({
+          fn(upd, {hasSource}) {
+            writeRef(hasSource, true)
+          },
         }),
-      step.compute({
-        fn: fn
-          ? (upd, {sourceState, clockState, fn}) =>
-            fn(readRef(sourceState), readRef(clockState))
-          : (upd, {sourceState}) => readRef(sourceState),
-      }),
-    ].filter(Boolean),
-  })
+        step.filter({fn: () => false}),
+      ],
+    }),
+  )
+  addLinkToOwner(
+    source,
+    createLinkNode(clock, target, {
+      scope: {sourceState, clockState, hasSource, fn},
+      node: [
+        step.update({store: clockState}),
+        step.filter({
+          fn: (upd, {hasSource}) => readRef(hasSource),
+        }),
+        //$off
+        !greedy
+          && step.barrier({
+            barrierID: nextBarrierID(),
+            priority: 'sampler',
+          }),
+        step.compute({
+          fn: fn
+            ? (upd, {sourceState, clockState, fn}) =>
+              fn(readRef(sourceState), readRef(clockState))
+            : (upd, {sourceState}) => readRef(sourceState),
+        }),
+      ].filter(Boolean),
+    }),
+  )
   return target
 }
 
