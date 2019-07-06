@@ -3,6 +3,7 @@
 import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
+import {store as isStore} from './is'
 
 export function createNode({
   node,
@@ -81,7 +82,12 @@ export const clearNode = (
     deep?: boolean,
     ...
   } = {},
-) => clearNodeNormalized(getGraph(graphite), !!deep)
+) => {
+  if (isStore(graphite)) {
+    ;(graphite: any).subscribers.clear()
+  }
+  clearNodeNormalized(getGraph(graphite), !!deep)
+}
 
 export const traverse = (
   graphite: Graphite,
