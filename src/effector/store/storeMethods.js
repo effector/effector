@@ -1,7 +1,6 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {upsertLaunch} from '../kernel'
 import {step, readRef, writeRef, addLinkToOwner} from '../stdlib'
 import {is} from '../validate'
 import {filterChanged, noop} from '../blocks'
@@ -34,19 +33,13 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
       scope: {
         handler,
         state: storeInstance.stateRef,
-        fail: storeInstance.fail,
       },
       node: [
         step.compute({
-          fn(newValue, {handler, state, fail}) {
-            try {
-              const result = handler(readRef(state), newValue)
-              if (result === undefined) return
-              return writeRef(state, result)
-            } catch (error) {
-              upsertLaunch(fail, {error, state: readRef(state)})
-              // throw error
-            }
+          fn(newValue, {handler, state}) {
+            const result = handler(readRef(state), newValue)
+            if (result === undefined) return
+            return writeRef(state, result)
           },
         }),
       ],
@@ -129,20 +122,10 @@ export function mapStore<A, B>(
     scope: {
       handler: fn,
       state: innerStore.stateRef,
-      fail: innerStore.fail,
     },
     node: [
       step.compute({
-        fn(newValue, {state, handler, fail}) {
-          let result
-          try {
-            result = handler(newValue, readRef(state))
-          } catch (error) {
-            upsertLaunch(fail, {error, state: readRef(state)})
-            console.error(error)
-          }
-          return result
-        },
+        fn: (upd, {state, handler}) => handler(upd, readRef(state)),
       }),
       filterChanged,
     ],
