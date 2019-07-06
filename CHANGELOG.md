@@ -96,7 +96,7 @@ await fetchApi(10)
 
 ## effector-react 20.0.0
 
-React adapter for effector 20
+- Removed unstable_createStoreProvider
 
 ## effector-vue 20.0.0
 
