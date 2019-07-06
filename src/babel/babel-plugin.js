@@ -2,31 +2,17 @@
 
 const importName = 'effector'
 
-const normalizeOptions = options => {
-  const defaultStoreCreators = ['createStore']
-  const defaultEventCreators = ['createEvent']
-  const defaultEffectCreators = ['createEffect']
-  const defaultDomainCreators = ['createDomain']
-
-  return {
-    filename:
-      typeof options.filename === 'undefined'
-        ? true
-        : Boolean(options.filename),
-    stores:
-      typeof options.stores === 'undefined' ? true : Boolean(options.stores),
-    events:
-      typeof options.events === 'undefined' ? true : Boolean(options.events),
-    effects:
-      typeof options.effects === 'undefined' ? true : Boolean(options.effects),
-    domains:
-      typeof options.domains === 'undefined' ? true : Boolean(options.domains),
-    storeCreators: new Set(options.storeCreators || defaultStoreCreators),
-    eventCreators: new Set(options.eventCreators || defaultEventCreators),
-    effectCreators: new Set(options.effectCreators || defaultEffectCreators),
-    domainCreators: new Set(options.domainCreators || defaultDomainCreators),
-  }
-}
+const normalizeOptions = options => ({
+  filename: options.filename === undefined ? true : Boolean(options.filename),
+  stores: options.stores === undefined ? true : Boolean(options.stores),
+  events: options.events === undefined ? true : Boolean(options.events),
+  effects: options.effects === undefined ? true : Boolean(options.effects),
+  domains: options.domains === undefined ? true : Boolean(options.domains),
+  storeCreators: new Set(options.storeCreators || ['createStore']),
+  eventCreators: new Set(options.eventCreators || ['createEvent']),
+  effectCreators: new Set(options.effectCreators || ['createEffect']),
+  domainCreators: new Set(options.domainCreators || ['createDomain']),
+})
 
 module.exports = function(babel, options = {}) {
   const {
@@ -44,29 +30,25 @@ module.exports = function(babel, options = {}) {
   const {types: t} = babel
 
   return {
-    name: '@effector/babel-plugin', // not required
+    name: '@effector/babel-plugin',
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
         const specifiers = path.node.specifiers
         if (source === importName) {
-          for (const {name, store, event, effect, domain} of specifiers
-            .filter(s => s.imported)
-            .map(s => ({
-              name: s.local.name,
-              store: storeCreators.has(s.imported.name),
-              event: eventCreators.has(s.imported.name),
-              effect: effectCreators.has(s.imported.name),
-              domain: domainCreators.has(s.imported.name),
-            }))) {
-            if (store) {
-              storeCreators.add(name)
-            } else if (event) {
-              eventCreators.add(name)
-            } else if (effect) {
-              effectCreators.add(name)
-            } else if (domain) {
-              domainCreators.add(name)
+          for (let i = 0; i < specifiers.length; i++) {
+            const s = specifiers[i]
+            if (!s.imported) continue
+            const importedName = s.imported.name
+            const localName = s.local.name
+            if (storeCreators.has(importedName)) {
+              storeCreators.add(localName)
+            } else if (eventCreators.has(importedName)) {
+              eventCreators.add(localName)
+            } else if (effectCreators.has(importedName)) {
+              effectCreators.add(localName)
+            } else if (domainCreators.has(importedName)) {
+              domainCreators.add(localName)
             }
           }
         }
@@ -180,10 +162,11 @@ function findCandidateNameForExpression(path) {
 }
 
 function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
-  const fileLineLiteral =
-    lineNumber != null ? t.numericLiteral(lineNumber) : t.numericLiteral(-1)
-  const fileColumnLiteral =
-    columnNumber != null ? t.numericLiteral(columnNumber) : t.numericLiteral(-1)
+  const fileLineLiteral = t.numericLiteral(lineNumber != null ? lineNumber : -1)
+  const fileColumnLiteral = t.numericLiteral(
+    columnNumber != null ? columnNumber : -1,
+  )
+
   const fileProperty = t.objectProperty(
     t.identifier('file'),
     fileNameIdentifier,
@@ -197,11 +180,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
 }
 
 function setStoreNameAfter(path, state, nameNodeId, t) {
-  let displayName
-  if (!displayName) {
-    displayName = nameNodeId.name
-  }
-
+  const displayName = nameNodeId.name
   let args
   let loc
   path.find(path => {
@@ -213,8 +192,10 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
   })
 
   if (args && displayName) {
+    if (!args[0]) return
     const oldConfig = args[1]
-    const configExpr = t.objectExpression([])
+    const configExpr = (args[1] = t.objectExpression([]))
+
     const nameProp = t.objectProperty(
       t.identifier('name'),
       t.stringLiteral(displayName),
@@ -223,21 +204,30 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
       t.identifier('loc'),
       makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
     )
-    if (!args[0]) return
-    args[1] = configExpr
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+        ),
+      ),
+    )
+
     if (oldConfig) {
-      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
-    args[1].properties.push(locProp)
-    args[1].properties.push(nameProp)
+    configExpr.properties.push(locProp)
+    configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
   }
 }
 
 function setEventNameAfter(path, state, nameNodeId, t) {
-  let displayName
-  if (!displayName) {
-    displayName = nameNodeId.name
-  }
+  const displayName = nameNodeId.name
 
   let args
   let loc
@@ -250,8 +240,10 @@ function setEventNameAfter(path, state, nameNodeId, t) {
   })
 
   if (args && displayName) {
+    if (!args[0]) args[0] = t.stringLiteral(displayName)
     const oldConfig = args[1]
-    const configExpr = t.objectExpression([])
+    const configExpr = (args[1] = t.objectExpression([]))
+
     const nameProp = t.objectProperty(
       t.identifier('name'),
       t.stringLiteral(displayName),
@@ -260,13 +252,31 @@ function setEventNameAfter(path, state, nameNodeId, t) {
       t.identifier('loc'),
       makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
     )
-    const name = t.stringLiteral(displayName)
-    if (!args[0]) args[0] = name
-    args[1] = configExpr
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+        ),
+      ),
+    )
+
     if (oldConfig) {
-      args[1].properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
-    args[1].properties.push(locProp)
-    args[1].properties.push(nameProp)
+    configExpr.properties.push(locProp)
+    configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
   }
+}
+
+/**
+ * "foo src/index.js [12,30]"
+ */
+function generateStableID(babelRoot, fileName, varName, line, column) {
+  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]}`
 }

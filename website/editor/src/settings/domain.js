@@ -1,6 +1,6 @@
 // @flow
 
-import {combine, type Store, createDomain} from 'effector'
+import {combine, type Store, type Effect, createDomain} from 'effector'
 
 const domain = createDomain('settings')
 
@@ -36,4 +36,21 @@ export const typechecker: Store<'flow' | 'typescript' | null> = combine(
     if (tsEnabled) return 'typescript'
     return null
   },
+)
+
+export const clickPrettify = domain.event<any>()
+export const prettier: Effect<string, string, Error> = domain.effect()
+export const prettierButtonStatus: Store<{
+  text: string,
+  disabled: boolean,
+}> = prettier.pending.map(pending =>
+  pending
+    ? {
+      text: 'In progress',
+      disabled: true,
+    }
+    : {
+      text: 'Prettify',
+      disabled: false,
+    },
 )

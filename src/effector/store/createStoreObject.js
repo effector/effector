@@ -6,10 +6,10 @@ import {
   readRef,
   writeRef,
   type StateRef,
+  is,
 } from '../stdlib'
-import {is} from '../validate'
 import {unitObjectName} from '../naming'
-import {createLink} from '../event'
+import {createLinkNode} from '../event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
@@ -66,7 +66,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    createLink(child, store, {
+    createLinkNode(child, store, {
       scope: {key, clone, target: store.stateRef, isFresh},
       node,
     })
@@ -115,37 +115,4 @@ export function createStoreObject(obj: *, fn?: Function) {
   return fn
     ? mergedStore.map(fn)
     : mergedStore
-}
-//eslint-disable-next-line
-declare export function extract<
-  State: $ReadOnlyArray<Store<any> | any>,
-  NextState: $ReadOnlyArray<Store<any> | any>,
->(
-  store: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<
-  $TupleMap<
-    NextState,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-declare export function extract<
-  State: {-[key: string]: Store<any> | any, ...},
-  NextState: {-[key: string]: Store<any> | any, ...},
->(
-  obj: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<
-  $ObjMap<
-    NextState,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-export function extract(store: Store<any>, extractor: any => any) {
-  let result
-  if ('defaultShape' in store) result = extractor((store: any).defaultShape)
-  else result = extractor((store: any).defaultState)
-  return createStoreObject(result)
 }

@@ -4,7 +4,7 @@ import * as React from 'react'
 import {styled} from 'linaria/react'
 import {codeSetCursor} from '../domain'
 
-const Outline = styled('div')`
+const Outline = styled.div`
   grid-column: 1 / span 1;
   grid-row: 3 / span 7;
   background-color: #fff;
@@ -18,22 +18,22 @@ const Outline = styled('div')`
   }
 `
 
-const Header = styled('div')`
+const Header = styled.div`
   padding: 3px 5px;
   background: #f7f7f7;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
 `
 
-const Section = styled('section')`
+const Section = styled.section`
   padding: 5px;
 `
 
-const EmptySection = styled('section')`
+const EmptySection = styled.section`
   padding: 15px;
 `
 
-const Item = styled('li')`
+const Item = styled.li`
   cursor: ${props => (Boolean(props.loc) ? 'pointer' : 'inherit')};
 `
 

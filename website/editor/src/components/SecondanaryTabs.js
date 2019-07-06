@@ -1,11 +1,11 @@
 //@flow
 
 import React from 'react'
-import {cx} from 'linaria'
 import {styled} from 'linaria/react'
-import {LogsView} from '../logs/view'
 import {createComponent} from 'effector-react'
-import {createApi, createStore, createStoreObject, Store} from 'effector'
+import {createApi, createStore, Store} from 'effector'
+import {LogsView} from '../logs/view'
+import {TabHeaderList} from '../tabs/styled'
 
 const tab: Store<'console'> = createStore('console')
 const api = createApi(tab, {
@@ -24,7 +24,7 @@ const Tab = styled.li`
   margin-bottom: ${({isActive}) => (isActive ? '-1px' : '0')};
 `
 
-const TabContent = styled('div')`
+const TabContent = styled.div`
   overflow: auto;
 `
 
@@ -32,15 +32,13 @@ const TabView = createComponent(tab, ({}, tab) => (
   <TabContent>{tab === 'console' && <LogsView />}</TabContent>
 ))
 
-const ToolbarView = createComponent(tab, ({}, tab) => {
-  return (
-    <ul className="toolbar">
-      <Tab onClick={api.showConsole} isActive={tab === 'console'}>
-        Console
-      </Tab>
-    </ul>
-  )
-})
+const ToolbarView = createComponent(tab, ({}, tab) => (
+  <TabHeaderList>
+    <Tab onClick={api.showConsole} isActive={tab === 'console'}>
+      Console
+    </Tab>
+  </TabHeaderList>
+))
 
 const SecondanaryTabs = styled.div`
   display: flex;

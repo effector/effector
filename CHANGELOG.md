@@ -1,5 +1,152 @@
 # Changelog
 
+## effector 20.0.0
+
+- Add `merge` for merging events
+
+```js
+import {createEvent, merge} from 'effector'
+const foo = createEvent()
+const bar = createEvent()
+const baz = merge([foo, bar])
+baz.watch(v => console.log('merged event triggered: ', v))
+
+foo(1)
+// => merged event triggered: 1
+bar(2)
+// => merged event triggered: 2
+```
+
+[try it](https://share.effector.dev/WxUgr6dZ)
+
+- Add `split` for pattern-matching over events
+
+```js
+import {createEvent, split} from 'effector'
+const message = createEvent()
+
+const messageByAuthor = split(message, {
+  bob: ({user}) => user === 'bob',
+  alice: ({user}) => user === 'alice',
+})
+messageByAuthor.bob.watch(({text}) => {
+  console.log('[bob]: ', text)
+})
+messageByAuthor.alice.watch(({text}) => {
+  console.log('[alice]: ', text)
+})
+
+message({user: 'bob', text: 'Hello'})
+// => [bob]: Hello
+message({user: 'alice', text: 'Hi bob'})
+// => [alice]: Hi bob
+
+/* default case, triggered if no one condition met */
+const {__: guest} = messageByAuthor
+guest.watch(({text}) => {
+  console.log('[guest]: ', text)
+})
+message({user: 'unregistered', text: 'hi'})
+// => [guest]: hi
+```
+
+[try it](https://share.effector.dev/QXZsR5yM)
+
+- Allow `clearNode` to automatically dispose all related intermediate steps
+
+```js
+import {createEvent, clearNode} from 'effector'
+const source = createEvent()
+const target = source.map(x => {
+  console.log('intermediate step')
+  return x
+})
+target.watch(x => console.log('target watcher'))
+source()
+// => intermediate step
+// => target watcher
+clearNode(target)
+source() // ~ no reaction ~
+```
+
+[try it](https://share.effector.dev/Ip5FAXiR)
+
+- Fix promise warning for effects
+
+- Add `effect.finally`
+
+```js
+import {createEffect} from 'effector'
+const fetchApi = createEffect({
+  handler: n =>
+    new Promise(resolve => {
+      setTimeout(resolve, n, `${n} ms`)
+    }),
+})
+fetchApi.finally.watch(response => {
+  console.log(response)
+})
+
+await fetchApi(10)
+// => {status: 'done', result: '10 ms', params: 10}
+
+// or
+
+// => {status: 'fail', error: Error, params: 10}
+```
+
+[try it](https://share.effector.dev/9Aoba2lk)
+
+- Add types for createEvent with config instead of string
+- Add types for createEffect with config instead of string
+- Add `event.filterMap` as new alias for `event.filter(fn)`
+- Remove `extract`, `withProps`, `is.*` re-exports
+
+## effector-react 20.0.0
+
+- Removed unstable_createStoreProvider
+
+## effector-vue 20.0.0
+
+Vue adapter for effector 20
+
+## effector-react 19.1.2
+
+- Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/zerobias/effector/issues/118)
+
+```js
+import {createStore} from 'effector'
+import {useStore, useStoreMap} from 'effector-react'
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+const User = ({id}) => {
+  const user = useStoreMap({
+    store: user$,
+    keys: [id],
+    fn: (users, [id]) => users[id],
+  })
+  return (
+    <div>
+      {user.name} ({user.age})
+    </div>
+  )
+}
+
+const UserList = () => useStore(userID$).map(id => <User id={id} key={id} />)
+
+const user$ = createStore({
+  alex: {age: 20, name: 'Alex'},
+  john: {age: 30, name: 'John'},
+})
+
+const userID$ = user$.map(users => Object.keys(users))
+
+ReactDOM.render(<UserList />, document.getElementById('root'))
+```
+
+[try it](https://share.effector.dev/EbyvGcQX)
+
 ## effector 19.1.0
 
 - Add support for `event.filter` with common predicate functions

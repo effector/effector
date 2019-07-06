@@ -5,7 +5,6 @@ import {combine} from 'effector'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
 
-//$off
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
 import {VersionLink} from './components/VersionLink'
@@ -65,25 +64,24 @@ const CodeView = createComponent(
     sourceCode,
     mode,
   },
-  ({}, {displayEditor, mode, sourceCode}) => {
-    return (
-      <div
-        className="sources"
-        style={{visibility: displayEditor ? 'visible' : 'hidden'}}>
-        <Panel
-          markLine={codeMarkLine}
-          setCursor={codeSetCursor}
-          performLint={performLint}
-          onCursorActivity={codeCursorActivity}
-          value={sourceCode}
-          mode={mode}
-          onChange={changeSourcesDebounced}
-          lineWrapping
-        />
-        <TypeHintView />
-      </div>
-    )
-  },
+  ({}, {displayEditor, mode, sourceCode}) => (
+    <div
+      className="sources"
+      style={{visibility: displayEditor ? 'visible' : 'hidden'}}>
+      <Panel
+        markLine={codeMarkLine}
+        setCursor={codeSetCursor}
+        performLint={performLint}
+        onCursorActivity={codeCursorActivity}
+        value={sourceCode}
+        mode={mode}
+        onChange={changeSourcesDebounced}
+        lineWrapping
+        passive
+      />
+      <TypeHintView />
+    </div>
+  ),
 )
 
 const VersionLinkView = createComponent(version, ({}, version) => (
@@ -96,15 +94,13 @@ const VersionLinkView = createComponent(version, ({}, version) => (
 //,
 const VersionSelectorView = createComponent(
   {versions: packageVersions, selected: version},
-  (_, {versions, selected}) => {
-    return (
-      <VersionSelector
-        versions={versions}
-        selected={selected}
-        onChange={selectVersion}
-      />
-    )
-  },
+  (_, {versions, selected}) => (
+    <VersionSelector
+      versions={versions}
+      selected={selected}
+      onChange={selectVersion}
+    />
+  ),
 )
 
 export default (

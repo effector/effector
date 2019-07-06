@@ -5,11 +5,6 @@ export type StoreConsumer<State> = React.ComponentType<{
   children: (state: State) => React.ReactNode
 }>
 
-export type StoreProvider<State> = React.ComponentType<{
-  value: State
-  children?: React.ReactNode
-}>
-
 export type Gate<Props = {}> = React.ComponentType<Props> & {
   isOpen: boolean
   isTerminated: boolean
@@ -27,19 +22,19 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
 }
 
 export function useStore<State>(store: Store<State>): State
-export function useStoreMap<
-  State,
-  Result,
-  Keys extends readonly any[],
->(opts: {
-  readonly store: Store<State>,
-  readonly keys: Keys,
-  readonly fn: (state: State, keys: Keys) => Result,
+export function useStoreMap<State, Result, Keys extends any[]>(opts: {
+  readonly store: Store<State>
+  readonly keys: Keys
+  readonly fn: (state: State, keys: Keys) => Result
 }): Result
+
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
 export function createGate<Props extends object>(name?: string): Gate<Props>
-export function createGate<Props>(name: string, defaultState: Props): Gate<Props>
+export function createGate<Props>(
+  name: string,
+  defaultState: Props,
+): Gate<Props>
 
 export function createComponent<Props, State>(
   storeFactory: (initialProps: Props) => Store<State>,
@@ -74,10 +69,6 @@ export function connect<
 export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
-
-export function unstable_createStoreProvider<State>(
-  store: Store<State>,
-): StoreProvider<State>
 
 export function createReactState<
   State extends object,

@@ -83,6 +83,9 @@
       "api/effector/store": {
         "title": "Store"
       },
+      "api/effector/sample": {
+        "title": "sample"
+      },
       "faq": {
         "title": "FAQ"
       },

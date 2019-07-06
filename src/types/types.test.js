@@ -22,11 +22,70 @@ import {
   /*::type*/ kind,
   forward,
   launch,
+  split,
 } from 'effector'
 import {createComponent, createGate, useGate} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
 describe('Unit', () => {
+  describe('split', () => {
+    describe('split infer result', () => {
+      test('split result no false-negative', () => {
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement, __: commonList} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofneg__user_defined: Event<string[]> = emptyList
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement, __} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofneg__defaults: Event<string[]> = __
+        }
+      })
+      test('split result no false-positive', () => {
+        {
+          const source: Event<string[]> = createEvent()
+          const {emptyList, oneElement} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__user_defined_1: Event<number> = emptyList
+          const split_result__nofpos__user_defined_2: null = oneElement
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {__} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__defaults_1: Event<number> = __
+        }
+        {
+          const source: Event<string[]> = createEvent()
+          const {__} = split(source, {
+            emptyList: list => list.length === 0,
+            oneElement: list => list.length === 1,
+          })
+          const split_result__nofpos__defaults_2: null = __
+        }
+      })
+    })
+
+    test('split arguments no false-positive', () => {
+      const source: Event<string[]> = createEvent()
+      split(source, {
+        wrongResult: list => null,
+        wrongArg_1: (list: null) => true,
+        wrongArg_2: (list: number[]) => true,
+      })
+    })
+  })
   describe('sample', () => {
     test('event by event', () => {
       const a = createEvent<number>()
@@ -123,6 +182,10 @@ describe('Unit', () => {
 describe('Event', () => {
   test('createEvent', () => {
     const createEvent_event1: Event<number> = createEvent()
+    const createEvent_event2: Event<number> = createEvent('event name [1]')
+    const createEvent_event3: Event<number> = createEvent({
+      name: 'event name [2]'
+    })
   })
   test('#map', () => {
     const event: Event<number> = createEvent()
@@ -173,6 +236,10 @@ describe('Effect', () => {
         return 'foo'
       },
     })
+    const createEffect_effect4: Effect<number, string> = createEffect('fx 4')
+    const createEffect_effect5: Effect<number, string> = createEffect({
+      name: 'fx 5',
+    })
   })
 
   test('#use', () => {
@@ -194,6 +261,20 @@ describe('Effect', () => {
       const effect = createEffect('').use(handler)
       effect()
     })
+  })
+  describe('nested effects', () => {
+    describe('with handler', () => {
+      test('no false-positive (should be type error)', () => {
+        const nestedEffect: Effect<string, string> = createEffect()
+        const parentEffect: Effect<number, number> = createEffect(
+          'should not throw',
+          {
+            handler: nestedEffect,
+          },
+        )
+      })
+    })
+    test('with use', () => {})
   })
 })
 
@@ -245,7 +326,6 @@ describe('Store', () => {
     api.multiply() // Expected 1 arguments, but got 0.
   })
   test('setStoreName', () => {})
-  test('extract', () => {})
   test('combine', () => {
     const ev = createEvent()
     const a = createStore('')

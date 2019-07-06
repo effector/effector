@@ -102,10 +102,6 @@ export interface Store<State> extends Unit<State> {
   off(trigger: Unit<any>): void
   subscribe(listener: (state: State) => any): Subscription
   updates: Event<State>
-  fail: Event<{
-    error: unknown
-    state: State
-  }>
   watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
   watch<E>(
     trigger: Unit<E>,
@@ -116,14 +112,6 @@ export interface Store<State> extends Unit<State> {
   defaultState: State
   [Symbol.observable](): Observable<State>
 }
-
-export function isUnit<T>(obj: unknown): obj is Unit<T>
-export function isStore<State>(obj: unknown): obj is Store<State>
-export function isEvent<Payload>(obj: unknown): obj is Event<Payload>
-export function isEffect<Params, Done, Error>(
-  obj: unknown,
-): obj is Effect<Params, Done, Error>
-export function isDomain(obj: unknown): obj is Domain
 
 export const is: {
   unit(obj: unknown): boolean
@@ -245,7 +233,9 @@ export function createNode(opts: {
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
+
 export function createEvent<E = void>(eventName?: string): Event<E>
+export function createEvent<E = void>(config: {name?: string}): Event<E>
 
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
@@ -253,6 +243,10 @@ export function createEffect<Params, Done, Fail = Error>(
     handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
+export function createEffect<Params, Done, Fail = Error>(config: {
+  name?: string
+  handler?: (params: Params) => Promise<Done> | Done
+}): Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
@@ -263,6 +257,14 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
+export function split<
+  S,
+  Obj extends {[name: string]: (payload: S) => boolean},
+>(
+  source: Unit<S>,
+  cases: Obj,
+): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
+
 export function createApi<
   S,
   Api extends {[name: string]: (store: S, e: any) => S}
@@ -277,10 +279,6 @@ export function createApi<
     : any
 }
 
-export function extract<State, NextState>(
-  obj: Store<State>,
-  extractor: (_: State) => NextState,
-): Store<NextState>
 export function restoreObject<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}

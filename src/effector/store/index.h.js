@@ -12,14 +12,7 @@ export interface Store<State> extends Unit {
   /*::+*/ stateRef: StateRef,
   reset(event: Event<any> | Effect<any, any, any>): Store<State>,
   getState(): State,
-  //prettier-ignore
-  /*::+*/ setState: (
-  & (<T>(newState: T, handler: (state: State, newState: T) => State) => void)
-  & (<T>(newState: State, _: void) => void)
- ),
-  // withProps<Props, R>(
-  //   fn: (state: State, props: Props) => R,
-  // ): (props: Props) => R,
+  setState(newState: State): void,
   //prettier-ignore
   /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
@@ -67,9 +60,5 @@ export interface Store<State> extends Unit {
   domainName?: CompositeName,
   +graphite: Graph,
   +updates: Event<State>,
-  +fail: Event<{|
-    error: mixed,
-    state: State,
-  |}>,
   compositeName?: CompositeName,
 }

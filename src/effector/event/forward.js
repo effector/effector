@@ -4,7 +4,20 @@ import type {Subscription} from '../index.h'
 import {createWatcher} from '../watcher'
 
 export const createLink = (
-  from: Graphite,
+  source: Graphite,
+  child: Graphite,
+  opts: {|
+    +node: Array<Cmd>,
+    scope?: {[name: string]: any, ...},
+    meta?: {[name: string]: any, ...},
+  |},
+) =>
+  createWatcher({
+    parent: getGraph(source),
+    child: createLinkNode(source, child, opts),
+  })
+export const createLinkNode = (
+  source: Graphite,
   child: Graphite,
   {
     node,
@@ -15,22 +28,22 @@ export const createLink = (
     scope?: {[name: string]: any, ...},
     meta?: {[name: string]: any, ...},
   |},
-) =>
-  forward({
-    from,
-    to: createNode({
-      node,
-      child: [child],
-      scope,
-      meta,
-      family: {
-        type: 'crosslink',
-        owners: [from, child],
-        links: [child],
-      },
-    }),
+) => {
+  const from = getGraph(source)
+  const to = createNode({
+    node,
+    child: [child],
+    scope,
+    meta,
+    family: {
+      type: 'crosslink',
+      owners: [from, child],
+      links: [child],
+    },
   })
-
+  from.next.push(to)
+  return to
+}
 export const forward = (opts: {|
   from: Graphite,
   to: Graphite,

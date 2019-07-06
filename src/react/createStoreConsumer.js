@@ -1,7 +1,5 @@
 //@flow
 
-import * as React from 'react'
-
 import type {Store} from 'effector'
 
 import type {StoreConsumer} from './index.h'

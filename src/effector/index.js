@@ -13,7 +13,7 @@ export type {Domain} from './domain'
 export {createDomain} from './domain'
 
 export type {Event} from './event'
-export {createEvent, merge, forward, fromObservable} from './event'
+export {createEvent, merge, split, forward, fromObservable} from './event'
 
 export type {Effect} from './effect'
 export {createEffect} from './effect'
@@ -22,20 +22,17 @@ export type {Store} from './store'
 export {
   createStore,
   setStoreName,
-  extract,
   createApi,
   restore,
   restoreEvent,
   restoreEffect,
   restoreObject,
-  withProps,
 } from './store'
 
-export {Kind, clearNode, createNode, step} from './stdlib'
+export {Kind, clearNode, createNode, step, is} from './stdlib'
 export {launch} from './kernel'
 export type {kind} from './stdlib'
 
-export {isUnit, isStore, isEvent, isEffect, isDomain, is} from './validate'
 export {version} from './flags'
 
 //eslint-disable-next-line

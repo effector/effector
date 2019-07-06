@@ -1,12 +1,10 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {upsertLaunch} from '../kernel'
-import {step, readRef, writeRef, addLinkToOwner} from '../stdlib'
-import {is} from '../validate'
+import {step, readRef, writeRef, addLinkToOwner, is} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
 import {effectFabric} from '../effect'
-import {createLink, type Event} from '../event'
+import {createLink, createLinkNode, type Event} from '../event'
 import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
@@ -34,19 +32,13 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
       scope: {
         handler,
         state: storeInstance.stateRef,
-        fail: storeInstance.fail,
       },
       node: [
         step.compute({
-          fn(newValue, {handler, state, fail}) {
-            try {
-              const result = handler(readRef(state), newValue)
-              if (result === undefined) return
-              return writeRef(state, result)
-            } catch (error) {
-              upsertLaunch(fail, {error, state: readRef(state)})
-              // throw error
-            }
+          fn(newValue, {handler, state}) {
+            const result = handler(readRef(state), newValue)
+            if (result === undefined) return
+            return writeRef(state, result)
           },
         }),
       ],
@@ -125,24 +117,14 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  createLink(store, innerStore, {
+  createLinkNode(store, innerStore, {
     scope: {
       handler: fn,
       state: innerStore.stateRef,
-      fail: innerStore.fail,
     },
     node: [
       step.compute({
-        fn(newValue, {state, handler, fail}) {
-          let result
-          try {
-            result = handler(newValue, readRef(state))
-          } catch (error) {
-            upsertLaunch(fail, {error, state: readRef(state)})
-            console.error(error)
-          }
-          return result
-        },
+        fn: (upd, {state, handler}) => handler(upd, readRef(state)),
       }),
       filterChanged,
     ],

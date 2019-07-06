@@ -19,7 +19,7 @@ import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
 import {thru} from '../thru'
-import {createLink} from './forward'
+import {createLink, createLinkNode} from './forward'
 
 const nextID = stringRefcount()
 
@@ -81,7 +81,7 @@ function prepend(event, fn: (_: any) => *) {
     parent: event.domainName,
   })
 
-  createLink(contramapped, event, {
+  createLinkNode(contramapped, event, {
     scope: {handler: fn},
     node: [
       step.compute({
@@ -102,7 +102,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name: '' + event.shortName + ' → *',
     parent: event.domainName,
   })
-  createLink(event, mapped, {
+  createLinkNode(event, mapped, {
     scope: {handler: fn},
     node: [
       step.compute({
@@ -121,35 +121,21 @@ function filterEvent(
       |}
     | (any => any | void),
 ): any {
+  if (typeof fn === 'function') {
+    console.error('.filter(fn) is deprecated, use .filterMap instead')
+    return filterMapEvent(event, fn)
+  }
   const mapped = eventFabric({
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  let node
-  let scope
-  //null values not allowed
-  if (typeof fn === 'object') {
-    scope = {fn: fn.fn}
-    node = [
+  createLinkNode(event, mapped, {
+    scope: {fn: fn.fn},
+    node: [
       step.filter({
         fn: (upd, {fn}) => fn(upd),
       }),
-    ]
-  } else {
-    console.error('.filter(fn) is deprecated, use .filterMap instead')
-    scope = {fn}
-    node = [
-      step.compute({
-        fn: (payload, {fn}) => fn(payload),
-      }),
-      step.filter({
-        fn: result => result !== undefined,
-      }),
-    ]
-  }
-  createLink(event, mapped, {
-    scope,
-    node,
+    ],
   })
   return mapped
 }
@@ -162,7 +148,7 @@ function filterMapEvent(
     name: '' + event.shortName + ' →? *',
     parent: event.domainName,
   })
-  createLink(event, mapped, {
+  createLinkNode(event, mapped, {
     scope: {fn},
     node: [
       step.compute({

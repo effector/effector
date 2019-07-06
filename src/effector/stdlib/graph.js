@@ -3,6 +3,7 @@
 import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
+import {store as isStore} from './is'
 
 export function createNode({
   node,
@@ -57,13 +58,15 @@ const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
   //$off
   targetNode.scope = null
   let currentNode
-  while ((currentNode = getLinks(targetNode).pop())) {
+  let list = getLinks(targetNode)
+  while ((currentNode = list.pop())) {
     removeItem(getOwners(currentNode), targetNode)
     if (deep || currentNode.family.type === 'crosslink') {
       clearNodeNormalized(currentNode, deep)
     }
   }
-  while ((currentNode = getOwners(targetNode).pop())) {
+  list = getOwners(targetNode)
+  while ((currentNode = list.pop())) {
     removeItem(currentNode.next, targetNode)
     removeItem(getLinks(currentNode), targetNode)
     if (currentNode.family.type === 'crosslink') {
@@ -79,7 +82,12 @@ export const clearNode = (
     deep?: boolean,
     ...
   } = {},
-) => clearNodeNormalized(getGraph(graphite), !!deep)
+) => {
+  if (isStore(graphite)) {
+    ;(graphite: any).subscribers.clear()
+  }
+  clearNodeNormalized(getGraph(graphite), !!deep)
+}
 
 export const traverse = (
   graphite: Graphite,
