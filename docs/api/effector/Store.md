@@ -44,7 +44,9 @@ const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store.on(increment, state => state + 1).reset(reset)
+store
+  .on(increment, state => state + 1)
+  .reset(reset)
 
 store.watch(state => console.log('changed', state))
 // changed 0
