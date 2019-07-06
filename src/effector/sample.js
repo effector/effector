@@ -1,7 +1,6 @@
 //@flow
 /* eslint-disable no-nested-ternary */
-import {is} from './validate'
-import {eventFabric, createLink, forward} from './event'
+import {eventFabric, createLink} from './event'
 import {storeFabric, createStoreObject} from './store'
 import {noop} from './blocks'
 import {
@@ -11,6 +10,7 @@ import {
   readRef,
   writeRef,
   nextBarrierID,
+  is,
 } from './stdlib'
 
 const storeBy = (source, clock, fn, greedy, target) => {

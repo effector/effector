@@ -1,7 +1,6 @@
 //@flow
 import type {Event} from './index.h'
-import {is} from '../validate'
-import {bind} from '../stdlib'
+import {bind, is} from '../stdlib'
 
 //eslint-disable-next-line no-unused-vars
 declare export function split<

@@ -1,7 +1,7 @@
 //@flow
 
 import {type Store, createStoreObject} from './store'
-import {is} from './validate'
+import {is} from './stdlib'
 
 //eslint-disable-next-line no-unused-vars
 declare export function combine<R>(fn: () => R): Store<R>

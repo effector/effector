@@ -1,6 +1,6 @@
 //@flow
 
-import {is} from '../validate'
+import {is} from '../stdlib'
 import type {Store} from './index.h'
 import {createName} from '../compositeName'
 

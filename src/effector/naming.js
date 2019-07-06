@@ -1,7 +1,7 @@
 //@flow
 
 import type {CompositeName} from './compositeName'
-import {is} from './validate'
+import {is} from './stdlib'
 import type {Store} from './store'
 import type {Event} from './event'
 import type {Effect} from './effect'

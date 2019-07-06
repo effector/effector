@@ -1,8 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, readRef, writeRef, addLinkToOwner} from '../stdlib'
-import {is} from '../validate'
+import {step, readRef, writeRef, addLinkToOwner, is} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
 import {effectFabric} from '../effect'
 import {createLink, type Event} from '../event'

@@ -4,7 +4,7 @@ import type {Effect} from '../effect'
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
 
-import {is} from '../validate'
+import {is} from '../stdlib'
 
 export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
   obj: State,

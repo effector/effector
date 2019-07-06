@@ -6,8 +6,8 @@ import {
   readRef,
   writeRef,
   type StateRef,
+  is,
 } from '../stdlib'
-import {is} from '../validate'
 import {unitObjectName} from '../naming'
 import {createLink} from '../event'
 

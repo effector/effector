@@ -29,11 +29,10 @@ export {
   restoreObject,
 } from './store'
 
-export {Kind, clearNode, createNode, step} from './stdlib'
+export {Kind, clearNode, createNode, step, is} from './stdlib'
 export {launch} from './kernel'
 export type {kind} from './stdlib'
 
-export {is} from './validate'
 export {version} from './flags'
 
 //eslint-disable-next-line
