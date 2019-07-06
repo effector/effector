@@ -252,6 +252,7 @@ declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
 declare export function createEvent<E>(eventName?: string): Event<E>
+declare export function createEvent<E>(config: {name?: string,...}): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
@@ -260,6 +261,11 @@ declare export function createEffect<Params, Done, Fail>(
     ...
   },
 ): Effect<Params, Done, Fail>
+declare export function createEffect<Params, Done, Fail>(config: {
+  name?: string,
+  handler?: (params: Params) => Promise<Done> | Done,
+  ...
+}): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(
   defaultState: State,
