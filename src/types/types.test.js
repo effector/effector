@@ -182,6 +182,10 @@ describe('Unit', () => {
 describe('Event', () => {
   test('createEvent', () => {
     const createEvent_event1: Event<number> = createEvent()
+    const createEvent_event2: Event<number> = createEvent('event name [1]')
+    const createEvent_event3: Event<number> = createEvent({
+      name: 'event name [2]'
+    })
   })
   test('#map', () => {
     const event: Event<number> = createEvent()
@@ -231,6 +235,10 @@ describe('Effect', () => {
       handler() {
         return 'foo'
       },
+    })
+    const createEffect_effect4: Effect<number, string> = createEffect('fx 4')
+    const createEffect_effect5: Effect<number, string> = createEffect({
+      name: 'fx 5',
     })
   })
 
