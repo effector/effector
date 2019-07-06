@@ -12,24 +12,9 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
-### Gate Methods
-
-- [`childGate(childName?)`](#childGate)
-
-### Gate Properties
-
-- [`isOpen`](#isOpen)
-- [`isTerminated`](#isTerminated)
-- [`open`](#open)
-- [`close`](#close)
-- [`status`](#status)
-- [`destructor`](#destructor)
-- [`current`](#current)
-- [`state`](#state)
-
 ## Gate Methods
 
-### <a id='childGate'></a>[`childGate(childName?)`](#childGate)
+### `childGate(childName?)`
 
 Returns child gate which won't render if parent gate is closed.
 
@@ -41,7 +26,7 @@ Returns child gate which won't render if parent gate is closed.
 
 ## Gate Properties
 
-### <a id='isOpen'></a>[`isOpen`](#isOpen)
+### `isOpen`
 
 #### Returns
 
@@ -49,7 +34,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='isTerminated'></a>[`isTerminated`](#isTerminated)
+### `isTerminated`
 
 #### Returns
 
@@ -57,7 +42,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='open'></a>[`open`](#open)
+### `open`
 
 ### Returns
 
@@ -65,7 +50,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='close'></a>[`close`](#close)
+### `close`
 
 ### Returns
 
@@ -73,7 +58,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='status'></a>[`status`](#status)
+### `status`
 
 ### Returns
 
@@ -81,7 +66,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='destructor'></a>[`destructor`](#destructor)
+### `destructor`
 
 ### Returns
 
@@ -89,7 +74,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='current'></a>[`current`](#current)
+### `current`
 
 ### Returns
 
@@ -97,7 +82,7 @@ Returns child gate which won't render if parent gate is closed.
 
 <hr>
 
-### <a id='state'></a>[`state`](#state)
+### `state`
 
 ### Returns
 

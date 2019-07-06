@@ -54,21 +54,9 @@ getUser({id: 1})
 const data = await getUser({id: 2}) // handle promise
 ```
 
-### Effect Methods
-
-- [`use(thunk)`](#use)
-- [`watch(watcher)`](#watch)
-- [`prepend(fn)`](#prepend)
-
-### Effect Properties
-
-- [`done`](#done)
-- [`fail`](#fail)
-- [`pending`](#pending)
-
 ## Effect Methods
 
-### <a id='use'></a>[`use(thunk)`](#use)
+### `use(thunk)`
 
 Provides a function, which will be called when an effect is triggered.
 
@@ -98,7 +86,7 @@ effect(1) // >> effect called with 1
 
 <hr>
 
-### <a id='watch'></a>[`watch(watcher)`](#watch)
+### `watch(watcher)`
 
 Subscribe to effect calls.
 
@@ -124,7 +112,7 @@ effect(20) // > foo called with 20
 
 <hr>
 
-### <a id='prepend'></a>[`prepend(fn)`](#prepend)
+### `prepend(fn)`
 
 #### Returns
 
@@ -134,7 +122,7 @@ effect(20) // > foo called with 20
 
 ## Effect Properties
 
-### <a id='done'></a>[`.done`](#done)
+### `.done`
 
 _Event_ triggered when promise from _thunk_ is *resolved*
 
@@ -160,7 +148,7 @@ effect(2) // >> Done with params 2 and result 3
 ```
 
 
-### <a id='fail'></a>[`.fail`](#fail)
+### `.fail`
 
 _Event_ triggered when promise from _thunk_ is *rejected* or thunk throws.
 
@@ -185,7 +173,7 @@ effect.fail.watch(({ params, error }) => {
 effect(2) // >> Fail with params 2 and error 1
 ```
 
-### <a id='pending'></a>[`.pending`](#pending)
+### `.pending`
 
 _Store_ will update when `done` or `fail` are triggered.
 _Store_ contains a `true` value until the effect is resolved.

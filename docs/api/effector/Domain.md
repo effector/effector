@@ -9,20 +9,9 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 
 It is useful for logging or other side effects.
 
-### Domain Methods
-
-- [`onCreateEvent(hook)`](#onCreateEvent)
-- [`onCreateEffect(hook)`](#onCreateEffect)
-- [`onCreateStore(hook)`](#onCreateStore)
-- [`onCreateDomain(hook)`](#onCreateDomain)
-- [`event(name?)`](#event)
-- [`effect(name?)`](#effect)
-- [`store(defaultState)`](#store)
-- [`domain(name?)`](#domain)
-
 ## Domain Methods
 
-### <a id='onCreateEvent'></a>[`onCreateEvent(hook)`](#onCreateEvent)
+### `onCreateEvent(hook)`
 
 #### Arguments
 
@@ -34,7 +23,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='onCreateEffect'></a>[`onCreateEffect(hook)`](#onCreateEffect)
+### `onCreateEffect(hook)`
 
 #### Arguments
 
@@ -46,7 +35,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='onCreateStore'></a>[`onCreateStore(hook)`](#onCreateStore)
+### `onCreateStore(hook)`
 
 #### Arguments
 
@@ -58,7 +47,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='onCreateDomain'></a>[`onCreateDomain(hook)`](#onCreateDomain)
+### `onCreateDomain(hook)`
 
 #### Arguments
 
@@ -70,7 +59,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='event'></a>[`event(name?)`](#event)
+### `event(name?)`
 
 #### Arguments
 
@@ -82,7 +71,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='effect'></a>[`effect(name?)`](#effect)
+### `effect(name?)`
 
 #### Arguments
 
@@ -94,7 +83,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='store'></a>[`store(defaultState)`](#store)
+### `store(defaultState)`
 
 #### Arguments
 
@@ -106,7 +95,7 @@ It is useful for logging or other side effects.
 
 <hr>
 
-### <a id='domain'></a>[`domain(name?)`](#domain)
+### `domain(name?)`
 
 #### Arguments
 
