@@ -6,11 +6,11 @@ import {from} from 'most'
 import {
   createStore,
   createStoreObject,
-  withProps,
   createEvent,
   type Event,
   createEffect,
 } from 'effector'
+import {useStore} from 'effector-react'
 
 import {spy, delay, getSpyCalls} from 'effector/fixtures'
 
@@ -236,26 +236,28 @@ test('rfc1 example implementation', async() => {
     increment()
   })
   store.watch(() => {})
-  const ClickedTimes = withProps(
-    store.map(({counter}) => `Clicked: ${counter} times`),
-    state => {
-      expect(state).not.toBe(text)
-      expect(typeof state).toBe('string')
-      return <span>{state}</span>
-    },
-  )
 
-  const CurrentText = withProps(store, ({text}, props) => (
-    <p>
-      {props.prefix} {text}
-    </p>
-  ))
+  const messageStore = store.map(({counter}) => `Clicked: ${counter} times`)
+  const ClickedTimes = () => {
+    const state = useStore(messageStore)
+    expect(state).not.toBe(text)
+    expect(typeof state).toBe('string')
+    return <span>{state}</span>
+  }
+  const CurrentText = ({prefix}) => {
+    const {text} = useStore(store)
+    return (
+      <p>
+        {prefix} {text}
+      </p>
+    )
+  }
 
   const App = () => (
-    <React.Fragment>
+    <>
       <ClickedTimes />
       <CurrentText prefix="Current text: " />
-    </React.Fragment>
+    </>
   )
   expect(ClickedTimes).toBeDefined()
   expect(<ClickedTimes />).toBeDefined()
