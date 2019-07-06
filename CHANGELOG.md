@@ -1,5 +1,107 @@
 # Changelog
 
+## effector 20.0.0
+
+- Add `merge` for merging events
+
+```js
+import {createEvent} from 'effector'
+const foo = createEvent()
+const bar = createEvent()
+const baz = merge([foo, bar])
+baz.watch(v => console.log('merged event triggered: ', v))
+
+foo(1)
+// => merged event triggered: 1
+bar(2)
+// => merged event triggered: 2
+```
+
+- Add `split` for pattern-matching over events
+
+```js
+import {createEvent, split} from 'effector'
+const message = createEvent()
+
+const messageByAuthor = split(message, {
+  bob: ({user}) => user === 'bob',
+  alice: ({user}) => user === 'alice',
+})
+messageByAuthor.bob.watch(({text}) => {
+  console.log('[bob]: ', text)
+})
+messageByAuthor.alice.watch(({text}) => {
+  console.log('[alice]: ', text)
+})
+
+message({user: 'bob', text: 'Hello'})
+// => [bob]: Hello
+message({user: 'alice', text: 'Hi bob'})
+// => [alice]: Hi bob
+
+/* default case, triggered if no one condition met */
+const {__: guest} = messageByAuthor
+guest.watch(({text}) => {
+  console.log('[guest]: ', text)
+})
+message({user: 'unregistered', text: 'hi'})
+// => [guest]: hi
+```
+
+- Allow `clearNode` to automatically dispose all related intermediate steps
+
+```js
+import {createEvent, clearNode} from 'effector'
+const source = createEvent()
+const target = source.map(x => {
+  console.log('intermediate step')
+  return x
+})
+target.watch(x => console.log('target watcher'))
+source()
+// => intermediate step
+// => target watcher
+clearNode(target)
+source() // ~ no reaction ~
+```
+
+- Fix promise warning for effects
+
+- Add `effect.finally`
+
+```js
+import {createEffect} from 'effector'
+const fetchApi = createEffect({
+  handler: n =>
+    new Promise(resolve => {
+      setTimeout(resolve, n, `${n} ms`)
+    }),
+})
+fetchApi.finally.watch(response => {
+  console.log(response)
+})
+
+await fetchApi(10)
+// => {status: 'done', result: '10 ms', params: 10}
+
+// or
+
+// => {status: 'fail', error: Error, params: 10}
+```
+
+- Add types for createEvent with config instead of string
+- Add types for createEffect with config instead of string
+- Add `event.filterMap` as new alias for `event.filter(fn)`
+- Remove `extract`, `withProps`, `is.*` reexports
+
+## effector-react 20.0.0
+
+React adapter for effector 20
+
+## effector-vue 20.0.0
+
+Vue adapter for effector 20
+
 ## effector-react 19.1.2
 
 - Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/zerobias/effector/issues/118)
