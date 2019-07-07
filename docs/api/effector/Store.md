@@ -334,10 +334,43 @@ https://runkit.com/embed/lwo1u4m8yhz0
 
 ### `thru(fn)`
 
+Creates a new store. This method calls with a provide function that receives Store. Other words "escape hatch" for creating compose function, also making chains.
+For example, you want to make multiple, summary and divide operations. You can create these functions and provide them followed by a call `.thru`.
+
+#### Arguments
+
+- (_`Function`_): Function that receives `Store` and returns a new derived store
+
 #### Returns
 
-(any)
+(_`Store`_): New store
 
+#### Example
+
+```js
+const sum = value => value + 10
+const square = value => value * value
+const divide = value => value / 2
+
+const enhance = fn => store => store.map(fn)
+
+const store = createStore(0)
+const newStore = store
+  .thru(enhance(sum))
+  .thru(enhance(square))
+  .thru(enhance(divide))
+  .watch(state => console.log(`newStore: ${state}`))
+```
+
+Output
+
+```
+// sum: 10
+// square: 100
+// divide: 50
+
+> newStore: 50
+```
 <hr>
 
 ## Store Properties
