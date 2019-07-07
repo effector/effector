@@ -6,7 +6,7 @@ hide_title: true
 
 # `merge([eventA, eventB])`
 
-Creates an event, which fires when one of passed events has triggered
+Creates an [event](merge.md), which fires when one of passed events has triggered
 
 #### Arguments
 
