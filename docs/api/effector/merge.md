@@ -6,7 +6,7 @@ hide_title: true
 
 # `merge([eventA, eventB])`
 
-Creates an [event](merge.md), which fires when one of passed events has triggered
+Creates an [event](Event.md), which fires when one of passed events has triggered
 
 #### Arguments
 
@@ -32,7 +32,7 @@ bar('bar') // => merged event triggered: bar
 
 ```
 
-for example, we should set form submitting status to `false` after request sucessed or returned error.
+for example, we should set form submitting status to `false` after request successed or returned error.
 
 ```js
 import { createStore, createEffect, merge } from 'effector'
