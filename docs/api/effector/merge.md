@@ -46,4 +46,6 @@ const submit = createEffect('submit form', {
 const submitting = createStore(false)
     .on(submit, () => true)
     .on(merge([submit.done, submit.fail]), () => false)
+    
+submit()
 ```
