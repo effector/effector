@@ -17,6 +17,7 @@ title: API Reference
 - [restore(obj)](restore.md)
 - [forward({from, to})](forward.md)
 - [fromObservable(observable)](fromObservable.md)
+- [merge([eventA, eventB])](merge.md)
 
 ### Event API
 
