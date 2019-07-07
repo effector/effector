@@ -32,7 +32,7 @@ bar('bar') // => merged event triggered: bar
 
 ```
 
-for example, we should set form submitting status to `false` after request successed or returned error.
+for example, we should set form submitting status to `false` after request succeeded or returned error.
 
 ```js
 import { createStore, createEffect, merge } from 'effector'
