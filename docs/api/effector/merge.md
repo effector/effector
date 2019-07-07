@@ -31,3 +31,19 @@ foo('foo') // => merged event triggered: foo
 bar('bar') // => merged event triggered: bar
 
 ```
+
+for example, we should set form submitting status to `false` after request sucessed or returned error.
+
+```js
+import { createStore, createEffect, merge } from 'effector'
+
+const submit = createEffect('submit form', {
+  handler: () => new Promise((resolve) => {
+    setTimeout(resolve, 1000)
+  })
+})
+
+const submitting = createStore(false)
+    .on(submit, () => true)
+    .on(merge([submit.done, submit.fail]), () => false)
+```
