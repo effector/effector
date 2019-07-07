@@ -42,7 +42,8 @@
       "api/effector/createApi",
       "api/effector/restore",
       "api/effector/forward",
-      "api/effector/fromObservable"
+      "api/effector/fromObservable",
+      "api/effector/merge"
     ],
     "effector-react": [
       "api/effector-react/effector-react",
