@@ -238,7 +238,7 @@ fetchApi.finally.watch(console.log)
 
 fetchApi(100)
 // if resolved
-// => {status: 'done', result: '10 ms', params: 100}
+// => {status: 'done', result: '100 ms', params: 100}
 
 // if rejected
 // => {status: 'fail', error: Error, params: 100}
