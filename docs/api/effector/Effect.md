@@ -130,7 +130,7 @@ _Event_ triggered when promise from _thunk_ is *resolved*
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): An argument passed to the effect call
+(_`params`_): An argument passed to the effect call  
 (_`result`_): A result of the resolved promise
 
 #### Example
@@ -156,7 +156,7 @@ _Event_ triggered when promise from _thunk_ is *rejected* or thunk throws.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): An argument passed to effect call
+(_`params`_): An argument passed to effect call  
 (_`error`_): An error catched from the thunk
 
 #### Example
@@ -175,7 +175,7 @@ effect(2) // >> Fail with params 2 and error 1
 
 ### `.pending`
 
-_Store_ will update when `done` or `fail` are triggered.
+_Store_ will update when `.done` or `.fail` are triggered.
 _Store_ contains a `true` value until the effect is resolved.
 
 #### Example
@@ -210,4 +210,37 @@ const isLoading = createStore(false)
   .on(fetchApi, () => true)
   .on(fetchApi.done, () => false)
   .on(fetchApi.fail, () => false)
+```
+
+### `.finally`
+
+_Event_ triggered when promise from _thunk_ is *resolved*, *rejected* or thunk throws.
+
+#### Arguments
+
+Event triggered with object of `status`, `params` and `error` or `result`:
+
+(_`status`_): A status of thunk (`done` or `fail`)   
+(_`params`_): An argument passed to effect call  
+(_`error`_): An error catched from the thunk  
+(_`result`_): A result of the resolved promise  
+
+#### Example
+
+```js
+import {createEffect} from 'effector'
+
+const fetchApi = createEffect({
+  handler: ms =>  new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+})
+
+fetchApi.finally.watch(console.log)
+
+fetchApi(100)
+// if resolved
+// => {status: 'done', result: '10 ms', params: 100}
+
+// if rejected
+// => {status: 'fail', error: Error, params: 100}
+
 ```
