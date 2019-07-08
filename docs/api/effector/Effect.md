@@ -3,7 +3,7 @@ id: effect
 title: Effect
 ---
 
-_Effect_ is a container for async function.
+**Effect** is a container for async function.
 
 It can be safely used in place of the original async function.
 
@@ -22,41 +22,40 @@ The only requirement for function:
 #### Example
 
 ```js
-const getUser = createEffect('get user')
-
-getUser.use(params => {
-  return fetch(`https://example.com/get-user/${params.id}`)
-    .then(res => res.json())
+const fetchUser = createEffect('get user', {
+  handler: ({ id }) => {
+    return fetch(`https://example.com/users/${id}`).then(res => res.json())
+  }
 })
 
-const users = createStore([]) // <-- Default state
-  // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+const users = createStore([]) // <= Default state
+  // add reducer for getUser.done event (triggered when handler resolved)
+  .on(fetchUser.done, (users, {result: user}) => [...users, user])
 
-// subscribe to promise resolve
-getUser.done.watch(({result, params}) => {
+// subscribe to handler resolve
+fetchUser.done.watch(({result, params}) => {
   console.log(params) // {id: 1}
   console.log(result) // resolved value
 })
 
-// subscribe to promise reject (or throw)
-getUser.fail.watch(({error, params}) => {
+// subscribe to handler reject or throw error
+fetchUser.fail.watch(({error, params}) => {
   console.error(params) // {id: 1}
   console.error(error) // rejected value
 })
 
 // you can replace function anytime
-getUser.use(() => promiseMock)
+fetchUser.use(() => promiseMock)
 
 // call effect with your params
-getUser({id: 1})
+fetchUser({id: 1})
 
-const data = await getUser({id: 2}) // handle promise
+const data = await fetchUser({id: 2}) // handle promise
 ```
 
 ## Effect Methods
 
-### `use(thunk)`
+### `use(handler)`
 
 Provides a function, which will be called when an effect is triggered.
 
@@ -65,7 +64,7 @@ It will replace the previous function inside (if any).
 #### Arguments
 
 
-(_`thunk`_): Function, that receives the first argument passed to an effect call
+(_`handler`_): Function, that receives the first argument passed to an effect call
 
 #### Returns
 
@@ -74,11 +73,11 @@ It will replace the previous function inside (if any).
 #### Example
 
 ```js
-const effect = createEffect("effect name")
-
-effect.use((params) => {
-  console.log("effect called with", params)
-  return fetch("/some-resource")
+const effect = createEffect("effect name", {
+  handler: (params) => {
+    console.log("effect called with", params)
+    return fetch("/some-resource")
+  }
 })
 
 effect(1) // >> effect called with 1
@@ -96,7 +95,7 @@ Subscribe to effect calls.
 
 #### Returns
 
-(_`Subscription`_): A function that unsubscribes the watcher
+(_`Subscription`_): A function that unsubscribe the watcher
 
 #### Example
 
@@ -122,23 +121,23 @@ effect(20) // > foo called with 20
 
 ## Effect Properties
 
-### `.done`
+### `done`
 
-_Event_ triggered when promise from _thunk_ is *resolved*
+Event triggered when handler is resolved
 
 #### Arguments
 
 Event triggered with object of `params` and `result`:
 
 (_`params`_): An argument passed to the effect call  
-(_`result`_): A result of the resolved promise
+(_`result`_): A result of the resolved handler
 
 #### Example
 
 ```js
-const effect = createEffect()
-
-effect.use((value) => Promise.resolve(value + 1))
+const effect = createEffect({
+  handler: (value) => Promise.resolve(value + 1)
+})
 
 effect.done.watch(({ params, result }) => {
   console.log("Done with params", params, "and result", result)
@@ -148,16 +147,16 @@ effect(2) // >> Done with params 2 and result 3
 ```
 
 
-### `.fail`
+### `fail`
 
-_Event_ triggered when promise from _thunk_ is *rejected* or thunk throws.
+Event triggered when handler is rejected or throws error.
 
 #### Arguments
 
 Event triggered with object of `params` and `error`:
 
 (_`params`_): An argument passed to effect call  
-(_`error`_): An error catched from the thunk
+(_`error`_): An error catched from the handler
 
 #### Example
 
@@ -173,19 +172,21 @@ effect.fail.watch(({ params, error }) => {
 effect(2) // >> Fail with params 2 and error 1
 ```
 
-### `.pending`
+### `pending`
 
-_Store_ will update when `.done` or `.fail` are triggered.
-_Store_ contains a `true` value until the effect is resolved.
+_Store_ will update when `done` or `fail` are triggered.  
+_Store_ contains a `true` value until the effect is resolved or rejected.
 
 #### Example
 
 ```js
+import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
-import React from 'react'
+
+
 const fetchApi = createEffect({
-  handler: n => new Promise(resolve => setTimeout(resolve, n)),
+  handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
 })
 
 fetchApi.pending.watch(console.log)
@@ -212,18 +213,18 @@ const isLoading = createStore(false)
   .on(fetchApi.fail, () => false)
 ```
 
-### `.finally`
+### `finally`
 
-_Event_ triggered when promise from _thunk_ is *resolved*, *rejected* or thunk throws.
+Event triggered when handler is resolved, rejected or throws error.
 
 #### Arguments
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-(_`status`_): A status of thunk (`done` or `fail`)   
+(_`status`_): A status of effect (`done` or `fail`)   
 (_`params`_): An argument passed to effect call  
-(_`error`_): An error catched from the thunk  
-(_`result`_): A result of the resolved promise  
+(_`error`_): An error catched from the handler  
+(_`result`_): A result of the resolved handler  
 
 #### Example
 
