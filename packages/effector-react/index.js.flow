@@ -46,7 +46,7 @@ declare export function useStoreMap<
   Result,
   Keys: $ReadOnlyArray<any>,
 >(opts: {|
-  +store: State,
+  +store: Store<State>,
   +keys: Keys,
   fn(state: State, keys: Keys): Result,
 |}): Result
