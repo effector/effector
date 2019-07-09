@@ -20,12 +20,22 @@ describe('useStore', () => {
     }
 
     const {container} = render(<Display />)
-    expect(container.firstChild).toMatchSnapshot()
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        Store text: 
+        foo
+      </span>
+    `)
     act(() => {
       changeText('bar')
     })
     // flushEffects()
-    expect(container.firstChild).toMatchSnapshot()
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        Store text: 
+        bar
+      </span>
+    `)
   })
 
   it('should throw', () => {
@@ -37,7 +47,9 @@ describe('useStore', () => {
 
     expect(() => {
       render(<ErrorDisplay />)
-    }).toThrowErrorMatchingSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"expect useStore argument to be a store"`,
+    )
   })
 })
 
@@ -86,14 +98,48 @@ test('useStoreMap', () => {
     )
   }
   const {container} = render(<Cards />)
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        Alex
+        : 
+        20
+      </li>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
   act(() => {
     changeUserAge({nickname: 'alex', age: 21})
   })
 
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        Alex
+        : 
+        21
+      </li>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
   act(() => {
     removeUser('alex')
   })
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
 })
