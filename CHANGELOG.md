@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 20.0.1
+
+- Fix flow typings for `useStoreMap`
+
 ## effector 20.0.0
 
 - Add `merge` for merging events
