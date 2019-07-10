@@ -7,7 +7,7 @@
 ```typescript
 import React from 'react'
 import {createStore} from 'effector'
-import {createStoreMap} from 'effector-react'
+import {useStoreMap} from 'effector-react'
 
 type User = {
   username: string
@@ -48,7 +48,7 @@ In typescript versions below 3.4, you can still use an explicit type assertion
 ```typescript
 import React from 'react'
 import {createStore} from 'effector'
-import {createStoreMap} from 'effector-react'
+import {useStoreMap} from 'effector-react'
 
 type User = {
   username: string
