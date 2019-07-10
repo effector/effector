@@ -22,7 +22,7 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
 }
 
 export function useStore<State>(store: Store<State>): State
-export function useStoreMap<State, Result, Keys extends any[]>(opts: {
+export function useStoreMap<State, Result, Keys extends (ReadonlyArray<any> | any[])>(opts: {
   readonly store: Store<State>
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
