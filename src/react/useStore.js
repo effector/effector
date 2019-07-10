@@ -9,7 +9,7 @@ const stateReducer = (_: any, payload: any) => payload
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throw Error('expect useStore argument to be a store')
   const dispatch = useReducer(stateReducer, undefined, store.getState)[1]
-  useIsomorphicLayoutEffect(() => store.watch(dispatch), [store])
+  useIsomorphicLayoutEffect(() => store.updates.watch(dispatch), [store])
   return store.getState()
 }
 
