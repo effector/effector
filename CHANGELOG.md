@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 20.0.2
+
+- Fix bug with additional rerender in case of `useStore` argument change
+
 ## effector-react 20.0.1
 
 - Fix flow typings for `useStoreMap`
