@@ -5,6 +5,7 @@ import * as React from 'react'
 import {render, cleanup, act} from 'react-testing-library'
 import {createStore, createEvent} from 'effector'
 import {useStore, useStoreMap} from '../useStore'
+import {argumentHistory} from 'effector/fixtures'
 
 afterEach(cleanup)
 
@@ -50,6 +51,44 @@ describe('useStore', () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `"expect useStore argument to be a store"`,
     )
+  })
+
+  it('should retrigger only once after store change', () => {
+    const fn = jest.fn()
+    const storeA = createStore('A')
+    const storeB = createStore('B')
+    const changeCurrentStore = createEvent()
+    const currentStore = createStore(storeA).on(
+      changeCurrentStore,
+      (_, store) => store,
+    )
+
+    const Target = ({store}) => {
+      const state = useStore(store)
+      fn(state)
+      return <span>Store text: {state}</span>
+    }
+
+    const Display = () => {
+      const store = useStore(currentStore)
+      return <Target store={store} />
+    }
+
+    render(<Display />)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "A",
+      ]
+    `)
+    act(() => {
+      changeCurrentStore(storeB)
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "A",
+        "B",
+      ]
+    `)
   })
 })
 
