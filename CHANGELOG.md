@@ -1,5 +1,91 @@
 # Changelog
 
+## effector-react 20.0.3
+
+- Allow `as const` typescript assertion for `useStoreMap` keys. It helps us to infer type for `fn` arguments
+
+```typescript
+import React from 'react'
+import {createStore} from 'effector'
+import {createStoreMap} from 'effector-react'
+
+type User = {
+  username: string
+  email: string
+  bio: string
+}
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+
+export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
+  const value = useStoreMap({
+    store: users,
+    keys: [id, field] as const,
+    fn: (users, [id, field]) => users[id][field] || null,
+  })
+  return <div>{value}</div>
+}
+```
+
+In typescript versions below 3.4, you can still use an explicit type assertion
+
+```typescript
+import React from 'react'
+import {createStore} from 'effector'
+import {createStoreMap} from 'effector-react'
+
+type User = {
+  username: string
+  email: string
+  bio: string
+}
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+
+export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
+  const value = useStoreMap({
+    store: users,
+    keys: [id, field] as [number, keyof User],
+    fn: (users, [id, field]) => users[id][field] || null,
+  })
+  return <div>{value}</div>
+}
+```
+
+[as const](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) in typescript docs
+
 ## effector-react 20.0.2
 
 - Fix bug with additional rerender in case of `useStore` argument change
