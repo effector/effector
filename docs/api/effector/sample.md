@@ -8,7 +8,7 @@ hide_title: true
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.  
 _Note: [_`Unit`_](Unit.md) chapter may come in handy, to be aware of way of using this method._
 
-Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect thunk invocation.
+Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more appropriate to use `sample` method as described below.
 
 Returned Unit may be observed (via `watch`), since it's valid graph node.
 
@@ -172,7 +172,7 @@ inc(); // => Doe has 1 coins
 
 # `sample({source, clock, fn, greedy?})`
 
-Object-like arguments passing, working exactly the same sa examples above.
+Object-like arguments passing, working exactly the same as examples above do.
 
 `greedy` modifier defines, whether sampler will wait of  resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
 
