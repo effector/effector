@@ -11,7 +11,7 @@ const domain = createDomain(\\"domain\\", {
     column: 15
   },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain.js [4, 15]}\\"
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain.js [4, 15]\\"
 });
 const foo = createDomain('bar', {
   loc: {
@@ -20,7 +20,7 @@ const foo = createDomain('bar', {
     column: 12
   },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-domain.js [5, 12]}\\"
+  sid: \\"foo /src/babel/__tests__/fixtures/create-domain.js [5, 12]\\"
 });"
 `;
 
@@ -35,7 +35,7 @@ const domain = createDomain(\\"domain\\", {
     column: 15
   },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-domain.js [4, 15]}\\"
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-domain.js [4, 15]\\"
 });
 const foo = domain.domain(\\"foo\\", {
   loc: {
@@ -44,7 +44,7 @@ const foo = domain.domain(\\"foo\\", {
     column: 12
   },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-domain-domain.js [5, 12]}\\"
+  sid: \\"foo /src/babel/__tests__/fixtures/create-domain-domain.js [5, 12]\\"
 });
 const bar = domain.domain('baz', {
   loc: {
@@ -53,7 +53,7 @@ const bar = domain.domain('baz', {
     column: 12
   },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-domain-domain.js [6, 12]}\\"
+  sid: \\"bar /src/babel/__tests__/fixtures/create-domain-domain.js [6, 12]\\"
 });"
 `;
 
@@ -68,7 +68,7 @@ const domain = createDomain(\\"domain\\", {
     column: 15
   },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-effect.js [4, 15]}\\"
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-effect.js [4, 15]\\"
 });
 const a = domain.effect(\\"a\\", {
   loc: {
@@ -77,7 +77,7 @@ const a = domain.effect(\\"a\\", {
     column: 10
   },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-effect.js [6, 10]}\\"
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-effect.js [6, 10]\\"
 });
 
 const f = () => domain.effect(\\"f\\", {
@@ -87,7 +87,7 @@ const f = () => domain.effect(\\"f\\", {
     column: 16
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-effect.js [7, 16]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-effect.js [7, 16]\\"
 });
 
 const b = domain.effect('hello', {
@@ -97,7 +97,7 @@ const b = domain.effect('hello', {
     column: 10
   },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-effect.js [8, 10]}\\"
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-effect.js [8, 10]\\"
 });
 
 const g = () => domain.effect('baz', {
@@ -107,7 +107,7 @@ const g = () => domain.effect('baz', {
     column: 16
   },
   name: \\"g\\",
-  sid: \\"g /src/babel/__tests__/fixtures/create-domain-effect.js [9, 16]}\\"
+  sid: \\"g /src/babel/__tests__/fixtures/create-domain-effect.js [9, 16]\\"
 });"
 `;
 
@@ -122,7 +122,7 @@ const domain = createDomain(\\"domain\\", {
     column: 15
   },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-event.js [4, 15]}\\"
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-event.js [4, 15]\\"
 });
 const a = domain.event(\\"a\\", {
   loc: {
@@ -131,7 +131,7 @@ const a = domain.event(\\"a\\", {
     column: 10
   },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-event.js [6, 10]}\\"
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-event.js [6, 10]\\"
 });
 
 const f = () => domain.event(\\"f\\", {
@@ -141,7 +141,7 @@ const f = () => domain.event(\\"f\\", {
     column: 16
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-event.js [7, 16]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-event.js [7, 16]\\"
 });
 
 const b = domain.event('asm', {
@@ -151,7 +151,7 @@ const b = domain.event('asm', {
     column: 10
   },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-event.js [8, 10]}\\"
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-event.js [8, 10]\\"
 });
 
 const g = () => domain.event('tasm', {
@@ -161,7 +161,7 @@ const g = () => domain.event('tasm', {
     column: 16
   },
   name: \\"g\\",
-  sid: \\"g /src/babel/__tests__/fixtures/create-domain-event.js [9, 16]}\\"
+  sid: \\"g /src/babel/__tests__/fixtures/create-domain-event.js [9, 16]\\"
 });"
 `;
 
@@ -176,7 +176,7 @@ const domain = createDomain(\\"domain\\", {
     column: 15
   },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-store.js [4, 15]}\\"
+  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-store.js [4, 15]\\"
 });
 const a = domain.store('bar', {
   loc: {
@@ -185,7 +185,7 @@ const a = domain.store('bar', {
     column: 10
   },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-store.js [6, 10]}\\"
+  sid: \\"a /src/babel/__tests__/fixtures/create-domain-store.js [6, 10]\\"
 });
 const b = domain.store('h', {
   ɔ: {
@@ -198,7 +198,7 @@ const b = domain.store('h', {
     column: 10
   },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-store.js [7, 10]}\\"
+  sid: \\"b /src/babel/__tests__/fixtures/create-domain-store.js [7, 10]\\"
 });
 const c = domain.store('h', {
   ɔ: {
@@ -210,7 +210,7 @@ const c = domain.store('h', {
     column: 10
   },
   name: \\"c\\",
-  sid: \\"c /src/babel/__tests__/fixtures/create-domain-store.js [8, 10]}\\"
+  sid: \\"c /src/babel/__tests__/fixtures/create-domain-store.js [8, 10]\\"
 }); //$off
 
 const d = domain.store('h', {
@@ -221,7 +221,7 @@ const d = domain.store('h', {
     column: 10
   },
   name: \\"d\\",
-  sid: \\"d /src/babel/__tests__/fixtures/create-domain-store.js [10, 10]}\\"
+  sid: \\"d /src/babel/__tests__/fixtures/create-domain-store.js [10, 10]\\"
 }); //$off
 
 const e = domain.store('h', {
@@ -232,7 +232,7 @@ const e = domain.store('h', {
     column: 10
   },
   name: \\"e\\",
-  sid: \\"e /src/babel/__tests__/fixtures/create-domain-store.js [12, 10]}\\"
+  sid: \\"e /src/babel/__tests__/fixtures/create-domain-store.js [12, 10]\\"
 });
 const f = domain.store('h', {
   ɔ: {},
@@ -242,7 +242,7 @@ const f = domain.store('h', {
     column: 10
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-store.js [13, 10]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-domain-store.js [13, 10]\\"
 });"
 `;
 
@@ -257,7 +257,7 @@ const foo = createEffect(\\"foo\\", {
     column: 12
   },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-effect.js [5, 12]}\\"
+  sid: \\"foo /src/babel/__tests__/fixtures/create-effect.js [5, 12]\\"
 });
 const bar = createEffect('hello', {
   loc: {
@@ -266,7 +266,7 @@ const bar = createEffect('hello', {
     column: 12
   },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-effect.js [6, 12]}\\"
+  sid: \\"bar /src/babel/__tests__/fixtures/create-effect.js [6, 12]\\"
 });
 const baz = createEffect({
   handler() {
@@ -280,7 +280,7 @@ const baz = createEffect({
     column: 12
   },
   name: \\"baz\\",
-  sid: \\"baz /src/babel/__tests__/fixtures/create-effect.js [7, 12]}\\"
+  sid: \\"baz /src/babel/__tests__/fixtures/create-effect.js [7, 12]\\"
 });
 const quux = createEffect('nice', {
   ɔ: {
@@ -295,7 +295,7 @@ const quux = createEffect('nice', {
     column: 13
   },
   name: \\"quux\\",
-  sid: \\"quux /src/babel/__tests__/fixtures/create-effect.js [12, 13]}\\"
+  sid: \\"quux /src/babel/__tests__/fixtures/create-effect.js [12, 13]\\"
 });
 
 const f = () => createEffect(\\"f\\", {
@@ -305,7 +305,7 @@ const f = () => createEffect(\\"f\\", {
     column: 16
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-effect.js [17, 16]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-effect.js [17, 16]\\"
 });"
 `;
 
@@ -320,7 +320,7 @@ const foo = createEvent(\\"foo\\", {
     column: 12
   },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-event.js [5, 12]}\\"
+  sid: \\"foo /src/babel/__tests__/fixtures/create-event.js [5, 12]\\"
 });
 const bar = createEvent('hello', {
   loc: {
@@ -329,7 +329,7 @@ const bar = createEvent('hello', {
     column: 12
   },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-event.js [6, 12]}\\"
+  sid: \\"bar /src/babel/__tests__/fixtures/create-event.js [6, 12]\\"
 });
 const baz = createEvent({
   name: 'nice'
@@ -340,7 +340,7 @@ const baz = createEvent({
     column: 12
   },
   name: \\"baz\\",
-  sid: \\"baz /src/babel/__tests__/fixtures/create-event.js [7, 12]}\\"
+  sid: \\"baz /src/babel/__tests__/fixtures/create-event.js [7, 12]\\"
 });
 
 const f = () => createEvent(\\"f\\", {
@@ -350,7 +350,7 @@ const f = () => createEvent(\\"f\\", {
     column: 16
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-event.js [8, 16]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-event.js [8, 16]\\"
 });"
 `;
 
@@ -365,7 +365,7 @@ const foo = createStore('foo', {
     column: 12
   },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-store.js [4, 12]}\\"
+  sid: \\"foo /src/babel/__tests__/fixtures/create-store.js [4, 12]\\"
 });
 const a = createStore('h', {
   loc: {
@@ -374,7 +374,7 @@ const a = createStore('h', {
     column: 10
   },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-store.js [5, 10]}\\"
+  sid: \\"a /src/babel/__tests__/fixtures/create-store.js [5, 10]\\"
 });
 const b = createStore('h', {
   ɔ: {},
@@ -384,7 +384,7 @@ const b = createStore('h', {
     column: 10
   },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-store.js [6, 10]}\\"
+  sid: \\"b /src/babel/__tests__/fixtures/create-store.js [6, 10]\\"
 }); //$off
 
 const c = createStore('h', {
@@ -395,7 +395,7 @@ const c = createStore('h', {
     column: 10
   },
   name: \\"c\\",
-  sid: \\"c /src/babel/__tests__/fixtures/create-store.js [8, 10]}\\"
+  sid: \\"c /src/babel/__tests__/fixtures/create-store.js [8, 10]\\"
 });
 const config = {
   option: 0
@@ -408,7 +408,7 @@ const dod = createStore(null, {
     column: 12
   },
   name: \\"dod\\",
-  sid: \\"dod /src/babel/__tests__/fixtures/create-store.js [10, 12]}\\"
+  sid: \\"dod /src/babel/__tests__/fixtures/create-store.js [10, 12]\\"
 });
 
 const f = a => createStore(a, {
@@ -418,6 +418,6 @@ const f = a => createStore(a, {
     column: 15
   },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-store.js [12, 15]}\\"
+  sid: \\"f /src/babel/__tests__/fixtures/create-store.js [12, 15]\\"
 });"
 `;

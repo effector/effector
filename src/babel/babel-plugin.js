@@ -278,5 +278,5 @@ function setEventNameAfter(path, state, nameNodeId, t) {
  * "foo src/index.js [12,30]"
  */
 function generateStableID(babelRoot, fileName, varName, line, column) {
-  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]}`
+  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]`
 }
