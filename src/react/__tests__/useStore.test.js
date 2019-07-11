@@ -3,7 +3,7 @@
 import * as React from 'react'
 //$todo
 import {render, cleanup, act} from 'react-testing-library'
-import {createStore, createEvent} from 'effector'
+import {createStore, createEvent, createEffect} from 'effector'
 import {useStore, useStoreMap} from '../useStore'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -89,6 +89,32 @@ describe('useStore', () => {
         "B",
       ]
     `)
+  })
+  it('should subscribe before any react hook will change store', async() => {
+    const fn = jest.fn()
+    const fx = createEffect({
+      handler: () => new Promise(rs => setTimeout(rs, 200)),
+    })
+    const Inner = () => {
+      React.useLayoutEffect(() => {
+        fx()
+      }, [])
+
+      return null
+    }
+    const App = () => {
+      const pending = useStore(fx.pending)
+      fn(pending)
+      return (
+        <>
+          {String(pending).toUpperCase()}
+          <Inner />
+        </>
+      )
+    }
+    render(<App />)
+    await new Promise(rs => setTimeout(rs, 500))
+    expect(argumentHistory(fn)).toEqual([false, true, false])
   })
 })
 
