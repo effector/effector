@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 20.0.4
+
+- Fix a bug in `useStore` with lack of store updates triggered by react hooks in children components
+
 ## effector-react 20.0.3
 
 - Allow `as const` typescript assertion for `useStoreMap` keys. It helps us to infer type for `fn` arguments
