@@ -104,7 +104,7 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): A function that receives `params`.
+(_`watcher`_): A function that receives `payload`.
 
 #### Returns
 
