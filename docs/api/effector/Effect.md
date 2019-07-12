@@ -77,7 +77,7 @@ It will replace the previous function inside (if any).
 #### Arguments
 
 
-(_`thunk`_): Function, that receives the first argument passed to an effect call
+(_`thunk`_): Function, that receives the first argument passed to an effect call.
 
 #### Returns
 
@@ -104,22 +104,24 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): A function that receives `params` and `effect name`
+(_`watcher`_): A function that receives `params`.
 
 #### Returns
 
-(_`Subscription`_): A function that unsubscribes the watcher
+(_`Subscription`_): A function that unsubscribes the watcher.
 
 #### Example
 
 ```js
-const effect = createEffect("foo")
-
-effect.watch((params, name) => {
-  console.log(name, "called with", params)
+const effect = createEffect("foo", {
+  handler: value => value
 })
 
-effect(20) // > foo called with 20
+effect.watch(payload => {
+  console.log("called with", payload)
+})
+
+effect(20) // > called with 20
 ```
 
 <hr>
@@ -136,7 +138,7 @@ effect(20) // > foo called with 20
 
 ### <a id='done'></a>[`.done`](#done)
 
-_Event_ triggered when promise from _thunk_ is *resolved*
+_Event_ triggered when promise from _thunk_ is *resolved*.
 
 #### Arguments
 
