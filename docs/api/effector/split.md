@@ -5,7 +5,7 @@ hide_title: true
 ---
 
 # `split(event, cases)`
-Pattern matching method, splits event into several, which fire upon source event matches its comparator function
+Pattern matching method, splits event into several, which fire upon source event matches its comparator function.
 
 #### Arguments
 
@@ -16,7 +16,7 @@ Pattern matching method, splits event into several, which fire upon source event
 
 (Object) - Object, having keys, defined in `cases` argument, plus `__`(two underscores) - which stands for `default` (no mathes met) case.
 
-#### Example
+#### Example 1
 
 ```javascript
 import {createEvent, split} from 'effector'
@@ -47,3 +47,28 @@ message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 [Try it](https://share.effector.dev/QXZsR5yM)
+
+_Note_: the only first met match will trigger resulting event
+
+#### Example 2
+
+```js
+import {createEvent, split} from 'effector'
+const message = createEvent();
+
+const {short, long, medium} = split(message, {
+  short: (m) => m.length <= 5,
+  medium: (m) => m.length > 5,
+  long: (m) => m.length > 10,
+});
+
+short.watch((m) => console.log(`short message '${m}'`));
+medium.watch((m) => console.log(`medium message '${m}'`));
+long.watch((m) => console.log(`long message '${m}'`));
+
+message("short"); // => medium message 'short!'
+message("medium"); // => medium message 'medium'
+message("long message"); // => medium message 'long message' (uh-oh)
+```
+
+[Try it](https://share.effector.dev/Ajta8lDk)
