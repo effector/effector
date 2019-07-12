@@ -178,5 +178,10 @@ Type 'number' does not satisfy the constraint 'object'.
 Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
 Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
   Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+src/types/useStoreMap.test.tsx(50,28): error TS2493: Tuple type 'readonly [number]' of length '1' has no element at index '1'.
+src/types/useStoreMap.test.tsx(71,11): error TS2322: Type '[number, \\"username\\" | \\"email\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
+  Type '\\"username\\" | \\"email\\" | \\"bio\\"' is not assignable to type 'number'.
+    Type '\\"username\\"' is not assignable to type 'number'.
+src/types/useStoreMap.test.tsx(83,43): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
 "
 `;

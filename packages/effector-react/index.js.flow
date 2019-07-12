@@ -13,11 +13,6 @@ export type StoreConsumer<State> = ComponentType<{|
   children: (state: State) => Node,
 |}>
 
-export type StoreProvider<State> = ComponentType<{|
-  value: State,
-  children?: Node,
-|}>
-
 export type StoreComponent<State> = ComponentType<{|
   children: (state: State) => Node,
 |}>
@@ -51,7 +46,7 @@ declare export function useStoreMap<
   Result,
   Keys: $ReadOnlyArray<any>,
 >(opts: {|
-  +store: State,
+  +store: Store<State>,
   +keys: Keys,
   fn(state: State, keys: Keys): Result,
 |}): Result
@@ -111,10 +106,6 @@ declare export function connect<
 declare export function createStoreConsumer<State>(
   store: Store<State>,
 ): StoreConsumer<State>
-
-declare export function unstable_createStoreProvider<State>(
-  store: Store<State>,
-): StoreProvider<State>
 
 declare export function createReactState<
   State: {[key: string]: any, ...},

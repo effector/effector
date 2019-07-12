@@ -6,10 +6,10 @@ import {
   readRef,
   writeRef,
   type StateRef,
+  is,
 } from '../stdlib'
-import {is} from '../validate'
 import {unitObjectName} from '../naming'
-import {createLink} from '../event'
+import {createLinkNode} from '../event'
 
 import type {Store} from './index.h'
 import {storeFabric} from './storeFabric'
@@ -66,7 +66,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    createLink(child, store, {
+    createLinkNode(child, store, {
       scope: {key, clone, target: store.stateRef, isFresh},
       node,
     })

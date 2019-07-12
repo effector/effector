@@ -5,17 +5,9 @@ title: Event
 
 _Event_ is an intention to change state.
 
-### Event Methods
-
-- [`watch(watcher)`](#watch)
-- [`map(fn)`](#map)
-- [`filter({fn})`](#filter)
-- [`filter(fn)`](#filtermap)
-- [`prepend(fn)`](#prepend)
-
 ## Event Methods
 
-### <a id='watch'></a>[`watch(watcher)`](#watch)
+### `watch(watcher)`
 
 #### Returns
 
@@ -23,7 +15,7 @@ _Event_ is an intention to change state.
 
 <hr>
 
-### <a id='map'></a>[`map(fn)`](#map)
+### `map(fn)`
 
 Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload.
 
@@ -33,7 +25,7 @@ _Event_ is an intention to change state.
 
 <hr>
 
-### <a id='filter'></a>[`filter({fn})`](#filter)
+### `filter({fn})`
 
 Сreates a new event, which will be called after the original event is called, if `fn` returns true.
 
@@ -61,7 +53,7 @@ const lastPositive = createStore(0)
 
 <hr>
 
-### <a id='filtermap'></a>[`filter(fn)`](#filtermap)
+### `filterMap(fn)`
 
 Сreates a new event, which will be called after the original event is called, if `fn` returns **not undefined**.
 
@@ -74,7 +66,7 @@ import {createEvent, createStore} from 'effector'
 
 const openModal = createEvent('open that modal')
 
-const openModalUnboxed = openModal.filter(ref => {
+const openModalUnboxed = openModal.filterMap(ref => {
   if (ref.current) return ref.current
 })
 
@@ -119,7 +111,7 @@ const App = () => (
 
 <hr>
 
-### <a id='prepend'></a>[`prepend(fn)`](#prepend)
+### `prepend(fn)`
 
 #### Returns
 

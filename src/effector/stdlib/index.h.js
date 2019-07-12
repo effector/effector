@@ -104,6 +104,6 @@ export type Graphite =
   | {+graphite: Graph, ...}
   | Graph
 
-export type Unit = /*::interface*/ {
-  +graphite: Graph,
+export interface Unit {
+  +graphite: Graph;
 }

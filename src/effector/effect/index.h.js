@@ -5,7 +5,7 @@ import type {Event} from '../event'
 import type {Store} from '../store'
 import type {CompositeName} from '../compositeName'
 
-export type Effect<Params, Done, Fail = Error> = /*::interface extends Unit*/ {
+export interface Effect<Params, Done, Fail = Error> extends Unit {
   /*::
   [[call]](payload: Params): Promise<Done>,
   */

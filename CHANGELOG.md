@@ -1,5 +1,213 @@
 # Changelog
 
+## effector-react 20.0.4
+
+- Fix a bug in `useStore` with lack of store updates triggered by react hooks in children components
+
+## effector-react 20.0.3
+
+- Allow `as const` typescript assertion for `useStoreMap` keys. It helps us to infer type for `fn` arguments
+
+```typescript
+import React from 'react'
+import {createStore} from 'effector'
+import {useStoreMap} from 'effector-react'
+
+type User = {
+  username: string
+  email: string
+  bio: string
+}
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+
+export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
+  const value = useStoreMap({
+    store: users,
+    keys: [id, field] as const,
+    fn: (users, [id, field]) => users[id][field] || null,
+  })
+  return <div>{value}</div>
+}
+```
+
+In typescript versions below 3.4, you can still use an explicit type assertion
+
+```typescript
+import React from 'react'
+import {createStore} from 'effector'
+import {useStoreMap} from 'effector-react'
+
+type User = {
+  username: string
+  email: string
+  bio: string
+}
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+
+export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
+  const value = useStoreMap({
+    store: users,
+    keys: [id, field] as [number, keyof User],
+    fn: (users, [id, field]) => users[id][field] || null,
+  })
+  return <div>{value}</div>
+}
+```
+
+[as const](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions) in typescript docs
+
+## effector-react 20.0.2
+
+- Fix bug with additional rerender in case of `useStore` argument change
+
+## effector-react 20.0.1
+
+- Fix flow typings for `useStoreMap`
+
+## effector 20.0.0
+
+- Add `merge` for merging events
+
+```js
+import {createEvent, merge} from 'effector'
+const foo = createEvent()
+const bar = createEvent()
+const baz = merge([foo, bar])
+baz.watch(v => console.log('merged event triggered: ', v))
+
+foo(1)
+// => merged event triggered: 1
+bar(2)
+// => merged event triggered: 2
+```
+
+[try it](https://share.effector.dev/WxUgr6dZ)
+
+- Add `split` for pattern-matching over events
+
+```js
+import {createEvent, split} from 'effector'
+const message = createEvent()
+
+const messageByAuthor = split(message, {
+  bob: ({user}) => user === 'bob',
+  alice: ({user}) => user === 'alice',
+})
+messageByAuthor.bob.watch(({text}) => {
+  console.log('[bob]: ', text)
+})
+messageByAuthor.alice.watch(({text}) => {
+  console.log('[alice]: ', text)
+})
+
+message({user: 'bob', text: 'Hello'})
+// => [bob]: Hello
+message({user: 'alice', text: 'Hi bob'})
+// => [alice]: Hi bob
+
+/* default case, triggered if no one condition met */
+const {__: guest} = messageByAuthor
+guest.watch(({text}) => {
+  console.log('[guest]: ', text)
+})
+message({user: 'unregistered', text: 'hi'})
+// => [guest]: hi
+```
+
+[try it](https://share.effector.dev/QXZsR5yM)
+
+- Allow `clearNode` to automatically dispose all related intermediate steps
+
+```js
+import {createEvent, clearNode} from 'effector'
+const source = createEvent()
+const target = source.map(x => {
+  console.log('intermediate step')
+  return x
+})
+target.watch(x => console.log('target watcher'))
+source()
+// => intermediate step
+// => target watcher
+clearNode(target)
+source() // ~ no reaction ~
+```
+
+[try it](https://share.effector.dev/Ip5FAXiR)
+
+- Fix promise warning for effects
+
+- Add `effect.finally`
+
+```js
+import {createEffect} from 'effector'
+const fetchApi = createEffect({
+  handler: n =>
+    new Promise(resolve => {
+      setTimeout(resolve, n, `${n} ms`)
+    }),
+})
+fetchApi.finally.watch(response => {
+  console.log(response)
+})
+
+await fetchApi(10)
+// => {status: 'done', result: '10 ms', params: 10}
+
+// or
+
+// => {status: 'fail', error: Error, params: 10}
+```
+
+[try it](https://share.effector.dev/9Aoba2lk)
+
+- Add types for createEvent with config instead of string
+- Add types for createEffect with config instead of string
+- Add `event.filterMap` as new alias for `event.filter(fn)`
+- Remove `extract`, `withProps`, `is.*` re-exports
+
+## effector-react 20.0.0
+
+- Removed unstable_createStoreProvider
+
+## effector-vue 20.0.0
+
+Vue adapter for effector 20
+
 ## effector-react 19.1.2
 
 - Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/zerobias/effector/issues/118)

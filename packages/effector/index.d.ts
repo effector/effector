@@ -233,7 +233,9 @@ export function createNode(opts: {
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
+
 export function createEvent<E = void>(eventName?: string): Event<E>
+export function createEvent<E = void>(config: {name?: string}): Event<E>
 
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
@@ -241,6 +243,10 @@ export function createEffect<Params, Done, Fail = Error>(
     handler?: (params: Params) => Promise<Done> | Done
   },
 ): Effect<Params, Done, Fail>
+export function createEffect<Params, Done, Fail = Error>(config: {
+  name?: string
+  handler?: (params: Params) => Promise<Done> | Done
+}): Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,

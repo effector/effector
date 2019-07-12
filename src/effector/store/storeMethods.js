@@ -1,11 +1,10 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, readRef, writeRef, addLinkToOwner} from '../stdlib'
-import {is} from '../validate'
+import {step, readRef, writeRef, addLinkToOwner, is} from '../stdlib'
 import {filterChanged, noop} from '../blocks'
 import {effectFabric} from '../effect'
-import {createLink, type Event} from '../event'
+import {createLink, createLinkNode, type Event} from '../event'
 import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
@@ -118,7 +117,7 @@ export function mapStore<A, B>(
     currentState: lastResult,
     parent: store.domainName,
   })
-  createLink(store, innerStore, {
+  createLinkNode(store, innerStore, {
     scope: {
       handler: fn,
       state: innerStore.stateRef,

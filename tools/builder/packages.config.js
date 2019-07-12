@@ -28,15 +28,15 @@ const common = {
 }
 
 const version = {
-  effector: '19.1.0',
-  'effector-react': '19.1.2',
-  'effector-vue': '19.0.1',
+  effector: '20.0.0',
+  'effector-react': '20.0.4',
+  'effector-vue': '20.0.0',
 
-  'bs-effector': '19.0.0',
-  'bs-effector-react': '19.0.0',
+  'bs-effector': '20.0.0',
+  'bs-effector-react': '20.0.0',
 
-  '@effector/babel-plugin': '0.1.0',
-  '@effector/babel-plugin-react': '0.0.3',
+  '@effector/babel-plugin': '0.2.0',
+  '@effector/babel-plugin-react': '0.2.0',
   '@effector/redux-adapter': '0.0.1',
   '@effector/forms': '0.0.1',
 }

@@ -80,11 +80,11 @@
       "api/effector/restore": {
         "title": "restore"
       },
-      "api/effector/store": {
-        "title": "Store"
-      },
       "api/effector/sample": {
         "title": "sample"
+      },
+      "api/effector/store": {
+        "title": "Store"
       },
       "faq": {
         "title": "FAQ"

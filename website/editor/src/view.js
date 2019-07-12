@@ -17,6 +17,7 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {isDesktopChanges, tab} from './tabs/domain'
 import {TabsView} from './tabs/view'
+import {mode} from './mode/domain'
 import {
   selectVersion,
   sourceCode,
@@ -61,10 +62,7 @@ const CodeView = createComponent(
       isDesktop ? true : tab === 'editor',
     ),
     sourceCode,
-    mode: typechecker.map(typechecker => {
-      if (typechecker === 'typescript') return 'text/typescript-jsx'
-      return 'text/flow-jsx'
-    }),
+    mode,
   },
   ({}, {displayEditor, mode, sourceCode}) => (
     <div

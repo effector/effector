@@ -6,7 +6,7 @@ import type {Effect} from '../effect'
 import type {CompositeName} from '../compositeName'
 import type {StoreConfigPart} from '../config'
 
-export type Store<State> = /*::interface extends Unit*/ {
+export interface Store<State> extends Unit {
   subscribers: Map<Event<any>, Subscription>,
   /*::+*/ id: string,
   /*::+*/ stateRef: StateRef,

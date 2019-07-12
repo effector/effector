@@ -3,8 +3,9 @@
 import * as React from 'react'
 //$todo
 import {render, cleanup, act} from 'react-testing-library'
-import {createStore, createEvent} from 'effector'
+import {createStore, createEvent, createEffect} from 'effector'
 import {useStore, useStoreMap} from '../useStore'
+import {argumentHistory} from 'effector/fixtures'
 
 afterEach(cleanup)
 
@@ -20,12 +21,22 @@ describe('useStore', () => {
     }
 
     const {container} = render(<Display />)
-    expect(container.firstChild).toMatchSnapshot()
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        Store text: 
+        foo
+      </span>
+    `)
     act(() => {
       changeText('bar')
     })
     // flushEffects()
-    expect(container.firstChild).toMatchSnapshot()
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <span>
+        Store text: 
+        bar
+      </span>
+    `)
   })
 
   it('should throw', () => {
@@ -37,7 +48,73 @@ describe('useStore', () => {
 
     expect(() => {
       render(<ErrorDisplay />)
-    }).toThrowErrorMatchingSnapshot()
+    }).toThrowErrorMatchingInlineSnapshot(
+      `"expect useStore argument to be a store"`,
+    )
+  })
+
+  it('should retrigger only once after store change', () => {
+    const fn = jest.fn()
+    const storeA = createStore('A')
+    const storeB = createStore('B')
+    const changeCurrentStore = createEvent()
+    const currentStore = createStore(storeA).on(
+      changeCurrentStore,
+      (_, store) => store,
+    )
+
+    const Target = ({store}) => {
+      const state = useStore(store)
+      fn(state)
+      return <span>Store text: {state}</span>
+    }
+
+    const Display = () => {
+      const store = useStore(currentStore)
+      return <Target store={store} />
+    }
+
+    render(<Display />)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "A",
+      ]
+    `)
+    act(() => {
+      changeCurrentStore(storeB)
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "A",
+        "B",
+      ]
+    `)
+  })
+  it('should subscribe before any react hook will change store', async() => {
+    const fn = jest.fn()
+    const fx = createEffect({
+      handler: () => new Promise(rs => setTimeout(rs, 200)),
+    })
+    const Inner = () => {
+      React.useLayoutEffect(() => {
+        fx()
+      }, [])
+
+      return null
+    }
+    const App = () => {
+      const pending = useStore(fx.pending)
+      fn(pending)
+      return (
+        <>
+          {String(pending).toUpperCase()}
+          <Inner />
+        </>
+      )
+    }
+    render(<App />)
+    await new Promise(rs => setTimeout(rs, 500))
+    expect(argumentHistory(fn)).toEqual([false, true, false])
   })
 })
 
@@ -86,14 +163,48 @@ test('useStoreMap', () => {
     )
   }
   const {container} = render(<Cards />)
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        Alex
+        : 
+        20
+      </li>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
   act(() => {
     changeUserAge({nickname: 'alex', age: 21})
   })
 
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        Alex
+        : 
+        21
+      </li>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
   act(() => {
     removeUser('alex')
   })
-  expect(container.firstChild).toMatchSnapshot()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <ul>
+      <li>
+        John
+        : 
+        30
+      </li>
+    </ul>
+  `)
 })
