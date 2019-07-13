@@ -10,6 +10,7 @@ title: API Reference
 - [createGate(name?)](createGate.md)
 - [useGate(GateComponent, props)](useGate.md)
 - [useStore(store)](useStore.md)
+- [useStoreMap({ store, keys, fn })](useStoreMap.md)
 
 ### Gate API
 
