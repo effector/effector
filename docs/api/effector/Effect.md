@@ -7,10 +7,6 @@ title: Effect
 
 It can be safely used in place of the original async function.
 
-The only requirement for function:
-
-- **Should** have zero or one argument
-
 #### Arguments
 
 1. `params` (_Params_): parameters passed to effect
@@ -64,7 +60,7 @@ It will replace the previous function inside (if any).
 #### Arguments
 
 
-(_`thunk`_): Function, that receives the first argument passed to an effect call.
+(_`handler`_): Function, that receives the first argument passed to an effect call.
 
 
 #### Returns
