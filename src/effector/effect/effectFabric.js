@@ -7,6 +7,7 @@ import {eventFabric, type Event} from '../event'
 import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
+import {Defer} from './defer'
 
 const onResolve = ({event, anyway, params, handler}, result) => {
   upsertLaunch(anyway, {
@@ -37,18 +38,6 @@ const onReject = ({event, anyway, params, handler}, error) => {
       error,
     },
   })
-}
-
-function Def() {
-  /*::
-  this.rs = result => {}
-  this.rj = error => {}
-  */
-  const req = new Promise((rs, rj) => {
-    this.rs = rs
-    this.rj = rj
-  })
-  this.req = req
 }
 
 const notifyHandler = step.run({
@@ -165,8 +154,7 @@ export function effectFabric<Payload, Done>({
     }),
   )
   ;(instance: any).create = (params: Payload, fullName, args) => {
-    const req = new Def()
-    req.req.catch(err => {})
+    const req: any = new Defer()
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }
