@@ -58,7 +58,7 @@ export function effectFabric<Payload, Done>({
   config: EffectConfigPart<Payload, Done>,
   ...
 }): Effect<Payload, Done, *> {
-  const {handler} = config
+  const {handler: defaultHandler} = config
 
   //$off
   const instance: Effect<Payload, Done, any> = eventFabric({
@@ -102,8 +102,8 @@ export function effectFabric<Payload, Done>({
   })
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
-  let thunk: Function =
-    handler
+  let handler: Function =
+    defaultHandler
     || (value => {
       console.error(`no handler used in ${instance.getType()}`)
       return Promise.resolve()
@@ -113,10 +113,10 @@ export function effectFabric<Payload, Done>({
   instance.fail = fail
   instance.finally = anyway
   ;(instance: any).use = fn => {
-    thunk = fn
+    handler = fn
     return instance
   }
-  const getCurrent = (): any => thunk
+  const getCurrent = (): any => handler
   ;(instance: any).use.getCurrent = getCurrent
   ;(instance: any).kind = Kind.effect
   //assume that fresh event has empty scope

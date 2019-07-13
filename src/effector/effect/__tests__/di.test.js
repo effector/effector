@@ -40,7 +40,7 @@ function variadicEffect<Done, Fn:(...params: any[]) => Promise<Done> | Done>(
   )
   const oldUse = effect.use
   //$off
-  effect.use = thunk => oldUse(payload => thunk(...payload))
+  effect.use = handler => oldUse(payload => handler(...payload))
 
   return (effect: any)
 }
