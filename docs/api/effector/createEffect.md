@@ -26,9 +26,10 @@ Create unnamed effect
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
-  handler: ({name}) => {
-    return fetch(`https://api.github.com/users/${user}/repos`)
-      .then(res => res.json())
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
   }
 })
 ```
@@ -39,9 +40,10 @@ Create named effect
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect('fetch user repositories', {
-  handler: ({name}) => {
-    return fetch(`https://api.github.com/users/${user}/repos`)
-      .then(res => res.json())
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
   }
 })
 ```
@@ -53,9 +55,10 @@ import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect()
 
-fetchUserRepos.use(({name}) => {
-  return fetch(`https://api.github.com/users/${user}/repos`)
-    .then(res => res.json())
+fetchUserRepos.use(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 ```
 
@@ -65,9 +68,10 @@ Watch effect status
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
-  handler: ({name}) => {
-    return fetch(`https://api.github.com/users/${name}/repos`)
-      .then(res => res.json())
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
   }
 })
 
@@ -105,9 +109,10 @@ Change state
 import {createStore, createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
-  handler: ({name}) => {
-    return fetch(`https://api.github.com/users/${name}/repos`)
-      .then(res => res.json())
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
   }
 })
 
