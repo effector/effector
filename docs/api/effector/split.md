@@ -9,8 +9,8 @@ Pattern matching method, splits event into several, which fire upon source event
 
 #### Arguments
 
-1. `event` _([_`Event`_](Event.md))_: Array of [_`units`_](Unit.md) to be merged.
-1. `event` _(Object)_: Schema of cases, which uses names of resulting events as keys, and comparator function_((value) => Boolean)_ 
+1. `event` _([_`Event`_](Event.md))_: Array of [_`events`_](Event.md) to be merged.
+2. `cases` _(Object)_: Schema of cases, which uses names of resulting events as keys, and comparator function_((value) => Boolean)_ 
 
 #### Returns
 
