@@ -29,6 +29,8 @@ export function createTask({
   trigger.fail = effect.fail
   //$off
   trigger.use = effect.use
+  //$off
+  trigger.pending = effect.pending
   trigger.graphite.seq.push(
     step.compute({
       fn(params, scope) {
