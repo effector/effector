@@ -8,21 +8,12 @@ import {createStoreObject} from './store'
 import {launch} from './kernel'
 import {step, bind, is} from './stdlib'
 
-export function createTask(opts: *) {
-  const {handler, store: storeOpts} = opts
-  let store
-  let fn
-  if (is.store(storeOpts)) {
-    store = storeOpts
-    fn = data => data
-  } else if (typeof storeOpts.fn === 'function') {
-    const {shape, fn: combinator} = storeOpts
-    store = is.store(shape) ? shape : createStoreObject(shape)
-    fn = combinator
-  } else {
-    store = createStoreObject(storeOpts)
-    fn = data => data
-  }
+export function createTask({
+  handler,
+  store: shape,
+  fn = (params, store) => ({params, store}),
+}: *) {
+  const store = is.store(shape) ? shape : createStoreObject(shape)
   const effect = createEffect({handler})
   //$off
   const trigger = createEvent()
@@ -65,5 +56,5 @@ export function createTask(opts: *) {
 }
 
 const transformBy = (fn, store, {params, req}) => ({
-  ɔ: {req, params: fn({params, store})},
+  ɔ: {req, params: fn(params, store)},
 })
