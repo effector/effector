@@ -1,16 +1,38 @@
 //@flow
 
-import {type Store, is, clearNode, createStore} from 'effector'
+import {
+  type Store,
+  is,
+  clearNode,
+  createStore,
+  type Subscription,
+} from 'effector'
 import {useReducer, useMemo} from 'react'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 
 const stateReducer = (_: any, payload: any) => payload
 
+type ReactSubscription = Subscription & {active: boolean}
+
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throw Error('expect useStore argument to be a store')
   const dispatch = useReducer(stateReducer, undefined, store.getState)[1]
-  const subscription = useMemo(() => store.updates.watch(dispatch), [store])
-  useIsomorphicLayoutEffect(() => subscription, [subscription])
+  const subscription = useMemo(() => {
+    //$off
+    const subscription: ReactSubscription = store.updates.watch(upd => {
+      if (!subscription.active) return
+      dispatch(upd)
+    })
+    subscription.active = true
+    return subscription
+  }, [store])
+  useIsomorphicLayoutEffect(
+    () => () => {
+      subscription.active = false
+      subscription()
+    },
+    [subscription],
+  )
   return store.getState()
 }
 
