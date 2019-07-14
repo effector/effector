@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 20.0.5
+
+- Fix irrelevant react memory leak warning in a few cases
+
 ## effector-react 20.0.4
 
 - Fix a bug in `useStore` with lack of store updates triggered by react hooks in children components
