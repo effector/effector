@@ -1,20 +1,24 @@
 //@flow
-/* eslint-disable no-nested-ternary */
-import {eventFabric, createLinkNode} from './event'
-import {storeFabric, createStoreObject} from './store'
-import {noop} from './blocks'
+
+import {eventFabric, createLinkNode} from '../event'
+import {storeFabric} from '../store'
+import {noop} from '../blocks'
 import {
   step,
-  type Graphite,
   createStateRef,
   readRef,
   writeRef,
   nextBarrierID,
-  is,
   addLinkToOwner,
-} from './stdlib'
+} from '../stdlib'
 
-const storeBy = (source, clock, fn, greedy, target) => {
+export const storeBy = (
+  source: any,
+  clock: any,
+  fn: null | ((a: any, b: any) => any),
+  greedy: boolean,
+  target: any,
+) => {
   addLinkToOwner(
     source,
     createLinkNode(clock, target, {
@@ -42,7 +46,13 @@ const storeBy = (source, clock, fn, greedy, target) => {
   return target
 }
 
-const storeByEvent = (source: any, clock: any, fn: any, greedy, target) =>
+export const storeByEvent = (
+  source: any,
+  clock: any,
+  fn: null | ((a: any, b: any) => any),
+  greedy: boolean,
+  target: any,
+) =>
   storeBy(
     source,
     clock,
@@ -55,7 +65,13 @@ const storeByEvent = (source: any, clock: any, fn: any, greedy, target) =>
       }),
   )
 
-const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
+export const storeByStore = (
+  source: any,
+  clock: any,
+  fn: null | ((a: any, b: any) => any),
+  greedy: boolean,
+  target: any,
+) => {
   const sourceState = readRef(source.stateRef)
   return storeBy(
     source,
@@ -73,7 +89,13 @@ const storeByStore = (source: any, clock: any, fn: any, greedy, target) => {
   )
 }
 
-const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
+export const eventByUnit = (
+  source: any,
+  clock: any,
+  fn: null | ((a: any, b: any) => any),
+  greedy: boolean,
+  target: any,
+) => {
   target =
     target
     || eventFabric({
@@ -125,44 +147,3 @@ const eventByUnit = (source: any, clock: any, fn: any, greedy, target) => {
   )
   return target
 }
-
-export function sample(
-  source: any,
-  clock: Graphite,
-  fn?: boolean | ((source: any, clock: any) => any),
-  greedy: boolean = false,
-): any {
-  let target
-  //config case
-  if (clock === undefined && 'source' in source) {
-    clock = source.clock || source.sampler
-    fn = source.fn
-    greedy = source.greedy
-    //optional target accepted only from config
-    target = source.target
-    source = source.source
-  }
-  if (clock === undefined) {
-    //still undefined!
-    clock = source
-  }
-  const sourceNorm = unitOrCombine(source)
-  const clockNorm = unitOrCombine(clock)
-  if (typeof fn === 'boolean') {
-    greedy = fn
-    fn = undefined
-  }
-  //prettier-ignore
-  const combinator =
-    is.store(sourceNorm)
-      ? is.store(clockNorm)
-        ? storeByStore
-        : storeByEvent
-      : eventByUnit
-  return combinator(sourceNorm, clockNorm, fn, greedy, target)
-}
-
-//prettier-ignore
-const unitOrCombine = (obj: any) => is.unit(obj)
-  ? obj
-  : createStoreObject(obj)
