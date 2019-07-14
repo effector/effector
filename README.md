@@ -196,39 +196,42 @@ data.watch(console.log)
 
 **Effect** is a container for async function.
 It can be safely used in place of the original async function.
-The only requirement for function - **Should have zero or one argument**
 
 ```js
-const getUser = createEffect('get user').use(params => {
-  return fetch(`https://example.com/get-user/${params.id}`).then(res =>
-    res.json(),
-  )
+import {createEffect} from 'effector'
+
+const fetchUserRepos = createEffect({
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
+  }
 })
 
 // subscribe to pending store status
-getUser.pending.watch((isPending) => {
-  console.log(isPending) // false
+fetchUserRepos.pending.watch(pending => {
+  console.log(pending) // false
 })
 
-// subscribe to promise resolve
-getUser.done.watch(({result, params}) => {
-  console.log(params) // {id: 1}
+// subscribe to handler resolve
+fetchUserRepos.done.watch(({params, result}) => {
+  console.log(params) // {name: 'zerobias'}
   console.log(result) // resolved value
 })
 
-// subscribe to promise reject (or throw)
-getUser.fail.watch(({error, params}) => {
-  console.error(params) // {id: 1}
+// subscribe to handler reject or throw error
+fetchUserRepos.fail.watch(({params, error}) => {
+  console.error(params) // {name: 'zerobias'}
   console.error(error) // rejected value
 })
 
-// you can replace function anytime
-getUser.use(() => promiseMock)
+// you can replace handler anytime
+fetchUserRepos.use(() => promiseMock)
 
 // call effect with your params
-getUser({id: 1})
+fetchUserRepos({name: 'zerobias'})
 
-const data = await getUser({id: 2}) // handle promise
+const data = await fetchUserRepos({name: 'zerobias'}) // handle promise
 ```
 
 ### Store
