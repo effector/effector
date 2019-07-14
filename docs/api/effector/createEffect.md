@@ -76,7 +76,7 @@ const fetchUserRepos = createEffect({
 })
 
 fetchUserRepos.pending.watch(pending => {
-  return console.log(`effect is pending?: ${pending ? 'yes' : 'no'}`)
+  console.log(`effect is pending?: ${pending ? 'yes' : 'no'}`)
 })
 
 fetchUserRepos.done.watch(({params, result}) => {
