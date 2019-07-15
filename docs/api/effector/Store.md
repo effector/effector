@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -105,7 +105,7 @@ Updates state when `trigger` is triggered by using `hander`.
 
 #### Arguments
 
-- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 - (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
   - `state`: Current state of store
   - `params`: Parameters passed to event call
