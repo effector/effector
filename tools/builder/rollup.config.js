@@ -1,11 +1,11 @@
-import {resolve} from 'path'
+const {resolve} = require('path')
 
-import babel from 'rollup-plugin-babel'
-import resolvePlugin from 'rollup-plugin-node-resolve'
-import commonjs from 'rollup-plugin-commonjs'
-import json from 'rollup-plugin-json'
+const babel = require('rollup-plugin-babel')
+const resolvePlugin = require('rollup-plugin-node-resolve')
+const commonjs = require('rollup-plugin-commonjs')
+const json = require('rollup-plugin-json')
 
-export default {
+const input = {
   input: resolve(__dirname, 'index.js'),
   plugins: [
     babel({
@@ -67,9 +67,12 @@ export default {
     'fs',
     'stream',
   ],
-  output: {
-    file: resolve(__dirname, '..', 'builder.js'),
-    format: 'cjs',
-    sourcemap: false,
-  },
 }
+
+const output = {
+  file: resolve(__dirname, '..', 'builder.js'),
+  format: 'cjs',
+  sourcemap: false,
+}
+
+module.exports = {input, output}
