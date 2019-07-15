@@ -7,7 +7,35 @@ import json from 'rollup-plugin-json'
 
 export default {
   input: resolve(__dirname, 'index.js'),
-  plugins: [babel(), json(), resolvePlugin(), commonjs()],
+  plugins: [
+    babel({
+      babelrc: false,
+      presets: [
+        '@babel/preset-flow',
+        [
+          '@babel/preset-env',
+          {
+            loose: true,
+            useBuiltIns: 'entry',
+            modules: false,
+            shippedProposals: true,
+            targets: {
+              node: 'current',
+            },
+          },
+        ],
+      ],
+      plugins: [
+        '@babel/plugin-proposal-export-namespace-from',
+        '@babel/plugin-proposal-optional-chaining',
+        '@babel/plugin-proposal-nullish-coalescing-operator',
+        ['@babel/plugin-proposal-class-properties', {loose: true}],
+      ],
+    }),
+    json(),
+    resolvePlugin(),
+    commonjs(),
+  ],
   external: [
     'path',
     'execa',
