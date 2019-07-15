@@ -196,8 +196,14 @@ switcher({
 
 realmInvoke.watch(({method, params, instance}) => {
   if (method === 'restore') {
-    for (const key in instance) {
-      realmStore(instance[key])
+    if (params.length > 0
+      && (params[0].kind === 'event' || params[0].kind === 'effect')
+    ) {
+      realmStore(instance)
+    } else {
+      for (const key in instance) {
+        realmStore(instance[key])
+      }
     }
   }
   if (method === 'createApi') {
