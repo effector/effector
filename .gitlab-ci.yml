@@ -1,8 +1,8 @@
 image: node:11
 
-cache:
-  paths:
-    - node_modules/
+# cache:
+#   paths:
+#     - node_modules/
 
 stages:
   - test
@@ -19,7 +19,7 @@ npm_latest:
     - echo "publish npm latest"
     - yarn
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-    - node tools/builder.js publish latest
+    - yarn build publish latest
   environment:
     name: npm
     url: https://www.npmjs.com/package/effector
@@ -32,7 +32,7 @@ npm_next:
     - echo "publish npm next"
     - yarn
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-    - node tools/builder.js publish next
+    - yarn build publish next
   environment:
     name: npm
     url: https://www.npmjs.com/package/effector
