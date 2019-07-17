@@ -11,7 +11,8 @@
     "bench": "node --expose-gc bench/bench.test.js",
     "perfsnake": "npx parcel serve --no-hmr --no-autoinstall tools/perfsnake/index.html",
     "build": "node tools/build",
-    "test:watch": "npx jest --config=jest.config.js --watch"
+    "test:watch": "npx jest --config=jest.config.js --watch",
+    "doc:update-readme": "npx doctoc README.md"
   },
   "author": "Zero Bias",
   "license": "MIT",
