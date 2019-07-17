@@ -31,6 +31,13 @@ https://gitpod.io/#https://github.com/zerobias/effector
 This command uses [`./tasks`](https://github.com/zerobias/effector/tree/master/tasks) to generate package.json for each npm-package from `./packages` and build sources.
 Rollup builds source files to `./npm` directory.
 
+### README.md
+
+To update Table of Contents use this command:
+
+```sh
+npx doctoc README.md
+```
 
 ### Tests
 
