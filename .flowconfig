@@ -11,7 +11,7 @@ untyped-type-import=error
 ./node_modules/@babel/types/lib/index.js.flow
 
 [version]
->=0.101.0
+>=0.102.0
 
 [include]
 
