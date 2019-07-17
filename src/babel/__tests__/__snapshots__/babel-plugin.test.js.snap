@@ -1,5 +1,22 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel-plugin should create component 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore } from 'effector';
+import { createComponent } from 'effector-react';
+const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  },
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/create-component.js [5, 12]\\"
+});
+const Foo = createComponent(foo, (props, data) => null);"
+`;
+
 exports[`babel-plugin should create domain 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
@@ -420,4 +437,34 @@ const f = a => createStore(a, {
   name: \\"f\\",
   sid: \\"f /src/babel/__tests__/fixtures/create-store.js [12, 15]\\"
 });"
+`;
+
+exports[`babel-plugin should use store 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore } from 'effector';
+import { useStore } from 'effector-react';
+const foo = createStore('foo', {
+  loc: {
+    file: _effectorFileName,
+    line: 5,
+    column: 12
+  },
+  name: \\"foo\\",
+  sid: \\"foo /src/babel/__tests__/fixtures/use-store.js [5, 12]\\"
+});
+const bar = createStore('bar', {
+  loc: {
+    file: _effectorFileName,
+    line: 6,
+    column: 12
+  },
+  name: \\"bar\\",
+  sid: \\"bar /src/babel/__tests__/fixtures/use-store.js [6, 12]\\"
+});
+
+const Foo = () => {
+  const data = useStore(foo);
+  const data0 = useStore(bar);
+};"
 `;
