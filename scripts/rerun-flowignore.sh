@@ -1,1 +1,0 @@
-IGNORED="" node scripts/flow-ignore
