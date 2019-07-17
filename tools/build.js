@@ -1,7 +1,7 @@
 const {rollup} = require('rollup')
 const {input, output} = require('./builder/rollup.config')
 
-void (async function runner() {
+module.exports = (async function runner() {
   console.log('generate build script')
   const build = await rollup(input)
   await build.write(output)
