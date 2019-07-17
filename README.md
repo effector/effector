@@ -15,10 +15,12 @@
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
   - [Additional packages:](#additional-packages)
+- [Press](#press)
 - [Examples](#examples)
   - [Increment/decrement](#incrementdecrement)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
@@ -32,6 +34,7 @@
   - [Effect](#effect)
   - [Store](#store)
   - [Domain](#domain)
+- [Tested with browserstack](#tested-with-browserstack)
 - [Contributors](#contributors)
 - [License](#license)
 
@@ -300,10 +303,43 @@ const pageStore = mainPage.store(0)
 ## Contributors
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-| [<img src="https://avatars0.githubusercontent.com/u/15912112?v=4" width="100px;"/><br /><sub><b>Dmitry</b></sub>](https://zerobias.net)<br />[💬](#question-zerobias "Answering Questions") [💻](https://github.com/zerobias/effector/commits?author=zerobias "Code") [📖](https://github.com/zerobias/effector/commits?author=zerobias "Documentation") [💡](#example-zerobias "Examples") [🤔](#ideas-zerobias "Ideas, Planning, & Feedback") [🚇](#infra-zerobias "Infrastructure (Hosting, Build-Tools, etc)") [⚠️](https://github.com/zerobias/effector/commits?author=zerobias "Tests") | [<img src="https://avatars2.githubusercontent.com/u/3275424?v=4" width="100px;"/><br /><sub><b>andretshurotshka</b></sub>](https://github.com/goodmind)<br />[💬](#question-goodmind "Answering Questions") [💻](https://github.com/zerobias/effector/commits?author=goodmind "Code") [📖](https://github.com/zerobias/effector/commits?author=goodmind "Documentation") [📦](#platform-goodmind "Packaging/porting to new platform") [⚠️](https://github.com/zerobias/effector/commits?author=goodmind "Tests") | [<img src="https://avatars0.githubusercontent.com/u/5620073?v=4" width="100px;"/><br /><sub><b>Sergey Sova</b></sub>](https://sergeysova.com)<br />[📖](https://github.com/zerobias/effector/commits?author=sergeysova "Documentation") [💡](#example-sergeysova "Examples") | [<img src="https://avatars0.githubusercontent.com/u/27290320?v=4" width="100px;"/><br /><sub><b>Arutyunyan Artyom</b></sub>](https://t.me/artalar)<br />[📖](https://github.com/zerobias/effector/commits?author=artalar "Documentation") [💡](#example-artalar "Examples") | [<img src="https://avatars2.githubusercontent.com/u/10588170?v=4" width="100px;"/><br /><sub><b>Ilya</b></sub>](https://github.com/Komar0ff)<br />[📖](https://github.com/zerobias/effector/commits?author=Komar0ff "Documentation") |
-| :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://zerobias.net"><img src="https://avatars0.githubusercontent.com/u/15912112?v=4" width="100px;" alt="Dmitry"/><br /><sub><b>Dmitry</b></sub></a><br /><a href="#question-zerobias" title="Answering Questions">💬</a> <a href="https://github.com/zerobias/effector/commits?author=zerobias" title="Code">💻</a> <a href="https://github.com/zerobias/effector/commits?author=zerobias" title="Documentation">📖</a> <a href="#example-zerobias" title="Examples">💡</a> <a href="#ideas-zerobias" title="Ideas, Planning, & Feedback">🤔</a> <a href="#infra-zerobias" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="https://github.com/zerobias/effector/commits?author=zerobias" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://github.com/goodmind"><img src="https://avatars2.githubusercontent.com/u/3275424?v=4" width="100px;" alt="andretshurotshka"/><br /><sub><b>andretshurotshka</b></sub></a><br /><a href="#question-goodmind" title="Answering Questions">💬</a> <a href="https://github.com/zerobias/effector/commits?author=goodmind" title="Code">💻</a> <a href="https://github.com/zerobias/effector/commits?author=goodmind" title="Documentation">📖</a> <a href="#platform-goodmind" title="Packaging/porting to new platform">📦</a> <a href="https://github.com/zerobias/effector/commits?author=goodmind" title="Tests">⚠️</a></td>
+    <td align="center"><a href="https://sergeysova.com"><img src="https://avatars0.githubusercontent.com/u/5620073?v=4" width="100px;" alt="Sergey Sova"/><br /><sub><b>Sergey Sova</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=sergeysova" title="Documentation">📖</a> <a href="#example-sergeysova" title="Examples">💡</a></td>
+    <td align="center"><a href="https://t.me/artalar"><img src="https://avatars0.githubusercontent.com/u/27290320?v=4" width="100px;" alt="Arutyunyan Artyom"/><br /><sub><b>Arutyunyan Artyom</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=artalar" title="Documentation">📖</a> <a href="#example-artalar" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/Komar0ff"><img src="https://avatars2.githubusercontent.com/u/10588170?v=4" width="100px;" alt="Ilya"/><br /><sub><b>Ilya</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Komar0ff" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/dpr-dev"><img src="https://avatars3.githubusercontent.com/u/23157659?v=4" width="100px;" alt="Arthur Irgashev"/><br /><sub><b>Arthur Irgashev</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=dpr-dev" title="Documentation">📖</a> <a href="https://github.com/zerobias/effector/commits?author=dpr-dev" title="Code">💻</a> <a href="#example-dpr-dev" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/hexagon141"><img src="https://avatars0.githubusercontent.com/u/15704394?v=4" width="100px;" alt="Igor Ryzhov"/><br /><sub><b>Igor Ryzhov</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=hexagon141" title="Documentation">📖</a></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://avatars1.githubusercontent.com/u/22044607?v=4" width="100px;" alt="Egor Guscha"/><br /><sub><b>Egor Guscha</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=egorguscha" title="Documentation">📖</a></td>
+    <td align="center"><img src="https://avatars0.githubusercontent.com/u/47696795?v=4" width="100px;" alt="bakugod"/><br /><sub><b>bakugod</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=bakugod" title="Documentation">📖</a> <a href="#example-bakugod" title="Examples">💡</a></td>
+    <td align="center"><img src="https://avatars0.githubusercontent.com/u/29141708?v=4" width="100px;" alt="Ruslan"/><br /><sub><b>Ruslan</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=doasync" title="Documentation">📖</a> <a href="https://github.com/zerobias/effector/commits?author=doasync" title="Code">💻</a> <a href="#ideas-doasync" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/zerobias/effector/commits?author=doasync" title="Tests">⚠️</a></td>
+    <td align="center"><img src="https://avatars2.githubusercontent.com/u/7874664?v=4" width="100px;" alt="Maxim Alyoshin"/><br /><sub><b>Maxim Alyoshin</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=mg901" title="Documentation">📖</a></td>
+    <td align="center"><img src="https://avatars0.githubusercontent.com/u/25362218?v=4" width="100px;" alt="Andrey Gopienko"/><br /><sub><b>Andrey Gopienko</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=tehSLy" title="Documentation">📖</a></td>
+    <td align="center"><img src="https://avatars2.githubusercontent.com/u/13759065?v=4" width="100px;" alt="Vadim Ivanov"/><br /><sub><b>Vadim Ivanov</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=ivanov-v" title="Documentation">📖</a></td>
+    <td align="center"><img src="https://avatars3.githubusercontent.com/u/14825383?v=4" width="100px;" alt="Aleksandr Anokhin"/><br /><sub><b>Aleksandr Anokhin</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=sanohin" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://avatars2.githubusercontent.com/u/4208480?v=4" width="100px;" alt="Anton Kosykh"/><br /><sub><b>Anton Kosykh</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=Kelin2025" title="Code">💻</a></td>
+    <td align="center"><img src="https://avatars0.githubusercontent.com/u/1109562?v=4" width="100px;" alt="Konstantin Lebedev"/><br /><sub><b>Konstantin Lebedev</b></sub><br /><a href="#example-RubaXa" title="Examples">💡</a></td>
+    <td align="center"><img src="https://avatars3.githubusercontent.com/u/1121997?v=4" width="100px;" alt="Pavel Tereschenko"/><br /><sub><b>Pavel Tereschenko</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=bigslycat" title="Code">💻</a></td>
+    <td align="center"><img src="https://avatars2.githubusercontent.com/u/29819102?v=4" width="100px;" alt="Satya Rohith"/><br /><sub><b>Satya Rohith</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=satyarohith" title="Documentation">📖</a></td>
+    <td align="center"><img src="https://avatars1.githubusercontent.com/u/13378944?v=4" width="100px;" alt="Vladislav Melnikov"/><br /><sub><b>Vladislav Melnikov</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=vladmelnikov" title="Code">💻</a></td>
+    <td align="center"><img src="https://avatars3.githubusercontent.com/u/15311091?v=4" width="100px;" alt="Grigory Zaripov"/><br /><sub><b>Grigory Zaripov</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=gzaripov" title="Code">💻</a></td>
+    <td align="center"><img src="https://avatars1.githubusercontent.com/u/37388187?v=4" width="100px;" alt="Marina Miyaoka"/><br /><sub><b>Marina Miyaoka</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=miyaokamarina" title="Code">💻</a></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="https://avatars2.githubusercontent.com/u/35740512?v=4" width="100px;" alt="Evgeny Zakharov"/><br /><sub><b>Evgeny Zakharov</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=risenforces" title="Documentation">📖</a></td>
+  </tr>
+</table>
 
+<!-- markdownlint-enable -->
+<!-- prettier-ignore-end -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
