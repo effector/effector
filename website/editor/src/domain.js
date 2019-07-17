@@ -39,8 +39,15 @@ export function getUrlParameter(name: string): string {
 }
 
 export function retrieveCode(): string {
-  if (window.__code__) {
-    return window.__code__?.content || defaultSourceCode
+  if (/https\:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
+    if ('__code__' in window) {
+      const preloaded: {
+        code: string,
+        description: string,
+        tags: string[],
+      } = (window: any).__code__
+      return preloaded.code
+    }
   }
   const code = getUrlParameter('code')
   if (code) {
