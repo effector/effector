@@ -78,9 +78,6 @@ Array [
     "Cannot call \`createApi\` with object literal bound to \`api\` because string [1] is incompatible with number [2] in the return value of property \`event\`.",
   ],
   Array [
-    "Cannot assign \`event\` to \`createApi_check3\` because string [1] is incompatible with number [2] in type argument \`Payload\` [3].",
-  ],
-  Array [
     "Cannot assign \`computed\` to \`map_check2\` because string [1] is incompatible with number [2] in type argument \`State\` [3].",
   ],
   Array [
