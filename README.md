@@ -51,8 +51,6 @@ Effector is an effective multi store state manager for Javascript apps **(React/
 - **Predictability and clarity of API** - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
 - **The application is built from simple elements** - space and way to take any required business logic out of the view, maximizing the simplicity of the components.
 
-![Effector Diagram](./diagram.png)
-
 ## Installation
 
 ```bash
@@ -80,6 +78,12 @@ yarn add effector
   | :------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
   |       [`bs-effector`](https://github.com/zerobias/effector/tree/master/packages/bs-effector)       |       [![npm](https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector)       |       [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector)](https://david-dm.org/zerobias/effector?path=packages/bs-effector)       |
   | [`bs-effector-react`](https://github.com/zerobias/effector/tree/master/packages/bs-effector-react) | [![npm](https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react)](https://david-dm.org/zerobias/effector?path=packages/bs-effector-react) |
+
+## Press
+
+- [Why I choose Effector instead of Redux or MobX](https://dev.to/lessmess/why-i-choose-effector-instead-of-redux-or-mobx-3dl7)
+- [Effector — State Manager You Should Give a Try](https://itnext.io/effector-state-manager-you-should-give-a-try-b46b917e51cc)
+- [Powerful and fast 5kb state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
 
 ## Examples
 
@@ -286,6 +290,8 @@ const pageStore = mainPage.store(0)
 ```
 
 > [Learn more](https://effector.now.sh/en/introduction/core-concepts)
+
+![Effector Diagram](./diagram.png)
 
 ## Tested with browserstack
 
