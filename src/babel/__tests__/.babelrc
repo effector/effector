@@ -1,3 +1,6 @@
 {
-  "plugins": [["../babel-plugin", {"filename": false}]]
+  "plugins": [
+    ["../babel-plugin", {"filename": false}],
+    ["../babel-plugin-react", {"filename": false}]
+  ]
 }
