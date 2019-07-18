@@ -15,6 +15,12 @@ import {
 import {shareCode} from '../graphql'
 import {isShareAPISupported} from '../device'
 
+shareCode.done.watch(({result: {slug}}) => {
+  if (/https\:\/\/(share\.)?effector\.dev/.test(location.origin)) {
+    history.pushState({slug}, slug, `https://share.effector.dev/${slug}`)
+  }
+})
+
 const slug = createStore('').on(
   shareCode.done,
   (state, {result}) => result.slug,
