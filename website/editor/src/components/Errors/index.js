@@ -49,5 +49,7 @@ export default function Errors({
   return <pre key="error-window" className="errors no-errors" />
 }
 Errors.defaultProps = {
-  error: Error('Unknown error')
+  isError: false,
+  error: Error('Unknown error'),
+  stackFrames: [],
 }
