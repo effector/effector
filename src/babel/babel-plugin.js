@@ -1,5 +1,8 @@
 //@noflow
 
+const fs = require('fs-extra')
+const path = require('path')
+
 const importName = 'effector'
 
 const normalizeOptions = options => ({
@@ -70,30 +73,38 @@ module.exports = function(babel, options = {}) {
           }
           state.fileNameIdentifier = fileNameIdentifier
         }
+        if (!state.stores) state.stores = new Set()
+        if (!state.events) state.events = new Set()
+        if (!state.effects) state.effects = new Set()
+        if (!state.domains) state.domains = new Set()
 
         if (t.isIdentifier(path.node.callee)) {
           if (stores && storeCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setStoreNameAfter(path, state, id, babel.types)
+              state.stores.add(id.name)
             }
           }
           if (events && eventCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.events.add(id.name)
             }
           }
           if (effects && effectCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.effects.add(id.name)
             }
           }
           if (domains && domainCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.domains.add(id.name)
             }
           }
         }
@@ -124,6 +135,26 @@ module.exports = function(babel, options = {}) {
             }
           }
         }
+      },
+
+      Program: {
+        exit(_, state) {
+          const metadata = path.join(
+            state.file.opts.root,
+            '.effector',
+            path.relative(state.file.opts.root, state.filename) + '.json',
+          )
+          fs.outputJson(
+            metadata,
+            {
+              stores: Array.from(state.stores),
+              effects: Array.from(state.effects),
+              domains: Array.from(state.domains),
+              events: Array.from(state.events),
+            },
+            {spaces: 2},
+          )
+        },
       },
     },
   }
