@@ -1,8 +1,20 @@
 //@flow
 
-import {forward} from 'effector'
+import {forward, Event} from 'effector'
 
-export function switcher({event, selector, pre = {}, post = {}, target = {}}) {
+export function switcher<Payload, Selector: {}, Pre: {}, Post: {}, Target: {}>({
+  event,
+  selector,
+  pre = {},
+  post = {},
+  target = {},
+}: {|
+  event: Event<Payload>,
+  selector: Selector,
+  pre: Pre,
+  post: Post,
+  target?: Target,
+|}) {
   const mapped = event.map(data => {
     const ctx = new SwitcherContext()
     for (const key in selector) {
@@ -26,7 +38,7 @@ export function switcher({event, selector, pre = {}, post = {}, target = {}}) {
       from: target,
       source: onKey({
         from: post,
-        source: mapped.filter(filter.bind(key)),
+        source: mapped.filterMap(filter.bind(key)),
         fn: ({source, item}) => source.map(item),
         key,
       }),
