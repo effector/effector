@@ -26,8 +26,8 @@ export default function Errors({
   stackFrames: StackFrameType[],
 |}) {
   if (isError) {
-    const errorName = error.name
-    const message = error.message
+    const errorName = 'name' in error ? error.name : null
+    const message = 'message' in error ? error.message : 'Unknown error'
     const headerText =
       message.match(/^\w*:/) || !errorName ? message : errorName
     return (
