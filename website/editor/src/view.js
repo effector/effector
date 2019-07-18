@@ -9,7 +9,7 @@ import 'codemirror/lib/codemirror.css'
 import './styles.css'
 import {VersionLink} from './components/VersionLink'
 import {VersionSelector} from './components/VersionSelector'
-import {Header} from './components/Header'
+import {SidebarHeader} from './components/SidebarHeader'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
@@ -104,15 +104,15 @@ const VersionSelectorView = createComponent(
 )
 
 export default (
-  <div className="try-inner">
+  <>
     <VersionLinkView />
     <OutlineView />
     <CodeView />
-    <Header>
+    <SidebarHeader>
       <VersionSelectorView />
-    </Header>
+    </SidebarHeader>
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />
-  </div>
+  </>
 )

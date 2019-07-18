@@ -56,11 +56,6 @@ body {
 }
 
 #try-wrapper {
-  flex-grow: 1;
-  display: contents;
-}
-
-.try-inner {
   display: grid;
 }
 
@@ -130,8 +125,7 @@ body {
   .navPusher {
     min-height: calc(100vh - 100px);
   }
-  .try-inner {
-    height: 100%;
+  #try-wrapper {
     width: 100vw;
     overflow-x: hidden;
     scroll-snap-type: mandatory;
@@ -165,9 +159,8 @@ body {
   }
 }
 @media (min-width: 700px) {
-  .try-inner {
+  #try-wrapper {
     overflow: hidden;
-    height: 100%;
     grid-template-columns: 200px minmax(200px, 2fr) minmax(200px, 1fr);
     grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
   }

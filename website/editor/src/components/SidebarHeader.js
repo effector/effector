@@ -2,7 +2,7 @@
 
 import {styled} from 'linaria/react'
 
-export const Header = styled.div`
+export const SidebarHeader = styled.div`
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   display: flex;
