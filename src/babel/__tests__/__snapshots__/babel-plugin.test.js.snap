@@ -1,7 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`babel-plugin should create component 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createStore } from 'effector';
 import { createComponent } from 'effector-react';
@@ -14,11 +15,20 @@ const foo = createStore('foo', {
   name: \\"foo\\",
   sid: \\"foo /src/babel/__tests__/fixtures/create-component.js [5, 12]\\"
 });
-const Foo = createComponent(foo, (props, data) => null);"
+const Foo = createComponent(foo, (props, data) => null, {
+  loc: {
+    file: _effectorFileName2,
+    line: 6,
+    column: 12
+  },
+  name: \\"Foo\\",
+  sid: \\"Foo /src/babel/__tests__/fixtures/create-component.js [6, 12]}\\"
+});"
 `;
 
 exports[`babel-plugin should create domain 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -42,7 +52,8 @@ const foo = createDomain('bar', {
 `;
 
 exports[`babel-plugin should create domain domain 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -75,7 +86,8 @@ const bar = domain.domain('baz', {
 `;
 
 exports[`babel-plugin should create domain effect 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -129,7 +141,8 @@ const g = () => domain.effect('baz', {
 `;
 
 exports[`babel-plugin should create domain event 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -183,7 +196,8 @@ const g = () => domain.event('tasm', {
 `;
 
 exports[`babel-plugin should create domain store 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
@@ -264,7 +278,8 @@ const f = domain.store('h', {
 `;
 
 exports[`babel-plugin should create effect 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createEffect } from 'effector';
 const foo = createEffect(\\"foo\\", {
@@ -327,7 +342,8 @@ const f = () => createEffect(\\"f\\", {
 `;
 
 exports[`babel-plugin should create event 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createEvent } from 'effector';
 const foo = createEvent(\\"foo\\", {
@@ -372,7 +388,8 @@ const f = () => createEvent(\\"f\\", {
 `;
 
 exports[`babel-plugin should create store 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createStore } from 'effector';
 const foo = createStore('foo', {
@@ -440,7 +457,8 @@ const f = a => createStore(a, {
 `;
 
 exports[`babel-plugin should use store 1`] = `
-"var _effectorFileName = \\"\\";
+"var _effectorFileName = \\"\\",
+    _effectorFileName2 = \\"\\";
 //@flow
 import { createStore } from 'effector';
 import { useStore } from 'effector-react';
@@ -464,7 +482,23 @@ const bar = createStore('bar', {
 });
 
 const Foo = () => {
-  const data = useStore(foo);
-  const data0 = useStore(bar);
+  const data = useStore(foo, {
+    loc: {
+      file: _effectorFileName2,
+      line: 8,
+      column: 15
+    },
+    name: \\"Foo\\",
+    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [8, 15]}\\"
+  });
+  const data0 = useStore(bar, {
+    loc: {
+      file: _effectorFileName2,
+      line: 9,
+      column: 16
+    },
+    name: \\"Foo\\",
+    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [9, 16]}\\"
+  });
 };"
 `;
