@@ -1,0 +1,28 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 10
+    commands:
+      - cd website/editor
+      - yarn
+      - cd ../..
+  build:
+    commands:
+      - cd website/editor
+      - npx parcel build -d ../../dist --no-autoinstall --public-url / src/index.html
+      - cd ../..
+      - cp -a website/client/static/. dist/
+      - cp -a website/media/. dist/
+      - aws cloudfront create-invalidation --distribution-id $cloudfront_static --paths "/*"
+artifacts:
+  files:
+    - '**/*'
+  base-directory: dist
+  # secondary-artifacts:
+  #   frontend-build:
+  #     files:
+  #       - '**/*'
+  #     base-directory: `frontend/dist
+  #     name: frontend-build
