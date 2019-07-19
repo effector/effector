@@ -168,7 +168,7 @@ body {
   }
   .dom {
     grid-column: 3 / span 1;
-    grid-row: 3 / span 2;
+    grid-row: 2 / span 3;
   }
   .sources {
     grid-column: 2 / span 1;
@@ -177,7 +177,7 @@ body {
 
   .editor.results {
     grid-column: 3 / span 1;
-    grid-row: 3 / span 2;
+    grid-row: 2 / span 3;
   }
 
   .errors {
