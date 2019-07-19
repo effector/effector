@@ -85,13 +85,6 @@ body {
 .editor.results {
 }
 
-.header-tabs {
-  border-left: 1px solid #ddd;
-  background-color: #f7f7f7;
-  height: 36px;
-  overflow-y: auto;
-}
-
 .dom {
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -141,7 +134,7 @@ body {
   }
   .header-tabs {
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 1;
   }
   .sources {
     grid-column: 1 / span 1;
@@ -171,7 +164,7 @@ body {
   }
   .header-tabs {
     grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 1;
   }
   .dom {
     grid-column: 3 / span 1;
