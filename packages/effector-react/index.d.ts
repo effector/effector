@@ -27,6 +27,10 @@ export function useStoreMap<State, Result, Keys extends (ReadonlyArray<any> | an
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
 }): Result
+export function useList<T>(
+  list: Store<T[]>,
+  renderItem: (item: T, index: number) => React.ReactNode,
+): React.ReactNode
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
