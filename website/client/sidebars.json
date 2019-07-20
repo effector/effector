@@ -20,6 +20,13 @@
           "recipes/react/example",
           "recipes/react/example-effects"
         ]
+      },
+      {
+        "type": "subcategory",
+        "label": "React Native",
+        "ids": [
+          "recipes/react-native/example"
+        ]
       }
     ],
     "Other": ["troubleshooting", "glossary"],
