@@ -119,6 +119,10 @@
         "title": "Example",
         "sidebar_label": "Example"
       },
+      "recipes/react-native/example": {
+        "title": "React Native Example",
+        "sidebar_label": "Example"
+      },
       "recipes/recipes": {
         "title": "Recipes: Index",
         "sidebar_label": "Recipes: Index"
