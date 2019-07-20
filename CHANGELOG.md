@@ -1,5 +1,37 @@
 # Changelog
 
+## effector-react 20.1.0
+
+- Add `useList` for efficient rendering of store lists
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import {createStore} from 'effector'
+import {useList} from 'effector-react'
+
+const list = createStore([
+  {name: 'alice', age: 21},
+  {name: 'bob', age: 20},
+  {name: 'carol', age: 22},
+])
+
+const List = () => {
+  // note that we don't need keys here any more
+  const users = useList(list, ({name}, i) => (
+    <div>
+      {i}) {name}
+    </div>
+  ))
+  return <div>{users}</div>
+}
+
+ReactDOM.render(<List />, document.getElementById('root'))
+```
+
+[try it](https://share.effector.dev/KJZx0uU5)
+
 ## effector-react 20.0.5
 
 - Fix irrelevant react memory leak warning in a few cases
