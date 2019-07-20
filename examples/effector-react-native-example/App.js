@@ -1,13 +1,39 @@
-import * as React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, AsyncStorage } from 'react-native';
+import * as React from 'react'
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import {createStore, createEvent, createEffect} from 'effector'
-import { useStore } from "effector-react"
+import {useStore} from 'effector-react'
 
 const init = createEvent('init')
 const increment = createEvent('increment')
 const decrement = createEvent('decrement')
 const reset = createEvent('reset')
+
+const fetchCountFromAsyncStorage = createEffect({
+  handler: async () => {
+    const value = parseInt(await AsyncStorage.getItem('count'))
+    return !isNaN(value) ? value : 0
+  },
+})
+
+const updateCountInAsyncStorage = createEffect({
+  handler: async count => {
+    try {
+      await AsyncStorage.setItem('count', `${count}`, err => {
+        if (err) console.error(err)
+      })
+    } catch (err) {
+      console.error(err)
+    }
+  },
+})
+
+fetchCountFromAsyncStorage()
+
+fetchCountFromAsyncStorage.done.watch(({result}) => {
+  init(result)
+})
 
 const counter = createStore(0)
   .on(increment, state => state + 1)
@@ -15,47 +41,29 @@ const counter = createStore(0)
   .on(init, (state, value) => value)
   .reset(reset)
 
-const fetchCountFromAsyncStorage = createEffect({
-  handler: async () => {
-    const value = parseInt(await AsyncStorage.getItem('count'));
-    return !isNaN(value) ? value : 0;
-  }
+counter.watch(state => {
+  updateCountInAsyncStorage(state)
 })
 
-const updateCountInAsyncStorage = createEffect({
-  handler: async (count) => {
-    try {
-      await AsyncStorage.setItem('count', `${count}`);
-    } catch (err) {
-      console.error(err)
-    }
-  }
-})
-
-fetchCountFromAsyncStorage.done.watch(({ result }) => {
-  init(result);
-})
-
-counter.watch((state) => {
-  updateCountInAsyncStorage(state);
-})
-
-fetchCountFromAsyncStorage();
 
 export default () => {
-    const count = useStore(counter)
-    return (
-      <View style={styles.container}>
-        <Text style={styles.paragraph}>
-          {count}
-        </Text>
-        <View style={styles.buttons}>
-          <TouchableOpacity key="dec" onPress={decrement} style={styles.button}><Text style={styles.label}>-</Text></TouchableOpacity>
-          <TouchableOpacity key="reset" onPress={reset} style={styles.button}><Text style={styles.label}>0</Text></TouchableOpacity>
-          <TouchableOpacity key="inc" onPress={increment} style={styles.button}><Text style={styles.label}>+</Text></TouchableOpacity>
-        </View>
+  const count = useStore(counter)
+  return (
+    <View style={styles.container}>
+      <Text style={styles.paragraph}>{count}</Text>
+      <View style={styles.buttons}>
+        <TouchableOpacity key="dec" onPress={decrement} style={styles.button}>
+          <Text style={styles.label}>-</Text>
+        </TouchableOpacity>
+        <TouchableOpacity key="reset" onPress={reset} style={styles.button}>
+          <Text style={styles.label}>0</Text>
+        </TouchableOpacity>
+        <TouchableOpacity key="inc" onPress={increment} style={styles.button}>
+          <Text style={styles.label}>+</Text>
+        </TouchableOpacity>
       </View>
-    );
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -75,18 +83,18 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     alignSelf: 'center',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
   },
   button: {
     marginHorizontal: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: '#4287f5',
-    borderRadius: 5
+    borderRadius: 5,
   },
   label: {
     fontSize: 30,
     color: '#ffffff',
-    fontWeight: 'bold'
-  }
-});
+    fontWeight: 'bold',
+  },
+})

@@ -6,6 +6,7 @@
     "start": "react-native start"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.5.1",
     "effector": "^20.0.0",
     "effector-react": "^20.0.5",
     "react": "16.8.6",
