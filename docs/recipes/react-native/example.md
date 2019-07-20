@@ -4,6 +4,8 @@ title: React Native Example
 sidebar_label: React Native Example
 ---
 
+The following example is a React Native counter that stores data to AsyncStorage. It uses store, event and effects.
+
 ```js
 import * as React from 'react'
 import {Text, View, StyleSheet, TouchableOpacity} from 'react-native'
