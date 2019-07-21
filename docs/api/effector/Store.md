@@ -40,7 +40,7 @@ increment() // changed 2
 reset() // changed 0
 ```
 
-<hr>
+<hr />
 
 ### `getState()`
 
@@ -64,7 +64,7 @@ updated(3)
 console.log(store.getState()) // 5
 ```
 
-<hr>
+<hr />
 
 ### `map(fn)`
 
@@ -97,7 +97,7 @@ changed('world') //
 changed('hello world') // new length 11
 ```
 
-<hr>
+<hr />
 
 ### `on(trigger, handler)`
 
@@ -129,7 +129,7 @@ changed(2) // updated 2
 changed(2) // updated 4
 ```
 
-<hr>
+<hr />
 
 ### `off(trigger)`
 
@@ -137,7 +137,7 @@ changed(2) // updated 4
 
 (Store): Current store
 
-<hr>
+<hr />
 
 ### `watch(trigger, watcher) | watch(watcher)`
 
@@ -330,7 +330,7 @@ Output
 
 https://runkit.com/embed/lwo1u4m8yhz0
 
-<hr>
+<hr />
 
 ### `thru(fn)`
 
@@ -371,7 +371,7 @@ Output
 
 > newStore: 50
 ```
-<hr>
+<hr />
 
 ## Store Properties
 
@@ -381,7 +381,7 @@ Output
 
 (string): ID or short name of store
 
-<hr>
+<hr />
 
 ### `defaultState`
 
@@ -389,4 +389,4 @@ Output
 
 (`State`): Default state of store
 
-<hr>
+<hr />

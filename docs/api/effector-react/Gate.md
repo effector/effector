@@ -22,7 +22,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Gate): Child gate
 
-<hr>
+<hr />
 
 ## Gate Properties
 
@@ -32,7 +32,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (boolean)
 
-<hr>
+<hr />
 
 ### `isTerminated`
 
@@ -40,7 +40,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (boolean)
 
-<hr>
+<hr />
 
 ### `open`
 
@@ -48,7 +48,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Event)
 
-<hr>
+<hr />
 
 ### `close`
 
@@ -56,7 +56,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Event)
 
-<hr>
+<hr />
 
 ### `status`
 
@@ -64,7 +64,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Store)
 
-<hr>
+<hr />
 
 ### `destructor`
 
@@ -72,7 +72,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Event)
 
-<hr>
+<hr />
 
 ### `current`
 
@@ -80,7 +80,7 @@ Returns child gate which won't render if parent gate is closed.
 
 (Props)
 
-<hr>
+<hr />
 
 ### `state`
 
@@ -88,4 +88,4 @@ Returns child gate which won't render if parent gate is closed.
 
 (Store)
 
-<hr>
+<hr />

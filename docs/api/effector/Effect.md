@@ -80,7 +80,7 @@ const effect = createEffect("effect name", {
 effect(1) // >> effect called with 1
 ```
 
-<hr>
+<hr />
 
 ### `watch(watcher)`
 
@@ -110,7 +110,7 @@ effect.watch(payload => {
 effect(20) // > called with 20
 ```
 
-<hr>
+<hr />
 
 ### `prepend(fn)`
 
@@ -118,7 +118,7 @@ effect(20) // > called with 20
 
 (_`Event`_): An intention to change state.
 
-<hr>
+<hr />
 
 ## Effect Properties
 
@@ -132,7 +132,7 @@ _Event_ triggered when promise from _thunk_ is *resolved*.
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): An argument passed to the effect call  
+(_`params`_): An argument passed to the effect call
 (_`result`_): A result of the resolved handler
 
 #### Example
@@ -158,7 +158,7 @@ Event triggered when handler is rejected or throws error.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): An argument passed to effect call  
+(_`params`_): An argument passed to effect call
 (_`error`_): An error catched from the handler
 
 #### Example
@@ -177,7 +177,7 @@ effect(2) // >> Fail with params 2 and error 1
 
 ### `pending`
 
-_Store_ will update when `done` or `fail` are triggered.  
+_Store_ will update when `done` or `fail` are triggered.
 _Store_ contains a `true` value until the effect is resolved or rejected.
 
 #### Example
@@ -224,10 +224,10 @@ Event triggered when handler is resolved, rejected or throws error.
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-(_`status`_): A status of effect (`done` or `fail`)   
-(_`params`_): An argument passed to effect call  
-(_`error`_): An error catched from the handler  
-(_`result`_): A result of the resolved handler  
+(_`status`_): A status of effect (`done` or `fail`)
+(_`params`_): An argument passed to effect call
+(_`error`_): An error catched from the handler
+(_`result`_): A result of the resolved handler
 
 #### Example
 

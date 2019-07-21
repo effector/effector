@@ -13,7 +13,7 @@ _Event_ is an intention to change state.
 
 (Subscription): Unsubscribe function
 
-<hr>
+<hr />
 
 ### `map(fn)`
 
@@ -23,7 +23,7 @@ _Event_ is an intention to change state.
 
 (Event): New event
 
-<hr>
+<hr />
 
 ### `filter({fn})`
 
@@ -51,7 +51,7 @@ const lastPositive = createStore(0)
 
 (Event): New event
 
-<hr>
+<hr />
 
 ### `filterMap(fn)`
 
@@ -109,7 +109,7 @@ const App = () => (
 
 (Event): New event
 
-<hr>
+<hr />
 
 ### `prepend(fn)`
 
@@ -117,4 +117,4 @@ const App = () => (
 
 (Event): New event
 
-<hr>
+<hr />
