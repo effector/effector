@@ -1,6 +1,6 @@
 # Changelog
 
-## effector-react 20.1.0
+## effector-react 20.1.1
 
 - Add `useList` for efficient rendering of store lists
 
