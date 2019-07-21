@@ -2535,10 +2535,10 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-effector-react@^20.0.4:
-  version "20.0.4"
-  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-20.0.4.tgz#8f3afa89f820d1d0f85d1e3ea4d314038b2044ed"
-  integrity sha512-va5SPu6KLB4yI3lNiXv+j4TANq+MgKEtYySNC1yos/zEXMbPqXjsaDtUT0Hu+gArDd271CL5l/7Kwk/jozUwcw==
+effector-react@^20.1.1:
+  version "20.1.1"
+  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-20.1.1.tgz#1cc22833704f75a4aeecefbb75a2483bdd506ba4"
+  integrity sha512-3lmPJXGA5HEUZctmQX1yThm9INr9dmg7Bin5K+F6iTapUZb2Eg9aOZsHV3ZSi7nCllEyxdWX3hoSKIEKovYCnQ==
 
 effector@^20.0.0:
   version "20.0.0"
