@@ -1,5 +1,5 @@
 ---
-id: react-native-example
+id: example
 title: React Native Example
 sidebar_label: React Native Example
 ---
