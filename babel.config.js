@@ -38,7 +38,7 @@ const aliases = {
 const babelConfig = {
   presets: [
     '@babel/preset-flow',
-    '@babel/preset-react',
+    ['@babel/preset-react', {useBuiltIns: true}],
     [
       '@babel/preset-env',
       {
