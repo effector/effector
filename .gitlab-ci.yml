@@ -19,7 +19,7 @@ npm_latest:
     - echo "publish npm latest"
     - yarn
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-    - yarn build publish latest
+    - node tools/build publish latest
   environment:
     name: npm
     url: https://www.npmjs.com/package/effector
@@ -32,7 +32,7 @@ npm_next:
     - echo "publish npm next"
     - yarn
     - npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
-    - yarn build publish next
+    - node tools/build publish next
   environment:
     name: npm
     url: https://www.npmjs.com/package/effector
