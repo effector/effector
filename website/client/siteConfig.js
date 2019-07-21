@@ -34,6 +34,8 @@ const siteConfig = {
   //   url: 'https://facebook.github.io',
   //   baseUrl: '/test-site/',
 
+  customDocsPath: '../docs',
+
   // Used for publishing and more
   projectName: 'effector',
   organizationName: 'zerobias',
