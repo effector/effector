@@ -302,43 +302,48 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A>(config: {
-  source: Unit<A>
-  clock: Unit<any>
-  target?: Unit<A>
-}): Unit<A>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  target?: Unit<C>
-  fn(source: A, clock: B): C
-}): Unit<C>
+type UnitValue<T extends Unit<any>> = T extends Unit<infer R> ? R : unknown
 
-export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
-export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<any>,
-): Event<A>
-export function sample<A>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  clock: Event<any> | Effect<any, any, any>,
-): Event<A>
+type SampleResult<Source extends Unit<any>, Clock extends Unit<any>, Result = UnitValue<Source>> =
+  Source extends Store<any>
+    ? Clock extends Store<any>
+    ? Store<Result>
+    : Event<Result>
+  : Event<Result>
 
-export function sample<A, B, C>(
-  source: Store<A>,
-  clock: Store<B>,
-  fn: (source: A, clock: B) => C,
-): Store<C>
-export function sample<A, B, C>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<B>,
-  fn: (source: A, clock: B) => C,
-): Event<A>
-export function sample<A, B, C>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  clock: Event<B> | Effect<B, any, any>,
-  fn: (source: A, clock: B) => C,
-): Event<C>
+export function sample<Source extends Store<any>>(source: Source): Store<UnitValue<Source>>
+export function sample<Source extends Unit<any>, Clock extends Unit<any>>(
+  source: Source,
+  clock: Clock
+): SampleResult<Source, Clock>
+export function sample<Source extends Unit<any>, Clock extends Unit<any>, Result>(
+  source: Source,
+  clock: Clock,
+  fn: (source: UnitValue<Source>, clock: UnitValue<Clock>) => Result,
+): SampleResult<Source, Clock, Result>
+export function sample<Source extends Unit<any>, Clock extends Unit<any>, Target extends Unit<any>>(config: {
+  source: Source,
+  clock: Clock,
+  fn: (source: UnitValue<Source>, clock: UnitValue<Clock>) => UnitValue<Target>,
+  target: Target
+  greedy?: boolean
+}): Target
+export function sample<Source extends Unit<any>, Clock extends Unit<any>,Target extends Unit<UnitValue<Source>>>(config: {
+  source: Source,
+  clock: Clock,
+  target: Target
+  greedy?: boolean
+}): Target
+export function sample<Source extends Unit<any>, Clock extends Unit<any>, Result>(config: {
+  source: Source,
+  clock: Clock,
+  fn: (source: UnitValue<Source>, clock: UnitValue<Clock>) => Result,
+  greedy?: boolean
+}): SampleResult<Source, Clock, Result>
+export function sample<Source extends Unit<any>, Clock extends Unit<any>>(config: {
+  source: Source,
+  clock: Clock,
+}): SampleResult<Source, Clock>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
