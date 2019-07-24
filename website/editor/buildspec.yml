@@ -15,6 +15,7 @@ phases:
       - cd ../..
       - cp -a website/client/static/. dist/
       - cp -a website/media/. dist/
+      - cp -a website/editor/robots.txt dist/
       - aws cloudfront create-invalidation --distribution-id $cloudfront_static --paths "/*"
 artifacts:
   files:

@@ -1,4 +1,6 @@
 User-agent: *
 Allow: /
 
+Disallow: /try
+
 Sitemap: https://effector.now.sh/sitemap.xml
