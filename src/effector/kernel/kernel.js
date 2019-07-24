@@ -147,58 +147,35 @@ const command = {
     local.isChanged = true
   },
   filter(local, step: $PropertyType<Filter, 'data'>, val: StateRef) {
-    const runCtx = tryRun({
-      arg: readRef(val),
-      val: local.scope,
-      fn: step.fn,
-    })
     /**
-     * .isFailed assignment is not needed because in such case
-     * runCtx.result will be null
-     * thereby successfully forcing that branch to stop
+     * handled edge case: if step.fn will throw,
+     * tryRun will return null
+     * thereby forcing that branch to stop
      */
-    local.isChanged = !!runCtx.result
+    local.isChanged = !!tryRun(local, step, val)
   },
   run(local, step: $PropertyType<Run, 'data'>, val: StateRef) {
-    const runCtx = tryRun({
-      arg: readRef(val),
-      val: local.scope,
-      fn: step.fn,
-    })
-    local.isFailed = runCtx.err
-    writeRef(val, runCtx.result)
+    writeRef(val, tryRun(local, step, val))
   },
   update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
     writeRef(step.store, readRef(val))
   },
   compute(local, step: $PropertyType<Compute, 'data'>, val: StateRef) {
-    const runCtx = tryRun({
-      arg: readRef(val),
-      val: local.scope,
-      fn: step.fn,
-    })
-    local.isFailed = runCtx.err
-    writeRef(val, runCtx.result)
+    writeRef(val, tryRun(local, step, val))
   },
   tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
-    const runCtx = tryRun({
-      arg: readRef(val),
-      val: local.scope,
-      fn: step.fn,
-    })
-    local.isFailed = runCtx.err
+    tryRun(local, step, val)
   },
 }
-const tryRun = ({fn, arg, val}: any) => {
-  const result = {
-    err: false,
-    result: null,
-  }
+const tryRun = (local: Local, {fn}, val: StateRef) => {
+  let result = null
+  let isFailed = false
   try {
-    result.result = fn(arg, val)
+    result = fn(readRef(val), local.scope)
   } catch (err) {
     console.error(err)
-    result.err = true
+    isFailed = true
   }
+  local.isFailed = isFailed
   return result
 }
