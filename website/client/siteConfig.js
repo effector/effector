@@ -112,8 +112,6 @@ const siteConfig = {
   ogImage: 'img/comet.png',
   twitterImage: 'img/comet.png',
 
-  gaTrackingId: 'UA-134943098-1',
-
   // Show documentation's last contributor's name.
   enableUpdateBy: true,
 
