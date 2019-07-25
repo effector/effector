@@ -19,12 +19,15 @@
     "effector-vue.es.js",
     "effector-vue.cjs.js",
     "effector-vue.umd.js",
+    "compat.js",
     "effector-vue.es.js.map",
     "effector-vue.cjs.js.map",
     "effector-vue.umd.js.map",
+    "compat.js.map",
     "effector-vue.cjs.js.flow",
     "effector-vue.es.js.flow",
-    "effector-vue.umd.js.flow"
+    "effector-vue.umd.js.flow",
+    "compat.js.flow"
   ],
   "keywords": [
     "data",

@@ -19,12 +19,15 @@
     "effector-react.es.js",
     "effector-react.cjs.js",
     "effector-react.umd.js",
+    "compat.js",
     "effector-react.es.js.map",
     "effector-react.cjs.js.map",
     "effector-react.umd.js.map",
+    "compat.js.map",
     "effector-react.cjs.js.flow",
     "effector-react.es.js.flow",
-    "effector-react.umd.js.flow"
+    "effector-react.umd.js.flow",
+    "compat.js.flow"
   ],
   "keywords": [
     "data",
