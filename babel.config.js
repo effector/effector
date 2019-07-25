@@ -61,7 +61,7 @@ const babelConfig = {
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
     const result = [
-      './src/babel/get-step',
+      // './src/babel/get-step',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -97,6 +97,7 @@ const babelConfig = {
           filename
           && filename.includes('__tests__')
           && !filename.includes('redux')
+          && !filename.includes('browserstack')
         )
       },
       plugins: ['./src/babel/babel-plugin'],
