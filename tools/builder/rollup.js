@@ -1,12 +1,5 @@
 //@flow
 import {rollup} from 'rollup'
-import {readFile, outputFile} from 'fs-extra'
-//$off
-import Viz from 'viz.js'
-//$off
-import {Module, render} from 'viz.js/full.render.js'
-//$off
-import sharp from 'sharp'
 //$off
 import babel from 'rollup-plugin-babel'
 import json from 'rollup-plugin-json'
@@ -27,11 +20,22 @@ import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
 
 const nameCache = {}
+const compatNameCache = {}
 const onwarn = (warning, rollupWarn: any) => {
   if (warning.code !== 'CIRCULAR_DEPENDENCY') {
     rollupWarn(warning)
   }
 }
+
+const compatTarget = {
+  browsers: [
+    'Chrome 47',
+    'last 2 Firefox versions',
+    'last 2 Safari versions',
+    'last 2 Edge versions',
+  ],
+}
+
 const minifyConfig = ({beautify}: {beautify: boolean}) => ({
   parse: {
     bare_returns: false,
@@ -173,7 +177,7 @@ export async function rollupBabel(name: string, plugin: *) {
     beautify: true,
   })
   const build = await rollup({
-    input: (dir(plugin): string),
+    input: dir(plugin),
     plugins: [
       plugins.babel,
       terser({
@@ -186,407 +190,286 @@ export async function rollupBabel(name: string, plugin: *) {
       }),
     ],
   })
-  await Promise.all([
-    build.write({
-      file: dir(`npm/${name}/index.js`),
-      format: 'cjs',
-      name,
-      sourcemap: true,
-    }),
-  ])
+  await build.write({
+    file: dir(`npm/${name}/index.js`),
+    format: 'cjs',
+    name,
+    sourcemap: true,
+  })
 }
 
 export async function rollupEffector() {
   const name = 'effector'
-  await Promise.all([cjsAndEs(), umd()])
-
-  async function cjsAndEs() {
-    const plugins = getPlugins(name)
-    const build = await rollup({
-      onwarn,
-      input: (dir(`packages/${name}/index.js`): string),
-      external: [
-        'warning',
-        'invariant',
-        'react',
-        'vue',
-        'most',
-        'symbol-observable',
-        'effector',
-      ],
-      plugins: [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-        plugins.graph,
-      ],
-    })
-
-    await Promise.all([
-      build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-      build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-    ])
-  }
-  async function umd() {
-    const plugins = getPlugins(`${name}.umd`)
-    //$off
-    const build = await rollup({
-      onwarn,
-      input: String(dir(`packages/${name}/index.js`)),
-      plugins: [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.replace,
-        plugins.commonjs,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/${name}.cjs.js`),
+        es: dir(`npm/${name}/${name}.es.js`),
+      },
+      renderModuleGraph: true,
+    }),
+    createUmd(name, {
       external: ['react', 'effector'],
-    })
-
-    await build.write({
-      file: (dir(`npm/${name}/${name}.umd.js`): string),
-      format: 'umd',
-      name,
-      sourcemap: true,
-    })
-  }
+      file: dir(`npm/${name}/${name}.umd.js`),
+      umdName: name,
+      globals: {},
+    }),
+    createCompat(name),
+  ])
 }
 
 export async function rollupEffectorReduxAdapter() {
   const name = '@effector/redux-adapter'
 
-  await Promise.all([cjsAndEs(), umd()])
-
-  async function cjsAndEs() {
-    const plugins = getPlugins(name)
-    const build = await rollup({
-      onwarn,
-      input: (dir(`packages/${name}/index.js`): string),
-      external: [
-        'warning',
-        'invariant',
-        'react',
-        'vue',
-        'most',
-        'symbol-observable',
-        'effector',
-      ],
-      plugins: [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
-    })
-
-    await Promise.all([
-      build.write({
-        file: dir(`npm/${name}/adapter.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-      build.write({
-        file: dir(`npm/${name}/adapter.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-    ])
-  }
-  async function umd() {
-    const plugins = getPlugins(`${name}.umd`)
-    //$off
-    const build = await rollup({
-      onwarn,
-      input: String(dir(`packages/${name}/index.js`)),
-      plugins: [
-        plugins.resolve,
-        plugins.json,
-        plugins.babel,
-        plugins.replace,
-        plugins.commonjs,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/adapter.cjs.js`),
+        es: dir(`npm/${name}/adapter.es.js`),
+      },
+    }),
+    createUmd(name, {
       external: ['effector'],
-    })
-
-    await build.write({
-      file: (dir(`npm/${name}/adapter.umd.js`): string),
-      format: 'umd',
-      name: 'effectorReduxAdapter',
-      sourcemap: true,
+      file: dir(`npm/${name}/adapter.umd.js`),
+      umdName: 'effectorReduxAdapter',
       globals: {
         effector: 'effector',
       },
-    })
-  }
+    }),
+    createCompat(name),
+  ])
 }
 
 export async function rollupEffectorForms() {
   const name = '@effector/forms'
 
-  await Promise.all([cjsAndEs(), umd()])
-
-  async function cjsAndEs() {
-    const plugins = getPlugins(name)
-    const build = await rollup({
-      onwarn,
-      input: (dir(`packages/${name}/index.js`): string),
-      external: [
-        'warning',
-        'invariant',
-        'react',
-        'vue',
-        'most',
-        'symbol-observable',
-        'effector',
-      ],
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
-    })
-
-    await Promise.all([
-      build.write({
-        file: dir(`npm/${name}/forms.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-      build.write({
-        file: dir(`npm/${name}/forms.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-    ])
-  }
-  async function umd() {
-    const plugins = getPlugins(`${name}.umd`)
-    //$off
-    const build = await rollup({
-      onwarn,
-      input: String(dir(`packages/${name}/index.js`)),
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.replace,
-        plugins.commonjs,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/forms.cjs.js`),
+        es: dir(`npm/${name}/forms.es.js`),
+      },
+    }),
+    createUmd(name, {
       external: ['react', 'effector'],
-    })
-
-    await build.write({
-      file: (dir(`npm/${name}/forms.umd.js`): string),
-      format: 'umd',
-      name: 'effectorForms',
-      sourcemap: true,
+      file: dir(`npm/${name}/forms.umd.js`),
+      umdName: 'effectorForms',
       globals: {
         effector: 'effector',
         react: 'React',
       },
-    })
-  }
+    }),
+    createCompat(name),
+  ])
 }
 
 export async function rollupEffectorReact() {
   const name = 'effector-react'
 
-  await Promise.all([cjsAndEs(), umd()])
-
-  async function cjsAndEs() {
-    const plugins = getPlugins(name)
-    const build = await rollup({
-      onwarn,
-      input: (dir(`packages/${name}/index.js`): string),
-      external: [
-        'warning',
-        'invariant',
-        'react',
-        'vue',
-        'most',
-        'symbol-observable',
-        'effector',
-      ],
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
-    })
-
-    await Promise.all([
-      build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-      build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-    ])
-  }
-  async function umd() {
-    const plugins = getPlugins(`${name}.umd`)
-    //$off
-    const build = await rollup({
-      onwarn,
-      input: String(dir(`packages/${name}/index.js`)),
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.replace,
-        plugins.commonjs,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/${name}.cjs.js`),
+        es: dir(`npm/${name}/${name}.es.js`),
+      },
+    }),
+    createUmd(name, {
       external: ['react', 'effector'],
-    })
-
-    await build.write({
-      file: (dir(`npm/${name}/${name}.umd.js`): string),
-      format: 'umd',
-      name: 'effectorReact',
-      sourcemap: true,
+      file: dir(`npm/${name}/${name}.umd.js`),
+      umdName: 'effectorReact',
       globals: {
         effector: 'effector',
         react: 'React',
       },
-    })
-  }
+    }),
+    createCompat(name),
+  ])
 }
-const viz = new Viz({Module, render})
-export async function renderModulesGraph() {
-  const root = process.cwd()
-  const source = await readFile(root + '/modules.dot', 'utf8')
 
-  const svg = await viz.renderString(source)
-  await outputFile(root + '/modules.svg', svg)
-  const buffer = await new Promise((rs, rj) => {
-    sharp(root + '/modules.svg')
-      // .resize(1024)
-      // .extract({left: 290, top: 760, width: 40, height: 40})
-      .toFormat('png')
-      .toBuffer((err, data, info) => {
-        if (err) return void rj(err)
-        rs(data)
-      })
-  })
-  await outputFile(root + '/modules.png', buffer)
-}
 export async function rollupEffectorVue() {
   const name = 'effector-vue'
-  await Promise.all([cjsAndEs(), umd()])
-
-  async function cjsAndEs() {
-    const plugins = getPlugins(name)
-    const build = await rollup({
-      onwarn,
-      input: (dir(`packages/${name}/index.js`): string),
-      external: [
-        'warning',
-        'invariant',
-        'react',
-        'vue',
-        'most',
-        'symbol-observable',
-        'effector',
-      ],
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
-    })
-    await Promise.all([
-      build.write({
-        file: dir(`npm/${name}/${name}.cjs.js`),
-        format: 'cjs',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-      build.write({
-        file: dir(`npm/${name}/${name}.es.js`),
-        format: 'es',
-        name,
-        sourcemap: true,
-        sourcemapPathTransform: getSourcemapPathTransform(name),
-      }),
-    ])
-  }
-  async function umd() {
-    const plugins = getPlugins(`${name}.umd`)
-    //$off
-    const build = await rollup({
-      onwarn,
-      input: String(dir(`packages/${name}/index.js`)),
-      plugins: [
-        plugins.resolve,
-        plugins.babel,
-        plugins.replace,
-        plugins.commonjs,
-        plugins.sizeSnapshot,
-        plugins.terser,
-        plugins.analyzer,
-      ],
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/${name}.cjs.js`),
+        es: dir(`npm/${name}/${name}.es.js`),
+      },
+    }),
+    createUmd(name, {
       external: ['vue', 'effector'],
-    })
-
-    await build.write({
-      file: (dir(`npm/${name}/${name}.umd.js`): string),
-      format: 'umd',
-      name: 'effectorVue',
-      sourcemap: true,
+      file: dir(`npm/${name}/${name}.umd.js`),
+      umdName: 'effectorVue',
       globals: {
         effector: 'effector',
         vue: 'Vue',
       },
-    })
+    }),
+    createCompat(name),
+  ])
+}
+
+async function createUmd(name, {external, file, umdName, globals}) {
+  const plugins = getPlugins(`${name}.umd`)
+  const build = await rollup({
+    onwarn,
+    input: dir(`packages/${name}/index.js`),
+    plugins: [
+      plugins.resolve,
+      plugins.json,
+      plugins.babel,
+      plugins.replace,
+      plugins.commonjs,
+      plugins.sizeSnapshot,
+      plugins.terser,
+      plugins.analyzer,
+    ],
+    external,
+  })
+  await build.write({
+    file,
+    format: 'umd',
+    name: umdName,
+    sourcemap: true,
+    globals,
+  })
+}
+async function createCompat(name) {
+  const plugins = getPlugins(`${name}.compat`)
+  //$off
+  const {getAliases} = require('../babel.config')
+  const terserConfig = minifyConfig({
+    beautify: !!process.env.PRETTIFY,
+  })
+  const pluginList = [
+    plugins.resolve,
+    plugins.json,
+    babel({
+      runtimeHelpers: false,
+      exclude: /(\.re|node_modules.*)/,
+      babelrc: false,
+      presets: [
+        '@babel/preset-flow',
+        ['@babel/preset-react', {useBuiltIns: false}],
+        [
+          '@babel/preset-env',
+          {
+            loose: true,
+            useBuiltIns: 'entry',
+            modules: false,
+            shippedProposals: true,
+            targets: compatTarget,
+          },
+        ],
+      ],
+      plugins: [
+        '@babel/plugin-proposal-export-namespace-from',
+        '@babel/plugin-proposal-optional-chaining',
+        '@babel/plugin-proposal-nullish-coalescing-operator',
+        ['@babel/plugin-proposal-class-properties', {loose: true}],
+        'macros',
+        [
+          'babel-plugin-module-resolver',
+          {
+            alias: getAliases(),
+          },
+        ],
+      ],
+    }),
+    plugins.sizeSnapshot,
+    terser({
+      ...terserConfig,
+      compress: {
+        ...terserConfig.compress,
+        directives: false,
+      },
+      mangle: {
+        ...terserConfig.mangle,
+        safari10: true,
+      },
+      output: {
+        ...terserConfig.output,
+        safari10: true,
+        webkit: true,
+      },
+      nameCache: compatNameCache,
+      safari10: true,
+    }),
+    plugins.analyzer,
+  ]
+  const build = await rollup({
+    onwarn,
+    input: dir(`packages/${name}/index.js`),
+    external: [
+      'warning',
+      'invariant',
+      'react',
+      'vue',
+      'most',
+      // 'symbol-observable',
+      'effector',
+    ],
+    plugins: pluginList,
+  })
+  await build.write({
+    file: dir(`npm/${name}/compat.js`),
+    format: 'umd',
+    name,
+    sourcemap: true,
+    sourcemapPathTransform: getSourcemapPathTransform(name),
+  })
+}
+async function createEsCjs(
+  name,
+  {
+    file: {es, cjs},
+    renderModuleGraph = false,
+  }: {file: {es: string, cjs: string}, renderModuleGraph?: boolean},
+) {
+  const plugins = getPlugins(name)
+  const pluginList = [
+    plugins.resolve,
+    plugins.json,
+    plugins.babel,
+    plugins.sizeSnapshot,
+    plugins.terser,
+    plugins.analyzer,
+  ]
+  if (renderModuleGraph) {
+    pluginList.push(
+      graphPlugin({
+        output: 'modules.dot',
+        exclude: 'effector/package.json',
+      }),
+    )
   }
+  const build = await rollup({
+    onwarn,
+    input: dir(`packages/${name}/index.js`),
+    external: [
+      'warning',
+      'invariant',
+      'react',
+      'vue',
+      'most',
+      'symbol-observable',
+      'effector',
+    ],
+    plugins: pluginList,
+  })
+  await Promise.all([
+    build.write({
+      file: cjs,
+      format: 'cjs',
+      name,
+      sourcemap: true,
+      sourcemapPathTransform: getSourcemapPathTransform(name),
+    }),
+    build.write({
+      file: es,
+      format: 'es',
+      name,
+      sourcemap: true,
+      sourcemapPathTransform: getSourcemapPathTransform(name),
+    }),
+  ])
 }
