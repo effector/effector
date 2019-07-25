@@ -78,17 +78,6 @@ const babelConfig = {
       result.push('@babel/plugin-transform-modules-commonjs')
     }
     return result
-
-    function parseAliases(meta, obj) {
-      const result = {}
-      for (const key in obj) {
-        const value = obj[key]
-        const name = typeof value === 'function' ? value(meta) : value
-        if (name === undefined || name === null) continue
-        result[key] = resolvePath(__dirname, 'src', name)
-      }
-      return result
-    }
   },
   overrides: [
     {
@@ -105,3 +94,16 @@ const babelConfig = {
   ],
   sourceMaps: true,
 }
+
+function parseAliases(meta, obj) {
+  const result = {}
+  for (const key in obj) {
+    const value = obj[key]
+    const name = typeof value === 'function' ? value(meta) : value
+    if (name === undefined || name === null) continue
+    result[key] = resolvePath(__dirname, 'src', name)
+  }
+  return result
+}
+
+module.exports.getAliases = () => parseAliases(meta, aliases)
