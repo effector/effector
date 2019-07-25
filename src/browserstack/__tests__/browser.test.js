@@ -3,13 +3,13 @@ test('load localhost', async () => {
   jest.setTimeout(30000)
   await browser.url('/src/browserstack/page.html')
   await browser.getUrl()
-  await browser.execute(function() {
+  await browser.execute(function(url) {
     if (!window.__addScript__) {
       console.error('no __addScript__', document.title)
       return
     }
-    window.__addScript__('/npm/effector/effector.umd.js')
-  })
+    window.__addScript__(url)
+  }, `/npm/effector/${libraryFile}.js`)
   await new Promise(rs => setTimeout(rs, 500))
   await browser.execute(function() {
     if (!window.__runCode__) {

@@ -29,34 +29,33 @@ const config = {
       root: resolve(__dirname, '../..'),
     },
   },
-  // automock: false,
-  // browser: false,
-  // transform: {
-  //   '^.+\\.jsx?$': 'babel-jest',
-  // },
 }
 
 const browsers = {
-  'IE 10': {
-    globals: {},
-    capabilities: {
-      'bstack:options': {
-        os: 'Windows',
-        osVersion: '7',
-        projectName: 'effector-compat',
-        buildName: 'IE 10',
-        seleniumVersion: '3.141.59',
-        ie: {
-          noFlash: 'true',
-          driver: '3.141.59',
-        },
-      },
-      browserName: 'IE',
-      browserVersion: '10.0',
-    },
-  },
+  // 'IE 10': {
+  //   globals: {
+  //     libraryFile: 'compat',
+  //   },
+  //   capabilities: {
+  //     'bstack:options': {
+  //       os: 'Windows',
+  //       osVersion: '7',
+  //       projectName: 'effector-compat',
+  //       buildName: 'IE 10',
+  //       seleniumVersion: '3.141.59',
+  //       ie: {
+  //         noFlash: 'true',
+  //         driver: '3.141.59',
+  //       },
+  //     },
+  //     browserName: 'IE',
+  //     browserVersion: '10.0',
+  //   },
+  // },
   'Chrome TV': {
-    globals: {},
+    globals: {
+      libraryFile: 'compat',
+    },
     capabilities: {
       'bstack:options': {
         os: 'OS X',
@@ -71,7 +70,9 @@ const browsers = {
     },
   },
   'iPhone XS': {
-    globals: {},
+    globals: {
+      libraryFile: 'effector.umd',
+    },
     capabilities: {
       'bstack:options': {
         osVersion: '12',
@@ -87,7 +88,9 @@ const browsers = {
     },
   },
   'macos Safari': {
-    globals: {},
+    globals: {
+      libraryFile: 'effector.umd',
+    },
     capabilities: {
       'bstack:options': {
         os: 'OS X',
