@@ -1,19 +1,25 @@
 //@flow
 
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
+import {readFile, outputFile} from 'fs-extra'
+//$off
+import Viz from 'viz.js'
+//$off
+import {Module, render} from 'viz.js/full.render.js'
+//$off
+import sharp from 'sharp'
+import {massCopy, publishScript} from 'Builder/utils'
 import {
   rollupEffector,
   rollupEffectorReact,
   rollupEffectorVue,
-  renderModulesGraph,
 } from 'Builder/rollup'
-import packages from 'Builder/packages.config'
+import {copyLicense, generatePackageJSON} from './common'
 
 export default {
   effector: [
-    () =>
-      outputPackageJSON('packages/effector/package.json', packages.effector),
-    () => massCopy('.', 'npm/effector', ['LICENSE', 'README.md']),
+    generatePackageJSON('effector'),
+    copyLicense('effector'),
+    () => massCopy('.', 'npm/effector', ['README.md']),
     () =>
       massCopy('packages/effector', 'npm/effector', [
         'index.d.ts',
@@ -25,6 +31,7 @@ export default {
             'effector.cjs.js.flow',
             'effector.es.js.flow',
             'effector.umd.js.flow',
+            'compat.js.flow',
           ],
         ],
       ]),
@@ -38,12 +45,8 @@ export default {
     publishScript('effector'),
   ],
   'effector-react': [
-    () =>
-      outputPackageJSON(
-        'packages/effector-react/package.json',
-        packages['effector-react'],
-      ),
-    () => massCopy('.', 'npm/effector-react', ['LICENSE']),
+    generatePackageJSON('effector-react'),
+    copyLicense('effector-react'),
     () =>
       massCopy('packages/effector-react', 'npm/effector-react', [
         'index.d.ts',
@@ -56,6 +59,7 @@ export default {
             'effector-react.cjs.js.flow',
             'effector-react.es.js.flow',
             'effector-react.umd.js.flow',
+            'compat.js.flow',
           ],
         ],
       ]),
@@ -63,12 +67,8 @@ export default {
     publishScript('effector-react'),
   ],
   'effector-vue': [
-    () =>
-      outputPackageJSON(
-        'packages/effector-vue/package.json',
-        packages['effector-vue'],
-      ),
-    () => massCopy('.', 'npm/effector-vue', ['LICENSE']),
+    generatePackageJSON('effector-vue'),
+    copyLicense('effector-vue'),
     () =>
       massCopy('packages/effector-vue', 'npm/effector-vue', [
         'index.d.ts',
@@ -87,4 +87,22 @@ export default {
     rollupEffectorVue,
     publishScript('effector-vue'),
   ],
+}
+
+const viz = new Viz({Module, render})
+async function renderModulesGraph() {
+  const root = process.cwd()
+  const source = await readFile(root + '/modules.dot', 'utf8')
+
+  const svg = await viz.renderString(source)
+  await outputFile(root + '/modules.svg', svg)
+  const buffer = await new Promise((rs, rj) => {
+    sharp(root + '/modules.svg')
+      .toFormat('png')
+      .toBuffer((err, data) => {
+        if (err) return void rj(err)
+        rs(data)
+      })
+  })
+  await outputFile(root + '/modules.png', buffer)
 }
