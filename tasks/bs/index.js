@@ -1,23 +1,19 @@
 //@flow
-import * as fs from 'fs-extra'
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
-import packages from 'Builder/packages.config'
+import {outputJSON} from 'fs-extra'
+import {massCopy, publishScript} from 'Builder/utils'
 import bsconfigs from './packages.config'
+import {copyLicense, generatePackageJSON} from '../common'
 
 export default {
   'bs-effector': [
+    generatePackageJSON('bs-effector'),
+    copyLicense('bs-effector'),
     () =>
-      outputPackageJSON(
-        'packages/bs-effector/package.json',
-        packages['bs-effector'],
-      ),
-    () =>
-      fs.outputJSON(
+      outputJSON(
         'packages/bs-effector/bsconfig.json',
         bsconfigs['bs-effector'],
         {spaces: 2},
       ),
-    () => massCopy('.', 'npm/bs-effector', ['LICENSE']),
     () =>
       massCopy('src/reason', 'npm/bs-effector', [
         ['Effector.re', 'src/Effector.re'],
@@ -31,18 +27,14 @@ export default {
     publishScript('bs-effector'),
   ],
   'bs-effector-react': [
+    generatePackageJSON('bs-effector-react'),
+    copyLicense('bs-effector-react'),
     () =>
-      outputPackageJSON(
-        'packages/bs-effector-react/package.json',
-        packages['bs-effector-react'],
-      ),
-    () =>
-      fs.outputJSON(
+      outputJSON(
         'packages/bs-effector-react/bsconfig.json',
         bsconfigs['bs-effector-react'],
         {spaces: 2},
       ),
-    () => massCopy('.', 'npm/bs-effector-react', ['LICENSE']),
     () =>
       massCopy('src/reason', 'npm/bs-effector-react', [
         ['EffectorReact.re', 'src/EffectorReact.re'],

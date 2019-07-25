@@ -1,17 +1,13 @@
 //@flow
 
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
+import {massCopy, publishScript} from 'Builder/utils'
 import {rollupBabel} from 'Builder/rollup'
-import packages from 'Builder/packages.config'
+import {copyLicense, generatePackageJSON} from './common'
 
 export default {
   '@effector/babel-plugin': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/babel-plugin/package.json',
-        packages['@effector/babel-plugin'],
-      ),
-    () => massCopy('.', 'npm/@effector/babel-plugin', ['LICENSE']),
+    generatePackageJSON('@effector/babel-plugin'),
+    copyLicense('@effector/babel-plugin'),
     () =>
       massCopy(
         'packages/@effector/babel-plugin',
@@ -22,12 +18,8 @@ export default {
     publishScript('@effector/babel-plugin'),
   ],
   '@effector/babel-plugin-react': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/babel-plugin-react/package.json',
-        packages['@effector/babel-plugin-react'],
-      ),
-    () => massCopy('.', 'npm/@effector/babel-plugin-react', ['LICENSE']),
+    generatePackageJSON('@effector/babel-plugin-react'),
+    copyLicense('@effector/babel-plugin-react'),
     () =>
       massCopy(
         'packages/@effector/babel-plugin-react',
