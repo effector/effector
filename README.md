@@ -281,8 +281,6 @@ const b = createStore("b")
 const c = createStoreObject({ a, b })
 ```
 
-TODO: combine, sample, computed stores, forward
-
 
 ### Domain
 
