@@ -259,9 +259,10 @@ const callback = (newState) => console.log(newState)
 users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
 // `callback` will be triggered each time when `.on` handler returns the new state
 ```
+#### Store composition/decomposition
+Most profit thing of stores.
 
-Most profit thing of stores is their compositions:
-
+Get smaller part of the store:
 ```js
 // `.map` accept state of parent store and return new memoized store. No more reselect ;)
 const firstUser = users.map(list => list[0])
@@ -270,6 +271,18 @@ firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) //
 addUser({name: Joseph}) // `firstUser` is not updated
 getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
 ```
+Compose stores:
+```js
+import {createStore, createStoreObject} from 'effector'
+
+const a = createStore(1)
+const b = createStore("b")
+
+const c = createStoreObject({ a, b })
+```
+
+TODO: combine, sample, computed stores, forward
+
 
 ### Domain
 
