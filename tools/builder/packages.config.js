@@ -50,14 +50,17 @@ const getFiles = name => [
   `${name}.es.js`,
   `${name}.cjs.js`,
   `${name}.umd.js`,
+  'compat.js',
   //mappings
   `${name}.es.js.map`,
   `${name}.cjs.js.map`,
   `${name}.umd.js.map`,
+  'compat.js.map',
   //typings
   `${name}.cjs.js.flow`,
   `${name}.es.js.flow`,
   `${name}.umd.js.flow`,
+  'compat.js.flow',
 ]
 
 const dependsOnEffector = {
