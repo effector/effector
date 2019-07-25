@@ -412,9 +412,9 @@ declare module 'rollup' {
   declare export function rollup(
     options: RollupFileOptions,
   ): Promise<RollupSingleFileBuild>
-  declare export function rollup(
-    options: RollupDirOptions,
-  ): Promise<RollupBuild>
+  // declare export function rollup(
+  //   options: RollupDirOptions,
+  // ): Promise<RollupBuild>
 
   declare export interface WatcherOptions {
     chokidar?: boolean | WatchOptions;
