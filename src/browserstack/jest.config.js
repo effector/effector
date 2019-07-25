@@ -38,70 +38,84 @@ const config = {
 
 const browsers = {
   'IE 10': {
-    'bstack:options': {
-      os: 'Windows',
-      osVersion: '7',
-      projectName: 'effector-compat',
-      buildName: 'IE 10',
-      seleniumVersion: '3.141.59',
-      ie: {
-        noFlash: 'true',
-        driver: '3.141.59',
+    globals: {},
+    capabilities: {
+      'bstack:options': {
+        os: 'Windows',
+        osVersion: '7',
+        projectName: 'effector-compat',
+        buildName: 'IE 10',
+        seleniumVersion: '3.141.59',
+        ie: {
+          noFlash: 'true',
+          driver: '3.141.59',
+        },
       },
+      browserName: 'IE',
+      browserVersion: '10.0',
     },
-    browserName: 'IE',
-    browserVersion: '10.0',
   },
   'Chrome TV': {
-    'bstack:options': {
-      os: 'OS X',
-      osVersion: 'Mojave',
-      projectName: 'effector-compat',
-      buildName: 'Chrome TV',
-      seleniumVersion: '3.141.59',
+    globals: {},
+    capabilities: {
+      'bstack:options': {
+        os: 'OS X',
+        osVersion: 'Mojave',
+        projectName: 'effector-compat',
+        buildName: 'Chrome TV',
+        seleniumVersion: '3.141.59',
+      },
+      browserName: 'Chrome',
+      browserVersion: '47.0',
+      // 'browserstack.localIdentifier': 'Test123',
     },
-    browserName: 'Chrome',
-    browserVersion: '47.0',
-    // 'browserstack.localIdentifier': 'Test123',
   },
   'iPhone XS': {
-    'bstack:options': {
-      osVersion: '12',
-      deviceName: 'iPhone XS',
-      realMobile: 'true',
-      projectName: 'effector-compat',
-      buildName: 'iPhone XS',
-      deviceOrientation: 'portrait',
-      // seleniumVersion: '3.141.59',
+    globals: {},
+    capabilities: {
+      'bstack:options': {
+        osVersion: '12',
+        deviceName: 'iPhone XS',
+        realMobile: 'true',
+        projectName: 'effector-compat',
+        buildName: 'iPhone XS',
+        deviceOrientation: 'portrait',
+        // seleniumVersion: '3.141.59',
+      },
+      // browserName: 'Safari',
+      // browserVersion: '12.1',
     },
-    // browserName: 'Safari',
-    // browserVersion: '12.1',
   },
   'macos Safari': {
-    'bstack:options': {
-      os: 'OS X',
-      osVersion: 'Mojave',
-      projectName: 'effector-compat',
-      buildName: 'macos Safari',
-      seleniumVersion: '3.141.59',
+    globals: {},
+    capabilities: {
+      'bstack:options': {
+        os: 'OS X',
+        osVersion: 'Mojave',
+        projectName: 'effector-compat',
+        buildName: 'macos Safari',
+        seleniumVersion: '3.141.59',
+      },
+      browserName: 'Safari',
+      browserVersion: '12.1',
     },
-    browserName: 'Safari',
-    browserVersion: '12.1',
   },
 }
 
 const projects = []
 
 for (const name in browsers) {
+  const {capabilities, globals} = browsers[name]
   projects.push({
     ...config,
     displayName: name,
+    globals,
     testEnvironmentOptions: {
       ...config.testEnvironmentOptions,
       capabilities: {
-        ...browsers[name],
+        ...capabilities,
         'bstack:options': {
-          ...browsers[name]['bstack:options'],
+          ...capabilities['bstack:options'],
           userName: creds.user,
           accessKey: creds.key,
           // local: 'true',

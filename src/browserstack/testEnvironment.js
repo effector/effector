@@ -3,46 +3,41 @@
 module.exports = class WebdriverEnvironment extends require('jest-environment-node') {
   constructor(options) {
     super(options)
-    // const {
-    //   staticServer,
-    //   ...testEnvironmentOptions
-    // } = options.testEnvironmentOptions
-    // this.options = testEnvironmentOptions
-    // this.staticServerOptions = staticServer
-    this.options = options.testEnvironmentOptions
+    const {
+      staticServer,
+      ...testEnvironmentOptions
+    } = options.testEnvironmentOptions
+    this.options = testEnvironmentOptions
+    this.staticServerOptions = staticServer
     if (!this.options.baseUrl) {
-      const ip = this.options.staticServer.ip
-        ? this.options.staticServer.ip
-        : getIp()
-      const port = this.options.staticServer.port
+      const ip = staticServer.ip ? staticServer.ip : getIp()
+      const port = staticServer.port
       this.options.baseUrl = `http://${ip}:${port}`
     }
-    console.log('DONE')
   }
   async setup() {
     await super.setup()
     const {remote} = require('webdriverio')
     const {Local} = require('browserstack-local')
-    // const serveHandler = require('serve-handler')
-    // const {createServer} = require('http')
-    // const {port, root} = this.staticServerOptions
-    // const server = createServer((req, res) => {
-    //   serveHandler(req, res, {
-    //     public: root,
-    //   })
-    // })
+    const serveHandler = require('serve-handler')
+    const {createServer} = require('http')
+    const {port, root} = this.staticServerOptions
+    const server = createServer((req, res) => {
+      serveHandler(req, res, {
+        public: root,
+      })
+    })
     const bsLocal = new Local()
-    // this.global.staticServer = server
+    this.global.staticServer = server
     this.global.bsLocal = bsLocal
     const bsArgs = {
       key: this.options.key,
-      // force: 'true',
     }
     await Promise.all([
-      // new Promise((rs, rj) => {
-      //   server.on('error', rj)
-      //   server.listen(port, rs)
-      // }),
+      new Promise((rs, rj) => {
+        server.on('error', rj)
+        server.listen(port, rs)
+      }),
       new Promise((rs, rj) => {
         bsLocal.start(bsArgs, err => {
           if (err) return rj(err)
@@ -66,11 +61,11 @@ module.exports = class WebdriverEnvironment extends require('jest-environment-no
         })
       })
     }
-    // if (this.global.staticServer) {
-    //   await new Promise(rs => {
-    //     this.global.staticServer.close(rs)
-    //   })
-    // }
+    if (this.global.staticServer) {
+      await new Promise(rs => {
+        this.global.staticServer.close(rs)
+      })
+    }
     await super.teardown()
   }
 }

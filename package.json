@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "integration": "sh integrations/webpack/run.sh",
-    "browserstack": "jest --config='src/browserstack/jest.config.js' --runInBand",
+    "browserstack": "npx jest --config='src/browserstack/jest.config.js' --runInBand",
     "build:bs": "bsb -make-world",
     "test": "jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
