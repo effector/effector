@@ -11,7 +11,7 @@ phases:
   build:
     commands:
       - cd website/editor
-      - npx parcel build -d ../../dist --no-autoinstall --public-url / src/index.html
+      - npx parcel build -d ../../dist --no-autoinstall --public-url 'https://editor-prod.effector.dev' src/index.html
       - cd ../..
       - cp -a website/client/static/. dist/
       - cp -a website/media/. dist/
