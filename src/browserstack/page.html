@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test page</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <style>
+      .error {
+        color: darkred;
+      }
+    </style>
+    <script>
+      'use strict'
+
+      var error = console.error.bind(console)
+      var log = []
+      window.__errorLogs__ = log
+      function errorLogs() {
+        log.push(arguments.length <= 0 ? undefined : arguments[0])
+        return error.apply(void 0, arguments)
+      }
+
+      console.error = errorLogs
+      //prettier-ignore
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        console.error({
+          message: msg,
+          loc: {
+            file: url,
+            line: lineNo,
+            column: columnNo
+          }
+        })
+      }
+      window.__addScript__ = function addScript(src, onLoad, onError) {
+        var s = document.createElement('script')
+        s.setAttribute('src', src)
+        if (onLoad) {
+          s.onload = onLoad
+        }
+        if (onError) {
+          s.onerror = onError
+        }
+        document.body.appendChild(s)
+      }
+    </script>
+  </head>
+  <body>
+    <h1>effector demo</h1>
+    <h2>execution results</h2>
+    <div id="results" class="result"></div>
+    <h2>global api</h2>
+    <ul>
+      <li><strong>__errorLogs__</strong> <i>Array</i></li>
+      <li>
+        <strong>__addScript__</strong> <i>(url, onLoad?, onError?) => void</i>
+      </li>
+      <li><strong>__setText__</strong> <i>(text, isError?) => void</i></li>
+      <li>
+        <strong>__runCode__</strong>
+        <i> (cb, onDone?, onFail?) => </i>
+        <i> | {status: 'done', result: any} </i>
+        <i> | {status: 'fail', error: Error} </i>
+      </li>
+    </ul>
+    <script>
+      'use strict'
+      var root = document.getElementById('results')
+      var textNode = document.createTextNode('')
+      root.appendChild(textNode)
+
+      function setText(text, isError) {
+        var newNode = document.createTextNode(text)
+        root.replaceChild(newNode, textNode)
+        textNode = newNode
+        if (isError) {
+          root.classList.add('error')
+        } else {
+          root.classList.remove('error')
+        }
+      }
+      window.__setText__ = setText
+      function runCode(cb, onDone, onFail) {
+        try {
+          var result = cb()
+          if (onDone) {
+            onDone(result)
+          }
+          //prettier-ignore
+          return {
+            status: 'done',
+            result: result
+          }
+        } catch (error) {
+          var message = String(Object(error).message)
+          setText(message, true)
+          console.error(message)
+          if (onFail) {
+            onFail(error)
+          }
+          //prettier-ignore
+          return {
+            status: 'fail',
+            error: message
+          }
+        }
+      }
+      window.__runCode__ = runCode
+    </script>
+  </body>
+</html>
