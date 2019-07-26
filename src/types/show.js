@@ -9,14 +9,18 @@ function fromPrintRoot(source) {
 }
 
 const files = {}
+function flatMap(list, cb) {
+  return list.reduce((acc, x) => acc.concat(cb(x)), [])
+}
 
 export async function generateReport(errors) {
   const results = []
   const getLines = ({loc: {start, end}}) => [start.line, end.line]
   const lineNumbersPad = Math.max(
-    ...errors.flatMap(({message, refs}) =>
-      [getLines(message), refs.flatMap(getLines)].flat(),
-    ),
+    ...flatMap(errors, ({message, refs}) => [
+      getLines(message),
+      ...flatMap(refs, getLines),
+    ]),
   ).toString().length
 
   for (const {message, refs} of errors) {
