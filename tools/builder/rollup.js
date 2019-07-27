@@ -405,14 +405,14 @@ async function createCompat(name) {
       'react',
       'vue',
       'most',
-      // 'symbol-observable',
+      'symbol-observable',
       'effector',
     ],
     plugins: pluginList,
   })
   await build.write({
     file: dir(`npm/${name}/compat.js`),
-    format: 'umd',
+    format: 'cjs',
     name,
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
