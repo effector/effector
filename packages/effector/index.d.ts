@@ -302,43 +302,70 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A>(config: {
-  source: Unit<A>
-  clock: Unit<any>
-  target?: Unit<A>
-}): Unit<A>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  target?: Unit<C>
-  fn(source: A, clock: B): C
-}): Unit<C>
-
-export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<any>,
-): Event<A>
+  source: Store<A>,
+  clock?: Store<any>,
+): Store<A>
 export function sample<A>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
+  source: Store<A>,
   clock: Event<any> | Effect<any, any, any>,
 ): Event<A>
-
+export function sample<A>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Unit<any>,
+): Event<A>
 export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<B>,
+  source: Unit<A>,
+  clock: Unit<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
-export function sample<A, B, C>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  clock: Event<B> | Effect<B, any, any>,
-  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Event<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  fn: (source: A, clock: B) => C,
+  target: Unit<C>
+  greedy?: boolean
+}): Unit<C>
+export function sample<A>(config: {
+  source: Unit<A>,
+  clock: Unit<any>,
+  target: Unit<A>
+  greedy?: boolean
+}): Unit<A>
+export function sample<A, B, C>(config: {
+  source: Store<A>,
+  clock: Store<B>,
+  fn(source: A, clock: B): C,
+  greedy?: boolean,
+}): Store<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>,
+  clock: Unit<B>,
+  fn(source: A, clock: B): C,
+  greedy?: boolean,
+}): Event<C>
+export function sample<A>(config: {
+  source: Store<A>,
+  clock?: Store<any>,
+  greedy?: boolean,
+}): Store<A>
+export function sample<A>(config: {
+  source: Store<A>,
+  clock?: Event<any> | Effect<any, any, any>,
+  greedy?: boolean,
+}): Event<A>
+export function sample<A>(config: {
+  source: Event<A> | Effect<A, any, any>,
+  clock?: Unit<any>,
+  greedy?: boolean,
+}): Event<A>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
