@@ -1,12 +1,5 @@
 //@flow
 
-export type CompositeName = {
-  +shortName: string,
-  +fullName: string,
-  +path: Array<string>,
-  ...
-}
-
 class Name {
   /*::
   shortName: string
@@ -19,8 +12,9 @@ class Name {
     this.path = path
   }
 }
+export type {Name as CompositeName}
 
-export function createName(name: string, parent?: CompositeName): Name {
+export function createName(name: string, parent?: Name): Name {
   let path
   let fullName
   const shortName = name

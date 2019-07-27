@@ -1,5 +1,19 @@
 # Changelog
 
+## effector 20.1.0
+
+- Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/zerobias/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
+- Improve typescript typings for `sample` (thanks [@abliarsar](https://github.com/abliarsar)) (PR [#156](https://github.com/zerobias/effector/pull/156))
+- Fix webpack issue, which generated incorrect code with some ancient targets (IE10)
+
+## effector-react 20.2.0
+
+- Add `effector-react/compat` module to use with Smart TV (Chrome 47) apps without babel
+
+## effector-vue 20.1.0
+
+- Add `effector-vue/compat` module to use with Smart TV (Chrome 47) apps without babel
+
 ## effector-react 20.1.1
 
 - Add `useList` for efficient rendering of store lists
