@@ -36,7 +36,7 @@ const TypeErrors = styled.pre`
   border-bottom: 1px solid #ddd;
   padding: 7px 10px;
   grid-column: 3 / span 1;
-  grid-row: 3 / span 3;
+  grid-row: 3 / span 2;
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;

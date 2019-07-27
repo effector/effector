@@ -168,7 +168,7 @@ body {
   }
   .dom {
     grid-column: 3 / span 1;
-    grid-row: 3 / span 3;
+    grid-row: 3 / span 2;
   }
   .sources {
     grid-column: 2 / span 1;
@@ -182,7 +182,7 @@ body {
 
   .errors {
     grid-column: 3 / span 1;
-    grid-row: 6 / span 1;
+    grid-row: 5 / span 1;
   }
 }
 
