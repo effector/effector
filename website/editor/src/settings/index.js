@@ -19,19 +19,26 @@ import {useStore} from 'effector-react'
 
 export {flowToggle, tsToggle} from './domain'
 
-const Prettify = () => {
+export const PrettifyButton = () => {
   const {disabled, text} = useStore(prettierButtonStatus)
   return (
-    <Section>
-      <Button disabled={disabled} onClick={clickPrettify}>
-        {text}
-      </Button>
-    </Section>
+    <Button disabled={disabled} onClick={clickPrettify}>
+      {text}
+    </Button>
   )
 }
 
 export const Settings = () => (
   <SettingsGroup>
+    <Section>
+      <Label>
+        <VersionSelector
+          versions={useStore(packageVersions)}
+          selected={useStore(version)}
+          onChange={selectVersion}
+        />
+      </Label>
+    </Section>
     <Section>
       <Label>
         <Toggle
@@ -59,14 +66,6 @@ export const Settings = () => (
         />
         Type hover
       </Label>
-    </Section>
-    <Prettify />
-    <Section>
-      <VersionSelector
-        versions={useStore(packageVersions)}
-        selected={useStore(version)}
-        onChange={selectVersion}
-      />
     </Section>
     {/*<Label>
         <Toggle

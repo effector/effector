@@ -36,7 +36,7 @@ const TypeErrors = styled.pre`
   border-bottom: 1px solid #ddd;
   padding: 7px 10px;
   grid-column: 3 / span 1;
-  grid-row: 2 / span 3;
+  grid-row: 3 / span 3;
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
@@ -130,8 +130,8 @@ export const TypeErrorsView = () => {
           {errors.map((error, key) => {
             // TODO: hide libdefs until errors are fixed
             if (
-              process.env.NODE_ENV === 'production'
-              && error.message[0].loc?.type === 'LibFile'
+              process.env.NODE_ENV === 'production' &&
+              error.message[0].loc?.type === 'LibFile'
             )
               return null
 
@@ -140,8 +140,8 @@ export const TypeErrorsView = () => {
                 {error.message.map((message, key) => (
                   <ErrorMessage key={key} {...message} />
                 ))}
-                {error.extra
-                  && error.extra.map((extra, key) => (
+                {error.extra &&
+                  error.extra.map((extra, key) => (
                     <Extra key={key} {...extra} />
                   ))}
               </li>

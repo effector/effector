@@ -4521,10 +4521,8 @@ parcel-bundler@^1.12.3:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
-parcel-plugin-linaria@^0.1.1:
+"parcel-plugin-linaria@file:./forks/parcel-plugin-linaria":
   version "0.1.1"
-  resolved "https://registry.yarnpkg.com/parcel-plugin-linaria/-/parcel-plugin-linaria-0.1.1.tgz#ce02f82e10479f3eab7f9509ca40d622bd0a91d3"
-  integrity sha512-2naQ0SwsNXhAvpV+XH5Q1qgvzrSu8JW0WbXINdQrhMvE+VRVX8D6dX79BqBKv/ctoEwAZxpaDvslyw26pF39bA==
 
 parse-asn1@^5.0.0:
   version "5.1.4"

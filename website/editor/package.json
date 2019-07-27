@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "npx parcel src/index.html",
+    "start": "npx parcel src/index.html --no-cache",
     "build": "npx parcel build -d dist --no-autoinstall --public-url /try src/index.html",
     "now-build": "node src/loadVersions.js && yarn build"
   },
@@ -16,7 +16,7 @@
     "@babel/standalone": "^7.4.3",
     "fs-extra": "^7.0.1",
     "parcel-bundler": "^1.12.3",
-    "parcel-plugin-linaria": "^0.1.1",
+    "parcel-plugin-linaria": "file:./forks/parcel-plugin-linaria",
     "terser": "^3.17.0"
   },
   "dependencies": {

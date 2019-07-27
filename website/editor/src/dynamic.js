@@ -196,8 +196,9 @@ switcher({
 
 realmInvoke.watch(({method, params, instance}) => {
   if (method === 'restore') {
-    if (params.length > 0
-      && (params[0].kind === 'event' || params[0].kind === 'effect')
+    if (
+      params.length > 0 &&
+      (params[0].kind === 'event' || params[0].kind === 'effect')
     ) {
       realmStore(instance)
     } else {

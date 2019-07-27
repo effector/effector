@@ -54,7 +54,7 @@ const SecondanaryTabs = styled.div`
 
   @media (min-width: 700px) {
     grid-column: 3 / span 1;
-    grid-row: 5 / span 2;
+    grid-row: 6 / span 2;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 `
