@@ -28,9 +28,9 @@ export function eventFabric<Payload>({
   parent,
   config = {},
 }: {
-  name?: string,
-  parent?: CompositeName,
-  config?: EventConfigPart,
+  +name?: string,
+  +parent?: CompositeName,
+  +config?: EventConfigPart,
   ...
 }): Event<Payload> {
   const id = nextID()

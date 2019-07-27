@@ -51,9 +51,9 @@ export function effectFabric<Payload, Done>({
   parent,
   config,
 }: {
-  name?: string,
-  parent?: CompositeName,
-  config: EffectConfigPart<Payload, Done>,
+  +name?: string,
+  +parent?: CompositeName,
+  +config: EffectConfigPart<Payload, Done>,
   ...
 }): Effect<Payload, Done, *> {
   const {handler: defaultHandler} = config

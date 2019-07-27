@@ -28,9 +28,9 @@ import {
 } from './storeMethods'
 
 export function storeFabric<State>(props: {
-  currentState: State,
-  config: ConfigPart,
-  parent?: CompositeName,
+  +currentState: State,
+  +config: ConfigPart,
+  +parent?: CompositeName,
   ...
 }): Store<State> {
   const {currentState, config, parent} = props

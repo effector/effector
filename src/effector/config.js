@@ -39,10 +39,10 @@ export type Config<Part> = {
 
 //prettier-ignore
 export const normalizeConfig:
-  | (<Params, Done>(config?: Config<EffectConfigPart<Params, Done>>) => EffectConfigPart<Params, Done>)
-  | ((config?: Config<StoreConfigPart>) => StoreConfigPart)
-  | ((config?: Config<EventConfigPart>) => EventConfigPart)
-  | ((config?: Config<DomainConfigPart>) => DomainConfigPart) =
+  & (<Params, Done>(config?: Config<EffectConfigPart<Params, Done>>) => EffectConfigPart<Params, Done>)
+  & ((config?: Config<StoreConfigPart>) => StoreConfigPart)
+  & ((config?: Config<EventConfigPart>) => EventConfigPart)
+  & ((config?: Config<DomainConfigPart>) => DomainConfigPart) =
   (config: any = {}): any => Object.assign({}, config, config.ɔ || {})
 
 declare export function normalizeEventConfig<Payload, Done>(

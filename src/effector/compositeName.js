@@ -1,10 +1,11 @@
 //@flow
 
-export type CompositeName = {|
+export type CompositeName = {
   +shortName: string,
   +fullName: string,
   +path: Array<string>,
-|}
+  ...
+}
 
 class Name {
   /*::
