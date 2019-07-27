@@ -29,8 +29,6 @@ export {
   restoreObject,
 } from './store'
 
-export {createTask} from './task'
-
 export {Kind, clearNode, createNode, step, is} from './stdlib'
 export {launch} from './kernel'
 export type {kind} from './stdlib'
