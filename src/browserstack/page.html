@@ -43,6 +43,12 @@
         }
         document.body.appendChild(s)
       }
+      window.require = function require(moduleName) {
+        return '@@observable'
+      }
+      var effectorExports = {}
+      window.effector = effectorExports
+      window.exports = effectorExports
     </script>
   </head>
   <body>
