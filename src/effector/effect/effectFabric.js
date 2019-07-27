@@ -48,12 +48,10 @@ const notifyHandler = step.run({
 })
 export function effectFabric<Payload, Done>({
   name,
-  domainName,
   parent,
   config,
 }: {
   name?: string,
-  domainName: string,
   parent?: CompositeName,
   config: EffectConfigPart<Payload, Done>,
   ...

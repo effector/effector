@@ -168,7 +168,6 @@ function watchEvent<Payload>(
 ): Subscription {
   const watcherEffect = effectFabric({
     name: event.shortName + ' watcher',
-    domainName: '',
     parent: event.domainName,
     config: {handler: watcher},
   })

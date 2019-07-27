@@ -78,7 +78,6 @@ export function domainFabric({
     ): Effect<Params, Done, Fail> {
       const result = effectFabric({
         name,
-        domainName: compositeName.fullName,
         parent: compositeName,
         config: normalizeConfig(config),
       })

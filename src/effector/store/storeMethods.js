@@ -83,7 +83,6 @@ export function subscribe(storeInstance: Store<any>, listener: Function) {
     throw Error('expect listener to be a function')
   const watcherEffect = effectFabric({
     name: storeInstance.shortName + ' watcher',
-    domainName: '',
     parent: storeInstance.domainName,
     config: {
       handler: listener,
