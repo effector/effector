@@ -3,6 +3,16 @@ test('load localhost', async () => {
   jest.setTimeout(30000)
   await browser.url('/src/browserstack/page.html')
   await browser.getUrl()
+  if (needPolyfill) {
+    await browser.execute(function(url) {
+      if (!window.__addScript__) {
+        console.error('no __addScript__', document.title)
+        return
+      }
+      window.__addScript__(url)
+    }, `/node_modules/@babel/polyfill/dist/polyfill.js`)
+    await new Promise(rs => setTimeout(rs, 1000))
+  }
   await browser.execute(function(url) {
     if (!window.__addScript__) {
       console.error('no __addScript__', document.title)
