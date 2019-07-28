@@ -40,6 +40,11 @@ export default {
         'babel-plugin.js',
         'babel-plugin-react.js',
       ]),
+    () =>
+      massCopy('src/babel/plugin', 'npm/effector/plugin', [
+        'defaultMetaVisitor.js',
+        'noopMetaVisitor.js',
+      ]),
     rollupEffector,
     renderModulesGraph,
     publishScript('effector'),

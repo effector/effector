@@ -84,7 +84,12 @@ export default {
       ...getFiles('effector'),
       'babel-plugin.js',
       'babel-plugin-react.js',
+      'plugin/defaultMetaVisitor.js',
+      'plugin/noopMetaVisitor.js',
     ],
+    browser: {
+      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
+    },
     keywords: [
       'data',
       'datastructure',
@@ -215,11 +220,18 @@ export default {
   },
   '@effector/babel-plugin': {
     name: '@effector/babel-plugin',
-    description: 'Call setStoreName on createStore calls',
+    description: 'Compile-time preprocessing for effector',
     version: version['@effector/babel-plugin'],
     repository: 'https://github.com/zerobias/effector',
     main: 'index.js',
-    files: ['index.js'],
+    files: [
+      'index.js',
+      'plugin/defaultMetaVisitor.js',
+      'plugin/noopMetaVisitor.js',
+    ],
+    browser: {
+      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
+    },
     peerDependencies: dependsOnEffector,
     keywords: ['effector', 'babel-plugin', 'displayName'],
     ...common,

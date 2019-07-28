@@ -28,8 +28,13 @@
     "effector.umd.js.flow",
     "compat.js.flow",
     "babel-plugin.js",
-    "babel-plugin-react.js"
+    "babel-plugin-react.js",
+    "plugin/defaultMetaVisitor.js",
+    "plugin/noopMetaVisitor.js"
   ],
+  "browser": {
+    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
+  },
   "keywords": [
     "data",
     "datastructure",

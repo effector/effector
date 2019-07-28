@@ -1,12 +1,17 @@
 {
   "name": "@effector/babel-plugin",
-  "description": "Call setStoreName on createStore calls",
+  "description": "Compile-time preprocessing for effector",
   "version": "0.2.0",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "plugin/defaultMetaVisitor.js",
+    "plugin/noopMetaVisitor.js"
   ],
+  "browser": {
+    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
+  },
   "peerDependencies": {
     "effector": "^20.1.0"
   },
