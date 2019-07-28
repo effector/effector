@@ -252,7 +252,7 @@ declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
 declare export function createEvent<E>(eventName?: string): Event<E>
-declare export function createEvent<E>(config: {name?: string,...}): Event<E>
+declare export function createEvent<E>(config: {name?: string, ...}): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
@@ -344,8 +344,12 @@ declare export function createDomain(domainName?: string): Domain
 declare export function sample<A>(config: {|
   +source: Unit<A>,
   +clock: Unit<any>,
-  +target?: Unit<A>,
 |}): Unit<A>
+declare export function sample<A, U: Unit<A>>(config: {|
+  +source: Unit<A>,
+  +clock: Unit<any>,
+  +target: U,
+|}): U
 declare export function sample<A, B, C>(config: {|
   +source: Unit<A>,
   +clock: Unit<B>,
@@ -374,7 +378,7 @@ declare export function sample<A, B, C>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
+): Event<C>
 declare export function sample<A, B, C>(
   source: Event<A> | Store<A> | Effect<A, any, any>,
   clock: Event<B> | Effect<B, any, any>,
