@@ -89,7 +89,14 @@ const babelConfig = {
           && !filename.includes('browserstack')
         )
       },
-      plugins: ['./src/babel/babel-plugin'],
+      plugins: [
+        [
+          './src/babel/babel-plugin',
+          {
+            exportMetadata: true,
+          },
+        ],
+      ],
     },
   ],
   sourceMaps: true,
