@@ -52,9 +52,31 @@ const browsers = {
   //     browserVersion: '10.0',
   //   },
   // },
+  'IE 11': {
+    globals: {
+      libraryFile: 'compat',
+      needPolyfill: true,
+    },
+    capabilities: {
+      'bstack:options': {
+        os: 'Windows',
+        osVersion: '7',
+        projectName: 'effector-compat',
+        buildName: 'IE 11',
+        seleniumVersion: '3.141.59',
+        ie: {
+          noFlash: 'true',
+          driver: '3.141.59',
+        },
+      },
+      browserName: 'IE',
+      browserVersion: '11.0',
+    },
+  },
   'Chrome TV': {
     globals: {
       libraryFile: 'compat',
+      needPolyfill: false,
     },
     capabilities: {
       'bstack:options': {
@@ -72,6 +94,7 @@ const browsers = {
   'iPhone XS': {
     globals: {
       libraryFile: 'effector.umd',
+      needPolyfill: false,
     },
     capabilities: {
       'bstack:options': {
@@ -90,6 +113,7 @@ const browsers = {
   'macos Safari': {
     globals: {
       libraryFile: 'effector.umd',
+      needPolyfill: false,
     },
     capabilities: {
       'bstack:options': {
