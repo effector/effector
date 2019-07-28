@@ -1,5 +1,15 @@
 # Changelog
 
+## effector 20.1.1
+
+- Add support for IE11 to `effector/compat`
+- Fix flow typings for `sample`
+- Allow `effector/babel-plugin` to work in browser
+
+## effector-react 20.2.1, effector-vue 20.1.1
+
+- Add support for IE11 to `effector-react/compat` and `effector-vue/compat`
+
 ## effector 20.1.0
 
 - Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/zerobias/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
