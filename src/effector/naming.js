@@ -32,20 +32,16 @@ export function unitObjectName(
       },
   method: string = 'combine',
 ) {
-  let i = 0
-  const arr: Array<any> = Object.values(objOrArr)
-  const max = unitObjectMaxNames - 1
-  const maxLength = arr.length - 1
   let name = method + '('
-  for (const unit of arr) {
-    const comma = i === max || maxLength === i ? '' : ', '
-    if (is.store(unit) || is.event(unit) || is.effect(unit)) {
-      name += getDisplayName(unit) + comma
-    } else {
-      name += unit.toString() + comma
-    }
+  let comma = ''
+  let i = 0
+  for (const key in objOrArr) {
+    const unit = objOrArr[key]
+    name += comma
+    name += is.unit(unit) ? getDisplayName(unit) : unit.toString()
     i += 1
-    if (comma === '') break
+    if (i === unitObjectMaxNames) break
+    comma = ', '
   }
   name += ')'
   return name
