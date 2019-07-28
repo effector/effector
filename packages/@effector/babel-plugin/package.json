@@ -1,7 +1,7 @@
 {
   "name": "@effector/babel-plugin",
   "description": "Compile-time preprocessing for effector",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "repository": "https://github.com/zerobias/effector",
   "main": "index.js",
   "files": [
@@ -13,7 +13,7 @@
     "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
   },
   "peerDependencies": {
-    "effector": "^20.1.0"
+    "effector": "^20.1.1"
   },
   "keywords": [
     "effector",
