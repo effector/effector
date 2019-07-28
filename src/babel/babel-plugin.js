@@ -174,7 +174,7 @@ const normalizeOptions = options => {
 
 function createMetadataVisitor(plugin, exportMetadata) {
   const {join, relative} = require('path')
-  plugin.Program = {
+  plugin.visitor.Program = {
     exit(_, state) {
       const metadata = join(
         state.file.opts.root,
