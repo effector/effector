@@ -33,6 +33,7 @@ const compatTarget = {
     'last 2 Firefox versions',
     'last 2 Safari versions',
     'last 2 Edge versions',
+    'IE 11',
   ],
 }
 
@@ -171,13 +172,44 @@ const getPlugins = (name: string) => ({
   }),
 })
 
-export async function rollupBabel(name: string, plugin: *) {
+export async function rollupBabel() {
+  const name = '@effector/babel-plugin'
   const plugins = getPlugins(name)
   const terserConfig = minifyConfig({
     beautify: true,
   })
   const build = await rollup({
-    input: dir(plugin),
+    input: dir('src/babel/babel-plugin'),
+    plugins: [
+      plugins.babel,
+      terser({
+        ...terserConfig,
+        compress: false,
+        mangle: false,
+        keep_classnames: true,
+        keep_fnames: true,
+        toplevel: false,
+      }),
+    ],
+    external: ['./plugin/defaultMetaVisitor.js'],
+  })
+  await build.write({
+    file: dir(`npm/${name}/index.js`),
+    format: 'cjs',
+    freeze: false,
+    name,
+    sourcemap: true,
+  })
+}
+
+export async function rollupBabelReact() {
+  const name = '@effector/babel-plugin-react'
+  const plugins = getPlugins(name)
+  const terserConfig = minifyConfig({
+    beautify: true,
+  })
+  const build = await rollup({
+    input: dir('src/babel/babel-plugin-react'),
     plugins: [
       plugins.babel,
       terser({
@@ -193,6 +225,7 @@ export async function rollupBabel(name: string, plugin: *) {
   await build.write({
     file: dir(`npm/${name}/index.js`),
     format: 'cjs',
+    freeze: false,
     name,
     sourcemap: true,
   })
@@ -328,6 +361,7 @@ async function createUmd(name, {external, file, umdName, globals}) {
   await build.write({
     file,
     format: 'umd',
+    freeze: false,
     name: umdName,
     sourcemap: true,
     globals,
@@ -378,9 +412,14 @@ async function createCompat(name) {
     plugins.sizeSnapshot,
     terser({
       ...terserConfig,
+      parse: {
+        ...terserConfig.parse,
+        ecma: 5,
+      },
       compress: {
         ...terserConfig.compress,
         directives: false,
+        ecma: 5,
       },
       mangle: {
         ...terserConfig.mangle,
@@ -388,9 +427,11 @@ async function createCompat(name) {
       },
       output: {
         ...terserConfig.output,
+        ecma: 5,
         safari10: true,
         webkit: true,
       },
+      ecma: 5,
       nameCache: compatNameCache,
       safari10: true,
     }),
@@ -413,6 +454,7 @@ async function createCompat(name) {
   await build.write({
     file: dir(`npm/${name}/compat.js`),
     format: 'cjs',
+    freeze: false,
     name,
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
@@ -460,6 +502,7 @@ async function createEsCjs(
     build.write({
       file: cjs,
       format: 'cjs',
+      freeze: false,
       name,
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
@@ -467,6 +510,7 @@ async function createEsCjs(
     build.write({
       file: es,
       format: 'es',
+      freeze: false,
       name,
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
