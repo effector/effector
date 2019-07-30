@@ -4,8 +4,6 @@ title: Usage with TypeScript
 sidebar_label: Usage with TypeScript
 ---
 
-# Usage with TypeScript
-
 **TypeScript** is a typed superset of JavaScript. It has become popular
 recently in applications due to the benefits it can bring. If you are new to
 TypeScript it is highly recommended to become familiar with it first before
@@ -135,7 +133,7 @@ export const MessageList = ChatDomain.store<Message[]>(initialState)
 
 The closest comparison for an event handler is a reducer that processes exactly 
 one event. In this example, there is no need to declare the types with which 
-the handler will be called, since the vehicle has enough information to deduce 
+the handler will be called, since the typescript has enough information to deduce 
 all the necessary types, it can also guarantee the correctness of the return 
 value from this handler.
 
