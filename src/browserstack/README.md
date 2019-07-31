@@ -1,5 +1,7 @@
 # Tests on real devices
 
+Provided by [browserstack open source support](https://www.browserstack.com/open-source) programm
+
 Run on each commmit on [CI](https://semaphoreci.com/zerobias/effector/branches/master)
 
 ## Usage
