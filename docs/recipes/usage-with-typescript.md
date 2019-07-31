@@ -24,9 +24,9 @@ two domains. The _Chat domain_ will focus on working with the chat history and
 the _system domain_ will focus on working with session information.
 
 The full source code is available on 
-[codesandbox here](https://codesandbox.io/embed/react-ts-effector-example-ho5q6). Note that by going
-through this example yourself you will experience some of the benefits of
- using TypeScript.
+[codesandbox here](https://codesandbox.io/s/github/Laiff/react-ts-effector-example). 
+Note that by going through this example yourself you will experience some of
+the benefits of using TypeScript.
 
 ## Type checking state
 
