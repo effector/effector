@@ -127,6 +127,7 @@ type Store<State> = {
  thru<U>(fn: (store: Store<State>) => U): U;
  shortName: string;
  defaultState: State;
+ updates: Event<State>;
 }
 ```
 
@@ -139,6 +140,7 @@ type Store<State> = {
 - [`thru(fn)`]() calls function with this store
 - [`shortName`]() is used for debug
 - [`defaultState`]() is `createStore` first argument
+- [`updates`]() is `event` for watch `store` changes only
 
 ## Domain
 
