@@ -390,3 +390,26 @@ Output
 (`State`): Default state of store
 
 <hr />
+
+### `updates`
+
+#### Returns 
+
+(`Event<State>`): Event that represent updates of given store.
+
+Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
+
+```js
+import {createStore, is} from 'effector'
+
+const clicksAmount = createStore(0)
+is.event(clicksAmount.updates) // => true
+
+clicksAmount.watch(amount => {
+  console.log('will be triggered with current state, immediately, sync', amount)
+})
+
+clicksAmount.updates.watch(amount => {
+  console.log('will not be triggered unless store value is changed', amount)
+})
+```
