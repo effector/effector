@@ -15,7 +15,7 @@ Sends data from one entity to another. </br>
 
 #### Returns
 
-(_`Subscription`_) Unsubscribe function
+(_`Subscription`_): Unsubscribe function
 
 #### Example 1
 
