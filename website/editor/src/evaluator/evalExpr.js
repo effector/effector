@@ -1,6 +1,7 @@
 //@flow
 
-import {realmStatus, compiledCode} from '../domain'
+import {realmStatus} from '../realm'
+import {compiledCode} from '../domain'
 import scopedEval from './scopedEval'
 import {transformCode} from './compiler'
 import {getStackFrames} from './stackframe/getStackFrames'

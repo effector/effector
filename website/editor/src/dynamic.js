@@ -18,10 +18,12 @@ import {
 import {typeAtPos, typeNode} from './flow/domain'
 import {resetGraphiteState} from './graphite/domain'
 import {compress} from './compression'
-import {versionLoader} from './evaluator'
+import {evaluator, versionLoader} from './evaluator'
 import {typechecker, typeHoverToggle} from './settings/domain'
 
 import './realm/init'
+
+evalEffect.use(evaluator)
 
 version.on(selectVersion, (_, p) => p)
 

@@ -2,19 +2,7 @@
 
 import {is} from 'effector'
 
-import {
-  changeSources,
-  realmInterval,
-  realmTimeout,
-  realmComponent,
-  evalEffect,
-  intervals,
-  timeouts,
-  realmStatus,
-  stats,
-  selectVersion,
-} from '../domain'
-import {evaluator} from '../evaluator'
+import {changeSources, selectVersion} from '../domain'
 import {
   realmClearNode,
   realmInvoke,
@@ -22,7 +10,13 @@ import {
   realmStore,
   realmEffect,
   realmDomain,
+  realmInterval,
+  realmTimeout,
+  realmComponent,
+  realmStatus,
 } from '.'
+
+import {intervals, timeouts, stats} from './state'
 
 intervals
   .on(realmInterval, (state, id) => [...state, id])
@@ -53,9 +47,6 @@ timeouts
     }
     return []
   })
-
-timeouts.watch(console.log)
-intervals.watch(console.log)
 
 stats
   .on(realmEvent, ({event, ...rest}, e) => ({
@@ -111,12 +102,6 @@ stats
   })
   .reset(changeSources)
   .reset(selectVersion)
-
-stats.watch(e => {
-  //console.log('stats', e);
-})
-
-evalEffect.use(evaluator)
 
 realmInvoke.watch(({method, params, instance}) => {
   if (method === 'restore') {

@@ -1,16 +1,6 @@
 //@flow
 
-import {
-  createEvent,
-  createEffect,
-  createStore,
-  type Unit,
-  type Event,
-  type Store,
-  type Effect,
-  type Domain,
-} from 'effector'
-import type {StoreView} from 'effector-react'
+import {createEvent, createEffect, createStore} from 'effector'
 
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from './versions.json'
@@ -68,27 +58,12 @@ export function retrieveVersion(): string {
   return defaultVersions[0]
 }
 
-export const realmComponent = createEvent<StoreView<any, any>>(
-  'realm component created',
-)
-
-export const realmStatus = createEvent<{|
-  active: boolean,
-  throwError: boolean,
-|}>('realm status update')
-
-export const realmInterval = createEvent<IntervalID>('realm setInterval call')
-export const realmTimeout = createEvent<TimeoutID>('realm setTimeout call')
-
 export const evalEffect = createEffect<string, any, any>('eval realm code')
 
 export const performLint = createEvent<void>('perform lint')
 export const changeSources = createEvent<string>('change sources')
 
 export const selectVersion = createEvent<string>('select version')
-
-export const intervals = createStore<IntervalID[]>([])
-export const timeouts = createStore<TimeoutID[]>([])
 
 export const version = createStore<string>(defaultVersions[0])
 export const packageVersions = createStore<string[]>(defaultVersions)
@@ -114,18 +89,4 @@ export const codeError = createStore<
   isError: false,
   error: null,
   stackFrames: [],
-})
-
-export const stats = createStore<{|
-  event: Event<any>[],
-  store: Store<any>[],
-  effect: Effect<any, any, any>[],
-  domain: Domain[],
-  component: StoreView<any, any>[],
-|}>({
-  event: [],
-  store: [],
-  effect: [],
-  domain: [],
-  component: [],
 })

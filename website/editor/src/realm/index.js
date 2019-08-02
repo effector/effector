@@ -1,14 +1,7 @@
 //@flow
 
-import {
-  createEvent,
-  split,
-  type Effect,
-  type Store,
-  type Domain,
-  type Event,
-  type Unit,
-} from 'effector'
+import {createEvent, split, type Event, type Unit} from 'effector'
+import type {StoreView} from 'effector-react'
 
 export const realmInvoke: Event<{|
   method: string,
@@ -16,9 +9,13 @@ export const realmInvoke: Event<{|
   instance: any,
 |}> = createEvent()
 
-export const realmClearNode: Event<Unit<any>> = createEvent()
+export const realmStatus: Event<{|
+  active: boolean,
+  throwError: boolean,
+|}> = createEvent()
 
-export const {realmEvent, realmStore, realmEffect, realmDomain} = split<*, any>(
+//$off
+export const {realmEvent, realmStore, realmEffect, realmDomain} = split(
   realmInvoke.map(e => e.instance || {}),
   {
     realmEvent: obj => obj.kind === 'event' || obj.kind === 2,
@@ -27,3 +24,8 @@ export const {realmEvent, realmStore, realmEffect, realmDomain} = split<*, any>(
     realmDomain: obj => obj.onCreateDomain && obj.domain,
   },
 )
+
+export const realmInterval: Event<IntervalID> = createEvent()
+export const realmTimeout: Event<TimeoutID> = createEvent()
+export const realmClearNode: Event<Unit<any>> = createEvent()
+export const realmComponent: Event<StoreView<any, any>> = createEvent()

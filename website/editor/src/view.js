@@ -23,12 +23,13 @@ import {
   changeSources,
   performLint,
   codeError,
-  stats,
   version,
   codeMarkLine,
   codeCursorActivity,
   codeSetCursor,
 } from './domain'
+
+import {stats} from './realm/state'
 
 const OutlineView = createComponent(
   {
