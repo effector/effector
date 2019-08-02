@@ -4,8 +4,10 @@ import {createEffect} from 'effector'
 import {prepareRuntime} from './prepareRuntime'
 import {evalExpr} from './evalExpr'
 import scopedEval from './scopedEval'
-import {selectVersion, version} from '../domain'
+import {selectVersion} from '../editor'
+import {version} from '../editor/state'
 import {consoleMap} from '../logs'
+//$off
 import {registerPlugin} from '@babel/standalone'
 
 const tag = `# source`
@@ -98,6 +100,7 @@ async function loadBabel() {
 export async function evaluator(code: string) {
   await loadBabel()
   const effector = await loadEngine()
+  //$off
   const env = prepareRuntime(effector, version.getState())
   return evalExpr(code, env)
 }

@@ -19,15 +19,13 @@ import {TabsView} from './tabs/view'
 import {PrettifyButton} from './settings'
 import {mode} from './mode/domain'
 import {
-  sourceCode,
-  changeSources,
   performLint,
-  codeError,
-  version,
-  codeMarkLine,
-  codeCursorActivity,
+  changeSources,
   codeSetCursor,
-} from './domain'
+  codeCursorActivity,
+  codeMarkLine,
+} from './editor'
+import {version, sourceCode, codeError} from './editor/state'
 
 import {stats} from './realm/state'
 
@@ -49,7 +47,7 @@ const OutlineView = createComponent(
 const ErrorsView = createComponent(
   codeError,
   ({}, {isError, error, stackFrames}) => (
-    <Errors isError={isError} error={error} stackFrames={stackFrames} />
+    <Errors isError={isError} error={(error: any)} stackFrames={stackFrames} />
   ),
 )
 

@@ -14,7 +14,8 @@ import {
   prettierButtonStatus,
   clickPrettify,
 } from './domain'
-import {packageVersions, version, selectVersion} from '../domain'
+import {selectVersion} from '../editor'
+import {packageVersions, version} from '../editor/state'
 import {useStore} from 'effector-react'
 
 export {flowToggle, tsToggle} from './domain'

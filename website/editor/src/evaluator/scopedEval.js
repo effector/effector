@@ -1,6 +1,7 @@
 // @flow
 
-import {sourceCode, selectVersion} from '../domain'
+import {selectVersion} from '../editor'
+import {sourceCode} from '../editor/state'
 
 let iframe: HTMLIFrameElement | null = null
 

@@ -1,7 +1,7 @@
 //@flow
 
 import {realmStatus} from '../realm'
-import {compiledCode} from '../domain'
+import {compiledCode} from '../editor/state'
 import scopedEval from './scopedEval'
 import {transformCode} from './compiler'
 import {getStackFrames} from './stackframe/getStackFrames'

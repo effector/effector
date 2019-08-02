@@ -3,7 +3,7 @@
 import {sample, forward} from 'effector'
 import {prettier as prettierRequest} from '@zerobias/codebox'
 
-import {sourceCode} from '../domain'
+import {sourceCode} from '../editor/state'
 
 import {
   flowToggle,

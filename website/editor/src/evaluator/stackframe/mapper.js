@@ -3,7 +3,8 @@
 import StackFrame from './stack-frame'
 import {getSourceMap} from './getSourceMap'
 import {getLinesAround} from './getLinesAround'
-import {compiledCode} from '../../domain'
+import {compiledCode} from '../../editor/state'
+//$off
 import {settle} from 'settle-promise'
 
 /**
@@ -43,7 +44,7 @@ async function map(
   )
   return frames.map(frame => {
     const {functionName, fileName, lineNumber, columnNumber} = frame
-    let {map, fileSource} = cache[fileName] || {}
+    const {map, fileSource} = cache[fileName] || {}
     if (map == null || lineNumber == null) {
       return frame
     }

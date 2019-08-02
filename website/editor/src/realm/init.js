@@ -2,7 +2,7 @@
 
 import {is} from 'effector'
 
-import {changeSources, selectVersion} from '../domain'
+import {changeSources, selectVersion} from '../editor'
 import {
   realmClearNode,
   realmInvoke,
