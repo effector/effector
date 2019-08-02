@@ -1,4 +1,5 @@
 //@flow
+/* eslint-disable no-unused-vars */
 
 const keyStrUriSafe =
   'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$'
@@ -8,7 +9,9 @@ for (let i = 0; i < keyStrUriSafe.length; i++) {
   baseReverseDic[charAt(keyStrUriSafe, i)] = i
 }
 
-export const compress = (input?: string) => {
+declare export function compress(input: string): string
+declare export function compress(input?: null | void): void
+export function compress(input?: string) {
   if (input == null) return ''
   let i
   let value
@@ -114,7 +117,9 @@ export const compress = (input?: string) => {
   return context_data.join('')
 }
 
-export const decompress = (input: string) => {
+declare export function decompress(input: string): string
+declare export function decompress(input?: null | void): void
+export function decompress(input: string) {
   if (input == null) return ''
   if (input == '') return null
   input = input.replace(/ /g, '+')
