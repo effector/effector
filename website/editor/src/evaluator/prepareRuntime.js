@@ -5,7 +5,8 @@ import * as ReactDOM from 'react-dom'
 import * as Effector from 'effector'
 import * as EffectorReact from 'effector-react'
 
-import {realmInvoke, realmInterval, realmTimeout} from '../domain'
+import {realmInvoke} from '../realm'
+import {realmInterval, realmTimeout} from '../domain'
 import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector: typeof Effector, version: string) {

@@ -68,21 +68,10 @@ export function retrieveVersion(): string {
   return defaultVersions[0]
 }
 
-export const realmClearNode = createEvent<Unit<any>>('realm clear node')
-export const realmEvent = createEvent<Event<any>>('realm event created')
-export const realmStore = createEvent<Store<any>>('realm store created')
-export const realmEffect = createEvent<Effect<any, any, any>>(
-  'realm effect created',
-)
-export const realmDomain = createEvent<Domain>('realm domain created')
 export const realmComponent = createEvent<StoreView<any, any>>(
   'realm component created',
 )
-export const realmInvoke = createEvent<{|
-  method: string,
-  params: Array<any>,
-  instance: any,
-|}>('realm invoke')
+
 export const realmStatus = createEvent<{|
   active: boolean,
   throwError: boolean,

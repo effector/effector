@@ -1,7 +1,7 @@
 //@flow
 
 import {graphite, resetGraphiteState} from './domain'
-import {realmEvent, realmStore, realmEffect} from '../domain'
+import {realmEvent, realmStore, realmEffect} from '../realm'
 
 import type {Graph, CompositeName, kind} from './index.h'
 
