@@ -13,7 +13,7 @@ It can be safely used in place of the original async function.
 
 #### Returns
 
-(_`Future`_)
+(_`Promise`_)
 
 #### Example
 
