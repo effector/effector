@@ -5,13 +5,6 @@ import {sourceCode, performLint} from '../domain'
 import {flowToggle, typeHoverToggle} from '../settings/domain'
 import {checkContent, typeAtPos, typeHint, typeErrors, typeNode} from './domain'
 
-if (process.env.NODE_ENV === 'development') {
-  checkContent.fail.watch(data => console.error('checkContent', data))
-  checkContent.done.watch(data => console.log('checkContent', data))
-  typeAtPos.fail.watch(data => console.error('typeAtPos', data))
-  typeAtPos.done.watch(data => console.log('typeAtPos', data))
-}
-
 flowToggle.watch(enabled => {
   if (enabled) {
     checkContent.use(body => flow(body))
@@ -22,12 +15,13 @@ flowToggle.watch(enabled => {
       }),
     )
   } else {
-    checkContent.use(async () => {
-      return {code: 'fail', processTime: 0, success: true, service: 'flow'}
-    })
-    typeAtPos.use(async () => {
-      return Promise.reject()
-    })
+    checkContent.use(async() => ({
+      code: 'fail',
+      processTime: 0,
+      success: true,
+      service: 'flow',
+    }))
+    typeAtPos.use(async() => Promise.reject())
   }
   performLint()
 })
