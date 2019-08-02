@@ -1,0 +1,173 @@
+//@flow
+
+import {is} from 'effector'
+
+import {
+  changeSources,
+  realmInterval,
+  realmTimeout,
+  realmComponent,
+  evalEffect,
+  intervals,
+  timeouts,
+  realmStatus,
+  stats,
+  selectVersion,
+} from '../domain'
+import {evaluator} from '../evaluator'
+import {
+  realmClearNode,
+  realmInvoke,
+  realmEvent,
+  realmStore,
+  realmEffect,
+  realmDomain,
+} from '.'
+
+intervals
+  .on(realmInterval, (state, id) => [...state, id])
+  .on(changeSources, state => {
+    for (const id of state) {
+      global.clearInterval(id)
+    }
+    return []
+  })
+  .on(selectVersion, state => {
+    for (const id of state) {
+      global.clearInterval(id)
+    }
+    return []
+  })
+
+timeouts
+  .on(realmTimeout, (state, id) => [...state, id])
+  .on(changeSources, state => {
+    for (const id of state) {
+      global.clearTimeout(id)
+    }
+    return []
+  })
+  .on(selectVersion, state => {
+    for (const id of state) {
+      global.clearTimeout(id)
+    }
+    return []
+  })
+
+timeouts.watch(console.log)
+intervals.watch(console.log)
+
+stats
+  .on(realmEvent, ({event, ...rest}, e) => ({
+    ...rest,
+    event: [...event, e],
+  }))
+  .on(realmStore, ({store, ...rest}, e) => ({
+    ...rest,
+    store: [...store, e],
+  }))
+  .on(realmEffect, ({effect, ...rest}, e) => ({
+    ...rest,
+    effect: [...effect, e],
+  }))
+  .on(realmDomain, ({domain, ...rest}, e) => ({
+    ...rest,
+    domain: [...domain, e],
+  }))
+  .on(realmComponent, ({component, ...rest}, e) => ({
+    ...rest,
+    component: [...component, e],
+  }))
+  .on(realmStatus, (stats, {active}) => {
+    if (!active) return stats
+    return {
+      event: [],
+      store: [],
+      effect: [],
+      domain: [],
+      component: [],
+    }
+  })
+  .on(realmClearNode, (stats, unit) => {
+    if (is.store(unit)) {
+      return {
+        ...stats,
+        store: [...stats.store.filter(store => store !== unit)],
+      }
+    }
+    if (is.event(unit)) {
+      return {
+        ...stats,
+        event: [...stats.event.filter(event => event !== unit)],
+      }
+    }
+    if (is.effect(unit)) {
+      return {
+        ...stats,
+        effect: [...stats.effect.filter(effect => effect !== unit)],
+      }
+    }
+    return stats
+  })
+  .reset(changeSources)
+  .reset(selectVersion)
+
+stats.watch(e => {
+  //console.log('stats', e);
+})
+
+evalEffect.use(evaluator)
+
+realmInvoke.watch(({method, params, instance}) => {
+  if (method === 'restore') {
+    if (
+      params.length > 0
+      && (params[0].kind === 'event' || params[0].kind === 'effect')
+    ) {
+      realmStore(instance)
+    } else {
+      for (const key in instance) {
+        realmStore(instance[key])
+      }
+    }
+  }
+  if (method === 'createApi') {
+    for (const key in instance) {
+      realmEvent(instance[key])
+    }
+  }
+  if (method === 'createComponent') {
+    realmComponent(instance)
+  }
+  if (method === 'clearNode') {
+    realmClearNode(params[0])
+  }
+})
+
+realmEffect.watch(e => {
+  realmEvent(e.done)
+  realmEvent(e.fail)
+})
+
+realmDomain.watch(domain => {
+  domain.onCreateEvent(event => {
+    //TODO: wrong behaviour?
+    if (event.domainName !== domain.compositeName) return
+    realmEvent(event)
+  })
+  domain.onCreateEffect(event => {
+    //TODO: wrong behaviour?
+    if (event.domainName !== domain.compositeName) return
+    realmEffect(event)
+  })
+  domain.onCreateStore(event => {
+    //TODO: wrong behaviour?
+    if (event.domainName !== domain.compositeName) return
+    realmStore(event)
+  })
+  domain.onCreateDomain(event => realmDomain(event))
+})
+
+// realmInvoke.watch(e => console.log('realm invoke', e));
+// realmEvent.watch(e => console.log('realm event', e.shortName));
+// realmStore.watch(e => console.log('realm store', e.shortName));
