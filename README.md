@@ -140,7 +140,7 @@ const App = () => {
 ```js
 const {createEvent} = require('effector')
 
-const messageEvent = createEvent('message event (optional description)')
+const messageEvent = createEvent()
 
 messageEvent.watch(text => console.log(`new message: ${text}`))
 
@@ -148,7 +148,7 @@ messageEvent('hello world')
 // => new message: hello world
 ```
 
-[Run example](https://runkit.com/zerobias/effector-hello-world)
+[Run example](https://share.effector.dev/CSKJUI4E)
 
 <hr />
 
@@ -176,7 +176,7 @@ turnOff() // "status changed: offline"
 turnOff() // nothing has changed
 ```
 
-[Run example](https://runkit.com/zerobias/effector-storages-and-events)
+[Run example](https://share.effector.dev/iXQVXIEv)
 
 <hr />
 
@@ -193,8 +193,6 @@ With useList hook
 [Run example](https://share.effector.dev/OlakwECa)
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
-
-> [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
 ### [More examples](https://github.com/zerobias/effector/network/dependents)
 
