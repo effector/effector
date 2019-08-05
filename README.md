@@ -21,19 +21,21 @@
 - [Installation](#installation)
   - [Additional packages:](#additional-packages)
 - [Press](#press)
+- [Online playground](#online-playground)
 - [Examples](#examples)
-  - [Increment/decrement](#incrementdecrement)
+  - [Increment/decrement with React](#incrementdecrement-with-react)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
-    - [Run example](#run-example)
   - [Storages and events](#storages-and-events)
-    - [Run example](#run-example-1)
-- [Demo](#demo)
-  - [More examples/demo you can check here](#more-examplesdemo-you-can-check-here)
+  - [Reddit reader](#reddit-reader)
+  - [Lists rendering](#lists-rendering)
+  - [More examples](#more-examples)
 - [API](#api)
   - [Event](#event)
   - [Effect](#effect)
   - [Store](#store)
+    - [Store composition/decomposition](#store-compositiondecomposition)
   - [Domain](#domain)
+  - [Learn more](#learn-more)
 - [Tested with browserstack](#tested-with-browserstack)
 - [Contributors](#contributors)
 - [License](#license)
@@ -43,8 +45,6 @@
 ## Introduction
 
 Effector is an effective multi store state manager for Javascript apps **(React/React Native/Vue/Node.js)**, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both **TypeScript** and **Flow** type annotations out of the box.
-
-> Detailed comparison with other state managers will be added soon
 
 ### Effector follows five basic principles:
 
@@ -88,11 +88,14 @@ yarn add effector
 - [Effector — State Manager You Should Give a Try](https://itnext.io/effector-state-manager-you-should-give-a-try-b46b917e51cc)
 - [Powerful and fast 5kb state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
 
+## Online playground
+
+You can try effector in [our repl](https://share.effector.dev)
+Code sharing, Typescript and react supported out of the box; and of course, it [built with effector](https://github.com/zerobias/effector/tree/master/website/editor/src)
+
 ## Examples
 
-Three following examples that will give you a basic understanding how the state manager works:
-
-### Increment/decrement
+### Increment/decrement with React
 
 ```js
 import {createStore, createEvent} from 'effector'
@@ -111,19 +114,24 @@ counter.watch(console.log)
 
 const Counter = () => {
   const value = useStore(counter)
+  return <div>{value}</div>
+}
+
+const App = () => {
+  const value = useStore(counter)
 
   return (
     <>
-      <div>{value}</div>
+      <Counter />
       <button onClick={increment}>+</button>
       <button onClick={decrement}>-</button>
       <button onClick={resetCounter}>reset</button>
     </>
   )
 }
-
-const App = () => <Counter />
 ```
+
+[Run example](https://share.effector.dev/3R0iqNYe)
 
 <hr />
 
@@ -140,7 +148,7 @@ messageEvent('hello world')
 // => new message: hello world
 ```
 
-#### [Run example](https://runkit.com/zerobias/effector-hello-world)
+[Run example](https://runkit.com/zerobias/effector-hello-world)
 
 <hr />
 
@@ -168,17 +176,27 @@ turnOff() // "status changed: offline"
 turnOff() // nothing has changed
 ```
 
-#### [Run example](https://runkit.com/zerobias/effector-storages-and-events)
+[Run example](https://runkit.com/zerobias/effector-storages-and-events)
 
 <hr />
 
-## Demo
+### Reddit reader
+
+With effects for data fetching and effector-react hooks
+
+[Run example](https://share.effector.dev/trNhbNKm)
+
+### Lists rendering
+
+With useList hook
+
+[Run example](https://share.effector.dev/OlakwECa)
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/1y6n4r6o57) SSR example
 
-### More examples/demo you can check [here](https://github.com/zerobias/effector/tree/master/examples)
+### [More examples](https://github.com/zerobias/effector/network/dependents)
 
 ## API
 
@@ -187,17 +205,26 @@ turnOff() // nothing has changed
 Event is an intention to change state.
 
 ```js
-const event = createEvent() // unnamed event
+import {createEvent} from 'effector'
+const send = createEvent() // unnamed event
 const onMessage = createEvent('message') // named event
 
 const socket = new WebSocket('wss://echo.websocket.org')
 socket.onmessage = msg => onMessage(msg)
+socket.onopen = () => send('{"text": "hello"}')
 
-const data = onMessage.map(msg => msg.data).map(JSON.parse)
+const onMessageParse = onMessage.map(msg => JSON.parse(msg.data))
 
-// Handle side effects
-data.watch(console.log)
+onMessageParse.watch(data => {
+  console.log('Message from server ', data)
+})
+
+send.watch(data => {
+  socket.send(data)
+})
 ```
+
+[Run example](https://share.effector.dev/8rZm1G6k)
 
 ### Effect
 
@@ -208,11 +235,11 @@ It can be safely used in place of the original async function.
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
-  handler: async ({name}) => {
+  async handler({name}) {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
     return req.json()
-  }
+  },
 })
 
 // subscribe to pending store status
@@ -232,14 +259,27 @@ fetchUserRepos.fail.watch(({params, error}) => {
   console.error(error) // rejected value
 })
 
+// subscribe to both cases
+fetchUserRepos.finally.watch(data => {
+  if (data.status === 'done') {
+    const {params, result} = data
+    console.log(params) // {name: 'zerobias'}
+    console.log(result) // resolved value
+  } else {
+    const {params, error} = data
+    console.error(params) // {name: 'zerobias'}
+    console.error(error) // rejected value
+  }
+})
+
 // you can replace handler anytime
-fetchUserRepos.use(() => promiseMock)
+fetchUserRepos.use(requestMock)
 
-// call effect with your params
-fetchUserRepos({name: 'zerobias'})
-
-const data = await fetchUserRepos({name: 'zerobias'}) // handle promise
+// calling effect will return a promise
+const result = await fetchUserRepos({name: 'zerobias'})
 ```
+
+[Run example](https://share.effector.dev/hlNcL8ma)
 
 ### Store
 
@@ -259,10 +299,13 @@ const callback = (newState) => console.log(newState)
 users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
 // `callback` will be triggered each time when `.on` handler returns the new state
 ```
+
 #### Store composition/decomposition
+
 Most profit thing of stores.
 
 Get smaller part of the store:
+
 ```js
 // `.map` accept state of parent store and return new memoized store. No more reselect ;)
 const firstUser = users.map(list => list[0])
@@ -271,16 +314,22 @@ firstUser.watch(newState => console.log(`first user name: ${newState.name}`)) //
 addUser({name: Joseph}) // `firstUser` is not updated
 getUsers() // after promise resolve `firstUser` is updated and call all watchers (subscribers)
 ```
+
 Compose stores:
+
 ```js
 import {createStore, createStoreObject} from 'effector'
 
 const a = createStore(1)
-const b = createStore("b")
+const b = createStore('b')
 
-const c = createStoreObject({ a, b })
+const c = createStoreObject({a, b})
+
+c.watch(console.log)
+// => {a: 1, b: "b"}
 ```
 
+[Run example](https://share.effector.dev/MuLF8xGB)
 
 ### Domain
 
@@ -303,7 +352,15 @@ const pageStore = mainPage.store(0)
 // => new store: 0
 ```
 
-> [Learn more](https://effector.now.sh/en/introduction/core-concepts)
+[Run example](https://share.effector.dev/PgwRuYja)
+
+### Learn more
+
+> [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
+
+> [API docs](https://effector.now.sh/en/api/effector/effector)
+
+> [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
 
 ![Effector Diagram](./diagram.png)
 
@@ -351,6 +408,7 @@ const pageStore = mainPage.store(0)
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
