@@ -9,7 +9,8 @@ import {generateReport} from '../show'
 
 jest.setTimeout(50000)
 
-test('TypeScript', async() => {
+test('TypeScript', async () => {
+  console.error('Typechecking TypeScript...')
   try {
     const data = await execa('npx', ['tsc', '-p', 'src/types'])
     expect(data).toMatchSnapshot('resolved')
@@ -21,7 +22,8 @@ test('TypeScript', async() => {
   }
 })
 
-test('Flow', async() => {
+test('Flow', async () => {
+  console.error('Typechecking Flow...')
   try {
     const data = await execa('npx', [
       'flow',

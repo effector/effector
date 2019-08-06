@@ -21,8 +21,8 @@ export const Kind: {
 
 export type Observer<A> = {
   readonly next?: (value: A) => void
-  // error(err: Error): void,
-  //complete(): void,
+  //error(err: Error): void
+  //complete(): void
 }
 
 export type Observable<T> = {
@@ -40,6 +40,12 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export type CompositeName = {
+  shortName: string
+  fullName: string
+  path: Array<string>
+}
+
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
@@ -54,6 +60,9 @@ export interface Event<Payload> extends Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<Payload>
 }
 
@@ -87,6 +96,9 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<Params>
 }
 
@@ -108,8 +120,10 @@ export interface Store<State> extends Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
-  shortName: string
   defaultState: State
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<State>
 }
 
@@ -257,10 +271,7 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-export function split<
-  S,
-  Obj extends {[name: string]: (payload: S) => boolean},
->(
+export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
   cases: Obj,
 ): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
@@ -302,10 +313,7 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A>(
-  source: Store<A>,
-  clock?: Store<any>,
-): Store<A>
+export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
   source: Store<A>,
   clock: Event<any> | Effect<any, any, any>,
@@ -327,44 +335,44 @@ export function sample<A, B, C>(
   greedy?: boolean,
 ): Event<C>
 export function sample<A, B, C>(config: {
-  source: Unit<A>,
-  clock: Unit<B>,
-  fn: (source: A, clock: B) => C,
+  source: Unit<A>
+  clock: Unit<B>
+  fn: (source: A, clock: B) => C
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
 export function sample<A>(config: {
-  source: Unit<A>,
-  clock: Unit<any>,
+  source: Unit<A>
+  clock: Unit<any>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
 export function sample<A, B, C>(config: {
-  source: Store<A>,
-  clock: Store<B>,
-  fn(source: A, clock: B): C,
-  greedy?: boolean,
+  source: Store<A>
+  clock: Store<B>
+  fn(source: A, clock: B): C
+  greedy?: boolean
 }): Store<C>
 export function sample<A, B, C>(config: {
-  source: Unit<A>,
-  clock: Unit<B>,
-  fn(source: A, clock: B): C,
-  greedy?: boolean,
+  source: Unit<A>
+  clock: Unit<B>
+  fn(source: A, clock: B): C
+  greedy?: boolean
 }): Event<C>
 export function sample<A>(config: {
-  source: Store<A>,
-  clock?: Store<any>,
-  greedy?: boolean,
+  source: Store<A>
+  clock?: Store<any>
+  greedy?: boolean
 }): Store<A>
 export function sample<A>(config: {
-  source: Store<A>,
-  clock?: Event<any> | Effect<any, any, any>,
-  greedy?: boolean,
+  source: Store<A>
+  clock?: Event<any> | Effect<any, any, any>
+  greedy?: boolean
 }): Event<A>
 export function sample<A>(config: {
-  source: Event<A> | Effect<A, any, any>,
-  clock?: Unit<any>,
-  greedy?: boolean,
+  source: Event<A> | Effect<A, any, any>
+  clock?: Unit<any>
+  greedy?: boolean
 }): Event<A>
 
 export function combine<R>(fn: () => R): Store<R>
