@@ -872,29 +872,29 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
-  395 |     const map_check1: Store<string> = computed
-  396 | 
-> 397 |     const map_check2: Store<number> = computed
+  399 |     const map_check1: Store<string> = computed
+  400 | 
+> 401 |     const map_check2: Store<number> = computed
       |                                       ^^^^^^^ 
       |  Cannot assign \`computed\` to \`map_check2\` 
       |  because string [1] is incompatible with number [2] in type argument \`State\` [3].
       |  
-  398 |   })
-  399 | 
+  402 |   })
+  403 | 
 
-  393 |     const computed = store.map(() => 'hello')
-  394 | 
-> 395 |     const map_check1: Store<string> = computed
+  397 |     const computed = store.map(() => 'hello')
+  398 | 
+> 399 |     const map_check1: Store<string> = computed
       |                             ^^^^^^ [1]
-  396 | 
-  397 |     const map_check2: Store<number> = computed
+  400 | 
+  401 |     const map_check2: Store<number> = computed
 
-  395 |     const map_check1: Store<string> = computed
-  396 | 
-> 397 |     const map_check2: Store<number> = computed
+  399 |     const map_check1: Store<string> = computed
+  400 | 
+> 401 |     const map_check2: Store<number> = computed
       |                             ^^^^^^ [2]
-  398 |   })
-  399 | 
+  402 |   })
+  403 | 
 
   packages/effector/index.js.flow
   103 | }
@@ -907,22 +907,22 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
-  477 |     const domain = createDomain()
-  478 |     const domain2 = createDomain('hello')
-> 479 |     const domain3 = createDomain(234)
+  481 |     const domain = createDomain()
+  482 |     const domain2 = createDomain('hello')
+> 483 |     const domain3 = createDomain(234)
       |                                  ^^ 
       |  Cannot call \`createDomain\` with \`234\` bound to \`domainName\` 
       |  because number [1] is incompatible with string [2].
       |  
-  480 |     const domain4 = createDomain({foo: true})
-  481 |   })
+  484 |     const domain4 = createDomain({foo: true})
+  485 |   })
 
-  477 |     const domain = createDomain()
-  478 |     const domain2 = createDomain('hello')
-> 479 |     const domain3 = createDomain(234)
+  481 |     const domain = createDomain()
+  482 |     const domain2 = createDomain('hello')
+> 483 |     const domain3 = createDomain(234)
       |                                  ^^^ [1]
-  480 |     const domain4 = createDomain({foo: true})
-  481 |   })
+  484 |     const domain4 = createDomain({foo: true})
+  485 |   })
 
   packages/effector/index.js.flow
   355 |   <S>(field: Store<S> | S) => Store<S>,
@@ -935,22 +935,22 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
-  478 |     const domain2 = createDomain('hello')
-  479 |     const domain3 = createDomain(234)
-> 480 |     const domain4 = createDomain({foo: true})
+  482 |     const domain2 = createDomain('hello')
+  483 |     const domain3 = createDomain(234)
+> 484 |     const domain4 = createDomain({foo: true})
       |                                  ^^^^^^^^^^ 
       |  Cannot call \`createDomain\` with object literal bound to \`domainName\` 
       |  because object literal [1] is incompatible with string [2].
       |  
-  481 |   })
-  482 | 
+  485 |   })
+  486 | 
 
-  478 |     const domain2 = createDomain('hello')
-  479 |     const domain3 = createDomain(234)
-> 480 |     const domain4 = createDomain({foo: true})
+  482 |     const domain2 = createDomain('hello')
+  483 |     const domain3 = createDomain(234)
+> 484 |     const domain4 = createDomain({foo: true})
       |                                  ^^^^^^^^^^^ [1]
-  481 |   })
-  482 | 
+  485 |   })
+  486 | 
 
   packages/effector/index.js.flow
   355 |   <S>(field: Store<S> | S) => Store<S>,
@@ -963,178 +963,178 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
-  494 |       },
-  495 |     })
-> 496 |     effect2(20)
+  498 |       },
+  499 |     })
+> 500 |     effect2(20)
       |             ^ 
       |  Cannot call \`effect2\` with \`20\` bound to \`payload\` 
       |  because number [1] is incompatible with string [2].
       |  
-  497 |     const effect3 = domain.effect('', {
-  498 |       handler: effect1,
+  501 |     const effect3 = domain.effect('', {
+  502 |       handler: effect1,
 
-  494 |       },
-  495 |     })
-> 496 |     effect2(20)
+  498 |       },
+  499 |     })
+> 500 |     effect2(20)
       |             ^^ [1]
-  497 |     const effect3 = domain.effect('', {
-  498 |       handler: effect1,
+  501 |     const effect3 = domain.effect('', {
+  502 |       handler: effect1,
 
-  490 |     const effect1: Effect<string, number, Error> = domain.effect()
-  491 |     const effect2 = domain.effect('', {
-> 492 |       handler(params: string) {
+  494 |     const effect1: Effect<string, number, Error> = domain.effect()
+  495 |     const effect2 = domain.effect('', {
+> 496 |       handler(params: string) {
       |                       ^^^^^^ [2]
-  493 |         return 256
-  494 |       },
+  497 |         return 256
+  498 |       },
 
   
 
   src/types/types.test.js
-  498 |       handler: effect1,
-  499 |     })
-> 500 |     effect3(20)
+  502 |       handler: effect1,
+  503 |     })
+> 504 |     effect3(20)
       |             ^ 
       |  Cannot call \`effect3\` with \`20\` bound to \`payload\` 
       |  because number [1] is incompatible with string [2].
       |  
-  501 |   })
-  502 | 
+  505 |   })
+  506 | 
 
-  498 |       handler: effect1,
-  499 |     })
-> 500 |     effect3(20)
+  502 |       handler: effect1,
+  503 |     })
+> 504 |     effect3(20)
       |             ^^ [1]
-  501 |   })
-  502 | 
+  505 |   })
+  506 | 
 
-  488 |   test('#effect', () => {
-  489 |     const domain = createDomain()
-> 490 |     const effect1: Effect<string, number, Error> = domain.effect()
+  492 |   test('#effect', () => {
+  493 |     const domain = createDomain()
+> 494 |     const effect1: Effect<string, number, Error> = domain.effect()
       |                           ^^^^^^ [2]
-  491 |     const effect2 = domain.effect('', {
-  492 |       handler(params: string) {
+  495 |     const effect2 = domain.effect('', {
+  496 |       handler(params: string) {
 
   
 
   src/types/types.test.js
-  584 |       ],
-  585 |     })
-> 586 |     launch(foo, '')
+  588 |       ],
+  589 |     })
+> 590 |     launch(foo, '')
       |                 ^ 
       |  Cannot call \`launch\` with empty string bound to \`payload\` 
       |  because string [1] is incompatible with number [2].
       |  
-  587 |     launch(foo, 0)
-  588 |     launch(customNode, 100)
+  591 |     launch(foo, 0)
+  592 |     launch(customNode, 100)
 
-  584 |       ],
-  585 |     })
-> 586 |     launch(foo, '')
+  588 |       ],
+  589 |     })
+> 590 |     launch(foo, '')
       |                 ^^ [1]
-  587 |     launch(foo, 0)
-  588 |     launch(customNode, 100)
+  591 |     launch(foo, 0)
+  592 |     launch(customNode, 100)
 
-  565 | 
-  566 |   test('launch', () => {
-> 567 |     const foo = createEvent<number>()
+  569 | 
+  570 |   test('launch', () => {
+> 571 |     const foo = createEvent<number>()
       |                             ^^^^^^ [2]
-  568 |     const customNode = createNode({
-  569 |       scope: {max: 100, lastValue: -1, add: 10},
+  572 |     const customNode = createNode({
+  573 |       scope: {max: 100, lastValue: -1, add: 10},
 
   
 
   src/types/types.test.js
-  616 |       (initialProps: {id: number}) => {
-  617 |         const createComponent_initialProps_check1: number = initialProps.id
-> 618 |         const createComponent_initialProps_check2: string = initialProps.id
+  620 |       (initialProps: {id: number}) => {
+  621 |         const createComponent_initialProps_check1: number = initialProps.id
+> 622 |         const createComponent_initialProps_check2: string = initialProps.id
       |                                                             ^^^^^^^^^^^^^^ 
       |  Cannot assign \`initialProps.id\` to \`createComponent_initialProps_check2\` 
       |  because number [1] is incompatible with string [2].
       |  
-  619 |         const createComponent_initialProps_check3: string =
-  620 |           initialProps.unknownProp
+  623 |         const createComponent_initialProps_check3: string =
+  624 |           initialProps.unknownProp
 
-  614 |     }>({})
-  615 |     const InitialProps = createComponent(
-> 616 |       (initialProps: {id: number}) => {
+  618 |     }>({})
+  619 |     const InitialProps = createComponent(
+> 620 |       (initialProps: {id: number}) => {
       |                           ^^^^^^ [1]
-  617 |         const createComponent_initialProps_check1: number = initialProps.id
-  618 |         const createComponent_initialProps_check2: string = initialProps.id
+  621 |         const createComponent_initialProps_check1: number = initialProps.id
+  622 |         const createComponent_initialProps_check2: string = initialProps.id
 
-  616 |       (initialProps: {id: number}) => {
-  617 |         const createComponent_initialProps_check1: number = initialProps.id
-> 618 |         const createComponent_initialProps_check2: string = initialProps.id
+  620 |       (initialProps: {id: number}) => {
+  621 |         const createComponent_initialProps_check1: number = initialProps.id
+> 622 |         const createComponent_initialProps_check2: string = initialProps.id
       |                                                    ^^^^^^ [2]
-  619 |         const createComponent_initialProps_check3: string =
-  620 |           initialProps.unknownProp
+  623 |         const createComponent_initialProps_check3: string =
+  624 |           initialProps.unknownProp
 
   
 
   src/types/types.test.js
-  618 |         const createComponent_initialProps_check2: string = initialProps.id
-  619 |         const createComponent_initialProps_check3: string =
-> 620 |           initialProps.unknownProp
+  622 |         const createComponent_initialProps_check2: string = initialProps.id
+  623 |         const createComponent_initialProps_check3: string =
+> 624 |           initialProps.unknownProp
       |                        ^^^^^^^^^^ 
       |  Cannot get \`initialProps.unknownProp\` 
       |  because property \`unknownProp\` is missing in object type [1].
       |  
-  621 |         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
-  622 |       },
+  625 |         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
+  626 |       },
 
-  614 |     }>({})
-  615 |     const InitialProps = createComponent(
-> 616 |       (initialProps: {id: number}) => {
+  618 |     }>({})
+  619 |     const InitialProps = createComponent(
+> 620 |       (initialProps: {id: number}) => {
       |                      ^^^^^^^^^^^^ [1]
-  617 |         const createComponent_initialProps_check1: number = initialProps.id
-  618 |         const createComponent_initialProps_check2: string = initialProps.id
+  621 |         const createComponent_initialProps_check1: number = initialProps.id
+  622 |         const createComponent_initialProps_check2: string = initialProps.id
 
   
 
   src/types/types.test.js
-  623 |       (_, state) => {
-  624 |         const createComponent_initialProps_check4: string = state.text
-> 625 |         const createComponent_initialProps_check5: number = state.text
+  627 |       (_, state) => {
+  628 |         const createComponent_initialProps_check4: string = state.text
+> 629 |         const createComponent_initialProps_check5: number = state.text
       |                                                             ^^^^^^^^^ 
       |  Cannot assign \`state.text\` to \`createComponent_initialProps_check5\` 
       |  because string [1] is incompatible with number [2].
       |  
-  626 |         return null
-  627 |       },
+  630 |         return null
+  631 |       },
 
-  610 |     const list = createStore<{
-  611 |       [key: number]: {
-> 612 |         text: string,
+  614 |     const list = createStore<{
+  615 |       [key: number]: {
+> 616 |         text: string,
       |               ^^^^^^ [1]
-  613 |       },
-  614 |     }>({})
+  617 |       },
+  618 |     }>({})
 
-  623 |       (_, state) => {
-  624 |         const createComponent_initialProps_check4: string = state.text
-> 625 |         const createComponent_initialProps_check5: number = state.text
+  627 |       (_, state) => {
+  628 |         const createComponent_initialProps_check4: string = state.text
+> 629 |         const createComponent_initialProps_check5: number = state.text
       |                                                    ^^^^^^ [2]
-  626 |         return null
-  627 |       },
+  630 |         return null
+  631 |       },
 
   
 
   src/types/types.test.js
-  630 | 
-  631 |   test('createGate', () => {
-> 632 |     const Foo = createGate<number>('foo')
+  634 | 
+  635 |   test('createGate', () => {
+> 636 |     const Foo = createGate<number>('foo')
       |                            ^^^^^ 
       |  Cannot call \`createGate\` 
       |  because number [1] is incompatible with object type [2] in type
       |  argument \`Props\`.
       |  
-  633 |     const Bar = createGate<{a: number}>('bar')
-  634 |     const Baz = createGate<number | null>('baz', null)
+  637 |     const Bar = createGate<{a: number}>('bar')
+  638 |     const Baz = createGate<number | null>('baz', null)
 
-  630 | 
-  631 |   test('createGate', () => {
-> 632 |     const Foo = createGate<number>('foo')
+  634 | 
+  635 |   test('createGate', () => {
+> 636 |     const Foo = createGate<number>('foo')
       |                            ^^^^^^ [1]
-  633 |     const Bar = createGate<{a: number}>('bar')
-  634 |     const Baz = createGate<number | null>('baz', null)
+  637 |     const Bar = createGate<{a: number}>('bar')
+  638 |     const Baz = createGate<number | null>('baz', null)
 
   packages/effector-react/index.js.flow
    57 | declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
@@ -1147,29 +1147,29 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
-  636 |     const Component = () => {
-  637 |       useGate(Foo, 1)
-> 638 |       useGate(Bar, 1)
+  640 |     const Component = () => {
+  641 |       useGate(Foo, 1)
+> 642 |       useGate(Bar, 1)
       |                    ^ 
       |  Cannot call \`useGate\` with \`1\` bound to \`props\` 
       |  because number [1] is incompatible with object type [2].
       |  
-  639 |       useGate(Bar, {a: 1})
-  640 |       useGate(Bar, {})
+  643 |       useGate(Bar, {a: 1})
+  644 |       useGate(Bar, {})
 
-  636 |     const Component = () => {
-  637 |       useGate(Foo, 1)
-> 638 |       useGate(Bar, 1)
+  640 |     const Component = () => {
+  641 |       useGate(Foo, 1)
+> 642 |       useGate(Bar, 1)
       |                    ^^ [1]
-  639 |       useGate(Bar, {a: 1})
-  640 |       useGate(Bar, {})
+  643 |       useGate(Bar, {a: 1})
+  644 |       useGate(Bar, {})
 
-  631 |   test('createGate', () => {
-  632 |     const Foo = createGate<number>('foo')
-> 633 |     const Bar = createGate<{a: number}>('bar')
+  635 |   test('createGate', () => {
+  636 |     const Foo = createGate<number>('foo')
+> 637 |     const Bar = createGate<{a: number}>('bar')
       |                            ^^^^^^^^^^^ [2]
-  634 |     const Baz = createGate<number | null>('baz', null)
-  635 | 
+  638 |     const Baz = createGate<number | null>('baz', null)
+  639 | 
 
   "
 `;
@@ -1222,19 +1222,19 @@ types.test.ts(335,13): Type 'Event<number>' is not assignable to type 'Event<str
   Type 'number' is not assignable to type 'string'.
 types.test.ts(341,13): Type 'Event<void>' is not assignable to type 'Event<string>'.
   Type 'void' is not assignable to type 'string'.
-types.test.ts(397,11): Type 'Store<string>' is not assignable to type 'Store<number>'.
+types.test.ts(401,11): Type 'Store<string>' is not assignable to type 'Store<number>'.
   Type 'string' is not assignable to type 'number'.
-types.test.ts(479,34): Argument of type '234' is not assignable to parameter of type 'string | undefined'.
-types.test.ts(480,34): Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
-types.test.ts(496,13): Argument of type '20' is not assignable to parameter of type 'string'.
+types.test.ts(483,34): Argument of type '234' is not assignable to parameter of type 'string | undefined'.
+types.test.ts(484,34): Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
 types.test.ts(500,13): Argument of type '20' is not assignable to parameter of type 'string'.
-types.test.ts(586,17): Argument of type '\\"\\"' is not assignable to parameter of type 'number'.
-types.test.ts(618,15): Type 'number' is not assignable to type 'string'.
-types.test.ts(620,24): Property 'unknownProp' does not exist on type '{ id: number; }'.
-types.test.ts(625,15): Type 'string' is not assignable to type 'number'.
-types.test.ts(632,28): Type 'number' does not satisfy the constraint 'object'.
-types.test.ts(638,20): Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
-types.test.ts(640,20): Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
+types.test.ts(504,13): Argument of type '20' is not assignable to parameter of type 'string'.
+types.test.ts(590,17): Argument of type '\\"\\"' is not assignable to parameter of type 'number'.
+types.test.ts(622,15): Type 'number' is not assignable to type 'string'.
+types.test.ts(624,24): Property 'unknownProp' does not exist on type '{ id: number; }'.
+types.test.ts(629,15): Type 'string' is not assignable to type 'number'.
+types.test.ts(636,28): Type 'number' does not satisfy the constraint 'object'.
+types.test.ts(642,20): Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
+types.test.ts(644,20): Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
   Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 useStoreMap.test.tsx(50,28): Tuple type 'readonly [number]' of length '1' has no element at index '1'.
 useStoreMap.test.tsx(71,11): Type '[number, \\"username\\" | \\"email\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
