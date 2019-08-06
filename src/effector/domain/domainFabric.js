@@ -25,10 +25,10 @@ export function domainFabric({
   parent,
   parentHooks,
 }: {
-  name?: string,
-  config?: DomainConfigPart,
-  parent?: CompositeName,
-  parentHooks?: DomainHooks,
+  +name?: string,
+  +config?: DomainConfigPart,
+  +parent?: CompositeName,
+  +parentHooks?: DomainHooks,
   ...
 }): Domain {
   const id = nextID()
