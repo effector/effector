@@ -51,7 +51,7 @@
     "ast-types": "^0.13.1",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "babel-jest": "^24.7.1",
+    "babel-jest": "^24.8.0",
     "babel-literal-to-ast": "^2.1.0",
     "babel-plugin-macros": "^2.5.1",
     "babel-plugin-module-resolver": "^3.2.0",
