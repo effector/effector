@@ -18,6 +18,7 @@ test('TypeScript', async () => {
     const cleanedMessage = err.message
       .replace(/src\/types\//gm, '')
       .replace(/error TS\d+: /gm, '')
+      .replace(/\(\d+,\d+\)/gm, '')
     expect(cleanedMessage).toMatchSnapshot('rejected')
   }
 })
