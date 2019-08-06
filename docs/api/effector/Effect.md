@@ -70,14 +70,17 @@ It will replace the previous function inside (if any).
 #### Example
 
 ```js
-const effect = createEffect("effect name", {
-  handler: (params) => {
-    console.log("effect called with", params)
-    return fetch("/some-resource")
-  }
+const fetchUserRepos = createEffect()
+
+fetchUserRepos.use(async (params) => {
+  console.log('fetchUserRepos called with', params)
+  
+  const url = `https://api.github.com/users/${params.name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 
-effect(1) // >> effect called with 1
+fetchUserRepos({name: 'zerobias'}) // fetchUserRepos called with {name: 'zerobias'}
 ```
 
 <hr />
