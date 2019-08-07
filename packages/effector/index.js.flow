@@ -34,6 +34,13 @@ export type Subscription = {
 export interface Unit<T> {
   +kind: kind;
 }
+
+export type CompositeName = {|
+  shortName: string,
+  fullName: string,
+  path: Array<string>,
+|}
+
 declare export class Event<Payload> implements Unit<Payload> {
   (payload: Payload): Payload;
   +kind: kind;
@@ -51,6 +58,9 @@ declare export class Event<Payload> implements Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription;
   thru<U>(fn: (event: Event<Payload>) => U): U;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export class Effect<Params, Done, Fail = Error>
@@ -87,6 +97,9 @@ declare export class Effect<Params, Done, Fail = Error>
   map<T>(fn: (params: Params) => T): Event<T>;
   subscribe(observer: Observer<Params>): Subscription;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export class Store<State> implements Unit<State> {
@@ -111,8 +124,10 @@ declare export class Store<State> implements Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
-  shortName: string;
   defaultState: State;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export var is: {|

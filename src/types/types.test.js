@@ -20,6 +20,7 @@ import {
   //ComputedStore,
   //ComputedEvent,
   /*::type*/ kind,
+  /*::type*/ CompositeName,
   forward,
   launch,
   split,
@@ -187,6 +188,19 @@ describe('Event', () => {
       name: 'event name [2]'
     })
   })
+  test('#(properties)', () => {
+    const event = createEvent()
+    const kind: kind = event.kind
+    const shortName: string = event.shortName
+    const domainName: CompositeName | typeof undefined = event.domainName
+    const compositeName: CompositeName = event.compositeName
+
+    const computed = event.map(() => 'hello')
+    const kind1: kind = computed.kind
+    const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
+  })
   test('#map', () => {
     const event: Event<number> = createEvent()
     const computed = event.map(() => 'foo')
@@ -240,6 +254,20 @@ describe('Effect', () => {
     const createEffect_effect5: Effect<number, string> = createEffect({
       name: 'fx 5',
     })
+  })
+
+  test('#(properties)', () => {
+    const effect = createEffect()
+    const kind: kind = effect.kind
+    const shortName: string = effect.shortName
+    const domainName: CompositeName | typeof undefined = effect.domainName
+    const compositeName: CompositeName = effect.compositeName
+
+    const computed = effect.map(() => 'hello')
+    const kind1: kind = computed.kind
+    const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
   })
 
   test('#use', () => {
@@ -344,11 +372,15 @@ describe('Store', () => {
     const store = createStore(0)
     const kind: kind = store.kind
     const shortName: string = store.shortName
+    const domainName: CompositeName | typeof undefined = store.domainName
+    const compositeName: CompositeName = store.compositeName
     const defaultState: number = store.defaultState
 
     const computed = store.map(() => 'hello')
     const kind1: kind = computed.kind
     const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
     const defaultState1: string = computed.defaultState
   })
 
