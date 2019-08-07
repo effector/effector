@@ -47,7 +47,6 @@ registerPlugin('@effector/repl-remove-imports', babel => ({
 
 const compileAll = (code: string): string => {
   const options = babelOptions.getState()
-  console.error(options)
   return transform(code, options).code
 }
 export const transformCode = (code: string): string => compileAll(code)
