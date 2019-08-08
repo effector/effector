@@ -128,11 +128,11 @@ export interface Store<State> extends Unit<State> {
 }
 
 export const is: {
-  unit(obj: unknown): boolean
-  store(obj: unknown): boolean
-  event(obj: unknown): boolean
-  effect(obj: unknown): boolean
-  domain(obj: unknown): boolean
+  unit(obj: unknown): obj is Unit<any>
+  store(obj: unknown): obj is Store<any>
+  event(obj: unknown): obj is Event<any>
+  effect(obj: unknown): obj is Effect<any, any, any>
+  domain(obj: unknown): obj is Domain
 }
 
 interface InternalStore<State> extends Store<State> {
