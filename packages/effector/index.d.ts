@@ -50,6 +50,7 @@ export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
+  filter<T extends Payload>(config: {fn(payload: Payload): payload is T}): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   /**
    * @deprecated This form is deprecated, use `filterMap` method instead.
