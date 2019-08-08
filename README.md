@@ -91,6 +91,7 @@ yarn add effector
 ## Online playground
 
 You can try effector in [our repl](https://share.effector.dev)
+
 Code sharing, Typescript and react supported out of the box; and of course, it [built with effector](https://github.com/zerobias/effector/tree/master/website/editor/src)
 
 ## Examples
@@ -182,15 +183,15 @@ turnOff() // nothing has changed
 
 ### Reddit reader
 
-With effects for data fetching and effector-react hooks
+[Run example](https://share.effector.dev/T5CyxSFl)
 
-[Run example](https://share.effector.dev/trNhbNKm)
+With effects for data fetching and effector-react hooks
 
 ### Lists rendering
 
-With useList hook
-
 [Run example](https://share.effector.dev/OlakwECa)
+
+With `useList` hook
 
 > [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
 
