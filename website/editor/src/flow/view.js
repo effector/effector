@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 
-import {useStore} from 'effector-react'
+import {useStore, useList} from 'effector-react'
 import {typeErrors, typeHint} from './domain'
 import {typeHoverToggle} from '../settings/domain'
 import type {FlowMessage, FlowInfoTree} from './index.h'
@@ -121,34 +121,29 @@ const Extra = ({message, children}: FlowInfoTree) => (
   </ul>
 )
 
-export const TypeErrorsView = () => {
-  const errors = useStore(typeErrors)
-  return (
-    <TypeErrors>
-      <Scroll>
-        <ul>
-          {errors.map((error, key) => {
-            // TODO: hide libdefs until errors are fixed
-            if (
-              process.env.NODE_ENV === 'production' &&
-              error.message[0].loc?.type === 'LibFile'
-            )
-              return null
+export const TypeErrorsView = () => (
+  <TypeErrors>
+    <Scroll>
+      <ul>
+        {useList(typeErrors, error => {
+          // TODO: hide libdefs until errors are fixed
+          if (
+            process.env.NODE_ENV === 'production'
+            && error.message[0].loc?.type === 'LibFile'
+          )
+            return null
 
-            return (
-              <li key={key}>
-                {error.message.map((message, key) => (
-                  <ErrorMessage key={key} {...message} />
-                ))}
-                {error.extra &&
-                  error.extra.map((extra, key) => (
-                    <Extra key={key} {...extra} />
-                  ))}
-              </li>
-            )
-          })}
-        </ul>
-      </Scroll>
-    </TypeErrors>
-  )
-}
+          return (
+            <li>
+              {error.message.map((message, key) => (
+                <ErrorMessage key={key} {...message} />
+              ))}
+              {error.extra
+                && error.extra.map((extra, key) => <Extra key={key} {...extra} />)}
+            </li>
+          )
+        })}
+      </ul>
+    </Scroll>
+  </TypeErrors>
+)
