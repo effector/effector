@@ -61,6 +61,7 @@
       "api/effector-react/useGate",
       "api/effector-react/useStore",
       "api/effector-react/useStoreMap",
+      "api/effector-react/useList",
       "api/effector-react/gate"
     ],
     "effector-vue": [
