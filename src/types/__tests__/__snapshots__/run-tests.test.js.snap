@@ -660,7 +660,7 @@ exports[`Flow: json messages 1`] = `
   237 |     })
 
    [LIB] core.js
-> 158 |     toString(radix?: number): string;
+> 162 |     toString(radix?: number): string;
       |                               ^^^^^^ [1]
 
   src/types/types.test.js
