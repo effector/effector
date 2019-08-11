@@ -48,3 +48,53 @@ const Users = () => {
 ReactDOM.render(<Users />, document.getElementById('root'))
 ```
 [Playground](https://share.effector.dev/JZ35Jjyr)
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore, createEvent} from 'effector'
+import {useList} from 'effector-react'
+
+const toggleTodo = createEvent()
+
+const todoList = createStore([
+  {text: 'write useList example', done: true},
+  {text: 'update readme', done: false},
+])
+  .on(toggleTodo, (list, id) =>
+    list.map((todo, i) => {
+      if (i === id) return {
+        ...todo,
+        done: !todo.done,
+      }
+      return todo
+    })
+  )
+const Todo = ({children, done}) => {
+  const textFragment = (
+    <span>{children}</span>
+  )
+  return done
+    ? <del>{textFragment}</del>
+    : textFragment
+}
+const TodoList = () => useList(todoList, ({text, done}, i) => (
+  <li onClick={() => toggleTodo(i)}>
+    <Todo done={done}>
+      {text}
+    </Todo>
+  </li>
+))
+const App = () => (
+  <div>
+    <h1>todo list</h1>
+    <ul>
+      <TodoList />
+    </ul>
+  </div>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
+
+```
+[Playground](https://share.effector.dev/GQjYp0Bn)
