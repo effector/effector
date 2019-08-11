@@ -47,3 +47,4 @@ const Users = () => {
 
 ReactDOM.render(<Users />, document.getElementById('root'))
 ```
+[Playground](https://share.effector.dev/JZ35Jjyr)
