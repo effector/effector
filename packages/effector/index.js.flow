@@ -227,6 +227,12 @@ export type Step = /*::interface extends Unit<any>*/ {
   +next: Array<Step>,
   +seq: Array<Cmd>,
   +scope: {[field: string]: any, ...},
+  +meta: Object,
+  +family: {|
+    +type: 'regular' | 'crosslink',
+    +links: Step[],
+    +owners: Step[],
+  |},
 }
 declare export var step: {|
   compute(data: {|

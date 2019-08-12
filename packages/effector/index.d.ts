@@ -225,6 +225,12 @@ export type Step = {
   next: Array<Step>
   seq: Array<Cmd>
   scope: {[field: string]: any}
+  meta: {}
+  family: {
+    type: 'regular' | 'crosslink'
+    links: Step[]
+    owners: Step[]
+  }
 }
 export const step: {
   compute(data: {
