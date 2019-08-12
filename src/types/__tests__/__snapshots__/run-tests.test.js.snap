@@ -49,12 +49,12 @@ exports[`Flow: json messages 1`] = `
    62 |         {
 
   packages/effector/index.js.flow
-  321 | ): $ObjMap<
-  322 |   {...Obj, __: (payload: S) => boolean},
-> 323 |   (h: (payload: S) => boolean) => Event<S>,
+  327 | ): $ObjMap<
+  328 |   {...Obj, __: (payload: S) => boolean},
+> 329 |   (h: (payload: S) => boolean) => Event<S>,
       |                                   ^^^^^^^^ [1]
-  324 | >
-  325 | declare export function restoreObject<
+  330 | >
+  331 | declare export function restoreObject<
 
   src/types/types.test.js
    58 |           })
@@ -114,12 +114,12 @@ exports[`Flow: json messages 1`] = `
    78 |       })
 
   packages/effector/index.js.flow
-  321 | ): $ObjMap<
-  322 |   {...Obj, __: (payload: S) => boolean},
-> 323 |   (h: (payload: S) => boolean) => Event<S>,
+  327 | ): $ObjMap<
+  328 |   {...Obj, __: (payload: S) => boolean},
+> 329 |   (h: (payload: S) => boolean) => Event<S>,
       |                                   ^^^^^^^^ [1]
-  324 | >
-  325 | declare export function restoreObject<
+  330 | >
+  331 | declare export function restoreObject<
 
   src/types/types.test.js
    74 |             oneElement: list => list.length === 1,
@@ -151,12 +151,12 @@ exports[`Flow: json messages 1`] = `
    86 |         wrongArg_2: (list: number[]) => true,
 
   packages/effector/index.js.flow
-  313 |   S,
-  314 |   Obj: {
-> 315 |     +[name: string]: (payload: S) => boolean,
+  319 |   S,
+  320 |   Obj: {
+> 321 |     +[name: string]: (payload: S) => boolean,
       |                                      ^^^^^^^ [2]
-  316 |     ...,
-  317 |   },
+  322 |     ...,
+  323 |   },
 
   
 
@@ -925,12 +925,12 @@ exports[`Flow: json messages 1`] = `
   485 |   })
 
   packages/effector/index.js.flow
-  355 |   <S>(field: Store<S> | S) => Store<S>,
-  356 | >
-> 357 | declare export function createDomain(domainName?: string): Domain
+  361 |   <S>(field: Store<S> | S) => Store<S>,
+  362 | >
+> 363 | declare export function createDomain(domainName?: string): Domain
       |                                                   ^^^^^^ [2]
-  358 | 
-  359 | declare export function sample<A>(config: {|
+  364 | 
+  365 | declare export function sample<A>(config: {|
 
   
 
@@ -953,12 +953,12 @@ exports[`Flow: json messages 1`] = `
   486 | 
 
   packages/effector/index.js.flow
-  355 |   <S>(field: Store<S> | S) => Store<S>,
-  356 | >
-> 357 | declare export function createDomain(domainName?: string): Domain
+  361 |   <S>(field: Store<S> | S) => Store<S>,
+  362 | >
+> 363 | declare export function createDomain(domainName?: string): Domain
       |                                                   ^^^^^^ [2]
-  358 | 
-  359 | declare export function sample<A>(config: {|
+  364 | 
+  365 | declare export function sample<A>(config: {|
 
   
 
