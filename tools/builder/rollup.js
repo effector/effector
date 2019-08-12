@@ -404,7 +404,11 @@ async function createCompat(name) {
         [
           'babel-plugin-module-resolver',
           {
-            alias: getAliases(),
+            alias: getAliases({
+              isBuild: true,
+              isTest: false,
+              isCompat: true,
+            }),
           },
         ],
       ],
@@ -448,6 +452,7 @@ async function createCompat(name) {
       'most',
       'symbol-observable',
       'effector',
+      'effector/compat',
     ],
     plugins: pluginList,
   })
