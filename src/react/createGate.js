@@ -1,7 +1,7 @@
 //@flow
 
 import * as React from 'react'
-import {useEffect} from 'react'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {createDomain, createApi, type Store, type Event} from 'effector'
 
 const {store: createStore} = createDomain('Gate')
@@ -24,7 +24,7 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props?: Props = ({}: any),
 ) {
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     GateComponent.open()
     return () => GateComponent.close()
   }, [GateComponent])
@@ -35,23 +35,23 @@ export function createGate<Props>(
   name: string = 'gate',
   defaultState: Props = ({}: any),
 ): Gate<Props> {
-  const status = createStore(false)
+  const status = createStore(Boolean(false))
   const state: Store<Props> = createStore(defaultState)
   const {set} = createApi(state, {
     set: (_, state) => state,
   })
 
   const {open, close, destructor} = createApi(status, {
-    open: () => GateComponent.predicate() && true,
-    close: () => false,
-    destructor: () => false,
+    open: () => GateComponent.predicate() && Boolean(true),
+    close: () => Boolean(false),
+    destructor: () => Boolean(false),
   })
 
   class GateComponent extends React.PureComponent<Props> {
-    static predicate = () => true
+    static predicate = () => Boolean(true)
 
     static displayName = `Gate:${name}`
-    static isOpen = false
+    static isOpen = Boolean(false)
     static current = state.getState()
     static open = open
     static close = close
@@ -59,7 +59,7 @@ export function createGate<Props>(
     static state = state
     static set = set
     static destructor = destructor
-    static isTerminated = false
+    static isTerminated = Boolean(false)
     static childGate<Next>(childName: string = 'Subgate'): Gate<Next> {
       const gate = createGate(`${name}/${childName}`)
       ;(gate: any).predicate = () => GateComponent.status.getState()
@@ -107,7 +107,7 @@ export function createGate<Props>(
   state.reset(close)
 
   const setTerminated = destructor.watch(() => {
-    GateComponent.isTerminated = true
+    GateComponent.isTerminated = Boolean(true)
   })
   const unstate = () => {
     GateComponent.status.off(GateComponent.open)
