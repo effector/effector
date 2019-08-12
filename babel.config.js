@@ -20,6 +20,7 @@ module.exports = api => {
 const meta = {
   isBuild: !!process.env.IS_BUILD,
   isTest: process.env.NODE_ENV === 'test',
+  isCompat: false,
 }
 
 const aliases = {
@@ -28,10 +29,11 @@ const aliases = {
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
-  effector({isTest, isBuild}) {
+  effector({isTest, isBuild, isCompat}) {
+    if (isCompat) return 'effector/compat'
     if (isBuild) return null
-    if (isTest) return './effector'
-    return '../npm/effector'
+    if (isTest) return resolveFromSources('./effector')
+    return resolveFromSources('../npm/effector')
   },
 }
 
@@ -106,11 +108,19 @@ function parseAliases(meta, obj) {
   const result = {}
   for (const key in obj) {
     const value = obj[key]
-    const name = typeof value === 'function' ? value(meta) : value
-    if (name === undefined || name === null) continue
-    result[key] = resolvePath(__dirname, 'src', name)
+    if (typeof value === 'function') {
+      const name = value(meta)
+      if (name === undefined || name === null) continue
+      result[key] = name
+    } else {
+      const name = value
+      if (name === undefined || name === null) continue
+      result[key] = resolveFromSources(name)
+    }
   }
   return result
 }
-
-module.exports.getAliases = () => parseAliases(meta, aliases)
+function resolveFromSources(path) {
+  return resolvePath(__dirname, 'src', path)
+}
+module.exports.getAliases = (metadata = meta) => parseAliases(metadata, aliases)
