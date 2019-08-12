@@ -1,5 +1,42 @@
 # Changelog
 
+## effector-react 20.2.2, effector-vue 20.1.2
+
+- `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/zerobias/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/zerobias/effector/issues/173))
+
+## effector 20.1.2
+
+- Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/zerobias/effector/pull/170)
+
+```typescript
+import {createEvent} from 'effector'
+
+const event = createEvent<string | number>()
+
+const isString = (value: any): value is string => typeof value === 'string'
+const isNumber = (value: any): value is number => typeof value === 'number'
+
+const str = event.filter({fn: isString}) // Event<string>
+const num = event.filter({fn: isNumber}) // Event<number>
+
+str.watch(value => value.slice()) // OK now
+num.watch(value => value.toFixed(2)) // OK now
+```
+
+- Allow typescript to refine type with `is` methods [PR](https://github.com/zerobias/effector/pull/169)
+
+```typescript
+import {is} from 'effector'
+
+//result has type Event<any> | void
+function getEvent(obj: unknown) {
+  if (is.event(obj)) return obj
+  if (is.store(obj)) return obj.updates
+}
+```
+
+- Add new fields to definition of graph nodes ([discussion](https://github.com/zerobias/effector/issues/91#issuecomment-511397503))
+
 ## effector 20.1.1
 
 - Add support for IE11 to `effector/compat`
