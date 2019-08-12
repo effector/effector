@@ -1,23 +1,45 @@
 //@flow
 
 import Vue from 'vue'
-import {is} from 'effector'
+import {is, createStoreObject, Store} from 'effector'
+
+declare function isStore(a: mixed): boolean %checks(a instanceof Store);
 
 export const effectorMixin = {
   created() {
-    const vm = this
+    const vm: {
+      $options: {
+        effector?: () => Store<mixed> | mixed
+      },
+      _subscription: any,
+      [key: string]: any
+    } = this
     const key = 'state'
-    let store = vm.$options.effector
-    if (typeof store === 'function') {
-      store = store.call(vm)
+    let shape = vm.$options.effector
+    if (typeof shape === 'function') {
+      shape = shape.call(vm)
     }
-    if (store) {
-      if (!is.store(store)) throw Error('property should Store')
-      //$off
-      Vue.util.defineReactive(vm, key, store.getState())
-      vm._subscription = store.subscribe(value => {
-        vm[key] = value
-      })
+    if (shape) {
+      if (is.store(shape) /*:: && isStore(shape) */) {
+        //$off
+        Vue.util.defineReactive(vm, key, shape.getState())
+        vm._subscription = shape.subscribe(value => {
+          vm[key] = value
+        })
+      } else if (typeof shape === 'object' && shape !== null /*:: && !isStore(shape) */) {
+        const store = createStoreObject(shape)
+        for (const key in shape) {
+          //$off
+          Vue.util.defineReactive(vm, key, store.defaultState[key])
+        }
+        vm._subscription = store.subscribe(value => {
+          for (const key in value) {
+            vm[key] = value[key]
+          }
+        })
+      } else {
+        throw Error('property should be Store')
+      }
     }
   },
   beforeDestroy() {
