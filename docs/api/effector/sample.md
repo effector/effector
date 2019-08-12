@@ -171,11 +171,13 @@ inc(); // => Doe has 1 coins
 ```
 [try it](https://share.effector.dev/h3zED3yW)
 
-# `sample({source, clock, fn, greedy?})`
+# `sample({source, clock, fn, greedy?, target?})`
 
 Object-like arguments passing, working exactly the same as examples above do.
 
 `greedy` modifier defines, whether sampler will wait of  resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
+
+`target` - can contain Unit, which accepts payload - returned by `fn`. If target passed, result will be the target itself. In case, target not passed, it's created "under the hood" and being returned as result of the function.
 
 #### Arguments
 
@@ -185,8 +187,32 @@ Object-like arguments passing, working exactly the same as examples above do.
 
 ([_`Event`_](Event.md)|[_`Store`_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
 
-#### Example
+#### Example 1
+```js
+import {sample, createStore, createEffect, createEvent} from 'effector'
 
+const $user = createStore({name: 'john', password: 'doe'})
+
+const signIn = createEffect({handler: console.log})
+const submitForm = createEvent()
+
+const submitted = sample({
+  source: $user,
+  clock: submitForm,
+  fn: (user, params) => ({user, params}),
+  target: signIn,
+})
+
+console.log(submitted === signIn) // units are equal
+
+submitForm('foo')
+```
+[try it](https://share.effector.dev/OPajzRNF)
+
+
+
+
+#### Example 2
 ```js
 import {createEvent, createStore, sample} from "effector"
 
@@ -230,3 +256,5 @@ clickButton('click B')
 
 ```
 [try it](https://share.effector.dev/yI70z0nd)
+
+
