@@ -25,9 +25,9 @@ const unitObjectMaxNames = 25
 
 export function unitObjectName(
   objOrArr:
-    | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any>
+    | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any | null>
     | {
-        [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any,
+        [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any | null,
         ...,
       },
   method: string = 'combine',
@@ -38,7 +38,7 @@ export function unitObjectName(
   for (const key in objOrArr) {
     const unit = objOrArr[key]
     name += comma
-    name += is.unit(unit) ? getDisplayName(unit) : unit.toString()
+    name += is.unit(unit) ? getDisplayName(unit) : unit?.toString()
     i += 1
     if (i === unitObjectMaxNames) break
     comma = ', '
