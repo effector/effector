@@ -7,14 +7,16 @@
  * @flow
  */
 
-import { parse as babelParse } from "@babel/parser";
-import type { Overrides } from "./_babel_options";
+//$todo
+import {parse as babelParse} from '@babel/parser'
+import type {Overrides} from './_babel_options'
 declare type BabelParser = {
-  parse: typeof babelParse
-};
-declare export var parser: BabelParser;
+  parse: typeof babelParse,
+  ...
+}
+declare export var parser: BabelParser
 declare export function parse(
   source: string,
-  options?: Overrides
-): $Exports<"@babel/types">;
-declare export {};
+  options?: Overrides,
+): $Exports<'@babel/types'>
+declare export {}

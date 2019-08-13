@@ -1,10 +1,11 @@
 declare type $npm$Vue$Config = {
  silent: boolean;
- optionMergeStrategies: { [key: string]: Function };
+ optionMergeStrategies: { [key: string]: Function, ...  };
  devtools: boolean;
  errorHandler: ?(err: Error, vm: Vue, info: string) => void;
  ignoredElements: Array<string>;
- keyCodes: { [key: string]: number | Array<number> };
+ keyCodes: { [key: string]: number | Array<number>, ...  };
+ ...
 }
 
 declare type $npm$Vue$Constructor = Class<any>;
@@ -32,6 +33,7 @@ declare type $npm$Vue$CreateElement = {
  (tag: $npm$Vue$Component, data?: $npm$Vue$VNodeData, children?: $npm$Vue$VNodeChildren): $npm$Vue$VNode;
  (tag: $npm$Vue$AsyncComponent, children: $npm$Vue$VNodeChildren): $npm$Vue$VNode;
  (tag: $npm$Vue$AsyncComponent, data?: $npm$Vue$VNodeData, children?: $npm$Vue$VNodeChildren): $npm$Vue$VNode;
+ ...
 }
 
 declare type $npm$Vue$RenderContext = {
@@ -40,6 +42,7 @@ declare type $npm$Vue$RenderContext = {
  slots(): any;
  data: $npm$Vue$VNodeData;
  parent: Vue;
+ ...
 }
 
 declare interface $npm$Vue$ComputedOptions {
@@ -56,21 +59,22 @@ declare interface $npm$Vue$WatchOptions {
 }
 
 declare type $npm$Vue$FunctionalComponentOptions = {
- props?: Array<string> | { [key: string]: $npm$Vue$PropOptions | $npm$Vue$Constructor | Array<$npm$Vue$Constructor> };
+ props?: Array<string> | { [key: string]: $npm$Vue$PropOptions | $npm$Vue$Constructor | Array<$npm$Vue$Constructor>, ...  };
  functional: boolean;
  render: (createElement: $npm$Vue$CreateElement, context: $npm$Vue$RenderContext) => $npm$Vue$VNode;
- name?: string
+ name?: string,
+ ...
 }
 
 declare type $npm$Vue$ComponentOptions = {
  // Options / Data
  data?: (() => Object) | Object;
  //data?: { $call?: () => Object };
- props?: Array<string> | { [key: string]: $npm$Vue$PropOptions | $npm$Vue$Constructor | Array<$npm$Vue$Constructor> };
+ props?: Array<string> | { [key: string]: $npm$Vue$PropOptions | $npm$Vue$Constructor | Array<$npm$Vue$Constructor>, ... };
  propsData?: Object;
- computed?: { [key: string]: (() => any) | $npm$Vue$ComputedOptions };
- methods?: { [key: string]: () => any };
- watch?: { [key: string]: ({ handler: $npm$Vue$WatchHandler } & $npm$Vue$WatchOptions) | $npm$Vue$WatchHandler | string };
+ computed?: { [key: string]: (() => any) | $npm$Vue$ComputedOptions, ... };
+ methods?: { [key: string]: () => any, ... };
+ watch?: { [key: string]: ({ handler: $npm$Vue$WatchHandler, ... } & $npm$Vue$WatchOptions) | $npm$Vue$WatchHandler | string, ... };
 
  // Options /DOM
  el?: Element | string;
@@ -91,10 +95,10 @@ declare type $npm$Vue$ComponentOptions = {
  deactivated?: Function;
 
  // Options / Assets
- directives?: { [key: string]: $npm$Vue$DirectiveOptions | $npm$Vue$DirectiveFunction };
- components?: { [key: string]: $npm$Vue$Component | $npm$Vue$AsyncComponent };
+ directives?: { [key: string]: $npm$Vue$DirectiveOptions | $npm$Vue$DirectiveFunction, ... };
+ components?: { [key: string]: $npm$Vue$Component | $npm$Vue$AsyncComponent, ... };
  //transitions?: { [key: string]: Object };
- filters?: { [key: string]: Function };
+ filters?: { [key: string]: Function, ... };
 
  // Options / Others
  parent?: Vue;
@@ -103,6 +107,7 @@ declare type $npm$Vue$ComponentOptions = {
  extends?: Array<$npm$Vue$ComponentOptions | typeof Vue>;
  delimiters?: [string, string];
  functional?: boolean;
+ ...
 }
 
 declare type $npm$Vue$ScopedSlot = (props: any) => $npm$Vue$VNodeChildrenArrayContents | string;
@@ -124,24 +129,25 @@ declare interface $npm$Vue$VNodeChildrenArrayContents {
 declare interface $npm$Vue$VNodeData {
  key?: string | number;
  slot?: string;
- scopedSlots?: { [key: string]: $npm$Vue$ScopedSlot };
+ scopedSlots?: { [key: string]: $npm$Vue$ScopedSlot, ... };
  ref?: string;
  tag?: string;
  staticClass?: string;
  class?: any;
- staticStyle?: { [key: string]: any };
+ staticStyle?: { [key: string]: any, ... };
  style?: Array<Object> | Object;
- props?: { [key: string]: any };
- attrs?: { [key: string]: any };
- domProps?: { [key: string]: any };
- hook?: { [key: string]: Function };
- on?: { [key: string]: Function | Array<Function> };
- nativeOn?: { [key: string]: Function | Array<Function> };
+ props?: { [key: string]: any, ...  };
+ attrs?: { [key: string]: any, ...  };
+ domProps?: { [key: string]: any, ...  };
+ hook?: { [key: string]: Function, ...  };
+ on?: { [key: string]: Function | Array<Function>, ...  };
+ nativeOn?: { [key: string]: Function | Array<Function>, ...  };
  transition?: Object;
  show?: boolean;
  inlineTemplate?: {
    render: Function;
    staticRenderFns: Array<Function>;
+   ...
  };
  directives?: Array<$npm$Vue$VNodeDirective>;
  keepAlive?: boolean;
@@ -171,7 +177,7 @@ declare interface $npm$Vue$VNodeDirective {
  oldValue: any;
  expression: any;
  arg: string;
- modifiers: { [key: string]: boolean };
+ modifiers: { [key: string]: boolean, ...  };
 }
 
 declare type $npm$Vue$DirectiveFunction = (
@@ -216,6 +222,7 @@ declare class Vue {
  static compile(template: string): {
    render(createElement: $npm$Vue$CreateElement): $npm$Vue$VNode;
    staticRenderFns: () => Array<$npm$Vue$VNode>;
+   ...
  };
  static version: string;
 
@@ -226,9 +233,9 @@ declare class Vue {
  $parent: Vue | void;
  $root: Vue;
  $children: Array<Vue>;
- $refs: { [key: string]: Vue | Element | Array<$Subtype<Vue>> | Array<$Subtype<Element>>};
- $slots: { [key: string]: Array<$npm$Vue$VNode> };
- $scopedSlots: { [key: string]: $npm$Vue$ScopedSlot };
+ $refs: { [key: string]: Vue | Element | Array<$Subtype<Vue>> | Array<$Subtype<Element>>, ... };
+ $slots: { [key: string]: Array<$npm$Vue$VNode>, ...  };
+ $scopedSlots: { [key: string]: $npm$Vue$ScopedSlot, ...  };
  $isServer: boolean;
 
  // Instance Methods / Data
@@ -257,7 +264,37 @@ declare class Vue {
 }
 
 declare module 'vue' {
- declare type Config = $npm$Vue$Config;
+  declare type Config = $npm$Vue$Config;
+
+  declare type Component = $npm$Vue$Component;
+  declare type AsyncComponent = $npm$Vue$AsyncComponent;
+
+  declare type ComponentOptions = $npm$Vue$ComponentOptions;
+  declare type FunctionalComponentOptions = $npm$Vue$FunctionalComponentOptions;
+  declare type PropOptions = $npm$Vue$PropOptions;
+
+  declare type ComputedOptions = $npm$Vue$ComputedOptions;
+
+  declare type WatchHandler = $npm$Vue$WatchHandler;
+  declare type WatchOptions = $npm$Vue$WatchOptions;
+
+  declare type DirectiveFunction = $npm$Vue$DirectiveFunction;
+  declare type DirectiveOptions = $npm$Vue$DirectiveOptions;
+
+  declare type VNodeChildren = $npm$Vue$VNodeChildren;
+  declare type VNodeChildrenArrayContents = $npm$Vue$VNodeChildrenArrayContents;
+  declare type VNode = $npm$Vue$VNode;
+  declare type VNodeComponentOptions = $npm$Vue$VNodeComponentOptions;
+  declare type VNodeData = $npm$Vue$VNodeData;
+  declare type VNodeDirective = $npm$Vue$VNodeDirective;
+  declare type CreateElement = $npm$Vue$CreateElement;
+  declare type RenderContext = $npm$Vue$RenderContext;
+
+  declare module.exports: typeof Vue;
+}
+
+declare module 'vue/dist/vue' {
+  declare type Config = $npm$Vue$Config;
 
  declare type Component = $npm$Vue$Component;
  declare type AsyncComponent = $npm$Vue$AsyncComponent;

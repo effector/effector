@@ -9,7 +9,7 @@
  * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
-declare module "parcel-bundler" {
+declare module 'parcel-bundler' {
   declare interface ParcelBundler$ParcelOptions {
     /**
      * The out directory to put the build files in
@@ -68,7 +68,7 @@ declare module "parcel-bundler" {
     /**
      * @default "browser"
      */
-    target?: "browser" | "node" | "electron";
+    target?: 'browser' | 'node' | 'electron';
 
     /**
      * Define a custom {key, cert} pair
@@ -89,7 +89,8 @@ declare module "parcel-bundler" {
            * Path to custom key
            * @default "./ssl/k.key"
            */
-          key?: string
+          key?: string,
+          ...
         };
 
     /**
@@ -129,7 +130,7 @@ declare module "parcel-bundler" {
     detailedReport?: boolean;
   }
 
-  declare type ParcelBundler$ParcelAsset = any;
+  declare type ParcelBundler$ParcelAsset = any
 
   declare interface ParcelBundler$ParcelBundle {
     /**
@@ -175,12 +176,11 @@ declare module "parcel-bundler" {
   declare class ParcelBundler {
     constructor(
       entryFiles?: string | string[],
-      options?: ParcelBundler$ParcelBundler$ParcelOptions
+      options?: ParcelBundler$ParcelBundler$ParcelOptions,
     ): this;
     addAssetType(extension: string, path: string): void;
     addPackager(type: string, packager: string): void;
     bundle(): Promise<ParcelBundler$ParcelBundler$ParcelBundle>;
   }
-  declare module.exports: typeof ParcelBundler;
+  declare module.exports: typeof ParcelBundler
 }
-

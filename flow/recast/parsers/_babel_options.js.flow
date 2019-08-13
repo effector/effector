@@ -7,13 +7,16 @@
  * @flow
  */
 
+//$todo
 import { ParserOptions, ParserPlugin } from "@babel/parser";
 export type Overrides = $Shape<{
   sourceType: $PropertyType<ParserOptions, "sourceType">,
-  strictMode: $PropertyType<ParserOptions, "strictMode">
+  strictMode: $PropertyType<ParserOptions, "strictMode">,
+  ...
 }>;
 declare export default function getBabelOptions(
   options?: Overrides
 ): ParserOptions & {
-  plugins: ParserPlugin[]
+  plugins: ParserPlugin[],
+  ...
 };

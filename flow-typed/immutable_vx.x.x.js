@@ -1,4 +1,3 @@
-
 declare module 'immutable' {
   /**
    * This file provides type definitions for use with the Flow type checker.
@@ -38,10 +37,10 @@ declare module 'immutable' {
 
     update<U>(updater: (value: this) => U): U;
 
-    toJS(): Array<any> | { [key: string]: mixed };
-    toJSON(): Array<V> | { [key: string]: V };
+    toJS(): Array<any> | {[key: string]: mixed, ...};
+    toJSON(): Array<V> | {[key: string]: V, ...};
     toArray(): Array<V>;
-    toObject(): { [key: string]: V };
+    toObject(): {[key: string]: V, ...};
     toMap(): Map<K, V>;
     toOrderedMap(): OrderedMap<K, V>;
     toSet(): Set<V>;
@@ -66,17 +65,17 @@ declare module 'immutable' {
 
     sortBy<C>(
       comparatorValueMapper: (value: V, key: K, iter: this) => C,
-      comparator?: (valueA: C, valueB: C) => number
+      comparator?: (valueA: C, valueB: C) => number,
     ): this;
 
     groupBy<G>(
       grouper: (value: V, key: K, iter: this) => G,
-      context?: mixed
+      context?: mixed,
     ): KeyedSeq<G, this>;
 
     forEach(
       sideEffect: (value: V, key: K, iter: this) => any,
-      context?: mixed
+      context?: mixed,
     ): number;
 
     slice(begin?: number, end?: number): this;
@@ -84,21 +83,33 @@ declare module 'immutable' {
     butLast(): this;
     skip(amount: number): this;
     skipLast(amount: number): this;
-    skipWhile(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): this;
-    skipUntil(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): this;
+    skipWhile(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): this;
+    skipUntil(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): this;
     take(amount: number): this;
     takeLast(amount: number): this;
-    takeWhile(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): this;
-    takeUntil(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): this;
+    takeWhile(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): this;
+    takeUntil(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): this;
 
     filter(
       predicate: (value: V, key: K, iter: this) => mixed,
-      context?: mixed
+      context?: mixed,
     ): this;
 
     filterNot(
       predicate: (value: V, key: K, iter: this) => mixed,
-      context?: mixed
+      context?: mixed,
     ): this;
 
     reduce<R>(
@@ -107,7 +118,7 @@ declare module 'immutable' {
       context?: mixed,
     ): R;
     reduce<R>(
-      reducer: (reduction: V | R, value: V, key: K, iter: this) => R
+      reducer: (reduction: V | R, value: V, key: K, iter: this) => R,
     ): R;
 
     reduceRight<R>(
@@ -116,32 +127,54 @@ declare module 'immutable' {
       context?: mixed,
     ): R;
     reduceRight<R>(
-      reducer: (reduction: V | R, value: V, key: K, iter: this) => R
+      reducer: (reduction: V | R, value: V, key: K, iter: this) => R,
     ): R;
 
-    every(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): boolean;
-    some(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): boolean;
+    every(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): boolean;
+    some(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): boolean;
     join(separator?: string): string;
     isEmpty(): boolean;
-    count(predicate?: (value: V, key: K, iter: this) => mixed, context?: mixed): number;
-    countBy<G>(grouper: (value: V, key: K, iter: this) => G, context?: mixed): Map<G, number>;
+    count(
+      predicate?: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): number;
+    countBy<G>(
+      grouper: (value: V, key: K, iter: this) => G,
+      context?: mixed,
+    ): Map<G, number>;
 
     find<NSV>(
       predicate: (value: V, key: K, iter: this) => mixed,
       context?: mixed,
-      notSetValue?: NSV
+      notSetValue?: NSV,
     ): V | NSV;
     findLast<NSV>(
       predicate: (value: V, key: K, iter: this) => mixed,
       context?: mixed,
-      notSetValue?: NSV
+      notSetValue?: NSV,
     ): V | NSV;
 
-    findEntry(predicate: (value: V, key: K, iter: this) => mixed): [K, V] | void;
-    findLastEntry(predicate: (value: V, key: K, iter: this) => mixed): [K, V] | void;
+    findEntry(
+      predicate: (value: V, key: K, iter: this) => mixed,
+    ): [K, V] | void;
+    findLastEntry(
+      predicate: (value: V, key: K, iter: this) => mixed,
+    ): [K, V] | void;
 
-    findKey(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): K | void;
-    findLastKey(predicate: (value: V, key: K, iter: this) => mixed, context?: mixed): K | void;
+    findKey(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): K | void;
+    findLastKey(
+      predicate: (value: V, key: K, iter: this) => mixed,
+      context?: mixed,
+    ): K | void;
 
     keyOf(searchValue: V): K | void;
     lastKeyOf(searchValue: V): K | void;
@@ -149,32 +182,40 @@ declare module 'immutable' {
     max(comparator?: (valueA: V, valueB: V) => number): V;
     maxBy<C>(
       comparatorValueMapper: (value: V, key: K, iter: this) => C,
-      comparator?: (valueA: C, valueB: C) => number
+      comparator?: (valueA: C, valueB: C) => number,
     ): V;
     min(comparator?: (valueA: V, valueB: V) => number): V;
     minBy<C>(
       comparatorValueMapper: (value: V, key: K, iter: this) => C,
-      comparator?: (valueA: C, valueB: C) => number
+      comparator?: (valueA: C, valueB: C) => number,
     ): V;
 
     isSubset(iter: Iterable<V>): boolean;
     isSuperset(iter: Iterable<V>): boolean;
   }
 
-  declare export function isImmutable(maybeImmutable: mixed): boolean %checks(maybeImmutable instanceof Collection);
-  declare export function isCollection(maybeCollection: mixed): boolean %checks(maybeCollection instanceof Collection);
-  declare export function isKeyed(maybeKeyed: mixed): boolean %checks(maybeKeyed instanceof KeyedCollection);
-  declare export function isIndexed(maybeIndexed: mixed): boolean %checks(maybeIndexed instanceof IndexedCollection);
-  declare export function isAssociative(maybeAssociative: mixed): boolean %checks(
-    maybeAssociative instanceof KeyedCollection ||
-    maybeAssociative instanceof IndexedCollection
-  );
-  declare export function isOrdered(maybeOrdered: mixed): boolean %checks(
-    maybeOrdered instanceof IndexedCollection ||
+  declare export function isImmutable(
+    maybeImmutable: mixed,
+  ): boolean %checks(maybeImmutable instanceof Collection)
+  declare export function isCollection(
+    maybeCollection: mixed,
+  ): boolean %checks(maybeCollection instanceof Collection)
+  declare export function isKeyed(
+    maybeKeyed: mixed,
+  ): boolean %checks(maybeKeyed instanceof KeyedCollection)
+  declare export function isIndexed(
+    maybeIndexed: mixed,
+  ): boolean %checks(maybeIndexed instanceof IndexedCollection)
+  declare export function isAssociative(
+    maybeAssociative: mixed,
+  ): boolean %checks(maybeAssociative instanceof KeyedCollection ||
+    maybeAssociative instanceof IndexedCollection)
+  declare export function isOrdered(
+    maybeOrdered: mixed,
+  ): boolean %checks(maybeOrdered instanceof IndexedCollection ||
     maybeOrdered instanceof OrderedMap ||
-    maybeOrdered instanceof OrderedSet
-  );
-  declare export function isValueObject(maybeValue: mixed): boolean;
+    maybeOrdered instanceof OrderedSet)
+  declare export function isValueObject(maybeValue: mixed): boolean
 
   declare export interface ValueObject {
     equals(other: mixed): boolean;
@@ -191,40 +232,44 @@ declare module 'immutable' {
     static isIndexed: typeof isIndexed;
     static isAssociative: typeof isAssociative;
     static isOrdered: typeof isOrdered;
-    static Keyed: typeof KeyedCollection
+    static Keyed: typeof KeyedCollection;
   }
 
   declare export class KeyedCollection<K, +V> extends Collection<K, V> {
     static <K, V>(iter?: Iterable<[K, V]>): KeyedCollection<K, V>;
-    static <K, V>(obj?: { [key: K]: V }): KeyedCollection<K, V>;
+    static <K, V>(obj?: {[key: K]: V, ...}): KeyedCollection<K, V>;
 
-    toJS(): { [key: string]: mixed };
-    toJSON(): { [key: string]: V };
+    toJS(): {[key: string]: mixed, ...};
+    toJSON(): {[key: string]: V, ...};
     @@iterator(): Iterator<[K, V]>;
     toSeq(): KeyedSeq<K, V>;
     flip(): KeyedCollection<V, K>;
 
-    concat<KC, VC>(...iters: Array<Iterable<[KC, VC]>>): KeyedCollection<K | KC, V | VC>;
-    concat<C>(...iters: Array<{[key: string]: C}>): KeyedCollection<K | string, V | C>;
+    concat<KC, VC>(
+      ...iters: Array<Iterable<[KC, VC]>>
+    ): KeyedCollection<K | KC, V | VC>;
+    concat<C>(
+      ...iters: Array<{[key: string]: C, ...}>
+    ): KeyedCollection<K | string, V | C>;
 
     map<M>(
       mapper: (value: V, key: K, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): KeyedCollection<K, M>;
 
     mapKeys<M>(
       mapper: (key: K, value: V, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): KeyedCollection<M, V>;
 
     mapEntries<KM, VM>(
       mapper: (entry: [K, V], index: number, iter: this) => [KM, VM],
-      context?: mixed
+      context?: mixed,
     ): KeyedCollection<KM, VM>;
 
     flatMap<KM, VM>(
       mapper: (value: V, key: K, iter: this) => Iterable<[KM, VM]>,
-      context?: mixed
+      context?: mixed,
     ): KeyedCollection<KM, VM>;
 
     flatten(depth?: number): KeyedCollection<any, any>;
@@ -241,16 +286,9 @@ declare module 'immutable' {
     fromEntrySeq<K, V>(): KeyedSeq<K, V>;
     interpose(separator: T): this;
     interleave(...collections: Iterable<T>[]): this;
-    splice(
-      index: number,
-      removeNum: number,
-      ...values: T[]
-    ): this;
+    splice(index: number, removeNum: number, ...values: T[]): this;
 
-    zip<A>(
-      a: Iterable<A>,
-      ..._: []
-    ): IndexedCollection<[T, A]>;
+    zip<A>(a: Iterable<A>, ..._: []): IndexedCollection<[T, A]>;
     zip<A, B>(
       a: Iterable<A>,
       b: Iterable<B>,
@@ -318,23 +356,23 @@ declare module 'immutable' {
     lastIndexOf(searchValue: T): number;
     findIndex(
       predicate: (value: T, index: number, iter: this) => mixed,
-      context?: mixed
+      context?: mixed,
     ): number;
     findLastIndex(
       predicate: (value: T, index: number, iter: this) => mixed,
-      context?: mixed
+      context?: mixed,
     ): number;
 
     concat<C>(...iters: Array<Iterable<C> | C>): IndexedCollection<T | C>;
 
     map<M>(
       mapper: (value: T, index: number, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): IndexedCollection<M>;
 
     flatMap<M>(
       mapper: (value: T, index: number, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): IndexedCollection<M>;
 
     flatten(depth?: number): IndexedCollection<any>;
@@ -357,19 +395,21 @@ declare module 'immutable' {
     // and key types *must* match.
     map<M>(
       mapper: (value: T, value: T, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): SetCollection<M>;
 
     flatMap<M>(
       mapper: (value: T, value: T, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): SetCollection<M>;
 
     flatten(depth?: number): SetCollection<any>;
     flatten(shallow?: boolean): SetCollection<any>;
   }
 
-  declare export function isSeq(maybeSeq: mixed): boolean %checks(maybeSeq instanceof Seq);
+  declare export function isSeq(
+    maybeSeq: mixed,
+  ): boolean %checks(maybeSeq instanceof Seq)
   declare export class Seq<K, +V> extends _Collection<K, V> {
     static Keyed: typeof KeyedSeq;
     static Indexed: typeof IndexedSeq;
@@ -378,7 +418,7 @@ declare module 'immutable' {
     static <K, V>(iter: KeyedSeq<K, V>): KeyedSeq<K, V>;
     static <T>(iter: SetSeq<T>): SetSeq<K, V>;
     static <T>(iter?: Iterable<T>): IndexedSeq<T>;
-    static <K, V>(iter: { [key: K]: V }): KeyedSeq<K, V>;
+    static <K, V>(iter: {[key: K]: V, ...}): KeyedSeq<K, V>;
 
     // static of<T>(...values: T[]): IndexedSeq<T>;
 
@@ -389,41 +429,47 @@ declare module 'immutable' {
     toSeq(): this;
   }
 
-  declare export class KeyedSeq<K, +V> extends Seq<K, V> mixins KeyedCollection<K, V> {
+  declare export class KeyedSeq<K, +V> extends Seq<K, V>
+    mixins KeyedCollection<K, V> {
     static <K, V>(iter?: Iterable<[K, V]>): KeyedSeq<K, V>;
-    static <K, V>(iter?: { [key: K]: V }): KeyedSeq<K, V>;
+    static <K, V>(iter?: {[key: K]: V, ...}): KeyedSeq<K, V>;
 
     // Override specialized return types
     flip(): KeyedSeq<V, K>;
 
-    concat<KC, VC>(...iters: Array<Iterable<[KC, VC]>>): KeyedSeq<K | KC, V | VC>;
-    concat<C>(...iters: Array<{[key: string]: C}>): KeyedSeq<K | string, V | C>;
+    concat<KC, VC>(
+      ...iters: Array<Iterable<[KC, VC]>>
+    ): KeyedSeq<K | KC, V | VC>;
+    concat<C>(
+      ...iters: Array<{[key: string]: C, ...}>
+    ): KeyedSeq<K | string, V | C>;
 
     map<M>(
       mapper: (value: V, key: K, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): KeyedSeq<K, M>;
 
     mapKeys<M>(
       mapper: (key: K, value: V, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): KeyedSeq<M, V>;
 
     mapEntries<KM, VM>(
       mapper: (entry: [K, V], index: number, iter: this) => [KM, VM],
-      context?: mixed
+      context?: mixed,
     ): KeyedSeq<KM, VM>;
 
     flatMap<KM, VM>(
       mapper: (value: V, key: K, iter: this) => Iterable<[KM, VM]>,
-      context?: mixed
+      context?: mixed,
     ): KeyedSeq<KM, VM>;
 
     flatten(depth?: number): KeyedSeq<any, any>;
     flatten(shallow?: boolean): KeyedSeq<any, any>;
   }
 
-  declare export class IndexedSeq<+T> extends Seq<number, T> mixins IndexedCollection<T> {
+  declare export class IndexedSeq<+T> extends Seq<number, T>
+    mixins IndexedCollection<T> {
     static <T>(iter?: Iterable<T>): IndexedSeq<T>;
 
     // static of<T>(...values: T[]): IndexedSeq<T>;
@@ -434,26 +480,19 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, index: number, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): IndexedSeq<M>;
 
     flatMap<M>(
       mapper: (value: T, index: number, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): IndexedSeq<M>;
 
     flatten(depth?: number): IndexedSeq<any>;
     flatten(shallow?: boolean): IndexedSeq<any>;
 
-    zip<A>(
-      a: Iterable<A>,
-      ..._: []
-    ): IndexedSeq<[T, A]>;
-    zip<A, B>(
-      a: Iterable<A>,
-      b: Iterable<B>,
-      ..._: []
-    ): IndexedSeq<[T, A, B]>;
+    zip<A>(a: Iterable<A>, ..._: []): IndexedSeq<[T, A]>;
+    zip<A, B>(a: Iterable<A>, b: Iterable<B>, ..._: []): IndexedSeq<[T, A, B]>;
     zip<A, B, C>(
       a: Iterable<A>,
       b: Iterable<B>,
@@ -524,19 +563,21 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, value: T, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): SetSeq<M>;
 
     flatMap<M>(
       mapper: (value: T, value: T, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): SetSeq<M>;
 
     flatten(depth?: number): SetSeq<any>;
     flatten(shallow?: boolean): SetSeq<any>;
   }
 
-  declare export function isList(maybeList: mixed): boolean %checks(maybeList instanceof List);
+  declare export function isList(
+    maybeList: mixed,
+  ): boolean %checks(maybeList instanceof List)
   declare export class List<+T> extends IndexedCollection<T> {
     static (collection?: Iterable<T>): List<T>;
 
@@ -558,7 +599,11 @@ declare module 'immutable' {
 
     update<U>(updater: (value: this) => U): U;
     update<U>(index: number, updater: (value: T) => U): List<T | U>;
-    update<U>(index: number, notSetValue: U, updater: (value: T) => U): List<T | U>;
+    update<U>(
+      index: number,
+      notSetValue: U,
+      updater: (value: T) => U,
+    ): List<T | U>;
 
     merge<U>(...collections: Iterable<U>[]): List<T | U>;
 
@@ -582,15 +627,15 @@ declare module 'immutable' {
     updateIn(
       keyPath: Iterable<mixed>,
       notSetValue: mixed,
-      updater: (value: any) => mixed
+      updater: (value: any) => mixed,
     ): this;
-    updateIn(
-      keyPath: Iterable<mixed>,
-      updater: (value: any) => mixed
-    ): this;
+    updateIn(keyPath: Iterable<mixed>, updater: (value: any) => mixed): this;
 
     mergeIn(keyPath: Iterable<mixed>, ...collections: Iterable<mixed>[]): this;
-    mergeDeepIn(keyPath: Iterable<mixed>, ...collections: Iterable<mixed>[]): this;
+    mergeDeepIn(
+      keyPath: Iterable<mixed>,
+      ...collections: Iterable<mixed>[]
+    ): this;
 
     withMutations(mutator: (mutable: this) => mixed): this;
     asMutable(): this;
@@ -602,26 +647,19 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, index: number, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): List<M>;
 
     flatMap<M>(
       mapper: (value: T, index: number, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): List<M>;
 
     flatten(depth?: number): List<any>;
     flatten(shallow?: boolean): List<any>;
 
-    zip<A>(
-      a: Iterable<A>,
-      ..._: []
-    ): List<[T, A]>;
-    zip<A, B>(
-      a: Iterable<A>,
-      b: Iterable<B>,
-      ..._: []
-    ): List<[T, A, B]>;
+    zip<A>(a: Iterable<A>, ..._: []): List<[T, A]>;
+    zip<A, B>(a: Iterable<A>, b: Iterable<B>, ..._: []): List<[T, A, B]>;
     zip<A, B, C>(
       a: Iterable<A>,
       b: Iterable<B>,
@@ -681,9 +719,11 @@ declare module 'immutable' {
     ): List<R>;
   }
 
-  declare export function isMap(maybeMap: mixed): boolean %checks(maybeMap instanceof Map);
+  declare export function isMap(
+    maybeMap: mixed,
+  ): boolean %checks(maybeMap instanceof Map)
   declare export class Map<K, +V> extends KeyedCollection<K, V> {
-    static <K, V>(obj?: {[key: K]: V}): Map<K, V>;
+    static <K, V>(obj?: {[key: K]: V, ...}): Map<K, V>;
     static <K, V>(collection: Iterable<[K, V]>): Map<K, V>;
 
     static isMap: typeof isMap;
@@ -700,24 +740,28 @@ declare module 'immutable' {
 
     update<U>(updater: (value: this) => U): U;
     update<V_>(key: K, updater: (value: V) => V_): Map<K, V | V_>;
-    update<V_>(key: K, notSetValue: V_, updater: (value: V) => V_): Map<K, V | V_>;
+    update<V_>(
+      key: K,
+      notSetValue: V_,
+      updater: (value: V) => V_,
+    ): Map<K, V | V_>;
 
     merge<K_, V_>(
-      ...collections: (Iterable<[K_, V_]> | { [key: K_]: V_ })[]
+      ...collections: (Iterable<[K_, V_]> | {[key: K_]: V_, ...})[]
     ): Map<K | K_, V | V_>;
 
     mergeWith<K_, W, X>(
       merger: (oldVal: V, newVal: W, key: K) => X,
-      ...collections: (Iterable<[K_, W]> | { [key: K_]: W })[]
+      ...collections: (Iterable<[K_, W]> | {[key: K_]: W, ...})[]
     ): Map<K | K_, V | W | X>;
 
     mergeDeep<K_, V_>(
-      ...collections: (Iterable<[K_, V_]> | { [key: K_]: V_ })[]
+      ...collections: (Iterable<[K_, V_]> | {[key: K_]: V_, ...})[]
     ): Map<K | K_, V | V_>;
 
     mergeDeepWith<K_, W, X>(
       merger: (oldVal: V, newVal: W, key: K) => X,
-      ...collections: (Iterable<[K_, W]> | { [key: K_]: W })[]
+      ...collections: (Iterable<[K_, W]> | {[key: K_]: W, ...})[]
     ): Map<K | K_, V | W | X>;
 
     setIn(keyPath: Iterable<mixed>, value: mixed): this;
@@ -727,20 +771,17 @@ declare module 'immutable' {
     updateIn(
       keyPath: Iterable<mixed>,
       notSetValue: mixed,
-      updater: (value: any) => mixed
+      updater: (value: any) => mixed,
     ): this;
-    updateIn(
-      keyPath: Iterable<mixed>,
-      updater: (value: any) => mixed
-    ): this;
+    updateIn(keyPath: Iterable<mixed>, updater: (value: any) => mixed): this;
 
     mergeIn(
       keyPath: Iterable<K>,
-      ...collections: (Iterable<K> | { [key: string]: mixed })[]
+      ...collections: (Iterable<K> | {[key: string]: mixed, ...})[]
     ): this;
     mergeDeepIn(
       keyPath: Iterable<K>,
-      ...collections: (Iterable<K> | { [key: string]: mixed })[]
+      ...collections: (Iterable<K> | {[key: string]: mixed, ...})[]
     ): this;
 
     withMutations(mutator: (mutable: this) => mixed): this;
@@ -752,35 +793,37 @@ declare module 'immutable' {
     flip(): Map<V, K>;
 
     concat<KC, VC>(...iters: Array<Iterable<[KC, VC]>>): Map<K | KC, V | VC>;
-    concat<C>(...iters: Array<{[key: string]: C}>): Map<K | string, V | C>;
+    concat<C>(...iters: Array<{[key: string]: C, ...}>): Map<K | string, V | C>;
 
     map<M>(
       mapper: (value: V, key: K, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): Map<K, M>;
 
     mapKeys<M>(
       mapper: (key: K, value: V, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): Map<M, V>;
 
     mapEntries<KM, VM>(
       mapper: (entry: [K, V], index: number, iter: this) => [KM, VM],
-      context?: mixed
+      context?: mixed,
     ): Map<KM, VM>;
 
     flatMap<KM, VM>(
       mapper: (value: V, key: K, iter: this) => Iterable<[KM, VM]>,
-      context?: mixed
+      context?: mixed,
     ): Map<KM, VM>;
 
     flatten(depth?: number): Map<any, any>;
     flatten(shallow?: boolean): Map<any, any>;
   }
 
-  declare export function isOrderedMap(maybeOrderedMap: mixed): boolean %checks(maybeOrderedMap instanceof OrderedMap);
+  declare export function isOrderedMap(
+    maybeOrderedMap: mixed,
+  ): boolean %checks(maybeOrderedMap instanceof OrderedMap)
   declare export class OrderedMap<K, +V> extends Map<K, V> {
-    static <K, V>(obj?: {[key: K]: V}): OrderedMap<K, V>;
+    static <K, V>(obj?: {[key: K]: V, ...}): OrderedMap<K, V>;
     static <K, V>(collection: Iterable<[K, V]>): OrderedMap<K, V>;
 
     static isOrderedMap: typeof isOrderedMap;
@@ -794,24 +837,28 @@ declare module 'immutable' {
 
     update<U>(updater: (value: this) => U): U;
     update<V_>(key: K, updater: (value: V) => V_): OrderedMap<K, V | V_>;
-    update<V_>(key: K, notSetValue: V_, updater: (value: V) => V_): OrderedMap<K, V | V_>;
+    update<V_>(
+      key: K,
+      notSetValue: V_,
+      updater: (value: V) => V_,
+    ): OrderedMap<K, V | V_>;
 
     merge<K_, V_>(
-      ...collections: (Iterable<[K_, V_]> | { [key: K_]: V_ })[]
+      ...collections: (Iterable<[K_, V_]> | {[key: K_]: V_, ...})[]
     ): OrderedMap<K | K_, V | V_>;
 
     mergeWith<K_, W, X>(
       merger: (oldVal: V, newVal: W, key: K) => X,
-      ...collections: (Iterable<[K_, W]> | { [key: K_]: W })[]
+      ...collections: (Iterable<[K_, W]> | {[key: K_]: W, ...})[]
     ): OrderedMap<K | K_, V | W | X>;
 
     mergeDeep<K_, V_>(
-      ...collections: (Iterable<[K_, V_]> | { [key: K_]: V_ })[]
+      ...collections: (Iterable<[K_, V_]> | {[key: K_]: V_, ...})[]
     ): OrderedMap<K | K_, V | V_>;
 
     mergeDeepWith<K_, W, X>(
       merger: (oldVal: V, newVal: W, key: K) => X,
-      ...collections: (Iterable<[K_, W]> | { [key: K_]: W })[]
+      ...collections: (Iterable<[K_, W]> | {[key: K_]: W, ...})[]
     ): OrderedMap<K | K_, V | W | X>;
 
     setIn(keyPath: Iterable<mixed>, value: mixed): this;
@@ -821,20 +868,17 @@ declare module 'immutable' {
     updateIn(
       keyPath: Iterable<mixed>,
       notSetValue: mixed,
-      updater: (value: any) => mixed
+      updater: (value: any) => mixed,
     ): this;
-    updateIn(
-      keyPath: Iterable<mixed>,
-      updater: (value: any) => mixed
-    ): this;
+    updateIn(keyPath: Iterable<mixed>, updater: (value: any) => mixed): this;
 
     mergeIn(
       keyPath: Iterable<K>,
-      ...collections: (Iterable<K> | { [key: string]: mixed })[]
+      ...collections: (Iterable<K> | {[key: string]: mixed, ...})[]
     ): this;
     mergeDeepIn(
       keyPath: Iterable<K>,
-      ...collections: (Iterable<K> | { [key: string]: mixed })[]
+      ...collections: (Iterable<K> | {[key: string]: mixed, ...})[]
     ): this;
 
     withMutations(mutator: (mutable: this) => mixed): this;
@@ -845,40 +889,46 @@ declare module 'immutable' {
 
     flip(): OrderedMap<V, K>;
 
-    concat<KC, VC>(...iters: Array<Iterable<[KC, VC]>>): OrderedMap<K | KC, V | VC>;
-    concat<C>(...iters: Array<{[key: string]: C}>): OrderedMap<K | string, V | C>;
+    concat<KC, VC>(
+      ...iters: Array<Iterable<[KC, VC]>>
+    ): OrderedMap<K | KC, V | VC>;
+    concat<C>(
+      ...iters: Array<{[key: string]: C, ...}>
+    ): OrderedMap<K | string, V | C>;
 
     map<M>(
       mapper: (value: V, key: K, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): OrderedMap<K, M>;
 
     mapKeys<M>(
       mapper: (key: K, value: V, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): OrderedMap<M, V>;
 
     mapEntries<KM, VM>(
       mapper: (entry: [K, V], index: number, iter: this) => [KM, VM],
-      context?: mixed
+      context?: mixed,
     ): OrderedMap<KM, VM>;
 
     flatMap<KM, VM>(
       mapper: (value: V, key: K, iter: this) => Iterable<[KM, VM]>,
-      context?: mixed
+      context?: mixed,
     ): OrderedMap<KM, VM>;
 
     flatten(depth?: number): OrderedMap<any, any>;
     flatten(shallow?: boolean): OrderedMap<any, any>;
   }
 
-  declare export function isSet(maybeSet: mixed): boolean %checks(maybeSet instanceof Set);
+  declare export function isSet(
+    maybeSet: mixed,
+  ): boolean %checks(maybeSet instanceof Set)
   declare export class Set<+T> extends SetCollection<T> {
     static <T>(collection?: Iterable<T>): Set<T>;
 
     static of<T>(...values: T[]): Set<T>;
     static fromKeys<T>(iter: Iterable<[T, mixed]>): Set<T>;
-    static fromKeys<K, V>(object: { [key: K]: V }): Set<K>;
+    static fromKeys<K, V>(object: {[key: K]: V, ...}): Set<K>;
 
     static intersect(sets: Iterable<Iterable<T>>): Set<T>;
     static union(sets: Iterable<Iterable<T>>): Set<T>;
@@ -906,12 +956,12 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, value: T, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): Set<M>;
 
     flatMap<M>(
       mapper: (value: T, value: T, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): Set<M>;
 
     flatten(depth?: number): Set<any>;
@@ -919,14 +969,16 @@ declare module 'immutable' {
   }
 
   // Overrides except for `isOrderedSet` are for specialized return types
-  declare export function isOrderedSet(maybeOrderedSet: mixed): boolean %checks(maybeOrderedSet instanceof OrderedSet);
+  declare export function isOrderedSet(
+    maybeOrderedSet: mixed,
+  ): boolean %checks(maybeOrderedSet instanceof OrderedSet)
   declare export class OrderedSet<+T> extends Set<T> {
     static <T>(collection: Iterable<T>): OrderedSet<T>;
     static (_: void): OrderedSet<any>;
 
     static of<T>(...values: T[]): OrderedSet<T>;
     static fromKeys<T>(iter: Iterable<[T, mixed]>): OrderedSet<T>;
-    static fromKeys<K, V>(object: { [key: K]: V }): OrderedSet<K>;
+    static fromKeys<K, V>(object: {[key: K]: V, ...}): OrderedSet<K>;
 
     static isOrderedSet: typeof isOrderedSet;
 
@@ -941,26 +993,19 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, value: T, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): OrderedSet<M>;
 
     flatMap<M>(
       mapper: (value: T, value: T, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): OrderedSet<M>;
 
     flatten(depth?: number): OrderedSet<any>;
     flatten(shallow?: boolean): OrderedSet<any>;
 
-    zip<A>(
-      a: Iterable<A>,
-      ..._: []
-    ): OrderedSet<[T, A]>;
-    zip<A, B>(
-      a: Iterable<A>,
-      b: Iterable<B>,
-      ..._: []
-    ): OrderedSet<[T, A, B]>;
+    zip<A>(a: Iterable<A>, ..._: []): OrderedSet<[T, A]>;
+    zip<A, B>(a: Iterable<A>, b: Iterable<B>, ..._: []): OrderedSet<[T, A, B]>;
     zip<A, B, C>(
       a: Iterable<A>,
       b: Iterable<B>,
@@ -1020,7 +1065,9 @@ declare module 'immutable' {
     ): OrderedSet<R>;
   }
 
-  declare export function isStack(maybeStack: mixed): boolean %checks(maybeStack instanceof Stack);
+  declare export function isStack(
+    maybeStack: mixed,
+  ): boolean %checks(maybeStack instanceof Stack)
   declare export class Stack<+T> extends IndexedCollection<T> {
     static <T>(collection?: Iterable<T>): Stack<T>;
 
@@ -1050,26 +1097,19 @@ declare module 'immutable' {
 
     map<M>(
       mapper: (value: T, index: number, iter: this) => M,
-      context?: mixed
+      context?: mixed,
     ): Stack<M>;
 
     flatMap<M>(
       mapper: (value: T, index: number, iter: this) => Iterable<M>,
-      context?: mixed
+      context?: mixed,
     ): Stack<M>;
 
     flatten(depth?: number): Stack<any>;
     flatten(shallow?: boolean): Stack<any>;
 
-    zip<A>(
-      a: Iterable<A>,
-      ..._: []
-    ): Stack<[T, A]>;
-    zip<A, B>(
-      a: Iterable<A>,
-      b: Iterable<B>,
-      ..._: []
-    ): Stack<[T, A, B]>;
+    zip<A>(a: Iterable<A>, ..._: []): Stack<[T, A]>;
+    zip<A, B>(a: Iterable<A>, b: Iterable<B>, ..._: []): Stack<[T, A, B]>;
     zip<A, B, C>(
       a: Iterable<A>,
       b: Iterable<B>,
@@ -1129,10 +1169,16 @@ declare module 'immutable' {
     ): Stack<R>;
   }
 
-  declare export function Range(start?: number, end?: number, step?: number): IndexedSeq<number>;
-  declare export function Repeat<T>(value: T, times?: number): IndexedSeq<T>;
+  declare export function Range(
+    start?: number,
+    end?: number,
+    step?: number,
+  ): IndexedSeq<number>
+  declare export function Repeat<T>(value: T, times?: number): IndexedSeq<T>
 
-  declare export function isRecord(maybeRecord: any): boolean %checks(maybeRecord instanceof RecordInstance);
+  declare export function isRecord(
+    maybeRecord: any,
+  ): boolean %checks(maybeRecord instanceof RecordInstance)
   declare export class Record {
     static <Values>(spec: Values, name?: string): RecordClass<Values>;
     constructor<Values>(spec: Values, name?: string): RecordClass<Values>;
@@ -1144,7 +1190,7 @@ declare module 'immutable' {
 
   declare export interface RecordClass<T> {
     (values: $Shape<T> | Iterable<[string, any]>): RecordInstance<T> & T;
-    new (values: $Shape<T> | Iterable<[string, any]>): RecordInstance<T> & T;
+    new(values: $Shape<T> | Iterable<[string, any]>): RecordInstance<T> & T;
   }
 
   declare export class RecordInstance<T: Object> {
@@ -1157,9 +1203,14 @@ declare module 'immutable' {
     hashCode(): number;
 
     set<K: $Keys<T>>(key: K, value: $ElementType<T, K>): this & T;
-    update<K: $Keys<T>>(key: K, updater: (value: $ElementType<T, K>) => $ElementType<T, K>): this & T;
+    update<K: $Keys<T>>(
+      key: K,
+      updater: (value: $ElementType<T, K>) => $ElementType<T, K>,
+    ): this & T;
     merge(...collections: Array<$Shape<T> | Iterable<[string, any]>>): this & T;
-    mergeDeep(...collections: Array<$Shape<T> | Iterable<[string, any]>>): this & T;
+    mergeDeep(
+      ...collections: Array<$Shape<T> | Iterable<[string, any]>>
+    ): this & T;
 
     mergeWith(
       merger: (oldVal: any, newVal: any, key: $Keys<T>) => any,
@@ -1183,7 +1234,7 @@ declare module 'immutable' {
 
     toSeq(): KeyedSeq<$Keys<T>, any>;
 
-    toJS(): { [key: $Keys<T>]: mixed };
+    toJS(): {[key: $Keys<T>]: mixed, ...};
     toJSON(): T;
     toObject(): T;
 
@@ -1199,11 +1250,10 @@ declare module 'immutable' {
     reviver?: (
       key: string | number,
       sequence: KeyedCollection<string, mixed> | IndexedCollection<mixed>,
-      path?: Array<string | number>
-    ) => mixed
-  ): mixed;
+      path?: Array<string | number>,
+    ) => mixed,
+  ): mixed
 
-  declare export function is(first: mixed, second: mixed): boolean;
-  declare export function hash(value: mixed): number;
-
+  declare export function is(first: mixed, second: mixed): boolean
+  declare export function hash(value: mixed): number
 }
