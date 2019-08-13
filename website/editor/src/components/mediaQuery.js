@@ -6,7 +6,7 @@ import {useStore} from 'effector-react'
 
 export function mediaQuery(
   query: string,
-): React.ComponentType<{children: React.Node}> {
+): React.ComponentType<{children: React.Node, ...}> {
   const queryChange = createEvent('query change')
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)

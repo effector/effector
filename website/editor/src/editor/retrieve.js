@@ -11,6 +11,7 @@ export function retrieveCode(): string {
         code: string,
         description: string,
         tags: string[],
+        ...
       } = (window: any).__code__
       return preloaded.code
     }

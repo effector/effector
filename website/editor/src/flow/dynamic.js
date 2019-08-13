@@ -1,5 +1,6 @@
 //@flow
 
+//$todo
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
 import {performLint} from '../editor'
 import {sourceCode} from '../editor/state'
@@ -35,6 +36,7 @@ typeErrors
   .reset(checkContent.fail)
 
 typeHint
+  //$todo
   .on(typeAtPos.done, (_, {result}) => result.code.c)
   .reset(typeAtPos.fail)
 

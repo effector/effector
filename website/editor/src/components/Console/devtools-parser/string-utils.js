@@ -206,6 +206,7 @@ function format(
 
     usedSubstitutionIndexes[token.substitutionIndex] = true
 
+    //$todo
     if (!(token.specifier in formatters)) {
       // Encountered an unsupported format character, treat as a string.
       warn(
@@ -219,6 +220,7 @@ function format(
 
     result = append(
       result,
+      //$todo
       formatters[token.specifier](
         substitutions[token.substitutionIndex],
         token,

@@ -3,16 +3,18 @@
 import Vue from 'vue'
 import {is, createStoreObject, Store} from 'effector'
 
-declare function isStore(a: mixed): boolean %checks(a instanceof Store);
+declare function isStore(a: mixed): boolean %checks(a instanceof Store)
 
 export const effectorMixin = {
   created() {
     const vm: {
       $options: {
-        effector?: () => Store<mixed> | mixed
+        effector?: () => Store<mixed> | mixed,
+        ...
       },
       _subscription: any,
-      [key: string]: any
+      [key: string]: any,
+      ...
     } = this
     const key = 'state'
     let shape = vm.$options.effector
@@ -26,7 +28,10 @@ export const effectorMixin = {
         vm._subscription = shape.subscribe(value => {
           vm[key] = value
         })
-      } else if (typeof shape === 'object' && shape !== null /*:: && !isStore(shape) */) {
+      } else if (
+        typeof shape === 'object' &&
+        shape !== null /*:: && !isStore(shape) */
+      ) {
         const store = createStoreObject(shape)
         for (const key in shape) {
           //$off

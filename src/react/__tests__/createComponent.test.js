@@ -50,6 +50,7 @@ describe('createComponent', () => {
     |}>()
     const list: Store<{
       [key: number]: ListItem,
+      ...
     }> = createStore({}).on(update, (state, {id, data}) => ({
       ...state,
       [id]: {...state[id], ...data},

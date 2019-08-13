@@ -3,6 +3,7 @@
 import React from 'react'
 import {createEvent, createEffect} from 'effector'
 import {checkContent} from '../flow/domain'
+//$todo: codemirror
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'
 import '../mode/jsx'
@@ -14,6 +15,7 @@ import 'codemirror/addon/wrap/hardwrap'
 import 'codemirror/addon/fold/foldgutter'
 import 'codemirror/addon/fold/brace-fold'
 import 'codemirror/addon/fold/comment-fold'
+//$todo: codemirror
 import 'codemirror/keymap/sublime'
 // import 'codemirror/addon/fold/xml-fold';
 import 'codemirror/addon/fold/foldgutter.css'
@@ -30,9 +32,12 @@ function getAnnotations(text: string, callback, options, editor) {
         const message = messages.map(msg => msg.descr).join('\n')
         return {
           from: CodeMirror.Pos(
+            //$todo
             firstLoc.start.line - 1,
+            //$todo
             firstLoc.start.column - 1,
           ),
+          //$todo
           to: CodeMirror.Pos(firstLoc.end.line - 1, firstLoc.end.column),
           severity: err.level,
           message,
@@ -54,8 +59,8 @@ export default class CodeMirrorPanel extends React.Component<any> {
     //keyMap: 'sublime',
     lineWrapping: false,
     passive: false,
-    setCursor: createEvent(),
-    markLine: createEffect(),
+    setCursor: createEvent<any>(),
+    markLine: createEffect<any, any, any>(),
     performLint: createEvent<void>(),
     onCursorActivity() {},
   }
@@ -130,7 +135,7 @@ export default class CodeMirrorPanel extends React.Component<any> {
     this._codeMirror && this._codeMirror.toTextArea()
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: any) {
     if (this.props.value !== this._cached && this.props.value != null) {
       this.updateValue(this.props.value)
     }
@@ -139,7 +144,7 @@ export default class CodeMirrorPanel extends React.Component<any> {
     }
   }
 
-  updateValue(value) {
+  updateValue(value: any) {
     this._cached = value
     if (this.props.passive) {
       this._codeMirror.setValue(value)
@@ -152,7 +157,7 @@ export default class CodeMirrorPanel extends React.Component<any> {
     }
   }
 
-  handleChange = (doc, change) => {
+  handleChange = (doc: any, change: any) => {
     //console.log('change.origin', change.origin);
     if (change.origin !== 'setValue') {
       this._cached = doc.getValue()

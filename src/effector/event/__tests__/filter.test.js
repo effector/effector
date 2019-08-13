@@ -65,7 +65,9 @@ describe('event.filter with function (T) => S | void', () => {
 
     expect(getSpyCalls()).toEqual([[0], [4], [8]])
 
+    //$todo
     expect(show(num.graphite)).toMatchSnapshot('num event graph')
+    //$todo
     expect(show(evenNum.graphite)).toMatchSnapshot('evenNum event graph')
   })
 })

@@ -16,6 +16,7 @@ interface PreventableEvent {
 type SpreadProps<A, B> = $Exact<{
   ...$Call<(empty => {||}) & (<V>(V) => $Exact<V>), A>,
   ...$Call<(empty => {||}) & (<V>(V) => $Exact<V>), B>,
+  ...
 }>
 
 declare export function createFormHandler<T: EventTarget>(
@@ -31,7 +32,7 @@ declare export function createFormHandler<T: EventTarget>(
 ): Event<interface {currentTarget: T}>
 // eslint-disable-next-line no-redeclare
 export function createFormHandler<
-  T: EventTarget & {type: string, value: any, checked: boolean},
+  T: EventTarget & {type: string, value: any, checked: boolean, ...},
 >(e: Event<any>): Event<interface {currentTarget: T}> {
   return e.prepend(e => {
     let parsed
@@ -45,8 +46,8 @@ export function createFormHandler<
 }
 
 export type FormApi<
-  Values: {[key: string]: any},
-  Errors: {[key: string]: any},
+  Values: {[key: string]: any, ...},
+  Errors: {[key: string]: any, ...},
 > = {|
   values: Store<Values>,
   errors: Store<Errors>,
@@ -70,9 +71,9 @@ export type FormApi<
 const formDomain = createDomain('forms')
 
 export function createFormApi<
-  Form: {[key: string]: any},
-  External: {[key: string]: any},
-  Errors: {[key: string]: any},
+  Form: {[key: string]: any, ...},
+  External: {[key: string]: any, ...},
+  Errors: {[key: string]: any, ...},
   Data,
   Error,
 >({
@@ -88,7 +89,7 @@ export function createFormApi<
   fields: Form,
   validate?: (
     values: SpreadProps<Form, External>,
-    data: {result?: Data, error?: Error},
+    data: {result?: Data, error?: Error, ...},
   ) => Errors,
   external?: Store<External>,
   submitEvent?: Event<SpreadProps<Form, External>>,
@@ -96,6 +97,7 @@ export function createFormApi<
   initialValues?: Store<?Form> | Store<Form>,
   domain?: Domain,
   resetOnSubmit?: boolean,
+  ...
 }): FormApi<Form, Errors> {
   let initialValuesUnwatch = () => {}
 
@@ -182,5 +184,6 @@ export function createFormApi<
     form.handle[method] = createFormHandler(api[method])
   }
 
+  //$todo
   return form
 }

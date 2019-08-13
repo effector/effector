@@ -37,7 +37,7 @@ const compatTarget = {
   ],
 }
 
-const minifyConfig = ({beautify}: {beautify: boolean}) => ({
+const minifyConfig = ({beautify}: {|beautify: boolean|}) => ({
   parse: {
     bare_returns: false,
     ecma: 8,
@@ -470,7 +470,7 @@ async function createEsCjs(
   {
     file: {es, cjs},
     renderModuleGraph = false,
-  }: {file: {es: string, cjs: string}, renderModuleGraph?: boolean},
+  }: {|file: {|es: string, cjs: string|}, renderModuleGraph?: boolean|},
 ) {
   const plugins = getPlugins(name)
   const pluginList = [

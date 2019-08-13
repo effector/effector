@@ -70,6 +70,7 @@ export const TypeHintView = () => {
 const ErrorMessage = ({type, loc, context, descr}: FlowMessage) => {
   if (loc && loc.source != null && context != null) {
     const basename = loc.source.replace(/.*\//, '')
+    //$todo
     const filename = basename !== 'repl.js' ? `${loc.source}:` : ''
     const prefix = `${filename}${loc.start.line}: `
 

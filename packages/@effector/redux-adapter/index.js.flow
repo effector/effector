@@ -2,11 +2,12 @@
 
 export type Action<T> = {
   type: T,
+  ...
 }
 
 export type DispatchAPI<A> = (action: A) => A
 
-export type Dispatch<A: {type: *}> = DispatchAPI<A>
+export type Dispatch<A: {type: *, ...}> = DispatchAPI<A>
 
 export type Store<S, A, D = Dispatch<A>> = {
   // rewrite MiddlewareAPI members in order to get nicer error messages (intersections produce long messages)
@@ -14,12 +15,13 @@ export type Store<S, A, D = Dispatch<A>> = {
   getState(): S,
   subscribe(listener: () => void): () => void,
   replaceReducer(nextReducer: Reducer<S, A>): void,
+  ...
 }
 
 export type Reducer<S, A> = (state: S | void, action: A) => S
 
 export type CombinedReducer<S, A> = (
-  state: ($Shape<S> & {}) | void,
+  state: ($Shape<S> & {...}) | void,
   action: A,
 ) => S
 
@@ -30,6 +32,7 @@ export type StoreCreator<S, A, D = Dispatch<A>> = {
     preloadedState: S,
     enhancer?: StoreEnhancer<S, A, D>,
   ): Store<S, A, D>,
+  ...
 }
 
 export type StoreEnhancer<S, A, D = Dispatch<A>> = (
@@ -46,7 +49,7 @@ declare export function createReduxStore<S, A, D>(
   enhancer?: StoreEnhancer<S, A, D>,
 ): Store<S, A, D>
 
-declare export function combineReducers<O: {}, A>(
+declare export function combineReducers<O: {...}, A>(
   reducers: O,
 ): CombinedReducer<$ObjMap<O, <S>(r: Reducer<S, any>) => S>, A>
 

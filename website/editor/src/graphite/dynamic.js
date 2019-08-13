@@ -13,6 +13,7 @@ const graphiteInvokeSetter = (
     +compositeName?: CompositeName,
     +shortName?: string,
     +graphite: Graph,
+    ...
   },
 ) => {
   let result

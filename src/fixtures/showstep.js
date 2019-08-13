@@ -45,9 +45,11 @@ const showCmd = (_: Cmd) => {
   //.replace(/^ /gim, '') // move whole json print one space left
   return `${_.type}: ${view}`
 }
+//$todo
 const storeOldStateComparator = createStore(
   null,
 ).graphite.seq[2].data.fn.toString()
+//$todo
 const isNotUndefined = createStore(null).graphite.seq[0].data.fn.toString()
 const noop = blocks.noop.data.fn.toString()
 const print = {

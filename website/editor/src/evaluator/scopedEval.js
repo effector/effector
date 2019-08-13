@@ -47,7 +47,7 @@ function scopedEval(code: string, sourceMap: ?string) {
 }
 
 function runCode(code: string) {
-  return function(env) {
+  return function(env: any) {
     for (const key in env) {
       getIframe().contentWindow[key] = env[key]
     }
@@ -56,7 +56,7 @@ function runCode(code: string) {
 }
 
 function runLibrary(code: string) {
-  return function(env) {
+  return function(env: any) {
     for (const key in env) {
       getIframe().contentWindow[key] = env[key]
     }

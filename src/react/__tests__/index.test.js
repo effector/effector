@@ -19,6 +19,7 @@ test('connect api', () => {
   class Display extends React.Component<{
     text: string,
     count: number,
+    ...
   }> {
     render() {
       return (
@@ -46,6 +47,7 @@ test('click counter', () => {
 
   class Display extends React.Component<{
     count: number,
+    ...
   }> {
     render() {
       return (

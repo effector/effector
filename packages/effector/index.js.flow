@@ -14,7 +14,7 @@ export type mixed_non_void =
   | string
   | number
   | boolean
-  | {}
+  | {...}
   | $ReadOnlyArray<mixed>
 
 declare export var Kind: {|
@@ -325,7 +325,7 @@ declare export function split<
   source: Unit<S>,
   cases: Obj,
 ): $ObjMap<
-  {...Obj, __: (payload: S) => boolean},
+  {...Obj, __: (payload: S) => boolean, ...},
   (h: (payload: S) => boolean) => Event<S>,
 >
 declare export function restoreObject<

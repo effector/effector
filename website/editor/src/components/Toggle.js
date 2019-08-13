@@ -13,6 +13,7 @@ export function Toggle({
   name: string,
   checked: boolean,
   onChange: (e: SyntheticEvent<HTMLInputElement>) => mixed,
+  ...
 }) {
   return (
     <Input type="checkbox" checked={checked} onChange={onChange} name={name} />

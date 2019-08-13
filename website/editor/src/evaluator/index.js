@@ -51,7 +51,7 @@ export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector'
 
 fetchEffector.fail.watch(() => selectVersion('master'))
 
-export const fetchBabelPlugin = createEffect<string, {[key: string]: any}, mixed>('fetch babel plugin', {
+export const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>('fetch babel plugin', {
   async handler(ver): $todo {
     const url =
       ver === 'master'

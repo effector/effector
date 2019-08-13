@@ -6,10 +6,10 @@ import execa from 'execa'
 import {load} from 'js-yaml'
 import packageJson from '../../package.json'
 
-export const cliArgs: {
+export const cliArgs: {|
   current: Array<string>,
   +original: $ReadOnlyArray<string>,
-} = {
+|} = {
   current: process.argv.slice(2),
   original: process.argv.slice(2),
 }
@@ -21,7 +21,7 @@ export function dir(...paths: $ReadOnlyArray<string>): string {
 
 export async function outputPackageJSON(
   path: string,
-  config: {[key: string]: any},
+  config: {[key: string]: any, ...},
 ) {
   let fullPath
   if (path.endsWith('package.json')) fullPath = dir(path)
@@ -112,8 +112,9 @@ export async function loadYaml(url: string) {
 export function validateConfig(
   obj: any,
 ): {
-  categories: Array<{name: string, description: string}>,
-  packages: Array<{name: string, version: string, category: string}>,
+  categories: Array<{|name: string, description: string|}>,
+  packages: Array<{|name: string, version: string, category: string|}>,
+  ...
 } {
   return obj
 }

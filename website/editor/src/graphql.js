@@ -29,7 +29,7 @@ const request = data => {
       return result.data
     })
 }
-type ShareCode = Effect<string, {slug: string}>
+type ShareCode = Effect<string, {|slug: string|}>
 export const shareCode: ShareCode = createEffect('share code', {
   async handler(code) {
     const {createCodePage} = await request({

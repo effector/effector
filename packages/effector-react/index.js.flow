@@ -56,7 +56,7 @@ declare export function useList<T>(
 ): Node
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
-declare export function createGate<Props: {}>(name?: string): Gate<Props>
+declare export function createGate<Props: {...}>(name?: string): Gate<Props>
 declare export function createGate<Props>(
   name: string,
   defaultState: Props,

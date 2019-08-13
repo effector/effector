@@ -48,10 +48,10 @@ const run = ({tasks, name, stats}) =>
       console.error(err)
     })
 const noop: Function = () => {}
-type Config = {
+type Config = {|
   ignore: Array<string>,
   only: Array<string>,
-}
+|}
 export let setConfig: <Field: $Keys<Config>>(
   field: Field,
   data: $ElementType<Config, Field>,
@@ -60,12 +60,12 @@ export let setConfig: <Field: $Keys<Config>>(
 export function taskList({
   tasks,
   hooks,
-}: {
-  tasks: {[pkg: string]: TaskList},
-  hooks: {
+}: {|
+  tasks: {[pkg: string]: TaskList, ...},
+  hooks: {|
     beforeAll: TaskList,
-  },
-}) {
+  |},
+|}) {
   const pending = []
   const stats = {
     done: {},

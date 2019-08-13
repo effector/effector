@@ -7,7 +7,7 @@ import {createComponent} from 'effector-react'
 
 export const LogsView = createComponent<
   {|
-    style: any,
+    style?: any,
   |},
   Array<{|
     data: Array<any>,
@@ -15,5 +15,6 @@ export const LogsView = createComponent<
     method: *,
   |}>,
 >(logs, ({style}, logs) => (
+  //$todo
   <Console className="console" style={style} logs={logs} />
 ))

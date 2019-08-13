@@ -15,4 +15,5 @@ export type StoreProvider<State> = ComponentType<{|
 export type StoreView<State, Props = {||}> = ComponentType<Props> & {
   mounted: Event<{|props: Props, state: State|}>,
   unmounted: Event<{|props: Props, state: State|}>,
+  ...
 }

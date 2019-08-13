@@ -33,14 +33,14 @@ export const step: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
   |}): Filter,
-  run(data: {
+  run(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
-  }): Run,
-  tap(data: {
+  |}): Run,
+  tap(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
-  }): Tap,
+  |}): Tap,
   update(data: {|
     store: StateRef,
     meta?: NodeMeta,

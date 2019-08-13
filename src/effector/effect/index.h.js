@@ -98,4 +98,5 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   domainName?: CompositeName,
   graphite: Graph,
   compositeName: CompositeName,
+  ...
 }

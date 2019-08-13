@@ -15,8 +15,8 @@ const invertCondition = (fn, data) => !fn(data)
 
 export function split<S>(
   unit: Event<S>,
-  cases: {[string]: (s: S) => boolean},
-): {[string]: Event<S>} {
+  cases: {[key: string]: (s: S) => boolean, ...},
+): {[key: string]: Event<S>, ...} {
   const result = {}
   let current: Event<S> = is.store(unit) ? (unit: any).updates : unit
   for (const key in cases) {

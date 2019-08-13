@@ -35,10 +35,12 @@ describe('sample', () => {
     const foo = createStore('')
     const bar = createStore('')
 
+    //$todo
     sample({sampler: foo, source: foo, target: bar})
   })
   it('handles object combination', () => {
     const foo = createStore('')
+    //$todo
     sample({foo})
   })
   it('works with single source', () => {
@@ -58,6 +60,7 @@ describe('sample', () => {
       const A = createEvent()
       const B = A.map(x => ({x}))
 
+      //$todo
       sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
 
       A(1)
@@ -70,6 +73,7 @@ describe('sample', () => {
       const A = createEvent()
       const B = A.map(x => ({x}))
 
+      //$todo
       sample(B, A, B => B, greedy).watch(e => spy(e))
 
       A(1)
@@ -187,10 +191,12 @@ describe('sample', () => {
       const clock = createStore(0)
       const result = sample(source, clock)
       result.watch(value => spy(value))
+      //$todo
       clock.setState(1)
       expect(spy).not.toHaveBeenCalled()
       source('run')
       expect(spy).not.toHaveBeenCalled()
+      //$todo
       clock.setState(2)
       expect(getSpyCalls()).toEqual([['run']])
     })
@@ -206,12 +212,14 @@ describe('sample', () => {
         }),
       )
       result.watch(value => spy(value))
+      //$todo
       clock.setState(1)
       expect(spy).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
       source('run')
       expect(spy).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
+      //$todo
       clock.setState(2)
       expect(spy.mock.calls).toEqual([[{source: 'run', clock: 2}]])
       expect(handler.mock.calls).toEqual([[{source: 'run', clock: 2}]])
@@ -274,7 +282,9 @@ describe('sample', () => {
     const hello = createEvent()
     const run = createEvent()
 
+    //$todo
     sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
+    //$todo
     sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
     run('R')
@@ -314,6 +324,7 @@ describe('sample', () => {
       const stop = createEvent()
 
       const s1 = createStore(0)
+      //$todo
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -326,6 +337,7 @@ describe('sample', () => {
       const stop = createStore(0)
 
       const s1 = createStore(0)
+      //$todo
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -351,12 +363,14 @@ describe('sample', () => {
     const stop = createEvent()
 
     const s1 = createStore(0)
+    //$todo
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => spy(value))
     expect(spy).toHaveBeenCalledTimes(0)
+    //$todo
     s1.setState(2)
 
     stop('x')
@@ -367,15 +381,19 @@ describe('sample', () => {
     const stop = createStore(false)
 
     const s1 = createStore(0)
+    //$todo
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => spy(value))
     expect(getSpyCalls()).toEqual([[{s1: 1, stop: false}]])
+    //$todo
     s1.setState(2)
+    //$todo
     s1.setState(0)
 
+    //$todo
     stop.setState(true)
     expect(getSpyCalls()).toEqual([
       [{s1: 1, stop: false}],

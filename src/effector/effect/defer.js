@@ -1,8 +1,8 @@
 //@flow
 export class Defer {
   /*::
-  rs: (value: any) => {}
-  rj: (error: any) => {}
+  rs: (value: any) => {...}
+  rj: (error: any) => {...}
   req: Promise<any>
   */
   constructor() {

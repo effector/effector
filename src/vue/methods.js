@@ -7,6 +7,7 @@ export function watchAsStore(
   expOrFn: string | Function,
   options: {
     immediate: boolean,
+    ...
   } = {
     immediate: true,
   },
