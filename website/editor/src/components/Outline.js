@@ -37,7 +37,7 @@ const Item = styled.li`
   cursor: ${props => (Boolean(props.loc) ? 'pointer' : 'inherit')};
 `
 
-const mapper = item => {
+const mapper = (item, i) => {
   const loc = item?.defaultConfig?.loc
   const name =
     item?.compositeName?.fullName
@@ -49,7 +49,7 @@ const mapper = item => {
     if (loc) codeSetCursor(loc)
   }
   return (
-    <Item loc={loc} onClick={onClick} key={key}>
+    <Item loc={loc} onClick={onClick} key={`${key} ${i}`}>
       {name}
     </Item>
   )
