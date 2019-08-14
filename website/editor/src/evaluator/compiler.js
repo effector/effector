@@ -42,8 +42,15 @@ registerPlugin('@effector/repl-remove-imports', babel => ({
     ImportDeclaration(path) {
       path.remove()
     },
-    ExportDeclaration(path) {
+    ExportDefaultDeclaration(path) {
       path.remove()
+    },
+    ExportNamedDeclaration(path) {
+      if (t.isVariableDeclaration(path.node.declaration)) {
+        path.replaceWith(path.node.declaration)
+      } else {
+        path.remove()
+      }
     },
   },
 }))
