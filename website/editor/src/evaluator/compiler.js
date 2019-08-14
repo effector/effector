@@ -42,6 +42,9 @@ registerPlugin('@effector/repl-remove-imports', babel => ({
     ImportDeclaration(path) {
       path.remove()
     },
+    ExportDeclaration(path) {
+      path.remove()
+    },
   },
 }))
 
