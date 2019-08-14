@@ -91,13 +91,15 @@ async function printMessage(msg, isRef, printHead, lineNumbersPad) {
     const offset = lineNumbersPad - padInit
     frame = addIndent(frame, offset)
       .split(`\n`)
-      .map((line, i, list) => {
+      .map(line => {
         const trimmed = line.trimStart()
-        if (trimmed.startsWith('>'))
-          return `> ${addIndent(trimmed.slice(2), offset)}`
-        if (i >= 4 && i <= list.length - 3)
-          return addIndent(trimmed, lineNumbersPad + 3)
-        return line
+        if (trimmed.startsWith('>')) {
+          const cutted = trimmed.slice(2)
+          const lineNumberBlockEnd = Math.max(0, cutted.indexOf('|'))
+          return `>  ${cutted.slice(lineNumberBlockEnd)}`
+        }
+        const lineNumberBlockEnd = Math.max(0, line.indexOf('|'))
+        return addIndent(line.slice(lineNumberBlockEnd), 3)
       })
       .join(`\n`)
   }
@@ -156,16 +158,18 @@ function printFrameRef(frame, descr, padTop, lineNumbersPad) {
     .reverse()
     .map((line, index, arr) => {
       const i = arr.length - 1 - index
+      const lineNumberBlockEnd = Math.max(0, line.indexOf('|'))
       if (i === padTop + 1) {
         padNumbers = line.indexOf('|') - 1 - 2
-        offset = lineNumbersPad - padNumbers
+        offset = lineNumbersPad // - padNumbers
         const index = line.lastIndexOf('^')
-        return `${line.slice(0, index + 1)}^ ${descr}`
+        return `${line.slice(lineNumberBlockEnd, index + 1)}^ ${descr}`
       }
       if (i === padTop) {
-        return `> ${addIndent(line.slice(2), offset)}`
+        return `> ${line.slice(2 + padNumbers)}`
       }
-      return line
+
+      return line.slice(lineNumberBlockEnd)
     })
     .reverse()
     .join(`\n`)

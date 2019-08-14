@@ -2,1174 +2,1174 @@
 
 exports[`Flow: json messages 1`] = `
 "  src/types/types.test.js
-   57 |             oneElement: list => list.length === 1,
-   58 |           })
->  59 |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
-      |                                                                       ^^^^^^^^ 
-      |  Cannot assign \`emptyList\` to \`split_result__nofpos__user_defined_1\` 
-      |  because array type [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-   60 |           const split_result__nofpos__user_defined_2: null = oneElement
-   61 |         }
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
+   |                                                                       ^^^^^^^^ 
+   |  Cannot assign \`emptyList\` to \`split_result__nofpos__user_defined_1\` 
+   |  because array type [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |           const split_result__nofpos__user_defined_2: null = oneElement
+   |         }
 
-   52 |       test('split result no false-positive', () => {
-   53 |         {
->  54 |           const source: Event<string[]> = createEvent()
-      |                               ^^^^^^^^ [1]
-   55 |           const {emptyList, oneElement} = split(source, {
-   56 |             emptyList: list => list.length === 0,
+   |       test('split result no false-positive', () => {
+   |         {
+>  |           const source: Event<string[]> = createEvent()
+   |                               ^^^^^^^^ [1]
+   |           const {emptyList, oneElement} = split(source, {
+   |             emptyList: list => list.length === 0,
 
-   57 |             oneElement: list => list.length === 1,
-   58 |           })
->  59 |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
-      |                                                             ^^^^^^ [2]
-   60 |           const split_result__nofpos__user_defined_2: null = oneElement
-   61 |         }
-
-  packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
-
-  
-
-  src/types/types.test.js
-   58 |           })
-   59 |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
->  60 |           const split_result__nofpos__user_defined_2: null = oneElement
-      |                                                              ^^^^^^^^^ 
-      |  Cannot assign \`oneElement\` to \`split_result__nofpos__user_defined_2\` 
-      |  because \`Event\` [1] is incompatible with null [2].
-      |  
-   61 |         }
-   62 |         {
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
+   |                                                             ^^^^^^ [2]
+   |           const split_result__nofpos__user_defined_2: null = oneElement
+   |         }
 
   packages/effector/index.js.flow
-  327 | ): $ObjMap<
-  328 |   {...Obj, __: (payload: S) => boolean},
-> 329 |   (h: (payload: S) => boolean) => Event<S>,
-      |                                   ^^^^^^^^ [1]
-  330 | >
-  331 | declare export function restoreObject<
-
-  src/types/types.test.js
-   58 |           })
-   59 |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
->  60 |           const split_result__nofpos__user_defined_2: null = oneElement
-      |                                                       ^^^^ [2]
-   61 |         }
-   62 |         {
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-   66 |             oneElement: list => list.length === 1,
-   67 |           })
->  68 |           const split_result__nofpos__defaults_1: Event<number> = __
-      |                                                                   ^ 
-      |  Cannot assign \`__\` to \`split_result__nofpos__defaults_1\` 
-      |  because array type [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-   69 |         }
-   70 |         {
-
-   61 |         }
-   62 |         {
->  63 |           const source: Event<string[]> = createEvent()
-      |                               ^^^^^^^^ [1]
-   64 |           const {__} = split(source, {
-   65 |             emptyList: list => list.length === 0,
-
-   66 |             oneElement: list => list.length === 1,
-   67 |           })
->  68 |           const split_result__nofpos__defaults_1: Event<number> = __
-      |                                                         ^^^^^^ [2]
-   69 |         }
-   70 |         {
+   |           })
+   |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
+>  |           const split_result__nofpos__user_defined_2: null = oneElement
+   |                                                              ^^^^^^^^^ 
+   |  Cannot assign \`oneElement\` to \`split_result__nofpos__user_defined_2\` 
+   |  because \`Event\` [1] is incompatible with null [2].
+   |  
+   |         }
+   |         {
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | ): $ObjMap<
+   |   {...Obj, __: (payload: S) => boolean, ...},
+>  |   (h: (payload: S) => boolean) => Event<S>,
+   |                                   ^^^^^^^^ [1]
+   | >
+   | declare export function restoreObject<
+
+  src/types/types.test.js
+   |           })
+   |           const split_result__nofpos__user_defined_1: Event<number> = emptyList
+>  |           const split_result__nofpos__user_defined_2: null = oneElement
+   |                                                       ^^^^ [2]
+   |         }
+   |         {
 
   
 
   src/types/types.test.js
-   74 |             oneElement: list => list.length === 1,
-   75 |           })
->  76 |           const split_result__nofpos__defaults_2: null = __
-      |                                                          ^ 
-      |  Cannot assign \`__\` to \`split_result__nofpos__defaults_2\` 
-      |  because \`Event\` [1] is incompatible with null [2].
-      |  
-   77 |         }
-   78 |       })
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__defaults_1: Event<number> = __
+   |                                                                   ^ 
+   |  Cannot assign \`__\` to \`split_result__nofpos__defaults_1\` 
+   |  because array type [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |         }
+   |         {
+
+   |         }
+   |         {
+>  |           const source: Event<string[]> = createEvent()
+   |                               ^^^^^^^^ [1]
+   |           const {__} = split(source, {
+   |             emptyList: list => list.length === 0,
+
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__defaults_1: Event<number> = __
+   |                                                         ^^^^^^ [2]
+   |         }
+   |         {
 
   packages/effector/index.js.flow
-  327 | ): $ObjMap<
-  328 |   {...Obj, __: (payload: S) => boolean},
-> 329 |   (h: (payload: S) => boolean) => Event<S>,
-      |                                   ^^^^^^^^ [1]
-  330 | >
-  331 | declare export function restoreObject<
-
-  src/types/types.test.js
-   74 |             oneElement: list => list.length === 1,
-   75 |           })
->  76 |           const split_result__nofpos__defaults_2: null = __
-      |                                                   ^^^^ [2]
-   77 |         }
-   78 |       })
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-   82 |       const source: Event<string[]> = createEvent()
-   83 |       split(source, {
->  84 |         wrongResult: list => null,
-      |                              ^^^ 
-      |  Cannot call \`split\` with object literal bound to \`cases\` 
-      |  because null [1] is incompatible with boolean [2] in the return value of
-      |  property \`wrongResult\`.
-      |  
-   85 |         wrongArg_1: (list: null) => true,
-   86 |         wrongArg_2: (list: number[]) => true,
-
-   82 |       const source: Event<string[]> = createEvent()
-   83 |       split(source, {
->  84 |         wrongResult: list => null,
-      |                              ^^^^ [1]
-   85 |         wrongArg_1: (list: null) => true,
-   86 |         wrongArg_2: (list: number[]) => true,
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__defaults_2: null = __
+   |                                                          ^ 
+   |  Cannot assign \`__\` to \`split_result__nofpos__defaults_2\` 
+   |  because \`Event\` [1] is incompatible with null [2].
+   |  
+   |         }
+   |       })
 
   packages/effector/index.js.flow
-  319 |   S,
-  320 |   Obj: {
-> 321 |     +[name: string]: (payload: S) => boolean,
-      |                                      ^^^^^^^ [2]
-  322 |     ...,
-  323 |   },
+   | ): $ObjMap<
+   |   {...Obj, __: (payload: S) => boolean, ...},
+>  |   (h: (payload: S) => boolean) => Event<S>,
+   |                                   ^^^^^^^^ [1]
+   | >
+   | declare export function restoreObject<
+
+  src/types/types.test.js
+   |             oneElement: list => list.length === 1,
+   |           })
+>  |           const split_result__nofpos__defaults_2: null = __
+   |                                                   ^^^^ [2]
+   |         }
+   |       })
 
   
 
   src/types/types.test.js
-   83 |       split(source, {
-   84 |         wrongResult: list => null,
->  85 |         wrongArg_1: (list: null) => true,
-      |                            ^^^ 
-      |  Cannot call \`split\` with object literal bound to \`cases\` 
-      |  because null [1] is incompatible with array type [2] in the first argument of
-      |  property \`wrongArg_1\`.
-      |  
-   86 |         wrongArg_2: (list: number[]) => true,
-   87 |       })
+   |       const source: Event<string[]> = createEvent()
+   |       split(source, {
+>  |         wrongResult: list => null,
+   |                              ^^^ 
+   |  Cannot call \`split\` with object literal bound to \`cases\` 
+   |  because null [1] is incompatible with boolean [2] in the return value of
+   |  property \`wrongResult\`.
+   |  
+   |         wrongArg_1: (list: null) => true,
+   |         wrongArg_2: (list: number[]) => true,
 
-   83 |       split(source, {
-   84 |         wrongResult: list => null,
->  85 |         wrongArg_1: (list: null) => true,
-      |                            ^^^^ [1]
-   86 |         wrongArg_2: (list: number[]) => true,
-   87 |       })
-
-   80 | 
-   81 |     test('split arguments no false-positive', () => {
->  82 |       const source: Event<string[]> = createEvent()
-      |                           ^^^^^^^^ [2]
-   83 |       split(source, {
-   84 |         wrongResult: list => null,
-
-  
-
-  src/types/types.test.js
-   84 |         wrongResult: list => null,
-   85 |         wrongArg_1: (list: null) => true,
->  86 |         wrongArg_2: (list: number[]) => true,
-      |                            ^^^^^ 
-      |  Cannot call \`split\` with object literal bound to \`cases\` 
-      |  because number [1] is incompatible with string [2] in array element of the
-      |  first argument of property \`wrongArg_2\`.
-      |  
-   87 |       })
-   88 |     })
-
-   84 |         wrongResult: list => null,
-   85 |         wrongArg_1: (list: null) => true,
->  86 |         wrongArg_2: (list: number[]) => true,
-      |                            ^^^^^^ [1]
-   87 |       })
-   88 |     })
-
-   80 | 
-   81 |     test('split arguments no false-positive', () => {
->  82 |       const source: Event<string[]> = createEvent()
-      |                           ^^^^^^ [2]
-   83 |       split(source, {
-   84 |         wrongResult: list => null,
-
-  
-
-  src/types/types.test.js
-   95 | 
-   96 |       const sample_ee_check1: Event<number> = c
->  97 |       const sample_ee_check2: Event<string> = c
-      |                                               ^ 
-      |  Cannot assign \`c\` to \`sample_ee_check2\` 
-      |  because number [1] is incompatible with string [2] in type argument
-      |  \`Payload\` [3].
-      |  
-   98 |     })
-   99 |     test('event by event with handler', () => {
-
-   90 |   describe('sample', () => {
-   91 |     test('event by event', () => {
->  92 |       const a = createEvent<number>()
-      |                             ^^^^^^ [1]
-   93 |       const b = createEvent<boolean>()
-   94 |       const c = sample(a, b)
-
-   95 | 
-   96 |       const sample_ee_check1: Event<number> = c
->  97 |       const sample_ee_check2: Event<string> = c
-      |                                     ^^^^^^ [2]
-   98 |     })
-   99 |     test('event by event with handler', () => {
+   |       const source: Event<string[]> = createEvent()
+   |       split(source, {
+>  |         wrongResult: list => null,
+   |                              ^^^^ [1]
+   |         wrongArg_1: (list: null) => true,
+   |         wrongArg_2: (list: number[]) => true,
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   |   S,
+   |   Obj: {
+>  |     +[name: string]: (payload: S) => boolean,
+   |                                      ^^^^^^^ [2]
+   |     ...,
+   |   },
 
   
 
   src/types/types.test.js
-  103 | 
-  104 |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
-> 105 |       const sample_eeh_check2: Event<string> = c
-      |                                                ^ 
-      |  Cannot assign \`c\` to \`sample_eeh_check2\` 
-      |  because object type [1] is incompatible with string [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  106 |     })
-  107 | 
+   |       split(source, {
+   |         wrongResult: list => null,
+>  |         wrongArg_1: (list: null) => true,
+   |                            ^^^ 
+   |  Cannot call \`split\` with object literal bound to \`cases\` 
+   |  because null [1] is incompatible with array type [2] in the first argument of
+   |  property \`wrongArg_1\`.
+   |  
+   |         wrongArg_2: (list: number[]) => true,
+   |       })
 
-  102 |       const c = sample(a, b, (a, b) => ({a, b}))
-  103 | 
-> 104 |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
-      |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
-  105 |       const sample_eeh_check2: Event<string> = c
-  106 |     })
+   |       split(source, {
+   |         wrongResult: list => null,
+>  |         wrongArg_1: (list: null) => true,
+   |                            ^^^^ [1]
+   |         wrongArg_2: (list: number[]) => true,
+   |       })
 
-  103 | 
-  104 |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
-> 105 |       const sample_eeh_check2: Event<string> = c
-      |                                      ^^^^^^ [2]
-  106 |     })
-  107 | 
+   | 
+   |     test('split arguments no false-positive', () => {
+>  |       const source: Event<string[]> = createEvent()
+   |                           ^^^^^^^^ [2]
+   |       split(source, {
+   |         wrongResult: list => null,
+
+  
+
+  src/types/types.test.js
+   |         wrongResult: list => null,
+   |         wrongArg_1: (list: null) => true,
+>  |         wrongArg_2: (list: number[]) => true,
+   |                            ^^^^^ 
+   |  Cannot call \`split\` with object literal bound to \`cases\` 
+   |  because number [1] is incompatible with string [2] in array element of the
+   |  first argument of property \`wrongArg_2\`.
+   |  
+   |       })
+   |     })
+
+   |         wrongResult: list => null,
+   |         wrongArg_1: (list: null) => true,
+>  |         wrongArg_2: (list: number[]) => true,
+   |                            ^^^^^^ [1]
+   |       })
+   |     })
+
+   | 
+   |     test('split arguments no false-positive', () => {
+>  |       const source: Event<string[]> = createEvent()
+   |                           ^^^^^^ [2]
+   |       split(source, {
+   |         wrongResult: list => null,
+
+  
+
+  src/types/types.test.js
+   | 
+   |       const sample_ee_check1: Event<number> = c
+>  |       const sample_ee_check2: Event<string> = c
+   |                                               ^ 
+   |  Cannot assign \`c\` to \`sample_ee_check2\` 
+   |  because number [1] is incompatible with string [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   |     test('event by event with handler', () => {
+
+   |   describe('sample', () => {
+   |     test('event by event', () => {
+>  |       const a = createEvent<number>()
+   |                             ^^^^^^ [1]
+   |       const b = createEvent<boolean>()
+   |       const c = sample(a, b)
+
+   | 
+   |       const sample_ee_check1: Event<number> = c
+>  |       const sample_ee_check2: Event<string> = c
+   |                                     ^^^^^^ [2]
+   |     })
+   |     test('event by event with handler', () => {
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  112 | 
-  113 |       const sample_se_check1: Event<number> = e
-> 114 |       const sample_se_check2: Event<string> = e
-      |                                               ^ 
-      |  Cannot assign \`e\` to \`sample_se_check2\` 
-      |  because number [1] is incompatible with string [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  115 |     })
-  116 |     test('store by event with handler', () => {
+   | 
+   |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
+>  |       const sample_eeh_check2: Event<string> = c
+   |                                                ^ 
+   |  Cannot assign \`c\` to \`sample_eeh_check2\` 
+   |  because object type [1] is incompatible with string [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   | 
 
-  111 |       const e = sample(d, b)
-  112 | 
-> 113 |       const sample_se_check1: Event<number> = e
-      |                                     ^^^^^^ [1]
-  114 |       const sample_se_check2: Event<string> = e
-  115 |     })
+   |       const c = sample(a, b, (a, b) => ({a, b}))
+   | 
+>  |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
+   |       const sample_eeh_check2: Event<string> = c
+   |     })
 
-  112 | 
-  113 |       const sample_se_check1: Event<number> = e
-> 114 |       const sample_se_check2: Event<string> = e
-      |                                     ^^^^^^ [2]
-  115 |     })
-  116 |     test('store by event with handler', () => {
+   | 
+   |       const sample_eeh_check1: Event<{a: string, b: boolean}> = c
+>  |       const sample_eeh_check2: Event<string> = c
+   |                                      ^^^^^^ [2]
+   |     })
+   | 
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  120 | 
-  121 |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
-> 122 |       const sample_seh_check2: Event<string> = e
-      |                                                ^ 
-      |  Cannot assign \`e\` to \`sample_seh_check2\` 
-      |  because object type [1] is incompatible with string [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  123 |     })
-  124 | 
+   | 
+   |       const sample_se_check1: Event<number> = e
+>  |       const sample_se_check2: Event<string> = e
+   |                                               ^ 
+   |  Cannot assign \`e\` to \`sample_se_check2\` 
+   |  because number [1] is incompatible with string [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   |     test('store by event with handler', () => {
 
-  119 |       const e = sample(d, b, (a, b) => ({a, b}))
-  120 | 
-> 121 |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
-      |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
-  122 |       const sample_seh_check2: Event<string> = e
-  123 |     })
+   |       const e = sample(d, b)
+   | 
+>  |       const sample_se_check1: Event<number> = e
+   |                                     ^^^^^^ [1]
+   |       const sample_se_check2: Event<string> = e
+   |     })
 
-  120 | 
-  121 |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
-> 122 |       const sample_seh_check2: Event<string> = e
-      |                                      ^^^^^^ [2]
-  123 |     })
-  124 | 
+   | 
+   |       const sample_se_check1: Event<number> = e
+>  |       const sample_se_check2: Event<string> = e
+   |                                     ^^^^^^ [2]
+   |     })
+   |     test('store by event with handler', () => {
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  129 | 
-  130 |       const sample_efe_check1: Event<string> = g
-> 131 |       const sample_efe_check2: Event<number> = g
-      |                                                ^ 
-      |  Cannot assign \`g\` to \`sample_efe_check2\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  132 |     })
-  133 |     test('effect by event with handler', () => {
+   | 
+   |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
+>  |       const sample_seh_check2: Event<string> = e
+   |                                                ^ 
+   |  Cannot assign \`e\` to \`sample_seh_check2\` 
+   |  because object type [1] is incompatible with string [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   | 
 
-  124 | 
-  125 |     test('effect by event', () => {
-> 126 |       const f = createEffect<string, any, any>()
-      |                              ^^^^^^ [1]
-  127 |       const b = createEvent<boolean>()
-  128 |       const g = sample(f, b)
+   |       const e = sample(d, b, (a, b) => ({a, b}))
+   | 
+>  |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
+   |       const sample_seh_check2: Event<string> = e
+   |     })
 
-  129 | 
-  130 |       const sample_efe_check1: Event<string> = g
-> 131 |       const sample_efe_check2: Event<number> = g
-      |                                      ^^^^^^ [2]
-  132 |     })
-  133 |     test('effect by event with handler', () => {
+   | 
+   |       const sample_seh_check1: Event<{a: string, b: boolean}> = e
+>  |       const sample_seh_check2: Event<string> = e
+   |                                      ^^^^^^ [2]
+   |     })
+   | 
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  137 | 
-  138 |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
-> 139 |       const sample_efeh_check2: Event<number> = g
-      |                                                 ^ 
-      |  Cannot assign \`g\` to \`sample_efeh_check2\` 
-      |  because object type [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  140 |     })
-  141 | 
+   | 
+   |       const sample_efe_check1: Event<string> = g
+>  |       const sample_efe_check2: Event<number> = g
+   |                                                ^ 
+   |  Cannot assign \`g\` to \`sample_efe_check2\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   |     test('effect by event with handler', () => {
 
-  136 |       const g = sample(f, b, (a, b) => ({a, b}))
-  137 | 
-> 138 |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
-      |                                       ^^^^^^^^^^^^^^^^^^^^^^^ [1]
-  139 |       const sample_efeh_check2: Event<number> = g
-  140 |     })
+   | 
+   |     test('effect by event', () => {
+>  |       const f = createEffect<string, any, any>()
+   |                              ^^^^^^ [1]
+   |       const b = createEvent<boolean>()
+   |       const g = sample(f, b)
 
-  137 | 
-  138 |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
-> 139 |       const sample_efeh_check2: Event<number> = g
-      |                                       ^^^^^^ [2]
-  140 |     })
-  141 | 
+   | 
+   |       const sample_efe_check1: Event<string> = g
+>  |       const sample_efe_check2: Event<number> = g
+   |                                      ^^^^^^ [2]
+   |     })
+   |     test('effect by event with handler', () => {
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  146 | 
-  147 |       const sample_ss_check1: Store<boolean> = c
-> 148 |       const sample_ss_check2: Store<string> = c
-      |                                               ^ 
-      |  Cannot assign \`c\` to \`sample_ss_check2\` 
-      |  because boolean [1] is incompatible with string [2] in type
-      |  argument \`State\` [3].
-      |  
-  149 |     })
-  150 |     test('store by store with handler', () => {
+   | 
+   |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
+>  |       const sample_efeh_check2: Event<number> = g
+   |                                                 ^ 
+   |  Cannot assign \`g\` to \`sample_efeh_check2\` 
+   |  because object type [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     })
+   | 
 
-  145 |       const c = sample(a, b)
-  146 | 
-> 147 |       const sample_ss_check1: Store<boolean> = c
-      |                                     ^^^^^^^ [1]
-  148 |       const sample_ss_check2: Store<string> = c
-  149 |     })
+   |       const g = sample(f, b, (a, b) => ({a, b}))
+   | 
+>  |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
+   |                                       ^^^^^^^^^^^^^^^^^^^^^^^ [1]
+   |       const sample_efeh_check2: Event<number> = g
+   |     })
 
-  146 | 
-  147 |       const sample_ss_check1: Store<boolean> = c
-> 148 |       const sample_ss_check2: Store<string> = c
-      |                                     ^^^^^^ [2]
-  149 |     })
-  150 |     test('store by store with handler', () => {
+   | 
+   |       const sample_efeh_check1: Event<{a: string, b: boolean}> = g
+>  |       const sample_efeh_check2: Event<number> = g
+   |                                       ^^^^^^ [2]
+   |     })
+   | 
 
   packages/effector/index.js.flow
-  103 | }
-  104 | 
-> 105 | declare export class Store<State> implements Unit<State> {
-      |                            ^^^^^ [3]
-  106 |   +kind: kind;
-  107 |   reset(...triggers: Array<Unit<any>>): this;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  154 | 
-  155 |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
-> 156 |       const sample_ssh_check2: Store<string> = c
-      |                                                ^ 
-      |  Cannot assign \`c\` to \`sample_ssh_check2\` 
-      |  because object type [1] is incompatible with string [2] in type
-      |  argument \`State\` [3].
-      |  
-  157 |     })
-  158 |     describe('sample(Store<T>):Store<T>', () => {
+   | 
+   |       const sample_ss_check1: Store<boolean> = c
+>  |       const sample_ss_check2: Store<string> = c
+   |                                               ^ 
+   |  Cannot assign \`c\` to \`sample_ss_check2\` 
+   |  because boolean [1] is incompatible with string [2] in type
+   |  argument \`State\` [3].
+   |  
+   |     })
+   |     test('store by store with handler', () => {
 
-  153 |       const c = sample(a, b, (a, b) => ({a, b}))
-  154 | 
-> 155 |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
-      |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
-  156 |       const sample_ssh_check2: Store<string> = c
-  157 |     })
+   |       const c = sample(a, b)
+   | 
+>  |       const sample_ss_check1: Store<boolean> = c
+   |                                     ^^^^^^^ [1]
+   |       const sample_ss_check2: Store<string> = c
+   |     })
 
-  154 | 
-  155 |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
-> 156 |       const sample_ssh_check2: Store<string> = c
-      |                                      ^^^^^^ [2]
-  157 |     })
-  158 |     describe('sample(Store<T>):Store<T>', () => {
+   | 
+   |       const sample_ss_check1: Store<boolean> = c
+>  |       const sample_ss_check2: Store<string> = c
+   |                                     ^^^^^^ [2]
+   |     })
+   |     test('store by store with handler', () => {
 
   packages/effector/index.js.flow
-  103 | }
-  104 | 
-> 105 | declare export class Store<State> implements Unit<State> {
-      |                            ^^^^^ [3]
-  106 |   +kind: kind;
-  107 |   reset(...triggers: Array<Unit<any>>): this;
+   | }
+   | 
+>  | declare export class Store<State> implements Unit<State> {
+   |                            ^^^^^ [3]
+   |   +kind: kind;
+   |   reset(...triggers: Array<Unit<any>>): this;
 
   
 
   src/types/types.test.js
-  163 |       test('incorrect case', () => {
-  164 |         const a = createStore('')
-> 165 |         const sample_s_incorrect: Store<number> = sample(a)
-      |                                                   ^^^^^^^^ 
-      |  Cannot assign \`sample(...)\` to \`sample_s_incorrect\` 
-      |  because string [1] is incompatible with number [2] in type argument \`State\` [3].
-      |  
-  166 |       })
-  167 |       describe('edge case', () => {
+   | 
+   |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
+>  |       const sample_ssh_check2: Store<string> = c
+   |                                                ^ 
+   |  Cannot assign \`c\` to \`sample_ssh_check2\` 
+   |  because object type [1] is incompatible with string [2] in type
+   |  argument \`State\` [3].
+   |  
+   |     })
+   |     describe('sample(Store<T>):Store<T>', () => {
 
-  162 |       })
-  163 |       test('incorrect case', () => {
-> 164 |         const a = createStore('')
-      |                               ^^ [1]
-  165 |         const sample_s_incorrect: Store<number> = sample(a)
-  166 |       })
+   |       const c = sample(a, b, (a, b) => ({a, b}))
+   | 
+>  |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^ [1]
+   |       const sample_ssh_check2: Store<string> = c
+   |     })
 
-  163 |       test('incorrect case', () => {
-  164 |         const a = createStore('')
-> 165 |         const sample_s_incorrect: Store<number> = sample(a)
-      |                                         ^^^^^^ [2]
-  166 |       })
-  167 |       describe('edge case', () => {
+   | 
+   |       const sample_ssh_check1: Store<{a: string, b: boolean}> = c
+>  |       const sample_ssh_check2: Store<string> = c
+   |                                      ^^^^^^ [2]
+   |     })
+   |     describe('sample(Store<T>):Store<T>', () => {
 
   packages/effector/index.js.flow
-  103 | }
-  104 | 
-> 105 | declare export class Store<State> implements Unit<State> {
-      |                            ^^^^^ [3]
-  106 |   +kind: kind;
-  107 |   reset(...triggers: Array<Unit<any>>): this;
+   | }
+   | 
+>  | declare export class Store<State> implements Unit<State> {
+   |                            ^^^^^ [3]
+   |   +kind: kind;
+   |   reset(...triggers: Array<Unit<any>>): this;
 
   
 
   src/types/types.test.js
-  174 |           const a = createStore('')
-  175 |           const clock = createEvent()
-> 176 |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
-      |                                                          ^^^^^^^^^^^^^^^ 
-      |  Cannot assign \`sample(...)\` to \`sample_s_edge_incorrect\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  177 |         })
-  178 |       })
+   |       test('incorrect case', () => {
+   |         const a = createStore('')
+>  |         const sample_s_incorrect: Store<number> = sample(a)
+   |                                                   ^^^^^^^^ 
+   |  Cannot assign \`sample(...)\` to \`sample_s_incorrect\` 
+   |  because string [1] is incompatible with number [2] in type argument \`State\` [3].
+   |  
+   |       })
+   |       describe('edge case', () => {
 
-  172 |         })
-  173 |         test('incorrect case', () => {
-> 174 |           const a = createStore('')
-      |                                 ^^ [1]
-  175 |           const clock = createEvent()
-  176 |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
+   |       })
+   |       test('incorrect case', () => {
+>  |         const a = createStore('')
+   |                               ^^ [1]
+   |         const sample_s_incorrect: Store<number> = sample(a)
+   |       })
 
-  174 |           const a = createStore('')
-  175 |           const clock = createEvent()
-> 176 |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
-      |                                                ^^^^^^ [2]
-  177 |         })
-  178 |       })
+   |       test('incorrect case', () => {
+   |         const a = createStore('')
+>  |         const sample_s_incorrect: Store<number> = sample(a)
+   |                                         ^^^^^^ [2]
+   |       })
+   |       describe('edge case', () => {
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | }
+   | 
+>  | declare export class Store<State> implements Unit<State> {
+   |                            ^^^^^ [3]
+   |   +kind: kind;
+   |   reset(...triggers: Array<Unit<any>>): this;
 
   
 
   src/types/types.test.js
-  207 | 
-  208 |     //const check1: Event<string> = computed
-> 209 |     const event_map_check2: Event<number> = computed
-      |                                             ^^^^^^^ 
-      |  Cannot assign \`computed\` to \`event_map_check2\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  210 |     event(2)
-  211 |     computed('')
+   |           const a = createStore('')
+   |           const clock = createEvent()
+>  |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
+   |                                                          ^^^^^^^^^^^^^^^ 
+   |  Cannot assign \`sample(...)\` to \`sample_s_edge_incorrect\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |         })
+   |       })
 
-  204 |   test('#map', () => {
-  205 |     const event: Event<number> = createEvent()
-> 206 |     const computed = event.map(() => 'foo')
-      |                                      ^^^^^ [1]
-  207 | 
-  208 |     //const check1: Event<string> = computed
+   |         })
+   |         test('incorrect case', () => {
+>  |           const a = createStore('')
+   |                                 ^^ [1]
+   |           const clock = createEvent()
+   |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
 
-  207 | 
-  208 |     //const check1: Event<string> = computed
-> 209 |     const event_map_check2: Event<number> = computed
-      |                                   ^^^^^^ [2]
-  210 |     event(2)
-  211 |     computed('')
+   |           const a = createStore('')
+   |           const clock = createEvent()
+>  |           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
+   |                                                ^^^^^^ [2]
+   |         })
+   |       })
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  207 | 
-  208 |     //const check1: Event<string> = computed
-> 209 |     const event_map_check2: Event<number> = computed
-      |                                             ^^^^^^^ 
-      |  Cannot assign \`computed\` to \`event_map_check2\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  210 |     event(2)
-  211 |     computed('')
+   | 
+   |     //const check1: Event<string> = computed
+>  |     const event_map_check2: Event<number> = computed
+   |                                             ^^^^^^^ 
+   |  Cannot assign \`computed\` to \`event_map_check2\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     event(2)
+   |     computed('')
 
-  209 |     const event_map_check2: Event<number> = computed
-  210 |     event(2)
-> 211 |     computed('')
-      |              ^^ [1]
-  212 |   })
-  213 |   test('#watch', () => {
+   |   test('#map', () => {
+   |     const event: Event<number> = createEvent()
+>  |     const computed = event.map(() => 'foo')
+   |                                      ^^^^^ [1]
+   | 
+   |     //const check1: Event<string> = computed
 
-  207 | 
-  208 |     //const check1: Event<string> = computed
-> 209 |     const event_map_check2: Event<number> = computed
-      |                                   ^^^^^^ [2]
-  210 |     event(2)
-  211 |     computed('')
+   | 
+   |     //const check1: Event<string> = computed
+>  |     const event_map_check2: Event<number> = computed
+   |                                   ^^^^^^ [2]
+   |     event(2)
+   |     computed('')
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  233 |       const event: Event<number> = createEvent()
-  234 |       const filteredEvent_error: Event<number> = event.filter(n => {
-> 235 |         if (n % 2) return n.toString()
-      |                           ^^^^^^^^^^^ 
-      |  Cannot assign \`event.filter(...)\` to \`filteredEvent_error\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  236 |       })
-  237 |     })
+   | 
+   |     //const check1: Event<string> = computed
+>  |     const event_map_check2: Event<number> = computed
+   |                                             ^^^^^^^ 
+   |  Cannot assign \`computed\` to \`event_map_check2\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     event(2)
+   |     computed('')
+
+   |     const event_map_check2: Event<number> = computed
+   |     event(2)
+>  |     computed('')
+   |              ^^ [1]
+   |   })
+   |   test('#watch', () => {
+
+   | 
+   |     //const check1: Event<string> = computed
+>  |     const event_map_check2: Event<number> = computed
+   |                                   ^^^^^^ [2]
+   |     event(2)
+   |     computed('')
+
+  packages/effector/index.js.flow
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
+
+  
+
+  src/types/types.test.js
+   |       const event: Event<number> = createEvent()
+   |       const filteredEvent_error: Event<number> = event.filter(n => {
+>  |         if (n % 2) return n.toString()
+   |                           ^^^^^^^^^^^ 
+   |  Cannot assign \`event.filter(...)\` to \`filteredEvent_error\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |       })
+   |     })
 
    [LIB] core.js
-> 162 |     toString(radix?: number): string;
-      |                               ^^^^^^ [1]
+>  |     toString(radix?: number): string;
+   |                               ^^^^^^ [1]
 
   src/types/types.test.js
-  232 |     test('#filter incorrect', () => {
-  233 |       const event: Event<number> = createEvent()
-> 234 |       const filteredEvent_error: Event<number> = event.filter(n => {
-      |                                        ^^^^^^ [2]
-  235 |         if (n % 2) return n.toString()
-  236 |       })
+   |     test('#filter incorrect', () => {
+   |       const event: Event<number> = createEvent()
+>  |       const filteredEvent_error: Event<number> = event.filter(n => {
+   |                                        ^^^^^^ [2]
+   |         if (n % 2) return n.toString()
+   |       })
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  295 |       test('no false-positive (should be type error)', () => {
-  296 |         const nestedEffect: Effect<string, string> = createEffect()
-> 297 |         const parentEffect: Effect<number, number> = createEffect(
-      |                                                      ^^^^^^^^^^^^
-> 298 |           'should not throw',
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 299 |           {
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 300 |             handler: nestedEffect,
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 301 |           },
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 302 |         )
-      | ^^^^^^^^^ 
-      |  Cannot assign \`createEffect(...)\` to \`parentEffect\` 
-      |  because number [1] is incompatible with string [2] in type
-      |  argument \`Params\` [3].
-      |  
-  303 |       })
-  304 |     })
+   |       test('no false-positive (should be type error)', () => {
+   |         const nestedEffect: Effect<string, string> = createEffect()
+>  |         const parentEffect: Effect<number, number> = createEffect(
+   |                                                      ^^^^^^^^^^^^
+>  |           'should not throw',
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |           {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |             handler: nestedEffect,
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |           },
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |         )
+   | ^^^^^^^^^ 
+   |  Cannot assign \`createEffect(...)\` to \`parentEffect\` 
+   |  because number [1] is incompatible with string [2] in type
+   |  argument \`Params\` [3].
+   |  
+   |       })
+   |     })
 
-  295 |       test('no false-positive (should be type error)', () => {
-  296 |         const nestedEffect: Effect<string, string> = createEffect()
-> 297 |         const parentEffect: Effect<number, number> = createEffect(
-      |                                    ^^^^^^ [1]
-  298 |           'should not throw',
-  299 |           {
+   |       test('no false-positive (should be type error)', () => {
+   |         const nestedEffect: Effect<string, string> = createEffect()
+>  |         const parentEffect: Effect<number, number> = createEffect(
+   |                                    ^^^^^^ [1]
+   |           'should not throw',
+   |           {
 
-  294 |     describe('with handler', () => {
-  295 |       test('no false-positive (should be type error)', () => {
-> 296 |         const nestedEffect: Effect<string, string> = createEffect()
-      |                                    ^^^^^^ [2]
-  297 |         const parentEffect: Effect<number, number> = createEffect(
-  298 |           'should not throw',
+   |     describe('with handler', () => {
+   |       test('no false-positive (should be type error)', () => {
+>  |         const nestedEffect: Effect<string, string> = createEffect()
+   |                                    ^^^^^^ [2]
+   |         const parentEffect: Effect<number, number> = createEffect(
+   |           'should not throw',
 
   packages/effector/index.js.flow
-   64 | }
-   65 | 
->  66 | declare export class Effect<Params, Done, Fail = Error>
-      |                             ^^^^^^ [3]
-   67 |   implements Unit<Params> {
-   68 |   (payload: Params): Promise<Done>;
+   | }
+   | 
+>  | declare export class Effect<Params, Done, Fail = Error>
+   |                             ^^^^^^ [3]
+   |   implements Unit<Params> {
+   |   (payload: Params): Promise<Done>;
 
   
 
   src/types/types.test.js
-  295 |       test('no false-positive (should be type error)', () => {
-  296 |         const nestedEffect: Effect<string, string> = createEffect()
-> 297 |         const parentEffect: Effect<number, number> = createEffect(
-      |                                                      ^^^^^^^^^^^^
-> 298 |           'should not throw',
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 299 |           {
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 300 |             handler: nestedEffect,
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 301 |           },
-      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> 302 |         )
-      | ^^^^^^^^^ 
-      |  Cannot assign \`createEffect(...)\` to \`parentEffect\` 
-      |  because string [1] is incompatible with number [2] in type argument \`Done\` [3].
-      |  
-  303 |       })
-  304 |     })
+   |       test('no false-positive (should be type error)', () => {
+   |         const nestedEffect: Effect<string, string> = createEffect()
+>  |         const parentEffect: Effect<number, number> = createEffect(
+   |                                                      ^^^^^^^^^^^^
+>  |           'should not throw',
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |           {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |             handler: nestedEffect,
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |           },
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>  |         )
+   | ^^^^^^^^^ 
+   |  Cannot assign \`createEffect(...)\` to \`parentEffect\` 
+   |  because string [1] is incompatible with number [2] in type argument \`Done\` [3].
+   |  
+   |       })
+   |     })
 
-  294 |     describe('with handler', () => {
-  295 |       test('no false-positive (should be type error)', () => {
-> 296 |         const nestedEffect: Effect<string, string> = createEffect()
-      |                                            ^^^^^^ [1]
-  297 |         const parentEffect: Effect<number, number> = createEffect(
-  298 |           'should not throw',
+   |     describe('with handler', () => {
+   |       test('no false-positive (should be type error)', () => {
+>  |         const nestedEffect: Effect<string, string> = createEffect()
+   |                                            ^^^^^^ [1]
+   |         const parentEffect: Effect<number, number> = createEffect(
+   |           'should not throw',
 
-  295 |       test('no false-positive (should be type error)', () => {
-  296 |         const nestedEffect: Effect<string, string> = createEffect()
-> 297 |         const parentEffect: Effect<number, number> = createEffect(
-      |                                            ^^^^^^ [2]
-  298 |           'should not throw',
-  299 |           {
+   |       test('no false-positive (should be type error)', () => {
+   |         const nestedEffect: Effect<string, string> = createEffect()
+>  |         const parentEffect: Effect<number, number> = createEffect(
+   |                                            ^^^^^^ [2]
+   |           'should not throw',
+   |           {
 
   packages/effector/index.js.flow
-   64 | }
-   65 | 
->  66 | declare export class Effect<Params, Done, Fail = Error>
-      |                                     ^^^^ [3]
-   67 |   implements Unit<Params> {
-   68 |   (payload: Params): Promise<Done>;
+   | }
+   | 
+>  | declare export class Effect<Params, Done, Fail = Error>
+   |                                     ^^^^ [3]
+   |   implements Unit<Params> {
+   |   (payload: Params): Promise<Done>;
 
   
 
   src/types/types.test.js
-  310 |   test('createStore', () => {
-  311 |     const createStore_store1: Store<number> = createStore(0)
-> 312 |     const createStore_store2: Store<string> = createStore(0)
-      |                                                           ^ 
-      |  Cannot assign \`createStore(...)\` to \`createStore_store2\` 
-      |  because number [1] is incompatible with string [2] in type argument \`State\` [3].
-      |  
-  313 |   })
-  314 |   test('createStoreObject', () => {
+   |   test('createStore', () => {
+   |     const createStore_store1: Store<number> = createStore(0)
+>  |     const createStore_store2: Store<string> = createStore(0)
+   |                                                           ^ 
+   |  Cannot assign \`createStore(...)\` to \`createStore_store2\` 
+   |  because number [1] is incompatible with string [2] in type argument \`State\` [3].
+   |  
+   |   })
+   |   test('createStoreObject', () => {
 
-  310 |   test('createStore', () => {
-  311 |     const createStore_store1: Store<number> = createStore(0)
-> 312 |     const createStore_store2: Store<string> = createStore(0)
-      |                                                           ^^ [1]
-  313 |   })
-  314 |   test('createStoreObject', () => {
+   |   test('createStore', () => {
+   |     const createStore_store1: Store<number> = createStore(0)
+>  |     const createStore_store2: Store<string> = createStore(0)
+   |                                                           ^^ [1]
+   |   })
+   |   test('createStoreObject', () => {
 
-  310 |   test('createStore', () => {
-  311 |     const createStore_store1: Store<number> = createStore(0)
-> 312 |     const createStore_store2: Store<string> = createStore(0)
-      |                                     ^^^^^^ [2]
-  313 |   })
-  314 |   test('createStoreObject', () => {
+   |   test('createStore', () => {
+   |     const createStore_store1: Store<number> = createStore(0)
+>  |     const createStore_store2: Store<string> = createStore(0)
+   |                                     ^^^^^^ [2]
+   |   })
+   |   test('createStoreObject', () => {
 
   packages/effector/index.js.flow
-  103 | }
-  104 | 
-> 105 | declare export class Store<State> implements Unit<State> {
-      |                            ^^^^^ [3]
-  106 |   +kind: kind;
-  107 |   reset(...triggers: Array<Unit<any>>): this;
+   | }
+   | 
+>  | declare export class Store<State> implements Unit<State> {
+   |                            ^^^^^ [3]
+   |   +kind: kind;
+   |   reset(...triggers: Array<Unit<any>>): this;
 
   
 
   src/types/types.test.js
-  333 |         event: (n, x: number) => x,
-  334 |       })
-> 335 |       const createApi_check2: Event<string> = event
-      |                                               ^^^^ 
-      |  Cannot assign \`event\` to \`createApi_check2\` 
-      |  because string [1] is incompatible with number [2] in type argument
-      |  \`Payload\` [3].
-      |  
-  336 |     }
-  337 |     {
+   |         event: (n, x: number) => x,
+   |       })
+>  |       const createApi_check2: Event<string> = event
+   |                                               ^^^^ 
+   |  Cannot assign \`event\` to \`createApi_check2\` 
+   |  because string [1] is incompatible with number [2] in type argument
+   |  \`Payload\` [3].
+   |  
+   |     }
+   |     {
 
-  333 |         event: (n, x: number) => x,
-  334 |       })
-> 335 |       const createApi_check2: Event<string> = event
-      |                                     ^^^^^^ [1]
-  336 |     }
-  337 |     {
+   |         event: (n, x: number) => x,
+   |       })
+>  |       const createApi_check2: Event<string> = event
+   |                                     ^^^^^^ [1]
+   |     }
+   |     {
 
-  331 |     {
-  332 |       const {event} = createApi(store, {
-> 333 |         event: (n, x: number) => x,
-      |                       ^^^^^^ [2]
-  334 |       })
-  335 |       const createApi_check2: Event<string> = event
+   |     {
+   |       const {event} = createApi(store, {
+>  |         event: (n, x: number) => x,
+   |                       ^^^^^^ [2]
+   |       })
+   |       const createApi_check2: Event<string> = event
 
   packages/effector/index.js.flow
-   42 | |}
-   43 | 
->  44 | declare export class Event<Payload> implements Unit<Payload> {
-      |                            ^^^^^^^ [3]
-   45 |   (payload: Payload): Payload;
-   46 |   +kind: kind;
+   | |}
+   | 
+>  | declare export class Event<Payload> implements Unit<Payload> {
+   |                            ^^^^^^^ [3]
+   |   (payload: Payload): Payload;
+   |   +kind: kind;
 
   
 
   src/types/types.test.js
-  337 |     {
-  338 |       const {event} = createApi(store, {
-> 339 |         event: (n, x) => x,
-      |                          ^ 
-      |  Cannot call \`createApi\` with object literal bound to \`api\` 
-      |  because string [1] is incompatible with number [2] in the return value of
-      |  property \`event\`.
-      |  
-  340 |       })
-  341 |       const createApi_check3: Event<string> = event
+   |     {
+   |       const {event} = createApi(store, {
+>  |         event: (n, x) => x,
+   |                          ^ 
+   |  Cannot call \`createApi\` with object literal bound to \`api\` 
+   |  because string [1] is incompatible with number [2] in the return value of
+   |  property \`event\`.
+   |  
+   |       })
+   |       const createApi_check3: Event<string> = event
 
-  339 |         event: (n, x) => x,
-  340 |       })
-> 341 |       const createApi_check3: Event<string> = event
-      |                                     ^^^^^^ [1]
-  342 |     }
-  343 |   })
+   |         event: (n, x) => x,
+   |       })
+>  |       const createApi_check3: Event<string> = event
+   |                                     ^^^^^^ [1]
+   |     }
+   |   })
 
-  322 |   })
-  323 |   test('createApi', () => {
-> 324 |     const store: Store<number> = createStore(0)
-      |                        ^^^^^^ [2]
-  325 |     {
-  326 |       const {event} = createApi(store, {
+   |   })
+   |   test('createApi', () => {
+>  |     const store: Store<number> = createStore(0)
+   |                        ^^^^^^ [2]
+   |     {
+   |       const {event} = createApi(store, {
 
   
 
   src/types/types.test.js
-  399 |     const map_check1: Store<string> = computed
-  400 | 
-> 401 |     const map_check2: Store<number> = computed
-      |                                       ^^^^^^^ 
-      |  Cannot assign \`computed\` to \`map_check2\` 
-      |  because string [1] is incompatible with number [2] in type argument \`State\` [3].
-      |  
-  402 |   })
-  403 | 
+   |     const map_check1: Store<string> = computed
+   | 
+>  |     const map_check2: Store<number> = computed
+   |                                       ^^^^^^^ 
+   |  Cannot assign \`computed\` to \`map_check2\` 
+   |  because string [1] is incompatible with number [2] in type argument \`State\` [3].
+   |  
+   |   })
+   | 
 
-  397 |     const computed = store.map(() => 'hello')
-  398 | 
-> 399 |     const map_check1: Store<string> = computed
-      |                             ^^^^^^ [1]
-  400 | 
-  401 |     const map_check2: Store<number> = computed
+   |     const computed = store.map(() => 'hello')
+   | 
+>  |     const map_check1: Store<string> = computed
+   |                             ^^^^^^ [1]
+   | 
+   |     const map_check2: Store<number> = computed
 
-  399 |     const map_check1: Store<string> = computed
-  400 | 
-> 401 |     const map_check2: Store<number> = computed
-      |                             ^^^^^^ [2]
-  402 |   })
-  403 | 
+   |     const map_check1: Store<string> = computed
+   | 
+>  |     const map_check2: Store<number> = computed
+   |                             ^^^^^^ [2]
+   |   })
+   | 
 
   packages/effector/index.js.flow
-  103 | }
-  104 | 
-> 105 | declare export class Store<State> implements Unit<State> {
-      |                            ^^^^^ [3]
-  106 |   +kind: kind;
-  107 |   reset(...triggers: Array<Unit<any>>): this;
+   | }
+   | 
+>  | declare export class Store<State> implements Unit<State> {
+   |                            ^^^^^ [3]
+   |   +kind: kind;
+   |   reset(...triggers: Array<Unit<any>>): this;
 
   
 
   src/types/types.test.js
-  481 |     const domain = createDomain()
-  482 |     const domain2 = createDomain('hello')
-> 483 |     const domain3 = createDomain(234)
-      |                                  ^^ 
-      |  Cannot call \`createDomain\` with \`234\` bound to \`domainName\` 
-      |  because number [1] is incompatible with string [2].
-      |  
-  484 |     const domain4 = createDomain({foo: true})
-  485 |   })
+   |     const domain = createDomain()
+   |     const domain2 = createDomain('hello')
+>  |     const domain3 = createDomain(234)
+   |                                  ^^ 
+   |  Cannot call \`createDomain\` with \`234\` bound to \`domainName\` 
+   |  because number [1] is incompatible with string [2].
+   |  
+   |     const domain4 = createDomain({foo: true})
+   |   })
 
-  481 |     const domain = createDomain()
-  482 |     const domain2 = createDomain('hello')
-> 483 |     const domain3 = createDomain(234)
-      |                                  ^^^ [1]
-  484 |     const domain4 = createDomain({foo: true})
-  485 |   })
+   |     const domain = createDomain()
+   |     const domain2 = createDomain('hello')
+>  |     const domain3 = createDomain(234)
+   |                                  ^^^ [1]
+   |     const domain4 = createDomain({foo: true})
+   |   })
 
   packages/effector/index.js.flow
-  361 |   <S>(field: Store<S> | S) => Store<S>,
-  362 | >
-> 363 | declare export function createDomain(domainName?: string): Domain
-      |                                                   ^^^^^^ [2]
-  364 | 
-  365 | declare export function sample<A>(config: {|
+   |   <S>(field: Store<S> | S) => Store<S>,
+   | >
+>  | declare export function createDomain(domainName?: string): Domain
+   |                                                   ^^^^^^ [2]
+   | 
+   | declare export function sample<A>(config: {|
 
   
 
   src/types/types.test.js
-  482 |     const domain2 = createDomain('hello')
-  483 |     const domain3 = createDomain(234)
-> 484 |     const domain4 = createDomain({foo: true})
-      |                                  ^^^^^^^^^^ 
-      |  Cannot call \`createDomain\` with object literal bound to \`domainName\` 
-      |  because object literal [1] is incompatible with string [2].
-      |  
-  485 |   })
-  486 | 
+   |     const domain2 = createDomain('hello')
+   |     const domain3 = createDomain(234)
+>  |     const domain4 = createDomain({foo: true})
+   |                                  ^^^^^^^^^^ 
+   |  Cannot call \`createDomain\` with object literal bound to \`domainName\` 
+   |  because object literal [1] is incompatible with string [2].
+   |  
+   |   })
+   | 
 
-  482 |     const domain2 = createDomain('hello')
-  483 |     const domain3 = createDomain(234)
-> 484 |     const domain4 = createDomain({foo: true})
-      |                                  ^^^^^^^^^^^ [1]
-  485 |   })
-  486 | 
+   |     const domain2 = createDomain('hello')
+   |     const domain3 = createDomain(234)
+>  |     const domain4 = createDomain({foo: true})
+   |                                  ^^^^^^^^^^^ [1]
+   |   })
+   | 
 
   packages/effector/index.js.flow
-  361 |   <S>(field: Store<S> | S) => Store<S>,
-  362 | >
-> 363 | declare export function createDomain(domainName?: string): Domain
-      |                                                   ^^^^^^ [2]
-  364 | 
-  365 | declare export function sample<A>(config: {|
+   |   <S>(field: Store<S> | S) => Store<S>,
+   | >
+>  | declare export function createDomain(domainName?: string): Domain
+   |                                                   ^^^^^^ [2]
+   | 
+   | declare export function sample<A>(config: {|
 
   
 
   src/types/types.test.js
-  498 |       },
-  499 |     })
-> 500 |     effect2(20)
-      |             ^ 
-      |  Cannot call \`effect2\` with \`20\` bound to \`payload\` 
-      |  because number [1] is incompatible with string [2].
-      |  
-  501 |     const effect3 = domain.effect('', {
-  502 |       handler: effect1,
+   |       },
+   |     })
+>  |     effect2(20)
+   |             ^ 
+   |  Cannot call \`effect2\` with \`20\` bound to \`payload\` 
+   |  because number [1] is incompatible with string [2].
+   |  
+   |     const effect3 = domain.effect('', {
+   |       handler: effect1,
 
-  498 |       },
-  499 |     })
-> 500 |     effect2(20)
-      |             ^^ [1]
-  501 |     const effect3 = domain.effect('', {
-  502 |       handler: effect1,
+   |       },
+   |     })
+>  |     effect2(20)
+   |             ^^ [1]
+   |     const effect3 = domain.effect('', {
+   |       handler: effect1,
 
-  494 |     const effect1: Effect<string, number, Error> = domain.effect()
-  495 |     const effect2 = domain.effect('', {
-> 496 |       handler(params: string) {
-      |                       ^^^^^^ [2]
-  497 |         return 256
-  498 |       },
-
-  
-
-  src/types/types.test.js
-  502 |       handler: effect1,
-  503 |     })
-> 504 |     effect3(20)
-      |             ^ 
-      |  Cannot call \`effect3\` with \`20\` bound to \`payload\` 
-      |  because number [1] is incompatible with string [2].
-      |  
-  505 |   })
-  506 | 
-
-  502 |       handler: effect1,
-  503 |     })
-> 504 |     effect3(20)
-      |             ^^ [1]
-  505 |   })
-  506 | 
-
-  492 |   test('#effect', () => {
-  493 |     const domain = createDomain()
-> 494 |     const effect1: Effect<string, number, Error> = domain.effect()
-      |                           ^^^^^^ [2]
-  495 |     const effect2 = domain.effect('', {
-  496 |       handler(params: string) {
+   |     const effect1: Effect<string, number, Error> = domain.effect()
+   |     const effect2 = domain.effect('', {
+>  |       handler(params: string) {
+   |                       ^^^^^^ [2]
+   |         return 256
+   |       },
 
   
 
   src/types/types.test.js
-  588 |       ],
-  589 |     })
-> 590 |     launch(foo, '')
-      |                 ^ 
-      |  Cannot call \`launch\` with empty string bound to \`payload\` 
-      |  because string [1] is incompatible with number [2].
-      |  
-  591 |     launch(foo, 0)
-  592 |     launch(customNode, 100)
+   |       handler: effect1,
+   |     })
+>  |     effect3(20)
+   |             ^ 
+   |  Cannot call \`effect3\` with \`20\` bound to \`payload\` 
+   |  because number [1] is incompatible with string [2].
+   |  
+   |   })
+   | 
 
-  588 |       ],
-  589 |     })
-> 590 |     launch(foo, '')
-      |                 ^^ [1]
-  591 |     launch(foo, 0)
-  592 |     launch(customNode, 100)
+   |       handler: effect1,
+   |     })
+>  |     effect3(20)
+   |             ^^ [1]
+   |   })
+   | 
 
-  569 | 
-  570 |   test('launch', () => {
-> 571 |     const foo = createEvent<number>()
-      |                             ^^^^^^ [2]
-  572 |     const customNode = createNode({
-  573 |       scope: {max: 100, lastValue: -1, add: 10},
-
-  
-
-  src/types/types.test.js
-  620 |       (initialProps: {id: number}) => {
-  621 |         const createComponent_initialProps_check1: number = initialProps.id
-> 622 |         const createComponent_initialProps_check2: string = initialProps.id
-      |                                                             ^^^^^^^^^^^^^^ 
-      |  Cannot assign \`initialProps.id\` to \`createComponent_initialProps_check2\` 
-      |  because number [1] is incompatible with string [2].
-      |  
-  623 |         const createComponent_initialProps_check3: string =
-  624 |           initialProps.unknownProp
-
-  618 |     }>({})
-  619 |     const InitialProps = createComponent(
-> 620 |       (initialProps: {id: number}) => {
-      |                           ^^^^^^ [1]
-  621 |         const createComponent_initialProps_check1: number = initialProps.id
-  622 |         const createComponent_initialProps_check2: string = initialProps.id
-
-  620 |       (initialProps: {id: number}) => {
-  621 |         const createComponent_initialProps_check1: number = initialProps.id
-> 622 |         const createComponent_initialProps_check2: string = initialProps.id
-      |                                                    ^^^^^^ [2]
-  623 |         const createComponent_initialProps_check3: string =
-  624 |           initialProps.unknownProp
+   |   test('#effect', () => {
+   |     const domain = createDomain()
+>  |     const effect1: Effect<string, number, Error> = domain.effect()
+   |                           ^^^^^^ [2]
+   |     const effect2 = domain.effect('', {
+   |       handler(params: string) {
 
   
 
   src/types/types.test.js
-  622 |         const createComponent_initialProps_check2: string = initialProps.id
-  623 |         const createComponent_initialProps_check3: string =
-> 624 |           initialProps.unknownProp
-      |                        ^^^^^^^^^^ 
-      |  Cannot get \`initialProps.unknownProp\` 
-      |  because property \`unknownProp\` is missing in object type [1].
-      |  
-  625 |         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
-  626 |       },
+   |       ],
+   |     })
+>  |     launch(foo, '')
+   |                 ^ 
+   |  Cannot call \`launch\` with empty string bound to \`payload\` 
+   |  because string [1] is incompatible with number [2].
+   |  
+   |     launch(foo, 0)
+   |     launch(customNode, 100)
 
-  618 |     }>({})
-  619 |     const InitialProps = createComponent(
-> 620 |       (initialProps: {id: number}) => {
-      |                      ^^^^^^^^^^^^ [1]
-  621 |         const createComponent_initialProps_check1: number = initialProps.id
-  622 |         const createComponent_initialProps_check2: string = initialProps.id
+   |       ],
+   |     })
+>  |     launch(foo, '')
+   |                 ^^ [1]
+   |     launch(foo, 0)
+   |     launch(customNode, 100)
 
-  
-
-  src/types/types.test.js
-  627 |       (_, state) => {
-  628 |         const createComponent_initialProps_check4: string = state.text
-> 629 |         const createComponent_initialProps_check5: number = state.text
-      |                                                             ^^^^^^^^^ 
-      |  Cannot assign \`state.text\` to \`createComponent_initialProps_check5\` 
-      |  because string [1] is incompatible with number [2].
-      |  
-  630 |         return null
-  631 |       },
-
-  614 |     const list = createStore<{
-  615 |       [key: number]: {
-> 616 |         text: string,
-      |               ^^^^^^ [1]
-  617 |       },
-  618 |     }>({})
-
-  627 |       (_, state) => {
-  628 |         const createComponent_initialProps_check4: string = state.text
-> 629 |         const createComponent_initialProps_check5: number = state.text
-      |                                                    ^^^^^^ [2]
-  630 |         return null
-  631 |       },
+   | 
+   |   test('launch', () => {
+>  |     const foo = createEvent<number>()
+   |                             ^^^^^^ [2]
+   |     const customNode = createNode({
+   |       scope: {max: 100, lastValue: -1, add: 10},
 
   
 
   src/types/types.test.js
-  634 | 
-  635 |   test('createGate', () => {
-> 636 |     const Foo = createGate<number>('foo')
-      |                            ^^^^^ 
-      |  Cannot call \`createGate\` 
-      |  because number [1] is incompatible with object type [2] in type
-      |  argument \`Props\`.
-      |  
-  637 |     const Bar = createGate<{a: number}>('bar')
-  638 |     const Baz = createGate<number | null>('baz', null)
+   |       (initialProps: {id: number}) => {
+   |         const createComponent_initialProps_check1: number = initialProps.id
+>  |         const createComponent_initialProps_check2: string = initialProps.id
+   |                                                             ^^^^^^^^^^^^^^ 
+   |  Cannot assign \`initialProps.id\` to \`createComponent_initialProps_check2\` 
+   |  because number [1] is incompatible with string [2].
+   |  
+   |         const createComponent_initialProps_check3: string =
+   |           initialProps.unknownProp
 
-  634 | 
-  635 |   test('createGate', () => {
-> 636 |     const Foo = createGate<number>('foo')
-      |                            ^^^^^^ [1]
-  637 |     const Bar = createGate<{a: number}>('bar')
-  638 |     const Baz = createGate<number | null>('baz', null)
+   |     }>({})
+   |     const InitialProps = createComponent(
+>  |       (initialProps: {id: number}) => {
+   |                           ^^^^^^ [1]
+   |         const createComponent_initialProps_check1: number = initialProps.id
+   |         const createComponent_initialProps_check2: string = initialProps.id
+
+   |       (initialProps: {id: number}) => {
+   |         const createComponent_initialProps_check1: number = initialProps.id
+>  |         const createComponent_initialProps_check2: string = initialProps.id
+   |                                                    ^^^^^^ [2]
+   |         const createComponent_initialProps_check3: string =
+   |           initialProps.unknownProp
+
+  
+
+  src/types/types.test.js
+   |         const createComponent_initialProps_check2: string = initialProps.id
+   |         const createComponent_initialProps_check3: string =
+>  |           initialProps.unknownProp
+   |                        ^^^^^^^^^^ 
+   |  Cannot get \`initialProps.unknownProp\` 
+   |  because property \`unknownProp\` is missing in object type [1].
+   |  
+   |         return list.map(list => list[initialProps.id] || {text: 'Loading...'})
+   |       },
+
+   |     }>({})
+   |     const InitialProps = createComponent(
+>  |       (initialProps: {id: number}) => {
+   |                      ^^^^^^^^^^^^ [1]
+   |         const createComponent_initialProps_check1: number = initialProps.id
+   |         const createComponent_initialProps_check2: string = initialProps.id
+
+  
+
+  src/types/types.test.js
+   |       (_, state) => {
+   |         const createComponent_initialProps_check4: string = state.text
+>  |         const createComponent_initialProps_check5: number = state.text
+   |                                                             ^^^^^^^^^ 
+   |  Cannot assign \`state.text\` to \`createComponent_initialProps_check5\` 
+   |  because string [1] is incompatible with number [2].
+   |  
+   |         return null
+   |       },
+
+   |     const list = createStore<{
+   |       [key: number]: {
+>  |         text: string,
+   |               ^^^^^^ [1]
+   |       },
+   |     }>({})
+
+   |       (_, state) => {
+   |         const createComponent_initialProps_check4: string = state.text
+>  |         const createComponent_initialProps_check5: number = state.text
+   |                                                    ^^^^^^ [2]
+   |         return null
+   |       },
+
+  
+
+  src/types/types.test.js
+   | 
+   |   test('createGate', () => {
+>  |     const Foo = createGate<number>('foo')
+   |                            ^^^^^ 
+   |  Cannot call \`createGate\` 
+   |  because number [1] is incompatible with object type [2] in type
+   |  argument \`Props\`.
+   |  
+   |     const Bar = createGate<{a: number}>('bar')
+   |     const Baz = createGate<number | null>('baz', null)
+
+   | 
+   |   test('createGate', () => {
+>  |     const Foo = createGate<number>('foo')
+   |                            ^^^^^^ [1]
+   |     const Bar = createGate<{a: number}>('bar')
+   |     const Baz = createGate<number | null>('baz', null)
 
   packages/effector-react/index.js.flow
-   57 | declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
-   58 | 
->  59 | declare export function createGate<Props: {}>(name?: string): Gate<Props>
-      |                                           ^^ [2]
-   60 | declare export function createGate<Props>(
-   61 |   name: string,
+   | declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
+   | 
+>  | declare export function createGate<Props: {...}>(name?: string): Gate<Props>
+   |                                           ^^^^^ [2]
+   | declare export function createGate<Props>(
+   |   name: string,
 
   
 
   src/types/types.test.js
-  640 |     const Component = () => {
-  641 |       useGate(Foo, 1)
-> 642 |       useGate(Bar, 1)
-      |                    ^ 
-      |  Cannot call \`useGate\` with \`1\` bound to \`props\` 
-      |  because number [1] is incompatible with object type [2].
-      |  
-  643 |       useGate(Bar, {a: 1})
-  644 |       useGate(Bar, {})
+   |     const Component = () => {
+   |       useGate(Foo, 1)
+>  |       useGate(Bar, 1)
+   |                    ^ 
+   |  Cannot call \`useGate\` with \`1\` bound to \`props\` 
+   |  because number [1] is incompatible with object type [2].
+   |  
+   |       useGate(Bar, {a: 1})
+   |       useGate(Bar, {})
 
-  640 |     const Component = () => {
-  641 |       useGate(Foo, 1)
-> 642 |       useGate(Bar, 1)
-      |                    ^^ [1]
-  643 |       useGate(Bar, {a: 1})
-  644 |       useGate(Bar, {})
+   |     const Component = () => {
+   |       useGate(Foo, 1)
+>  |       useGate(Bar, 1)
+   |                    ^^ [1]
+   |       useGate(Bar, {a: 1})
+   |       useGate(Bar, {})
 
-  635 |   test('createGate', () => {
-  636 |     const Foo = createGate<number>('foo')
-> 637 |     const Bar = createGate<{a: number}>('bar')
-      |                            ^^^^^^^^^^^ [2]
-  638 |     const Baz = createGate<number | null>('baz', null)
-  639 | 
+   |   test('createGate', () => {
+   |     const Foo = createGate<number>('foo')
+>  |     const Bar = createGate<{a: number}>('bar')
+   |                            ^^^^^^^^^^^ [2]
+   |     const Baz = createGate<number | null>('baz', null)
+   | 
 
   "
 `;
