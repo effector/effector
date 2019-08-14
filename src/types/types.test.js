@@ -185,7 +185,7 @@ describe('Event', () => {
     const createEvent_event1: Event<number> = createEvent()
     const createEvent_event2: Event<number> = createEvent('event name [1]')
     const createEvent_event3: Event<number> = createEvent({
-      name: 'event name [2]'
+      name: 'event name [2]',
     })
   })
   test('#(properties)', () => {
@@ -564,6 +564,29 @@ describe('Graph', () => {
       const e = createStore(0)
       const f = createStore(0)
       forward({from: e, to: f})
+    })
+    describe('forward with subtyping', () => {
+      const str: Event<string> = createEvent()
+      const strOrNum: Event<string | number> = createEvent()
+      const num: Event<number> = createEvent()
+      it('incompatible (should fail)', () => {
+        forward({from: str, to: num})
+      })
+      it('same types (should be ok)', () => {
+        forward({from: str, to: str})
+      })
+      it('more strict -> less strict type (should be ok)', () => {
+        forward({from: str, to: strOrNum})
+      })
+      it('less strict -> more strict type (should fail)', () => {
+        forward({from: strOrNum, to: str})
+      })
+      it('generic from (?)', () => {
+        forward<string | number>({from: strOrNum, to: str})
+      })
+      it('generic to (should fail)', () => {
+        forward<string>({from: strOrNum, to: str})
+      })
     })
   })
 
