@@ -1043,45 +1043,9 @@ exports[`Flow: json messages 1`] = `
    |       const num: Event<number> = createEvent()
 
   packages/effector/index.js.flow
-   |   ...
-   | }
->  | export interface Unit<T> {
-   |                       ^^ [3]
    |   +kind: kind;
    | }
-
-  
-
-  src/types/types.test.js
-   |       })
-   |       it('more strict -> less strict type (should be ok)', () => {
->  |         forward({from: str, to: strOrNum})
-   |                 ^^^^^^^^^^^^^^^^^^^^^^^^ 
-   |  Cannot call \`forward\` with object literal bound to \`opts\` 
-   |  because number [1] is incompatible with string [2] in type argument \`T\` [3] of
-   |  property \`to\`.
-   |  
-   |       })
-   |       it('less strict -> more strict type (should fail)', () => {
-
-   |     describe('forward with subtyping', () => {
-   |       const str: Event<string> = createEvent()
->  |       const strOrNum: Event<string | number> = createEvent()
-   |                                      ^^^^^^ [1]
-   |       const num: Event<number> = createEvent()
-   |       it('incompatible (should fail)', () => {
-
-   |     })
-   |     describe('forward with subtyping', () => {
->  |       const str: Event<string> = createEvent()
-   |                        ^^^^^^ [2]
-   |       const strOrNum: Event<string | number> = createEvent()
-   |       const num: Event<number> = createEvent()
-
-  packages/effector/index.js.flow
-   |   ...
-   | }
->  | export interface Unit<T> {
+>  | export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
    |                       ^^ [3]
    |   +kind: kind;
    | }
@@ -1115,9 +1079,9 @@ exports[`Flow: json messages 1`] = `
    |       it('incompatible (should fail)', () => {
 
   packages/effector/index.js.flow
-   |   ...
+   |   +kind: kind;
    | }
->  | export interface Unit<T> {
+>  | export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
    |                       ^^ [3]
    |   +kind: kind;
    | }
@@ -1151,9 +1115,9 @@ exports[`Flow: json messages 1`] = `
    |       it('generic to (should fail)', () => {
 
   packages/effector/index.js.flow
-   |   ...
+   |   +kind: kind;
    | }
->  | export interface Unit<T> {
+>  | export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
    |                       ^^ [3]
    |   +kind: kind;
    | }
@@ -1189,8 +1153,8 @@ exports[`Flow: json messages 1`] = `
   packages/effector/index.js.flow
    |   ...
    | }
->  | export interface Unit<T> {
-   |                       ^^ [3]
+>  | interface CovariantUnit<+T> {
+   |                          ^^ [3]
    |   +kind: kind;
    | }
 
@@ -1408,9 +1372,9 @@ types.test.ts: Argument of type '234' is not assignable to parameter of type 'st
 types.test.ts: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
 types.test.ts: Argument of type '20' is not assignable to parameter of type 'string'.
 types.test.ts: Argument of type '20' is not assignable to parameter of type 'string'.
-types.test.ts: Type 'Event<number>' is not assignable to type 'Unit<string>'.
+types.test.ts: Type 'Event<string>' is not assignable to type 'Unit<number>'.
   Types of property '__' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+    Type 'string' is not assignable to type 'number'.
 types.test.ts: Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
   Types of property '__' are incompatible.
     Type 'string | number' is not assignable to type 'string'.

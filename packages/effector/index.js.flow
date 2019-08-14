@@ -31,7 +31,13 @@ export type Subscription = {
   unsubscribe(): void,
   ...
 }
-export interface Unit<T> {
+interface CovariantUnit<+T> {
+  +kind: kind;
+}
+interface ContravariantUnit<-T> {
+  +kind: kind;
+}
+export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
   +kind: kind;
 }
 
@@ -252,7 +258,7 @@ declare export var step: {|
   |}): Run,
 |}
 declare export function forward<T>(opts: {|
-  +from: Unit<T>,
+  +from: CovariantUnit<T>,
   +to: Unit<T>,
 |}): Subscription
 

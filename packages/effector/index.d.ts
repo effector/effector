@@ -244,6 +244,7 @@ export const step: {
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+export function forward<To, From extends To>(opts:{ from: Unit<From>, to: Unit<To>}): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
