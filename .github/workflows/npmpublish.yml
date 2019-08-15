@@ -2,8 +2,8 @@ name: effector publish
 
 on:
   push:
-    branches:
-      - master
+#     branches:
+#       - master
     tags:
       - effector@*
 
@@ -16,7 +16,6 @@ jobs:
         with:
           version: 12
       - run: npm i -g yarn
-      - run: yarn
 
   publish-npm:
     needs: build
@@ -27,6 +26,7 @@ jobs:
         with:
           version: 12
           registry-url: https://registry.npmjs.org/
+      - run: yarn
       - run: yarn build publish latest
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
@@ -41,6 +41,7 @@ jobs:
           version: 12
           registry-url: https://npm.pkg.github.com/
           scope: '@zerobias'
+      - run: yarn
       - run: yarn build
       - run: cd npm/effector
       - run: npm publish
