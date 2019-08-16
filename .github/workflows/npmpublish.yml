@@ -30,19 +30,18 @@ jobs:
       - run: yarn build publish latest
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          version: 12
-          registry-url: https://npm.pkg.github.com/
-          scope: '@zerobias'
-      - run: yarn
-      - run: yarn build
-      - run: cd npm/effector && npm config set registry 'https://npm.pkg.github.com/' && npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  # publish-gpr:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         version: 12
+  #         registry-url: https://npm.pkg.github.com/
+  #         scope: '@zerobias'
+  #     - run: yarn
+  #     - run: yarn build
+  #     - run: cd npm/effector && npm config set registry 'https://npm.pkg.github.com/' && npm publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
