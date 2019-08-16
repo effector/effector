@@ -2,8 +2,8 @@ name: effector publish
 
 on:
   push:
-#     branches:
-#       - master
+    #     branches:
+    #       - master
     tags:
       - effector@*
 
@@ -43,7 +43,6 @@ jobs:
           scope: '@zerobias'
       - run: yarn
       - run: yarn build
-      - run: cd npm/effector
-      - run: npm publish
+      - run: cd npm/effector && npm config set registry 'https://npm.pkg.github.com/' && npm publish
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
