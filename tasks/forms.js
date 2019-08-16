@@ -1,17 +1,13 @@
 //@flow
 
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
+import {massCopy, publishScript} from 'Builder/utils'
 import {rollupEffectorForms} from 'Builder/rollup'
-import packages from 'Builder/packages.config'
+import {copyLicense, generatePackageJSON} from './common'
 
 export default {
   '@effector/forms': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/forms/package.json',
-        packages['@effector/forms'],
-      ),
-    () => massCopy('.', 'npm/@effector/forms', ['LICENSE']),
+    generatePackageJSON('@effector/forms'),
+    copyLicense('@effector/forms'),
     () =>
       massCopy('packages/@effector/forms', 'npm/@effector/forms', [
         'index.d.ts',

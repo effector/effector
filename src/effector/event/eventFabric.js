@@ -28,9 +28,9 @@ export function eventFabric<Payload>({
   parent,
   config = {},
 }: {
-  name?: string,
-  parent?: CompositeName,
-  config?: EventConfigPart,
+  +name?: string,
+  +parent?: CompositeName,
+  +config?: EventConfigPart,
   ...
 }): Event<Payload> {
   const id = nextID()
@@ -168,7 +168,6 @@ function watchEvent<Payload>(
 ): Subscription {
   const watcherEffect = effectFabric({
     name: event.shortName + ' watcher',
-    domainName: '',
     parent: event.domainName,
     config: {handler: watcher},
   })

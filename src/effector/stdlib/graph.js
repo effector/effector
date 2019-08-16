@@ -20,6 +20,7 @@ export function createNode({
     type?: 'regular' | 'crosslink',
     links?: Graphite[],
     owners?: Graphite[],
+    ...
   },
   ...
 }): Graph {

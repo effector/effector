@@ -5,8 +5,7 @@ hide_title: true
 ---
 
 # `sample(sourceStore, clockEvent, fn)`
-Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.  
-_Note: [_`Unit`_](Unit.md) chapter may come in handy, to be aware of way of using this method._
+Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
 Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more appropriate to use `sample` method as described below.
 
@@ -127,10 +126,10 @@ sampled.watch(console.log);
 inc() // => nothing
 
 event("foo");
-inc() // => Current count is 2, last event invocation: foo 
+inc() // => Current count is 2, last event invocation: foo
 
 event("bar");
-inc(); // => Current count is 3, last event invocation: bar 
+inc(); // => Current count is 3, last event invocation: bar
 ```
 [try it](https://share.effector.dev/L4nbGjxM)
 

@@ -12,9 +12,5 @@ export function createEvent<Payload>(
   nameOrConfig?: string | EventConfigPart,
   opts?: Config<EventConfigPart> = {},
 ): Event<Payload> {
-  const {config, name} = normalizeEventConfig(nameOrConfig, opts)
-  return eventFabric({
-    name,
-    config,
-  })
+  return eventFabric(normalizeEventConfig(nameOrConfig, opts))
 }

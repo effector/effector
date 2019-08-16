@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "20.0.0",
+  "version": "20.1.2",
   "description": "Application state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
@@ -18,15 +18,23 @@
     "effector.es.js",
     "effector.cjs.js",
     "effector.umd.js",
+    "compat.js",
     "effector.es.js.map",
     "effector.cjs.js.map",
     "effector.umd.js.map",
+    "compat.js.map",
     "effector.cjs.js.flow",
     "effector.es.js.flow",
     "effector.umd.js.flow",
+    "compat.js.flow",
     "babel-plugin.js",
-    "babel-plugin-react.js"
+    "babel-plugin-react.js",
+    "plugin/defaultMetaVisitor.js",
+    "plugin/noopMetaVisitor.js"
   ],
+  "browser": {
+    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
+  },
   "keywords": [
     "data",
     "datastructure",

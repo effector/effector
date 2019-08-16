@@ -2,18 +2,6 @@
 
 const importName = 'effector'
 
-const normalizeOptions = options => ({
-  filename: options.filename === undefined ? true : Boolean(options.filename),
-  stores: options.stores === undefined ? true : Boolean(options.stores),
-  events: options.events === undefined ? true : Boolean(options.events),
-  effects: options.effects === undefined ? true : Boolean(options.effects),
-  domains: options.domains === undefined ? true : Boolean(options.domains),
-  storeCreators: new Set(options.storeCreators || ['createStore']),
-  eventCreators: new Set(options.eventCreators || ['createEvent']),
-  effectCreators: new Set(options.effectCreators || ['createEffect']),
-  domainCreators: new Set(options.domainCreators || ['createDomain']),
-})
-
 module.exports = function(babel, options = {}) {
   const {
     filename: enableFileName,
@@ -25,11 +13,11 @@ module.exports = function(babel, options = {}) {
     eventCreators,
     effectCreators,
     domainCreators,
+    exportMetadata,
   } = normalizeOptions(options)
 
   const {types: t} = babel
-
-  return {
+  const plugin = {
     name: '@effector/babel-plugin',
     visitor: {
       ImportDeclaration(path) {
@@ -70,30 +58,38 @@ module.exports = function(babel, options = {}) {
           }
           state.fileNameIdentifier = fileNameIdentifier
         }
+        if (!state.stores) state.stores = new Set()
+        if (!state.events) state.events = new Set()
+        if (!state.effects) state.effects = new Set()
+        if (!state.domains) state.domains = new Set()
 
         if (t.isIdentifier(path.node.callee)) {
           if (stores && storeCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setStoreNameAfter(path, state, id, babel.types)
+              state.stores.add(id.name)
             }
           }
           if (events && eventCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.events.add(id.name)
             }
           }
           if (effects && effectCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.effects.add(id.name)
             }
           }
           if (domains && domainCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types)
+              state.domains.add(id.name)
             }
           }
         }
@@ -127,8 +123,73 @@ module.exports = function(babel, options = {}) {
       },
     },
   }
+  if (exportMetadata) {
+    createMetadataVisitor(plugin, exportMetadata)
+  }
+  return plugin
+}
+const normalizeOptions = options => {
+  let exportMetadata
+  if ('exportMetadata' in options) {
+    if (typeof options.exportMetadata === 'function') {
+      exportMetadata = options.exportMetadata
+    } else if (options.exportMetadata == true /* == for truthy values */) {
+      exportMetadata = require('./plugin/defaultMetaVisitor.js')
+        .defaultMetaVisitor
+    } else {
+      exportMetadata = null
+    }
+  } else {
+    exportMetadata = null
+  }
+  return readConfigFlags({
+    options,
+    properties: {
+      filename: true,
+      stores: true,
+      events: true,
+      effects: true,
+      domains: true,
+    },
+    result: {
+      exportMetadata,
+      storeCreators: new Set(options.storeCreators || ['createStore']),
+      eventCreators: new Set(options.eventCreators || ['createEvent']),
+      effectCreators: new Set(options.effectCreators || ['createEffect']),
+      domainCreators: new Set(options.domainCreators || ['createDomain']),
+    },
+  })
+
+  function readConfigFlags({options, properties, result}) {
+    for (const property in properties) {
+      if (property in options) {
+        result[property] = Boolean(options[property])
+      } else {
+        result[property] = properties[property]
+      }
+    }
+    return result
+  }
 }
 
+function createMetadataVisitor(plugin, exportMetadata) {
+  const {join, relative} = require('path')
+  plugin.visitor.Program = {
+    exit(_, state) {
+      const metadata = join(
+        state.file.opts.root,
+        '.effector',
+        relative(state.file.opts.root, state.filename) + '.json',
+      )
+      exportMetadata(metadata, {
+        stores: Array.from(state.stores),
+        effects: Array.from(state.effects),
+        domains: Array.from(state.domains),
+        events: Array.from(state.events),
+      })
+    },
+  }
+}
 // function addImportDeclaration(path, t, names) {
 //   if (!path) return
 //   const importDeclaration = t.importDeclaration(

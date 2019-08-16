@@ -9,5 +9,21 @@ import './logs/dynamic'
 import './settings/dynamic'
 import view from './view'
 
-const domNode = document.getElementById('try-wrapper')
-domNode && ReactDOM.render(view, domNode)
+const root = document.getElementById('try-wrapper')
+if (!root) throw Error('no body')
+
+window.addEventListener(
+  'touchmove',
+  event => {
+    event.preventDefault()
+  },
+  {passive: false},
+)
+root.addEventListener(
+  'touchmove',
+  (event: Event) => {
+    event.stopPropagation()
+  },
+  false,
+)
+ReactDOM.render(view, root)

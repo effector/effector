@@ -21,8 +21,8 @@ export const Kind: {
 
 export type Observer<A> = {
   readonly next?: (value: A) => void
-  // error(err: Error): void,
-  //complete(): void,
+  //error(err: Error): void
+  //complete(): void
 }
 
 export type Observable<T> = {
@@ -40,10 +40,17 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export type CompositeName = {
+  shortName: string
+  fullName: string
+  path: Array<string>
+}
+
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
+  filter<T extends Payload>(config: {fn(payload: Payload): payload is T}): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   /**
    * @deprecated This form is deprecated, use `filterMap` method instead.
@@ -54,6 +61,9 @@ export interface Event<Payload> extends Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<Payload>
 }
 
@@ -87,6 +97,9 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<Params>
 }
 
@@ -108,17 +121,19 @@ export interface Store<State> extends Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
-  shortName: string
   defaultState: State
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
   [Symbol.observable](): Observable<State>
 }
 
 export const is: {
-  unit(obj: unknown): boolean
-  store(obj: unknown): boolean
-  event(obj: unknown): boolean
-  effect(obj: unknown): boolean
-  domain(obj: unknown): boolean
+  unit(obj: unknown): obj is Unit<any>
+  store(obj: unknown): obj is Store<any>
+  event(obj: unknown): obj is Event<any>
+  effect(obj: unknown): obj is Effect<any, any, any>
+  domain(obj: unknown): obj is Domain
 }
 
 interface InternalStore<State> extends Store<State> {
@@ -210,6 +225,12 @@ export type Step = {
   next: Array<Step>
   seq: Array<Cmd>
   scope: {[field: string]: any}
+  meta: {}
+  family: {
+    type: 'regular' | 'crosslink'
+    links: Step[]
+    owners: Step[]
+  }
 }
 export const step: {
   compute(data: {
@@ -223,6 +244,7 @@ export const step: {
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+export function forward<To, From extends To>(opts:{ from: Unit<From>, to: Unit<To>}): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
@@ -257,10 +279,7 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-export function split<
-  S,
-  Obj extends {[name: string]: (payload: S) => boolean},
->(
+export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
   cases: Obj,
 ): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
@@ -302,43 +321,67 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A>(config: {
-  source: Unit<A>
-  clock: Unit<any>
-  target?: Unit<A>
-}): Unit<A>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  target?: Unit<C>
-  fn(source: A, clock: B): C
-}): Unit<C>
-
 export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<any>,
-): Event<A>
-export function sample<A>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
+  source: Store<A>,
   clock: Event<any> | Effect<any, any, any>,
 ): Event<A>
-
+export function sample<A>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Unit<any>,
+): Event<A>
 export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<B>,
+  source: Unit<A>,
+  clock: Unit<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
-export function sample<A, B, C>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  clock: Event<B> | Effect<B, any, any>,
-  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Event<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn: (source: A, clock: B) => C
+  target: Unit<C>
+  greedy?: boolean
+}): Unit<C>
+export function sample<A>(config: {
+  source: Unit<A>
+  clock: Unit<any>
+  target: Unit<A>
+  greedy?: boolean
+}): Unit<A>
+export function sample<A, B, C>(config: {
+  source: Store<A>
+  clock: Store<B>
+  fn(source: A, clock: B): C
+  greedy?: boolean
+}): Store<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn(source: A, clock: B): C
+  greedy?: boolean
+}): Event<C>
+export function sample<A>(config: {
+  source: Store<A>
+  clock?: Store<any>
+  greedy?: boolean
+}): Store<A>
+export function sample<A>(config: {
+  source: Store<A>
+  clock?: Event<any> | Effect<any, any, any>
+  greedy?: boolean
+}): Event<A>
+export function sample<A>(config: {
+  source: Event<A> | Effect<A, any, any>
+  clock?: Unit<any>
+  greedy?: boolean
+}): Event<A>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>

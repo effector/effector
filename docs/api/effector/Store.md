@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -40,7 +40,7 @@ increment() // changed 2
 reset() // changed 0
 ```
 
-<hr>
+<hr />
 
 ### `getState()`
 
@@ -64,7 +64,7 @@ updated(3)
 console.log(store.getState()) // 5
 ```
 
-<hr>
+<hr />
 
 ### `map(fn)`
 
@@ -97,7 +97,7 @@ changed('world') //
 changed('hello world') // new length 11
 ```
 
-<hr>
+<hr />
 
 ### `on(trigger, handler)`
 
@@ -105,7 +105,7 @@ Updates state when `trigger` is triggered by using `hander`.
 
 #### Arguments
 
-- ([_`Unit`_](Unit.md)): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 - (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
   - `state`: Current state of store
   - `params`: Parameters passed to event call
@@ -129,7 +129,7 @@ changed(2) // updated 2
 changed(2) // updated 4
 ```
 
-<hr>
+<hr />
 
 ### `off(trigger)`
 
@@ -137,7 +137,7 @@ changed(2) // updated 4
 
 (Store): Current store
 
-<hr>
+<hr />
 
 ### `watch(trigger, watcher) | watch(watcher)`
 
@@ -330,7 +330,7 @@ Output
 
 https://runkit.com/embed/lwo1u4m8yhz0
 
-<hr>
+<hr />
 
 ### `thru(fn)`
 
@@ -371,7 +371,7 @@ Output
 
 > newStore: 50
 ```
-<hr>
+<hr />
 
 ## Store Properties
 
@@ -381,7 +381,7 @@ Output
 
 (string): ID or short name of store
 
-<hr>
+<hr />
 
 ### `defaultState`
 
@@ -389,4 +389,27 @@ Output
 
 (`State`): Default state of store
 
-<hr>
+<hr />
+
+### `updates`
+
+#### Returns 
+
+(`Event<State>`): Event that represent updates of given store.
+
+Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
+
+```js
+import {createStore, is} from 'effector'
+
+const clicksAmount = createStore(0)
+is.event(clicksAmount.updates) // => true
+
+clicksAmount.watch(amount => {
+  console.log('will be triggered with current state, immediately, sync', amount)
+})
+
+clicksAmount.updates.watch(amount => {
+  console.log('will not be triggered unless store value is changed', amount)
+})
+```

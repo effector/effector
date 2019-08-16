@@ -25,27 +25,26 @@ const unitObjectMaxNames = 25
 
 export function unitObjectName(
   objOrArr:
-    | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any>
+    | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any | null>
     | {
-        [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any,
+        [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any | null,
         ...,
       },
   method: string = 'combine',
 ) {
-  let i = 0
-  const arr: Array<any> = Object.values(objOrArr)
-  const max = unitObjectMaxNames - 1
-  const maxLength = arr.length - 1
   let name = method + '('
-  for (const unit of arr) {
-    const comma = i === max || maxLength === i ? '' : ', '
-    if (is.store(unit) || is.event(unit) || is.effect(unit)) {
-      name += getDisplayName(unit) + comma
-    } else {
-      name += unit.toString() + comma
-    }
+  let comma = ''
+  let i = 0
+  //$todo
+  for (const key in objOrArr) {
+    //$todo
+    const unit = objOrArr[key]
+    name += comma
+    //$todo
+    name += is.unit(unit) ? getDisplayName(unit) : unit?.toString()
     i += 1
-    if (comma === '') break
+    if (i === unitObjectMaxNames) break
+    comma = ', '
   }
   name += ')'
   return name

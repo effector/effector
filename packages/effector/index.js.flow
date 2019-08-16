@@ -14,7 +14,7 @@ export type mixed_non_void =
   | string
   | number
   | boolean
-  | {}
+  | {...}
   | $ReadOnlyArray<mixed>
 
 declare export var Kind: {|
@@ -31,9 +31,22 @@ export type Subscription = {
   unsubscribe(): void,
   ...
 }
-export interface Unit<T> {
+interface CovariantUnit<+T> {
   +kind: kind;
 }
+interface ContravariantUnit<-T> {
+  +kind: kind;
+}
+export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+  +kind: kind;
+}
+
+export type CompositeName = {|
+  shortName: string,
+  fullName: string,
+  path: Array<string>,
+|}
+
 declare export class Event<Payload> implements Unit<Payload> {
   (payload: Payload): Payload;
   +kind: kind;
@@ -51,6 +64,9 @@ declare export class Event<Payload> implements Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription;
   thru<U>(fn: (event: Event<Payload>) => U): U;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export class Effect<Params, Done, Fail = Error>
@@ -87,6 +103,9 @@ declare export class Effect<Params, Done, Fail = Error>
   map<T>(fn: (params: Params) => T): Event<T>;
   subscribe(observer: Observer<Params>): Subscription;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export class Store<State> implements Unit<State> {
@@ -111,8 +130,10 @@ declare export class Store<State> implements Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
-  shortName: string;
   defaultState: State;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  shortName: string;
 }
 
 declare export var is: {|
@@ -212,6 +233,12 @@ export type Step = /*::interface extends Unit<any>*/ {
   +next: Array<Step>,
   +seq: Array<Cmd>,
   +scope: {[field: string]: any, ...},
+  +meta: Object,
+  +family: {|
+    +type: 'regular' | 'crosslink',
+    +links: Step[],
+    +owners: Step[],
+  |},
 }
 declare export var step: {|
   compute(data: {|
@@ -231,7 +258,7 @@ declare export var step: {|
   |}): Run,
 |}
 declare export function forward<T>(opts: {|
-  +from: Unit<T>,
+  +from: CovariantUnit<T>,
   +to: Unit<T>,
 |}): Subscription
 
@@ -252,7 +279,7 @@ declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
 declare export function createEvent<E>(eventName?: string): Event<E>
-declare export function createEvent<E>(config: {name?: string,...}): Event<E>
+declare export function createEvent<E>(config: {name?: string, ...}): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
@@ -304,7 +331,7 @@ declare export function split<
   source: Unit<S>,
   cases: Obj,
 ): $ObjMap<
-  {...Obj, __: (payload: S) => boolean},
+  {...Obj, __: (payload: S) => boolean, ...},
   (h: (payload: S) => boolean) => Event<S>,
 >
 declare export function restoreObject<
@@ -344,8 +371,12 @@ declare export function createDomain(domainName?: string): Domain
 declare export function sample<A>(config: {|
   +source: Unit<A>,
   +clock: Unit<any>,
-  +target?: Unit<A>,
 |}): Unit<A>
+declare export function sample<A, U: Unit<A>>(config: {|
+  +source: Unit<A>,
+  +clock: Unit<any>,
+  +target: U,
+|}): U
 declare export function sample<A, B, C>(config: {|
   +source: Unit<A>,
   +clock: Unit<B>,
@@ -374,7 +405,7 @@ declare export function sample<A, B, C>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
+): Event<C>
 declare export function sample<A, B, C>(
   source: Event<A> | Store<A> | Effect<A, any, any>,
   clock: Event<B> | Effect<B, any, any>,

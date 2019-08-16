@@ -9,7 +9,7 @@
  * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
-declare module "immer" {
+declare module 'immer' {
   /**
    * Object types that should never be mapped
    */
@@ -24,54 +24,57 @@ declare module "immer" {
     | RegExp
     | Boolean
     | Number
-    | String;
-  declare type ArrayMethod = Exclude<$Keys<[]>, number>;
-  declare type Indices<T> = Exclude<$Keys<T>, ArrayMethod>;
+    | String
+  declare type ArrayMethod = Exclude<$Keys<[]>, number>
+  declare type Indices<T> = Exclude<$Keys<T>, ArrayMethod>
   declare export type DraftArray<T: $ReadOnlyArray<any>> = Array<
     $ElementType<
-      $ObjMapi<{ [k: Indices<T>]: any }, <P>(P) => Draft<$ElementType<T, P>>>,
-      Indices<T>
-    >
-  >;
+      $ObjMapi<
+        {[k: Indices<T>]: any, ...},
+        <P>(P) => Draft<$ElementType<T, P>>,
+      >,
+      Indices<T>,
+    >,
+  >
   declare export type DraftTuple<T: $ReadOnlyArray<any>> = $ObjMapi<
     T,
-    <P>(P) => "There was Conditional Type, use $Call utility type"
-  >;
+    <P>(P) => 'There was Conditional Type, use $Call utility type',
+  >
   declare export type Draft<T> =
-    "There was Conditional Type, use $Call utility type";
+    'There was Conditional Type, use $Call utility type'
   declare export interface Patch {
-    op: "replace" | "remove" | "add";
+    op: 'replace' | 'remove' | 'add';
     path: (string | number)[];
     value?: any;
   }
   declare export type PatchListener = (
     patches: Patch[],
-    inversePatches: Patch[]
-  ) => void;
+    inversePatches: Patch[],
+  ) => void
   declare type IsVoidLike<T> =
-    "There was Conditional Type, use $Call utility type";
+    'There was Conditional Type, use $Call utility type'
 
   /**
    * Converts `nothing` into `undefined`
    */
   declare type FromNothing<T> =
-    "There was Conditional Type, use $Call utility type";
+    'There was Conditional Type, use $Call utility type'
 
   /**
    * The inferred return type of `produce`
    */
   declare export type Produced<T, Return> =
-    "There was Conditional Type, use $Call utility type";
+    'There was Conditional Type, use $Call utility type'
   declare type ImmutableTuple<T: $ReadOnlyArray<any>> = $ObjMapi<
     T,
-    <P>(P) => Immutable<$ElementType<T, P>>
-  >;
+    <P>(P) => Immutable<$ElementType<T, P>>,
+  >
 
   /**
    * Convert a mutable type into a readonly type
    */
   declare export type Immutable<T> =
-    "There was Conditional Type, use $Call utility type";
+    'There was Conditional Type, use $Call utility type'
   declare export interface IProduce {
     /**
      * The `produce` function takes a value and a "recipe function" (whose
@@ -94,7 +97,7 @@ declare module "immer" {
     <T, Return, D>(
       base: T,
       recipe: (draft: D) => Return,
-      listener?: PatchListener
+      listener?: PatchListener,
     ): Produced<T, Return>;
 
     /**
@@ -102,18 +105,18 @@ declare module "immer" {
      */
     <T, Rest: any[], Return, D>(
       recipe: (draft: D, ...rest: Rest) => Return,
-      defaultBase: T
+      defaultBase: T,
     ): (base: Immutable<D> | void, ...rest: Rest) => Produced<D, Return>;
 
     /**
      * Curried producer with no default value
      */
     <T, Rest: any[], Return>(
-      recipe: (draft: Draft<T>, ...rest: Rest) => Return
+      recipe: (draft: Draft<T>, ...rest: Rest) => Return,
     ): (base: Immutable<T>, ...rest: Rest) => Produced<T, Return>;
   }
-  declare export var produce: IProduce;
-  declare export default typeof produce;
+  declare export var produce: IProduce
+  declare export default typeof produce
 
   /**
    * Use a class type for `nothing` so its type is unique
@@ -123,7 +126,7 @@ declare module "immer" {
   /**
    * The sentinel value returned by producers to replace the draft with undefined.
    */
-  declare export var nothing: Nothing;
+  declare export var nothing: Nothing
 
   /**
    * To let Immer treat your class instances as plain immutable objects
@@ -133,14 +136,14 @@ declare module "immer" {
    * Otherwise, your class instance will never be drafted, which means it won't be
    * safe to mutate in a produce callback.
    */
-  declare export var immerable: "NO PRINT IMPLEMENTED: TypeOperator UniqueKeyword";
+  declare export var immerable: 'NO PRINT IMPLEMENTED: TypeOperator UniqueKeyword'
 
   /**
    * Pass true to automatically freeze all copies created by Immer.
    *
    * By default, auto-freezing is disabled in production.
    */
-  declare export function setAutoFreeze(autoFreeze: boolean): void;
+  declare export function setAutoFreeze(autoFreeze: boolean): void
 
   /**
    * Pass true to use the ES2015 `Proxy` class when creating drafts, which is
@@ -148,41 +151,42 @@ declare module "immer" {
    *
    * By default, feature detection is used, so calling this is rarely necessary.
    */
-  declare export function setUseProxies(useProxies: boolean): void;
+  declare export function setUseProxies(useProxies: boolean): void
 
   /**
    * Apply an array of Immer patches to the first argument.
    *
    * This function is a producer, which means copy-on-write is in effect.
    */
-  declare export function applyPatches<S>(base: S, patches: Patch[]): S;
+  declare export function applyPatches<S>(base: S, patches: Patch[]): S
 
   /**
    * Get the underlying object that is represented by the given draft
    */
-  declare export function original<T>(value: T): T | void;
+  declare export function original<T>(value: T): T | void
 
   /**
    * Returns true if the given value is an Immer draft
    */
-  declare export function isDraft(value: any): boolean;
+  declare export function isDraft(value: any): boolean
 
   /**
    * Returns true if the given value can be drafted by Immer
    */
-  declare export function isDraftable(value: any): boolean;
+  declare export function isDraftable(value: any): boolean
 
   declare export class Immer {
     constructor(config: {
       useProxies?: boolean,
       autoFreeze?: boolean,
       onAssign?: (
-        state: ImmerState,
+        state: ImmerState<>,
         prop: string | number,
-        value: mixed
+        value: mixed,
       ) => void,
-      onDelete?: (state: ImmerState, prop: string | number) => void,
-      onCopy?: (state: ImmerState) => void
+      onDelete?: (state: ImmerState<>, prop: string | number) => void,
+      onCopy?: (state: ImmerState<>) => void,
+      ...
     }): this;
 
     /**
@@ -231,13 +235,13 @@ declare module "immer" {
     setUseProxies(useProxies: boolean): void;
   }
   declare export interface ImmerState<T> {
-    parent?: ImmerState;
+    parent?: ImmerState<>;
     base: T;
     copy: T;
     assigned: {
       [prop: string]: boolean,
-      [index: number]: boolean
+      // [index: number]: boolean,
+      ...,
     };
   }
 }
-

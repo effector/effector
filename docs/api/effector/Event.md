@@ -26,6 +26,7 @@ unwatch();
 sayHi("Drew"); // => nothing happened
 ```
 [Try it](https://share.effector.dev/rcbKQbEn)
+
 <hr>
 
 ### `map(fn)`
@@ -79,7 +80,7 @@ const lastPositive = createStore(0)
 ```
 [Try it](https://share.effector.dev/XHDQ3FDX)
 
-<hr>
+<hr />
 
 ### `filterMap(fn)`
 
@@ -138,7 +139,7 @@ const App = () => (
 
 [Try it](https://share.effector.dev/axd5A0G5)
 
-<hr>
+<hr />
 
 ### `prepend(fn)`
 
@@ -164,5 +165,4 @@ document.body.appendChild(input);
   // => Current name is: something
 ```
 [Try it](https://share.effector.dev/xv3E9OfR)
-
 <hr>

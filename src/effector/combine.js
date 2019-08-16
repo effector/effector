@@ -117,31 +117,31 @@ export function combine(...args: Array<Store<any>>): Store<any> {
   }
 
   let structStoreShape
-
-  makeShape: {
-    if (stores.length === 1) {
-      const obj = stores[0]
-      /*
+  let shapeReady
+  if (stores.length === 1) {
+    const obj = stores[0]
+    /*
       without edge case combine(Color, (Color) => '~')
       */
-      if (!is.store(obj)) {
-        /*
-        case combine([R,G,B], ([R,G,B]) => '~')
-        case combine({R,G,B}, ({R,G,B}) => '~')
+    if (!is.store(obj)) {
+      /*
+      case combine([R,G,B], ([R,G,B]) => '~')
+      case combine({R,G,B}, ({R,G,B}) => '~')
 
-        edge case combine([Color], ([Color]) => '~')
-        edge case combine({Color}, ({Color}) => '~')
+      edge case combine([Color], ([Color]) => '~')
+      edge case combine({Color}, ({Color}) => '~')
 
-        edge case combine([R,G,B])
-        edge case combine({R,G,B})
+      edge case combine([R,G,B])
+      edge case combine({R,G,B})
 
-        edge case combine([Color])
-        edge case combine({Color})
-        */
-        structStoreShape = obj
-        break makeShape
-      }
+      edge case combine([Color])
+      edge case combine({Color})
+      */
+      structStoreShape = obj
+      shapeReady = true
     }
+  }
+  if (!shapeReady) {
     /*
     case combine(R,G,B, (R,G,B) => '~')
     */

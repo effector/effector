@@ -21,6 +21,7 @@ declare module 'rollup' {
       file?: string,
       line: number,
       column: number,
+      ...
     };
     stack?: string;
     frame?: string;
@@ -39,7 +40,7 @@ declare module 'rollup' {
     file: string;
   }
 
-  declare export type RawSourceMap = {mappings: ''} | ExistingRawSourceMap
+  declare export type RawSourceMap = {mappings: '', ...} | ExistingRawSourceMap
 
   declare export interface SourceMap {
     version: string;
@@ -100,11 +101,11 @@ declare module 'rollup' {
     getAssetFileName: (assetId: string) => string;
     warn(
       warning: RollupWarning | string,
-      pos?: {line: number, column: number},
+      pos?: {line: number, column: number, ...},
     ): void;
     error(
       err: RollupError | string,
-      pos?: {line: number, column: number},
+      pos?: {line: number, column: number, ...},
     ): void;
   }
 
@@ -145,8 +146,8 @@ declare module 'rollup' {
     options: OutputOptions,
     chunk: OutputChunk,
   ) =>
-    | Promise<{code: string, map: RawSourceMap} | void>
-    | {code: string, map: RawSourceMap}
+    | Promise<{code: string, map: RawSourceMap, ...} | void>
+    | {code: string, map: RawSourceMap, ...}
     | void
     | null
 
@@ -156,8 +157,8 @@ declare module 'rollup' {
     options: OutputOptions,
     chunk: OutputChunk,
   ) =>
-    | Promise<{code: string, map: RawSourceMap} | void>
-    | {code: string, map: RawSourceMap}
+    | Promise<{code: string, map: RawSourceMap, ...} | void>
+    | {code: string, map: RawSourceMap, ...}
     | void
 
   declare export type ResolveDynamicImportHook = (
@@ -216,27 +217,27 @@ declare module 'rollup' {
 
   declare export type ExternalOption = string[] | IsExternal
   declare export type GlobalsOption =
-    | {[name: string]: string}
+    | {[name: string]: string, ...}
     | ((name: string) => string)
   declare export type InputOption =
     | string
     | string[]
-    | {[entryAlias: string]: string}
+    | {[entryAlias: string]: string, ...}
 
   declare export interface InputOptions {
     +input: $Subtype<InputOption>;
-    +manualChunks?: {[chunkAlias: string]: string[]};
+    +manualChunks?: {[chunkAlias: string]: string[], ...};
     +external?: ExternalOption;
     +plugins?: Plugin[];
 
     +onwarn?: WarningHandler;
     +cache?: RollupCache;
 
-    +acorn?: {};
+    +acorn?: {...};
     +acornInjectPlugins?: Function[];
     +treeshake?: boolean | TreeshakingOptions;
     +context?: string;
-    +moduleContext?: string | ((id: string) => string) | {[id: string]: string};
+    +moduleContext?: string | ((id: string) => string) | {[id: string]: string, ...};
     +watch?: WatcherOptions;
     +inlineDynamicImports?: boolean;
     +experimentalCodeSplitting?: boolean;
@@ -261,7 +262,7 @@ declare module 'rollup' {
     | 'iife'
     | 'umd'
 
-  declare export type OptionsPaths = {} | ((id: string) => string)
+  declare export type OptionsPaths = {...} | ((id: string) => string)
 
   declare export type OutputOptions = {
     // only required for bundle.write
@@ -291,6 +292,7 @@ declare module 'rollup' {
     amd?: {
       id?: string,
       define?: string,
+      ...
     },
     indent?: boolean,
     strict?: boolean,
@@ -305,15 +307,18 @@ declare module 'rollup' {
     // deprecated
     dest?: string,
     moduleId?: string,
+    ...
   }
 
   declare export type OutputOptionsFile = OutputOptions & {
     file?: string,
+    ...
   }
 
   declare export type OutputOptionsDir = OutputOptions & {
     // only required for bundles.write
     dir?: string,
+    ...
   }
 
   declare export interface RollupWarning {
@@ -323,8 +328,9 @@ declare module 'rollup' {
       file: string,
       line: number,
       column: number,
+      ...
     };
-    deprecations?: {old: string, new: string}[];
+    deprecations?: {old: string, new: string, ...}[];
     modules?: string[];
     names?: string[];
     source?: string;
@@ -364,26 +370,28 @@ declare module 'rollup' {
     exports: string[];
     modules: {
       [id: string]: RenderedModule,
+      ...,
     };
     code: string;
     map?: SourceMap;
   }
 
-  declare export type RollupCache = {
+  declare export type RollupCache = {|
     +modules: ModuleJSON[],
     +assetDependencies?: string[],
-  }
+  |}
 
   declare export type RollupSingleFileBuild = {
     // TODO: consider deprecating to match code splitting
     imports: string[],
-    exports: {name: string, originalName: string, moduleId: string}[],
+    exports: {|name: string, originalName: string, moduleId: string|}[],
     modules: ModuleJSON[],
     cache: RollupCache,
 
     generate(outputOptions: OutputOptions): Promise<OutputChunk>,
     write(options: OutputOptions): Promise<OutputChunk>,
     getTimings?: () => SerializedTimings,
+    ...
   }
 
   declare export interface OutputBundle {
@@ -392,9 +400,10 @@ declare module 'rollup' {
 
   declare export type RollupBuild = {
     cache: RollupCache,
-    generate(outputOptions: OutputOptions): Promise<{output: OutputBundle}>,
-    write(options: OutputOptions): Promise<{output: OutputBundle}>,
+    generate(outputOptions: OutputOptions): Promise<{|output: OutputBundle|}>,
+    write(options: OutputOptions): Promise<{|output: OutputBundle|}>,
     getTimings?: () => SerializedTimings,
+    ...
   }
 
   declare export interface RollupFileOptions extends InputOptions {
@@ -405,16 +414,16 @@ declare module 'rollup' {
 
   declare export interface RollupDirOptions extends InputOptions {
     +cache?: RollupCache;
-    +input: $Subtype<string[] | {[entryName: string]: string}>;
+    +input: $Subtype<string[] | {[entryName: string]: string, ...}>;
     +output?: OutputOptionsDir;
   }
 
   declare export function rollup(
     options: RollupFileOptions,
   ): Promise<RollupSingleFileBuild>
-  declare export function rollup(
-    options: RollupDirOptions,
-  ): Promise<RollupBuild>
+  // declare export function rollup(
+  //   options: RollupDirOptions,
+  // ): Promise<RollupBuild>
 
   declare export interface WatcherOptions {
     chokidar?: boolean | WatchOptions;

@@ -12,10 +12,5 @@ export function createEffect<Payload, Done>(
   nameOrConfig?: string | EffectConfigPart<Payload, Done>,
   opts?: Config<EffectConfigPart<Payload, Done>>,
 ): Effect<Payload, Done, *> {
-  const {config, name} = normalizeEventConfig(nameOrConfig, opts)
-  return effectFabric({
-    name,
-    domainName: '',
-    config,
-  })
+  return effectFabric(normalizeEventConfig(nameOrConfig, opts))
 }

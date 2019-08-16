@@ -26,6 +26,13 @@ export default function Errors({
   stackFrames: StackFrameType[],
 |}) {
   if (isError) {
+    if (error !== Object(error)) {
+      return (
+        <pre key="error-window" className="errors has-errors">
+          <Header headerText={String(error)} />
+        </pre>
+      )
+    }
     const errorName = error.name
     const message = error.message
     const headerText =
@@ -47,4 +54,9 @@ export default function Errors({
     )
   }
   return <pre key="error-window" className="errors no-errors" />
+}
+Errors.defaultProps = {
+  isError: false,
+  error: Error('Unknown error'),
+  stackFrames: [],
 }

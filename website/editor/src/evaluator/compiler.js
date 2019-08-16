@@ -42,12 +42,21 @@ registerPlugin('@effector/repl-remove-imports', babel => ({
     ImportDeclaration(path) {
       path.remove()
     },
+    ExportDefaultDeclaration(path) {
+      path.remove()
+    },
+    ExportNamedDeclaration(path) {
+      if (path.node.declaration) {
+        path.replaceWith(path.node.declaration)
+      } else {
+        path.remove()
+      }
+    },
   },
 }))
 
 const compileAll = (code: string): string => {
   const options = babelOptions.getState()
-  console.error(options)
   return transform(code, options).code
 }
 export const transformCode = (code: string): string => compileAll(code)

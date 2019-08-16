@@ -40,10 +40,10 @@ export const typechecker: Store<'flow' | 'typescript' | null> = combine(
 
 export const clickPrettify = domain.event<any>()
 export const prettier: Effect<string, string, Error> = domain.effect()
-export const prettierButtonStatus: Store<{
+export const prettierButtonStatus: Store<{|
   text: string,
   disabled: boolean,
-}> = prettier.pending.map(pending =>
+|}> = prettier.pending.map(pending =>
   pending
     ? {
       text: 'In progress',

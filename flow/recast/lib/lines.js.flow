@@ -8,7 +8,7 @@
  */
 
 import type {Options} from './options'
-import {namedTypes} from 'ast-types'
+import * as namedTypes from 'ast-types/gen/namedTypes'
 declare type Pos = namedTypes.Position
 declare type LineInfo = {
   +line: string,
@@ -16,6 +16,7 @@ declare type LineInfo = {
   +locked: boolean,
   +sliceStart: number,
   +sliceEnd: number,
+  ...
 }
 declare export class Lines {
   length: number;
@@ -40,10 +41,12 @@ declare export class Lines {
   firstPos(): {
     line: number,
     column: number,
+    ...
   };
   lastPos(): {
     line: number,
     column: number,
+    ...
   };
   skipSpaces(
     pos: Pos,

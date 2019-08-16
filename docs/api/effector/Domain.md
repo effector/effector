@@ -21,7 +21,7 @@ It is useful for logging or other side effects.
 
 (Subscription): Unsubscribe function
 
-<hr>
+<hr />
 
 ### `onCreateEffect(hook)`
 
@@ -33,7 +33,7 @@ It is useful for logging or other side effects.
 
 (Subscription): Unsubscribe function
 
-<hr>
+<hr />
 
 ### `onCreateStore(hook)`
 
@@ -45,7 +45,7 @@ It is useful for logging or other side effects.
 
 (Subscription): Unsubscribe function
 
-<hr>
+<hr />
 
 ### `onCreateDomain(hook)`
 
@@ -57,7 +57,7 @@ It is useful for logging or other side effects.
 
 (Subscription): Unsubscribe function
 
-<hr>
+<hr />
 
 ### `event(name?)`
 
@@ -69,7 +69,7 @@ It is useful for logging or other side effects.
 
 ([_`Event`_](Event.md)): An intention to change state.
 
-<hr>
+<hr />
 
 ### `effect(name?)`
 
@@ -81,7 +81,7 @@ It is useful for logging or other side effects.
 
 ([_`Effect`_](Effect.md)): A container for async function.
 
-<hr>
+<hr />
 
 ### `store(defaultState)`
 
@@ -93,7 +93,7 @@ It is useful for logging or other side effects.
 
 ([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
-<hr>
+<hr />
 
 ### `domain(name?)`
 
@@ -105,4 +105,4 @@ It is useful for logging or other side effects.
 
 ([_`Domain`_](Store.md)): A namespace for your events, stores and effects.
 
-<hr>
+<hr />

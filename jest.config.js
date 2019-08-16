@@ -61,6 +61,7 @@ module.exports = {
     'effector/stdlib',
     'effector/perf',
     'effector/validate',
+    'effector/sample',
     'static-land',
     'types',
     'forms',
@@ -135,9 +136,9 @@ function createProjectList(items) {
 }
 
 function boolean(
-  value/*: string | boolean | null | void*/,
-  defaults/*: boolean*/,
-)/*: boolean*/ {
+  value /*: string | boolean | null | void*/,
+  defaults /*: boolean*/,
+) /*: boolean*/ {
   switch (value) {
     case 'no':
     case 'false':

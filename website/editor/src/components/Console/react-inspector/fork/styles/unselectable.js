@@ -6,4 +6,4 @@ export default {
   msUserSelect: 'none',
   OUserSelect: 'none',
   userSelect: 'none',
-};
+}

@@ -8,8 +8,7 @@ import debounce from 'lodash.debounce'
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
 import {VersionLink} from './components/VersionLink'
-import {VersionSelector} from './components/VersionSelector'
-import {Header} from './components/Header'
+import {SidebarHeader} from './components/SidebarHeader'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
@@ -17,21 +16,18 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {isDesktopChanges, tab} from './tabs/domain'
 import {TabsView} from './tabs/view'
+import {PrettifyButton} from './settings'
 import {mode} from './mode/domain'
 import {
-  selectVersion,
-  sourceCode,
-  changeSources,
   performLint,
-  codeError,
-  stats,
-  version,
-  codeMarkLine,
-  codeCursorActivity,
+  changeSources,
   codeSetCursor,
-  packageVersions,
-} from './domain'
-import {typechecker} from './settings/domain'
+  codeCursorActivity,
+  codeMarkLine,
+} from './editor'
+import {version, sourceCode, codeError} from './editor/state'
+
+import {stats} from './realm/state'
 
 const OutlineView = createComponent(
   {
@@ -51,7 +47,7 @@ const OutlineView = createComponent(
 const ErrorsView = createComponent(
   codeError,
   ({}, {isError, error, stackFrames}) => (
-    <Errors isError={isError} error={error} stackFrames={stackFrames} />
+    <Errors isError={isError} error={(error: any)} stackFrames={stackFrames} />
   ),
 )
 
@@ -88,31 +84,16 @@ const VersionLinkView = createComponent(version, ({}, version) => (
   <VersionLink version={version} />
 ))
 
-//const versions = useStore(packageVersions)
-//const selected = useStore(version)
-//TODO: bug in createComponent, probably actually in watchers
-//,
-const VersionSelectorView = createComponent(
-  {versions: packageVersions, selected: version},
-  (_, {versions, selected}) => (
-    <VersionSelector
-      versions={versions}
-      selected={selected}
-      onChange={selectVersion}
-    />
-  ),
-)
-
 export default (
-  <div className="try-inner">
+  <>
     <VersionLinkView />
     <OutlineView />
     <CodeView />
-    <Header>
-      <VersionSelectorView />
-    </Header>
+    <SidebarHeader>
+      <PrettifyButton />
+    </SidebarHeader>
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />
-  </div>
+  </>
 )

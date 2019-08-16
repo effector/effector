@@ -38,10 +38,26 @@
   height: 100%;
 }
 
+@font-face {
+  font-family: 'Fira Code VF';
+  src: url('font.woff2') format('woff2-variations');
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+.CodeMirror span {
+  font-family: 'Fira Code VF', sans-serif;
+}
+
 body {
+  overscroll-behavior: none;
   margin: 0;
   padding: 0;
   height: 100vh;
+  -webkit-overflow-scrolling: touch;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
 }
 
 #version {
@@ -56,11 +72,6 @@ body {
 }
 
 #try-wrapper {
-  flex-grow: 1;
-  display: contents;
-}
-
-.try-inner {
   display: grid;
 }
 
@@ -83,13 +94,6 @@ body {
 }
 
 .editor.results {
-}
-
-.header-tabs {
-  border-left: 1px solid #ddd;
-  background-color: #f7f7f7;
-  height: 36px;
-  overflow-y: auto;
 }
 
 .dom {
@@ -130,8 +134,7 @@ body {
   .navPusher {
     min-height: calc(100vh - 100px);
   }
-  .try-inner {
-    height: 100%;
+  #try-wrapper {
     width: 100vw;
     overflow-x: hidden;
     scroll-snap-type: mandatory;
@@ -165,9 +168,8 @@ body {
   }
 }
 @media (min-width: 700px) {
-  .try-inner {
+  #try-wrapper {
     overflow: hidden;
-    height: 100%;
     grid-template-columns: 200px minmax(200px, 2fr) minmax(200px, 1fr);
     grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
   }
@@ -186,7 +188,7 @@ body {
 
   .editor.results {
     grid-column: 3 / span 1;
-    grid-row: 3 / span 2;
+    grid-row: 2 / span 3;
   }
 
   .errors {

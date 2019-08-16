@@ -20,6 +20,13 @@
           "recipes/react/example",
           "recipes/react/example-effects"
         ]
+      },
+      {
+        "type": "subcategory",
+        "label": "React Native",
+        "ids": [
+          "recipes/react-native/example"
+        ]
       }
     ],
     "Other": ["troubleshooting", "glossary"],
@@ -53,6 +60,8 @@
       "api/effector-react/createGate",
       "api/effector-react/useGate",
       "api/effector-react/useStore",
+      "api/effector-react/useStoreMap",
+      "api/effector-react/useList",
       "api/effector-react/gate"
     ],
     "effector-vue": [

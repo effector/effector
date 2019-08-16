@@ -70,7 +70,7 @@ test('list', () => {
 
   function storeList<T>(
     initials: Array<T>,
-  ): {
+  ): {|
     +self: Store<$ReadOnlyArray<T>>,
     +watch: $PropertyType<Store<Array<T>>, 'watch'>,
     +on: $PropertyType<Store<Array<T>>, 'on'>,
@@ -127,7 +127,7 @@ test('list', () => {
     shift: Event<void>,
     pop: Event<void>,
     clear: Event<void>,
-  } {
+  |} {
     const store = createStore(initials)
     const reducers = {
       insert(
@@ -186,10 +186,10 @@ test('list', () => {
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{
+        const newSegments: Array<{|
           index: number,
           updater(value: T): T,
-        }> = segments
+        |}> = segments
           .map(({updater, index}) => ({
             updater,
             index: normalizeOffset<T>(index, state, []),
@@ -239,10 +239,10 @@ test('list', () => {
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{
+        const newSegments: Array<{|
           from: number,
           to: number,
-        }> = segments
+        |}> = segments
           .map(([indexA, indexB]) => ({
             from: normalizeOffset<T>(indexA, state, []),
             to: normalizeOffset<T>(indexB, state, []),
@@ -267,10 +267,10 @@ test('list', () => {
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{
+        const newSegments: Array<{|
           from: number,
           to: number,
-        }> = segments
+        |}> = segments
           .map(([indexA, indexB]) => ({
             from: normalizeOffset<T>(indexA, state, []),
             to: normalizeOffset<T>(indexB, state, []),

@@ -1,3 +1,5 @@
+.env
+.effector
 .DS_Store
 .idea
 .history
@@ -13,6 +15,7 @@ debug.log
 lerna-debug.log
 node_modules
 npm-debug.log
+local.log
 cldr
 coverage/
 .nyc_output

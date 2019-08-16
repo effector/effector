@@ -40,7 +40,7 @@ function variadicEffect<Done, Fn:(...params: any[]) => Promise<Done> | Done>(
   )
   const oldUse = effect.use
   //$off
-  effect.use = thunk => oldUse(payload => thunk(...payload))
+  effect.use = handler => oldUse(payload => handler(...payload))
 
   return (effect: any)
 }
@@ -65,6 +65,7 @@ test('effect.create multiple arguments', async() => {
   await effect(200, 300)
   await effect(300, 400)
 
+  //$todo
   await expect(effect.create.mock.calls).toMatchSnapshot('effect.create')
   await expect(useSpy.mock.calls).toMatchSnapshot('effect.use')
   await expect(baz.mock.calls).toMatchSnapshot('effect.watch')

@@ -5,7 +5,16 @@ import {logs} from './domain'
 import Console from '../components/Console'
 import {createComponent} from 'effector-react'
 
-export const LogsView = createComponent<{|style: any|}, _>(
-  logs,
-  ({style}, logs) => <Console className="console" style={style} logs={logs} />,
-)
+export const LogsView = createComponent<
+  {|
+    style?: any,
+  |},
+  Array<{|
+    data: Array<any>,
+    id: number,
+    method: *,
+  |}>,
+>(logs, ({style}, logs) => (
+  //$todo
+  <Console className="console" style={style} logs={logs} />
+))

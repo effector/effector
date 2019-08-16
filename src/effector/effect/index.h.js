@@ -12,11 +12,11 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   done: Event<{|
     params: Params,
     result: Done,
-  |}>,
+  |}>;
   fail: Event<{|
     params: Params,
     error: Fail,
-  |}>,
+  |}>;
   finally: Event<
     | {|
         +status: 'done',
@@ -28,21 +28,21 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
         +params: Params,
         +error: *,
       |},
-  >,
-  /*::+*/ id: string,
+  >;
+  /*::+*/ id: string;
   use: {|
     /*::
     [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
     */
     getCurrent(): (params: Params) => Promise<Done>,
-  |},
-  create(payload: Params, type: string, args: any[]): Params,
-  pending: Store<boolean>,
-  watch(watcher: (payload: Params) => any): Subscription,
+  |};
+  create(payload: Params, type: string, args: any[]): Params;
+  pending: Store<boolean>;
+  watch(watcher: (payload: Params) => any): Subscription;
   // getNode(): Vertex<['event', string]>,
   //map<T>(fn: (_: E) => T): Event<T>,
-  prepend<Before>(fn: (_: Before) => Params): Event<Before>,
-  subscribe(subscriber: Subscriber<Params>): Subscription,
+  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
+  subscribe(subscriber: Subscriber<Params>): Subscription;
   //prettier-ignore
   //   +to: (
   //   & (<T>(
@@ -52,12 +52,12 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   //   & ((store: Store<Params>, _: void) => Subscription)
   //  ),
   // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
-  getType(): string,
-  +kind: kind,
-  shortName: string,
-  domainName?: CompositeName,
-  graphite: Graph,
-  compositeName: CompositeName,
+  getType(): string;
+  +kind: kind;
+  shortName: string;
+  domainName?: CompositeName;
+  graphite: Graph;
+  compositeName: CompositeName;
 }
 
 export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
@@ -98,6 +98,5 @@ export type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   domainName?: CompositeName,
   graphite: Graph,
   compositeName: CompositeName,
+  ...
 }
-
-export type Thunk<Args, Done> = (_: Args) => Promise<Done>

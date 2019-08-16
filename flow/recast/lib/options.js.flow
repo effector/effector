@@ -7,7 +7,7 @@
  * @flow
  */
 
-import { Omit } from "ast-types/types";
+import type {Omit} from 'ast-types/types'
 
 /**
  * All Recast API functions take second parameter with configuration options,
@@ -110,7 +110,7 @@ export type Options = {
    * which results in the shorter literal) Otherwise, use double quotes.
    * @default null
    */
-  quote?: "single" | "double" | "auto" | null,
+  quote?: 'single' | 'double' | 'auto' | null,
 
   /**
    * Controls the printing of trailing commas in object literals, array
@@ -164,16 +164,18 @@ export type Options = {
    * Whether to return an array of .tokens on the root AST node.
    * @default true
    */
-  tokens?: boolean
-} & DeprecatedOptions;
+  tokens?: boolean,
+  ...
+} & DeprecatedOptions
 declare interface DeprecatedOptions {
   /**
    * @deprecated
    */
   esprima?: any;
 }
+//$todo
 export type NormalizedOptions = Required<
-  Omit<Options, $Keys<DeprecatedOptions>>
->;
-declare export function normalize(opts?: Options): NormalizedOptions;
-declare export {};
+  Omit<Options, $Keys<DeprecatedOptions>>,
+>
+declare export function normalize(opts?: Options): NormalizedOptions
+declare export {}

@@ -1,17 +1,13 @@
 //@flow
 
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
+import {massCopy} from 'Builder/utils'
 import {rollupEffectorReduxAdapter} from 'Builder/rollup'
-import packages from 'Builder/packages.config'
+import {copyLicense, generatePackageJSON} from './common'
 
 export default {
   '@effector/redux-adapter': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/redux-adapter/package.json',
-        packages['@effector/redux-adapter'],
-      ),
-    () => massCopy('.', 'npm/@effector/redux-adapter', ['LICENSE']),
+    generatePackageJSON('@effector/redux-adapter'),
+    copyLicense('@effector/redux-adapter'),
     () =>
       massCopy(
         'packages/@effector/redux-adapter',

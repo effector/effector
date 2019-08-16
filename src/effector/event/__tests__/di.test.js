@@ -23,6 +23,7 @@ type FnEvent<Fn> = Fn & Event<any>
 test('event.create multiple arguments', () => {
   const bar: FnEvent<(number, string) => number> = createEvent<number>('bar')
   const oldCreate = bar.create
+  //$todo
   bar.create = jest.fn((payload, fullName, args) =>
     oldCreate([payload, ...args], fullName, []),
   )

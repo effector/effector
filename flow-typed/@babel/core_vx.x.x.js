@@ -18,36 +18,36 @@ declare module '@babel/core' {
   declare export var version: string
   declare export type TransformOptions = {
     /**
- * Include the AST in the returned object
- * 
-Default: `false`
-*/
+     * Include the AST in the returned object
+     *
+     Default: `false`
+     */
     ast?: boolean | null,
 
     /**
  * Attach a comment after all non-user injected code
- * 
+ *
 Default: `null`
 */
     auxiliaryCommentAfter?: string | null,
 
     /**
  * Attach a comment before all non-user injected code
- * 
+ *
 Default: `null`
 */
     auxiliaryCommentBefore?: string | null,
 
     /**
  * Specify the "root" folder that defines the location to search for "babel.config.js", and the default folder to allow `.babelrc` files inside of.
- * 
+ *
 Default: `"."`
 */
     root?: string | null,
 
     /**
  * The config file to load Babel's config from. Defaults to searching for "babel.config.js" inside the "root" folder. `false` will disable searching for config files.
- * 
+ *
 Default: `undefined`
 */
     configFile?: string | false | null,
@@ -70,35 +70,35 @@ Default: `(root)`
 
     /**
  * Defaults to environment variable `BABEL_ENV` if set, or else `NODE_ENV` if set, or else it defaults to `"development"`
- * 
+ *
 Default: env vars
 */
     envName?: string | null,
 
     /**
  * Enable code generation
- * 
+ *
 Default: `true`
 */
     code?: boolean | null,
 
     /**
  * Output comments in generated output
- * 
+ *
 Default: `true`
 */
     comments?: boolean | null,
 
     /**
  * Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB
- * 
+ *
 Default: `"auto"`
 */
     compact?: boolean | 'auto' | null,
 
     /**
  * The working directory that Babel's programmatic options are loaded relative to.
- * 
+ *
 Default: `"."`
 */
     cwd?: string | null,
@@ -111,88 +111,89 @@ Default: `{}`
 */
     env?: {
       [index: string]: TransformOptions | null | void,
+      ...,
     } | null,
 
     /**
  * A path to a `.babelrc` file to extend
- * 
+ *
 Default: `null`
 */
     extends?: string | null,
 
     /**
  * Filename for use in errors etc
- * 
+ *
 Default: `"unknown"`
 */
     filename?: string | null,
 
     /**
  * Filename relative to `sourceRoot`
- * 
+ *
 Default: `(filename)`
 */
     filenameRelative?: string | null,
 
     /**
  * An object containing the options to be passed down to the babel code generator, @babel/generator
- * 
+ *
 Default: `{}`
 */
     generatorOpts?: GeneratorOptions | null,
 
     /**
  * Specify a custom callback to generate a module id with. Called as `getModuleId(moduleName)`. If falsy value is returned then the generated module id is used
- * 
+ *
 Default: `null`
 */
     getModuleId?: ((moduleName: string) => string | null | void) | null,
 
     /**
  * ANSI highlight syntax error code frames
- * 
+ *
 Default: `true`
 */
     highlightCode?: boolean | null,
 
     /**
  * Opposite to the `only` option. `ignore` is disregarded if `only` is specified
- * 
+ *
 Default: `null`
 */
     ignore?: string[] | null,
 
     /**
  * A source map object that the output source map will be based on
- * 
+ *
 Default: `null`
 */
-    inputSourceMap?: {[key: string]: any} | null,
+    inputSourceMap?: {[key: string]: any, ...} | null,
 
     /**
  * Should the output be minified (not printing last semicolons in blocks, printing literal string values instead of escaped ones, stripping `()` from `new` when safe)
- * 
+ *
 Default: `false`
 */
     minified?: boolean | null,
 
     /**
  * Specify a custom name for module ids
- * 
+ *
 Default: `null`
 */
     moduleId?: string | null,
 
     /**
  * If truthy, insert an explicit id for modules. By default, all modules are anonymous. (Not available for `common` modules)
- * 
+ *
 Default: `false`
 */
     moduleIds?: boolean | null,
 
     /**
  * Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions
- * 
+ *
 Default: `(sourceRoot)`
 */
     moduleRoot?: string | null,
@@ -207,42 +208,42 @@ Default: `null`
 
     /**
  * An object containing the options to be passed down to the babel parser, @babel/parser
- * 
+ *
 Default: `{}`
 */
     parserOpts?: ParserOptions | null,
 
     /**
  * List of plugins to load and use
- * 
+ *
 Default: `[]`
 */
     plugins?: PluginItem[] | null,
 
     /**
  * List of presets (a set of plugins) to load and use
- * 
+ *
 Default: `[]`
 */
     presets?: PluginItem[] | null,
 
     /**
  * Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE**: This will not retain the columns)
- * 
+ *
 Default: `false`
 */
     retainLines?: boolean | null,
 
     /**
  * An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE**: This overrides the `comment` option when used
- * 
+ *
 Default: `null`
 */
     shouldPrintComment?: ((commentContents: string) => boolean) | null,
 
     /**
  * Set `sources[0]` on returned source map
- * 
+ *
 Default: `(filenameRelative)`
 */
     sourceFileName?: string | null,
@@ -257,7 +258,7 @@ Default: `false`
 
     /**
  * The root from which all sources are relative
- * 
+ *
 Default: `(moduleRoot)`
 */
     sourceRoot?: string | null,
@@ -281,6 +282,7 @@ Default: `("module")`
           callback: (path: NodePath<>, state: any) => void,
         ) => (path: NodePath<>, state: any) => void)
       | null,
+    ...
   }
   declare export type FileResultCallback = (
     err: Error | null,
@@ -416,6 +418,7 @@ Default: `("module")`
       sourcesContent?: string[],
       mappings: string,
       file: string,
+      ...
     } | null;
     metadata?: BabelFileMetadata;
   }
@@ -424,15 +427,17 @@ Default: `("module")`
     marked: Array<{
       type: string,
       message: string,
-      loc: {[key: string]: any},
+      loc: {[key: string]: any, ...},
+      ...
     }>;
     modules: BabelFileModulesMetadata;
   }
   declare export interface BabelFileModulesMetadata {
-    imports: {[key: string]: any}[];
+    imports: {[key: string]: any, ...}[];
     exports: {
-      exported: {[key: string]: any}[],
-      specifiers: {[key: string]: any}[],
+      exported: {[key: string]: any, ...}[],
+      specifiers: {[key: string]: any, ...}[],
+      ...
     };
   }
   declare export type FileParseCallback = (
@@ -484,7 +489,7 @@ Default: `("module")`
 
   /**
  * Resolve Babel's options fully, resulting in an options object where:
- * 
+ *
 * opts.plugins is a full list of Plugin instances.
 * opts.presets is empty and all presets are flattened into opts.
 * It can be safely passed back to Babel. Fields like babelrc have been set to false so that later calls to Babel
@@ -496,7 +501,7 @@ invalidate properly, but it is the best we have at the moment.
 */
   declare export function loadOptions(
     options?: TransformOptions,
-  ): {[key: string]: any} | null
+  ): {[key: string]: any, ...} | null
 
   /**
  * To allow systems to easily manipulate and validate a user's config, this function resolves the plugins and
@@ -535,12 +540,12 @@ information about `ConfigItem` fields.
     /**
      * The resolved value of the plugin.
      */
-    value: {[key: string]: any} | ((...args: any[]) => any);
+    value: {[key: string]: any, ...} | ((...args: any[]) => any);
 
     /**
      * The options object passed to the plugin.
      */
-    options?: {[key: string]: any} | false;
+    options?: {[key: string]: any, ...} | false;
 
     /**
      * The path that the options are relative to.
@@ -561,12 +566,13 @@ information about `ConfigItem` fields.
        * The full path of the resolved file, e.g. `"/tmp/node_modules/@babel/preset-env/lib/index.js"`
        */
       resolved: string,
+      ...
     } | null;
   }
-  declare export type PluginOptions = {[key: string]: any} | void | false
+  declare export type PluginOptions = {[key: string]: any, ...} | void | false
   declare export type PluginTarget =
     | string
-    | {[key: string]: any}
+    | {[key: string]: any, ...}
     | ((...args: any[]) => any)
   declare export type PluginItem =
     | ConfigItem

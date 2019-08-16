@@ -44,4 +44,5 @@ export interface Transformer {
 }
 export type RunOptions = {
   writeback?: (code: string) => void,
+  ...
 } & Options

@@ -1,44 +1,37 @@
 //@flow
 
-import {outputPackageJSON, massCopy, publishScript} from 'Builder/utils'
-import {rollupBabel} from 'Builder/rollup'
-import packages from 'Builder/packages.config'
+import {massCopy, publishScript} from 'Builder/utils'
+import {rollupBabel, rollupBabelReact} from 'Builder/rollup'
+import {copyLicense, generatePackageJSON} from './common'
 
 export default {
   '@effector/babel-plugin': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/babel-plugin/package.json',
-        packages['@effector/babel-plugin'],
-      ),
-    () => massCopy('.', 'npm/@effector/babel-plugin', ['LICENSE']),
+    generatePackageJSON('@effector/babel-plugin'),
+    copyLicense('@effector/babel-plugin'),
     () =>
       massCopy(
         'packages/@effector/babel-plugin',
         'npm/@effector/babel-plugin',
         ['package.json', 'README.md'],
       ),
-    () => rollupBabel('@effector/babel-plugin', 'src/babel/babel-plugin'),
+    () =>
+      massCopy('src/babel/plugin', 'npm/@effector/babel-plugin/plugin', [
+        'defaultMetaVisitor.js',
+        'noopMetaVisitor.js',
+      ]),
+    rollupBabel,
     publishScript('@effector/babel-plugin'),
   ],
   '@effector/babel-plugin-react': [
-    () =>
-      outputPackageJSON(
-        'packages/@effector/babel-plugin-react/package.json',
-        packages['@effector/babel-plugin-react'],
-      ),
-    () => massCopy('.', 'npm/@effector/babel-plugin-react', ['LICENSE']),
+    generatePackageJSON('@effector/babel-plugin-react'),
+    copyLicense('@effector/babel-plugin-react'),
     () =>
       massCopy(
         'packages/@effector/babel-plugin-react',
         'npm/@effector/babel-plugin-react',
         ['package.json', 'README.md'],
       ),
-    () =>
-      rollupBabel(
-        '@effector/babel-plugin-react',
-        'src/babel/babel-plugin-react',
-      ),
+    rollupBabelReact,
     publishScript('@effector/babel-plugin-react'),
   ],
 }

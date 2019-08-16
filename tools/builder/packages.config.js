@@ -28,14 +28,14 @@ const common = {
 }
 
 const version = {
-  effector: '20.0.0',
-  'effector-react': '20.0.4',
-  'effector-vue': '20.0.0',
+  effector: '20.1.2',
+  'effector-react': '20.2.2',
+  'effector-vue': '20.1.2',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
 
-  '@effector/babel-plugin': '0.2.0',
+  '@effector/babel-plugin': '0.3.0',
   '@effector/babel-plugin-react': '0.2.0',
   '@effector/redux-adapter': '0.0.1',
   '@effector/forms': '0.0.1',
@@ -50,14 +50,17 @@ const getFiles = name => [
   `${name}.es.js`,
   `${name}.cjs.js`,
   `${name}.umd.js`,
+  'compat.js',
   //mappings
   `${name}.es.js.map`,
   `${name}.cjs.js.map`,
   `${name}.umd.js.map`,
+  'compat.js.map',
   //typings
   `${name}.cjs.js.flow`,
   `${name}.es.js.flow`,
   `${name}.umd.js.flow`,
+  'compat.js.flow',
 ]
 
 const dependsOnEffector = {
@@ -81,7 +84,12 @@ export default {
       ...getFiles('effector'),
       'babel-plugin.js',
       'babel-plugin-react.js',
+      'plugin/defaultMetaVisitor.js',
+      'plugin/noopMetaVisitor.js',
     ],
+    browser: {
+      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
+    },
     keywords: [
       'data',
       'datastructure',
@@ -212,11 +220,18 @@ export default {
   },
   '@effector/babel-plugin': {
     name: '@effector/babel-plugin',
-    description: 'Call setStoreName on createStore calls',
+    description: 'Compile-time preprocessing for effector',
     version: version['@effector/babel-plugin'],
     repository: 'https://github.com/zerobias/effector',
     main: 'index.js',
-    files: ['index.js'],
+    files: [
+      'index.js',
+      'plugin/defaultMetaVisitor.js',
+      'plugin/noopMetaVisitor.js',
+    ],
+    browser: {
+      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
+    },
     peerDependencies: dependsOnEffector,
     keywords: ['effector', 'babel-plugin', 'displayName'],
     ...common,

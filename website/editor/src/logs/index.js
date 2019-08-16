@@ -16,9 +16,11 @@ export function consoleMap() {
 }
 
 function logger(...args) {
-  realmLog({method: this.toString(), args})
+  const method: $off = this.toString()
+  realmLog({method, args})
 }
 
+//$todo
 export function printLogs(logs) {
   PRINT_IN_GROUP && console.group('runtime')
   CLEAR_CONSOLE && console.clear()
@@ -26,6 +28,7 @@ export function printLogs(logs) {
   for (const {method, args} of logs) {
     const styleArgs = []
     if (method in presets) {
+      //$todo
       styleArgs.push('%c%s', presets[method], ` ${method.toLocaleUpperCase()} `)
     }
     const resultArgs = styleArgs.concat(args)
@@ -39,5 +42,6 @@ export function printLogs(logs) {
         break
     }
   }
+  //$todo
   PRINT_IN_GROUP && console.groupEnd('runtime')
 }

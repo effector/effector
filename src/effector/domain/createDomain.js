@@ -7,9 +7,5 @@ export function createDomain(
   nameOrConfig?: string | DomainConfigPart,
   opts?: Config<DomainConfigPart> = {},
 ) {
-  const {config, name} = normalizeEventConfig(nameOrConfig, opts)
-  return domainFabric({
-    name: name === undefined ? '' : name,
-    config,
-  })
+  return domainFabric(normalizeEventConfig(nameOrConfig, opts))
 }

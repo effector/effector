@@ -16,6 +16,7 @@ beforeEach(() => {
   getSpyCalls = () => spy.mock.calls
 })
 /*::
+//$todo
 const mockFN = jest.fn()
 */
 type MockFN = typeof mockFN

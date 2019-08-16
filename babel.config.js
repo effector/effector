@@ -20,6 +20,7 @@ module.exports = api => {
 const meta = {
   isBuild: !!process.env.IS_BUILD,
   isTest: process.env.NODE_ENV === 'test',
+  isCompat: false,
 }
 
 const aliases = {
@@ -28,17 +29,18 @@ const aliases = {
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
-  effector({isTest, isBuild}) {
+  effector({isTest, isBuild, isCompat}) {
+    if (isCompat) return 'effector/compat'
     if (isBuild) return null
-    if (isTest) return './effector'
-    return '../npm/effector'
+    if (isTest) return resolveFromSources('./effector')
+    return resolveFromSources('../npm/effector')
   },
 }
 
 const babelConfig = {
   presets: [
     '@babel/preset-flow',
-    '@babel/preset-react',
+    ['@babel/preset-react', {useBuiltIns: true}],
     [
       '@babel/preset-env',
       {
@@ -61,7 +63,7 @@ const babelConfig = {
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
     const result = [
-      './src/babel/get-step',
+      // './src/babel/get-step',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -78,17 +80,6 @@ const babelConfig = {
       result.push('@babel/plugin-transform-modules-commonjs')
     }
     return result
-
-    function parseAliases(meta, obj) {
-      const result = {}
-      for (const key in obj) {
-        const value = obj[key]
-        const name = typeof value === 'function' ? value(meta) : value
-        if (name === undefined || name === null) continue
-        result[key] = resolvePath(__dirname, 'src', name)
-      }
-      return result
-    }
   },
   overrides: [
     {
@@ -97,10 +88,39 @@ const babelConfig = {
           filename
           && filename.includes('__tests__')
           && !filename.includes('redux')
+          && !filename.includes('browserstack')
         )
       },
-      plugins: ['./src/babel/babel-plugin'],
+      plugins: [
+        [
+          './src/babel/babel-plugin',
+          {
+            exportMetadata: true,
+          },
+        ],
+      ],
     },
   ],
   sourceMaps: true,
 }
+
+function parseAliases(meta, obj) {
+  const result = {}
+  for (const key in obj) {
+    const value = obj[key]
+    if (typeof value === 'function') {
+      const name = value(meta)
+      if (name === undefined || name === null) continue
+      result[key] = name
+    } else {
+      const name = value
+      if (name === undefined || name === null) continue
+      result[key] = resolveFromSources(name)
+    }
+  }
+  return result
+}
+function resolveFromSources(path) {
+  return resolvePath(__dirname, 'src', path)
+}
+module.exports.getAliases = (metadata = meta) => parseAliases(metadata, aliases)

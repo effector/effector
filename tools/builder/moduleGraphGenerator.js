@@ -10,11 +10,11 @@ function field({
   name,
   value,
   quotes = false,
-}: {
+}: {|
   name: string,
   value: *,
   quotes?: boolean,
-}) {
+|}) {
   if (quotes) value = quote(value)
   return `${name}=${value}`
 }
@@ -273,6 +273,7 @@ type Opts = {
   exclude?: string,
   prune?: boolean,
   output: string,
+  ...
 }
 
 export default function plugin(options: Opts = {}): any {

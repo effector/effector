@@ -10,6 +10,7 @@ export type ReactProps = {
   large: boolean,
   portrait: boolean,
   landscape: boolean,
+  ...
 }
 
 declare export var Screen: React.AbstractComponent<

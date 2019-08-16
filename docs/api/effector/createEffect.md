@@ -4,55 +4,121 @@ title: createEffect
 hide_title: true
 ---
 
-# `createEffect(name?)`
+# `createEffect(name?, { handler })`
 
 Creates an [effect](Effect.md)
 
 #### Arguments
 
-1. `name`? _(string)_: [Effect](Effect.md) name
+1. `name`? _(string)_: Effect name
 2. `params`? (_Params_): Setup effect
-    - `handler` (_Function_): thunk to handle effect calls, also can be set with [`use(thunk)`](#use)
+    - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
 #### Returns
 
 ([_`Effect`_](Effect.md)): A container for async function.
 
-#### Example
+#### Examples
+
+Create unnamed effect
 
 ```js
-const getUser = createEffect('get user', {
-  handler: params => fetch(`https://example.com/get-user/${params.id}`)
-    .then(res => res.json())
+import {createEffect} from 'effector'
+
+const fetchUserRepos = createEffect({
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
+  }
+})
+```
+
+Create named effect
+
+```js
+import {createEffect} from 'effector'
+
+const fetchUserRepos = createEffect('fetch user repositories', {
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
+  }
+})
+```
+
+Set handler to effect after creating
+
+```js
+import {createEffect} from 'effector'
+
+const fetchUserRepos = createEffect()
+
+fetchUserRepos.use(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
+})
+```
+
+Watch effect status
+
+```js
+import {createEffect} from 'effector'
+
+const fetchUserRepos = createEffect({
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
+  }
 })
 
-// OR
-getUser.use(params => {
-  return fetch(`https://example.com/get-user/${params.id}`)
-    .then(res => res.json())
+fetchUserRepos.pending.watch(pending => {
+  console.log(`effect is pending?: ${pending ? 'yes' : 'no'}`)
 })
 
-const users = createStore([]) // <-- Default state
-  // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUser.done, (state, {result: user, params}) => [...state, user])
-
-// subscribe to promise resolve
-getUser.done.watch(({result, params}) => {
-  console.log(params) // {id: 1}
+fetchUserRepos.done.watch(({params, result}) => {
+  console.log(params) // {name: 'zerobias'}
   console.log(result) // resolved value
 })
 
-// subscribe to promise reject (or throw)
-getUser.fail.watch(({error, params}) => {
-  console.error(params) // {id: 1}
+fetchUserRepos.fail.watch(({params, error}) => {
+  console.error(params) // {name: 'zerobias'}
   console.error(error) // rejected value
 })
 
-// you can replace function anytime
-getUser.use(() => promiseMock)
+fetchUserRepos.finally.watch(({ params, status, result, error }) => {
+  console.log(params) // {name: 'zerobias'}
+  console.log(`handler status: ${status}`)
+  
+  if (error) {
+    console.log('handler rejected', error)
+  } else {
+    console.log('handler resolved', result)
+  }
+})
 
-// call effect with your params
-getUser({id: 1})
-
-const data = await getUser({id: 2}) // handle promise
+fetchUserRepos({name: 'zerobias'})
 ```
+
+Change state
+
+```js
+import {createStore, createEffect} from 'effector'
+
+const fetchUserRepos = createEffect({
+  handler: async ({name}) => {
+    const url = `https://api.github.com/users/${name}/repos`
+    const req = await fetch(url)
+    return req.json()
+  }
+})
+
+const repos = createStore([])
+    .on(fetchUserRepos.done, (_, {result: repos}) => repos)
+
+```
+
+

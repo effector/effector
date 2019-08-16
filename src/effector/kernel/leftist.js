@@ -55,6 +55,7 @@ const mergeNoLoop = (x: leftist, y: leftist): leftist => {
     // rank was, and remains, 1
   } else {
     // left child does exist, so compare ranks
+    // $off
     if (left.rank < right.rank) {
       temp = left
       left = right
@@ -62,6 +63,7 @@ const mergeNoLoop = (x: leftist, y: leftist): leftist => {
     }
     // since we know the right child has the lower rank, we can just
     // add one to its rank
+    // $off
     rank = right.rank + 1
   }
   return new Leftist(x.value, rank, left, right)
@@ -88,6 +90,7 @@ const mergeMutable = (x: leftist, y: leftist): leftist => {
     // rank was, and remains, 1
   } else {
     // left child does exist, so compare ranks
+    // $off
     if (left.rank < right.rank) {
       temp = left
       left = right
@@ -96,6 +99,7 @@ const mergeMutable = (x: leftist, y: leftist): leftist => {
     }
     // since we know the right child has the lower rank, we can just
     // add one to its rank
+    // $off
     rank = right.rank + 1
   }
   x.rank = rank

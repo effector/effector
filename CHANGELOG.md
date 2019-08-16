@@ -1,5 +1,102 @@
 # Changelog
 
+## effector-react 20.2.2, effector-vue 20.1.2
+
+- `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/zerobias/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/zerobias/effector/issues/173))
+
+## effector 20.1.2
+
+- Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/zerobias/effector/pull/170)
+
+```typescript
+import {createEvent} from 'effector'
+
+const event = createEvent<string | number>()
+
+const isString = (value: any): value is string => typeof value === 'string'
+const isNumber = (value: any): value is number => typeof value === 'number'
+
+const str = event.filter({fn: isString}) // Event<string>
+const num = event.filter({fn: isNumber}) // Event<number>
+
+str.watch(value => value.slice()) // OK now
+num.watch(value => value.toFixed(2)) // OK now
+```
+
+- Allow typescript to refine type with `is` methods [PR](https://github.com/zerobias/effector/pull/169)
+
+```typescript
+import {is} from 'effector'
+
+//result has type Event<any> | void
+function getEvent(obj: unknown) {
+  if (is.event(obj)) return obj
+  if (is.store(obj)) return obj.updates
+}
+```
+
+- Add new fields to definition of graph nodes ([discussion](https://github.com/zerobias/effector/issues/91#issuecomment-511397503))
+
+## effector 20.1.1
+
+- Add support for IE11 to `effector/compat`
+- Fix flow typings for `sample`
+- Allow `effector/babel-plugin` to work in browser
+
+## effector-react 20.2.1, effector-vue 20.1.1
+
+- Add support for IE11 to `effector-react/compat` and `effector-vue/compat`
+
+## effector 20.1.0
+
+- Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/zerobias/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
+- Improve typescript typings for `sample` (thanks [@abliarsar](https://github.com/abliarsar)) (PR [#156](https://github.com/zerobias/effector/pull/156))
+- Fix webpack issue, which generated incorrect code with some ancient targets (IE10)
+
+## effector-react 20.2.0
+
+- Add `effector-react/compat` module to use with Smart TV (Chrome 47) apps without babel
+
+## effector-vue 20.1.0
+
+- Add `effector-vue/compat` module to use with Smart TV (Chrome 47) apps without babel
+
+## effector-react 20.1.1
+
+- Add `useList` for efficient rendering of store lists
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import {createStore} from 'effector'
+import {useList} from 'effector-react'
+
+const list = createStore([
+  {name: 'alice', age: 21},
+  {name: 'bob', age: 20},
+  {name: 'carol', age: 22},
+])
+
+const List = () => {
+  // note that we don't need keys here any more
+  const users = useList(list, ({name}, i) => (
+    <div>
+      {i}) {name}
+    </div>
+  ))
+  return <div>{users}</div>
+}
+
+ReactDOM.render(<List />, document.getElementById('root'))
+```
+
+[try it](https://share.effector.dev/KJZx0uU5)
+
+## effector-react 20.0.5
+
+- Fix irrelevant react memory leak warning in a few cases
+
 ## effector-react 20.0.4
 
 - Fix a bug in `useStore` with lack of store updates triggered by react hooks in children components

@@ -7,17 +7,13 @@ title: Effect
 
 It can be safely used in place of the original async function.
 
-The only requirement for function:
-
-- **Should** have zero or one argument
-
 #### Arguments
 
 1. `params` (_Params_): parameters passed to effect
 
 #### Returns
 
-(_`Future`_)
+(_`Promise`_)
 
 #### Example
 
@@ -64,7 +60,8 @@ It will replace the previous function inside (if any).
 #### Arguments
 
 
-(_`handler`_): Function, that receives the first argument passed to an effect call
+(_`handler`_): Function, that receives the first argument passed to an effect call.
+
 
 #### Returns
 
@@ -73,17 +70,20 @@ It will replace the previous function inside (if any).
 #### Example
 
 ```js
-const effect = createEffect("effect name", {
-  handler: (params) => {
-    console.log("effect called with", params)
-    return fetch("/some-resource")
-  }
+const fetchUserRepos = createEffect()
+
+fetchUserRepos.use(async (params) => {
+  console.log('fetchUserRepos called with', params)
+  
+  const url = `https://api.github.com/users/${params.name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 
-effect(1) // >> effect called with 1
+fetchUserRepos({name: 'zerobias'}) // fetchUserRepos called with {name: 'zerobias'}
 ```
 
-<hr>
+<hr />
 
 ### `watch(watcher)`
 
@@ -91,25 +91,29 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): A function that receives `params` and `effect name`
+(_`watcher`_): A function that receives `payload`.
 
 #### Returns
 
-(_`Subscription`_): A function that unsubscribe the watcher
+
+(_`Subscription`_): A function that unsubscribes the watcher.
+
 
 #### Example
 
 ```js
-const effect = createEffect("foo")
-
-effect.watch((params, name) => {
-  console.log(name, "called with", params)
+const effect = createEffect("foo", {
+  handler: value => value
 })
 
-effect(20) // > foo called with 20
+effect.watch(payload => {
+  console.log("called with", payload)
+})
+
+effect(20) // > called with 20
 ```
 
-<hr>
+<hr />
 
 ### `prepend(fn)`
 
@@ -117,19 +121,21 @@ effect(20) // > foo called with 20
 
 (_`Event`_): An intention to change state.
 
-<hr>
+<hr />
 
 ## Effect Properties
 
 ### `done`
 
-Event triggered when handler is resolved
+
+_Event_ triggered when promise from _thunk_ is *resolved*.
+
 
 #### Arguments
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): An argument passed to the effect call  
+(_`params`_): An argument passed to the effect call
 (_`result`_): A result of the resolved handler
 
 #### Example
@@ -155,7 +161,7 @@ Event triggered when handler is rejected or throws error.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): An argument passed to effect call  
+(_`params`_): An argument passed to effect call
 (_`error`_): An error catched from the handler
 
 #### Example
@@ -174,7 +180,7 @@ effect(2) // >> Fail with params 2 and error 1
 
 ### `pending`
 
-_Store_ will update when `done` or `fail` are triggered.  
+_Store_ will update when `done` or `fail` are triggered.
 _Store_ contains a `true` value until the effect is resolved or rejected.
 
 #### Example
@@ -221,10 +227,10 @@ Event triggered when handler is resolved, rejected or throws error.
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-(_`status`_): A status of effect (`done` or `fail`)   
-(_`params`_): An argument passed to effect call  
-(_`error`_): An error catched from the handler  
-(_`result`_): A result of the resolved handler  
+(_`status`_): A status of effect (`done` or `fail`)
+(_`params`_): An argument passed to effect call
+(_`error`_): An error catched from the handler
+(_`result`_): A result of the resolved handler
 
 #### Example
 

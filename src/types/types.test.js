@@ -20,6 +20,7 @@ import {
   //ComputedStore,
   //ComputedEvent,
   /*::type*/ kind,
+  /*::type*/ CompositeName,
   forward,
   launch,
   split,
@@ -184,8 +185,21 @@ describe('Event', () => {
     const createEvent_event1: Event<number> = createEvent()
     const createEvent_event2: Event<number> = createEvent('event name [1]')
     const createEvent_event3: Event<number> = createEvent({
-      name: 'event name [2]'
+      name: 'event name [2]',
     })
+  })
+  test('#(properties)', () => {
+    const event = createEvent()
+    const kind: kind = event.kind
+    const shortName: string = event.shortName
+    const domainName: CompositeName | typeof undefined = event.domainName
+    const compositeName: CompositeName = event.compositeName
+
+    const computed = event.map(() => 'hello')
+    const kind1: kind = computed.kind
+    const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
   })
   test('#map', () => {
     const event: Event<number> = createEvent()
@@ -240,6 +254,20 @@ describe('Effect', () => {
     const createEffect_effect5: Effect<number, string> = createEffect({
       name: 'fx 5',
     })
+  })
+
+  test('#(properties)', () => {
+    const effect = createEffect()
+    const kind: kind = effect.kind
+    const shortName: string = effect.shortName
+    const domainName: CompositeName | typeof undefined = effect.domainName
+    const compositeName: CompositeName = effect.compositeName
+
+    const computed = effect.map(() => 'hello')
+    const kind1: kind = computed.kind
+    const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
   })
 
   test('#use', () => {
@@ -344,11 +372,15 @@ describe('Store', () => {
     const store = createStore(0)
     const kind: kind = store.kind
     const shortName: string = store.shortName
+    const domainName: CompositeName | typeof undefined = store.domainName
+    const compositeName: CompositeName = store.compositeName
     const defaultState: number = store.defaultState
 
     const computed = store.map(() => 'hello')
     const kind1: kind = computed.kind
     const shortName1: string = computed.shortName
+    const domainName1: CompositeName | typeof undefined = computed.domainName
+    const compositeName1: CompositeName = computed.compositeName
     const defaultState1: string = computed.defaultState
   })
 
@@ -532,6 +564,29 @@ describe('Graph', () => {
       const e = createStore(0)
       const f = createStore(0)
       forward({from: e, to: f})
+    })
+    describe('forward with subtyping', () => {
+      const str: Event<string> = createEvent()
+      const strOrNum: Event<string | number> = createEvent()
+      const num: Event<number> = createEvent()
+      it('incompatible (should fail)', () => {
+        forward({from: str, to: num})
+      })
+      it('same types (should be ok)', () => {
+        forward({from: str, to: str})
+      })
+      it('more strict -> less strict type (should be ok)', () => {
+        forward({from: str, to: strOrNum})
+      })
+      it('less strict -> more strict type (should fail)', () => {
+        forward({from: strOrNum, to: str})
+      })
+      it('generic from (?)', () => {
+        forward<string | number>({from: strOrNum, to: str})
+      })
+      it('generic to (should fail)', () => {
+        forward<string>({from: strOrNum, to: str})
+      })
     })
   })
 

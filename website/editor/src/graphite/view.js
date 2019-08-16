@@ -7,7 +7,7 @@ import Panel from '../components/CodeMirrorPanel'
 
 const jsonRef = React.createRef()
 
-export const GraphiteView = createComponent<{style?: any}, string>(
+export const GraphiteView = createComponent<{style?: any, ...}, string>(
   graphiteCode,
   ({style}, graphite) => (
     <Panel

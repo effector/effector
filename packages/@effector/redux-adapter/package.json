@@ -14,12 +14,15 @@
     "adapter.es.js",
     "adapter.cjs.js",
     "adapter.umd.js",
+    "compat.js",
     "adapter.es.js.map",
     "adapter.cjs.js.map",
     "adapter.umd.js.map",
+    "compat.js.map",
     "adapter.cjs.js.flow",
     "adapter.es.js.flow",
-    "adapter.umd.js.flow"
+    "adapter.umd.js.flow",
+    "compat.js.flow"
   ],
   "typings": "index.d.ts",
   "keywords": [

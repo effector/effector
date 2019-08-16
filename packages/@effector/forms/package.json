@@ -15,15 +15,18 @@
     "forms.es.js",
     "forms.cjs.js",
     "forms.umd.js",
+    "compat.js",
     "forms.es.js.map",
     "forms.cjs.js.map",
     "forms.umd.js.map",
+    "compat.js.map",
     "forms.cjs.js.flow",
     "forms.es.js.flow",
-    "forms.umd.js.flow"
+    "forms.umd.js.flow",
+    "compat.js.flow"
   ],
   "dependencies": {
-    "effector": "^20.0.0"
+    "effector": "^20.1.2"
   },
   "keywords": [
     "effector",

@@ -26,6 +26,9 @@
       "api/effector-react/useStore": {
         "title": "useStore"
       },
+      "api/effector-react/useStoreMap": {
+        "title": "useStoreMap"
+      },
       "api/effector-vue/component-options": {
         "title": "ComponentOptions"
       },
@@ -77,20 +80,20 @@
       "api/effector/effector": {
         "title": "API Reference"
       },
+      "api/effector/merge": {
+        "title": "merge"
+      },
       "api/effector/restore": {
         "title": "restore"
       },
       "api/effector/sample": {
         "title": "sample"
       },
-      "api/effector/store": {
-        "title": "Store"
-      },
-      "api/effector/merge": {
-        "title": "merge"
-      },
       "api/effector/split": {
         "title": "split"
+      },
+      "api/effector/store": {
+        "title": "Store"
       },
       "faq": {
         "title": "FAQ"
@@ -110,6 +113,10 @@
       "recipes/migrating-to-effector/from-redux": {
         "title": "From Redux",
         "sidebar_label": "From Redux"
+      },
+      "recipes/react-native/example": {
+        "title": "React Native Example",
+        "sidebar_label": "React Native Example"
       },
       "recipes/react/example-effects": {
         "title": "Example: Effects",

@@ -17,11 +17,13 @@ import {spy, delay, getSpyCalls} from 'effector/fixtures'
 describe('symbol-observable support', () => {
   test('from(store)', async() => {
     expect(() => {
+      //$todo
       from(createStore(0))
     }).not.toThrow()
     const store1 = createStore(-1)
     const ev1 = createEvent('ev1')
     const ev2 = createEvent('ev2')
+    //$todo
     const store1$ = from(store1)
     store1$.observe(spy)
     store1.on(ev1, state => state + 1)

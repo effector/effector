@@ -19,7 +19,8 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
      * An array that contains all the object results that have been
      * returned by this mock function call
      */
-    results: Array<{isThrow: boolean, value: TReturn}>,
+    results: Array<{isThrow: boolean, value: TReturn, ...}>,
+    ...
   },
   /**
    * Resets all information stored in the mockFn.mock.calls and
@@ -92,6 +93,7 @@ type JestMockFn<TArguments: $ReadOnlyArray<*>, TReturn> = {
    * Sugar for jest.fn().mockImplementationOnce(() => Promise.reject(value))
    */
   mockRejectedValueOnce(value: TReturn): JestMockFn<TArguments, Promise<any>>,
+  ...
 }
 
 type JestAsymmetricEqualityType = {
@@ -99,6 +101,7 @@ type JestAsymmetricEqualityType = {
    * A custom Jasmine equality tester
    */
   asymmetricMatch(value: mixed): boolean,
+  ...
 }
 
 type JestCallsType = {
@@ -109,6 +112,7 @@ type JestCallsType = {
   first(): mixed,
   mostRecent(): mixed,
   reset(): void,
+  ...
 }
 
 type JestClockType = {
@@ -116,11 +120,13 @@ type JestClockType = {
   mockDate(date: Date): void,
   tick(milliseconds?: number): void,
   uninstall(): void,
+  ...
 }
 
 type JestMatcherResult = {
   message?: string | (() => string),
   pass: boolean,
+  ...
 }
 
 type JestMatcher = (
@@ -139,6 +145,7 @@ type JestPromiseType = {
    * matcher can be chained. If the promise is rejected the assertion fails.
    */
   resolves: JestExpectType,
+  ...
 }
 
 /**
@@ -161,6 +168,7 @@ type JestStyledComponentsMatcherOptions = {
   media?: string,
   modifier?: string,
   supports?: string,
+  ...
 }
 
 type JestStyledComponentsMatchersType = {
@@ -169,6 +177,7 @@ type JestStyledComponentsMatchersType = {
     value: JestStyledComponentsMatcherValue,
     options?: JestStyledComponentsMatcherOptions,
   ): void,
+  ...
 }
 
 /**
@@ -190,12 +199,12 @@ type EnzymeMatchersType = {
   toHaveClassName(className: string): void,
   toHaveHTML(html: string): void,
   toHaveProp: ((propKey: string, propValue?: any) => void) &
-    ((props: {}) => void),
+    ((props: {...}) => void),
   toHaveRef(refName: string): void,
   toHaveState: ((stateKey: string, stateValue?: any) => void) &
-    ((state: {}) => void),
+    ((state: {...}) => void),
   toHaveStyle: ((styleKey: string, styleValue?: any) => void) &
-    ((style: {}) => void),
+    ((style: {...}) => void),
   toHaveTagName(tagName: string): void,
   toHaveText(text: string): void,
   toHaveValue(value: any): void,
@@ -207,6 +216,7 @@ type EnzymeMatchersType = {
   toMatchSelector(selector: string): void,
   // 7.x
   toHaveDisplayName(name: string): void,
+  ...
 }
 
 // DOM testing library extensions https://github.com/kentcdodds/dom-testing-library#custom-jest-matchers
@@ -220,13 +230,14 @@ type DomTestingLibraryType = {
   toHaveAttribute(name: string, expectedValue?: string): void,
   toHaveClass(...classNames: string[]): void,
   toHaveFocus(): void,
-  toHaveFormValues(expectedValues: {[name: string]: any}): void,
+  toHaveFormValues(expectedValues: {[name: string]: any, ...}): void,
   toHaveStyle(css: string): void,
   toHaveTextContent(
     content: string | RegExp,
-    options?: {normalizeWhitespace: boolean},
+    options?: {normalizeWhitespace: boolean, ...},
   ): void,
   toBeInTheDOM(): void,
+  ...
 }
 
 // Jest JQuery Matchers: https://github.com/unindented/custom-jquery-matchers
@@ -241,7 +252,7 @@ type JestJQueryMatchersType = {
   toHaveText(text: string | RegExp): void,
   toHaveData(key: string, val?: any): void,
   toHaveValue(val: any): void,
-  toHaveCss(css: {[key: string]: any}): void,
+  toHaveCss(css: {[key: string]: any, ...}): void,
   toBeChecked(): void,
   toBeDisabled(): void,
   toBeEmpty(): void,
@@ -253,6 +264,7 @@ type JestJQueryMatchersType = {
   toBeMatchedBy(sel: string): void,
   toHaveDescendant(sel: string): void,
   toHaveDescendantWithText(sel: string, text: string | RegExp): void,
+  ...
 }
 
 // Jest Extended Matchers: https://github.com/jest-community/jest-extended
@@ -553,6 +565,7 @@ type JestExtendedMatchersType = {
    * @param {Array.<String>} substring
    */
   toIncludeMultiple(substring: string[]): void,
+  ...
 }
 
 interface JestExpectType {
@@ -919,10 +932,12 @@ type JestObjectType = {
    * Note: The default timeout interval is 5 seconds if this method is not called.
    */
   setTimeout(timeout: number): JestObjectType,
+  ...
 }
 
 type JestSpyType = {
   calls: JestCallsType,
+  ...
 }
 
 /** Runs this function after every test inside this context */
@@ -975,6 +990,7 @@ declare var describe: {
     fn?: (...args: Array<any>) => ?Promise<mixed>,
     timeout?: number,
   ) => void,
+  ...
 }
 
 /** An individual test unit */
@@ -1011,6 +1027,7 @@ declare var it: {
       fn?: (...args: Array<any>) => ?Promise<mixed>,
       timeout?: number,
     ) => void,
+    ...
   },
 
   /**
@@ -1058,6 +1075,7 @@ declare var it: {
     fn?: (...args: Array<any>) => ?Promise<mixed>,
     timeout?: number,
   ) => void,
+  ...
 }
 
 declare function fit(
@@ -1077,11 +1095,12 @@ declare var xit: typeof it
 declare var xtest: typeof it
 
 type JestPrettyFormatColors = {
-  comment: {close: string, open: string},
-  content: {close: string, open: string},
-  prop: {close: string, open: string},
-  tag: {close: string, open: string},
-  value: {close: string, open: string},
+  comment: {close: string, open: string, ...},
+  content: {close: string, open: string, ...},
+  prop: {close: string, open: string, ...},
+  tag: {close: string, open: string, ...},
+  value: {close: string, open: string, ...},
+  ...
 }
 
 type JestPrettyFormatIndent = string => string
@@ -1118,6 +1137,7 @@ type JestPrettyFormatPlugin = {
     colors: JestPrettyFormatColors,
   ) => string,
   test: any => boolean,
+  ...
 }
 
 type JestPrettyFormatPlugins = Array<JestPrettyFormatPlugin>
@@ -1136,7 +1156,7 @@ declare var expect: {
     JestExtendedMatchersType,
 
   /** Add additional Jasmine matchers to Jest's roster */
-  extend(matchers: {[name: string]: JestMatcher}): void,
+  extend(matchers: {[name: string]: JestMatcher, ...}): void,
   /** Add a module that formats application-specific data structures. */
   addSnapshotSerializer(pluginModule: JestPrettyFormatPlugin): void,
   assertions(expectedAssertions: number): void,
@@ -1150,10 +1170,12 @@ declare var expect: {
   stringMatching(value: string | RegExp): string,
   not: {
     arrayContaining: (value: $ReadOnlyArray<mixed>) => Array<mixed>,
-    objectContaining: (value: {}) => Object,
+    objectContaining: (value: {...}) => Object,
     stringContaining: (value: string) => string,
     stringMatching: (value: string | RegExp) => string,
+    ...
   },
+  ...
 }
 
 // TODO handle return type
@@ -1177,7 +1199,8 @@ declare var jasmine: {
   createSpyObj(
     baseName: string,
     methodNames: Array<string>,
-  ): {[methodName: string]: JestSpyType},
+  ): {[methodName: string]: JestSpyType, ...},
   objectContaining(value: Object): Object,
   stringMatching(value: string): string,
+  ...
 }

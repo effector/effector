@@ -19,4 +19,9 @@ export const TabHeaderList = styled.ul`
   margin: 0;
   padding: 0;
   display: flex;
+
+  border-left: 1px solid #ddd;
+  background-color: #f7f7f7;
+  height: 36px;
+  overflow-y: auto;
 `

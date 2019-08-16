@@ -25,10 +25,10 @@ export function domainFabric({
   parent,
   parentHooks,
 }: {
-  name?: string,
-  config?: DomainConfigPart,
-  parent?: CompositeName,
-  parentHooks?: DomainHooks,
+  +name?: string,
+  +config?: DomainConfigPart,
+  +parent?: CompositeName,
+  +parentHooks?: DomainHooks,
   ...
 }): Domain {
   const id = nextID()
@@ -78,7 +78,6 @@ export function domainFabric({
     ): Effect<Params, Done, Fail> {
       const result = effectFabric({
         name,
-        domainName: compositeName.fullName,
         parent: compositeName,
         config: normalizeConfig(config),
       })

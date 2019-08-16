@@ -7,6 +7,7 @@ import {eventFabric, type Event} from '../event'
 import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../compositeName'
+import {Defer} from './defer'
 
 const onResolve = ({event, anyway, params, handler}, result) => {
   upsertLaunch(anyway, {
@@ -39,18 +40,6 @@ const onReject = ({event, anyway, params, handler}, error) => {
   })
 }
 
-function Def() {
-  /*::
-  this.rs = result => {}
-  this.rj = error => {}
-  */
-  const req = new Promise((rs, rj) => {
-    this.rs = rs
-    this.rj = rj
-  })
-  this.req = req
-}
-
 const notifyHandler = step.run({
   fn({handler, toHandler, result}, scope) {
     handler(toHandler)
@@ -59,17 +48,15 @@ const notifyHandler = step.run({
 })
 export function effectFabric<Payload, Done>({
   name,
-  domainName,
   parent,
   config,
 }: {
-  name?: string,
-  domainName: string,
-  parent?: CompositeName,
-  config: EffectConfigPart<Payload, Done>,
+  +name?: string,
+  +parent?: CompositeName,
+  +config: EffectConfigPart<Payload, Done>,
   ...
 }): Effect<Payload, Done, *> {
-  const {handler} = config
+  const {handler: defaultHandler} = config
 
   //$off
   const instance: Effect<Payload, Done, any> = eventFabric({
@@ -113,8 +100,8 @@ export function effectFabric<Payload, Done>({
   })
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
-  let thunk: Function =
-    handler
+  let handler: Function =
+    defaultHandler
     || (value => {
       console.error(`no handler used in ${instance.getType()}`)
       return Promise.resolve()
@@ -124,10 +111,10 @@ export function effectFabric<Payload, Done>({
   instance.fail = fail
   instance.finally = anyway
   ;(instance: any).use = fn => {
-    thunk = fn
+    handler = fn
     return instance
   }
-  const getCurrent = (): any => thunk
+  const getCurrent = (): any => handler
   ;(instance: any).use.getCurrent = getCurrent
   ;(instance: any).kind = Kind.effect
   //assume that fresh event has empty scope
@@ -165,8 +152,7 @@ export function effectFabric<Payload, Done>({
     }),
   )
   ;(instance: any).create = (params: Payload, fullName, args) => {
-    const req = new Def()
-    req.req.catch(err => {})
+    const req: any = new Defer()
     eventCreate({ɔ: {params, req}}, instance.getType(), args)
     return req.req
   }

@@ -23,7 +23,7 @@ const getHref = ({version, match, isMaster}) => {
   }
 }
 
-export const VersionLink = ({version}: {version: string}) => {
+export const VersionLink = ({version}: {version: string, ...}) => {
   const {href, displayVersion} = getHref({
     version,
     match: version.match(/^pr-(\d+)$/),

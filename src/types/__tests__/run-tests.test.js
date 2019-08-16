@@ -1,20 +1,30 @@
 // @flow
 
+//$off
 import execa from 'execa'
+//$off
+// import {outputJSON} from 'fs-extra'
+import {processFlow} from '../proc'
+import {generateReport} from '../show'
 
 jest.setTimeout(50000)
 
-test('TypeScript', async() => {
+test('TypeScript', async () => {
+  console.error('Typechecking TypeScript...')
   try {
     const data = await execa('npx', ['tsc', '-p', 'src/types'])
     expect(data).toMatchSnapshot('resolved')
   } catch (err) {
-    const replaceRegex = /src\/types\/types\.test\.ts\(\d+,\d+\): error TS\d+: /gm
-    expect(err.message.replace(replaceRegex, '')).toMatchSnapshot('rejected')
+    const cleanedMessage = err.message
+      .replace(/src\/types\//gm, '')
+      .replace(/error TS\d+: /gm, '')
+      .replace(/\(\d+,\d+\)/gm, '')
+    expect(cleanedMessage).toMatchSnapshot('rejected')
   }
 })
 
-test('Flow', async() => {
+test('Flow', async () => {
+  console.error('Typechecking Flow...')
   try {
     const data = await execa('npx', [
       'flow',
@@ -28,8 +38,8 @@ test('Flow', async() => {
     const data = JSON.parse(
       err.message.substring(err.message.indexOf('\n') + 1).trim(),
     )
-    expect(
-      data.errors.map(error => error.message.map(p => p.descr)),
-    ).toMatchSnapshot('json messages')
+    const result = await generateReport(processFlow(data))
+
+    expect(result).toMatchSnapshot('json messages')
   }
 })

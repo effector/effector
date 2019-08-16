@@ -2,12 +2,12 @@
 
 type TemplateStringsArray = $ReadOnlyArray<string>
 
-export type Level = $Values<{
+export type Level = $Values<{|
   None: 0,
   Basic: 1,
   Ansi256: 2,
   TrueColor: 3,
-}>
+|}>
 
 export type ChalkOptions = {|
   enabled?: boolean,

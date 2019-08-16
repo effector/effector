@@ -101,7 +101,7 @@ declare module 'execa' {
      * Set `extendEnv` to `false` if you don't want this.
      * @default `process.env`
      */
-    env?: {[key: string]: ?string};
+    env?: {[key: string]: ?string, ...};
 
     /**
      * Set to `false` if you don't want to extend the environment variables when providing the `env` property.
@@ -240,6 +240,7 @@ declare module 'execa' {
      * Write some input to the `stdin` of your binary.
      */
     input?: string | Buffer | Stream,
+    ...
   } & execa$CommonOptions
 
   declare type execa$SyncOptions = {
@@ -248,6 +249,7 @@ declare module 'execa' {
      * Streams are not allowed when using the synchronous methods.
      */
     input?: string | Buffer,
+    ...
   } & execa$CommonOptions
 
   declare interface execa$ExecaReturns {

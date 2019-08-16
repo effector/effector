@@ -3,6 +3,7 @@
 import * as React from 'react'
 import {Section, Label, SettingsGroup, Button} from './styled'
 import {Toggle} from '../components/Toggle'
+import {VersionSelector} from '../components/VersionSelector'
 import {
   typeHoverToggle,
   typeHoverToggleChange,
@@ -13,23 +14,32 @@ import {
   prettierButtonStatus,
   clickPrettify,
 } from './domain'
+import {selectVersion} from '../editor'
+import {packageVersions, version} from '../editor/state'
 import {useStore} from 'effector-react'
 
 export {flowToggle, tsToggle} from './domain'
 
-const Prettify = () => {
+export const PrettifyButton = () => {
   const {disabled, text} = useStore(prettierButtonStatus)
   return (
-    <Section>
-      <Button disabled={disabled} onClick={clickPrettify}>
-        {text}
-      </Button>
-    </Section>
+    <Button disabled={disabled} onClick={clickPrettify}>
+      {text}
+    </Button>
   )
 }
 
 export const Settings = () => (
   <SettingsGroup>
+    <Section>
+      <Label>
+        <VersionSelector
+          versions={useStore(packageVersions)}
+          selected={useStore(version)}
+          onChange={selectVersion}
+        />
+      </Label>
+    </Section>
     <Section>
       <Label>
         <Toggle
@@ -58,7 +68,6 @@ export const Settings = () => (
         Type hover
       </Label>
     </Section>
-    <Prettify />
     {/*<Label>
         <Toggle
           name="rollup"

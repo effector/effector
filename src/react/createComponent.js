@@ -6,10 +6,10 @@ import type {StoreView} from './index.h'
 
 type Unsubscribe = () => void
 
-export function createComponent<Props: {}, State>(
+export function createComponent<Props: {...}, State>(
   shape:
     | Store<State>
-    | {+[key: string]: Store<any> | any}
+    | {+[key: string]: Store<any> | any, ...}
     | ((props: Props) => Store<State>),
   renderProp: (props: Props, state: State) => React.Node,
 ): StoreView<State, Props> {
@@ -21,6 +21,7 @@ export function createComponent<Props: {}, State>(
     storeFn = shape
   } else {
     if (typeof shape === 'object' && shape !== null) {
+      //$todo
       store = createStoreObject(shape)
     } else throw Error('shape should be a store or object with stores')
   }
@@ -29,7 +30,7 @@ export function createComponent<Props: {}, State>(
   const unmounted = createEvent(`${storeName}.View unmounted`)
   return class RenderComponent extends React.Component<
     Props,
-    {currentState: State},
+    {currentState: State, ...},
   > {
     static displayName = `${storeName}.View`
     static mounted = mounted
