@@ -17,6 +17,7 @@ import {
 } from '.'
 
 import {intervals, timeouts, stats} from './state'
+import {handleSample} from './sample'
 
 intervals
   .on(realmInterval, (state, id) => [...state, id])
@@ -49,26 +50,41 @@ timeouts
   })
 
 stats
-  .on(realmEvent, ({event, ...rest}, e) => ({
-    ...rest,
-    event: [...event, e],
-  }))
-  .on(realmStore, ({store, ...rest}, e) => ({
-    ...rest,
-    store: [...store, e],
-  }))
-  .on(realmEffect, ({effect, ...rest}, e) => ({
-    ...rest,
-    effect: [...effect, e],
-  }))
-  .on(realmDomain, ({domain, ...rest}, e) => ({
-    ...rest,
-    domain: [...domain, e],
-  }))
-  .on(realmComponent, ({component, ...rest}, e) => ({
-    ...rest,
-    component: [...component, e],
-  }))
+  .on(realmEvent, ({event, ...rest}, e) => {
+    if (event.includes(e)) return
+    return {
+      ...rest,
+      event: [...event, e],
+    }
+  })
+  .on(realmStore, ({store, ...rest}, e) => {
+    if (store.includes(e)) return
+    return {
+      ...rest,
+      store: [...store, e],
+    }
+  })
+  .on(realmEffect, ({effect, ...rest}, e) => {
+    if (effect.includes(e)) return
+    return {
+      ...rest,
+      effect: [...effect, e],
+    }
+  })
+  .on(realmDomain, ({domain, ...rest}, e) => {
+    if (domain.includes(e)) return
+    return {
+      ...rest,
+      domain: [...domain, e],
+    }
+  })
+  .on(realmComponent, ({component, ...rest}, e) => {
+    if (component.includes(e)) return
+    return {
+      ...rest,
+      component: [...component, e],
+    }
+  })
   .on(realmStatus, (stats, {active}) => {
     if (!active) return stats
     return {
@@ -126,6 +142,9 @@ realmInvoke.watch(({method, params, instance}) => {
   }
   if (method === 'clearNode') {
     realmClearNode(params[0])
+  }
+  if (method === 'sample') {
+    handleSample(params, instance)
   }
 })
 
