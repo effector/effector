@@ -17,7 +17,6 @@ import {
 } from '.'
 
 import {intervals, timeouts, stats} from './state'
-import {handleSample} from './sample'
 
 intervals
   .on(realmInterval, (state, id) => [...state, id])
@@ -142,9 +141,6 @@ realmInvoke.watch(({method, params, instance}) => {
   }
   if (method === 'clearNode') {
     realmClearNode(params[0])
-  }
-  if (method === 'sample') {
-    handleSample(params, instance)
   }
 })
 
