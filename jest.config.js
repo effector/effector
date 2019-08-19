@@ -63,7 +63,6 @@ module.exports = {
     'effector/validate',
     'effector/sample',
     'static-land',
-    'types',
     'forms',
     'babel',
     // 'redux',
@@ -81,6 +80,17 @@ module.exports = {
     {
       reason: {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
+      },
+    },
+    {
+      types: {
+        testMatch: [
+          `<rootDir>/src/types/__tests__/**/*.test.js`,
+          `<rootDir>/src/types/__tests__/**/*.spec.js`,
+        ],
+        transform: {
+          '^.+\\.jsx?$': '<rootDir>/src/types/transformer.js',
+        },
       },
     },
   ]),

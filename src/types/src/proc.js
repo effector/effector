@@ -1,7 +1,7 @@
 export function processFlow({errors}) {
   return errors.map(e => {
     const result = {}
-    const extra = e.extra
+    const extra = (e.extra || [])
       .map(e1 => e1.message[0])
       .slice(1)
       .map(processItem)
