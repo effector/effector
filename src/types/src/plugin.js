@@ -1,13 +1,11 @@
 // @flow
 
-const execa = require('execa')
-const recast = require('recast')
-const prettier = require('prettier')
+// const execa = require('execa')
+// const recast = require('recast')
+// const prettier = require('prettier')
 const path = require('path')
 const fs = require('fs-extra')
 const generate = require('@babel/generator').default
-
-import template from '@babel/template'
 
 function getImportNodes(program) {
   return program
@@ -17,13 +15,17 @@ function getImportNodes(program) {
         item.isImportDeclaration() ||
         (item.isExportDeclaration() && item.node.source),
     )
-    .map(item => {
-      return item.node
-    })
+    .map(item => item.node)
 }
 
 module.exports = function(babel, options = {}) {
-  const {types: t} = babel
+  const {types: t, template} = babel
+  const testTemplate = template(`
+jest.setTimeout(15000)
+test('snapshots', async () => {
+  await require('../__fixtures__/run.js').typeCheck(TS_FILE, FLOW_FILE)
+})
+`)
   const plugin = {
     name: 'plugin',
     visitor: {
@@ -35,12 +37,7 @@ module.exports = function(babel, options = {}) {
         exit(program, state) {
           program.pushContainer(
             'body',
-            template(`
-jest.setTimeout(15000)
-test('snapshots', async () => {
-  await require('../__fixtures__/run.js').typeCheck(TS_FILE, FLOW_FILE)
-})
-`)({
+            testTemplate({
               FLOW_FILE: t.stringLiteral(
                 path.join(
                   __dirname,

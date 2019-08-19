@@ -14,7 +14,7 @@ module.exports = {
           test(filename) {
             return path.dirname(filename) === path.join(__dirname, '__tests__')
           },
-          plugins: [require.resolve('./dist/plugin.js')],
+          plugins: [require.resolve('./src/plugin.js')],
         },
       ],
     })
