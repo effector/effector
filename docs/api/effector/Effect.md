@@ -129,8 +129,7 @@ effect(20) // nothing, cause watcher unsubscribed
 
 ### `done`
 
-
-_Event_ triggered when promise from _thunk_ is *resolved*.
+_Event_ triggered when _handler_ is *resolved*.
 
 
 #### Arguments
