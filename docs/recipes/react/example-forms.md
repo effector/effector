@@ -127,7 +127,7 @@ const $store = createStore({})
 const App = () => {
   const values = useStore($store);
   
-  return <form action="void(0)" onSubmit={sendForm /*note, there is an event, which is clock for sample*/}>
+  return <form action="void(0)" onSubmit={sendForm /*note, there is an effect itself*/}>
     <input name="login" label="Login" onChange={changed} value={values.login || ""}/>
     <input name="password" type="password" label="Password" onChange={changed} value={values.password || ""}/>
     <button type="submit">Submit!</button>
