@@ -122,6 +122,10 @@
         "title": "Example: Effects",
         "sidebar_label": "Example: Effects"
       },
+      "recipes/react/example-forms": {
+        "title": "Example: Forms",
+        "sidebar_label": "Example: Forms"
+      },
       "recipes/react/example": {
         "title": "Example",
         "sidebar_label": "Example"
