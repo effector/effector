@@ -138,7 +138,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 [Try it](https://share.effector.dev/GBYkPuX2)
 
-This code is way shorter, yet has code duplication, lower scalability and reuse opportunity. In some cases, usage of `getState` may cause state inconsistence, race conditions.
+This code is way shorter, yet has code duplication, lower scalability and less reusable. In some cases, usage of `getState` may cause state inconsistence, race conditions.
 
 #### Example 2
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which are dependent of stores, transform data passed between events.
