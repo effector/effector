@@ -18,35 +18,36 @@ It can be safely used in place of the original async function.
 #### Example
 
 ```js
-const fetchUser = createEffect('get user', {
+const fetchUser = createEffect({
   handler: ({ id }) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
   }
 })
 
-const users = createStore([]) // <= Default state
-  // add reducer for getUser.done event (triggered when handler resolved)
+const users = createStore([]) // Default state
+  // add reducer for fetchUser.done event (triggered when handler resolved)
   .on(fetchUser.done, (users, {result: user}) => [...users, user])
 
 // subscribe to handler resolve
 fetchUser.done.watch(({result, params}) => {
-  console.log(params) // {id: 1}
-  console.log(result) // resolved value
+  console.log(params) // => {id: 1}
+  console.log(result) // => resolved value
 })
 
 // subscribe to handler reject or throw error
 fetchUser.fail.watch(({error, params}) => {
-  console.error(params) // {id: 1}
-  console.error(error) // rejected value
+  console.error(params) // => {id: 1}
+  console.error(error) // => rejected value
 })
 
 // you can replace function anytime
-fetchUser.use(() => promiseMock)
+fetchUser.use(anotherHandler)
 
 // call effect with your params
 fetchUser({id: 1})
 
-const data = await fetchUser({id: 2}) // handle promise
+// handle promise
+const data = await fetchUser({id: 2})
 ```
 
 ## Effect Methods
@@ -80,7 +81,7 @@ fetchUserRepos.use(async (params) => {
   return req.json()
 })
 
-fetchUserRepos({name: 'zerobias'}) // fetchUserRepos called with {name: 'zerobias'}
+fetchUserRepos({name: 'zerobias'}) // => fetchUserRepos called with {name: 'zerobias'}
 ```
 
 <hr />
@@ -95,22 +96,23 @@ Subscribe to effect calls.
 
 #### Returns
 
-
 (_`Subscription`_): A function that unsubscribes the watcher.
 
 
 #### Example
 
 ```js
-const effect = createEffect("foo", {
+const effect = createEffect({
   handler: value => value
 })
 
-effect.watch(payload => {
+const unsubscribe = effect.watch(payload => {
   console.log("called with", payload)
+  unsubscribe()
 })
 
-effect(20) // > called with 20
+effect(10) // => called with 10
+effect(20) // nothing, cause watcher unsubscribed
 ```
 
 <hr />
@@ -127,8 +129,7 @@ effect(20) // > called with 20
 
 ### `done`
 
-
-_Event_ triggered when promise from _thunk_ is *resolved*.
+_Event_ triggered when _handler_ is *resolved*.
 
 
 #### Arguments
@@ -149,7 +150,7 @@ effect.done.watch(({ params, result }) => {
   console.log("Done with params", params, "and result", result)
 })
 
-effect(2) // >> Done with params 2 and result 3
+effect(2) // => Done with params 2 and result 3
 ```
 
 
@@ -175,7 +176,7 @@ effect.fail.watch(({ params, error }) => {
   console.log("Fail with params", params, "and error", error)
 })
 
-effect(2) // >> Fail with params 2 and error 1
+effect(2) // => Fail with params 2 and error 1
 ```
 
 ### `pending`
