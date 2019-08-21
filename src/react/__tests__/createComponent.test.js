@@ -68,4 +68,15 @@ describe('createComponent', () => {
     expect(tree.html()).toMatchSnapshot()
     tree.unmount()
   })
+
+  test('works with hooks', () => {
+    const store = createStore('value')
+    const Foo = createComponent(store, (_, state) => {
+      const [count] = React.useState(0)
+
+      return <div>{state} {count}</div>
+    })
+    const tryMount = () => mount(<Foo />)
+    expect(tryMount).not.toThrow()
+  })
 })
