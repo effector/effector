@@ -6,6 +6,7 @@ import type {StoreView} from './index.h'
 
 type Unsubscribe = () => void
 
+const WithEffectorStore = ({props, state, render}) => render(props, state)
 export function createComponent<Props: {...}, State>(
   shape:
     | Store<State>
@@ -49,7 +50,7 @@ export function createComponent<Props: {...}, State>(
       this._hasUnmounted = true
     }
     render() {
-      return renderProp(this.props, this.state.currentState)
+      return <WithEffectorStore props={this.props} state={this.state.currentState} render={renderProp}/>
     }
     subscribe() {
       this._unsubscribe = this.store.watch((state: State) => {
