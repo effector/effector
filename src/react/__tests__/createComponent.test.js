@@ -76,7 +76,13 @@ describe('createComponent', () => {
 
       return <div>{state} {count}</div>
     })
-    const tryMount = () => mount(<Foo />)
+    let instance
+    const tryMount = () => {
+      instance = mount(<Foo />)
+    }
     expect(tryMount).not.toThrow()
+    if (instance) {
+      instance.unmount()
+    }
   })
 })
