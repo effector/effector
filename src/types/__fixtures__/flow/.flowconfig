@@ -1,4 +1,5 @@
 [ignore]
+.*/types.test.js/snapshots.js
 
 [include]
 ../../../../packages/effector

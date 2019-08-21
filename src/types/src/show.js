@@ -1,4 +1,4 @@
-import {resolve, relative} from 'path'
+import {resolve, relative, basename} from 'path'
 import {readFile} from 'fs-extra'
 import {codeFrameColumns} from '@babel/code-frame'
 
@@ -138,6 +138,7 @@ async function printLibRef(msg, isRef, lineNumbersPad) {
     msg.context,
     '',
   ].join(`\n`)
+  const libPath = `<BUILTINS>/${basename(msg.source)}`
   const frame = printFrameRef(
     codeFrameColumns(filledSource, msg.loc, {
       linesAbove: 0,
@@ -148,7 +149,7 @@ async function printLibRef(msg, isRef, lineNumbersPad) {
     0,
     lineNumbersPad,
   )
-  return `   ${msg.source}\n${frame}`
+  return `   ${libPath}\n${frame}`
 }
 function printFrameRef(frame, descr, padTop, lineNumbersPad) {
   let padNumbers = lineNumbersPad

@@ -21,9 +21,9 @@ function getImportNodes(program) {
 module.exports = function(babel, options = {}) {
   const {types: t, template} = babel
   const testTemplate = template(`
-jest.setTimeout(15000)
+jest.setTimeout(30000)
 test('snapshots', async () => {
-  await require('../__fixtures__/run.js').typeCheck(TS_FILE, FLOW_FILE)
+  await (require('../__fixtures__/run.js').typeCheck(TS_FILE, FLOW_FILE));
 })
 `)
   const plugin = {

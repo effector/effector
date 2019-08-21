@@ -168,7 +168,7 @@ exports[`snapshots 2`] = `
    |   });
    | }
 
-   /private/tmp/flow/flowlib_36977284/core.js
+   <BUILTINS>/core.js
 >  |     toString(radix?: number): string;
    |                               ^^^^^^ [1]
 
@@ -802,17 +802,6 @@ exports[`snapshots 2`] = `
    |                                     ^^^^ [3]
    |   implements Unit<Params> {
    |   (payload: Params): Promise<Done>;
-
-  
-
-  types/__fixtures__/flow/types.test.js/snapshots.js
-   | import { createFormApi } from '@effector/forms';
-   | {
->  |   await require(\\"../__fixtures__/run.js\\").typeCheck(\\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector_master/src/types/__fixtures__/typescript/types.test.js\\", \\"/Users/goodmind/Clouds/MEGAsync/development/web/projects/pending/effector_master/src/types/__fixtures__/flow/types.test.js\\");
-   |         ^^^^^^ 
-   |  Unexpected identifier, expected the token \`;\`
-   |  
-   | }
 
   
 

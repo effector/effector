@@ -18,10 +18,7 @@ module.exports = {
         },
       ],
     })
-
-    if (path.dirname(filename) === path.join(__dirname, '__tests__'))
-      console.log(result.code)
-
+    
     return result ? result.code : src
   },
 }

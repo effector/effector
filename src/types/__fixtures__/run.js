@@ -16,7 +16,6 @@ async function runFlow() {
     const data = JSON.parse(
       err.message.substring(err.message.indexOf('\n') + 1).trim(),
     )
-    console.log(data)
     const result = await generateReport(processFlow(data))
 
     return {errors: result}
