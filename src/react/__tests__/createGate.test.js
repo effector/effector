@@ -8,10 +8,9 @@ configure({
 })
 
 import * as React from 'react'
-import {render, cleanup} from 'react-testing-library'
+import {render, cleanup, container} from 'effector/fixtures/react'
 import {mount} from 'enzyme'
-import {createEvent, createStore, createStoreObject} from 'effector'
-import {createGate, useGate, type Gate as GateType} from '../createGate'
+import {createGate, useGate} from '../createGate'
 
 test('plain gate', () => {
   const Gate = createGate('plain gate')
@@ -27,7 +26,7 @@ test('plain gate', () => {
   expect(Gate.isOpen).toBe(false)
 })
 
-test('plain gate hook', () => {
+test('plain gate hook', async() => {
   const Gate = createGate('plain gate')
   expect(Gate.isOpen).toBe(false)
   const Component = () => {
@@ -38,9 +37,10 @@ test('plain gate hook', () => {
       </section>
     )
   }
-  render(<Component />)
+  await render(<Component />)
+
   expect(Gate.isOpen).toBe(true)
-  cleanup()
+  await cleanup()
   expect(Gate.isOpen).toBe(false)
 })
 
@@ -67,11 +67,11 @@ test('gate with props hook', async() => {
     useGate(Gate, {foo: 'bar'})
     return <section />
   }
-  const {container} = render(<Component />)
+  await render(<Component />)
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
   expect(Gate.current).toMatchObject({foo: 'bar'})
   expect(container.firstChild).toMatchSnapshot('gate with props hook')
-  cleanup()
+  await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
@@ -105,8 +105,8 @@ test('gate properties hook', async() => {
     useGate(Gate, {foo: 'bar'})
     return <section />
   }
-  render(<Component />)
-  cleanup()
+  await render(<Component />)
+  await cleanup()
   calls(fn1, false, true, false)
   calls(fn2, {}, {foo: 'bar'}, {})
 })
@@ -153,14 +153,14 @@ describe('child gate', () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
-    const tree = mount(
+    await render(
       <section>
         <Child />
       </section>,
     )
 
     expect(Child.isOpen).toBe(false)
-    tree.unmount()
+    await cleanup()
     expect(Child.isOpen).toBe(false)
   })
 })

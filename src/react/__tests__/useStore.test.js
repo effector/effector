@@ -1,16 +1,13 @@
 //@flow
 
 import * as React from 'react'
-//$todo
-import {render, cleanup, act} from 'react-testing-library'
+import {render, container, act} from 'effector/fixtures/react'
 import {createStore, createEvent, createEffect} from 'effector'
 import {useStore, useStoreMap} from '../useStore'
 import {argumentHistory} from 'effector/fixtures'
 
-afterEach(cleanup)
-
 describe('useStore', () => {
-  it('should render', () => {
+  it('should render', async() => {
     const store = createStore('foo')
     const changeText = createEvent('change text')
     store.on(changeText, (_, e) => e)
@@ -20,14 +17,14 @@ describe('useStore', () => {
       return <span>Store text: {state}</span>
     }
 
-    const {container} = render(<Display />)
+    await render(<Display />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <span>
         Store text: 
         foo
       </span>
     `)
-    act(() => {
+    await act(async() => {
       changeText('bar')
     })
     // flushEffects()
@@ -39,21 +36,21 @@ describe('useStore', () => {
     `)
   })
 
-  it('should throw', () => {
+  it('should throw', async() => {
     const ErrorDisplay = props => {
       //$off
       const state = useStore(undefined)
       return <span>Store text: {state}</span>
     }
 
-    expect(() => {
+    await expect(
       render(<ErrorDisplay />)
-    }).toThrowErrorMatchingInlineSnapshot(
+    ).rejects.toThrowErrorMatchingInlineSnapshot(
       `"expect useStore argument to be a store"`,
     )
   })
 
-  it('should retrigger only once after store change', () => {
+  it('should retrigger only once after store change', async() => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
@@ -74,13 +71,13 @@ describe('useStore', () => {
       return <Target store={store} />
     }
 
-    render(<Display />)
+    await render(<Display />)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "A",
       ]
     `)
-    act(() => {
+    await act(async() => {
       changeCurrentStore(storeB)
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -112,13 +109,13 @@ describe('useStore', () => {
         </>
       )
     }
-    render(<App />)
+    await render(<App />)
     await new Promise(rs => setTimeout(rs, 500))
     expect(argumentHistory(fn)).toEqual([false, true, false])
   })
 })
 
-test('useStoreMap', () => {
+test('useStoreMap', async() => {
   const removeUser = createEvent()
   const changeUserAge = createEvent()
   const users = createStore({
@@ -162,7 +159,7 @@ test('useStoreMap', () => {
       </ul>
     )
   }
-  const {container} = render(<Cards />)
+  await render(<Cards />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <ul>
       <li>
@@ -177,7 +174,7 @@ test('useStoreMap', () => {
       </li>
     </ul>
   `)
-  act(() => {
+  await act(async() => {
     changeUserAge({nickname: 'alex', age: 21})
   })
 
@@ -195,7 +192,7 @@ test('useStoreMap', () => {
       </li>
     </ul>
   `)
-  act(() => {
+  await act(async() => {
     removeUser('alex')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
