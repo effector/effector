@@ -11,7 +11,7 @@ import * as React from 'react'
 import {mount} from 'enzyme'
 import {act} from 'effector/fixtures/react'
 import {type Store, createStore, createStoreObject, createEvent} from 'effector'
-import {createComponent} from 'effector-react'
+import {createComponent} from '..'
 
 describe('createComponent', () => {
   const a = createStore(0)
