@@ -238,6 +238,7 @@ test('subscription', async() => {
   const domain = createDomain()
 
   const eff = domain.effect('TYPE_CONST')
+  eff.use(() => {})
   expect(() => {
     from(eff).observe(spy)
   }).not.toThrow()
