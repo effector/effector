@@ -9,6 +9,7 @@ configure({
 
 import * as React from 'react'
 import {mount} from 'enzyme'
+import {act} from 'effector/fixtures/react'
 import {createStore} from 'effector'
 import {createEvent} from 'effector'
 import {createContextComponent} from '..'
@@ -32,9 +33,15 @@ test('createContextComponent', () => {
   )
 
   const tree = mount(<Display />)
-  expect(tree.text()).toMatchSnapshot()
-  changeText('bar')
-  expect(tree.text()).toMatchSnapshot()
+  expect(tree.text()).toMatchInlineSnapshot(
+    `"Store text: fooContext text: bar"`,
+  )
+  act(() => {
+    changeText('bar')
+  })
+  expect(tree.text()).toMatchInlineSnapshot(
+    `"Store text: barContext text: bar"`,
+  )
   tree.unmount()
 
   const tree2 = mount(
@@ -42,8 +49,14 @@ test('createContextComponent', () => {
       <Display />
     </Context.Provider>,
   )
-  expect(tree2.text()).toMatchSnapshot()
-  changeText('foo')
-  expect(tree2.text()).toMatchSnapshot()
+  expect(tree2.text()).toMatchInlineSnapshot(
+    `"Store text: barContext text: test"`,
+  )
+  act(() => {
+    changeText('foo')
+  })
+  expect(tree2.text()).toMatchInlineSnapshot(
+    `"Store text: fooContext text: test"`,
+  )
   tree2.unmount()
 })
