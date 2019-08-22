@@ -26,7 +26,7 @@ test('plain gate', () => {
   expect(Gate.isOpen).toBe(false)
 })
 
-test('plain gate hook', async() => {
+test('plain gate hook', async () => {
   const Gate = createGate('plain gate')
   expect(Gate.isOpen).toBe(false)
   const Component = () => {
@@ -44,7 +44,7 @@ test('plain gate hook', async() => {
   expect(Gate.isOpen).toBe(false)
 })
 
-test('gate with props', async() => {
+test('gate with props', async () => {
   const Gate = createGate('gate with props')
   expect(Gate.current).toMatchObject({})
   const tree = mount(
@@ -55,12 +55,12 @@ test('gate with props', async() => {
   tree.render()
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
   expect(Gate.current).toMatchObject({foo: 'bar'})
-  expect(tree.text()).toMatchSnapshot('gate with props')
+  expect(tree.text()).toMatchInlineSnapshot(`""`)
   tree.unmount()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
-test('gate with props hook', async() => {
+test('gate with props hook', async () => {
   const Gate = createGate('gate with props')
   expect(Gate.current).toMatchObject({})
   const Component = () => {
@@ -70,7 +70,7 @@ test('gate with props hook', async() => {
   await render(<Component />)
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
   expect(Gate.current).toMatchObject({foo: 'bar'})
-  expect(container.firstChild).toMatchSnapshot('gate with props hook')
+  expect(container.firstChild).toMatchInlineSnapshot(`<section />`)
   await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
 })
@@ -78,7 +78,7 @@ test('gate with props hook', async() => {
 function calls(fn, ...args) {
   expect(fn.mock.calls).toEqual(args.map(a => [a]))
 }
-test('gate properties', async() => {
+test('gate properties', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -95,7 +95,7 @@ test('gate properties', async() => {
   calls(fn2, {}, {foo: 'bar'}, {})
 })
 
-test('gate properties hook', async() => {
+test('gate properties hook', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -112,7 +112,7 @@ test('gate properties hook', async() => {
 })
 
 describe('child gate', () => {
-  test('usage', async() => {
+  test('usage', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
@@ -126,12 +126,12 @@ describe('child gate', () => {
     )
     expect(Gate.isOpen).toBe(true)
     expect(Child.isOpen).toBe(true)
-    expect(tree.text()).toMatchSnapshot('child gate usage')
+    expect(tree.text()).toMatchInlineSnapshot(`""`)
     tree.unmount()
     expect(Gate.isOpen).toBe(false)
     expect(Child.isOpen).toBe(false)
   })
-  test('order edge case', async() => {
+  test('order edge case', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
@@ -149,7 +149,7 @@ describe('child gate', () => {
     expect(Gate.isOpen).toBe(false)
     expect(Child.isOpen).toBe(false)
   })
-  test('parent prevent children from beeing open', async() => {
+  test('parent prevent children from beeing open', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
