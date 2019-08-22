@@ -52,15 +52,15 @@ describe('createComponent', () => {
       `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
     )
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-                                                                  Array [
-                                                                    Array [
-                                                                      Object {
-                                                                        "a": 2,
-                                                                        "b": "foo",
-                                                                      },
-                                                                    ],
-                                                                  ]
-                                            `)
+                                                                              Array [
+                                                                                Array [
+                                                                                  Object {
+                                                                                    "a": 2,
+                                                                                    "b": "foo",
+                                                                                  },
+                                                                                ],
+                                                                              ]
+                                                    `)
     tree.unmount()
   })
 
@@ -109,25 +109,25 @@ describe('createComponent', () => {
     })
     tree.unmount()
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-                        Array [
-                          Array [
-                            Object {
-                              "props": Object {
-                                "foo": 1,
-                              },
-                              "state": "foo",
-                            },
-                          ],
-                          Array [
-                            Object {
-                              "props": Object {
-                                "foo": 1,
-                              },
-                              "state": "bar",
-                            },
-                          ],
-                        ]
-                `)
+                                    Array [
+                                      Array [
+                                        Object {
+                                          "props": Object {
+                                            "foo": 1,
+                                          },
+                                          "state": "foo",
+                                        },
+                                      ],
+                                      Array [
+                                        Object {
+                                          "props": Object {
+                                            "foo": 1,
+                                          },
+                                          "state": "bar",
+                                        },
+                                      ],
+                                    ]
+                        `)
   })
 
   test('mount event', async () => {
@@ -156,27 +156,18 @@ describe('createComponent', () => {
     await render(<Foo b="B" />)
     await cleanup()
     expect(argumentHistory(spy)).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "props": Object {
-            "a": "A",
-          },
-          "state": Object {
-            "a": 1,
-            "b": "bar",
-          },
-        },
-        Object {
-          "props": Object {
-            "b": "B",
-          },
-          "state": Object {
-            "a": 6,
-            "b": "bar",
-          },
-        },
-      ]
-    `)
+            Array [
+              Object {
+                "props": Object {
+                  "a": "A",
+                },
+                "state": Object {
+                  "a": 1,
+                  "b": "bar",
+                },
+              },
+            ]
+        `)
   })
   test('unmount event', async () => {
     const a = createStore(1)
@@ -205,15 +196,6 @@ describe('createComponent', () => {
     await cleanup()
     expect(argumentHistory(spy)).toMatchInlineSnapshot(`
       Array [
-        Object {
-          "props": Object {
-            "a": "A",
-          },
-          "state": Object {
-            "a": 6,
-            "b": "bar",
-          },
-        },
         Object {
           "props": Object {
             "b": "B",

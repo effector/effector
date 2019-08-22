@@ -31,17 +31,21 @@ export function createComponent<Props: {...}, State>(
   const mounted = createEvent(`${storeName}.View mounted`)
   const unmounted = createEvent(`${storeName}.View unmounted`)
   function RenderComponent(props: Props) {
+    const propsRef = React.useRef(props)
     const _store = React.useMemo(
       () => (typeof shape === 'function' ? storeFn(props) : store),
       [],
     )
     const state = useStore(_store)
     useIsomorphicLayoutEffect(() => {
+      propsRef.current = props
+    }, [props])
+    useIsomorphicLayoutEffect(() => {
       mounted({props, state: _store.getState()})
       return () => {
-        unmounted({props, state: _store.getState()})
+        unmounted({props: propsRef.current, state: _store.getState()})
       }
-    }, [props])
+    }, [])
     return renderProp(props, state)
   }
   RenderComponent.displayName = `${storeName}.View`
