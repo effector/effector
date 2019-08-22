@@ -52,15 +52,15 @@ describe('createComponent', () => {
       `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
     )
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-                                                Array [
-                                                  Array [
-                                                    Object {
-                                                      "a": 2,
-                                                      "b": "foo",
-                                                    },
-                                                  ],
-                                                ]
-                                `)
+                                                                              Array [
+                                                                                Array [
+                                                                                  Object {
+                                                                                    "a": 2,
+                                                                                    "b": "foo",
+                                                                                  },
+                                                                                ],
+                                                                              ]
+                                                    `)
     tree.unmount()
   })
 
@@ -125,25 +125,25 @@ describe('createComponent', () => {
     })
     tree.unmount()
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
-            "props": Object {
-              "foo": 1,
-            },
-            "state": "foo",
-          },
-        ],
-        Array [
-          Object {
-            "props": Object {
-              "foo": 1,
-            },
-            "state": "bar",
-          },
-        ],
-      ]
-    `)
+                                    Array [
+                                      Array [
+                                        Object {
+                                          "props": Object {
+                                            "foo": 1,
+                                          },
+                                          "state": "foo",
+                                        },
+                                      ],
+                                      Array [
+                                        Object {
+                                          "props": Object {
+                                            "foo": 1,
+                                          },
+                                          "state": "bar",
+                                        },
+                                      ],
+                                    ]
+                        `)
   })
 
   test('mount event', async () => {
@@ -172,18 +172,18 @@ describe('createComponent', () => {
     await render(<Foo b="B" />)
     await cleanup()
     expect(argumentHistory(spy)).toMatchInlineSnapshot(`
-      Array [
-        Object {
-          "props": Object {
-            "a": "A",
-          },
-          "state": Object {
-            "a": 1,
-            "b": "bar",
-          },
-        },
-      ]
-    `)
+            Array [
+              Object {
+                "props": Object {
+                  "a": "A",
+                },
+                "state": Object {
+                  "a": 1,
+                  "b": "bar",
+                },
+              },
+            ]
+        `)
   })
   test('unmount event', async () => {
     const a = createStore(1)
@@ -223,5 +223,31 @@ describe('createComponent', () => {
         },
       ]
     `)
+  })
+
+  test('hooks', () => {
+    const text = createStore('foo')
+    const HookComponent = createComponent(text, (_, text) => {
+      const [count, setCount] = React.useState(0)
+      return (
+        <>
+          <div>Text: {text}</div>
+          <div>Counter: {count}</div>
+          <button id="increment" onClick={() => setCount(count + 1)}>
+            incr
+          </button>
+        </>
+      )
+    })
+    const tree = mount(<HookComponent />)
+    expect(tree.html()).toMatchInlineSnapshot(
+      `"<div>Text: foo</div><div>Counter: 0</div><button id=\\"increment\\">incr</button>"`,
+    )
+    act(() => {
+      tree.find('#increment').simulate('click')
+    })
+    expect(tree.html()).toMatchInlineSnapshot(
+      `"<div>Text: foo</div><div>Counter: 1</div><button id=\\"increment\\">incr</button>"`,
+    )
   })
 })
