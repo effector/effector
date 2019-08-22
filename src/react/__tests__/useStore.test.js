@@ -37,17 +37,23 @@ describe('useStore', () => {
   })
 
   it('should throw', async() => {
+    const fn = jest.fn()
     const ErrorDisplay = props => {
-      //$off
-      const state = useStore(undefined)
-      return <span>Store text: {state}</span>
+      try {
+        //$off
+        useStore(undefined)
+      } catch (error) {
+        fn(error.message)
+      }
+      return <span>Store text</span>
     }
 
-    await expect(
-      render(<ErrorDisplay />)
-    ).rejects.toThrowErrorMatchingInlineSnapshot(
-      `"expect useStore argument to be a store"`,
-    )
+    await render(<ErrorDisplay />)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "expect useStore argument to be a store",
+      ]
+    `)
   })
 
   it('should retrigger only once after store change', async() => {
@@ -109,8 +115,11 @@ describe('useStore', () => {
         </>
       )
     }
-    await render(<App />)
-    await new Promise(rs => setTimeout(rs, 500))
+
+    await act(async() => {
+      await render(<App />)
+      await new Promise(rs => setTimeout(rs, 500))
+    })
     expect(argumentHistory(fn)).toEqual([false, true, false])
   })
 })
