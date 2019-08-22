@@ -96,6 +96,22 @@ describe('createComponent', () => {
     tree.unmount()
   })
 
+  test('should throw', () => {
+    expect(() =>
+      createComponent(50, (_, {a, b}) => a * b),
+    ).toThrowErrorMatchingInlineSnapshot(
+      `"shape should be a store or object with stores"`,
+    )
+  })
+
+  test('createStoreObject', () => {
+    const a = createStore(2)
+    const b = createStore(2)
+    const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
+    const tree = mount(<ObjectComponent />)
+    expect(tree.text()).toMatchInlineSnapshot(`"4"`)
+  })
+
   test('mounted/unmounted events', () => {
     const text = createStore('foo')
     const spy = jest.fn()
