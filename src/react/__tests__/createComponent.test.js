@@ -9,8 +9,15 @@ configure({
 
 import * as React from 'react'
 import {mount} from 'enzyme'
-import {act} from 'effector/fixtures/react'
-import {type Store, createStore, createStoreObject, createEvent} from 'effector'
+import {argumentHistory} from 'effector/fixtures'
+import {act, render, cleanup} from 'effector/fixtures/react'
+import {
+  type Store,
+  createStore,
+  createStoreObject,
+  createEvent,
+  createApi,
+} from 'effector'
 import {createComponent} from '..'
 
 describe('createComponent', () => {
@@ -119,6 +126,85 @@ describe('createComponent', () => {
             "state": "bar",
           },
         ],
+      ]
+    `)
+  })
+
+  test('mount event', async () => {
+    const a = createStore(1)
+    const b = createStore('bar')
+    const {add} = createApi(a, {
+      add: (x, y) => x + y,
+    })
+    const updateValue = createEvent()
+    const c = createStoreObject({a, b})
+    const spy = jest.fn()
+    const Foo = createComponent(c, (_, state) => (
+      <>
+        <div>{state.b}</div>
+        <select value={state.b} onChange={updateValue}>
+          <option value="bar">bar</option>
+          <option value="foo">foo</option>
+        </select>
+      </>
+    ))
+    Foo.mounted.watch(spy)
+    await render(<Foo a="A" />)
+    await act(async () => {
+      add(5)
+    })
+    await render(<Foo b="B" />)
+    await cleanup()
+    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "props": Object {
+            "a": "A",
+          },
+          "state": Object {
+            "a": 1,
+            "b": "bar",
+          },
+        },
+      ]
+    `)
+  })
+  test('unmount event', async () => {
+    const a = createStore(1)
+    const b = createStore('bar')
+    const {add} = createApi(a, {
+      add: (x, y) => x + y,
+    })
+    const updateValue = createEvent()
+    const c = createStoreObject({a, b})
+    const spy = jest.fn()
+    const Foo = createComponent(c, (_, state) => (
+      <>
+        <div>{state.b}</div>
+        <select value={state.b} onChange={updateValue}>
+          <option value="bar">bar</option>
+          <option value="foo">foo</option>
+        </select>
+      </>
+    ))
+    Foo.unmounted.watch(spy)
+    await render(<Foo a="A" />)
+    await act(async () => {
+      add(5)
+    })
+    await render(<Foo b="B" />)
+    await cleanup()
+    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "props": Object {
+            "b": "B",
+          },
+          "state": Object {
+            "a": 6,
+            "b": "bar",
+          },
+        },
       ]
     `)
   })
