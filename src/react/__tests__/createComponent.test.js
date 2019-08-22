@@ -45,15 +45,15 @@ describe('createComponent', () => {
       `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
     )
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-      Array [
-        Array [
-          Object {
-            "a": 2,
-            "b": "foo",
-          },
-        ],
-      ]
-    `)
+                                                Array [
+                                                  Array [
+                                                    Object {
+                                                      "a": 2,
+                                                      "b": "foo",
+                                                    },
+                                                  ],
+                                                ]
+                                `)
     tree.unmount()
   })
 
@@ -87,5 +87,39 @@ describe('createComponent', () => {
     })
     expect(tree.html()).toMatchInlineSnapshot(`"<div>nice</div>"`)
     tree.unmount()
+  })
+
+  test('mounted/unmounted events', () => {
+    const text = createStore('foo')
+    const spy = jest.fn()
+    const Component = createComponent(text, () => null)
+    Component.mounted.watch(spy)
+    Component.unmounted.watch(spy)
+    const tree = mount(<Component foo={1} />)
+    act(() => {
+      //$off
+      text.setState('bar')
+    })
+    tree.unmount()
+    expect(spy.mock.calls).toMatchInlineSnapshot(`
+      Array [
+        Array [
+          Object {
+            "props": Object {
+              "foo": 1,
+            },
+            "state": "foo",
+          },
+        ],
+        Array [
+          Object {
+            "props": Object {
+              "foo": 1,
+            },
+            "state": "bar",
+          },
+        ],
+      ]
+    `)
   })
 })
