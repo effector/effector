@@ -1,16 +1,13 @@
 //@flow
 
 import * as React from 'react'
-//$todo
-import {render, cleanup, act} from 'react-testing-library'
+import {render, container, act} from 'effector/fixtures/react'
 
 import {createStore, createEvent} from 'effector'
 
 import {useList} from '../useList'
 
-afterEach(cleanup)
-
-it('should render store items', () => {
+it('should render store items', async() => {
   const list = createStore(['foo', 'bar', 'baz'])
 
   const List = () => (
@@ -24,7 +21,7 @@ it('should render store items', () => {
     </div>
   )
 
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -43,7 +40,7 @@ it('should render store items', () => {
   `)
 })
 
-it('should handle updates without dull re-renders', () => {
+it('should handle updates without dull re-renders', async() => {
   const fn = jest.fn()
   const update = createEvent()
   const list = createStore(['foo', 'bar', 'baz']).on(
@@ -68,7 +65,7 @@ it('should handle updates without dull re-renders', () => {
       })}
     </div>
   )
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -86,7 +83,7 @@ it('should handle updates without dull re-renders', () => {
     </div>
   `)
   expect(fn).toBeCalledTimes(3)
-  act(() => {
+  await act(async() => {
     update({key: 1, value: 'update'})
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -108,7 +105,7 @@ it('should handle updates without dull re-renders', () => {
   expect(fn).toBeCalledTimes(4)
 })
 
-it('should handle inserts without dull re-renders', () => {
+it('should handle inserts without dull re-renders', async() => {
   const fn = jest.fn()
   const insert = createEvent()
   const list = createStore(['foo', 'bar', 'baz']).on(insert, (list, value) => [
@@ -130,7 +127,7 @@ it('should handle inserts without dull re-renders', () => {
     </div>
   )
 
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -148,7 +145,7 @@ it('should handle inserts without dull re-renders', () => {
     </div>
   `)
   expect(fn).toBeCalledTimes(3)
-  act(() => {
+  await act(async() => {
     insert('update')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
