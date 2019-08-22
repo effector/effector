@@ -10,7 +10,7 @@ configure({
 import * as React from 'react'
 import {mount} from 'enzyme'
 import {argumentHistory} from 'effector/fixtures'
-import {act, render, cleanup} from 'effector/fixtures/react'
+import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {
   type Store,
   createStore,
@@ -52,15 +52,15 @@ describe('createComponent', () => {
       `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
     )
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-                                                                              Array [
-                                                                                Array [
-                                                                                  Object {
-                                                                                    "a": 2,
-                                                                                    "b": "foo",
-                                                                                  },
-                                                                                ],
-                                                                              ]
-                                                    `)
+      Array [
+        Array [
+          Object {
+            "a": 2,
+            "b": "foo",
+          },
+        ],
+      ]
+    `)
     tree.unmount()
   })
 
@@ -104,12 +104,12 @@ describe('createComponent', () => {
     )
   })
 
-  test('createStoreObject', () => {
+  test('createStoreObject', async () => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
-    const tree = mount(<ObjectComponent />)
-    expect(tree.text()).toMatchInlineSnapshot(`"4"`)
+    await render(<ObjectComponent />)
+    expect(container.firstChild).toMatchInlineSnapshot(`4`)
   })
 
   test('mounted/unmounted events', () => {
@@ -125,25 +125,25 @@ describe('createComponent', () => {
     })
     tree.unmount()
     expect(spy.mock.calls).toMatchInlineSnapshot(`
-                                    Array [
-                                      Array [
-                                        Object {
-                                          "props": Object {
-                                            "foo": 1,
-                                          },
-                                          "state": "foo",
-                                        },
-                                      ],
-                                      Array [
-                                        Object {
-                                          "props": Object {
-                                            "foo": 1,
-                                          },
-                                          "state": "bar",
-                                        },
-                                      ],
-                                    ]
-                        `)
+      Array [
+        Array [
+          Object {
+            "props": Object {
+              "foo": 1,
+            },
+            "state": "foo",
+          },
+        ],
+        Array [
+          Object {
+            "props": Object {
+              "foo": 1,
+            },
+            "state": "bar",
+          },
+        ],
+      ]
+    `)
   })
 
   test('mount event', async () => {
@@ -172,18 +172,18 @@ describe('createComponent', () => {
     await render(<Foo b="B" />)
     await cleanup()
     expect(argumentHistory(spy)).toMatchInlineSnapshot(`
-            Array [
-              Object {
-                "props": Object {
-                  "a": "A",
-                },
-                "state": Object {
-                  "a": 1,
-                  "b": "bar",
-                },
-              },
-            ]
-        `)
+      Array [
+        Object {
+          "props": Object {
+            "a": "A",
+          },
+          "state": Object {
+            "a": 1,
+            "b": "bar",
+          },
+        },
+      ]
+    `)
   })
   test('unmount event', async () => {
     const a = createStore(1)
