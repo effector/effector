@@ -154,7 +154,7 @@
     "effector/flags": "./src/effector/flags.prod"
   },
   "devDependencies": {
-    "@types/react": "^16.8.16",
+    "@types/react": "^16.9.2",
     "eslint-config-prettier": "^6.0.0",
     "funland": "^0.1.5",
     "funland-laws": "^0.1.5",
