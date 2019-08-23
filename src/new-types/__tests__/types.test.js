@@ -64,7 +64,11 @@ describe('Unit', () => {
             "
             --typescript--
             Type 'Event<string[]>' is not assignable to type 'Event<number>'.
-              Type 'string[]' is not assignable to type 'number'.
+              Types of property 'watch' are incompatible.
+                Type '(watcher: (payload: string[]) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
+                  Types of parameters 'watcher' and 'watcher' are incompatible.
+                    Types of parameters 'payload' and 'payload' are incompatible.
+                      Type 'string[]' is not assignable to type 'number'.
             Type 'Event<string[]>' is not assignable to type 'null'.
             Type 'Event<string[]>' is not assignable to type 'Event<number>'.
             Type 'Event<string[]>' is not assignable to type 'null'.

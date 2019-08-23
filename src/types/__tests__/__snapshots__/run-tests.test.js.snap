@@ -132,6 +132,33 @@ exports[`Flow: json messages 1`] = `
   
 
   src/types/types.test.js
+   |     test('split arguments no false-positive', () => {
+   |       const source: Event<string[]> = createEvent()
+>  |       split(source, {
+   |       ^^^^ 
+   |  Cannot call \`split\` 
+   |  because null [1] is incompatible with array type [2] in property \`wrongArg_1\`.
+   |  
+   |         wrongResult: list => null,
+   |         wrongArg_1: (list: null) => true,
+
+   |       split(source, {
+   |         wrongResult: list => null,
+>  |         wrongArg_1: (list: null) => true,
+   |                            ^^^^ [1]
+   |         wrongArg_2: (list: number[]) => true,
+   |       })
+
+   | 
+   |     test('split arguments no false-positive', () => {
+>  |       const source: Event<string[]> = createEvent()
+   |                           ^^^^^^^^ [2]
+   |       split(source, {
+   |         wrongResult: list => null,
+
+  
+
+  src/types/types.test.js
    |       const source: Event<string[]> = createEvent()
    |       split(source, {
 >  |         wrongResult: list => null,
@@ -1322,7 +1349,11 @@ exports[`TypeScript: rejected 1`] = `
 "Command failed: npx tsc -p src/types
 
 types.test.ts: Type 'Event<string[]>' is not assignable to type 'Event<number>'.
-  Type 'string[]' is not assignable to type 'number'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: string[]) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'string[]' is not assignable to type 'number'.
 types.test.ts: Type 'Event<string[]>' is not assignable to type 'null'.
 types.test.ts: Type 'Event<string[]>' is not assignable to type 'Event<number>'.
 types.test.ts: Type 'Event<string[]>' is not assignable to type 'null'.
@@ -1336,38 +1367,73 @@ types.test.ts: Type '(list: number[]) => true' is not assignable to type '(paylo
       Type 'string' is not assignable to type 'number'.
 types.test.ts: Type 'Event<number>' is not assignable to type 'Event<string>'.
 types.test.ts: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 types.test.ts: Type 'Event<number>' is not assignable to type 'Event<string>'.
 types.test.ts: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<string>'.
-  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 types.test.ts: Type 'Event<string>' is not assignable to type 'Event<number>'.
 types.test.ts: Type 'Event<{ a: string; b: boolean; }>' is not assignable to type 'Event<number>'.
-  Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: { a: string; b: boolean; }) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type '{ a: string; b: boolean; }' is not assignable to type 'number'.
 types.test.ts: Type 'Store<boolean>' is not assignable to type 'Store<string>'.
-  Type 'boolean' is not assignable to type 'string'.
+  Types of property 'getState' are incompatible.
+    Type '() => boolean' is not assignable to type '() => string'.
+      Type 'boolean' is not assignable to type 'string'.
 types.test.ts: Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
-  Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+  Types of property 'getState' are incompatible.
+    Type '() => { a: string; b: boolean; }' is not assignable to type '() => string'.
+      Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 types.test.ts: Type 'Store<string>' is not assignable to type 'Store<number>'.
 types.test.ts: Type 'Event<string>' is not assignable to type 'Event<number>'.
 types.test.ts: Type 'Event<string>' is not assignable to type 'Event<number>'.
-  Type 'string' is not assignable to type 'number'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'string' is not assignable to type 'number'.
 types.test.ts: Type 'Event<string>' is not assignable to type 'Event<number>'.
-types.test.ts: Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
+types.test.ts: Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: void) => unknown'.
   Types of parameters 'payload' and 'params' are incompatible.
-    Type '{}' is not assignable to type 'number'.
-types.test.ts: Expected 1 arguments, but got 0.
-types.test.ts: Argument of type '() => void' is not assignable to parameter of type '(params: {}) => {} | Promise<{}>'.
-  Type 'void' is not assignable to type '{} | Promise<{}>'.
+    Type 'void' is not assignable to type 'number'.
 types.test.ts: Type 'Effect<string, string, Error>' is not assignable to type 'Effect<number, number, Error>'.
-  Type 'string' is not assignable to type 'number'.
+  Types of property 'done' are incompatible.
+    Type 'Event<{ params: string; result: string; }>' is not assignable to type 'Event<{ params: number; result: number; }>'.
+      Types of property 'watch' are incompatible.
+        Type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: number; result: number; }) => any) => Subscription'.
+          Types of parameters 'watcher' and 'watcher' are incompatible.
+            Types of parameters 'payload' and 'payload' are incompatible.
+              Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
 types.test.ts: Type 'Store<number>' is not assignable to type 'Store<string>'.
-  Type 'number' is not assignable to type 'string'.
+  Types of property 'getState' are incompatible.
+    Type '() => number' is not assignable to type '() => string'.
+      Type 'number' is not assignable to type 'string'.
 types.test.ts: Type 'Event<number>' is not assignable to type 'Event<string>'.
-  Type 'number' is not assignable to type 'string'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'number' is not assignable to type 'string'.
 types.test.ts: Type 'Event<void>' is not assignable to type 'Event<string>'.
-  Type 'void' is not assignable to type 'string'.
+  Types of property 'watch' are incompatible.
+    Type '(watcher: (payload: void) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+      Types of parameters 'watcher' and 'watcher' are incompatible.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'void' is not assignable to type 'string'.
 types.test.ts: Type 'Store<string>' is not assignable to type 'Store<number>'.
-  Type 'string' is not assignable to type 'number'.
+  Types of property 'getState' are incompatible.
+    Type '() => string' is not assignable to type '() => number'.
+      Type 'string' is not assignable to type 'number'.
 types.test.ts: Argument of type '234' is not assignable to parameter of type 'string | undefined'.
 types.test.ts: Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
 types.test.ts: Argument of type '20' is not assignable to parameter of type 'string'.
