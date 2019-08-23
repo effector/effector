@@ -2,10 +2,12 @@ name: effector publish
 
 on:
   push:
-    #     branches:
-    #       - master
+    # branches:
+    #   - master
     tags:
-      - effector@*
+      - 'effector*'
+    # paths:
+    #   - 'packages/*'
 
 jobs:
   build:
