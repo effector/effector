@@ -16,7 +16,7 @@ test('list', () => {
     acc.push(list)
   })
   acc.watch(done, lists => {
-    console.log(lists.map(list => list.join(' ')).join(`\n`))
+    // console.log(lists.map(list => list.join(' ')).join(`\n`))
   })
 
   list.insert([
@@ -366,7 +366,10 @@ test('list', () => {
   ): Array<{|+entries: $ReadOnlyArray<T>, +offset: number|}> {
     return segments
       .map(
-        ({entries, offset}): {|entries: $ReadOnlyArray<T>, offset: number|} => ({
+        ({
+          entries,
+          offset,
+        }): {|entries: $ReadOnlyArray<T>, offset: number|} => ({
           entries,
           offset: normalizeOffset<T>(offset, list, entries),
         }),

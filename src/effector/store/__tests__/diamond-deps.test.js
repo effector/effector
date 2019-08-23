@@ -1,8 +1,6 @@
 //@flow
-import {resolve} from 'path'
-import {createEvent, forward} from '../../event'
-import {createStore} from '..'
-import {combine} from '../../combine'
+
+import {createStore, createEvent, forward, combine} from 'effector'
 
 test('diamonds', async() => {
   const fn = jest.fn()
@@ -142,15 +140,6 @@ test('display name', () => {
   expect(view.mock.calls.length).toBe(2)
 
   updateFirstName('Jooooooooooooooseph')
-  console.table(
-    displayNameMap.mock.calls.map(
-      ([firstName, isFirstNameShort, fullName]) => ({
-        firstName,
-        isFirstNameShort,
-        fullName,
-      }),
-    ),
-  )
   expect(displayName.getState()).toBe('Jooooooooooooooseph')
   expect(isFirstNameShortMap.mock.calls.length).toBe(3)
   expect(fullNameMap.mock.calls.length).toBe(3)
