@@ -70,6 +70,7 @@ const babelConfig = {
       '@babel/plugin-proposal-nullish-coalescing-operator',
       ['@babel/plugin-proposal-class-properties', {loose: true}],
       'macros',
+      [require.resolve('./src/types/src/plugin.js'), false],
       [
         'babel-plugin-module-resolver',
         {
@@ -86,10 +87,10 @@ const babelConfig = {
     {
       test(filename) {
         return (
-          filename
-          && filename.includes('__tests__')
-          && !filename.includes('redux')
-          && !filename.includes('browserstack')
+          filename &&
+          filename.includes('__tests__') &&
+          !filename.includes('redux') &&
+          !filename.includes('browserstack')
         )
       },
       plugins: [
