@@ -1,5 +1,9 @@
 # Changelog
 
+## effector-react 20.3.0
+
+- Add support for react hooks in `createComponent`
+
 ## effector-react 20.2.2, effector-vue 20.1.2
 
 - `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/zerobias/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/zerobias/effector/issues/173))
