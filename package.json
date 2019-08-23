@@ -7,7 +7,6 @@
     "integration": "sh integrations/webpack/run.sh",
     "browserstack": "npx jest --config='src/browserstack/jest.config.js' --runInBand",
     "build:bs": "bsb -make-world",
-    "pretest": "babel src/types/src -d src/types/dist",
     "test": "jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
     "bench": "node --expose-gc bench/bench.test.js",
