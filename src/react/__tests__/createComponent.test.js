@@ -97,9 +97,10 @@ describe('createComponent', () => {
   })
 
   test('should throw', () => {
-    expect(() =>
-      createComponent(50, (_, {a, b}) => a * b),
-    ).toThrowErrorMatchingInlineSnapshot(
+    expect(() => {
+      //$off
+      createComponent(50, (_, {a, b}) => a * b)
+    }).toThrowErrorMatchingInlineSnapshot(
       `"shape should be a store or object with stores"`,
     )
   })
@@ -249,5 +250,35 @@ describe('createComponent', () => {
     expect(tree.html()).toMatchInlineSnapshot(
       `"<div>Text: foo</div><div>Counter: 1</div><button id=\\"increment\\">incr</button>"`,
     )
+  })
+  it('should not use props from failed renders', async () => {
+    const spy = jest.fn()
+    const text = createStore('foo')
+    const Foo = createComponent(text, (props, text) => {
+      if (props.shouldFail) {
+        throw Error('[expect error]')
+      }
+      return (
+        <div>
+          {props.field} {text}
+        </div>
+      )
+    })
+    Foo.unmounted.watch(spy)
+    await render(<Foo shouldFail={false} field="init" />)
+    await render(<Foo shouldFail={false} field="correct" />)
+    await render(<Foo shouldFail={true} field="incorrect" />).catch(() => {})
+    await cleanup()
+    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "props": Object {
+            "field": "correct",
+            "shouldFail": false,
+          },
+          "state": "foo",
+        },
+      ]
+    `)
   })
 })
