@@ -35,16 +35,17 @@ export function createComponent<Props: {...}, State>(
       : (props => store)
   function RenderComponent(props: Props) {
     const propsRef = React.useRef(props)
-    propsRef.current = props
-    const _store = React.useMemo(() => instanceFabric(props), [])
-    const state = useStore(_store)
+    const ownStore = React.useMemo(() => instanceFabric(props), [])
+    const state = useStore(ownStore)
     useIsomorphicLayoutEffect(() => {
-      mounted({props: propsRef.current, state: _store.getState()})
+      mounted({props: propsRef.current, state: ownStore.getState()})
       return () => {
-        unmounted({props: propsRef.current, state: _store.getState()})
+        unmounted({props: propsRef.current, state: ownStore.getState()})
       }
     }, [])
-    return renderProp(props, state)
+    const result = renderProp(props, state)
+    propsRef.current = props
+    return result
   }
   RenderComponent.displayName = `${storeName}.View`
   RenderComponent.mounted = mounted
