@@ -82,20 +82,21 @@ module.exports = {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
-    'types',
+    // 'types',
     {
       'new-types': {
+        testRunner: './src/new-types/testRunner.js',
         testMatch: [
           `<rootDir>/src/new-types/__tests__/**/*.test.js`,
           `<rootDir>/src/new-types/__tests__/**/*.spec.js`,
-          `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
-          `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
-          `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
-          `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
+          // `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
+          // `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
+          // `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
+          // `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
         ],
-        transform: {
-          '^.+\\.jsx?$': '<rootDir>/src/new-types/transformer.js',
-          '^.+\\.tsx?$': '<rootDir>/src/new-types/transformer.js',
+        browser: false,
+        globals: {
+          setupLocation: require('./src/new-types/setupLocation'),
         },
       },
     },
