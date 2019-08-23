@@ -61,7 +61,7 @@
     "bs-platform": "^5.0.3",
     "chalk": "^2.4.2",
     "chroma-js": "^2.0.3",
-    "core-js": "^3.0.1",
+    "core-js": "^3.2.1",
     "cross-env": "^5.2.0",
     "cross-fetch": "^3.0.2",
     "dotenv": "^8.0.0",
