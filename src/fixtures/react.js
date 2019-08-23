@@ -8,7 +8,17 @@ export {act}
 
 //$off
 export let container: HTMLDivElement = null
+let dom
 beforeEach(() => {
+  if (typeof document === 'undefined') {
+    if (!dom) {
+      //$off
+      const {JSDOM} = require('jsdom')
+      dom = new JSDOM('<!DOCTYPE html><html><body></body></html>')
+    }
+    global.document = dom.window.document
+    global.window = dom.window
+  }
   container = document.createElement('div')
   //$off
   document.body.appendChild(container)
@@ -27,3 +37,7 @@ export const render = async(node: React.Node) =>
     //$off
     renderDom(node, container)
   })
+export async function renderHTML(node: React.Node) {
+  await render(node)
+  return container.firstChild
+}
