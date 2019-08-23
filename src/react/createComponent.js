@@ -6,8 +6,6 @@ import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import type {StoreView} from './index.h'
 
-type Unsubscribe = () => void
-
 export function createComponent<Props: {...}, State>(
   shape:
     | Store<State>
@@ -30,12 +28,14 @@ export function createComponent<Props: {...}, State>(
   const storeName = store?.shortName ?? 'Unknown'
   const mounted = createEvent(`${storeName}.View mounted`)
   const unmounted = createEvent(`${storeName}.View unmounted`)
+  //prettier-ignore
+  const instanceFabric: (props: Props) => Store<any> =
+    typeof shape === 'function'
+      ? (storeFn: any)
+      : (props => store)
   function RenderComponent(props: Props) {
     const propsRef = React.useRef(props)
-    const _store = React.useMemo(
-      () => (typeof shape === 'function' ? storeFn(props) : store),
-      [],
-    )
+    const _store = React.useMemo(() => instanceFabric(props), [])
     const state = useStore(_store)
     useIsomorphicLayoutEffect(() => {
       propsRef.current = props
