@@ -70,7 +70,7 @@ const babelConfig = {
       '@babel/plugin-proposal-nullish-coalescing-operator',
       ['@babel/plugin-proposal-class-properties', {loose: true}],
       'macros',
-      [require.resolve('./src/types/src/plugin.js'), false],
+      [require.resolve('./src/new-types/src/plugin.js'), false],
       [
         'babel-plugin-module-resolver',
         {
