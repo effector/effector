@@ -2,12 +2,17 @@ name: effector publish
 
 on:
   push:
-    # branches:
-    #   - master
-    tags:
-      - 'effector*'
-    # paths:
-    #   - 'packages/*'
+    branches:
+      - master
+    paths:
+      - packages/effector/package.json
+      - packages/effector-react/package.json
+      - packages/effector-vue/package.json
+      - packages/bs-effector/package.json
+      - packages/bs-effector-react/package.json
+      - 'packages/@effector/babel-plugin/package.json'
+      - 'packages/@effector/babel-plugin-react/package.json'
+      - 'packages/@effector/forms/package.json'
 
 jobs:
   build:
