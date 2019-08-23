@@ -28,6 +28,8 @@ import {
 import {createComponent, createGate, useGate} from 'effector-react'
 import {createFormApi} from '@effector/forms'
 
+const typecheck = '{global}'
+
 describe('Unit', () => {
   describe('split', () => {
     describe('split infer result', () => {
@@ -58,6 +60,16 @@ describe('Unit', () => {
           })
           const split_result__nofpos__user_defined_1: Event<number> = emptyList
           const split_result__nofpos__user_defined_2: null = oneElement
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+              Type 'string[]' is not assignable to type 'number'.
+            Type 'Event<string[]>' is not assignable to type 'null'.
+            Type 'Event<string[]>' is not assignable to type 'Event<number>'.
+            Type 'Event<string[]>' is not assignable to type 'null'.
+            "
+          `)
         }
         {
           const source: Event<string[]> = createEvent()
