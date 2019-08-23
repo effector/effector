@@ -9,7 +9,7 @@ async function runFlow() {
       'flow',
       'check',
       '--json',
-      `src/types/__fixtures__/flow`,
+      `src/new-types/__fixtures__/flow`,
     ])
     return {result}
   } catch (err) {
@@ -27,7 +27,7 @@ async function runTypeScript() {
     const result = await execa('npx', [
       'tsc',
       '-p',
-      `src/types/__fixtures__/typescript`,
+      `src/new-types/__fixtures__/typescript`,
     ])
     return {result}
   } catch (err) {
