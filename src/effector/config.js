@@ -33,7 +33,7 @@ export type DomainConfigPart = {
 
 export type Config<Part> = {
   ɔ?: Part,
-  ...Part,
+  ...$Exact<Part>,
   ...
 }
 
