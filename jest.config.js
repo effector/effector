@@ -82,14 +82,15 @@ module.exports = {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
+    'types',
     {
-      types: {
+      'new-types': {
         testMatch: [
-          `<rootDir>/src/types/__tests__/**/*.test.js`,
-          `<rootDir>/src/types/__tests__/**/*.spec.js`,
+          `<rootDir>/src/new-types/__tests__/**/*.test.js`,
+          `<rootDir>/src/new-types/__tests__/**/*.spec.js`,
         ],
         transform: {
-          '^.+\\.jsx?$': '<rootDir>/src/types/transformer.js',
+          '^.+\\.jsx?$': '<rootDir>/src/new-types/transformer.js',
         },
       },
     },
