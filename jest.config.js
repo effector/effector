@@ -88,9 +88,14 @@ module.exports = {
         testMatch: [
           `<rootDir>/src/new-types/__tests__/**/*.test.js`,
           `<rootDir>/src/new-types/__tests__/**/*.spec.js`,
+          `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
+          `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
+          `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
+          `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
         ],
         transform: {
           '^.+\\.jsx?$': '<rootDir>/src/new-types/transformer.js',
+          '^.+\\.tsx?$': '<rootDir>/src/new-types/transformer.js',
         },
       },
     },
