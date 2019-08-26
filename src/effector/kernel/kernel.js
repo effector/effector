@@ -1,15 +1,6 @@
 //@flow
 
-import type {
-  Graphite,
-  StateRef,
-  Run,
-  Update,
-  Filter,
-  Compute,
-  Barrier,
-  Tap,
-} from '../stdlib'
+import type {Graphite} from '../stdlib'
 import {getGraph, writeRef, readRef} from '../stdlib'
 import type {Layer} from './layer'
 import {type leftist, insert, deleteMin} from './leftist'
@@ -78,22 +69,38 @@ const runGraph = ({step: graph, firstIndex, stack, resetStop}: Layer, meta) => {
         }
       }
     }
-    const cmd = command[step.type]
-    //$todo
-    cmd(local, step.data, stack.value)
+    switch (step.type) {
+      case 'barrier':
+        local.isFailed = false
+        local.isChanged = true
+        break
+      case 'filter':
+        /**
+         * handled edge case: if step.fn will throw,
+         * tryRun will return null
+         * thereby forcing that branch to stop
+         */
+        local.isChanged = !!tryRun(local, step.data, stack.value)
+        break
+      case 'run':
+      case 'compute':
+        writeRef(stack.value, tryRun(local, step.data, stack.value))
+        break
+      case 'update':
+        writeRef(step.data.store, readRef(stack.value))
+        break
+      case 'tap':
+        tryRun(local, step.data, stack.value)
+        break
+    }
     meta.stop = local.isFailed || !local.isChanged
   }
   if (!meta.stop) {
     for (let stepn = 0; stepn < graph.next.length; stepn++) {
-      /**
-       * copy head of scope stack to feel free
-       * to override it during seq execution
-       */
-      const subscope = new Stack(readRef(stack.value), stack)
       pushHeap({
         step: graph.next[stepn],
         firstIndex: 0,
-        stack: subscope,
+        stack: new Stack(readRef(stack.value), stack),
         resetStop: true,
         type: 'child',
         id: ++layerID,
@@ -141,33 +148,8 @@ export const upsertLaunch = (unit: Graphite, payload: any) => {
   if (alreadyStarted) return
   exec()
 }
-const command = {
-  barrier(local, step: $PropertyType<Barrier, 'data'>, val: StateRef) {
-    local.isFailed = false
-    local.isChanged = true
-  },
-  filter(local, step: $PropertyType<Filter, 'data'>, val: StateRef) {
-    /**
-     * handled edge case: if step.fn will throw,
-     * tryRun will return null
-     * thereby forcing that branch to stop
-     */
-    local.isChanged = !!tryRun(local, step, val)
-  },
-  run(local, step: $PropertyType<Run, 'data'>, val: StateRef) {
-    writeRef(val, tryRun(local, step, val))
-  },
-  update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
-    writeRef(step.store, readRef(val))
-  },
-  compute(local, step: $PropertyType<Compute, 'data'>, val: StateRef) {
-    writeRef(val, tryRun(local, step, val))
-  },
-  tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
-    tryRun(local, step, val)
-  },
-}
-const tryRun = (local: Local, {fn}, val: StateRef) => {
+
+const tryRun = (local: Local, {fn}, val: {current: any, ...}) => {
   let result = null
   let isFailed = false
   try {
