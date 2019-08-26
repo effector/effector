@@ -27,7 +27,7 @@ import {
 } from 'effector'
 import {createComponent, createGate, useGate} from 'effector-react'
 import {createFormApi} from '@effector/forms'
-
+import setupLocation from '../setupLocation'
 const typecheck = '{global}'
 
 describe('Unit', () => {
