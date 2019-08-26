@@ -13,7 +13,7 @@ import type {Stack} from './stack'
 export type Layer = {|
   +step: Graph,
   +firstIndex: number,
-  +scope: Stack,
+  +stack: Stack,
   +resetStop: boolean,
   +type: PriorityTag,
   +id: number,

@@ -37,7 +37,7 @@ const barriers = new Set()
 const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
-const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
+const runGraph = ({step: graph, firstIndex, stack, resetStop}: Layer, meta) => {
   const local = new Local(graph.scope)
   for (
     let stepn = firstIndex;
@@ -55,7 +55,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
           pushHeap({
             step: graph,
             firstIndex: stepn,
-            scope,
+            stack,
             resetStop: false,
             type: 'effect',
             id: ++layerID,
@@ -68,7 +68,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
             pushHeap({
               step: graph,
               firstIndex: stepn,
-              scope,
+              stack,
               resetStop: false,
               type: step.data.priority,
               id: ++layerID,
@@ -80,7 +80,7 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
     }
     const cmd = command[step.type]
     //$todo
-    cmd(local, step.data, scope.value)
+    cmd(local, step.data, stack.value)
     meta.stop = local.isFailed || !local.isChanged
   }
   if (!meta.stop) {
@@ -89,11 +89,11 @@ const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
        * copy head of scope stack to feel free
        * to override it during seq execution
        */
-      const subscope = new Stack(readRef(scope.value), scope)
+      const subscope = new Stack(readRef(stack.value), stack)
       pushHeap({
         step: graph.next[stepn],
         firstIndex: 0,
-        scope: subscope,
+        stack: subscope,
         resetStop: true,
         type: 'child',
         id: ++layerID,
@@ -111,7 +111,7 @@ const addSingleBranch = (unit: Graphite, payload: any) => {
   pushHeap({
     step: getGraph(unit),
     firstIndex: 0,
-    scope: new Stack(payload, null),
+    stack: new Stack(payload, null),
     resetStop: false,
     type: 'pure',
     id: ++layerID,
