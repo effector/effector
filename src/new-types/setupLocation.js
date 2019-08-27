@@ -1,12 +1,28 @@
-module.exports = function setupLocation(file, loc, reportPath) {
+//@flow
+module.exports = function setupLocation(
+  file /*: string*/,
+  loc /*: {
+  start: {line: number, column: number},
+  end: {line: number, column: number},
+}*/,
+  reportPath /*: string */,
+) {
+  //@ts-ignore
   const {readJSONSync} = require('fs-extra')
   const report = readJSONSync(reportPath)
-  const errors = []
+  return `\n--typescript--\n${matchTypecheckerMessages(
+    report.ts,
+    loc,
+  )}\n\n--flow--\n${matchTypecheckerMessages(report.flow, loc)}\n`
+}
+
+function matchTypecheckerMessages(report, loc) {
+  const messages = []
   for (const {pos, message} of report) {
-    if (inRange(loc, pos)) errors.push(message)
+    if (inRange(loc, pos)) messages.push(message)
   }
-  if (errors.length === 0) return 'no errors'
-  return `\n--typescript--\n${errors.join(`\n`)}\n`
+  if (messages.length === 0) return 'no errors'
+  return messages.join(`\n`)
 }
 
 function inRange({start, end}, {line, col}) {

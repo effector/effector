@@ -1,7 +1,6 @@
 const execa = require('execa')
-const {resolve, relative, basename} = require('path')
-const {codeFrameColumns} = require('@babel/code-frame')
-const {readFile, outputFile, remove, copyFile, outputJSON} = require('fs-extra')
+const {resolve, relative, parse} = require('path')
+const {readFile, remove, copyFile, outputJSON} = require('fs-extra')
 
 const jestAdapter = require('jest-circus/runner')
 
@@ -16,6 +15,8 @@ module.exports = async function(
   return jestAdapter(globalConfig, config, environment, runtime, testPath)
 }
 
+const PRINT_FOREIGN_FILE_NAME = false
+
 async function typeCheck(testPath) {
   const root = resolve(__dirname, '../new-types')
   const repoRoot = resolve(__dirname, '../..')
@@ -28,17 +29,15 @@ async function typeCheck(testPath) {
 
   const relativeTestPath = relative(root, testPath)
   const files = {}
-  const ts = await runTypeScript()
-  const flow = await runFlow()
+  const [ts, flow] = await Promise.all([runTypeScript(), runFlow()])
 
   const tsReport = normalizeTSReport(ts)
-  await outputJSON(resolve(__dirname, 'ts-report.json'), tsReport, {spaces: 2})
-  await outputJSON(resolve(__dirname, 'flow-report.json'), flow, {spaces: 2})
-  // expect(ts.errors).toMatchSnapshot()
-  // expect(flow.errors).toMatchSnapshot()
-
+  await outputJSON(
+    resolve(__dirname, 'type-report.json'),
+    {ts: tsReport, flow},
+    {spaces: 2},
+  )
   await Promise.all([remove(movedFileFlow), remove(movedFileTS)])
-
   function normalizeTSReport(report) {
     let current = {
       pos: {line: -1, col: -1},
@@ -80,7 +79,8 @@ async function typeCheck(testPath) {
         '-p',
         `src/new-types/__fixtures__/typescript`,
       ])
-      return {result}
+      console.warn('no errors found by typescript typecheck', result)
+      return ''
     } catch (err) {
       const cleanedMessage = err.message
         // .replace(/src\/types\//gm, '')
@@ -101,37 +101,169 @@ async function typeCheck(testPath) {
         '--json',
         `src/new-types/__fixtures__/flow`,
       ])
-      return {result}
+      console.warn('no errors found by flow typecheck', result)
+      return []
     } catch (err) {
       const data = JSON.parse(
         err.message.substring(err.message.indexOf('\n') + 1).trim(),
       )
       const result = await generateReport(processFlow(data))
 
-      return {errors: result}
+      return result
     }
 
     async function generateReport(errors) {
-      const results = []
-      const getLines = ({loc: {start, end}}) => [start.line, end.line]
-      const lineNumbersPad = Math.max(
-        ...flatMap(errors, ({message, refs}) => [
-          getLines(message),
-          ...flatMap(refs, getLines),
-        ]),
-      ).toString().length
-
-      for (const {message, refs} of errors) {
-        results.push(await printMessage(message, false, true, lineNumbersPad))
-        let lastSource = message.source
-        for (const ref of refs) {
-          const printHead = lastSource !== ref.source
-          lastSource = ref.source
-          results.push(await printMessage(ref, true, printHead, lineNumbersPad))
+      const resultsNew = []
+      function getMarkLine(sourceLine, loc) {
+        const paddingLeft = sourceLine.length - sourceLine.trimStart().length
+        sourceLine = sourceLine.trimStart()
+        const startColumn = Math.max(0, loc.start.column - 1 - paddingLeft)
+        const endColumn = Math.max(0, loc.end.column - paddingLeft)
+        let markLine = Array(startColumn)
+          .fill(' ')
+          .join('')
+        let addEllipsis = false
+        let markLength = 0
+        if (loc.end.line !== loc.start.line) {
+          markLength = Math.max(0, sourceLine.length - startColumn)
+          addEllipsis = true
+        } else {
+          markLength = Math.max(
+            0,
+            Math.min(sourceLine.length, endColumn) - startColumn,
+          )
         }
-        results.push('  ')
+        markLine += Array(markLength)
+          .fill('^')
+          .join('')
+        if (addEllipsis) markLine += '...'
+        return markLine
       }
-      return results.join(`\n\n`)
+      async function getNewMessage(message, framePath, isRoot) {
+        let {descr} = message
+        const fullDescription = {
+          header: [],
+          explanation: [],
+        }
+        if (isRoot) {
+          descr = descr.replace(/\`/gi, `'`).replace(/\.$/, '')
+          const splitPoint = descr.indexOf(' because ')
+          if (splitPoint === -1) {
+            fullDescription.header.push(descr)
+          } else {
+            const [briefDescription, explanation] = descr.split(' because ')
+            fullDescription.header.push(briefDescription)
+            fullDescription.explanation.push(`  ${explanation}`)
+          }
+        }
+
+        const {loc} = message
+        if (message.type !== 'SourceFile') {
+          let sourceLine = message.context
+          let markLine = getMarkLine(sourceLine, loc)
+          sourceLine = sourceLine.trimStart()
+          if (!isRoot) {
+            const fill = Array(descr.length + 1)
+              .fill(' ')
+              .join('')
+            sourceLine = `${fill}${sourceLine}`
+            markLine = `${fill}${markLine}`
+            const firstPointer = markLine.indexOf('^')
+            if (firstPointer >= descr.length + 1) {
+              const before = markLine.slice(0, firstPointer - descr.length - 1)
+              const after = markLine.slice(firstPointer - 1)
+              markLine = `${before}${descr}${after}`
+            }
+          } else {
+            markLine = `  ${markLine}`
+            sourceLine = `  ${sourceLine}`
+          }
+          const sourceFile = `<BUILTINS>/${parse(message.source).base}`
+          const lines = [
+            ...fullDescription.header,
+            sourceFile,
+            sourceLine,
+            markLine,
+            ...fullDescription.explanation,
+          ]
+          return {
+            pos: {
+              line: loc.start.line,
+              col: loc.start.column,
+            },
+            file: sourceFile,
+            lines,
+          }
+        }
+        const sourceCode = await readSource(message.source)
+        let currentPath = fromPrintRoot(message.source)
+        const printCurrentPath =
+          PRINT_FOREIGN_FILE_NAME && message.source !== framePath
+        if (currentPath.startsWith('packages'))
+          currentPath = currentPath.replace('packages/', '')
+        currentPath = currentPath.replace(
+          new RegExp(relative(repoRoot, movedFileFlow), 'gm'),
+          relativeTestPath,
+        )
+
+        let sourceLine = (
+          sourceCode.split(/\n/)[Math.max(0, loc.start.line - 1)] || ''
+        ).trimEnd()
+        let markLine = getMarkLine(sourceLine, loc)
+        sourceLine = sourceLine.trimStart()
+        if (!isRoot) {
+          const fill = Array(descr.length + 1)
+            .fill(' ')
+            .join('')
+          sourceLine = `${fill}${sourceLine}`
+          markLine = `${fill}${markLine}`
+          const firstPointer = markLine.indexOf('^')
+          if (firstPointer >= descr.length + 1) {
+            const before = markLine.slice(0, firstPointer - descr.length - 1)
+            const after = markLine.slice(firstPointer - 1)
+            markLine = `${before}${descr}${after}`
+          }
+        } else {
+          markLine = `  ${markLine}`
+          sourceLine = `  ${sourceLine}`
+        }
+        const lines = [...fullDescription.header]
+        if (printCurrentPath) lines.push(currentPath)
+        lines.push(sourceLine, markLine, ...fullDescription.explanation)
+        return {
+          pos: {
+            line: loc.start.line,
+            col: loc.start.column,
+          },
+          file: currentPath,
+          lines,
+        }
+      }
+      for (const {message, refs} of errors) {
+        const errorsPack = []
+        errorsPack.push(await getNewMessage(message, message.source, true))
+        const messages = await Promise.all(
+          refs.map(ref => getNewMessage(ref, message.source, false)),
+        )
+        errorsPack.push(...messages)
+        //prettier-ignore
+        const lines = errorsPack.map(
+          ({lines}, i) => i === 0
+            ? lines.join(`\n`)
+            : lines
+              .map(line => line
+                .split(`\n`)
+                .map(line => `  ${line}`)
+                .join(`\n`))
+              .join(`\n`)
+        )
+        resultsNew.push({
+          pos: errorsPack[0].pos,
+          message: lines.join(`\n`),
+          file: errorsPack[0].file,
+        })
+      }
+      return resultsNew
 
       async function readSource(source) {
         if (source in files) return files[source]
@@ -141,158 +273,6 @@ async function typeCheck(testPath) {
         return result
       }
 
-      async function printMessage(msg, isRef, printHead, lineNumbersPad) {
-        if (msg.type === 'LibFile')
-          return printLibRef(msg, isRef, lineNumbersPad)
-        const source = await readSource(msg.source)
-        const head = printHead ? `  ${fromPrintRoot(msg.source)}\n` : ''
-        let frame
-        if (isRef) {
-          frame = printFrameRef(
-            codeFrameColumns(source, msg.loc, {
-              linesAbove: 2,
-              linesBelow: 2,
-              // message
-            }),
-            msg.descr,
-            2,
-            lineNumbersPad,
-          )
-        } else {
-          const pad = addIndent('|  ', 4 + 1)
-          const withPad = line => `${pad}${line}`
-          let descr = msg.descr
-          const acc = []
-          const max = 80
-          const trailMin = 15
-          if (descr.includes('because ')) {
-            const index = descr.indexOf('because ')
-            splitLongLine(descr.slice(0, index), acc, max, trailMin)
-            splitLongLine(descr.slice(index), acc, max, trailMin)
-          } else {
-            splitLongLine(descr, acc, max, trailMin)
-          }
-          acc.push('')
-          descr = ['', ...acc.map(withPad)].join(`\n`)
-          frame = codeFrameColumns(source, msg.loc, {
-            linesAbove: 2,
-            linesBelow: 2,
-            message: descr,
-          })
-          const padInit =
-            frame
-              .split(`\n`)
-              .find(line => line.startsWith('>'))
-              .indexOf('|') -
-            1 -
-            2
-          const offset = lineNumbersPad - padInit
-          frame = addIndent(frame, offset)
-            .split(`\n`)
-            .map(line => {
-              const trimmed = line.trimStart()
-              if (trimmed.startsWith('>')) {
-                const cutted = trimmed.slice(2)
-                const lineNumberBlockEnd = Math.max(0, cutted.indexOf('|'))
-                return `>  ${cutted.slice(lineNumberBlockEnd)}`
-              }
-              const lineNumberBlockEnd = Math.max(0, line.indexOf('|'))
-              return addIndent(line.slice(lineNumberBlockEnd), 3)
-            })
-            .join(`\n`)
-        }
-        return `${head}${frame}`
-      }
-      function splitLongLine(line, acc, max, trailMin) {
-        let currentLine = line
-        while (currentLine.length > max) {
-          let bound = max - 1
-          let trail = -1
-          let trailFound = false
-          let lastSpace
-          while (!trailFound) {
-            lastSpace = currentLine.lastIndexOf(' ', bound)
-            if (lastSpace === -1) {
-              acc.push(currentLine)
-              return
-            }
-            trail = currentLine.length - lastSpace
-            if (trail < trailMin) {
-              bound = Math.max(0, lastSpace - 1)
-            } else {
-              trailFound = true
-            }
-          }
-          acc.push(currentLine.slice(0, lastSpace))
-          currentLine = currentLine.slice(lastSpace + 1)
-        }
-        acc.push(currentLine)
-      }
-      async function printLibRef(msg, isRef, lineNumbersPad) {
-        const filledSource = [
-          Array(Math.max(0, msg.loc.start.line - 1))
-            .fill('')
-            .join(`\n`),
-          msg.context,
-          '',
-        ].join(`\n`)
-        const libPath = `<BUILTINS>/${basename(msg.source)}`
-        const frame = printFrameRef(
-          codeFrameColumns(filledSource, msg.loc, {
-            linesAbove: 0,
-            linesBelow: 0,
-            // message
-          }),
-          msg.descr,
-          0,
-          lineNumbersPad,
-        )
-        return `   ${libPath}\n${frame}`
-      }
-      function printFrameRef(frame, descr, padTop, lineNumbersPad) {
-        let padNumbers = lineNumbersPad
-        let offset = 0
-        const result = frame
-          .split(`\n`)
-          .reverse()
-          .map((line, index, arr) => {
-            const i = arr.length - 1 - index
-            const lineNumberBlockEnd = Math.max(0, line.indexOf('|'))
-            if (i === padTop + 1) {
-              padNumbers = line.indexOf('|') - 1 - 2
-              offset = lineNumbersPad // - padNumbers
-              const index = line.lastIndexOf('^')
-              return `${line.slice(lineNumberBlockEnd, index + 1)}^ ${descr}`
-            }
-            if (i === padTop) {
-              return `> ${line.slice(2 + padNumbers)}`
-            }
-
-            return line.slice(lineNumberBlockEnd)
-          })
-          .reverse()
-          .join(`\n`)
-        const offsetResult = addIndent(result, offset)
-        return offsetResult
-          .split(`\n`)
-          .map((line, i) => {
-            if (i === padTop) return line.slice(offset)
-            return line
-          })
-          .join(`\n`)
-      }
-      function addIndent(str, n = 2) {
-        const space = Array(n)
-          .fill(' ')
-          .join('')
-        const splitted = str.split(/\n/gi)
-        const padded = splitted.map(line => `${space}${line}`)
-        return padded.join(`\n`)
-      }
-
-      function flatMap(list, cb) {
-        return list.reduce((acc, x) => acc.concat(cb(x)), [])
-      }
       function fromPrintRoot(source) {
         return relative(repoRoot, resolve(root, source))
       }
