@@ -34,7 +34,7 @@ export function storeFabric<State>(props: {
   ...
 }): Store<State> {
   const {currentState, config, parent} = props
-  const {name} = config
+  const {name, sid = null} = config
   const plainState = createStateRef(currentState)
   const currentId = name || plainState.id
   const defaultState = currentState
@@ -72,6 +72,7 @@ export function storeFabric<State>(props: {
     defaultState,
     getState: bind(readRef, plainState),
     stateRef: plainState,
+    sid,
   }: any)
   ;(store: any).subscribe = bind(subscribe, store)
   ;(store: any).watch = bind(watch, store)

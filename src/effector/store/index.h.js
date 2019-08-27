@@ -7,24 +7,24 @@ import type {CompositeName} from '../compositeName'
 import type {StoreConfigPart} from '../config'
 
 export interface Store<State> extends Unit {
-  subscribers: Map<Event<any>, Subscription>,
-  /*::+*/ id: string,
-  /*::+*/ stateRef: StateRef,
-  reset(event: Event<any> | Effect<any, any, any>): Store<State>,
-  getState(): State,
-  setState(newState: State): void,
+  subscribers: Map<Event<any>, Subscription>;
+  /*::+*/ id: string;
+  /*::+*/ stateRef: StateRef;
+  reset(event: Event<any> | Effect<any, any, any>): Store<State>;
+  getState(): State;
+  setState(newState: State): void;
   //prettier-ignore
   /*::+*/ map: (
   & (<T>(fn: (_: State, lastState?: T) => T, _: void) => Store<T>)
   & (<T>(fn: (_: State, lastState: T) => T, firstState: T) => Store<T>)
- ),
+ );
   on<E>(
     event: Event<E> | Effect<E, any, any> | Store<E>,
     handler: (state: State, payload: E) => State | void,
-  ): Store<State>,
-  off(event: Event<any>): void,
-  subscribe(listener: any): Subscription,
-  thru<U>(fn: (store: Store<State>) => U): U,
+  ): Store<State>;
+  off(event: Event<any>): void;
+  subscribe(listener: any): Subscription;
+  thru<U>(fn: (store: Store<State>) => U): U;
   //prettier-ignore
   /*::+*/ watch: (
     & (
@@ -51,14 +51,15 @@ export interface Store<State> extends Unit {
         watcher: (state: State, payload: E, type: string) => any,
       ) => Subscription
     )
-  ),
-  +kind: kind,
-  +defaultState: State,
-  +defaultConfig: StoreConfigPart,
-  defaultShape?: Object,
-  shortName: string,
-  domainName?: CompositeName,
-  +graphite: Graph,
-  +updates: Event<State>,
-  compositeName?: CompositeName,
+  );
+  +kind: kind;
+  +defaultState: State;
+  +defaultConfig: StoreConfigPart;
+  defaultShape?: Object;
+  shortName: string;
+  domainName?: CompositeName;
+  +sid: string | null;
+  +graphite: Graph;
+  +updates: Event<State>;
+  compositeName?: CompositeName;
 }

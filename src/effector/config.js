@@ -16,6 +16,7 @@ export type EffectConfigPart<Payload, Done> = {
 export type StoreConfigPart = {
   name?: string,
   loc?: SourceLocation,
+  sid?: string,
   ...
 }
 
