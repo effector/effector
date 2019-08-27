@@ -11,31 +11,31 @@ import type {
   EventConfigPart,
   EffectConfigPart,
 } from '../config'
-import type {kind} from '../stdlib'
+import type {kind, Graph, Unit} from '../stdlib'
 
-export type Domain = {
-  /*:: +*/ id: string,
-  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription,
-  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription,
-  onCreateStore(hook: (newStore: Store<any>) => any): Subscription,
-  onCreateDomain(hook: (newDomain: Domain) => any): Subscription,
+export interface Domain extends Unit {
+  /*:: +*/ id: string;
+  onCreateEvent(hook: (newEvent: Event<any>) => any): Subscription;
+  onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
+  onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
+  onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(
     name?: string,
     config?: Config<EventConfigPart>,
-  ): Event<Payload>,
+  ): Event<Payload>;
   effect<Params, Done, Fail>(
     name?: string,
     config?: Config<EffectConfigPart<Params, Done>>,
-  ): Effect<Params, Done, Fail>,
-  domain(name?: string): Domain,
+  ): Effect<Params, Done, Fail>;
+  domain(name?: string): Domain;
   store<State>(
     defaultState: State,
     config?: Config<StoreConfigPart>,
-  ): Store<State>,
-  compositeName: CompositeName,
-  getType(): string,
-  kind: kind,
-  ...
+  ): Store<State>;
+  compositeName: CompositeName;
+  getType(): string;
+  kind: kind;
+  graphite: Graph;
 }
 
 export type DomainHooks = {|

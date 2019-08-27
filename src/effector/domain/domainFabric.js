@@ -1,6 +1,6 @@
 //@flow
 
-import {stringRefcount, Kind} from '../stdlib'
+import {stringRefcount, Kind, addLinkToOwner} from '../stdlib'
 import {type Store, storeFabric} from '../store'
 import {
   normalizeConfig,
@@ -16,6 +16,7 @@ import type {Domain, DomainHooks} from './index.h'
 import type {DomainConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
 import {DomainHistory, domainHooks} from './hook'
+import {createNode} from '../stdlib/graph'
 
 const nextID = stringRefcount()
 
@@ -37,7 +38,13 @@ export function domainFabric({
   const history = new DomainHistory()
   const hooks = domainHooks(history, compositeName, parentHooks)
 
+  const node = createNode({
+    node: [],
+    scope: {history, hooks},
+  })
+
   return {
+    graphite: node,
     compositeName,
     id,
     defaultConfig: config,
@@ -69,6 +76,7 @@ export function domainFabric({
         parent: compositeName,
         config: normalizeConfig(config),
       })
+      addLinkToOwner(node, result)
       hooks.event(result)
       return result
     },
@@ -81,6 +89,7 @@ export function domainFabric({
         parent: compositeName,
         config: normalizeConfig(config),
       })
+      addLinkToOwner(node, result)
       hooks.effect(result)
       return result
     },
@@ -91,6 +100,7 @@ export function domainFabric({
         parentHooks: hooks,
         config: normalizeConfig(config),
       })
+      addLinkToOwner(node, result)
       hooks.domain(result)
       return result
     },
@@ -98,8 +108,10 @@ export function domainFabric({
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
+        //$todo
         config: normalizeConfig(config),
       })
+      addLinkToOwner(node, result)
       hooks.store(result)
       return result
     },

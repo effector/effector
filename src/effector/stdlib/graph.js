@@ -3,7 +3,7 @@
 import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
-import {store as isStore} from './is'
+import {store as isStore, domain as isDomain} from './is'
 
 export function createNode({
   node,
@@ -86,6 +86,24 @@ export const clearNode = (
 ) => {
   if (isStore(graphite)) {
     ;(graphite: any).subscribers.clear()
+  }
+  if (isDomain(graphite)) {
+    const {scope} = getGraph(graphite)
+    const {history, hooks} = scope
+    if (history) {
+      history.events.clear()
+      history.effects.clear()
+      history.storages.clear()
+      history.domains.clear()
+    }
+    if (hooks) {
+      clearNode(hooks.event, {deep})
+      clearNode(hooks.effect, {deep})
+      clearNode(hooks.store, {deep})
+      clearNode(hooks.domain, {deep})
+    }
+    scope.history = null
+    scope.hooks = null
   }
   clearNodeNormalized(getGraph(graphite), !!deep)
 }
