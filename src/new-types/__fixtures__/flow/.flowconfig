@@ -12,6 +12,8 @@
 ../../../../packages/@effector/forms/package.json
 ../../../../packages/@effector/redux-adapter/index.js.flow
 ../../../../packages/@effector/redux-adapter/package.json
+../setupLocation.js
+../../setupLocation.js
 
 [libs]
 ../../../../node_modules/@babel/types/lib/index.js.flow
