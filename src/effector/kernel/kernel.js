@@ -49,7 +49,7 @@ const exec = () => {
     stop: false,
   }
   let value
-  while (heap) {
+  mem: while (heap) {
     value = heap.value
     heap = deleteMin(heap)
     const {step: graph, firstIndex, stack, resetStop} = value
@@ -75,7 +75,7 @@ const exec = () => {
               type: 'effect',
               id: ++layerID,
             })
-            return
+            continue mem
           case 'barrier': {
             const id = step.data.barrierID
             if (!barriers.has(id)) {
@@ -89,7 +89,7 @@ const exec = () => {
                 id: ++layerID,
               })
             }
-            return
+            continue mem
           }
         }
       }
