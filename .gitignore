@@ -9,8 +9,7 @@
 *.*~
 *.swp
 
-src/new-types/ts-report.json
-src/new-types/flow-report.json
+src/new-types/type-report.json
 lib/**
 es/**
 debug.log
