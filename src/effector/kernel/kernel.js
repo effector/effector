@@ -28,89 +28,6 @@ const barriers = new Set()
 const pushHeap = (opts: Layer) => {
   heap = insert(opts, heap)
 }
-const runGraph = ({step: graph, firstIndex, stack, resetStop}: Layer, meta) => {
-  const local = new Local(graph.scope)
-  for (
-    let stepn = firstIndex;
-    stepn < graph.seq.length && !meta.stop;
-    stepn++
-  ) {
-    const step = graph.seq[stepn]
-    if (stepn === firstIndex) {
-      if (step.type === 'barrier') {
-        barriers.delete(step.data.barrierID)
-      }
-    } else {
-      switch (step.type) {
-        case 'run':
-          pushHeap({
-            step: graph,
-            firstIndex: stepn,
-            stack,
-            resetStop: false,
-            type: 'effect',
-            id: ++layerID,
-          })
-          return
-        case 'barrier': {
-          const id = step.data.barrierID
-          if (!barriers.has(id)) {
-            barriers.add(id)
-            pushHeap({
-              step: graph,
-              firstIndex: stepn,
-              stack,
-              resetStop: false,
-              type: step.data.priority,
-              id: ++layerID,
-            })
-          }
-          return
-        }
-      }
-    }
-    switch (step.type) {
-      case 'barrier':
-        local.isFailed = false
-        local.isChanged = true
-        break
-      case 'filter':
-        /**
-         * handled edge case: if step.fn will throw,
-         * tryRun will return null
-         * thereby forcing that branch to stop
-         */
-        local.isChanged = !!tryRun(local, step.data, stack.value)
-        break
-      case 'run':
-      case 'compute':
-        writeRef(stack.value, tryRun(local, step.data, stack.value))
-        break
-      case 'update':
-        writeRef(step.data.store, readRef(stack.value))
-        break
-      case 'tap':
-        tryRun(local, step.data, stack.value)
-        break
-    }
-    meta.stop = local.isFailed || !local.isChanged
-  }
-  if (!meta.stop) {
-    for (let stepn = 0; stepn < graph.next.length; stepn++) {
-      pushHeap({
-        step: graph.next[stepn],
-        firstIndex: 0,
-        stack: new Stack(readRef(stack.value), stack),
-        resetStop: true,
-        type: 'child',
-        id: ++layerID,
-      })
-    }
-  }
-  if (resetStop) {
-    meta.stop = false
-  }
-}
 
 let alreadyStarted = false
 
@@ -135,7 +52,88 @@ const exec = () => {
   while (heap) {
     value = heap.value
     heap = deleteMin(heap)
-    runGraph(value, meta)
+    const {step: graph, firstIndex, stack, resetStop} = value
+    const local = new Local(graph.scope)
+    for (
+      let stepn = firstIndex;
+      stepn < graph.seq.length && !meta.stop;
+      stepn++
+    ) {
+      const step = graph.seq[stepn]
+      if (stepn === firstIndex) {
+        if (step.type === 'barrier') {
+          barriers.delete(step.data.barrierID)
+        }
+      } else {
+        switch (step.type) {
+          case 'run':
+            pushHeap({
+              step: graph,
+              firstIndex: stepn,
+              stack,
+              resetStop: false,
+              type: 'effect',
+              id: ++layerID,
+            })
+            return
+          case 'barrier': {
+            const id = step.data.barrierID
+            if (!barriers.has(id)) {
+              barriers.add(id)
+              pushHeap({
+                step: graph,
+                firstIndex: stepn,
+                stack,
+                resetStop: false,
+                type: step.data.priority,
+                id: ++layerID,
+              })
+            }
+            return
+          }
+        }
+      }
+      switch (step.type) {
+        case 'barrier':
+          local.isFailed = false
+          local.isChanged = true
+          break
+        case 'filter':
+          /**
+           * handled edge case: if step.fn will throw,
+           * tryRun will return null
+           * thereby forcing that branch to stop
+           */
+          local.isChanged = !!tryRun(local, step.data, stack.value)
+          break
+        case 'run':
+        case 'compute':
+          writeRef(stack.value, tryRun(local, step.data, stack.value))
+          break
+        case 'update':
+          writeRef(step.data.store, readRef(stack.value))
+          break
+        case 'tap':
+          tryRun(local, step.data, stack.value)
+          break
+      }
+      meta.stop = local.isFailed || !local.isChanged
+    }
+    if (!meta.stop) {
+      for (let stepn = 0; stepn < graph.next.length; stepn++) {
+        pushHeap({
+          step: graph.next[stepn],
+          firstIndex: 0,
+          stack: new Stack(readRef(stack.value), stack),
+          resetStop: true,
+          type: 'child',
+          id: ++layerID,
+        })
+      }
+    }
+    if (resetStop) {
+      meta.stop = false
+    }
   }
   alreadyStarted = lastStartedState
 }
