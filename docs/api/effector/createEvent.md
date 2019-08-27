@@ -7,7 +7,7 @@ hide_title: true
 # `createEvent(name?)`
 
 Creates an [Event](Event.md).</br>
-You can pass _name_ if you want.
+You can pass `name` if you want.
 
 #### Arguments
 
@@ -36,7 +36,7 @@ addNumber(10)
 ```
 
 Let's talk about what happened. We created store and event (addNumber), and started to watch after store.</br>
-You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(10)` you may see on console how state will change.
+You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(10)` you may see in console how state will change.
 
 #### Example 2
 
