@@ -6,7 +6,7 @@ module.exports = function(babel) {
   const locationTemplate = template(
     'const typecheck = setupLocation(FILE, LOC, REPORT);',
   )
-  const reportPath = resolve(__dirname, '../ts-report.json')
+  const reportPath = resolve(__dirname, '../type-report.json')
   const jestVisitor = {
     CallExpression(path, state) {
       if (!handledMethods.includes(path.node.callee.name)) return
