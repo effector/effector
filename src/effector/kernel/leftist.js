@@ -26,6 +26,16 @@ export class Leftist {
  * therefore, it seems reasonable to express this explicitly
  */
 export type leftist = null | Leftist
+export const initialize = (list: Layer[]): leftist => {
+  const temp: leftist[] = [null]
+  for (let i = 0; i < list.length; i++) {
+    temp[i + 1] = new Leftist(list[i], 1, null, null)
+  }
+  for (let i = 1; i < temp.length; i += 2) {
+    temp.push(mergeMutable(temp[i - 1], temp[i]))
+  }
+  return temp[temp.length - 1]
+}
 export const insert = (x: Layer, t: leftist): leftist =>
   mergeNoLoop(new Leftist(x, 1, null, null), t)
 
