@@ -1,6 +1,6 @@
 //@flow
-import type {Graphite, Cmd} from '../effector/stdlib'
-import {blocks, createStore} from '../effector'
+import type {Cmd} from '../effector/stdlib'
+import {blocks} from '../effector'
 
 const SHOW_FUN_SOURCE = false
 const printFn = (fn: Function) => {
@@ -22,12 +22,16 @@ const showCmd = (_: Cmd) => {
     return val
   }
   switch (_.type) {
+    case 'check':
+      switch (_.data.type) {
+        case 'defined':
+          return `check: defined`
+        case 'changed':
+          return `check: changed`
+      }
+      return `check: ?`
     case 'filter':
       switch (_.data.fn.toString()) {
-        case storeOldStateComparator:
-          return 'filter: upd => upd !== state'
-        case isNotUndefined:
-          return 'filter: upd => upd !== undefined'
         default:
           return `filter: ${printFn(_.data.fn)}`
       }
@@ -45,12 +49,7 @@ const showCmd = (_: Cmd) => {
   //.replace(/^ /gim, '') // move whole json print one space left
   return `${_.type}: ${view}`
 }
-//$todo
-const storeOldStateComparator = createStore(
-  null,
-).graphite.seq[2].data.fn.toString()
-//$todo
-const isNotUndefined = createStore(null).graphite.seq[0].data.fn.toString()
+
 const noop = blocks.noop.data.fn.toString()
 const print = {
   multi(value) {
