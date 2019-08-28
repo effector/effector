@@ -36,6 +36,7 @@ export function storeFabric<State>(props: {
   const {currentState, config, parent} = props
   const {name, sid = null} = config
   const plainState = createStateRef(currentState)
+  const oldState = createStateRef(currentState)
   const currentId = name || plainState.id
   const defaultState = currentState
   const compositeName = createName(currentId, parent)
@@ -48,11 +49,14 @@ export function storeFabric<State>(props: {
     graphite: createNode({
       node: [
         step.check.defined(),
-        step.check.changed({
-          store: plainState,
-        }),
         step.update({
           store: plainState,
+        }),
+        step.check.changed({
+          store: oldState,
+        }),
+        step.update({
+          store: oldState,
         }),
       ],
     }),
