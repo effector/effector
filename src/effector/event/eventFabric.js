@@ -154,9 +154,7 @@ function filterMapEvent(
       step.compute({
         fn: (payload, {fn}) => fn(payload),
       }),
-      step.filter({
-        fn: result => result !== undefined,
-      }),
+      step.check.defined(),
     ],
   })
   return mapped

@@ -24,11 +24,11 @@ type CombinationScope = {
 
 const storeCombination = (obj: any, clone: Function, defaultState: any) => {
   const node = [
+    step.check.defined(),
     //prettier-ignore
     step.filter({
       fn: (upd, {target, key}: CombinationScope) => (
         upd !== readRef(target)[key]
-      && upd !== undefined
       ),
     }),
     step.tap({
