@@ -11,13 +11,18 @@ exports[`graphite: show bar 1`] = `
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
+            check: defined,
             update: {
               store: {
                 state: foo | 1 | 11
               }
             },
-            filter: upd => upd !== state
+            check: changed,
+            update: {
+              store: {
+                state: foo | 1 | 11
+              }
+            }
           ],
           next: [
             Node {seq: [], next: []},
@@ -29,13 +34,18 @@ exports[`graphite: show bar 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: 12
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: 12
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -66,13 +76,18 @@ exports[`graphite: show bar 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: false
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -99,13 +114,18 @@ exports[`graphite: show bar 2`] = `
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
+            check: defined,
             update: {
               store: {
                 state: foo | 1 | 11
               }
             },
-            filter: upd => upd !== state
+            check: changed,
+            update: {
+              store: {
+                state: foo | 1 | 11
+              }
+            }
           ],
           next: [
             Node {seq: [], next: []},
@@ -117,13 +137,18 @@ exports[`graphite: show bar 2`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: 12
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: 12
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -158,13 +183,18 @@ exports[`graphite: show foo 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: foo | 1 | 11 | 101
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: foo | 1 | 11 | 101
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []},
@@ -176,13 +206,18 @@ exports[`graphite: show foo 1`] = `
                       next: [
                         Node {
                           seq: [
-                            filter: upd => upd !== undefined,
+                            check: defined,
                             update: {
                               store: {
                                 state: 18
                               }
                             },
-                            filter: upd => upd !== state
+                            check: changed,
+                            update: {
+                              store: {
+                                state: 18
+                              }
+                            }
                           ],
                           next: [
                             Node {seq: [], next: []}
@@ -205,13 +240,18 @@ exports[`graphite: show foo 1`] = `
 exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
+    check: defined,
     update: {
       store: {
         state: foo | 1 | 11 | 101
       }
     },
-    filter: upd => upd !== state
+    check: changed,
+    update: {
+      store: {
+        state: foo | 1 | 11 | 101
+      }
+    }
   ],
   next: [
     Node {seq: [], next: []},
@@ -223,13 +263,18 @@ exports[`graphite: show store1 1`] = `
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
+            check: defined,
             update: {
               store: {
                 state: 18
               }
             },
-            filter: upd => upd !== state
+            check: changed,
+            update: {
+              store: {
+                state: 18
+              }
+            }
           ],
           next: [
             Node {seq: [], next: []}
@@ -244,13 +289,18 @@ exports[`graphite: show store1 1`] = `
 exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
+    check: defined,
     update: {
       store: {
         state: 18
       }
     },
-    filter: upd => upd !== state
+    check: changed,
+    update: {
+      store: {
+        state: 18
+      }
+    }
   ],
   next: [
     Node {seq: [], next: []}
@@ -269,18 +319,24 @@ exports[`showcase: event foo 1`] = `
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
+            check: defined,
             update: {
               store: {
                 state: 3
               }
             },
-            filter: upd => upd !== state
+            check: changed,
+            update: {
+              store: {
+                state: 3
+              }
+            }
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
+                check: defined,
                 filter: Function,
                 tap: {},
                 tap: {},
@@ -293,7 +349,7 @@ exports[`showcase: event foo 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: {
@@ -302,7 +358,15 @@ exports[`showcase: event foo 1`] = `
                         }
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: {
+                          a: 3,
+                          b: 6
+                        }
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []},
@@ -314,13 +378,18 @@ exports[`showcase: event foo 1`] = `
                       next: [
                         Node {
                           seq: [
-                            filter: upd => upd !== undefined,
+                            check: defined,
                             update: {
                               store: {
                                 state: 3
                               }
                             },
-                            filter: upd => upd !== state
+                            check: changed,
+                            update: {
+                              store: {
+                                state: 3
+                              }
+                            }
                           ],
                           next: [
                             Node {seq: [], next: []},
@@ -343,13 +412,18 @@ exports[`showcase: event foo 1`] = `
                                       next: [
                                         Node {
                                           seq: [
-                                            filter: upd => upd !== undefined,
+                                            check: defined,
                                             update: {
                                               store: {
                                                 state: false
                                               }
                                             },
-                                            filter: upd => upd !== state
+                                            check: changed,
+                                            update: {
+                                              store: {
+                                                state: false
+                                              }
+                                            }
                                           ],
                                           next: [
                                             Node {seq: [], next: []}
@@ -380,13 +454,18 @@ exports[`showcase: event foo 1`] = `
 exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
+    check: defined,
     update: {
       store: {
         state: 3
       }
     },
-    filter: upd => upd !== state
+    check: changed,
+    update: {
+      store: {
+        state: 3
+      }
+    }
   ],
   next: [
     Node {seq: [], next: []},
@@ -409,13 +488,18 @@ exports[`showcase: mapped 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: false
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -434,18 +518,24 @@ exports[`showcase: mapped 1`] = `
 exports[`showcase: store a 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
+    check: defined,
     update: {
       store: {
         state: 3
       }
     },
-    filter: upd => upd !== state
+    check: changed,
+    update: {
+      store: {
+        state: 3
+      }
+    }
   ],
   next: [
     Node {seq: [], next: []},
     Node {
       seq: [
+        check: defined,
         filter: Function,
         tap: {},
         tap: {},
@@ -458,7 +548,7 @@ exports[`showcase: store a 1`] = `
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
+            check: defined,
             update: {
               store: {
                 state: {
@@ -467,7 +557,15 @@ exports[`showcase: store a 1`] = `
                 }
               }
             },
-            filter: upd => upd !== state
+            check: changed,
+            update: {
+              store: {
+                state: {
+                  a: 3,
+                  b: 6
+                }
+              }
+            }
           ],
           next: [
             Node {seq: [], next: []},
@@ -479,13 +577,18 @@ exports[`showcase: store a 1`] = `
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: 3
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: 3
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []},
@@ -508,13 +611,18 @@ exports[`showcase: store a 1`] = `
                               next: [
                                 Node {
                                   seq: [
-                                    filter: upd => upd !== undefined,
+                                    check: defined,
                                     update: {
                                       store: {
                                         state: false
                                       }
                                     },
-                                    filter: upd => upd !== state
+                                    check: changed,
+                                    update: {
+                                      store: {
+                                        state: false
+                                      }
+                                    }
                                   ],
                                   next: [
                                     Node {seq: [], next: []}

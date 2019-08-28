@@ -23,13 +23,18 @@ exports[`event.filterMap event.filterMap should drop undefined values: evenNum e
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
+                    check: defined,
                     update: {
                       store: {
                         state: false
                       }
                     },
-                    filter: upd => upd !== state
+                    check: changed,
+                    update: {
+                      store: {
+                        state: false
+                      }
+                    }
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -52,7 +57,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
     Node {
       seq: [
         compute: Function,
-        filter: Function
+        check: defined
       ],
       next: [
         Node {
@@ -77,13 +82,18 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
                       next: [
                         Node {
                           seq: [
-                            filter: upd => upd !== undefined,
+                            check: defined,
                             update: {
                               store: {
                                 state: false
                               }
                             },
-                            filter: upd => upd !== state
+                            check: changed,
+                            update: {
+                              store: {
+                                state: false
+                              }
+                            }
                           ],
                           next: [
                             Node {seq: [], next: []}
