@@ -46,20 +46,13 @@ export function storeFabric<State>(props: {
     subscribers: new Map(),
     compositeName,
     graphite: createNode({
-      scope: {state: plainState, oldState: currentState},
       node: [
-        step.filter({
-          fn: upd => upd !== undefined,
+        step.check.defined(),
+        step.check.changed({
+          store: plainState,
         }),
         step.update({
           store: plainState,
-        }),
-        step.filter({
-          fn(upd, scope) {
-            if (upd === scope.oldState) return false
-            scope.oldState = upd
-            return true
-          },
         }),
       ],
     }),
