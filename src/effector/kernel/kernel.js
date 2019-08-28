@@ -98,6 +98,17 @@ const exec = () => {
           local.isFailed = false
           local.isChanged = true
           break
+        case 'check':
+          switch (step.data.op.type) {
+            case 'defined':
+              local.isChanged = readRef(stack.value) !== undefined
+              break
+            case 'changed':
+              local.isChanged =
+                readRef(step.data.op.store) !== readRef(stack.value)
+              break
+          }
+          break
         case 'filter':
           /**
            * handled edge case: if step.fn will throw,

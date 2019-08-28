@@ -8,6 +8,7 @@ import type {
   Filter,
   Compute,
   Barrier,
+  Check,
   ID,
 } from './index.h'
 import {stringRefcount} from './refcount'
@@ -25,6 +26,10 @@ export const step: {|
     +priority?: 'barrier' | 'sampler',
     meta?: NodeMeta,
   |}): Barrier,
+  check: {
+    defined(): Check,
+    changed({store: StateRef}): Check,
+  },
   compute(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
     meta?: NodeMeta,
@@ -51,6 +56,10 @@ export const step: {|
       barrierID,
       priority,
     }),
+  check: {
+    defined: () => cmd('check', {type: 'defined'}),
+    changed: ({store}) => cmd('check', {type: 'changed', store}),
+  },
   compute: cmd.bind(null, 'compute'),
   filter: cmd.bind(null, 'filter'),
   run: cmd.bind(null, 'run'),
