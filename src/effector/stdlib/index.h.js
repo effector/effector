@@ -18,14 +18,6 @@ export type NodeMeta = {|
   section?: ID,
 |}
 
-//prettier-ignore
-export type CheckOp =
-  | CheckDefined
-  | CheckChanged
-
-export type CheckDefined = {+type: 'defined'}
-export type CheckChanged = {+type: 'changed', +store: StateRef}
-
 export type TypeDef<+Type, +Group> = {|
   +id: ID,
   +type: Type,
@@ -44,10 +36,16 @@ export type Cmd =
 export type Check = {|
   +id: ID,
   +type: 'check',
-  +data: {|
-    +op: CheckOp,
-    meta?: NodeMeta,
-  |},
+  +data:
+    | {|
+        +type: 'defined',
+        meta?: NodeMeta,
+      |}
+    | {|
+        +type: 'changed',
+        +store: StateRef,
+        meta?: NodeMeta,
+      |},
 |}
 
 export type Barrier = {|

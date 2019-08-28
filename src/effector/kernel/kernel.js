@@ -99,13 +99,13 @@ const exec = () => {
           local.isChanged = true
           break
         case 'check':
-          switch (step.data.op.type) {
+          switch (step.data.type) {
             case 'defined':
               local.isChanged = readRef(stack.value) !== undefined
               break
             case 'changed':
               local.isChanged =
-                readRef(step.data.op.store) !== readRef(stack.value)
+                readRef(step.data.store) !== readRef(stack.value)
               break
           }
           break
