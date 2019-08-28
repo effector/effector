@@ -6,7 +6,7 @@ hide_title: true
 
 # `createEvent(name?)`
 
-Creates an [Event](Event.md).</br>
+Creates an [Event](Event.md). In other words you create intention.</br>
 You can pass `name` if you want.
 
 #### Arguments
