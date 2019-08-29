@@ -5,7 +5,7 @@ import {type Layer, layerComparator} from './layer'
 /**
  * Lestist heap tree
  *
- * See http://www.dgp.toronto.edu/people/JamesStewart/378notes/10leftist/
+ * See https://zero-bias-papers.s3-eu-west-1.amazonaws.com/leftist+trees.pdf
  */
 export class Leftist {
   /*::
