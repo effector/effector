@@ -1,10 +1,16 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {step, readRef, writeRef, addLinkToOwner, is} from '../stdlib'
-import {filterChanged, noop} from '../blocks'
-import {effectFabric} from '../effect'
-import {createLink, createLinkNode, type Event} from '../event'
+import {
+  step,
+  readRef,
+  writeRef,
+  addLinkToOwner,
+  createNode,
+  is,
+} from '../stdlib'
+import {noop} from '../blocks'
+import {createLink, createLinkNode, forward, type Event} from '../event'
 import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
@@ -78,26 +84,26 @@ export function watch(
     throw Error('second argument should be a function')
   return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
 }
-export function subscribe(storeInstance: Store<any>, listener: Function) {
-  if (typeof listener !== 'function')
+export function subscribe(storeInstance: Store<any>, handler: Function) {
+  if (typeof handler !== 'function')
     throw Error('expect listener to be a function')
-  const watcherEffect = effectFabric({
-    name: storeInstance.shortName + ' watcher',
-    parent: storeInstance.domainName,
-    config: {
-      handler: listener,
-    },
+  handler(storeInstance.getState())
+  const watcherNode = createNode({
+    scope: {handler},
+    node: [
+      noop,
+      step.run({
+        fn(upd, {handler}) {
+          handler(upd)
+        },
+      }),
+    ],
   })
-  watcherEffect(storeInstance.getState())
-  const subscription = createLink(storeInstance, watcherEffect, {
-    node: [noop, step.run({fn: x => x})],
+  addLinkToOwner(storeInstance, watcherNode)
+  return forward({
+    from: storeInstance,
+    to: watcherNode,
   })
-  //$todo
-  subscription.fail = watcherEffect.fail
-  //$todo
-  subscription.done = watcherEffect.done
-  addLinkToOwner(storeInstance, watcherEffect)
-  return subscription
 }
 
 export function mapStore<A, B>(
@@ -125,7 +131,10 @@ export function mapStore<A, B>(
       step.compute({
         fn: (upd, {state, handler}) => handler(upd, readRef(state)),
       }),
-      filterChanged,
+      step.check.defined(),
+      step.check.changed({
+        store: innerStore.stateRef,
+      }),
     ],
   })
   return innerStore

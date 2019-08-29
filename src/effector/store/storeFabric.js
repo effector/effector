@@ -1,7 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {launch, upsertLaunch} from '../kernel'
+import {upsertLaunch} from '../kernel'
 import {
   addLinkToOwner,
   step,

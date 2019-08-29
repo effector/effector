@@ -6,11 +6,10 @@ import {
   Kind,
   stringRefcount,
   createNode,
-  type Unit,
   bind,
   addLinkToOwner,
 } from '../stdlib'
-import {type Effect, effectFabric} from '../effect'
+import {type Effect} from '../effect'
 import {launch} from '../kernel'
 import {noop} from '../blocks'
 
@@ -19,7 +18,7 @@ import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
 import {thru} from '../thru'
-import {createLink, createLinkNode} from './forward'
+import {forward, createLinkNode} from './forward'
 
 const nextID = stringRefcount()
 
@@ -162,20 +161,22 @@ function filterMapEvent(
 
 function watchEvent<Payload>(
   event: Event<Payload>,
-  watcher: (payload: Payload) => any,
+  handler: (payload: Payload) => any,
 ): Subscription {
-  const watcherEffect = effectFabric({
-    name: event.shortName + ' watcher',
-    parent: event.domainName,
-    config: {handler: watcher},
+  const watcherNode = createNode({
+    scope: {handler},
+    node: [
+      noop,
+      step.run({
+        fn(upd, {handler}) {
+          handler(upd)
+        },
+      }),
+    ],
   })
-  const subscription = createLink(event, watcherEffect, {
-    node: [noop, step.run({fn: x => x})],
+  addLinkToOwner(event, watcherNode)
+  return forward({
+    from: event,
+    to: watcherNode,
   })
-  addLinkToOwner(event, watcherEffect)
-  //$todo
-  subscription.fail = watcherEffect.fail
-  //$todo
-  subscription.done = watcherEffect.done
-  return subscription
 }
