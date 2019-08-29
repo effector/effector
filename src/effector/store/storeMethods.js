@@ -1,18 +1,12 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {
-  step,
-  readRef,
-  writeRef,
-  addLinkToOwner,
-  createNode,
-  is,
-} from '../stdlib'
-import {createLink, createLinkNode, forward, type Event} from '../event'
+import {step, readRef, writeRef, is} from '../stdlib'
+import {createLink, createLinkNode, type Event} from '../event'
 import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
 import type {Subscriber} from '../index.h'
+import {watchUnit} from '../watcher'
 
 export function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   for (const event of events)
@@ -87,21 +81,7 @@ export function subscribe(storeInstance: Store<any>, handler: Function) {
   if (typeof handler !== 'function')
     throw Error('expect listener to be a function')
   handler(storeInstance.getState())
-  const watcherNode = createNode({
-    scope: {handler},
-    node: [
-      step.run({
-        fn(upd, {handler}) {
-          handler(upd)
-        },
-      }),
-    ],
-  })
-  addLinkToOwner(storeInstance, watcherNode)
-  return forward({
-    from: storeInstance,
-    to: watcherNode,
-  })
+  return watchUnit(storeInstance, handler)
 }
 
 export function mapStore<A, B>(

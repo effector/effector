@@ -1,14 +1,7 @@
 //@flow
 import $$observable from 'symbol-observable'
 
-import {
-  step,
-  Kind,
-  stringRefcount,
-  createNode,
-  bind,
-  addLinkToOwner,
-} from '../stdlib'
+import {step, Kind, stringRefcount, createNode, bind} from '../stdlib'
 import {type Effect} from '../effect'
 import {launch} from '../kernel'
 
@@ -17,7 +10,8 @@ import type {EventConfigPart} from '../config'
 import type {Event} from './index.h'
 import {type CompositeName, createName} from '../compositeName'
 import {thru} from '../thru'
-import {forward, createLinkNode} from './forward'
+import {createLinkNode} from './forward'
+import {watchUnit} from '../watcher'
 
 const nextID = stringRefcount()
 
@@ -58,7 +52,7 @@ export function eventFabric<Payload>({
   ;(instance: any).kind = Kind.event
   ;(instance: any)[$$observable] = () => instance
   ;(instance: any).id = id
-  ;(instance: any).watch = bind(watchEvent, instance)
+  ;(instance: any).watch = bind(watchUnit, instance)
   ;(instance: any).map = bind(mapEvent, instance)
   ;(instance: any).filter = bind(filterEvent, instance)
   ;(instance: any).filterMap = bind(filterMapEvent, instance)
@@ -156,25 +150,4 @@ function filterMapEvent(
     ],
   })
   return mapped
-}
-
-function watchEvent<Payload>(
-  event: Event<Payload>,
-  handler: (payload: Payload) => any,
-): Subscription {
-  const watcherNode = createNode({
-    scope: {handler},
-    node: [
-      step.run({
-        fn(upd, {handler}) {
-          handler(upd)
-        },
-      }),
-    ],
-  })
-  addLinkToOwner(event, watcherNode)
-  return forward({
-    from: event,
-    to: watcherNode,
-  })
 }
