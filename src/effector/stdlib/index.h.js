@@ -13,10 +13,6 @@ export type StateRef = {|
   +id: ID,
   current: any,
 |}
-export type NodeMeta = {|
-  fullName?: string,
-  section?: ID,
-|}
 
 export type TypeDef<+Type, +Group> = {|
   +id: ID,
@@ -39,12 +35,10 @@ export type Check = {|
   +data:
     | {|
         +type: 'defined',
-        meta?: NodeMeta,
       |}
     | {|
         +type: 'changed',
         +store: StateRef,
-        meta?: NodeMeta,
       |},
 |}
 
@@ -54,7 +48,6 @@ export type Barrier = {|
   +data: {|
     +barrierID: ID,
     +priority: 'barrier' | 'sampler',
-    meta?: NodeMeta,
   |},
 |}
 
@@ -63,7 +56,6 @@ export type Update = {|
   +type: 'update',
   +data: {|
     store: StateRef,
-    meta?: NodeMeta,
   |},
 |}
 export type Run = {|
@@ -71,7 +63,6 @@ export type Run = {|
   +type: 'run',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |},
 |}
 
@@ -80,7 +71,6 @@ export type Filter = {|
   +type: 'filter',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => boolean,
-    meta?: NodeMeta,
   |},
 |}
 export type Compute = {|
@@ -88,7 +78,6 @@ export type Compute = {|
   +type: 'compute',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |},
 |}
 
@@ -97,7 +86,6 @@ export type Tap = {|
   +type: 'tap',
   +data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |},
 |}
 

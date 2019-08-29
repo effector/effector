@@ -1,7 +1,6 @@
 //@flow
 import type {
   StateRef,
-  NodeMeta,
   Update,
   Run,
   Tap,
@@ -24,7 +23,6 @@ export const step: {|
   barrier(data: {|
     +barrierID: ID,
     +priority?: 'barrier' | 'sampler',
-    meta?: NodeMeta,
   |}): Barrier,
   check: {
     defined(): Check,
@@ -32,23 +30,18 @@ export const step: {|
   },
   compute(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |}): Compute,
   filter(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |}): Filter,
   run(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |}): Run,
   tap(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
-    meta?: NodeMeta,
   |}): Tap,
   update(data: {|
     store: StateRef,
-    meta?: NodeMeta,
   |}): Update,
 |} = {
   barrier: ({barrierID, priority = 'barrier'}) =>
