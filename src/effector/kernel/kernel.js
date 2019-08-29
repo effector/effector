@@ -52,7 +52,7 @@ const exec = () => {
   mem: while (heap) {
     value = heap.value
     heap = deleteMin(heap)
-    const {step: graph, firstIndex, stack, resetStop} = value
+    const {step: graph, firstIndex, stack, resetStop, type} = value
     const local = new Local(graph.scope)
     for (
       let stepn = firstIndex;
@@ -60,24 +60,11 @@ const exec = () => {
       stepn++
     ) {
       const step = graph.seq[stepn]
-      if (stepn === firstIndex) {
-        if (step.type === 'barrier') {
-          barriers.delete(step.data.barrierID)
-        }
-      } else {
-        switch (step.type) {
-          case 'run':
-            pushHeap({
-              step: graph,
-              firstIndex: stepn,
-              stack,
-              resetStop: false,
-              type: 'effect',
-              id: ++layerID,
-            })
-            continue mem
-          case 'barrier': {
-            const id = step.data.barrierID
+      switch (step.type) {
+        case 'barrier': {
+          const id = step.data.barrierID
+          const priority = step.data.priority
+          if (stepn !== firstIndex || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
               pushHeap({
@@ -85,19 +72,17 @@ const exec = () => {
                 firstIndex: stepn,
                 stack,
                 resetStop: false,
-                type: step.data.priority,
+                type: priority,
                 id: ++layerID,
               })
             }
             continue mem
           }
-        }
-      }
-      switch (step.type) {
-        case 'barrier':
+          barriers.delete(id)
           local.isFailed = false
           local.isChanged = true
           break
+        }
         case 'check':
           switch (step.data.type) {
             case 'defined':
@@ -118,6 +103,18 @@ const exec = () => {
           local.isChanged = !!tryRun(local, step.data, stack.value)
           break
         case 'run':
+          /** exec 'compute' step when stepn === firstIndex */
+          if (stepn !== firstIndex || type !== 'effect') {
+            pushHeap({
+              step: graph,
+              firstIndex: stepn,
+              stack,
+              resetStop: false,
+              type: 'effect',
+              id: ++layerID,
+            })
+            continue mem
+          }
         case 'compute':
           writeRef(stack.value, tryRun(local, step.data, stack.value))
           break
