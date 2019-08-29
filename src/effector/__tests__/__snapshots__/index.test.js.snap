@@ -29,7 +29,8 @@ exports[`graphite: show bar 1`] = `
             Node {
               seq: [
                 compute: Function,
-                filter: Function
+                check: defined,
+                check: changed
               ],
               next: [
                 Node {
@@ -62,42 +63,7 @@ exports[`graphite: show bar 1`] = `
         compute: x => x,
         run: watcher
       ],
-      next: [
-        Node {
-          seq: [
-            compute: Function,
-            run: watcher
-          ],
-          next: [
-            Node {
-              seq: [
-                compute: Function
-              ],
-              next: [
-                Node {
-                  seq: [
-                    check: defined,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    },
-                    check: changed,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    }
-                  ],
-                  next: [
-                    Node {seq: [], next: []}
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      next: []
     }
   ]
 }"
@@ -132,7 +98,8 @@ exports[`graphite: show bar 2`] = `
             Node {
               seq: [
                 compute: Function,
-                filter: Function
+                check: defined,
+                check: changed
               ],
               next: [
                 Node {
@@ -201,7 +168,8 @@ exports[`graphite: show foo 1`] = `
                     Node {
                       seq: [
                         compute: Function,
-                        filter: Function
+                        check: defined,
+                        check: changed
                       ],
                       next: [
                         Node {
@@ -258,7 +226,8 @@ exports[`graphite: show store1 1`] = `
     Node {
       seq: [
         compute: Function,
-        filter: Function
+        check: defined,
+        check: changed
       ],
       next: [
         Node {
@@ -373,7 +342,8 @@ exports[`showcase: event foo 1`] = `
                     Node {
                       seq: [
                         compute: Function,
-                        filter: Function
+                        check: defined,
+                        check: changed
                       ],
                       next: [
                         Node {
@@ -398,42 +368,7 @@ exports[`showcase: event foo 1`] = `
                                 compute: x => x,
                                 run: watcher
                               ],
-                              next: [
-                                Node {
-                                  seq: [
-                                    compute: Function,
-                                    run: watcher
-                                  ],
-                                  next: [
-                                    Node {
-                                      seq: [
-                                        compute: Function
-                                      ],
-                                      next: [
-                                        Node {
-                                          seq: [
-                                            check: defined,
-                                            update: {
-                                              store: {
-                                                state: false
-                                              }
-                                            },
-                                            check: changed,
-                                            update: {
-                                              store: {
-                                                state: false
-                                              }
-                                            }
-                                          ],
-                                          next: [
-                                            Node {seq: [], next: []}
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              next: []
                             }
                           ]
                         }
@@ -474,42 +409,7 @@ exports[`showcase: mapped 1`] = `
         compute: x => x,
         run: watcher
       ],
-      next: [
-        Node {
-          seq: [
-            compute: Function,
-            run: watcher
-          ],
-          next: [
-            Node {
-              seq: [
-                compute: Function
-              ],
-              next: [
-                Node {
-                  seq: [
-                    check: defined,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    },
-                    check: changed,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    }
-                  ],
-                  next: [
-                    Node {seq: [], next: []}
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      next: []
     }
   ]
 }"
@@ -572,7 +472,8 @@ exports[`showcase: store a 1`] = `
             Node {
               seq: [
                 compute: Function,
-                filter: Function
+                check: defined,
+                check: changed
               ],
               next: [
                 Node {
@@ -597,42 +498,7 @@ exports[`showcase: store a 1`] = `
                         compute: x => x,
                         run: watcher
                       ],
-                      next: [
-                        Node {
-                          seq: [
-                            compute: Function,
-                            run: watcher
-                          ],
-                          next: [
-                            Node {
-                              seq: [
-                                compute: Function
-                              ],
-                              next: [
-                                Node {
-                                  seq: [
-                                    check: defined,
-                                    update: {
-                                      store: {
-                                        state: false
-                                      }
-                                    },
-                                    check: changed,
-                                    update: {
-                                      store: {
-                                        state: false
-                                      }
-                                    }
-                                  ],
-                                  next: [
-                                    Node {seq: [], next: []}
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      next: []
                     }
                   ]
                 }

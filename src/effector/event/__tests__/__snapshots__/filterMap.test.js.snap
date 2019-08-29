@@ -9,42 +9,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: evenNum e
         compute: x => x,
         run: watcher
       ],
-      next: [
-        Node {
-          seq: [
-            compute: Function,
-            run: watcher
-          ],
-          next: [
-            Node {
-              seq: [
-                compute: Function
-              ],
-              next: [
-                Node {
-                  seq: [
-                    check: defined,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    },
-                    check: changed,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    }
-                  ],
-                  next: [
-                    Node {seq: [], next: []}
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      next: []
     }
   ]
 }"
@@ -68,42 +33,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
                 compute: x => x,
                 run: watcher
               ],
-              next: [
-                Node {
-                  seq: [
-                    compute: Function,
-                    run: watcher
-                  ],
-                  next: [
-                    Node {
-                      seq: [
-                        compute: Function
-                      ],
-                      next: [
-                        Node {
-                          seq: [
-                            check: defined,
-                            update: {
-                              store: {
-                                state: false
-                              }
-                            },
-                            check: changed,
-                            update: {
-                              store: {
-                                state: false
-                              }
-                            }
-                          ],
-                          next: [
-                            Node {seq: [], next: []}
-                          ]
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
+              next: []
             }
           ]
         }
