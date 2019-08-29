@@ -2,7 +2,6 @@
 
 import {eventFabric, createLinkNode} from '../event'
 import {storeFabric} from '../store'
-import {noop} from '../blocks'
 import {
   step,
   createStateRef,
@@ -28,10 +27,8 @@ export const storeBy = (
       },
       node: [
         //$off
-        !greedy && noop,
-        //$off
-        !greedy
-          && step.barrier({
+        !greedy &&
+          step.barrier({
             barrierID: nextBarrierID(),
             priority: 'sampler',
           }),
@@ -58,8 +55,8 @@ export const storeByEvent = (
     clock,
     fn,
     greedy,
-    target
-      || eventFabric({
+    target ||
+      eventFabric({
         name: source.shortName,
         parent: source.domainName,
       }),
@@ -78,8 +75,8 @@ export const storeByStore = (
     clock,
     fn,
     greedy,
-    target
-      || storeFabric({
+    target ||
+      storeFabric({
         currentState: fn
           ? fn(sourceState, readRef(clock.stateRef))
           : sourceState,
@@ -97,8 +94,8 @@ export const eventByUnit = (
   target: any,
 ) => {
   target =
-    target
-    || eventFabric({
+    target ||
+    eventFabric({
       name: source.shortName,
       parent: source.domainName,
     })
@@ -131,8 +128,8 @@ export const eventByUnit = (
           fn: (upd, {hasSource}) => readRef(hasSource),
         }),
         //$off
-        !greedy
-          && step.barrier({
+        !greedy &&
+          step.barrier({
             barrierID: nextBarrierID(),
             priority: 'sampler',
           }),

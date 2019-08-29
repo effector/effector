@@ -60,7 +60,6 @@ exports[`graphite: show bar 1`] = `
     },
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
       next: []
@@ -365,7 +364,6 @@ exports[`showcase: event foo 1`] = `
                             Node {seq: [], next: []},
                             Node {
                               seq: [
-                                compute: x => x,
                                 run: watcher
                               ],
                               next: []
@@ -406,7 +404,6 @@ exports[`showcase: mapped 1`] = `
     Node {seq: [], next: []},
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
       next: []
@@ -495,7 +492,6 @@ exports[`showcase: store a 1`] = `
                     Node {seq: [], next: []},
                     Node {
                       seq: [
-                        compute: x => x,
                         run: watcher
                       ],
                       next: []

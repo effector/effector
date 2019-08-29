@@ -6,7 +6,6 @@ exports[`event.filterMap event.filterMap should drop undefined values: evenNum e
   next: [
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
       next: []
@@ -30,7 +29,6 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
           next: [
             Node {
               seq: [
-                compute: x => x,
                 run: watcher
               ],
               next: []

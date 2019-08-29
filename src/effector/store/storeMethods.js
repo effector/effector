@@ -9,7 +9,6 @@ import {
   createNode,
   is,
 } from '../stdlib'
-import {noop} from '../blocks'
 import {createLink, createLinkNode, forward, type Event} from '../event'
 import {storeFabric} from './storeFabric'
 import type {Store} from './index.h'
@@ -91,7 +90,6 @@ export function subscribe(storeInstance: Store<any>, handler: Function) {
   const watcherNode = createNode({
     scope: {handler},
     node: [
-      noop,
       step.run({
         fn(upd, {handler}) {
           handler(upd)

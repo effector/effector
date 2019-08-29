@@ -6,7 +6,6 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
   next: [
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
       next: []
@@ -30,7 +29,6 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
           next: [
             Node {
               seq: [
-                compute: x => x,
                 run: watcher
               ],
               next: []

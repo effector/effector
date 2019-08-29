@@ -11,7 +11,6 @@ import {
 } from '../stdlib'
 import {type Effect} from '../effect'
 import {launch} from '../kernel'
-import {noop} from '../blocks'
 
 import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
@@ -166,7 +165,6 @@ function watchEvent<Payload>(
   const watcherNode = createNode({
     scope: {handler},
     node: [
-      noop,
       step.run({
         fn(upd, {handler}) {
           handler(upd)
