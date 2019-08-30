@@ -21,13 +21,18 @@ export function getDisplayName(unit: {
   return unit.id
 }
 
-const unitObjectMaxNames = 25
-
 export function unitObjectName(
   objOrArr:
-    | $ReadOnlyArray<Store<any> | Event<any> | Effect<any, any, any> | any | null>
+    | $ReadOnlyArray<
+        Store<any> | Event<any> | Effect<any, any, any> | any | null,
+      >
     | {
-        [key: string]: Store<any> | Event<any> | Effect<any, any, any> | any | null,
+        [key: string]:
+          | Store<any>
+          | Event<any>
+          | Effect<any, any, any>
+          | any
+          | null,
         ...,
       },
   method: string = 'combine',
@@ -39,11 +44,14 @@ export function unitObjectName(
   for (const key in objOrArr) {
     //$todo
     const unit = objOrArr[key]
-    name += comma
-    //$todo
-    name += is.unit(unit) ? getDisplayName(unit) : unit?.toString()
+    if (unit != null) {
+      name += comma
+      //$todo
+      name += is.unit(unit) ? getDisplayName(unit) : unit.toString()
+    }
     i += 1
-    if (i === unitObjectMaxNames) break
+    /* inlined max object names constant */
+    if (i === 25) break
     comma = ', '
   }
   name += ')'
