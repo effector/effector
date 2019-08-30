@@ -281,16 +281,26 @@ export function createEffect<Params, Done, Fail = Error>(
     handler?: (params: Params) => Promise<Done> | Done
     sid?: string
   },
-): ((params: Params) => any) extends (params: unknown) => void
-  ? Effect<void, Done, Fail>
-  : Effect<Params, Done, Fail>
+): Effect<Params, Done, Fail>
+
+export function createEffect<FN extends Function>(config: {
+  name?: string
+  handler: FN
+  sid?: string
+}): FN extends () => infer Done
+  ? Done extends Promise<infer Async>
+    ? Effect<void, Async, Error>
+    : Effect<void, Done, Error>
+  : FN extends (t: infer Params) => infer Done
+  ? Done extends Promise<infer Async>
+    ? Effect<Params, Async, Error>
+    : Effect<Params, Done, Error>
+  : never
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
   sid?: string
-}): ((params: Params) => any) extends (params: unknown) => void
-  ? Effect<void, Done, Fail>
-  : Effect<Params, Done, Fail>
+}): Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
