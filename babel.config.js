@@ -39,7 +39,7 @@ const aliases = {
 
 const babelConfig = {
   presets: [
-    '@babel/preset-flow',
+    // '@babel/preset-flow',
     ['@babel/preset-react', {useBuiltIns: true}],
     [
       '@babel/preset-env',
@@ -107,6 +107,30 @@ const babelConfig = {
           },
         ],
       ],
+    },
+    {
+      test(filename) {
+        return (
+          filename && (filename.endsWith('.tsx') || filename.endsWith('.ts'))
+        )
+      },
+      presets: [
+        [
+          '@babel/preset-typescript',
+          {
+            isTSX: true,
+            allExtensions: true,
+          },
+        ],
+      ],
+    },
+    {
+      test(filename) {
+        return (
+          filename && !(filename.endsWith('.tsx') || filename.endsWith('.ts'))
+        )
+      },
+      presets: ['@babel/preset-flow'],
     },
   ],
   sourceMaps: true,
