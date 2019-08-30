@@ -28,14 +28,14 @@ const common = {
 }
 
 const version = {
-  effector: '20.1.2',
+  effector: '20.2.0',
   'effector-react': '20.3.0',
   'effector-vue': '20.1.2',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
 
-  '@effector/babel-plugin': '0.3.0',
+  '@effector/babel-plugin': '0.4.0',
   '@effector/babel-plugin-react': '0.2.0',
   '@effector/redux-adapter': '0.0.1',
   '@effector/forms': '0.0.1',
