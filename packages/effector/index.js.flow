@@ -133,6 +133,7 @@ declare export class Store<State> implements Unit<State> {
   defaultState: State;
   domainName?: CompositeName;
   compositeName: CompositeName;
+  sid?: string;
   shortName: string;
 }
 

@@ -50,7 +50,9 @@ export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
-  filter<T extends Payload>(config: {fn(payload: Payload): payload is T}): Event<T>
+  filter<T extends Payload>(config: {
+    fn(payload: Payload): payload is T
+  }): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   /**
    * @deprecated This form is deprecated, use `filterMap` method instead.
@@ -125,6 +127,7 @@ export interface Store<State> extends Unit<State> {
   domainName?: CompositeName
   compositeName: CompositeName
   shortName: string
+  sid?: string
   [Symbol.observable](): Observable<State>
 }
 
@@ -244,7 +247,10 @@ export const step: {
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
-export function forward<To, From extends To>(opts:{ from: Unit<From>, to: Unit<To>}): Subscription
+export function forward<To, From extends To>(opts: {
+  from: Unit<From>
+  to: Unit<To>
+}): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
@@ -264,11 +270,15 @@ export function createEffect<Params, Done, Fail = Error>(
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
   },
-): ((params: Params) => any) extends (params: unknown) => void ? Effect<void, Done, Fail> : Effect<Params, Done, Fail>
+): ((params: Params) => any) extends (params: unknown) => void
+  ? Effect<void, Done, Fail>
+  : Effect<Params, Done, Fail>
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
-}): ((params: Params) => any) extends (params: unknown) => void ? Effect<void, Done, Fail> : Effect<Params, Done, Fail>
+}): ((params: Params) => any) extends (params: unknown) => void
+  ? Effect<void, Done, Fail>
+  : Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
