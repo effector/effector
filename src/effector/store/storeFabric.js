@@ -38,7 +38,6 @@ export function storeFabric<State>(props: {
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
   const currentId = name || plainState.id
-  const defaultState = currentState
   const compositeName = createName(currentId, parent)
 
   const updates = createEvent('update ' + currentId)
@@ -66,7 +65,7 @@ export function storeFabric<State>(props: {
     domainName: parent,
     updates,
     defaultConfig: config,
-    defaultState,
+    defaultState: currentState,
     getState: bind(readRef, plainState),
     stateRef: plainState,
     sid,
