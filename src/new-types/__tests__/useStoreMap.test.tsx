@@ -4,6 +4,9 @@ import React from 'react'
 import {createStore} from 'effector'
 import {useStoreMap} from 'effector-react'
 
+import setupLocation from '../setupLocation'
+const typecheck = '{global}'
+
 type User = {
   username: string
   email: string
@@ -41,6 +44,12 @@ describe('useStoreMap', () => {
         })
         return <div>{value}</div>
       }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+        "
+      `)
     })
     it('should fail typecheck', () => {
       const UserProperty = ({id, field}: Props) => {
@@ -51,6 +60,12 @@ describe('useStoreMap', () => {
         })
         return <div>{value}</div>
       }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Tuple type 'readonly [number]' of length '1' has no element at index '1'.
+        "
+      `)
     })
   })
   describe('infer type with `as [explicit, tuple]`', () => {
@@ -63,6 +78,12 @@ describe('useStoreMap', () => {
         })
         return <div>{value}</div>
       }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+        "
+      `)
     })
     it('should fail typecheck', () => {
       const UserProperty = ({id, field}: Props) => {
@@ -73,6 +94,14 @@ describe('useStoreMap', () => {
         })
         return <div>{value}</div>
       }
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Type '[number, \\"username\\" | \\"email\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
+          Type '\\"username\\" | \\"email\\" | \\"bio\\"' is not assignable to type 'number'.
+            Type '\\"username\\"' is not assignable to type 'number'.
+        "
+      `)
     })
   })
   it('unable to infer tuple type without `as`', () => {
@@ -84,5 +113,12 @@ describe('useStoreMap', () => {
       })
       return <div>{value}</div>
     }
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Element implicitly has an 'any' type because index expression is not of type 'number'.
+
+      "
+    `)
   })
 })
