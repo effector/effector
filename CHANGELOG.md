@@ -72,7 +72,7 @@ const effect = createEffect({handler})
 effect()
 ```
 
-- Fix bug with `cannot read property .toSting of undefined` error during store initialization
+- Fix bug with `cannot read property .toString of undefined` error during store initialization
 
 ## effector-react 20.3.0
 
