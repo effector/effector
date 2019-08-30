@@ -1,23 +1,17 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`babel-plugin should create component 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createStore } from 'effector';
 import { createComponent } from 'effector-react';
 const foo = createStore('foo', {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-component.js [5, 12]\\"
+  sid: \\"-jdfd95\\"
 });
 const Foo = createComponent(foo, (props, data) => null, {
   loc: {
-    file: _effectorFileName2,
+    file: _effectorFileName,
     line: 6,
     column: 12
   },
@@ -27,278 +21,152 @@ const Foo = createComponent(foo, (props, data) => null, {
 `;
 
 exports[`babel-plugin should create domain 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 15
-  },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain.js [4, 15]\\"
+  sid: \\"-r2jo9q\\"
 });
 const foo = createDomain('bar', {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-domain.js [5, 12]\\"
+  sid: \\"-kylwgu\\"
 });"
 `;
 
 exports[`babel-plugin should create domain domain 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 15
-  },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-domain.js [4, 15]\\"
+  sid: \\"-jsqfil\\"
 });
 const foo = domain.domain(\\"foo\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-domain-domain.js [5, 12]\\"
+  sid: \\"-veeiq1\\"
 });
 const bar = domain.domain('baz', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 12
-  },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-domain-domain.js [6, 12]\\"
+  sid: \\"ksdvxf\\"
 });"
 `;
 
 exports[`babel-plugin should create domain effect 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 15
-  },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-effect.js [4, 15]\\"
+  sid: \\"-gfxji2\\"
 });
 const a = domain.effect(\\"a\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10
-  },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-effect.js [6, 10]\\"
+  sid: \\"-yaax6i\\"
 });
 
 const f = () => domain.effect(\\"f\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 16
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-effect.js [7, 16]\\"
+  sid: \\"jyl44k\\"
 });
 
 const b = domain.effect('hello', {
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 10
-  },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-effect.js [8, 10]\\"
+  sid: \\"y8n8xx\\"
 });
 
 const g = () => domain.effect('baz', {
-  loc: {
-    file: _effectorFileName,
-    line: 9,
-    column: 16
-  },
   name: \\"g\\",
-  sid: \\"g /src/babel/__tests__/fixtures/create-domain-effect.js [9, 16]\\"
+  sid: \\"hgf89v\\"
 });"
 `;
 
 exports[`babel-plugin should create domain event 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 15
-  },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-event.js [4, 15]\\"
+  sid: \\"3a2uet\\"
 });
 const a = domain.event(\\"a\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10
-  },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-event.js [6, 10]\\"
+  sid: \\"-h01fmt\\"
 });
 
 const f = () => domain.event(\\"f\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 16
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-event.js [7, 16]\\"
+  sid: \\"-nyhxip\\"
 });
 
 const b = domain.event('asm', {
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 10
-  },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-event.js [8, 10]\\"
+  sid: \\"p2tf20\\"
 });
 
 const g = () => domain.event('tasm', {
-  loc: {
-    file: _effectorFileName,
-    line: 9,
-    column: 16
-  },
   name: \\"g\\",
-  sid: \\"g /src/babel/__tests__/fixtures/create-domain-event.js [9, 16]\\"
+  sid: \\"i4cx64\\"
 });"
 `;
 
 exports[`babel-plugin should create domain store 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
 const domain = createDomain(\\"domain\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 15
-  },
   name: \\"domain\\",
-  sid: \\"domain /src/babel/__tests__/fixtures/create-domain-store.js [4, 15]\\"
+  sid: \\"-fpi1bm\\"
 });
 const a = domain.store('bar', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10
-  },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-domain-store.js [6, 10]\\"
+  sid: \\"z1hqlw\\"
 });
 const b = domain.store('h', {
   ɔ: {
     option: 'test',
     ['na' + 'me']: 'LOL'
   },
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 10
-  },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-domain-store.js [7, 10]\\"
+  sid: \\"5m6wxe\\"
 });
 const c = domain.store('h', {
   ɔ: {
     name: 'test'
   },
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 10
-  },
   name: \\"c\\",
-  sid: \\"c /src/babel/__tests__/fixtures/create-domain-store.js [8, 10]\\"
+  sid: \\"-nt3wr4\\"
 }); //$off
 
 const d = domain.store('h', {
   ɔ: null,
-  loc: {
-    file: _effectorFileName,
-    line: 10,
-    column: 10
-  },
   name: \\"d\\",
-  sid: \\"d /src/babel/__tests__/fixtures/create-domain-store.js [10, 10]\\"
+  sid: \\"a6fhta\\"
 }); //$off
 
 const e = domain.store('h', {
   ɔ: 4234,
-  loc: {
-    file: _effectorFileName,
-    line: 12,
-    column: 10
-  },
   name: \\"e\\",
-  sid: \\"e /src/babel/__tests__/fixtures/create-domain-store.js [12, 10]\\"
+  sid: \\"7o9lyl\\"
 });
 const f = domain.store('h', {
   ɔ: {},
-  loc: {
-    file: _effectorFileName,
-    line: 13,
-    column: 10
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-domain-store.js [13, 10]\\"
+  sid: \\"4p23pp\\"
 });"
 `;
 
 exports[`babel-plugin should create effect 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createEffect } from 'effector';
 const foo = createEffect(\\"foo\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-effect.js [5, 12]\\"
+  sid: \\"-hlt0gb\\"
 });
 const bar = createEffect('hello', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 12
-  },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-effect.js [6, 12]\\"
+  sid: \\"-ydp1p5\\"
 });
 const baz = createEffect({
   handler() {
@@ -306,13 +174,8 @@ const baz = createEffect({
   }
 
 }, {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 12
-  },
   name: \\"baz\\",
-  sid: \\"baz /src/babel/__tests__/fixtures/create-effect.js [7, 12]\\"
+  sid: \\"-v7s7ya\\"
 });
 const quux = createEffect('nice', {
   ɔ: {
@@ -321,170 +184,97 @@ const quux = createEffect('nice', {
     }
 
   },
-  loc: {
-    file: _effectorFileName,
-    line: 12,
-    column: 13
-  },
   name: \\"quux\\",
-  sid: \\"quux /src/babel/__tests__/fixtures/create-effect.js [12, 13]\\"
+  sid: \\"-evyqqj\\"
 });
 
 const f = () => createEffect(\\"f\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 17,
-    column: 16
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-effect.js [17, 16]\\"
+  sid: \\"y82cl8\\"
 });"
 `;
 
 exports[`babel-plugin should create event 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createEvent } from 'effector';
 const foo = createEvent(\\"foo\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-event.js [5, 12]\\"
+  sid: \\"qm3jl6\\"
 });
 const bar = createEvent('hello', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 12
-  },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/create-event.js [6, 12]\\"
+  sid: \\"f2obva\\"
 });
 const baz = createEvent({
   name: 'nice'
 }, {
-  loc: {
-    file: _effectorFileName,
-    line: 7,
-    column: 12
-  },
   name: \\"baz\\",
-  sid: \\"baz /src/babel/__tests__/fixtures/create-event.js [7, 12]\\"
+  sid: \\"-yrvnsz\\"
 });
 
 const f = () => createEvent(\\"f\\", {
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 16
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-event.js [8, 16]\\"
+  sid: \\"vi2m03\\"
 });"
 `;
 
 exports[`babel-plugin should create store 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createStore } from 'effector';
 const foo = createStore('foo', {
-  loc: {
-    file: _effectorFileName,
-    line: 4,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/create-store.js [4, 12]\\"
+  sid: \\"75h1gk\\"
 });
 const a = createStore('h', {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 10
-  },
   name: \\"a\\",
-  sid: \\"a /src/babel/__tests__/fixtures/create-store.js [5, 10]\\"
+  sid: \\"osbuqo\\"
 });
 const b = createStore('h', {
   ɔ: {},
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 10
-  },
   name: \\"b\\",
-  sid: \\"b /src/babel/__tests__/fixtures/create-store.js [6, 10]\\"
+  sid: \\"-yawrls\\"
 }); //$off
 
 const c = createStore('h', {
   ɔ: 23020,
-  loc: {
-    file: _effectorFileName,
-    line: 8,
-    column: 10
-  },
   name: \\"c\\",
-  sid: \\"c /src/babel/__tests__/fixtures/create-store.js [8, 10]\\"
+  sid: \\"-lvzpkx\\"
 });
 const config = {
   option: 0
 };
 const dod = createStore(null, {
   ɔ: config,
-  loc: {
-    file: _effectorFileName,
-    line: 10,
-    column: 12
-  },
   name: \\"dod\\",
-  sid: \\"dod /src/babel/__tests__/fixtures/create-store.js [10, 12]\\"
+  sid: \\"qtb6qu\\"
 });
 
 const f = a => createStore(a, {
-  loc: {
-    file: _effectorFileName,
-    line: 12,
-    column: 15
-  },
   name: \\"f\\",
-  sid: \\"f /src/babel/__tests__/fixtures/create-store.js [12, 15]\\"
+  sid: \\"42loz8\\"
 });"
 `;
 
 exports[`babel-plugin should use store 1`] = `
-"var _effectorFileName = \\"\\",
-    _effectorFileName2 = \\"\\";
+"var _effectorFileName = \\"\\";
 //@flow
 import { createStore } from 'effector';
 import { useStore } from 'effector-react';
 const foo = createStore('foo', {
-  loc: {
-    file: _effectorFileName,
-    line: 5,
-    column: 12
-  },
   name: \\"foo\\",
-  sid: \\"foo /src/babel/__tests__/fixtures/use-store.js [5, 12]\\"
+  sid: \\"ciaon0\\"
 });
 const bar = createStore('bar', {
-  loc: {
-    file: _effectorFileName,
-    line: 6,
-    column: 12
-  },
   name: \\"bar\\",
-  sid: \\"bar /src/babel/__tests__/fixtures/use-store.js [6, 12]\\"
+  sid: \\"-t7ybo2\\"
 });
 
 const Foo = () => {
   const data = useStore(foo, {
     loc: {
-      file: _effectorFileName2,
+      file: _effectorFileName,
       line: 8,
       column: 15
     },
@@ -493,7 +283,7 @@ const Foo = () => {
   });
   const data0 = useStore(bar, {
     loc: {
-      file: _effectorFileName2,
+      file: _effectorFileName,
       line: 9,
       column: 16
     },

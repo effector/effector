@@ -103,6 +103,7 @@ const babelConfig = {
           './src/babel/babel-plugin',
           {
             exportMetadata: true,
+            addLoc: true,
           },
         ],
       ],
