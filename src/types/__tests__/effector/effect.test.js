@@ -67,9 +67,9 @@ test('#use', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: unknown) => unknown'.
+    Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: void) => unknown'.
       Types of parameters 'payload' and 'params' are incompatible.
-        Type 'unknown' is not assignable to type 'number'.
+        Type 'void' is not assignable to type 'number'.
 
     --flow--
     no errors
@@ -78,19 +78,35 @@ test('#use', () => {
 })
 
 describe('void params', () => {
-  test('with handler', () => {
-    const handler = () => {}
-    const effect = createEffect('', {handler})
-    effect()
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      Expected 1 arguments, but got 0.
+  describe('with handler', () => {
+    test('handler returns void', () => {
+      const handler = () => {}
+      const effect = createEffect('', {handler})
+      effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        no errors
+        "
+      `)
+    })
+    test('handler returns value', () => {
+      const handler = () => 'ok'
+      const effect = createEffect({handler})
+      const result: Promise<string> = effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
   })
   test('with use', () => {
     const handler = () => {}
@@ -99,7 +115,7 @@ describe('void params', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Expected 1 arguments, but got 0.
+      no errors
 
       --flow--
       no errors
@@ -109,6 +125,21 @@ describe('void params', () => {
 })
 describe('nested effects', () => {
   describe('with handler', () => {
+    it('support nesting (should be ok)', () => {
+      const nestedEffect: Effect<string, string> = createEffect()
+      const parentEffect: Effect<string, string> = createEffect({
+        handler: nestedEffect,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
     test('no false-positive (should be type error)', () => {
       const nestedEffect: Effect<string, string> = createEffect()
       const parentEffect: Effect<number, number> = createEffect(
