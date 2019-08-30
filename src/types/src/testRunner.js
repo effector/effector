@@ -21,6 +21,11 @@ const TEST_DIR = 'types'
 async function typeCheck(testPath) {
   const root = resolve(__dirname, '../..', TEST_DIR)
   const repoRoot = resolve(__dirname, '../../..')
+  /*
+  TODO use test path file name to run tests in parallel,
+  thereby avoiding both files with hardcoded names and race conditions,
+  because running tests sequentially is a waaay too slow
+  */
   const movedFileFlow = resolve(__dirname, '..', '__fixtures__/flow/index.js')
   const movedFileTS = resolve(
     __dirname,
