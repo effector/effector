@@ -85,18 +85,23 @@ module.exports = {
     // 'types',
     {
       'new-types': {
-        testRunner: './src/new-types/testRunner.js',
+        runner: './src/new-types/src/runner.js',
+        testRunner: './src/new-types/src/testRunner.js',
         testMatch: [
           `<rootDir>/src/new-types/__tests__/**/*.test.js`,
           `<rootDir>/src/new-types/__tests__/**/*.spec.js`,
-          // `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
-          // `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
-          // `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
-          // `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
+          `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
+          `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
+          `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
+          `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
         ],
         browser: false,
         globals: {
           setupLocation: require('./src/new-types/setupLocation'),
+        },
+        transform: {
+          '^.+\\.jsx?$': 'babel-jest',
+          '^.+\\.tsx?$': 'babel-jest',
         },
       },
     },

@@ -1,6 +1,6 @@
-const execa = require('execa')
 const {resolve, relative, parse} = require('path')
-const {readFile, remove, copyFile, outputJSON} = require('fs-extra')
+const execa = require('execa')
+const {readFile, remove, copyFile, outputJSON, pathExists} = require('fs-extra')
 
 const jestAdapter = require('jest-circus/runner')
 
@@ -16,28 +16,59 @@ module.exports = async function(
 }
 
 const PRINT_FOREIGN_FILE_NAME = false
+const TEST_DIR = 'new-types'
 
 async function typeCheck(testPath) {
-  const root = resolve(__dirname, '../new-types')
-  const repoRoot = resolve(__dirname, '../..')
-  const movedFileFlow = resolve(__dirname, '__fixtures__/flow/index.js')
-  const movedFileTS = resolve(__dirname, '__fixtures__/typescript/index.ts')
-  await Promise.all([
-    copyFile(testPath, movedFileFlow),
-    copyFile(testPath, movedFileTS),
-  ])
+  const root = resolve(__dirname, '../..', TEST_DIR)
+  const repoRoot = resolve(__dirname, '../../..')
+  const movedFileFlow = resolve(__dirname, '..', '__fixtures__/flow/index.js')
+  const movedFileTS = resolve(
+    __dirname,
+    '..',
+    '__fixtures__/typescript/index.tsx',
+  )
+
+  const testMeta = {
+    flow: false,
+    ts: false,
+  }
+  if (/\.jsx?$/.test(testPath)) {
+    testMeta.flow = true
+    const sibling = testPath.replace(/^(.+)\.j(sx?)$/, '$1.t$2')
+    if (!(await pathExists(sibling))) {
+      testMeta.ts = true
+    }
+  } else if (/\.tsx?$/.test(testPath)) {
+    testMeta.ts = true
+  }
 
   const relativeTestPath = relative(root, testPath)
-  const files = {}
-  const [ts, flow] = await Promise.all([runTypeScript(), runFlow()])
 
-  const tsReport = normalizeTSReport(ts)
-  await outputJSON(
-    resolve(__dirname, 'type-report.json'),
-    {ts: tsReport, flow},
-    {spaces: 2},
-  )
-  await Promise.all([remove(movedFileFlow), remove(movedFileTS)])
+  const typechecks = []
+  if (testMeta.flow) typechecks.push(flowBranch())
+  if (testMeta.ts) typechecks.push(tsBranch())
+
+  const reports = await Promise.all(typechecks)
+  const outputData = {meta: testMeta, testPath: relativeTestPath}
+  for (const {type, report} of reports) {
+    outputData[type] = report
+  }
+
+  await outputJSON(resolve(__dirname, '..', 'type-report.json'), outputData, {
+    spaces: 2,
+  })
+  async function tsBranch() {
+    await copyFile(testPath, movedFileTS)
+    const report = await runTypeScript()
+    await remove(movedFileTS)
+    return {type: 'ts', report: normalizeTSReport(report)}
+  }
+  async function flowBranch() {
+    await copyFile(testPath, movedFileFlow)
+    const report = await runFlow()
+    await remove(movedFileFlow)
+    return {type: 'flow', report}
+  }
   function normalizeTSReport(report) {
     let current = {
       pos: {line: -1, col: -1},
@@ -77,7 +108,7 @@ async function typeCheck(testPath) {
       const result = await execa('npx', [
         'tsc',
         '-p',
-        `src/new-types/__fixtures__/typescript`,
+        `src/${TEST_DIR}/__fixtures__/typescript`,
       ])
       console.warn('no errors found by typescript typecheck', result)
       return ''
@@ -94,12 +125,13 @@ async function typeCheck(testPath) {
     }
   }
   async function runFlow() {
+    const files = {}
     try {
       const result = await execa('npx', [
         'flow',
         'check',
         '--json',
-        `src/new-types/__fixtures__/flow`,
+        `src/${TEST_DIR}/__fixtures__/flow`,
       ])
       console.warn('no errors found by flow typecheck', result)
       return []

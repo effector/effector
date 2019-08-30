@@ -10,10 +10,16 @@ module.exports = function setupLocation(
   //@ts-ignore
   const {readJSONSync} = require('fs-extra')
   const report = readJSONSync(reportPath)
-  return `\n--typescript--\n${matchTypecheckerMessages(
-    report.ts,
-    loc,
-  )}\n\n--flow--\n${matchTypecheckerMessages(report.flow, loc)}\n`
+  const reportList = []
+  if (report.meta.ts) {
+    const ts = matchTypecheckerMessages(report.ts, loc)
+    reportList.push(`\n--typescript--\n${ts}\n`)
+  }
+  if (report.meta.flow) {
+    const flow = matchTypecheckerMessages(report.flow, loc)
+    reportList.push(`\n--flow--\n${flow}\n`)
+  }
+  return reportList.join('')
 }
 
 function matchTypecheckerMessages(report, loc) {
