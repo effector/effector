@@ -264,11 +264,11 @@ export function createEffect<Params, Done, Fail = Error>(
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
   },
-): Effect<Params, Done, Fail>
+): ((params: Params) => any) extends (params: unknown) => void ? Effect<void, Done, Fail> : Effect<Params, Done, Fail>
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
-}): Effect<Params, Done, Fail>
+}): ((params: Params) => any) extends (params: unknown) => void ? Effect<void, Done, Fail> : Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
