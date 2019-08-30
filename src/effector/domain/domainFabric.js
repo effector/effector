@@ -81,7 +81,6 @@ export function domainFabric({
   const node = createNode({
     node: [],
     scope: {
-      hooks,
       history: {
         domains,
         storages,

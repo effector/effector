@@ -86,24 +86,16 @@ export const clearNode = (
 ) => {
   if (isStore(graphite)) {
     ;(graphite: any).subscribers.clear()
-  }
-  if (isDomain(graphite)) {
+  } else if (isDomain(graphite)) {
     const {scope} = getGraph(graphite)
-    const {history, hooks} = scope
+    const {history} = scope
     if (history) {
       history.events.clear()
       history.effects.clear()
       history.storages.clear()
       history.domains.clear()
     }
-    if (hooks) {
-      clearNode(hooks.event)
-      clearNode(hooks.effect)
-      clearNode(hooks.store)
-      clearNode(hooks.domain)
-    }
     scope.history = null
-    scope.hooks = null
   }
   clearNodeNormalized(getGraph(graphite), !!deep)
 }
