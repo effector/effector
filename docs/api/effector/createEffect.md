@@ -18,6 +18,8 @@ Creates an [effect](Effect.md)
 
 ([_`Effect`_](Effect.md)): A container for async function.
 
+> **Note**: You are not supposed to [`Forward`](forward.md) parts of *Effect* (even though it consists of *Events* and *Stores*), since it's a complete entity on its own. This behavior will not be supported
+
 #### Examples
 
 Create unnamed effect
