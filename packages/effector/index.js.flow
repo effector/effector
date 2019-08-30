@@ -66,6 +66,7 @@ declare export class Event<Payload> implements Unit<Payload> {
   getType(): string;
   domainName?: CompositeName;
   compositeName: CompositeName;
+  sid: string | null;
   shortName: string;
 }
 
@@ -105,6 +106,7 @@ declare export class Effect<Params, Done, Fail = Error>
   getType(): string;
   domainName?: CompositeName;
   compositeName: CompositeName;
+  sid: string | null;
   shortName: string;
 }
 
@@ -133,7 +135,7 @@ declare export class Store<State> implements Unit<State> {
   defaultState: State;
   domainName?: CompositeName;
   compositeName: CompositeName;
-  sid?: string;
+  sid: string | null;
   shortName: string;
 }
 
@@ -164,15 +166,17 @@ declare export class Domain {
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done,
+      sid?: string,
       ...
     },
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
   store<State>(
     defaultState: State,
-    config?: {name?: string, ...},
+    config?: {name?: string, sid?: string, ...},
   ): Store<State>;
   getType(): string;
+  sid: string | null;
 }
 export type ID = string
 export type StateRef = {|
@@ -280,24 +284,30 @@ declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
 declare export function createEvent<E>(eventName?: string): Event<E>
-declare export function createEvent<E>(config: {name?: string, ...}): Event<E>
+declare export function createEvent<E>(config: {
+  name?: string,
+  sid?: string,
+  ...
+}): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
     handler?: (params: Params) => Promise<Done> | Done,
+    sid?: string,
     ...
   },
 ): Effect<Params, Done, Fail>
 declare export function createEffect<Params, Done, Fail>(config: {
   name?: string,
   handler?: (params: Params) => Promise<Done> | Done,
+  sid?: string,
   ...
 }): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(
   defaultState: State,
-  config?: {name?: string, ...},
+  config?: {name?: string, sid?: string, ...},
 ): Store<State>
 declare export function setStoreName<State>(
   store: Store<State>,

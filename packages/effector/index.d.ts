@@ -65,6 +65,7 @@ export interface Event<Payload> extends Unit<Payload> {
   getType(): string
   domainName?: CompositeName
   compositeName: CompositeName
+  sid: string | null
   shortName: string
   [Symbol.observable](): Observable<Payload>
 }
@@ -101,6 +102,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   getType(): string
   domainName?: CompositeName
   compositeName: CompositeName
+  sid: string | null
   shortName: string
   [Symbol.observable](): Observable<Params>
 }
@@ -127,7 +129,7 @@ export interface Store<State> extends Unit<State> {
   domainName?: CompositeName
   compositeName: CompositeName
   shortName: string
-  sid?: string
+  sid: string | null
   [Symbol.observable](): Observable<State>
 }
 
@@ -158,10 +160,15 @@ export class Domain {
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done
+      sid?: string
     },
   ): Effect<Params, Done, Fail>
   domain(name?: string): Domain
-  store<State>(defaultState: State, config?: {name?: string}): Store<State>
+  store<State>(
+    defaultState: State,
+    config?: {name?: string; sid?: string},
+  ): Store<State>
+  sid: string | null
   getType(): string
 }
 
@@ -263,12 +270,16 @@ export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
 
 export function createEvent<E = void>(eventName?: string): Event<E>
-export function createEvent<E = void>(config: {name?: string}): Event<E>
+export function createEvent<E = void>(config: {
+  name?: string
+  sid?: string
+}): Event<E>
 
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
   },
 ): ((params: Params) => any) extends (params: unknown) => void
   ? Effect<void, Done, Fail>
@@ -276,13 +287,14 @@ export function createEffect<Params, Done, Fail = Error>(
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
+  sid?: string
 }): ((params: Params) => any) extends (params: unknown) => void
   ? Effect<void, Done, Fail>
   : Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
-  config?: {name?: string},
+  config?: {name?: string; sid?: string},
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
