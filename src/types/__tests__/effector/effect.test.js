@@ -67,9 +67,9 @@ test('#use', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: void) => unknown'.
+    Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: unknown) => unknown'.
       Types of parameters 'payload' and 'params' are incompatible.
-        Type 'void' is not assignable to type 'number'.
+        Type 'unknown' is not assignable to type 'number'.
 
     --flow--
     no errors
@@ -77,11 +77,56 @@ test('#use', () => {
   `)
 })
 
+it('should pass', () => {
+  const handler = (_: any) => {}
+  const effect = createEffect<any, any, any>({handler})
+  effect(1)
+  effect('')
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+it('should allow any value', () => {
+  const handler = (_: any) => {}
+  const effect = createEffect({handler})
+  effect(1)
+  effect('')
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
 describe('void params', () => {
+  it('should allow only calls without arguments', () => {
+    const handler = async () => 'ok'
+    const effect = createEffect({handler})
+    effect(1)
+    effect()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Argument of type '1' is not assignable to parameter of type 'void'.
+
+      --flow--
+      no errors
+      "
+    `)
+  })
   describe('with handler', () => {
     test('handler returns void', () => {
       const handler = () => {}
-      const effect = createEffect('', {handler})
+      const effect = createEffect({handler})
       effect()
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -115,7 +160,7 @@ describe('void params', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      Expected 1 arguments, but got 0.
 
       --flow--
       no errors
