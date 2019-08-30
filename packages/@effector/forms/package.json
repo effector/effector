@@ -26,7 +26,7 @@
     "compat.js.flow"
   ],
   "dependencies": {
-    "effector": "^20.2.0"
+    "effector": "^20.2.1"
   },
   "keywords": [
     "effector",
