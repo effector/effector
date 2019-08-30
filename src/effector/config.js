@@ -10,6 +10,7 @@ export type EffectConfigPart<Payload, Done> = {
   handler?: (payload: Payload) => Promise<Done> | Done,
   name?: string,
   loc?: SourceLocation,
+  sid?: string,
   ...
 }
 
@@ -23,12 +24,14 @@ export type StoreConfigPart = {
 export type EventConfigPart = {
   name?: string,
   loc?: SourceLocation,
+  sid?: string,
   ...
 }
 
 export type DomainConfigPart = {
   name?: string,
   loc?: SourceLocation,
+  sid?: string,
   ...
 }
 

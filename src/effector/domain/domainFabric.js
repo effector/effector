@@ -143,7 +143,6 @@ export function domainFabric({
       const result = storeFabric({
         currentState: state,
         parent: compositeName,
-        //$todo
         config: normalizeConfig(config),
       })
       addLinkToOwner(node, result)
@@ -151,5 +150,6 @@ export function domainFabric({
       return result
     },
     kind: Kind.domain,
+    sid: config.sid || null,
   }
 }

@@ -44,6 +44,7 @@ export function eventFabric<Payload>({
     launch(instance, payload)
     return payload
   }
+  instance.sid = config.sid || null
   instance.graphite = graphite
   instance.shortName = name
   instance.domainName = parent
