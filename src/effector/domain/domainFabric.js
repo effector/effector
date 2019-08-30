@@ -8,17 +8,27 @@ import {
   type EffectConfigPart,
   type EventConfigPart,
   type StoreConfigPart,
+  type DomainConfigPart,
 } from '../config'
-import {type Event, eventFabric} from '../event'
+import {type Event, eventFabric, forward} from '../event'
 import {type Effect, effectFabric} from '../effect'
 
 import type {Domain, DomainHooks} from './index.h'
-import type {DomainConfigPart} from '../config'
 import {createName, type CompositeName} from '../compositeName'
-import {DomainHistory, domainHooks} from './hook'
 import {createNode} from '../stdlib/graph'
 
 const nextID = stringRefcount()
+
+const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
+  trigger.watch(data => {
+    acc.add(data)
+  })
+  addLinkToOwner(node, trigger)
+  return (hook: (data: any) => any) => {
+    acc.forEach(hook)
+    return trigger.watch(hook)
+  }
+}
 
 export function domainFabric({
   name: nameRaw,
@@ -35,12 +45,50 @@ export function domainFabric({
   const id = nextID()
   const name = nameRaw || ''
   const compositeName = createName(name, parent)
-  const history = new DomainHistory()
-  const hooks = domainHooks(history, compositeName, parentHooks)
+  const domains: Set<Domain> = new Set()
+  const storages: Set<Store<any>> = new Set()
+  const effects: Set<Effect<any, any, any>> = new Set()
+  const events: Set<Event<any>> = new Set()
+
+  const event: Event<Event<any>> = eventFabric({
+    name: `${compositeName.fullName} event hook`,
+    parent: compositeName,
+  })
+  const effect: Event<Effect<any, any, any>> = eventFabric({
+    name: `${compositeName.fullName} effect hook`,
+    parent: compositeName,
+  })
+  const store: Event<Store<any>> = eventFabric({
+    name: `${compositeName.fullName} store hook`,
+    parent: compositeName,
+  })
+  const domain: Event<Domain> = eventFabric({
+    parent: compositeName,
+  })
+  if (parentHooks) {
+    forward({from: event, to: parentHooks.event})
+    forward({from: effect, to: parentHooks.effect})
+    forward({from: store, to: parentHooks.store})
+    forward({from: domain, to: parentHooks.domain})
+  }
+  const hooks: {|
+    domain: Event<Domain>,
+    effect: Event<Effect<any, any, any>>,
+    event: Event<Event<any>>,
+    store: Event<any>,
+  |} = {event, effect, store, domain}
 
   const node = createNode({
     node: [],
-    scope: {history, hooks},
+    scope: {
+      hooks,
+      history: {
+        domains,
+        storages,
+        effects,
+        events,
+      },
+    },
   })
 
   return {
@@ -51,22 +99,10 @@ export function domainFabric({
     getType() {
       return compositeName.fullName
     },
-    onCreateEvent(hook: (newEvent: Event<any>) => any) {
-      history.events.forEach(hook)
-      return hooks.event.watch(hook)
-    },
-    onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any) {
-      history.effects.forEach(hook)
-      return hooks.effect.watch(hook)
-    },
-    onCreateStore(hook: (newStore: Store<any>) => any) {
-      history.storages.forEach(hook)
-      return hooks.store.watch(hook)
-    },
-    onCreateDomain(hook: (newDomain: Domain) => any) {
-      history.domains.forEach(hook)
-      return hooks.domain.watch(hook)
-    },
+    onCreateEvent: createHook(event, events, node),
+    onCreateEffect: createHook(effect, effects, node),
+    onCreateStore: createHook(store, storages, node),
+    onCreateDomain: createHook(domain, domains, node),
     event<Payload>(
       name?: string,
       config?: Config<EventConfigPart>,
@@ -77,7 +113,7 @@ export function domainFabric({
         config: normalizeConfig(config),
       })
       addLinkToOwner(node, result)
-      hooks.event(result)
+      event(result)
       return result
     },
     effect<Params, Done, Fail>(
@@ -90,7 +126,7 @@ export function domainFabric({
         config: normalizeConfig(config),
       })
       addLinkToOwner(node, result)
-      hooks.effect(result)
+      effect(result)
       return result
     },
     domain(name?: string, config?: Config<DomainConfigPart>) {
@@ -101,7 +137,7 @@ export function domainFabric({
         config: normalizeConfig(config),
       })
       addLinkToOwner(node, result)
-      hooks.domain(result)
+      domain(result)
       return result
     },
     store<T>(state: T, config?: Config<StoreConfigPart>): Store<T> {
@@ -112,7 +148,7 @@ export function domainFabric({
         config: normalizeConfig(config),
       })
       addLinkToOwner(node, result)
-      hooks.store(result)
+      store(result)
       return result
     },
     kind: Kind.domain,

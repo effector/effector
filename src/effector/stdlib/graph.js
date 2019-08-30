@@ -97,10 +97,10 @@ export const clearNode = (
       history.domains.clear()
     }
     if (hooks) {
-      clearNode(hooks.event, {deep})
-      clearNode(hooks.effect, {deep})
-      clearNode(hooks.store, {deep})
-      clearNode(hooks.domain, {deep})
+      clearNode(hooks.event)
+      clearNode(hooks.effect)
+      clearNode(hooks.store)
+      clearNode(hooks.domain)
     }
     scope.history = null
     scope.hooks = null
