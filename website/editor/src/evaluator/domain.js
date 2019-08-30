@@ -46,7 +46,12 @@ export const babelOptions: Store<any> = combine(
       'proposal-optional-chaining',
       ['proposal-class-properties', {loose: true}],
       'effector/babel-plugin-react',
+      [
       'effector/babel-plugin',
+        {
+          addLoc: true,
+        },
+      ],
       '@effector/repl-remove-imports',
     ],
     sourceMaps: 'inline',
