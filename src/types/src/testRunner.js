@@ -16,7 +16,7 @@ module.exports = async function(
 }
 
 const PRINT_FOREIGN_FILE_NAME = false
-const TEST_DIR = 'new-types'
+const TEST_DIR = 'types'
 
 async function typeCheck(testPath) {
   const root = resolve(__dirname, '../..', TEST_DIR)

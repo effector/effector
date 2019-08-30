@@ -82,22 +82,21 @@ module.exports = {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
-    // 'types',
     {
-      'new-types': {
-        runner: './src/new-types/src/runner.js',
-        testRunner: './src/new-types/src/testRunner.js',
+      types: {
+        runner: './src/types/src/runner.js',
+        testRunner: './src/types/src/testRunner.js',
         testMatch: [
-          `<rootDir>/src/new-types/__tests__/**/*.test.js`,
-          `<rootDir>/src/new-types/__tests__/**/*.spec.js`,
-          `<rootDir>/src/new-types/__tests__/**/*.test.ts`,
-          `<rootDir>/src/new-types/__tests__/**/*.spec.ts`,
-          `<rootDir>/src/new-types/__tests__/**/*.test.tsx`,
-          `<rootDir>/src/new-types/__tests__/**/*.spec.tsx`,
+          `<rootDir>/src/types/__tests__/**/*.test.js`,
+          `<rootDir>/src/types/__tests__/**/*.spec.js`,
+          `<rootDir>/src/types/__tests__/**/*.test.ts`,
+          `<rootDir>/src/types/__tests__/**/*.spec.ts`,
+          `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+          `<rootDir>/src/types/__tests__/**/*.spec.tsx`,
         ],
         browser: false,
         globals: {
-          setupLocation: require('./src/new-types/setupLocation'),
+          setupLocation: require('./src/types/setupLocation'),
         },
         transform: {
           '^.+\\.jsx?$': 'babel-jest',

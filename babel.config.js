@@ -70,7 +70,6 @@ const babelConfig = {
       '@babel/plugin-proposal-nullish-coalescing-operator',
       ['@babel/plugin-proposal-class-properties', {loose: true}],
       'macros',
-      // [require.resolve('./src/new-types/src/plugin.js'), false],
       [
         'babel-plugin-module-resolver',
         {
@@ -86,9 +85,9 @@ const babelConfig = {
   overrides: [
     {
       test(filename) {
-        return filename && filename.includes('new-types/__tests__')
+        return filename && filename.includes('types/__tests__')
       },
-      plugins: ['./src/new-types/src/locationPlugin.js'],
+      plugins: ['./src/types/src/locationPlugin.js'],
     },
     {
       test(filename) {

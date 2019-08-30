@@ -9,7 +9,7 @@
 *.*~
 *.swp
 
-src/new-types/type-report.json
+src/types/type-report.json
 lib/**
 es/**
 debug.log
