@@ -9,23 +9,23 @@ function getIframe(): HTMLIFrameElement {
   if (iframe === null) {
     //iframe = document.createElement('iframe')
     iframe =
-      ((document.getElementById('dom'): any): HTMLIFrameElement | null)
-      || document.createElement('iframe')
-    //iframe.style.display = 'none'
+      ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
+      document.createElement('iframe')
 
-    //$off
-    //document.body.append(iframe)
-
-    sourceCode.watch(() => {
+    const generateFrame = () => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
-      iframe.contentDocument.body.innerHTML = '<div id="root"></div>'
-    })
-    selectVersion.watch(() => {
-      if (iframe === null) return
-      if (iframe.contentDocument.body === null) return
-      iframe.contentDocument.body.innerHTML = '<div id="root"></div>'
-    })
+      const styles = `
+  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-core.css">
+  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-light.css">
+  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-lightest.css">
+  `
+      iframe.contentDocument.head.innerHTML = styles
+      iframe.contentDocument.body.innerHTML =
+        '<div class="spectrum spectrum--light spectrum--medium" id="root"></div>'
+    }
+    sourceCode.watch(generateFrame)
+    selectVersion.watch(generateFrame)
   }
 
   return iframe
