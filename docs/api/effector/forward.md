@@ -11,7 +11,7 @@ Sends data from one entity to another. </br>
 
 #### Arguments
 
-1. `opts` (Object): Object of kind `{from: A, to: B}`, where `from` and `to` are units.
+1. `opts` (_Object_): Object of kind `{from: A, to: B}`, where `from` and `to` are units.
 
 #### Returns
 

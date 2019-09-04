@@ -15,9 +15,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 1. `sourceStore` ([_Store_](Store.md)): Source event
 2. `clockEvent` ([_Event_](Event.md)): Clock(Trigger) event
-3. `fn`? (_Function_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
-    - `source`: Source payload
-    - `clock`: Clock payload
+3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 #### Returns
 
@@ -71,9 +69,9 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 #### Arguments
 
-1. `sourceEvent` _(Event)_: Source event
-2. `clockEvent` _(Event)_: Clock(Trigger) event
-3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
+1. `sourceEvent` (_Event_): Source event
+2. `clockEvent` (_Event_): Clock(Trigger) event
+3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
 
 #### Returns
 
@@ -104,9 +102,9 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 #### Arguments
 
-1. `event` _(Event)_: Source event
-2. `store` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
+1. `event` (_Event_): Source event
+2. `store` (_Store_): Triggers sampled unit upon store update
+3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
 
 #### Returns
 
@@ -141,9 +139,9 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 #### Arguments
 
-1. `sourceStore` _(Store)_: Source store
-2. `clockStore` _(Store)_: Triggers sampled unit upon store update
-3. `fn`? _((source, clock) => result)_: Optional combinator function, should be **pure**
+1. `sourceStore` (_Store_): Source store
+2. `clockStore` (_Store_): Triggers sampled unit upon store update
+3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
 
 #### Returns
 
@@ -182,7 +180,7 @@ Object-like arguments passing, working exactly the same as examples above do.
 
 #### Arguments
 
-1. `params` _(Object)_: Configuration object
+1. `params` (_Object_): Configuration object
 
 #### Returns
 
@@ -257,5 +255,3 @@ clickButton('click B')
 
 ```
 [try it](https://share.effector.dev/yI70z0nd)
-
-

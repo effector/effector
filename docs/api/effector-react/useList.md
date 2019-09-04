@@ -5,13 +5,13 @@ hide_title: true
 ---
 
 # `useList(store, renderItem)`
-Hook function for efficient rendering of list store.  
+Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data changes.
 
 #### Arguments
 
-1. `store` _(Store)_ Store **should be array**
-2. `renderItem` _(function)_ Render function which will be called for every item in list
+1. `store` (_Store_): Store **should be array**
+2. `renderItem` (_Function_): Render function which will be called for every item in list
 
 #### Returns
 
@@ -39,9 +39,9 @@ const Users = () => {
       [{index}] {name}
     </li>
   ))
-  
+
   return (
-    <ul>{list}</ul>  
+    <ul>{list}</ul>
   )
 }
 

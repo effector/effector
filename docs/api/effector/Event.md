@@ -19,8 +19,8 @@ import { createEvent } from "effector";
 
 const sayHi = createEvent();
 const unwatch = sayHi.watch((name) => console.log(`${name}, hi there!`));
-                            
-sayHi("Peter"); // => Peter, hi there! 
+
+sayHi("Peter"); // => Peter, hi there!
 unwatch();
 
 sayHi("Drew"); // => nothing happened
@@ -35,7 +35,7 @@ sayHi("Drew"); // => nothing happened
 
 #### Arguments
 
-1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -53,7 +53,7 @@ userNameUpdated.watch((name) => console.log(`User's name is [${name}] now`));
 userRoleUpdated.watch((name) => console.log(`User's role is [${name}] now`));
 
 userUpdated({name: "john", role: "admin"});
- // => User's name is [john] now 
+ // => User's name is [john] now
  // => User's role is [ADMIN] now
 ```
 [Try it](https://share.effector.dev/EM5OSZGM)
@@ -65,7 +65,7 @@ userUpdated({name: "john", role: "admin"});
 
 #### Arguments
 
-1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -96,7 +96,7 @@ const lastPositive = createStore(0)
 
 #### Arguments
 
-1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -159,7 +159,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Arguments
 
-1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 

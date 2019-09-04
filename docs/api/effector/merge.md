@@ -5,11 +5,12 @@ hide_title: true
 ---
 
 # `merge(eventsArray)`
+
 Merges [`events`](Event.md), resulting single one, which fires upon trigger of any of merged events.
 
 #### Arguments
 
-1. `eventsArray` _(Array<[_`Event`_](Event.md)>)_: Array of [`events`](Event.md) to be merged.
+1. `eventsArray` (_Array<[_`Event`_](Event.md)>_): Array of [`events`](Event.md) to be merged.
 
 #### Returns
 
@@ -50,8 +51,8 @@ const $bar = createStore(100)
 const anyUpdated = merge([$foo, $bar]);
 anyUpdated.watch((v) => console.log(`state changed to: ${v}`));
 
-setFoo(1); // => state changed to: 1 
-setBar(123); // => state changed to: 123 
+setFoo(1); // => state changed to: 1
+setBar(123); // => state changed to: 123
 
 ```
 [Try it](https://share.effector.dev/Rp9wuRvl)

@@ -10,7 +10,7 @@ Creates an [effect](Effect.md)
 
 #### Arguments
 
-1. `name`? _(string)_: Effect name
+1. `name`? (_string_): Effect name
 2. `params`? (_Params_): Setup effect
     - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
@@ -94,7 +94,7 @@ fetchUserRepos.fail.watch(({params, error}) => {
 fetchUserRepos.finally.watch(({ params, status, result, error }) => {
   console.log(params) // {name: 'zerobias'}
   console.log(`handler status: ${status}`)
-  
+
   if (error) {
     console.log('handler rejected', error)
   } else {
@@ -122,5 +122,3 @@ const repos = createStore([])
     .on(fetchUserRepos.done, (_, {result: repos}) => repos)
 
 ```
-
-

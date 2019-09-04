@@ -10,10 +10,10 @@ Creates hook function, which observes changes in selected part of store. Compone
 
 #### Arguments
 
-1. `params` _(object)_ Configuration object
-    - `store` _(Store)_: Source store
-    - `keys` _(array)_: This argument will be passed to React.useMemo to avoid unnecessary updates
-    - `fn` _((store, keys) => result)_: Selector function to receive part of source store 
+1. `params` (_Object_): Configuration object
+    - `store` (_Store_): Source store
+    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
+    - `fn` (_(store, keys) => result_): Selector function to receive part of source store
 
 #### Returns
 
@@ -57,7 +57,7 @@ const User = ({ id }) => {
     keys: [id],
     fn: (users, [userId]) => users.find(({ id }) => id === userId)
   })
-  
+
   return (
     <div>
       <strong>[{user.id}]</strong> {user.name}

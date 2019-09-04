@@ -11,7 +11,7 @@ You can pass `name` if you want.
 
 #### Arguments
 
-1. `name`? _(string)_: [Event](Event.md) name.
+1. `name`? (_string_): [Event](Event.md) name.
 
 #### Returns
 

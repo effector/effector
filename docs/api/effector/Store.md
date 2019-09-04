@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-1. `eventOrStore` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `eventOrStore` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -72,7 +72,7 @@ Creates a derived store. It will call a provided function with the state, when t
 
 #### Arguments
 
-1. `fn` (_`Function`_): Function that receives `state` and returns a new state for the derived store
+1. `fn` (_Function_): Function that receives `state` and returns a new state for the derived store
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
@@ -105,8 +105,8 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Arguments
 
-1. `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
-2. `handler` (_`Function`_): Reducer function that receives `state` and `params` and returns a new state, should be **pure**.
+1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, should be **pure**.
   A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
     - `state`: Current state of store
     - `params`: Parameters passed to event call
@@ -135,7 +135,7 @@ changed(2) // updated 4
 
 #### Arguments
 
-1. `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -343,7 +343,7 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Arguments
 
-1. `fn` (_`Function`_): Function that receives `Store` and returns a new derived store
+1. `fn` (_Function_): Function that receives `Store` and returns a new derived store
 
 #### Returns
 
@@ -397,7 +397,7 @@ Output
 
 ### `updates`
 
-#### Returns 
+#### Returns
 
 (_`Event<State>`_): Event that represent updates of given store.
 

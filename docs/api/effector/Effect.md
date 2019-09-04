@@ -60,7 +60,7 @@ It will replace the previous function inside (if any).
 
 #### Arguments
 
-1. `handler` (_`Function`_): Function, that receives the first argument passed to an effect call.
+1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
 #### Returns
 
@@ -73,7 +73,7 @@ const fetchUserRepos = createEffect()
 
 fetchUserRepos.use(async (params) => {
   console.log('fetchUserRepos called with', params)
-  
+
   const url = `https://api.github.com/users/${params.name}/repos`
   const req = await fetch(url)
   return req.json()
@@ -90,7 +90,7 @@ Subscribe to effect calls.
 
 #### Arguments
 
-1. `watcher` (_`Function`_): A function that receives `payload`.
+1. `watcher` (_Function_): A function that receives `payload`.
 
 #### Returns
 
@@ -121,7 +121,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Arguments
 
-1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -140,8 +140,8 @@ _Event_ triggered when _handler_ is *resolved*.
 
 Event triggered with object of `params` and `result`:
 
-1. `params` (_`Params`_): An argument passed to the effect call
-2. `result` (_`Done`_): A result of the resolved handler
+1. `params` (_Params_): An argument passed to the effect call
+2. `result` (_Done_): A result of the resolved handler
 
 #### Example
 
@@ -166,8 +166,8 @@ Event triggered when handler is rejected or throws error.
 
 Event triggered with object of `params` and `error`:
 
-1. `params` (_`Params`_): An argument passed to effect call
-2. `error` (_`Fail`_): An error catched from the handler
+1. `params` (_Params_): An argument passed to effect call
+2. `error` (_Fail_): An error catched from the handler
 
 #### Example
 
@@ -232,10 +232,10 @@ Event triggered when handler is resolved, rejected or throws error.
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-1. `status` (_`string`_): A status of effect (`done` or `fail`)
-2. `params` (_`Params`_): An argument passed to effect call
-3. `error` (_`Fail`_): An error catched from the handler
-4. `result` (_`Done`_): A result of the resolved handler
+1. `status` (_string_): A status of effect (`done` or `fail`)
+2. `params` (_Params_): An argument passed to effect call
+3. `error` (_Fail_): An error catched from the handler
+4. `result` (_Done_): A result of the resolved handler
 
 #### Example
 
