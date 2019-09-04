@@ -13,9 +13,9 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 #### Arguments
 
-1. `sourceStore` ([_`Store`_](Store.md)): Source event
-2. `clockEvent` ([_`Event`_](Event.md)): Clock(Trigger) event
-3. `fn`? (_`Function`_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+1. `sourceStore` ([_Store_](Store.md)): Source event
+2. `clockEvent` ([_Event_](Event.md)): Clock(Trigger) event
+3. `fn`? (_Function_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
     - `source`: Source payload
     - `clock`: Clock payload
 
