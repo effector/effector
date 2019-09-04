@@ -33,6 +33,10 @@ sayHi("Drew"); // => nothing happened
 
 Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload.
 
+#### Arguments
+
+1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+
 #### Returns
 
 (_`Event`_): New event
@@ -58,6 +62,10 @@ userUpdated({name: "john", role: "admin"});
 ### `filter({fn})`
 
 Сreates a new event, which will be called after the original event is called, if `fn` returns true.
+
+#### Arguments
+
+1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -85,6 +93,10 @@ const lastPositive = createStore(0)
 ### `filterMap(fn)`
 
 Сreates a new event, which will be called after the original event is called, if `fn` returns **not undefined**.
+
+#### Arguments
+
+1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -144,6 +156,10 @@ const App = () => (
 ### `prepend(fn)`
 
 Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
+#### Arguments
+
+1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
