@@ -143,7 +143,7 @@ const App = () => (
 
 ### `prepend(fn)`
 
-Creates event, upon trigger it does send transformed data into source event. Working kind of reverse `.map`. In case of `.prepend` data transforms **before original event occurs**, and in case of `.map`, data transforms **after original event occured**.
+Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
 #### Returns
 
