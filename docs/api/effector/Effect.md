@@ -60,9 +60,7 @@ It will replace the previous function inside (if any).
 
 #### Arguments
 
-
-(_`handler`_): Function, that receives the first argument passed to an effect call.
-
+1. `handler` (_`Function`_): Function, that receives the first argument passed to an effect call.
 
 #### Returns
 
@@ -92,7 +90,7 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): A function that receives `payload`.
+1. `watcher` (_`Function`_): A function that receives `payload`.
 
 #### Returns
 
@@ -119,6 +117,10 @@ effect(20) // nothing, cause watcher unsubscribed
 
 ### `prepend(fn)`
 
+#### Arguments
+
+1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
+
 #### Returns
 
 (_`Event`_): An intention to change state.
@@ -136,8 +138,8 @@ _Event_ triggered when _handler_ is *resolved*.
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): An argument passed to the effect call
-(_`result`_): A result of the resolved handler
+1. `params` (_`Params`_): An argument passed to the effect call
+2. `result` (_`Done`_): A result of the resolved handler
 
 #### Example
 
@@ -162,8 +164,8 @@ Event triggered when handler is rejected or throws error.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): An argument passed to effect call
-(_`error`_): An error catched from the handler
+1. `params` (_`Params`_): An argument passed to effect call
+2. `error` (_`Fail`_): An error catched from the handler
 
 #### Example
 
@@ -228,10 +230,10 @@ Event triggered when handler is resolved, rejected or throws error.
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-(_`status`_): A status of effect (`done` or `fail`)
-(_`params`_): An argument passed to effect call
-(_`error`_): An error catched from the handler
-(_`result`_): A result of the resolved handler
+1. `status` (_`string`_): A status of effect (`done` or `fail`)
+2. `params` (_`Params`_): An argument passed to effect call
+3. `error` (_`Fail`_): An error catched from the handler
+4. `result` (_`Done`_): A result of the resolved handler
 
 #### Example
 
