@@ -101,7 +101,7 @@ changed('hello world') // new length 11
 
 ### `on(trigger, handler)`
 
-Updates state when `trigger` is triggered by using `hander`.
+Updates state when `trigger` is triggered by using `handler`.
 
 #### Arguments
 
