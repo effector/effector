@@ -11,7 +11,7 @@ _Event_ is an intention to change state.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+(_`Subscription`_): Unsubscribe function
 
 #### Example
 ```js
@@ -35,7 +35,7 @@ sayHi("Drew"); // => nothing happened
 
 #### Returns
 
-(Event): New event
+(_`Event`_): New event
 
 #### Example
 ```js
@@ -61,7 +61,7 @@ userUpdated({name: "john", role: "admin"});
 
 #### Returns
 
-(Event): New event
+(_`Event`_): New event
 
 #### Example
 
@@ -88,7 +88,7 @@ const lastPositive = createStore(0)
 
 #### Returns
 
-(Event): New event
+(_`Event`_): New event
 
 
 #### Example
@@ -147,7 +147,7 @@ Creates event, upon trigger it does send transformed data into source event. Wor
 
 #### Returns
 
-(Event): New event
+(_`Event`_): New event
 
 #### Example
 ```js
