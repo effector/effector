@@ -117,6 +117,8 @@ effect(20) // nothing, cause watcher unsubscribed
 
 ### `prepend(fn)`
 
+Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
 #### Arguments
 
 1. `fn` (_`Function`_): A function that receives `payload`, should be **pure**.
