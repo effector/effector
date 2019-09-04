@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- `eventOrStore` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -72,7 +72,7 @@ Creates a derived store. It will call a provided function with the state, when t
 
 #### Arguments
 
-- (_`Function`_): Function that receives `state` and returns a new state for the derived store
+- `fn` (_`Function`_): Function that receives `state` and returns a new state for the derived store
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
@@ -105,8 +105,8 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Arguments
 
-- (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
-- (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
+- `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+- `handler` (_`Function`_): Reducer function that receives `state` and `params` and returns a new state
   - `state`: Current state of store
   - `params`: Parameters passed to event call
     A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
@@ -132,6 +132,10 @@ changed(2) // updated 4
 <hr />
 
 ### `off(trigger)`
+
+#### Arguments
+
+- `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -339,7 +343,7 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Arguments
 
-- (_`Function`_): Function that receives `Store` and returns a new derived store
+- `fn` (_`Function`_): Function that receives `Store` and returns a new derived store
 
 #### Returns
 
