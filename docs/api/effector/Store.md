@@ -48,7 +48,7 @@ Returns current state of store
 
 #### Returns
 
-(`State`): Current state of the store
+(_`State`_): Current state of the store
 
 #### Example
 
@@ -113,7 +113,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Returns
 
-(Store): Current store
+(_`Store`_): Current store
 
 #### Example
 
@@ -135,7 +135,7 @@ changed(2) // updated 4
 
 #### Returns
 
-(Store): Current store
+(_`Store`_): Current store
 
 <hr />
 
@@ -146,7 +146,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+(_`Subscription`_): Unsubscribe function
 
 #### Example 1
 
@@ -379,7 +379,7 @@ Output
 
 #### Returns
 
-(string): ID or short name of store
+(_`string`_): ID or short name of store
 
 <hr />
 
@@ -387,7 +387,7 @@ Output
 
 #### Returns
 
-(`State`): Default state of store
+(_`State`_): Default state of store
 
 <hr />
 
@@ -395,7 +395,7 @@ Output
 
 #### Returns 
 
-(`Event<State>`): Event that represent updates of given store.
+(_`Event<State>`_): Event that represent updates of given store.
 
 Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
 
