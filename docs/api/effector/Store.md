@@ -135,7 +135,7 @@ changed(2) // updated 4
 
 #### Arguments
 
-- `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `trigger` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -343,7 +343,7 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Arguments
 
-- `fn` (_`Function`_): Function that receives `Store` and returns a new derived store
+1. `fn` (_`Function`_): Function that receives `Store` and returns a new derived store
 
 #### Returns
 
