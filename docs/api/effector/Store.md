@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-- `eventOrStore` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `eventOrStore` (_`Event | Effect | Store`_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 
 #### Returns
 
@@ -72,7 +72,7 @@ Creates a derived store. It will call a provided function with the state, when t
 
 #### Arguments
 
-- `fn` (_`Function`_): Function that receives `state` and returns a new state for the derived store
+1. `fn` (_`Function`_): Function that receives `state` and returns a new state for the derived store
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
