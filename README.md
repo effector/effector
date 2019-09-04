@@ -26,6 +26,7 @@
   - [Increment/decrement with React](#incrementdecrement-with-react)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
   - [Storages and events](#storages-and-events)
+  - [Client-server interaction with effects](#client-server-interaction-with-effects)
   - [Reddit reader](#reddit-reader)
   - [Lists rendering](#lists-rendering)
   - [More examples](#more-examples)
@@ -180,6 +181,10 @@ turnOff() // nothing has changed
 [Run example](https://share.effector.dev/iXQVXIEv)
 
 <hr />
+
+### Client-server interaction with effects
+
+[see source code](https://github.com/zerobias/effector/tree/master/examples/worker-rpc)
 
 ### Reddit reader
 
