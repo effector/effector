@@ -48,7 +48,7 @@ message({user: 'unregistered', text: 'hi'})
 ```
 [Try it](https://share.effector.dev/QXZsR5yM)
 
-_Note_: the only first met match will trigger resulting event
+> **Note:** the only first met match will trigger resulting event
 
 #### Example 2
 

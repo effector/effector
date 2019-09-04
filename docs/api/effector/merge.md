@@ -32,7 +32,7 @@ bar(2)
 ```
 [Try it](https://share.effector.dev/WxUgr6dZ)
 
-_Note:_ however, array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
+> **Note:** however, array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
 
 #### Example 2
 

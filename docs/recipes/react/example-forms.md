@@ -58,10 +58,10 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 Let's break down the code above.
 
-These are just events & effects definitions. Simple.  
+These are just events & effects definitions. Simple.
 ```js
 const sendForm = createEffect({handler: console.log})
-const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form  
+const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
 const setField = createEvent() //has intention to change $form's state in a way, defined in reducer further
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
   ...s,
@@ -81,7 +81,7 @@ sample({
 
 So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, requiring some data transformation, before data appear in `setField` event.
 ```js
-const handleChange = setField.prepend(e => ({ 
+const handleChange = setField.prepend(e => ({
   key: e.target.name,
   value: e.target.value,
 })) // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
@@ -107,6 +107,7 @@ const Field = ({name, type, label}) => {
 ```
 
 And, finally, the `App` itself! Note, how we get rid of any business-logic in view layer. It's simplier to debug, to share logic, and even more: logic is framework independent now.
+
 ```js
 const App = () => (
   <form action="void(0)" onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
@@ -126,7 +127,7 @@ const $store = createStore({})
 
 const App = () => {
   const values = useStore($store);
-  
+
   return <form action="void(0)" onSubmit={sendForm /*note, there is an effect itself*/}>
     <input name="login" label="Login" onChange={changed} value={values.login || ""}/>
     <input name="password" type="password" label="Password" onChange={changed} value={values.password || ""}/>

@@ -6,8 +6,9 @@ hide_title: true
 
 # `forward({from, to})`
 
-Sends data from one entity to another. </br>
-**Note:** If you want forward  `from` store `to` store, there is your store `from` must change. Let's see example 1 below.
+Sends data from one entity to another.
+
+> **Note:** If you want forward  `from` store `to` store, there is your store `from` must change. Let's see example 1 below.
 
 #### Arguments
 
