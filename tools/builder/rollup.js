@@ -155,6 +155,7 @@ const getPlugins = (name: string) => ({
   sizeSnapshot: sizeSnapshot(),
   analyzer: analyze({
     filename: `stats/${name}.html`,
+    title: `${name} size report`,
     sourcemap: true,
   }),
   terser: terser(
