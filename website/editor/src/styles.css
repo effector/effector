@@ -165,6 +165,7 @@ body {
     grid-column: 1 / span 1;
     grid-row: 1 / span 2;
     border-bottom: 1px solid #ffd6d6;
+    margin-top: 86px;
   }
 }
 @media (min-width: 700px) {
