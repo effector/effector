@@ -10,8 +10,27 @@ import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector: typeof Effector, version: string) {
   const api = {}
-  assignEffector(api, effector)
-  assignEffectorReact(api, EffectorReact)
+  apiMap(api, {
+    createEvent: effector.createEvent,
+    createEffect: effector.createEffect,
+    createStore: effector.createStore,
+    createStoreObject: effector.createStoreObject,
+    createDomain: effector.createDomain,
+    createApi: effector.createApi,
+    restoreEvent: effector.restoreEvent,
+    restoreEffect: effector.restoreEffect,
+    restore: effector.restore,
+    combine: effector.combine,
+    sample: effector.sample,
+    merge: effector.merge,
+    split: effector.split,
+    clearNode: effector.clearNode,
+  })
+  apiMap(api, {
+    createComponent: EffectorReact.createComponent,
+  })
+  assignLibrary(api, effector)
+  assignLibrary(api, EffectorReact)
   return {
     React,
     ReactDOM,
@@ -50,33 +69,6 @@ function assignLibrary(target, effector) {
     target[method] = effector[method]
   }
   return target
-}
-
-function assignEffector(target, effector) {
-  apiMap(target, {
-    createEvent: effector.createEvent,
-    createEffect: effector.createEffect,
-    createStore: effector.createStore,
-    createStoreObject: effector.createStoreObject,
-    createDomain: effector.createDomain,
-    createApi: effector.createApi,
-    restoreEvent: effector.restoreEvent,
-    restoreEffect: effector.restoreEffect,
-    restore: effector.restore,
-    combine: effector.combine,
-    sample: effector.sample,
-    merge: effector.merge,
-    split: effector.split,
-    clearNode: effector.clearNode,
-  })
-  assignLibrary(target, effector)
-}
-
-function assignEffectorReact(target, effectorReact) {
-  apiMap(target, {
-    createComponent: effectorReact.createComponent,
-  })
-  assignLibrary(target, effectorReact)
 }
 
 function apiMap(target, obj) {
