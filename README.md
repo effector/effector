@@ -357,6 +357,8 @@ const pageStore = mainPage.store(0)
 
 [Run example](https://share.effector.dev/PgwRuYja)
 
+> See also [worker-rpc](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) example, which uses shared domain for effects
+
 ### Learn more
 
 > [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
@@ -374,7 +376,6 @@ const pageStore = mainPage.store(0)
 ## Tested with browserstack
 
 [![Tested with browserstack](https://raw.githubusercontent.com/zerobias/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
-
 
 ## Contributors
 
