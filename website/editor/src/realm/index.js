@@ -14,6 +14,25 @@ export const realmStatus: Event<{|
   throwError: boolean,
 |}> = createEvent()
 
+export const realmStatusApi: {
+  init: Event<void>,
+  done: Event<void>,
+  fail: Event<void>,
+} = {
+  init: realmStatus.prepend(() => ({
+    active: true,
+    throwError: false,
+  })),
+  done: realmStatus.prepend(() => ({
+    active: false,
+    throwError: false,
+  })),
+  fail: realmStatus.prepend(() => ({
+    active: false,
+    throwError: true,
+  })),
+}
+
 //$off
 export const {realmEvent, realmStore, realmEffect, realmDomain} = split(
   realmInvoke.map(e => e.instance || {}),
