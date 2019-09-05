@@ -8,8 +8,6 @@
 ![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
 ![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
 
-<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
-
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -37,6 +35,7 @@
     - [Store composition/decomposition](#store-compositiondecomposition)
   - [Domain](#domain)
   - [Learn more](#learn-more)
+- [Support us](#support-us)
 - [Tested with browserstack](#tested-with-browserstack)
 - [Contributors](#contributors)
 - [License](#license)
@@ -368,9 +367,14 @@ const pageStore = mainPage.store(0)
 
 ![Effector Diagram](./diagram.png)
 
+## Support us
+
+<a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
+
 ## Tested with browserstack
 
 [![Tested with browserstack](https://raw.githubusercontent.com/zerobias/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
+
 
 ## Contributors
 
