@@ -1,6 +1,7 @@
 ---
 id: vue-effector
 title: VueEffector
+hide_title: true
 ---
 
 # `VueEffector(Vue, options?)`
