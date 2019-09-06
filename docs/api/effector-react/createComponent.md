@@ -12,8 +12,8 @@ Creates store-based React component. The `createComponent` is useful to transfer
 
 #### Arguments
 
-1. `store` (_Store_)
-2. `render` (_Function_)
+1. `store` (_Store | Object | Function_): `Store` or object of `Store`, or function which will be called with initial props.
+2. `render` (_Function_): Render function which will be called with props and state.
 
 #### Returns
 
