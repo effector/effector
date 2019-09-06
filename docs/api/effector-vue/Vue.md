@@ -3,4 +3,10 @@ id: vue
 title: Vue
 ---
 
-## TODO
+# `Vue`
+
+## Vue Methods
+
+### `$watchAsStore(expOrFn, options?)`
+
+### `$store(expOrFn)`

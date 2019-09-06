@@ -3,4 +3,4 @@ id: vue-effector
 title: VueEffector
 ---
 
-## TODO
+# `VueEffector(Vue, options?)`
