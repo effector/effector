@@ -36,7 +36,7 @@ sayHi("Drew"); // => nothing happened
 
 ### `map(fn)`
 
-Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, data extracting or data transforming.
+Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, to extract data or transform data.
 
 #### Arguments
 
