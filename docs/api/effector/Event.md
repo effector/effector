@@ -3,15 +3,21 @@ id: event
 title: Event
 ---
 
-_Event_ is an intention to change state.
+_Event_ is an intention to change state. Let's imagine life situation, you come to a shop and on etiquette you should say "hello" - **intention**, then you say "hello" - **event**.
 
 ## Event Methods
 
 ### `watch(watcher)`
 
+It is a function which allows you to watch or to create side-effects.
+
+### Arguments
+
+1. `watcher` (_Function_): A function that receives `payload`.
+
 #### Returns
 
-(_`Subscription`_): Unsubscribe function
+(_`Subscription`_): Unsubscribe function.
 
 #### Example
 ```js
@@ -25,28 +31,27 @@ unwatch();
 
 sayHi("Drew"); // => nothing happened
 ```
-[Try it](https://share.effector.dev/rcbKQbEn)
 
 <hr>
 
 ### `map(fn)`
 
-Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload.
+Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, data extracting or data transforming.
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
 
 #### Returns
 
-(_`Event`_): New event
+(_`Event`_): New event.
 
 #### Example
 ```js
 import { createEvent } from "effector";
 
 const userUpdated = createEvent();
-const userNameUpdated = userUpdated.map(({name}) => name); // you may decompose dataflow with `.map` method
+const userNameUpdated = userUpdated.map(({name}) => name); // you may decompose dataflow with .map() method
 const userRoleUpdated = userUpdated.map(({role}) => role.toUpperCase()); // either way you can transform data
 
 userNameUpdated.watch((name) => console.log(`User's name is [${name}] now`));
@@ -56,7 +61,6 @@ userUpdated({name: "john", role: "admin"});
  // => User's name is [john] now
  // => User's role is [ADMIN] now
 ```
-[Try it](https://share.effector.dev/EM5OSZGM)
 <hr>
 
 ### `filter({fn})`
@@ -65,11 +69,11 @@ userUpdated({name: "john", role: "admin"});
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
 
 #### Returns
 
-(_`Event`_): New event
+(_`Event`_): New event.
 
 #### Example
 
@@ -86,8 +90,6 @@ const lastPositive = createStore(0)
 	.on(positiveNumbers, (n, {x}) => x)
 
 ```
-[Try it](https://share.effector.dev/XHDQ3FDX)
-
 <hr />
 
 ### `filterMap(fn)`
@@ -96,12 +98,11 @@ const lastPositive = createStore(0)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
 
 #### Returns
 
-(_`Event`_): New event
-
+(_`Event`_): New event.
 
 #### Example
 
@@ -148,9 +149,6 @@ const App = () => (
 
 
 ```
-
-[Try it](https://share.effector.dev/axd5A0G5)
-
 <hr />
 
 ### `prepend(fn)`
@@ -159,11 +157,11 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
 
 #### Returns
 
-(_`Event`_): New event
+(_`Event`_): New event.
 
 #### Example
 ```js
@@ -180,5 +178,3 @@ document.body.appendChild(input);
   // input something in input, and press Enter
   // => Current name is: something
 ```
-[Try it](https://share.effector.dev/xv3E9OfR)
-<hr>
