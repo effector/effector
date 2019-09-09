@@ -1,5 +1,19 @@
 # Changelog
 
+## effector-vue 20.2.0
+
+- Add support for object shape
+
+```js
+const counter = createStore(0)
+
+new Vue({
+  effector: {
+    counter, // would create `counter` in template
+  }
+})
+```
+
 ## effector 20.2.0
 
 - Add support for domains to `clearNode`
