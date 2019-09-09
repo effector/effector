@@ -11,7 +11,7 @@ _Event_ is an intention to change state. Let's imagine life situation, you come 
 
 It is a function which allows you to watch or to create side-effects.
 
-### Arguments
+#### Arguments
 
 1. `watcher` (_Function_): A function that receives `payload`.
 
@@ -36,7 +36,7 @@ sayHi("Drew"); // => nothing happened
 
 ### `map(fn)`
 
-Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, to extract data or transform data.
+Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
 
 #### Arguments
 
