@@ -30,18 +30,18 @@
     "compat.js.flow"
   ],
   "keywords": [
-    "data",
-    "datastructure",
-    "functional",
-    "collection",
-    "state",
-    "store",
+    "vue",
+    "state manager",
     "reactive",
+    "functional",
+    "store",
+    "event",
+    "effect",
+    "data",
     "streams",
+    "state",
     "actions",
-    "effects",
-    "redux",
-    "vue"
+    "redux"
   ],
   "author": "Zero Bias",
   "maintainers": [
