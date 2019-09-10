@@ -51,7 +51,7 @@ export function booleanEnv(
 
 export function publishScript(name: string) {
   const onCatch = error => {
-    if (booleanEnv(process.env.print_errors, false)) {
+    if (booleanEnv(process.env.PRINT_ERRORS, false)) {
       console.error(error)
     }
   }
