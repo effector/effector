@@ -29,9 +29,29 @@ export async function outputPackageJSON(
   await fs.outputJSON(fullPath, config, {spaces: 2})
 }
 
+export function booleanEnv(
+  value: string | boolean | null | void,
+  defaults: boolean,
+): boolean {
+  switch (value) {
+    case 'no':
+    case 'false':
+    case false:
+      return false
+    case 'yes':
+    case 'true':
+    case true:
+      return true
+    case null:
+    case undefined:
+    default:
+      return defaults
+  }
+}
+
 export function publishScript(name: string) {
   const onCatch = error => {
-    if (!!process.env.print_errors) {
+    if (booleanEnv(process.env.print_errors, false)) {
       console.error(error)
     }
   }
