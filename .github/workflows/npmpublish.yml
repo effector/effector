@@ -5,38 +5,24 @@ on:
     branches:
       - master
     paths:
-      - packages/effector/package.json
-      - packages/effector-react/package.json
-      - packages/effector-vue/package.json
-      - packages/bs-effector/package.json
-      - packages/bs-effector-react/package.json
-      - 'packages/@effector/babel-plugin/package.json'
-      - 'packages/@effector/babel-plugin-react/package.json'
-      - 'packages/@effector/forms/package.json'
-
+      - 'packages/*/package.json'
+      - 'packages/*/*/package.json'
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          version: 12
-      - run: npm i -g yarn
-
   publish-npm:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           version: 12
-          registry-url: https://registry.npmjs.org/
-      - run: yarn
-      - run: yarn build publish latest
+      - name: install
+        run: yarn
+      - name: set npm config
+        run: npm config set //registry.npmjs.org/:_authToken $npm_token
         env:
-          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+          npm_token: ${{ secrets.npm_token }}
+      - name: publish packages
+        run: yarn build publish latest
   # publish-gpr:
   #   needs: build
   #   runs-on: ubuntu-latest
