@@ -210,8 +210,8 @@ function toDot(modules, output) {
     const toId = nameMap.idOf[to]
     let opts = ' [style="dashed"]'
     const sameCluster =
-      toId in clusterRoots.clusterOf
-      && clusterRoots.clusterOf[fromId] === clusterRoots.clusterOf[toId]
+      toId in clusterRoots.clusterOf &&
+      clusterRoots.clusterOf[fromId] === clusterRoots.clusterOf[toId]
     if (sameCluster) {
       const cluster = clusterRoots.clusterOf[fromId]
       const color = clusterRoots.colors[cluster]
@@ -236,10 +236,10 @@ function toDot(modules, output) {
   }
   const outputPath = Path.resolve(process.cwd(), output)
   outputFileSync(outputPath, fullText)
-  console.log(
-    '[moduleGraphGenerator] module dependency scheme saved to file %s',
-    outputPath,
-  )
+  // console.log(
+  //   '[moduleGraphGenerator] module dependency scheme saved to file %s',
+  //   outputPath,
+  // )
 }
 
 function prune(modules) {

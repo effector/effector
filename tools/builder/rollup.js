@@ -152,7 +152,9 @@ const getPlugins = (name: string) => ({
   }),
   commonjs: commonjs({}),
   resolve: resolve({}),
-  sizeSnapshot: sizeSnapshot(),
+  sizeSnapshot: sizeSnapshot({
+    printInfo: false,
+  }),
   analyzer: analyze({
     filename: `stats/${name}.html`,
     title: `${name} size report`,
