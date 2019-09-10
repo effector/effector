@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - master
+    paths:	
+      - 'packages/*/package.json'	
+      - 'packages/*/*/package.json'
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
