@@ -30,6 +30,11 @@ export async function outputPackageJSON(
 }
 
 export function publishScript(name: string) {
+  const onCatch = error => {
+    if (!!process.env.print_errors) {
+      console.error(error)
+    }
+  }
   return async() => {
     const args = [...cliArgs.original]
     if (args.length < 2) return
@@ -48,7 +53,9 @@ export function publishScript(name: string) {
           )
           console.log(stdout)
           console.error(stderr)
-        } catch {}
+        } catch (error) {
+          onCatch(error)
+        }
       } else if (argument === 'latest') {
         try {
           const {stdout, stderr} = await execa(
@@ -61,7 +68,9 @@ export function publishScript(name: string) {
           )
           console.log(stdout)
           console.error(stderr)
-        } catch {}
+        } catch (error) {
+          onCatch(error)
+        }
       }
     }
   }
