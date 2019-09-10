@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - master
-    paths:
-      - 'packages/*/package.json'
-      - 'packages/*/*/package.json'
 jobs:
   publish-npm:
     runs-on: ubuntu-latest
@@ -18,11 +15,13 @@ jobs:
       - name: install
         run: yarn
       - name: set npm config
-        run: npm config set //registry.npmjs.org/:_authToken $npm_token
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
         env:
-          npm_token: ${{ secrets.npm_token }}
+          NPM_TOKEN: ${{ secrets.npm_token }}
       - name: publish packages
-        run: yarn build publish latest
+        run: node tools/build publish latest
+        env:
+          PRINT_ERRORS: false
   # publish-gpr:
   #   needs: build
   #   runs-on: ubuntu-latest
