@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - master
-    paths:	
-      - 'packages/*/package.json'	
+    paths:
+      - 'packages/*/package.json'
       - 'packages/*/*/package.json'
 jobs:
   publish-npm:
@@ -18,13 +18,22 @@ jobs:
       - name: install
         run: yarn
       - name: set npm config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
         env:
           NPM_TOKEN: ${{ secrets.npm_token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: publish packages
         run: node tools/build publish latest
         env:
           PRINT_ERRORS: false
+      - name: configure for github registry
+        run: node tools/versionHash
+        env:
+          VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
+      - name: publish packages on github
+        run: node tools/build publish latest
+        env:
+          PRINT_ERRORS: true
   # publish-gpr:
   #   needs: build
   #   runs-on: ubuntu-latest
