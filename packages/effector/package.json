@@ -10,6 +10,9 @@
   "dependencies": {
     "symbol-observable": "^1.2.0"
   },
+  "browser": {
+    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
+  },
   "files": [
     "README.md",
     "LICENSE",
@@ -32,9 +35,6 @@
     "plugin/defaultMetaVisitor.js",
     "plugin/noopMetaVisitor.js"
   ],
-  "browser": {
-    "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
-  },
   "keywords": [
     "state manager",
     "reactive",
