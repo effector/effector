@@ -1,7 +1,7 @@
 {
   "name": "effector",
   "version": "20.2.1",
-  "description": "Application state manager",
+  "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
   "umd:main": "effector.umd.js",

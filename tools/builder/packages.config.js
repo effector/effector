@@ -85,7 +85,7 @@ export default {
   effector: {
     name: 'effector',
     version: version['effector'],
-    description: 'Application state manager',
+    description: 'The state manager',
     main: 'effector.cjs.js',
     module: 'effector.es.js',
     'umd:main': 'effector.umd.js',
@@ -121,10 +121,7 @@ export default {
       effector: '*',
     },
     files: getFiles('effector-react'),
-    keywords: [
-      'react',
-      ...keywords,
-    ],
+    keywords: ['react', ...keywords],
     ...common,
   },
   'effector-vue': {
@@ -141,10 +138,7 @@ export default {
       effector: '*',
     },
     files: getFiles('effector-vue'),
-    keywords: [
-      'vue',
-      ...keywords,
-    ],
+    keywords: ['vue', ...keywords],
     ...common,
   },
   'bs-effector': {
@@ -154,12 +148,7 @@ export default {
     dependencies: {},
     peerDependencies: dependsOnEffector,
     files: ['src/Effector.re', 'bsconfig.json', 'LICENSE', 'README.md'],
-    keywords: [
-      'bucklescript',
-      'reason',
-      'bsb',
-      ...keywords,
-    ],
+    keywords: ['bucklescript', 'reason', 'bsb', ...keywords],
     ...common,
   },
   'bs-effector-react': {
@@ -171,12 +160,7 @@ export default {
       effector: '*',
     },
     files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
-    keywords: [
-      'bucklescript',
-      'reason',
-      'bsb',
-      ...keywords,
-    ],
+    keywords: ['bucklescript', 'reason', 'bsb', ...keywords],
     ...common,
   },
   '@effector/babel-plugin': {
