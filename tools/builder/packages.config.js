@@ -94,9 +94,6 @@ export default {
     dependencies: {
       'symbol-observable': '^1.2.0',
     },
-    browser: {
-      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
-    },
     files: [
       ...getFiles('effector'),
       'babel-plugin.js',
@@ -104,6 +101,9 @@ export default {
       'plugin/defaultMetaVisitor.js',
       'plugin/noopMetaVisitor.js',
     ],
+    browser: {
+      './plugin/defaultMetaVisitor.js': './plugin/noopMetaVisitor.js',
+    },
     keywords,
     ...common,
   },
