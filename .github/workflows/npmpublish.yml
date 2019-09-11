@@ -31,9 +31,7 @@ jobs:
         env:
           VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
       - name: publish packages on github
-        run: node tools/build publish latest
-        env:
-          PRINT_ERRORS: true
+        run: cd npm/effector && npm publish
   # publish-gpr:
   #   needs: build
   #   runs-on: ubuntu-latest
