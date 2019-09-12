@@ -1,6 +1,17 @@
 name: tests
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+      - 'packages/*'
+      - 'src/*'
+      - 'tasks/*'
+      - 'tools/*'
+      - 'babel.config.js'
+      - 'jest.config.js'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'bsconfig.json'
 jobs:
   common-tests:
     runs-on: ubuntu-latest
@@ -10,7 +21,29 @@ jobs:
         with:
           version: 12
       - run: yarn
+        name: install deps
       - run: yarn test
+        name: tests
+  publish-github:
+    needs: common-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          version: 12
+      - run: yarn
+        name: install deps
+      - name: set npm config
+        run: npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: configure for github registry
+        run: node tools/versionHash
+        env:
+          VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
+      - name: publish packages on github
+        run: cd npm/effector && npm publish
   # browserstack:
   #   needs: common-tests
   #   runs-on: ubuntu-latest
