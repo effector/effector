@@ -31,6 +31,7 @@ export function eventFabric<Payload>({
   const fullName = compositeName.fullName
   const graphite = createNode({
     node: [],
+    meta: {unit: 'event'},
   })
 
   //$off
@@ -81,6 +82,7 @@ function prepend(event, fn: (_: any) => *) {
         fn: (newValue, {handler}) => handler(newValue),
       }),
     ],
+    meta: {op: 'prepend'},
   })
   return contramapped
 }
@@ -102,6 +104,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
         fn: (payload, {handler}) => handler(payload),
       }),
     ],
+    meta: {op: 'map'},
   })
   return mapped
 }
@@ -129,6 +132,7 @@ function filterEvent(
         fn: (upd, {fn}) => fn(upd),
       }),
     ],
+    meta: {op: 'filter'},
   })
   return mapped
 }
@@ -149,6 +153,7 @@ function filterMapEvent(
       }),
       step.check.defined(),
     ],
+    meta: {op: 'filterMap'},
   })
   return mapped
 }

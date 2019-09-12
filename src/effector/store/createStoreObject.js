@@ -69,6 +69,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     createLinkNode(child, store, {
       scope: {key, clone, target: store.stateRef, isFresh},
       node,
+      meta: {op: 'combine'},
     })
   }
 

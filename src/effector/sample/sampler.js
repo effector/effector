@@ -38,6 +38,7 @@ export const storeBy = (
             : (upd, {state}) => readRef(state),
         }),
       ].filter(Boolean),
+      meta: {op: 'sample', sample: 'store'},
     }),
   )
   return target
@@ -116,6 +117,7 @@ export const eventByUnit = (
         }),
         step.filter({fn: () => false}),
       ],
+      meta: {op: 'sample', sample: 'source'},
     }),
   )
   addLinkToOwner(
@@ -140,6 +142,7 @@ export const eventByUnit = (
             : (upd, {sourceState}) => readRef(sourceState),
         }),
       ].filter(Boolean),
+      meta: {op: 'sample', sample: 'clock'},
     }),
   )
   return target

@@ -58,6 +58,7 @@ export function storeFabric<State>(props: {
           store: oldState,
         }),
       ],
+      meta: {unit: 'store'},
     }),
     kind: Kind.store,
     id: plainState.id,

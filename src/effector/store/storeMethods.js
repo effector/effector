@@ -41,6 +41,7 @@ export function on(storeInstance: Store<any>, event: any, handler: Function) {
           },
         }),
       ],
+      meta: {op: 'on'},
     }),
   )
   return storeInstance
@@ -114,6 +115,7 @@ export function mapStore<A, B>(
         store: innerStore.stateRef,
       }),
     ],
+    meta: {op: 'map'},
   })
   return innerStore
 }
