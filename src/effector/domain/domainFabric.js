@@ -88,6 +88,7 @@ export function domainFabric({
         events,
       },
     },
+    meta: {unit: 'domain'},
   })
 
   return {
