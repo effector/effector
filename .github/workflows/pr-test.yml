@@ -7,6 +7,11 @@ on:
       - 'src/*'
       - 'tasks/*'
       - 'tools/*'
+      - 'babel.config.js'
+      - 'jest.config.js'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'bsconfig.json'
 jobs:
   common-tests:
     runs-on: ubuntu-latest
