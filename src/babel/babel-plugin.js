@@ -1,7 +1,5 @@
 //@noflow
 
-const importName = 'effector'
-
 module.exports = function(babel, options = {}) {
   const {
     compressor,
@@ -16,6 +14,7 @@ module.exports = function(babel, options = {}) {
     effectCreators,
     domainCreators,
     exportMetadata,
+    importName,
   } = normalizeOptions(options)
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
@@ -154,6 +153,7 @@ const normalizeOptions = options => {
       domains: true,
     },
     result: {
+      importName: options.importName || 'effector',
       exportMetadata,
       storeCreators: new Set(options.storeCreators || ['createStore']),
       eventCreators: new Set(options.eventCreators || ['createEvent']),
