@@ -64,7 +64,8 @@ export function effectFabric<Payload, Done>({
     parent,
     config,
   })
-
+  //$off
+  instance.graphite.meta.unit = 'effect'
   const eventCreate = instance.create
   const done: Event<{|
     params: Payload,
@@ -101,8 +102,8 @@ export function effectFabric<Payload, Done>({
   done.graphite.seq.push(notifyHandler)
   fail.graphite.seq.push(notifyHandler)
   let handler: Function =
-    defaultHandler
-    || (value => {
+    defaultHandler ||
+    (value => {
       console.error(`no handler used in ${instance.getType()}`)
       return Promise.resolve()
     })
