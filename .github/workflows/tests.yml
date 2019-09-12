@@ -58,6 +58,8 @@ jobs:
           version: 12
       - run: yarn
         name: install deps
+      - run: yarn build 'only: [effector]'
+        name: build effector
       - name: set npm config
         run: npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
         env:
