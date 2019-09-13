@@ -23,12 +23,13 @@ const Foo = createComponent(foo, (props, data) => null, {
 exports[`babel-plugin should create domain 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
-import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+import { createDomain as cd } from 'effector';
+const notForPlugin = createDomain();
+const domain = cd(\\"domain\\", {
   name: \\"domain\\",
   sid: \\"-r2jo9q\\"
 });
-const foo = createDomain('bar', {
+const foo = cd('bar', {
   name: \\"foo\\",
   sid: \\"-kylwgu\\"
 });"
@@ -159,16 +160,17 @@ const f = domain.store('h', {
 exports[`babel-plugin should create effect 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
-import { createEffect } from 'effector';
-const foo = createEffect(\\"foo\\", {
+import { createEffect as cf } from 'effector';
+const notForPlugin = createEffect();
+const foo = cf(\\"foo\\", {
   name: \\"foo\\",
   sid: \\"-hlt0gb\\"
 });
-const bar = createEffect('hello', {
+const bar = cf('hello', {
   name: \\"bar\\",
   sid: \\"-ydp1p5\\"
 });
-const baz = createEffect({
+const baz = cf({
   handler() {
     return 0;
   }
@@ -177,7 +179,7 @@ const baz = createEffect({
   name: \\"baz\\",
   sid: \\"-v7s7ya\\"
 });
-const quux = createEffect('nice', {
+const quux = cf('nice', {
   ɔ: {
     handler() {
       return 0;
@@ -188,7 +190,7 @@ const quux = createEffect('nice', {
   sid: \\"-evyqqj\\"
 });
 
-const f = () => createEffect(\\"f\\", {
+const f = () => cf(\\"f\\", {
   name: \\"f\\",
   sid: \\"y82cl8\\"
 });"
@@ -197,23 +199,24 @@ const f = () => createEffect(\\"f\\", {
 exports[`babel-plugin should create event 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
-import { createEvent } from 'effector';
-const foo = createEvent(\\"foo\\", {
+import { createEvent as e } from 'effector';
+const notForPlugin = createEvent();
+const foo = e(\\"foo\\", {
   name: \\"foo\\",
   sid: \\"qm3jl6\\"
 });
-const bar = createEvent('hello', {
+const bar = e('hello', {
   name: \\"bar\\",
   sid: \\"f2obva\\"
 });
-const baz = createEvent({
+const baz = e({
   name: 'nice'
 }, {
   name: \\"baz\\",
   sid: \\"-yrvnsz\\"
 });
 
-const f = () => createEvent(\\"f\\", {
+const f = () => e(\\"f\\", {
   name: \\"f\\",
   sid: \\"vi2m03\\"
 });"
@@ -222,22 +225,23 @@ const f = () => createEvent(\\"f\\", {
 exports[`babel-plugin should create store 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
-import { createStore } from 'effector';
-const foo = createStore('foo', {
+import { createStore as cc } from 'effector';
+const notForPlugin = createStore();
+const foo = cc('foo', {
   name: \\"foo\\",
   sid: \\"75h1gk\\"
 });
-const a = createStore('h', {
+const a = cc('h', {
   name: \\"a\\",
   sid: \\"osbuqo\\"
 });
-const b = createStore('h', {
+const b = cc('h', {
   ɔ: {},
   name: \\"b\\",
   sid: \\"-yawrls\\"
 }); //$off
 
-const c = createStore('h', {
+const c = cc('h', {
   ɔ: 23020,
   name: \\"c\\",
   sid: \\"-lvzpkx\\"
@@ -245,13 +249,13 @@ const c = createStore('h', {
 const config = {
   option: 0
 };
-const dod = createStore(null, {
+const dod = cc(null, {
   ɔ: config,
   name: \\"dod\\",
   sid: \\"qtb6qu\\"
 });
 
-const f = a => createStore(a, {
+const f = a => cc(a, {
   name: \\"f\\",
   sid: \\"42loz8\\"
 });"

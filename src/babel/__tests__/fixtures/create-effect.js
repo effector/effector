@@ -1,17 +1,18 @@
 //@flow
 
-import {createEffect} from 'effector'
+import {createEffect as cf} from 'effector'
 
-const foo = createEffect()
-const bar = createEffect('hello')
-const baz = createEffect({
+const notForPlugin = createEffect()
+const foo = cf()
+const bar = cf('hello')
+const baz = cf({
   handler() {
     return 0
   },
 })
-const quux = createEffect('nice', {
+const quux = cf('nice', {
   handler() {
     return 0
   },
 })
-const f = () => createEffect()
+const f = () => cf()

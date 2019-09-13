@@ -1,12 +1,13 @@
 //@flow
-import {createStore} from 'effector'
+import {createStore as cc} from 'effector'
 
-const foo = createStore('foo')
-const a = createStore('h')
-const b = createStore('h', {})
+const notForPlugin = createStore()
+const foo = cc('foo')
+const a = cc('h')
+const b = cc('h', {})
 //$off
-const c = createStore('h', 23020)
+const c = cc('h', 23020)
 const config = {option: 0}
-const dod = createStore(null, config)
+const dod = cc(null, config)
 
-const f = a => createStore(a)
+const f = a => cc(a)

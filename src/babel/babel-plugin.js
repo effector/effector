@@ -1,5 +1,12 @@
 //@noflow
 
+const definions = {
+  createStore: 'createStore',
+  createEvent: 'createEvent',
+  createEffect: 'createEffect',
+  createDomain: 'createDomain'
+}
+
 module.exports = function(babel, options = {}) {
   const {
     compressor,
@@ -20,6 +27,9 @@ module.exports = function(babel, options = {}) {
   const {types: t} = babel
   const plugin = {
     name: '@effector/babel-plugin',
+    pre() {
+      this.importedNames = new Map()
+    },
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
@@ -30,14 +40,14 @@ module.exports = function(babel, options = {}) {
             if (!s.imported) continue
             const importedName = s.imported.name
             const localName = s.local.name
-            if (storeCreators.has(importedName)) {
-              storeCreators.add(localName)
-            } else if (eventCreators.has(importedName)) {
-              eventCreators.add(localName)
-            } else if (effectCreators.has(importedName)) {
-              effectCreators.add(localName)
-            } else if (domainCreators.has(importedName)) {
-              domainCreators.add(localName)
+            if (stores && storeCreators.includes(importedName)) {
+              this.importedNames.set(localName, definions.createStore)
+            } else if (events && eventCreators.includes(importedName)) {
+              this.importedNames.set(localName, definions.createEvent)
+            } else if (effects && effectCreators.includes(importedName)) {
+              this.importedNames.set(localName, definions.createEffect)
+            } else if (domains && domainCreators.includes(importedName)) {
+              this.importedNames.set(localName, definions.createDomain)
             }
           }
         }
@@ -64,33 +74,27 @@ module.exports = function(babel, options = {}) {
         if (!state.effects) state.effects = new Set()
         if (!state.domains) state.domains = new Set()
 
-        if (t.isIdentifier(path.node.callee)) {
-          if (stores && storeCreators.has(path.node.callee.name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) {
-              setStoreNameAfter(path, state, id, babel.types, smallConfig)
-              state.stores.add(id.name)
-            }
-          }
-          if (events && eventCreators.has(path.node.callee.name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              state.events.add(id.name)
-            }
-          }
-          if (effects && effectCreators.has(path.node.callee.name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              state.effects.add(id.name)
-            }
-          }
-          if (domains && domainCreators.has(path.node.callee.name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-              state.domains.add(id.name)
+        if (t.isIdentifier(path.node.callee) && this.importedNames.has(path.node.callee.name)) {
+          const name = this.importedNames.get(path.node.callee.name)
+          const id = findCandidateNameForExpression(path)
+          if (id) {
+            switch (name) {
+              case definions.createStore:
+                setStoreNameAfter(path, state, id, babel.types, smallConfig)
+                state.stores.add(id.name)
+                break
+              case definions.createEvent:
+                setEventNameAfter(path, state, id, babel.types, smallConfig)
+                state.events.add(id.name)
+                break
+              case definions.createEffect:
+                setEventNameAfter(path, state, id, babel.types, smallConfig)
+                state.effects.add(id.name)
+                break
+              case definions.createDomain:
+                setEventNameAfter(path, state, id, babel.types, smallConfig)
+                state.domains.add(id.name)
+                break
             }
           }
         }
@@ -155,10 +159,10 @@ const normalizeOptions = options => {
     result: {
       importName: options.importName || 'effector',
       exportMetadata,
-      storeCreators: new Set(options.storeCreators || ['createStore']),
-      eventCreators: new Set(options.eventCreators || ['createEvent']),
-      effectCreators: new Set(options.effectCreators || ['createEffect']),
-      domainCreators: new Set(options.domainCreators || ['createDomain']),
+      storeCreators: options.storeCreators || [definions.createStore],
+      eventCreators: options.eventCreators || [definions.createEvent],
+      effectCreators: options.effectCreators || [definions.createEffect],
+      domainCreators: options.domainCreators || [definions.createDomain],
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },

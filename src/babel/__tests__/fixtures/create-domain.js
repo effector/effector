@@ -1,5 +1,6 @@
 //@flow
-import {createDomain} from 'effector'
+import {createDomain as cd} from 'effector'
 
-const domain = createDomain()
-const foo = createDomain('bar')
+const notForPlugin = createDomain()
+const domain = cd()
+const foo = cd('bar')
