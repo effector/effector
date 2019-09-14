@@ -16,7 +16,7 @@ hide_title: true
 
 #### Example
 
-```javascript
+```js try
 const balance = createStore(0)
 const username = createStore('zerobias')
 

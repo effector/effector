@@ -18,7 +18,7 @@ Creates a [store](Store.md).
 
 #### Example
 
-```js
+```js try
 // Create events
 const addTodo = createEvent()
 const clearTodos = createEvent()

@@ -18,7 +18,7 @@ Creates hook function, which subscribe to watcher, that observes changes in curr
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore, createApi } from 'effector'

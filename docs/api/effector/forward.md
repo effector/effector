@@ -22,7 +22,7 @@ Sends data from one entity to another.
 
 Send store data to store
 
-```js
+```js try
 const a = createStore(1)
 const b = createStore(2)
 
@@ -50,7 +50,7 @@ event()
 
 Send event data to store
 
-```js
+```js try
 const event = createEvent()
 const proxy = createStore(-1)
 

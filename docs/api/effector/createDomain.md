@@ -18,7 +18,7 @@ Creates a [domain](Domain.md)
 
 #### Example
 
-```js
+```js try
 const domain = createDomain() // Unnamed domain
 const httpDomain = createDomain('http') // Named domain
 

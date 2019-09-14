@@ -18,7 +18,7 @@ Merges [`events`](Event.md), resulting single one, which fires upon trigger of a
 
 #### Example 1
 
-```javascript
+```js try
 import {createEvent, merge} from 'effector'
 const foo = createEvent()
 const bar = createEvent()
@@ -30,48 +30,47 @@ foo(1)
 bar(2)
 // => merged event triggered: 2
 ```
-[Try it](https://share.effector.dev/WxUgr6dZ)
+
+[try it](https://share.effector.dev/WxUgr6dZ)
 
 > **Note:** however, array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
 
 #### Example 2
 
-```javascript
-import {createEvent, createStore, merge} from "effector";
+```js try
+import {createEvent, createStore, merge} from 'effector'
 
-const setFoo = createEvent();
-const setBar = createEvent();
+const setFoo = createEvent()
+const setBar = createEvent()
 
-const $foo = createStore(0)
-	.on(setFoo, (_, v) => v);
+const $foo = createStore(0).on(setFoo, (_, v) => v)
 
-const $bar = createStore(100)
-	.on(setBar, (_, v) => v);
+const $bar = createStore(100).on(setBar, (_, v) => v)
 
-const anyUpdated = merge([$foo, $bar]);
-anyUpdated.watch((v) => console.log(`state changed to: ${v}`));
+const anyUpdated = merge([$foo, $bar])
+anyUpdated.watch(v => console.log(`state changed to: ${v}`))
 
-setFoo(1); // => state changed to: 1
-setBar(123); // => state changed to: 123
-
+setFoo(1) // => state changed to: 1
+setBar(123) // => state changed to: 123
 ```
-[Try it](https://share.effector.dev/Rp9wuRvl)
+
+[try it](https://share.effector.dev/Rp9wuRvl)
 
 #### Example 3
 
-```javascript
-import {createEvent, createStore, merge} from "effector";
+```js try
+import {createEvent, createStore, merge} from 'effector'
 
-const setFoo = createEvent();
-const otherEvent = createEvent();
+const setFoo = createEvent()
+const otherEvent = createEvent()
 
-const $foo = createStore(0)
-	.on(setFoo, (_, v) => v);
+const $foo = createStore(0).on(setFoo, (_, v) => v)
 
-const merged = merge([$foo, otherEvent]);
-merged.watch((v) => console.log(`merged event payload: ${v}`));
+const merged = merge([$foo, otherEvent])
+merged.watch(v => console.log(`merged event payload: ${v}`))
 
-setFoo(999);
-otherEvent("bar");
+setFoo(999)
+otherEvent('bar')
 ```
-[Try it](https://share.effector.dev/Rp9wuRvl)
+
+[try it](https://share.effector.dev/Rp9wuRvl)

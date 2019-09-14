@@ -4,7 +4,7 @@ title: Example: Effects
 sidebar_label: Example: Effects
 ---
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -24,13 +24,13 @@ const CurrentUser = createComponent(
   	: <div>no current user</div>
   )
 
-const url = 'https://gist.githubusercontent.com/zerobias/24bc72aa8394157549e0b566ac5059a4/raw/b55eb74b06afd709e2d1d19f9703272b4d753386/data.json' 
+const url = 'https://gist.githubusercontent.com/zerobias/24bc72aa8394157549e0b566ac5059a4/raw/b55eb74b06afd709e2d1d19f9703272b4d753386/data.json'
 
 
 const node = document.createElement('div')
 document.body.appendChild(node)
 ReactDOM.render(<>
   <button onClick={() => asyncAction(url)}>load user</button>
-  <CurrentUser/>  
+  <CurrentUser/>
 </>, node)
 ```

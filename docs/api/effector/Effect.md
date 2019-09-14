@@ -17,7 +17,7 @@ It can be safely used in place of the original async function.
 
 #### Example
 
-```js
+```js try
 const fetchUser = createEffect({
   handler: ({ id }) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
@@ -68,7 +68,7 @@ It will replace the previous function inside (if any).
 
 #### Example
 
-```js
+```js try
 const fetchUserRepos = createEffect()
 
 fetchUserRepos.use(async (params) => {
@@ -99,7 +99,7 @@ Subscribe to effect calls.
 
 #### Example
 
-```js
+```js try
 const effect = createEffect({
   handler: value => value
 })
@@ -145,7 +145,7 @@ Event triggered with object of `params` and `result`:
 
 #### Example
 
-```js
+```js try
 const effect = createEffect({
   handler: (value) => Promise.resolve(value + 1)
 })
@@ -171,7 +171,7 @@ Event triggered with object of `params` and `error`:
 
 #### Example
 
-```js
+```js try
 const effect = createEffect()
 
 effect.use((value) => Promise.reject(value - 1))
@@ -190,7 +190,7 @@ _Store_ contains a `true` value until the effect is resolved or rejected.
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
@@ -212,7 +212,7 @@ fetchApi(5000)
 
 It's a shorthand for common use case
 
-```js
+```js try
 import {createEffect, createStore} from 'effector'
 
 const fetchApi = createEffect()
@@ -239,7 +239,7 @@ Event triggered with object of `status`, `params` and `error` or `result`:
 
 #### Example
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchApi = createEffect({

@@ -25,7 +25,8 @@ new Vue({
       foo: 'bar',
     }
   },
-  effector() { // would create `state` in template
+  effector() {
+    // would create `state` in template
     return combine(
       this.$store(() => this.foo),
       counter,
@@ -39,12 +40,12 @@ new Vue({
 new Vue({
   effector: {
     counter, // would create `counter` in template
-  }
+  },
 })
 ```
 
 ```js
 new Vue({
-  effector: counter // would create `state` in template
+  effector: counter, // would create `state` in template
 })
 ```

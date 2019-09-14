@@ -18,7 +18,7 @@ Creates a [_`Gate`_](Gate.md)
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createGate} from 'effector-react'

@@ -5,6 +5,7 @@ hide_title: true
 ---
 
 # `sample(sourceStore, clockEvent, fn)`
+
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
 Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more appropriate to use `sample` method as described below.
@@ -23,45 +24,41 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 #### Example 1
 
-```javascript
-import {createStore, createEvent, sample} from "effector";
+```js try
+import {createStore, createEvent, sample} from 'effector'
 
-const store = createStore('hello zerobias');
-const event = createEvent();
+const store = createStore('hello zerobias')
+const event = createEvent()
 
-const sampled = sample(store, event);
-sampled.watch(console.log);
+const sampled = sample(store, event)
+sampled.watch(console.log)
 
 event() // => hello zerobias
 ```
+
 [try it](https://share.effector.dev/IMXnU270)
 
 #### Example 2
 
-```javascript
-import {createStore, createEvent, sample} from "effector"
+```js try
+import {createStore, createEvent, sample} from 'effector'
 
 const login = createStore('peter')
 const sendMessage = createEvent()
 
-const fullMessage = sample(
-  login,
-  sendMessage,
-  (login, text) => ({login, text}),
-)
+const fullMessage = sample(login, sendMessage, (login, text) => ({login, text}))
 
 fullMessage.watch(({login, text}) => {
-   console.log(`[${login}]: ${text}`)
+  console.log(`[${login}]: ${text}`)
 })
 
 sendMessage('hello')
 // => [peter]: hello
 sendMessage('how r u?')
 // => [peter]: how r u?
-
 ```
-[try it](https://share.effector.dev/0ZP1xn8d)
 
+[try it](https://share.effector.dev/0ZP1xn8d)
 
 # `sample(sourceEvent, clockEvent, fn)`
 
@@ -79,21 +76,22 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 #### Example
 
-```js
-import {createEvent, sample} from "effector"
+```js try
+import {createEvent, sample} from 'effector'
 
-const event1 = createEvent();
-const event2 = createEvent();
+const event1 = createEvent()
+const event2 = createEvent()
 
-const sampled = sample(event1, event2, (a, b) => `${a} ${b}`);
-sampled.watch(console.log);
+const sampled = sample(event1, event2, (a, b) => `${a} ${b}`)
+sampled.watch(console.log)
 
-event1("Hello");
-event2("World"); // => Hello World
-event2("effector!"); // => Hello effector!
+event1('Hello')
+event2('World') // => Hello World
+event2('effector!') // => Hello effector!
 
-sampled("Can be invoked too!"); // => Can be invoked too!
+sampled('Can be invoked too!') // => Can be invoked too!
 ```
+
 [try it](https://share.effector.dev/vXKWDhwL)
 
 # `sample(event, store, fn)`
@@ -112,25 +110,29 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 #### Example
 
-```js
-import {createEvent, createStore, sample} from "effector"
+```js try
+import {createEvent, createStore, sample} from 'effector'
 
-const event = createEvent();
-const inc = createEvent();
-const count = createStore(0)
-  .on(inc, (state) => state + 1);
+const event = createEvent()
+const inc = createEvent()
+const count = createStore(0).on(inc, state => state + 1)
 
-const sampled = sample(event, count, (c, i) => `Current count is ${i}, last event invocation: ${c}`);
-sampled.watch(console.log);
+const sampled = sample(
+  event,
+  count,
+  (c, i) => `Current count is ${i}, last event invocation: ${c}`,
+)
+sampled.watch(console.log)
 
 inc() // => nothing
 
-event("foo");
+event('foo')
 inc() // => Current count is 2, last event invocation: foo
 
-event("bar");
-inc(); // => Current count is 3, last event invocation: bar
+event('bar')
+inc() // => Current count is 3, last event invocation: bar
 ```
+
 [try it](https://share.effector.dev/L4nbGjxM)
 
 # `sample(sourceStore, clockStore, fn)`
@@ -149,32 +151,31 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 #### Example
 
-```js
-import {createEvent, createStore, sample} from "effector";
+```js try
+import {createEvent, createStore, sample} from 'effector'
 
-const inc = createEvent();
-const setName = createEvent();
+const inc = createEvent()
+const setName = createEvent()
 
-const name = createStore("John")
-  .on(setName, (_, v) => v);
+const name = createStore('John').on(setName, (_, v) => v)
 
-const clock = createStore(0)
-  .on(inc, (i) => i + 1);
+const clock = createStore(0).on(inc, i => i + 1)
 
-const sampled = sample(name, clock, (name, i) => `${name} has ${i} coins`);
-sampled.watch(console.log);
- // => John has 0 coins (initial store update triggered sampled store)
+const sampled = sample(name, clock, (name, i) => `${name} has ${i} coins`)
+sampled.watch(console.log)
+// => John has 0 coins (initial store update triggered sampled store)
 
-setName("Doe");
-inc(); // => Doe has 1 coins
+setName('Doe')
+inc() // => Doe has 1 coins
 ```
+
 [try it](https://share.effector.dev/h3zED3yW)
 
 # `sample({source, clock, fn, greedy?, target?})`
 
 Object-like arguments passing, working exactly the same as examples above do.
 
-`greedy` modifier defines, whether sampler will wait of  resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
+`greedy` modifier defines, whether sampler will wait of resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
 
 `target` - can contain Unit, which accepts payload - returned by `fn`. If target passed, result will be the target itself. In case, target not passed, it's created "under the hood" and being returned as result of the function.
 
@@ -187,7 +188,8 @@ Object-like arguments passing, working exactly the same as examples above do.
 ([_`Event`_](Event.md)|[_`Store`_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
 
 #### Example 1
-```js
+
+```js try
 import {sample, createStore, createEffect, createEvent} from 'effector'
 
 const $user = createStore({name: 'john', password: 'doe'})
@@ -206,14 +208,13 @@ console.log(submitted === signIn) // units are equal
 
 submitForm('foo')
 ```
+
 [try it](https://share.effector.dev/OPajzRNF)
 
-
-
-
 #### Example 2
-```js
-import {createEvent, createStore, sample} from "effector"
+
+```js try
+import {createEvent, createStore, sample} from 'effector'
 
 const clickButton = createEvent()
 const closeModal = clickButton.map(() => 'close modal')
@@ -252,6 +253,6 @@ greedySampling.watch(data => console.log('greedy update', data))
 
 clickButton('click A')
 clickButton('click B')
-
 ```
+
 [try it](https://share.effector.dev/yI70z0nd)

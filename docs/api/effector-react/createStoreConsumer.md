@@ -19,7 +19,7 @@ The `createStoreConsumer` creates a consumer who is watching for changes in the 
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { createStore } from 'effector'

@@ -19,7 +19,7 @@ hide_title: true
 
 #### Example
 
-```js
+```js try
 // Create store
 const playerPosition = createStore({x: 0, y: 0}) // <-- Default state
 

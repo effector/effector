@@ -20,7 +20,8 @@ It is a function which allows you to watch or to create side-effects.
 (_`Subscription`_): Unsubscribe function.
 
 #### Example
-```js
+
+```js try
 import { createEvent } from "effector";
 
 const sayHi = createEvent();
@@ -47,7 +48,8 @@ sayHi("Drew"); // => nothing happened
 (_`Event`_): New event.
 
 #### Example
-```js
+
+```js try
 import { createEvent } from "effector";
 
 const userUpdated = createEvent();
@@ -77,7 +79,7 @@ userUpdated({name: "john", role: "admin"});
 
 #### Example
 
-```javascript
+```js try
 import {createEvent, createStore} from 'effector'
 
 const numbers = createEvent('event with {x: number}')
@@ -106,7 +108,7 @@ const lastPositive = createStore(0)
 
 #### Example
 
-```javascript
+```js try
 import React from 'react'
 
 import {createEvent, createStore} from 'effector'
@@ -164,7 +166,8 @@ Creates an event, upon trigger it does send transformed data into source event. 
 (_`Event`_): New event.
 
 #### Example
-```js
+
+```js try
 import { createEvent } from "effector";
 
 const nameChanged = createEvent();

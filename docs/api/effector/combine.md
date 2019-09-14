@@ -14,7 +14,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 
 #### Example
 
-```javascript
+```js try
 const balance = createStore(0)
 const username = createStore('zerobias')
 

@@ -5,7 +5,8 @@ sidebar_label: Example: Forms
 ---
 
 #### Example 1
-```js
+
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
@@ -54,11 +55,13 @@ const App = () => (
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-[Try it](https://share.effector.dev/2ksW0IsZ)
+
+[try it](https://share.effector.dev/2ksW0IsZ)
 
 Let's break down the code above.
 
 These are just events & effects definitions. Simple.
+
 ```js
 const sendForm = createEffect({handler: console.log})
 const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
@@ -70,6 +73,7 @@ const $form = createStore({}).on(setField, (s, {key, value}) => ({
 ```
 
 Next piece of code shows, how we can obtain a state in Effector, in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
+
 ```js
 sample({
   source: $form, // Take LATEST state from $form, and
@@ -80,6 +84,7 @@ sample({
 ```
 
 So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, requiring some data transformation, before data appear in `setField` event.
+
 ```js
 const handleChange = setField.prepend(e => ({
   key: e.target.name,
@@ -100,7 +105,12 @@ const Field = ({name, type, label}) => {
   return (
     <div>
       {label}{' '}
-      <input name={name} type={type} value={value} onChange={handleChange /*note, bound event is here!*/} />
+      <input
+        name={name}
+        type={type}
+        value={value}
+        onChange={handleChange /*note, bound event is here!*/}
+      />
     </div>
   )
 }
@@ -110,7 +120,9 @@ And, finally, the `App` itself! Note, how we get rid of any business-logic in vi
 
 ```js
 const App = () => (
-  <form action="void(0)" onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
+  <form
+    action="void(0)"
+    onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
     <button type="submit">Submit!</button>
@@ -119,41 +131,62 @@ const App = () => (
 ```
 
 Of course, there is much simplier way, to implement this, consider:
+
 ```js
-const sendForm = createEffect({handler: () => console.log($store.getState())});
-const changed = createEvent();
-const $store = createStore({})
-  .on(changed, (s, e) => ({...s, [e.target.name]: e.target.value}))
+const sendForm = createEffect({handler: () => console.log($store.getState())})
+const changed = createEvent()
+const $store = createStore({}).on(changed, (s, e) => ({
+  ...s,
+  [e.target.name]: e.target.value,
+}))
 
 const App = () => {
-  const values = useStore($store);
+  const values = useStore($store)
 
-  return <form action="void(0)" onSubmit={sendForm /*note, there is an effect itself*/}>
-    <input name="login" label="Login" onChange={changed} value={values.login || ""}/>
-    <input name="password" type="password" label="Password" onChange={changed} value={values.password || ""}/>
-    <button type="submit">Submit!</button>
-  </form>
+  return (
+    <form
+      action="void(0)"
+      onSubmit={sendForm /*note, there is an effect itself*/}>
+      <input
+        name="login"
+        label="Login"
+        onChange={changed}
+        value={values.login || ''}
+      />
+      <input
+        name="password"
+        type="password"
+        label="Password"
+        onChange={changed}
+        value={values.password || ''}
+      />
+      <button type="submit">Submit!</button>
+    </form>
+  )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
-[Try it](https://share.effector.dev/GBYkPuX2)
+
+[try it](https://share.effector.dev/GBYkPuX2)
 
 This code is way shorter, yet has code duplication, lower scalability and less reusable. In some cases, usage of `getState` may cause state inconsistence, race conditions.
 
 #### Example 2
+
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which are dependent of stores, transform data passed between events.
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 
-const sendForm = createEffect({ //defining simple Effect, which results a string in 3 seconds
+const sendForm = createEffect({
+  //defining simple Effect, which results a string in 3 seconds
   handler: formData =>
     new Promise(rs =>
-      setTimeout(rs, 3000, `Signed in as [${formData.get('name')}]`)
+      setTimeout(rs, 3000, `Signed in as [${formData.get('name')}]`),
     ),
 })
 
@@ -188,6 +221,6 @@ const App = () => {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
-
 ```
-[Try it](https://share.effector.dev/hIfXZ1Kg)
+
+[try it](https://share.effector.dev/hIfXZ1Kg)

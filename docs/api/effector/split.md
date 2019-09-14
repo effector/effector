@@ -5,12 +5,13 @@ hide_title: true
 ---
 
 # `split(event, cases)`
+
 Pattern matching method, splits event into several, which fire upon source event matches its comparator function.
 
 #### Arguments
 
 1. `event` ([_Event_](Event.md)): Array of [_`events`_](Event.md) to be merged.
-2. `cases` (_Object_): Schema of cases, which uses names of resulting events as keys, and comparator function_((value) => Boolean)_
+2. `cases` (_Object_): Schema of cases, which uses names of resulting events as keys, and comparator function*((value) => Boolean)*
 
 #### Returns
 
@@ -18,8 +19,9 @@ Pattern matching method, splits event into several, which fire upon source event
 
 #### Example 1
 
-```javascript
+```js try
 import {createEvent, split} from 'effector'
+
 const message = createEvent()
 
 const messageByAuthor = split(message, {
@@ -46,29 +48,30 @@ guest.watch(({text}) => {
 message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
-[Try it](https://share.effector.dev/QXZsR5yM)
+
+[try it](https://share.effector.dev/QXZsR5yM)
 
 > **Note:** the only first met match will trigger resulting event
 
 #### Example 2
 
-```js
+```js try
 import {createEvent, split} from 'effector'
-const message = createEvent();
+const message = createEvent()
 
 const {short, long, medium} = split(message, {
-  short: (m) => m.length <= 5,
-  medium: (m) => m.length > 5,
-  long: (m) => m.length > 10,
-});
+  short: m => m.length <= 5,
+  medium: m => m.length > 5,
+  long: m => m.length > 10,
+})
 
-short.watch((m) => console.log(`short message '${m}'`));
-medium.watch((m) => console.log(`medium message '${m}'`));
-long.watch((m) => console.log(`long message '${m}'`));
+short.watch(m => console.log(`short message '${m}'`))
+medium.watch(m => console.log(`medium message '${m}'`))
+long.watch(m => console.log(`long message '${m}'`))
 
-message("short"); // => medium message 'short!'
-message("medium"); // => medium message 'medium'
-message("long message"); // => medium message 'long message' (uh-oh)
+message('short') // => medium message 'short!'
+message('medium') // => medium message 'medium'
+message('long message') // => medium message 'long message' (uh-oh)
 ```
 
-[Try it](https://share.effector.dev/Ajta8lDk)
+[try it](https://share.effector.dev/Ajta8lDk)

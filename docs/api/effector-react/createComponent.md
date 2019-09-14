@@ -21,7 +21,7 @@ Creates store-based React component. The `createComponent` is useful to transfer
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'

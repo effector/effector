@@ -19,7 +19,7 @@ Creates a _`Store`_ from _`Event`_
 
 #### Example
 
-```js
+```js try
 const event = createEvent('event')
 const store = restore(event, 'default')
 
@@ -45,7 +45,7 @@ Creates a _`Store`_ from _`Effect`_
 
 #### Example
 
-```js
+```js try
 const effect = createEffect('effect')
 effect.use(() => Promise.resolve('foo'))
 const store = restore(effect, 'default')
@@ -71,7 +71,7 @@ Creates an object with stores from object
 
 #### Example
 
-```js
+```js try
 const obj = restore({
   foo: 'foo',
   bar: 0,

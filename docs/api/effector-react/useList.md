@@ -19,7 +19,7 @@ Every item will be memoized and updated only when their data changes.
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
@@ -47,9 +47,9 @@ const Users = () => {
 
 ReactDOM.render(<Users />, document.getElementById('root'))
 ```
-[Playground](https://share.effector.dev/JZ35Jjyr)
+[try it](https://share.effector.dev/JZ35Jjyr)
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
@@ -97,4 +97,4 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 
 ```
-[Playground](https://share.effector.dev/GQjYp0Bn)
+[try it](https://share.effector.dev/GQjYp0Bn)

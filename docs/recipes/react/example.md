@@ -4,7 +4,7 @@ title: Example
 sidebar_label: Example
 ---
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEvent, createStore, createStoreObject} from 'effector'

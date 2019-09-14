@@ -24,7 +24,7 @@ Creates an [effect](Effect.md)
 
 Create unnamed effect
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
@@ -38,7 +38,7 @@ const fetchUserRepos = createEffect({
 
 Create named effect
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect('fetch user repositories', {
@@ -52,7 +52,7 @@ const fetchUserRepos = createEffect('fetch user repositories', {
 
 Set handler to effect after creating
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect()
@@ -66,7 +66,7 @@ fetchUserRepos.use(async ({name}) => {
 
 Watch effect status
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
@@ -107,7 +107,7 @@ fetchUserRepos({name: 'zerobias'})
 
 Change state
 
-```js
+```js try
 import {createStore, createEffect} from 'effector'
 
 const fetchUserRepos = createEffect({
