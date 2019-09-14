@@ -3,7 +3,7 @@ id: effector
 title: API Reference
 ---
 
-### Top-Level Exports 
+### Top-Level Exports
 
 - [createEvent(name?)](createEvent.md)
 - [createEffect(name?)](createEffect.md)

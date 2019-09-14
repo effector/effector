@@ -7,7 +7,7 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 ## Event
 
-*Event* is an intention to change state.
+_Event_ is an intention to change state.
 
 ```typescript
 function createEvent<E>(eventName?: string): Event<E>;
@@ -37,7 +37,7 @@ type Event<Payload> = {
 
 ## Effect
 
-*Effect* is a container for async function. 
+_Effect_ is a container for async function.
 
 It can be safely used in place of the original async function.
 
@@ -78,7 +78,7 @@ type Effect<Params, Done, Fail = Error> = {
 
 ## Store
 
-*Store* is an object that holds the state tree.
+_Store_ is an object that holds the state tree.
 There can be multiple stores.
 
 ```typescript
@@ -130,7 +130,7 @@ type Store<State> = {
 
 ## Domain
 
-*Domain* is a namespace for your events, stores and effects.
+_Domain_ is a namespace for your events, stores and effects.
 
 Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
 
@@ -171,7 +171,7 @@ type StoreReducer<State, E> = (state: S, payload: E) => State | void
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 ```
 
-*Reducer* calculates a new state given the previous state and an event.
+_Reducer_ calculates a new state given the previous state and an event.
 
 ## Watcher
 
@@ -179,7 +179,7 @@ type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 type Watcher<T> = (update: T) => any
 ```
 
-*Watcher* is used for __side effects__
+_Watcher_ is used for __side effects__
 
 ## Subscription
 

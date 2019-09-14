@@ -45,5 +45,5 @@ const extractPartOfArray = createEvent()
 const array = extractPartOfArray.map(arr => arr.slice(2))
 
 array.watch(console.log) // [3,4,5,6]
-extractPartOfArray([1,2,3,4,5,6])
+extractPartOfArray([1, 2, 3, 4, 5, 6])
 ```

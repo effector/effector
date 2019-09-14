@@ -32,5 +32,5 @@ const Home = props => {
   return <section>Home</section>
 }
 
-<Route component={Home} />
+;<Route component={Home} />
 ```

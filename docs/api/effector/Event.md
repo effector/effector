@@ -22,15 +22,15 @@ It is a function which allows you to watch or to create side-effects.
 #### Example
 
 ```js try
-import { createEvent } from "effector";
+import {createEvent} from 'effector'
 
-const sayHi = createEvent();
-const unwatch = sayHi.watch((name) => console.log(`${name}, hi there!`));
+const sayHi = createEvent()
+const unwatch = sayHi.watch(name => console.log(`${name}, hi there!`))
 
-sayHi("Peter"); // => Peter, hi there!
-unwatch();
+sayHi('Peter') // => Peter, hi there!
+unwatch()
 
-sayHi("Drew"); // => nothing happened
+sayHi('Drew') // => nothing happened
 ```
 
 <hr>
@@ -50,19 +50,20 @@ sayHi("Drew"); // => nothing happened
 #### Example
 
 ```js try
-import { createEvent } from "effector";
+import {createEvent} from 'effector'
 
-const userUpdated = createEvent();
-const userNameUpdated = userUpdated.map(({name}) => name); // you may decompose dataflow with .map() method
-const userRoleUpdated = userUpdated.map(({role}) => role.toUpperCase()); // either way you can transform data
+const userUpdated = createEvent()
+const userNameUpdated = userUpdated.map(({name}) => name) // you may decompose dataflow with .map() method
+const userRoleUpdated = userUpdated.map(({role}) => role.toUpperCase()) // either way you can transform data
 
-userNameUpdated.watch((name) => console.log(`User's name is [${name}] now`));
-userRoleUpdated.watch((name) => console.log(`User's role is [${name}] now`));
+userNameUpdated.watch(name => console.log(`User's name is [${name}] now`))
+userRoleUpdated.watch(name => console.log(`User's role is [${name}] now`))
 
-userUpdated({name: "john", role: "admin"});
- // => User's name is [john] now
- // => User's role is [ADMIN] now
+userUpdated({name: 'john', role: 'admin'})
+// => User's name is [john] now
+// => User's role is [ADMIN] now
 ```
+
 <hr>
 
 ### `filter({fn})`
@@ -88,10 +89,9 @@ const positiveNumbers = numbers.filter({
   fn: ({x}) => x > 0,
 })
 
-const lastPositive = createStore(0)
-	.on(positiveNumbers, (n, {x}) => x)
-
+const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
 ```
+
 <hr />
 
 ### `filterMap(fn)`
@@ -134,11 +134,11 @@ const modalRef = React.createRef()
 const App = () => (
   <>
     <dialog ref={modalRef}>
-      <form method='dialog'>
+      <form method="dialog">
         <fieldset>
           <legend>Modal</legend>
           Tap to close
-          <button type='submit' onSubmit={() => closeModal(modalRef)}>
+          <button type="submit" onSubmit={() => closeModal(modalRef)}>
             ❌
           </button>
         </fieldset>
@@ -148,9 +148,8 @@ const App = () => (
     <button onClick={() => openModal(modalRef)}>Open modal</button>
   </>
 )
-
-
 ```
+
 <hr />
 
 ### `prepend(fn)`
@@ -168,16 +167,16 @@ Creates an event, upon trigger it does send transformed data into source event. 
 #### Example
 
 ```js try
-import { createEvent } from "effector";
+import {createEvent} from 'effector'
 
-const nameChanged = createEvent();
-nameChanged.watch((name) => console.log(`Current name is: ${name}`));
+const nameChanged = createEvent()
+nameChanged.watch(name => console.log(`Current name is: ${name}`))
 
-const inputChanged = nameChanged.prepend((e) => e.target.value); // event, which will be bound to DOM element
-const input = document.createElement("input");
-input.onchange = inputChanged;
+const inputChanged = nameChanged.prepend(e => e.target.value) // event, which will be bound to DOM element
+const input = document.createElement('input')
+input.onchange = inputChanged
 
-document.body.appendChild(input);
-  // input something in input, and press Enter
-  // => Current name is: something
+document.body.appendChild(input)
+// input something in input, and press Enter
+// => Current name is: something
 ```

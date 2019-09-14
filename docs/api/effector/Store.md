@@ -107,9 +107,9 @@ Updates state when `trigger` is triggered by using `handler`.
 
 1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
 2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, should be **pure**.
-  A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
-    - `state`: Current state of store
-    - `params`: Parameters passed to event call
+   A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
+   - `state`: Current state of store
+   - `params`: Parameters passed to event call
 
 #### Returns
 
@@ -375,6 +375,7 @@ Output
 
 > newStore: 50
 ```
+
 <hr />
 
 ## Store Properties

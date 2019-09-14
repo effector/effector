@@ -11,9 +11,9 @@ Creates hook function, which observes changes in selected part of store. Compone
 #### Arguments
 
 1. `params` (_Object_): Configuration object
-    - `store` (_Store_): Source store
-    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
-    - `fn` (_(store, keys) => result_): Selector function to receive part of source store
+   - `store` (_Store_): Source store
+   - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
+   - `fn` (_(store, keys) => result_): Selector function to receive part of source store
 
 #### Returns
 
@@ -26,8 +26,8 @@ This hook is very useful for working with lists, especially with large ones.
 ```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore } from 'effector'
-import { createComponent, useStoreMap } from 'effector-react'
+import {createStore} from 'effector'
+import {createComponent, useStoreMap} from 'effector-react'
 
 const data = [
   {
@@ -45,17 +45,17 @@ const data = [
   {
     id: 4,
     name: 'Sesh',
-  }
+  },
 ]
 
 const $users = createStore(data)
-const $ids = createStore(data.map(({ id }) => id))
+const $ids = createStore(data.map(({id}) => id))
 
-const User = ({ id }) => {
+const User = ({id}) => {
   const user = useStoreMap({
     store: $users,
     keys: [id],
-    fn: (users, [userId]) => users.find(({ id }) => id === userId)
+    fn: (users, [userId]) => users.find(({id}) => id === userId),
   })
 
   return (
@@ -65,9 +65,9 @@ const User = ({ id }) => {
   )
 }
 
-const UserList = createComponent($ids, (_, ids) => (
-  ids.map(id => <User key={id} id={id} />)
-))
+const UserList = createComponent($ids, (_, ids) =>
+  ids.map(id => <User key={id} id={id} />),
+)
 
 ReactDOM.render(<UserList />, document.getElementById('root'))
 ```

@@ -54,7 +54,6 @@ counter.watch(state => {
   updateCountInAsyncStorage(state)
 })
 
-
 export default () => {
   const count = useStore(counter)
   return (

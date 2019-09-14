@@ -27,9 +27,9 @@ const Gate = createGate('gate with props')
 
 const App = () => (
   <section>
-    <Gate foo="bar"/>
+    <Gate foo="bar" />
   </section>
-	)
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 

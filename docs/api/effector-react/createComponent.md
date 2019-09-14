@@ -41,10 +41,8 @@ const MyCounter = createComponent(counter, (props, state) => (
 
 const MyOwnComponent = () => {
   // any staff here
-  return (
-    <MyCounter />
-  )
+  return <MyCounter />
 }
 
-ReactDOM.render(<MyOwnComponent />, document.getElementById("root"));
+ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```

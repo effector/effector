@@ -19,9 +19,9 @@ It can be safely used in place of the original async function.
 
 ```js try
 const fetchUser = createEffect({
-  handler: ({ id }) => {
+  handler: ({id}) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
-  }
+  },
 })
 
 const users = createStore([]) // Default state
@@ -71,7 +71,7 @@ It will replace the previous function inside (if any).
 ```js try
 const fetchUserRepos = createEffect()
 
-fetchUserRepos.use(async (params) => {
+fetchUserRepos.use(async params => {
   console.log('fetchUserRepos called with', params)
 
   const url = `https://api.github.com/users/${params.name}/repos`
@@ -96,16 +96,15 @@ Subscribe to effect calls.
 
 (_`Subscription`_): A function that unsubscribes the watcher.
 
-
 #### Example
 
 ```js try
 const effect = createEffect({
-  handler: value => value
+  handler: value => value,
 })
 
 const unsubscribe = effect.watch(payload => {
-  console.log("called with", payload)
+  console.log('called with', payload)
   unsubscribe()
 })
 
@@ -133,8 +132,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 ### `done`
 
-_Event_ triggered when _handler_ is *resolved*.
-
+_Event_ triggered when _handler_ is _resolved_.
 
 #### Arguments
 
@@ -147,16 +145,15 @@ Event triggered with object of `params` and `result`:
 
 ```js try
 const effect = createEffect({
-  handler: (value) => Promise.resolve(value + 1)
+  handler: value => Promise.resolve(value + 1),
 })
 
-effect.done.watch(({ params, result }) => {
-  console.log("Done with params", params, "and result", result)
+effect.done.watch(({params, result}) => {
+  console.log('Done with params', params, 'and result', result)
 })
 
 effect(2) // => Done with params 2 and result 3
 ```
-
 
 ### `fail`
 
@@ -174,10 +171,10 @@ Event triggered with object of `params` and `error`:
 ```js try
 const effect = createEffect()
 
-effect.use((value) => Promise.reject(value - 1))
+effect.use(value => Promise.reject(value - 1))
 
-effect.fail.watch(({ params, error }) => {
-  console.log("Fail with params", params, "and error", error)
+effect.fail.watch(({params, error}) => {
+  console.log('Fail with params', params, 'and error', error)
 })
 
 effect(2) // => Fail with params 2 and error 1
@@ -194,7 +191,6 @@ _Store_ contains a `true` value until the effect is resolved or rejected.
 import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
-
 
 const fetchApi = createEffect({
   handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
@@ -243,7 +239,7 @@ Event triggered with object of `status`, `params` and `error` or `result`:
 import {createEffect} from 'effector'
 
 const fetchApi = createEffect({
-  handler: ms =>  new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+  handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
 })
 
 fetchApi.finally.watch(console.log)
@@ -254,5 +250,4 @@ fetchApi(100)
 
 // if rejected
 // => {status: 'fail', error: Error, params: 100}
-
 ```

@@ -12,36 +12,26 @@ import {createComponent, useStore} from 'effector-react'
 
 const plus = createEvent()
 
-const int = createStore(1)
-  .on(plus, n => n + 1)
-const text = int.map(
-  n => `current value = ${n}`
-)
+const int = createStore(1).on(plus, n => n + 1)
+const text = int.map(n => `current value = ${n}`)
 const data = createStoreObject({int, text})
 
-const IntView = createComponent(data, ({}, {int, text}) => (
-  <div>n = {int}</div>
-))
+const IntView = createComponent(data, ({}, {int, text}) => <div>n = {int}</div>)
 
 const IntHook = () => {
   const {text} = useStore(data)
-  return (
-    <div>{text}</div>
-  )
+  return <div>{text}</div>
 }
 
 const App = () => (
   <div>
     <button onClick={plus}>click</button>
-    <IntView/>
-    <IntHook/>
+    <IntView />
+    <IntHook />
   </div>
 )
 
 const div = document.createElement('div')
 document.body.appendChild(div)
-ReactDOM.render(
-  <App/>,
-  div
-)
+ReactDOM.render(<App />, div)
 ```

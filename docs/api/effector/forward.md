@@ -8,7 +8,7 @@ hide_title: true
 
 Sends data from one entity to another.
 
-> **Note:** If you want forward  `from` store `to` store, there is your store `from` must change. Let's see example 1 below.
+> **Note:** If you want forward `from` store `to` store, there is your store `from` must change. Let's see example 1 below.
 
 #### Arguments
 
@@ -30,7 +30,7 @@ const event = createEvent('event')
 
 forward({
   from: a,
-  to: b
+  to: b,
 })
 
 b.watch(state => console.log('state b: ', state))
@@ -38,7 +38,9 @@ b.watch(state => console.log('state b: ', state))
 
 /* A snippet at the top is equivalent to a snippet at the bottom */
 
-b.on(a, (state,valueFromA) => valueFromA).watch(state => console.log('state b: ', state))
+b.on(a, (state, valueFromA) => valueFromA).watch(state =>
+  console.log('state b: ', state),
+)
 // state b: 11
 
 a.on(event, state => state + 10)

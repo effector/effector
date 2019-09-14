@@ -23,7 +23,6 @@ hide_title: true
 // Create store
 const playerPosition = createStore({x: 0, y: 0}) // <-- Default state
 
-
 // Attach events to store and create them
 const api = createApi(playerPosition, {
   moveLeft: ({x, y}, n) => ({x, y: y + n}),

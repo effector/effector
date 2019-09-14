@@ -5,6 +5,7 @@ hide_title: true
 ---
 
 # `useList(store, renderItem)`
+
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data changes.
 
@@ -29,7 +30,7 @@ const users = createStore([
   {id: 1, name: 'Yung'},
   {id: 2, name: 'Lean'},
   {id: 3, name: 'Kyoto'},
-  {id: 4, name: 'Sesh'}
+  {id: 4, name: 'Sesh'},
 ])
 
 const Users = () => {
@@ -40,13 +41,12 @@ const Users = () => {
     </li>
   ))
 
-  return (
-    <ul>{list}</ul>
-  )
+  return <ul>{list}</ul>
 }
 
 ReactDOM.render(<Users />, document.getElementById('root'))
 ```
+
 [try it](https://share.effector.dev/JZ35Jjyr)
 
 ```js try
@@ -60,31 +60,26 @@ const toggleTodo = createEvent()
 const todoList = createStore([
   {text: 'write useList example', done: true},
   {text: 'update readme', done: false},
-])
-  .on(toggleTodo, (list, id) =>
-    list.map((todo, i) => {
-      if (i === id) return {
+]).on(toggleTodo, (list, id) =>
+  list.map((todo, i) => {
+    if (i === id)
+      return {
         ...todo,
         done: !todo.done,
       }
-      return todo
-    })
-  )
+    return todo
+  }),
+)
 const Todo = ({children, done}) => {
-  const textFragment = (
-    <span>{children}</span>
-  )
-  return done
-    ? <del>{textFragment}</del>
-    : textFragment
+  const textFragment = <span>{children}</span>
+  return done ? <del>{textFragment}</del> : textFragment
 }
-const TodoList = () => useList(todoList, ({text, done}, i) => (
-  <li onClick={() => toggleTodo(i)}>
-    <Todo done={done}>
-      {text}
-    </Todo>
-  </li>
-))
+const TodoList = () =>
+  useList(todoList, ({text, done}, i) => (
+    <li onClick={() => toggleTodo(i)}>
+      <Todo done={done}>{text}</Todo>
+    </li>
+  ))
 const App = () => (
   <div>
     <h1>todo list</h1>
@@ -95,6 +90,6 @@ const App = () => (
 )
 
 ReactDOM.render(<App />, document.getElementById('root'))
-
 ```
+
 [try it](https://share.effector.dev/GQjYp0Bn)
