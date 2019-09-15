@@ -1,4 +1,4 @@
-const {resolve, relative, parse} = require('path')
+const {resolve, relative, parse, sep, join} = require('path')
 const execa = require('execa')
 const {readFile, remove, copyFile, outputJSON, pathExists} = require('fs-extra')
 
@@ -19,18 +19,26 @@ const PRINT_FOREIGN_FILE_NAME = false
 const TEST_DIR = 'types'
 
 async function typeCheck(testPath) {
-  const root = resolve(__dirname, '../..', TEST_DIR)
-  const repoRoot = resolve(__dirname, '../../..')
+  const root = resolve(__dirname, '..', '..', TEST_DIR)
+  const repoRoot = resolve(__dirname, '..', '..', '..')
   /*
   TODO use test path file name to run tests in parallel,
   thereby avoiding both files with hardcoded names and race conditions,
   because running tests sequentially is a waaay too slow
   */
-  const movedFileFlow = resolve(__dirname, '..', '__fixtures__/flow/index.js')
+  const movedFileFlow = resolve(
+    __dirname,
+    '..',
+    '__fixtures__',
+    'flow',
+    'index.js',
+  )
   const movedFileTS = resolve(
     __dirname,
     '..',
-    '__fixtures__/typescript/index.tsx',
+    '__fixtures__',
+    'typescript',
+    'index.tsx',
   )
 
   const testMeta = {
@@ -113,7 +121,7 @@ async function typeCheck(testPath) {
       const result = await execa('npx', [
         'tsc',
         '-p',
-        `src/${TEST_DIR}/__fixtures__/typescript`,
+        join('src', TEST_DIR, '__fixtures__', 'typescript'),
       ])
       console.warn('no errors found by typescript typecheck', result)
       return ''
@@ -136,7 +144,7 @@ async function typeCheck(testPath) {
         'flow',
         'check',
         '--json',
-        `src/${TEST_DIR}/__fixtures__/flow`,
+        join('src', TEST_DIR, '__fixtures__', 'flow'),
       ])
       console.warn('no errors found by flow typecheck', result)
       return []
@@ -237,7 +245,7 @@ async function typeCheck(testPath) {
         const printCurrentPath =
           PRINT_FOREIGN_FILE_NAME && message.source !== framePath
         if (currentPath.startsWith('packages'))
-          currentPath = currentPath.replace('packages/', '')
+          currentPath = currentPath.replace('packages' + sep, '')
         currentPath = currentPath.replace(
           new RegExp(relative(repoRoot, movedFileFlow), 'gm'),
           relativeTestPath,

@@ -1,6 +1,6 @@
 //@noflow
 
-const {resolve: resolvePath} = require('path')
+const {resolve: resolvePath, join} = require('path')
 
 module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
@@ -23,6 +23,8 @@ const meta = {
   isCompat: false,
 }
 
+const typesTestsPath = join('types', '__tests__')
+
 const aliases = {
   'effector/fixtures': 'fixtures',
   '@effector/forms': 'forms',
@@ -39,7 +41,6 @@ const aliases = {
 
 const babelConfig = {
   presets: [
-    // '@babel/preset-flow',
     ['@babel/preset-react', {useBuiltIns: true}],
     [
       '@babel/preset-env',
@@ -64,7 +65,6 @@ const babelConfig = {
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
     const result = [
-      // './src/babel/get-step',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -85,7 +85,7 @@ const babelConfig = {
   overrides: [
     {
       test(filename) {
-        return filename && filename.includes('types/__tests__')
+        return filename && filename.includes(typesTestsPath)
       },
       plugins: ['./src/types/src/locationPlugin.js'],
     },

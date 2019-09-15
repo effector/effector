@@ -358,9 +358,12 @@ function generateStableID(
   column,
   compressor,
 ) {
-  return compressor(
-    `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]`,
-  )
+  const {sep, normalize} = require('path')
+  const rawPath = fileName.replace(babelRoot, '')
+  const normalizedPath = normalize(rawPath)
+    .split(sep)
+    .join('/')
+  return compressor(`${varName} ${normalizedPath} [${line}, ${column}]`)
 }
 function hashCode(s) {
   let h = 0
