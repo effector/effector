@@ -180,12 +180,8 @@ function getIframe(): HTMLIFrameElement {
     const generateFrame = () => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
-      const styles = `
-  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-core.css">
-  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-lightest.css">
-  `
       //$off
-      iframe.contentDocument.head.innerHTML = styles
+      resetHead(iframe.contentDocument)
       iframe.contentDocument.body.innerHTML =
         '<div class="spectrum spectrum--lightest spectrum--medium" id="root"></div>'
     }
@@ -194,4 +190,34 @@ function getIframe(): HTMLIFrameElement {
   }
 
   return iframe
+}
+
+function resetHead(document) {
+  const styleLinks = [
+    'https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-core.css',
+    'https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-lightest.css',
+  ]
+  for (const node of document.head.childNodes) {
+    if (node.nodeName === 'LINK') {
+      const href = node.getAttribute('href')
+      const rel = node.getAttribute('rel')
+      if (
+          rel === 'stylesheet' &&
+          styleLinks.includes(href)
+        ) {
+        styleLinks.splice(
+          styleLinks.indexOf(href),
+          1,
+        )
+        continue
+      }
+    }
+    node.remove()
+  }
+  for (const url of styleLinks) {
+    const link = document.createElement('link')
+    link.setAttribute('rel', 'stylesheet')
+    link.setAttribute('href', url)
+    document.head.appendChild(link)
+  }
 }
