@@ -43,23 +43,23 @@ export function domainFabric({
   ...
 }): Domain {
   const id = nextID()
-  const name = nameRaw || ''
-  const compositeName = createName(name, parent)
+  const compositeName = createName(nameRaw || '', parent)
+  const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
   const storages: Set<Store<any>> = new Set()
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
   const event: Event<Event<any>> = eventFabric({
-    name: `${compositeName.fullName} event hook`,
+    name: `${fullName} event hook`,
     parent: compositeName,
   })
   const effect: Event<Effect<any, any, any>> = eventFabric({
-    name: `${compositeName.fullName} effect hook`,
+    name: `${fullName} effect hook`,
     parent: compositeName,
   })
   const store: Event<Store<any>> = eventFabric({
-    name: `${compositeName.fullName} store hook`,
+    name: `${fullName} store hook`,
     parent: compositeName,
   })
   const domain: Event<Domain> = eventFabric({
@@ -96,9 +96,8 @@ export function domainFabric({
     compositeName,
     id,
     defaultConfig: config,
-    getType() {
-      return compositeName.fullName
-    },
+    shortName: compositeName.shortName,
+    getType: () => fullName,
     onCreateEvent: createHook(event, events, node),
     onCreateEffect: createHook(effect, effects, node),
     onCreateStore: createHook(store, storages, node),

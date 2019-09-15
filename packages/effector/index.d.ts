@@ -169,6 +169,7 @@ export class Domain {
     config?: {name?: string; sid?: string},
   ): Store<State>
   sid: string | null
+  shortName: string
   getType(): string
 }
 

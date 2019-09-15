@@ -175,8 +175,9 @@ declare export class Domain {
     defaultState: State,
     config?: {name?: string, sid?: string, ...},
   ): Store<State>;
-  getType(): string;
   sid: string | null;
+  shortName: string;
+  getType(): string;
 }
 export type ID = string
 export type StateRef = {|
