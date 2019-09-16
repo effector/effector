@@ -1,5 +1,6 @@
 //@flow
 
+import * as pathLibrary from 'path'
 import {createEffect, createStore} from 'effector'
 import {prepareRuntime} from './prepareRuntime'
 import {selectVersion} from '../editor'
@@ -26,9 +27,10 @@ async function createRealm(sourceCode: string, version: string, filename): $todo
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
-    if (path === 'symbol-observable') {
-      //$todo
-      return Symbol.observable
+    switch (path) {
+      //$off
+      case 'symbol-observable': return Symbol.observable
+      case 'path': return pathLibrary
     }
     console.warn('require: ', path)
   }
