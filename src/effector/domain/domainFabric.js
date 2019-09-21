@@ -14,7 +14,7 @@ import {type Event, eventFabric, forward} from '../event'
 import {type Effect, effectFabric} from '../effect'
 
 import type {Domain, DomainHooks} from './index.h'
-import {createName, type CompositeName} from '../compositeName'
+import {createName, type CompositeName} from '../naming'
 import {createNode} from '../stdlib/graph'
 
 const nextID = stringRefcount()

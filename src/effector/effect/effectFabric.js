@@ -6,7 +6,7 @@ import {upsertLaunch} from '../kernel'
 import {eventFabric, type Event} from '../event'
 import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
-import type {CompositeName} from '../compositeName'
+import type {CompositeName} from '../naming'
 import {Defer} from './defer'
 
 const onResolve = ({event, anyway, params, handler}, result) => {

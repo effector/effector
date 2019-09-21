@@ -56,6 +56,7 @@ module.exports = {
     'effector/effect',
     'effector/event',
     'effector/store',
+    'effector/naming',
     'effector/domain',
     'effector/kernel',
     'effector/stdlib',

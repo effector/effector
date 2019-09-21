@@ -21,7 +21,7 @@ import {
   createLinkNode,
   type Event,
 } from '../event'
-import {createName, type CompositeName} from '../compositeName'
+import {createName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'
 import {watchUnit} from '../watcher'

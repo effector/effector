@@ -1,8 +1,8 @@
 //@flow
 
 import {is} from '../stdlib'
-import type {Store} from './index.h'
-import {createName} from '../compositeName'
+import type {Store} from '../store/index.h'
+import {createName} from './compositeName'
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
   const compositeName = createName(rawName, store.domainName)

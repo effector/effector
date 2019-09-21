@@ -1,6 +1,6 @@
 //@flow
 
-import type {CompositeName} from '../compositeName'
+import type {CompositeName} from '../naming'
 import type {Subscription} from '../index.h'
 import type {Event} from '../event'
 import type {Effect} from '../effect'

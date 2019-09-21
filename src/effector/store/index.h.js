@@ -3,7 +3,7 @@ import type {Subscription} from '../index.h'
 import type {Graph, kind, StateRef, ID, Unit} from '../stdlib'
 import type {Event} from '../event'
 import type {Effect} from '../effect'
-import type {CompositeName} from '../compositeName'
+import type {CompositeName} from '../naming'
 import type {StoreConfigPart} from '../config'
 
 export interface Store<State> extends Unit {

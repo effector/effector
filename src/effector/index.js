@@ -21,12 +21,12 @@ export {createEffect} from './effect'
 export type {Store} from './store'
 export {
   createStore,
-  setStoreName,
   restore,
   restoreEvent,
   restoreEffect,
   restoreObject,
 } from './store'
+export {setStoreName} from './naming'
 export {createApi} from './createApi'
 
 export {Kind, clearNode, createNode, step, is} from './stdlib'
