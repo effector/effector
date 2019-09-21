@@ -15,6 +15,7 @@ import {
   writeRef,
   is,
   getGraph,
+  nextUnitID,
 } from '../stdlib'
 import {createEvent} from '../event'
 import {forward, createLinkNode} from '../forward'
@@ -34,26 +35,25 @@ export function createStore<State>(
 ): Store<State> {
   if (currentState === undefined)
     throw Error("current state can't be undefined, use null instead")
-  return storeFabric({
-    currentState,
-    config: normalizeConfig(config),
-  })
+  return storeFabric(currentState, config)
 }
 
-export function storeFabric<State>(props: {
-  +currentState: State,
-  +config: ConfigPart,
-  +parent?: CompositeName,
-  ...
-}): Store<State> {
-  const {currentState, config, parent} = props
-  const {name, sid = null} = config
+export function storeFabric<State>(
+  currentState: State,
+  props: {
+    +config: ConfigPart,
+    +parent?: CompositeName,
+    ...
+  },
+): Store<State> {
+  const config = normalizeConfig(props)
+  const id = nextUnitID()
+  const {parent, name = id, sid = null} = config
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
-  const currentId = name || plainState.id
-  const compositeName = createName(currentId, parent)
+  const compositeName = createName(name, parent)
 
-  const updates = createEvent('update ' + currentId)
+  const updates = createEvent('updates')
 
   const store: $Shape<Store<State>> = ({
     subscribers: new Map(),
@@ -74,8 +74,8 @@ export function storeFabric<State>(props: {
       meta: {unit: 'store'},
     }),
     kind: Kind.store,
-    id: plainState.id,
-    shortName: currentId,
+    id,
+    shortName: compositeName.shortName,
     domainName: parent,
     updates,
     defaultConfig: config,
@@ -193,9 +193,8 @@ function mapStore<A, B>(
     lastResult = fn(storeState, firstState)
   }
 
-  const innerStore: Store<any> = storeFabric({
-    config: {name: '' + store.shortName + ' → *'},
-    currentState: lastResult,
+  const innerStore: Store<any> = storeFabric(lastResult, {
+    name: '' + store.shortName + ' → *',
     parent: store.domainName,
   })
   createLinkNode(store, innerStore, {

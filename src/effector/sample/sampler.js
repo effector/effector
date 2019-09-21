@@ -73,11 +73,8 @@ export const storeByStore = (
     fn,
     greedy,
     target ||
-      storeFabric({
-        currentState: fn
-          ? fn(sourceState, readRef(clock.stateRef))
-          : sourceState,
-        config: {name: source.shortName},
+      storeFabric(fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState, {
+        name: source.shortName,
         parent: source.domainName,
       }),
   )

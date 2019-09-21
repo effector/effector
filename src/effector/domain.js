@@ -5,7 +5,6 @@ import {nextUnitID, Kind, addLinkToOwner, createNode} from './stdlib'
 import {storeFabric} from './store'
 import {
   normalizeConfig,
-  normalizeEventConfig,
   type Config,
   type EffectConfigPart,
   type EventConfigPart,
@@ -18,10 +17,10 @@ import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
 
 export function createDomain(
-  nameOrConfig?: string | DomainConfigPart,
-  opts?: Config<DomainConfigPart> = {},
+  name?: string | DomainConfigPart,
+  config?: Config<DomainConfigPart>,
 ) {
-  return domainFabric(normalizeEventConfig(nameOrConfig, opts))
+  return domainFabric({name, config})
 }
 
 type DomainHooks = {|
@@ -42,12 +41,7 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   }
 }
 
-function domainFabric({
-  name: nameRaw,
-  config = {},
-  parent,
-  parentHooks,
-}: {
+function domainFabric(opts: {
   +name?: string,
   +config?: DomainConfigPart,
   +parent?: CompositeName,
@@ -55,6 +49,8 @@ function domainFabric({
   ...
 }): Domain {
   const id = nextUnitID()
+  const config = normalizeConfig(opts)
+  const {name: nameRaw, parent, parentHooks} = config
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
@@ -121,7 +117,7 @@ function domainFabric({
       const result = eventFabric({
         name,
         parent: compositeName,
-        config: normalizeConfig(config),
+        config,
       })
       addLinkToOwner(node, result)
       event(result)
@@ -134,7 +130,7 @@ function domainFabric({
       const result = effectFabric({
         name,
         parent: compositeName,
-        config: normalizeConfig(config),
+        config,
       })
       addLinkToOwner(node, result)
       effect(result)
@@ -145,17 +141,16 @@ function domainFabric({
         name,
         parent: compositeName,
         parentHooks: hooks,
-        config: normalizeConfig(config),
+        config,
       })
       addLinkToOwner(node, result)
       domain(result)
       return result
     },
     store<T>(state: T, config?: Config<StoreConfigPart>): Store<T> {
-      const result = storeFabric({
-        currentState: state,
+      const result = storeFabric(state, {
         parent: compositeName,
-        config: normalizeConfig(config),
+        config,
       })
       addLinkToOwner(node, result)
       store(result)

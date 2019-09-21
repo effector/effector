@@ -229,10 +229,9 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }),
   ]
   const stateNew = clone(defaultState)
-  const store = storeFabric({
-    currentState: stateNew,
+  const store = storeFabric(stateNew, {
     //TODO: add location
-    config: {name: unitObjectName(obj)},
+    name: unitObjectName(obj),
   })
   const isFresh = createStateRef(false)
   for (const key in obj) {
