@@ -1,4 +1,3 @@
 //@flow
 
-export {effectFabric} from './effectFabric'
-export {createEffect} from './createEffect'
+export {createEffect, effectFabric} from './createEffect'

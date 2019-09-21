@@ -3,7 +3,7 @@
 import {unitObjectName} from '../naming'
 
 import type {Event} from '../unit.h'
-import {eventFabric} from './eventFabric'
+import {eventFabric} from './createEvent'
 
 export function combine<T>(
   f: (...args: any[]) => T,
