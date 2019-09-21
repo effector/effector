@@ -1,7 +1,6 @@
 //@flow
 
-import {createStore} from '..'
-import {createStoreObject} from '../createStoreObject'
+import {createStore, createStoreObject} from 'effector'
 
 describe('createStoreObject', () => {
   test('.defaultState', () => {

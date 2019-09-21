@@ -1,9 +1,38 @@
 //@flow
 
-import {type Store, createStoreObject} from './store'
-import {is} from './stdlib'
+import type {Store} from './store'
+import {
+  is,
+  step,
+  nextBarrierID,
+  createStateRef,
+  readRef,
+  writeRef,
+  type StateRef,
+} from './stdlib'
+import {unitObjectName} from './naming'
+import {createLinkNode} from './event'
+import {storeFabric} from './store/storeFabric'
 
 //eslint-disable-next-line no-unused-vars
+declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(
+  obj: State,
+): Store<
+  $TupleMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
+declare export function combine<State: {-[key: string]: Store<any> | any, ...}>(
+  obj: State,
+): Store<
+  $ObjMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
@@ -159,3 +188,105 @@ export function combine(...args: Array<Store<any>>): Store<any> {
 }
 
 const spreadArgs = fn => list => fn(...list)
+
+type CombinationScope = {
+  key: any,
+  target: StateRef,
+  clone(value: any): any,
+  isFresh: StateRef,
+  ...
+}
+
+const storeCombination = (obj: any, clone: Function, defaultState: any) => {
+  const node = [
+    step.check.defined(),
+    //prettier-ignore
+    step.filter({
+      fn: (upd, {target, key}: CombinationScope) => (
+        upd !== readRef(target)[key]
+      ),
+    }),
+    step.tap({
+      fn(upd, {isFresh, target, clone}: CombinationScope) {
+        if (readRef(isFresh)) return
+        writeRef(target, clone(readRef(target)))
+        writeRef(isFresh, true)
+      },
+    }),
+    step.tap({
+      fn(upd, {target, key}: CombinationScope) {
+        readRef(target)[key] = upd
+      },
+    }),
+    step.barrier({barrierID: nextBarrierID()}),
+    step.compute({
+      fn(none, {isFresh, target}: CombinationScope) {
+        writeRef(isFresh, false)
+        return readRef(target)
+      },
+    }),
+  ]
+  const stateNew = clone(defaultState)
+  const store = storeFabric({
+    currentState: stateNew,
+    //TODO: add location
+    config: {name: unitObjectName(obj)},
+  })
+  const isFresh = createStateRef(false)
+  for (const key in obj) {
+    const child = obj[key]
+    if (!is.store(child)) {
+      stateNew[key] = defaultState[key] = child
+      continue
+    }
+    defaultState[key] = child.defaultState
+    stateNew[key] = child.getState()
+    createLinkNode(child, store, {
+      scope: {key, clone, target: store.stateRef, isFresh},
+      node,
+      meta: {op: 'combine'},
+    })
+  }
+
+  ;(store: any).defaultShape = obj
+  ;(store: any).defaultState = defaultState
+  return store
+}
+
+declare function createStoreObject<State: $ReadOnlyArray<Store<any> | any>>(
+  obj: State,
+): Store<
+  $TupleMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
+declare function createStoreObject<
+  State: {-[key: string]: Store<any> | any, ...},
+>(
+  obj: State,
+): Store<
+  $ObjMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
+//prettier-ignore
+function createStoreObject(obj: *, fn?: Function) {
+  const mergedStore = Array.isArray(obj)
+    ? storeCombination(
+      obj,
+      list => list.slice(),
+      [],
+    )
+    : storeCombination(
+      obj,
+      obj => Object.assign({}, obj),
+      {},
+    )
+  return fn
+    ? mergedStore.map(fn)
+    : mergedStore
+}

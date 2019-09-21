@@ -1,6 +1,6 @@
 //@flow
 /* eslint-disable no-nested-ternary */
-import {createStoreObject} from '../store'
+import {combine} from '../combine'
 import {type Graphite, is} from '../stdlib'
 
 import {storeByStore, storeByEvent, eventByUnit} from './sampler'
@@ -44,4 +44,4 @@ export function sample(
 //prettier-ignore
 const unitOrCombine = (obj: any) => is.unit(obj)
   ? obj
-  : createStoreObject(obj)
+  : combine(obj)

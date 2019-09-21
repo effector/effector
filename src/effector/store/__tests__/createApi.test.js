@@ -1,6 +1,6 @@
 //@flow
 
-import {createApi, restore, createStoreObject} from '..'
+import {createApi, restore, createStoreObject} from 'effector'
 
 test('create api', () => {
   const shape = restore({

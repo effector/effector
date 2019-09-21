@@ -4,7 +4,7 @@ import {Defer} from './effect/defer'
 import {createEffect} from './effect'
 import {createEvent} from './event'
 import {sample} from './sample'
-import {createStoreObject} from './store'
+import {combine} from './combine'
 import {launch} from './kernel'
 import {step, bind, is} from './stdlib'
 
@@ -13,7 +13,7 @@ export function createTask({
   store: shape,
   fn = (params, store) => ({params, store}),
 }: *) {
-  const store = is.store(shape) ? shape : createStoreObject(shape)
+  const store = is.store(shape) ? shape : combine(shape)
   const effect = createEffect({handler})
   //$off
   const trigger = createEvent()
