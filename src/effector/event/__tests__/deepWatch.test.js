@@ -1,6 +1,6 @@
 //@flow
 
-import {createEvent} from '..'
+import {createEvent} from 'effector'
 
 it('can use deep stack calls', () => {
   const fn = jest.fn()

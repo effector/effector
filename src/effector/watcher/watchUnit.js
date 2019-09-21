@@ -2,7 +2,7 @@
 
 import {type Unit, createNode, step, addLinkToOwner} from '../stdlib'
 import type {Subscription} from '../index.h'
-import {forward} from '../event'
+import {forward} from '../forward'
 
 export function watchUnit(
   unit: Unit,

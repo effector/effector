@@ -14,7 +14,7 @@ import {
 } from '../config'
 import {type CompositeName, createName} from '../naming'
 import {thru} from '../thru'
-import {createLinkNode} from './forward'
+import {createLinkNode} from '../forward'
 import {watchUnit} from '../watcher'
 
 export function createEvent<Payload>(

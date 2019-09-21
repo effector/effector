@@ -1,7 +1,6 @@
 //@flow
 
-import {createStore} from '..'
-import {createEvent, forward} from '../../event'
+import {createStore, createEvent, forward} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('reset before computation', () => {

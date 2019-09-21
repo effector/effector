@@ -8,8 +8,12 @@
 
 export {combine, combine as createStoreObject} from './combine'
 export {sample} from './sample'
+export {split} from './split'
+export {merge} from './merge'
+export {forward} from './forward'
+export {fromObservable} from './fromObservable'
 export {createDomain} from './domain'
-export {createEvent, merge, split, forward, fromObservable} from './event'
+export {createEvent} from './event'
 export {createEffect} from './effect'
 export {createStore} from './store'
 export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'

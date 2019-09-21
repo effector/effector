@@ -1,12 +1,11 @@
 //@flow
-import {createEffect} from '..'
-import {forward} from '../../event'
+import {createEffect, forward} from 'effector'
 import {delay, spy, argumentHistory} from 'effector/fixtures'
 
 const effect = createEffect('long request')
 
 describe('effect({...})', () => {
-  test(`if used function will resolve`, async () => {
+  test(`if used function will resolve`, async() => {
     effect.use(async params => {
       await delay(500)
       spy(params)
@@ -15,7 +14,7 @@ describe('effect({...})', () => {
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
-  test('if used function will throw', async () => {
+  test('if used function will throw', async() => {
     effect.use(async params => {
       await delay(500)
       spy(params)
@@ -27,7 +26,7 @@ describe('effect({...})', () => {
 })
 
 describe('future', () => {
-  test(`if used function will resolve`, async () => {
+  test(`if used function will resolve`, async() => {
     effect.use(async params => {
       await delay(500)
       spy(params)
@@ -36,7 +35,7 @@ describe('future', () => {
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
-  test('if used function will throw', async () => {
+  test('if used function will throw', async() => {
     effect.use(async params => {
       await delay(500)
       spy(params)
@@ -47,7 +46,7 @@ describe('future', () => {
 })
 
 describe('effect.finally', () => {
-  test(`if used function will resolve`, async () => {
+  test(`if used function will resolve`, async() => {
     const effect = createEffect('long request', {
       async handler({fail}) {
         await delay(100)
@@ -70,7 +69,7 @@ describe('effect.finally', () => {
     `)
   })
 
-  test('if used function will throw', async () => {
+  test('if used function will throw', async() => {
     const effect = createEffect('long request', {
       async handler({fail}) {
         await delay(100)
@@ -94,12 +93,12 @@ describe('effect.finally', () => {
   })
 })
 describe('createEffect with config', () => {
-  it('supports empty config as second argument', async () => {
+  it('supports empty config as second argument', async() => {
     const effect = createEffect('long request', {})
 
     await expect(effect('ok')).resolves.toBe(undefined)
   })
-  it('supports default handler with config', async () => {
+  it('supports default handler with config', async() => {
     const effect = createEffect('long request', {
       async handler(params) {
         await delay(500)
@@ -109,7 +108,7 @@ describe('createEffect with config', () => {
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
-  it('supports default handler without name', async () => {
+  it('supports default handler without name', async() => {
     const effect = createEffect({
       async handler(params) {
         await delay(500)
@@ -126,7 +125,7 @@ it('should return itself at .use call', () => {
   expect(effect.use((_: any) => 'done!')).toBe(effect)
 })
 
-it('should handle both done and error in .finally', async () => {
+it('should handle both done and error in .finally', async() => {
   const fn = jest.fn()
   const effect = createEffect('long request', {
     async handler(params) {
@@ -156,7 +155,7 @@ it('should handle both done and error in .finally', async () => {
   `)
 })
 
-it('should support forward', async () => {
+it('should support forward', async() => {
   const fnHandler = jest.fn()
   const fnWatcher = jest.fn()
   const fetchData = createEffect('fetch', {
@@ -188,7 +187,7 @@ it('should support forward', async () => {
   ])
 })
 
-it('handle sync effect watchers in correct order', async () => {
+it('handle sync effect watchers in correct order', async() => {
   const fn = jest.fn()
   const eff = createEffect('eff sync', {
     handler: () => [1, 2, 3],

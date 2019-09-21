@@ -1,9 +1,9 @@
 // @flow
 
-import type {Store, Event, Effect} from '../unit.h'
-import {eventFabric} from './createEvent'
-import {unitObjectName} from '../naming'
+import type {Store, Event, Effect} from './unit.h'
+import {eventFabric} from './event'
 import {forward} from './forward'
+import {unitObjectName} from './naming'
 
 export function merge<T>(
   events: $ReadOnlyArray<Event<T> | Store<T> | Effect<T, any, any>>,

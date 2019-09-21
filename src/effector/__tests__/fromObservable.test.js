@@ -1,7 +1,7 @@
 //@flow
 //$off
 import * as redux from 'redux'
-import {fromObservable} from '../fromObservable'
+import {fromObservable} from 'effector'
 
 it('works with typical Symbol.observable library: redux', () => {
   const fn = jest.fn()

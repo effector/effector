@@ -1,7 +1,8 @@
 //@flow
 
-import {eventFabric, createLinkNode} from '../event'
+import {eventFabric} from '../event'
 import {storeFabric} from '../store'
+import {createLinkNode} from '../forward'
 import {
   step,
   createStateRef,

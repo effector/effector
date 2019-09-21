@@ -1,7 +1,7 @@
 //@flow
 
 import {from} from 'most'
-import {createEvent} from '..'
+import {createEvent} from 'effector'
 
 import {argumentHistory, spy} from 'effector/fixtures'
 

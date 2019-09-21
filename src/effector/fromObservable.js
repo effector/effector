@@ -1,9 +1,9 @@
 //@flow
 
 import $$observable from 'symbol-observable'
-import type {Event} from '../unit.h'
-import {clearNode} from '../stdlib'
-import {createEvent} from './createEvent'
+import type {Event} from './unit.h'
+import {clearNode} from './stdlib'
+import {createEvent} from './event'
 
 export function fromObservable<T>(observable: mixed): Event<T> {
   if (observable !== Object(observable))

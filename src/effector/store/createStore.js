@@ -15,7 +15,8 @@ import {
   writeRef,
   is,
 } from '../stdlib'
-import {createEvent, forward, createLink, createLinkNode} from '../event'
+import {createEvent} from '../event'
+import {forward, createLink, createLinkNode} from '../forward'
 import {createName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'

@@ -12,7 +12,7 @@ import {
   type StateRef,
 } from './stdlib'
 import {unitObjectName} from './naming'
-import {createLinkNode} from './event'
+import {createLinkNode} from './forward'
 
 //eslint-disable-next-line no-unused-vars
 declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(

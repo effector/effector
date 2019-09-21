@@ -12,8 +12,9 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from '../config'
-import {eventFabric, forward} from '../event'
+import {eventFabric} from '../event'
 import {effectFabric} from '../effect'
+import {forward} from '../forward'
 import {createName, type CompositeName} from '../naming'
 import {createNode} from '../stdlib/graph'
 
