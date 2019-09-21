@@ -1,6 +1,6 @@
 //@noflow
 
-const {resolve: resolvePath, join} = require('path')
+const {resolve: resolvePath, join, sep: pathSep} = require('path')
 
 module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
@@ -38,6 +38,9 @@ const aliases = {
     return resolveFromSources('../npm/effector')
   },
 }
+
+// TODO
+const babelPlugin = '.' + pathSep + join('src', 'babel', 'babel-plugin')
 
 const babelConfig = {
   presets: [
@@ -100,7 +103,7 @@ const babelConfig = {
       },
       plugins: [
         [
-          './src/babel/babel-plugin',
+          babelPlugin,
           {
             exportMetadata: true,
             addLoc: true,
