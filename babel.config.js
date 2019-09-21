@@ -1,6 +1,6 @@
 //@noflow
 
-const {resolve: resolvePath, join, sep: pathSep} = require('path')
+const {resolve: resolvePath, join} = require('path')
 
 module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
@@ -39,10 +39,14 @@ const aliases = {
   },
 }
 
-// TODO
-// hello
-const babelPlugin = '.' + pathSep + join('src', 'babel', 'babel-plugin')
-
+const babelPlugin = resolvePath(__dirname, 'src', 'babel', 'babel-plugin.js')
+const locationPlugin = resolvePath(
+  __dirname,
+  'src',
+  'types',
+  'src',
+  'locationPlugin.js',
+)
 const babelConfig = {
   presets: [
     ['@babel/preset-react', {useBuiltIns: true}],
@@ -91,7 +95,7 @@ const babelConfig = {
       test(filename) {
         return filename && filename.includes(typesTestsPath)
       },
-      plugins: ['./src/types/src/locationPlugin.js'],
+      plugins: [locationPlugin],
     },
     {
       test(filename) {
