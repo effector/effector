@@ -1,10 +1,8 @@
 //@flow
-import type {Event} from '../event'
-import type {Effect} from '../effect'
-import type {Store} from './index.h'
-import {storeFabric} from './createStore'
-
-import {is} from '../stdlib'
+import type {Event} from './event'
+import type {Effect} from './effect'
+import {type Store, storeFabric} from './store'
+import {is} from './stdlib'
 
 export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
   obj: State,

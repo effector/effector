@@ -19,13 +19,8 @@ export type {Effect} from './effect'
 export {createEffect} from './effect'
 
 export type {Store} from './store'
-export {
-  createStore,
-  restore,
-  restoreEvent,
-  restoreEffect,
-  restoreObject,
-} from './store'
+export {createStore} from './store'
+export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'
 export {setStoreName} from './naming'
 export {createApi} from './createApi'
 
