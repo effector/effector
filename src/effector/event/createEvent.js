@@ -6,7 +6,7 @@ import {
   type EventConfigPart,
   type Config,
 } from '../config'
-import type {Event} from './index.h'
+import type {Event} from '../unit.h'
 
 export function createEvent<Payload>(
   nameOrConfig?: string | EventConfigPart,

@@ -1,7 +1,7 @@
 //@flow
 
 import {is} from '../stdlib'
-import type {Store} from '../store/index.h'
+import type {Store} from '../unit.h'
 import {createName} from './compositeName'
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {

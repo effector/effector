@@ -1,7 +1,6 @@
 //@flow
-import type {Event} from './event'
-import type {Effect} from './effect'
-import {type Store, storeFabric} from './store'
+import type {Store, Event, Effect} from './unit.h'
+import {storeFabric} from './store'
 import {is} from './stdlib'
 
 export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(

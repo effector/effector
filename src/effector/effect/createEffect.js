@@ -1,12 +1,12 @@
 //@flow
 
+import type {Effect} from '../unit.h'
 import {effectFabric} from './effectFabric'
 import {
   normalizeEventConfig,
   type EffectConfigPart,
   type Config,
 } from '../config'
-import type {Effect} from './index.h'
 
 export function createEffect<Payload, Done>(
   nameOrConfig?: string | EffectConfigPart<Payload, Done>,

@@ -8,27 +8,18 @@
 
 export {combine, combine as createStoreObject} from './combine'
 export {sample} from './sample'
-
-export type {Domain} from './domain'
 export {createDomain} from './domain'
-
-export type {Event} from './event'
 export {createEvent, merge, split, forward, fromObservable} from './event'
-
-export type {Effect} from './effect'
 export {createEffect} from './effect'
-
-export type {Store} from './store'
 export {createStore} from './store'
 export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'
 export {setStoreName} from './naming'
 export {createApi} from './createApi'
-
 export {Kind, clearNode, createNode, step, is} from './stdlib'
 export {launch} from './kernel'
-export type {kind} from './stdlib'
-
 export {version} from './flags'
-
 //eslint-disable-next-line
 export * as blocks from './blocks'
+
+export type {Store, Event, Effect, Domain} from './unit.h'
+export type {kind} from './stdlib'

@@ -2,7 +2,7 @@
 
 import {unitObjectName} from '../naming'
 
-import type {Event} from './index.h'
+import type {Event} from '../unit.h'
 import {eventFabric} from './eventFabric'
 
 export function combine<T>(

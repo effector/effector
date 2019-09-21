@@ -1,6 +1,7 @@
 //@flow
 
-import {storeFabric, type Store} from './store'
+import type {Store} from './unit.h'
+import {storeFabric} from './store'
 import {
   is,
   step,

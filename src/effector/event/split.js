@@ -1,5 +1,5 @@
 //@flow
-import type {Event} from './index.h'
+import type {Event} from '../unit.h'
 import {bind, is} from '../stdlib'
 
 //eslint-disable-next-line no-unused-vars

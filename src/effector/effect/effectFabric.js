@@ -1,9 +1,9 @@
 //@flow
 
-import type {Effect} from './index.h'
+import type {Event, Effect} from '../unit.h'
 import {Kind, step, addLinkToOwner, bind} from '../stdlib'
 import {upsertLaunch} from '../kernel'
-import {eventFabric, type Event} from '../event'
+import {eventFabric} from '../event'
 import {createStore} from '../store'
 import type {EffectConfigPart} from '../config'
 import type {CompositeName} from '../naming'

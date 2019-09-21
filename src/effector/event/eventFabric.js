@@ -1,13 +1,12 @@
 //@flow
 import $$observable from 'symbol-observable'
 
+import type {Event, Effect} from '../unit.h'
 import {step, Kind, stringRefcount, createNode, bind} from '../stdlib'
-import {type Effect} from '../effect'
 import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
 import type {EventConfigPart} from '../config'
-import type {Event} from './index.h'
 import {type CompositeName, createName} from '../naming'
 import {thru} from '../thru'
 import {createLinkNode} from './forward'

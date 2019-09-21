@@ -1,7 +1,6 @@
 //@flow
 
-import {createEffect} from '..'
-import type {FnEffect} from '../index.h'
+import {createEffect} from 'effector'
 import {delay} from 'effector/fixtures'
 
 test('effect.create single argument', async() => {
@@ -28,6 +27,47 @@ test('effect.create single argument', async() => {
 
 //eslint-disable-next-line
 type ExtractFn<Params, Fn: (...params: Params) => any> = Params
+
+type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
+  /*::
+  [[call]]: Fn,
+  */
+  +done: Event<{|
+    params: Params,
+    result: Done,
+  |}>,
+  +fail: Event<{|
+    params: Params,
+    error: Fail,
+  |}>,
+  /*::+*/ id: string,
+  +use: {|
+    (asyncFunction: Fn): void,
+    getCurrent(): Fn,
+  |},
+  create(payload: Params, type: string, args: any[]): Params,
+  +watch: (watcher: (payload: Params) => any) => Subscription,
+  // getNode(): Vertex<['event', string]>,
+  //map<T>(fn: (_: E) => T): Event<T>,
+  prepend<Before>(fn: (_: Before) => Params): Event<Before>,
+  subscribe(subscriber: Subscriber<Params>): Subscription,
+  //prettier-ignore
+  //   +to: (
+  //   & (<T>(
+  //    store: Store<T>,
+  //    reducer: (state: T, payload: Params) => T
+  //   ) => Subscription)
+  //   & ((store: Store<Params>, _: void) => Subscription)
+  //  ),
+  // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
+  getType(): string,
+  +kind: kind,
+  shortName: string,
+  domainName?: CompositeName,
+  graphite: Graph,
+  compositeName: CompositeName,
+  ...
+}
 
 function variadicEffect<Done, Fn:(...params: any[]) => Promise<Done> | Done>(
   name?: string,

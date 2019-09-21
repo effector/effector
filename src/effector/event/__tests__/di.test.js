@@ -1,6 +1,6 @@
 //@flow
 
-import {createEvent, type Event} from '..'
+import {createEvent, type Event} from 'effector'
 
 test('event.create single argument', () => {
   const foo = createEvent<number>('foo')

@@ -2,6 +2,7 @@
 
 import $$observable from 'symbol-observable'
 
+import type {Store, Event} from '../unit.h'
 import {upsertLaunch} from '../kernel'
 import {
   addLinkToOwner,
@@ -14,18 +15,11 @@ import {
   writeRef,
   is,
 } from '../stdlib'
-import {
-  createEvent,
-  forward,
-  createLink,
-  createLinkNode,
-  type Event,
-} from '../event'
+import {createEvent, forward, createLink, createLinkNode} from '../event'
 import {createName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'
 import {watchUnit} from '../watcher'
-import type {Store} from './index.h'
 import {
   type Config,
   type StoreConfigPart as ConfigPart,

@@ -1,7 +1,8 @@
 //@flow
 
+import type {Store, Event, Effect, Domain} from '../unit.h'
 import {stringRefcount, Kind, addLinkToOwner} from '../stdlib'
-import {type Store, storeFabric} from '../store'
+import {storeFabric} from '../store'
 import {
   normalizeConfig,
   type Config,
@@ -10,12 +11,17 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from '../config'
-import {type Event, eventFabric, forward} from '../event'
-import {type Effect, effectFabric} from '../effect'
-
-import type {Domain, DomainHooks} from './index.h'
+import {eventFabric, forward} from '../event'
+import {effectFabric} from '../effect'
 import {createName, type CompositeName} from '../naming'
 import {createNode} from '../stdlib/graph'
+
+type DomainHooks = {|
+  domain: Event<Domain>,
+  effect: Event<Effect<any, any, any>>,
+  event: Event<Event<any>>,
+  store: Event<Store<any>>,
+|}
 
 const nextID = stringRefcount()
 
