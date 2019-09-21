@@ -38,7 +38,12 @@ on:
       - 'bsconfig.json'
 jobs:
   common-tests:
-    runs-on: ubuntu-latest
+    name: Test on node ${{ matrix.node_version }} and ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node_version: [8, 10, 12]
+        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
