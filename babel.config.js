@@ -40,6 +40,7 @@ const aliases = {
 }
 
 // TODO
+// hello
 const babelPlugin = '.' + pathSep + join('src', 'babel', 'babel-plugin')
 
 const babelConfig = {
