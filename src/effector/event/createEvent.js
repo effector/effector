@@ -7,33 +7,27 @@ import {step, Kind, createNode, bind, nextUnitID} from '../stdlib'
 import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
-import {
-  normalizeEventConfig,
-  type EventConfigPart,
-  type Config,
-} from '../config'
+import {normalizeConfig, type EventConfigPart, type Config} from '../config'
 import {type CompositeName, createName} from '../naming'
 import {thru} from '../thru'
 import {createLinkNode} from '../forward'
 import {watchUnit} from '../watcher'
 
 export function createEvent<Payload>(
-  nameOrConfig?: string | EventConfigPart,
-  opts?: Config<EventConfigPart> = {},
+  name?: string | EventConfigPart,
+  config?: Config<EventConfigPart> = {},
 ): Event<Payload> {
-  return eventFabric(normalizeEventConfig(nameOrConfig, opts))
+  return eventFabric({name, config})
 }
 
-export function eventFabric<Payload>({
-  name: nameRaw,
-  parent,
-  config = {},
-}: {
+export function eventFabric<Payload>(opts: {
   +name?: string,
   +parent?: CompositeName,
   +config?: EventConfigPart,
   ...
 }): Event<Payload> {
+  const config = normalizeConfig(opts)
+  const {name: nameRaw, parent} = config
   const id = nextUnitID()
   const name = nameRaw || id
   const compositeName = createName(name, parent)

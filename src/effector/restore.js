@@ -16,10 +16,7 @@ export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
     if (is.store(value)) {
       result[key] = value
     } else {
-      result[key] = storeFabric({
-        currentState: value,
-        config: {name: key},
-      })
+      result[key] = storeFabric(value, {name: key})
     }
   }
   return result
@@ -29,22 +26,20 @@ export function restoreEffect<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done> {
-  const store = storeFabric({
-    currentState: defaultState,
+  const store = storeFabric(defaultState, {
     parent: event.domainName,
     //TODO: add location
-    config: {name: event.shortName},
+    name: event.shortName,
   })
   store.on(event.done, (_, {result}) => result)
   return store
 }
 
 export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
-  const store = storeFabric({
-    currentState: defaultState,
+  const store = storeFabric(defaultState, {
     parent: event.domainName,
     //TODO: add location
-    config: {name: event.shortName},
+    name: event.shortName,
   })
   store.on(event, (_, v) => v)
   return store

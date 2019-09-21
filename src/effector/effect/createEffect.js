@@ -5,32 +5,25 @@ import {Kind, step, addLinkToOwner, bind} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {eventFabric} from '../event'
 import {createStore} from '../store'
-import {
-  normalizeEventConfig,
-  type EffectConfigPart,
-  type Config,
-} from '../config'
+import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
 import type {CompositeName} from '../naming'
 import {Defer} from './defer'
 
 export function createEffect<Payload, Done>(
-  nameOrConfig?: string | EffectConfigPart<Payload, Done>,
-  opts?: Config<EffectConfigPart<Payload, Done>>,
+  name?: string | EffectConfigPart<Payload, Done>,
+  config?: Config<EffectConfigPart<Payload, Done>>,
 ): Effect<Payload, Done, *> {
-  return effectFabric(normalizeEventConfig(nameOrConfig, opts))
+  return effectFabric({name, config})
 }
 
-export function effectFabric<Payload, Done>({
-  name,
-  parent,
-  config,
-}: {
+export function effectFabric<Payload, Done>(opts: {
   +name?: string,
   +parent?: CompositeName,
   +config: EffectConfigPart<Payload, Done>,
   ...
 }): Effect<Payload, Done, *> {
-  const {handler: defaultHandler} = config
+  const config = normalizeConfig(opts)
+  const {name, parent, handler: defaultHandler} = config
 
   //$off
   const instance: Effect<Payload, Done, any> = eventFabric({
