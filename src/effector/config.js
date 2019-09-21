@@ -48,11 +48,11 @@ const assignConfigPart = (part, config = {}) => {
       if (typeof part.name === 'object') assignConfigPart(part.name, config)
       else config.name = part.name
     }
-    if ('loc' in part) config.loc = part.loc
-    if ('sid' in part) config.sid = part.sid
-    if ('handler' in part) config.handler = part.handler
-    if ('parent' in part) config.parent = part.parent
-    if ('parentHooks' in part) config.parentHooks = part.parentHooks
+    if (part.loc) config.loc = part.loc
+    if (part.sid) config.sid = part.sid
+    if (part.handler) config.handler = part.handler
+    if (part.parent) config.parent = part.parent
+    if (part.parentHooks) config.parentHooks = part.parentHooks
     assignConfigPart(part.ɔ, config)
   }
   return config
