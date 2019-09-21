@@ -1,8 +1,8 @@
 //@flow
 
-import type {Store, Event, Effect, Domain} from '../unit.h'
-import {nextUnitID, Kind, addLinkToOwner} from '../stdlib'
-import {storeFabric} from '../store'
+import type {Store, Event, Effect, Domain} from './unit.h'
+import {nextUnitID, Kind, addLinkToOwner, createNode} from './stdlib'
+import {storeFabric} from './store'
 import {
   normalizeConfig,
   normalizeEventConfig,
@@ -11,12 +11,11 @@ import {
   type EventConfigPart,
   type StoreConfigPart,
   type DomainConfigPart,
-} from '../config'
-import {eventFabric} from '../event'
-import {effectFabric} from '../effect'
-import {forward} from '../forward'
-import {createName, type CompositeName} from '../naming'
-import {createNode} from '../stdlib/graph'
+} from './config'
+import {eventFabric} from './event'
+import {effectFabric} from './effect'
+import {forward} from './forward'
+import {createName, type CompositeName} from './naming'
 
 export function createDomain(
   nameOrConfig?: string | DomainConfigPart,
