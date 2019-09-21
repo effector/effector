@@ -1,6 +1,6 @@
 //@flow
 
-import type {Store} from './store'
+import {storeFabric, type Store} from './store'
 import {
   is,
   step,
@@ -12,7 +12,6 @@ import {
 } from './stdlib'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './event'
-import {storeFabric} from './store/storeFabric'
 
 //eslint-disable-next-line no-unused-vars
 declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(

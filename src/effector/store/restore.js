@@ -2,7 +2,7 @@
 import type {Event} from '../event'
 import type {Effect} from '../effect'
 import type {Store} from './index.h'
-import {storeFabric} from './storeFabric'
+import {storeFabric} from './createStore'
 
 import {is} from '../stdlib'
 
