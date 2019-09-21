@@ -183,7 +183,10 @@ export function combine(...args: Array<Store<any>>): Store<any> {
     }
   }
   //$off
-  return createStoreObject(structStoreShape, handler)
+  const mergedStore = Array.isArray(structStoreShape)
+    ? storeCombination(structStoreShape, list => list.slice(), [])
+    : storeCombination(structStoreShape, obj => Object.assign({}, obj), {})
+  return handler ? mergedStore.map(handler) : mergedStore
 }
 
 const spreadArgs = fn => list => fn(...list)
@@ -250,42 +253,4 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
   ;(store: any).defaultShape = obj
   ;(store: any).defaultState = defaultState
   return store
-}
-
-declare function createStoreObject<State: $ReadOnlyArray<Store<any> | any>>(
-  obj: State,
-): Store<
-  $TupleMap<
-    State,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-declare function createStoreObject<
-  State: {-[key: string]: Store<any> | any, ...},
->(
-  obj: State,
-): Store<
-  $ObjMap<
-    State,
-    //prettier-ignore
-    <S>(field: Store<S> | S) => S,
-  >,
->
-//prettier-ignore
-function createStoreObject(obj: *, fn?: Function) {
-  const mergedStore = Array.isArray(obj)
-    ? storeCombination(
-      obj,
-      list => list.slice(),
-      [],
-    )
-    : storeCombination(
-      obj,
-      obj => Object.assign({}, obj),
-      {},
-    )
-  return fn
-    ? mergedStore.map(fn)
-    : mergedStore
 }
