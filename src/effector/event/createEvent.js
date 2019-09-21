@@ -8,7 +8,7 @@ import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
 import {normalizeConfig, type EventConfigPart, type Config} from '../config'
-import {type CompositeName, createName} from '../naming'
+import {type CompositeName, createName, mapName} from '../naming'
 import {thru} from '../thru'
 import {createLinkNode} from '../forward'
 import {watchUnit} from '../watcher'
@@ -96,9 +96,17 @@ declare function mapEvent<A, B>(
   fn: (_: A) => B,
 ): Event<B>
 function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
+  let config
+  let name
+  if (typeof fn === 'object') {
+    config = fn
+    name = fn.name
+    fn = fn.fn
+  }
   const mapped = eventFabric({
-    name: '' + event.shortName + ' → *',
+    name: mapName(event, name),
     parent: event.domainName,
+    config,
   })
   createLinkNode(event, mapped, {
     scope: {handler: fn},

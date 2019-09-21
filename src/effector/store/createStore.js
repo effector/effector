@@ -19,7 +19,7 @@ import {
 } from '../stdlib'
 import {createEvent} from '../event'
 import {forward, createLinkNode} from '../forward'
-import {createName, type CompositeName} from '../naming'
+import {createName, mapName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'
 import {watchUnit, createWatcher} from '../watcher'
@@ -187,6 +187,14 @@ function mapStore<A, B>(
   fn: (state: A, lastState?: B) => B,
   firstState?: B,
 ): Store<B> {
+  let config
+  let name
+  if (typeof fn === 'object') {
+    config = fn
+    name = fn.name
+    fn = fn.fn
+    firstState = fn.firstState
+  }
   let lastResult
   const storeState = store.getState()
   if (storeState !== undefined) {
@@ -194,8 +202,9 @@ function mapStore<A, B>(
   }
 
   const innerStore: Store<any> = storeFabric(lastResult, {
-    name: '' + store.shortName + ' → *',
+    name: mapName(store, name),
     parent: store.domainName,
+    config,
   })
   createLinkNode(store, innerStore, {
     scope: {

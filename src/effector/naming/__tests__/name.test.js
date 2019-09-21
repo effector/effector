@@ -10,6 +10,25 @@ import {storeNaming, unitObjectName} from '..'
 
 const rootDomain = createDomain('')
 
+describe('.map support', () => {
+  it('should support event.map', () => {
+    const foo = createEvent()
+    const bar = foo.map({
+      name: 'Bar',
+      fn: x => x,
+    })
+    expect(bar.shortName).toBe('Bar')
+  })
+  it('should support store.map', () => {
+    const foo = createStore(0)
+    const bar = foo.map({
+      name: 'Bar',
+      fn: x => x + 1,
+    })
+    expect(bar.shortName).toBe('Bar')
+  })
+})
+
 describe('naming', () => {
   describe('domain', () => {
     test('value store', () => {
