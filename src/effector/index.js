@@ -22,12 +22,12 @@ export type {Store} from './store'
 export {
   createStore,
   setStoreName,
-  createApi,
   restore,
   restoreEvent,
   restoreEffect,
   restoreObject,
 } from './store'
+export {createApi} from './createApi'
 
 export {Kind, clearNode, createNode, step, is} from './stdlib'
 export {launch} from './kernel'

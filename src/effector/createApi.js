@@ -1,7 +1,7 @@
 //@flow
 
-import type {Store} from './index.h'
-import {type Event, createEvent} from '../event'
+import type {Store} from './store/index.h'
+import {type Event, createEvent} from './event'
 
 declare export function createApi<
   S,
@@ -11,7 +11,10 @@ declare export function createApi<
   setters: Obj,
 ): $ObjMap<Obj, <E>(h: (store: S, e: E) => S) => Event<E>>
 
-export function createApi(store: Store<any>, setters: {[string]: Function, ...}) {
+export function createApi(
+  store: Store<any>,
+  setters: {[string]: Function, ...},
+) {
   const result = {}
   for (const key in setters) {
     const handler: any = setters[key]
