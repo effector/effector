@@ -3,7 +3,7 @@
 import $$observable from 'symbol-observable'
 
 import type {Event, Effect} from '../unit.h'
-import {step, Kind, stringRefcount, createNode, bind} from '../stdlib'
+import {step, Kind, createNode, bind, nextUnitID} from '../stdlib'
 import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
@@ -24,8 +24,6 @@ export function createEvent<Payload>(
   return eventFabric(normalizeEventConfig(nameOrConfig, opts))
 }
 
-const nextID = stringRefcount()
-
 export function eventFabric<Payload>({
   name: nameRaw,
   parent,
@@ -36,7 +34,7 @@ export function eventFabric<Payload>({
   +config?: EventConfigPart,
   ...
 }): Event<Payload> {
-  const id = nextID()
+  const id = nextUnitID()
   const name = nameRaw || id
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName

@@ -1,9 +1,8 @@
 //@flow
 import type {StateRef} from './index.h'
-import {stringRefcount} from './refcount'
-const nextID = stringRefcount()
+import {nextStepID} from './refcount'
 export const createStateRef = (current: any): StateRef => ({
-  id: nextID(),
+  id: nextStepID(),
   current,
 })
 

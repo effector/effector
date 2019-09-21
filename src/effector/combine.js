@@ -5,7 +5,6 @@ import {storeFabric} from './store'
 import {
   is,
   step,
-  nextBarrierID,
   createStateRef,
   readRef,
   writeRef,
@@ -218,7 +217,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
         readRef(target)[key] = upd
       },
     }),
-    step.barrier({barrierID: nextBarrierID()}),
+    step.barrier({priority: 'barrier'}),
     step.compute({
       fn(none, {isFresh, target}: CombinationScope) {
         writeRef(isFresh, false)

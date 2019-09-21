@@ -10,18 +10,16 @@ import type {
   Check,
   ID,
 } from './index.h'
-import {stringRefcount} from './refcount'
-const nextID = stringRefcount()
+import {nextStepID, nextBarrierID} from './refcount'
 
 const cmd = (type: any, data: any): any => ({
-  id: nextID(),
+  id: nextStepID(),
   type,
   data,
 })
 
 export const step: {|
   barrier(data: {|
-    +barrierID: ID,
     +priority?: 'barrier' | 'sampler',
   |}): Barrier,
   check: {
@@ -44,9 +42,9 @@ export const step: {|
     store: StateRef,
   |}): Update,
 |} = {
-  barrier: ({barrierID, priority = 'barrier'}) =>
+  barrier: ({priority = 'barrier'}) =>
     cmd('barrier', {
-      barrierID,
+      barrierID: nextBarrierID(),
       priority,
     }),
   check: {

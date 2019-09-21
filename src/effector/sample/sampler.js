@@ -8,7 +8,6 @@ import {
   createStateRef,
   readRef,
   writeRef,
-  nextBarrierID,
   addLinkToOwner,
 } from '../stdlib'
 
@@ -28,11 +27,7 @@ export const storeBy = (
       },
       node: [
         //$off
-        !greedy &&
-          step.barrier({
-            barrierID: nextBarrierID(),
-            priority: 'sampler',
-          }),
+        !greedy && step.barrier({priority: 'sampler'}),
         step.compute({
           fn: fn
             ? (upd, {state, fn}) => fn(readRef(state), upd)
@@ -131,11 +126,7 @@ export const eventByUnit = (
           fn: (upd, {hasSource}) => readRef(hasSource),
         }),
         //$off
-        !greedy &&
-          step.barrier({
-            barrierID: nextBarrierID(),
-            priority: 'sampler',
-          }),
+        !greedy && step.barrier({priority: 'sampler'}),
         step.compute({
           fn: fn
             ? (upd, {sourceState, clockState, fn}) =>

@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from '../unit.h'
-import {stringRefcount, Kind, addLinkToOwner} from '../stdlib'
+import {nextUnitID, Kind, addLinkToOwner} from '../stdlib'
 import {storeFabric} from '../store'
 import {
   normalizeConfig,
@@ -32,8 +32,6 @@ type DomainHooks = {|
   store: Event<Store<any>>,
 |}
 
-const nextID = stringRefcount()
-
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
     acc.add(data)
@@ -57,7 +55,7 @@ function domainFabric({
   +parentHooks?: DomainHooks,
   ...
 }): Domain {
-  const id = nextID()
+  const id = nextUnitID()
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
