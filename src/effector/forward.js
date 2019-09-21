@@ -3,19 +3,6 @@ import {type Graphite, type Cmd, getGraph, createNode} from './stdlib'
 import type {Subscription} from './index.h'
 import {createWatcher} from './watcher'
 
-export const createLink = (
-  source: Graphite,
-  child: Graphite,
-  opts: {|
-    +node: Array<Cmd>,
-    scope?: {[name: string]: any, ...},
-    meta?: {[name: string]: any, ...},
-  |},
-) =>
-  createWatcher({
-    parent: getGraph(source),
-    child: createLinkNode(source, child, opts),
-  })
 export const createLinkNode = (
   source: Graphite,
   child: Graphite,

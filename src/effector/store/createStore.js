@@ -14,13 +14,14 @@ import {
   bind,
   writeRef,
   is,
+  getGraph,
 } from '../stdlib'
 import {createEvent} from '../event'
-import {forward, createLink, createLinkNode} from '../forward'
+import {forward, createLinkNode} from '../forward'
 import {createName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'
-import {watchUnit} from '../watcher'
+import {watchUnit, createWatcher} from '../watcher'
 import {
   type Config,
   type StoreConfigPart as ConfigPart,
@@ -120,21 +121,24 @@ function on(storeInstance: Store<any>, event: any, handler: Function) {
   storeInstance.off(event)
   storeInstance.subscribers.set(
     event,
-    createLink(event, storeInstance, {
-      scope: {
-        handler,
-        state: storeInstance.stateRef,
-      },
-      node: [
-        step.compute({
-          fn(newValue, {handler, state}) {
-            const result = handler(readRef(state), newValue)
-            if (result === undefined) return
-            return writeRef(state, result)
-          },
-        }),
-      ],
-      meta: {op: 'on'},
+    createWatcher({
+      parent: getGraph(event),
+      child: createLinkNode(event, storeInstance, {
+        scope: {
+          handler,
+          state: storeInstance.stateRef,
+        },
+        node: [
+          step.compute({
+            fn(newValue, {handler, state}) {
+              const result = handler(readRef(state), newValue)
+              if (result === undefined) return
+              return writeRef(state, result)
+            },
+          }),
+        ],
+        meta: {op: 'on'},
+      }),
     }),
   )
   return storeInstance
