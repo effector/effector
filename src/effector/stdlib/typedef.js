@@ -8,7 +8,9 @@ import type {
   Compute,
   Barrier,
   Check,
+  Batch,
   ID,
+  Graph,
 } from './index.h'
 import {nextStepID, nextBarrierID} from './refcount'
 
@@ -19,6 +21,9 @@ const cmd = (type: any, data: any): any => ({
 })
 
 export const step: {|
+  batch(data: {|
+    +blocks: Graph,
+  |}): Batch,
   barrier(data: {|
     +priority?: 'barrier' | 'sampler',
   |}): Barrier,
@@ -42,6 +47,7 @@ export const step: {|
     store: StateRef,
   |}): Update,
 |} = {
+  batch: cmd.bind(null, 'batch'),
   barrier: ({priority = 'barrier'}) =>
     cmd('barrier', {
       barrierID: nextBarrierID(),

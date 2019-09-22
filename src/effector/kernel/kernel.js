@@ -1,6 +1,7 @@
 //@flow
 
-import type {Graphite} from '../stdlib'
+import type {Graphite, Graph} from '../stdlib'
+import type {PriorityTag} from './getPriority'
 import {getGraph, writeRef, readRef} from '../stdlib'
 import type {Layer} from './layer'
 import {type leftist, insert, deleteMin} from './leftist'
@@ -25,22 +26,30 @@ class Local {
 let layerID = 0
 let heap: leftist = null
 const barriers = new Set()
-const pushHeap = (opts: Layer) => {
-  heap = insert(opts, heap)
+const pushHeap = (
+  step: Graph,
+  firstIndex: number,
+  stack: Stack,
+  type: PriorityTag,
+) => {
+  heap = insert(
+    {
+      step,
+      firstIndex,
+      stack,
+      resetStop: currentResetStop,
+      type,
+      id: ++layerID,
+    },
+    heap,
+  )
 }
 
 let alreadyStarted = false
 
-const addSingleBranch = (unit: Graphite, payload: any) => {
-  pushHeap({
-    step: getGraph(unit),
-    firstIndex: 0,
-    stack: new Stack(payload, null),
-    resetStop: false,
-    type: 'pure',
-    id: ++layerID,
-  })
-}
+let currentResetStop = false
+
+const getData = ({data}) => data
 
 const exec = () => {
   const lastStartedState = alreadyStarted
@@ -61,20 +70,26 @@ const exec = () => {
     ) {
       const step = graph.seq[stepn]
       switch (step.type) {
+        case 'batch': {
+          const blocks = readRef(stack.value)
+          const ctx = readRef(stack.parent.value)
+          for (let i = 0; i < blocks.length; i++) {
+            pushHeap(
+              getData(step).blocks[blocks[i]],
+              0,
+              new Stack(ctx, stack.parent),
+              'pure',
+            )
+          }
+          break
+        }
         case 'barrier': {
-          const id = step.data.barrierID
-          const priority = step.data.priority
+          const id = getData(step).barrierID
+          const priority = getData(step).priority
           if (stepn !== firstIndex || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap({
-                step: graph,
-                firstIndex: stepn,
-                stack,
-                resetStop: false,
-                type: priority,
-                id: ++layerID,
-              })
+              pushHeap(graph, stepn, stack, priority)
             }
             continue mem
           }
@@ -84,13 +99,13 @@ const exec = () => {
           break
         }
         case 'check':
-          switch (step.data.type) {
+          switch (getData(step).type) {
             case 'defined':
               local.isChanged = readRef(stack.value) !== undefined
               break
             case 'changed':
               local.isChanged =
-                readRef(step.data.store) !== readRef(stack.value)
+                readRef(getData(step).store) !== readRef(stack.value)
               break
           }
           break
@@ -100,44 +115,37 @@ const exec = () => {
            * tryRun will return null
            * thereby forcing that branch to stop
            */
-          local.isChanged = !!tryRun(local, step.data, stack.value)
+          local.isChanged = !!tryRun(local, getData(step), stack.value)
           break
         case 'run':
           /** exec 'compute' step when stepn === firstIndex */
           if (stepn !== firstIndex || type !== 'effect') {
-            pushHeap({
-              step: graph,
-              firstIndex: stepn,
-              stack,
-              resetStop: false,
-              type: 'effect',
-              id: ++layerID,
-            })
+            pushHeap(graph, stepn, stack, 'effect')
             continue mem
           }
         case 'compute':
-          writeRef(stack.value, tryRun(local, step.data, stack.value))
+          writeRef(stack.value, tryRun(local, getData(step), stack.value))
           break
         case 'update':
-          writeRef(step.data.store, readRef(stack.value))
+          writeRef(getData(step).store, readRef(stack.value))
           break
         case 'tap':
-          tryRun(local, step.data, stack.value)
+          tryRun(local, getData(step), stack.value)
           break
       }
       meta.stop = local.isFailed || !local.isChanged
     }
     if (!meta.stop) {
+      currentResetStop = true
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        pushHeap({
-          step: graph.next[stepn],
-          firstIndex: 0,
-          stack: new Stack(readRef(stack.value), stack),
-          resetStop: true,
-          type: 'child',
-          id: ++layerID,
-        })
+        pushHeap(
+          graph.next[stepn],
+          0,
+          new Stack(readRef(stack.value), stack),
+          'child',
+        )
       }
+      currentResetStop = false
     }
     if (resetStop) {
       meta.stop = false
@@ -145,14 +153,13 @@ const exec = () => {
   }
   alreadyStarted = lastStartedState
 }
-export const launch = (unit: Graphite, payload: any) => {
-  addSingleBranch(unit, payload)
+export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
+  pushHeap(getGraph(unit), 0, new Stack(payload, null), 'pure')
+  if (upsert && alreadyStarted) return
   exec()
 }
 export const upsertLaunch = (unit: Graphite, payload: any) => {
-  addSingleBranch(unit, payload)
-  if (alreadyStarted) return
-  exec()
+  launch(unit, payload, true)
 }
 
 const tryRun = (local: Local, {fn}, val: {current: any, ...}) => {

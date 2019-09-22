@@ -28,7 +28,14 @@ export type Cmd =
   | Compute
   | Barrier
   | Tap
-
+  | Batch
+export type Batch = {|
+  +id: ID,
+  +type: 'batch',
+  +data: {|
+    +blocks: Graph,
+  |},
+|}
 export type Check = {|
   +id: ID,
   +type: 'check',
