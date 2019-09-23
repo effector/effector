@@ -27,11 +27,11 @@ import { createDomain as cd } from 'effector';
 const notForPlugin = createDomain();
 const domain = cd(\\"domain\\", {
   name: \\"domain\\",
-  sid: \\"-r2jo9q\\"
+  sid: \\"-qli1vj\\"
 });
 const foo = cd('bar', {
   name: \\"foo\\",
-  sid: \\"-kylwgu\\"
+  sid: \\"-khka2n\\"
 });"
 `;
 
@@ -164,11 +164,11 @@ import { createEffect as cf } from 'effector';
 const notForPlugin = createEffect();
 const foo = cf(\\"foo\\", {
   name: \\"foo\\",
-  sid: \\"-hlt0gb\\"
+  sid: \\"-h4re24\\"
 });
 const bar = cf('hello', {
   name: \\"bar\\",
-  sid: \\"-ydp1p5\\"
+  sid: \\"-xwnfay\\"
 });
 const baz = cf({
   handler() {
@@ -177,7 +177,7 @@ const baz = cf({
 
 }, {
   name: \\"baz\\",
-  sid: \\"-v7s7ya\\"
+  sid: \\"-uqqlk3\\"
 });
 const quux = cf('nice', {
   ɔ: {
@@ -187,12 +187,12 @@ const quux = cf('nice', {
 
   },
   name: \\"quux\\",
-  sid: \\"-evyqqj\\"
+  sid: \\"-eex4cc\\"
 });
 
 const f = () => cf(\\"f\\", {
   name: \\"f\\",
-  sid: \\"y82cl8\\"
+  sid: \\"yp3yzf\\"
 });"
 `;
 
@@ -203,22 +203,22 @@ import { createEvent as e } from 'effector';
 const notForPlugin = createEvent();
 const foo = e(\\"foo\\", {
   name: \\"foo\\",
-  sid: \\"qm3jl6\\"
+  sid: \\"r355zd\\"
 });
 const bar = e('hello', {
   name: \\"bar\\",
-  sid: \\"f2obva\\"
+  sid: \\"fjpy9h\\"
 });
 const baz = e({
   name: 'nice'
 }, {
   name: \\"baz\\",
-  sid: \\"-yrvnsz\\"
+  sid: \\"-yau1es\\"
 });
 
 const f = () => e(\\"f\\", {
   name: \\"f\\",
-  sid: \\"vi2m03\\"
+  sid: \\"vz48ea\\"
 });"
 `;
 
@@ -229,22 +229,22 @@ import { createStore as cc } from 'effector';
 const notForPlugin = createStore();
 const foo = cc('foo', {
   name: \\"foo\\",
-  sid: \\"75h1gk\\"
+  sid: \\"7minur\\"
 });
 const a = cc('h', {
   name: \\"a\\",
-  sid: \\"osbuqo\\"
+  sid: \\"p9dh4v\\"
 });
 const b = cc('h', {
   ɔ: {},
   name: \\"b\\",
-  sid: \\"-yawrls\\"
+  sid: \\"-xtv57l\\"
 }); //$off
 
 const c = cc('h', {
   ɔ: 23020,
   name: \\"c\\",
-  sid: \\"-lvzpkx\\"
+  sid: \\"-ley36q\\"
 });
 const config = {
   option: 0
@@ -252,12 +252,12 @@ const config = {
 const dod = cc(null, {
   ɔ: config,
   name: \\"dod\\",
-  sid: \\"qtb6qu\\"
+  sid: \\"ract51\\"
 });
 
 const f = a => cc(a, {
   name: \\"f\\",
-  sid: \\"42loz8\\"
+  sid: \\"4jnbdf\\"
 });"
 `;
 
