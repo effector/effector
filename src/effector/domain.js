@@ -2,7 +2,7 @@
 
 import type {Store, Event, Effect, Domain} from './unit.h'
 import {nextUnitID, Kind, addLinkToOwner, createNode} from './stdlib'
-import {storeFabric} from './store'
+import {createStore} from './store'
 import {
   normalizeConfig,
   type Config,
@@ -148,7 +148,7 @@ function domainFabric(opts: {
       return result
     },
     store<T>(state: T, config?: Config<StoreConfigPart>): Store<T> {
-      const result = storeFabric(state, {
+      const result = createStore(state, {
         parent: compositeName,
         config,
       })

@@ -1,7 +1,7 @@
 //@flow
 
 import {eventFabric} from '../event'
-import {storeFabric} from '../store'
+import {createStore} from '../store'
 import {createLinkNode} from '../forward'
 import {
   step,
@@ -73,7 +73,7 @@ export const storeByStore = (
     fn,
     greedy,
     target ||
-      storeFabric(fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState, {
+      createStore(fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState, {
         name: source.shortName,
         parent: source.domainName,
       }),

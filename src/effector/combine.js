@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store} from './unit.h'
-import {storeFabric} from './store'
+import {createStore} from './store'
 import {
   is,
   step,
@@ -229,7 +229,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }),
   ]
   const stateNew = clone(defaultState)
-  const store = storeFabric(stateNew, {
+  const store = createStore(stateNew, {
     //TODO: add location
     name: unitObjectName(obj),
   })

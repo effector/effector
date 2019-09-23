@@ -31,15 +31,6 @@ import {
 
 export function createStore<State>(
   currentState: State,
-  config?: Config<ConfigPart>,
-): Store<State> {
-  if (currentState === undefined)
-    throw Error("current state can't be undefined, use null instead")
-  return storeFabric(currentState, config)
-}
-
-export function storeFabric<State>(
-  currentState: State,
   props: {
     +config: ConfigPart,
     +parent?: CompositeName,
@@ -48,7 +39,9 @@ export function storeFabric<State>(
 ): Store<State> {
   const config = normalizeConfig(props)
   const id = nextUnitID()
-  const {parent, name = id, sid = null} = config
+  const {parent, name = id, sid = null, strict = true} = config
+  if (strict && currentState === undefined)
+    throw Error("current state can't be undefined, use null instead")
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
   const compositeName = createName(name, parent)
@@ -201,10 +194,11 @@ function mapStore<A, B>(
     lastResult = fn(storeState, firstState)
   }
 
-  const innerStore: Store<any> = storeFabric(lastResult, {
+  const innerStore: Store<any> = createStore(lastResult, {
     name: mapName(store, name),
     parent: store.domainName,
     config,
+    strict: false,
   })
   createLinkNode(store, innerStore, {
     scope: {

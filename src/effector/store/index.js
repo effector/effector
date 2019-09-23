@@ -1,3 +1,3 @@
 //@flow
 
-export {createStore, storeFabric} from './createStore'
+export {createStore} from './createStore'

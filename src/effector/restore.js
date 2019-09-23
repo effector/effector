@@ -1,6 +1,6 @@
 //@flow
 import type {Store, Event, Effect} from './unit.h'
-import {storeFabric} from './store'
+import {createStore} from './store'
 import {is} from './stdlib'
 
 export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
@@ -16,7 +16,7 @@ export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
     if (is.store(value)) {
       result[key] = value
     } else {
-      result[key] = storeFabric(value, {name: key})
+      result[key] = createStore(value, {name: key})
     }
   }
   return result
@@ -26,7 +26,7 @@ export function restoreEffect<Done>(
   event: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done> {
-  const store = storeFabric(defaultState, {
+  const store = createStore(defaultState, {
     parent: event.domainName,
     //TODO: add location
     name: event.shortName,
@@ -36,7 +36,7 @@ export function restoreEffect<Done>(
 }
 
 export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
-  const store = storeFabric(defaultState, {
+  const store = createStore(defaultState, {
     parent: event.domainName,
     //TODO: add location
     name: event.shortName,
