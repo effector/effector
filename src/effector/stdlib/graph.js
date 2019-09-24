@@ -3,7 +3,6 @@
 import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
-import {store as isStore, domain as isDomain} from './is'
 
 export function createNode({
   node,
@@ -44,60 +43,6 @@ export function createNode({
     getLinks(owners[i]).push(result)
   }
   return result
-}
-
-const removeItem = (list, item) => {
-  const pos = list.indexOf(item)
-  if (pos !== -1) {
-    list.splice(pos, 1)
-  }
-}
-
-const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
-  targetNode.next.length = 0
-  targetNode.seq.length = 0
-  //$off
-  targetNode.scope = null
-  let currentNode
-  let list = getLinks(targetNode)
-  while ((currentNode = list.pop())) {
-    removeItem(getOwners(currentNode), targetNode)
-    if (deep || currentNode.family.type === 'crosslink') {
-      clearNodeNormalized(currentNode, deep)
-    }
-  }
-  list = getOwners(targetNode)
-  while ((currentNode = list.pop())) {
-    removeItem(currentNode.next, targetNode)
-    removeItem(getLinks(currentNode), targetNode)
-    if (currentNode.family.type === 'crosslink') {
-      clearNodeNormalized(currentNode, deep)
-    }
-  }
-}
-export const clearNode = (
-  graphite: Graphite,
-  {
-    deep,
-  }: {
-    deep?: boolean,
-    ...
-  } = {},
-) => {
-  if (isStore(graphite)) {
-    ;(graphite: any).subscribers.clear()
-  } else if (isDomain(graphite)) {
-    const {scope} = getGraph(graphite)
-    const {history} = scope
-    if (history) {
-      history.events.clear()
-      history.effects.clear()
-      history.storages.clear()
-      history.domains.clear()
-    }
-    scope.history = null
-  }
-  clearNodeNormalized(getGraph(graphite), !!deep)
 }
 
 export const traverse = (
