@@ -17,7 +17,6 @@ export const storeBy = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
-  filter: any,
 ) => {
   addLinkToOwner(
     source,
@@ -25,7 +24,6 @@ export const storeBy = (
       scope: {
         state: source.stateRef,
         fn,
-        filter,
       },
       node: [
         //$off
@@ -35,10 +33,6 @@ export const storeBy = (
             ? (upd, {state, fn}) => fn(readRef(state), upd)
             : (upd, {state}) => readRef(state),
         }),
-        filter &&
-          step.filter({
-            fn: (upd, {filter}) => filter(upd),
-          }),
       ].filter(Boolean),
       meta: {op: 'sample', sample: 'store'},
     }),
@@ -52,7 +46,6 @@ export const storeByEvent = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
-  filter: any,
 ) =>
   storeBy(
     source,
@@ -64,7 +57,6 @@ export const storeByEvent = (
         name: source.shortName,
         parent: source.domainName,
       }),
-    filter,
   )
 
 export const storeByStore = (
@@ -73,21 +65,19 @@ export const storeByStore = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
-  filter: any,
 ) => {
   const sourceState = readRef(source.stateRef)
-  if (!target) {
-    const initialState = fn
-      ? fn(sourceState, readRef(clock.stateRef))
-      : sourceState
-    if (filter && !filter(initialState))
-      throw Error('cannot create store without initial state')
-    target = createStore(initialState, {
-      name: source.shortName,
-      parent: source.domainName,
-    })
-  }
-  return storeBy(source, clock, fn, greedy, target, filter)
+  return storeBy(
+    source,
+    clock,
+    fn,
+    greedy,
+    target ||
+      createStore(fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState, {
+        name: source.shortName,
+        parent: source.domainName,
+      }),
+  )
 }
 
 export const eventByUnit = (
@@ -96,7 +86,6 @@ export const eventByUnit = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
-  filter: any,
 ) => {
   target =
     target ||
@@ -127,7 +116,7 @@ export const eventByUnit = (
   addLinkToOwner(
     source,
     createLinkNode(clock, target, {
-      scope: {sourceState, clockState, hasSource, fn, filter},
+      scope: {sourceState, clockState, hasSource, fn},
       node: [
         step.update({store: clockState}),
         step.filter({
@@ -141,10 +130,6 @@ export const eventByUnit = (
               fn(readRef(sourceState), readRef(clockState))
             : (upd, {sourceState}) => readRef(sourceState),
         }),
-        filter &&
-          step.filter({
-            fn: (upd, {filter}) => filter(upd),
-          }),
       ].filter(Boolean),
       meta: {op: 'sample', sample: 'clock'},
     }),
