@@ -1,5 +1,31 @@
 # Changelog
 
+## effector 20.3.0
+
+- Add `shortName` to domains
+
+```js
+import {createDomain} from 'effector'
+const domain = createDomain('feature')
+console.log(domain.shortName)
+// => feature
+```
+
+[try it](https://share.effector.dev/vKObFGtp)
+
+- Add `history` to domains with read-only sets of events, effects, stores and subdomains
+
+```js
+import {createDomain} from 'effector'
+const domain = createDomain()
+const eventA = domain.event()
+const storeB = domain.store(0)
+console.log(domain.history)
+// => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
+```
+
+[try it](https://share.effector.dev/HAG9a8nk)
+
 ## effector-vue 20.2.0
 
 - Add support for object shape
@@ -10,7 +36,7 @@ const counter = createStore(0)
 new Vue({
   effector: {
     counter, // would create `counter` in template
-  }
+  },
 })
 ```
 
