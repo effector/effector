@@ -36,7 +36,7 @@ describe('sample', () => {
     const bar = createStore('')
 
     //$todo
-    sample({sampler: foo, source: foo, target: bar})
+    sample({clock: foo, source: foo, target: bar})
   })
   it('handles object combination', () => {
     const foo = createStore('')
