@@ -178,6 +178,12 @@ declare export class Domain {
   sid: string | null;
   shortName: string;
   getType(): string;
+  history: {
+    domains: $ReadOnlySet<Domain>,
+    stores: $ReadOnlySet<Store<any>>,
+    effects: $ReadOnlySet<Effect<any, any, any>>,
+    events: $ReadOnlySet<Event<any>>,
+  };
 }
 export type ID = string
 export type StateRef = {|

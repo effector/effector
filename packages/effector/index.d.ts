@@ -171,6 +171,12 @@ export class Domain {
   sid: string | null
   shortName: string
   getType(): string
+  history: {
+    domains: Set<Domain>
+    stores: Set<Store<any>>
+    effects: Set<Effect<any, any, any>>
+    events: Set<Event<any>>
+  }
 }
 
 export type ID = string

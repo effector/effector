@@ -54,7 +54,7 @@ function domainFabric(opts: {
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
-  const storages: Set<Store<any>> = new Set()
+  const stores: Set<Store<any>> = new Set()
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
@@ -86,16 +86,17 @@ function domainFabric(opts: {
     store: Event<any>,
   |} = {event, effect, store, domain}
 
+  const history = {
+    domains,
+    stores,
+    storages: stores, // PLEASE USE .stores, THAT PROPERTY IS NOT SUPPORTED AND WILL BE REMOVED SOON
+    effects,
+    events,
+  }
+
   const node = createNode({
     node: [],
-    scope: {
-      history: {
-        domains,
-        storages,
-        effects,
-        events,
-      },
-    },
+    scope: {history},
     meta: {unit: 'domain'},
   })
 
@@ -108,8 +109,9 @@ function domainFabric(opts: {
     getType: () => fullName,
     onCreateEvent: createHook(event, events, node),
     onCreateEffect: createHook(effect, effects, node),
-    onCreateStore: createHook(store, storages, node),
+    onCreateStore: createHook(store, stores, node),
     onCreateDomain: createHook(domain, domains, node),
+    history,
     event<Payload>(
       name?: string,
       config?: Config<EventConfigPart>,
