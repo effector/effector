@@ -267,6 +267,9 @@ export function forward<To, From extends To>(opts: {
 }): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
+export function merge<T extends ReadonlyArray<Unit<any>>>(
+  events: T
+): T[number] extends Unit<infer R> ? Event<R> : never
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>
