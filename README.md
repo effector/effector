@@ -30,7 +30,8 @@
   - [Range input component](#range-input-component)
   - [Modal dialog](#modal-dialog)
   - [Conditional fitering](#conditional-fitering)
-  - [Dynamic form, saving and loading from localStorage with effects](#dynamic-form-saving-and-loading-from-localstorage-with-effects)
+  - [Dynamic form fields, saving and loading from localStorage with effects](#dynamic-form-fields-saving-and-loading-from-localstorage-with-effects)
+  - [Dynamic page selection with useStoreMap](#dynamic-page-selection-with-usestoremap)
   - [Night theme switcher component](#night-theme-switcher-component)
   - [Computed bounce menu animation](#computed-bounce-menu-animation)
   - [Values history](#values-history)
@@ -221,9 +222,13 @@ With `useList` hook
 
 [Run example](https://share.effector.dev/1EsAGMyq)
 
-### Dynamic form, saving and loading from localStorage with effects
+### Dynamic form fields, saving and loading from localStorage with effects
 
 [Run example](https://share.effector.dev/EdsTwKeN)
+
+### Dynamic page selection with useStoreMap
+
+[Run example](https://share.effector.dev/AvWnrFXy)
 
 ### Night theme switcher component
 
