@@ -14,7 +14,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 #### Arguments
 
-1. `sourceStore` ([_Store_](Store.md)): Source event
+1. `sourceStore` ([_Store_](Store.md)): Source store
 2. `clockEvent` ([_Event_](Event.md)): Clock(Trigger) event
 3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
@@ -256,3 +256,62 @@ clickButton('click B')
 ```
 
 [try it](https://share.effector.dev/yI70z0nd)
+
+# `sample(sourceStore)`
+
+Shorthand for `sample({ source: sourceStore, clock: sourceStore })`, it can be used to make updates of `sourceStore` non-greedy, thus batching updates of `sourceStore`.
+
+This is especially useful if we are combining different stores, and resulting store switches its state multiple times within single update. `sample` ensures it will fire only upon the last state
+
+#### Arguments
+
+1. `sourceStore` ([_Store_](Store.md)): Source store
+
+#### Returns
+
+([_`Store`_](Store.md)) - Non-greedy store
+
+#### Example 1
+
+```js try
+import {createStore, createEffect, sample, combine} from 'effector'
+
+const data = [{name: 'physics', id: 1}]
+
+const fetchContent = createEffect({
+  handler: () => new Promise(resolve => setTimeout(() => resolve(data), 0)),
+})
+
+const $lessonIndex = createStore(0)
+const $allLessons = createStore([]).on(
+  fetchContent.done,
+  (_, {result}) => result
+)
+
+const $lesson = combine(
+  $lessonIndex,
+  $allLessons,
+  (idx, lessons) => lessons[idx]
+)
+
+const $modal = combine({
+  isPending: fetchContent.pending,
+  content: $lesson,
+})
+
+const $batchedModal = sample($modal)
+
+$modal.updates.watch(v => console.log('modal update', v))
+//=> modal update { isPending: true, content: undefined })
+//=> modal update { isPending: false, content: undefined })
+//=> modal update { isPending: false, content: Object })
+// total 3 updates
+$batchedModal.updates.watch(v => console.log('batchedModal update', v))
+//=> batched modal update { isPending: true, content: undefined })
+//=> batched modal update { isPending: false, content: Object })
+// total 2 updates
+
+fetchContent()
+```
+
+[try it](https://share.effector.dev/mYd5PEpD)
