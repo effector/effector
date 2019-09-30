@@ -27,7 +27,19 @@
   - [Client-server interaction with effects](#client-server-interaction-with-effects)
   - [Reddit reader](#reddit-reader)
   - [Lists rendering](#lists-rendering)
-  - [More examples](#more-examples)
+  - [Range input component](#range-input-component)
+  - [Modal dialog](#modal-dialog)
+  - [Conditional fitering](#conditional-fitering)
+  - [Dynamic form, saving and loading from localStorage with effects](#dynamic-form-saving-and-loading-from-localstorage-with-effects)
+  - [Night theme switcher component](#night-theme-switcher-component)
+  - [Computed bounce menu animation](#computed-bounce-menu-animation)
+  - [Values history](#values-history)
+  - [Read default state from backend](#read-default-state-from-backend)
+  - [Requests cache](#requests-cache)
+  - [Watch last two store state values](#watch-last-two-store-state-values)
+  - [Stores from react context](#stores-from-react-context)
+  - [Basic todolist example](#basic-todolist-example)
+  - [Real world projects](#real-world-projects)
 - [API](#api)
   - [Event](#event)
   - [Effect](#effect)
@@ -197,9 +209,55 @@ With effects for data fetching and effector-react hooks
 
 With `useList` hook
 
-> [![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43) Basic example
+### Range input component
 
-### [More examples](https://github.com/zerobias/effector/network/dependents)
+[Run example](https://share.effector.dev/oRB2iB8M)
+
+### Modal dialog
+
+[Run example](https://share.effector.dev/B2ShiBzm)
+
+### Conditional fitering
+
+[Run example](https://share.effector.dev/1EsAGMyq)
+
+### Dynamic form, saving and loading from localStorage with effects
+
+[Run example](https://share.effector.dev/EdsTwKeN)
+
+### Night theme switcher component
+
+[Run example](https://share.effector.dev/4MU8H3YW)
+
+### Computed bounce menu animation
+
+[Run example](https://share.effector.dev/m43fCkOU)
+
+### Values history
+
+[Run example](https://share.effector.dev/ghHZZHci)
+
+### Read default state from backend
+
+[Run example](https://share.effector.dev/hA3WTBIT)
+
+### Requests cache
+
+[Run example](https://share.effector.dev/jvE7r0By)
+
+### Watch last two store state values
+
+[Run example](https://share.effector.dev/LRVsYhIc)
+
+### Stores from react context
+
+[Codesandbox](https://codesandbox.io/s/pensive-euler-i4qs5)
+
+### Basic todolist example
+
+[Codesandbox](https://codesandbox.io/s/vmx6wxww43)
+
+### [Real world projects](https://github.com/zerobias/effector/network/dependents)
 
 ## API
 
