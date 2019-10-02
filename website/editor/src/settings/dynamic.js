@@ -39,14 +39,12 @@ prettier.use(async code => {
   return result.code
 })
 
-forward({
-  from: sample({
-    source: sourceCode,
-    clock: sample(prettier.pending, clickPrettify).filter({
-      fn: pending => !pending,
-    }),
+sample({
+  source: sourceCode,
+  clock: sample(prettier.pending, clickPrettify).filter({
+    fn: pending => !pending,
   }),
-  to: prettier,
+  target: prettier,
 })
 
 forward({
