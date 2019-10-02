@@ -22,14 +22,23 @@ export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
 }
 
 export function useStore<State>(store: Store<State>): State
-export function useStoreMap<State, Result, Keys extends (ReadonlyArray<any> | any[])>(opts: {
+export function useStoreMap<
+  State,
+  Result,
+  Keys extends ReadonlyArray<any> | any[]
+>(opts: {
   readonly store: Store<State>
   readonly keys: Keys
   readonly fn: (state: State, keys: Keys) => Result
 }): Result
 export function useList<T>(
   list: Store<T[]>,
-  renderItem: (item: T, index: number) => React.ReactNode,
+  renderItem:
+    | {
+        readonly keys?: any[]
+        readonly fn: (item: T, index: number) => React.ReactNode
+      }
+    | ((item: T, index: number) => React.ReactNode),
 ): React.ReactNode
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void

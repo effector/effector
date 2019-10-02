@@ -52,7 +52,12 @@ declare export function useStoreMap<
 |}): Result
 declare export function useList<T>(
   list: Store<T[]> | Store<$ReadOnlyArray<T>>,
-  renderItem: (item: T, index: number) => Node,
+  renderItem:
+    | {|
+        +keys?: any[],
+        fn(item: T, index: number): Node,
+      |}
+    | ((item: T, index: number) => Node),
 ): Node
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
