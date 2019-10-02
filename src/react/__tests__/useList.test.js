@@ -3,9 +3,10 @@
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 
-import {createStore, createEvent} from 'effector'
+import {createStore, createEvent, restore} from 'effector'
 
 import {useList} from '../useList'
+import {useStore} from '../useStore'
 
 it('should render store items', async() => {
   const list = createStore(['foo', 'bar', 'baz'])
@@ -169,4 +170,69 @@ it('should handle inserts without dull re-renders', async() => {
     </div>
   `)
   expect(fn).toBeCalledTimes(4)
+})
+
+it('should update when keys are changed', async() => {
+  const changeDependency = createEvent()
+  const list = createStore(['foo', 'bar', 'baz'])
+  const dependency = restore(changeDependency, 'dep')
+
+  const List = () => {
+    const dep = useStore(dependency)
+    return (
+      <div>
+        {useList(list, {
+          keys: [dep],
+          fn: item => (
+            <div>
+              {item} {dep}
+            </div>
+          ),
+        })}
+      </div>
+    )
+  }
+
+  await render(<List />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        foo
+         
+        dep
+      </div>
+      <div>
+        bar
+         
+        dep
+      </div>
+      <div>
+        baz
+         
+        dep
+      </div>
+    </div>
+  `)
+  await act(async() => {
+    changeDependency('changed')
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        foo
+         
+        changed
+      </div>
+      <div>
+        bar
+         
+        changed
+      </div>
+      <div>
+        baz
+         
+        changed
+      </div>
+    </div>
+  `)
 })
