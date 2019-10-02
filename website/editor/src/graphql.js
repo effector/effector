@@ -9,9 +9,7 @@ const ENDPOINT = {
 }
 
 const request = data => {
-  const url = `https://${ENDPOINT.DIST}.appsync-api.${
-    ENDPOINT.REGION
-  }.amazonaws.com/graphql`
+  const url = `https://${ENDPOINT.DIST}.appsync-api.${ENDPOINT.REGION}.amazonaws.com/graphql`
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -34,12 +32,15 @@ export const shareCode: ShareCode = createEffect('share code', {
   async handler(code) {
     const {createCodePage} = await request({
       query: `
-        mutation ReplMutation {
-          createCodePage(code: ${JSON.stringify(code)}) {
+        mutation ReplMutation($codePage: CodePageInput!) {
+          createCodePage(codePage: $codePage) {
             slug
           }
         }
       `,
+      variables: {
+        codePage: {code},
+      },
       operationName: 'ReplMutation',
     })
     return createCodePage
