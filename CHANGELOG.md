@@ -19,7 +19,7 @@ const friends = createStore(['bob'])
 const List = () => {
   const userName = useStore(user)
   return useList(friends, {
-    keys: [user],
+    keys: [userName],
     fn: friend => (
       <div>
         {friend} is a friend of {userName}
@@ -35,7 +35,7 @@ setTimeout(() => {
 }, 500)
 ```
 
-[Try it](https://share.effector.dev/1yTEC3HD)
+[Try it](https://share.effector.dev/VSAHPO60)
 
 ## effector 20.3.0
 
