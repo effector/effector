@@ -2,7 +2,7 @@
 
 ## effector-react 20.4.0
 
-- Add support for `keys` field in `useList`. By default, `useList` rerenders only when some of it's items was changed.
+- Add support for `keys` field in `useList`. By default, `useList` rerenders only when some of its items was changed.
   Howewer, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
   In such cases we need to tell react about our dependencies and pass keys explicitly.
 
