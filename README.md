@@ -31,6 +31,7 @@
   - [Modal dialog](#modal-dialog)
   - [Conditional fitering](#conditional-fitering)
   - [Dynamic form fields, saving and loading from localStorage with effects](#dynamic-form-fields-saving-and-loading-from-localstorage-with-effects)
+  - [Loading initial state from localStorage with domains](#loading-initial-state-from-localstorage-with-domains)
   - [Dynamic page selection with useStoreMap](#dynamic-page-selection-with-usestoremap)
   - [Night theme switcher component](#night-theme-switcher-component)
   - [Computed bounce menu animation](#computed-bounce-menu-animation)
@@ -225,6 +226,10 @@ With `useList` hook
 ### Dynamic form fields, saving and loading from localStorage with effects
 
 [Run example](https://share.effector.dev/EdsTwKeN)
+
+### Loading initial state from localStorage with domains
+
+[Run example](https://share.effector.dev/YbiBnyAD)
 
 ### Dynamic page selection with useStoreMap
 
