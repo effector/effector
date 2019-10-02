@@ -32,6 +32,7 @@ type DomainHooks = {|
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
+    addLinkToOwner(node, data)
     acc.add(data)
   })
   addLinkToOwner(node, trigger)
@@ -112,52 +113,44 @@ function domainFabric(opts: {
     onCreateStore: createHook(store, stores, node),
     onCreateDomain: createHook(domain, domains, node),
     history,
-    event<Payload>(
+    event: <Payload>(
       name?: string,
       config?: Config<EventConfigPart>,
-    ): Event<Payload> {
-      const result = eventFabric({
-        name,
-        parent: compositeName,
-        config,
-      })
-      addLinkToOwner(node, result)
-      event(result)
-      return result
-    },
-    effect<Params, Done, Fail>(
+    ): Event<Payload> =>
+      event(
+        eventFabric({
+          name,
+          parent: compositeName,
+          config,
+        }),
+      ),
+    effect: <Params, Done, Fail>(
       name?: string,
       config?: Config<EffectConfigPart<Params, Done>>,
-    ): Effect<Params, Done, Fail> {
-      const result = effectFabric({
-        name,
-        parent: compositeName,
-        config,
-      })
-      addLinkToOwner(node, result)
-      effect(result)
-      return result
-    },
-    domain(name?: string, config?: Config<DomainConfigPart>) {
-      const result = domainFabric({
-        name,
-        parent: compositeName,
-        parentHooks: hooks,
-        config,
-      })
-      addLinkToOwner(node, result)
-      domain(result)
-      return result
-    },
-    store<T>(state: T, config?: Config<StoreConfigPart>): Store<T> {
-      const result = createStore(state, {
-        parent: compositeName,
-        config,
-      })
-      addLinkToOwner(node, result)
-      store(result)
-      return result
-    },
+    ): Effect<Params, Done, Fail> =>
+      effect(
+        effectFabric({
+          name,
+          parent: compositeName,
+          config,
+        }),
+      ),
+    domain: (name?: string, config?: Config<DomainConfigPart>) =>
+      domain(
+        domainFabric({
+          name,
+          parent: compositeName,
+          parentHooks: hooks,
+          config,
+        }),
+      ),
+    store: <T>(state: T, config?: Config<StoreConfigPart>): Store<T> =>
+      store(
+        createStore(state, {
+          parent: compositeName,
+          config,
+        }),
+      ),
     kind: Kind.domain,
     sid: config.sid || null,
   }
