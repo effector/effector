@@ -1,5 +1,42 @@
 # Changelog
 
+## effector-react 20.4.0
+
+- Add support for `keys` field in `useList`. By default, `useList` rerenders only when some of it's items was changed.
+  Howewer, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
+  In such cases we need to tell react about our dependencies and pass keys explicitly.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import {createEvent, createStore, restore} from 'effector'
+import {useStore, useList} from 'effector-react'
+
+const renameUser = createEvent()
+const user = restore(renameUser, 'alice')
+const friends = createStore(['bob'])
+const List = () => {
+  const userName = useStore(user)
+  return useList(friends, {
+    keys: [user],
+    fn: friend => (
+      <div>
+        {friend} is a friend of {userName}
+      </div>
+    ),
+  })
+}
+ReactDOM.render(<List />, document.getElementById('root'))
+// => <div> bob is a friend of alice </div>
+setTimeout(() => {
+  renameUser('carol')
+  // => <div> bob is a friend of carol </div>
+}, 500)
+```
+
+[Try it](https://share.effector.dev/1yTEC3HD)
+
 ## effector 20.3.0
 
 - Add `shortName` to domains
