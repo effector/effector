@@ -1,5 +1,9 @@
 # Changelog
 
+## effector 20.3.1
+
+- Fix edge case when `clearNode` been called on store belonged to certain domain led to the removal of the entire domain
+
 ## effector-react 20.4.0
 
 - Add support for `keys` field in `useList`. By default, `useList` rerenders only when some of its items was changed.
