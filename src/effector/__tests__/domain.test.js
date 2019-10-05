@@ -1,7 +1,13 @@
 //@flow
 
-import {createDomain, createEvent, createEffect} from 'effector'
-import {spy} from 'effector/fixtures'
+import {
+  createDomain,
+  clearNode,
+  createStore,
+  createEvent,
+  createEffect,
+} from 'effector'
+import {spy, argumentHistory} from 'effector/fixtures'
 
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
@@ -90,5 +96,44 @@ describe('domain name', () => {
       expect(domain.domain().getType()).toBe('dom')
       expect(domain.effect().getType()).not.toBe('dom/')
     })
+  })
+})
+describe('domain ownership', () => {
+  test('reference example', () => {
+    const fn = jest.fn()
+    const add = createEvent()
+    const source = createStore([]).on(add, (list, item) => [...list, item])
+    const mappedA = source.map(list => list.length)
+    const mappedB = source.map(list => list.length)
+    mappedA.watch(e => fn(e))
+    add('a')
+    clearNode(mappedB)
+    add('b')
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+        2,
+      ]
+    `)
+  })
+  test('edge case with domains', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const add = domain.event()
+    const source = domain.store([]).on(add, (list, item) => [...list, item])
+    const mappedA = source.map(list => list.length)
+    const mappedB = source.map(list => list.length)
+    mappedA.watch(e => fn(e))
+    add('a')
+    clearNode(mappedB)
+    add('b')
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+        2,
+      ]
+    `)
   })
 })
