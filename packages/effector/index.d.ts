@@ -324,7 +324,7 @@ export function createStoreObject<State>(
 export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
   cases: Obj,
-): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
+): {[K in keyof Obj]: Obj[K] extends (p: any) => p is infer R ? Event<R> : Event<S>} & {__: Event<S>}
 
 export function createApi<
   S,
