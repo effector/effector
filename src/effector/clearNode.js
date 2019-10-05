@@ -17,7 +17,11 @@ const removeItem = (list, item) => {
   }
 }
 
-const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
+const clearNodeNormalized = (
+  targetNode: Graph,
+  deep: boolean,
+  isDomainUnit,
+) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
   //$off
@@ -26,16 +30,19 @@ const clearNodeNormalized = (targetNode: Graph, deep: boolean) => {
   let list = getLinks(targetNode)
   while ((currentNode = list.pop())) {
     removeItem(getOwners(currentNode), targetNode)
-    if (deep || currentNode.family.type === 'crosslink') {
-      clearNodeNormalized(currentNode, deep)
+    if (deep || isDomainUnit || currentNode.family.type === 'crosslink') {
+      clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
   list = getOwners(targetNode)
   while ((currentNode = list.pop())) {
     removeItem(currentNode.next, targetNode)
     removeItem(getLinks(currentNode), targetNode)
-    if (currentNode.family.type === 'crosslink') {
-      clearNodeNormalized(currentNode, deep)
+    if (
+      currentNode.family.type === 'crosslink' ||
+      (isDomainUnit && currentNode.family.type === 'regular')
+    ) {
+      clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
 }
@@ -49,14 +56,16 @@ export const clearNode = (
     ...
   } = {},
 ) => {
+  let isDomainUnit = false
   if (isStore(graphite)) {
     clearMap(graphite.subscribers)
   } else if (isDomain(graphite)) {
+    isDomainUnit = true
     const history = getGraph(graphite).scope.history
     clearMap(history.events)
     clearMap(history.effects)
     clearMap(history.storages)
     clearMap(history.domains)
   }
-  clearNodeNormalized(getGraph(graphite), !!deep)
+  clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit)
 }

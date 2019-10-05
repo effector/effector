@@ -99,6 +99,9 @@ function domainFabric(opts: {
     node: [],
     scope: {history},
     meta: {unit: 'domain'},
+    family: {
+      type: 'domain',
+    },
   })
 
   return {

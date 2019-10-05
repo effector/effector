@@ -97,7 +97,7 @@ export type Tap = {|
 |}
 
 export type Family = {|
-  type: 'regular' | 'crosslink',
+  type: 'regular' | 'crosslink' | 'domain',
   links: Graph[],
   +owners: Graph[],
 |}
