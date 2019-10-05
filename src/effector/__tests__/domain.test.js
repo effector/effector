@@ -136,4 +136,23 @@ describe('domain ownership', () => {
       ]
     `)
   })
+  test('clearNode(domain) should work as usual', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const add = domain.event()
+    const source = domain.store([]).on(add, (list, item) => [...list, item])
+    const mappedA = source.map(list => list.length)
+    const mappedB = source.map(list => list.length)
+    mappedA.watch(e => fn(e))
+    add('a')
+    clearNode(domain)
+    add('b')
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+      ]
+    `)
+  })
 })
