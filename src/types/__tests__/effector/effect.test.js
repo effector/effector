@@ -242,7 +242,7 @@ describe('optional params', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Argument of type '1' is not assignable to parameter of type 'void'.
+        no errors
 
         --flow--
         no errors
@@ -257,7 +257,7 @@ describe('optional params', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Argument of type '\\"really anything\\"' is not assignable to parameter of type 'void'.
+        Expected 1 arguments, but got 0.
 
 
         --flow--
