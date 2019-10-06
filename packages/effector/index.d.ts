@@ -268,7 +268,7 @@ export function forward<To, From extends To>(opts: {
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function merge<T extends ReadonlyArray<Unit<any>>>(
-  events: T
+  events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
@@ -297,14 +297,29 @@ export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
   sid?: string
-}): FN extends () => infer Done
-  ? Done extends Promise<infer Async>
-    ? Effect<void, Async, Error>
-    : Effect<void, Done, Error>
-  : FN extends (t: infer Params) => infer Done
-  ? Done extends Promise<infer Async>
-    ? Effect<Params, Async, Error>
-    : Effect<Params, Done, Error>
+}): FN extends (...args: infer Args) => infer Done
+  ? Effect<
+      Args['length'] extends 0 // does handler accept 0 arguments?
+        ? void // works since TS v3.3.3
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+          /**
+           * Applying `infer` to a variadic arguments here we'll get `Args` of
+           * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
+           * In case T is optional we get `T | undefined` back from `Args[0]`.
+           * We lose information about argument's optionality, but we can make it
+           * optional again by appending `void` type, so the result type will be
+           * `T | undefined | void`.
+           *
+           * The disadvantage of this method is that we can't restore optonality
+           * in case of `params?: any` because in a union `any` type absorbs any
+           * other type (`any | undefined | void` becomes just `any`). And we
+           * have similar situation also with the `unknown` type.
+           */
+        ? Args[0] | void
+        : Args[0],
+      Done extends Promise<infer Async> ? Async : Done,
+      Error
+    >
   : never
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
