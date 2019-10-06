@@ -205,7 +205,6 @@ describe('nested effects', () => {
                     Types of parameters 'payload' and 'payload' are incompatible.
                       Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
 
-
         --flow--
         Cannot assign 'createEffect(...)' to 'parentEffect'
           const parentEffect: Effect<number, number> = createEffect(
@@ -232,4 +231,39 @@ describe('nested effects', () => {
     })
   })
   test('with use', () => {})
+})
+describe('optional params', () => {
+  describe('inference of optional argument type from handler type', () => {
+    it('should allow calls with and w/o arguments', () => {
+      const handler = (params = 0) => params
+      const effect = createEffect({handler})
+      effect(1)
+      effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+    it('should allow calls with and w/o arguments in case of `params?: any`', () => {
+      const handler = (params?: any) => params
+      const effect = createEffect({handler})
+      effect('really anything')
+      effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Expected 1 arguments, but got 0.
+
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
 })
