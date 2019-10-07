@@ -202,7 +202,7 @@ it('handle sync effect watchers in correct order', async() => {
 it('should not override sync event updates', async() => {
   const fn = jest.fn()
   const uppercase = createEvent()
-  
+
   const fx = createEffect({
     handler() {
       uppercase()
@@ -213,10 +213,6 @@ it('should not override sync event updates', async() => {
     .on(fx, (_, user) => user)
   user.watch(user => fn(user))
 
-  await user('bob')
-  expect(argumentHistory(fn)).toEqual([
-    'alice',
-    'bob',
-    'BOB',
-  ])
+  await fx('bob')
+  expect(argumentHistory(fn)).toEqual(['alice', 'bob', 'BOB'])
 })
