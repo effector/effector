@@ -1,5 +1,5 @@
 //@flow
-import {createEffect, forward} from 'effector'
+import {createEffect, createEvent, createStore, forward} from 'effector'
 import {delay, spy, argumentHistory} from 'effector/fixtures'
 
 const effect = createEffect('long request')
@@ -197,4 +197,26 @@ it('handle sync effect watchers in correct order', async() => {
   eff.done.watch(e => fn(e))
   await eff('run')
   expect(fn.mock.calls).toEqual([['run'], [{params: 'run', result: [1, 2, 3]}]])
+})
+
+it('should not override sync event updates', async() => {
+  const fn = jest.fn()
+  const uppercase = createEvent()
+  
+  const fx = createEffect({
+    handler() {
+      uppercase()
+    },
+  })
+  const user = createStore('alice')
+    .on(uppercase, user => user.toUpperCase())
+    .on(fx, (_, user) => user)
+  user.watch(user => fn(user))
+
+  await user('bob')
+  expect(argumentHistory(fn)).toEqual([
+    'alice',
+    'bob',
+    'BOB',
+  ])
 })
