@@ -1,5 +1,70 @@
 # Changelog
 
+## effector 20.3.2
+
+- Allow typescript to refine type with `split` method ([PR](https://github.com/zerobias/effector/pull/215))
+- Improve type inference of effects with optional arguments in Typescript ([PR](https://github.com/zerobias/effector/pull/214))
+- Ensure that effect handler is called only after effect update itself, thereby preventing side-effects from interrupting pure computations
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore, createEvent, createEffect, sample} from 'effector'
+import {useList} from 'effector-react'
+
+const items$ = createStore([{id: 0, status: 'NEW'}, {id: 1, status: 'NEW'}])
+
+const updateItem = createEvent()
+const resetItems = createEvent()
+
+const processItems = createEffect({
+  async handler(items) {
+    for (let {id} of items) {
+      //event call inside effect
+      //should be applied to items$
+      //only after processItems itself
+      updateItem({id, status: 'PROCESS'})
+      await new Promise(r => setTimeout(r, 3000))
+      updateItem({id, status: 'DONE'})
+    }
+  },
+})
+
+items$
+  .on(updateItem, (items, {id, status}) =>
+    items.map(item => (item.id === id ? {...item, status} : item)),
+  )
+  .on(processItems, items => items.map(({id}) => ({id, status: 'WAIT'})))
+  .reset(resetItems)
+
+const processClicked = createEvent()
+
+sample({
+  source: items$,
+  clock: processClicked,
+  target: processItems,
+})
+
+const App = () => (
+  <section>
+    <header>
+      <h1>Jobs list</h1>
+    </header>
+    <button onClick={processClicked}>run tasks</button>
+    <button onClick={resetItems}>reset</button>
+    <ol>
+      {useList(items$, ({status}) => (
+        <li>{status}</li>
+      ))}
+    </ol>
+  </section>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+[Try it](https://share.effector.dev/viApFDXj)
+
 ## effector 20.3.1
 
 - Fix edge case when `clearNode` been called on store belonged to certain domain led to the removal of the entire domain
