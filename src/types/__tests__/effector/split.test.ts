@@ -14,9 +14,6 @@ it('should infer type by given predicate', () => {
     "
     --typescript--
     no errors
-
-    --flow--
-    no errors
     "
   `)
 })
