@@ -141,8 +141,7 @@ export function effectFabric<Payload, Done>(opts: {
     and false as Boolean(0) */
   const pending = createStore(Boolean(0))
     .on(instance, () => Boolean(1))
-    .reset(done)
-    .reset(fail)
+    .reset(done, fail)
   instance.pending = pending
 
   addLinkToOwner(instance, done)
