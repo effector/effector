@@ -8,7 +8,7 @@ import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
 import {normalizeConfig, type EventConfigPart, type Config} from '../config'
-import {type CompositeName, createName, mapName} from '../naming'
+import {type CompositeName, createName, mapName, joinName} from '../naming'
 import {thru} from '../thru'
 import {createLinkNode} from '../forward'
 import {watchUnit} from '../watcher'
@@ -133,7 +133,7 @@ function filterEvent(
     return filterMapEvent(event, fn)
   }
   const mapped = eventFabric({
-    name: '' + event.shortName + ' →? *',
+    name: joinName(event, ' →? *'),
     parent: event.domainName,
   })
   createLinkNode(event, mapped, {
@@ -153,7 +153,7 @@ function filterMapEvent(
   fn: any => any | void,
 ): any {
   const mapped = eventFabric({
-    name: '' + event.shortName + ' →? *',
+    name: joinName(event, ' →? *'),
     parent: event.domainName,
   })
   createLinkNode(event, mapped, {

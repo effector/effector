@@ -6,7 +6,7 @@ import {upsertLaunch} from '../kernel'
 import {eventFabric} from '../event'
 import {createStore} from '../store'
 import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
-import type {CompositeName} from '../naming'
+import {joinName, type CompositeName} from '../naming'
 import {Defer} from './defer'
 
 export function createEffect<Payload, Done>(
@@ -38,7 +38,7 @@ export function effectFabric<Payload, Done>(opts: {
     params: Payload,
     result: Done,
   |}> = eventFabric({
-    name: '' + instance.shortName + ' done',
+    name: joinName(instance, ' done'),
     parent,
     config,
   })
@@ -46,7 +46,7 @@ export function effectFabric<Payload, Done>(opts: {
     params: Payload,
     error: *,
   |}> = eventFabric({
-    name: '' + instance.shortName + ' fail',
+    name: joinName(instance, ' fail'),
     parent,
     config,
   })
@@ -62,7 +62,7 @@ export function effectFabric<Payload, Done>(opts: {
         +error: *,
       |},
   > = eventFabric({
-    name: '' + instance.shortName + ' finally',
+    name: joinName(instance, ' finally'),
     parent,
     config,
   })
