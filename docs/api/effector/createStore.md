@@ -12,7 +12,7 @@ Creates a [store](Store.md).
 
 1. `defaultState` (_State_): Default state
 2. `config` (_Config_): Optional configuration
-    - `name` (_String_): Name of the store. Babel plugin sets it from variable name
+    - `name` (_String_): Name for the store. Babel plugin can set it from variable name, if not passed explicitly in config.
 
 #### Returns
 
