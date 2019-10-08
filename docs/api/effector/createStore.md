@@ -4,13 +4,15 @@ title: createStore
 hide_title: true
 ---
 
-# `createStore(defaultState)`
+# `createStore(defaultState, config?)`
 
 Creates a [store](Store.md).
 
 #### Arguments
 
 1. `defaultState` (_State_): Default state
+2. `config` (_Config_): Optional configuration
+  - `name` (_String_): Name of the store. Babel plugin sets it from variable name
 
 #### Returns
 
