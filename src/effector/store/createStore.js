@@ -185,8 +185,8 @@ function mapStore<A, B>(
   if (typeof fn === 'object') {
     config = fn
     name = fn.name
-    fn = fn.fn
     firstState = fn.firstState
+    fn = fn.fn
   }
   let lastResult
   const storeState = store.getState()
