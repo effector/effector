@@ -23,6 +23,7 @@ export {Kind, createNode, step, is} from './stdlib'
 export {clearNode} from './clearNode'
 export {launch} from './kernel'
 export {version} from './flags'
+export {guard} from './guard'
 //eslint-disable-next-line
 export * as blocks from './blocks'
 
