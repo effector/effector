@@ -9,7 +9,7 @@ import {clearNode} from './clearNode'
 
 export function guard({
   source,
-  when,
+  filter,
   target,
   greedy = false,
   name = null,
@@ -17,9 +17,9 @@ export function guard({
   let result
   const meta = {op: 'guard'}
 
-  if (is.unit(when)) {
+  if (is.unit(filter)) {
     result = sample({
-      source: when,
+      source: filter,
       clock: source,
       target: createNode({
         node: [
@@ -34,7 +34,7 @@ export function guard({
         meta,
         family: {
           type: 'crosslink',
-          owners: [source, when, target],
+          owners: [source, filter, target],
           links: [target],
         },
       }),
@@ -43,13 +43,13 @@ export function guard({
       name,
     })
   } else {
-    if (typeof when !== 'function')
-      throw Error('`when` should be function or unit')
+    if (typeof filter !== 'function')
+      throw Error('`filter` should be function or unit')
     result = createLinkNode(source, target, {
-      scope: {fn: when},
+      scope: {fn: filter},
       node: [
         step.filter({
-          fn: (upd, {fn}) => fn(when),
+          fn: (upd, {fn}) => fn(upd),
         }),
       ],
       meta,
@@ -57,5 +57,6 @@ export function guard({
   }
   const unsub = clearNode.bind(null, result, {})
   unsub.unsubscribe = unsub
+  unsub.graphite = result
   return unsub
 }
