@@ -1,24 +1,26 @@
 //@flow
 
 import type {Unit} from './stdlib'
-import {forward, createLinkNode} from './forward'
+import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './event'
-import {is, step, getGraph, createNode} from './stdlib'
-import {clearNode} from './clearNode'
+import {is, step, createNode} from './stdlib'
 
-export function guard({
-  source,
-  filter,
-  target,
-  greedy = false,
-  name = null,
-}: any) {
-  let result
+export function guard(source: any, config: any) {
+  if (!config) {
+    config = source
+    source = config.source
+  }
+  const {filter, greedy, name} = config
+  let target = config.target
+  let returnTarget = false
+  if (!target) {
+    returnTarget = true
+    target = createEvent(name)
+  }
   const meta = {op: 'guard'}
-
   if (is.unit(filter)) {
-    result = sample({
+    sample({
       source: filter,
       clock: source,
       target: createNode({
@@ -45,7 +47,7 @@ export function guard({
   } else {
     if (typeof filter !== 'function')
       throw Error('`filter` should be function or unit')
-    result = createLinkNode(source, target, {
+    createLinkNode(source, target, {
       scope: {fn: filter},
       node: [
         step.filter({
@@ -55,8 +57,5 @@ export function guard({
       meta,
     })
   }
-  const unsub = clearNode.bind(null, result, {})
-  unsub.unsubscribe = unsub
-  unsub.graphite = result
-  return unsub
+  if (returnTarget) return target
 }
