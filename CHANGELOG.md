@@ -53,6 +53,24 @@ submitForm('alice') // ~> searchUser('alice')
 [Type inference](https://github.com/zerobias/effector/blob/master/src/types/__tests__/effector/guard.test.js)
 [Implementation tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/guard.test.js)
 
+- Introduce `name` property in `sample` parameters list
+
+Each basic entity in Effector (event/effect/store/domain) may have a name. You now can name sampled entities in the same
+manner as basic ones.
+
+```js
+import {createStore, sample} from 'effector'
+
+const foo = createStore(null)
+
+const sampled = sample({
+  source: foo,
+  name: 'sampled foo',
+})
+
+console.log(sampled.shortName) // 'sampled foo'
+```
+
 ## effector 20.3.2
 
 - Allow typescript to refine type with `split` method ([PR](https://github.com/zerobias/effector/pull/215))
