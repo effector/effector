@@ -16,7 +16,7 @@ export function createNode({
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
   family?: {
-    type?: 'regular' | 'crosslink',
+    type?: 'regular' | 'crosslink' | 'domain',
     links?: Graphite[],
     owners?: Graphite[],
     ...

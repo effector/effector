@@ -46,6 +46,7 @@ export const storeByEvent = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
+  name: string | null,
 ) =>
   storeBy(
     source,
@@ -54,7 +55,7 @@ export const storeByEvent = (
     greedy,
     target ||
       eventFabric({
-        name: source.shortName,
+        name: name || source.shortName,
         parent: source.domainName,
       }),
   )
@@ -65,6 +66,7 @@ export const storeByStore = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
+  name: string | null,
 ) => {
   const sourceState = readRef(source.stateRef)
   return storeBy(
@@ -74,7 +76,7 @@ export const storeByStore = (
     greedy,
     target ||
       createStore(fn ? fn(sourceState, readRef(clock.stateRef)) : sourceState, {
-        name: source.shortName,
+        name: name || source.shortName,
         parent: source.domainName,
       }),
   )
@@ -86,11 +88,12 @@ export const eventByUnit = (
   fn: null | ((a: any, b: any) => any),
   greedy: boolean,
   target: any,
+  name: string | null,
 ) => {
   target =
     target ||
     eventFabric({
-      name: source.shortName,
+      name: name || source.shortName,
       parent: source.domainName,
     })
   const hasSource = createStateRef(false)

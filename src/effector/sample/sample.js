@@ -12,13 +12,15 @@ export function sample(
   greedy: boolean = false,
 ): any {
   let target
+  let name = null
   //config case
   if (clock === undefined && 'source' in source) {
     clock = source.clock
     fn = source.fn
     greedy = source.greedy
-    //optional target accepted only from config
+    //optional target & name accepted only from config
     target = source.target
+    name = source.name
     source = source.source
   }
   if (clock === undefined) {
@@ -38,7 +40,7 @@ export function sample(
         ? storeByStore
         : storeByEvent
       : eventByUnit
-  return combinator(sourceNorm, clockNorm, (fn: any), greedy, target)
+  return combinator(sourceNorm, clockNorm, (fn: any), greedy, target, name)
 }
 
 //prettier-ignore
