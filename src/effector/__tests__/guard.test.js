@@ -43,3 +43,21 @@ it('supports store guards', () => {
 
   expect(argumentHistory(spy)).toEqual(['A', 'C'])
 })
+
+test.skip('temporal consistency', () => {
+  const trigger = createEvent()
+  const target = createEvent()
+
+  guard({
+    source: trigger,
+    when: trigger.map(x => x > 0),
+    target,
+  })
+
+  target.watch(spy)
+  // trigger(1)
+  trigger(0)
+  trigger(2)
+
+  expect(argumentHistory(spy)).toEqual([2])
+})

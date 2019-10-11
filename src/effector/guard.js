@@ -1,29 +1,61 @@
 //@flow
 
 import type {Unit} from './stdlib'
-import {forward} from './forward'
+import {forward, createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './event'
-import {is} from './stdlib'
+import {is, step, getGraph, createNode} from './stdlib'
+import {clearNode} from './clearNode'
 
-export function guard({source, when, target, greedy = false}: any) {
-  if (!is.unit(when)) {
-    forward({
-      from: (is.store(source) ? source.updates : source).filter({fn: when}),
-      to: target,
+export function guard({
+  source,
+  when,
+  target,
+  greedy = false,
+  name = null,
+}: any) {
+  let result
+  const meta = {op: 'guard'}
+
+  if (is.unit(when)) {
+    result = sample({
+      source: when,
+      clock: source,
+      target: createNode({
+        node: [
+          step.filter({
+            fn: ({guard}) => guard,
+          }),
+          step.compute({
+            fn: ({data}) => data,
+          }),
+        ],
+        child: [target],
+        meta,
+        family: {
+          type: 'crosslink',
+          owners: [source, when, target],
+          links: [target],
+        },
+      }),
+      fn: (guard, data) => ({guard, data}),
+      greedy,
+      name,
     })
-    return
+  } else {
+    if (typeof when !== 'function')
+      throw Error('`when` should be function or unit')
+    result = createLinkNode(source, target, {
+      scope: {fn: when},
+      node: [
+        step.filter({
+          fn: (upd, {fn}) => fn(when),
+        }),
+      ],
+      meta,
+    })
   }
-  const src = createEvent()
-  sample({
-    source: when,
-    clock: source,
-    target: src,
-    fn: (guard, data) => ({guard, data}),
-    greedy,
-  })
-  forward({
-    from: src.filter({fn: ({guard}) => guard}).map(({data}) => data),
-    to: target,
-  })
+  const unsub = clearNode.bind(null, result, {})
+  unsub.unsubscribe = unsub
+  return unsub
 }
