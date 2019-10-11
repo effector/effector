@@ -1,5 +1,58 @@
 # Changelog
 
+## effector 20.4.0
+
+- Introduce `guard`: conditional event routing
+  Control one event with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
+
+```js
+import {createStore, createEffect, createEvent, guard, sample} from 'effector'
+
+const clickRequest = createEvent()
+const fetchRequest = createEffect({
+  handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
+})
+
+const clicks = createStore(0).on(clickRequest, x => x + 1)
+const requests = createStore(0).on(fetchRequest, x => x + 1)
+
+const isIdle = fetchRequest.pending.map(pending => !pending)
+
+/*
+on clickRequest, take current clicks value,
+and call fetchRequest with it
+if isIdle value is true 
+*/
+guard({
+  source: sample(clicks, clickRequest),
+  filter: isIdle,
+  target: fetchRequest,
+})
+```
+
+See [ui visualization](https://share.effector.dev/zLB4NwNV)
+
+Also, `guard` can accept common function predicate as a filter, to drop events before forwarding them to target
+
+```js
+import {createEffect, createEvent, guard} from 'effector'
+
+const searchUser = createEffect()
+const submitForm = createEvent()
+
+guard({
+  source: submitForm,
+  filter: user => user.length > 0,
+  target: searchUser,
+})
+
+submitForm('') // nothing happens
+submitForm('alice') // ~> searchUser('alice')
+```
+
+[Type inference](https://github.com/zerobias/effector/blob/master/src/types/__tests__/effector/guard.test.js)
+[Implementation tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/guard.test.js)
+
 ## effector 20.3.2
 
 - Allow typescript to refine type with `split` method ([PR](https://github.com/zerobias/effector/pull/215))
