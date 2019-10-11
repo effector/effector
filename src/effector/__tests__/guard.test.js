@@ -18,23 +18,23 @@ test('use case', () => {
   })
   const clicks = createStore(0).on(clickRequest, x => x + 1)
 
-  sample({
-    source: clicks,
-    clock: guard({
-      source: sample(fetchRequest.pending, clickRequest),
-      filter: pending => !pending,
-    }),
-    target: fetchRequest,
-  })
-
-  // or
-
   const isIdle = fetchRequest.pending.map(pending => !pending)
 
   sample({
     source: clicks,
     clock: guard(clickRequest, {
       filter: isIdle,
+    }),
+    target: fetchRequest,
+  })
+
+  // or
+
+  sample({
+    source: clicks,
+    clock: guard({
+      source: sample(fetchRequest.pending, clickRequest),
+      filter: pending => !pending,
     }),
     target: fetchRequest,
   })
