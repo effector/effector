@@ -416,27 +416,32 @@ export function sample<A, B, C>(config: {
   source: Store<A>
   clock: Store<B>
   fn(source: A, clock: B): C
+  name?: string
   greedy?: boolean
 }): Store<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
   clock: Unit<B>
   fn(source: A, clock: B): C
+  name?: string
   greedy?: boolean
 }): Event<C>
 export function sample<A>(config: {
   source: Store<A>
   clock?: Store<any>
+  name?: string
   greedy?: boolean
 }): Store<A>
 export function sample<A>(config: {
   source: Store<A>
   clock?: Event<any> | Effect<any, any, any>
+  name?: string
   greedy?: boolean
 }): Event<A>
 export function sample<A>(config: {
   source: Event<A> | Effect<A, any, any>
   clock?: Unit<any>
+  name?: string
   greedy?: boolean
 }): Event<A>
 
