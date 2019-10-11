@@ -11,13 +11,8 @@ export function guard(source: any, config: any) {
     config = source
     source = config.source
   }
-  const {filter, greedy, name} = config
-  let target = config.target
-  let returnTarget = false
-  if (!target) {
-    returnTarget = true
-    target = createEvent(name)
-  }
+  const {filter, greedy, name = 'guard'} = config
+  const target = config.target || createEvent(name)
   const meta = {op: 'guard'}
   if (is.unit(filter)) {
     sample({
@@ -57,5 +52,5 @@ export function guard(source: any, config: any) {
       meta,
     })
   }
-  if (returnTarget) return target
+  return target
 }

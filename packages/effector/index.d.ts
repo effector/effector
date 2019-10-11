@@ -449,14 +449,19 @@ export function guard<A>(
   source: Unit<A>,
   config: {
     filter: Store<boolean> | ((value: A) => boolean)
-    name?: string
+    target: Unit<A>
+  },
+): Unit<A>
+export function guard<A>(
+  source: Unit<A>,
+  config: {
+    filter: Store<boolean> | ((value: A) => boolean)
   },
 ): Event<A>
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
     filter: (value: Source) => value is Result
-    name?: string
   },
 ): Event<Result>
 
@@ -464,13 +469,13 @@ export function guard<A>(config: {
   source: Unit<A>
   filter: Store<boolean> | ((value: A) => boolean)
   target: Unit<A>
-}): any
+}): Unit<A>
 
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result
   target: Unit<Result>
-}): any
+}): Unit<Result>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>

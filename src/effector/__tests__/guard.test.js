@@ -1,7 +1,32 @@
 //@flow
 
-import {guard, createEvent, createStore, createApi, is} from 'effector'
+import {
+  guard,
+  createEvent,
+  createStore,
+  createApi,
+  is,
+  createEffect,
+  sample,
+} from 'effector'
 import {argumentHistory, spy} from 'effector/fixtures'
+
+test('use case', () => {
+  const clickRequest = createEvent()
+  const fetchRequest = createEffect({
+    handler: n => new Promise(rs => setTimeout(rs, 500, n)),
+  })
+  const clicks = createStore(0).on(clickRequest, x => x + 1)
+
+  sample({
+    source: clicks,
+    clock: guard({
+      source: sample(fetchRequest.pending, clickRequest),
+      filter: pending => !pending,
+    }),
+    target: fetchRequest,
+  })
+})
 
 describe('without target', () => {
   it('returns event', () => {
