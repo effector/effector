@@ -26,6 +26,18 @@ test('use case', () => {
     }),
     target: fetchRequest,
   })
+
+  // or
+
+  const isIdle = fetchRequest.pending.map(pending => !pending)
+
+  sample({
+    source: clicks,
+    clock: guard(clickRequest, {
+      filter: isIdle,
+    }),
+    target: fetchRequest,
+  })
 })
 
 describe('without target', () => {
