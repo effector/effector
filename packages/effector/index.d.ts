@@ -445,13 +445,12 @@ export function sample<A>(config: {
   greedy?: boolean
 }): Event<A>
 
-export function guard<A>(
-  source: Unit<A>,
+export function guard<Source, Result extends Source>(
+  source: Unit<Source>,
   config: {
-    filter: Store<boolean> | ((value: A) => boolean)
-    target: Unit<A>
+    filter: (value: Source) => value is Result
   },
-): Unit<A>
+): Event<Result>
 export function guard<A>(
   source: Unit<A>,
   config: {
@@ -462,20 +461,34 @@ export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
     filter: (value: Source) => value is Result
+    target: Unit<Result>
   },
-): Event<Result>
-
+): Unit<Result>
+export function guard<A>(
+  source: Unit<A>,
+  config: {
+    filter: Store<boolean> | ((value: A) => boolean)
+    target: Unit<A>
+  },
+): Unit<A>
+export function guard<Source, Result extends Source>(config: {
+  source: Unit<Source>
+  filter: (value: Source) => value is Result
+}): Event<Result>
 export function guard<A>(config: {
   source: Unit<A>
   filter: Store<boolean> | ((value: A) => boolean)
-  target: Unit<A>
-}): Unit<A>
-
+}): Event<A>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result
   target: Unit<Result>
 }): Unit<Result>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: Store<boolean> | ((value: A) => boolean)
+  target: Unit<A>
+}): Unit<A>
 
 export function combine<R>(fn: () => R): Store<R>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
