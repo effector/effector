@@ -20,6 +20,14 @@ test('use case', () => {
 
   const isIdle = fetchRequest.pending.map(pending => !pending)
 
+  guard({
+    source: sample(clicks, clickRequest),
+    filter: isIdle,
+    target: fetchRequest,
+  })
+
+  // or
+
   sample({
     source: clicks,
     clock: guard(clickRequest, {
