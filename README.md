@@ -33,6 +33,7 @@
   - [Dynamic form fields, saving and loading from localStorage with effects](#dynamic-form-fields-saving-and-loading-from-localstorage-with-effects)
   - [Loading initial state from localStorage with domains](#loading-initial-state-from-localstorage-with-domains)
   - [Dynamic page selection with useStoreMap](#dynamic-page-selection-with-usestoremap)
+  - [Update on scroll with `guard`](#update-on-scroll-with-guard)
   - [Night theme switcher component](#night-theme-switcher-component)
   - [Computed bounce menu animation](#computed-bounce-menu-animation)
   - [Values history](#values-history)
@@ -234,6 +235,10 @@ With `useList` hook
 ### Dynamic page selection with useStoreMap
 
 [Run example](https://share.effector.dev/AvWnrFXy)
+
+### Update on scroll with `guard`
+
+[Run example](https://share.effector.dev/avjCFH22)
 
 ### Night theme switcher component
 
