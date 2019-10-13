@@ -81,7 +81,7 @@ export default function({style, component, domain, event, effect, store}: $todo)
       )}
       <OutlineSection list={event} title="Events" />
       <OutlineSection list={effect} title="Effects" />
-      <OutlineSection list={store} title="Storages" />
+      <OutlineSection list={store} title="Stores" />
       <OutlineSection list={domain} title="Domains" />
       <OutlineSection list={component} title="Components" />
     </Outline>
