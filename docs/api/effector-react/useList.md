@@ -94,11 +94,11 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 [try it](https://share.effector.dev/GQjYp0Bn)
 
-#### Example 2
-
 By default, useList rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
 In such cases, we need to tell react about our dependencies and pass keys explicitly.
+
+#### Example 2
 
 ```js try
 const renameUser = createEvent()
