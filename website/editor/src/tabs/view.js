@@ -40,6 +40,9 @@ export const TabsView = () => {
         <TabHeader onClick={tabApi.showSettings} isActive={tab === 'settings'}>
           Settings
         </TabHeader>
+        <TabHeader onClick={tabApi.showDescription} isActive={tab === 'description'}>
+          Description
+        </TabHeader>
       </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div
