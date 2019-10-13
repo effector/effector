@@ -93,3 +93,32 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 [try it](https://share.effector.dev/GQjYp0Bn)
+
+#### Example 2
+
+By default, useList rerenders only when some of its items were changed.
+However, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
+In such cases, we need to tell react about our dependencies and pass keys explicitly.
+
+```js try
+const renameUser = createEvent()
+const user = restore(renameUser, 'alice')
+const friends = createStore(['bob'])
+const List = () => {
+  const userName = useStore(user)
+  return useList(friends, {
+    keys: [userName],
+    fn: friend => (
+      <div>
+        {friend} is a friend of {userName}
+      </div>
+    ),
+  })
+}
+ReactDOM.render(<List />, document.getElementById('root'))
+// => <div> bob is a friend of alice </div>
+setTimeout(() => {
+  renameUser('carol')
+  // => <div> bob is a friend of carol </div>
+}, 500)
+```
