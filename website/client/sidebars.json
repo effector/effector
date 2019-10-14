@@ -36,34 +36,35 @@
   "api": {
     "effector": [
       "api/effector/effector",
-      "api/effector/createEvent",
       "api/effector/event",
-      "api/effector/createEffect",
-      "api/effector/effect",
-      "api/effector/createStore",
       "api/effector/store",
-      "api/effector/sample",
-      "api/effector/createDomain",
+      "api/effector/effect",
       "api/effector/domain",
+      "api/effector/createStore",
+      "api/effector/createEvent",
+      "api/effector/createEffect",
+      "api/effector/createDomain",
+      "api/effector/guard",
+      "api/effector/sample",
       "api/effector/combine",
       "api/effector/createStoreObject",
       "api/effector/createApi",
       "api/effector/restore",
       "api/effector/forward",
-      "api/effector/fromObservable",
       "api/effector/merge",
-      "api/effector/split"
+      "api/effector/split",
+      "api/effector/fromObservable"
     ],
     "effector-react": [
       "api/effector-react/effector-react",
-      "api/effector-react/createStoreConsumer",
-      "api/effector-react/createComponent",
-      "api/effector-react/createGate",
-      "api/effector-react/useGate",
       "api/effector-react/useStore",
       "api/effector-react/useStoreMap",
       "api/effector-react/useList",
-      "api/effector-react/gate"
+      "api/effector-react/createComponent",
+      "api/effector-react/gate",
+      "api/effector-react/createGate",
+      "api/effector-react/useGate",
+      "api/effector-react/createStoreConsumer"
     ],
     "effector-vue": [
       "api/effector-vue/effector-vue",
