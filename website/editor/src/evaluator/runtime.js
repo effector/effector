@@ -96,6 +96,7 @@ function generateBabelConfig({types, filename}) {
     case 'flow':
       presets.push(['flow', {all: true}])
       break
+    case 'typescript':
     case 'ts':
       presets.push([
         'typescript',
