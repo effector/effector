@@ -20,6 +20,8 @@ Control one dataflow with the help of another: when the condition and the data a
 #### Example
 
 ```js try
+import {createStore, createEffect, createEvent, guard, sample} from 'effector'
+
 const clickRequest = createEvent()
 const fetchRequest = createEffect({
   handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
@@ -49,6 +51,8 @@ Also, guard can accept common function predicate as a filter, to drop events bef
 #### Example 2
 
 ```js try
+import {createEffect, createEvent, guard} from 'effector'
+
 const searchUser = createEffect()
 const submitForm = createEvent()
 
@@ -62,7 +66,7 @@ submitForm('') // nothing happens
 submitForm('alice') // ~> searchUser('alice')
 ```
 
-# `guard({sourceEvent, {filter: filterStore})`
+# `guard(source, {filter: booleanStore})`
 
 #### Arguments
 
@@ -72,6 +76,8 @@ submitForm('alice') // ~> searchUser('alice')
 #### Example
 
 ```js try
+import {createEvent, createStore, createApi, guard} from 'effector'
+
 const trigger = createEvent()
 const $unlocked = createStore(true)
 const {lock, unlock} = createApi($unlocked, {
@@ -96,11 +102,13 @@ trigger('C')
 #### Arguments
 
 1. `sourceEvent` (_Event_): Source eventre
-2. `filter` (([a]) => Boolean): Optional predicate function, should be **pure**
+2. `filter` (_(sourcePayload) => Boolean_): Predicate function, should be **pure**
 
 #### Example 2
 
 ```js try
+import {createEvent, guard} from 'effector'
+
 const source = createEvent()
 const target = guard(source, {
   filter: x => x > 0,
