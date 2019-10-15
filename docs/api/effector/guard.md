@@ -4,7 +4,7 @@ title: guard
 hide_title: true
 ---
 
-# `guard({source, filter, target})`
+# `guard({source, filter, target?})`
 
 Introduce guard: conditional event routing
 Control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
@@ -20,8 +20,6 @@ Control one dataflow with the help of another: when the condition and the data a
 #### Example
 
 ```js try
-import {createStore, createEffect, createEvent, guard, sample} from 'effector'
-
 const clickRequest = createEvent()
 const fetchRequest = createEffect({
   handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
@@ -51,8 +49,6 @@ Also, guard can accept common function predicate as a filter, to drop events bef
 #### Example 2
 
 ```js try
-import {createEffect, createEvent, guard} from 'effector'
-
 const searchUser = createEffect()
 const submitForm = createEvent()
 
@@ -64,4 +60,54 @@ guard({
 
 submitForm('') // nothing happens
 submitForm('alice') // ~> searchUser('alice')
+```
+
+# `guard({sourceEvent, {filter: filterStore})`
+
+#### Arguments
+
+1. `sourceEvent` (_Event_): Source event
+1. `filterStore` (_Store_): Filter store
+
+#### Example
+
+```js try
+const trigger = createEvent()
+const $unlocked = createStore(true)
+const {lock, unlock} = createApi($unlocked, {
+  lock: () => false,
+  unlock: () => true,
+})
+
+const target = guard(trigger, {
+  filter: $unlocked,
+})
+
+target.watch(console.log)
+trigger('A')
+lock()
+trigger('B') // nothing happens
+unlock()
+trigger('C')
+```
+
+# `guard({sourceEvent, {filter: predicate})`
+
+#### Arguments
+
+1. `sourceEvent` (_Event_): Source eventre
+2. `filter` (([a]) => Boolean): Optional predicate function, should be **pure**
+
+#### Example 2
+
+```js try
+const source = createEvent()
+const target = guard(source, {
+  filter: x => x > 0,
+})
+
+target.watch(spy)
+
+source(0)
+source(1)
 ```
