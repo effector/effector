@@ -9,15 +9,18 @@ title: API Reference
 - [createEffect(name?)](createEffect.md)
 - [createStore(defaultState)](createStore.md)
 - [createDomain(name?)](createDomain.md)
-- [combine(...stores, f)](combine.md)
 - [createStoreObject({storeA, storeB})](createStoreObject.md)
 - [createApi(store, api)](createApi.md)
+- [combine(...stores, f)](combine.md)
+- [forward({from, to})](forward.md)
+- [fromObservable(observable)](fromObservable.md)
+- [guard({source, filter, target})](guard.md)
+- [merge([eventA, eventB])](merge.md)
 - [restore(event, defaultState)](restore.md)
 - [restore(effect, defaultState)](restore.md)
 - [restore(obj)](restore.md)
-- [forward({from, to})](forward.md)
-- [fromObservable(observable)](fromObservable.md)
-- [merge([eventA, eventB])](merge.md)
+- [split(event, cases)](split.md)
+- [sample(sourceStore, clockEvent, fn)](sample.md)
 
 ### Event API
 
