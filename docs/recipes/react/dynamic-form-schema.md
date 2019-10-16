@@ -1,7 +1,7 @@
 ---
-id: dynamic-form
-title: Dynamic Form
-sidebar_label: Example: Dynamic Form
+id: dynamic-form-schema
+title: Dynamic form schema
+sidebar_label: Example: Dynamic form schema
 ---
 
 ```js try
