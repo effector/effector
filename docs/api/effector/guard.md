@@ -6,8 +6,8 @@ hide_title: true
 
 # `guard({source, filter, target?})`
 
-Introduce guard: conditional event routing
-Control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
+Guard is a method for conditional event routing.
+It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
 
 #### Arguments
 
@@ -101,7 +101,7 @@ trigger('C')
 
 #### Arguments
 
-1. `sourceEvent` (_Event_): Source eventre
+1. `sourceEvent` (_Event_): Source event
 2. `filter` (_(sourcePayload) => Boolean_): Predicate function, should be **pure**
 
 #### Example 2
