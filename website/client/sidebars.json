@@ -72,7 +72,8 @@
         "ids": [
           "recipes/react/example",
           "recipes/react/example-effects",
-          "recipes/react/example-forms"
+          "recipes/react/example-forms",
+          "recipes/react/todo-creator"
         ]
       },
       {
