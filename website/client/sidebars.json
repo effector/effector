@@ -73,7 +73,8 @@
           "recipes/react/example",
           "recipes/react/example-effects",
           "recipes/react/example-forms",
-          "recipes/react/todo-creator"
+          "recipes/react/todo-creator",
+          "recipes/react/dynamic-form-schema"
         ]
       },
       {
