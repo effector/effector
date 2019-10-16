@@ -226,7 +226,7 @@ With `useList` hook
 
 ### Dynamic form fields, saving and loading from localStorage with effects
 
-[Run example](https://share.effector.dev/EdsTwKeN)
+[Run example](https://share.effector.dev/4i2Lmfaw)
 
 ### Loading initial state from localStorage with domains
 
