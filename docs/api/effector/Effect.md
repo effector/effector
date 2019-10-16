@@ -204,6 +204,8 @@ const Loading = createComponent(
 )
 
 fetchApi(5000)
+
+ReactDOM.render(<Loading />, document.getElementById('root'))
 ```
 
 It's a shorthand for common use case
