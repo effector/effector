@@ -1,5 +1,18 @@
 # Changelog
 
+## effector-vue 20.2.1
+
+- Add typescript typings for object shape, introduced in effector-vue 20.2.0
+```js
+const counter = createStore(0)
+
+new Vue({
+  effector: {
+    counter, // would create `counter` in template
+  },
+})
+```
+
 ## effector 20.4.0
 
 - Introduce `guard`: conditional event routing
