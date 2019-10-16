@@ -4,7 +4,7 @@ title: clearNode
 hide_title: true
 ---
 
-Metod for destroy stores, events, effects, subscriptions and domains
+Method for destroy stores, events, effects, subscriptions and domains
 
 # `clearNode(unit, config?: {deep?: boolean}): void`
 
