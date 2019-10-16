@@ -5,6 +5,59 @@
       "introduction/core-concepts",
       "introduction/prior-art"
     ],
+    "API": [
+      {
+        "type": "subcategory",
+        "label": "effector",
+        "ids": [
+          "api/effector/effector",
+          "api/effector/event",
+          "api/effector/store",
+          "api/effector/effect",
+          "api/effector/domain",
+          "api/effector/createStore",
+          "api/effector/createEvent",
+          "api/effector/createEffect",
+          "api/effector/createDomain",
+          "api/effector/guard",
+          "api/effector/sample",
+          "api/effector/combine",
+          "api/effector/createStoreObject",
+          "api/effector/createApi",
+          "api/effector/restore",
+          "api/effector/forward",
+          "api/effector/merge",
+          "api/effector/split",
+          "api/effector/clearNode",
+          "api/effector/fromObservable"
+        ]
+      },
+      {
+        "type": "subcategory",
+        "label": "effector-react",
+        "ids": [
+          "api/effector-react/effector-react",
+          "api/effector-react/useStore",
+          "api/effector-react/useStoreMap",
+          "api/effector-react/useList",
+          "api/effector-react/createComponent",
+          "api/effector-react/gate",
+          "api/effector-react/createGate",
+          "api/effector-react/useGate",
+          "api/effector-react/createStoreConsumer"
+        ]
+      },
+      {
+        "type": "subcategory",
+        "label": "effector-vue",
+        "ids": [
+          "api/effector-vue/effector-vue",
+          "api/effector-vue/vue-effector",
+          "api/effector-vue/component-options",
+          "api/effector-vue/vue"
+        ]
+      }
+    ],
     "Recipes": [
       "recipes/recipes",
       "recipes/usage-with-typescript",
@@ -53,6 +106,7 @@
       "api/effector/forward",
       "api/effector/merge",
       "api/effector/split",
+      "api/effector/clearNode",
       "api/effector/fromObservable"
     ],
     "effector-react": [
