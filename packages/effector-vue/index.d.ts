@@ -10,7 +10,7 @@ declare module 'vue/types/vue' {
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
-    effector?: (this: V) => Store<any>
+    effector?: (this: V) => Store<any> | {[field: string]: Store<any>}
   }
 }
 
