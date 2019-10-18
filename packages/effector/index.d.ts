@@ -284,7 +284,7 @@ export function forward<T>(opts: {
   from: Unit<T & {}>;
   to: Unit<T>
 }): Subscription
-// Do not remove the second signature to avoid breaking changes!
+// Do not remove the signature below to avoid breaking change!
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
   to: Unit<To>
