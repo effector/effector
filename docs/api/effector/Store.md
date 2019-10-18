@@ -66,13 +66,13 @@ console.log(store.getState()) // 5
 
 <hr />
 
-### `map(fn)`
+### `map(fn: (state: State, lastState?: T) => T)`
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
 #### Arguments
 
-1. `fn` (_Function_): Function that receives `state` and returns a new state for the derived store
+1. `fn` (_Function_): Function that receives `state` and `lastState?` and returns a new state for the derived store
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
