@@ -128,7 +128,10 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -170,10 +173,11 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+      Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
         Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+          Type 'string | number' is not assignable to type 'string & {}'.
+            Type 'number' is not assignable to type 'string & {}'.
+              Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
