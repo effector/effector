@@ -260,7 +260,26 @@ export const step: {
   update(data: {store: StateRef}): Update
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
-export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+
+export function forward<T>(opts: {
+  /**
+  * By default TS picks "best common type" `T` between `from` and `to` arguments.
+  * This lets us forward from `string | number` to `string` for instance, and
+  * this is wrong.
+  * 
+  * Fortunately we have a way to disable such behavior. By adding `& {}` to some
+  * generic type we tell TS "do not try to infer this generic type from
+  * corresponding argument type". 
+  * 
+  * Generic `T` won't be inferred from `from` any more. Forwarding from "less
+  * strict" to "more strict" will produce an error as expected.
+  * 
+  * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
+  */
+  from: Unit<T & {}>;
+  to: Unit<T>
+}): Subscription
+// Do not remove the second signature to avoid breaking changes!
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
   to: Unit<To>
