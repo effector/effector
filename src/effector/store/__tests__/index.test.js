@@ -3,7 +3,7 @@
 import {createStore} from '..'
 import {createEvent} from '../../event'
 import {createEffect} from '../../effect'
-import {spy, getSpyCalls} from 'effector/fixtures'
+import {spy, getSpyCalls, argumentHistory} from 'effector/fixtures'
 
 test('createStore', () => {
   expect(() => createStore(undefined)).toThrowErrorMatchingSnapshot()
@@ -41,6 +41,38 @@ describe('.map', () => {
     newWord('')
 
     expect(spy).toHaveBeenCalledTimes(3)
+  })
+  it('calls given handler with current state as second argument', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+    const computed = store.map((x, state) => `(${x}, ${state})`)
+    computed.watch(fn)
+    inc()
+    inc()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "(0, undefined)",
+        "(1, (0, undefined))",
+        "(2, (1, (0, undefined)))",
+      ]
+    `)
+  })
+  it('accepts initial state as second argument', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+    const computed = store.map((x, state) => `(${x}, ${state})`, 'initial')
+    computed.watch(fn)
+    inc()
+    inc()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "(0, initial)",
+        "(1, (0, initial))",
+        "(2, (1, (0, initial)))",
+      ]
+    `)
   })
 
   it('supports nested mapping with updates skipping', () => {
