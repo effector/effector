@@ -8,7 +8,7 @@ There can be multiple stores.
 
 ## Store Methods
 
-### `reset(eventOrStore)`
+### `reset(...triggers)`
 
 Resets store state to the default value.
 
@@ -16,7 +16,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-1. `eventOrStore` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_`Events`_](Event.md), [_`Effects`_](Effect.md) or _`Stores`_
 
 #### Returns
 
