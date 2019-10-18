@@ -261,6 +261,11 @@ export const step: {
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
 
+// Allow `* -> void` forwarding (e.g. `string -> void`).
+export function forward(opts: {
+  from: Unit<any>
+  to: Unit<void>
+}): Subscription
 export function forward<T>(opts: {
   /**
   * By default TS picks "best common type" `T` between `from` and `to` arguments.

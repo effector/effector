@@ -213,6 +213,7 @@ describe('forward with subtyping', () => {
       Type 'string | number' does not satisfy the constraint 'string'.
         Type 'number' is not assignable to type 'string'.
 
+
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
         forward<string, string | number>({to: str, from: strOrNum})
@@ -239,10 +240,7 @@ describe('better inference experience', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string>' is not assignable to type 'Unit<void>'.
-        Types of property '__' are incompatible.
-          Type 'string' is not assignable to type 'void'.
-
+      no errors
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
