@@ -5314,10 +5314,10 @@ flatted@^2.0.0:
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.0.tgz#55122b6536ea496b4b44893ee2608141d10d9916"
   integrity sha512-R+H8IZclI8AAkSBRQJLVOsxwAoHd6WC40b4QTNWIjzAa6BXOBfQcM587MXDTVPeYaopFNWHUFLx7eNmHDSxMWg==
 
-flow-bin@^0.106.2:
-  version "0.106.2"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.106.2.tgz#624db7c04b00879ac14853434817c7bc5e1419db"
-  integrity sha512-pALWFKf+AQiX4VfSEdxruj2bSMigsrAcg8djV6Hue2y3FJyiA/Z42UkEv6zEvSIpDj1EL+cRBvJNUx6L2+gdTQ==
+flow-bin@^0.109.0:
+  version "0.109.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.109.0.tgz#dcdcb7402dd85b58200392d8716ccf14e5a8c24c"
+  integrity sha512-tpcMTpAGIRivYhFV3KJq+zHI2HzcXo8MoGe9pXS4G/UZuey2Faq/e8/gdph2WF0erRlML5hmwfwiq7v9c25c7w==
 
 flowgen@^1.8.2:
   version "1.8.2"
@@ -11841,7 +11841,7 @@ typescript-compiler@^1.4.1-2:
   resolved "https://registry.yarnpkg.com/typescript-compiler/-/typescript-compiler-1.4.1-2.tgz#ba4f7db22d91534a1929d90009dce161eb72fd3f"
   integrity sha1-uk99si2RU0oZKdkACdzhYety/T8=
 
-typescript@^3.2.1, typescript@^3.5.3:
+typescript@^3.2.1:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
   integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
@@ -11850,6 +11850,11 @@ typescript@^3.3.3333:
   version "3.4.2"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.2.tgz#9ed4e6475d906f589200193be056f5913caed481"
   integrity sha512-Og2Vn6Mk7JAuWA1hQdDQN/Ekm/SchX80VzLhjKN9ETYrIepBFAd8PkOdOTK2nKt0FCkmMZKBJvQ1dV1gIxPu/A==
+
+typescript@^3.6.4:
+  version "3.6.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
+  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
 
 typify-parser@^1.1.0:
   version "1.1.0"
