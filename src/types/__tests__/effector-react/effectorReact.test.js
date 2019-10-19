@@ -50,6 +50,28 @@ test('createComponent', () => {
     Type 'string' is not assignable to type 'number'.
 
     --flow--
+    Could not decide which case to select, since case 1 [1] may work but if it doesn't case 3 [2] looks promising too. To fix add a type annotation to return [3] or to 'state' [4]
+      const Store = createComponent(createStore(0), (props, state) => {
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+          declare export function createComponent<
+                     [1] ^^^^^^^^^^^^^^^^^^^^^^^^^...
+          declare export function createComponent<Props, State>(
+                     [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+          const Store = createComponent(createStore(0), (props, state) => {
+                                                                     [3] ^
+          const Store = createComponent(createStore(0), (props, state) => {
+                                                            [4] ^^^^^
+    Could not decide which case to select, since case 1 [1] may work but if it doesn't case 2 [2] looks promising too. To fix add a type annotation to return [3] or to 'state' [4]
+      const InitialProps = createComponent(
+                           ^^^^^^^^^^^^^^^^...
+          declare export function createComponent<
+                     [1] ^^^^^^^^^^^^^^^^^^^^^^^^^...
+          declare export function createComponent<Props, State>(
+                     [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
+          (_, state) => {
+                   [3] ^
+          (_, state) => {
+          [4] ^^^^^
     Cannot assign 'initialProps.id' to 'createComponent_initialProps_check2'
       const createComponent_initialProps_check2: string = initialProps.id
                                                           ^^^^^^^^^^^^^^^
@@ -64,14 +86,6 @@ test('createComponent', () => {
       property 'unknownProp' is missing in object type [1]
           (initialProps: {id: number}) => {
                      [1] ^^^^^^^^^^^^
-    Cannot assign 'state.text' to 'createComponent_initialProps_check5'
-      const createComponent_initialProps_check5: number = state.text
-                                                          ^^^^^^^^^^
-      string [1] is incompatible with number [2]
-          text: string,
-            [1] ^^^^^^
-          const createComponent_initialProps_check5: number = state.text
-                                                 [2] ^^^^^^
     "
   `)
 })

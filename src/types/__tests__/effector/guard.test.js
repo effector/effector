@@ -47,11 +47,13 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
-            Types of property 'getState' are incompatible.
-              Type '() => string' is not assignable to type '() => boolean'.
-                Type 'string' is not assignable to type 'boolean'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+                Types of property 'getState' are incompatible.
+                  Type '() => string' is not assignable to type '() => boolean'.
+                    Type 'string' is not assignable to type 'boolean'.
 
         --flow--
         Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
@@ -77,8 +79,10 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
         Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
@@ -127,9 +131,11 @@ describe('guard(source, config)', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Store<string>' is not assignable to type 'Unit<number>'.
-            Types of property '__' are incompatible.
-              Type 'string' is not assignable to type 'number'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+                Types of property '__' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
 
           --flow--
           Cannot call 'guard'
@@ -222,7 +228,9 @@ describe('guard(source, config)', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
           --flow--
           Cannot call 'guard'
@@ -294,8 +302,10 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
         Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
@@ -324,8 +334,10 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
-          Type 'Store<string>' is not assignable to type 'Store<boolean>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
+              Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
         Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
@@ -376,7 +388,9 @@ describe('guard(config)', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
           --flow--
           Cannot call 'guard'
@@ -472,7 +486,9 @@ describe('guard(config)', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
 
           --flow--

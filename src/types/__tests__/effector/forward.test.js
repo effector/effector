@@ -81,9 +81,20 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string>' is not assignable to type 'Unit<number>'.
-        Types of property '__' are incompatible.
-          Type 'string' is not assignable to type 'number'.
+      No overload matches this call.
+        Overload 1 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
+          Type 'Event<number>' is not assignable to type 'Unit<void>'.
+            Types of property '__' are incompatible.
+              Type 'number' is not assignable to type 'void'.
+        Overload 2 of 3, '(opts: { from: Unit<number & {}>; to: Unit<number>; }): Subscription', gave the following error.
+          Type 'Event<string>' is not assignable to type 'Unit<number & {}>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'number & {}'.
+                Type 'string' is not assignable to type 'number'.
+        Overload 3 of 3, '(opts: { from: Unit<number>; to: Unit<number>; }): Subscription', gave the following error.
+          Type 'Event<string>' is not assignable to type 'Unit<number>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'number'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -128,10 +139,22 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
+      No overload matches this call.
+        Overload 1 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
+          Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            Types of property '__' are incompatible.
+              Type 'string' is not assignable to type 'void'.
+        Overload 2 of 3, '(opts: { from: Unit<string & {}>; to: Unit<string>; }): Subscription', gave the following error.
+          Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
+            Types of property '__' are incompatible.
+              Type 'string | number' is not assignable to type 'string & {}'.
+                Type 'number' is not assignable to type 'string & {}'.
+                  Type 'number' is not assignable to type 'string'.
+        Overload 3 of 3, '(opts: { from: Unit<string>; to: Unit<string>; }): Subscription', gave the following error.
+          Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+            Types of property '__' are incompatible.
+              Type 'string | number' is not assignable to type 'string'.
+                Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -174,10 +197,6 @@ describe('forward with subtyping', () => {
       "
       --typescript--
       Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string & {}'.
-            Type 'number' is not assignable to type 'string & {}'.
-              Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
