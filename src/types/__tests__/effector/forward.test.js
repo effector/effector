@@ -128,7 +128,10 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string'.
+            Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -170,11 +173,11 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
+      Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
         Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string'.
-            Type 'number' is not assignable to type 'string'.
-
+          Type 'string | number' is not assignable to type 'string & {}'.
+            Type 'number' is not assignable to type 'string & {}'.
+              Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -187,6 +190,69 @@ describe('forward with subtyping', () => {
                 [2] ^^^^^^
             interface CovariantUnit<+T> {
                                  [3] ^
+      "
+    `)
+  })
+  it('generics `to` and `from` (should pass)', () => {
+    forward<string | number, string>({to: strOrNum, from: str})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('generics `to` and `from` (should fail on providing generics)', () => {
+    forward<string, string | number>({to: str, from: strOrNum})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Type 'string | number' does not satisfy the constraint 'string'.
+        Type 'number' is not assignable to type 'string'.
+
+
+      --flow--
+      Cannot call 'forward' with object literal bound to 'opts'
+        forward<string, string | number>({to: str, from: strOrNum})
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^
+        number [1] is incompatible with string [2] in type argument 'T' [3] of property 'from'
+            const strOrNum: Event<string | number> = createEvent()
+                                       [1] ^^^^^^
+            forward<string, string | number>({to: str, from: strOrNum})
+                [2] ^^^^^^
+            interface CovariantUnit<+T> {
+                                 [3] ^
+      "
+    `)
+  })
+})
+
+describe('better inference experience', () => {
+  it('should forward from `Unit<*>` to `Unit<void>`', () => {
+    const from = createEvent<string>()
+    const to = createEvent<void>()
+
+    forward({from, to})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'forward' with object literal bound to 'opts'
+        forward({from, to})
+                ^^^^^^^^^^
+        undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'to'
+            const to = createEvent<void>()
+                               [1] ^^^^
+            const from = createEvent<string>()
+                                 [2] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
       "
     `)
   })
