@@ -1,5 +1,10 @@
 # Changelog
 
+## effector 20.4.1
+
+- Improve `forward` typings for typescript (PR [#229](https://github.com/zerobias/effector/pull/229), fix [#174](https://github.com/zerobias/effector/issues/174)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+- Add typescript typings for `clearNode(domain)`, introduced in [effector 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2020)
+
 ## effector-vue 20.2.1
 
 - Add typescript typings for object shape, introduced in [effector-vue 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-vue-2020)
