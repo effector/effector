@@ -145,8 +145,9 @@ interface InternalStore<State> extends Store<State> {
   setState(state: State): void
 }
 
-export class Domain {
+export class Domain implements Unit<any> {
   readonly kind: kind
+  readonly __: any
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,

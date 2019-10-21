@@ -58,9 +58,7 @@ test('clearNode(domain)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Argument of type 'Domain' is not assignable to parameter of type 'Unit<any> | Step'.
-      Property '__' is missing in type 'Domain' but required in type 'Unit<any>'.
-
+    no errors
 
     --flow--
     no errors
