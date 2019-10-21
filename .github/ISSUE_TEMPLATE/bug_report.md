@@ -9,10 +9,10 @@ Found a bug? Please fill out the sections below.
 Be kind and objective when writing in text. Thanks!
 -->
 
-**Code to reproduce the issue:**
+**What is the current behavior:**
 
-**Expected behavior:**
+**Please provide the steps to reproduce and if possible a minimal demo of the problem via https://effector.now.sh/try, https://codesandbox.io or similar**
 
-**Actual behavior:**
+**What is the expected behavior:**
 
-**Versions of packages used:**
+**Which versions of Effector packages, and which browser and OS are affected by this issue? Did this work in previous versions of Effector?:**
