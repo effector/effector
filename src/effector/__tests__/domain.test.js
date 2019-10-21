@@ -98,6 +98,22 @@ describe('domain name', () => {
     })
   })
 })
+describe('config', () => {
+  test('domain.effect(config)', async () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const fx = domain.effect({
+      name: 'fx1',
+      handler: fn,
+    })
+    await fx('payload')
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "payload",
+      ]
+    `)
+  })
+})
 describe('domain ownership', () => {
   test('reference example', () => {
     const fn = jest.fn()
