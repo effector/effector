@@ -232,7 +232,6 @@ describe('forward with subtyping', () => {
       Type 'string | number' does not satisfy the constraint 'string'.
         Type 'number' is not assignable to type 'string'.
 
-
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
         forward<string, string | number>({to: str, from: strOrNum})
@@ -275,4 +274,60 @@ describe('better inference experience', () => {
       "
     `)
   })
+})
+
+test('edge case #1 (should pass)', () => {
+  const event1 = createEvent<string>()
+  const event2 = createEvent<{value: string}>()
+
+  forward({
+    from: event1.map(value => ({value})),
+    to: event2,
+  })
+
+  forward({
+    from: event1,
+    to: event2.prepend(value => ({value})),
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    Type 'void' is not assignable to type 'string'.
+
+    --flow--
+    no errors
+    "
+  `)
+})
+
+test('edge case #2 (should fail)', () => {
+  const event1 = createEvent<string>()
+  const event2 = createEvent<{value: string}>()
+
+  forward({
+    from: event1,
+    to: event2.map(value => ({value})),
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    No overload matches this call.
+      Overload 1 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
+        Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'Unit<void>'.
+          Types of property '__' are incompatible.
+            Type '{ value: { value: string; }; }' is not assignable to type 'void'.
+      Overload 2 of 3, '(opts: { from: Unit<{ value: { value: string; }; }>; to: Unit<{ value: { value: string; }; }>; }): Subscription', gave the following error.
+        Type 'Event<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
+          Types of property '__' are incompatible.
+            Type 'string' is not assignable to type '{ value: { value: string; }; }'.
+      Overload 3 of 3, '(opts: { from: Unit<{ value: { value: string; }; }>; to: Unit<{ value: { value: string; }; }>; }): Subscription', gave the following error.
+        Type 'Event<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
+
+
+    --flow--
+    no errors
+    "
+  `)
 })
