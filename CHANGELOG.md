@@ -2,7 +2,8 @@
 
 ## effector-vue 20.2.1
 
-- Add typescript typings for object shape, introduced in effector-vue 20.2.0
+- Add typescript typings for object shape, introduced in [effector-vue 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-vue-2020)
+
 ```js
 const counter = createStore(0)
 
