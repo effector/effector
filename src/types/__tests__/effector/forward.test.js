@@ -276,7 +276,7 @@ describe('better inference experience', () => {
   })
 })
 
-test('edge case #1 (should pass)', () => {
+test('forward form event.map (should pass)', () => {
   const event1 = createEvent<string>()
   const event2 = createEvent<{value: string}>()
 
@@ -284,6 +284,21 @@ test('edge case #1 (should pass)', () => {
     from: event1.map(value => ({value})),
     to: event2,
   })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+
+test('forward to event.prepend (should pass)', () => {
+  const event1 = createEvent<string>()
+  const event2 = createEvent<{value: string}>()
 
   forward({
     from: event1,
@@ -301,7 +316,7 @@ test('edge case #1 (should pass)', () => {
   `)
 })
 
-test('edge case #2 (should fail)', () => {
+test('edge case #1 (should fail)', () => {
   const event1 = createEvent<string>()
   const event2 = createEvent<{value: string}>()
 
