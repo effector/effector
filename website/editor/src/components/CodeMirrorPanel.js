@@ -2,7 +2,7 @@
 
 import React from 'react'
 import {createEvent, createEffect} from 'effector'
-import {checkContent} from '../flow/domain'
+import {checkContent} from '../flow'
 //$todo: codemirror
 import CodeMirror from 'codemirror'
 //import 'codemirror/mode/javascript/javascript'

@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom'
 
 import './init'
 import './graphite/dynamic'
-import './flow/dynamic'
 import './logs/dynamic'
 import view from './view'
 

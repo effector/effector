@@ -1,11 +1,14 @@
 //@flow
-
+import {guard} from 'effector'
 //$todo
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
 import {performLint} from '../editor'
 import {sourceCode} from '../editor/state'
 import {flowToggle, typeHoverToggle} from '../settings/state'
-import {checkContent, typeAtPos, typeHint, typeErrors, typeNode} from './domain'
+import {checkContent, typeAtPos, showTypeNode, hideTypeNode} from '.'
+import {typeHint, typeErrors, typeNode} from './state'
+
+typeNode.className = 'type-hover'
 
 flowToggle.watch(enabled => {
   if (enabled) {
@@ -39,27 +42,31 @@ typeHint
   //$todo
   .on(typeAtPos.done, (_, {result}) => result.code.c)
   .reset(typeAtPos.fail)
-
-typeHoverToggle.watch(enabled => {
-  if (enabled) {
-    typeNode.show.watch(() => {
-      typeNode.current.style.opacity = '1'
-      typeNode.current.style.visibility = 'inherit'
-    })
-    typeNode.hide.watch(() => {
-      typeNode.current.style.opacity = '0'
-      typeNode.current.style.visibility = 'hidden'
-    })
-
-    typeAtPos.fail.watch(() => typeNode.hide())
-
-    typeHint
-      .map(data => {
-        if (data === null) return 'Loading...'
-        return data
-      })
-      .watch(hint => {
-        typeNode.current.innerText = hint
-      })
-  }
+guard({
+  source: showTypeNode,
+  filter: typeHoverToggle,
+}).watch(() => {
+  typeNode.style.opacity = '1'
+  typeNode.style.visibility = 'inherit'
+})
+guard({
+  source: hideTypeNode,
+  filter: typeHoverToggle,
+}).watch(() => {
+  typeNode.style.opacity = '0'
+  typeNode.style.visibility = 'hidden'
+})
+guard({
+  source: typeAtPos.fail,
+  filter: typeHoverToggle,
+  target: hideTypeNode,
+})
+guard({
+  source: typeHint.map(data => {
+    if (data === null) return 'Loading...'
+    return data
+  }),
+  filter: typeHoverToggle,
+}).watch(hint => {
+  typeNode.innerText = hint
 })

@@ -12,7 +12,8 @@ import {
 import {sourceCode, codeError, version} from './state'
 import {retrieveCode, retrieveVersion} from './retrieve'
 import {compress} from './compression'
-import {typeAtPos, typeNode} from '../flow/domain'
+import {typeNode} from '../flow/state'
+import {typeAtPos, showTypeNode, hideTypeNode} from '../flow'
 import {resetGraphiteState} from '../graphite/domain'
 import {evaluator, versionLoader} from '../evaluator'
 import {typechecker, typeHoverToggle} from '../settings/state'
@@ -48,12 +49,12 @@ sample({
         line: cursor.line,
         ch: cursor.ch,
       },
-      typeNode.current,
+      typeNode,
     )
     if (cursor.outside) {
-      typeNode.hide()
+      hideTypeNode()
     } else {
-      typeNode.show()
+      showTypeNode()
     }
   }
 })
