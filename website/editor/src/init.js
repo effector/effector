@@ -1,7 +1,7 @@
 //@flow
 
-import './realm/init'
-import './editor/init'
 import './settings/init'
+import './realm/init'
 import './flow/init'
 import './logs/init'
+import './editor/init'
