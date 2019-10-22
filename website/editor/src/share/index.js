@@ -6,7 +6,7 @@ import {shareCode} from '../graphql'
 import {sourceCode} from '../editor/state'
 import {ShareGroup, ShareButton, SharedUrl, Label} from './styled'
 import {sharedUrl, canShare, urlRef, clickShare} from './controller'
-import {Section} from '../settings/styled'
+import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
 
 const Save = () => {

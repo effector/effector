@@ -4,7 +4,7 @@
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'
 import {performLint} from '../editor'
 import {sourceCode} from '../editor/state'
-import {flowToggle, typeHoverToggle} from '../settings/domain'
+import {flowToggle, typeHoverToggle} from '../settings/state'
 import {checkContent, typeAtPos, typeHint, typeErrors, typeNode} from './domain'
 
 flowToggle.watch(enabled => {

@@ -16,7 +16,7 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {isDesktopChanges, tab} from './tabs/domain'
 import {TabsView} from './tabs/view'
-import {PrettifyButton} from './settings'
+import {PrettifyButton} from './settings/view'
 import {mode} from './mode/domain'
 import {
   performLint,

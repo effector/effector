@@ -2,11 +2,10 @@
 
 import ReactDOM from 'react-dom'
 
-import './dynamic'
+import './init'
 import './graphite/dynamic'
 import './flow/dynamic'
 import './logs/dynamic'
-import './settings/dynamic'
 import view from './view'
 
 const root = document.getElementById('try-wrapper')

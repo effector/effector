@@ -15,7 +15,7 @@ import {compress} from './compression'
 import {typeAtPos, typeNode} from '../flow/domain'
 import {resetGraphiteState} from '../graphite/domain'
 import {evaluator, versionLoader} from '../evaluator'
-import {typechecker, typeHoverToggle} from '../settings/domain'
+import {typechecker, typeHoverToggle} from '../settings/state'
 
 evalEffect.use(evaluator)
 

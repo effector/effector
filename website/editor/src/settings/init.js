@@ -6,15 +6,26 @@ import {prettier as prettierRequest} from '@zerobias/codebox'
 import {sourceCode} from '../editor/state'
 
 import {
-  flowToggle,
   flowToggleChange,
-  tsToggle,
   tsToggleChange,
-  typeHoverToggle,
   typeHoverToggleChange,
   clickPrettify,
   prettier,
-} from './domain'
+} from '.'
+import {domain, flowToggle, tsToggle, typeHoverToggle} from './state'
+
+domain.onCreateStore(store => {
+  const snapshot = localStorage.getItem(store.compositeName.fullName)
+  if (snapshot != null) {
+    const data = JSON.parse(snapshot)
+    store.setState(data)
+  }
+
+  store.updates.watch(newState => {
+    localStorage.setItem(store.compositeName.fullName, JSON.stringify(newState))
+  })
+  return store
+})
 
 const handler = (_, e) => e.currentTarget.checked
 

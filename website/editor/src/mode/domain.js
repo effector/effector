@@ -1,7 +1,7 @@
 // @flow
 
 import type {Store} from 'effector'
-import {typechecker} from '../settings/domain'
+import {typechecker} from '../settings/state'
 
 export const mode: Store<
   'text/typescript-jsx' | 'text/flow-jsx',

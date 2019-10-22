@@ -4,7 +4,7 @@ import * as React from 'react'
 
 import {useStore, useList} from 'effector-react'
 import {typeErrors, typeHint} from './domain'
-import {typeHoverToggle} from '../settings/domain'
+import {typeHoverToggle} from '../settings/state'
 import type {FlowMessage, FlowInfoTree} from './index.h'
 import {styled} from 'linaria/react'
 
@@ -129,8 +129,8 @@ export const TypeErrorsView = () => (
         {useList(typeErrors, error => {
           // TODO: hide libdefs until errors are fixed
           if (
-            process.env.NODE_ENV === 'production'
-            && error.message[0].loc?.type === 'LibFile'
+            process.env.NODE_ENV === 'production' &&
+            error.message[0].loc?.type === 'LibFile'
           )
             return null
 
@@ -139,8 +139,8 @@ export const TypeErrorsView = () => (
               {error.message.map((message, key) => (
                 <ErrorMessage key={key} {...message} />
               ))}
-              {error.extra
-                && error.extra.map((extra, key) => <Extra key={key} {...extra} />)}
+              {error.extra &&
+                error.extra.map((extra, key) => <Extra key={key} {...extra} />)}
             </li>
           )
         })}
