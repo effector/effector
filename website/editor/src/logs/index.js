@@ -1,10 +1,14 @@
 // @flow
 
+import {createEvent} from 'effector'
+import type {Methods} from '../components/Console/methods'
 import {presets} from './stylePresets'
-import {realmLog} from './domain'
+import {CLEAR_CONSOLE, PRINT_IN_GROUP} from './env'
 
-const CLEAR_CONSOLE = false
-const PRINT_IN_GROUP = false
+export const realmLog = createEvent<{|
+  method: Methods,
+  args: any[],
+|}>('realm console.log call')
 
 export function consoleMap() {
   const console = {}
