@@ -163,52 +163,31 @@ it('works', async() => {
     </Scope.Provider>
   )
 
-  const Server = () => (
-    <main>
-      <App root={aliceScope} />
-      <hr />
-      <App root={carolScope} />
-    </main>
-  )
-
-  await render(<Server />)
+  clearNode(carolScope)
+  await render(<App root={carolScope} />)
+  expect(carolScope).toMatchInlineSnapshot(`
+    Object {
+      "find": [Function],
+      "graphite": Object {
+        "family": Object {
+          "links": Array [],
+          "owners": Array [],
+          "type": "domain",
+        },
+        "meta": Object {
+          "unit": "domain",
+        },
+        "next": Array [],
+        "scope": null,
+        "seq": Array [],
+      },
+    }
+  `)
+  await render(<App root={bobScope} />)
   expect(container.firstChild).toMatchInlineSnapshot(`
-    <main>
     <h2>
-        alice
-      </h2>
-      <b>
-        Friends:
-      </b>
-      <ol>
-        <li>
       bob
-        </li>
-      </ol>
-      <small>
-        Total: 
-        1
-      </small>
-      <hr />
-      <h2>
-        carol
     </h2>
-      <b>
-        Friends:
-      </b>
-      <ol>
-        <li>
-          alice
-        </li>
-        <li>
-          bob
-        </li>
-      </ol>
-      <small>
-        Total: 
-        2
-      </small>
-    </main>
   `)
 })
 
