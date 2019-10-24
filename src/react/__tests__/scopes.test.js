@@ -4,7 +4,15 @@ import fetch from 'cross-fetch'
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, createNode, forward, sample, launch, step} from 'effector'
+import {
+  createDomain,
+  createNode,
+  forward,
+  sample,
+  launch,
+  step,
+  clearNode,
+} from 'effector'
 import {
   useStore as commonUseStore,
   useList as commonUseList,
@@ -166,7 +174,7 @@ it('works', async() => {
   await render(<Server />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <main>
-      <h2>
+    <h2>
         alice
       </h2>
       <b>
@@ -174,7 +182,7 @@ it('works', async() => {
       </b>
       <ol>
         <li>
-          bob
+      bob
         </li>
       </ol>
       <small>
@@ -184,7 +192,7 @@ it('works', async() => {
       <hr />
       <h2>
         carol
-      </h2>
+    </h2>
       <b>
         Friends:
       </b>
@@ -375,7 +383,7 @@ function cloneGraph(unit) {
     req,
     scope: {
       find: findClone,
-      node: createNode({
+      graphite: createNode({
         node: [],
         meta: {unit: 'domain'},
         family: {
