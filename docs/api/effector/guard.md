@@ -97,7 +97,7 @@ unlock()
 trigger('C')
 ```
 
-# `guard({sourceEvent, {filter: predicate})`
+# `guard(sourceEvent, {filter: predicate})`
 
 #### Arguments
 
