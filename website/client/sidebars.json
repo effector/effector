@@ -73,6 +73,7 @@
           "recipes/react/example",
           "recipes/react/example-effects",
           "recipes/react/example-forms",
+          "recipes/react/props-to-store",
           "recipes/react/todo-creator",
           "recipes/react/dynamic-form-schema"
         ]
@@ -80,9 +81,7 @@
       {
         "type": "subcategory",
         "label": "React Native",
-        "ids": [
-          "recipes/react-native/example"
-        ]
+        "ids": ["recipes/react-native/example"]
       }
     ],
     "Other": ["troubleshooting", "glossary"],
