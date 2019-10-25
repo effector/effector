@@ -4,6 +4,15 @@ import {sample, Kind, createEvent, createStore, createEffect} from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
 
+it('should not accept undefined clocks', () => {
+  expect(() => {
+    sample({
+      source: createStore(null),
+      clock: undefined,
+    })
+  }).toThrowErrorMatchingInlineSnapshot(`"config.clock should be defined"`)
+})
+
 describe('sample type', () => {
   test.each`
     source            | clock             | kind
@@ -12,8 +21,8 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${Kind.event}
     ${createEvent()}  | ${createEvent()}  | ${Kind.event}
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
-  expect(sample(source, clock).kind).toBe(kind)
-})
+    expect(sample(source, clock).kind).toBe(kind)
+  })
   test.each`
     source            | clock             | kind
     ${createStore(0)} | ${createStore(0)} | ${Kind.store}
@@ -21,13 +30,13 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${Kind.event}
     ${createEvent()}  | ${createEvent()}  | ${Kind.event}
   `(
-  `$kind <- $source.kind by $clock.kind with handler`,
-  ({source, clock, kind}) => {
-    expect(
-      sample(source, clock, (source, clock) => ({source, clock})).kind,
-    ).toBe(kind)
-  },
-)
+    `$kind <- $source.kind by $clock.kind with handler`,
+    ({source, clock, kind}) => {
+      expect(
+        sample(source, clock, (source, clock) => ({source, clock})).kind,
+      ).toBe(kind)
+    },
+  )
 })
 
 describe('sample', () => {
@@ -54,36 +63,36 @@ describe('sample', () => {
       ${false} | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 2}], [{x: 3}]]}
       ${true}  | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 1}], [{x: 2}]]}
     `(
-  'depended on order of execution (greedy = $greedy)',
-  ({greedy, resultDirect, resultBacktracking}) => {
-    test('direct order', () => {
-      const A = createEvent()
-      const B = A.map(x => ({x}))
+      'depended on order of execution (greedy = $greedy)',
+      ({greedy, resultDirect, resultBacktracking}) => {
+        test('direct order', () => {
+          const A = createEvent()
+          const B = A.map(x => ({x}))
 
-      //$todo
-      sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
+          //$todo
+          sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
 
-      A(1)
-      A(2)
-      A(3)
+          A(1)
+          A(2)
+          A(3)
 
-      expect(getSpyCalls()).toEqual(resultDirect)
-    })
-    test('backtracking', () => {
-      const A = createEvent()
-      const B = A.map(x => ({x}))
+          expect(getSpyCalls()).toEqual(resultDirect)
+        })
+        test('backtracking', () => {
+          const A = createEvent()
+          const B = A.map(x => ({x}))
 
-      //$todo
-      sample(B, A, B => B, greedy).watch(e => spy(e))
+          //$todo
+          sample(B, A, B => B, greedy).watch(e => spy(e))
 
-      A(1)
-      A(2)
-      A(3)
+          A(1)
+          A(2)
+          A(3)
 
-      expect(getSpyCalls()).toEqual(resultBacktracking)
-    })
-  },
-)
+          expect(getSpyCalls()).toEqual(resultBacktracking)
+        })
+      },
+    )
 
     it('works with sibling events', () => {
       const fn1 = jest.fn()
@@ -251,7 +260,7 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
-    it('support watchers as usual', async() => {
+    it('support watchers as usual', async () => {
       const fn1 = jest.fn()
       const fn2 = jest.fn()
       const hello = createEffect({
@@ -276,24 +285,24 @@ describe('sample', () => {
         ${false}
         ${true}
       `(
-  'event call will not break watchers (greedy = $greedy)',
-  async({greedy}) => {
-    const fn1 = jest.fn()
-    const hello = createEvent()
-    const run = createEvent()
+        'event call will not break watchers (greedy = $greedy)',
+        async ({greedy}) => {
+          const fn1 = jest.fn()
+          const hello = createEvent()
+          const run = createEvent()
 
-    //$todo
-    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
-    //$todo
-    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
+          //$todo
+          sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
+          //$todo
+          sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
-    run('R')
-    hello('hello')
+          run('R')
+          hello('hello')
 
-    run('RR')
-    expect(fn1).toHaveBeenCalledTimes(1)
-  },
-)
+          run('RR')
+          expect(fn1).toHaveBeenCalledTimes(1)
+        },
+      )
     })
     test('effect source with store as target', () => {})
     test('effect source with effect as target', () => {})
