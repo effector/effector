@@ -20,7 +20,6 @@ import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
 import {minifyConfig} from './minificationConfig'
 
-const nameCache = {}
 const compatNameCache = {}
 const onwarn = (warning, rollupWarn: any) => {
   if (warning.code !== 'CIRCULAR_DEPENDENCY') {

@@ -1,4 +1,5 @@
 //@flow
+const nameCache = {}
 
 export const minifyConfig = ({beautify}: {|beautify: boolean|}) => ({
   parse: {
