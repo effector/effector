@@ -52,6 +52,7 @@ export function createStore<State>(
     subscribers: new Map(),
     compositeName,
     graphite: createNode({
+      scope: {state: plainState},
       node: [
         step.check.defined(),
         step.update({
