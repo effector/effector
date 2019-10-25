@@ -1,5 +1,18 @@
 # Changelog
 
+## effector 20.4.3
+
+- Throw expected error in case with `sample({clock: undefined})`
+
+```js
+import {createStore, sample} from 'effector'
+sample({
+  source: createStore(null),
+  clock: undefined,
+})
+// Throw "config.clock should be defined"
+```
+
 ## effector 20.4.1
 
 - Improve `forward` typings for typescript (PR [#229](https://github.com/zerobias/effector/pull/229), fix [#174](https://github.com/zerobias/effector/issues/174)) (thanks [@bloadvenro](https://github.com/bloadvenro))
