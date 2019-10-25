@@ -4,6 +4,9 @@ title: Dynamic form schema
 sidebar_label: Example: Dynamic form schema
 ---
 
+[Try it](https://share.effector.dev/1oOz6104)
+
+
 ```js try
 
 const submitForm = createEvent()
