@@ -15,6 +15,8 @@ export function sample(
   let name = null
   //config case
   if (clock === undefined && 'source' in source) {
+    if ('clock' in source && source.clock == null)
+      throw Error('config.clock should be defined')
     clock = source.clock
     fn = source.fn
     greedy = source.greedy
