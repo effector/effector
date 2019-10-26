@@ -19,7 +19,7 @@ declare export function createEvent<Payload>(
 ): Event<Payload>
 export function createEvent<Payload>(
   nameOrConfig: any,
-  maybeConfig: any = {},
+  maybeConfig: any,
 ): Event<Payload> {
   const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const {name: nameRaw, parent} = config

@@ -12,16 +12,9 @@ import {
   type DomainConfigPart,
 } from './config'
 import {createEvent} from './event'
-import {effectFabric} from './effect'
+import {createEffect} from './effect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
-
-export function createDomain(
-  name?: string | DomainConfigPart,
-  config?: Config<DomainConfigPart>,
-) {
-  return domainFabric({name, config})
-}
 
 type DomainHooks = {|
   domain: Event<Domain>,
@@ -41,16 +34,13 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
     return trigger.watch(hook)
   }
 }
-
-function domainFabric(opts: {
-  +name?: string,
-  +config?: DomainConfigPart,
-  +parent?: CompositeName,
-  +parentHooks?: DomainHooks,
-  ...
-}): Domain {
+declare export function createDomain(
+  name?: string | DomainConfigPart,
+  config?: Config<DomainConfigPart>,
+): Domain
+export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
+  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const id = nextUnitID()
-  const config = normalizeConfig(opts)
   const {name: nameRaw, parent, parentHooks} = config
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
@@ -131,15 +121,14 @@ function domainFabric(opts: {
       config?: Config<EffectConfigPart<Params, Done>>,
     ): Effect<Params, Done, Fail> =>
       effect(
-        effectFabric({
-          name,
+        createEffect(name, {
           parent: compositeName,
           config,
         }),
       ),
     domain: (name?: string, config?: Config<DomainConfigPart>) =>
       domain(
-        domainFabric({
+        createDomain({
           name,
           parent: compositeName,
           parentHooks: hooks,

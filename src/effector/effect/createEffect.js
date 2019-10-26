@@ -9,20 +9,15 @@ import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
 import {joinName, type CompositeName} from '../naming'
 import {Defer} from './defer'
 
-export function createEffect<Payload, Done>(
+declare export function createEffect<Payload, Done>(
   name?: string | EffectConfigPart<Payload, Done>,
   config?: Config<EffectConfigPart<Payload, Done>>,
+): Effect<Payload, Done, *>
+export function createEffect<Payload, Done>(
+  nameOrConfig: any,
+  maybeConfig: any,
 ): Effect<Payload, Done, *> {
-  return effectFabric({name, config})
-}
-
-export function effectFabric<Payload, Done>(opts: {
-  +name?: string,
-  +parent?: CompositeName,
-  +config: EffectConfigPart<Payload, Done>,
-  ...
-}): Effect<Payload, Done, *> {
-  const config = normalizeConfig(opts)
+  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const {name, parent, handler: defaultHandler} = config
 
   //$off
