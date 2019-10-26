@@ -120,7 +120,7 @@ export default {
       react: '^16.8.0',
       effector: '*',
     },
-    files: getFiles('effector-react'),
+    files: [...getFiles('effector-react'), 'ssr.js', 'ssr.js.map'],
     keywords: ['react', ...keywords],
     ...common,
   },
