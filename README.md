@@ -13,18 +13,21 @@ Reactive state manager
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
-  - [Additional packages:](#additional-packages)
+  - [React](#react)
+  - [Vue](#vue)
+  - [CDN](#cdn)
+  - [Additional packages](#additional-packages)
+- [Community](#community)
 - [Press](#press)
 - [Online playground](#online-playground)
 - [Examples](#examples)
   - [Increment/decrement with React](#incrementdecrement-with-react)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
   - [Storages and events](#storages-and-events)
-  - [**More examples**](#more-examples)
+- [More examples](#more-examples)
 - [API](#api)
   - [Event](#event)
   - [Effect](#effect)
@@ -79,30 +82,83 @@ yarn add effector effector-vue
 
 ### CDN
 
-* https://unpkg.com/effector/effector.cjs.js
-* https://unpkg.com/effector-react/effector-react.cjs.js
-* https://unpkg.com/effector-vue/effector-vue.cjs.js
+- https://unpkg.com/effector/effector.cjs.js
+- https://unpkg.com/effector-react/effector-react.cjs.js
+- https://unpkg.com/effector-vue/effector-vue.cjs.js
 
-### Additional packages:
+### Additional packages
 
-- **For Web Framework/Libraries:**
+- **For Web Framework/Libraries**
 
-  |                                           Package                                            |                                                       Version                                                       |                                                                             Dependencies                                                                             |
-  | :------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-  | [`effector-react`](https://github.com/zerobias/effector/tree/master/packages/effector-react) | [![npm](https://img.shields.io/npm/v/effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/effector-react)](https://david-dm.org/zerobias/effector?path=packages/effector-react) |
-  |   [`effector-vue`](https://github.com/zerobias/effector/tree/master/packages/effector-vue)   |   [![npm](https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600)](https://www.npmjs.com/package/effector-vue)   |   [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/effector-vue)](https://david-dm.org/zerobias/effector?path=packages/effector-vue)   |
+  |      Package       |             Version              |            Dependencies            |               Size               |
+  | :----------------: | :------------------------------: | :--------------------------------: | :------------------------------: |
+  |    [`effector`]    | [![npm-effector]][pack-effector] | [![deps-effector]][david-effector] | [![size-effector]][pho-effector] |
+  | [`effector-react`] |    [![npm-react]][pack-react]    |    [![deps-react]][david-react]    |    [![size-react]][pho-react]    |
+  |  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![deps-vue]][david-vue]      |      [![size-vue]][pho-vue]      |
 
-- **For another languages:**
+[`effector`]: https://github.com/zerobias/effector/tree/master/packages/effector
+[npm-effector]: https://img.shields.io/npm/v/effector.svg?maxAge=3600
+[pack-effector]: https://npmjs.com/effector
+[deps-effector]: https://david-dm.org/zerobias/effector.svg?path=packages/effector
+[david-effector]: https://david-dm.org/zerobias/effector?path=packages/effector
+[size-effector]: https://img.shields.io/bundlephobia/min/effector
+[pho-effector]: https://bundlephobia.com/result?p=effector
+[`effector-react`]: https://github.com/zerobias/effector/tree/master/packages/effector-react
+[npm-react]: https://img.shields.io/npm/v/effector-react.svg?maxAge=3600
+[pack-react]: https://npmjs.com/effector-react
+[deps-react]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-react
+[david-react]: https://david-dm.org/zerobias/effector?path=packages/effector-react
+[size-react]: https://img.shields.io/bundlephobia/min/effector-react
+[pho-react]: https://bundlephobia.com/result?p=effector-react
+[`effector-vue`]: https://github.com/zerobias/effector/tree/master/packages/effector-vue
+[npm-vue]: https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600
+[pack-vue]: https://npmjs.com/effector-vue
+[deps-vue]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-vue
+[david-vue]: https://david-dm.org/zerobias/effector?path=packages/effector-vue
+[size-vue]: https://img.shields.io/bundlephobia/min/effector-vue
+[pho-vue]: https://bundlephobia.com/result?p=effector-vue
 
-  |                                              Package                                               |                                                          Version                                                          |                                                                                Dependencies                                                                                |
-  | :------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-  |       [`bs-effector`](https://github.com/zerobias/effector/tree/master/packages/bs-effector)       |       [![npm](https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector)       |       [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector)](https://david-dm.org/zerobias/effector?path=packages/bs-effector)       |
-  | [`bs-effector-react`](https://github.com/zerobias/effector/tree/master/packages/bs-effector-react) | [![npm](https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react)](https://david-dm.org/zerobias/effector?path=packages/bs-effector-react) |
+- **Tools**
+
+|             Package              |                Version                 |               Dependencies               |
+| :------------------------------: | :------------------------------------: | :--------------------------------------: |
+|    [`@effector/babel-plugin`]    |       [![npm-babel]][pack-babel]       |       [![deps-babel]][david-babel]       |
+| [`@effector/babel-plugin-react`] | [![npm-babel-react]][pack-babel-react] | [![deps-babel-react]][david-babel-react] |
+
+[`@effector/babel-plugin`]: https://github.com/zerobias/effector/tree/master/packages/%40effector/babel-plugin
+[npm-babel]: https://img.shields.io/npm/v/@effector/babel-plugin.svg?maxAge=3600
+[pack-babel]: https://www.npmjs.com/package/@effector/babel-plugin
+[deps-babel]: https://david-dm.org/zerobias/effector.svg?path=packages/@effector/babel-plugin
+[david-babel]: https://david-dm.org/zerobias/effector?path=packages/@effector/babel-plugin
+[`@effector/babel-plugin-react`]: https://github.com/zerobias/effector/tree/master/packages/%40effector/babel-plugin-react
+[npm-babel-react]: https://img.shields.io/npm/v/@effector/babel-plugin-react.svg?maxAge=3600
+[pack-babel-react]: https://www.npmjs.com/package/@effector/babel-plugin-react
+[deps-babel-react]: https://david-dm.org/zerobias/effector.svg?path=packages/@effector/babel-plugin-react
+[david-babel-react]: https://david-dm.org/zerobias/effector?path=packages/@effector/babel-plugin-react
+
+- **For another languages**
+
+  |        Package        |             Version              |            Dependencies            |
+  | :-------------------: | :------------------------------: | :--------------------------------: |
+  |    [`bs-effector`]    |  [![npm-bs]][pack-bs-effector]   |       [![deps-bs]][david-bs]       |
+  | [`bs-effector-react`] | [![npm-bs-react]][pack-bs-react] | [![deps-bs-react]][david-bs-react] |
+
+[`bs-effector`]: https://github.com/zerobias/effector/tree/master/packages/bs-effector
+[npm-bs]: https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600
+[pack-bs-effector]: https://npmjs.com/bs-effector
+[deps-bs]: https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector
+[david-bs]: https://david-dm.org/zerobias/effector?path=packages/bs-effector
+[`bs-effector-react`]: https://github.com/zerobias/effector/tree/master/packages/bs-effector-react
+[npm-bs-react]: https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600
+[pack-bs-react]: https://npmjs.com/bs-effector-react
+[deps-bs-react]: https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react
+[david-bs-react]: https://david-dm.org/zerobias/effector?path=packages/bs-effector-react
 
 ## Community
 
 - [Twitter](https://twitter.com/effectorjs)
 - [Gitter](https://gitter.im/effector-js/community)
+- [Telegram](https://t.me/effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru)
 
 ## Press
@@ -206,26 +262,26 @@ turnOff() // nothing has changed
 
 ## More examples
 
-* [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
-* [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
-* [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
-* [Range input component](https://share.effector.dev/oRB2iB8M)
-* [Modal dialog](https://share.effector.dev/B2ShiBzm)
-* [Conditional fitering](https://share.effector.dev/1EsAGMyq)
-* [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
-* [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
-* [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
-* [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
-* [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
-* [Computed bounce menu animation](https://share.effector.dev/m43fCkOU)
-* [Values history](https://share.effector.dev/ghHZZHci)
-* [Read default state from backend](https://share.effector.dev/hA3WTBIT)
-* [Requests cache](https://share.effector.dev/jvE7r0By)
-* [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
-* [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
-* [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
-* ["realworld" app](https://github.com/mg901/react-effector-realworld-example-app) ([Realworld?](https://github.com/gothinkster/realworld))
-* [Real world projects](https://github.com/zerobias/effector/network/dependents) Github
+- [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
+- [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
+- [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
+- [Range input component](https://share.effector.dev/oRB2iB8M)
+- [Modal dialog](https://share.effector.dev/B2ShiBzm)
+- [Conditional fitering](https://share.effector.dev/1EsAGMyq)
+- [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
+- [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
+- [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
+- [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
+- [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
+- [Computed bounce menu animation](https://share.effector.dev/m43fCkOU)
+- [Values history](https://share.effector.dev/ghHZZHci)
+- [Read default state from backend](https://share.effector.dev/hA3WTBIT)
+- [Requests cache](https://share.effector.dev/jvE7r0By)
+- [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
+- [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
+- [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
+- ["realworld" app](https://github.com/mg901/react-effector-realworld-example-app) ([Realworld?](https://github.com/gothinkster/realworld))
+- [Real world projects](https://github.com/zerobias/effector/network/dependents) Github
 
 ## API
 
@@ -387,10 +443,10 @@ const pageStore = mainPage.store(0)
 
 ### Learn more
 
-* [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
-* [API docs](https://effector.now.sh/en/api/effector/effector)
-* [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
-* [Glossary](https://effector.now.sh/en/glossary)
+- [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
+- [API docs](https://effector.now.sh/en/api/effector/effector)
+- [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
+- [Glossary](https://effector.now.sh/en/glossary)
 
 ![Effector Diagram](./diagram.png)
 
