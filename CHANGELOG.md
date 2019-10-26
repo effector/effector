@@ -1,5 +1,9 @@
 # Changelog
 
+## effector 20.4.4
+
+- Ensure that both `effect.done` and `effect.fail` are called before `effect.finally` watchers, thereby preventing side-effects from interrupting pure computations
+
 ## effector 20.4.3
 
 - Throw expected error in case with `sample({clock: undefined})`
