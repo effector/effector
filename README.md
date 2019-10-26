@@ -16,10 +16,10 @@ Reactive state manager
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
-  - [React](#react)
-  - [Vue](#vue)
-  - [CDN](#cdn)
-  - [Additional packages](#additional-packages)
+  - [Packages](#packages)
+    - [Web frameworks](#web-frameworks)
+    - [Babel plugins](#babel-plugins)
+    - [ReasonML/BuckleScript](#reasonmlbucklescript)
 - [Community](#community)
 - [Press](#press)
 - [Online playground](#online-playground)
@@ -44,19 +44,17 @@ Reactive state manager
 
 ## Introduction
 
-Effector is an effective multi-store state manager for Javascript apps **(React/React Native/Vue/Node.js)**, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both **TypeScript** and **Flow** type annotations out of the box.
+Effector is an effective multi-store state manager for Javascript apps **(React/React Native/Vue/Node.js)**, that allows you to manage data in complex applications without the risk of inflating the monolithic central store, with clear control flow, good type support and high capacity API. Effector supports both **TypeScript** and **Flow** type annotations _out of the box_.
 
 ### Effector follows five basic principles:
 
 - **Application stores should be as light as possible** - the idea of adding a store for specific needs should not be frightening or damaging to the developer.
 - **Application stores should be freely combined** - data that the application needs can be statically distributed, showing how it will be converted in runtime.
 - **Autonomy from controversial concepts** - no decorators, no need to use classes or proxies - this is not required to control the state of the application and therefore the api library uses only functions and simple js objects
-- **Predictability and clarity of API** - A small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
+- **Predictability and clarity of API** - a small number of basic principles are reused in different cases, reducing the user's workload and increasing recognition. For example, if you know how .watch works for events, you already know how .watch works for stores.
 - **The application is built from simple elements** - space and way to take any required business logic out of the view, maximizing the simplicity of the components.
 
 ## Installation
-
-Before installation you can review size of the library on the Bundlephobia: [effector](https://bundlephobia.com/result?p=effector), [effector-react](https://bundlephobia.com/result?p=effector-react), [effector-vue](https://bundlephobia.com/result?p=effector-vue)
 
 ```bash
 npm install --save effector
@@ -64,7 +62,7 @@ npm install --save effector
 yarn add effector
 ```
 
-### React
+**React**
 
 ```bash
 npm install --save effector effector-react
@@ -72,7 +70,7 @@ npm install --save effector effector-react
 yarn add effector effector-react
 ```
 
-### Vue
+**Vue**
 
 ```bash
 npm install --save effector effector-vue
@@ -80,21 +78,21 @@ npm install --save effector effector-vue
 yarn add effector effector-vue
 ```
 
-### CDN
+**CDN**
 
 - https://unpkg.com/effector/effector.cjs.js
 - https://unpkg.com/effector-react/effector-react.cjs.js
 - https://unpkg.com/effector-vue/effector-vue.cjs.js
 
-### Additional packages
+### Packages
 
-- **For Web Framework/Libraries**
+#### Web frameworks
 
-  |      Package       |             Version              |            Dependencies            |               Size               |
-  | :----------------: | :------------------------------: | :--------------------------------: | :------------------------------: |
-  |    [`effector`]    | [![npm-effector]][pack-effector] | [![deps-effector]][david-effector] | [![size-effector]][pho-effector] |
-  | [`effector-react`] |    [![npm-react]][pack-react]    |    [![deps-react]][david-react]    |    [![size-react]][pho-react]    |
-  |  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![deps-vue]][david-vue]      |      [![size-vue]][pho-vue]      |
+|      Package       |             Version              |            Dependencies            |               Size               |
+| :----------------: | :------------------------------: | :--------------------------------: | :------------------------------: |
+|    [`effector`]    | [![npm-effector]][pack-effector] | [![deps-effector]][david-effector] | [![size-effector]][pho-effector] |
+| [`effector-react`] |    [![npm-react]][pack-react]    |    [![deps-react]][david-react]    |    [![size-react]][pho-react]    |
+|  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![deps-vue]][david-vue]      |      [![size-vue]][pho-vue]      |
 
 [`effector`]: https://github.com/zerobias/effector/tree/master/packages/effector
 [npm-effector]: https://img.shields.io/npm/v/effector.svg?maxAge=3600
@@ -118,7 +116,7 @@ yarn add effector effector-vue
 [size-vue]: https://img.shields.io/bundlephobia/min/effector-vue
 [pho-vue]: https://bundlephobia.com/result?p=effector-vue
 
-- **Tools**
+#### Babel plugins
 
 |             Package              |                Version                 |               Dependencies               |
 | :------------------------------: | :------------------------------------: | :--------------------------------------: |
@@ -136,12 +134,12 @@ yarn add effector effector-vue
 [deps-babel-react]: https://david-dm.org/zerobias/effector.svg?path=packages/@effector/babel-plugin-react
 [david-babel-react]: https://david-dm.org/zerobias/effector?path=packages/@effector/babel-plugin-react
 
-- **For another languages**
+#### ReasonML/BuckleScript
 
-  |        Package        |             Version              |            Dependencies            |
-  | :-------------------: | :------------------------------: | :--------------------------------: |
-  |    [`bs-effector`]    |  [![npm-bs]][pack-bs-effector]   |       [![deps-bs]][david-bs]       |
-  | [`bs-effector-react`] | [![npm-bs-react]][pack-bs-react] | [![deps-bs-react]][david-bs-react] |
+|        Package        |             Version              |            Dependencies            |
+| :-------------------: | :------------------------------: | :--------------------------------: |
+|    [`bs-effector`]    |  [![npm-bs]][pack-bs-effector]   |       [![deps-bs]][david-bs]       |
+| [`bs-effector-react`] | [![npm-bs-react]][pack-bs-react] | [![deps-bs-react]][david-bs-react] |
 
 [`bs-effector`]: https://github.com/zerobias/effector/tree/master/packages/bs-effector
 [npm-bs]: https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600
