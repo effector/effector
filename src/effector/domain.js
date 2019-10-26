@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from './unit.h'
-import {nextUnitID, Kind, addLinkToOwner, createNode} from './stdlib'
+import {nextUnitID, Kind, own, createNode} from './stdlib'
 import {createStore} from './store'
 import {
   normalizeConfig,
@@ -32,10 +32,10 @@ type DomainHooks = {|
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
-    addLinkToOwner(node, [data])
+    own(node, [data])
     acc.add(data)
   })
-  addLinkToOwner(node, [trigger])
+  own(node, [trigger])
   return (hook: (data: any) => any) => {
     acc.forEach(hook)
     return trigger.watch(hook)

@@ -1,7 +1,7 @@
 //@flow
 
 import type {Event, Effect} from '../unit.h'
-import {Kind, step, addLinkToOwner, bind, createNode} from '../stdlib'
+import {Kind, step, own, bind, createNode} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {createEvent} from '../event'
 import {createStore} from '../store'
@@ -162,7 +162,7 @@ export function effectFabric<Payload, Done>(opts: {
     .reset(done, fail)
   instance.pending = pending
 
-  addLinkToOwner(instance, [
+  own(instance, [
     done,
     doneSideChain,
     fail,

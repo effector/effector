@@ -5,7 +5,7 @@ import $$observable from 'symbol-observable'
 import type {Store, Event} from '../unit.h'
 import {upsertLaunch} from '../kernel'
 import {
-  addLinkToOwner,
+  own,
   step,
   createNode,
   Kind,
@@ -94,7 +94,7 @@ export function createStore<State>(
     from: store,
     to: updates,
   })
-  addLinkToOwner(store, [updates])
+  own(store, [updates])
   return store
 }
 
