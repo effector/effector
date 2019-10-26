@@ -51,6 +51,7 @@ const siteConfig = {
     {blog: true, label: 'Blog'},
     {languages: true},
     // { search: true },
+    { href: 'https://twitter.com/effectorjs', label: 'Twitter' },
     {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
   ],
 
