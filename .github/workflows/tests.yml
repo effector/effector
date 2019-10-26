@@ -3,34 +3,10 @@ name: tests
 on:
   push:
     paths:
-      - 'packages/*'
-      - 'packages/*/*'
-      - 'packages/*/*/*'
-      - 'packages/*/*/*/*'
-      - 'packages/*/*/*/*/*'
-      - 'packages/*/*/*/*/*/*'
-      - 'packages/*/*/*/*/*/*/*'
-      - 'src/*'
-      - 'src/*/*'
-      - 'src/*/*/*'
-      - 'src/*/*/*/*'
-      - 'src/*/*/*/*/*'
-      - 'src/*/*/*/*/*/*'
-      - 'src/*/*/*/*/*/*/*'
-      - 'tasks/*'
-      - 'tasks/*/*'
-      - 'tasks/*/*/*'
-      - 'tasks/*/*/*/*'
-      - 'tasks/*/*/*/*/*'
-      - 'tasks/*/*/*/*/*/*'
-      - 'tasks/*/*/*/*/*/*/*'
-      - 'tools/*'
-      - 'tools/*/*'
-      - 'tools/*/*/*'
-      - 'tools/*/*/*/*'
-      - 'tools/*/*/*/*/*'
-      - 'tools/*/*/*/*/*/*'
-      - 'tools/*/*/*/*/*/*/*'
+      - 'packages/**'
+      - 'src/**'
+      - 'tasks/**'
+      - 'tools/**'
       - 'babel.config.js'
       - 'jest.config.js'
       - 'package.json'
@@ -56,6 +32,7 @@ jobs:
   publish-github:
     needs: common-tests
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -73,8 +50,16 @@ jobs:
         run: node tools/versionHash
         env:
           VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
-      - name: publish packages on github
+      - name: publish effector on github
         run: cd npm/effector && npm publish
+      - name: publish effector fallback
+        if: failure()
+        run: echo 'cannot publish effector on github'
+      - name: publish effector-react on github
+        run: cd npm/effector-react && npm publish
+      - name: publish effector-react fallback
+        if: failure()
+        run: echo 'cannot publish effector-react on github'
   # browserstack:
   #   needs: common-tests
   #   runs-on: ubuntu-latest
