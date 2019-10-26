@@ -1,6 +1,6 @@
 # ☄️ Effector
 
-> Reactive state manager
+Reactive state manager
 
 [![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
 [![Join the chat at https://
@@ -53,15 +53,35 @@ Effector is an effective multi-store state manager for Javascript apps **(React/
 
 ## Installation
 
+Before installation you can review size of the library on the Bundlephobia: [effector](https://bundlephobia.com/result?p=effector), [effector-react](https://bundlephobia.com/result?p=effector-react), [effector-vue](https://bundlephobia.com/result?p=effector-vue)
+
 ```bash
 npm install --save effector
-```
-
-Or using `yarn`
-
-```bash
+// or
 yarn add effector
 ```
+
+### React
+
+```bash
+npm install --save effector effector-react
+// or
+yarn add effector effector-react
+```
+
+### Vue
+
+```bash
+npm install --save effector effector-vue
+// or
+yarn add effector effector-vue
+```
+
+### CDN
+
+* https://unpkg.com/effector/effector.cjs.js
+* https://unpkg.com/effector-react/effector-react.cjs.js
+* https://unpkg.com/effector-vue/effector-vue.cjs.js
 
 ### Additional packages:
 
@@ -367,11 +387,10 @@ const pageStore = mainPage.store(0)
 
 ### Learn more
 
-> [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
-
-> [API docs](https://effector.now.sh/en/api/effector/effector)
-
-> [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
+* [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
+* [API docs](https://effector.now.sh/en/api/effector/effector)
+* [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
+* [Glossary](https://effector.now.sh/en/glossary)
 
 ![Effector Diagram](./diagram.png)
 
