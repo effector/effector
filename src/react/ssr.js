@@ -149,7 +149,7 @@ export function cloneGraph(unit) {
   const handlers = new Map()
 
   queryList(clones, () => {
-    query({op: 'fx'}, node => {
+    query({op: 'fx', fx: 'runner'}, node => {
       const {scope, seq} = node
       scope.done = findClone(scope.done)
       scope.fail = findClone(scope.fail)
