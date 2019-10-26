@@ -32,10 +32,10 @@ type DomainHooks = {|
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
-    addLinkToOwner(node, data)
+    addLinkToOwner(node, [data])
     acc.add(data)
   })
-  addLinkToOwner(node, trigger)
+  addLinkToOwner(node, [trigger])
   return (hook: (data: any) => any) => {
     acc.forEach(hook)
     return trigger.watch(hook)

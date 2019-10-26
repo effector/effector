@@ -162,11 +162,15 @@ export function effectFabric<Payload, Done>(opts: {
     .reset(done, fail)
   instance.pending = pending
 
-  addLinkToOwner(instance, done)
-  addLinkToOwner(instance, fail)
-  addLinkToOwner(instance, anyway)
-  addLinkToOwner(instance, pending)
-  addLinkToOwner(instance, effectRunner)
+  addLinkToOwner(instance, [
+    done,
+    doneSideChain,
+    fail,
+    failSideChain,
+    anyway,
+    pending,
+    effectRunner,
+  ])
   return instance
 }
 

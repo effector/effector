@@ -18,8 +18,7 @@ export const storeBy = (
   greedy: boolean,
   target: any,
 ) => {
-  addLinkToOwner(
-    source,
+  addLinkToOwner(source, [
     createLinkNode(clock, target, {
       scope: {
         state: source.stateRef,
@@ -36,7 +35,7 @@ export const storeBy = (
       ].filter(Boolean),
       meta: {op: 'sample', sample: 'store'},
     }),
-  )
+  ])
   return target
 }
 
@@ -98,8 +97,7 @@ export const eventByUnit = (
   const sourceState = createStateRef()
   const clockState = createStateRef()
 
-  addLinkToOwner(
-    clock,
+  addLinkToOwner(clock, [
     createLinkNode(source, target, {
       scope: {hasSource},
       node: [
@@ -113,9 +111,8 @@ export const eventByUnit = (
       ],
       meta: {op: 'sample', sample: 'source'},
     }),
-  )
-  addLinkToOwner(
-    source,
+  ])
+  addLinkToOwner(source, [
     createLinkNode(clock, target, {
       scope: {sourceState, clockState, hasSource, fn},
       node: [
@@ -134,6 +131,6 @@ export const eventByUnit = (
       ].filter(Boolean),
       meta: {op: 'sample', sample: 'clock'},
     }),
-  )
+  ])
   return target
 }

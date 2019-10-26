@@ -94,7 +94,7 @@ export function createStore<State>(
     from: store,
     to: updates,
   })
-  addLinkToOwner(store, updates)
+  addLinkToOwner(store, [updates])
   return store
 }
 

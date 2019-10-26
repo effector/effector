@@ -16,7 +16,6 @@ export const createLinkNode = (
     meta?: {[name: string]: any, ...},
   |},
 ) => {
-  const from = getGraph(source)
   const to = createNode({
     node,
     child: [child],
@@ -24,11 +23,11 @@ export const createLinkNode = (
     meta,
     family: {
       type: 'crosslink',
-      owners: [from, child],
+      owners: [source, child],
       links: [child],
     },
   })
-  from.next.push(to)
+  getGraph(source).next.push(to)
   return to
 }
 export const forward = (opts: {|

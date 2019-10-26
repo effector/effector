@@ -19,7 +19,7 @@ export function watchUnit(
     ],
     meta: {op: 'watch'},
   })
-  addLinkToOwner(unit, watcherNode)
+  addLinkToOwner(unit, [watcherNode])
   return forward({
     from: unit,
     to: watcherNode,
