@@ -85,7 +85,9 @@ export function createStore<State>(
   ;(store: any).off = bind(off, store)
   ;(store: any).map = bind(mapStore, store)
   ;(store: any).thru = bind(thru, store)
-  ;(store: any).setState = bind(upsertLaunch, store)
+  ;(store: any).setState = state => {
+    upsertLaunch([store], [state])
+  }
   //$off
   store[$$observable] = bind(observable, store)
   forward({

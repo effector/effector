@@ -66,8 +66,30 @@ export function effectFabric<Payload, Done>(opts: {
     parent,
     config,
   })
-  done.graphite.seq.push(notifyHandler)
-  fail.graphite.seq.push(notifyHandler)
+  const doneSideChain = createNode({
+    node: [notifyHandler],
+    meta: {op: 'fx', fx: 'done'},
+  })
+  const failSideChain = createNode({
+    node: [notifyHandler],
+    meta: {op: 'fx', fx: 'fail'},
+  })
+  done.graphite.seq.push(
+    step.compute({
+      fn(upd, scope) {
+        upsertLaunch([doneSideChain], [upd])
+        return upd.result
+      },
+    }),
+  )
+  fail.graphite.seq.push(
+    step.compute({
+      fn(upd, scope) {
+        upsertLaunch([failSideChain], [upd])
+        return upd.result
+      },
+    }),
+  )
   let handler: Function =
     defaultHandler ||
     (value => {
@@ -125,7 +147,7 @@ export function effectFabric<Payload, Done>(opts: {
     }),
     step.run({
       fn(upd, {runner}) {
-        upsertLaunch(runner, upd)
+        upsertLaunch([runner], [upd])
         return upd.params
       },
     }),
@@ -153,34 +175,44 @@ export function effectFabric<Payload, Done>(opts: {
 }
 
 const onResolve = ({event, anyway, params, handler}, result) => {
-  upsertLaunch(anyway, {
-    status: 'done',
-    params,
-    result,
-  })
-  upsertLaunch(event, {
-    handler,
-    toHandler: result,
-    result: {
-      params,
-      result,
-    },
-  })
+  upsertLaunch(
+    [anyway, event],
+    [
+      {
+        status: 'done',
+        params,
+        result,
+      },
+      {
+        handler,
+        toHandler: result,
+        result: {
+          params,
+          result,
+        },
+      },
+    ],
+  )
 }
 const onReject = ({event, anyway, params, handler}, error) => {
-  upsertLaunch(anyway, {
-    status: 'fail',
-    params,
-    error,
-  })
-  upsertLaunch(event, {
-    handler,
-    toHandler: error,
-    result: {
-      params,
-      error,
-    },
-  })
+  upsertLaunch(
+    [anyway, event],
+    [
+      {
+        status: 'fail',
+        params,
+        error,
+      },
+      {
+        handler,
+        toHandler: error,
+        result: {
+          params,
+          error,
+        },
+      },
+    ],
+  )
 }
 
 const notifyHandler = step.run({
