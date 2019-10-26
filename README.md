@@ -97,6 +97,12 @@ yarn add effector
   |       [`bs-effector`](https://github.com/zerobias/effector/tree/master/packages/bs-effector)       |       [![npm](https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector)       |       [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector)](https://david-dm.org/zerobias/effector?path=packages/bs-effector)       |
   | [`bs-effector-react`](https://github.com/zerobias/effector/tree/master/packages/bs-effector-react) | [![npm](https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600)](https://www.npmjs.com/package/bs-effector-react) | [![Dependency Status](https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react)](https://david-dm.org/zerobias/effector?path=packages/bs-effector-react) |
 
+## Community
+
+- [Twitter](https://twitter.com/effectorjs)
+- [Gitter](https://gitter.im/effector-js/community)
+- [Telegram 🇷🇺](https://t.me/effector_ru)
+
 ## Press
 
 - [Why I choose Effector instead of Redux or MobX](https://dev.to/lessmess/why-i-choose-effector-instead-of-redux-or-mobx-3dl7)
