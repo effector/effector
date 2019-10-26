@@ -13,20 +13,15 @@ import {thru} from '../thru'
 import {createLinkNode} from '../forward'
 import {watchUnit} from '../watcher'
 
-export function createEvent<Payload>(
+declare export function createEvent<Payload>(
   name?: string | EventConfigPart,
-  config?: Config<EventConfigPart> = {},
+  config?: Config<EventConfigPart>,
+): Event<Payload>
+export function createEvent<Payload>(
+  nameOrConfig: any,
+  maybeConfig: any = {},
 ): Event<Payload> {
-  return eventFabric({name, config})
-}
-
-export function eventFabric<Payload>(opts: {
-  +name?: string,
-  +parent?: CompositeName,
-  +config?: EventConfigPart,
-  ...
-}): Event<Payload> {
-  const config = normalizeConfig(opts)
+  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const {name: nameRaw, parent} = config
   const id = nextUnitID()
   const name = nameRaw || id
@@ -73,8 +68,7 @@ function subscribe(event, observer): Subscription {
 }
 
 function prepend(event, fn: (_: any) => *) {
-  const contramapped: Event<any> = eventFabric({
-    name: '* → ' + event.shortName,
+  const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
     parent: event.domainName,
   })
 
@@ -103,8 +97,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name = fn.name
     fn = fn.fn
   }
-  const mapped = eventFabric({
-    name: mapName(event, name),
+  const mapped = createEvent(mapName(event, name), {
     parent: event.domainName,
     config,
   })
@@ -132,8 +125,7 @@ function filterEvent(
     console.error('.filter(fn) is deprecated, use .filterMap instead')
     return filterMapEvent(event, fn)
   }
-  const mapped = eventFabric({
-    name: joinName(event, ' →? *'),
+  const mapped = createEvent(joinName(event, ' →? *'), {
     parent: event.domainName,
   })
   createLinkNode(event, mapped, {
@@ -152,8 +144,7 @@ function filterMapEvent(
   event: Event<any> | Effect<any, any, any>,
   fn: any => any | void,
 ): any {
-  const mapped = eventFabric({
-    name: joinName(event, ' →? *'),
+  const mapped = createEvent(joinName(event, ' →? *'), {
     parent: event.domainName,
   })
   createLinkNode(event, mapped, {

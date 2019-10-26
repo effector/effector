@@ -11,7 +11,7 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from './config'
-import {eventFabric} from './event'
+import {createEvent} from './event'
 import {effectFabric} from './effect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
@@ -59,19 +59,19 @@ function domainFabric(opts: {
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const event: Event<Event<any>> = eventFabric({
-    name: `${fullName} event hook`,
+  const event: Event<Event<any>> = createEvent(`${fullName} event hook`, {
     parent: compositeName,
   })
-  const effect: Event<Effect<any, any, any>> = eventFabric({
-    name: `${fullName} effect hook`,
+  const effect: Event<Effect<any, any, any>> = createEvent(
+    `${fullName} effect hook`,
+    {
+      parent: compositeName,
+    },
+  )
+  const store: Event<Store<any>> = createEvent(`${fullName} store hook`, {
     parent: compositeName,
   })
-  const store: Event<Store<any>> = eventFabric({
-    name: `${fullName} store hook`,
-    parent: compositeName,
-  })
-  const domain: Event<Domain> = eventFabric({
+  const domain: Event<Domain> = createEvent(`${fullName} domain hook`, {
     parent: compositeName,
   })
   if (parentHooks) {
@@ -121,8 +121,7 @@ function domainFabric(opts: {
       config?: Config<EventConfigPart>,
     ): Event<Payload> =>
       event(
-        eventFabric({
-          name,
+        createEvent(name, {
           parent: compositeName,
           config,
         }),

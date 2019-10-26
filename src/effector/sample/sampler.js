@@ -1,6 +1,6 @@
 //@flow
 
-import {eventFabric} from '../event'
+import {createEvent} from '../event'
 import {createStore} from '../store'
 import {createLinkNode} from '../forward'
 import {
@@ -54,8 +54,7 @@ export const storeByEvent = (
     fn,
     greedy,
     target ||
-      eventFabric({
-        name: name || source.shortName,
+      createEvent(name || source.shortName, {
         parent: source.domainName,
       }),
   )
@@ -92,8 +91,7 @@ export const eventByUnit = (
 ) => {
   target =
     target ||
-    eventFabric({
-      name: name || source.shortName,
+    createEvent(name || source.shortName, {
       parent: source.domainName,
     })
   const hasSource = createStateRef(false)

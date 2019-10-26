@@ -3,7 +3,7 @@
 import type {Event, Effect} from '../unit.h'
 import {Kind, step, addLinkToOwner, bind, createNode} from '../stdlib'
 import {upsertLaunch} from '../kernel'
-import {eventFabric} from '../event'
+import {createEvent} from '../event'
 import {createStore} from '../store'
 import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
 import {joinName, type CompositeName} from '../naming'
@@ -26,8 +26,7 @@ export function effectFabric<Payload, Done>(opts: {
   const {name, parent, handler: defaultHandler} = config
 
   //$off
-  const instance: Effect<Payload, Done, any> = eventFabric({
-    name,
+  const instance: Effect<Payload, Done, any> = createEvent(name, {
     parent,
     config,
   })
@@ -37,16 +36,14 @@ export function effectFabric<Payload, Done>(opts: {
   const done: Event<{|
     params: Payload,
     result: Done,
-  |}> = eventFabric({
-    name: joinName(instance, ' done'),
+  |}> = createEvent(joinName(instance, ' done'), {
     parent,
     config,
   })
   const fail: Event<{|
     params: Payload,
     error: *,
-  |}> = eventFabric({
-    name: joinName(instance, ' fail'),
+  |}> = createEvent(joinName(instance, ' fail'), {
     parent,
     config,
   })
@@ -61,8 +58,7 @@ export function effectFabric<Payload, Done>(opts: {
         +params: Payload,
         +error: *,
       |},
-  > = eventFabric({
-    name: joinName(instance, ' finally'),
+  > = createEvent(joinName(instance, ' finally'), {
     parent,
     config,
   })
