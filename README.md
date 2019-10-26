@@ -202,83 +202,28 @@ turnOff() // nothing has changed
 
 <hr />
 
-### Client-server interaction with effects
+## More examples
 
-[see source code](https://github.com/zerobias/effector/tree/master/examples/worker-rpc)
-
-### Reddit reader
-
-[Run example](https://share.effector.dev/T5CyxSFl)
-
-With effects for data fetching and effector-react hooks
-
-### Lists rendering
-
-[Run example](https://share.effector.dev/OlakwECa)
-
-With `useList` hook
-
-### Range input component
-
-[Run example](https://share.effector.dev/oRB2iB8M)
-
-### Modal dialog
-
-[Run example](https://share.effector.dev/B2ShiBzm)
-
-### Conditional fitering
-
-[Run example](https://share.effector.dev/1EsAGMyq)
-
-### Dynamic form fields, saving and loading from localStorage with effects
-
-[Run example](https://share.effector.dev/Qxt0zAdd)
-
-### Loading initial state from localStorage with domains
-
-[Run example](https://share.effector.dev/YbiBnyAD)
-
-### Dynamic page selection with useStoreMap
-
-[Run example](https://share.effector.dev/AvWnrFXy)
-
-### Update on scroll with `guard`
-
-[Run example](https://share.effector.dev/avjCFH22)
-
-### Night theme switcher component
-
-[Run example](https://share.effector.dev/4MU8H3YW)
-
-### Computed bounce menu animation
-
-[Run example](https://share.effector.dev/m43fCkOU)
-
-### Values history
-
-[Run example](https://share.effector.dev/ghHZZHci)
-
-### Read default state from backend
-
-[Run example](https://share.effector.dev/hA3WTBIT)
-
-### Requests cache
-
-[Run example](https://share.effector.dev/jvE7r0By)
-
-### Watch last two store state values
-
-[Run example](https://share.effector.dev/LRVsYhIc)
-
-### Stores from react context
-
-[Codesandbox](https://codesandbox.io/s/pensive-euler-i4qs5)
-
-### Basic todolist example
-
-[Codesandbox](https://codesandbox.io/s/vmx6wxww43)
-
-### [Real world projects](https://github.com/zerobias/effector/network/dependents)
+* [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
+* [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
+* [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
+* [Range input component](https://share.effector.dev/oRB2iB8M)
+* [Modal dialog](https://share.effector.dev/B2ShiBzm)
+* [Conditional fitering](https://share.effector.dev/1EsAGMyq)
+* [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
+* [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
+* [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
+* [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
+* [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
+* [Computed bounce menu animation](https://share.effector.dev/m43fCkOU)
+* [Values history](https://share.effector.dev/ghHZZHci)
+* [Read default state from backend](https://share.effector.dev/hA3WTBIT)
+* [Requests cache](https://share.effector.dev/jvE7r0By)
+* [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
+* [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
+* [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
+* ["realworld" app](https://github.com/mg901/react-effector-realworld-example-app) ([Realworld?](https://github.com/gothinkster/realworld))
+* [Real world projects](https://github.com/zerobias/effector/network/dependents) Github
 
 ## API
 
