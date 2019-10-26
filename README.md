@@ -56,25 +56,25 @@ Effector is an effective multi-store state manager for Javascript apps **(React/
 
 ## Installation
 
-```bash
+```sh
 npm install --save effector
-// or
+# or
 yarn add effector
 ```
 
 **React**
 
-```bash
+```sh
 npm install --save effector effector-react
-// or
+# or
 yarn add effector effector-react
 ```
 
 **Vue**
 
-```bash
+```sh
 npm install --save effector effector-vue
-// or
+# or
 yarn add effector effector-vue
 ```
 
