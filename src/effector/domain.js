@@ -41,7 +41,7 @@ declare export function createDomain(
 export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const id = nextUnitID()
-  const {name: nameRaw, parent, parentHooks} = config
+  const {name: nameRaw, parent, parentHooks, sid = null} = config
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
@@ -88,7 +88,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   const node = createNode({
     node: [],
     scope: {history},
-    meta: {unit: 'domain'},
+    meta: {unit: 'domain', name: compositeName.shortName, sid},
     family: {
       type: 'domain',
     },
@@ -143,6 +143,6 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
         }),
       ),
     kind: Kind.domain,
-    sid: config.sid || null,
+    sid,
   }
 }

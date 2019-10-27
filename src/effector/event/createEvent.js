@@ -22,14 +22,14 @@ export function createEvent<Payload>(
   maybeConfig: any,
 ): Event<Payload> {
   const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
-  const {name: nameRaw, parent} = config
+  const {name: nameRaw, parent, sid = null} = config
   const id = nextUnitID()
   const name = nameRaw || id
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createNode({
     node: [],
-    meta: {unit: 'event'},
+    meta: {unit: 'event', name, sid},
   })
 
   //$off
@@ -43,7 +43,7 @@ export function createEvent<Payload>(
     launch(instance, payload)
     return payload
   }
-  instance.sid = config.sid || null
+  instance.sid = sid
   instance.graphite = graphite
   instance.shortName = name
   instance.domainName = parent
