@@ -31,35 +31,7 @@ describe('combine cases', () => {
       no errors
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with object type [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]. Or array literal [1] is incompatible with 'Store' [13]
-        const store: Store<[number, number, number]> = combine([R, G, B])
-                                                       ^^^^^^^
-            const store: Store<[number, number, number]> = combine([R, G, B])
-                                                               [1] ^^^^^^^^^
-            State: {+[key: string]: Store<any> | any, ...},
-               [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
-             a: Store<A>,
-           [13] ^^^^^^^^
+      no errors
       "
     `)
   })
@@ -85,35 +57,7 @@ describe('combine cases', () => {
       no errors
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with object type [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]. Or array literal [1] is incompatible with 'Store' [13]
-        const store: Store<[string]> = combine([Color])
-                                       ^^^^^^^
-            const store: Store<[string]> = combine([Color])
-                                               [1] ^^^^^^^
-            State: {+[key: string]: Store<any> | any, ...},
-               [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
-             a: Store<A>,
-           [13] ^^^^^^^^
+      no errors
       "
     `)
   })
