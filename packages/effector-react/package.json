@@ -27,7 +27,9 @@
     "effector-react.cjs.js.flow",
     "effector-react.es.js.flow",
     "effector-react.umd.js.flow",
-    "compat.js.flow"
+    "compat.js.flow",
+    "ssr.js",
+    "ssr.js.map"
   ],
   "keywords": [
     "react",

@@ -1,5 +1,43 @@
 # Changelog
 
+## effector 20.5.0
+
+- Merge `createStoreObject` to `combine` to reduce api surface. Wherever `createStoreObject` was used, it can be replaced with `combine`
+
+```js
+import {createStore, combine, createStoreObject} from 'effector'
+
+const r = createStore(255)
+const g = createStore(0)
+const b = createStore(255)
+
+const color = combine({r, g, b})
+color.watch(console.log)
+// => {r: 255, b: 0, b: 255}
+
+const colorOld = createStoreObject({r, g, b})
+colorOld.watch(console.log)
+// => {r: 255, b: 0, b: 255}
+```
+
+[Try it](https://share.effector.dev/YmXUET9b)
+
+- Add ability to use arrays of stores with `combine`
+
+```js
+import {createStore, combine} from 'effector'
+
+const r = createStore(255)
+const g = createStore(0)
+const b = createStore(255)
+
+const color = combine([r, g, b])
+color.watch(console.log)
+// => [255, 0, 255]
+```
+
+[Try it](https://share.effector.dev/WXJoaXQw)
+
 ## effector 20.4.4
 
 - Ensure that both `effect.done` and `effect.fail` are called before `effect.finally` watchers, thereby preventing side-effects from interrupting pure computations

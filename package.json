@@ -1,7 +1,7 @@
 {
   "name": "effector-dev",
-  "version": "20.4.4",
-  "description": "Application state manager",
+  "version": "20.5.0",
+  "description": "The state manager",
   "private": true,
   "scripts": {
     "integration": "sh integrations/webpack/run.sh",
