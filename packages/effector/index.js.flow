@@ -458,7 +458,17 @@ declare export function guard<A>(
   |},
 ): Unit<A>
 
-declare export function combine<R>(fn: () => R): Store<R>
+declare export function combine<
+  State: {+[key: string]: Store<any> | any, ...},
+>(
+  obj: State,
+): Store<
+  $ObjMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
   a: Store<A>,
