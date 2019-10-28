@@ -1,6 +1,6 @@
 //@flow
 
-import {combine, createStore} from 'effector'
+import {combine, createStore, Store} from 'effector'
 import setupLocation from '../../setupLocation'
 const typecheck = '{global}'
 
@@ -9,19 +9,19 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine({R, G, B})
+    const store: Store<{R: number, G: number, B: number}> = combine({R, G, B})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ R: Store<number>; G: Store<number>; B: Store<number>; }' is not assignable to parameter of type '() => unknown'.
-        Object literal may only specify known properties, and 'R' does not exist in type '() => unknown'.
+      Argument of type '{ R: Store<number>; G: Store<number>; B: Store<number>; }' is not assignable to parameter of type '() => { R: number; G: number; B: number; }'.
+        Object literal may only specify known properties, and 'R' does not exist in type '() => { R: number; G: number; B: number; }'.
 
       --flow--
       Cannot call 'combine' because: Either a call signature declaring the expected parameter / return type is missing in object literal [1] but exists in function type [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]. Or object literal [1] is incompatible with 'Store' [13]
-        const store = combine({R, G, B})
-                      ^^^^^^^
-            const store = combine({R, G, B})
-                              [1] ^^^^^^^^^
+        const store: Store<{R: number, G: number, B: number}> = combine({R, G, B})
+                                                                ^^^^^^^
+            const store: Store<{R: number, G: number, B: number}> = combine({R, G, B})
+                                                                        [1] ^^^^^^^^^
             declare export function combine<R>(fn: () => R): Store<R>
                                                [2] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -53,19 +53,19 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine([R, G, B])
+    const store: Store<[number, number, number]> = combine([R, G, B])
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>[]' is not assignable to parameter of type '() => unknown'.
-        Type 'Store<number>[]' provides no match for the signature '(): unknown'.
+      Argument of type 'Store<number>[]' is not assignable to parameter of type '() => [number, number, number]'.
+        Type 'Store<number>[]' provides no match for the signature '(): [number, number, number]'.
 
       --flow--
       Cannot call 'combine' because: Either array literal [1] is incompatible with function type [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]. Or array literal [1] is incompatible with 'Store' [13]
-        const store = combine([R, G, B])
-                      ^^^^^^^
-            const store = combine([R, G, B])
-                              [1] ^^^^^^^^^
+        const store: Store<[number, number, number]> = combine([R, G, B])
+                                                       ^^^^^^^
+            const store: Store<[number, number, number]> = combine([R, G, B])
+                                                               [1] ^^^^^^^^^
             declare export function combine<R>(fn: () => R): Store<R>
                                                [2] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -95,19 +95,19 @@ describe('combine cases', () => {
   })
   test('combine({Color})', () => {
     const Color = createStore('#e95801')
-    const store = combine({Color})
+    const store: Store<{Color: string}> = combine({Color})
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ Color: Store<string>; }' is not assignable to parameter of type '() => unknown'.
-        Object literal may only specify known properties, and 'Color' does not exist in type '() => unknown'.
+      Argument of type '{ Color: Store<string>; }' is not assignable to parameter of type '() => { Color: string; }'.
+        Object literal may only specify known properties, and 'Color' does not exist in type '() => { Color: string; }'.
 
       --flow--
       Cannot call 'combine' because: Either a call signature declaring the expected parameter / return type is missing in object literal [1] but exists in function type [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]. Or object literal [1] is incompatible with 'Store' [13]
-        const store = combine({Color})
-                      ^^^^^^^
-            const store = combine({Color})
-                              [1] ^^^^^^^
+        const store: Store<{Color: string}> = combine({Color})
+                                              ^^^^^^^
+            const store: Store<{Color: string}> = combine({Color})
+                                                      [1] ^^^^^^^
             declare export function combine<R>(fn: () => R): Store<R>
                                                [2] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -137,19 +137,19 @@ describe('combine cases', () => {
   })
   test('combine([Color])', () => {
     const Color = createStore('#e95801')
-    const store = combine([Color])
+    const store: Store<[string]> = combine([Color])
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<string>[]' is not assignable to parameter of type '() => unknown'.
-        Type 'Store<string>[]' provides no match for the signature '(): unknown'.
+      Argument of type 'Store<string>[]' is not assignable to parameter of type '() => [string]'.
+        Type 'Store<string>[]' provides no match for the signature '(): [string]'.
 
       --flow--
       Cannot call 'combine' because: Either array literal [1] is incompatible with function type [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]. Or array literal [1] is incompatible with 'Store' [13]
-        const store = combine([Color])
-                      ^^^^^^^
-            const store = combine([Color])
-                              [1] ^^^^^^^
+        const store: Store<[string]> = combine([Color])
+                                       ^^^^^^^
+            const store: Store<[string]> = combine([Color])
+                                               [1] ^^^^^^^
             declare export function combine<R>(fn: () => R): Store<R>
                                                [2] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -181,7 +181,7 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine(
+    const store: Store<string> = combine(
       {R, G, B},
       ({R, G, B}) =>
         '#' +
@@ -200,8 +200,8 @@ describe('combine cases', () => {
 
       --flow--
       Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
-        const store = combine(
-                      ^^^^^^^
+        const store: Store<string> = combine(
+                                     ^^^^^^^
             {R, G, B},
         [1] ^^^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -233,7 +233,7 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine(
+    const store: Store<string> = combine(
       [R, G, B],
       ([R, G, B]) =>
         '#' +
@@ -252,8 +252,8 @@ describe('combine cases', () => {
 
       --flow--
       Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
-        const store = combine(
-                      ^^^^^^^
+        const store: Store<string> = combine(
+                                     ^^^^^^^
             [R, G, B],
         [1] ^^^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
@@ -283,7 +283,7 @@ describe('combine cases', () => {
   })
   test(`combine({Color}, ({Color}) => '~')`, () => {
     const Color = createStore('#e95801')
-    const store = combine({Color}, ({Color}) => Color)
+    const store: Store<string> = combine({Color}, ({Color}) => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
@@ -293,10 +293,10 @@ describe('combine cases', () => {
 
       --flow--
       Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
-        const store = combine({Color}, ({Color}) => Color)
-                      ^^^^^^^
-            const store = combine({Color}, ({Color}) => Color)
-                              [1] ^^^^^^^
+        const store: Store<string> = combine({Color}, ({Color}) => Color)
+                                     ^^^^^^^
+            const store: Store<string> = combine({Color}, ({Color}) => Color)
+                                             [1] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
                                                  [2] ^^^^^^^^
             a: Store<A>,
@@ -324,7 +324,7 @@ describe('combine cases', () => {
   })
   test(`combine([Color], ([Color]) => '~')`, () => {
     const Color = createStore('#e95801')
-    const store = combine([Color], ([Color]) => Color)
+    const store: Store<string> = combine([Color], ([Color]) => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
@@ -334,10 +334,10 @@ describe('combine cases', () => {
 
       --flow--
       Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
-        const store = combine([Color], ([Color]) => Color)
-                      ^^^^^^^
-            const store = combine([Color], ([Color]) => Color)
-                              [1] ^^^^^^^
+        const store: Store<string> = combine([Color], ([Color]) => Color)
+                                     ^^^^^^^
+            const store: Store<string> = combine([Color], ([Color]) => Color)
+                                             [1] ^^^^^^^
             declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
                                                  [2] ^^^^^^^^
             a: Store<A>,
@@ -365,7 +365,7 @@ describe('combine cases', () => {
   })
   test(`combine(Color, (Color) => '~')`, () => {
     const Color = createStore('#e95801')
-    const store = combine(Color, Color => Color)
+    const store: Store<string> = combine(Color, Color => Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
@@ -380,7 +380,7 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine(
+    const store: Store<string> = combine(
       R,
       G,
       B,
@@ -404,17 +404,17 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    const store = combine(R, G, B)
+    const store: Store<[number, number, number]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>' is not assignable to parameter of type '(a: number, b: number) => unknown'.
-        Type 'Store<number>' provides no match for the signature '(a: number, b: number): unknown'.
+      Argument of type 'Store<number>' is not assignable to parameter of type '(a: number, b: number) => [number, number, number]'.
+        Type 'Store<number>' provides no match for the signature '(a: number, b: number): [number, number, number]'.
 
       --flow--
       Cannot call 'combine'
-        const store = combine(R, G, B)
-                                    ^
+        const store: Store<[number, number, number]> = combine(R, G, B)
+                                                                     ^
         a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
             ): Store<State>
            [1] ^^^^^^^^^^^^
@@ -425,18 +425,18 @@ describe('combine cases', () => {
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
-    const store = combine(Color)
+    const store: Store<string> = combine(Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<string>' is not assignable to parameter of type '() => unknown'.
-        Type 'Store<string>' provides no match for the signature '(): unknown'.
+      Argument of type 'Store<string>' is not assignable to parameter of type '() => string'.
+        Type 'Store<string>' provides no match for the signature '(): string'.
 
 
       --flow--
       Cannot call 'combine'
-        const store = combine(Color)
-                              ^^^^^
+        const store: Store<string> = combine(Color)
+                                             ^^^^^
         a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
             ): Store<State>
            [1] ^^^^^^^^^^^^
