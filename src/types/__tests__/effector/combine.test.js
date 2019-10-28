@@ -76,40 +76,10 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ R: Store<number>; G: Store<number>; B: Store<number>; }' is not assignable to parameter of type 'Store<unknown>'.
-        Object literal may only specify known properties, and 'R' does not exist in type 'Store<unknown>'.
-      Binding element 'R' implicitly has an 'any' type.
-      Binding element 'G' implicitly has an 'any' type.
-      Binding element 'B' implicitly has an 'any' type.
+      no errors
 
       --flow--
-      Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
-        const store: Store<string> = combine(
-                                     ^^^^^^^
-            {R, G, B},
-        [1] ^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      no errors
       "
     `)
   })
@@ -128,40 +98,10 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>[]' is not assignable to parameter of type 'Store<unknown>'.
-        Type 'Store<number>[]' is missing the following properties from type 'Store<unknown>': reset, getState, on, off, and 11 more.
-      Binding element 'R' implicitly has an 'any' type.
-      Binding element 'G' implicitly has an 'any' type.
-      Binding element 'B' implicitly has an 'any' type.
+      no errors
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
-        const store: Store<string> = combine(
-                                     ^^^^^^^
-            [R, G, B],
-        [1] ^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      no errors
       "
     `)
   })
@@ -171,38 +111,10 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ Color: Store<string>; }' is not assignable to parameter of type 'Store<unknown>'.
-        Object literal may only specify known properties, and 'Color' does not exist in type 'Store<unknown>'.
-      Binding element 'Color' implicitly has an 'any' type.
+      no errors
 
       --flow--
-      Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
-        const store: Store<string> = combine({Color}, ({Color}) => Color)
-                                     ^^^^^^^
-            const store: Store<string> = combine({Color}, ({Color}) => Color)
-                                             [1] ^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      no errors
       "
     `)
   })
@@ -212,38 +124,10 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<string>[]' is not assignable to parameter of type 'Store<unknown>'.
-        Type 'Store<string>[]' is missing the following properties from type 'Store<unknown>': reset, getState, on, off, and 11 more.
-      Binding element 'Color' implicitly has an 'any' type.
+      no errors
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
-        const store: Store<string> = combine([Color], ([Color]) => Color)
-                                     ^^^^^^^
-            const store: Store<string> = combine([Color], ([Color]) => Color)
-                                             [1] ^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      no errors
       "
     `)
   })
@@ -323,8 +207,8 @@ describe('combine cases (should pass)', () => {
         const store: Store<string> = combine(Color)
                                      ^^^^^^^^^^^^^^
         object type [1] is incompatible with string [2] in type argument 'State' [3]
-            $ObjMap<
-        [1] ^^^^^^^^...
+            ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             const store: Store<string> = combine(Color)
                            [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {
@@ -466,13 +350,6 @@ describe('error inference (should fail with number -> string error)', () => {
             Type '[string]' is not assignable to type '[number]'.
 
       --flow--
-      'Store' [1] is not a valid argument of '$ObjMap' [2]
-        $ObjMap<
-        ^^^^^^^^...
-            ): Store<State>
-           [1] ^^^^^^^^^^^^
-            $ObjMap<
-        [2] ^^^^^^^^...
       in the first argument: Either cannot assign 'combine(...)' to 'store'
         const store: Store<[number]> = combine([Color])
                                                 ^^^^^
@@ -501,40 +378,25 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ R: Store<number>; G: Store<number>; B: Store<number>; }' is not assignable to parameter of type 'Store<unknown>'.
-        Object literal may only specify known properties, and 'R' does not exist in type 'Store<unknown>'.
-      Binding element 'R' implicitly has an 'any' type.
-      Binding element 'G' implicitly has an 'any' type.
-      Binding element 'B' implicitly has an 'any' type.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Types of property 'getState' are incompatible.
+          Type '() => string' is not assignable to type '() => number'.
+            Type 'string' is not assignable to type 'number'.
 
       --flow--
-      Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
-        const store: Store<number> = combine(
-                                     ^^^^^^^
-            {R, G, B},
-        [1] ^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      in the first argument: Either cannot assign 'combine(...)' to 'store'
+        {R, G, B},
+               ^
+        string [1] is incompatible with number [2] in type argument 'State' [3]. Or cannot call 'B.toString'
+            '#' +
+        [1] ^^^^^...
+            const store: Store<number> = combine(
+                           [2] ^^^^^^
+            declare export class Store<State> implements Unit<State> {
+                                   [3] ^^^^^
+        <BUILTINS>/core.js
+            toString(): string;
+        [4] ^^^^^^^^^^^^^^^^^^
       "
     `)
   })
@@ -553,39 +415,22 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>[]' is not assignable to parameter of type 'Store<unknown>'.
-      Binding element 'R' implicitly has an 'any' type.
-      Binding element 'G' implicitly has an 'any' type.
-      Binding element 'B' implicitly has an 'any' type.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
-        const store: Store<number> = combine(
-                                     ^^^^^^^
-            [R, G, B],
-        [1] ^^^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+      in the first argument: Either cannot assign 'combine(...)' to 'store'
+        [R, G, B],
+               ^
+        string [1] is incompatible with number [2] in type argument 'State' [3]. Or cannot call 'B.toString'
+            '#' +
+        [1] ^^^^^...
+            const store: Store<number> = combine(
+                           [2] ^^^^^^
+            declare export class Store<State> implements Unit<State> {
+                                   [3] ^^^^^
+        <BUILTINS>/core.js
+            toString(): string;
+        [4] ^^^^^^^^^^^^^^^^^^
       "
     `)
   })
@@ -595,38 +440,26 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '{ Color: Store<string>; }' is not assignable to parameter of type 'Store<unknown>'.
-        Object literal may only specify known properties, and 'Color' does not exist in type 'Store<unknown>'.
-      Binding element 'Color' implicitly has an 'any' type.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      Cannot call 'combine' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]. Or object literal [1] is incompatible with 'Store' [4]. Or object literal [1] is incompatible with 'Store' [5]. Or object literal [1] is incompatible with 'Store' [6]. Or object literal [1] is incompatible with 'Store' [7]. Or object literal [1] is incompatible with 'Store' [8]. Or object literal [1] is incompatible with 'Store' [9]. Or object literal [1] is incompatible with 'Store' [10]. Or object literal [1] is incompatible with 'Store' [11]. Or object literal [1] is incompatible with 'Store' [12]
+      'Store' [1] is not a valid argument of '$ObjMap' [2]
+        ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            ): Store<State>
+           [1] ^^^^^^^^^^^^
+            ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      in the first argument: Either cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine({Color}, ({Color}) => Color)
-                                     ^^^^^^^
+                                              ^^^^^
+        string [1] is incompatible with number [2] in type argument 'State' [3]
+            const Color = createStore('#e95801')
+                                  [1] ^^^^^^^^^
             const store: Store<number> = combine({Color}, ({Color}) => Color)
-                                             [1] ^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+                           [2] ^^^^^^
+            declare export class Store<State> implements Unit<State> {
+                                   [3] ^^^^^
       "
     `)
   })
@@ -636,37 +469,19 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<string>[]' is not assignable to parameter of type 'Store<unknown>'.
-      Binding element 'Color' implicitly has an 'any' type.
+      Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
+      in the first argument: Either cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine([Color], ([Color]) => Color)
-                                     ^^^^^^^
+                                              ^^^^^
+        string [1] is incompatible with number [2] in type argument 'State' [3]
+            const Color = createStore('#e95801')
+                                  [1] ^^^^^^^^^
             const store: Store<number> = combine([Color], ([Color]) => Color)
-                                             [1] ^^^^^^^
-            declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-                                                 [2] ^^^^^^^^
-            a: Store<A>,
-           [3] ^^^^^^^^
-            a: Store<A>,
-           [4] ^^^^^^^^
-            a: Store<A>,
-           [5] ^^^^^^^^
-            a: Store<A>,
-           [6] ^^^^^^^^
-            a: Store<A>,
-           [7] ^^^^^^^^
-            a: Store<A>,
-           [8] ^^^^^^^^
-            a: Store<A>,
-           [9] ^^^^^^^^
-             a: Store<A>,
-           [10] ^^^^^^^^
-             a: Store<A>,
-           [11] ^^^^^^^^
-             a: Store<A>,
-           [12] ^^^^^^^^
+                           [2] ^^^^^^
+            declare export class Store<State> implements Unit<State> {
+                                   [3] ^^^^^
       "
     `)
   })
@@ -677,9 +492,6 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        Types of property 'getState' are incompatible.
-          Type '() => string' is not assignable to type '() => number'.
-            Type 'string' is not assignable to type 'number'.
 
       --flow--
       Cannot assign 'combine(...)' to 'store'
@@ -768,8 +580,8 @@ describe('error inference (should fail with number -> string error)', () => {
         const store: Store<number> = combine(Color)
                                      ^^^^^^^^^^^^^^
         object type [1] is incompatible with number [2] in type argument 'State' [3]
-            $ObjMap<
-        [1] ^^^^^^^^...
+            ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             const store: Store<number> = combine(Color)
                            [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {

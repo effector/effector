@@ -516,9 +516,15 @@ export function guard<A>(config: {
 }): Unit<A>
 
 export function combine<State>(
-  defaultState: State,
+  shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+export function combine<State, R>(
+  shape: State,
+  fn: (
+    shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
+  ) => R,
+): Store<R>
 export function combine<A, B, R>(
   a: Store<A>,
   b: Store<B>,
