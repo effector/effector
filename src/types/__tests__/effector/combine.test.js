@@ -466,6 +466,13 @@ describe('error inference (should fail with number -> string error)', () => {
             Type '[string]' is not assignable to type '[number]'.
 
       --flow--
+      'Store' [1] is not a valid argument of '$ObjMap' [2]
+        $ObjMap<
+        ^^^^^^^^...
+            ): Store<State>
+           [1] ^^^^^^^^^^^^
+            $ObjMap<
+        [2] ^^^^^^^^...
       in the first argument: Either cannot assign 'combine(...)' to 'store'
         const store: Store<[number]> = combine([Color])
                                                 ^^^^^
@@ -552,13 +559,6 @@ describe('error inference (should fail with number -> string error)', () => {
       Binding element 'B' implicitly has an 'any' type.
 
       --flow--
-      'Store' [1] is not a valid argument of '$ObjMap' [2]
-        $ObjMap<
-        ^^^^^^^^...
-            ): Store<State>
-           [1] ^^^^^^^^^^^^
-            $ObjMap<
-        [2] ^^^^^^^^...
       Cannot call 'combine' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]. Or array literal [1] is incompatible with 'Store' [4]. Or array literal [1] is incompatible with 'Store' [5]. Or array literal [1] is incompatible with 'Store' [6]. Or array literal [1] is incompatible with 'Store' [7]. Or array literal [1] is incompatible with 'Store' [8]. Or array literal [1] is incompatible with 'Store' [9]. Or array literal [1] is incompatible with 'Store' [10]. Or array literal [1] is incompatible with 'Store' [11]. Or array literal [1] is incompatible with 'Store' [12]
         const store: Store<number> = combine(
                                      ^^^^^^^
