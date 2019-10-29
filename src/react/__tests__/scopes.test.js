@@ -20,9 +20,10 @@ import {
   fork,
   invoke,
   Provider,
+  serialize,
 } from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
@@ -112,6 +113,7 @@ it('works', async() => {
   expect(carolScope).toMatchInlineSnapshot(`
     Object {
       "find": [Function],
+      "getDomain": [Function],
       "graphite": Object {
         "family": Object {
           "links": Array [],
@@ -132,5 +134,22 @@ it('works', async() => {
     <h2>
       bob
     </h2>
+  `)
+
+  expect(serialize(aliceScope)).toMatchInlineSnapshot(`
+    Object {
+      "-o30n88": Array [
+        "bob",
+      ],
+      "1q6x9y": "alice",
+    }
+  `)
+  expect(serialize(bobScope)).toMatchInlineSnapshot(`
+    Object {
+      "-o30n88": Array [
+        "alice",
+      ],
+      "1q6x9y": "bob",
+    }
   `)
 })
