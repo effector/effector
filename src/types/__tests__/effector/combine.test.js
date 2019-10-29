@@ -45,10 +45,7 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Property 'toFixed' does not exist on type 'Store<number> | Store<string>'.
-        Property 'toFixed' does not exist on type 'Store<number>'.
-      Property 'charAt' does not exist on type 'Store<number> | Store<string>'.
-        Property 'charAt' does not exist on type 'Store<number>'.
+      no errors
 
       --flow--
       in the first argument: Either cannot get 'n.toFixed'
@@ -142,10 +139,7 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Property 'toFixed' does not exist on type 'Store<number> | Store<string>'.
-        Property 'toFixed' does not exist on type 'Store<number>'.
-      Property 'charAt' does not exist on type 'Store<number> | Store<string>'.
-        Property 'charAt' does not exist on type 'Store<number>'.
+      no errors
 
       --flow--
       in the first argument: Either cannot get 'n.toFixed'

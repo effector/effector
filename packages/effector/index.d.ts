@@ -1,5 +1,13 @@
 /// <reference types="symbol-observable" />
 
+/**
+ * This tuple type is intended for use as a generic constraint to infer concrete
+ * tuple type of ANY length.
+ *
+ * @see https://github.com/krzkaczor/ts-essentials/blob/a4c2485bc3f37843267820ec552aa662251767bc/lib/types.ts#L169
+ */
+type Tuple<T = unknown> = [T] | T[]
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -515,10 +523,19 @@ export function guard<A>(config: {
   target: Unit<A>
 }): Unit<A>
 
+export function combine<State extends Tuple>(
+  shape: State,
+): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<State>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+export function combine<State extends Tuple, R>(
+  shape: State,
+  fn: (
+    shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
+  ) => R,
+): Store<R>
 export function combine<State, R>(
   shape: State,
   fn: (
