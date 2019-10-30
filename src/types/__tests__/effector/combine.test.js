@@ -35,6 +35,30 @@ describe('combine cases (should pass)', () => {
       "
     `)
   })
+  test('combine([Store<number>,Store<string>])', () => {
+    const sn = createStore(0)
+    const ss = createStore('')
+    const store = combine([sn, ss]).map(([n, s]) => {
+      n.toFixed // should have method on type
+      s.charAt // should have method on type
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      in the first argument: Either cannot get 'n.toFixed'
+        const store = combine([sn, ss]).map(([n, s]) => {
+                                   ^^
+        property 'toFixed' is missing in 'String' [1]. Or cannot get 'n.toFixed'
+            const ss = createStore('')
+                               [1] ^^
+            ): Store<State>
+           [2] ^^^^^^^^^^^^
+      "
+    `)
+  })
   test('combine({Color})', () => {
     const Color = createStore('#e95801')
     const store: Store<{Color: string}> = combine({Color})
@@ -102,6 +126,30 @@ describe('combine cases (should pass)', () => {
 
       --flow--
       no errors
+      "
+    `)
+  })
+  test(`combine([Store<number>,Store<string>], ([number,string]) => ...)`, () => {
+    const sn = createStore(0)
+    const ss = createStore('')
+    const store = combine([sn, ss], ([n, s]) => {
+      n.toFixed // should have method on type
+      s.charAt // should have method on type
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      in the first argument: Either cannot get 'n.toFixed'
+        const store = combine([sn, ss], ([n, s]) => {
+                                   ^^
+        property 'toFixed' is missing in 'String' [1]. Or cannot get 'n.toFixed'
+            const ss = createStore('')
+                               [1] ^^
+            ): Store<State>
+           [2] ^^^^^^^^^^^^
       "
     `)
   })
@@ -418,6 +466,13 @@ describe('error inference (should fail with number -> string error)', () => {
       Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
+      'Store' [1] is not a valid argument of '$ObjMap' [2]
+        ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            ): Store<State>
+           [1] ^^^^^^^^^^^^
+            ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+                 [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       in the first argument: Either cannot assign 'combine(...)' to 'store'
         [R, G, B],
                ^
@@ -443,13 +498,6 @@ describe('error inference (should fail with number -> string error)', () => {
       Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      'Store' [1] is not a valid argument of '$ObjMap' [2]
-        ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            ): Store<State>
-           [1] ^^^^^^^^^^^^
-            ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
-                 [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       in the first argument: Either cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine({Color}, ({Color}) => Color)
                                               ^^^^^
