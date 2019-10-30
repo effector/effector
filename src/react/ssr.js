@@ -116,7 +116,7 @@ works like React.useCallback, but for scopes
 */
 export function useScopeEvent(event) {
   const scope = React.useContext(Scope)
-  const unit = scope.find(store)
+  const unit = scope.find(event)
   const result = payload => launch(unit, payload)
   return React.useCallback(result, [event])
 }
