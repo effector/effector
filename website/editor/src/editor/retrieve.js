@@ -2,7 +2,7 @@
 
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from '../versions.json'
-import {decompress} from './compression'
+import {decompress, compress} from './compression'
 
 export function retrieveCode(): string {
   const isStuck = readStuckFlag()
