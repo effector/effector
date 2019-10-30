@@ -5,6 +5,7 @@ import defaultVersions from '../versions.json'
 import {decompress} from './compression'
 
 export function retrieveCode(): string {
+  const isStuck = readStuckFlag()
   if (/https\:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
     if ('__code__' in window) {
       const preloaded: {
@@ -22,9 +23,26 @@ export function retrieveCode(): string {
   }
   const storageCode = localStorage.getItem('code-compressed')
   if (storageCode != null) {
-    return decompress(storageCode)
+    const decompressed = decompress(storageCode)
+    if (isStuck) {
+      const withThrow = `throw Error('this code leads to infinite loop')\n${decompressed}`
+      localStorage.setItem('code-compressed', compress(withThrow))
+      return withThrow
+    }
+    return decompressed
   }
   return defaultSourceCode
+}
+
+function readStuckFlag() {
+  try {
+    let flag = JSON.parse(localStorage.getItem('runtime/stuck'))
+    if (typeof flag !== 'boolean') flag = false
+    localStorage.setItem('runtime/stuck', JSON.stringify(false))
+    return flag
+  } catch (err) {
+    return false
+  }
 }
 
 export function retrieveVersion(): string {
