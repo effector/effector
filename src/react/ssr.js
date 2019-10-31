@@ -22,15 +22,62 @@ const stack = []
 const Scope = React.createContext(null)
 export const {Provider} = Scope
 
-/* useStore wrapper for scopes */
+/**
+hydrate state on client
+
+const root = createDomain()
+hydrate(root, {
+  values: window.__initialState__
+})
+
+*/
+export function hydrate(domain, {values}) {
+  if (!is.domain(domain)) {
+    throw Error('first argument of hydrate should be domain')
+  }
+  if (Object(values) !== values) {
+    throw Error('values property should be an object')
+  }
+  const valuesSidList = Object.getOwnPropertyNames(values)
+  domain.onCreateStore(store => {
+    if (store.sid && valuesSidList.includes(store.sid)) {
+      store.setState(values[store.sid])
+    }
+  })
+}
+
+/**
+serialize state on server
+
+const scope = createScope({domain, start})
+const alice = await fork(scope, {ctx})
+const state = serialize(alice)
+*/
+export function serialize(scope) {
+  const result = {}
+  const root = scope.getDomain()
+  for (const store of root.history.stores) {
+    if (!store.sid) {
+      throw Error(
+        'expect store to have sid (need to add "effector/babel-plugin" to babel plugins)',
+      )
+    }
+    const state = scope.find(store).meta.wrapped.getState()
+    result[store.sid] = state
+  }
+
+  return result
+}
+
+/** useStore wrapper for scopes */
 export function useStore(store) {
   return commonUseStore(useScopeStore(store))
 }
-/* useList wrapper for scopes */
+/** useList wrapper for scopes */
 export function useList(store, opts) {
   return commonUseList(useScopeStore(store), opts)
 }
-/* useList wrapper for scopes */
+/** useStoreMap wrapper for scopes */
 export function useStoreMap({store, keys, fn}) {
   return commonUseStoreMap({
     store: useScopeStore(store),
@@ -43,7 +90,7 @@ function useScopeStore(store) {
   return scope.find(store).meta.wrapped
 }
 
-/* invoke event in scope */
+/** invoke event in scope */
 export function invoke(unit, payload) {
   if (stack.length === 0) {
     throw Error('invoke cannot be called outside of forked .watch')
@@ -51,7 +98,7 @@ export function invoke(unit, payload) {
   launch(stack[stack.length - 1](unit), payload)
 }
 
-/* bind event to scope */
+/** bind event to scope */
 export function scopeBind(unit) {
   if (stack.length === 0) {
     throw Error('scopeBind cannot be called outside of forked .watch')
@@ -62,17 +109,21 @@ export function scopeBind(unit) {
   }
 }
 
-/*
-bind event to scope. works like React.useCallback, but for scopes
+/**
+bind event to scope
+
+works like React.useCallback, but for scopes
 */
 export function useScopeEvent(event) {
   const scope = React.useContext(Scope)
-  const unit = scope.find(store)
+  const unit = scope.find(event)
   const result = payload => launch(unit, payload)
   return React.useCallback(result, [event])
 }
 
-/*
+/**
+create scope for further forks
+
 const scope = createScope({domain, start})
 const alice = await fork(scope, {ctx})
 clearNode(alice)
@@ -85,12 +136,13 @@ export function createScope({domain, start}) {
     domain,
   }
 }
-export async function fork({start, domain}, {ctx}) {
-  const {scope, req, syncComplete} = cloneGraph(domain)
-  launch(scope.find(start), ctx)
+export function fork({start, domain}, {ctx, values = {}}) {
+  const {scope, req, syncComplete} = cloneGraph(domain, values)
+  if (start) {
+    launch(scope.find(start), ctx)
+  }
   syncComplete()
-  await req
-  return scope
+  return req.then(() => scope)
 }
 const noop = () => {}
 class Defer {
@@ -106,7 +158,8 @@ reachable from given unit
 
 to erase, call clearNode(clone.node)
 */
-export function cloneGraph(unit) {
+export function cloneGraph(unit, values = {}) {
+  const parentUnit = unit
   const queryStack = []
   unit = unit.graphite || unit
   const list = flatGraph(unit)
@@ -147,9 +200,10 @@ export function cloneGraph(unit) {
 
   const refs = new Map()
   const handlers = new Map()
+  const valuesSidList = Object.getOwnPropertyNames(values)
 
   queryList(clones, () => {
-    query({op: 'fx'}, node => {
+    query({op: 'fx', fx: 'runner'}, node => {
       const {scope, seq} = node
       scope.done = findClone(scope.done)
       scope.fail = findClone(scope.fail)
@@ -206,6 +260,10 @@ export function cloneGraph(unit) {
       const {seq, meta} = node
       const plainState = getRef(seq[1].data.store)
       const oldState = getRef(seq[3].data.store)
+      if (meta.sid != null && valuesSidList.includes(meta.sid)) {
+        plainState.current = values[meta.sid]
+        oldState.current = values[meta.sid]
+      }
       seq[1] = copyStep(seq[1])
       seq[2] = copyStep(seq[2])
       seq[3] = copyStep(seq[3])
@@ -292,6 +350,7 @@ export function cloneGraph(unit) {
     req: defer.req,
     scope: {
       find: findClone,
+      getDomain: () => parentUnit,
       graphite: createNode({
         node: [],
         meta: {unit: 'domain'},
@@ -329,7 +388,7 @@ export function cloneGraph(unit) {
   function cloneRef(ref) {
     if (ref == null) throw Error('no ref')
     if (refs.has(ref)) return
-    refs.set(ref, {...ref})
+    refs.set(ref, Object.assign({}, ref))
   }
   function reallocSiblings(siblings) {
     siblings.forEach((node, i) => {
@@ -353,7 +412,7 @@ export function cloneGraph(unit) {
     return {
       id: step.id,
       type: step.type,
-      data: {...step.data},
+      data: Object.assign({}, step.data),
     }
   }
   function getNode(unit) {

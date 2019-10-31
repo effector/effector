@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from './unit.h'
-import {nextUnitID, Kind, addLinkToOwner, createNode} from './stdlib'
+import {nextUnitID, Kind, own, createNode} from './stdlib'
 import {createStore} from './store'
 import {
   normalizeConfig,
@@ -11,17 +11,10 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from './config'
-import {eventFabric} from './event'
-import {effectFabric} from './effect'
+import {createEvent} from './event'
+import {createEffect} from './effect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
-
-export function createDomain(
-  name?: string | DomainConfigPart,
-  config?: Config<DomainConfigPart>,
-) {
-  return domainFabric({name, config})
-}
 
 type DomainHooks = {|
   domain: Event<Domain>,
@@ -32,26 +25,23 @@ type DomainHooks = {|
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
-    addLinkToOwner(node, data)
+    own(node, [data])
     acc.add(data)
   })
-  addLinkToOwner(node, trigger)
+  own(node, [trigger])
   return (hook: (data: any) => any) => {
     acc.forEach(hook)
     return trigger.watch(hook)
   }
 }
-
-function domainFabric(opts: {
-  +name?: string,
-  +config?: DomainConfigPart,
-  +parent?: CompositeName,
-  +parentHooks?: DomainHooks,
-  ...
-}): Domain {
+declare export function createDomain(
+  name?: string | DomainConfigPart,
+  config?: Config<DomainConfigPart>,
+): Domain
+export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
+  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const id = nextUnitID()
-  const config = normalizeConfig(opts)
-  const {name: nameRaw, parent, parentHooks} = config
+  const {name: nameRaw, parent, parentHooks, sid = null} = config
   const compositeName = createName(nameRaw || '', parent)
   const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
@@ -59,19 +49,19 @@ function domainFabric(opts: {
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const event: Event<Event<any>> = eventFabric({
-    name: `${fullName} event hook`,
+  const event: Event<Event<any>> = createEvent(`${fullName} event hook`, {
     parent: compositeName,
   })
-  const effect: Event<Effect<any, any, any>> = eventFabric({
-    name: `${fullName} effect hook`,
+  const effect: Event<Effect<any, any, any>> = createEvent(
+    `${fullName} effect hook`,
+    {
+      parent: compositeName,
+    },
+  )
+  const store: Event<Store<any>> = createEvent(`${fullName} store hook`, {
     parent: compositeName,
   })
-  const store: Event<Store<any>> = eventFabric({
-    name: `${fullName} store hook`,
-    parent: compositeName,
-  })
-  const domain: Event<Domain> = eventFabric({
+  const domain: Event<Domain> = createEvent(`${fullName} domain hook`, {
     parent: compositeName,
   })
   if (parentHooks) {
@@ -98,7 +88,7 @@ function domainFabric(opts: {
   const node = createNode({
     node: [],
     scope: {history},
-    meta: {unit: 'domain'},
+    meta: {unit: 'domain', name: compositeName.shortName, sid},
     family: {
       type: 'domain',
     },
@@ -121,8 +111,7 @@ function domainFabric(opts: {
       config?: Config<EventConfigPart>,
     ): Event<Payload> =>
       event(
-        eventFabric({
-          name,
+        createEvent(name, {
           parent: compositeName,
           config,
         }),
@@ -132,15 +121,14 @@ function domainFabric(opts: {
       config?: Config<EffectConfigPart<Params, Done>>,
     ): Effect<Params, Done, Fail> =>
       effect(
-        effectFabric({
-          name,
+        createEffect(name, {
           parent: compositeName,
           config,
         }),
       ),
     domain: (name?: string, config?: Config<DomainConfigPart>) =>
       domain(
-        domainFabric({
+        createDomain({
           name,
           parent: compositeName,
           parentHooks: hooks,
@@ -155,6 +143,6 @@ function domainFabric(opts: {
         }),
       ),
     kind: Kind.domain,
-    sid: config.sid || null,
+    sid,
   }
 }

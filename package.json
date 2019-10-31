@@ -1,7 +1,7 @@
 {
   "name": "effector-dev",
-  "version": "20.4.3",
-  "description": "Application state manager",
+  "version": "20.5.0",
+  "description": "The state manager",
   "private": true,
   "scripts": {
     "integration": "sh integrations/webpack/run.sh",
@@ -76,7 +76,7 @@
     "eslint-plugin-react-hooks": "^2.0.1",
     "execa": "^1.0.0",
     "faker": "^4.1.0",
-    "flow-bin": "^0.109.0",
+    "flow-bin": "^0.110.1",
     "flowgen": "^1.8.2",
     "fs-extra": "^7.0.1",
     "immer": "^3.1.1",

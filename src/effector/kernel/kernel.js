@@ -158,8 +158,12 @@ export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
   if (upsert && alreadyStarted) return
   exec()
 }
-export const upsertLaunch = (unit: Graphite, payload: any) => {
-  launch(unit, payload, true)
+export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
+  for (let i = 0; i < units.length; i++) {
+    pushHeap(getGraph(units[i]), 0, new Stack(payloads[i], null), 'pure')
+  }
+  if (alreadyStarted) return
+  exec()
 }
 
 const tryRun = (local: Local, {fn}, val: {current: any, ...}) => {

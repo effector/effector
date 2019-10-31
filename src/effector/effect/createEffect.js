@@ -1,33 +1,27 @@
 //@flow
 
 import type {Event, Effect} from '../unit.h'
-import {Kind, step, addLinkToOwner, bind, createNode} from '../stdlib'
+import {Kind, step, own, bind, createNode} from '../stdlib'
 import {upsertLaunch} from '../kernel'
-import {eventFabric} from '../event'
+import {createEvent} from '../event'
 import {createStore} from '../store'
 import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
 import {joinName, type CompositeName} from '../naming'
 import {Defer} from './defer'
 
-export function createEffect<Payload, Done>(
+declare export function createEffect<Payload, Done>(
   name?: string | EffectConfigPart<Payload, Done>,
   config?: Config<EffectConfigPart<Payload, Done>>,
+): Effect<Payload, Done, *>
+export function createEffect<Payload, Done>(
+  nameOrConfig: any,
+  maybeConfig: any,
 ): Effect<Payload, Done, *> {
-  return effectFabric({name, config})
-}
-
-export function effectFabric<Payload, Done>(opts: {
-  +name?: string,
-  +parent?: CompositeName,
-  +config: EffectConfigPart<Payload, Done>,
-  ...
-}): Effect<Payload, Done, *> {
-  const config = normalizeConfig(opts)
+  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
   const {name, parent, handler: defaultHandler} = config
 
   //$off
-  const instance: Effect<Payload, Done, any> = eventFabric({
-    name,
+  const instance: Effect<Payload, Done, any> = createEvent(name, {
     parent,
     config,
   })
@@ -37,16 +31,14 @@ export function effectFabric<Payload, Done>(opts: {
   const done: Event<{|
     params: Payload,
     result: Done,
-  |}> = eventFabric({
-    name: joinName(instance, ' done'),
+  |}> = createEvent(joinName(instance, ' done'), {
     parent,
     config,
   })
   const fail: Event<{|
     params: Payload,
     error: *,
-  |}> = eventFabric({
-    name: joinName(instance, ' fail'),
+  |}> = createEvent(joinName(instance, ' fail'), {
     parent,
     config,
   })
@@ -61,13 +53,11 @@ export function effectFabric<Payload, Done>(opts: {
         +params: Payload,
         +error: *,
       |},
-  > = eventFabric({
-    name: joinName(instance, ' finally'),
+  > = createEvent(joinName(instance, ' finally'), {
     parent,
     config,
   })
-  done.graphite.seq.push(notifyHandler)
-  fail.graphite.seq.push(notifyHandler)
+
   let handler: Function =
     defaultHandler ||
     (value => {
@@ -98,8 +88,18 @@ export function effectFabric<Payload, Done>(opts: {
           runEffect(
             getHandler(),
             params,
-            bind(onResolve, {event: done, anyway, params, handler: req.rs}),
-            bind(onReject, {event: fail, anyway, params, handler: req.rj}),
+            bind(onResolve, {
+              event: done,
+              anyway,
+              params,
+              fn: req.rs,
+            }),
+            bind(onReject, {
+              event: fail,
+              anyway,
+              params,
+              fn: req.rj,
+            }),
           )
           return params
         },
@@ -125,7 +125,7 @@ export function effectFabric<Payload, Done>(opts: {
     }),
     step.run({
       fn(upd, {runner}) {
-        upsertLaunch(runner, upd)
+        upsertLaunch([runner], [upd])
         return upd.params
       },
     }),
@@ -144,50 +144,59 @@ export function effectFabric<Payload, Done>(opts: {
     .reset(done, fail)
   instance.pending = pending
 
-  addLinkToOwner(instance, done)
-  addLinkToOwner(instance, fail)
-  addLinkToOwner(instance, anyway)
-  addLinkToOwner(instance, pending)
-  addLinkToOwner(instance, effectRunner)
+  own(instance, [done, fail, anyway, pending, effectRunner])
   return instance
 }
 
-const onResolve = ({event, anyway, params, handler}, result) => {
-  upsertLaunch(anyway, {
-    status: 'done',
-    params,
-    result,
-  })
-  upsertLaunch(event, {
-    handler,
-    toHandler: result,
-    result: {
-      params,
-      result,
-    },
-  })
+const onResolve = ({event, anyway, params, fn}, result) => {
+  upsertLaunch(
+    [anyway, event, sidechain],
+    [
+      {
+        status: 'done',
+        params,
+        result,
+      },
+      {
+        params,
+        result,
+      },
+      {
+        fn,
+        value: result,
+      },
+    ],
+  )
 }
-const onReject = ({event, anyway, params, handler}, error) => {
-  upsertLaunch(anyway, {
-    status: 'fail',
-    params,
-    error,
-  })
-  upsertLaunch(event, {
-    handler,
-    toHandler: error,
-    result: {
-      params,
-      error,
-    },
-  })
+const onReject = ({event, anyway, params, fn}, error) => {
+  upsertLaunch(
+    [anyway, event, sidechain],
+    [
+      {
+        status: 'fail',
+        params,
+        error,
+      },
+      {
+        params,
+        error,
+      },
+      {
+        fn,
+        value: error,
+      },
+    ],
+  )
 }
-
-const notifyHandler = step.run({
-  fn({handler, toHandler, result}, scope) {
-    handler(toHandler)
-    return result
-  },
+const sidechain = createNode({
+  node: [
+    step.run({
+      fn({fn, value}) {
+        fn(value)
+      },
+    }),
+  ],
+  meta: {op: 'fx', fx: 'sidechain'},
 })
 
 function runEffect(handler, params, onResolve, onReject) {

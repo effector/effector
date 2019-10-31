@@ -1,6 +1,6 @@
 //@flow
 
-import {type Unit, createNode, step, addLinkToOwner} from '../stdlib'
+import {type Unit, createNode, step, own} from '../stdlib'
 import type {Subscription} from '../index.h'
 import {forward} from '../forward'
 
@@ -19,7 +19,7 @@ export function watchUnit(
     ],
     meta: {op: 'watch'},
   })
-  addLinkToOwner(unit, watcherNode)
+  own(unit, [watcherNode])
   return forward({
     from: unit,
     to: watcherNode,

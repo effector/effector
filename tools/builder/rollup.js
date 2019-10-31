@@ -204,6 +204,7 @@ export async function rollupEffectorReact() {
         es: dir(`npm/${name}/${name}.es.js`),
       },
     }),
+    createSSR({file: {cjs: dir(`npm/${name}/ssr.js`)}}),
     createUmd(name, {
       external: ['react', 'effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -215,6 +216,32 @@ export async function rollupEffectorReact() {
     }),
     createCompat(name),
   ])
+
+  async function createSSR({file: {cjs}}: {|file: {|cjs: string|}|}) {
+    const plugins = getPlugins(name)
+    const pluginList = [
+      plugins.resolve,
+      plugins.json,
+      plugins.babel,
+      plugins.sizeSnapshot,
+      plugins.terser,
+      plugins.analyzer,
+    ]
+    const build = await rollup({
+      onwarn,
+      input: dir(`packages/${name}/ssr.js`),
+      external: ['react', 'vue', 'symbol-observable', 'effector'],
+      plugins: pluginList,
+    })
+    await build.write({
+      file: cjs,
+      format: 'cjs',
+      freeze: false,
+      name,
+      sourcemap: true,
+      sourcemapPathTransform: getSourcemapPathTransform(name),
+    })
+  }
 }
 
 export async function rollupEffectorVue() {

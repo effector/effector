@@ -458,8 +458,21 @@ declare export function guard<A>(
   |},
 ): Unit<A>
 
-declare export function combine<R>(fn: () => R): Store<R>
+declare export function combine<State: {+[key: string]: Store<any> | any, ...}>(
+  shape: State,
+): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(
+  list: State,
+): Store<$TupleMap<State, <S>(field: Store<S> | S) => S>>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+declare export function combine<State: {+[key: string]: Store<any> | any, ...}, R>(
+  shape: State,
+  fn: (shape: $ObjMap<State, <S>(field: Store<S> | S) => S>) => R,
+): Store<R>
+declare export function combine<State: $ReadOnlyArray<Store<any> | any>, R>(
+  list: State,
+  fn: (list: $TupleMap<State, <S>(field: Store<S> | S) => S>) => R,
+): Store<R>
 declare export function combine<A, B, R>(
   a: Store<A>,
   b: Store<B>,

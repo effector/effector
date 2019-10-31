@@ -14,6 +14,10 @@ title: Prior Art
 - **Backtracking, Interleaving, and Terminating Monad Transformers** [[pdf]](https://zero-bias-papers.s3-eu-west-1.amazonaws.com/Backtracking%2C+Interleaving%2C+and+Terminating+Monad+Transformers.pdf) <br> _Oleg Kiselyov, Chung-chieh Shan, Daniel P. Friedman and Amr Sabry_
 - **Typed Tagless Final Interpreters** [[pdf]](https://zero-bias-papers.s3-eu-west-1.amazonaws.com/Typed+Tagless+Final+Interpreters.pdf) <br> _Oleg Kiselyov_
 
+## Books
+
+- **Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions** [[book]](https://www.amazon.com/o/asin/0321200683/ref=nosim/enterpriseint-20), [[messaging patterns overview]](https://www.enterpriseintegrationpatterns.com/patterns/messaging/) <br> _Gregor Hohpe and Bobby Woolf_
+
 ## API
 
 - [flux](https://facebook.github.io/flux/)

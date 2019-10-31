@@ -9,7 +9,9 @@ _Event_ is an intention to change state. Let's imagine life situation, you come 
 
 ### `watch(watcher)`
 
-It is a function which allows you to watch or to create side-effects.
+It is a function which allows you to follow the event or to create side-effects.
+
+<!--If you want to know, when watch is called, welcome to advanced section-->
 
 #### Arguments
 
@@ -68,7 +70,10 @@ userUpdated({name: 'john', role: 'admin'})
 
 ### `filter({fn})`
 
-Сreates a new event, which will be called after the original event is called, if `fn` returns true.
+Сreates a new event, which will be called after the original event is called if `fn` returns `true`.
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the concrete size of the sneakers model, besides you want to receive a notification if there will have and don't receive others. Therefore filtering is needed for that. Event filtering works the same. If the filter returns `true`, the event will be called.
+
+<!-- You may ask, why object as argument? If you are interesting, welcome to advanced section -->
 
 #### Arguments
 
@@ -90,6 +95,10 @@ const positiveNumbers = numbers.filter({
 })
 
 const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
+
+numbers({x: 0}) // store won't triggered
+numbers({x: -10}) // store won't triggered
+numbers({x: 10}) // store will triggered
 ```
 
 <hr />
@@ -180,3 +189,4 @@ document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
 ```
+

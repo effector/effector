@@ -5,6 +5,12 @@ import {transform, registerPlugin, availablePlugins} from '@babel/standalone'
 
 export type BabelPlugin = string | [string, Object]
 
+function writeStuckFlag(stuck: boolean) {
+  try {
+    localStorage.setItem('runtime/stuck', JSON.stringify(stuck))
+  } catch (err) {}
+}
+
 export async function exec({
   realmGlobal,
   code,
@@ -47,6 +53,7 @@ export async function exec({
       throw error
     }
   }
+  writeStuckFlag(true)
   try {
     const result = await realmGlobal.eval(compiled)
     if (onRuntimeComplete) await onRuntimeComplete()
@@ -54,6 +61,8 @@ export async function exec({
   } catch (error) {
     if (onRuntimeError) await onRuntimeError(error)
     throw error
+  } finally {
+    writeStuckFlag(false)
   }
 }
 
