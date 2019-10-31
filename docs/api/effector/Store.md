@@ -3,68 +3,10 @@ id: store
 title: Store
 ---
 
-_Store_ is an object that holds the state tree.
+_Store_ is an object that holds the state value.
 There can be multiple stores.
 
 ## Store Methods
-
-### `reset(...triggers)`
-
-Resets store state to the default value.
-
-A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
-
-#### Arguments
-
-1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_`Events`_](Event.md), [_`Effects`_](Effect.md) or _`Stores`_
-
-#### Returns
-
-(_`Store`_): Current store
-
-#### Example
-
-```js
-const store = createStore(0)
-const increment = createEvent()
-const reset = createEvent()
-
-store.on(increment, state => state + 1).reset(reset)
-
-store.watch(state => console.log('changed', state))
-// changed 0
-// watch method calls its function immediately
-
-increment() // changed 1
-increment() // changed 2
-reset() // changed 0
-```
-
-<hr />
-
-### `getState()`
-
-Returns current state of store
-
-#### Returns
-
-(_`State`_): Current state of the store
-
-#### Example
-
-```js
-const store = createStore(0)
-const updated = createEvent()
-
-store.on(updated, (state, value) => state + value)
-
-updated(2)
-updated(3)
-
-console.log(store.getState()) // 5
-```
-
-<hr />
 
 ### `map(fn: (state: State, lastState?: T) => T)`
 
@@ -83,12 +25,11 @@ If the function returns an old state or if it returns `undefined`, the new store
 #### Example
 
 ```js
-const title = createStore('')
 const changed = createEvent()
+const title = createStore('')
+  .on(changed, (_, newTitle) => newTitle)
 
 const length = title.map(title => title.length)
-
-title.on(changed, (_, newTitle) => newTitle)
 
 length.watch(length => console.log('new length', length)) // new length 0
 
@@ -131,22 +72,46 @@ changed(2) // updated 4
 
 <hr />
 
-### `off(trigger)`
+### `watch(watcher)`
+
+Call `watcher` function each time when store is updated. <br/>
+If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `watcher` (_Function_): Function that receives current store state as first argument
 
 #### Returns
 
-(_`Store`_): Current store
+(_`Subscription`_): Unsubscribe function
+
+#### Example
+
+```js
+const add = createEvent()
+const store = createStore(0)
+  .on(add, (state, payload) => state + payload)
+
+store.watch(value => console.log(`current value: ${value}`))
+// current value: 0
+add(4)
+// current value: 4
+add(3)
+// current value: 7
+```
+
+[Try it](https://share.effector.dev/t2eqYQ9m)
 
 <hr />
 
-### `watch(trigger, watcher) | watch(watcher)`
+### `watch(trigger, watcher)`
 
 Run `watcher` only when `trigger` event triggered. <br/>
-If `trigger` not passed, run `watcher` on each event that linked with store.
+
+#### Arguments
+
+1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_: Trigger, which leads to call of `watcher`
+1. `watcher` (_Function_): Function that receives current store state as first argument and payload of trigger as second argument.
 
 #### Returns
 
@@ -161,9 +126,11 @@ First argument of `watcher` is a state value, second is an event value.
 const foo = createEvent('foo')
 const bar = createEvent('bar')
 
-const store = createStore(0).watch(foo, (storeValue, eventValue) =>
+const store = createStore(0)
+
+store.watch(foo, (storeValue, eventValue) => {
   console.log(`triggered ${storeValue}, ${eventValue}`),
-)
+})
 
 foo(1)
 bar(2)
@@ -190,6 +157,8 @@ const bar = createEvent('bar')
 
 const store = createStore(0)
   .on(bar, (state, value) => value)
+
+store
   .watch(foo, value => console.log(`triggered ${value}`))
 
 foo(1)
@@ -218,6 +187,8 @@ const another = createEvent('another')
 const store = createStore(0)
   .on(incr, (state, value) => state + value)
   .on(decr, (state, value) => state - value)
+
+store
   .watch(value => console.log(`triggered ${value}`))
 
 another(100)
@@ -237,20 +208,6 @@ Output
 ```
 
 https://runkit.com/embed/1r2qo0nsockp
-
-#### Example 4
-
-`.watch` triggers `watcher` on first initialization
-
-```js
-const store = createStore(0).watch(value => console.log(`triggered ${value}`))
-```
-
-Output
-
-```
-> triggered 0
-```
 
 #### Example with Effect
 
@@ -295,7 +252,9 @@ const change = createEvent('change')
 
 const first = createStore(0).on(change, (state, value) => state + value)
 
-const second = createStore(100).watch(first, (secondState, firstState) =>
+const second = createStore(100)
+
+second.watch(first, (secondState, firstState) =>
   console.log(secondState * firstState),
 )
 
@@ -319,9 +278,11 @@ Watcher receive third argument event name.
 ```js
 const foo = createEvent('foo event')
 
-const store = createStore(0).watch(foo, (storeValue, eventValue, eventName) =>
-  console.log(`store: ${storeValue}, event: ${eventValue}, name: ${eventName}`),
-)
+const store = createStore(0)
+
+store.watch(foo, (storeValue, eventValue) => {
+  console.log(`store: ${storeValue}, event: ${eventValue}`),
+})
 
 foo(1)
 ```
@@ -329,10 +290,82 @@ foo(1)
 Output
 
 ```
-> store: 0, event: 1, name: foo event
+> store: 0, event: 1
 ```
 
 https://runkit.com/embed/lwo1u4m8yhz0
+
+<hr />
+
+### `reset(...triggers)`
+
+Resets store state to the default value.
+
+A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
+
+#### Arguments
+
+1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_`Events`_](Event.md), [_`Effects`_](Effect.md) or _`Stores`_
+
+#### Returns
+
+(_`Store`_): Current store
+
+#### Example
+
+```js
+const store = createStore(0)
+const increment = createEvent()
+const reset = createEvent()
+
+store
+  .on(increment, state => state + 1)
+  .reset(reset)
+
+store.watch(state => console.log('changed', state))
+// changed 0
+// watch method calls its function immediately
+
+increment() // changed 1
+increment() // changed 2
+reset() // changed 0
+```
+
+<hr />
+
+### `off(trigger)`
+
+#### Arguments
+
+1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+
+#### Returns
+
+(_`Store`_): Current store
+
+<hr />
+
+### `getState()`
+
+Returns current state of store
+
+#### Returns
+
+(_`State`_): Current state of the store
+
+#### Example
+
+```js
+const store = createStore(0)
+const updated = createEvent()
+
+store.on(updated, (state, value) => state + value)
+
+updated(2)
+updated(3)
+
+console.log(store.getState()) // 5
+```
 
 <hr />
 
@@ -347,7 +380,7 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Returns
 
-(_`Store`_): New store
+(_`Store`_): The same store
 
 #### Example
 
@@ -380,22 +413,6 @@ Output
 
 ## Store Properties
 
-### `shortName`
-
-#### Returns
-
-(_`string`_): ID or short name of store
-
-<hr />
-
-### `defaultState`
-
-#### Returns
-
-(_`State`_): Default state of store
-
-<hr />
-
 ### `updates`
 
 #### Returns
@@ -418,3 +435,19 @@ clicksAmount.updates.watch(amount => {
   console.log('will not be triggered unless store value is changed', amount)
 })
 ```
+
+<hr />
+
+### `shortName`
+
+#### Returns
+
+(_`string`_): ID or short name of store
+
+<hr />
+
+### `defaultState`
+
+#### Returns
+
+(_`State`_): Default state of store
