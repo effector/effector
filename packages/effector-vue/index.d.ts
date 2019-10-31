@@ -1,4 +1,8 @@
 import Vue, {ComponentOptions, WatchOptions, VueConstructor} from 'vue'
+import {
+  ThisTypedComponentOptionsWithArrayProps,
+  ThisTypedComponentOptionsWithRecordProps,
+} from "vue/types/options";
 import { ExtendedVue } from "vue/types/vue"
 import {Store} from 'effector'
 
