@@ -54,6 +54,7 @@ module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/effector/\1'
 module.name_mapper='^Builder\(.*\)$' -> '<PROJECT_ROOT>/tools/builder\1'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
+module.name_mapper='^effector-react/\(.+\)$' -> '<PROJECT_ROOT>/packages/effector-react/\1'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 module.name_mapper='^@effector/\(.+\)$' -> '<PROJECT_ROOT>/packages/@effector/\1'
 

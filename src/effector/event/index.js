@@ -1,3 +1,3 @@
 //@flow
 
-export {createEvent, eventFabric} from './createEvent'
+export {createEvent} from './createEvent'

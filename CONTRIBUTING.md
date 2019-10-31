@@ -43,6 +43,10 @@ npx doctoc README.md
 
 Just use `yarn test` and `yarn test:watch`.
 
+### Type tests
+
+`yarn test --testPathPattern='types'` to run types tests, `yarn test --testPathPattern='types' -u` to update their inline snapshots.
+
 ### New Features
 
 Please open an issue with a proposal for a new feature or refactoring before starting on the work.

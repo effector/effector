@@ -1,9 +1,18 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {combine} from '../combine'
-import {type Graphite, is} from '../stdlib'
-
-import {storeByStore, storeByEvent, eventByUnit} from './sampler'
+import {
+  type Graphite,
+  step,
+  createStateRef,
+  readRef,
+  writeRef,
+  own,
+  is,
+} from '../stdlib'
+import {createStore} from '../store'
+import {createEvent} from '../event'
+import {createLinkNode} from '../forward'
 
 export function sample(
   source: any,
@@ -29,23 +38,85 @@ export function sample(
     //still undefined!
     clock = source
   }
-  const sourceNorm = unitOrCombine(source)
-  const clockNorm = unitOrCombine(clock)
+  source = is.unit(source) ? source : combine(source)
+  clock = is.unit(clock) ? clock : combine(clock)
   if (typeof fn === 'boolean') {
     greedy = fn
-    fn = undefined
+    fn = null
   }
-  //prettier-ignore
-  const combinator =
-    is.store(sourceNorm)
-      ? is.store(clockNorm)
-        ? storeByStore
-        : storeByEvent
-      : eventByUnit
-  return combinator(sourceNorm, clockNorm, (fn: any), greedy, target, name)
-}
+  if (!target) {
+    const config = {
+      name: name || source.shortName,
+      parent: source.domainName,
+    }
+    if (is.store(source) && is.store(clock)) {
+      const initialState = fn
+        ? fn(readRef(source.stateRef), readRef(clock.stateRef))
+        : readRef(source.stateRef)
+      target = createStore(initialState, config)
+    } else {
+      target = createEvent(config)
+    }
+  }
+  if (is.store(source)) {
+    own(source, [
+      createLinkNode(clock, target, {
+        scope: {
+          state: source.stateRef,
+          fn,
+        },
+        node: [
+          //$off
+          !greedy && step.barrier({priority: 'sampler'}),
+          step.compute({
+            fn: fn
+              ? (upd, {state, fn}) => fn(readRef(state), upd)
+              : (upd, {state}) => readRef(state),
+          }),
+        ].filter(Boolean),
+        meta: {op: 'sample', sample: 'store'},
+      }),
+    ])
+  } else {
+    const hasSource = createStateRef(false)
+    const sourceState = createStateRef()
+    const clockState = createStateRef()
 
-//prettier-ignore
-const unitOrCombine = (obj: any) => is.unit(obj)
-  ? obj
-  : combine(obj)
+    own(clock, [
+      createLinkNode(source, target, {
+        scope: {hasSource},
+        node: [
+          step.update({store: sourceState}),
+          step.compute({
+            fn(upd, {hasSource}) {
+              writeRef(hasSource, true)
+            },
+          }),
+          step.filter({fn: () => false}),
+        ],
+        meta: {op: 'sample', sample: 'source'},
+      }),
+    ])
+    own(source, [
+      createLinkNode(clock, target, {
+        scope: {sourceState, clockState, hasSource, fn},
+        node: [
+          step.update({store: clockState}),
+          step.filter({
+            fn: (upd, {hasSource}) => readRef(hasSource),
+          }),
+          //$off
+          !greedy && step.barrier({priority: 'sampler'}),
+          step.compute({
+            fn: fn
+              ? (upd, {sourceState, clockState, fn}) =>
+                fn(readRef(sourceState), readRef(clockState))
+              : (upd, {sourceState}) => readRef(sourceState),
+          }),
+        ].filter(Boolean),
+        meta: {op: 'sample', sample: 'clock'},
+      }),
+    ])
+  }
+  return target
+}

@@ -42,7 +42,7 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.4.3',
+  effector: '20.5.0',
   'effector-react': '20.4.0',
   'effector-vue': '20.2.1',
 
@@ -120,7 +120,7 @@ export default {
       react: '^16.8.0',
       effector: '*',
     },
-    files: getFiles('effector-react'),
+    files: [...getFiles('effector-react'), 'ssr.js', 'ssr.js.map'],
     keywords: ['react', ...keywords],
     ...common,
   },
