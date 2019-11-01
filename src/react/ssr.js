@@ -114,11 +114,14 @@ bind event to scope
 
 works like React.useCallback, but for scopes
 */
-export function useScopeEvent(event) {
+export function useEvent(event) {
   const scope = React.useContext(Scope)
   const unit = scope.find(event)
-  const result = payload => launch(unit, payload)
-  return React.useCallback(result, [event])
+  const result = payload => {
+    launch(unit, payload)
+    return payload
+  }
+  return React.useCallback(result, [scope, event])
 }
 
 export function fork(domain, {ctx, values = {}, start}) {
