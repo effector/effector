@@ -13,6 +13,7 @@ Reactive state manager
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
@@ -491,12 +492,17 @@ const pageStore = mainPage.store(0)
   </tr>
   <tr>
     <td align="center"><img src="https://avatars2.githubusercontent.com/u/35740512?v=4" width="100px;" alt="Evgeny Zakharov"/><br /><sub><b>Evgeny Zakharov</b></sub><br /><a href="https://github.com/zerobias/effector/commits?author=risenforces" title="Documentation">📖</a></td>
+    <td align="center"><a href="http://bloadvenro.ru"><img src="https://avatars1.githubusercontent.com/u/11679418?v=4" width="100px;" alt="Viktor"/><br /><sub><b>Viktor</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=bloadvenro" title="Code">💻</a> <a href="https://github.com/zerobias/effector/commits?author=bloadvenro" title="Documentation">📖</a> <a href="https://github.com/zerobias/effector/commits?author=bloadvenro" title="Tests">⚠️</a> <a href="#ideas-bloadvenro" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="https://github.com/abliarsar"><img src="https://avatars3.githubusercontent.com/u/9501504?v=4" width="100px;" alt="Ivan Savichev"/><br /><sub><b>Ivan Savichev</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=abliarsar" title="Code">💻</a> <a href="#ideas-abliarsar" title="Ideas, Planning, & Feedback">🤔</a></td>
+    <td align="center"><a href="http://vk.com/dimensi"><img src="https://avatars0.githubusercontent.com/u/11390039?v=4" width="100px;" alt="Nikita Nafranets"/><br /><sub><b>Nikita Nafranets</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=dimensi" title="Documentation">📖</a> <a href="#example-dimensi" title="Examples">💡</a></td>
+    <td align="center"><a href="https://github.com/Tauka"><img src="https://avatars3.githubusercontent.com/u/15087247?v=4" width="100px;" alt="Tauyekel Kunzhol"/><br /><sub><b>Tauyekel Kunzhol</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Tauka" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/Laiff"><img src="https://avatars0.githubusercontent.com/u/575885?v=4" width="100px;" alt="Andrew Laiff"/><br /><sub><b>Andrew Laiff</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Laiff" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/ilajosmanov"><img src="https://avatars3.githubusercontent.com/u/18512404?v=4" width="100px;" alt="Illia Osmanov"/><br /><sub><b>Illia Osmanov</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=ilajosmanov" title="Code">💻</a> <a href="#ideas-ilajosmanov" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
