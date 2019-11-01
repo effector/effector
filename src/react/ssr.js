@@ -1,4 +1,4 @@
-//@flow
+//@noflow
 
 import {
   createDomain,
@@ -136,9 +136,11 @@ export function createScope({domain, start}) {
     domain,
   }
 }
-export function fork({start, domain}, {ctx, values = {}}) {
+export function fork({start, domain}, {ctx, values = {}, start: customStart}) {
   const {scope, req, syncComplete} = cloneGraph(domain, values)
-  if (start) {
+  if (customStart) {
+    launch(scope.find(customStart), ctx)
+  } else if (start) {
     launch(scope.find(start), ctx)
   }
   syncComplete()

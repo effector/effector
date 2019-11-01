@@ -23,7 +23,7 @@ import {
   serialize,
 } from 'effector-react/ssr'
 
-it('works', async () => {
+it('works', async() => {
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
@@ -83,6 +83,7 @@ it('works', async () => {
   const scope = createScope({start, domain: app})
 
   const aliceScope = await fork(scope, {
+    start,
     ctx: users.alice,
   })
   const [bobScope, carolScope] = await Promise.all([
@@ -90,6 +91,7 @@ it('works', async () => {
       ctx: users.bob,
     }),
     fork(scope, {
+      start,
       ctx: users.carol,
     }),
   ])
