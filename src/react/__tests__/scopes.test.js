@@ -77,7 +77,7 @@ it('works', async() => {
     console.log(`${e} indirect call`)
   })
   sendStats.done.watch(() => {
-    invoke(indirectCall)
+    indirectCall()
   })
 
   const scope = createScope({start, domain: app})

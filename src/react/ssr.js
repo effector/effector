@@ -131,6 +131,19 @@ clearNode(alice)
 export function createScope({domain, start}) {
   if (!is.domain(domain))
     throw Error('first argument of createScope should be domain')
+  if (!domain.graphite.meta.withScopes) {
+    domain.graphite.meta.withScopes = true
+    domain.onCreateEvent(event => {
+      event.create = payload => {
+        if (stack.length > 0) {
+          invoke(event, payload)
+        } else {
+          launch(event, payload)
+        }
+        return payload
+      }
+    })
+  }
   return {
     start,
     domain,
