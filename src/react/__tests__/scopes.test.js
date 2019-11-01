@@ -16,7 +16,6 @@ import {
 import {
   useStore,
   useList,
-  createScope,
   fork,
   invoke,
   Provider,
@@ -80,17 +79,16 @@ it('works', async() => {
     indirectCall()
   })
 
-  const scope = createScope({start, domain: app})
-
-  const aliceScope = await fork(scope, {
+  const aliceScope = await fork(app, {
     start,
     ctx: users.alice,
   })
   const [bobScope, carolScope] = await Promise.all([
-    fork(scope, {
+    fork(app, {
+      start,
       ctx: users.bob,
     }),
-    fork(scope, {
+    fork(app, {
       start,
       ctx: users.carol,
     }),

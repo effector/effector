@@ -121,16 +121,9 @@ export function useScopeEvent(event) {
   return React.useCallback(result, [event])
 }
 
-/**
-create scope for further forks
-
-const scope = createScope({domain, start})
-const alice = await fork(scope, {ctx})
-clearNode(alice)
-*/
-export function createScope({domain, start}) {
+export function fork(domain, {ctx, values = {}, start}) {
   if (!is.domain(domain))
-    throw Error('first argument of createScope should be domain')
+    return Promise.reject(Error('first argument of fork should be domain'))
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
     domain.onCreateEvent(event => {
@@ -144,16 +137,8 @@ export function createScope({domain, start}) {
       }
     })
   }
-  return {
-    start,
-    domain,
-  }
-}
-export function fork({start, domain}, {ctx, values = {}, start: customStart}) {
   const {scope, req, syncComplete} = cloneGraph(domain, values)
-  if (customStart) {
-    launch(scope.find(customStart), ctx)
-  } else if (start) {
+  if (start) {
     launch(scope.find(start), ctx)
   }
   syncComplete()
