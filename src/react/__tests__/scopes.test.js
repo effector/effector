@@ -22,7 +22,7 @@ import {
   serialize,
 } from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
@@ -138,18 +138,18 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-o30n88": Array [
+      "-ok29mf": Array [
         "bob",
       ],
-      "1q6x9y": "alice",
+      "195avr": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-o30n88": Array [
+      "-ok29mf": Array [
         "alice",
       ],
-      "1q6x9y": "bob",
+      "195avr": "bob",
     }
   `)
 })
