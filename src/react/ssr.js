@@ -117,7 +117,14 @@ works like React.useCallback, but for scopes
 export function useEvent(event) {
   const scope = React.useContext(Scope)
   const unit = scope.find(event)
-  const result = payload => {
+  const result = is.effect(event)
+  ? params => {
+    const req = new Defer()
+    const payload = {ɔ: {params, req}}
+    launch(unit, payload)
+    return req.req
+  }
+  : payload => {
     launch(unit, payload)
     return payload
   }
