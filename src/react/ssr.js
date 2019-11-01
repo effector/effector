@@ -139,6 +139,18 @@ export function fork(domain, {ctx, values = {}, start}) {
         return payload
       }
     })
+    domain.onCreateEffect(effect => {
+      effect.create = params => {
+        const req = new Defer()
+        const payload = {ɔ: {params, req}}
+        if (stack.length > 0) {
+          invoke(effect, payload)
+        } else {
+          launch(effect, payload)
+        }
+        return req.req
+      }
+    })
   }
   const {scope, req, syncComplete} = cloneGraph(domain, values)
   if (start) {
@@ -150,8 +162,9 @@ export function fork(domain, {ctx, values = {}, start}) {
 const noop = () => {}
 class Defer {
   constructor() {
-    this.req = new Promise(rs => {
+    this.req = new Promise((rs, rj) => {
       this.rs = rs
+      this.rj = rj
     })
   }
 }
