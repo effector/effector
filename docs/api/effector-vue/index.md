@@ -6,6 +6,7 @@ title: API Reference
 ### Top-Level Exports 
 
 - [VueEffector(Vue, options?)](VueEffector.md)
+- [createComponent(ComponentOptions, store?)](createComponent.md)
 
 ### ComponentOptions API
 
