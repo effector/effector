@@ -119,10 +119,11 @@ numbers({x: 10}) // store will triggered
 
 ```js try
 import React from 'react'
-
+import ReactDOM from 'react-dom'
 import {createEvent, createStore} from 'effector'
 
 const openModal = createEvent('open that modal')
+const closeModal = createEvent('close that modal')
 
 const openModalUnboxed = openModal.filterMap(ref => {
   if (ref.current) return ref.current
@@ -130,11 +131,11 @@ const openModalUnboxed = openModal.filterMap(ref => {
 
 openModalUnboxed.watch(modal => modal.showModal())
 
-const closeModal = createEvent('close that modal')
-
 closeModal
-  .filter(ref => {
-    if (ref.current) return ref.current
+  .filter({
+    fn: ref => {
+      if (ref.current) return ref.current
+    },
   })
   .watch(modal => modal.close())
 
@@ -157,6 +158,8 @@ const App = () => (
     <button onClick={() => openModal(modalRef)}>Open modal</button>
   </>
 )
+
+ReactDOM.render(<App/>, document.getElementById('root'))
 ```
 
 <hr />
