@@ -129,8 +129,8 @@ describe('restore cases (should pass)', () => {
 
 describe('restore cases (should fail)', () => {
   test('restore(Event<number>, string)', () => {
-    const eff = createEvent<number>()
-    restore(eff, 'initial')
+    const ev = createEvent<number>()
+    restore(ev, 'initial')
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
