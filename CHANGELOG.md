@@ -1,5 +1,34 @@
 # Changelog
 
+## effector-vue 20.3.0
+
+- Add `createComponent` HOC for TypeScript usage. This HOC provides type-safe properties in vue components.
+
+```typescript
+// component.vue
+import {createStore, createApi} from 'effector'
+import {createComponent} from 'effector-vue'
+
+const $counter = createStore(0)
+const {update} = createApi($counter, {
+  update: (_, value: number) => value,
+})
+
+export default createComponent(
+  {
+    name: 'Counter',
+    methods: {
+      update,
+      handleClick() {
+        const value = this.$counter + 1 // this.$counter <- number ( typescript tips )
+        this.update(value)
+      },
+    },
+  },
+  {$counter},
+)
+```
+
 ## effector 20.5.0
 
 - Merge `createStoreObject` to `combine` to reduce api surface. Wherever `createStoreObject` was used, it can be replaced with `combine`
