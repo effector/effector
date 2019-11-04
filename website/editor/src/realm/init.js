@@ -121,11 +121,14 @@ stats
 realmInvoke.watch(({method, params, instance}) => {
   if (method === 'restore') {
     if (
-      params.length > 0
-      && (params[0].kind === 'event' || params[0].kind === 'effect')
+      params.length > 0 &&
+      (params[0].kind === 'event' ||
+        params[0].kind === 'effect' ||
+        params[0].kind === 'store')
     ) {
       realmStore(instance)
     } else {
+      //TODO seems like a bug: restore doesn't have to deal with object shapes
       for (const key in instance) {
         realmStore(instance[key])
       }
