@@ -118,4 +118,4 @@ declare function createComponent<
     PropNames
   >,
   store?: S,
-): ExtendedVue<V, Data, Methods, Computed, Props>
+): ExtendedVue<V, Data, Methods, Computed, PropNames>
