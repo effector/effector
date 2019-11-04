@@ -24,6 +24,32 @@ describe('restore cases (should pass)', () => {
           "
       `)
   })
+  test('restore(Event<number>, null): Store<number|null>', () => {
+    const ev = createEvent<number>()
+
+    let restored = restore(ev, null)
+    let store: Store<number | null>
+
+    store = restored
+    restored = store
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'restore'
+        let restored = restore(ev, null)
+                               ^^
+        'Event' [1] is incompatible with 'Effect' [2]
+            declare export function createEvent<E>(eventName?: string): Event<E>
+                                                                    [1] ^^^^^^^^
+            effect: Effect<any, Done, any>,
+                [2] ^^^^^^^^^^^^^^^^^^^^^^
+      "
+    `)
+  })
   test('restore(Effect<any,number,Error>, number): Store<number>', () => {
     const eff = createEffect<any, number, Error>()
 
@@ -42,6 +68,32 @@ describe('restore cases (should pass)', () => {
           no errors
           "
       `)
+  })
+  test('restore(Effect<any,number,Error>, null): Store<number|null>', () => {
+    const eff = createEffect<any, number, Error>()
+
+    let restored = restore(eff, null)
+    let store: Store<number | null>
+
+    store = restored
+    restored = store
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'restore'
+        let restored = restore(eff, null)
+                               ^^^
+        'Effect' [1] is incompatible with 'Event' [2]
+            ): Effect<Params, Done, Fail>
+           [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^
+            declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+                                                  [2] ^^^^^^^^
+      "
+    `)
   })
   test('restore(Dictionary<?>): wraps each non-Store dictionary property into Store', () => {
     const dictionary = {
@@ -84,21 +136,18 @@ describe('restore cases (should fail)', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 3, '(effect: Effect<any, string, any>, defaultState: string): Store<string>', gave the following error.
-          Argument of type 'Event<number>' is not assignable to parameter of type 'Effect<any, string, any>'.
-            Type 'Event<number>' is missing the following properties from type 'Effect<any, string, any>': done, fail, finally, use, pending
-        Overload 2 of 3, '(event: Event<number>, defaultState: number): Store<number>', gave the following error.
-          Argument of type '\\"initial\\"' is not assignable to parameter of type 'number'.
+        The last overload gave the following error.
+          Argument of type '\\"initial\\"' is not assignable to parameter of type 'null'.
 
       --flow--
       Cannot call 'restore'
-        restore(eff, 'initial')
-                     ^^^^^^^^^
+        restore(ev, 'initial')
+                    ^^^^^^^^^
         string [1] is incompatible with number [2]
-            restore(eff, 'initial')
-                     [1] ^^^^^^^^^
-            const eff = createEvent<number>()
-                                [2] ^^^^^^
+            restore(ev, 'initial')
+                    [1] ^^^^^^^^^
+            const ev = createEvent<number>()
+                               [2] ^^^^^^
       "
     `)
   })
@@ -110,11 +159,9 @@ describe('restore cases (should fail)', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 3, '(effect: Effect<any, number, any>, defaultState: number): Store<number>', gave the following error.
-          Argument of type '\\"initial\\"' is not assignable to parameter of type 'number'.
-        Overload 2 of 3, '(event: Event<string>, defaultState: string): Store<string>', gave the following error.
-          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
-            Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<string>': filter, filterMap, thru
+        The last overload gave the following error.
+          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
+            Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<unknown>': filter, filterMap, thru
 
 
       --flow--

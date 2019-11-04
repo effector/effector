@@ -400,7 +400,12 @@ export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
+export function restore<Done>(
+  effect: Effect<any, Done, any>,
+  defaultState: null,
+): Store<Done | null>
 export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {
