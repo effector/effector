@@ -3,7 +3,7 @@
 import $$observable from 'symbol-observable'
 
 import type {Event, Effect} from '../unit.h'
-import {step, Kind, createNode, bind, nextUnitID} from '../stdlib'
+import {step, createNode, bind, nextUnitID} from '../stdlib'
 import {launch} from '../kernel'
 
 import type {Subscription} from '../index.h'
@@ -49,7 +49,7 @@ export function createEvent<Payload>(
   instance.domainName = parent
   instance.compositeName = compositeName
   instance.defaultConfig = config
-  ;(instance: any).kind = Kind.event
+  ;(instance: any).kind = 'event'
   ;(instance: any)[$$observable] = () => instance
   ;(instance: any).id = id
   ;(instance: any).watch = bind(watchUnit, instance)

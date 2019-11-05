@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from './unit.h'
-import {nextUnitID, Kind, own, createNode} from './stdlib'
+import {nextUnitID, own, createNode} from './stdlib'
 import {createStore} from './store'
 import {
   normalizeConfig,
@@ -142,7 +142,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
           config,
         }),
       ),
-    kind: Kind.domain,
+    kind: 'domain',
     sid,
   }
 }

@@ -1,7 +1,7 @@
 //@flow
 
 import type {Event, Effect} from '../unit.h'
-import {Kind, step, own, bind, createNode} from '../stdlib'
+import {step, own, bind, createNode} from '../stdlib'
 import {upsertLaunch} from '../kernel'
 import {createEvent} from '../event'
 import {createStore} from '../store'
@@ -74,7 +74,7 @@ export function createEffect<Payload, Done>(
   }
   const getCurrent = (): any => handler
   ;(instance: any).use.getCurrent = getCurrent
-  ;(instance: any).kind = Kind.effect
+  ;(instance: any).kind = 'effect'
   const effectRunner = createNode({
     scope: {
       done,
