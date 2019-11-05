@@ -184,7 +184,7 @@ to erase, call clearNode(clone.node)
 export function cloneGraph(unit) {
   const parentUnit = unit
   const queryStack = []
-  unit = unit.graphite || unit
+  unit = getNode(unit)
   const list = flatGraph(unit)
   const clones = list.map(node => {
     const result = createNode({
@@ -240,11 +240,9 @@ export function cloneGraph(unit) {
         to: createNode({
           meta: {fork: true},
           node: [
-            step.barrier({}),
             step.run({
               fn() {
                 fxCount.current -= 1
-                // console.log('in flight effects: %d', fxCount.current)
                 if (fxCount.current === 0) {
                   fxID += 1
                   tryCompleteInitPhase()
@@ -279,7 +277,6 @@ export function cloneGraph(unit) {
       cloneRef(item.scope.isFresh)
     })
   })
-  list.length = 0
 
   queryList(clones, () => {
     query({unit: 'store'}, node => {
@@ -332,7 +329,6 @@ export function cloneGraph(unit) {
         step.tap({
           fn() {
             fxCount.current += 1
-            // console.log('in flight effects: %d', fxCount.current)
             fxID += 1
           },
         }),
@@ -400,12 +396,10 @@ export function cloneGraph(unit) {
       .forEach(cb)
   }
   function getRef(ref) {
-    if (ref == null) throw Error('no ref')
     if (!refs.has(ref)) throw Error('no ref found')
     return refs.get(ref)
   }
   function cloneRef(ref) {
-    if (ref == null) throw Error('no ref')
     if (refs.has(ref)) return
     refs.set(ref, Object.assign({}, ref))
   }
@@ -415,17 +409,10 @@ export function cloneGraph(unit) {
     })
   }
   function findClone(unit) {
-    unit = unit.graphite || unit
-    const result = clones.find(clone => clone.meta.forkOf === unit)
-    if (!result) {
-      if (unit.meta.forkOf) {
-        console.count('clone of forked item')
-        return unit
-      }
-      console.log('unit not found', unit)
-      throw Error('not found')
-    }
-    return result
+    unit = getNode(unit)
+    const index = list.indexOf(unit)
+    if (index === -1) throw Error('not found')
+    return clones[index]
   }
   function getNode(unit) {
     return unit.graphite || unit
@@ -433,7 +420,7 @@ export function cloneGraph(unit) {
 
   function flatGraph(unit) {
     const visited = new Set()
-    traverse(unit.graphite || unit)
+    traverse(getNode(unit))
     function traverse(node) {
       if (visited.has(node)) return
       visited.add(node)
