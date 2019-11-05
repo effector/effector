@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect} from '../unit.h'
-import type {CompositeName} from './compositeName'
+import {type CompositeName, createName} from './compositeName'
 import {is} from '../stdlib'
 
 export function getDisplayName(unit: {
@@ -54,4 +54,19 @@ export function unitObjectName(
   }
   name += ')'
   return name
+}
+
+export function setStoreName<State>(store: Store<State>, rawName: string) {
+  const compositeName = createName(rawName, store.domainName)
+  store.shortName = rawName
+  if (!store.compositeName) {
+    store.compositeName = compositeName
+    return
+  }
+  //$todo
+  store.compositeName.path = compositeName.path
+  //$todo
+  store.compositeName.shortName = compositeName.shortName
+  //$todo
+  store.compositeName.fullName = compositeName.fullName
 }

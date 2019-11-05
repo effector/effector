@@ -30,8 +30,8 @@ test('empty domain name should be skipped', () => {
   const domain = createDomain('')
   const subdomain = domain.domain('subdom')
   expect(domain.effect('foo').getType()).toBe('foo')
-  expect(domain.effect('foo').done.getType()).toBe('foo done')
-  expect(domain.effect('foo').fail.getType()).toBe('foo fail')
+  expect(domain.effect('foo').done.getType()).toBe('done')
+  expect(domain.effect('foo').fail.getType()).toBe('fail')
   expect(subdomain.effect('bar').getType()).toBe('subdom/bar')
 })
 describe('empty name support', () => {

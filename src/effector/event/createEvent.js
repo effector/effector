@@ -22,9 +22,9 @@ export function createEvent<Payload>(
   maybeConfig: any,
 ): Event<Payload> {
   const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
-  const {name: nameRaw, parent, sid = null, named = null} = config
+  const {parent, sid = null, named = null} = config
   const id = nextUnitID()
-  const name = nameRaw || id
+  const name = named ? named : config.name || id
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createNode({

@@ -38,9 +38,10 @@ export function createStore<State>(
 ): Store<State> {
   const config = normalizeConfig(props)
   const id = nextUnitID()
-  const {parent, name = id, sid = null, strict = true, named = null} = config
+  const {parent, sid = null, strict = true, named = null} = config
   if (strict && currentState === undefined)
     throw Error("current state can't be undefined, use null instead")
+  const name = named ? named : config.name || id
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
   const compositeName = createName(name, parent)

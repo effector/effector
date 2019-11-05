@@ -154,7 +154,6 @@ test('createApi voids', () => {
     "
   `)
 })
-test('setStoreName', () => {})
 test('combine', () => {
   const ev = createEvent()
   const a = createStore('')
