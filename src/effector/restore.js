@@ -3,48 +3,6 @@ import type {Store, Event, Effect} from './unit.h'
 import {createStore} from './store'
 import {is} from './stdlib'
 
-export function restoreObject<State: {+[key: string]: Store<any> | any, ...}>(
-  obj: State,
-): $ObjMap<
-  State,
-  //prettier-ignore
-  <S>(field: Store<S> | S) => Store<S>,
-> {
-  const result = {}
-  for (const key in obj) {
-    const value = obj[key]
-    if (is.store(value)) {
-      result[key] = value
-    } else {
-      result[key] = createStore(value, {name: key})
-    }
-  }
-  return result
-}
-
-export function restoreEffect<Done>(
-  event: Effect<any, Done, any>,
-  defaultState: Done,
-): Store<Done> {
-  const store = createStore(defaultState, {
-    parent: event.domainName,
-    //TODO: add location
-    name: event.shortName,
-  })
-  store.on(event.done, (_, {result}) => result)
-  return store
-}
-
-export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E> {
-  const store = createStore(defaultState, {
-    parent: event.domainName,
-    //TODO: add location
-    name: event.shortName,
-  })
-  store.on(event, (_, v) => v)
-  return store
-}
-
 //eslint-disable-next-line no-unused-vars
 declare export function restore<Done>(
   event: Effect<any, Done, any>,
@@ -63,10 +21,31 @@ export function restore(obj: any, defaultState: any): any {
     return obj
   }
   if (is.event(obj)) {
-    return restoreEvent(obj, defaultState)
+    return createStore(defaultState, {
+      parent: obj.domainName,
+      name: obj.shortName,
+    }).on(obj, (_, v) => v)
   }
   if (is.effect(obj)) {
-    return restoreEffect(obj, defaultState)
+    return createStore(defaultState, {
+      parent: obj.domainName,
+      name: obj.shortName,
+    }).on(obj.done, (_, {result}) => result)
   }
-  return restoreObject(obj)
+  const result = {}
+  for (const key in obj) {
+    const value = obj[key]
+    if (is.store(value)) {
+      result[key] = value
+    } else {
+      result[key] = createStore(value, {name: key})
+    }
+  }
+  return result
+}
+
+export {
+  restore as restoreEvent,
+  restore as restoreEffect,
+  restore as restoreObject,
 }
