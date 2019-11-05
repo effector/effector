@@ -188,10 +188,14 @@ export function cloneGraph(unit, values = {}) {
   const list = flatGraph(unit)
   const clones = list.map(node => {
     const result = createNode({
-      node: [...node.seq.map(copyStep)],
+      node: [...node.seq.map(step => ({
+        id: step.id,
+        type: step.type,
+        data: Object.assign({}, step.data),
+      }))],
       child: [...node.next],
-      meta: {...node.meta, forkOf: node},
-      scope: {...node.scope},
+      meta: Object.assign({}, node.meta, {forkOf: node}),
+      scope: Object.assign({}, node.scope),
     })
     result.family = {
       type: node.family.type,
@@ -287,9 +291,6 @@ export function cloneGraph(unit, values = {}) {
         plainState.current = values[meta.sid]
         oldState.current = values[meta.sid]
       }
-      seq[1] = copyStep(seq[1])
-      seq[2] = copyStep(seq[2])
-      seq[3] = copyStep(seq[3])
       seq[1].data.store = plainState
       seq[2].data.store = oldState
       seq[3].data.store = oldState
@@ -430,13 +431,6 @@ export function cloneGraph(unit, values = {}) {
       throw Error('not found')
     }
     return result
-  }
-  function copyStep(step) {
-    return {
-      id: step.id,
-      type: step.type,
-      data: Object.assign({}, step.data),
-    }
   }
   function getNode(unit) {
     return unit.graphite || unit
