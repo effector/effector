@@ -162,6 +162,7 @@ declare export class Domain {
   ): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
+  event<Payload>(config: {name?: string, sid?: string, ...}): Event<Payload>;
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
@@ -170,6 +171,12 @@ declare export class Domain {
       ...
     },
   ): Effect<Params, Done, Fail>;
+  effect<Params, Done, Fail>(config: {
+    handler?: (params: Params) => Promise<Done> | Done,
+    sid?: string,
+    name?: string,
+    ...
+  }): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
   store<State>(
     defaultState: State,
@@ -465,7 +472,10 @@ declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(
   list: State,
 ): Store<$TupleMap<State, <S>(field: Store<S> | S) => S>>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-declare export function combine<State: {+[key: string]: Store<any> | any, ...}, R>(
+declare export function combine<
+  State: {+[key: string]: Store<any> | any, ...},
+  R,
+>(
   shape: State,
   fn: (shape: $ObjMap<State, <S>(field: Store<S> | S) => S>) => R,
 ): Store<R>

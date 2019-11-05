@@ -165,6 +165,7 @@ export class Domain implements Unit<any> {
   ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
+  event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
@@ -172,6 +173,11 @@ export class Domain implements Unit<any> {
       sid?: string
     },
   ): Effect<Params, Done, Fail>
+  effect<Params, Done, Fail = Error>(config: {
+    handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
+    name?: string
+  }): Effect<Params, Done, Fail>
   domain(name?: string): Domain
   store<State>(
     defaultState: State,
@@ -272,27 +278,24 @@ export const step: {
 
 export function forward<T>(opts: {
   /**
-  * By default TS picks "best common type" `T` between `from` and `to` arguments.
-  * This lets us forward from `string | number` to `string` for instance, and
-  * this is wrong.
-  * 
-  * Fortunately we have a way to disable such behavior. By adding `& {}` to some
-  * generic type we tell TS "do not try to infer this generic type from
-  * corresponding argument type". 
-  * 
-  * Generic `T` won't be inferred from `from` any more. Forwarding from "less
-  * strict" to "more strict" will produce an error as expected.
-  * 
-  * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
-  */
-  from: Unit<T & {}>;
+   * By default TS picks "best common type" `T` between `from` and `to` arguments.
+   * This lets us forward from `string | number` to `string` for instance, and
+   * this is wrong.
+   *
+   * Fortunately we have a way to disable such behavior. By adding `& {}` to some
+   * generic type we tell TS "do not try to infer this generic type from
+   * corresponding argument type".
+   *
+   * Generic `T` won't be inferred from `from` any more. Forwarding from "less
+   * strict" to "more strict" will produce an error as expected.
+   *
+   * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
+   */
+  from: Unit<T & {}>
   to: Unit<T>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
-export function forward(opts: {
-  from: Unit<any>
-  to: Unit<void>
-}): Subscription
+export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
@@ -334,8 +337,8 @@ export function createEffect<FN extends Function>(config: {
   ? Effect<
       Args['length'] extends 0 // does handler accept 0 arguments?
         ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length']  // is the first argument optional?
-          /**
+        : 0 | 1 extends Args['length'] // is the first argument optional?
+        ? /**
            * Applying `infer` to a variadic arguments here we'll get `Args` of
            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
            * In case T is optional we get `T | undefined` back from `Args[0]`.
@@ -348,7 +351,7 @@ export function createEffect<FN extends Function>(config: {
            * other type (`any | undefined | void` becomes just `any`). And we
            * have similar situation also with the `unknown` type.
            */
-        ? Args[0] | void
+          Args[0] | void
         : Args[0],
       Done extends Promise<infer Async> ? Async : Done,
       Error
@@ -372,7 +375,11 @@ export function createStoreObject<State>(
 export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
   cases: Obj,
-): {[K in keyof Obj]: Obj[K] extends (p: any) => p is infer R ? Event<R> : Event<S>} & {__: Event<S>}
+): {
+  [K in keyof Obj]: Obj[K] extends (p: any) => p is infer R
+    ? Event<R>
+    : Event<S>
+} & {__: Event<S>}
 
 export function createApi<
   S,
