@@ -49,20 +49,21 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const event: Event<Event<any>> = createEvent(`${fullName} event hook`, {
+  const event: Event<Event<any>> = createEvent({
     parent: compositeName,
+    named: 'onEvent',
   })
-  const effect: Event<Effect<any, any, any>> = createEvent(
-    `${fullName} effect hook`,
-    {
-      parent: compositeName,
-    },
-  )
-  const store: Event<Store<any>> = createEvent(`${fullName} store hook`, {
+  const effect: Event<Effect<any, any, any>> = createEvent({
     parent: compositeName,
+    named: 'onEffect',
   })
-  const domain: Event<Domain> = createEvent(`${fullName} domain hook`, {
+  const store: Event<Store<any>> = createEvent({
     parent: compositeName,
+    named: 'onStore',
+  })
+  const domain: Event<Domain> = createEvent({
+    parent: compositeName,
+    named: 'onDomain',
   })
   if (parentHooks) {
     forward({from: event, to: parentHooks.event})
