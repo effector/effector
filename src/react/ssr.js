@@ -118,16 +118,16 @@ export function useEvent(event) {
   const scope = React.useContext(Scope)
   const unit = scope.find(event)
   const result = is.effect(event)
-  ? params => {
-    const req = new Defer()
-    const payload = {ɔ: {params, req}}
-    launch(unit, payload)
-    return req.req
-  }
-  : payload => {
-    launch(unit, payload)
-    return payload
-  }
+    ? params => {
+      const req = new Defer()
+      const payload = {ɔ: {params, req}}
+      launch(unit, payload)
+      return req.req
+    }
+    : payload => {
+      launch(unit, payload)
+      return payload
+    }
   return React.useCallback(result, [scope, event])
 }
 
@@ -188,13 +188,13 @@ export function cloneGraph(unit) {
   const list = flatGraph(unit)
   const clones = list.map(node => {
     const result = createNode({
-      node: [...node.seq.map(step => ({
+      node: node.seq.map(step => ({
         id: step.id,
         type: step.type,
         data: Object.assign({}, step.data),
-      }))],
+      })),
       child: [...node.next],
-      meta: Object.assign({}, node.meta, {forkOf: node}),
+      meta: Object.assign({}, node.meta),
       scope: Object.assign({}, node.scope),
     })
     result.family = {
@@ -401,7 +401,10 @@ export function cloneGraph(unit) {
   }
   function cloneRef(ref) {
     if (refs.has(ref)) return
-    refs.set(ref, Object.assign({}, ref))
+    refs.set(ref, {
+      id: ref.id,
+      current: ref.current,
+    })
   }
   function reallocSiblings(siblings) {
     siblings.forEach((node, i) => {
