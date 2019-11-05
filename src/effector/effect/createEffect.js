@@ -111,9 +111,7 @@ export function createEffect<Payload, Done>(
   instance.graphite.seq.push(
     step.compute({
       fn(params) {
-        if (typeof params === 'object' && params !== null) {
-          if ('ɔ' in params) return params.ɔ
-        }
+        if (Object(params) === params && 'ɔ' in params) return params.ɔ
         return {
           params,
           req: {
@@ -213,11 +211,9 @@ function runEffect(handler, params, onResolve, onReject) {
     onReject(syncError)
     return
   }
-  if (typeof rawResult === 'object' && rawResult !== null) {
-    if (typeof rawResult.then === 'function') {
-      rawResult.then(onResolve, onReject)
-      return
-    }
+  if (Object(rawResult) === rawResult && typeof rawResult.then === 'function') {
+    rawResult.then(onResolve, onReject)
+    return
   }
   onResolve(rawResult)
 }
