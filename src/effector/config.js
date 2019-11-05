@@ -11,6 +11,7 @@ export type EffectConfigPart<Payload, Done> = {
   name?: string,
   loc?: SourceLocation,
   sid?: string,
+  named?: string,
   ...
 }
 
@@ -18,6 +19,7 @@ export type StoreConfigPart = {
   name?: string,
   loc?: SourceLocation,
   sid?: string,
+  named?: string,
   ...
 }
 
@@ -25,6 +27,7 @@ export type EventConfigPart = {
   name?: string,
   loc?: SourceLocation,
   sid?: string,
+  named?: string,
   ...
 }
 
@@ -32,6 +35,7 @@ export type DomainConfigPart = {
   name?: string,
   loc?: SourceLocation,
   sid?: string,
+  named?: string,
   ...
 }
 
@@ -54,6 +58,7 @@ const assignConfigPart = (part, config = {}) => {
     if (part.parent) config.parent = part.parent
     if (part.parentHooks) config.parentHooks = part.parentHooks
     if ('strict' in part) config.strict = part.strict
+    if (part.named) config.named = part.named
     assignConfigPart(part.ɔ, config)
   }
   return config

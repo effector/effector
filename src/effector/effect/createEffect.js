@@ -18,29 +18,31 @@ export function createEffect<Payload, Done>(
   maybeConfig: any,
 ): Effect<Payload, Done, *> {
   const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
-  const {name, parent, handler: defaultHandler} = config
+  let handler =
+    config.handler ||
+    (value => {
+      console.error(`no handler used in ${instance.getType()}`)
+      return Promise.resolve()
+    })
 
   //$off
-  const instance: Effect<Payload, Done, any> = createEvent(name, {
-    parent,
-    config,
-  })
+  const instance: Effect<Payload, Done, any> = createEvent(config)
   const eventCreate = instance.create
   //$off
   instance.graphite.meta.unit = 'effect'
   const done: Event<{|
     params: Payload,
     result: Done,
-  |}> = createEvent(joinName(instance, ' done'), {
-    parent,
+  |}> = createEvent({
     config,
+    named: 'done',
   })
   const fail: Event<{|
     params: Payload,
     error: *,
-  |}> = createEvent(joinName(instance, ' fail'), {
-    parent,
+  |}> = createEvent({
     config,
+    named: 'fail',
   })
   const anyway: Event<
     | {|
@@ -53,17 +55,10 @@ export function createEffect<Payload, Done>(
         +params: Payload,
         +error: *,
       |},
-  > = createEvent(joinName(instance, ' finally'), {
-    parent,
+  > = createEvent({
     config,
+    named: 'finally',
   })
-
-  let handler: Function =
-    defaultHandler ||
-    (value => {
-      console.error(`no handler used in ${instance.getType()}`)
-      return Promise.resolve()
-    })
 
   instance.done = done
   instance.fail = fail
@@ -137,7 +132,7 @@ export function createEffect<Payload, Done>(
   /* terser will minify true and false to 1 and 0,
     thereby we need to define true as Boolean(1)
     and false as Boolean(0) */
-  const pending = createStore(Boolean(0))
+  const pending = createStore(Boolean(0), {named: 'pending'})
     .on(instance, () => Boolean(1))
     .reset(done, fail)
   instance.pending = pending

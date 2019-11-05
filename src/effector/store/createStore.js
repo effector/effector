@@ -38,14 +38,14 @@ export function createStore<State>(
 ): Store<State> {
   const config = normalizeConfig(props)
   const id = nextUnitID()
-  const {parent, name = id, sid = null, strict = true} = config
+  const {parent, name = id, sid = null, strict = true, named = null} = config
   if (strict && currentState === undefined)
     throw Error("current state can't be undefined, use null instead")
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
   const compositeName = createName(name, parent)
 
-  const updates = createEvent('updates')
+  const updates = createEvent({named: 'updates'})
 
   const store: $Shape<Store<State>> = ({
     subscribers: new Map(),
@@ -64,7 +64,7 @@ export function createStore<State>(
           store: oldState,
         }),
       ],
-      meta: {unit: 'store', name: compositeName.shortName, sid},
+      meta: {unit: 'store', name: compositeName.shortName, sid, named},
     }),
     kind: 'store',
     id,
