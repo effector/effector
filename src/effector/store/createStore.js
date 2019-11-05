@@ -86,7 +86,7 @@ export function createStore<State>(
   ;(store: any).map = bind(mapStore, store)
   ;(store: any).thru = bind(thru, store)
   ;(store: any).setState = state => {
-    upsertLaunch([store], [state])
+    if (readRef(plainState) !== state) upsertLaunch([store], [state])
   }
   //$off
   store[$$observable] = bind(observable, store)
