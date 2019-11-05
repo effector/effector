@@ -131,7 +131,7 @@ export function useEvent(event) {
   return React.useCallback(result, [scope, event])
 }
 
-export function fork(domain, {ctx, values = {}, start}) {
+export function fork(domain, {ctx, start}) {
   if (!is.domain(domain))
     return Promise.reject(Error('first argument of fork should be domain'))
   if (!domain.graphite.meta.withScopes) {
@@ -159,7 +159,7 @@ export function fork(domain, {ctx, values = {}, start}) {
       }
     })
   }
-  const {scope, req, syncComplete} = cloneGraph(domain, values)
+  const {scope, req, syncComplete} = cloneGraph(domain)
   if (start) {
     launch(scope.find(start), ctx)
   }
@@ -181,7 +181,7 @@ reachable from given unit
 
 to erase, call clearNode(clone.node)
 */
-export function cloneGraph(unit, values = {}) {
+export function cloneGraph(unit) {
   const parentUnit = unit
   const queryStack = []
   unit = unit.graphite || unit
@@ -227,7 +227,6 @@ export function cloneGraph(unit, values = {}) {
 
   const refs = new Map()
   const handlers = new Map()
-  const valuesSidList = Object.getOwnPropertyNames(values)
 
   queryList(clones, () => {
     query({op: 'fx', fx: 'runner'}, node => {
@@ -287,10 +286,6 @@ export function cloneGraph(unit, values = {}) {
       const {seq, meta} = node
       const plainState = getRef(seq[1].data.store)
       const oldState = getRef(seq[3].data.store)
-      if (meta.sid != null && valuesSidList.includes(meta.sid)) {
-        plainState.current = values[meta.sid]
-        oldState.current = values[meta.sid]
-      }
       seq[1].data.store = plainState
       seq[2].data.store = oldState
       seq[3].data.store = oldState
