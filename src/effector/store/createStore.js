@@ -78,8 +78,7 @@ export function createStore<State>(
     stateRef: plainState,
     sid,
   }: any)
-  ;(store: any).subscribe = bind(subscribe, store)
-  ;(store: any).watch = bind(watch, store)
+  ;(store: any).watch = (store: any).subscribe = bind(watch, store)
   ;(store: any).reset = bind(reset, store)
   ;(store: any).on = bind(on, store)
   ;(store: any).off = bind(off, store)
@@ -139,24 +138,21 @@ function on(storeInstance: Store<any>, event: any, handler: Function) {
   )
   return storeInstance
 }
-function observable(storeInstance: Store<any>) {
-  const result = {
-    subscribe(observer: Subscriber<any>) {
-      if (observer !== Object(observer))
-        throw Error('expect observer to be an object') // or function
-      return subscribe(storeInstance, state => {
-        if (observer.next) {
-          observer.next(state)
-        }
-      })
-    },
-  }
+const observable = (storeInstance: Store<any>) => ({
+  subscribe(observer: Subscriber<any>) {
+    if (observer !== Object(observer))
+      throw Error('expect observer to be an object') // or function
+    return watch(storeInstance, state => {
+      if (observer.next) {
+        observer.next(state)
+      }
+    })
+  },
   //$off
-  result[$$observable] = function() {
+  [$$observable]() {
     return this
-  }
-  return result
-}
+  },
+})
 function watch(
   storeInstance: Store<any>,
   eventOrFn: Event<*> | Function,
@@ -165,17 +161,12 @@ function watch(
   if (!fn || !is.unit(eventOrFn)) {
     if (typeof eventOrFn !== 'function')
       throw Error('watch requires function handler')
-    return subscribe(storeInstance, eventOrFn)
+    eventOrFn(storeInstance.getState())
+    return watchUnit(storeInstance, eventOrFn)
   }
   if (typeof fn !== 'function')
     throw Error('second argument should be a function')
   return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
-}
-function subscribe(storeInstance: Store<any>, handler: Function) {
-  if (typeof handler !== 'function')
-    throw Error('expect listener to be a function')
-  handler(storeInstance.getState())
-  return watchUnit(storeInstance, handler)
 }
 
 function mapStore<A, B>(
