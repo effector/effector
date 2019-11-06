@@ -86,3 +86,54 @@ it('should unsubscribe only from relevant watchers', async() => {
   expect(listenerB.mock.calls.length).toBe(1)
   expect(listenerC.mock.calls.length).toBe(2)
 })
+
+describe('array forwarding support', () => {
+  it('support forwarding to arrays', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const s1 = createEvent()
+    const t1 = createEvent()
+    const t2 = createEvent()
+    t1.watch(fn1)
+    t2.watch(fn2)
+    forward({
+      from: s1,
+      to: [t1, t2],
+    })
+    s1()
+    expect(fn1).toBeCalledTimes(1)
+    expect(fn2).toBeCalledTimes(1)
+  })
+  it('support forwarding from arrays', () => {
+    const fn = jest.fn()
+    const s1 = createEvent()
+    const s2 = createEvent()
+    const t1 = createEvent()
+    t1.watch(fn)
+    forward({
+      from: [s1, s2],
+      to: t1,
+    })
+    s1()
+    s2()
+    expect(fn).toBeCalledTimes(2)
+  })
+  it('support forwarding from arrays to arrays', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const s1 = createEvent()
+    const s2 = createEvent()
+    const t1 = createEvent()
+    const t2 = createEvent()
+    t1.watch(fn1)
+    t2.watch(fn2)
+    forward({
+      from: [s1, s2],
+      to: [t1, t2],
+    })
+    s1()
+    s2()
+    expect(fn1).toBeCalledTimes(2)
+    expect(fn2).toBeCalledTimes(2)
+  })
+})
