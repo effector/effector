@@ -36,8 +36,13 @@ export const forward = ({
   to: Graphite,
 |}): Subscription =>
   createSubscription(
-    createLinkNode(from, to, {
+    createNode({
       node: [],
+      parent: [from],
+      child: [to],
       meta: {op: 'forward'},
+      family: {
+        type: 'crosslink',
+      },
     }),
   )
