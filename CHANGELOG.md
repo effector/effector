@@ -1,5 +1,35 @@
 # Changelog
 
+## effector 20.6.0
+
+- Add support for arrays to `forward`
+
+```js
+import {createEvent, forward} from 'effector'
+
+const firstSource = createEvent()
+const secondSource = createEvent()
+const firstTarget = createEvent()
+const secondTarget = createEvent()
+
+forward({
+  from: [firstSource, secondSource],
+  to: [firstTarget, secondTarget]
+})
+
+firstTarget.watch(e => console.log('first target', e))
+secondTarget.watch(e => console.log('second target', e))
+
+firstSource('A')
+// => first target A
+// => second target A
+secondSource('B')
+// => first target B
+// => second target B
+```
+
+[Try it](https://share.effector.dev/SRwLtX4l)
+
 ## effector-vue 20.3.0
 
 - Add `createComponent` HOC for TypeScript usage. This HOC provides type-safe properties in vue components.
