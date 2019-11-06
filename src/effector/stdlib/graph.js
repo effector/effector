@@ -6,6 +6,7 @@ import {getGraph, getOwners, getLinks} from './getter'
 
 export function createNode({
   node,
+  parent = [],
   child = [],
   scope = {},
   meta = {},
@@ -13,6 +14,7 @@ export function createNode({
 }: {
   +node: Array<Cmd>,
   +child?: Array<Graphite>,
+  +parent?: Array<Graphite>,
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
   family?: {
@@ -41,6 +43,9 @@ export function createNode({
   }
   for (let i = 0; i < owners.length; i++) {
     getLinks(owners[i]).push(result)
+  }
+  for (let i = 0; i < parent.length; i++) {
+    getGraph(parent[i]).next.push(result)
   }
   return result
 }
