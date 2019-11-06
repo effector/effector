@@ -278,7 +278,7 @@ declare export var step: {|
 |}
 declare export function forward<T>(opts: {|
   +from: CovariantUnit<T>,
-  +to: Unit<T>,
+  +to: Unit<T> | $ReadOnlyArray<Unit<T>>,
 |}): Subscription
 
 declare export function merge<T>(events: $ReadOnlyArray<Unit<T>>): Event<T>

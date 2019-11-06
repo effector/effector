@@ -82,16 +82,7 @@ describe('forward with subtyping', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 3, '(opts: { from: Unit<number & {}>; to: Unit<number>; }): Subscription', gave the following error.
-          Type 'Event<string>' is not assignable to type 'Unit<number & {}>'.
-            Types of property '__' are incompatible.
-              Type 'string' is not assignable to type 'number & {}'.
-                Type 'string' is not assignable to type 'number'.
-        Overload 2 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
-          Type 'Event<number>' is not assignable to type 'Unit<void>'.
-            Types of property '__' are incompatible.
-              Type 'number' is not assignable to type 'void'.
-        Overload 3 of 3, '(opts: { from: Unit<number>; to: Unit<number>; }): Subscription', gave the following error.
+        The last overload gave the following error.
           Type 'Event<string>' is not assignable to type 'Unit<number>'.
             Types of property '__' are incompatible.
               Type 'string' is not assignable to type 'number'.
@@ -140,17 +131,7 @@ describe('forward with subtyping', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 3, '(opts: { from: Unit<string & {}>; to: Unit<string>; }): Subscription', gave the following error.
-          Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
-            Types of property '__' are incompatible.
-              Type 'string | number' is not assignable to type 'string & {}'.
-                Type 'number' is not assignable to type 'string & {}'.
-                  Type 'number' is not assignable to type 'string'.
-        Overload 2 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
-          Type 'Event<string>' is not assignable to type 'Unit<void>'.
-            Types of property '__' are incompatible.
-              Type 'string' is not assignable to type 'void'.
-        Overload 3 of 3, '(opts: { from: Unit<string>; to: Unit<string>; }): Subscription', gave the following error.
+        The last overload gave the following error.
           Type 'Event<string | number>' is not assignable to type 'Unit<string>'.
             Types of property '__' are incompatible.
               Type 'string | number' is not assignable to type 'string'.
@@ -197,6 +178,10 @@ describe('forward with subtyping', () => {
       "
       --typescript--
       Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string & {}'.
+            Type 'number' is not assignable to type 'string & {}'.
+              Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -329,20 +314,110 @@ test('edge case #1 (should fail)', () => {
     "
     --typescript--
     No overload matches this call.
-      Overload 1 of 3, '(opts: { from: Unit<{ value: { value: string; }; }>; to: Unit<{ value: { value: string; }; }>; }): Subscription', gave the following error.
+      The last overload gave the following error.
         Type 'Event<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
           Types of property '__' are incompatible.
             Type 'string' is not assignable to type '{ value: { value: string; }; }'.
-      Overload 2 of 3, '(opts: { from: Unit<any>; to: Unit<void>; }): Subscription', gave the following error.
-        Type 'Event<{ value: { value: string; }; }>' is not assignable to type 'Unit<void>'.
-          Types of property '__' are incompatible.
-            Type '{ value: { value: string; }; }' is not assignable to type 'void'.
-      Overload 3 of 3, '(opts: { from: Unit<{ value: { value: string; }; }>; to: Unit<{ value: { value: string; }; }>; }): Subscription', gave the following error.
-        Type 'Event<string>' is not assignable to type 'Unit<{ value: { value: string; }; }>'.
-
 
     --flow--
     no errors
     "
   `)
+})
+
+describe('array support', () => {
+  describe('forward to array', () => {
+    test('valid', () => {
+      const s1 = createEvent<string>()
+      const t1 = createEvent<string>()
+      const t2 = createEvent<string>()
+      forward({
+        from: s1,
+        to: [t1, t2],
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+    describe('invalid', () => {
+      test('type mismatch', () => {
+        const s1 = createEvent<number>()
+        const t1 = createEvent<string>()
+        const t2 = createEvent<string>()
+        forward({
+          from: s1,
+          to: [t1, t2],
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<number>' is not assignable to type 'Unit<string>'.
+                Types of property '__' are incompatible.
+                  Type 'number' is not assignable to type 'string'.
+
+          --flow--
+          Cannot call 'forward' with object literal bound to 'opts'
+            to: [t1, t2],
+                ^^^^^^^^
+            string [1] is incompatible with number [2] in type argument 'T' [3] of array element of property 'to'
+                const t1 = createEvent<string>()
+                                   [1] ^^^^^^
+                const s1 = createEvent<number>()
+                                   [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
+      })
+      test('array mismatch', () => {
+        const s1 = createEvent<string>()
+        const t1 = createEvent<string>()
+        const t2 = createEvent<number>()
+        forward({
+          from: s1,
+          to: [t1, t2],
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type '(Event<number> | Event<string>)[]' is not assignable to type 'Unit<number> | readonly Unit<number>[]'.
+                  Type '(Event<number> | Event<string>)[]' is not assignable to type 'readonly Unit<number>[]'.
+                    Type 'Event<number> | Event<string>' is not assignable to type 'Unit<number>'.
+                      Type 'Event<string>' is not assignable to type 'Unit<number>'.
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<number>'.
+                Type '(Event<number> | Event<string>)[]' is not assignable to type 'Unit<number> | readonly Unit<number>[]'.
+                  Type '(Event<number> | Event<string>)[]' is not assignable to type 'readonly Unit<number>[]'.
+                    Type 'Event<number> | Event<string>' is not assignable to type 'Unit<number>'.
+                      Type 'Event<string>' is not assignable to type 'Unit<number>'.
+
+
+          --flow--
+          Cannot call 'forward' with object literal bound to 'opts'
+            to: [t1, t2],
+                ^^^^^^^^
+            number [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
+                const t2 = createEvent<number>()
+                                   [1] ^^^^^^
+                const t1 = createEvent<string>()
+                                   [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
+      })
+    })
+  })
 })

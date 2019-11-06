@@ -292,14 +292,15 @@ export function forward<T>(opts: {
    * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
    */
   from: Unit<T & {}>
-  to: Unit<T>
+  to: Unit<T> | ReadonlyArray<Unit<T>>
 }): Subscription
 // Allow `* -> void` forwarding (e.g. `string -> void`).
 export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
+export function forward(opts: {from: Unit<any>; to: ReadonlyArray<Unit<void>>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 export function forward<To, From extends To>(opts: {
   from: Unit<From>
-  to: Unit<To>
+  to: Unit<To> | ReadonlyArray<Unit<To>>
 }): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
