@@ -234,24 +234,22 @@ export function cloneGraph(unit) {
       scope.done = findClone(scope.done)
       scope.fail = findClone(scope.fail)
       scope.anyway = findClone(scope.anyway)
-
-      forward({
-        from: getNode(scope.anyway),
-        to: createNode({
-          meta: {fork: true},
-          node: [
-            step.run({
-              fn() {
-                fxCount.current -= 1
-                if (fxCount.current === 0) {
-                  fxID += 1
-                  tryCompleteInitPhase()
-                }
-              },
-            }),
-          ],
-        }),
+      const from = getNode(scope.anyway)
+      const to = createNode({
+        meta: {fork: true},
+        node: [
+          step.run({
+            fn() {
+              fxCount.current -= 1
+              if (fxCount.current === 0) {
+                fxID += 1
+                tryCompleteInitPhase()
+              }
+            },
+          }),
+        ],
       })
+      from.next.push(to)
     })
   })
 

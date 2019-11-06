@@ -1,7 +1,7 @@
 //@flow
-import {type Graphite, type Cmd, getGraph, createNode} from './stdlib'
+import {type Graphite, type Cmd, createNode} from './stdlib'
 import type {Subscription} from './index.h'
-import {createWatcher} from './watcher'
+import {createSubscription} from './subscription'
 
 export const createLinkNode = (
   source: Graphite,
@@ -15,9 +15,10 @@ export const createLinkNode = (
     scope?: {[name: string]: any, ...},
     meta?: {[name: string]: any, ...},
   |},
-) => {
-  const to = createNode({
+) =>
+  createNode({
     node,
+    parent: [source],
     child: [child],
     scope,
     meta,
@@ -27,18 +28,16 @@ export const createLinkNode = (
       links: [child],
     },
   })
-  getGraph(source).next.push(to)
-  return to
-}
-export const forward = (opts: {|
+export const forward = ({
+  from,
+  to,
+}: {|
   from: Graphite,
   to: Graphite,
-|}): Subscription => {
-  const from = getGraph(opts.from)
-  const to = getGraph(opts.to)
-  from.next.push(to)
-  return createWatcher({
-    child: to,
-    parent: from,
-  })
-}
+|}): Subscription =>
+  createSubscription(
+    createLinkNode(from, to, {
+      node: [],
+      meta: {op: 'forward'},
+    }),
+  )

@@ -21,12 +21,13 @@ import {forward, createLinkNode} from '../forward'
 import {createName, mapName, type CompositeName} from '../naming'
 import {thru} from '../thru'
 import type {Subscriber} from '../index.h'
-import {watchUnit, createWatcher} from '../watcher'
+import {watchUnit} from '../watch'
 import {
   type Config,
   type StoreConfigPart as ConfigPart,
   normalizeConfig,
 } from '../config'
+import {createSubscription} from '../subscription'
 
 export function createStore<State>(
   currentState: State,
@@ -116,9 +117,8 @@ function on(storeInstance: Store<any>, event: any, handler: Function) {
   storeInstance.off(event)
   storeInstance.subscribers.set(
     event,
-    createWatcher({
-      parent: getGraph(event),
-      child: createLinkNode(event, storeInstance, {
+    createSubscription(
+      createLinkNode(event, storeInstance, {
         scope: {
           handler,
           state: storeInstance.stateRef,
@@ -134,7 +134,7 @@ function on(storeInstance: Store<any>, event: any, handler: Function) {
         ],
         meta: {op: 'on'},
       }),
-    }),
+    ),
   )
   return storeInstance
 }

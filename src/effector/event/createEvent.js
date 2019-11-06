@@ -11,7 +11,7 @@ import {normalizeConfig, type EventConfigPart, type Config} from '../config'
 import {type CompositeName, createName, mapName, joinName} from '../naming'
 import {thru} from '../thru'
 import {createLinkNode} from '../forward'
-import {watchUnit} from '../watcher'
+import {watchUnit} from '../watch'
 
 declare export function createEvent<Payload>(
   name?: string | EventConfigPart,
@@ -63,9 +63,8 @@ export function createEvent<Payload>(
   return instance
 }
 
-function subscribe(event, observer): Subscription {
-  return event.watch(payload => observer.next(payload))
-}
+const subscribe = (event, observer): Subscription =>
+  watchUnit(event, payload => observer.next(payload))
 
 function prepend(event, fn: (_: any) => *) {
   const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
