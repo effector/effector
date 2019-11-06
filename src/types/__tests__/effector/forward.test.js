@@ -177,11 +177,15 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
-        Types of property '__' are incompatible.
-          Type 'string | number' is not assignable to type 'string & {}'.
-            Type 'number' is not assignable to type 'string & {}'.
-              Type 'number' is not assignable to type 'string'.
+      No overload matches this call.
+        Overload 1 of 6, '(opts: { from: readonly Unit<string & {}>[]; to: Unit<string> | readonly Unit<string>[]; }): Subscription', gave the following error.
+          Type 'Event<string | number>' is missing the following properties from type 'readonly Unit<string & {}>[]': concat, join, slice, indexOf, and 15 more.
+        Overload 2 of 6, '(opts: { from: Unit<string & {}>; to: Unit<string> | readonly Unit<string>[]; }): Subscription', gave the following error.
+          Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
+            Types of property '__' are incompatible.
+              Type 'string | number' is not assignable to type 'string & {}'.
+                Type 'number' is not assignable to type 'string & {}'.
+                  Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
@@ -403,7 +407,6 @@ describe('array support', () => {
                     Type 'Event<number> | Event<string>' is not assignable to type 'Unit<number>'.
                       Type 'Event<string>' is not assignable to type 'Unit<number>'.
 
-
           --flow--
           Cannot call 'forward' with object literal bound to 'opts'
             to: [t1, t2],
@@ -412,6 +415,87 @@ describe('array support', () => {
                 const t2 = createEvent<number>()
                                    [1] ^^^^^^
                 const t1 = createEvent<string>()
+                                   [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
+      })
+    })
+  })
+  describe('forward from array', () => {
+    test('valid', () => {
+      const s1 = createEvent<string>()
+      const s2 = createEvent<string>()
+      const t1 = createEvent<string>()
+      forward({
+        from: [s1, s2],
+        to: t1,
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+    describe('invalid', () => {
+      test('type mismatch', () => {
+        const s1 = createEvent<string>()
+        const s2 = createEvent<string>()
+        const t1 = createEvent<number>()
+        forward({
+          from: [s1, s2],
+          to: t1,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>[]' is missing the following properties from type 'Unit<number>': kind, __
+
+          --flow--
+          Cannot call 'forward' with object literal bound to 'opts'
+            forward({
+                    ^...
+            number [1] is incompatible with string [2] in type argument 'T' [3] of property 'to'
+                const t1 = createEvent<number>()
+                                   [1] ^^^^^^
+                const s1 = createEvent<string>()
+                                   [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
+      })
+      test('array mismatch', () => {
+        const s1 = createEvent<string>()
+        const s2 = createEvent<number>()
+        const t1 = createEvent<string>()
+        forward({
+          from: [s1, s2],
+          to: t1,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type '(Event<number> | Event<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
+
+
+          --flow--
+          Cannot call 'forward' with object literal bound to 'opts'
+            forward({
+                    ^...
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'to'
+                const t1 = createEvent<string>()
+                                   [1] ^^^^^^
+                const s2 = createEvent<number>()
                                    [2] ^^^^^^
                 export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
                                   [3] ^
