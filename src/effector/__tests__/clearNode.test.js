@@ -211,6 +211,46 @@ describe('based on clearNode', () => {
       ]
     `)
   })
+  it('wil not clear node, connected via forward to destroyed one', () => {
+    const fn = jest.fn()
+    const store = createStore(0)
+    const event = createEvent()
+    event.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    event(2)
+    clearNode(store)
+    event(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+        3,
+      ]
+    `)
+  })
+  it('wil not clear node, which forwarded to destroyed one', () => {
+    const fn = jest.fn()
+    const store = createStore(0)
+    const event = createEvent()
+    store.updates.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    clearNode(event)
+    store.setState(2)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
 })
 describe('domain support', () => {
   it('will not clear domain.store after event will be destroyed', () => {
@@ -278,6 +318,48 @@ describe('domain support', () => {
     event()
     unsub()
     event()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+  it('wil not clear node, connected via forward to destroyed one', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const store = domain.store(0)
+    const event = domain.event()
+    event.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    event(2)
+    clearNode(store)
+    event(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+        3,
+      ]
+    `)
+  })
+  it('wil not clear node, which forwarded to destroyed one', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const store = domain.store(0)
+    const event = domain.event()
+    store.updates.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    clearNode(event)
+    store.setState(2)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         1,
