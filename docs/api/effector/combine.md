@@ -4,7 +4,7 @@ title: combine
 hide_title: true
 ---
 
-# `combine(...stores, fn?)`
+# `combine(...stores, fn)`
 
 Creates a new [store](Store.md) that emits the set of latest store values from all input stores
 
