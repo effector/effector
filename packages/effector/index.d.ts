@@ -277,10 +277,6 @@ export const step: {
 }
 
 export function forward<T>(opts: {
-  from: ReadonlyArray<Unit<T & {}>>
-  to: Unit<T> | ReadonlyArray<Unit<T>>
-}): Subscription
-export function forward<T>(opts: {
   /**
    * By default TS picks "best common type" `T` between `from` and `to` arguments.
    * This lets us forward from `string | number` to `string` for instance, and
@@ -298,13 +294,13 @@ export function forward<T>(opts: {
   from: Unit<T & {}>
   to: Unit<T> | ReadonlyArray<Unit<T>>
 }): Subscription
-// Allow `* -> void` forwarding (e.g. `string -> void`).
 export function forward(opts: {from: Unit<any>; to: ReadonlyArray<Unit<void>>}): Subscription
-export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
   to: Unit<To> | ReadonlyArray<Unit<To>>
 }): Subscription
+// Allow `* -> void` forwarding (e.g. `string -> void`).
+export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
 // Do not remove the signature below to avoid breaking change!
 export function forward<To, From extends To>(opts: {
   from: Unit<From>

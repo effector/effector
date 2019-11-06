@@ -177,15 +177,11 @@ describe('forward with subtyping', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      No overload matches this call.
-        Overload 1 of 6, '(opts: { from: readonly Unit<string & {}>[]; to: Unit<string> | readonly Unit<string>[]; }): Subscription', gave the following error.
-          Type 'Event<string | number>' is missing the following properties from type 'readonly Unit<string & {}>[]': concat, join, slice, indexOf, and 15 more.
-        Overload 2 of 6, '(opts: { from: Unit<string & {}>; to: Unit<string> | readonly Unit<string>[]; }): Subscription', gave the following error.
-          Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
-            Types of property '__' are incompatible.
-              Type 'string | number' is not assignable to type 'string & {}'.
-                Type 'number' is not assignable to type 'string & {}'.
-                  Type 'number' is not assignable to type 'string'.
+      Type 'Event<string | number>' is not assignable to type 'Unit<string & {}>'.
+        Types of property '__' are incompatible.
+          Type 'string | number' is not assignable to type 'string & {}'.
+            Type 'number' is not assignable to type 'string & {}'.
+              Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot call 'forward' with object literal bound to 'opts'
