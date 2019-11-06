@@ -197,13 +197,11 @@ describe('nested effects', () => {
         "
         --typescript--
         Type 'Effect<string, string, Error>' is not assignable to type 'Effect<number, number, Error>'.
-          Types of property 'done' are incompatible.
-            Type 'Event<{ params: string; result: string; }>' is not assignable to type 'Event<{ params: number; result: number; }>'.
-              Types of property 'watch' are incompatible.
-                Type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: number; result: number; }) => any) => Subscription'.
-                  Types of parameters 'watcher' and 'watcher' are incompatible.
-                    Types of parameters 'payload' and 'payload' are incompatible.
-                      Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
+          The types of 'done.watch' are incompatible between these types.
+            Type '(watcher: (payload: { params: string; result: string; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: number; result: number; }) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type '{ params: string; result: string; }' is not assignable to type '{ params: number; result: number; }'.
 
         --flow--
         Cannot assign 'createEffect(...)' to 'parentEffect'

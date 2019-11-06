@@ -246,9 +246,8 @@ describe('combine cases (should pass)', () => {
       "
       --typescript--
       Type 'Store<{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }>' is not assignable to type 'Store<string>'.
-        Types of property 'getState' are incompatible.
-          Type '() => { reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type '() => string'.
-            Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type 'string'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type 'string'.
 
       --flow--
       Cannot assign 'combine(...)' to 'store'
@@ -276,9 +275,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<{ R: number; G: number; B: number; }>' is not assignable to type 'Store<{ R: string; G: string; B: string; }>'.
-        Types of property 'getState' are incompatible.
-          Type '() => { R: number; G: number; B: number; }' is not assignable to type '() => { R: string; G: string; B: string; }'.
-            Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
 
       --flow--
       in the first argument: Either cannot assign 'combine(...)' to 'store'
@@ -323,9 +321,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
-        Types of property 'getState' are incompatible.
-          Type '() => [number, number, number]' is not assignable to type '() => [string, string, string]'.
-            Type '[number, number, number]' is not assignable to type '[string, string, string]'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '[number, number, number]' is not assignable to type '[string, string, string]'.
 
       --flow--
       in the first argument: Either cannot assign 'combine(...)' to 'store'
@@ -368,9 +365,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<{ Color: string; }>' is not assignable to type 'Store<{ Color: number; }>'.
-        Types of property 'getState' are incompatible.
-          Type '() => { Color: string; }' is not assignable to type '() => { Color: number; }'.
-            Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
 
       --flow--
       in the first argument: Either cannot assign 'combine(...)' to 'store'
@@ -393,9 +389,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<[string]>' is not assignable to type 'Store<[number]>'.
-        Types of property 'getState' are incompatible.
-          Type '() => [string]' is not assignable to type '() => [number]'.
-            Type '[string]' is not assignable to type '[number]'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '[string]' is not assignable to type '[number]'.
 
       --flow--
       in the first argument: Either cannot assign 'combine(...)' to 'store'
@@ -427,9 +422,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        Types of property 'getState' are incompatible.
-          Type '() => string' is not assignable to type '() => number'.
-            Type 'string' is not assignable to type 'number'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type 'string' is not assignable to type 'number'.
 
       --flow--
       in the first argument: Either cannot assign 'combine(...)' to 'store'
@@ -618,9 +612,8 @@ describe('error inference (should fail with number -> string error)', () => {
       "
       --typescript--
       Type 'Store<{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }>' is not assignable to type 'Store<number>'.
-        Types of property 'getState' are incompatible.
-          Type '() => { reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type '() => number'.
-            Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type 'number'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 12 more ...; readonly __: string; }' is not assignable to type 'number'.
 
 
       --flow--

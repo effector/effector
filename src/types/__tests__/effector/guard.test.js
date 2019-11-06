@@ -51,9 +51,8 @@ describe('guard(source, config)', () => {
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
-                Types of property 'getState' are incompatible.
-                  Type '() => string' is not assignable to type '() => boolean'.
-                    Type 'string' is not assignable to type 'boolean'.
+                The types returned by 'getState()' are incompatible between these types.
+                  Type 'string' is not assignable to type 'boolean'.
 
         --flow--
         Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'

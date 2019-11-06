@@ -206,9 +206,8 @@ test('store by store', () => {
     "
     --typescript--
     Type 'Store<boolean>' is not assignable to type 'Store<string>'.
-      Types of property 'getState' are incompatible.
-        Type '() => boolean' is not assignable to type '() => string'.
-          Type 'boolean' is not assignable to type 'string'.
+      The types returned by 'getState()' are incompatible between these types.
+        Type 'boolean' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'c' to 'sample_ss_check2'
@@ -235,9 +234,8 @@ test('store by store with handler', () => {
     "
     --typescript--
     Type 'Store<{ a: string; b: boolean; }>' is not assignable to type 'Store<string>'.
-      Types of property 'getState' are incompatible.
-        Type '() => { a: string; b: boolean; }' is not assignable to type '() => string'.
-          Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
+      The types returned by 'getState()' are incompatible between these types.
+        Type '{ a: string; b: boolean; }' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'c' to 'sample_ssh_check2'
@@ -274,9 +272,8 @@ describe('sample(Store<T>):Store<T>', () => {
       "
       --typescript--
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        Types of property 'getState' are incompatible.
-          Type '() => string' is not assignable to type '() => number'.
-            Type 'string' is not assignable to type 'number'.
+        The types returned by 'getState()' are incompatible between these types.
+          Type 'string' is not assignable to type 'number'.
 
       --flow--
       Cannot assign 'sample(...)' to 'sample_s_incorrect'

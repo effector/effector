@@ -125,7 +125,7 @@
     "shelljs": "^0.8.3",
     "symbol-observable": "^1.2.0",
     "terser": "^3.17.0",
-    "typescript": "^3.6.4",
+    "typescript": "^3.7.2",
     "viz.js": "^2.1.2",
     "vue": "^2.6.10",
     "webdriverio": "^5.11.7",

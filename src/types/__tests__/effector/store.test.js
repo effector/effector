@@ -23,9 +23,8 @@ test('createStore', () => {
     "
     --typescript--
     Type 'Store<number>' is not assignable to type 'Store<string>'.
-      Types of property 'getState' are incompatible.
-        Type '() => number' is not assignable to type '() => string'.
-          Type 'number' is not assignable to type 'string'.
+      The types returned by 'getState()' are incompatible between these types.
+        Type 'number' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'createStore(...)' to 'createStore_store2'
@@ -239,9 +238,8 @@ test('#map', () => {
     "
     --typescript--
     Type 'Store<string>' is not assignable to type 'Store<number>'.
-      Types of property 'getState' are incompatible.
-        Type '() => string' is not assignable to type '() => number'.
-          Type 'string' is not assignable to type 'number'.
+      The types returned by 'getState()' are incompatible between these types.
+        Type 'string' is not assignable to type 'number'.
 
 
     --flow--
