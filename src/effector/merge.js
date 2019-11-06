@@ -9,8 +9,10 @@ export function merge<T>(
   events: $ReadOnlyArray<Event<T> | Store<T> | Effect<T, any, any>>,
 ): Event<T> {
   const result = createEvent(unitObjectName(events, 'merge'))
-  for (const event of events) {
-    forward({from: event, to: result})
-  }
+  forward({
+    from: events,
+    to: result,
+    meta: {op: 'merge'},
+  })
   return result
 }

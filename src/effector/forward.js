@@ -31,16 +31,18 @@ export const createLinkNode = (
 export const forward = ({
   from,
   to,
+  meta = {op: 'forward'},
 }: {|
   from: Graphite | Graphite[],
   to: Graphite | Graphite[],
+  meta?: Object,
 |}): Subscription =>
   createSubscription(
     createNode({
       node: [],
       parent: Array.isArray(from) ? from : [from],
       child: Array.isArray(to) ? to : [to],
-      meta: {op: 'forward'},
+      meta,
       family: {
         type: 'crosslink',
       },
