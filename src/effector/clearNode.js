@@ -16,7 +16,11 @@ const removeItem = (list, item) => {
     list.splice(pos, 1)
   }
 }
-
+const removeFromNode = (currentNode, targetNode) => {
+  removeItem(currentNode.next, targetNode)
+  removeItem(getOwners(currentNode), targetNode)
+  removeItem(getLinks(currentNode), targetNode)
+}
 const clearNodeNormalized = (
   targetNode: Graph,
   deep: boolean,
@@ -29,19 +33,15 @@ const clearNodeNormalized = (
   let currentNode
   let list = getLinks(targetNode)
   while ((currentNode = list.pop())) {
-    removeItem(getOwners(currentNode), targetNode)
+    removeFromNode(currentNode, targetNode)
     if (deep || isDomainUnit || currentNode.family.type === 'crosslink') {
       clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
   list = getOwners(targetNode)
   while ((currentNode = list.pop())) {
-    removeItem(currentNode.next, targetNode)
-    removeItem(getLinks(currentNode), targetNode)
-    if (
-      currentNode.family.type === 'crosslink' ||
-      (isDomainUnit && currentNode.family.type === 'regular')
-    ) {
+    removeFromNode(currentNode, targetNode)
+    if (isDomainUnit && currentNode.family.type === 'regular') {
       clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
