@@ -32,14 +32,14 @@ export const forward = ({
   from,
   to,
 }: {|
-  from: Graphite,
-  to: Graphite,
+  from: Graphite | Graphite[],
+  to: Graphite | Graphite[],
 |}): Subscription =>
   createSubscription(
     createNode({
       node: [],
-      parent: [from],
-      child: [to],
+      parent: Array.isArray(from) ? from : [from],
+      child: Array.isArray(to) ? to : [to],
       meta: {op: 'forward'},
       family: {
         type: 'crosslink',
