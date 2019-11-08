@@ -134,3 +134,21 @@ describe('with target', () => {
     expect(argumentHistory(spy)).toEqual([1])
   })
 })
+
+test('temporal consistency', () => {
+  const trigger = createEvent()
+  const target = createEvent()
+  const filter = trigger.map(x => x > 0)
+  guard({
+    source: trigger,
+    filter,
+    target,
+  })
+
+  target.watch(spy)
+  // trigger(1)
+  trigger(0)
+  trigger(2)
+
+  expect(argumentHistory(spy)).toEqual([2])
+})

@@ -1,8 +1,111 @@
 //@flow
 
-import {sample, Kind, createEvent, createStore, createEffect} from 'effector'
+import {
+  sample,
+  guard,
+  Kind,
+  createEvent,
+  createStore,
+  createEffect,
+} from 'effector'
 
-import {spy, getSpyCalls} from 'effector/fixtures'
+import {spy, getSpyCalls, argumentHistory} from 'effector/fixtures'
+
+describe('temporal consistency', () => {
+  test('in combination with guard, pass immediately', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent()
+    sample({
+      source: trigger,
+      clock: guard(trigger, {
+        filter: x => x > 0,
+      }),
+      target,
+    })
+    target.watch(fn)
+    trigger(1)
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+  test('in combination with guard, pass on second call', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent()
+    sample({
+      source: trigger,
+      clock: guard(trigger, {
+        filter: x => x > 0,
+      }),
+      target,
+    })
+    target.watch(fn)
+    trigger(0)
+    trigger(1)
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+  test('in combination with .filter, pass immediately', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent()
+    sample({
+      source: trigger,
+      clock: trigger.filter({
+        fn: x => x > 0,
+      }),
+      target,
+    })
+    target.watch(fn)
+    trigger(1)
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+  test('in combination with .filter, pass on second call', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent()
+    sample({
+      source: trigger,
+      clock: trigger.filter({
+        fn: x => x > 0,
+      }),
+      target,
+    })
+    target.watch(fn)
+    trigger(0)
+    trigger(1)
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+  test('source & clock is a same event', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent()
+    sample({
+      source: trigger,
+      clock: trigger,
+      target,
+    })
+    target.watch(fn)
+    trigger(0)
+    trigger(1)
+    expect(argumentHistory(fn)).toEqual([0, 1])
+  })
+  test('clock triggers earlier than source during same pure phase', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const source = trigger.map(x => x)
+    const target = createEvent()
+    sample({
+      source,
+      clock: trigger,
+      target,
+    })
+    target.watch(fn)
+    trigger(0)
+    trigger(1)
+    //note that during first trigger call, source is not called yet
+    //in general, users should avoid such a backward-clocking
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+})
 
 it('should not accept undefined clocks', () => {
   expect(() => {
@@ -21,8 +124,8 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${Kind.event}
     ${createEvent()}  | ${createEvent()}  | ${Kind.event}
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
-    expect(sample(source, clock).kind).toBe(kind)
-  })
+  expect(sample(source, clock).kind).toBe(kind)
+})
   test.each`
     source            | clock             | kind
     ${createStore(0)} | ${createStore(0)} | ${Kind.store}
@@ -30,13 +133,13 @@ describe('sample type', () => {
     ${createEvent()}  | ${createStore(0)} | ${Kind.event}
     ${createEvent()}  | ${createEvent()}  | ${Kind.event}
   `(
-    `$kind <- $source.kind by $clock.kind with handler`,
-    ({source, clock, kind}) => {
-      expect(
-        sample(source, clock, (source, clock) => ({source, clock})).kind,
-      ).toBe(kind)
-    },
-  )
+  `$kind <- $source.kind by $clock.kind with handler`,
+  ({source, clock, kind}) => {
+    expect(
+      sample(source, clock, (source, clock) => ({source, clock})).kind,
+    ).toBe(kind)
+  },
+)
 })
 
 describe('sample', () => {
@@ -63,36 +166,36 @@ describe('sample', () => {
       ${false} | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 2}], [{x: 3}]]}
       ${true}  | ${[[{x: 1}], [{x: 2}], [{x: 3}]]} | ${[[{x: 1}], [{x: 2}]]}
     `(
-      'depended on order of execution (greedy = $greedy)',
-      ({greedy, resultDirect, resultBacktracking}) => {
-        test('direct order', () => {
-          const A = createEvent()
-          const B = A.map(x => ({x}))
+  'depended on order of execution (greedy = $greedy)',
+  ({greedy, resultDirect, resultBacktracking}) => {
+    test('direct order', () => {
+      const A = createEvent()
+      const B = A.map(x => ({x}))
 
-          //$todo
-          sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
+      //$todo
+      sample(A, B, (A, B) => B, greedy).watch(e => spy(e))
 
-          A(1)
-          A(2)
-          A(3)
+      A(1)
+      A(2)
+      A(3)
 
-          expect(getSpyCalls()).toEqual(resultDirect)
-        })
-        test('backtracking', () => {
-          const A = createEvent()
-          const B = A.map(x => ({x}))
+      expect(getSpyCalls()).toEqual(resultDirect)
+    })
+    test('backtracking', () => {
+      const A = createEvent()
+      const B = A.map(x => ({x}))
 
-          //$todo
-          sample(B, A, B => B, greedy).watch(e => spy(e))
+      //$todo
+      sample(B, A, B => B, greedy).watch(e => spy(e))
 
-          A(1)
-          A(2)
-          A(3)
+      A(1)
+      A(2)
+      A(3)
 
-          expect(getSpyCalls()).toEqual(resultBacktracking)
-        })
-      },
-    )
+      expect(getSpyCalls()).toEqual(resultBacktracking)
+    })
+  },
+)
 
     it('works with sibling events', () => {
       const fn1 = jest.fn()
@@ -260,7 +363,7 @@ describe('sample', () => {
       expect(getSpyCalls()).toEqual([[{x: 'baz'}]])
       expect(spy).toHaveBeenCalledTimes(1)
     })
-    it('support watchers as usual', async () => {
+    it('support watchers as usual', async() => {
       const fn1 = jest.fn()
       const fn2 = jest.fn()
       const hello = createEffect({
@@ -285,24 +388,24 @@ describe('sample', () => {
         ${false}
         ${true}
       `(
-        'event call will not break watchers (greedy = $greedy)',
-        async ({greedy}) => {
-          const fn1 = jest.fn()
-          const hello = createEvent()
-          const run = createEvent()
+  'event call will not break watchers (greedy = $greedy)',
+  async({greedy}) => {
+    const fn1 = jest.fn()
+    const hello = createEvent()
+    const run = createEvent()
 
-          //$todo
-          sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
-          //$todo
-          sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
+    //$todo
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => {})
+    //$todo
+    sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
-          run('R')
-          hello('hello')
+    run('R')
+    hello('hello')
 
-          run('RR')
-          expect(fn1).toHaveBeenCalledTimes(1)
-        },
-      )
+    run('RR')
+    expect(fn1).toHaveBeenCalledTimes(1)
+  },
+)
     })
     test('effect source with store as target', () => {})
     test('effect source with effect as target', () => {})
