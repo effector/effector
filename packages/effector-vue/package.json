@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "20.3.1",
+  "version": "20.3.2",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
@@ -27,7 +27,11 @@
     "effector-vue.cjs.js.flow",
     "effector-vue.es.js.flow",
     "effector-vue.umd.js.flow",
-    "compat.js.flow"
+    "compat.js.flow",
+    "effector-vue.cjs.d.ts",
+    "effector-vue.es.d.ts",
+    "effector-vue.umd.d.ts",
+    "compat.d.ts"
   ],
   "keywords": [
     "vue",

@@ -22,7 +22,11 @@
     "adapter.cjs.js.flow",
     "adapter.es.js.flow",
     "adapter.umd.js.flow",
-    "compat.js.flow"
+    "compat.js.flow",
+    "adapter.cjs.d.ts",
+    "adapter.es.d.ts",
+    "adapter.umd.d.ts",
+    "compat.d.ts"
   ],
   "typings": "index.d.ts",
   "keywords": [

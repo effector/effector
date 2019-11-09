@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "20.6.0",
+  "version": "20.6.1",
   "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
@@ -27,6 +27,10 @@
     "effector.es.js.flow",
     "effector.umd.js.flow",
     "compat.js.flow",
+    "effector.cjs.d.ts",
+    "effector.es.d.ts",
+    "effector.umd.d.ts",
+    "compat.d.ts",
     "babel-plugin.js",
     "babel-plugin-react.js",
     "plugin/defaultMetaVisitor.js",

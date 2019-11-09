@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "20.4.0",
+  "version": "20.4.1",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
@@ -28,6 +28,10 @@
     "effector-react.es.js.flow",
     "effector-react.umd.js.flow",
     "compat.js.flow",
+    "effector-react.cjs.d.ts",
+    "effector-react.es.d.ts",
+    "effector-react.umd.d.ts",
+    "compat.d.ts",
     "ssr.js",
     "ssr.js.map"
   ],

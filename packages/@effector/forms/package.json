@@ -23,10 +23,14 @@
     "forms.cjs.js.flow",
     "forms.es.js.flow",
     "forms.umd.js.flow",
-    "compat.js.flow"
+    "compat.js.flow",
+    "forms.cjs.d.ts",
+    "forms.es.d.ts",
+    "forms.umd.d.ts",
+    "compat.d.ts"
   ],
   "dependencies": {
-    "effector": "^20.5.0"
+    "effector": "^20.6.1"
   },
   "keywords": [
     "effector",
