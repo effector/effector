@@ -122,7 +122,7 @@ export function massCopy(
 
 /* eslint-disable max-len */
 /**
- * @example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js
+ * @example ../../src/react/createComponent.js -> ./createComponent.js
  */
 export const getSourcemapPathTransform = (name: string) =>
   function sourcemapPathTransform(relativePath: string) {
@@ -130,7 +130,7 @@ export const getSourcemapPathTransform = (name: string) =>
     if (extname(packagePath) !== '') {
       packagePath = dirname(packagePath)
     }
-    return join(`node_modules/${name}`, relative(packagePath, relativePath))
+    return `./${relative(packagePath, relativePath)}`
   }
 
 export async function loadYaml(url: string) {
