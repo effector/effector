@@ -29,6 +29,14 @@ export type Cmd =
   | Barrier
   | Tap
   | Batch
+  | ReadStack
+export type ReadStack = {|
+  +id: ID,
+  +type: 'stack',
+  +data: {|
+    +to: Graph,
+  |},
+|}
 export type Batch = {|
   +id: ID,
   +type: 'batch',

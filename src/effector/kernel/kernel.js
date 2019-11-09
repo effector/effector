@@ -70,6 +70,9 @@ const exec = () => {
     ) {
       const step = graph.seq[stepn]
       switch (step.type) {
+        case 'stack':
+          pushHeap(getData(step).to, 0, new Stack(stack, stack), 'pure')
+          break
         case 'batch': {
           const blocks = readRef(stack.value)
           const ctx = readRef(stack.parent.value)
