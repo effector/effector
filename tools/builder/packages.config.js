@@ -42,9 +42,9 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.6.0',
-  'effector-react': '20.4.0',
-  'effector-vue': '20.3.1',
+  effector: '20.6.1',
+  'effector-react': '20.4.1',
+  'effector-vue': '20.3.2',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
@@ -70,11 +70,16 @@ const getFiles = name => [
   `${name}.cjs.js.map`,
   `${name}.umd.js.map`,
   'compat.js.map',
-  //typings
+  //flow typings
   `${name}.cjs.js.flow`,
   `${name}.es.js.flow`,
   `${name}.umd.js.flow`,
   'compat.js.flow',
+  //ts typings
+  `${name}.cjs.d.ts`,
+  `${name}.es.d.ts`,
+  `${name}.umd.d.ts`,
+  'compat.d.ts',
 ]
 
 const dependsOnEffector = {
