@@ -22,7 +22,16 @@ export default {
     () => massCopy('.', 'npm/effector', ['README.md']),
     () =>
       massCopy('packages/effector', 'npm/effector', [
-        'index.d.ts',
+        [
+          'index.d.ts',
+          [
+            'index.d.ts',
+            'effector.cjs.d.ts',
+            'effector.es.d.ts',
+            'effector.umd.d.ts',
+            'compat.d.ts',
+          ],
+        ],
         'package.json',
         [
           'index.js.flow',
@@ -54,7 +63,16 @@ export default {
     copyLicense('effector-react'),
     () =>
       massCopy('packages/effector-react', 'npm/effector-react', [
-        'index.d.ts',
+        [
+          'index.d.ts',
+          [
+            'index.d.ts',
+            'effector-react.cjs.d.ts',
+            'effector-react.es.d.ts',
+            'effector-react.umd.d.ts',
+            'compat.d.ts',
+          ],
+        ],
         'README.md',
         'package.json',
         [
@@ -76,7 +94,16 @@ export default {
     copyLicense('effector-vue'),
     () =>
       massCopy('packages/effector-vue', 'npm/effector-vue', [
-        'index.d.ts',
+        [
+          'index.d.ts',
+          [
+            'index.d.ts',
+            'effector-vue.cjs.d.ts',
+            'effector-vue.es.d.ts',
+            'effector-vue.umd.d.ts',
+            'compat.d.ts',
+          ],
+        ],
         'README.md',
         'package.json',
         [
