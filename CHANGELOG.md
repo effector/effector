@@ -1,5 +1,10 @@
 # Changelog
 
+## effector 20.6.1, effector-react 20.4.1, effector-vue 20.3.2
+
+- Add typescript typings for [compat builds](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2010)
+- Improve built-in source maps
+
 ## effector 20.6.0
 
 - Add support for arrays to `forward`
