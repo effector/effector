@@ -111,25 +111,6 @@ test('createStore', () => {
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
-describe.skip('pipe aka .to', () => {
-  test('event.to', () => {
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = createStoreObject({counter, text, foo: 'bar'})
-
-    const e1: Event<string> = createEvent('e1')
-    //$todo
-    e1.to(store, (state, payload) => ({
-      ...state,
-      foo: payload,
-    }))
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-    e1('baz')
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
-  })
-  test('store.to', () => {})
-})
 describe('store.on', () => {
   test('store.on(event)', () => {
     const counter = createStore(0)
