@@ -20,6 +20,7 @@ title: Prior Art
 
 ## API
 
+- [re-frame](https://github.com/day8/re-frame)
 - [flux](https://facebook.github.io/flux/)
 - [redux](https://redux.js.org/)
 - [redux-act](https://github.com/pauldijou/redux-act)
