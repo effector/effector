@@ -12,6 +12,8 @@ import {
   realmDomain,
   realmInterval,
   realmTimeout,
+  realmClearInterval,
+  realmClearTimeout,
   realmComponent,
   realmStatus,
 } from '.'
@@ -20,6 +22,9 @@ import {intervals, timeouts, stats} from './state'
 
 intervals
   .on(realmInterval, (state, id) => [...state, id])
+  .on(realmClearInterval, (state, removed) =>
+    state.filter(id => id !== removed),
+  )
   .on(changeSources, state => {
     for (const id of state) {
       global.clearInterval(id)
@@ -35,6 +40,7 @@ intervals
 
 timeouts
   .on(realmTimeout, (state, id) => [...state, id])
+  .on(realmClearTimeout, (state, removed) => state.filter(id => id !== removed))
   .on(changeSources, state => {
     for (const id of state) {
       global.clearTimeout(id)
@@ -171,6 +177,9 @@ realmDomain.watch(domain => {
   domain.onCreateDomain(event => realmDomain(event))
 })
 
-// realmInvoke.watch(e => console.log('realm invoke', e));
-// realmEvent.watch(e => console.log('realm event', e.shortName));
-// realmStore.watch(e => console.log('realm store', e.shortName));
+realmClearInterval.watch(id => {
+  global.clearInterval(id)
+})
+realmClearTimeout.watch(id => {
+  global.clearTimeout(id)
+})

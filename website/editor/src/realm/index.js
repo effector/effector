@@ -46,5 +46,7 @@ export const {realmEvent, realmStore, realmEffect, realmDomain} = split(
 
 export const realmInterval: Event<IntervalID> = createEvent()
 export const realmTimeout: Event<TimeoutID> = createEvent()
+export const realmClearInterval: Event<IntervalID> = createEvent()
+export const realmClearTimeout: Event<TimeoutID> = createEvent()
 export const realmClearNode: Event<Unit<any>> = createEvent()
 export const realmComponent: Event<StoreView<any, any>> = createEvent()

@@ -5,7 +5,13 @@ import * as ReactDOM from 'react-dom'
 import * as Effector from 'effector'
 import * as EffectorReact from 'effector-react'
 
-import {realmInvoke, realmInterval, realmTimeout} from '../realm'
+import {
+  realmInvoke,
+  realmInterval,
+  realmTimeout,
+  realmClearInterval,
+  realmClearTimeout,
+} from '../realm'
 import {consoleMap} from '../logs'
 
 export function prepareRuntime(effector: typeof Effector, version: string) {
@@ -37,12 +43,19 @@ export function prepareRuntime(effector: typeof Effector, version: string) {
     console: consoleMap(),
     setInterval,
     setTimeout,
+    clearInterval,
+    clearTimeout,
     __VERSION__: version,
     effector,
     ...api,
   }
 }
-
+function clearInterval(id) {
+  realmClearInterval(id)
+}
+function clearTimeout(id) {
+  realmClearTimeout(id)
+}
 function setInterval<TArguments: Array<mixed>>(
   callback: (...args: TArguments) => mixed,
   timeout?: number,
