@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event} from './unit.h'
-import {createEvent} from './event'
+import {createEvent} from './createEvent'
 
 declare export function createApi<
   S,

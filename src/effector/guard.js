@@ -3,7 +3,7 @@
 import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
-import {createEvent} from './event'
+import {createEvent} from './createEvent'
 import {is, step, createNode} from './stdlib'
 
 export function guard(source: any, config: any) {

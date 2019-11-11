@@ -2,7 +2,7 @@
 
 import type {Store, Event, Effect, Domain} from './unit.h'
 import {nextUnitID, own, createNode} from './stdlib'
-import {createStore} from './store'
+import {createStore} from './createStore'
 import {
   normalizeConfig,
   type Config,
@@ -11,8 +11,8 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from './config'
-import {createEvent} from './event'
-import {createEffect} from './effect'
+import {createEvent} from './createEvent'
+import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
 

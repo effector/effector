@@ -16,7 +16,7 @@ import {
   getGraph,
   nextUnitID,
 } from './stdlib'
-import {createEvent} from './event'
+import {createEvent} from './createEvent'
 import {forward, createLinkNode} from './forward'
 import {createName, mapName, type CompositeName} from './naming'
 import {thru} from './thru'

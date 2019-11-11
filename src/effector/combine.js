@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store} from './unit.h'
-import {createStore} from './store'
+import {createStore} from './createStore'
 import {
   is,
   step,

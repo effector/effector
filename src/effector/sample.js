@@ -10,8 +10,8 @@ import {
   own,
   is,
 } from './stdlib'
-import {createStore} from './store'
-import {createEvent} from './event'
+import {createStore} from './createStore'
+import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'
 
 export function sample(
