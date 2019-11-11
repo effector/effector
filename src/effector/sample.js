@@ -1,6 +1,6 @@
 //@flow
 /* eslint-disable no-nested-ternary */
-import {combine} from '../combine'
+import {combine} from './combine'
 import {
   type Graphite,
   step,
@@ -9,10 +9,10 @@ import {
   writeRef,
   own,
   is,
-} from '../stdlib'
-import {createStore} from '../store'
-import {createEvent} from '../event'
-import {createLinkNode} from '../forward'
+} from './stdlib'
+import {createStore} from './store'
+import {createEvent} from './event'
+import {createLinkNode} from './forward'
 
 export function sample(
   source: any,

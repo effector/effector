@@ -2,16 +2,16 @@
 
 import $$observable from 'symbol-observable'
 
-import type {Event, Effect} from '../unit.h'
-import {step, createNode, bind, nextUnitID} from '../stdlib'
-import {launch} from '../kernel'
+import type {Event, Effect} from './unit.h'
+import {step, createNode, bind, nextUnitID} from './stdlib'
+import {launch} from './kernel'
 
-import type {Subscription} from '../index.h'
-import {normalizeConfig, type EventConfigPart, type Config} from '../config'
-import {type CompositeName, createName, mapName, joinName} from '../naming'
-import {thru} from '../thru'
-import {createLinkNode} from '../forward'
-import {watchUnit} from '../watch'
+import type {Subscription} from './index.h'
+import {normalizeConfig, type EventConfigPart, type Config} from './config'
+import {type CompositeName, createName, mapName, joinName} from './naming'
+import {thru} from './thru'
+import {createLinkNode} from './forward'
+import {watchUnit} from './watch'
 
 declare export function createEvent<Payload>(
   name?: string | EventConfigPart,

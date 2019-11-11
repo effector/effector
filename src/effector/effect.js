@@ -1,12 +1,12 @@
 //@flow
 
-import type {Event, Effect} from '../unit.h'
-import {step, own, bind, createNode} from '../stdlib'
-import {upsertLaunch} from '../kernel'
-import {createEvent} from '../event'
-import {createStore} from '../store'
-import {normalizeConfig, type EffectConfigPart, type Config} from '../config'
-import {joinName, type CompositeName} from '../naming'
+import type {Event, Effect} from './unit.h'
+import {step, own, bind, createNode} from './stdlib'
+import {upsertLaunch} from './kernel'
+import {createEvent} from './event'
+import {createStore} from './store'
+import {normalizeConfig, type EffectConfigPart, type Config} from './config'
+import {joinName, type CompositeName} from './naming'
 import {Defer} from './defer'
 
 declare export function createEffect<Payload, Done>(

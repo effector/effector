@@ -2,8 +2,8 @@
 
 import $$observable from 'symbol-observable'
 
-import type {Store, Event} from '../unit.h'
-import {upsertLaunch} from '../kernel'
+import type {Store, Event} from './unit.h'
+import {upsertLaunch} from './kernel'
 import {
   own,
   step,
@@ -15,19 +15,19 @@ import {
   is,
   getGraph,
   nextUnitID,
-} from '../stdlib'
-import {createEvent} from '../event'
-import {forward, createLinkNode} from '../forward'
-import {createName, mapName, type CompositeName} from '../naming'
-import {thru} from '../thru'
-import type {Subscriber} from '../index.h'
-import {watchUnit} from '../watch'
+} from './stdlib'
+import {createEvent} from './event'
+import {forward, createLinkNode} from './forward'
+import {createName, mapName, type CompositeName} from './naming'
+import {thru} from './thru'
+import type {Subscriber} from './index.h'
+import {watchUnit} from './watch'
 import {
   type Config,
   type StoreConfigPart as ConfigPart,
   normalizeConfig,
-} from '../config'
-import {createSubscription} from '../subscription'
+} from './config'
+import {createSubscription} from './subscription'
 
 export function createStore<State>(
   currentState: State,
