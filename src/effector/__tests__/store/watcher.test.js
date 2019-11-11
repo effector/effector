@@ -1,7 +1,6 @@
 //@flow
 
-import {createStore} from '..'
-import {createEvent} from '../../event'
+import {createStore, createEvent} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 it('support watchers for event', () => {

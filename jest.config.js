@@ -45,19 +45,11 @@ module.exports = {
   projects: createProjectList([
     {
       effector: {
-        testMatch: [
-          `<rootDir>/src/effector/__tests__/**/*.test.js`,
-          `<rootDir>/src/effector/__tests__/**/*.spec.js`,
-        ],
+        testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
       },
     },
-    'effector/effect',
-    'effector/event',
-    'effector/store',
     'effector/naming',
     'effector/kernel',
-    'effector/stdlib',
-    'effector/sample',
     'static-land',
     'forms',
     'babel',

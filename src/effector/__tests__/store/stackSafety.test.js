@@ -1,6 +1,6 @@
 //@flow
 
-import {createStore} from '..'
+import {createStore} from 'effector'
 
 it('stack safe', () => {
   const DEPTH = 10000

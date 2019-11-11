@@ -1,7 +1,6 @@
 //@flow
 
-import {createEffect} from '..'
-import {createDomain} from '../../domain'
+import {createEffect, createDomain} from 'effector'
 
 test("should return it's own name on effect.getType()", () => {
   expect(createEffect('foo').getType()).toBe('foo')
