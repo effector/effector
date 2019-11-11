@@ -26,15 +26,9 @@ class Local {
 let layerID = 0
 let heap: leftist = null
 const barriers = new Set()
-const pushHeap = (
-  step: Graph,
-  firstIndex: number,
-  stack: Stack,
-  type: PriorityTag,
-) => {
+const pushHeap = (firstIndex: number, stack: Stack, type: PriorityTag) => {
   heap = insert(
     {
-      step,
       firstIndex,
       stack,
       resetStop: currentResetStop,
@@ -57,11 +51,13 @@ const exec = () => {
   const meta = {
     stop: false,
   }
+  let graph
   let value
   mem: while (heap) {
     value = heap.value
     heap = deleteMin(heap)
-    const {step: graph, firstIndex, stack, resetStop, type} = value
+    const {firstIndex, stack, resetStop, type} = value
+    graph = stack.node
     const local = new Local(graph.scope)
     for (
       let stepn = firstIndex;
@@ -71,16 +67,15 @@ const exec = () => {
       const step = graph.seq[stepn]
       switch (step.type) {
         case 'stack':
-          pushHeap(getData(step).to, 0, new Stack(stack, stack), 'pure')
+          pushHeap(0, new Stack(stack, stack, getData(step).to), 'pure')
           break
         case 'batch': {
           const blocks = readRef(stack.value)
           const ctx = readRef(stack.parent.value)
           for (let i = 0; i < blocks.length; i++) {
             pushHeap(
-              getData(step).blocks[blocks[i]],
               0,
-              new Stack(ctx, stack.parent),
+              new Stack(ctx, stack.parent, getData(step).blocks[blocks[i]]),
               'pure',
             )
           }
@@ -92,7 +87,7 @@ const exec = () => {
           if (stepn !== firstIndex || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
-              pushHeap(graph, stepn, stack, priority)
+              pushHeap(stepn, stack, priority)
             }
             continue mem
           }
@@ -123,7 +118,7 @@ const exec = () => {
         case 'run':
           /** exec 'compute' step when stepn === firstIndex */
           if (stepn !== firstIndex || type !== 'effect') {
-            pushHeap(graph, stepn, stack, 'effect')
+            pushHeap(stepn, stack, 'effect')
             continue mem
           }
         case 'compute':
@@ -142,9 +137,8 @@ const exec = () => {
       currentResetStop = true
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
         pushHeap(
-          graph.next[stepn],
           0,
-          new Stack(readRef(stack.value), stack),
+          new Stack(readRef(stack.value), stack, graph.next[stepn]),
           'child',
         )
       }
@@ -157,13 +151,13 @@ const exec = () => {
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  pushHeap(getGraph(unit), 0, new Stack(payload, null), 'pure')
+  pushHeap(0, new Stack(payload, null, getGraph(unit)), 'pure')
   if (upsert && alreadyStarted) return
   exec()
 }
 export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
   for (let i = 0; i < units.length; i++) {
-    pushHeap(getGraph(units[i]), 0, new Stack(payloads[i], null), 'pure')
+    pushHeap(0, new Stack(payloads[i], null, getGraph(units[i])), 'pure')
   }
   if (alreadyStarted) return
   exec()
