@@ -260,10 +260,10 @@ turnOff() // nothing has changed
 <hr />
 
 ## More examples
-
 - [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
 - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
+- [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
 - [Range input component](https://share.effector.dev/oRB2iB8M)
 - [Modal dialog](https://share.effector.dev/B2ShiBzm)
 - [Conditional fitering](https://share.effector.dev/1EsAGMyq)
