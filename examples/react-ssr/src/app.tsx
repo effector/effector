@@ -16,9 +16,8 @@ export const app = createDomain()
 export const startServer = app.event<string>()
 export const startClient = app.event()
 
-const isClient = app
-  .store(false)
-  .on(startClient, () => true)
+const isServer = app.store(true)
+  .on(startClient, () => false)
   .reset(startServer)
 
 const selectUserEvent = app.event<string>()
@@ -62,7 +61,7 @@ sample({
 })
 const Meta = () => (
   <p>
-    This page is rendered on <b>{useStore(isClient) ? 'client' : 'server'}</b>
+    This page is rendered on <b>{useStore(isServer) ? 'server' : 'client'}</b>
   </p>
 )
 const User = () => <h2>{useStore(user)}</h2>
