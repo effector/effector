@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "module": "es2015",
+    "target": "esnext",
+    "jsx": "react",
+    "allowJs": true,
+    "noImplicitAny": true,
+    "allowSyntheticDefaultImports": true,
+    "lib": ["dom", "esnext"]
+  },
+  "exclude": ["./dist"],
+  "include": ["./src"]
+}
