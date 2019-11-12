@@ -257,7 +257,7 @@ export type Step = {
   next: Array<Step>
   seq: Array<Cmd>
   scope: {[field: string]: any}
-  meta: {}
+  meta: {[field: string]: any}
   family: {
     type: 'regular' | 'crosslink'
     links: Step[]
