@@ -16,6 +16,11 @@ export const app = createDomain()
 export const startServer = app.event<string>()
 export const startClient = app.event()
 
+const isClient = app
+  .store(false)
+  .on(startClient, () => true)
+  .reset(startServer)
+
 const selectUserEvent = app.event<string>()
 
 const fetchUser = app.effect<string, {name: string; friends: string[]}>({
@@ -55,7 +60,11 @@ sample({
   clock: fetchUser.done,
   target: log,
 })
-
+const Meta = () => (
+  <p>
+    This page is rendered on <b>{useStore(isClient) ? 'client' : 'server'}</b>
+  </p>
+)
 const User = () => <h2>{useStore(user)}</h2>
 const Friends = () => useList(friends, friend => <li>{friend}</li>)
 const Total = () => <small>Total: {useStore(friendsTotal)}</small>
@@ -98,6 +107,7 @@ export const App = ({root}) => (
     <Total />
     <h3>Users:</h3>
     <UserList />
+    <Meta />
   </Provider>
 )
 
