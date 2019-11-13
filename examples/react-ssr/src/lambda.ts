@@ -24,6 +24,7 @@ async function compile({content, data}: {content: string; data: any}) {
 export default async(req, res) => {
   const url = req.url.replace('/ssr', '').replace(/^\//, '')
   if (url === '') {
+    const routes = Object.keys(users)
     const route = routes[(Math.random() * routes.length) | 0]
     res.setHeader('Location', `/${route}`)
     res.status(302).send('')
