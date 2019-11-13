@@ -7,7 +7,7 @@ import {
   createDomain,
   clearNode,
 } from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 test('clearNode(store)', () => {

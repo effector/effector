@@ -1,7 +1,7 @@
 //@flow
 
 import {combine, createStore, Store} from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 describe('combine cases (should pass)', () => {

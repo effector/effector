@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import {restore, createEvent, createEffect, createStore, Store} from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 describe('restore cases (should pass)', () => {

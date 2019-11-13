@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import {createStoreObject, createDomain, clearNode, Effect} from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 test('createDomain', () => {

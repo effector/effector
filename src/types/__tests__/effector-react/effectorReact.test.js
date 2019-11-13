@@ -3,7 +3,7 @@
 import * as React from 'react'
 import {createStore} from 'effector'
 import {createComponent, createGate, useGate} from 'effector-react'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 test('createComponent', () => {

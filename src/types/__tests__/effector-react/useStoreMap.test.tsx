@@ -4,7 +4,7 @@ import React from 'react'
 import {createStore} from 'effector'
 import {useStoreMap} from 'effector-react'
 
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 type User = {

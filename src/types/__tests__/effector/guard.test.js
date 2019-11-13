@@ -1,7 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, guard, Store, Event} from 'effector'
-import setupLocation from '../../setupLocation'
 const typecheck = '{global}'
 
 describe('guard(source, config)', () => {

@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, createEffect, Event, forward} from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 test('forward between events', () => {

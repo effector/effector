@@ -6,7 +6,7 @@ import {
   /*::type*/ CompositeName,
   /*::type*/ kind,
 } from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 test('createEvent', () => {

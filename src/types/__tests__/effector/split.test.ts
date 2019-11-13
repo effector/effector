@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import {createEvent, Event, split} from 'effector'
-import setupLocation from '../../setupLocation'
+
 const typecheck = '{global}'
 
 it('should infer type by given predicate', () => {
