@@ -1,8 +1,8 @@
 .github
 .vscode
 bench/**
-examples/**
-!examples/react-ssr/**
+examples/*
+!examples/react-ssr/
 flow/**
 flow-typed/**
 forks/**
