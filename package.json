@@ -142,9 +142,6 @@
     }
   ],
   "repository": "https://github.com/zerobias/effector",
-  "resolutions": {
-    "nan": "file:./forks/nan"
-  },
   "alias": {
     "effector": "./src/effector/index.js",
     "effector-react": "./src/react",
