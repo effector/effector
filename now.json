@@ -33,15 +33,19 @@
   "routes": [
     {
       "src": "/ssr/static/(.*)",
-      "dest": "/examples/react-ssr/dist/client/(.*)"
+      "dest": "/examples/react-ssr/src/index.html"
     },
     {
       "src": "/ssr/api/(.*)",
       "dest": "/examples/react-ssr/src/api.js"
     },
     {
-      "src": "/ssr(.*)",
-      "dest": "/examples/react-ssr/dist/server/lambda.js"
+      "src": "/ssr/(.*)",
+      "dest": "/examples/react-ssr/src/lambda.ts"
+    },
+    {
+      "src": "/ssr",
+      "dest": "/examples/react-ssr/src/lambda.ts"
     },
     {
       "src": "/favicon.ico",
