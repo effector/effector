@@ -27,7 +27,7 @@
   "routes": [
     {
       "src": "/ssr/api/(.*)",
-      "dest": "/examples/react-ssr/src/api.js/$1"
+      "dest": "/examples/react-ssr/src/api.js$1"
     },
     {
       "src": "/favicon.ico",
