@@ -18,7 +18,7 @@ const data = {
 }
 
 module.exports = async(req, res) => {
-  const url = req.url.replace(/\//g, '').replace('/ssr/api/', '')
+  const url = req.url.replace('/ssr/api', '').replace(/\//g, '')
   console.log('url', req.url, url)
   if (data.hasOwnProperty(url)) {
     res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
