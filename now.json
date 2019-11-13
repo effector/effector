@@ -26,8 +26,8 @@
   ],
   "routes": [
     {
-      "src": "/ssr/api/(.*)",
-      "dest": "/website/api/api.js/$1"
+      "src": "/ssr/api",
+      "dest": "/website/api/api.js"
     },
     {
       "src": "/favicon.ico",

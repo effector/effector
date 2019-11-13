@@ -18,8 +18,8 @@ const data = {
 }
 
 module.exports = async(req, res) => {
-  console.log('url', req.url)
-  const url = req.url.replace(/\//g, '')
+  const url = req.url.replace(/\//g, '').replace('/ssr/api/', '')
+  console.log('url', req.url, url)
   if (data.hasOwnProperty(url)) {
     res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
     res.status(200).send(data[url])
