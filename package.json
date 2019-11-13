@@ -143,7 +143,6 @@
   ],
   "repository": "https://github.com/zerobias/effector",
   "resolutions": {
-    "v8-profiler-node8": "file:./forks/v8-profiler-node8",
     "nan": "file:./forks/nan"
   },
   "alias": {
