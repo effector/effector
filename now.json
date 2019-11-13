@@ -22,12 +22,12 @@
       "src": "website/media/*.*",
       "use": "@now/static"
     },
-    {"src": "examples/react-ssr/src/api.js", "use": "@now/node"}
+    {"src": "website/api/api.js", "use": "@now/node"}
   ],
   "routes": [
     {
       "src": "/ssr/api/(.*)",
-      "dest": "/examples/react-ssr/src/api.js"
+      "dest": "/website/api/api.js/$1"
     },
     {
       "src": "/favicon.ico",
