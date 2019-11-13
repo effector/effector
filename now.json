@@ -22,12 +22,26 @@
       "src": "website/media/*.*",
       "use": "@now/static"
     },
-    {"src": "website/api/api.js", "use": "@now/node"}
+    {
+      "src": "examples/react-ssr/package.json",
+      "use": "@now/static-build",
+      "config": {"distDir": "dist/client"}
+    },
+    {"src": "examples/react-ssr/src/api.js", "use": "@now/node"},
+    {"src": "examples/react-ssr/dist/server/lambda.js", "use": "@now/node"}
   ],
   "routes": [
     {
+      "src": "/ssr/static/(.*)",
+      "dest": "/examples/react-ssr/dist/client/(.*)"
+    },
+    {
       "src": "/ssr/api/(.*)",
-      "dest": "/website/api/api.js"
+      "dest": "/examples/react-ssr/src/api.js"
+    },
+    {
+      "src": "/ssr(.*)",
+      "dest": "/examples/react-ssr/dist/server/lambda.js"
     },
     {
       "src": "/favicon.ico",
