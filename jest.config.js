@@ -70,9 +70,8 @@ module.exports = {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
-    {
+    !boolean(process.env.NO_TYPE_TESTS, false) && {
       types: {
-        runner: './src/types/src/runner.js',
         testRunner: './src/types/src/testRunner.js',
         testMatch: [
           `<rootDir>/src/types/__tests__/**/*.test.js`,
@@ -105,6 +104,7 @@ if (boolean(process.env.LINT, false)) {
 }
 
 function createProjectList(items) {
+  items = items.filter(Boolean)
   const list = []
   for (const item of items) {
     if (typeof item === 'string') {

@@ -1,6 +1,14 @@
 const {resolve, relative, parse, sep, join} = require('path')
 const execa = require('execa')
-const {readFile, remove, copyFile, outputJSON, pathExists} = require('fs-extra')
+const {
+  readFile,
+  remove,
+  copyFile,
+  copy,
+  outputJSON,
+  pathExists,
+  ensureDir,
+} = require('fs-extra')
 
 const jestAdapter = require('jest-circus/runner')
 
@@ -11,35 +19,47 @@ module.exports = async function(
   runtime,
   testPath,
 ) {
+  const reportPath = resolve(
+    __dirname,
+    '..',
+    '.reports',
+    `type-report-${hashCode(
+      relative(resolve(__dirname, '..', '..', TEST_DIR), testPath),
+    )}.json`,
+  )
   await typeCheck(testPath)
-  return jestAdapter(globalConfig, config, environment, runtime, testPath)
+  try {
+    return await jestAdapter(
+      globalConfig,
+      config,
+      environment,
+      runtime,
+      testPath,
+    )
+  } finally {
+    if (REMOVE_REPORT) {
+      await remove(reportPath)
+    }
+  }
 }
 
+const REMOVE_REPORT = true
 const PRINT_FOREIGN_FILE_NAME = false
 const TEST_DIR = 'types'
 
 async function typeCheck(testPath) {
   const root = resolve(__dirname, '..', '..', TEST_DIR)
   const repoRoot = resolve(__dirname, '..', '..', '..')
-  /*
-  TODO use test path file name to run tests in parallel,
-  thereby avoiding both files with hardcoded names and race conditions,
-  because running tests sequentially is a waaay too slow
-  */
-  const movedFileFlow = resolve(
-    __dirname,
-    '..',
-    '__fixtures__',
-    'flow',
-    'index.js',
-  )
-  const movedFileTS = resolve(
-    __dirname,
-    '..',
-    '__fixtures__',
-    'typescript',
-    'index.tsx',
-  )
+  const flowTemplate = resolve(__dirname, '..', '__fixtures__', 'flow')
+  const tsTemplate = resolve(__dirname, '..', '__fixtures__', 'typescript')
+  const movedDirFlow = (dirName = 'flow') =>
+    resolve(__dirname, '..', '__fixtures__', dirName)
+  const movedDirTS = (dirName = 'typescript') =>
+    resolve(__dirname, '..', '__fixtures__', dirName)
+  const movedFileFlow = (dirName = 'flow') =>
+    resolve(movedDirFlow(dirName), 'index.js')
+  const movedFileTS = (dirName = 'typescript') =>
+    resolve(movedDirTS(dirName), 'index.tsx')
 
   const testMeta = {
     flow: false,
@@ -66,20 +86,45 @@ async function typeCheck(testPath) {
   for (const {type, report} of reports) {
     outputData[type] = report
   }
-
-  await outputJSON(resolve(__dirname, '..', 'type-report.json'), outputData, {
+  const outputPath = resolve(
+    __dirname,
+    '..',
+    '.reports',
+    `type-report-${hashCode(relativeTestPath)}.json`,
+  )
+  await outputJSON(outputPath, outputData, {
     spaces: 2,
   })
   async function tsBranch() {
-    await copyFile(testPath, movedFileTS)
-    const report = await runTypeScript()
-    await remove(movedFileTS)
+    const dirName = '.ts_' + hashCode(relativeTestPath)
+    const dirPath = movedDirTS(dirName)
+    await ensureDir(dirPath)
+    await Promise.all([
+      copy(tsTemplate, dirPath, {
+        overwrite: true,
+        errorOnExist: false,
+        recursive: false,
+      }),
+      copyFile(testPath, movedFileTS(dirName)),
+    ])
+    const report = await runTypeScript(dirName)
+    await remove(dirPath)
     return {type: 'ts', report: normalizeTSReport(report)}
   }
   async function flowBranch() {
-    await copyFile(testPath, movedFileFlow)
-    const report = await runFlow()
-    await remove(movedFileFlow)
+    const dirName = '.flow_' + hashCode(relativeTestPath)
+    const dirPath = movedDirFlow(dirName)
+    await ensureDir(dirPath)
+    await Promise.all([
+      copy(flowTemplate, dirPath, {
+        overwrite: true,
+        errorOnExist: false,
+        recursive: false,
+      }),
+      copyFile(testPath, movedFileFlow(dirName)),
+    ])
+    const report = await runFlow(dirName)
+    await remove(dirPath)
     return {type: 'flow', report}
   }
   function normalizeTSReport(report) {
@@ -116,20 +161,24 @@ async function typeCheck(testPath) {
     return tsReport
   }
 
-  async function runTypeScript() {
+  async function runTypeScript(dirName = 'typescript') {
     try {
       const result = await execa('npx', [
         'tsc',
         '-p',
-        join('src', TEST_DIR, '__fixtures__', 'typescript'),
+        join('src', TEST_DIR, '__fixtures__', dirName),
       ])
-      console.warn('no errors found by typescript typecheck', result)
+      console.warn(
+        'no errors found by typescript typecheck',
+        relativeTestPath,
+        result,
+      )
       return ''
     } catch (err) {
       const cleanedMessage = err.message
         // .replace(/src\/types\//gm, '')
         .replace(
-          new RegExp(relative(repoRoot, movedFileTS), 'gm'),
+          new RegExp(relative(repoRoot, movedFileTS(dirName)), 'gm'),
           relativeTestPath,
         )
         .replace(/error TS\d+: /gm, '')
@@ -137,16 +186,20 @@ async function typeCheck(testPath) {
       return cleanedMessage //{errors: cleanedMessage}
     }
   }
-  async function runFlow() {
+  async function runFlow(dirName = 'flow') {
     const files = {}
     try {
       const result = await execa('npx', [
         'flow',
         'check',
         '--json',
-        join('src', TEST_DIR, '__fixtures__', 'flow'),
+        join('src', TEST_DIR, '__fixtures__', dirName),
       ])
-      console.warn('no errors found by flow typecheck', result)
+      console.warn(
+        'no errors found by flow typecheck',
+        relativeTestPath,
+        result,
+      )
       return []
     } catch (err) {
       const data = JSON.parse(
@@ -247,7 +300,7 @@ async function typeCheck(testPath) {
         if (currentPath.startsWith('packages'))
           currentPath = currentPath.replace('packages' + sep, '')
         currentPath = currentPath.replace(
-          new RegExp(relative(repoRoot, movedFileFlow), 'gm'),
+          new RegExp(relative(repoRoot, movedFileFlow(dirName)), 'gm'),
           relativeTestPath,
         )
 
@@ -363,4 +416,12 @@ async function typeCheck(testPath) {
       }
     }
   }
+}
+
+function hashCode(s) {
+  let h = 0
+  let i = 0
+  if (s.length > 0)
+    while (i < s.length) h = ((h << 5) - h + s.charCodeAt(i++)) | 0
+  return Math.abs(h).toString(36)
 }
