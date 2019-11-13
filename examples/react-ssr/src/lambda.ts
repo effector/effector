@@ -6,7 +6,7 @@ import {fork, serialize} from 'effector-react/ssr'
 import {app, startServer, App} from './app'
 import users from './users.json'
 
-const clientPath = resolve(__dirname, '..', 'client')
+const clientPath = resolve(__dirname, '..')
 const clientTemplatePath = resolve(clientPath, 'index.html')
 
 async function compile({content, data}: {content: string; data: any}) {
