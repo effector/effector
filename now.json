@@ -28,7 +28,7 @@
       "config": {"distDir": "dist/client"}
     },
     {"src": "examples/react-ssr/src/api.js", "use": "@now/node"},
-    {"src": "examples/react-ssr/dist/server/lambda.js", "use": "@now/node"}
+    {"src": "examples/react-ssr/src/lambda.ts", "use": "@now/node"}
   ],
   "routes": [
     {
