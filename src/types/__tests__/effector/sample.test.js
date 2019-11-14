@@ -330,3 +330,26 @@ describe('sample(Store<T>):Store<T>', () => {
     })
   })
 })
+
+test('edge case (should fail)', () => {
+  const event1 = createEvent()
+  const event2 = createEvent<{prop: string}>()
+
+  const store = createStore('value')
+
+  sample({
+    source: store,
+    clock: event1,
+    fn: () => ({}),
+    target: event2,
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
