@@ -25,12 +25,7 @@ exports[`graphite: show bar 1`] = `
             }
           ],
           next: [
-            Node {
-              seq: [],
-              next: [
-                Node {seq: [], next: []}
-              ]
-            },
+            Node {seq: [], next: []},
             Node {
               seq: [
                 compute: Function,
@@ -54,12 +49,7 @@ exports[`graphite: show bar 1`] = `
                     }
                   ],
                   next: [
-                    Node {
-                      seq: [],
-                      next: [
-                        Node {seq: [], next: []}
-                      ]
-                    }
+                    Node {seq: [], next: []}
                   ]
                 }
               ]
@@ -103,12 +93,7 @@ exports[`graphite: show bar 2`] = `
             }
           ],
           next: [
-            Node {
-              seq: [],
-              next: [
-                Node {seq: [], next: []}
-              ]
-            },
+            Node {seq: [], next: []},
             Node {
               seq: [
                 compute: Function,
@@ -132,12 +117,7 @@ exports[`graphite: show bar 2`] = `
                     }
                   ],
                   next: [
-                    Node {
-                      seq: [],
-                      next: [
-                        Node {seq: [], next: []}
-                      ]
-                    }
+                    Node {seq: [], next: []}
                   ]
                 }
               ]
@@ -183,12 +163,7 @@ exports[`graphite: show foo 1`] = `
                     }
                   ],
                   next: [
-                    Node {
-                      seq: [],
-                      next: [
-                        Node {seq: [], next: []}
-                      ]
-                    },
+                    Node {seq: [], next: []},
                     Node {
                       seq: [
                         compute: Function,
@@ -212,12 +187,7 @@ exports[`graphite: show foo 1`] = `
                             }
                           ],
                           next: [
-                            Node {
-                              seq: [],
-                              next: [
-                                Node {seq: [], next: []}
-                              ]
-                            }
+                            Node {seq: [], next: []}
                           ]
                         }
                       ]
@@ -251,12 +221,7 @@ exports[`graphite: show store1 1`] = `
     }
   ],
   next: [
-    Node {
-      seq: [],
-      next: [
-        Node {seq: [], next: []}
-      ]
-    },
+    Node {seq: [], next: []},
     Node {
       seq: [
         compute: Function,
@@ -280,12 +245,7 @@ exports[`graphite: show store1 1`] = `
             }
           ],
           next: [
-            Node {
-              seq: [],
-              next: [
-                Node {seq: [], next: []}
-              ]
-            }
+            Node {seq: [], next: []}
           ]
         }
       ]
@@ -311,12 +271,7 @@ exports[`graphite: show store2 1`] = `
     }
   ],
   next: [
-    Node {
-      seq: [],
-      next: [
-        Node {seq: [], next: []}
-      ]
-    }
+    Node {seq: [], next: []}
   ]
 }"
 `;
@@ -346,12 +301,7 @@ exports[`showcase: event foo 1`] = `
             }
           ],
           next: [
-            Node {
-              seq: [],
-              next: [
-                Node {seq: [], next: []}
-              ]
-            },
+            Node {seq: [], next: []},
             Node {
               seq: [
                 check: defined,
@@ -387,12 +337,7 @@ exports[`showcase: event foo 1`] = `
                     }
                   ],
                   next: [
-                    Node {
-                      seq: [],
-                      next: [
-                        Node {seq: [], next: []}
-                      ]
-                    },
+                    Node {seq: [], next: []},
                     Node {
                       seq: [
                         compute: Function,
@@ -416,12 +361,7 @@ exports[`showcase: event foo 1`] = `
                             }
                           ],
                           next: [
-                            Node {
-                              seq: [],
-                              next: [
-                                Node {seq: [], next: []}
-                              ]
-                            },
+                            Node {seq: [], next: []},
                             Node {
                               seq: [
                                 run: watcher
@@ -461,12 +401,7 @@ exports[`showcase: mapped 1`] = `
     }
   ],
   next: [
-    Node {
-      seq: [],
-      next: [
-        Node {seq: [], next: []}
-      ]
-    },
+    Node {seq: [], next: []},
     Node {
       seq: [
         run: watcher
@@ -494,12 +429,7 @@ exports[`showcase: store a 1`] = `
     }
   ],
   next: [
-    Node {
-      seq: [],
-      next: [
-        Node {seq: [], next: []}
-      ]
-    },
+    Node {seq: [], next: []},
     Node {
       seq: [
         check: defined,
@@ -535,12 +465,7 @@ exports[`showcase: store a 1`] = `
             }
           ],
           next: [
-            Node {
-              seq: [],
-              next: [
-                Node {seq: [], next: []}
-              ]
-            },
+            Node {seq: [], next: []},
             Node {
               seq: [
                 compute: Function,
@@ -564,12 +489,7 @@ exports[`showcase: store a 1`] = `
                     }
                   ],
                   next: [
-                    Node {
-                      seq: [],
-                      next: [
-                        Node {seq: [], next: []}
-                      ]
-                    },
+                    Node {seq: [], next: []},
                     Node {
                       seq: [
                         run: watcher
