@@ -73,7 +73,7 @@ export function sample(
               ? (upd, {state, fn}) => fn(readRef(state), upd)
               : (upd, {state}) => readRef(state),
           }),
-        ].filter(Boolean),
+        ],
         meta: {op: 'sample', sample: 'store'},
       }),
     ])
@@ -113,7 +113,7 @@ export function sample(
                 fn(readRef(sourceState), readRef(clockState))
               : (upd, {sourceState}) => readRef(sourceState),
           }),
-        ].filter(Boolean),
+        ],
         meta: {op: 'sample', sample: 'clock'},
       }),
     ])

@@ -4,27 +4,27 @@ import type {Subscription} from './index.h'
 import {createSubscription} from './subscription'
 
 export const createLinkNode = (
-  source: Graphite,
+  parent: Graphite,
   child: Graphite,
   {
     node,
     scope,
     meta,
   }: {|
-    +node: Array<Cmd>,
+    +node?: Array<Cmd | false | void | null>,
     scope?: {[name: string]: any, ...},
     meta?: {[name: string]: any, ...},
   |},
 ) =>
   createNode({
     node,
-    parent: [source],
-    child: [child],
+    parent,
+    child,
     scope,
     meta,
     family: {
       type: 'crosslink',
-      owners: [source, child],
+      owners: [parent, child],
       links: [child],
     },
   })
@@ -39,9 +39,8 @@ export const forward = ({
 |}): Subscription =>
   createSubscription(
     createNode({
-      node: [],
-      parent: Array.isArray(from) ? from : [from],
-      child: Array.isArray(to) ? to : [to],
+      parent: from,
+      child: to,
       meta,
       family: {
         type: 'crosslink',

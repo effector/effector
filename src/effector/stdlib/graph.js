@@ -3,33 +3,35 @@
 import type {Graph, Graphite, Cmd} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
-
+const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] =>
+  (Array.isArray(list) ? list : [list]).map(getGraph)
 export function createNode({
-  node,
-  parent = [],
-  child = [],
+  node = [],
+  parent,
+  child,
   scope = {},
   meta = {},
   family: familyRaw = {},
 }: {
-  +node: Array<Cmd>,
-  +child?: Array<Graphite>,
-  +parent?: Array<Graphite>,
+  +node?: Array<Cmd | false | void | null>,
+  +parent?: Graphite | Graphite[],
+  +child?: Graphite | Graphite[],
   scope?: {[name: string]: any, ...},
   meta?: {[name: string]: any, ...},
   family?: {
     type?: 'regular' | 'crosslink' | 'domain',
-    links?: Graphite[],
-    owners?: Graphite[],
+    links?: Graphite | Graphite[],
+    owners?: Graphite | Graphite[],
     ...
   },
   ...
 }): Graph {
-  const links = (familyRaw.links || []).map(getGraph)
-  const owners = (familyRaw.owners || []).map(getGraph)
+  const sources = arrifyNodes(parent)
+  const links = arrifyNodes(familyRaw.links)
+  const owners = arrifyNodes(familyRaw.owners)
   const result: Graph = {
-    seq: node,
-    next: child.map(getGraph),
+    seq: node.filter(Boolean),
+    next: arrifyNodes(child),
     meta,
     scope,
     family: {
@@ -44,8 +46,8 @@ export function createNode({
   for (let i = 0; i < owners.length; i++) {
     getLinks(owners[i]).push(result)
   }
-  for (let i = 0; i < parent.length; i++) {
-    getGraph(parent[i]).next.push(result)
+  for (let i = 0; i < sources.length; i++) {
+    sources[i].next.push(result)
   }
   return result
 }

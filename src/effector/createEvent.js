@@ -28,7 +28,6 @@ export function createEvent<Payload>(
   const compositeName = createName(name, parent)
   const fullName = compositeName.fullName
   const graphite = createNode({
-    node: [],
     meta: {unit: 'event', name, sid, named},
   })
 

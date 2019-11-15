@@ -87,7 +87,6 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   }
 
   const node = createNode({
-    node: [],
     scope: {history},
     meta: {unit: 'domain', name: compositeName.shortName, sid},
     family: {
