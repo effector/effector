@@ -313,7 +313,6 @@ describe('sample(Store<T>):Store<T>', () => {
         --typescript--
         Type 'Event<string>' is not assignable to type 'Event<number>'.
 
-
         --flow--
         Cannot assign 'sample(...)' to 'sample_s_edge_incorrect'
           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
@@ -379,7 +378,10 @@ describe('`target` forwarding', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ a: string; }>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<{ a: string; }>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -407,7 +409,10 @@ describe('`target` forwarding', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<null>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -434,7 +439,10 @@ describe('`target` forwarding', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{}>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<{}>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
 
       --flow--
       no errors
@@ -453,7 +461,11 @@ describe('`target` forwarding', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<null>' is not assignable to type 'Event<unknown>'.
+
 
       --flow--
       no errors
