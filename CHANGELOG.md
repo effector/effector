@@ -1,5 +1,9 @@
 # Changelog
 
+## effector 20.6.2
+
+- Improve `sample` typings for typescript (PR [#248](https://github.com/zerobias/effector/pull/248), fix [#247](https://github.com/zerobias/effector/issues/247)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+
 ## effector 20.6.1, effector-react 20.4.1, effector-vue 20.3.2
 
 - Add typescript typings for [compat builds](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2010)
