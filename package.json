@@ -1,6 +1,6 @@
 {
   "name": "effector-dev",
-  "version": "20.6.1",
+  "version": "0.0.1",
   "description": "The state manager",
   "private": true,
   "scripts": {
