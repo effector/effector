@@ -8,6 +8,13 @@
  */
 type Tuple<T = unknown> = [T] | T[]
 
+/**
+ * Non inferential type parameter usage.
+ *
+ * @see https://github.com/microsoft/TypeScript/issues/14829#issuecomment-504042546
+ */
+type NoInfer<T> = [T][T extends any ? 0 : never]
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -452,12 +459,12 @@ export function sample<A, B, C>(
 export function sample<A, B, C>(config: {
   source: Unit<A>
   clock: Unit<B>
-  fn: (source: A, clock: B) => C
+  fn: (source: A, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
 export function sample<A>(config: {
-  source: Unit<A>
+  source: Unit<NoInfer<A>>
   clock: Unit<any>
   target: Unit<A>
   greedy?: boolean

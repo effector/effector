@@ -313,7 +313,6 @@ describe('sample(Store<T>):Store<T>', () => {
         --typescript--
         Type 'Event<string>' is not assignable to type 'Event<number>'.
 
-
         --flow--
         Cannot assign 'sample(...)' to 'sample_s_edge_incorrect'
           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
@@ -331,25 +330,146 @@ describe('sample(Store<T>):Store<T>', () => {
   })
 })
 
-test('edge case (should fail)', () => {
-  const event1 = createEvent()
-  const event2 = createEvent<{prop: string}>()
+describe('`target` forwarding', () => {
+  it('should pass when a target receives a more strict (or equal) value type from a source', () => {
+    const source = createStore({a: '', b: ''})
+    const clock = createEvent()
+    const target = createEvent<{a: string}>()
 
-  const store = createStore('value')
+    sample({source, clock, target})
 
-  sample({
-    source: store,
-    clock: event1,
-    fn: () => ({}),
-    target: event2,
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
   })
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    --typescript--
-    no errors
 
-    --flow--
-    no errors
-    "
-  `)
+  it('should pass when a target receives a more strict (or equal) value type from a mapping fn', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({a: '', b: ''})
+    const target = createEvent<{a: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a source', () => {
+    const source = createStore({a: ''})
+    const clock = createEvent()
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ a: string; }>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<{ a: string; }>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({source, clock, target})
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+            const source = createStore({a: ''})
+                                   [1] ^^^^^^^
+            const target = createEvent<{a: string, b: string}>()
+                                   [2] ^^^^^^^^^^^^^^^^^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a mapping fn', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({a: ''})
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<null>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({source, clock, fn, target})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+            const fn = () => ({a: ''})
+                          [1] ^^^^^^^
+            const target = createEvent<{a: string, b: string}>()
+                                   [2] ^^^^^^^^^^^^^^^^^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a source (edge case for {} type)', () => {
+    const source = createStore({})
+    const clock = createEvent()
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{}>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<{}>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a mapping fn (edge case for {} type)', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({})
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Type 'Store<null>' is not assignable to type 'Event<unknown>'.
+
+
+      --flow--
+      no errors
+      "
+    `)
+  })
 })
