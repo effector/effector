@@ -353,3 +353,134 @@ test('edge case (should fail)', () => {
     "
   `)
 })
+
+describe('`target` forwarding', () => {
+  it('should pass when a target receives a more strict (or equal) value type from a source', () => {
+    const source = createStore({a: '', b: ''})
+    const clock = createEvent()
+    const target = createEvent<{a: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should pass when a target receives a more strict (or equal) value type from a mapping fn', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({a: '', b: ''})
+    const target = createEvent<{a: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a source', () => {
+    const source = createStore({a: ''})
+    const clock = createEvent()
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({source, clock, target})
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+            const source = createStore({a: ''})
+                                   [1] ^^^^^^^
+            const target = createEvent<{a: string, b: string}>()
+                                   [2] ^^^^^^^^^^^^^^^^^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a mapping fn', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({a: ''})
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({source, clock, fn, target})
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+            const fn = () => ({a: ''})
+                          [1] ^^^^^^^
+            const target = createEvent<{a: string, b: string}>()
+                                   [2] ^^^^^^^^^^^^^^^^^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a source (edge case for {} type)', () => {
+    const source = createStore({})
+    const clock = createEvent()
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should fail when a target receives a more loose value type from a mapping fn (edge case for {} type)', () => {
+    const source = createStore(null)
+    const clock = createEvent()
+    const fn = () => ({})
+    const target = createEvent<{a: string, b: string}>()
+
+    sample({source, clock, fn, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+})
