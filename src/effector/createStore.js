@@ -17,7 +17,7 @@ import {
   nextUnitID,
 } from './stdlib'
 import {createEvent} from './createEvent'
-import {forward, createLinkNode} from './forward'
+import {createLinkNode} from './forward'
 import {createName, mapName, type CompositeName} from './naming'
 import {thru} from './thru'
 import type {Subscriber} from './index.h'
@@ -66,6 +66,7 @@ export function createStore<State>(
           store: oldState,
         }),
       ],
+      child: [updates],
       meta: {unit: 'store', name: compositeName.shortName, sid, named},
     }),
     kind: 'store',
@@ -90,10 +91,6 @@ export function createStore<State>(
   }
   //$off
   store[$$observable] = bind(observable, store)
-  forward({
-    from: store,
-    to: updates,
-  })
   own(store, [updates])
   return store
 }
