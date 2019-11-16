@@ -26,7 +26,7 @@ function matchTypecheckerMessages(report, fileName, loc) {
     if (file === fileName && inRange(loc, pos)) messages.push(message)
   }
   if (messages.length === 0) return 'no errors'
-  return messages.join(`\n`)
+  return messages.join(`\n`).trim()
 }
 
 function inRange({start, end}, {line, col}) {

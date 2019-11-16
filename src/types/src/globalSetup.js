@@ -192,7 +192,7 @@ async function runTypeScript(testFiles) {
 
   // await outputFile(resolve(tsTestDir, 'index.tsx'), importPaths.join(`\n`))
   const version = await execa('npx', ['tsc', '-v'])
-  console.log(`typescript ${version}`)
+  console.log(`\ntypescript ${version.stdout}`)
   try {
     const result = await execa('npx', [
       'tsc',
