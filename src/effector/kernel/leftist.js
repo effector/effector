@@ -37,11 +37,11 @@ export const initialize = (list: Layer[]): leftist => {
   return temp[temp.length - 1]
 }
 export const insert = (x: Layer, t: leftist): leftist =>
-  mergeNoLoop(new Leftist(x, 1, null, null), t)
+  mergeMutable(new Leftist(x, 1, null, null), t)
 
 export const deleteMin = (param: leftist): leftist => {
   if (param) {
-    return mergeNoLoop(param.left, param.right)
+    return mergeMutable(param.left, param.right)
   }
   return null
 }
