@@ -36,6 +36,7 @@ module.exports = async function() {
         overwrite: true,
         errorOnExist: false,
         recursive: true,
+        preserveTimestamps: true,
         filter(filePath, to) {
           if (extname(filePath) === '') return true
           const fileMeta = testFiles.find(file => file.fullPath === filePath)
@@ -52,6 +53,7 @@ module.exports = async function() {
             return copy(fileMeta.fullPath, target, {
               overwrite: true,
               errorOnExist: false,
+              preserveTimestamps: true,
             })
           }),
       )
@@ -67,6 +69,7 @@ module.exports = async function() {
         overwrite: true,
         errorOnExist: false,
         recursive: true,
+        preserveTimestamps: true,
         filter(filePath, to) {
           if (extname(filePath) === '') return true
           const fileMeta = testFiles.find(file => file.fullPath === filePath)
@@ -86,6 +89,7 @@ module.exports = async function() {
             return copy(fileMeta.fullPath, target, {
               overwrite: true,
               errorOnExist: false,
+              preserveTimestamps: true,
             })
           }),
       )
@@ -186,7 +190,9 @@ async function runTypeScript(testFiles) {
     ({fullPath}) => `import './${relative(testsDir, fullPath)}'`,
   )
 
-  await outputFile(resolve(tsTestDir, 'index.tsx'), importPaths.join(`\n`))
+  // await outputFile(resolve(tsTestDir, 'index.tsx'), importPaths.join(`\n`))
+  const version = await execa('npx', ['tsc', '-v'])
+  console.log(`typescript ${version}`)
   try {
     const result = await execa('npx', [
       'tsc',
@@ -246,7 +252,8 @@ async function runTypeScript(testFiles) {
       .replace('.ts', '')
       .replace('.jsx', '')
       .replace('.js', '')
-    const {ext} = testFiles.find(({fullPath}) => {
+    const {ext} = testFiles.find(({fullPath, type}) => {
+      if (type === 'flow') return false
       fullPath = fullPath
         .replace('.tsx', '')
         .replace('.ts', '')
