@@ -93,14 +93,14 @@ module.exports = {
   ]),
 }
 
-if (boolean(process.env.LINT, false)) {
-  module.exports.projects.push({
-    runner: 'jest-runner-eslint',
-    displayName: 'lint',
-    testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
-    // watchPathIgnorePatterns,
-  })
-}
+// if (boolean(process.env.LINT, false)) {
+//   module.exports.projects.push({
+//     runner: 'jest-runner-eslint',
+//     displayName: 'lint',
+//     testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
+//     // watchPathIgnorePatterns,
+//   })
+// }
 
 function createProjectList(items) {
   items = items.filter(Boolean)
