@@ -257,7 +257,6 @@ describe('optional params', () => {
         --typescript--
         Expected 1 arguments, but got 0.
 
-
         --flow--
         no errors
         "

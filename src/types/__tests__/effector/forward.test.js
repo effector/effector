@@ -390,18 +390,10 @@ describe('array support', () => {
           --typescript--
           No overload matches this call.
             The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<number>'.
-                Type '(Event<number> | Event<string>)[]' is not assignable to type 'Unit<number> | readonly Unit<number>[]'.
-                  Type '(Event<number> | Event<string>)[]' is not assignable to type 'readonly Unit<number>[]'.
-                    Type 'Event<number> | Event<string>' is not assignable to type 'Unit<number>'.
-                      Type 'Event<string>' is not assignable to type 'Unit<number>'.
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<number>'.
-                Type '(Event<number> | Event<string>)[]' is not assignable to type 'Unit<number> | readonly Unit<number>[]'.
-                  Type '(Event<number> | Event<string>)[]' is not assignable to type 'readonly Unit<number>[]'.
-                    Type 'Event<number> | Event<string>' is not assignable to type 'Unit<number>'.
-                      Type 'Event<string>' is not assignable to type 'Unit<number>'.
+              Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<string> | readonly Unit<string>[]'.
+                Type '(Event<string> | Event<number>)[]' is not assignable to type 'readonly Unit<string>[]'.
+                  Type 'Event<string> | Event<number>' is not assignable to type 'Unit<string>'.
+                    Type 'Event<number>' is not assignable to type 'Unit<string>'.
 
           --flow--
           Cannot call 'forward' with object literal bound to 'opts'
@@ -481,8 +473,7 @@ describe('array support', () => {
           --typescript--
           No overload matches this call.
             The last overload gave the following error.
-              Type '(Event<number> | Event<string>)[]' is missing the following properties from type 'Unit<string>': kind, __
-
+              Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<string>': kind, __
 
           --flow--
           Cannot call 'forward' with object literal bound to 'opts'

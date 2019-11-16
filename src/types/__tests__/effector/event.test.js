@@ -136,7 +136,6 @@ describe('#filter', () => {
       --typescript--
       Type 'Event<string>' is not assignable to type 'Event<number>'.
 
-
       --flow--
       Cannot assign 'event.filter(...)' to 'filteredEvent_error'
         if (n % 2) return n.toString()

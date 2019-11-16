@@ -84,11 +84,6 @@ describe('createApi', () => {
       "
       --typescript--
       Type 'Event<number>' is not assignable to type 'Event<string>'.
-        Types of property 'watch' are incompatible.
-          Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-            Types of parameters 'watcher' and 'watcher' are incompatible.
-              Types of parameters 'payload' and 'payload' are incompatible.
-                Type 'number' is not assignable to type 'string'.
 
       --flow--
       Cannot assign 'event' to 'createApi_check2'
@@ -238,8 +233,6 @@ test('#map', () => {
     "
     --typescript--
     Type 'Store<string>' is not assignable to type 'Store<number>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type 'string' is not assignable to type 'number'.
 
 
     --flow--

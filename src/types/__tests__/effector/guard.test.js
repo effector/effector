@@ -488,7 +488,6 @@ describe('guard(config)', () => {
             The last overload gave the following error.
               Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
-
           --flow--
           Cannot call 'guard'
             guard({

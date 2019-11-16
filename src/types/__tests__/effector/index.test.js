@@ -222,7 +222,6 @@ test('launch', () => {
     --typescript--
     Argument of type '\\"\\"' is not assignable to parameter of type 'number'.
 
-
     --flow--
     Cannot call 'launch' with empty string bound to 'payload'
       launch(foo, '')

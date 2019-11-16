@@ -4,7 +4,6 @@ import React from 'react'
 import {createStore} from 'effector'
 import {useStoreMap} from 'effector-react'
 
-
 const typecheck = '{global}'
 
 type User = {
@@ -117,7 +116,6 @@ describe('useStoreMap', () => {
       "
       --typescript--
       Element implicitly has an 'any' type because index expression is not of type 'number'.
-
       "
     `)
   })

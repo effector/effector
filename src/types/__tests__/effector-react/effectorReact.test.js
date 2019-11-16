@@ -112,7 +112,6 @@ test('createGate', () => {
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 
-
     --flow--
     Cannot call 'createGate'
       const Foo = createGate<number>('foo')

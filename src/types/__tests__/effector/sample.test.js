@@ -22,11 +22,6 @@ test('event by event', () => {
     "
     --typescript--
     Type 'Event<number>' is not assignable to type 'Event<string>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'number' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'c' to 'sample_ee_check2'
@@ -143,11 +138,6 @@ test('effect by event', () => {
     "
     --typescript--
     Type 'Event<string>' is not assignable to type 'Event<number>'.
-      Types of property 'watch' are incompatible.
-        Type '(watcher: (payload: string) => any) => Subscription' is not assignable to type '(watcher: (payload: number) => any) => Subscription'.
-          Types of parameters 'watcher' and 'watcher' are incompatible.
-            Types of parameters 'payload' and 'payload' are incompatible.
-              Type 'string' is not assignable to type 'number'.
 
     --flow--
     Cannot assign 'g' to 'sample_efe_check2'
@@ -272,8 +262,6 @@ describe('sample(Store<T>):Store<T>', () => {
       "
       --typescript--
       Type 'Store<string>' is not assignable to type 'Store<number>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type 'string' is not assignable to type 'number'.
 
       --flow--
       Cannot assign 'sample(...)' to 'sample_s_incorrect'
@@ -465,7 +453,6 @@ describe('`target` forwarding', () => {
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
             Type 'Store<null>' is not assignable to type 'Event<unknown>'.
-
 
       --flow--
       no errors

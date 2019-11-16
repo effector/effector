@@ -163,7 +163,6 @@ describe('restore cases (should fail)', () => {
           Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
             Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<unknown>': filter, filterMap, thru
 
-
       --flow--
       Cannot call 'restore'
         restore(eff, 'initial')

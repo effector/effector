@@ -98,7 +98,6 @@ describe('#effect', () => {
       Argument of type '20' is not assignable to parameter of type 'string'.
       Argument of type '20' is not assignable to parameter of type 'string'.
 
-
       --flow--
       Cannot call 'effect2' with '20' bound to 'payload'
         effect2(20)
