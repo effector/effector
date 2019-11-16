@@ -234,7 +234,6 @@ test('#map', () => {
     --typescript--
     Type 'Store<string>' is not assignable to type 'Store<number>'.
 
-
     --flow--
     Cannot assign 'computed' to 'map_check2'
       const map_check2: Store<number> = computed
