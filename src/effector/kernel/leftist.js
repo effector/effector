@@ -54,7 +54,6 @@ const mergeNoLoop = (x: leftist, y: leftist): leftist => {
     x = y
     y = temp
   }
-  // there was x.right = mergeWiki(x.right, y)
   let right = mergeNoLoop(x.right, y)
   let left = x.left
   let rank = x.rank
@@ -116,37 +115,4 @@ const mergeMutable = (x: leftist, y: leftist): leftist => {
   x.left = left
   x.right = right
   return x
-}
-/**
- * Used to maintain priority queue being sorted
- */
-const mergeOriginal = (_t1: leftist, _t2: leftist): leftist => {
-  let t2
-  let t1
-  let k1
-  let l
-  let merged
-  let rank_left
-  let rank_right
-  while (true) {
-    t2 = _t2
-    t1 = _t1
-    if (!t1) return t2
-    if (!t2) return t1
-    k1 = t1.value
-    l = t1.left
-    if (layerComparator(k1, t2.value)) {
-      _t2 = t1
-      _t1 = t2
-      continue
-    }
-    merged = mergeOriginal(t1.right, t2)
-    rank_left = l?.rank || 0
-    rank_right = merged?.rank || 0
-    if (rank_left >= rank_right) {
-      return new Leftist(k1, rank_right + 1, l, merged)
-    }
-    return new Leftist(k1, rank_left + 1, merged, l)
-  }
-  /*::return _t1*/
 }
