@@ -5,27 +5,25 @@ module.exports = function setupLocation(
   start: {line: number, column: number},
   end: {line: number, column: number},
 }*/,
-  reportPath /*: string */,
 ) {
   //@ts-ignore
-  const {readJSONSync} = require('fs-extra')
-  const report = readJSONSync(reportPath)
+  const {ts, flow, fileTypes} = require('./.reports/type-report-full.json')
   const reportList = []
-  if (report.meta.ts) {
-    const ts = matchTypecheckerMessages(report.ts, loc)
-    reportList.push(`\n--typescript--\n${ts}\n`)
+  if (fileTypes.ts.includes(file) || fileTypes.both.includes(file)) {
+    const tsErr = matchTypecheckerMessages(ts, file, loc)
+    reportList.push(`\n--typescript--\n${tsErr}\n`)
   }
-  if (report.meta.flow) {
-    const flow = matchTypecheckerMessages(report.flow, loc)
-    reportList.push(`\n--flow--\n${flow}\n`)
+  if (fileTypes.flow.includes(file) || fileTypes.both.includes(file)) {
+    const flowErr = matchTypecheckerMessages(flow, file, loc)
+    reportList.push(`\n--flow--\n${flowErr}\n`)
   }
   return reportList.join('')
 }
 
-function matchTypecheckerMessages(report, loc) {
+function matchTypecheckerMessages(report, fileName, loc) {
   const messages = []
-  for (const {pos, message} of report) {
-    if (inRange(loc, pos)) messages.push(message)
+  for (const {pos, message, file} of report) {
+    if (file === fileName && inRange(loc, pos)) messages.push(message)
   }
   if (messages.length === 0) return 'no errors'
   return messages.join(`\n`)

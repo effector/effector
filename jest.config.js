@@ -72,7 +72,6 @@ module.exports = {
     },
     !boolean(process.env.NO_TYPE_TESTS, false) && {
       types: {
-        testRunner: './src/types/src/testRunner.js',
         testMatch: [
           `<rootDir>/src/types/__tests__/**/*.test.js`,
           `<rootDir>/src/types/__tests__/**/*.spec.js`,
@@ -82,9 +81,9 @@ module.exports = {
           `<rootDir>/src/types/__tests__/**/*.spec.tsx`,
         ],
         browser: false,
-        globals: {
-          setupLocation: require('./src/types/setupLocation'),
-        },
+        globalSetup: './src/types/src/globalSetup.js',
+        globalTeardown: './src/types/src/globalTeardown.js',
+        maxConcurrency: 25,
         transform: {
           '^.+\\.jsx?$': 'babel-jest',
           '^.+\\.tsx?$': 'babel-jest',
