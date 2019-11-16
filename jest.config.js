@@ -40,7 +40,7 @@ module.exports = {
     '!<rootDir>/src/redux/**',
   ],
 
-  watchPlugins: ['jest-runner-eslint/watch-fix'],
+  // watchPlugins: ['jest-runner-eslint/watch-fix'],
   watchPathIgnorePatterns,
   projects: createProjectList([
     {
