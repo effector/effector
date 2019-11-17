@@ -22,20 +22,20 @@ export type TypeDef<+Type, +Group> = {|
 //prettier-ignore
 export type Cmd =
   | Check
-  | Update
   | Run
   | Filter
   | Compute
   | Barrier
-  | Tap
   | Batch
   | ReadStack
+  | Mov
 export type ReadStack = {|
   +id: ID,
   +type: 'stack',
   +data: {|
     +to: Graph,
   |},
+  +hasRef: false,
 |}
 export type Batch = {|
   +id: ID,
@@ -43,6 +43,18 @@ export type Batch = {|
   +data: {|
     +blocks: Graph,
   |},
+  +hasRef: false,
+|}
+export type Mov = {|
+  +id: ID,
+  +type: 'mov',
+  +data: {|
+    +from: 'value' | 'store' | 'stack' | 'a' | 'b',
+    +to: 'stack' | 'a' | 'b',
+    +store: any,
+    +target: any,
+  |},
+  +hasRef: boolean,
 |}
 export type Check = {|
   +id: ID,
@@ -55,6 +67,7 @@ export type Check = {|
         +type: 'changed',
         +store: StateRef,
       |},
+  +hasRef: boolean,
 |}
 
 export type Barrier = {|
@@ -64,44 +77,33 @@ export type Barrier = {|
     +barrierID: ID,
     +priority: 'barrier' | 'sampler',
   |},
+  +hasRef: false,
 |}
 
-export type Update = {|
-  +id: ID,
-  +type: 'update',
-  +data: {|
-    store: StateRef,
-  |},
-|}
 export type Run = {|
   +id: ID,
   +type: 'run',
   +data: {|
-    fn: (data: any, scope: {[string]: any, ...}) => any,
+    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
   |},
+  +hasRef: false,
 |}
 
 export type Filter = {|
   +id: ID,
   +type: 'filter',
   +data: {|
-    fn: (data: any, scope: {[string]: any, ...}) => boolean,
+    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => boolean,
   |},
+  +hasRef: false,
 |}
 export type Compute = {|
   +id: ID,
   +type: 'compute',
   +data: {|
-    fn: (data: any, scope: {[string]: any, ...}) => any,
+    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
   |},
-|}
-
-export type Tap = {|
-  +id: ID,
-  +type: 'tap',
-  +data: {|
-    fn: (data: any, scope: {[string]: any, ...}) => any,
-  |},
+  +hasRef: false,
 |}
 
 export type Family = {|
@@ -114,6 +116,7 @@ export type Graph = {
   +next: Array<Graph>,
   +seq: Array<Cmd>,
   +scope: {[string]: any, ...},
+  +reg: {[id: string]: StateRef},
   +meta: {[tag: string]: any, ...},
   +family: Family,
   ...

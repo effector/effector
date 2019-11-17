@@ -30,18 +30,16 @@ const showCmd = (_: Cmd) => {
           return `check: changed`
       }
       return `check: ?`
+
+    case 'mov':
+      return `mov: ${_.data.from} ${_.data.to}`
     case 'filter':
       switch (_.data.fn.toString()) {
         default:
           return `filter: ${printFn(_.data.fn)}`
       }
     case 'compute':
-      switch (_.data.fn.toString()) {
-        case noop:
-          return `compute: x => x`
-        default:
-          return `compute: ${printFn(_.data.fn)}`
-      }
+      return `compute: ${printFn(_.data.fn)}`
     case 'run':
       return `run: watcher`
   }
@@ -50,7 +48,6 @@ const showCmd = (_: Cmd) => {
   return `${_.type}: ${view}`
 }
 
-const noop = blocks.noop.data.fn.toString()
 const print = {
   multi(value) {
     if (value.length === 0) return 'next: []'

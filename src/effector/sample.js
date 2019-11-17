@@ -1,15 +1,7 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {combine} from './combine'
-import {
-  type Graphite,
-  step,
-  createStateRef,
-  readRef,
-  writeRef,
-  own,
-  is,
-} from './stdlib'
+import {type Graphite, step, createStateRef, readRef, own, is} from './stdlib'
 import {createStore} from './createStore'
 import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'
@@ -61,18 +53,18 @@ export function sample(
   if (is.store(source)) {
     own(source, [
       createLinkNode(clock, target, {
-        scope: {
-          state: source.stateRef,
-          fn,
-        },
+        scope: {fn},
         node: [
           //$off
           !greedy && step.barrier({priority: 'sampler'}),
-          step.compute({
-            fn: fn
-              ? (upd, {state, fn}) => fn(readRef(state), upd)
-              : (upd, {state}) => readRef(state),
+          step.mov({
+            store: source.stateRef,
+            to: fn ? 'a' : 'stack',
           }),
+          fn &&
+            step.compute({
+              fn: (upd, {fn}, {a: state}) => fn(state, upd),
+            }),
         ],
         meta: {op: 'sample', sample: 'store'},
       }),
@@ -84,13 +76,12 @@ export function sample(
 
     own(clock, [
       createLinkNode(source, target, {
-        scope: {hasSource},
         node: [
           step.update({store: sourceState}),
-          step.compute({
-            fn(upd, {hasSource}) {
-              writeRef(hasSource, true)
-            },
+          step.mov({
+            from: 'value',
+            store: true,
+            target: hasSource,
           }),
           step.filter({fn: () => false}),
         ],
@@ -99,20 +90,22 @@ export function sample(
     ])
     own(source, [
       createLinkNode(clock, target, {
-        scope: {sourceState, clockState, hasSource, fn},
+        scope: {fn},
         node: [
           step.update({store: clockState}),
-          step.filter({
-            fn: (upd, {hasSource}) => readRef(hasSource),
-          }),
+          step.mov({store: hasSource}),
+          step.filter({fn: hasSource => hasSource}),
           //$off
           !greedy && step.barrier({priority: 'sampler'}),
-          step.compute({
-            fn: fn
-              ? (upd, {sourceState, clockState, fn}) =>
-                fn(readRef(sourceState), readRef(clockState))
-              : (upd, {sourceState}) => readRef(sourceState),
+          step.mov({store: sourceState}),
+          step.mov({
+            store: clockState,
+            to: 'a',
           }),
+          fn &&
+            step.compute({
+              fn: (source, {fn}, {a: clock}) => fn(source, clock),
+            }),
         ],
         meta: {op: 'sample', sample: 'clock'},
       }),

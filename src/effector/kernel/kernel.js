@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graphite, Graph} from '../stdlib'
+import type {Graphite, Graph, ID} from '../stdlib'
 import type {PriorityTag} from './getPriority'
 import {getGraph, writeRef, readRef} from '../stdlib'
 import type {Layer} from './layer'
@@ -14,11 +14,13 @@ class Local {
   /*::
   isChanged: boolean
   isFailed: boolean
+  ref: ID
   scope: {[key: string]: any, ...}
   */
   constructor(scope: {[key: string]: any, ...}) {
     this.isChanged = true
     this.isFailed = false
+    this.ref = ''
     this.scope = scope
   }
 }
@@ -66,15 +68,15 @@ const exec = () => {
       const data = step.data
       switch (step.type) {
         case 'stack':
-          pushHeap(0, new Stack(stack, stack, data.to), 'pure')
+          pushHeap(0, new Stack(data.to, stack, stack), 'pure')
           break
         case 'batch': {
-          const blocks = readRef(stack.value)
-          const ctx = readRef(stack.parent.value)
+          const blocks = stack.value
+          const ctx = stack.parent.value
           for (let i = 0; i < blocks.length; i++) {
             pushHeap(
               0,
-              new Stack(ctx, stack.parent, data.blocks[blocks[i]]),
+              new Stack(data.blocks[blocks[i]], stack.parent, ctx),
               'pure',
             )
           }
@@ -95,13 +97,37 @@ const exec = () => {
           local.isChanged = true
           break
         }
+        case 'mov': {
+          let value
+          //prettier-ignore
+          switch (data.from) {
+            case 'stack': value = stack.value; break
+            case 'a': value = stack.reg.a; break
+            case 'b': value = stack.reg.b; break
+            case 'value': value = data.store; break
+            case 'store':
+              value = readRef(graph.reg[data.store.id])
+              break
+          }
+          //prettier-ignore
+          switch (data.to) {
+            case 'stack': stack.value = value; break
+            case 'a': stack.reg.a = value; break
+            case 'b': stack.reg.b = value; break
+            case 'store':
+              writeRef(graph.reg[data.target.id], value)
+              break
+          }
+          break
+        }
         case 'check':
           switch (data.type) {
             case 'defined':
-              local.isChanged = readRef(stack.value) !== undefined
+              local.isChanged = stack.value !== undefined
               break
             case 'changed':
-              local.isChanged = readRef(data.store) !== readRef(stack.value)
+              local.isChanged =
+                stack.value !== readRef(graph.reg[data.store.id])
               break
           }
           break
@@ -111,7 +137,7 @@ const exec = () => {
            * tryRun will return null
            * thereby forcing that branch to stop
            */
-          local.isChanged = !!tryRun(local, data, stack.value)
+          local.isChanged = !!tryRun(local, data, stack)
           break
         case 'run':
           /** exec 'compute' step when stepn === firstIndex */
@@ -120,13 +146,7 @@ const exec = () => {
             continue mem
           }
         case 'compute':
-          writeRef(stack.value, tryRun(local, data, stack.value))
-          break
-        case 'update':
-          writeRef(data.store, readRef(stack.value))
-          break
-        case 'tap':
-          tryRun(local, data, stack.value)
+          stack.value = tryRun(local, data, stack)
           break
       }
       meta.stop = local.isFailed || !local.isChanged
@@ -134,11 +154,7 @@ const exec = () => {
     if (!meta.stop) {
       currentResetStop = true
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        pushHeap(
-          0,
-          new Stack(readRef(stack.value), stack, graph.next[stepn]),
-          'child',
-        )
+        pushHeap(0, new Stack(graph.next[stepn], stack, stack.value), 'child')
       }
       currentResetStop = false
     }
@@ -149,23 +165,23 @@ const exec = () => {
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  pushHeap(0, new Stack(payload, null, getGraph(unit)), 'pure')
+  pushHeap(0, new Stack(getGraph(unit), null, payload), 'pure')
   if (upsert && alreadyStarted) return
   exec()
 }
 export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
   for (let i = 0; i < units.length; i++) {
-    pushHeap(0, new Stack(payloads[i], null, getGraph(units[i])), 'pure')
+    pushHeap(0, new Stack(getGraph(units[i]), null, payloads[i]), 'pure')
   }
   if (alreadyStarted) return
   exec()
 }
 
-const tryRun = (local: Local, {fn}, val: {current: any, ...}) => {
+const tryRun = (local: Local, {fn}, stack: Stack) => {
   let result = null
   let isFailed = false
   try {
-    result = fn(readRef(val), local.scope)
+    result = fn(stack.value, local.scope, stack.reg)
   } catch (err) {
     console.error(err)
     isFailed = true

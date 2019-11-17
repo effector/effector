@@ -11,7 +11,6 @@ import {
   createStateRef,
   readRef,
   bind,
-  writeRef,
   is,
   getGraph,
   nextUnitID,
@@ -101,39 +100,45 @@ function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
   return storeInstance
 }
 
-function off(storeInstance: Store<any>, event: Event<any>) {
-  const currentSubscription = storeInstance.subscribers.get(event)
+function off(store: Store<any>, event: Event<any>) {
+  const currentSubscription = store.subscribers.get(event)
   if (currentSubscription !== undefined) {
     currentSubscription()
-    storeInstance.subscribers.delete(event)
+    store.subscribers.delete(event)
   }
-  return storeInstance
+  return store
 }
 
-function on(storeInstance: Store<any>, event: any, handler: Function) {
-  storeInstance.off(event)
-  storeInstance.subscribers.set(
-    event,
-    createSubscription(
-      createLinkNode(event, storeInstance, {
-        scope: {
-          handler,
-          state: storeInstance.stateRef,
-        },
-        node: [
-          step.compute({
-            fn(newValue, {handler, state}) {
-              const result = handler(readRef(state), newValue)
-              if (result === undefined) return
-              return writeRef(state, result)
-            },
-          }),
-        ],
-        meta: {op: 'on'},
+const updateStore = (
+  from,
+  {graphite, stateRef}: Store<any>,
+  op,
+  stateFirst: boolean,
+  fn: Function,
+) =>
+  createLinkNode(from, graphite, {
+    scope: {fn},
+    node: [
+      step.mov({store: stateRef, to: 'a'}),
+      step.compute({
+        fn: stateFirst
+          ? (upd, {fn}, {a: state}) => fn(state, upd)
+          : (upd, {fn}, {a: state}) => fn(upd, state),
       }),
-    ),
+      step.check.defined(),
+      step.check.changed({store: stateRef}),
+      step.update({store: stateRef}),
+    ],
+    meta: {op},
+  })
+
+function on(store: Store<any>, event: any, fn: Function) {
+  store.off(event)
+  store.subscribers.set(
+    event,
+    createSubscription(updateStore(event, store, 'on', true, fn)),
   )
-  return storeInstance
+  return store
 }
 const observable = (storeInstance: Store<any>) => ({
   subscribe(observer: Subscriber<any>) {
@@ -191,21 +196,6 @@ function mapStore<A, B>(
     config,
     strict: false,
   })
-  createLinkNode(store, innerStore, {
-    scope: {
-      handler: fn,
-      state: innerStore.stateRef,
-    },
-    node: [
-      step.compute({
-        fn: (upd, {state, handler}) => handler(upd, readRef(state)),
-      }),
-      step.check.defined(),
-      step.check.changed({
-        store: innerStore.stateRef,
-      }),
-    ],
-    meta: {op: 'map'},
-  })
+  updateStore(store, innerStore, 'map', false, fn)
   return innerStore
 }

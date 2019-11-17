@@ -1,7 +1,6 @@
 //@flow
 import type {
   StateRef,
-  Update,
   Run,
   Tap,
   Filter,
@@ -12,13 +11,16 @@ import type {
   ID,
   Graph,
   ReadStack,
+  Mov,
 } from './index.h'
 import {nextStepID, nextBarrierID} from './refcount'
+import {bind2} from './bind'
 
-const cmd = (type: any, data: any): any => ({
+const cmd = (type: any, hasRef: boolean, data: any): any => ({
   id: nextStepID(),
   type,
   data,
+  hasRef,
 })
 
 export const step: {|
@@ -31,6 +33,12 @@ export const step: {|
   barrier(data: {|
     +priority?: 'barrier' | 'sampler',
   |}): Barrier,
+  mov(data: {|
+    from?: 'value' | 'store' | 'stack' | 'a' | 'b',
+    to?: 'stack' | 'a' | 'b',
+    store?: any,
+    target?: any,
+  |}): Mov,
   check: {
     defined(): Check,
     changed({store: StateRef}): Check,
@@ -49,22 +57,23 @@ export const step: {|
   |}): Tap,
   update(data: {|
     store: StateRef,
-  |}): Update,
+  |}): Mov,
 |} = {
-  batch: cmd.bind(null, 'batch'),
-  stack: cmd.bind(null, 'stack'),
+  batch: bind2(cmd, 'batch', false),
+  stack: bind2(cmd, 'stack', false),
   barrier: ({priority = 'barrier'}) =>
-    cmd('barrier', {
+    cmd('barrier', false, {
       barrierID: nextBarrierID(),
       priority,
     }),
+  mov: ({from = 'store', store, target, to = target ? 'store' : 'stack'}) =>
+    cmd('mov', from === 'store', {from, store, to, target}),
   check: {
-    defined: () => cmd('check', {type: 'defined'}),
-    changed: ({store}) => cmd('check', {type: 'changed', store}),
+    defined: () => cmd('check', false, {type: 'defined'}),
+    changed: ({store}) => cmd('check', true, {type: 'changed', store}),
   },
-  compute: cmd.bind(null, 'compute'),
-  filter: cmd.bind(null, 'filter'),
-  run: cmd.bind(null, 'run'),
-  tap: cmd.bind(null, 'tap'),
-  update: cmd.bind(null, 'update'),
+  compute: bind2(cmd, 'compute', false),
+  filter: bind2(cmd, 'filter', false),
+  run: bind2(cmd, 'run', false),
+  update: ({store}) => step.mov({from: 'stack', target: store}),
 }

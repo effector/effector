@@ -4,6 +4,7 @@ import $$observable from 'symbol-observable'
 import type {Event} from './unit.h'
 import {clearNode} from './clearNode'
 import {createEvent} from './createEvent'
+import {bind2} from './stdlib'
 
 export function fromObservable<T>(observable: mixed): Event<T> {
   if (observable !== Object(observable))
@@ -17,7 +18,7 @@ export function fromObservable<T>(observable: mixed): Event<T> {
   if (!observableItem.subscribe)
     throw Error('expect observable to have .subscribe')
   const event: Event<T> = createEvent()
-  const disposer = clearNode.bind(null, event, {})
+  const disposer = bind2(clearNode, event, undefined)
   observableItem.subscribe({
     next: event,
     error: disposer,

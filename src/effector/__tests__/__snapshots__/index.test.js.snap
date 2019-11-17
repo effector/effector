@@ -6,47 +6,37 @@ exports[`graphite: show bar 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: Function,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
             check: defined,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            },
+            mov: stack store,
             check: changed,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            }
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
+                mov: store a,
                 compute: Function,
                 check: defined,
-                check: changed
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
                     check: defined,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    },
+                    mov: stack store,
                     check: changed,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    }
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -74,47 +64,37 @@ exports[`graphite: show bar 2`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: Function,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
             check: defined,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            },
+            mov: stack store,
             check: changed,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            }
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
+                mov: store a,
                 compute: Function,
                 check: defined,
-                check: changed
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
                     check: defined,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    },
+                    mov: stack store,
                     check: changed,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    }
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -144,47 +124,37 @@ exports[`graphite: show foo 1`] = `
           next: [
             Node {
               seq: [
-                compute: Function
+                mov: store a,
+                compute: Function,
+                check: defined,
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
                     check: defined,
-                    update: {
-                      store: {
-                        state: foo | 1 | 11 | 101
-                      }
-                    },
+                    mov: stack store,
                     check: changed,
-                    update: {
-                      store: {
-                        state: foo | 1 | 11 | 101
-                      }
-                    }
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},
                     Node {
                       seq: [
+                        mov: store a,
                         compute: Function,
                         check: defined,
-                        check: changed
+                        check: changed,
+                        mov: stack store
                       ],
                       next: [
                         Node {
                           seq: [
                             check: defined,
-                            update: {
-                              store: {
-                                state: 18
-                              }
-                            },
+                            mov: stack store,
                             check: changed,
-                            update: {
-                              store: {
-                                state: 18
-                              }
-                            }
+                            mov: stack store
                           ],
                           next: [
                             Node {seq: [], next: []}
@@ -208,41 +178,27 @@ exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
     check: defined,
-    update: {
-      store: {
-        state: foo | 1 | 11 | 101
-      }
-    },
+    mov: stack store,
     check: changed,
-    update: {
-      store: {
-        state: foo | 1 | 11 | 101
-      }
-    }
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
     Node {
       seq: [
+        mov: store a,
         compute: Function,
         check: defined,
-        check: changed
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
             check: defined,
-            update: {
-              store: {
-                state: 18
-              }
-            },
+            mov: stack store,
             check: changed,
-            update: {
-              store: {
-                state: 18
-              }
-            }
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []}
@@ -258,17 +214,9 @@ exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
     check: defined,
-    update: {
-      store: {
-        state: 18
-      }
-    },
+    mov: stack store,
     check: changed,
-    update: {
-      store: {
-        state: 18
-      }
-    }
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []}
@@ -282,23 +230,19 @@ exports[`showcase: event foo 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: Function,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
             check: defined,
-            update: {
-              store: {
-                state: 3
-              }
-            },
+            mov: stack store,
             check: changed,
-            update: {
-              store: {
-                state: 3
-              }
-            }
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
@@ -306,8 +250,8 @@ exports[`showcase: event foo 1`] = `
               seq: [
                 check: defined,
                 filter: Function,
-                tap: {},
-                tap: {},
+                compute: Function,
+                compute: Function,
                 barrier: {
                   barrierID: 1,
                   priority: barrier
@@ -318,47 +262,27 @@ exports[`showcase: event foo 1`] = `
                 Node {
                   seq: [
                     check: defined,
-                    update: {
-                      store: {
-                        state: {
-                          a: 3,
-                          b: 6
-                        }
-                      }
-                    },
+                    mov: stack store,
                     check: changed,
-                    update: {
-                      store: {
-                        state: {
-                          a: 3,
-                          b: 6
-                        }
-                      }
-                    }
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},
                     Node {
                       seq: [
+                        mov: store a,
                         compute: Function,
                         check: defined,
-                        check: changed
+                        check: changed,
+                        mov: stack store
                       ],
                       next: [
                         Node {
                           seq: [
                             check: defined,
-                            update: {
-                              store: {
-                                state: 3
-                              }
-                            },
+                            mov: stack store,
                             check: changed,
-                            update: {
-                              store: {
-                                state: 3
-                              }
-                            }
+                            mov: stack store
                           ],
                           next: [
                             Node {seq: [], next: []},
@@ -388,17 +312,9 @@ exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
     check: defined,
-    update: {
-      store: {
-        state: 3
-      }
-    },
+    mov: stack store,
     check: changed,
-    update: {
-      store: {
-        state: 3
-      }
-    }
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
@@ -416,17 +332,9 @@ exports[`showcase: store a 1`] = `
 "Node {
   seq: [
     check: defined,
-    update: {
-      store: {
-        state: 3
-      }
-    },
+    mov: stack store,
     check: changed,
-    update: {
-      store: {
-        state: 3
-      }
-    }
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
@@ -434,8 +342,8 @@ exports[`showcase: store a 1`] = `
       seq: [
         check: defined,
         filter: Function,
-        tap: {},
-        tap: {},
+        compute: Function,
+        compute: Function,
         barrier: {
           barrierID: 1,
           priority: barrier
@@ -446,47 +354,27 @@ exports[`showcase: store a 1`] = `
         Node {
           seq: [
             check: defined,
-            update: {
-              store: {
-                state: {
-                  a: 3,
-                  b: 6
-                }
-              }
-            },
+            mov: stack store,
             check: changed,
-            update: {
-              store: {
-                state: {
-                  a: 3,
-                  b: 6
-                }
-              }
-            }
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
+                mov: store a,
                 compute: Function,
                 check: defined,
-                check: changed
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
                     check: defined,
-                    update: {
-                      store: {
-                        state: 3
-                      }
-                    },
+                    mov: stack store,
                     check: changed,
-                    update: {
-                      store: {
-                        state: 3
-                      }
-                    }
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},

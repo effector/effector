@@ -96,7 +96,7 @@ describe('combine cases', () => {
   })
 })
 
-it('deduplicate outputs', async() => {
+it('deduplicate outputs', async () => {
   const fn = jest.fn()
   const fetchApi = createEffect({
     async handler() {

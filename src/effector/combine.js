@@ -200,6 +200,12 @@ type CombinationScope = {
 }
 
 const storeCombination = (obj: any, clone: Function, defaultState: any) => {
+  const stateNew = clone(defaultState)
+  const store = createStore(stateNew, {
+    //TODO: add location
+    name: unitObjectName(obj),
+  })
+  const isFresh = createStateRef(false)
   const node = [
     step.check.defined(),
     //prettier-ignore
@@ -208,16 +214,19 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
         upd !== readRef(target)[key]
       ),
     }),
-    step.tap({
+    step.compute({
       fn(upd, {isFresh, target, clone}: CombinationScope) {
-        if (readRef(isFresh)) return
-        writeRef(target, clone(readRef(target)))
-        writeRef(isFresh, true)
+        if (!readRef(isFresh)) {
+          writeRef(target, clone(readRef(target)))
+          writeRef(isFresh, true)
+        }
+        return upd
       },
     }),
-    step.tap({
+    step.compute({
       fn(upd, {target, key}: CombinationScope) {
         readRef(target)[key] = upd
+        return upd
       },
     }),
     step.barrier({priority: 'barrier'}),
@@ -228,12 +237,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       },
     }),
   ]
-  const stateNew = clone(defaultState)
-  const store = createStore(stateNew, {
-    //TODO: add location
-    name: unitObjectName(obj),
-  })
-  const isFresh = createStateRef(false)
+
   for (const key in obj) {
     const child = obj[key]
     if (!is.store(child)) {

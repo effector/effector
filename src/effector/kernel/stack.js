@@ -7,13 +7,15 @@ import type {Graph} from '../stdlib'
 
 export class Stack {
   /*::
-  value: {current: any, ...}
+  value: any
+  reg: {a: any, b: any}
   parent: Stack | null
   node: Graph
   */
-  constructor(value: any, parent: Stack | null, node: Graph) {
-    this.value = {current: value}
-    this.parent = parent
+  constructor(node: Graph, parent: Stack | null, value: any) {
+    this.reg = {a: null, b: null}
     this.node = node
+    this.parent = parent
+    this.value = value
   }
 }

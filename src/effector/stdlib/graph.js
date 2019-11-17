@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graph, Graphite, Cmd} from './index.h'
+import type {Graph, Graphite, Cmd, StateRef} from './index.h'
 
 import {getGraph, getOwners, getLinks} from './getter'
 const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] =>
@@ -29,8 +29,23 @@ export function createNode({
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
+  const seq: Cmd[] = []
+  const reg: {[id: string]: StateRef} = {}
+  for (let i = 0; i < node.length; i++) {
+    const item = node[i]
+    if (!item) continue
+    seq.push(item)
+    if (item.hasRef) {
+      const store = item.data.store
+      reg[store.id] = store
+    }
+    if (item.type === 'mov' && item.data.to === 'store') {
+      const store = item.data.target
+      reg[store.id] = store
+    }
+  }
   const result: Graph = {
-    seq: node.filter(Boolean),
+    seq,
     next: arrifyNodes(child),
     meta,
     scope,
@@ -39,6 +54,7 @@ export function createNode({
       links,
       owners,
     },
+    reg,
   }
   for (let i = 0; i < links.length; i++) {
     getOwners(links[i]).push(result)
