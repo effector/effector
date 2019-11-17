@@ -43,8 +43,6 @@ let alreadyStarted = false
 
 let currentResetStop = false
 
-const getData = ({data}) => data
-
 const exec = () => {
   const lastStartedState = alreadyStarted
   alreadyStarted = true
@@ -65,9 +63,10 @@ const exec = () => {
       stepn++
     ) {
       const step = graph.seq[stepn]
+      const data = step.data
       switch (step.type) {
         case 'stack':
-          pushHeap(0, new Stack(stack, stack, getData(step).to), 'pure')
+          pushHeap(0, new Stack(stack, stack, data.to), 'pure')
           break
         case 'batch': {
           const blocks = readRef(stack.value)
@@ -75,15 +74,15 @@ const exec = () => {
           for (let i = 0; i < blocks.length; i++) {
             pushHeap(
               0,
-              new Stack(ctx, stack.parent, getData(step).blocks[blocks[i]]),
+              new Stack(ctx, stack.parent, data.blocks[blocks[i]]),
               'pure',
             )
           }
           break
         }
         case 'barrier': {
-          const id = getData(step).barrierID
-          const priority = getData(step).priority
+          const id = data.barrierID
+          const priority = data.priority
           if (stepn !== firstIndex || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
@@ -97,13 +96,12 @@ const exec = () => {
           break
         }
         case 'check':
-          switch (getData(step).type) {
+          switch (data.type) {
             case 'defined':
               local.isChanged = readRef(stack.value) !== undefined
               break
             case 'changed':
-              local.isChanged =
-                readRef(getData(step).store) !== readRef(stack.value)
+              local.isChanged = readRef(data.store) !== readRef(stack.value)
               break
           }
           break
@@ -113,7 +111,7 @@ const exec = () => {
            * tryRun will return null
            * thereby forcing that branch to stop
            */
-          local.isChanged = !!tryRun(local, getData(step), stack.value)
+          local.isChanged = !!tryRun(local, data, stack.value)
           break
         case 'run':
           /** exec 'compute' step when stepn === firstIndex */
@@ -122,13 +120,13 @@ const exec = () => {
             continue mem
           }
         case 'compute':
-          writeRef(stack.value, tryRun(local, getData(step), stack.value))
+          writeRef(stack.value, tryRun(local, data, stack.value))
           break
         case 'update':
-          writeRef(getData(step).store, readRef(stack.value))
+          writeRef(data.store, readRef(stack.value))
           break
         case 'tap':
-          tryRun(local, getData(step), stack.value)
+          tryRun(local, data, stack.value)
           break
       }
       meta.stop = local.isFailed || !local.isChanged
