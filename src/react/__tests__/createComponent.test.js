@@ -105,7 +105,7 @@ describe('createComponent', () => {
     )
   })
 
-  test('createStoreObject', async() => {
+  test('createStoreObject', async () => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
@@ -147,7 +147,7 @@ describe('createComponent', () => {
     `)
   })
 
-  test('mount event', async() => {
+  test('mount event', async () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
@@ -167,7 +167,7 @@ describe('createComponent', () => {
     ))
     Foo.mounted.watch(spy)
     await render(<Foo a="A" />)
-    await act(async() => {
+    await act(async () => {
       add(5)
     })
     await render(<Foo b="B" />)
@@ -186,7 +186,7 @@ describe('createComponent', () => {
       ]
     `)
   })
-  test('unmount event', async() => {
+  test('unmount event', async () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
@@ -206,7 +206,7 @@ describe('createComponent', () => {
     ))
     Foo.unmounted.watch(spy)
     await render(<Foo a="A" />)
-    await act(async() => {
+    await act(async () => {
       add(5)
     })
     await render(<Foo b="B" />)
@@ -251,7 +251,7 @@ describe('createComponent', () => {
       `"<div>Text: foo</div><div>Counter: 1</div><button id=\\"increment\\">incr</button>"`,
     )
   })
-  it('should not use props from failed renders', async() => {
+  it('should not use props from failed renders', async () => {
     const spy = jest.fn()
     const text = createStore('foo')
     const Foo = createComponent(text, (props, text) => {

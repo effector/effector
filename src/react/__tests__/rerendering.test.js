@@ -13,7 +13,7 @@ import {
 import {useStore} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures/index'
 
-it('should rerender only once', async() => {
+it('should rerender only once', async () => {
   const fn = jest.fn()
   const getPresentation = createEffect({
     async handler() {

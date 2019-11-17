@@ -124,6 +124,7 @@ it('works', async () => {
           "unit": "domain",
         },
         "next": Array [],
+        "reg": Object {},
         "scope": null,
         "seq": Array [],
       },

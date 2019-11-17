@@ -181,9 +181,8 @@ reachable from given unit
 
 to erase, call clearNode(clone.node)
 */
-export function cloneGraph(unit) {
+function cloneGraph(unit) {
   const parentUnit = unit
-  const queryStack = []
   unit = getNode(unit)
   const list = flatGraph(unit)
   const clones = list.map(node => {
@@ -192,6 +191,7 @@ export function cloneGraph(unit) {
         id: step.id,
         type: step.type,
         data: Object.assign({}, step.data),
+        hasRef: step.hasRef,
       })),
       child: [...node.next],
       meta: Object.assign({}, node.meta),
@@ -227,129 +227,86 @@ export function cloneGraph(unit) {
 
   const refs = new Map()
   const handlers = new Map()
-
-  queryList(clones, () => {
-    query({op: 'fx', fx: 'runner'}, node => {
-      const {scope, seq} = node
-      scope.done = findClone(scope.done)
-      scope.fail = findClone(scope.fail)
-      scope.anyway = findClone(scope.anyway)
-      const from = getNode(scope.anyway)
-      const to = createNode({
-        meta: {fork: true},
-        node: [
-          step.run({
-            fn() {
-              fxCount.current -= 1
-              if (fxCount.current === 0) {
-                fxID += 1
-                tryCompleteInitPhase()
-              }
-            },
-          }),
-        ],
-      })
-      from.next.push(to)
-    })
-  })
-
-  queryList(list, () => {
-    query({unit: 'store'}, item => {
-      cloneRef(item.seq[1].data.store)
-      cloneRef(item.seq[3].data.store)
-    })
-    query({op: 'sample', sample: 'source'}, item => {
-      cloneRef(item.scope.hasSource)
-      cloneRef(item.seq[0].data.store)
-    })
-    query({op: 'sample', sample: 'clock'}, item => {
-      cloneRef(item.scope.hasSource)
-      cloneRef(item.scope.sourceState)
-      cloneRef(item.scope.clockState)
-    })
-    query({op: 'sample', sample: 'store'}, item => {
-      cloneRef(item.scope.state)
-    })
-    query({op: 'combine'}, item => {
-      cloneRef(item.scope.target)
-      cloneRef(item.scope.isFresh)
-    })
-  })
-
-  queryList(clones, () => {
-    query({unit: 'store'}, node => {
-      const {seq, meta} = node
-      const plainState = getRef(seq[1].data.store)
-      const oldState = getRef(seq[3].data.store)
-      seq[1].data.store = plainState
-      seq[2].data.store = oldState
-      seq[3].data.store = oldState
-      meta.plainState = plainState
-      meta.wrapped = wrapStore(node)
-    })
-    query({op: 'sample', sample: 'source'}, ({scope, seq}) => {
-      scope.hasSource = getRef(scope.hasSource)
-      seq[0].data.store = getRef(seq[0].data.store)
-    })
-    query({op: 'sample', sample: 'clock'}, ({scope}) => {
-      scope.hasSource = getRef(scope.hasSource)
-      scope.sourceState = getRef(scope.sourceState)
-      scope.clockState = getRef(scope.clockState)
-    })
-    query({op: 'sample', sample: 'store'}, ({scope}) => {
-      scope.state = getRef(scope.state)
-    })
-    query({op: 'combine'}, ({scope}) => {
-      scope.target = getRef(scope.target)
-      scope.isFresh = getRef(scope.isFresh)
-    })
-
-    query({op: 'map'}, ({scope}) => {
-      if (scope.state) {
-        scope.state = getRef(scope.state)
-      }
-    })
-    query({op: 'on'}, ({scope}) => {
-      scope.state = getRef(scope.state)
-    })
-
-    query({unit: 'domain'}, ({scope}) => {
-      scope.history = {
-        domains: new Set(),
-        stores: new Set(),
-        events: new Set(),
-        effects: new Set(),
-      }
-    })
-    query({unit: 'effect'}, ({scope, seq}) => {
-      scope.runner = findClone(scope.runner)
-      seq.push(
-        step.tap({
+  for (let i = 0; i < clones.length; i++) {
+    const clone = clones[i]
+    for (const id in clone.reg) {
+      clone.reg[id] = cloneRef(clone.reg[id])
+    }
+  }
+  const nodeProcessors = []
+  onOperation('fx', node => {
+    const {scope, seq} = node
+    scope.done = findClone(scope.done)
+    scope.fail = findClone(scope.fail)
+    scope.anyway = findClone(scope.anyway)
+    const from = getNode(scope.anyway)
+    const to = createNode({
+      meta: {fork: true},
+      node: [
+        step.run({
           fn() {
-            fxCount.current += 1
-            fxID += 1
+            fxCount.current -= 1
+            if (fxCount.current === 0) {
+              fxID += 1
+              tryCompleteInitPhase()
+            }
           },
         }),
-      )
+      ],
     })
-    query({op: 'watch'}, ({scope}) => {
-      const handler = scope.handler
-      scope.handler = data => {
-        stack.push(findClone)
-        try {
-          handler(data)
-        } finally {
-          stack.pop()
-        }
-      }
-    })
+    from.next.push(to)
   })
-
-  clones.forEach(clone => {
+  onUnit('store', node => {
+    node.meta.wrapped = wrapStore(node)
+  })
+  onOperation('combine', ({scope}) => {
+    scope.target = cloneRef(scope.target)
+    scope.isFresh = cloneRef(scope.isFresh)
+  })
+  onUnit('domain', ({scope}) => {
+    scope.history = {
+      domains: new Set(),
+      stores: new Set(),
+      events: new Set(),
+      effects: new Set(),
+    }
+  })
+  onUnit('effect', ({scope, seq}) => {
+    scope.runner = findClone(scope.runner)
+    seq.push(
+      step.compute({
+        fn(upd) {
+          fxCount.current += 1
+          fxID += 1
+          return upd
+        },
+      }),
+    )
+  })
+  onOperation('watch', ({scope}) => {
+    const handler = scope.handler
+    scope.handler = data => {
+      stack.push(findClone)
+      try {
+        handler(data)
+      } finally {
+        stack.pop()
+      }
+    }
+  })
+  for (let i = 0; i < nodeProcessors.length; i++) {
+    const {type, name, cb} = nodeProcessors[i]
+    for (let j = 0; j < clones.length; j++) {
+      if (clones[j].meta[type] === name) cb(clones[j])
+    }
+  }
+  for (let i = 0; i < clones.length; i++) {
+    const clone = clones[i]
     reallocSiblings(clone.next)
     reallocSiblings(clone.family.links)
     reallocSiblings(clone.family.owners)
-  })
+  }
+
   refs.clear()
   handlers.clear()
   return {
@@ -374,35 +331,24 @@ export function cloneGraph(unit) {
       }),
     },
   }
-  function queryList(list, cb) {
-    queryStack.push(list)
-    try {
-      cb()
-    } finally {
-      queryStack.pop()
-    }
+  function onOperation(name, cb) {
+    nodeProcessors.push({type: 'op', name, cb})
   }
-  function query(shape, cb) {
-    const list = queryStack[queryStack.length - 1]
-    list
-      .filter(item => {
-        for (const key in shape) {
-          if (item.meta[key] !== shape[key]) return false
-        }
-        return true
-      })
-      .forEach(cb)
+  function onUnit(name, cb) {
+    nodeProcessors.push({type: 'unit', name, cb})
   }
   function getRef(ref) {
     if (!refs.has(ref)) throw Error('no ref found')
     return refs.get(ref)
   }
   function cloneRef(ref) {
-    if (refs.has(ref)) return
-    refs.set(ref, {
+    if (refs.has(ref)) return refs.get(ref)
+    const result = {
       id: ref.id,
       current: ref.current,
-    })
+    }
+    refs.set(ref, result)
+    return result
   }
   function reallocSiblings(siblings) {
     siblings.forEach((node, i) => {
@@ -434,7 +380,7 @@ export function cloneGraph(unit) {
   function wrapStore(node) {
     return {
       kind: 'store',
-      getState: () => node.meta.plainState.current,
+      getState: () => node.reg[node.scope.state.id].current,
       updates: {
         watch: cb => createWatch(node, cb),
       },
