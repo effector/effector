@@ -3,9 +3,9 @@
 import {createEffect, type Effect} from 'effector'
 
 const ENDPOINT = {
-  DIST: 'ttqe4agemjayhmu4qt7xtpyahm',
+  DIST: 'y6776i4nfja2lnx3gbkbmlgr3i',
   REGION: 'us-east-1',
-  PUBLIC_API_KEY: 'da2-x3lsnw3sx5chvowyqbsgrrszcq',
+  PUBLIC_API_KEY: 'da2-srl2uzygsnhpdd2bban5gscnza',
 }
 
 const request = data => {
