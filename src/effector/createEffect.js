@@ -1,7 +1,8 @@
 //@flow
 
 import type {Event, Effect} from './unit.h'
-import {step, own, bind, createNode} from './stdlib'
+import {step, own, bind} from './stdlib'
+import {createNode} from './createNode'
 import {upsertLaunch} from './kernel'
 import {createEvent} from './createEvent'
 import {createStore} from './createStore'

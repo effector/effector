@@ -7,7 +7,6 @@ import {upsertLaunch} from './kernel'
 import {
   own,
   step,
-  createNode,
   createStateRef,
   readRef,
   bind,
@@ -15,6 +14,7 @@ import {
   getGraph,
   nextUnitID,
 } from './stdlib'
+import {createNode} from './createNode'
 import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'
 import {createName, mapName, type CompositeName} from './naming'

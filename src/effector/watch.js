@@ -1,6 +1,7 @@
 //@flow
 
-import {type Unit, createNode, step} from './stdlib'
+import {type Unit, step} from './stdlib'
+import {createNode} from './createNode'
 import type {Subscription} from './index.h'
 import {createSubscription} from './subscription'
 

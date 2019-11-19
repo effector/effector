@@ -1,5 +1,6 @@
 //@flow
-import {type Graphite, type Cmd, createNode} from './stdlib'
+import {type Graphite, type Cmd} from './stdlib'
+import {createNode} from './createNode'
 import type {Subscription} from './index.h'
 import {createSubscription} from './subscription'
 

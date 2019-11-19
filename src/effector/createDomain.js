@@ -1,7 +1,8 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from './unit.h'
-import {nextUnitID, own, createNode} from './stdlib'
+import {nextUnitID, own} from './stdlib'
+import {createNode} from './createNode'
 import {createStore} from './createStore'
 import {
   normalizeConfig,

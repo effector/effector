@@ -1,8 +1,8 @@
 //@flow
 
-import type {Graph, Graphite, Cmd, StateRef} from './index.h'
+import type {Graph, Graphite, Cmd, StateRef} from './stdlib/index.h'
 
-import {getGraph, getOwners, getLinks} from './getter'
+import {getGraph, getOwners, getLinks} from './stdlib/getter'
 const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] =>
   (Array.isArray(list) ? list : [list]).map(getGraph)
 export function createNode({

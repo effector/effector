@@ -3,7 +3,8 @@
 import $$observable from 'symbol-observable'
 
 import type {Event, Effect} from './unit.h'
-import {step, createNode, bind, nextUnitID} from './stdlib'
+import {step, bind, nextUnitID} from './stdlib'
+import {createNode} from './createNode'
 import {launch} from './kernel'
 
 import type {Subscription} from './index.h'

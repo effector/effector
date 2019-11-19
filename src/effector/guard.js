@@ -4,7 +4,8 @@ import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createEvent'
-import {is, step, createNode} from './stdlib'
+import {is, step} from './stdlib'
+import {createNode} from './createNode'
 
 export function guard(source: any, config: any) {
   if (!config) {
