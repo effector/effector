@@ -48,7 +48,6 @@ module.exports = {
         testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
       },
     },
-    'effector/naming',
     'effector/kernel',
     'static-land',
     'forms',

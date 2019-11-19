@@ -1,8 +1,12 @@
 //@flow
 
-import type {Store, Event, Effect} from '../unit.h'
-import {type CompositeName, createName} from './compositeName'
-import {is} from '../stdlib'
+import type {Store, Event, Effect} from './unit.h'
+import {is} from './stdlib'
+
+export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
+
+export const mapName = (unit: any, name: ?string) =>
+  name == null ? joinName(unit, ' → *') : name
 
 export function getDisplayName(unit: {
   compositeName?: CompositeName,
@@ -69,4 +73,45 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
   store.compositeName.shortName = compositeName.shortName
   //$todo
   store.compositeName.fullName = compositeName.fullName
+}
+
+class Name {
+  /*::
+  shortName: string
+  fullName: string
+  path: Array<string>
+  */
+  constructor(shortName: string, fullName: string, path: Array<string>) {
+    this.shortName = shortName
+    this.fullName = fullName
+    this.path = path
+  }
+}
+export type {Name as CompositeName}
+
+export function createName(name: string, parent?: Name): Name {
+  let path
+  let fullName
+  const shortName = name
+  if (parent === undefined) {
+    if (name.length === 0) {
+      path = ([]: string[])
+    } else {
+      path = [name]
+    }
+    fullName = name
+  } else {
+    if (name.length === 0) {
+      path = parent.path
+      fullName = parent.fullName
+    } else {
+      path = parent.path.concat([name])
+      if (parent.fullName.length === 0) {
+        fullName = name
+      } else {
+        fullName = '' + parent.fullName + '/' + name
+      }
+    }
+  }
+  return new Name(shortName, fullName, path)
 }

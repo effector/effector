@@ -6,7 +6,7 @@ import {
   createStoreObject,
   createDomain,
 } from 'effector'
-import {unitObjectName} from '..'
+import {unitObjectName} from '../naming'
 
 const rootDomain = createDomain('')
 
