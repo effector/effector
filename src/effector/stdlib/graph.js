@@ -67,31 +67,3 @@ export function createNode({
   }
   return result
 }
-
-export const traverse = (
-  graphite: Graphite,
-  {
-    ctx = {},
-    pre = (step, ctx, stack, layer) => {},
-    post = (step, ctx, stack, layer) => {},
-  }: {ctx: any, pre: Function, post: Function, ...},
-) => {
-  const visited = new Set()
-  const stack = []
-  const walk = (step, layer) => {
-    if (visited.has(step)) return
-    stack.push(step)
-    visited.add(step)
-    pre(step, ctx, stack, layer)
-    const steps = step.next
-    for (let i = 0; i < steps.length; i++) {
-      walk(steps[i], steps)
-    }
-    stack.pop()
-    post(step, ctx, stack, layer)
-  }
-  const graph = getGraph(graphite)
-  walk(graph, [graph])
-  visited.clear()
-  return ctx
-}
