@@ -13,16 +13,10 @@ import {
   step,
   clearNode,
 } from 'effector'
-import {
-  useStore,
-  useList,
-  fork,
-  invoke,
-  Provider,
-  serialize,
-} from 'effector-react/ssr'
+import {fork, invoke, Provider, serialize} from 'effector-react/ssr'
+import {useStore, useList} from 'effector-react/ssr-compat'
 
-it('works', async () => {
+it('works', async() => {
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
