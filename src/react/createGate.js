@@ -2,7 +2,13 @@
 
 import * as React from 'react'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
-import {createDomain, createApi, type Store, type Event} from 'effector'
+import {
+  createDomain,
+  createApi,
+  type Store,
+  type Event,
+  type Domain,
+} from 'effector'
 
 const {store: createStore} = createDomain('Gate')
 
