@@ -8,7 +8,7 @@ import {
   getOwners,
   getLinks,
 } from './stdlib'
-import {store as isStore, domain as isDomain} from './stdlib/is'
+import {is} from './is'
 
 const removeItem = (list, item) => {
   const pos = list.indexOf(item)
@@ -57,9 +57,9 @@ export const clearNode = (
   } = {},
 ) => {
   let isDomainUnit = false
-  if (isStore(graphite)) {
+  if (is.store(graphite)) {
     clearMap(graphite.subscribers)
-  } else if (isDomain(graphite)) {
+  } else if (is.domain(graphite)) {
     isDomainUnit = true
     const history = getGraph(graphite).scope.history
     clearMap(history.events)

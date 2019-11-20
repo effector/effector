@@ -2,8 +2,6 @@
 
 //eslint-disable-next-line
 export * as Kind from './kind'
-//eslint-disable-next-line
-export * as is from './is'
 export * from './bind'
 export * from './typedef'
 export * from './family'

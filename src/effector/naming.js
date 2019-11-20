@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event, Effect} from './unit.h'
-import {is} from './stdlib'
+import {is} from './is'
 
 export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
 

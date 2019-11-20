@@ -1,7 +1,7 @@
 //@flow
 import type {Store, Event, Effect} from './unit.h'
 import {createStore} from './createStore'
-import {is} from './stdlib'
+import {is} from './is'
 
 //eslint-disable-next-line no-unused-vars
 declare export function restore<Done>(

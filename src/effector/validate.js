@@ -1,17 +1,17 @@
 //@flow
 
-import type {kind} from './index.h'
+import type {kind} from './stdlib/index.h'
 import {
   store as storeKind,
   event as eventKind,
   effect as effectKind,
   domain as domainKind,
-} from './kind'
+} from './stdlib/kind'
 
 export const unit = (obj: mixed) =>
-  (typeof obj === 'function' || (typeof obj === 'object' && obj !== null))
+  (typeof obj === 'function' || (typeof obj === 'object' && obj !== null)) &&
   //$off
-  && 'kind' in obj
+  'kind' in obj
 
 //$off
 const is = (type: kind) => (obj: mixed) => unit(obj) && obj.kind === type

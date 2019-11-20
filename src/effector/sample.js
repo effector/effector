@@ -1,7 +1,8 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {combine} from './combine'
-import {type Graphite, step, createStateRef, readRef, own, is} from './stdlib'
+import {type Graphite, step, createStateRef, readRef, own} from './stdlib'
+import {is} from './is'
 import {createStore} from './createStore'
 import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'

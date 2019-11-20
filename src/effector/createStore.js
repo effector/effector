@@ -10,10 +10,10 @@ import {
   createStateRef,
   readRef,
   bind,
-  is,
   getGraph,
   nextUnitID,
 } from './stdlib'
+import {is} from './is'
 import {createNode} from './createNode'
 import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'
