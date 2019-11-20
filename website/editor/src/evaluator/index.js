@@ -23,7 +23,7 @@ const filename = createStore('repl.js').on(
     return 'repl.js'
   },
 )
-async function createRealm(sourceCode: string, version: string, filename, additionalLibs = {}): $todo {
+async function createRealm(sourceCode: string, filename, additionalLibs = {}): $todo {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
@@ -65,7 +65,7 @@ const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
     const req = await fetch(url)
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
-    return createRealm(text, ver, `effector.${ver}.js`)
+    return createRealm(text, `effector.${ver}.js`)
   },
 })
 
@@ -81,7 +81,7 @@ const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>(
     const req = await fetch(url)
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
-    return createRealm(text, ver, `effector-babel-plugin.${ver}.js`)
+    return createRealm(text, `effector-babel-plugin.${ver}.js`)
   },
 })
 
@@ -92,7 +92,7 @@ const fetchEffectorReact = createEffect<any, {[key: string]: any, ...}, mixed>('
     const req = await fetch(url)
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
-    return createRealm(text, ver, `effector-react.cjs.js`, {effector})
+    return createRealm(text, `effector-react.cjs.js`, {effector})
   },
 })
 
