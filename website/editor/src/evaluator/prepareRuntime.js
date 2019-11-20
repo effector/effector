@@ -14,7 +14,11 @@ import {
 } from '../realm'
 import {consoleMap} from '../logs'
 
-export function prepareRuntime(effector: typeof Effector, version: string) {
+export function prepareRuntime(
+  effector: typeof Effector,
+  effectorReact: typeof EffectorReact,
+  version: string,
+) {
   const api = {}
   apiMap(api, {
     createEvent: effector.createEvent,
@@ -33,10 +37,10 @@ export function prepareRuntime(effector: typeof Effector, version: string) {
     clearNode: effector.clearNode,
   })
   apiMap(api, {
-    createComponent: EffectorReact.createComponent,
+    createComponent: effectorReact.createComponent,
   })
   assignLibrary(api, effector)
-  assignLibrary(api, EffectorReact)
+  assignLibrary(api, effectorReact)
   return {
     React,
     ReactDOM,

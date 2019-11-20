@@ -1,5 +1,5 @@
 //@flow
-
+import * as React from 'react'
 import * as pathLibrary from 'path'
 import {createEffect, createStore} from 'effector'
 import {prepareRuntime} from './prepareRuntime'
@@ -23,7 +23,7 @@ const filename = createStore('repl.js').on(
     return 'repl.js'
   },
 )
-async function createRealm(sourceCode: string, version: string, filename): $todo {
+async function createRealm(sourceCode: string, version: string, filename, additionalLibs = {}): $todo {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
@@ -31,7 +31,9 @@ async function createRealm(sourceCode: string, version: string, filename): $todo
       //$off
       case 'symbol-observable': return Symbol.observable
       case 'path': return pathLibrary
+      case 'react': return React
     }
+    if (path in additionalLibs) return additionalLibs[path]
     console.warn('require: ', path)
   }
   realm.exports = {}
@@ -53,7 +55,7 @@ const cache = {
   '@effector/babel-plugin': new Map()
 }
 
-export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
+const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
   async handler(ver: string) {
     const url =
       ver === 'master'
@@ -69,7 +71,7 @@ export const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector'
 
 fetchEffector.fail.watch(() => selectVersion('master'))
 
-export const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>('fetch babel plugin', {
+const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>('fetch babel plugin', {
   async handler(ver): $todo {
     const url =
       ver === 'master'
@@ -80,6 +82,17 @@ export const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, 
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
     return createRealm(text, ver, `effector-babel-plugin.${ver}.js`)
+  },
+})
+
+const fetchEffectorReact = createEffect<any, {[key: string]: any, ...}, mixed>('fetch effector-react', {
+  async handler(effector): $todo {
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-react/effector-react.cjs.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, ver, `effector-react.cjs.js`, {effector})
   },
 })
 
@@ -116,8 +129,9 @@ export async function evaluator(code: string) {
     cache['@effector/babel-plugin'].get(version.getState()),
     cache.effector.get(version.getState()),
   ])
+  const effectorReact = await fetchEffectorReact(effector)
   //$off
-  const env = prepareRuntime(effector, version.getState())
+  const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
