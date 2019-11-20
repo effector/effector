@@ -16,7 +16,7 @@ import {
 import {fork, invoke, Provider, serialize} from 'effector-react/ssr'
 import {useStore, useList} from 'effector-react/ssr-compat'
 
-it('works', async() => {
+it('works', async () => {
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
@@ -133,18 +133,18 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-ok29mf": Array [
+      "-bj2hri": "alice",
+      "xotzpg": Array [
         "bob",
       ],
-      "195avr": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-ok29mf": Array [
+      "-bj2hri": "bob",
+      "xotzpg": Array [
         "alice",
       ],
-      "195avr": "bob",
     }
   `)
 })
