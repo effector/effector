@@ -100,21 +100,21 @@ yarn add effector effector-vue
 [pack-effector]: https://npmjs.com/effector
 [deps-effector]: https://david-dm.org/zerobias/effector.svg?path=packages/effector
 [david-effector]: https://david-dm.org/zerobias/effector?path=packages/effector
-[size-effector]: https://img.shields.io/bundlephobia/min/effector
+[size-effector]: https://img.shields.io/bundlephobia/minzip/effector
 [pho-effector]: https://bundlephobia.com/result?p=effector
 [`effector-react`]: https://github.com/zerobias/effector/tree/master/packages/effector-react
 [npm-react]: https://img.shields.io/npm/v/effector-react.svg?maxAge=3600
 [pack-react]: https://npmjs.com/effector-react
 [deps-react]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-react
 [david-react]: https://david-dm.org/zerobias/effector?path=packages/effector-react
-[size-react]: https://img.shields.io/bundlephobia/min/effector-react
+[size-react]: https://img.shields.io/bundlephobia/minzip/effector-react
 [pho-react]: https://bundlephobia.com/result?p=effector-react
 [`effector-vue`]: https://github.com/zerobias/effector/tree/master/packages/effector-vue
 [npm-vue]: https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600
 [pack-vue]: https://npmjs.com/effector-vue
 [deps-vue]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-vue
 [david-vue]: https://david-dm.org/zerobias/effector?path=packages/effector-vue
-[size-vue]: https://img.shields.io/bundlephobia/min/effector-vue
+[size-vue]: https://img.shields.io/bundlephobia/minzip/effector-vue
 [pho-vue]: https://bundlephobia.com/result?p=effector-vue
 
 #### Babel plugins
