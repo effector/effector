@@ -3,7 +3,7 @@
 import type {Event, Effect} from './unit.h'
 import {step, own, bind} from './stdlib'
 import {createNode} from './createNode'
-import {upsertLaunch} from './kernel'
+import {upsertLaunch, launch} from './kernel'
 import {createEvent} from './createEvent'
 import {createStore} from './createStore'
 import {normalizeConfig, type EffectConfigPart, type Config} from './config'
@@ -28,7 +28,6 @@ export function createEffect<Payload, Done>(
 
   //$off
   const instance: Effect<Payload, Done, any> = createEvent(config)
-  const eventCreate = instance.create
   //$off
   instance.graphite.meta.unit = 'effect'
   const done: Event<{|
@@ -124,9 +123,9 @@ export function createEffect<Payload, Done>(
       },
     }),
   )
-  ;(instance: any).create = (params: Payload, fullName, args) => {
+  ;(instance: any).create = (params: Payload) => {
     const req: any = new Defer()
-    eventCreate({ɔ: {params, req}}, instance.getType(), args)
+    launch(instance, {ɔ: {params, req}})
     return req.req
   }
 
