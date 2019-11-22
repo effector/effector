@@ -199,7 +199,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     //TODO: add location
     name: unitObjectName(obj),
   })
-  const isFresh = createStateRef(false)
+  const isFresh = createStateRef(true)
   const node = [
     step.check.defined(),
     step.mov({
@@ -216,7 +216,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }),
     step.compute({
       fn(upd, {target, clone, key}: CombinationScope, {a, b}) {
-        if (!b) {
+        if (b) {
           writeRef(target, clone(a))
         }
         readRef(target)[key] = upd
@@ -224,13 +224,13 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     }),
     step.mov({
       from: 'value',
-      store: true,
+      store: false,
       target: isFresh,
     }),
     step.barrier({priority: 'barrier'}),
     step.mov({
       from: 'value',
-      store: false,
+      store: true,
       target: isFresh,
     }),
     step.mov({
