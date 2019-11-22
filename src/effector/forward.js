@@ -25,7 +25,7 @@ export const createLinkNode = (
     meta,
     family: {
       owners: [parent, child],
-      links: [child],
+      links: child,
     },
   })
 export const forward = ({

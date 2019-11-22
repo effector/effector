@@ -29,11 +29,11 @@ export function guard(source: any, config: any) {
             fn: ({data}) => data,
           }),
         ],
-        child: [target],
+        child: target,
         meta,
         family: {
           owners: [source, filter, target],
-          links: [target],
+          links: target,
         },
       }),
       fn: (guard, data) => ({guard, data}),

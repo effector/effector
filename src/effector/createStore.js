@@ -65,7 +65,7 @@ export function createStore<State>(
           store: oldState,
         }),
       ],
-      child: [updates],
+      child: updates,
       meta: {unit: 'store', name: compositeName.shortName, sid, named},
     }),
     kind: 'store',

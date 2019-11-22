@@ -19,10 +19,10 @@ export const watchUnit = (
           },
         }),
       ],
-      parent: [unit],
+      parent: unit,
       meta: {op: 'watch'},
       family: {
-        owners: [unit],
+        owners: unit,
       },
     }),
   )

@@ -86,7 +86,6 @@ export function sample(
         }),
       ],
       family: {
-        type: 'crosslink',
         owners: [source, target, clock],
         links: target,
       },
