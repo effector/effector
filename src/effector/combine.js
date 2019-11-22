@@ -202,33 +202,39 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
   const isFresh = createStateRef(false)
   const node = [
     step.check.defined(),
+    step.mov({
+      store: store.stateRef,
+      to: 'a',
+    }),
     //prettier-ignore
     step.filter({
-      fn: (upd, {target, key}: CombinationScope) => (
-        upd !== readRef(target)[key]
-      ),
+      fn: (upd, {key}, {a}) => upd !== a[key],
+    }),
+    step.mov({
+      store: isFresh,
+      to: 'b',
     }),
     step.compute({
-      fn(upd, {isFresh, target, clone}: CombinationScope) {
-        if (!readRef(isFresh)) {
-          writeRef(target, clone(readRef(target)))
-          writeRef(isFresh, true)
+      fn(upd, {target, clone, key}: CombinationScope, {a, b}) {
+        if (!b) {
+          writeRef(target, clone(a))
         }
-        return upd
+        readRef(target)[key] = upd
       },
     }),
-    step.compute({
-      fn(upd, {target, key}: CombinationScope) {
-        readRef(target)[key] = upd
-        return upd
-      },
+    step.mov({
+      from: 'value',
+      store: true,
+      target: isFresh,
     }),
     step.barrier({priority: 'barrier'}),
-    step.compute({
-      fn(none, {isFresh, target}: CombinationScope) {
-        writeRef(isFresh, false)
-        return readRef(target)
-      },
+    step.mov({
+      from: 'value',
+      store: false,
+      target: isFresh,
+    }),
+    step.mov({
+      store: store.stateRef,
     }),
   ]
 
@@ -241,7 +247,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     createLinkNode(child, store, {
-      scope: {key, clone, target: store.stateRef, isFresh},
+      scope: {key, clone, target: store.stateRef},
       node,
       meta: {op: 'combine'},
     })

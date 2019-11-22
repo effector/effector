@@ -249,14 +249,17 @@ exports[`showcase: event foo 1`] = `
             Node {
               seq: [
                 check: defined,
+                mov: store a,
                 filter: Function,
+                mov: store b,
                 compute: Function,
-                compute: Function,
+                mov: value store,
                 barrier: {
                   barrierID: 1,
                   priority: barrier
                 },
-                compute: Function
+                mov: value store,
+                mov: store stack
               ],
               next: [
                 Node {
@@ -341,14 +344,17 @@ exports[`showcase: store a 1`] = `
     Node {
       seq: [
         check: defined,
+        mov: store a,
         filter: Function,
+        mov: store b,
         compute: Function,
-        compute: Function,
+        mov: value store,
         barrier: {
           barrierID: 1,
           priority: barrier
         },
-        compute: Function
+        mov: value store,
+        mov: store stack
       ],
       next: [
         Node {

@@ -261,7 +261,6 @@ function cloneGraph(unit) {
   })
   onOperation('combine', ({scope}) => {
     scope.target = cloneRef(scope.target)
-    scope.isFresh = cloneRef(scope.isFresh)
   })
   onUnit('domain', ({scope}) => {
     scope.history = {
