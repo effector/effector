@@ -11,7 +11,7 @@ export function createNode({
   child,
   scope = {},
   meta = {},
-  family: familyRaw = {},
+  family: familyRaw = {type: 'regular'},
 }: {
   +node?: Array<Cmd | false | void | null>,
   +parent?: Graphite | Graphite[],
@@ -50,7 +50,7 @@ export function createNode({
     meta,
     scope,
     family: {
-      type: familyRaw.type || 'regular',
+      type: familyRaw.type || 'crosslink',
       links,
       owners,
     },
