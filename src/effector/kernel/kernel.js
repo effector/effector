@@ -2,7 +2,7 @@
 
 import type {Graphite, Graph, ID} from '../stdlib'
 import type {PriorityTag} from './getPriority'
-import {getGraph, writeRef, readRef} from '../stdlib'
+import {getGraph, readRef} from '../stdlib'
 import type {Layer} from './layer'
 import {type leftist, insert, deleteMin} from './leftist'
 import {Stack} from './stack'
@@ -115,7 +115,7 @@ const exec = () => {
             case 'a': stack.reg.a = value; break
             case 'b': stack.reg.b = value; break
             case 'store':
-              writeRef(graph.reg[data.target.id], value)
+              graph.reg[data.target.id].current = value
               break
           }
           break
@@ -147,7 +147,7 @@ const exec = () => {
           }
         case 'compute':
           stack.value = tryRun(local, data, stack)
-          break
+              break
       }
       meta.stop = local.isFailed || !local.isChanged
     }

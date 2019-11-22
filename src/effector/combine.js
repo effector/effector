@@ -2,7 +2,7 @@
 
 import type {Store} from './unit.h'
 import {createStore} from './createStore'
-import {step, createStateRef, readRef, writeRef, type StateRef} from './stdlib'
+import {step, createStateRef, readRef, type StateRef} from './stdlib'
 import {is} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
