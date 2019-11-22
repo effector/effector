@@ -259,9 +259,6 @@ function cloneGraph(unit) {
   onUnit('store', node => {
     node.meta.wrapped = wrapStore(node)
   })
-  onOperation('combine', ({scope}) => {
-    scope.target = cloneRef(scope.target)
-  })
   onUnit('domain', ({scope}) => {
     scope.history = {
       domains: new Set(),

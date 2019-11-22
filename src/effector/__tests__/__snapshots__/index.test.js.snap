@@ -253,6 +253,7 @@ exports[`showcase: event foo 1`] = `
                 filter: Function,
                 mov: store b,
                 compute: Function,
+                mov: a store,
                 mov: value store,
                 barrier: {
                   barrierID: 1,
@@ -348,6 +349,7 @@ exports[`showcase: store a 1`] = `
         filter: Function,
         mov: store b,
         compute: Function,
+        mov: a store,
         mov: value store,
         barrier: {
           barrierID: 1,

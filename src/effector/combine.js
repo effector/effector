@@ -199,11 +199,12 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     //TODO: add location
     name: unitObjectName(obj),
   })
+  const target = store.stateRef
   const isFresh = createStateRef(true)
   const node = [
     step.check.defined(),
     step.mov({
-      store: store.stateRef,
+      store: target,
       to: 'a',
     }),
     //prettier-ignore
@@ -215,12 +216,16 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       to: 'b',
     }),
     step.compute({
-      fn(upd, {target, clone, key}: CombinationScope, {a, b}) {
-        if (b) {
-          writeRef(target, clone(a))
+      fn(upd, {clone, key}: CombinationScope, reg) {
+        if (reg.b) {
+          reg.a = clone(reg.a)
         }
-        readRef(target)[key] = upd
+        reg.a[key] = upd
       },
+    }),
+    step.mov({
+      from: 'a',
+      target,
     }),
     step.mov({
       from: 'value',
@@ -233,9 +238,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       store: true,
       target: isFresh,
     }),
-    step.mov({
-      store: store.stateRef,
-    }),
+    step.mov({store: target}),
   ]
 
   for (const key in obj) {
@@ -247,7 +250,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
     createLinkNode(child, store, {
-      scope: {key, clone, target: store.stateRef},
+      scope: {key, clone},
       node,
       meta: {op: 'combine'},
     })
