@@ -6,6 +6,7 @@ import {is} from './is'
 import {createStore} from './createStore'
 import {createEvent} from './createEvent'
 import {createLinkNode} from './forward'
+import {createNode} from './createNode'
 
 export function sample(
   source: any,
@@ -74,21 +75,23 @@ export function sample(
     const hasSource = createStateRef(false)
     const sourceState = createStateRef()
     const clockState = createStateRef()
-
-    own(clock, [
-      createLinkNode(source, target, {
-        node: [
-          step.update({store: sourceState}),
-          step.mov({
-            from: 'value',
-            store: true,
-            target: hasSource,
-          }),
-          step.filter({fn: () => false}),
-        ],
-        meta: {op: 'sample', sample: 'source'},
-      }),
-    ])
+    createNode({
+      parent: source,
+      node: [
+        step.update({store: sourceState}),
+        step.mov({
+          from: 'value',
+          store: true,
+          target: hasSource,
+        }),
+      ],
+      family: {
+        type: 'crosslink',
+        owners: [source, target, clock],
+        links: target,
+      },
+      meta: {op: 'sample', sample: 'source'},
+    })
     own(source, [
       createLinkNode(clock, target, {
         scope: {fn},
