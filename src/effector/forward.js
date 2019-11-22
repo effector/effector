@@ -24,7 +24,6 @@ export const createLinkNode = (
     scope,
     meta,
     family: {
-      type: 'crosslink',
       owners: [parent, child],
       links: [child],
     },
@@ -43,8 +42,6 @@ export const forward = ({
       parent: from,
       child: to,
       meta,
-      family: {
-        type: 'crosslink',
-      },
+      family: {},
     }),
   )

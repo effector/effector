@@ -22,7 +22,6 @@ export const watchUnit = (
       parent: [unit],
       meta: {op: 'watch'},
       family: {
-        type: 'crosslink',
         owners: [unit],
       },
     }),

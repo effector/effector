@@ -32,7 +32,6 @@ export function guard(source: any, config: any) {
         child: [target],
         meta,
         family: {
-          type: 'crosslink',
           owners: [source, filter, target],
           links: [target],
         },
