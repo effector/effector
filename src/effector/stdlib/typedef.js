@@ -10,7 +10,6 @@ import type {
   Batch,
   ID,
   Graph,
-  ReadStack,
   Mov,
 } from './index.h'
 import {nextStepID, nextBarrierID} from './refcount'
@@ -27,9 +26,6 @@ export const step: {|
   batch(data: {|
     +blocks: Graph,
   |}): Batch,
-  stack(data: {|
-    +to: Graph,
-  |}): ReadStack,
   barrier(data: {|
     +priority?: 'barrier' | 'sampler',
   |}): Barrier,
@@ -60,7 +56,6 @@ export const step: {|
   |}): Mov,
 |} = {
   batch: bind2(cmd, 'batch', false),
-  stack: bind2(cmd, 'stack', false),
   barrier: ({priority = 'barrier'}) =>
     cmd('barrier', false, {
       barrierID: nextBarrierID(),

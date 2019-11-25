@@ -27,16 +27,7 @@ export type Cmd =
   | Compute
   | Barrier
   | Batch
-  | ReadStack
   | Mov
-export type ReadStack = {|
-  +id: ID,
-  +type: 'stack',
-  +data: {|
-    +to: Graph,
-  |},
-  +hasRef: false,
-|}
 export type Batch = {|
   +id: ID,
   +type: 'batch',
