@@ -23,9 +23,6 @@ const cmd = (type: any, hasRef: boolean, data: any): any => ({
 })
 
 export const step: {|
-  batch(data: {|
-    +blocks: Graph,
-  |}): Batch,
   barrier(data: {|
     +priority?: 'barrier' | 'sampler',
   |}): Barrier,
@@ -48,14 +45,10 @@ export const step: {|
   run(data: {|
     fn: (data: any, scope: {[string]: any, ...}) => any,
   |}): Run,
-  tap(data: {|
-    fn: (data: any, scope: {[string]: any, ...}) => any,
-  |}): Tap,
   update(data: {|
     store: StateRef,
   |}): Mov,
 |} = {
-  batch: bind2(cmd, 'batch', false),
   barrier: ({priority = 'barrier'}) =>
     cmd('barrier', false, {
       barrierID: nextBarrierID(),

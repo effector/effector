@@ -26,16 +26,7 @@ export type Cmd =
   | Filter
   | Compute
   | Barrier
-  | Batch
   | Mov
-export type Batch = {|
-  +id: ID,
-  +type: 'batch',
-  +data: {|
-    +blocks: Graph,
-  |},
-  +hasRef: false,
-|}
 export type Mov = {|
   +id: ID,
   +type: 'mov',

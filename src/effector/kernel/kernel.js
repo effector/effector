@@ -67,18 +67,6 @@ const exec = () => {
       const step = graph.seq[stepn]
       const data = step.data
       switch (step.type) {
-        case 'batch': {
-          const blocks = stack.value
-          const ctx = stack.parent.value
-          for (let i = 0; i < blocks.length; i++) {
-            pushHeap(
-              0,
-              new Stack(data.blocks[blocks[i]], stack.parent, ctx),
-              'pure',
-            )
-          }
-          break
-        }
         case 'barrier': {
           const id = data.barrierID
           const priority = data.priority
