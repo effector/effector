@@ -173,6 +173,8 @@ export class Domain implements Unit<any> {
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
   event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
+  createEvent<Payload = void>(name?: string): Event<Payload>
+  createEvent<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
@@ -185,8 +187,25 @@ export class Domain implements Unit<any> {
     sid?: string
     name?: string
   }): Effect<Params, Done, Fail>
+  createEffect<Params, Done, Fail = Error>(
+    name?: string,
+    config?: {
+      handler?: (params: Params) => Promise<Done> | Done
+      sid?: string
+    },
+  ): Effect<Params, Done, Fail>
+  createEffect<Params, Done, Fail = Error>(config: {
+    handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
+    name?: string
+  }): Effect<Params, Done, Fail>
   domain(name?: string): Domain
+  createDomain(name?: string): Domain
   store<State>(
+    defaultState: State,
+    config?: {name?: string; sid?: string},
+  ): Store<State>
+  createStore<State>(
     defaultState: State,
     config?: {name?: string; sid?: string},
   ): Store<State>
