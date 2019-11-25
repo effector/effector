@@ -77,6 +77,47 @@ describe('#event', () => {
     `)
   })
 })
+describe('#createEvent', () => {
+  it('works without arguments', () => {
+    const domain = createDomain()
+    const event = domain.createEvent<string>()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('works with name', () => {
+    const domain = createDomain()
+    const event = domain.createEvent<string>('event')
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('works with config', () => {
+    const domain = createDomain()
+    const event = domain.createEvent<string>({name: 'event'})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+})
 
 describe('#effect', () => {
   test('type inference', () => {
@@ -163,6 +204,105 @@ describe('#effect', () => {
   it('works with name and config', () => {
     const domain = createDomain()
     const fx = domain.effect('fx', {
+      async handler(params) {},
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+})
+
+describe('#createEffect', () => {
+  test('type inference', () => {
+    const domain = createDomain()
+    const effect1: Effect<string, number, Error> = domain.createEffect()
+    const effect2 = domain.createEffect('', {
+      handler(params: string) {
+        return 256
+      },
+    })
+    effect2(20)
+    const effect3 = domain.createEffect('', {
+      handler: effect1,
+    })
+    effect3(20)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Argument of type '20' is not assignable to parameter of type 'string'.
+      Argument of type '20' is not assignable to parameter of type 'string'.
+
+      --flow--
+      Cannot call 'effect2' with '20' bound to 'payload'
+        effect2(20)
+                ^^
+        number [1] is incompatible with string [2]
+            effect2(20)
+                [1] ^^
+            handler(params: string) {
+                        [2] ^^^^^^
+      Cannot call 'effect3' with '20' bound to 'payload'
+        effect3(20)
+                ^^
+        number [1] is incompatible with string [2]
+            effect3(20)
+                [1] ^^
+            const effect1: Effect<string, number, Error> = domain.createEffect()
+                              [2] ^^^^^^
+      "
+    `)
+  })
+  it('works without arguments', () => {
+    const domain = createDomain()
+    const fx = domain.createEffect()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('works with name', () => {
+    const domain = createDomain()
+    const fx = domain.createEffect('fx')
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('works with config', () => {
+    const domain = createDomain()
+    const fx = domain.createEffect({
+      name: 'fx',
+      async handler(params) {},
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  it('works with name and config', () => {
+    const domain = createDomain()
+    const fx = domain.createEffect('fx', {
       async handler(params) {},
     })
     expect(typecheck).toMatchInlineSnapshot(`
