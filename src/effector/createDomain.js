@@ -95,7 +95,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     },
   })
 
-  return {
+  const result = {
     graphite: node,
     compositeName,
     id,
@@ -107,43 +107,51 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     onCreateStore: createHook(store, stores, node),
     onCreateDomain: createHook(domain, domains, node),
     history,
-    event: <Payload>(
-      name?: string,
-      config?: Config<EventConfigPart>,
-    ): Event<Payload> =>
+    kind: 'domain',
+    sid,
+  }
+
+  result.createEvent = result.event = <Payload>(
+    name?: string,
+    config?: Config<EventConfigPart>,
+  ): Event<Payload> =>
       event(
         createEvent(name, {
           parent: compositeName,
           config,
         }),
-      ),
-    effect: <Params, Done, Fail>(
-      name?: string,
-      config?: Config<EffectConfigPart<Params, Done>>,
-    ): Effect<Params, Done, Fail> =>
+      )
+  result.createEffect = result.effect = <Params, Done, Fail>(
+    name?: string,
+    config?: Config<EffectConfigPart<Params, Done>>,
+  ): Effect<Params, Done, Fail> =>
       effect(
         createEffect(name, {
           parent: compositeName,
           config,
         }),
-      ),
-    domain: (name?: string, config?: Config<DomainConfigPart>) =>
-      domain(
-        createDomain({
-          name,
-          parent: compositeName,
-          parentHooks: hooks,
-          config,
-        }),
-      ),
-    store: <T>(state: T, config?: Config<StoreConfigPart>): Store<T> =>
+      )
+  result.createDomain = result.domain = (
+    name?: string,
+    config?: Config<DomainConfigPart>,
+  ) =>
+    domain(
+      createDomain({
+        name,
+        parent: compositeName,
+        parentHooks: hooks,
+        config,
+      }),
+    )
+  result.createStore = result.store = <T>(
+    state: T,
+    config?: Config<StoreConfigPart>,
+  ): Store<T> =>
       store(
         createStore(state, {
           parent: compositeName,
           config,
         }),
-      ),
-    kind: 'domain',
-    sid,
-  }
+      )
+  return result
 }
