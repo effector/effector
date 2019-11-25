@@ -31,11 +31,11 @@ const barriers = new Set()
 const pushHeap = (firstIndex: number, stack: Stack, type: PriorityTag) => {
   heap = insert(
     {
-      firstIndex,
-      stack,
-      resetStop: currentResetStop,
-      type,
-      id: ++layerID,
+    firstIndex,
+    stack,
+    resetStop: currentResetStop,
+    type,
+    id: ++layerID,
     },
     heap,
   )
@@ -102,8 +102,8 @@ const exec = () => {
           //prettier-ignore
           switch (data.from) {
             case 'stack': value = stack.value; break
-            case 'a': value = stack.reg.a; break
-            case 'b': value = stack.reg.b; break
+            case 'a': value = stack.a; break
+            case 'b': value = stack.b; break
             case 'value': value = data.store; break
             case 'store':
               value = readRef(graph.reg[data.store.id])
@@ -112,8 +112,8 @@ const exec = () => {
           //prettier-ignore
           switch (data.to) {
             case 'stack': stack.value = value; break
-            case 'a': stack.reg.a = value; break
-            case 'b': stack.reg.b = value; break
+            case 'a': stack.a = value; break
+            case 'b': stack.b = value; break
             case 'store':
               graph.reg[data.target.id].current = value
               break
@@ -147,7 +147,7 @@ const exec = () => {
           }
         case 'compute':
           stack.value = tryRun(local, data, stack)
-              break
+          break
       }
       meta.stop = local.isFailed || !local.isChanged
     }
@@ -181,7 +181,7 @@ const tryRun = (local: Local, {fn}, stack: Stack) => {
   let result = null
   let isFailed = false
   try {
-    result = fn(stack.value, local.scope, stack.reg)
+    result = fn(stack.value, local.scope, stack)
   } catch (err) {
     console.error(err)
     isFailed = true
