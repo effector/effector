@@ -62,6 +62,19 @@ describe('domain hooks', () => {
     expect(spyDom).toHaveBeenLastCalledWith(e2)
     expect(spySub).toHaveBeenLastCalledWith(e2)
   })
+  test('create* aliases', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEvent(fn)
+    domain.onCreateEffect(fn)
+    domain.onCreateStore(fn)
+    domain.onCreateDomain(fn)
+    const event = domain.createEvent()
+    const effect = domain.createEffect()
+    const store = domain.createStore(null)
+    const subdomain = domain.createDomain()
+    expect(argumentHistory(fn)).toEqual([event, effect, store, subdomain])
+  })
 })
 
 describe('domain name', () => {
@@ -99,7 +112,7 @@ describe('domain name', () => {
   })
 })
 describe('config', () => {
-  test('domain.effect(config)', async () => {
+  test('domain.effect(config)', async() => {
     const fn = jest.fn()
     const domain = createDomain()
     const fx = domain.effect({
