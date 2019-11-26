@@ -1,5 +1,12 @@
 # Changelog
 
+## effector 20.7.0
+
+- Add `domain.createStore` as alias for `domain.store` ([proposal](https://github.com/zerobias/effector/issues/186))
+- Add `domain.createEvent` as alias for `domain.event`
+- Add `domain.createEffect` as alias for `domain.effect`
+- Add `domain.createDomain` as alias for `domain.domain`
+
 ## effector 20.6.2
 
 - Improve `sample` typings for typescript (PR [#248](https://github.com/zerobias/effector/pull/248), fix [#247](https://github.com/zerobias/effector/issues/247)) (thanks [@bloadvenro](https://github.com/bloadvenro))
