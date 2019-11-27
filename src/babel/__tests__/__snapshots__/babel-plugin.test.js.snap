@@ -16,7 +16,7 @@ const Foo = createComponent(foo, (props, data) => null, {
     column: 12
   },
   name: \\"Foo\\",
-  sid: \\"Foo /src/babel/__tests__/fixtures/create-component.js [6, 12]}\\"
+  sid: \\"Foo /src/babel/__tests__/fixtures/create-component.js [6, 12]\\"
 });"
 `;
 
@@ -49,6 +49,14 @@ const foo = domain.domain(\\"foo\\", {
 const bar = domain.domain('baz', {
   name: \\"bar\\",
   sid: \\"ksdvxf\\"
+});
+const fooAlias = domain.createDomain(\\"fooAlias\\", {
+  name: \\"fooAlias\\",
+  sid: \\"75cvir\\"
+});
+const barAlias = domain.createDomain('bazAlias', {
+  name: \\"barAlias\\",
+  sid: \\"-abn323\\"
 });"
 `;
 
@@ -78,6 +86,26 @@ const b = domain.effect('hello', {
 const g = () => domain.effect('baz', {
   name: \\"g\\",
   sid: \\"hgf89v\\"
+});
+
+const aAlias = domain.createEffect(\\"aAlias\\", {
+  name: \\"aAlias\\",
+  sid: \\"-ej7o7u\\"
+});
+
+const fAlias = () => domain.createEffect(\\"fAlias\\", {
+  name: \\"fAlias\\",
+  sid: \\"-yfer5d\\"
+});
+
+const bAlias = domain.createEffect('helloAlias', {
+  name: \\"bAlias\\",
+  sid: \\"-hnrrtn\\"
+});
+
+const gAlias = () => domain.createEffect('bazAlias', {
+  name: \\"gAlias\\",
+  sid: \\"xh577y\\"
 });"
 `;
 
@@ -107,6 +135,26 @@ const b = domain.event('asm', {
 const g = () => domain.event('tasm', {
   name: \\"g\\",
   sid: \\"i4cx64\\"
+});
+
+const aAlias = domain.createEvent(\\"aAlias\\", {
+  name: \\"aAlias\\",
+  sid: \\"ocb24t\\"
+});
+
+const fAlias = () => domain.createEvent(\\"fAlias\\", {
+  name: \\"fAlias\\",
+  sid: \\"sqoaj0\\"
+});
+
+const bAlias = domain.createEvent('asmAlias', {
+  name: \\"bAlias\\",
+  sid: \\"-2c6lli\\"
+});
+
+const gAlias = () => domain.createEvent('tasmAlias', {
+  name: \\"gAlias\\",
+  sid: \\"226msp\\"
 });"
 `;
 
@@ -153,6 +201,42 @@ const f = domain.store('h', {
   ɔ: {},
   name: \\"f\\",
   sid: \\"4p23pp\\"
+});
+const aAlias = domain.createStore('bar', {
+  name: \\"aAlias\\",
+  sid: \\"6bga5r\\"
+});
+const bAlias = domain.createStore('h', {
+  ɔ: {
+    option: 'test',
+    ['na' + 'me']: 'LOL'
+  },
+  name: \\"bAlias\\",
+  sid: \\"-ku2zyr\\"
+});
+const cAlias = domain.createStore('h', {
+  ɔ: {
+    name: 'testAlias'
+  },
+  name: \\"cAlias\\",
+  sid: \\"n1hrvv\\"
+}); //$off
+
+const dAlias = domain.createStore('h', {
+  ɔ: null,
+  name: \\"dAlias\\",
+  sid: \\"-3mzvug\\"
+}); //$off
+
+const eAlias = domain.createStore('h', {
+  ɔ: 4234,
+  name: \\"eAlias\\",
+  sid: \\"-kdjhao\\"
+});
+const fAlias = domain.createStore('h', {
+  ɔ: {},
+  name: \\"fAlias\\",
+  sid: \\"ni1ajy\\"
 });"
 `;
 
@@ -279,7 +363,7 @@ const Foo = () => {
       column: 15
     },
     name: \\"Foo\\",
-    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [8, 15]}\\"
+    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [8, 15]\\"
   });
   const data0 = useStore(bar, {
     loc: {
@@ -288,7 +372,7 @@ const Foo = () => {
       column: 16
     },
     name: \\"Foo\\",
-    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [9, 16]}\\"
+    sid: \\"Foo /src/babel/__tests__/fixtures/use-store.js [9, 16]\\"
   });
 };"
 `;
