@@ -13,18 +13,27 @@ module.exports = function(babel, options = {}) {
     eventCreators,
     effectCreators,
     domainCreators,
+    domainMethods,
     exportMetadata,
     importName,
   } = normalizeOptions(options)
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
+  const isPropertyNameInRange = (range, path) =>
+    range.has(path.node.callee.property.name)
+  const isDomainMethod = {
+    store: isPropertyNameInRange.bind(null, domainMethods.store),
+    event: isPropertyNameInRange.bind(null, domainMethods.event),
+    effect: isPropertyNameInRange.bind(null, domainMethods.effect),
+    domain: isPropertyNameInRange.bind(null, domainMethods.domain),
+  }
   const plugin = {
     name: '@effector/babel-plugin',
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
         const specifiers = path.node.specifiers
-        if (source === importName) {
+        if (importName.has(source)) {
           for (let i = 0; i < specifiers.length; i++) {
             const s = specifiers[i]
             if (!s.imported) continue
@@ -96,25 +105,25 @@ module.exports = function(babel, options = {}) {
         }
 
         if (t.isMemberExpression(path.node.callee)) {
-          if (stores && path.node.callee.property.name === 'store') {
+          if (stores && isDomainMethod.store(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setStoreNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (events && path.node.callee.property.name === 'event') {
+          if (events && isDomainMethod.event(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (effects && path.node.callee.property.name === 'effect') {
+          if (effects && isDomainMethod.effect(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (domains && path.node.callee.property.name === 'domain') {
+          if (domains && isDomainMethod.domain(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
@@ -153,12 +162,24 @@ const normalizeOptions = options => {
       domains: true,
     },
     result: {
-      importName: options.importName || 'effector',
+      importName: new Set(
+        options.importName
+          ? Array.isArray(options.importName)
+            ? options.importName
+            : [options.importName]
+          : ['effector', '@zerobias/effector'],
+      ),
       exportMetadata,
       storeCreators: new Set(options.storeCreators || ['createStore']),
       eventCreators: new Set(options.eventCreators || ['createEvent']),
       effectCreators: new Set(options.effectCreators || ['createEffect']),
       domainCreators: new Set(options.domainCreators || ['createDomain']),
+      domainMethods: readConfigShape(options.domainMethods, {
+        store: ['store', 'createStore'],
+        event: ['event', 'createEvent'],
+        effect: ['effect', 'createEffect'],
+        domain: ['domain', 'createDomain'],
+      }),
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },
@@ -173,6 +194,16 @@ const normalizeOptions = options => {
       }
     }
     return result
+  }
+  function readConfigShape(shape = {}, defaults = {}) {
+    const result = {}
+    for (const key in defaults) {
+      result[key] = readConfigArray(shape[key], defaults[key])
+    }
+    return result
+  }
+  function readConfigArray(array, defaults) {
+    return new Set(array || defaults)
   }
 }
 
