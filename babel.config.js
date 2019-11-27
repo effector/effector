@@ -77,7 +77,6 @@ const babelConfig = {
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       ['@babel/plugin-proposal-class-properties', {loose: true}],
-      'macros',
       [
         'babel-plugin-module-resolver',
         {
