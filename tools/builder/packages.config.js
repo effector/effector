@@ -42,15 +42,15 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.7.0',
-  'effector-react': '20.4.1',
+  effector: '20.7.1',
+  'effector-react': '20.4.2',
   'effector-vue': '20.3.2',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
 
-  '@effector/babel-plugin': '0.4.0',
-  '@effector/babel-plugin-react': '0.2.0',
+  '@effector/babel-plugin': '0.5.0',
+  '@effector/babel-plugin-react': '0.2.1',
   '@effector/redux-adapter': '0.0.1',
   '@effector/forms': '0.0.1',
 }
@@ -123,7 +123,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '^16.8.0',
-      effector: '*',
+      effector: '^20.7.0',
     },
     files: [...getFiles('effector-react'), 'ssr.js', 'ssr.js.map'],
     keywords: ['react', ...keywords],
