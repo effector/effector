@@ -221,5 +221,5 @@ function generateStableID(babelRoot, fileName, varName, line, column) {
   const normalizedPath = normalize(rawPath)
     .split(sep)
     .join('/')
-  return `${varName} ${normalizedPath} [${line}, ${column}]}`
+  return `${varName} ${normalizedPath} [${line}, ${column}]`
 }
