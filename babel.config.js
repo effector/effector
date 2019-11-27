@@ -102,7 +102,8 @@ const babelConfig = {
           filename &&
           filename.includes('__tests__') &&
           !filename.includes('redux') &&
-          !filename.includes('browserstack')
+          !filename.includes('browserstack') &&
+          !filename.includes('fromObservable')
         )
       },
       plugins: [
