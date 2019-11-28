@@ -71,6 +71,7 @@ userUpdated({name: 'john', role: 'admin'})
 ### `filter({fn})`
 
 Сreates a new event, which will be called after the original event is called if `fn` returns `true`.
+
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the concrete size of the sneakers model, besides you want to receive a notification if there will have and don't receive others. Therefore filtering is needed for that. Event filtering works the same. If the filter returns `true`, the event will be called.
 
 <!-- You may ask, why object as argument? If you are interesting, welcome to advanced section -->
@@ -105,7 +106,22 @@ numbers({x: 10}) // store will triggered
 
 ### `filterMap(fn)`
 
-Сreates a new event, which will be called after the original event is called, if `fn` returns **not undefined**.
+Сreates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.\
+Imagine you come to the product shop and you have let's say a task: you should buy 10 apples, but only red otherwise nothing.
+Let's consider by steps:
+
+1. Take one apple;
+2. Have a look red(put in a pack) or no(take another).
+
+And you repeat this till no complete a task. Now think about it in Effector context and we consider the positive case:
+
+1. Take an apple - event;
+2. Have a look red or no - filter;
+3. You keep it - map;
+4. Put in pack - event.
+5. Pack - store
+
+You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
 
 #### Arguments
 
@@ -159,7 +175,7 @@ const App = () => (
   </>
 )
 
-ReactDOM.render(<App/>, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
 <hr />
@@ -192,4 +208,3 @@ document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
 ```
-
