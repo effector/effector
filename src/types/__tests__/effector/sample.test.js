@@ -460,3 +460,36 @@ describe('`target` forwarding', () => {
     `)
   })
 })
+
+describe('sample with implicit combine', () => {
+  it('support store objects as source (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample({
+      source: {a, b},
+      clock,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
+            Object literal may only specify known properties, and 'a' does not exist in type 'Event<unknown> | Effect<unknown, any, any>'.
+
+      --flow--
+      Cannot call 'sample' because: Either property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. Or property 'kind' is missing in object literal [1] but exists in 'Unit' [3] in property 'source'
+        const result = sample({
+                       ^^^^^^
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+            +source: Unit<A>,
+                 [3] ^^^^^^^
+      "
+    `)
+  })
+})
