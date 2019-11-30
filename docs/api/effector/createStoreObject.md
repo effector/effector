@@ -6,6 +6,8 @@ hide_title: true
 
 # `createStoreObject(objectShape)`
 
+An alias for `combine({field: storeA, another: storeB})`. See [_`combine`_](combine.md)
+
 #### Arguments
 
 1. `objectShape` (_Object_)
