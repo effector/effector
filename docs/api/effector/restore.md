@@ -6,7 +6,8 @@ hide_title: true
 
 # `restore(event, defaultState)`
 
-Creates a _`Store`_ from _`Event`_
+Creates a _`Store`_ from _`Event`_.
+It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
 #### Arguments
 
@@ -20,19 +21,20 @@ Creates a _`Store`_ from _`Event`_
 #### Example
 
 ```js try
-const event = createEvent('event')
+const event = createEvent()
 const store = restore(event, 'default')
 
 store.watch(state => console.log('state: ', state))
 // state: default
-// state: foo
 
 event('foo')
+// state: foo
 ```
 
 # `restore(effect, defaultState)`
 
-Creates a _`Store`_ from _`Effect`_
+Creates a _`Store`_ from sucessful results of _`Effect`_.
+It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
 #### Arguments
 
@@ -46,15 +48,16 @@ Creates a _`Store`_ from _`Effect`_
 #### Example
 
 ```js try
-const effect = createEffect('effect')
-effect.use(() => Promise.resolve('foo'))
+const effect = createEffect({
+  handler: () => 'foo',
+})
 const store = restore(effect, 'default')
 
 store.watch(state => console.log('state: ', state))
 // state: default
-// state: foo
 
 effect()
+// state: foo
 ```
 
 # `restore(obj)`
