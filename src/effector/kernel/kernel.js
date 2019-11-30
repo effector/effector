@@ -48,8 +48,10 @@ const popMinFromList = list => {
 }
 
 const queue = []
-for (let i = 0; i < 5; i++) {
+let ix = 0
+while (ix < 5) {
   queue.push({first: null, last: null, size: 0})
+  ix += 1
 }
 
 let layerID = 0
