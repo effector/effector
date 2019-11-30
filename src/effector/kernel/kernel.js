@@ -1,10 +1,9 @@
 //@flow
 
 import type {Graphite, Graph, ID} from '../stdlib'
-import type {PriorityTag} from './getPriority'
+import {type PriorityTag, getPriority} from './getPriority'
 import {getGraph, readRef} from '../stdlib'
 import type {Layer} from './layer'
-import {type leftist, insert, deleteMin} from './leftist'
 import {Stack} from './stack'
 
 /**
@@ -24,21 +23,50 @@ class Local {
     this.scope = scope
   }
 }
+const pushValueToList = (list, value) => {
+  const item = {
+    right: null,
+    value,
+  }
+  if (list.size === 0) {
+    list.first = item
+  } else {
+    list.last.right = item
+  }
+  list.size += 1
+  list.last = item
+}
+const popMinFromList = list => {
+  if (list.size === 0) return
+  if (list.size === 1) {
+    list.last = null
+  }
+  const item = list.first
+  list.first = item.right
+  list.size -= 1
+  return item.value
+}
+
+const queue = []
+for (let i = 0; i < 5; i++) {
+  queue.push({first: null, last: null, size: 0})
+}
 
 let layerID = 0
-let heap: leftist = null
 const barriers = new Set()
+const deleteMin = () => {
+  for (let i = 0; i < 5; i++) {
+    if (queue[i].size > 0) return popMinFromList(queue[i])
+  }
+}
 const pushHeap = (firstIndex: number, stack: Stack, type: PriorityTag) => {
-  heap = insert(
-    {
+  pushValueToList(queue[getPriority(type)], {
     firstIndex,
     stack,
     resetStop: currentResetStop,
     type,
     id: ++layerID,
-    },
-    heap,
-  )
+  })
 }
 
 let alreadyStarted = false
@@ -53,9 +81,7 @@ const exec = () => {
   }
   let graph
   let value
-  mem: while (heap) {
-    value = heap.value
-    heap = deleteMin(heap)
+  mem: while ((value = deleteMin())) {
     const {firstIndex, stack, resetStop, type} = value
     graph = stack.node
     const local = new Local(graph.scope)
@@ -78,8 +104,6 @@ const exec = () => {
             continue mem
           }
           barriers.delete(id)
-          local.isFailed = false
-          local.isChanged = true
           break
         }
         case 'mov': {
@@ -163,14 +187,10 @@ export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
 }
 
 const tryRun = (local: Local, {fn}, stack: Stack) => {
-  let result = null
-  let isFailed = false
   try {
-    result = fn(stack.value, local.scope, stack)
+    return fn(stack.value, local.scope, stack)
   } catch (err) {
     console.error(err)
-    isFailed = true
+    local.isFailed = true
   }
-  local.isFailed = isFailed
-  return result
 }
