@@ -13,7 +13,6 @@ Reactive state manager
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
@@ -260,6 +259,7 @@ turnOff() // nothing has changed
 <hr />
 
 ## More examples
+
 - [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
 - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
@@ -372,15 +372,13 @@ const result = await fetchUserRepos({name: 'zerobias'})
 ```js
 // `getUsers` - is an effect
 // `addUser` - is an event
-const defaultState = [{ name: Joe }];
-const users = createStore(defaultState)
+const users = createStore([{ name: Joe }])
   // subscribe store reducers to events
   .on(getUsers.done, (oldState, payload) => payload)
   .on(addUser, (oldState, payload) => [...oldState, payload]))
 
-// subscribe side-effects
-const callback = (newState) => console.log(newState)
-users.watch(callback) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
+// subscribe to store updates
+users.watch(state => console.log(state)) // `.watch` for a store is triggered immediately: `[{ name: Joe }]`
 // `callback` will be triggered each time when `.on` handler returns the new state
 ```
 
@@ -402,16 +400,18 @@ getUsers() // after promise resolve `firstUser` is updated and call all watchers
 Compose stores:
 
 ```js
-import {createStore, createStoreObject} from 'effector'
+import {createStore, combine} from 'effector'
 
 const a = createStore(1)
 const b = createStore('b')
 
-const c = createStoreObject({a, b})
+const c = combine({a, b})
 
 c.watch(console.log)
 // => {a: 1, b: "b"}
 ```
+
+See [`combine`](http://effector.now.sh/api/effector/combine) in docs
 
 [Run example](https://share.effector.dev/MuLF8xGB)
 
@@ -429,12 +429,14 @@ mainPage.onCreateEvent(event => {
 mainPage.onCreateStore(store => {
   console.log('new store: ', store.getState())
 })
-const mount = mainPage.event('mount')
+const mount = mainPage.createEvent('mount')
 // => new event: main page/mount
 
-const pageStore = mainPage.store(0)
+const pageStore = mainPage.createStore(0)
 // => new store: 0
 ```
+
+See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 [Run example](https://share.effector.dev/PgwRuYja)
 
@@ -503,6 +505,7 @@ const pageStore = mainPage.store(0)
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
