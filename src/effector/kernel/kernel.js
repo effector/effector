@@ -4,8 +4,7 @@ import type {Graphite, Graph, ID} from '../stdlib'
 import type {PriorityTag} from './getPriority'
 import {getGraph, readRef} from '../stdlib'
 import type {Layer} from './layer'
-// import {type leftist, insert, deleteMin} from './leftist'
-import {type Item, push, pop} from './binheap'
+import {type leftist, insert, deleteMin} from './leftist'
 import {Stack} from './stack'
 
 /**
@@ -27,16 +26,19 @@ class Local {
 }
 
 let layerID = 0
-const heap: Item[] = []
+let heap: leftist = null
 const barriers = new Set()
 const pushHeap = (firstIndex: number, stack: Stack, type: PriorityTag) => {
-  push(heap, {
+  heap = insert(
+    {
     firstIndex,
     stack,
     resetStop: currentResetStop,
     type,
     id: ++layerID,
-  })
+    },
+    heap,
+  )
 }
 
 let alreadyStarted = false
@@ -51,9 +53,9 @@ const exec = () => {
   }
   let graph
   let value
-  let heapItem
-  mem: while ((heapItem = pop(heap))) {
-    value = heapItem.value
+  mem: while (heap) {
+    value = heap.value
+    heap = deleteMin(heap)
     const {firstIndex, stack, resetStop, type} = value
     graph = stack.node
     const local = new Local(graph.scope)
