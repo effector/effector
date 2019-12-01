@@ -1,7 +1,6 @@
 // @flow
 
-import {sample, forward} from 'effector'
-import {prettier as prettierRequest} from '@zerobias/codebox'
+import {sample, forward, guard} from 'effector'
 
 import {sourceCode} from '../editor/state'
 
@@ -12,7 +11,13 @@ import {
   clickPrettify,
   prettier,
 } from '.'
-import {domain, flowToggle, tsToggle, typeHoverToggle} from './state'
+import {
+  domain,
+  flowToggle,
+  tsToggle,
+  typeHoverToggle,
+  typechecker,
+} from './state'
 
 domain.onCreateStore(store => {
   const snapshot = localStorage.getItem(store.compositeName.fullName)
@@ -41,8 +46,12 @@ tsToggle.on(tsToggleChange, handler).on(flowToggleChange, (state, e) => {
 
 typeHoverToggle.on(typeHoverToggleChange, handler)
 
-prettier.use(async code => {
-  const result = await prettierRequest(code)
+prettier.use(async({code, parser}) => {
+  const req = await fetch('https://codebox.now.sh/', {
+    method: 'POST',
+    body: JSON.stringify({code, config: {parser}}),
+  })
+  const result = await req.json()
   if (typeof result.code !== 'string') {
     console.error('prettier request error', result)
     throw Error('request failed')
@@ -51,9 +60,12 @@ prettier.use(async code => {
 })
 
 sample({
-  source: sourceCode,
-  clock: sample(prettier.pending, clickPrettify).filter({
-    fn: pending => !pending,
+  source: {
+    code: sourceCode,
+    parser: typechecker.map(parser => parser ?? 'babel'),
+  },
+  clock: guard(clickPrettify, {
+    filter: prettier.pending.map(pending => !pending),
   }),
   target: prettier,
 })
