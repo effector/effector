@@ -2535,15 +2535,15 @@ ee-first@1.1.1:
   resolved "https://registry.yarnpkg.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=
 
-effector-react@^20.4.1:
-  version "20.4.1"
-  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-20.4.1.tgz#fc414cd64bec3c6627130a3f4afaf2e375a930f2"
-  integrity sha512-DK+LWEl7Drm99C71y2idt5ZMz7+4W89NUCLwiM3Aygg5ZiWCL5/R2w6lsWGM+yV6OVfpR0zcao3+KfhFrJubtg==
+effector-react@^20.4.2:
+  version "20.4.2"
+  resolved "https://registry.yarnpkg.com/effector-react/-/effector-react-20.4.2.tgz#b2c5fbfaa40def558f41b3e7500ff3f5df0ed653"
+  integrity sha512-faUa1yaLxRcq7LOOJAx9tR5Z374sb+JeXoQ5nSV7kCNXEkIr2XMNt7AEYbIpZ1mD7eaNwy1ztdxiUHbkWP6nmA==
 
-effector@^20.6.2:
-  version "20.6.2"
-  resolved "https://registry.yarnpkg.com/effector/-/effector-20.6.2.tgz#13f2cb080caba760a4978a786c4439bc1b8c5842"
-  integrity sha512-p2e6sJ9+NcxepB43SP9gOK4Xl8aAaW0jHH22V1hlLlXyOlh8JyuCBDMFRbsc1cvQVcAjFB6bfKcw69OvRhz7Rg==
+effector@^20.7.1:
+  version "20.7.1"
+  resolved "https://registry.yarnpkg.com/effector/-/effector-20.7.1.tgz#7ddb1587f7da0954653dcccf65beae667fc8fecd"
+  integrity sha512-stdlDC1jPRd1k7rCAOIPLfVyFYoFhvAYXlr66GAdCZxaS0cnYRyRsqDdTB4kjnRhrVGuKu9WnovnX65SEVBOGw==
   dependencies:
     symbol-observable "^1.2.0"
 
