@@ -47,7 +47,7 @@ tsToggle.on(tsToggleChange, handler).on(flowToggleChange, (state, e) => {
 typeHoverToggle.on(typeHoverToggleChange, handler)
 
 prettier.use(async({code, parser}) => {
-  const req = await fetch('https://codebox.now.sh/', {
+  const req = await fetch('https://codebox.now.sh/prettier', {
     method: 'POST',
     body: JSON.stringify({code, config: {parser}}),
   })
