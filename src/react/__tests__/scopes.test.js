@@ -13,14 +13,8 @@ import {
   step,
   clearNode,
 } from 'effector'
-import {
-  useStore,
-  useList,
-  fork,
-  invoke,
-  Provider,
-  serialize,
-} from 'effector-react/ssr'
+import {fork, invoke, Provider, serialize} from 'effector-react/ssr'
+import {useStore, useList} from 'effector-react/ssr-replacement'
 
 it('works', async () => {
   /*
@@ -139,18 +133,18 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-ok29mf": Array [
+      "-bj2hri": "alice",
+      "xotzpg": Array [
         "bob",
       ],
-      "195avr": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-ok29mf": Array [
+      "-bj2hri": "bob",
+      "xotzpg": Array [
         "alice",
       ],
-      "195avr": "bob",
     }
   `)
 })
