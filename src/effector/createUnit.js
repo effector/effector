@@ -15,6 +15,7 @@ import {
   nextUnitID,
   callStackAReg,
   callARegStack,
+  callStack,
 } from './stdlib'
 import {createNode} from './createNode'
 import {launch, upsertLaunch} from './kernel'
@@ -91,7 +92,7 @@ function prepend(event, fn: (_: any) => *) {
 
   createLinkNode(contramapped, event, {
     scope: {fn},
-    node: [step.compute({fn: callStackAReg})],
+    node: [step.compute({fn: callStack})],
     meta: {op: 'prepend'},
   })
   return contramapped
@@ -116,7 +117,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
   })
   createLinkNode(event, mapped, {
     scope: {fn},
-    node: [step.compute({fn: callStackAReg})],
+    node: [step.compute({fn: callStack})],
     meta: {op: 'map'},
   })
   return mapped
@@ -139,7 +140,7 @@ function filterEvent(
   })
   createLinkNode(event, mapped, {
     scope: {fn: fn.fn},
-    node: [step.filter({fn: callStackAReg})],
+    node: [step.filter({fn: callStack})],
     meta: {op: 'filter'},
   })
   return mapped
@@ -154,7 +155,7 @@ function filterMapEvent(
   })
   createLinkNode(event, mapped, {
     scope: {fn},
-    node: [step.compute({fn: callStackAReg}), step.check.defined()],
+    node: [step.compute({fn: callStack}), step.check.defined()],
     meta: {op: 'filterMap'},
   })
   return mapped

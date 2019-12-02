@@ -20,7 +20,7 @@ exports[`event.filter with function (T) => S | void event.filter should drop und
   next: [
     Node {
       seq: [
-        compute: Function,
+        compute: callStack,
         check: defined
       ],
       next: [

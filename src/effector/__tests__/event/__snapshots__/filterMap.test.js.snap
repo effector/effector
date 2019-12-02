@@ -20,7 +20,7 @@ exports[`event.filterMap event.filterMap should drop undefined values: num event
   next: [
     Node {
       seq: [
-        compute: Function,
+        compute: callStack,
         check: defined
       ],
       next: [

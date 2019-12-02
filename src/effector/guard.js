@@ -4,7 +4,7 @@ import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createEvent'
-import {step, callStackAReg} from './stdlib'
+import {step, callStack} from './stdlib'
 import {is} from './is'
 import {createNode} from './createNode'
 
@@ -45,7 +45,7 @@ export function guard(source: any, config: any) {
       throw Error('`filter` should be function or unit')
     createLinkNode(source, target, {
       scope: {fn: filter},
-      node: [step.filter({fn: callStackAReg})],
+      node: [step.filter({fn: callStack})],
       meta,
     })
   }
