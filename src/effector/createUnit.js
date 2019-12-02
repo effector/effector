@@ -13,6 +13,8 @@ import {
   bind,
   getGraph,
   nextUnitID,
+  callStackAReg,
+  callARegStack,
 } from './stdlib'
 import {createNode} from './createNode'
 import {launch, upsertLaunch} from './kernel'
@@ -88,12 +90,8 @@ function prepend(event, fn: (_: any) => *) {
   })
 
   createLinkNode(contramapped, event, {
-    scope: {handler: fn},
-    node: [
-      step.compute({
-        fn: (newValue, {handler}) => handler(newValue),
-      }),
-    ],
+    scope: {fn},
+    node: [step.compute({fn: callStackAReg})],
     meta: {op: 'prepend'},
   })
   return contramapped
@@ -117,12 +115,8 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     config,
   })
   createLinkNode(event, mapped, {
-    scope: {handler: fn},
-    node: [
-      step.compute({
-        fn: (payload, {handler}) => handler(payload),
-      }),
-    ],
+    scope: {fn},
+    node: [step.compute({fn: callStackAReg})],
     meta: {op: 'map'},
   })
   return mapped
@@ -145,11 +139,7 @@ function filterEvent(
   })
   createLinkNode(event, mapped, {
     scope: {fn: fn.fn},
-    node: [
-      step.filter({
-        fn: (upd, {fn}) => fn(upd),
-      }),
-    ],
+    node: [step.filter({fn: callStackAReg})],
     meta: {op: 'filter'},
   })
   return mapped
@@ -164,12 +154,7 @@ function filterMapEvent(
   })
   createLinkNode(event, mapped, {
     scope: {fn},
-    node: [
-      step.compute({
-        fn: (payload, {fn}) => fn(payload),
-      }),
-      step.check.defined(),
-    ],
+    node: [step.compute({fn: callStackAReg}), step.check.defined()],
     meta: {op: 'filterMap'},
   })
   return mapped
@@ -270,9 +255,7 @@ const updateStore = (
     node: [
       step.mov({store: stateRef, to: 'a'}),
       step.compute({
-        fn: stateFirst
-          ? (upd, {fn}, {a: state}) => fn(state, upd)
-          : (upd, {fn}, {a: state}) => fn(upd, state),
+        fn: stateFirst ? callARegStack : callStackAReg,
       }),
       step.check.defined(),
       step.check.changed({store: stateRef}),

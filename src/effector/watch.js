@@ -1,6 +1,6 @@
 //@flow
 
-import {type Unit, step} from './stdlib'
+import {type Unit, step, callStackAReg} from './stdlib'
 import {createNode} from './createNode'
 import type {Subscription} from './index.h'
 import {createSubscription} from './subscription'
@@ -11,14 +11,8 @@ export const watchUnit = (
 ): Subscription =>
   createSubscription(
     createNode({
-      scope: {handler},
-      node: [
-        step.run({
-          fn(upd, {handler}) {
-            handler(upd)
-          },
-        }),
-      ],
+      scope: {fn: handler},
+      node: [step.run({fn: callStackAReg})],
       parent: unit,
       meta: {op: 'watch'},
       family: {

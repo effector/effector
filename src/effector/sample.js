@@ -1,7 +1,15 @@
 //@flow
 /* eslint-disable no-nested-ternary */
 import {combine} from './combine'
-import {type Graphite, step, createStateRef, readRef, own} from './stdlib'
+import {
+  type Graphite,
+  step,
+  createStateRef,
+  readRef,
+  own,
+  callStackAReg,
+  callARegStack,
+} from './stdlib'
 import {is} from './is'
 import {createStore} from './createStore'
 import {createEvent} from './createEvent'
@@ -63,10 +71,7 @@ export function sample(
             store: source.stateRef,
             to: fn ? 'a' : 'stack',
           }),
-          fn &&
-            step.compute({
-              fn: (upd, {fn}, {a: state}) => fn(state, upd),
-            }),
+          fn && step.compute({fn: callARegStack}),
         ],
         meta: {op: 'sample', sample: 'store'},
       }),
@@ -105,10 +110,7 @@ export function sample(
             store: clockState,
             to: 'a',
           }),
-          fn &&
-            step.compute({
-              fn: (source, {fn}, {a: clock}) => fn(source, clock),
-            }),
+          fn && step.compute({fn: callStackAReg}),
         ],
         meta: {op: 'sample', sample: 'clock'},
       }),
