@@ -7,7 +7,7 @@ exports[`graphite: show bar 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: Function,
+        compute: callARegStack,
         check: defined,
         check: changed,
         mov: stack store
@@ -25,7 +25,7 @@ exports[`graphite: show bar 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: Function,
+                compute: callStackAReg,
                 check: defined,
                 check: changed,
                 mov: stack store
@@ -65,7 +65,7 @@ exports[`graphite: show bar 2`] = `
     Node {
       seq: [
         mov: store a,
-        compute: Function,
+        compute: callARegStack,
         check: defined,
         check: changed,
         mov: stack store
@@ -83,7 +83,7 @@ exports[`graphite: show bar 2`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: Function,
+                compute: callStackAReg,
                 check: defined,
                 check: changed,
                 mov: stack store
@@ -116,7 +116,7 @@ exports[`graphite: show foo 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        compute: callStack
       ],
       next: [
         Node {
@@ -125,7 +125,7 @@ exports[`graphite: show foo 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: Function,
+                compute: callARegStack,
                 check: defined,
                 check: changed,
                 mov: stack store
@@ -143,7 +143,7 @@ exports[`graphite: show foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: Function,
+                        compute: callStackAReg,
                         check: defined,
                         check: changed,
                         mov: stack store
@@ -187,7 +187,7 @@ exports[`graphite: show store1 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: Function,
+        compute: callStackAReg,
         check: defined,
         check: changed,
         mov: stack store
@@ -231,7 +231,7 @@ exports[`showcase: event foo 1`] = `
     Node {
       seq: [
         mov: store a,
-        compute: Function,
+        compute: callARegStack,
         check: defined,
         check: changed,
         mov: stack store
@@ -275,7 +275,7 @@ exports[`showcase: event foo 1`] = `
                     Node {
                       seq: [
                         mov: store a,
-                        compute: Function,
+                        compute: callStackAReg,
                         check: defined,
                         check: changed,
                         mov: stack store
@@ -371,7 +371,7 @@ exports[`showcase: store a 1`] = `
             Node {
               seq: [
                 mov: store a,
-                compute: Function,
+                compute: callStackAReg,
                 check: defined,
                 check: changed,
                 mov: stack store

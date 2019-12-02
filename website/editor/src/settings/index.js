@@ -11,4 +11,8 @@ export const typeHoverToggleChange = createEvent<
 >()
 
 export const clickPrettify = createEvent<any>()
-export const prettier: Effect<string, string, Error> = createEffect()
+export const prettier: Effect<
+  {code: string, parser: 'flow' | 'typescript' | 'babel'},
+  string,
+  Error,
+> = createEffect()
