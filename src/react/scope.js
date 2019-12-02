@@ -240,8 +240,8 @@ function cloneGraph(unit) {
     )
   })
   onOperation('watch', ({scope}) => {
-    const handler = scope.handler
-    scope.handler = data => {
+    const handler = scope.fn
+    scope.fn = data => {
       stack.push(findClone)
       try {
         handler(data)
