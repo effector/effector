@@ -33,6 +33,24 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 
+let isStrict
+const initUnit = (kind, unit, rawConfig) => {
+  const config = normalizeConfig(rawConfig)
+  const id = nextUnitID()
+  const {parent, sid = null, strict = true, named = null} = config
+  const name = named ? named : config.name || id
+  unit.kind = kind
+  unit.id = id
+  unit.sid = sid
+  unit.shortName = name
+  unit.domainName = parent
+  unit.compositeName = createName(name, parent)
+  unit.defaultConfig = config
+  unit.thru = bind(thru, unit)
+  isStrict = strict
+  return {unit: kind, name, sid, named}
+}
+
 declare export function createEvent<Payload>(
   name?: string | EventConfigPart,
   config?: Config<EventConfigPart>,
@@ -41,45 +59,30 @@ export function createEvent<Payload>(
   nameOrConfig: any,
   maybeConfig: any,
 ): Event<Payload> {
-  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
-  const {parent, sid = null, named = null} = config
-  const id = nextUnitID()
-  const name = named ? named : config.name || id
-  const compositeName = createName(name, parent)
-  const fullName = compositeName.fullName
-  const graphite = createNode({
-    meta: {unit: 'event', name, sid, named},
+  const event: any = (payload: Payload, ...args: any[]) =>
+    event.create(payload, fullName, args)
+  event.graphite = createNode({
+    meta: initUnit('event', event, {
+      name: nameOrConfig,
+      config: maybeConfig,
+    }),
   })
-
-  //$off
-  const instance: Event<Payload> = (
-    payload: Payload,
-    ...args: any[]
-  ): Payload => instance.create(payload, fullName, args)
-  ;(instance: any).getType = () => fullName
+  event.getType = () => fullName
   //eslint-disable-next-line no-unused-vars
-  ;(instance: any).create = (payload, fullName, args) => {
-    launch(instance, payload)
+  event.create = (payload, fullName, args) => {
+    launch(event, payload)
     return payload
   }
-  instance.sid = sid
-  instance.graphite = graphite
-  instance.shortName = name
-  instance.domainName = parent
-  instance.compositeName = compositeName
-  instance.defaultConfig = config
-  ;(instance: any).kind = 'event'
-  ;(instance: any)[$$observable] = () => instance
-  ;(instance: any).id = id
-  ;(instance: any).watch = bind(watchUnit, instance)
-  ;(instance: any).map = bind(mapEvent, instance)
-  ;(instance: any).filter = bind(filterEvent, instance)
-  ;(instance: any).filterMap = bind(filterMapEvent, instance)
-  ;(instance: any).prepend = bind(prepend, instance)
-  ;(instance: any).subscribe = bind(subscribe, instance)
-  ;(instance: any).thru = bind(thru, instance)
+  event.watch = bind(watchUnit, event)
+  event.map = bind(mapEvent, event)
+  event.filter = bind(filterEvent, event)
+  event.filterMap = bind(filterMapEvent, event)
+  event.prepend = bind(prepend, event)
+  event.subscribe = bind(subscribe, event)
+  event[$$observable] = () => event
+  const fullName = event.compositeName.fullName
 
-  return instance
+  return event
 }
 
 const subscribe = (event, observer): Subscription =>
@@ -171,58 +174,44 @@ export function createStore<State>(
     ...
   },
 ): Store<State> {
-  const config = normalizeConfig(props)
-  const id = nextUnitID()
-  const {parent, sid = null, strict = true, named = null} = config
-  if (strict && currentState === undefined)
-    throw Error("current state can't be undefined, use null instead")
-  const name = named ? named : config.name || id
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
-  const compositeName = createName(name, parent)
-
   const updates = createEvent({named: 'updates'})
-
-  const store: $Shape<Store<State>> = ({
+  const store: any = {
     subscribers: new Map(),
-    compositeName,
-    graphite: createNode({
-      scope: {state: plainState},
-      node: [
-        step.check.defined(),
-        step.update({
-          store: plainState,
-        }),
-        step.check.changed({
-          store: oldState,
-        }),
-        step.update({
-          store: oldState,
-        }),
-      ],
-      child: updates,
-      meta: {unit: 'store', name: compositeName.shortName, sid, named},
-    }),
-    kind: 'store',
-    id,
-    shortName: compositeName.shortName,
-    domainName: parent,
     updates,
-    defaultConfig: config,
     defaultState: currentState,
-    getState: bind(readRef, plainState),
     stateRef: plainState,
-    sid,
-  }: any)
-  ;(store: any).watch = (store: any).subscribe = bind(watch, store)
-  ;(store: any).reset = bind(reset, store)
-  ;(store: any).on = bind(on, store)
-  ;(store: any).off = bind(off, store)
-  ;(store: any).map = bind(mapStore, store)
-  ;(store: any).thru = bind(thru, store)
-  ;(store: any).setState = state => {
-    if (readRef(plainState) !== state) upsertLaunch([store], [state])
+    getState: bind(readRef, plainState),
+    setState(state) {
+      if (readRef(plainState) !== state) upsertLaunch([store], [state])
+    },
   }
+  store.graphite = createNode({
+    scope: {state: plainState},
+    node: [
+      step.check.defined(),
+      step.update({
+        store: plainState,
+      }),
+      step.check.changed({
+        store: oldState,
+      }),
+      step.update({
+        store: oldState,
+      }),
+    ],
+    child: updates,
+    meta: initUnit('store', store, props),
+  })
+  if (isStrict && currentState === undefined)
+    throw Error("current state can't be undefined, use null instead")
+
+  store.watch = store.subscribe = bind(watch, store)
+  store.reset = bind(reset, store)
+  store.on = bind(on, store)
+  store.off = bind(off, store)
+  store.map = bind(mapStore, store)
   //$off
   store[$$observable] = bind(observable, store)
   own(store, [updates])
