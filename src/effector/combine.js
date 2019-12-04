@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store} from './unit.h'
-import {createStore} from './createStore'
+import {createStore} from './createUnit'
 import {step, createStateRef, readRef, type StateRef} from './stdlib'
 import {is} from './is'
 import {unitObjectName} from './naming'

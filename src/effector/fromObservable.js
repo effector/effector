@@ -3,7 +3,7 @@
 import $$observable from 'symbol-observable'
 import type {Event} from './unit.h'
 import {clearNode} from './clearNode'
-import {createEvent} from './createEvent'
+import {createEvent} from './createUnit'
 import {bind2} from './stdlib'
 
 export function fromObservable<T>(observable: mixed): Event<T> {

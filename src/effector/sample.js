@@ -11,8 +11,8 @@ import {
   callARegStack,
 } from './stdlib'
 import {is} from './is'
-import {createStore} from './createStore'
-import {createEvent} from './createEvent'
+import {createStore} from './createUnit'
+import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 

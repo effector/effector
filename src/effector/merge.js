@@ -1,7 +1,7 @@
 // @flow
 
 import type {Store, Event, Effect} from './unit.h'
-import {createEvent} from './createEvent'
+import {createEvent} from './createUnit'
 import {forward} from './forward'
 import {unitObjectName} from './naming'
 

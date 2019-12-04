@@ -3,7 +3,7 @@
 import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
-import {createEvent} from './createEvent'
+import {createEvent} from './createUnit'
 import {step, callStack} from './stdlib'
 import {is} from './is'
 import {createNode} from './createNode'
