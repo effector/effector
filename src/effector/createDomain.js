@@ -3,7 +3,6 @@
 import type {Store, Event, Effect, Domain} from './unit.h'
 import {nextUnitID, own} from './stdlib'
 import {createNode} from './createNode'
-import {createStore} from './createStore'
 import {
   normalizeConfig,
   type Config,
@@ -12,8 +11,12 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from './config'
-import {createEvent} from './createEvent'
-import {initUnit} from './createUnit'
+import {
+  createEvent,
+  createStore,
+  createNamedEvent,
+  initUnit,
+} from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
@@ -66,22 +69,10 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
   const parentHooks = result.defaultConfig.parentHooks
   const {compositeName} = result
-  const event = createEvent({
-    parent: compositeName,
-    named: 'onEvent',
-  })
-  const effect = createEvent({
-    parent: compositeName,
-    named: 'onEffect',
-  })
-  const store = createEvent({
-    parent: compositeName,
-    named: 'onStore',
-  })
-  const domain = createEvent({
-    parent: compositeName,
-    named: 'onDomain',
-  })
+  const event = createNamedEvent('onEvent')
+  const effect = createNamedEvent('onEffect')
+  const store = createNamedEvent('onStore')
+  const domain = createNamedEvent('onDomain')
 
   const hooks: {|
     domain: Event<Domain>,

@@ -4,8 +4,7 @@ import type {Event, Effect} from './unit.h'
 import {step, own, bind} from './stdlib'
 import {createNode} from './createNode'
 import {upsertLaunch, launch} from './kernel'
-import {createEvent} from './createEvent'
-import {createStore} from './createStore'
+import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {normalizeConfig, type EffectConfigPart, type Config} from './config'
 import {joinName, type CompositeName} from './naming'
 import {Defer} from './defer'
@@ -33,15 +32,11 @@ export function createEffect<Payload, Done>(
   const done: Event<{|
     params: Payload,
     result: Done,
-  |}> = createEvent({
-    named: 'done',
-  })
+  |}> = createNamedEvent('done')
   const fail: Event<{|
     params: Payload,
     error: *,
-  |}> = createEvent({
-    named: 'fail',
-  })
+  |}> = createNamedEvent('fail')
   const anyway: Event<
     | {|
         +status: 'done',
@@ -53,9 +48,7 @@ export function createEffect<Payload, Done>(
         +params: Payload,
         +error: *,
       |},
-  > = createEvent({
-    named: 'finally',
-  })
+  > = createNamedEvent('finally')
 
   instance.done = done
   instance.fail = fail
