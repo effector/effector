@@ -61,10 +61,10 @@ export const clearNode = (
     clearMap(graphite.subscribers)
   } else if (is.domain(graphite)) {
     isDomainUnit = true
-    const history = getGraph(graphite).scope.history
+    const history = graphite.history
     clearMap(history.events)
     clearMap(history.effects)
-    clearMap(history.storages)
+    clearMap(history.stores)
     clearMap(history.domains)
   }
   clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit)

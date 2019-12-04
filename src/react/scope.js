@@ -219,14 +219,6 @@ function cloneGraph(unit) {
     scope.target = cloneRef(scope.target)
     scope.isFresh = cloneRef(scope.isFresh)
   })
-  onUnit('domain', ({scope}) => {
-    scope.history = {
-      domains: new Set(),
-      stores: new Set(),
-      events: new Set(),
-      effects: new Set(),
-    }
-  })
   onUnit('effect', ({scope, seq}) => {
     scope.runner = findClone(scope.runner)
     seq.push(

@@ -34,19 +34,24 @@ import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 
 let isStrict
-const initUnit = (kind, unit, rawConfig) => {
-  const config = normalizeConfig(rawConfig)
+export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
+  const config = normalizeConfig({
+    name: rawConfigB,
+    config: rawConfigA,
+  })
   const id = nextUnitID()
   const {parent, sid = null, strict = true, named = null} = config
-  const name = named ? named : config.name || id
+  const name = named ? named : config.name || (kind === 'domain' ? '' : id)
+  const compositeName = createName(name, parent)
   unit.kind = kind
   unit.id = id
   unit.sid = sid
   unit.shortName = name
   unit.domainName = parent
-  unit.compositeName = createName(name, parent)
+  unit.compositeName = compositeName
   unit.defaultConfig = config
   unit.thru = bind(thru, unit)
+  unit.getType = () => compositeName.fullName
   isStrict = strict
   return {unit: kind, name, sid, named}
 }
@@ -60,14 +65,10 @@ export function createEvent<Payload>(
   maybeConfig: any,
 ): Event<Payload> {
   const event: any = (payload: Payload, ...args: any[]) =>
-    event.create(payload, fullName, args)
+    event.create(payload, event.getType(), args)
   event.graphite = createNode({
-    meta: initUnit('event', event, {
-      name: nameOrConfig,
-      config: maybeConfig,
-    }),
+    meta: initUnit('event', event, maybeConfig, nameOrConfig),
   })
-  event.getType = () => fullName
   //eslint-disable-next-line no-unused-vars
   event.create = (payload, fullName, args) => {
     launch(event, payload)
@@ -80,8 +81,6 @@ export function createEvent<Payload>(
   event.prepend = bind(prepend, event)
   event.subscribe = bind(subscribe, event)
   event[$$observable] = () => event
-  const fullName = event.compositeName.fullName
-
   return event
 }
 

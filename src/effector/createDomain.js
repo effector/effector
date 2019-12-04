@@ -13,6 +13,7 @@ import {
   type DomainConfigPart,
 } from './config'
 import {createEvent} from './createEvent'
+import {initUnit} from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
@@ -35,81 +36,73 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
     return trigger.watch(hook)
   }
 }
+
 declare export function createDomain(
   name?: string | DomainConfigPart,
   config?: Config<DomainConfigPart>,
 ): Domain
 export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
-  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
-  const id = nextUnitID()
-  const {name: nameRaw, parent, parentHooks, sid = null} = config
-  const compositeName = createName(nameRaw || '', parent)
-  const {fullName} = compositeName
   const domains: Set<Domain> = new Set()
   const stores: Set<Store<any>> = new Set()
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const event: Event<Event<any>> = createEvent({
-    parent: compositeName,
-    named: 'onEvent',
-  })
-  const effect: Event<Effect<any, any, any>> = createEvent({
-    parent: compositeName,
-    named: 'onEffect',
-  })
-  const store: Event<Store<any>> = createEvent({
-    parent: compositeName,
-    named: 'onStore',
-  })
-  const domain: Event<Domain> = createEvent({
-    parent: compositeName,
-    named: 'onDomain',
-  })
-  if (parentHooks) {
-    forward({from: event, to: parentHooks.event})
-    forward({from: effect, to: parentHooks.effect})
-    forward({from: store, to: parentHooks.store})
-    forward({from: domain, to: parentHooks.domain})
-  }
-  const hooks: {|
-    domain: Event<Domain>,
-    effect: Event<Effect<any, any, any>>,
-    event: Event<Event<any>>,
-    store: Event<any>,
-  |} = {event, effect, store, domain}
-
   const history = {
     domains,
     stores,
-    storages: stores, // PLEASE USE .stores, THAT PROPERTY IS NOT SUPPORTED AND WILL BE REMOVED SOON
     effects,
     events,
   }
 
   const node = createNode({
-    scope: {history},
-    meta: {unit: 'domain', name: compositeName.shortName, sid},
-    family: {
-      type: 'domain',
-    },
+    family: {type: 'domain'},
   })
 
   const result = {
-    graphite: node,
-    compositeName,
-    id,
-    defaultConfig: config,
-    shortName: compositeName.shortName,
-    getType: () => fullName,
-    onCreateEvent: createHook(event, events, node),
-    onCreateEffect: createHook(effect, effects, node),
-    onCreateStore: createHook(store, stores, node),
-    onCreateDomain: createHook(domain, domains, node),
     history,
-    kind: 'domain',
-    sid,
+    graphite: node,
   }
+
+  node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
+  const parentHooks = result.defaultConfig.parentHooks
+  const {compositeName} = result
+  const event = createEvent({
+    parent: compositeName,
+    named: 'onEvent',
+  })
+  const effect = createEvent({
+    parent: compositeName,
+    named: 'onEffect',
+  })
+  const store = createEvent({
+    parent: compositeName,
+    named: 'onStore',
+  })
+  const domain = createEvent({
+    parent: compositeName,
+    named: 'onDomain',
+  })
+
+  const hooks: {|
+    domain: Event<Domain>,
+    effect: Event<Effect<any, any, any>>,
+    event: Event<Event<any>>,
+    store: Event<any>,
+  |} = {
+    event,
+    effect,
+    store,
+    domain,
+  }
+  if (parentHooks) {
+    for (const key in hooks) {
+      forward({from: hooks[key], to: parentHooks[key]})
+    }
+  }
+  result.onCreateEvent = createHook(event, events, node)
+  result.onCreateEffect = createHook(effect, effects, node)
+  result.onCreateStore = createHook(store, stores, node)
+  result.onCreateDomain = createHook(domain, domains, node)
 
   result.createEvent = result.event = <Payload>(
     name?: string,
