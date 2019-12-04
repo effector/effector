@@ -34,14 +34,12 @@ export function createEffect<Payload, Done>(
     params: Payload,
     result: Done,
   |}> = createEvent({
-    config,
     named: 'done',
   })
   const fail: Event<{|
     params: Payload,
     error: *,
   |}> = createEvent({
-    config,
     named: 'fail',
   })
   const anyway: Event<
@@ -56,7 +54,6 @@ export function createEffect<Payload, Done>(
         +error: *,
       |},
   > = createEvent({
-    config,
     named: 'finally',
   })
 
