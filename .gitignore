@@ -48,3 +48,4 @@ tools/builder.js
 integrations/webpack/npm/**
 
 **/.reports/**
+**/.serverless/**
