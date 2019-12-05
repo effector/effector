@@ -4,25 +4,18 @@ import type {Graphite, Graph, ID} from '../stdlib'
 import {type PriorityTag, getPriority} from './getPriority'
 import {getGraph, readRef} from '../stdlib'
 import type {Layer} from './layer'
-import {Stack} from './stack'
+import {Stack, createStack} from './stack'
 
 /**
  * Dedicated local metadata
  */
-class Local {
-  /*::
-  isChanged: boolean
-  isFailed: boolean
-  ref: ID
-  scope: {[key: string]: any, ...}
-  */
-  constructor(scope: {[key: string]: any, ...}) {
-    this.isChanged = true
-    this.isFailed = false
-    this.ref = ''
-    this.scope = scope
-  }
+type Local = {
+  isChanged: boolean,
+  isFailed: boolean,
+  ref: ID,
+  scope: {[key: string]: any, ...},
 }
+
 const pushValueToList = (list, value) => {
   const item = {
     right: null,
@@ -86,7 +79,12 @@ const exec = () => {
   mem: while ((value = deleteMin())) {
     const {firstIndex, stack, resetStop, type} = value
     graph = stack.node
-    const local = new Local(graph.scope)
+    const local: Local = {
+      isChanged: true,
+      isFailed: false,
+      ref: '',
+      scope: graph.scope,
+    }
     for (
       let stepn = firstIndex;
       stepn < graph.seq.length && !meta.stop;
@@ -165,7 +163,7 @@ const exec = () => {
     if (!meta.stop) {
       currentResetStop = true
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        pushHeap(0, new Stack(graph.next[stepn], stack, stack.value), 'child')
+        pushHeap(0, createStack(graph.next[stepn], stack, stack.value), 'child')
       }
       currentResetStop = false
     }
@@ -176,13 +174,13 @@ const exec = () => {
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  pushHeap(0, new Stack(getGraph(unit), null, payload), 'pure')
+  pushHeap(0, createStack(getGraph(unit), null, payload), 'pure')
   if (upsert && alreadyStarted) return
   exec()
 }
 export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
   for (let i = 0; i < units.length; i++) {
-    pushHeap(0, new Stack(getGraph(units[i]), null, payloads[i]), 'pure')
+    pushHeap(0, createStack(getGraph(units[i]), null, payloads[i]), 'pure')
   }
   if (alreadyStarted) return
   exec()
