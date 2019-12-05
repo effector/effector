@@ -212,11 +212,9 @@ function cloneGraph(unit) {
         scope[onCopy[j]] = findClone(scope[onCopy[j]])
       }
     }
-    forEachRelatedNode(node, siblings =>
-      siblings.forEach((node, i) => {
-        if (!node.meta.fork) siblings[i] = findClone(node)
-      }),
-    )
+    forEachRelatedNode(node, (node, i, siblings) => {
+      if (!node.meta.fork) siblings[i] = findClone(node)
+    })
     switch (itemTag) {
       case 'store':
         node.meta.wrapped = wrapStore(node)
@@ -256,7 +254,7 @@ function cloneGraph(unit) {
               },
             }),
           ],
-          parent: scope.runner.scope.anyway,
+          parent: findClone(scope.runner.scope.anyway),
         })
         break
     }

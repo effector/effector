@@ -16,7 +16,8 @@ import {
 import {fork, invoke, Provider, serialize} from 'effector-react/ssr'
 import {useStore, useList} from 'effector-react/ssr-replacement'
 
-it('works', async () => {
+it('works', async() => {
+  const indirectCallFn = jest.fn()
   /*
   real remote json documents
   GET https://api.myjson.com/bins/{user}
@@ -32,7 +33,6 @@ it('works', async () => {
   const indirectCall = app.event()
   const sendStats = app.effect({
     async handler(user) {
-      console.log(`loading instance\n  current user: %s`, user)
       await new Promise(resolve => {
         // let bob loading longer
         setTimeout(resolve, user === 'bob' ? 500 : 100)
@@ -66,9 +66,8 @@ it('works', async () => {
   sample({
     source: user,
     clock: indirectCall,
-  }).watch(e => {
-    console.log(`${e} indirect call`)
-  })
+  }).watch(indirectCallFn)
+
   sendStats.done.watch(() => {
     indirectCall()
   })
@@ -147,4 +146,5 @@ it('works', async () => {
       ],
     }
   `)
+  expect(indirectCallFn).toBeCalled()
 })
