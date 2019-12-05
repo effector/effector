@@ -55,21 +55,18 @@ const version = {
   '@effector/forms': '0.0.1',
 }
 
+const compiledFile = name => [`${name}.js`, `${name}.js.map`]
+
 const getFiles = name => [
   'README.md',
   'LICENSE',
   'index.d.ts',
   'index.js.flow',
   //js files
-  `${name}.es.js`,
-  `${name}.cjs.js`,
-  `${name}.umd.js`,
-  'compat.js',
-  //mappings
-  `${name}.es.js.map`,
-  `${name}.cjs.js.map`,
-  `${name}.umd.js.map`,
-  'compat.js.map',
+  ...compiledFile(`${name}.es`),
+  ...compiledFile(`${name}.cjs`),
+  ...compiledFile(`${name}.umd`),
+  ...compiledFile('compat'),
   //flow typings
   `${name}.cjs.js.flow`,
   `${name}.es.js.flow`,
@@ -101,6 +98,8 @@ export default {
     },
     files: [
       ...getFiles('effector'),
+      ...compiledFile('fork.cjs'),
+      ...compiledFile('fork.es'),
       'babel-plugin.js',
       'babel-plugin-react.js',
       'plugin/defaultMetaVisitor.js',

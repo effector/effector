@@ -139,6 +139,13 @@ export async function rollupEffector() {
       },
       renderModuleGraph: true,
     }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/fork.cjs.js`),
+        es: dir(`npm/${name}/fork.es.js`),
+      },
+      input: 'fork',
+    }),
     createUmd(name, {
       external: ['react', 'effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -393,7 +400,12 @@ async function createEsCjs(
   {
     file: {es, cjs},
     renderModuleGraph = false,
-  }: {|file: {|es: string, cjs: string|}, renderModuleGraph?: boolean|},
+    input = 'index',
+  }: {|
+    file: {|es: string, cjs: string|},
+    renderModuleGraph?: boolean,
+    input?: string,
+  |},
 ) {
   const plugins = getPlugins(name)
   const pluginList = [
@@ -414,7 +426,7 @@ async function createEsCjs(
   }
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.js`),
+    input: dir(`packages/${name}/${input}.js`),
     external: ['react', 'vue', 'symbol-observable', 'effector'],
     plugins: pluginList,
   })

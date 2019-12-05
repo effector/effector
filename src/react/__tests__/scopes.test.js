@@ -12,13 +12,12 @@ import {
   launch,
   step,
   clearNode,
-  fork,
-  invoke,
-  serialize,
 } from 'effector'
+
+import {fork, invoke, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async () => {
+it('works', async() => {
   const indirectCallFn = jest.fn()
   /*
   real remote json documents

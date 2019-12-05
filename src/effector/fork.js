@@ -1,12 +1,10 @@
 //@flow
 
-import {is} from './is'
-import {step, getGraph, bind} from './stdlib'
-import {launch} from './kernel'
-import {createNode} from './createNode'
-import {forward} from './forward'
+import {getGraph, bind} from './stdlib'
 import {Defer} from './defer'
 import {watchUnit} from './watch'
+
+import {is, step, launch, createNode} from 'effector'
 
 const stack = []
 

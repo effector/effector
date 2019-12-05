@@ -25,7 +25,6 @@ export {clearNode} from './clearNode'
 export {launch} from './kernel'
 export {version} from './flags'
 export {guard} from './guard'
-export {hydrate, serialize, invoke, scopeBind, fork} from './fork'
 //eslint-disable-next-line
 export * as blocks from './blocks'
 
