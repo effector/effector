@@ -66,12 +66,12 @@ export function createEvent<Payload>(
   maybeConfig: any,
 ): Event<Payload> {
   const event: any = (payload: Payload, ...args: any[]) =>
-    event.create(payload, event.getType(), args)
+    event.create(payload, args, args)
   event.graphite = createNode({
     meta: initUnit('event', event, maybeConfig, nameOrConfig),
   })
   //eslint-disable-next-line no-unused-vars
-  event.create = (payload, fullName, args) => {
+  event.create = (payload, _, args) => {
     launch(event, payload)
     return payload
   }

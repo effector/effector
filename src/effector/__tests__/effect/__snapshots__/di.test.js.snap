@@ -4,21 +4,27 @@ exports[`effect.create multiple arguments: effect.create 1`] = `
 Array [
   Array [
     100,
-    "long request",
+    Array [
+      200,
+    ],
     Array [
       200,
     ],
   ],
   Array [
     200,
-    "long request",
+    Array [
+      300,
+    ],
     Array [
       300,
     ],
   ],
   Array [
     300,
-    "long request",
+    Array [
+      400,
+    ],
     Array [
       400,
     ],
@@ -79,17 +85,17 @@ exports[`effect.create single argument 1`] = `
 Array [
   Array [
     100,
-    "long request",
+    Array [],
     Array [],
   ],
   Array [
     200,
-    "long request",
+    Array [],
     Array [],
   ],
   Array [
     300,
-    "long request",
+    Array [],
     Array [],
   ],
 ]

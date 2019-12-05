@@ -4,21 +4,27 @@ exports[`event.create multiple arguments: event 1`] = `
 Array [
   Array [
     -2,
-    "bar",
+    Array [
+      "foo",
+    ],
     Array [
       "foo",
     ],
   ],
   Array [
     -3,
-    "bar",
+    Array [
+      "bar",
+    ],
     Array [
       "bar",
     ],
   ],
   Array [
     -2,
-    "bar",
+    Array [
+      "baz",
+    ],
     Array [
       "baz",
     ],
@@ -53,17 +59,17 @@ exports[`event.create single argument: event 1`] = `
 Array [
   Array [
     100,
-    "foo",
+    Array [],
     Array [],
   ],
   Array [
     200,
-    "foo",
+    Array [],
     Array [],
   ],
   Array [
     300,
-    "foo",
+    Array [],
     Array [],
   ],
 ]
