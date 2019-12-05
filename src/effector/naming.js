@@ -75,21 +75,16 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
   store.compositeName.fullName = compositeName.fullName
 }
 
-class Name {
-  /*::
-  shortName: string
-  fullName: string
-  path: Array<string>
-  */
-  constructor(shortName: string, fullName: string, path: Array<string>) {
-    this.shortName = shortName
-    this.fullName = fullName
-    this.path = path
-  }
+export type CompositeName = {
+  shortName: string,
+  fullName: string,
+  path: string[],
 }
-export type {Name as CompositeName}
 
-export function createName(name: string, parent?: Name): Name {
+export function createName(
+  name: string,
+  parent?: CompositeName,
+): CompositeName {
   let path
   let fullName
   const shortName = name
@@ -113,5 +108,5 @@ export function createName(name: string, parent?: Name): Name {
       }
     }
   }
-  return new Name(shortName, fullName, path)
+  return {shortName, fullName, path}
 }
