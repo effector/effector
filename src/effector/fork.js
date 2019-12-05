@@ -1,20 +1,14 @@
-//@noflow
+//@flow
 
-import {
-  createDomain,
-  createNode,
-  forward,
-  sample,
-  launch,
-  step,
-  clearNode,
-  is,
-} from 'effector'
-import * as React from 'react'
+import {is} from './is'
+import {step, getGraph, bind} from './stdlib'
+import {launch} from './kernel'
+import {createNode} from './createNode'
+import {forward} from './forward'
+import {Defer} from './defer'
+import {watchUnit} from './watch'
 
 const stack = []
-export const Scope = React.createContext(null)
-export const {Provider} = Scope
 
 /**
 hydrate state on client
@@ -61,11 +55,6 @@ export function serialize(scope) {
   }
 
   return result
-}
-
-export function useScopeStore(store) {
-  const scope = React.useContext(Scope)
-  return scope.find(store).meta.wrapped
 }
 
 /** invoke event in scope */
@@ -122,34 +111,24 @@ export function fork(domain, {ctx, start}) {
   syncComplete()
   return req.then(() => scope)
 }
-const noop = () => {}
-export class Defer {
-  constructor() {
-    this.req = new Promise((rs, rj) => {
-      this.rs = rs
-      this.rj = rj
-    })
-  }
-}
+
 /**
 everything we need to clone graph section
 reachable from given unit
 
 to erase, call clearNode(clone.node)
 */
-function cloneGraph(unit) {
-  const parentUnit = unit
-  unit = getNode(unit)
-  const visited = new Set()
+function cloneGraph(parentUnit) {
+  const unit = getGraph(parentUnit)
+  const list = []
   ;(function traverse(node) {
-    if (visited.has(node)) return
-    visited.add(node)
+    if (list.includes(node)) return
+    list.push(node)
     forEachRelatedNode(node, traverse)
   })(unit)
-  const list = [...visited]
   const refs = new Map()
 
-  let defer = new Defer()
+  const defer = new Defer()
   const fxCount = {
     current: 0,
     syncComplete: false,
@@ -162,12 +141,15 @@ function cloneGraph(unit) {
     const id = fxID
     Promise.resolve().then(() => {
       if (id !== fxID) return
-      tryCompleteInitPhase = noop
-      const rs = defer.rs
-      defer.rs = noop
-      defer = null
-      rs()
+      tryCompleteInitPhase = null
+      defer.rs()
     })
+  }
+  const completeInitPhase = () => {
+    if (fxCount.current === 0) {
+      fxID += 1
+      tryCompleteInitPhase && tryCompleteInitPhase()
+    }
   }
   const clones = list.map(node => {
     const result = createNode({
@@ -247,10 +229,7 @@ function cloneGraph(unit) {
             step.run({
               fn() {
                 fxCount.current -= 1
-                if (fxCount.current === 0) {
-                  fxID += 1
-                  tryCompleteInitPhase()
-                }
+                completeInitPhase()
               },
             }),
           ],
@@ -263,10 +242,7 @@ function cloneGraph(unit) {
   return {
     syncComplete() {
       fxCount.syncComplete = true
-      if (fxCount.current === 0) {
-        fxID += 1
-        tryCompleteInitPhase()
-      }
+      completeInitPhase()
     },
     req: defer.req,
     scope: {
@@ -284,13 +260,10 @@ function cloneGraph(unit) {
   }
 
   function findClone(unit) {
-    unit = getNode(unit)
+    unit = getGraph(unit)
     const index = list.indexOf(unit)
     if (index === -1) throw Error('not found')
     return clones[index]
-  }
-  function getNode(unit) {
-    return unit.graphite || unit
   }
 
   function forEachRelatedNode({next, family}, cb) {
@@ -303,31 +276,10 @@ function cloneGraph(unit) {
       kind: 'store',
       getState: () => node.reg[node.scope.state.id].current,
       updates: {
-        watch: cb => createWatch(node, cb),
+        watch: bind(watchUnit, node),
       },
       graphite: node,
       family: node.family,
     }
-  }
-
-  /* watchers for bare graph nodes */
-  function createWatch(node, cb) {
-    return forward({
-      from: node,
-      to: createNode({
-        node: [
-          step.run({
-            fn(result) {
-              cb(result)
-            },
-          }),
-        ],
-        family: {
-          type: 'crosslink',
-          owners: [],
-        },
-        meta: {op: 'watch'},
-      }),
-    })
   }
 }
