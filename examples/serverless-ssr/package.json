@@ -1,0 +1,40 @@
+{
+  "name": "effector-react-serverless-ssr",
+  "private": true,
+  "author": "Zero Bias",
+  "scripts": {
+    "build:ssr": "npx parcel build -t node --bundle-node-modules -d dist/server src/server/ssr.ts",
+    "build:static": "npx parcel build -t node --bundle-node-modules -d dist/server src/server/static.ts",
+    "build:api": "npx parcel build -t node --bundle-node-modules -d dist/server src/server/api.ts",
+    "build:client": "npx parcel build --public-url /static -d dist/client src/index.html",
+    "build": "yarn build:client && yarn build:ssr && yarn build:api && yarn build:static",
+    "deploy": "npx sls deploy -s dev",
+    "predeploy": "yarn build"
+  },
+  "dependencies": {
+    "cross-fetch": "^3.0.4",
+    "effector": "^20.7.1",
+    "effector-react": "^20.4.2",
+    "history": "^4.10.1",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-env": "^7.7.4",
+    "@babel/preset-typescript": "^7.7.4",
+    "@types/aws-lambda": "^8.10.36",
+    "@types/node": "^12.12.14",
+    "parcel-bundler": "^1.12.4",
+    "serverless": "^1.59.0",
+    "serverless-domain-manager": "^3.3.0",
+    "serverless-plugin-typescript": "^1.1.9",
+    "typescript": "^3.7.3"
+  },
+  "browserslist": [
+    "last 2 Chrome versions",
+    "last 2 Firefox versions",
+    "last 2 Safari versions"
+  ],
+  "license": "MIT"
+}

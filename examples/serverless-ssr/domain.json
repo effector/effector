@@ -1,0 +1,4 @@
+{
+  "domainName": "ssr.effector.dev",
+  "certificateArn": "arn:aws:acm:us-east-1:<AWS USER ID>:certificate/<CERTIFICATE ID>"
+}
