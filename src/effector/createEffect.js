@@ -97,8 +97,9 @@ export function createEffect<Payload, Done>(
   instance.graphite.scope.runner = effectRunner
   instance.graphite.seq.push(
     step.compute({
-      fn(params) {
-        if (Object(params) === params && 'ɔ' in params) return params.ɔ
+      fn(params, scope, stack) {
+        // empty stack means that this node was launched directly
+        if (!stack.parent) return params
         return {
           params,
           req: {
@@ -117,7 +118,7 @@ export function createEffect<Payload, Done>(
   )
   ;(instance: any).create = (params: Payload) => {
     const req: any = new Defer()
-    launch(instance, {ɔ: {params, req}})
+    launch(instance, {params, req})
     return req.req
   }
 
