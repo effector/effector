@@ -12,11 +12,13 @@ import {
   launch,
   step,
   clearNode,
+  fork,
+  invoke,
+  serialize,
 } from 'effector'
-import {fork, invoke, Provider, serialize} from 'effector-react/ssr'
-import {useStore, useList} from 'effector-react/ssr-replacement'
+import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   const indirectCallFn = jest.fn()
   /*
   real remote json documents
@@ -132,16 +134,16 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-bj2hri": "alice",
-      "xotzpg": Array [
+      "-akz8z4": "alice",
+      "ymx8hu": Array [
         "bob",
       ],
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-bj2hri": "bob",
-      "xotzpg": Array [
+      "-akz8z4": "bob",
+      "ymx8hu": Array [
         "alice",
       ],
     }
