@@ -17,7 +17,7 @@ import {
 import {fork, invoke, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   const indirectCallFn = jest.fn()
   /*
   real remote json documents
@@ -133,16 +133,16 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-akz8z4": "alice",
-      "ymx8hu": Array [
+      "-b20vdb": "alice",
+      "y5vm3n": Array [
         "bob",
       ],
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-akz8z4": "bob",
-      "ymx8hu": Array [
+      "-b20vdb": "bob",
+      "y5vm3n": Array [
         "alice",
       ],
     }
