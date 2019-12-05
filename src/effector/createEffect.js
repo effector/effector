@@ -5,7 +5,7 @@ import {step, own, bind} from './stdlib'
 import {createNode} from './createNode'
 import {upsertLaunch, launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
-import {normalizeConfig, type EffectConfigPart, type Config} from './config'
+import type {EffectConfigPart, Config} from './config'
 import {joinName, type CompositeName} from './naming'
 import {Defer} from './defer'
 
@@ -17,17 +17,19 @@ export function createEffect<Payload, Done>(
   nameOrConfig: any,
   maybeConfig: any,
 ): Effect<Payload, Done, *> {
-  const config = normalizeConfig({name: nameOrConfig, config: maybeConfig})
+  //$off
+  const instance: Effect<Payload, Done, any> = createEvent(
+    nameOrConfig,
+    maybeConfig,
+  )
   let handler =
-    config.handler ||
+    instance.defaultConfig.handler ||
     (value => {
       console.error(`no handler used in ${instance.getType()}`)
       return Promise.resolve()
     })
 
-  //$off
-  const instance: Effect<Payload, Done, any> = createEvent(config)
-  //$off
+  instance.graphite.meta.onCopy = ['runner']
   instance.graphite.meta.unit = 'effect'
   const done: Event<{|
     params: Payload,
@@ -90,7 +92,7 @@ export function createEffect<Payload, Done>(
         },
       }),
     ],
-    meta: {op: 'fx', fx: 'runner'},
+    meta: {op: 'fx', fx: 'runner', onCopy: ['done', 'fail', 'anyway']},
   })
   instance.graphite.scope.runner = effectRunner
   instance.graphite.seq.push(

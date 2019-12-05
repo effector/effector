@@ -140,26 +140,15 @@ to erase, call clearNode(clone.node)
 function cloneGraph(unit) {
   const parentUnit = unit
   unit = getNode(unit)
-  const list = flatGraph(unit)
-  const clones = list.map(node => {
-    const result = createNode({
-      node: node.seq.map(step => ({
-        id: step.id,
-        type: step.type,
-        data: Object.assign({}, step.data),
-        hasRef: step.hasRef,
-      })),
-      child: [...node.next],
-      meta: Object.assign({}, node.meta),
-      scope: Object.assign({}, node.scope),
-    })
-    result.family = {
-      type: node.family.type,
-      links: [...node.family.links],
-      owners: [...node.family.owners],
-    }
-    return result
-  })
+  const visited = new Set()
+  ;(function traverse(node) {
+    if (visited.has(node)) return
+    visited.add(node)
+    forEachRelatedNode(node, traverse)
+  })(unit)
+  const list = [...visited]
+  const refs = new Map()
+
   let defer = new Defer()
   const fxCount = {
     current: 0,
@@ -180,83 +169,99 @@ function cloneGraph(unit) {
       rs()
     })
   }
-
-  const refs = new Map()
-  const handlers = new Map()
-  for (let i = 0; i < clones.length; i++) {
-    const clone = clones[i]
-    for (const id in clone.reg) {
-      clone.reg[id] = cloneRef(clone.reg[id])
-    }
-  }
-  const nodeProcessors = []
-  onOperation('fx', node => {
-    const {scope, seq} = node
-    scope.done = findClone(scope.done)
-    scope.fail = findClone(scope.fail)
-    scope.anyway = findClone(scope.anyway)
-    const from = getNode(scope.anyway)
-    const to = createNode({
-      meta: {fork: true},
-      node: [
-        step.run({
-          fn() {
-            fxCount.current -= 1
-            if (fxCount.current === 0) {
-              fxID += 1
-              tryCompleteInitPhase()
-            }
-          },
-        }),
-      ],
+  const clones = list.map(node => {
+    const result = createNode({
+      node: node.seq.map(step => ({
+        id: step.id,
+        type: step.type,
+        data: Object.assign({}, step.data),
+        hasRef: step.hasRef,
+      })),
+      child: [...node.next],
+      meta: Object.assign({}, node.meta),
+      scope: Object.assign({}, node.scope),
     })
-    from.next.push(to)
+    result.family = {
+      type: node.family.type,
+      links: [...node.family.links],
+      owners: [...node.family.owners],
+    }
+    return result
   })
-  onUnit('store', node => {
-    node.meta.wrapped = wrapStore(node)
-  })
-  onOperation('combine', ({scope}) => {
-    scope.target = cloneRef(scope.target)
-    scope.isFresh = cloneRef(scope.isFresh)
-  })
-  onUnit('effect', ({scope, seq}) => {
-    scope.runner = findClone(scope.runner)
-    seq.push(
-      step.compute({
-        fn(upd) {
-          fxCount.current += 1
-          fxID += 1
-          return upd
-        },
-      }),
-    )
-  })
-  onOperation('watch', ({scope}) => {
-    const handler = scope.fn
-    scope.fn = data => {
-      stack.push(findClone)
-      try {
-        handler(data)
-      } finally {
-        stack.pop()
+  clones.forEach(node => {
+    const {
+      reg,
+      scope,
+      meta: {onCopy, op, unit},
+    } = node
+    const itemTag = op || unit
+    for (const id in reg) {
+      const ref = reg[id]
+      let newRef = refs.get(ref)
+      if (!newRef) {
+        newRef = {
+          id: ref.id,
+          current: ref.current,
+        }
+        refs.set(ref, newRef)
+      }
+      reg[id] = newRef
+    }
+    if (onCopy) {
+      for (let j = 0; j < onCopy.length; j++) {
+        scope[onCopy[j]] = findClone(scope[onCopy[j]])
       }
     }
-  })
-  for (let i = 0; i < nodeProcessors.length; i++) {
-    const {type, name, cb} = nodeProcessors[i]
-    for (let j = 0; j < clones.length; j++) {
-      if (clones[j].meta[type] === name) cb(clones[j])
+    forEachRelatedNode(node, siblings =>
+      siblings.forEach((node, i) => {
+        if (!node.meta.fork) siblings[i] = findClone(node)
+      }),
+    )
+    switch (itemTag) {
+      case 'store':
+        node.meta.wrapped = wrapStore(node)
+        break
+      case 'watch': {
+        const handler = scope.fn
+        scope.fn = data => {
+          stack.push(findClone)
+          try {
+            handler(data)
+          } finally {
+            stack.pop()
+          }
+        }
+        break
+      }
+      case 'effect':
+        node.seq.push(
+          step.compute({
+            fn(upd) {
+              fxCount.current += 1
+              fxID += 1
+              return upd
+            },
+          }),
+        )
+        createNode({
+          meta: {fork: true},
+          node: [
+            step.run({
+              fn() {
+                fxCount.current -= 1
+                if (fxCount.current === 0) {
+                  fxID += 1
+                  tryCompleteInitPhase()
+                }
+              },
+            }),
+          ],
+          parent: scope.runner.scope.anyway,
+        })
+        break
     }
-  }
-  for (let i = 0; i < clones.length; i++) {
-    const clone = clones[i]
-    reallocSiblings(clone.next)
-    reallocSiblings(clone.family.links)
-    reallocSiblings(clone.family.owners)
-  }
+  })
 
-  refs.clear()
-  handlers.clear()
   return {
     syncComplete() {
       fxCount.syncComplete = true
@@ -279,30 +284,7 @@ function cloneGraph(unit) {
       }),
     },
   }
-  function onOperation(name, cb) {
-    nodeProcessors.push({type: 'op', name, cb})
-  }
-  function onUnit(name, cb) {
-    nodeProcessors.push({type: 'unit', name, cb})
-  }
-  function getRef(ref) {
-    if (!refs.has(ref)) throw Error('no ref found')
-    return refs.get(ref)
-  }
-  function cloneRef(ref) {
-    if (refs.has(ref)) return refs.get(ref)
-    const result = {
-      id: ref.id,
-      current: ref.current,
-    }
-    refs.set(ref, result)
-    return result
-  }
-  function reallocSiblings(siblings) {
-    siblings.forEach((node, i) => {
-      if (!node.meta.fork) siblings[i] = findClone(node)
-    })
-  }
+
   function findClone(unit) {
     unit = getNode(unit)
     const index = list.indexOf(unit)
@@ -313,17 +295,10 @@ function cloneGraph(unit) {
     return unit.graphite || unit
   }
 
-  function flatGraph(unit) {
-    const visited = new Set()
-    traverse(getNode(unit))
-    function traverse(node) {
-      if (visited.has(node)) return
-      visited.add(node)
-      node.next.forEach(traverse)
-      node.family.owners.forEach(traverse)
-      node.family.links.forEach(traverse)
-    }
-    return [...visited]
+  function forEachRelatedNode({next, family}, cb) {
+    next.forEach(cb)
+    family.owners.forEach(cb)
+    family.links.forEach(cb)
   }
   function wrapStore(node) {
     return {
