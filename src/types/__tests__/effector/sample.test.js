@@ -368,8 +368,9 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ a: string; }>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
-            Type 'Store<{ a: string; }>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+          Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
+            Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ a: string; }>'.
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -399,8 +400,9 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
-            Type 'Store<null>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+          Type 'Store<null>' is not assignable to type 'Combinable'.
+            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<null>'.
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -429,8 +431,9 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
-            Type 'Store<{}>' is missing the following properties from type 'Event<unknown>': filter, filterMap, prepend, getType
+          Type 'Store<{}>' is not assignable to type 'Combinable'.
+            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{}>'.
 
       --flow--
       no errors
@@ -451,8 +454,8 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
-            Type 'Store<null>' is not assignable to type 'Event<unknown>'.
+          Type 'Store<null>' is not assignable to type 'Combinable'.
+            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
 
       --flow--
       no errors
@@ -462,7 +465,7 @@ describe('`target` forwarding', () => {
 })
 
 describe('sample with implicit combine', () => {
-  it('support store objects as source (should pass)', () => {
+  it('supports store objects as a source (should pass)', () => {
     const a = createStore(1)
     const b = createStore('b')
     const clock = createEvent<number>()
@@ -474,10 +477,7 @@ describe('sample with implicit combine', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Type '{ a: Store<number>; b: Store<string>; }' is not assignable to type 'Event<unknown> | Effect<unknown, any, any>'.
-            Object literal may only specify known properties, and 'a' does not exist in type 'Event<unknown> | Effect<unknown, any, any>'.
+      no errors
 
       --flow--
       Cannot call 'sample' because: Either property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. Or property 'kind' is missing in object literal [1] but exists in 'Unit' [3] in property 'source'
@@ -489,6 +489,366 @@ describe('sample with implicit combine', () => {
                  [2] ^^^^^^^
             +source: Unit<A>,
                  [3] ^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample({
+      source: [a, b],
+      clock,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports store objects as a source + mapping (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample({
+      source: {a, b},
+      clock,
+      fn: ({a, b}, clock) => a.toString() + b + clock.toString(),
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample'
+        source: {a, b},
+                ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source + mapping (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample({
+      source: [a, b],
+      clock,
+      fn: ([a, b], clock) => a.toString() + b + clock.toString(),
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports store objects as a source + target forwarding (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const target = createEvent<{a: number, b: string}>()
+    const result = sample({
+      source: {a, b},
+      clock,
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample'
+        source: {a, b},
+                ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source + target forwarding (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const target = createEvent<[number, string]>()
+    const result = sample({
+      source: [a, b],
+      clock,
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports store objects as a source + mapping + target forwarding (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const target = createEvent<string>()
+    const result = sample({
+      source: {a, b},
+      clock,
+      fn: ({a, b}, clock) => a.toString() + b + clock.toString(),
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample'
+        source: {a, b},
+                ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source + mapping + target forwarding (should pass)', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const target = createEvent<string>()
+    const result = sample({
+      source: [a, b],
+      clock,
+      fn: ([a, b], clock) => a.toString() + b + clock.toString(),
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
+  })
+  it('supports store objects as a source (should pass) [non-config sample overload]', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample({a, b}, clock)
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]
+        const result = sample({a, b}, clock)
+                       ^^^^^^
+            const result = sample({a, b}, clock)
+                              [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
+            source: Store<A>,
+                [3] ^^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source (should pass) [non-config sample overload]', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample([a, b], clock)
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]
+        const result = sample([a, b], clock)
+                       ^^^^^^
+            const result = sample([a, b], clock)
+                              [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
+            source: Store<A>,
+                [3] ^^^^^^^^
+      "
+    `)
+  })
+  it('supports store objects as a source + mapping (should pass) [non-config sample overload]', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample(
+      {a, b},
+      clock,
+      ({a, b}, clock) => a.toString() + b + clock.toString(),
+    )
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample'
+        {a, b},
+        ^^^^^^
+        object literal [1] is incompatible with 'Store' [2]
+            {a, b},
+        [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
+      "
+    `)
+  })
+  it('supports a list of stores as a source + mapping (should pass) [non-config sample overload]', () => {
+    const a = createStore(1)
+    const b = createStore('b')
+    const clock = createEvent<number>()
+    const result = sample(
+      [a, b],
+      clock,
+      ([a, b], clock) => a.toString() + b + clock.toString(),
+    )
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample'
+        [a, b],
+        ^^^^^^
+        array literal [1] is incompatible with 'Store' [2]
+            [a, b],
+        [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
       "
     `)
   })
