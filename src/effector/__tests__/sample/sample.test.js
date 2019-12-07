@@ -514,3 +514,22 @@ describe('sample', () => {
     expect(spy).toHaveBeenCalledTimes(2)
   })
 })
+
+test('array target', () => {
+  const fn1 = jest.fn()
+  const fn2 = jest.fn()
+  const store = createStore(0)
+  const trigger = createEvent()
+  const t1 = createEvent()
+  const t2 = createEvent()
+  t1.watch(fn1)
+  t2.watch(fn2)
+  sample({
+    source: store,
+    clock: trigger,
+    target: [t1, t2],
+  })
+  trigger()
+  expect(argumentHistory(fn1)).toEqual([0])
+  expect(argumentHistory(fn2)).toEqual([0])
+})
