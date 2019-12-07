@@ -3,8 +3,18 @@
 import type {Graph, Graphite, Cmd, StateRef} from './stdlib/index.h'
 
 import {getGraph, getOwners, getLinks} from './stdlib/getter'
-const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] =>
-  (Array.isArray(list) ? list : [list]).map(getGraph)
+const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
+  const result = []
+  if (Array.isArray(list)) {
+    for (let i = 0; i < list.length; i++) {
+      if (Array.isArray(list[i])) result.push(...list[i])
+      else result.push(list[i])
+    }
+  } else {
+    result.push(list)
+  }
+  return result.map(getGraph)
+}
 export function createNode({
   node = [],
   parent,
