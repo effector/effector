@@ -76,6 +76,7 @@ export default {
         ],
         'README.md',
         'package.json',
+        'ssr.d.ts',
         [
           'index.js.flow',
           [
