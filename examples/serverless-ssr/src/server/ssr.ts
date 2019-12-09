@@ -3,7 +3,7 @@ import {resolve, extname, basename} from 'path'
 import {promises as fs} from 'fs'
 import React from 'react'
 import {renderToString} from 'react-dom/server'
-import {fork, serialize} from 'effector-react/ssr'
+import {fork, serialize, waitAll} from 'effector/fork'
 import fetch from 'cross-fetch'
 import {startServer, App} from '../app'
 import {app} from '../domain'
@@ -29,9 +29,13 @@ export default async (event: APIGatewayProxyEvent) => {
 
 async function dynamicContent(user) {
   try {
-    const scope = await fork(app, {
+    const scope = fork(app, {
       start: startServer,
       ctx: user,
+    })
+    await waitAll(startServer, {
+      scope,
+      params: user,
     })
     const data = serialize(scope)
     const content = renderToString(React.createElement(App, {root: scope}))

@@ -1,13 +1,13 @@
 import React from 'react'
 import fetch from 'cross-fetch'
 import {sample, createDomain, forward, guard, combine} from 'effector'
+import {scopeBind} from 'effector/fork'
 import {
   useStore,
   useList,
   useStoreMap,
   Provider,
   useEvent,
-  scopeBind,
 } from 'effector-react/ssr'
 import domainConfig from '../domain.json'
 import {app} from './domain'
