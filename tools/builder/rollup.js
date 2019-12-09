@@ -142,8 +142,7 @@ export async function rollupEffector() {
     }),
     createEsCjs(name, {
       file: {
-        cjs: dir(`npm/${name}/fork.cjs.js`),
-        es: dir(`npm/${name}/fork.es.js`),
+        cjs: dir(`npm/${name}/fork.js`),
       },
       input: 'fork',
     }),
@@ -402,7 +401,7 @@ async function createEsCjs(
     renderModuleGraph = false,
     input = 'index',
   }: {|
-    file: {|es: string, cjs: string|},
+    file: {|es?: string, cjs: string|},
     renderModuleGraph?: boolean,
     input?: string,
   |},
@@ -439,13 +438,14 @@ async function createEsCjs(
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
     }),
-    build.write({
-      file: es,
-      format: 'es',
-      freeze: false,
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
+    es &&
+      build.write({
+        file: es,
+        format: 'es',
+        freeze: false,
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
   ])
 }
