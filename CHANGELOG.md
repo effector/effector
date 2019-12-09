@@ -1,5 +1,83 @@
 # Changelog
 
+## effector 20.8.0
+
+- Allow to use objects and arrays with stores in sample source
+
+```js
+import {createStore, createEvent, sample, combine} from 'effector'
+
+const trigger = createEvent()
+const objectTarget = createEvent()
+const arrayTarget = createEvent()
+
+const a = createStore('A')
+const b = createStore('B')
+
+sample({
+  source: {a, b},
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: [a, b],
+  clock: trigger,
+  target: arrayTarget,
+})
+
+objectTarget.watch(obj => {
+  console.log('sampled object', obj)
+})
+arrayTarget.watch(array => {
+  console.log('sampled array', array)
+})
+
+trigger()
+// sampled object {a: 'A', b: 'B'}
+// sampled array ['A', 'B']
+
+/* old way to do this: */
+
+sample({
+  source: combine({a, b}),
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: combine([a, b]),
+  clock: trigger,
+  target: arrayTarget,
+})
+```
+
+[Try it](https://share.effector.dev/GcYoDBf8)
+
+## effector-react 20.5.0
+
+- Pass props to `Gate.open` & `Gate.close` events
+
+```js
+import {createGate} from 'effector-react'
+const PageMeta = createGate()
+
+PageMeta.open.watch(props => {
+  console.log('page meta', props)
+})
+
+const App = () => (
+  <>
+    <PageMeta name="admin page" />
+    <div>body</div>
+  </>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+// => page meta {name: 'admin page'}
+```
+
+[Try it](https://share.effector.dev/5g7jdANZ)
+
 ## effector 20.7.0
 
 - Add `domain.createStore` as alias for `domain.store` ([proposal](https://github.com/zerobias/effector/issues/186))
@@ -30,7 +108,7 @@ const secondTarget = createEvent()
 
 forward({
   from: [firstSource, secondSource],
-  to: [firstTarget, secondTarget]
+  to: [firstTarget, secondTarget],
 })
 
 firstTarget.watch(e => console.log('first target', e))
@@ -232,7 +310,10 @@ import ReactDOM from 'react-dom'
 import {createStore, createEvent, createEffect, sample} from 'effector'
 import {useList} from 'effector-react'
 
-const items$ = createStore([{id: 0, status: 'NEW'}, {id: 1, status: 'NEW'}])
+const items$ = createStore([
+  {id: 0, status: 'NEW'},
+  {id: 1, status: 'NEW'},
+])
 
 const updateItem = createEvent()
 const resetItems = createEvent()
