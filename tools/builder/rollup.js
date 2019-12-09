@@ -54,6 +54,7 @@ const getPlugins = (name: string) => ({
     filename: `stats/${name}.html`,
     title: `${name} size report`,
     sourcemap: true,
+    template: 'sunburst',
   }),
   terser: terser(
     minifyConfig({
@@ -406,7 +407,7 @@ async function createEsCjs(
     input?: string,
   |},
 ) {
-  const plugins = getPlugins(name)
+  const plugins = getPlugins(input === 'index' ? name : input)
   const pluginList = [
     plugins.resolve,
     plugins.json,
