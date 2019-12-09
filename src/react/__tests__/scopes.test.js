@@ -4,17 +4,9 @@ import fetch from 'cross-fetch'
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
-import {
-  createDomain,
-  createNode,
-  forward,
-  sample,
-  launch,
-  step,
-  clearNode,
-} from 'effector'
+import {createDomain, forward, sample} from 'effector'
 
-import {fork, invoke, serialize} from 'effector/fork'
+import {fork, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
 it('works', async () => {
@@ -102,28 +94,6 @@ it('works', async () => {
     </Provider>
   )
 
-  clearNode(carolScope)
-  await render(<App root={carolScope} />)
-  expect(carolScope).toMatchInlineSnapshot(`
-    Object {
-      "find": [Function],
-      "getDomain": [Function],
-      "graphite": Object {
-        "family": Object {
-          "links": Array [],
-          "owners": Array [],
-          "type": "domain",
-        },
-        "meta": Object {
-          "unit": "domain",
-        },
-        "next": Array [],
-        "reg": Object {},
-        "scope": null,
-        "seq": Array [],
-      },
-    }
-  `)
   await render(<App root={bobScope} />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <h2>
@@ -133,16 +103,16 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-b20vdb": "alice",
-      "y5vm3n": Array [
+      "-osbwsy": "alice",
+      "kfkko0": Array [
         "bob",
       ],
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-b20vdb": "bob",
-      "y5vm3n": Array [
+      "-osbwsy": "bob",
+      "kfkko0": Array [
         "alice",
       ],
     }
