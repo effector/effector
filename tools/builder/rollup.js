@@ -54,7 +54,7 @@ const getPlugins = (name: string) => ({
     filename: `stats/${name}.html`,
     title: `${name} size report`,
     sourcemap: true,
-    template: 'sunburst',
+    template: 'treemap',
   }),
   terser: terser(
     minifyConfig({
