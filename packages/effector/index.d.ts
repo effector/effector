@@ -277,13 +277,6 @@ export type Compute = {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
-export type Tap = {
-  id: ID
-  type: 'tap'
-  data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
-  }
-}
 export type Step = {
   next: Array<Step>
   seq: Array<Cmd>
@@ -299,7 +292,6 @@ export const step: {
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
-  tap(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Tap
   filter(data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter

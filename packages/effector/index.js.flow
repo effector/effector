@@ -266,13 +266,6 @@ export type Compute = {|
     fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |},
 |}
-export type Tap = {|
-  +id: ID,
-  +type: 'tap',
-  +data: {|
-    fn: (data: any, scope: {[field: string]: any, ...}) => any,
-  |},
-|}
 export type Step = /*::interface extends Unit<any>*/ {
   +next: Array<Step>,
   +seq: Array<Cmd>,
@@ -288,9 +281,6 @@ declare export var step: {|
   compute(data: {|
     fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |}): Compute,
-  tap(data: {|
-    fn: (data: any, scope: {[field: string]: any, ...}) => any,
-  |}): Tap,
   filter(data: {|
     fn: (data: any, scope: {[field: string]: any, ...}) => boolean,
   |}): Filter,
@@ -353,9 +343,10 @@ declare export function setStoreName<State>(
   name: string,
 ): void
 
-declare export function createStoreObject<
-  State: {+[key: string]: Store<any> | any, ...},
->(
+type StoreObject = {+[key: string]: Store<any> | any, ...}
+type StoreTuple = $ReadOnlyArray<Store<any> | any>
+
+declare export function createStoreObject<State: StoreObject>(
   obj: State,
 ): Store<
   $ObjMap<
@@ -384,9 +375,7 @@ declare export function split<
   {...Obj, __: (payload: S) => boolean, ...},
   (h: (payload: S) => boolean) => Event<S>,
 >
-declare export function restoreObject<
-  State: {+[key: string]: Store<any> | any, ...},
->(
+declare export function restoreObject<State: StoreObject>(
   state: State,
 ): $ObjMap<
   State,
@@ -409,7 +398,7 @@ declare export function restore<Done>(
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
+declare export function restore<State: StoreObject>(
   state: State,
 ): $ObjMap<
   State,
@@ -490,21 +479,18 @@ declare export function guard<A>(
   |},
 ): Unit<A>
 
-declare export function combine<State: {+[key: string]: Store<any> | any, ...}>(
+declare export function combine<State: StoreObject>(
   shape: State,
 ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
-declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(
+declare export function combine<State: StoreTuple>(
   list: State,
 ): Store<$TupleMap<State, <S>(field: Store<S> | S) => S>>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
-declare export function combine<
-  State: {+[key: string]: Store<any> | any, ...},
-  R,
->(
+declare export function combine<State: StoreObject, R>(
   shape: State,
   fn: (shape: $ObjMap<State, <S>(field: Store<S> | S) => S>) => R,
 ): Store<R>
-declare export function combine<State: $ReadOnlyArray<Store<any> | any>, R>(
+declare export function combine<State: StoreTuple, R>(
   list: State,
   fn: (list: $TupleMap<State, <S>(field: Store<S> | S) => S>) => R,
 ): Store<R>
