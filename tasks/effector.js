@@ -33,6 +33,7 @@ export default {
           ],
         ],
         'package.json',
+        'fork.d.ts',
         [
           'index.js.flow',
           [
