@@ -89,8 +89,7 @@ export function useEvent(event) {
   const result = is.effect(event)
     ? params => {
       const req = new Defer()
-      const payload = {ɔ: {params, req}}
-      launch(unit, payload)
+      launch(unit, {params, req})
       return req.req
     }
     : payload => {
