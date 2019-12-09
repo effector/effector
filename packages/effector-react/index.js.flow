@@ -20,8 +20,8 @@ export type StoreComponent<State> = ComponentType<{|
 export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
   isOpen: boolean,
   isTerminated: boolean,
-  open: Event<void>,
-  close: Event<void>,
+  open: Event<Props>,
+  close: Event<Props>,
   status: Store<boolean>,
   destructor: Event<void>,
   current: Props,

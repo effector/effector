@@ -16,8 +16,8 @@ export type Gate<Props = {||}> = Class<React.Component<Props>> &
   interface {
     isOpen: boolean,
     isTerminated: boolean,
-    open: Event<void>,
-    close: Event<void>,
+    open: Event<Props>,
+    close: Event<Props>,
     status: Store<boolean>,
     destructor: Event<void>,
     current: Props,
@@ -93,12 +93,11 @@ export function createGate<Props>(
       GateComponent.destructor.watch(() => gate.destructor())
       return gate
     }
-
     componentDidMount() {
-      GateComponent.open()
+      GateComponent.open(this.props)
     }
     componentWillUnmount() {
-      GateComponent.close()
+      GateComponent.close(this.props)
     }
     render() {
       GateComponent.set(this.props)

@@ -8,8 +8,8 @@ export type StoreConsumer<State> = React.ComponentType<{
 export type Gate<Props = {}> = React.ComponentType<Props> & {
   isOpen: boolean
   isTerminated: boolean
-  open: Event<void>
-  close: Event<void>
+  open: Event<Props>
+  close: Event<Props>
   status: Store<boolean>
   destructor: Event<void>
   current: Props
