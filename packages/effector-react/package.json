@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "20.4.2",
+  "version": "20.5.0",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "react": "^16.8.0",
-    "effector": "^20.7.0"
+    "effector": "^20.8.0"
   },
   "files": [
     "README.md",
@@ -33,7 +33,8 @@
     "effector-react.umd.d.ts",
     "compat.d.ts",
     "ssr.js",
-    "ssr.js.map"
+    "ssr.js.map",
+    "ssr.d.ts"
   ],
   "keywords": [
     "react",

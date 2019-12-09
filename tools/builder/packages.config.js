@@ -42,8 +42,8 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.7.1',
-  'effector-react': '20.4.2',
+  effector: '20.8.0',
+  'effector-react': '20.5.0',
   'effector-vue': '20.3.2',
 
   'bs-effector': '20.0.0',
@@ -98,8 +98,8 @@ export default {
     },
     files: [
       ...getFiles('effector'),
-      ...compiledFile('fork.cjs'),
-      ...compiledFile('fork.es'),
+      ...compiledFile('fork'),
+      'fork.d.ts',
       'babel-plugin.js',
       'babel-plugin-react.js',
       'plugin/defaultMetaVisitor.js',
@@ -122,9 +122,9 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '^16.8.0',
-      effector: '^20.7.0',
+      effector: '^20.8.0',
     },
-    files: [...getFiles('effector-react'), ...compiledFile('ssr')],
+    files: [...getFiles('effector-react'), ...compiledFile('ssr'), 'ssr.d.ts'],
     keywords: ['react', ...keywords],
     ...common,
   },
