@@ -56,6 +56,11 @@ const getPlugins = (name: string) => ({
     sourcemap: true,
     template: 'treemap',
   }),
+  analyzerJSON: analyze({
+    sourcemap: true,
+    json: true,
+    filename: `stats/${name}.json`,
+  }),
   terser: terser(
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
@@ -233,6 +238,7 @@ export async function rollupEffectorReact() {
       plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
+      plugins.analyzerJSON,
     ]
     const build = await rollup({
       onwarn,
@@ -287,6 +293,7 @@ async function createUmd(name, {external, file, umdName, globals}) {
       plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
+      plugins.analyzerJSON,
     ],
     external,
   })
@@ -372,6 +379,7 @@ async function createCompat(name) {
       safari10: true,
     }),
     plugins.analyzer,
+    plugins.analyzerJSON,
   ]
   const build = await rollup({
     onwarn,
@@ -414,6 +422,7 @@ async function createEsCjs(
     plugins.sizeSnapshot,
     plugins.terser,
     plugins.analyzer,
+    plugins.analyzerJSON,
   ]
   if (renderModuleGraph) {
     pluginList.push(
