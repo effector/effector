@@ -6,10 +6,10 @@ import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {createDomain, forward, sample} from 'effector'
 
-import {fork, serialize} from 'effector/fork'
+import {fork, waitAll, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async () => {
+it('works', async() => {
   const indirectCallFn = jest.fn()
   /*
   real remote json documents
@@ -65,18 +65,21 @@ it('works', async () => {
     indirectCall()
   })
 
-  const aliceScope = await fork(app, {
-    start,
-    ctx: users.alice,
-  })
-  const [bobScope, carolScope] = await Promise.all([
-    fork(app, {
-      start,
-      ctx: users.bob,
+  const aliceScope = fork(app)
+  const bobScope = fork(app)
+  const carolScope = fork(app)
+  await Promise.all([
+    waitAll(start, {
+      scope: aliceScope,
+      params: users.alice,
     }),
-    fork(app, {
-      start,
-      ctx: users.carol,
+    waitAll(start, {
+      scope: bobScope,
+      params: users.bob,
+    }),
+    waitAll(start, {
+      scope: carolScope,
+      params: users.carol,
     }),
   ])
   const User = () => <h2>{useStore(user)}</h2>

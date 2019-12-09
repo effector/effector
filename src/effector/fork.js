@@ -4,7 +4,7 @@ import {getGraph, bind} from './stdlib'
 import {Defer} from './defer'
 import {watchUnit} from './watch'
 
-import {is, step, launch, createNode} from 'effector'
+import {is, step, launch, createNode, clearNode} from 'effector'
 
 const stack = []
 
@@ -71,7 +71,7 @@ function universalLaunch(unit, payload) {
     launch(unit, payload)
   }
 }
-export function fork(domain, opts = {}) {
+export function fork(domain) {
   if (!is.domain(domain))
     return Promise.reject(Error('first argument of fork should be domain'))
   if (!domain.graphite.meta.withScopes) {
@@ -90,10 +90,9 @@ export function fork(domain, opts = {}) {
       }
     })
   }
-  const cloned = cloneGraph(domain)
-  return installSupervisor(cloned, opts).then(() => cloned)
+  return cloneGraph(domain)
 }
-function installSupervisor({clones, find}, {start, ctx}) {
+export function waitAll(start, {scope: {clones, find}, params: ctx}) {
   const defer = new Defer()
   let isSyncComplete = false
   let fxCount = 0
@@ -106,6 +105,8 @@ function installSupervisor({clones, find}, {start, ctx}) {
     Promise.resolve().then(() => {
       if (id !== fxID) return
       tryCompleteInitPhase = null
+      clearNode(onStart)
+      clearNode(onEnd)
       defer.rs()
     })
   }
@@ -115,29 +116,36 @@ function installSupervisor({clones, find}, {start, ctx}) {
       tryCompleteInitPhase && tryCompleteInitPhase()
     }
   }
-  for (const {meta, seq, scope} of clones) {
-    if (meta.unit !== 'effect') continue
-    seq.push(
+  const effects = []
+  const finalizers = []
+  for (let i = 0; i < clones.length; i++) {
+    const node = clones[i]
+    if (node.meta.unit !== 'effect') continue
+    effects.push(node)
+    finalizers.push(node.scope.runner.scope.anyway)
+  }
+  const onStart = createNode({
+    node: [
       step.compute({
-        fn(upd) {
+        fn() {
           fxCount += 1
           fxID += 1
-          return upd
         },
       }),
-    )
-    createNode({
-      node: [
-        step.run({
-          fn() {
-            fxCount -= 1
-            completeInitPhase()
-          },
-        }),
-      ],
-      parent: scope.runner.scope.anyway,
-    })
-  }
+    ],
+    parent: effects,
+  })
+  const onEnd = createNode({
+    node: [
+      step.run({
+        fn() {
+          fxCount -= 1
+          completeInitPhase()
+        },
+      }),
+    ],
+    parent: finalizers,
+  })
   if (start) {
     launch(find(start), ctx)
   }
