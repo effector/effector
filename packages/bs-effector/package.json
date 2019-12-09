@@ -44,8 +44,8 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/zerobias/effector",
-  "bugs": "https://github.com/zerobias/effector/issues",
   "homepage": "https://effector.now.sh",
+  "bugs": "https://github.com/zerobias/effector/issues",
   "engines": {
     "node": ">=6.0.0"
   },
