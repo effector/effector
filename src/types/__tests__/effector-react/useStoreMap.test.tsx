@@ -96,9 +96,9 @@ describe('useStoreMap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type '[number, \\"username\\" | \\"email\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
-          Type '\\"username\\" | \\"email\\" | \\"bio\\"' is not assignable to type 'number'.
-            Type '\\"username\\"' is not assignable to type 'number'.
+        Type '[number, \\"email\\" | \\"username\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
+          Type '\\"email\\" | \\"username\\" | \\"bio\\"' is not assignable to type 'number'.
+            Type '\\"email\\"' is not assignable to type 'number'.
         "
       `)
     })

@@ -1,13 +1,25 @@
 //@flow
 
 const watchPathIgnorePatterns = [
-  '<rootDir>/node_modules/',
-  '<rootDir>/tools/',
-  '<rootDir>/npm/',
-  '<rootDir>/packages/',
+  '<rootDir>/.effector/',
+  '<rootDir>/.github/',
+  '<rootDir>/.vscode/',
+  '<rootDir>/bench/',
+  '<rootDir>/coverage/',
+  '<rootDir>/docs/',
+  '<rootDir>/examples/',
   '<rootDir>/flow/',
   '<rootDir>/flow-typed/',
-  '<rootDir>/examples/',
+  '<rootDir>/integrations/',
+  '<rootDir>/node_modules/',
+  '<rootDir>/npm/',
+  '<rootDir>/recipies/',
+  '<rootDir>/rfc/',
+  '<rootDir>/scripts/',
+  '<rootDir>/stats/',
+  '<rootDir>/tasks/',
+  '<rootDir>/tools/',
+  '<rootDir>/website/',
 ]
 const createDefaultConfig = () => ({
   automock: false,
@@ -39,8 +51,6 @@ module.exports = {
     '!<rootDir>/src/fixtures/**',
     '!<rootDir>/src/redux/**',
   ],
-
-  // watchPlugins: ['jest-runner-eslint/watch-fix'],
   watchPathIgnorePatterns,
   projects: createProjectList([
     {
@@ -91,15 +101,6 @@ module.exports = {
     },
   ]),
 }
-
-// if (boolean(process.env.LINT, false)) {
-//   module.exports.projects.push({
-//     runner: 'jest-runner-eslint',
-//     displayName: 'lint',
-//     testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
-//     // watchPathIgnorePatterns,
-//   })
-// }
 
 function createProjectList(items) {
   items = items.filter(Boolean)
