@@ -272,7 +272,7 @@ turnOff() // nothing has changed
 - [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
 - [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
 - [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
-- [Computed bounce menu animation](https://share.effector.dev/m43fCkOU)
+- [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
 - [Values history](https://share.effector.dev/ghHZZHci)
 - [Read default state from backend](https://share.effector.dev/hA3WTBIT)
 - [Requests cache](https://share.effector.dev/jvE7r0By)
