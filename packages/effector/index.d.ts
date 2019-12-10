@@ -236,7 +236,6 @@ export type Cmd =
   | Run
   | Filter
   | Compute
-  | Tap
   | Barrier
 
 export type Barrier = {
