@@ -30,9 +30,11 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props?: Props = ({}: any),
 ) {
+  const propsRef = React.useRef(props)
+  propsRef.current = props
   useIsomorphicLayoutEffect(() => {
-    GateComponent.open()
-    return () => GateComponent.close()
+    GateComponent.open(propsRef.current)
+    return () => GateComponent.close(propsRef.current)
   }, [GateComponent])
   GateComponent.set(props)
 }
