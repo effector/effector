@@ -57,6 +57,25 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
+const createComputation = (from, to, op, fn) =>
+  createLinkNode(from, to, {
+    scope: {fn},
+    node: [step.compute({fn: callStack})],
+    meta: {op},
+  })
+
+const createEventFiltration = (event, op, fn, node) => {
+  const mapped = createEvent(joinName(event, ' →? *'), {
+    parent: event.domainName,
+  })
+  createLinkNode(event, mapped, {
+    scope: {fn},
+    node,
+    meta: {op},
+  })
+  return mapped
+}
+
 declare export function createEvent<Payload>(
   name?: string | EventConfigPart,
   config?: Config<EventConfigPart>,
@@ -92,12 +111,7 @@ function prepend(event, fn: (_: any) => *) {
   const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
     parent: event.domainName,
   })
-
-  createLinkNode(contramapped, event, {
-    scope: {fn},
-    node: [step.compute({fn: callStack})],
-    meta: {op: 'prepend'},
-  })
+  createComputation(contramapped, event, 'prepend', fn)
   return contramapped
 }
 
@@ -118,11 +132,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     parent: event.domainName,
     config,
   })
-  createLinkNode(event, mapped, {
-    scope: {fn},
-    node: [step.compute({fn: callStack})],
-    meta: {op: 'map'},
-  })
+  createComputation(event, mapped, 'map', fn)
   return mapped
 }
 
@@ -138,30 +148,19 @@ function filterEvent(
     console.error('.filter(fn) is deprecated, use .filterMap instead')
     return filterMapEvent(event, fn)
   }
-  const mapped = createEvent(joinName(event, ' →? *'), {
-    parent: event.domainName,
-  })
-  createLinkNode(event, mapped, {
-    scope: {fn: fn.fn},
-    node: [step.filter({fn: callStack})],
-    meta: {op: 'filter'},
-  })
-  return mapped
+  return createEventFiltration(event, 'filter', fn.fn, [
+    step.filter({fn: callStack}),
+  ])
 }
 
 function filterMapEvent(
   event: Event<any> | Effect<any, any, any>,
   fn: any => any | void,
 ): any {
-  const mapped = createEvent(joinName(event, ' →? *'), {
-    parent: event.domainName,
-  })
-  createLinkNode(event, mapped, {
-    scope: {fn},
-    node: [step.compute({fn: callStack}), step.check.defined()],
-    meta: {op: 'filterMap'},
-  })
-  return mapped
+  return createEventFiltration(event, 'filterMap', fn, [
+    step.compute({fn: callStack}),
+    step.check.defined(),
+  ])
 }
 
 /*PAGE*/

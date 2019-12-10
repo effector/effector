@@ -6,7 +6,6 @@ import {createNode} from './createNode'
 import {upsertLaunch, launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import type {EffectConfigPart, Config} from './config'
-import {joinName, type CompositeName} from './naming'
 import {Defer} from './defer'
 
 declare export function createEffect<Payload, Done>(
