@@ -1,0 +1,17 @@
+name: trigger changelog generator
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'CHANGELOG.md'
+jobs:
+  trigger_changelog_generator:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run pipeline for changelog generation
+      run: curl -X POST -d {} "$AMPLIFY_CHANGELOG_WEBHOOK" -H "Content-Type:application/json"
+      env:
+        AMPLIFY_CHANGELOG_WEBHOOK: ${{ secrets.amplify_changelog_webhook }}
