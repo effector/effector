@@ -1,7 +1,9 @@
 {
   "name": "effector",
   "version": 2,
-  "silent": true,
+  "github": {
+    "silent": true
+  },
   "alias": ["effector.now.sh"],
   "build": {
     "env": {
@@ -22,32 +24,9 @@
     {
       "src": "website/media/*.*",
       "use": "@now/static"
-    },
-    {
-      "src": "examples/react-ssr/package.json",
-      "use": "@now/static-build",
-      "config": {"distDir": "dist/client"}
-    },
-    {"src": "examples/react-ssr/src/api.js", "use": "@now/node"},
-    {"src": "examples/react-ssr/src/lambda.ts", "use": "@now/node"}
+    }
   ],
   "routes": [
-    {
-      "src": "/ssr/static/(.*)",
-      "dest": "/examples/react-ssr/src/index.html"
-    },
-    {
-      "src": "/ssr/api/(.*)",
-      "dest": "/examples/react-ssr/src/api.js"
-    },
-    {
-      "src": "/ssr/(.*)",
-      "dest": "/examples/react-ssr/src/lambda.ts"
-    },
-    {
-      "src": "/ssr",
-      "dest": "/examples/react-ssr/src/lambda.ts"
-    },
     {
       "src": "/favicon.ico",
       "dest": "/website/media/favicon.ico"
