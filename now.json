@@ -1,6 +1,7 @@
 {
   "name": "effector",
   "version": 2,
+  "silent": true,
   "alias": ["effector.now.sh"],
   "build": {
     "env": {
