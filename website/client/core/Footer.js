@@ -12,13 +12,11 @@ class Footer extends React.Component {
     const baseUrl = this.props.config.baseUrl
     const docsUrl = this.props.config.docsUrl
     const docsPart = `${docsUrl ? `${docsUrl}/` : ''}`
-    const langPart = `${language ? `${language}/` : ''}`
-    return `${baseUrl}${docsPart}${langPart}${doc}`
+    return `${baseUrl}${docsPart}${doc}`
   }
 
   pageUrl(doc, language) {
-    const baseUrl = this.props.config.baseUrl
-    return baseUrl + (language ? `${language}/` : '') + doc
+    return `${this.props.config.baseUrl}${doc}`
   }
 
   render() {
@@ -35,39 +33,25 @@ class Footer extends React.Component {
           </a>
           <div>
             <h5>Docs</h5>
-            <a
-              href={this.docUrl(
-                'introduction/installation',
-                this.props.language,
-              )}>
+            <a href={this.docUrl('introduction/installation')}>
               Getting Started
             </a>
-            <a href={this.docUrl('api/effector/effector', this.props.language)}>
-              API Reference
-            </a>
+            <a href={this.docUrl('api/effector/effector')}>API Reference</a>
+            <a href="https://changelog.effector.dev">Changelog</a>
           </div>
           <div>
             <h5>Community</h5>
-            <a href={this.pageUrl('users', this.props.language)}>
-              User Showcase
-            </a>
-            <a
-              href="http://stackoverflow.com/questions/tagged/effector"
-              target="_blank"
-              rel="noreferrer noopener">
-              Stack Overflow
-            </a>
-            <a href="https://gitter.im/effector-js/community">Gitter</a>
             <a
               href="https://twitter.com/effectorjs"
               target="_blank"
               rel="noreferrer noopener">
               Twitter
             </a>
+            <a href="https://t.me/effector_ru">Telegram 🇷🇺</a>
+            <a href="https://t.me/effector_en">Telegram</a>
           </div>
           <div>
             <h5>More</h5>
-            {/*<a href={`${this.props.config.baseUrl}blog`}>Blog</a>*/}
             <a href="https://github.com/zerobias/effector">GitHub</a>
             <a
               className="github-button"
