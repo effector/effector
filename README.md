@@ -448,6 +448,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 - [API docs](https://effector.now.sh/en/api/effector/effector)
 - [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
 - [Glossary](https://effector.now.sh/en/glossary)
+- [Changelog](https://changelog.effector.dev)
 
 ![Effector Diagram](./diagram.png)
 
