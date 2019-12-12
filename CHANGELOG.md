@@ -1,5 +1,7 @@
 # Changelog
 
+See also [separate changelogs for each library](https://changelog.effector.dev/)
+
 ## effector 20.8.0
 
 - Allow to use objects and arrays with stores in sample source
