@@ -63,8 +63,7 @@ module.exports = function Index({config: siteConfig}) {
                         className="button getStarted"
                         href={`${baseUrl}${
                           docsUrl ? `${docsUrl}/` : ''
-                        }introduction/installation`}
-                        target={props.target}>
+                        }introduction/installation`}>
                         Get started
                       </a>
                     </div>
