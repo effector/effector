@@ -4,7 +4,7 @@ title: sample
 hide_title: true
 ---
 
-# `sample(sourceStore, clockEvent, fn)`
+# `sample(sourceStore, clockEvent, fn?)`
 
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
@@ -60,7 +60,7 @@ sendMessage('how r u?')
 
 [try it](https://share.effector.dev/0ZP1xn8d)
 
-# `sample(sourceEvent, clockEvent, fn)`
+# `sample(sourceEvent, clockEvent, fn?)`
 
 Passes last `sourceEvent` invocation argument value and `clockEvent` value to `fn` handler.
 
@@ -94,7 +94,7 @@ sampled('Can be invoked too!') // => Can be invoked too!
 
 [try it](https://share.effector.dev/vXKWDhwL)
 
-# `sample(event, store, fn)`
+# `sample(event, store, fn?)`
 
 Passes last `event` invocation argument value and `store`'s updated state to `fn` handler.
 
@@ -135,7 +135,7 @@ inc() // => Current count is 3, last event invocation: bar
 
 [try it](https://share.effector.dev/L4nbGjxM)
 
-# `sample(sourceStore, clockStore, fn)`
+# `sample(sourceStore, clockStore, fn?)`
 
 Passes last `sourceStore`'s current state and `clockStore`'s updated state to `fn` handler, upon `clockStore`'s update.
 
