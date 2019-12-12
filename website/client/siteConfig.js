@@ -1,7 +1,7 @@
 // See https://docusaurus.io/docs/site-config
 
-const siteConfig = {
-  title: 'Effector', // Title for your website.
+module.exports = {
+  title: 'Effector',
   tagline: 'The state manager',
   url: process.env.SITE_URL || 'https://effector.now.sh', // Your website URL
   baseUrl: '/', // Base URL for your project */
@@ -27,8 +27,8 @@ const siteConfig = {
     {href: '/try', label: 'Try'},
     {href: 'https://changelog.effector.dev', label: 'Changelog'},
     // {page: 'help', label: 'Help'},
-    {languages: false},
-    {search: true},
+    // {languages: false},
+    // {search: false},
     {href: 'https://twitter.com/effectorjs', label: 'Twitter'},
     {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
     {blog: true, label: 'Blog'},
@@ -101,5 +101,3 @@ const siteConfig = {
   // template. For example, if you need your repo's URL...
   repoUrl: 'https://github.com/zerobias/effector',
 }
-
-module.exports = siteConfig
