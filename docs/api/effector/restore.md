@@ -21,6 +21,8 @@ It works like a shortcut for `createStore(defaultState).on(event, (_, payload) =
 #### Example
 
 ```js try
+import {createEvent, restore} from 'effector'
+
 const event = createEvent()
 const store = restore(event, 'default')
 
@@ -48,6 +50,8 @@ It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {res
 #### Example
 
 ```js try
+import {createEffect, restore} from 'effector'
+
 const effect = createEffect({
   handler: () => 'foo',
 })
@@ -75,13 +79,15 @@ Creates an object with stores from object
 #### Example
 
 ```js try
+import {restore} from 'effector'
+
 const obj = restore({
   foo: 'foo',
   bar: 0,
 })
 
-obj.foo.getState()
-// 'foo'
-obj.bar.getState()
-// 0
+obj.watch(({foo, bar}) => {
+  console.log('foo', foo) // => 'foo'
+  console.log('bar', bar) // => 0
+})
 ```
