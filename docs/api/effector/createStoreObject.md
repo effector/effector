@@ -19,6 +19,8 @@ An alias for `combine({field: storeA, another: storeB})`. See [_`combine`_](comb
 #### Example
 
 ```js try
+import {createStore, createStoreObject} from 'effector'
+
 const balance = createStore(0)
 const username = createStore('zerobias')
 
