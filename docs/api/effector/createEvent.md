@@ -24,6 +24,8 @@ You can pass `name` if you want.
 #### Example 1
 
 ```js try
+import {createStore, createEvent} from 'effector'
+
 const store = createStore(0)
 const addNumber = createEvent()
 
@@ -41,6 +43,8 @@ You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(1
 #### Example 2
 
 ```js try
+import {createEvent} from 'effector'
+
 const extractPartOfArray = createEvent()
 const array = extractPartOfArray.map(arr => arr.slice(2))
 
