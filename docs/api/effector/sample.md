@@ -4,7 +4,9 @@ title: sample
 hide_title: true
 ---
 
-# `sample(sourceStore, clockEvent, fn?)`
+# Sample
+
+## `sample(sourceStore, clockEvent, fn?)`
 
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
@@ -60,7 +62,7 @@ sendMessage('how r u?')
 
 [try it](https://share.effector.dev/0ZP1xn8d)
 
-# `sample(sourceEvent, clockEvent, fn?)`
+## `sample(sourceEvent, clockEvent, fn?)`
 
 Passes last `sourceEvent` invocation argument value and `clockEvent` value to `fn` handler.
 
@@ -94,7 +96,7 @@ sampled('Can be invoked too!') // => Can be invoked too!
 
 [try it](https://share.effector.dev/vXKWDhwL)
 
-# `sample(event, store, fn?)`
+## `sample(event, store, fn?)`
 
 Passes last `event` invocation argument value and `store`'s updated state to `fn` handler.
 
@@ -135,7 +137,7 @@ inc() // => Current count is 3, last event invocation: bar
 
 [try it](https://share.effector.dev/L4nbGjxM)
 
-# `sample(sourceStore, clockStore, fn?)`
+## `sample(sourceStore, clockStore, fn?)`
 
 Passes last `sourceStore`'s current state and `clockStore`'s updated state to `fn` handler, upon `clockStore`'s update.
 
@@ -171,7 +173,7 @@ inc() // => Doe has 1 coins
 
 [try it](https://share.effector.dev/h3zED3yW)
 
-# `sample({source, clock, fn, greedy?, target?})`
+## `sample({source, clock, fn, greedy?, target?})`
 
 Object-like arguments passing, working exactly the same as examples above do.
 
@@ -257,7 +259,7 @@ clickButton('click B')
 
 [try it](https://share.effector.dev/yI70z0nd)
 
-# `sample(sourceStore)`
+## `sample(sourceStore)`
 
 Shorthand for `sample({ source: sourceStore, clock: sourceStore })`, it can be used to make updates of `sourceStore` non-greedy, thus batching updates of `sourceStore`.
 
@@ -285,13 +287,13 @@ const fetchContent = createEffect({
 const $lessonIndex = createStore(0)
 const $allLessons = createStore([]).on(
   fetchContent.done,
-  (_, {result}) => result
+  (_, {result}) => result,
 )
 
 const $lesson = combine(
   $lessonIndex,
-  $allLessons,
-  (idx, lessons) => lessons[idx]
+  $allLessons
+  (idx, lessons) => lessons[idx],
 )
 
 const $modal = combine({
@@ -315,3 +317,51 @@ fetchContent()
 ```
 
 [try it](https://share.effector.dev/mYd5PEpD)
+
+## Objects and arrays with stores in sample source
+
+```js try
+import {createStore, createEvent, sample, combine} from 'effector'
+
+const trigger = createEvent()
+const objectTarget = createEvent()
+const arrayTarget = createEvent()
+
+const a = createStore('A')
+const b = createStore('B')
+
+sample({
+  source: {a, b},
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: [a, b],
+  clock: trigger,
+  target: arrayTarget,
+})
+
+objectTarget.watch(obj => {
+  console.log('sampled object', obj) // => {a: 'A', b: 'B'}
+})
+arrayTarget.watch(array => {
+  console.log('sampled array', array) // => ['A', 'B']
+})
+
+trigger()
+
+/_ old way to do this: _/
+
+sample({
+  source: combine({a, b}),
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: combine([a, b]),
+  clock: trigger,
+  target: arrayTarget,
+})
+```
