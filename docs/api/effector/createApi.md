@@ -20,6 +20,7 @@ hide_title: true
 #### Example
 
 ```js try
+import {createStore, createApi} from 'effector'
 // Create store
 const playerPosition = createStore({x: 0, y: 0}) // <-- Default state
 
