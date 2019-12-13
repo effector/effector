@@ -19,6 +19,8 @@ Creates a [domain](Domain.md)
 #### Example
 
 ```js try
+import {createDomain} from 'effector'
+
 const domain = createDomain() // Unnamed domain
 const httpDomain = createDomain('http') // Named domain
 
