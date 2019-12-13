@@ -26,8 +26,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 ```js
 const changed = createEvent()
-const title = createStore('')
-  .on(changed, (_, newTitle) => newTitle)
+const title = createStore('').on(changed, (_, newTitle) => newTitle)
 
 const length = title.map(title => title.length)
 
@@ -89,8 +88,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 ```js
 const add = createEvent()
-const store = createStore(0)
-  .on(add, (state, payload) => state + payload)
+const store = createStore(0).on(add, (state, payload) => state + payload)
 
 store.watch(value => console.log(`current value: ${value}`))
 // current value: 0
@@ -155,11 +153,9 @@ But `.watch` reacts only on `foo` event
 const foo = createEvent('foo')
 const bar = createEvent('bar')
 
-const store = createStore(0)
-  .on(bar, (state, value) => value)
+const store = createStore(0).on(bar, (state, value) => value)
 
-store
-  .watch(foo, value => console.log(`triggered ${value}`))
+store.watch(foo, value => console.log(`triggered ${value}`))
 
 foo(1)
 bar(2)
@@ -188,8 +184,7 @@ const store = createStore(0)
   .on(incr, (state, value) => state + value)
   .on(decr, (state, value) => state - value)
 
-store
-  .watch(value => console.log(`triggered ${value}`))
+store.watch(value => console.log(`triggered ${value}`))
 
 another(100)
 incr(1) // 0 + 1 = 1
@@ -318,9 +313,7 @@ const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
 
-store
-  .on(increment, state => state + 1)
-  .reset(reset)
+store.on(increment, state => state + 1).reset(reset)
 
 store.watch(state => console.log('changed', state))
 // changed 0
@@ -364,7 +357,7 @@ store.on(updated, (state, value) => state + value)
 updated(2)
 updated(3)
 
-console.log(store.getState()) // 5
+store.watch(console.log) // => 5
 ```
 
 <hr />

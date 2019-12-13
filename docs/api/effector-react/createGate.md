@@ -31,13 +31,14 @@ const App = () => (
   </section>
 )
 
-ReactDOM.render(<App />, document.getElementById('root'))
+Gate.state.watch(state => {
+  console.log('current state', state)
+})
+// => current state {}
 
-console.log(Gate.state.getState()) // -->  {foo: 'bar'}
-console.log(Gate.current) // -->  {foo: 'bar'}
+ReactDOM.render(<App />, document.getElementById('root'))
+// => current state {foo: 'bar'}
 
 ReactDOM.unmountComponentAtNode(document.getElementById('root'))
-
-console.log(Gate.state.getState()) // --> {}
-console.log(Gate.current) // -->  {}
+// => current state {}
 ```
