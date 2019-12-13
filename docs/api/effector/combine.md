@@ -15,6 +15,8 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 #### Example
 
 ```js try
+import {createStore} from 'effector'
+
 const balance = createStore(0)
 const username = createStore('zerobias')
 
@@ -28,8 +30,8 @@ const arrStores = combine(balance, username)
 arrStore.watch(console.log) // => [0, 'zerobias']
 ```
 
-
 # `combine({ A, B, C }, fn?)`
+
 Creates a new [store](Store.md) that emits the set of latest store values from all input stores
 
 #### Returns
@@ -37,7 +39,10 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 ([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
 #### Example
+
 ```js try
+import {createStore} from 'effector'
+
 const r = createStore(255)
 const g = createStore(0)
 const b = createStore(255)
@@ -51,7 +56,6 @@ sum.watch(console.log) // => 510
 
 # `combine([A, B, C], fn?)`
 
-
 #### Returns
 
 ([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
@@ -59,6 +63,8 @@ sum.watch(console.log) // => 510
 #### Example
 
 ```js try
+import {createStore} from 'effector'
+
 const r = createStore(255)
 const g = createStore(0)
 const b = createStore(255)
