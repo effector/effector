@@ -15,7 +15,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 #### Example
 
 ```js try
-import {createStore} from 'effector'
+import {createStore, combine} from 'effector'
 
 const balance = createStore(0)
 const username = createStore('zerobias')
@@ -41,7 +41,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 #### Example
 
 ```js try
-import {createStore} from 'effector'
+import {createStore, combine} from 'effector'
 
 const r = createStore(255)
 const g = createStore(0)
@@ -63,7 +63,7 @@ sum.watch(console.log) // => 510
 #### Example
 
 ```js try
-import {createStore} from 'effector'
+import {createStore, combine} from 'effector'
 
 const r = createStore(255)
 const g = createStore(0)
