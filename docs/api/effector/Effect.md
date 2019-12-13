@@ -18,6 +18,8 @@ It can be safely used in place of the original async function.
 #### Example
 
 ```js try
+import {createEffect, createStore} from 'effector'
+
 const fetchUser = createEffect({
   handler: ({id}) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
@@ -99,6 +101,8 @@ Subscribe to effect calls.
 #### Example
 
 ```js try
+import {createEffect} from 'effector'
+
 const effect = createEffect({
   handler: value => value,
 })
@@ -144,6 +148,8 @@ Event triggered with object of `params` and `result`:
 #### Example
 
 ```js try
+import {createEffect} from 'effector'
+
 const effect = createEffect({
   handler: value => Promise.resolve(value + 1),
 })
@@ -169,6 +175,8 @@ Event triggered with object of `params` and `error`:
 #### Example
 
 ```js try
+import {createEffect} from 'effector'
+
 const effect = createEffect()
 
 effect.use(value => Promise.reject(value - 1))
