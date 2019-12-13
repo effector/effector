@@ -68,3 +68,31 @@ forward({
 event(1)
 event(1)
 ```
+
+#### Example 3
+
+Arrays to forward
+
+```js try
+import {createEvent, forward} from 'effector'
+
+const firstSource = createEvent()
+const secondSource = createEvent()
+const firstTarget = createEvent()
+const secondTarget = createEvent()
+
+forward({
+  from: [firstSource, secondSource],
+  to: [firstTarget, secondTarget],
+})
+
+firstTarget.watch(e => console.log('first target', e))
+secondTarget.watch(e => console.log('second target', e))
+
+firstSource('A')
+// => first target A
+// => second target A
+secondSource('B')
+// => first target B
+// => second target B
+```
