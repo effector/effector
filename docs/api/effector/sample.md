@@ -292,7 +292,7 @@ const $allLessons = createStore([]).on(
 
 const $lesson = combine(
   $lessonIndex,
-  $allLessons
+  $allLessons,
   (idx, lessons) => lessons[idx],
 )
 
