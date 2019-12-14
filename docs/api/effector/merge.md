@@ -20,6 +20,7 @@ Merges [`events`](Event.md), resulting single one, which fires upon trigger of a
 
 ```js try
 import {createEvent, merge} from 'effector'
+
 const foo = createEvent()
 const bar = createEvent()
 const baz = merge([foo, bar])

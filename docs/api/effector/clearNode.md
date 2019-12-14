@@ -12,7 +12,7 @@ Method for destroy stores, events, effects, subscriptions and domains
 
 1. `unit` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)/[_Domain_](Domain.md)): unit to be erased
 2. `config: ({deep?: boolean})` (optional): config object
-    - `deep: boolean` (optional): erase node _and_ all of its computed values
+   - `deep: boolean` (optional): erase node _and_ all of its computed values
 
 #### Returns
 
@@ -22,9 +22,9 @@ Method for destroy stores, events, effects, subscriptions and domains
 
 ```js
 import {createStore, createEvent, clearNode} from 'effector'
+
 const inc = createEvent()
-const store = createStore(0)
-  .on(inc, x => x + 1)
+const store = createStore(0).on(inc, x => x + 1)
 inc.watch(() => console.log('inc called'))
 store.watch(x => console.log('store state: ', x))
 // => store state: 0
@@ -42,10 +42,10 @@ inc()
 
 ```js
 import {createStore, createStoreObject, createEvent, clearNode} from 'effector'
+
 const inc = createEvent()
 const trigger = inc.prepend(() => {})
-const store = createStore(0)
-  .on(inc, x => x + 1)
+const store = createStore(0).on(inc, x => x + 1)
 trigger.watch(() => console.log('trigger called'))
 inc.watch(() => console.log('inc called'))
 store.watch(x => console.log('store state: ', x))

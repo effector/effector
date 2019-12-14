@@ -57,6 +57,7 @@ message({user: 'unregistered', text: 'hi'})
 
 ```js try
 import {createEvent, split} from 'effector'
+
 const message = createEvent()
 
 const {short, long, medium} = split(message, {
