@@ -9,8 +9,7 @@ hide_title: true
 Pattern matching method, splits event into several, which fire upon source event matches its comparator function.
 
 #### Arguments
-
-1. `event` ([_Event_](Event.md)): Array of [_`events`_](Event.md) to be merged.
+1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md) or [_`Store`_](Store.md) unit-trigger.
 2. `cases` (_Object_): Schema of cases, which uses names of resulting events as keys, and comparator function*((value) => Boolean)*
 
 #### Returns
