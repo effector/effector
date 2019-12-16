@@ -14,7 +14,7 @@ Pattern matching method, splits event into several, which fire upon source event
 
 #### Returns
 
-(Object) - Object, having keys, defined in `cases` argument, plus `__`(two underscores) - which stands for `default` (no mathes met) case.
+(Object) - Object, having keys, defined in `cases` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
 
 #### Example 1
 
