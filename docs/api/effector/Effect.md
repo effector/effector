@@ -132,6 +132,34 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 <hr />
 
+### `use.getCurrent()`
+
+Returns current handler of effect. Useful for testing.
+
+#### Returns
+
+(_Function_): Current handler, defined by `handler` property or via `use` call.
+
+#### Example
+
+```js try
+const handlerA = () => 'A'
+const handlerB = () => 'B'
+
+const fx = createEffect({handler: handlerA})
+
+console.log(fx.use.getCurrent() === handlerA)
+// => true
+
+fx.use(handlerB)
+console.log(fx.use.getCurrent() === handlerB)
+// => true
+```
+
+[Try it](https://share.effector.dev/mtY4Ny0n)
+
+<hr />
+
 ## Effect Properties
 
 ### `done`
