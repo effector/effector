@@ -55,44 +55,60 @@ import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
 import {useList} from 'effector-react'
 
+const addTodo = createEvent()
 const toggleTodo = createEvent()
 
 const todoList = createStore([
   {text: 'write useList example', done: true},
   {text: 'update readme', done: false},
-]).on(toggleTodo, (list, id) =>
-  list.map((todo, i) => {
-    if (i === id)
-      return {
+])
+  .on(toggleTodo, (list, id) =>
+    list.map((todo, i) => {
+      if (i === id) return {
         ...todo,
         done: !todo.done,
       }
-    return todo
-  }),
-)
-const Todo = ({children, done}) => {
-  const textFragment = <span>{children}</span>
-  return done ? <del>{textFragment}</del> : textFragment
-}
-const TodoList = () =>
-  useList(todoList, ({text, done}, i) => (
+      return todo
+    })
+  )
+  .on(addTodo, (list, e) => [
+    ...list,
+    {
+      text: e.currentTarget.elements.content.value,
+      done: false
+    }
+  ])
+
+addTodo.watch(e => {
+  e.preventDefault()
+})
+
+const TodoList = () => useList(todoList, ({text, done}, i) => {
+  const todo = done
+    ? <del><span>{text}</span></del>
+    : <span>{text}</span>
+  return (
     <li onClick={() => toggleTodo(i)}>
-      <Todo done={done}>{text}</Todo>
+      {todo}
     </li>
-  ))
+  )
+})
 const App = () => (
   <div>
     <h1>todo list</h1>
+    <form onSubmit={addTodo}>
+      <label htmlFor="content">New todo</label>
+      <input type="text" name="content" required/>
+      <input type="submit" value="Add"/>
+    </form>
     <ul>
       <TodoList />
     </ul>
   </div>
 )
-
-ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/GQjYp0Bn)
+[try it](https://share.effector.dev/OghlApl5)
 
 By default, useList rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
