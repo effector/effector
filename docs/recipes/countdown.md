@@ -8,6 +8,13 @@ Sometimes we need simple countdown. Next example allows handle each tick and abo
 
 [Link to a playground](https://share.effector.dev/DIQP8UbH)
 
+Task:
+
+1. Execute tick every `timeout` milliseconds
+2. Each tick should send remain seconds to listeners
+3. Countdown can be stopped (`abort` argument)
+4. Countdown can't be started if already started
+
 ```js
 function createCountdown(
   name,
