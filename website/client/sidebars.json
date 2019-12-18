@@ -60,6 +60,7 @@
     ],
     "Recipes": [
       "recipes/recipes",
+      "recipes/countdown-timer",
       "recipes/usage-with-typescript",
       {
         "type": "subcategory",
