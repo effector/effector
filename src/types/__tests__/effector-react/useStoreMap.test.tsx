@@ -103,7 +103,7 @@ describe('useStoreMap', () => {
       `)
     })
   })
-  it('unable to infer tuple type without `as`', () => {
+  it('can infer tuple type without `as`', () => {
     const UserProperty = ({id, field}: Props) => {
       const value = useStoreMap({
         store: users,
@@ -115,7 +115,7 @@ describe('useStoreMap', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Element implicitly has an 'any' type because index expression is not of type 'number'.
+      no errors
       "
     `)
   })
