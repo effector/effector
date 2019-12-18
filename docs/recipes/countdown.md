@@ -1,0 +1,72 @@
+---
+id: countdown-timer
+title: Countdown timer on setTimeout
+sidebar_label: Countdown timer
+---
+
+Sometimes we need simple countdown. Next example allows handle each tick and abort the timer.
+
+[Link to a playground](https://share.effector.dev/DIQP8UbH)
+
+```js
+function createCountdown(
+  name,
+  {start, abort = createEvent(`${name}Reset`), timeout = 1000} // tick every 1 second
+) {
+  const $working = createStore(true, {name: `${name}Working`})
+  const tick = createEvent(`${name}Tick`)
+  const timer = createEffect(`${name}Timer`).use(() => wait(timeout))
+
+  $working.on(abort, () => false)
+
+  guard({
+    source: start,
+    filter: timer.pending.map(is => !is),
+    target: tick,
+  })
+
+  forward({
+    from: tick,
+    to: timer,
+  })
+
+  const willTick = guard({
+    source: timer.done.map(({params}) => params - 1),
+    filter: seconds => seconds >= 0,
+  })
+
+  guard({
+    source: willTick,
+    filter: $working,
+    target: tick,
+  })
+
+  return {tick}
+}
+
+function wait(ms) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+}
+```
+
+Usage:
+
+```js
+const startCountdown = createEvent()
+const abortCountdown = createEvent()
+
+const countdown = createCountdown('simple', { start: startCountdown, abort: abortCountdown })
+
+// handle each tick
+countdown.tick.watch((remainSeconds) => {
+  console.info("Tick. Remain seconds: ", remainSeconds)
+})
+
+// let's start
+startCountdown(15) // 15 ticks to count down, 1 tick per second
+
+// abort after 5 second
+setTimeout(abortCountdown, 5000)
+```
