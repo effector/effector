@@ -18,6 +18,10 @@ title: API Reference
 - [forward({from, to})](forward.md)
 - [fromObservable(observable)](fromObservable.md)
 - [merge([eventA, eventB])](merge.md)
+- [split(event, cases)](split.md)
+- [sample](sample.md)
+- [guard](guard.md)
+- [forward](forward.md)
 
 ### Event API
 
