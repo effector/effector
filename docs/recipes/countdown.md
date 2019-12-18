@@ -17,7 +17,7 @@ function createCountdown(
   const tick = createEvent(`${name}Tick`)
   const timer = createEffect(`${name}Timer`).use(() => wait(timeout))
 
-  $working.on(abort, () => false)
+  $working.on(abort, () => false).on(start, () => true)
 
   guard({
     source: start,
