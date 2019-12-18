@@ -19,9 +19,8 @@ title: API Reference
 - [fromObservable(observable)](fromObservable.md)
 - [merge([eventA, eventB])](merge.md)
 - [split(event, cases)](split.md)
-- [sample](sample.md)
-- [guard](guard.md)
-- [forward](forward.md)
+- [sample({source, clock, fn, target}](sample.md)
+- [guard({source, filter, target})](guard.md)
 
 ### Event API
 
