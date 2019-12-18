@@ -502,11 +502,13 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
     <td align="center"><a href="https://github.com/Laiff"><img src="https://avatars0.githubusercontent.com/u/575885?v=4" width="100px;" alt="Andrew Laiff"/><br /><sub><b>Andrew Laiff</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Laiff" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/ilajosmanov"><img src="https://avatars3.githubusercontent.com/u/18512404?v=4" width="100px;" alt="Illia Osmanov"/><br /><sub><b>Illia Osmanov</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=ilajosmanov" title="Code">💻</a> <a href="#ideas-ilajosmanov" title="Ideas, Planning, & Feedback">🤔</a></td>
   </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/YanLobat"><img src="https://avatars3.githubusercontent.com/u/5307423?v=4" width="100px;" alt="Yan"/><br /><sub><b>Yan</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=YanLobat" title="Documentation">📖</a></td>
+  </tr>
 </table>
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
