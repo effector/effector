@@ -64,7 +64,7 @@ export interface SystemState {
 Note that we are exporting these interfaces to reuse them later in stores and
 events.
 
-## Organize yous domains
+## Organize your domains
 
 To effectively structure the project code, you can break the application
 logic into separate domains that combine all the logic of working with this
