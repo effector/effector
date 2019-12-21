@@ -54,10 +54,7 @@ export function retrieveVersion(): string {
 }
 
 function getUrlParameter(name: string): string {
-  name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
-  const regex = new RegExp('[\\?&]' + name + '=([^&#]*)')
-  const results = regex.exec(location.search)
-  return results === null
-    ? ''
-    : decodeURIComponent(results[1].replace(/\+/g, ' '))
+  const urlSearch = new URLSearchParams(location.search)
+  if (urlSearch.has(name)) return urlSearch.get(name)
+  return ''
 }
