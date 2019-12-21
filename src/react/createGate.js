@@ -110,6 +110,7 @@ export function createGate<Props>(
   const unwatch2 = state.watch(current => (GateComponent.current = current))
   const unwatch3 = status.map(status => {
     if (!status) GateComponent.current = defaultState
+    return null
   })
   state.reset(close)
 

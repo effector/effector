@@ -41,6 +41,7 @@ describe('combine cases (should pass)', () => {
     const store = combine([sn, ss]).map(([n, s]) => {
       n.toFixed // should have method on type
       s.charAt // should have method on type
+      return null
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
@@ -135,6 +136,7 @@ describe('combine cases (should pass)', () => {
     const store = combine([sn, ss], ([n, s]) => {
       n.toFixed // should have method on type
       s.charAt // should have method on type
+      return null
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
