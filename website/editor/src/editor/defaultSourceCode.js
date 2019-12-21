@@ -1,8 +1,8 @@
 //@flow
 
-export default `const increment = createEvent('increment')
-const decrement = createEvent('decrement')
-const resetCounter = createEvent('reset counter')
+export default `const increment = createEvent()
+const decrement = createEvent()
+const resetCounter = createEvent()
 
 const counter = createStore(0)
   .on(increment, state => state + 1)
