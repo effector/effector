@@ -24,7 +24,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 #### Example
 
-```js
+```js try
 const changed = createEvent()
 const title = createStore('').on(changed, (_, newTitle) => newTitle)
 
@@ -57,7 +57,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Example
 
-```js
+```js try
 const store = createStore(0)
 const changed = createEvent()
 
@@ -86,7 +86,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Example
 
-```js
+```js try
 const add = createEvent()
 const store = createStore(0).on(add, (state, payload) => state + payload)
 
@@ -120,9 +120,9 @@ Run `watcher` only when `trigger` event triggered. <br/>
 `.watch` trigger `watcher` when `foo` executed, because `foo` explicitly passed to `watch`. <br/>
 First argument of `watcher` is a state value, second is an event value.
 
-```js
-const foo = createEvent('foo')
-const bar = createEvent('bar')
+```js try
+const foo = createEvent()
+const bar = createEvent()
 
 const store = createStore(0)
 
@@ -149,9 +149,9 @@ https://runkit.com/embed/6j1bg5fsysa0
 Here `.on(bar, ...)` changes the state between `foo` executes.
 But `.watch` reacts only on `foo` event
 
-```js
-const foo = createEvent('foo')
-const bar = createEvent('bar')
+```js try
+const foo = createEvent()
+const bar = createEvent()
 
 const store = createStore(0).on(bar, (state, value) => value)
 
@@ -175,10 +175,10 @@ https://runkit.com/embed/74lmt29e1ei5
 
 Here `watch` reacts only on `incr` and `decr` because it explicitly used in `.on` calls. But not reacts on any other events.
 
-```js
-const incr = createEvent('foo')
-const decr = createEvent('bar')
-const another = createEvent('another')
+```js try
+const incr = createEvent()
+const decr = createEvent()
+const another = createEvent()
 
 const store = createStore(0)
   .on(incr, (state, value) => state + value)
@@ -209,7 +209,7 @@ https://runkit.com/embed/1r2qo0nsockp
 Effect is an Event with 2 additional events such as `fail` and `done`.<br/>
 You can subscribe to triggering effect by `fail` and `done` events.
 
-```js
+```js try
 const effect = createEffect().use(
   value => new Promise(res => setTimeout(res, 200, value)),
 )
@@ -242,7 +242,7 @@ https://runkit.com/embed/ovnsqp9k9zoq
 
 One store can subscribe to updates of another store.
 
-```js
+```js try
 const change = createEvent('change')
 
 const first = createStore(0).on(change, (state, value) => state + value)
@@ -268,9 +268,7 @@ https://runkit.com/embed/eoiiqofdtchn
 
 #### Example with watcher
 
-Watcher receive third argument event name.
-
-```js
+```js try
 const foo = createEvent('foo event')
 
 const store = createStore(0)
@@ -308,7 +306,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Example
 
-```js
+```js try
 const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
@@ -348,7 +346,7 @@ Returns current state of store
 
 #### Example
 
-```js
+```js try
 const store = createStore(0)
 const updated = createEvent()
 
@@ -377,7 +375,7 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Example
 
-```js
+```js try
 const sum = value => value + 10
 const square = value => value * value
 const divide = value => value / 2
@@ -414,7 +412,7 @@ Output
 
 Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
 
-```js
+```js try
 import {createStore, is} from 'effector'
 
 const clicksAmount = createStore(0)
