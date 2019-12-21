@@ -23,6 +23,11 @@ test('event by event', () => {
     "
     --typescript--
     Type 'Event<number>' is not assignable to type 'Event<string>'.
+      Types of property 'watch' are incompatible.
+        Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+          Types of parameters 'watcher' and 'watcher' are incompatible.
+            Types of parameters 'payload' and 'payload' are incompatible.
+              Type 'number' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'c' to 'sample_ee_check2'
@@ -871,7 +876,7 @@ describe('sample + guard (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Object is of type 'unknown'.
+      no errors
 
       --flow--
       no errors
