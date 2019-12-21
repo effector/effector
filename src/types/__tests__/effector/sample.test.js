@@ -7,6 +7,7 @@ import {
   sample,
   Store,
   Event,
+  guard,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -849,6 +850,31 @@ describe('sample with implicit combine', () => {
         [1] ^^^^^^
             source: Store<A>,
                 [2] ^^^^^^^^
+      "
+    `)
+  })
+})
+
+describe('sample + guard (should pass)', () => {
+  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn`", () => {
+    const source = createStore(0)
+    const clock = createEvent<number>()
+
+    sample({
+      source,
+      clock: guard(clock, {
+        filter: clock => clock > 0,
+      }),
+      fn: (source, clock) => source + clock,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Object is of type 'unknown'.
+
+      --flow--
+      no errors
       "
     `)
   })
