@@ -15,15 +15,21 @@ preparePackage(effectorPackage)
 const registry = process.env.VERSION_HASH_REGISTRY
 if (registry) {
   prepareGithubPackage('@zerobias/effector', effectorPackage)
-  const effectorReactPackagePath = resolve(
-    __dirname,
-    '..',
-    'npm/effector-react/package.json',
-  )
-  const effectorReactPackage = readJSONSync(effectorReactPackagePath)
-  preparePackage(effectorReactPackage)
-  prepareGithubPackage('@zerobias/effector-react', effectorReactPackage)
-  outputJSONSync(effectorReactPackagePath, effectorReactPackage, {
+  preparePackageFull({
+    path: 'effector-react',
+    name: '@zerobias/effector-react',
+  })
+  preparePackageFull({
+    path: 'effector-dom',
+    name: '@zerobias/effector-dom',
+  })
+}
+function preparePackageFull({path, name}) {
+  const packagePath = resolve(__dirname, '..', 'npm', path, 'package.json')
+  const packageJson = readJSONSync(packagePath)
+  preparePackage(packageJson)
+  prepareGithubPackage(name, packageJson)
+  outputJSONSync(packagePath, packageJson, {
     spaces: 2,
   })
 }
