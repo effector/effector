@@ -31,10 +31,12 @@ test/storage.json
 modules.dot
 modules.svg
 stats/**/*.html
+stats/**/*.json
 npm/@effector/**
 npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
+npm/effector-dom/**
 npm/bs-effector/**
 npm/bs-effector-react/**
 .merlin
