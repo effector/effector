@@ -54,12 +54,17 @@ jobs:
         run: cd npm/effector && npm publish
       - name: publish effector fallback
         if: failure()
-        run: echo 'cannot publish effector on github'
+        run: echo 'cannot publish effector to github'
       - name: publish effector-react on github
         run: cd npm/effector-react && npm publish
       - name: publish effector-react fallback
         if: failure()
-        run: echo 'cannot publish effector-react on github'
+        run: echo 'cannot publish effector-react to github'
+      - name: publish effector-dom on github
+        run: cd npm/effector-dom && npm publish
+      - name: publish effector-dom fallback
+        if: failure()
+        run: echo 'cannot publish effector-dom to github'
   # browserstack:
   #   needs: common-tests
   #   runs-on: ubuntu-latest
