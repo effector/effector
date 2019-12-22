@@ -90,6 +90,16 @@ export interface Event<Payload> extends Unit<Payload> {
   [Symbol.observable](): Observable<Payload>
 }
 
+/**
+ * This is a workaround for https://github.com/microsoft/TypeScript/issues/35162
+ * 
+ * The problem was that we couldn't use guard as sample's clock parameter because
+ * sample's clock-related generic inferred as `unknown` in cases when guard returned
+ * `Event<T>`. This happens because `Event` has a callable signature. With `Unit<T>`
+ * as the return type we won't see any problems.
+ */
+type EventAsReturnType<Payload> = Payload extends any ? Event<Payload> : never
+
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
@@ -585,13 +595,13 @@ export function guard<Source, Result extends Source>(
   config: {
     filter: (value: Source) => value is Result
   },
-): Event<Result>
+): EventAsReturnType<Result>
 export function guard<A>(
   source: Unit<A>,
   config: {
     filter: Store<boolean> | ((value: A) => boolean)
   },
-): Event<A>
+): EventAsReturnType<A>
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
@@ -609,11 +619,11 @@ export function guard<A>(
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result
-}): Event<Result>
+}): EventAsReturnType<Result>
 export function guard<A>(config: {
   source: Unit<A>
   filter: Store<boolean> | ((value: A) => boolean)
-}): Event<A>
+}): EventAsReturnType<A>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result

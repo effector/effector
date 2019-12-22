@@ -7,6 +7,7 @@ import {
   sample,
   Store,
   Event,
+  guard,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -22,6 +23,11 @@ test('event by event', () => {
     "
     --typescript--
     Type 'Event<number>' is not assignable to type 'Event<string>'.
+      Types of property 'watch' are incompatible.
+        Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+          Types of parameters 'watcher' and 'watcher' are incompatible.
+            Types of parameters 'payload' and 'payload' are incompatible.
+              Type 'number' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'c' to 'sample_ee_check2'
@@ -849,6 +855,31 @@ describe('sample with implicit combine', () => {
         [1] ^^^^^^
             source: Store<A>,
                 [2] ^^^^^^^^
+      "
+    `)
+  })
+})
+
+describe('sample + guard (should pass)', () => {
+  test("directly assign `guard` invocation to `sample`'s `clock` argument without losing inference in `sample`'s `fn`", () => {
+    const source = createStore(0)
+    const clock = createEvent<number>()
+
+    sample({
+      source,
+      clock: guard(clock, {
+        filter: clock => clock > 0,
+      }),
+      fn: (source, clock) => source + clock,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
       "
     `)
   })
