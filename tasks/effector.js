@@ -12,6 +12,7 @@ import {
   rollupEffector,
   rollupEffectorReact,
   rollupEffectorVue,
+  rollupEffectorDom,
 } from 'Builder/rollup'
 import {copyLicense, generatePackageJSON} from './common'
 
@@ -120,6 +121,14 @@ export default {
       ]),
     rollupEffectorVue,
     publishScript('effector-vue'),
+  ],
+  'effector-dom': [
+    generatePackageJSON('effector-dom'),
+    copyLicense('effector-dom'),
+    () =>
+      massCopy('packages/effector-dom', 'npm/effector-dom', ['package.json']),
+    rollupEffectorDom,
+    publishScript('effector-dom'),
   ],
 }
 

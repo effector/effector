@@ -15,6 +15,8 @@ import replace from 'rollup-plugin-replace'
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 //$off
 import analyze from 'rollup-plugin-visualizer'
+//$off
+import typescript from '@rollup/plugin-typescript'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
@@ -45,8 +47,16 @@ const getPlugins = (name: string) => ({
   replace: replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
+  typescript: typescript({
+    module: 'es2015',
+    target: 'esnext',
+    allowSyntheticDefaultImports: true,
+    lib: ['dom', 'esnext'],
+  }),
   commonjs: commonjs({}),
-  resolve: resolve({}),
+  resolve: resolve({
+    extensions: ['.js', '.ts', '.json'],
+  }),
   sizeSnapshot: sizeSnapshot({
     printInfo: false,
   }),
@@ -158,6 +168,32 @@ export async function rollupEffector() {
       globals: {},
     }),
     createCompat(name),
+  ])
+}
+export async function rollupEffectorDom() {
+  const name = 'effector-dom'
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/${name}.cjs.js`),
+        es: dir(`npm/${name}/${name}.es.js`),
+      },
+      inputExtension: 'ts',
+    }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/server.js`),
+      },
+      input: 'server',
+      inputExtension: 'ts',
+    }),
+    // createUmd(name, {
+    //   external: ['react', 'effector'],
+    //   file: dir(`npm/${name}/${name}.umd.js`),
+    //   umdName: name,
+    //   globals: {},
+    // }),
+    // createCompat(name),
   ])
 }
 
@@ -408,15 +444,18 @@ async function createEsCjs(
     file: {es, cjs},
     renderModuleGraph = false,
     input = 'index',
+    inputExtension = 'js',
   }: {|
     file: {|es?: string, cjs: string|},
     renderModuleGraph?: boolean,
     input?: string,
+    inputExtension?: string,
   |},
 ) {
   const plugins = getPlugins(input === 'index' ? name : input)
   const pluginList = [
     plugins.resolve,
+    plugins.typescript,
     plugins.json,
     plugins.babel,
     plugins.sizeSnapshot,
@@ -434,8 +473,8 @@ async function createEsCjs(
   }
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/${input}.js`),
-    external: ['react', 'vue', 'symbol-observable', 'effector'],
+    input: dir(`packages/${name}/${input}.${inputExtension}`),
+    external: ['react', 'vue', 'symbol-observable', 'effector', 'perf_hooks'],
     plugins: pluginList,
   })
   await Promise.all([

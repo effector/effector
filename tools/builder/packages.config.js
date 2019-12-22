@@ -45,6 +45,7 @@ const version = {
   effector: '20.8.1',
   'effector-react': '20.5.1',
   'effector-vue': '20.3.2',
+  'effector-dom': '0.0.1',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
@@ -143,6 +144,19 @@ export default {
     },
     files: getFiles('effector-vue'),
     keywords: ['vue', ...keywords],
+    ...common,
+  },
+  'effector-dom': {
+    name: 'effector-dom',
+    version: version['effector-dom'],
+    description: 'Effector package for working with dom',
+    main: 'effector-dom.cjs.js',
+    module: 'effector-dom.es.js',
+    'umd:main': 'effector-dom.umd.js',
+    'jsnext:main': 'effector-dom.es.js',
+    dependencies: {},
+    peerDependencies: dependsOnEffector,
+    keywords,
     ...common,
   },
   'bs-effector': {
