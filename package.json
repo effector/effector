@@ -127,10 +127,12 @@
     "effector": "./src/effector/index.js",
     "effector-react": "./src/react",
     "effector-vue": "./src/vue",
+    "effector-dom": "./src/dom",
     "@effector/forms": "./src/forms",
     "@effector/redux-adapter": "./src/redux"
   },
   "devDependencies": {
+    "@rollup/plugin-typescript": "^2.0.1",
     "@types/react": "^16.9.15",
     "eslint-config-prettier": "^6.7.0",
     "funland": "^0.1.5",
