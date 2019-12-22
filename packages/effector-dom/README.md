@@ -6,7 +6,7 @@
 
 ```js
 import {createStore, createEvent} from 'effector'
-import {using, Data, Text, Handler, h} from './h'
+import {using, Data, Text, Handler, h} from 'effector-dom'
 
 using(document.body, () => {
   const addLine = createEvent()
