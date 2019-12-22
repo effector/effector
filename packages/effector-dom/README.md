@@ -1,4 +1,4 @@
-# H
+# Effector-DOM
 
 ## Declarative stack-based DOM api
 
