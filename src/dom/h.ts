@@ -13,7 +13,7 @@ import {own} from './own'
 
 export {using} from './render/using'
 export {h} from './render/h'
-export {Signal} from './render/index.h'
+// export {Signal} from './render/index.h'
 export {list, tree} from './render/list'
 
 export function signalOwn<T>(value: T): T {

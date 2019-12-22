@@ -15,9 +15,8 @@ export {render, body, createDocumentFragment} from './document'
 import {createDocumentFragment, render} from './document'
 import {using} from './using'
 
-export async function renderStatic(cb: () => void) {
+export function renderStatic(cb: () => void) {
   const node = createDocumentFragment()
   using(node, cb)
-  await new Promise(rs => setTimeout(rs, 800))
-  return render(node)
+  return new Promise(rs => setTimeout(rs, 800)).then(() => render(node))
 }
