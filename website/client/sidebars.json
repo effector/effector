@@ -3,6 +3,7 @@
     "Introduction": [
       "introduction/installation",
       "introduction/core-concepts",
+      "glossary",
       "introduction/prior-art"
     ],
     "API": [
@@ -63,11 +64,6 @@
       "recipes/usage-with-typescript",
       {
         "type": "subcategory",
-        "label": "Migrating to Effector",
-        "ids": ["recipes/migrating-to-effector/from-redux"]
-      },
-      {
-        "type": "subcategory",
         "label": "React",
         "ids": [
           "recipes/react/example",
@@ -84,7 +80,6 @@
         "ids": ["recipes/react-native/example"]
       }
     ],
-    "Other": ["troubleshooting", "glossary"],
     "FAQ": ["faq"]
   },
   "api": {

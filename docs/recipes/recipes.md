@@ -10,5 +10,3 @@ hide_title: true
 - [Countdown timer](countdown-timer.md)
 - [Usage with TypeScript](usage-with-typescript.md)
 - [Usage with React Native](react-native/example.md)
-- Migrating to Effector
-  - [From Redux](migrating-to-effector/from-redux.md)

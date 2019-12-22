@@ -68,7 +68,7 @@ module.exports = function Index({config: siteConfig}) {
                       </a>
                     </div>
                     <div className="pluginWrapper buttonWrapper">
-                      <a className="button" href="/try">
+                      <a className="button" href="https://share.effector.dev">
                         Try it out
                       </a>
                     </div>
@@ -91,6 +91,12 @@ module.exports = function Index({config: siteConfig}) {
                 imageAlign: 'top',
               },
               {
+                content: 'Can work with any UI or server framework.',
+                title: 'Framework agnostic',
+                image: siteConfig.baseUrl + 'img/settings.svg',
+                imageAlign: 'top',
+              },
+              {
                 content: 'Simple API surface and helpful community.',
                 title: 'Developer-friendly',
                 image: baseUrl + 'img/laptop.svg',
@@ -108,16 +114,6 @@ module.exports = function Index({config: siteConfig}) {
                   'Effector uses Rollup and Terser to provide small builds.',
                 title: 'Tiny bundle size',
                 image: baseUrl + 'img/box.svg',
-                imageAlign: 'top',
-              },
-              // {
-              //   content: '...',
-              //   title: 'Decentralized',
-              // },
-              {
-                content: 'Can work with any UI or server framework.',
-                title: 'Flexible',
-                image: siteConfig.baseUrl + 'img/settings.svg',
                 imageAlign: 'top',
               },
             ]}
