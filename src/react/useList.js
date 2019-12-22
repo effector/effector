@@ -6,20 +6,34 @@ import {useStoreMap} from './useStore'
 
 export function useList<T>(
   list: Store<T[]>,
-  renderItem: (item: T, index: number) => React.Node,
+  renderItem:
+    | {
+        keys?: any[],
+        fn(item: T, index: number): React.Node,
+      }
+    | ((item: T, index: number) => React.Node),
 ): React.Node {
+  let keys = []
+  let fn
+  if (typeof renderItem === 'object' && renderItem !== null) {
+    if (renderItem.keys) keys = renderItem.keys
+    fn = renderItem.fn
+  } else {
+    fn = renderItem
+  }
   if (!is.store(list))
     throw Error('expect useList first argument to be a store')
-  if (typeof renderItem !== 'function')
-    throw Error('expect useList second argument to be a function')
+  if (typeof fn !== 'function')
+    throw Error("expect useList's renderItem to be a function")
+  if (!Array.isArray(keys)) throw Error("expect useList's keys to be an array")
   const Item = React.useMemo(() => {
-    const Item = ({index}) => {
+    const Item = ({index, keys}) => {
       const item = useStoreMap({
         store: list,
-        keys: [index],
+        keys: [index, ...keys],
         fn: (list, keys) => list[keys[0]],
       })
-      return renderItem(item, index)
+      return fnRef.current(item, index)
     }
     Item.displayName = `${list.shortName || 'Unknown'}.Item`
     return React.memo(Item)
@@ -29,5 +43,10 @@ export function useList<T>(
     keys: [list],
     fn: list => list.length,
   })
-  return Array.from({length}, (_, i) => <Item index={i} key={i} />)
+  const fnRef = React.useRef(fn)
+  fnRef.current = fn
+  const keysSelfMemo = React.useMemo(() => keys, keys)
+  return Array.from({length}, (_, i) => (
+    <Item index={i} key={i} keys={keysSelfMemo} />
+  ))
 }

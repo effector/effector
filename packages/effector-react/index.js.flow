@@ -20,8 +20,8 @@ export type StoreComponent<State> = ComponentType<{|
 export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
   isOpen: boolean,
   isTerminated: boolean,
-  open: Event<void>,
-  close: Event<void>,
+  open: Event<Props>,
+  close: Event<Props>,
   status: Store<boolean>,
   destructor: Event<void>,
   current: Props,
@@ -52,11 +52,16 @@ declare export function useStoreMap<
 |}): Result
 declare export function useList<T>(
   list: Store<T[]> | Store<$ReadOnlyArray<T>>,
-  renderItem: (item: T, index: number) => Node,
+  renderItem:
+    | {|
+        +keys?: any[],
+        fn(item: T, index: number): Node,
+      |}
+    | ((item: T, index: number) => Node),
 ): Node
 declare export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
-declare export function createGate<Props: {}>(name?: string): Gate<Props>
+declare export function createGate<Props: {...}>(name?: string): Gate<Props>
 declare export function createGate<Props>(
   name: string,
   defaultState: Props,

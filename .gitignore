@@ -1,4 +1,5 @@
 .env
+.effector
 .DS_Store
 .idea
 .history
@@ -8,6 +9,7 @@
 *.*~
 *.swp
 
+src/types/type-report.json
 lib/**
 es/**
 debug.log
@@ -29,10 +31,12 @@ test/storage.json
 modules.dot
 modules.svg
 stats/**/*.html
+stats/**/*.json
 npm/@effector/**
 npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
+npm/effector-dom/**
 npm/bs-effector/**
 npm/bs-effector-react/**
 .merlin
@@ -44,3 +48,6 @@ val/**
 **/.cache/**
 tools/builder.js
 integrations/webpack/npm/**
+
+**/.reports/**
+**/.serverless/**

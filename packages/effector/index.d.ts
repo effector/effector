@@ -1,5 +1,25 @@
 /// <reference types="symbol-observable" />
 
+/**
+ * This tuple type is intended for use as a generic constraint to infer concrete
+ * tuple type of ANY length.
+ *
+ * @see https://github.com/krzkaczor/ts-essentials/blob/a4c2485bc3f37843267820ec552aa662251767bc/lib/types.ts#L169
+ */
+type Tuple<T = unknown> = [T] | T[]
+
+/**
+ * Non inferential type parameter usage.
+ *
+ * @see https://github.com/microsoft/TypeScript/issues/14829#issuecomment-504042546
+ */
+type NoInfer<T> = [T][T extends any ? 0 : never]
+
+// Type for extention purpose. Represents combinable sample source.
+type Combinable = { [key: string]: Store<any> } | Tuple<Store<any>>
+// Helper type, which unwraps combinable sample source value.
+type GetCombinedValue<T> = {[K in keyof T]: T[K] extends Store<infer U> ? U : never}
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -21,8 +41,8 @@ export const Kind: {
 
 export type Observer<A> = {
   readonly next?: (value: A) => void
-  // error(err: Error): void,
-  //complete(): void,
+  //error(err: Error): void
+  //complete(): void
 }
 
 export type Observable<T> = {
@@ -40,10 +60,19 @@ export interface Unit<T> {
   readonly __: T
 }
 
+export type CompositeName = {
+  shortName: string
+  fullName: string
+  path: Array<string>
+}
+
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
+  filter<T extends Payload>(config: {
+    fn(payload: Payload): payload is T
+  }): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   /**
    * @deprecated This form is deprecated, use `filterMap` method instead.
@@ -54,8 +83,22 @@ export interface Event<Payload> extends Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  sid: string | null
+  shortName: string
   [Symbol.observable](): Observable<Payload>
 }
+
+/**
+ * This is a workaround for https://github.com/microsoft/TypeScript/issues/35162
+ * 
+ * The problem was that we couldn't use guard as sample's clock parameter because
+ * sample's clock-related generic inferred as `unknown` in cases when guard returned
+ * `Event<T>`. This happens because `Event` has a callable signature. With `Unit<T>`
+ * as the return type we won't see any problems.
+ */
+type EventAsReturnType<Payload> = Payload extends any ? Event<Payload> : never
 
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Promise<Done>
@@ -87,6 +130,10 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
+  domainName?: CompositeName
+  compositeName: CompositeName
+  sid: string | null
+  shortName: string
   [Symbol.observable](): Observable<Params>
 }
 
@@ -108,25 +155,29 @@ export interface Store<State> extends Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
-  shortName: string
   defaultState: State
+  domainName?: CompositeName
+  compositeName: CompositeName
+  shortName: string
+  sid: string | null
   [Symbol.observable](): Observable<State>
 }
 
 export const is: {
-  unit(obj: unknown): boolean
-  store(obj: unknown): boolean
-  event(obj: unknown): boolean
-  effect(obj: unknown): boolean
-  domain(obj: unknown): boolean
+  unit(obj: unknown): obj is Unit<any>
+  store(obj: unknown): obj is Store<any>
+  event(obj: unknown): obj is Event<any>
+  effect(obj: unknown): obj is Effect<any, any, any>
+  domain(obj: unknown): obj is Domain
 }
 
 interface InternalStore<State> extends Store<State> {
   setState(state: State): void
 }
 
-export class Domain {
+export class Domain implements Unit<any> {
   readonly kind: kind
+  readonly __: any
   onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
   onCreateEffect(
     hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
@@ -136,15 +187,52 @@ export class Domain {
   ): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
   event<Payload = void>(name?: string): Event<Payload>
+  event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
+  createEvent<Payload = void>(name?: string): Event<Payload>
+  createEvent<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done
+      sid?: string
     },
   ): Effect<Params, Done, Fail>
+  effect<Params, Done, Fail = Error>(config: {
+    handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
+    name?: string
+  }): Effect<Params, Done, Fail>
+  createEffect<Params, Done, Fail = Error>(
+    name?: string,
+    config?: {
+      handler?: (params: Params) => Promise<Done> | Done
+      sid?: string
+    },
+  ): Effect<Params, Done, Fail>
+  createEffect<Params, Done, Fail = Error>(config: {
+    handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
+    name?: string
+  }): Effect<Params, Done, Fail>
   domain(name?: string): Domain
-  store<State>(defaultState: State, config?: {name?: string}): Store<State>
+  createDomain(name?: string): Domain
+  store<State>(
+    defaultState: State,
+    config?: {name?: string; sid?: string},
+  ): Store<State>
+  createStore<State>(
+    defaultState: State,
+    config?: {name?: string; sid?: string},
+  ): Store<State>
+  sid: string | null
+  shortName: string
   getType(): string
+  history: {
+    domains: Set<Domain>
+    stores: Set<Store<any>>
+    effects: Set<Effect<any, any, any>>
+    events: Set<Event<any>>
+  }
 }
 
 export type ID = string
@@ -158,7 +246,6 @@ export type Cmd =
   | Run
   | Filter
   | Compute
-  | Tap
   | Barrier
 
 export type Barrier = {
@@ -199,32 +286,63 @@ export type Compute = {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
-export type Tap = {
-  id: ID
-  type: 'tap'
-  data: {
-    fn: (data: any, scope: {[field: string]: any}) => any
-  }
-}
 export type Step = {
   next: Array<Step>
   seq: Array<Cmd>
   scope: {[field: string]: any}
+  meta: {[field: string]: any}
+  family: {
+    type: 'regular' | 'crosslink'
+    links: Step[]
+    owners: Step[]
+  }
 }
 export const step: {
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
   }): Compute
-  tap(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Tap
   filter(data: {
     fn: (data: any, scope: {[field: string]: any}) => boolean
   }): Filter
   update(data: {store: StateRef}): Update
   run(data: {fn: (data: any, scope: {[field: string]: any}) => any}): Run
 }
-export function forward<T>(opts: {from: Unit<T>; to: Unit<T>}): Subscription
+
+export function forward<T>(opts: {
+  /**
+   * By default TS picks "best common type" `T` between `from` and `to` arguments.
+   * This lets us forward from `string | number` to `string` for instance, and
+   * this is wrong.
+   *
+   * Fortunately we have a way to disable such behavior. By adding `& {}` to some
+   * generic type we tell TS "do not try to infer this generic type from
+   * corresponding argument type".
+   *
+   * Generic `T` won't be inferred from `from` any more. Forwarding from "less
+   * strict" to "more strict" will produce an error as expected.
+   *
+   * @see https://www.typescriptlang.org/docs/handbook/type-inference.html#best-common-type
+   */
+  from: Unit<T & {}>
+  to: Unit<T> | ReadonlyArray<Unit<T>>
+}): Subscription
+export function forward(opts: {from: Unit<any>; to: ReadonlyArray<Unit<void>>}): Subscription
+export function forward<To, From extends To>(opts: {
+  from: ReadonlyArray<Unit<From>>
+  to: Unit<To> | ReadonlyArray<Unit<To>>
+}): Subscription
+// Allow `* -> void` forwarding (e.g. `string -> void`).
+export function forward(opts: {from: Unit<any>; to: Unit<void>}): Subscription
+// Do not remove the signature below to avoid breaking change!
+export function forward<To, From extends To>(opts: {
+  from: Unit<From>
+  to: Unit<To> | ReadonlyArray<Unit<To>>
+}): Subscription
 
 export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
+export function merge<T extends ReadonlyArray<Unit<any>>>(
+  events: T,
+): T[number] extends Unit<infer R> ? Event<R> : never
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
   node: Array<Cmd>
@@ -235,35 +353,70 @@ export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function fromObservable<T>(observable: unknown): Event<T>
 
 export function createEvent<E = void>(eventName?: string): Event<E>
-export function createEvent<E = void>(config: {name?: string}): Event<E>
+export function createEvent<E = void>(config: {
+  name?: string
+  sid?: string
+}): Event<E>
 
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
     handler?: (params: Params) => Promise<Done> | Done
+    sid?: string
   },
 ): Effect<Params, Done, Fail>
+
+export function createEffect<FN extends Function>(config: {
+  name?: string
+  handler: FN
+  sid?: string
+}): FN extends (...args: infer Args) => infer Done
+  ? Effect<
+      Args['length'] extends 0 // does handler accept 0 arguments?
+        ? void // works since TS v3.3.3
+        : 0 | 1 extends Args['length'] // is the first argument optional?
+        ? /**
+           * Applying `infer` to a variadic arguments here we'll get `Args` of
+           * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
+           * In case T is optional we get `T | undefined` back from `Args[0]`.
+           * We lose information about argument's optionality, but we can make it
+           * optional again by appending `void` type, so the result type will be
+           * `T | undefined | void`.
+           *
+           * The disadvantage of this method is that we can't restore optonality
+           * in case of `params?: any` because in a union `any` type absorbs any
+           * other type (`any | undefined | void` becomes just `any`). And we
+           * have similar situation also with the `unknown` type.
+           */
+          Args[0] | void
+        : Args[0],
+      Done extends Promise<infer Async> ? Async : Done,
+      Error
+    >
+  : never
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
+  sid?: string
 }): Effect<Params, Done, Fail>
 
 export function createStore<State>(
   defaultState: State,
-  config?: {name?: string},
+  config?: {name?: string; sid?: string},
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-export function split<
-  S,
-  Obj extends {[name: string]: (payload: S) => boolean},
->(
+export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
   cases: Obj,
-): {[K in keyof Obj]: Event<S>} & {__: Event<S>}
+): {
+  [K in keyof Obj]: Obj[K] extends (p: any) => p is infer R
+    ? Event<R>
+    : Event<S>
+} & {__: Event<S>}
 
 export function createApi<
   S,
@@ -291,7 +444,12 @@ export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
 ): Store<Done>
+export function restore<Done>(
+  effect: Effect<any, Done, any>,
+  defaultState: null,
+): Store<Done | null>
 export function restore<E>(event: Event<E>, defaultState: E): Store<E>
+export function restore<E>(event: Event<E>, defaultState: null): Store<E | null>
 export function restore<State extends {[key: string]: Store<any> | any}>(
   state: State,
 ): {
@@ -302,46 +460,200 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-export function sample<A>(config: {
-  source: Unit<A>
-  clock: Unit<any>
-  target?: Unit<A>
-}): Unit<A>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  target?: Unit<C>
-  fn(source: A, clock: B): C
-}): Unit<C>
-
+/* basic overloads */
 export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
 export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<any>,
-): Event<A>
-export function sample<A>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
+  source: Store<A>,
   clock: Event<any> | Effect<any, any, any>,
 ): Event<A>
-
+export function sample<A>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Unit<any>,
+): Event<A>
 export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Store<B>,
+  source: Unit<A>,
+  clock: Unit<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
-export function sample<A, B, C>(
-  source: Event<A> | Store<A> | Effect<A, any, any>,
-  clock: Event<B> | Effect<B, any, any>,
-  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
 ): Event<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn: (source: A, clock: B) => NoInfer<C>
+  target: Unit<C>
+  greedy?: boolean
+}): Unit<C>
+export function sample<A>(config: {
+  source: Unit<NoInfer<A>>
+  clock: Unit<any>
+  target: Unit<A>
+  greedy?: boolean
+}): Unit<A>
+export function sample<A, B, C>(config: {
+  source: Store<A>
+  clock: Store<B>
+  fn(source: A, clock: B): C
+  name?: string
+  greedy?: boolean
+}): Store<C>
+export function sample<A, B, C>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn(source: A, clock: B): C
+  name?: string
+  greedy?: boolean
+}): Event<C>
+export function sample<A>(config: {
+  source: Store<A>
+  clock?: Store<any>
+  name?: string
+  greedy?: boolean
+}): Store<A>
+export function sample<A>(config: {
+  source: Store<A>
+  clock?: Event<any> | Effect<any, any, any>
+  name?: string
+  greedy?: boolean
+}): Event<A>
+export function sample<A>(config: {
+  source: Event<A> | Effect<A, any, any>
+  clock?: Unit<any>
+  name?: string
+  greedy?: boolean
+}): Event<A>
+/* overloads with implicit `combine` */
+export function sample<A extends Combinable>(
+  source: A,
+  clock: Event<any> | Effect<any, any, any>,
+): Event<GetCombinedValue<A>>
+export function sample<A extends Combinable, B, C>(
+  source: A,
+  clock: Store<B>,
+  fn: (source: GetCombinedValue<A>, clock: B) => C,
+  greedy?: boolean,
+): Store<C>
+export function sample<A extends Combinable, B, C>(
+  source: A,
+  clock: Store<B>,
+  fn: (source: GetCombinedValue<A>, clock: B) => C,
+  greedy?: boolean,
+): Store<C>
+export function sample<A extends Combinable, B, C>(
+  source: A,
+  clock: Event<B> | Effect<B, any, any>,
+  fn: (source: GetCombinedValue<A>, clock: B) => C,
+  greedy?: boolean,
+): Event<C>
+export function sample<A extends Combinable>(config: {
+  source: A
+  clock: Store<any>
+  name?: string
+  greedy?: boolean
+}): Store<GetCombinedValue<A>>
+export function sample<A extends Combinable>(config: {
+  source: A
+  clock: Event<any> | Effect<any, any, any>
+  name?: string
+  greedy?: boolean
+}): Event<GetCombinedValue<A>>
+export function sample<A extends Combinable, B, C>(config: {
+  source: A
+  clock: Store<B>
+  fn(source: GetCombinedValue<A>, clock: B): C
+  name?: string
+  greedy?: boolean
+}): Store<C>
+export function sample<A extends Combinable, B, C>(config: {
+  source: A
+  clock: Event<B> | Effect<B, any, any>
+  fn(source: GetCombinedValue<A>, clock: B): C
+  name?: string
+  greedy?: boolean
+}): Event<C>
+export function sample<A extends Combinable>(config: {
+  source: A
+  clock: Unit<any>
+  target: Unit<GetCombinedValue<A>>
+  greedy?: boolean
+}): Unit<GetCombinedValue<A>>
+export function sample<A extends Combinable, B, C>(config: {
+  source: A
+  clock: Unit<B>
+  fn(source: GetCombinedValue<A>, clock: B): C
+  target: Unit<C>
+  greedy?: boolean
+}): Unit<C>
 
-export function combine<R>(fn: () => R): Store<R>
+export function guard<Source, Result extends Source>(
+  source: Unit<Source>,
+  config: {
+    filter: (value: Source) => value is Result
+  },
+): EventAsReturnType<Result>
+export function guard<A>(
+  source: Unit<A>,
+  config: {
+    filter: Store<boolean> | ((value: A) => boolean)
+  },
+): EventAsReturnType<A>
+export function guard<Source, Result extends Source>(
+  source: Unit<Source>,
+  config: {
+    filter: (value: Source) => value is Result
+    target: Unit<Result>
+  },
+): Unit<Result>
+export function guard<A>(
+  source: Unit<A>,
+  config: {
+    filter: Store<boolean> | ((value: A) => boolean)
+    target: Unit<A>
+  },
+): Unit<A>
+export function guard<Source, Result extends Source>(config: {
+  source: Unit<Source>
+  filter: (value: Source) => value is Result
+}): EventAsReturnType<Result>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: Store<boolean> | ((value: A) => boolean)
+}): EventAsReturnType<A>
+export function guard<Source, Result extends Source>(config: {
+  source: Unit<Source>
+  filter: (value: Source) => value is Result
+  target: Unit<Result>
+}): Unit<Result>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: Store<boolean> | ((value: A) => boolean)
+  target: Unit<A>
+}): Unit<A>
+
+export function combine<State extends Tuple>(
+  shape: State,
+): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
+export function combine<State>(
+  shape: State,
+): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
 export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+export function combine<State extends Tuple, R>(
+  shape: State,
+  fn: (
+    shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
+  ) => R,
+): Store<R>
+export function combine<State, R>(
+  shape: State,
+  fn: (
+    shape: {[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]},
+  ) => R,
+): Store<R>
 export function combine<A, B, R>(
   a: Store<A>,
   b: Store<B>,

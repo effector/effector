@@ -1,19 +1,11 @@
 //@flow
 
-import {configure} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-configure({
-  adapter: new Adapter(),
-})
-
 import * as React from 'react'
-import {mount} from 'enzyme'
-import {createStore} from 'effector'
-import {createEvent} from 'effector'
-import {createContextComponent} from '..'
+import {createEvent, createStore} from 'effector'
+import {createContextComponent} from 'effector-react'
+import {render, container, act} from 'effector/fixtures/react'
 
-test('createContextComponent', () => {
+test('createContextComponent', async() => {
   const store = createStore('foo')
   const changeText = createEvent('change text')
   store.on(changeText, (_, e) => e)
@@ -31,19 +23,29 @@ test('createContextComponent', () => {
     ),
   )
 
-  const tree = mount(<Display />)
-  expect(tree.text()).toMatchSnapshot()
-  changeText('bar')
-  expect(tree.text()).toMatchSnapshot()
-  tree.unmount()
+  await render(<Display />)
+  expect(container.textContent).toMatchInlineSnapshot(
+    `"Store text: fooContext text: bar"`,
+  )
+  await act(async() => {
+    changeText('bar')
+  })
+  expect(container.textContent).toMatchInlineSnapshot(
+    `"Store text: barContext text: bar"`,
+  )
 
-  const tree2 = mount(
+  await render(
     <Context.Provider value="test">
       <Display />
     </Context.Provider>,
   )
-  expect(tree2.text()).toMatchSnapshot()
-  changeText('foo')
-  expect(tree2.text()).toMatchSnapshot()
-  tree2.unmount()
+  expect(container.textContent).toMatchInlineSnapshot(
+    `"Store text: barContext text: test"`,
+  )
+  await act(async() => {
+    changeText('foo')
+  })
+  expect(container.textContent).toMatchInlineSnapshot(
+    `"Store text: fooContext text: test"`,
+  )
 })

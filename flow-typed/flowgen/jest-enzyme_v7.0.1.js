@@ -9,7 +9,7 @@
  * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
-declare module "jest-enzyme" {
+declare module 'jest-enzyme' {
   declare interface jest$ToMatchElementOptions {
     ignoreProps?: boolean;
   }
@@ -26,15 +26,18 @@ declare module "jest-enzyme" {
     toHaveClassName(className: string): void;
     toHaveDisplayName(tagName: string): void;
     toHaveHTML(html: string): void;
-    toHaveProp(propKey: { [key: string]: any } | string, propValue?: any): void;
+    toHaveProp(
+      propKey: {[key: string]: any, ...} | string,
+      propValue?: any,
+    ): void;
     toHaveRef(refName: string): void;
     toHaveState(
-      stateKey: { [key: string]: any } | string,
-      stateValue?: any
+      stateKey: {[key: string]: any, ...} | string,
+      stateValue?: any,
     ): void;
     toHaveStyle(
-      styleKey: { [key: string]: any } | string,
-      styleValue?: any
+      styleKey: {[key: string]: any, ...} | string,
+      styleValue?: any,
     ): void;
     toHaveTagName(tagName: string): void;
     toHaveText(text: string): void;
@@ -42,9 +45,8 @@ declare module "jest-enzyme" {
     toIncludeText(text: string): void;
     toMatchElement(
       element: React.ReactElement<any>,
-      options?: jest$ToMatchElementOptions
+      options?: jest$ToMatchElementOptions,
     ): void;
     toMatchSelector(selector: string): void;
   }
 }
-

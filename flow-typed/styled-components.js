@@ -1,5 +1,5 @@
 type $npm$styledComponents$Interpolation =
-  | (<C: {}>(executionContext: C) => string)
+  | (<C: {...}>(executionContext: C) => string)
   | string
   | number
 type $npm$styledComponents$NameGenerator = (hash: number) => string
@@ -11,6 +11,7 @@ type $npm$styledComponents$TaggedTemplateLiteral<R> = {|
 // ---- FUNCTIONAL COMPONENT DEFINITIONS ----
 type $npm$styledComponents$ReactComponentFunctional<Props, DefaultProps = *> = {
   defaultProps: DefaultProps,
+  ...
 } & $npm$styledComponents$ReactComponentFunctionalUndefinedDefaultProps<Props>
 
 type $npm$styledComponents$ReactComponentFunctionalUndefinedDefaultProps<
@@ -71,7 +72,7 @@ type $npm$styledComponents$ReactComponentStyledStaticProps<
   Props,
   ComponentList,
 > = {|
-  attrs: <AdditionalProps: {}>(
+  attrs: <AdditionalProps: {...}>(
     AdditionalProps,
   ) => $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteral<
     Props & AdditionalProps,
@@ -88,7 +89,7 @@ type $npm$styledComponents$ReactComponentStyledStaticPropsWithComponent<
   ComponentList,
 > = {|
   withComponent: $npm$styledComponents$ReactComponentStyledWithComponent<ComponentList>,
-  attrs: <AdditionalProps: {}>(
+  attrs: <AdditionalProps: {...}>(
     AdditionalProps,
   ) => $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteralWithComponent<
     Props & AdditionalProps,
@@ -106,7 +107,7 @@ type $npm$styledComponents$ReactComponentStyledStaticPropsWithComponent<
 type $npm$styledComponents$Call<
   ComponentListKeys,
 > = (ComponentListKeys => $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteralWithComponent<
-  {},
+  {...},
   ComponentListKeys,
 >) &
   (<Props>(
@@ -152,29 +153,35 @@ type $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteralWithComponen
 
 // ---- WITHTHEME ----
 type $npm$styledComponents$WithThemeReactComponentClass = <
-  InputProps: {theme: $npm$styledComponents$Theme},
-  InputDefaultProps: {},
-  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme}>,
-  OutputDefaultProps: InputDefaultProps & {theme: $npm$styledComponents$Theme},
+  InputProps: {theme: $npm$styledComponents$Theme, ...},
+  InputDefaultProps: {...},
+  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme, ...}>,
+  OutputDefaultProps: InputDefaultProps & {
+    theme: $npm$styledComponents$Theme,
+    ...
+  },
 >(
   $npm$styledComponents$ReactComponentClass<InputProps, InputDefaultProps>,
 ) => $npm$styledComponents$ReactComponentClass<OutputProps, OutputDefaultProps>
 
 type $npm$styledComponents$WithThemeReactComponentClassUndefinedDefaultProps = <
-  InputProps: {theme: $npm$styledComponents$Theme},
-  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme}>,
+  InputProps: {theme: $npm$styledComponents$Theme, ...},
+  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme, ...}>,
 >(
   $npm$styledComponents$ReactComponentClassUndefinedDefaultProps<InputProps>,
 ) => $npm$styledComponents$ReactComponentClass<
   OutputProps,
-  {theme: $npm$styledComponents$Theme},
+  {theme: $npm$styledComponents$Theme, ...},
 >
 
 type $npm$styledComponents$WithThemeReactComponentFunctional = <
-  InputProps: {theme: $npm$styledComponents$Theme},
-  InputDefaultProps: {},
-  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme}>,
-  OutputDefaultProps: InputDefaultProps & {theme: $npm$styledComponents$Theme},
+  InputProps: {theme: $npm$styledComponents$Theme, ...},
+  InputDefaultProps: {...},
+  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme, ...}>,
+  OutputDefaultProps: InputDefaultProps & {
+    theme: $npm$styledComponents$Theme,
+    ...
+  },
 >(
   $npm$styledComponents$ReactComponentFunctional<InputProps, InputDefaultProps>,
 ) => $npm$styledComponents$ReactComponentFunctional<
@@ -183,13 +190,13 @@ type $npm$styledComponents$WithThemeReactComponentFunctional = <
 >
 
 type $npm$styledComponents$WithThemeReactComponentFunctionalUndefinedDefaultProps = <
-  InputProps: {theme: $npm$styledComponents$Theme},
-  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme}>,
+  InputProps: {theme: $npm$styledComponents$Theme, ...},
+  OutputProps: $Diff<InputProps, {theme: $npm$styledComponents$Theme, ...}>,
 >(
   $npm$styledComponents$ReactComponentFunctionalUndefinedDefaultProps<InputProps>,
 ) => $npm$styledComponents$ReactComponentFunctional<
   OutputProps,
-  {theme: $npm$styledComponents$Theme},
+  {theme: $npm$styledComponents$Theme, ...},
 >
 
 type $npm$styledComponents$WithTheme = $npm$styledComponents$WithThemeReactComponentClass &
@@ -198,17 +205,19 @@ type $npm$styledComponents$WithTheme = $npm$styledComponents$WithThemeReactCompo
   $npm$styledComponents$WithThemeReactComponentFunctionalUndefinedDefaultProps
 
 // ---- MISC ----
-type $npm$styledComponents$Theme = $ReadOnly<{[key: string]: mixed}>
+type $npm$styledComponents$Theme = $ReadOnly<{[key: string]: mixed, ...}>
 type $npm$styledComponents$ThemeProviderProps = {
   theme:
     | $npm$styledComponents$Theme
     | ((outerTheme: $npm$styledComponents$Theme) => void),
+  ...
 }
 
 class Npm$StyledComponents$ThemeProvider extends React$Component<$npm$styledComponents$ThemeProviderProps> {}
 
 class Npm$StyledComponents$StyleSheetManager extends React$Component<{
   sheet: mixed,
+  ...
 }> {}
 
 class Npm$StyledComponents$ServerStyleSheet {
@@ -224,7 +233,7 @@ type $npm$styledComponents$StyledComponentsComponentListKeys = $Subtype<
 >
 
 type $npm$styledComponents$StyledComponentsComponentListValue = $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteralWithComponent<
-  {},
+  {...},
   $npm$styledComponents$StyledComponentsComponentListKeys,
 >
 
@@ -371,7 +380,7 @@ type $npm$styledComponents$StyledComponentsNativeComponentListKeys = $Subtype<
 >
 
 type $npm$styledComponents$StyledComponentsNativeComponentListValue = $npm$styledComponents$ReactComponentStyledTaggedTemplateLiteralWithComponent<
-  {},
+  {...},
   $npm$styledComponents$StyledComponentsNativeComponentListKeys,
 >
 
@@ -438,18 +447,18 @@ declare module 'styled-components' {
   declare export type ComponentListKeys = $npm$styledComponents$StyledComponentsComponentListKeys
 
   declare export type ReactComponentFunctional<
-    Props: {},
-    DefaultProps: ?{} = *,
+    Props: {...},
+    DefaultProps: ?{...} = *,
   > = $npm$styledComponents$ReactComponentFunctional<Props, DefaultProps>
   declare export type ReactComponentFunctionalUndefinedDefaultProps<
-    Props: {},
+    Props: {...},
   > = $npm$styledComponents$ReactComponentFunctionalUndefinedDefaultProps<Props>
   declare export type ReactComponentClass<
-    Props: {},
-    DefaultProps: ?{} = *,
+    Props: {...},
+    DefaultProps: ?{...} = *,
   > = $npm$styledComponents$ReactComponentClass<Props, DefaultProps>
   declare export type ReactComponentClassUndefinedDefaultProps<
-    Props: {},
+    Props: {...},
   > = $npm$styledComponents$ReactComponentClassUndefinedDefaultProps<Props>
   declare export type ReactComponentUnion<
     Props,
@@ -485,7 +494,9 @@ declare module 'styled-components' {
     css: TaggedTemplateLiteral<Array<Interpolation>>,
     ...$npm$styledComponents$StyledComponentsComponentList,
     ...$npm$styledComponents$StyledComponentsNativeComponentList,
+    ...
   } & {
     [[call]]: $npm$styledComponents$Call<ComponentListKeys>,
+    ...,
   }
 }

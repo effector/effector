@@ -1,0 +1,80 @@
+name: tests
+
+on:
+  push:
+    paths:
+      - 'packages/**'
+      - 'src/**'
+      - 'tasks/**'
+      - 'tools/**'
+      - 'babel.config.js'
+      - 'jest.config.js'
+      - 'package.json'
+      - 'yarn.lock'
+      - 'bsconfig.json'
+jobs:
+  common-tests:
+    name: Test on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+        name: install deps
+      - run: yarn test
+        name: tests
+  publish-github:
+    needs: common-tests
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+        name: install deps
+      - run: yarn build
+        name: build effector
+      - name: set npm config
+        run: npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: configure for github registry
+        run: node tools/versionHash
+        env:
+          VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
+      - name: publish effector on github
+        run: cd npm/effector && npm publish
+      - name: publish effector fallback
+        if: failure()
+        run: echo 'cannot publish effector to github'
+      - name: publish effector-react on github
+        run: cd npm/effector-react && npm publish
+      - name: publish effector-react fallback
+        if: failure()
+        run: echo 'cannot publish effector-react to github'
+      - name: publish effector-dom on github
+        run: cd npm/effector-dom && npm publish
+      - name: publish effector-dom fallback
+        if: failure()
+        run: echo 'cannot publish effector-dom to github'
+  # browserstack:
+  #   needs: common-tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+  #     - run: yarn
+  #     - run: yarn browserstack
+  #       env:
+  #         BROWSERSTACK_USERNAME: ${{secrets.BROWSERSTACK_USERNAME}}
+  #         BROWSERSTACK_ACCESS_KEY: ${{secrets.BROWSERSTACK_ACCESS_KEY}}

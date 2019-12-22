@@ -11,9 +11,8 @@ import type {Stack} from './stack'
  * and index of next step in the executed Graph
  */
 export type Layer = {|
-  +step: Graph,
   +firstIndex: number,
-  +scope: Stack,
+  +stack: Stack,
   +resetStop: boolean,
   +type: PriorityTag,
   +id: number,

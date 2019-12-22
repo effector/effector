@@ -3,7 +3,7 @@ id: effector
 title: API Reference
 ---
 
-### Top-Level Exports 
+### Top-Level Exports
 
 - [createEvent(name?)](createEvent.md)
 - [createEffect(name?)](createEffect.md)
@@ -18,6 +18,9 @@ title: API Reference
 - [forward({from, to})](forward.md)
 - [fromObservable(observable)](fromObservable.md)
 - [merge([eventA, eventB])](merge.md)
+- [split(event, cases)](split.md)
+- [sample({source, clock, fn, target}](sample.md)
+- [guard({source, filter, target})](guard.md)
 
 ### Event API
 

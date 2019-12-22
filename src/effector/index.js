@@ -8,34 +8,25 @@
 
 export {combine, combine as createStoreObject} from './combine'
 export {sample} from './sample'
-
-export type {Domain} from './domain'
-export {createDomain} from './domain'
-
-export type {Event} from './event'
-export {createEvent, merge, split, forward, fromObservable} from './event'
-
-export type {Effect} from './effect'
-export {createEffect} from './effect'
-
-export type {Store} from './store'
-export {
-  createStore,
-  setStoreName,
-  createApi,
-  restore,
-  restoreEvent,
-  restoreEffect,
-  restoreObject,
-} from './store'
-
-export {createTask} from './task'
-
-export {Kind, clearNode, createNode, step, is} from './stdlib'
+export {split} from './split'
+export {merge} from './merge'
+export {forward} from './forward'
+export {fromObservable} from './fromObservable'
+export {createDomain} from './createDomain'
+export {createEffect} from './createEffect'
+export {createStore, createEvent} from './createUnit'
+export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'
+export {setStoreName} from './naming'
+export {createApi} from './createApi'
+export {Kind, step} from './stdlib'
+export {is} from './is'
+export {createNode} from './createNode'
+export {clearNode} from './clearNode'
 export {launch} from './kernel'
-export type {kind} from './stdlib'
-
 export {version} from './flags'
-
+export {guard} from './guard'
 //eslint-disable-next-line
 export * as blocks from './blocks'
+
+export type {Store, Event, Effect, Domain} from './unit.h'
+export type {kind} from './stdlib'

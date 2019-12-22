@@ -1,6 +1,14 @@
 //@noflow
 
-import {clearNode, createEvent, forward, createStore, sample} from 'effector'
+import {
+  clearNode,
+  createEvent,
+  createDomain,
+  forward,
+  createStore,
+  sample,
+} from 'effector'
+import {argumentHistory} from 'effector/fixtures/index'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
@@ -132,5 +140,231 @@ describe('itermediate steps should not stay', () => {
     clearNode(store)
     trigger()
     expect(fn).toBeCalledTimes(1)
+  })
+})
+describe('based on clearNode', () => {
+  it('will not clear domain.store after event will be destroyed', () => {
+    const fn = jest.fn()
+    const store = createStore(0)
+    const eventA = createEvent()
+    const eventB = createEvent()
+    store.on(eventA, x => x + 1).on(eventB, x => x + 1)
+    store.watch(fn)
+    eventA()
+    clearNode(eventA)
+    eventB()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+        2,
+      ]
+    `)
+  })
+  it('will not clear connected units after forward will be destroyed', () => {
+    const fn = jest.fn()
+    const eventA = createEvent()
+    const eventB = createEvent()
+    const unsub = forward({
+      from: eventA,
+      to: eventB,
+    })
+    eventA.watch(fn)
+    eventA(0)
+    unsub()
+    eventA(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+      ]
+    `)
+  })
+  it('will not clear unit after .watch will be destroyed', () => {
+    const fn = jest.fn()
+    const event = createEvent()
+    const unsub = event.watch(() => {})
+    event.watch(fn)
+    event(0)
+    unsub()
+    event(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+      ]
+    `)
+  })
+  it('will not clear store after store.updates.watch will be destroyed', () => {
+    const fn = jest.fn()
+    const event = createEvent()
+    const store = createStore(0).on(event, x => x + 1)
+    const unsub = store.updates.watch(() => {})
+    store.updates.watch(fn)
+    event()
+    unsub()
+    event()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+  it('wil not clear node, connected via forward to destroyed one', () => {
+    const fn = jest.fn()
+    const store = createStore(0)
+    const event = createEvent()
+    event.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    event(2)
+    clearNode(store)
+    event(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+        3,
+      ]
+    `)
+  })
+  it('wil not clear node, which forwarded to destroyed one', () => {
+    const fn = jest.fn()
+    const store = createStore(0)
+    const event = createEvent()
+    store.updates.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    clearNode(event)
+    store.setState(2)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+})
+describe('domain support', () => {
+  it('will not clear domain.store after event will be destroyed', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const store = domain.store(0)
+    const eventA = domain.event()
+    const eventB = domain.event()
+    store.on(eventA, x => x + 1).on(eventB, x => x + 1)
+    store.watch(fn)
+    eventA()
+    clearNode(eventA)
+    eventB()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+        2,
+      ]
+    `)
+  })
+  it('will not clear connected units after forward will be destroyed', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const eventA = domain.event()
+    const eventB = domain.event()
+    const unsub = forward({
+      from: eventA,
+      to: eventB,
+    })
+    eventA.watch(fn)
+    eventA(0)
+    unsub()
+    eventA(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+      ]
+    `)
+  })
+  it('will not clear unit after .watch will be destroyed', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const event = domain.event()
+    const unsub = event.watch(() => {})
+    event.watch(fn)
+    event(0)
+    unsub()
+    event(1)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        0,
+        1,
+      ]
+    `)
+  })
+  it('will not clear store after store.updates.watch will be destroyed', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const event = domain.event()
+    const store = domain.store(0).on(event, x => x + 1)
+    const unsub = store.updates.watch(() => {})
+    store.updates.watch(fn)
+    event()
+    unsub()
+    event()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+  it('wil not clear node, connected via forward to destroyed one', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const store = domain.store(0)
+    const event = domain.event()
+    event.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    event(2)
+    clearNode(store)
+    event(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+        3,
+      ]
+    `)
+  })
+  it('wil not clear node, which forwarded to destroyed one', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const store = domain.store(0)
+    const event = domain.event()
+    store.updates.watch(fn)
+    forward({
+      from: store.updates,
+      to: event,
+    })
+    store.setState(1)
+    clearNode(event)
+    store.setState(2)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
   })
 })

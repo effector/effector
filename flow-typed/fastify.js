@@ -29,14 +29,17 @@ declare module 'fastify' {
 
   declare export type fastify$DefaultQuery = {
     [k: string]: any,
+    ...,
   }
 
   declare export type fastify$DefaultParams = {
     [k: string]: any,
+    ...,
   }
 
   declare export type fastify$DefaultHeaders = {
     [k: string]: any,
+    ...,
   }
 
   declare export type fastify$DefaultBody = any
@@ -128,6 +131,7 @@ declare module 'fastify' {
     header: (name: string, value: any) => fastify$FastifyReply<HttpResponse>;
     headers: (headers: {
       [key: string]: any,
+      ...,
     }) => fastify$FastifyReply<HttpResponse>;
     type: (contentType: string) => fastify$FastifyReply<HttpResponse>;
     redirect: (
@@ -162,10 +166,12 @@ declare module 'fastify' {
 
   declare export type fastify$ServerOptionsAsSecure = {
     https: any, //http2.SecureServerOptions,
+    ...
   } & fastify$ServerOptions
 
   declare export type fastify$ServerOptionsAsHttp = {
     http2?: false,
+    ...
   } & fastify$ServerOptions
 
   //prettier-ignore
@@ -174,6 +180,7 @@ declare module 'fastify' {
 
   declare export type fastify$ServerOptionsAsHttp2 = {
     http2: true,
+    ...
   } & fastify$ServerOptions
 
   //prettier-ignore
@@ -189,6 +196,7 @@ declare module 'fastify' {
     response?: {
       // [code: number]: fastify$JSONSchema,
       [code: string]: fastify$JSONSchema,
+      ...,
     };
   }
 
@@ -255,6 +263,7 @@ declare module 'fastify' {
       Headers,
       Body,
     >,
+    ...
   } & fastify$RouteShorthandOptions<
     HttpServer,
     HttpRequest,
@@ -279,6 +288,7 @@ declare module 'fastify' {
   > = {
     [key: string]: any,
     prefix?: string,
+    ...
   } & fastify$RouteShorthandOptions<
     HttpServer,
     HttpRequest,
@@ -296,14 +306,15 @@ declare module 'fastify' {
     url: string;
     method?: fastify$HTTPMethod;
     authority?: string;
-    headers?: /*ObjectKeyword*/ {};
+    headers?: /*ObjectKeyword*/ {...};
     remoteAddress?: string;
-    payload?: string | /*ObjectKeyword*/ {} | Buffer | Readable;
+    payload?: string | /*ObjectKeyword*/ {...} | Buffer | Readable;
     simulate?: {
       end?: boolean,
       split?: boolean,
       error?: boolean,
       close?: boolean,
+      ...
     };
     validate?: boolean;
   }
@@ -315,13 +326,14 @@ declare module 'fastify' {
     raw: {
       req: Readable,
       res: ServerResponse,
+      ...
     };
-    headers: /*ObjectKeyword*/ {};
+    headers: /*ObjectKeyword*/ {...};
     statusCode: number;
     statusMessage: string;
     payload: string;
     rawPayload: Buffer;
-    trailers: /*ObjectKeyword*/ {};
+    trailers: /*ObjectKeyword*/ {...};
   }
 
   /**
@@ -873,6 +885,7 @@ declare module 'fastify' {
         opts: fastify$RouteOptions<HttpServer, HttpRequest, HttpResponse> & {
           path: string,
           prefix: string,
+          ...
         },
       ) => void,
     ): fastify$FastifyInstance<HttpServer, HttpRequest, HttpResponse>;
@@ -923,7 +936,7 @@ declare module 'fastify' {
     /**
      * Create a shared schema
      */
-    addSchema(schema: /*ObjectKeyword*/ {}): fastify$FastifyInstance<
+    addSchema(schema: /*ObjectKeyword*/ {...}): fastify$FastifyInstance<
       HttpServer,
       HttpRequest,
       HttpResponse,
@@ -934,6 +947,7 @@ declare module 'fastify' {
      */
     getSchemas(): {
       [shemaId: string]: Object,
+      ...,
     };
 
     /**
@@ -943,6 +957,7 @@ declare module 'fastify' {
       contentType: string | string[],
       opts: {
         bodyLimit?: number,
+        ...
       },
       parser: fastify$ContentTypeParser<HttpRequest>,
     ): void;
@@ -951,6 +966,7 @@ declare module 'fastify' {
       opts: {
         parseAs: 'string',
         bodyLimit?: number,
+        ...
       },
       parser: fastify$BodyParser<HttpRequest, string>,
     ): void;
@@ -959,6 +975,7 @@ declare module 'fastify' {
       opts: {
         parseAs: 'buffer',
         bodyLimit?: number,
+        ...
       },
       parser: fastify$BodyParser<HttpRequest, Buffer>,
     ): void;

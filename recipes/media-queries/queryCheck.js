@@ -15,6 +15,7 @@ export function orientationCheck(
   if (!props.portrait && !props.landscape) return true
   return (
     (props.portrait && queries.portrait) ||
+    //$todo
     (props.landscape && !queries.portrait)
   )
 }
@@ -38,6 +39,7 @@ export function screenSizeCheck(
   return (
     (props.small && queries.small) ||
     (props.medium && queries.medium) ||
+    //$todo
     (props.large && queries.large)
   )
 }

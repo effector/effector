@@ -20,12 +20,16 @@ export type ReactForm<Props, Values, Errors> = Class<
   //   ) => React.Node,
   // }>,
   FieldGate: $ObjMap<Values, <V>(V) => Gate<{|value: V|}>>,
+  ...
 }
 
-export function createReactForm<Values: {}, Errors: {}>(
+export function createReactForm<Values: {...}, Errors: {...}>(
   formApi: FormApi<Values, Errors>,
 ): ReactForm<
-  {|children: React.Node, resetOnUnmount?: boolean|},
+  {|
+    children: React.Node,
+    resetOnUnmount?: boolean
+  |},
   Values,
   Errors,
 > {

@@ -18,7 +18,7 @@ Creates a [_`Gate`_](Gate.md)
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createGate} from 'effector-react'
@@ -27,17 +27,18 @@ const Gate = createGate('gate with props')
 
 const App = () => (
   <section>
-    <Gate foo="bar"/>
+    <Gate foo="bar" />
   </section>
-	)
+)
+
+Gate.state.watch(state => {
+  console.log('current state', state)
+})
+// => current state {}
 
 ReactDOM.render(<App />, document.getElementById('root'))
-
-console.log(Gate.state.getState()) // -->  {foo: 'bar'}
-console.log(Gate.current) // -->  {foo: 'bar'}
+// => current state {foo: 'bar'}
 
 ReactDOM.unmountComponentAtNode(document.getElementById('root'))
-
-console.log(Gate.state.getState()) // --> {}
-console.log(Gate.current) // -->  {}
+// => current state {}
 ```

@@ -1,5 +1,595 @@
 # Changelog
 
+See also [separate changelogs for each library](https://changelog.effector.dev/)
+
+## effector 20.8.0
+
+- Allow to use objects and arrays with stores in sample source
+
+```js
+import {createStore, createEvent, sample, combine} from 'effector'
+
+const trigger = createEvent()
+const objectTarget = createEvent()
+const arrayTarget = createEvent()
+
+const a = createStore('A')
+const b = createStore('B')
+
+sample({
+  source: {a, b},
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: [a, b],
+  clock: trigger,
+  target: arrayTarget,
+})
+
+objectTarget.watch(obj => {
+  console.log('sampled object', obj)
+})
+arrayTarget.watch(array => {
+  console.log('sampled array', array)
+})
+
+trigger()
+// sampled object {a: 'A', b: 'B'}
+// sampled array ['A', 'B']
+
+/* old way to do this: */
+
+sample({
+  source: combine({a, b}),
+  clock: trigger,
+  target: objectTarget,
+})
+
+sample({
+  source: combine([a, b]),
+  clock: trigger,
+  target: arrayTarget,
+})
+```
+
+[Try it](https://share.effector.dev/GcYoDBf8)
+
+## effector-react 20.5.0
+
+- Pass props to `Gate.open` & `Gate.close` events
+
+```js
+import {createGate} from 'effector-react'
+const PageMeta = createGate()
+
+PageMeta.open.watch(props => {
+  console.log('page meta', props)
+})
+
+const App = () => (
+  <>
+    <PageMeta name="admin page" />
+    <div>body</div>
+  </>
+)
+ReactDOM.render(<App />, document.getElementById('root'))
+// => page meta {name: 'admin page'}
+```
+
+[Try it](https://share.effector.dev/5g7jdANZ)
+
+## effector 20.7.0
+
+- Add `domain.createStore` as alias for `domain.store` ([proposal](https://github.com/zerobias/effector/issues/186))
+- Add `domain.createEvent` as alias for `domain.event`
+- Add `domain.createEffect` as alias for `domain.effect`
+- Add `domain.createDomain` as alias for `domain.domain`
+
+## effector 20.6.2
+
+- Improve `sample` typings for typescript (PR [#248](https://github.com/zerobias/effector/pull/248), fix [#247](https://github.com/zerobias/effector/issues/247)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+
+## effector 20.6.1, effector-react 20.4.1, effector-vue 20.3.2
+
+- Add typescript typings for [compat builds](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2010)
+- Improve built-in source maps
+
+## effector 20.6.0
+
+- Add support for arrays to `forward`
+
+```js
+import {createEvent, forward} from 'effector'
+
+const firstSource = createEvent()
+const secondSource = createEvent()
+const firstTarget = createEvent()
+const secondTarget = createEvent()
+
+forward({
+  from: [firstSource, secondSource],
+  to: [firstTarget, secondTarget],
+})
+
+firstTarget.watch(e => console.log('first target', e))
+secondTarget.watch(e => console.log('second target', e))
+
+firstSource('A')
+// => first target A
+// => second target A
+secondSource('B')
+// => first target B
+// => second target B
+```
+
+[Try it](https://share.effector.dev/SRwLtX4l)
+
+## effector-vue 20.3.0
+
+- Add `createComponent` HOC for TypeScript usage. This HOC provides type-safe properties in vue components.
+
+```typescript
+// component.vue
+import {createStore, createApi} from 'effector'
+import {createComponent} from 'effector-vue'
+
+const $counter = createStore(0)
+const {update} = createApi($counter, {
+  update: (_, value: number) => value,
+})
+
+export default createComponent(
+  {
+    name: 'Counter',
+    methods: {
+      update,
+      handleClick() {
+        const value = this.$counter + 1 // this.$counter <- number ( typescript tips )
+        this.update(value)
+      },
+    },
+  },
+  {$counter},
+)
+```
+
+## effector 20.5.0
+
+- Merge `createStoreObject` to `combine` to reduce api surface. Wherever `createStoreObject` was used, it can be replaced with `combine`
+
+```js
+import {createStore, combine, createStoreObject} from 'effector'
+
+const r = createStore(255)
+const g = createStore(0)
+const b = createStore(255)
+
+const color = combine({r, g, b})
+color.watch(console.log)
+// => {r: 255, b: 0, b: 255}
+
+const colorOld = createStoreObject({r, g, b})
+colorOld.watch(console.log)
+// => {r: 255, b: 0, b: 255}
+```
+
+[Try it](https://share.effector.dev/YmXUET9b)
+
+- Add ability to use arrays of stores with `combine`
+
+```js
+import {createStore, combine} from 'effector'
+
+const r = createStore(255)
+const g = createStore(0)
+const b = createStore(255)
+
+const color = combine([r, g, b])
+color.watch(console.log)
+// => [255, 0, 255]
+```
+
+[Try it](https://share.effector.dev/WXJoaXQw)
+
+## effector 20.4.4
+
+- Ensure that both `effect.done` and `effect.fail` are called before `effect.finally` watchers, thereby preventing side-effects from interrupting pure computations
+
+## effector 20.4.3
+
+- Throw expected error in case with `sample({clock: undefined})`
+
+```js
+import {createStore, sample} from 'effector'
+sample({
+  source: createStore(null),
+  clock: undefined,
+})
+// Throw "config.clock should be defined"
+```
+
+## effector 20.4.1
+
+- Improve `forward` typings for typescript (PR [#229](https://github.com/zerobias/effector/pull/229), fix [#174](https://github.com/zerobias/effector/issues/174)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+- Add typescript typings for `clearNode(domain)`, introduced in [effector 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2020)
+
+## effector-vue 20.2.1
+
+- Add typescript typings for object shape, introduced in [effector-vue 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-vue-2020)
+
+```js
+const counter = createStore(0)
+
+new Vue({
+  effector: {
+    counter, // would create `counter` in template
+  },
+})
+```
+
+## effector 20.4.0
+
+- Introduce `guard`: conditional event routing
+  Control one event with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
+
+```js
+import {createStore, createEffect, createEvent, guard, sample} from 'effector'
+
+const clickRequest = createEvent()
+const fetchRequest = createEffect({
+  handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
+})
+
+const clicks = createStore(0).on(clickRequest, x => x + 1)
+const requests = createStore(0).on(fetchRequest, x => x + 1)
+
+const isIdle = fetchRequest.pending.map(pending => !pending)
+
+/*
+on clickRequest, take current clicks value,
+and call fetchRequest with it
+if isIdle value is true 
+*/
+guard({
+  source: sample(clicks, clickRequest),
+  filter: isIdle,
+  target: fetchRequest,
+})
+```
+
+See [ui visualization](https://share.effector.dev/zLB4NwNV)
+
+Also, `guard` can accept common function predicate as a filter, to drop events before forwarding them to target
+
+```js
+import {createEffect, createEvent, guard} from 'effector'
+
+const searchUser = createEffect()
+const submitForm = createEvent()
+
+guard({
+  source: submitForm,
+  filter: user => user.length > 0,
+  target: searchUser,
+})
+
+submitForm('') // nothing happens
+submitForm('alice') // ~> searchUser('alice')
+```
+
+[Type inference](https://github.com/zerobias/effector/blob/master/src/types/__tests__/effector/guard.test.js)
+[Implementation tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/guard.test.js)
+
+- Introduce `name` property in `sample` parameters list
+
+Each basic entity in Effector (event/effect/store/domain) may have a name. You now can name sampled entities in the same
+manner as basic ones.
+
+```js
+import {createStore, sample} from 'effector'
+
+const foo = createStore(null)
+
+const sampled = sample({
+  source: foo,
+  name: 'sampled foo',
+})
+
+console.log(sampled.shortName) // 'sampled foo'
+```
+
+## effector 20.3.2
+
+- Allow typescript to refine type with `split` method ([PR](https://github.com/zerobias/effector/pull/215))
+- Improve type inference of effects with optional arguments in Typescript ([PR](https://github.com/zerobias/effector/pull/214))
+- Ensure that effect handler is called only after effect update itself, thereby preventing side-effects from interrupting pure computations
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import {createStore, createEvent, createEffect, sample} from 'effector'
+import {useList} from 'effector-react'
+
+const items$ = createStore([
+  {id: 0, status: 'NEW'},
+  {id: 1, status: 'NEW'},
+])
+
+const updateItem = createEvent()
+const resetItems = createEvent()
+
+const processItems = createEffect({
+  async handler(items) {
+    for (let {id} of items) {
+      //event call inside effect
+      //should be applied to items$
+      //only after processItems itself
+      updateItem({id, status: 'PROCESS'})
+      await new Promise(r => setTimeout(r, 3000))
+      updateItem({id, status: 'DONE'})
+    }
+  },
+})
+
+items$
+  .on(updateItem, (items, {id, status}) =>
+    items.map(item => (item.id === id ? {...item, status} : item)),
+  )
+  .on(processItems, items => items.map(({id}) => ({id, status: 'WAIT'})))
+  .reset(resetItems)
+
+const processClicked = createEvent()
+
+sample({
+  source: items$,
+  clock: processClicked,
+  target: processItems,
+})
+
+const App = () => (
+  <section>
+    <header>
+      <h1>Jobs list</h1>
+    </header>
+    <button onClick={processClicked}>run tasks</button>
+    <button onClick={resetItems}>reset</button>
+    <ol>
+      {useList(items$, ({status}) => (
+        <li>{status}</li>
+      ))}
+    </ol>
+  </section>
+)
+
+ReactDOM.render(<App />, document.getElementById('root'))
+```
+
+[Try it](https://share.effector.dev/viApFDXj)
+
+## effector 20.3.1
+
+- Fix edge case when `clearNode` been called on store belonged to certain domain led to the removal of the entire domain
+
+## effector-react 20.4.0
+
+- Add support for `keys` field in `useList`. By default, `useList` rerenders only when some of its items was changed.
+  Howewer, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
+  In such cases we need to tell react about our dependencies and pass keys explicitly.
+
+```js
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import {createEvent, createStore, restore} from 'effector'
+import {useStore, useList} from 'effector-react'
+
+const renameUser = createEvent()
+const user = restore(renameUser, 'alice')
+const friends = createStore(['bob'])
+const List = () => {
+  const userName = useStore(user)
+  return useList(friends, {
+    keys: [userName],
+    fn: friend => (
+      <div>
+        {friend} is a friend of {userName}
+      </div>
+    ),
+  })
+}
+ReactDOM.render(<List />, document.getElementById('root'))
+// => <div> bob is a friend of alice </div>
+setTimeout(() => {
+  renameUser('carol')
+  // => <div> bob is a friend of carol </div>
+}, 500)
+```
+
+[Try it](https://share.effector.dev/VSAHPO60)
+
+## effector 20.3.0
+
+- Add `shortName` to domains
+
+```js
+import {createDomain} from 'effector'
+const domain = createDomain('feature')
+console.log(domain.shortName)
+// => feature
+```
+
+[try it](https://share.effector.dev/vKObFGtp)
+
+- Add `history` to domains with read-only sets of events, effects, stores and subdomains
+
+```js
+import {createDomain} from 'effector'
+const domain = createDomain()
+const eventA = domain.event()
+const storeB = domain.store(0)
+console.log(domain.history)
+// => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
+```
+
+[try it](https://share.effector.dev/HAG9a8nk)
+
+## effector-vue 20.2.0
+
+- Add support for object shape
+
+```js
+const counter = createStore(0)
+
+new Vue({
+  effector: {
+    counter, // would create `counter` in template
+  },
+})
+```
+
+## effector 20.2.0
+
+- Add support for domains to `clearNode`
+
+```js
+import {createDomain, clearNode} from 'effector'
+const root = createDomain()
+const child = root.domain()
+clearNode(child)
+```
+
+- Add `.sid` - stable hash identifier for events, effects, stores and domains, preserved between environments, to handle client-server interaction within the same codebase.
+
+```js
+/* common.js */
+
+import {createEffect} from 'effector'
+
+export const getUser = createEffect({sid: 'GET /user'})
+console.log(getUsers.sid)
+// => GET /user
+
+/* worker.js */
+
+import {getUsers} from './common'
+
+getUsers.use(userID => fetch(userID))
+
+getUsers.done.watch(({result}) => {
+  postMessage({sid: getUsers.sid, result})
+})
+
+onmessage = async ({data}) => {
+  if (data.sid !== getUsers.sid) return
+  getUsers(data.userID)
+}
+
+/* client.js */
+
+import {createEvent} from 'effector'
+import {getUsers} from './common'
+
+const onMessage = createEvent()
+
+const worker = new Worker('worker.js')
+worker.onmessage = onMessage
+
+getUsers.use(
+  userID =>
+    new Promise(rs => {
+      worker.postMessage({sid: getUsers.sid, userID})
+      const unwatch = onMessage.watch(({data}) => {
+        if (data.sid !== getUsers.sid) return
+        unwatch()
+        rs(data.result)
+      })
+    }),
+)
+```
+
+The key is that sid can be autogenerated by `effector/babel-plugin` with default config and it will be stable between builds
+
+See [example project](https://github.com/zerobias/effector/tree/master/examples/worker-rpc)
+
+- Add support for implicit void params in `createEffect` for typescript [#106](https://github.com/zerobias/effector/issues/106)
+
+```typescript
+const handler = () => console.log()
+
+const effect = createEffect({handler})
+
+effect()
+```
+
+- Fix bug with `cannot read property .toString of undefined` error during store initialization
+
+## effector-react 20.3.0
+
+- Add support for react hooks in `createComponent`
+
+## effector-react 20.2.2, effector-vue 20.1.2
+
+- `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/zerobias/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/zerobias/effector/issues/173))
+
+## effector 20.1.2
+
+- Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/zerobias/effector/pull/170)
+
+```typescript
+import {createEvent} from 'effector'
+
+const event = createEvent<string | number>()
+
+const isString = (value: any): value is string => typeof value === 'string'
+const isNumber = (value: any): value is number => typeof value === 'number'
+
+const str = event.filter({fn: isString}) // Event<string>
+const num = event.filter({fn: isNumber}) // Event<number>
+
+str.watch(value => value.slice()) // OK now
+num.watch(value => value.toFixed(2)) // OK now
+```
+
+- Allow typescript to refine type with `is` methods [PR](https://github.com/zerobias/effector/pull/169)
+
+```typescript
+import {is} from 'effector'
+
+//result has type Event<any> | void
+function getEvent(obj: unknown) {
+  if (is.event(obj)) return obj
+  if (is.store(obj)) return obj.updates
+}
+```
+
+- Add new fields to definition of graph nodes ([discussion](https://github.com/zerobias/effector/issues/91#issuecomment-511397503))
+
+## effector 20.1.1
+
+- Add support for IE11 to `effector/compat`
+- Fix flow typings for `sample`
+- Allow `effector/babel-plugin` to work in browser
+
+## effector-react 20.2.1, effector-vue 20.1.1
+
+- Add support for IE11 to `effector-react/compat` and `effector-vue/compat`
+
+## effector 20.1.0
+
+- Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/zerobias/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
+- Improve typescript typings for `sample` (thanks [@abliarsar](https://github.com/abliarsar)) (PR [#156](https://github.com/zerobias/effector/pull/156))
+- Fix webpack issue, which generated incorrect code with some ancient targets (IE10)
+
+## effector-react 20.2.0
+
+- Add `effector-react/compat` module to use with Smart TV (Chrome 47) apps without babel
+
+## effector-vue 20.1.0
+
+- Add `effector-vue/compat` module to use with Smart TV (Chrome 47) apps without babel
+
 ## effector-react 20.1.1
 
 - Add `useList` for efficient rendering of store lists

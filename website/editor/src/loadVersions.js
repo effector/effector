@@ -6,7 +6,6 @@ async function main() {
   const data = await fetch('https://registry.npmjs.org/effector')
   const pkg = await data.json()
   const versions = []
-  const files = {}
   const packages = await Promise.all(
     Object.keys(pkg.versions).map(v =>
       fetch(`https://unpkg.com/effector@${v}/package.json`)

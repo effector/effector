@@ -6,10 +6,10 @@ import execa from 'execa'
 import {load} from 'js-yaml'
 import packageJson from '../../package.json'
 
-export const cliArgs: {
+export const cliArgs: {|
   current: Array<string>,
   +original: $ReadOnlyArray<string>,
-} = {
+|} = {
   current: process.argv.slice(2),
   original: process.argv.slice(2),
 }
@@ -21,7 +21,7 @@ export function dir(...paths: $ReadOnlyArray<string>): string {
 
 export async function outputPackageJSON(
   path: string,
-  config: {[key: string]: any},
+  config: {[key: string]: any, ...},
 ) {
   let fullPath
   if (path.endsWith('package.json')) fullPath = dir(path)
@@ -29,7 +29,32 @@ export async function outputPackageJSON(
   await fs.outputJSON(fullPath, config, {spaces: 2})
 }
 
+export function booleanEnv(
+  value: string | boolean | null | void,
+  defaults: boolean,
+): boolean {
+  switch (value) {
+    case 'no':
+    case 'false':
+    case false:
+      return false
+    case 'yes':
+    case 'true':
+    case true:
+      return true
+    case null:
+    case undefined:
+    default:
+      return defaults
+  }
+}
+
 export function publishScript(name: string) {
+  const onCatch = error => {
+    if (booleanEnv(process.env.PRINT_ERRORS, false)) {
+      console.error(error)
+    }
+  }
   return async() => {
     const args = [...cliArgs.original]
     if (args.length < 2) return
@@ -48,7 +73,9 @@ export function publishScript(name: string) {
           )
           console.log(stdout)
           console.error(stderr)
-        } catch {}
+        } catch (error) {
+          onCatch(error)
+        }
       } else if (argument === 'latest') {
         try {
           const {stdout, stderr} = await execa(
@@ -61,7 +88,9 @@ export function publishScript(name: string) {
           )
           console.log(stdout)
           console.error(stderr)
-        } catch {}
+        } catch (error) {
+          onCatch(error)
+        }
       }
     }
   }
@@ -93,7 +122,7 @@ export function massCopy(
 
 /* eslint-disable max-len */
 /**
- * @example ../../src/react/createComponent.js -> node_modules/effector-react/createComponent.js
+ * @example ../../src/react/createComponent.js -> effector-react/createComponent.js
  */
 export const getSourcemapPathTransform = (name: string) =>
   function sourcemapPathTransform(relativePath: string) {
@@ -101,7 +130,7 @@ export const getSourcemapPathTransform = (name: string) =>
     if (extname(packagePath) !== '') {
       packagePath = dirname(packagePath)
     }
-    return join(`node_modules/${name}`, relative(packagePath, relativePath))
+    return `${name}/${relative(packagePath, relativePath)}`
   }
 
 export async function loadYaml(url: string) {
@@ -112,8 +141,9 @@ export async function loadYaml(url: string) {
 export function validateConfig(
   obj: any,
 ): {
-  categories: Array<{name: string, description: string}>,
-  packages: Array<{name: string, version: string, category: string}>,
+  categories: Array<{|name: string, description: string|}>,
+  packages: Array<{|name: string, version: string, category: string|}>,
+  ...
 } {
   return obj
 }

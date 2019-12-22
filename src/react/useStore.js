@@ -12,7 +12,7 @@ import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 
 const stateReducer = (_: any, payload: any) => payload
 
-type ReactSubscription = Subscription & {active: boolean}
+type ReactSubscription = Subscription & {active: boolean, ...}
 
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throw Error('expect useStore argument to be a store')

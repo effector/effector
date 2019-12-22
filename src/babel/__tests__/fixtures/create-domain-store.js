@@ -11,3 +11,12 @@ const d = domain.store('h', null)
 //$off
 const e = domain.store('h', 4234)
 const f = domain.store('h', {})
+
+const aAlias = domain.createStore('bar')
+const bAlias = domain.createStore('h', {option: 'test', ['na' + 'me']: 'LOL'})
+const cAlias = domain.createStore('h', {name: 'testAlias'})
+//$off
+const dAlias = domain.createStore('h', null)
+//$off
+const eAlias = domain.createStore('h', 4234)
+const fAlias = domain.createStore('h', {})

@@ -17,3 +17,5 @@ tools/builder.js
 **/examples/**
 **/packages/**
 src/model-gen/**
+website/editor/src/mode/javascript.js
+website/editor/src/mode/jsx.js

@@ -56,12 +56,12 @@ declare module 'lit-html' {
    * A sentinel value that signals that a value was handled by a directive and
    * should not be written to the DOM.
    */
-  declare export var noChange: {[key: string]: any}
+  declare export var noChange: {[key: string]: any, ...}
 
   /**
    * A sentinel value that signals a NodePart to fully clear its content.
    */
-  declare export var nothing: {}
+  declare export var nothing: {...}
   declare export type Primitive =
     | null
     | void
@@ -235,12 +235,14 @@ declare module 'lit-html' {
     | {
         type: 'node',
         index: number,
+        ...
       }
     | {
         type: 'attribute',
         index: number,
         name: string,
         strings: string[],
+        ...
       }
   declare export var isTemplatePartActive: (part: TemplatePart) => boolean
   declare export var createMarker: () => Comment

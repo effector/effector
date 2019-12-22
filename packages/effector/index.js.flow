@@ -14,7 +14,7 @@ export type mixed_non_void =
   | string
   | number
   | boolean
-  | {}
+  | {...}
   | $ReadOnlyArray<mixed>
 
 declare export var Kind: {|
@@ -31,9 +31,22 @@ export type Subscription = {
   unsubscribe(): void,
   ...
 }
-export interface Unit<T> {
+interface CovariantUnit<+T> {
   +kind: kind;
 }
+interface ContravariantUnit<-T> {
+  +kind: kind;
+}
+export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+  +kind: kind;
+}
+
+export type CompositeName = {|
+  shortName: string,
+  fullName: string,
+  path: Array<string>,
+|}
+
 declare export class Event<Payload> implements Unit<Payload> {
   (payload: Payload): Payload;
   +kind: kind;
@@ -51,6 +64,10 @@ declare export class Event<Payload> implements Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription;
   thru<U>(fn: (event: Event<Payload>) => U): U;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  sid: string | null;
+  shortName: string;
 }
 
 declare export class Effect<Params, Done, Fail = Error>
@@ -87,6 +104,10 @@ declare export class Effect<Params, Done, Fail = Error>
   map<T>(fn: (params: Params) => T): Event<T>;
   subscribe(observer: Observer<Params>): Subscription;
   getType(): string;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  sid: string | null;
+  shortName: string;
 }
 
 declare export class Store<State> implements Unit<State> {
@@ -111,8 +132,11 @@ declare export class Store<State> implements Unit<State> {
     watcher: (state: State, payload: E) => any,
   ): Subscription;
   thru<U>(fn: (store: Store<State>) => U): U;
-  shortName: string;
   defaultState: State;
+  domainName?: CompositeName;
+  compositeName: CompositeName;
+  sid: string | null;
+  shortName: string;
 }
 
 declare export var is: {|
@@ -138,19 +162,60 @@ declare export class Domain {
   ): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
   event<Payload>(name?: string): Event<Payload>;
+  event<Payload>(config: {name?: string, sid?: string, ...}): Event<Payload>;
+  createEvent<Payload>(name?: string): Event<Payload>;
+  createEvent<Payload>(config: {
+    name?: string,
+    sid?: string,
+    ...
+  }): Event<Payload>;
   effect<Params, Done, Fail>(
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done,
+      sid?: string,
       ...
     },
   ): Effect<Params, Done, Fail>;
+  effect<Params, Done, Fail>(config: {
+    handler?: (params: Params) => Promise<Done> | Done,
+    sid?: string,
+    name?: string,
+    ...
+  }): Effect<Params, Done, Fail>;
+  createEffect<Params, Done, Fail>(
+    name?: string,
+    config?: {
+      handler?: (params: Params) => Promise<Done> | Done,
+      sid?: string,
+      ...
+    },
+  ): Effect<Params, Done, Fail>;
+  createEffect<Params, Done, Fail>(config: {
+    handler?: (params: Params) => Promise<Done> | Done,
+    sid?: string,
+    name?: string,
+    ...
+  }): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
+  createDomain(name?: string): Domain;
   store<State>(
     defaultState: State,
-    config?: {name?: string, ...},
+    config?: {name?: string, sid?: string, ...},
   ): Store<State>;
+  createStore<State>(
+    defaultState: State,
+    config?: {name?: string, sid?: string, ...},
+  ): Store<State>;
+  sid: string | null;
+  shortName: string;
   getType(): string;
+  history: {
+    domains: $ReadOnlySet<Domain>,
+    stores: $ReadOnlySet<Store<any>>,
+    effects: $ReadOnlySet<Effect<any, any, any>>,
+    events: $ReadOnlySet<Event<any>>,
+  };
 }
 export type ID = string
 export type StateRef = {|
@@ -163,7 +228,6 @@ export type Cmd =
   | Run
   | Filter
   | Compute
-  | Tap
   | Barrier
 
 export type Barrier = {|
@@ -201,25 +265,21 @@ export type Compute = {|
     fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |},
 |}
-export type Tap = {|
-  +id: ID,
-  +type: 'tap',
-  +data: {|
-    fn: (data: any, scope: {[field: string]: any, ...}) => any,
-  |},
-|}
 export type Step = /*::interface extends Unit<any>*/ {
   +next: Array<Step>,
   +seq: Array<Cmd>,
   +scope: {[field: string]: any, ...},
+  +meta: Object,
+  +family: {|
+    +type: 'regular' | 'crosslink',
+    +links: Step[],
+    +owners: Step[],
+  |},
 }
 declare export var step: {|
   compute(data: {|
     fn: (data: any, scope: {[field: string]: any, ...}) => any,
   |}): Compute,
-  tap(data: {|
-    fn: (data: any, scope: {[field: string]: any, ...}) => any,
-  |}): Tap,
   filter(data: {|
     fn: (data: any, scope: {[field: string]: any, ...}) => boolean,
   |}): Filter,
@@ -231,8 +291,8 @@ declare export var step: {|
   |}): Run,
 |}
 declare export function forward<T>(opts: {|
-  +from: Unit<T>,
-  +to: Unit<T>,
+  +from: CovariantUnit<T> | $ReadOnlyArray<CovariantUnit<T>>,
+  +to: Unit<T> | $ReadOnlyArray<Unit<T>>,
 |}): Subscription
 
 declare export function merge<T>(events: $ReadOnlyArray<Unit<T>>): Event<T>
@@ -252,33 +312,40 @@ declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
 declare export function createEvent<E>(eventName?: string): Event<E>
-declare export function createEvent<E>(config: {name?: string,...}): Event<E>
+declare export function createEvent<E>(config: {
+  name?: string,
+  sid?: string,
+  ...
+}): Event<E>
 
 declare export function createEffect<Params, Done, Fail>(
   effectName?: string,
   config?: {
     handler?: (params: Params) => Promise<Done> | Done,
+    sid?: string,
     ...
   },
 ): Effect<Params, Done, Fail>
 declare export function createEffect<Params, Done, Fail>(config: {
   name?: string,
   handler?: (params: Params) => Promise<Done> | Done,
+  sid?: string,
   ...
 }): Effect<Params, Done, Fail>
 
 declare export function createStore<State>(
   defaultState: State,
-  config?: {name?: string, ...},
+  config?: {name?: string, sid?: string, ...},
 ): Store<State>
 declare export function setStoreName<State>(
   store: Store<State>,
   name: string,
 ): void
 
-declare export function createStoreObject<
-  State: {+[key: string]: Store<any> | any, ...},
->(
+type StoreObject = {+[key: string]: Store<any> | any, ...}
+type StoreTuple = $ReadOnlyArray<Store<any> | any>
+
+declare export function createStoreObject<State: StoreObject>(
   obj: State,
 ): Store<
   $ObjMap<
@@ -304,12 +371,10 @@ declare export function split<
   source: Unit<S>,
   cases: Obj,
 ): $ObjMap<
-  {...Obj, __: (payload: S) => boolean},
+  {...Obj, __: (payload: S) => boolean, ...},
   (h: (payload: S) => boolean) => Event<S>,
 >
-declare export function restoreObject<
-  State: {+[key: string]: Store<any> | any, ...},
->(
+declare export function restoreObject<State: StoreObject>(
   state: State,
 ): $ObjMap<
   State,
@@ -332,7 +397,7 @@ declare export function restore<Done>(
   defaultState: Done,
 ): Store<Done>
 declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {+[key: string]: Store<any> | any, ...}>(
+declare export function restore<State: StoreObject>(
   state: State,
 ): $ObjMap<
   State,
@@ -344,13 +409,19 @@ declare export function createDomain(domainName?: string): Domain
 declare export function sample<A>(config: {|
   +source: Unit<A>,
   +clock: Unit<any>,
-  +target?: Unit<A>,
+  +name?: string,
 |}): Unit<A>
+declare export function sample<A, U: Unit<A>>(config: {|
+  +source: Unit<A>,
+  +clock: Unit<any>,
+  +target: U,
+|}): U
 declare export function sample<A, B, C>(config: {|
   +source: Unit<A>,
   +clock: Unit<B>,
   +target?: Unit<C>,
   fn(source: A, clock: B): C,
+  +name?: string,
 |}): Unit<C>
 declare export function sample<A>(
   source: Store<A>,
@@ -374,15 +445,54 @@ declare export function sample<A, B, C>(
   source: Event<A> | Effect<A, any, any>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-): Event<A>
+): Event<C>
 declare export function sample<A, B, C>(
   source: Event<A> | Store<A> | Effect<A, any, any>,
   clock: Event<B> | Effect<B, any, any>,
   fn: (source: A, clock: B) => C,
 ): Event<C>
 
-declare export function combine<R>(fn: () => R): Store<R>
+declare export function guard<A>(config: {|
+  +source: Unit<A>,
+  +filter: Store<boolean> | ((value: A) => boolean),
+|}): Event<A>
+
+declare export function guard<A>(config: {|
+  +source: Unit<A>,
+  +filter: Store<boolean> | ((value: A) => boolean),
+  +target: Unit<A>,
+|}): Unit<A>
+
+declare export function guard<A>(
+  source: Unit<A>,
+  config: {|
+    +filter: Store<boolean> | ((value: A) => boolean),
+  |},
+): Event<A>
+
+declare export function guard<A>(
+  source: Unit<A>,
+  config: {|
+    +filter: Store<boolean> | ((value: A) => boolean),
+    +target: Unit<A>,
+  |},
+): Unit<A>
+
+declare export function combine<State: StoreObject>(
+  shape: State,
+): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
+declare export function combine<State: StoreTuple>(
+  list: State,
+): Store<$TupleMap<State, <S>(field: Store<S> | S) => S>>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
+declare export function combine<State: StoreObject, R>(
+  shape: State,
+  fn: (shape: $ObjMap<State, <S>(field: Store<S> | S) => S>) => R,
+): Store<R>
+declare export function combine<State: StoreTuple, R>(
+  list: State,
+  fn: (list: $TupleMap<State, <S>(field: Store<S> | S) => S>) => R,
+): Store<R>
 declare export function combine<A, B, R>(
   a: Store<A>,
   b: Store<B>,

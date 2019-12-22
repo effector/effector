@@ -8,6 +8,7 @@ configure({
 })
 
 import * as React from 'react'
+import {act} from 'effector/fixtures/react'
 import {createStore, createEvent} from 'effector'
 import {connect} from '..'
 
@@ -19,6 +20,7 @@ test('connect api', () => {
   class Display extends React.Component<{
     text: string,
     count: number,
+    ...
   }> {
     render() {
       return (
@@ -32,9 +34,11 @@ test('connect api', () => {
   const ConnectedDisplay = (connect(Display): any)(store.map(text => ({text})))
 
   const tree = mount(<ConnectedDisplay count={1} />)
-  expect(tree.text()).toMatchSnapshot()
-  changeText('bar')
-  expect(tree.text()).toMatchSnapshot()
+  expect(tree.text()).toMatchInlineSnapshot(`"Text: fooCounter: 1"`)
+  act(() => {
+    changeText('bar')
+  })
+  expect(tree.text()).toMatchInlineSnapshot(`"Text: barCounter: 1"`)
   tree.unmount()
 })
 
@@ -46,6 +50,7 @@ test('click counter', () => {
 
   class Display extends React.Component<{
     count: number,
+    ...
   }> {
     render() {
       return (
@@ -63,8 +68,10 @@ test('click counter', () => {
     .thru((connect(Display): any))
 
   const tree = mount(<ConnectedDisplay />)
-  expect(tree.text()).toMatchSnapshot()
-  tree.find('#increment').simulate('click')
-  expect(tree.text()).toMatchSnapshot()
+  expect(tree.text()).toMatchInlineSnapshot(`"Counter: 0Increment"`)
+  act(() => {
+    tree.find('#increment').simulate('click')
+  })
+  expect(tree.text()).toMatchInlineSnapshot(`"Counter: 1Increment"`)
   tree.unmount()
 })

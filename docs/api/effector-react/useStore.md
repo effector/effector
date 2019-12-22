@@ -18,17 +18,17 @@ Creates hook function, which subscribe to watcher, that observes changes in curr
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { createStore, createApi } from 'effector'
-import { useStore } from 'effector-react'
+import {createStore, createApi} from 'effector'
+import {useStore} from 'effector-react'
 
 const counter = createStore(0)
 
-const { increment, decrement } = createApi(counter, {
+const {increment, decrement} = createApi(counter, {
   increment: state => state + 1,
-  decrement: state => state - 1
+  decrement: state => state - 1,
 })
 
 const Counter = () => {
@@ -42,5 +42,5 @@ const Counter = () => {
   )
 }
 
-ReactDOM.render(<Counter />, document.getElementById("root"));
+ReactDOM.render(<Counter />, document.getElementById('root'))
 ```

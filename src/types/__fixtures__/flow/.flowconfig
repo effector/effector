@@ -1,0 +1,31 @@
+[ignore]
+.*/types.test.js/snapshots.js
+
+[include]
+../../../../packages/effector/index.js.flow
+../../../../packages/effector/package.json
+../../../../packages/effector-react/index.js.flow
+../../../../packages/effector-react/package.json
+../../../../packages/effector-vue/index.js.flow
+../../../../packages/effector-vue/package.json
+../../../../packages/@effector/forms/index.js.flow
+../../../../packages/@effector/forms/package.json
+../../../../packages/@effector/redux-adapter/index.js.flow
+../../../../packages/@effector/redux-adapter/package.json
+../../setupLocation.js
+
+[libs]
+../../../../node_modules/@babel/types/lib/index.js.flow
+../../../../flow-typed/npm/redux_v4.x.x.js
+../../../../flow-typed/jest.js
+
+[lints]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\@ts-ignore
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/../../../../packages/effector'
+module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/../../../../packages/effector-react'
+module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/../../../../packages/effector-vue'
+module.name_mapper='^\@effector/\(.+\)$' -> '<PROJECT_ROOT>/../../../../packages/\@effector/\1'
+
+[strict]

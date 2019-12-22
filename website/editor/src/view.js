@@ -8,6 +8,7 @@ import debounce from 'lodash.debounce'
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
 import {VersionLink} from './components/VersionLink'
+import {SidebarHeader} from './components/SidebarHeader'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
 import SecondanaryTabs from './components/SecondanaryTabs'
@@ -15,18 +16,18 @@ import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {isDesktopChanges, tab} from './tabs/domain'
 import {TabsView} from './tabs/view'
+import {PrettifyButton} from './settings/view'
 import {mode} from './mode/domain'
 import {
-  sourceCode,
-  changeSources,
   performLint,
-  codeError,
-  stats,
-  version,
-  codeMarkLine,
-  codeCursorActivity,
+  changeSources,
   codeSetCursor,
-} from './domain'
+  codeCursorActivity,
+  codeMarkLine,
+} from './editor'
+import {version, sourceCode, codeError} from './editor/state'
+
+import {stats} from './realm/state'
 
 const OutlineView = createComponent(
   {
@@ -46,7 +47,7 @@ const OutlineView = createComponent(
 const ErrorsView = createComponent(
   codeError,
   ({}, {isError, error, stackFrames}) => (
-    <Errors isError={isError} error={error} stackFrames={stackFrames} />
+    <Errors isError={isError} error={(error: any)} stackFrames={stackFrames} />
   ),
 )
 
@@ -88,6 +89,9 @@ export default (
     <VersionLinkView />
     <OutlineView />
     <CodeView />
+    <SidebarHeader>
+      <PrettifyButton />
+    </SidebarHeader>
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />

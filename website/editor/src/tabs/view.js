@@ -1,16 +1,58 @@
 // @flow
 
 import * as React from 'react'
-import {useStore} from 'effector-react'
+import {useStore, useStoreMap} from 'effector-react'
 import {tab as _tab, tabApi} from './domain'
 import {GraphiteView} from '../graphite/view'
-import {Settings, flowToggle as _flowToggle} from '../settings'
+import {Settings} from '../settings/view'
+import {flowToggle as _flowToggle} from '../settings/state'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
 import {TabHeader, TabHeaderList} from './styled'
 import {mediaQuery} from '../components/mediaQuery'
 
 const SmallScreens = mediaQuery('(max-width: 699px)')
+
+const tabs = {
+  editor: {
+    select: tabApi.showEditor,
+    title: 'Editor',
+  },
+  outline: {
+    select: tabApi.showOutline,
+    title: 'Outline',
+  },
+  errors: {
+    select: tabApi.showErrors,
+    title: 'Errors',
+  },
+  dom: {
+    select: tabApi.showDOM,
+    title: 'DOM',
+  },
+  share: {
+    select: tabApi.showShare,
+    title: 'Share',
+  },
+  settings: {
+    select: tabApi.showSettings,
+    title: 'Settings',
+  },
+}
+
+const TabHeaderTemplate = ({name}: {name: $Keys<typeof tabs>, ...}) => {
+  const isActive = useStoreMap({
+    store: _tab,
+    keys: [name],
+    fn: (activeTab, [tab]) => activeTab === tab,
+  })
+  const {select, title} = tabs[name]
+  return (
+    <TabHeader onClick={select} isActive={isActive}>
+      {title}
+    </TabHeader>
+  )
+}
 
 export const TabsView = () => {
   const tab = useStore(_tab)
@@ -19,30 +61,13 @@ export const TabsView = () => {
     <>
       <TabHeaderList className="header-tabs">
         <SmallScreens>
-          <TabHeader onClick={tabApi.showEditor} isActive={tab === 'editor'}>
-            Editor
-          </TabHeader>
-          <TabHeader onClick={tabApi.showOutline} isActive={tab === 'outline'}>
-            Outline
-          </TabHeader>
+          <TabHeaderTemplate name="editor" />
+          <TabHeaderTemplate name="outline" />
         </SmallScreens>
-        {flowToggle && (
-          <TabHeader onClick={tabApi.showErrors} isActive={tab === 'errors'}>
-            Errors
-          </TabHeader>
-        )}
-        <TabHeader onClick={tabApi.showDOM} isActive={tab === 'dom'}>
-          DOM
-        </TabHeader>
-        <TabHeader onClick={tabApi.showShare} isActive={tab === 'share'}>
-          Share
-        </TabHeader>
-        <TabHeader onClick={tabApi.showSettings} isActive={tab === 'settings'}>
-          Settings
-        </TabHeader>
-        <TabHeader onClick={tabApi.showDescription} isActive={tab === 'description'}>
-          Description
-        </TabHeader>
+        {flowToggle && <TabHeaderTemplate name="errors" />}
+        <TabHeaderTemplate name="dom" />
+        <TabHeaderTemplate name="share" />
+        <TabHeaderTemplate name="settings" />
       </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div

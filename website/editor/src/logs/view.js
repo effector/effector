@@ -1,13 +1,14 @@
 //@flow
 
 import * as React from 'react'
-import {logs} from './domain'
-import Console from '../components/Console'
 import {createComponent} from 'effector-react'
+
+import {logs} from './state'
+import Console from '../components/Console'
 
 export const LogsView = createComponent<
   {|
-    style: any,
+    style?: any,
   |},
   Array<{|
     data: Array<any>,
@@ -15,5 +16,6 @@ export const LogsView = createComponent<
     method: *,
   |}>,
 >(logs, ({style}, logs) => (
+  //$todo
   <Console className="console" style={style} logs={logs} />
 ))

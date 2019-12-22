@@ -1,9 +1,31 @@
 //@flow
 
-import {type Store, createStoreObject} from './store'
-import {is} from './stdlib'
+import type {Store} from './unit.h'
+import {createStore} from './createUnit'
+import {step, createStateRef, readRef, type StateRef} from './stdlib'
+import {is} from './is'
+import {unitObjectName} from './naming'
+import {createLinkNode} from './forward'
 
 //eslint-disable-next-line no-unused-vars
+declare export function combine<State: $ReadOnlyArray<Store<any> | any>>(
+  obj: State,
+): Store<
+  $TupleMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
+declare export function combine<State: {-[key: string]: Store<any> | any, ...}>(
+  obj: State,
+): Store<
+  $ObjMap<
+    State,
+    //prettier-ignore
+    <S>(field: Store<S> | S) => S,
+  >,
+>
 declare export function combine<R>(fn: () => R): Store<R>
 declare export function combine<A, R>(a: Store<A>, fn: (a: A) => R): Store<R>
 declare export function combine<A, B, R>(
@@ -155,7 +177,86 @@ export function combine(...args: Array<Store<any>>): Store<any> {
     }
   }
   //$off
-  return createStoreObject(structStoreShape, handler)
+  const mergedStore = Array.isArray(structStoreShape)
+    ? storeCombination(structStoreShape, list => list.slice(), [])
+    : storeCombination(structStoreShape, obj => Object.assign({}, obj), {})
+  return handler ? mergedStore.map(handler) : mergedStore
 }
 
 const spreadArgs = fn => list => fn(...list)
+
+type CombinationScope = {
+  key: any,
+  target: StateRef,
+  clone(value: any): any,
+  isFresh: StateRef,
+  ...
+}
+
+const storeCombination = (obj: any, clone: Function, defaultState: any) => {
+  const stateNew = clone(defaultState)
+  const store = createStore(stateNew, {
+    //TODO: add location
+    name: unitObjectName(obj),
+  })
+  const target = store.stateRef
+  const isFresh = createStateRef(true)
+  const node = [
+    step.check.defined(),
+    step.mov({
+      store: target,
+      to: 'a',
+    }),
+    //prettier-ignore
+    step.filter({
+      fn: (upd, {key}, {a}) => upd !== a[key],
+    }),
+    step.mov({
+      store: isFresh,
+      to: 'b',
+    }),
+    step.compute({
+      fn(upd, {clone, key}: CombinationScope, reg) {
+        if (reg.b) {
+          reg.a = clone(reg.a)
+        }
+        reg.a[key] = upd
+      },
+    }),
+    step.mov({
+      from: 'a',
+      target,
+    }),
+    step.mov({
+      from: 'value',
+      store: false,
+      target: isFresh,
+    }),
+    step.barrier({priority: 'barrier'}),
+    step.mov({
+      from: 'value',
+      store: true,
+      target: isFresh,
+    }),
+    step.mov({store: target}),
+  ]
+
+  for (const key in obj) {
+    const child = obj[key]
+    if (!is.store(child)) {
+      stateNew[key] = defaultState[key] = child
+      continue
+    }
+    defaultState[key] = child.defaultState
+    stateNew[key] = child.getState()
+    createLinkNode(child, store, {
+      scope: {key, clone},
+      node,
+      meta: {op: 'combine'},
+    })
+  }
+
+  ;(store: any).defaultShape = obj
+  ;(store: any).defaultState = defaultState
+  return store
+}

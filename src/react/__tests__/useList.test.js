@@ -1,16 +1,14 @@
 //@flow
 
 import * as React from 'react'
-//$todo
-import {render, cleanup, act} from 'react-testing-library'
+import {render, container, act} from 'effector/fixtures/react'
 
-import {createStore, createEvent} from 'effector'
+import {createStore, createEvent, restore} from 'effector'
 
 import {useList} from '../useList'
+import {useStore} from '../useStore'
 
-afterEach(cleanup)
-
-it('should render store items', () => {
+it('should render store items', async() => {
   const list = createStore(['foo', 'bar', 'baz'])
 
   const List = () => (
@@ -24,7 +22,7 @@ it('should render store items', () => {
     </div>
   )
 
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -43,7 +41,7 @@ it('should render store items', () => {
   `)
 })
 
-it('should handle updates without dull re-renders', () => {
+it('should handle updates without dull re-renders', async() => {
   const fn = jest.fn()
   const update = createEvent()
   const list = createStore(['foo', 'bar', 'baz']).on(
@@ -68,7 +66,7 @@ it('should handle updates without dull re-renders', () => {
       })}
     </div>
   )
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -86,7 +84,7 @@ it('should handle updates without dull re-renders', () => {
     </div>
   `)
   expect(fn).toBeCalledTimes(3)
-  act(() => {
+  await act(async() => {
     update({key: 1, value: 'update'})
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -108,7 +106,7 @@ it('should handle updates without dull re-renders', () => {
   expect(fn).toBeCalledTimes(4)
 })
 
-it('should handle inserts without dull re-renders', () => {
+it('should handle inserts without dull re-renders', async() => {
   const fn = jest.fn()
   const insert = createEvent()
   const list = createStore(['foo', 'bar', 'baz']).on(insert, (list, value) => [
@@ -130,7 +128,7 @@ it('should handle inserts without dull re-renders', () => {
     </div>
   )
 
-  const {container} = render(<List />)
+  await render(<List />)
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <div>
@@ -148,7 +146,7 @@ it('should handle inserts without dull re-renders', () => {
     </div>
   `)
   expect(fn).toBeCalledTimes(3)
-  act(() => {
+  await act(async() => {
     insert('update')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -172,4 +170,69 @@ it('should handle inserts without dull re-renders', () => {
     </div>
   `)
   expect(fn).toBeCalledTimes(4)
+})
+
+it('should update when keys are changed', async() => {
+  const changeDependency = createEvent()
+  const list = createStore(['foo', 'bar', 'baz'])
+  const dependency = restore(changeDependency, 'dep')
+
+  const List = () => {
+    const dep = useStore(dependency)
+    return (
+      <div>
+        {useList(list, {
+          keys: [dep],
+          fn: item => (
+            <div>
+              {item} {dep}
+            </div>
+          ),
+        })}
+      </div>
+    )
+  }
+
+  await render(<List />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        foo
+         
+        dep
+      </div>
+      <div>
+        bar
+         
+        dep
+      </div>
+      <div>
+        baz
+         
+        dep
+      </div>
+    </div>
+  `)
+  await act(async() => {
+    changeDependency('changed')
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <div>
+        foo
+         
+        changed
+      </div>
+      <div>
+        bar
+         
+        changed
+      </div>
+      <div>
+        baz
+         
+        changed
+      </div>
+    </div>
+  `)
 })

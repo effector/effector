@@ -6,7 +6,7 @@
  * Repo: http://github.com/joarwilk/flowgen
  */
 
-declare var fakerStatic: Faker$FakerStatic;
+declare var fakerStatic: Faker$FakerStatic
 declare interface Faker$FakerStatic {
   locale: string;
   setLocale(locale: string): void;
@@ -26,7 +26,8 @@ declare interface Faker$FakerStatic {
     state(useAbbr?: boolean): string,
     stateAbbr(): string,
     latitude(): string,
-    longitude(): string
+    longitude(): string,
+    ...
   };
   commerce: {
     color(): string,
@@ -35,7 +36,8 @@ declare interface Faker$FakerStatic {
     price(min?: number, max?: number, dec?: number, symbol?: string): string,
     productAdjective(): string,
     productMaterial(): string,
-    product(): string
+    product(): string,
+    ...
   };
   company: {
     suffixes(): string[],
@@ -48,13 +50,15 @@ declare interface Faker$FakerStatic {
     catchPhraseNoun(): string,
     bsAdjective(): string,
     bsBuzz(): string,
-    bsNoun(): string
+    bsNoun(): string,
+    ...
   };
   database: {
     column(): string,
     type(): string,
     collation(): string,
-    engine(): string
+    engine(): string,
+    ...
   };
   date: {
     past(years?: number, refDate?: string | Date): Date,
@@ -64,12 +68,15 @@ declare interface Faker$FakerStatic {
     soon(days?: number): Date,
     month(options?: {
       abbr?: boolean,
-      context?: boolean
+      context?: boolean,
+      ...
     }): string,
     weekday(options?: {
       abbr?: boolean,
-      context?: boolean
-    }): string
+      context?: boolean,
+      ...
+    }): string,
+    ...
   };
   fake(str: string): string;
   finance: {
@@ -84,7 +91,8 @@ declare interface Faker$FakerStatic {
     bitcoinAddress(): string,
     ethereumAddress(): string,
     iban(formatted?: boolean): string,
-    bic(): string
+    bic(): string,
+    ...
   };
   hacker: {
     abbreviation(): string,
@@ -92,7 +100,8 @@ declare interface Faker$FakerStatic {
     noun(): string,
     verb(): string,
     ingverb(): string,
-    phrase(): string
+    phrase(): string,
+    ...
   };
   helpers: {
     randomize<T>(array: T[]): T,
@@ -105,13 +114,15 @@ declare interface Faker$FakerStatic {
     mustache(
       str: string,
       data: {
-        [key: string]: string | ((substring: string, ...args: any[]) => string)
-      }
+        [key: string]: string | ((substring: string, ...args: any[]) => string),
+        ...
+      },
     ): string,
     createCard(): Faker$Card,
     contextualCard(): Faker$ContextualCard,
     userCard(): Faker$UserCard,
-    createTransaction(): Faker$Transaction
+    createTransaction(): Faker$Transaction,
+    ...
   };
   image: {
     image(): string,
@@ -121,7 +132,7 @@ declare interface Faker$FakerStatic {
       height?: number,
       category?: string,
       randomize?: boolean,
-      https?: boolean
+      https?: boolean,
     ): string,
     abstract(width?: number, height?: number): string,
     animals(width?: number, height?: number): string,
@@ -136,7 +147,8 @@ declare interface Faker$FakerStatic {
     sports(width?: number, height?: number): string,
     technics(width?: number, height?: number): string,
     transport(width?: number, height?: number): string,
-    dataUri(width?: number, height?: number): string
+    dataUri(width?: number, height?: number): string,
+    ...
   };
   internet: {
     avatar(): string,
@@ -154,15 +166,16 @@ declare interface Faker$FakerStatic {
     color(
       baseRed255?: number,
       baseGreen255?: number,
-      baseBlue255?: number
+      baseBlue255?: number,
     ): string,
     mac(): string,
     password(
       len?: number,
       memorable?: boolean,
       pattern?: string | RegExp,
-      prefix?: string
-    ): string
+      prefix?: string,
+    ): string,
+    ...
   };
   lorem: {
     word(): string,
@@ -173,7 +186,8 @@ declare interface Faker$FakerStatic {
     paragraph(sentenceCount?: number): string,
     paragraphs(paragraphCount?: number, separator?: string): string,
     text(times?: number): string,
-    lines(lineCount?: number): string
+    lines(lineCount?: number): string,
+    ...
   };
   name: {
     firstName(gender?: number): string,
@@ -185,33 +199,38 @@ declare interface Faker$FakerStatic {
     title(): string,
     jobDescriptor(): string,
     jobArea(): string,
-    jobType(): string
+    jobType(): string,
+    ...
   };
   phone: {
     phoneNumber(format?: string): string,
     phoneNumberFormat(phoneFormatsArrayIndex?: number): string,
-    phoneFormats(): string
+    phoneFormats(): string,
+    ...
   };
   random: {
     number(max: number): number,
     number(options?: {
       min?: number,
       max?: number,
-      precision?: number
+      precision?: number,
+      ...
     }): number,
     arrayElement(): string,
     arrayElement<T>(array: T[]): T,
     objectElement(
       object?: {
-        [key: string]: any
+        [key: string]: any,
+        ...
       },
-      field?: "key"
+      field?: 'key',
     ): string,
     objectElement<T>(
       object?: {
-        [key: string]: T
+        [key: string]: T,
+        ...
       },
-      field?: any
+      field?: any,
     ): T,
     uuid(): string,
     boolean(): boolean,
@@ -220,7 +239,8 @@ declare interface Faker$FakerStatic {
     image(): string,
     locale(): string,
     alphaNumeric(count?: number): string,
-    hexaDecimal(count?: number): string
+    hexaDecimal(count?: number): string,
+    ...
   };
   system: {
     fileName(ext?: string, type?: string): string,
@@ -232,7 +252,8 @@ declare interface Faker$FakerStatic {
     fileExt(mimeType: string): string,
     directoryPath(): string,
     filePath(): string,
-    semver(): string
+    semver(): string,
+    ...
   };
   seed(value: number): void;
 }
@@ -317,117 +338,117 @@ declare interface Faker$Transaction {
   type: string;
   account: string;
 }
-declare module "faker" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/az" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/az' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/cz" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/cz' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/de" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/de' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/de_AT" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/de_AT' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/de_CH" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/de_CH' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_AU" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_AU' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_BORK" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_BORK' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_CA" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_CA' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_GB" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_GB' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_IE" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_IE' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_IND" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_IND' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_US" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_US' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/en_au_ocker" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/en_au_ocker' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/es" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/es' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/es_MX" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/es_MX' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/fa" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/fa' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/fr" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/fr' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/fr_CA" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/fr_CA' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/ge" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/ge' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/id_ID" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/id_ID' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/it" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/it' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/ja" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/ja' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/ko" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/ko' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/nb_NO" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/nb_NO' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/nep" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/nep' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/nl" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/nl' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/pl" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/pl' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/pt_BR" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/pt_BR' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/ru" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/ru' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/sk" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/sk' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/sv" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/sv' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/tr" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/tr' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/uk" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/uk' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/vi" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/vi' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/zh_CN" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/zh_CN' {
+  declare module.exports: typeof fakerStatic
 }
-declare module "faker/locale/zh_TW" {
-  declare module.exports: typeof fakerStatic;
+declare module 'faker/locale/zh_TW' {
+  declare module.exports: typeof fakerStatic
 }

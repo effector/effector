@@ -31,6 +31,7 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
     // Error handling
     const error = this.typeCheck(log)
     if (error) return error
+    if (!log.data) return error
 
     // Chrome formatting
     if (
@@ -48,6 +49,8 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
     ) {
       return <ErrorPanel log={log} />
     }
+
+    if (!log.data) return error
 
     // Normal inspector
     const quoted = typeof log.data[0] !== 'string'

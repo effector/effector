@@ -34,6 +34,7 @@ class ErrorPanel extends React.PureComponent<Props, any> {
     }
 
     if (!otherErrorLines) {
+      //$todo
       return <Linkify>{log.data.join(' ')}</Linkify>
     }
 

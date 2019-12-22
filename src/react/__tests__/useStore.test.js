@@ -1,16 +1,13 @@
 //@flow
 
 import * as React from 'react'
-//$todo
-import {render, cleanup, act} from 'react-testing-library'
-import {createStore, createEvent, createEffect} from 'effector'
+import {render, container, act} from 'effector/fixtures/react'
+import {createStore, createEvent, createEffect, createDomain} from 'effector'
 import {useStore, useStoreMap} from '../useStore'
 import {argumentHistory} from 'effector/fixtures'
 
-afterEach(cleanup)
-
 describe('useStore', () => {
-  it('should render', () => {
+  it('should render', async() => {
     const store = createStore('foo')
     const changeText = createEvent('change text')
     store.on(changeText, (_, e) => e)
@@ -20,17 +17,16 @@ describe('useStore', () => {
       return <span>Store text: {state}</span>
     }
 
-    const {container} = render(<Display />)
+    await render(<Display />)
     expect(container.firstChild).toMatchInlineSnapshot(`
       <span>
         Store text: 
         foo
       </span>
     `)
-    act(() => {
+    await act(async() => {
       changeText('bar')
     })
-    // flushEffects()
     expect(container.firstChild).toMatchInlineSnapshot(`
       <span>
         Store text: 
@@ -39,21 +35,27 @@ describe('useStore', () => {
     `)
   })
 
-  it('should throw', () => {
+  it('should throw', async() => {
+    const fn = jest.fn()
     const ErrorDisplay = props => {
-      //$off
-      const state = useStore(undefined)
-      return <span>Store text: {state}</span>
+      try {
+        //$off
+        useStore(undefined)
+      } catch (error) {
+        fn(error.message)
+      }
+      return <span>Store text</span>
     }
 
-    expect(() => {
-      render(<ErrorDisplay />)
-    }).toThrowErrorMatchingInlineSnapshot(
-      `"expect useStore argument to be a store"`,
-    )
+    await render(<ErrorDisplay />)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        "expect useStore argument to be a store",
+      ]
+    `)
   })
 
-  it('should retrigger only once after store change', () => {
+  it('should retrigger only once after store change', async() => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
@@ -74,13 +76,13 @@ describe('useStore', () => {
       return <Target store={store} />
     }
 
-    render(<Display />)
+    await render(<Display />)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "A",
       ]
     `)
-    act(() => {
+    await act(async() => {
       changeCurrentStore(storeB)
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -112,99 +114,215 @@ describe('useStore', () => {
         </>
       )
     }
-    render(<App />)
-    await new Promise(rs => setTimeout(rs, 500))
+
+    await act(async() => {
+      await render(<App />)
+      await new Promise(rs => setTimeout(rs, 500))
+    })
     expect(argumentHistory(fn)).toEqual([false, true, false])
   })
-})
-
-test('useStoreMap', () => {
-  const removeUser = createEvent()
-  const changeUserAge = createEvent()
-  const users = createStore({
-    alex: {age: 20, name: 'Alex'},
-    john: {age: 30, name: 'John'},
-  })
-  const userNames = createStore(['alex', 'john']).on(
-    removeUser,
-    (list, username) => list.filter(item => item !== username),
-  )
-  users.on(removeUser, (users, nickname) => {
-    const upd = {...users}
-    delete upd[nickname]
-    return upd
-  })
-  users.on(changeUserAge, (users, {nickname, age}) => ({
-    ...users,
-    [nickname]: {...users[nickname], age},
-  }))
-
-  const Card = ({nickname}) => {
-    const {name, age} = useStoreMap({
-      store: users,
-      keys: [nickname],
-      fn: (users, [nickname]) => users[nickname],
+  it('should support domains', async() => {
+    const domain = createDomain()
+    const toggle = domain.event()
+    const inc = domain.event()
+    const show = domain
+      .store('A')
+      .on(toggle, current => (current === 'A' ? 'B' : 'A'))
+    const a = domain.store(10).on(inc, x => x + 1)
+    const b = domain.store(20).on(inc, x => x + 1)
+    const View = () => {
+      const current = useStore(show)
+      const selectedStore = current === 'A' ? a : b
+      const value = useStore(selectedStore)
+      return <div>{value}</div>
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        10
+      </div>
+    `)
+    await act(async() => {
+      inc()
     })
-    return (
-      <li>
-        {name}: {age}
-      </li>
-    )
-  }
-
-  const Cards = () => {
-    const userList = useStore(userNames)
-    return (
-      <ul>
-        {userList.map(name => (
-          <Card nickname={name} key={name} />
-        ))}
-      </ul>
-    )
-  }
-  const {container} = render(<Cards />)
-  expect(container.firstChild).toMatchInlineSnapshot(`
-    <ul>
-      <li>
-        Alex
-        : 
-        20
-      </li>
-      <li>
-        John
-        : 
-        30
-      </li>
-    </ul>
-  `)
-  act(() => {
-    changeUserAge({nickname: 'alex', age: 21})
-  })
-
-  expect(container.firstChild).toMatchInlineSnapshot(`
-    <ul>
-      <li>
-        Alex
-        : 
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        11
+      </div>
+    `)
+    await act(async() => {
+      toggle()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
         21
-      </li>
-      <li>
-        John
-        : 
-        30
-      </li>
-    </ul>
-  `)
-  act(() => {
-    removeUser('alex')
+      </div>
+    `)
+    await act(async() => {
+      inc()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        22
+      </div>
+    `)
+    await act(async() => {
+      toggle()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        12
+      </div>
+    `)
   })
-  expect(container.firstChild).toMatchInlineSnapshot(`
-    <ul>
-      <li>
-        John
-        : 
-        30
-      </li>
-    </ul>
-  `)
+})
+describe('useStoreMap', () => {
+  it('should render', async() => {
+    const removeUser = createEvent()
+    const changeUserAge = createEvent()
+    const users = createStore({
+      alex: {age: 20, name: 'Alex'},
+      john: {age: 30, name: 'John'},
+    })
+    const userNames = createStore(['alex', 'john']).on(
+      removeUser,
+      (list, username) => list.filter(item => item !== username),
+    )
+    users.on(removeUser, (users, nickname) => {
+      const upd = {...users}
+      delete upd[nickname]
+      return upd
+    })
+    users.on(changeUserAge, (users, {nickname, age}) => ({
+      ...users,
+      [nickname]: {...users[nickname], age},
+    }))
+
+    const Card = ({nickname}) => {
+      const {name, age} = useStoreMap({
+        store: users,
+        keys: [nickname],
+        fn: (users, [nickname]) => users[nickname],
+      })
+      return (
+        <li>
+          {name}: {age}
+        </li>
+      )
+    }
+
+    const Cards = () => {
+      const userList = useStore(userNames)
+      return (
+        <ul>
+          {userList.map(name => (
+            <Card nickname={name} key={name} />
+          ))}
+        </ul>
+      )
+    }
+    await render(<Cards />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          Alex
+          : 
+          20
+        </li>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+    await act(async() => {
+      changeUserAge({nickname: 'alex', age: 21})
+    })
+
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          Alex
+          : 
+          21
+        </li>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+    await act(async() => {
+      removeUser('alex')
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <ul>
+        <li>
+          John
+          : 
+          30
+        </li>
+      </ul>
+    `)
+  })
+  it('should support domains', async() => {
+    const domain = createDomain()
+    const toggle = domain.event()
+    const inc = domain.event()
+    const show = domain
+      .store('A')
+      .on(toggle, current => (current === 'A' ? 'B' : 'A'))
+    const a = domain.store(10).on(inc, x => x + 1)
+    const b = domain.store(20).on(inc, x => x + 1)
+    const View = () => {
+      const current = useStore(show)
+      const selectedStore = current === 'A' ? a : b
+      const value = useStoreMap({
+        store: selectedStore,
+        keys: [selectedStore],
+        fn: x => x,
+      })
+      return <div>{value}</div>
+    }
+    await render(<View />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        10
+      </div>
+    `)
+    await act(async() => {
+      inc()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        11
+      </div>
+    `)
+    await act(async() => {
+      toggle()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        21
+      </div>
+    `)
+    await act(async() => {
+      inc()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        22
+      </div>
+    `)
+    await act(async() => {
+      toggle()
+    })
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        12
+      </div>
+    `)
+  })
 })

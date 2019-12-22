@@ -9,10 +9,10 @@
  * community by sending a pull request to:
  * https://github.com/flowtype/flow-typed
  */
-declare module "terser" {
-  import type { RawSourceMap } from "source-map";
+declare module 'terser' {
+  import type {RawSourceMap} from 'source-map'
 
-  declare export type ECMA = 5 | 6 | 7 | 8 | 9;
+  declare export type ECMA = 5 | 6 | 7 | 8 | 9
   declare export interface ParseOptions {
     bare_returns?: boolean;
     ecma?: ECMA;
@@ -33,7 +33,7 @@ declare module "terser" {
     drop_debugger?: boolean;
     evaluate?: boolean;
     expression?: boolean;
-    global_defs?: { [key: string]: any };
+    global_defs?: {[key: string]: any, ...};
     hoist_funs?: boolean;
     hoist_props?: boolean;
     hoist_vars?: boolean;
@@ -49,7 +49,7 @@ declare module "terser" {
     passes?: number;
     properties?: boolean;
     pure_funcs?: string[];
-    pure_getters?: boolean | "strict";
+    pure_getters?: boolean | 'strict';
     reduce_funcs?: boolean;
     reduce_vars?: boolean;
     sequences?: boolean | number;
@@ -113,7 +113,7 @@ declare module "terser" {
     ascii_only?: boolean;
     beautify?: boolean;
     braces?: boolean;
-    comments?: boolean | "all" | "some" | RegExp;
+    comments?: boolean | 'all' | 'some' | RegExp;
     ecma?: ECMA;
     indent_level?: number;
     indent_start?: boolean;
@@ -162,13 +162,13 @@ declare module "terser" {
     keep_fnames?: boolean | RegExp;
     mangle?: boolean | MangleOptions;
     module?: boolean;
-    nameCache?: { [key: string]: any };
+    nameCache?: {[key: string]: any, ...};
     output?: OutputOptions;
     parse?: ParseOptions;
     safari10?: boolean;
     sourceMap?: boolean | SourceMapOptions;
     toplevel?: boolean;
-    warnings?: boolean | "verbose";
+    warnings?: boolean | 'verbose';
   }
   declare export interface MinifyOutput {
     ast?: AST_Node;
@@ -182,18 +182,18 @@ declare module "terser" {
     includeSources?: boolean;
     filename?: string;
     root?: string;
-    url?: string | "inline";
+    url?: string | 'inline';
   }
-  declare function parse(text: string, options?: ParseOptions): AST_Node;
+  declare function parse(text: string, options?: ParseOptions): AST_Node
 
   declare export class TreeWalker {
     constructor(
       callback: (
         node: AST_Node,
-        descend?: (node: AST_Node) => void
-      ) => boolean | void
+        descend?: (node: AST_Node) => void,
+      ) => boolean | void,
     ): this;
-    directives: { [key: string]: any };
+    directives: {[key: string]: any, ...};
     find_parent(type: AST_Node): AST_Node | void;
     has_directive(type: string): boolean;
     loopcontrol_target(node: AST_Node): AST_Node | void;
@@ -209,18 +209,18 @@ declare module "terser" {
       before: (
         node: AST_Node,
         descend?: (node: AST_Node, tw: TreeWalker) => void,
-        in_list?: boolean
+        in_list?: boolean,
       ) => AST_Node | void,
-      after?: (node: AST_Node, in_list?: boolean) => AST_Node | void
+      after?: (node: AST_Node, in_list?: boolean) => AST_Node | void,
     ): this;
     before: (node: AST_Node) => AST_Node;
     after: (node: AST_Node) => AST_Node;
   }
-  declare export function push_uniq<T>(array: T[], el: T): void;
+  declare export function push_uniq<T>(array: T[], el: T): void
 
-  declare type DictEachCallback = (val: any, key: string) => any;
+  declare type DictEachCallback = (val: any, key: string) => any
   declare export class Dictionary {
-    static fromObject(obj: { [key: string]: any }): Dictionary;
+    static fromObject(obj: {[key: string]: any, ...}): Dictionary;
     add(key: string, val: any): this;
     clone(): Dictionary;
     del(key: string): this;
@@ -236,14 +236,15 @@ declare module "terser" {
       | string
       | string[]
       | {
-          [file: string]: string
+          [file: string]: string,
+          ...,
         }
       | AST_Node,
-    options?: MinifyOptions
-  ): MinifyOutput;
+    options?: MinifyOptions,
+  ): MinifyOutput
 
   declare export class AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     static BASE: AST_Node;
     static PROPS: string[];
     static SELF_PROPS: string[];
@@ -262,8 +263,8 @@ declare module "terser" {
   declare class SymbolDef {
     constructor(
       scope?: AST_Scope,
-      orig?: { [key: string]: any },
-      init?: { [key: string]: any }
+      orig?: {[key: string]: any, ...},
+      init?: {[key: string]: any, ...},
     ): this;
     name: string;
     orig: AST_SymbolRef[];
@@ -282,32 +283,32 @@ declare module "terser" {
     | AST_SymbolFunarg
     | AST_DefaultAssign
     | AST_Destructuring
-    | AST_Expansion;
+    | AST_Expansion
   declare class AST_Statement mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Debugger mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Directive mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: string;
     quote: string;
   }
   declare class AST_SimpleStatement mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     body: AST_Node[];
   }
   declare class AST_Block mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     body: AST_Node[];
     block_scope: AST_Scope | null;
   }
   declare class AST_BlockStatement mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Scope mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     variables: any;
     functions: any;
     uses_with: boolean;
@@ -317,11 +318,11 @@ declare module "terser" {
     cname: any;
   }
   declare class AST_Toplevel mixins AST_Scope {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     globals: any;
   }
   declare class AST_Lambda mixins AST_Scope {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     name: AST_SymbolDeclaration | null;
     argnames: ArgType[];
     uses_arguments: boolean;
@@ -329,146 +330,146 @@ declare module "terser" {
     async: boolean;
   }
   declare class AST_Accessor mixins AST_Lambda {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Function mixins AST_Lambda {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     inlined: boolean;
   }
   declare class AST_Arrow mixins AST_Lambda {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     inlined: boolean;
   }
   declare class AST_Defun mixins AST_Lambda {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     inlined: boolean;
   }
   declare class AST_Class mixins AST_Scope {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     name: AST_SymbolClass | AST_SymbolDefClass | null;
     extends: AST_Node | null;
     properties: AST_ObjectProperty[];
     inlined: boolean;
   }
   declare class AST_DefClass mixins AST_Class {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_ClassExpression mixins AST_Class {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Switch mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
   }
   declare class AST_SwitchBranch mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Default mixins AST_SwitchBranch {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Case mixins AST_SwitchBranch {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
   }
   declare class AST_Try mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     bcatch: AST_Catch;
     bfinally: null | AST_Finally;
   }
   declare class AST_Catch mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     argname: ArgType;
   }
   declare class AST_Finally mixins AST_Block {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_EmptyStatement mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_StatementWithBody mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     body: AST_Node[];
   }
   declare class AST_LabeledStatement mixins AST_StatementWithBody {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     label: AST_Label;
   }
   declare class AST_IterationStatement mixins AST_StatementWithBody {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     block_scope: AST_Scope | null;
   }
   declare class AST_DWLoop mixins AST_IterationStatement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     condition: AST_Node;
   }
   declare class AST_Do mixins AST_DWLoop {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_While mixins AST_DWLoop {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_For mixins AST_IterationStatement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     init: AST_Node | null;
     condition: AST_Node | null;
     step: AST_Node | null;
   }
   declare class AST_ForIn mixins AST_IterationStatement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     init: AST_Node | null;
     object: AST_Node;
   }
   declare class AST_ForOf mixins AST_ForIn {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     await: boolean;
   }
   declare class AST_With mixins AST_StatementWithBody {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
   }
   declare class AST_If mixins AST_StatementWithBody {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     condition: AST_Node;
     alternative: AST_Node | null;
   }
   declare class AST_Jump mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Exit mixins AST_Jump {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: AST_Node | null;
   }
   declare class AST_Return mixins AST_Exit {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Throw mixins AST_Exit {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_LoopControl mixins AST_Jump {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     label: null | AST_LabelRef;
   }
   declare class AST_Break mixins AST_LoopControl {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Continue mixins AST_LoopControl {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Definitions mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     definitions: AST_VarDef[];
   }
   declare class AST_Var mixins AST_Definitions {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Let mixins AST_Definitions {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Const mixins AST_Definitions {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Export mixins AST_Statement {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     exported_definition: AST_Definitions | AST_Lambda | AST_DefClass | null;
     exported_value: AST_Node | null;
     is_default: boolean;
@@ -476,256 +477,255 @@ declare module "terser" {
     module_name: AST_String;
   }
   declare class AST_Expansion mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
   }
   declare class AST_Destructuring mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     names: AST_Node[];
     is_array: boolean;
   }
   declare class AST_PrefixedTemplateString mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     template_string: AST_TemplateString;
     prefix: AST_Node;
   }
   declare class AST_TemplateString mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     segments: AST_Node[];
   }
   declare class AST_TemplateSegment mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: string;
     raw: string;
   }
   declare class AST_NameMapping mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     foreign_name: AST_Symbol;
     name: AST_SymbolExport | AST_SymbolImport;
   }
   declare class AST_Import mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     imported_name: null | AST_SymbolImport;
     imported_names: AST_NameMapping[];
     module_name: AST_String;
   }
   declare class AST_VarDef mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     name: AST_Destructuring | AST_SymbolConst | AST_SymbolLet | AST_SymbolVar;
     value: AST_Node | null;
   }
   declare class AST_Call mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
     args: AST_Node[];
   }
   declare class AST_New mixins AST_Call {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Sequence mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expressions: AST_Node[];
   }
   declare class AST_PropAccess mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
     property: AST_Node | string;
   }
   declare class AST_Dot mixins AST_PropAccess {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Sub mixins AST_PropAccess {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Unary mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     operator: string;
     expression: AST_Node;
   }
   declare class AST_UnaryPrefix mixins AST_Unary {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_UnaryPostfix mixins AST_Unary {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Binary mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     operator: string;
     left: AST_Node;
     right: AST_Node;
   }
   declare class AST_Assign mixins AST_Binary {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_DefaultAssign mixins AST_Binary {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Conditional mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     condition: AST_Node;
     consequent: AST_Node;
     alternative: AST_Node;
   }
   declare class AST_Array mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     elements: AST_Node[];
   }
   declare class AST_Object mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     properties: AST_ObjectProperty[];
   }
   declare class AST_ObjectProperty mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     key: string | number | AST_Node;
     value: AST_Node;
   }
   declare class AST_ObjectKeyVal mixins AST_ObjectProperty {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     quote: string;
   }
   declare class AST_ObjectSetter mixins AST_ObjectProperty {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     quote: string;
     static: boolean;
   }
   declare class AST_ObjectGetter mixins AST_ObjectProperty {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     quote: string;
     static: boolean;
   }
   declare class AST_ConciseMethod mixins AST_ObjectProperty {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     quote: string;
     static: boolean;
     is_generator: boolean;
     async: boolean;
   }
   declare class AST_Symbol mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     scope: AST_Scope;
     name: string;
     thedef: SymbolDef;
   }
   declare class AST_SymbolDeclaration mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     init: AST_Node | null;
   }
   declare class AST_SymbolVar mixins AST_SymbolDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolFunarg mixins AST_SymbolVar {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolBlockDeclaration mixins AST_SymbolDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolConst mixins AST_SymbolBlockDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolLet mixins AST_SymbolBlockDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolDefClass mixins AST_SymbolBlockDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolCatch mixins AST_SymbolBlockDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolImport mixins AST_SymbolBlockDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolDefun mixins AST_SymbolDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolLambda mixins AST_SymbolDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolClass mixins AST_SymbolDeclaration {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolMethod mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolImportForeign mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Label mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     references: AST_LoopControl | null;
   }
   declare class AST_SymbolRef mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolExport mixins AST_SymbolRef {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_SymbolExportForeign mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_LabelRef mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_This mixins AST_Symbol {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Super mixins AST_This {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_NewTarget mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Constant mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_String mixins AST_Constant {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: string;
     quote: string;
   }
   declare class AST_Number mixins AST_Constant {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: number;
     literal: string;
   }
   declare class AST_RegExp mixins AST_Constant {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     value: RegExp;
   }
   declare class AST_Atom mixins AST_Constant {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Null mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_NaN mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Undefined mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Hole mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Infinity mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Boolean mixins AST_Atom {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_False mixins AST_Boolean {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_True mixins AST_Boolean {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
   }
   declare class AST_Await mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
   }
   declare class AST_Yield mixins AST_Node {
-    constructor(props?: { [key: string]: any }): this;
+    constructor(props?: {[key: string]: any, ...}): this;
     expression: AST_Node;
     is_star: boolean;
   }
 }
-

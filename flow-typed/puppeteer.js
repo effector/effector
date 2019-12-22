@@ -15,12 +15,12 @@ declare module 'puppeteer' {
      * @param key Name of key to press, such as ArrowLeft.
      * @param options Specifies a input text event.
      */
-    down(key: string, options?: {text?: string}): Promise<void>,
+    down(key: string, options?: {text?: string, ...}): Promise<void>,
 
     /** Shortcut for `keyboard.down` and `keyboard.up`. */
     press(
       key: string,
-      options?: {delay?: number, text?: string},
+      options?: {delay?: number, text?: string, ...},
     ): Promise<void>,
 
     /** Dispatches a `keypress` and `input` event. This does not send a `keydown` or keyup `event`. */
@@ -31,13 +31,14 @@ declare module 'puppeteer' {
      * @param text A text to type into a focused element.
      * @param options Specifies the typing options.
      */
-    type(text: string, options?: {delay?: number}): Promise<void>,
+    type(text: string, options?: {delay?: number, ...}): Promise<void>,
 
     /**
      * Dispatches a keyup event.
      * @param key Name of key to release, such as ArrowLeft.
      */
     up(key: string): Promise<void>,
+    ...
   }
 
   declare type MousePressOptions = {
@@ -52,6 +53,7 @@ declare module 'puppeteer' {
      * @default 1
      */
     clickCount?: number,
+    ...
   }
 
   declare type Mouse = {
@@ -75,12 +77,13 @@ declare module 'puppeteer' {
      * @param y The y position.
      * @param options The mouse move options.
      */
-    move(x: number, y: number, options?: {steps: number}): Promise<void>,
+    move(x: number, y: number, options?: {steps: number, ...}): Promise<void>,
     /**
      * Dispatches a `mouseup` event.
      * @param options The mouse press options.
      */
     up(options?: MousePressOptions): Promise<void>,
+    ...
   }
 
   declare type Touchscreen = {
@@ -90,6 +93,7 @@ declare module 'puppeteer' {
      * @param y The y position.
      */
     tap(x: number, y: number): Promise<void>,
+    ...
   }
 
   /**
@@ -99,12 +103,14 @@ declare module 'puppeteer' {
     start(options: TracingStartOptions): Promise<void>,
 
     stop(): Promise<void>,
+    ...
   }
 
   declare type TracingStartOptions = {
     categories?: Array<string>,
     path: string,
     screenshots?: boolean,
+    ...
   }
 
   /** Dialog objects are dispatched by page via the 'dialog' event. */
@@ -126,6 +132,7 @@ declare module 'puppeteer' {
 
     /** The dialog type. Dialog's type, can be one of `alert`, `beforeunload`, `confirm` or `prompt`. */
     type(): 'alert' | 'beforeunload' | 'confirm' | 'prompt',
+    ...
   }
 
   /** ConsoleMessage objects are dispatched by page via the 'console' event. */
@@ -155,6 +162,7 @@ declare module 'puppeteer' {
       | 'profileEnd'
       | 'count'
       | 'timeEnd',
+    ...
   }
 
   declare type PageEvents =
@@ -180,6 +188,7 @@ declare module 'puppeteer' {
   declare type AuthOptions = {
     password: string,
     username: string,
+    ...
   }
 
   declare type MouseButtons = 'left' | 'right' | 'middle'
@@ -196,6 +205,7 @@ declare module 'puppeteer' {
      * Defaults to 0.
      */
     delay?: number,
+    ...
   }
 
   /** Represents a browser cookie. */
@@ -223,6 +233,7 @@ declare module 'puppeteer' {
 
     /** The cookie value. */
     value: string,
+    ...
   }
 
   declare type DeleteCookie = {
@@ -232,6 +243,7 @@ declare module 'puppeteer' {
     path?: string,
     secure?: boolean,
     url?: string,
+    ...
   }
 
   declare type SetCookie = {
@@ -261,6 +273,7 @@ declare module 'puppeteer' {
 
     /** The cookie value. */
     value: string,
+    ...
   }
 
   declare type Viewport = {
@@ -293,6 +306,7 @@ declare module 'puppeteer' {
 
     /** The page width in pixels. */
     width: number,
+    ...
   }
 
   /** Page emulation options. */
@@ -302,6 +316,7 @@ declare module 'puppeteer' {
 
     /** The viewport emulation options. */
     viewport?: Viewport,
+    ...
   }
 
   declare type EvaluateFn = string | ((...args: Array<mixed>) => mixed)
@@ -324,6 +339,7 @@ declare module 'puppeteer' {
      * @default load Navigation is consider when the `load` event is fired.
      */
     waitUntil?: LoadEvent | Array<LoadEvent>,
+    ...
   }
 
   declare type PDFFormat =
@@ -390,6 +406,7 @@ declare module 'puppeteer' {
 
       /** Top margin, accepts values labeled with units. */
       top?: string,
+      ...
     },
 
     /**
@@ -419,6 +436,7 @@ declare module 'puppeteer' {
 
     /** Paper width, accepts values labeled with units. */
     width?: string,
+    ...
   }
 
   /** Defines the screenshot options. */
@@ -455,6 +473,7 @@ declare module 'puppeteer' {
      * @default png
      */
     type?: 'jpeg' | 'png',
+    ...
   }
 
   /** Options for `addStyleTag` */
@@ -467,6 +486,7 @@ declare module 'puppeteer' {
 
     /** Url of the <link> tag. */
     url?: string,
+    ...
   }
   /** Options for `addScriptTag` */
   declare type ScriptTagOptions = {
@@ -481,11 +501,13 @@ declare module 'puppeteer' {
 
     /** Url of a script to be added. */
     url?: string,
+    ...
   }
 
   declare type PageFnOptions = {
     polling?: 'raf' | 'mutation' | number,
     timeout?: number,
+    ...
   }
 
   declare type BoundingBox = {
@@ -500,6 +522,7 @@ declare module 'puppeteer' {
 
     /** The y-coordinate of top-left corner. */
     y: number,
+    ...
   }
 
   /**
@@ -562,7 +585,7 @@ declare module 'puppeteer' {
      */
     press(
       key: string,
-      options?: {delay?: number, text?: string},
+      options?: {delay?: number, text?: string, ...},
     ): Promise<void>,
 
     /**
@@ -585,13 +608,14 @@ declare module 'puppeteer' {
      * @param text A text to type into a focused element.
      * @param options The typing options.
      */
-    type(text: string, options?: {delay: number}): Promise<void>,
+    type(text: string, options?: {delay: number, ...}): Promise<void>,
 
     /**
      * This method expects elementHandle to point to an input element.
      * @param filePaths Sets the value of the file input these paths. If some of the filePaths are relative paths, then they are resolved relative to current working directory.
      */
     uploadFile(...filePaths: Array<string>): Promise<void>,
+    ...
   }
 
   /** The class represents a context for JavaScript execution. */
@@ -599,6 +623,7 @@ declare module 'puppeteer' {
     evaluate(fn: EvaluateFn, ...args: Array<mixed>): Promise<mixed>,
     evaluateHandle(fn: EvaluateFn, ...args: Array<mixed>): Promise<JSHandle>,
     queryObjects(prototypeHandle: JSHandle): JSHandle,
+    ...
   }
 
   /** JSHandle represents an in-page JavaScript object. */
@@ -635,6 +660,7 @@ declare module 'puppeteer' {
      * @throws The method will throw if the referenced object is not stringifiable.
      */
     jsonValue(): Promise<mixed>,
+    ...
   }
 
   declare type Metrics = {
@@ -675,9 +701,10 @@ declare module 'puppeteer' {
 
     /** The timestamp when the metrics sample was taken. */
     Timestamp: number,
+    ...
   }
 
-  declare type Headers = {[key: string]: string}
+  declare type Headers = {[key: string]: string, ...}
   declare type HttpMethod =
     | 'GET'
     | 'POST'
@@ -706,6 +733,7 @@ declare module 'puppeteer' {
     method?: HttpMethod,
     postData?: string,
     url?: string,
+    ...
   }
 
   /** Represents a page request. */
@@ -769,6 +797,7 @@ declare module 'puppeteer' {
 
     /** Contains the URL of the request. */
     url(): string,
+    ...
   }
 
   /** Options for `Request.respond` method */
@@ -787,6 +816,7 @@ declare module 'puppeteer' {
      * @default 200
      */
     status?: number,
+    ...
   }
 
   /** Response class represents responses which are received by page. */
@@ -823,6 +853,7 @@ declare module 'puppeteer' {
 
     /** Contains the URL of the response. */
     url(): string,
+    ...
   }
 
   declare type Frame = {
@@ -918,7 +949,7 @@ declare module 'puppeteer' {
 
     waitForSelector(
       selector: string,
-      options?: {hidden?: boolean, timeout?: number, visible?: boolean},
+      options?: {hidden?: boolean, timeout?: number, visible?: boolean, ...},
     ): Promise<ElementHandle>,
     childFrames(): Array<Frame>,
 
@@ -933,6 +964,7 @@ declare module 'puppeteer' {
 
     /** Returns parent frame, if any. Detached frames and main frames return null. */
     parentFrame(): ?Frame,
+    ...
   }
 
   declare type PageEventObj = {
@@ -967,7 +999,7 @@ declare module 'puppeteer' {
      * Emitted when the JavaScript code makes a call to `console.timeStamp`.
      * For the list of metrics see `page.metrics`.
      */
-    metrics: {metrics: mixed, title: string},
+    metrics: {|metrics: mixed, title: string|},
 
     /** Emitted when an uncaught exception happens within the page. */
     pageerror: string,
@@ -986,6 +1018,7 @@ declare module 'puppeteer' {
 
     /** Emitted when a response is received. */
     response: Response,
+    ...
   }
 
   /** Page provides methods to interact with a single tab in Chromium. One Browser instance might have multiple Page instances. */
@@ -1082,7 +1115,7 @@ declare module 'puppeteer' {
 
     waitForSelector(
       selector: string,
-      options?: {hidden?: boolean, timeout?: number, visible?: boolean},
+      options?: {hidden?: boolean, timeout?: number, visible?: boolean, ...},
     ): Promise<ElementHandle>;
     childFrames(): Array<Frame>;
 
@@ -1366,7 +1399,7 @@ declare module 'puppeteer' {
     type(
       selector: string,
       text: string,
-      options?: {delay: number},
+      options?: {delay: number, ...},
     ): Promise<void>;
 
     /**
@@ -1464,6 +1497,7 @@ declare module 'puppeteer' {
 
     /** Emitted when a target is destroyed, for example when a page is closed. */
     targetdestroyed: Target,
+    ...
   }
 
   declare type Target = {
@@ -1478,6 +1512,7 @@ declare module 'puppeteer' {
 
     /** Returns the target URL. */
     url(): string,
+    ...
   }
 
   declare type LaunchOptions = {
@@ -1541,6 +1576,7 @@ declare module 'puppeteer' {
 
     /** Path to a User Data Directory. */
     userDataDir?: string,
+    ...
   }
 
   declare type ConnectOptions = {
@@ -1552,6 +1588,7 @@ declare module 'puppeteer' {
      * @default false
      */
     ignoreHTTPSErrors?: boolean,
+    ...
   }
 
   declare interface CDPSession extends events$EventEmitter {
@@ -1573,18 +1610,19 @@ declare module 'puppeteer' {
     startJSCoverage(options?: StartCoverageOptions): Promise<void>,
     stopCSSCoverage(): Promise<Array<CoverageEntry>>,
     stopJSCoverage(): Promise<Array<CoverageEntry>>,
+    ...
   }
 
-  declare type StartCoverageOptions = {
+  declare type StartCoverageOptions = {|
     /** Whether to reset coverage on every navigation. Defaults to `true`. */
     resetOnNavigation?: boolean,
-  }
+  |}
 
-  declare type CoverageEntry = {
-    ranges: Array<{end: number, start: number}>,
+  declare type CoverageEntry = {|
+    ranges: Array<{|end: number, start: number|}>,
     text: string,
     url: string,
-  }
+  |}
 
   /** Attaches Puppeteer to an existing Chromium instance */
   declare function connect(options?: ConnectOptions): Promise<Browser>

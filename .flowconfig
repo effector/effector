@@ -1,6 +1,7 @@
 [lints]
 all=warn
 # Disable until https://github.com/facebook/flow/issues/7473 resolved
+deprecated-utility=off
 dynamic-export=off
 inexact-spread=error
 unnecessary-optional-chain=error
@@ -22,6 +23,7 @@ server.max_workers=1
 include_warnings=false
 max_header_tokens=5
 experimental.strict_call_arity=true
+exact_by_default=true
 lazy_mode=ide
 # experimental.well_formed_exports=true
 # experimental.types_first=true
@@ -39,7 +41,9 @@ suppress_type=$off
 suppress_type=$todo
 module.use_strict=true
 
-module.name_mapper='^codemirror\(.+\)$' -> '<PROJECT_ROOT>/flow/codemirror\1'
+module.name_mapper='^ast-types\(.*\)$' -> '<PROJECT_ROOT>/flow/ast-types\1'
+module.name_mapper='^recast\(.*\)$' -> '<PROJECT_ROOT>/flow/recast\1'
+module.name_mapper='^codemirror\(.*\)$' -> '<PROJECT_ROOT>/flow/codemirror\1'
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
@@ -50,6 +54,7 @@ module.name_mapper='^effector/\(.+\)$' -> '<PROJECT_ROOT>/src/effector/\1'
 module.name_mapper='^Builder\(.*\)$' -> '<PROJECT_ROOT>/tools/builder\1'
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/packages/effector'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/packages/effector-react'
+module.name_mapper='^effector-react/\(.+\)$' -> '<PROJECT_ROOT>/packages/effector-react/\1'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/packages/effector-vue'
 module.name_mapper='^@effector/\(.+\)$' -> '<PROJECT_ROOT>/packages/@effector/\1'
 
@@ -66,8 +71,23 @@ unnecessary-invariant
 .*/.history/.*
 .*/.cache/.*
 .*/dist/.*
+
 .*/node_modules/.*
 !.*/node_modules/@zerobias/codebox
+!.*/node_modules/funland-laws
+!.*/node_modules/funland
+!.*/node_modules/csstype
+!.*/node_modules/reselect
+!.*/node_modules/flowgen
+!.*/node_modules/throat
+!.*/node_modules/chalk
+!.*/node_modules/enzyme-matchers
+!.*/node_modules/whatwg-fetch
+!.*/node_modules/serve
+!.*/node_modules/@goodmind/flow-js
+!.*/node_modules/table
+
+<PROJECT_ROOT>/src/types/*
 <PROJECT_ROOT>/website/try/evaluator/flow/*
 <PROJECT_ROOT>/src/graphite/tarjan/*
 <PROJECT_ROOT>/src/redux/*

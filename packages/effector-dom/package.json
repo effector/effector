@@ -1,0 +1,50 @@
+{
+  "name": "effector-dom",
+  "version": "0.0.1",
+  "description": "Effector package for working with dom",
+  "main": "effector-dom.cjs.js",
+  "module": "effector-dom.es.js",
+  "umd:main": "effector-dom.umd.js",
+  "jsnext:main": "effector-dom.es.js",
+  "dependencies": {},
+  "peerDependencies": {
+    "effector": "^20.8.1"
+  },
+  "keywords": [
+    "state manager",
+    "reactive",
+    "functional",
+    "store",
+    "event",
+    "effect",
+    "data",
+    "streams",
+    "state",
+    "actions",
+    "redux"
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    },
+    {
+      "name": "goodmind",
+      "email": "andwebar@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

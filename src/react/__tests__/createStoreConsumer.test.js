@@ -9,6 +9,7 @@ configure({
 
 import * as React from 'react'
 import {mount} from 'enzyme'
+import {act} from 'effector/fixtures/react'
 import {createEvent, createStore, createStoreObject} from 'effector'
 import {createStoreConsumer} from '../createStoreConsumer'
 
@@ -20,9 +21,11 @@ test('createStoreComponent attempt', () => {
   const tree = mount(
     <Store1>{state => <span>Current state: {state}</span>}</Store1>,
   )
-  expect(tree.text()).toMatchSnapshot()
-  changeText('bar')
-  expect(tree.text()).toMatchSnapshot()
+  expect(tree.text()).toMatchInlineSnapshot(`"Current state: foo"`)
+  act(() => {
+    changeText('bar')
+  })
+  expect(tree.text()).toMatchInlineSnapshot(`"Current state: bar"`)
   tree.unmount()
 })
 
@@ -52,11 +55,15 @@ test('no dull re-renders', () => {
       }}
     </CurrentList>,
   )
-  expect(tree.text()).toMatchSnapshot()
-  inc()
-  expect(tree.text()).toMatchSnapshot()
-  reset()
-  expect(tree.text()).toMatchSnapshot()
+  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2"`)
+  act(() => {
+    inc()
+  })
+  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2,3"`)
+  act(() => {
+    reset()
+  })
+  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2"`)
   tree.unmount()
 
   expect(fn.mock.calls).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])

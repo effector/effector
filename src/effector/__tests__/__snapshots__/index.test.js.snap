@@ -6,36 +6,37 @@ exports[`graphite: show bar 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: callARegStack,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            },
-            filter: upd => upd !== state
+            check: defined,
+            mov: stack store,
+            check: changed,
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
-                compute: Function,
-                filter: Function
+                mov: store a,
+                compute: callStackAReg,
+                check: defined,
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    },
-                    filter: upd => upd !== state
+                    check: defined,
+                    mov: stack store,
+                    check: changed,
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -49,40 +50,9 @@ exports[`graphite: show bar 1`] = `
     },
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
-      next: [
-        Node {
-          seq: [
-            compute: Function,
-            run: watcher
-          ],
-          next: [
-            Node {
-              seq: [
-                compute: Function
-              ],
-              next: [
-                Node {
-                  seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    },
-                    filter: upd => upd !== state
-                  ],
-                  next: [
-                    Node {seq: [], next: []}
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      next: []
     }
   ]
 }"
@@ -94,36 +64,37 @@ exports[`graphite: show bar 2`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: callARegStack,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
-            update: {
-              store: {
-                state: foo | 1 | 11
-              }
-            },
-            filter: upd => upd !== state
+            check: defined,
+            mov: stack store,
+            check: changed,
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
-                compute: Function,
-                filter: Function
+                mov: store a,
+                compute: callStackAReg,
+                check: defined,
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: 12
-                      }
-                    },
-                    filter: upd => upd !== state
+                    check: defined,
+                    mov: stack store,
+                    check: changed,
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []}
@@ -145,7 +116,7 @@ exports[`graphite: show foo 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        compute: callStack
       ],
       next: [
         Node {
@@ -153,36 +124,37 @@ exports[`graphite: show foo 1`] = `
           next: [
             Node {
               seq: [
-                compute: Function
+                mov: store a,
+                compute: callARegStack,
+                check: defined,
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: foo | 1 | 11 | 101
-                      }
-                    },
-                    filter: upd => upd !== state
+                    check: defined,
+                    mov: stack store,
+                    check: changed,
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},
                     Node {
                       seq: [
-                        compute: Function,
-                        filter: Function
+                        mov: store a,
+                        compute: callStackAReg,
+                        check: defined,
+                        check: changed,
+                        mov: stack store
                       ],
                       next: [
                         Node {
                           seq: [
-                            filter: upd => upd !== undefined,
-                            update: {
-                              store: {
-                                state: 18
-                              }
-                            },
-                            filter: upd => upd !== state
+                            check: defined,
+                            mov: stack store,
+                            check: changed,
+                            mov: stack store
                           ],
                           next: [
                             Node {seq: [], next: []}
@@ -205,31 +177,28 @@ exports[`graphite: show foo 1`] = `
 exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
-    update: {
-      store: {
-        state: foo | 1 | 11 | 101
-      }
-    },
-    filter: upd => upd !== state
+    check: defined,
+    mov: stack store,
+    check: changed,
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
     Node {
       seq: [
-        compute: Function,
-        filter: Function
+        mov: store a,
+        compute: callStackAReg,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
-            update: {
-              store: {
-                state: 18
-              }
-            },
-            filter: upd => upd !== state
+            check: defined,
+            mov: stack store,
+            check: changed,
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []}
@@ -244,13 +213,10 @@ exports[`graphite: show store1 1`] = `
 exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
-    update: {
-      store: {
-        state: 18
-      }
-    },
-    filter: upd => upd !== state
+    check: defined,
+    mov: stack store,
+    check: changed,
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []}
@@ -264,102 +230,71 @@ exports[`showcase: event foo 1`] = `
   next: [
     Node {
       seq: [
-        compute: Function
+        mov: store a,
+        compute: callARegStack,
+        check: defined,
+        check: changed,
+        mov: stack store
       ],
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
-            update: {
-              store: {
-                state: 3
-              }
-            },
-            filter: upd => upd !== state
+            check: defined,
+            mov: stack store,
+            check: changed,
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
+                check: defined,
+                mov: store a,
                 filter: Function,
-                tap: {},
-                tap: {},
+                mov: store b,
+                compute: Function,
+                mov: a store,
+                mov: value store,
                 barrier: {
                   barrierID: 1,
                   priority: barrier
                 },
-                compute: Function
+                mov: value store,
+                mov: store stack
               ],
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: {
-                          a: 3,
-                          b: 6
-                        }
-                      }
-                    },
-                    filter: upd => upd !== state
+                    check: defined,
+                    mov: stack store,
+                    check: changed,
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},
                     Node {
                       seq: [
-                        compute: Function,
-                        filter: Function
+                        mov: store a,
+                        compute: callStackAReg,
+                        check: defined,
+                        check: changed,
+                        mov: stack store
                       ],
                       next: [
                         Node {
                           seq: [
-                            filter: upd => upd !== undefined,
-                            update: {
-                              store: {
-                                state: 3
-                              }
-                            },
-                            filter: upd => upd !== state
+                            check: defined,
+                            mov: stack store,
+                            check: changed,
+                            mov: stack store
                           ],
                           next: [
                             Node {seq: [], next: []},
                             Node {
                               seq: [
-                                compute: x => x,
                                 run: watcher
                               ],
-                              next: [
-                                Node {
-                                  seq: [
-                                    compute: Function,
-                                    run: watcher
-                                  ],
-                                  next: [
-                                    Node {
-                                      seq: [
-                                        compute: Function
-                                      ],
-                                      next: [
-                                        Node {
-                                          seq: [
-                                            filter: upd => upd !== undefined,
-                                            update: {
-                                              store: {
-                                                state: false
-                                              }
-                                            },
-                                            filter: upd => upd !== state
-                                          ],
-                                          next: [
-                                            Node {seq: [], next: []}
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
+                              next: []
                             }
                           ]
                         }
@@ -380,52 +315,18 @@ exports[`showcase: event foo 1`] = `
 exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
-    update: {
-      store: {
-        state: 3
-      }
-    },
-    filter: upd => upd !== state
+    check: defined,
+    mov: stack store,
+    check: changed,
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
     Node {
       seq: [
-        compute: x => x,
         run: watcher
       ],
-      next: [
-        Node {
-          seq: [
-            compute: Function,
-            run: watcher
-          ],
-          next: [
-            Node {
-              seq: [
-                compute: Function
-              ],
-              next: [
-                Node {
-                  seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: false
-                      }
-                    },
-                    filter: upd => upd !== state
-                  ],
-                  next: [
-                    Node {seq: [], next: []}
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
+      next: []
     }
   ]
 }"
@@ -434,97 +335,62 @@ exports[`showcase: mapped 1`] = `
 exports[`showcase: store a 1`] = `
 "Node {
   seq: [
-    filter: upd => upd !== undefined,
-    update: {
-      store: {
-        state: 3
-      }
-    },
-    filter: upd => upd !== state
+    check: defined,
+    mov: stack store,
+    check: changed,
+    mov: stack store
   ],
   next: [
     Node {seq: [], next: []},
     Node {
       seq: [
+        check: defined,
+        mov: store a,
         filter: Function,
-        tap: {},
-        tap: {},
+        mov: store b,
+        compute: Function,
+        mov: a store,
+        mov: value store,
         barrier: {
           barrierID: 1,
           priority: barrier
         },
-        compute: Function
+        mov: value store,
+        mov: store stack
       ],
       next: [
         Node {
           seq: [
-            filter: upd => upd !== undefined,
-            update: {
-              store: {
-                state: {
-                  a: 3,
-                  b: 6
-                }
-              }
-            },
-            filter: upd => upd !== state
+            check: defined,
+            mov: stack store,
+            check: changed,
+            mov: stack store
           ],
           next: [
             Node {seq: [], next: []},
             Node {
               seq: [
-                compute: Function,
-                filter: Function
+                mov: store a,
+                compute: callStackAReg,
+                check: defined,
+                check: changed,
+                mov: stack store
               ],
               next: [
                 Node {
                   seq: [
-                    filter: upd => upd !== undefined,
-                    update: {
-                      store: {
-                        state: 3
-                      }
-                    },
-                    filter: upd => upd !== state
+                    check: defined,
+                    mov: stack store,
+                    check: changed,
+                    mov: stack store
                   ],
                   next: [
                     Node {seq: [], next: []},
                     Node {
                       seq: [
-                        compute: x => x,
                         run: watcher
                       ],
-                      next: [
-                        Node {
-                          seq: [
-                            compute: Function,
-                            run: watcher
-                          ],
-                          next: [
-                            Node {
-                              seq: [
-                                compute: Function
-                              ],
-                              next: [
-                                Node {
-                                  seq: [
-                                    filter: upd => upd !== undefined,
-                                    update: {
-                                      store: {
-                                        state: false
-                                      }
-                                    },
-                                    filter: upd => upd !== state
-                                  ],
-                                  next: [
-                                    Node {seq: [], next: []}
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      ]
+                      next: []
                     }
                   ]
                 }

@@ -26,16 +26,21 @@ test('graphite', () => {
   foo(10)
   expect(fn).toHaveBeenCalledTimes(2)
   expect(store1.getState()).toBe('foo | 1 | 11')
+  //$todo
   const showBar = show(bar.graphite)
 
   expect(showBar).toMatchSnapshot('show bar')
   unsub1()
+  //$todo
   const showBar2 = show(bar.graphite)
   expect(showBar2).toMatchSnapshot('show bar')
   foo(100)
   expect(fn1).toHaveBeenCalledTimes(2)
+  //$todo
   const showFoo = show(foo.graphite)
+  //$todo
   const showStore = show(store1.graphite)
+  //$todo
   const showStore2 = show(store2.graphite)
   expect(showFoo).toMatchSnapshot('show foo')
   expect(showStore).toMatchSnapshot('show store1')
@@ -64,8 +69,11 @@ test('showcase', () => {
   bar()
   bar()
 
+  //$todo
   expect(show(a.graphite)).toMatchSnapshot('store a')
+  //$todo
   expect(show(foo.graphite)).toMatchSnapshot('event foo')
+  //$todo
   expect(show(mapped.graphite)).toMatchSnapshot('mapped')
   expect(spy).toHaveBeenCalledTimes(3)
   const first = createStore('s')

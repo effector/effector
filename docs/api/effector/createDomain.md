@@ -10,7 +10,7 @@ Creates a [domain](Domain.md)
 
 #### Arguments
 
-1. `name`? _(string)_: [Domain](Domain.md) name
+1. `name`? (_string_): [Domain](Domain.md) name
 
 #### Returns
 
@@ -18,7 +18,9 @@ Creates a [domain](Domain.md)
 
 #### Example
 
-```js
+```js try
+import {createDomain} from 'effector'
+
 const domain = createDomain() // Unnamed domain
 const httpDomain = createDomain('http') // Named domain
 

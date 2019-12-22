@@ -13,40 +13,43 @@ It can be safely used in place of the original async function.
 
 #### Returns
 
-(_`Future`_)
+(_`Promise`_)
 
 #### Example
 
-```js
-const fetchUser = createEffect('get user', {
-  handler: ({ id }) => {
+```js try
+import {createEffect, createStore} from 'effector'
+
+const fetchUser = createEffect({
+  handler: ({id}) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
-  }
+  },
 })
 
-const users = createStore([]) // <= Default state
-  // add reducer for getUser.done event (triggered when handler resolved)
+const users = createStore([]) // Default state
+  // add reducer for fetchUser.done event (triggered when handler resolved)
   .on(fetchUser.done, (users, {result: user}) => [...users, user])
 
 // subscribe to handler resolve
 fetchUser.done.watch(({result, params}) => {
-  console.log(params) // {id: 1}
-  console.log(result) // resolved value
+  console.log(params) // => {id: 1}
+  console.log(result) // => resolved value
 })
 
 // subscribe to handler reject or throw error
 fetchUser.fail.watch(({error, params}) => {
-  console.error(params) // {id: 1}
-  console.error(error) // rejected value
+  console.error(params) // => {id: 1}
+  console.error(error) // => rejected value
 })
 
 // you can replace function anytime
-fetchUser.use(() => promiseMock)
+fetchUser.use(anotherHandler)
 
 // call effect with your params
 fetchUser({id: 1})
 
-const data = await fetchUser({id: 2}) // handle promise
+// handle promise
+const data = await fetchUser({id: 2})
 ```
 
 ## Effect Methods
@@ -59,9 +62,7 @@ It will replace the previous function inside (if any).
 
 #### Arguments
 
-
-(_`handler`_): Function, that receives the first argument passed to an effect call.
-
+1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
 #### Returns
 
@@ -69,15 +70,18 @@ It will replace the previous function inside (if any).
 
 #### Example
 
-```js
-const effect = createEffect("effect name", {
-  handler: (params) => {
-    console.log("effect called with", params)
-    return fetch("/some-resource")
-  }
+```js try
+const fetchUserRepos = createEffect()
+
+fetchUserRepos.use(async params => {
+  console.log('fetchUserRepos called with', params)
+
+  const url = `https://api.github.com/users/${params.name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 
-effect(1) // >> effect called with 1
+fetchUserRepos({name: 'zerobias'}) // => fetchUserRepos called with {name: 'zerobias'}
 ```
 
 <hr />
@@ -88,31 +92,39 @@ Subscribe to effect calls.
 
 #### Arguments
 
-(_`watcher`_): A function that receives `payload`.
+1. `watcher` (_Function_): A function that receives `payload`.
 
 #### Returns
 
-
 (_`Subscription`_): A function that unsubscribes the watcher.
-
 
 #### Example
 
-```js
-const effect = createEffect("foo", {
-  handler: value => value
+```js try
+import {createEffect} from 'effector'
+
+const effect = createEffect({
+  handler: value => value,
 })
 
-effect.watch(payload => {
-  console.log("called with", payload)
+const unsubscribe = effect.watch(payload => {
+  console.log('called with', payload)
+  unsubscribe()
 })
 
-effect(20) // > called with 20
+effect(10) // => called with 10
+effect(20) // nothing, cause watcher unsubscribed
 ```
 
 <hr />
 
 ### `prepend(fn)`
+
+Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
+#### Arguments
+
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -120,35 +132,62 @@ effect(20) // > called with 20
 
 <hr />
 
+### `use.getCurrent()`
+
+Returns current handler of effect. Useful for testing.
+
+#### Returns
+
+(_Function_): Current handler, defined by `handler` property or via `use` call.
+
+#### Example
+
+```js try
+const handlerA = () => 'A'
+const handlerB = () => 'B'
+
+const fx = createEffect({handler: handlerA})
+
+console.log(fx.use.getCurrent() === handlerA)
+// => true
+
+fx.use(handlerB)
+console.log(fx.use.getCurrent() === handlerB)
+// => true
+```
+
+[Try it](https://share.effector.dev/mtY4Ny0n)
+
+<hr />
+
 ## Effect Properties
 
 ### `done`
 
-
-_Event_ triggered when promise from _thunk_ is *resolved*.
-
+_Event_ triggered when _handler_ is _resolved_.
 
 #### Arguments
 
 Event triggered with object of `params` and `result`:
 
-(_`params`_): An argument passed to the effect call
-(_`result`_): A result of the resolved handler
+1. `params` (_Params_): An argument passed to the effect call
+2. `result` (_Done_): A result of the resolved handler
 
 #### Example
 
-```js
+```js try
+import {createEffect} from 'effector'
+
 const effect = createEffect({
-  handler: (value) => Promise.resolve(value + 1)
+  handler: value => Promise.resolve(value + 1),
 })
 
-effect.done.watch(({ params, result }) => {
-  console.log("Done with params", params, "and result", result)
+effect.done.watch(({params, result}) => {
+  console.log('Done with params', params, 'and result', result)
 })
 
-effect(2) // >> Done with params 2 and result 3
+effect(2) // => Done with params 2 and result 3
 ```
-
 
 ### `fail`
 
@@ -158,21 +197,23 @@ Event triggered when handler is rejected or throws error.
 
 Event triggered with object of `params` and `error`:
 
-(_`params`_): An argument passed to effect call
-(_`error`_): An error catched from the handler
+1. `params` (_Params_): An argument passed to effect call
+2. `error` (_Fail_): An error catched from the handler
 
 #### Example
 
-```js
+```js try
+import {createEffect} from 'effector'
+
 const effect = createEffect()
 
-effect.use((value) => Promise.reject(value - 1))
+effect.use(value => Promise.reject(value - 1))
 
-effect.fail.watch(({ params, error }) => {
-  console.log("Fail with params", params, "and error", error)
+effect.fail.watch(({params, error}) => {
+  console.log('Fail with params', params, 'and error', error)
 })
 
-effect(2) // >> Fail with params 2 and error 1
+effect(2) // => Fail with params 2 and error 1
 ```
 
 ### `pending`
@@ -182,11 +223,10 @@ _Store_ contains a `true` value until the effect is resolved or rejected.
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
-
 
 const fetchApi = createEffect({
   handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
@@ -200,11 +240,13 @@ const Loading = createComponent(
 )
 
 fetchApi(5000)
+
+ReactDOM.render(<Loading />, document.getElementById('root'))
 ```
 
 It's a shorthand for common use case
 
-```js
+```js try
 import {createEffect, createStore} from 'effector'
 
 const fetchApi = createEffect()
@@ -224,18 +266,18 @@ Event triggered when handler is resolved, rejected or throws error.
 
 Event triggered with object of `status`, `params` and `error` or `result`:
 
-(_`status`_): A status of effect (`done` or `fail`)
-(_`params`_): An argument passed to effect call
-(_`error`_): An error catched from the handler
-(_`result`_): A result of the resolved handler
+1. `status` (_string_): A status of effect (`done` or `fail`)
+2. `params` (_Params_): An argument passed to effect call
+3. `error` (_Fail_): An error catched from the handler
+4. `result` (_Done_): A result of the resolved handler
 
 #### Example
 
-```js
+```js try
 import {createEffect} from 'effector'
 
 const fetchApi = createEffect({
-  handler: ms =>  new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+  handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
 })
 
 fetchApi.finally.watch(console.log)
@@ -246,5 +288,4 @@ fetchApi(100)
 
 // if rejected
 // => {status: 'fail', error: Error, params: 100}
-
 ```

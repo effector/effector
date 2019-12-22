@@ -216,5 +216,10 @@ function setUseStoreNameAfter(path, state, nameNodeId, t) {
  * "foo src/index.js [12,30]"
  */
 function generateStableID(babelRoot, fileName, varName, line, column) {
-  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]}`
+  const {sep, normalize} = require('path')
+  const rawPath = fileName.replace(babelRoot, '')
+  const normalizedPath = normalize(rawPath)
+    .split(sep)
+    .join('/')
+  return `${varName} ${normalizedPath} [${line}, ${column}]`
 }

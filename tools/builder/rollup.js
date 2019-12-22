@@ -15,11 +15,13 @@ import replace from 'rollup-plugin-replace'
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 //$off
 import analyze from 'rollup-plugin-visualizer'
+//$off
+import typescript from '@rollup/plugin-typescript'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
+import {minifyConfig} from './minificationConfig'
 
-const nameCache = {}
 const compatNameCache = {}
 const onwarn = (warning, rollupWarn: any) => {
   if (warning.code !== 'CIRCULAR_DEPENDENCY') {
@@ -33,113 +35,9 @@ const compatTarget = {
     'last 2 Firefox versions',
     'last 2 Safari versions',
     'last 2 Edge versions',
+    'IE 11',
   ],
 }
-
-const minifyConfig = ({beautify}: {beautify: boolean}) => ({
-  parse: {
-    bare_returns: false,
-    ecma: 8,
-    html5_comments: false,
-    shebang: true,
-  },
-  compress: {
-    global_defs: {
-      // __DEV__: false,
-      // 'process.env.NODE_ENV': 'production',
-    },
-    arrows: true,
-    arguments: true,
-    booleans: true,
-    booleans_as_integers: true,
-    collapse_vars: true,
-    comparisons: true,
-    computed_props: true,
-    conditionals: true,
-    dead_code: true,
-    directives: true,
-    drop_console: false,
-    drop_debugger: true,
-    ecma: 8,
-    evaluate: true,
-    expression: true, //?
-    hoist_funs: true, //?
-    hoist_props: true,
-    hoist_vars: false,
-    if_return: true,
-    inline: true,
-    join_vars: true, //?
-
-    defaults: false,
-    keep_classnames: false,
-    keep_fargs: false,
-    keep_fnames: false,
-    loops: true,
-    module: true,
-    properties: true,
-    pure_getters: true,
-    reduce_funcs: true,
-    reduce_vars: true,
-    sequences: true,
-    side_effects: true,
-    switches: true,
-    toplevel: true,
-
-    typeofs: true,
-    unused: true,
-    passes: 3,
-
-    unsafe_arrows: true,
-    unsafe_Function: true,
-    unsafe_math: true,
-    unsafe_proto: true,
-  },
-  mangle: {
-    reserved: ['effector', 'effectorVue', 'effectorReact', 'it', 'test'],
-    eval: true,
-    keep_classnames: false,
-    keep_fnames: false,
-    module: true,
-    toplevel: true, //?
-    safari10: false,
-    // properties: {
-    //   builtins: false,
-    //   debug: false,
-    //   keep_quoted: false, //?
-    //   reserved: ['test', 'it'],
-    // },
-  },
-  output: {
-    ascii_only: false,
-    braces: false, //?
-    // comments: /#/i,
-    comments: false,
-    ecma: 8,
-    beautify,
-    indent_level: 2,
-    inline_script: false, //?
-    keep_quoted_props: false, //?
-    quote_keys: false,
-    quote_style: 3, //?
-    safari10: false,
-    semicolons: true, //?
-    shebang: true,
-    webkit: false,
-    wrap_iife: false,
-  },
-  // sourceMap: {
-  //     // source map options
-  // },
-  ecma: 8,
-  keep_classnames: false,
-  keep_fnames: false,
-  ie8: false,
-  module: true,
-  nameCache,
-  safari10: false,
-  toplevel: true,
-  warnings: true,
-})
 
 const getPlugins = (name: string) => ({
   babel: babel({
@@ -149,12 +47,29 @@ const getPlugins = (name: string) => ({
   replace: replace({
     'process.env.NODE_ENV': JSON.stringify('production'),
   }),
+  typescript: typescript({
+    module: 'es2015',
+    target: 'esnext',
+    allowSyntheticDefaultImports: true,
+    lib: ['dom', 'esnext'],
+  }),
   commonjs: commonjs({}),
-  resolve: resolve({}),
-  sizeSnapshot: sizeSnapshot(),
+  resolve: resolve({
+    extensions: ['.js', '.ts', '.json'],
+  }),
+  sizeSnapshot: sizeSnapshot({
+    printInfo: false,
+  }),
   analyzer: analyze({
     filename: `stats/${name}.html`,
+    title: `${name} size report`,
     sourcemap: true,
+    template: 'treemap',
+  }),
+  analyzerJSON: analyze({
+    sourcemap: true,
+    json: true,
+    filename: `stats/${name}.json`,
   }),
   terser: terser(
     minifyConfig({
@@ -171,13 +86,44 @@ const getPlugins = (name: string) => ({
   }),
 })
 
-export async function rollupBabel(name: string, plugin: *) {
+export async function rollupBabel() {
+  const name = '@effector/babel-plugin'
   const plugins = getPlugins(name)
   const terserConfig = minifyConfig({
     beautify: true,
   })
   const build = await rollup({
-    input: dir(plugin),
+    input: dir('src/babel/babel-plugin'),
+    plugins: [
+      plugins.babel,
+      terser({
+        ...terserConfig,
+        compress: false,
+        mangle: false,
+        keep_classnames: true,
+        keep_fnames: true,
+        toplevel: false,
+      }),
+    ],
+    external: ['./plugin/defaultMetaVisitor.js'],
+  })
+  await build.write({
+    file: dir(`npm/${name}/index.js`),
+    format: 'cjs',
+    freeze: false,
+    name,
+    sourcemap: true,
+  })
+}
+
+export async function rollupBabelReact() {
+  const name = '@effector/babel-plugin-react'
+  const plugins = getPlugins(name)
+  const terserConfig = minifyConfig({
+    beautify: true,
+  })
+  const build = await rollup({
+    input: dir('src/babel/babel-plugin-react'),
     plugins: [
       plugins.babel,
       terser({
@@ -193,6 +139,7 @@ export async function rollupBabel(name: string, plugin: *) {
   await build.write({
     file: dir(`npm/${name}/index.js`),
     format: 'cjs',
+    freeze: false,
     name,
     sourcemap: true,
   })
@@ -208,6 +155,12 @@ export async function rollupEffector() {
       },
       renderModuleGraph: true,
     }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/fork.js`),
+      },
+      input: 'fork',
+    }),
     createUmd(name, {
       external: ['react', 'effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -215,6 +168,32 @@ export async function rollupEffector() {
       globals: {},
     }),
     createCompat(name),
+  ])
+}
+export async function rollupEffectorDom() {
+  const name = 'effector-dom'
+  await Promise.all([
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/${name}.cjs.js`),
+        es: dir(`npm/${name}/${name}.es.js`),
+      },
+      inputExtension: 'ts',
+    }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/server.js`),
+      },
+      input: 'server',
+      inputExtension: 'ts',
+    }),
+    // createUmd(name, {
+    //   external: ['react', 'effector'],
+    //   file: dir(`npm/${name}/${name}.umd.js`),
+    //   umdName: name,
+    //   globals: {},
+    // }),
+    // createCompat(name),
   ])
 }
 
@@ -273,6 +252,7 @@ export async function rollupEffectorReact() {
         es: dir(`npm/${name}/${name}.es.js`),
       },
     }),
+    createSSR({file: {cjs: dir(`npm/${name}/ssr.js`)}}),
     createUmd(name, {
       external: ['react', 'effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -284,6 +264,33 @@ export async function rollupEffectorReact() {
     }),
     createCompat(name),
   ])
+
+  async function createSSR({file: {cjs}}: {|file: {|cjs: string|}|}) {
+    const plugins = getPlugins(name)
+    const pluginList = [
+      plugins.resolve,
+      plugins.json,
+      plugins.babel,
+      plugins.sizeSnapshot,
+      plugins.terser,
+      plugins.analyzer,
+      plugins.analyzerJSON,
+    ]
+    const build = await rollup({
+      onwarn,
+      input: dir(`packages/${name}/ssr.js`),
+      external: ['react', 'vue', 'symbol-observable', 'effector'],
+      plugins: pluginList,
+    })
+    await build.write({
+      file: cjs,
+      format: 'cjs',
+      freeze: false,
+      name,
+      sourcemap: true,
+      sourcemapPathTransform: getSourcemapPathTransform(name),
+    })
+  }
 }
 
 export async function rollupEffectorVue() {
@@ -322,12 +329,14 @@ async function createUmd(name, {external, file, umdName, globals}) {
       plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
+      plugins.analyzerJSON,
     ],
     external,
   })
   await build.write({
     file,
     format: 'umd',
+    freeze: false,
     name: umdName,
     sourcemap: true,
     globals,
@@ -355,6 +364,7 @@ async function createCompat(name) {
           {
             loose: true,
             useBuiltIns: 'entry',
+            corejs: 3,
             modules: false,
             shippedProposals: true,
             targets: compatTarget,
@@ -366,11 +376,14 @@ async function createCompat(name) {
         '@babel/plugin-proposal-optional-chaining',
         '@babel/plugin-proposal-nullish-coalescing-operator',
         ['@babel/plugin-proposal-class-properties', {loose: true}],
-        'macros',
         [
           'babel-plugin-module-resolver',
           {
-            alias: getAliases(),
+            alias: getAliases({
+              isBuild: true,
+              isTest: false,
+              isCompat: true,
+            }),
           },
         ],
       ],
@@ -378,9 +391,14 @@ async function createCompat(name) {
     plugins.sizeSnapshot,
     terser({
       ...terserConfig,
+      parse: {
+        ...terserConfig.parse,
+        ecma: 5,
+      },
       compress: {
         ...terserConfig.compress,
         directives: false,
+        ecma: 5,
       },
       mangle: {
         ...terserConfig.mangle,
@@ -388,31 +406,33 @@ async function createCompat(name) {
       },
       output: {
         ...terserConfig.output,
+        ecma: 5,
         safari10: true,
         webkit: true,
       },
+      ecma: 5,
       nameCache: compatNameCache,
       safari10: true,
     }),
     plugins.analyzer,
+    plugins.analyzerJSON,
   ]
   const build = await rollup({
     onwarn,
     input: dir(`packages/${name}/index.js`),
     external: [
-      'warning',
-      'invariant',
       'react',
       'vue',
-      'most',
-      // 'symbol-observable',
+      'symbol-observable',
       'effector',
+      'effector/compat',
     ],
     plugins: pluginList,
   })
   await build.write({
     file: dir(`npm/${name}/compat.js`),
-    format: 'umd',
+    format: 'cjs',
+    freeze: false,
     name,
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
@@ -423,16 +443,25 @@ async function createEsCjs(
   {
     file: {es, cjs},
     renderModuleGraph = false,
-  }: {file: {es: string, cjs: string}, renderModuleGraph?: boolean},
+    input = 'index',
+    inputExtension = 'js',
+  }: {|
+    file: {|es?: string, cjs: string|},
+    renderModuleGraph?: boolean,
+    input?: string,
+    inputExtension?: string,
+  |},
 ) {
-  const plugins = getPlugins(name)
+  const plugins = getPlugins(input === 'index' ? name : input)
   const pluginList = [
     plugins.resolve,
+    plugins.typescript,
     plugins.json,
     plugins.babel,
     plugins.sizeSnapshot,
     plugins.terser,
     plugins.analyzer,
+    plugins.analyzerJSON,
   ]
   if (renderModuleGraph) {
     pluginList.push(
@@ -444,32 +473,27 @@ async function createEsCjs(
   }
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.js`),
-    external: [
-      'warning',
-      'invariant',
-      'react',
-      'vue',
-      'most',
-      'symbol-observable',
-      'effector',
-    ],
+    input: dir(`packages/${name}/${input}.${inputExtension}`),
+    external: ['react', 'vue', 'symbol-observable', 'effector', 'perf_hooks'],
     plugins: pluginList,
   })
   await Promise.all([
     build.write({
       file: cjs,
       format: 'cjs',
+      freeze: false,
       name,
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
     }),
-    build.write({
-      file: es,
-      format: 'es',
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    }),
+    es &&
+      build.write({
+        file: es,
+        format: 'es',
+        freeze: false,
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+      }),
   ])
 }

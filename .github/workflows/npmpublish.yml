@@ -1,0 +1,28 @@
+name: effector publish
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'packages/*/package.json'
+      - 'packages/*/*/package.json'
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: install
+        run: yarn
+      - name: set npm config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.npm_token }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: publish packages
+        run: node tools/build publish latest
+        env:
+          PRINT_ERRORS: false

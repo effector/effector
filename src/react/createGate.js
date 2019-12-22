@@ -1,8 +1,14 @@
 //@flow
 
 import * as React from 'react'
-import {useEffect} from 'react'
-import {createDomain, createApi, type Store, type Event} from 'effector'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {
+  createDomain,
+  createApi,
+  type Store,
+  type Event,
+  type Domain,
+} from 'effector'
 
 const {store: createStore} = createDomain('Gate')
 
@@ -10,8 +16,8 @@ export type Gate<Props = {||}> = Class<React.Component<Props>> &
   interface {
     isOpen: boolean,
     isTerminated: boolean,
-    open: Event<void>,
-    close: Event<void>,
+    open: Event<Props>,
+    close: Event<Props>,
     status: Store<boolean>,
     destructor: Event<void>,
     current: Props,
@@ -24,9 +30,11 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props?: Props = ({}: any),
 ) {
-  useEffect(() => {
-    GateComponent.open()
-    return () => GateComponent.close()
+  const propsRef = React.useRef(props)
+  propsRef.current = props
+  useIsomorphicLayoutEffect(() => {
+    GateComponent.open(propsRef.current)
+    return () => GateComponent.close(propsRef.current)
   }, [GateComponent])
   GateComponent.set(props)
 }
@@ -35,23 +43,23 @@ export function createGate<Props>(
   name: string = 'gate',
   defaultState: Props = ({}: any),
 ): Gate<Props> {
-  const status = createStore(false)
+  const status = createStore(Boolean(false))
   const state: Store<Props> = createStore(defaultState)
   const {set} = createApi(state, {
     set: (_, state) => state,
   })
 
   const {open, close, destructor} = createApi(status, {
-    open: () => GateComponent.predicate() && true,
-    close: () => false,
-    destructor: () => false,
+    open: () => GateComponent.predicate() && Boolean(true),
+    close: () => Boolean(false),
+    destructor: () => Boolean(false),
   })
 
   class GateComponent extends React.PureComponent<Props> {
-    static predicate = () => true
+    static predicate = () => Boolean(true)
 
     static displayName = `Gate:${name}`
-    static isOpen = false
+    static isOpen = Boolean(false)
     static current = state.getState()
     static open = open
     static close = close
@@ -59,7 +67,7 @@ export function createGate<Props>(
     static state = state
     static set = set
     static destructor = destructor
-    static isTerminated = false
+    static isTerminated = Boolean(false)
     static childGate<Next>(childName: string = 'Subgate'): Gate<Next> {
       const gate = createGate(`${name}/${childName}`)
       ;(gate: any).predicate = () => GateComponent.status.getState()
@@ -87,12 +95,11 @@ export function createGate<Props>(
       GateComponent.destructor.watch(() => gate.destructor())
       return gate
     }
-
     componentDidMount() {
-      GateComponent.open()
+      GateComponent.open(this.props)
     }
     componentWillUnmount() {
-      GateComponent.close()
+      GateComponent.close(this.props)
     }
     render() {
       GateComponent.set(this.props)
@@ -103,11 +110,12 @@ export function createGate<Props>(
   const unwatch2 = state.watch(current => (GateComponent.current = current))
   const unwatch3 = status.map(status => {
     if (!status) GateComponent.current = defaultState
+    return null
   })
   state.reset(close)
 
   const setTerminated = destructor.watch(() => {
-    GateComponent.isTerminated = true
+    GateComponent.isTerminated = Boolean(true)
   })
   const unstate = () => {
     GateComponent.status.off(GateComponent.open)

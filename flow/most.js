@@ -3,10 +3,12 @@
 export type SeedValue<S, V> = {
   seed: S,
   value: V,
+  ...
 }
 export type TimeValue<V> = {
   /*::+*/time: number,
-  /*::+*/value: V
+  /*::+*/value: V,
+  /*::...*/
 }
 export type CreateGenerator<A>=
   ((...args: $ReadOnlyArray<mixed>) => Generator<A | Promise<A>, mixed, mixed>)
@@ -14,18 +16,21 @@ export type CreateGenerator<A>=
 export type Sink<A> = {
   event(time: number, value: A): void,
   end(time: number, value?: A): void,
-  error(time: number, err: Error): void
+  error(time: number, err: Error): void,
+  /*::...*/
 }
 export type Task = {
   run(time: number): void,
   error(time: number, e: Error): void,
-  dispose(): void
+  dispose(): void,
+  /*::...*/
 }
 export type ScheduledTask = {
   /*::+*/task: Task,
   run(): void,
   error(err: Error): void,
-  dispose(): void
+  dispose(): void,
+  /*::...*/
 }
 export type Scheduler = {
   now(): number,
@@ -34,24 +39,29 @@ export type Scheduler = {
   periodic(task: Task): ScheduledTask,
   schedule(delay: number, period: number, task: Task): ScheduledTask,
   cancel(task: Task): void,
-  cancelAll(predicate: (task: Task) => boolean): void
+  cancelAll(predicate: (task: Task) => boolean): void,
+  /*::...*/
 }
 export type Disposable<A> = {
-  dispose(): void | Promise<A>
+  dispose(): void | Promise<A>,
+  /*::...*/
 }
 
 export type Subscription<A> = {
-  unsubscribe(): void
+  unsubscribe(): void,
+  /*::...*/
 }
 
 export type Subscriber<A> = {
   +next?: (value: A) => void,
   +error?: (err: Error) => void,
-  +complete?: (value?: A) => void
+  +complete?: (value?: A) => void,
+  /*::...*/
 }
 
 export type Observable<A> = {
-  subscribe(subscriber: Subscriber<A>): Subscription<A>
+  subscribe(subscriber: Subscriber<A>): Subscription<A>,
+  /*::...*/
 }
 
 declare export class Stream<A> {

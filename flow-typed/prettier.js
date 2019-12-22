@@ -18,6 +18,7 @@ declare module 'prettier' {
 
   declare export type PrettierParser = {
     [name: PrettierParserName]: (text: string, options?: Object) => AST,
+    ...,
   }
 
   declare export type CustomParser = (
@@ -46,22 +47,22 @@ declare module 'prettier' {
     plugins?: Array<string | Plugin>,
   |}
 
-  declare export type Plugin = {
+  declare export type Plugin = {|
     languages: SupportLanguage,
-    parsers: {[parserName: string]: Parser},
-    printers: {[astFormat: string]: Printer},
-  }
+    parsers: {[parserName: string]: Parser, ...},
+    printers: {[astFormat: string]: Printer, ...},
+  |}
 
-  declare export type Parser = {
+  declare export type Parser = {|
     parse: (
       text: string,
-      parsers: {[parserName: string]: Parser},
+      parsers: {[parserName: string]: Parser, ...},
       options: Object,
     ) => AST,
     astFormat: string,
-  }
+  |}
 
-  declare export type Printer = {
+  declare export type Printer = {|
     print: (
       path: FastPath,
       options: Object,
@@ -73,7 +74,7 @@ declare module 'prettier' {
       textToDoc: (text: string, options: Object) => Doc,
       options: Object,
     ) => ?Doc,
-  }
+  |}
 
   declare export type CursorOptions = {|
     cursorOffset: number,
@@ -105,7 +106,7 @@ declare module 'prettier' {
     editorconfig?: boolean,
   |}
 
-  declare export type SupportLanguage = {
+  declare export type SupportLanguage = {|
     name: string,
     since: string,
     parsers: Array<string>,
@@ -119,7 +120,7 @@ declare module 'prettier' {
     filenames?: Array<string>,
     linguistLanguageId: number,
     vscodeLanguageIds: Array<string>,
-  }
+  |}
 
   declare export type SupportOption = {|
     since: string,
@@ -166,6 +167,7 @@ declare module 'prettier' {
     resolveConfig: {
       (filePath: string, options?: ResolveConfigOptions): Promise<?Options>,
       sync(filePath: string, options?: ResolveConfigOptions): ?Options,
+      ...
     },
     clearConfigCache: () => void,
     getSupportInfo: (version?: string) => SupportInfo,

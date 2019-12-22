@@ -17,6 +17,7 @@ const input = {
           {
             loose: true,
             useBuiltIns: 'entry',
+            corejs: 3,
             modules: false,
             shippedProposals: true,
             targets: {
@@ -48,6 +49,7 @@ const input = {
     'chalk',
     'rollup',
     'rollup-plugin-json',
+    '@rollup/plugin-typescript',
     'rollup-plugin-babel',
     'rollup-plugin-node-resolve',
     'rollup-plugin-terser',

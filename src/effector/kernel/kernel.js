@@ -1,122 +1,72 @@
 //@flow
 
-import type {
-  Graphite,
-  StateRef,
-  Run,
-  Update,
-  Filter,
-  Compute,
-  Barrier,
-  Tap,
-} from '../stdlib'
-import {getGraph, writeRef, readRef} from '../stdlib'
+import type {Graphite, Graph, ID} from '../stdlib'
+import {type PriorityTag, getPriority} from './getPriority'
+import {getGraph, readRef} from '../stdlib'
 import type {Layer} from './layer'
-import {type leftist, insert, deleteMin} from './leftist'
-import {Stack} from './stack'
+import {Stack, createStack} from './stack'
 
 /**
  * Dedicated local metadata
  */
-class Local {
-  /*::
-  isChanged: boolean
-  isFailed: boolean
-  scope: {[key: string]: any, ...}
-  */
-  constructor(scope: {[key: string]: any, ...}) {
-    this.isChanged = true
-    this.isFailed = false
-    this.scope = scope
+type Local = {
+  isChanged: boolean,
+  isFailed: boolean,
+  ref: ID,
+  scope: {[key: string]: any, ...},
+}
+
+const pushValueToList = (list, value) => {
+  const item = {
+    right: null,
+    value,
   }
+  if (list.size === 0) {
+    list.first = item
+  } else {
+    list.last.right = item
+  }
+  list.size += 1
+  list.last = item
+}
+const popMinFromList = list => {
+  if (list.size === 0) return
+  if (list.size === 1) {
+    list.last = null
+  }
+  const item = list.first
+  list.first = item.right
+  list.size -= 1
+  return item.value
+}
+
+const queue = []
+let ix = 0
+while (ix < 5) {
+  queue.push({first: null, last: null, size: 0})
+  ix += 1
 }
 
 let layerID = 0
-let heap: leftist = null
 const barriers = new Set()
-const pushHeap = (opts: Layer) => {
-  heap = insert(opts, heap)
+const deleteMin = () => {
+  for (let i = 0; i < 5; i++) {
+    if (queue[i].size > 0) return popMinFromList(queue[i])
+  }
 }
-const runGraph = ({step: graph, firstIndex, scope, resetStop}: Layer, meta) => {
-  const local = new Local(graph.scope)
-  for (
-    let stepn = firstIndex;
-    stepn < graph.seq.length && !meta.stop;
-    stepn++
-  ) {
-    const step = graph.seq[stepn]
-    if (stepn === firstIndex) {
-      if (step.type === 'barrier') {
-        barriers.delete(step.data.barrierID)
-      }
-    } else {
-      switch (step.type) {
-        case 'run':
-          pushHeap({
-            step: graph,
-            firstIndex: stepn,
-            scope,
-            resetStop: false,
-            type: 'effect',
-            id: ++layerID,
-          })
-          return
-        case 'barrier': {
-          const id = step.data.barrierID
-          if (!barriers.has(id)) {
-            barriers.add(id)
-            pushHeap({
-              step: graph,
-              firstIndex: stepn,
-              scope,
-              resetStop: false,
-              type: step.data.priority,
-              id: ++layerID,
-            })
-          }
-          return
-        }
-      }
-    }
-    const cmd = command[step.type]
-    //$todo
-    cmd(local, step.data, scope.value)
-    meta.stop = local.isFailed || !local.isChanged
-  }
-  if (!meta.stop) {
-    for (let stepn = 0; stepn < graph.next.length; stepn++) {
-      /**
-       * copy head of scope stack to feel free
-       * to override it during seq execution
-       */
-      const subscope = new Stack(readRef(scope.value), scope)
-      pushHeap({
-        step: graph.next[stepn],
-        firstIndex: 0,
-        scope: subscope,
-        resetStop: true,
-        type: 'child',
-        id: ++layerID,
-      })
-    }
-  }
-  if (resetStop) {
-    meta.stop = false
-  }
+const pushHeap = (firstIndex: number, stack: Stack, type: PriorityTag) => {
+  pushValueToList(queue[getPriority(type)], {
+    firstIndex,
+    stack,
+    resetStop: currentResetStop,
+    type,
+    id: ++layerID,
+  })
 }
 
 let alreadyStarted = false
 
-const addSingleBranch = (unit: Graphite, payload: any) => {
-  pushHeap({
-    step: getGraph(unit),
-    firstIndex: 0,
-    scope: new Stack(payload, null),
-    resetStop: false,
-    type: 'pure',
-    id: ++layerID,
-  })
-}
+let currentResetStop = false
 
 const exec = () => {
   const lastStartedState = alreadyStarted
@@ -124,58 +74,123 @@ const exec = () => {
   const meta = {
     stop: false,
   }
+  let graph
   let value
-  while (heap) {
-    value = heap.value
-    heap = deleteMin(heap)
-    runGraph(value, meta)
+  mem: while ((value = deleteMin())) {
+    const {firstIndex, stack, resetStop, type} = value
+    graph = stack.node
+    const local: Local = {
+      isChanged: true,
+      isFailed: false,
+      ref: '',
+      scope: graph.scope,
+    }
+    for (
+      let stepn = firstIndex;
+      stepn < graph.seq.length && !meta.stop;
+      stepn++
+    ) {
+      const step = graph.seq[stepn]
+      const data = step.data
+      switch (step.type) {
+        case 'barrier': {
+          const id = data.barrierID
+          const priority = data.priority
+          if (stepn !== firstIndex || type !== priority) {
+            if (!barriers.has(id)) {
+              barriers.add(id)
+              pushHeap(stepn, stack, priority)
+            }
+            continue mem
+          }
+          barriers.delete(id)
+          break
+        }
+        case 'mov': {
+          let value
+          //prettier-ignore
+          switch (data.from) {
+            case 'stack': value = stack.value; break
+            case 'a': value = stack.a; break
+            case 'b': value = stack.b; break
+            case 'value': value = data.store; break
+            case 'store':
+              value = readRef(graph.reg[data.store.id])
+              break
+          }
+          //prettier-ignore
+          switch (data.to) {
+            case 'stack': stack.value = value; break
+            case 'a': stack.a = value; break
+            case 'b': stack.b = value; break
+            case 'store':
+              graph.reg[data.target.id].current = value
+              break
+          }
+          break
+        }
+        case 'check':
+          switch (data.type) {
+            case 'defined':
+              local.isChanged = stack.value !== undefined
+              break
+            case 'changed':
+              local.isChanged =
+                stack.value !== readRef(graph.reg[data.store.id])
+              break
+          }
+          break
+        case 'filter':
+          /**
+           * handled edge case: if step.fn will throw,
+           * tryRun will return null
+           * thereby forcing that branch to stop
+           */
+          local.isChanged = !!tryRun(local, data, stack)
+          break
+        case 'run':
+          /** exec 'compute' step when stepn === firstIndex */
+          if (stepn !== firstIndex || type !== 'effect') {
+            pushHeap(stepn, stack, 'effect')
+            continue mem
+          }
+        case 'compute':
+          stack.value = tryRun(local, data, stack)
+          break
+      }
+      meta.stop = local.isFailed || !local.isChanged
+    }
+    if (!meta.stop) {
+      currentResetStop = true
+      for (let stepn = 0; stepn < graph.next.length; stepn++) {
+        pushHeap(0, createStack(graph.next[stepn], stack, stack.value), 'child')
+      }
+      currentResetStop = false
+    }
+    if (resetStop) {
+      meta.stop = false
+    }
   }
   alreadyStarted = lastStartedState
 }
-export const launch = (unit: Graphite, payload: any) => {
-  addSingleBranch(unit, payload)
+export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
+  pushHeap(0, createStack(getGraph(unit), null, payload), 'pure')
+  if (upsert && alreadyStarted) return
   exec()
 }
-export const upsertLaunch = (unit: Graphite, payload: any) => {
-  addSingleBranch(unit, payload)
+export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
+  for (let i = 0; i < units.length; i++) {
+    pushHeap(0, createStack(getGraph(units[i]), null, payloads[i]), 'pure')
+  }
   if (alreadyStarted) return
   exec()
 }
-const command = {
-  barrier(local, step: $PropertyType<Barrier, 'data'>, val: StateRef) {
-    local.isFailed = false
-    local.isChanged = true
-  },
-  filter(local, step: $PropertyType<Filter, 'data'>, val: StateRef) {
-    /**
-     * handled edge case: if step.fn will throw,
-     * tryRun will return null
-     * thereby forcing that branch to stop
-     */
-    local.isChanged = !!tryRun(local, step, val)
-  },
-  run(local, step: $PropertyType<Run, 'data'>, val: StateRef) {
-    writeRef(val, tryRun(local, step, val))
-  },
-  update(local, step: $PropertyType<Update, 'data'>, val: StateRef) {
-    writeRef(step.store, readRef(val))
-  },
-  compute(local, step: $PropertyType<Compute, 'data'>, val: StateRef) {
-    writeRef(val, tryRun(local, step, val))
-  },
-  tap(local, step: $PropertyType<Tap, 'data'>, val: StateRef) {
-    tryRun(local, step, val)
-  },
-}
-const tryRun = (local: Local, {fn}, val: StateRef) => {
-  let result = null
-  let isFailed = false
+
+const tryRun = (local: Local, {fn}, stack: Stack) => {
   try {
-    result = fn(readRef(val), local.scope)
+    return fn(stack.value, local.scope, stack)
   } catch (err) {
     console.error(err)
-    isFailed = true
+    local.isFailed = true
   }
-  local.isFailed = isFailed
-  return result
 }

@@ -10,7 +10,7 @@ import {
   type Store,
 } from 'effector'
 
-import {sourceCode} from '../../domain'
+import {sourceCode} from '../../editor/state'
 import {shareCode} from '../../graphql'
 
 export const inputRef: any = createRef()

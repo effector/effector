@@ -7,7 +7,7 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 ## Event
 
-*Event* is an intention to change state.
+_Event_ is an intention to change state.
 
 ```typescript
 function createEvent<E>(eventName?: string): Event<E>;
@@ -20,40 +20,28 @@ type Event<Payload> = {
  (payload: Payload): Payload;
  watch(watcher: (payload: Payload) => any): Subscription;
  map<T>(fn: (payload: Payload) => T): Event<T>;
- filter<T>(fn: (payload: Payload) => T | void): Event<T>;
+ filter(options: {fn(payload: Payload): boolean}): Event<Payload>;
+ filterMap<T>(fn: (payload: Payload) => T | void): Event<T>;
  prepend<Before>(fn: (params: Before) => Payload): Event<Before>;
- getType(): string;
+ shortName: string;
 }
 ```
 
 - [`(payload)`]() calls `Event` with payload
-- [`watch(watcher)`]() listens to this event and calls [`watcher`](#watcher)
+- [`watch(watcher)`]() listens to this event and calls given [`watcher`](#watcher)
 - [`map(fn)`]()
-- [`filter(fn)`]()
+- [`filter({fn})`]() creates new event that will receive update only when given `fn` returns true
+- [`filterMap(fn)`]() creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
 - [`prepend(fn)`]() creates new event that preprocesses payload before calling original event
-- [`getType()`]() returns event name
-
-## Future
-
-*Future* is a container for async value.
-
-It is basically `Promise` with additional methods
-
-```typescript
-class Future<Params, Done, Fail> extends Promise<Done> {
- args: Params;
- anyway(): Promise<void>;
- cache(): Done | void;
-}
-```
+- [`shortName`]() is used for debug
 
 ## Effect
 
-*Effect* is a container for async function. 
+_Effect_ is a container for async function.
 
 It can be safely used in place of the original async function.
 
-It returns [`Future`](#Future)
+It returns promise with result of function call
 
 The only requirement for function:
 
@@ -69,30 +57,28 @@ function createEffect<Params, Done, Fail>(
 
 ```typescript
 type Effect<Params, Done, Fail = Error> = {
- (
-  payload: Params,
- ): Future<Params, Done, Fail>;
+ (payload: Params): Promise<Done>;
  done: Event<{params: Params, result: Done}>;
  fail: Event<{params: Params, error: Fail}>;
  use: {
-  (asyncFunction: (params: Params) => Promise<Done>): void,
+  (asyncFunction: (params: Params) => Promise<Done>): this,
   getCurrent(): (params: Params) => Promise<Done>,
  };
  watch(watcher: (payload: Params) => any): Subscription;
  prepend<Before>(fn: (_: Before) => Params): Event<Before>;
- getType(): string;
+ shortName: string;
 }
 ```
 
 - [`(payload)`]() calls `Effect` with payload
 - [`use(asyncFunction)`]() injects async function into effect (can be called multiple times)
-- [`watch(watcher)`]() listens to this effect and calls [`watcher`](#watcher)
+- [`watch(watcher)`]() listens to this effect and calls given [`watcher`](#watcher)
 - [`prepend(fn)`]() creates new effect that preprocesses payload before calling original event
-- [`getType()`]() returns effect name
+- [`shortName`]() is used for debug
 
 ## Store
 
-*Store* is an object that holds the state tree.
+_Store_ is an object that holds the state tree.
 There can be multiple stores.
 
 ```typescript
@@ -109,7 +95,7 @@ function createStoreObject<State: {[key: string]: Store<any> | any}>(
 
 ```typescript
 type Store<State> = {
- reset(trigger: Event<any> | Effect<any, any, any> | Store<any>): this;
+ reset(...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>): this;
  getState(): State;
  map<T>(fn: (_: State) => T): Store<T>;
  on<E>(
@@ -122,27 +108,29 @@ type Store<State> = {
  ): Subscription;
  watch<E>(
   trigger: Event<E> | Effect<E, any, any> | Store<E>,
-  watcher: (state: State, payload: E, type: string) => any,
+  watcher: (state: State, payload: E) => any,
  ): Subscription;
  thru<U>(fn: (store: Store<State>) => U): U;
  shortName: string;
  defaultState: State;
+ updates: Event<State>;
 }
 ```
 
-- [`reset(event)`]() resets state to default when event occurs
+- [`reset(...triggers)`]() resets state to default when event occurs
 - [`getState()`]() returns current state
 - [`map(fn)`]() creates computed store from previous state
 - [`on(event, handler)`]() calls [`reducer`](#reducer) on store when event occurs
 - [`off(event)`]() disables [`reducer`](#reducer)
-- [`watch(event, watcher) | watch(watcher)`]() calls [`watcher`](#watcher) when event occurs
-- [`thru(fn)`]() calls function with this store
+- [`watch(watcher)`]() calls given [`watcher`](#watcher) when event occurs
+- [`thru(fn)`]() calls function with this store and return its result
 - [`shortName`]() is used for debug
 - [`defaultState`]() is `createStore` first argument
+- [`updates`]() is `event` for watch `store` changes only
 
 ## Domain
 
-*Domain* is a namespace for your events, stores and effects.
+_Domain_ is a namespace for your events, stores and effects.
 
 Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
 
@@ -183,16 +171,15 @@ type StoreReducer<State, E> = (state: S, payload: E) => State | void
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 ```
 
-*Reducer* calculates a new state given the previous state and an event.
+_Reducer_ calculates a new state given the previous state and an event.
 
 ## Watcher
 
 ```typescript
-type EventOrEffectWatcher<Params> = (payload: Params) => any
-type StoreWatcher<State, E> = (state: State, payload: E, type: string) => any
+type Watcher<T> = (update: T) => any
 ```
 
-*Watcher* is used for __side effects__
+_Watcher_ is used for __side effects__
 
 ## Subscription
 

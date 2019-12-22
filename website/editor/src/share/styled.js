@@ -40,12 +40,12 @@ export const Button = styled.button`
 `
 
 export const SharedUrl = styled.input`
-  border-radius: 2px;
   background: #fff;
   padding: 0.5rem 1rem;
   border: none;
   outline: none;
   width: 100%;
+  border-bottom: 1px solid #ddd;
 
   &[value=''] {
     visibility: hidden;
@@ -57,20 +57,23 @@ export const ShareButton = styled(Button)`
   padding: 0.5rem 1rem;
   border-width: 0;
   margin: 1rem;
-  align-self: center;
 `
 
 export const ShareGroup = styled.div`
-  width: calc(100% - 1.5rem * 2);
+  background-color: #f7f7f7;
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  display: flex;
-  flex-wrap: wrap;
   grid-column: 3 / span 1;
-  grid-row: 2 / span 3;
+  grid-row: 3 / span 2;
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
     grid-row: 3 / span 7;
   }
+`
+
+export const Label = styled.div`
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  font-weight: bold;
 `

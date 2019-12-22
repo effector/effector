@@ -4,6 +4,7 @@ parserOptions:
 extends:
   # - 'plugin:flowtype/recommended'
   - 'plugin:react/recommended'
+  - prettier
 plugins:
   - babel
   - flowtype
@@ -27,6 +28,9 @@ rules:
   # flowtype/no-weak-types: 'off'
   # flowtype/generic-spacing: 'off'
   # flowtype/space-after-type-colon: 'off'
+  flowtype/require-exact-type:
+    - error
+    - never
   react-hooks/rules-of-hooks: error
   react/react-in-jsx-scope: 'off'
   react/no-children-prop: 'off'
@@ -67,10 +71,10 @@ rules:
     - single
     - allowTemplateLiterals: true
       avoidEscape: true
-  max-len:
-    - warn
-    - code: 80
-      tabWidth: 2
+  # max-len:
+  #   - warn
+  #   - code: 80
+  #     tabWidth: 2
   key-spacing:
     - warn
     - beforeColon: false
@@ -94,16 +98,16 @@ rules:
     - 2
     - 2
     - SwitchCase: 1
-  operator-linebreak:
-    - warn
-    - after
-    - overrides:
-        '?': before
-        ':': before
-        '||': before
-        '|': before
-        '&': before
-        '&&': before
+  # operator-linebreak:
+  #   - warn
+  #   - after
+  #   - overrides:
+  #       '?': before
+  #       ':': before
+  #       '||': before
+  #       '|': before
+  #       '&': before
+  #       '&&': before
   newline-per-chained-call:
     - error
   keyword-spacing:
@@ -113,10 +117,10 @@ rules:
     - words: true
       nonwords: false
   no-whitespace-before-property: error
-  generator-star-spacing:
-    - error
-    - before: false
-      after: true
+  # generator-star-spacing:
+  #   - error
+  #   - before: false
+  #     after: true
   arrow-spacing:
     - error
     - before: true

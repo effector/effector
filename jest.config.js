@@ -1,13 +1,25 @@
 //@flow
 
 const watchPathIgnorePatterns = [
-  '<rootDir>/node_modules/',
-  '<rootDir>/tools/',
-  '<rootDir>/npm/',
-  '<rootDir>/packages/',
+  '<rootDir>/.effector/',
+  '<rootDir>/.github/',
+  '<rootDir>/.vscode/',
+  '<rootDir>/bench/',
+  '<rootDir>/coverage/',
+  '<rootDir>/docs/',
+  '<rootDir>/examples/',
   '<rootDir>/flow/',
   '<rootDir>/flow-typed/',
-  '<rootDir>/examples/',
+  '<rootDir>/integrations/',
+  '<rootDir>/node_modules/',
+  '<rootDir>/npm/',
+  '<rootDir>/recipies/',
+  '<rootDir>/rfc/',
+  '<rootDir>/scripts/',
+  '<rootDir>/stats/',
+  '<rootDir>/tasks/',
+  '<rootDir>/tools/',
+  '<rootDir>/website/',
 ]
 const createDefaultConfig = () => ({
   automock: false,
@@ -37,33 +49,17 @@ module.exports = {
     '!**/*.spec.js',
     '!<rootDir>/src/babel/**',
     '!<rootDir>/src/fixtures/**',
-    '!<rootDir>/src/invariant/**',
-    '!<rootDir>/src/warning/**',
     '!<rootDir>/src/redux/**',
   ],
-
-  watchPlugins: ['jest-runner-eslint/watch-fix'],
   watchPathIgnorePatterns,
   projects: createProjectList([
     {
       effector: {
-        testMatch: [
-          `<rootDir>/src/effector/__tests__/**/*.test.js`,
-          `<rootDir>/src/effector/__tests__/**/*.spec.js`,
-        ],
+        testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
       },
     },
-    'effector/effect',
-    'effector/event',
-    'effector/store',
-    'effector/domain',
     'effector/kernel',
-    'effector/stdlib',
-    'effector/perf',
-    'effector/validate',
-    'effector/sample',
     'static-land',
-    'types',
     'forms',
     'babel',
     // 'redux',
@@ -74,7 +70,7 @@ module.exports = {
           `<rootDir>/src/react/**/*.test.js`,
           `<rootDir>/src/react/**/*.spec.js`,
         ],
-        setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+        // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
         // watchPathIgnorePatterns,
       },
     },
@@ -83,19 +79,31 @@ module.exports = {
         testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
       },
     },
+    !boolean(process.env.NO_TYPE_TESTS, false) && {
+      types: {
+        testMatch: [
+          `<rootDir>/src/types/__tests__/**/*.test.js`,
+          `<rootDir>/src/types/__tests__/**/*.spec.js`,
+          `<rootDir>/src/types/__tests__/**/*.test.ts`,
+          `<rootDir>/src/types/__tests__/**/*.spec.ts`,
+          `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+          `<rootDir>/src/types/__tests__/**/*.spec.tsx`,
+        ],
+        browser: false,
+        globalSetup: './src/types/src/globalSetup.js',
+        globalTeardown: './src/types/src/globalTeardown.js',
+        maxConcurrency: 25,
+        transform: {
+          '^.+\\.jsx?$': 'babel-jest',
+          '^.+\\.tsx?$': 'babel-jest',
+        },
+      },
+    },
   ]),
 }
 
-if (boolean(process.env.LINT, false)) {
-  module.exports.projects.push({
-    runner: 'jest-runner-eslint',
-    displayName: 'lint',
-    testMatch: ['<rootDir>/src/**/*.js', '!**/redux/**'],
-    // watchPathIgnorePatterns,
-  })
-}
-
 function createProjectList(items) {
+  items = items.filter(Boolean)
   const list = []
   for (const item of items) {
     if (typeof item === 'string') {

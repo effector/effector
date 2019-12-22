@@ -1,6 +1,9 @@
 {
   "name": "effector",
   "version": 2,
+  "github": {
+    "silent": true
+  },
   "alias": ["effector.now.sh"],
   "build": {
     "env": {

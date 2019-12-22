@@ -9,11 +9,11 @@ import {
   type Subscription,
 } from 'effector'
 
-export function componentFromStore<Props: {}>(
+export function componentFromStore<Props: {...}>(
   propsToVdom: (props: Store<Props>) => Store<React.Node>,
 ) {
-  class ComponentFromStore extends React.Component<Props, {vdom: React.Node}> {
-    state /*: {vdom: React.Node}*/ = {vdom: null}
+  class ComponentFromStore extends React.Component<Props, {vdom: React.Node, ...}> {
+    state /*: {vdom: React.Node, ...}*/ = {vdom: null}
 
     propsEmitter: Event<Props> = createEvent()
 
@@ -45,7 +45,7 @@ export function componentFromStore<Props: {}>(
 
     shouldComponentUpdate(
       nextProps: Props,
-      nextState /*: {vdom: React.Node}*/,
+      nextState /*: {vdom: React.Node, ...}*/,
     ) {
       return nextState.vdom !== this.state.vdom
     }

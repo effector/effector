@@ -9,16 +9,14 @@ export type ShellConfig = {
   fatal: boolean,
   globOpts: {
     nodir: boolean,
+    ...
   },
   silent: boolean,
   verbose: boolean,
+  ...
 }
 
-export type ExecThen = (
-  code: number,
-  stdout: string,
-  stderr: string,
-) => void
+export type ExecThen = (code: number, stdout: string, stderr: string) => void
 
 export type ExecOpts = {
   cwd?: string,
@@ -32,6 +30,7 @@ export type ExecOpts = {
   gid?: number,
   async?: boolean,
   silent?: boolean,
+  ...
 }
 
 export type ExecOptsAsync = {
@@ -46,6 +45,7 @@ export type ExecOptsAsync = {
   gid?: number,
   async: true,
   silent?: boolean,
+  ...
 }
 
 export type ExecOptsSync = {
@@ -62,25 +62,19 @@ export type ExecOptsSync = {
   encoding?: string,
   async?: boolean,
   silent?: boolean,
+  ...
 }
-export type GrepOpts = { '-l': boolean, '-v': boolean }
-export type SedOpts = { '-i': boolean }
-export type SortOpts = { '-n': boolean, '-r': boolean }
-export type TestOpts =
-  | '-b'
-  | '-c'
-  | '-d'
-  | '-e'
-  | '-f'
-  | '-L'
-  | '-p'
-  | '-S'
+export type GrepOpts = {'-l': boolean, '-v': boolean, ...}
+export type SedOpts = {'-i': boolean, ...}
+export type SortOpts = {'-n': boolean, '-r': boolean, ...}
+export type TestOpts = '-b' | '-c' | '-d' | '-e' | '-f' | '-L' | '-p' | '-S'
 export type TouchOpts = {
   '-a': boolean,
   '-c': boolean,
   '-m': boolean,
   '-d'?: string,
   '-r'?: string,
+  ...
 }
 
 // dupe from flow lib until we can import
@@ -107,6 +101,7 @@ export type ShellFileStats = {
   isFile(): boolean,
   isSocket(): boolean,
   isSymbolicLink(): boolean,
+  ...
 }
 
 export type ShellResult = {
@@ -118,13 +113,13 @@ export type ShellResult = {
   cat(rest: void): $npm$shelljs$String,
   exec: ((
     cmd: string,
-    opts: ExecOpts & { async: true },
+    opts: ExecOpts & {async: true, ...},
     then: ExecThen,
     rest: void,
   ) => $npm$shelljs$Async) &
     ((
       cmd: string,
-      opts: ExecOpts & { async: true },
+      opts: ExecOpts & {async: true, ...},
       rest: void,
     ) => $npm$shelljs$Async) &
     ((cmd: string, opts: ExecOptsSync, rest: void) => $npm$shelljs$String) &
@@ -143,6 +138,7 @@ export type ShellResult = {
     ((rest: void) => $npm$shelljs$String),
   tail: ((num: number, rest: void) => $npm$shelljs$String) &
     ((rest: void) => $npm$shelljs$String),
+  ...
 }
 
 export type ShellArray<T> = $npm$shelljs$Array<T>
@@ -153,6 +149,7 @@ export type ChmodOpts = {
   '-R': boolean,
   '-c': boolean,
   '-v': boolean,
+  ...
 }
 export type CpOpts = {
   '-P': boolean,
@@ -160,6 +157,7 @@ export type CpOpts = {
   '-R': boolean,
   '-f': boolean,
   '-n': boolean,
+  ...
 }
 export type DirsOpts = '-c'
 export // FIXME
@@ -229,18 +227,19 @@ type DirsIdx =
   | '+30'
   | '+31'
 
-export type LnOpts = { '-f': boolean, '-s': boolean }
+export type LnOpts = {'-f': boolean, '-s': boolean, ...}
 export type LsOpts = {
   '-A': boolean,
   '-R': boolean,
   '-d': boolean,
   '-l': boolean,
+  ...
 }
-export type MkdirOpts = { '-p': boolean }
-export type MvOpts = { '-f': boolean, '-n': boolean }
-export type PopdOpts = { '-n': boolean }
-export type PushdOpts = { '-n': boolean }
-export type RmOpts = { '-f': boolean, '-r': boolean }
+export type MkdirOpts = {'-p': boolean, ...}
+export type MvOpts = {'-f': boolean, '-n': boolean, ...}
+export type PopdOpts = {'-n': boolean, ...}
+export type PushdOpts = {'-n': boolean, ...}
+export type RmOpts = {'-f': boolean, '-r': boolean, ...}
 declare export var ShellString: ((
   stdout: string,
   stderr?: string,
@@ -248,7 +247,7 @@ declare export var ShellString: ((
 ) => ShellResultType) &
   (<T>(stdout: T[], stderr?: string, code?: number) => ShellArray<T>)
 declare export var config: ShellConfig
-declare export var env: { [key: string]: string }
+declare export var env: {[key: string]: string, ...}
 declare export function cat(glob: string, ...rest: string[]): ShellResultType
 declare export function cd(dir?: string): ShellResultType
 declare export function chmod(
@@ -269,26 +268,37 @@ declare export var cp: ((
   ...rest: string[]
 ) => ShellResultType) &
   ((src: string, next: string, ...rest: string[]) => ShellResultType)
-declare export function dirs(
-  idxOrOpts?: DirsIdx | DirsOpts,
-): string[]
+declare export function dirs(idxOrOpts?: DirsIdx | DirsOpts): string[]
 declare export function echo(
   ...rest: $ReadOnlyArray<number | string>
 ): ShellResultType
 // FIXME: consider allowing more input types
 declare export function error(rest: void): ?string
 
-declare export function exec(cmd: string, opts: ExecOptsAsync, ...rest: void[]): ShellAsync
-declare export function exec(cmd: string, opts: ExecThen, ...rest: void[]): ShellAsync
-declare export function exec(cmd: string, opts: ExecOptsAsync, then: ExecThen): ShellAsync
-declare export function exec(cmd: string, opts: ExecOptsSync, ...rest: void[]): ShellResultType
+declare export function exec(
+  cmd: string,
+  opts: ExecOptsAsync,
+  ...rest: void[]
+): ShellAsync
+declare export function exec(
+  cmd: string,
+  opts: ExecThen,
+  ...rest: void[]
+): ShellAsync
+declare export function exec(
+  cmd: string,
+  opts: ExecOptsAsync,
+  then: ExecThen,
+): ShellAsync
+declare export function exec(
+  cmd: string,
+  opts: ExecOptsSync,
+  ...rest: void[]
+): ShellResultType
 declare export function exec(cmd: string, ...rest: void[]): ShellResultType
 
 declare export function exit(code?: number): void
-declare export var find: (
-  glob: string,
-  ...rest: string[]
-) => ShellArray<string>
+declare export var find: (glob: string, ...rest: string[]) => ShellArray<string>
 declare export var grep: ((
   opts: GrepOpts,
   rx: ShellPattern,
@@ -310,7 +320,7 @@ declare export var ln: ((
 ) => ShellResultType) &
   ((src: string, tgt: string, rest: void) => ShellResultType)
 declare export var ls: ((
-  opts: LsOpts & { '-l': true },
+  opts: LsOpts & {'-l': true, ...},
   glob: string,
   ...rest: string[]
 ) => ShellArray<ShellFileStats>) &

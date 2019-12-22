@@ -1,0 +1,54 @@
+{
+  "name": "parcel-plugin-linaria",
+  "version": "0.1.1",
+  "main": "src/index.js",
+  "license": "MIT",
+  "keywords": [
+    "parcel",
+    "linaria"
+  ],
+  "scripts": {
+    "lint": "eslint .",
+    "test": "jest",
+    "example": "parcel example/index.html",
+    "release": "release-it"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-react": "^7.0.0",
+    "@callstack/eslint-config": "^3.0.2",
+    "@commitlint/config-conventional": "^7.5.0",
+    "codecov": "^3.2.0",
+    "commitlint": "^7.5.2",
+    "conventional-changelog-cli": "^2.0.12",
+    "eslint": "^5.14.1",
+    "husky": "^1.3.1",
+    "jest": "^24.1.0",
+    "linaria": "^1.1.4",
+    "parcel-assert-bundle-tree": "^1.0.0",
+    "parcel-bundler": "^1.12.3",
+    "parcel-plugin-linaria": "link:.",
+    "prettier": "^1.16.4",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "release-it": "^10.1.0"
+  },
+  "peerDependencies": {
+    "linaria": ">= 1.0.0",
+    "parcel-bundler": ">= 1.12.0"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "yarn lint && yarn test"
+    }
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "testRegex": "/__tests__/.*\\.(test|spec)\\.js$",
+    "watchPathIgnorePatterns": [
+      "__output__"
+    ]
+  }
+}

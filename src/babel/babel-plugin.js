@@ -1,24 +1,9 @@
 //@noflow
 
-const fs = require('fs-extra')
-const path = require('path')
-
-const importName = 'effector'
-
-const normalizeOptions = options => ({
-  filename: options.filename === undefined ? true : Boolean(options.filename),
-  stores: options.stores === undefined ? true : Boolean(options.stores),
-  events: options.events === undefined ? true : Boolean(options.events),
-  effects: options.effects === undefined ? true : Boolean(options.effects),
-  domains: options.domains === undefined ? true : Boolean(options.domains),
-  storeCreators: new Set(options.storeCreators || ['createStore']),
-  eventCreators: new Set(options.eventCreators || ['createEvent']),
-  effectCreators: new Set(options.effectCreators || ['createEffect']),
-  domainCreators: new Set(options.domainCreators || ['createDomain']),
-})
-
 module.exports = function(babel, options = {}) {
   const {
+    compressor,
+    addLoc,
     filename: enableFileName,
     stores,
     events,
@@ -28,17 +13,27 @@ module.exports = function(babel, options = {}) {
     eventCreators,
     effectCreators,
     domainCreators,
+    domainMethods,
+    exportMetadata,
+    importName,
   } = normalizeOptions(options)
-
+  const smallConfig = {compressor, addLoc}
   const {types: t} = babel
-
-  return {
+  const isPropertyNameInRange = (range, path) =>
+    range.has(path.node.callee.property.name)
+  const isDomainMethod = {
+    store: isPropertyNameInRange.bind(null, domainMethods.store),
+    event: isPropertyNameInRange.bind(null, domainMethods.event),
+    effect: isPropertyNameInRange.bind(null, domainMethods.effect),
+    domain: isPropertyNameInRange.bind(null, domainMethods.domain),
+  }
+  const plugin = {
     name: '@effector/babel-plugin',
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
         const specifiers = path.node.specifiers
-        if (source === importName) {
+        if (importName.has(source)) {
           for (let i = 0; i < specifiers.length; i++) {
             const s = specifiers[i]
             if (!s.imported) continue
@@ -58,7 +53,7 @@ module.exports = function(babel, options = {}) {
       },
 
       CallExpression(path, state) {
-        if (!state.fileNameIdentifier) {
+        if (addLoc && !state.fileNameIdentifier) {
           const fileName = enableFileName ? state.filename || '' : ''
 
           const fileNameIdentifier = path.scope.generateUidIdentifier(
@@ -82,84 +77,154 @@ module.exports = function(babel, options = {}) {
           if (stores && storeCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, state, id, babel.types)
+              setStoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
           if (events && eventCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.events.add(id.name)
             }
           }
           if (effects && effectCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.effects.add(id.name)
             }
           }
           if (domains && domainCreators.has(path.node.callee.name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.domains.add(id.name)
             }
           }
         }
 
         if (t.isMemberExpression(path.node.callee)) {
-          if (stores && path.node.callee.property.name === 'store') {
+          if (stores && isDomainMethod.store(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setStoreNameAfter(path, state, id, babel.types)
+              setStoreNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (events && path.node.callee.property.name === 'event') {
+          if (events && isDomainMethod.event(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (effects && path.node.callee.property.name === 'effect') {
+          if (effects && isDomainMethod.effect(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
-          if (domains && path.node.callee.property.name === 'domain') {
+          if (domains && isDomainMethod.domain(path)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
             }
           }
         }
       },
-
-      Program: {
-        exit(_, state) {
-          const metadata = path.join(
-            state.file.opts.root,
-            '.effector',
-            path.relative(state.file.opts.root, state.filename) + '.json',
-          )
-          fs.outputJson(
-            metadata,
-            {
-              stores: Array.from(state.stores),
-              effects: Array.from(state.effects),
-              domains: Array.from(state.domains),
-              events: Array.from(state.events),
-            },
-            {spaces: 2},
-          )
-        },
-      },
     },
+  }
+  if (exportMetadata) {
+    createMetadataVisitor(plugin, exportMetadata)
+  }
+  return plugin
+}
+const normalizeOptions = options => {
+  let exportMetadata
+  if ('exportMetadata' in options) {
+    if (typeof options.exportMetadata === 'function') {
+      exportMetadata = options.exportMetadata
+    } else if (options.exportMetadata == true /* == for truthy values */) {
+      exportMetadata = require('./plugin/defaultMetaVisitor.js')
+        .defaultMetaVisitor
+    } else {
+      exportMetadata = null
+    }
+  } else {
+    exportMetadata = null
+  }
+  return readConfigFlags({
+    options,
+    properties: {
+      filename: true,
+      stores: true,
+      events: true,
+      effects: true,
+      domains: true,
+    },
+    result: {
+      importName: new Set(
+        options.importName
+          ? Array.isArray(options.importName)
+            ? options.importName
+            : [options.importName]
+          : ['effector', '@zerobias/effector'],
+      ),
+      exportMetadata,
+      storeCreators: new Set(options.storeCreators || ['createStore']),
+      eventCreators: new Set(options.eventCreators || ['createEvent']),
+      effectCreators: new Set(options.effectCreators || ['createEffect']),
+      domainCreators: new Set(options.domainCreators || ['createDomain']),
+      domainMethods: readConfigShape(options.domainMethods, {
+        store: ['store', 'createStore'],
+        event: ['event', 'createEvent'],
+        effect: ['effect', 'createEffect'],
+        domain: ['domain', 'createDomain'],
+      }),
+      addLoc: Boolean(options.addLoc),
+      compressor: options.compressSid === false ? str => str : hashCode,
+    },
+  })
+
+  function readConfigFlags({options, properties, result}) {
+    for (const property in properties) {
+      if (property in options) {
+        result[property] = Boolean(options[property])
+      } else {
+        result[property] = properties[property]
+      }
+    }
+    return result
+  }
+  function readConfigShape(shape = {}, defaults = {}) {
+    const result = {}
+    for (const key in defaults) {
+      result[key] = readConfigArray(shape[key], defaults[key])
+    }
+    return result
+  }
+  function readConfigArray(array, defaults) {
+    return new Set(array || defaults)
   }
 }
 
+function createMetadataVisitor(plugin, exportMetadata) {
+  const {join, relative} = require('path')
+  plugin.visitor.Program = {
+    exit(_, state) {
+      const metadata = join(
+        state.file.opts.root,
+        '.effector',
+        relative(state.file.opts.root, state.filename) + '.json',
+      )
+      exportMetadata(metadata, {
+        stores: Array.from(state.stores),
+        effects: Array.from(state.effects),
+        domains: Array.from(state.domains),
+        events: Array.from(state.events),
+      })
+    },
+  }
+}
 // function addImportDeclaration(path, t, names) {
 //   if (!path) return
 //   const importDeclaration = t.importDeclaration(
@@ -210,7 +275,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
 
-function setStoreNameAfter(path, state, nameNodeId, t) {
+function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
   const displayName = nameNodeId.name
   let args
   let loc
@@ -231,10 +296,7 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
       t.identifier('name'),
       t.stringLiteral(displayName),
     )
-    const locProp = t.objectProperty(
-      t.identifier('loc'),
-      makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
-    )
+
     const stableID = t.objectProperty(
       t.identifier('sid'),
       t.stringLiteral(
@@ -244,6 +306,7 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
           displayName,
           loc.line,
           loc.column,
+          compressor,
         ),
       ),
     )
@@ -251,13 +314,19 @@ function setStoreNameAfter(path, state, nameNodeId, t) {
     if (oldConfig) {
       configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
-    configExpr.properties.push(locProp)
+    if (addLoc) {
+      const locProp = t.objectProperty(
+        t.identifier('loc'),
+        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+      )
+      configExpr.properties.push(locProp)
+    }
     configExpr.properties.push(nameProp)
     configExpr.properties.push(stableID)
   }
 }
 
-function setEventNameAfter(path, state, nameNodeId, t) {
+function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
   const displayName = nameNodeId.name
 
   let args
@@ -279,10 +348,7 @@ function setEventNameAfter(path, state, nameNodeId, t) {
       t.identifier('name'),
       t.stringLiteral(displayName),
     )
-    const locProp = t.objectProperty(
-      t.identifier('loc'),
-      makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
-    )
+
     const stableID = t.objectProperty(
       t.identifier('sid'),
       t.stringLiteral(
@@ -292,6 +358,7 @@ function setEventNameAfter(path, state, nameNodeId, t) {
           displayName,
           loc.line,
           loc.column,
+          compressor,
         ),
       ),
     )
@@ -299,7 +366,13 @@ function setEventNameAfter(path, state, nameNodeId, t) {
     if (oldConfig) {
       configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
     }
-    configExpr.properties.push(locProp)
+    if (addLoc) {
+      const locProp = t.objectProperty(
+        t.identifier('loc'),
+        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+      )
+      configExpr.properties.push(locProp)
+    }
     configExpr.properties.push(nameProp)
     configExpr.properties.push(stableID)
   }
@@ -308,6 +381,25 @@ function setEventNameAfter(path, state, nameNodeId, t) {
 /**
  * "foo src/index.js [12,30]"
  */
-function generateStableID(babelRoot, fileName, varName, line, column) {
-  return `${varName} ${fileName.replace(babelRoot, '')} [${line}, ${column}]`
+function generateStableID(
+  babelRoot,
+  fileName,
+  varName,
+  line,
+  column,
+  compressor,
+) {
+  const {sep, normalize} = require('path')
+  const rawPath = fileName.replace(babelRoot, '')
+  const normalizedPath = normalize(rawPath)
+    .split(sep)
+    .join('/')
+  return compressor(`${varName} ${normalizedPath} [${line}, ${column}]`)
+}
+function hashCode(s) {
+  let h = 0
+  let i = 0
+  if (s.length > 0)
+    while (i < s.length) h = ((h << 5) - h + s.charCodeAt(i++)) | 0
+  return h.toString(36)
 }

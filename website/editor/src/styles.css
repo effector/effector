@@ -38,6 +38,17 @@
   height: 100%;
 }
 
+@font-face {
+  font-family: 'Fira Code VF';
+  src: url('font.woff2') format('woff2-variations');
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+.CodeMirror span {
+  font-family: 'Fira Code VF', sans-serif;
+}
+
 body {
   overscroll-behavior: none;
   margin: 0;
@@ -134,7 +145,7 @@ body {
   }
   .header-tabs {
     grid-column: 1 / span 1;
-    grid-row: 1 / span 1;
+    grid-row: 2 / span 1;
   }
   .sources {
     grid-column: 1 / span 1;
@@ -154,6 +165,7 @@ body {
     grid-column: 1 / span 1;
     grid-row: 1 / span 2;
     border-bottom: 1px solid #ffd6d6;
+    margin-top: 86px;
   }
 }
 @media (min-width: 700px) {
@@ -164,11 +176,11 @@ body {
   }
   .header-tabs {
     grid-column: 3 / span 1;
-    grid-row: 1 / span 1;
+    grid-row: 2 / span 1;
   }
   .dom {
     grid-column: 3 / span 1;
-    grid-row: 2 / span 3;
+    grid-row: 3 / span 2;
   }
   .sources {
     grid-column: 2 / span 1;

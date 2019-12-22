@@ -98,6 +98,7 @@ export type Styles = {
   TABLE_DATA_BACKGROUND_SIZE?: any,
 
   [style: string]: any,
+  ...
 }
 
 export type Variants = 'light' | 'dark'

@@ -1,6 +1,5 @@
 //@flow
 import * as React from 'react'
-import TestRenderer from 'react-test-renderer'
 import {from} from 'most'
 
 import {
@@ -13,15 +12,18 @@ import {
 import {useStore} from 'effector-react'
 
 import {spy, delay, getSpyCalls} from 'effector/fixtures'
+import {render, act, renderHTML} from 'effector/fixtures/react'
 
 describe('symbol-observable support', () => {
   test('from(store)', async() => {
     expect(() => {
+      //$todo
       from(createStore(0))
     }).not.toThrow()
     const store1 = createStore(-1)
     const ev1 = createEvent('ev1')
     const ev2 = createEvent('ev2')
+    //$todo
     const store1$ = from(store1)
     store1$.observe(spy)
     store1.on(ev1, state => state + 1)
@@ -39,8 +41,8 @@ describe('symbol-observable support', () => {
       expect(() => {
         from(createEffect('ev1'))
       }).not.toThrow()
-      const ev1 = createEffect('ev1')
-      const ev2 = createEffect('ev2')
+      const ev1 = createEffect({handler(n) {}})
+      const ev2 = createEffect({handler(n) {}})
       const ev1$ = from(ev1)
       ev1$.observe(spy)
       ev1(0)
@@ -59,8 +61,8 @@ describe('symbol-observable support', () => {
         eff1.use(impl)
         from(eff1)
       }).not.toThrow()
-      const ev1 = createEffect('ev1')
-      const ev2 = createEffect('ev2')
+      const ev1 = createEffect({handler(n) {}})
+      const ev2 = createEffect({handler(n) {}})
       async function impl() {}
       ev1.use(impl)
       const ev1$ = from(ev1)
@@ -109,25 +111,6 @@ test('createStore', () => {
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
-describe.skip('pipe aka .to', () => {
-  test('event.to', () => {
-    const counter = createStore(0)
-    const text = createStore('')
-    const store = createStoreObject({counter, text, foo: 'bar'})
-
-    const e1: Event<string> = createEvent('e1')
-    //$todo
-    e1.to(store, (state, payload) => ({
-      ...state,
-      foo: payload,
-    }))
-
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
-    e1('baz')
-    expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
-  })
-  test('store.to', () => {})
-})
 describe('store.on', () => {
   test('store.on(event)', () => {
     const counter = createStore(0)
@@ -183,27 +166,23 @@ test('store.watch', () => {
   expect(fn1).toHaveBeenCalledTimes(1)
   expect(fn2.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
   expect(fn1.mock.calls).toEqual([[-1]])
-  // expect(fn1.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
 })
 
 test('rfc1 example implementation', async() => {
-  const inputText = createEvent('input text')
-  const click = createEvent('click')
-  const resetForm = createEvent('reset')
-  const increment = createEvent('increment')
+  const fnWait = jest.fn()
+  const fnClick = jest.fn()
+  const clickEpicFn = jest.fn()
 
-  //  const fetchSavedText: Effect<string, any, any, any> = createEffect(
-  //   'fetch saved text',
-  //  )
-
-  //  fetchSavedText.use(() => Promise.resolve('~~ mock for saved text ~~'))
+  const inputText = createEvent()
+  const click = createEvent()
+  const resetForm = createEvent()
+  const increment = createEvent()
 
   const counter = createStore(0)
   const text = createStore('')
   const store = createStoreObject({counter, text})
 
-  const fnWait = jest.fn()
-  const waitIncrement = createEffect('wait increment', {
+  const waitIncrement = createEffect({
     async handler() {
       await new Promise(rs => {
         const unsub = increment.watch(() => {
@@ -215,7 +194,6 @@ test('rfc1 example implementation', async() => {
   })
   click.watch(() => waitIncrement())
   waitIncrement.done.watch(fnWait)
-  //  increment.watch(fnWait)
   counter.reset(resetForm)
   text.reset(resetForm)
   const trimmedInput = inputText.map(text => text.trim())
@@ -224,9 +202,7 @@ test('rfc1 example implementation', async() => {
 
   counter.watch(() => {})
   counter.on(increment, state => state + 1)
-  const fnClick = jest.fn()
   click.watch(() => {})
-  const clickEpicFn = jest.fn()
   const click$ = from(click).tap(clickEpicFn)
 
   click$.observe(() => {})
@@ -259,25 +235,39 @@ test('rfc1 example implementation', async() => {
       <CurrentText prefix="Current text: " />
     </>
   )
-  expect(ClickedTimes).toBeDefined()
-  expect(<ClickedTimes />).toBeDefined()
-  expect(App).toBeDefined()
-  expect(() => {
-    TestRenderer.create(<ClickedTimes />).toJSON()
-    TestRenderer.create(<CurrentText prefix="Current text: " />).toJSON()
-    TestRenderer.create(<App />).toJSON()
-  }).not.toThrow()
-  expect(TestRenderer.create(<ClickedTimes />).toJSON()).toMatchSnapshot()
-  expect(
-    TestRenderer.create(<CurrentText prefix="Current text: " />).toJSON(),
-  ).toMatchSnapshot()
-  expect(TestRenderer.create(<App />).toJSON()).toMatchSnapshot()
+  await expect(
+    (async() => {
+      await render(<ClickedTimes />)
+      await render(<CurrentText prefix="Current text: " />)
+      await render(<App />)
+    })(),
+  ).resolves.not.toThrow()
+  expect(await renderHTML(<ClickedTimes />)).toMatchInlineSnapshot(`
+    <span>
+      Clicked: 0 times
+    </span>
+  `)
+  expect(await renderHTML(<CurrentText prefix="Current text: " />))
+    .toMatchInlineSnapshot(`
+    <p>
+      Current text: 
+       
+      
+    </p>
+  `)
+  expect(await renderHTML(<App />)).toMatchInlineSnapshot(`
+    <span>
+      Clicked: 0 times
+    </span>
+  `)
   expect(fnWait).not.toHaveBeenCalled()
   expect(fnClick).not.toHaveBeenCalled()
-  click()
-  click()
-  expect(fnWait).not.toHaveBeenCalled()
-  await new Promise(_ => setTimeout(_, 2200))
+  await act(async() => {
+    click()
+    click()
+    expect(fnWait).not.toHaveBeenCalled()
+    await new Promise(_ => setTimeout(_, 2200))
+  })
   expect(counter.getState()).toBe(2)
   expect(fnWait).toHaveBeenCalledTimes(2)
   expect(fnClick).toHaveBeenCalledTimes(2)
@@ -285,5 +275,9 @@ test('rfc1 example implementation', async() => {
     counter: 2,
     text: '',
   })
-  expect(TestRenderer.create(<App />).toJSON()).toMatchSnapshot()
+  expect(await renderHTML(<App />)).toMatchInlineSnapshot(`
+    <span>
+      Clicked: 2 times
+    </span>
+  `)
 })

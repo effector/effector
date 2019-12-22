@@ -26,7 +26,7 @@ function count(search: string, string: string): number {
  * @param {number} [fileContents=3] The number of lines to provide before and after the line specified in the <code>StackFrame</code>.
  */
 async function unmap(
-  _fileUri: string | {uri: string, contents: string},
+  _fileUri: string | {uri: string, contents: string, ...},
   frames: StackFrame[],
   contextLines: number = 3,
 ): Promise<StackFrame[]> {

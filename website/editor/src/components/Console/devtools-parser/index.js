@@ -9,7 +9,7 @@ import formatMessageString from './format-message'
  */
 export default function formatMessage(
   args: any[],
-): {html: string, args: any[]} {
+): {html: string, args: any[], ...} {
   const formattedResult = document.createElement('span')
 
   const {unusedSubstitutions = []} = formatMessageString(

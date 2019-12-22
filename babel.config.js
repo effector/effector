@@ -1,6 +1,6 @@
 //@noflow
 
-const {resolve: resolvePath} = require('path')
+const {resolve: resolvePath, join} = require('path')
 
 module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
@@ -20,7 +20,10 @@ module.exports = api => {
 const meta = {
   isBuild: !!process.env.IS_BUILD,
   isTest: process.env.NODE_ENV === 'test',
+  isCompat: false,
 }
+
+const typesTestsPath = join('types', '__tests__')
 
 const aliases = {
   'effector/fixtures': 'fixtures',
@@ -28,22 +31,31 @@ const aliases = {
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
-  effector({isTest, isBuild}) {
+  effector({isTest, isBuild, isCompat}) {
+    if (isCompat) return 'effector/compat'
     if (isBuild) return null
-    if (isTest) return './effector'
-    return '../npm/effector'
+    if (isTest) return resolveFromSources('./effector')
+    return resolveFromSources('../npm/effector')
   },
 }
 
+const babelPlugin = resolvePath(__dirname, 'src', 'babel', 'babel-plugin.js')
+const locationPlugin = resolvePath(
+  __dirname,
+  'src',
+  'types',
+  'src',
+  'locationPlugin.js',
+)
 const babelConfig = {
   presets: [
-    '@babel/preset-flow',
     ['@babel/preset-react', {useBuiltIns: true}],
     [
       '@babel/preset-env',
       {
         loose: true,
         useBuiltIns: 'entry',
+        corejs: 3,
         modules: false,
         shippedProposals: true,
         targets: {
@@ -61,12 +73,10 @@ const babelConfig = {
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
     const result = [
-      // './src/babel/get-step',
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',
       '@babel/plugin-proposal-nullish-coalescing-operator',
       ['@babel/plugin-proposal-class-properties', {loose: true}],
-      'macros',
       [
         'babel-plugin-module-resolver',
         {
@@ -82,14 +92,53 @@ const babelConfig = {
   overrides: [
     {
       test(filename) {
+        return filename && filename.includes(typesTestsPath)
+      },
+      plugins: [locationPlugin],
+    },
+    {
+      test(filename) {
         return (
-          filename
-          && filename.includes('__tests__')
-          && !filename.includes('redux')
-          && !filename.includes('browserstack')
+          filename &&
+          filename.includes('__tests__') &&
+          !filename.includes('redux') &&
+          !filename.includes('browserstack') &&
+          !filename.includes('fromObservable')
         )
       },
-      plugins: ['./src/babel/babel-plugin'],
+      plugins: [
+        [
+          babelPlugin,
+          {
+            exportMetadata: true,
+            addLoc: true,
+          },
+        ],
+      ],
+    },
+    {
+      test(filename) {
+        return (
+          filename && (filename.endsWith('.tsx') || filename.endsWith('.ts'))
+        )
+      },
+      presets: [
+        [
+          '@babel/preset-typescript',
+          {
+            isTSX: true,
+            allExtensions: true,
+          },
+        ],
+      ],
+    },
+    {
+      test(filename) {
+        return (
+          filename && !(filename.endsWith('.tsx') || filename.endsWith('.ts'))
+        )
+      },
+      presets: ['@babel/preset-flow'],
     },
   ],
   sourceMaps: true,
@@ -99,11 +148,19 @@ function parseAliases(meta, obj) {
   const result = {}
   for (const key in obj) {
     const value = obj[key]
-    const name = typeof value === 'function' ? value(meta) : value
-    if (name === undefined || name === null) continue
-    result[key] = resolvePath(__dirname, 'src', name)
+    if (typeof value === 'function') {
+      const name = value(meta)
+      if (name === undefined || name === null) continue
+      result[key] = name
+    } else {
+      const name = value
+      if (name === undefined || name === null) continue
+      result[key] = resolveFromSources(name)
+    }
   }
   return result
 }
-
-module.exports.getAliases = () => parseAliases(meta, aliases)
+function resolveFromSources(path) {
+  return resolvePath(__dirname, 'src', path)
+}
+module.exports.getAliases = (metadata = meta) => parseAliases(metadata, aliases)

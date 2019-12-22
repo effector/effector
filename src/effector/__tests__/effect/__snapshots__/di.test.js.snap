@@ -1,0 +1,125 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`effect.create multiple arguments: effect.create 1`] = `
+Array [
+  Array [
+    100,
+    Array [
+      200,
+    ],
+    Array [
+      200,
+    ],
+  ],
+  Array [
+    200,
+    Array [
+      300,
+    ],
+    Array [
+      300,
+    ],
+  ],
+  Array [
+    300,
+    Array [
+      400,
+    ],
+    Array [
+      400,
+    ],
+  ],
+]
+`;
+
+exports[`effect.create multiple arguments: effect.use 1`] = `
+Array [
+  Array [
+    100,
+    200,
+  ],
+  Array [
+    200,
+    300,
+  ],
+  Array [
+    300,
+    400,
+  ],
+]
+`;
+
+exports[`effect.create multiple arguments: effect.watch 1`] = `
+Array [
+  Array [
+    Object {
+      "params": Array [
+        100,
+        200,
+      ],
+      "result": "done!",
+    },
+  ],
+  Array [
+    Object {
+      "params": Array [
+        200,
+        300,
+      ],
+      "result": "done!",
+    },
+  ],
+  Array [
+    Object {
+      "params": Array [
+        300,
+        400,
+      ],
+      "result": "done!",
+    },
+  ],
+]
+`;
+
+exports[`effect.create single argument 1`] = `
+Array [
+  Array [
+    100,
+    Array [],
+    Array [],
+  ],
+  Array [
+    200,
+    Array [],
+    Array [],
+  ],
+  Array [
+    300,
+    Array [],
+    Array [],
+  ],
+]
+`;
+
+exports[`effect.create single argument 2`] = `
+Array [
+  Array [
+    Object {
+      "params": 100,
+      "result": "done!",
+    },
+  ],
+  Array [
+    Object {
+      "params": 200,
+      "result": "done!",
+    },
+  ],
+  Array [
+    Object {
+      "params": 300,
+      "result": "done!",
+    },
+  ],
+]
+`;

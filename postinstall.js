@@ -10,13 +10,13 @@ const pkg = require('./package.json')
 type Package = string
 type Lockfile = {|
   version: number,
-  packages: {
-    flowgen: {[key: string]: Package},
-    custom: {[key: string]: Package},
-    flowTyped: {[key: string]: Package},
-    stub: {[key: string]: Package},
-    builtin: {[key: string]: Package}
-  }
+  packages: {|
+    flowgen: {[key: string]: Package, ...},
+    custom: {[key: string]: Package, ...},
+    flowTyped: {[key: string]: Package, ...},
+    stub: {[key: string]: Package, ...},
+    builtin: {[key: string]: Package, ...}
+  |}
 |}
 */
 
@@ -26,6 +26,7 @@ function normalizePattern(
   hasVersion: boolean,
   name: string,
   range: string,
+  ...
 }*/ {
   let hasVersion = false
   let range = 'latest'
@@ -69,6 +70,7 @@ const defaultLockfile = {
     builtin: {},
   },
 }
+//$todo
 const lockfileData = fs.existsSync('./flow-typed/flow.lock')
 const lockfile /*: Lockfile*/ = lockfileData
   ? fs.readJSONSync('./flow-typed/flow.lock', {
@@ -229,6 +231,7 @@ ${code}
   }
 
   try {
+    //$off
     require(`${typesPackageName}/package.json`)
     return getTypescriptFile(typesPackageName)
   } catch (err) {

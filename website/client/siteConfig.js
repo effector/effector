@@ -1,32 +1,9 @@
-/**
- * Copyright (c) 2017-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
+// See https://docusaurus.io/docs/site-config
 
-// See https://docusaurus.io/docs/site-config for all the possible
-// site configuration options.
-
-// List of projects/orgs using your project for the users page.
-const users = [
-  {
-    caption: 'User1',
-    // You will need to prepend the image path with your baseUrl
-    // if it is not '/', like: '/test-site/img/docusaurus.svg'.
-    image: '/img/comet.png',
-    infoLink: 'https://www.facebook.com',
-    pinned: true,
-  },
-]
-
-const url = process.env.SITE_URL || 'https://effector.now.sh'
-
-const siteConfig = {
-  title: 'Effector', // Title for your website.
-  tagline:
-    'Effector lets you write simple, fast and type safe code and manage reactive state with ease.',
-  url, // Your website URL
+module.exports = {
+  title: 'Effector',
+  tagline: 'The state manager',
+  url: process.env.SITE_URL || 'https://effector.now.sh', // Your website URL
   baseUrl: '/', // Base URL for your project */
   editUrl: 'https://github.com/zerobias/effector/tree/master/docs/',
   docsUrl: '',
@@ -46,17 +23,19 @@ const siteConfig = {
   // For no header links in the top nav bar -> headerLinks: [],
   headerLinks: [
     {doc: 'introduction/installation', label: 'Docs'},
-    {href: '/try', label: 'Try'},
     {doc: 'api/effector/effector', label: 'API'},
+    {href: '/try', label: 'Try'},
+    {href: 'https://changelog.effector.dev', label: 'Changelog'},
     // {page: 'help', label: 'Help'},
-    {blog: true, label: 'Blog'},
-    {languages: true},
-    // { search: true },
+    // {languages: false},
+    // {search: false},
+    {href: 'https://twitter.com/effectorjs', label: 'Twitter'},
     {href: 'https://github.com/zerobias/effector', label: 'GitHub'},
+    {blog: true, label: 'Blog'},
   ],
 
   // If you have users set above, you add it here:
-  users,
+  users: [],
 
   /* path to images for header/footer */
   headerIcon: 'img/comet.png',
@@ -113,7 +92,7 @@ const siteConfig = {
   twitterImage: 'img/comet.png',
 
   // Show documentation's last contributor's name.
-  enableUpdateBy: true,
+  enableUpdateBy: false,
 
   // Show documentation's last update time.
   // enableUpdateTime: true,
@@ -122,5 +101,3 @@ const siteConfig = {
   // template. For example, if you need your repo's URL...
   repoUrl: 'https://github.com/zerobias/effector',
 }
-
-module.exports = siteConfig

@@ -3,15 +3,13 @@
 import {createEffect, type Effect} from 'effector'
 
 const ENDPOINT = {
-  DIST: 'ttqe4agemjayhmu4qt7xtpyahm',
+  DIST: 'y6776i4nfja2lnx3gbkbmlgr3i',
   REGION: 'us-east-1',
-  PUBLIC_API_KEY: 'da2-x3lsnw3sx5chvowyqbsgrrszcq',
+  PUBLIC_API_KEY: 'da2-srl2uzygsnhpdd2bban5gscnza',
 }
 
 const request = data => {
-  const url = `https://${ENDPOINT.DIST}.appsync-api.${
-    ENDPOINT.REGION
-  }.amazonaws.com/graphql`
+  const url = `https://${ENDPOINT.DIST}.appsync-api.${ENDPOINT.REGION}.amazonaws.com/graphql`
   return fetch(url, {
     method: 'POST',
     headers: {
@@ -29,17 +27,20 @@ const request = data => {
       return result.data
     })
 }
-type ShareCode = Effect<string, {slug: string}>
+type ShareCode = Effect<string, {|slug: string|}>
 export const shareCode: ShareCode = createEffect('share code', {
   async handler(code) {
     const {createCodePage} = await request({
       query: `
-        mutation ReplMutation {
-          createCodePage(code: ${JSON.stringify(code)}) {
+        mutation ReplMutation($codePage: CodePageInput!) {
+          createCodePage(codePage: $codePage) {
             slug
           }
         }
       `,
+      variables: {
+        codePage: {code},
+      },
       operationName: 'ReplMutation',
     })
     return createCodePage

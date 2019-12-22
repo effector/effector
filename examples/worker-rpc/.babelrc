@@ -1,0 +1,31 @@
+{
+  "plugins": [
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ],
+    "effector/babel-plugin"
+  ],
+  "presets": [
+    "@babel/preset-react",
+    "@babel/preset-flow",
+    [
+      "@babel/preset-env",
+      {
+        "modules": false,
+        "shippedProposals": true,
+        "loose": true,
+        "useBuiltIns": false,
+        "targets": {
+          "browsers": [
+            "last 2 Chrome versions",
+            "last 2 Firefox versions",
+            "last 2 Safari versions"
+          ]
+        }
+      }
+    ]
+  ]
+}

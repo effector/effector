@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ObjectName from '../object/ObjectName';
-import ObjectValue from '../object/ObjectValue';
+import React from 'react'
+import PropTypes from 'prop-types'
+import ObjectName from '../object/ObjectName'
+import ObjectValue from '../object/ObjectValue'
 
 /**
  * if isNonenumerable is specified, render the name dimmed
  */
-const ObjectLabel = ({ name, data, isNonenumerable }) => {
-  const object = data;
+const ObjectLabel = ({name, data, isNonenumerable}) => {
+  const object = data
 
   return (
     <span>
@@ -15,16 +15,16 @@ const ObjectLabel = ({ name, data, isNonenumerable }) => {
       <span>: </span>
       <ObjectValue object={object} />
     </span>
-  );
-};
+  )
+}
 
 ObjectLabel.propTypes = {
   /** Non enumerable object property will be dimmed */
   isNonenumerable: PropTypes.bool,
-};
+}
 
 ObjectLabel.defaultProps = {
   isNonenumerable: false,
-};
+}
 
-export default ObjectLabel;
+export default ObjectLabel

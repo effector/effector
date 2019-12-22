@@ -6,6 +6,8 @@ hide_title: true
 
 # `createStoreObject(objectShape)`
 
+An alias for `combine({field: storeA, another: storeB})`. See [_`combine`_](combine.md)
+
 #### Arguments
 
 1. `objectShape` (_Object_)
@@ -16,7 +18,9 @@ hide_title: true
 
 #### Example
 
-```javascript
+```js try
+import {createStore, createStoreObject} from 'effector'
+
 const balance = createStore(0)
 const username = createStore('zerobias')
 

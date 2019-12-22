@@ -8,12 +8,12 @@ hide_title: true
 
 Creates store-based React component. The `createComponent` is useful to transfer logic and data in state to your View component.
 
-Note: **You can't use hooks in `createComponent`**.
+> **Note:** You can use hooks in `createComponent` since effector-react@20.3.0.
 
 #### Arguments
 
-1. `store` (_Store_)
-2. `render` (_Function_)
+1. `store` (_Store | Object | Function_): `Store` or object of `Store`, or function which will be called with initial props.
+2. `render` (_Function_): Render function which will be called with props and state.
 
 #### Returns
 
@@ -21,7 +21,7 @@ Note: **You can't use hooks in `createComponent`**.
 
 #### Example
 
-```js
+```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
@@ -41,10 +41,8 @@ const MyCounter = createComponent(counter, (props, state) => (
 
 const MyOwnComponent = () => {
   // any staff here
-  return (
-    <MyCounter />
-  )
+  return <MyCounter />
 }
 
-ReactDOM.render(<MyOwnComponent />, document.getElementById("root"));
+ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```

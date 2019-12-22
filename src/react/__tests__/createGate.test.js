@@ -8,10 +8,9 @@ configure({
 })
 
 import * as React from 'react'
-import {render, cleanup} from 'react-testing-library'
+import {render, cleanup, container} from 'effector/fixtures/react'
 import {mount} from 'enzyme'
-import {createEvent, createStore, createStoreObject} from 'effector'
-import {createGate, useGate, type Gate as GateType} from '../createGate'
+import {createGate, useGate} from '../createGate'
 
 test('plain gate', () => {
   const Gate = createGate('plain gate')
@@ -27,7 +26,7 @@ test('plain gate', () => {
   expect(Gate.isOpen).toBe(false)
 })
 
-test('plain gate hook', () => {
+test('plain gate hook', async () => {
   const Gate = createGate('plain gate')
   expect(Gate.isOpen).toBe(false)
   const Component = () => {
@@ -38,13 +37,14 @@ test('plain gate hook', () => {
       </section>
     )
   }
-  render(<Component />)
+  await render(<Component />)
+
   expect(Gate.isOpen).toBe(true)
-  cleanup()
+  await cleanup()
   expect(Gate.isOpen).toBe(false)
 })
 
-test('gate with props', async() => {
+test('gate with props', async () => {
   const Gate = createGate('gate with props')
   expect(Gate.current).toMatchObject({})
   const tree = mount(
@@ -55,30 +55,30 @@ test('gate with props', async() => {
   tree.render()
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
   expect(Gate.current).toMatchObject({foo: 'bar'})
-  expect(tree.text()).toMatchSnapshot('gate with props')
+  expect(tree.text()).toMatchInlineSnapshot(`""`)
   tree.unmount()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
-test('gate with props hook', async() => {
+test('gate with props hook', async () => {
   const Gate = createGate('gate with props')
   expect(Gate.current).toMatchObject({})
   const Component = () => {
     useGate(Gate, {foo: 'bar'})
     return <section />
   }
-  const {container} = render(<Component />)
+  await render(<Component />)
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
   expect(Gate.current).toMatchObject({foo: 'bar'})
-  expect(container.firstChild).toMatchSnapshot('gate with props hook')
-  cleanup()
+  expect(container.firstChild).toMatchInlineSnapshot(`<section />`)
+  await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
 function calls(fn, ...args) {
   expect(fn.mock.calls).toEqual(args.map(a => [a]))
 }
-test('gate properties', async() => {
+test('gate properties', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -95,7 +95,7 @@ test('gate properties', async() => {
   calls(fn2, {}, {foo: 'bar'}, {})
 })
 
-test('gate properties hook', async() => {
+test('gate properties hook', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -105,14 +105,14 @@ test('gate properties hook', async() => {
     useGate(Gate, {foo: 'bar'})
     return <section />
   }
-  render(<Component />)
-  cleanup()
+  await render(<Component />)
+  await cleanup()
   calls(fn1, false, true, false)
   calls(fn2, {}, {foo: 'bar'}, {})
 })
 
 describe('child gate', () => {
-  test('usage', async() => {
+  test('usage', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
@@ -126,12 +126,12 @@ describe('child gate', () => {
     )
     expect(Gate.isOpen).toBe(true)
     expect(Child.isOpen).toBe(true)
-    expect(tree.text()).toMatchSnapshot('child gate usage')
+    expect(tree.text()).toMatchInlineSnapshot(`""`)
     tree.unmount()
     expect(Gate.isOpen).toBe(false)
     expect(Child.isOpen).toBe(false)
   })
-  test('order edge case', async() => {
+  test('order edge case', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
@@ -149,18 +149,18 @@ describe('child gate', () => {
     expect(Gate.isOpen).toBe(false)
     expect(Child.isOpen).toBe(false)
   })
-  test('parent prevent children from beeing open', async() => {
+  test('parent prevent children from beeing open', async () => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')
 
-    const tree = mount(
+    await render(
       <section>
         <Child />
       </section>,
     )
 
     expect(Child.isOpen).toBe(false)
-    tree.unmount()
+    await cleanup()
     expect(Child.isOpen).toBe(false)
   })
 })

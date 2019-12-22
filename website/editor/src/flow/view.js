@@ -1,12 +1,12 @@
 //@flow
 
 import * as React from 'react'
-
-import {useStore} from 'effector-react'
-import {typeErrors, typeHint} from './domain'
-import {typeHoverToggle} from '../settings/domain'
-import type {FlowMessage, FlowInfoTree} from './index.h'
+import {useStore, useList} from 'effector-react'
 import {styled} from 'linaria/react'
+
+import {typeErrors, typeHint} from './state'
+import {typeHoverToggle} from '../settings/state'
+import type {FlowMessage, FlowInfoTree} from './index.h'
 
 const lineHeight = 1.5
 const lines = 3
@@ -36,7 +36,7 @@ const TypeErrors = styled.pre`
   border-bottom: 1px solid #ddd;
   padding: 7px 10px;
   grid-column: 3 / span 1;
-  grid-row: 2 / span 3;
+  grid-row: 3 / span 2;
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
@@ -70,6 +70,7 @@ export const TypeHintView = () => {
 const ErrorMessage = ({type, loc, context, descr}: FlowMessage) => {
   if (loc && loc.source != null && context != null) {
     const basename = loc.source.replace(/.*\//, '')
+    //$todo
     const filename = basename !== 'repl.js' ? `${loc.source}:` : ''
     const prefix = `${filename}${loc.start.line}: `
 
@@ -121,34 +122,29 @@ const Extra = ({message, children}: FlowInfoTree) => (
   </ul>
 )
 
-export const TypeErrorsView = () => {
-  const errors = useStore(typeErrors)
-  return (
-    <TypeErrors>
-      <Scroll>
-        <ul>
-          {errors.map((error, key) => {
-            // TODO: hide libdefs until errors are fixed
-            if (
-              process.env.NODE_ENV === 'production'
-              && error.message[0].loc?.type === 'LibFile'
-            )
-              return null
+export const TypeErrorsView = () => (
+  <TypeErrors>
+    <Scroll>
+      <ul>
+        {useList(typeErrors, error => {
+          // TODO: hide libdefs until errors are fixed
+          if (
+            process.env.NODE_ENV === 'production' &&
+            error.message[0].loc?.type === 'LibFile'
+          )
+            return null
 
-            return (
-              <li key={key}>
-                {error.message.map((message, key) => (
-                  <ErrorMessage key={key} {...message} />
-                ))}
-                {error.extra
-                  && error.extra.map((extra, key) => (
-                    <Extra key={key} {...extra} />
-                  ))}
-              </li>
-            )
-          })}
-        </ul>
-      </Scroll>
-    </TypeErrors>
-  )
-}
+          return (
+            <li>
+              {error.message.map((message, key) => (
+                <ErrorMessage key={key} {...message} />
+              ))}
+              {error.extra &&
+                error.extra.map((extra, key) => <Extra key={key} {...extra} />)}
+            </li>
+          )
+        })}
+      </ul>
+    </Scroll>
+  </TypeErrors>
+)

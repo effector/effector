@@ -2,6 +2,7 @@
 
 import Vue from 'vue'
 import {effectorMixin} from './mixin'
+import {createComponent} from './component'
 import {watchAsStore, store} from './methods'
 
 export const VueEffector = (Vue: Class<Vue>, options: Object) => {
@@ -11,6 +12,8 @@ export const VueEffector = (Vue: Class<Vue>, options: Object) => {
   //$off
   Vue.prototype.$store = store
 }
+
+export {createComponent}
 
 declare export class EffectorVue extends Vue {
   $watchAsStore: typeof watchAsStore;

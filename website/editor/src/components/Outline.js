@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import {styled} from 'linaria/react'
-import {codeSetCursor} from '../domain'
+import {codeSetCursor} from '../editor'
 
 const Outline = styled.div`
   grid-column: 1 / span 1;
@@ -37,19 +37,19 @@ const Item = styled.li`
   cursor: ${props => (Boolean(props.loc) ? 'pointer' : 'inherit')};
 `
 
-const mapper = item => {
+const mapper = (item, i) => {
   const loc = item?.defaultConfig?.loc
   const name =
-    item?.compositeName?.fullName ||
-    item?.shortName ||
-    item.id ||
-    item.displayName
+    item?.compositeName?.fullName
+    || item?.shortName
+    || item.id
+    || item.displayName
   const key = item.kind && item.id ? item.kind + item.id + name : name
   const onClick = () => {
     if (loc) codeSetCursor(loc)
   }
   return (
-    <Item loc={loc} onClick={onClick} key={key}>
+    <Item loc={loc} onClick={onClick} key={`${key} ${i}`}>
       {name}
     </Item>
   )
@@ -67,13 +67,13 @@ const OutlineSection = ({list, title}) => {
   )
 }
 
-export default function({style, component, domain, event, effect, store}) {
+export default function({style, component, domain, event, effect, store}: $todo) {
   const isEmpty =
-    event.length === 0 &&
-    effect.length === 0 &&
-    store.length === 0 &&
-    domain.length === 0 &&
-    component.length === 0
+    event.length === 0
+    && effect.length === 0
+    && store.length === 0
+    && domain.length === 0
+    && component.length === 0
   return (
     <Outline style={style}>
       {isEmpty && (
@@ -81,7 +81,7 @@ export default function({style, component, domain, event, effect, store}) {
       )}
       <OutlineSection list={event} title="Events" />
       <OutlineSection list={effect} title="Effects" />
-      <OutlineSection list={store} title="Storages" />
+      <OutlineSection list={store} title="Stores" />
       <OutlineSection list={domain} title="Domains" />
       <OutlineSection list={component} title="Components" />
     </Outline>

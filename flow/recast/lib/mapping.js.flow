@@ -7,7 +7,7 @@
  * @flow
  */
 
-import { namedTypes } from "ast-types";
+import * as namedTypes from 'ast-types/gen/namedTypes'
 import { Lines } from "./lines";
 declare type Pos = namedTypes.Position;
 declare type Loc = namedTypes.SourceLocation;

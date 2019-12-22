@@ -13,20 +13,24 @@
     "index.d.ts",
     "index.js.flow",
     "forms.es.js",
-    "forms.cjs.js",
-    "forms.umd.js",
-    "compat.js",
     "forms.es.js.map",
+    "forms.cjs.js",
     "forms.cjs.js.map",
+    "forms.umd.js",
     "forms.umd.js.map",
+    "compat.js",
     "compat.js.map",
     "forms.cjs.js.flow",
     "forms.es.js.flow",
     "forms.umd.js.flow",
-    "compat.js.flow"
+    "compat.js.flow",
+    "forms.cjs.d.ts",
+    "forms.es.d.ts",
+    "forms.umd.d.ts",
+    "compat.d.ts"
   ],
   "dependencies": {
-    "effector": "^20.0.0"
+    "effector": "^20.8.0"
   },
   "keywords": [
     "effector",

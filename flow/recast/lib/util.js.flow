@@ -18,7 +18,8 @@ declare export function copyPos(
   pos: any
 ): {
   line: any,
-  column: any
+  column: any,
+  ...
 };
 declare export function composeSourceMaps(formerMap: any, latterMap: any): any;
 declare export function getTrueLoc(
@@ -26,7 +27,8 @@ declare export function getTrueLoc(
   lines: any
 ): {
   start: any,
-  end: any
+  end: any,
+  ...
 } | null;
 declare export function fixFaultyLocations(node: any, lines: any): void;
 declare export function isExportDeclaration(node: any): boolean;

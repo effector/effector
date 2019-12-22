@@ -1,0 +1,57 @@
+service: effector-example-serverless-ssr
+
+package:
+  exclude:
+    - package.json
+    - node_modules/**
+    - yarn.lock
+    - tsconfig.json
+plugins:
+  - serverless-domain-manager
+provider:
+  name: aws
+  runtime: nodejs12.x
+  memorySize: 256
+  timeout: 15
+  region: us-east-1
+  logs:
+    restApi: true
+  apiGateway:
+    binaryMediaTypes:
+      - 'image/jpeg'
+      - 'image/x-icon'
+      - 'image/png'
+      - 'application/octet-stream'
+custom:
+  customDomain:
+    domainName: ${file(./domain.json):domainName}
+    certificateArn: ${file(./domain.json):certificateArn}
+    basePath: ''
+    createRoute53Record: true
+functions:
+  api:
+    handler: dist/server/api.default
+    events:
+      - http:
+          path: /api
+          method: post
+          cors: true
+      - http:
+          path: /api/{user}
+          method: post
+          cors: true
+  ssr:
+    handler: dist/server/ssr.default
+    events:
+      - http:
+          path: /
+          method: get
+      - http:
+          path: /user/{user}
+          method: get
+  static:
+    handler: dist/server/static.default
+    events:
+      - http:
+          path: /static/{file}
+          method: get

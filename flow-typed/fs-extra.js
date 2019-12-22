@@ -213,6 +213,7 @@ declare module 'fs-extra' {
       encoding?: Encoding,
       mode?: number | string,
       flag?: string,
+      ...
     },
     callback: (err: ErrnoError | null) => void,
   ): void
@@ -308,7 +309,7 @@ declare module 'fs-extra' {
   ): Buffer
   declare export function readFileSync(
     file: string | Buffer | number,
-    options: {encoding: 'utf8'},
+    options: {encoding: 'utf8', ...},
   ): string
 
   declare export function readFile(
@@ -334,7 +335,7 @@ declare module 'fs-extra' {
   ): void
   declare export function readdirSync(
     path: string,
-    options?: string | {encoding: Encoding},
+    options?: string | {encoding: Encoding, ...},
   ): Array<string>
   declare export function readlink(
     path: string | Buffer,
