@@ -26,24 +26,3 @@ jobs:
         run: node tools/build publish latest
         env:
           PRINT_ERRORS: false
-      - name: configure for github registry
-        run: node tools/versionHash
-        env:
-          VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
-      - name: publish packages on github
-        run: cd npm/effector && npm publish
-  # publish-gpr:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v1
-  #     - uses: actions/setup-node@v1
-  #       with:
-  #         node-version: 12
-  #         registry-url: https://npm.pkg.github.com/
-  #         scope: '@zerobias'
-  #     - run: yarn
-  #     - run: yarn build
-  #     - run: cd npm/effector && npm config set registry 'https://npm.pkg.github.com/' && npm publish
-  #       env:
-  #         NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
