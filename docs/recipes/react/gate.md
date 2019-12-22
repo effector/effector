@@ -1,7 +1,6 @@
 ---
 id: gate
-title: Gate: a bridge between props and store
-sidebar_label: Gate: a bridge between props and store
+title: Gate - a bridge between props and store
 ---
 
 Imagine you have the task of transferring something from react props to the effector store.  

@@ -35,11 +35,11 @@ unwatch()
 sayHi('Drew') // => nothing happened
 ```
 
-<hr>
+<hr/>
 
 ### `map(fn)`
 
-Сreates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
+Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
 
 #### Arguments
 
@@ -66,11 +66,11 @@ userUpdated({name: 'john', role: 'admin'})
 // => User's role is [ADMIN] now
 ```
 
-<hr>
+<hr/>
 
 ### `filter({fn})`
 
-Сreates a new event, which will be called after the original event is called if `fn` returns `true`.
+Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the concrete size of the sneakers model, besides you want to receive a notification if there will have and don't receive others. Therefore filtering is needed for that. Event filtering works the same. If the filter returns `true`, the event will be called.
 
@@ -106,7 +106,7 @@ numbers({x: 10}) // store will triggered
 
 ### `filterMap(fn)`
 
-Сreates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.\
+Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.\
 Imagine you come to the product shop and you have let's say a task: you should buy 10 apples, but only red otherwise nothing.
 Let's consider by steps:
 
@@ -133,7 +133,7 @@ You may see that we united `filter()` and `map()` methods, the reason for creati
 
 #### Example
 
-```js try
+```jsx try
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEvent, createStore} from 'effector'

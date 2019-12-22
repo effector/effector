@@ -1,7 +1,6 @@
 ---
 id: example-forms
-title: Example: Forms
-sidebar_label: Example: Forms
+title: Forms
 ---
 
 #### Example 1

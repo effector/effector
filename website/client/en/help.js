@@ -5,9 +5,8 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-const React = require('react');
-
-const CompLibrary = require('../../core/CompLibrary.js');
+import React from 'react';
+import Layout from '@theme/Layout';
 
 const Container = CompLibrary.Container;
 const GridBlock = CompLibrary.GridBlock;

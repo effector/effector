@@ -6,7 +6,7 @@ hide_title: true
 
 # `createEvent(name?)`
 
-Creates an [Event](Event.md). In other words you create intention.</br>
+Creates an [Event](Event.md). In other words you create intention.<br/>
 You can pass `name` if you want.
 
 #### Arguments
@@ -37,7 +37,8 @@ addNumber(10)
 addNumber(10)
 ```
 
-Let's talk about what happened. We created store and event (addNumber), and started to watch the store.</br>
+
+Let's talk about what happened. We created store and event (addNumber), and started to watch the store.<br/>
 You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(10)` you may see in console how state will change.
 
 #### Example 2
