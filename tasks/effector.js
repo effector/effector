@@ -126,7 +126,10 @@ export default {
     generatePackageJSON('effector-dom'),
     copyLicense('effector-dom'),
     () =>
-      massCopy('packages/effector-dom', 'npm/effector-dom', ['package.json']),
+      massCopy('packages/effector-dom', 'npm/effector-dom', [
+        'README.md',
+        'package.json'
+      ]),
     rollupEffectorDom,
     publishScript('effector-dom'),
   ],
