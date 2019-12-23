@@ -2,6 +2,54 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.5.2
+
+- Add ability to infer `fn` argument types without `as const` in `useStoreMap`.
+  In [effector-react 20.0.3](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-react-2003) we introduced an improvement for `useStoreMap` types, which helps to infer types of `fn` arguments from `keys`. And now `useStoreMap` types improved even more: every item in second argument will have its own type even without `as const`, out from a box
+
+[Type tests](https://github.com/zerobias/effector/blob/5176da5791cc1fa454e89a508e9fc0d5abc3705c/src/types/__tests__/effector-react/useStoreMap.test.tsx#L106)
+[useStoreMap in docs](https://effector.now.sh/api/effector-react/useStoreMap)
+[PR #274](https://github.com/zerobias/effector/pull/274) (thanks (@abliarsar)[https://github.com/abliarsar])
+
+```typescript
+import React from 'react'
+import {createStore} from 'effector'
+import {useStoreMap} from 'effector-react'
+
+type User = {
+  username: string
+  email: string
+  bio: string
+}
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+
+export const UserProperty = ({id, field}: {id: number; field: keyof User}) => {
+  const value = useStoreMap({
+    store: users,
+    keys: [id, field],
+    fn: (users, [id, field]) => users[id][field] || null,
+  })
+  return <div>{value}</div>
+}
+```
+
 ## effector 20.8.0
 
 - Allow to use objects and arrays with stores in sample source
