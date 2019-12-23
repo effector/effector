@@ -8,8 +8,10 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
   In [effector-react 20.0.3](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-react-2003) we introduced an improvement for `useStoreMap` types, which helps to infer types of `fn` arguments from `keys`. And now `useStoreMap` types improved even more: every item in second argument will have its own type even without `as const`, out from a box
 
 [Type tests](https://github.com/zerobias/effector/blob/5176da5791cc1fa454e89a508e9fc0d5abc3705c/src/types/__tests__/effector-react/useStoreMap.test.tsx#L106)
+
 [useStoreMap in docs](https://effector.now.sh/api/effector-react/useStoreMap)
-[PR #274](https://github.com/zerobias/effector/pull/274) (thanks (@abliarsar)[https://github.com/abliarsar])
+
+[PR #274](https://github.com/zerobias/effector/pull/274) (thanks [@abliarsar](https://github.com/abliarsar))
 
 ```typescript
 import React from 'react'
