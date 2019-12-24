@@ -11,7 +11,6 @@ export type Tab =
   | 'outline'
   | 'settings'
   | 'errors'
-  | 'description'
 
 export const isDesktopChanges = mediaMatcher('(min-width: 700px)')
 
@@ -27,7 +26,6 @@ export const tabApi = createApi(tab, {
   showShare: () => 'share',
   showSettings: () => 'settings',
   showErrors: () => 'errors',
-  showDescription: () => 'description',
 })
 
 tab.on(isDesktopChanges, (state, isDesktop) => {
