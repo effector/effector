@@ -2,6 +2,25 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.8.2
+
+- Improve `combine` batching in a few edge cases with nested `combine` calls
+
+```js
+import {createEvent, createStore, combine} from 'effector'
+
+const event = createEvent()
+const store = createStore(0).on(event, s => s + 1)
+
+const combined = combine([store, combine([store.map(d => d + 1)])])
+combined.watch(e => fn(e))
+// => [0, [1]]
+event()
+// => [1, [2]]
+```
+
+[Try it](https://share.effector.dev/gQGceQe6)
+
 ## effector-react 20.5.2
 
 - Add ability to infer `fn` argument types without `as const` in `useStoreMap`.
