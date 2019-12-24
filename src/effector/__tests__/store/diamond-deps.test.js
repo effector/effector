@@ -1,6 +1,7 @@
 //@flow
 
 import {createStore, createEvent, forward, combine} from 'effector'
+import {argumentHistory} from 'effector/fixtures'
 
 test('diamonds', async() => {
   const fn = jest.fn()
@@ -145,4 +146,23 @@ test('display name', () => {
   expect(fullNameMap.mock.calls.length).toBe(3)
   expect(displayNameMap.mock.calls.length).toBe(3)
   expect(view.mock.calls.length).toBe(3)
+})
+
+test('combine edge case', () => {
+  const fn = jest.fn()
+  const event = createEvent()
+  const eA = createStore(0).on(event, s => s + 1)
+  //prettier-ignore
+  const combined = combine([
+    eA,
+    combine([
+      eA.map(d => d + 1)
+    ])
+  ])
+  combined.watch(e => fn(e))
+  event()
+  expect(argumentHistory(fn)).toEqual([
+    [0, [1]],
+    [1, [2]],
+  ])
 })
