@@ -7,6 +7,7 @@ module.exports = {
   organizationName: 'zerobias', // Usually your GitHub org/user name.
   projectName: 'effector', // Usually your repo name.
   themeConfig: {
+    sidebarCollapsible: false,
     image: 'img/comet.png',
     navbar: {
       title: 'Effector.js',
