@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Effector.js',
+  title: 'Effector',
   tagline: 'The state manager',
   url: process.env.SITE_URL || 'https://effector.now.sh',
   baseUrl: '/',
@@ -13,9 +13,9 @@ module.exports = {
       theme: require('prism-react-renderer/themes/vsDark'),
     },
     navbar: {
-      title: 'Effector.js',
+      title: 'Effector',
       logo: {
-        alt: 'Effector.js Logo',
+        alt: 'Effector Logo',
         src: 'img/comet.png',
       },
       links: [
@@ -92,7 +92,7 @@ module.exports = {
         },
       ],
       logo: {
-        alt: 'Effector.js',
+        alt: 'Effector - the state manager',
         src: 'img/comet.png',
         href: 'https://github.com/zerobias/effector',
       },
