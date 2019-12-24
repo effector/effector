@@ -1,12 +1,11 @@
 ---
 id: recipes
-title: Recipes: Index
-sidebar_label: Recipes: Index
+title: Recipes
 hide_title: true
 ---
 
 # Recipes
 
-- [Countdown timer](countdown-timer.md)
+- [Countdown timer](countdown.md)
 - [Usage with TypeScript](usage-with-typescript.md)
 - [Usage with React Native](react-native/example.md)

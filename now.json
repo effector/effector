@@ -14,7 +14,7 @@
     {
       "src": "website/client/package.json",
       "use": "@now/static-build",
-      "config": {"distDir": "build/effector"}
+      "config": {"distDir": "build"}
     },
     {
       "src": "website/editor/package.json",

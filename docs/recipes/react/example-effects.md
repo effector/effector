@@ -1,7 +1,6 @@
 ---
 id: example-effects
-title: Example: Effects
-sidebar_label: Example: Effects
+title: Effects
 ---
 
 ```js try

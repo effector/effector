@@ -3,7 +3,7 @@
   "localized-strings": {
     "next": "Next",
     "previous": "Previous",
-    "tagline": "Effector lets you write simple, fast and type safe code and manage reactive state with ease.",
+    "tagline": "The state manager",
     "docs": {
       "api/effector-react/createComponent": {
         "title": "createComponent"
@@ -23,6 +23,9 @@
       "api/effector-react/useGate": {
         "title": "useGate"
       },
+      "api/effector-react/useList": {
+        "title": "useList"
+      },
       "api/effector-react/useStore": {
         "title": "useStore"
       },
@@ -32,6 +35,9 @@
       "api/effector-vue/component-options": {
         "title": "ComponentOptions"
       },
+      "api/effector-vue/create-component": {
+        "title": "createComponent"
+      },
       "api/effector-vue/effector-vue": {
         "title": "API Reference"
       },
@@ -40,6 +46,9 @@
       },
       "api/effector-vue/vue-effector": {
         "title": "VueEffector"
+      },
+      "api/effector/clearNode": {
+        "title": "clearNode"
       },
       "api/effector/combine": {
         "title": "combine"
@@ -77,6 +86,9 @@
       "api/effector/fromObservable": {
         "title": "fromObservable"
       },
+      "api/effector/guard": {
+        "title": "guard"
+      },
       "api/effector/effector": {
         "title": "API Reference"
       },
@@ -110,13 +122,17 @@
       "introduction/prior-art": {
         "title": "Prior Art"
       },
-      "recipes/migrating-to-effector/from-redux": {
-        "title": "From Redux",
-        "sidebar_label": "From Redux"
+      "recipes/countdown-timer": {
+        "title": "Countdown timer on setTimeout",
+        "sidebar_label": "Countdown timer"
       },
       "recipes/react-native/example": {
         "title": "React Native Example",
         "sidebar_label": "React Native Example"
+      },
+      "recipes/react/dynamic-form-schema": {
+        "title": "Dynamic form schema",
+        "sidebar_label": "Example: Dynamic form schema"
       },
       "recipes/react/example-effects": {
         "title": "Example: Effects",
@@ -130,6 +146,14 @@
         "title": "Example",
         "sidebar_label": "Example"
       },
+      "recipes/react/gate": {
+        "title": "Gate: a bridge between props and store",
+        "sidebar_label": "Gate: a bridge between props and store"
+      },
+      "recipes/react/todo-creator": {
+        "title": "TODO creator",
+        "sidebar_label": "Example: TODO creator"
+      },
       "recipes/recipes": {
         "title": "Recipes: Index",
         "sidebar_label": "Recipes: Index"
@@ -137,22 +161,21 @@
       "recipes/usage-with-typescript": {
         "title": "Usage with TypeScript",
         "sidebar_label": "Usage with TypeScript"
-      },
-      "troubleshooting": {
-        "title": "Troubleshooting"
       }
     },
     "links": {
       "Docs": "Docs",
-      "Try": "Try",
       "API": "API",
-      "Blog": "Blog",
-      "GitHub": "GitHub"
+      "Try": "Try",
+      "Changelog": "Changelog",
+      "Twitter": "Twitter",
+      "GitHub": "GitHub",
+      "Blog": "Blog"
     },
     "categories": {
       "Introduction": "Introduction",
+      "API": "API",
       "Recipes": "Recipes",
-      "Other": "Other",
       "FAQ": "FAQ",
       "effector": "effector",
       "effector-react": "effector-react",

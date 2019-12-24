@@ -1,7 +1,6 @@
 ---
 id: todo-creator
 title: TODO creator
-sidebar_label: Example: TODO creator
 ---
 ```js try
 import React from 'react'

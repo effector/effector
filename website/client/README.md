@@ -45,7 +45,7 @@ my-docusaurus/
       img/
     package.json
     sidebar.json
-    siteConfig.js
+    docusaurus.config.js
 ```
 
 # Editing Content
@@ -118,9 +118,9 @@ For more information about adding new docs, click [here](https://docusaurus.io/d
 
 ## Adding a new blog post
 
-1. Make sure there is a header link to your blog in `website/siteConfig.js`:
+1. Make sure there is a header link to your blog in `website/docusaurus.config.js`:
 
-`website/siteConfig.js`
+`website/docusaurus.config.js`
 ```javascript
 headerLinks: [
     ...
@@ -148,9 +148,9 @@ For more information about blog posts, click [here](https://docusaurus.io/docs/e
 
 ## Adding items to your site's top navigation bar
 
-1. Add links to docs, custom pages or external links by editing the headerLinks field of `website/siteConfig.js`:
+1. Add links to docs, custom pages or external links by editing the headerLinks field of `website/docusaurus.config.js`:
 
-`website/siteConfig.js`
+`website/docusaurus.config.js`
 ```javascript
 {
   headerLinks: [
@@ -172,9 +172,9 @@ For more information about the navigation bar, click [here](https://docusaurus.i
 ## Adding custom pages
 
 1. Docusaurus uses React components to build pages. The components are saved as .js files in `website/pages/en`:
-1. If you want your page to show up in your navigation header, you will need to update `website/siteConfig.js` to add to the `headerLinks` element:
+1. If you want your page to show up in your navigation header, you will need to update `website/docusaurus.config.js` to add to the `headerLinks` element:
 
-`website/siteConfig.js`
+`website/docusaurus.config.js`
 ```javascript
 {
   headerLinks: [
