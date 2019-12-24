@@ -30,17 +30,21 @@ type Stack = {
 }
 
 /**
- * Dedicated local metadata
+ * Queue as linked list
  */
-type Local = {
-  skip: boolean,
-  fail: boolean,
-  ref: ID,
-  scope: {[key: string]: any, ...},
+
+type QueueItem = {
+  right: QueueItem | null,
+  value: Layer,
+}
+type QueueBucket = {
+  first: QueueItem | null,
+  last: QueueItem | null,
+  size: number,
 }
 
 /**
- * Skew heap
+ * Queue as skew heap
  */
 type Heap = {
   /** heap node value */
@@ -49,6 +53,16 @@ type Heap = {
   l: Heap | null,
   /** right heap node */
   r: Heap | null,
+}
+
+/**
+ * Dedicated local metadata
+ */
+type Local = {
+  skip: boolean,
+  fail: boolean,
+  ref: ID,
+  scope: {[key: string]: any, ...},
 }
 
 let heap: Heap | null = null
@@ -74,7 +88,7 @@ const merge = (a: Heap | null, b: Heap | null): Heap | null => {
   return a
 }
 
-const queue = []
+const queue: QueueBucket[] = []
 let ix = 0
 while (ix < 5) {
   queue.push({first: null, last: null, size: 0})
@@ -120,8 +134,8 @@ const pushFirstHeapItem = (
   )
 const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const priority = getPriority(type)
-  const list = queue[priority]
-  const value = {
+  const bucket: QueueBucket = queue[priority]
+  const value: Layer = {
     idx,
     stack,
     resetStop: currentResetStop,
@@ -131,18 +145,18 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   if (priority === 2 || priority === 3) {
     heap = merge(heap, {v: value, l: 0, r: 0})
   } else {
-    const item = {
+    const item: QueueItem = {
       right: null,
       value,
     }
-    if (list.size === 0) {
-      list.first = item
+    if (bucket.size === 0) {
+      bucket.first = item
     } else {
-      list.last.right = item
+      bucket.last.right = item
     }
-    list.last = item
+    bucket.last = item
   }
-  list.size += 1
+  bucket.size += 1
 }
 
 const barriers = new Set()
