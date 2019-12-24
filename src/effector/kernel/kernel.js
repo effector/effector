@@ -18,9 +18,7 @@ type Layer = {|
   +id: number,
 |}
 
-/**
- * Call stack
- */
+/** Call stack */
 type Stack = {
   value: any,
   a: any,
@@ -29,10 +27,7 @@ type Stack = {
   node: Graph,
 }
 
-/**
- * Queue as linked list
- */
-
+/** Queue as linked list */
 type QueueItem = {
   right: QueueItem | null,
   value: Layer,
@@ -43,9 +38,7 @@ type QueueBucket = {
   size: number,
 }
 
-/**
- * Queue as skew heap
- */
+/** Queue as skew heap */
 type Heap = {
   /** heap node value */
   v: Layer,
@@ -55,9 +48,7 @@ type Heap = {
   r: Heap | null,
 }
 
-/**
- * Dedicated local metadata
- */
+/** Dedicated local metadata */
 type Local = {
   skip: boolean,
   fail: boolean,
@@ -74,7 +65,12 @@ const merge = (a: Heap | null, b: Heap | null): Heap | null => {
   let ret
   const isSameType = a.v.type === b.v.type
   if (
+    /**
+     * if both nodes has the same PriorityType
+     * and first node is created after second one
+     */
     (isSameType && a.v.id > b.v.id) ||
+    /** if first node is "sampler" and second node is "barrier" */
     (!isSameType && a.v.type === 'sampler')
   ) {
     ret = a
@@ -88,9 +84,14 @@ const merge = (a: Heap | null, b: Heap | null): Heap | null => {
   return a
 }
 
+/** queue buckets for each PriorityType */
 const queue: QueueBucket[] = []
 let ix = 0
 while (ix < 5) {
+  /**
+   * although "sampler" and "barrier" are using heap instead of linked list,
+   * their buckets are still useful: they maintains size of heap queue
+   */
   queue.push({first: null, last: null, size: 0})
   ix += 1
 }
@@ -99,6 +100,10 @@ const deleteMin = () => {
   for (let i = 0; i < 5; i++) {
     const list = queue[i]
     if (list.size > 0) {
+      /**
+       * second bucket is for "barrier" PriorityType (used in combine)
+       * and third bucket is for "sampler" PriorityType (used in sample and guard)
+       */
       if (i === 2 || i === 3) {
         list.size -= 1
         const value = heap.v
@@ -142,6 +147,10 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
     type,
     id,
   }
+  /**
+   * second bucket is for "barrier" PriorityType (used in combine)
+   * and third bucket is for "sampler" PriorityType (used in sample and guard)
+   */
   if (priority === 2 || priority === 3) {
     heap = merge(heap, {v: value, l: 0, r: 0})
   } else {
