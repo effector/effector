@@ -10,7 +10,8 @@ import {getGraph, readRef} from '../stdlib'
  * and index of next step in the executed Graph
  */
 type Layer = {|
-  +firstIndex: number,
+  /** index of first step */
+  +idx: number,
   +stack: Stack,
   +resetStop: boolean,
   +type: PriorityTag,
@@ -57,9 +58,10 @@ const merge = (a: Heap | null, b: Heap | null): Heap | null => {
   if (!b) return a
 
   let ret
+  const isSameType = a.v.type === b.v.type
   if (
-    (a.v.type === b.v.type && a.v.id > b.v.id) ||
-    getPriority(a.v.type) > getPriority(b.v.type)
+    (isSameType && a.v.id > b.v.id) ||
+    (!isSameType && a.v.type === 'sampler')
   ) {
     ret = a
     a = b
@@ -116,16 +118,11 @@ const pushFirstHeapItem = (
     }: Stack),
     type,
   )
-const pushHeap = (
-  firstIndex: number,
-  stack: Stack,
-  type: PriorityTag,
-  id = ++layerID,
-) => {
+const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const priority = getPriority(type)
   const list = queue[priority]
   const value = {
-    firstIndex,
+    idx,
     stack,
     resetStop: currentResetStop,
     type,
@@ -148,7 +145,6 @@ const pushHeap = (
   list.size += 1
 }
 
-let layerID = 0
 const barriers = new Set()
 
 let alreadyStarted = false
@@ -163,7 +159,7 @@ const exec = () => {
   let graph
   let value
   mem: while ((value = deleteMin())) {
-    const {firstIndex, stack, resetStop, type} = value
+    const {idx, stack, resetStop, type} = value
     graph = stack.node
     const local: Local = {
       skip: false,
@@ -171,18 +167,14 @@ const exec = () => {
       ref: '',
       scope: graph.scope,
     }
-    for (
-      let stepn = firstIndex;
-      stepn < graph.seq.length && !meta.stop;
-      stepn++
-    ) {
+    for (let stepn = idx; stepn < graph.seq.length && !meta.stop; stepn++) {
       const step = graph.seq[stepn]
       const data = step.data
       switch (step.type) {
         case 'barrier': {
           const id = data.barrierID
           const priority = data.priority
-          if (stepn !== firstIndex || type !== priority) {
+          if (stepn !== idx || type !== priority) {
             if (!barriers.has(id)) {
               barriers.add(id)
               pushHeap(stepn, stack, priority, id)
@@ -234,8 +226,8 @@ const exec = () => {
           local.skip = !tryRun(local, data, stack)
           break
         case 'run':
-          /** exec 'compute' step when stepn === firstIndex */
-          if (stepn !== firstIndex || type !== 'effect') {
+          /** exec 'compute' step when stepn === idx */
+          if (stepn !== idx || type !== 'effect') {
             pushHeap(stepn, stack, 'effect')
             continue mem
           }
