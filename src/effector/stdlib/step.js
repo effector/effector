@@ -12,7 +12,7 @@ import type {
   Graph,
   Mov,
 } from './index.h'
-import {nextStepID, nextBarrierID} from './refcount'
+import {nextStepID} from './refcount'
 import {bind2} from './bind'
 
 const cmd = (type: any, hasRef: boolean, data: any): any => ({
@@ -22,11 +22,13 @@ const cmd = (type: any, hasRef: boolean, data: any): any => ({
   hasRef,
 })
 
+let nextBarrierID = 0
+
 export const barrier: (data: {|
   +priority?: 'barrier' | 'sampler',
 |}) => Barrier = ({priority = 'barrier'}) =>
   cmd('barrier', false, {
-    barrierID: nextBarrierID(),
+    barrierID: ++nextBarrierID,
     priority,
   })
 export const mov: (data: {|
