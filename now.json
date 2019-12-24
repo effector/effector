@@ -76,6 +76,10 @@
       }
     },
     {
+      "src": "/en/(.*)",
+      "dest": "/website/client/$1"
+    },
+    {
       "src": "/(.*)",
       "dest": "/website/client/$1"
     }
