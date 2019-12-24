@@ -13,6 +13,7 @@
 
 /* You can override the default Infima variables here. */
 :root {
+  --ifm-menu-link-padding-vertical: calc(0.375rem / 2);
   --ifm-color-primary: darkorange;
   --ifm-color-primary-dark: #d66a00;
   --ifm-color-primary-darker: #be5e00;
@@ -32,5 +33,3 @@
 .footer .footer__logo {
   max-width: 5rem;
 }
-
-
