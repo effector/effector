@@ -26,3 +26,12 @@ jobs:
         run: node tools/build publish latest
         env:
           PRINT_ERRORS: false
+  trigger_changelog_generator:
+    runs-on: ubuntu-latest
+    needs: [publish-npm]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run pipeline for changelog generation
+      run: curl -X POST -d {} "$AMPLIFY_CHANGELOG_WEBHOOK" -H "Content-Type:application/json"
+      env:
+        AMPLIFY_CHANGELOG_WEBHOOK: ${{ secrets.amplify_changelog_webhook }}
