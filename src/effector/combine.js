@@ -178,9 +178,14 @@ export function combine(...args: Array<Store<any>>): Store<any> {
   }
   //$off
   const mergedStore = Array.isArray(structStoreShape)
-    ? storeCombination(structStoreShape, list => list.slice(), [])
-    : storeCombination(structStoreShape, obj => Object.assign({}, obj), {})
-  return handler ? mergedStore.map(handler) : mergedStore
+    ? storeCombination(structStoreShape, list => list.slice(), [], handler)
+    : storeCombination(
+      structStoreShape,
+      obj => Object.assign({}, obj),
+      {},
+      handler,
+    )
+  return mergedStore
 }
 
 const spreadArgs = fn => list => fn(...list)
@@ -193,13 +198,17 @@ type CombinationScope = {
   ...
 }
 
-const storeCombination = (obj: any, clone: Function, defaultState: any) => {
+const storeCombination = (
+  obj: any,
+  clone: Function,
+  defaultState: any,
+  fn?: Function,
+) => {
   const stateNew = clone(defaultState)
   const store = createStore(stateNew, {
-    //TODO: add location
     name: unitObjectName(obj),
   })
-  const target = store.stateRef
+  const target = createStateRef(stateNew)
   const isFresh = createStateRef(true)
   const node = [
     step.check.defined(),
@@ -239,6 +248,7 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
       target: isFresh,
     }),
     step.mov({store: target}),
+    fn && step.compute({fn}),
   ]
 
   for (const key in obj) {
@@ -256,7 +266,9 @@ const storeCombination = (obj: any, clone: Function, defaultState: any) => {
     })
   }
 
-  ;(store: any).defaultShape = obj
-  ;(store: any).defaultState = defaultState
+  store.defaultShape = obj
+  store.defaultState = fn
+    ? (store.stateRef.current = fn(stateNew))
+    : defaultState
   return store
 }
