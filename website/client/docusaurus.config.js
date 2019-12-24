@@ -9,6 +9,9 @@ module.exports = {
   themeConfig: {
     sidebarCollapsible: false,
     image: 'img/comet.png',
+    prism: {
+      theme: require('prism-react-renderer/themes/vsDark'),
+    },
     navbar: {
       title: 'Effector.js',
       logo: {
@@ -95,7 +98,6 @@ module.exports = {
       },
       copyright: `Copyright © ${new Date().getFullYear()} zerobias`,
     },
-
   },
   scripts: [
     'https://buttons.github.io/buttons.js',
