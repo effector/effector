@@ -3,7 +3,7 @@
  * however, automatic switching looks broken in chrome desktop,
  * so we need to explicitly change it in case of chages of user theme preferences
  */
-document.addEventListener('load', () => {
+setTimeout(() => {
   const isDark = window.matchMedia('(prefers-color-scheme: dark)')
 
   function applyTheme(e) {
@@ -16,4 +16,4 @@ document.addEventListener('load', () => {
 
   isDark.addListener(applyTheme)
   applyTheme(isDark)
-})
+}, 1000)
