@@ -6,7 +6,7 @@
 
 ```js
 import {createStore, createEvent} from 'effector'
-import {using, Data, Text, Handler, h} from 'effector-dom'
+import {using, data, text, handler, list, h} from 'effector-dom'
 
 using(document.body, () => {
   const addLine = createEvent()
@@ -15,19 +15,19 @@ using(document.body, () => {
   
   
   h('section', () => {
-    Data({timelineNames: true})
-    List(timelineRows, ({store}) => {
+    data({timelineNames: true})
+    list(timelineRows, ({store}) => {
       h('div', () => {
-        Data({timelineName: true})
-        Text(store)
+        data({timelineName: true})
+        text(store)
       })
     })
   })
   h('section', () => {
-    Data({section: 'controls'})
+    data({section: 'controls'})
     h('button', () => {
-      Handler({click: addLine})
-      Text('Add line')
+      handler({click: addLine})
+      text('Add line')
     })
   })
 })
@@ -37,9 +37,9 @@ using(document.body, () => {
 ```js
 function VizionSectionHeader(text) {
   h('header', () => {
-    Data({vizionSectionHeader: true})
+    data({vizionSectionHeader: true})
     h('h4', () => {
-      Text(text)
+      text(text)
     })
   })
 }
