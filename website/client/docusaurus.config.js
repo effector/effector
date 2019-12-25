@@ -105,6 +105,7 @@ module.exports = {
     'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.umd.js',
     '/js/splash.js',
     '/js/try-button.js',
+    '/js/darkTheme.js',
   ],
   stylesheets: ['/css/try-button.css'],
   presets: [
