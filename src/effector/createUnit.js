@@ -55,6 +55,7 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
   isStrict = strict
   return {unit: kind, name, sid, named}
 }
+export const createNamedEvent = (named: string) => createEvent({named})
 
 const createComputation = (from, to, op, fn) =>
   createLinkNode(from, to, {
@@ -174,7 +175,7 @@ export function createStore<State>(
 ): Store<State> {
   const plainState = createStateRef(currentState)
   const oldState = createStateRef(currentState)
-  const updates = createEvent({named: 'updates'})
+  const updates = createNamedEvent('updates')
   const store: any = {
     subscribers: new Map(),
     updates,
