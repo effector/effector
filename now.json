@@ -64,7 +64,7 @@
       "source": "/try/?(?<qr>[^/]*)",
       "destination": "/website/editor/index.html?$qr"
     },
-    {"source": "/(.*)", "destination": "/website/client/$1"}
+    {"source": "/en/(.*)", "destination": "https://effector.now.sh/docs/$1"}
   ],
-  "redirects": [{"source": "/en/(.*)", "destination": "/docs/$1"}]
+  "redirects": []
 }
