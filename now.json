@@ -2,7 +2,7 @@
   "name": "effector",
   "version": 2,
   "github": {
-    "silent": false
+    "silent": true
   },
   "alias": ["effector.now.sh"],
   "build": {
@@ -77,7 +77,10 @@
     },
     {
       "src": "/en/(.*)",
-      "dest": "https://effector.now.sh/docs/$1"
+      "status": 301,
+      "headers": {
+        "Location": "https://effector.now.sh/docs/$1"
+      }
     },
     {
       "src": "/(.*)",
