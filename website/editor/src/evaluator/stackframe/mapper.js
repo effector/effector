@@ -4,15 +4,13 @@ import StackFrame from './stack-frame'
 import {getSourceMap} from './getSourceMap'
 import {getLinesAround} from './getLinesAround'
 import {compiledCode} from '../../editor/state'
-//$off
-import {settle} from 'settle-promise'
 
 /**
  * Enhances a set of <code>StackFrame</code>s with their original positions and code (when available).
  * @param {StackFrame[]} frames A set of <code>StackFrame</code>s which contain (generated) code positions.
  * @param {number} [contextLines=3] The number of lines to provide before and after the line specified in the <code>StackFrame</code>.
  */
-async function map(
+export async function map(
   frames: StackFrame[],
   contextLines: number = 3,
 ): Promise<StackFrame[]> {
@@ -68,5 +66,23 @@ async function map(
   })
 }
 
-export {map}
+function settle(val: Array<Promise<*>> | Promise<*>): Promise<*> {
+  if (!Array.isArray(val)) val = [val]
+  return Promise.all(
+    val.map(p =>
+      p
+        .then(value => ({
+          isFulfilled: true,
+          isRejected: false,
+          value,
+        }))
+        .catch(reason => ({
+          isFulfilled: false,
+          isRejected: true,
+          reason,
+        })),
+    ),
+  )
+}
+
 export default map
