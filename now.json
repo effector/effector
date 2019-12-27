@@ -2,7 +2,7 @@
   "name": "effector",
   "version": 2,
   "github": {
-    "silent": true
+    "silent": false
   },
   "alias": ["effector.now.sh"],
   "build": {
