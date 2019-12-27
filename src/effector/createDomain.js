@@ -11,12 +11,7 @@ import {
   type StoreConfigPart,
   type DomainConfigPart,
 } from './config'
-import {
-  createEvent,
-  createStore,
-  createNamedEvent,
-  initUnit,
-} from './createUnit'
+import {createEvent, createStore, initUnit} from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {createName, type CompositeName} from './naming'
@@ -69,10 +64,10 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
   const parentHooks = result.defaultConfig.parentHooks
   const {compositeName} = result
-  const event = createNamedEvent('onEvent')
-  const effect = createNamedEvent('onEffect')
-  const store = createNamedEvent('onStore')
-  const domain = createNamedEvent('onDomain')
+  const event = createEvent({named: 'onEvent'})
+  const effect = createEvent({named: 'onEffect'})
+  const store = createEvent({named: 'onStore'})
+  const domain = createEvent({named: 'onDomain'})
 
   const hooks: {|
     domain: Event<Domain>,
