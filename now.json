@@ -26,10 +26,8 @@
       "use": "@now/static"
     }
   ],
-  "rewrites": [
-    {"source": "/en/(.*)", "destination": "https://effector.now.sh/docs/$1"}
-  ],
   "routes": [
+    {"src": "/en/(.*)", "dest": "https://effector.now.sh/docs/$1"},
     {
       "src": "/favicon.ico",
       "dest": "/website/media/favicon.ico"
@@ -66,6 +64,7 @@
     {
       "src": "/try/?(?<qr>[^/]*)",
       "dest": "/website/editor/index.html?$qr"
-    }
+    },
+    {"src": "/try", "dest": "https://share.effector.dev"}
   ]
 }
