@@ -54,7 +54,7 @@ it('should stop forwarding after unsubscribe', () => {
   ])
 })
 
-it('should unsubscribe only from relevant watchers', async() => {
+it('should unsubscribe only from relevant watchers', async () => {
   const dispatch = createEvent('dispatch')
   const store = createStore([])
   store.on(dispatch, (state, text) => [...state, text])
@@ -136,4 +136,21 @@ describe('array forwarding support', () => {
     expect(fn1).toBeCalledTimes(2)
     expect(fn2).toBeCalledTimes(2)
   })
+})
+it('should validate arguments', () => {
+  expect(() => {
+    forward({})
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"from and to fields should be defined"`,
+  )
+  expect(() => {
+    forward({from: createStore(null)})
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"from and to fields should be defined"`,
+  )
+  expect(() => {
+    forward({to: createStore(null)})
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"from and to fields should be defined"`,
+  )
 })

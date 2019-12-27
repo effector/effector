@@ -36,8 +36,9 @@ export const forward = ({
   from: Graphite | Graphite[],
   to: Graphite | Graphite[],
   meta?: Object,
-|}): Subscription =>
-  createSubscription(
+|}): Subscription => {
+  if (!from || !to) throw Error('from and to fields should be defined')
+  return createSubscription(
     createNode({
       parent: from,
       child: to,
@@ -45,3 +46,4 @@ export const forward = ({
       family: {},
     }),
   )
+}
