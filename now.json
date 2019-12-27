@@ -27,7 +27,6 @@
     }
   ],
   "routes": [
-    {"src": "/en/(.*)", "dest": "https://effector.now.sh/docs/$1"},
     {
       "src": "/favicon.ico",
       "dest": "/website/media/favicon.ico"
@@ -60,11 +59,29 @@
       "src": "/site.webmanifest",
       "dest": "/website/media/site.webmanifest"
     },
-    {"src": "/try/(?<file>[^/]+)", "dest": "/website/editor/$file"},
+    {
+      "src": "/try/(?<file>[^/]+)",
+      "dest": "/website/editor/$file"
+    },
     {
       "src": "/try/?(?<qr>[^/]*)",
       "dest": "/website/editor/index.html?$qr"
     },
-    {"src": "/try", "dest": "https://share.effector.dev"}
+    {
+      "src": "/try",
+      "status": 301,
+      "headers": {
+        "Location": "https://share.effector.dev/",
+        "cache-control": "s-maxage=1000"
+      }
+    },
+    {
+      "src": "/en/(.*)",
+      "dest": "https://effector.now.sh/docs/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/website/client/$1"
+    }
   ]
 }
