@@ -59,6 +59,12 @@ const features = [
     imageUrl: 'img/box.svg',
     description: 'Effector uses Rollup and Terser to provide small builds.',
   },
+  {
+    title: 'Plain javascript',
+    imageUrl: 'img/laptop.svg',
+    description:
+      'No decorators, no proxies, no classes required. Only you and your data.',
+  },
 ]
 
 function Feature({imageUrl, title, description}) {
