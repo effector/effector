@@ -54,7 +54,9 @@ module.exports = function(babel, options = {}) {
 
       CallExpression(path, state) {
         if (addLoc && !state.fileNameIdentifier) {
-          const fileName = enableFileName ? state.filename || '' : ''
+          const fileName = enableFileName
+            ? stripRoot(state.file.opts.root || '', state.filename || '')
+            : ''
 
           const fileNameIdentifier = path.scope.generateUidIdentifier(
             '_effectorFileName',
@@ -377,7 +379,14 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     configExpr.properties.push(stableID)
   }
 }
-
+function stripRoot(babelRoot, fileName) {
+  const {sep, normalize} = require('path')
+  const rawPath = fileName.replace(babelRoot, '')
+  const normalizedPath = normalize(rawPath)
+    .split(sep)
+    .join('/')
+  return normalizedPath
+}
 /**
  * "foo src/index.js [12,30]"
  */
@@ -389,11 +398,7 @@ function generateStableID(
   column,
   compressor,
 ) {
-  const {sep, normalize} = require('path')
-  const rawPath = fileName.replace(babelRoot, '')
-  const normalizedPath = normalize(rawPath)
-    .split(sep)
-    .join('/')
+  const normalizedPath = stripRoot(babelRoot, fileName)
   return compressor(`${varName} ${normalizedPath} [${line}, ${column}]`)
 }
 function hashCode(s) {
