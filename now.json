@@ -27,44 +27,45 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/favicon.ico",
-      "destination": "/website/media/favicon.ico"
-    },
-    {
-      "source": "/favicon-16x16.png",
-      "destination": "/website/media/favicon-16x16.png"
-    },
-    {
-      "source": "/favicon-32x32.png",
-      "destination": "/website/media/favicon-32x32.png"
-    },
-    {
-      "source": "/android-chrome-192x192.png",
-      "destination": "/website/media/android-chrome-192x192.png"
-    },
-    {
-      "source": "/android-chrome-512x512.png",
-      "destination": "/website/media/android-chrome-512x512.png"
-    },
-    {
-      "source": "/apple-touch-icon.png",
-      "destination": "/website/media/apple-touch-icon.png"
-    },
-    {
-      "source": "/safari-pinned-tab.svg",
-      "destination": "/website/media/safari-pinned-tab.svg"
-    },
-    {
-      "source": "/site.webmanifest",
-      "destination": "/website/media/site.webmanifest"
-    },
-    {"source": "/try/(?<file>[^/]+)", "destination": "/website/editor/$file"},
-    {
-      "source": "/try/?(?<qr>[^/]*)",
-      "destination": "/website/editor/index.html?$qr"
-    },
     {"source": "/en/(.*)", "destination": "https://effector.now.sh/docs/$1"}
   ],
-  "redirects": []
+  "routes": [
+    {
+      "src": "/favicon.ico",
+      "dest": "/website/media/favicon.ico"
+    },
+    {
+      "src": "/favicon-16x16.png",
+      "dest": "/website/media/favicon-16x16.png"
+    },
+    {
+      "src": "/favicon-32x32.png",
+      "dest": "/website/media/favicon-32x32.png"
+    },
+    {
+      "src": "/android-chrome-192x192.png",
+      "dest": "/website/media/android-chrome-192x192.png"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "dest": "/website/media/android-chrome-512x512.png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "dest": "/website/media/apple-touch-icon.png"
+    },
+    {
+      "src": "/safari-pinned-tab.svg",
+      "dest": "/website/media/safari-pinned-tab.svg"
+    },
+    {
+      "src": "/site.webmanifest",
+      "dest": "/website/media/site.webmanifest"
+    },
+    {"src": "/try/(?<file>[^/]+)", "dest": "/website/editor/$file"},
+    {
+      "src": "/try/?(?<qr>[^/]*)",
+      "dest": "/website/editor/index.html?$qr"
+    }
+  ]
 }
