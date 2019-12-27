@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "20.8.2",
+  "version": "20.8.3",
   "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
