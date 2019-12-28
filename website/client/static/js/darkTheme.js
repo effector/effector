@@ -20,7 +20,10 @@ setTimeout(() => {
     if (e.key !== THEME) return
     let systemTheme = getItem(SYSTEM_THEME)
     if (systemTheme === 'light') systemTheme = ''
-    setItem(IS_EXPLICIT_THEME, e.newValue !== systemTheme)
+    const isExplicit = e.newValue !== systemTheme
+    setTimeout(() => {
+      setItem(IS_EXPLICIT_THEME, isExplicit)
+    })
   })
   isDark.addListener(applyTheme)
   applyTheme(isDark)
