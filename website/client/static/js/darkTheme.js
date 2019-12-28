@@ -15,16 +15,28 @@ setItem(SYSTEM_THEME, isDark.matches ? 'dark' : 'light')
 if (getItem(IS_EXPLICIT_THEME) === null) {
   setItem(IS_EXPLICIT_THEME, false)
 }
+let onSetItem = e => {}
+try {
+  const setter = localStorage.setItem.bind(localStorage)
+  localStorage.setItem = function(key, value) {
+    setter(key, value)
+    try {
+      onSetItem({key, newValue: value})
+    } catch (err) {}
+  }
+} catch (err) {}
+window.addEventListener('storage', e => {
+  if (e.key !== THEME) return
+  document.documentElement.dataset.theme = e.newValue
+})
 setTimeout(() => {
-  window.addEventListener('storage', e => {
+  onSetItem = e => {
     if (e.key !== THEME) return
     let systemTheme = getItem(SYSTEM_THEME)
     if (systemTheme === 'light') systemTheme = ''
     const isExplicit = e.newValue !== systemTheme
-    setTimeout(() => {
-      setItem(IS_EXPLICIT_THEME, isExplicit)
-    })
-  })
+    setItem(IS_EXPLICIT_THEME, isExplicit)
+  }
   isDark.addListener(applyTheme)
   applyTheme(isDark)
 }, 1000)
