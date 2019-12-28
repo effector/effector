@@ -23,7 +23,7 @@ module.exports = {
         {to: 'docs/api/effector/effector', label: 'API', position: 'left'},
         {to: 'blog', label: 'Blog', position: 'left'},
         {
-          href: '/try',
+          href: 'https://share.effector.dev',
           label: 'Try',
           position: 'left',
         },
