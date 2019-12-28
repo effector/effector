@@ -135,6 +135,31 @@ describe('with target', () => {
   })
 })
 
+describe('source as object support', () => {
+  test('with store guard', () => {
+    expect(() => {
+      guard({
+        source: {
+          a: createStore(0),
+          b: createStore(0),
+        },
+        filter: createStore(true),
+      })
+    }).not.toThrow()
+  })
+  test('with function guard', () => {
+    expect(() => {
+      guard({
+        source: {
+          a: createStore(0),
+          b: createStore(0),
+        },
+        filter: () => true,
+      })
+    }).not.toThrow()
+  })
+})
+
 test('temporal consistency', () => {
   const trigger = createEvent()
   const target = createEvent()
