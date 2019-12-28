@@ -11,6 +11,7 @@ phases:
   build:
     commands:
       - cd website/editor
+      - node src/loadVersions.js
       - npx parcel build -d ../../dist --no-autoinstall --public-url 'https://editor-prod.effector.dev' src/index.html
       - cd ../..
       - cp -a website/client/static/. dist/
