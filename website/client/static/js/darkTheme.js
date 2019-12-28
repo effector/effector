@@ -10,10 +10,25 @@ const THEME = 'theme'
 const SYSTEM_THEME = 'theme/system'
 // is theme was explicitly changed
 const IS_EXPLICIT_THEME = 'theme/explicit'
+const EXPLICIT_THEME_DATE = 'theme/explicit/updated'
+// one week
+const EXPLICIT_THEME_EXPIRE = 1e3 * 60 * 60 * 24 * 7
 
 setItem(SYSTEM_THEME, isDark.matches ? 'dark' : 'light')
 if (getItem(IS_EXPLICIT_THEME) === null) {
   setItem(IS_EXPLICIT_THEME, false)
+  setItem(EXPLICIT_THEME_DATE, Date.now())
+} else {
+  const lastUpdated = getItem(EXPLICIT_THEME_DATE)
+  if (isFinite(lastUpdated)) {
+    const updateTimestamp = +lastUpdated
+    if (Date.now() - updateTimestamp > EXPLICIT_THEME_EXPIRE) {
+      setItem(IS_EXPLICIT_THEME, false)
+      setItem(EXPLICIT_THEME_DATE, Date.now())
+    }
+  } else {
+    setItem(EXPLICIT_THEME_DATE, Date.now())
+  }
 }
 let onSetItem = e => {}
 try {
@@ -36,6 +51,9 @@ setTimeout(() => {
     if (systemTheme === 'light') systemTheme = ''
     const isExplicit = e.newValue !== systemTheme
     setItem(IS_EXPLICIT_THEME, isExplicit)
+    if (isExplicit) {
+      setItem(EXPLICIT_THEME_DATE, Date.now())
+    }
   }
   isDark.addListener(applyTheme)
   applyTheme(isDark)
