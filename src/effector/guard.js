@@ -4,6 +4,7 @@ import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createUnit'
+import {combine} from './combine'
 import {step, callStack} from './stdlib'
 import {is} from './is'
 import {createNode} from './createNode'
@@ -15,6 +16,7 @@ export function guard(source: any, config: any) {
   }
   const {filter, greedy, name = 'guard'} = config
   const target = config.target || createEvent(name)
+  if (!is.unit(source)) source = combine(source)
   const meta = {op: 'guard'}
   if (is.unit(filter)) {
     sample({
