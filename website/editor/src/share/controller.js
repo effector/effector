@@ -8,12 +8,35 @@ import {
   createEffect,
   forward,
   sample,
+  guard,
   type Effect,
   type Store,
   type Event,
 } from 'effector'
+import {sourceCode} from '../editor/state'
 import {shareCode} from '../graphql'
 import {isShareAPISupported} from '../device'
+
+const pressCtrlS = createEvent()
+
+sample({
+  source: sourceCode,
+  clock: guard(pressCtrlS, {
+    filter: shareCode.pending.map(pending => !pending),
+  }),
+  target: shareCode,
+})
+
+document.addEventListener(
+  'keydown',
+  e => {
+    if ((e.metaKey || e.ctrlKey) && e.keyCode === 83) {
+      e.preventDefault()
+      pressCtrlS()
+    }
+  },
+  false,
+)
 
 shareCode.done.watch(({result: {slug}}) => {
   if (/https\:\/\/(share\.)?effector\.dev/.test(location.origin)) {
