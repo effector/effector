@@ -4,16 +4,14 @@
   "author": "Zero Bias",
   "scripts": {
     "start": "node dist/server",
-    "build:lambda": "npx parcel build -t node -d dist/server -o lambda.js src/lambda.ts",
     "build:server": "npx parcel build -t node -d dist/server -o index.js src/server.tsx",
     "build:client": "npx parcel build -d dist/client src/index.html",
-    "build": "yarn build:server && yarn build:client",
-    "now-build": "yarn build:lambda && npx parcel build -d dist/client --public-url /ssr/static src/index.html"
+    "build": "yarn build:server && yarn build:client"
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "effector": "^20.6.1",
-    "effector-react": "^20.4.1",
+    "effector": "^20.8.5",
+    "effector-react": "^20.5.2",
     "history": "^4.10.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0"

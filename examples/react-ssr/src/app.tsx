@@ -1,34 +1,35 @@
 import React from 'react'
 import fetch from 'cross-fetch'
 import {sample, createDomain, forward, guard} from 'effector'
+import {scopeBind} from 'effector/fork'
 import {
   useStore,
   useList,
   useStoreMap,
   Provider,
   useEvent,
-  scopeBind,
 } from 'effector-react/ssr'
 import users from './users.json'
 
 export const app = createDomain()
 
-export const startServer = app.event<string>()
-export const startClient = app.event()
+export const startServer = app.createEvent<string>()
+export const startClient = app.createEvent()
 
-const isServer = app.store(true)
+const isServer = app
+  .createStore(true)
   .on(startClient, () => false)
   .reset(startServer)
 
-const selectUserEvent = app.event<string>()
+const selectUserEvent = app.createEvent<string>()
 
-const fetchUser = app.effect<string, {name: string; friends: string[]}>({
+const fetchUser = app.createEffect<string, {name: string; friends: string[]}>({
   async handler(bin: string) {
     return (await fetch('https://api.myjson.com/bins/' + bin)).json()
   },
 })
 
-const log = app.effect({
+const log = app.createEffect({
   async handler(data) {
     console.log('data', data)
   },
@@ -44,10 +45,10 @@ forward({
   to: fetchUser,
 })
 
-const user = app.store('guest')
-const friends = app.store<string[]>([])
+const user = app.createStore('guest')
+const friends = app.createStore<string[]>([])
 const friendsTotal = friends.map(list => list.length)
-const userList = app.store(Object.keys(users))
+const userList = app.createStore(Object.keys(users))
 
 export const location$ = user.map(user => (user === 'guest' ? '/' : `/${user}`))
 
@@ -110,8 +111,8 @@ export const App = ({root}) => (
   </Provider>
 )
 
-export const installHistory = app.event<any>()
-const changeLocation = app.event<string>()
+export const installHistory = app.createEvent<any>()
+const changeLocation = app.createEvent<string>()
 
 // triggered when current location not equal new location
 // and new location is valid user ID
