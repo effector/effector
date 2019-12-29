@@ -72,8 +72,7 @@ function universalLaunch(unit, payload) {
   }
 }
 export function fork(domain) {
-  if (!is.domain(domain))
-    return Promise.reject(Error('first argument of fork should be domain'))
+  if (!is.domain(domain)) throw Error('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
     domain.onCreateEvent(event => {
