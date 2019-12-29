@@ -3,7 +3,7 @@ import {renderToString} from 'react-dom/server'
 import express from 'express'
 import {resolve} from 'path'
 import {promises as fs} from 'fs'
-import {fork, serialize} from 'effector-react/ssr'
+import {fork, serialize, waitAll} from 'effector/fork'
 import {app, startServer, App} from './app'
 import users from './users.json'
 
@@ -16,9 +16,10 @@ const server = express()
 for (const key in users) {
   server.get(`/${key}`, async(req, res) => {
     try {
-      const scope = await fork(app, {
-        start: startServer,
-        ctx: users[key],
+      const scope = fork(app)
+      await waitAll(startServer, {
+        scope,
+        params: users[key],
       })
       const data = serialize(scope)
       const content = renderToString(<App root={scope} />)
