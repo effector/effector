@@ -29,10 +29,7 @@ export default async (event: APIGatewayProxyEvent) => {
 
 async function dynamicContent(user) {
   try {
-    const scope = fork(app, {
-      start: startServer,
-      ctx: user,
-    })
+    const scope = fork(app)
     await waitAll(startServer, {
       scope,
       params: user,
