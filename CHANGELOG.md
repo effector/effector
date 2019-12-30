@@ -102,6 +102,9 @@ This solution requires `effector/babel-plugin` in babel configuration:
 }
 ```
 
+[Example application with express](https://github.com/zerobias/effector/tree/master/examples/react-ssr)
+[Serverless example](https://github.com/zerobias/effector/tree/master/examples/serverless-ssr)
+
 - Add events created with `createApi`, stores created with `restore` and events created with `.prepend` to domain of given source units
 
 ```js
