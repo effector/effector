@@ -1,7 +1,7 @@
 //@flow
 
 import type {Store, Event} from './unit.h'
-import {createEvent} from './createUnit'
+import {createEvent, getEventCreator} from './createUnit'
 
 declare export function createApi<
   S,
@@ -16,9 +16,10 @@ export function createApi(
   setters: {[string]: Function, ...},
 ) {
   const result = {}
+  const eventCreator = getEventCreator(store)
   for (const key in setters) {
     const handler: any = setters[key]
-    const event = (result[key] = createEvent(key))
+    const event = (result[key] = eventCreator(key))
     store.on(event, handler)
   }
   return result
