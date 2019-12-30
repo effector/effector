@@ -6,6 +6,8 @@ import {
   createStore,
   createEvent,
   createEffect,
+  createApi,
+  restore,
 } from 'effector'
 import {spy, argumentHistory} from 'effector/fixtures'
 
@@ -183,5 +185,27 @@ describe('domain ownership', () => {
         1,
       ]
     `)
+  })
+})
+
+describe('indirect child support', () => {
+  it('support createApi', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEvent(e => fn(e))
+    const position = domain.createStore(0)
+    const {moveLeft, moveRight} = createApi(position, {
+      moveLeft: x => x - 1,
+      moveRight: x => x + 1,
+    })
+    expect(argumentHistory(fn)).toEqual([moveLeft, moveRight])
+  })
+  it('support restore', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateStore(e => fn(e))
+    const source = domain.createEvent()
+    const store = restore(source, null)
+    expect(argumentHistory(fn)).toEqual([store])
   })
 })
