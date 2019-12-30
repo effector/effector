@@ -884,3 +884,567 @@ describe('sample + guard (should pass)', () => {
     `)
   })
 })
+
+/**
+ * Please note, that some tests may seem duplicating, having the same target sets but
+ * in different order. This is crucial for testing the correctness of conditional tuple
+ * iteration algorithms as they rely on order in some situations.
+ */
+describe('sample multitarget support', () => {
+  const empty = createEvent<void>()
+  const any = createEvent<any>()
+  const unknown = createEvent<unknown>()
+
+  const number = createEvent<number>()
+  const string = createEvent<string>()
+
+  const numberString = createEvent<number | string>()
+  const stringBoolean = createEvent<string | boolean>()
+
+  const a_number = createEvent<{a: number}>()
+  const a_string = createEvent<{a: string}>()
+  const a_number_b_number = createEvent<{a: number, b: number}>()
+  const a_number_b_string = createEvent<{a: number, b: string}>()
+
+  const l_number = createEvent<[number]>()
+  const l_string = createEvent<[string]>()
+  const l_number_number = createEvent<[number, number]>()
+
+  const $number = createStore<number>(0)
+
+  describe('basic cases (should pass)', () => {
+    test('{ source: number, clock: any, target: [number] }', () => {
+      sample({source: number, clock: any, target: [number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [numberString, number] }', () => {
+      sample({source: number, clock: any, target: [numberString, number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [empty] }', () => {
+      sample({source: number, clock: any, target: [empty]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [number, empty] }', () => {
+      sample({source: number, clock: any, target: [number, empty]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [empty, number] }', () => {
+      sample({source: number, clock: any, target: [empty, number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('basic cases (should fail)', () => {
+    test('{ source: number, clock: any, target: [] }', () => {
+      sample({source: number, clock: any, target: []})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [string] }', () => {
+      sample({source: number, clock: any, target: [string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [number, string] }', () => {
+      sample({source: number, clock: any, target: [number, string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [string, number] }', () => {
+      sample({source: number, clock: any, target: [string, number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [numberString, string] }', () => {
+      sample({source: number, clock: any, target: [numberString, string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [string, numberString] }', () => {
+      sample({source: number, clock: any, target: [string, numberString]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [number, stringBoolean] }', () => {
+      sample({source: number, clock: any, target: [string, stringBoolean]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [stringBoolean, number] }', () => {
+      sample({source: number, clock: any, target: [stringBoolean, number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [empty, string] }', () => {
+      sample({source: number, clock: any, target: [empty, string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [string, empty] }', () => {
+      sample({source: number, clock: any, target: [string, empty]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [any, string] }', () => {
+      sample({source: number, clock: any, target: [any, string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: any, target: [string, any] }', () => {
+      sample({source: number, clock: any, target: [string, any]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('source & clock mapping (should pass)', () => {
+    test('{ source: number, clock: number, fn: (s, c) => s + c, target: [number] }', () => {
+      sample({
+        source: number,
+        clock: number,
+        fn: (s, c) => s + c,
+        target: [number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: number, clock: number, fn: (s, c) => s + c, target: [numberString, number] }', () => {
+      sample({
+        source: number,
+        clock: number,
+        fn: (s, c) => s + c,
+        target: [numberString, number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('combinable source object (should pass)', () => {
+    test('{ source: { a: $number }, clock: any, target: [a_number] }', () => {
+      sample({source: {a: $number}, clock: any, target: [a_number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: { a: $number, b: $number }, clock: any, target: [a_number] }', () => {
+      sample({source: {a: $number, b: $number}, clock: any, target: [a_number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: { a: $number, b: $number }, clock: any, target: [a_number_b_number] }', () => {
+      sample({
+        source: {a: $number, b: $number},
+        clock: any,
+        target: [a_number_b_number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('combinable source object (should fail)', () => {
+    test('{ source: { a: $number }, clock: any, target: [a_string] }', () => {
+      sample({source: {a: $number}, clock: any, target: [a_string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+    })
+
+    test('{ source: { a: $number }, clock: any, target: [a_number, a_string] }', () => {
+      sample({source: {a: $number}, clock: any, target: [a_number, a_string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+    })
+
+    test('{ source: { a: $number }, clock: any, target: [a_number_b_string] }', () => {
+      sample({source: {a: $number}, clock: any, target: [a_number_b_string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+    })
+
+    test('{ source: { a: $number }, clock: any, target: [a_number_b_number, a_number] }', () => {
+      sample({
+        source: {a: $number},
+        clock: any,
+        target: [a_number_b_number, a_number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+    })
+  })
+
+  describe('combinable source object & clock mapping (should pass)', () => {
+    test('{ source: { a: $number, b: $number }, clock: number, fn: (s, c) => s.a + s.b + c, target: [number] }', () => {
+      sample({
+        source: {a: $number, b: $number},
+        clock: number,
+        fn: (s, c) => s.a + s.b + c,
+        target: [number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: { a: $number, b: $number }, clock: number, fn: (s, c) => s.a + s.b + c, target: [numberString, number] }', () => {
+      sample({
+        source: {a: $number, b: $number},
+        clock: number,
+        fn: (s, c) => s.a + s.b + c,
+        target: [numberString, number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('combinable source list (should pass)', () => {
+    test('{ source: [$number], clock: any, target: [l_number] }', () => {
+      sample({source: [$number], clock: any, target: [l_number]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: [$number, $number], clock: any, target: [l_number_number] }', () => {
+      sample({
+        source: [$number, $number],
+        clock: any,
+        target: [l_number_number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('combinable source list (should fail)', () => {
+    test('{ source: [$number], clock: any, target: [l_string] }', () => {
+      sample({source: [$number], clock: any, target: [l_string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: [$number], clock: any, target: [l_number, l_string] }', () => {
+      sample({source: [$number], clock: any, target: [l_number, l_string]})
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+
+  describe('combinable source list & clock mapping (should pass)', () => {
+    test('{ source: [$number, $number], clock: number, fn: ([a, b], c) => a + b + c, target: [number] }', () => {
+      sample({
+        source: [$number, $number],
+        clock: number,
+        fn: ([a, b], c) => a + b + c,
+        target: [number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+
+    test('{ source: [$number, $number], clock: number, fn: ([a, b], c) => a + b + c, target: [numberString, number] }', () => {
+      sample({
+        source: [$number, $number],
+        clock: number,
+        fn: ([a, b], c) => a + b + c,
+        target: [numberString, number],
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+})
