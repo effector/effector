@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "20.5.2",
+  "version": "20.6.0",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.es.js",
@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "react": "^16.8.0",
-    "effector": "^20.8.0"
+    "effector": "^20.9.0"
   },
   "files": [
     "README.md",
@@ -55,10 +55,6 @@
     {
       "name": "Zero Bias",
       "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
     }
   ],
   "sideEffects": false,

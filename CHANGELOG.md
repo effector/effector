@@ -2,6 +2,130 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.9.0, effector-react 20.6.0
+
+- Introduce `effector/fork` and `effector-react/ssr`: api for server side rendering and managing independent instances of application in general.
+
+```tsx
+/**
+ * app
+ */
+import {createDomain, forward, restore} from 'effector'
+import {useStore, useList, Provider, useEvent} from 'effector-react/ssr'
+
+export const app = createDomain()
+
+const requestUsername = app.createEffect<{login: string}, string>()
+const requestFriends = app.createEffect<string, string[]>()
+
+const username = restore(requestUsername, 'guest')
+const friends = restore(requestFriends, [])
+
+forward({
+  from: requestUserName.done.map(({result: username}) => username),
+  to: requestFriends,
+})
+
+const Friends = () => (
+  <ul>
+    {useList(friends, friend => (
+      <li>{name}</li>
+    ))}
+  </ul>
+)
+
+const Title = () => <header>Hello {useStore(username)}</header>
+
+export const View = ({root}) => (
+  <Provider value={root}>
+    <Title />
+    <Friends />
+  </Provider>
+)
+
+/**
+ * client
+ */
+import ReactDOM from 'react-dom'
+import {fork, hydrate} from 'effector/fork'
+import {app, View} from './app'
+
+// initialize app with values from server
+hydrate(app, {
+  values: window.__initialState__,
+})
+
+const clientScope = fork(app)
+
+ReactDOM.hydrate(<View root={clientScope} />, document.getElementById('root'))
+
+/**
+ * server
+ */
+import express from 'express'
+import {renderToString} from 'react-dom/server'
+import {fork, serialize, allSettled} from 'effector/fork'
+
+import {app, View} from './app'
+
+export const server = express()
+
+server.get('/user/:login', async (req, res) => {
+  // clone application
+  const scope = fork(app)
+  // call requestUsername(req.params) in scope
+  // and await all triggered effects
+  await allSettled(requestUsername, {
+    scope,
+    params: req.params, // argument for requestUsername call
+  })
+  // save all stores in application to plain object
+  const data = serialize(scope)
+  // render dom content
+  const content = renderToString(<View root={scope} />)
+  res.send(`
+    <body>
+      ${content}
+      <script>
+        window.__initialState__ = ${JSON.stringify(data)};
+      </script>
+    </body>
+  `)
+})
+```
+
+This solution requires `effector/babel-plugin` in babel configuration:
+
+```json
+{
+  "plugins": ["effector/babel-plugin"]
+}
+```
+
+- Add events created with `createApi`, stores created with `restore` and events created with `.prepend` to domain of given source units
+
+```js
+import {createDomain, createApi, restore} from 'effector'
+const domain = createDomain()
+domain.onCreateStore(store => {
+  console.log('store created')
+})
+domain.onCreateEvent(event => {
+  console.log('event created')
+})
+
+const position = domain.createStore({x: 0})
+// => store created
+const {move} = createApi(position, {
+  move: ({x}, payload) => ({x: x + payload}),
+})
+// => event created
+const lastMove = restore(move, 0)
+// => store created
+```
+
+[Try it](https://share.effector.dev/d6OVcrCp)
+
 ## effector 20.8.2
 
 - Improve `combine` batching in a few edge cases with nested `combine` calls

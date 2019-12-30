@@ -7,10 +7,6 @@ const common = {
       name: 'Zero Bias',
       email: 'ribkatt@gmail.com',
     },
-    {
-      name: 'goodmind',
-      email: 'andwebar@gmail.com',
-    },
   ],
   sideEffects: false,
   license: 'MIT',
@@ -42,8 +38,8 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.8.5',
-  'effector-react': '20.5.2',
+  effector: '20.9.0',
+  'effector-react': '20.6.0',
   'effector-vue': '20.3.2',
   'effector-dom': '0.0.1',
 
@@ -123,7 +119,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '^16.8.0',
-      effector: '^20.8.0',
+      effector: '^20.9.0',
     },
     files: [...getFiles('effector-react'), ...compiledFile('ssr'), 'ssr.d.ts'],
     keywords: ['react', ...keywords],
