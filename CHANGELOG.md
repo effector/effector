@@ -47,15 +47,14 @@ export const View = ({root}) => (
  * client
  */
 import ReactDOM from 'react-dom'
-import {fork, hydrate} from 'effector/fork'
+import {fork} from 'effector/fork'
 import {app, View} from './app'
 
 // initialize app with values from server
-hydrate(app, {
+
+const clientScope = fork(app, {
   values: window.__initialState__,
 })
-
-const clientScope = fork(app)
 
 ReactDOM.hydrate(<View root={clientScope} />, document.getElementById('root'))
 
