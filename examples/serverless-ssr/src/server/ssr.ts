@@ -3,7 +3,7 @@ import {resolve, extname, basename} from 'path'
 import {promises as fs} from 'fs'
 import React from 'react'
 import {renderToString} from 'react-dom/server'
-import {fork, serialize, waitAll} from 'effector/fork'
+import {fork, serialize, allSettled} from 'effector/fork'
 import fetch from 'cross-fetch'
 import {startServer, App} from '../app'
 import {app} from '../domain'
@@ -30,7 +30,7 @@ export default async (event: APIGatewayProxyEvent) => {
 async function dynamicContent(user) {
   try {
     const scope = fork(app)
-    await waitAll(startServer, {
+    await allSettled(startServer, {
       scope,
       params: user,
     })

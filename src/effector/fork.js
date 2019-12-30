@@ -91,7 +91,7 @@ export function fork(domain) {
   }
   return cloneGraph(domain)
 }
-export function waitAll(start, {scope: {clones, find}, params: ctx}) {
+export function allSettled(start, {scope: {clones, find}, params: ctx}) {
   const defer = new Defer()
   let isSyncComplete = false
   let fxCount = 0

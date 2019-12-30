@@ -6,7 +6,7 @@ import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {createDomain, forward, sample} from 'effector'
 
-import {fork, waitAll, serialize} from 'effector/fork'
+import {fork, allSettled, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
 it('works', async() => {
@@ -69,15 +69,15 @@ it('works', async() => {
   const bobScope = fork(app)
   const carolScope = fork(app)
   await Promise.all([
-    waitAll(start, {
+    allSettled(start, {
       scope: aliceScope,
       params: users.alice,
     }),
-    waitAll(start, {
+    allSettled(start, {
       scope: bobScope,
       params: users.bob,
     }),
-    waitAll(start, {
+    allSettled(start, {
       scope: carolScope,
       params: users.carol,
     }),

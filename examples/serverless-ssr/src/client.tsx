@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createBrowserHistory} from 'history'
-import {fork, hydrate, waitAll} from 'effector/fork'
+import {fork, hydrate, allSettled} from 'effector/fork'
 import {App, location$, startClient} from './app'
 import {app} from './domain'
 
@@ -21,7 +21,7 @@ const scope = fork(app, {
   start: startClient,
   ctx: history,
 })
-waitAll(startClient, {
+allSettled(startClient, {
   scope,
   params: history,
 })

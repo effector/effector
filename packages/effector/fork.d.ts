@@ -27,7 +27,7 @@ export function scopeBind<T>(unit: Unit<T>): (payload: T) => void
 export function fork(domain: Domain): Scope
 
 /** run event in scope and wait for all triggered effects */
-export function waitAll<T>(
+export function allSettled<T>(
   unit: Unit<T>,
   config: {scope: Scope; params: T},
 ): Promise<void>
