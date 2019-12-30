@@ -71,7 +71,7 @@ function universalLaunch(unit, payload) {
     launch(unit, payload)
   }
 }
-export function fork(domain) {
+export function fork(domain, {values = {}} = {}) {
   if (!is.domain(domain)) throw Error('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
@@ -89,7 +89,7 @@ export function fork(domain) {
       }
     })
   }
-  return cloneGraph(domain)
+  return cloneGraph(domain, {values})
 }
 export function allSettled(start, {scope: {clones, find}, params: ctx}) {
   const defer = new Defer()
@@ -165,7 +165,7 @@ function flatGraph(unit) {
 everything we need to clone graph section
 reachable from given unit
 */
-function cloneGraph(unit) {
+function cloneGraph(unit, {values}) {
   const list = flatGraph(unit)
   const refs = new Map()
 
@@ -201,7 +201,7 @@ function cloneGraph(unit) {
       if (!newRef) {
         newRef = {
           id: ref.id,
-          current: ref.current,
+          current: ref.id in values ? values[ref.id] : ref.current,
         }
         refs.set(ref, newRef)
       }
