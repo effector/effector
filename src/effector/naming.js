@@ -8,21 +8,6 @@ export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
 export const mapName = (unit: any, name: ?string) =>
   name == null ? joinName(unit, ' → *') : name
 
-function getDisplayName(unit: {
-  compositeName?: CompositeName,
-  domainName?: CompositeName,
-  /*::+*/ id: string,
-  /*::...*/
-}) {
-  if (unit.compositeName) {
-    return unit.compositeName.fullName
-  }
-  if (unit.domainName) {
-    return unit.domainName.fullName
-  }
-  return unit.id
-}
-
 export function unitObjectName(
   objOrArr:
     | $ReadOnlyArray<
@@ -49,7 +34,7 @@ export function unitObjectName(
     if (unit != null) {
       name += comma
       //$todo
-      name += is.unit(unit) ? getDisplayName(unit) : unit.toString()
+      name += is.unit(unit) ? unit.compositeName.fullName : unit.toString()
     }
     i += 1
     /* inlined max object names constant */
