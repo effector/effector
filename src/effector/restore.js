@@ -16,7 +16,7 @@ declare export function restore<State: {-[key: string]: Store<any> | any, ...}>(
   //prettier-ignore
   <S>(field: Store<S> | S) => Store<S>,
 >
-export function restore(obj: any, defaultState: any): any {
+export function restore(obj: any, defaultState: any, config?: any): any {
   if (is.store(obj)) {
     return obj
   }
@@ -27,12 +27,14 @@ export function restore(obj: any, defaultState: any): any {
       result = createStore(defaultState, {
         parent: domain,
         name: obj.shortName,
+        ɔ: config,
       }).on(obj, (_, v) => v)
     }
     if (is.effect(obj)) {
       result = createStore(defaultState, {
         parent: domain,
         name: obj.shortName,
+        ɔ: config,
       }).on(obj.done, (_, {result}) => result)
     }
     if (domain) domain.hooks.store(result)
