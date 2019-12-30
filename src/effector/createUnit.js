@@ -111,13 +111,17 @@ const subscribe = (event, observer): Subscription =>
   watchUnit(event, payload => observer.next(payload))
 
 function prepend(event, fn: (_: any) => *) {
+  const parent = event.parent
   const contramapped: Event<any> = getEventCreator(event)(
     '* → ' + event.shortName,
     {
-      parent: event.parent,
+      parent,
     },
   )
   createComputation(contramapped, event, 'prepend', fn)
+  if (parent) {
+    parent.hooks.event(contramapped)
+  }
   return contramapped
 }
 
