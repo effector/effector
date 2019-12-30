@@ -161,22 +161,26 @@ realmEffect.watch(e => {
 realmDomain.watch(domain => {
   domain.onCreateEvent(event => {
     //TODO: wrong behaviour?
-    if (event.domainName !== domain.compositeName) return
+    if (getDomainName(event) !== domain.compositeName) return
     realmEvent(event)
   })
   domain.onCreateEffect(event => {
     //TODO: wrong behaviour?
-    if (event.domainName !== domain.compositeName) return
+    if (getDomainName(event) !== domain.compositeName) return
     realmEffect(event)
   })
   domain.onCreateStore(event => {
     //TODO: wrong behaviour?
-    if (event.domainName !== domain.compositeName) return
+    if (getDomainName(event) !== domain.compositeName) return
     realmStore(event)
   })
   domain.onCreateDomain(event => realmDomain(event))
 })
-
+function getDomainName(event) {
+  if (event.parent) return event.parent.compositeName
+  // before 20.9.0
+  return event.domainName
+}
 realmClearInterval.watch(id => {
   global.clearInterval(id)
 })
