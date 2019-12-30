@@ -1,12 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createBrowserHistory} from 'history'
-import {fork, hydrate} from 'effector-react/ssr'
+import {fork, allSettled} from 'effector/fork'
 import {App, app, location$, startClient} from './app'
-
-hydrate(app, {
-  values: (window as any).__initialState__,
-})
 
 const history = createBrowserHistory()
 
@@ -16,12 +12,13 @@ location$.updates.watch(location => {
   }
 })
 
-render()
+const clientScope = fork(app, {
+  values: window.__initialState__,
+})
 
-async function render() {
-  const scope = await fork(app, {
-    start: startClient,
-    ctx: history,
-  })
-  ReactDOM.hydrate(<App root={scope} />, document.getElementById('root'))
-}
+allSettled(startClient, {
+  scope: clientScope,
+  params: history,
+}).then(() => {
+  ReactDOM.hydrate(<App root={clientScope} />, document.getElementById('root'))
+})
