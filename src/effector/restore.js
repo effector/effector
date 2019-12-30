@@ -17,24 +17,26 @@ declare export function restore<State: {-[key: string]: Store<any> | any, ...}>(
   <S>(field: Store<S> | S) => Store<S>,
 >
 export function restore(obj: any, defaultState: any): any {
+  if (is.store(obj)) {
+    return obj
+  }
   if (is.unit(obj)) {
     const domain = obj.parent
-    const storeCreator = domain ? domain.store : createStore
-    if (is.store(obj)) {
-      return obj
-    }
+    let result
     if (is.event(obj)) {
-      return storeCreator(defaultState, {
+      result = createStore(defaultState, {
         parent: domain,
         name: obj.shortName,
       }).on(obj, (_, v) => v)
     }
     if (is.effect(obj)) {
-      return storeCreator(defaultState, {
+      result = createStore(defaultState, {
         parent: domain,
         name: obj.shortName,
       }).on(obj.done, (_, {result}) => result)
     }
+    if (domain) domain.hooks.store(result)
+    return result
   }
   const result = {}
   for (const key in obj) {

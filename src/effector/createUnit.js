@@ -33,9 +33,8 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 
-export const getEventCreator = event => {
-  const domain = event.parent
-  return domain ? domain.event : createEvent
+export const applyParentEventHook = ({parent}, target) => {
+  if (parent) parent.hooks.event(target)
 }
 
 let isStrict
@@ -111,17 +110,11 @@ const subscribe = (event, observer): Subscription =>
   watchUnit(event, payload => observer.next(payload))
 
 function prepend(event, fn: (_: any) => *) {
-  const parent = event.parent
-  const contramapped: Event<any> = getEventCreator(event)(
-    '* → ' + event.shortName,
-    {
-      parent,
-    },
-  )
+  const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
+    parent: event.parent,
+  })
   createComputation(contramapped, event, 'prepend', fn)
-  if (parent) {
-    parent.hooks.event(contramapped)
-  }
+  applyParentEventHook(event, contramapped)
   return contramapped
 }
 
