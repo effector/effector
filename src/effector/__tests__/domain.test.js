@@ -208,4 +208,12 @@ describe('indirect child support', () => {
     const store = restore(source, null)
     expect(argumentHistory(fn)).toEqual([store])
   })
+  it('support prepend', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    domain.onCreateEvent(e => fn(e))
+    const source = domain.createEvent()
+    const prepended = source.prepend(() => {})
+    expect(argumentHistory(fn)).toEqual([source, prepended])
+  })
 })
