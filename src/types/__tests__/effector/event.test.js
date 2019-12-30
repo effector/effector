@@ -29,13 +29,11 @@ test('#(properties)', () => {
   const event = createEvent()
   const kind1: kind = event.kind
   const shortName: string = event.shortName
-  const domainName: CompositeName | typeof undefined = event.domainName
   const compositeName: CompositeName = event.compositeName
 
   const computed = event.map(() => 'hello')
   const kind2: kind = computed.kind
   const shortName1: string = computed.shortName
-  const domainName1: CompositeName | typeof undefined = computed.domainName
   const compositeName1: CompositeName = computed.compositeName
   expect(typecheck).toMatchInlineSnapshot(`
     "

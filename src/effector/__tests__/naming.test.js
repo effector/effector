@@ -36,8 +36,6 @@ describe('naming', () => {
       const firstName = domain.store('')
       const lastName = domain.store('')
 
-      expect(firstName.domainName?.fullName).toBe('form')
-      expect(lastName.domainName?.fullName).toBe('form')
       expect(firstName.compositeName?.fullName).toBe('form/firstName')
       expect(lastName.compositeName?.fullName).toBe('form/lastName')
     })

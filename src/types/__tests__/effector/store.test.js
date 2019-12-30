@@ -184,14 +184,12 @@ test('#(properties)', () => {
   const store = createStore(0)
   const kind1: kind = store.kind
   const shortName: string = store.shortName
-  const domainName: CompositeName | typeof undefined = store.domainName
   const compositeName: CompositeName = store.compositeName
   const defaultState: number = store.defaultState
 
   const computed = store.map(() => 'hello')
   const kind2: kind = computed.kind
   const shortName1: string = computed.shortName
-  const domainName1: CompositeName | typeof undefined = computed.domainName
   const compositeName1: CompositeName = computed.compositeName
   const defaultState1: string = computed.defaultState
   expect(typecheck).toMatchInlineSnapshot(`

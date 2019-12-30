@@ -39,13 +39,11 @@ test('#(properties)', () => {
   const effect = createEffect()
   const kind1: kind = effect.kind
   const shortName: string = effect.shortName
-  const domainName: CompositeName | typeof undefined = effect.domainName
   const compositeName: CompositeName = effect.compositeName
 
   const computed = effect.map(() => 'hello')
   const kind2: kind = computed.kind
   const shortName1: string = computed.shortName
-  const domainName1: CompositeName | typeof undefined = computed.domainName
   const compositeName1: CompositeName = computed.compositeName
   expect(typecheck).toMatchInlineSnapshot(`
     "
