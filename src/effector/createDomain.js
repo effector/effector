@@ -19,7 +19,6 @@ import {
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
-import {createName, type CompositeName} from './naming'
 
 type DomainHooks = {|
   domain: Event<Domain>,
@@ -67,8 +66,6 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   }
 
   node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
-  const parentHooks = result.defaultConfig.parentHooks
-  const {compositeName} = result
   const event = createNamedEvent('onEvent')
   const effect = createNamedEvent('onEffect')
   const store = createNamedEvent('onStore')
@@ -85,11 +82,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     store,
     domain,
   }
-  if (parentHooks) {
-    for (const key in hooks) {
-      forward({from: hooks[key], to: parentHooks[key]})
-    }
-  }
+  result.hooks = hooks
   result.onCreateEvent = createHook(event, events, node)
   result.onCreateEffect = createHook(effect, effects, node)
   result.onCreateStore = createHook(store, stores, node)
@@ -101,7 +94,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   ): Event<Payload> =>
       event(
         createEvent(name, {
-          parent: compositeName,
+          parent: result,
           config,
         }),
       )
@@ -111,7 +104,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   ): Effect<Params, Done, Fail> =>
       effect(
         createEffect(name, {
-          parent: compositeName,
+          parent: result,
           config,
         }),
       )
@@ -119,23 +112,28 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     name?: string,
     config?: Config<DomainConfigPart>,
   ) =>
-    domain(
-      createDomain({
-        name,
-        parent: compositeName,
-        parentHooks: hooks,
-        config,
-      }),
-    )
+    createDomain({
+      name,
+      parent: result,
+      config,
+    })
   result.createStore = result.store = <T>(
     state: T,
     config?: Config<StoreConfigPart>,
   ): Store<T> =>
       store(
         createStore(state, {
-          parent: compositeName,
+          parent: result,
           config,
         }),
       )
+
+  const parent = result.parent
+  if (parent) {
+    for (const key in hooks) {
+      forward({from: hooks[key], to: parent.hooks[key]})
+    }
+    parent.hooks.domain(result)
+  }
   return result
 }

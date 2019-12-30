@@ -33,6 +33,11 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 
+export const getEventCreator = event => {
+  const domain = event.parent
+  return domain ? domain.event : createEvent
+}
+
 let isStrict
 export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
   const config = normalizeConfig({
@@ -40,14 +45,14 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
     config: rawConfigA,
   })
   const id = nextUnitID()
-  const {parent, sid = null, strict = true, named = null} = config
+  const {parent = null, sid = null, strict = true, named = null} = config
   const name = named ? named : config.name || (kind === 'domain' ? '' : id)
   const compositeName = createName(name, parent)
   unit.kind = kind
   unit.id = id
   unit.sid = sid
   unit.shortName = name
-  unit.domainName = parent
+  unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
   unit.thru = bind(thru, unit)
@@ -65,9 +70,7 @@ const createComputation = (from, to, op, fn) =>
   })
 
 const createEventFiltration = (event, op, fn, node) => {
-  const mapped = createEvent(joinName(event, ' →? *'), {
-    parent: event.domainName,
-  })
+  const mapped = createEvent(joinName(event, ' →? *'))
   createLinkNode(event, mapped, {
     scope: {fn},
     node,
@@ -108,9 +111,12 @@ const subscribe = (event, observer): Subscription =>
   watchUnit(event, payload => observer.next(payload))
 
 function prepend(event, fn: (_: any) => *) {
-  const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
-    parent: event.domainName,
-  })
+  const contramapped: Event<any> = getEventCreator(event)(
+    '* → ' + event.shortName,
+    {
+      parent: event.parent,
+    },
+  )
   createComputation(contramapped, event, 'prepend', fn)
   return contramapped
 }
@@ -128,10 +134,7 @@ function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
     name = fn.name
     fn = fn.fn
   }
-  const mapped = createEvent(mapName(event, name), {
-    parent: event.domainName,
-    config,
-  })
+  const mapped = createEvent(mapName(event, name), config)
   createComputation(event, mapped, 'map', fn)
   return mapped
 }
@@ -313,7 +316,6 @@ function mapStore<A, B>(
 
   const innerStore: Store<any> = createStore(lastResult, {
     name: mapName(store, name),
-    parent: store.domainName,
     config,
     strict: false,
   })

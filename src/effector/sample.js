@@ -23,7 +23,7 @@ export function sample(
   greedy: boolean = false,
 ): any {
   let target
-  let name = null
+  let name
   //config case
   if (clock === undefined && 'source' in source) {
     if ('clock' in source && source.clock == null)
@@ -40,6 +40,7 @@ export function sample(
     //still undefined!
     clock = source
   }
+  name = name || source.shortName
   source = is.unit(source) ? source : combine(source)
   clock = is.unit(clock) ? clock : combine(clock)
   if (typeof fn === 'boolean') {
@@ -47,17 +48,13 @@ export function sample(
     fn = null
   }
   if (!target) {
-    const config = {
-      name: name || source.shortName,
-      parent: source.domainName,
-    }
     if (is.store(source) && is.store(clock)) {
       const initialState = fn
         ? fn(readRef(source.stateRef), readRef(clock.stateRef))
         : readRef(source.stateRef)
-      target = createStore(initialState, config)
+      target = createStore(initialState, {name})
     } else {
-      target = createEvent(config)
+      target = createEvent(name)
     }
   }
   if (is.store(source)) {

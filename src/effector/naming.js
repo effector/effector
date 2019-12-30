@@ -1,6 +1,6 @@
 //@flow
 
-import type {Store, Event, Effect} from './unit.h'
+import type {Store, Event, Effect, Domain} from './unit.h'
 import {is} from './is'
 
 export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
@@ -46,7 +46,7 @@ export function unitObjectName(
 }
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
-  const compositeName = createName(rawName, store.domainName)
+  const compositeName = createName(rawName, store.parent)
   store.shortName = rawName
   if (!store.compositeName) {
     store.compositeName = compositeName
@@ -66,14 +66,12 @@ export type CompositeName = {
   path: string[],
 }
 
-export function createName(
-  name: string,
-  parent?: CompositeName,
-): CompositeName {
+export function createName(name: string, parent?: Domain): CompositeName {
   let path
   let fullName
+  let composite
   const shortName = name
-  if (parent === undefined) {
+  if (!parent) {
     if (name.length === 0) {
       path = ([]: string[])
     } else {
@@ -81,15 +79,16 @@ export function createName(
     }
     fullName = name
   } else {
+    composite = parent.compositeName
     if (name.length === 0) {
-      path = parent.path
-      fullName = parent.fullName
+      path = composite.path
+      fullName = composite.fullName
     } else {
-      path = parent.path.concat([name])
-      if (parent.fullName.length === 0) {
+      path = composite.path.concat([name])
+      if (composite.fullName.length === 0) {
         fullName = name
       } else {
-        fullName = '' + parent.fullName + '/' + name
+        fullName = '' + composite.fullName + '/' + name
       }
     }
   }

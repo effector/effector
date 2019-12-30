@@ -56,7 +56,6 @@ const assignConfigPart = (part, config = {}) => {
     if (part.sid) config.sid = part.sid
     if (part.handler) config.handler = part.handler
     if (part.parent) config.parent = part.parent
-    if (part.parentHooks) config.parentHooks = part.parentHooks
     if ('strict' in part) config.strict = part.strict
     if (part.named) config.named = part.named
     assignConfigPart(part.ɔ, config)
