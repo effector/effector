@@ -341,6 +341,44 @@ const f = a => createStore(a, {
 });"
 `;
 
+exports[`babel-plugin should restore 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createEvent, restore } from 'effector';
+const foo = createEvent(\\"foo\\", {
+  name: \\"foo\\",
+  sid: \\"uytd56\\"
+});
+const a = restore(foo, null, {
+  name: \\"a\\",
+  sid: \\"-n6x72o\\"
+});
+const b = restore(foo, null, {
+  ɔ: {},
+  name: \\"b\\",
+  sid: \\"-qp36mq\\"
+}); //$off
+
+const c = restore(foo, null, {
+  ɔ: 23020,
+  name: \\"c\\",
+  sid: \\"-tq7jsl\\"
+});
+const config = {
+  option: 0
+};
+const dod = restore(foo, null, {
+  ɔ: config,
+  name: \\"dod\\",
+  sid: \\"-5s8kqi\\"
+});
+
+const f = a => restore(foo, null, {
+  name: \\"f\\",
+  sid: \\"tcvrf2\\"
+});"
+`;
+
 exports[`babel-plugin should use store 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow

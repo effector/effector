@@ -9,10 +9,12 @@ module.exports = function(babel, options = {}) {
     events,
     effects,
     domains,
+    restores,
     storeCreators,
     eventCreators,
     effectCreators,
     domainCreators,
+    restoreCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -47,6 +49,8 @@ module.exports = function(babel, options = {}) {
               effectCreators.add(localName)
             } else if (domainCreators.has(importedName)) {
               domainCreators.add(localName)
+            } else if (restoreCreators.has(importedName)) {
+              restoreCreators.add(localName)
             }
           }
         }
@@ -102,6 +106,13 @@ module.exports = function(babel, options = {}) {
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.domains.add(id.name)
+            }
+          }
+          if (restores && restoreCreators.has(path.node.callee.name)) {
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setRestoreNameAfter(path, state, id, babel.types, smallConfig)
+              state.stores.add(id.name)
             }
           }
         }
@@ -162,6 +173,7 @@ const normalizeOptions = options => {
       events: true,
       effects: true,
       domains: true,
+      restores: true,
     },
     result: {
       importName: new Set(
@@ -176,6 +188,7 @@ const normalizeOptions = options => {
       eventCreators: new Set(options.eventCreators || ['createEvent']),
       effectCreators: new Set(options.effectCreators || ['createEffect']),
       domainCreators: new Set(options.domainCreators || ['createDomain']),
+      restoreCreators: new Set(options.restoreCreators || ['restore']),
       domainMethods: readConfigShape(options.domainMethods, {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
@@ -276,7 +289,57 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   )
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
+function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+  const displayName = nameNodeId.name
+  let args
+  let loc
+  path.find(path => {
+    if (path.isCallExpression()) {
+      args = path.node.arguments
+      loc = path.node.loc.start
+      return true
+    }
+  })
 
+  if (args && displayName) {
+    if (!args[0]) return
+    if (!args[1]) return
+    const oldConfig = args[2]
+    const configExpr = (args[2] = t.objectExpression([]))
+
+    const nameProp = t.objectProperty(
+      t.identifier('name'),
+      t.stringLiteral(displayName),
+    )
+
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+          compressor,
+        ),
+      ),
+    )
+
+    if (oldConfig) {
+      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+    }
+    if (addLoc) {
+      const locProp = t.objectProperty(
+        t.identifier('loc'),
+        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+      )
+      configExpr.properties.push(locProp)
+    }
+    configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
+  }
+}
 function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
   const displayName = nameNodeId.name
   let args
