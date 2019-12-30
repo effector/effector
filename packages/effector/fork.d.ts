@@ -24,7 +24,10 @@ export function serialize(scope: Scope): {[sid: string]: any}
 /** bind event to scope from .watch call */
 export function scopeBind<T>(unit: Unit<T>): (payload: T) => void
 
-export function fork(domain: Domain): Scope
+export function fork(
+  domain: Domain,
+  config?: {values?: {[sid: string]: any}},
+): Scope
 
 /** run event in scope and wait for all triggered effects */
 export function allSettled<T>(
