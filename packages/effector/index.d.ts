@@ -83,7 +83,6 @@ export interface Event<Payload> extends Unit<Payload> {
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
-  domainName?: CompositeName
   compositeName: CompositeName
   sid: string | null
   shortName: string
@@ -130,7 +129,6 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
   getType(): string
-  domainName?: CompositeName
   compositeName: CompositeName
   sid: string | null
   shortName: string
@@ -156,7 +154,6 @@ export interface Store<State> extends Unit<State> {
   ): Subscription
   thru<U>(fn: (store: Store<State>) => U): U
   defaultState: State
-  domainName?: CompositeName
   compositeName: CompositeName
   shortName: string
   sid: string | null
