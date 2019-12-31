@@ -919,10 +919,44 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Index signature is missing in type 'Event<number>'.
+                  Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Index signature is missing in type 'Event<number>'.
+                  Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number]})
+                                                      [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number]})
+                                                      [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number]})
+                                                      [1] ^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -931,13 +965,45 @@ describe('sample multitarget support', () => {
       sample({source: number, clock: any, target: [numberString, number]})
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
-      --flow--
-      no errors
-      "
+        --flow--
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
+        "
       `)
     })
 
@@ -947,10 +1013,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty]})
+                                                      ^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty]})
+                                                      [1] ^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty]})
+                                                      ^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty]})
+                                                      [1] ^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty]})
+                                                      ^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty]})
+                                                      [1] ^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -961,10 +1059,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -975,10 +1105,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, number]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, number]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, number]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, number]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, number]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, number]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -991,10 +1153,26 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          sample({source: number, clock: any, target: []})
+                                                      ^^
+          property 'kind' is missing in empty array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: []})
+                                                      [1] ^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1005,10 +1183,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string]})
+                                                      [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string]})
+                                                      [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string]})
+                                                      ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string]})
+                                                      [1] ^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1019,10 +1229,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, string]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, string]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [number, string]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [number, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1033,10 +1275,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, number]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, number]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, number]})
+                                                      ^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1047,10 +1321,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, string]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, string]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [numberString, string]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [numberString, string]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1061,10 +1367,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, numberString]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, numberString]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, numberString]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, numberString]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, numberString]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, numberString]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1075,10 +1413,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<string> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, stringBoolean]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1089,10 +1459,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      ^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [stringBoolean, number]})
+                                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1103,10 +1505,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, string]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, string]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, string]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, string]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [empty, string]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [empty, string]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1117,10 +1551,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, empty]})
+                                                      ^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, empty]})
+                                                      [1] ^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1131,10 +1597,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [any, string]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [any, string]})
+                                                      [1] ^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [any, string]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [any, string]})
+                                                      [1] ^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [any, string]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [any, string]})
+                                                      [1] ^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1145,10 +1643,42 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, any]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, any]})
+                                                      [1] ^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, any]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, any]})
+                                                      [1] ^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: number, clock: any, target: [string, any]})
+                                                      ^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: number, clock: any, target: [string, any]})
+                                                      [1] ^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1166,10 +1696,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              +target?: Unit<C>,
+                    [2] ^^^^^^^
         "
       `)
     })
@@ -1185,10 +1764,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>' is not assignable to type 'Combinable'.
+              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
+                  Types of parameters 's' and 'source' are incompatible.
+                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
+                      Type 'any[]' is not assignable to type 'number'.
+                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              +target?: Unit<C>,
+                    [2] ^^^^^^^
         "
       `)
     })
@@ -1201,10 +1829,19 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          sample({source: {a: $number}, clock: any, target: [a_number]})
+                          ^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: {a: $number}, clock: any, target: [a_number]})
+                          [1] ^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
         "
       `)
     })
@@ -1215,10 +1852,19 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          sample({source: {a: $number, b: $number}, clock: any, target: [a_number]})
+                          ^^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: {a: $number, b: $number}, clock: any, target: [a_number]})
+                          [1] ^^^^^^^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
         "
       `)
     })
@@ -1233,10 +1879,19 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; b: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          source: {a: $number, b: $number},
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              source: {a: $number, b: $number},
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
         "
       `)
     })
@@ -1247,42 +1902,69 @@ describe('sample multitarget support', () => {
       sample({source: {a: $number}, clock: any, target: [a_string]})
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        Cannot call 'sample'
+          sample({source: {a: $number}, clock: any, target: [a_string]})
+                          ^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: {a: $number}, clock: any, target: [a_string]})
+                          [1] ^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        "
+      `)
     })
 
     test('{ source: { a: $number }, clock: any, target: [a_number, a_string] }', () => {
       sample({source: {a: $number}, clock: any, target: [a_number, a_string]})
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        Cannot call 'sample'
+          sample({source: {a: $number}, clock: any, target: [a_number, a_string]})
+                          ^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: {a: $number}, clock: any, target: [a_number, a_string]})
+                          [1] ^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        "
+      `)
     })
 
     test('{ source: { a: $number }, clock: any, target: [a_number_b_string] }', () => {
       sample({source: {a: $number}, clock: any, target: [a_number_b_string]})
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        Cannot call 'sample'
+          sample({source: {a: $number}, clock: any, target: [a_number_b_string]})
+                          ^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: {a: $number}, clock: any, target: [a_number_b_string]})
+                          [1] ^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        "
+      `)
     })
 
     test('{ source: { a: $number }, clock: any, target: [a_number_b_number, a_number] }', () => {
@@ -1293,14 +1975,23 @@ describe('sample multitarget support', () => {
       })
 
       expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        Cannot call 'sample'
+          source: {a: $number},
+                  ^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              source: {a: $number},
+                  [1] ^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        "
+      `)
     })
   })
 
@@ -1316,10 +2007,19 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>[]' is not assignable to type 'Unit<number>'.
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          source: {a: $number, b: $number},
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              source: {a: $number, b: $number},
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
         "
       `)
     })
@@ -1335,10 +2035,19 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<number>'.
 
         --flow--
-        no errors
+        Cannot call 'sample'
+          source: {a: $number, b: $number},
+                  ^^^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+              source: {a: $number, b: $number},
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
         "
       `)
     })
@@ -1351,10 +2060,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number]})
+                          [1] ^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number]})
+                                                         [1] ^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number]})
+                                                         [1] ^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number]})
+                                                         [1] ^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1369,10 +2127,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [l_number_number],
+                  ^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              target: [l_number_number],
+                  [1] ^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [l_number_number],
+                  ^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              target: [l_number_number],
+                  [1] ^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [l_number_number],
+                  ^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              target: [l_number_number],
+                  [1] ^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1385,10 +2192,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<[string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_string]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_string]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_string]})
+                          [1] ^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_string]})
+                                                         [1] ^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_string]})
+                                                         [1] ^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_string]})
+                                                         ^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_string]})
+                                                         [1] ^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1399,10 +2255,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<[number]> | Event<[string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          [1] ^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          ^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                          [1] ^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         ^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         [1] ^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         ^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         [1] ^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         ^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              sample({source: [$number], clock: any, target: [l_number, l_string]})
+                                                         [1] ^^^^^^^^^^^^^^^^^^^^
+              declare export function sample<A, U: Unit<A>>(config: {|
+                                               [2] ^^^^^^^
         "
       `)
     })
@@ -1420,10 +2325,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Event<number>[]' is not assignable to type 'Unit<number>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [number],
+                  ^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              target: [number],
+                  [1] ^^^^^^^^
+              +target?: Unit<C>,
+                    [2] ^^^^^^^
         "
       `)
     })
@@ -1439,10 +2393,59 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        No overload matches this call.
+          The last overload gave the following error.
+            Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<number>'.
 
         --flow--
-        no errors
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          source: [$number, $number],
+                  ^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
+              source: [$number, $number],
+                  [1] ^^^^^^^^^^^^^^^^^^
+              +source: Unit<A>,
+                   [2] ^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                           [2] ^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                             [2] ^^^^^^^^^^^^^^^^^^^^
+        Cannot call 'sample' with object literal bound to 'config'
+          target: [numberString, number],
+                  ^^^^^^^^^^^^^^^^^^^^^^
+          property 'kind' is missing in array literal [1] but exists in 'Unit' [2] in property 'target'
+              target: [numberString, number],
+                  [1] ^^^^^^^^^^^^^^^^^^^^^^
+              +target?: Unit<C>,
+                    [2] ^^^^^^^
         "
       `)
     })
