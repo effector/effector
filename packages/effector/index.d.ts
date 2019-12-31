@@ -20,6 +20,45 @@ type Combinable = { [key: string]: Store<any> } | Tuple<Store<any>>
 // Helper type, which unwraps combinable sample source value.
 type GetCombinedValue<T> = {[K in keyof T]: T[K] extends Store<infer U> ? U : never}
 
+type GetUnitValue<T> = T extends Unit<infer Value> ? Value : never 
+
+type Tail<A extends Tuple> = 
+    ((...args: A) => any) extends ((h: any, ...t: infer T) => any) ? T : never
+
+type CombineSource<T> = {
+  [K in keyof T]: Store<T[K]>
+}
+ & { [key: string]: any } // allow excessive source object props
+ & { [key: number]: any } // allow excessive source list items
+
+type HandleVoidAnyUnknownUnit<T, Fallback> = void extends T // Unit<void> extends Unit<void/any/unknown> ?
+    ? Fallback
+    : T
+
+type FindStrictest<L, R> =
+    [L] extends [R]
+        ? [R] extends [L]
+            ? L // L = R
+            : L // R > L
+        : [R] extends [L]
+            ? R // L > R
+            : never  // L != R
+
+type FindStrictestUnitInTuple<T extends Tuple<Unit<any>>, U extends Unit<any> = T[0]> = (
+    T['length'] extends 0
+      ? { _: U }
+      : {
+          _:
+            FindStrictestUnitInTuple<
+                Tail<T>,
+                Unit<FindStrictest<
+                    HandleVoidAnyUnknownUnit<GetUnitValue<U>, GetUnitValue<T[0]>>,
+                    HandleVoidAnyUnknownUnit<GetUnitValue<T[0]>, GetUnitValue<U>>
+                >>
+            >
+        }
+) extends { _: infer Result } ? Unit<HandleVoidAnyUnknownUnit<GetUnitValue<Result>, any>> : Unit<never>
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -586,6 +625,33 @@ export function sample<A extends Combinable, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
+/* overloads with multitarget support */
+export function sample<A extends Combinable, B, C extends Tuple<Unit<any>>>(config: {
+  source: A
+  clock: Unit<B>
+  fn(source: GetCombinedValue<A>, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
+  target: C
+  greedy?: boolean
+}): C
+export function sample<A, B, C extends Tuple<Unit<any>>>(config: {
+  source: Unit<A>
+  clock: Unit<B>
+  fn(source: A, clock: B): GetUnitValue<FindStrictestUnitInTuple<C>>
+  target: C
+  greedy?: boolean
+}): C
+export function sample<A extends Tuple<Unit<any>>>(config: {
+  source: FindStrictestUnitInTuple<A> 
+  clock: Unit<any>
+  target: A
+  greedy?: boolean
+}): A
+export function sample<A extends Tuple<Unit<any>>>(config: {
+  source: CombineSource<GetUnitValue<FindStrictestUnitInTuple<A>>>
+  clock: Unit<any>
+  target: A
+  greedy?: boolean
+}): A
 
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
