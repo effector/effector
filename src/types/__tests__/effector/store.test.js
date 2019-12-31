@@ -23,8 +23,6 @@ test('createStore', () => {
     "
     --typescript--
     Type 'Store<number>' is not assignable to type 'Store<string>'.
-      The types returned by 'getState()' are incompatible between these types.
-        Type 'number' is not assignable to type 'string'.
 
     --flow--
     Cannot assign 'createStore(...)' to 'createStore_store2'

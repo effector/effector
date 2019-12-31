@@ -374,9 +374,18 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<{ a: string; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ a: string; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{ a: string; }>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ a: string; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ a: string; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ a: string; }>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -406,9 +415,18 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<null>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<null>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'
@@ -437,9 +455,18 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Combinable'.
-            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<{}>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{}>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{}>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{}>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{}>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{}>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
 
       --flow--
       no errors
@@ -460,8 +487,16 @@ describe('`target` forwarding', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is missing the following properties from type 'Unit<any>[]': pop, push, concat, join, and 26 more.
 
       --flow--
       no errors
@@ -919,18 +954,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Index signature is missing in type 'Event<number>'.
-                  Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Index signature is missing in type 'Event<number>'.
-                  Type 'Event<number>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -967,16 +991,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1013,16 +1028,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'Event<void>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1059,16 +1065,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1105,16 +1102,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1155,14 +1143,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'never[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample'
@@ -1185,14 +1166,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type 'Event<string>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1231,14 +1206,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1277,14 +1245,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<unknown>'.
+            Type 'Event<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1323,14 +1284,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1369,14 +1324,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1415,14 +1364,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<string> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1461,14 +1404,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<number> | Event<string | boolean>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1507,14 +1443,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1553,14 +1483,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<void> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1599,14 +1523,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<any> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1645,14 +1563,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(Event<any> | Event<string>)[]' is not assignable to type 'Unit<unknown>'.
+            Type 'Event<number>' is not assignable to type 'CombineSource<string>'.
+              Type 'Event<number>' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1696,33 +1608,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type 'Event<number>[]' is missing the following properties from type 'Unit<number>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1764,33 +1650,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>' is not assignable to type 'Combinable'.
-              Type 'Event<number>' is not assignable to type '{ [key: string]: Store<any>; }'.
-                Type '(s: number, c: number) => number' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: number) => number'.
-                  Types of parameters 's' and 'source' are incompatible.
-                    Type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]' is not assignable to type 'number'.
-                      Type 'any[]' is not assignable to type 'number'.
-                        Type '(Event<number> | Event<string | number>)[]' is missing the following properties from type 'Unit<number>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -1829,9 +1689,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample'
@@ -1852,9 +1710,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
+        no errors
 
         --flow--
         Cannot call 'sample'
@@ -1879,9 +1735,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<{ a: number; b: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample'
@@ -1906,7 +1760,9 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Store<number>' is not assignable to type 'Store<string>'.
+              The types returned by 'getState()' are incompatible between these types.
+                Type 'number' is not assignable to type 'string'.
 
         --flow--
         Cannot call 'sample'
@@ -1929,7 +1785,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Store<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample'
@@ -1952,7 +1808,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type '{ a: Store<number>; }' is not assignable to type 'CombineSource<{ a: number; b: string; }>'.
+              Property 'b' is missing in type '{ a: Store<number>; }' but required in type '{ a: Store<number>; b: Store<string>; }'.
 
         --flow--
         Cannot call 'sample'
@@ -1979,7 +1836,8 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type '{ a: Store<number>; }' is not assignable to type 'CombineSource<{ a: number; b: number; }>'.
+              Property 'b' is missing in type '{ a: Store<number>; }' but required in type '{ a: Store<number>; b: Store<number>; }'.
 
         --flow--
         Cannot call 'sample'
@@ -2007,9 +1865,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>[]' is not assignable to type 'Unit<number>'.
+        no errors
 
         --flow--
         Cannot call 'sample'
@@ -2035,9 +1891,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<number>'.
+        no errors
 
         --flow--
         Cannot call 'sample'
@@ -2060,9 +1914,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -2127,9 +1979,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -2194,7 +2044,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type 'Event<[string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Store<number>' is not assignable to type 'Store<string>'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -2257,7 +2107,7 @@ describe('sample multitarget support', () => {
         --typescript--
         No overload matches this call.
           The last overload gave the following error.
-            Type '(Event<[number]> | Event<[string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+            Type 'Store<number>' is not assignable to type 'never'.
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -2325,9 +2175,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type 'Event<number>[]' is not assignable to type 'Unit<number>'.
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
@@ -2393,9 +2241,7 @@ describe('sample multitarget support', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        No overload matches this call.
-          The last overload gave the following error.
-            Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<number>'.
+        no errors
 
         --flow--
         Cannot call 'sample' with object literal bound to 'config'
