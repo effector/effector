@@ -27,7 +27,7 @@ const greeting = combine(balance, username, (balance, username) => {
 greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
 
 const arrStores = combine(balance, username)
-arrStore.watch(console.log) // => [0, 'zerobias']
+arrStores.watch(console.log) // => [0, 'zerobias']
 ```
 
 # `combine({ A, B, C }, fn?)`
