@@ -26,9 +26,11 @@ const greeting = combine(balance, username, (balance, username) => {
 
 greeting.watch(data => console.log(data)) // => Hello, zerobias. Your balance is 0
 
-const arrStores = combine(balance, username)
+const arrStores = combine([balance, username])
 arrStores.watch(console.log) // => [0, 'zerobias']
 ```
+
+[Try it](https://share.effector.dev/jyX3NCLt)
 
 # `combine({ A, B, C }, fn?)`
 
