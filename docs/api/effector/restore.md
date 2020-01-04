@@ -66,7 +66,7 @@ effect()
 
 # `restore(obj)`
 
-Creates an object with stores from object
+Creates an object with stores from object with values
 
 #### Arguments
 
@@ -81,13 +81,18 @@ Creates an object with stores from object
 ```js try
 import {restore} from 'effector'
 
-const obj = restore({
+const {foo, bar} = restore({
   foo: 'foo',
   bar: 0,
 })
-
-obj.watch(({foo, bar}) => {
-  console.log('foo', foo) // => 'foo'
-  console.log('bar', bar) // => 0
+foo.watch(foo => {
+  console.log('foo', foo)
 })
+// => foo 'foo'
+bar.watch(bar => {
+  console.log('bar', bar)
+})
+// => bar 0
 ```
+
+[Try it](https://share.effector.dev/NQX0kotI)
