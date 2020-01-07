@@ -25,5 +25,7 @@
       "last 1 safari version"
     ]
   },
-  "engines": { "node": "12.x" }
+  "engines": {
+    "node": ">=10.x"
+  }
 }

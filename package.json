@@ -139,5 +139,7 @@
     "funland-laws": "^0.1.5",
     "jsverify": "^0.8.4"
   },
-  "engines": { "node": "12.x" }
+  "engines": {
+    "node": ">=10.x"
+  }
 }
