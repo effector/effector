@@ -26,7 +26,7 @@ Reactive state manager
 - [Examples](#examples)
   - [Increment/decrement with React](#incrementdecrement-with-react)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
-  - [Storages and events](#storages-and-events)
+  - [Stores and events](#stores-and-events)
 - [More examples](#more-examples)
 - [API](#api)
   - [Event](#event)
@@ -234,7 +234,7 @@ messageEvent('hello world')
 
 <hr />
 
-### Storages and events
+### Stores and events
 
 ```js
 const {createStore, createEvent} = require('effector')
