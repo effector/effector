@@ -78,6 +78,10 @@ npm install --save effector effector-vue
 yarn add effector effector-vue
 ```
 
+**Svelte**
+
+Svelte works with effector out from a box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
+
 **CDN**
 
 - https://unpkg.com/effector/effector.cjs.js
@@ -509,6 +513,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License

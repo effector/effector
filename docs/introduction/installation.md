@@ -3,10 +3,6 @@ id: installation
 title: Installation
 ---
 
-**Prerequisite**: either NPM (comes with [node](https://nodejs.org/en/)) or [Yarn](https://yarnpkg.com/en/).
-
-To install the stable version:
-
 ```sh
 npm install --save effector
 ```
@@ -17,7 +13,7 @@ yarn add effector
 
 ## Complementary packages
 
-If you use React:
+### For react
 
 ```sh
 npm install --save effector-react
@@ -27,7 +23,7 @@ npm install --save effector-react
 yarn add effector-react
 ```
 
-or if you use Vue:
+### For vue
 
 ```sh
 npm install --save effector-vue
@@ -36,3 +32,7 @@ npm install --save effector-vue
 ```sh
 yarn add effector-vue
 ```
+
+### For svelte
+
+Svelte works with effector out from a box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
