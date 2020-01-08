@@ -1,8 +1,10 @@
 //@flow
 
-import type {Graphite, Graph, ID} from '../stdlib'
-import {type PriorityTag, getPriority} from './getPriority'
-import {getGraph, readRef} from '../stdlib'
+import type {Graphite, Graph, ID} from './stdlib'
+import {getGraph, readRef} from './stdlib'
+
+/** Names of priority groups */
+type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
 
 /**
  * Position in the current branch,
@@ -168,11 +170,30 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   bucket.size += 1
 }
 
+const getPriority = (t: PriorityTag) => {
+  switch (t) {
+    case 'child':
+      return 0
+    case 'pure':
+      return 1
+    case 'barrier':
+      return 2
+    case 'sampler':
+      return 3
+    case 'effect':
+      return 4
+    default:
+      return -1
+  }
+}
+
 const barriers = new Set()
 
 let alreadyStarted = false
 
 let currentResetStop = false
+
+/** main execution method */
 const exec = () => {
   const lastStartedState = alreadyStarted
   alreadyStarted = true
@@ -286,6 +307,7 @@ export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
   exec()
 }
 
+/** try catch for external functions */
 const tryRun = (local: Local, {fn}, stack: Stack) => {
   try {
     return fn(stack.value, local.scope, stack)
