@@ -1,5 +1,5 @@
 //@flow
-/*PAGE*/
+
 import $$observable from 'symbol-observable'
 
 import {is} from './is'
@@ -28,7 +28,6 @@ import {
   type Config,
 } from './config'
 import {type CompositeName, createName, mapName, joinName} from './naming'
-import {thru} from './thru'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
@@ -162,8 +161,6 @@ function filterMapEvent(
     step.check.defined(),
   ])
 }
-
-/*PAGE*/
 
 export function createStore<State>(
   currentState: State,
@@ -320,4 +317,4 @@ function mapStore<A, B>(
   return innerStore
 }
 
-/*PAGE*/
+const thru = (instance: any, fn: Function) => fn(instance)
