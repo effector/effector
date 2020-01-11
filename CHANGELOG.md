@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.10.0
+
+- Add `launch({target: unit, params})` overload for `launch` - low level method for running computation in units (events, effects or stores). Mostly used by library developers for fine-grained control of computations.
+
 ## effector 20.9.0, effector-react 20.6.0
 
 - Introduce `effector/fork` and `effector-react/ssr`: api for server side rendering and managing independent instances of application in general.
