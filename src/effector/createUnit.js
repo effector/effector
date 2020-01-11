@@ -18,7 +18,7 @@ import {
   callStack,
 } from './stdlib'
 import {createNode} from './createNode'
-import {launch, upsertLaunch} from './kernel'
+import {launch} from './kernel'
 
 import type {Subscription, Subscriber} from './index.h'
 import {
@@ -180,7 +180,13 @@ export function createStore<State>(
     stateRef: plainState,
     getState: bind(readRef, plainState),
     setState(state) {
-      if (readRef(plainState) !== state) upsertLaunch([store], [state])
+      if (readRef(plainState) !== state) {
+        launch({
+          target: store,
+          params: state,
+          defer: true,
+        })
+      }
     },
   }
   store.graphite = createNode({

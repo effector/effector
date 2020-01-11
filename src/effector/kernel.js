@@ -295,15 +295,19 @@ const exec = () => {
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  pushFirstHeapItem('pure', getGraph(unit), null, payload)
-  if (upsert && alreadyStarted) return
-  exec()
-}
-export const upsertLaunch = (units: Graphite[], payloads: any[]) => {
-  for (let i = 0; i < units.length; i++) {
-    pushFirstHeapItem('pure', getGraph(units[i]), null, payloads[i])
+  if (unit.target) {
+    payload = unit.params
+    upsert = unit.defer
+    unit = unit.target
   }
-  if (alreadyStarted) return
+  if (Array.isArray(unit)) {
+    for (let i = 0; i < unit.length; i++) {
+      pushFirstHeapItem('pure', getGraph(unit[i]), null, payload[i])
+    }
+  } else {
+    pushFirstHeapItem('pure', getGraph(unit), null, payload)
+  }
+  if (upsert && alreadyStarted) return
   exec()
 }
 

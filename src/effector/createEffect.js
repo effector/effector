@@ -3,7 +3,7 @@
 import type {Event, Effect} from './unit.h'
 import {step, own, bind} from './stdlib'
 import {createNode} from './createNode'
-import {upsertLaunch, launch} from './kernel'
+import {launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import type {EffectConfigPart, Config} from './config'
 import {Defer} from './defer'
@@ -74,17 +74,19 @@ export function createEffect<Payload, Done>(
           runEffect(
             getHandler(),
             params,
-            bind(onResolve, {
+            bind(onSettled, {
               event: done,
               anyway,
               params,
               fn: req.rs,
+              ok: true,
             }),
-            bind(onReject, {
+            bind(onSettled, {
               event: fail,
               anyway,
               params,
               fn: req.rj,
+              ok: false,
             }),
           )
           return params
@@ -110,7 +112,11 @@ export function createEffect<Payload, Done>(
     }),
     step.run({
       fn(upd, {runner}) {
-        upsertLaunch([runner], [upd])
+        launch({
+          target: runner,
+          params: upd,
+          defer: true,
+        })
         return upd.params
       },
     }),
@@ -132,46 +138,42 @@ export function createEffect<Payload, Done>(
   own(instance, [done, fail, anyway, pending, effectRunner])
   return instance
 }
-
-const onResolve = ({event, anyway, params, fn}, result) => {
-  upsertLaunch(
-    [anyway, event, sidechain],
-    [
-      {
-        status: 'done',
-        params,
-        result,
-      },
-      {
-        params,
-        result,
-      },
-      {
-        fn,
-        value: result,
-      },
-    ],
-  )
-}
-const onReject = ({event, anyway, params, fn}, error) => {
-  upsertLaunch(
-    [anyway, event, sidechain],
-    [
-      {
-        status: 'fail',
-        params,
-        error,
-      },
-      {
-        params,
-        error,
-      },
-      {
-        fn,
-        value: error,
-      },
-    ],
-  )
+const onSettled = ({event, anyway, params, fn, ok}, data) => {
+  launch({
+    target: [anyway, event, sidechain],
+    params: ok
+      ? [
+        {
+          status: 'done',
+          params,
+          result: data,
+        },
+        {
+          params,
+          result: data,
+        },
+        {
+          fn,
+          value: data,
+        },
+      ]
+      : [
+        {
+          status: 'fail',
+          params,
+          error: data,
+        },
+        {
+          params,
+          error: data,
+        },
+        {
+          fn,
+          value: data,
+        },
+      ],
+    defer: true,
+  })
 }
 const sidechain = createNode({
   node: [
