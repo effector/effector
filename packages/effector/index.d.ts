@@ -347,6 +347,11 @@ export function createNode(opts: {
   scope?: {[field: string]: any}
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void
+export function launch<T>(config: {
+  target: Unit<T> | Step
+  params: T
+  defer?: boolean
+}): void
 export function fromObservable<T>(observable: unknown): Event<T>
 
 export function createEvent<E = void>(eventName?: string): Event<E>

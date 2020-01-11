@@ -305,6 +305,11 @@ declare export function createNode(opts: {|
 |}): Step
 
 declare export function launch<T>(unit: Unit<T>, payload: T): void
+declare export function launch<T>(config: {
+  target: Unit<T>,
+  params: T,
+  defer?: boolean
+}): void
 
 declare export function fromObservable<T>(observable: mixed): Event<T>
 
