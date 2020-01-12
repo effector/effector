@@ -15,7 +15,6 @@ type Layer = {|
   /** index of first step */
   +idx: number,
   +stack: Stack,
-  +resetStop: boolean,
   +type: PriorityTag,
   +id: number,
 |}
@@ -145,7 +144,6 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const value: Layer = {
     idx,
     stack,
-    resetStop: currentResetStop,
     type,
     id,
   }
@@ -191,7 +189,7 @@ const barriers = new Set()
 
 let alreadyStarted = false
 
-let currentResetStop = false
+const currentResetStop = false
 
 /** main execution method */
 const exec = () => {
@@ -203,7 +201,7 @@ const exec = () => {
   let graph
   let value
   mem: while ((value = deleteMin())) {
-    const {idx, stack, resetStop, type} = value
+    const {idx, stack, type} = value
     graph = stack.node
     const local: Local = {
       skip: false,
@@ -282,15 +280,11 @@ const exec = () => {
       meta.stop = local.fail || local.skip
     }
     if (!meta.stop) {
-      currentResetStop = true
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
         pushFirstHeapItem('child', graph.next[stepn], stack, stack.value)
       }
-      currentResetStop = false
     }
-    if (resetStop) {
-      meta.stop = false
-    }
+    meta.stop = false
   }
   alreadyStarted = lastStartedState
 }
