@@ -38,7 +38,7 @@ sampled.watch(console.log)
 event() // => hello zerobias
 ```
 
-[try it](https://share.effector.dev/IMXnU270)
+[Try it](https://share.effector.dev/IMXnU270)
 
 #### Example 2
 
@@ -60,7 +60,7 @@ sendMessage('how r u?')
 // => [peter]: how r u?
 ```
 
-[try it](https://share.effector.dev/0ZP1xn8d)
+[Try it](https://share.effector.dev/0ZP1xn8d)
 
 ## `sample(sourceEvent, clockEvent, fn?)`
 
@@ -94,7 +94,7 @@ event2('effector!') // => Hello effector!
 sampled('Can be invoked too!') // => Can be invoked too!
 ```
 
-[try it](https://share.effector.dev/vXKWDhwL)
+[Try it](https://share.effector.dev/vXKWDhwL)
 
 ## `sample(event, store, fn?)`
 
@@ -135,7 +135,7 @@ event('bar')
 inc() // => Current count is 3, last event invocation: bar
 ```
 
-[try it](https://share.effector.dev/L4nbGjxM)
+[Try it](https://share.effector.dev/L4nbGjxM)
 
 ## `sample(sourceStore, clockStore, fn?)`
 
@@ -171,7 +171,7 @@ setName('Doe')
 inc() // => Doe has 1 coins
 ```
 
-[try it](https://share.effector.dev/h3zED3yW)
+[Try it](https://share.effector.dev/h3zED3yW)
 
 ## `sample({source, clock, fn, greedy?, target?})`
 
@@ -211,7 +211,7 @@ console.log(submitted === signIn) // units are equal
 submitForm('foo')
 ```
 
-[try it](https://share.effector.dev/OPajzRNF)
+[Try it](https://share.effector.dev/OPajzRNF)
 
 #### Example 2
 
@@ -257,7 +257,7 @@ clickButton('click A')
 clickButton('click B')
 ```
 
-[try it](https://share.effector.dev/yI70z0nd)
+[Try it](https://share.effector.dev/yI70z0nd)
 
 ## `sample(sourceStore)`
 
@@ -316,7 +316,7 @@ $batchedModal.updates.watch(v => console.log('batchedModal update', v))
 fetchContent()
 ```
 
-[try it](https://share.effector.dev/mYd5PEpD)
+[Try it](https://share.effector.dev/mYd5PEpD)
 
 ## Objects and arrays with stores in sample source
 

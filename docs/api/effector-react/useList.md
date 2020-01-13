@@ -47,7 +47,7 @@ const Users = () => {
 ReactDOM.render(<Users />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/JZ35Jjyr)
+[Try it](https://share.effector.dev/JZ35Jjyr)
 
 ```js try
 import React from 'react'
@@ -110,7 +110,7 @@ const App = () => (
 )
 ```
 
-[try it](https://share.effector.dev/OghlApl5)
+[Try it](https://share.effector.dev/OghlApl5)
 
 By default, useList rerenders only when some of its items were changed.
 However, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.

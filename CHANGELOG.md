@@ -619,7 +619,7 @@ console.log(domain.shortName)
 // => feature
 ```
 
-[try it](https://share.effector.dev/vKObFGtp)
+[Try it](https://share.effector.dev/vKObFGtp)
 
 - Add `history` to domains with read-only sets of events, effects, stores and subdomains
 
@@ -632,7 +632,7 @@ console.log(domain.history)
 // => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
 ```
 
-[try it](https://share.effector.dev/HAG9a8nk)
+[Try it](https://share.effector.dev/HAG9a8nk)
 
 ## effector-vue 20.2.0
 
@@ -819,7 +819,7 @@ const List = () => {
 ReactDOM.render(<List />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/KJZx0uU5)
+[Try it](https://share.effector.dev/KJZx0uU5)
 
 ## effector-react 20.0.5
 
@@ -940,7 +940,7 @@ bar(2)
 // => merged event triggered: 2
 ```
 
-[try it](https://share.effector.dev/WxUgr6dZ)
+[Try it](https://share.effector.dev/WxUgr6dZ)
 
 - Add `split` for pattern-matching over events
 
@@ -973,7 +973,7 @@ message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
-[try it](https://share.effector.dev/QXZsR5yM)
+[Try it](https://share.effector.dev/QXZsR5yM)
 
 - Allow `clearNode` to automatically dispose all related intermediate steps
 
@@ -992,7 +992,7 @@ clearNode(target)
 source() // ~ no reaction ~
 ```
 
-[try it](https://share.effector.dev/Ip5FAXiR)
+[Try it](https://share.effector.dev/Ip5FAXiR)
 
 - Fix promise warning for effects
 
@@ -1018,7 +1018,7 @@ await fetchApi(10)
 // => {status: 'fail', error: Error, params: 10}
 ```
 
-[try it](https://share.effector.dev/9Aoba2lk)
+[Try it](https://share.effector.dev/9Aoba2lk)
 
 - Add types for createEvent with config instead of string
 - Add types for createEffect with config instead of string
@@ -1068,7 +1068,7 @@ const userID$ = user$.map(users => Object.keys(users))
 ReactDOM.render(<UserList />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/EbyvGcQX)
+[Try it](https://share.effector.dev/EbyvGcQX)
 
 ## effector 19.1.0
 
@@ -1118,7 +1118,7 @@ clicksAmount.updates.watch(amount => {
 })
 ```
 
-[try it](https://effector.now.sh/try?version=0.18.10&code=JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGjmAGcBfOAMyghDgHJVLLUk8p6AoTpCAOxLwkAG2BIA1iQCCICAFc+8ALxwUGLLnwAKAAwBKTqQB0qAG6pFWkWMkz5io3LAATTKhJ64Aei9wlAPjgYKDlUbmsJaVkFGCMAd0wkAAstdGjFP0CETjhVfhIIYVQjYQgAcy16OOBhYTgAI1QgqGAystQ0Z2IQEFRnYDdhAE8iEiG+JHoiNPsYAzIDHlFIuxjHFzcSeMSUmZjMxBy8gULi0oqqmrq+CHhG5tb2zrgFIpISOEF8OFN0YVDiB9kug+O1nFM4HtFPM9EA)
+[Try it](https://effector.now.sh/try?version=0.18.10&code=JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGjmAGcBfOAMyghDgHJVLLUk8p6AoTpCAOxLwkAG2BIA1iQCCICAFc+8ALxwUGLLnwAKAAwBKTqQB0qAG6pFWkWMkz5io3LAATTKhJ64Aei9wlAPjgYKDlUbmsJaVkFGCMAd0wkAAstdGjFP0CETjhVfhIIYVQjYQgAcy16OOBhYTgAI1QgqGAystQ0Z2IQEFRnYDdhAE8iEiG+JHoiNPsYAzIDHlFIuxjHFzcSeMSUmZjMxBy8gULi0oqqmrq+CHhG5tb2zrgFIpISOEF8OFN0YVDiB9kug+O1nFM4HtFPM9EA)
 
 ## effector 0.18.9
 
@@ -1174,7 +1174,7 @@ const isLoading = createStore(false)
   .on(fetchApi.fail, () => false)
 ```
 
-[try it](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0FEBm+6KcAvgvjFGAgOTqHFyy2iSyKobboDC10AHbpBZClRr1GJWAFpuJVuGjwEAJSwlx1OgrisUUQQGdEROCgAWAQQggEAXgRosOAkRIAKJMAQJLmIIAJgA26DAAXAieggCUjgB8CMIA7ggAChIgxuieGMZQIQBu6IkIOXAAKuDoUACucHnoBcXoADTJsbFtwKSxwMDmVrYgAHQQIkEgggDmoynYVp6GJoXooyFQM-3AK6YIADJQmFOzjs7cOPzswqKeQzZ245PTMx2eEFQQxh0Twa-xBxJTy+BB-U4zBAAMihCAAPBAEkcTq9Rmi4QB6RHALoDB4jTwARgArAAGUk7PaIWwQc6eQHA4AASDhUyKCVBfjhACMGsxBAgjLwQiAUABrBxIellfF2IlkimkBIoEXihDMBB1CBBHiY3lwfkcvxc5EQjFG+EYtkcylGfZUKCIJxBKAoOpgERwUYuHi4MIeu60Nm0fout0Br3cqBBACeo0wEHBvEsIBCQTyUEdOw0mBIABEAPIAWVGGGC4U8cJp5o6DrgsSAA)
+[Try it](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0FEBm+6KcAvgvjFGAgOTqHFyy2iSyKobboDC10AHbpBZClRr1GJWAFpuJVuGjwEAJSwlx1OgrisUUQQGdEROCgAWAQQggEAXgRosOAkRIAKJMAQJLmIIAJgA26DAAXAieggCUjgB8CMIA7ggAChIgxuieGMZQIQBu6IkIOXAAKuDoUACucHnoBcXoADTJsbFtwKSxwMDmVrYgAHQQIkEgggDmoynYVp6GJoXooyFQM-3AK6YIADJQmFOzjs7cOPzswqKeQzZ245PTMx2eEFQQxh0Twa-xBxJTy+BB-U4zBAAMihCAAPBAEkcTq9Rmi4QB6RHALoDB4jTwARgArAAGUk7PaIWwQc6eQHA4AASDhUyKCVBfjhACMGsxBAgjLwQiAUABrBxIellfF2IlkimkBIoEXihDMBB1CBBHiY3lwfkcvxc5EQjFG+EYtkcylGfZUKCIJxBKAoOpgERwUYuHi4MIeu60Nm0fout0Br3cqBBACeo0wEHBvEsIBCQTyUEdOw0mBIABEAPIAWVGGGC4U8cJp5o6DrgsSAA)
 
 - Introduce `sample`. Sample allows to integrate rapidly changed values with common ui states
 

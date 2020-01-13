@@ -32,7 +32,7 @@ bar(2)
 // => merged event triggered: 2
 ```
 
-[try it](https://share.effector.dev/WxUgr6dZ)
+[Try it](https://share.effector.dev/WxUgr6dZ)
 
 > **Note:** however, array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
 
@@ -55,7 +55,7 @@ setFoo(1) // => state changed to: 1
 setBar(123) // => state changed to: 123
 ```
 
-[try it](https://share.effector.dev/Rp9wuRvl)
+[Try it](https://share.effector.dev/Rp9wuRvl)
 
 #### Example 3
 
@@ -74,4 +74,4 @@ setFoo(999)
 otherEvent('bar')
 ```
 
-[try it](https://share.effector.dev/Rp9wuRvl)
+[Try it](https://share.effector.dev/Rp9wuRvl)

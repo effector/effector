@@ -55,7 +55,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/2ksW0IsZ)
+[Try it](https://share.effector.dev/2ksW0IsZ)
 
 Let's break down the code above.
 
@@ -167,7 +167,7 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/GBYkPuX2)
+[Try it](https://share.effector.dev/GBYkPuX2)
 
 This code is way shorter, yet has code duplication, lower scalability and less reusable. In some cases, usage of `getState` may cause state inconsistence, race conditions.
 
@@ -222,4 +222,4 @@ const App = () => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[try it](https://share.effector.dev/hIfXZ1Kg)
+[Try it](https://share.effector.dev/hIfXZ1Kg)
