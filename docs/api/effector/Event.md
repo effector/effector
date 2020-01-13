@@ -50,6 +50,8 @@ unwatch()
 sayHi('Drew') // => nothing happened
 ```
 
+[Try it](https://share.effector.dev/9YVgCl4C)
+
 <hr/>
 
 ### `map(fn)`
@@ -80,6 +82,8 @@ userUpdated({name: 'john', role: 'admin'})
 // => User's name is [john] now
 // => User's role is [ADMIN] now
 ```
+
+[Try it](https://share.effector.dev/duDut6nR)
 
 <hr/>
 
