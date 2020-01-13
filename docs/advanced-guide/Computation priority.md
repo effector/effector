@@ -12,7 +12,7 @@ Actually, pure computation cannot observe out of scope, therefore the definition
 
 Priority:
 
-[source code](https://github.com/zerobias/effector/blob/master/src/effector/kernel.js#L171)
+[Source code](https://github.com/zerobias/effector/blob/master/src/effector/kernel.js#L171)
 
 ```
 1. child -> forward
