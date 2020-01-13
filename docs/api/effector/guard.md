@@ -66,6 +66,8 @@ submitForm('') // nothing happens
 submitForm('alice') // ~> searchUser('alice')
 ```
 
+[Try it](https://share.effector.dev/84j97tZ7)
+
 # `guard(source, {filter: booleanStore})`
 
 #### Arguments
@@ -97,6 +99,8 @@ unlock()
 trigger('C')
 ```
 
+[Try it](https://share.effector.dev/6bqOCO4y)
+
 # `guard(sourceEvent, {filter: predicate})`
 
 #### Arguments
@@ -114,8 +118,14 @@ const target = guard(source, {
   filter: x => x > 0,
 })
 
-target.watch(spy)
+target.watch(() => {
+  console.log('target called')
+})
 
 source(0)
+// nothing happens
 source(1)
+// target called
 ```
+
+[Try it](https://share.effector.dev/ethzpd8Y)
