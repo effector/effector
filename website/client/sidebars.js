@@ -59,6 +59,7 @@ module.exports = {
         ],
       },
     ],
+    'Advanced guide': ['advanced-guide/Computation priority'],
     Recipes: [
       'recipes/recipes',
       'recipes/usage-with-typescript',
