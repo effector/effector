@@ -50,6 +50,8 @@ a.on(event, state => state + 10)
 event()
 ```
 
+[Try it](https://share.effector.dev/LJCt2hdi)
+
 #### Example 2
 
 Send event data to store
@@ -72,6 +74,8 @@ forward({
 event(1)
 event(1)
 ```
+
+[Try it](https://share.effector.dev/bED2glHm)
 
 #### Example 3
 
@@ -100,3 +104,5 @@ secondSource('B')
 // => first target B
 // => second target B
 ```
+
+[Try it](https://share.effector.dev/8aVpg8nU)
