@@ -77,9 +77,9 @@ const color = combine([r, g, b])
 color.watch(console.log)
 // => [255, 0, 255]
 
-const sum = combine({r, g, b}, ({r, g, b}) => r + g + b)
+const sum = combine([r, g, b], ([r, g, b]) => r + g + b)
 sum.watch(console.log)
 // => 510
 ```
 
-[Try it](https://share.effector.dev/Ntd7MoNb)
+[Try it](https://share.effector.dev/ch4CKPrX)
