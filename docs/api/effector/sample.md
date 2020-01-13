@@ -322,46 +322,41 @@ fetchContent()
 
 ```js try
 import {createStore, createEvent, sample, combine} from 'effector'
-
 const trigger = createEvent()
 const objectTarget = createEvent()
 const arrayTarget = createEvent()
-
 const a = createStore('A')
 const b = createStore('B')
-
 sample({
   source: {a, b},
   clock: trigger,
   target: objectTarget,
 })
-
 sample({
   source: [a, b],
   clock: trigger,
   target: arrayTarget,
 })
-
 objectTarget.watch(obj => {
-  console.log('sampled object', obj) // => {a: 'A', b: 'B'}
+  console.log('sampled object', obj)
+  // => {a: 'A', b: 'B'}
 })
 arrayTarget.watch(array => {
-  console.log('sampled array', array) // => ['A', 'B']
+  console.log('sampled array', array)
+  // => ['A', 'B']
 })
-
 trigger()
-
-/_ old way to do this: _/
-
+/* old way to do this: */
 sample({
   source: combine({a, b}),
   clock: trigger,
   target: objectTarget,
 })
-
 sample({
   source: combine([a, b]),
   clock: trigger,
   target: arrayTarget,
 })
 ```
+
+[Try it](https://share.effector.dev/D1l72gqC)
