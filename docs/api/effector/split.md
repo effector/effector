@@ -48,7 +48,7 @@ message({user: 'unregistered', text: 'hi'})
 // => [guest]: hi
 ```
 
-[try it](https://share.effector.dev/QXZsR5yM)
+[Try it](https://share.effector.dev/QXZsR5yM)
 
 > **Note:** the only first met match will trigger resulting event
 
@@ -74,4 +74,4 @@ message('medium') // => medium message 'medium'
 message('long message') // => medium message 'long message' (uh-oh)
 ```
 
-[try it](https://share.effector.dev/Ajta8lDk)
+[Try it](https://share.effector.dev/Ajta8lDk)
