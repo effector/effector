@@ -5,6 +5,21 @@ title: Event
 
 _Event_ is an intention to change state. Let's imagine life situation, you come to a shop and on etiquette you should say "hello" - **intention**, then you say "hello" - **event**.
 
+Event calls always returns its payload:
+
+```js try
+import {createEvent} from 'effector'
+
+const event = createEvent()
+
+console.log(event(1))
+// => 1
+console.log(event())
+// => undefined
+```
+
+[Try it](https://share.effector.dev/iVBYDJjf)
+
 ## Event Methods
 
 ### `watch(watcher)`
