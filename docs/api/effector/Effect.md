@@ -52,6 +52,8 @@ fetchUser({id: 1})
 const data = await fetchUser({id: 2})
 ```
 
+[Try it](https://share.effector.dev/5WVJOJ6f)
+
 ## Effect Methods
 
 ### `use(handler)`
@@ -81,8 +83,11 @@ fetchUserRepos.use(async params => {
   return req.json()
 })
 
-fetchUserRepos({name: 'zerobias'}) // => fetchUserRepos called with {name: 'zerobias'}
+fetchUserRepos({name: 'zerobias'})
+// => fetchUserRepos called with {name: 'zerobias'}
 ```
+
+[Try it](https://share.effector.dev/TlYuDeve)
 
 <hr />
 
@@ -115,6 +120,8 @@ const unsubscribe = effect.watch(payload => {
 effect(10) // => called with 10
 effect(20) // nothing, cause watcher unsubscribed
 ```
+
+[Try it](https://share.effector.dev/qK7m6pt7)
 
 <hr />
 
@@ -189,6 +196,8 @@ effect.done.watch(({params, result}) => {
 effect(2) // => Done with params 2 and result 3
 ```
 
+[Try it](https://share.effector.dev/b4lNYXPs)
+
 ### `fail`
 
 Event triggered when handler is rejected or throws error.
@@ -215,6 +224,8 @@ effect.fail.watch(({params, error}) => {
 
 effect(2) // => Fail with params 2 and error 1
 ```
+
+[Try it](https://share.effector.dev/UaHRvZrE)
 
 ### `pending`
 
@@ -243,6 +254,8 @@ fetchApi(5000)
 
 ReactDOM.render(<Loading />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/cnr4Z15t)
 
 It's a shorthand for common use case
 
@@ -289,3 +302,5 @@ fetchApi(100)
 // if rejected
 // => {status: 'fail', error: Error, params: 100}
 ```
+
+[Try it](https://share.effector.dev/x4NVEQc9)
