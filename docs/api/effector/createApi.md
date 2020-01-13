@@ -21,15 +21,24 @@ hide_title: true
 
 ```js try
 import {createStore, createApi} from 'effector'
-// Create store
-const playerPosition = createStore({x: 0, y: 0}) // <-- Default state
 
-// Attach events to store and create them
+const playerPosition = createStore(0)
+
+// create events and attach them to store
 const api = createApi(playerPosition, {
-  moveLeft: ({x, y}, n) => ({x, y: y + n}),
-  moveRight: ({x, y}, n) => ({x, y: y - n}),
+  moveLeft: (pos, n) => pos - n,
+  moveRight: (pos, n) => pos + n,
 })
 
-api.moveLeft(10)
-api.moveRight(5)
+playerPosition.watch(pos => {
+  console.log('position', pos)
+})
+// => position 0
+
+api.moveRight(10)
+// => position 10
+api.moveLeft(5)
+// => position 5
 ```
+
+[Try it](https://share.effector.dev/SjVy8dzF)
