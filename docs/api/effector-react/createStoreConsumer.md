@@ -32,3 +32,5 @@ const App = () => <FirstName>{name => <h1>{name}</h1>}</FirstName>
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/2cAXCcbU)

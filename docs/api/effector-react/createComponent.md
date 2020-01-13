@@ -46,3 +46,5 @@ const MyOwnComponent = () => {
 
 ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/EdhOYD25)

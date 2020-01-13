@@ -23,13 +23,10 @@ Creates a [store](Store.md).
 ```js try
 import {createEvent, createStore} from 'effector'
 
-// Create events
 const addTodo = createEvent()
 const clearTodos = createEvent()
 
-// Create store
-const todos = createStore([]) // <-- Default state
-
+const todos = createStore([])
 todos
   // Add reducer
   .on(addTodo, (state, todo) => [...state, todo])
@@ -38,10 +35,12 @@ todos
 
 // Create derived store
 const selectedTodos = todos.map(todos => {
-  // Filter array inside store
   return todos.filter(todo => !!todo.selected)
 })
-
 // Handle side effects
-todos.watch(state => console.log(state))
+todos.watch(state => {
+  console.log(state)
+})
 ```
+
+[Try it](https://share.effector.dev/dFRb1kxi)

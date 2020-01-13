@@ -71,3 +71,5 @@ const UserList = createComponent($ids, (_, ids) =>
 
 ReactDOM.render(<UserList />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/Y0bu6bPv)

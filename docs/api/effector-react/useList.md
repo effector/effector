@@ -64,42 +64,44 @@ const todoList = createStore([
 ])
   .on(toggleTodo, (list, id) =>
     list.map((todo, i) => {
-      if (i === id) return {
-        ...todo,
-        done: !todo.done,
-      }
+      if (i === id)
+        return {
+          ...todo,
+          done: !todo.done,
+        }
       return todo
-    })
+    }),
   )
   .on(addTodo, (list, e) => [
     ...list,
     {
       text: e.currentTarget.elements.content.value,
-      done: false
-    }
+      done: false,
+    },
   ])
 
 addTodo.watch(e => {
   e.preventDefault()
 })
 
-const TodoList = () => useList(todoList, ({text, done}, i) => {
-  const todo = done
-    ? <del><span>{text}</span></del>
-    : <span>{text}</span>
-  return (
-    <li onClick={() => toggleTodo(i)}>
-      {todo}
-    </li>
-  )
-})
+const TodoList = () =>
+  useList(todoList, ({text, done}, i) => {
+    const todo = done ? (
+      <del>
+        <span>{text}</span>
+      </del>
+    ) : (
+      <span>{text}</span>
+    )
+    return <li onClick={() => toggleTodo(i)}>{todo}</li>
+  })
 const App = () => (
   <div>
     <h1>todo list</h1>
     <form onSubmit={addTodo}>
       <label htmlFor="content">New todo</label>
-      <input type="text" name="content" required/>
-      <input type="submit" value="Add"/>
+      <input type="text" name="content" required />
+      <input type="submit" value="Add" />
     </form>
     <ul>
       <TodoList />
@@ -117,9 +119,16 @@ In such cases, we need to tell react about our dependencies and pass keys explic
 #### Example 2
 
 ```js try
+import React from 'react'
+import ReactDOM from 'react-dom'
+
+import {createEvent, createStore, restore} from 'effector'
+import {useStore, useList} from 'effector-react'
+
 const renameUser = createEvent()
 const user = restore(renameUser, 'alice')
 const friends = createStore(['bob'])
+
 const List = () => {
   const userName = useStore(user)
   return useList(friends, {
@@ -131,10 +140,14 @@ const List = () => {
     ),
   })
 }
+
 ReactDOM.render(<List />, document.getElementById('root'))
 // => <div> bob is a friend of alice </div>
+
 setTimeout(() => {
   renameUser('carol')
   // => <div> bob is a friend of carol </div>
 }, 500)
 ```
+
+[Try it](https://share.effector.dev/R7V48rrF)

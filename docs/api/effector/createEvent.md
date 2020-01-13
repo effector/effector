@@ -25,18 +25,25 @@ You can pass `name` if you want.
 
 ```js try
 import {createStore, createEvent} from 'effector'
-
 const store = createStore(0)
 const addNumber = createEvent()
-
 store.on(addNumber, (state, number) => state + number)
-store.watch(state => console.log(state)) // 10 20 30
+store.watch(state => {
+  console.log('state', state)
+})
+// => 0
 
 addNumber(10)
+// => 10
+
 addNumber(10)
+// => 20
+
 addNumber(10)
+// => 30
 ```
 
+[Try it](https://share.effector.dev/BlvDKg17)
 
 Let's talk about what happened. We created store and event (addNumber), and started to watch the store.<br/>
 You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(10)` you may see in console how state will change.
@@ -49,6 +56,11 @@ import {createEvent} from 'effector'
 const extractPartOfArray = createEvent()
 const array = extractPartOfArray.map(arr => arr.slice(2))
 
-array.watch(console.log) // [3,4,5,6]
+array.watch(part => {
+  console.log(part)
+})
 extractPartOfArray([1, 2, 3, 4, 5, 6])
+// => [3, 4, 5, 6]
 ```
+
+[Try it](https://share.effector.dev/4lWsZr2k)

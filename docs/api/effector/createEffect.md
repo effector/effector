@@ -36,6 +36,8 @@ const fetchUserRepos = createEffect({
 })
 ```
 
+[Try it](https://share.effector.dev/56sXfp9j)
+
 Create named effect
 
 ```js try
@@ -50,6 +52,8 @@ const fetchUserRepos = createEffect('fetch user repositories', {
 })
 ```
 
+[Try it](https://share.effector.dev/Oe3zcAgn)
+
 Set handler to effect after creating
 
 ```js try
@@ -63,6 +67,8 @@ fetchUserRepos.use(async ({name}) => {
   return req.json()
 })
 ```
+
+[Try it](https://share.effector.dev/Wp9b9RF4)
 
 Watch effect status
 
@@ -105,6 +111,8 @@ fetchUserRepos.finally.watch(({params, status, result, error}) => {
 fetchUserRepos({name: 'zerobias'})
 ```
 
+[Try it](https://share.effector.dev/8tauAC1P)
+
 Change state
 
 ```js try
@@ -123,3 +131,5 @@ const repos = createStore([]).on(
   (_, {result: repos}) => repos,
 )
 ```
+
+[Try it](https://share.effector.dev/JNeawjtw)

@@ -29,3 +29,5 @@ const download = httpDomain.effect('download')
 const apiDomain = httpDomain.domain('api') // nested domain
 const data = httpDomain.store({status: -1})
 ```
+
+[Try it](https://share.effector.dev/lSgrvzGL)

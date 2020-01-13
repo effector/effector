@@ -42,3 +42,5 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ReactDOM.unmountComponentAtNode(document.getElementById('root'))
 // => current state {}
 ```
+
+[Try it](https://share.effector.dev/mMZSQclh)

@@ -33,6 +33,8 @@ event('foo')
 // state: foo
 ```
 
+[Try it](https://share.effector.dev/MGGQnTlQ)
+
 # `restore(effect, defaultState)`
 
 Creates a _`Store`_ from sucessful results of _`Effect`_.
@@ -63,6 +65,8 @@ store.watch(state => console.log('state: ', state))
 effect()
 // state: foo
 ```
+
+[Try it](https://share.effector.dev/CuOQT4Lq)
 
 # `restore(obj)`
 

@@ -44,3 +44,5 @@ const Counter = () => {
 
 ReactDOM.render(<Counter />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/4aFc0s3d)
