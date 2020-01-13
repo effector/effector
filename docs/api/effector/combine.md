@@ -56,6 +56,8 @@ const sum = combine({r, g, b}, ({r, g, b}) => r + g + b)
 sum.watch(console.log) // => 510
 ```
 
+[Try it](https://share.effector.dev/9AckAVg7)
+
 # `combine([A, B, C], fn?)`
 
 #### Returns
@@ -72,8 +74,12 @@ const g = createStore(0)
 const b = createStore(255)
 
 const color = combine([r, g, b])
-color.watch(console.log) // => [255, 0, 255]
+color.watch(console.log)
+// => [255, 0, 255]
 
-const sum = combine({r, g, b}, ([r, g, b]) => r + g + b)
-sum.watch(console.log) // => 510
+const sum = combine({r, g, b}, ({r, g, b}) => r + g + b)
+sum.watch(console.log)
+// => 510
 ```
+
+[Try it](https://share.effector.dev/Ntd7MoNb)
