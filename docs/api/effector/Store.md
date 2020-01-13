@@ -25,17 +25,28 @@ If the function returns an old state or if it returns `undefined`, the new store
 #### Example
 
 ```js try
+import {createEvent, createStore} from 'effector'
+
 const changed = createEvent()
 const title = createStore('').on(changed, (_, newTitle) => newTitle)
-
 const length = title.map(title => title.length)
 
-length.watch(length => console.log('new length', length)) // new length 0
+length.watch(length => {
+  console.log('new length', length)
+})
+// => new length 0
 
-changed('hello') // new length 5
-changed('world') //
-changed('hello world') // new length 11
+changed('hello')
+// => new length 5
+
+changed('world')
+// no reaction
+
+changed('hello world')
+// => new length 11
 ```
+
+[Try it](https://share.effector.dev/XGKGMvpF)
 
 <hr />
 
@@ -58,16 +69,25 @@ Updates state when `trigger` is triggered by using `handler`.
 #### Example
 
 ```js try
+import {createEvent, createStore} from 'effector'
+
 const store = createStore(0)
 const changed = createEvent()
 
 store.on(changed, (state, params) => state + params)
 
-store.watch(value => console.log('updated', value))
+store.watch(value => {
+  console.log('updated', value)
+})
 
-changed(2) // updated 2
-changed(2) // updated 4
+changed(2)
+// => updated 2
+
+changed(2)
+// => updated 4
 ```
+
+[Try it](https://share.effector.dev/O0JnDtIl)
 
 <hr />
 
@@ -121,28 +141,27 @@ Run `watcher` only when `trigger` event triggered. <br/>
 First argument of `watcher` is a state value, second is an event value.
 
 ```js try
+import {createEvent, createStore} from 'effector'
+
 const foo = createEvent()
 const bar = createEvent()
 
 const store = createStore(0)
 
 store.watch(foo, (storeValue, eventValue) => {
-  console.log(`triggered ${storeValue}, ${eventValue}`),
+  console.log(`triggered ${storeValue}, ${eventValue}`)
 })
 
 foo(1)
+// => triggered 0, 1
+
 bar(2)
+
 foo(3)
+// => triggered 0, 3
 ```
 
-Output
-
-```
-> triggered 0, 1
-> triggered 0, 3
-```
-
-https://runkit.com/embed/6j1bg5fsysa0
+[Try it](https://share.effector.dev/xEltaFyH)
 
 #### Example 2
 
@@ -150,32 +169,35 @@ Here `.on(bar, ...)` changes the state between `foo` executes.
 But `.watch` reacts only on `foo` event
 
 ```js try
+import {createEvent, createStore} from 'effector'
+
 const foo = createEvent()
 const bar = createEvent()
 
 const store = createStore(0).on(bar, (state, value) => value)
 
-store.watch(foo, value => console.log(`triggered ${value}`))
+store.watch(foo, value => {
+  console.log(`triggered ${value}`)
+})
 
 foo(1)
+// => triggered 0
+
 bar(2)
+
 foo(3)
+// => triggered 2
 ```
 
-Output
-
-```
-> triggered 0
-> triggered 2
-```
-
-https://runkit.com/embed/74lmt29e1ei5
+[Try it](https://share.effector.dev/iydvYHdS)
 
 #### Example 3
 
 Here `watch` reacts only on `incr` and `decr` because it explicitly used in `.on` calls. But not reacts on any other events.
 
 ```js try
+import {createEvent, createStore} from 'effector'
+
 const incr = createEvent()
 const decr = createEvent()
 const another = createEvent()
@@ -193,16 +215,7 @@ decr(3) // 3 - 3 = 0
 another(200)
 ```
 
-Output
-
-```
-> triggered 0
-> triggered 1
-> triggered 3
-> triggered 0
-```
-
-https://runkit.com/embed/1r2qo0nsockp
+[Try it](https://share.effector.dev/2yu2hvYp)
 
 #### Example with Effect
 
@@ -210,6 +223,8 @@ Effect is an Event with 2 additional events such as `fail` and `done`.<br/>
 You can subscribe to triggering effect by `fail` and `done` events.
 
 ```js try
+import {createEffect, createStore} from 'effector'
+
 const effect = createEffect().use(
   value => new Promise(res => setTimeout(res, 200, value)),
 )
@@ -229,21 +244,16 @@ store.watch(effect.fail, (state, {params, result}) =>
 effect(100)
 ```
 
-Output
-
-```
-> executed with 100
-> executed with 100, resolved with 200
-```
-
-https://runkit.com/embed/ovnsqp9k9zoq
+[Try it](https://share.effector.dev/fT4JgRJr)
 
 #### Example with another Store
 
 One store can subscribe to updates of another store.
 
 ```js try
-const change = createEvent('change')
+import {createEffect, createStore} from 'effector'
+
+const change = createEvent()
 
 const first = createStore(0).on(change, (state, value) => state + value)
 
@@ -264,17 +274,19 @@ Output
 > 2000
 ```
 
-https://runkit.com/embed/eoiiqofdtchn
+[Try it](https://share.effector.dev/llg8OjJ8)
 
 #### Example with watcher
 
 ```js try
-const foo = createEvent('foo event')
+import {createEffect, createStore} from 'effector'
+
+const foo = createEvent()
 
 const store = createStore(0)
 
 store.watch(foo, (storeValue, eventValue) => {
-  console.log(`store: ${storeValue}, event: ${eventValue}`),
+  console.log(`store: ${storeValue}, event: ${eventValue}`)
 })
 
 foo(1)
@@ -286,7 +298,7 @@ Output
 > store: 0, event: 1
 ```
 
-https://runkit.com/embed/lwo1u4m8yhz0
+[Try it](https://share.effector.dev/yp0GKYFb)
 
 <hr />
 
@@ -307,6 +319,8 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 #### Example
 
 ```js try
+import {createEffect, createStore} from 'effector'
+
 const store = createStore(0)
 const increment = createEvent()
 const reset = createEvent()
@@ -321,6 +335,8 @@ increment() // changed 1
 increment() // changed 2
 reset() // changed 0
 ```
+
+[Try it](https://share.effector.dev/7W8m2Zdg)
 
 <hr />
 
@@ -347,6 +363,8 @@ Returns current state of store
 #### Example
 
 ```js try
+import {createEffect, createStore} from 'effector'
+
 const store = createStore(0)
 const updated = createEvent()
 
@@ -357,6 +375,8 @@ updated(3)
 
 store.watch(console.log) // => 5
 ```
+
+[Try it](https://share.effector.dev/gmXolqQL)
 
 <hr />
 
@@ -376,6 +396,8 @@ For example, you want to make multiple, summary and divide operations. You can c
 #### Example
 
 ```js try
+import {createStore} from 'effector'
+
 const sum = value => value + 10
 const square = value => value * value
 const divide = value => value / 2
@@ -399,6 +421,8 @@ Output
 
 > newStore: 50
 ```
+
+[Try it](https://share.effector.dev/QCqXcCpQ)
 
 <hr />
 
@@ -426,6 +450,8 @@ clicksAmount.updates.watch(amount => {
   console.log('will not be triggered unless store value is changed', amount)
 })
 ```
+
+[Try it](https://share.effector.dev/F5L5kLTE)
 
 <hr />
 

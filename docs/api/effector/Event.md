@@ -121,6 +121,8 @@ numbers({x: -10}) // store won't triggered
 numbers({x: 10}) // store will triggered
 ```
 
+[Try it](https://share.effector.dev/rfTLL4bo)
+
 <hr />
 
 ### `filterMap(fn)`
@@ -197,6 +199,8 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
+[Try it](https://share.effector.dev/IqDmMX3e)
+
 <hr />
 
 ### `prepend(fn)`
@@ -227,3 +231,5 @@ document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
 ```
+
+[Try it](https://share.effector.dev/lVz4Wr1v)
