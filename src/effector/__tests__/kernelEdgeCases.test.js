@@ -64,7 +64,7 @@ it('should avoid data races', () => {
   expect(argumentHistory(fn)).toEqual([-2, 0, 1])
 })
 
-describe('should not erase sibling branches', () => {
+it('should not erase sibling branches', () => {
   const fooFn = jest.fn()
   const trigger = createEvent()
   const foo = createStore(0)
