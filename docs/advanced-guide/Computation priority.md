@@ -22,20 +22,39 @@ Priority:
 5. effect -> watch, effect handler
 ```
 
-> Whenever you will allow fact occurs of side effects, the library will work by worst scenario. Hence your application will have performance problems - progressively. Don't ignore that.
+> Whenever you will allow fact occurs of side effects, the library will work by worst scenario. Thereby the increase non-consistency of application, where side effects occur inside pure computation, therefore, breaking them and themselves. Don't ignore that.
 
 ## Side effect
 
 In addition by [side effect](<https://en.wikipedia.org/wiki/Side_effect_(computer_science)>) - these are the consequences of calling a function that can be detected by independent observation.
 
-```js
-const event = createEvent('event')
-
-let sideEffect = 0
-event.watch(() => {
-  sideEffect += 1
+```js try
+let count = 0
+const sideEffect = createEffect({
+  handler() {
+    // side effect 1
+    count += 1
+  },
 })
+
+sideEffect.done.watch(() => {
+  // side effect 1 already executed
+  console.log('expect count to be 1', count === 1)
+  // side effect 2
+  count += 1
+})
+
+sideEffect()
+// side effect 1 already executed
+// side effect 2 already executed as well
+// that's what we expected to happen
+// that's watchmen effect
+console.log('expect count to be 2', count === 2)
+// example which violated that agreement: setState in react
+// which defer any side effect long after setState call itself
 ```
+
+[Try it](https://share.effector.dev/cyzh0THS)
 
 > **Note:** Whenever library notice side effect in the pure function it move him in the end of a [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue).
 
