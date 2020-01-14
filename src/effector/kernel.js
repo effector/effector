@@ -189,8 +189,6 @@ const barriers = new Set()
 
 let alreadyStarted = false
 
-const currentResetStop = false
-
 /** main execution method */
 const exec = () => {
   const lastStartedState = alreadyStarted
