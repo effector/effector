@@ -180,13 +180,11 @@ export function createStore<State>(
     stateRef: plainState,
     getState: bind(readRef, plainState),
     setState(state) {
-      if (readRef(plainState) !== state) {
-        launch({
-          target: store,
-          params: state,
-          defer: true,
-        })
-      }
+      launch({
+        target: store,
+        params: state,
+        defer: true,
+      })
     },
   }
   store.graphite = createNode({
