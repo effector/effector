@@ -1,14 +1,15 @@
 {
   "name": "effector-dom",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Effector package for working with dom",
   "main": "effector-dom.cjs.js",
   "module": "effector-dom.es.js",
   "umd:main": "effector-dom.umd.js",
   "jsnext:main": "effector-dom.es.js",
+  "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.8.1"
+    "effector": "^20.10.1"
   },
   "keywords": [
     "state manager",
@@ -28,10 +29,6 @@
     {
       "name": "Zero Bias",
       "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
     }
   ],
   "sideEffects": false,
