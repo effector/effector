@@ -1,4 +1,4 @@
-import {Store, Event} from 'effector'
+import {Store, Event, createNode} from 'effector'
 
 import {
   PropertyMap,
@@ -15,6 +15,24 @@ export {using} from './render/using'
 export {h} from './render/h'
 // export {Signal} from './render/index.h'
 export {list, tree} from './render/list'
+
+export function explicitUnmount(unmountOn: Event<any>) {
+  const stack = activeStack.get()
+  if (stack) {
+    createNode({
+      node: [],
+      //@ts-ignore
+      parent: unmountOn,
+      //@ts-ignore
+      child: stack.signal,
+      //@ts-ignore
+      family: {
+        type: 'crosslink',
+        owners: [stack.signal, unmountOn],
+      },
+    })
+  }
+}
 
 export function signalOwn<T>(value: T): T {
   const stack = activeStack.get()
@@ -61,6 +79,24 @@ export function node(fn: (node: DOMElement) => void) {
   if (!stack.targetElement.__STATIC__) {
     fn(stack.targetElement)
   }
+}
+export type Specification = {
+  attr?: PropertyMap
+  data?: PropertyMap
+  transform?: Partial<TransformMap>
+  text?: StoreOrData<DOMProperty>
+  visible?: Store<boolean>
+  style?: {
+    prop?: StylePropertyMap
+    val?: PropertyMap
+  }
+  focus?: {
+    focus?: Event<any>
+    blur?: Event<any>
+  }
+  handler?: Partial<
+    {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+  >
 }
 export function spec(spec: {
   attr?: PropertyMap

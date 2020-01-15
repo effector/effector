@@ -3,7 +3,7 @@ import {
   Stack,
   ElementDraft,
   MergedBindings,
-  NSType
+  NSType,
 } from './index.h'
 import {nodeStack, activeStack} from './stack'
 import {appendBatch, forwardStacks} from './using'
@@ -18,15 +18,37 @@ import {
   bindText,
   bindVisible,
   bindFocus,
-  bindBlur
+  bindBlur,
 } from './bindings'
 import {document} from './documentResolver'
+import {spec} from '../h'
 
 export function h(tag: string, cb: () => void): DOMElement
 export function h(
   tag: string,
+  spec: {
+    attr?: PropertyMap
+    data?: PropertyMap
+    transform?: Partial<TransformMap>
+    text?: StoreOrData<DOMProperty>
+    visible?: Store<boolean>
+    style?: {
+      prop?: StylePropertyMap
+      val?: PropertyMap
+    }
+    focus?: {
+      focus?: Event<any>
+      blur?: Event<any>
+    }
+    handler?: Partial<
+      {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+    >
+  },
+)
+export function h(
+  tag: string,
   opts: {type?: 'svg'; noAppend?: boolean},
-  cb?: () => void
+  cb?: () => void,
 ): DOMElement
 export function h(tag, opts, cb?: any) {
   if (typeof opts === 'function') {
@@ -65,6 +87,7 @@ export function h(tag, opts, cb?: any) {
   const signal = createSignal()
   const draft: ElementDraft = {
     type: 'element',
+    pure: false,
     tag,
     attr: [],
     data: [],
@@ -75,7 +98,7 @@ export function h(tag, opts, cb?: any) {
     handler: [],
     transform: [],
     focus: [],
-    blur: []
+    blur: [],
   }
   const currentStack: Stack = {
     parent: null,
@@ -87,15 +110,15 @@ export function h(tag, opts, cb?: any) {
     locality: {
       sibling: {
         left: {ref: null},
-        right: {ref: null}
+        right: {ref: null},
       },
       child: {
         first: {ref: null},
-        last: {ref: null}
-      }
+        last: {ref: null},
+      },
     },
     node: draft,
-    mountStatus: 'initial'
+    mountStatus: 'initial',
   }
   if (parent) {
     forwardStacks(parent, currentStack)
@@ -109,6 +132,9 @@ export function h(tag, opts, cb?: any) {
   // node.__SIGNAL__ = signal
   if (cb) {
     initNode(node, parent, cb)
+  } else {
+    draft.pure = true
+    spec(opts)
   }
   applyNodeDraft()
   activeStack.replace(parent)
@@ -149,7 +175,7 @@ function mergeNodeDraft() {
     handler: draft.handler,
     transform: draft.transform,
     focus: draft.focus,
-    blur: draft.blur
+    blur: draft.blur,
   }
   for (let i = 0; i < draft.attr.length; i++) {
     const map = draft.attr[i]

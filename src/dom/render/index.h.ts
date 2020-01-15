@@ -59,6 +59,7 @@ export type HandlerRecord = {
 
 type ListType = {
   type: 'list'
+  pure: boolean
   reverse: boolean
   key: {type: 'index'} | {type: 'key'; key: string}
   store: Store<any[]>
@@ -74,6 +75,7 @@ type ListType = {
 
 export type ListItemType = {
   type: 'listItem'
+  pure: boolean
   key: string
   index: number
   store: Store<any>
@@ -96,6 +98,7 @@ export type MergedBindings = {
 }
 
 export type BindingsDraft = {
+  pure: boolean
   attr: PropertyMap[]
   data: PropertyMap[]
   visible: Array<Store<boolean>>
@@ -119,6 +122,7 @@ export type UsingDraft = BindingsDraft & {
 
 type NoopType = {
   type: 'noop'
+  pure: boolean
 }
 export type NodeType =
   | ElementDraft

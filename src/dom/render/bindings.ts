@@ -82,9 +82,9 @@ export function bindVisible(
 }
 const applyStyleProp = (style: CSSStyleDeclaration, propName, value) => {
   if (isFalse(value)) {
-    style.removeProperty(propName)
+    delete style[propName]
   } else {
-    style.setProperty(propName, value)
+    style[propName] = value
   }
 }
 const applyStyleVal = (style: CSSStyleDeclaration, variableName, value) => {
@@ -132,17 +132,28 @@ function applyAttr(element: DOMElement, attr, value) {
         //@ts-ignore
         delete element.value
         break
+      case 'checked':
+        //@ts-ignore
+        delete element.checked
+        break
       case 'spellcheck':
         if (value === false) {
           element.setAttribute('spellcheck', 'false')
           return
         }
+        break
     }
     element.removeAttribute(attr)
   } else {
-    if (attr === 'value') {
-      //@ts-ignore
-      element.value = `${value}`
+    switch (attr) {
+      case 'value':
+        //@ts-ignore
+        element.value = `${value}`
+        break
+      case 'checked':
+        //@ts-ignore
+        element.checked = `${value}`
+        break
     }
     element.setAttribute(attr, `${value}`)
   }
@@ -155,7 +166,10 @@ export function bindAttr(
 ) {
   for (const attr in map) {
     domOperation(
-      attr !== 'value' && attr !== 'min' && attr !== 'max',
+      attr !== 'value' &&
+        attr !== 'checked' &&
+        attr !== 'min' &&
+        attr !== 'max',
       signal,
       map[attr],
       applyAttr.bind(null, element, attr),

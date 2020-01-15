@@ -103,6 +103,7 @@ export function list<T>(opts, cb: (opts: any) => void) {
     },
     node: {
       type: 'list',
+      pure: false,
       reverse,
       key: is.store(opts) ? {type: 'index'} : {type: 'key', key: opts.key},
       store: source,
@@ -200,6 +201,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
       },
       node: {
         type: 'listItem',
+        pure: false,
         key: id as any,
         index: id as any,
         store,

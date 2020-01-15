@@ -35,6 +35,7 @@ export function using(node: DOMElement, cb: () => any): void {
     },
     node: {
       type: 'using',
+      pure: false,
       attr: [],
       data: [],
       visible: [],
