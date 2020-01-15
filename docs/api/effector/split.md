@@ -57,21 +57,23 @@ message({user: 'unregistered', text: 'hi'})
 ```js try
 import {createEvent, split} from 'effector'
 
-const message = createEvent()
+const message = createEvent();
 
 const {short, long, medium} = split(message, {
-  short: m => m.length <= 5,
-  medium: m => m.length > 5,
-  long: m => m.length > 10,
-})
+  short: (m) => m.length <= 5,
+  medium: (m) => m.length > 5 && m.length <= 10,
+  long: (m) => m.length > 10,
+});
 
-short.watch(m => console.log(`short message '${m}'`))
-medium.watch(m => console.log(`medium message '${m}'`))
-long.watch(m => console.log(`long message '${m}'`))
+short.watch((m) => console.log(`short message '${m}'`));
+medium.watch((m) => console.log(`medium message '${m}'`));
+long.watch((m) => console.log(`long message '${m}'`));
 
-message('short') // => medium message 'short!'
-message('medium') // => medium message 'medium'
-message('long message') // => medium message 'long message' (uh-oh)
+message("Hello, Bob!")
+// => long message 'Hello, Bob!'
+
+message("Hi!")
+// => short message 'Hi!'
 ```
 
-[Try it](https://share.effector.dev/Ajta8lDk)
+[Try it](https://share.effector.dev/ke2tM78I)
