@@ -128,7 +128,8 @@ export default {
     () =>
       massCopy('packages/effector-dom', 'npm/effector-dom', [
         'README.md',
-        'package.json'
+        'package.json',
+        'index.d.ts',
       ]),
     rollupEffectorDom,
     publishScript('effector-dom'),

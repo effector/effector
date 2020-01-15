@@ -150,6 +150,7 @@ export default {
     module: 'effector-dom.es.js',
     'umd:main': 'effector-dom.umd.js',
     'jsnext:main': 'effector-dom.es.js',
+    typings: 'index.d.ts',
     dependencies: {},
     peerDependencies: dependsOnEffector,
     keywords,

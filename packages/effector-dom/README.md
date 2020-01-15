@@ -6,40 +6,42 @@
 
 ```js
 import {createStore, createEvent} from 'effector'
-import {using, data, text, handler, list, h} from 'effector-dom'
+import {using, spec, list, h} from 'effector-dom'
 
 using(document.body, () => {
   const addLine = createEvent()
-  const code = createStore('let foo = 0;')
-    .on(addLine, code => `${code}\nfoo += ${Math.random()}`)
-  
-  
+  const code = createStore('let foo = 0;').on(
+    addLine,
+    code => `${code}\nfoo += ${Math.random()}`,
+  )
+
   h('section', () => {
-    data({timelineNames: true})
+    spec({data: {timelineNames: true}})
     list(timelineRows, ({store}) => {
-      h('div', () => {
-        data({timelineName: true})
-        text(store)
+      h('div', {
+        data: {timelineName: true},
+        text: store,
       })
     })
   })
   h('section', () => {
-    data({section: 'controls'})
-    h('button', () => {
-      handler({click: addLine})
-      text('Add line')
+    spec({data: {section: 'controls'}})
+    h('button', {
+      handler: {click: addLine},
+      text: 'Add line',
     })
   })
 })
 ```
 
 **Component is just a plain function**
+
 ```js
 function VizionSectionHeader(text) {
   h('header', () => {
-    data({vizionSectionHeader: true})
-    h('h4', () => {
-      text(text)
+    spec({data: {vizionSectionHeader: true}})
+    h('h4', {
+      text,
     })
   })
 }
