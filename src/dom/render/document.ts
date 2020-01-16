@@ -10,14 +10,14 @@ class DOMNode {
     last: DOMNode | null
   } = {
     first: null,
-    last: null
+    last: null,
   }
   sibling: {
     left: DOMNode | null
     right: DOMNode | null
   } = {
     left: null,
-    right: null
+    right: null,
   }
   parent: DOMNode | null = null
   tagName = ''
@@ -27,7 +27,7 @@ class DOMNode {
   value?: string
   firstChild: DOMNode | null = null
   transform = {
-    baseVal: new DOMSVGTransformList()
+    baseVal: new DOMSVGTransformList(),
   }
   isFragment = true
   attributes: {[attributeName: string]: string} = Object.create(null)
@@ -61,7 +61,7 @@ class DOMNode {
       this.child.first = node
       this.child.last = node
     } else {
-      this.child.first.sibling.left = node
+      this.child.first!.sibling.left = node
       node.sibling.right = this.child.first
     }
     this.child.first = node
@@ -69,7 +69,7 @@ class DOMNode {
     node.parent = this
   }
   contains(node: DOMNode): boolean {
-    let parent = node
+    let parent: DOMNode | null = node
     while (parent) {
       if (parent === this) return true
       parent = parent.parent
@@ -86,13 +86,13 @@ class DOMNode {
     } else if (parent.child.first === this) {
       parent.child.first = this.sibling.right
       parent.firstChild = this.sibling.right
-      this.sibling.right.sibling.left = null
+      this.sibling.right!.sibling.left = null
     } else if (parent.child.last === this) {
       parent.child.last = this.sibling.left
-      this.sibling.left.sibling.right = null
+      this.sibling.left!.sibling.right = null
     } else {
-      this.sibling.right.sibling.left = this.sibling.left
-      this.sibling.left.sibling.right = this.sibling.right
+      this.sibling.right!.sibling.left = this.sibling.left
+      this.sibling.left!.sibling.right = this.sibling.right
     }
     this.sibling.left = null
     this.sibling.right = null
@@ -117,13 +117,13 @@ class DOMNode {
     } else if (parent.child.first === this) {
       parent.child.first = node
       parent.firstChild = node
-      this.sibling.right.sibling.left = node
+      this.sibling.right!.sibling.left = node
     } else if (parent.child.last === this) {
       parent.child.last = node
-      this.sibling.left.sibling.right = node
+      this.sibling.left!.sibling.right = node
     } else {
-      this.sibling.right.sibling.left = node
-      this.sibling.left.sibling.right = node
+      this.sibling.right!.sibling.left = node
+      this.sibling.left!.sibling.right = node
     }
     node.sibling.left = this.sibling.left
     node.sibling.right = this.sibling.right
@@ -236,7 +236,7 @@ export function createElement(tag: string) {
 }
 export function createElementNS(
   namespace: 'http://www.w3.org/1999/xhtml' | 'http://www.w3.org/2000/svg',
-  tag: string
+  tag: string,
 ) {
   switch (namespace) {
     case 'http://www.w3.org/1999/xhtml':
@@ -282,17 +282,17 @@ function renderPart(node: DOMNode, parts: string[]) {
       '=',
       '"',
       escapeTagValue(node.dataset[key]),
-      '"'
+      '"',
     )
   }
-  const styles = []
+  const styles = [] as string[]
   for (const property in node.style.properties) {
     if (property.startsWith('--')) {
       styles.push(`${property}: ${node.style.properties[property]}`)
     } else {
       const dashedProperty = property.replace(
         /[A-Z]/,
-        char => `-${char.toLowerCase()}`
+        char => `-${char.toLowerCase()}`,
       )
       styles.push(`${dashedProperty}: ${node.style.properties[property]}`)
     }
@@ -314,7 +314,7 @@ function renderPart(node: DOMNode, parts: string[]) {
     return
   }
   parts.push('>')
-  let child = node.firstChild
+  let child: DOMNode | null = node.firstChild
   while (child) {
     renderPart(child, parts)
     child = child.sibling.right
