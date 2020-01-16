@@ -10,8 +10,7 @@
     "baseUrl": ".",
     "paths": {
       "effector": ["src/effector"],
-      "effector/*": ["src/*"],
-      "effector/flags": ["src/effector/flags.dev"]
+      "effector/*": ["src/*"]
     }
   },
   "typeAcquisition": {
