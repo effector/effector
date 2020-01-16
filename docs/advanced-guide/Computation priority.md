@@ -2,10 +2,10 @@ For sure you've been noticed that function must be pure... or watch there is a p
 
 A real example of queue priority - people awaiting medical treatment hospital, extreme emergency cases will have the highest priority and move on the start of the queue less significant at the end.
 
-The main of the reason for creating Computation priority was that side effects:
+The main of the reason for creating Computation priority was to occur side effects:
 
 - Letting go first pure functions
-- Following consistent state of application
+- Side effects follow a consistent state of an application
 - Batching of pure computation in `combine()`
 
 Actually, pure computation cannot observe out of scope, therefore the definition of **_pure computation_** by the library gives an opportunity to optimized grouping.
