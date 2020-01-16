@@ -392,7 +392,7 @@ async function runFlow(testFiles) {
       const sourceCode = await readSource(message.source)
       const printCurrentPath =
         PRINT_FOREIGN_FILE_NAME && message.source !== framePath
-      const flowDirRoot = join('src', 'types', '__fixtures__', '.flow')
+      const flowDirRoot = join('src', 'types', '__fixtures__', '.flow') + sep
       const currentPath = fromPrintRoot(message.source)
         .replace('packages' + sep, '')
         .replace(flowDirRoot, '')
