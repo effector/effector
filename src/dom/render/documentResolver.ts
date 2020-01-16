@@ -1,6 +1,7 @@
 import * as customDocument from './document'
 export const domDocument =
-  typeof globalThis !== 'undefined' && globalThis.document
+  (typeof globalThis !== 'undefined' && globalThis.document) ||
+  (typeof global !== 'undefined' && global.document)
 
 export {customDocument}
 export let document = domDocument
