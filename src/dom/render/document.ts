@@ -202,7 +202,7 @@ function escapeTag(value: string) {
   switch (value) {
     case '__proto__':
     case '__defineGetter__':
-    case '__defineGetter__':
+    case '__defineSetter__':
     case 'constructor':
     case 'prototype':
     case 'hasOwnProperty':
