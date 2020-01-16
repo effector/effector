@@ -1,11 +1,7 @@
 import {createStore} from 'effector'
 import {using, h, spec, list, remap} from 'effector-dom'
 
-beforeAll(() => {
-  globalThis.requestAnimationFrame = cb => setTimeout(cb, 0)
-  globalThis.cancelAnimationFrame = clearTimeout
-})
-it('works', async () => {
+it('works', async() => {
   const el = document.createElement('div')
   const store = createStore([{name: 'alice'}, {name: 'bob'}, {name: 'carol'}])
   using(el, () => {

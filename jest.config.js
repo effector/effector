@@ -78,6 +78,10 @@ module.exports = {
           '^.+\\.jsx?$': 'babel-jest',
           '^.+\\.ts?$': 'babel-jest',
         },
+        globals: {
+          requestAnimationFrame: cb => setTimeout(cb, 0),
+          cancelAnimationFrame: clearTimeout,
+        },
       },
     },
     {
