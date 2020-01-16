@@ -130,6 +130,7 @@ export default {
         'README.md',
         'package.json',
         'index.d.ts',
+        'server.d.ts',
       ]),
     rollupEffectorDom,
     publishScript('effector-dom'),
