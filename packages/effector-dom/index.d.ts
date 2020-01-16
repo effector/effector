@@ -123,3 +123,11 @@ export function combine<A extends Combinable, B>(config: {
 export function node(fn: (node: DOMElement) => void): void
 export function signalOwn<T>(value: T): T
 export function explicitUnmount(unmountOn: Event<any>): void
+
+export function remap<
+  T extends {[field: string]: any},
+  S extends {[field: number]: keyof T} | {[field: string]: keyof T}
+>(
+  store: Store<T>,
+  shape: S,
+): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never}
