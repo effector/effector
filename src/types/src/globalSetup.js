@@ -392,9 +392,10 @@ async function runFlow(testFiles) {
       const sourceCode = await readSource(message.source)
       const printCurrentPath =
         PRINT_FOREIGN_FILE_NAME && message.source !== framePath
+      const flowDirRoot = join('src', 'types', '__fixtures__', '.flow')
       const currentPath = fromPrintRoot(message.source)
         .replace('packages' + sep, '')
-        .replace('src/types/__fixtures__/.flow/', '')
+        .replace(flowDirRoot, '')
 
       let sourceLine = (
         sourceCode.split(/\n/)[Math.max(0, loc.start.line - 1)] || ''
