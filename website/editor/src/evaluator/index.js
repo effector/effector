@@ -96,11 +96,23 @@ const fetchEffectorReact = createEffect<any, {[key: string]: any, ...}, mixed>('
   },
 })
 
+const fetchEffectorDom = createEffect({
+  async handler(effector) {
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-dom/effector-dom.cjs.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, `effector-dom.cjs.js`, {effector})
+  }
+})
+
 fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
   'effector': fetchEffector,
-  '@effector/babel-plugin': fetchBabelPlugin
+  '@effector/babel-plugin': fetchBabelPlugin,
+  'effector-dom': fetchEffectorDom,
 }
 
 function cacher(v, cache, fetcher) {
@@ -130,12 +142,16 @@ export async function evaluator(code: string) {
     cache.effector.get(version.getState()),
   ])
   const effectorReact = await fetchEffectorReact(effector)
+  let effectorDom
+  if (version.getState() === 'master') {
+    effectorDom = await fetchEffectorDom(effector)
+  }
   //$off
   const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env],
+    globalBlocks: [env, {dom: effectorDom, effectorDom}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -166,11 +182,54 @@ const onRuntimeError = async error => {
   const stackFrames = await getStackFrames(error)
   throw {type: 'runtime-error', original: error, stackFrames}
 }
-
+function replaceEffectorDomImports(path, {types: t}) {
+  const values = []
+  for (const specifier of path.node.specifiers) {
+    switch (specifier.type) {
+      case 'ImportSpecifier':
+        values.push(
+          t.objectProperty(
+            t.identifier(specifier.imported.name),
+            t.identifier(specifier.local.name)
+          )
+        )
+        break
+      case 'ImportNamespaceSpecifier':
+      case 'ImportDefaultSpecifier':
+        path.replaceWith(
+          t.VariableDeclaration("const", [
+            t.VariableDeclarator(
+              t.identifier(specifier.local.name),
+              t.memberExpression(
+                t.identifier("globalThis"),
+                t.identifier("effectorDom")
+              )
+            )
+          ])
+        )
+        return
+    }
+  }
+  path.replaceWith(
+    t.VariableDeclaration("const", [
+      t.VariableDeclarator(
+        t.objectPattern(values),
+        t.memberExpression(
+          t.identifier("globalThis"),
+          t.identifier("effectorDom")
+        )
+      )
+    ])
+  )
+}
 const removeImportsPlugin = babel => ({
   visitor: {
     ImportDeclaration(path) {
-      path.remove()
+      if (path.node.source.value === 'effector-dom') {
+        replaceEffectorDomImports(path, babel)
+      } else {
+        path.remove()
+      }
     },
     ExportDefaultDeclaration(path) {
       path.remove()
