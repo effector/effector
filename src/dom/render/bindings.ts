@@ -16,7 +16,7 @@ import {createWatch} from './createWatch'
 import {document} from './documentResolver'
 
 function isFalse(val) {
-  return val === false || val === undefined || val === null
+  return val !== '' && (val === false || val === undefined || val === null)
 }
 const finalizeHandler = (
   element: DOMElement,
