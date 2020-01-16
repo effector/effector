@@ -46,7 +46,6 @@ module.exports = {
     '!**/node_modules/**',
     '!**/__tests__/**',
     '!**/*.test.js',
-    '!**/*.spec.js',
     '!<rootDir>/src/babel/**',
     '!<rootDir>/src/fixtures/**',
     '!<rootDir>/src/redux/**',
@@ -66,12 +65,19 @@ module.exports = {
     {
       react: {
         testEnvironment: 'jsdom',
-        testMatch: [
-          `<rootDir>/src/react/**/*.test.js`,
-          `<rootDir>/src/react/**/*.spec.js`,
-        ],
+        testMatch: [`<rootDir>/src/react/**/*.test.js`],
         // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
         // watchPathIgnorePatterns,
+      },
+    },
+    {
+      dom: {
+        testEnvironment: 'jsdom',
+        testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
+        transform: {
+          '^.+\\.jsx?$': 'babel-jest',
+          '^.+\\.ts?$': 'babel-jest',
+        },
       },
     },
     {
@@ -83,11 +89,8 @@ module.exports = {
       types: {
         testMatch: [
           `<rootDir>/src/types/__tests__/**/*.test.js`,
-          `<rootDir>/src/types/__tests__/**/*.spec.js`,
           `<rootDir>/src/types/__tests__/**/*.test.ts`,
-          `<rootDir>/src/types/__tests__/**/*.spec.ts`,
           `<rootDir>/src/types/__tests__/**/*.test.tsx`,
-          `<rootDir>/src/types/__tests__/**/*.spec.tsx`,
         ],
         browser: false,
         globalSetup: './src/types/src/globalSetup.js',
@@ -111,10 +114,7 @@ function createProjectList(items) {
         {},
         createDefaultConfig(),
         {
-          testMatch: [
-            `<rootDir>/src/${item}/**/*.test.js`,
-            `<rootDir>/src/${item}/**/*.spec.js`,
-          ],
+          testMatch: [`<rootDir>/src/${item}/**/*.test.js`],
         },
         {
           displayName: item,
@@ -128,10 +128,7 @@ function createProjectList(items) {
           {},
           createDefaultConfig(),
           {
-            testMatch: [
-              `<rootDir>/src/${key}/**/*.test.js`,
-              `<rootDir>/src/${key}/**/*.spec.js`,
-            ],
+            testMatch: [`<rootDir>/src/${key}/**/*.test.js`],
           },
           val,
           {displayName: key},
