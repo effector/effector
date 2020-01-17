@@ -1,9 +1,16 @@
+import {Store, Event} from 'effector'
+
 import {
   DOMElement,
   Stack,
   ElementDraft,
   MergedBindings,
   NSType,
+  PropertyMap,
+  TransformMap,
+  StoreOrData,
+  DOMProperty,
+  StylePropertyMap,
 } from './index.h'
 import {nodeStack, activeStack} from './stack'
 import {appendBatch, forwardStacks} from './using'
@@ -217,7 +224,7 @@ function initNode(node: DOMElement, parent: Stack, cb: () => void) {
     cb()
     succ = true
   } finally {
-    appendBatch(nodeStack.pop())
+    appendBatch(nodeStack.pop()!)
     if (!succ) {
       activeStack.replace(parent)
     }
