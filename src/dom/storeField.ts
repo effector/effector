@@ -3,13 +3,22 @@ import {activeStack} from './render/stack'
 import {own} from './own'
 import {bind} from './render/bind'
 
+export function remap<T extends {[field: string]: any}, S extends keyof T>(
+  store: Store<T>,
+  key: S,
+): Store<T[S]>
 export function remap<
   T extends {[field: string]: any},
   S extends {[field: number]: keyof T} | {[field: string]: keyof T}
 >(
   store: Store<T>,
   shape: S,
-): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never} {
+): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never}
+
+export function remap(
+  store: Store<any>,
+  shape: string | Array<any> | {[field: string]: any},
+) {
   const stack = activeStack.get()
   if (Array.isArray(shape)) {
     const result = [] as any
@@ -21,14 +30,21 @@ export function remap<
     }
     return result
   }
-  const owned = []
-  const result = {} as any
-  for (const key in shape) {
-    result[key] = store.map(bind(readField as any, shape[key]))
-    owned.push(result[key])
+  if (typeof shape === 'object' && shape !== null) {
+    const owned = [] as any[]
+    const result = {} as any
+    for (const key in shape) {
+      result[key] = store.map(bind(readField as any, shape[key]))
+      owned.push(result[key])
+    }
+    if (stack) {
+      own(stack.signal, owned)
+    }
+    return result
   }
+  const result = store.map(bind(readField as any, shape))
   if (stack) {
-    own(stack.signal, owned)
+    own(stack.signal, result)
   }
   return result
 }

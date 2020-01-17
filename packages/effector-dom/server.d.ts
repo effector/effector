@@ -124,6 +124,10 @@ export function node(fn: (node: DOMElement) => void): void
 export function signalOwn<T>(value: T): T
 export function explicitUnmount(unmountOn: Event<any>): void
 
+export function remap<T extends {[field: string]: any}, S extends keyof T>(
+  store: Store<T>,
+  key: S,
+): Store<T[S]>
 export function remap<
   T extends {[field: string]: any},
   S extends {[field: number]: keyof T} | {[field: string]: keyof T}
