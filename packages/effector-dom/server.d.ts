@@ -46,10 +46,8 @@ export function spec(spec: {
   transform?: Partial<TransformMap>
   text?: StoreOrData<DOMProperty>
   visible?: Store<boolean>
-  style?: {
-    prop?: StylePropertyMap
-    val?: PropertyMap
-  }
+  style?: StylePropertyMap
+  styleVar?: PropertyMap
   focus?: {
     focus?: Event<any>
     blur?: Event<any>
@@ -79,10 +77,8 @@ export function h(
     transform?: Partial<TransformMap>
     text?: StoreOrData<DOMProperty>
     visible?: Store<boolean>
-    style?: {
-      prop?: StylePropertyMap
-      val?: PropertyMap
-    }
+    style?: StylePropertyMap
+    styleVar?: PropertyMap
     focus?: {
       focus?: Event<any>
       blur?: Event<any>

@@ -104,10 +104,8 @@ export function spec(spec: {
   transform?: Partial<TransformMap>
   text?: StoreOrData<DOMProperty>
   visible?: Store<boolean>
-  style?: {
-    prop?: StylePropertyMap
-    val?: PropertyMap
-  }
+  style?: StylePropertyMap
+  styleVar?: PropertyMap
   focus?: {
     focus?: Event<any>
     blur?: Event<any>
@@ -119,9 +117,15 @@ export function spec(spec: {
   if (spec.attr) attr(spec.attr)
   if (spec.data) data(spec.data)
   if (spec.transform) transform(spec.transform)
+  //@ts-ignore
   if ('text' in spec) text(spec.text)
+  //@ts-ignore
   if ('visible' in spec) visible(spec.visible)
-  if (spec.style) style(spec.style)
+  if (spec.style || spec.styleVar)
+    style({
+      prop: spec.style,
+      val: spec.styleVar,
+    })
   if (spec.focus) focus(spec.focus)
   if (spec.handler) handler(spec.handler)
 }
