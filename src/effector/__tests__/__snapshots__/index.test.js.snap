@@ -260,7 +260,8 @@ exports[`showcase: event foo 1`] = `
                   priority: barrier
                 },
                 mov: value store,
-                mov: store stack
+                mov: store stack,
+                check: changed
               ],
               next: [
                 Node {
@@ -356,7 +357,8 @@ exports[`showcase: store a 1`] = `
           priority: barrier
         },
         mov: value store,
-        mov: store stack
+        mov: store stack,
+        check: changed
       ],
       next: [
         Node {
