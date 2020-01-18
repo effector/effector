@@ -249,6 +249,9 @@ const storeCombination = (
     }),
     step.mov({store: target}),
     fn && step.compute({fn}),
+    step.check.changed({
+      store: store.stateRef,
+    }),
   ]
 
   for (const key in obj) {
