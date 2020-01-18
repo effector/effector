@@ -1,6 +1,6 @@
 //@flow
 
-import {combine, createStore, createEffect, sample} from 'effector'
+import {combine, createStore, createEffect, sample, createEvent} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 function rgbToHex(r, g, b) {
@@ -96,7 +96,7 @@ describe('combine cases', () => {
   })
 })
 
-it('deduplicate outputs', async () => {
+it('deduplicate outputs', async() => {
   const fn = jest.fn()
   const fetchApi = createEffect({
     async handler() {
@@ -132,6 +132,23 @@ it('deduplicate outputs', async () => {
         },
         "pending": false,
       },
+    ]
+  `)
+})
+
+it('skip first duplicated update', async() => {
+  const fn = jest.fn()
+  const changedToken = createEvent()
+
+  const $token = createStore('').on(changedToken, (_, token) => token)
+  const $token2 = createStore('').on(changedToken, (_, token) => token)
+
+  const websocketUrl = combine($token, () => null)
+  websocketUrl.watch(fn)
+  changedToken('token')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      null,
     ]
   `)
 })
