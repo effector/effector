@@ -1,15 +1,13 @@
 import * as customDocument from './document'
-export const domDocument =
-  (typeof globalThis !== 'undefined' && globalThis.document) ||
-  (typeof global !== 'undefined' && global.document)
-
+export const domDocument = typeof document !== 'undefined' ? document : null
 export {customDocument}
-export let document = domDocument
+let doc = domDocument
+export {doc as document}
 export const useCustomDocument = () => {
   //@ts-ignore
-  document = customDocument
+  doc = customDocument
 }
 
 export const useDOMDocument = () => {
-  document = domDocument
+  doc = domDocument
 }

@@ -21,11 +21,18 @@ function batchRAFrs() {
   executeTasks()
   endMark('batchRAF')
 }
-
+const raf =
+  typeof requestAnimationFrame !== 'undefined'
+    ? requestAnimationFrame
+    : cb => setTimeout(cb, 0)
+const cancelRaf =
+  typeof cancelAnimationFrame !== 'undefined'
+    ? cancelAnimationFrame
+    : clearTimeout
 const batchWindow = () => {
   if (isBatched) return
   isBatched = true
-  rafID = requestAnimationFrame(batchRAFrs)
+  rafID = raf(batchRAFrs)
 }
 
 const targets = new Map<number, Store<any> | Event<any>>()
@@ -71,7 +78,7 @@ const executionEndMark = createNode({
       fn() {
         if (importantTasks.size === 0 && tasks.size === 0) return false
         if (performance.now() - startTime >= TASK_DEADLINE) return false
-        cancelAnimationFrame(rafID)
+        cancelRaf(rafID)
         bonusTime = true
         isBatched = false
         return true

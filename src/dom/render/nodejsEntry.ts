@@ -1,20 +1,13 @@
 import {performance} from 'perf_hooks'
 const globalVariable =
-  (typeof globalThis !== undefined && globalThis) ||
-  (typeof global !== undefined && global) ||
-  (typeof window !== undefined && window)
+  (typeof globalThis !== 'undefined' && globalThis) ||
+  (typeof global !== 'undefined' && global) ||
+  (typeof window !== 'undefined' && window)
 if (globalVariable) {
   //@ts-ignore
   if (!globalVariable.performance)
     //@ts-ignore
     globalVariable.performance = performance
-  //@ts-ignore
-  if (!globalVariable.requestAnimationFrame) {
-    //@ts-ignore
-    globalVariable.requestAnimationFrame = cb => setTimeout(cb, 0)
-    //@ts-ignore
-    globalVariable.cancelAnimationFrame = clearTimeout
-  }
 }
 import {useCustomDocument} from './documentResolver'
 useCustomDocument()
