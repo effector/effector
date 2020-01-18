@@ -271,6 +271,7 @@ turnOff() // nothing has changed
 - [Range input component](https://share.effector.dev/oRB2iB8M)
 - [Modal dialog](https://share.effector.dev/B2ShiBzm)
 - [Conditional fitering](https://share.effector.dev/1EsAGMyq)
+- [Request cancellation](https://share.effector.dev/W4I0ghLt)
 - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
 - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
 - [Dynamic page selection with useStoreMap](https://share.effector.dev/AvWnrFXy)
@@ -283,8 +284,8 @@ turnOff() // nothing has changed
 - [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
 - [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
 - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
-- ["realworld" app](https://github.com/mg901/react-effector-realworld-example-app) ([Realworld?](https://github.com/gothinkster/realworld))
-- [Real world projects](https://github.com/zerobias/effector/network/dependents) Github
+- [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld))
+- [Recent users projects](https://github.com/zerobias/effector/network/dependents)
 
 ## API
 
