@@ -216,7 +216,7 @@ export function createStore<State>(
   //$off
   store[$$observable] = bind(observable, store)
   own(store, [updates])
-  return addToRegion(event)
+  return addToRegion(store)
 }
 
 function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
