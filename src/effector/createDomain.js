@@ -16,6 +16,7 @@ import {
   createStore,
   createNamedEvent,
   initUnit,
+  addToRegion,
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
@@ -127,7 +128,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
           config,
         }),
       )
-
+  addToRegion(result)
   const parent = result.parent
   if (parent) {
     for (const key in hooks) {

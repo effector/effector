@@ -102,6 +102,7 @@ export function createEvent<Payload>(
   event.prepend = bind(prepend, event)
   event.subscribe = bind(subscribe, event)
   event[$$observable] = () => event
+  addToRegion(event)
   return event
 }
 
@@ -215,6 +216,7 @@ export function createStore<State>(
   //$off
   store[$$observable] = bind(observable, store)
   own(store, [updates])
+  addToRegion(store)
   return store
 }
 
@@ -322,3 +324,21 @@ function mapStore<A, B>(
 }
 
 const thru = (instance: any, fn: Function) => fn(instance)
+
+export const addToRegion = unit => {
+  if (regionStack) own(regionStack.value, [unit])
+}
+
+let regionStack = null
+
+export function wrapRegion(unit: any, cb: () => void) {
+  regionStack = {
+    parent: regionStack,
+    value: unit,
+  }
+  try {
+    cb()
+  } finally {
+    regionStack = regionStack.parent
+  }
+}
