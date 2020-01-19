@@ -480,6 +480,8 @@ declare export function guard<A>(
   |},
 ): Unit<A>
 
+declare export function wrapRegion(unit: Unit<any> | Step, cb: () => void): void
+
 declare export function combine<State: StoreObject>(
   shape: State,
 ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>

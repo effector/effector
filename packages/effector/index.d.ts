@@ -637,6 +637,8 @@ export function guard<A>(config: {
   target: Unit<A>
 }): Unit<A>
 
+export function wrapRegion(unit: Unit<any> | Step, cb: () => void): void
+
 export function combine<State extends Tuple>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
