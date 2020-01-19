@@ -152,3 +152,62 @@ it('skip first duplicated update', async() => {
     ]
   `)
 })
+
+it('updates consistently', async() => {
+  const fn = jest.fn()
+  const e = createEvent()
+
+  const s1 = createStore('').on(e, (_, m) => m)
+  const s2 = createStore('').on(e, (_, m) => m)
+  let i = 0
+  //prettier-ignore
+  const combined = combine(s1, s2, (_, m) => {
+    i+=1
+    switch (i) {
+      case 1: return null
+      //a
+      case 2: return m
+      //return the same value twice
+      //b
+      case 3:
+      //c
+      case 4: return 'noop'
+      //d
+      case 5: return m
+      //return undefined
+      //e
+      case 6: return
+      //f
+      case 7: return m
+      //return undefined and then return same state
+      //g
+      case 8: return
+      //h
+      case 9: return (() => combined.getState())()
+      //i, j
+      default: return m
+    }
+  })
+  combined.watch(fn)
+  e('a')
+  e('b')
+  e('c')
+  e('d')
+  e('e')
+  e('f')
+  e('g')
+  e('h')
+  e('i')
+  e('j')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      null,
+      "a",
+      "noop",
+      "d",
+      "f",
+      "i",
+      "j",
+    ]
+  `)
+})
