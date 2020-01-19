@@ -1,14 +1,3 @@
-import {performance} from 'perf_hooks'
-const globalVariable =
-  (typeof globalThis !== 'undefined' && globalThis) ||
-  (typeof global !== 'undefined' && global) ||
-  (typeof window !== 'undefined' && window)
-if (globalVariable) {
-  //@ts-ignore
-  if (!globalVariable.performance)
-    //@ts-ignore
-    globalVariable.performance = performance
-}
 import {useCustomDocument} from './documentResolver'
 useCustomDocument()
 export * from '../h'

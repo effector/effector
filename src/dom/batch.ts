@@ -2,6 +2,7 @@ import {createEvent, launch, Store, Event, is, createNode, step} from 'effector'
 import {own} from './own'
 import {beginMark, endMark} from './render/mark'
 import {TASK_DEADLINE} from './env'
+import {now} from './render/platform/now'
 
 export type Priority = 'low' | 'high'
 
@@ -77,7 +78,7 @@ const executionEndMark = createNode({
     step.filter({
       fn() {
         if (importantTasks.size === 0 && tasks.size === 0) return false
-        if (performance.now() - startTime >= TASK_DEADLINE) return false
+        if (now() - startTime >= TASK_DEADLINE) return false
         cancelRaf(rafID)
         bonusTime = true
         isBatched = false
@@ -95,12 +96,12 @@ executeTasks.watch(() => {
   }
   let interrupted = false
   if (!bonusTime) {
-    startTime = performance.now()
+    startTime = now()
   }
   bonusTime = false
   beginMark('plan')
   for (const [id, data] of importantTasks) {
-    if (performance.now() - startTime >= TASK_DEADLINE) {
+    if (now() - startTime >= TASK_DEADLINE) {
       batchWindow()
       interrupted = true
       break
@@ -112,7 +113,7 @@ executeTasks.watch(() => {
   }
   if (!interrupted) {
     for (const [id, data] of tasks) {
-      if (performance.now() - startTime >= TASK_DEADLINE) {
+      if (now() - startTime >= TASK_DEADLINE) {
         batchWindow()
         interrupted = true
         break
@@ -257,7 +258,7 @@ export function dynamicQueueFlat<T, R = null>({
 } {
   const prepared = trigger.map(value => [
     {
-      inserted: performance.now(),
+      inserted: now(),
       retry: 0,
       value,
     } as QueuedItem<T>,
@@ -272,13 +273,13 @@ export function dynamicQueueFlat<T, R = null>({
       beginMark(mark)
       for (i = 0; i < list.length; i++) {
         const item = list[i]
-        const now = performance.now()
-        if (item.inserted + batchWindow > now) {
+        const timeNow = now()
+        if (item.inserted + batchWindow > timeNow) {
           batched.push(item)
           continue
         }
-        if (item.inserted + timeout < now) continue
-        if (now - start >= TASK_DEADLINE) {
+        if (item.inserted + timeout < timeNow) continue
+        if (timeNow - start >= TASK_DEADLINE) {
           interrupted = true
           break
         }
@@ -342,7 +343,7 @@ export function dynamicQueue<T, S, R>({
 }) {
   const prepared = trigger.map(items => {
     const result = [] as Array<QueuedItem<S>>
-    const inserted = performance.now()
+    const inserted = now()
     for (let i = 0; i < items.length; i++) {
       const block = flatten(items[i])
       for (let j = 0; j < block.length; j++) {
@@ -365,13 +366,13 @@ export function dynamicQueue<T, S, R>({
       beginMark(mark)
       for (i = 0; i < list.length; i++) {
         const item = list[i]
-        const now = performance.now()
-        if (item.inserted + batchWindow > now) {
+        const timeNow = now()
+        if (item.inserted + batchWindow > timeNow) {
           batched.push(item)
           continue
         }
-        if (item.inserted + timeout < now) continue
-        if (now - start >= TASK_DEADLINE) {
+        if (item.inserted + timeout < timeNow) continue
+        if (timeNow - start >= TASK_DEADLINE) {
           interrupted = true
           break
         }
