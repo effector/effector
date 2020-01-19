@@ -6,7 +6,7 @@ import {createNode} from './createNode'
 import {launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import type {EffectConfigPart, Config} from './config'
-import {Defer} from './defer'
+import {createDefer} from './defer'
 
 declare export function createEffect<Payload, Done>(
   name?: string | EffectConfigPart<Payload, Done>,
@@ -122,7 +122,7 @@ export function createEffect<Payload, Done>(
     }),
   )
   ;(instance: any).create = (params: Payload) => {
-    const req: any = new Defer()
+    const req: any = createDefer()
     launch(instance, {params, req})
     return req.req
   }

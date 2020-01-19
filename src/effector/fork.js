@@ -1,7 +1,7 @@
 //@flow
 
 import {getGraph, bind} from './stdlib'
-import {Defer} from './defer'
+import {createDefer} from './defer'
 import {watchUnit} from './watch'
 
 import {is, step, launch, createNode, clearNode} from 'effector'
@@ -83,7 +83,7 @@ export function fork(domain, {values = {}} = {}) {
     })
     domain.onCreateEffect(effect => {
       effect.create = params => {
-        const req = new Defer()
+        const req = createDefer()
         universalLaunch(effect, {params, req})
         return req.req
       }
@@ -92,7 +92,7 @@ export function fork(domain, {values = {}} = {}) {
   return cloneGraph(domain, {values})
 }
 export function allSettled(start, {scope: {clones, find}, params: ctx}) {
-  const defer = new Defer()
+  const defer = createDefer()
   let isSyncComplete = false
   let fxCount = 0
   let fxID = 0

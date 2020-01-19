@@ -1,16 +1,15 @@
 //@flow
-export class Defer {
-  /*::
-  rs: (value: any) => {...}
-  rj: (error: any) => {...}
-  req: Promise<any>
-  */
-  constructor() {
-    const req = new Promise((rs: Function, rj: Function) => {
-      this.rs = rs
-      this.rj = rj
-    })
-    this.req = req
-    req.catch(err => {})
-  }
+
+export function createDefer(): {
+  rs: (value: any) => any,
+  rj: (value: any) => any,
+  req: Promise<any>,
+  } {
+  const result = {}
+  result.req = new Promise((rs, rj) => {
+    result.rs = rs
+    result.rj = rj
+  })
+  result.req.catch(err => {})
+  return result
 }
