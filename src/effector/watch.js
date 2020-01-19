@@ -4,7 +4,7 @@ import {type Unit, step, callStack} from './stdlib'
 import {createNode} from './createNode'
 import type {Subscription} from './index.h'
 import {createSubscription} from './subscription'
-import {addToRegion} from './createUnit'
+import {addToRegion} from './region'
 
 export const watchUnit = (
   unit: Unit,

@@ -1,5 +1,4 @@
 //@flow
-/* eslint-disable no-nested-ternary */
 import {combine} from './combine'
 import {
   type Graphite,
@@ -15,6 +14,7 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
+import {addToRegion} from './region'
 
 export function sample(
   source: any,
@@ -59,58 +59,64 @@ export function sample(
   }
   if (is.store(source)) {
     own(source, [
-      createLinkNode(clock, target, {
-        scope: {fn},
-        node: [
-          //$off
-          !greedy && step.barrier({priority: 'sampler'}),
-          step.mov({
-            store: source.stateRef,
-            to: fn ? 'a' : 'stack',
-          }),
-          fn && step.compute({fn: callARegStack}),
-        ],
-        meta: {op: 'sample', sample: 'store'},
-      }),
+      addToRegion(
+        createLinkNode(clock, target, {
+          scope: {fn},
+          node: [
+            //$off
+            !greedy && step.barrier({priority: 'sampler'}),
+            step.mov({
+              store: source.stateRef,
+              to: fn ? 'a' : 'stack',
+            }),
+            fn && step.compute({fn: callARegStack}),
+          ],
+          meta: {op: 'sample', sample: 'store'},
+        }),
+      ),
     ])
   } else {
     const hasSource = createStateRef(false)
     const sourceState = createStateRef()
     const clockState = createStateRef()
-    createNode({
-      parent: source,
-      node: [
-        step.update({store: sourceState}),
-        step.mov({
-          from: 'value',
-          store: true,
-          target: hasSource,
-        }),
-      ],
-      family: {
-        owners: [source, target, clock],
-        links: target,
-      },
-      meta: {op: 'sample', sample: 'source'},
-    })
-    own(source, [
-      createLinkNode(clock, target, {
-        scope: {fn},
+    addToRegion(
+      createNode({
+        parent: source,
         node: [
-          step.update({store: clockState}),
-          step.mov({store: hasSource}),
-          step.filter({fn: hasSource => hasSource}),
-          //$off
-          !greedy && step.barrier({priority: 'sampler'}),
-          step.mov({store: sourceState}),
+          step.update({store: sourceState}),
           step.mov({
-            store: clockState,
-            to: 'a',
+            from: 'value',
+            store: true,
+            target: hasSource,
           }),
-          fn && step.compute({fn: callStackAReg}),
         ],
-        meta: {op: 'sample', sample: 'clock'},
+        family: {
+          owners: [source, target, clock],
+          links: target,
+        },
+        meta: {op: 'sample', sample: 'source'},
       }),
+    )
+    own(source, [
+      addToRegion(
+        createLinkNode(clock, target, {
+          scope: {fn},
+          node: [
+            step.update({store: clockState}),
+            step.mov({store: hasSource}),
+            step.filter({fn: hasSource => hasSource}),
+            //$off
+            !greedy && step.barrier({priority: 'sampler'}),
+            step.mov({store: sourceState}),
+            step.mov({
+              store: clockState,
+              to: 'a',
+            }),
+            fn && step.compute({fn: callStackAReg}),
+          ],
+          meta: {op: 'sample', sample: 'clock'},
+        }),
+      ),
     ])
   }
   return target
