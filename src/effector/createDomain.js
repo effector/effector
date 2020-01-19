@@ -16,10 +16,10 @@ import {
   createStore,
   createNamedEvent,
   initUnit,
-  addToRegion,
 } from './createUnit'
 import {createEffect} from './createEffect'
 import {forward} from './forward'
+import {addToRegion} from './region'
 
 type DomainHooks = {|
   domain: Event<Domain>,

@@ -31,6 +31,7 @@ import {type CompositeName, createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
+import {addToRegion} from './region'
 
 export const applyParentEventHook = ({parent}, target) => {
   if (parent) parent.hooks.event(target)
@@ -102,8 +103,7 @@ export function createEvent<Payload>(
   event.prepend = bind(prepend, event)
   event.subscribe = bind(subscribe, event)
   event[$$observable] = () => event
-  addToRegion(event)
-  return event
+  return addToRegion(event)
 }
 
 const subscribe = (event, observer): Subscription =>
@@ -216,8 +216,7 @@ export function createStore<State>(
   //$off
   store[$$observable] = bind(observable, store)
   own(store, [updates])
-  addToRegion(store)
-  return store
+  return addToRegion(event)
 }
 
 function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
@@ -324,22 +323,3 @@ function mapStore<A, B>(
 }
 
 const thru = (instance: any, fn: Function) => fn(instance)
-
-export const addToRegion = unit => {
-  if (regionStack) own(regionStack.value, [unit])
-  return unit
-}
-
-let regionStack = null
-
-export function wrapRegion(unit: any, cb: () => void) {
-  regionStack = {
-    parent: regionStack,
-    value: unit,
-  }
-  try {
-    cb()
-  } finally {
-    regionStack = regionStack.parent
-  }
-}
