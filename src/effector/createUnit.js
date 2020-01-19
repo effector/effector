@@ -327,6 +327,7 @@ const thru = (instance: any, fn: Function) => fn(instance)
 
 export const addToRegion = unit => {
   if (regionStack) own(regionStack.value, [unit])
+  return unit
 }
 
 let regionStack = null
