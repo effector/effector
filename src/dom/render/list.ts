@@ -5,7 +5,7 @@ import {
   is,
   launch,
   sample,
-  clearNode,
+  wrapRegion,
 } from 'effector'
 import {Signal, DOMElement, Stack, ListItemType} from './index.h'
 import {own} from '../own'
@@ -282,7 +282,7 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
       const item = stack.node as ListItemType
       if (!item.active) continue
       activeStack.replace(stack)
-      cb(item)
+      wrapRegion(stack.signal, bind(cb, item))
       for (let k = 0; k < appended.length; k++) {
         item.nodes.push(appended[k])
       }

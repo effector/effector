@@ -1,4 +1,4 @@
-import {Store, Event} from 'effector'
+import {Store, Event, wrapRegion} from 'effector'
 
 import {
   DOMElement,
@@ -11,6 +11,7 @@ import {
   StoreOrData,
   DOMProperty,
   StylePropertyMap,
+  Signal,
 } from './index.h'
 import {nodeStack, activeStack} from './stack'
 import {appendBatch, forwardStacks} from './using'
@@ -136,7 +137,7 @@ export function h(tag, opts, cb?: any) {
   activeStack.replace(currentStack)
   // node.__SIGNAL__ = signal
   if (cb) {
-    initNode(node, parent, cb)
+    initNode(signal, node, parent, cb)
   } else {
     draft.pure = true
     spec(opts)
@@ -215,11 +216,16 @@ function mergeNodeDraft() {
   return merged
 }
 
-function initNode(node: DOMElement, parent: Stack, cb: () => void) {
+function initNode(
+  signal: Signal,
+  node: DOMElement,
+  parent: Stack,
+  cb: () => void,
+) {
   let succ = false
   nodeStack.push({node, append: [], reverse: false})
   try {
-    cb()
+    wrapRegion(signal, cb)
     succ = true
   } finally {
     appendBatch(nodeStack.pop()!)

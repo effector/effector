@@ -1,4 +1,4 @@
-import {step} from 'effector'
+import {step, wrapRegion} from 'effector'
 import {nodeStack, activeStack} from './stack'
 import {DOMElement, NSType, Stack} from './index.h'
 import {createSignal} from './createSignal'
@@ -55,7 +55,7 @@ export function using(node: DOMElement, cb: () => any): void {
   activeStack.replace(stack)
   nodeStack.push({node, append: [], reverse: false})
   try {
-    return cb()
+    wrapRegion(stack.signal, cb)
   } finally {
     appendBatch(nodeStack.pop())
     activeStack.replace(parentStack)
