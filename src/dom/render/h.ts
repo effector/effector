@@ -125,6 +125,7 @@ export function h(tag, opts, cb?: any) {
     },
     node: draft,
     mountStatus: 'initial',
+    visible: true,
   }
   if (parent) {
     forwardStacks(parent, currentStack)
@@ -144,13 +145,13 @@ export function h(tag, opts, cb?: any) {
   }
   const merged = applyNodeDraft()
   activeStack.replace(parent)
+  currentStack.visible = !merged.visible || merged.visible.getState()
   if (!noAppend) {
     if (nodeStack.length > 0) {
-      if (!merged.visible || merged.visible.getState())
+      if (currentStack.visible)
         nodeStack[nodeStack.length - 1].append.push(node)
     }
   }
-  return node
 }
 
 function applyNodeDraft() {

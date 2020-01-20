@@ -48,6 +48,7 @@ export function using(node: DOMElement, cb: () => any): void {
       blur: [],
     },
     mountStatus: 'initial',
+    visible: true,
   }
   // if (!parentStack || !parentStack.signal) {
   //   stack.signal.scope.stack = stack

@@ -157,4 +157,5 @@ export type Stack = {
   }
   node: NodeType
   mountStatus: MountStatus
+  visible: boolean
 }

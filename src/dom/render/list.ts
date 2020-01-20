@@ -110,6 +110,7 @@ export function list<T>(opts, cb: (opts: any) => void) {
       cb,
     },
     mountStatus: 'initial',
+    visible: true,
   }
   // parentSignal.scope.stack = currentStack
   forwardStacks(parentStack, currentStack)
@@ -210,6 +211,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
         nodes: [],
       },
       mountStatus: 'initial',
+      visible: true,
     }
     makeSiblings(lastItem, stack)
     lastItem = stack
