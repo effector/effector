@@ -31,10 +31,7 @@ const keywords = [
   'event',
   'effect',
   'data',
-  'streams',
   'state',
-  'actions',
-  'redux',
 ]
 
 const version = {
