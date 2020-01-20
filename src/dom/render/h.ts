@@ -1,4 +1,4 @@
-import {Store, Event, wrapRegion} from 'effector'
+import {Store, Event, withRegion} from 'effector'
 
 import {
   DOMElement,
@@ -228,7 +228,7 @@ function initNode(
   let succ = false
   nodeStack.push({node, append: [], reverse: false})
   try {
-    wrapRegion(signal, cb)
+    withRegion(signal, cb)
     succ = true
   } finally {
     appendBatch(nodeStack.pop()!)

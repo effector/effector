@@ -9,7 +9,7 @@ export const addToRegion = unit => {
 
 let regionStack = null
 
-export function wrapRegion(unit: any, cb: () => void) {
+export function withRegion(unit: any, cb: () => void) {
   regionStack = {
     parent: regionStack,
     value: unit,
