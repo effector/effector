@@ -77,8 +77,8 @@ function normalizeValues(values) {
     const result = {}
     for (const [key, value] of values) {
       result[key.sid] = value
-      return result
     }
+    return result
   }
   return values
 }
