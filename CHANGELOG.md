@@ -32,7 +32,7 @@ await Promise.all([req1, req2])
 
 [Try it](https://share.effector.dev/tSAhu4Kt)
 
-[Documentation for `effect.inFlight`](https://effector.now.sh/docs/api/effector/effect#inFlight)
+[Documentation for `effect.inFlight`](https://effector.now.sh/docs/api/effector/effect#inflight)
 
 - Introduce `withRegion`: region-based memory management tool, which attach units (stores, events and effects) and watchers, created inside given callback to lifecycle of owner unit to be erased together with it.
 
