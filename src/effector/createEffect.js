@@ -127,15 +127,18 @@ export function createEffect<Payload, Done>(
     return req.req
   }
 
-  /* terser will minify true and false to 1 and 0,
-    thereby we need to define true as Boolean(1)
-    and false as Boolean(0) */
-  const pending = createStore(Boolean(0), {named: 'pending'})
-    .on(instance, () => Boolean(1))
-    .reset(done, fail)
+  const inFlight = createStore(0, {named: 'inFlight'})
+    .on(instance, x => x + 1)
+    .on(done, x => x - 1)
+    .on(fail, x => x - 1)
+
+  const pending = inFlight.map({
+    fn: amount => amount > 0,
+    named: 'pending',
+  })
   instance.pending = pending
 
-  own(instance, [done, fail, anyway, pending, effectRunner])
+  own(instance, [done, fail, anyway, pending, inFlight, effectRunner])
   return instance
 }
 const onSettled = ({event, anyway, params, fn, ok}, data) => {
