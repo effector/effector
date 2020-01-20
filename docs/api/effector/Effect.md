@@ -227,6 +227,40 @@ effect(2) // => Fail with params 2 and error 1
 
 [Try it](https://share.effector.dev/UaHRvZrE)
 
+### `finally`
+
+Event triggered when handler is resolved, rejected or throws error.
+
+#### Arguments
+
+Event triggered with object of `status`, `params` and `error` or `result`:
+
+1. `status` (_string_): A status of effect (`done` or `fail`)
+2. `params` (_Params_): An argument passed to effect call
+3. `error` (_Fail_): An error catched from the handler
+4. `result` (_Done_): A result of the resolved handler
+
+#### Example
+
+```js try
+import {createEffect} from 'effector'
+
+const fetchApi = createEffect({
+  handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+})
+
+fetchApi.finally.watch(console.log)
+
+fetchApi(100)
+// if resolved
+// => {status: 'done', result: '100 ms', params: 100}
+
+// if rejected
+// => {status: 'fail', error: Error, params: 100}
+```
+
+[Try it](https://share.effector.dev/x4NVEQc9)
+
 ### `pending`
 
 _Store_ will update when `done` or `fail` are triggered.
@@ -271,36 +305,34 @@ const isLoading = createStore(false)
   .on(fetchApi.fail, () => false)
 ```
 
-### `finally`
+### `inFlight`
 
-Event triggered when handler is resolved, rejected or throws error.
-
-#### Arguments
-
-Event triggered with object of `status`, `params` and `error` or `result`:
-
-1. `status` (_string_): A status of effect (`done` or `fail`)
-2. `params` (_Params_): An argument passed to effect call
-3. `error` (_Fail_): An error catched from the handler
-4. `result` (_Done_): A result of the resolved handler
+_Store_ which show how many effect calls aren't settled yet. Useful for rate limiting.
 
 #### Example
 
 ```js try
 import {createEffect} from 'effector'
 
-const fetchApi = createEffect({
-  handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+const fx = createEffect({
+  handler: () => new Promise(rs => setTimeout(rs, 500)),
 })
 
-fetchApi.finally.watch(console.log)
+fx.inFlight.watch(amount => {
+  console.log('in-flight requests:', amount)
+})
+// => 0
 
-fetchApi(100)
-// if resolved
-// => {status: 'done', result: '100 ms', params: 100}
+const req1 = fx()
+// => 1
 
-// if rejected
-// => {status: 'fail', error: Error, params: 100}
+const req2 = fx()
+// => 2
+
+await Promise.all([req1, req2])
+
+// => 1
+// => 0
 ```
 
-[Try it](https://share.effector.dev/x4NVEQc9)
+[Try it](https://share.effector.dev/tSAhu4Kt)
