@@ -1,6 +1,6 @@
 {
   "name": "effector-dom",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Effector package for working with dom",
   "main": "effector-dom.cjs.js",
   "module": "effector-dom.es.js",
@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.10.1"
+    "effector": "^20.11.0"
   },
   "keywords": [
     "state manager",

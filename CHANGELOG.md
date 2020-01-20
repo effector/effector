@@ -2,6 +2,65 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.11.0
+
+- Add `effect.inFlight` store to effects. It show how many effect calls aren't settled yet. Useful for rate limiting.
+
+```js
+import {createEffect} from 'effector'
+
+const fx = createEffect({
+  handler: () => new Promise(rs => setTimeout(rs, 500)),
+})
+
+fx.inFlight.watch(amount => {
+  console.log('in-flight requests:', amount)
+})
+// => 0
+
+const req1 = fx()
+// => 1
+
+const req2 = fx()
+// => 2
+
+await Promise.all([req1, req2])
+
+// => 1
+// => 0
+```
+
+[Try it](https://share.effector.dev/tSAhu4Kt)
+
+[Documentation for `effect.inFlight`](https://effector.now.sh/docs/api/effector/effect#inFlight)
+
+- Introduce `withRegion`: region-based memory management tool, which attach units (stores, events and effects) and watchers, created inside given callback to lifecycle of owner unit to be erased together with it.
+
+```js
+import {createEvent, createDomain, withRegion} from 'effector'
+
+const trigger = createEvent()
+
+const domain = createDomain()
+
+withRegion(domain, () => {
+  trigger.watch(n => {
+    console.log(n)
+  })
+})
+
+trigger(0)
+// => 0
+clearNode(domain)
+trigger(1)
+// no reaction
+```
+
+[Try it](https://share.effector.dev/mm3sV32v)
+
+- Add support for `Map<Store, any>` to `values` property in `fork`.
+- Fix concurrent requests support in `effect.pending`: it will become `false` only after all pending effect calls becomes settled.
+
 ## effector 20.10.0
 
 - Add `launch({target: unit, params})` overload for `launch` - low level method for running computation in units (events, effects or stores). Mostly used by library developers for fine-grained control of computations.
