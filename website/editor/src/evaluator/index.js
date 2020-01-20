@@ -106,11 +106,22 @@ const fetchEffectorDom = createEffect({
     return createRealm(text, `effector-dom.cjs.js`, {effector})
   }
 })
+const fetchEffectorFork = createEffect({
+  async handler(effector) {
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/fork.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, `fork.js`, {effector})
+  }
+})
 
 fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
   'effector': fetchEffector,
+  'effector/fork': fetchEffectorFork,
   '@effector/babel-plugin': fetchBabelPlugin,
   'effector-dom': fetchEffectorDom,
 }
@@ -143,15 +154,21 @@ export async function evaluator(code: string) {
   ])
   const effectorReact = await fetchEffectorReact(effector)
   let effectorDom
+  let effectorFork
   if (version.getState() === 'master') {
-    effectorDom = await fetchEffectorDom(effector)
+    const additionalLibs = await Promise.all([
+      fetchEffectorDom(effector),
+      fetchEffectorFork(effector),
+    ])
+    effectorDom = additionalLibs[0]
+    effectorFork = additionalLibs[1]
   }
   //$off
   const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env, {dom: effectorDom, effectorDom}],
+    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -182,7 +199,7 @@ const onRuntimeError = async error => {
   const stackFrames = await getStackFrames(error)
   throw {type: 'runtime-error', original: error, stackFrames}
 }
-function replaceEffectorDomImports(path, {types: t}) {
+function replaceModuleImports(globalVarName, path, {types: t}) {
   const values = []
   for (const specifier of path.node.specifiers) {
     switch (specifier.type) {
@@ -202,7 +219,7 @@ function replaceEffectorDomImports(path, {types: t}) {
               t.identifier(specifier.local.name),
               t.memberExpression(
                 t.identifier("globalThis"),
-                t.identifier("effectorDom")
+                t.identifier(globalVarName)
               )
             )
           ])
@@ -216,7 +233,7 @@ function replaceEffectorDomImports(path, {types: t}) {
         t.objectPattern(values),
         t.memberExpression(
           t.identifier("globalThis"),
-          t.identifier("effectorDom")
+          t.identifier(globalVarName)
         )
       )
     ])
@@ -225,10 +242,15 @@ function replaceEffectorDomImports(path, {types: t}) {
 const removeImportsPlugin = babel => ({
   visitor: {
     ImportDeclaration(path) {
-      if (path.node.source.value === 'effector-dom') {
-        replaceEffectorDomImports(path, babel)
-      } else {
-        path.remove()
+      switch (path.node.source.value) {
+        case 'effector-dom':
+          replaceModuleImports('effectorDom', path, babel)
+          break
+        case 'effector/fork':
+          replaceModuleImports('effectorFork', path, babel)
+          break
+        default:
+          path.remove()
       }
     },
     ExportDefaultDeclaration(path) {
