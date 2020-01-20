@@ -342,9 +342,16 @@ export function merge<T extends ReadonlyArray<Unit<any>>>(
 ): T[number] extends Unit<infer R> ? Event<R> : never
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
 export function createNode(opts: {
-  node: Array<Cmd>
+  node?: Array<Cmd>
+  parent?: Array<Unit<any> | Step>
   child?: Array<Unit<any> | Step>
   scope?: {[field: string]: any}
+  meta?: {[field: string]: any}
+  family?: {
+    type?: 'regular' | 'crosslink'
+    owners?: Unit<any> | Step | Array<Unit<any> | Step>
+    links?: Unit<any> | Step | Array<Unit<any> | Step>
+  }
 }): Step
 export function launch<T>(unit: Unit<T> | Step, payload: T): void
 export function launch<T>(config: {

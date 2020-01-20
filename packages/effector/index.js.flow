@@ -300,15 +300,22 @@ declare export function clearNode(
 ): void
 declare export function createNode(opts: {|
   +node: Array<Cmd>,
+  +parent?: Array<Unit<any> | Step>,
   +child?: Array<Unit<any> | Step>,
   +scope?: {[field: string]: any, ...},
+  +meta?: {[field: string]: any, ...},
+  +family?: {
+    +type?: 'regular' | 'crosslink',
+    +owners?: Unit<any> | Step | Array<Unit<any> | Step>,
+    +links?: Unit<any> | Step | Array<Unit<any> | Step>,
+  },
 |}): Step
 
 declare export function launch<T>(unit: Unit<T>, payload: T): void
 declare export function launch<T>(config: {
   target: Unit<T>,
   params: T,
-  defer?: boolean
+  defer?: boolean,
 }): void
 
 declare export function fromObservable<T>(observable: mixed): Event<T>
