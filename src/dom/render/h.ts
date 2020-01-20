@@ -142,11 +142,12 @@ export function h(tag, opts, cb?: any) {
     draft.pure = true
     spec(opts)
   }
-  applyNodeDraft()
+  const merged = applyNodeDraft()
   activeStack.replace(parent)
   if (!noAppend) {
     if (nodeStack.length > 0) {
-      nodeStack[nodeStack.length - 1].append.push(node)
+      if (!merged.visible || merged.visible.getState())
+        nodeStack[nodeStack.length - 1].append.push(node)
     }
   }
   return node
@@ -167,6 +168,7 @@ function applyNodeDraft() {
   bindVisible(element, signal, merged.visible)
   bindFocus(element, signal, merged.focus)
   bindBlur(element, signal, merged.blur)
+  return merged
 }
 
 function mergeNodeDraft() {
