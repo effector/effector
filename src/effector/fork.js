@@ -24,6 +24,7 @@ export function hydrate(domain, {values}) {
   if (Object(values) !== values) {
     throw Error('values property should be an object')
   }
+  values = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(values)
   const units = flatGraph(domain)
   for (const {meta, scope, reg} of units) {
@@ -71,6 +72,16 @@ function universalLaunch(unit, payload) {
     launch(unit, payload)
   }
 }
+function normalizeValues(values) {
+  if (values instanceof Map) {
+    const result = {}
+    for (const [key, value] of values) {
+      result[key.sid] = value
+      return result
+    }
+  }
+  return values
+}
 export function fork(domain, {values = {}} = {}) {
   if (!is.domain(domain)) throw Error('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
@@ -89,6 +100,7 @@ export function fork(domain, {values = {}} = {}) {
       }
     })
   }
+  values = normalizeValues(values)
   return cloneGraph(domain, {values})
 }
 export function allSettled(start, {scope: {clones, find}, params: ctx}) {
