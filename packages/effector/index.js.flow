@@ -98,6 +98,7 @@ declare export class Effect<Params, Done, Fail = Error>
     getCurrent(): (params: Params) => Promise<Done>,
   |};
   pending: Store<boolean>;
+  inFlight: Store<number>;
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   map<T>(fn: (params: Params) => T): Event<T>;

@@ -136,6 +136,7 @@ export function createEffect<Payload, Done>(
     fn: amount => amount > 0,
     named: 'pending',
   })
+  instance.inFlight = inFlight
   instance.pending = pending
 
   own(instance, [done, fail, anyway, pending, inFlight, effectRunner])

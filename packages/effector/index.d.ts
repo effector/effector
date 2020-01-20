@@ -124,6 +124,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
     getCurrent(): (params: Params) => Promise<Done>
   }
   pending: Store<boolean>
+  inFlight: Store<number>
   watch(watcher: (payload: Params) => any): Subscription
   map<T>(fn: (params: Params) => T): Event<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
