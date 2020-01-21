@@ -100,6 +100,8 @@ sampled('Can be invoked too!') // => Can be invoked too!
 
 Passes last `event` invocation argument value and `store`'s updated state to `fn` handler.
 
+> **Note**: `event` must be invoked at least once.
+
 #### Arguments
 
 1. `event` (_Event_): Source event
