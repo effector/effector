@@ -11,6 +11,7 @@ export function map<T, S>(
   store: Store<T>,
   {fn}: {fn: (value: T) => S},
 ): Store<S> {
+  console.error('separate map method is deprecated, use store.map as usual')
   return signalOwn(store.map(fn))
 }
 
@@ -21,5 +22,6 @@ export function combine<A extends Combinable, B>({
   source: A
   fn(source: GetCombinedValue<A>): B
 }): Store<B> {
+  console.error('separate combine method is deprecated, use common combine method as usual')
   return signalOwn(originalCombine(source, fn))
 }
