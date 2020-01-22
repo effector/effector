@@ -35,10 +35,10 @@ const fetchUserRepos = createEffect({
   },
 })
 
-await fetchUserRepos({name})
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/stErhjHW)
+[Try it](https://share.effector.dev/6pNaXVyU)
 
 Create named effect
 
