@@ -34,9 +34,11 @@ const fetchUserRepos = createEffect({
     return req.json()
   },
 })
+
+await fetchUserRepos({name})
 ```
 
-[Try it](https://share.effector.dev/56sXfp9j)
+[Try it](https://share.effector.dev/stErhjHW)
 
 Create named effect
 
