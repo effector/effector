@@ -59,6 +59,10 @@ module.exports = {
         ],
       },
     ],
+    Conventions: [
+      'conventions/naming',
+      'conventions/best-practices'
+    ],
     'Advanced guide': ['advanced-guide/Computation priority'],
     Recipes: [
       'recipes/recipes',
