@@ -52,9 +52,11 @@ const fetchUserRepos = createEffect('fetch user repositories', {
     return req.json()
   },
 })
+
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/Oe3zcAgn)
+[Try it](https://share.effector.dev/8oirbvPY)
 
 Set handler to effect after creating
 
@@ -68,9 +70,11 @@ fetchUserRepos.use(async ({name}) => {
   const req = await fetch(url)
   return req.json()
 })
+
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/Wp9b9RF4)
+[Try it](https://share.effector.dev/e1QPH9Uq)
 
 Watch effect status
 
@@ -110,10 +114,10 @@ fetchUserRepos.finally.watch(({params, status, result, error}) => {
   }
 })
 
-fetchUserRepos({name: 'zerobias'})
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/8tauAC1P)
+[Try it](https://share.effector.dev/f3JDMpAB)
 
 Change state
 
@@ -132,6 +136,8 @@ const repos = createStore([]).on(
   fetchUserRepos.done,
   (_, {result: repos}) => repos,
 )
+
+await fetchUserRepos({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/JNeawjtw)
+[Try it](https://share.effector.dev/Evt9wTm2)
