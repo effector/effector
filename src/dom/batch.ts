@@ -107,9 +107,11 @@ executeTasks.watch(() => {
       break
     }
     importantTasks.delete(id)
-    const unit = targets.get(id)
-    //@ts-ignore
-    launch(unit, data, true)
+    launch({
+      target: targets.get(id)!,
+      params: data,
+      defer: true,
+    })
   }
   if (!interrupted) {
     for (const [id, data] of tasks) {
@@ -119,14 +121,18 @@ executeTasks.watch(() => {
         break
       }
       tasks.delete(id)
-      const unit = targets.get(id)
-      //@ts-ignore
-      launch(unit, data, true)
+      launch({
+        target: targets.get(id)!,
+        params: data,
+        defer: true,
+      })
     }
   }
-  //@ts-ignore
-  launch(executionEndMark, null, true)
-
+  launch({
+    target: executionEndMark,
+    params: null,
+    defer: true,
+  })
   endMark('plan')
 })
 const unwrapDone = step.compute({
