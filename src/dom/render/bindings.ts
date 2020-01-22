@@ -201,7 +201,7 @@ function applyAttr(element: DOMElement, attr, value) {
         break
       case 'checked':
         //@ts-ignore
-        delete element.checked
+        element.checked = false
         break
       case 'spellcheck':
         if (value === false) {
