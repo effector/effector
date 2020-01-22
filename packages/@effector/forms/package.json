@@ -30,7 +30,7 @@
     "compat.d.ts"
   ],
   "dependencies": {
-    "effector": "^20.8.0"
+    "effector": "^20.11.1"
   },
   "keywords": [
     "effector",
@@ -41,10 +41,6 @@
     {
       "name": "Zero Bias",
       "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
     }
   ],
   "sideEffects": false,

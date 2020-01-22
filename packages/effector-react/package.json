@@ -45,10 +45,7 @@
     "event",
     "effect",
     "data",
-    "streams",
-    "state",
-    "actions",
-    "redux"
+    "state"
   ],
   "author": "Zero Bias",
   "maintainers": [

@@ -4,7 +4,7 @@
   "description": "Reason bindings for effector",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.8.0"
+    "effector": "^20.11.1"
   },
   "files": [
     "src/Effector.re",
@@ -23,20 +23,13 @@
     "event",
     "effect",
     "data",
-    "streams",
-    "state",
-    "actions",
-    "redux"
+    "state"
   ],
   "author": "Zero Bias",
   "maintainers": [
     {
       "name": "Zero Bias",
       "email": "ribkatt@gmail.com"
-    },
-    {
-      "name": "goodmind",
-      "email": "andwebar@gmail.com"
     }
   ],
   "sideEffects": false,
@@ -44,8 +37,8 @@
   "devDependencies": {},
   "scripts": {},
   "repository": "https://github.com/zerobias/effector",
-  "homepage": "https://effector.now.sh",
   "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
   "engines": {
     "node": ">=6.0.0"
   },

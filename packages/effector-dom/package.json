@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.11.0"
+    "effector": "^20.11.1"
   },
   "keywords": [
     "state manager",
