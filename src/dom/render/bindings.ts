@@ -1,4 +1,4 @@
-import {is, Store, Event} from 'effector'
+import {is, Store, Event, combine} from 'effector'
 import {debounceRaf, domOperation} from './renderer'
 
 import {
@@ -243,6 +243,24 @@ export function bindAttr(
     )
   }
 }
+const xShape = (y: number, x: number) => ({x, y})
+const yShape = (x: number, y: number) => ({x, y})
+function normalizeTranslateShape(
+  data:
+    | Store<{x?: number; y?: number}>
+    | {x?: StoreOrData<number>; y?: StoreOrData<number>},
+): StoreOrData<{
+  x?: number
+  y?: number
+}> {
+  if (is.store(data)) return data
+  if (is.store(data.x)) {
+    if (is.store(data.y)) return combine({x: data.x, y: data.y})
+    return data.x.map(xShape.bind(null, data.y))
+  }
+  if (is.store(data.y)) return data.y.map(yShape.bind(null, data.x))
+  return data as any
+}
 
 function applyTransform<T>(
   svg: SVGSVGElement,
@@ -250,8 +268,15 @@ function applyTransform<T>(
   transformList: SVGTransformList,
   data: StoreOrData<T>,
   handler: (transform: SVGTransform, data: T) => void,
+  key: keyof typeof transformResolvers,
 ) {
   const transform = svg.createSVGTransform()
+  switch (key) {
+    case 'translate':
+    case 'scale':
+      data = normalizeTranslateShape(data) as any
+      break
+  }
   domOperation(false, signal, data, handler.bind(null, transform))
   transformList.appendItem(transform)
 }
@@ -305,6 +330,7 @@ export function bindTransform(
         transformList,
         operations[key],
         transformResolvers[key],
+        key as any,
       )
     }
   }

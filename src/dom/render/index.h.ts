@@ -30,14 +30,24 @@ export type DOMElement = HTMLElement | SVGElement
 
 export type StoreOrData<T> = Store<T> | T
 export type TransformMap = {
-  translate: StoreOrData<{
-    x?: number
-    y?: number
-  }>
-  scale: StoreOrData<{
-    x?: number
-    y?: number
-  }>
+  translate:
+    | Store<{
+        x?: number
+        y?: number
+      }>
+    | {
+        x?: StoreOrData<number>
+        y?: StoreOrData<number>
+      }
+  scale:
+    | Store<{
+        x?: number
+        y?: number
+      }>
+    | {
+        x?: StoreOrData<number>
+        y?: StoreOrData<number>
+      }
   rotate: StoreOrData<
     | {
         angle?: number

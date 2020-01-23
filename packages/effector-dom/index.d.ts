@@ -10,14 +10,24 @@ export type StylePropertyMap = Partial<
   }
 >
 export type TransformMap = {
-  translate: StoreOrData<{
-    x?: number
-    y?: number
-  }>
-  scale: StoreOrData<{
-    x?: number
-    y?: number
-  }>
+  translate:
+    | Store<{
+        x?: number
+        y?: number
+      }>
+    | {
+        x?: StoreOrData<number>
+        y?: StoreOrData<number>
+      }
+  scale:
+    | Store<{
+        x?: number
+        y?: number
+      }>
+    | {
+        x?: StoreOrData<number>
+        y?: StoreOrData<number>
+      }
   rotate: StoreOrData<
     | {
         angle?: number
