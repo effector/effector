@@ -51,7 +51,7 @@ it('will not broke subscribers', () => {
   expect(fn).toBeCalledTimes(2)
 })
 
-it('deep cleaning', () => {
+test('deep cleaning', () => {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const source = createStore(0)
@@ -212,7 +212,7 @@ describe('based on clearNode', () => {
       ]
     `)
   })
-  it('wil not clear node, connected via forward to destroyed one', () => {
+  it('will not clear node, connected via forward to destroyed one', () => {
     const fn = jest.fn()
     const store = createStore(0)
     const event = createEvent()
@@ -233,7 +233,7 @@ describe('based on clearNode', () => {
       ]
     `)
   })
-  it('wil not clear node, which forwarded to destroyed one', () => {
+  it('will not clear node, which forwarded to destroyed one', () => {
     const fn = jest.fn()
     const store = createStore(0)
     const event = createEvent()
@@ -326,7 +326,7 @@ describe('domain support', () => {
       ]
     `)
   })
-  it('wil not clear node, connected via forward to destroyed one', () => {
+  it('will not clear node, connected via forward to destroyed one', () => {
     const fn = jest.fn()
     const domain = createDomain()
     const store = domain.store(0)
@@ -348,7 +348,7 @@ describe('domain support', () => {
       ]
     `)
   })
-  it('wil not clear node, which forwarded to destroyed one', () => {
+  it('will not clear node, which forwarded to destroyed one', () => {
     const fn = jest.fn()
     const domain = createDomain()
     const store = domain.store(0)
@@ -367,6 +367,17 @@ describe('domain support', () => {
         2,
       ]
     `)
+  })
+  it('will not clear event after clearNode call at its prepended event', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const event = domain.createEvent()
+    const prepended = event.prepend(_ => _)
+    event.watch(fn)
+
+    clearNode(prepended)
+    event(1)
+    expect(argumentHistory(fn)).toEqual([1])
   })
   test('child should not survive clearNode(domain) call', () => {
     const fn = jest.fn()
