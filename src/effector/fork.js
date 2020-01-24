@@ -250,6 +250,13 @@ function cloneGraph(unit, {values}) {
   return {
     clones,
     find: findClone,
+    graphite: createNode({
+      family: {
+        type: 'domain',
+        links: clones,
+      },
+      meta: {unit: 'fork'},
+    }),
   }
   function findClone(unit) {
     unit = getGraph(unit)
