@@ -7,6 +7,7 @@ import {
   forward,
   createStore,
   sample,
+  combine,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures/index'
 
@@ -143,7 +144,7 @@ describe('itermediate steps should not stay', () => {
   })
 })
 describe('based on clearNode', () => {
-  it('will not clear domain.store after event will be destroyed', () => {
+  it('will not clear store after event will be destroyed', () => {
     const fn = jest.fn()
     const store = createStore(0)
     const eventA = createEvent()
@@ -366,5 +367,65 @@ describe('domain support', () => {
         2,
       ]
     `)
+  })
+  test('child should not survive clearNode(domain) call', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const event = domain.createEvent()
+    event.watch(fn)
+    event(1)
+    clearNode(domain)
+    event(2)
+    expect(argumentHistory(fn)).toEqual([1])
+  })
+  describe('clearNode(domain) should not affect sibling nodes', () => {
+    test('with sample', () => {
+      const fn = jest.fn()
+      const fn2 = jest.fn()
+      const store = createStore(null)
+      const event = createEvent()
+      store.on(event, (_, e) => e)
+      store.watch(fn)
+
+      const domain = createDomain()
+      const eventInDomain = domain.createEvent()
+      eventInDomain.watch(fn2)
+      sample({
+        source: store,
+        clock: eventInDomain,
+      })
+
+      event(1)
+      eventInDomain(-1)
+
+      clearNode(domain)
+
+      event(2)
+      eventInDomain(-2)
+      expect(argumentHistory(fn2)).toEqual([-1])
+      expect(argumentHistory(fn)).toEqual([null, 1, 2])
+    })
+    test('with combine', () => {
+      const fn = jest.fn()
+      const fn2 = jest.fn()
+      const store = createStore(null)
+      const event = createEvent()
+      store.on(event, (_, e) => e)
+      store.watch(fn)
+
+      const domain = createDomain()
+      const storeInDomain = domain.createStore(null)
+      storeInDomain.on(event, (_, e) => e)
+      storeInDomain.watch(fn2)
+      combine({store, storeInDomain})
+
+      event(1)
+
+      clearNode(domain)
+
+      event(2)
+      expect(argumentHistory(fn2)).toEqual([null, 1])
+      expect(argumentHistory(fn)).toEqual([null, 1, 2])
+    })
   })
 })
