@@ -390,6 +390,40 @@ describe('domain support', () => {
     expect(argumentHistory(fn)).toEqual([1])
   })
   describe('clearNode(domain) should not affect sibling nodes', () => {
+    describe('with forward', () => {
+      test('from', () => {
+        const fn = jest.fn()
+        const event = createEvent()
+        const domain = createDomain()
+        const event2 = domain.createEvent()
+        forward({
+          from: event,
+          to: event2,
+        })
+        event.watch(fn)
+        event(0)
+        clearNode(domain)
+        event(1)
+        expect(argumentHistory(fn)).toEqual([0, 1])
+      })
+      test('to', () => {
+        const fn = jest.fn()
+        const event = createEvent()
+        const domain = createDomain()
+        const event2 = domain.createEvent()
+        forward({
+          from: event2,
+          to: event,
+        })
+        event.watch(fn)
+        event(0)
+        event2(1)
+        clearNode(domain)
+        event(2)
+        event2(3)
+        expect(argumentHistory(fn)).toEqual([0, 1, 2])
+      })
+    })
     test('with sample', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
@@ -437,6 +471,80 @@ describe('domain support', () => {
       event(2)
       expect(argumentHistory(fn2)).toEqual([null, 1])
       expect(argumentHistory(fn)).toEqual([null, 1, 2])
+    })
+  })
+  describe('clearNode(domain) should not affect sample targets', () => {
+    test('with store as source', () => {
+      const fn = jest.fn()
+      const fn2 = jest.fn()
+
+      const event1 = createEvent()
+      const event2 = createEvent()
+      const storeA = createStore(0).on(event1, (_, v) => v)
+
+      const storeB = createStore(0).on(event2, (_, v) => v)
+      storeA.watch(fn)
+      storeB.watch(fn2)
+
+      const domain = createDomain()
+      const storeInDomain = domain.createStore(0)
+
+      sample({
+        source: storeInDomain,
+        clock: createEvent(),
+        target: storeA,
+      })
+
+      sample({
+        source: storeA,
+        clock: createEvent(),
+        target: storeB,
+      })
+
+      event1(1)
+      event2(100)
+
+      clearNode(domain)
+
+      event1(2)
+      event2(200)
+      expect(argumentHistory(fn2)).toEqual([0, 100, 200])
+      expect(argumentHistory(fn)).toEqual([0, 1, 2])
+    })
+    test('with event as source', () => {
+      const fn = jest.fn()
+      const fn2 = jest.fn()
+      const store = createStore(0)
+      const source = createEvent()
+      const clock = createEvent()
+
+      source.watch(fn)
+      store.watch(fn2)
+
+      const domain = createDomain()
+      const eventInDomain = domain.createEvent()
+
+      sample({
+        source: eventInDomain,
+        clock: createEvent(),
+        target: store,
+      })
+
+      sample({
+        source,
+        clock,
+        target: store,
+      })
+
+      source(1)
+      clock()
+
+      clearNode(domain)
+
+      source(2)
+      clock()
+      expect(argumentHistory(fn2)).toEqual([0, 1, 2])
+      expect(argumentHistory(fn)).toEqual([1, 2])
     })
   })
 })
