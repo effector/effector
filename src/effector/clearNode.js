@@ -41,7 +41,7 @@ const clearNodeNormalized = (
   list = getOwners(targetNode)
   while ((currentNode = list.pop())) {
     removeFromNode(currentNode, targetNode)
-    if (isDomainUnit && currentNode.family.type === 'regular') {
+    if (isDomainUnit && currentNode.family.type === 'crosslink') {
       clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
