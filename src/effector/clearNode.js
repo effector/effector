@@ -34,7 +34,11 @@ const clearNodeNormalized = (
   let list = getLinks(targetNode)
   while ((currentNode = list.pop())) {
     removeFromNode(currentNode, targetNode)
-    if (deep || isDomainUnit || currentNode.family.type === 'crosslink') {
+    if (
+      deep ||
+      (isDomainUnit && !targetNode.meta.sample) ||
+      currentNode.family.type === 'crosslink'
+    ) {
       clearNodeNormalized(currentNode, deep, isDomainUnit)
     }
   }
