@@ -5,6 +5,7 @@ import {
   createStore,
   createStoreObject,
   createDomain,
+  combine,
 } from 'effector'
 import {unitObjectName} from '../naming'
 
@@ -91,4 +92,12 @@ describe('naming scheme', () => {
     const obj2 = Object.values(obj).slice(0, 25)
     expect(unitObjectName(obj)).toBe(`combine(${obj2.join(', ')})`)
   })
+})
+
+it('support combine', () => {
+  const a = createStore(0)
+  const b = createStore(1)
+  const ab = combine([a, b])
+  expect(ab.shortName).toBe('ab')
+  expect(ab.getState()).toEqual([0, 1])
 })
