@@ -128,6 +128,11 @@ export function combine(...args: Array<Store<any>>): Store<any> {
   if (args.length === 0) throw Error('at least one argument required')
   let handler
   let stores
+  let config
+  if ('ɔ' in args[0]) {
+    config = args[0].config
+    args = args[0].ɔ
+  }
   {
     const rawHandler = args[args.length - 1]
     if (typeof rawHandler === 'function') {
@@ -178,11 +183,18 @@ export function combine(...args: Array<Store<any>>): Store<any> {
   }
   //$off
   const mergedStore = Array.isArray(structStoreShape)
-    ? storeCombination(structStoreShape, list => list.slice(), [], handler)
+    ? storeCombination(
+      structStoreShape,
+      list => list.slice(),
+      [],
+      config,
+      handler,
+    )
     : storeCombination(
       structStoreShape,
       obj => Object.assign({}, obj),
       {},
+      config,
       handler,
     )
   return mergedStore
@@ -202,11 +214,12 @@ const storeCombination = (
   obj: any,
   clone: Function,
   defaultState: any,
+  config?: string,
   fn?: Function,
 ) => {
   const stateNew = clone(defaultState)
   const store = createStore(stateNew, {
-    name: unitObjectName(obj),
+    name: config ? config : unitObjectName(obj),
   })
   const target = createStateRef(stateNew)
   const isFresh = createStateRef(true)
