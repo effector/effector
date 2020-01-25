@@ -10,11 +10,13 @@ module.exports = function(babel, options = {}) {
     effects,
     domains,
     restores,
+    combines,
     storeCreators,
     eventCreators,
     effectCreators,
     domainCreators,
     restoreCreators,
+    combineCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -51,6 +53,8 @@ module.exports = function(babel, options = {}) {
               domainCreators.add(localName)
             } else if (restoreCreators.has(importedName)) {
               restoreCreators.add(localName)
+            } else if (combineCreators.has(importedName)) {
+              combineCreators.add(localName)
             }
           }
         }
@@ -80,38 +84,46 @@ module.exports = function(babel, options = {}) {
         if (!state.domains) state.domains = new Set()
 
         if (t.isIdentifier(path.node.callee)) {
-          if (stores && storeCreators.has(path.node.callee.name)) {
+          const name = path.node.callee.name
+          if (stores && storeCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setStoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
-          if (events && eventCreators.has(path.node.callee.name)) {
+          if (events && eventCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.events.add(id.name)
             }
           }
-          if (effects && effectCreators.has(path.node.callee.name)) {
+          if (effects && effectCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.effects.add(id.name)
             }
           }
-          if (domains && domainCreators.has(path.node.callee.name)) {
+          if (domains && domainCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.domains.add(id.name)
             }
           }
-          if (restores && restoreCreators.has(path.node.callee.name)) {
+          if (restores && restoreCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
               setRestoreNameAfter(path, state, id, babel.types, smallConfig)
+              state.stores.add(id.name)
+            }
+          }
+          if (combines && combineCreators.has(name)) {
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setCombineNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
@@ -174,6 +186,7 @@ const normalizeOptions = options => {
       effects: true,
       domains: true,
       restores: true,
+      combines: true,
     },
     result: {
       importName: new Set(
@@ -189,6 +202,7 @@ const normalizeOptions = options => {
       effectCreators: new Set(options.effectCreators || ['createEffect']),
       domainCreators: new Set(options.domainCreators || ['createDomain']),
       restoreCreators: new Set(options.restoreCreators || ['restore']),
+      combineCreators: new Set(options.combineCreators || ['combine']),
       domainMethods: readConfigShape(options.domainMethods, {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
@@ -388,6 +402,58 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     }
     configExpr.properties.push(nameProp)
     configExpr.properties.push(stableID)
+  }
+}
+function setCombineNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+  const displayName = nameNodeId.name
+  let args
+  let loc
+  path.find(path => {
+    if (path.isCallExpression()) {
+      args = path.node.arguments
+      loc = path.node.loc.start
+      return true
+    }
+  })
+
+  if (args && displayName) {
+    if (!args[0]) return
+    const commonArgs = t.ArrayExpression(args.slice())
+    args.length = 0
+    const configExpr = t.objectExpression([])
+
+    const nameProp = t.objectProperty(
+      t.identifier('name'),
+      t.stringLiteral(displayName),
+    )
+
+    const stableID = t.objectProperty(
+      t.identifier('sid'),
+      t.stringLiteral(
+        generateStableID(
+          state.file.opts.root,
+          state.filename,
+          displayName,
+          loc.line,
+          loc.column,
+          compressor,
+        ),
+      ),
+    )
+
+    if (addLoc) {
+      const locProp = t.objectProperty(
+        t.identifier('loc'),
+        makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
+      )
+      configExpr.properties.push(locProp)
+    }
+    configExpr.properties.push(nameProp)
+    configExpr.properties.push(stableID)
+    args[0] = t.objectExpression([
+      t.objectProperty(t.identifier('ɔ'), commonArgs),
+      t.objectProperty(t.identifier('config'), configExpr),
+    ])
   }
 }
 

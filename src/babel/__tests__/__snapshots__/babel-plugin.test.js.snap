@@ -1,5 +1,62 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel-plugin should combine 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, combine } from 'effector';
+const foo = createStore('foo', {
+  name: \\"foo\\",
+  sid: \\"vir1ix\\"
+});
+const bar = createStore('h', {
+  name: \\"bar\\",
+  sid: \\"-92kryt\\"
+});
+const baz1 = combine({
+  ɔ: [{
+    foo,
+    bar
+  }],
+  config: {
+    name: \\"baz1\\",
+    sid: \\"ihqrp\\"
+  }
+});
+const baz2 = combine({
+  ɔ: [[foo, bar]],
+  config: {
+    name: \\"baz2\\",
+    sid: \\"-2zo8sd\\"
+  }
+});
+const baz3 = combine({
+  ɔ: [foo, bar, (a, b) => [a, b]],
+  config: {
+    name: \\"baz3\\",
+    sid: \\"-6hu8cf\\"
+  }
+});
+const spread = [foo, bar];
+const baz4 = combine({
+  ɔ: [...spread],
+  config: {
+    name: \\"baz4\\",
+    sid: \\"-cwioto\\"
+  }
+});
+
+const f = a => combine({
+  ɔ: [{
+    foo,
+    bar
+  }],
+  config: {
+    name: \\"f\\",
+    sid: \\"-nk51xf\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should create component 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
