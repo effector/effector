@@ -13,7 +13,7 @@ describe('raw config', () => {
     expect(readFullName(foo)).toBe('foo')
     const bar = domain.store(0)
     expect(readFullName(bar)).toBe('bar')
-    const e = combine(foo, bar, (a, b) => ({a, b}))
+    const e = {combine}.combine(foo, bar, (a, b) => ({a, b}))
     expect(readFullName(e)).toBe('combine(foo, bar)')
   })
 
@@ -68,7 +68,7 @@ describe('raw config alias', () => {
     expect(readFullName(foo)).toBe('foo')
     const bar = domain.createStore(0)
     expect(readFullName(bar)).toBe('bar')
-    const e = combine(foo, bar, (a, b) => ({a, b}))
+    const e = {combine}.combine(foo, bar, (a, b) => ({a, b}))
     expect(readFullName(e)).toBe('combine(foo, bar)')
   })
 
