@@ -76,7 +76,7 @@ const userNameUpdated = userUpdated.map(({name}) => name) // you may decompose d
 const userRoleUpdated = userUpdated.map(({role}) => role.toUpperCase()) // either way you can transform data
 
 userNameUpdated.watch(name => console.log(`User's name is [${name}] now`))
-userRoleUpdated.watch(name => console.log(`User's role is [${name}] now`))
+userRoleUpdated.watch(role => console.log(`User's role is [${role}] now`))
 
 userUpdated({name: 'john', role: 'admin'})
 // => User's name is [john] now
