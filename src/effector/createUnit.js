@@ -97,60 +97,40 @@ export function createEvent<Payload>(
     return payload
   }
   event.watch = bind(watchUnit, event)
-  event.map = bind(mapEvent, event)
-  event.filter = bind(filterEvent, event)
+  event.map = (fn: Function) => {
+    let config
+    let name
+    if (typeof fn === 'object') {
+      config = fn
+      name = fn.name
+      fn = fn.fn
+    }
+    const mapped = createEvent(mapName(event, name), config)
+    createComputation(event, mapped, 'map', fn)
+    return mapped
+  }
+  event.filter = fn => {
+    if (typeof fn === 'function') {
+      console.error('.filter(fn) is deprecated, use .filterMap instead')
+      return filterMapEvent(event, fn)
+    }
+    return createEventFiltration(event, 'filter', fn.fn, [
+      step.filter({fn: callStack}),
+    ])
+  }
   event.filterMap = bind(filterMapEvent, event)
-  event.prepend = bind(prepend, event)
-  event.subscribe = bind(subscribe, event)
+  event.prepend = fn => {
+    const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
+      parent: event.parent,
+    })
+    createComputation(contramapped, event, 'prepend', fn)
+    applyParentEventHook(event, contramapped)
+    return contramapped
+  }
+  event.subscribe = observer =>
+    watchUnit(event, payload => observer.next(payload))
   event[$$observable] = () => event
   return addToRegion(event)
-}
-
-const subscribe = (event, observer): Subscription =>
-  watchUnit(event, payload => observer.next(payload))
-
-function prepend(event, fn: (_: any) => *) {
-  const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
-    parent: event.parent,
-  })
-  createComputation(contramapped, event, 'prepend', fn)
-  applyParentEventHook(event, contramapped)
-  return contramapped
-}
-
-declare function mapEvent<A, B>(event: Event<A>, fn: (_: A) => B): Event<B>
-declare function mapEvent<A, B>(
-  effect: Effect<A, any, any>,
-  fn: (_: A) => B,
-): Event<B>
-function mapEvent<A, B>(event: Event<A> | Effect<A, any, any>, fn: A => B) {
-  let config
-  let name
-  if (typeof fn === 'object') {
-    config = fn
-    name = fn.name
-    fn = fn.fn
-  }
-  const mapped = createEvent(mapName(event, name), config)
-  createComputation(event, mapped, 'map', fn)
-  return mapped
-}
-
-function filterEvent(
-  event: Event<any> | Effect<any, any, any>,
-  fn:
-    | {|
-        fn(_: any): boolean,
-      |}
-    | (any => any | void),
-): any {
-  if (typeof fn === 'function') {
-    console.error('.filter(fn) is deprecated, use .filterMap instead')
-    return filterMapEvent(event, fn)
-  }
-  return createEventFiltration(event, 'filter', fn.fn, [
-    step.filter({fn: callStack}),
-  ])
 }
 
 function filterMapEvent(
@@ -209,20 +189,58 @@ export function createStore<State>(
     throw Error("current state can't be undefined, use null instead")
 
   store.watch = store.subscribe = bind(watch, store)
-  store.reset = bind(reset, store)
-  store.on = bind(on, store)
+  store.reset = (...units) => {
+    for (const unit of units) store.on(unit, () => store.defaultState)
+    return store
+  }
+  store.on = (event, fn) => {
+    store.off(event)
+    store.subscribers.set(
+      event,
+      createSubscription(updateStore(event, store, 'on', true, fn)),
+    )
+    return store
+  }
   store.off = bind(off, store)
-  store.map = bind(mapStore, store)
-  //$off
-  store[$$observable] = bind(observable, store)
+  store.map = (fn, firstState?: any) => {
+    let config
+    let name
+    if (typeof fn === 'object') {
+      config = fn
+      name = fn.name
+      firstState = fn.firstState
+      fn = fn.fn
+    }
+    let lastResult
+    const storeState = store.getState()
+    if (storeState !== undefined) {
+      lastResult = fn(storeState, firstState)
+    }
+
+    const innerStore: Store<any> = createStore(lastResult, {
+      name: mapName(store, name),
+      config,
+      strict: false,
+    })
+    updateStore(store, innerStore, 'map', false, fn)
+    return innerStore
+  }
+  store[$$observable] = () => ({
+    subscribe(observer: Subscriber<any>) {
+      if (observer !== Object(observer))
+        throw Error('expect observer to be an object') // or function
+      return watch(store, state => {
+        if (observer.next) {
+          observer.next(state)
+        }
+      })
+    },
+    [$$observable]() {
+      return this
+    },
+  })
   own(store, [updates])
   return addToRegion(store)
-}
-
-function reset(storeInstance: Store<any>, ...events: Array<Event<any>>) {
-  for (const event of events)
-    storeInstance.on(event, () => storeInstance.defaultState)
-  return storeInstance
 }
 
 function off(store: Store<any>, event: Event<any>) {
@@ -255,29 +273,6 @@ const updateStore = (
     meta: {op},
   })
 
-function on(store: Store<any>, event: any, fn: Function) {
-  store.off(event)
-  store.subscribers.set(
-    event,
-    createSubscription(updateStore(event, store, 'on', true, fn)),
-  )
-  return store
-}
-const observable = (storeInstance: Store<any>) => ({
-  subscribe(observer: Subscriber<any>) {
-    if (observer !== Object(observer))
-      throw Error('expect observer to be an object') // or function
-    return watch(storeInstance, state => {
-      if (observer.next) {
-        observer.next(state)
-      }
-    })
-  },
-  //$off
-  [$$observable]() {
-    return this
-  },
-})
 function watch(
   storeInstance: Store<any>,
   eventOrFn: Event<*> | Function,
@@ -292,34 +287,6 @@ function watch(
   if (typeof fn !== 'function')
     throw Error('second argument should be a function')
   return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
-}
-
-function mapStore<A, B>(
-  store: Store<A>,
-  fn: (state: A, lastState?: B) => B,
-  firstState?: B,
-): Store<B> {
-  let config
-  let name
-  if (typeof fn === 'object') {
-    config = fn
-    name = fn.name
-    firstState = fn.firstState
-    fn = fn.fn
-  }
-  let lastResult
-  const storeState = store.getState()
-  if (storeState !== undefined) {
-    lastResult = fn(storeState, firstState)
-  }
-
-  const innerStore: Store<any> = createStore(lastResult, {
-    name: mapName(store, name),
-    config,
-    strict: false,
-  })
-  updateStore(store, innerStore, 'map', false, fn)
-  return innerStore
 }
 
 const thru = (instance: any, fn: Function) => fn(instance)
