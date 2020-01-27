@@ -91,7 +91,7 @@ export interface Event<Payload> extends Unit<Payload> {
 
 /**
  * This is a workaround for https://github.com/microsoft/TypeScript/issues/35162
- * 
+ *
  * The problem was that we couldn't use guard as sample's clock parameter because
  * sample's clock-related generic inferred as `unknown` in cases when guard returned
  * `Event<T>`. This happens because `Event` has a callable signature. With `Unit<T>`
@@ -646,7 +646,7 @@ export function guard<A>(config: {
 }): Unit<A>
 
 export function withRegion(unit: Unit<any> | Step, cb: () => void): void
-
+export function combine<T extends Store<any>>(store: T): T extends Store<infer R> ? Store<[R]> : never
 export function combine<State extends Tuple>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
@@ -761,3 +761,4 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   k: Store<K>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
 ): Store<R>
+export function combine<T extends Tuple<Store<any>>>(...stores: T): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
