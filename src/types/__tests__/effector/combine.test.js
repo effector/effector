@@ -582,9 +582,8 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>' is not assignable to parameter of type '(a: number, b: number) => [string, string, string]'.
-        Type 'Store<number>' provides no match for the signature '(a: number, b: number): [string, string, string]'.
-
+      Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
+      
       --flow--
       Cannot call 'combine'
         const store: Store<[string, string, string]> = combine(R, G, B)
@@ -603,9 +602,9 @@ describe('error inference (should fail with number -> string error)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Store<{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 11 more ...; readonly __: string; }>' is not assignable to type 'Store<number>'.
+      Type 'Store<[string]>' is not assignable to type 'Store<number>'.
         The types returned by 'getState()' are incompatible between these types.
-          Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 11 more ...; readonly __: string; }' is not assignable to type 'number'.
+          Type '[string]' is not assignable to type 'number'.
 
       --flow--
       Cannot assign 'combine(...)' to 'store'
