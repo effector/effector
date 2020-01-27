@@ -226,8 +226,7 @@ describe('combine cases (should pass)', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type 'Store<number>' is not assignable to parameter of type '(a: number, b: number) => [number, number, number]'.
-        Type 'Store<number>' provides no match for the signature '(a: number, b: number): [number, number, number]'.
+      no errors
 
       --flow--
       Cannot call 'combine'
@@ -243,23 +242,21 @@ describe('combine cases (should pass)', () => {
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
-    const store: Store<string> = combine(Color)
+    const store: Store<[string]> = combine(Color)
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Store<{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 11 more ...; readonly __: string; }>' is not assignable to type 'Store<string>'.
-        The types returned by 'getState()' are incompatible between these types.
-          Type '{ reset: (...triggers: Unit<any>[]) => Store<string>; getState: () => string; map: { <T>(fn: (state: string, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: string, lastState: T) => T, firstState: T): Store<...>; }; ... 11 more ...; readonly __: string; }' is not assignable to type 'string'.
+      no errors
 
       --flow--
       Cannot assign 'combine(...)' to 'store'
-        const store: Store<string> = combine(Color)
-                                     ^^^^^^^^^^^^^^
-        object type [1] is incompatible with string [2] in type argument 'State' [3]
+        const store: Store<[string]> = combine(Color)
+                                       ^^^^^^^^^^^^^^
+        object type [1] is incompatible with tuple type [2] in type argument 'State' [3]
             ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-            const store: Store<string> = combine(Color)
-                           [2] ^^^^^^
+            const store: Store<[string]> = combine(Color)
+                           [2] ^^^^^^^^
             declare export class Store<State> implements Unit<State> {
                                    [3] ^^^^^
       "
