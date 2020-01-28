@@ -48,7 +48,7 @@ Event which will be called during gate unmounting.
 
 ### `status`
 
-Boolean store which show if given store is mounted.
+Boolean store which show if given gate is mounted.
 
 #### Returns
 
