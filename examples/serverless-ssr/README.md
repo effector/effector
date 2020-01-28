@@ -2,7 +2,7 @@
 
 Deployed to AWS Lambda
 
-Deployment url: [ssr.effector.dev](ssr.effector.dev)
+Default deployment url: [ssr.effector.dev](https://ssr.effector.dev)
 
 ## Backend
 
