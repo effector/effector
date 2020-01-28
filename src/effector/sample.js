@@ -16,6 +16,8 @@ import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {addToRegion} from './region'
 
+export const shapeToStore = shape => (is.unit(shape) ? shape : combine(shape))
+
 export function sample(
   source: any,
   clock: Graphite,
@@ -41,8 +43,8 @@ export function sample(
     clock = source
   }
   name = name || source.shortName
-  source = is.unit(source) ? source : combine(source)
-  clock = is.unit(clock) ? clock : combine(clock)
+  source = shapeToStore(source)
+  clock = shapeToStore(clock)
   if (typeof fn === 'boolean') {
     greedy = fn
     fn = null
