@@ -1,7 +1,7 @@
 //@flow
 
 import type {Event, Effect} from './unit.h'
-import {step, own, bind} from './stdlib'
+import {step, own, bind, getGraph} from './stdlib'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
@@ -28,8 +28,8 @@ export function createEffect<Payload, Done>(
       return Promise.resolve()
     })
 
-  instance.graphite.meta.onCopy = ['runner']
-  instance.graphite.meta.unit = 'effect'
+  getGraph(instance).meta.onCopy = ['runner']
+  getGraph(instance).meta.unit = 'effect'
   const done: Event<{|
     params: Payload,
     result: Done,
@@ -54,13 +54,13 @@ export function createEffect<Payload, Done>(
   instance.done = done
   instance.fail = fail
   instance.finally = anyway
-  ;(instance: any).use = fn => {
+  instance.use = fn => {
     handler = fn
     return instance
   }
-  const getCurrent = (): any => handler
-  ;(instance: any).use.getCurrent = getCurrent
-  ;(instance: any).kind = 'effect'
+  const getCurrent = () => handler
+  instance.use.getCurrent = getCurrent
+  instance.kind = 'effect'
   const effectRunner = createNode({
     scope: {
       done,
@@ -95,8 +95,8 @@ export function createEffect<Payload, Done>(
     ],
     meta: {op: 'fx', fx: 'runner', onCopy: ['done', 'fail', 'anyway']},
   })
-  instance.graphite.scope.runner = effectRunner
-  instance.graphite.seq.push(
+  getGraph(instance).scope.runner = effectRunner
+  getGraph(instance).seq.push(
     step.compute({
       fn(params, scope, stack) {
         // empty stack means that this node was launched directly
@@ -121,8 +121,8 @@ export function createEffect<Payload, Done>(
       },
     }),
   )
-  ;(instance: any).create = (params: Payload) => {
-    const req: any = createDefer()
+  instance.create = (params: Payload) => {
+    const req = createDefer()
     launch(instance, {params, req})
     return req.req
   }
