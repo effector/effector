@@ -1,6 +1,6 @@
 //@flow
 
-import {getGraph, getStoreState, callARegStack, step, own} from './stdlib'
+import {getGraph, getStoreState, step, own} from './stdlib'
 import {createEffect} from './createEffect'
 import {shapeToStore} from './sample'
 import {addToReg} from './createNode'
@@ -28,9 +28,8 @@ export function attach({source, fn = _ => _, target}) {
   )
 
   node.seq.splice(
-    node.seq.length - 2,
+    1,
     0,
-    step.barrier({priority: 'sampler'}),
     copySource
       ? copySource
       : step.mov({
@@ -38,7 +37,10 @@ export function attach({source, fn = _ => _, target}) {
         to: 'a',
       }),
     step.compute({
-      fn: callARegStack,
+      fn: ({params, req}, {fn}, {a}) => ({
+        params: fn(a, params),
+        req,
+      }),
     }),
   )
   own(target, [resultFx])
