@@ -28,7 +28,7 @@ export function attach({source, fn = _ => _, target}) {
   )
 
   node.seq.splice(
-    seq.length - 2,
+    node.seq.length - 2,
     0,
     step.barrier({priority: 'sampler'}),
     copySource
