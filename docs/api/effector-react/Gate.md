@@ -26,66 +26,42 @@ Returns child gate which won't render if parent gate is closed.
 
 ## Gate Properties
 
-### `isOpen`
-
-#### Returns
-
-(boolean)
-
-<hr />
-
-### `isTerminated`
-
-#### Returns
-
-(boolean)
-
-<hr />
-
 ### `open`
 
-### Returns
+#### Returns
 
-(Event)
+Event which will be called during gate mounting
+
+(Event<Props>)
 
 <hr />
 
 ### `close`
 
-### Returns
+#### Returns
 
-(Event)
+Event which will be called during gate unmounting.
+
+(Event<Props>)
 
 <hr />
 
 ### `status`
 
-### Returns
+Boolean store which show if given store is mounted.
 
-(Store)
+#### Returns
 
-<hr />
-
-### `destructor`
-
-### Returns
-
-(Event)
-
-<hr />
-
-### `current`
-
-### Returns
-
-(Props)
+(Store<boolean>)
 
 <hr />
 
 ### `state`
 
-### Returns
+Store with current state of given gate
 
-(Store)
+#### Returns
+
+(Store<Props>)
 
 <hr />
