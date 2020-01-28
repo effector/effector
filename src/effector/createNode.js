@@ -15,6 +15,17 @@ const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
   }
   return result.map(getGraph)
 }
+export const addToReg = ({hasRef, type, data}, reg) => {
+  let store
+  if (hasRef) {
+    store = data.store
+    reg[store.id] = store
+  }
+  if (type === 'mov' && data.to === 'store') {
+    store = data.target
+    reg[store.id] = store
+  }
+}
 export function createNode({
   node = [],
   from,
@@ -53,14 +64,7 @@ export function createNode({
     const item = node[i]
     if (!item) continue
     seq.push(item)
-    if (item.hasRef) {
-      const store = item.data.store
-      reg[store.id] = store
-    }
-    if (item.type === 'mov' && item.data.to === 'store') {
-      const store = item.data.target
-      reg[store.id] = store
-    }
+    addToReg(item, reg)
   }
   const result: Graph = {
     seq,
