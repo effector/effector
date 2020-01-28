@@ -8,6 +8,7 @@ import {
   own,
   callStackAReg,
   callARegStack,
+  getStoreState,
 } from './stdlib'
 import {is} from './is'
 import {createStore} from './createUnit'
@@ -52,8 +53,8 @@ export function sample(
   if (!target) {
     if (is.store(source) && is.store(clock)) {
       const initialState = fn
-        ? fn(readRef(source.stateRef), readRef(clock.stateRef))
-        : readRef(source.stateRef)
+        ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
+        : readRef(getStoreState(source))
       target = createStore(initialState, {name})
     } else {
       target = createEvent(name)
@@ -68,7 +69,7 @@ export function sample(
             //$off
             !greedy && step.barrier({priority: 'sampler'}),
             step.mov({
-              store: source.stateRef,
+              store: getStoreState(source),
               to: fn ? 'a' : 'stack',
             }),
             fn && step.compute({fn: callARegStack}),

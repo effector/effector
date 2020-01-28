@@ -2,7 +2,7 @@
 
 import type {Store} from './unit.h'
 import {createStore} from './createUnit'
-import {step, createStateRef, readRef, type StateRef} from './stdlib'
+import {step, createStateRef, getStoreState, type StateRef} from './stdlib'
 import {is} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -263,7 +263,7 @@ const storeCombination = (
     step.mov({store: target}),
     fn && step.compute({fn}),
     step.check.changed({
-      store: store.stateRef,
+      store: getStoreState(store),
     }),
   ]
 
@@ -284,7 +284,7 @@ const storeCombination = (
 
   store.defaultShape = obj
   store.defaultState = fn
-    ? (store.stateRef.current = fn(stateNew))
+    ? (getStoreState(store).current = fn(stateNew))
     : defaultState
   return store
 }
