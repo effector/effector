@@ -19,14 +19,16 @@ import {addToRegion} from './region'
 
 export const shapeToStore = shape => (is.unit(shape) ? shape : combine(shape))
 
-export function sample(
-  source: any,
-  clock: Graphite,
-  fn?: boolean | ((source: any, clock: any) => any),
-  greedy: boolean = false,
-): any {
+export function sample(...args): any {
   let target
   let name
+  let metadata
+  if ('ɔ' in args[0]) {
+    metadata = args[0].config
+    args = args[0].ɔ
+  }
+  let [source, clock, fn, greedy = false] = args
+
   //config case
   if (clock === undefined && 'source' in source) {
     if ('clock' in source && source.clock == null)
@@ -43,7 +45,7 @@ export function sample(
     //still undefined!
     clock = source
   }
-  name = name || source.shortName
+  name = metadata || name || source.shortName
   source = shapeToStore(source)
   clock = shapeToStore(clock)
   if (typeof fn === 'boolean') {
