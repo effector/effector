@@ -31,4 +31,3 @@ export * as blocks from './blocks'
 
 export type {Store, Event, Effect, Domain} from './unit.h'
 export type {kind} from './stdlib'
-export {attach} from './attach'
