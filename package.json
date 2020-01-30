@@ -93,7 +93,6 @@
     "js-yaml": "^3.13.1",
     "jsdom": "^16.0.1",
     "jsverify": "^0.8.4",
-    "markdown-table": "^1.1.2",
     "most": "^1.7.3",
     "now": "^16.6.2",
     "prettier": "^1.19.1",
