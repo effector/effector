@@ -12,6 +12,8 @@ on:
       - 'package.json'
       - 'yarn.lock'
       - 'bsconfig.json'
+    tags:
+      - '!**'
 jobs:
   common-tests:
     name: Test on ${{ matrix.os }}
