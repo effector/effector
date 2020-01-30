@@ -11,4 +11,10 @@ const baz3 = combine(foo, bar, (a, b) => [a, b])
 const spread = [foo, bar]
 const baz4 = combine(...spread)
 
+const shape = {foo, bar}
+const baz5 = combine(shape)
+
+combine({foo, bar})
+combine(...spread)
+
 const f = a => combine({foo, bar})

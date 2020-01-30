@@ -44,6 +44,22 @@ const baz4 = combine({
     sid: \\"-cwioto\\"
   }
 });
+const shape = {
+  foo,
+  bar
+};
+const baz5 = combine({
+  ɔ: [shape],
+  config: {
+    name: \\"baz5\\",
+    sid: \\"79adte\\"
+  }
+});
+combine({
+  foo,
+  bar
+});
+combine(...spread);
 
 const f = a => combine({
   ɔ: [{
@@ -52,7 +68,7 @@ const f = a => combine({
   }],
   config: {
     name: \\"f\\",
-    sid: \\"-nk51xf\\"
+    sid: \\"-arx9a6\\"
   }
 });"
 `;
