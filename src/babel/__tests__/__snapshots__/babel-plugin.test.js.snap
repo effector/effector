@@ -436,6 +436,72 @@ const f = a => restore(foo, null, {
 });"
 `;
 
+exports[`babel-plugin should sample 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, createEvent, sample } from 'effector';
+const foo = createStore('foo', {
+  name: \\"foo\\",
+  sid: \\"-4e9wqe\\"
+});
+const bar = createEvent(\\"bar\\", {
+  name: \\"bar\\",
+  sid: \\"-nktibu\\"
+});
+const baz1 = sample({
+  ɔ: [foo, bar],
+  config: {
+    name: \\"baz1\\",
+    sid: \\"-mcp4ju\\"
+  }
+});
+const baz2 = sample({
+  ɔ: [{
+    source: foo,
+    clock: bar
+  }],
+  config: {
+    name: \\"baz2\\",
+    sid: \\"-m09tbe\\"
+  }
+});
+sample(foo, bar);
+sample({
+  source: foo,
+  clock: bar
+});
+const spread = [foo, bar];
+const baz4 = sample({
+  ɔ: [...spread],
+  config: {
+    name: \\"baz4\\",
+    sid: \\"55gj6o\\"
+  }
+});
+const config = {
+  source: foo,
+  clock: bar
+};
+const baz5 = sample({
+  ɔ: [config],
+  config: {
+    name: \\"baz5\\",
+    sid: \\"4hk9zs\\"
+  }
+});
+
+const f = () => sample({
+  ɔ: [{
+    source: foo,
+    clock: bar
+  }],
+  config: {
+    name: \\"f\\",
+    sid: \\"hzwgc2\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should use store 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow

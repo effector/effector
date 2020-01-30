@@ -6,6 +6,7 @@ import {
   createStoreObject,
   createDomain,
   combine,
+  sample,
 } from 'effector'
 import {unitObjectName} from '../naming'
 
@@ -100,4 +101,19 @@ it('support combine', () => {
   const ab = combine([a, b])
   expect(ab.shortName).toBe('ab')
   expect(ab.getState()).toEqual([0, 1])
+})
+
+describe('sample support', () => {
+  test('sample(source, clock)', () => {
+    const source = createStore(0)
+    const clock = createEvent()
+    const sampled = sample(source, clock)
+    expect(sampled.shortName).toBe('sampled')
+  })
+  test('sample(config)', () => {
+    const source = createStore(0)
+    const clock = createEvent()
+    const sampled = sample({source, clock})
+    expect(sampled.shortName).toBe('sampled')
+  })
 })
