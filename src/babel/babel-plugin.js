@@ -126,28 +126,25 @@ module.exports = function(babel, options = {}) {
           }
           if (combines && combineCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              id,
+              babel.types,
+              smallConfig,
+            )
             if (id) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                id,
-                babel.types,
-                smallConfig,
-              )
               state.stores.add(id.name)
             }
           }
           if (samples && sampleCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            if (id) {
-              setConfigForConfigurableMethod(
-                path,
-                state,
-                id,
-                babel.types,
-                smallConfig,
-              )
-            }
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              findCandidateNameForExpression(path),
+              babel.types,
+              smallConfig,
+            )
           }
         }
 
@@ -435,7 +432,7 @@ function setConfigForConfigurableMethod(
   t,
   {addLoc, compressor},
 ) {
-  const displayName = nameNodeId.name
+  const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
   path.find(path => {
@@ -446,7 +443,7 @@ function setConfigForConfigurableMethod(
     }
   })
 
-  if (args && displayName) {
+  if (args) {
     if (!args[0]) return
     const commonArgs = t.ArrayExpression(args.slice())
     args.length = 0

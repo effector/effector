@@ -56,10 +56,22 @@ const baz5 = combine({
   }
 });
 combine({
-  foo,
-  bar
+  ɔ: [{
+    foo,
+    bar
+  }],
+  config: {
+    name: \\"\\",
+    sid: \\"6d0wwi\\"
+  }
 });
-combine(...spread);
+combine({
+  ɔ: [...spread],
+  config: {
+    name: \\"\\",
+    sid: \\"6dkphv\\"
+  }
+});
 
 const f = a => combine({
   ɔ: [{
@@ -481,10 +493,22 @@ const baz2 = sample({
     sid: \\"-m09tbe\\"
   }
 });
-sample(foo, bar);
 sample({
-  source: foo,
-  clock: bar
+  ɔ: [foo, bar],
+  config: {
+    name: \\"\\",
+    sid: \\"u6o7kj\\"
+  }
+});
+sample({
+  ɔ: [{
+    source: foo,
+    clock: bar
+  }],
+  config: {
+    name: \\"\\",
+    sid: \\"u7805w\\"
+  }
 });
 const spread = [foo, bar];
 const baz4 = sample({
