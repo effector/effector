@@ -11,12 +11,14 @@ module.exports = function(babel, options = {}) {
     domains,
     restores,
     combines,
+    samples,
     storeCreators,
     eventCreators,
     effectCreators,
     domainCreators,
     restoreCreators,
     combineCreators,
+    sampleCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -55,6 +57,8 @@ module.exports = function(babel, options = {}) {
               restoreCreators.add(localName)
             } else if (combineCreators.has(importedName)) {
               combineCreators.add(localName)
+            } else if (sampleCreators.has(importedName)) {
+              sampleCreators.add(localName)
             }
           }
         }
@@ -123,8 +127,26 @@ module.exports = function(babel, options = {}) {
           if (combines && combineCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
             if (id) {
-              setCombineNameAfter(path, state, id, babel.types, smallConfig)
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                id,
+                babel.types,
+                smallConfig,
+              )
               state.stores.add(id.name)
+            }
+          }
+          if (samples && sampleCreators.has(name)) {
+            const id = findCandidateNameForExpression(path)
+            if (id) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                id,
+                babel.types,
+                smallConfig,
+              )
             }
           }
         }
@@ -187,6 +209,7 @@ const normalizeOptions = options => {
       domains: true,
       restores: true,
       combines: true,
+      samples: true,
     },
     result: {
       importName: new Set(
@@ -203,6 +226,7 @@ const normalizeOptions = options => {
       domainCreators: new Set(options.domainCreators || ['createDomain']),
       restoreCreators: new Set(options.restoreCreators || ['restore']),
       combineCreators: new Set(options.combineCreators || ['combine']),
+      sampleCreators: new Set(options.sampleCreators || ['sample']),
       domainMethods: readConfigShape(options.domainMethods, {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
@@ -404,7 +428,13 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     configExpr.properties.push(stableID)
   }
 }
-function setCombineNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+function setConfigForConfigurableMethod(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, compressor},
+) {
   const displayName = nameNodeId.name
   let args
   let loc
