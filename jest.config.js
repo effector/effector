@@ -51,58 +51,66 @@ module.exports = {
     '!<rootDir>/src/redux/**',
   ],
   watchPathIgnorePatterns,
-  projects: createProjectList([
-    {
-      effector: {
-        testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
-      },
-    },
-    'effector/kernel',
-    'static-land',
-    'forms',
-    'babel',
-    // 'redux',
-    {
-      react: {
-        testEnvironment: 'jsdom',
-        testMatch: [`<rootDir>/src/react/**/*.test.js`],
-        // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
-        // watchPathIgnorePatterns,
-      },
-    },
-    {
-      dom: {
-        testEnvironment: 'jsdom',
-        testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
-        transform: {
-          '^.+\\.jsx?$': 'babel-jest',
-          '^.+\\.ts?$': 'babel-jest',
+  projects: createProjectList(
+    boolean(process.env.DOM, false)
+      ? [
+        {
+          dom: {
+            automock: false,
+            browser: false,
+            testEnvironment: 'node',
+            testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
+            transform: {
+              '^.+\\.jsx?$': 'babel-jest',
+              '^.+\\.ts?$': 'babel-jest',
+            },
+            testTimeout: 60e3,
+            runner: './src/dom/testEnvironment.js',
+          },
         },
-      },
-    },
-    {
-      reason: {
-        testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
-      },
-    },
-    !boolean(process.env.NO_TYPE_TESTS, false) && {
-      types: {
-        testMatch: [
-          `<rootDir>/src/types/__tests__/**/*.test.js`,
-          `<rootDir>/src/types/__tests__/**/*.test.ts`,
-          `<rootDir>/src/types/__tests__/**/*.test.tsx`,
-        ],
-        browser: false,
-        globalSetup: './src/types/src/globalSetup.js',
-        globalTeardown: './src/types/src/globalTeardown.js',
-        maxConcurrency: 25,
-        transform: {
-          '^.+\\.jsx?$': 'babel-jest',
-          '^.+\\.tsx?$': 'babel-jest',
+      ]
+      : [
+        {
+          effector: {
+            testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
+          },
         },
-      },
-    },
-  ]),
+        'static-land',
+        'forms',
+        'babel',
+        // 'redux',
+        {
+          react: {
+            testEnvironment: 'jsdom',
+            testMatch: [`<rootDir>/src/react/**/*.test.js`],
+            // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+            // watchPathIgnorePatterns,
+          },
+        },
+        {
+          reason: {
+            testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
+          },
+        },
+        !boolean(process.env.NO_TYPE_TESTS, false) && {
+          types: {
+            testMatch: [
+              `<rootDir>/src/types/__tests__/**/*.test.js`,
+              `<rootDir>/src/types/__tests__/**/*.test.ts`,
+              `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+            ],
+            browser: false,
+            globalSetup: './src/types/src/globalSetup.js',
+            globalTeardown: './src/types/src/globalTeardown.js',
+            maxConcurrency: 25,
+            transform: {
+              '^.+\\.jsx?$': 'babel-jest',
+              '^.+\\.tsx?$': 'babel-jest',
+            },
+          },
+        },
+      ],
+  ),
 }
 
 function createProjectList(items) {
