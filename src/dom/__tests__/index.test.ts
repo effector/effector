@@ -319,3 +319,62 @@ describe('list', () => {
     })
   })
 })
+
+it('remove watch calls after node removal', async () => {
+  const [s1, s2, s3, s4] = await exec(async () => {
+    const tick = createEvent<number>()
+    const logRecord = createEvent<string>()
+    const removeUser = createEvent<string>()
+    const log = createStore<{id: number; value: string}[]>([]).on(
+      logRecord,
+      (list, rec) => [...list, {value: rec, id: Date.now()}],
+    )
+
+    const users = createStore(['alice', 'bob', 'carol']).on(
+      removeUser,
+      (list, user) => list.filter(e => e !== user),
+    )
+
+    using(el, () => {
+      h('section', () => {
+        list(users, ({store}) => {
+          h('div', {
+            text: store,
+          })
+          store.watch(tick, (user, tick) => {
+            logRecord(`[${tick}] ${user}`)
+          })
+        })
+      })
+      h('section', () => {
+        list({source: log, key: 'id'}, ({store}) => {
+          h('div', {
+            text: remap(store, 'value'),
+          })
+        })
+      })
+    })
+    await act()
+    await act(() => {
+      tick(0)
+    })
+    await act(() => {
+      removeUser('bob')
+    })
+    await act(() => {
+      tick(1)
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(
+    `"<section><div>alice</div><div>bob</div><div>carol</div></section><section></section>"`,
+  )
+  expect(s2).toMatchInlineSnapshot(
+    `"<section><div>alice</div><div>bob</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] carol</div></section>"`,
+  )
+  expect(s3).toMatchInlineSnapshot(
+    `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] carol</div></section>"`,
+  )
+  expect(s4).toMatchInlineSnapshot(
+    `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] bob</div><div>[0] bob</div><div>[1] alice</div><div>[0] carol</div><div>[1] carol</div></section>"`,
+  )
+})
