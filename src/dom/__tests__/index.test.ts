@@ -1,6 +1,6 @@
 // import {BrowserObject} from 'webdriverio'
-import {createStore, createEvent, restore} from 'effector'
-import {h, using, list, remap} from 'effector-dom'
+import {createStore, createEvent, restore, combine} from 'effector'
+import {h, using, list, remap, spec} from 'effector-dom'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -229,5 +229,93 @@ describe('list', () => {
     expect(s4).toMatchInlineSnapshot(
       `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div>"`,
     )
+  })
+  describe('support visible changes', () => {
+    it('works with non-keyed list', async () => {
+      const [s1, s2] = await exec(async () => {
+        const setTeam = createEvent<'a' | 'b'>()
+        const currentTeam = restore(setTeam, 'a')
+        const users = createStore([
+          {name: 'alice', team: 'a'},
+          {name: 'bob', team: 'b'},
+          {name: 'carol', team: 'b'},
+          {name: 'dave', team: 'a'},
+          {name: 'eve', team: 'a'},
+        ])
+
+        using(el, () => {
+          list(users, ({store}) => {
+            h('p', () => {
+              spec({
+                visible: combine(
+                  currentTeam,
+                  store,
+                  (current, {team}) => team === current,
+                ),
+              })
+              h('div', {
+                text: remap(store, 'name'),
+              })
+              h('div', {
+                text: remap(store, 'team'),
+              })
+            })
+          })
+        })
+        await act()
+        await act(() => {
+          setTeam('b')
+        })
+      })
+      expect(s1).toMatchInlineSnapshot(
+        `"<p><div>alice</div><div>a</div></p><p><div>dave</div><div>a</div></p><p><div>eve</div><div>a</div></p>"`,
+      )
+      expect(s2).toMatchInlineSnapshot(
+        `"<p><div>bob</div><div>b</div></p><p><div>carol</div><div>b</div></p>"`,
+      )
+    })
+    it('works with keyed list', async () => {
+      const [s1, s2] = await exec(async () => {
+        const setTeam = createEvent<'a' | 'b'>()
+        const currentTeam = restore(setTeam, 'a')
+        const users = createStore([
+          {name: 'alice', team: 'a'},
+          {name: 'bob', team: 'b'},
+          {name: 'carol', team: 'b'},
+          {name: 'dave', team: 'a'},
+          {name: 'eve', team: 'a'},
+        ])
+
+        using(el, () => {
+          list({source: users, key: 'name'}, ({store}) => {
+            h('p', () => {
+              spec({
+                visible: combine(
+                  currentTeam,
+                  store,
+                  (current, {team}) => team === current,
+                ),
+              })
+              h('div', {
+                text: remap(store, 'name'),
+              })
+              h('div', {
+                text: remap(store, 'team'),
+              })
+            })
+          })
+        })
+        await act()
+        await act(() => {
+          setTeam('b')
+        })
+      })
+      expect(s1).toMatchInlineSnapshot(
+        `"<p><div>alice</div><div>a</div></p><p><div>dave</div><div>a</div></p><p><div>eve</div><div>a</div></p>"`,
+      )
+      expect(s2).toMatchInlineSnapshot(
+        `"<p><div>bob</div><div>b</div></p><p><div>carol</div><div>b</div></p>"`,
+      )
+    })
   })
 })
