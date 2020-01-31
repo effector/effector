@@ -268,6 +268,7 @@ turnOff() // nothing has changed
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
 - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
 - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
+- [Forward data between effects](https://share.effector.dev/RYQ5z59Q)
 - [Range input component](https://share.effector.dev/oRB2iB8M)
 - [Modal dialog](https://share.effector.dev/B2ShiBzm)
 - [Conditional fitering](https://share.effector.dev/1EsAGMyq)
