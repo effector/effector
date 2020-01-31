@@ -1,7 +1,7 @@
 import * as customDocument from './document'
 export const domDocument = typeof document !== 'undefined' ? document : null
 export {customDocument}
-let doc = domDocument
+let doc = domDocument!
 export {doc as document}
 export const useCustomDocument = () => {
   //@ts-ignore
@@ -9,5 +9,6 @@ export const useCustomDocument = () => {
 }
 
 export const useDOMDocument = () => {
+  //@ts-ignore
   doc = domDocument
 }

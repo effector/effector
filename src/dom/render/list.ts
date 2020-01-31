@@ -11,13 +11,15 @@ import {Signal, DOMElement, Stack, ListItemType} from './index.h'
 import {own} from '../own'
 import {beginMark, endMark} from './mark'
 import {nodeStack, activeStack} from './stack'
-import {appendBatch, forwardStacks} from './using'
+import {forwardStacks} from './using'
 import {createSignal} from './createSignal'
 import {createWatch} from './createWatch'
 import {dynamicQueue, dynamicQueueFlat} from '../batch'
 import {bind} from './bind'
 import {remap} from '../storeField'
 import {setRightSibling, setLeftSibling, makeSiblings} from './locality'
+import {findNearestVisibleNode} from './nearestNode'
+import {document} from './documentResolver'
 
 type ListContext = {
   parentNode: DOMElement
@@ -164,6 +166,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
       const item = removedRecords[i]
       const {node, locality} = item
       ;(node as ListItemType).active = false
+      //@ts-ignore
       ;(node as ListItemType).store = null
       const left = locality.sibling.left.ref
       const right = locality.sibling.right.ref
@@ -229,6 +232,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
 type AppendElements = {
   node: DOMElement
   append: Array<{
+    listItemStack: Stack
     listItem: ListItemType
     appended: DOMElement[]
   }>
@@ -238,20 +242,30 @@ type AppendElements = {
 const {trigger: appendBatchEvent} = dynamicQueueFlat<AppendElements>({
   mark: 'append DOM nodes',
   fn: function appendDOMNode(block) {
-    const append = [] as DOMElement[]
-    for (let j = 0; j < block.append.length; j++) {
-      const child = block.append[j]
+    for (let i = 0; i < block.append.length; i++) {
+      const child = block.append[i]
       if (child.listItem.active === false) continue
-      for (let k = 0; k < child.appended.length; k++) {
-        append.push(child.appended[k])
+      if (child.appended.length === 0) continue
+      const frag = document.createDocumentFragment()
+      if (!block.reverse) {
+        for (let j = 0; j < child.appended.length; j++) {
+          frag.appendChild(child.appended[j])
+        }
+      } else {
+        for (let j = child.appended.length - 1; j >= 0; j--) {
+          frag.appendChild(child.appended[j])
+        }
       }
-    }
-    if (append.length > 0) {
-      appendBatch({
-        node: block.node,
-        append,
-        reverse: block.reverse,
-      })
+      const nearestVisible = findNearestVisibleNode(child.listItemStack)
+      if (nearestVisible && block.node.contains(nearestVisible.targetElement)) {
+        if (block.reverse) {
+          nearestVisible.targetElement.before(frag)
+        } else {
+          nearestVisible.targetElement.after(frag)
+        }
+      } else {
+        block.node.appendChild(frag)
+      }
     }
   },
 })
@@ -270,6 +284,7 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
     activeStack.replace(parentStack)
 
     const nodes = [] as {
+      listItemStack: Stack
       listItem: ListItemType
       appended: DOMElement[]
     }[]
@@ -289,6 +304,7 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
         item.nodes.push(appended[k])
       }
       nodes.push({
+        listItemStack: stack,
         appended: appended.slice(),
         listItem: item,
       })
@@ -296,16 +312,15 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
     }
     nodeStack.pop()
     if (nodes.length > 0) {
-      launch(
-        appendBatchEvent,
-        {
+      launch({
+        target: appendBatchEvent,
+        params: {
           node: parentNode,
           append: nodes,
           reverse,
         },
-        //@ts-ignore
-        true,
-      )
+        defer: true,
+      })
     }
     activeStack.replace(currentActiveStack)
     endMark('initRecord ' + shortName)
@@ -348,6 +363,7 @@ const clearParentSignal = (updates: Store<Stack[]>) => {
   for (let i = 0; i < allRecords.length; i++) {
     const listItem = allRecords[i].node as ListItemType
     listItem.active = false
+    //@ts-ignore
     listItem.store = null
   }
   //@ts-ignore
