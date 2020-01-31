@@ -1,5 +1,5 @@
 // import {BrowserObject} from 'webdriverio'
-import {createStore, createEvent, restore, combine} from 'effector'
+import {createStore, createEvent, restore, combine, sample} from 'effector'
 import {h, using, list, remap, spec} from 'effector-dom'
 
 // let addGlobals: Function
@@ -325,9 +325,10 @@ it('remove watch calls after node removal', async () => {
     const tick = createEvent<number>()
     const logRecord = createEvent<string>()
     const removeUser = createEvent<string>()
+    let id = 0
     const log = createStore<{id: number; value: string}[]>([]).on(
       logRecord,
-      (list, rec) => [...list, {value: rec, id: Date.now()}],
+      (list, rec) => [...list, {value: rec, id: ++id}],
     )
 
     const users = createStore(['alice', 'bob', 'carol']).on(
@@ -341,7 +342,11 @@ it('remove watch calls after node removal', async () => {
           h('div', {
             text: store,
           })
-          store.watch(tick, (user, tick) => {
+          sample({
+            source: store,
+            clock: tick,
+            fn: (user, tick) => ({user, tick}),
+          }).watch(({user, tick}) => {
             logRecord(`[${tick}] ${user}`)
           })
         })
@@ -375,6 +380,6 @@ it('remove watch calls after node removal', async () => {
     `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] carol</div></section>"`,
   )
   expect(s4).toMatchInlineSnapshot(
-    `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] bob</div><div>[0] bob</div><div>[1] alice</div><div>[0] carol</div><div>[1] carol</div></section>"`,
+    `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] carol</div><div>[1] alice</div><div>[1] carol</div></section>"`,
   )
 })
