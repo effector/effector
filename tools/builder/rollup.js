@@ -17,6 +17,7 @@ import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 import analyze from 'rollup-plugin-visualizer'
 //$off
 import typescript from '@rollup/plugin-typescript'
+import alias from '@rollup/plugin-alias'
 
 import graphPlugin from './moduleGraphGenerator'
 import {dir, getSourcemapPathTransform} from './utils'
@@ -83,6 +84,11 @@ const getPlugins = (name: string) => ({
   json: json({
     preferConst: true,
     indent: '  ',
+  }),
+  alias: alias({
+    entries: {
+      effector: dir('src/effector'),
+    },
   }),
 })
 
@@ -187,12 +193,14 @@ export async function rollupEffectorDom() {
       input: 'server',
       inputExtension: 'ts',
     }),
-    // createUmd(name, {
-    //   external: ['react', 'effector'],
-    //   file: dir(`npm/${name}/${name}.umd.js`),
-    //   umdName: name,
-    //   globals: {},
-    // }),
+    createUmd(name, {
+      external: [],
+      file: dir(`npm/${name}/${name}.umd.js`),
+      umdName: name,
+      globals: {},
+      extension: 'ts',
+      bundleEffector: true,
+    }),
     // createCompat(name),
   ])
 }
@@ -315,22 +323,27 @@ export async function rollupEffectorVue() {
   ])
 }
 
-async function createUmd(name, {external, file, umdName, globals}) {
+async function createUmd(
+  name,
+  {external, file, umdName, globals, extension = 'js', bundleEffector = false},
+) {
   const plugins = getPlugins(`${name}.umd`)
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.js`),
+    input: dir(`packages/${name}/index.${extension}`),
     plugins: [
       plugins.resolve,
+      plugins.typescript,
       plugins.json,
       plugins.babel,
       plugins.replace,
+      bundleEffector && plugins.alias,
       plugins.commonjs,
       plugins.sizeSnapshot,
       plugins.terser,
       plugins.analyzer,
       plugins.analyzerJSON,
-    ],
+    ].filter(Boolean),
     external,
   })
   await build.write({

@@ -129,7 +129,15 @@ export default {
       massCopy('packages/effector-dom', 'npm/effector-dom', [
         'README.md',
         'package.json',
-        'index.d.ts',
+        [
+          'index.d.ts',
+          [
+            'index.d.ts',
+            'effector-dom.cjs.d.ts',
+            'effector-dom.es.d.ts',
+            'effector-dom.umd.d.ts',
+          ],
+        ],
         'server.d.ts',
       ]),
     rollupEffectorDom,

@@ -50,6 +50,7 @@ const input = {
     'rollup',
     'rollup-plugin-json',
     '@rollup/plugin-typescript',
+    '@rollup/plugin-alias',
     'rollup-plugin-babel',
     'rollup-plugin-node-resolve',
     'rollup-plugin-terser',
