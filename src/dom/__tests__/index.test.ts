@@ -171,11 +171,11 @@ describe('list', () => {
     )
 
     expect(s3).toMatchInlineSnapshot(
-      `"<div>alice</div><div>bob</div><div>carol</div><div>carol</div><div>charlie</div>"`,
+      `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div><div>carol</div>"`,
     )
 
     expect(s4).toMatchInlineSnapshot(
-      `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div>"`,
+      `"<div>alice</div><div>bob</div><div>charlie</div><div>carol</div>"`,
     )
   })
   it('support list sequences with keys', async () => {
@@ -223,11 +223,11 @@ describe('list', () => {
     )
 
     expect(s3).toMatchInlineSnapshot(
-      `"<div>alice</div><div>bob</div><div>carol</div><div>carol</div><div>charlie</div>"`,
+      `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div><div>carol</div>"`,
     )
 
     expect(s4).toMatchInlineSnapshot(
-      `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div>"`,
+      `"<div>alice</div><div>bob</div><div>charlie</div><div>carol</div>"`,
     )
   })
   describe('support visible changes', () => {
