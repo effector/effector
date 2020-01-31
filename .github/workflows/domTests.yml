@@ -1,0 +1,27 @@
+name: effector-dom browserstack tests
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'src/dom/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - run: yarn
+        name: install deps
+      - run: yarn build
+        name: build libs
+      - run: yarn test
+        name: dom tests
+        env:
+          DOM: 'true'
+          BROWSERSTACK_USERNAME: ${{ secrets.browserstack_username }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.browserstack_access_key }}
