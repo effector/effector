@@ -38,7 +38,7 @@ const version = {
   effector: '20.11.5',
   'effector-react': '20.6.0',
   'effector-vue': '20.3.2',
-  'effector-dom': '0.0.6',
+  'effector-dom': '0.0.7',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
