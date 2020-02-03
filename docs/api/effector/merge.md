@@ -10,7 +10,7 @@ Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effe
 
 #### Arguments
 
-1. `unitsArray` (_Array<[_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)>_): Array of units to be merged.
+1. `unitsArray` (Array<[_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)>): Array of units to be merged.
 
 #### Returns
 
