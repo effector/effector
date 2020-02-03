@@ -58,7 +58,7 @@ export function using(node: DOMElement, cb: () => any): void {
   try {
     withRegion(stack.signal, cb)
   } finally {
-    appendBatch(nodeStack.pop())
+    appendBatch(nodeStack.pop()!)
     activeStack.replace(parentStack)
   }
 }

@@ -95,7 +95,7 @@ export function bindVisible(
   visible: Store<boolean> | null,
 ) {
   if (visible === null) return
-  const parent = activeStack.get().parent.targetElement
+  const parent = activeStack.get().parent!.targetElement
   debounceRaf(
     signal,
     visible,
