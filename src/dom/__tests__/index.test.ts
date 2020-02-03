@@ -192,16 +192,18 @@ describe('list', () => {
         )
 
       using(el, () => {
-        list({source: teamA, key: 'name'}, ({store}) => {
-          h('div', {
-            text: remap(store, 'name'),
-          })
-        })
-        list({source: teamB, key: 'name'}, ({store}) => {
-          h('div', {
-            text: remap(store, 'name'),
-          })
-        })
+        list(
+          {source: teamA, key: 'name', fields: ['name']},
+          ({fields: [name]}) => {
+            h('div', {text: name})
+          },
+        )
+        list(
+          {source: teamB, key: 'name', fields: ['name']},
+          ({fields: [name]}) => {
+            h('div', {text: name})
+          },
+        )
       })
       await act()
       await act(() => {
@@ -276,9 +278,13 @@ describe('list', () => {
     })
     it('works with keyed list', async () => {
       const [s1, s2] = await exec(async () => {
+        type User = {
+          team: 'a' | 'b'
+          name: string
+        }
         const setTeam = createEvent<'a' | 'b'>()
         const currentTeam = restore(setTeam, 'a')
-        const users = createStore([
+        const users = createStore<User[]>([
           {name: 'alice', team: 'a'},
           {name: 'bob', team: 'b'},
           {name: 'carol', team: 'b'},
@@ -287,23 +293,22 @@ describe('list', () => {
         ])
 
         using(el, () => {
-          list({source: users, key: 'name'}, ({store}) => {
-            h('p', () => {
-              spec({
-                visible: combine(
-                  currentTeam,
-                  store,
-                  (current, {team}) => team === current,
-                ),
+          list(
+            {source: users, key: 'name', fields: ['name', 'team']},
+            ({fields: [name, team]}) => {
+              h('p', () => {
+                spec({
+                  visible: combine(
+                    currentTeam,
+                    team,
+                    (current, team) => team === current,
+                  ),
+                })
+                h('div', {text: name})
+                h('div', {text: team})
               })
-              h('div', {
-                text: remap(store, 'name'),
-              })
-              h('div', {
-                text: remap(store, 'team'),
-              })
-            })
-          })
+            },
+          )
         })
         await act()
         await act(() => {
@@ -339,9 +344,7 @@ it('remove watch calls after node removal', async () => {
     using(el, () => {
       h('section', () => {
         list(users, ({store}) => {
-          h('div', {
-            text: store,
-          })
+          h('div', {text: store})
           sample({
             source: store,
             clock: tick,
@@ -352,11 +355,12 @@ it('remove watch calls after node removal', async () => {
         })
       })
       h('section', () => {
-        list({source: log, key: 'id'}, ({store}) => {
-          h('div', {
-            text: remap(store, 'value'),
-          })
-        })
+        list(
+          {source: log, key: 'id', fields: ['value']},
+          ({fields: [value]}) => {
+            h('div', {text: value})
+          },
+        )
       })
     })
     await act()
