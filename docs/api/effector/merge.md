@@ -4,13 +4,13 @@ title: merge
 hide_title: true
 ---
 
-# `merge(eventsArray)`
+# `merge(unitsArray)`
 
-Merges [`events`](Event.md), resulting single one, which fires upon trigger of any of merged events.
+Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)), returns a new [_Event_](Event.md), which fires upon trigger of any of merged unitts.
 
 #### Arguments
 
-1. `eventsArray` (_Array<[_`Event`_](Event.md)>_): Array of [`events`](Event.md) to be merged.
+1. `unitsArray` (_Array<[_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)>_): Array of units to be merged.
 
 #### Returns
 
