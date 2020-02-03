@@ -92,6 +92,7 @@ export type ListItemType = {
   active: boolean
   signal: Signal
   nodes: DOMElement[]
+  fields: Store<any>[] | null
 }
 
 export type MergedBindings = {

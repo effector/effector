@@ -28,6 +28,7 @@ type ListContext = {
   reverse: boolean
   parentStack: Stack
   getID: (item: any, i: number) => string | number | symbol
+  fields: string[] | null
 }
 
 export function tree<T, K extends keyof T, C extends keyof T>(
@@ -46,7 +47,7 @@ export function tree<T, K extends keyof T, C extends keyof T>(
   ) => void,
 ) {
   list({source, key}, ({store, key: currentKey, signal}) => {
-    const [childList] = remap(store, [child] as const)
+    const childList = remap(store, child)
     cb({store, key: currentKey, signal}, () => {
       //@ts-ignore
       tree({key, child, source: childList as Store<T[]>}, cb)
@@ -63,10 +64,12 @@ export function list<T, K extends keyof T>(
     key,
     source,
     reverse,
+    fields,
   }: {
     key: T[K] extends string | number | symbol ? K : never
     source: Store<T[]>
     reverse?: boolean
+    fields?: string[]
   },
   cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
@@ -125,6 +128,7 @@ export function list<T>(opts, cb: (opts: any) => void) {
     reverse,
     parentStack: currentStack,
     getID,
+    fields: opts.fields ? opts.fields : null,
   }
 
   const updates = createStore(update(context, [], source.getState()))
@@ -184,6 +188,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
     const item = input[i]
     const store = createStore(item)
     const signal = createSignal()
+    const fields = context.fields ? remap(store, context.fields as any[]) : null
     own(signal, [store])
     const id = context.getID(item, i)
     const stack: Stack = {
@@ -212,6 +217,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
         signal,
         active: true,
         nodes: [],
+        fields,
       },
       mountStatus: 'initial',
       visible: true,
