@@ -98,7 +98,10 @@ export function h(
     >
   },
 ): void
-
+export function variant<Case extends string>(
+  key: Store<Case>,
+  cases: Partial<{[K in Case]: () => void}>,
+): void
 export function list<T>(
   source: Store<T[]>,
   cb: (opts: {store: Store<T>; index: number; signal: Signal}) => void,

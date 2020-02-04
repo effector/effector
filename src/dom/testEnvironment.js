@@ -212,6 +212,7 @@ function initPageRuntime(modules) {
     spec: dom.spec,
     remap: dom.remap,
     list: dom.list,
+    variant: dom.variant,
     ...effector,
   })
 }

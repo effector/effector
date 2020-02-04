@@ -1,6 +1,6 @@
 // import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, restore, combine, sample} from 'effector'
-import {h, using, list, remap, spec} from 'effector-dom'
+import {h, using, list, remap, spec, variant} from 'effector-dom'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -386,4 +386,49 @@ it('remove watch calls after node removal', async () => {
   expect(s4).toMatchInlineSnapshot(
     `"<section><div>alice</div><div>carol</div></section><section><div>[0] alice</div><div>[0] bob</div><div>[0] carol</div><div>[1] alice</div><div>[1] carol</div></section>"`,
   )
+})
+
+test('variant', async () => {
+  const [s1, s2] = await exec(async () => {
+    type Text = {
+      type: 'plain' | 'bold' | 'italic'
+      text: string
+    }
+    const toItalic = createEvent()
+    const text = createStore<Text[]>([
+      {type: 'plain', text: 'Bold: '},
+      {type: 'bold', text: 'text'},
+    ])
+    text.on(toItalic, list =>
+      list.map(e => (e.type === 'bold' ? {type: 'italic', text: e.text} : e)),
+    )
+    using(el, () => {
+      h('p', () => {
+        list(
+          {source: text, fields: ['type', 'text'], key: 'text'},
+          ({fields: [type, text]}) => {
+            h('div', () => {
+              variant(type, {
+                plain() {
+                  h('span', {text})
+                },
+                bold() {
+                  h('b', {text})
+                },
+                italic() {
+                  h('i', {text})
+                },
+              })
+            })
+          },
+        )
+      })
+    })
+    await act()
+    await act(() => {
+      toItalic()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`"<p><div></div><div></div></p>"`)
+  expect(s2).toMatchInlineSnapshot(`"<p><div></div><div></div></p>"`)
 })

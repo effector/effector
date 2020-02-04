@@ -59,6 +59,37 @@ export function list<T>(
   source: Store<T[]>,
   cb: (opts: {store: Store<T>; index: number; signal: Signal}) => void,
 ): void
+export function list<
+  T,
+  K extends keyof T,
+  Query extends [keyof T] | ReadonlyArray<keyof T> | (keyof T)[]
+>(
+  opts: {
+    key: T[K] extends string | number ? K : never
+    source: Store<T[]>
+    fields: Query
+  },
+  cb: (opts: {
+    store: Store<T>
+    fields: {
+      [K in keyof Query]: Query[K] extends keyof T ? Store<T[Query[K]]> : never
+    }
+    key: T[K]
+    signal: Signal
+  }) => void,
+): void
+export function list<T, K extends keyof T>(
+  {
+    key,
+    source,
+    reverse,
+  }: {
+    key: T[K] extends string | number | symbol ? K : never
+    source: Store<T[]>
+    reverse?: boolean
+  },
+  cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
+): void
 export function list<T, K extends keyof T>(
   {
     key,
