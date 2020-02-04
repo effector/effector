@@ -388,6 +388,78 @@ it('remove watch calls after node removal', async () => {
   )
 })
 
+describe('visible', () => {
+  it('support visible as dom node property', async () => {
+    const [s1, s2] = await exec(async () => {
+      const toggleVisible = createEvent<string>()
+      const text = createStore([
+        {text: 'a', visible: true},
+        {text: 'b', visible: false},
+        {text: 'c', visible: true},
+      ]).on(toggleVisible, (list, text) =>
+        list.map(e =>
+          e.text === text ? {text: e.text, visible: !e.visible} : e,
+        ),
+      )
+
+      using(el, () => {
+        list(
+          {
+            source: text,
+            key: 'text',
+            fields: ['text', 'visible'],
+          },
+          ({fields: [text, visible]}) => {
+            h('p', {text, visible})
+          },
+        )
+      })
+      await act()
+      await act(() => {
+        toggleVisible('b')
+      })
+    })
+    expect(s1).toMatchInlineSnapshot(`"<p>a</p><p>c</p>"`)
+    expect(s2).toMatchInlineSnapshot(`"<p>a</p><p>b</p><p>c</p>"`)
+  })
+  it('support visible as list item property', async () => {
+    const [s1, s2] = await exec(async () => {
+      const toggleVisible = createEvent<string>()
+      const text = createStore([
+        {text: 'a', visible: true},
+        {text: 'b', visible: false},
+        {text: 'c', visible: true},
+      ]).on(toggleVisible, (list, text) =>
+        list.map(e =>
+          e.text === text ? {text: e.text, visible: !e.visible} : e,
+        ),
+      )
+
+      using(el, () => {
+        h('div', () => {
+          list(
+            {
+              source: text,
+              key: 'text',
+              fields: ['text', 'visible'],
+            },
+            ({fields: [text, visible]}) => {
+              spec({visible})
+              h('p', {text})
+            },
+          )
+        })
+      })
+      await act()
+      await act(() => {
+        toggleVisible('b')
+      })
+    })
+    expect(s1).toMatchInlineSnapshot(`"<div></div>"`)
+    expect(s2).toMatchInlineSnapshot(`"<div></div>"`)
+  })
+})
+
 test('variant', async () => {
   const [s1, s2] = await exec(async () => {
     type Text = {
