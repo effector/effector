@@ -280,7 +280,7 @@ export function bindTransform(
     const operations = operationsSeq[i]
     for (const key in operations) {
       applyTransform(
-        svg,
+        svg!,
         signal,
         transformList,
         operations[key],

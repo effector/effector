@@ -31,6 +31,7 @@ import {
 import {document} from './documentResolver'
 import {spec} from '../h'
 
+//@ts-ignore
 export function h(tag: string, cb: () => void): DOMElement
 export function h(
   tag: string,
