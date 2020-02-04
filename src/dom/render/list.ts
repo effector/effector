@@ -249,6 +249,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
         active: true,
         nodes: [],
         fields,
+        visible: [],
       },
       mountStatus: 'initial',
       visible: true,
@@ -293,19 +294,28 @@ const {trigger: appendBatchEvent} = dynamicQueueFlat<AppendElements>({
           frag.appendChild(child.appended[j])
         }
       }
-      const nearestVisible = findNearestVisibleNode(child.listItemStack)
-      if (nearestVisible && block.node.contains(nearestVisible.targetElement)) {
-        if (block.reverse) {
-          nearestVisible.targetElement.before(frag)
-        } else {
-          nearestVisible.targetElement.after(frag)
-        }
-      } else {
-        block.node.appendChild(frag)
-      }
+      insertElement(child.listItemStack, frag, block.reverse, block.node)
     }
   },
 })
+
+function insertElement(
+  stack: Stack,
+  element: Node,
+  reverse: boolean,
+  parent: DOMElement,
+) {
+  const nearestVisible = findNearestVisibleNode(stack)
+  if (nearestVisible && parent.contains(nearestVisible.targetElement)) {
+    if (reverse) {
+      nearestVisible.targetElement.before(element)
+    } else {
+      nearestVisible.targetElement.after(element)
+    }
+  } else {
+    parent.appendChild(element)
+  }
+}
 
 type AddRecords = {
   context: ListContext
@@ -340,11 +350,44 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
       for (let k = 0; k < appended.length; k++) {
         item.nodes.push(appended[k])
       }
-      nodes.push({
-        listItemStack: stack,
-        appended: appended.slice(),
-        listItem: item,
-      })
+      if (item.visible.length > 0) {
+        withRegion(stack.signal, () => {
+          const visible = item.visible[item.visible.length - 1]
+          visible.updates.watch(visible => {
+            if (item.active === false) return
+            if (visible) {
+              const frag = document.createDocumentFragment()
+              if (!reverse) {
+                for (let j = 0; j < item.nodes.length; j++) {
+                  frag.appendChild(item.nodes[j])
+                }
+              } else {
+                for (let j = item.nodes.length - 1; j >= 0; j--) {
+                  frag.appendChild(item.nodes[j])
+                }
+              }
+              insertElement(stack, frag, reverse, parentNode)
+            } else {
+              for (let i = 0; i < item.nodes.length; i++) {
+                item.nodes[i].remove()
+              }
+            }
+          })
+          if (visible.getState()) {
+            nodes.push({
+              listItemStack: stack,
+              appended: appended.slice(),
+              listItem: item,
+            })
+          }
+        })
+      } else {
+        nodes.push({
+          listItemStack: stack,
+          appended: appended.slice(),
+          listItem: item,
+        })
+      }
       appended.length = 0
     }
     nodeStack.pop()

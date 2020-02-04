@@ -42,11 +42,11 @@ export function signalOwn<T>(value: T): T {
   return value
 }
 
-function assertElementNode() {
+function assertElementNode(extensionName: string) {
   const stack = activeStack.get()
   if (stack.node.type !== 'element' && stack.node.type !== 'using') {
     throw Error(
-      `this extension can be used only with element nodes, got "${stack.node.type}"`,
+      `"${extensionName}" extension can be used only with element nodes, got "${stack.node.type}"`,
     )
   }
 }
@@ -131,23 +131,32 @@ export function spec(spec: {
 }
 
 export function attr(map: PropertyMap) {
-  assertElementNode()
+  assertElementNode('attr')
   activeStack.getElementNode().attr.push(map)
 }
 export function data(dataset: PropertyMap) {
-  assertElementNode()
+  assertElementNode('data')
   activeStack.getElementNode().data.push(dataset)
 }
 export function transform(operations: Partial<TransformMap>) {
-  assertElementNode()
+  assertElementNode('transform')
   activeStack.getElementNode().transform.push(operations)
 }
 export function text(store: StoreOrData<DOMProperty>) {
-  assertElementNode()
+  assertElementNode('text')
   activeStack.getElementNode().text.push(store)
 }
 export function visible(visible: Store<boolean>) {
-  assertElementNode()
+  const stack = activeStack.get()
+  if (
+    stack.node.type !== 'element' &&
+    stack.node.type !== 'using' &&
+    stack.node.type !== 'listItem'
+  ) {
+    throw Error(
+      `"visible" extension can be used only with element or listItem nodes, got "${stack.node.type}"`,
+    )
+  }
   activeStack.getElementNode().visible.push(visible)
 }
 
@@ -158,7 +167,7 @@ export function style({
   prop?: StylePropertyMap
   val?: PropertyMap
 }) {
-  assertElementNode()
+  assertElementNode('style')
   if (prop) {
     activeStack.getElementNode().styleProp.push(prop)
   }
@@ -179,7 +188,7 @@ export function handler(
   >,
 ): void
 export function handler(options, map?: any) {
-  assertElementNode()
+  assertElementNode('handler')
   if (map === undefined) {
     map = options
     options = {}
@@ -192,7 +201,7 @@ export function handler(options, map?: any) {
 }
 
 export function focus({focus, blur}: {focus?: Event<any>; blur?: Event<any>}) {
-  assertElementNode()
+  assertElementNode('focus')
   const node = activeStack.getElementNode()
   if (focus) node.focus.push(focus)
   if (blur) node.blur.push(blur)

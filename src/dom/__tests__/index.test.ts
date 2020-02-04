@@ -455,8 +455,8 @@ describe('visible', () => {
         toggleVisible('b')
       })
     })
-    expect(s1).toMatchInlineSnapshot(`"<div></div>"`)
-    expect(s2).toMatchInlineSnapshot(`"<div></div>"`)
+    expect(s1).toMatchInlineSnapshot(`"<div><p>a</p><p>c</p></div>"`)
+    expect(s2).toMatchInlineSnapshot(`"<div><p>a</p><p>b</p><p>c</p></div>"`)
   })
 })
 
@@ -501,6 +501,10 @@ test('variant', async () => {
       toItalic()
     })
   })
-  expect(s1).toMatchInlineSnapshot(`"<p><div></div><div></div></p>"`)
-  expect(s2).toMatchInlineSnapshot(`"<p><div></div><div></div></p>"`)
+  expect(s1).toMatchInlineSnapshot(
+    `"<p><div><span>Bold: </span></div><div><b>text</b></div></p>"`,
+  )
+  expect(s2).toMatchInlineSnapshot(
+    `"<p><div><span>Bold: </span></div><div><i>text</i></div></p>"`,
+  )
 })
