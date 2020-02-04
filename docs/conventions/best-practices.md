@@ -14,4 +14,4 @@ First of them is `index` file which exports only the public interface of your mo
 
 The second one is `state` file which exports only model store and mapped stores based on it if they are present.
 
-And the last but not the least is `init` file. Init file exports NOTHING, it only imports events, stores from different models as well. This is a place where you initialize your effects first, then set some handlers on your model store. Just after that, you start buildling the dataflow for the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
+And the last is an `init` file. Init file exports nothing, it only imports events, stores from different models. This is a place where you initialize your effects, to keep other modules pure. Just after that, you start buildling the dataflow for the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
