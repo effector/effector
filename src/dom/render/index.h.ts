@@ -61,7 +61,7 @@ export type TransformMap = {
 }
 
 export type HandlerRecord = {
-  options: {passive: boolean; capture: boolean}
+  options: {passive: boolean; capture: boolean; prevent: boolean; stop: boolean;}
   map: Partial<
     {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
   >

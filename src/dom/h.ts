@@ -193,9 +193,14 @@ export function handler(options, map?: any) {
     map = options
     options = {}
   }
-  const {passive = true, capture = false} = options
+  const {
+    passive = true,
+    capture = false,
+    prevent = false,
+    stop = false,
+  } = options
   activeStack.getElementNode().handler.push({
-    options: {passive, capture},
+    options: {passive, capture, prevent, stop},
     map,
   })
 }
