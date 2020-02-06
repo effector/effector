@@ -89,10 +89,11 @@ const removeFromParent = step.compute({
   fn(upd, scope: {stack: Stack}) {
     if (!scope.stack) return upd
     const {stack} = scope
+    //@ts-ignore
     scope.stack = null
-    const index = stack.parent.child.indexOf(stack)
+    const index = stack.parent!.child.indexOf(stack)
     if (index !== -1) {
-      stack.parent.child.splice(index, 1)
+      stack.parent!.child.splice(index, 1)
     }
     stack.parent = null
     return upd
