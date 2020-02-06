@@ -182,10 +182,24 @@ function mergeNodeDraft() {
     text: null,
     styleVar: {},
     styleProp: {},
-    handler: draft.handler,
+    handler: [],
     transform: draft.transform,
     focus: draft.focus,
     blur: draft.blur,
+  }
+  for (let i = 0; i < draft.handler.length; i++) {
+    const {options, map} = draft.handler[i]
+    options.passive = options.prevent ? false : options.passive
+
+    for (const key in map) {
+      const evt = map[key]
+      map[key] = function(e) {
+        if (options.prevent) e.preventDefault()
+        if (options.stop) e.stopPropagation()
+        evt(e)
+      }
+    }
+    merged.handler.push({options, map})
   }
   for (let i = 0; i < draft.attr.length; i++) {
     const map = draft.attr[i]

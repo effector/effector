@@ -619,4 +619,50 @@ describe('handler', () => {
 
     expect(clicked).toMatchInlineSnapshot(`true`)
   })
+  test('prevented event', async () => {
+    const prevented = await execFunc(async () => {
+      const click = createEvent<MouseEvent>();
+      let isPrevented = false;
+
+      click.watch(e => {
+        isPrevented = e.defaultPrevented;
+        console.log(e, isPrevented);
+      })
+
+      using(el, () => {
+        h('button', () => {
+          handler({prevent: true}, {click})
+          spec({attr: {id: 'btn'}})
+        })
+      })
+      await act()
+      document.getElementById('btn')!.click()
+      return isPrevented;
+    })
+
+    expect(prevented).toMatchInlineSnapshot(`true`)
+  })
+  test('change passive property if prevent is [true]', async () => {
+    const prevented = await execFunc(async () => {
+      const click = createEvent<MouseEvent>();
+      let isPrevented = false;
+
+      click.watch(e => {
+        isPrevented = e.defaultPrevented;
+        console.log(e, isPrevented);
+      })
+
+      using(el, () => {
+        h('button', () => {
+          handler({prevent: true, passive: true}, {click})
+          spec({attr: {id: 'btn'}})
+        })
+      })
+      await act()
+      document.getElementById('btn')!.click()
+      return isPrevented;
+    })
+
+    expect(prevented).toMatchInlineSnapshot(`true`)
+  })
 })
