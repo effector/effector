@@ -1,6 +1,6 @@
 // import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, restore, combine, sample} from 'effector'
-import {h, using, list, remap, spec, variant} from 'effector-dom'
+import {h, using, list, remap, spec, variant, node} from 'effector-dom'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -231,6 +231,18 @@ describe('list', () => {
     expect(s4).toMatchInlineSnapshot(
       `"<div>alice</div><div>bob</div><div>charlie</div><div>carol</div>"`,
     )
+  })
+  it('support text nodes', async () => {
+    const [s1] = await exec(async () => {
+      const text = createStore(['foo', 'bar'])
+      using(el, () => {
+        list(text, ({store}) => {
+          spec({text: store})
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`""`)
   })
   describe('support visible changes', () => {
     it('works with non-keyed list', async () => {
@@ -507,4 +519,53 @@ test('variant', async () => {
   expect(s2).toMatchInlineSnapshot(
     `"<p><div><span>Bold: </span></div><div><i>text</i></div></p>"`,
   )
+})
+
+describe('node reader', () => {
+  it('called after dom node mounting', async () => {
+    const [s1] = await exec(async () => {
+      type Log = {
+        id: number
+        key: string
+        value: string
+      }
+      const addLog = createEvent<{key: any; value: any}>()
+      const logs = createStore<Log[]>([]).on(addLog, (list, {key, value}) => [
+        ...list,
+        {
+          id: list.length,
+          key: String(key),
+          value: String(value),
+        },
+      ])
+
+      using(el, () => {
+        h('div', () => {
+          node(node => {
+            addLog({
+              key: 'is connected',
+              value: node.isConnected,
+            })
+            addLog({
+              key: 'has parent',
+              value: !!node.parentElement,
+            })
+          })
+        })
+        h('dl', () => {
+          list(
+            {source: logs, key: 'id', fields: ['key', 'value']},
+            ({fields: [key, value]}) => {
+              h('dt', {text: key})
+              h('dd', {text: value})
+            },
+          )
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(
+      `"<div></div><dl><dt>is connected</dt><dd>false</dd><dt>has parent</dt><dd>false</dd></dl>"`,
+    )
+  })
 })
