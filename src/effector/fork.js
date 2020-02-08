@@ -82,7 +82,7 @@ function normalizeValues(values) {
   }
   return values
 }
-export function fork(domain, {values = {}} = {}) {
+export function fork(domain, {values = {}, deep = true} = {}) {
   if (!is.domain(domain)) throw Error('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
@@ -101,7 +101,7 @@ export function fork(domain, {values = {}} = {}) {
     })
   }
   values = normalizeValues(values)
-  return cloneGraph(domain, {values})
+  return cloneGraph(domain, {values, deep})
 }
 export function allSettled(start, {scope: {clones, find}, params: ctx}) {
   const defer = createDefer()
@@ -133,7 +133,7 @@ export function allSettled(start, {scope: {clones, find}, params: ctx}) {
     const node = clones[i]
     if (node.meta.unit !== 'effect') continue
     effects.push(node)
-    finalizers.push(node.scope.runner.scope.anyway)
+    finalizers.push(node.scope.runner.scope.finally)
   }
   const onStart = createNode({
     node: [
@@ -177,7 +177,7 @@ function flatGraph(unit) {
 everything we need to clone graph section
 reachable from given unit
 */
-function cloneGraph(unit, {values}) {
+function cloneGraph(unit, {values, deep}) {
   const list = flatGraph(unit)
   const refs = new Map()
 

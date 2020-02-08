@@ -26,22 +26,19 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
-  const getCurrent = (instance.use.getCurrent = () => handler)
-  const done = (instance.done = createNamedEvent('done'))
-  const fail = (instance.fail = createNamedEvent('fail'))
-  const doneData = (instance.doneData = createNamedEvent('doneData'))
-  const failData = (instance.failData = createNamedEvent('failData'))
-  const anyway = (instance.finally = createNamedEvent('finally'))
+  const onCopy = ['done', 'fail', 'doneData', 'failData', 'finally']
+  const namedEvents = onCopy.map(createNamedEvent)
+  const [done, fail, doneData, failData, anyway] = namedEvents
+  const scope = {}
+  scope.getHandler = instance.use.getCurrent = () => handler
+  scope.done = instance.done = done
+  scope.fail = instance.fail = fail
+  scope.doneData = instance.doneData = doneData
+  scope.failData = instance.failData = failData
+  scope.finally = instance.finally = anyway
 
   const effectRunner = createNode({
-    scope: {
-      done,
-      fail,
-      doneData,
-      failData,
-      anyway,
-      getHandler: getCurrent,
-    },
+    scope,
     node: [
       step.run({
         fn({params, req}, scope) {
@@ -85,7 +82,7 @@ export function createEffect<Payload, Done>(
     meta: {
       op: 'fx',
       fx: 'runner',
-      onCopy: ['done', 'fail', 'anyway', 'doneData', 'failData'],
+      onCopy,
     },
   })
   getGraph(instance).scope.runner = effectRunner
@@ -120,34 +117,24 @@ export function createEffect<Payload, Done>(
     return req.req
   }
 
-  const inFlight = createStore(0, {named: 'inFlight'})
+  const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
     .on(done, x => x - 1)
-    .on(fail, x => x - 1)
+    .on(fail, x => x - 1))
 
-  const pending = inFlight.map({
+  const pending = (instance.pending = inFlight.map({
     fn: amount => amount > 0,
     named: 'pending',
-  })
-  instance.inFlight = inFlight
-  instance.pending = pending
+  }))
 
-  own(instance, [
-    done,
-    fail,
-    doneData,
-    failData,
-    anyway,
-    pending,
-    inFlight,
-    effectRunner,
-  ])
+  own(instance, namedEvents)
+  own(instance, [pending, inFlight, effectRunner])
   return instance
 }
 const onSettled = ({params, fn, ok, api}, data) => {
   launch({
     target: [
-      api.anyway,
+      api.finally,
       ok ? api.done : api.fail,
       ok ? api.doneData : api.failData,
       sidechain,
