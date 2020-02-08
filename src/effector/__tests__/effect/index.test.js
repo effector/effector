@@ -3,7 +3,7 @@ import {
   createEffect,
   createEvent,
   createStore,
-  createStoreObject,
+  combine,
   forward,
   restore,
 } from 'effector'
@@ -127,39 +127,6 @@ describe('createEffect with config', () => {
   })
 })
 
-it('should run both .done and .finally at the same tick', async() => {
-  const fn = jest.fn()
-  const fx = createEffect({
-    async handler() {
-      return 'ok'
-    },
-  })
-  const a = restore(fx.finally, null)
-  const b = restore(fx.done, null)
-  const sum = createStoreObject({a, b})
-  sum.watch(fn)
-  await fx(null)
-  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "a": null,
-        "b": null,
-      },
-      Object {
-        "a": Object {
-          "params": null,
-          "result": "ok",
-          "status": "done",
-        },
-        "b": Object {
-          "params": null,
-          "result": "ok",
-        },
-      },
-    ]
-  `)
-})
-
 it('should return itself at .use call', () => {
   const effect = createEffect('long request')
   expect(effect.use((_: any) => 'done!')).toBe(effect)
@@ -191,6 +158,43 @@ it('should handle both done and error in .finally', async() => {
         "params": "bar",
         "status": "fail",
       },
+    ]
+  `)
+})
+
+test('effect.doneData', async() => {
+  const fn = jest.fn()
+  const fx = createEffect({
+    handler: () => 'result',
+  })
+  fx.doneData.watch(fn)
+  await fx()
+  expect(argumentHistory(fn)).toEqual(['result'])
+})
+test('effect.failData', async() => {
+  const fn = jest.fn()
+  const fx = createEffect({
+    handler() {
+      throw 'error'
+    },
+  })
+  fx.failData.watch(fn)
+  await fx().catch(() => {})
+  expect(argumentHistory(fn)).toEqual(['error'])
+})
+
+test('effect.pending is a boolean store', async() => {
+  const fn = jest.fn()
+  const fx = createEffect({
+    async handler() {},
+  })
+  fx.pending.watch(fn)
+  await fx()
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
     ]
   `)
 })
@@ -227,53 +231,107 @@ it('should support forward', async() => {
   ])
 })
 
-it('handle sync effect watchers in correct order', async() => {
-  const fn = jest.fn()
-  const eff = createEffect('eff sync', {
-    handler: () => [1, 2, 3],
-  })
-
-  eff.watch(e => fn(e))
-  eff.done.watch(e => fn(e))
-  await eff('run')
-  expect(fn.mock.calls).toEqual([['run'], [{params: 'run', result: [1, 2, 3]}]])
-})
-
-it('should not override sync event updates', async() => {
-  const fn = jest.fn()
-  const uppercase = createEvent()
-
-  const fx = createEffect({
-    handler() {
-      uppercase()
-    },
-  })
-  const user = createStore('alice')
-    .on(uppercase, user => user.toUpperCase())
-    .on(fx, (_, user) => user)
-  user.watch(user => fn(user))
-
-  await fx('bob')
-  expect(argumentHistory(fn)).toEqual(['alice', 'bob', 'BOB'])
-})
-
-describe('effect.pending', () => {
-  it('is a boolean store', async() => {
+describe('execution order', () => {
+  it('should run watchers and promise resolvers in order', async() => {
     const fn = jest.fn()
     const fx = createEffect({
-      async handler() {},
+      handler() {
+        fn('handler')
+      },
     })
-    fx.pending.watch(fn)
-    await fx()
+    fx.watch(() => {
+      fn('start')
+    })
+    fx.done.watch(() => {
+      fn('done')
+    })
+    fx.doneData.watch(() => {
+      fn('doneData')
+    })
+    fx.finally.watch(() => {
+      fn('finally')
+    })
+    await fx().then(() => {
+      fn('promise resolver')
+    })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
-        false,
-        true,
-        false,
+        "start",
+        "handler",
+        "finally",
+        "done",
+        "doneData",
+        "promise resolver",
       ]
     `)
   })
-  it('becomes false only after all concurrent requests will be settled', async() => {
+  it('should run both .done and .finally at the same tick', async() => {
+    const fn = jest.fn()
+    const fx = createEffect({
+      async handler() {
+        return 'ok'
+      },
+    })
+    const a = restore(fx.finally, null)
+    const b = restore(fx.done, null)
+    const sum = combine({a, b})
+    sum.watch(fn)
+    await fx(null)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "a": null,
+        "b": null,
+      },
+      Object {
+        "a": Object {
+          "params": null,
+          "result": "ok",
+          "status": "done",
+        },
+        "b": Object {
+          "params": null,
+          "result": "ok",
+        },
+      },
+    ]
+  `)
+  })
+
+  it('handle sync effect watchers in correct order', async() => {
+    const fn = jest.fn()
+    const eff = createEffect('eff sync', {
+      handler: () => [1, 2, 3],
+    })
+
+    eff.watch(e => fn(e))
+    eff.done.watch(e => fn(e))
+    await eff('run')
+    expect(fn.mock.calls).toEqual([
+      ['run'],
+      [{params: 'run', result: [1, 2, 3]}],
+    ])
+  })
+
+  it('should not override sync event updates', async() => {
+    const fn = jest.fn()
+    const uppercase = createEvent()
+
+    const fx = createEffect({
+      handler() {
+        uppercase()
+      },
+    })
+    const user = createStore('alice')
+      .on(uppercase, user => user.toUpperCase())
+      .on(fx, (_, user) => user)
+    user.watch(user => fn(user))
+
+    await fx('bob')
+    expect(argumentHistory(fn)).toEqual(['alice', 'bob', 'BOB'])
+  })
+
+  test('effect.pending becomes false only after all concurrent requests will be settled', async() => {
     const fx = createEffect()
 
     expect(fx.pending.getState()).toBe(false)
