@@ -8,19 +8,11 @@ import {createNamedEvent, createStore, createEvent} from './createUnit'
 import type {EffectConfigPart, Config} from './config'
 import {createDefer} from './defer'
 
-declare export function createEffect<Payload, Done>(
-  name?: string | EffectConfigPart<Payload, Done>,
-  config?: Config<EffectConfigPart<Payload, Done>>,
-): Effect<Payload, Done, *>
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
   maybeConfig: any,
 ): Effect<Payload, Done, *> {
-  //$off
-  const instance: Effect<Payload, Done, any> = createEvent(
-    nameOrConfig,
-    maybeConfig,
-  )
+  const instance = createEvent(nameOrConfig, maybeConfig)
   let handler =
     instance.defaultConfig.handler ||
     (value => {
@@ -29,71 +21,72 @@ export function createEffect<Payload, Done>(
     })
 
   getGraph(instance).meta.onCopy = ['runner']
-  getGraph(instance).meta.unit = 'effect'
-  const done: Event<{|
-    params: Payload,
-    result: Done,
-  |}> = createNamedEvent('done')
-  const fail: Event<{|
-    params: Payload,
-    error: *,
-  |}> = createNamedEvent('fail')
-  const anyway: Event<
-    | {|
-        +status: 'done',
-        +params: Payload,
-        +result: Done,
-      |}
-    | {|
-        +status: 'fail',
-        +params: Payload,
-        +error: *,
-      |},
-  > = createNamedEvent('finally')
-
-  instance.done = done
-  instance.fail = fail
-  instance.finally = anyway
+  getGraph(instance).meta.unit = instance.kind = 'effect'
   instance.use = fn => {
     handler = fn
     return instance
   }
-  const getCurrent = () => handler
-  instance.use.getCurrent = getCurrent
-  instance.kind = 'effect'
+  const getCurrent = (instance.use.getCurrent = () => handler)
+  const done = (instance.done = createNamedEvent('done'))
+  const fail = (instance.fail = createNamedEvent('fail'))
+  const doneData = (instance.doneData = createNamedEvent('doneData'))
+  const failData = (instance.failData = createNamedEvent('failData'))
+  const anyway = (instance.finally = createNamedEvent('finally'))
+
   const effectRunner = createNode({
     scope: {
       done,
       fail,
+      doneData,
+      failData,
       anyway,
       getHandler: getCurrent,
     },
     node: [
       step.run({
-        fn({params, req}, {getHandler, done, fail, anyway}) {
-          runEffect(
-            getHandler(),
+        fn({params, req}, scope) {
+          const onResolve = bind(onSettled, {
             params,
-            bind(onSettled, {
-              event: done,
-              anyway,
-              params,
-              fn: req.rs,
-              ok: true,
-            }),
-            bind(onSettled, {
-              event: fail,
-              anyway,
-              params,
-              fn: req.rj,
-              ok: false,
-            }),
-          )
+            fn: req.rs,
+            ok: true,
+            api: scope,
+          })
+          const onReject = bind(onSettled, {
+            params,
+            fn: req.rj,
+            ok: false,
+            api: scope,
+          })
+          let failedSync = false
+          let syncError
+          let rawResult
+          try {
+            rawResult = scope.getHandler()(params)
+          } catch (err) {
+            failedSync = true
+            syncError = err
+          }
+          if (failedSync) {
+            onReject(syncError)
+            return params
+          }
+          if (
+            Object(rawResult) === rawResult &&
+            typeof rawResult.then === 'function'
+          ) {
+            rawResult.then(onResolve, onReject)
+            return params
+          }
+          onResolve(rawResult)
           return params
         },
       }),
     ],
-    meta: {op: 'fx', fx: 'runner', onCopy: ['done', 'fail', 'anyway']},
+    meta: {
+      op: 'fx',
+      fx: 'runner',
+      onCopy: ['done', 'fail', 'anyway', 'doneData', 'failData'],
+    },
   })
   getGraph(instance).scope.runner = effectRunner
   getGraph(instance).seq.push(
@@ -139,12 +132,26 @@ export function createEffect<Payload, Done>(
   instance.inFlight = inFlight
   instance.pending = pending
 
-  own(instance, [done, fail, anyway, pending, inFlight, effectRunner])
+  own(instance, [
+    done,
+    fail,
+    doneData,
+    failData,
+    anyway,
+    pending,
+    inFlight,
+    effectRunner,
+  ])
   return instance
 }
-const onSettled = ({event, anyway, params, fn, ok}, data) => {
+const onSettled = ({params, fn, ok, api}, data) => {
   launch({
-    target: [anyway, event, sidechain],
+    target: [
+      api.anyway,
+      ok ? api.done : api.fail,
+      ok ? api.doneData : api.failData,
+      sidechain,
+    ],
     params: ok
       ? [
         {
@@ -156,6 +163,7 @@ const onSettled = ({event, anyway, params, fn, ok}, data) => {
           params,
           result: data,
         },
+        data,
         {
           fn,
           value: data,
@@ -171,6 +179,7 @@ const onSettled = ({event, anyway, params, fn, ok}, data) => {
           params,
           error: data,
         },
+        data,
         {
           fn,
           value: data,
@@ -189,24 +198,3 @@ const sidechain = createNode({
   ],
   meta: {op: 'fx', fx: 'sidechain'},
 })
-
-function runEffect(handler, params, onResolve, onReject) {
-  let failedSync = false
-  let syncError
-  let rawResult
-  try {
-    rawResult = handler(params)
-  } catch (err) {
-    failedSync = true
-    syncError = err
-  }
-  if (failedSync) {
-    onReject(syncError)
-    return
-  }
-  if (Object(rawResult) === rawResult && typeof rawResult.then === 'function') {
-    rawResult.then(onResolve, onReject)
-    return
-  }
-  onResolve(rawResult)
-}
