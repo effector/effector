@@ -1,16 +1,9 @@
 //@flow
 
 import type {Store, Event, Effect, Domain} from './unit.h'
-import {nextUnitID, own} from './stdlib'
+import {own} from './stdlib'
 import {createNode} from './createNode'
-import {
-  normalizeConfig,
-  type Config,
-  type EffectConfigPart,
-  type EventConfigPart,
-  type StoreConfigPart,
-  type DomainConfigPart,
-} from './config'
+import type {Config} from './config'
 import {
   createEvent,
   createStore,
@@ -20,13 +13,6 @@ import {
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {addToRegion} from './region'
-
-type DomainHooks = {|
-  domain: Event<Domain>,
-  effect: Event<Effect<any, any, any>>,
-  event: Event<Event<any>>,
-  store: Event<Store<any>>,
-|}
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
@@ -40,10 +26,6 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   }
 }
 
-declare export function createDomain(
-  name?: string | DomainConfigPart,
-  config?: Config<DomainConfigPart>,
-): Domain
 export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   const domains: Set<Domain> = new Set()
   const stores: Set<Store<any>> = new Set()
@@ -67,10 +49,12 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   }
 
   node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
-  const event = createNamedEvent('onEvent')
-  const effect = createNamedEvent('onEffect')
-  const store = createNamedEvent('onStore')
-  const domain = createNamedEvent('onDomain')
+  const [event, effect, store, domain] = [
+    'onEvent',
+    'onEffect',
+    'onStore',
+    'onDomain',
+  ].map(createNamedEvent)
 
   const hooks: {|
     domain: Event<Domain>,
@@ -89,45 +73,33 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   result.onCreateStore = createHook(store, stores, node)
   result.onCreateDomain = createHook(domain, domains, node)
 
-  result.createEvent = result.event = <Payload>(
-    name?: string,
-    config?: Config<EventConfigPart>,
-  ): Event<Payload> =>
-      event(
-        createEvent(name, {
-          parent: result,
-          config,
-        }),
-      )
-  result.createEffect = result.effect = <Params, Done, Fail>(
-    name?: string,
-    config?: Config<EffectConfigPart<Params, Done>>,
-  ): Effect<Params, Done, Fail> =>
-      effect(
-        createEffect(name, {
-          parent: result,
-          config,
-        }),
-      )
-  result.createDomain = result.domain = (
-    name?: string,
-    config?: Config<DomainConfigPart>,
-  ) =>
+  result.createEvent = result.event = (nameOrConfig, config?: Config<any>) =>
+    event(
+      createEvent(nameOrConfig, {
+        parent: result,
+        config,
+      }),
+    )
+  result.createEffect = result.effect = (nameOrConfig, config?: Config<any>) =>
+    effect(
+      createEffect(nameOrConfig, {
+        parent: result,
+        config,
+      }),
+    )
+  result.createDomain = result.domain = (nameOrConfig, config?: Config<any>) =>
     createDomain({
-      name,
+      name: nameOrConfig,
       parent: result,
       config,
     })
-  result.createStore = result.store = <T>(
-    state: T,
-    config?: Config<StoreConfigPart>,
-  ): Store<T> =>
-      store(
-        createStore(state, {
-          parent: result,
-          config,
-        }),
-      )
+  result.createStore = result.store = (state: any, config?: Config<any>) =>
+    store(
+      createStore(state, {
+        parent: result,
+        config,
+      }),
+    )
   addToRegion(result)
   const parent = result.parent
   if (parent) {
