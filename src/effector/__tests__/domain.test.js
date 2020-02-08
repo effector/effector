@@ -186,6 +186,12 @@ describe('domain ownership', () => {
       ]
     `)
   })
+  test('domain should own its hooks', () => {
+    const domain = createDomain()
+    clearNode(domain)
+    //this mean onCreateEvent hook will be erased together with domain itself
+    expect(domain.hooks.event.graphite.scope).toBe(null)
+  })
 })
 
 describe('indirect child support', () => {
