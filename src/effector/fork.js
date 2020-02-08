@@ -4,7 +4,7 @@ import {getGraph, bind} from './stdlib'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
 
-import {is, step, launch, createNode, clearNode} from 'effector'
+import {is, step, launch, createNode} from 'effector'
 
 const stack = []
 
@@ -103,65 +103,22 @@ export function fork(domain, {values = {}, deep = true} = {}) {
   values = normalizeValues(values)
   return cloneGraph(domain, {values, deep})
 }
-export function allSettled(start, {scope: {clones, find}, params: ctx}) {
+export function allSettled(
+  start,
+  {
+    scope: {
+      find,
+      graphite: {
+        scope: {forkInFlightCounter},
+      },
+    },
+    params: ctx,
+  },
+) {
   const defer = createDefer()
-  let isSyncComplete = false
-  let fxCount = 0
-  let fxID = 0
-
-  let tryCompleteInitPhase = () => {
-    if (!isSyncComplete) return
-    if (fxCount !== 0) return
-    const id = fxID
-    Promise.resolve().then(() => {
-      if (id !== fxID) return
-      tryCompleteInitPhase = null
-      clearNode(onStart)
-      clearNode(onEnd)
-      defer.rs()
-    })
-  }
-  const completeInitPhase = () => {
-    if (fxCount === 0) {
-      fxID += 1
-      tryCompleteInitPhase && tryCompleteInitPhase()
-    }
-  }
-  const effects = []
-  const finalizers = []
-  for (let i = 0; i < clones.length; i++) {
-    const node = clones[i]
-    if (node.meta.unit !== 'effect') continue
-    effects.push(node)
-    finalizers.push(node.scope.runner.scope.finally)
-  }
-  const onStart = createNode({
-    node: [
-      step.compute({
-        fn() {
-          fxCount += 1
-          fxID += 1
-        },
-      }),
-    ],
-    parent: effects,
-  })
-  const onEnd = createNode({
-    node: [
-      step.run({
-        fn() {
-          fxCount -= 1
-          completeInitPhase()
-        },
-      }),
-    ],
-    parent: finalizers,
-  })
-  if (start) {
-    launch(find(start), ctx)
-  }
-  isSyncComplete = true
-  completeInitPhase()
+  forkInFlightCounter.scope.defers.push(defer)
+  launch(find(start), ctx)
+  launch(forkInFlightCounter)
   return defer.req
 }
 function flatGraph(unit) {
@@ -180,6 +137,44 @@ reachable from given unit
 function cloneGraph(unit, {values, deep}) {
   const list = flatGraph(unit)
   const refs = new Map()
+  const scope = {
+    defers: [],
+    inFlight: 0,
+    fxID: 0,
+  }
+  const forkInFlightCounter = createNode({
+    scope,
+    node: [
+      step.compute({
+        fn(_, scope, stack) {
+          if (!stack.parent) {
+            scope.fxID += 1
+            return
+          }
+          if (stack.parent.node.meta.named === 'finally') {
+            scope.inFlight -= 1
+          } else {
+            scope.inFlight += 1
+            scope.fxID += 1
+          }
+        },
+      }),
+      step.barrier({priority: 'sampler'}),
+      step.run({
+        fn(_, scope) {
+          const {inFlight, defers, fxID} = scope
+          if (inFlight > 0 || defers.length === 0) return
+          Promise.resolve().then(() => {
+            if (scope.fxID !== fxID) return
+            defers.splice(0, defers.length).forEach(defer => {
+              defer.rs()
+            })
+          })
+        },
+      }),
+    ],
+    meta: {unit: 'forkInFlightCounter'},
+  })
 
   const clones = list.map(({seq, next, meta, scope, family}) => {
     const result = createNode({
@@ -232,6 +227,12 @@ function cloneGraph(unit, {values, deep}) {
       case 'store':
         node.meta.wrapped = wrapStore(node)
         break
+      case 'effect':
+        node.next.push(forkInFlightCounter)
+        break
+      case 'fx':
+        scope.finally.next.push(forkInFlightCounter)
+        break
       case 'watch': {
         const handler = scope.fn
         scope.fn = data => {
@@ -253,9 +254,10 @@ function cloneGraph(unit, {values, deep}) {
     graphite: createNode({
       family: {
         type: 'domain',
-        links: clones,
+        links: [forkInFlightCounter, ...clones],
       },
       meta: {unit: 'fork'},
+      scope: {forkInFlightCounter},
     }),
   }
   function findClone(unit) {
@@ -277,7 +279,8 @@ function wrapStore(node) {
     family: node.family,
   }
 }
-function forEachRelatedNode({next, family}, cb) {
+function forEachRelatedNode({next, family, meta}, cb) {
+  if (meta.unit === 'fork' || meta.unit === 'forkInFlightCounter') return
   next.forEach(cb)
   family.owners.forEach(cb)
   family.links.forEach(cb)
