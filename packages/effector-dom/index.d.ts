@@ -72,7 +72,12 @@ export function handler(
   >,
 ): void
 export function handler(
-  options: {passive?: boolean; capture?: boolean; stop?: boolean; prevent?: boolean},
+  options: {
+    passive?: boolean
+    capture?: boolean
+    stop?: boolean
+    prevent?: boolean
+  },
   map: Partial<
     {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
   >,
