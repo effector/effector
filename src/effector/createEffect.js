@@ -1,11 +1,10 @@
 //@flow
 
-import type {Event, Effect} from './unit.h'
+import type {Effect} from './unit.h'
 import {step, own, bind, getGraph} from './stdlib'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
-import type {EffectConfigPart, Config} from './config'
 import {createDefer} from './defer'
 
 export function createEffect<Payload, Done>(
@@ -26,15 +25,22 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
-  const onCopy = ['done', 'fail', 'doneData', 'failData', 'finally']
+  const onCopy = ['done', 'fail', 'finally']
   const namedEvents = onCopy.map(createNamedEvent)
-  const [done, fail, doneData, failData, anyway] = namedEvents
+  onCopy.push('doneData', 'failData')
+  const [done, fail, anyway] = namedEvents
   const scope = {}
   scope.getHandler = instance.use.getCurrent = () => handler
   scope.done = instance.done = done
   scope.fail = instance.fail = fail
-  scope.doneData = instance.doneData = doneData
-  scope.failData = instance.failData = failData
+  const doneData = (scope.doneData = instance.doneData = done.map({
+    named: 'doneData',
+    fn: ({result}) => result,
+  }))
+  const failData = (scope.failData = instance.failData = fail.map({
+    named: 'failData',
+    fn: ({error}) => error,
+  }))
   scope.finally = instance.finally = anyway
 
   const effectRunner = createNode({
@@ -128,17 +134,12 @@ export function createEffect<Payload, Done>(
   }))
 
   own(instance, namedEvents)
-  own(instance, [pending, inFlight, effectRunner])
+  own(instance, [doneData, failData, pending, inFlight, effectRunner])
   return instance
 }
 const onSettled = ({params, fn, ok, api}, data) => {
   launch({
-    target: [
-      api.finally,
-      ok ? api.done : api.fail,
-      ok ? api.doneData : api.failData,
-      sidechain,
-    ],
+    target: [api.finally, ok ? api.done : api.fail, sidechain],
     params: ok
       ? [
         {
@@ -150,7 +151,6 @@ const onSettled = ({params, fn, ok, api}, data) => {
           params,
           result: data,
         },
-        data,
         {
           fn,
           value: data,
@@ -166,7 +166,6 @@ const onSettled = ({params, fn, ok, api}, data) => {
           params,
           error: data,
         },
-        data,
         {
           fn,
           value: data,
