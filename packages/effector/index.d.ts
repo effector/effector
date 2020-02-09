@@ -16,9 +16,9 @@ type Tuple<T = unknown> = [T] | T[]
 type NoInfer<T> = [T][T extends any ? 0 : never]
 
 // Type for extention purpose. Represents combinable sample source.
-type Combinable = { [key: string]: Store<any> } | Tuple<Store<any>>
+export type Combinable = { [key: string]: Store<any> } | Tuple<Store<any>>
 // Helper type, which unwraps combinable sample source value.
-type GetCombinedValue<T> = {[K in keyof T]: T[K] extends Store<infer U> ? U : never}
+export type GetCombinedValue<T> = {[K in keyof T]: T[K] extends Store<infer U> ? U : never}
 
 export const version: string
 
@@ -644,6 +644,35 @@ export function guard<A>(config: {
   filter: Store<boolean> | ((value: A) => boolean)
   target: Unit<A>
 }): Unit<A>
+
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done, Fail>(
+  config: {
+    source: States
+    target: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+    mapDone: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
+    mapFail: (fail: FX extends Effect<any, any, infer F> ? F : never, states: GetCombinedValue<States>) => Fail
+  }
+): Effect<Params, Done, Fail>
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done>(
+  config: {
+    source: States
+    target: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+    mapDone: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
+  }
+): Effect<Params, Done, FX extends Effect<any, any, infer F> ? F : never>
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>>(
+  config: {
+    source: States
+    target: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+  }
+): Effect<
+  Params,
+  FX extends Effect<any, infer D, any> ? D : never,
+  FX extends Effect<any, any, infer F> ? F : never
+>
 
 export function withRegion(unit: Unit<any> | Step, cb: () => void): void
 export function combine<T extends Store<any>>(store: T): T extends Store<infer R> ? Store<[R]> : never

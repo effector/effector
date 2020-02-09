@@ -26,6 +26,7 @@ export {clearNode} from './clearNode'
 export {launch} from './kernel'
 export {version} from './flags'
 export {guard} from './guard'
+export {attach} from './attach'
 //eslint-disable-next-line
 export * as blocks from './blocks'
 
