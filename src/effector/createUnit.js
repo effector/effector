@@ -69,7 +69,12 @@ const createComputation = (from, to, op, fn) =>
   })
 
 const createEventFiltration = (event, op, fn, node) => {
-  const mapped = createEvent(joinName(event, ' →? *'))
+  let config
+  if (typeof fn === 'object') {
+    config = fn
+    fn = fn.fn
+  }
+  const mapped = createEvent(joinName(event, ' →? *'), config)
   createLinkNode(event, mapped, {
     scope: {fn},
     node,
@@ -133,7 +138,7 @@ export function createEvent<Payload>(
   return addToRegion(event)
 }
 
-function filterMapEvent(
+export function filterMapEvent(
   event: Event<any> | Effect<any, any, any>,
   fn: any => any | void,
 ): any {
