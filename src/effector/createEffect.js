@@ -4,7 +4,12 @@ import type {Effect} from './unit.h'
 import {step, own, bind, getGraph} from './stdlib'
 import {createNode} from './createNode'
 import {launch} from './kernel'
-import {createNamedEvent, createStore, createEvent} from './createUnit'
+import {
+  createNamedEvent,
+  createStore,
+  createEvent,
+  filterMapEvent,
+} from './createUnit'
 import {createDefer} from './defer'
 
 export function createEffect<Payload, Done>(
@@ -25,46 +30,61 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
-  const onCopy = ['done', 'fail', 'finally']
-  const namedEvents = onCopy.map(createNamedEvent)
-  onCopy.push('doneData', 'failData')
-  const [done, fail, anyway] = namedEvents
-  const scope = {}
-  scope.getHandler = instance.use.getCurrent = () => handler
-  scope.done = instance.done = done
-  scope.fail = instance.fail = fail
-  const doneData = (scope.doneData = instance.doneData = done.map({
+  const anyway = (instance.finally = createNamedEvent('finally'))
+  const done = (instance.done = filterMapEvent(anyway, {
+    named: 'done',
+    fn(result) {
+      if (result.status === 'done')
+        return {
+          params: result.params,
+          result: result.result,
+        }
+    },
+  }))
+  const fail = (instance.fail = filterMapEvent(anyway, {
+    named: 'fail',
+    fn(result) {
+      if (result.status === 'fail')
+        return {
+          params: result.params,
+          error: result.error,
+        }
+    },
+  }))
+  const doneData = (instance.doneData = done.map({
     named: 'doneData',
     fn: ({result}) => result,
   }))
-  const failData = (scope.failData = instance.failData = fail.map({
+  const failData = (instance.failData = fail.map({
     named: 'failData',
     fn: ({error}) => error,
   }))
-  scope.finally = instance.finally = anyway
 
   const effectRunner = createNode({
-    scope,
+    scope: {
+      getHandler: (instance.use.getCurrent = () => handler),
+      finally: anyway,
+    },
     node: [
       step.run({
-        fn({params, req}, scope) {
+        fn({params, req}, {finally: anyway, getHandler}) {
           const onResolve = bind(onSettled, {
             params,
             fn: req.rs,
             ok: true,
-            api: scope,
+            anyway,
           })
           const onReject = bind(onSettled, {
             params,
             fn: req.rj,
             ok: false,
-            api: scope,
+            anyway,
           })
           let failedSync = false
           let syncError
           let rawResult
           try {
-            rawResult = scope.getHandler()(params)
+            rawResult = getHandler()(params)
           } catch (err) {
             failedSync = true
             syncError = err
@@ -88,7 +108,7 @@ export function createEffect<Payload, Done>(
     meta: {
       op: 'fx',
       fx: 'runner',
-      onCopy,
+      onCopy: ['finally'],
     },
   })
   getGraph(instance).scope.runner = effectRunner
@@ -133,44 +153,38 @@ export function createEffect<Payload, Done>(
     named: 'pending',
   }))
 
-  own(instance, namedEvents)
-  own(instance, [doneData, failData, pending, inFlight, effectRunner])
+  own(instance, [
+    anyway,
+    done,
+    fail,
+    doneData,
+    failData,
+    pending,
+    inFlight,
+    effectRunner,
+  ])
   return instance
 }
-const onSettled = ({params, fn, ok, api}, data) => {
+const onSettled = ({params, fn, ok, anyway}, data) => {
   launch({
-    target: [api.finally, ok ? api.done : api.fail, sidechain],
-    params: ok
-      ? [
-        {
+    target: [anyway, sidechain],
+    params: [
+      ok
+        ? {
           status: 'done',
           params,
           result: data,
-        },
-        {
-          params,
-          result: data,
-        },
-        {
-          fn,
-          value: data,
-        },
-      ]
-      : [
-        {
+        }
+        : {
           status: 'fail',
           params,
           error: data,
         },
-        {
-          params,
-          error: data,
-        },
-        {
-          fn,
-          value: data,
-        },
-      ],
+      {
+        fn,
+        value: data,
+      },
+    ],
     defer: true,
   })
 }
