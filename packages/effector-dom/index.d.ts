@@ -132,6 +132,21 @@ export function list<
 ): void
 export function list<T, K extends keyof T>(
   {
+    fn,
+    key,
+    source,
+    reverse,
+    fields,
+  }: {
+    source: Store<T[]>
+    fn: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
+    key: T[K] extends string | number | symbol ? K : never
+    reverse?: boolean
+    fields?: string[]
+  },
+): void
+export function list<T, K extends keyof T>(
+  {
     key,
     source,
     reverse,

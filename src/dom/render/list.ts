@@ -20,6 +20,7 @@ import {remap} from '../storeField'
 import {setRightSibling, setLeftSibling, makeSiblings} from './locality'
 import {findNearestVisibleNode} from './nearestNode'
 import {document} from './documentResolver'
+import {h} from './h'
 
 type ListContext = {
   parentNode: DOMElement
@@ -104,7 +105,24 @@ export function list<T, K extends keyof T>(
   },
   cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
-export function list<T>(opts, cb: (opts: any) => void) {
+export function list<T, K extends keyof T>(
+  {
+    source,
+    fn,
+    key,
+    reverse,
+    fields,
+  }: {
+    source: Store<T[]>
+    fn: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
+    key: T[K] extends string | number | symbol ? K : never
+    reverse?: boolean
+    fields?: string[]
+  },
+): void
+export function list<T>(opts, cb = (opts: any) => {}) {
+  cb = opts.fn ? opts.fn : cb
+
   let source
   let reverse = false
   let getID: (item: T, i: number) => string | number | symbol

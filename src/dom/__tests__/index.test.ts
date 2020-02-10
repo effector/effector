@@ -336,6 +336,28 @@ describe('list', () => {
       )
     })
   })
+  it('create list from [fn] option', async () => {
+    const [s1] = await exec(async () => {
+      const users = createStore([
+        {name: 'alice', id: 1},
+        {name: 'bob', id: 2},
+      ])
+
+      using(el, () => {
+        list({
+          source: users,
+          key: 'id',
+          fn: ({store}) => {
+            h('li', {text: store.map(v => v.name)})
+          }
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(
+      `"<li>alice</li><li>bob</li>"`
+    )
+  })
   it.skip('insert its items before sibling nodes', async () => {
     const [s1, s2] = await exec(async () => {
       const addUser = createEvent<string>()
