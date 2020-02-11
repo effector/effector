@@ -3,8 +3,8 @@ id: gate
 title: Gate - a bridge between props and store
 ---
 
-Imagine you have the task of transferring something from react props to the effector store.  
-Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.  
+Imagine you have the task of transferring something from react props to the effector store.
+Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
 In such a situation [`Gate`](https://effector.now.sh/en/api/effector-react/gate) will help.
 
 In this example we will write code which will not go beyond our sandbox
@@ -14,7 +14,7 @@ import {createStore, createEffect, forward} from 'effector'
 import {useStore, createGate} from 'effector-react'
 
 // Effect for api request
-const fxGetTodo = createEffect({
+const getTodoFx = createEffect({
   async handler({id}) {
     const req = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
     return req.json()
@@ -22,12 +22,12 @@ const fxGetTodo = createEffect({
 })
 
 // Our main store
-const $todo = createStore(null).on(fxGetTodo.done, (_, {result}) => result)
+const $todo = createStore(null).on(getTodoFx.done, (_, {result}) => result)
 
 const TodoGate = createGate('gate with props')
 
-// We callfxGetTodo effect every time Gate updates its state.
-forward({from: TodoGate.state, to: fxGetTodo})
+// We callgetTodoFx effect every time Gate updates its state.
+forward({from: TodoGate.state, to: getTodoFx})
 
 TodoGate.open.watch(() => {
   //called each time when TodoGate is mounted
@@ -38,7 +38,7 @@ TodoGate.close.watch(() => {
 
 function Todo() {
   const todo = useStore($todo)
-  const loading = useStore(fxGetTodo.pending)
+  const loading = useStore(getTodoFx.pending)
   if (loading) {
     return <div>Loading...</div>
   }

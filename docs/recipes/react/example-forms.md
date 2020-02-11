@@ -11,7 +11,7 @@ import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 
-const sendForm = createEffect({handler: console.log})
+const sendFormFx = createEffect({handler: console.log})
 const submitted = createEvent()
 const setField = createEvent()
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
@@ -22,7 +22,7 @@ const $form = createStore({}).on(setField, (s, {key, value}) => ({
 sample({
   source: $form,
   clock: submitted,
-  target: sendForm,
+  target: sendFormFx,
 })
 
 const handleChange = setField.prepend(e => ({
@@ -62,7 +62,7 @@ Let's break down the code above.
 These are just events & effects definitions. Simple.
 
 ```js
-const sendForm = createEffect({handler: console.log})
+const sendFormFx = createEffect({handler: console.log})
 const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
 const setField = createEvent() //has intention to change $form's state in a way, defined in reducer further
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
@@ -77,7 +77,7 @@ Next piece of code shows, how we can obtain a state in Effector, in a right way.
 sample({
   source: $form, // Take LATEST state from $form, and
   clock: submitted, // when `submitted` is triggered
-  target: sendForm, // pass it to `sendForm`, in other words -> sendForm(state)
+  target: sendFormFx, // pass it to `sendFormFx`, in other words -> sendFormFx(state)
   //fn: (sourceState, clockParams) => transformedData // we could additionally transform data here, but if we need just pass source's value, we may omit this property
 })
 ```
@@ -132,7 +132,7 @@ const App = () => (
 Of course, there is much simplier way, to implement this, consider:
 
 ```js
-const sendForm = createEffect({handler: () => console.log($store.getState())})
+const sendFormFx = createEffect({handler: () => console.log($store.getState())})
 const changed = createEvent()
 const $store = createStore({}).on(changed, (s, e) => ({
   ...s,
@@ -145,7 +145,7 @@ const App = () => {
   return (
     <form
       action="void(0)"
-      onSubmit={sendForm /*note, there is an effect itself*/}>
+      onSubmit={sendFormFx /*note, there is an effect itself*/}>
       <input
         name="login"
         label="Login"
@@ -181,7 +181,7 @@ import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 
-const sendForm = createEffect({
+const sendFormFx = createEffect({
   //defining simple Effect, which results a string in 3 seconds
   handler: formData =>
     new Promise(rs =>
@@ -191,21 +191,21 @@ const sendForm = createEffect({
 
 const Loader = () => {
   //approach #1: explicit store usage, with hook `useStore`
-  const loading = useStore(sendForm.pending) //typeof loading === "boolean"
+  const loading = useStore(sendFormFx.pending) //typeof loading === "boolean"
   return loading ? <div>Loading...</div> : null
 }
 
-const SubmitButton = createComponent(sendForm.pending, (props, loading) => (
+const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
   //approach #2: implicit store usage, hooks are unsupported yet
   <button disabled={loading} type="submit">
     Submit
   </button>
 ))
 
-const onSubmit = sendForm.prepend(e => new FormData(e.target)) //transforming upcoming data, from DOM Event to FormData
+const onSubmit = sendFormFx.prepend(e => new FormData(e.target)) //transforming upcoming data, from DOM Event to FormData
 
 const App = () => {
-  React.useEffect(() => sendForm.done.watch(({result}) => alert(result)), []) //applying side-effect, upon sendForm `done`
+  React.useEffect(() => sendFormFx.done.watch(({result}) => alert(result)), []) //applying side-effect, upon sendFormFx `done`
 
   return (
     <form action="javascript:void(0)" onSubmit={onSubmit}>

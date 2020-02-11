@@ -18,27 +18,28 @@ Task:
 ```js
 function createCountdown(
   name,
-  {start, abort = createEvent(`${name}Reset`), timeout = 1000} // tick every 1 second
+  {start, abort = createEvent(`${name}Reset`), timeout = 1000},
 ) {
+  // tick every 1 second
   const $working = createStore(true, {name: `${name}Working`})
   const tick = createEvent(`${name}Tick`)
-  const timer = createEffect(`${name}Timer`).use(() => wait(timeout))
+  const timerFx = createEffect(`${name}Timer`).use(() => wait(timeout))
 
   $working.on(abort, () => false).on(start, () => true)
 
   guard({
     source: start,
-    filter: timer.pending.map(is => !is),
+    filter: timerFx.pending.map(is => !is),
     target: tick,
   })
 
   forward({
     from: tick,
-    to: timer,
+    to: timerFx,
   })
 
   const willTick = guard({
-    source: timer.done.map(({params}) => params - 1),
+    source: timerFx.done.map(({params}) => params - 1),
     filter: seconds => seconds >= 0,
   })
 
@@ -64,11 +65,14 @@ Usage:
 const startCountdown = createEvent()
 const abortCountdown = createEvent()
 
-const countdown = createCountdown('simple', { start: startCountdown, abort: abortCountdown })
+const countdown = createCountdown('simple', {
+  start: startCountdown,
+  abort: abortCountdown,
+})
 
 // handle each tick
-countdown.tick.watch((remainSeconds) => {
-  console.info("Tick. Remain seconds: ", remainSeconds)
+countdown.tick.watch(remainSeconds => {
+  console.info('Tick. Remain seconds: ', remainSeconds)
 })
 
 // let's start

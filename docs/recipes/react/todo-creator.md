@@ -2,10 +2,11 @@
 id: todo-creator
 title: TODO creator
 ---
+
 ```js try
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {createEffect, createStore, createEvent, sample} from 'effector'
+import {createStore, createEvent, sample} from 'effector'
 import {useStore, useList} from 'effector-react'
 
 function createTodoListApi(initial: string[] = []) {
@@ -20,16 +21,16 @@ function createTodoListApi(initial: string[] = []) {
   input.on(change, (state, value) => value);
   input.on(reset, () => '');
   input.on(insert, () => '');
-  
+
   const submit = createEvent()
   submit.watch(e => e.preventDefault())
-  
+
   sample({
     source: input,
     clock: submit,
     target: insert,
   })
-  
+
   return {
     list: todos,
     submit,
