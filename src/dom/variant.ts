@@ -1,6 +1,5 @@
 import {Store, createStore, combine} from 'effector'
 import {list} from './render/list'
-import {spec} from './h'
 
 export function variant<State extends {[key: string]: any}>(
   key: Store<keyof State>,
@@ -9,13 +8,19 @@ export function variant<State extends {[key: string]: any}>(
   const caseList = createStore(
     Object.entries(cases).map(([key, val]) => ({key, val: val!})),
   )
-  list(
-    {source: caseList, key: 'key', fields: ['key', 'val']},
-    ({fields: [field, val]}) => {
-      spec({
-        visible: combine(field, key, (field, key) => field === key),
-      })
-      val.getState()()
-    },
+  const caseListWithVisibility = combine(caseList, key, (list, key) =>
+    list.map(e => ({
+      key: e.key,
+      val: e.val,
+      visible: e.key === key,
+    })),
   )
+  list({
+    source: caseListWithVisibility,
+    key: 'key',
+    visible: ({visible}) => visible,
+    fn({store}) {
+      store.getState().val()
+    },
+  })
 }
