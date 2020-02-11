@@ -120,8 +120,18 @@ export function list<
     key: T[K] extends string | number ? K : never
     source: Store<T[]>
     fields: Query
+    fn?: (opts: {
+      store: Store<T>
+      fields: {
+        [K in keyof Query]: Query[K] extends keyof T
+          ? Store<T[Query[K]]>
+          : never
+      }
+      key: T[K]
+      signal: Signal
+    }) => void
   },
-  cb: (opts: {
+  cb?: (opts: {
     store: Store<T>
     fields: {
       [K in keyof Query]: Query[K] extends keyof T ? Store<T[Query[K]]> : never
@@ -132,21 +142,6 @@ export function list<
 ): void
 export function list<T, K extends keyof T>(
   {
-    fn,
-    key,
-    source,
-    reverse,
-    fields,
-  }: {
-    source: Store<T[]>
-    fn: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
-    key: T[K] extends string | number | symbol ? K : never
-    reverse?: boolean
-    fields?: string[]
-  },
-): void
-export function list<T, K extends keyof T>(
-  {
     key,
     source,
     reverse,
@@ -154,8 +149,9 @@ export function list<T, K extends keyof T>(
     key: T[K] extends string | number | symbol ? K : never
     source: Store<T[]>
     reverse?: boolean
+    fn?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void
   },
-  cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
+  cb?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
 
 export function map<T, S>(
