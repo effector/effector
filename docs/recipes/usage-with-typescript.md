@@ -143,10 +143,9 @@ const initialState: SystemState = {
   userName: '',
 }
 
-export const SystemStore = SystemDomain.store<SystemState>(initialState).on(
-  updateSession,
-  (state, payload) => ({...state, ...payload}),
-)
+export const SystemStore = SystemDomain.store<SystemState>(
+  initialState,
+).on(updateSession, (state, payload) => ({...state, ...payload}))
 ```
 
 ## Usage with `effector-react`
@@ -177,8 +176,8 @@ Then bind created handlers to effects
 ```typescript
 // src/index.tsx
 
-sendMessage.use(MessageApi.sendMessage)
-deleteMessage.use(MessageApi.deleteMessage)
+sendMessageFx.use(MessageApi.sendMessage)
+deleteMessageFx.use(MessageApi.deleteMessage)
 ```
 
 Then we can implement components which uses data from stores. And start

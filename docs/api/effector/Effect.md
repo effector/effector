@@ -20,36 +20,36 @@ It can be safely used in place of the original async function.
 ```js try
 import {createEffect, createStore} from 'effector'
 
-const fetchUser = createEffect({
+const fetchUserFx = createEffect({
   handler: ({id}) => {
     return fetch(`https://example.com/users/${id}`).then(res => res.json())
   },
 })
 
 const users = createStore([]) // Default state
-  // add reducer for fetchUser.done event (triggered when handler resolved)
-  .on(fetchUser.done, (users, {result: user}) => [...users, user])
+  // add reducer for fetchUserFx.done event (triggered when handler resolved)
+  .on(fetchUserFx.done, (users, {result: user}) => [...users, user])
 
 // subscribe to handler resolve
-fetchUser.done.watch(({result, params}) => {
+fetchUserFx.done.watch(({result, params}) => {
   console.log(params) // => {id: 1}
   console.log(result) // => resolved value
 })
 
 // subscribe to handler reject or throw error
-fetchUser.fail.watch(({error, params}) => {
+fetchUserFx.fail.watch(({error, params}) => {
   console.error(params) // => {id: 1}
   console.error(error) // => rejected value
 })
 
 // you can replace function anytime
-fetchUser.use(anotherHandler)
+fetchUserFx.use(anotherHandler)
 
 // call effect with your params
-fetchUser({id: 1})
+fetchUserFx({id: 1})
 
 // handle promise
-const data = await fetchUser({id: 2})
+const data = await fetchUserFx({id: 2})
 ```
 
 [Try it](https://share.effector.dev/5WVJOJ6f)
@@ -73,17 +73,17 @@ It will replace the previous function inside (if any).
 #### Example
 
 ```js try
-const fetchUserRepos = createEffect()
+const fetchUserReposFx = createEffect()
 
-fetchUserRepos.use(async params => {
-  console.log('fetchUserRepos called with', params)
+fetchUserReposFx.use(async params => {
+  console.log('fetchUserReposFx called with', params)
 
   const url = `https://api.github.com/users/${params.name}/repos`
   const req = await fetch(url)
   return req.json()
 })
 
-fetchUserRepos({name: 'zerobias'})
+fetchUserReposFx({name: 'zerobias'})
 // => fetchUserRepos called with {name: 'zerobias'}
 ```
 
@@ -108,17 +108,17 @@ Subscribe to effect calls.
 ```js try
 import {createEffect} from 'effector'
 
-const effect = createEffect({
+const effectFx = createEffect({
   handler: value => value,
 })
 
-const unsubscribe = effect.watch(payload => {
+const unsubscribe = effectFx.watch(payload => {
   console.log('called with', payload)
   unsubscribe()
 })
 
-effect(10) // => called with 10
-effect(20) // nothing, cause watcher unsubscribed
+effectFx(10) // => called with 10
+effectFx(20) // nothing, cause watcher unsubscribed
 ```
 
 [Try it](https://share.effector.dev/qK7m6pt7)
@@ -185,15 +185,15 @@ Event triggered with object of `params` and `result`:
 ```js try
 import {createEffect} from 'effector'
 
-const effect = createEffect({
+const effectFx = createEffect({
   handler: value => Promise.resolve(value + 1),
 })
 
-effect.done.watch(({params, result}) => {
+effectFx.done.watch(({params, result}) => {
   console.log('Done with params', params, 'and result', result)
 })
 
-effect(2) // => Done with params 2 and result 3
+effectFx(2) // => Done with params 2 and result 3
 ```
 
 [Try it](https://share.effector.dev/b4lNYXPs)
@@ -214,15 +214,15 @@ Event triggered with object of `params` and `error`:
 ```js try
 import {createEffect} from 'effector'
 
-const effect = createEffect()
+const effectFx = createEffect()
 
-effect.use(value => Promise.reject(value - 1))
+effectFx.use(value => Promise.reject(value - 1))
 
-effect.fail.watch(({params, error}) => {
+effectFx.fail.watch(({params, error}) => {
   console.log('Fail with params', params, 'and error', error)
 })
 
-effect(2) // => Fail with params 2 and error 1
+effectFx(2) // => Fail with params 2 and error 1
 ```
 
 [Try it](https://share.effector.dev/UaHRvZrE)
@@ -245,13 +245,13 @@ Event triggered with object of `status`, `params` and `error` or `result`:
 ```js try
 import {createEffect} from 'effector'
 
-const fetchApi = createEffect({
+const fetchApiFx = createEffect({
   handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
 })
 
-fetchApi.finally.watch(console.log)
+fetchApiFx.finally.watch(console.log)
 
-fetchApi(100)
+fetchApiFx(100)
 // if resolved
 // => {status: 'done', result: '100 ms', params: 100}
 
@@ -273,18 +273,18 @@ import React from 'react'
 import {createEffect} from 'effector'
 import {createComponent} from 'effector-react'
 
-const fetchApi = createEffect({
+const fetchApiFx = createEffect({
   handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
 })
 
-fetchApi.pending.watch(console.log)
+fetchApiFx.pending.watch(console.log)
 
 const Loading = createComponent(
-  fetchApi.pending,
+  fetchApiFx.pending,
   (props, pending) => pending && <div>Loading...</div>,
 )
 
-fetchApi(5000)
+fetchApiFx(5000)
 
 ReactDOM.render(<Loading />, document.getElementById('root'))
 ```
@@ -296,13 +296,13 @@ It's a shorthand for common use case
 ```js try
 import {createEffect, createStore} from 'effector'
 
-const fetchApi = createEffect()
+const fetchApiFx = createEffect()
 
-//now you can use fetchApi.pending instead
+//now you can use fetchApiFx.pending instead
 const isLoading = createStore(false)
-  .on(fetchApi, () => true)
-  .on(fetchApi.done, () => false)
-  .on(fetchApi.fail, () => false)
+  .on(fetchApiFx, () => true)
+  .on(fetchApiFx.done, () => false)
+  .on(fetchApiFx.fail, () => false)
 ```
 
 ### `inFlight`

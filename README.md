@@ -324,7 +324,7 @@ It can be safely used in place of the original async function.
 ```js
 import {createEffect} from 'effector'
 
-const fetchUserRepos = createEffect({
+const fetchUserReposFx = createEffect({
   async handler({name}) {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
@@ -333,24 +333,24 @@ const fetchUserRepos = createEffect({
 })
 
 // subscribe to pending store status
-fetchUserRepos.pending.watch(pending => {
+fetchUserReposFx.pending.watch(pending => {
   console.log(pending) // false
 })
 
 // subscribe to handler resolve
-fetchUserRepos.done.watch(({params, result}) => {
+fetchUserReposFx.done.watch(({params, result}) => {
   console.log(params) // {name: 'zerobias'}
   console.log(result) // resolved value
 })
 
 // subscribe to handler reject or throw error
-fetchUserRepos.fail.watch(({params, error}) => {
+fetchUserReposFx.fail.watch(({params, error}) => {
   console.error(params) // {name: 'zerobias'}
   console.error(error) // rejected value
 })
 
 // subscribe to both cases
-fetchUserRepos.finally.watch(data => {
+fetchUserReposFx.finally.watch(data => {
   if (data.status === 'done') {
     const {params, result} = data
     console.log(params) // {name: 'zerobias'}
@@ -363,10 +363,10 @@ fetchUserRepos.finally.watch(data => {
 })
 
 // you can replace handler anytime
-fetchUserRepos.use(requestMock)
+fetchUserReposFx.use(requestMock)
 
 // calling effect will return a promise
-const result = await fetchUserRepos({name: 'zerobias'})
+const result = await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Run example](https://share.effector.dev/hlNcL8ma)

@@ -19,14 +19,14 @@ const increment = createEvent('increment')
 const decrement = createEvent('decrement')
 const reset = createEvent('reset')
 
-const fetchCountFromAsyncStorage = createEffect({
+const fetchCountFromAsyncStorageFx = createEffect({
   handler: async () => {
     const value = parseInt(await AsyncStorage.getItem('count'))
     return !isNaN(value) ? value : 0
   },
 })
 
-const updateCountInAsyncStorage = createEffect({
+const updateCountInAsyncStorageFx = createEffect({
   handler: async count => {
     try {
       await AsyncStorage.setItem('count', `${count}`, err => {
@@ -38,9 +38,9 @@ const updateCountInAsyncStorage = createEffect({
   },
 })
 
-fetchCountFromAsyncStorage()
+fetchCountFromAsyncStorageFx()
 
-fetchCountFromAsyncStorage.done.watch(({result}) => {
+fetchCountFromAsyncStorageFx.done.watch(({result}) => {
   init(result)
 })
 
@@ -51,7 +51,7 @@ const counter = createStore(0)
   .reset(reset)
 
 counter.watch(state => {
-  updateCountInAsyncStorage(state)
+  updateCountInAsyncStorageFx(state)
 })
 
 export default () => {

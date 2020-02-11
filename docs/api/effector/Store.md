@@ -225,23 +225,23 @@ You can subscribe to triggering effect by `fail` and `done` events.
 ```js try
 import {createEffect, createStore} from 'effector'
 
-const effect = createEffect().use(
+const effectFx = createEffect().use(
   value => new Promise(res => setTimeout(res, 200, value)),
 )
 
 const store = createStore('initial')
 
-store.watch(effect, (state, params) => console.log(`executed with ${params}`))
+store.watch(effectFx, (state, params) => console.log(`executed with ${params}`))
 
-store.watch(effect.done, (state, {params, result}) =>
+store.watch(effectFx.done, (state, {params, result}) =>
   console.log(`executed with ${params}, resolved with ${result}`),
 )
 
-store.watch(effect.fail, (state, {params, result}) =>
+store.watch(effectFx.fail, (state, {params, result}) =>
   console.log(`rejected with ${params}, resolved with ${result}`),
 )
 
-effect(100)
+effectFx(100)
 ```
 
 [Try it](https://share.effector.dev/fT4JgRJr)
@@ -251,7 +251,7 @@ effect(100)
 One store can subscribe to updates of another store.
 
 ```js try
-import {createEffect, createStore} from 'effector'
+import {createEvent, createStore} from 'effector'
 
 const change = createEvent()
 
@@ -279,7 +279,7 @@ Output
 #### Example with watcher
 
 ```js try
-import {createEffect, createStore} from 'effector'
+import {createEvent, createStore} from 'effector'
 
 const foo = createEvent()
 
@@ -319,7 +319,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 #### Example
 
 ```js try
-import {createEffect, createStore} from 'effector'
+import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
 const increment = createEvent()
@@ -363,7 +363,7 @@ Returns current state of store
 #### Example
 
 ```js try
-import {createEffect, createStore} from 'effector'
+import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
 const updated = createEvent()

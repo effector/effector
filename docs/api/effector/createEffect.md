@@ -27,7 +27,7 @@ Create unnamed effect
 ```js try
 import {createEffect} from 'effector'
 
-const fetchUserRepos = createEffect({
+const fetchUserReposFx = createEffect({
   handler: async ({name}) => {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
@@ -35,7 +35,7 @@ const fetchUserRepos = createEffect({
   },
 })
 
-await fetchUserRepos({name: 'zerobias'})
+await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Try it](https://share.effector.dev/6pNaXVyU)
@@ -45,7 +45,7 @@ Create named effect
 ```js try
 import {createEffect} from 'effector'
 
-const fetchUserRepos = createEffect('fetch user repositories', {
+const fetchUserReposFx = createEffect('fetch user repositories', {
   handler: async ({name}) => {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
@@ -53,7 +53,7 @@ const fetchUserRepos = createEffect('fetch user repositories', {
   },
 })
 
-await fetchUserRepos({name: 'zerobias'})
+await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Try it](https://share.effector.dev/8oirbvPY)
@@ -63,15 +63,15 @@ Set handler to effect after creating
 ```js try
 import {createEffect} from 'effector'
 
-const fetchUserRepos = createEffect()
+const fetchUserReposFx = createEffect()
 
-fetchUserRepos.use(async ({name}) => {
+fetchUserReposFx.use(async ({name}) => {
   const url = `https://api.github.com/users/${name}/repos`
   const req = await fetch(url)
   return req.json()
 })
 
-await fetchUserRepos({name: 'zerobias'})
+await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
@@ -81,7 +81,7 @@ Watch effect status
 ```js try
 import {createEffect} from 'effector'
 
-const fetchUserRepos = createEffect({
+const fetchUserReposFx = createEffect({
   handler: async ({name}) => {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
@@ -89,21 +89,21 @@ const fetchUserRepos = createEffect({
   },
 })
 
-fetchUserRepos.pending.watch(pending => {
+fetchUserReposFx.pending.watch(pending => {
   console.log(`effect is pending?: ${pending ? 'yes' : 'no'}`)
 })
 
-fetchUserRepos.done.watch(({params, result}) => {
+fetchUserReposFx.done.watch(({params, result}) => {
   console.log(params) // {name: 'zerobias'}
   console.log(result) // resolved value
 })
 
-fetchUserRepos.fail.watch(({params, error}) => {
+fetchUserReposFx.fail.watch(({params, error}) => {
   console.error(params) // {name: 'zerobias'}
   console.error(error) // rejected value
 })
 
-fetchUserRepos.finally.watch(({params, status, result, error}) => {
+fetchUserReposFx.finally.watch(({params, status, result, error}) => {
   console.log(params) // {name: 'zerobias'}
   console.log(`handler status: ${status}`)
 
@@ -114,7 +114,7 @@ fetchUserRepos.finally.watch(({params, status, result, error}) => {
   }
 })
 
-await fetchUserRepos({name: 'zerobias'})
+await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Try it](https://share.effector.dev/f3JDMpAB)
@@ -124,7 +124,7 @@ Change state
 ```js try
 import {createStore, createEffect} from 'effector'
 
-const fetchUserRepos = createEffect({
+const fetchUserReposFx = createEffect({
   handler: async ({name}) => {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
@@ -133,11 +133,11 @@ const fetchUserRepos = createEffect({
 })
 
 const repos = createStore([]).on(
-  fetchUserRepos.done,
+  fetchUserReposFx.done,
   (_, {result: repos}) => repos,
 )
 
-await fetchUserRepos({name: 'zerobias'})
+await fetchUserReposFx({name: 'zerobias'})
 ```
 
 [Try it](https://share.effector.dev/Evt9wTm2)
