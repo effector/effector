@@ -1,6 +1,7 @@
 //@flow
 
-import {step, readRef} from './stdlib'
+import {step} from './typedef'
+import {readRef} from './stateRef'
 
 //prettier-ignore
 export const filterChanged = step.filter({

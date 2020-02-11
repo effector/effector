@@ -19,7 +19,7 @@ export {withRegion} from './region'
 export {restore, restoreEvent, restoreEffect, restoreObject} from './restore'
 export {setStoreName} from './naming'
 export {createApi} from './createApi'
-export {Kind, step} from './stdlib'
+export {step} from './typedef'
 export {is} from './is'
 export {createNode} from './createNode'
 export {clearNode} from './clearNode'
@@ -29,6 +29,5 @@ export {guard} from './guard'
 export {attach} from './attach'
 //eslint-disable-next-line
 export * as blocks from './blocks'
-
-export type {Store, Event, Effect, Domain} from './unit.h'
-export type {kind} from './stdlib'
+//eslint-disable-next-line
+export * as Kind from './kind'

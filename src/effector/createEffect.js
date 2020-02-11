@@ -1,7 +1,10 @@
 //@flow
 
 import type {Effect} from './unit.h'
-import {step, own, bind, getGraph} from './stdlib'
+import {step} from './typedef'
+import {getGraph} from './getter'
+import {own} from './own'
+import {bind} from './bind'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {

@@ -1,11 +1,11 @@
 //@flow
 
-import type {Unit} from './stdlib'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createUnit'
 import {combine} from './combine'
-import {step, callStack} from './stdlib'
+import {step} from './typedef'
+import {callStack} from './caller'
 import {is} from './is'
 import {createNode} from './createNode'
 

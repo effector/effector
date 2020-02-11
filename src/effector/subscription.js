@@ -1,7 +1,7 @@
 //@flow
 
-import type {Subscription} from './index.h'
-import {type Graphite, bind2} from './stdlib'
+import type {Subscription, Graphite} from './index.h'
+import {bind2} from './bind'
 import {clearNode} from './clearNode'
 
 export const createSubscription = (node: Graphite): Subscription => {

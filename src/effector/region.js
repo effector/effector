@@ -1,6 +1,6 @@
 //@flow
 
-import {own} from './stdlib'
+import {own} from './own'
 
 export const addToRegion = unit => {
   if (regionStack) own(regionStack.value, [unit])

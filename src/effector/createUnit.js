@@ -5,28 +5,17 @@ import $$observable from 'symbol-observable'
 import {is} from './is'
 import type {Store, Event, Effect} from './unit.h'
 
-import {
-  own,
-  step,
-  createStateRef,
-  readRef,
-  bind,
-  getGraph,
-  nextUnitID,
-  callStackAReg,
-  callARegStack,
-  callStack,
-} from './stdlib'
+import {step} from './typedef'
+import {createStateRef, readRef} from './stateRef'
+import {nextUnitID} from './id'
+import {callStackAReg, callARegStack, callStack} from './caller'
+import {bind} from './bind'
+import {own} from './own'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 
-import type {Subscription, Subscriber} from './index.h'
-import {
-  normalizeConfig,
-  type EventConfigPart,
-  type StoreConfigPart as ConfigPart,
-  type Config,
-} from './config'
+import type {Subscriber} from './index.h'
+import {normalizeConfig, type StoreConfigPart as ConfigPart} from './config'
 import {type CompositeName, createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'

@@ -1,13 +1,7 @@
 //@flow
 
-import {
-  type Graph,
-  type Graphite,
-  type Cmd,
-  getGraph,
-  getOwners,
-  getLinks,
-} from './stdlib'
+import type {Graph, Graphite} from './index.h'
+import {getGraph, getOwners, getLinks} from './getter'
 import {is} from './is'
 
 const removeItem = (list, item) => {

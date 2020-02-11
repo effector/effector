@@ -1,6 +1,12 @@
 //@flow
-import type {Subscription, Subscriber} from './index.h'
-import type {Graph, kind, StateRef, ID, Unit} from './stdlib'
+import type {
+  Subscription,
+  Subscriber,
+  Graph,
+  kind,
+  StateRef,
+  Unit,
+} from './index.h'
 import type {CompositeName} from './naming'
 import type {
   Config,

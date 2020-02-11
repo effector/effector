@@ -1,7 +1,8 @@
 //@flow
 
-import type {Graphite, Graph, ID} from './stdlib'
-import {getGraph, readRef} from './stdlib'
+import type {Graphite, Graph, ID} from './index.h'
+import {readRef} from './stateRef'
+import {getGraph} from './getter'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -11,13 +12,12 @@ type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
  * including call stack, priority type
  * and index of next step in the executed Graph
  */
-type Layer = {|
-  /** index of first step */
-  +idx: number,
-  +stack: Stack,
-  +type: PriorityTag,
-  +id: number,
-|}
+type Layer = {
+  idx: number,
+  stack: Stack,
+  type: PriorityTag,
+  id: number,
+}
 
 /** Call stack */
 type Stack = {

@@ -1,8 +1,9 @@
 //@flow
 
-import {type Unit, step, callStack} from './stdlib'
+import {step} from './typedef'
+import {callStack} from './caller'
 import {createNode} from './createNode'
-import type {Subscription} from './index.h'
+import type {Subscription, Unit} from './index.h'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
 

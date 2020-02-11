@@ -1,7 +1,6 @@
 //@flow
-import {type Graphite, type Cmd} from './stdlib'
 import {createNode} from './createNode'
-import type {Subscription} from './index.h'
+import type {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 
 export const createLinkNode = (

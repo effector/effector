@@ -4,7 +4,7 @@ import $$observable from 'symbol-observable'
 import type {Event} from './unit.h'
 import {clearNode} from './clearNode'
 import {createEvent} from './createUnit'
-import {bind2} from './stdlib'
+import {bind2} from './bind'
 
 export function fromObservable<T>(observable: mixed): Event<T> {
   if (observable !== Object(observable))

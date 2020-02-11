@@ -1,15 +1,10 @@
 //@flow
 import {combine} from './combine'
-import {
-  type Graphite,
-  step,
-  createStateRef,
-  readRef,
-  own,
-  callStackAReg,
-  callARegStack,
-  getStoreState,
-} from './stdlib'
+import {step} from './typedef'
+import {createStateRef, readRef} from './stateRef'
+import {callStackAReg, callARegStack} from './caller'
+import {getStoreState} from './getter'
+import {own} from './own'
 import {is} from './is'
 import {createStore} from './createUnit'
 import {createEvent} from './createUnit'

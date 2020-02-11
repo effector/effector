@@ -2,17 +2,13 @@
 import type {
   StateRef,
   Run,
-  Tap,
   Filter,
   Compute,
   Barrier,
   Check,
-  Batch,
-  ID,
-  Graph,
   Mov,
 } from './index.h'
-import {nextStepID} from './refcount'
+import {nextStepID} from './id'
 import {bind2} from './bind'
 
 const cmd = (type: any, hasRef: boolean, data: any): any => ({

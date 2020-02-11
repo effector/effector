@@ -1,6 +1,7 @@
 //@flow
 
-import {getGraph, bind} from './stdlib'
+import {getGraph} from './getter'
+import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
 
