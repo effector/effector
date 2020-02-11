@@ -4,7 +4,7 @@ title: split
 hide_title: true
 ---
 
-# `split(event, cases)`
+# `split(trigger, cases)`
 
 Pattern matching method, splits event into several, which fire upon source event matches its comparator function.
 
