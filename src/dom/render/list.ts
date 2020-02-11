@@ -30,6 +30,7 @@ type ListContext = {
   parentStack: Stack
   getID: (item: any, i: number) => string | number | symbol
   fields: string[] | null
+  visible: ((state: any) => boolean) | null
 }
 
 export function tree<T, K extends keyof T, C extends keyof T>(
@@ -69,6 +70,7 @@ export function list<
     key: T[K] extends string | number ? K : never
     source: Store<T[]>
     fields: Query
+    visible?: (state: T) => boolean
   },
   cb: (opts: {
     store: Store<T>
@@ -88,6 +90,7 @@ export function list<T, K extends keyof T>(
     key: T[K] extends string | number | symbol ? K : never
     source: Store<T[]>
     reverse?: boolean
+    visible?: (state: T) => boolean
   },
   cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
@@ -102,24 +105,24 @@ export function list<T, K extends keyof T>(
     source: Store<T[]>
     reverse?: boolean
     fields?: string[]
+    visible?: (state: T) => boolean
   },
   cb: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
-export function list<T, K extends keyof T>(
-  {
-    source,
-    fn,
-    key,
-    reverse,
-    fields,
-  }: {
-    source: Store<T[]>
-    fn: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
-    key: T[K] extends string | number | symbol ? K : never
-    reverse?: boolean
-    fields?: string[]
-  },
-): void
+export function list<T, K extends keyof T>({
+  source,
+  fn,
+  key,
+  reverse,
+  fields,
+}: {
+  source: Store<T[]>
+  fn: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void
+  key: T[K] extends string | number | symbol ? K : never
+  reverse?: boolean
+  fields?: string[]
+  visible?: (state: T) => boolean
+}): void
 export function list<T>(opts, cb = (opts: any) => {}) {
   cb = opts.fn ? opts.fn : cb
 
@@ -178,6 +181,7 @@ export function list<T>(opts, cb = (opts: any) => {}) {
     parentStack: currentStack,
     getID,
     fields: opts.fields ? opts.fields : null,
+    visible: opts.visible ? opts.visible : null,
   }
 
   const updates = createStore(update(context, [], source.getState()))
@@ -208,8 +212,11 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
       resultRecords.push(stack)
       skipNode[index] = true
       if (record.store.getState() !== input[index])
-        //@ts-ignore
-        launch(record.store, input[index], true)
+        launch({
+          target: record.store,
+          params: input[index],
+          defer: true,
+        })
     } else {
       removedRecords.push(stack)
     }
@@ -227,8 +234,11 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
       setRightSibling(item, null)
       setLeftSibling(item, null)
     }
-    //@ts-ignore
-    launch(removeNodesFromDOM, removedRecords, true)
+    launch({
+      target: removeNodesFromDOM,
+      params: removedRecords,
+      defer: true,
+    })
   }
   let lastItem: Stack | null =
     resultRecords.length > 0 ? resultRecords[resultRecords.length - 1] : null
@@ -267,7 +277,7 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
         active: true,
         nodes: [],
         fields,
-        visible: [],
+        visible: context.visible ? [store.map(context.visible)] : [],
       },
       mountStatus: 'initial',
       visible: true,
@@ -279,8 +289,11 @@ function update<T>(context: ListContext, records: Stack[], input: T[]) {
     resultRecords.push(stack)
   }
   if (newRecords.length > 0) {
-    //@ts-ignore
-    launch(applyNewRecordsEvent, {context, list: newRecords}, true)
+    launch({
+      target: applyNewRecordsEvent,
+      params: {context, list: newRecords},
+      defer: true,
+    })
   }
   endMark('list update [' + context.shortName + ']')
   return resultRecords
@@ -437,8 +450,11 @@ dynamicQueue<Stack, Signal, any>({
   flatten: ({signal}) => [signal],
   fn: function launchSignal(signal) {
     if (!signal.scope) return
-    //@ts-ignore
-    launch(signal, null, false)
+    launch({
+      target: signal,
+      params: null,
+      defer: false,
+    })
   },
 })
 
@@ -464,6 +480,9 @@ const clearParentSignal = (updates: Store<Stack[]>) => {
     //@ts-ignore
     listItem.store = null
   }
-  //@ts-ignore
-  launch(removeNodesFromDOM, allRecords, true)
+  launch({
+    target: removeNodesFromDOM,
+    params: allRecords,
+    defer: true,
+  })
 }
