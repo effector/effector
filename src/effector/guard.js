@@ -6,7 +6,7 @@ import {createEvent} from './createUnit'
 import {combine} from './combine'
 import {step} from './typedef'
 import {callStack} from './caller'
-import {is} from './is'
+import {is, isFunction} from './is'
 import {createNode} from './createNode'
 
 export function guard(source: any, config: any) {
@@ -43,8 +43,7 @@ export function guard(source: any, config: any) {
       name,
     })
   } else {
-    if (typeof filter !== 'function')
-      throw Error('`filter` should be function or unit')
+    if (!isFunction(filter)) throw Error('`filter` should be function or unit')
     createLinkNode(source, target, {
       scope: {fn: filter},
       node: [step.filter({fn: callStack})],

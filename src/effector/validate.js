@@ -8,12 +8,11 @@ import {
   domain as domainKind,
 } from './kind'
 
-export const unit = (obj: mixed) =>
-  (typeof obj === 'function' || (typeof obj === 'object' && obj !== null)) &&
-  //$off
-  'kind' in obj
+import {isObject, isFunction} from './is'
 
-//$off
+export const unit = (obj: mixed) =>
+  (isFunction(obj) || isObject(obj)) && 'kind' in obj
+
 const is = (type: kind) => (obj: mixed) => unit(obj) && obj.kind === type
 
 export const store = is(storeKind)

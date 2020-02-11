@@ -14,6 +14,7 @@ import {
   filterMapEvent,
 } from './createUnit'
 import {createDefer} from './defer'
+import {isObject, isFunction} from './is'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
@@ -96,10 +97,7 @@ export function createEffect<Payload, Done>(
             onReject(syncError)
             return params
           }
-          if (
-            Object(rawResult) === rawResult &&
-            typeof rawResult.then === 'function'
-          ) {
+          if (isObject(rawResult) && isFunction(rawResult.then)) {
             rawResult.then(onResolve, onReject)
             return params
           }

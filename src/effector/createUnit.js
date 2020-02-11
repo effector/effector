@@ -2,7 +2,7 @@
 
 import $$observable from 'symbol-observable'
 
-import {is} from './is'
+import {is, isObject, isFunction} from './is'
 import type {Store, Event, Effect} from './unit.h'
 
 import {step} from './typedef'
@@ -59,7 +59,7 @@ const createComputation = (from, to, op, fn) =>
 
 const createEventFiltration = (event, op, fn, node) => {
   let config
-  if (typeof fn === 'object') {
+  if (isObject(fn)) {
     config = fn
     fn = fn.fn
   }
@@ -94,7 +94,7 @@ export function createEvent<Payload>(
   event.map = (fn: Function) => {
     let config
     let name
-    if (typeof fn === 'object') {
+    if (isObject(fn)) {
       config = fn
       name = fn.name
       fn = fn.fn
@@ -104,7 +104,7 @@ export function createEvent<Payload>(
     return mapped
   }
   event.filter = fn => {
-    if (typeof fn === 'function') {
+    if (isFunction(fn)) {
       console.error('.filter(fn) is deprecated, use .filterMap instead')
       return filterMapEvent(event, fn)
     }
@@ -199,7 +199,7 @@ export function createStore<State>(
   store.map = (fn, firstState?: any) => {
     let config
     let name
-    if (typeof fn === 'object') {
+    if (isObject(fn)) {
       config = fn
       name = fn.name
       firstState = fn.firstState
@@ -273,13 +273,11 @@ function watch(
   fn?: Function,
 ) {
   if (!fn || !is.unit(eventOrFn)) {
-    if (typeof eventOrFn !== 'function')
-      throw Error('watch requires function handler')
+    if (!isFunction(eventOrFn)) throw Error('watch requires function handler')
     eventOrFn(storeInstance.getState())
     return watchUnit(storeInstance, eventOrFn)
   }
-  if (typeof fn !== 'function')
-    throw Error('second argument should be a function')
+  if (!isFunction(fn)) throw Error('second argument should be a function')
   return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
 }
 

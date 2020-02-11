@@ -4,6 +4,7 @@ import {getGraph} from './getter'
 import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
+import {isObject} from './is'
 
 import {is, step, launch, createNode} from 'effector'
 
@@ -22,7 +23,7 @@ export function hydrate(domain, {values}) {
   if (!is.domain(domain)) {
     throw Error('first argument of hydrate should be domain')
   }
-  if (Object(values) !== values) {
+  if (!isObject(values)) {
     throw Error('values property should be an object')
   }
   values = normalizeValues(values)

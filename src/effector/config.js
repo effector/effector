@@ -1,10 +1,12 @@
 //@flow
 
-export type SourceLocation = {|
+import {isObject} from './is'
+
+export type SourceLocation = {
   file: string,
   column: number,
   line: number,
-|}
+}
 
 export type EffectConfigPart<Payload, Done> = {
   handler?: (payload: Payload) => Promise<Done> | Done,
@@ -46,10 +48,10 @@ export type Config<Part> = {
 }
 
 const assignConfigPart = (part, config = {}) => {
-  if (Object(part) === part) {
+  if (isObject(part)) {
     assignConfigPart(part.config, config)
     if (part.name != null) {
-      if (typeof part.name === 'object') assignConfigPart(part.name, config)
+      if (isObject(part.name)) assignConfigPart(part.name, config)
       else config.name = part.name
     }
     if (part.loc) config.loc = part.loc
