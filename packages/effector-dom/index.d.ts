@@ -119,6 +119,7 @@ export function list<
   opts: {
     key: T[K] extends string | number ? K : never
     source: Store<T[]>
+    visible?: (state: T) => boolean
     fields: Query
     fn?: (opts: {
       store: Store<T>
@@ -148,6 +149,7 @@ export function list<T, K extends keyof T>(
   }: {
     key: T[K] extends string | number | symbol ? K : never
     source: Store<T[]>
+    visible?: (state: T) => boolean
     reverse?: boolean
     fn?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void
   },
