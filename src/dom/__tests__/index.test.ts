@@ -349,14 +349,12 @@ describe('list', () => {
           key: 'id',
           fn: ({store}) => {
             h('li', {text: store.map(v => v.name)})
-          }
+          },
         })
       })
       await act()
     })
-    expect(s1).toMatchInlineSnapshot(
-      `"<li>alice</li><li>bob</li>"`
-    )
+    expect(s1).toMatchInlineSnapshot(`"<li>alice</li><li>bob</li>"`)
   })
   it.skip('insert its items before sibling nodes', async () => {
     const [s1, s2] = await exec(async () => {
@@ -643,12 +641,12 @@ describe('handler', () => {
   })
   test('prevented event', async () => {
     const prevented = await execFunc(async () => {
-      const click = createEvent<MouseEvent>();
-      let isPrevented = false;
+      const click = createEvent<MouseEvent>()
+      let isPrevented = false
 
       click.watch(e => {
-        isPrevented = e.defaultPrevented;
-        console.log(e, isPrevented);
+        isPrevented = e.defaultPrevented
+        console.log(e, isPrevented)
       })
 
       using(el, () => {
@@ -659,19 +657,19 @@ describe('handler', () => {
       })
       await act()
       document.getElementById('btn')!.click()
-      return isPrevented;
+      return isPrevented
     })
 
     expect(prevented).toMatchInlineSnapshot(`true`)
   })
   test('change passive property if prevent is [true]', async () => {
     const prevented = await execFunc(async () => {
-      const click = createEvent<MouseEvent>();
-      let isPrevented = false;
+      const click = createEvent<MouseEvent>()
+      let isPrevented = false
 
       click.watch(e => {
-        isPrevented = e.defaultPrevented;
-        console.log(e, isPrevented);
+        isPrevented = e.defaultPrevented
+        console.log(e, isPrevented)
       })
 
       using(el, () => {
@@ -682,7 +680,7 @@ describe('handler', () => {
       })
       await act()
       document.getElementById('btn')!.click()
-      return isPrevented;
+      return isPrevented
     })
 
     expect(prevented).toMatchInlineSnapshot(`true`)
