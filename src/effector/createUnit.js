@@ -2,7 +2,7 @@
 
 import $$observable from 'symbol-observable'
 
-import {is, isObject, isFunction} from './is'
+import {is, isObject, isFunction, assertObject} from './is'
 import type {Store, Event, Effect} from './unit.h'
 
 import {step} from './typedef'
@@ -221,8 +221,7 @@ export function createStore<State>(
   }
   store[$$observable] = () => ({
     subscribe(observer: Subscriber<any>) {
-      if (observer !== Object(observer))
-        throw Error('expect observer to be an object') // or function
+      assertObject(observer)
       return watch(store, state => {
         if (observer.next) {
           observer.next(state)
