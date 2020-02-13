@@ -3,12 +3,13 @@ import {Store, Event, Step} from 'effector'
 export type Signal = Step
 export type StoreOrData<T> = Store<T> | T
 export type DOMProperty = string | number | null | boolean
-export type PropertyMap = {[field: string]: StoreOrData<DOMProperty>}
+export type PropertyMap = {[field: string]: DOMProperty | AttributeStore}
 export type StylePropertyMap = Partial<
   {
-    [K in keyof CSSStyleDeclaration]: StoreOrData<DOMProperty>
+    [K in keyof CSSStyleDeclaration]: DOMProperty | AttributeStore
   }
 >
+export type DOMTag = keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap
 export type TransformMap = {
   translate:
     | Store<{
@@ -41,6 +42,22 @@ export type TransformMap = {
 }
 
 export type DOMElement = HTMLElement | SVGElement
+export type AttributeStore =
+  | Store<string>
+  | Store<number>
+  | Store<boolean>
+  | Store<null>
+  | Store<string | number>
+  | Store<string | boolean>
+  | Store<string | null>
+  | Store<number | boolean>
+  | Store<number | null>
+  | Store<boolean | null>
+  | Store<string | number | boolean>
+  | Store<string | number | null>
+  | Store<string | boolean | null>
+  | Store<number | boolean | null>
+  | Store<string | number | boolean | null>
 
 type Tuple<T = unknown> = [T] | T[]
 type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
@@ -54,7 +71,7 @@ export function spec(spec: {
   attr?: PropertyMap
   data?: PropertyMap
   transform?: Partial<TransformMap>
-  text?: StoreOrData<DOMProperty>
+  text?: DOMProperty | AttributeStore
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
@@ -83,14 +100,13 @@ export function handler(
   >,
 ): void
 
-export function h(tag: string, cb: () => void): void
 export function h(
-  tag: string,
+  tag: DOMTag,
   spec: {
     attr?: PropertyMap
     data?: PropertyMap
     transform?: Partial<TransformMap>
-    text?: StoreOrData<DOMProperty>
+    text?: DOMProperty | AttributeStore
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
@@ -103,6 +119,7 @@ export function h(
     >
   },
 ): void
+export function h(tag: DOMTag, cb: () => void): void
 export function variant<Case extends string>(
   key: Store<Case>,
   cases: Partial<{[K in Case]: () => void}>,
