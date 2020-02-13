@@ -275,6 +275,24 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "egaris",
+      "name": "Egor Aristov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/5036934?v=4",
+      "profile": "https://github.com/egaris",
+      "contributions": [
+        "doc"
+      ]
+    },
+    {
+      "login": "Sozonov",
+      "name": "Sozonov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/1931637?v=4",
+      "profile": "https://github.com/Sozonov",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "commitConvention": "none"
