@@ -4,9 +4,9 @@ title: split
 hide_title: true
 ---
 
-# `split(event, cases)`
+# `split(trigger, cases)`
 
-Pattern matching method, splits event into several, which fire upon source event matches its comparator function.
+Pattern matching method, splits trigger unit (event, effect or store) into several events, which fire upon trigger matches its comparator function.
 
 #### Arguments
 1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md) or [_`Store`_](Store.md) unit-trigger.
