@@ -173,16 +173,6 @@ export function list<T, K extends keyof T>(
   cb?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
 ): void
 
-export function map<T, S>(
-  store: Store<T>,
-  config: {fn: (value: T) => S},
-): Store<S>
-
-export function combine<A extends Combinable, B>(config: {
-  source: A
-  fn(source: GetCombinedValue<A>): B
-}): Store<B>
-
 export function node(fn: (node: DOMElement) => void): void
 export function signalOwn<T>(value: T): T
 export function explicitUnmount(unmountOn: Event<any>): void
