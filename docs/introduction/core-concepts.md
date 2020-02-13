@@ -31,36 +31,36 @@ The only requirement for function:
 - **Should** have zero or one argument
 
 ```js try
-const getUser = createEffect('get user').use(params => {
+const getUserFx = createEffect('get user').use(params => {
   return fetch(`https://example.com/get-user/${params.id}`).then(res =>
     res.json(),
   )
 })
 
 // subscribe to effect call
-getUser.watch(params => {
+getUserFx.watch(params => {
   console.log(params) // {id: 1}
 })
 
 // subscribe to promise resolve
-getUser.done.watch(({result, params}) => {
+getUserFx.done.watch(({result, params}) => {
   console.log(params) // {id: 1}
   console.log(result) // resolved value
 })
 
 // subscribe to promise reject (or throw)
-getUser.fail.watch(({error, params}) => {
+getUserFx.fail.watch(({error, params}) => {
   console.error(params) // {id: 1}
   console.error(error) // rejected value
 })
 
 // you can replace function anytime
-getUser.use(() => promiseMock)
+getUserFx.use(() => promiseMock)
 
 // call effect with your params
-getUser({id: 1})
+getUserFx({id: 1})
 
-const data = await getUser({id: 2}) // handle promise
+const data = await getUserFx({id: 2}) // handle promise
 ```
 
 ## Store
@@ -70,7 +70,7 @@ _Store_ is an object that holds the state tree. There can be multiple stores.
 ```js try
 const users = createStore([]) // <-- Default state
   // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUser.done, (state, {result: user, params}) => [...state, user])
+  .on(getUserFx.done, (state, {result: user, params}) => [...state, user])
 
 const messages = createStore([])
   // from WebSocket

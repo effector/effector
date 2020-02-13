@@ -198,17 +198,17 @@ import {sample, createStore, createEffect, createEvent} from 'effector'
 
 const $user = createStore({name: 'john', password: 'doe'})
 
-const signIn = createEffect({handler: console.log})
+const signInFx = createEffect({handler: console.log})
 const submitForm = createEvent()
 
 const submitted = sample({
   source: $user,
   clock: submitForm,
   fn: (user, params) => ({user, params}),
-  target: signIn,
+  target: signInFx,
 })
 
-console.log(submitted === signIn) // units are equal
+console.log(submitted === signInFx) // units are equal
 
 submitForm('foo')
 ```
@@ -282,13 +282,13 @@ import {createStore, createEffect, sample, combine} from 'effector'
 
 const data = [{name: 'physics', id: 1}]
 
-const fetchContent = createEffect({
+const fetchContentFx = createEffect({
   handler: () => new Promise(resolve => setTimeout(() => resolve(data), 0)),
 })
 
 const $lessonIndex = createStore(0)
 const $allLessons = createStore([]).on(
-  fetchContent.done,
+  fetchContentFx.done,
   (_, {result}) => result,
 )
 
@@ -299,7 +299,7 @@ const $lesson = combine(
 )
 
 const $modal = combine({
-  isPending: fetchContent.pending,
+  isPending: fetchContentFx.pending,
   content: $lesson,
 })
 
@@ -315,7 +315,7 @@ $batchedModal.updates.watch(v => console.log('batchedModal update', v))
 //=> batched modal update { isPending: false, content: Object })
 // total 2 updates
 
-fetchContent()
+fetchContentFx()
 ```
 
 [Try it](https://share.effector.dev/mYd5PEpD)
