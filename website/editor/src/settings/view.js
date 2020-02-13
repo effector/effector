@@ -1,10 +1,9 @@
 // @flow
 
 import * as React from 'react'
-import {useStore, useStoreMap} from 'effector-react'
+import {useStore, useStoreMap, useList} from 'effector-react'
 import {styled} from 'linaria/react'
 import {Toggle} from '../components/Toggle'
-import {VersionSelector} from '../components/VersionSelector'
 import {
   typeHoverToggleChange,
   flowToggleChange,
@@ -36,11 +35,16 @@ export const Settings = () => (
   <SettingsGroup>
     <Section>
       <Label>
-        <VersionSelector
-          versions={useStore(packageVersions)}
-          selected={useStore(version)}
-          onChange={selectVersion}
-        />
+        <div className="versions">
+          <select
+            value={useStore(version)}
+            onChange={e => selectVersion(e.currentTarget.value)}>
+            {useList(packageVersions, item => (
+              <option value={item}>{item}</option>
+            ))}
+          </select>
+        </div>
+        Effector version
       </Label>
     </Section>
     <Section>
