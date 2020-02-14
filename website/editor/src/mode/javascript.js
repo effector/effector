@@ -653,7 +653,6 @@
         )
       if (type == 'operator') {
         if (/\+\+|--/.test(value) || (isTS && value == '!')) return cont(me)
-        console.log('operator no comma', cx.stream)
         if (
           (isTS || isFlow) &&
           value == '<' &&

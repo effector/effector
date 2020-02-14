@@ -20,25 +20,21 @@ import 'codemirror/keymap/sublime'
 // import 'codemirror/addon/fold/xml-fold';
 import 'codemirror/addon/fold/foldgutter.css'
 
+const {signal, Pos} = CodeMirror
+
 function getAnnotations(text: string, callback, options, editor) {
   checkContent(text)
     .then(({code}) => (code === 'fail' ? [] : code))
     .then(errors => {
-      CodeMirror.signal(editor, 'flowErrors', errors)
+      signal(editor, 'flowErrors', errors)
 
       const lint = errors.map(err => {
         const messages = err.message
         const firstLoc = messages[0].loc
         const message = messages.map(msg => msg.descr).join('\n')
         return {
-          from: CodeMirror.Pos(
-            //$todo
-            firstLoc.start.line - 1,
-            //$todo
-            firstLoc.start.column - 1,
-          ),
-          //$todo
-          to: CodeMirror.Pos(firstLoc.end.line - 1, firstLoc.end.column),
+          from: Pos(firstLoc.start.line - 1, firstLoc.start.column - 1),
+          to: Pos(firstLoc.end.line - 1, firstLoc.end.column),
           severity: err.level,
           message,
         }

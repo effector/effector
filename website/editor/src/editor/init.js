@@ -115,7 +115,6 @@ const initStore = combine({
   typechecker,
 })
 initStore.watch(data => {
-  console.log('init store update', data)
   evalEffect(data.sourceCode)
 })
 
