@@ -4,7 +4,6 @@ import * as React from 'react'
 import {
   createStore,
   createEvent,
-  createStoreObject,
   createEffect,
   forward,
   sample,
@@ -80,9 +79,10 @@ const unexpectedSharingError = sharing.fail.filter({
 unexpectedSharingError.watch(({error}) => {
   console.error(error)
 })
-forward({
-  from: sample(createStoreObject({slug, sharedUrl}), clickShare),
-  to: sharing,
+sample({
+  source: {slug, sharedUrl},
+  clock: clickShare,
+  target: sharing,
 })
 
 export const urlRef: any = React.createRef()

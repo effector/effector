@@ -1,6 +1,6 @@
 //@flow
 
-import {createStoreObject, sample, forward} from 'effector'
+import {combine, sample, forward} from 'effector'
 
 import {
   changeSources,
@@ -109,17 +109,15 @@ forward({
   to: sourceCode,
 })
 
-{
-  const initStore = createStoreObject({
-    sourceCode,
-    versionLoader,
-    typechecker,
-  })
-  initStore.watch(data => {
-    console.log('init store update', data)
-    evalEffect(data.sourceCode)
-  })
-}
+const initStore = combine({
+  sourceCode,
+  versionLoader,
+  typechecker,
+})
+initStore.watch(data => {
+  console.log('init store update', data)
+  evalEffect(data.sourceCode)
+})
 
 changeSources(retrieveCode())
 selectVersion(retrieveVersion())
