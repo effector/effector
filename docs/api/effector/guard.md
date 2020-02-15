@@ -7,7 +7,7 @@ hide_title: true
 # `guard({source, filter, target?})`
 
 Guard is a method for conditional event routing.
-It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them
+It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them.
 
 #### Arguments
 
@@ -72,8 +72,8 @@ submitForm('alice') // ~> searchUser('alice')
 
 #### Arguments
 
-1. `sourceEvent` (_Event_): Source event
-1. `filterStore` (_Store_): Filter store
+1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
+1. `filter` (_Store_): Filter store
 
 #### Example
 
@@ -101,12 +101,12 @@ trigger('C')
 
 [Try it](https://share.effector.dev/6bqOCO4y)
 
-# `guard(sourceEvent, {filter: predicate})`
+# `guard(source, {filter: predicate})`
 
 #### Arguments
 
-1. `sourceEvent` (_Event_): Source event
-2. `filter` (_(sourcePayload) => Boolean_): Predicate function, should be **pure**
+1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
+2. `filter` (_(payload) => Boolean_): Predicate function, should be **pure**
 
 #### Example 2
 
