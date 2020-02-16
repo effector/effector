@@ -146,8 +146,7 @@ export function createEffect<Payload, Done>(
 
   const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
-    .on(done, x => x - 1)
-    .on(fail, x => x - 1))
+    .on(anyway, x => x - 1))
 
   const pending = (instance.pending = inFlight.map({
     fn: amount => amount > 0,
