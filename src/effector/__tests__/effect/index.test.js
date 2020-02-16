@@ -268,8 +268,8 @@ describe('execution order', () => {
         "handler",
         "finally",
         "done",
-        "doneData",
         "inFlight 0",
+        "doneData",
         "pending false",
         "promise resolver",
       ]
