@@ -251,16 +251,26 @@ describe('execution order', () => {
     fx.finally.watch(() => {
       fn('finally')
     })
+    fx.inFlight.updates.watch(n => {
+      fn(`inFlight ${n}`)
+    })
+    fx.pending.updates.watch(pending => {
+      fn(`pending ${pending}`)
+    })
     await fx().then(() => {
       fn('promise resolver')
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         "start",
+        "inFlight 1",
+        "pending true",
         "handler",
         "finally",
         "done",
         "doneData",
+        "inFlight 0",
+        "pending false",
         "promise resolver",
       ]
     `)
