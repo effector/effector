@@ -45,7 +45,7 @@ Just use `yarn test` and `yarn test:watch`.
 
 ### Type tests
 
-`yarn test --testPathPattern='types'` to run types tests, `yarn test --testPathPattern='types' -u` to update their inline snapshots.
+`yarn test --testPathPattern='types'` to run types tests, `yarn test --testPathPattern='types' -u` to update their inline snapshots. Public types are always placed in `packages/<library name>/*.d.ts`, for example, [here are public typings for effector](https://github.com/zerobias/effector/blob/master/packages/effector/index.d.ts)
 
 ### New Features
 
