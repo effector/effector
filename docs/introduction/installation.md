@@ -3,11 +3,11 @@ id: installation
 title: Installation
 ---
 
-```sh
+```bash
 npm install --save effector
 ```
 
-```sh
+```bash
 yarn add effector
 ```
 
@@ -15,21 +15,21 @@ yarn add effector
 
 ### For react
 
-```sh
+```bash
 npm install --save effector-react
 ```
 
-```sh
+```bash
 yarn add effector-react
 ```
 
 ### For vue
 
-```sh
+```bash
 npm install --save effector-vue
 ```
 
-```sh
+```bash
 yarn add effector-vue
 ```
 
