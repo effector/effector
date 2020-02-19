@@ -12,26 +12,30 @@ import {Code} from '../components/Code'
 const codeExample = `
 import {createStore, createEvent} from 'effector'
 
-const increment = createEvent()
-const decrement = createEvent()
-const resetCounter = createEvent()
-
+const incremented = createEvent()
+const decremented = createEvent()
+const reseted = createEvent()
+  
 const counter = createStore(0)
-  .on(increment, state => state + 1)
-  .on(decrement, state => state - 1)
-  .reset(resetCounter)
-
+ .on(increment, state => state + 1)
+ .on(decrement, state => state - 1)
+ .reset(reseted)
+  
 counter.watch(n => console.log('counter: ', n))
 // counter: 0
-increment.watch(() => console.log('increment'))
-decrement.watch(() => console.log('decrement'))
-
-increment()
+incremented.watch(() => console.log('counter incremented'))
+decremented.watch(() => console.log('counter decremented'))
+reseted.watch(() => console.log('counter reseted'))
+  
+incremented()
 // counter: 1
-// increment
-decrement()
+// incremented
+decremented()
 // counter: 0
-// decrement
+// incremented
+reseted()
+// counter: 0
+// counter reseted
 `
 
 const features = [

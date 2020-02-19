@@ -1,28 +1,28 @@
 //@flow
 
 export default `
-  const increment = createEvent()
-  const decrement = createEvent()
-  const resetCounter = createEvent()
+const incremented = createEvent()
+const decremented = createEvent()
+const reseted = createEvent()
   
-  const counter = createStore(0)
-    .on(increment, state => state + 1)
-    .on(decrement, state => state - 1)
-    .reset(resetCounter)
+const counter = createStore(0)
+ .on(increment, state => state + 1)
+ .on(decrement, state => state - 1)
+ .reset(reseted)
   
-  counter.watch(n => console.log('counter: ', n))
-  // counter: 0
-  increment.watch(() => console.log('increment'))
-  decrement.watch(() => console.log('decrement'))
-  resetCounter.watch(() => console.log('reset counter'))
+counter.watch(n => console.log('counter: ', n))
+// counter: 0
+incremented.watch(() => console.log('counter incremented'))
+decremented.watch(() => console.log('counter decremented'))
+reseted.watch(() => console.log('counter reseted'))
   
-  increment()
-  // counter: 1
-  // increment
-  decrement()
-  // counter: 0
-  // decrement
-  resetCounter()
-  // counter: 0
-  // reset counter
+incremented()
+// counter: 1
+// incremented
+decremented()
+// counter: 0
+// incremented
+reseted()
+// counter: 0
+// counter reseted
 `
