@@ -169,6 +169,62 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ## Effect Properties
 
+### `doneData`
+
+_Event_ triggered when _handler_ is _resolved_.
+
+#### Arguments
+
+Event triggered with result of effect execution:
+
+1. `result` (_Done_): A result of the resolved handler
+
+#### Example
+
+```js try
+import {createEffect} from 'effector'
+
+const effectFx = createEffect({
+  handler: value => Promise.resolve(value + 1),
+})
+
+effectFx.doneData.watch(result => {
+  console.log('Done with result', result)
+})
+
+effectFx(2) // => Done with result 3
+```
+
+[Try it](https://share.effector.dev/KXoTVGju)
+
+### `failData`
+
+Event triggered when handler is rejected or throws error.
+
+#### Arguments
+
+Event triggered with error thrown by effect:
+
+1. `error` (_Fail_): An error thrown by handler
+
+#### Example
+
+```js try
+import {createEffect} from 'effector'
+
+const effectFx = createEffect()
+
+effectFx.use(value => Promise.reject(value - 1))
+
+effectFx.failData.watch(error => {
+  console.log('Fail with error', error)
+})
+
+effectFx(2) // => Fail with error 1
+```
+
+[Try it](https://share.effector.dev/DQFsvWqy)
+
 ### `done`
 
 _Event_ triggered when _handler_ is _resolved_.
