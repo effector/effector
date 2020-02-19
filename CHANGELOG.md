@@ -2,6 +2,40 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.12.0
+
+- Add `effect.doneData` and `effect.failData` events with effect result and error values as shorthands for common use cases `effect.done.map(({result}) => result)` and `effect.fail.map(({error}) => error)`
+
+```js
+import {createEffect, merge} from 'effector'
+
+const fetchUserFx = createEffect()
+const fetchFriendsFx = createEffect()
+
+/* create event with results of any request to api */
+
+/* new way, using .doneData events */
+
+const apiResult = merge([
+  fetchUserFx.doneData,
+  fetchFriendsFx.doneData,
+])
+
+/* old way, using .done events */
+
+const apiResultOld = merge([
+  fetchUserFx.done.map(({result}) => result),
+  fetchFriendsFx.done.map(({result}) => result),
+])
+
+```
+
+[Try it](https://share.effector.dev/Zae5MZHU)
+
+[Documentation for `effect.doneData`](https://effector.now.sh/docs/api/effector/effect#donedata)
+
+[Documentation for `effect.failData`](https://effector.now.sh/docs/api/effector/effect#faildata)
+
 ## effector 20.11.0
 
 - Add `effect.inFlight` store to effects. It show how many effect calls aren't settled yet. Useful for rate limiting.
