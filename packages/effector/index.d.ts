@@ -102,7 +102,9 @@ type EventAsReturnType<Payload> = Payload extends any ? Event<Payload> : never
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
+  readonly doneData: Event<Done>
   readonly fail: Event<{params: Params; error: Fail}>
+  readonly failData: Event<Fail>
   readonly finally: Event<
     | {
         status: 'done'

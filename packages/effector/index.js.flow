@@ -77,10 +77,12 @@ declare export class Effect<Params, Done, Fail = Error>
     +params: Params,
     +result: Done,
   |}>;
+  +doneData: Event<Done>;
   +fail: Event<{|
     +params: Params,
     +error: Fail,
   |}>;
+  +failData: Event<Fail>;
   +finally: Event<
     | {|
         +status: 'done',
