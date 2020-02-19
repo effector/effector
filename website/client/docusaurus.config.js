@@ -10,7 +10,8 @@ module.exports = {
     sidebarCollapsible: false,
     image: 'img/comet.png',
     prism: {
-      theme: require('prism-react-renderer/themes/vsDark'),
+      theme: require('prism-react-renderer/themes/github'),
+      darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
     navbar: {
       title: 'Effector',

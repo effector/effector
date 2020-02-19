@@ -1,36 +1,38 @@
 import React from 'react'
 import classnames from 'classnames'
 import Layout from '@theme/Layout'
-// import CodeBlock from '@theme/CodeBlock';
+import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
 import styles from './styles.module.css'
 
-// const codeExample = `
-// import {createStore, createEvent} from 'effector'
-//
-// const increment = createEvent()
-// const decrement = createEvent()
-// const resetCounter = createEvent()
-//
-// const counter = createStore(0)
-//   .on(increment, state => state + 1)
-//   .on(decrement, state => state - 1)
-//   .reset(resetCounter)
-//
-// counter.watch(n => console.log('counter: ', n))
-// // counter: 0
-// increment.watch(() => console.log('increment'))
-// decrement.watch(() => console.log('decrement'))
-//
-// increment()
-// // counter: 1
-// // increment
-// decrement()
-// // counter: 0
-// // decrement
-// `
+import {Code} from '../components/Code'
+
+const codeExample = `
+import {createStore, createEvent} from 'effector'
+
+const increment = createEvent()
+const decrement = createEvent()
+const resetCounter = createEvent()
+
+const counter = createStore(0)
+  .on(increment, state => state + 1)
+  .on(decrement, state => state - 1)
+  .reset(resetCounter)
+
+counter.watch(n => console.log('counter: ', n))
+// counter: 0
+increment.watch(() => console.log('increment'))
+decrement.watch(() => console.log('decrement'))
+
+increment()
+// counter: 1
+// increment
+decrement()
+// counter: 0
+// decrement
+`
 
 const features = [
   {
@@ -88,32 +90,38 @@ function Home() {
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
       <header className={classnames('hero ', styles.heroBanner)}>
-        {/*<CodeBlock>*/}
-        {/*  {codeExample}*/}
-        {/*</CodeBlock>*/}
         <div className="container">
-          <h1 className="hero__title">{siteConfig.title}</h1>
-          <p className="hero__subtitle">{siteConfig.tagline}</p>
+          <div className="row">
+            <div className="col col--6">
+              <Code language="js">
+                {codeExample}
+              </Code>
+            </div>
+            <div className={classnames("col col--6", styles.buttons)} >
+              <h1 className="hero__title">{siteConfig.title}</h1>
+              <p className="hero__subtitle">{siteConfig.tagline}</p>
+              <div className={styles.buttons}>
+                <Link
+                  className={classnames(
+                    'button button--outline button--primary button--lg',
+                    styles.getStarted,
+                  )}
+                  to={useBaseUrl('docs/introduction/installation')}>
+                  Get Started
+                </Link>
+                <Link
+                  className={classnames(
+                    'button button--outline button--secondary button--lg',
+                    styles.getStarted,
+                  )}
+                  to="https://share.effector.dev">
+                  Try it out
+                </Link>
+              </div>
+            </div>
 
-          <div className={styles.buttons}>
-            <Link
-              className={classnames(
-                'button button--outline button--primary button--lg',
-                styles.getStarted,
-              )}
-              to={useBaseUrl('docs/introduction/installation')}>
-              Get Started
-            </Link>
-            <Link
-              className={classnames(
-                'button button--outline button--secondary button--lg',
-                styles.getStarted,
-              )}
-              to="https://share.effector.dev">
-              Try it out
-            </Link>
           </div>
-        </div>
+          </div>
       </header>
       <main>
         {features && features.length && (
