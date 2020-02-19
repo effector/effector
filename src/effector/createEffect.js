@@ -95,14 +95,11 @@ export function createEffect<Payload, Done>(
           }
           if (failedSync) {
             onReject(syncError)
-            return params
-          }
-          if (isObject(rawResult) && isFunction(rawResult.then)) {
+          } else if (isObject(rawResult) && isFunction(rawResult.then)) {
             rawResult.then(onResolve, onReject)
-            return params
+          } else {
+            onResolve(rawResult)
           }
-          onResolve(rawResult)
-          return params
         },
       }),
     ],
