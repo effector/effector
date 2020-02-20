@@ -12,27 +12,27 @@ import {Code} from '../components/Code'
 const codeExample = `
 import {createStore, createEvent} from 'effector'
 
-const increment = createEvent()
-const decrement = createEvent()
+const add = createEvent()
+const sub = createEvent()
 const reset = createEvent()
   
 const counter = createStore(0)
- .on(increment, state => state + 1)
- .on(decrement, state => state - 1)
+ .on(add, (count, num) => count + num)
+ .on(sub, (count, num) => count - num)
  .reset(reset)
   
 counter.watch(n => console.log('counter: ', n))
 // counter: 0
-increment.watch(() => console.log('increment counter'))
-decrement.watch(() => console.log('decrement counter'))
+add.watch(n => console.log('add'))
+sub.watch(n => console.log('subtract'))
 reset.watch(() => console.log('reset counter'))
   
-increment()
+add(2)
+// counter: 2
+// add
+sub(1)
 // counter: 1
-// increment
-decrement()
-// counter: 0
-// increment
+// subtract
 reset()
 // counter: 0
 // reset counter
