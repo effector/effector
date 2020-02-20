@@ -23,8 +23,8 @@ const counter = createStore(0)
   
 counter.watch(n => console.log('counter: ', n))
 // counter: 0
-add.watch(n => console.log('add'))
-sub.watch(n => console.log('subtract'))
+add.watch(() => console.log('add'))
+sub.watch(() => console.log('subtract'))
 reset.watch(() => console.log('reset counter'))
   
 add(2)
