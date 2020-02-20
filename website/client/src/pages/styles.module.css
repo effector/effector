@@ -39,6 +39,7 @@
 .featureImage {
   height: 100px;
   width: 100px;
+  filter: hue-rotate(-50deg) brightness(1.7);
 }
 
 .getStarted {
