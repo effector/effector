@@ -5,17 +5,17 @@ import {TASK_DEADLINE} from './env'
 import {now} from './render/platform/now'
 
 export type Priority = 'low' | 'high'
+type Time = number
+type QueuedItem<T> = {
+  inserted: Time
+  retry: number
+  value: T
+}
 
-const runner =
-  typeof queueMicrotask !== 'undefined'
-    ? queueMicrotask
-    : function runner(cb) {
-        cb()
-      }
 const executeTasks = createEvent()
 let bonusTime = false
 let isBatched = false
-let rafID
+let rafID: number | NodeJS.Timeout
 function batchRAFrs() {
   isBatched = false
   beginMark('batchRAF')
@@ -25,8 +25,9 @@ function batchRAFrs() {
 const raf =
   typeof requestAnimationFrame !== 'undefined'
     ? requestAnimationFrame
-    : cb => setTimeout(cb, 0)
-const cancelRaf =
+    : (cb: Function) => setTimeout(cb, 0)
+//@ts-ignore
+const cancelRaf: (id: number | NodeJS.Timeout) => void =
   typeof cancelAnimationFrame !== 'undefined'
     ? cancelAnimationFrame
     : clearTimeout
@@ -43,35 +44,7 @@ const priorities = new Map<number, Priority>()
 
 let nextTaskID = 0
 let startTime = 0
-function getTaskList(taskID: number) {
-  return priorities.get(taskID) === 'high' ? importantTasks : tasks
-}
-function watchBatchEvent(taskID: number, isList: boolean, value) {
-  const taskList = getTaskList(taskID)
-  let list: any[] = taskList.get(taskID)
-  if (!list) {
-    list = []
-    taskList.set(taskID, list)
-  }
-  if (isList) {
-    for (let i = 0; i < value.length; i++) {
-      list.push(value[i])
-    }
-  } else {
-    list.push(value)
-  }
-  batchWindow()
-}
-export function batchEvent<T>(trigger: Event<T> | Store<T>): Event<T[]> {
-  const taskID = ++nextTaskID
-  const result = createEvent<T[]>()
-  const unit = is.store(trigger) ? trigger.updates : trigger
-  unit.watch(watchBatchEvent.bind(null, taskID, false))
-  own(trigger, [result])
-  targets.set(taskID, result)
-  priorities.set(taskID, 'low')
-  return result
-}
+
 const executionEndMark = createNode({
   node: [
     step.run({fn: () => {}}),
@@ -144,14 +117,19 @@ const unwrapFail = step.compute({
 const dropEmptyList = step.filter({
   fn: list => list.length > 0,
 })
-const pushBatchList = step.compute({
-  fn(values, {taskID}) {
-    watchBatchEvent(taskID, true, values)
-  },
-})
+
 const pushSingleValue = step.compute({
-  fn(value, {taskID, flat}) {
-    watchBatchEvent(taskID, flat, value)
+  fn(value, {taskID}) {
+    const taskList = priorities.get(taskID) === 'high' ? importantTasks : tasks
+    let list: any[] = taskList.get(taskID)
+    if (!list) {
+      list = []
+      taskList.set(taskID, list)
+    }
+    for (let i = 0; i < value.length; i++) {
+      list.push(value[i])
+    }
+    batchWindow()
   },
 })
 const runBatchFn = step.run({
@@ -160,18 +138,7 @@ const runBatchFn = step.run({
   },
 })
 
-//@ts-ignore
-export function backpressureEvent<T, S>(
-  trigger: Event<T> | Store<T>,
-  fn: (
-    values: T[],
-    start: number,
-  ) => {
-    done: S[]
-    fail: T[]
-  },
-): Event<S[]>
-export function backpressureEvent<T, S>(
+function backpressureEvent<T, S>(
   trigger: Event<T[]> | Store<T[]>,
   fn: (
     values: T[],
@@ -180,18 +147,11 @@ export function backpressureEvent<T, S>(
     done: S[]
     fail: T[]
   },
-  flat: boolean,
   priority: Priority,
-): Event<S[]>
-export function backpressureEvent(
-  trigger,
-  fn,
-  flat: boolean = false,
-  priority: Priority = 'low',
-) {
+): Event<S[]> {
   const taskID = ++nextTaskID
-  const result = createEvent()
-  const unit = eventify(trigger)
+  const result = createEvent<S[]>()
+  const unit = is.store(trigger) ? trigger.updates : trigger
   const family = {
     type: 'crosslink',
     owners: [unit, result],
@@ -200,7 +160,8 @@ export function backpressureEvent(
     node: [pushSingleValue],
     //@ts-ignore
     parent: [unit],
-    scope: {taskID, flat},
+    scope: {taskID},
+    //@ts-ignore
     family,
   })
 
@@ -211,7 +172,7 @@ export function backpressureEvent(
       node: [runBatchFn],
       child: [
         createNode({
-          node: [unwrapFail, dropEmptyList, pushBatchList],
+          node: [unwrapFail, dropEmptyList, pushSingleValue],
           scope: {taskID},
           //@ts-ignore
           family,
@@ -232,15 +193,7 @@ export function backpressureEvent(
   priorities.set(taskID, priority)
   return result
 }
-const toArray = step.compute({
-  fn: e => [e],
-})
-type Time = number
-type QueuedItem<T> = {
-  inserted: Time
-  retry: number
-  value: T
-}
+
 export function dynamicQueueFlat<T, R = null>({
   trigger = createEvent(),
   fn,
@@ -260,7 +213,6 @@ export function dynamicQueueFlat<T, R = null>({
 }): {
   trigger: Event<T>
   processed: Event<R[]>
-  connect: (source: Event<T> | Store<T>) => void
 } {
   const prepared = trigger.map(value => [
     {
@@ -305,27 +257,11 @@ export function dynamicQueueFlat<T, R = null>({
       endMark(mark)
       return {done, fail: batched}
     },
-    true,
     priority,
   )
-  const connect = (source: Store<T> | Event<T>) => {
-    createNode({
-      node: [],
-      //@ts-ignore
-      parent: source,
-      //@ts-ignore
-      child: trigger,
-      //@ts-ignore
-      family: {
-        type: 'crosslink',
-        owners: [source, trigger],
-      },
-    })
-  }
   return {
     trigger,
     processed,
-    connect,
   }
 }
 export function dynamicQueue<T, S, R>({
@@ -397,30 +333,10 @@ export function dynamicQueue<T, S, R>({
       endMark(mark)
       return {done, fail: batched}
     },
-    true,
     priority,
   )
-  const connect = (source: Store<T> | Event<T>) => {
-    createNode({
-      node: [toArray],
-      //@ts-ignore
-      parent: source,
-      //@ts-ignore
-      child: trigger,
-      //@ts-ignore
-      family: {
-        type: 'crosslink',
-        owners: [source, trigger],
-      },
-    })
-  }
   return {
     trigger,
     processed,
-    connect,
   }
-}
-
-function eventify<T>(source: Store<T> | Event<T>): Event<T> {
-  return is.store(source) ? source.updates : source
 }
