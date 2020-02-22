@@ -386,28 +386,25 @@ describe('array support', () => {
           to: [t1, t2],
         })
         expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type '(Event<string> | Event<number>)[]' is not assignable to type 'Unit<string> | readonly Unit<string>[]'.
-                Type '(Event<string> | Event<number>)[]' is not assignable to type 'readonly Unit<string>[]'.
-                  Type 'Event<string> | Event<number>' is not assignable to type 'Unit<string>'.
-                    Type 'Event<number>' is not assignable to type 'Unit<string>'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Event<number>' is not assignable to type 'Unit<string>'.
 
-          --flow--
-          Cannot call 'forward' with object literal bound to 'opts'
-            to: [t1, t2],
-                ^^^^^^^^
-            number [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
-                const t2 = createEvent<number>()
-                                   [1] ^^^^^^
-                const t1 = createEvent<string>()
-                                   [2] ^^^^^^
-                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                  [3] ^
-          "
-        `)
+--flow--
+Cannot call 'forward' with object literal bound to 'opts'
+  to: [t1, t2],
+      ^^^^^^^^
+  number [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
+      const t2 = createEvent<number>()
+                         [1] ^^^^^^
+      const t1 = createEvent<string>()
+                         [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
       })
     })
   })
