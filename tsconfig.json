@@ -12,6 +12,7 @@
     "lib": ["dom", "esnext"],
     "baseUrl": ".",
     "paths": {
+      "effector/fork": ["packages/effector/fork"],
       "effector": ["packages/effector"],
       "effector-dom": ["packages/effector-dom"]
     }
