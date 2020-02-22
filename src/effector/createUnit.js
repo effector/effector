@@ -161,6 +161,62 @@ export function createStore<State>(
         defer: true,
       })
     },
+    reset(...units) {
+      for (const unit of units) store.on(unit, () => store.defaultState)
+      return store
+    },
+    on(event, fn) {
+      store.off(event)
+      store.subscribers.set(
+        event,
+        createSubscription(updateStore(event, store, 'on', true, fn)),
+      )
+      return store
+    },
+    off(unit) {
+      const currentSubscription = store.subscribers.get(unit)
+      if (currentSubscription) {
+        currentSubscription()
+        store.subscribers.delete(unit)
+      }
+      return store
+    },
+    map(fn, firstState?: any) {
+      let config
+      let name
+      if (isObject(fn)) {
+        config = fn
+        name = fn.name
+        firstState = fn.firstState
+        fn = fn.fn
+      }
+      let lastResult
+      const storeState = store.getState()
+      if (storeState !== undefined) {
+        lastResult = fn(storeState, firstState)
+      }
+
+      const innerStore: Store<any> = createStore(lastResult, {
+        name: mapName(store, name),
+        config,
+        strict: false,
+      })
+      updateStore(store, innerStore, 'map', false, fn)
+      return innerStore
+    },
+    [$$observable]: () => ({
+      subscribe(observer: Subscriber<any>) {
+        assertObject(observer)
+        return store.watch(state => {
+          if (observer.next) {
+            observer.next(state)
+          }
+        })
+      },
+      [$$observable]() {
+        return this
+      },
+    }),
   }
   store.graphite = createNode({
     scope: {state: plainState},
@@ -182,63 +238,18 @@ export function createStore<State>(
   if (isStrict && currentState === undefined)
     throw Error("current state can't be undefined, use null instead")
 
-  store.watch = store.subscribe = bind(watch, store)
-  store.reset = (...units) => {
-    for (const unit of units) store.on(unit, () => store.defaultState)
-    return store
-  }
-  store.on = (event, fn) => {
-    store.off(event)
-    store.subscribers.set(
-      event,
-      createSubscription(updateStore(event, store, 'on', true, fn)),
-    )
-    return store
-  }
-  store.off = unit => {
-    const currentSubscription = store.subscribers.get(unit)
-    if (currentSubscription) {
-      currentSubscription()
-      store.subscribers.delete(unit)
+  store.watch = store.subscribe = (
+    eventOrFn: Event<any> | Function,
+    fn?: Function,
+  ) => {
+    if (!fn || !is.unit(eventOrFn)) {
+      if (!isFunction(eventOrFn)) throw Error('watch requires function handler')
+      eventOrFn(store.getState())
+      return watchUnit(store, eventOrFn)
     }
-    return store
+    if (!isFunction(fn)) throw Error('second argument should be a function')
+    return eventOrFn.watch(payload => fn(store.getState(), payload))
   }
-  store.map = (fn, firstState?: any) => {
-    let config
-    let name
-    if (isObject(fn)) {
-      config = fn
-      name = fn.name
-      firstState = fn.firstState
-      fn = fn.fn
-    }
-    let lastResult
-    const storeState = store.getState()
-    if (storeState !== undefined) {
-      lastResult = fn(storeState, firstState)
-    }
-
-    const innerStore: Store<any> = createStore(lastResult, {
-      name: mapName(store, name),
-      config,
-      strict: false,
-    })
-    updateStore(store, innerStore, 'map', false, fn)
-    return innerStore
-  }
-  store[$$observable] = () => ({
-    subscribe(observer: Subscriber<any>) {
-      assertObject(observer)
-      return watch(store, state => {
-        if (observer.next) {
-          observer.next(state)
-        }
-      })
-    },
-    [$$observable]() {
-      return this
-    },
-  })
   own(store, [updates])
   return addToRegion(store)
 }
@@ -263,17 +274,3 @@ const updateStore = (
     ],
     meta: {op},
   })
-
-function watch(
-  storeInstance: Store<any>,
-  eventOrFn: Event<*> | Function,
-  fn?: Function,
-) {
-  if (!fn || !is.unit(eventOrFn)) {
-    if (!isFunction(eventOrFn)) throw Error('watch requires function handler')
-    eventOrFn(storeInstance.getState())
-    return watchUnit(storeInstance, eventOrFn)
-  }
-  if (!isFunction(fn)) throw Error('second argument should be a function')
-  return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
-}
