@@ -43,7 +43,7 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = bind(thru, unit)
+  unit.thru = fn => fn(unit)
   unit.getType = () => compositeName.fullName
   isStrict = strict
   return {unit: kind, name, sid, named}
@@ -195,7 +195,14 @@ export function createStore<State>(
     )
     return store
   }
-  store.off = bind(off, store)
+  store.off = unit => {
+    const currentSubscription = store.subscribers.get(unit)
+    if (currentSubscription) {
+      currentSubscription()
+      store.subscribers.delete(unit)
+    }
+    return store
+  }
   store.map = (fn, firstState?: any) => {
     let config
     let name
@@ -236,15 +243,6 @@ export function createStore<State>(
   return addToRegion(store)
 }
 
-function off(store: Store<any>, event: Event<any>) {
-  const currentSubscription = store.subscribers.get(event)
-  if (currentSubscription !== undefined) {
-    currentSubscription()
-    store.subscribers.delete(event)
-  }
-  return store
-}
-
 const updateStore = (
   from,
   {graphite, stateRef}: Store<any>,
@@ -279,5 +277,3 @@ function watch(
   if (!isFunction(fn)) throw Error('second argument should be a function')
   return eventOrFn.watch(payload => fn(storeInstance.getState(), payload))
 }
-
-const thru = (instance: any, fn: Function) => fn(instance)
