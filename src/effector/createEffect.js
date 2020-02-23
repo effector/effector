@@ -35,16 +35,23 @@ export function createEffect<Payload, Done>(
   }
   const getHandler = instance.use.getCurrent = () => handler
   const anyway = instance.finally = createNamedEvent('finally')
+
+  const omitStatus = (data) => {
+    const result = { ...data }
+    delete result.status
+    return result
+  }
   const done = instance.done = filterMapEvent(anyway, {
     named: 'done',
-    fn: ({status, ...result}) =>
-      status === 'done' ? result : undefined
+    fn: (result) =>
+      result.status === 'done' ? omitStatus(result) : undefined
   })
   const fail = instance.fail = filterMapEvent(anyway, {
     named: 'fail',
-    fn: ({status, ...result}) =>
-      status === 'fail' ? result : undefined
+    fn: (result) =>
+      result.status === 'fail' ? omitStatus(result) : undefined
   })
+
   const doneData = instance.doneData = done.map({
     named: 'doneData',
     fn: ({result}) => result,
