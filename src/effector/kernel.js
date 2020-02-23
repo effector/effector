@@ -28,25 +28,19 @@ type Stack = {
   node: Graph,
 }
 
-/** Queue as linked list */
+/** Queue as linked list or skew heap */
 type QueueItem = {
-  right: QueueItem | null,
-  value: Layer,
+  /** node value */
+  v: Layer,
+  /** left node. always null in queue but used in skew heap */
+  l: QueueItem | null,
+  /** right node */
+  r: QueueItem | null,
 }
 type QueueBucket = {
   first: QueueItem | null,
   last: QueueItem | null,
   size: number,
-}
-
-/** Queue as skew heap */
-type Heap = {
-  /** heap node value */
-  v: Layer,
-  /** left heap node */
-  l: Heap | null,
-  /** right heap node */
-  r: Heap | null,
 }
 
 /** Dedicated local metadata */
@@ -57,9 +51,9 @@ type Local = {
   scope: {[key: string]: any, ...},
 }
 
-let heap: Heap | null = null
+let heap: QueueItem | null = null
 
-const merge = (a: Heap | null, b: Heap | null): Heap | null => {
+const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
   if (!a) return b
   if (!b) return a
 
@@ -115,9 +109,9 @@ const deleteMin = () => {
         list.last = null
       }
       const item = list.first
-      list.first = item.right
+      list.first = item.r
       list.size -= 1
-      return item.value
+      return item.v
     }
   }
 }
@@ -141,27 +135,27 @@ const pushFirstHeapItem = (
 const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const priority = getPriority(type)
   const bucket: QueueBucket = queue[priority]
-  const value: Layer = {
-    idx,
-    stack,
-    type,
-    id,
+  const item: QueueItem = {
+    v: {
+      idx,
+      stack,
+      type,
+      id,
+    },
+    l: 0,
+    r: 0,
   }
   /**
    * second bucket is for "barrier" PriorityType (used in combine)
    * and third bucket is for "sampler" PriorityType (used in sample and guard)
    */
   if (priority === 2 || priority === 3) {
-    heap = merge(heap, {v: value, l: 0, r: 0})
+    heap = merge(heap, item)
   } else {
-    const item: QueueItem = {
-      right: null,
-      value,
-    }
     if (bucket.size === 0) {
       bucket.first = item
     } else {
-      bucket.last.right = item
+      bucket.last.r = item
     }
     bucket.last = item
   }
