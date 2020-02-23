@@ -2,15 +2,7 @@
 
 import * as React from 'react'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
-import {
-  createDomain,
-  createApi,
-  type Store,
-  type Event,
-  type Domain,
-} from 'effector'
-
-const {store: createStore} = createDomain('Gate')
+import {createStore, createApi, launch, type Store, type Event} from 'effector'
 
 export type Gate<Props = {||}> = Class<React.Component<Props>> &
   interface {
@@ -43,6 +35,14 @@ export function createGate<Props>(
   name: string = 'gate',
   defaultState: Props = ({}: any),
 ): Gate<Props> {
+  let domain
+  if (typeof name === 'object' && name !== null) {
+    if ('defaultState' in name) {
+      defaultState = name.defaultState
+    }
+    if (name.domain) domain = name.domain
+    name = name.name || 'gate'
+  }
   const status = createStore(Boolean(false))
   const state: Store<Props> = createStore(defaultState)
   const {set} = createApi(state, {
@@ -69,6 +69,7 @@ export function createGate<Props>(
     static destructor = destructor
     static isTerminated = Boolean(false)
     static childGate<Next>(childName: string = 'Subgate'): Gate<Next> {
+      console.error('childGate is deprecated')
       const gate = createGate(`${name}/${childName}`)
       ;(gate: any).predicate = () => GateComponent.status.getState()
       let isOpen = false
@@ -131,5 +132,12 @@ export function createGate<Props>(
     unstate()
     GateComponent.state.off(GateComponent.set)
   })
+  if (domain) {
+    const {hooks} = domain
+    launch({
+      target: [hooks.store, hooks.store, hooks.event, hooks.event, hooks.event],
+      params: [status, state, open, close, set],
+    })
+  }
   return GateComponent
 }
