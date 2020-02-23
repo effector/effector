@@ -121,8 +121,7 @@ export function createEvent<Payload>(
     applyParentEventHook(event, contramapped)
     return contramapped
   }
-  event.subscribe = observer =>
-    watchUnit(event, payload => observer.next(payload))
+  event.subscribe = bind(subscribeObservable, event)
   event[$$observable] = () => event
   return addToRegion(event)
 }
@@ -205,14 +204,7 @@ export function createStore<State>(
       return innerStore
     },
     [$$observable]: () => ({
-      subscribe(observer: Subscriber<any>) {
-        assertObject(observer)
-        return store.watch(state => {
-          if (observer.next) {
-            observer.next(state)
-          }
-        })
-      },
+      subscribe: bind(subscribeObservable, store),
       [$$observable]() {
         return this
       },
@@ -252,6 +244,15 @@ export function createStore<State>(
   }
   own(store, [updates])
   return addToRegion(store)
+}
+
+const subscribeObservable = (unit, observer: Subscriber<any>) => {
+  assertObject(observer)
+  return unit.watch(upd => {
+    if (observer.next) {
+      observer.next(upd)
+    }
+  })
 }
 
 const updateStore = (
