@@ -204,7 +204,11 @@ function mergeNodeDraft() {
   for (let i = 0; i < draft.attr.length; i++) {
     const map = draft.attr[i]
     for (const key in map) {
-      merged.attr[key] = map[key]
+      if (key === 'xlink:href') {
+        merged.attr.href = map[key]
+      } else {
+        merged.attr[key] = map[key]
+      }
     }
   }
   for (let i = 0; i < draft.data.length; i++) {

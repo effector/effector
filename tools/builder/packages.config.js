@@ -36,9 +36,9 @@ const keywords = [
 
 const version = {
   effector: '20.12.0',
-  'effector-react': '20.6.0',
+  'effector-react': '20.6.1',
   'effector-vue': '20.3.2',
-  'effector-dom': '0.0.11',
+  'effector-dom': '0.0.12',
 
   'bs-effector': '20.0.0',
   'bs-effector-react': '20.0.0',
@@ -150,7 +150,7 @@ export default {
     typings: 'index.d.ts',
     dependencies: {},
     peerDependencies: dependsOnEffector,
-    keywords,
+    keywords: [...keywords, 'dom', 'view'],
     ...common,
   },
   'bs-effector': {
