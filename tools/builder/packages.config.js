@@ -150,7 +150,7 @@ export default {
     typings: 'index.d.ts',
     dependencies: {},
     peerDependencies: dependsOnEffector,
-    keywords,
+    keywords: [...keywords, 'dom', 'view'],
     ...common,
   },
   'bs-effector': {

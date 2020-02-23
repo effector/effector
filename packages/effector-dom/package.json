@@ -19,7 +19,9 @@
     "event",
     "effect",
     "data",
-    "state"
+    "state",
+    "dom",
+    "view"
   ],
   "author": "Zero Bias",
   "maintainers": [
