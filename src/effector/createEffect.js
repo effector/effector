@@ -33,33 +33,31 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
-  const getHandler = instance.use.getCurrent = () => handler
-  const anyway = instance.finally = createNamedEvent('finally')
+  const getHandler = (instance.use.getCurrent = () => handler)
+  const anyway = (instance.finally = createNamedEvent('finally'))
 
-  const omitStatus = (data) => {
-    const result = { ...data }
+  const omitStatus = data => {
+    const result = {...data}
     delete result.status
     return result
   }
-  const done = instance.done = filterMapEvent(anyway, {
+  const done = (instance.done = filterMapEvent(anyway, {
     named: 'done',
-    fn: (result) =>
-      result.status === 'done' ? omitStatus(result) : undefined
-  })
-  const fail = instance.fail = filterMapEvent(anyway, {
+    fn: result => (result.status === 'done' ? omitStatus(result) : undefined),
+  }))
+  const fail = (instance.fail = filterMapEvent(anyway, {
     named: 'fail',
-    fn: (result) =>
-      result.status === 'fail' ? omitStatus(result) : undefined
-  })
+    fn: result => (result.status === 'fail' ? omitStatus(result) : undefined),
+  }))
 
-  const doneData = instance.doneData = done.map({
+  const doneData = (instance.doneData = done.map({
     named: 'doneData',
     fn: ({result}) => result,
-  })
-  const failData = instance.failData = fail.map({
+  }))
+  const failData = (instance.failData = fail.map({
     named: 'failData',
     fn: ({error}) => error,
-  })
+  }))
 
   const effectRunner = createNode({
     scope: {
@@ -133,14 +131,14 @@ export function createEffect<Payload, Done>(
     return req.req
   }
 
-  const inFlight = instance.inFlight = createStore(0, {named: 'inFlight'})
+  const inFlight = (instance.inFlight = createStore(0, {named: 'inFlight'})
     .on(instance, x => x + 1)
-    .on(anyway, x => x - 1)
+    .on(anyway, x => x - 1))
 
-  const pending = instance.pending = inFlight.map({
+  const pending = (instance.pending = inFlight.map({
     fn: amount => amount > 0,
     named: 'pending',
-  })
+  }))
 
   own(instance, [
     anyway,
@@ -155,21 +153,21 @@ export function createEffect<Payload, Done>(
   return instance
 }
 
-const onSettled = ({params, fn, ok, anyway}) => (data) =>
+const onSettled = ({params, fn, ok, anyway}) => data =>
   launch({
     target: [anyway, sidechain],
     params: [
       ok
         ? {
-          status: 'done',
-          params,
-          result: data,
-        }
+            status: 'done',
+            params,
+            result: data,
+          }
         : {
-          status: 'fail',
-          params,
-          error: data,
-        },
+            status: 'fail',
+            params,
+            error: data,
+          },
       {
         fn,
         value: data,
