@@ -62,7 +62,15 @@ export function using(node: DOMElement, cb: () => any): void {
     activeStack.replace(parentStack)
   }
 }
-export function appendBatch({node, append, reverse = false}) {
+export function appendBatch({
+  node,
+  append,
+  reverse = false,
+}: {
+  node: DOMElement
+  append: DOMElement[]
+  reverse?: boolean
+}) {
   if (append.length === 0) return
   const frag = document.createDocumentFragment()
   if (!reverse) {
@@ -86,6 +94,7 @@ export function forwardStacks(parent: Stack, child: Stack) {
 }
 
 const removeFromParent = step.compute({
+  //@ts-ignore
   fn(upd, scope: {stack: Stack}) {
     if (!scope.stack) return upd
     const {stack} = scope

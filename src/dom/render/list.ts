@@ -123,7 +123,7 @@ export function list<T, K extends keyof T>({
   fields?: string[]
   visible?: (state: T) => boolean
 }): void
-export function list<T>(opts, cb = (opts: any) => {}) {
+export function list<T>(opts: any, cb = (opts: any) => {}) {
   cb = opts.fn ? opts.fn : cb
 
   let source
@@ -191,7 +191,7 @@ export function list<T>(opts, cb = (opts: any) => {}) {
   sample({
     source: updates,
     clock: source,
-    fn: bind(update, context),
+    fn: bind(update as any, context),
     target: updates,
   })
   activeStack.replace(parentStack)
@@ -438,8 +438,8 @@ const {trigger: applyNewRecordsEvent} = dynamicQueueFlat<AddRecords>({
   },
 })
 
-const indexIDGetter = (item, i) => i
-const keyIDGetter = (key, item, i) => item[key]
+const indexIDGetter = (item: any, i: number) => i
+const keyIDGetter = (key: string, item: any, i: number) => item[key]
 
 const removeNodesFromDOM = createEvent<Stack[]>()
 

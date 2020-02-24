@@ -13,6 +13,7 @@ const clearSelf = createNode({
   ],
 })
 const clearLocality = step.compute({
+  //@ts-ignore
   fn(_, scope: {stack: Stack | null; self: Signal}) {
     scope.self.next.push(clearSelf)
     const {stack} = scope

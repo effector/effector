@@ -17,7 +17,7 @@ import {createWatch} from './createWatch'
 import {document} from './documentResolver'
 import {findNearestVisibleNode} from './nearestNode'
 
-function isFalse(val) {
+function isFalse(val: any) {
   return (
     val !== '' &&
     val !== 0 &&
@@ -29,6 +29,7 @@ const finalizeHandler = (
   {map, options}: HandlerRecord,
 ) => {
   for (const key in map) {
+    //@ts-ignore
     element.removeEventListener(key, map[key], options)
   }
 }
@@ -40,12 +41,13 @@ export function bindHandler(
   for (let i = 0; i < handlers.length; i++) {
     const {options, map} = handlers[i]
     for (const key in map) {
+      //@ts-ignore
       element.addEventListener(key, map[key], options)
     }
     createWatch(signal, finalizeHandler.bind(null, element, handlers[i]))
   }
 }
-function applyData(dataset, field, value) {
+function applyData(dataset: DOMStringMap, field: string, value: any) {
   if (isFalse(value)) {
     delete dataset[field]
   } else {
@@ -102,14 +104,22 @@ export function bindVisible(
     applyVisible.bind(null, element, parent, activeStack.get()),
   )
 }
-const applyStyleProp = (style: CSSStyleDeclaration, propName, value) => {
+const applyStyleProp = (
+  style: CSSStyleDeclaration,
+  propName: any,
+  value: any,
+) => {
   if (isFalse(value)) {
     delete style[propName]
   } else {
     style[propName] = value
   }
 }
-const applyStyleVal = (style: CSSStyleDeclaration, variableName, value) => {
+const applyStyleVal = (
+  style: CSSStyleDeclaration,
+  variableName: string,
+  value: any,
+) => {
   if (isFalse(value)) {
     style.removeProperty(variableName)
   } else {
@@ -147,7 +157,11 @@ export function bindStyleVar(
   }
 }
 
-function applyAttr(element: DOMElement, attr, value) {
+function applyAttr(
+  element: DOMElement,
+  attr: string,
+  value: string | number | boolean | null,
+) {
   if (isFalse(value)) {
     switch (attr) {
       case 'value':
@@ -209,10 +223,14 @@ function normalizeTranslateShape(
   y?: number
 }> {
   if (is.store(data)) return data
+  //@ts-ignore
   if (is.store(data.x)) {
+    //@ts-ignore
     if (is.store(data.y)) return combine({x: data.x, y: data.y})
+    //@ts-ignore
     return data.x.map(xShape.bind(null, data.y))
   }
+  //@ts-ignore
   if (is.store(data.y)) return data.y.map(yShape.bind(null, data.x))
   return data as any
 }
@@ -229,7 +247,7 @@ function applyTransform<T>(
   switch (key) {
     case 'translate':
     case 'scale':
-      data = normalizeTranslateShape(data) as any
+      data = normalizeTranslateShape(data as any) as any
       break
   }
   domOperation(false, signal, data, handler.bind(null, transform))
@@ -283,14 +301,16 @@ export function bindTransform(
         svg!,
         signal,
         transformList,
+        //@ts-ignore
         operations[key],
+        //@ts-ignore
         transformResolvers[key],
         key as any,
       )
     }
   }
 }
-function setText(node, text) {
+function setText(node: DOMElement, text: string | number | boolean) {
   const textNode = document.createTextNode(`${text}`)
   const firstChild = node.firstChild
   if (firstChild) {

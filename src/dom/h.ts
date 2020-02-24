@@ -64,7 +64,7 @@ export function nodeMethod<K extends keyof DOMElement>(
   node(e => {
     item = e
   })
-  return ((...args) => {
+  return ((...args: any[]) => {
     if (!item) {
       // throw Error('node not mounted yet')
       return
@@ -187,7 +187,7 @@ export function handler(
     {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
   >,
 ): void
-export function handler(options, map?: any) {
+export function handler(options: any, map?: any) {
   assertElementNode('handler')
   if (map === undefined) {
     map = options

@@ -31,8 +31,7 @@ import {
 import {document} from './documentResolver'
 import {spec} from '../h'
 
-//@ts-ignore
-export function h(tag: string, cb: () => void): DOMElement
+export function h(tag: string, cb: () => void): void
 export function h(
   tag: string,
   spec: {
@@ -51,13 +50,13 @@ export function h(
       {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
     >
   },
-)
+): void
 export function h(
   tag: string,
   opts: {type?: 'svg'; noAppend?: boolean},
   cb?: () => void,
-): DOMElement
-export function h(tag, opts, cb?: any) {
+): void
+export function h(tag: string, opts: any, cb?: any) {
   if (typeof opts === 'function') {
     cb = opts
     opts = {}
@@ -132,7 +131,7 @@ export function h(tag, opts, cb?: any) {
     forwardStacks(parent, currentStack)
   }
   if (tag === 'svg') {
-    currentStack.svgRoot = node
+    currentStack.svgRoot = node as SVGSVGElement
   } else if (parent) {
     currentStack.svgRoot = parent.svgRoot
   }
@@ -192,7 +191,9 @@ function mergeNodeDraft() {
     options.passive = options.prevent ? false : options.passive
 
     for (const key in map) {
+      //@ts-ignore
       const evt = map[key]
+      //@ts-ignore
       map[key] = function(e) {
         if (options.prevent) e.preventDefault()
         if (options.stop) e.stopPropagation()
