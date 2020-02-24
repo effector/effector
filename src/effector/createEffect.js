@@ -37,8 +37,12 @@ export function createEffect<Payload, Done>(
   const anyway = (instance.finally = createNamedEvent('finally'))
 
   const omitStatus = data => {
-    const result = {...data}
-    delete result.status
+    const result = {}
+    for (const key in data) {
+      if (key !== 'status') {
+        result[key] = data[key]
+      }
+    }
     return result
   }
   const done = (instance.done = filterMapEvent(anyway, {
