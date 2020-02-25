@@ -4,7 +4,6 @@ import type {Effect} from './unit.h'
 import {step} from './typedef'
 import {getGraph} from './getter'
 import {own} from './own'
-import {bind} from './bind'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 import {
@@ -34,25 +33,18 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
+  const getHandler = (instance.use.getCurrent = () => handler)
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = filterMapEvent(anyway, {
     named: 'done',
-    fn(result) {
-      if (result.status === 'done')
-        return {
-          params: result.params,
-          result: result.result,
-        }
+    fn({status, params, result}) {
+      if (status === 'done') return {params, result}
     },
   }))
   const fail = (instance.fail = filterMapEvent(anyway, {
     named: 'fail',
-    fn(result) {
-      if (result.status === 'fail')
-        return {
-          params: result.params,
-          error: result.error,
-        }
+    fn({status, params, error}) {
+      if (status === 'fail') return {params, error}
     },
   }))
   const doneData = (instance.doneData = done.map({
@@ -66,39 +58,34 @@ export function createEffect<Payload, Done>(
 
   const effectRunner = createNode({
     scope: {
-      getHandler: (instance.use.getCurrent = () => handler),
+      getHandler,
       finally: anyway,
     },
     node: [
       step.run({
         fn({params, req}, {finally: anyway, getHandler}) {
-          const onResolve = bind(onSettled, {
+          const onResolve = onSettled({
             params,
             fn: req.rs,
             ok: true,
             anyway,
           })
-          const onReject = bind(onSettled, {
+          const onReject = onSettled({
             params,
             fn: req.rj,
             ok: false,
             anyway,
           })
-          let failedSync = false
-          let syncError
-          let rawResult
+          let result
           try {
-            rawResult = getHandler()(params)
+            result = getHandler()(params)
           } catch (err) {
-            failedSync = true
-            syncError = err
+            return void onReject(err)
           }
-          if (failedSync) {
-            onReject(syncError)
-          } else if (isObject(rawResult) && isFunction(rawResult.then)) {
-            rawResult.then(onResolve, onReject)
+          if (isObject(result) && isFunction(result.then)) {
+            result.then(onResolve, onReject)
           } else {
-            onResolve(rawResult)
+            onResolve(result)
           }
         },
       }),
@@ -162,21 +149,22 @@ export function createEffect<Payload, Done>(
   ])
   return instance
 }
-const onSettled = ({params, fn, ok, anyway}, data) => {
+
+const onSettled = ({params, fn, ok, anyway}) => data =>
   launch({
     target: [anyway, sidechain],
     params: [
       ok
         ? {
-          status: 'done',
-          params,
-          result: data,
-        }
+            status: 'done',
+            params,
+            result: data,
+          }
         : {
-          status: 'fail',
-          params,
-          error: data,
-        },
+            status: 'fail',
+            params,
+            error: data,
+          },
       {
         fn,
         value: data,
@@ -184,7 +172,7 @@ const onSettled = ({params, fn, ok, anyway}, data) => {
     ],
     defer: true,
   })
-}
+
 const sidechain = createNode({
   node: [
     step.run({
