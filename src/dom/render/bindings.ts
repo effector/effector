@@ -310,26 +310,25 @@ export function bindTransform(
     }
   }
 }
-function setText(node: DOMElement, text: string | number | boolean) {
-  const textNode = document.createTextNode(`${text}`)
-  const firstChild = node.firstChild
-  if (firstChild) {
-    firstChild.replaceWith(textNode)
-  } else {
-    node.appendChild(textNode)
-  }
+function setText(textNode: Text, text: string | number | boolean) {
+  textNode.replaceData(0, (textNode.textContent || '').length, String(text))
 }
 
 export function bindText(
   element: DOMElement,
   signal: Signal,
-  store: StoreOrData<DOMProperty>,
+  stores: StoreOrData<DOMProperty>[],
 ) {
-  if (store === null) return
-  if (is.unit(store)) {
-    debounceRaf(signal, store, setText.bind(null, element))
-  } else {
-    setText(element, store)
+  for (let i = 0; i < stores.length; i++) {
+    const store = stores[i]
+    if (store === null) continue
+    const textNode = document.createTextNode('')
+    element.appendChild(textNode)
+    if (is.unit(store)) {
+      debounceRaf(signal, store, setText.bind(null, textNode))
+    } else {
+      setText(textNode, store)
+    }
   }
 }
 function setFocus(element: DOMElement) {

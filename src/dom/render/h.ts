@@ -178,7 +178,7 @@ function mergeNodeDraft() {
     attr: {},
     data: {},
     visible: null,
-    text: null,
+    text: [],
     styleVar: {},
     styleProp: {},
     handler: [],
@@ -221,9 +221,7 @@ function mergeNodeDraft() {
   if (draft.visible.length > 0) {
     merged.visible = draft.visible[draft.visible.length - 1]
   }
-  if (draft.text.length > 0) {
-    merged.text = draft.text[draft.text.length - 1]
-  }
+  merged.text = draft.text
   for (let i = 0; i < draft.styleVar.length; i++) {
     const map = draft.styleVar[i]
     for (const key in map) {

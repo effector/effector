@@ -61,7 +61,7 @@ export type TransformMap = {
 }
 
 export type HandlerRecord = {
-  options: {passive: boolean; capture: boolean; prevent: boolean; stop: boolean;}
+  options: {passive: boolean; capture: boolean; prevent: boolean; stop: boolean}
   map: Partial<
     {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
   >
@@ -100,7 +100,7 @@ export type MergedBindings = {
   attr: PropertyMap
   data: PropertyMap
   visible: Store<boolean> | null
-  text: StoreOrData<DOMProperty>
+  text: StoreOrData<DOMProperty>[]
   styleVar: PropertyMap
   styleProp: StylePropertyMap
   handler: HandlerRecord[]
