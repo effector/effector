@@ -137,6 +137,13 @@ class DOMNode {
   createSVGTransform(): DOMSVGTransform {
     return new DOMSVGTransform()
   }
+  replaceData(offset: number, length: number, content: string) {
+    if (typeof this.textContent !== 'string') return
+    this.textContent = `${this.textContent.slice(
+      0,
+      offset,
+    )}${content}${this.textContent.slice(offset + length)}`
+  }
 }
 class CSSStyle {
   properties = Object.create(null)
@@ -323,7 +330,7 @@ function renderPart(node: DOMNode, parts: string[]) {
 }
 
 export function render(node: DOMNode) {
-  const parts = []
+  const parts = [] as string[]
   renderPart(node, parts)
   const content = parts.join('')
   if (detectFullPageRender(node)) {
