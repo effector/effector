@@ -686,3 +686,23 @@ describe('handler', () => {
     expect(prevented).toMatchInlineSnapshot(`true`)
   })
 })
+
+it('support multiply text nodes', async () => {
+  const [s1, s2] = await exec(async () => {
+    const trigger = createEvent()
+    const foo = createStore('aaa').on(trigger, () => 'cccc')
+    const bar = createStore('bbb').on(trigger, () => 'dddd')
+    using(el, () => {
+      h('div', () => {
+        spec({text: foo})
+        spec({text: bar})
+      })
+    })
+    await act()
+    await act(() => {
+      trigger()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`"<div>aaabbb</div>"`)
+  expect(s2).toMatchInlineSnapshot(`"<div>ccccdddd</div>"`)
+})
