@@ -27,16 +27,19 @@ export const createLinkNode = (
       links: child,
     },
   })
-export const forward = ({
-  from,
-  to,
-  meta = {op: 'forward'},
-}: {|
+export const forward = (opts: {
   from: Graphite | Graphite[],
   to: Graphite | Graphite[],
   meta?: Object,
-|}): Subscription => {
+}): Subscription => {
+  let config
+  if ('ɔ' in opts) {
+    config = opts.config
+    opts = opts.ɔ
+  }
+  const {from, to, meta = {op: 'forward'}} = opts
   if (!from || !to) throw Error('from and to fields should be defined')
+  if (config) meta.config = config
   return createSubscription(
     createNode({
       parent: from,
