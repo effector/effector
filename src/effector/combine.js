@@ -19,14 +19,12 @@ export function combine(...args: any[]): Store<any> {
     config = args[0].config
     args = args[0].ɔ
   }
-  {
-    const rawHandler = args[args.length - 1]
-    if (isFunction(rawHandler)) {
-      stores = args.slice(0, -1)
-      handler = rawHandler
-    } else {
-      stores = args
-    }
+  const rawHandler = args[args.length - 1]
+  if (isFunction(rawHandler)) {
+    stores = args.slice(0, -1)
+    handler = rawHandler
+  } else {
+    stores = args
   }
 
   let structStoreShape
