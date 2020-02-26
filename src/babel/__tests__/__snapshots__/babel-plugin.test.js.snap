@@ -502,6 +502,90 @@ const f = () => forward({
 });"
 `;
 
+exports[`babel-plugin should guard 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, createEvent, guard } from 'effector';
+const foo = createStore(true, {
+  name: \\"foo\\",
+  sid: \\"12fz6b\\"
+});
+const bar = createEvent(\\"bar\\", {
+  name: \\"bar\\",
+  sid: \\"-3ob7uj\\"
+});
+const baz1 = guard({
+  ɔ: [bar, {
+    filter: foo
+  }],
+  config: {
+    name: \\"baz1\\",
+    sid: \\"b10z6n\\"
+  }
+});
+const baz2 = guard({
+  ɔ: [{
+    source: bar,
+    filter: foo
+  }],
+  config: {
+    name: \\"baz2\\",
+    sid: \\"rjc331\\"
+  }
+});
+guard({
+  ɔ: [bar, {
+    filter: foo
+  }],
+  config: {
+    name: \\"\\",
+    sid: \\"-ajecgo\\"
+  }
+});
+guard({
+  ɔ: [{
+    source: bar,
+    filter: foo
+  }],
+  config: {
+    name: \\"\\",
+    sid: \\"-aiujvb\\"
+  }
+});
+const spread = [bar, {
+  filter: foo
+}];
+const baz4 = guard({
+  ɔ: [...spread],
+  config: {
+    name: \\"baz4\\",
+    sid: \\"-dxz69v\\"
+  }
+});
+const config = {
+  source: bar,
+  filter: foo
+};
+const baz5 = guard({
+  ɔ: [config],
+  config: {
+    name: \\"baz5\\",
+    sid: \\"-ara4o9\\"
+  }
+});
+
+const f = () => guard({
+  ɔ: [{
+    source: bar,
+    filter: foo
+  }],
+  config: {
+    name: \\"f\\",
+    sid: \\"-7ro5ad\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow

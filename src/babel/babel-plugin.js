@@ -13,6 +13,7 @@ module.exports = function(babel, options = {}) {
     combines,
     samples,
     forwards,
+    guards,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -21,6 +22,7 @@ module.exports = function(babel, options = {}) {
     combineCreators,
     sampleCreators,
     forwardCreators,
+    guardCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -63,6 +65,8 @@ module.exports = function(babel, options = {}) {
               sampleCreators.add(localName)
             } else if (forwardCreators.has(importedName)) {
               forwardCreators.add(localName)
+            } else if (guardCreators.has(importedName)) {
+              guardCreators.add(localName)
             }
           }
         }
@@ -152,6 +156,16 @@ module.exports = function(babel, options = {}) {
               false,
             )
           }
+          if (guards && guardCreators.has(name)) {
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              findCandidateNameForExpression(path),
+              babel.types,
+              smallConfig,
+              false,
+            )
+          }
           if (forwards && forwardCreators.has(name)) {
             setConfigForConfigurableMethod(
               path,
@@ -224,6 +238,7 @@ const normalizeOptions = options => {
       combines: true,
       samples: true,
       forwards: true,
+      guards: true,
     },
     result: {
       importName: new Set(
@@ -242,6 +257,7 @@ const normalizeOptions = options => {
       combineCreators: new Set(options.combineCreators || ['combine']),
       sampleCreators: new Set(options.sampleCreators || ['sample']),
       forwardCreators: new Set(options.forwardCreators || ['forward']),
+      guardCreators: new Set(options.guardCreators || ['guard']),
       domainMethods: readConfigShape(options.domainMethods, {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
