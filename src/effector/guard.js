@@ -1,5 +1,6 @@
 //@flow
 
+import {getConfig, getNestedConfig} from './getter'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createUnit'
@@ -9,7 +10,12 @@ import {callStack} from './caller'
 import {is, isFunction} from './is'
 import {createNode} from './createNode'
 
-export function guard(source: any, config: any) {
+export function guard(source, config) {
+  const meta = {op: 'guard'}
+  if (getNestedConfig(source)) {
+    meta.config = getConfig(source)
+    ;[source, config] = getNestedConfig(source)
+  }
   if (!config) {
     config = source
     source = config.source
@@ -17,7 +23,7 @@ export function guard(source: any, config: any) {
   const {filter, greedy, name = 'guard'} = config
   const target = config.target || createEvent(name)
   if (!is.unit(source)) source = combine(source)
-  const meta = {op: 'guard'}
+
   if (is.unit(filter)) {
     sample({
       source: filter,
