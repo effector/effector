@@ -1,5 +1,5 @@
 //@flow
-import {getConfig} from './getter'
+import {getConfig, getNestedConfig} from './getter'
 import {createNode} from './createNode'
 import type {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
@@ -34,9 +34,9 @@ export const forward = (opts: {
   meta?: Object,
 }): Subscription => {
   let config
-  if ('ɔ' in opts) {
+  if (getNestedConfig(opts)) {
     config = getConfig(opts)
-    opts = opts.ɔ
+    opts = getNestedConfig(opts)
   }
   const {from, to, meta = {op: 'forward'}} = opts
   if (!from || !to) throw Error('from and to fields should be defined')

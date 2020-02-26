@@ -1,6 +1,6 @@
 //@flow
 
-import {getConfig} from './getter'
+import {getConfig, getNestedConfig} from './getter'
 import {isObject} from './is'
 
 export type SourceLocation = {
@@ -48,11 +48,11 @@ export type Config<Part> = {
   ...
 }
 
-const assignConfigPart = (part, config = {}) => {
+export const normalizeConfig = (part, config = {}) => {
   if (isObject(part)) {
-    assignConfigPart(getConfig(part), config)
+    normalizeConfig(getConfig(part), config)
     if (part.name != null) {
-      if (isObject(part.name)) assignConfigPart(part.name, config)
+      if (isObject(part.name)) normalizeConfig(part.name, config)
       else config.name = part.name
     }
     if (part.loc) config.loc = part.loc
@@ -61,14 +61,7 @@ const assignConfigPart = (part, config = {}) => {
     if (part.parent) config.parent = part.parent
     if ('strict' in part) config.strict = part.strict
     if (part.named) config.named = part.named
-    assignConfigPart(part.ɔ, config)
+    normalizeConfig(getNestedConfig(part), config)
   }
   return config
 }
-//prettier-ignore
-export const normalizeConfig:
-  & (<Params, Done>(config?: Config<EffectConfigPart<Params, Done>>) => EffectConfigPart<Params, Done>)
-  & ((config?: Config<StoreConfigPart>) => StoreConfigPart)
-  & ((config?: Config<EventConfigPart>) => EventConfigPart)
-  & ((config?: Config<DomainConfigPart>) => DomainConfigPart) =
-  assignConfigPart

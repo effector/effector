@@ -8,3 +8,4 @@ export const getOwners = (node: Graph) => node.family.owners
 export const getLinks = (node: Graph) => node.family.links
 export const getStoreState = store => store.stateRef
 export const getConfig = opts => opts.config
+export const getNestedConfig = opts => opts.ɔ
