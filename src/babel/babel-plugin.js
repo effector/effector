@@ -12,6 +12,7 @@ module.exports = function(babel, options = {}) {
     restores,
     combines,
     samples,
+    forwards,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -19,6 +20,7 @@ module.exports = function(babel, options = {}) {
     restoreCreators,
     combineCreators,
     sampleCreators,
+    forwardCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -59,6 +61,8 @@ module.exports = function(babel, options = {}) {
               combineCreators.add(localName)
             } else if (sampleCreators.has(importedName)) {
               sampleCreators.add(localName)
+            } else if (forwardCreators.has(importedName)) {
+              forwardCreators.add(localName)
             }
           }
         }
@@ -132,6 +136,7 @@ module.exports = function(babel, options = {}) {
               id,
               babel.types,
               smallConfig,
+              false,
             )
             if (id) {
               state.stores.add(id.name)
@@ -144,6 +149,17 @@ module.exports = function(babel, options = {}) {
               findCandidateNameForExpression(path),
               babel.types,
               smallConfig,
+              false,
+            )
+          }
+          if (forwards && forwardCreators.has(name)) {
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              findCandidateNameForExpression(path),
+              babel.types,
+              smallConfig,
+              true,
             )
           }
         }
@@ -207,6 +223,7 @@ const normalizeOptions = options => {
       restores: true,
       combines: true,
       samples: true,
+      forwards: true,
     },
     result: {
       importName: new Set(
@@ -224,6 +241,7 @@ const normalizeOptions = options => {
       restoreCreators: new Set(options.restoreCreators || ['restore']),
       combineCreators: new Set(options.combineCreators || ['combine']),
       sampleCreators: new Set(options.sampleCreators || ['sample']),
+      forwardCreators: new Set(options.forwardCreators || ['forward']),
       domainMethods: readConfigShape(options.domainMethods, {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
@@ -431,6 +449,7 @@ function setConfigForConfigurableMethod(
   nameNodeId,
   t,
   {addLoc, compressor},
+  singleArgument,
 ) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   let args
@@ -445,7 +464,9 @@ function setConfigForConfigurableMethod(
 
   if (args) {
     if (!args[0]) return
-    const commonArgs = t.ArrayExpression(args.slice())
+    const commonArgs = singleArgument
+      ? args[0]
+      : t.ArrayExpression(args.slice())
     args.length = 0
     const configExpr = t.objectExpression([])
 

@@ -426,6 +426,82 @@ const f = a => createStore(a, {
 });"
 `;
 
+exports[`babel-plugin should forward 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, createEvent, forward } from 'effector';
+const foo = createStore('foo', {
+  name: \\"foo\\",
+  sid: \\"c0eo5u\\"
+});
+const bar = createEvent(\\"bar\\", {
+  name: \\"bar\\",
+  sid: \\"-skx5bw\\"
+});
+const baz1 = forward({
+  ɔ: {
+    from: foo,
+    to: bar
+  },
+  config: {
+    name: \\"baz1\\",
+    sid: \\"-izumle\\"
+  }
+});
+const baz2 = forward({
+  ɔ: {
+    from: foo,
+    to: bar
+  },
+  config: {
+    name: \\"baz2\\",
+    sid: \\"-mi0m5g\\"
+  }
+});
+forward({
+  ɔ: {
+    from: foo,
+    to: bar
+  },
+  config: {
+    name: \\"\\",
+    sid: \\"-do0gmv\\"
+  }
+});
+forward({
+  ɔ: {
+    from: foo,
+    to: bar
+  },
+  config: {
+    name: \\"\\",
+    sid: \\"-dngo1i\\"
+  }
+});
+const config = {
+  from: foo,
+  to: bar
+};
+const baz5 = forward({
+  ɔ: config,
+  config: {
+    name: \\"baz5\\",
+    sid: \\"-tagonb\\"
+  }
+});
+
+const f = () => forward({
+  ɔ: {
+    from: foo,
+    to: bar
+  },
+  config: {
+    name: \\"f\\",
+    sid: \\"7acgzo\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
