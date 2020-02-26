@@ -2,7 +2,7 @@
 
 import type {Graphite, Graph, ID} from './index.h'
 import {readRef} from './stateRef'
-import {getGraph} from './getter'
+import {getGraph, getValue} from './getter'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -222,7 +222,7 @@ const exec = () => {
           let value
           //prettier-ignore
           switch (data.from) {
-            case 'stack': value = stack.value; break
+            case 'stack': value = getValue(stack); break
             case 'a': value = stack.a; break
             case 'b': value = stack.b; break
             case 'value': value = data.store; break
@@ -244,10 +244,10 @@ const exec = () => {
         case 'check':
           switch (data.type) {
             case 'defined':
-              local.skip = stack.value === undefined
+              local.skip = getValue(stack) === undefined
               break
             case 'changed':
-              local.skip = stack.value === readRef(graph.reg[data.store.id])
+              local.skip = getValue(stack) === readRef(graph.reg[data.store.id])
               break
           }
           break
@@ -273,7 +273,7 @@ const exec = () => {
     }
     if (!meta.stop) {
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        pushFirstHeapItem('child', graph.next[stepn], stack, stack.value)
+        pushFirstHeapItem('child', graph.next[stepn], stack, getValue(stack))
       }
     }
     meta.stop = false
@@ -300,7 +300,7 @@ export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
 /** try catch for external functions */
 const tryRun = (local: Local, {fn}, stack: Stack) => {
   try {
-    return fn(stack.value, local.scope, stack)
+    return fn(getValue(stack), local.scope, stack)
   } catch (err) {
     console.error(err)
     local.fail = true

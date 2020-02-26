@@ -21,6 +21,7 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
+import {getSubscribers} from './getter'
 
 export const applyParentEventHook = ({parent}, target) => {
   if (parent) parent.hooks.event(target)
@@ -165,17 +166,17 @@ export function createStore<State>(
     },
     on(event, fn) {
       store.off(event)
-      store.subscribers.set(
+      getSubscribers(store).set(
         event,
         createSubscription(updateStore(event, store, 'on', true, fn)),
       )
       return store
     },
     off(unit) {
-      const currentSubscription = store.subscribers.get(unit)
+      const currentSubscription = getSubscribers(store).get(unit)
       if (currentSubscription) {
         currentSubscription()
-        store.subscribers.delete(unit)
+        getSubscribers(store).delete(unit)
       }
       return store
     },

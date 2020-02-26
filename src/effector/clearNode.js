@@ -1,7 +1,7 @@
 //@flow
 
 import type {Graph, Graphite} from './index.h'
-import {getGraph, getOwners, getLinks} from './getter'
+import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 
 const removeItem = (list, item) => {
@@ -56,7 +56,7 @@ export const clearNode = (
 ) => {
   let isDomainUnit = false
   if (is.store(graphite)) {
-    clearMap(graphite.subscribers)
+    clearMap(getSubscribers(graphite))
   } else if (is.domain(graphite)) {
     isDomainUnit = true
     const history = graphite.history

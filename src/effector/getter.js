@@ -9,3 +9,5 @@ export const getLinks = (node: Graph) => node.family.links
 export const getStoreState = store => store.stateRef
 export const getConfig = opts => opts.config
 export const getNestedConfig = opts => opts.ɔ
+export const getValue = stack => stack.value
+export const getSubscribers = store => store.subscribers

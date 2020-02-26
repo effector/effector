@@ -1,9 +1,9 @@
 //@flow
-
+import {getValue} from './getter'
 import {own} from './own'
 
 export const addToRegion = unit => {
-  if (regionStack) own(regionStack.value, [unit])
+  if (regionStack) own(getValue(regionStack), [unit])
   return unit
 }
 
