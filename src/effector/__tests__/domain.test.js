@@ -223,3 +223,17 @@ describe('indirect child support', () => {
     expect(argumentHistory(fn)).toEqual([source, prepended])
   })
 })
+
+test('parent assignment', () => {
+  const fn = jest.fn()
+  const domain = createDomain()
+  domain.onCreateEffect(fx => {
+    domain.hooks.event(fx.doneData)
+  })
+  domain.onCreateStore(store => {
+    fn(store.shortName)
+  })
+  const fx = domain.createEffect()
+  const store = restore(fx.doneData, {})
+  expect(argumentHistory(fn)).toEqual(['store'])
+})

@@ -18,6 +18,7 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
+    if (!data.parent) data.parent = node
   })
   own(node, [trigger])
   return (hook: (data: any) => any) => {
@@ -68,10 +69,10 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     domain,
   }
   result.hooks = hooks
-  result.onCreateEvent = createHook(event, events, node)
-  result.onCreateEffect = createHook(effect, effects, node)
-  result.onCreateStore = createHook(store, stores, node)
-  result.onCreateDomain = createHook(domain, domains, node)
+  result.onCreateEvent = createHook(event, events, result)
+  result.onCreateEffect = createHook(effect, effects, result)
+  result.onCreateStore = createHook(store, stores, result)
+  result.onCreateDomain = createHook(domain, domains, result)
 
   result.createEvent = result.event = (nameOrConfig, config?: Config<any>) =>
     event(
