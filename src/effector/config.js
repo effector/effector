@@ -1,5 +1,6 @@
 //@flow
 
+import {getConfig} from './getter'
 import {isObject} from './is'
 
 export type SourceLocation = {
@@ -49,7 +50,7 @@ export type Config<Part> = {
 
 const assignConfigPart = (part, config = {}) => {
   if (isObject(part)) {
-    assignConfigPart(part.config, config)
+    assignConfigPart(getConfig(part), config)
     if (part.name != null) {
       if (isObject(part.name)) assignConfigPart(part.name, config)
       else config.name = part.name

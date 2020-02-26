@@ -1,4 +1,5 @@
 //@flow
+import {getConfig} from './getter'
 import {createNode} from './createNode'
 import type {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
@@ -34,7 +35,7 @@ export const forward = (opts: {
 }): Subscription => {
   let config
   if ('ɔ' in opts) {
-    config = opts.config
+    config = getConfig(opts)
     opts = opts.ɔ
   }
   const {from, to, meta = {op: 'forward'}} = opts

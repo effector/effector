@@ -3,7 +3,7 @@ import {combine} from './combine'
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg, callARegStack} from './caller'
-import {getStoreState} from './getter'
+import {getStoreState, getConfig} from './getter'
 import {own} from './own'
 import {is} from './is'
 import {createStore} from './createUnit'
@@ -19,7 +19,7 @@ export function sample(...args): any {
   let name
   let metadata
   if ('ɔ' in args[0]) {
-    metadata = args[0].config
+    metadata = getConfig(args[0])
     args = args[0].ɔ
   }
   let [source, clock, fn, greedy = false] = args

@@ -5,7 +5,7 @@ import {createStore} from './createUnit'
 import type {StateRef} from './index.h'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'
-import {getStoreState} from './getter'
+import {getStoreState, getConfig} from './getter'
 import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -16,7 +16,7 @@ export function combine(...args: any[]): Store<any> {
   let stores
   let config
   if ('ɔ' in args[0]) {
-    config = args[0].config
+    config = getConfig(args[0])
     args = args[0].ɔ
   }
   const rawHandler = args[args.length - 1]
