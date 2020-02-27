@@ -516,6 +516,41 @@ describe('visible', () => {
     expect(s1).toMatchInlineSnapshot(`"<div><p>a</p><p>c</p></div>"`)
     expect(s2).toMatchInlineSnapshot(`"<div><p>a</p><p>b</p><p>c</p></div>"`)
   })
+  test('re-insertion order', async () => {
+    const [s1, s2, s3] = await exec(async () => {
+      const toggleVisible = createEvent()
+      const visible = createStore(true).on(toggleVisible, visible => !visible)
+      using(el, () => {
+        h('section', () => {
+          h('div', () => {
+            spec({
+              visible,
+              text: 'aside',
+            })
+          })
+          h('div', () => {
+            spec({
+              text: 'content',
+            })
+          })
+        })
+      })
+      await act()
+      await act(() => {
+        toggleVisible()
+      })
+      await act(() => {
+        toggleVisible()
+      })
+    })
+    expect(s1).toMatchInlineSnapshot(
+      `"<section><div>aside</div><div>content</div></section>"`,
+    )
+    expect(s2).toMatchInlineSnapshot(`"<section><div>content</div></section>"`)
+    expect(s3).toMatchInlineSnapshot(
+      `"<section><div>aside</div><div>content</div></section>"`,
+    )
+  })
 })
 
 test('variant', async () => {
