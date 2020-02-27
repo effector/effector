@@ -83,7 +83,7 @@ function applyVisible(
       if (nearestVisible && parent.contains(nearestVisible.targetElement)) {
         nearestVisible.targetElement.after(node)
       } else {
-        parent.appendChild(node)
+        parent.prepend(node)
       }
     }
   } else {
@@ -97,11 +97,11 @@ export function bindVisible(
   visible: Store<boolean> | null,
 ) {
   if (visible === null) return
-  const parent = activeStack.get().parent!.targetElement
+  const stack = activeStack.get()
   debounceRaf(
     signal,
     visible,
-    applyVisible.bind(null, element, parent, activeStack.get()),
+    applyVisible.bind(null, element, stack.parent!.targetElement, stack),
   )
 }
 const applyStyleProp = (
