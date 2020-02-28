@@ -525,7 +525,7 @@ describe('guard(config)', () => {
                   ^...
             string [1] is incompatible with null [2] in type argument 'T' [3] of property 'target'
                 const target = createEvent<string>()
-                                      [1] ^^^^^^
+                                       [1] ^^^^^^
                 const source = createStore<string | null>('test').on(event, () => null)
                                                 [2] ^^^^
                 export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
