@@ -502,6 +502,37 @@ describe('guard(config)', () => {
           "
         `)
       })
+      test('nullable type support', () => {
+        const event = createEvent()
+        const source = createStore<string | null>('test').on(event, () => null)
+        const filter = createStore(true)
+
+        const target = createEvent<string>()
+
+        guard({
+          source,
+          filter,
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          no errors
+
+          --flow--
+          Cannot call 'guard' with object literal bound to 'config'
+            guard({
+                  ^...
+            string [1] is incompatible with null [2] in type argument 'T' [3] of property 'target'
+                const target = createEvent<string>()
+                                      [1] ^^^^^^
+                const source = createStore<string | null>('test').on(event, () => null)
+                                                [2] ^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
+      })
     })
   })
 })
