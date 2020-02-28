@@ -6,14 +6,9 @@ import type {
   kind,
   StateRef,
   Unit,
+  Config,
 } from './index.h'
 import type {CompositeName} from './naming'
-import type {
-  Config,
-  StoreConfigPart,
-  EventConfigPart,
-  EffectConfigPart,
-} from './config'
 
 export interface Event<E> extends Unit {
   /*::
@@ -86,7 +81,7 @@ export interface Store<State> extends Unit {
   );
   +kind: kind;
   +defaultState: State;
-  +defaultConfig: StoreConfigPart;
+  +defaultConfig: Config;
   defaultShape?: Object;
   shortName: string;
   domainName?: CompositeName;
@@ -157,19 +152,13 @@ export interface Domain extends Unit {
   onCreateEffect(hook: (newEffect: Effect<any, any, any>) => any): Subscription;
   onCreateStore(hook: (newStore: Store<any>) => any): Subscription;
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
-  event<Payload>(
-    name?: string,
-    config?: Config<EventConfigPart>,
-  ): Event<Payload>;
+  event<Payload>(name?: string, config?: Config): Event<Payload>;
   effect<Params, Done, Fail>(
     name?: string,
-    config?: Config<EffectConfigPart<Params, Done>>,
+    config?: Config,
   ): Effect<Params, Done, Fail>;
   domain(name?: string): Domain;
-  store<State>(
-    defaultState: State,
-    config?: Config<StoreConfigPart>,
-  ): Store<State>;
+  store<State>(defaultState: State, config?: Config): Store<State>;
   compositeName: CompositeName;
   getType(): string;
   kind: kind;

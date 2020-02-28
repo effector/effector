@@ -3,7 +3,7 @@
 import type {Store, Event, Effect, Domain} from './unit.h'
 import {own} from './own'
 import {createNode} from './createNode'
-import type {Config} from './config'
+import type {Config} from './index.h'
 import {
   createEvent,
   createStore,
@@ -33,19 +33,17 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   const effects: Set<Effect<any, any, any>> = new Set()
   const events: Set<Event<any>> = new Set()
 
-  const history = {
-    domains,
-    stores,
-    effects,
-    events,
-  }
-
   const node = createNode({
     family: {type: 'domain'},
   })
 
   const result = {
-    history,
+    history: {
+      domains,
+      stores,
+      effects,
+      events,
+    },
     graphite: node,
   }
 
@@ -57,44 +55,38 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     'onDomain',
   ].map(createNamedEvent)
 
-  const hooks: {|
-    domain: Event<Domain>,
-    effect: Event<Effect<any, any, any>>,
-    event: Event<Event<any>>,
-    store: Event<any>,
-  |} = {
+  const hooks = (result.hooks = {
     event,
     effect,
     store,
     domain,
-  }
-  result.hooks = hooks
+  })
   result.onCreateEvent = createHook(event, events, result)
   result.onCreateEffect = createHook(effect, effects, result)
   result.onCreateStore = createHook(store, stores, result)
   result.onCreateDomain = createHook(domain, domains, result)
 
-  result.createEvent = result.event = (nameOrConfig, config?: Config<any>) =>
+  result.createEvent = result.event = (nameOrConfig, config?: Config) =>
     event(
       createEvent(nameOrConfig, {
         parent: result,
         config,
       }),
     )
-  result.createEffect = result.effect = (nameOrConfig, config?: Config<any>) =>
+  result.createEffect = result.effect = (nameOrConfig, config?: Config) =>
     effect(
       createEffect(nameOrConfig, {
         parent: result,
         config,
       }),
     )
-  result.createDomain = result.domain = (nameOrConfig, config?: Config<any>) =>
+  result.createDomain = result.domain = (nameOrConfig, config?: Config) =>
     createDomain({
       name: nameOrConfig,
       parent: result,
       config,
     })
-  result.createStore = result.store = (state: any, config?: Config<any>) =>
+  result.createStore = result.store = (state: any, config?: Config) =>
     store(
       createStore(state, {
         parent: result,

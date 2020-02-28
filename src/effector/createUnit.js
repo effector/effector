@@ -14,14 +14,31 @@ import {own} from './own'
 import {createNode} from './createNode'
 import {launch} from './kernel'
 
-import type {Subscriber} from './index.h'
-import {normalizeConfig, type StoreConfigPart as ConfigPart} from './config'
-import {type CompositeName, createName, mapName, joinName} from './naming'
+import type {Subscriber, Config} from './index.h'
+import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
-import {getSubscribers} from './getter'
+import {getSubscribers, getConfig, getNestedConfig} from './getter'
+
+const normalizeConfig = (part, config) => {
+  if (isObject(part)) {
+    normalizeConfig(getConfig(part), config)
+    if (part.name != null) {
+      if (isObject(part.name)) normalizeConfig(part.name, config)
+      else config.name = part.name
+    }
+    if (part.loc) config.loc = part.loc
+    if (part.sid) config.sid = part.sid
+    if (part.handler) config.handler = part.handler
+    if (part.parent) config.parent = part.parent
+    if ('strict' in part) config.strict = part.strict
+    if (part.named) config.named = part.named
+    normalizeConfig(getNestedConfig(part), config)
+  }
+  return config
+}
 
 export const applyParentEventHook = ({parent}, target) => {
   if (parent) parent.hooks.event(target)
@@ -29,10 +46,13 @@ export const applyParentEventHook = ({parent}, target) => {
 
 let isStrict
 export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
-  const config = normalizeConfig({
-    name: rawConfigB,
-    config: rawConfigA,
-  })
+  const config = normalizeConfig(
+    {
+      name: rawConfigB,
+      config: rawConfigA,
+    },
+    {},
+  )
   const id = nextUnitID()
   const {parent = null, sid = null, strict = true, named = null} = config
   const name = named ? named : config.name || (kind === 'domain' ? '' : id)
@@ -73,10 +93,6 @@ const createEventFiltration = (event, op, fn, node) => {
   return mapped
 }
 
-declare export function createEvent<Payload>(
-  name?: string | EventConfigPart,
-  config?: Config<EventConfigPart>,
-): Event<Payload>
 export function createEvent<Payload>(
   nameOrConfig: any,
   maybeConfig: any,
@@ -137,20 +153,16 @@ export function filterMapEvent(
 }
 
 export function createStore<State>(
-  currentState: State,
-  props: {
-    +config: ConfigPart,
-    +parent?: CompositeName,
-    ...
-  },
+  defaultState: State,
+  props?: Config,
 ): Store<State> {
-  const plainState = createStateRef(currentState)
-  const oldState = createStateRef(currentState)
+  const plainState = createStateRef(defaultState)
+  const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const store: any = {
     subscribers: new Map(),
     updates,
-    defaultState: currentState,
+    defaultState,
     stateRef: plainState,
     getState: bind(readRef, plainState),
     setState(state) {
@@ -222,7 +234,7 @@ export function createStore<State>(
     child: updates,
     meta: initUnit('store', store, props),
   })
-  if (isStrict && currentState === undefined)
+  if (isStrict && defaultState === undefined)
     throw Error("current state can't be undefined, use null instead")
 
   store.watch = store.subscribe = (

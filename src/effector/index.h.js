@@ -14,6 +14,22 @@ export type StateRef = {
   current: any,
 }
 
+export type Config = {
+  loc?: {
+    file: string,
+    column: number,
+    line: number,
+  },
+  sid?: string,
+  named?: string,
+  name?: string | Config,
+  ɔ?: Config,
+  config?: Config,
+  parent?: any,
+  strict?: boolean,
+  handler?: Function,
+}
+
 export type Graph = {
   next: Array<Graph>,
   seq: Array<Cmd>,

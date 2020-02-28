@@ -33,7 +33,6 @@ export function createEffect<Payload, Done>(
     handler = fn
     return instance
   }
-  const getHandler = (instance.use.getCurrent = () => handler)
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = filterMapEvent(anyway, {
     named: 'done',
@@ -58,7 +57,7 @@ export function createEffect<Payload, Done>(
 
   const effectRunner = createNode({
     scope: {
-      getHandler,
+      getHandler: (instance.use.getCurrent = () => handler),
       finally: anyway,
     },
     node: [
@@ -156,15 +155,15 @@ const onSettled = ({params, fn, ok, anyway}) => data =>
     params: [
       ok
         ? {
-            status: 'done',
-            params,
-            result: data,
-          }
+          status: 'done',
+          params,
+          result: data,
+        }
         : {
-            status: 'fail',
-            params,
-            error: data,
-          },
+          status: 'fail',
+          params,
+          error: data,
+        },
       {
         fn,
         value: data,
