@@ -2,6 +2,12 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.12.1
+
+- Add support for guard to babel-plugin
+- Add support for forward to babel-plugin
+- Add support for explicit `domain.hooks` calls as escape hatch for imperative adding units to given domain
+
 ## effector 20.12.0
 
 - Add `effect.doneData` and `effect.failData` events with effect result and error values as shorthands for common use cases `effect.done.map(({result}) => result)` and `effect.fail.map(({error}) => error)`
@@ -16,10 +22,7 @@ const fetchFriendsFx = createEffect()
 
 /* new way, using .doneData events */
 
-const apiResult = merge([
-  fetchUserFx.doneData,
-  fetchFriendsFx.doneData,
-])
+const apiResult = merge([fetchUserFx.doneData, fetchFriendsFx.doneData])
 
 /* old way, using .done events */
 
@@ -27,7 +30,6 @@ const apiResultOld = merge([
   fetchUserFx.done.map(({result}) => result),
   fetchFriendsFx.done.map(({result}) => result),
 ])
-
 ```
 
 [Try it](https://share.effector.dev/Zae5MZHU)
