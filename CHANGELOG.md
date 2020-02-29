@@ -2,6 +2,29 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 20.4.0
+
+- Add support for vue component watch option ([PR #313](https://github.com/zerobias/effector/pull/313)) (thanks [@Fl0pZz](https://github.com/Fl0pZz))
+
+```js
+import {createStore} from 'effector'
+import {createComponent} from 'effector-vue'
+
+const counter = createStore(0)
+
+const component = createComponent(
+  {
+    template: '<div>{{ counter }}</div>',
+    watch: {
+      counter() {
+        /* side-effects here */
+      },
+    },
+  },
+  {counter},
+)
+```
+
 ## effector-react 20.6.2, effector-vue 20.3.3
 
 - Fix umd build of effector-react and effector-vue
