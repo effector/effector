@@ -2,6 +2,13 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.6.2, effector-vue 20.3.3
+
+- Fix umd build of effector-react and effector-vue
+
+[Cdn with umd build of effector-react](https://unpkg.com/effector-react/effector-react.umd.js)
+[Cdn with umd build of effector-vue](https://unpkg.com/effector-vue/effector-vue.umd.js)
+
 ## effector 20.12.1
 
 - Add support for guard to babel-plugin
