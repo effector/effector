@@ -6,7 +6,7 @@ import {is, createStoreObject, Store} from 'effector'
 declare function isStore(a: mixed): boolean %checks(a instanceof Store)
 
 export const effectorMixin = {
-  created() {
+  beforeCreate() {
     const vm: {
       $options: {
         effector?: () => Store<mixed> | mixed,
@@ -25,7 +25,7 @@ export const effectorMixin = {
       if (is.store(shape) /*:: && isStore(shape) */) {
         //$off
         Vue.util.defineReactive(vm, key, shape.getState())
-        vm._subscription = shape.subscribe(value => {
+        vm._subscription = shape.watch(value => {
           vm[key] = value
         })
       } else if (
@@ -37,7 +37,7 @@ export const effectorMixin = {
           //$off
           Vue.util.defineReactive(vm, key, store.defaultState[key])
         }
-        vm._subscription = store.subscribe(value => {
+        vm._subscription = store.watch(value => {
           for (const key in value) {
             vm[key] = value[key]
           }

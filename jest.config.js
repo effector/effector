@@ -88,6 +88,14 @@ module.exports = {
           },
         },
         {
+          vue: {
+            testEnvironment: 'jsdom',
+            testMatch: [`<rootDir>/src/vue/**/*.test.js`],
+            // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
+            // watchPathIgnorePatterns,
+          },
+        },
+        {
           reason: {
             testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
           },
