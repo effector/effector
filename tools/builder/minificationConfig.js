@@ -1,7 +1,13 @@
 //@flow
 const nameCache = {}
 
-export const minifyConfig = ({beautify}: {|beautify: boolean|}) => ({
+export const minifyConfig = ({
+  beautify,
+  inline = true,
+}: {
+  beautify: boolean,
+  inline?: boolean,
+}) => ({
   parse: {
     bare_returns: false,
     ecma: 8,
@@ -32,7 +38,7 @@ export const minifyConfig = ({beautify}: {|beautify: boolean|}) => ({
     hoist_props: true,
     hoist_vars: false,
     if_return: true,
-    inline: true,
+    inline,
     join_vars: true, //?
 
     defaults: false,

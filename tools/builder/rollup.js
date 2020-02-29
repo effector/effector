@@ -75,6 +75,7 @@ const getPlugins = (name: string) => ({
   terser: terser(
     minifyConfig({
       beautify: !!process.env.PRETTIFY,
+      inline: !name.endsWith('.umd'),
     }),
   ),
   graph: graphPlugin({
