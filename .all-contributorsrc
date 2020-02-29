@@ -293,6 +293,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "Fl0pZz",
+      "name": "Rafael Fakhreev",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/9510124?v=4",
+      "profile": "https://github.com/Fl0pZz",
+      "contributions": [
+        "code",
+        "ideas",
+        "test"
+      ]
     }
   ],
   "commitConvention": "none"

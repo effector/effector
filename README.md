@@ -512,6 +512,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
     <td align="center"><a href="https://github.com/YanLobat"><img src="https://avatars3.githubusercontent.com/u/5307423?v=4" width="100px;" alt="Yan"/><br /><sub><b>Yan</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=YanLobat" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/egaris"><img src="https://avatars2.githubusercontent.com/u/5036934?v=4" width="100px;" alt="Egor Aristov"/><br /><sub><b>Egor Aristov</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=egaris" title="Documentation">📖</a></td>
     <td align="center"><a href="https://github.com/Sozonov"><img src="https://avatars2.githubusercontent.com/u/1931637?v=4" width="100px;" alt="Sozonov"/><br /><sub><b>Sozonov</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Sozonov" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/Fl0pZz"><img src="https://avatars2.githubusercontent.com/u/9510124?v=4" width="100px;" alt="Rafael Fakhreev"/><br /><sub><b>Rafael Fakhreev</b></sub></a><br /><a href="https://github.com/zerobias/effector/commits?author=Fl0pZz" title="Code">💻</a> <a href="#ideas-Fl0pZz" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/zerobias/effector/commits?author=Fl0pZz" title="Tests">⚠️</a></td>
   </tr>
 </table>
 
