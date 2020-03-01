@@ -83,16 +83,16 @@ module.exports = {
           react: {
             testEnvironment: 'jsdom',
             testMatch: [`<rootDir>/src/react/**/*.test.js`],
-            // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
-            // watchPathIgnorePatterns,
           },
         },
         {
           vue: {
             testEnvironment: 'jsdom',
-            testMatch: [`<rootDir>/src/vue/**/*.test.js`],
-            // setupFiles: ['<rootDir>/src/fixtures/performance.mock.js'],
-            // watchPathIgnorePatterns,
+            testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
+            transform: {
+              '^.+\\.jsx?$': 'babel-jest',
+              '^.+\\.ts?$': 'babel-jest',
+            },
           },
         },
         {
