@@ -10,6 +10,9 @@
     "baseUrl": ".",
     "paths": {
       "effector": ["src/effector"],
+      "effector/fork": ["packages/effector/fork"],
+      "effector-dom": ["packages/effector-dom"],
+      "effector-vue": ["packages/effector-vue"],
       "effector/*": ["src/*"]
     }
   },

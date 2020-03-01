@@ -14,7 +14,8 @@
     "paths": {
       "effector/fork": ["packages/effector/fork"],
       "effector": ["packages/effector"],
-      "effector-dom": ["packages/effector-dom"]
+      "effector-dom": ["packages/effector-dom"],
+      "effector-vue": ["packages/effector-vue"]
     }
   },
   "exclude": [
