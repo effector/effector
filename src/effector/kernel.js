@@ -26,6 +26,7 @@ type Stack = {
   b: any,
   parent: Stack | null,
   node: Graph,
+  branch: number,
 }
 
 /** Queue as linked list or skew heap */
@@ -48,7 +49,7 @@ type Local = {
   skip: boolean,
   fail: boolean,
   ref: ID,
-  scope: {[key: string]: any, ...},
+  scope: {[key: string]: any},
 }
 
 let heap: QueueItem | null = null
@@ -117,6 +118,7 @@ const deleteMin = () => {
 }
 const pushFirstHeapItem = (
   type: PriorityTag,
+  branchID: number,
   node: Graph,
   parent: Stack | null,
   value: any,
@@ -129,6 +131,7 @@ const pushFirstHeapItem = (
       node,
       parent,
       value,
+      branch: branchID,
     }: Stack),
     type,
   )
@@ -187,9 +190,7 @@ let alreadyStarted = false
 const exec = () => {
   const lastStartedState = alreadyStarted
   alreadyStarted = true
-  const meta = {
-    stop: false,
-  }
+  let stop = false
   let graph
   let value
   mem: while ((value = deleteMin())) {
@@ -201,7 +202,7 @@ const exec = () => {
       ref: '',
       scope: graph.scope,
     }
-    for (let stepn = idx; stepn < graph.seq.length && !meta.stop; stepn++) {
+    for (let stepn = idx; stepn < graph.seq.length && !stop; stepn++) {
       const step = graph.seq[stepn]
       const data = step.data
       switch (step.type) {
@@ -269,29 +270,37 @@ const exec = () => {
           stack.value = tryRun(local, data, stack)
           break
       }
-      meta.stop = local.fail || local.skip
+      stop = local.fail || local.skip
     }
-    if (!meta.stop) {
+    if (!stop) {
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
-        pushFirstHeapItem('child', graph.next[stepn], stack, getValue(stack))
+        pushFirstHeapItem(
+          'child',
+          stack.branch,
+          graph.next[stepn],
+          stack,
+          getValue(stack),
+        )
       }
     }
-    meta.stop = false
+    stop = false
   }
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
+  let branchID = 0
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
     unit = unit.target
+    branchID = unit.branch || branchID
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
-      pushFirstHeapItem('pure', getGraph(unit[i]), null, payload[i])
+      pushFirstHeapItem('pure', branchID, getGraph(unit[i]), null, payload[i])
     }
   } else {
-    pushFirstHeapItem('pure', getGraph(unit), null, payload)
+    pushFirstHeapItem('pure', branchID, getGraph(unit), null, payload)
   }
   if (upsert && alreadyStarted) return
   exec()

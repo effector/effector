@@ -62,18 +62,20 @@ export function createEffect<Payload, Done>(
     },
     node: [
       step.run({
-        fn({params, req}, {finally: anyway, getHandler}) {
+        fn({params, req}, {finally: anyway, getHandler}, {branch}) {
           const onResolve = onSettled({
             params,
             fn: req.rs,
             ok: true,
             anyway,
+            branch,
           })
           const onReject = onSettled({
             params,
             fn: req.rj,
             ok: false,
             anyway,
+            branch,
           })
           let result
           try {
@@ -149,7 +151,7 @@ export function createEffect<Payload, Done>(
   return instance
 }
 
-const onSettled = ({params, fn, ok, anyway}) => data =>
+const onSettled = ({params, fn, ok, anyway, branch}) => data =>
   launch({
     target: [anyway, sidechain],
     params: [
@@ -170,6 +172,7 @@ const onSettled = ({params, fn, ok, anyway}) => data =>
       },
     ],
     defer: true,
+    branch,
   })
 
 const sidechain = createNode({
