@@ -310,6 +310,7 @@ export async function rollupEffectorVue() {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
         es: dir(`npm/${name}/${name}.es.js`),
       },
+      inputExtension: 'ts',
     }),
     createUmd(name, {
       external: ['vue', 'effector'],
@@ -319,8 +320,9 @@ export async function rollupEffectorVue() {
         effector: 'effector',
         vue: 'Vue',
       },
+      extension: 'ts',
     }),
-    createCompat(name),
+    createCompat(name, 'ts'),
   ])
 }
 
@@ -356,7 +358,7 @@ async function createUmd(
     globals,
   })
 }
-async function createCompat(name) {
+async function createCompat(name, extension = 'js') {
   const plugins = getPlugins(`${name}.compat`)
   //$off
   const {getAliases} = require('../babel.config')
@@ -365,6 +367,7 @@ async function createCompat(name) {
   })
   const pluginList = [
     plugins.resolve,
+    plugins.typescript,
     plugins.json,
     babel({
       runtimeHelpers: false,
@@ -433,7 +436,7 @@ async function createCompat(name) {
   ]
   const build = await rollup({
     onwarn,
-    input: dir(`packages/${name}/index.js`),
+    input: dir(`packages/${name}/index.${extension}`),
     external: [
       'react',
       'vue',
