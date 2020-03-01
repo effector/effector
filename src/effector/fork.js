@@ -5,6 +5,7 @@ import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
 import {isObject} from './is'
+import {throwError} from './throw'
 
 import {is, step, launch, createNode} from 'effector'
 
@@ -21,10 +22,10 @@ hydrate(root, {
 */
 export function hydrate(domain, {values}) {
   if (!is.domain(domain)) {
-    throw Error('first argument of hydrate should be domain')
+    throwError('first argument of hydrate should be domain')
   }
   if (!isObject(values)) {
-    throw Error('values property should be an object')
+    throwError('values property should be an object')
   }
   values = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(values)
@@ -52,7 +53,7 @@ export function serialize({clones}) {
 /** invoke event in scope */
 export function invoke(unit, payload) {
   if (stack.length === 0) {
-    throw Error('invoke cannot be called outside of forked .watch')
+    throwError('invoke cannot be called outside of forked .watch')
   }
   launch(stack[stack.length - 1](unit), payload)
 }
@@ -60,7 +61,7 @@ export function invoke(unit, payload) {
 /** bind event to scope */
 export function scopeBind(unit) {
   if (stack.length === 0) {
-    throw Error('scopeBind cannot be called outside of forked .watch')
+    throwError('scopeBind cannot be called outside of forked .watch')
   }
   const result = stack[stack.length - 1](unit)
   return payload => {
@@ -85,7 +86,7 @@ function normalizeValues(values) {
   return values
 }
 export function fork(domain, {values = {}, deep = true} = {}) {
-  if (!is.domain(domain)) throw Error('first argument of fork should be domain')
+  if (!is.domain(domain)) throwError('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
     domain.onCreateEvent(event => {
@@ -265,7 +266,7 @@ function cloneGraph(unit, {values, deep}) {
   function findClone(unit) {
     unit = getGraph(unit)
     const index = list.indexOf(unit)
-    if (index === -1) throw Error('not found')
+    if (index === -1) throwError('not found')
     return clones[index]
   }
 }

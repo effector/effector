@@ -3,6 +3,7 @@ import {getConfig, getNestedConfig} from './getter'
 import {createNode} from './createNode'
 import type {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
+import {throwError} from './throw'
 
 export const createLinkNode = (
   parent: Graphite,
@@ -39,7 +40,7 @@ export const forward = (opts: {
     opts = getNestedConfig(opts)
   }
   const {from, to, meta = {op: 'forward'}} = opts
-  if (!from || !to) throw Error('from and to fields should be defined')
+  if (!from || !to) throwError('from and to fields should be defined')
   if (config) meta.config = config
   return createSubscription(
     createNode({

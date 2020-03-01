@@ -21,6 +21,7 @@ import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
 import {getSubscribers, getConfig, getNestedConfig} from './getter'
+import {throwError} from './throw'
 
 const normalizeConfig = (part, config) => {
   if (isObject(part)) {
@@ -235,18 +236,18 @@ export function createStore<State>(
     meta: initUnit('store', store, props),
   })
   if (isStrict && defaultState === undefined)
-    throw Error("current state can't be undefined, use null instead")
+    throwError("current state can't be undefined, use null instead")
 
   store.watch = store.subscribe = (
     eventOrFn: Event<any> | Function,
     fn?: Function,
   ) => {
     if (!fn || !is.unit(eventOrFn)) {
-      if (!isFunction(eventOrFn)) throw Error('watch requires function handler')
+      if (!isFunction(eventOrFn)) throwError('watch requires function handler')
       eventOrFn(store.getState())
       return watchUnit(store, eventOrFn)
     }
-    if (!isFunction(fn)) throw Error('second argument should be a function')
+    if (!isFunction(fn)) throwError('second argument should be a function')
     return eventOrFn.watch(payload => fn(store.getState(), payload))
   }
   own(store, [updates])

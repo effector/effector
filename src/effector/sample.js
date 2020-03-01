@@ -11,6 +11,7 @@ import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {addToRegion} from './region'
+import {throwError} from './throw'
 
 export const shapeToStore = shape => (is.unit(shape) ? shape : combine(shape))
 
@@ -27,7 +28,7 @@ export function sample(...args): any {
   //config case
   if (clock === undefined && 'source' in source) {
     if ('clock' in source && source.clock == null)
-      throw Error('config.clock should be defined')
+      throwError('config.clock should be defined')
     clock = source.clock
     fn = source.fn
     greedy = source.greedy

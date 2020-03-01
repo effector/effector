@@ -9,9 +9,10 @@ import {getStoreState, getConfig, getNestedConfig} from './getter'
 import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
+import {throwError} from './throw'
 
 export function combine(...args: any[]): Store<any> {
-  if (args.length === 0) throw Error('at least one argument required')
+  if (args.length === 0) throwError('at least one argument required')
   let handler
   let stores
   let config

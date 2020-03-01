@@ -9,6 +9,7 @@ import {step} from './typedef'
 import {callStack} from './caller'
 import {is, isFunction} from './is'
 import {createNode} from './createNode'
+import {throwError} from './throw'
 
 export function guard(source, config) {
   const meta = {op: 'guard'}
@@ -49,7 +50,7 @@ export function guard(source, config) {
       name,
     })
   } else {
-    if (!isFunction(filter)) throw Error('`filter` should be function or unit')
+    if (!isFunction(filter)) throwError('`filter` should be function or unit')
     createLinkNode(source, target, {
       scope: {fn: filter},
       node: [step.filter({fn: callStack})],
