@@ -7,6 +7,7 @@ import {
   withRegion,
   clearNode,
   createNode,
+  forward,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -60,6 +61,44 @@ it('binds units to region lifetime', () => {
       1,
     ]
   `)
+})
+
+describe('api features support', () => {
+  it('support on', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+    const region = createNode({})
+
+    withRegion(region, () => {
+      createStore(0).on(store, x => {
+        fn(x)
+        return x + 1
+      })
+    })
+    inc()
+    clearNode(region)
+    inc()
+    expect(argumentHistory(fn)).toEqual([0])
+  })
+  it('support forward', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+    const target = createEvent()
+    target.watch(fn)
+    const region = createNode({})
+    withRegion(region, () => {
+      forward({
+        from: store,
+        to: target,
+      })
+    })
+    inc()
+    clearNode(region)
+    inc()
+    expect(argumentHistory(fn)).toEqual([1])
+  })
 })
 
 describe('protect external units from destroy', () => {
