@@ -1,5 +1,5 @@
 //@flow
-import {getValue} from './getter'
+import {getValue, getGraph} from './getter'
 import {own} from './own'
 
 export const addToRegion = unit => {
@@ -9,10 +9,14 @@ export const addToRegion = unit => {
 
 let regionStack = null
 
+export const isTemplateRegion = () => regionStack && regionStack.isTemplate
+
 export function withRegion(unit: any, cb: () => void) {
   regionStack = {
     parent: regionStack,
     value: unit,
+    isTemplate:
+      getGraph(unit).meta.isTemplate || (regionStack && regionStack.isTemplate),
   }
   try {
     return cb()

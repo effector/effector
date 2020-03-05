@@ -19,7 +19,7 @@ import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {addToRegion} from './region'
+import {addToRegion, isTemplateRegion} from './region'
 import {getSubscribers, getConfig, getNestedConfig} from './getter'
 import {throwError} from './throw'
 
@@ -204,7 +204,9 @@ export function createStore<State>(
       }
       let lastResult
       const storeState = store.getState()
-      if (storeState !== undefined) {
+      if (isTemplateRegion()) {
+        lastResult = null
+      } else if (storeState !== undefined) {
         lastResult = fn(storeState, firstState)
       }
 
@@ -244,7 +246,7 @@ export function createStore<State>(
   ) => {
     if (!fn || !is.unit(eventOrFn)) {
       if (!isFunction(eventOrFn)) throwError('watch requires function handler')
-      eventOrFn(store.getState())
+      if (!isTemplateRegion()) eventOrFn(store.getState())
       return watchUnit(store, eventOrFn)
     }
     if (!isFunction(fn)) throwError('second argument should be a function')

@@ -10,6 +10,7 @@ import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
+import {isTemplateRegion} from './region'
 
 export function combine(...args: any[]): Store<any> {
   if (args.length === 0) throwError('at least one argument required')
@@ -168,8 +169,10 @@ const storeCombination = (
   }
 
   store.defaultShape = obj
-  store.defaultState = fn
-    ? (getStoreState(store).current = fn(stateNew))
-    : defaultState
+  if (!isTemplateRegion()) {
+    store.defaultState = fn
+      ? (getStoreState(store).current = fn(stateNew))
+      : defaultState
+  }
   return store
 }
