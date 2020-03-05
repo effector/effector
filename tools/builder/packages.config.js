@@ -35,7 +35,7 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.12.1',
+  effector: '20.12.2',
   'effector-react': '20.6.2',
   'effector-vue': '20.4.0',
   'effector-dom': '0.0.14',

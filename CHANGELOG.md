@@ -2,6 +2,25 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.12.2
+
+- Add type support for sample with target and without clock (in that case, `source` will become `clock` as well)
+
+```typescript
+import {createStore, sample} from 'effector'
+
+const source = createStore([{foo: 0}])
+const target = createStore(0)
+
+sample({
+  source,
+  target,
+  fn: list => list.length,
+})
+```
+
+[Try it](https://share.effector.dev/fl50soxD)
+
 ## effector-vue 20.4.0
 
 - Add support for vue component watch option ([PR #313](https://github.com/zerobias/effector/pull/313)) (thanks [@Fl0pZz](https://github.com/Fl0pZz))
