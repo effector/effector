@@ -6,6 +6,7 @@ import {
   createDomain,
   withRegion,
   clearNode,
+  createNode,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -59,4 +60,51 @@ it('binds units to region lifetime', () => {
       1,
     ]
   `)
+})
+
+describe('protect external units from destroy', () => {
+  test('with on', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+
+    store.updates.watch(fn)
+    inc()
+
+    const region = createNode({})
+
+    withRegion(region, () => {
+      createStore(0).on(store.updates, x => x + 1)
+    })
+    clearNode(region)
+    inc()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+  test('with watch', () => {
+    const fn = jest.fn()
+    const inc = createEvent()
+    const store = createStore(0).on(inc, x => x + 1)
+
+    store.updates.watch(fn)
+    inc()
+
+    const region = createNode({})
+
+    withRegion(region, () => {
+      store.updates.watch(() => {})
+    })
+    clearNode(region)
+    inc()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
 })
