@@ -68,10 +68,11 @@ describe('api features support', () => {
     const fn = jest.fn()
     const inc = createEvent()
     const store = createStore(0).on(inc, x => x + 1)
+    const target = createStore(0)
     const region = createNode({})
 
     withRegion(region, () => {
-      createStore(0).on(store, x => {
+      target.on(store, x => {
         fn(x)
         return x + 1
       })
