@@ -428,6 +428,12 @@ declare export function sample<A, U: Unit<A>>(config: {|
   +clock: Unit<any>,
   +target: U,
 |}): U
+declare export function sample<A, B>(config: {|
+  +source: Unit<A>,
+  +target: Unit<B>,
+  fn(source: A): B,
+  +name?: string,
+|}): Unit<B>
 declare export function sample<A, B, C>(config: {|
   +source: Unit<A>,
   +clock: Unit<B>,

@@ -501,6 +501,12 @@ export function sample<A, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
+export function sample<A, B>(config: {
+  source: Unit<A>
+  fn: (source: A) => NoInfer<B>
+  target: Unit<B>
+  greedy?: boolean
+}): Unit<B>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
   clock: Unit<any>
