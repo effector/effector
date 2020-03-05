@@ -9,6 +9,7 @@ import {step} from './typedef'
 import {callStack} from './caller'
 import {is, isFunction} from './is'
 import {createNode} from './createNode'
+import {addToRegion} from './region'
 import {throwError} from './throw'
 
 export function guard(source, config) {
@@ -29,22 +30,24 @@ export function guard(source, config) {
     sample({
       source: filter,
       clock: source,
-      target: createNode({
-        node: [
-          step.filter({
-            fn: ({guard}) => guard,
-          }),
-          step.compute({
-            fn: ({data}) => data,
-          }),
-        ],
-        child: target,
-        meta,
-        family: {
-          owners: [source, filter, target],
-          links: target,
-        },
-      }),
+      target: addToRegion(
+        createNode({
+          node: [
+            step.filter({
+              fn: ({guard}) => guard,
+            }),
+            step.compute({
+              fn: ({data}) => data,
+            }),
+          ],
+          child: target,
+          meta,
+          family: {
+            owners: [source, filter, target],
+            links: target,
+          },
+        }),
+      ),
       fn: (guard, data) => ({guard, data}),
       greedy,
       name,

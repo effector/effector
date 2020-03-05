@@ -4,6 +4,7 @@ import {createNode} from './createNode'
 import type {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {throwError} from './throw'
+import {addToRegion} from './region'
 
 export const createLinkNode = (
   parent: Graphite,
@@ -18,17 +19,19 @@ export const createLinkNode = (
     meta?: {[name: string]: any, ...},
   |},
 ) =>
-  createNode({
-    node,
-    parent,
-    child,
-    scope,
-    meta,
-    family: {
-      owners: [parent, child],
-      links: child,
-    },
-  })
+  addToRegion(
+    createNode({
+      node,
+      parent,
+      child,
+      scope,
+      meta,
+      family: {
+        owners: [parent, child],
+        links: child,
+      },
+    }),
+  )
 export const forward = (opts: {
   from: Graphite | Graphite[],
   to: Graphite | Graphite[],
@@ -43,11 +46,13 @@ export const forward = (opts: {
   if (!from || !to) throwError('from and to fields should be defined')
   if (config) meta.config = config
   return createSubscription(
-    createNode({
-      parent: from,
-      child: to,
-      meta,
-      family: {},
-    }),
+    addToRegion(
+      createNode({
+        parent: from,
+        child: to,
+        meta,
+        family: {},
+      }),
+    ),
   )
 }

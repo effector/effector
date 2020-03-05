@@ -60,21 +60,19 @@ export function sample(...args): any {
   }
   if (is.store(source)) {
     own(source, [
-      addToRegion(
-        createLinkNode(clock, target, {
-          scope: {fn},
-          node: [
-            //$off
-            !greedy && step.barrier({priority: 'sampler'}),
-            step.mov({
-              store: getStoreState(source),
-              to: fn ? 'a' : 'stack',
-            }),
-            fn && step.compute({fn: callARegStack}),
-          ],
-          meta: {op: 'sample', sample: 'store'},
-        }),
-      ),
+      createLinkNode(clock, target, {
+        scope: {fn},
+        node: [
+          //$off
+          !greedy && step.barrier({priority: 'sampler'}),
+          step.mov({
+            store: getStoreState(source),
+            to: fn ? 'a' : 'stack',
+          }),
+          fn && step.compute({fn: callARegStack}),
+        ],
+        meta: {op: 'sample', sample: 'store'},
+      }),
     ])
   } else {
     const hasSource = createStateRef(false)
@@ -99,25 +97,23 @@ export function sample(...args): any {
       }),
     )
     own(source, [
-      addToRegion(
-        createLinkNode(clock, target, {
-          scope: {fn},
-          node: [
-            step.update({store: clockState}),
-            step.mov({store: hasSource}),
-            step.filter({fn: hasSource => hasSource}),
-            //$off
-            !greedy && step.barrier({priority: 'sampler'}),
-            step.mov({store: sourceState}),
-            step.mov({
-              store: clockState,
-              to: 'a',
-            }),
-            fn && step.compute({fn: callStackAReg}),
-          ],
-          meta: {op: 'sample', sample: 'clock'},
-        }),
-      ),
+      createLinkNode(clock, target, {
+        scope: {fn},
+        node: [
+          step.update({store: clockState}),
+          step.mov({store: hasSource}),
+          step.filter({fn: hasSource => hasSource}),
+          //$off
+          !greedy && step.barrier({priority: 'sampler'}),
+          step.mov({store: sourceState}),
+          step.mov({
+            store: clockState,
+            to: 'a',
+          }),
+          fn && step.compute({fn: callStackAReg}),
+        ],
+        meta: {op: 'sample', sample: 'clock'},
+      }),
     ])
   }
   return target
