@@ -879,3 +879,43 @@ describe('sample + guard (should pass)', () => {
     `)
   })
 })
+
+test('optional clock with target', () => {
+  const source = createStore([{foo: 'ok', bar: 0}])
+  const target = createStore({foo: '...', bar: 1})
+
+  sample({
+    source,
+    target,
+    fn: ([obj]) => obj,
+  })
+
+  expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Store<{ foo: string; bar: number; }[]>' is not assignable to type 'Combinable'.
+      Type 'Store<{ foo: string; bar: number; }[]>' is not assignable to type '{ [key: string]: Store<any>; }'.
+        Index signature is missing in type 'Store<{ foo: string; bar: number; }[]>'.
+Binding element 'obj' implicitly has an 'any' type.
+
+--flow--
+Cannot call 'sample' because: Either property 'fn' is missing in object type [1] but exists in object literal [2]. Or property 'fn' is missing in object type [3] but exists in object literal [2]. Or property 'clock' is missing in object literal [2] but exists in object type [4]. Or object literal [2] is incompatible with 'Store' [5]. Or object literal [2] is incompatible with 'Store' [6]
+  sample({
+  ^^^^^^
+      declare export function sample<A>(config: {|
+                                            [1] ^^...
+      sample({
+         [2] ^...
+      declare export function sample<A, U: Unit<A>>(config: {|
+                                                        [3] ^^...
+      declare export function sample<A, B, C>(config: {|
+                                                  [4] ^^...
+      source: Store<A>,
+          [5] ^^^^^^^^
+      source: Store<A>,
+          [6] ^^^^^^^^
+"
+`)
+})
