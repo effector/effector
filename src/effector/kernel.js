@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graphite, Graph, ID} from './index.h'
+import type {Graphite, Graph} from './index.h'
 import {readRef} from './stateRef'
 import {getGraph, getValue} from './getter'
 
@@ -46,9 +46,7 @@ type QueueBucket = {
 
 /** Dedicated local metadata */
 type Local = {
-  skip: boolean,
   fail: boolean,
-  ref: ID,
   scope: {[key: string]: any},
 }
 
@@ -191,16 +189,16 @@ const exec = () => {
   const lastStartedState = alreadyStarted
   alreadyStarted = true
   let stop = false
+  let skip = false
   let graph
   let value
+  let page
   mem: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     graph = stack.node
-    const page = stack.page
+    page = stack.page
     const local: Local = {
-      skip: false,
       fail: false,
-      ref: '',
       scope: graph.scope,
     }
     for (let stepn = idx; stepn < graph.seq.length && !stop; stepn++) {
@@ -252,10 +250,10 @@ const exec = () => {
         case 'check':
           switch (data.type) {
             case 'defined':
-              local.skip = getValue(stack) === undefined
+              skip = getValue(stack) === undefined
               break
             case 'changed':
-              local.skip =
+              skip =
                 getValue(stack) ===
                 (page ? page[data.store.id] : readRef(graph.reg[data.store.id]))
               break
@@ -267,7 +265,7 @@ const exec = () => {
            * tryRun will return null
            * thereby forcing that branch to stop
            */
-          local.skip = !tryRun(local, data, stack)
+          skip = !tryRun(local, data, stack)
           break
         case 'run':
           /** exec 'compute' step when stepn === idx */
@@ -279,7 +277,7 @@ const exec = () => {
           stack.value = tryRun(local, data, stack)
           break
       }
-      stop = local.fail || local.skip
+      stop = local.fail || skip
     }
     if (!stop) {
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
@@ -292,7 +290,7 @@ const exec = () => {
         )
       }
     }
-    stop = false
+    stop = skip = false
   }
   alreadyStarted = lastStartedState
 }
