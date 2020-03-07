@@ -5,7 +5,7 @@ import {createStore} from './createUnit'
 import type {StateRef} from './index.h'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'
-import {getStoreState, getConfig, getNestedConfig} from './getter'
+import {getStoreState, getConfig, getNestedConfig, getGraph} from './getter'
 import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -88,14 +88,6 @@ export function combine(...args: any[]): Store<any> {
 
 const spreadArgs = fn => list => fn(...list)
 
-type CombinationScope = {
-  key: any,
-  target: StateRef,
-  clone(value: any): any,
-  isFresh: StateRef,
-  ...
-}
-
 const storeCombination = (
   obj: any,
   clone: Function,
@@ -107,12 +99,16 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
   })
-  const target = createStateRef(stateNew)
+  const rawShape = createStateRef(stateNew)
   const isFresh = createStateRef(true)
+  const {meta} = getGraph(store)
+  meta.fn = fn
+  meta.rawShape = rawShape
+  meta.shape = obj
   const node = [
     step.check.defined(),
     step.mov({
-      store: target,
+      store: rawShape,
       to: 'a',
     }),
     //prettier-ignore
@@ -124,7 +120,7 @@ const storeCombination = (
       to: 'b',
     }),
     step.compute({
-      fn(upd, {clone, key}: CombinationScope, reg) {
+      fn(upd, {clone, key}, reg) {
         if (reg.b) {
           reg.a = clone(reg.a)
         }
@@ -133,7 +129,7 @@ const storeCombination = (
     }),
     step.mov({
       from: 'a',
-      target,
+      target: rawShape,
     }),
     step.mov({
       from: 'value',
@@ -146,7 +142,7 @@ const storeCombination = (
       store: true,
       target: isFresh,
     }),
-    step.mov({store: target}),
+    step.mov({store: rawShape}),
     fn && step.compute({fn}),
     step.check.changed({
       store: getStoreState(store),
