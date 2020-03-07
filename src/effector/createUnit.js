@@ -165,6 +165,11 @@ export function createStore<State>(
   const plainState = createStateRef(defaultState)
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
+  const template = isTemplateRegion()
+  if (template) {
+    template.plain[plainState.id] = defaultState
+    template.plain[oldState.id] = defaultState
+  }
   const store: any = {
     subscribers: new Map(),
     updates,

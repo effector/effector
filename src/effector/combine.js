@@ -165,7 +165,12 @@ const storeCombination = (
   }
 
   store.defaultShape = obj
-  if (!isTemplateRegion()) {
+  const template = isTemplateRegion()
+  if (template) {
+    const bucket = Array.isArray(stateNew) ? template.list : template.shape
+    bucket.push(rawShape)
+    template.plain[isFresh.id] = true
+  } else {
     store.defaultState = fn
       ? (getStoreState(store).current = fn(stateNew))
       : defaultState

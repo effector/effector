@@ -9,14 +9,14 @@ export const addToRegion = unit => {
 
 let regionStack = null
 
-export const isTemplateRegion = () => regionStack && regionStack.isTemplate
+export const isTemplateRegion = () => regionStack && regionStack.template
 
 export function withRegion(unit: any, cb: () => void) {
   regionStack = {
     parent: regionStack,
     value: unit,
-    isTemplate:
-      getGraph(unit).meta.isTemplate || (regionStack && regionStack.isTemplate),
+    template:
+      getGraph(unit).meta.template || (regionStack && regionStack.template),
   }
   try {
     return cb()

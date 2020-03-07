@@ -15,7 +15,11 @@ test('region templates', () => {
 
   const template = createNode({
     meta: {
-      isTemplate: true,
+      template: {
+        plain: {},
+        list: [],
+        shape: [],
+      },
     },
   })
 
@@ -36,29 +40,24 @@ test('region templates', () => {
 
   expect(fn).not.toBeCalled()
 
-  function templateInstance(template, values = new Map()) {
-    if (!template.meta.defaultPage) {
-      const page = {}
-      for (const {reg} of template.family.links) {
-        for (const key in reg) {
-          page[key] = reg[key].current
-        }
-      }
-      template.meta.defaultPage = page
+  function templateInstance(unit, values = new Map()) {
+    const template = unit.meta.template
+    const resultPage = {...template.plain}
+    for (const {id, current} of template.list) {
+      resultPage[id] = [...current]
     }
-    const resultPage = {...template.meta.defaultPage}
+    for (const {id, current} of template.shape) {
+      resultPage[id] = {...current}
+    }
     for (const [store, value] of values) {
       for (const id in store.graphite.reg) {
         resultPage[id] = value
       }
     }
-    for (const {meta, reg} of template.family.links) {
+    for (const {meta, reg} of unit.family.links) {
       if (!meta.rawShape) continue
       const rawShapeID = meta.rawShape.id
-      const rawCombinedShape = resultPage[rawShapeID]
-      const state = Array.isArray(rawCombinedShape)
-        ? [...rawCombinedShape]
-        : {...rawCombinedShape}
+      const state = resultPage[rawShapeID]
       resultPage[rawShapeID] = state
       for (const field in meta.shape) {
         const id = meta.shape[field].stateRef.id
