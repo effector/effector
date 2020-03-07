@@ -26,7 +26,7 @@ type Stack = {
   b: any,
   parent: Stack | null,
   node: Graph,
-  branch: number,
+  page: {[id: string]: any} | null,
 }
 
 /** Queue as linked list or skew heap */
@@ -118,7 +118,7 @@ const deleteMin = () => {
 }
 const pushFirstHeapItem = (
   type: PriorityTag,
-  branchID: number,
+  page: {[id: string]: any} | null,
   node: Graph,
   parent: Stack | null,
   value: any,
@@ -131,7 +131,7 @@ const pushFirstHeapItem = (
       node,
       parent,
       value,
-      branch: branchID,
+      page,
     }: Stack),
     type,
   )
@@ -276,7 +276,7 @@ const exec = () => {
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
         pushFirstHeapItem(
           'child',
-          stack.branch,
+          stack.page,
           graph.next[stepn],
           stack,
           getValue(stack),
@@ -288,19 +288,19 @@ const exec = () => {
   alreadyStarted = lastStartedState
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  let branchID = 0
+  let page = null
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
     unit = unit.target
-    branchID = unit.branch || branchID
+    page = unit.page || page
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
-      pushFirstHeapItem('pure', branchID, getGraph(unit[i]), null, payload[i])
+      pushFirstHeapItem('pure', page, getGraph(unit[i]), null, payload[i])
     }
   } else {
-    pushFirstHeapItem('pure', branchID, getGraph(unit), null, payload)
+    pushFirstHeapItem('pure', page, getGraph(unit), null, payload)
   }
   if (upsert && alreadyStarted) return
   exec()
