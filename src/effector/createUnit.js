@@ -20,7 +20,12 @@ import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion, isTemplateRegion} from './region'
-import {getSubscribers, getConfig, getNestedConfig} from './getter'
+import {
+  getSubscribers,
+  getConfig,
+  getNestedConfig,
+  getStoreState,
+} from './getter'
 import {throwError} from './throw'
 
 const normalizeConfig = (part, config) => {
@@ -271,21 +276,21 @@ const addObservableApi = (unit, target) => {
 
 const updateStore = (
   from,
-  {graphite, stateRef}: Store<any>,
+  store: Store<any>,
   op,
   stateFirst: boolean,
   fn: Function,
 ) =>
-  createLinkNode(from, graphite, {
+  createLinkNode(from, store, {
     scope: {fn},
     node: [
-      step.mov({store: stateRef, to: 'a'}),
+      step.mov({store: getStoreState(store), to: 'a'}),
       step.compute({
         fn: stateFirst ? callARegStack : callStackAReg,
       }),
       step.check.defined(),
-      step.check.changed({store: stateRef}),
-      step.update({store: stateRef}),
+      step.check.changed({store: getStoreState(store)}),
+      step.update({store: getStoreState(store)}),
     ],
     meta: {op},
   })
