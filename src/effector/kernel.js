@@ -196,6 +196,7 @@ const exec = () => {
   mem: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     graph = stack.node
+    const page = stack.page
     const local: Local = {
       skip: false,
       fail: false,
@@ -228,7 +229,9 @@ const exec = () => {
             case 'b': value = stack.b; break
             case 'value': value = data.store; break
             case 'store':
-              value = readRef(graph.reg[data.store.id])
+              value = page
+                ? page[data.store.id]
+                : readRef(graph.reg[data.store.id])
               break
           }
           //prettier-ignore
@@ -237,7 +240,11 @@ const exec = () => {
             case 'a': stack.a = value; break
             case 'b': stack.b = value; break
             case 'store':
-              graph.reg[data.target.id].current = value
+              if (page) {
+                page[data.target.id] = value
+              } else {
+                graph.reg[data.target.id].current = value
+              }
               break
           }
           break
@@ -248,7 +255,9 @@ const exec = () => {
               local.skip = getValue(stack) === undefined
               break
             case 'changed':
-              local.skip = getValue(stack) === readRef(graph.reg[data.store.id])
+              local.skip =
+                getValue(stack) ===
+                (page ? page[data.store.id] : readRef(graph.reg[data.store.id]))
               break
           }
           break
@@ -276,7 +285,7 @@ const exec = () => {
       for (let stepn = 0; stepn < graph.next.length; stepn++) {
         pushFirstHeapItem(
           'child',
-          stack.page,
+          page,
           graph.next[stepn],
           stack,
           getValue(stack),
@@ -292,8 +301,8 @@ export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
-    unit = unit.target
     page = unit.page || page
+    unit = unit.target
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
