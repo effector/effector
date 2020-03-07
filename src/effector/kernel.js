@@ -188,8 +188,8 @@ let alreadyStarted = false
 const exec = () => {
   const lastStartedState = alreadyStarted
   alreadyStarted = true
-  let stop = false
-  let skip = false
+  let stop
+  let skip
   let graph
   let value
   let page
@@ -201,6 +201,7 @@ const exec = () => {
       fail: false,
       scope: graph.scope,
     }
+    stop = skip = false
     for (let stepn = idx; stepn < graph.seq.length && !stop; stepn++) {
       const step = graph.seq[stepn]
       const data = step.data
@@ -290,7 +291,6 @@ const exec = () => {
         )
       }
     }
-    stop = skip = false
   }
   alreadyStarted = lastStartedState
 }
