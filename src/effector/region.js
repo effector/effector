@@ -9,7 +9,7 @@ export const addToRegion = unit => {
 
 let regionStack = null
 
-export const isTemplateRegion = () => regionStack && regionStack.template
+export const readTemplate = () => regionStack && regionStack.template
 
 export function withRegion(unit: any, cb: () => void) {
   regionStack = {

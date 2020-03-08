@@ -19,7 +19,7 @@ import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {addToRegion, isTemplateRegion} from './region'
+import {addToRegion, readTemplate} from './region'
 import {
   getSubscribers,
   getConfig,
@@ -163,12 +163,14 @@ export function createStore<State>(
   props?: Config,
 ): Store<State> {
   const plainState = createStateRef(defaultState)
+  const plainStateID = plainState.id
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
-  const template = isTemplateRegion()
+  const template = readTemplate()
   if (template) {
-    template.plain[plainState.id] = defaultState
+    template.plain[plainStateID] = defaultState
     template.plain[oldState.id] = defaultState
+    template.seq[plainStateID] = [{type: 'copy', to: oldState}]
   }
   const store: any = {
     subscribers: new Map(),
@@ -214,7 +216,8 @@ export function createStore<State>(
       }
       let lastResult
       const storeState = store.getState()
-      if (isTemplateRegion()) {
+      const template = readTemplate()
+      if (template) {
         lastResult = null
       } else if (storeState !== undefined) {
         lastResult = fn(storeState, firstState)
@@ -226,6 +229,13 @@ export function createStore<State>(
         strict: false,
       })
       updateStore(store, innerStore, 'map', false, fn)
+      if (template) {
+        template.seq[plainStateID].push({
+          type: 'map',
+          fn,
+          to: getStoreState(innerStore),
+        })
+      }
       return innerStore
     },
     [$$observable]: () => addObservableApi(store, {}),
@@ -256,7 +266,15 @@ export function createStore<State>(
   ) => {
     if (!fn || !is.unit(eventOrFn)) {
       if (!isFunction(eventOrFn)) throwError('watch requires function handler')
-      if (!isTemplateRegion()) eventOrFn(store.getState())
+      const template = readTemplate()
+      if (template) {
+        template.watch.push({
+          of: plainState,
+          fn: eventOrFn,
+        })
+      } else {
+        eventOrFn(store.getState())
+      }
       return watchUnit(store, eventOrFn)
     }
     if (!isFunction(fn)) throwError('second argument should be a function')

@@ -10,7 +10,7 @@ import {createStore} from './createUnit'
 import {createEvent} from './createUnit'
 import {createLinkNode} from './forward'
 import {createNode} from './createNode'
-import {addToRegion} from './region'
+import {addToRegion, readTemplate} from './region'
 import {throwError} from './throw'
 
 export const shapeToStore = shape => (is.unit(shape) ? shape : combine(shape))
@@ -78,6 +78,12 @@ export function sample(...args): any {
     const hasSource = createStateRef(false)
     const sourceState = createStateRef()
     const clockState = createStateRef()
+    const template = readTemplate()
+    if (template) {
+      template.plain[hasSource.id] = false
+      template.plain[sourceState.id] = null
+      template.plain[clockState.id] = null
+    }
     addToRegion(
       createNode({
         parent: source,

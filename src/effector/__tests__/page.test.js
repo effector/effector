@@ -13,69 +13,31 @@ import {argumentHistory} from 'effector/fixtures'
 test('region templates', () => {
   const fn = jest.fn()
 
-  const template = createNode({
-    meta: {
-      template: {
-        plain: {},
-        list: [],
-        shape: [],
-      },
-    },
-  })
-
   const trigger = createEvent()
 
-  let pageName
-
-  withRegion(template, () => {
+  const template = createTemplate(() => {
     const foo = createStore(0).on(trigger, (foo, x) => foo + x)
-    pageName = createStore('')
+    const pageName = createStore('')
 
     const combined = combine({foo, pageName})
 
     combined.watch(upd => {
       fn(upd)
     })
+
+    return {
+      state: {pageName},
+    }
   })
 
   expect(fn).not.toBeCalled()
 
-  function templateInstance(unit, values = new Map()) {
-    const template = unit.meta.template
-    const resultPage = {...template.plain}
-    for (const {id, current} of template.list) {
-      resultPage[id] = [...current]
-    }
-    for (const {id, current} of template.shape) {
-      resultPage[id] = {...current}
-    }
-    for (const [store, value] of values) {
-      for (const id in store.graphite.reg) {
-        resultPage[id] = value
-      }
-    }
-    for (const {meta, reg} of unit.family.links) {
-      if (!meta.rawShape) continue
-      const rawShapeID = meta.rawShape.id
-      const state = resultPage[rawShapeID]
-      resultPage[rawShapeID] = state
-      for (const field in meta.shape) {
-        const id = meta.shape[field].stateRef.id
-        state[field] = resultPage[id]
-      }
-      let resultState = state
-      if (meta.fn) {
-        resultState = meta.fn(state)
-      }
-      for (const id in reg) {
-        resultPage[id] = resultState
-      }
-    }
-    return resultPage
-  }
-
-  const pageA = templateInstance(template, new Map([[pageName, 'A']]))
-  const pageB = templateInstance(template, new Map([[pageName, 'B']]))
+  const pageA = spawn(template, {
+    values: {pageName: 'A'},
+  })
+  const pageB = spawn(template, {
+    values: {pageName: 'B'},
+  })
 
   launch({
     target: trigger,
@@ -91,6 +53,14 @@ test('region templates', () => {
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       Object {
+        "foo": 0,
+        "pageName": "A",
+      },
+      Object {
+        "foo": 0,
+        "pageName": "B",
+      },
+      Object {
         "foo": 8,
         "pageName": "A",
       },
@@ -101,3 +71,77 @@ test('region templates', () => {
     ]
   `)
 })
+
+function createTemplate(fn) {
+  const template = {
+    plain: {},
+    combine: {},
+    seq: {},
+    watch: [],
+    nameMap: {},
+  }
+  const node = createNode({
+    meta: {
+      template,
+    },
+  })
+  withRegion(node, () => {
+    const result = fn()
+    if (result.state) {
+      template.nameMap = result.state
+    }
+  })
+  return node
+}
+
+function spawn(unit, {values = {}} = {}) {
+  const template = unit.meta.template
+  const page = {...template.plain}
+  for (const name in values) {
+    page[template.nameMap[name].stateRef.id] = values[name]
+  }
+  for (const id in template.combine) {
+    if (template.combine[id] === 'shape') {
+      page[id] = {...page[id]}
+    } else {
+      page[id] = [...page[id]]
+    }
+  }
+  for (const id in template.seq) {
+    const after = template.seq[id]
+    const value = page[id]
+    for (const cmd of after) {
+      switch (cmd.type) {
+        case 'copy':
+          page[cmd.to.id] = value
+          break
+        case 'map':
+          page[cmd.to.id] = cmd.fn(value)
+          break
+        case 'field':
+          page[cmd.to.id][cmd.field] = value
+          break
+      }
+    }
+  }
+  const state = {i: 0, stop: false}
+  while (!state.stop) {
+    runWatchersFrom(template.watch, state, page)
+  }
+  return page
+}
+
+function runWatchersFrom(list, state, page) {
+  state.stop = true
+  let val
+  try {
+    while (state.i < list.length) {
+      val = list[state.i]
+      state.i++
+      val.fn(page[val.of.id])
+    }
+  } catch (err) {
+    console.error(err)
+    state.stop = false
+  }
+}
