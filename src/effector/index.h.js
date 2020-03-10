@@ -44,10 +44,7 @@ export type Graph = {
   ...
 }
 
-//prettier-ignore
-export type Graphite =
-  | {graphite: Graph, ...}
-  | Graph
+export type Graphite = {graphite: Graph, ...} | Graph
 
 export interface Unit {
   graphite: Graph;
@@ -55,8 +52,6 @@ export interface Unit {
 
 export type Subscriber<A> = {
   next?: (value: A) => void,
-  // error(err: Error): void,
-  //complete(): void,
   ...
 }
 
@@ -74,6 +69,8 @@ export type Cmd =
   | Compute
   | Barrier
   | Mov
+  | Page
+
 export type Mov = {
   id: ID,
   type: 'mov',
@@ -131,6 +128,15 @@ export type Compute = {
   type: 'compute',
   data: {
     fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
+  },
+  hasRef: false,
+}
+
+export type Page = {
+  id: ID,
+  type: 'page',
+  data: {
+    template: any,
   },
   hasRef: false,
 }

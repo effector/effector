@@ -152,7 +152,7 @@ const storeCombination = (
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
-    createLinkNode(child, store, {
+    const linkNode = createLinkNode(child, store, {
       scope: {key, clone},
       node,
       meta: {op: 'combine'},
@@ -168,6 +168,7 @@ const storeCombination = (
           template.closure.push(ref)
           template.seq[key] = []
         }
+        linkNode.seq.unshift(step.page({template}))
       }
       template.seq[childRef.id].push({
         type: 'field',

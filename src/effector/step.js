@@ -7,6 +7,7 @@ import type {
   Barrier,
   Check,
   Mov,
+  Page,
 } from './index.h'
 import {nextStepID} from './id'
 import {bind2} from './bind'
@@ -20,19 +21,19 @@ const cmd = (type: any, hasRef: boolean, data: any): any => ({
 
 let nextBarrierID = 0
 
-export const barrier: (data: {|
-  +priority?: 'barrier' | 'sampler',
-|}) => Barrier = ({priority = 'barrier'}) =>
+export const barrier: (data: {
+  priority?: 'barrier' | 'sampler',
+}) => Barrier = ({priority = 'barrier'}) =>
   cmd('barrier', false, {
     barrierID: ++nextBarrierID,
     priority,
   })
-export const mov: (data: {|
+export const mov: (data: {
   from?: 'value' | 'store' | 'stack' | 'a' | 'b',
   to?: 'stack' | 'a' | 'b',
   store?: any,
   target?: any,
-|}) => Mov = ({
+}) => Mov = ({
   from = 'store',
   store,
   target,
@@ -45,15 +46,16 @@ export const check: {
   defined: () => cmd('check', false, {type: 'defined'}),
   changed: ({store}) => cmd('check', true, {type: 'changed', store}),
 }
-export const compute: (data: {|
-  fn: (data: any, scope: {[string]: any, ...}) => any,
-|}) => Compute = bind2(cmd, 'compute', false)
-export const filter: (data: {|
-  fn: (data: any, scope: {[string]: any, ...}) => any,
-|}) => Filter = bind2(cmd, 'filter', false)
-export const run: (data: {|
-  fn: (data: any, scope: {[string]: any, ...}) => any,
-|}) => Run = bind2(cmd, 'run', false)
-export const update: (data: {|
+export const compute: (data: {
+  fn: (data: any, scope: {[string]: any}) => any,
+}) => Compute = bind2(cmd, 'compute', false)
+export const filter: (data: {
+  fn: (data: any, scope: {[string]: any}) => any,
+}) => Filter = bind2(cmd, 'filter', false)
+export const run: (data: {
+  fn: (data: any, scope: {[string]: any}) => any,
+}) => Run = bind2(cmd, 'run', false)
+export const update: (data: {
   store: StateRef,
-|}) => Mov = ({store}) => mov({from: 'stack', target: store})
+}) => Mov = ({store}) => mov({from: 'stack', target: store})
+export const page: (data: {template: any}) => Page = bind2(cmd, 'page', false)
