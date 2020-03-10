@@ -197,6 +197,7 @@ const exec = () => {
     const {idx, stack, type} = value
     graph = stack.node
     page = stack.page
+    const reg = (page ? page : graph).reg
     const local: Local = {
       fail: false,
       scope: graph.scope,
@@ -228,7 +229,7 @@ const exec = () => {
             case 'b': value = stack.b; break
             case 'value': value = data.store; break
             case 'store':
-              value = readRef((page ? page : graph).reg[data.store.id])
+              value = readRef(reg[data.store.id])
               break
           }
           //prettier-ignore
@@ -237,7 +238,7 @@ const exec = () => {
             case 'a': stack.a = value; break
             case 'b': stack.b = value; break
             case 'store':
-              ;(page ? page : graph).reg[data.target.id].current = value
+              reg[data.target.id].current = value
               break
           }
           break
@@ -248,9 +249,7 @@ const exec = () => {
               skip = getValue(stack) === undefined
               break
             case 'changed':
-              skip =
-                getValue(stack) ===
-                readRef((page ? page : graph).reg[data.store.id])
+              skip = getValue(stack) === readRef(reg[data.store.id])
               break
           }
           break
