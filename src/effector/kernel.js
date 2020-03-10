@@ -228,9 +228,7 @@ const exec = () => {
             case 'b': value = stack.b; break
             case 'value': value = data.store; break
             case 'store':
-              value = page
-                ? readRef(page[data.store.id])
-                : readRef(graph.reg[data.store.id])
+              value = readRef((page ? page : graph).reg[data.store.id])
               break
           }
           //prettier-ignore
@@ -239,11 +237,7 @@ const exec = () => {
             case 'a': stack.a = value; break
             case 'b': stack.b = value; break
             case 'store':
-              if (page) {
-                page[data.target.id].current = value
-              } else {
-                graph.reg[data.target.id].current = value
-              }
+              ;(page ? page : graph).reg[data.target.id].current = value
               break
           }
           break
@@ -256,7 +250,7 @@ const exec = () => {
             case 'changed':
               skip =
                 getValue(stack) ===
-                readRef(page ? page[data.store.id] : graph.reg[data.store.id])
+                readRef((page ? page : graph).reg[data.store.id])
               break
           }
           break

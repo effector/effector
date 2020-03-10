@@ -208,7 +208,7 @@ function spawn(unit, {values = {}} = {}) {
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  return page
+  return {reg: page}
 }
 
 function runWatchersFrom(list, state, page) {
