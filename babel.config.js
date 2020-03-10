@@ -87,6 +87,15 @@ const babelConfig = {
     if (meta.isTest) {
       result.push('@babel/plugin-transform-modules-commonjs')
     }
+    if (meta.isBuild) {
+      const constToLetPlugin = resolvePath(
+        __dirname,
+        'src',
+        'babel',
+        'constToLet.js',
+      )
+      result.unshift(constToLetPlugin)
+    }
     return result
   },
   overrides: [
