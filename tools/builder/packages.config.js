@@ -45,7 +45,6 @@ const version = {
 
   '@effector/babel-plugin': '0.5.0',
   '@effector/babel-plugin-react': '0.2.1',
-  '@effector/redux-adapter': '0.0.1',
   '@effector/forms': '0.0.1',
 }
 
@@ -218,19 +217,6 @@ export default {
     files: getFiles('forms'),
     dependencies: dependsOnEffector,
     keywords: ['effector', 'forms'],
-    ...common,
-  },
-  '@effector/redux-adapter': {
-    name: '@effector/redux-adapter',
-    description: 'Effector adapter for Redux',
-    version: version['@effector/redux-adapter'],
-    main: 'adapter.cjs.js',
-    module: 'adapter.es.js',
-    'umd:main': 'adapter.umd.js',
-    'jsnext:main': 'adapter.es.js',
-    files: getFiles('adapter'),
-    typings: 'index.d.ts',
-    keywords,
     ...common,
   },
 }

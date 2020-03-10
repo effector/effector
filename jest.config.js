@@ -78,7 +78,6 @@ module.exports = {
         'static-land',
         'forms',
         'babel',
-        // 'redux',
         {
           react: {
             testEnvironment: 'jsdom',

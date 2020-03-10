@@ -206,28 +206,6 @@ export async function rollupEffectorDom() {
   ])
 }
 
-export async function rollupEffectorReduxAdapter() {
-  const name = '@effector/redux-adapter'
-
-  await Promise.all([
-    createEsCjs(name, {
-      file: {
-        cjs: dir(`npm/${name}/adapter.cjs.js`),
-        es: dir(`npm/${name}/adapter.es.js`),
-      },
-    }),
-    createUmd(name, {
-      external: ['effector'],
-      file: dir(`npm/${name}/adapter.umd.js`),
-      umdName: 'effectorReduxAdapter',
-      globals: {
-        effector: 'effector',
-      },
-    }),
-    createCompat(name),
-  ])
-}
-
 export async function rollupEffectorForms() {
   const name = '@effector/forms'
 
