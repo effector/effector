@@ -7,6 +7,7 @@ import {
   combine,
   withRegion,
   launch,
+  restore,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -15,19 +16,17 @@ test('region templates', () => {
 
   const trigger = createEvent()
 
-  const template = createTemplate(() => {
-    const foo = createStore(0).on(trigger, (foo, x) => foo + x)
-    const pageName = createStore('')
+  const template = createTemplate({
+    state: {pageName: ''},
+    fn({pageName}) {
+      const foo = createStore(0).on(trigger, (foo, x) => foo + x)
 
-    const combined = combine({foo, pageName})
+      const combined = combine({foo, pageName})
 
-    combined.watch(upd => {
-      fn(upd)
-    })
-
-    return {
-      state: {pageName},
-    }
+      combined.watch(upd => {
+        fn(upd)
+      })
+    },
   })
 
   expect(fn).not.toBeCalled()
@@ -72,9 +71,78 @@ test('region templates', () => {
   `)
 })
 
-function createTemplate(fn) {
+test('external state', () => {
+  const fn = jest.fn()
+  const trigger = createEvent()
+  const external = createStore(0).on(trigger, x => x + 1)
+
+  const template = createTemplate({
+    state: {pageName: ''},
+    fn({pageName}) {
+      const combined = combine({external, pageName})
+
+      combined.watch(fn)
+    },
+  })
+
+  const pageA = spawn(template, {
+    values: {pageName: 'A'},
+  })
+  const pageB = spawn(template, {
+    values: {pageName: 'B'},
+  })
+
+  launch({
+    target: trigger,
+    params: null,
+    page: pageA,
+  })
+  launch({
+    target: trigger,
+    params: null,
+    page: pageB,
+  })
+  trigger(null)
+
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": 0,
+    "pageName": "A",
+  },
+  Object {
+    "external": 0,
+    "pageName": "B",
+  },
+  Object {
+    "external": 1,
+    "pageName": "A",
+  },
+  Object {
+    "external": 2,
+    "pageName": "B",
+  },
+  Object {
+    "external": 3,
+    "pageName": "",
+  },
+]
+`)
+})
+
+function list({fn, source, key}) {
+  const listTemplate = createTemplate({
+    fn,
+    state: {
+      key: null,
+      value: null,
+    },
+  })
+}
+
+function createTemplate({fn, state: values = {}}) {
   const template = {
-    plain: {},
+    plain: [],
     combine: {},
     seq: {},
     watch: [],
@@ -86,40 +154,46 @@ function createTemplate(fn) {
     },
   })
   withRegion(node, () => {
-    const result = fn()
-    if (result.state) {
-      template.nameMap = result.state
-    }
+    const state = restore(values)
+    fn(state)
+    template.nameMap = state
   })
   return node
 }
 
 function spawn(unit, {values = {}} = {}) {
   const template = unit.meta.template
-  const page = {...template.plain}
-  for (const name in values) {
-    page[template.nameMap[name].stateRef.id] = values[name]
+  const page = {}
+  for (const ref of template.plain) {
+    page[ref.id] = {id: ref.id, current: ref.current}
   }
+  for (const name in values) {
+    page[template.nameMap[name].stateRef.id].current = values[name]
+  }
+  console.log(page, template)
   for (const id in template.combine) {
     if (template.combine[id] === 'shape') {
-      page[id] = {...page[id]}
+      page[id].current = {...page[id].current}
     } else {
-      page[id] = [...page[id]]
+      page[id].current = [...page[id].current]
     }
   }
   for (const id in template.seq) {
     const after = template.seq[id]
-    const value = page[id]
+    const value = page[id].current
     for (const cmd of after) {
       switch (cmd.type) {
         case 'copy':
-          page[cmd.to.id] = value
+          page[cmd.to.id].current = value
           break
         case 'map':
-          page[cmd.to.id] = cmd.fn(value)
+          page[cmd.to.id].current = cmd.fn(value)
           break
         case 'field':
-          page[cmd.to.id][cmd.field] = value
+          page[cmd.to.id].current[cmd.field] = value
+          break
+        case 'load':
+          page[id] = cmd.from
           break
       }
     }
@@ -138,7 +212,7 @@ function runWatchersFrom(list, state, page) {
     while (state.i < list.length) {
       val = list[state.i]
       state.i++
-      val.fn(page[val.of.id])
+      val.fn(page[val.of.id].current)
     }
   } catch (err) {
     console.error(err)

@@ -80,9 +80,7 @@ export function sample(...args): any {
     const clockState = createStateRef()
     const template = readTemplate()
     if (template) {
-      template.plain[hasSource.id] = false
-      template.plain[sourceState.id] = null
-      template.plain[clockState.id] = null
+      template.plain.push(hasSource, sourceState, clockState)
     }
     addToRegion(
       createNode({

@@ -168,8 +168,7 @@ export function createStore<State>(
   const updates = createNamedEvent('updates')
   const template = readTemplate()
   if (template) {
-    template.plain[plainStateID] = defaultState
-    template.plain[oldState.id] = defaultState
+    template.plain.push(plainState, oldState)
     template.seq[plainStateID] = [{type: 'copy', to: oldState}]
   }
   const store: any = {

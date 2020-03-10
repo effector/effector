@@ -229,7 +229,7 @@ const exec = () => {
             case 'value': value = data.store; break
             case 'store':
               value = page
-                ? page[data.store.id]
+                ? readRef(page[data.store.id])
                 : readRef(graph.reg[data.store.id])
               break
           }
@@ -240,7 +240,7 @@ const exec = () => {
             case 'b': stack.b = value; break
             case 'store':
               if (page) {
-                page[data.target.id] = value
+                page[data.target.id].current = value
               } else {
                 graph.reg[data.target.id].current = value
               }
@@ -254,9 +254,10 @@ const exec = () => {
               skip = getValue(stack) === undefined
               break
             case 'changed':
+              console.log('page', page, data.store)
               skip =
                 getValue(stack) ===
-                (page ? page[data.store.id] : readRef(graph.reg[data.store.id]))
+                readRef(page ? page[data.store.id] : graph.reg[data.store.id])
               break
           }
           break

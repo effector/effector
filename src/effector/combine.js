@@ -90,6 +90,7 @@ const storeCombination = (
   const isFresh = createStateRef(true)
   let after
   if (template) {
+    template.plain.push(rawShape, isFresh)
     after = template.seq[rawShape.id] = []
     template.combine[rawShape.id] = Array.isArray(stateNew) ? 'list' : 'shape'
   }
@@ -157,7 +158,19 @@ const storeCombination = (
       meta: {op: 'combine'},
     })
     if (template) {
-      template.seq[getStoreState(child).id].push({
+      const childRef = getStoreState(child)
+      if (!template.plain.includes(childRef)) {
+        for (const key in child.graphite.reg) {
+          const ref = child.graphite.reg[key]
+          template.plain.push(ref)
+          template.seq[key] = []
+        }
+        template.seq[childRef.id].push({
+          type: 'load',
+          from: childRef,
+        })
+      }
+      template.seq[childRef.id].push({
         type: 'field',
         field: key,
         to: rawShape,
@@ -167,7 +180,7 @@ const storeCombination = (
 
   store.defaultShape = obj
   if (template) {
-    template.plain[isFresh.id] = true
+    // template.plain.push(isFresh)
     after.push(
       fn
         ? {
