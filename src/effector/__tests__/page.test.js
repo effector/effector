@@ -92,42 +92,28 @@ test('external state', () => {
     values: {pageName: 'B'},
   })
 
-  launch({
-    target: trigger,
-    params: null,
-    page: pageA,
-  })
-  launch({
-    target: trigger,
-    params: null,
-    page: pageB,
-  })
   trigger(null)
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "external": 0,
-    "pageName": "A",
-  },
-  Object {
-    "external": 0,
-    "pageName": "B",
-  },
-  Object {
-    "external": 1,
-    "pageName": "A",
-  },
-  Object {
-    "external": 2,
-    "pageName": "B",
-  },
-  Object {
-    "external": 3,
-    "pageName": "",
-  },
-]
-`)
+    Array [
+      Object {
+        "external": 0,
+        "pageName": "A",
+      },
+      Object {
+        "external": 0,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "pageName": "A",
+      },
+      Object {
+        "external": 1,
+        "pageName": "B",
+      },
+    ]
+  `)
 })
 
 function list({fn, source, key}) {
@@ -147,6 +133,8 @@ function createTemplate({fn, state: values = {}}) {
     seq: {},
     watch: [],
     nameMap: {},
+    pages: [],
+    nextID: 0,
   }
   const node = createNode({
     meta: {
@@ -208,7 +196,12 @@ function spawn(unit, {values = {}} = {}) {
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  return {reg: page}
+  const result = {
+    id: ++template.nextID,
+    reg: page,
+  }
+  template.pages.push(result)
+  return result
 }
 
 function runWatchersFrom(list, state, page) {
