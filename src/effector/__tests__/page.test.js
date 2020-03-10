@@ -143,6 +143,7 @@ function list({fn, source, key}) {
 function createTemplate({fn, state: values = {}}) {
   const template = {
     plain: [],
+    closure: [],
     seq: {},
     watch: [],
     nameMap: {},
@@ -183,6 +184,9 @@ function spawn(unit, {values = {}} = {}) {
   for (const name in values) {
     page[template.nameMap[name].stateRef.id].current = values[name]
   }
+  for (const ref of template.closure) {
+    page[ref.id] = ref
+  }
   for (const id in template.seq) {
     const after = template.seq[id]
     const value = page[id].current
@@ -196,9 +200,6 @@ function spawn(unit, {values = {}} = {}) {
           break
         case 'field':
           page[cmd.to.id].current[cmd.field] = value
-          break
-        case 'load':
-          page[id] = cmd.from
           break
       }
     }

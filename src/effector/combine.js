@@ -159,16 +159,15 @@ const storeCombination = (
     })
     if (template) {
       const childRef = getStoreState(child)
-      if (!template.plain.includes(childRef)) {
+      if (
+        !template.plain.includes(childRef) &&
+        !template.closure.includes(childRef)
+      ) {
         for (const key in child.graphite.reg) {
           const ref = child.graphite.reg[key]
-          template.plain.push(ref)
+          template.closure.push(ref)
           template.seq[key] = []
         }
-        template.seq[childRef.id].push({
-          type: 'load',
-          from: childRef,
-        })
       }
       template.seq[childRef.id].push({
         type: 'field',
