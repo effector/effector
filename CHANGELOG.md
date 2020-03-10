@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.6.3
+
+- Add type support for stores with `ReadonlyArray` to `useList` for typescript
+
 ## effector 20.12.2
 
 - Add type support for sample with target and without clock (in that case, `source` will become `clock` as well)
