@@ -161,7 +161,7 @@ Used when you need to pass dependencies to react (to update items when some of d
 #### Arguments
 
 1. `store` (_Store_): Store **should be array**
-2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useStore`
+2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`
 3. `fn` (_Function_): Render function which will be called for every item in list
 
 ```js
