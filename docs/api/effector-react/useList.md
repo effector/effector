@@ -4,7 +4,9 @@ title: useList
 hide_title: true
 ---
 
-# `useList(store, renderItem)`
+# useList
+
+## `useList(store, renderItem)`
 
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data changes.
@@ -151,3 +153,29 @@ setTimeout(() => {
 ```
 
 [Try it](https://share.effector.dev/R7V48rrF)
+
+## `useList(store, {keys, fn})`
+
+Used when you need to pass dependencies to react (to update items when some of dependencies are changed)
+
+#### Arguments
+
+1. `store` (_Store_): Store **should be array**
+2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useStore`
+3. `fn` (_Function_): Render function which will be called for every item in list
+
+```js
+import {createStore} from 'effector'
+import {useList} from 'effector-react'
+
+export const friends = createStore(['alice', 'bob'])
+
+export const FriendList = ({username}) => useList(friends, {
+  keys: [username],
+  fn: friend => (
+    <p>
+      {friend} is a friend of {username}
+    </p>
+  )
+})
+```
