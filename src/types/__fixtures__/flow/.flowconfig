@@ -10,8 +10,6 @@
 ../../../../packages/effector-vue/package.json
 ../../../../packages/@effector/forms/index.js.flow
 ../../../../packages/@effector/forms/package.json
-../../../../packages/@effector/redux-adapter/index.js.flow
-../../../../packages/@effector/redux-adapter/package.json
 ../../setupLocation.js
 
 [libs]
