@@ -32,7 +32,7 @@ export function useStoreMap<
   readonly fn: (state: State, keys: Keys) => Result
 }): Result
 export function useList<T>(
-  list: Store<T[]>,
+  list: Store<T[]> | Store<ReadonlyArray<T>>,
   renderItem:
     | {
         readonly keys?: any[]
