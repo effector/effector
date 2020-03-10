@@ -143,7 +143,6 @@ function list({fn, source, key}) {
 function createTemplate({fn, state: values = {}}) {
   const template = {
     plain: [],
-    combine: {},
     seq: {},
     watch: [],
     nameMap: {},
@@ -161,21 +160,28 @@ function createTemplate({fn, state: values = {}}) {
   return node
 }
 
+function getCurrent(ref) {
+  switch (ref.type) {
+    case 'list':
+      return [...ref.current]
+    case 'shape':
+      return {...ref.current}
+    default:
+      return ref.current
+  }
+}
+
 function spawn(unit, {values = {}} = {}) {
   const template = unit.meta.template
   const page = {}
   for (const ref of template.plain) {
-    page[ref.id] = {id: ref.id, current: ref.current}
+    page[ref.id] = {
+      id: ref.id,
+      current: getCurrent(ref),
+    }
   }
   for (const name in values) {
     page[template.nameMap[name].stateRef.id].current = values[name]
-  }
-  for (const id in template.combine) {
-    if (template.combine[id] === 'shape') {
-      page[id].current = {...page[id].current}
-    } else {
-      page[id].current = [...page[id].current]
-    }
   }
   for (const id in template.seq) {
     const after = template.seq[id]

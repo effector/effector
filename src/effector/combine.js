@@ -88,11 +88,11 @@ const storeCombination = (
   const stateNew = clone(defaultState)
   const rawShape = createStateRef(stateNew)
   const isFresh = createStateRef(true)
+  rawShape.type = isArray ? 'list' : 'shape'
   let after
   if (template) {
     template.plain.push(rawShape, isFresh)
     after = template.seq[rawShape.id] = []
-    template.combine[rawShape.id] = Array.isArray(stateNew) ? 'list' : 'shape'
   }
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
