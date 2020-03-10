@@ -170,7 +170,6 @@ function spawn(unit, {values = {}} = {}) {
   for (const name in values) {
     page[template.nameMap[name].stateRef.id].current = values[name]
   }
-  console.log(page, template)
   for (const id in template.combine) {
     if (template.combine[id] === 'shape') {
       page[id].current = {...page[id].current}

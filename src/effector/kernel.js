@@ -254,7 +254,6 @@ const exec = () => {
               skip = getValue(stack) === undefined
               break
             case 'changed':
-              console.log('page', page, data.store)
               skip =
                 getValue(stack) ===
                 readRef(page ? page[data.store.id] : graph.reg[data.store.id])
