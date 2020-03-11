@@ -12,6 +12,8 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+let spawnID = 0
+
 test('region templates', () => {
   const fn = jest.fn()
 
@@ -189,27 +191,32 @@ test('nested template', () => {
       Object {
         "external": 1,
         "index": 0,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "index": 1,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "index": 0,
+        "pageName": "A",
+      },
+      Object {
+        "external": 1,
+        "index": 1,
         "pageName": "A",
       },
       Object {
         "external": 1,
         "index": 0,
-        "pageName": "B",
+        "pageName": "A",
       },
       Object {
         "external": 1,
         "index": 1,
-        "pageName": "B",
-      },
-      Object {
-        "external": 1,
-        "index": 0,
-        "pageName": "B",
-      },
-      Object {
-        "external": 1,
-        "index": 1,
-        "pageName": "B",
+        "pageName": "A",
       },
     ]
   `)
@@ -233,7 +240,6 @@ function createTemplate({fn, state: values = {}}) {
     watch: [],
     nameMap: {},
     pages: [],
-    nextID: 0,
     loader: step.filter({
       fn(upd, scope, stack) {
         if (!stack.page || stack.page.template !== template) {
@@ -312,7 +318,7 @@ function spawn(unit, {values = {}} = {}) {
     runWatchersFrom(template.watch, state, page)
   }
   const result = {
-    id: ++template.nextID,
+    id: ++spawnID,
     reg: page,
     template,
   }
