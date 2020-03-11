@@ -86,10 +86,10 @@ test('external state', () => {
     },
   })
 
-  const pageA = spawn(template, {
+  spawn(template, {
     values: {pageName: 'A'},
   })
-  const pageB = spawn(template, {
+  spawn(template, {
     values: {pageName: 'B'},
   })
 
@@ -111,6 +111,104 @@ test('external state', () => {
       },
       Object {
         "external": 1,
+        "pageName": "B",
+      },
+    ]
+  `)
+})
+
+test('nested template', () => {
+  const fn = jest.fn()
+  const trigger = createEvent()
+  const external = createStore(0).on(trigger, x => x + 1)
+
+  const template = createTemplate({
+    state: {pageName: ''},
+    fn({pageName}) {
+      const combined = combine({external, pageName})
+
+      const nested = createTemplate({
+        state: {index: -1},
+        fn({index}) {
+          const nestedCombined = combine(
+            combined,
+            index,
+            ({external, pageName}, index) => ({
+              external,
+              pageName,
+              index,
+            }),
+          )
+
+          nestedCombined.watch(fn)
+        },
+      })
+
+      pageName.watch(() => {
+        spawn(nested, {
+          values: {index: 0},
+        })
+        spawn(nested, {
+          values: {index: 1},
+        })
+      })
+    },
+  })
+
+  spawn(template, {
+    values: {pageName: 'A'},
+  })
+  spawn(template, {
+    values: {pageName: 'B'},
+  })
+
+  trigger(null)
+
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "external": 0,
+        "index": 0,
+        "pageName": "",
+      },
+      Object {
+        "external": 0,
+        "index": 1,
+        "pageName": "",
+      },
+      Object {
+        "external": 0,
+        "index": 0,
+        "pageName": "",
+      },
+      Object {
+        "external": 0,
+        "index": 1,
+        "pageName": "",
+      },
+      Object {
+        "external": 1,
+        "index": 0,
+        "pageName": "A",
+      },
+      Object {
+        "external": 1,
+        "index": 0,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "index": 1,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "index": 0,
+        "pageName": "B",
+      },
+      Object {
+        "external": 1,
+        "index": 1,
         "pageName": "B",
       },
     ]
