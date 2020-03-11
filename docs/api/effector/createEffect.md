@@ -132,12 +132,9 @@ const fetchUserReposFx = createEffect({
   },
 })
 
-const repos = createStore([]).on(
-  fetchUserReposFx.done,
-  (_, {result: repos}) => repos,
-)
+const repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos)
 
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/Evt9wTm2)
+[Try it](https://share.effector.dev/wxUCfzN5)

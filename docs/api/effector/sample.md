@@ -288,8 +288,8 @@ const fetchContentFx = createEffect({
 
 const $lessonIndex = createStore(0)
 const $allLessons = createStore([]).on(
-  fetchContentFx.done,
-  (_, {result}) => result,
+  fetchContentFx.doneData,
+  (_, result) => result,
 )
 
 const $lesson = combine(
@@ -318,7 +318,7 @@ $batchedModal.updates.watch(v => console.log('batchedModal update', v))
 fetchContentFx()
 ```
 
-[Try it](https://share.effector.dev/mYd5PEpD)
+[Try it](https://share.effector.dev/htQpg1LY)
 
 ## Objects and arrays with stores in sample source
 

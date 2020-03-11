@@ -21,14 +21,15 @@ It can be safely used in place of the original async function.
 import {createEffect, createStore} from 'effector'
 
 const fetchUserFx = createEffect({
-  handler: ({id}) => {
-    return fetch(`https://example.com/users/${id}`).then(res => res.json())
+  async handler({id}) {
+    const res = await fetch(`https://example.com/users/${id}`)
+    return res.json()
   },
 })
 
 const users = createStore([]) // Default state
-  // add reducer for fetchUserFx.done event (triggered when handler resolved)
-  .on(fetchUserFx.done, (users, {result: user}) => [...users, user])
+  // add reducer for fetchUserFx.doneData event (triggered when handler resolved)
+  .on(fetchUserFx.doneData, (users, user) => [...users, user])
 
 // subscribe to handler resolve
 fetchUserFx.done.watch(({result, params}) => {
@@ -52,7 +53,7 @@ fetchUserFx({id: 1})
 const data = await fetchUserFx({id: 2})
 ```
 
-[Try it](https://share.effector.dev/5WVJOJ6f)
+[Try it](https://share.effector.dev/am85AiZf)
 
 ## Effect Methods
 

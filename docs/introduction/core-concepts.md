@@ -69,8 +69,8 @@ _Store_ is an object that holds the state tree. There can be multiple stores.
 
 ```js try
 const users = createStore([]) // <-- Default state
-  // add reducer for getUser.done event (fires when promise resolved)
-  .on(getUserFx.done, (state, {result: user, params}) => [...state, user])
+  // add reducer for getUser.doneData event (fires when promise resolved)
+  .on(getUserFx.doneData, (state, user) => [...state, user])
 
 const messages = createStore([])
   // from WebSocket

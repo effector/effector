@@ -20,7 +20,7 @@ const loadFormFx = createEffect({
   },
 })
 
-const mainForm = createStore({}).on(loadFormFx.done, (state, {result}) => {
+const mainForm = createStore({}).on(loadFormFx.doneData, (state, result) => {
   let changed = false
   state = {...state}
   for (const key in result) {
@@ -70,7 +70,7 @@ const types = createStore({
     delete state[name]
     return state
   })
-  .on(loadFormFx.done, (state, {result}) => {
+  .on(loadFormFx.doneData, (state, result) => {
     let changed = false
     state = {...state}
     for (const key in result) {

@@ -40,7 +40,7 @@ const updateCountInAsyncStorageFx = createEffect({
 
 fetchCountFromAsyncStorageFx()
 
-fetchCountFromAsyncStorageFx.done.watch(({result}) => {
+fetchCountFromAsyncStorageFx.doneData.watch(result => {
   init(result)
 })
 

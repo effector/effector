@@ -22,7 +22,7 @@ const getTodoFx = createEffect({
 })
 
 // Our main store
-const $todo = createStore(null).on(getTodoFx.done, (_, {result}) => result)
+const $todo = createStore(null).on(getTodoFx.doneData, (_, result) => result)
 
 const TodoGate = createGate('gate with props')
 

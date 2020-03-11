@@ -122,8 +122,8 @@ const initialState: Message[] = [
 ]
 
 export const MessageList = ChatDomain.store<Message[]>(initialState)
-  .on(sendMessage.done, (state, {result}) => [...state, result])
-  .on(deleteMessage.done, (state, {result}) =>
+  .on(sendMessage.doneData, (state, message) => [...state, message])
+  .on(deleteMessage.doneData, (state, result) =>
     state.filter(message => message.id !== result.id),
   )
 ```
