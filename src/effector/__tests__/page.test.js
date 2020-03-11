@@ -13,6 +13,8 @@ import {
 import {argumentHistory} from 'effector/fixtures'
 
 let spawnID = 0
+const templateStack = []
+const spawnStack = []
 
 test('region templates', () => {
   const fn = jest.fn()
@@ -122,7 +124,7 @@ test('external state', () => {
 test('nested template', () => {
   const fn = jest.fn()
   const trigger = createEvent()
-  const external = createStore(0).on(trigger, x => x + 1)
+  const external = createStore('x').on(trigger, (_, e) => e)
 
   const template = createTemplate({
     state: {pageName: ''},
@@ -164,59 +166,64 @@ test('nested template', () => {
     values: {pageName: 'B'},
   })
 
-  trigger(null)
+  trigger('y')
 
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       Object {
-        "external": 0,
+        "external": "x",
         "index": 0,
         "pageName": "",
       },
       Object {
-        "external": 0,
+        "external": "x",
         "index": 1,
         "pageName": "",
       },
       Object {
-        "external": 0,
+        "external": "x",
         "index": 0,
         "pageName": "",
       },
       Object {
-        "external": 0,
+        "external": "x",
         "index": 1,
         "pageName": "",
       },
       Object {
-        "external": 1,
+        "external": "y",
+        "index": 1,
+        "pageName": "A",
+      },
+      Object {
+        "external": "y",
+        "index": 0,
+        "pageName": "A",
+      },
+      Object {
+        "external": "y",
+        "index": 1,
+        "pageName": "A",
+      },
+      Object {
+        "external": "y",
+        "index": 1,
+        "pageName": "B",
+      },
+      Object {
+        "external": "y",
         "index": 0,
         "pageName": "B",
       },
       Object {
-        "external": 1,
+        "external": "y",
         "index": 1,
         "pageName": "B",
       },
       Object {
-        "external": 1,
+        "external": "y",
         "index": 0,
-        "pageName": "A",
-      },
-      Object {
-        "external": 1,
-        "index": 1,
-        "pageName": "A",
-      },
-      Object {
-        "external": 1,
-        "index": 0,
-        "pageName": "A",
-      },
-      Object {
-        "external": 1,
-        "index": 1,
-        "pageName": "A",
+        "pageName": "B",
       },
     ]
   `)
@@ -233,6 +240,10 @@ function list({fn, source, key}) {
 }
 
 function createTemplate({fn, state: values = {}}) {
+  let parent = null
+  if (templateStack.length > 0) {
+    parent = templateStack[templateStack.length - 1]
+  }
   const template = {
     plain: [],
     closure: [],
@@ -256,17 +267,22 @@ function createTemplate({fn, state: values = {}}) {
         return true
       },
     }),
+    parent,
   }
   const node = createNode({
     meta: {
       template,
     },
+    isRegion: true,
   })
+  const [parentRegion] = node.family.owners
+  templateStack.push(template)
   withRegion(node, () => {
     const state = restore(values)
     fn(state)
     template.nameMap = state
   })
+  templateStack.pop()
   return node
 }
 
@@ -283,18 +299,33 @@ function getCurrent(ref) {
 
 function spawn(unit, {values = {}} = {}) {
   const template = unit.meta.template
+  let parent = null
+  if (spawnStack.length > 0) {
+    parent = spawnStack[spawnStack.length - 1]
+  }
   const page = {}
+  const result = {
+    id: ++spawnID,
+    reg: page,
+    template,
+    parent,
+  }
+  template.pages.push(result)
+  spawnStack.push({template, spawn: result})
   for (const ref of template.plain) {
     page[ref.id] = {
       id: ref.id,
       current: getCurrent(ref),
     }
   }
-  for (const name in values) {
-    page[template.nameMap[name].stateRef.id].current = values[name]
-  }
   for (const ref of template.closure) {
     page[ref.id] = ref
+  }
+  if (parent) {
+    Object.assign(page, parent.spawn.reg)
+  }
+  for (const name in values) {
+    page[template.nameMap[name].stateRef.id].current = values[name]
   }
   for (const id in template.seq) {
     const after = template.seq[id]
@@ -317,12 +348,7 @@ function spawn(unit, {values = {}} = {}) {
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  const result = {
-    id: ++spawnID,
-    reg: page,
-    template,
-  }
-  template.pages.push(result)
+  spawnStack.pop()
   return result
 }
 
