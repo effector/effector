@@ -21,6 +21,7 @@ function isFalse(val: any) {
   return (
     val !== '' &&
     val !== 0 &&
+    val !== '0' &&
     (val === false || val === undefined || val === null)
   )
 }
