@@ -121,123 +121,399 @@ test('external state', () => {
   `)
 })
 
-test('nested template', () => {
-  const fn = jest.fn()
-  const trigger = createEvent()
-  const external = createStore('x').on(trigger, (_, e) => e)
+describe('nested template', () => {
+  describe('pair of child forks', () => {
+    test('pair of parent forks', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
 
-  const template = createTemplate({
-    state: {pageName: ''},
-    fn({pageName}) {
-      const combined = combine({external, pageName})
+      const template = createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
 
-      const nested = createTemplate({
-        state: {index: -1},
-        fn({index}) {
-          const nestedCombined = combine(
-            combined,
-            index,
-            ({external, pageName}, index) => ({
-              external,
-              pageName,
-              index,
-            }),
-          )
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
 
-          nestedCombined.watch(fn)
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+            spawn(nested, {
+              values: {index: 1},
+            })
+          })
         },
       })
 
-      pageName.watch(() => {
-        spawn(nested, {
-          values: {index: 0},
-        })
-        spawn(nested, {
-          values: {index: 1},
-        })
+      spawn(template, {
+        values: {pageName: 'A'},
       })
-    },
-  })
+      spawn(template, {
+        values: {pageName: 'B'},
+      })
 
-  spawn(template, {
-    values: {pageName: 'A'},
-  })
-  spawn(template, {
-    values: {pageName: 'B'},
-  })
+      trigger('y')
 
-  trigger('y')
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "external": "x",
+            "index": 0,
+            "pageName": "",
+          },
+          Object {
+            "external": "x",
+            "index": 1,
+            "pageName": "",
+          },
+          Object {
+            "external": "x",
+            "index": 0,
+            "pageName": "",
+          },
+          Object {
+            "external": "x",
+            "index": 1,
+            "pageName": "",
+          },
+          Object {
+            "external": "y",
+            "index": 1,
+            "pageName": "A",
+          },
+          Object {
+            "external": "y",
+            "index": 0,
+            "pageName": "A",
+          },
+          Object {
+            "external": "y",
+            "index": 1,
+            "pageName": "A",
+          },
+          Object {
+            "external": "y",
+            "index": 1,
+            "pageName": "B",
+          },
+          Object {
+            "external": "y",
+            "index": 0,
+            "pageName": "B",
+          },
+          Object {
+            "external": "y",
+            "index": 1,
+            "pageName": "B",
+          },
+          Object {
+            "external": "y",
+            "index": 0,
+            "pageName": "B",
+          },
+        ]
+      `)
+    })
+    test('single parent fork', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
 
-  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-    Array [
-      Object {
-        "external": "x",
-        "index": 0,
-        "pageName": "",
-      },
-      Object {
-        "external": "x",
-        "index": 1,
-        "pageName": "",
-      },
-      Object {
-        "external": "x",
-        "index": 0,
-        "pageName": "",
-      },
-      Object {
-        "external": "x",
-        "index": 1,
-        "pageName": "",
-      },
-      Object {
-        "external": "y",
-        "index": 1,
-        "pageName": "A",
-      },
-      Object {
-        "external": "y",
-        "index": 0,
-        "pageName": "A",
-      },
-      Object {
-        "external": "y",
-        "index": 1,
-        "pageName": "A",
-      },
-      Object {
-        "external": "y",
-        "index": 1,
-        "pageName": "B",
-      },
-      Object {
-        "external": "y",
-        "index": 0,
-        "pageName": "B",
-      },
-      Object {
-        "external": "y",
-        "index": 1,
-        "pageName": "B",
-      },
-      Object {
-        "external": "y",
-        "index": 0,
-        "pageName": "B",
-      },
-    ]
-  `)
+      const template = createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
+
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
+
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+            spawn(nested, {
+              values: {index: 1},
+            })
+          })
+        },
+      })
+
+      spawn(template, {
+        values: {pageName: 'A'},
+      })
+
+      trigger('y')
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "external": "x",
+            "index": 0,
+            "pageName": "",
+          },
+          Object {
+            "external": "x",
+            "index": 1,
+            "pageName": "",
+          },
+          Object {
+            "external": "y",
+            "index": 0,
+            "pageName": "A",
+          },
+          Object {
+            "external": "y",
+            "index": 1,
+            "pageName": "A",
+          },
+        ]
+      `)
+    })
+    test('no parent forks', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
+
+      createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
+
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
+
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+            spawn(nested, {
+              values: {index: 1},
+            })
+          })
+        },
+      })
+
+      trigger('y')
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+    })
+  })
+  describe('single child fork', () => {
+    test('pair of parent forks', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
+
+      const template = createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
+
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
+
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+          })
+        },
+      })
+
+      spawn(template, {
+        values: {pageName: 'A'},
+      })
+      spawn(template, {
+        values: {pageName: 'B'},
+      })
+
+      trigger('y')
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": "x",
+    "index": 0,
+    "pageName": "",
+  },
+  Object {
+    "external": "x",
+    "index": 0,
+    "pageName": "",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "pageName": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "pageName": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "pageName": "B",
+  },
+]
+`)
+    })
+    test('single parent fork', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
+
+      const template = createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
+
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
+
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+          })
+        },
+      })
+
+      spawn(template, {
+        values: {pageName: 'A'},
+      })
+
+      trigger('y')
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": "x",
+    "index": 0,
+    "pageName": "",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "pageName": "A",
+  },
+]
+`)
+    })
+    test('no parent forks', () => {
+      const fn = jest.fn()
+      const trigger = createEvent()
+      const external = createStore('x').on(trigger, (_, e) => e)
+
+      createTemplate({
+        state: {pageName: ''},
+        fn({pageName}) {
+          const combined = combine({external, pageName})
+
+          const nested = createTemplate({
+            state: {index: -1},
+            fn({index}) {
+              const nestedCombined = combine(
+                combined,
+                index,
+                ({external, pageName}, index) => ({
+                  external,
+                  pageName,
+                  index,
+                }),
+              )
+
+              nestedCombined.watch(fn)
+            },
+          })
+
+          pageName.watch(() => {
+            spawn(nested, {
+              values: {index: 0},
+            })
+          })
+        },
+      })
+
+      trigger('y')
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`Array []`)
+    })
+  })
 })
-
-function list({fn, source, key}) {
-  const listTemplate = createTemplate({
-    fn,
-    state: {
-      key: null,
-      value: null,
-    },
-  })
-}
 
 function createTemplate({fn, state: values = {}}) {
   let parent = null
@@ -251,6 +527,7 @@ function createTemplate({fn, state: values = {}}) {
     watch: [],
     nameMap: {},
     pages: [],
+    childTemplates: [],
     loader: step.filter({
       fn(upd, scope, stack) {
         if (!stack.page || stack.page.template !== template) {
@@ -269,13 +546,14 @@ function createTemplate({fn, state: values = {}}) {
     }),
     parent,
   }
+  if (parent) {
+    parent.childTemplates.push(template)
+  }
   const node = createNode({
     meta: {
       template,
     },
-    isRegion: true,
   })
-  const [parentRegion] = node.family.owners
   templateStack.push(template)
   withRegion(node, () => {
     const state = restore(values)
@@ -366,3 +644,13 @@ function runWatchersFrom(list, state, page) {
     state.stop = false
   }
 }
+
+// function list({fn, source, key}) {
+//   const listTemplate = createTemplate({
+//     fn,
+//     state: {
+//       key: null,
+//       value: null,
+//     },
+//   })
+// }
