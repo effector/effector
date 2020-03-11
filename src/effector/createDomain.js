@@ -13,6 +13,7 @@ import {
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {addToRegion} from './region'
+import {forIn} from './forIn'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
@@ -55,12 +56,12 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     'onDomain',
   ].map(createNamedEvent)
 
-  const hooks = (result.hooks = {
+  result.hooks = {
     event,
     effect,
     store,
     domain,
-  })
+  }
   result.onCreateEvent = createHook(event, events, result)
   result.onCreateEffect = createHook(effect, effects, result)
   result.onCreateStore = createHook(store, stores, result)
@@ -96,9 +97,9 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   addToRegion(result)
   const parent = result.parent
   if (parent) {
-    for (const key in hooks) {
-      forward({from: hooks[key], to: parent.hooks[key]})
-    }
+    forIn(result.hooks, (from, key) => {
+      forward({from, to: parent.hooks[key]})
+    })
     parent.hooks.domain(result)
   }
   return result

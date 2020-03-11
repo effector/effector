@@ -10,6 +10,7 @@ import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
 import {readTemplate} from './region'
+import {forIn} from './forIn'
 
 export function combine(...args: any[]): Store<any> {
   if (args.length === 0) throwError('at least one argument required')
@@ -144,11 +145,10 @@ const storeCombination = (
       store: getStoreState(store),
     }),
   ]
-  for (const key in obj) {
-    const child = obj[key]
+  forIn(obj, (child, key) => {
     if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child
-      continue
+      return
     }
     defaultState[key] = child.defaultState
     stateNew[key] = child.getState()
@@ -163,11 +163,10 @@ const storeCombination = (
         !template.plain.includes(childRef) &&
         !template.closure.includes(childRef)
       ) {
-        for (const key in child.graphite.reg) {
-          const ref = child.graphite.reg[key]
+        forIn(getGraph(child).reg, (ref, key) => {
           template.closure.push(ref)
           template.seq[key] = []
-        }
+        })
         linkNode.seq.unshift(step.page({template}))
       }
       template.seq[childRef.id].push({
@@ -176,7 +175,7 @@ const storeCombination = (
         to: rawShape,
       })
     }
-  }
+  })
 
   store.defaultShape = obj
   if (template) {

@@ -1,18 +1,7 @@
 //@flow
 import type {Event} from './unit.h'
-import {bind} from './bind'
 import {is} from './is'
-
-//eslint-disable-next-line no-unused-vars
-declare export function split<
-  S,
-  Obj: {-[name: string]: (payload: S) => boolean, ...},
->(
-  source: Event<S>,
-  cases: Obj,
-): $ObjMap<Obj, (h: (payload: S) => boolean) => Event<S>>
-
-const invertCondition = (fn, data) => !fn(data)
+import {forIn} from './forIn'
 
 export function split<S>(
   unit: Event<S>,
@@ -20,12 +9,12 @@ export function split<S>(
 ): {[key: string]: Event<S>, ...} {
   const result = {}
   let current: Event<S> = is.store(unit) ? (unit: any).updates : unit
-  for (const key in cases) {
-    result[key] = current.filter({fn: cases[key]})
+  forIn(cases, (fn, key) => {
+    result[key] = current.filter({fn})
     current = current.filter({
-      fn: bind(invertCondition, cases[key]),
+      fn: data => !fn(data),
     })
-  }
+  })
   result.__ = current
   return result
 }

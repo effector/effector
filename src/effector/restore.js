@@ -2,6 +2,7 @@
 import type {Store, Event, Effect} from './unit.h'
 import {createStore} from './createUnit'
 import {is} from './is'
+import {forIn} from './forIn'
 
 //eslint-disable-next-line no-unused-vars
 declare export function restore<Done>(
@@ -41,14 +42,9 @@ export function restore(obj: any, defaultState: any, config?: any): any {
     return result
   }
   const result = {}
-  for (const key in obj) {
-    const value = obj[key]
-    if (is.store(value)) {
-      result[key] = value
-    } else {
-      result[key] = createStore(value, {name: key})
-    }
-  }
+  forIn(obj, (value, key) => {
+    result[key] = is.store(value) ? value : createStore(value, {name: key})
+  })
   return result
 }
 

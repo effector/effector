@@ -1,25 +1,18 @@
 //@flow
 
-import type {Store, Event} from './unit.h'
+import type {Store} from './unit.h'
 import {createEvent, applyParentEventHook} from './createUnit'
-
-declare export function createApi<
-  S,
-  Obj: {-[name: string]: (store: S, e: any) => S, ...},
->(
-  store: Store<S>,
-  setters: Obj,
-): $ObjMap<Obj, <E>(h: (store: S, e: E) => S) => Event<E>>
+import {forIn} from './forIn'
 
 export function createApi(
   store: Store<any>,
   setters: {[string]: Function, ...},
 ) {
   const result = {}
-  for (const key in setters) {
+  forIn(setters, (fn, key) => {
     const event = (result[key] = createEvent(key, {parent: store.parent}))
-    store.on(event, setters[key])
+    store.on(event, fn)
     applyParentEventHook(store, event)
-  }
+  })
   return result
 }
