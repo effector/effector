@@ -90,10 +90,8 @@ const storeCombination = (
   const rawShape = createStateRef(stateNew)
   const isFresh = createStateRef(true)
   rawShape.type = isArray ? 'list' : 'shape'
-  let after
   if (template) {
     template.plain.push(rawShape, isFresh)
-    after = template.seq[rawShape.id] = []
   }
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
@@ -157,41 +155,52 @@ const storeCombination = (
       node,
       meta: {op: 'combine'},
     })
+    const childRef = getStoreState(child)
+    childRef.after.push({
+      type: 'field',
+      field: key,
+      to: rawShape,
+    })
     if (template) {
-      const childRef = getStoreState(child)
       if (
         !template.plain.includes(childRef) &&
         !template.closure.includes(childRef)
       ) {
         forIn(getGraph(child).reg, (ref, key) => {
           template.closure.push(ref)
-          template.seq[key] = []
         })
         linkNode.seq.unshift(template.loader)
       }
-      template.seq[childRef.id].push({
-        type: 'field',
-        field: key,
-        to: rawShape,
-      })
     }
   })
 
   store.defaultShape = obj
+  rawShape.after = [
+    fn
+      ? {
+        type: 'map',
+        to: getStoreState(store),
+        fn,
+      }
+      : {
+        type: 'copy',
+        to: getStoreState(store),
+      },
+  ]
   if (template) {
     // template.plain.push(isFresh)
-    after.push(
-      fn
-        ? {
-          type: 'map',
-          to: getStoreState(store),
-          fn,
-        }
-        : {
-          type: 'copy',
-          to: getStoreState(store),
-        },
-    )
+    // after.push(
+    //   fn
+    //     ? {
+    //       type: 'map',
+    //       to: getStoreState(store),
+    //       fn,
+    //     }
+    //     : {
+    //       type: 'copy',
+    //       to: getStoreState(store),
+    //     },
+    // )
   } else {
     store.defaultState = fn
       ? (getStoreState(store).current = fn(stateNew))

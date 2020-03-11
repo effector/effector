@@ -167,9 +167,9 @@ export function createStore<State>(
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const template = readTemplate()
+  plainState.after = [{type: 'copy', to: oldState}]
   if (template) {
-    template.plain.push(plainState, oldState)
-    template.seq[plainStateID] = [{type: 'copy', to: oldState}]
+    template.plain.push(plainState)
   }
   const store: any = {
     subscribers: new Map(),

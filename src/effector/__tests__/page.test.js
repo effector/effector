@@ -12,6 +12,8 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+const SILENT = true
+
 let spawnID = 0
 let currentTemplate = null
 let currentSpawn = null
@@ -175,32 +177,22 @@ describe('nested template', () => {
           Object {
             "external": "x",
             "index": 0,
-            "pageName": "",
+            "pageName": "A",
           },
           Object {
             "external": "x",
-            "index": 1,
-            "pageName": "",
-          },
-          Object {
-            "external": "x",
-            "index": 0,
-            "pageName": "",
-          },
-          Object {
-            "external": "x",
-            "index": 1,
-            "pageName": "",
-          },
-          Object {
-            "external": "y",
             "index": 1,
             "pageName": "A",
           },
           Object {
-            "external": "y",
+            "external": "x",
             "index": 0,
-            "pageName": "A",
+            "pageName": "B",
+          },
+          Object {
+            "external": "x",
+            "index": 1,
+            "pageName": "B",
           },
           Object {
             "external": "y",
@@ -214,17 +206,7 @@ describe('nested template', () => {
           },
           Object {
             "external": "y",
-            "index": 0,
-            "pageName": "B",
-          },
-          Object {
-            "external": "y",
             "index": 1,
-            "pageName": "B",
-          },
-          Object {
-            "external": "y",
-            "index": 0,
             "pageName": "B",
           },
         ]
@@ -279,16 +261,11 @@ describe('nested template', () => {
           Object {
             "external": "x",
             "index": 0,
-            "pageName": "",
+            "pageName": "A",
           },
           Object {
             "external": "x",
             "index": 1,
-            "pageName": "",
-          },
-          Object {
-            "external": "y",
-            "index": 0,
             "pageName": "A",
           },
           Object {
@@ -392,12 +369,12 @@ Array [
   Object {
     "external": "x",
     "index": 0,
-    "pageName": "",
+    "pageName": "A",
   },
   Object {
     "external": "x",
     "index": 0,
-    "pageName": "",
+    "pageName": "B",
   },
   Object {
     "external": "y",
@@ -423,11 +400,13 @@ Array [
       const external = createStore('x').on(trigger, (_, e) => e)
 
       const template = createTemplate({
+        name: 'single parent',
         state: {pageName: ''},
         fn({pageName}) {
           const combined = combine({external, pageName})
 
           const nested = createTemplate({
+            name: 'single child',
             state: {index: -1},
             fn({index}) {
               const nestedCombined = combine(
@@ -463,7 +442,7 @@ Array [
   Object {
     "external": "x",
     "index": 0,
-    "pageName": "",
+    "pageName": "A",
   },
   Object {
     "external": "y",
@@ -515,9 +494,10 @@ Array [
   })
 })
 
-function createTemplate({fn, state: values = {}}) {
+function createTemplate({fn, state: values = {}, name = ''}) {
   const parent = currentTemplate
   const template = {
+    name,
     plain: [],
     closure: [],
     seq: {},
@@ -584,6 +564,7 @@ function spawn(unit, {values = {}} = {}) {
   }
   template.pages.push(result)
   currentSpawn = {template, spawn: result}
+  log('spawn', template.name)
   for (const ref of template.plain) {
     page[ref.id] = {
       id: ref.id,
@@ -594,32 +575,66 @@ function spawn(unit, {values = {}} = {}) {
     page[ref.id] = ref
   }
   if (parent) {
+    log('parent spawn reg', parent.spawn.reg)
+    log('page before assign', page)
     Object.assign(page, parent.spawn.reg)
+    log('page after assign', page)
   }
   for (const name in values) {
-    page[template.nameMap[name].stateRef.id].current = values[name]
+    const id = template.nameMap[name].stateRef.id
+    page[id] = {
+      id,
+      current: values[name],
+    }
   }
-  for (const id in template.seq) {
-    const after = template.seq[id]
-    const value = page[id].current
-    for (const cmd of after) {
+
+  for (const ref of template.plain) {
+    if (!ref.after) continue
+    const value = page[ref.id].current
+    for (const cmd of ref.after) {
+      const to = cmd.to
+      if (!page[to.id]) {
+        page[to.id] = {
+          id: to.id,
+          current: to.current,
+        }
+      }
       switch (cmd.type) {
         case 'copy':
-          page[cmd.to.id].current = value
+          page[to.id].current = value
           break
         case 'map':
-          page[cmd.to.id].current = cmd.fn(value)
+          page[to.id].current = cmd.fn(value)
           break
         case 'field':
-          page[cmd.to.id].current[cmd.field] = value
+          page[to.id].current[cmd.field] = value
           break
       }
     }
   }
+  // for (const id in template.seq) {
+  //   const after = template.seq[id]
+  //   const value = page[id].current
+  //   for (const cmd of after) {
+  //     switch (cmd.type) {
+  //       case 'copy':
+  //         page[cmd.to.id].current = value
+  //         break
+  //       case 'map':
+  //         page[cmd.to.id].current = cmd.fn(value)
+  //         break
+  //       case 'field':
+  //         page[cmd.to.id].current[cmd.field] = value
+  //         break
+  //     }
+  //   }
+  // }
+  log('pre-final page', page)
   const state = {i: 0, stop: false}
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
+  log('final page', page)
   currentSpawn = parent
   return result
 }
@@ -637,6 +652,11 @@ function runWatchersFrom(list, state, page) {
     console.error(err)
     state.stop = false
   }
+}
+
+function log(tag, value) {
+  if (SILENT) return
+  console.log(tag, JSON.stringify(value, null, 2))
 }
 
 // function list({fn, source, key}) {
