@@ -13,8 +13,8 @@ import {
 import {argumentHistory} from 'effector/fixtures'
 
 let spawnID = 0
-const templateStack = []
-const spawnStack = []
+let currentTemplate = null
+let currentSpawn = null
 
 test('region templates', () => {
   const fn = jest.fn()
@@ -516,10 +516,7 @@ Array [
 })
 
 function createTemplate({fn, state: values = {}}) {
-  let parent = null
-  if (templateStack.length > 0) {
-    parent = templateStack[templateStack.length - 1]
-  }
+  const parent = currentTemplate
   const template = {
     plain: [],
     closure: [],
@@ -554,13 +551,13 @@ function createTemplate({fn, state: values = {}}) {
       template,
     },
   })
-  templateStack.push(template)
+  currentTemplate = template
   withRegion(node, () => {
     const state = restore(values)
     fn(state)
     template.nameMap = state
   })
-  templateStack.pop()
+  currentTemplate = parent
   return node
 }
 
@@ -577,10 +574,7 @@ function getCurrent(ref) {
 
 function spawn(unit, {values = {}} = {}) {
   const template = unit.meta.template
-  let parent = null
-  if (spawnStack.length > 0) {
-    parent = spawnStack[spawnStack.length - 1]
-  }
+  const parent = currentSpawn
   const page = {}
   const result = {
     id: ++spawnID,
@@ -589,7 +583,7 @@ function spawn(unit, {values = {}} = {}) {
     parent,
   }
   template.pages.push(result)
-  spawnStack.push({template, spawn: result})
+  currentSpawn = {template, spawn: result}
   for (const ref of template.plain) {
     page[ref.id] = {
       id: ref.id,
@@ -626,7 +620,7 @@ function spawn(unit, {values = {}} = {}) {
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  spawnStack.pop()
+  currentSpawn = parent
   return result
 }
 
