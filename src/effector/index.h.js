@@ -69,7 +69,6 @@ export type Cmd =
   | Compute
   | Barrier
   | Mov
-  | Page
 
 export type Mov = {
   id: ID,
@@ -128,15 +127,6 @@ export type Compute = {
   type: 'compute',
   data: {
     fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
-  },
-  hasRef: false,
-}
-
-export type Page = {
-  id: ID,
-  type: 'page',
-  data: {
-    template: any,
   },
   hasRef: false,
 }

@@ -7,7 +7,6 @@ import type {
   Barrier,
   Check,
   Mov,
-  Page,
 } from './index.h'
 import {nextStepID} from './id'
 import {bind2} from './bind'
@@ -58,4 +57,3 @@ export const run: (data: {
 export const update: (data: {
   store: StateRef,
 }) => Mov = ({store}) => mov({from: 'stack', target: store})
-export const page: (data: {template: any}) => Page = bind2(cmd, 'page', false)

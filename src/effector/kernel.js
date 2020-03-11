@@ -207,27 +207,6 @@ const exec = () => {
       const step = graph.seq[stepn]
       const data = step.data
       switch (step.type) {
-        case 'page': {
-          if (stepn !== idx || type !== 'pure') {
-            const pages = step.data.template.pages
-            for (let p = 0; p < pages.length; p++) {
-              pushHeap(
-                stepn,
-                {
-                  a: stack.a,
-                  b: stack.b,
-                  node: graph,
-                  parent: stack.parent,
-                  value: stack.value,
-                  page: pages[p],
-                },
-                'pure',
-              )
-            }
-            continue mem
-          }
-          break
-        }
         case 'barrier': {
           let id = data.barrierID
           if (page) {

@@ -8,6 +8,7 @@ import {
   withRegion,
   launch,
   restore,
+  step,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -135,6 +136,22 @@ function createTemplate({fn, state: values = {}}) {
     nameMap: {},
     pages: [],
     nextID: 0,
+    loader: step.filter({
+      fn(upd, scope, stack) {
+        if (!stack.page || stack.page.template !== template) {
+          template.pages.forEach(page => {
+            launch({
+              params: upd,
+              target: stack.node,
+              page,
+              defer: true,
+            })
+          })
+          return false
+        }
+        return true
+      },
+    }),
   }
   const node = createNode({
     meta: {
@@ -199,6 +216,7 @@ function spawn(unit, {values = {}} = {}) {
   const result = {
     id: ++template.nextID,
     reg: page,
+    template,
   }
   template.pages.push(result)
   return result

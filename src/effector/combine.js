@@ -167,7 +167,7 @@ const storeCombination = (
           template.closure.push(ref)
           template.seq[key] = []
         })
-        linkNode.seq.unshift(step.page({template}))
+        linkNode.seq.unshift(template.loader)
       }
       template.seq[childRef.id].push({
         type: 'field',
