@@ -4,7 +4,7 @@ import type {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'
-import {getStoreState, getConfig, getNestedConfig, getGraph} from './getter'
+import {getStoreState, getConfig, getNestedConfig} from './getter'
 import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -96,10 +96,6 @@ const storeCombination = (
   const store = createStore(stateNew, {
     name: config ? config : unitObjectName(obj),
   })
-  const {meta} = getGraph(store)
-  meta.fn = fn
-  meta.rawShape = rawShape
-  meta.shape = obj
   const node = [
     step.check.defined(),
     step.mov({
@@ -162,13 +158,7 @@ const storeCombination = (
       to: rawShape,
     })
     if (template) {
-      if (
-        !template.plain.includes(childRef) &&
-        !template.closure.includes(childRef)
-      ) {
-        forIn(getGraph(child).reg, (ref, key) => {
-          template.closure.push(ref)
-        })
+      if (!template.plain.includes(childRef)) {
         linkNode.seq.unshift(template.loader)
       }
     }
@@ -187,21 +177,7 @@ const storeCombination = (
         to: getStoreState(store),
       },
   ]
-  if (template) {
-    // template.plain.push(isFresh)
-    // after.push(
-    //   fn
-    //     ? {
-    //       type: 'map',
-    //       to: getStoreState(store),
-    //       fn,
-    //     }
-    //     : {
-    //       type: 'copy',
-    //       to: getStoreState(store),
-    //     },
-    // )
-  } else {
+  if (!template) {
     store.defaultState = fn
       ? (getStoreState(store).current = fn(stateNew))
       : defaultState

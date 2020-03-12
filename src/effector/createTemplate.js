@@ -13,8 +13,6 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
   const template = {
     name,
     plain: [],
-    closure: [],
-    seq: {},
     watch: [],
     nameMap: {},
     pages: [],
@@ -79,20 +77,18 @@ export function spawn(unit, {values = {}} = {}) {
   template.pages.push(result)
   currentSpawn = {template, spawn: result}
   log('spawn', template.name)
+
+  if (parent) {
+    log('parent spawn reg', parent.spawn.reg)
+    // log('page before assign', page)
+    Object.assign(page, parent.spawn.reg)
+    log('page after assign', page)
+  }
   for (const ref of template.plain) {
     page[ref.id] = {
       id: ref.id,
       current: getCurrent(ref),
     }
-  }
-  for (const ref of template.closure) {
-    page[ref.id] = ref
-  }
-  if (parent) {
-    log('parent spawn reg', parent.spawn.reg)
-    log('page before assign', page)
-    Object.assign(page, parent.spawn.reg)
-    log('page after assign', page)
   }
   for (const name in values) {
     const id = template.nameMap[name].stateRef.id
@@ -101,7 +97,7 @@ export function spawn(unit, {values = {}} = {}) {
       current: values[name],
     }
   }
-
+  log(`page before plain assignment (${template.name})`, page)
   for (const ref of template.plain) {
     if (!ref.after) continue
     const value = page[ref.id].current
@@ -126,29 +122,12 @@ export function spawn(unit, {values = {}} = {}) {
       }
     }
   }
-  // for (const id in template.seq) {
-  //   const after = template.seq[id]
-  //   const value = page[id].current
-  //   for (const cmd of after) {
-  //     switch (cmd.type) {
-  //       case 'copy':
-  //         page[cmd.to.id].current = value
-  //         break
-  //       case 'map':
-  //         page[cmd.to.id].current = cmd.fn(value)
-  //         break
-  //       case 'field':
-  //         page[cmd.to.id].current[cmd.field] = value
-  //         break
-  //     }
-  //   }
-  // }
-  log('pre-final page', page)
+  log(`pre-final page ${template.name}`, page)
   const state = {i: 0, stop: false}
   while (!state.stop) {
     runWatchersFrom(template.watch, state, page)
   }
-  log('final page', page)
+  log(`final page ${template.name}`, page)
   currentSpawn = parent
   return result
 }

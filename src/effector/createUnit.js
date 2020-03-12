@@ -229,11 +229,11 @@ export function createStore<State>(
       })
       updateStore(store, innerStore, 'map', false, fn)
       if (template) {
-        template.seq[plainStateID].push({
-          type: 'map',
-          fn,
-          to: getStoreState(innerStore),
-        })
+        // template.seq[plainStateID].push({
+        //   type: 'map',
+        //   fn,
+        //   to: getStoreState(innerStore),
+        // })
       }
       return innerStore
     },
