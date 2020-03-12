@@ -3,7 +3,7 @@
 import {createEvent, createStore, combine, launch} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-import {createTemplate, spawn} from '../createTemplate'
+import {createTemplate, spawn, setSilent} from '../createTemplate'
 
 test('region templates', () => {
   const fn = jest.fn()
@@ -11,6 +11,7 @@ test('region templates', () => {
   const trigger = createEvent()
 
   const template = createTemplate({
+    name: 'region template',
     state: {pageName: ''},
     fn({pageName}) {
       const foo = createStore(0).on(trigger, (foo, x) => foo + x)
@@ -75,7 +76,7 @@ test('external state', () => {
     fn({pageName}) {
       const combined = combine({external, pageName})
 
-      combined.watch(fn)
+      combined.watch(e => fn(e))
     },
   })
 
@@ -110,6 +111,111 @@ test('external state', () => {
   `)
 })
 
+test('map support', () => {
+  // setSilent(false)
+  const fnj = jest.fn()
+  const fn = e => {
+    // console.log('fn', JSON.stringify(e, null, 2))
+    fnj(e)
+  }
+  const trigger = createEvent()
+  const external = createStore('x').on(trigger, (_, e) => e)
+
+  const template = createTemplate({
+    name: 'map parent',
+    state: {pageName: ''},
+    fn({pageName}) {
+      const combined = combine({external, pageName})
+
+      const mapped = combined.map(({external, pageName}) => ({
+        external,
+        name: pageName,
+      }))
+
+      const nested = createTemplate({
+        name: 'map child',
+        state: {index: -1},
+        fn({index}) {
+          const nestedCombined = combine(
+            mapped,
+            index,
+            ({external, name}, index) => ({
+              external,
+              name,
+              index,
+            }),
+          )
+
+          nestedCombined.watch(e => fn(e))
+        },
+      })
+
+      pageName.watch(() => {
+        spawn(nested, {
+          values: {index: 0},
+        })
+        spawn(nested, {
+          values: {index: 1},
+        })
+      })
+    },
+  })
+
+  spawn(template, {
+    values: {pageName: 'A'},
+  })
+  spawn(template, {
+    values: {pageName: 'B'},
+  })
+
+  trigger('y')
+
+  expect(argumentHistory(fnj)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "B",
+  },
+]
+`)
+})
+
 describe('nested template', () => {
   describe('pair of child forks', () => {
     test('pair of parent forks', () => {
@@ -135,7 +241,7 @@ describe('nested template', () => {
                 }),
               )
 
-              nestedCombined.watch(fn)
+              nestedCombined.watch(e => fn(e))
             },
           })
 
@@ -183,11 +289,6 @@ Array [
   },
   Object {
     "external": "y",
-    "index": 1,
-    "pageName": "A",
-  },
-  Object {
-    "external": "y",
     "index": 0,
     "pageName": "A",
   },
@@ -198,22 +299,12 @@ Array [
   },
   Object {
     "external": "y",
-    "index": 1,
-    "pageName": "B",
-  },
-  Object {
-    "external": "y",
     "index": 0,
     "pageName": "B",
   },
   Object {
     "external": "y",
     "index": 1,
-    "pageName": "B",
-  },
-  Object {
-    "external": "y",
-    "index": 0,
     "pageName": "B",
   },
 ]
@@ -389,11 +480,6 @@ Array [
     "external": "y",
     "index": 0,
     "pageName": "A",
-  },
-  Object {
-    "external": "y",
-    "index": 0,
-    "pageName": "B",
   },
   Object {
     "external": "y",

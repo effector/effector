@@ -2,15 +2,21 @@
 
 import {createNode, withRegion, launch, restore, step} from 'effector'
 
-const SILENT = true
+let SILENT = true
 
+let templateID = 0
 let spawnID = 0
 let currentTemplate = null
 let currentSpawn = null
 
+export const setSilent = val => {
+  SILENT = val
+}
+
 export function createTemplate({fn, state: values = {}, name = ''}) {
   const parent = currentTemplate
   const template = {
+    id: ++templateID,
     name,
     plain: [],
     watch: [],
@@ -19,15 +25,28 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
     childTemplates: [],
     loader: step.filter({
       fn(upd, scope, stack) {
-        if (!stack.page || stack.page.template !== template) {
-          template.pages.forEach(page => {
-            launch({
-              params: upd,
-              target: stack.node,
-              page,
-              defer: true,
+        if (stack.parent) {
+          // console.log('stack page', stack.page)
+          if (stack.page) {
+            stack.page.childSpawns[template.id].forEach(page => {
+              launch({
+                params: upd,
+                target: stack.node,
+                page,
+                defer: false,
+              })
             })
-          })
+          } else {
+            template.pages.forEach(page => {
+              launch({
+                params: upd,
+                target: stack.node,
+                page,
+                defer: false,
+              })
+            })
+          }
+
           return false
         }
         return true
@@ -44,12 +63,15 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
     },
   })
   currentTemplate = template
+  // console.log(`{+} ${template.name} ${template.id}`)
   withRegion(node, () => {
     const state = restore(values)
     fn(state)
     template.nameMap = state
   })
+  // template.plain = [...new Set(template.plain)]
   currentTemplate = parent
+  // console.log(`{-} ${template.name} ${template.id}`)
   return node
 }
 
@@ -70,25 +92,43 @@ export function spawn(unit, {values = {}} = {}) {
   const page = {}
   const result = {
     id: ++spawnID,
+    fullID: '',
     reg: page,
     template,
     parent,
+    childSpawns: {},
   }
   template.pages.push(result)
   currentSpawn = {template, spawn: result}
+  if (parent) {
+    if (!parent.spawn.childSpawns[template.id]) {
+      parent.spawn.childSpawns[template.id] = []
+    }
+    parent.spawn.childSpawns[template.id].push(result)
+  }
+  if (parent) {
+    result.fullID = `${parent.spawn.fullID}_${result.id}`
+  } else {
+    result.fullID = `${result.id}`
+  }
+  // console.log(`[+] ${template.name} ${result.fullID}`)
   log('spawn', template.name)
 
   if (parent) {
-    log('parent spawn reg', parent.spawn.reg)
+    // log('parent spawn reg', parent.spawn.reg)
     // log('page before assign', page)
     Object.assign(page, parent.spawn.reg)
-    log('page after assign', page)
+    log(`page after assign ${template.name}`, page)
   }
   for (const ref of template.plain) {
-    page[ref.id] = {
+    const next = {
       id: ref.id,
       current: getCurrent(ref),
     }
+    if (ref.id in page) {
+      log(`has id (${template.name})`, {ref, old: page[ref.id], next})
+    }
+    page[ref.id] = next
   }
   for (const name in values) {
     const id = template.nameMap[name].stateRef.id
@@ -99,6 +139,15 @@ export function spawn(unit, {values = {}} = {}) {
   }
   log(`page before plain assignment (${template.name})`, page)
   for (const ref of template.plain) {
+    if (ref.before) {
+      for (const cmd of ref.before) {
+        switch (cmd.type) {
+          case 'map':
+            page[ref.id].current = cmd.fn(page[cmd.from.id].current)
+            break
+        }
+      }
+    }
     if (!ref.after) continue
     const value = page[ref.id].current
     for (const cmd of ref.after) {
@@ -129,6 +178,7 @@ export function spawn(unit, {values = {}} = {}) {
   }
   log(`final page ${template.name}`, page)
   currentSpawn = parent
+  // console.log(`[-] ${template.name} ${result.fullID}`)
   return result
 }
 
@@ -138,6 +188,17 @@ function runWatchersFrom(list, state, page) {
   try {
     while (state.i < list.length) {
       val = list[state.i]
+      // console.log(
+      //   'watch',
+      //   JSON.stringify(
+      //     {
+      //       val,
+      //       pageRef: page[val.of.id],
+      //     },
+      //     null,
+      //     2,
+      //   ),
+      // )
       state.i++
       val.fn(page[val.of.id].current)
     }

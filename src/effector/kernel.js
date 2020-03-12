@@ -210,7 +210,7 @@ const exec = () => {
         case 'barrier': {
           let id = data.barrierID
           if (page) {
-            id = `${page.id}_${id}`
+            id = `${page.fullID}_${id}`
           }
           const priority = data.priority
           if (stepn !== idx || type !== priority) {

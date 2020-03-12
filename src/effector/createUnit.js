@@ -163,7 +163,6 @@ export function createStore<State>(
   props?: Config,
 ): Store<State> {
   const plainState = createStateRef(defaultState)
-  const plainStateID = plainState.id
   const oldState = createStateRef(defaultState)
   const updates = createNamedEvent('updates')
   const template = readTemplate()
@@ -227,13 +226,19 @@ export function createStore<State>(
         config,
         strict: false,
       })
-      updateStore(store, innerStore, 'map', false, fn)
+      const linkNode = updateStore(store, innerStore, 'map', false, fn)
+
+      getStoreState(innerStore).before = [
+        {
+          type: 'map',
+          fn,
+          from: plainState,
+        },
+      ]
       if (template) {
-        // template.seq[plainStateID].push({
-        //   type: 'map',
-        //   fn,
-        //   to: getStoreState(innerStore),
-        // })
+        if (!template.plain.includes(plainState)) {
+          linkNode.seq.unshift(template.loader)
+        }
       }
       return innerStore
     },
