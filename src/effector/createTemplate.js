@@ -26,7 +26,6 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
     loader: step.filter({
       fn(upd, scope, stack) {
         if (stack.parent) {
-          // console.log('stack page', stack.page)
           if (stack.page) {
             stack.page.childSpawns[template.id].forEach(page => {
               launch({
@@ -69,6 +68,9 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
     fn(state)
     template.nameMap = state
   })
+  // for (const child of template.childTemplates) {
+  //   template.plain = template.plain.concat(child.plain)
+  // }
   // template.plain = [...new Set(template.plain)]
   currentTemplate = parent
   // console.log(`{-} ${template.name} ${template.id}`)
@@ -178,6 +180,14 @@ export function spawn(unit, {values = {}} = {}) {
   }
   log(`final page ${template.name}`, page)
   currentSpawn = parent
+  if (parent) {
+    for (const id in result.childSpawns) {
+      if (!(id in parent.spawn.childSpawns)) {
+        parent.spawn.childSpawns[id] = []
+      }
+      parent.spawn.childSpawns[id].push(...result.childSpawns[id])
+    }
+  }
   // console.log(`[-] ${template.name} ${result.fullID}`)
   return result
 }

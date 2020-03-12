@@ -110,67 +110,63 @@ test('external state', () => {
     ]
   `)
 })
+describe('map support', () => {
+  test('on a same level', () => {
+    // setSilent(false)
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const external = createStore('x').on(trigger, (_, e) => e)
 
-test('map support', () => {
-  // setSilent(false)
-  const fnj = jest.fn()
-  const fn = e => {
-    // console.log('fn', JSON.stringify(e, null, 2))
-    fnj(e)
-  }
-  const trigger = createEvent()
-  const external = createStore('x').on(trigger, (_, e) => e)
+    const template = createTemplate({
+      name: 'map parent',
+      state: {pageName: ''},
+      fn({pageName}) {
+        const combined = combine({external, pageName})
 
-  const template = createTemplate({
-    name: 'map parent',
-    state: {pageName: ''},
-    fn({pageName}) {
-      const combined = combine({external, pageName})
+        const mapped = combined.map(({external, pageName}) => ({
+          external,
+          name: pageName,
+        }))
 
-      const mapped = combined.map(({external, pageName}) => ({
-        external,
-        name: pageName,
-      }))
-
-      const nested = createTemplate({
-        name: 'map child',
-        state: {index: -1},
-        fn({index}) {
-          const nestedCombined = combine(
-            mapped,
-            index,
-            ({external, name}, index) => ({
-              external,
-              name,
+        const nested = createTemplate({
+          name: 'map child',
+          state: {index: -1},
+          fn({index}) {
+            const nestedCombined = combine(
+              mapped,
               index,
-            }),
-          )
+              ({external, name}, index) => ({
+                external,
+                name,
+                index,
+              }),
+            )
 
-          nestedCombined.watch(e => fn(e))
-        },
-      })
-
-      pageName.watch(() => {
-        spawn(nested, {
-          values: {index: 0},
+            nestedCombined.watch(e => fn(e))
+          },
         })
-        spawn(nested, {
-          values: {index: 1},
+
+        pageName.watch(() => {
+          spawn(nested, {
+            values: {index: 0},
+          })
+          spawn(nested, {
+            values: {index: 1},
+          })
         })
-      })
-    },
-  })
+      },
+    })
 
-  spawn(template, {
-    values: {pageName: 'A'},
-  })
-  spawn(template, {
-    values: {pageName: 'B'},
-  })
+    spawn(template, {
+      values: {pageName: 'A'},
+    })
+    spawn(template, {
+      values: {pageName: 'B'},
+    })
 
-  trigger('y')
+    trigger('y')
 
-  expect(argumentHistory(fnj)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
 Array [
   Object {
     "external": "x",
@@ -214,8 +210,217 @@ Array [
   },
 ]
 `)
-})
+  })
+  test('on a nested level', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const external = createStore('x').on(trigger, (_, e) => e)
 
+    const template = createTemplate({
+      name: 'map parent',
+      state: {pageName: ''},
+      fn({pageName}) {
+        const combined = combine({external, pageName})
+
+        const nested = createTemplate({
+          name: 'map child',
+          state: {index: -1},
+          fn({index}) {
+            const mapped = combined.map(({external, pageName}) => ({
+              external,
+              name: pageName,
+            }))
+            const nestedCombined = combine(
+              mapped,
+              index,
+              ({external, name}, index) => ({
+                external,
+                name,
+                index,
+              }),
+            )
+
+            nestedCombined.watch(e => fn(e))
+          },
+        })
+
+        pageName.watch(() => {
+          spawn(nested, {
+            values: {index: 0},
+          })
+          spawn(nested, {
+            values: {index: 1},
+          })
+        })
+      },
+    })
+
+    spawn(template, {
+      values: {pageName: 'A'},
+    })
+    spawn(template, {
+      values: {pageName: 'B'},
+    })
+
+    trigger('y')
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "B",
+  },
+]
+`)
+  })
+  afterEach(() => {
+    setSilent(true)
+  })
+  test('on a deep nested level', () => {
+    // setSilent(false)
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const external = createStore('x').on(trigger, (_, e) => e)
+
+    const template = createTemplate({
+      name: 'map parent',
+      state: {pageName: ''},
+      fn({pageName}) {
+        const combined = combine({external, pageName})
+
+        const nested = createTemplate({
+          name: 'map child',
+          state: {index: -1},
+          fn({index}) {
+            const deep = createTemplate({
+              name: 'deep child',
+              fn() {
+                const mapped = combined.map(({external, pageName}) => ({
+                  external,
+                  name: pageName,
+                }))
+                const nestedCombined = combine(
+                  mapped,
+                  index,
+                  ({external, name}, index) => ({
+                    external,
+                    name,
+                    index,
+                  }),
+                )
+
+                nestedCombined.watch(e => fn(e))
+              },
+            })
+
+            index.watch(() => {
+              spawn(deep)
+            })
+          },
+        })
+
+        pageName.watch(() => {
+          spawn(nested, {
+            values: {index: 0},
+          })
+          spawn(nested, {
+            values: {index: 1},
+          })
+        })
+      },
+    })
+
+    spawn(template, {
+      values: {pageName: 'A'},
+    })
+    spawn(template, {
+      values: {pageName: 'B'},
+    })
+
+    trigger('y')
+
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "x",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "x",
+    "index": 1,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "A",
+  },
+  Object {
+    "external": "y",
+    "index": 0,
+    "name": "B",
+  },
+  Object {
+    "external": "y",
+    "index": 1,
+    "name": "B",
+  },
+]
+`)
+  })
+})
 describe('nested template', () => {
   describe('pair of child forks', () => {
     test('pair of parent forks', () => {
