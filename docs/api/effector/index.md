@@ -12,9 +12,9 @@ title: API Reference
 
 ## Unit definitions
 
-- [Event<Payload>](Event.md)
-- [Effect<Params, Done, Fail>](Effect.md)
-- [Store<State>](Store.md)
+- [Event](Event.md)
+- [Effect](Effect.md)
+- [Store](Store.md)
 - [Domain](Domain.md)
 
 ## Top-Level Exports
