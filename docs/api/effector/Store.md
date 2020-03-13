@@ -56,7 +56,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_
+1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
 2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, should be **pure**.
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
@@ -128,7 +128,7 @@ Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md): Trigger, which leads to call of `watcher`
+1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md): Trigger, which leads to call of `watcher`
 1. `watcher` (_Function_): Function that receives current store state as first argument and payload of trigger as second argument.
 
 #### Returns
@@ -344,7 +344,7 @@ reset() // changed 0
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
+1. `trigger`: [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
 
 #### Returns
 
