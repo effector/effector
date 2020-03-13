@@ -11,7 +11,7 @@ Creates an event containing all items from an Observable.
 
 #### Returns
 
-([_Event_](Event.md))
+[_Event_](Event.md): New event
 
 #### Example
 

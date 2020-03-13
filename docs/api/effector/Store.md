@@ -20,7 +20,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 #### Returns
 
-([_Store_](Store.md)): New store
+[_Store_](Store.md): New store
 
 #### Example
 
@@ -64,7 +64,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Returns
 
-([_Store_](Store.md)): Current store
+[_Store_](Store.md): Current store
 
 #### Example
 
@@ -102,7 +102,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function
 
 #### Example
 
@@ -133,7 +133,7 @@ Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function
 
 #### Example 1
 
@@ -314,7 +314,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Returns
 
-([_Store_](Store.md)): Current store
+[_Store_](Store.md): Current store
 
 #### Example
 
@@ -348,7 +348,7 @@ reset() // changed 0
 
 #### Returns
 
-([_Store_](Store.md)): Current store
+[_Store_](Store.md): Current store
 
 <hr />
 
@@ -432,7 +432,7 @@ Output
 
 #### Returns
 
-([_Event_](Event.md)): Event that represent updates of given store.
+[_Event_](Event.md): Event that represent updates of given store.
 
 Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 

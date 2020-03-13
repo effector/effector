@@ -10,7 +10,7 @@ hide_title: true
 
 #### Arguments
 
-1. `store` (_Store_)[Store.md]
+1. `store` [_Store_](Store.md)
 2. `api` (_Object_) Object with [_reducers_](../../glossary.md#reducer)
 
 ### Returns

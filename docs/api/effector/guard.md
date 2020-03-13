@@ -15,7 +15,7 @@ It provide a way to control one dataflow with the help of another: when the cond
 
 #### Returns
 
-([_Event_](Event.md)) - Event, which fires upon clock is triggered
+[_Event_](Event.md), which fires upon clock is triggered
 
 #### Example
 

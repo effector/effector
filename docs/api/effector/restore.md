@@ -6,17 +6,17 @@ hide_title: true
 
 # `restore(event, defaultState)`
 
-Creates a (_Store_)[Store.md] from (_Event_)[Event.md].
+Creates a [_Store_](Store.md) from [_Event_](Event.md).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
 #### Arguments
 
-1. `event` (_Event_)[Event.md]
+1. `event` [_Event_](Event.md)
 2. `defaultState` (_Payload_)
 
 #### Returns
 
-((_Store_)[Store.md]): A new store
+[_Store_](Store.md): New store
 
 #### Example
 
@@ -37,17 +37,17 @@ event('foo')
 
 # `restore(effect, defaultState)`
 
-Creates a (_Store_)[Store.md] from sucessful results of (_Effect_)[Effect.md].
+Creates a [_Store_](Store.md) from sucessful results of [_Effect_](Effect.md).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
 #### Arguments
 
-1. `effect` (_Effect_)[Effect.md]
+1. `effect` [_Effect_](Effect.md)
 2. `defaultState` (_Done_)
 
 #### Returns
 
-((_Store_)[Store.md]): A new store
+[_Store_](Store.md): New store
 
 #### Example
 
@@ -78,7 +78,7 @@ Creates an object with stores from object with values
 
 #### Returns
 
-((_Store_)[Store.md]): A new store
+[_Store_](Store.md): New store
 
 #### Example
 

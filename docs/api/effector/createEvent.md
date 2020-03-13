@@ -15,7 +15,7 @@ You can pass `name` if you want.
 
 #### Returns
 
-([_Event_](Event.md)): An intention to change state (see notes).
+[_Event_](Event.md): New event
 
 #### Notes
 

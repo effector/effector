@@ -16,7 +16,7 @@ Creates a [store](Store.md).
 
 #### Returns
 
-([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
+[_Store_](Store.md): New store
 
 #### Example
 

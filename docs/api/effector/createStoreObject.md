@@ -14,7 +14,7 @@ An alias for `combine({field: storeA, another: storeB})`. See [_`combine`_](comb
 
 #### Returns
 
-([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
+[_Store_](Store.md): New store
 
 #### Example
 

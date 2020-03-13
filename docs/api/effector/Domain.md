@@ -19,7 +19,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
 <hr />
 
@@ -31,7 +31,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
 <hr />
 
@@ -43,7 +43,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
 <hr />
 
@@ -55,7 +55,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
+[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
 <hr />
 
@@ -67,7 +67,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Event_](Event.md)): An intention to change state.
+[_Event_](Event.md): New event
 
 <hr />
 
@@ -79,7 +79,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Effect_](Effect.md)): A container for async function.
+[_Effect_](Effect.md): A container for async function.
 
 <hr />
 
@@ -91,7 +91,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
+[_Store_](Store.md): New store
 
 <hr />
 
@@ -103,7 +103,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Domain_](Domain.md)): A namespace for your events, stores and effects.
+[_Domain_](Domain.md): New domain
 
 <hr />
 
@@ -115,7 +115,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Event_](Event.md)): An intention to change state.
+[_Event_](Event.md): New event
 
 <hr />
 
@@ -127,7 +127,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Effect_](Effect.md)): A container for async function.
+[_Effect_](Effect.md): New effect
 
 <hr />
 
@@ -139,7 +139,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
+[_Store_](Store.md): New store
 
 <hr />
 
@@ -151,6 +151,6 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_Domain_](Domain.md)): A namespace for your events, stores and effects.
+[_Domain_](Domain.md): New domain
 
 <hr />
