@@ -34,7 +34,7 @@ It is a function which allows you to follow the event or to create side-effects.
 
 #### Returns
 
-(_`Subscription`_): Unsubscribe function.
+([_`Subscription`_](../../glossary.md#subscription)): Unsubscribe function.
 
 #### Example
 
