@@ -14,7 +14,7 @@ Creates a [domain](Domain.md)
 
 #### Returns
 
-([_`Domain`_](Domain.md)): Namespace for your events, stores and effects.
+([_Domain_](Domain.md)): Namespace for your events, stores and effects.
 
 #### Example
 

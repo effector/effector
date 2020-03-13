@@ -9,7 +9,8 @@ hide_title: true
 Pattern matching method, splits trigger unit (event, effect or store) into several events, which fire upon trigger matches its comparator function.
 
 #### Arguments
-1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md) or [_`Store`_](Store.md) unit-trigger.
+
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
 2. `cases` (_Object_): Schema of cases, which uses names of resulting events as keys, and comparator function*((value) => Boolean)*
 
 #### Returns
@@ -57,22 +58,22 @@ message({user: 'unregistered', text: 'hi'})
 ```js try
 import {createEvent, split} from 'effector'
 
-const message = createEvent();
+const message = createEvent()
 
 const {short, long, medium} = split(message, {
-  short: (m) => m.length <= 5,
-  medium: (m) => m.length > 5 && m.length <= 10,
-  long: (m) => m.length > 10,
-});
+  short: m => m.length <= 5,
+  medium: m => m.length > 5 && m.length <= 10,
+  long: m => m.length > 10,
+})
 
-short.watch((m) => console.log(`short message '${m}'`));
-medium.watch((m) => console.log(`medium message '${m}'`));
-long.watch((m) => console.log(`long message '${m}'`));
+short.watch(m => console.log(`short message '${m}'`))
+medium.watch(m => console.log(`medium message '${m}'`))
+long.watch(m => console.log(`long message '${m}'`))
 
-message("Hello, Bob!")
+message('Hello, Bob!')
 // => long message 'Hello, Bob!'
 
-message("Hi!")
+message('Hi!')
 // => short message 'Hi!'
 ```
 

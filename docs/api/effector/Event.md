@@ -34,7 +34,7 @@ It is a function which allows you to follow the event or to create side-effects.
 
 #### Returns
 
-([_`Subscription`_](../../glossary.md#subscription)): Unsubscribe function.
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
 
 #### Example
 
@@ -64,7 +64,7 @@ Creates a new event, which will be called after the original event is called, ap
 
 #### Returns
 
-(_`Event`_): New event.
+([_Event_](Event.md)): New event.
 
 #### Example
 
@@ -101,7 +101,7 @@ Let's assume a standard situation when you want to buy sneakers in the shop, but
 
 #### Returns
 
-(_`Event`_): New event.
+([_Event_](Event.md)): New event.
 
 #### Example
 
@@ -150,7 +150,7 @@ You may see that we united `filter()` and `map()` methods, the reason for creati
 
 #### Returns
 
-(_`Event`_): New event.
+([_Event_](Event.md)): New event.
 
 #### Example
 
@@ -213,7 +213,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Returns
 
-(_`Event`_): New event.
+([_Event_](Event.md)): New event.
 
 #### Example
 

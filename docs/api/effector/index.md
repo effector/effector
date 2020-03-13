@@ -3,37 +3,30 @@ id: effector
 title: API Reference
 ---
 
-### Top-Level Exports
+## Unit creators
 
-- [createEvent(name?)](createEvent.md)
-- [createEffect(name?)](createEffect.md)
-- [createStore(defaultState)](createStore.md)
-- [createDomain(name?)](createDomain.md)
+- [createEvent](createEvent.md)
+- [createStore](createStore.md)
+- [createEffect](createEffect.md)
+- [createDomain](createDomain.md)
+
+## Unit definitions
+
+- [Event<Payload>](Event.md)
+- [Effect<Params, Done, Fail>](Effect.md)
+- [Store<State>](Store.md)
+- [Domain](Domain.md)
+
+## Top-Level Exports
+
 - [combine(...stores, f)](combine.md)
-- [createStoreObject({storeA, storeB})](createStoreObject.md)
 - [createApi(store, api)](createApi.md)
-- [restore(event, defaultState)](restore.md)
-- [restore(effect, defaultState)](restore.md)
-- [restore(obj)](restore.md)
 - [forward({from, to})](forward.md)
-- [fromObservable(observable)](fromObservable.md)
 - [merge([eventA, eventB])](merge.md)
 - [split(event, cases)](split.md)
 - [sample({source, clock, fn, target}](sample.md)
 - [guard({source, filter, target})](guard.md)
-
-### Event API
-
-- [Event\<Payload\>](Event.md)
-
-### Effect API
-
-- [Effect<Params, Done, Fail>](Effect.md)
-
-### Store API
-
-- [Store\<State\>](Store.md)
-
-### Domain API
-
-- [Domain](Domain.md)
+- [restore(event, defaultState)](restore.md)
+- [restore(effect, defaultState)](restore.md)
+- [restore(obj)](restore.md)
+- [fromObservable(observable)](fromObservable.md)

@@ -22,7 +22,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 #### Returns
 
-([_`Event`_](Event.md)) - Event, which fires upon clock is triggered
+([_Event_](Event.md)) - Event, which fires upon clock is triggered
 
 #### Example 1
 
@@ -74,7 +74,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 #### Returns
 
-([_`Event`_](Event.md)) - Event, which fires upon clock is triggered
+([_Event_](Event.md)) - Event, which fires upon clock is triggered
 
 #### Example
 
@@ -110,7 +110,7 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 #### Returns
 
-([_`Event`_](Event.md)) - Event, which fires upon clock is triggered
+([_Event_](Event.md)) - Event, which fires upon clock is triggered
 
 #### Example
 
@@ -151,7 +151,7 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 #### Returns
 
-([_`Store`_](Store.md)) - Store, which updates upon clock update
+([_Store_](Store.md)) - Store, which updates upon clock update
 
 #### Example
 
@@ -189,7 +189,7 @@ Object-like arguments passing, working exactly the same as examples above do.
 
 #### Returns
 
-([_`Event`_](Event.md)|[_`Store`_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
+([_Event_](Event.md)|[_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
 
 #### Example 1
 
@@ -273,7 +273,7 @@ This is especially useful if we are combining different stores, and resulting st
 
 #### Returns
 
-([_`Store`_](Store.md)) - Non-greedy store
+([_Store_](Store.md)) - Non-greedy store
 
 #### Example 1
 

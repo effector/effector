@@ -19,7 +19,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
 
 <hr />
 
@@ -31,7 +31,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
 
 <hr />
 
@@ -43,7 +43,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
 
 <hr />
 
@@ -55,7 +55,55 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-(Subscription): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
+
+<hr />
+
+### `createEvent(name?)`
+
+#### Arguments
+
+1. `name`? (_string_): event name
+
+#### Returns
+
+([_Event_](Event.md)): An intention to change state.
+
+<hr />
+
+### `createEffect(name?)`
+
+#### Arguments
+
+1. `name`? (_string_): effect name
+
+#### Returns
+
+([_Effect_](Effect.md)): A container for async function.
+
+<hr />
+
+### `createStore(defaultState)`
+
+#### Arguments
+
+1. `defaultState` (_State_): store default state
+
+#### Returns
+
+([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
+
+<hr />
+
+### `createDomain(name?)`
+
+#### Arguments
+
+1. `name`? (_string_): domain name
+
+#### Returns
+
+([_Domain_](Domain.md)): A namespace for your events, stores and effects.
 
 <hr />
 
@@ -67,7 +115,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_`Event`_](Event.md)): An intention to change state.
+([_Event_](Event.md)): An intention to change state.
 
 <hr />
 
@@ -79,7 +127,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_`Effect`_](Effect.md)): A container for async function.
+([_Effect_](Effect.md)): A container for async function.
 
 <hr />
 
@@ -91,7 +139,7 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
+([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
 <hr />
 
@@ -103,6 +151,6 @@ It is useful for logging or other side effects.
 
 #### Returns
 
-([_`Domain`_](Store.md)): A namespace for your events, stores and effects.
+([_Domain_](Domain.md)): A namespace for your events, stores and effects.
 
 <hr />

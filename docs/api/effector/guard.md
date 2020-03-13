@@ -15,7 +15,7 @@ It provide a way to control one dataflow with the help of another: when the cond
 
 #### Returns
 
-([_`Event`_](Event.md)) - Event, which fires upon clock is triggered
+([_Event_](Event.md)) - Event, which fires upon clock is triggered
 
 #### Example
 
@@ -73,7 +73,7 @@ submitForm('alice') // ~> searchUser('alice')
 #### Arguments
 
 1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
-1. `filter` (_Store_): Filter store
+1. `filter` ([_Store_](Store.md)): Filter store
 
 #### Example
 

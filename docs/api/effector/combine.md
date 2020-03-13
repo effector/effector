@@ -10,7 +10,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 
 #### Returns
 
-([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
+([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
 #### Example
 
@@ -38,7 +38,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 
 #### Returns
 
-([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
+([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
 #### Example
 
@@ -62,7 +62,7 @@ sum.watch(console.log) // => 510
 
 #### Returns
 
-([_`Store`_](Store.md)): An object that holds the state tree. There can be multiple stores.
+([_Store_](Store.md)): An object that holds the state tree. There can be multiple stores.
 
 #### Example
 

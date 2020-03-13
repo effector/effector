@@ -69,7 +69,7 @@ It will replace the previous function inside (if any).
 
 #### Returns
 
-(_`Effect`_): A container for async function.
+((_Effect_)[Effect.md]): The same effect
 
 #### Example
 
@@ -102,7 +102,7 @@ Subscribe to effect calls.
 
 #### Returns
 
-(_`Subscription`_): A function that unsubscribes the watcher.
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function.
 
 #### Example
 
@@ -136,7 +136,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Returns
 
-(_`Event`_): An intention to change state.
+([_Event_](Event.md)): New event.
 
 <hr />
 
@@ -172,7 +172,7 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ### `doneData`
 
-_Event_ triggered when _handler_ is _resolved_.
+([_Event_](Event.md)) triggered when _handler_ is _resolved_.
 
 #### Arguments
 
@@ -200,7 +200,7 @@ effectFx(2) // => Done with result 3
 
 ### `failData`
 
-Event triggered when handler is rejected or throws error.
+([_Event_](Event.md)) triggered when handler is rejected or throws error.
 
 #### Arguments
 
@@ -228,7 +228,7 @@ effectFx(2) // => Fail with error 1
 
 ### `done`
 
-_Event_ triggered when _handler_ is _resolved_.
+([_Event_](Event.md)) triggered when _handler_ is _resolved_.
 
 #### Arguments
 
@@ -257,7 +257,7 @@ effectFx(2) // => Done with params 2 and result 3
 
 ### `fail`
 
-Event triggered when handler is rejected or throws error.
+([_Event_](Event.md)) triggered when handler is rejected or throws error.
 
 #### Arguments
 
@@ -290,7 +290,7 @@ Event triggered when handler is resolved, rejected or throws error.
 
 #### Arguments
 
-Event triggered with object of `status`, `params` and `error` or `result`:
+([_Event_](Event.md)) triggered with object of `status`, `params` and `error` or `result`:
 
 1. `status` (_string_): A status of effect (`done` or `fail`)
 2. `params` (_Params_): An argument passed to effect call
@@ -320,8 +320,8 @@ fetchApiFx(100)
 
 ### `pending`
 
-_Store_ will update when `done` or `fail` are triggered.
-_Store_ contains a `true` value until the effect is resolved or rejected.
+([_Store_](Store.md)) will update when `done` or `fail` are triggered.
+([_Store_](Store.md)) contains a `true` value until the effect is resolved or rejected.
 
 #### Example
 
@@ -364,7 +364,7 @@ const isLoading = createStore(false)
 
 ### `inFlight`
 
-_Store_ which show how many effect calls aren't settled yet. Useful for rate limiting.
+([_Store_](Store.md)) which show how many effect calls aren't settled yet. Useful for rate limiting.
 
 #### Example
 

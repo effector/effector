@@ -16,7 +16,7 @@ Sends data from one entity to another.
 
 #### Returns
 
-(_`Subscription`_): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function
 
 #### Example 1
 

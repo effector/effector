@@ -16,7 +16,7 @@ Creates an [effect](Effect.md)
 
 #### Returns
 
-([_`Effect`_](Effect.md)): A container for async function.
+([_Effect_](Effect.md)): A container for async function.
 
 > **Note**: You are not supposed to [`Forward`](forward.md) parts of _Effect_ (even though it consists of _Events_ and _Stores_), since it's a complete entity on its own. This behavior will not be supported
 

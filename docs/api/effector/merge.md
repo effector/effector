@@ -14,7 +14,7 @@ Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effe
 
 #### Returns
 
-([_`Event`_](Event.md)) - Event, which fires upon any of merged units was triggered
+([_Event_](Event.md)) - Event, which fires upon any of merged units was triggered
 
 #### Example 1
 

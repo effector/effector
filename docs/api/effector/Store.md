@@ -20,7 +20,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 #### Returns
 
-(_`Store`_): New store
+([_Store_](Store.md)): New store
 
 #### Example
 
@@ -56,7 +56,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_
 2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, should be **pure**.
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
@@ -64,7 +64,7 @@ Updates state when `trigger` is triggered by using `handler`.
 
 #### Returns
 
-(_`Store`_): Current store
+([_Store_](Store.md)): Current store
 
 #### Example
 
@@ -102,7 +102,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Returns
 
-(_`Subscription`_): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function
 
 #### Example
 
@@ -128,12 +128,12 @@ Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_: Trigger, which leads to call of `watcher`
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_: Trigger, which leads to call of `watcher`
 1. `watcher` (_Function_): Function that receives current store state as first argument and payload of trigger as second argument.
 
 #### Returns
 
-(_`Subscription`_): Unsubscribe function
+([_Subscription_](../../glossary.md#subscription)): Unsubscribe function
 
 #### Example 1
 
@@ -314,7 +314,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Returns
 
-(_`Store`_): Current store
+([_Store_](Store.md)): Current store
 
 #### Example
 
@@ -344,11 +344,11 @@ reset() // changed 0
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_`Event`_](Event.md), [_`Effect`_](Effect.md), _`Store`_
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_
 
 #### Returns
 
-(_`Store`_): Current store
+([_Store_](Store.md)): Current store
 
 <hr />
 
@@ -387,11 +387,11 @@ For example, you want to make multiple, summary and divide operations. You can c
 
 #### Arguments
 
-1. `fn` (_Function_): Function that receives `Store` and returns a new derived store
+1. `fn` (_Function_): Function that receives `Store` and returns some value
 
 #### Returns
 
-(_`Store`_): The same store
+(_any_): Value, returned by `fn`
 
 #### Example
 
@@ -432,7 +432,7 @@ Output
 
 #### Returns
 
-(_`Event<State>`_): Event that represent updates of given store.
+([_Event<State>_](Event.md)): Event that represent updates of given store.
 
 Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
 
