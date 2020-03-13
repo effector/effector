@@ -213,6 +213,41 @@ module.exports = function(babel, options = {}) {
   return plugin
 }
 const normalizeOptions = options => {
+  const defaults = options.noDefaults
+    ? {
+      store: [],
+      event: [],
+      effect: [],
+      domain: [],
+      restore: [],
+      combine: [],
+      sample: [],
+      forward: [],
+      guard: [],
+      domainMethods: {
+        store: [],
+        event: [],
+        effect: [],
+        domain: [],
+      },
+    }
+    : {
+      store: ['createStore'],
+      event: ['createEvent'],
+      effect: ['createEffect'],
+      domain: ['createDomain'],
+      restore: ['restore'],
+      combine: ['combine'],
+      sample: ['sample'],
+      forward: ['forward'],
+      guard: ['guard'],
+      domainMethods: {
+        store: ['store', 'createStore'],
+        event: ['event', 'createEvent'],
+        effect: ['effect', 'createEffect'],
+        domain: ['domain', 'createDomain'],
+      },
+    }
   let exportMetadata
   if ('exportMetadata' in options) {
     if (typeof options.exportMetadata === 'function') {
@@ -249,21 +284,19 @@ const normalizeOptions = options => {
           : ['effector', '@zerobias/effector'],
       ),
       exportMetadata,
-      storeCreators: new Set(options.storeCreators || ['createStore']),
-      eventCreators: new Set(options.eventCreators || ['createEvent']),
-      effectCreators: new Set(options.effectCreators || ['createEffect']),
-      domainCreators: new Set(options.domainCreators || ['createDomain']),
-      restoreCreators: new Set(options.restoreCreators || ['restore']),
-      combineCreators: new Set(options.combineCreators || ['combine']),
-      sampleCreators: new Set(options.sampleCreators || ['sample']),
-      forwardCreators: new Set(options.forwardCreators || ['forward']),
-      guardCreators: new Set(options.guardCreators || ['guard']),
-      domainMethods: readConfigShape(options.domainMethods, {
-        store: ['store', 'createStore'],
-        event: ['event', 'createEvent'],
-        effect: ['effect', 'createEffect'],
-        domain: ['domain', 'createDomain'],
-      }),
+      storeCreators: new Set(options.storeCreators || defaults.store),
+      eventCreators: new Set(options.eventCreators || defaults.event),
+      effectCreators: new Set(options.effectCreators || defaults.effect),
+      domainCreators: new Set(options.domainCreators || defaults.domain),
+      restoreCreators: new Set(options.restoreCreators || defaults.restore),
+      combineCreators: new Set(options.combineCreators || defaults.combine),
+      sampleCreators: new Set(options.sampleCreators || defaults.sample),
+      forwardCreators: new Set(options.forwardCreators || defaults.forward),
+      guardCreators: new Set(options.guardCreators || defaults.guard),
+      domainMethods: readConfigShape(
+        options.domainMethods,
+        defaults.domainMethods,
+      ),
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },
