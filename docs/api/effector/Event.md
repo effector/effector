@@ -30,7 +30,7 @@ It is a function which allows you to follow the event or to create side-effects.
 
 #### Arguments
 
-1. `watcher` (_Function_): A function that receives `payload`.
+1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
 
 #### Returns
 

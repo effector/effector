@@ -98,7 +98,7 @@ Subscribe to effect calls.
 
 #### Arguments
 
-1. `watcher` (_Function_): A function that receives `payload`.
+1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
 
 #### Returns
 

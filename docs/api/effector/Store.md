@@ -98,7 +98,7 @@ If `trigger` not passed, run `watcher` on each event that linked with store.
 
 #### Arguments
 
-1. `watcher` (_Function_): Function that receives current store state as first argument
+1. `watcher` ([_Watcher_](../../glossary.md#watcher)): Watcher function that receives current store state as first argument
 
 #### Returns
 
@@ -128,7 +128,7 @@ Run `watcher` only when `trigger` event triggered. <br/>
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_: Trigger, which leads to call of `watcher`
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md): Trigger, which leads to call of `watcher`
 1. `watcher` (_Function_): Function that receives current store state as first argument and payload of trigger as second argument.
 
 #### Returns
@@ -310,7 +310,7 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 
 #### Arguments
 
-1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_`Events`_](Event.md), [_`Effects`_](Effect.md) or _`Stores`_
+1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_Events_](Event.md), [_Effects_](Effect.md) or [_Stores_](Store.md)
 
 #### Returns
 
@@ -344,7 +344,7 @@ reset() // changed 0
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md), _`Store`_
+1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
 
 #### Returns
 
@@ -432,9 +432,9 @@ Output
 
 #### Returns
 
-([_Event<State>_](Event.md)): Event that represent updates of given store.
+([_Event_](Event.md)): Event that represent updates of given store.
 
-Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
+Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 
 ```js try
 import {createStore, is} from 'effector'
