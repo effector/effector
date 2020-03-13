@@ -175,9 +175,11 @@ inc() // => Doe has 1 coins
 
 [Try it](https://share.effector.dev/h3zED3yW)
 
-## `sample({source, clock, fn, greedy?, target?})`
+## `sample({source, clock?, fn?, greedy?, target?})`
 
 Object-like arguments passing, working exactly the same as examples above do.
+
+`clock` - trigger node, if not passed the `source` is used as clock
 
 `greedy` modifier defines, whether sampler will wait of resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
 
