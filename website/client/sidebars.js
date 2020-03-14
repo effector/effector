@@ -77,7 +77,6 @@ const sidebar = {
     },
   ],
   Conventions: ['conventions/naming', 'conventions/best-practices'],
-  'Advanced guide': ['advanced-guide/Computation priority'],
   Recipes: [
     'recipes/recipes',
     'recipes/usage-with-typescript',
@@ -100,6 +99,7 @@ const sidebar = {
       items: ['recipes/react-native/example'],
     },
   ],
+  'Advanced guide': ['advanced-guide/Computation priority'],
   FAQ: ['faq'],
 }
 
