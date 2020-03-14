@@ -1,3 +1,8 @@
+---
+id: best-practices
+title: Best practices
+---
+
 Effector provides you pretty powerful tooling to migrate all the remaining logic from views to your models(events, effects, stores and their connections in general)
 
 Here are some advice on buildling stress relief UI:
