@@ -10,20 +10,20 @@ This is a glossary of the core terms in Effector, along with their type signatur
 _Event_ is a function you can subscribe to. It can be intention to change store, fact about what happening in application, command to be executed, aggregated analytics trigger and so on.
 
 ```typescript
-function createEvent<E>(eventName?: string): Event<E>;
+function createEvent<E>(eventName?: string): Event<E>
 ```
 
 - [`createEvent(eventName)`]() creates event
 
 ```typescript
 type Event<Payload> = {
- (payload: Payload): Payload;
- watch(watcher: (payload: Payload) => any): Subscription;
- map<T>(fn: (payload: Payload) => T): Event<T>;
- filter(options: {fn(payload: Payload): boolean}): Event<Payload>;
- filterMap<T>(fn: (payload: Payload) => T | void): Event<T>;
- prepend<Before>(fn: (params: Before) => Payload): Event<Before>;
- shortName: string;
+  (payload: Payload): Payload
+  watch(watcher: (payload: Payload) => any): Subscription
+  map<T>(fn: (payload: Payload) => T): Event<T>
+  filter(options: {fn(payload: Payload): boolean}): Event<Payload>
+  filterMap<T>(fn: (payload: Payload) => T | void): Event<T>
+  prepend<Before>(fn: (params: Before) => Payload): Event<Before>
+  shortName: string
 }
 ```
 
@@ -45,28 +45,28 @@ It returns promise with result of function call
 
 The only requirement for function:
 
-- __Should__ have zero or one argument
+- **Should** have zero or one argument
 
 ```typescript
 function createEffect<Params, Done, Fail>(
- effectName?: string,
-): Effect<Params, Done, Fail>;
+  effectName?: string,
+): Effect<Params, Done, Fail>
 ```
 
 - [`createEffect(effectName)`]() creates effect
 
 ```typescript
 type Effect<Params, Done, Fail = Error> = {
- (payload: Params): Promise<Done>;
- done: Event<{params: Params, result: Done}>;
- fail: Event<{params: Params, error: Fail}>;
- use: {
-  (asyncFunction: (params: Params) => Promise<Done>): this,
-  getCurrent(): (params: Params) => Promise<Done>,
- };
- watch(watcher: (payload: Params) => any): Subscription;
- prepend<Before>(fn: (_: Before) => Params): Event<Before>;
- shortName: string;
+  (payload: Params): Promise<Done>
+  done: Event<{params: Params; result: Done}>
+  fail: Event<{params: Params; error: Fail}>
+  use: {
+    (asyncFunction: (params: Params) => Promise<Done>): this
+    getCurrent(): (params: Params) => Promise<Done>
+  }
+  watch(watcher: (payload: Params) => any): Subscription
+  prepend<Before>(fn: (_: Before) => Params): Event<Before>
+  shortName: string
 }
 ```
 
@@ -84,6 +84,7 @@ There can be multiple stores.
 ```typescript
 function createStore<State>(defaultState: State): Store<State>
 ```
+
 ```typescript
 function createStoreObject<State: {[key: string]: Store<any> | any}>(
   obj: State
@@ -95,25 +96,27 @@ function createStoreObject<State: {[key: string]: Store<any> | any}>(
 
 ```typescript
 type Store<State> = {
- reset(...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>): this;
- getState(): State;
- map<T>(fn: (_: State) => T): Store<T>;
- on<E>(
-  trigger: Event<E> | Effect<E, any, any> | Store<E>,
-  handler: (state: State, payload: E) => State | void,
- ): this;
- off(trigger: Event<any> | Effect<any, any, any> | Store<any>): void;
- watch<E>(
-  watcher: (state: State, payload: E, type: string) => any,
- ): Subscription;
- watch<E>(
-  trigger: Event<E> | Effect<E, any, any> | Store<E>,
-  watcher: (state: State, payload: E) => any,
- ): Subscription;
- thru<U>(fn: (store: Store<State>) => U): U;
- shortName: string;
- defaultState: State;
- updates: Event<State>;
+  reset(
+    ...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>
+  ): this
+  getState(): State
+  map<T>(fn: (_: State) => T): Store<T>
+  on<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    handler: (state: State, payload: E) => State | void,
+  ): this
+  off(trigger: Event<any> | Effect<any, any, any> | Store<any>): void
+  watch<E>(
+    watcher: (state: State, payload: E, type: string) => any,
+  ): Subscription
+  watch<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    watcher: (state: State, payload: E) => any,
+  ): Subscription
+  thru<U>(fn: (store: Store<State>) => U): U
+  shortName: string
+  defaultState: State
+  updates: Event<State>
 }
 ```
 
@@ -137,21 +140,23 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 It is useful for logging or other side effects.
 
 ```typescript
-function createDomain(domainName?: string): Domain;
+function createDomain(domainName?: string): Domain
 ```
 
 - [`createDomain(domainName)`]() creates new domain
 
 ```typescript
 type Domain = {
- onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription;
- onCreateEffect(hook: (newEffect: Effect<unknown, unknown, unknown>) => any): Subscription;
- onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription;
- onCreateDomain(hook: (newDomain: Domain) => any): Subscription;
- event<Payload>(name?: string): Event<Payload>;
- effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>;
- store<State>(defaultState: State): Store<State>;
- domain(name?: string): Domain;
+  onCreateEvent(hook: (newEvent: Event<unknown>) => any): Subscription
+  onCreateEffect(
+    hook: (newEffect: Effect<unknown, unknown, unknown>) => any,
+  ): Subscription
+  onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
+  onCreateDomain(hook: (newDomain: Domain) => any): Subscription
+  event<Payload>(name?: string): Event<Payload>
+  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
+  store<State>(defaultState: State): Store<State>
+  domain(name?: string): Domain
 }
 ```
 
@@ -179,14 +184,14 @@ _Reducer_ calculates a new state given the previous state and an event.
 type Watcher<T> = (update: T) => any
 ```
 
-_Watcher_ is used for __side effects__
+_Watcher_ is used for **side effects**
 
 ## Subscription
 
 ```typescript
 type Subscription = {
- (): void,
- unsubscribe(): void,
+  (): void
+  unsubscribe(): void
 }
 ```
 
@@ -228,7 +233,7 @@ const submitLoginSize = createEvent()
 
 forward({
   from: loginSize,
-  to: submitLoginSize
+  to: submitLoginSize,
 })
 ```
 
@@ -240,7 +245,6 @@ forward({
 
 ```js
 import {createStore, createEvent, forward} from 'effector'
-
 
 const submitLoginSize = createEvent()
 
