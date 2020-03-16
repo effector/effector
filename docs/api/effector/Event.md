@@ -60,7 +60,7 @@ Creates a new event, which will be called after the original event is called, ap
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -97,7 +97,7 @@ Let's assume a standard situation when you want to buy sneakers in the shop, but
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -146,7 +146,7 @@ You may see that we united `filter()` and `map()` methods, the reason for creati
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
@@ -209,7 +209,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, must be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
 
 #### Returns
 
