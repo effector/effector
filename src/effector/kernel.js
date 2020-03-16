@@ -193,11 +193,12 @@ const exec = () => {
   let graph
   let value
   let page
+  let reg
   mem: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     graph = stack.node
     page = stack.page
-    const reg = (page ? page : graph).reg
+    reg = (page ? page : graph).reg
     const local: Local = {
       fail: false,
       scope: graph.scope,
@@ -232,6 +233,12 @@ const exec = () => {
             case 'b': value = stack.b; break
             case 'value': value = data.store; break
             case 'store':
+              if (!reg[data.store.id]) {
+                if (!page.parent) {
+                  page = null
+                  reg = graph.reg
+                }
+              }
               value = readRef(reg[data.store.id])
               break
           }

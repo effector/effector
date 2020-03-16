@@ -138,8 +138,18 @@ Array [
   Array [],
   Array [
     Object {
-      "count": 0,
-      "pageName": "",
+      "count": 11,
+      "pageName": "A",
+    },
+  ],
+  Array [
+    Object {
+      "count": 11,
+      "pageName": "A",
+    },
+    Object {
+      "count": 21,
+      "pageName": "B",
     },
   ],
 ]

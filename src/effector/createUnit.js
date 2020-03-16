@@ -307,17 +307,41 @@ const updateStore = (
   op,
   stateFirst: boolean,
   fn: Function,
-) =>
-  createLinkNode(from, store, {
+) => {
+  const storeRef = getStoreState(store)
+  const node = [
+    step.mov({store: storeRef, to: 'a'}),
+    step.compute({
+      fn: stateFirst ? callARegStack : callStackAReg,
+    }),
+    step.check.defined(),
+    step.check.changed({store: storeRef}),
+    step.update({store: storeRef}),
+  ]
+  const template = readTemplate()
+  if (template) {
+    if (is.store(from)) {
+      const ref = getStoreState(from)
+      let needToAddLoader = true
+      if (!template.plain.includes(ref)) {
+        node.unshift(template.loader)
+        needToAddLoader = false
+        if (!storeRef.before) storeRef.before = []
+        storeRef.before.push({
+          type: 'closure',
+          of: ref,
+        })
+      }
+      // if (!template.plain.includes(storeRef)) {
+      //   if (needToAddLoader) node.unshift(template.loader)
+      // }
+    } else {
+      node.unshift(template.loader)
+    }
+  }
+  return createLinkNode(from, store, {
     scope: {fn},
-    node: [
-      step.mov({store: getStoreState(store), to: 'a'}),
-      step.compute({
-        fn: stateFirst ? callARegStack : callStackAReg,
-      }),
-      step.check.defined(),
-      step.check.changed({store: getStoreState(store)}),
-      step.update({store: getStoreState(store)}),
-    ],
+    node,
     meta: {op},
   })
+}

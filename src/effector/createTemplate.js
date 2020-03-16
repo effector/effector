@@ -27,6 +27,7 @@ export function createTemplate({fn, state: values = {}, name = ''}) {
       fn(upd, scope, stack) {
         if (stack.parent) {
           if (stack.page) {
+            if (stack.page.template === template) return true
             stack.page.childSpawns[template.id].forEach(page => {
               launch({
                 params: upd,
@@ -155,6 +156,11 @@ export function spawn(unit, {values = {}} = {}) {
             page[ref.id].current[cmd.field] = page[from.id].current
             break
           }
+          case 'closure':
+            if (!page[cmd.of.id]) {
+              page[cmd.of.id] = cmd.of
+            }
+            break
         }
       }
     }
