@@ -110,6 +110,65 @@ test('external state', () => {
     ]
   `)
 })
+describe('event support', () => {
+  test('prepend to global event', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const items = createStore([]).on(trigger, (list, item) => [...list, item])
+    const template = createTemplate({
+      name: 'prepend to global event',
+      state: {pageName: ''},
+      fn({pageName}) {
+        const combined = combine({items, pageName})
+
+        const prepended = trigger.prepend(e => e)
+
+        combined.watch(e => fn(e))
+        pageName.watch(name => {
+          prepended(name)
+        })
+      },
+    })
+    spawn(template, {
+      values: {pageName: 'A'},
+    })
+    spawn(template, {
+      values: {pageName: 'AA'},
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "items": Array [],
+    "pageName": "A",
+  },
+  Object {
+    "items": Array [
+      "A",
+    ],
+    "pageName": "A",
+  },
+  Object {
+    "items": Array [],
+    "pageName": "AA",
+  },
+  Object {
+    "items": Array [
+      "A",
+      "AA",
+    ],
+    "pageName": "A",
+  },
+  Object {
+    "items": Array [
+      "A",
+      "AA",
+    ],
+    "pageName": "AA",
+  },
+]
+`)
+  })
+})
 describe('map support', () => {
   test('on a same level', () => {
     // setSilent(false)
