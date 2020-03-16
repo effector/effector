@@ -148,7 +148,9 @@ Array [
     "pageName": "A",
   },
   Object {
-    "items": Array [],
+    "items": Array [
+      "A",
+    ],
     "pageName": "AA",
   },
   Object {

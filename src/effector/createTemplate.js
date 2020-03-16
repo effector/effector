@@ -147,6 +147,14 @@ export function spawn(unit, {values = {}} = {}) {
           case 'map':
             page[ref.id].current = cmd.fn(page[cmd.from.id].current)
             break
+          case 'field': {
+            const from = cmd.from
+            if (!page[from.id]) {
+              page[from.id] = from
+            }
+            page[ref.id].current[cmd.field] = page[from.id].current
+            break
+          }
         }
       }
     }
@@ -166,9 +174,6 @@ export function spawn(unit, {values = {}} = {}) {
           break
         case 'map':
           page[to.id].current = cmd.fn(value)
-          break
-        case 'field':
-          page[to.id].current[cmd.field] = value
           break
       }
     }

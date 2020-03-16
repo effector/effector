@@ -139,6 +139,7 @@ const storeCombination = (
       store: getStoreState(store),
     }),
   ]
+  const before = (rawShape.before = [])
   forIn(obj, (child, key) => {
     if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child
@@ -152,10 +153,10 @@ const storeCombination = (
       meta: {op: 'combine'},
     })
     const childRef = getStoreState(child)
-    childRef.after.push({
+    before.push({
       type: 'field',
       field: key,
-      to: rawShape,
+      from: childRef,
     })
     if (template) {
       if (!template.plain.includes(childRef)) {
