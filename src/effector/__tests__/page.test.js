@@ -110,6 +110,42 @@ test('external state', () => {
     ]
   `)
 })
+describe('on support', () => {
+  test('globalStore.on localStore', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const store = createStore([])
+    store.watch(fn)
+
+    const template = createTemplate({
+      name: 'globalStore.on localStore',
+      state: {pageName: '', count: -1},
+      fn({pageName, count}) {
+        const combined = combine({count, pageName})
+        store.on(combined, (list, item) => [...list, item])
+        count.on(trigger, x => x + 1)
+      },
+    })
+    spawn(template, {
+      values: {pageName: 'A', count: 10},
+    })
+    spawn(template, {
+      values: {pageName: 'B', count: 20},
+    })
+    trigger()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Array [],
+  Array [
+    Object {
+      "count": 0,
+      "pageName": "",
+    },
+  ],
+]
+`)
+  })
+})
 describe('event support', () => {
   test('prepend to global event', () => {
     const fn = jest.fn()
