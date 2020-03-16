@@ -132,7 +132,7 @@ Creates an event, upon trigger it does send transformed data into source event. 
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, should be **pure**.
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
 
 #### Returns
 

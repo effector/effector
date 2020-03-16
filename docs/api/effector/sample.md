@@ -18,7 +18,7 @@ Returned Unit may be observed (via `watch`), since it's valid graph node.
 
 1. `sourceStore` ([_Store_](Store.md)): Source store
 2. `clockEvent` ([_Event_](Event.md)): Clock(Trigger) event
-3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**. Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 #### Returns
 
@@ -70,7 +70,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 1. `sourceEvent` (_Event_): Source event
 2. `clockEvent` (_Event_): Clock(Trigger) event
-3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
+3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
 
 #### Returns
 
@@ -106,7 +106,7 @@ Passes last `event` invocation argument value and `store`'s updated state to `fn
 
 1. `event` (_Event_): Source event
 2. `store` (_Store_): Triggers sampled unit upon store update
-3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
+3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
 
 #### Returns
 
@@ -147,7 +147,7 @@ Passes last `sourceStore`'s current state and `clockStore`'s updated state to `f
 
 1. `sourceStore` (_Store_): Source store
 2. `clockStore` (_Store_): Triggers sampled unit upon store update
-3. `fn`? (_(source, clock) => result_): Optional combinator function, should be **pure**
+3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
 
 #### Returns
 

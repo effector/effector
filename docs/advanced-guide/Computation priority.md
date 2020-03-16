@@ -1,4 +1,4 @@
-For sure you've been noticed that function must be pure... or watch there is a place for side effect. Yes and we will tell about this in that section - **Computation priority**
+For sure you've been noticed that function [should be pure](../glossary.md#pureness)... or watch there is a place for side effect. Yes and we will tell about this in that section - **Computation priority**
 
 A real example of queue priority - people awaiting medical treatment hospital, extreme emergency cases will have the highest priority and move on the start of the queue less significant at the end.
 
