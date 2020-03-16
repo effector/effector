@@ -217,8 +217,8 @@ loginSize.watch(size => {
 
 [Try it](https://share.effector.dev/D5hV8C70)
 
-[store.map in docs](https://effector.now.sh/docs/api/effector/store#mapfn-state-state-laststate-t--t)
-[store.watch in docs](https://effector.now.sh/docs/api/effector/store#watchwatcher)
+[store.map in docs](./api/effector/Store.md#mapfn-state-state-laststate-t--t)
+[store.watch in docs](./api/effector/Store.md#watchwatcher)
 
 **Correct**, declarative:
 
@@ -239,7 +239,7 @@ forward({
 
 [Try it](https://share.effector.dev/it0gXQLI)
 
-[forward in docs](https://effector.now.sh/docs/api/effector/forward)
+[forward in docs](./api/effector/forward.md)
 
 **Incorrect**:
 
