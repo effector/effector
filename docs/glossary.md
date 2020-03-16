@@ -189,3 +189,65 @@ type Subscription = {
  unsubscribe(): void,
 }
 ```
+
+## Pureness
+
+Most of functions in api shouldn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than speaded across entire business logic
+
+**Correct**, imperative:
+
+```js
+import {createStore, createEvent} from 'effector'
+
+const login = createStore('guest')
+
+const loginSize = login.map(login => login.length)
+
+const submitLoginSize = createEvent()
+
+loginSize.watch(size => {
+  submitLoginSize(size)
+})
+```
+
+[Try it](https://share.effector.dev/D5hV8C70)
+
+[store.map in docs](https://effector.now.sh/docs/api/effector/store#mapfn-state-state-laststate-t--t)
+[store.watch in docs](https://effector.now.sh/docs/api/effector/store#watchwatcher)
+
+**Correct**, declarative:
+
+```js
+import {createStore, createEvent, forward} from 'effector'
+
+const login = createStore('guest')
+
+const loginSize = login.map(login => login.length)
+
+const submitLoginSize = createEvent()
+
+forward({
+  from: loginSize,
+  to: submitLoginSize
+})
+```
+
+[Try it](https://share.effector.dev/it0gXQLI)
+
+[forward in docs](https://effector.now.sh/docs/api/effector/forward)
+
+**Incorrect**:
+
+```js
+import {createStore, createEvent, forward} from 'effector'
+
+
+const submitLoginSize = createEvent()
+
+const login = createStore('guest')
+const loginSize = login.map(login => {
+  // no! use forward or watch instead
+  submitLoginSize(login.length)
+  return login.length
+})
+```
