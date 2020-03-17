@@ -12,8 +12,6 @@ Overall this method can be used in order to link two nodes, resulting the third 
 
 Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more appropriate to use `sample` method as described below.
 
-Returned Unit may be observed (via `watch`), since it's valid graph node.
-
 #### Arguments
 
 1. `sourceStore` ([_Store_](Store.md)): Source store
