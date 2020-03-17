@@ -13,6 +13,10 @@ module.exports = {
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/vsDark'),
     },
+    algolia: {
+      apiKey: process.env.ALGOLIA_API_KEY,
+      indexName: 'effector',
+    },
     navbar: {
       title: 'Effector',
       logo: {
