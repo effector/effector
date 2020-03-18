@@ -2,6 +2,7 @@
 
 import {combine} from './combine'
 import {createEffect, sidechain} from './createEffect'
+import {applyParentEventHook} from './createUnit'
 import {getGraph, getStoreState} from './getter'
 import {own} from './own'
 import {step} from './typedef'
@@ -97,6 +98,7 @@ export function attach(config) {
   runner.scope.effect = effect
   runner.meta.onCopy.push('effect', 'sidechain')
   runner.seq.splice(0, 1, ...runnerSteps)
+  applyParentEventHook(effect, attached)
   return attached
 }
 
