@@ -653,34 +653,118 @@ export function guard<A>(config: {
   target: Unit<A>
 }): Unit<A>
 
-export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done, Fail>(
+type StoreShape = Store<any> | Combinable
+type GetShapeValue<T> = T extends Store<infer S> ? S : GetCombinedValue<T>
+type FXParams<FX extends Effect<any, any, any>> = FX extends Effect<infer P, any, any> ? P : never
+type FXResult<FX extends Effect<any, any, any>> = FX extends Effect<any, infer D, any> ? D : never
+type FXError<FX extends Effect<any, any, any>> = FX extends Effect<any, any, infer E> ? E : never
+
+// attach with source
+
+export function attach<Params, States extends StoreShape, FX extends Effect<any, any, any>, Done, Fail>(
   config: {
     source: States
     effect: FX
-    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
-    mapResult: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
-    mapError: (fail: FX extends Effect<any, any, infer F> ? F : never, states: GetCombinedValue<States>) => Fail
+    mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
+    mapResult: (done: FXResult<FX>, states: GetShapeValue<States>) => Done
+    mapError: (fail: FXError<FX>, states: GetShapeValue<States>) => Fail
   }
 ): Effect<Params, Done, Fail>
-export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done>(
+export function attach<Params, States extends StoreShape, FX extends Effect<any, any, any>, Done>(
   config: {
     source: States
     effect: FX
-    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
-    mapResult: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
+    mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
+    mapResult: (done: FXResult<FX>, states: GetShapeValue<States>) => Done
   }
-): Effect<Params, Done, FX extends Effect<any, any, infer F> ? F : never>
-export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>>(
+): Effect<Params, Done, FXError<FX>>
+export function attach<Params, States extends StoreShape, FX extends Effect<any, any, any>, Fail>(
   config: {
     source: States
     effect: FX
-    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+    mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
+    mapError: (fail: FXError<FX>, states: GetShapeValue<States>) => Fail
   }
-): Effect<
-  Params,
-  FX extends Effect<any, infer D, any> ? D : never,
-  FX extends Effect<any, any, infer F> ? F : never
->
+): Effect<Params, FXResult<FX>, Fail>
+export function attach<Params, States extends StoreShape, FX extends Effect<any, any, any>>(
+  config: {
+    source: States
+    effect: FX
+    mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
+  }
+): Effect<Params, FXResult<FX>, FXError<FX>>
+export function attach<States extends StoreShape, FX extends Effect<any, any, any>, Done, Fail>(
+  config: {
+    source: States
+    effect: FX
+    mapResult: (done: FXResult<FX>, states: GetShapeValue<States>) => Done
+    mapError: (fail: FXError<FX>, states: GetShapeValue<States>) => Fail
+  }
+): Effect<FXParams<FX>, Done, Fail>
+export function attach<States extends StoreShape, FX extends Effect<any, any, any>, Done>(
+  config: {
+    source: States
+    effect: FX
+    mapResult: (done: FXResult<FX>, states: GetShapeValue<States>) => Done
+  }
+): Effect<FXParams<FX>, Done, FXError<FX>>
+export function attach<States extends StoreShape, FX extends Effect<any, any, any>, Fail>(
+  config: {
+    source: States
+    effect: FX
+    mapError: (fail: FXError<FX>, states: GetShapeValue<States>) => Fail
+  }
+): Effect<FXParams<FX>, FXResult<FX>, Fail>
+
+// attach without source
+
+export function attach<Params, FX extends Effect<any, any, any>, Done, Fail>(
+  config: {
+    effect: FX
+    mapParams: (params: Params) => FXParams<FX>
+    mapResult: (done: FXResult<FX>) => Done
+    mapError: (fail: FXError<FX>) => Fail
+  }
+): Effect<Params, Done, Fail>
+export function attach<Params, FX extends Effect<any, any, any>, Done>(
+  config: {
+    effect: FX
+    mapParams: (params: Params) => FXParams<FX>
+    mapResult: (done: FXResult<FX>) => Done
+  }
+): Effect<Params, Done, FXError<FX>>
+export function attach<Params, FX extends Effect<any, any, any>, Fail>(
+  config: {
+    effect: FX
+    mapParams: (params: Params) => FXParams<FX>
+    mapError: (fail: FXError<FX>) => Fail
+  }
+): Effect<Params, FXResult<FX>, Fail>
+export function attach<Params, FX extends Effect<any, any, any>>(
+  config: {
+    effect: FX
+    mapParams: (params: Params) => FXParams<FX>
+  }
+): Effect<Params, FXResult<FX>, FXError<FX>>
+export function attach<FX extends Effect<any, any, any>, Done, Fail>(
+  config: {
+    effect: FX
+    mapResult: (done: FXResult<FX>) => Done
+    mapError: (fail: FXError<FX>) => Fail
+  }
+): Effect<FXParams<FX>, Done, Fail>
+export function attach<FX extends Effect<any, any, any>, Done>(
+  config: {
+    effect: FX
+    mapResult: (done: FXResult<FX>) => Done
+  }
+): Effect<FXParams<FX>, Done, FXError<FX>>
+export function attach<FX extends Effect<any, any, any>, Fail>(
+  config: {
+    effect: FX
+    mapError: (fail: FXError<FX>) => Fail
+  }
+): Effect<FXParams<FX>, FXResult<FX>, Fail>
 
 export function withRegion(unit: Unit<any> | Step, cb: () => void): void
 export function combine<T extends Store<any>>(store: T): T extends Store<infer R> ? Store<[R]> : never
