@@ -4,9 +4,11 @@ title: is
 hide_title: true
 ---
 
+# is
+
 Namespace for unit validators
 
-# `is.store(value)`
+## `is.store(value)`
 
 Checks if the passed object is [_store_](Store.md)
 
@@ -54,7 +56,7 @@ is.store(null)
 
 [Try it](https://share.effector.dev/4vzdWan1)
 
-# `is.event(value)`
+## `is.event(value)`
 
 Checks if the passed object is [_event_](Event.md)
 
@@ -102,7 +104,7 @@ is.event(null)
 
 [Try it](https://share.effector.dev/hB0JEiIo)
 
-# `is.effect(value)`
+## `is.effect(value)`
 
 Checks if the passed object is [_effect_](Effect.md)
 
@@ -141,7 +143,7 @@ is.effect(null)
 
 [Try it](https://share.effector.dev/ZdZ2N6VG)
 
-# `is.domain(value)`
+## `is.domain(value)`
 
 Checks if the passed object is [_domain_](Domain.md)
 
@@ -180,7 +182,7 @@ is.domain(null)
 
 [Try it](https://share.effector.dev/Iea0gmfD)
 
-# `is.unit(value)`
+## `is.unit(value)`
 
 Checks if the passed object is [_event_](Event.md), [_store_](Store.md), [_effect_](Effect.md) or [_domain_](Domain.md)
 

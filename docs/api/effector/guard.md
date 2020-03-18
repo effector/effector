@@ -4,10 +4,12 @@ title: guard
 hide_title: true
 ---
 
-# `guard({source, filter, target?})`
+# guard
 
-Guard is a method for conditional event routing.
+Method for conditional event routing.
 It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them.
+
+## `guard({source, filter, target?})`
 
 #### Arguments
 
@@ -68,7 +70,7 @@ submitForm('alice') // ~> searchUser('alice')
 
 [Try it](https://share.effector.dev/84j97tZ7)
 
-# `guard(source, {filter: booleanStore})`
+## `guard(source, {filter: booleanStore})`
 
 #### Arguments
 
@@ -101,7 +103,7 @@ trigger('C')
 
 [Try it](https://share.effector.dev/6bqOCO4y)
 
-# `guard(source, {filter: predicate})`
+## `guard(source, {filter: predicate})`
 
 #### Arguments
 

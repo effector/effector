@@ -4,7 +4,11 @@ title: combine
 hide_title: true
 ---
 
-# `combine(...stores, fn)`
+# combine
+
+Store combinator
+
+## `combine(...stores, fn)`
 
 Creates a new [store](Store.md) that emits the set of latest store values from all input stores
 
@@ -32,7 +36,7 @@ arrStores.watch(console.log) // => [0, 'zerobias']
 
 [Try it](https://share.effector.dev/jyX3NCLt)
 
-# `combine({ A, B, C }, fn?)`
+## `combine({ A, B, C }, fn?)`
 
 Creates a new [store](Store.md) that emits the set of latest store values from all input stores
 
@@ -58,7 +62,7 @@ sum.watch(console.log) // => 510
 
 [Try it](https://share.effector.dev/9AckAVg7)
 
-# `combine([A, B, C], fn?)`
+## `combine([A, B, C], fn?)`
 
 #### Returns
 

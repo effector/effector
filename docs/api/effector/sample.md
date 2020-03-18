@@ -4,7 +4,7 @@ title: sample
 hide_title: true
 ---
 
-# Sample
+# sample
 
 ## `sample(sourceStore, clockEvent, fn?)`
 

@@ -4,7 +4,9 @@ title: restore
 hide_title: true
 ---
 
-# `restore(event, defaultState)`
+# restore
+
+## `restore(event, defaultState)`
 
 Creates a [_Store_](Store.md) from [_Event_](Event.md).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
@@ -35,7 +37,7 @@ event('foo')
 
 [Try it](https://share.effector.dev/MGGQnTlQ)
 
-# `restore(effect, defaultState)`
+## `restore(effect, defaultState)`
 
 Creates a [_Store_](Store.md) from sucessful results of [_Effect_](Effect.md).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
@@ -68,7 +70,7 @@ effect()
 
 [Try it](https://share.effector.dev/CuOQT4Lq)
 
-# `restore(obj)`
+## `restore(obj)`
 
 Creates an object with stores from object with values
 
