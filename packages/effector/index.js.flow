@@ -496,73 +496,9 @@ declare export function guard<A>(
   |},
 ): Unit<A>
 
-// attach with single store
-
 declare export function attach<
-  Source: Store<any>,
   Params,
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => FXParams,
-  +mapResult: (
-    done: FXResult,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Done,
-  +mapError: (
-    fail: FXError,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Fail,
-|}): Effect<Params, Done, Fail>
-declare export function attach<
   Source: Store<any>,
-  Params,
-  Done,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => FXParams,
-  +mapResult: (
-    done: FXResult,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Done,
-|}): Effect<Params, Done, FXError>
-declare export function attach<
-  Source: Store<any>,
-  Params,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => FXParams,
-  +mapError: (
-    fail: FXError,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Fail,
-|}): Effect<Params, FXResult, Fail>
-declare export function attach<
-  Source: Store<any>,
-  Params,
   FXParams,
   FXResult,
   FXError,
@@ -574,121 +510,10 @@ declare export function attach<
     source: $Call<<S>(field: Store<S> | S) => S, Source>,
   ) => FXParams,
 |}): Effect<Params, FXResult, FXError>
-declare export function attach<
-  Source: Store<any>,
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (
-    done: FXResult,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Done,
-  +mapError: (
-    fail: FXError,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Fail,
-|}): Effect<FXParams, Done, Fail>
-declare export function attach<
-  Source: Store<any>,
-  Done,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (
-    done: FXResult,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Done,
-|}): Effect<FXParams, Done, FXError>
-declare export function attach<
-  Source: Store<any>,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapError: (
-    fail: FXError,
-    source: $Call<<S>(field: Store<S> | S) => S, Source>,
-  ) => Fail,
-|}): Effect<FXParams, FXResult, Fail>
-
-// attach with source shape
 
 declare export function attach<
-  Source: StoreObject,
   Params,
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => FXParams,
-  +mapResult: (
-    done: FXResult,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Done,
-  +mapError: (
-    fail: FXError,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Fail,
-|}): Effect<Params, Done, Fail>
-declare export function attach<
   Source: StoreObject,
-  Params,
-  Done,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => FXParams,
-  +mapResult: (
-    done: FXResult,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Done,
-|}): Effect<Params, Done, FXError>
-declare export function attach<
-  Source: StoreObject,
-  Params,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (
-    params: Params,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => FXParams,
-  +mapError: (
-    fail: FXError,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Fail,
-|}): Effect<Params, FXResult, Fail>
-declare export function attach<
-  Source: StoreObject,
-  Params,
   FXParams,
   FXResult,
   FXError,
@@ -700,114 +525,10 @@ declare export function attach<
     source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
   ) => FXParams,
 |}): Effect<Params, FXResult, FXError>
-declare export function attach<
-  Source: StoreObject,
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (
-    done: FXResult,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Done,
-  +mapError: (
-    fail: FXError,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Fail,
-|}): Effect<FXParams, Done, Fail>
-declare export function attach<
-  Source: StoreObject,
-  Done,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (
-    done: FXResult,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Done,
-|}): Effect<FXParams, Done, FXError>
-declare export function attach<
-  Source: StoreObject,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +source: Source,
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapError: (
-    fail: FXError,
-    source: $ObjMap<Source, <S>(field: Store<S> | S) => S>,
-  ) => Fail,
-|}): Effect<FXParams, FXResult, Fail>
-
-// attach without source
-
 declare export function attach<Params, FXParams, FXResult, FXError>(config: {|
   +effect: Effect<FXParams, FXResult, FXError>,
   +mapParams: (params: Params) => FXParams,
 |}): Effect<Params, FXResult, FXError>
-declare export function attach<Done, FXParams, FXResult, FXError>(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (done: FXResult) => Done,
-|}): Effect<FXParams, Done, FXError>
-declare export function attach<Fail, FXParams, FXResult, FXError>(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapError: (fail: FXError) => Fail,
-|}): Effect<FXParams, FXResult, Fail>
-declare export function attach<
-  Params,
-  Done,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (params: Params) => FXParams,
-  +mapResult: (done: FXResult) => Done,
-|}): Effect<Params, Done, FXError>
-declare export function attach<
-  Params,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (params: Params) => FXParams,
-  +mapError: (fail: FXError) => Fail,
-|}): Effect<Params, FXResult, Fail>
-declare export function attach<
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapResult: (done: FXResult) => Done,
-  +mapError: (fail: FXError) => Fail,
-|}): Effect<FXParams, Done, Fail>
-declare export function attach<
-  Params,
-  Done,
-  Fail,
-  FXParams,
-  FXResult,
-  FXError,
->(config: {|
-  +effect: Effect<FXParams, FXResult, FXError>,
-  +mapParams: (params: Params) => FXParams,
-  +mapResult: (done: FXResult) => Done,
-  +mapError: (fail: FXError) => Fail,
-|}): Effect<Params, Done, Fail>
 
 declare export function withRegion(unit: Unit<any> | Step, cb: () => void): void
 

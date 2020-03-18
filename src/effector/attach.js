@@ -1,75 +1,50 @@
 //@flow
 
 import {combine} from './combine'
-import {createEffect, sidechain} from './createEffect'
+import {createEffect, onSettled} from './createEffect'
 import {applyParentEventHook} from './createUnit'
 import {getGraph, getStoreState} from './getter'
 import {own} from './own'
 import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
-import {addToReg, createNode} from './createNode'
+import {addToReg} from './createNode'
 
-export function attach(config) {
-  const {source, effect, mapParams, mapResult, mapError} = config
+export function attach({source, effect, mapParams}) {
   const attached = createEffect()
   const {runner} = getGraph(attached).scope
 
   let runnerSteps
-  const sidechainSteps = [
-    step.compute({
-      fn({params, req, ok, anyway, data}, _, {a: states, page}) {
-        const mapped = optionalCall(data, states, ok ? mapResult : mapError)
-        launch({
-          target: [anyway, sidechain],
-          params: [
-            ok
-              ? {
-                status: 'done',
-                params,
-                result: mapped,
-              }
-              : {
-                status: 'fail',
-                params,
-                error: mapped,
-              },
-            {
-              fn: ok ? req.rs : req.rj,
-              value: mapped,
-            },
-          ],
-          defer: true,
-          page,
-        })
-      },
-    }),
-  ]
   const runnerFn = (
     {params, req},
-    {finally: anyway, sidechain, effect},
+    {finally: anyway, effect},
     {a: states, page},
-  ) => {
-    const sidechainRunner = ok => data =>
-      launch({
-        target: sidechain,
-        params: {params, req, ok, anyway, data},
-        defer: true,
-        page,
-      })
+  ) =>
     launch({
       target: effect,
       params: {
-        params: optionalCall(params, states, mapParams),
+        params: mapParams(params, states),
         req: {
-          rs: sidechainRunner(true),
-          rj: sidechainRunner(false),
+          rs: onSettled({
+            params,
+            req,
+            ok: true,
+            anyway,
+            page,
+          }),
+          rj: onSettled({
+            params,
+            req,
+            ok: false,
+            anyway,
+            page,
+          }),
         },
       },
       page,
       defer: true,
     })
-  }
+
   if (source) {
     let state
     if (is.store(source)) state = source
@@ -91,24 +66,12 @@ export function attach(config) {
       step.compute({fn: runnerFn}),
     ]
     addToReg(readStateRef, runner.reg)
-    sidechainSteps.unshift(readStateRef)
   } else {
     runnerSteps = [step.run({fn: runnerFn})]
   }
-  runner.scope.sidechain = createNode({
-    node: sidechainSteps,
-    family: {owners: attached},
-    meta: {op: 'attachSidechain'},
-  })
   runner.scope.effect = effect
-  runner.meta.onCopy.push('effect', 'sidechain')
+  runner.meta.onCopy.push('effect')
   runner.seq.splice(0, 1, ...runnerSteps)
   applyParentEventHook(effect, attached)
   return attached
 }
-
-const optionalCall = (
-  data: any,
-  states?: any,
-  fn?: (data: any, states?: any) => any,
-) => (fn ? fn(data, states) : data)
