@@ -6,6 +6,7 @@
  * it's more like a big ball
  */
 
+export {attach} from './attach'
 export {clearNode} from './clearNode'
 export {combine, combine as createStoreObject} from './combine'
 export {createApi} from './createApi'

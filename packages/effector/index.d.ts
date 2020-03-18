@@ -653,6 +653,35 @@ export function guard<A>(config: {
   target: Unit<A>
 }): Unit<A>
 
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done, Fail>(
+  config: {
+    source: States
+    effect: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+    mapResult: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
+    mapError: (fail: FX extends Effect<any, any, infer F> ? F : never, states: GetCombinedValue<States>) => Fail
+  }
+): Effect<Params, Done, Fail>
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>, Done>(
+  config: {
+    source: States
+    effect: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+    mapResult: (done: FX extends Effect<any, infer D, any> ? D : never, states: GetCombinedValue<States>) => Done
+  }
+): Effect<Params, Done, FX extends Effect<any, any, infer F> ? F : never>
+export function attach<Params, States extends Combinable, FX extends Effect<any, any, any>>(
+  config: {
+    source: States
+    effect: FX
+    mapParams: (params: Params, states: GetCombinedValue<States>) => FX extends Effect<infer P, any, any> ? P : never
+  }
+): Effect<
+  Params,
+  FX extends Effect<any, infer D, any> ? D : never,
+  FX extends Effect<any, any, infer F> ? F : never
+>
+
 export function withRegion(unit: Unit<any> | Step, cb: () => void): void
 export function combine<T extends Store<any>>(store: T): T extends Store<infer R> ? Store<[R]> : never
 export function combine<State extends Tuple>(
