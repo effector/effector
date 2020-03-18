@@ -39,6 +39,7 @@ const sidebar = {
         'api/effector/merge',
         'api/effector/split',
         'api/effector/forward',
+        'api/effector/is',
         'api/effector/fromObservable',
         'api/effector/createStoreObject',
         'api/effector/clearNode',

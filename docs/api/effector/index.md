@@ -29,4 +29,5 @@ title: API Reference
 - [restore(event, defaultState)](restore.md)
 - [restore(effect, defaultState)](restore.md)
 - [restore(obj)](restore.md)
+- [is](is.md)
 - [fromObservable(observable)](fromObservable.md)
