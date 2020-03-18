@@ -98,7 +98,7 @@ export function attach(config) {
   runner.scope.sidechain = createNode({
     node: sidechainSteps,
     family: {owners: attached},
-    meta: {op: 'fx', fx: 'attachSidechain'},
+    meta: {op: 'attachSidechain'},
   })
   runner.scope.effect = effect
   runner.meta.onCopy.push('effect', 'sidechain')
