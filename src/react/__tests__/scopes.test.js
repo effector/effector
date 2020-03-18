@@ -9,17 +9,8 @@ import {createDomain, forward, sample} from 'effector'
 import {fork, allSettled, serialize} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   const indirectCallFn = jest.fn()
-  /*
-  real remote json documents
-  GET https://api.myjson.com/bins/{user}
-  */
-  const users = {
-    alice: '9s0p2',
-    bob: 'sw17q',
-    carol: 'k38w6',
-  }
 
   const app = createDomain()
   const start = app.event()
@@ -34,8 +25,12 @@ it('works', async() => {
   })
 
   const fetchUser = app.effect({
-    async handler(bin) {
-      return (await fetch('https://api.myjson.com/bins/' + bin)).json()
+    async handler(user) {
+      return (
+        await fetch('https://ssr.effector.dev/api/' + user, {
+          method: 'POST',
+        })
+      ).json()
     },
   })
   //assume that calling start() will trigger some effects
@@ -48,8 +43,8 @@ it('works', async() => {
   const friends = app.store([])
   const friendsTotal = friends.map(list => list.length)
 
-  user.on(fetchUser.done, (_, {result}) => result.name)
-  friends.on(fetchUser.done, (_, {result}) => result.friends)
+  user.on(fetchUser.doneData, (_, result) => result.name)
+  friends.on(fetchUser.doneData, (_, result) => result.friends)
 
   sample({
     source: user,
@@ -71,15 +66,15 @@ it('works', async() => {
   await Promise.all([
     allSettled(start, {
       scope: aliceScope,
-      params: users.alice,
+      params: 'alice',
     }),
     allSettled(start, {
       scope: bobScope,
-      params: users.bob,
+      params: 'bob',
     }),
     allSettled(start, {
       scope: carolScope,
-      params: users.carol,
+      params: 'carol',
     }),
   ])
   const User = () => <h2>{useStore(user)}</h2>
@@ -106,16 +101,17 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-osbwsy": "alice",
-      "kfkko0": Array [
+      "-r5k0rx": "alice",
+      "i2cgp1": Array [
         "bob",
+        "carol",
       ],
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-osbwsy": "bob",
-      "kfkko0": Array [
+      "-r5k0rx": "bob",
+      "i2cgp1": Array [
         "alice",
       ],
     }
