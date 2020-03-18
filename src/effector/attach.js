@@ -5,6 +5,7 @@ import {createEffect, sidechain} from './createEffect'
 import {applyParentEventHook} from './createUnit'
 import {getGraph, getStoreState} from './getter'
 import {own} from './own'
+import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
 import {addToReg, createNode} from './createNode'
@@ -70,7 +71,12 @@ export function attach(config) {
     })
   }
   if (source) {
-    const state = combine(source)
+    let state
+    if (is.store(source)) state = source
+    else {
+      state = combine(source)
+      own(attached, [state])
+    }
     const readStateRef = step.mov({
       from: 'store',
       store: getStoreState(state),
@@ -84,7 +90,6 @@ export function attach(config) {
       /* no need for step.run because of first step */
       step.compute({fn: runnerFn}),
     ]
-    own(attached, [state])
     addToReg(readStateRef, runner.reg)
     sidechainSteps.unshift(readStateRef)
   } else {
