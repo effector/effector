@@ -263,3 +263,7 @@ h3 {
   padding: var(--gutter) 0;
   height: 100%;
 }
+
+.navigationSlider .slidingNav ul li a {
+  font-weight: normal;
+}
