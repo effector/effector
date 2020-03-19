@@ -25,7 +25,7 @@ const backendRequest = createEffect({
   },
 })
 
-const requestsSend = createStore(0).on(backendRequest, total => total)
+const requestsSend = createStore(0).on(backendRequest, total => total + 1)
 
 requestsSend.watch(total => {
   console.log(`client analytics: sent ${total} requests`)
