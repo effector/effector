@@ -2,6 +2,115 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.13.0
+
+- Introduce `attach`: wrapper for effect, which allow to map effect arguments and use data from stores.
+
+Use cases: declarative passing values from stores to effects and argument preprocessing.
+
+```js
+import {createEffect, attach, createStore} from 'effector'
+
+const backendRequest = createEffect({
+  async handler({token, data, resource}) {
+    const req = fetch(`https://example.com/api${resource}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    })
+  },
+})
+
+const requestsSend = createStore(0).on(backendRequest, total => total + 1)
+
+requestsSend.watch(total => {
+  console.log(`client analytics: sent ${total} requests`)
+})
+
+const token = createStore('guest_token')
+
+const authorizedRequest = attach({
+  effect: backendRequest,
+  source: token,
+  mapParams: ({data, resource}, token) => ({data, resource, token}),
+})
+
+const createRequest = resource =>
+  attach({
+    effect: authorizedRequest,
+    mapParams: data => ({data, resource}),
+  })
+
+const getUser = createRequest('/user')
+const getPosts = createRequest('/posts')
+
+const user = await getUser({name: 'alice'})
+/*
+POST https://example.com/api/user
+{"name": "alice"}
+Authorization: Bearer guest_token
+*/
+
+// => client analytics: sent 1 requests
+
+const posts = await getPosts({user: user.id})
+/*
+POST https://example.com/api/posts
+{"user": 18329}
+Authorization: Bearer guest_token
+*/
+
+// => client analytics: sent 2 requests
+```
+
+[Documentation for `attach`](https://effector.now.sh/docs/api/effector/attach)
+
+- Add `noDefaults` option for `effector/babel-plugin` for making custom unit fabrics with clean configuration
+
+```json
+{
+  "plugins": [
+    ["effector/babel-plugin", {"addLoc": true}],
+    [
+      "effector/babel-plugin",
+      {
+        "importName": "@lib/createInputField",
+        "storeCreators": ["createInputField"],
+        "noDefaults": true
+      },
+      "createInputField"
+    ]
+  ]
+}
+```
+
+```js
+// @lib/createInputField.js
+import {createStore} from 'effector'
+import {resetForm} from './form'
+
+export function createInputField(defaultState, {sid, name}) {
+  return createStore(defaultState, {sid, name}).reset(resetForm)
+}
+
+// src/state.js
+import {createInputField} from '@lib/createInputField'
+
+const foo = createInputField('-')
+/* 
+
+will be treated as store creator and compiled to
+
+const foo = createInputField('-', {
+  name: 'foo',
+  sid: 'z&si65'
+})
+
+*/
+```
+
 ## effector-react 20.6.3
 
 - Add type support for stores with `ReadonlyArray` to `useList` for typescript
