@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce'
 const setBorder = dir => props => props.direction === dir && `1px solid ${props.border}`
 
 const StyledSizer = styled.div`
-  flex 0 0 ${props => props.size};
+  flex: 0 0 ${props => props.size};
   width: ${props => props.direction === 'vertical' ? props.size : '100%'};
   height: ${props => props.direction === 'horizontal' ? props.size : '100%'};
   background-color: ${props => props.color};
