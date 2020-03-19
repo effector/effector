@@ -75,7 +75,7 @@ export default function({style, component, domain, event, effect, store}: $todo)
     && domain.length === 0
     && component.length === 0
   return (
-    <Outline style={style}>
+    <Outline id="outline-sidebar" style={style}>
       {isEmpty && (
         <EmptySection>Symbols weren&apos;t found in this file</EmptySection>
       )}

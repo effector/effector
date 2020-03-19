@@ -24,4 +24,5 @@ export const TabHeaderList = styled.ul`
   background-color: #f7f7f7;
   height: 36px;
   overflow-y: auto;
+  min-height: 32px;
 `

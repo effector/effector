@@ -3,6 +3,9 @@
   --link-color: #007eff;
   --text-color: #333;
   --error-color: #fff0f0;
+  --outline-width: 200px;
+  --right-panel-width: 1fr;
+  --console-height: 1fr;
 }
 
 .CodeMirror-lint-tooltip {
@@ -114,6 +117,7 @@ body {
 
 .errors {
   margin: 0;
+  margin-top: 6px;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -131,6 +135,9 @@ body {
 }
 
 @media (max-width: 699px) {
+  .layout-sizer {
+    display: none;
+  }
   .navPusher {
     min-height: calc(100vh - 100px);
   }
@@ -169,10 +176,13 @@ body {
   }
 }
 @media (min-width: 700px) {
+  .layout-sizer {
+    display: block;
+  }
   #try-wrapper {
     overflow: hidden;
-    grid-template-columns: 200px minmax(200px, 2fr) minmax(200px, 1fr);
-    grid-template-rows: 50px 36px repeat(3, minmax(100px, 1fr));
+    grid-template-columns: var(--outline-width) minmax(200px, 2fr) var(--right-panel-width);
+    grid-template-rows: 50px 36px repeat(2, minmax(100px, 1fr)) var(--console-height);
   }
   .header-tabs {
     grid-column: 3 / span 1;

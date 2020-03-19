@@ -1,6 +1,6 @@
 //@flow
 
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import {combine} from 'effector'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
@@ -28,6 +28,8 @@ import {
 import {version, sourceCode, codeError} from './editor/state'
 
 import {stats} from './realm/state'
+import Sizer from './components/Sizer'
+
 
 const OutlineView = createComponent(
   {
@@ -60,24 +62,44 @@ const CodeView = createComponent(
     sourceCode,
     mode,
   },
-  ({}, {displayEditor, mode, sourceCode}) => (
-    <div
-      className="sources"
-      style={{visibility: displayEditor ? 'visible' : 'hidden'}}>
-      <Panel
-        markLine={codeMarkLine}
-        setCursor={codeSetCursor}
-        performLint={performLint}
-        onCursorActivity={codeCursorActivity}
-        value={sourceCode}
-        mode={mode}
-        onChange={changeSourcesDebounced}
-        lineWrapping
-        passive
-      />
-      <TypeHintView />
-    </div>
-  ),
+  ({}, {displayEditor, mode, sourceCode}) => {
+    const [outlineSidebar, setOutlineSidebar] = useState(null)
+    const [consolePanel, setConsolePanel] = useState(null)
+
+    useEffect(() => {
+      setOutlineSidebar(document.getElementById('outline-sidebar'))
+      setConsolePanel(document.getElementById('console-panel'))
+    }, [])
+
+    return (
+      <div
+        className="sources"
+        style={{
+          visibility: displayEditor ? 'visible' : 'hidden',
+          display: 'flex',
+        }}
+      >
+        <Sizer direction="vertical" container={outlineSidebar} cssVar="--outline-width" sign={1} />
+
+        <div className="sources" style={{flex: '1 0 auto'}}>
+          <Panel
+            markLine={codeMarkLine}
+            setCursor={codeSetCursor}
+            performLint={performLint}
+            onCursorActivity={codeCursorActivity}
+            value={sourceCode}
+            mode={mode}
+            onChange={changeSourcesDebounced}
+            lineWrapping
+            passive
+          />
+          <TypeHintView />
+        </div>
+
+        <Sizer direction="vertical" container={consolePanel} cssVar="--right-panel-width" sign={-1} />
+      </div>
+    )
+  },
 )
 
 const VersionLinkView = createComponent(version, ({}, version) => (

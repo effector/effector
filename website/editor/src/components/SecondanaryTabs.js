@@ -1,11 +1,13 @@
 //@flow
 
-import React from 'react'
+import React, {useState} from 'react'
 import {styled} from 'linaria/react'
 import {createComponent} from 'effector-react'
 import {createApi, createStore, Store} from 'effector'
 import {LogsView} from '../logs/view'
 import {TabHeaderList} from '../tabs/styled'
+import Sizer from './Sizer'
+
 
 const tab: Store<'console'> = createStore('console')
 const api = createApi(tab, {
@@ -60,8 +62,11 @@ const SecondanaryTabs = styled.div`
 `
 
 export default function() {
+  const [ref, setRef] = useState(null)
+
   return (
-    <SecondanaryTabs>
+    <SecondanaryTabs ref={setRef} id="console-panel">
+      <Sizer direction="horizontal" cssVar="--console-height" container={ref} sign={-1} />
       <ToolbarView />
       <TabView />
     </SecondanaryTabs>
