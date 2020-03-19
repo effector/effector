@@ -36,6 +36,7 @@ const sidebar = {
         'api/effector/createApi',
         'api/effector/sample',
         'api/effector/guard',
+        'api/effector/attach',
         'api/effector/merge',
         'api/effector/split',
         'api/effector/forward',

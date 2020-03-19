@@ -26,6 +26,7 @@ title: API Reference
 - [split(event, cases)](split.md)
 - [sample({source, clock, fn, target}](sample.md)
 - [guard({source, filter, target})](guard.md)
+- [attach({effect, mapParams, source?})](attach.md)
 - [restore(event, defaultState)](restore.md)
 - [restore(effect, defaultState)](restore.md)
 - [restore(obj)](restore.md)
