@@ -2,12 +2,15 @@
 
 import ReactDOM from 'react-dom'
 
+import { loadLayoutSettings } from './layout-settings'
 import './init'
 import './graphite/dynamic'
 import view from './view'
 
 const root = document.getElementById('try-wrapper')
 if (!root) throw Error('no body')
+
+loadLayoutSettings()
 
 window.addEventListener(
   'touchmove',
