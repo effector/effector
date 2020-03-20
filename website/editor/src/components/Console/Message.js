@@ -16,9 +16,9 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
   // })
 
   render() {
-    const {log} = this.props
+    const {log, last} = this.props
     return (
-      <Message data-method={log.method} method={log.method}>
+      <Message data-method={log.method} method={log.method} id={last ? 'last-log-message' : undefined}>
         <Icon method={log.method} />
         <Content>{this.getNode()}</Content>
       </Message>

@@ -16,3 +16,5 @@ export const prettier: Effect<
   string,
   Error,
 > = createEffect()
+
+export const toggleAutoScroll = createEvent()

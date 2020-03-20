@@ -5,17 +5,10 @@ import {createComponent} from 'effector-react'
 
 import {logs} from './state'
 import Console from '../components/Console'
+import {autoScrollLog} from '../settings/state'
 
-export const LogsView = createComponent<
-  {|
-    style?: any,
-  |},
-  Array<{|
-    data: Array<any>,
-    id: number,
-    method: *,
-  |}>,
->(logs, ({style}, logs) => (
+
+export const LogsView = createComponent({logs, autoScrollLog}, ({style}, {logs, autoScrollLog}) => (
   //$todo
-  <Console className="console" style={style} logs={logs} />
+  <Console className="console" style={style} logs={logs} autoScroll={autoScrollLog} />
 ))

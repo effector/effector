@@ -49,3 +49,5 @@ export function printLogs(logs) {
   //$todo
   PRINT_IN_GROUP && console.groupEnd('runtime')
 }
+
+export const clearConsole = createEvent('clear console')

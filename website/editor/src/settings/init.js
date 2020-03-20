@@ -9,7 +9,7 @@ import {
   tsToggleChange,
   typeHoverToggleChange,
   clickPrettify,
-  prettier,
+  prettier, toggleAutoScroll,
 } from '.'
 import {
   domain,
@@ -17,6 +17,7 @@ import {
   tsToggle,
   typeHoverToggle,
   typechecker,
+  autoScrollLog,
 } from './state'
 
 domain.onCreateStore(store => {
@@ -74,3 +75,5 @@ forward({
   from: prettier.done.map(({result}) => result),
   to: sourceCode,
 })
+
+autoScrollLog.on(toggleAutoScroll, state => !state)

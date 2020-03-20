@@ -7,22 +7,26 @@ export const TabHeader = styled.li`
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
-  padding: 7px 15px;
+  padding: 7px 15px 5px 15px;
   margin: 0;
   background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
+  border-bottom: ${({isActive}) => (isActive ? '2px solid #e95801' : '2px solid transparent')};
 `
 
 export const TabHeaderList = styled.ul`
   background: #f7f7f7;
   border-bottom: 1px solid #ddd;
+  
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
 
-  border-left: 1px solid #ddd;
+  display: flex;
+  justify-content: ${props => props.justify || 'flex-start'};
+  align-items: center;
+
   background-color: #f7f7f7;
   height: 36px;
-  overflow-y: auto;
-  min-height: 32px;
+  min-height: 36px;
+  overflow-y: hidden;
 `
