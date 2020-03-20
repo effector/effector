@@ -16,3 +16,4 @@ export const typechecker: Store<'flow' | 'typescript' | null> = combine(
     return null
   },
 )
+export const autoScrollLog = domain.store<boolean>(true)

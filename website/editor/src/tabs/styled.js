@@ -18,11 +18,14 @@ export const TabHeaderList = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+
   display: flex;
+  justify-content: ${props => props.justify || 'flex-start'};
+  align-items: center;
 
   border-left: 1px solid #ddd;
   background-color: #f7f7f7;
-  height: 36px;
+  height: 32px;
   overflow-y: auto;
-  min-height: 32px;
+  min-height: 36px;
 `

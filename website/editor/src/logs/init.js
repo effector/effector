@@ -1,6 +1,6 @@
 //@flow
 
-import {realmLog} from '.'
+import {clearConsole, realmLog} from '.'
 import {logs} from './state'
 import {changeSources, selectVersion} from '../editor'
 import {realmStatus} from '../realm'
@@ -45,3 +45,4 @@ logs
   })
   .reset(changeSources)
   .reset(selectVersion)
+  .reset(clearConsole)

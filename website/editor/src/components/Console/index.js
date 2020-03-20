@@ -6,6 +6,7 @@ import {Root} from './elements'
 import Message from './Message'
 import type {Props} from './index.h'
 
+
 class Console extends React.Component<Props, any> {
   // theme = () => ({
   //   variant: this.props.variant || 'light',
@@ -14,6 +15,22 @@ class Console extends React.Component<Props, any> {
   //     ...this.props.styles,
   //   },
   // })
+
+  scrollToLastMessage = () => {
+    const {autoScroll} = this.props
+    const last = document.getElementById('last-log-message')
+    if (autoScroll && last) {
+      last.scrollIntoView()
+    }
+  }
+
+  componentDidMount() {
+    this.scrollToLastMessage()
+  }
+
+  componentDidUpdate() {
+    this.scrollToLastMessage()
+  }
 
   render() {
     const {filter = [], logs = [], ...props} = this.props
@@ -28,7 +45,11 @@ class Console extends React.Component<Props, any> {
             && filter.indexOf(log.method) === -1
 
           return filtered ? null : (
-            <Message log={log} key={`${log.method}-${i}`} />
+            <Message
+              log={log}
+              key={`${log.method}-${i}`}
+              last={i === logs.length - 1}
+            />
           )
         })}
       </Root>

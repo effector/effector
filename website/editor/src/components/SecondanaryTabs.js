@@ -7,6 +7,12 @@ import {createApi, createStore, Store} from 'effector'
 import {LogsView} from '../logs/view'
 import {TabHeaderList} from '../tabs/styled'
 import Sizer from './Sizer'
+import {theme} from './Console/theme/default'
+import {clearConsole} from '../logs'
+import {ArrowToBottom} from './Icons/ArrowToBottom'
+import {autoScrollLog} from '../settings/state'
+import {toggleAutoScroll} from '../settings'
+import {IconButton} from './IconButton'
 
 
 const tab: Store<'console'> = createStore('console')
@@ -34,11 +40,22 @@ const TabView = createComponent(tab, ({}, tab) => (
   <TabContent>{tab === 'console' && <LogsView />}</TabContent>
 ))
 
-const ToolbarView = createComponent(tab, ({}, tab) => (
-  <TabHeaderList>
+// style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: 10, minHeight: 36}}>
+const ToolbarView = createComponent({tab, autoScrollLog}, ({}, {tab, autoScrollLog}) => (
+  <TabHeaderList justify="space-between">
     <Tab onClick={api.showConsole} isActive={tab === 'console'}>
       Console
     </Tab>
+    <div style={{ margin: '0 6px'}}>
+      <ArrowToBottom
+        width={22}
+        height={22}
+        color={autoScrollLog ? '#2680eb' : 'gray'}
+        style={{ margin: '0 5px', cursor: 'pointer' }}
+        onClick={toggleAutoScroll}
+      />
+      <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onClick={clearConsole} />
+    </div>
   </TabHeaderList>
 ))
 
