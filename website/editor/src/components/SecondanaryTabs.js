@@ -28,8 +28,7 @@ const Tab = styled.li`
   padding: 7px 15px;
   margin: 0;
   background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
-  border-bottom: ${({isActive}) => (isActive ? '1px solid #fff' : 'none')};
-  margin-bottom: ${({isActive}) => (isActive ? '-1px' : '0')};
+  border-bottom: ${({isActive}) => (isActive ? '5px solid #e95801' : '5px solid transparent')};
 `
 
 const TabContent = styled.div`

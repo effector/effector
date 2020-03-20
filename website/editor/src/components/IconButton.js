@@ -1,16 +1,17 @@
 import {styled} from 'linaria/react'
 
 
-export const IconButton = styled.abbr`
+export const IconButton = styled.button`
   display: inline-block;
   background: ${props => props.icon};
   background-size: contain;
   background-repeat: no-repeat;
   width: ${props => props.size || '22px'};
   height: ${props => props.size || '22px'};
-  padding: 2px 5px;
+  padding: 0;
   margin: 0 4px;
   cursor: pointer;
+  border: none;
   :hover {
     opacity: .75;
   }
