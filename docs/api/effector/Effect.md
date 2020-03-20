@@ -328,7 +328,7 @@ fetchApiFx(100)
 ```js try
 import React from 'react'
 import {createEffect} from 'effector'
-import {createComponent} from 'effector-react'
+import {useStore} from 'effector-react'
 
 const fetchApiFx = createEffect({
   handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
@@ -336,17 +336,17 @@ const fetchApiFx = createEffect({
 
 fetchApiFx.pending.watch(console.log)
 
-const Loading = createComponent(
-  fetchApiFx.pending,
-  (props, pending) => pending && <div>Loading...</div>,
-)
-
-fetchApiFx(5000)
+const Loading = () => {
+  const loading = useStore(fetchApiFx.pending)
+  return <div>{loading ? 'Loading...' : 'Load complete'}</div>
+}
 
 ReactDOM.render(<Loading />, document.getElementById('root'))
+
+fetchApiFx(3000)
 ```
 
-[Try it](https://share.effector.dev/cnr4Z15t)
+[Try it](https://share.effector.dev/SNO0sZMR)
 
 It's a shorthand for common use case
 
