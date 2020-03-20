@@ -54,7 +54,8 @@ const SecondanaryTabs = styled.div`
   flex-direction: column;
   background: #fff;
   border-left: 1px solid #ddd;
-
+  z-index: 1;
+  
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
     grid-row: 11 / span 1;
