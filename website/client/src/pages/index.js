@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import Layout from '@theme/Layout'
-import CodeBlock from '@theme/CodeBlock';
+// import CodeBlock from '@theme/CodeBlock'
 import Link from '@docusaurus/Link'
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext'
 import useBaseUrl from '@docusaurus/useBaseUrl'
@@ -28,14 +28,14 @@ sub.watch(() => console.log('subtract'))
 reset.watch(() => console.log('reset counter'))
   
 add(2)
-// counter: 2
 // add
+// counter: 2
 sub(1)
-// counter: 1
 // subtract
+// counter: 1
 reset()
-// counter: 0
 // reset counter
+// counter: 0
 `
 
 const features = [
@@ -97,11 +97,9 @@ function Home() {
         <div className="container">
           <div className="row">
             <div className="col col--6">
-              <Code language="js">
-                {codeExample}
-              </Code>
+              <Code language="js">{codeExample}</Code>
             </div>
-            <div className={classnames("col col--6", styles.buttons)} >
+            <div className={classnames('col col--6', styles.buttons)}>
               <h1 className="hero__title">{siteConfig.title}</h1>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
               <div className={styles.buttons}>
@@ -123,9 +121,8 @@ function Home() {
                 </Link>
               </div>
             </div>
-
           </div>
-          </div>
+        </div>
       </header>
       <main>
         {features && features.length && (
