@@ -7,6 +7,7 @@ import Message from './Message'
 import type {Props} from './index.h'
 import {disableAutoScroll, enableAutoScroll} from '../../settings'
 
+const AUTO_SCROLL_MARGIN = 10
 
 class Console extends React.Component<Props, any> {
   // theme = () => ({
@@ -21,7 +22,7 @@ class Console extends React.Component<Props, any> {
     const {autoScroll} = this.props
     const last = document.getElementById('last-log-message')
     if (autoScroll && last) {
-      last.scrollIntoView()
+      last.scrollIntoView({behavior: 'smooth', block: 'end'})
     }
   }
 
@@ -43,8 +44,7 @@ class Console extends React.Component<Props, any> {
   handleScroll = e => {
     const {autoScroll} = this.props
     const {target} = e
-
-    if (Math.floor(target.scrollHeight - target.scrollTop) <= target.clientHeight) {
+    if (Math.floor(target.scrollHeight - target.scrollTop) <= target.clientHeight + AUTO_SCROLL_MARGIN) {
       !autoScroll && enableAutoScroll()
     } else {
       autoScroll && disableAutoScroll()
