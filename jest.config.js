@@ -75,7 +75,7 @@ module.exports = {
             testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
           },
         },
-        'forms',
+        // 'forms',
         'babel',
         {
           react: {
