@@ -1,5 +1,0 @@
-//@flow
-
-// TODO: add types
-
-declare module.exports: any;

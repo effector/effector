@@ -41,9 +41,6 @@ suppress_type=$off
 suppress_type=$todo
 module.use_strict=true
 
-module.name_mapper='^ast-types\(.*\)$' -> '<PROJECT_ROOT>/flow/ast-types\1'
-module.name_mapper='^recast\(.*\)$' -> '<PROJECT_ROOT>/flow/recast\1'
-module.name_mapper='^codemirror\(.*\)$' -> '<PROJECT_ROOT>/flow/codemirror\1'
 module.name_mapper='^most$' -> '<PROJECT_ROOT>/flow/most'
 module.name_mapper='^chalk$' -> '<PROJECT_ROOT>/flow/chalk'
 module.name_mapper='^shelljs$' -> '<PROJECT_ROOT>/flow/shelljs'
