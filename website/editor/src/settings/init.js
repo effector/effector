@@ -9,7 +9,9 @@ import {
   tsToggleChange,
   typeHoverToggleChange,
   clickPrettify,
-  prettier, toggleAutoScroll,
+  prettier,
+  enableAutoScroll,
+  disableAutoScroll,
 } from '.'
 import {
   domain,
@@ -19,6 +21,7 @@ import {
   typechecker,
   autoScrollLog,
 } from './state'
+
 
 domain.onCreateStore(store => {
   const snapshot = localStorage.getItem(store.compositeName.fullName)
@@ -47,7 +50,7 @@ tsToggle.on(tsToggleChange, handler).on(flowToggleChange, (state, e) => {
 
 typeHoverToggle.on(typeHoverToggleChange, handler)
 
-prettier.use(async({code, parser}) => {
+prettier.use(async ({code, parser}) => {
   const req = await fetch('https://codebox.now.sh/prettier', {
     method: 'POST',
     body: JSON.stringify({code, config: {parser}}),
@@ -76,4 +79,6 @@ forward({
   to: sourceCode,
 })
 
-autoScrollLog.on(toggleAutoScroll, state => !state)
+autoScrollLog
+  .on(enableAutoScroll, _ => true)
+  .on(disableAutoScroll, _ => false)

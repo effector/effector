@@ -9,9 +9,7 @@ import {TabHeaderList} from '../tabs/styled'
 import Sizer from './Sizer'
 import {theme} from './Console/theme/default'
 import {clearConsole} from '../logs'
-import {ArrowToBottom} from './Icons/ArrowToBottom'
 import {autoScrollLog} from '../settings/state'
-import {toggleAutoScroll} from '../settings'
 import {IconButton} from './IconButton'
 
 
@@ -46,13 +44,6 @@ const ToolbarView = createComponent({tab, autoScrollLog}, ({}, {tab, autoScrollL
       Console
     </Tab>
     <div style={{ margin: '0 6px'}}>
-      <ArrowToBottom
-        width={22}
-        height={22}
-        color={autoScrollLog ? '#2680eb' : 'gray'}
-        style={{ margin: '0 5px', cursor: 'pointer' }}
-        onClick={toggleAutoScroll}
-      />
       <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onClick={clearConsole} />
     </div>
   </TabHeaderList>

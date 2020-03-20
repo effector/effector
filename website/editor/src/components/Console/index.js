@@ -5,6 +5,7 @@ import * as React from 'react'
 import {Root} from './elements'
 import Message from './Message'
 import type {Props} from './index.h'
+import {disableAutoScroll, enableAutoScroll} from '../../settings'
 
 
 class Console extends React.Component<Props, any> {
@@ -24,19 +25,37 @@ class Console extends React.Component<Props, any> {
     }
   }
 
+  ref = React.createRef()
+
   componentDidMount() {
     this.scrollToLastMessage()
+    this.ref.current.parentElement.addEventListener('scroll', this.handleScroll)
   }
 
   componentDidUpdate() {
     this.scrollToLastMessage()
   }
 
+  componentWillUnmount() {
+    this.ref.current.parentElement.removeEventListener('scroll', this.handleScroll)
+  }
+
+  handleScroll = e => {
+    const {autoScroll} = this.props
+    const {target} = e
+
+    if (Math.floor(target.scrollHeight - target.scrollTop) <= target.clientHeight) {
+      !autoScroll && enableAutoScroll()
+    } else {
+      autoScroll && disableAutoScroll()
+    }
+  }
+
   render() {
     const {filter = [], logs = [], ...props} = this.props
 
     return (
-      <Root {...props}>
+      <Root {...props} ref={this.ref}>
         {logs.map((log, i) => {
           // If the filter is defined and doesn't include the method
           const filtered =

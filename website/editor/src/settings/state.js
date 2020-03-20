@@ -1,6 +1,6 @@
 //@flow
 
-import {createDomain, combine, type Store} from 'effector'
+import {createDomain, combine, type Store, createStore} from 'effector'
 
 export const domain = createDomain('settings')
 
@@ -16,4 +16,4 @@ export const typechecker: Store<'flow' | 'typescript' | null> = combine(
     return null
   },
 )
-export const autoScrollLog = domain.store<boolean>(true)
+export const autoScrollLog = createStore<boolean>(true)
