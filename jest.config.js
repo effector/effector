@@ -75,7 +75,6 @@ module.exports = {
             testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
           },
         },
-        'static-land',
         'forms',
         'babel',
         {
