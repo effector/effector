@@ -81,12 +81,15 @@ module.exports = function(babel, options = {}) {
           const fileNameIdentifier = path.scope.generateUidIdentifier(
             '_effectorFileName',
           )
-          const scope = path.hub.getScope()
-          if (scope) {
-            scope.push({
-              id: fileNameIdentifier,
-              init: t.stringLiteral(fileName),
-            })
+          // babel bug https://github.com/babel/babel/issues/9496
+          if (path.hub) {
+            const scope = path.hub.getScope()
+            if (scope) {
+              scope.push({
+                id: fileNameIdentifier,
+                init: t.stringLiteral(fileName),
+              })
+            }
           }
           state.fileNameIdentifier = fileNameIdentifier
         }
