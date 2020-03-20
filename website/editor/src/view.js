@@ -7,7 +7,6 @@ import debounce from 'lodash.debounce'
 
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
-import {VersionLink} from './components/VersionLink'
 import {SidebarHeader} from './components/SidebarHeader'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
@@ -25,11 +24,10 @@ import {
   codeCursorActivity,
   codeMarkLine,
 } from './editor'
-import {version, sourceCode, codeError} from './editor/state'
+import {sourceCode, codeError} from './editor/state'
 
 import {stats} from './realm/state'
 import Sizer from './components/Sizer'
-
 
 const OutlineView = createComponent(
   {
@@ -77,9 +75,13 @@ const CodeView = createComponent(
         style={{
           visibility: displayEditor ? 'visible' : 'hidden',
           display: 'flex',
-        }}
-      >
-        <Sizer direction="vertical" container={outlineSidebar} cssVar="--outline-width" sign={1} />
+        }}>
+        <Sizer
+          direction="vertical"
+          container={outlineSidebar}
+          cssVar="--outline-width"
+          sign={1}
+        />
 
         <div className="sources" style={{flex: '1 0 auto'}}>
           <Panel
@@ -96,19 +98,19 @@ const CodeView = createComponent(
           <TypeHintView />
         </div>
 
-        <Sizer direction="vertical" container={consolePanel} cssVar="--right-panel-width" sign={-1} />
+        <Sizer
+          direction="vertical"
+          container={consolePanel}
+          cssVar="--right-panel-width"
+          sign={-1}
+        />
       </div>
     )
   },
 )
 
-const VersionLinkView = createComponent(version, ({}, version) => (
-  <VersionLink version={version} />
-))
-
 export default (
   <>
-    <VersionLinkView />
     <OutlineView />
     <CodeView />
     <SidebarHeader>
