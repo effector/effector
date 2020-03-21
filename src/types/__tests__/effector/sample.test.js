@@ -879,24 +879,44 @@ describe('sample + guard (should pass)', () => {
     `)
   })
 })
+describe('without clock', () => {
+  test('with fn', () => {
+    const source = createStore([{foo: 'ok', bar: 0}])
+    const target = createStore({foo: '...', bar: 1})
 
-test('optional clock with target', () => {
-  const source = createStore([{foo: 'ok', bar: 0}])
-  const target = createStore({foo: '...', bar: 1})
+    sample({
+      source,
+      target,
+      fn: ([obj]) => obj,
+    })
 
-  sample({
-    source,
-    target,
-    fn: ([obj]) => obj,
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
   })
 
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    --typescript--
-    no errors
+  test('without fx', () => {
+    const source = createEvent()
+    const fx = createEffect<void, void, any>()
 
-    --flow--
-    no errors
-    "
-  `)
+    sample({
+      source,
+      target: fx,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+no errors
+"
+`)
+  })
 })
