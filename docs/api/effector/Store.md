@@ -52,7 +52,7 @@ changed('hello world')
 
 ### `on(trigger, handler)`
 
-Updates state when `trigger` is triggered by using `handler`.
+Updates state when `trigger` is triggered by using `handler`. For each trigger, last installed handler will override previous handlers (useful for dynamic behavior).
 
 #### Arguments
 
@@ -341,6 +341,8 @@ reset() // changed 0
 <hr />
 
 ### `off(trigger)`
+
+Removes handler for given trigger, which was installed via [store.on](Store.md#ontrigger-handler). If there was no handler for that trigger, this method will do nothing.
 
 #### Arguments
 
