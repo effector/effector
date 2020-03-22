@@ -10,7 +10,7 @@ import type {
 } from './index.h'
 import {nextStepID} from './id'
 
-const cmd = (type: any, hasRef: boolean) => (data: any): any => ({
+const cmd = (type: any, hasRef: boolean, data: any): any => ({
   id: nextStepID(),
   type,
   data,
@@ -22,7 +22,7 @@ let nextBarrierID = 0
 export const barrier: (data: {
   priority?: 'barrier' | 'sampler',
 }) => Barrier = ({priority = 'barrier'}) =>
-  cmd('barrier', false)({
+  cmd('barrier', false, {
     barrierID: ++nextBarrierID,
     priority,
   })
@@ -36,23 +36,23 @@ export const mov: (data: {
   store,
   target,
   to = target ? 'store' : 'stack',
-}) => cmd('mov', from === 'store')({from, store, to, target})
+}) => cmd('mov', from === 'store', {from, store, to, target})
 export const check: {
   defined(): Check,
   changed({store: StateRef}): Check,
 } = {
-  defined: () => cmd('check', false)({type: 'defined'}),
-  changed: ({store}) => cmd('check', true)({type: 'changed', store}),
+  defined: () => cmd('check', false, {type: 'defined'}),
+  changed: ({store}) => cmd('check', true, {type: 'changed', store}),
 }
 export const compute: (data: {
   fn: (data: any, scope: {[string]: any}) => any,
-}) => Compute = cmd('compute', false)
+}) => Compute = data => cmd('compute', false, data)
 export const filter: (data: {
   fn: (data: any, scope: {[string]: any}) => any,
-}) => Filter = cmd('filter', false)
+}) => Filter = data => cmd('filter', false, data)
 export const run: (data: {
   fn: (data: any, scope: {[string]: any}) => any,
-}) => Run = cmd('run', false)
+}) => Run = data => cmd('run', false, data)
 export const update: (data: {
   store: StateRef,
 }) => Mov = ({store}) => mov({from: 'stack', target: store})
