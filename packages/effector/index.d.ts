@@ -518,6 +518,11 @@ export function sample<A>(config: {
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
+export function sample(config: {
+  source: Unit<any>
+  target: Unit<void>
+  greedy?: boolean
+}): Unit<void>
 export function sample<A, B, C>(config: {
   source: Store<A>
   clock: Store<B>
