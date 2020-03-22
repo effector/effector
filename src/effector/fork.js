@@ -1,7 +1,6 @@
 //@flow
 
 import {getGraph} from './getter'
-import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
 import {isObject} from './is'
@@ -276,7 +275,7 @@ function wrapStore(node) {
     kind: 'store',
     getState: () => node.reg[node.scope.state.id].current,
     updates: {
-      watch: bind(watchUnit, node),
+      watch: watchUnit(node),
     },
     graphite: node,
     family: node.family,

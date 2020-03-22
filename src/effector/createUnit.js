@@ -9,7 +9,6 @@ import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
 import {nextUnitID} from './id'
 import {callStackAReg, callARegStack, callStack} from './caller'
-import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch} from './kernel'
@@ -113,7 +112,7 @@ export function createEvent<Payload>(
     launch(event, payload)
     return payload
   }
-  event.watch = bind(watchUnit, event)
+  event.watch = watchUnit(event)
   event.map = (fn: Function) => {
     let config
     let name
@@ -135,7 +134,7 @@ export function createEvent<Payload>(
       step.filter({fn: callStack}),
     ])
   }
-  event.filterMap = bind(filterMapEvent, event)
+  event.filterMap = fn => filterMapEvent(event, fn)
   event.prepend = fn => {
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: event.parent,
@@ -175,7 +174,7 @@ export function createStore<State>(
     updates,
     defaultState,
     stateRef: plainState,
-    getState: bind(readRef, plainState),
+    getState: () => readRef(plainState),
     setState(state) {
       launch({
         target: store,
@@ -279,7 +278,7 @@ export function createStore<State>(
       } else {
         eventOrFn(store.getState())
       }
-      return watchUnit(store, eventOrFn)
+      return watchUnit(store)(eventOrFn)
     }
     if (!isFunction(fn)) throwError('second argument should be a function')
     return eventOrFn.watch(payload => fn(store.getState(), payload))

@@ -7,10 +7,7 @@ import type {Subscription, Unit} from './index.h'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
 
-export const watchUnit = (
-  unit: Unit,
-  handler: (payload: any) => any,
-): Subscription =>
+export const watchUnit = (unit: Unit) => (handler: (payload: any) => any): Subscription =>
   createSubscription(
     addToRegion(
       createNode({
