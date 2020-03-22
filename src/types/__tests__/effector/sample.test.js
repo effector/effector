@@ -901,7 +901,7 @@ describe('without clock', () => {
     `)
   })
 
-  test('without fx', () => {
+  test('without fn', () => {
     const source = createEvent()
     const fx = createEffect<void, void, any>()
 
@@ -919,7 +919,7 @@ no errors
 "
 `)
   })
-  test('without fx, any to void', () => {
+  test('without fn, any to void', () => {
     const source = createEvent<string>()
     const target = createEvent<void>()
     sample({
