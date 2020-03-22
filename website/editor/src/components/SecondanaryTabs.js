@@ -11,6 +11,7 @@ import {theme} from './Console/theme/default'
 import {clearConsole} from '../logs'
 import {autoScrollLog} from '../settings/state'
 import {IconButton} from './IconButton'
+import {logs} from '../logs/state'
 
 
 const tab: Store<'console'> = createStore('console')
@@ -38,10 +39,10 @@ const TabView = createComponent(tab, ({}, tab) => (
 ))
 
 // style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: 10, minHeight: 36}}>
-const ToolbarView = createComponent({tab, autoScrollLog}, ({}, {tab, autoScrollLog}) => (
+const ToolbarView = createComponent({logs, tab, autoScrollLog}, ({}, {logs, tab, autoScrollLog}) => (
   <TabHeaderList justify="space-between">
     <Tab onClick={api.showConsole} isActive={tab === 'console'}>
-      Console
+      Console{logs.length > 0 && <span style={{ marginLeft: 10, color: '#999'}}>({logs.length})</span>}
     </Tab>
     <div style={{ margin: '0 6px'}}>
       <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onClick={clearConsole} />

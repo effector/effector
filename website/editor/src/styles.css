@@ -181,7 +181,7 @@ body {
   #try-wrapper {
     overflow: hidden;
     grid-template-columns: var(--outline-width) minmax(200px, 2fr) var(--right-panel-width);
-    grid-template-rows: 50px 36px repeat(2, minmax(100px, 1fr)) var(--console-height);
+    grid-template-rows: 50px 36px repeat(2, minmax(0, 1fr)) minmax(42px, var(--console-height));
   }
   .header-tabs {
     grid-column: 3 / span 1;
