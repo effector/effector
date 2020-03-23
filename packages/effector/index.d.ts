@@ -644,6 +644,16 @@ export function guard<A>(
     target: Unit<A>
   },
 ): Unit<A>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: ((value: A) => boolean)
+  target: Unit<void>
+}): Unit<void>
+export function guard(config: {
+  source: Unit<any>
+  filter: Store<boolean>
+  target: Unit<void>
+}): Unit<void>
 export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result

@@ -533,6 +533,65 @@ describe('guard(config)', () => {
           "
         `)
       })
+      describe('any to void', () => {
+        test('with store', () => {
+          const filter = createStore(true)
+          const source = createEvent<string>()
+          const target = createEvent<void>()
+
+          guard({
+            source,
+            filter,
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+Cannot call 'guard' with object literal bound to 'config'
+  guard({
+        ^...
+  undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
+      const target = createEvent<void>()
+                             [1] ^^^^
+      const source = createEvent<string>()
+                             [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+        })
+        test('with function', () => {
+          const source = createEvent<{pass: boolean}>()
+          const target = createEvent<void>()
+
+          guard({
+            source,
+            filter: ({pass}) => pass,
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+Cannot call 'guard' with object literal bound to 'config'
+  guard({
+        ^...
+  undefined [1] is incompatible with object type [2] in type argument 'T' [3] of property 'target'
+      const target = createEvent<void>()
+                             [1] ^^^^
+      const source = createEvent<{pass: boolean}>()
+                             [2] ^^^^^^^^^^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+        })
+      })
     })
   })
 })
