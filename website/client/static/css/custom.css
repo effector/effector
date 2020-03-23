@@ -101,14 +101,3 @@
 
 @media only screen and (min-width: 1500px) {
 }
-
-@media (min-width: 997px) {
-  div .sidebarLogo_node_modules-\@docusaurus-theme-classic-src-theme-DocSidebar- {
-    display: none !important;
-  }
-  div .sidebar_node_modules-\@docusaurus-theme-classic-src-theme-DocSidebar- {
-    height: calc(100vh - var(--ifm-navbar-height));
-    top: var(--ifm-navbar-height);
-    padding-top: 0;
-  }
-}
