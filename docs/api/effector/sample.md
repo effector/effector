@@ -36,10 +36,10 @@ How to read it:
 For example:
 
 ```ts
-const $store = sample($store, $store);
+const $store = sample({ source: $store, clock: $store });
 // Result will be store, because source and clock are stores.
 
-const event = sample($store, event);
+const event = sample({ source: $store, clock: event });
 // Because not all arguments are storess
 ```
 
