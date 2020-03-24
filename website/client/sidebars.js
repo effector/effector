@@ -82,8 +82,9 @@ const sidebar = {
   Recipes: [
     'recipes/recipes',
     'recipes/countdown',
-    'recipes/usage-with-typescript',
     'recipes/design-api-layer',
+    'recipes/usage-with-typescript',
+    'recipes/react-native/example',
     {
       type: 'category',
       label: 'React',
@@ -110,4 +111,3 @@ module.exports = {
   docs: sidebar,
   api: sidebar,
 }
-
