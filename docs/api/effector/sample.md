@@ -6,6 +6,41 @@ hide_title: true
 
 # sample
 
+## `sample({ source, clock, target }): target`
+
+Formula:
+
+When `clock` is triggered, read the value from `source` and trigger `target` with it.
+
+- If the `fn` is passed, pass value from `source` through before passing to `target`
+- If the `target` is not passed, create it and return from `sample()`
+
+#### Type of the created `target`
+
+If `target` is not passed to `sample()` call, it will be created inside. The type of the unit described in the table below:
+
+| clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
+| --------------------- | ------------------- | ------------------- | --------------------- |
+| [_Store_](Store.md)   | `Store`             | `Event`             | `Event`               |
+| [_Event_](Event.md)   | `Event`             | `Event`             | `Event`               |
+| [_Effect_](Effect.md) | `Event`             | `Event`             | `Event`               |
+
+How to read it:
+
+1. You need to know type of the `source`, it is column
+2. Type of the `clock` in the rows
+3. Match the column and the row
+
+For example:
+
+```ts
+const $store = sample($store, $store);
+// Result will be store, because source and clock are stores.
+
+const event = sample($store, event);
+// Because not all arguments are storess
+```
+
 ## `sample(sourceStore, clockEvent, fn?)`
 
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
