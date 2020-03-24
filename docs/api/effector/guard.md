@@ -9,6 +9,18 @@ hide_title: true
 Method for conditional event routing.
 It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them.
 
+## Formulae
+
+```ts
+guard({ source, filter, target? }): target
+```
+
+When `source` is triggered check `filter` for thruthy and call `target` with data from `source` if `true`.
+
+- If `target` is not passed, create (_Event_)(Event.md) with type of `source` and return it from `guard()`
+- If `filter` is (_Store_)(Store.md) check it value for `thruthy`
+- If `filter` is `Function` call it with data from `source` and check result for `thruthy`
+
 ## `guard({source, filter, target?})`
 
 #### Arguments
@@ -22,22 +34,22 @@ It provide a way to control one dataflow with the help of another: when the cond
 #### Example
 
 ```js try
-import {createStore, createEffect, createEvent, guard, sample} from 'effector'
+import { createStore, createEffect, createEvent, guard, sample } from 'effector'
 
 const clickRequest = createEvent()
 const fetchRequest = createEffect({
-  handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
+  handler: (n) => new Promise((rs) => setTimeout(rs, 2500, n)),
 })
 
-const clicks = createStore(0).on(clickRequest, x => x + 1)
-const requests = createStore(0).on(fetchRequest, x => x + 1)
+const clicks = createStore(0).on(clickRequest, (x) => x + 1)
+const requests = createStore(0).on(fetchRequest, (x) => x + 1)
 
-const isIdle = fetchRequest.pending.map(pending => !pending)
+const isIdle = fetchRequest.pending.map((pending) => !pending)
 
 /*
 on clickRequest, take current clicks value,
 and call fetchRequest with it
-if isIdle value is true 
+if isIdle value is true
 */
 guard({
   source: sample(clicks, clickRequest),
@@ -53,14 +65,14 @@ Also, guard can accept common function predicate as a filter, to drop events bef
 #### Example 2
 
 ```js try
-import {createEffect, createEvent, guard} from 'effector'
+import { createEffect, createEvent, guard } from 'effector'
 
 const searchUser = createEffect()
 const submitForm = createEvent()
 
 guard({
   source: submitForm,
-  filter: user => user.length > 0,
+  filter: (user) => user.length > 0,
   target: searchUser,
 })
 
@@ -80,11 +92,11 @@ submitForm('alice') // ~> searchUser('alice')
 #### Example
 
 ```js try
-import {createEvent, createStore, createApi, guard} from 'effector'
+import { createEvent, createStore, createApi, guard } from 'effector'
 
 const trigger = createEvent()
 const $unlocked = createStore(true)
-const {lock, unlock} = createApi($unlocked, {
+const { lock, unlock } = createApi($unlocked, {
   lock: () => false,
   unlock: () => true,
 })
@@ -113,11 +125,11 @@ trigger('C')
 #### Example 2
 
 ```js try
-import {createEvent, guard} from 'effector'
+import { createEvent, guard } from 'effector'
 
 const source = createEvent()
 const target = guard(source, {
-  filter: x => x > 0,
+  filter: (x) => x > 0,
 })
 
 target.watch(() => {
