@@ -6,9 +6,11 @@ hide_title: true
 
 # sample
 
-## `sample({ source, clock, target, fn? }): target`
+## Formulae
 
-Formula:
+```ts
+sample({ source, clock, target, fn? }): target
+```
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
 
