@@ -93,7 +93,6 @@ const sidebar = {
         'recipes/react/gate',
         'recipes/react/todo-creator',
         'recipes/react/dynamic-form-schema',
-        'recipes/countdown-timer',
       ],
     },
     {

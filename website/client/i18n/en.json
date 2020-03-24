@@ -122,7 +122,7 @@
       "introduction/prior-art": {
         "title": "Prior Art"
       },
-      "recipes/countdown-timer": {
+      "recipes/countdown": {
         "title": "Countdown timer on setTimeout",
         "sidebar_label": "Countdown timer"
       },
