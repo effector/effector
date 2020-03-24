@@ -6,6 +6,43 @@ hide_title: true
 
 # sample
 
+## Formulae
+
+```ts
+sample({ source, clock, target, fn? }): target
+```
+
+When `clock` is triggered, read the value from `source` and trigger `target` with it.
+
+- If the `fn` is passed, pass value from `source` through before passing to `target`
+- If the `target` is not passed, create it and return from `sample()`
+
+#### Type of the created `target`
+
+If `target` is not passed to `sample()` call, it will be created inside. The type of the unit described in the table below:
+
+| clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
+| --------------------- | ------------------- | ------------------- | --------------------- |
+| [_Store_](Store.md)   | `Store`             | `Event`             | `Event`               |
+| [_Event_](Event.md)   | `Event`             | `Event`             | `Event`               |
+| [_Effect_](Effect.md) | `Event`             | `Event`             | `Event`               |
+
+How to read it:
+
+1. You need to know type of the `source`, it is column
+2. Type of the `clock` in the rows
+3. Match the column and the row
+
+For example:
+
+```ts
+const $store = sample({ source: $store, clock: $store });
+// Result will be store, because source and clock are stores.
+
+const event = sample({ source: $store, clock: event });
+// Because not all arguments are storess
+```
+
 ## `sample(sourceStore, clockEvent, fn?)`
 
 Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
@@ -320,45 +357,60 @@ fetchContentFx()
 
 [Try it](https://share.effector.dev/htQpg1LY)
 
-## Objects and arrays with stores in sample source
+## Objects and arrays of _Store_ in `sample({ source })`
+
+### Object of stores
+
+`sample` can be called with object of (_Store_)[Store.md] as `source`:
 
 ```js try
-import {createStore, createEvent, sample, combine} from 'effector'
+import { createStore, createEvent, sample } from 'effector'
 const trigger = createEvent()
-const objectTarget = createEvent()
-const arrayTarget = createEvent()
+
 const a = createStore('A')
-const b = createStore('B')
-sample({
-  source: {a, b},
+const b = createStore(1)
+
+// Target has type `Event<{ a: string, b: number }>`
+const target = sample({
+  source: { a, b },
   clock: trigger,
-  target: objectTarget,
 })
-sample({
-  source: [a, b],
-  clock: trigger,
-  target: arrayTarget,
-})
-objectTarget.watch(obj => {
+
+target.watch((obj) => {
   console.log('sampled object', obj)
-  // => {a: 'A', b: 'B'}
-})
-arrayTarget.watch(array => {
-  console.log('sampled array', array)
-  // => ['A', 'B']
-})
-trigger()
-/* old way to do this: */
-sample({
-  source: combine({a, b}),
-  clock: trigger,
-  target: objectTarget,
-})
-sample({
-  source: combine([a, b]),
-  clock: trigger,
-  target: arrayTarget,
+  // => {a: 'A', b: 1}
 })
 ```
 
-[Try it](https://share.effector.dev/D1l72gqC)
+[Try it](https://share.effector.dev/hiGwHrX4)
+
+### Array of stores
+
+`sample` can be called with array of (_Store_)[Store.md] as `source`:
+
+```js try
+import { createStore, createEvent, sample } from 'effector'
+const trigger = createEvent()
+
+const a = createStore('A')
+const b = createStore(1)
+
+// Target has type `Event<[string, number]>`
+const target = sample({
+  source: [a, b],
+  clock: trigger,
+})
+
+target.watch((obj) => {
+  console.log('sampled array', obj)
+  // => ["A", 1]
+})
+
+// You can easily destructure arguments to set explicit names
+target.watch(([a, b]) => {
+  console.log('Explicit names', a, b)
+  // => "A" 1
+})
+```
+
+[Try it](https://share.effector.dev/aQPLBJ2j)
