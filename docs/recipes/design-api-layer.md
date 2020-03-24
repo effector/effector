@@ -88,7 +88,7 @@ const requestFx = createEffect<Request, any, Error>({
     const response = await fetch(path, { method, body, headers })
 
     if (!response.ok) {
-      throw new NetworkError(JSON.parse(await response.json()))
+      throw new NetworkError(await response.json())
     }
 
     return response.json()
