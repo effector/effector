@@ -6,7 +6,7 @@ hide_title: true
 
 # sample
 
-## `sample({ source, clock, target }): target`
+## `sample({ source, clock, target, fn? }): target`
 
 Formula:
 
