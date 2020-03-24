@@ -364,22 +364,22 @@ fetchContentFx()
 `sample` can be called with object of (_Store_)[Store.md] as `source`:
 
 ```js try
-import { createStore, createEvent, sample } from "effector";
-const trigger = createEvent();
+import { createStore, createEvent, sample } from 'effector'
+const trigger = createEvent()
 
-const a = createStore("A");
-const b = createStore(1);
+const a = createStore('A')
+const b = createStore(1)
 
 // Target has type `Event<{ a: string, b: number }>`
 const target = sample({
-	source: { a, b },
-	clock: trigger
-});
+  source: { a, b },
+  clock: trigger,
+})
 
-target.watch(obj => {
-	console.log("sampled object", obj);
-	// => {a: 'A', b: 1}
-});
+target.watch((obj) => {
+  console.log('sampled object', obj)
+  // => {a: 'A', b: 1}
+})
 ```
 
 [Try it](https://share.effector.dev/hiGwHrX4)
@@ -389,29 +389,28 @@ target.watch(obj => {
 `sample` can be called with array of (_Store_)[Store.md] as `source`:
 
 ```js try
-import { createStore, createEvent, sample } from "effector";
-const trigger = createEvent();
+import { createStore, createEvent, sample } from 'effector'
+const trigger = createEvent()
 
-const a = createStore("A");
-const b = createStore(1);
+const a = createStore('A')
+const b = createStore(1)
 
 // Target has type `Event<[string, number]>`
 const target = sample({
-	source: [a, b],
-	clock: trigger
-});
+  source: [a, b],
+  clock: trigger,
+})
 
-target.watch(obj => {
-	console.log("sampled array", obj);
-	// => ["A", 1]
-});
+target.watch((obj) => {
+  console.log('sampled array', obj)
+  // => ["A", 1]
+})
 
 // You can easily destructure arguments to set explicit names
 target.watch(([a, b]) => {
-	console.log("Explicit names", a, b);
-	// => "A" 1
-});
+  console.log('Explicit names', a, b)
+  // => "A" 1
+})
 ```
 
 [Try it](https://share.effector.dev/aQPLBJ2j)
-
