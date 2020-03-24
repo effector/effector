@@ -10,6 +10,77 @@ Wrapper for [_effect_](Effect.md) which allow to map effect arguments and use da
 
 Use cases: declarative passing values from stores to effects and argument preprocessing.
 
+## Formulae
+
+```ts
+attach({ effect, mapParams, source? }): newEffect
+```
+
+When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
+
+- If `attach` called without `source`, `mapParams` will be called only with params of the `newEffect`
+- `attach()` always returns new (_Effect_)[Effect.md]
+
+### Short example
+
+```js
+import { createEffect, attach } from 'effector'
+
+const original = createEffect({
+  handler: (params) => {
+    console.log("Original effect called with", params)
+  }
+})
+
+const created = attach({
+  effect: original,
+  mapParams: (params) => {
+    console.log("Created effect called with", params)
+    return { wrapped: params }
+  }
+})
+
+created("HELLO")
+
+// => Created effect called with "HELLO"
+// => Original effect called with { wrapped: "HELLO" }
+```
+
+[Try it](https://share.effector.dev/VcTZZlF1)
+
+### Short example with source
+
+```js
+import {createEffect, attach} from 'effector'
+
+const original = createEffect({
+  handler: params => {
+    console.log('Original effect called with', params)
+  },
+})
+
+const data = createStore(8900)
+
+const created = attach({
+  effect: original,
+  source: data,
+  mapParams: (params, data) => {
+    console.log('Created effect called with', params, 'and data', data)
+    return {wrapped: params, data}
+  },
+})
+
+created('HELLO')
+
+// => Created effect called with "HELLO" and data 8900
+// => Original effect called with {wrapped: "HELLO", data: 8900}
+```
+
+[Try it](https://share.effector.dev/IYtQCWAU)
+
+
+### Long example
+
 ```js
 import {createEffect, attach, createStore} from 'effector'
 
