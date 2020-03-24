@@ -357,45 +357,61 @@ fetchContentFx()
 
 [Try it](https://share.effector.dev/htQpg1LY)
 
-## Objects and arrays with stores in sample source
+## Objects and arrays of _Store_ in `sample({ source })`
+
+### Object of stores
+
+`sample` can be called with object of (_Store_)[Store.md] as `source`:
 
 ```js try
-import {createStore, createEvent, sample, combine} from 'effector'
-const trigger = createEvent()
-const objectTarget = createEvent()
-const arrayTarget = createEvent()
-const a = createStore('A')
-const b = createStore('B')
-sample({
-  source: {a, b},
-  clock: trigger,
-  target: objectTarget,
-})
-sample({
-  source: [a, b],
-  clock: trigger,
-  target: arrayTarget,
-})
-objectTarget.watch(obj => {
-  console.log('sampled object', obj)
-  // => {a: 'A', b: 'B'}
-})
-arrayTarget.watch(array => {
-  console.log('sampled array', array)
-  // => ['A', 'B']
-})
-trigger()
-/* old way to do this: */
-sample({
-  source: combine({a, b}),
-  clock: trigger,
-  target: objectTarget,
-})
-sample({
-  source: combine([a, b]),
-  clock: trigger,
-  target: arrayTarget,
-})
+import { createStore, createEvent, sample } from "effector";
+const trigger = createEvent();
+
+const a = createStore("A");
+const b = createStore(1);
+
+// Target has type `Event<{ a: string, b: number }>`
+const target = sample({
+	source: { a, b },
+	clock: trigger
+});
+
+target.watch(obj => {
+	console.log("sampled object", obj);
+	// => {a: 'A', b: 1}
+});
 ```
 
-[Try it](https://share.effector.dev/D1l72gqC)
+[Try it](https://share.effector.dev/hiGwHrX4)
+
+### Array of stores
+
+`sample` can be called with array of (_Store_)[Store.md] as `source`:
+
+```js try
+import { createStore, createEvent, sample } from "effector";
+const trigger = createEvent();
+
+const a = createStore("A");
+const b = createStore(1);
+
+// Target has type `Event<[string, number]>`
+const target = sample({
+	source: [a, b],
+	clock: trigger
+});
+
+target.watch(obj => {
+	console.log("sampled array", obj);
+	// => ["A", 1]
+});
+
+// You can easily destructure arguments to set explicit names
+target.watch(([a, b]) => {
+	console.log("Explicit names", a, b);
+	// => "A" 1
+});
+```
+
+[Try it](https://share.effector.dev/aQPLBJ2j)
+
