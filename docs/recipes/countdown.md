@@ -1,5 +1,5 @@
 ---
-id: countdown-timer
+id: countdown
 title: Countdown timer on setTimeout
 sidebar_label: Countdown timer
 ---
