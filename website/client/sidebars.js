@@ -81,6 +81,7 @@ const sidebar = {
   Conventions: ['conventions/naming', 'conventions/best-practices'],
   Recipes: [
     'recipes/recipes',
+    'recipes/countdown',
     'recipes/usage-with-typescript',
     {
       type: 'category',
