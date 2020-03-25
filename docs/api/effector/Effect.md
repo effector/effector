@@ -96,6 +96,15 @@ fetchUserReposFx({name: 'zerobias'})
 
 Subscribe to effect calls.
 
+#### Formulae
+
+```ts
+const unwatch = effect.watch(fn)
+```
+
+- Call `fn` on each `effect` call, pass payload of `effect` as argument to `fn`
+- When `unwatch` is called, stop calling `fn`
+
 #### Arguments
 
 1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
@@ -129,6 +138,16 @@ effectFx(20) // nothing, cause watcher unsubscribed
 ### `prepend(fn)`
 
 Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
+#### Formulae
+
+```ts
+const event = effect.prepend(fn)
+```
+
+- When `event` is triggered
+- Call `fn` with payload from `event`
+- Call `effect` with result of `fn()`
 
 #### Arguments
 
@@ -172,13 +191,9 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ### `doneData`
 
-[_Event_](Event.md) triggered when _handler_ is _resolved_.
-
-#### Arguments
-
 Event triggered with result of effect execution:
 
-1. `result` (_Done_): A result of the resolved handler
+[_Event_](Event.md) triggered when _handler_ is _resolved_.
 
 #### Example
 
@@ -200,13 +215,9 @@ effectFx(2) // => Done with result 3
 
 ### `failData`
 
-[_Event_](Event.md) triggered when handler is rejected or throws error.
-
-#### Arguments
-
 Event triggered with error thrown by effect:
 
-1. `error` (_Fail_): An error thrown by handler
+[_Event_](Event.md) triggered when handler is rejected or throws error.
 
 #### Example
 
@@ -230,7 +241,7 @@ effectFx(2) // => Fail with error 1
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
 
-#### Arguments
+#### Properties
 
 Event triggered with object of `params` and `result`:
 
@@ -259,7 +270,7 @@ effectFx(2) // => Done with params 2 and result 3
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
 
-#### Arguments
+#### Properties
 
 Event triggered with object of `params` and `error`:
 
@@ -288,7 +299,7 @@ effectFx(2) // => Fail with params 2 and error 1
 
 Event triggered when handler is resolved, rejected or throws error.
 
-#### Arguments
+#### Properties
 
 [_Event_](Event.md) triggered with object of `status`, `params` and `error` or `result`:
 
