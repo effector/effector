@@ -19,7 +19,7 @@ attach({ effect, mapParams, source? }): newEffect
 When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
 
 - If `attach` called without `source`, `mapParams` will be called only with params of the `newEffect`
-- `attach()` always returns new (_Effect_)[Effect.md]
+- `attach()` always returns new [_Effect_](Effect.md)
 
 ### Short example
 
