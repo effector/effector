@@ -25,6 +25,9 @@ export function guard(source, config) {
   const {filter, greedy, name = 'guard'} = config
   const target = config.target || createEvent(name)
   if (!is.unit(source)) source = combine(source)
+  if (!is.unit(target)) {
+    throw new TypeError("target should be an store, effect or event")
+  }
 
   if (is.unit(filter)) {
     sample({
