@@ -26,6 +26,15 @@ console.log(event())
 
 It is a function which allows you to follow the event or to create side-effects.
 
+#### Formulae
+
+```ts
+const unwatch = event.watch(fn)
+```
+
+- Call `fn` on each `event` trigger, pass payload of `event` as argument to `fn`
+- When `unwatch` is called, stop calling `fn` on each `event` trigger
+
 <!--If you want to know, when watch is called, welcome to advanced section-->
 
 #### Arguments
@@ -57,6 +66,15 @@ sayHi('Drew') // => nothing happened
 ### `map(fn)`
 
 Creates a new event, which will be called after the original event is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
+
+#### Formulae
+
+```ts
+const second = first.map(fn)
+```
+
+- When `first` is triggered, pass payload from `first` to `fn`
+- Trigger `second` with the result of the `fn()` call as payload
 
 #### Arguments
 
@@ -92,6 +110,15 @@ userUpdated({name: 'john', role: 'admin'})
 Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
 Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the concrete size of the sneakers model, besides you want to receive a notification if there will have and don't receive others. Therefore filtering is needed for that. Event filtering works the same. If the filter returns `true`, the event will be called.
+
+#### Formulae
+
+```ts
+const second = first.filter({fn})
+```
+
+- When `first` is triggered, pass payload from `first` to `fn`
+- If `fn()` returns `true`, `second` will be triggered with payload from `first`
 
 <!-- You may ask, why object as argument? If you are interesting, welcome to advanced section -->
 
@@ -143,6 +170,16 @@ And you repeat this till no complete a task. Now think about it in Effector cont
 5. Pack - store
 
 You may see that we united `filter()` and `map()` methods, the reason for creating was an impossibility to event filtering.
+
+#### Formulae
+
+```ts
+const second = first.filterMap(fn)
+```
+
+- When `first` is triggered, call `fn` with payload from `first`
+  - If `fn()` returned `undefined` do not trigger `second`
+  - If `fn()` returned some data, trigger `second` with data from `fn()`
 
 #### Arguments
 
@@ -206,6 +243,16 @@ ReactDOM.render(<App />, document.getElementById('root'))
 ### `prepend(fn)`
 
 Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+
+#### Formulae
+
+```ts
+const second = first.prepend(fn)
+```
+
+- When `second` event is triggered
+- Call `fn` with payload from `second`
+- Trigger `first` with result of `fn()`
 
 #### Arguments
 
