@@ -12,6 +12,15 @@ There can be multiple stores.
 
 Creates a derived store. It will call a provided function with the state, when the original store updates, and will use the result to update the derived store
 
+#### Formulae
+
+```ts
+const $second = $first.map(fn)
+```
+
+- When `$first` store is updated, call `fn` with new state and previous state
+- Next update `$second` store with result of `fn()` call and trigger all subscribers
+
 #### Arguments
 
 1. `fn` (_Function_): Function that receives `state` and `lastState?` and returns a new state for the derived store
@@ -53,6 +62,15 @@ changed('hello world')
 ### `on(trigger, handler)`
 
 Updates state when `trigger` is triggered by using `handler`. For each trigger, last installed handler will override previous handlers (useful for dynamic behavior).
+
+#### Formulae
+
+```ts
+$store.on(trigger, handler)
+```
+
+- When `trigger` is triggered, call `handler` with payload of the `trigger` and data of `$store`
+- Next update `$store` with result of `handler()` call and trigger all subscribers
 
 #### Arguments
 
@@ -96,6 +114,15 @@ changed(2)
 Call `watcher` function each time when store is updated. <br/>
 If `trigger` not passed, run `watcher` on each event that linked with store.
 
+#### Formulae
+
+```ts
+const unwatch = $store.watch(watcher)
+```
+
+- On initialize and each `$store` update, call `watcher` with the new state of `$store`
+- When `unwatch` is called, stop calling `watcher`
+
 #### Arguments
 
 1. `watcher` ([_Watcher_](../../glossary.md#watcher)): Watcher function that receives current store state as first argument
@@ -111,20 +138,27 @@ const add = createEvent()
 const store = createStore(0).on(add, (state, payload) => state + payload)
 
 store.watch(value => console.log(`current value: ${value}`))
-// current value: 0
+// => current value: 0
 add(4)
-// current value: 4
+// => current value: 4
 add(3)
-// current value: 7
+// => current value: 7
 ```
-
-[Try it](https://share.effector.dev/t2eqYQ9m)
 
 <hr />
 
 ### `watch(trigger, watcher)`
 
 Run `watcher` only when `trigger` event triggered. <br/>
+
+#### Formulae
+
+```ts
+const unwatch = $store.watch(trigger, watcher)
+```
+
+- On each `$store` update with passed `trigger`, call `watcher` with the new state of `$store` and payload from `trigger`
+- When `unwatch` is called, stop calling `watcher`
 
 #### Arguments
 
@@ -308,6 +342,14 @@ Resets store state to the default value.
 
 A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
 
+#### Formulae
+
+```ts
+$store.reset(...triggers)
+```
+
+- When triggered any unit from `triggers` list, update `$store` with its default state, from `createStore(defaultState)`
+
 #### Arguments
 
 1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_Events_](Event.md), [_Effects_](Effect.md) or [_Stores_](Store.md)
@@ -342,7 +384,12 @@ reset() // changed 0
 
 ### `off(trigger)`
 
-Removes handler for given trigger, which was installed via [store.on](Store.md#ontrigger-handler). If there was no handler for that trigger, this method will do nothing.
+```ts
+$store.off(trigger)
+```
+
+- Removes handler for given `trigger`, which was installed via [\$store.on](Store.md#ontrigger-handler)
+- If there was no handler for that `trigger`, this method will do nothing
 
 #### Arguments
 
@@ -386,6 +433,15 @@ store.watch(console.log) // => 5
 
 Creates a new store. This method calls with a provide function that receives Store. Other words "escape hatch" for creating compose function, also making chains.
 For example, you want to make multiple, summary and divide operations. You can create these functions and provide them followed by a call `.thru`.
+
+#### Formulae
+
+```ts
+const $new = $store.thru(fn)
+```
+
+- Call `fn` with `$store` as argument
+- Set result of the `fn()` call to `$new`
 
 #### Arguments
 
@@ -432,6 +488,14 @@ Output
 
 ### `updates`
 
+#### Formulae
+
+```ts
+$store.updates
+```
+
+- When `$store` is **changed** trigger `updates` event with the new state
+
 #### Returns
 
 [_Event_](Event.md): Event that represent updates of given store.
@@ -470,3 +534,12 @@ clicksAmount.updates.watch(amount => {
 #### Returns
 
 (_`State`_): Default state of store
+
+#### Example
+
+```ts
+const $store = createStore('DEFAULT')
+
+console.log($store.defaultState === 'DEFAULT')
+// => true
+```
