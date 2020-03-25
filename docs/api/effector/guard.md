@@ -15,10 +15,10 @@ It provide a way to control one dataflow with the help of another: when the cond
 guard({ source, filter, target? }): target
 ```
 
-When `source` is triggered check `filter` for thruthy and call `target` with data from `source` if `true`.
+When `source` is triggered, check `filter` for thruthy and call `target` with data from `source` if `true`.
 
-- If `target` is not passed, create (_Event_)(Event.md) with type of `source` and return it from `guard()`
-- If `filter` is (_Store_)(Store.md) check it value for `thruthy`
+- If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
+- If `filter` is [_Store_](Store.md) check it value for `thruthy`
 - If `filter` is `Function` call it with data from `source` and check result for `thruthy`
 
 ## `guard({source, filter, target?})`
