@@ -5,7 +5,7 @@ title: Core Concepts
 
 ## Event
 
-_Event_ is an intention to change state.
+[_Event_] is an intention to change state.
 
 ```js try
 const event = createEvent() // unnamed event
@@ -22,7 +22,7 @@ data.watch(console.log)
 
 ## Effect
 
-_Effect_ is a container for async function.
+[_Effect_] is a container for async function.
 
 It can be safely used in place of the original async function.
 
@@ -65,7 +65,7 @@ const data = await getUserFx({id: 2}) // handle promise
 
 ## Store
 
-_Store_ is an object that holds the state tree. There can be multiple stores.
+[_Store_] is an object that holds the state tree. There can be multiple stores.
 
 ```js try
 const users = createStore([]) // <-- Default state
@@ -79,3 +79,7 @@ const messages = createStore([])
 users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
 messages.watch(console.log)
 ```
+
+[_store_]: ../api/effector/Store.md
+[_effect_]: ../api/effector/Effect.md
+[_event_]: ../api/effector/Event.md
