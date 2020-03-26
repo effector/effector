@@ -40,7 +40,7 @@ const $store = sample({ source: $store, clock: $store });
 // Result will be store, because source and clock are stores.
 
 const event = sample({ source: $store, clock: event });
-// Because not all arguments are storess
+// Because not all arguments are stores.
 ```
 
 ## `sample(sourceStore, clockEvent, fn?)`
