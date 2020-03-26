@@ -7,7 +7,7 @@ import {createEvent} from './createUnit'
 import {combine} from './combine'
 import {step} from './typedef'
 import {callStack} from './caller'
-import {is, isFunction} from './is'
+import {is, isFunction, assertUnitOrList} from './is'
 import {createNode} from './createNode'
 import {addToRegion} from './region'
 import {throwError} from './throw'
@@ -25,9 +25,8 @@ export function guard(source, config) {
   const {filter, greedy, name = 'guard'} = config
   const target = config.target || createEvent(name)
   if (!is.unit(source)) source = combine(source)
-  if (!is.unit(target)) {
-    throw new TypeError("target should be an store, effect or event")
-  }
+
+  assertUnitOrList(target)
 
   if (is.unit(filter)) {
     sample({
