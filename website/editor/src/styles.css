@@ -131,6 +131,7 @@ body {
 .errors.no-errors {
   opacity: 0.5;
   z-index: -20;
+  padding: 0;
 }
 
 @media (max-width: 699px) {
