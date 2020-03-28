@@ -108,6 +108,7 @@ const Label = styled.label`
   padding: var(--settings-row-padding);
   border-bottom: 1px solid #ddd;
   font-weight: bold;
+  cursor: pointer;
 `
 
 export const Section = styled.section`

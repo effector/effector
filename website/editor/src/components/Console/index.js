@@ -20,9 +20,9 @@ class Console extends React.Component<Props, any> {
 
   scrollToLastMessage = () => {
     const {autoScroll} = this.props
-    const last = document.getElementById('last-log-message')
-    if (autoScroll && last) {
-      last.scrollIntoView({behavior: 'smooth', block: 'end'})
+    if (autoScroll) {
+      const parent = this.ref.current.parentElement
+      parent.scrollTop = parent.scrollHeight
     }
   }
 
