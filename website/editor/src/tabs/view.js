@@ -10,6 +10,7 @@ import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
 import {TabHeader, TabHeaderList} from './styled'
 import {mediaQuery} from '../components/mediaQuery'
+import {Gist} from '../gist/view'
 
 const SmallScreens = mediaQuery('(max-width: 699px)')
 
@@ -37,6 +38,10 @@ const tabs = {
   settings: {
     select: tabApi.showSettings,
     title: 'Settings',
+  },
+  gist: {
+    select: tabApi.showGist,
+    title: 'Gist',
   },
 }
 
@@ -68,16 +73,18 @@ export const TabsView = () => {
         <TabHeaderTemplate name="dom" />
         <TabHeaderTemplate name="share" />
         <TabHeaderTemplate name="settings" />
+        <TabHeaderTemplate name="gist" />
       </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div
-        style={{visibility: tab === 'dom' ? 'visible' : 'hidden'}}
+        style={{display: tab === 'dom' ? 'block' : 'none'}}
         className="dom">
         <iframe id="dom" />
       </div>
       {tab === 'share' && <Share />}
       {tab === 'settings' && <Settings />}
       {tab === 'errors' && <TypeErrorsView />}
+      {tab === 'gist' && <Gist />}
     </>
   )
 }

@@ -10,12 +10,13 @@ export type Tab =
   | 'editor'
   | 'outline'
   | 'settings'
+  | 'gist'
   | 'errors'
 
 export const isDesktopChanges = mediaMatcher('(min-width: 700px)')
 
 export const tab = createStore<Tab>(
-  isDesktopChanges.getState() ? 'dom' : 'editor',
+  isDesktopChanges.getState() ? 'dom' : 'editor'
 )
 
 export const tabApi = createApi(tab, {
@@ -25,6 +26,7 @@ export const tabApi = createApi(tab, {
   showDOM: () => 'dom',
   showShare: () => 'share',
   showSettings: () => 'settings',
+  showGist: () => 'gist',
   showErrors: () => 'errors',
 })
 
