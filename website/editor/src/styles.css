@@ -277,3 +277,8 @@ h3 {
 .navigationSlider .slidingNav ul li a {
   font-weight: normal;
 }
+
+.CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
+  font-size: 24px;
+  margin: -6px 2px 0 -4px;
+}
