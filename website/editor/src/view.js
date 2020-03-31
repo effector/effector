@@ -1,6 +1,6 @@
 //@flow
 
-import React, {useState, useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import {combine} from 'effector'
 import {createComponent} from 'effector-react'
 import debounce from 'lodash.debounce'
@@ -17,17 +17,13 @@ import {isDesktopChanges, tab} from './tabs/domain'
 import {TabsView} from './tabs/view'
 import {PrettifyButton} from './settings/view'
 import {mode} from './mode/domain'
-import {
-  performLint,
-  changeSources,
-  codeSetCursor,
-  codeCursorActivity,
-  codeMarkLine,
-} from './editor'
-import {sourceCode, codeError} from './editor/state'
+import {changeSources, codeCursorActivity, codeMarkLine, codeSetCursor, performLint} from './editor'
+import {codeError, sourceCode} from './editor/state'
 
 import {stats} from './realm/state'
 import Sizer from './components/Sizer'
+import {GitHubAuth} from './github/GitHubAuthLink'
+
 
 const OutlineView = createComponent(
   {
@@ -119,5 +115,6 @@ export default (
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />
+    <GitHubAuth />
   </>
 )

@@ -6,6 +6,7 @@
   --outline-width: 200px;
   --right-panel-width: 1fr;
   --console-height: 1fr;
+  --primary-color: #e95801;
 }
 
 .CodeMirror-lint-tooltip {
@@ -281,4 +282,24 @@ h3 {
 .CodeMirror-foldgutter-open, .CodeMirror-foldgutter-folded {
   font-size: 24px;
   margin: -6px 2px 0 -4px;
+}
+
+.headerWrapper.wrapper > header {
+  justify-content: space-between;
+}
+
+.fixedHeaderContainer > .headerWrapper.wrapper {
+  max-width: 100vw;
+  margin: 0;
+}
+
+#auth-section {
+  margin: 0;
+  flex: 0 0 120px;
+  display: flex;
+  height: 34px;
+  white-space: nowrap;
+  justify-content: flex-end;
+  z-index: 10001;
+  margin-right: -12px;
 }

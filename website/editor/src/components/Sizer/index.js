@@ -3,7 +3,7 @@ import {styled} from 'linaria/react'
 import debounce from 'lodash.debounce'
 
 
-const setBorder = dir => props => props.direction === dir && `1px solid ${props.border}`
+const setBorder = dir => props => props.direction === dir ? `1px solid ${props.border}` : 'none'
 
 const StyledSizer = styled.div`
   flex: 0 0 ${props => props.size};
@@ -67,7 +67,6 @@ const Sizer = ({
   sign,
 }) => {
   const ref = useRef(null)
-
   const handleMouseMove = e => {
     const shift = (direction === 'vertical' ? e.pageX : e.pageY) - params.start
     const newValue = `${Math.floor(params.param + shift * sign)}px`

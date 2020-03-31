@@ -10,7 +10,7 @@ import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share'
 import {TabHeader, TabHeaderList} from './styled'
 import {mediaQuery} from '../components/mediaQuery'
-import {Gist} from '../gist/view'
+import {Gist} from '../github/view'
 
 const SmallScreens = mediaQuery('(max-width: 699px)')
 
@@ -73,7 +73,7 @@ export const TabsView = () => {
         <TabHeaderTemplate name="dom" />
         <TabHeaderTemplate name="share" />
         <TabHeaderTemplate name="settings" />
-        <TabHeaderTemplate name="gist" />
+        {/*<TabHeaderTemplate name="gist" />*/}
       </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div
@@ -84,7 +84,7 @@ export const TabsView = () => {
       {tab === 'share' && <Share />}
       {tab === 'settings' && <Settings />}
       {tab === 'errors' && <TypeErrorsView />}
-      {tab === 'gist' && <Gist />}
+      {/*{tab === 'gist' && <Gist />}*/}
     </>
   )
 }

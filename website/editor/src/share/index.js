@@ -8,23 +8,24 @@ import {ShareGroup, ShareButton, SharedUrl, Label} from './styled'
 import {sharedUrl, canShare, urlRef, clickShare} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
+import {config} from '../github/config'
+
 
 const Save = () => {
   const pending = useStore(shareCode.pending)
   const codeToShare = useStore(sourceCode)
   return (
     <ShareButton onClick={() => shareCode(codeToShare)} disabled={pending}>
-      save
+      Save
     </ShareButton>
   )
 }
 
 const Copy = () => {
   const shareAllowed = useStore(canShare)
-  const copyMessage = <>copy&nbsp;to&nbsp;clipboard</>
   return (
     <ShareButton onClick={clickShare} disabled={!shareAllowed}>
-      {isShareAPISupported ? 'share' : copyMessage}
+      {isShareAPISupported ? 'Share' : 'Copy to clipboard'}
     </ShareButton>
   )
 }
@@ -40,14 +41,17 @@ const Url = () => {
   )
 }
 
-export const Share = () => (
-  <ShareGroup>
-    <Section>
-      <Label>
-        <Save />
-        <Copy />
-      </Label>
-    </Section>
-    <Url />
-  </ShareGroup>
-)
+
+export const Share = () => {
+  return (
+    <ShareGroup>
+      <Section>
+        <Label>
+          <Save />
+          <Copy />
+        </Label>
+      </Section>
+      <Url />
+    </ShareGroup>
+  )
+}
