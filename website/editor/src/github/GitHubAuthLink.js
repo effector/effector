@@ -22,9 +22,9 @@ const DropDownMenu = styled.div`
   right: -14px;
   background-color: white;
   color: #333;
-  box-shadow: 2px 2px 12px #aaa;
+  box-shadow: 2px 2px 12px #999;
   padding: 5px 0px;
-  list-style: none;
+  border-radius: 5px;
   &::after {
     opacity: ${props => props.open ? 1 : 0};
     transition: opacity .3s;
