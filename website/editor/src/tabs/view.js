@@ -64,7 +64,7 @@ export const TabsView = () => {
   const flowToggle = useStore(_flowToggle)
   return (
     <>
-      <TabHeaderList className="header-tabs">
+      <TabHeaderList className="header-tabs" style={{borderLeft: '1px solid #ddd'}}>
         <SmallScreens>
           <TabHeaderTemplate name="editor" />
           <TabHeaderTemplate name="outline" />

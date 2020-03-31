@@ -17,5 +17,3 @@ export const loadLayoutSettings = () => {
     // console.error(e)
   }
 }
-
-window.loadLayoutSettings = loadLayoutSettings

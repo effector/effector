@@ -94,13 +94,22 @@ const GitHubUserMenu = ({user, ...props}) => {
             setOpen(state => !state)
           }}
         >
-          <img src={user.avatarUrl} alt={user.name} style={{margin: '0 5px 0 0'}} />
+          <img src={user.avatarUrl} alt={user.name} style={{margin: '0 5px 0 0', width: 32, height: 32}} />
           <DropDownArrow />
         </div>
         <DropDownMenu open={open} ref={ref}>
-          <div style={{margin: '5px 20px 10px 20px'}}>
-            Signed in as <span style={{fontWeight: 'bold'}}>{user.name}</span>
-          </div>
+          <a
+            style={{
+              margin: '5px 20px 10px 20px',
+              color: '#555',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+            href={user.url}
+            target="_blank" rel="noreferrer noopener">
+            <GitHubCatIcon />
+            <span style={{fontWeight: 'bold'}}>{user.name}</span>
+          </a>
           <MenuDivider />
           <MenuItem onClick={() => setAuth(null)}>
             Sign out
@@ -143,7 +152,7 @@ export const GitHubAuthLink = ({token, ...props}) => {
 export const GitHubAuth = (props) => {
   const token = useStore($githubToken)
   const userInfo = useStore($githubUser)
-  // config.githubAuthUrl.searchParams.set('redirect_uri', location.href)
+  config.githubAuthUrl.searchParams.set('redirect_uri', location.href)
 
   if (token) {
     return <GitHubUserMenu user={userInfo} />

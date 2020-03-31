@@ -7,8 +7,8 @@ import {createEffect, attach, guard, restore} from 'effector'
 
 const auth = async (cb) => {
   const params = new URLSearchParams(location.search)
-  const code = params.get('code')
-  if (code) {
+  if (params.has('code')) {
+    const code = params.get('code')
     const url = new URL(GITHUB_GATEKEEPER_URL)
     url.searchParams.set('code', code)
     try {
@@ -26,9 +26,27 @@ const auth = async (cb) => {
   }
 }
 
+class AuthError extends Error {
+  constructor() {
+    super('Authotization error!')
+  }
+}
+
+class BadTokenError extends AuthError {
+  constructor() {
+    super('Bad token!')
+  }
+}
+
+class UnauthorizedError extends AuthError {
+  constructor() {
+    super('Unauthorized!')
+  }
+}
+
 const gqlQuery = createEffect({
   async handler({query, variables = null, token}) {
-    if (!token) throw new Error('bad token')
+    if (!token) throw new BadTokenError()
     const res = await fetch(GITHUB_API_URL, {
       method: 'POST',
       headers: {
@@ -39,6 +57,11 @@ const gqlQuery = createEffect({
         variables,
       }),
     })
+
+    if (!res.ok) {
+      throw new UnauthorizedError()
+    }
+
     return res.json()
   },
 })
@@ -63,17 +86,17 @@ const getUserInfo = createGqlQuery({query: userInfo})
 
 $githubUser
   .on(getUserInfo.doneData, (state, {data}) => data.viewer)
-  .reset(getUserInfo.fail)
+  .on(getUserInfo.fail, () => ({
+    email: '',
+    avatarUrl: '',
+    name: '',
+  }))
 
 $githubToken
   .on(login, () => '')
   .on(setAuth, (state, token) => token)
-  .reset(getUserInfo.fail)
+  .on(getUserInfo.fail, () => null)
 
-const profileMenuElement = document.getElementById('profile-menu')
-setGitDropDownMenu.watch(value => {
-  profileMenuElement.style.display = value ? 'block' : 'none'
-})
 
 auth(() => {
   getUserInfo()
