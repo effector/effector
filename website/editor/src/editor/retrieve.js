@@ -17,7 +17,7 @@ export function retrieveCode(): string {
       return preloaded.code
     }
   }
-  const code = getUrlParameter('code')
+  const code = getUrlParameter('src')
   if (code) {
     return decompress(code)
   }

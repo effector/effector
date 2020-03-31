@@ -121,7 +121,7 @@ declare export function decompress(input: string): string
 declare export function decompress(input?: null | void): void
 export function decompress(input: string) {
   if (input == null) return ''
-  if (input == '') return null
+  if (input === '') return null
   input = input.replace(/ /g, '+')
 
   const dictionary = [0, 1, 2]
@@ -141,10 +141,10 @@ export function decompress(input: string) {
   let dataIndex = 1
 
   const updateData = () => {
-    while (power != maxpower) {
+    while (power !== maxpower) {
       resb = dataVal & dataPosition
       dataPosition >>= 1
-      if (dataPosition == 0) {
+      if (dataPosition === 0) {
         dataPosition = 32
         dataVal = baseReverseDic[charAt(input, dataIndex++)]
       }
@@ -197,7 +197,7 @@ export function decompress(input: string) {
         return result.join('')
     }
 
-    if (enlargeIn == 0) {
+    if (enlargeIn === 0) {
       enlargeIn = 2 ** numBits
       numBits++
     }
@@ -221,7 +221,7 @@ export function decompress(input: string) {
 
     w = entry
 
-    if (enlargeIn == 0) {
+    if (enlargeIn === 0) {
       enlargeIn = 2 ** numBits
       numBits++
     }
