@@ -160,8 +160,8 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 
 - [Twitter](https://twitter.com/effectorjs)
 - [Gitter](https://gitter.im/effector-js/community)
-- [Telegram](https://t.me/effector_en)
-- [Telegram 🇷🇺](https://t.me/effector_ru)
+- [Telegram](https://t.me/effector_en) (@effector_en)
+- [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
 
 ## Press
 
@@ -460,6 +460,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 ## Support us
 
+More articles about effector at patreon
 <a href="https://www.patreon.com/zero_bias/overview"><img src="https://c5.patreon.com/external/logo/become_a_patron_button.png"/></a>
 
 ## Tested with browserstack
