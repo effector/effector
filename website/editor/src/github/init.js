@@ -1,4 +1,4 @@
-import {$csrf, $gitDropDownMenu, $githubToken, $githubUser} from './state'
+import {$csrf, $gitDropDownMenu, $githubToken, $githubUser, initialUserInfo} from './state'
 import {login, setAuth, setGitDropDownMenu} from './index'
 import {GITHUB_API_URL, GITHUB_GATEKEEPER_URL} from './config'
 import {userInfo} from './gql'
@@ -86,11 +86,7 @@ const getUserInfo = createGqlQuery({query: userInfo})
 
 $githubUser
   .on(getUserInfo.doneData, (state, {data}) => data.viewer)
-  .on(getUserInfo.fail, () => ({
-    email: '',
-    avatarUrl: '',
-    name: '',
-  }))
+  .on(getUserInfo.fail, () => initialUserInfo)
 
 $githubToken
   .on(login, () => '')

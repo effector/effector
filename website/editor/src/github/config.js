@@ -10,7 +10,7 @@ export const GITHUB_GATEKEEPER_URL = process.env.NODE_ENV === 'development'
 
 const githubAuthUrl = new URL(GITHUB_AUTH_URL)
 githubAuthUrl.searchParams.set('client_id', GITHUB_EFFECTOR_CLIENT_ID)
-githubAuthUrl.searchParams.set('scope', 'gist,read:user,user:email')
+githubAuthUrl.searchParams.set('scope', 'gist,read:user')
 
 export const config = {
   githubAuthUrl,
