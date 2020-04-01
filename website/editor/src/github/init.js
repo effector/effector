@@ -16,7 +16,7 @@ const auth = async (cb) => {
       if (res.ok) {
         const {token} = await res.json()
         setAuth(token)
-        location.replace(location.pathname)
+        history.replaceState({}, '', location.origin)
       }
     } catch (e) {
       setAuth(null)
