@@ -6,6 +6,8 @@ import {decompress, compress} from './compression'
 
 export function retrieveCode(): string {
   const isStuck = readStuckFlag()
+  const isAuthRedirectedUrl = location.pathname === '/auth'
+
   if (/https\:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
     if ('__code__' in window) {
       const preloaded: {
@@ -18,7 +20,7 @@ export function retrieveCode(): string {
     }
   }
   const code = getUrlParameter('code')
-  if (code) {
+  if (!isAuthRedirectedUrl && code) {
     return decompress(code)
   }
   const storageCode = localStorage.getItem('code-compressed')
