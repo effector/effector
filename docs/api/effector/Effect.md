@@ -63,7 +63,9 @@ Provides a function, which will be called when an effect is triggered.
 
 It will replace the previous function inside.
 
-> Note that you must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise the error "no handler used in _%effect name%_" will appear in the console
+> **Note**: You must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise the error "no handler used in _%effect name%_" will appear in the console
+
+> **See also**: [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 
 #### Arguments
 
