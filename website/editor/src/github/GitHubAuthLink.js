@@ -152,7 +152,7 @@ export const GitHubAuthLink = ({token, ...props}) => {
 export const GitHubAuth = (props) => {
   const token = useStore($githubToken)
   const userInfo = useStore($githubUser)
-  config.githubAuthUrl.searchParams.set('redirect_uri', location.href)
+  // config.githubAuthUrl.searchParams.set('redirect_uri', location.href)
 
   if (token) {
     return <GitHubUserMenu user={userInfo} />
