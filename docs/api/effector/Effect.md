@@ -61,7 +61,9 @@ const data = await fetchUserFx({id: 2})
 
 Provides a function, which will be called when an effect is triggered.
 
-It will replace the previous function inside (if any).
+It will replace the previous function inside.
+
+> Note that you must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise the error "no handler used in _%effect name%_" will appear in the console
 
 #### Arguments
 
