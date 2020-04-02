@@ -25,8 +25,8 @@ module.exports = function Footer({config}) {
             rel="noreferrer noopener">
             Twitter
           </a>
-          <a href="https://t.me/effector_ru">Telegram 🇷🇺</a>
-          <a href="https://t.me/effector_en">Telegram</a>
+          <a href="tg://resolve?domain=effector_ru">Telegram 🇷🇺</a>
+          <a href="tg://resolve?domain=effector_en">Telegram</a>
         </div>
         <div>
           <h5>More</h5>
