@@ -125,6 +125,8 @@ const ShareList = () => {
       e.stopPropagation()
 
       const tmp = document.createElement('input')
+      tmp.contentEditable = true
+      tmp.readOnly = false
       tmp.value = `${location.origin}/${share.slug}`
       document.body.appendChild(tmp)
       tmp.select()
