@@ -9,6 +9,8 @@ import {setCurrentShareId} from '../share'
 export function retrieveCode(): string {
   const isStuck = readStuckFlag()
   const isAuthRedirectedUrl = location.pathname === '/auth'
+  const regExp = new RegExp(`${location.origin}/(.*)`)
+  const [, slug] = regExp.exec(location.href)
 
   if (/https:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
     if ('__code__' in window) {
@@ -18,11 +20,10 @@ export function retrieveCode(): string {
         tags: string[],
         ...
       } = (window: any).__code__
+      slug && setCurrentShareId(slug)
       return preloaded.code
     }
   } else if (!isAuthRedirectedUrl) {
-    const regExp = new RegExp(`${location.origin}/(.*)`)
-    const [, slug] = regExp.exec(location.href)
     if (slug) {
       fetch(`https://effector-proxy.now.sh/api/get-code?slug=${slug}`)
         .then(async res => {
