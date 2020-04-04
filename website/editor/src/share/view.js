@@ -3,13 +3,12 @@
 import * as React from 'react'
 import {useStore} from 'effector-react'
 import {shareCode} from '../graphql'
-import {sourceCode} from '../editor/state'
-import {ShareGroup, ShareButton, SharedUrl, Label, Button} from './styled'
-import {sharedUrl, canShare, urlRef, clickShare} from './controller'
+import {ShareButton, SharedUrl, ShareGroup} from './styled'
+import {canShare, clickShare, sharedUrl, urlRef} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
-import {handleInput, handleKeyDown, removeShare, saveShare, setCurrentShareId} from './index'
-import {$currentShareId, $shareDescription, $shareList} from './state'
+import {handleInput, handleKeyDown, removeShare, setCurrentShareId} from './index'
+import {$currentShareId, $shareDescription} from './state'
 import {styled} from 'linaria/react'
 import {CopyIcon} from '../components/Icons/CopyIcon'
 import {ShareIcon} from '../components/Icons/ShareIcon'
@@ -17,7 +16,6 @@ import {LoadingIcon} from '../components/Icons/LoadingIcon'
 import {$sortedShareList} from './init'
 import {IconButton} from '../components/IconButton'
 import {theme} from '../components/Console/theme/default'
-import {clearConsole} from '../logs'
 
 
 const Save = (props) => {
@@ -192,8 +190,18 @@ const ShareList = () => {
   })
 }
 
+const ValidatedInput = styled.input`
+  outline: none;
+  border: none;
+  box-shadow: 0 0 1px black;
+  :invalid {
+    box-shadow: 0 0 4px red;
+  }
+`
+
 export const Share = () => {
   const shareDescription = useStore($shareDescription)
+
   return (
     <ShareGroup>
       <Section style={{
@@ -205,13 +213,15 @@ export const Share = () => {
         border: 'none',
         borderBottom: '1px solid #ddd',
       }}>
-        <input type="text"
-               className="share-description"
-               style={{width: '100%', padding: 4, height: 32}}
-               placeholder="Share description"
-               value={shareDescription}
-               onKeyDown={handleKeyDown}
-               onChange={handleInput}
+        <ValidatedInput type="text"
+                        className="share-description"
+                        style={{width: '100%', padding: 4, height: 32}}
+                        placeholder="Required share description"
+                        value={shareDescription}
+                        onKeyDown={handleKeyDown}
+                        onChange={handleInput}
+                        autoFocus
+                        required
         />
         <Save disabled={!shareDescription.trim()} />
         {/*<Copy />*/}

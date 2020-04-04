@@ -1,9 +1,10 @@
-import {addShare, onKeyDown, onTextChange, removeShare, saveShare, setCurrentShareId} from './index'
+import {addShare, onKeyDown, onTextChange, removeShare, setCurrentShareId} from './index'
 import {$currentShareId, $shareDescription, $shareList} from './state'
-import {sample, split, forward, combine} from 'effector'
-import {sourceCode} from '../editor/state'
+import {combine, forward, sample, split} from 'effector'
 import {shareCode} from '../graphql'
 import {$githubUser} from '../github/state'
+import {pressCtrlS} from './controller'
+import {tabApi} from '../tabs/domain'
 
 
 $currentShareId
@@ -21,11 +22,22 @@ forward({
 
 $shareDescription
   .on(onTextChange, (_, value) => value)
-  .reset(addShare, keyDown.Escape)
+  .reset(keyDown.Escape)
 
 const sharesWithUser = combine({
   shareList: $shareList,
   githubUser: $githubUser,
+})
+
+sample({
+  source: sharesWithUser,
+  clock: $currentShareId,
+  target: $shareDescription,
+  fn: ({shareList, githubUser}, slug) => {
+    const userShares = shareList[githubUser.databaseId]
+    const currentShare = Object.values(userShares).find(share => share.slug === slug)
+    return currentShare?.description
+  },
 })
 
 sample({
@@ -70,3 +82,12 @@ export const $sortedShareList = sharesWithUser.map(({shareList, githubUser}) => 
   },
 )
 
+sample({
+  source: $shareDescription,
+  clock: pressCtrlS,
+  fn: (desc) => {
+    if (!desc) {
+      tabApi.showShare()
+    }
+  },
+})

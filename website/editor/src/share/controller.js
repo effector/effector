@@ -15,9 +15,10 @@ import {
 import {sourceCode} from '../editor/state'
 import {shareCode} from '../graphql'
 import {isShareAPISupported} from '../device'
+import {setCurrentShareId} from './index'
 
 
-const pressCtrlS = createEvent()
+export const pressCtrlS = createEvent()
 
 forward({
   from: guard(pressCtrlS, {
@@ -40,6 +41,7 @@ document.addEventListener(
 shareCode.done.watch(({result: {slug}}) => {
   // if (/https\:\/\/(share\.)?effector\.dev/.test(location.origin)) {
   history.pushState({slug}, slug, `${location.origin}/${slug}`)
+  setCurrentShareId(slug)
   // }
 })
 
