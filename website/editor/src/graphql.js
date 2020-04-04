@@ -38,6 +38,8 @@ const request = data => {
 export const shareCode = attach({
   effect: createEffect('share code', {
     async handler({author, description, code}) {
+      if (!description) throw new Error(`Missing required field 'description'`)
+
       const {createCodePage} = await request({
         query: `
         mutation ReplMutation($codePage: CodePageInput!) {
