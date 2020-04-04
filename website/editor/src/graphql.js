@@ -1,6 +1,12 @@
 //@flow
 
-import {createEffect, type Effect} from 'effector'
+import {attach, createEffect, type Effect} from 'effector'
+import md5 from 'js-md5'
+import {$githubUser} from './github/state'
+import {$shareDescription} from './share/state'
+import {addShare} from './share'
+import {sourceCode} from './editor/state'
+
 
 const ENDPOINT = {
   DIST: 'y6776i4nfja2lnx3gbkbmlgr3i',
@@ -27,22 +33,43 @@ const request = data => {
       return result.data
     })
 }
-type ShareCode = Effect<string, {|slug: string|}>
-export const shareCode: ShareCode = createEffect('share code', {
-  async handler(code) {
-    const {createCodePage} = await request({
-      query: `
+
+// type ShareCode = Effect<string, {|slug: string|}>
+export const shareCode = attach({
+  effect: createEffect('share code', {
+    async handler({author, description, code}) {
+      const {createCodePage} = await request({
+        query: `
         mutation ReplMutation($codePage: CodePageInput!) {
           createCodePage(codePage: $codePage) {
             slug
+            description
+            author
+            created
+            code
           }
         }
       `,
-      variables: {
-        codePage: {code},
-      },
-      operationName: 'ReplMutation',
-    })
-    return createCodePage
+        variables: {
+          codePage: {author, description, code},
+        },
+        operationName: 'ReplMutation',
+      })
+      addShare({
+        ...createCodePage,
+        md5: md5(createCodePage.code),
+      })
+      return createCodePage
+    },
+  }),
+  source: {
+    user: $githubUser,
+    description: $shareDescription,
+    sourceCode,
   },
+  mapParams: (params, {user, description, sourceCode}) => ({
+    author: user ? user.databaseId : null,
+    description,
+    code: sourceCode,
+  }),
 })

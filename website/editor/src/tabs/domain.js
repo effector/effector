@@ -2,6 +2,7 @@
 
 import {createStore, createApi} from 'effector'
 import {mediaMatcher} from '../mediaMatcher'
+import {createLocalStore} from '../lib/createLocalStorage'
 
 export type Tab =
   | 'graphite'
@@ -15,7 +16,7 @@ export type Tab =
 
 export const isDesktopChanges = mediaMatcher('(min-width: 700px)')
 
-export const tab = createStore<Tab>(
+export const tab = createLocalStore<Tab>('current-tab',
   isDesktopChanges.getState() ? 'dom' : 'editor'
 )
 

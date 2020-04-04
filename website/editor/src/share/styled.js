@@ -33,8 +33,9 @@ export const Button = styled.button`
   }
 
   &:disabled {
+    opacity: .65;
     background: hsl(213, 50%, 45%);
-    color: hsla(0, 0%, 100%, 0.9);
+    color: hsla(0,0%,90%,0.9);
     cursor: not-allowed;
   }
 `
@@ -56,15 +57,10 @@ export const ShareButton = styled(Button)`
   border-radius: 2px;
   padding: 0.5rem 1rem;
   border-width: 0;
-  margin: 1rem 0;
-  margin-left: 1rem;
+  margin: 0;
+  margin-left: 6px;
   white-space: nowrap;
-  &:first-child {
-    margin-left: 1rem;
-  }
-  &:last-child {
-    margin-right: 1rem;
-  }
+  transition: width .25s;
 `
 
 export const ShareGroup = styled.div`

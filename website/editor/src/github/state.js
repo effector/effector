@@ -1,13 +1,24 @@
-import {createStore, restore} from 'effector'
+//@flow
 import {createLocalStore} from '../lib/createLocalStorage'
 
-export const initialUserInfo = {
-  id: '',
-  avatarUrl: '',
-  name: '',
-  url: ''
+
+export type TGitHubUserInfo = {
+  databaseId: ?number,
+  name: string,
+  url: string,
+  avatarUrl: string
 }
 
-export const $csrf = createLocalStore('csrf', '')
-export const $githubToken = createLocalStore('github-token', '')
-export const $githubUser = createLocalStore('github-user', initialUserInfo)
+export const initialUserInfo: TGitHubUserInfo = {
+  databaseId: null,
+  avatarUrl: '',
+  name: '',
+  url: '',
+}
+
+export type TToken = string | null
+
+
+export const $csrf = createLocalStore<string>('csrf', '')
+export const $githubToken = createLocalStore<TToken>('github-token', null)
+export const $githubUser = createLocalStore<TGitHubUserInfo>('github-user', initialUserInfo)

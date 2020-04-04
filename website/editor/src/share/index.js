@@ -1,57 +1,13 @@
-//@flow
-
-import * as React from 'react'
-import {useStore} from 'effector-react'
-import {shareCode} from '../graphql'
-import {sourceCode} from '../editor/state'
-import {ShareGroup, ShareButton, SharedUrl, Label} from './styled'
-import {sharedUrl, canShare, urlRef, clickShare} from './controller'
-import {Section} from '../settings/view'
-import {isShareAPISupported} from '../device'
-import {config} from '../github/config'
+import {createEffect, createEvent} from 'effector'
 
 
-const Save = () => {
-  const pending = useStore(shareCode.pending)
-  const codeToShare = useStore(sourceCode)
-  return (
-    <ShareButton onClick={() => shareCode(codeToShare)} disabled={pending}>
-      Save
-    </ShareButton>
-  )
-}
-
-const Copy = () => {
-  const shareAllowed = useStore(canShare)
-  return (
-    <ShareButton onClick={clickShare} disabled={!shareAllowed}>
-      {isShareAPISupported ? 'Share' : 'Copy to clipboard'}
-    </ShareButton>
-  )
-}
-
-const Url = () => {
-  const url = useStore(sharedUrl)
-  return (
-    url && (
-      <Section>
-        <SharedUrl ref={urlRef} value={url} readOnly />
-      </Section>
-    )
-  )
-}
-
-
-export const Share = () => {
-  return (
-    <ShareGroup>
-      <Section>
-        <Label>
-          <Save />
-          <Copy />
-        </Label>
-      </Section>
-      <Url />
-    </ShareGroup>
-  )
-}
+export const saveShare = createEvent()
+export const removeShare = createEvent()
+export const addShare = createEvent()
+export const getShareList = createEffect()
+export const setCurrentShareId = createEvent()
+export const copyToClipboard = createEvent()
+export const handleInput = createEvent()
+export const onTextChange = handleInput.map(e => e.target.value)
+export const handleKeyDown = createEvent()
+export const onKeyDown = handleKeyDown.map(e => e.key)

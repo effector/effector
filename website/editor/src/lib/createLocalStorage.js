@@ -32,7 +32,8 @@ export function createLocalStore<State>(
     prevent?: boolean,
     save?: Function,
     unsavedState?: State
-  } = createStore<State>(load(name), {name})
+  } = createStore<State>(initialState, {name})
+  store.setState(load(name))
   store.storageKey = name
   store.prevent = prevent
   store.save = (key, value) => {

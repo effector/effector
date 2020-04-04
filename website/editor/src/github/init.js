@@ -1,34 +1,48 @@
-import {$csrf, $gitDropDownMenu, $githubToken, $githubUser, initialUserInfo} from './state'
-import {login, setAuth, setGitDropDownMenu} from './index'
+import {attach, createEffect, Store} from 'effector'
+import type {TGitHubUserInfo, TToken} from './state'
+import {$githubToken, $githubUser} from './state'
+import {login, logout, setToken} from './index'
 import {GITHUB_API_URL, GITHUB_GATEKEEPER_URL} from './config'
 import {userInfo} from './gql'
-import {createEffect, attach, guard, restore} from 'effector'
 
 
-const auth = async (cb) => {
-  const params = new URLSearchParams(location.search)
-  if (params.has('code')) {
-    const code = params.get('code')
-    const url = new URL(GITHUB_GATEKEEPER_URL)
-    url.searchParams.set('code', code)
-    try {
-      const res = await fetch(url)
-      if (res.ok) {
-        const {token} = await res.json()
-        setAuth(token)
-        history.replaceState({}, '', location.origin)
-      }
-    } catch (e) {
-      setAuth(null)
-    }
-  } else {
-    cb()
+type GQLParams = {
+  query: string,
+  variables?: {},
+  token?: TToken
+}
+
+type TUserInfoResult = {
+  data: {
+    viewer: TGitHubUserInfo
   }
 }
 
+export const auth = createEffect({
+  handler: async () => {
+    const params = new URLSearchParams(location.search)
+    const code = params.get('code')
+    if (code) {
+      const url = new URL(GITHUB_GATEKEEPER_URL)
+      url.searchParams.set('code', code)
+      try {
+        const res = await fetch(url)
+        if (res.ok) {
+          const {token} = await res.json()
+          setToken(token)
+          history.replaceState({}, '', location.origin)
+        }
+      } catch (e) {
+        return setToken(null)
+      }
+    }
+    getUserInfo()
+  },
+})
+
 class AuthError extends Error {
-  constructor() {
-    super('Authotization error!')
+  constructor(message: string) {
+    super(message || 'Authorization error!')
   }
 }
 
@@ -45,7 +59,7 @@ class UnauthorizedError extends AuthError {
 }
 
 const gqlQuery = createEffect({
-  async handler({query, variables = null, token}) {
+  async handler({query, variables, token}) {
     if (!token) throw new BadTokenError()
     const res = await fetch(GITHUB_API_URL, {
       method: 'POST',
@@ -62,38 +76,35 @@ const gqlQuery = createEffect({
       throw new UnauthorizedError()
     }
 
-    return res.json()
+    return await res.json()
   },
 })
 
 const authorizedRequest = attach({
   effect: gqlQuery,
   source: $githubToken,
-  mapParams: ({query, variables}, token) => ({
+  mapParams: ({query, variables}, token: TToken) => ({
     query,
     variables,
     token,
   }),
 })
 
-const createGqlQuery = ({query, variables}) =>
+const createGqlQuery = (query: string) =>
   attach({
     effect: authorizedRequest,
-    mapParams: () => ({query, variables}),
+    mapParams: (variables?: {}) => ({query, variables}),
   })
 
-const getUserInfo = createGqlQuery({query: userInfo})
+export const getUserInfo = createGqlQuery(userInfo)
 
 $githubUser
   .on(getUserInfo.doneData, (state, {data}) => data.viewer)
-  .on(getUserInfo.fail, () => initialUserInfo)
+  .reset(getUserInfo.fail, logout, login)
 
 $githubToken
-  .on(login, () => '')
-  .on(setAuth, (state, token) => token)
-  .on(getUserInfo.fail, () => null)
+  .on(setToken, (state, token) => token)
+  .reset(getUserInfo.fail, logout, login)
 
 
-auth(() => {
-  getUserInfo()
-})
+auth()
