@@ -6,7 +6,9 @@ import {config} from './config'
 import {$csrf, $githubToken, $githubUser} from './state'
 import {DropDownArrow} from './icons/DropDownArrow'
 import {GitHubCatIcon} from './icons/GitHubCatIcon'
-import {setAuth} from './index'
+import {logout, setToken} from './index'
+import {auth, getUserInfo} from './init'
+import {LoadingIcon} from '../components/Icons/LoadingIcon'
 
 
 const portalContainer = document.getElementById('auth-section')
@@ -55,7 +57,7 @@ const MenuDivider = styled.div`
   background-color: #eee;
 `
 
-const GitHubUserMenu = ({user, ...props}) => {
+const GitHubUserMenu = ({user, pending, ...props}) => {
   const [open, setOpen] = useState(false)
   const ref = useRef(null)
 
@@ -78,7 +80,10 @@ const GitHubUserMenu = ({user, ...props}) => {
         alignItems: 'center',
         cursor: 'pointer',
         zIndex: 100,
-        overflow: 'auto',
+        paddingRight: 10,
+        overflow: 'hidden',
+        minWidth: 18,
+        minHeight: 18,
         ...props.style,
       }}>
         <div
@@ -111,7 +116,10 @@ const GitHubUserMenu = ({user, ...props}) => {
             <span style={{fontWeight: 'bold'}}>{user.name}</span>
           </a>
           <MenuDivider />
-          <MenuItem onClick={() => setAuth(null)}>
+          <MenuItem onClick={() => {
+            setOpen(false)
+            logout()
+          }}>
             Sign out
           </MenuItem>
         </DropDownMenu>
@@ -142,17 +150,32 @@ export const GitHubAuthLink = ({token, ...props}) => {
          location.replace(config.githubAuthUrl.href)
        }}
     >
-      <GitHubCatIcon />
-      Sign in
+      <GitHubCatIcon /> Sign in
     </a>,
     portalContainer,
   )
 }
 
-export const GitHubAuth = (props) => {
+export const GitHubAuth = () => {
   const token = useStore($githubToken)
   const userInfo = useStore($githubUser)
+  const userInfoPending = useStore(getUserInfo.pending)
+  const authPending = useStore(auth.pending)
   // config.githubAuthUrl.searchParams.set('redirect_uri', location.href)
+
+  if (authPending || userInfoPending) {
+    return ReactDOM.createPortal(
+      <div style={{
+        alignSelf: 'center',
+        marginLeft: 40,
+        zIndex: 100,
+        paddingRight: 40,
+      }}>
+        <LoadingIcon />
+      </div>,
+      portalContainer
+    )
+  }
 
   if (token) {
     return <GitHubUserMenu user={userInfo} />

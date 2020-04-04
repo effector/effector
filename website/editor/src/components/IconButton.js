@@ -12,6 +12,7 @@ export const IconButton = styled.button`
   margin: 0 4px;
   cursor: pointer;
   border: none;
+  outline: none;
   :hover {
     opacity: .75;
   }

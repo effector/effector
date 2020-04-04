@@ -303,3 +303,7 @@ h3 {
   z-index: 10001;
   margin-right: -12px;
 }
+
+.share-description::placeholder {
+  color: #777;
+}

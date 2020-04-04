@@ -16,14 +16,14 @@ import {sourceCode} from '../editor/state'
 import {shareCode} from '../graphql'
 import {isShareAPISupported} from '../device'
 
+
 const pressCtrlS = createEvent()
 
-sample({
-  source: sourceCode,
-  clock: guard(pressCtrlS, {
+forward({
+  from: guard(pressCtrlS, {
     filter: shareCode.pending.map(pending => !pending),
   }),
-  target: shareCode,
+  to: shareCode,
 })
 
 document.addEventListener(
@@ -38,9 +38,9 @@ document.addEventListener(
 )
 
 shareCode.done.watch(({result: {slug}}) => {
-  if (/https\:\/\/(share\.)?effector\.dev/.test(location.origin)) {
-    history.pushState({slug}, slug, `https://share.effector.dev/${slug}`)
-  }
+  // if (/https\:\/\/(share\.)?effector\.dev/.test(location.origin)) {
+  history.pushState({slug}, slug, `${location.origin}/${slug}`)
+  // }
 })
 
 const slug = createStore('').on(
@@ -49,7 +49,7 @@ const slug = createStore('').on(
 )
 export const sharedUrl: Store<string> = createStore('').on(
   slug,
-  (state, slug) => `https://share.effector.dev/${slug}`,
+  (state, slug) => `${location.origin}/${slug}`,
 )
 shareCode.fail.watch(e => console.log('fail', e))
 

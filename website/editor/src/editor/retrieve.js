@@ -3,12 +3,14 @@
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from '../versions.json'
 import {decompress, compress} from './compression'
+import {changeSources} from './index'
+import {setCurrentShareId} from '../share'
 
 export function retrieveCode(): string {
   const isStuck = readStuckFlag()
   const isAuthRedirectedUrl = location.pathname === '/auth'
 
-  if (/https\:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
+  if (/https:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
     if ('__code__' in window) {
       const preloaded: {
         code: string,
@@ -18,7 +20,27 @@ export function retrieveCode(): string {
       } = (window: any).__code__
       return preloaded.code
     }
+  } else if (!isAuthRedirectedUrl) {
+    const regExp = new RegExp(`${location.origin}/(.*)`)
+    const [, slug] = regExp.exec(location.href)
+    if (slug) {
+      fetch(`https://effector-proxy.now.sh/api/get-code?slug=${slug}`)
+        .then(async res => {
+          try {
+            const {status, data} = await res.json()
+            if (status === 200) {
+              const {code} = JSON.parse(decompress(data))
+              return changeSources(code)
+            }
+          } catch(e) {
+            console.error(e)
+          }
+        })
+      setCurrentShareId(slug)
+      return null
+    }
   }
+
   const code = getUrlParameter('code')
   if (!isAuthRedirectedUrl && code) {
     return decompress(code)
