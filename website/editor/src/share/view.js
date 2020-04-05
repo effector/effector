@@ -145,7 +145,7 @@ const ShareList = () => {
       >
         <ShareRow>
           <ShareDescription>
-            {share.description}
+            {share.description || `<${share.slug}>`}
           </ShareDescription>
           <div style={{marginLeft: 10, position: 'relative'}}>
             {isShareAPISupported
@@ -203,6 +203,7 @@ const ValidatedInput = styled.input`
 
 export const Share = () => {
   const shareDescription = useStore($shareDescription)
+  const saving = useStore(shareCode.pending)
 
   return (
     <ShareGroup>
@@ -219,16 +220,15 @@ export const Share = () => {
                         className="share-description"
                         style={{width: '100%', padding: 4, height: 32}}
                         placeholder="Required share description"
-                        value={shareDescription}
+                        value={shareDescription || ''}
                         onKeyDown={handleKeyDown}
                         onChange={handleInput}
                         autoFocus
                         required
         />
-        <Save disabled={!shareDescription.trim()} />
-        {/*<Copy />*/}
+        <Save disabled={saving} />
       </Section>
-      {/*<Url />*/}
+
       <Section style={{
         margin: 0,
         padding: 0,

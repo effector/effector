@@ -82,12 +82,12 @@ export const $sortedShareList = sharesWithUser.map(({shareList, githubUser}) => 
   },
 )
 
-sample({
-  source: $shareDescription,
-  clock: pressCtrlS,
-  fn: (desc) => {
-    if (!desc) {
-      tabApi.showShare()
-    }
-  },
-})
+// sample({
+//   source: $shareDescription,
+//   clock: pressCtrlS,
+//   fn: (desc) => {
+//     if (!desc) {
+//       tabApi.showShare()
+//     }
+//   },
+// })

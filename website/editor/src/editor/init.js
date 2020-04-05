@@ -102,6 +102,7 @@ codeError.watch(async({stackFrames}) => {
 
 changeSources.map(compress).watch(code => {
   localStorage.setItem('code-compressed', code)
+  history.replaceState({}, '', location.origin)
 })
 
 forward({

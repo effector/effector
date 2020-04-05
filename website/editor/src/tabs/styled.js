@@ -3,6 +3,8 @@
 import {styled} from 'linaria/react'
 
 export const TabHeader = styled.li`
+  flex: 1 1 100%;
+  text-align: center;
   border-right: 1px solid #ddd;
   cursor: pointer;
   font-size: 14px;

@@ -1,6 +1,6 @@
 //@flow
 
-import * as React from 'react'
+import React, {memo} from 'react'
 
 import {Root} from './elements'
 import Message from './Message'
@@ -76,4 +76,4 @@ class Console extends React.Component<Props, any> {
   }
 }
 
-export default Console
+export default memo(Console)

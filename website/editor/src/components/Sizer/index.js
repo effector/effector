@@ -20,17 +20,7 @@ const StyledSizer = styled.div`
   }
 `
 
-const background = document.createElement('div')
-background.style = `
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10000;
-  opacity: 0;
-  cursor: row-resize;
-`
+const background = document.getElementById('dimmer')
 
 function getCoords(elem) {
   var box = elem.getBoundingClientRect()
@@ -56,6 +46,10 @@ const saveSettings = debounce((key, value) => {
   }
 }, 250)
 
+let lastClick = 0
+const DOUBLE_CLICK_TIMEOUT = 250
+let lastZoom = '0'
+
 const Sizer = ({
   direction,
   color = '#ddd',
@@ -65,6 +59,11 @@ const Sizer = ({
   cssVar,
   container,
   sign,
+  children,
+  max = direction === 'horizontal' ? window.innerHeight : window.innerWidth,
+  min = 0,
+  middle = 0,
+  ...props
 }) => {
   const ref = useRef(null)
   const handleMouseMove = e => {
@@ -77,14 +76,34 @@ const Sizer = ({
   const handleMouseUp = e => {
     document.removeEventListener('mousemove', handleMouseMove)
     document.removeEventListener('mouseup', handleMouseUp)
-    document.body.removeChild(background)
+    background.style.display = 'none'
     document.body.style['user-select'] = bodyUserSelect
   }
 
   const handleMouseDown = e => {
+    const prevLastClick =  lastClick
+    lastClick = Date.now()
+    if (Date.now() - prevLastClick < DOUBLE_CLICK_TIMEOUT) {
+      const currentValue = String(document.body.style.getPropertyValue(cssVar))
+      console.log(currentValue, lastZoom, min, max)
+      let zoom
+      if (currentValue === min || currentValue === max) {
+        zoom = middle
+        lastZoom = currentValue
+      } else if (lastZoom === min) {
+        zoom = max
+        lastZoom = max
+      } else if (lastZoom === max) {
+        zoom = min
+        lastZoom = min
+      }
+      document.body.style.setProperty(cssVar, zoom)
+      saveSettings(cssVar, zoom)
+      return
+    }
     background.style.cursor = direction === 'vertical' ? 'col-resize' : 'row-resize'
+    background.style.display = 'block'
     bodyUserSelect = document.body.style['user-select'] || ''
-    document.body.appendChild(background)
     document.body.style['user-select'] = 'none'
 
     document.addEventListener('mousemove', handleMouseMove)
@@ -115,7 +134,10 @@ const Sizer = ({
       border={border}
       size={size}
       style={style}
-    />
+      {...props}
+    >
+      {children}
+    </StyledSizer>
   )
 }
 

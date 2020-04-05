@@ -6,6 +6,7 @@
   --outline-width: 200px;
   --right-panel-width: 1fr;
   --console-height: 1fr;
+  --console-min-height: 38px;
   --primary-color: #e95801;
 }
 
@@ -136,8 +137,14 @@ body {
 }
 
 @media (max-width: 699px) {
-  .layout-sizer {
+  .navPusher {
+    padding-top: 50px;
+  }
+  .navigationWrapper {
     display: none;
+  }
+  .layout-sizer {
+    /*display: none;*/
   }
   .navPusher {
     min-height: calc(100vh - 100px);
@@ -146,33 +153,31 @@ body {
     width: 100vw;
     overflow-x: hidden;
     scroll-snap-type: mandatory;
-    grid-template-rows: 50px auto repeat(7, minmax(100px, 33vh)) auto repeat(
-        3,
-        minmax(100px, 33vh)
-      );
+    grid-template-rows: 36px minmax(0, 1fr) minmax(var(--console-min-height), var(--console-height));
+    border: none;
+    z-index: 9999;
   }
   .header-tabs {
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 1;
   }
   .sources {
     grid-column: 1 / span 1;
-    grid-row: 3 / span 7;
+    grid-row: 2 / span 1;
   }
   .dom {
     border-top: 1px solid #ddd;
     grid-column: 1 / span 1;
-    grid-row: 3 / span 7;
+    grid-row: 2 / span 1;
   }
   .editor.results {
     border-top: 1px solid #ddd;
     grid-column: 1 / span 1;
-    grid-row: 3 / span 7;
+    grid-row: 2 / span 1;
   }
   .errors {
     grid-column: 1 / span 1;
-    grid-row: 1 / span 2;
-    border-bottom: 1px solid #ffd6d6;
+    grid-row: 3 / span 1;
     margin-top: 86px;
   }
 }
@@ -183,15 +188,15 @@ body {
   #try-wrapper {
     overflow: hidden;
     grid-template-columns: var(--outline-width) minmax(200px, 2fr) var(--right-panel-width);
-    grid-template-rows: 50px 36px repeat(2, minmax(0, 1fr)) minmax(42px, var(--console-height));
+    grid-template-rows: 36px minmax(0, 1fr) minmax(var(--console-min-height), var(--console-height));
   }
   .header-tabs {
     grid-column: 3 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 1 / span 1;
   }
   .dom {
     grid-column: 3 / span 1;
-    grid-row: 3 / span 2;
+    grid-row: 2 / span 1;
   }
   .sources {
     grid-column: 2 / span 1;
@@ -200,12 +205,12 @@ body {
 
   .editor.results {
     grid-column: 3 / span 1;
-    grid-row: 2 / span 3;
+    grid-row: 3 / span 1;
   }
 
   .errors {
     grid-column: 3 / span 1;
-    grid-row: 5 / span 1;
+    grid-row: 3 / span 1;
   }
 }
 
@@ -306,4 +311,17 @@ h3 {
 
 .share-description::placeholder {
   color: #777;
+}
+
+#dimmer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000000;
+  opacity: 0;
+  cursor: row-resize;
+  background-color: #000;
+  display: none;
 }

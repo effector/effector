@@ -15,7 +15,8 @@ import {flowToggle, tsToggle, typeHoverToggle} from './state'
 import {selectVersion} from '../editor'
 import {packageVersions, version} from '../editor/state'
 
-export const PrettifyButton = () => {
+
+export const PrettifyButton = ({style}) => {
   const {disabled, text} = useStoreMap({
     store: prettier.pending,
     keys: [],
@@ -25,7 +26,10 @@ export const PrettifyButton = () => {
     }),
   })
   return (
-    <Button disabled={disabled} onClick={clickPrettify}>
+    <Button disabled={disabled}
+            onClick={clickPrettify}
+            style={{height: 28, lineHeight: 0, margin: '0 10px 0 3px'}}
+    >
       {text}
     </Button>
   )
@@ -93,11 +97,11 @@ const SettingsGroup = styled.div`
   border-left: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
   grid-column: 3 / span 1;
-  grid-row: 3 / span 2;
+  grid-row: 2 / span 1;
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
-    grid-row: 3 / span 7;
+    grid-row: 2 / span 1;
   }
 `
 
@@ -126,14 +130,14 @@ const Button = styled.button`
 
   display: inline-block;
   border: none;
-  border-radius: 2px;
+  border-radius: 3px;
   border-width: 0;
   padding: 0.5rem 1rem;
   text-decoration: none;
   background: var(--color-main);
   color: #ffffff;
   font-family: sans-serif;
-  font-size: 1rem;
+  //font-size: 1rem;
   cursor: pointer;
   text-align: center;
   transition: background 70ms ease-in-out, transform 150ms ease;

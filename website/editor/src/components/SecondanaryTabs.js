@@ -42,9 +42,9 @@ const TabView = createComponent(tab, ({}, tab) => (
 const ToolbarView = createComponent({logs, tab, autoScrollLog}, ({}, {logs, tab, autoScrollLog}) => (
   <TabHeaderList justify="space-between">
     <Tab onClick={api.showConsole} isActive={tab === 'console'}>
-      Console{logs.length > 0 && <span style={{ marginLeft: 10, color: '#999'}}>({logs.length})</span>}
+      Console{logs.length > 0 && <span style={{marginLeft: 10, color: '#999'}}>({logs.length})</span>}
     </Tab>
-    <div style={{ margin: '0 6px'}}>
+    <div style={{margin: '0 6px'}}>
       <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onClick={clearConsole} />
     </div>
   </TabHeaderList>
@@ -59,13 +59,13 @@ const SecondanaryTabs = styled.div`
   
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
-    grid-row: 11 / span 1;
+    grid-row: 3 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 
   @media (min-width: 700px) {
     grid-column: 3 / span 1;
-    grid-row: 5 / span 1;
+    grid-row: 3 / span 1;
     grid-template-columns: repeat(2, minmax(100px, 1fr));
   }
 `
@@ -75,8 +75,18 @@ export default function() {
 
   return (
     <SecondanaryTabs ref={setRef} id="console-panel">
-      <Sizer direction="horizontal" cssVar="--console-height" container={ref} sign={-1} />
-      <ToolbarView />
+      <Sizer
+        direction="horizontal"
+        cssVar="--console-height"
+        container={ref}
+        sign={-1}
+        size={32}
+        min="0"
+        max="calc(100vh - 50px - 32px)"
+        middle="calc((100vh - 50px - 32px) / 2)"
+      >
+        <ToolbarView />
+      </Sizer>
       <TabView />
     </SecondanaryTabs>
   )

@@ -6,7 +6,7 @@ import {codeSetCursor} from '../editor'
 
 const Outline = styled.div`
   grid-column: 1 / span 1;
-  grid-row: 3 / span 7;
+  grid-row: 2 / span 1;
   background-color: #fff;
   border-bottom: 1px solid #ddd;
   font-size: 0.8rem;
@@ -14,7 +14,7 @@ const Outline = styled.div`
 
   @media (min-width: 700px) {
     grid-column: 1 / span 1;
-    grid-row: 1 / span 5;
+    grid-row: 1 / span 3;
   }
 `
 

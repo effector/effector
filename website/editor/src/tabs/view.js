@@ -4,7 +4,7 @@ import * as React from 'react'
 import {useStore, useStoreMap} from 'effector-react'
 import {tab as _tab, tabApi} from './domain'
 import {GraphiteView} from '../graphite/view'
-import {Settings} from '../settings/view'
+import {PrettifyButton, Settings} from '../settings/view'
 import {flowToggle as _flowToggle} from '../settings/state'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share/view'
@@ -64,7 +64,8 @@ export const TabsView = () => {
   const flowToggle = useStore(_flowToggle)
   return (
     <>
-      <TabHeaderList className="header-tabs" style={{borderLeft: '1px solid #ddd'}}>
+      <TabHeaderList className="header-tabs" style={{borderLeft: '1px solid #ddd', display: 'flex', justifyContent: 'space-between'}}>
+        <PrettifyButton />
         <SmallScreens>
           <TabHeaderTemplate name="editor" />
           <TabHeaderTemplate name="outline" />

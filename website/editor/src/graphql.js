@@ -6,6 +6,7 @@ import {$githubUser} from './github/state'
 import {$shareDescription} from './share/state'
 import {addShare} from './share'
 import {sourceCode} from './editor/state'
+import {auth} from './github/init'
 
 
 const ENDPOINT = {
@@ -34,12 +35,18 @@ const request = data => {
     })
 }
 
+const WARNING_MUST_SIGNIN = 'Share not saved. You must be signed in!"'
+
 // type ShareCode = Effect<string, {|slug: string|}>
 export const shareCode = attach({
   effect: createEffect('share code', {
     async handler({author, description, code}) {
-      if (!description) throw new Error(`Missing required field 'description'`)
-
+      description = description || undefined
+      author = author || undefined
+      if (!author) {
+        alert(WARNING_MUST_SIGNIN)
+        throw new Error(WARNING_MUST_SIGNIN)
+      }
       const {createCodePage} = await request({
         query: `
         mutation ReplMutation($codePage: CodePageInput!) {
