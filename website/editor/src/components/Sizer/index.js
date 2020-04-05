@@ -16,7 +16,7 @@ const StyledSizer = styled.div`
   border-top: ${setBorder('horizontal')};
   border-bottom: ${setBorder('horizontal')};
   &:hover {
-    opacity: .5;
+    opacity: ${props => props.hover || .5};
   }
 `
 
