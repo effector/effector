@@ -43,10 +43,6 @@ export const shareCode = attach({
     async handler({author, description, code}) {
       description = description || undefined
       author = author || undefined
-      if (!author) {
-        alert(WARNING_MUST_SIGNIN)
-        throw new Error(WARNING_MUST_SIGNIN)
-      }
       const {createCodePage} = await request({
         query: `
         mutation ReplMutation($codePage: CodePageInput!) {

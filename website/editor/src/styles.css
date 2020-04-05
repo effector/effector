@@ -325,3 +325,8 @@ h3 {
   background-color: #000;
   display: none;
 }
+
+.fixedHeaderContainer {
+  top: 0;
+  z-index: 10000;
+}
