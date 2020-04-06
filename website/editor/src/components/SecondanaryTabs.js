@@ -27,7 +27,7 @@ const Tab = styled.li`
   padding: 7px 15px;
   margin: 0;
   background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
-  border-bottom: ${({isActive}) => (isActive ? '5px solid #e95801' : '5px solid transparent')};
+  border-bottom: ${({isActive}) => (isActive ? '3px solid #e95801' : '3px solid transparent')};
 `
 
 const TabContent = styled.div`
@@ -40,11 +40,11 @@ const TabView = createComponent(tab, ({}, tab) => (
 
 // style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: 10, minHeight: 36}}>
 const ToolbarView = createComponent({logs, tab, autoScrollLog}, ({}, {logs, tab, autoScrollLog}) => (
-  <TabHeaderList justify="space-between">
+  <TabHeaderList justify="space-between" style={{border: 'none'}}>
     <Tab onClick={api.showConsole} isActive={tab === 'console'}>
-      Console{logs.length > 0 && <span style={{marginLeft: 10, color: '#999'}}>({logs.length})</span>}
+      Console {logs.length > 0 && <span style={{marginLeft: 10, color: '#999'}}>({logs.length})</span>}
     </Tab>
-    <div style={{margin: '0 6px'}}>
+    <div style={{margin: '5px 5px 0 0'}}>
       <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onMouseDown={clearConsole} />
     </div>
   </TabHeaderList>
@@ -80,7 +80,7 @@ export default function() {
         cssVar="--console-height"
         container={ref}
         sign={-1}
-        size={32}
+        size={28}
         min="0"
         max="calc(100vh - 50px - 32px)"
         middle="calc((100vh - 50px - 32px) / 2)"

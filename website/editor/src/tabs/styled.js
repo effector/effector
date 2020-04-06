@@ -12,11 +12,10 @@ export const TabHeader = styled.li`
   padding: 7px 15px 5px 15px;
   margin: 0;
   background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
-  border-bottom: ${({isActive}) => (isActive ? '2px solid #e95801' : '2px solid transparent')};
+  border-bottom: ${({isActive}) => (isActive ? '3px solid #e95801' : '3px solid transparent')};
 `
 
 export const TabHeaderList = styled.ul`
-  background: #f7f7f7;
   border-bottom: 1px solid #ddd;
   
   list-style: none;

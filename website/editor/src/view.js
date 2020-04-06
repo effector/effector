@@ -109,9 +109,6 @@ export default (
   <>
     <OutlineView />
     <CodeView />
-    {/*<SidebarHeader>*/}
-    {/*  <PrettifyButton />*/}
-    {/*</SidebarHeader>*/}
     <TabsView />
     <SecondanaryTabs />
     <ErrorsView />
