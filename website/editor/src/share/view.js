@@ -219,7 +219,7 @@ export const Share = () => {
         <ValidatedInput type="text"
                         className="share-description"
                         style={{width: '100%', padding: 4, height: 32}}
-                        placeholder="Required share description"
+                        placeholder="Share description required"
                         value={shareDescription || ''}
                         onKeyDown={handleKeyDown}
                         onChange={handleInput}
