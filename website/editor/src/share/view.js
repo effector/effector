@@ -4,7 +4,7 @@ import * as React from 'react'
 import {useStore} from 'effector-react'
 import {shareCode} from '../graphql'
 import {ShareButton, SharedUrl, ShareGroup} from './styled'
-import {canShare, clickShare, sharedUrl, urlRef} from './controller'
+import {canShare, clickShare, sharedUrl, sharing, urlRef} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
 import {handleInput, handleKeyDown, removeShare, setCurrentShareId} from './index'
@@ -117,7 +117,7 @@ const ShareList = () => {
     const shareLink = (e) => {
       e.preventDefault()
       e.stopPropagation()
-      console.log('share')
+      sharing({slug: share.slug, sharedUrl: `https://share.effector.dev/${share.slug}`})
     }
 
     const copyLink = (e) => {
