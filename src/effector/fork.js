@@ -35,6 +35,11 @@ export function hydrate(domain, {values}) {
       reg[scope.state.id].current = values[meta.sid]
     }
   }
+  const nonComputedStores = [...domain.history.stores]
+  launch({
+    target: nonComputedStores,
+    params: nonComputedStores.map(store => store.getState()),
+  })
 }
 
 /**
