@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createBrowserHistory} from 'history'
-import {fork, allSettled} from 'effector/fork'
+import {fork, hydrate, allSettled} from 'effector/fork'
 import {App, location$, startClient} from './app'
 import {app} from './domain'
 
@@ -13,11 +13,15 @@ location$.updates.watch(location => {
   }
 })
 
-const scope = fork(app, {
+hydrate(app, {
   values: (window as any).__initialState__,
 })
+
+const scope = fork(app)
+
 allSettled(startClient, {
   scope,
   params: history,
+}).then(() => {
+  ReactDOM.hydrate(<App root={scope} />, document.getElementById('root'))
 })
-ReactDOM.hydrate(<App root={scope} />, document.getElementById('root'))
