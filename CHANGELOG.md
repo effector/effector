@@ -36,7 +36,7 @@ forward({
 })
 ```
 
-- Fix computed stores support for `fork`
+- Fix computed stores support for `hydrate`
 - Fix `allSettled` support for effects as first argument
 
 ## effector 20.13.0
