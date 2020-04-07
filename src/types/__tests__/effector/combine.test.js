@@ -224,21 +224,21 @@ describe('combine cases (should pass)', () => {
     const B = createStore(1)
     const store: Store<[number, number, number]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'combine'
-        const store: Store<[number, number, number]> = combine(R, G, B)
-                                                                     ^
-        a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
-            ): Store<State>
-           [1] ^^^^^^^^^^^^
-            fn: (a: A, b: B) => R,
-            [2] ^^^^^^^^^^^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'combine'
+  const store: Store<[number, number, number]> = combine(R, G, B)
+                                                 ^^^^^^^
+  a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
+      ): Store<State>
+     [1] ^^^^^^^^^^^^
+      fn: (a: A, b: B) => R,
+      [2] ^^^^^^^^^^^^^^^^^
+"
+`)
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
@@ -580,21 +580,21 @@ describe('error inference (should fail with number -> string error)', () => {
     const B = createStore(1)
     const store: Store<[string, string, string]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
-      
-      --flow--
-      Cannot call 'combine'
-        const store: Store<[string, string, string]> = combine(R, G, B)
-                                                                     ^
-        a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
-            ): Store<State>
-           [1] ^^^^^^^^^^^^
-            fn: (a: A, b: B) => R,
-            [2] ^^^^^^^^^^^^^^^^^
-      "
-    `)
+"
+--typescript--
+Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
+
+--flow--
+Cannot call 'combine'
+  const store: Store<[string, string, string]> = combine(R, G, B)
+                                                 ^^^^^^^
+  a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
+      ): Store<State>
+     [1] ^^^^^^^^^^^^
+      fn: (a: A, b: B) => R,
+      [2] ^^^^^^^^^^^^^^^^^
+"
+`)
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
