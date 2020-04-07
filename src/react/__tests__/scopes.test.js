@@ -9,7 +9,7 @@ import {createDomain, forward, sample, attach} from 'effector'
 import {fork, allSettled, serialize, hydrate} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async () => {
+it('works', async() => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -119,7 +119,7 @@ it('works', async () => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('attach support', async () => {
+test('attach support', async() => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -239,7 +239,7 @@ Object {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('computed values support', async () => {
+test('computed values support', async() => {
   const app = createDomain()
 
   const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
@@ -301,4 +301,32 @@ test('computed values support', async () => {
   </small>
 </section>
 `)
+})
+
+test('allSettled effect calls', async() => {
+  const fn = jest.fn()
+  const app = createDomain()
+
+  const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
+    {
+      async handler(user) {
+        const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
+          method: 'POST',
+        })
+        return req.json()
+      },
+    },
+  )
+
+  const serverScope = fork(app)
+
+  await allSettled(fetchUser, {
+    scope: serverScope,
+    params: 'alice',
+  })
+    .then(fn)
+    .catch(err => {
+      console.error(err)
+    })
+  expect(fn).toBeCalled()
 })
