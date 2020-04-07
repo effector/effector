@@ -327,6 +327,14 @@ export function forward<T>(opts: {
   to: Unit<T> | ReadonlyArray<Unit<T>>
 }): Subscription
 export function forward(opts: {from: Unit<any>; to: ReadonlyArray<Unit<void>>}): Subscription
+export function forward(opts: {
+  from: ReadonlyArray<Unit<any>>
+  to: ReadonlyArray<Unit<void>>
+}): Subscription
+export function forward(opts: {
+  from: ReadonlyArray<Unit<any>>
+  to: Unit<void>
+}): Subscription
 export function forward<To, From extends To>(opts: {
   from: ReadonlyArray<Unit<From>>
   to: Unit<To> | ReadonlyArray<Unit<To>>

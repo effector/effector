@@ -233,7 +233,7 @@ Cannot call 'forward' with object literal bound to 'opts'
   })
 })
 
-describe('better inference experience', () => {
+describe('any to void support', () => {
   it('should forward from `Unit<*>` to `Unit<void>`', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
@@ -249,6 +249,81 @@ no errors
 Cannot call 'forward' with object literal bound to 'opts'
   forward({from, to})
                  ^^
+  undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'to'
+      const to = createEvent<void>()
+                         [1] ^^^^
+      const from = createEvent<string>()
+                           [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+  })
+  it('should forward from `Unit<*>[]` to `Unit<void>[]`', () => {
+    const from = createEvent<string>()
+    const to = createEvent<void>()
+
+    forward({from: [from], to: [to]})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+Cannot call 'forward' with object literal bound to 'opts'
+  forward({from: [from], to: [to]})
+                             ^^^^
+  undefined [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
+      const to = createEvent<void>()
+                         [1] ^^^^
+      const from = createEvent<string>()
+                           [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+  })
+  it('should forward from `Unit<*>` to `Unit<void>[]`', () => {
+    const from = createEvent<string>()
+    const to = createEvent<void>()
+
+    forward({from, to: [to]})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+Cannot call 'forward' with object literal bound to 'opts'
+  forward({from, to: [to]})
+                     ^^^^
+  undefined [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
+      const to = createEvent<void>()
+                         [1] ^^^^
+      const from = createEvent<string>()
+                           [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+  })
+  it('should forward from `Unit<*>[]` to `Unit<void>`', () => {
+    const from = createEvent<string>()
+    const to = createEvent<void>()
+
+    forward({from: [from], to})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+Cannot call 'forward' with object literal bound to 'opts'
+  forward({from: [from], to})
+                         ^^
   undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'to'
       const to = createEvent<void>()
                          [1] ^^^^
