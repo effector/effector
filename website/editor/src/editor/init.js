@@ -100,9 +100,14 @@ codeError.watch(async({stackFrames}) => {
   }
 })
 
+let lastCode = null
+
 changeSources.map(compress).watch(code => {
-  localStorage.setItem('code-compressed', code)
-  history.replaceState({}, '', location.origin)
+  if (lastCode !== null && lastCode !== code) {
+    localStorage.setItem('code-compressed', code)
+    history.replaceState({}, '', location.origin)
+  }
+  lastCode = code || lastCode
 })
 
 forward({
