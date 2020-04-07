@@ -125,7 +125,18 @@ export function allSettled(
 ) {
   const defer = createDefer()
   forkInFlightCounter.scope.defers.push(defer)
-  launch(find(start), ctx)
+  const contextStart = find(start)
+  if (is.effect(start)) {
+    launch(contextStart, {
+      params: ctx,
+      req: {
+        rs() {},
+        rj() {},
+      },
+    })
+  } else {
+    launch(contextStart, ctx)
+  }
   launch(forkInFlightCounter)
   return defer.req
 }
