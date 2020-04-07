@@ -2,6 +2,43 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.13.5
+
+- Extend typescript support for any to void forwarding: add support for forwarding to array of void units
+
+```typescript
+import {forward, createEvent, createEffect} from 'effector'
+
+const sourceA = createEvent<string>()
+const sourceB = createEvent<number>()
+
+const targetA = createEvent<void>()
+const targetB = createEffect<void, any>()
+
+forward({
+  from: sourceA,
+  to: targetA,
+})
+
+forward({
+  from: sourceA,
+  to: [targetA, targetB],
+})
+
+forward({
+  from: [sourceA, sourceB],
+  to: targetA,
+})
+
+forward({
+  from: [sourceA, sourceB],
+  to: [targetA, targetB],
+})
+```
+
+- Fix computed stores support for `fork`
+- Fix `allSettled` support for effects as first argument
+
 ## effector 20.13.0
 
 - Introduce `attach`: wrapper for effect, which allow to map effect arguments and use data from stores.
