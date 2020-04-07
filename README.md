@@ -158,6 +158,7 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 
 ## Community
 
+- Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
 - [Twitter](https://twitter.com/effectorjs)
 - [Gitter](https://gitter.im/effector-js/community)
 - [Telegram](https://t.me/effector_en) (@effector_en)
