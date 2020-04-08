@@ -1,13 +1,6 @@
 //@flow
 
-import {
-  createEvent,
-  createStore,
-  createStoreObject,
-  createDomain,
-  combine,
-  sample,
-} from 'effector'
+import {createEvent, createStore, createDomain, combine, sample} from 'effector'
 import {unitObjectName} from '../naming'
 
 const rootDomain = createDomain('')
@@ -54,8 +47,8 @@ describe('naming', () => {
   test('unnamed object store', () => {
     const firstName = createStore('')
     const lastName = createStore('')
-    const form = createStoreObject({firstName, lastName})
-    const app = createStoreObject({form})
+    const form = combine({firstName, lastName})
+    const app = combine({form})
 
     expect(app.compositeName?.fullName).toBe(
       'combine(combine(firstName, lastName))',

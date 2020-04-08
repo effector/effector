@@ -6,22 +6,22 @@ import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {
   type Store,
   createStore,
-  createStoreObject,
+  combine,
   createEvent,
   createApi,
 } from 'effector'
 import {createComponent} from '..'
 
 describe('createComponent', () => {
-  test('createStoreObject', async() => {
+  test('combine', async() => {
     const a = createStore(0)
     const b = createStore('bar')
-    const c = createStoreObject({a, b})
+    const c = combine({a, b})
     const spy = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
-        <select value={state.b}>
+        <select value={state.b} onChange={() => {}}>
           <option value="bar">bar</option>
           <option value="foo">foo</option>
         </select>
@@ -103,7 +103,7 @@ describe('createComponent', () => {
     )
   })
 
-  test('createStoreObject', async() => {
+  test('combine', async() => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
@@ -148,7 +148,7 @@ describe('createComponent', () => {
       add: (x, y) => x + y,
     })
     const updateValue = createEvent()
-    const c = createStoreObject({a, b})
+    const c = combine({a, b})
     const spy = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
@@ -187,7 +187,7 @@ describe('createComponent', () => {
       add: (x, y) => x + y,
     })
     const updateValue = createEvent()
-    const c = createStoreObject({a, b})
+    const c = combine({a, b})
     const spy = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>

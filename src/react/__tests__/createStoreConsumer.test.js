@@ -3,10 +3,10 @@
 import * as React from 'react'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
-import {createEvent, createStore, createStoreObject} from 'effector'
+import {createEvent, createStore, combine} from 'effector'
 import {createStoreConsumer} from '../createStoreConsumer'
 
-test('createStoreComponent attempt', async () => {
+test('createStoreComponent attempt', async() => {
   const store1 = createStore('foo')
   const changeText = createEvent()
   store1.on(changeText, (_, payload) => payload)
@@ -18,7 +18,7 @@ test('createStoreComponent attempt', async () => {
       foo
     </span>
   `)
-  await act(async () => {
+  await act(async() => {
     changeText('bar')
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -29,7 +29,7 @@ test('createStoreComponent attempt', async () => {
   `)
 })
 
-test('no dull re-renders', async () => {
+test('no dull re-renders', async() => {
   const fn = jest.fn()
   const reset = createEvent()
   const inc = createEvent()
@@ -43,7 +43,7 @@ test('no dull re-renders', async () => {
     .reset(reset)
   const selected = createStore([])
 
-  const fullStore = createStoreObject({listSize, currentList, selected})
+  const fullStore = combine({listSize, currentList, selected})
 
   const CurrentList = createStoreConsumer(currentList)
 
@@ -61,7 +61,7 @@ test('no dull re-renders', async () => {
       0,1,2
     </span>
   `)
-  await act(async () => {
+  await act(async() => {
     inc()
   })
   expect(container.firstChild).toMatchInlineSnapshot(`
@@ -70,7 +70,7 @@ test('no dull re-renders', async () => {
       0,1,2,3
     </span>
   `)
-  await act(async () => {
+  await act(async() => {
     reset()
   })
   expect(container.firstChild).toMatchInlineSnapshot(`

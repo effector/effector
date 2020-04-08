@@ -1,6 +1,6 @@
 //@flow
 
-import {createApi, restore, createStoreObject} from 'effector'
+import {createApi, restore, combine} from 'effector'
 
 test('create api', () => {
   const shape = restore({
@@ -8,7 +8,7 @@ test('create api', () => {
     newTodo: '',
     selected: [1],
   })
-  const full = createStoreObject(shape)
+  const full = combine(shape)
   const listCmd = createApi(shape.todos, {
     add(todos, item) {
       return [...todos, item]

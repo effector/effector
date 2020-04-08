@@ -1,7 +1,6 @@
 //@flow
 
 import {
-  createStoreObject,
   createStore,
   type Store,
   combine,
@@ -53,7 +52,7 @@ test('showcase', () => {
 
   const a = createStore(1)
   const b = createStore(2)
-  const bigStore = createStoreObject({a, b})
+  const bigStore = combine({a, b})
   const mapped = bigStore.map(s => s.a)
 
   a.on(foo, n => n + 1)

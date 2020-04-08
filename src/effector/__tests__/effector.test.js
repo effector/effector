@@ -8,7 +8,6 @@ import {
   createEvent,
   fromObservable,
   createStore,
-  createStoreObject,
 } from 'effector'
 
 import {spy, getSpyCalls} from 'effector/fixtures'
@@ -40,7 +39,7 @@ test('will run in expected order', () => {
     .reset(reset)
   const selected = createStore([])
 
-  createStoreObject({listSize, currentList, selected})
+  combine({listSize, currentList, selected})
 
   const unsub = currentList.subscribe(state => spy(state))
   add(5)
@@ -109,7 +108,7 @@ test('store.reset(event)', () => {
     .reset(reset)
   const selected = createStore([])
 
-  createStoreObject({listSize, currentList, selected})
+  combine({listSize, currentList, selected})
 
   const unsub = currentList.subscribe(state => spy(state))
   inc()

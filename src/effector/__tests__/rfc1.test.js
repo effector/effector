@@ -2,13 +2,7 @@
 import * as React from 'react'
 import {from} from 'most'
 
-import {
-  createStore,
-  createStoreObject,
-  createEvent,
-  type Event,
-  createEffect,
-} from 'effector'
+import {createStore, combine, createEvent, createEffect} from 'effector'
 import {useStore} from 'effector-react'
 
 import {spy, delay, getSpyCalls} from 'effector/fixtures'
@@ -107,7 +101,7 @@ test('attt', () => {
 test('createStore', () => {
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStoreObject({counter, text, foo: 'bar'})
+  const store = combine({counter, text, foo: 'bar'})
   expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'bar'})
 })
 
@@ -115,7 +109,7 @@ describe('store.on', () => {
   test('store.on(event)', () => {
     const counter = createStore(0)
     const text = createStore('')
-    const store = createStoreObject({counter, text, foo: 'bar'})
+    const store = combine({counter, text, foo: 'bar'})
 
     const e1 = createEvent('e1')
     store.on(e1, (state, payload) => ({
@@ -130,7 +124,7 @@ describe('store.on', () => {
   test('store.on(effect)', async() => {
     const counter = createStore(0)
     const text = createStore('')
-    const store = createStoreObject({counter, text, foo: 0})
+    const store = combine({counter, text, foo: 0})
     const e1 = createEffect('e1')
     store.on(e1.done, (state, {result}) => {
       spy(state, result)
@@ -164,7 +158,11 @@ test('store.watch', () => {
   expect(fn2).toHaveBeenCalledTimes(3)
 
   expect(fn1).toHaveBeenCalledTimes(1)
-  expect(fn2.mock.calls).toEqual([[-1, undefined], [-1, 'a'], [-1, 'b']])
+  expect(fn2.mock.calls).toEqual([
+    [-1, undefined],
+    [-1, 'a'],
+    [-1, 'b'],
+  ])
   expect(fn1.mock.calls).toEqual([[-1]])
 })
 
@@ -180,7 +178,7 @@ test('rfc1 example implementation', async() => {
 
   const counter = createStore(0)
   const text = createStore('')
-  const store = createStoreObject({counter, text})
+  const store = combine({counter, text})
 
   const waitIncrement = createEffect({
     async handler() {
