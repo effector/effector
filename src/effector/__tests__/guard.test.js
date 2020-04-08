@@ -9,7 +9,7 @@ import {
   createEffect,
   sample,
 } from 'effector'
-import {argumentHistory, spy} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
 test('use case', () => {
   const clickRequest = createEvent()
@@ -58,6 +58,7 @@ describe('without target', () => {
     expect(is.event(target)).toBe(true)
   })
   it('supports store guards', () => {
+    const fn = jest.fn()
     const trigger = createEvent()
     const unlocked = createStore(true)
     const {lock, unlock} = createApi(unlocked, {
@@ -68,32 +69,34 @@ describe('without target', () => {
       filter: unlocked,
     })
 
-    target.watch(spy)
+    target.watch(fn)
     trigger('A')
     lock()
     trigger('B')
     unlock()
     trigger('C')
 
-    expect(argumentHistory(spy)).toEqual(['A', 'C'])
+    expect(argumentHistory(fn)).toEqual(['A', 'C'])
   })
 
   it('supports function predicate', () => {
+    const fn = jest.fn()
     const source = createEvent()
     const target = guard(source, {
       filter: x => x > 0,
     })
 
-    target.watch(spy)
+    target.watch(fn)
 
     source(0)
     source(1)
-    expect(argumentHistory(spy)).toEqual([1])
+    expect(argumentHistory(fn)).toEqual([1])
   })
 })
 
 describe('with target', () => {
   it('supports store guards', () => {
+    const fn = jest.fn()
     const trigger = createEvent()
     const target = createEvent()
     const unlocked = createStore(true)
@@ -108,20 +111,21 @@ describe('with target', () => {
       target,
     })
 
-    target.watch(spy)
+    target.watch(fn)
     trigger('A')
     lock()
     trigger('B')
     unlock()
     trigger('C')
 
-    expect(argumentHistory(spy)).toEqual(['A', 'C'])
+    expect(argumentHistory(fn)).toEqual(['A', 'C'])
   })
 
   it('supports function predicate', () => {
+    const fn = jest.fn()
     const source = createEvent()
     const target = createEvent()
-    target.watch(spy)
+    target.watch(fn)
 
     guard({
       source,
@@ -131,7 +135,7 @@ describe('with target', () => {
 
     source(0)
     source(1)
-    expect(argumentHistory(spy)).toEqual([1])
+    expect(argumentHistory(fn)).toEqual([1])
   })
 })
 
@@ -161,6 +165,7 @@ describe('source as object support', () => {
 })
 
 test('temporal consistency', () => {
+  const fn = jest.fn()
   const trigger = createEvent()
   const target = createEvent()
   const filter = trigger.map(x => x > 0)
@@ -170,10 +175,10 @@ test('temporal consistency', () => {
     target,
   })
 
-  target.watch(spy)
+  target.watch(fn)
   // trigger(1)
   trigger(0)
   trigger(2)
 
-  expect(argumentHistory(spy)).toEqual([2])
+  expect(argumentHistory(fn)).toEqual([2])
 })

@@ -9,7 +9,6 @@ import {
   createEffect,
   type Effect,
 } from 'effector'
-import {spy} from 'effector/fixtures'
 
 describe('separate functions', () => {
   test('restore object', () => {
@@ -31,19 +30,20 @@ describe('separate functions', () => {
   })
 
   test('restore effect', async() => {
+    const fn = jest.fn()
     const fx: Effect<string, number, string> = createEffect('fx1')
     fx.use(text => text.length)
     const shape = restoreEffect(fx, -1)
-    shape.watch(spy)
+    shape.watch(fn)
     expect(shape.getState()).toBe(-1)
     await fx('foo')
     expect(shape.getState()).toBe(3)
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     fx.use(() => {
       throw 'err'
     })
     await expect(fx('bar')).rejects.toBe('err')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
 })
 
@@ -67,19 +67,20 @@ describe('single function', () => {
   })
 
   test('restore effect', async() => {
+    const fn = jest.fn()
     const fx: Effect<string, number, string> = createEffect('fx1')
     fx.use(text => text.length)
     const shape = restore(fx, -1)
-    shape.watch(spy)
+    shape.watch(fn)
     expect(shape.getState()).toBe(-1)
     await fx('foo')
     expect(shape.getState()).toBe(3)
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     fx.use(() => {
       throw 'err'
     })
     await expect(fx('bar')).rejects.toBe('err')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
   test('all together', () => {
     const keyPressed = createEvent<string>()

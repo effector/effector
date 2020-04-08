@@ -3,24 +3,25 @@
 import {from} from 'most'
 import {createEvent} from 'effector'
 
-import {argumentHistory, spy} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('symbol-observable support', () => {
   test('most.from(event) //stream of events', () => {
+    const fn = jest.fn()
     expect(() => {
       from(createEvent(''))
     }).not.toThrow()
     const ev1 = createEvent('ev1')
     const ev2 = createEvent('ev2')
     const ev1$ = from(ev1)
-    ev1$.observe(spy)
+    ev1$.observe(fn)
     ev1(0)
     ev1(1)
     ev1(2)
     ev2('should ignore')
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
 
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         0,
         1,
@@ -31,13 +32,14 @@ describe('symbol-observable support', () => {
 })
 
 test('event.watch(fn)', () => {
+  const fn = jest.fn()
   const click = createEvent('click')
-  click.watch(spy)
+  click.watch(fn)
   click()
   click(1)
   click(2)
-  expect(spy).toHaveBeenCalledTimes(3)
-  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+  expect(fn).toHaveBeenCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       undefined,
       1,
@@ -47,15 +49,16 @@ test('event.watch(fn)', () => {
 })
 
 test('event.prepend(fn)', () => {
+  const fn = jest.fn()
   const click = createEvent('click')
   const preclick = click.prepend(([n]) => n)
-  click.watch(spy)
+  click.watch(fn)
   preclick([])
   preclick([1])
   preclick([2])
 
-  expect(spy).toHaveBeenCalledTimes(3)
-  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+  expect(fn).toHaveBeenCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       undefined,
       1,
@@ -65,14 +68,15 @@ test('event.prepend(fn)', () => {
 })
 
 test('event.map(fn)', () => {
+  const fn = jest.fn()
   const click = createEvent('click')
   const postclick = click.map(n => [n])
-  postclick.watch(spy)
+  postclick.watch(fn)
   click()
   click(1)
   click(2)
-  expect(spy).toHaveBeenCalledTimes(3)
-  expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+  expect(fn).toHaveBeenCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
       Array [
         undefined,

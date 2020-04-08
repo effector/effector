@@ -2,29 +2,12 @@
 
 import {from, periodic} from 'most'
 
-import {
-  combine,
-  createDomain,
-  createEvent,
-  fromObservable,
-  createStore,
-} from 'effector'
+import {combine, createDomain, createEvent, createStore} from 'effector'
 
-import {spy, getSpyCalls} from 'effector/fixtures'
-
-describe('fixtures works correctly', () => {
-  test('spy use', () => {
-    spy()
-    spy()
-    expect(spy).toHaveBeenCalledTimes(2)
-  })
-  test('spy reuse', () => {
-    spy()
-    expect(spy).toHaveBeenCalledTimes(1)
-  })
-})
+import {argumentHistory} from 'effector/fixtures'
 
 test('will run in expected order', () => {
+  const fn = jest.fn()
   const reset = createEvent('reset')
   const add = createEvent('add')
   const mult = createEvent('mult')
@@ -41,14 +24,31 @@ test('will run in expected order', () => {
 
   combine({listSize, currentList, selected})
 
-  const unsub = currentList.subscribe(state => spy(state))
+  const unsub = currentList.subscribe(state => fn(state))
   add(5)
   mult(4)
   unsub()
   // halt()
 
-  expect(getSpyCalls()).toEqual([[[]], [[{add: 5}]], [[{add: 5}, {mult: 4}]]])
-  expect(spy).toHaveBeenCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Array [],
+      Array [
+        Object {
+          "add": 5,
+        },
+      ],
+      Array [
+        Object {
+          "add": 5,
+        },
+        Object {
+          "mult": 4,
+        },
+      ],
+    ]
+  `)
+  expect(fn).toHaveBeenCalledTimes(3)
 })
 it('safe with nested triggers', () => {
   const a = createEvent()
@@ -77,25 +77,47 @@ test('reducer defaults', () => {
   const sub = createEvent('sub')
   const state1 = createStore(3)
     .on(add, (state, payload) => {
-      fn1(state, payload)
+      fn1({state, payload})
     })
     .on(sub, (state, payload) => {
-      fn2(state, payload)
+      fn2({state, payload})
       return state - payload
     })
   state1.watch(fn3)
   sub(1)
   add(10)
   add(2)
-  expect({
-    add: fn1.mock.calls,
-    sub: fn2.mock.calls,
-    watch: fn3.mock.calls,
-    state: state1.getState(),
-  }).toMatchSnapshot()
+  expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "payload": 10,
+        "state": 2,
+      },
+      Object {
+        "payload": 2,
+        "state": 2,
+      },
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "payload": 1,
+        "state": 3,
+      },
+    ]
+  `)
+  expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+    Array [
+      3,
+      2,
+    ]
+  `)
+  expect(state1.getState()).toMatchInlineSnapshot(`2`)
 })
 
 test('store.reset(event)', () => {
+  const fn = jest.fn()
   const reset = createEvent('reset')
   const inc = createEvent('inc')
   const listSize = createStore(3)
@@ -110,16 +132,36 @@ test('store.reset(event)', () => {
 
   combine({listSize, currentList, selected})
 
-  const unsub = currentList.subscribe(state => spy(state))
+  const unsub = currentList.subscribe(state => fn(state))
   inc()
   reset()
   unsub()
 
-  expect(getSpyCalls()).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
-  expect(spy).toHaveBeenCalledTimes(3)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        0,
+        1,
+        2,
+      ],
+      Array [
+        0,
+        1,
+        2,
+        3,
+      ],
+      Array [
+        0,
+        1,
+        2,
+      ],
+    ]
+  `)
+  expect(fn).toHaveBeenCalledTimes(3)
 })
 
 test('combine', () => {
+  const fn = jest.fn()
   const inc = createEvent('inc')
   const dec = createEvent('dec')
   const s1 = createStore(0)
@@ -127,7 +169,7 @@ test('combine', () => {
   const s3 = createStore(0)
   const s4 = createStore(0)
   const result = combine(s1, s2, s3, s4, (a, b, c, d) => ({a, b, c, d}))
-  result.watch(spy)
+  result.watch(fn)
   s1.on(inc, _ => _ + 1).on(dec, _ => _ - 10)
   s2.on(inc, _ => _ + 10).on(dec, _ => _ - 1)
 
@@ -137,7 +179,7 @@ test('combine', () => {
   dec()
   expect(result.getState()).toMatchObject({a: -9, b: 9, c: 0, d: 0})
 
-  expect(spy).toHaveBeenCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   // expect(fn).toHaveBeenCalledTimes(5)
 })
 
@@ -153,15 +195,39 @@ test('no dull updates', () => {
   store.on(e2, (_, p) => _ === p)
   const nextStore = store.map(x => (fn2(x), x))
   nextStore.watch(fn3)
-  store.watch(e => {})
+  store.watch(() => {})
   e1(false)
   e1(true)
   e1(false)
   e2(false)
   e2(false)
-  expect(fn1.mock.calls).toMatchSnapshot()
-  expect(fn2.mock.calls).toMatchSnapshot()
-  expect(fn3.mock.calls).toMatchSnapshot()
+  expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
+  expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
+  expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+    Array [
+      false,
+      true,
+      false,
+      true,
+      false,
+    ]
+  `)
   expect(fn1).toHaveBeenCalledTimes(5)
   expect(fn2).toHaveBeenCalledTimes(5)
   expect(fn3).toHaveBeenCalledTimes(5)
@@ -208,44 +274,32 @@ describe('port', () => {
 })
 
 it('works with most use cases', async() => {
+  const fn = jest.fn()
   const timeout = createEvent('timeout')
-  timeout.watch(spy)
+  timeout.watch(fn)
 
   await periodic(300)
     .take(5)
     .observe(() => timeout())
 
-  expect(spy).toHaveBeenCalledTimes(5)
-})
-
-test.skip('fromObservable supports own events as sources', async() => {
-  const used = jest.fn(x => Promise.resolve(x))
-  const usedDone = jest.fn(x => Promise.resolve(x))
-  const domain = createDomain()
-
-  const effect = domain.effect('eff')
-  effect.use(used)
-  effect.done.watch(usedDone)
-  const event = domain.event('event1')
-  fromObservable/*:: <string> */(event).watch(e => effect(e))
-  await event('ev')
-  expect(used).toHaveBeenCalledTimes(1)
-  expect(usedDone).toHaveBeenCalledTimes(1)
+  expect(fn).toHaveBeenCalledTimes(5)
 })
 
 test('subscription', async() => {
+  const fn = jest.fn()
+
   const domain = createDomain()
 
   const eff = domain.effect('TYPE_CONST')
   eff.use(() => {})
   expect(() => {
-    from(eff).observe(spy)
+    from(eff).observe(fn)
   }).not.toThrow()
   const event = domain.event('ev')
   expect(() => {
-    from(event).observe(spy)
+    from(event).observe(fn)
   }).not.toThrow()
   await event('')
   await eff('')
-  expect(spy).toHaveBeenCalledTimes(2)
+  expect(fn).toHaveBeenCalledTimes(2)
 })

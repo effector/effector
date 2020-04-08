@@ -47,8 +47,8 @@ describe('naming', () => {
   test('unnamed object store', () => {
     const firstName = createStore('')
     const lastName = createStore('')
-    const form = combine({firstName, lastName})
-    const app = combine({form})
+    const form = {combine}.combine({firstName, lastName})
+    const app = {combine}.combine({form})
 
     expect(app.compositeName?.fullName).toBe(
       'combine(combine(firstName, lastName))',

@@ -17,7 +17,7 @@ describe('createComponent', () => {
     const a = createStore(0)
     const b = createStore('bar')
     const c = combine({a, b})
-    const spy = jest.fn()
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -38,14 +38,14 @@ describe('createComponent', () => {
       a.setState(2)
       //$todo
       b.setState('foo')
-      c.watch(spy)
+      c.watch(fn)
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div>
         foo
       </div>
     `)
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "a": 2,
@@ -113,17 +113,17 @@ describe('createComponent', () => {
 
   test('mounted/unmounted events', async() => {
     const text = createStore('foo')
-    const spy = jest.fn()
+    const fn = jest.fn()
     const Component = createComponent(text, () => null)
-    Component.mounted.watch(spy)
-    Component.unmounted.watch(spy)
+    Component.mounted.watch(fn)
+    Component.unmounted.watch(fn)
     await render(<Component foo={1} />)
     await act(async() => {
       //$off
       text.setState('bar')
     })
     await cleanup()
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -149,7 +149,7 @@ describe('createComponent', () => {
     })
     const updateValue = createEvent()
     const c = combine({a, b})
-    const spy = jest.fn()
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -159,14 +159,14 @@ describe('createComponent', () => {
         </select>
       </>
     ))
-    Foo.mounted.watch(spy)
+    Foo.mounted.watch(fn)
     await render(<Foo a="A" />)
     await act(async() => {
       add(5)
     })
     await render(<Foo b="B" />)
     await cleanup()
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -188,7 +188,7 @@ describe('createComponent', () => {
     })
     const updateValue = createEvent()
     const c = combine({a, b})
-    const spy = jest.fn()
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -198,14 +198,14 @@ describe('createComponent', () => {
         </select>
       </>
     ))
-    Foo.unmounted.watch(spy)
+    Foo.unmounted.watch(fn)
     await render(<Foo a="A" />)
     await act(async() => {
       add(5)
     })
     await render(<Foo b="B" />)
     await cleanup()
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -274,7 +274,7 @@ describe('createComponent', () => {
 `)
   })
   it('should not use props from failed renders', async() => {
-    const spy = jest.fn()
+    const fn = jest.fn()
     const text = createStore('foo')
     const Foo = createComponent(text, (props, text) => {
       if (props.shouldFail) {
@@ -286,7 +286,7 @@ describe('createComponent', () => {
         </div>
       )
     })
-    Foo.unmounted.watch(spy)
+    Foo.unmounted.watch(fn)
     const error = console.error
     //$off
     console.error = function errorMock(...args) {
@@ -301,7 +301,7 @@ describe('createComponent', () => {
       //$off
       console.error = error
     }
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {

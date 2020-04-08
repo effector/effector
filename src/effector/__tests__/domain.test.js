@@ -9,45 +9,47 @@ import {
   createApi,
   restore,
 } from 'effector'
-import {spy, argumentHistory} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
+    const fn = jest.fn()
     const dom = createDomain()
     dom.event()
-    const unsub = dom.onCreateEvent(e => spy(e))
-    expect(spy).toHaveBeenCalled()
+    const unsub = dom.onCreateEvent(e => fn(e))
+    expect(fn).toHaveBeenCalled()
     const e2 = dom.event()
-    expect(spy).toHaveBeenLastCalledWith(e2)
+    expect(fn).toHaveBeenLastCalledWith(e2)
     createEvent()
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     const e4 = dom.event()
-    expect(spy).toHaveBeenLastCalledWith(e4)
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenLastCalledWith(e4)
+    expect(fn).toHaveBeenCalledTimes(3)
     expect(() => {
       unsub()
     }).not.toThrow()
     dom.event()
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
 
   test('domain.onCreateEffect(fn)', () => {
+    const fn = jest.fn()
     const dom = createDomain()
     dom.effect()
-    const unsub = dom.onCreateEffect(e => spy(e))
-    expect(spy).toHaveBeenCalled()
+    const unsub = dom.onCreateEffect(e => fn(e))
+    expect(fn).toHaveBeenCalled()
     const e2 = dom.effect()
-    expect(spy).toHaveBeenLastCalledWith(e2)
+    expect(fn).toHaveBeenLastCalledWith(e2)
     createEffect()
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     const e4 = dom.effect()
-    expect(spy).toHaveBeenLastCalledWith(e4)
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenLastCalledWith(e4)
+    expect(fn).toHaveBeenCalledTimes(3)
     expect(() => {
       unsub()
     }).not.toThrow()
     dom.effect()
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
 
   test('nested domains', () => {

@@ -9,8 +9,6 @@ import {
 } from 'effector'
 import {show} from 'effector/fixtures/showstep'
 
-import {spy} from 'effector/fixtures'
-
 test('graphite', () => {
   const fn = jest.fn()
   const fn1 = jest.fn()
@@ -47,6 +45,7 @@ test('graphite', () => {
 })
 
 test('showcase', () => {
+  const fn = jest.fn()
   const foo = createEvent('foo')
   const bar = createEvent('bar')
 
@@ -58,7 +57,7 @@ test('showcase', () => {
   a.on(foo, n => n + 1)
   b.on(bar, n => n + 1)
 
-  mapped.watch(spy)
+  mapped.watch(fn)
 
   foo()
   foo()
@@ -74,7 +73,7 @@ test('showcase', () => {
   expect(show(foo.graphite)).toMatchSnapshot('event foo')
   //$todo
   expect(show(mapped.graphite)).toMatchSnapshot('mapped')
-  expect(spy).toHaveBeenCalledTimes(3)
+  expect(fn).toHaveBeenCalledTimes(3)
   const first = createStore('s')
   const second = createStore('h')
   const third = createStore('i')

@@ -5,11 +5,12 @@ import {from} from 'most'
 import {createStore, combine, createEvent, createEffect} from 'effector'
 import {useStore} from 'effector-react'
 
-import {spy, delay, getSpyCalls} from 'effector/fixtures'
+import {delay, argumentHistory} from 'effector/fixtures'
 import {render, act, renderHTML} from 'effector/fixtures/react'
 
 describe('symbol-observable support', () => {
   test('from(store)', async() => {
+    const fn = jest.fn()
     expect(() => {
       //$todo
       from(createStore(0))
@@ -19,55 +20,57 @@ describe('symbol-observable support', () => {
     const ev2 = createEvent('ev2')
     //$todo
     const store1$ = from(store1)
-    store1$.observe(spy)
+    store1$.observe(fn)
     store1.on(ev1, state => state + 1)
     ev1('foo')
     ev1('bar')
     ev1('baz')
     ev2('should ignore')
 
-    expect(getSpyCalls()).toEqual([[-1], [0], [1], [2]])
-    expect(spy).toHaveBeenCalledTimes(4)
+    expect(argumentHistory(fn)).toEqual([-1, 0, 1, 2])
+    expect(fn).toHaveBeenCalledTimes(4)
     expect(store1.getState()).toBe(2)
   })
   describe('from(effect)', () => {
     test('without implementation', async() => {
+      const fn = jest.fn()
       expect(() => {
         from(createEffect('ev1'))
       }).not.toThrow()
-      const ev1 = createEffect({handler(n) {}})
-      const ev2 = createEffect({handler(n) {}})
+      const ev1 = createEffect({handler() {}})
+      const ev2 = createEffect({handler() {}})
       const ev1$ = from(ev1)
-      ev1$.observe(spy)
+      ev1$.observe(fn)
       ev1(0)
       ev1(1)
       ev1(2)
       ev2('should ignore')
-      expect(spy).toHaveBeenCalledTimes(3)
+      expect(fn).toHaveBeenCalledTimes(3)
 
-      expect(getSpyCalls()).toEqual([[0], [1], [2]])
+      expect(argumentHistory(fn)).toEqual([0, 1, 2])
     })
 
     test('with implementation', async() => {
+      const fn = jest.fn()
       expect(() => {
         async function impl() {}
         const eff1 = createEffect('ev1')
         eff1.use(impl)
         from(eff1)
       }).not.toThrow()
-      const ev1 = createEffect({handler(n) {}})
-      const ev2 = createEffect({handler(n) {}})
+      const ev1 = createEffect({handler() {}})
+      const ev2 = createEffect({handler() {}})
       async function impl() {}
       ev1.use(impl)
       const ev1$ = from(ev1)
-      ev1$.observe(spy)
+      ev1$.observe(fn)
       ev1(0)
       ev1(1)
       ev1(2)
       ev2('should ignore')
-      expect(spy).toHaveBeenCalledTimes(3)
+      expect(fn).toHaveBeenCalledTimes(3)
 
-      expect(getSpyCalls()).toEqual([[0], [1], [2]])
+      expect(argumentHistory(fn)).toEqual([0, 1, 2])
     })
   })
 })
@@ -126,13 +129,10 @@ describe('store.on', () => {
     const text = createStore('')
     const store = combine({counter, text, foo: 0})
     const e1 = createEffect('e1')
-    store.on(e1.done, (state, {result}) => {
-      spy(state, result)
-      return {
-        ...state,
-        foo: result,
-      }
-    })
+    store.on(e1.done, (state, {result}) => ({
+      ...state,
+      foo: result,
+    }))
     e1.use(n => new Promise(_ => setTimeout(_, n, n)))
 
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 0})
@@ -163,7 +163,7 @@ test('store.watch', () => {
     [-1, 'a'],
     [-1, 'b'],
   ])
-  expect(fn1.mock.calls).toEqual([[-1]])
+  expect(argumentHistory(fn1)).toEqual([-1])
 })
 
 test('rfc1 example implementation', async() => {
