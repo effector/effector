@@ -37,7 +37,7 @@ type Translates = Dictionary<Dictionary<string, string>, string>; // type from t
 
 export const $language = createStore<string>('en'); 
 export const $translates = createStore<Translates>({}); 
-export const $i18n = createStoreObject({language: $language, translates: $translates}); 
+export const $i18n = combine({language: $language, translates: $translates}); 
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
