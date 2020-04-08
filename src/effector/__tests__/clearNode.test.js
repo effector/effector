@@ -131,7 +131,7 @@ describe('itermediate steps should not stay', () => {
     const fn = jest.fn()
     const trigger = createEvent()
     const store = createStore(null)
-    const result = sample({
+    sample({
       source: store,
       clock: trigger,
       fn,
@@ -254,12 +254,12 @@ describe('based on clearNode', () => {
   })
 })
 describe('domain support', () => {
-  it('will not clear domain.store after event will be destroyed', () => {
+  it('will not clear domain.createStore after event will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const store = domain.store(0)
-    const eventA = domain.event()
-    const eventB = domain.event()
+    const store = domain.createStore(0)
+    const eventA = domain.createEvent()
+    const eventB = domain.createEvent()
     store.on(eventA, x => x + 1).on(eventB, x => x + 1)
     store.watch(fn)
     eventA()
@@ -276,8 +276,8 @@ describe('domain support', () => {
   it('will not clear connected units after forward will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const eventA = domain.event()
-    const eventB = domain.event()
+    const eventA = domain.createEvent()
+    const eventB = domain.createEvent()
     const unsub = forward({
       from: eventA,
       to: eventB,
@@ -296,7 +296,7 @@ describe('domain support', () => {
   it('will not clear unit after .watch will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const event = domain.event()
+    const event = domain.createEvent()
     const unsub = event.watch(() => {})
     event.watch(fn)
     event(0)
@@ -312,8 +312,8 @@ describe('domain support', () => {
   it('will not clear store after store.updates.watch will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const event = domain.event()
-    const store = domain.store(0).on(event, x => x + 1)
+    const event = domain.createEvent()
+    const store = domain.createStore(0).on(event, x => x + 1)
     const unsub = store.updates.watch(() => {})
     store.updates.watch(fn)
     event()
@@ -329,8 +329,8 @@ describe('domain support', () => {
   it('will not clear node, connected via forward to destroyed one', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const store = domain.store(0)
-    const event = domain.event()
+    const store = domain.createStore(0)
+    const event = domain.createEvent()
     event.watch(fn)
     forward({
       from: store.updates,
@@ -351,8 +351,8 @@ describe('domain support', () => {
   it('will not clear node, which forwarded to destroyed one', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const store = domain.store(0)
-    const event = domain.event()
+    const store = domain.createStore(0)
+    const event = domain.createEvent()
     store.updates.watch(fn)
     forward({
       from: store.updates,

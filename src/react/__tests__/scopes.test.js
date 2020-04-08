@@ -13,9 +13,9 @@ it('works', async() => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
-  const start = app.event()
-  const indirectCall = app.event()
-  const sendStats = app.effect({
+  const start = app.createEvent()
+  const indirectCall = app.createEvent()
+  const sendStats = app.createEffect({
     async handler(user) {
       await new Promise(resolve => {
         // let bob loading longer
@@ -24,7 +24,7 @@ it('works', async() => {
     },
   })
 
-  const fetchUser = app.effect({
+  const fetchUser = app.createEffect({
     async handler(user) {
       return (
         await fetch('https://ssr.effector.dev/api/' + user, {
@@ -39,8 +39,8 @@ it('works', async() => {
     to: fetchUser,
   })
 
-  const user = app.store('guest')
-  const friends = app.store([])
+  const user = app.createStore('guest')
+  const friends = app.createStore([])
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)

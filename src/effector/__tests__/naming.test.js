@@ -27,9 +27,9 @@ describe('.map support', () => {
 describe('naming', () => {
   describe('domain', () => {
     test('value store', () => {
-      const domain = rootDomain.domain('form')
-      const firstName = domain.store('')
-      const lastName = domain.store('')
+      const domain = rootDomain.createDomain('form')
+      const firstName = domain.createStore('')
+      const lastName = domain.createStore('')
 
       expect(firstName.compositeName?.fullName).toBe('form/firstName')
       expect(lastName.compositeName?.fullName).toBe('form/lastName')

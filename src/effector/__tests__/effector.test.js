@@ -238,10 +238,10 @@ test('smoke', async() => {
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain('smoke')
 
-  const effect = domain.effect('eff')
+  const effect = domain.createEffect()
   effect.use(used)
   effect.done.watch(usedDone)
-  const event = domain.event('event1')
+  const event = domain.createEvent()
   expect(effect).toBeDefined()
   expect(event).toBeDefined()
   event('bar')
@@ -255,8 +255,8 @@ describe('port', () => {
     const used = jest.fn()
     const usedEff = jest.fn()
     const domain = createDomain()
-    const event = domain.event('port-event')
-    const eff = domain.event('port-effect')
+    const event = domain.createEvent()
+    const eff = domain.createEvent()
     event.watch(used)
     eff.watch(usedEff)
     const str$ = periodic(100)
@@ -290,12 +290,12 @@ test('subscription', async() => {
 
   const domain = createDomain()
 
-  const eff = domain.effect('TYPE_CONST')
+  const eff = domain.createEffect()
   eff.use(() => {})
   expect(() => {
     from(eff).observe(fn)
   }).not.toThrow()
-  const event = domain.event('ev')
+  const event = domain.createEvent()
   expect(() => {
     from(event).observe(fn)
   }).not.toThrow()
