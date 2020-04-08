@@ -1,12 +1,5 @@
 import Vue, {VueConstructor} from 'vue'
-import {
-  createEvent,
-  restore,
-  is,
-  createStoreObject,
-  Store,
-  Subscription,
-} from 'effector'
+import {createEvent, restore, is, combine, Store, Subscription} from 'effector'
 
 export interface EffectorVue extends Vue {
   $watchAsStore: typeof watchAsStore
@@ -85,7 +78,7 @@ const effectorMixin: {
           this[key] = value
         })
       } else if (typeof shape === 'object' && shape !== null) {
-        const store = createStoreObject(shape)
+        const store = combine(shape)
         for (const key in shape) {
           //@ts-ignore
           Vue.util.defineReactive(this, key, store.defaultState[key])
