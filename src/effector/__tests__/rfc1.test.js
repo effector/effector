@@ -16,8 +16,8 @@ describe('symbol-observable support', () => {
       from(createStore(0))
     }).not.toThrow()
     const store1 = createStore(-1)
-    const ev1 = createEvent('ev1')
-    const ev2 = createEvent('ev2')
+    const ev1 = createEvent()
+    const ev2 = createEvent()
     //$todo
     const store1$ = from(store1)
     store1$.observe(fn)
@@ -35,7 +35,7 @@ describe('symbol-observable support', () => {
     test('without implementation', async() => {
       const fn = jest.fn()
       expect(() => {
-        from(createEffect('ev1'))
+        from(createEffect())
       }).not.toThrow()
       const ev1 = createEffect({handler() {}})
       const ev2 = createEffect({handler() {}})
@@ -54,7 +54,7 @@ describe('symbol-observable support', () => {
       const fn = jest.fn()
       expect(() => {
         async function impl() {}
-        const eff1 = createEffect('ev1')
+        const eff1 = createEffect()
         eff1.use(impl)
         from(eff1)
       }).not.toThrow()
@@ -80,7 +80,7 @@ test('attt', () => {
     foo: 1,
     bar: [0],
   })
-  const e1 = createEvent('nu ok')
+  const e1 = createEvent()
   expect(state.getState()).toMatchObject({
     foo: 1,
     bar: [0],
@@ -114,7 +114,7 @@ describe('store.on', () => {
     const text = createStore('')
     const store = combine({counter, text, foo: 'bar'})
 
-    const e1 = createEvent('e1')
+    const e1 = createEvent()
     store.on(e1, (state, payload) => ({
       ...state,
       foo: payload,
@@ -128,7 +128,7 @@ describe('store.on', () => {
     const counter = createStore(0)
     const text = createStore('')
     const store = combine({counter, text, foo: 0})
-    const e1 = createEffect('e1')
+    const e1 = createEffect()
     store.on(e1.done, (state, {result}) => ({
       ...state,
       foo: result,
@@ -143,7 +143,7 @@ describe('store.on', () => {
 })
 
 test('store.watch', () => {
-  const click = createEvent('click')
+  const click = createEvent()
   const store1 = createStore(-1)
   const fn1 = jest.fn()
   const fn2 = jest.fn()

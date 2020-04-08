@@ -6,7 +6,7 @@ import {argumentHistory} from 'effector/fixtures'
 describe('reset before computation', () => {
   test('reset before computation', () => {
     const fn = jest.fn()
-    const A = createEvent('A')
+    const A = createEvent()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -33,7 +33,7 @@ describe('reset before computation', () => {
 
   it("doesnt depend on methods' ordering", () => {
     const fn = jest.fn()
-    const A = createEvent('A')
+    const A = createEvent()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -62,7 +62,7 @@ describe('reset before computation', () => {
 describe('computation before reset', () => {
   test('computation before reset', () => {
     const fn = jest.fn()
-    const A = createEvent('A')
+    const A = createEvent()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -88,7 +88,7 @@ describe('computation before reset', () => {
 
   it("doesnt depend on methods' ordering", () => {
     const fn = jest.fn()
-    const A = createEvent('A')
+    const A = createEvent()
     const B = A.map(d => `${d}->B`)
 
     const target = createStore('init')
@@ -139,7 +139,7 @@ describe('dependencies of resettable stores', () => {
   test('dependencies of resettable stores', () => {
     const fnA = jest.fn()
     const fnB = jest.fn()
-    const run = createEvent('run')
+    const run = createEvent()
     const reset = run.map(d => `${d}->reset`)
     const A = createStore('A')
     const B = A.map(d => `B(${d})`)

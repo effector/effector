@@ -21,7 +21,7 @@ describe('separate functions', () => {
   })
 
   test('restore event', () => {
-    const event = createEvent<string>('e1')
+    const event = createEvent<string>()
 
     const shape = restoreEvent(event, 'def')
     expect(shape.getState()).toBe('def')
@@ -31,7 +31,7 @@ describe('separate functions', () => {
 
   test('restore effect', async() => {
     const fn = jest.fn()
-    const fx: Effect<string, number, string> = createEffect('fx1')
+    const fx: Effect<string, number, string> = createEffect()
     fx.use(text => text.length)
     const shape = restoreEffect(fx, -1)
     shape.watch(fn)
@@ -58,7 +58,7 @@ describe('single function', () => {
   })
 
   test('restore event', () => {
-    const event = createEvent<string>('e1')
+    const event = createEvent<string>()
 
     const shape = restore(event, 'def')
     expect(shape.getState()).toBe('def')
@@ -68,7 +68,7 @@ describe('single function', () => {
 
   test('restore effect', async() => {
     const fn = jest.fn()
-    const fx: Effect<string, number, string> = createEffect('fx1')
+    const fx: Effect<string, number, string> = createEffect()
     fx.use(text => text.length)
     const shape = restore(fx, -1)
     shape.watch(fn)

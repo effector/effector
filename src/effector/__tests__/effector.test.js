@@ -8,9 +8,9 @@ import {argumentHistory} from 'effector/fixtures'
 
 test('will run in expected order', () => {
   const fn = jest.fn()
-  const reset = createEvent('reset')
-  const add = createEvent('add')
-  const mult = createEvent('mult')
+  const reset = createEvent()
+  const add = createEvent()
+  const mult = createEvent()
   const listSize = createStore(3)
     .on(add, (n, nn) => n + nn)
     .on(mult, (n, q) => n * q)
@@ -73,8 +73,8 @@ test('reducer defaults', () => {
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const fn3 = jest.fn()
-  const add = createEvent('add')
-  const sub = createEvent('sub')
+  const add = createEvent()
+  const sub = createEvent()
   const state1 = createStore(3)
     .on(add, (state, payload) => {
       fn1({state, payload})
@@ -118,8 +118,8 @@ test('reducer defaults', () => {
 
 test('store.reset(event)', () => {
   const fn = jest.fn()
-  const reset = createEvent('reset')
-  const inc = createEvent('inc')
+  const reset = createEvent()
+  const inc = createEvent()
   const listSize = createStore(3)
     .on(inc, n => n + 1)
     .reset(reset)
@@ -162,8 +162,8 @@ test('store.reset(event)', () => {
 
 test('combine', () => {
   const fn = jest.fn()
-  const inc = createEvent('inc')
-  const dec = createEvent('dec')
+  const inc = createEvent()
+  const dec = createEvent()
   const s1 = createStore(0)
   const s2 = createStore(0)
   const s3 = createStore(0)
@@ -185,8 +185,8 @@ test('combine', () => {
 
 test('no dull updates', () => {
   const store = createStore(false)
-  const e1 = createEvent('e1')
-  const e2 = createEvent('e2')
+  const e1 = createEvent()
+  const e2 = createEvent()
   const fn1 = jest.fn()
   const fn2 = jest.fn()
   const fn3 = jest.fn()
@@ -236,7 +236,7 @@ test('no dull updates', () => {
 test('smoke', async() => {
   const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
-  const domain = createDomain('smoke')
+  const domain = createDomain()
 
   const effect = domain.createEffect()
   effect.use(used)
@@ -275,7 +275,7 @@ describe('port', () => {
 
 it('works with most use cases', async() => {
   const fn = jest.fn()
-  const timeout = createEvent('timeout')
+  const timeout = createEvent()
   timeout.watch(fn)
 
   await periodic(300)

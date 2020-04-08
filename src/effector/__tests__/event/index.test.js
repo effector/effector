@@ -9,10 +9,10 @@ describe('symbol-observable support', () => {
   test('most.from(event) //stream of events', () => {
     const fn = jest.fn()
     expect(() => {
-      from(createEvent(''))
+      from(createEvent())
     }).not.toThrow()
-    const ev1 = createEvent('ev1')
-    const ev2 = createEvent('ev2')
+    const ev1 = createEvent()
+    const ev2 = createEvent()
     const ev1$ = from(ev1)
     ev1$.observe(fn)
     ev1(0)
@@ -33,7 +33,7 @@ describe('symbol-observable support', () => {
 
 test('event.watch(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent('click')
+  const click = createEvent()
   click.watch(fn)
   click()
   click(1)
@@ -50,7 +50,7 @@ test('event.watch(fn)', () => {
 
 test('event.prepend(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent('click')
+  const click = createEvent()
   const preclick = click.prepend(([n]) => n)
   click.watch(fn)
   preclick([])
@@ -69,7 +69,7 @@ test('event.prepend(fn)', () => {
 
 test('event.map(fn)', () => {
   const fn = jest.fn()
-  const click = createEvent('click')
+  const click = createEvent()
   const postclick = click.map(n => [n])
   postclick.watch(fn)
   click()
@@ -92,7 +92,7 @@ test('event.map(fn)', () => {
 })
 
 test('event.thru(fn)', () => {
-  const click = createEvent('click')
+  const click = createEvent()
   const postclick = click.thru(event => event)
   expect(postclick).toBe(click)
 })

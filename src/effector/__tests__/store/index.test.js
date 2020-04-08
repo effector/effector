@@ -3,8 +3,10 @@
 import {createStore, createEvent, createEffect} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-test('createStore', () => {
-  expect(() => createStore(undefined)).toThrowErrorMatchingSnapshot()
+test('createStore throw on undefined', () => {
+  expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
+    `"current state can't be undefined, use null instead"`,
+  )
 })
 
 describe('.map', () => {

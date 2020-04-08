@@ -7,7 +7,7 @@ import {show} from 'effector/fixtures/showstep'
 describe('event.filterMap', () => {
   test('event.filterMap should infer type', () => {
     const fn = jest.fn()
-    const num: Event<number | '-1'> = createEvent('number')
+    const num: Event<number | '-1'> = createEvent()
 
     const evenNum = num.filterMap(n => {
       if (n !== '-1') return n
@@ -33,7 +33,7 @@ describe('event.filterMap', () => {
 
   test('event.filterMap should drop undefined values', () => {
     const fn = jest.fn()
-    const num: Event<number> = createEvent('number')
+    const num: Event<number> = createEvent()
     const evenNum = num.filterMap(n => {
       if (n % 2 === 0) return n * 2
     })

@@ -9,7 +9,7 @@ import {argumentHistory} from 'effector/fixtures'
 describe('useStore', () => {
   it('should render', async() => {
     const store = createStore('foo')
-    const changeText = createEvent('change text')
+    const changeText = createEvent()
     store.on(changeText, (_, e) => e)
 
     const Display = () => {

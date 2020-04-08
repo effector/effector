@@ -1,11 +1,11 @@
 //@flow
 
 import {createEffect} from 'effector'
-import {delay} from 'effector/fixtures'
+import {delay, argumentHistory} from 'effector/fixtures'
 
-test('effect.create single argument', async() => {
-  const effect = createEffect('long request')
-  effect.use(async() => {
+test('effect.create single argument', async () => {
+  const effect = createEffect()
+  effect.use(async () => {
     await delay(500)
     return 'done!'
   })
@@ -21,8 +21,41 @@ test('effect.create single argument', async() => {
   await effect(200)
   await effect(300)
 
-  await expect(effect.create.mock.calls).toMatchSnapshot()
-  await expect(baz.mock.calls).toMatchSnapshot()
+  await expect(effect.create.mock.calls).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              100,
+              Array [],
+              Array [],
+            ],
+            Array [
+              200,
+              Array [],
+              Array [],
+            ],
+            Array [
+              300,
+              Array [],
+              Array [],
+            ],
+          ]
+        `)
+  await expect(argumentHistory(baz)).toMatchInlineSnapshot(`
+          Array [
+            Object {
+              "params": 100,
+              "result": "done!",
+            },
+            Object {
+              "params": 200,
+              "result": "done!",
+            },
+            Object {
+              "params": 300,
+              "result": "done!",
+            },
+          ]
+        `)
 })
 
 //eslint-disable-next-line
@@ -69,7 +102,7 @@ type FnEffect<Params, Done, Fail = Error, +Fn = Function> = {
   ...
 }
 
-function variadicEffect<Done, Fn:(...params: any[]) => Promise<Done> | Done>(
+function variadicEffect<Done, Fn: (...params: any[]) => Promise<Done> | Done>(
   name?: string,
 ): FnEffect<ExtractFn<*, Fn>, Done, Error, Fn> {
   const effect = createEffect(name)
@@ -85,17 +118,17 @@ function variadicEffect<Done, Fn:(...params: any[]) => Promise<Done> | Done>(
   return (effect: any)
 }
 
-test('effect.create multiple arguments', async() => {
+test('effect.create multiple arguments', async () => {
   const useSpy = jest.fn()
   const baz = jest.fn()
   const effect = variadicEffect<
     string,
     *,
     (a: number, b: number) => Promise<string>,
-      >('long request')
+  >('long request')
 
-  effect.use(async(a, b) => {
-    useSpy(a, b)
+  effect.use(async (a, b) => {
+    useSpy({a, b})
     await delay(500)
     return 'done!'
   })
@@ -106,7 +139,76 @@ test('effect.create multiple arguments', async() => {
   await effect(300, 400)
 
   //$todo
-  await expect(effect.create.mock.calls).toMatchSnapshot('effect.create')
-  await expect(useSpy.mock.calls).toMatchSnapshot('effect.use')
-  await expect(baz.mock.calls).toMatchSnapshot('effect.watch')
+  await expect(effect.create.mock.calls).toMatchInlineSnapshot(`
+          Array [
+            Array [
+              100,
+              Array [
+                200,
+              ],
+              Array [
+                200,
+              ],
+            ],
+            Array [
+              200,
+              Array [
+                300,
+              ],
+              Array [
+                300,
+              ],
+            ],
+            Array [
+              300,
+              Array [
+                400,
+              ],
+              Array [
+                400,
+              ],
+            ],
+          ]
+        `)
+  await expect(argumentHistory(useSpy)).toMatchInlineSnapshot(`
+          Array [
+            Object {
+              "a": 100,
+              "b": 200,
+            },
+            Object {
+              "a": 200,
+              "b": 300,
+            },
+            Object {
+              "a": 300,
+              "b": 400,
+            },
+          ]
+        `)
+  await expect(argumentHistory(baz)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "params": Array [
+      100,
+      200,
+    ],
+    "result": "done!",
+  },
+  Object {
+    "params": Array [
+      200,
+      300,
+    ],
+    "result": "done!",
+  },
+  Object {
+    "params": Array [
+      300,
+      400,
+    ],
+    "result": "done!",
+  },
+]
+`)
 })

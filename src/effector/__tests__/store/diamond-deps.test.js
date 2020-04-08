@@ -5,7 +5,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 test('diamonds', async() => {
   const fn = jest.fn()
-  const trigger = createEvent('trigger')
+  const trigger = createEvent()
   const nodeA = createStore(1).on(trigger, x => x + 1)
   const nodeB = nodeA.map(x => x + 1)
   const nodeC = nodeB.map(x => x + 1)
@@ -46,16 +46,10 @@ updated branches     └────┘                └────┘
                                 │ I  │
                                 └────┘
 
-
-wonder why it called "olympic"?
-
-   C   D   E
-     F   G
-
 */
 test('olympic', async() => {
   const fn = jest.fn()
-  const A = createEvent('A')
+  const A = createEvent()
   const B = createStore('text')
   const C = B.map(text => text.length)
   const D = C.map(ln => ({isEmpty: ln === 0, ln}))
@@ -78,13 +72,22 @@ test('olympic', async() => {
   A(' ')
   A('end')
 
-  expect(fn.mock.calls).toEqual([
-    ['text: "text" length: 4 empty: false'],
-    ['text: "word" length: 4 empty: false'],
-    ['text: "" length: 0 empty: true'],
-    ['text: "" length: 1 empty: false'],
-    ['text: "end" length: 3 empty: false'],
+  expect(argumentHistory(fn)).toEqual([
+    'text: "text" length: 4 empty: false',
+    'text: "word" length: 4 empty: false',
+    'text: "" length: 0 empty: true',
+    'text: "" length: 1 empty: false',
+    'text: "end" length: 3 empty: false',
   ])
+
+  /*
+
+    wonder why it called "olympic"?
+
+      C   D   E
+        F   G
+
+  */
 })
 
 test('display name', () => {

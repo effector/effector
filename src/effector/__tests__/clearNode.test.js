@@ -32,8 +32,8 @@ it('will deactivate store', () => {
 
 it('will not broke subscribers', () => {
   const fn = jest.fn()
-  const eventA = createEvent('A')
-  const eventB = createEvent('A -> B')
+  const eventA = createEvent()
+  const eventB = createEvent()
   eventB.watch(e => fn(e))
 
   forward({

@@ -5,7 +5,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 it('should call watcher as many times, as many store updates occured', () => {
   const fn = jest.fn()
-  const e1 = createEvent('e1')
+  const e1 = createEvent()
   const e2 = e1.map(() => 'e2')
   const st1 = createStore('str')
     .on(e1, (_, x) => x)
@@ -26,7 +26,7 @@ it('should call watcher as many times, as many store updates occured', () => {
 })
 it('should call sampled watcher once during a walk', () => {
   const fn = jest.fn()
-  const e1 = createEvent('e1')
+  const e1 = createEvent()
   const e2 = e1.map(() => 'e2')
   const st1 = createStore('str')
     .on(e1, (_, x) => x)

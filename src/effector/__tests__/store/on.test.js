@@ -5,7 +5,7 @@ import {createEvent, createStore} from 'effector'
 
 it('supports stores', () => {
   const fn = jest.fn()
-  const newWord = createEvent<string>('new word')
+  const newWord = createEvent<string>()
   const a = createStore('word').on(newWord, (_, word) => word)
 
   const b = createStore(['word'])
@@ -62,7 +62,7 @@ it('supports stores', () => {
 })
 it('supports events', () => {
   const fn = jest.fn()
-  const trigger = createEvent('trigger')
+  const trigger = createEvent()
 
   const b = createStore(0)
 
@@ -103,7 +103,7 @@ it('supports events', () => {
   `)
 })
 it('replace old links', () => {
-  const event = createEvent('event')
+  const event = createEvent()
 
   const store = createStore('')
     .on(event, () => 'a')

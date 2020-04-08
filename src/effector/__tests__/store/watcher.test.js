@@ -5,7 +5,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 it('support watchers for event', () => {
   const fn = jest.fn()
-  const event = createEvent('trigger')
+  const event = createEvent()
   const watcher = event.watch(e => {
     fn(e)
   })
@@ -31,7 +31,7 @@ it('support watchers for event', () => {
 
 it('support watchers for storages', () => {
   const fn = jest.fn()
-  const event = createEvent('trigger')
+  const event = createEvent()
   const store = createStore('none').on(event, (_, e) => e.toString())
   const watcher = store.watch(e => {
     fn(e)
@@ -107,7 +107,7 @@ it('support watchers for mapped storages', () => {
     unit.graphite.scope.tag = tag
   }
   const fn = jest.fn()
-  const event = createEvent('trigger')
+  const event = createEvent()
   const storeFirst = createStore('none').on(event, (_, e) => e.toString())
   const store = storeFirst.map(e => `/${e}`)
 

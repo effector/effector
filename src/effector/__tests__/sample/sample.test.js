@@ -228,8 +228,8 @@ describe('sample', () => {
     })
     test('event', () => {
       const fn = jest.fn()
-      const data = createEvent('data')
-      const stop = createEvent('stop')
+      const data = createEvent()
+      const stop = createEvent()
 
       const lastData = sample(data, stop)
 
@@ -247,8 +247,8 @@ describe('sample', () => {
     })
     test('no updates until first source update', () => {
       const fn = jest.fn()
-      const data = createEvent('data')
-      const stop = createEvent('stop')
+      const data = createEvent()
+      const stop = createEvent()
 
       const lastData = sample(data, stop)
 
@@ -268,8 +268,8 @@ describe('sample', () => {
         'even when clock is store',
       () => {
         const fn = jest.fn()
-        const data = createEvent('data')
-        const add = createEvent('+ n')
+        const data = createEvent()
+        const add = createEvent()
         const stop = createStore(0).on(add, (x, n) => x + n)
 
         const lastData = sample(data, stop)
@@ -353,12 +353,12 @@ describe('sample', () => {
   describe('sample with effect as source', () => {
     test('effect', () => {
       const fn = jest.fn()
-      const data = createEffect('data', {
+      const data = createEffect({
         handler() {
           return 'resolved'
         },
       })
-      const stop = createEvent('stop')
+      const stop = createEvent()
 
       const lastData = sample(data, stop)
 
@@ -424,9 +424,9 @@ describe('sample', () => {
   describe('sample with store as source', () => {
     test('store', () => {
       const fn = jest.fn()
-      const inc = createEvent('inc')
-      const dec = createEvent('dec')
-      const stop = createEvent('stop')
+      const inc = createEvent()
+      const dec = createEvent()
+      const stop = createEvent()
 
       const s1 = createStore(0)
       const s2 = sample(s1, stop)
