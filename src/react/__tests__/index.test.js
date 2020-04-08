@@ -1,57 +1,60 @@
 //@flow
 
-import {configure, mount} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-configure({
-  adapter: new Adapter(),
-})
-
 import * as React from 'react'
-import {act} from 'effector/fixtures/react'
+import {act, render, container} from 'effector/fixtures/react'
 import {createStore, createEvent} from 'effector'
 import {connect} from '..'
 
-test('connect api', () => {
-  const store = createStore('foo')
-  const changeText = createEvent('change text')
-  store.on(changeText, (_, e) => e)
+test('connect api', async() => {
+  const text = createStore('foo')
+  const store = text.map(text => ({text}))
+  const changeText = createEvent()
+  text.on(changeText, (_, e) => e)
 
   class Display extends React.Component<{
     text: string,
     count: number,
-    ...
   }> {
     render() {
       return (
         <span>
-          Text: {this.props.text}
-          Counter: {this.props.count}
+          Text: {this.props.text}/ Counter: {this.props.count}
         </span>
       )
     }
   }
-  const ConnectedDisplay = (connect(Display): any)(store.map(text => ({text})))
+  const ConnectedDisplay = connect(Display)(store)
 
-  const tree = mount(<ConnectedDisplay count={1} />)
-  expect(tree.text()).toMatchInlineSnapshot(`"Text: fooCounter: 1"`)
-  act(() => {
+  await render(<ConnectedDisplay count={1} />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Text: 
+      foo
+      / Counter: 
+      1
+    </span>
+  `)
+  await act(async() => {
     changeText('bar')
   })
-  expect(tree.text()).toMatchInlineSnapshot(`"Text: barCounter: 1"`)
-  tree.unmount()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Text: 
+      bar
+      / Counter: 
+      1
+    </span>
+  `)
 })
 
-test('click counter', () => {
-  const store = createStore(0)
-  const increment = createEvent('increment')
+test('click counter', async() => {
+  const count = createStore(0)
+  const store = count.map(text => ({text}))
+  const increment = createEvent()
 
-  store.on(increment, state => state + 1)
+  count.on(increment, state => state + 1)
 
-  class Display extends React.Component<{
-    count: number,
-    ...
-  }> {
+  class Display extends React.Component<{count: number}> {
     render() {
       return (
         <span>
@@ -63,15 +66,30 @@ test('click counter', () => {
       )
     }
   }
-  const ConnectedDisplay = store
-    .map(count => ({count}))
-    .thru((connect(Display): any))
+  const ConnectedDisplay = connect(Display)(store)
 
-  const tree = mount(<ConnectedDisplay />)
-  expect(tree.text()).toMatchInlineSnapshot(`"Counter: 0Increment"`)
-  act(() => {
-    tree.find('#increment').simulate('click')
+  await render(<ConnectedDisplay />)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Counter: 
+      <button
+        id="increment"
+      >
+        Increment
+      </button>
+    </span>
+  `)
+  await act(async() => {
+    container.firstChild.querySelector('#increment').click()
   })
-  expect(tree.text()).toMatchInlineSnapshot(`"Counter: 1Increment"`)
-  tree.unmount()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Counter: 
+      <button
+        id="increment"
+      >
+        Increment
+      </button>
+    </span>
+  `)
 })

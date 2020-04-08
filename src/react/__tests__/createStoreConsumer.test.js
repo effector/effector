@@ -1,38 +1,38 @@
 //@flow
 
-import {configure} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-configure({
-  adapter: new Adapter(),
-})
-
 import * as React from 'react'
-import {mount} from 'enzyme'
-import {act} from 'effector/fixtures/react'
+import {act, render, cleanup, container} from 'effector/fixtures/react'
+import {argumentHistory} from 'effector/fixtures'
 import {createEvent, createStore, createStoreObject} from 'effector'
 import {createStoreConsumer} from '../createStoreConsumer'
 
-test('createStoreComponent attempt', () => {
+test('createStoreComponent attempt', async () => {
   const store1 = createStore('foo')
-  const changeText = createEvent('change text')
+  const changeText = createEvent()
   store1.on(changeText, (_, payload) => payload)
   const Store1 = createStoreConsumer(store1)
-  const tree = mount(
-    <Store1>{state => <span>Current state: {state}</span>}</Store1>,
-  )
-  expect(tree.text()).toMatchInlineSnapshot(`"Current state: foo"`)
-  act(() => {
+  await render(<Store1>{state => <span>Current state: {state}</span>}</Store1>)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Current state: 
+      foo
+    </span>
+  `)
+  await act(async () => {
     changeText('bar')
   })
-  expect(tree.text()).toMatchInlineSnapshot(`"Current state: bar"`)
-  tree.unmount()
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Current state: 
+      bar
+    </span>
+  `)
 })
 
-test('no dull re-renders', () => {
+test('no dull re-renders', async () => {
   const fn = jest.fn()
-  const reset = createEvent('reset')
-  const inc = createEvent('inc')
+  const reset = createEvent()
+  const inc = createEvent()
   const listSize = createStore(3)
     .on(inc, n => n + 1)
     .reset(reset)
@@ -47,7 +47,7 @@ test('no dull re-renders', () => {
 
   const CurrentList = createStoreConsumer(currentList)
 
-  const tree = mount(
+  await render(
     <CurrentList>
       {state => {
         fn(state)
@@ -55,17 +55,49 @@ test('no dull re-renders', () => {
       }}
     </CurrentList>,
   )
-  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2"`)
-  act(() => {
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Current state: 
+      0,1,2
+    </span>
+  `)
+  await act(async () => {
     inc()
   })
-  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2,3"`)
-  act(() => {
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Current state: 
+      0,1,2,3
+    </span>
+  `)
+  await act(async () => {
     reset()
   })
-  expect(tree.text()).toMatchInlineSnapshot(`"Current state: 0,1,2"`)
-  tree.unmount()
-
-  expect(fn.mock.calls).toEqual([[[0, 1, 2]], [[0, 1, 2, 3]], [[0, 1, 2]]])
-  expect(fn).toHaveBeenCalledTimes(3)
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <span>
+      Current state: 
+      0,1,2
+    </span>
+  `)
+  await cleanup()
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Array [
+        0,
+        1,
+        2,
+      ],
+      Array [
+        0,
+        1,
+        2,
+        3,
+      ],
+      Array [
+        0,
+        1,
+        2,
+      ],
+    ]
+  `)
 })
