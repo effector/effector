@@ -3,6 +3,7 @@ author: Zero Bias
 authorURL: https://github.com/zerobias
 title: Media queries with effector
 ---
+
 Hi!
 
 In this article I will show how to make react component which will work like this
@@ -26,7 +27,6 @@ const Button = () => (
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-
 Media queries itself could been handled in such way:
 
 <!--DOCUSAURUS_CODE_TABS-->
@@ -34,7 +34,7 @@ Media queries itself could been handled in such way:
 <!--JavaScript-->
 
 ```js
-const mediaQueryList = window.matchMedia("(orientation: portrait)")
+const mediaQueryList = window.matchMedia('(orientation: portrait)')
 mediaQueryList.addListener(e => {
   if (e.matches) {
     // The viewport is currently in portrait orientation
@@ -45,7 +45,6 @@ mediaQueryList.addListener(e => {
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
-
 
 But how this could been used in react components? (actually, we’ll make more universal thing, which can be used in various ways)
 
@@ -59,19 +58,18 @@ Effector can reacts on media queries changes and provide current query state as 
 import {createEvent, createStore} from 'effector'
 
 const orientationChange = createEvent('orientation changed')
-const isPortrait = createStore(false)
-	.on(orientationChange, (state, e) => e.matches)
+const isPortrait = createStore(false).on(
+  orientationChange,
+  (state, e) => e.matches,
+)
 
 const orientationMediaQuery = window.matchMedia('(orientation: portrait)')
 orientationMediaQuery.addListener(orientationChange)
-
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
 `orientationChange` is just a function
-
-
 
 We can rewrite it for reuse with any query
 
@@ -86,8 +84,10 @@ export function mediaMatcher(query) {
   const queryChange = createEvent('query change')
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches)
-    .on(queryChange, (state, e) => e.matches)
+  const isQueryMatches = createStore(mediaQueryList.matches).on(
+    queryChange,
+    (state, e) => e.matches,
+  )
   return isQueryMatches
 }
 
@@ -107,9 +107,7 @@ small.watch(isSmall => {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-For my device currently it prints `is small screen? false` 
-
-
+For my device currently it prints `is small screen? false`
 
 Lets make it single store, thereby creating common base to connect it to view framework further
 
@@ -122,29 +120,30 @@ Lets make it single store, thereby creating common base to connect it to view fr
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
-  const queryChange = createEvent('query change')
+  const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches)
-    .on(queryChange, (state, e) => e.matches)
+  const isQueryMatches = createStore(mediaQueryList.matches).on(
+    queryChange,
+    (state, e) => e.matches,
+  )
   return isQueryMatches
 }
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-
 <!--DOCUSAURUS_CODE_TABS-->
 
 <!--JavaScript-->
 
 ```js
-import {createStoreObject} from 'effector'
+import {combine} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = createStoreObject({
+export const screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -154,12 +153,7 @@ export const screenQueries = createStoreObject({
 /* using queries */
 
 screenQueries.watch(queries => {
-  const {
-    small,
-    medium,
-    large,
-    portrait,
-  } = queries
+  const {small, medium, large, portrait} = queries
   console.log(`
     is small ${small}
     is medium ${medium}
@@ -172,7 +166,6 @@ screenQueries.watch(queries => {
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-
 Now we could connect it to view framework, react, using `effector-react` library
 
 <!--DOCUSAURUS_CODE_TABS-->
@@ -184,17 +177,18 @@ Now we could connect it to view framework, react, using `effector-react` library
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
-  const queryChange = createEvent('query change')
+  const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
-  const isQueryMatches = createStore(mediaQueryList.matches)
-    .on(queryChange, (state, e) => e.matches)
+  const isQueryMatches = createStore(mediaQueryList.matches).on(
+    queryChange,
+    (state, e) => e.matches,
+  )
   return isQueryMatches
 }
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
-
 
 <!--DOCUSAURUS_CODE_TABS-->
 
@@ -202,12 +196,12 @@ export function mediaMatcher(query) {
 
 ```js
 //screenQueries.js
-import {createStoreObject} from 'effector'
+import {combine} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = createStoreObject({
+export const screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -217,14 +211,12 @@ export const screenQueries = createStoreObject({
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-
-
 <!--DOCUSAURUS_CODE_TABS-->
 
 <!--JavaScript-->
 
 ```js
-import {createComponent} from 'effector-react'
+import {useStore} from 'effector-react'
 import {screenQueries} from './screenQueries'
 
 function orientationCheck(props, queries) {
@@ -246,16 +238,15 @@ function screenSizeCheck(props, queries) {
   )
 }
 
-export const Screen = createComponent(
-  screenQueries, (props, queries) => {
-    const orientationAllowed = orientationCheck(props, queries)
-    const screenSizeAllowed = screenSizeCheck(props, queries)
-    if (orientationAllowed && screenSizeAllowed) {
-      return props.children
-    }
-    return null
+export const Screen = props => {
+  const queries = useStore(screenQueries)
+  const orientationAllowed = orientationCheck(props, queries)
+  const screenSizeAllowed = screenSizeCheck(props, queries)
+  if (orientationAllowed && screenSizeAllowed) {
+    return props.children
   }
-)
+  return null
+}
 
 Screen.defaultProps = {
   children: null,
@@ -265,8 +256,6 @@ Screen.defaultProps = {
   portrait: false,
   landscape: false,
 }
-
-
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
@@ -283,18 +272,14 @@ It support nesting out from a box
 export const AppLogo = ({brandName, fullLogo, squareLogo}) => (
   <>
     <Screen landscape>
-      <img src={fullLogo}/>
-      <Screen large>
-        {brandName}
-      </Screen>
+      <img src={fullLogo} />
+      <Screen large>{brandName}</Screen>
     </Screen>
-      <Screen portrait>
-      <img src={squareLogo}/>
+    <Screen portrait>
+      <img src={squareLogo} />
     </Screen>
   </>
 )
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
-
-More advanced nesting example see [here](https://codesandbox.io/s/mj1n4466kj)
