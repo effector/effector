@@ -128,6 +128,8 @@ describe('#effect', () => {
         return 256
       },
     })
+    const handler: any = () => {}
+    effect1.use(handler)
     effect2(20)
     const effect3 = domain.effect('', {
       handler: effect1,
@@ -227,6 +229,8 @@ describe('#createEffect', () => {
         return 256
       },
     })
+    const handler: any = () => {}
+    effect1.use(handler)
     effect2(20)
     const effect3 = domain.createEffect('', {
       handler: effect1,
