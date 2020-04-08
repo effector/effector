@@ -16,37 +16,39 @@ yarn add effector effector-react
 
 ## Usage
 
-[![Edit Effector-react example](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/vmx6wxww43)
-
 ```js
-import {createStore, createStoreObject, createEvent} from 'effector'
+import {createStore, combine, createEvent} from 'effector'
 
-import {createStoreConsumer} from 'effector-react'
+import {useStore} from 'effector-react'
 
-const inputText = createEvent('input text')
+const inputText = createEvent()
 const text = createStore('').on(inputText, (state, payload) => payload)
 
-const length = createStore(0).on(inputText, (state, payload) => payload.length)
+const size = createStore(0).on(inputText, (state, payload) => payload.length)
 
-const store = createStoreObject({
- text,
- length,
+const form = combine({
+  text,
+  size,
 })
 
-const FormStore = createStoreConsumer(store)
-
-const Form = () => (
- <FormStore>
-  {state => (
-   <form>
-    <input
-     type="text"
-     onChange={e => inputText(e.currentTarget.value)}
-     value={state.text}
-    />
-    <p>Length: {state.length}</p>
-   </form>
-  )}
- </FormStore>
-)
+const Form = () => {
+  const {text, size} = useStore(form)
+  return (
+    <form>
+      <input
+        type="text"
+        onChange={e => inputText(e.currentTarget.value)}
+        value={text}
+      />
+      <p>Length: {size}</p>
+    </form>
+  )
+}
 ```
+
+[Try it](https://share.effector.dev/vwTDZXOA)
+
+[useStore](https://effector.now.sh/docs/api/effector-react/useStore) in docs
+[createStore](https://effector.now.sh/docs/api/effector/createStore) in docs
+[combine](https://effector.now.sh/docs/api/effector/combine) in docs
+[createEvent](https://effector.now.sh/docs/api/effector/createEvent) in docs
