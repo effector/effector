@@ -181,6 +181,8 @@ type Subscription = {
 }
 ```
 
+Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+
 ## Pureness
 
 Most of functions in api shouldn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than speaded across entire business logic
