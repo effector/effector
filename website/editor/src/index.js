@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom'
 import {loadLayoutSettings} from './layout-settings'
 import './init'
 import './graphite/dynamic'
-import view from './view'
+import App from './view'
 import React from "react"
 
 
@@ -28,4 +28,4 @@ root.addEventListener(
   },
   false,
 )
-ReactDOM.render(view, root)
+ReactDOM.render(<App />, root)

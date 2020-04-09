@@ -223,7 +223,7 @@ export const Share = () => {
                         value={shareDescription || ''}
                         onKeyDown={handleKeyDown}
                         onChange={handleInput}
-                        autoFocus
+                        autoFocus={false}
                         required
         />
         <Save disabled={saving} />

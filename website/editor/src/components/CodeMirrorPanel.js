@@ -109,6 +109,9 @@ export default class CodeMirrorPanel extends React.Component<any> {
     this.props.setCursor.watch(({line, column}) => {
       this._codeMirror.focus()
       this._codeMirror.setCursor({line: line - 1, ch: column})
+      const cursorCoords = this._codeMirror.cursorCoords({line: line - 1, ch: column}, 'local')
+      const scrollInfo = this._codeMirror.getScrollInfo()
+      this._codeMirror.scrollTo(cursorCoords.left, cursorCoords.top - scrollInfo.clientHeight / 2)
     })
 
     this.props.performLint.watch(() => {

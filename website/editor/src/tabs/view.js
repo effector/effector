@@ -12,7 +12,8 @@ import {TabHeader, TabHeaderList} from './styled'
 import {mediaQuery} from '../components/mediaQuery'
 import {Gist} from '../github/view'
 
-const SmallScreens = mediaQuery('(max-width: 699px)')
+export const SmallScreens = mediaQuery('(max-width: 699px)')
+export const DesktopScreens = mediaQuery('(min-width: 700px)')
 
 const tabs = {
   editor: {
@@ -68,13 +69,11 @@ export const TabsView = () => {
         <PrettifyButton />
         <SmallScreens>
           <TabHeaderTemplate name="editor" />
-          <TabHeaderTemplate name="outline" />
         </SmallScreens>
         {flowToggle && <TabHeaderTemplate name="errors" />}
         <TabHeaderTemplate name="dom" />
         <TabHeaderTemplate name="share" />
         <TabHeaderTemplate name="settings" />
-        {/*<TabHeaderTemplate name="gist" />*/}
       </TabHeaderList>
       {tab === 'graphite' && <GraphiteView />}
       <div
@@ -85,7 +84,6 @@ export const TabsView = () => {
       {tab === 'share' && <Share />}
       {tab === 'settings' && <Settings />}
       {tab === 'errors' && <TypeErrorsView />}
-      {/*{tab === 'gist' && <Gist />}*/}
     </>
   )
 }

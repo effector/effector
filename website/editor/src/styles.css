@@ -178,7 +178,10 @@ body {
   .errors {
     grid-column: 1 / span 1;
     grid-row: 3 / span 1;
-    margin-top: 86px;
+    margin: 0;
+    margin-top: var(--console-min-height);
+    overflow: auto;
+    padding: 10px;
   }
 }
 @media (min-width: 700px) {
@@ -211,6 +214,9 @@ body {
   .errors {
     grid-column: 3 / span 1;
     grid-row: 3 / span 1;
+    margin-top: var(--console-min-height);
+    overflow: auto;
+    padding: 10px;
   }
 }
 

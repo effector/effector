@@ -2,7 +2,7 @@
 
 import React, {useState} from 'react'
 import {styled} from 'linaria/react'
-import {createComponent} from 'effector-react'
+import {createComponent, useStore} from 'effector-react'
 import {createApi, createStore, Store} from 'effector'
 import {LogsView} from '../logs/view'
 import {TabHeaderList} from '../tabs/styled'
@@ -12,11 +12,16 @@ import {clearConsole} from '../logs'
 import {autoScrollLog} from '../settings/state'
 import {IconButton} from './IconButton'
 import {logs} from '../logs/state'
+import {DesktopScreens, SmallScreens} from '../tabs/view'
+import Outline from './Outline'
+import {OutlineView} from '../view'
+import {tab as $mainTab} from '../tabs/domain'
 
 
-const tab: Store<'console'> = createStore('console')
+const tab = createStore('console')
 const api = createApi(tab, {
   showConsole: () => 'console',
+  showOutline: () => 'outline',
 })
 
 const Tab = styled.li`
@@ -34,16 +39,24 @@ const TabContent = styled.div`
   overflow: auto;
 `
 
-const TabView = createComponent(tab, ({}, tab) => (
-  <TabContent>{tab === 'console' && <LogsView />}</TabContent>
-))
-
 // style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingRight: 10, minHeight: 36}}>
-const ToolbarView = createComponent({logs, tab, autoScrollLog}, ({}, {logs, tab, autoScrollLog}) => (
+const ToolbarView = createComponent({logs, tab, autoScrollLog, $mainTab}, ({},
+  {$mainTab, logs, tab, autoScrollLog}) => (
   <TabHeaderList justify="space-between" style={{border: 'none'}}>
-    <Tab onClick={api.showConsole} isActive={tab === 'console'}>
-      Console {logs.length > 0 && <span style={{marginLeft: 10, color: '#999'}}>({logs.length})</span>}
-    </Tab>
+    <div style={{display: 'flex'}}>
+      <Tab onMouseDown={e => {
+        api.showConsole()
+      }} isActive={tab === 'console' || $mainTab !== 'editor'}>
+        Console {logs.length > 0 && <span style={{marginLeft: 10, color: '#999'}}>({logs.length})</span>}
+      </Tab>
+      <SmallScreens>
+        {$mainTab === 'editor' && (
+          <Tab onMouseDown={api.showOutline} isActive={tab === 'outline'}>
+            Outline
+          </Tab>
+        )}
+      </SmallScreens>
+    </div>
     <div style={{margin: '5px 5px 0 0'}}>
       <IconButton title="Clear" icon={theme.styles.TRASH_ICON} onMouseDown={clearConsole} />
     </div>
@@ -72,6 +85,8 @@ const SecondanaryTabs = styled.div`
 
 export default function() {
   const [ref, setRef] = useState(null)
+  const _tab = useStore(tab)
+  const mainTab = useStore($mainTab)
 
   return (
     <SecondanaryTabs ref={setRef} id="console-panel">
@@ -88,7 +103,12 @@ export default function() {
       >
         <ToolbarView />
       </Sizer>
-      <TabView />
+      <SmallScreens>
+        {_tab === 'console' || mainTab !== 'editor' ? <LogsView /> : <OutlineView />}
+      </SmallScreens>
+      <DesktopScreens>
+        <LogsView />
+      </DesktopScreens>
     </SecondanaryTabs>
   )
 }

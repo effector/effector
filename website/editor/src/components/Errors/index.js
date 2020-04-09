@@ -8,12 +8,12 @@ import {styled} from 'linaria/react'
 import type {StackFrame as StackFrameType} from '../../evaluator/stackframe/stack-frame'
 
 const StackTrace = styled.div`
-  overflow: auto;
+  //overflow: auto;
 `
 
 const Message = styled.div`
-  overflow: ${props => (props.scroll ? 'auto' : 'none')};
-  margin-bottom: 1.5em;
+  // overflow: ${props => (props.scroll ? 'auto' : 'none')};
+  // margin-bottom: 1.5em;
 `
 
 export default function Errors({

@@ -2,7 +2,7 @@
 
 import React, {useEffect, useState} from 'react'
 import {combine} from 'effector'
-import {createComponent} from 'effector-react'
+import {createComponent, useStore} from 'effector-react'
 import debounce from 'lodash.debounce'
 
 import 'codemirror/lib/codemirror.css'
@@ -14,7 +14,7 @@ import SecondanaryTabs from './components/SecondanaryTabs'
 import Outline from './components/Outline'
 import {TypeHintView} from './flow/view'
 import {isDesktopChanges, tab} from './tabs/domain'
-import {TabsView} from './tabs/view'
+import {DesktopScreens, SmallScreens, TabsView} from './tabs/view'
 import {mode} from './mode/domain'
 import {changeSources, codeCursorActivity, codeMarkLine, codeSetCursor, performLint} from './editor'
 import {codeError, sourceCode} from './editor/state'
@@ -24,20 +24,7 @@ import Sizer from './components/Sizer'
 import {GitHubAuth} from './github/GitHubAuthLink'
 
 
-const OutlineView = createComponent(
-  {
-    displayOutline: combine(tab, isDesktopChanges, (tab, isDesktop) =>
-      isDesktop ? true : tab === 'outline',
-    ),
-    stats,
-  },
-  ({}, {displayOutline, stats}) => (
-    <Outline
-      style={{visibility: displayOutline ? 'visible' : 'hidden'}}
-      {...stats}
-    />
-  ),
-)
+export const OutlineView = createComponent({stats}, ({}, {stats}) => <Outline {...stats} />)
 
 const ErrorsView = createComponent(
   codeError,
@@ -71,12 +58,14 @@ const CodeView = createComponent(
           visibility: displayEditor ? 'visible' : 'hidden',
           display: 'flex',
         }}>
-        <Sizer
-          direction="vertical"
-          container={outlineSidebar}
-          cssVar="--outline-width"
-          sign={1}
-        />
+        <DesktopScreens>
+          <Sizer
+            direction="vertical"
+            container={outlineSidebar}
+            cssVar="--outline-width"
+            sign={1}
+          />
+        </DesktopScreens>
 
         <div className="sources" style={{flex: '1 0 auto'}}>
           <Panel
@@ -93,24 +82,42 @@ const CodeView = createComponent(
           <TypeHintView />
         </div>
 
-        <Sizer
-          direction="vertical"
-          container={consolePanel}
-          cssVar="--right-panel-width"
-          sign={-1}
-        />
+        <DesktopScreens>
+          <Sizer
+            direction="vertical"
+            container={consolePanel}
+            cssVar="--right-panel-width"
+            sign={-1}
+          />
+        </DesktopScreens>
       </div>
     )
   },
 )
 
-export default (
-  <>
-    <OutlineView />
-    <CodeView />
-    <TabsView />
-    <SecondanaryTabs />
-    <ErrorsView />
-    <GitHubAuth />
-  </>
-)
+const $displayOutline = combine(tab, isDesktopChanges, (tab, isDesktop) => isDesktop || tab === 'editor')
+
+export default () => {
+  const displayOutline = useStore($displayOutline)
+  const _tab = useStore(tab)
+  return (
+    <>
+      {displayOutline && <OutlineView />}
+      <CodeView />
+      <TabsView />
+      <SmallScreens>
+        {_tab !== 'share' && _tab !== 'settings' && (
+          <>
+            <SecondanaryTabs />
+            <ErrorsView />
+          </>
+        )}
+      </SmallScreens>
+      <DesktopScreens>
+        <SecondanaryTabs />
+        <ErrorsView />
+      </DesktopScreens>
+      <GitHubAuth />
+    </>
+  )
+}
