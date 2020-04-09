@@ -1,70 +1,61 @@
 //@flow
 
-import {configure} from 'enzyme'
-import Adapter from 'enzyme-adapter-react-16'
-
-configure({
-  adapter: new Adapter(),
-})
-
 import * as React from 'react'
-import {mount} from 'enzyme'
 import {argumentHistory} from 'effector/fixtures'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {
   type Store,
   createStore,
-  createStoreObject,
+  combine,
   createEvent,
   createApi,
 } from 'effector'
 import {createComponent} from '..'
 
 describe('createComponent', () => {
-  const a = createStore(0)
-  const b = createStore('bar')
-  const updateValue = createEvent()
-  const c = createStoreObject({a, b})
-  const spy = jest.fn()
-
-  test('createStoreObject', () => {
+  test('combine', async() => {
+    const a = createStore(0)
+    const b = createStore('bar')
+    const c = combine({a, b})
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
-        <select value={state.b} onChange={updateValue}>
+        <select value={state.b} onChange={() => {}}>
           <option value="bar">bar</option>
           <option value="foo">foo</option>
         </select>
       </>
     ))
-    const tree = mount(<Foo />)
-    expect(tree.html()).toMatchInlineSnapshot(
-      `"<div>bar</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
-    )
-    act(() => {
+    await render(<Foo />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        bar
+      </div>
+    `)
+    await act(async() => {
       //$todo
       a.setState(2)
       //$todo
       b.setState('foo')
-      c.watch(spy)
+      c.watch(fn)
     })
-    expect(tree.html()).toMatchInlineSnapshot(
-      `"<div>foo</div><select><option value=\\"bar\\">bar</option><option value=\\"foo\\">foo</option></select>"`,
-    )
-    expect(spy.mock.calls).toMatchInlineSnapshot(`
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        foo
+      </div>
+    `)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
-        Array [
-          Object {
-            "a": 2,
-            "b": "foo",
-          },
-        ],
+        Object {
+          "a": 2,
+          "b": "foo",
+        },
       ]
     `)
-    tree.unmount()
   })
 
-  test('initial props', () => {
+  test('initial props', async() => {
     type ListItem = {
       text: string,
     }
@@ -84,16 +75,23 @@ describe('createComponent', () => {
         list.map(list => list[initialProps.id] ?? {text: 'Loading...'}),
       (_, state) => <div>{state.text}</div>,
     )
-    const tree = mount(<Foo id={24} />)
-    expect(tree.html()).toMatchInlineSnapshot(`"<div>Loading...</div>"`)
-    act(() => {
+    await render(<Foo id={24} />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        Loading...
+      </div>
+    `)
+    await act(async() => {
       update({
         id: 24,
         data: {text: 'nice'},
       })
     })
-    expect(tree.html()).toMatchInlineSnapshot(`"<div>nice</div>"`)
-    tree.unmount()
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <div>
+        nice
+      </div>
+    `)
   })
 
   test('should throw', () => {
@@ -105,7 +103,7 @@ describe('createComponent', () => {
     )
   })
 
-  test('createStoreObject', async () => {
+  test('combine', async() => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
@@ -113,49 +111,45 @@ describe('createComponent', () => {
     expect(container.firstChild).toMatchInlineSnapshot(`4`)
   })
 
-  test('mounted/unmounted events', () => {
+  test('mounted/unmounted events', async() => {
     const text = createStore('foo')
-    const spy = jest.fn()
+    const fn = jest.fn()
     const Component = createComponent(text, () => null)
-    Component.mounted.watch(spy)
-    Component.unmounted.watch(spy)
-    const tree = mount(<Component foo={1} />)
-    act(() => {
+    Component.mounted.watch(fn)
+    Component.unmounted.watch(fn)
+    await render(<Component foo={1} />)
+    await act(async() => {
       //$off
       text.setState('bar')
     })
-    tree.unmount()
-    expect(spy.mock.calls).toMatchInlineSnapshot(`
+    await cleanup()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
-        Array [
-          Object {
-            "props": Object {
-              "foo": 1,
-            },
-            "state": "foo",
+        Object {
+          "props": Object {
+            "foo": 1,
           },
-        ],
-        Array [
-          Object {
-            "props": Object {
-              "foo": 1,
-            },
-            "state": "bar",
+          "state": "foo",
+        },
+        Object {
+          "props": Object {
+            "foo": 1,
           },
-        ],
+          "state": "bar",
+        },
       ]
     `)
   })
 
-  test('mount event', async () => {
+  test('mount event', async() => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
       add: (x, y) => x + y,
     })
     const updateValue = createEvent()
-    const c = createStoreObject({a, b})
-    const spy = jest.fn()
+    const c = combine({a, b})
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -165,14 +159,14 @@ describe('createComponent', () => {
         </select>
       </>
     ))
-    Foo.mounted.watch(spy)
+    Foo.mounted.watch(fn)
     await render(<Foo a="A" />)
-    await act(async () => {
+    await act(async() => {
       add(5)
     })
     await render(<Foo b="B" />)
     await cleanup()
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -186,15 +180,15 @@ describe('createComponent', () => {
       ]
     `)
   })
-  test('unmount event', async () => {
+  test('unmount event', async() => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
       add: (x, y) => x + y,
     })
     const updateValue = createEvent()
-    const c = createStoreObject({a, b})
-    const spy = jest.fn()
+    const c = combine({a, b})
+    const fn = jest.fn()
     const Foo = createComponent(c, (_, state) => (
       <>
         <div>{state.b}</div>
@@ -204,14 +198,14 @@ describe('createComponent', () => {
         </select>
       </>
     ))
-    Foo.unmounted.watch(spy)
+    Foo.unmounted.watch(fn)
     await render(<Foo a="A" />)
-    await act(async () => {
+    await act(async() => {
       add(5)
     })
     await render(<Foo b="B" />)
     await cleanup()
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {
@@ -226,33 +220,61 @@ describe('createComponent', () => {
     `)
   })
 
-  test('hooks', () => {
+  test('hooks', async() => {
     const text = createStore('foo')
     const HookComponent = createComponent(text, (_, text) => {
       const [count, setCount] = React.useState(0)
       return (
-        <>
+        <div>
           <div>Text: {text}</div>
           <div>Counter: {count}</div>
           <button id="increment" onClick={() => setCount(count + 1)}>
             incr
           </button>
-        </>
+        </div>
       )
     })
-    const tree = mount(<HookComponent />)
-    expect(tree.html()).toMatchInlineSnapshot(
-      `"<div>Text: foo</div><div>Counter: 0</div><button id=\\"increment\\">incr</button>"`,
-    )
-    act(() => {
-      tree.find('#increment').simulate('click')
+    await render(<HookComponent />)
+    expect(container.firstChild).toMatchInlineSnapshot(`
+<div>
+  <div>
+    Text: 
+    foo
+  </div>
+  <div>
+    Counter: 
+    0
+  </div>
+  <button
+    id="increment"
+  >
+    incr
+  </button>
+</div>
+`)
+    await act(async() => {
+      container.firstChild.querySelector('#increment').click()
     })
-    expect(tree.html()).toMatchInlineSnapshot(
-      `"<div>Text: foo</div><div>Counter: 1</div><button id=\\"increment\\">incr</button>"`,
-    )
+    expect(container.firstChild).toMatchInlineSnapshot(`
+<div>
+  <div>
+    Text: 
+    foo
+  </div>
+  <div>
+    Counter: 
+    1
+  </div>
+  <button
+    id="increment"
+  >
+    incr
+  </button>
+</div>
+`)
   })
-  it('should not use props from failed renders', async () => {
-    const spy = jest.fn()
+  it('should not use props from failed renders', async() => {
+    const fn = jest.fn()
     const text = createStore('foo')
     const Foo = createComponent(text, (props, text) => {
       if (props.shouldFail) {
@@ -264,7 +286,7 @@ describe('createComponent', () => {
         </div>
       )
     })
-    Foo.unmounted.watch(spy)
+    Foo.unmounted.watch(fn)
     const error = console.error
     //$off
     console.error = function errorMock(...args) {
@@ -279,7 +301,7 @@ describe('createComponent', () => {
       //$off
       console.error = error
     }
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "props": Object {

@@ -127,27 +127,27 @@ describe('guard(source, config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
-                Types of property '__' are incompatible.
-                  Type 'string' is not assignable to type 'number'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Store<string>' is not assignable to type 'Unit<number>'.
+      Types of property '__' are incompatible.
+        Type 'string' is not assignable to type 'number'.
 
-          --flow--
-          Cannot call 'guard'
-            guard(trigger, {
-                           ^...
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-                const target: Store<string> = createStore('no')
-                                [1] ^^^^^^
-                const trigger: Event<number> = createEvent()
-                                 [2] ^^^^^^
-                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                  [3] ^
-          "
-        `)
+--flow--
+Cannot call 'guard'
+  guard(trigger, {
+  ^^^^^
+  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+      const target: Store<string> = createStore('no')
+                      [1] ^^^^^^
+      const trigger: Event<number> = createEvent()
+                       [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
       })
     })
   })
@@ -224,25 +224,25 @@ describe('guard(source, config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
-          --flow--
-          Cannot call 'guard'
-            guard(trigger, {
-                           ^...
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-                const target: Store<string> = createStore('no')
-                                [1] ^^^^^^
-                const trigger: Event<number> = createEvent()
-                                 [2] ^^^^^^
-                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                  [3] ^
-          "
-        `)
+--flow--
+Cannot call 'guard'
+  guard(trigger, {
+  ^^^^^
+  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+      const target: Store<string> = createStore('no')
+                      [1] ^^^^^^
+      const trigger: Event<number> = createEvent()
+                       [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
       })
     })
   })
@@ -384,25 +384,25 @@ describe('guard(config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
-          --flow--
-          Cannot call 'guard'
-            guard({
-                  ^...
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-                const target: Store<string> = createStore('no')
-                                [1] ^^^^^^
-                const trigger: Event<number> = createEvent()
-                                 [2] ^^^^^^
-                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                  [3] ^
-          "
-        `)
+--flow--
+Cannot call 'guard'
+  guard({
+  ^^^^^
+  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+      const target: Store<string> = createStore('no')
+                      [1] ^^^^^^
+      const trigger: Event<number> = createEvent()
+                       [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
       })
     })
   })
@@ -482,25 +482,25 @@ describe('guard(config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
-          --flow--
-          Cannot call 'guard'
-            guard({
-                  ^...
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-                const target: Store<string> = createStore('no')
-                                [1] ^^^^^^
-                const trigger: Event<number> = createEvent()
-                                 [2] ^^^^^^
-                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                  [3] ^
-          "
-        `)
+--flow--
+Cannot call 'guard'
+  guard({
+  ^^^^^
+  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+      const target: Store<string> = createStore('no')
+                      [1] ^^^^^^
+      const trigger: Event<number> = createEvent()
+                       [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
       })
       test('nullable type support', () => {
         const event = createEvent()

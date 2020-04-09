@@ -1,7 +1,7 @@
 //@flow
 
 import * as React from 'react'
-import {type Store, is, createStoreObject, createEvent} from 'effector'
+import {type Store, is, combine, createEvent} from 'effector'
 import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import type {StoreView} from './index.h'
@@ -22,7 +22,7 @@ export function createComponent<Props: {...}, State>(
   } else {
     if (typeof shape === 'object' && shape !== null) {
       //$todo
-      store = createStoreObject(shape)
+      store = combine(shape)
     } else throw Error('shape should be a store or object with stores')
   }
   const storeName = store?.shortName ?? 'Unknown'

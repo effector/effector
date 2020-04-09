@@ -41,7 +41,7 @@ describe('restore cases (should pass)', () => {
       --flow--
       Cannot call 'restore'
         let restored = restore(ev, null)
-                               ^^
+                       ^^^^^^^
         'Event' [1] is incompatible with 'Effect' [2]
             declare export function createEvent<E>(eventName?: string): Event<E>
                                                                     [1] ^^^^^^^^
@@ -86,7 +86,7 @@ describe('restore cases (should pass)', () => {
       --flow--
       Cannot call 'restore'
         let restored = restore(eff, null)
-                               ^^^
+                       ^^^^^^^
         'Effect' [1] is incompatible with 'Event' [2]
             ): Effect<Params, Done, Fail>
            [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -133,46 +133,46 @@ describe('restore cases (should fail)', () => {
     restore(ev, 'initial')
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type '\\"initial\\"' is not assignable to parameter of type 'null'.
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Argument of type '\\"initial\\"' is not assignable to parameter of type 'null'.
 
-      --flow--
-      Cannot call 'restore'
-        restore(ev, 'initial')
-                    ^^^^^^^^^
-        string [1] is incompatible with number [2]
-            restore(ev, 'initial')
-                    [1] ^^^^^^^^^
-            const ev = createEvent<number>()
-                               [2] ^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'restore'
+  restore(ev, 'initial')
+  ^^^^^^^
+  string [1] is incompatible with number [2]
+      restore(ev, 'initial')
+              [1] ^^^^^^^^^
+      const ev = createEvent<number>()
+                         [2] ^^^^^^
+"
+`)
   })
   test('restore(Effect<any,number,Error>, string)', () => {
     const eff = createEffect<any, number, Error>()
     restore(eff, 'initial')
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
-            Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<unknown>': filter, filterMap, thru
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
+      Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<unknown>': filter, filterMap, thru
 
-      --flow--
-      Cannot call 'restore'
-        restore(eff, 'initial')
-                     ^^^^^^^^^
-        string [1] is incompatible with number [2]
-            restore(eff, 'initial')
-                     [1] ^^^^^^^^^
-            const eff = createEffect<any, number, Error>()
-                                      [2] ^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'restore'
+  restore(eff, 'initial')
+  ^^^^^^^
+  string [1] is incompatible with number [2]
+      restore(eff, 'initial')
+               [1] ^^^^^^^^^
+      const eff = createEffect<any, number, Error>()
+                                [2] ^^^^^^
+"
+`)
   })
 })

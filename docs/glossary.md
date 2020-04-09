@@ -9,11 +9,13 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 _Event_ is a function you can subscribe to. It can be intention to change store, fact about what happening in application, command to be executed, aggregated analytics trigger and so on.
 
+[Event]('./api/effector/Event.md) in api documentation
+
 ```typescript
 function createEvent<E>(eventName?: string): Event<E>
 ```
 
-- [`createEvent(eventName)`]() creates event
+- [createEvent(eventName)](./api/effector/createEvent.md) creates event
 
 ```typescript
 type Event<Payload> = {
@@ -23,17 +25,15 @@ type Event<Payload> = {
   filter(options: {fn(payload: Payload): boolean}): Event<Payload>
   filterMap<T>(fn: (payload: Payload) => T | void): Event<T>
   prepend<Before>(fn: (params: Before) => Payload): Event<Before>
-  shortName: string
 }
 ```
 
-- [`(payload)`]() calls `Event` with payload
-- [`watch(watcher)`]() listens to this event and calls given [`watcher`](#watcher)
-- [`map(fn)`]()
-- [`filter({fn})`]() creates new event that will receive update only when given `fn` returns true
-- [`filterMap(fn)`]() creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
-- [`prepend(fn)`]() creates new event that preprocesses payload before calling original event
-- [`shortName`]() is used for debug
+- `(payload)` calls `Event` with payload
+- [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to this event and calls given [`watcher`](#watcher)
+- [map(fn)](./api/effector/Event.md#mapfn) creates new event, which will be called after the original event is called, applying the result of a fn as a payload
+- [filter({fn})](./api/effector/Event.md#filterfn) creates new event that will receive update only when given `fn` returns true
+- [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
+- [prepend(fn)](./api/effector/Event.md#prependfn) creates new event that preprocesses payload before calling original event
 
 ## Effect
 
@@ -47,89 +47,73 @@ The only requirement for function:
 
 - **Should** have zero or one argument
 
+[Effect]('./api/effector/Effect.md) in api documentation
+
 ```typescript
-function createEffect<Params, Done, Fail>(
-  effectName?: string,
-): Effect<Params, Done, Fail>
+function createEffect<Params, Done, Fail>(config?: {
+  handler?: (params: Params) => Promise<Done> | Done
+}): Effect<Params, Done, Fail>
 ```
 
-- [`createEffect(effectName)`]() creates effect
+- [createEffect(config)](./api/effector/createEffect.md) creates effect
 
 ```typescript
 type Effect<Params, Done, Fail = Error> = {
   (payload: Params): Promise<Done>
+  doneData: Event<Done>
+  failData: Event<Fail>
   done: Event<{params: Params; result: Done}>
   fail: Event<{params: Params; error: Fail}>
+  pending: Store<boolean>
+  inFlight: Store<number>
   use: {
     (asyncFunction: (params: Params) => Promise<Done>): this
     getCurrent(): (params: Params) => Promise<Done>
   }
   watch(watcher: (payload: Params) => any): Subscription
-  prepend<Before>(fn: (_: Before) => Params): Event<Before>
-  shortName: string
 }
 ```
 
-- [`(payload)`]() calls `Effect` with payload
-- [`use(asyncFunction)`]() injects async function into effect (can be called multiple times)
-- [`watch(watcher)`]() listens to this effect and calls given [`watcher`](#watcher)
-- [`prepend(fn)`]() creates new effect that preprocesses payload before calling original event
-- [`shortName`]() is used for debug
+- `(payload)` calls `Effect` with payload and returns a Promise
+- [use(asyncFunction)](./api/effector/Effect.md#usehandler) injects async function into effect (can be called multiple times)
+- [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to this effect and calls given [`watcher`](#watcher) when effect starts
 
 ## Store
 
 _Store_ is an object that holds the state tree.
 There can be multiple stores.
 
+[Store]('./api/effector/Store.md) in api documentation
+
 ```typescript
 function createStore<State>(defaultState: State): Store<State>
 ```
 
-```typescript
-function createStoreObject<State: {[key: string]: Store<any> | any}>(
-  obj: State
-): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
-```
-
-- [`createStore(defaultState)`]() creates new store
-- [`createStoreObject(obj)`]() combines multiple stores into one
+- [createStore(defaultState)](./api/effector/createStore.md) creates new store
+- [combine(stores)](./api/effector/combine.md) combines multiple stores into one
 
 ```typescript
 type Store<State> = {
+  on<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    reducer: (state: State, payload: E) => State | void,
+  ): this
+  map<T>(fn: (_: State) => T): Store<T>
   reset(
     ...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>
   ): this
-  getState(): State
-  map<T>(fn: (_: State) => T): Store<T>
-  on<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
-    handler: (state: State, payload: E) => State | void,
-  ): this
-  off(trigger: Event<any> | Effect<any, any, any> | Store<any>): void
-  watch<E>(
-    watcher: (state: State, payload: E, type: string) => any,
-  ): Subscription
-  watch<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
-    watcher: (state: State, payload: E) => any,
-  ): Subscription
-  thru<U>(fn: (store: Store<State>) => U): U
-  shortName: string
-  defaultState: State
+  watch<E>(watcher: (state: State) => any): Subscription
   updates: Event<State>
+  defaultState: State
 }
 ```
 
-- [`reset(...triggers)`]() resets state to default when event occurs
-- [`getState()`]() returns current state
-- [`map(fn)`]() creates computed store from previous state
-- [`on(event, handler)`]() calls [`reducer`](#reducer) on store when event occurs
-- [`off(event)`]() disables [`reducer`](#reducer)
-- [`watch(watcher)`]() calls given [`watcher`](#watcher) when event occurs
-- [`thru(fn)`]() calls function with this store and return its result
-- [`shortName`]() is used for debug
-- [`defaultState`]() is `createStore` first argument
-- [`updates`]() is `event` for watch `store` changes only
+- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store when event occurs
+- [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
+- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default when event occurs
+- [watch(watcher)](./api/effector/Store.md#watchwatcher) calls given [`watcher`](#watcher) with current state
+- [updates](./api/effector/Store.md#updates) is `event` for watch `store` changes only
+- [defaultState](./api/effector/Store.md#defaultstate) initial state of given store
 
 ## Domain
 
@@ -139,11 +123,13 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 
 It is useful for logging or other side effects.
 
+[Domain]('./api/effector/Domain.md) in api documentation
+
 ```typescript
 function createDomain(domainName?: string): Domain
 ```
 
-- [`createDomain(domainName)`]() creates new domain
+- [createDomain(domainName)](./api/effector/createDomain.md) creates new domain
 
 ```typescript
 type Domain = {
@@ -153,21 +139,21 @@ type Domain = {
   ): Subscription
   onCreateStore(hook: (newStore: Store<unknown>) => any): Subscription
   onCreateDomain(hook: (newDomain: Domain) => any): Subscription
-  event<Payload>(name?: string): Event<Payload>
-  effect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
-  store<State>(defaultState: State): Store<State>
-  domain(name?: string): Domain
+  createEvent<Payload>(name?: string): Event<Payload>
+  createEffect<Params, Done, Fail>(name?: string): Effect<Params, Done, Fail>
+  createStore<State>(defaultState: State): Store<State>
+  createDomain(name?: string): Domain
 }
 ```
 
-- [`onCreateEvent(hook)`]() calls hook when nested [`Event`](#event) created
-- [`onCreateEffect(hook)`]() calls hook when nested [`Effect`](#effect) created
-- [`onCreateStore(hook)`]() calls hook when nested [`Store`](#store) created
-- [`onCreateDomain(hook)`]() calls hook when nested `Domain` created
-- [`event(name)`]() is the function that creates [`Event`](#event) described above.
-- [`effect(name)`]() is the function that creates [`Effect`](#effect) described above.
-- [`store(defaultState)`]() is the function that creates Store described above.
-- [`domain(name)`]() creates nested domain.
+- [onCreateEvent(hook)](./api/effector/Domain.md#oncreateeventhook) calls hook when nested [`Event`](#Event) created
+- [onCreateEffect(hook)](./api/effector/Domain.md#oncreateeffecthook) calls hook when nested [`Effect`](#Effect) created
+- [onCreateStore(hook)](./api/effector/Domain.md#oncreatestorehook) calls hook when nested [`Store`](#Store) created
+- [onCreateDomain(hook)](./api/effector/Domain.md#oncreatedomainhook) calls hook when nested [`Domain`](#Domain) created
+- [createEvent(name)](./api/effector/Domain.md#createeventname) is the function that creates [`Event`](#Event)
+- [createEffect(name)](./api/effector/Domain.md#createeffectname) is the function that creates [`Effect`](#Effect)
+- [createStore(defaultState)](./api/effector/Domain.md#createstoredefaultstate) is the function that creates [`Store`](#Store)
+- [createDomain(name)](./api/effector/Domain.md#createdomainname) creates nested [`Domain`](#Domain)
 
 ## Reducer
 
@@ -176,7 +162,7 @@ type StoreReducer<State, E> = (state: S, payload: E) => State | void
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 ```
 
-_Reducer_ calculates a new state given the previous state and an event.
+_Reducer_ calculates a new state given the previous state and an event. For stores, if reducer returns undefined or the same state (===), then there will be no update for given store.
 
 ## Watcher
 
@@ -194,6 +180,8 @@ type Subscription = {
   unsubscribe(): void
 }
 ```
+
+Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
 
 ## Pureness
 
@@ -218,6 +206,7 @@ loginSize.watch(size => {
 [Try it](https://share.effector.dev/D5hV8C70)
 
 [store.map in docs](./api/effector/Store.md#mapfn-state-state-laststate-t--t)
+
 [store.watch in docs](./api/effector/Store.md#watchwatcher)
 
 **Correct**, declarative:

@@ -57,7 +57,7 @@ Effector can reacts on media queries changes and provide current query state as 
 ```js
 import {createEvent, createStore} from 'effector'
 
-const orientationChange = createEvent('orientation changed')
+const orientationChange = createEvent()
 const isPortrait = createStore(false).on(
   orientationChange,
   (state, e) => e.matches,
@@ -120,7 +120,7 @@ Lets make it single store, thereby creating common base to connect it to view fr
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
-  const queryChange = createEvent('query change')
+  const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
   const isQueryMatches = createStore(mediaQueryList.matches).on(
@@ -138,12 +138,12 @@ export function mediaMatcher(query) {
 <!--JavaScript-->
 
 ```js
-import {createStoreObject} from 'effector'
+import {combine} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = createStoreObject({
+export const screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -177,7 +177,7 @@ Now we could connect it to view framework, react, using `effector-react` library
 import {createEvent, createStore} from 'effector'
 
 export function mediaMatcher(query) {
-  const queryChange = createEvent('query change')
+  const queryChange = createEvent()
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)
   const isQueryMatches = createStore(mediaQueryList.matches).on(
@@ -196,12 +196,12 @@ export function mediaMatcher(query) {
 
 ```js
 //screenQueries.js
-import {createStoreObject} from 'effector'
+import {combine} from 'effector'
 import {mediaMatcher} from './mediaMatcher'
 
 /* declaring queries and merge them into single store*/
 
-export const screenQueries = createStoreObject({
+export const screenQueries = combine({
   small: mediaMatcher('(max-width: 768px)'),
   medium: mediaMatcher('(min-width: 769px) and (max-width: 1024px)'),
   large: mediaMatcher('(min-width: 1025px)'),
@@ -216,7 +216,7 @@ export const screenQueries = createStoreObject({
 <!--JavaScript-->
 
 ```js
-import {createComponent} from 'effector-react'
+import {useStore} from 'effector-react'
 import {screenQueries} from './screenQueries'
 
 function orientationCheck(props, queries) {
@@ -238,14 +238,15 @@ function screenSizeCheck(props, queries) {
   )
 }
 
-export const Screen = createComponent(screenQueries, (props, queries) => {
+export const Screen = props => {
+  const queries = useStore(screenQueries)
   const orientationAllowed = orientationCheck(props, queries)
   const screenSizeAllowed = screenSizeCheck(props, queries)
   if (orientationAllowed && screenSizeAllowed) {
     return props.children
   }
   return null
-})
+}
 
 Screen.defaultProps = {
   children: null,

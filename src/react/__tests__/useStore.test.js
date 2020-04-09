@@ -9,10 +9,10 @@ import {argumentHistory} from 'effector/fixtures'
 describe('useStore', () => {
   it('should render', async() => {
     const store = createStore('foo')
-    const changeText = createEvent('change text')
+    const changeText = createEvent()
     store.on(changeText, (_, e) => e)
 
-    const Display = props => {
+    const Display = () => {
       const state = useStore(store)
       return <span>Store text: {state}</span>
     }
@@ -37,7 +37,7 @@ describe('useStore', () => {
 
   it('should throw', async() => {
     const fn = jest.fn()
-    const ErrorDisplay = props => {
+    const ErrorDisplay = () => {
       try {
         //$off
         useStore(undefined)
@@ -123,13 +123,13 @@ describe('useStore', () => {
   })
   it('should support domains', async() => {
     const domain = createDomain()
-    const toggle = domain.event()
-    const inc = domain.event()
+    const toggle = domain.createEvent()
+    const inc = domain.createEvent()
     const show = domain
-      .store('A')
+      .createStore('A')
       .on(toggle, current => (current === 'A' ? 'B' : 'A'))
-    const a = domain.store(10).on(inc, x => x + 1)
-    const b = domain.store(20).on(inc, x => x + 1)
+    const a = domain.createStore(10).on(inc, x => x + 1)
+    const b = domain.createStore(20).on(inc, x => x + 1)
     const View = () => {
       const current = useStore(show)
       const selectedStore = current === 'A' ? a : b
@@ -269,13 +269,13 @@ describe('useStoreMap', () => {
   })
   it('should support domains', async() => {
     const domain = createDomain()
-    const toggle = domain.event()
-    const inc = domain.event()
+    const toggle = domain.createEvent()
+    const inc = domain.createEvent()
     const show = domain
-      .store('A')
+      .createStore('A')
       .on(toggle, current => (current === 'A' ? 'B' : 'A'))
-    const a = domain.store(10).on(inc, x => x + 1)
-    const b = domain.store(20).on(inc, x => x + 1)
+    const a = domain.createStore(10).on(inc, x => x + 1)
+    const b = domain.createStore(20).on(inc, x => x + 1)
     const View = () => {
       const current = useStore(show)
       const selectedStore = current === 'A' ? a : b

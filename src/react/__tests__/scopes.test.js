@@ -6,16 +6,16 @@ import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {createDomain, forward, sample, attach} from 'effector'
 
-import {fork, allSettled, serialize} from 'effector/fork'
+import {fork, allSettled, serialize, hydrate} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async () => {
+it('works', async() => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
-  const start = app.event()
-  const indirectCall = app.event()
-  const sendStats = app.effect({
+  const start = app.createEvent()
+  const indirectCall = app.createEvent()
+  const sendStats = app.createEffect({
     async handler(user) {
       await new Promise(resolve => {
         // let bob loading longer
@@ -24,7 +24,7 @@ it('works', async () => {
     },
   })
 
-  const fetchUser = app.effect({
+  const fetchUser = app.createEffect({
     async handler(user) {
       return (
         await fetch('https://ssr.effector.dev/api/' + user, {
@@ -39,8 +39,8 @@ it('works', async () => {
     to: fetchUser,
   })
 
-  const user = app.store('guest')
-  const friends = app.store([])
+  const user = app.createStore('guest')
+  const friends = app.createStore([])
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -119,7 +119,7 @@ it('works', async () => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('attach support', async () => {
+test('attach support', async() => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -237,4 +237,96 @@ Object {
 }
 `)
   expect(indirectCallFn).toBeCalled()
+})
+
+test('computed values support', async() => {
+  const app = createDomain()
+
+  const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
+    {
+      async handler(user) {
+        const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
+          method: 'POST',
+        })
+        return req.json()
+      },
+    },
+  )
+  const start = app.createEvent()
+  forward({from: start, to: fetchUser})
+  const name = app
+    .createStore('guest')
+    .on(fetchUser.done, (_, {result}) => result.name)
+
+  const friends = app
+    .createStore<string[]>([])
+    .on(fetchUser.done, (_, {result}) => result.friends)
+  const friendsTotal = friends.map(list => list.length)
+
+  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
+  const User = () => <b>User: {useStore(name)}</b>
+  const App = ({root}) => (
+    <Provider value={root}>
+      <section>
+        <User />
+        <Total />
+      </section>
+    </Provider>
+  )
+
+  const serverScope = fork(app)
+  await allSettled(start, {
+    scope: serverScope,
+    params: 'alice',
+  })
+  const serialized = serialize(serverScope)
+
+  hydrate(app, {
+    values: serialized,
+  })
+
+  const clientScope = fork(app)
+
+  await render(<App root={clientScope} />)
+
+  expect(container.firstChild).toMatchInlineSnapshot(`
+<section>
+  <b>
+    User: 
+    alice
+  </b>
+  <small>
+    Total: 
+    2
+  </small>
+</section>
+`)
+})
+
+test('allSettled effect calls', async() => {
+  const fn = jest.fn()
+  const app = createDomain()
+
+  const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
+    {
+      async handler(user) {
+        const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
+          method: 'POST',
+        })
+        return req.json()
+      },
+    },
+  )
+
+  const serverScope = fork(app)
+
+  await allSettled(fetchUser, {
+    scope: serverScope,
+    params: 'alice',
+  })
+    .then(fn)
+    .catch(err => {
+      console.error(err)
+    })
+  expect(fn).toBeCalled()
 })

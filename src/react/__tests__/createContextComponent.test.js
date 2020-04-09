@@ -7,7 +7,7 @@ import {render, container, act} from 'effector/fixtures/react'
 
 test('createContextComponent', async() => {
   const store = createStore('foo')
-  const changeText = createEvent('change text')
+  const changeText = createEvent()
   store.on(changeText, (_, e) => e)
   const Context = React.createContext('bar')
 

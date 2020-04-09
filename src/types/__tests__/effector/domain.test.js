@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars */
-import {createStoreObject, createDomain, clearNode, Effect} from 'effector'
+import {combine, createDomain, clearNode, Effect} from 'effector'
 
 const typecheck = '{global}'
 
@@ -128,6 +128,8 @@ describe('#effect', () => {
         return 256
       },
     })
+    const handler: any = () => {}
+    effect1.use(handler)
     effect2(20)
     const effect3 = domain.effect('', {
       handler: effect1,
@@ -227,6 +229,8 @@ describe('#createEffect', () => {
         return 256
       },
     })
+    const handler: any = () => {}
+    effect1.use(handler)
     effect2(20)
     const effect3 = domain.createEffect('', {
       handler: effect1,
@@ -318,7 +322,7 @@ describe('#createEffect', () => {
 })
 
 test('#onCreateStore', () => {
-  const root = createDomain('root')
+  const root = createDomain()
   root.onCreateStore(store => {
     const snapshot = localStorage.getItem(store.shortName)
     if (typeof snapshot === 'string') store.setState(JSON.parse(snapshot))
@@ -334,7 +338,7 @@ test('#onCreateStore', () => {
   })
 
   root.onCreateStore(foo => {
-    const object = createStoreObject({foo})
+    const object = combine({foo})
     object.watch(data => {
       data.foo
     })

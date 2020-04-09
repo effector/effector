@@ -4,12 +4,12 @@ import {createEvent} from 'effector'
 
 it('can use deep stack calls', () => {
   const fn = jest.fn()
-  const a = createEvent('a')
-  const b = createEvent('b')
-  const c = createEvent('c')
+  const a = createEvent()
+  const b = createEvent()
+  const c = createEvent()
   const d = c.map(_ => _)
   const e = d.map(_ => _)
-  const f = createEvent('f')
+  const f = createEvent()
 
   a.watch(data => {
     b(data)

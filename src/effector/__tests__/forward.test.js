@@ -4,9 +4,9 @@ import {forward, createEvent, createStore} from 'effector'
 
 it('should forward data from one event to another', () => {
   const fn = jest.fn()
-  const source1 = createEvent<string>('source 1')
-  const source2 = createEvent<string>('source 2')
-  const target = createEvent<string>('target')
+  const source1 = createEvent<string>()
+  const source2 = createEvent<string>()
+  const target = createEvent<string>()
 
   target.watch(e => fn(e))
   const unsubscribe = forward({
@@ -27,9 +27,9 @@ it('should forward data from one event to another', () => {
 
 it('should stop forwarding after unsubscribe', () => {
   const fn = jest.fn()
-  const source1 = createEvent<string>('source 1')
-  const source2 = createEvent<string>('source 2')
-  const target = createEvent<string>('target')
+  const source1 = createEvent<string>()
+  const source2 = createEvent<string>()
+  const target = createEvent<string>()
 
   target.watch(e => fn(e))
   const unsubscribe = forward({
@@ -54,8 +54,8 @@ it('should stop forwarding after unsubscribe', () => {
   ])
 })
 
-it('should unsubscribe only from relevant watchers', async () => {
-  const dispatch = createEvent('dispatch')
+it('should unsubscribe only from relevant watchers', async() => {
+  const dispatch = createEvent()
   const store = createStore([])
   store.on(dispatch, (state, text) => [...state, text])
   function subscribe(fn) {

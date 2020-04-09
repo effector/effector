@@ -7,24 +7,26 @@ import {
   forward,
   restore,
 } from 'effector'
-import {delay, spy, argumentHistory} from 'effector/fixtures'
-
-const effect = createEffect('long request')
+import {delay, argumentHistory} from 'effector/fixtures'
 
 describe('effect({...})', () => {
   test(`if used function will resolve`, async() => {
+    const fn = jest.fn()
+    const effect = createEffect()
     effect.use(async params => {
       await delay(500)
-      spy(params)
+      fn(params)
       return 'done!'
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
   test('if used function will throw', async() => {
+    const fn = jest.fn()
+    const effect = createEffect()
     effect.use(async params => {
       await delay(500)
-      spy(params)
+      fn(params)
       throw 'fail!'
     })
     //eslint-disable-next-line max-len
@@ -34,18 +36,22 @@ describe('effect({...})', () => {
 
 describe('future', () => {
   test(`if used function will resolve`, async() => {
+    const fn = jest.fn()
+    const effect = createEffect()
     effect.use(async params => {
       await delay(500)
-      spy(params)
+      fn(params)
       return 'done!'
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
   test('if used function will throw', async() => {
+    const fn = jest.fn()
+    const effect = createEffect()
     effect.use(async params => {
       await delay(500)
-      spy(params)
+      fn(params)
       throw 'fail!'
     })
     await expect(effect('will throw')).rejects.toBe('fail!')
@@ -54,16 +60,17 @@ describe('future', () => {
 
 describe('effect.finally', () => {
   test(`if used function will resolve`, async() => {
-    const effect = createEffect('long request', {
+    const fn = jest.fn()
+    const effect = createEffect({
       async handler({fail}) {
         await delay(100)
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
     })
-    effect.finally.watch(e => spy(e))
+    effect.finally.watch(e => fn(e))
     await effect({fail: false})
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "params": Object {
@@ -77,16 +84,17 @@ describe('effect.finally', () => {
   })
 
   test('if used function will throw', async() => {
-    const effect = createEffect('long request', {
+    const fn = jest.fn()
+    const effect = createEffect({
       async handler({fail}) {
         await delay(100)
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
     })
-    effect.finally.watch(e => spy(e))
+    effect.finally.watch(e => fn(e))
     await effect({fail: true}).catch(() => {})
-    expect(argumentHistory(spy)).toMatchInlineSnapshot(`
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
         Object {
           "error": [Error: [expected error]],
@@ -101,25 +109,27 @@ describe('effect.finally', () => {
 })
 describe('createEffect with config', () => {
   it('supports empty config as second argument', async() => {
-    const effect = createEffect('long request', {})
+    const effect = createEffect('fx without handler', {})
 
     await expect(effect('ok')).resolves.toBe(undefined)
   })
   it('supports default handler with config', async() => {
+    const fn = jest.fn()
     const effect = createEffect('long request', {
       async handler(params) {
         await delay(500)
-        spy(params)
+        fn(params)
         return 'done!'
       },
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
   it('supports default handler without name', async() => {
+    const fn = jest.fn()
     const effect = createEffect({
       async handler(params) {
         await delay(500)
-        spy(params)
+        fn(params)
         return 'done!'
       },
     })
@@ -128,17 +138,16 @@ describe('createEffect with config', () => {
 })
 
 it('should return itself at .use call', () => {
-  const effect = createEffect('long request')
-  expect(effect.use((_: any) => 'done!')).toBe(effect)
+  const effect = createEffect()
+  expect(effect.use(() => 'done!')).toBe(effect)
 })
 
 it('should handle both done and error in .finally', async() => {
   const fn = jest.fn()
-  const effect = createEffect('long request', {
+  const effect = createEffect({
     async handler(params) {
       await delay(500)
       if (params === 'bar') throw new Error('error')
-      spy(params)
       return 'done!'
     },
   })
@@ -202,13 +211,13 @@ test('effect.pending is a boolean store', async() => {
 it('should support forward', async() => {
   const fnHandler = jest.fn()
   const fnWatcher = jest.fn()
-  const fetchData = createEffect('fetch', {
-    async handler(payload) {
+  const fetchData = createEffect({
+    async handler() {
       return 'fetchData result'
     },
   })
 
-  const logRequest = createEffect('log', {
+  const logRequest = createEffect({
     async handler(payload) {
       fnHandler(payload)
       return 'logRequest result'
@@ -225,9 +234,9 @@ it('should support forward', async() => {
   })
 
   await fetchData({url: 'xxx'})
-  expect(fnHandler.mock.calls).toEqual([[{url: 'xxx'}]])
-  expect(fnWatcher.mock.calls).toEqual([
-    [{params: {url: 'xxx'}, result: 'logRequest result'}],
+  expect(argumentHistory(fnHandler)).toEqual([{url: 'xxx'}])
+  expect(argumentHistory(fnWatcher)).toEqual([
+    {params: {url: 'xxx'}, result: 'logRequest result'},
   ])
 })
 
@@ -310,16 +319,16 @@ describe('execution order', () => {
 
   it('handle sync effect watchers in correct order', async() => {
     const fn = jest.fn()
-    const eff = createEffect('eff sync', {
+    const eff = createEffect({
       handler: () => [1, 2, 3],
     })
 
     eff.watch(e => fn(e))
     eff.done.watch(e => fn(e))
     await eff('run')
-    expect(fn.mock.calls).toEqual([
-      ['run'],
-      [{params: 'run', result: [1, 2, 3]}],
+    expect(argumentHistory(fn)).toEqual([
+      'run',
+      {params: 'run', result: [1, 2, 3]},
     ])
   })
 

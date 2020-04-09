@@ -41,7 +41,7 @@ inc()
 #### Example 2 (with deep)
 
 ```js
-import {createStore, createStoreObject, createEvent, clearNode} from 'effector'
+import {createStore, createEvent, clearNode} from 'effector'
 
 const inc = createEvent()
 const trigger = inc.prepend(() => {})

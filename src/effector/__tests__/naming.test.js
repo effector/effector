@@ -1,13 +1,6 @@
 //@flow
 
-import {
-  createEvent,
-  createStore,
-  createStoreObject,
-  createDomain,
-  combine,
-  sample,
-} from 'effector'
+import {createEvent, createStore, createDomain, combine, sample} from 'effector'
 import {unitObjectName} from '../naming'
 
 const rootDomain = createDomain('')
@@ -34,9 +27,9 @@ describe('.map support', () => {
 describe('naming', () => {
   describe('domain', () => {
     test('value store', () => {
-      const domain = rootDomain.domain('form')
-      const firstName = domain.store('')
-      const lastName = domain.store('')
+      const domain = rootDomain.createDomain('form')
+      const firstName = domain.createStore('')
+      const lastName = domain.createStore('')
 
       expect(firstName.compositeName?.fullName).toBe('form/firstName')
       expect(lastName.compositeName?.fullName).toBe('form/lastName')
@@ -54,8 +47,8 @@ describe('naming', () => {
   test('unnamed object store', () => {
     const firstName = createStore('')
     const lastName = createStore('')
-    const form = createStoreObject({firstName, lastName})
-    const app = createStoreObject({form})
+    const form = {combine}.combine({firstName, lastName})
+    const app = {combine}.combine({form})
 
     expect(app.compositeName?.fullName).toBe(
       'combine(combine(firstName, lastName))',

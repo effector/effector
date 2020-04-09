@@ -13,8 +13,8 @@
   },
   "dependencies": {
     "cross-fetch": "^3.0.4",
-    "effector": "^20.9.1",
-    "effector-react": "^20.6.0",
+    "effector": "^20.13.5",
+    "effector-react": "^20.6.3",
     "history": "^4.10.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0"

@@ -1,14 +1,17 @@
 //@flow
 
 import {createStore, createEvent, createEffect} from 'effector'
-import {spy, getSpyCalls, argumentHistory} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
-test('createStore', () => {
-  expect(() => createStore(undefined)).toThrowErrorMatchingSnapshot()
+test('createStore throw on undefined', () => {
+  expect(() => createStore(undefined)).toThrowErrorMatchingInlineSnapshot(
+    `"current state can't be undefined, use null instead"`,
+  )
 })
 
 describe('.map', () => {
   it('supports basic mapping', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -16,7 +19,7 @@ describe('.map', () => {
 
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-    sum.watch(spy)
+    sum.watch(fn)
 
     expect(a.getState()).toBe('word')
     expect(b.getState()).toBe(4)
@@ -34,11 +37,11 @@ describe('.map', () => {
     expect(b.getState()).toBe(9)
     expect(sum.getState()).toBe(16)
 
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
 
     newWord('')
 
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
   it('calls given handler with current state as second argument', () => {
     const fn = jest.fn()
@@ -89,6 +92,7 @@ describe('.map', () => {
 
 describe('.watch', () => {
   it('supports functions', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -96,19 +100,20 @@ describe('.watch', () => {
 
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-    sum.watch(spy)
+    sum.watch(fn)
 
     newWord('lol')
 
     newWord('long word')
 
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
 
     newWord('')
 
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
   it('returns unsubscribe function', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -117,49 +122,66 @@ describe('.watch', () => {
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
     const unsub = sum.watch(sum => {
-      spy(sum)
+      fn(sum)
     })
 
     newWord('lol')
 
     newWord('long word [1]')
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
 
     unsub()
 
     newWord('long word _ [2]')
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(3)
   })
   it('supports events', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */('new word')
-    const spyEvent = createEvent('spy event')
+    const spyEvent = createEvent()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
 
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-    sum.watch(spyEvent, (store, event) => spy(store, event))
+    sum.watch(spyEvent, (store, event) => fn({store, event}))
 
     newWord('lol')
-    expect(spy).toHaveBeenCalledTimes(0)
+    expect(fn).toHaveBeenCalledTimes(0)
     spyEvent(1)
     spyEvent(2)
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     newWord('')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     newWord(' ')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     spyEvent(3)
     newWord('long word')
-    expect(spy).toHaveBeenCalledTimes(3)
-    expect(getSpyCalls()).toEqual([[7, 1], [7, 2], [8, 3]])
+    expect(fn).toHaveBeenCalledTimes(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "event": 1,
+    "store": 7,
+  },
+  Object {
+    "event": 2,
+    "store": 7,
+  },
+  Object {
+    "event": 3,
+    "store": 8,
+  },
+]
+`)
   })
   it('supports effects', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */('new word')
-    const spyEvent = createEffect('spy effect')
+    const spyEvent = createEffect()
     spyEvent.use(args => args)
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -167,28 +189,44 @@ describe('.watch', () => {
 
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-    sum.watch(spyEvent, (store, event) => spy(store, event))
+    sum.watch(spyEvent, (store, event) => fn({store, event}))
 
     newWord('lol')
-    expect(spy).toHaveBeenCalledTimes(0)
+    expect(fn).toHaveBeenCalledTimes(0)
     spyEvent(1)
     spyEvent(2)
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     newWord('')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
     newWord(' ')
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     spyEvent(3)
     newWord('long word')
-    expect(spy).toHaveBeenCalledTimes(3)
-    expect(getSpyCalls()).toEqual([[7, 1], [7, 2], [8, 3]])
+    expect(fn).toHaveBeenCalledTimes(3)
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "event": 1,
+    "store": 7,
+  },
+  Object {
+    "event": 2,
+    "store": 7,
+  },
+  Object {
+    "event": 3,
+    "store": 8,
+  },
+]
+`)
   })
 })
 
 describe('.off', () => {
   it('allows to unsubscribe store from event', () => {
+    const fn = jest.fn()
     const newWord = createEvent/*:: <string> */()
     const a = createStore('word').on(newWord, (_, word) => word)
 
@@ -196,7 +234,7 @@ describe('.off', () => {
 
     const sum = b.map((ln, prevLn) => ln + prevLn, 0)
 
-    sum.watch(spy)
+    sum.watch(fn)
 
     expect(a.getState()).toBe('word')
     expect(b.getState()).toBe(4)
@@ -216,11 +254,11 @@ describe('.off', () => {
     expect(b.getState()).toBe(3)
     expect(sum.getState()).toBe(7)
 
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
 
     newWord('')
 
-    expect(spy).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
   it('returns store itself', () => {
     const newWord = createEvent()

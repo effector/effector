@@ -1,6 +1,6 @@
 //@flow
 
-import {sample, createStore, createEvent, createStoreObject} from 'effector'
+import {sample, createStore, createEvent, combine} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 test('store update will always performs before sampling', () => {
@@ -21,7 +21,7 @@ test('store update will always performs before sampling', () => {
 test('store combination will always updates before sampling', () => {
   const fn = jest.fn()
   const int = createStore(0)
-  const shape = createStoreObject({int})
+  const shape = combine({int})
   const trigger = createEvent()
   sample({
     source: shape,

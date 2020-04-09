@@ -9,58 +9,60 @@ import {
   createApi,
   restore,
 } from 'effector'
-import {spy, argumentHistory} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('domain hooks', () => {
   test('domain.onCreateEvent(fn)', () => {
+    const fn = jest.fn()
     const dom = createDomain()
-    dom.event()
-    const unsub = dom.onCreateEvent(e => spy(e))
-    expect(spy).toHaveBeenCalled()
-    const e2 = dom.event()
-    expect(spy).toHaveBeenLastCalledWith(e2)
+    dom.createEvent()
+    const unsub = dom.onCreateEvent(e => fn(e))
+    expect(fn).toHaveBeenCalled()
+    const e2 = dom.createEvent()
+    expect(fn).toHaveBeenLastCalledWith(e2)
     createEvent()
-    expect(spy).toHaveBeenCalledTimes(2)
-    const e4 = dom.event()
-    expect(spy).toHaveBeenLastCalledWith(e4)
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(2)
+    const e4 = dom.createEvent()
+    expect(fn).toHaveBeenLastCalledWith(e4)
+    expect(fn).toHaveBeenCalledTimes(3)
     expect(() => {
       unsub()
     }).not.toThrow()
-    dom.event()
-    expect(spy).toHaveBeenCalledTimes(3)
+    dom.createEvent()
+    expect(fn).toHaveBeenCalledTimes(3)
   })
 
   test('domain.onCreateEffect(fn)', () => {
+    const fn = jest.fn()
     const dom = createDomain()
-    dom.effect()
-    const unsub = dom.onCreateEffect(e => spy(e))
-    expect(spy).toHaveBeenCalled()
-    const e2 = dom.effect()
-    expect(spy).toHaveBeenLastCalledWith(e2)
+    dom.createEffect()
+    const unsub = dom.onCreateEffect(e => fn(e))
+    expect(fn).toHaveBeenCalled()
+    const e2 = dom.createEffect()
+    expect(fn).toHaveBeenLastCalledWith(e2)
     createEffect()
-    expect(spy).toHaveBeenCalledTimes(2)
-    const e4 = dom.effect()
-    expect(spy).toHaveBeenLastCalledWith(e4)
-    expect(spy).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(2)
+    const e4 = dom.createEffect()
+    expect(fn).toHaveBeenLastCalledWith(e4)
+    expect(fn).toHaveBeenCalledTimes(3)
     expect(() => {
       unsub()
     }).not.toThrow()
-    dom.effect()
-    expect(spy).toHaveBeenCalledTimes(3)
+    dom.createEffect()
+    expect(fn).toHaveBeenCalledTimes(3)
   })
 
   test('nested domains', () => {
     const spyDom = jest.fn()
     const spySub = jest.fn()
     const dom = createDomain()
-    const subdom = dom.domain()
+    const subdom = dom.createDomain()
     dom.onCreateEvent(e => spyDom(e))
     subdom.onCreateEvent(e => spySub(e))
-    const e1 = dom.event()
+    const e1 = dom.createEvent()
     expect(spyDom).toHaveBeenLastCalledWith(e1)
     expect(spySub).not.toHaveBeenCalled()
-    const e2 = subdom.event()
+    const e2 = subdom.createEvent()
     expect(spyDom).toHaveBeenLastCalledWith(e2)
     expect(spySub).toHaveBeenLastCalledWith(e2)
   })
@@ -85,15 +87,15 @@ describe('domain name', () => {
   })
   test('subdomains should has full path in name', () => {
     const domain = createDomain('dom')
-    const subdomain = domain.domain('subdom')
-    expect(domain.domain('foo').getType()).toBe('dom/foo')
-    expect(subdomain.domain('bar').getType()).toBe('dom/subdom/bar')
+    const subdomain = domain.createDomain('subdom')
+    expect(domain.createDomain('foo').getType()).toBe('dom/foo')
+    expect(subdomain.createDomain('bar').getType()).toBe('dom/subdom/bar')
   })
   test('empty domain name should be skipped', () => {
     const domain = createDomain('')
-    const subdomain = domain.domain('subdom')
-    expect(domain.domain('foo').getType()).toBe('foo')
-    expect(subdomain.domain('bar').getType()).toBe('subdom/bar')
+    const subdomain = domain.createDomain('subdom')
+    expect(domain.createDomain('foo').getType()).toBe('foo')
+    expect(subdomain.createDomain('bar').getType()).toBe('subdom/bar')
   })
   describe('empty name support', () => {
     test(
@@ -104,20 +106,20 @@ describe('domain name', () => {
         expect(createDomain().getType()).toBe('')
       },
     )
-    test('domain.domain() should fallback to parent domain name', () => {
+    test('domain.createDomain() should fallback to parent domain name', () => {
       const domain = createDomain('dom')
-      expect(domain.domain().getType()).toBeDefined()
-      expect(domain.domain().getType()).not.toBe('')
-      expect(domain.domain().getType()).toBe('dom')
-      expect(domain.effect().getType()).not.toBe('dom/')
+      expect(domain.createDomain().getType()).toBeDefined()
+      expect(domain.createDomain().getType()).not.toBe('')
+      expect(domain.createDomain().getType()).toBe('dom')
+      expect(domain.createEffect().getType()).not.toBe('dom/')
     })
   })
 })
 describe('config', () => {
-  test('domain.effect(config)', async() => {
+  test('domain.createEffect(config)', async() => {
     const fn = jest.fn()
     const domain = createDomain()
-    const fx = domain.effect({
+    const fx = domain.createEffect({
       name: 'fx1',
       handler: fn,
     })
@@ -151,8 +153,10 @@ describe('domain ownership', () => {
   test('edge case with domains', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const add = domain.event()
-    const source = domain.store([]).on(add, (list, item) => [...list, item])
+    const add = domain.createEvent()
+    const source = domain
+      .createStore([])
+      .on(add, (list, item) => [...list, item])
     const mappedA = source.map(list => list.length)
     const mappedB = source.map(list => list.length)
     mappedA.watch(e => fn(e))
@@ -170,10 +174,12 @@ describe('domain ownership', () => {
   test('clearNode(domain) should work as usual', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const add = domain.event()
-    const source = domain.store([]).on(add, (list, item) => [...list, item])
+    const add = domain.createEvent()
+    const source = domain
+      .createStore([])
+      .on(add, (list, item) => [...list, item])
     const mappedA = source.map(list => list.length)
-    const mappedB = source.map(list => list.length)
+    source.map(list => list.length)
     mappedA.watch(e => fn(e))
     add('a')
     clearNode(domain)

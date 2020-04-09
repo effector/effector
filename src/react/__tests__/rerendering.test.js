@@ -1,19 +1,13 @@
 //@flow
 
 import * as React from 'react'
-import {render, container, act} from 'effector/fixtures/react'
+import {render} from 'effector/fixtures/react'
 
-import {
-  createStore,
-  createEvent,
-  createEffect,
-  createStoreObject,
-  merge,
-} from 'effector'
+import {createStore, createEffect, combine} from 'effector'
 import {useStore} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures/index'
 
-it('should rerender only once', async () => {
+it('should rerender only once', async() => {
   const fn = jest.fn()
   const getPresentation = createEffect({
     async handler() {
@@ -28,7 +22,7 @@ it('should rerender only once', async () => {
   const loading = createStore(true)
     .on(getPresentation, () => true)
     .on(getPresentation.finally, () => false)
-  const presentationStore = createStoreObject({
+  const presentationStore = combine({
     loading,
     presentation,
   })

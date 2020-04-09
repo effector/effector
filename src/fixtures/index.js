@@ -1,3 +1,3 @@
 //@flow
 
-export {delay, spy, getSpyCalls, argumentHistory} from './testUtils'
+export {delay, argumentHistory} from './testUtils'

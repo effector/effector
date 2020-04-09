@@ -546,21 +546,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'sample'
-        source: {a, b},
-                ^^^^^^
-        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-            source: {a, b},
-                [1] ^^^^^^
-            +source: Unit<A>,
-                 [2] ^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'sample'
+  const result = sample({
+                 ^^^^^^
+  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+      source: {a, b},
+          [1] ^^^^^^
+      +source: Unit<A>,
+           [2] ^^^^^^^
+"
+`)
   })
   it('supports a list of stores as a source + mapping (should pass)', () => {
     const a = createStore(1)
@@ -617,21 +617,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'sample'
-        source: {a, b},
-                ^^^^^^
-        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-            source: {a, b},
-                [1] ^^^^^^
-            +source: Unit<A>,
-                 [2] ^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'sample'
+  const result = sample({
+                 ^^^^^^
+  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+      source: {a, b},
+          [1] ^^^^^^
+      +source: Unit<A>,
+           [2] ^^^^^^^
+"
+`)
   })
   it('supports a list of stores as a source + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -690,21 +690,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'sample'
-        source: {a, b},
-                ^^^^^^
-        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-            source: {a, b},
-                [1] ^^^^^^
-            +source: Unit<A>,
-                 [2] ^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'sample'
+  const result = sample({
+                 ^^^^^^
+  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
+      source: {a, b},
+          [1] ^^^^^^
+      +source: Unit<A>,
+           [2] ^^^^^^^
+"
+`)
   })
   it('supports a list of stores as a source + mapping + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -810,21 +810,21 @@ Cannot call 'sample' with object literal bound to 'config'
     )
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'sample'
-        {a, b},
-        ^^^^^^
-        object literal [1] is incompatible with 'Store' [2]
-            {a, b},
-        [1] ^^^^^^
-            source: Store<A>,
-                [2] ^^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'sample'
+  const result = sample(
+                 ^^^^^^
+  object literal [1] is incompatible with 'Store' [2]
+      {a, b},
+  [1] ^^^^^^
+      source: Store<A>,
+          [2] ^^^^^^^^
+"
+`)
   })
   it('supports a list of stores as a source + mapping (should pass) [non-config sample overload]', () => {
     const a = createStore(1)
@@ -837,21 +837,21 @@ Cannot call 'sample' with object literal bound to 'config'
     )
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+no errors
 
-      --flow--
-      Cannot call 'sample'
-        [a, b],
-        ^^^^^^
-        array literal [1] is incompatible with 'Store' [2]
-            [a, b],
-        [1] ^^^^^^
-            source: Store<A>,
-                [2] ^^^^^^^^
-      "
-    `)
+--flow--
+Cannot call 'sample'
+  const result = sample(
+                 ^^^^^^
+  array literal [1] is incompatible with 'Store' [2]
+      [a, b],
+  [1] ^^^^^^
+      source: Store<A>,
+          [2] ^^^^^^^^
+"
+`)
   })
 })
 

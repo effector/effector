@@ -35,7 +35,7 @@ test('launch(unit, payload)', () => {
     --flow--
     Cannot call 'launch'
       launch(foo, '')
-                  ^^
+      ^^^^^^
       string [1] is incompatible with number [2]
           launch(foo, '')
                   [1] ^^

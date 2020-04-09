@@ -105,30 +105,30 @@ test('createGate', () => {
     useGate(Baz, 1)
   }
   expect(typecheck).toMatchInlineSnapshot(`
-    "
-    --typescript--
-    Type 'number' does not satisfy the constraint 'object'.
-    Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
-    Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
-      Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+"
+--typescript--
+Type 'number' does not satisfy the constraint 'object'.
+Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
+Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
+  Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 
-    --flow--
-    Cannot call 'createGate'
+--flow--
+Cannot call 'createGate'
+  const Foo = createGate<number>('foo')
+              ^^^^^^^^^^
+  number [1] is incompatible with object type [2] in type argument 'Props'
       const Foo = createGate<number>('foo')
-                             ^^^^^^
-      number [1] is incompatible with object type [2] in type argument 'Props'
-          const Foo = createGate<number>('foo')
-                             [1] ^^^^^^
-          declare export function createGate<Props: {...}>(name?: string): Gate<Props>
-                                                [2] ^^^^^
-    Cannot call 'useGate' with '1' bound to 'props'
+                         [1] ^^^^^^
+      declare export function createGate<Props: {...}>(name?: string): Gate<Props>
+                                            [2] ^^^^^
+Cannot call 'useGate' with '1' bound to 'props'
+  useGate(Bar, 1)
+               ^
+  number [1] is incompatible with object type [2]
       useGate(Bar, 1)
-                   ^
-      number [1] is incompatible with object type [2]
-          useGate(Bar, 1)
-                   [1] ^
-          const Bar = createGate<{a: number}>('bar')
-                             [2] ^^^^^^^^^^^
-    "
-  `)
+               [1] ^
+      const Bar = createGate<{a: number}>('bar')
+                         [2] ^^^^^^^^^^^
+"
+`)
 })
