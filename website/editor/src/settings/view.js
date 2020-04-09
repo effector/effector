@@ -17,12 +17,11 @@ import {packageVersions, version} from '../editor/state'
 import {LoadingIcon} from '../components/Icons/LoadingIcon'
 
 
-export const PrettifyButton = ({style}) => {
+export const PrettifyButton = () => {
   const {disabled, pending} = useStoreMap({
     store: prettier.pending,
     keys: [],
     fn: pending => ({
-      // text: pending ? 'In progress' : 'Prettify',
       disabled: pending,
       pending,
     }),
@@ -40,7 +39,7 @@ export const PrettifyButton = ({style}) => {
               display: 'flex',
               alignItems: 'center',
               fontSize: 14,
-              justifyContent: 'center'
+              justifyContent: 'center',
             }}
     >
       {pending && <LoadingIcon style={{marginRight: 10}} />}
