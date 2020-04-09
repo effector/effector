@@ -117,6 +117,17 @@ const fetchEffectorFork = createEffect({
   }
 })
 
+const fetchEffectorReactSSR = createEffect({
+  async handler(effector) {
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-react/ssr.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, `ssr.js`, {effector})
+  }
+})
+
 fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
@@ -155,20 +166,23 @@ export async function evaluator(code: string) {
   const effectorReact = await fetchEffectorReact(effector)
   let effectorDom
   let effectorFork
+  let effectorReactSSR
   if (version.getState() === 'master') {
     const additionalLibs = await Promise.all([
       fetchEffectorDom(effector),
       fetchEffectorFork(effector),
+      fetchEffectorReactSSR(effector)
     ])
     effectorDom = additionalLibs[0]
     effectorFork = additionalLibs[1]
+    effectorReactSSR = additionalLibs[2]
   }
   //$off
   const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork}],
+    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork, effectorReactSSR}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -248,6 +262,9 @@ const removeImportsPlugin = babel => ({
           break
         case 'effector/fork':
           replaceModuleImports('effectorFork', path, babel)
+          break
+        case 'effector-react/ssr':
+          replaceModuleImports('effectorReactSSR', path, babel)
           break
         default:
           path.remove()
