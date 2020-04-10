@@ -61,14 +61,12 @@ combine({
     bar
   }],
   config: {
-    name: \\"\\",
     sid: \\"6d0wwi\\"
   }
 });
 combine({
   ɔ: [...spread],
   config: {
-    name: \\"\\",
     sid: \\"6dkphv\\"
   }
 });
@@ -109,7 +107,7 @@ exports[`babel-plugin should create domain 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+const domain = createDomain({
   name: \\"domain\\",
   sid: \\"-r2jo9q\\"
 });
@@ -123,11 +121,11 @@ exports[`babel-plugin should create domain domain 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+const domain = createDomain({
   name: \\"domain\\",
   sid: \\"-jsqfil\\"
 });
-const foo = domain.domain(\\"foo\\", {
+const foo = domain.domain({
   name: \\"foo\\",
   sid: \\"-veeiq1\\"
 });
@@ -135,7 +133,7 @@ const bar = domain.domain('baz', {
   name: \\"bar\\",
   sid: \\"ksdvxf\\"
 });
-const fooAlias = domain.createDomain(\\"fooAlias\\", {
+const fooAlias = domain.createDomain({
   name: \\"fooAlias\\",
   sid: \\"75cvir\\"
 });
@@ -149,16 +147,16 @@ exports[`babel-plugin should create domain effect 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+const domain = createDomain({
   name: \\"domain\\",
   sid: \\"-gfxji2\\"
 });
-const a = domain.effect(\\"a\\", {
+const a = domain.effect({
   name: \\"a\\",
   sid: \\"-yaax6i\\"
 });
 
-const f = () => domain.effect(\\"f\\", {
+const f = () => domain.effect({
   name: \\"f\\",
   sid: \\"jyl44k\\"
 });
@@ -173,12 +171,12 @@ const g = () => domain.effect('baz', {
   sid: \\"hgf89v\\"
 });
 
-const aAlias = domain.createEffect(\\"aAlias\\", {
+const aAlias = domain.createEffect({
   name: \\"aAlias\\",
   sid: \\"-ej7o7u\\"
 });
 
-const fAlias = () => domain.createEffect(\\"fAlias\\", {
+const fAlias = () => domain.createEffect({
   name: \\"fAlias\\",
   sid: \\"-yfer5d\\"
 });
@@ -198,16 +196,16 @@ exports[`babel-plugin should create domain event 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+const domain = createDomain({
   name: \\"domain\\",
   sid: \\"3a2uet\\"
 });
-const a = domain.event(\\"a\\", {
+const a = domain.event({
   name: \\"a\\",
   sid: \\"-h01fmt\\"
 });
 
-const f = () => domain.event(\\"f\\", {
+const f = () => domain.event({
   name: \\"f\\",
   sid: \\"-nyhxip\\"
 });
@@ -222,12 +220,12 @@ const g = () => domain.event('tasm', {
   sid: \\"i4cx64\\"
 });
 
-const aAlias = domain.createEvent(\\"aAlias\\", {
+const aAlias = domain.createEvent({
   name: \\"aAlias\\",
   sid: \\"ocb24t\\"
 });
 
-const fAlias = () => domain.createEvent(\\"fAlias\\", {
+const fAlias = () => domain.createEvent({
   name: \\"fAlias\\",
   sid: \\"sqoaj0\\"
 });
@@ -247,7 +245,7 @@ exports[`babel-plugin should create domain store 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createDomain } from 'effector';
-const domain = createDomain(\\"domain\\", {
+const domain = createDomain({
   name: \\"domain\\",
   sid: \\"-fpi1bm\\"
 });
@@ -329,7 +327,7 @@ exports[`babel-plugin should create effect 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createEffect } from 'effector';
-const foo = createEffect(\\"foo\\", {
+const foo = createEffect({
   name: \\"foo\\",
   sid: \\"-hlt0gb\\"
 });
@@ -357,7 +355,7 @@ const quux = createEffect('nice', {
   sid: \\"-evyqqj\\"
 });
 
-const f = () => createEffect(\\"f\\", {
+const f = () => createEffect({
   name: \\"f\\",
   sid: \\"y82cl8\\"
 });"
@@ -367,7 +365,7 @@ exports[`babel-plugin should create event 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createEvent } from 'effector';
-const foo = createEvent(\\"foo\\", {
+const foo = createEvent({
   name: \\"foo\\",
   sid: \\"qm3jl6\\"
 });
@@ -382,7 +380,7 @@ const baz = createEvent({
   sid: \\"-yrvnsz\\"
 });
 
-const f = () => createEvent(\\"f\\", {
+const f = () => createEvent({
   name: \\"f\\",
   sid: \\"vi2m03\\"
 });"
@@ -434,7 +432,7 @@ const foo = createStore('foo', {
   name: \\"foo\\",
   sid: \\"c0eo5u\\"
 });
-const bar = createEvent(\\"bar\\", {
+const bar = createEvent({
   name: \\"bar\\",
   sid: \\"-skx5bw\\"
 });
@@ -464,7 +462,6 @@ forward({
     to: bar
   },
   config: {
-    name: \\"\\",
     sid: \\"-do0gmv\\"
   }
 });
@@ -474,7 +471,6 @@ forward({
     to: bar
   },
   config: {
-    name: \\"\\",
     sid: \\"-dngo1i\\"
   }
 });
@@ -510,7 +506,7 @@ const foo = createStore(true, {
   name: \\"foo\\",
   sid: \\"12fz6b\\"
 });
-const bar = createEvent(\\"bar\\", {
+const bar = createEvent({
   name: \\"bar\\",
   sid: \\"-3ob7uj\\"
 });
@@ -538,7 +534,6 @@ guard({
     filter: foo
   }],
   config: {
-    name: \\"\\",
     sid: \\"-ajecgo\\"
   }
 });
@@ -548,7 +543,6 @@ guard({
     filter: foo
   }],
   config: {
-    name: \\"\\",
     sid: \\"-aiujvb\\"
   }
 });
@@ -590,7 +584,7 @@ exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
 import { createEvent, restore } from 'effector';
-const foo = createEvent(\\"foo\\", {
+const foo = createEvent({
   name: \\"foo\\",
   sid: \\"uytd56\\"
 });
@@ -632,7 +626,7 @@ const foo = createStore('foo', {
   name: \\"foo\\",
   sid: \\"-4e9wqe\\"
 });
-const bar = createEvent(\\"bar\\", {
+const bar = createEvent({
   name: \\"bar\\",
   sid: \\"-nktibu\\"
 });
@@ -656,7 +650,6 @@ const baz2 = sample({
 sample({
   ɔ: [foo, bar],
   config: {
-    name: \\"\\",
     sid: \\"u6o7kj\\"
   }
 });
@@ -666,7 +659,6 @@ sample({
     clock: bar
   }],
   config: {
-    name: \\"\\",
     sid: \\"u7805w\\"
   }
 });
