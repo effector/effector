@@ -11,3 +11,7 @@ const aAlias = domain.createEffect()
 const fAlias = () => domain.createEffect()
 const bAlias = domain.createEffect('helloAlias')
 const gAlias = () => domain.createEffect('bazAlias')
+
+const {sid} = domain.createEffect()
+const {name} = domain.createEffect('foo')
+const {shortName} = domain.createEffect({name: 'foo'})

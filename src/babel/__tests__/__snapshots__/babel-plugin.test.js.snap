@@ -114,6 +114,23 @@ const domain = createDomain({
 const foo = createDomain('bar', {
   name: \\"foo\\",
   sid: \\"-kylwgu\\"
+});
+const {
+  sid
+} = createDomain({
+  sid: \\"-ikueb0\\"
+});
+const {
+  name
+} = createDomain('foo', {
+  sid: \\"-i3srvy\\"
+});
+const {
+  shortName
+} = createDomain({
+  name: 'foo'
+}, {
+  sid: \\"-hmr4vd\\"
 });"
 `;
 
@@ -140,6 +157,23 @@ const fooAlias = domain.createDomain({
 const barAlias = domain.createDomain('bazAlias', {
   name: \\"barAlias\\",
   sid: \\"-abn323\\"
+});
+const {
+  sid
+} = domain.createDomain({
+  sid: \\"sm28rc\\"
+});
+const {
+  name
+} = domain.createDomain('foo', {
+  sid: \\"t33v6e\\"
+});
+const {
+  shortName
+} = domain.createDomain({
+  name: 'foo'
+}, {
+  sid: \\"tk5i6z\\"
 });"
 `;
 
@@ -189,6 +223,24 @@ const bAlias = domain.createEffect('helloAlias', {
 const gAlias = () => domain.createEffect('bazAlias', {
   name: \\"gAlias\\",
   sid: \\"xh577y\\"
+});
+
+const {
+  sid
+} = domain.createEffect({
+  sid: \\"-7j3t5r\\"
+});
+const {
+  name
+} = domain.createEffect('foo', {
+  sid: \\"-7226qp\\"
+});
+const {
+  shortName
+} = domain.createEffect({
+  name: 'foo'
+}, {
+  sid: \\"-6l0jq4\\"
 });"
 `;
 
@@ -238,6 +290,24 @@ const bAlias = domain.createEvent('asmAlias', {
 const gAlias = () => domain.createEvent('tasmAlias', {
   name: \\"gAlias\\",
   sid: \\"226msp\\"
+});
+
+const {
+  sid
+} = domain.createEvent({
+  sid: \\"68j0kq\\"
+});
+const {
+  name
+} = domain.createEvent('foo', {
+  sid: \\"6pkmzs\\"
+});
+const {
+  shortName
+} = domain.createEvent({
+  name: 'foo'
+}, {
+  sid: \\"76ma0d\\"
 });"
 `;
 
@@ -320,6 +390,19 @@ const fAlias = domain.createStore('h', {
   ɔ: {},
   name: \\"fAlias\\",
   sid: \\"ni1ajy\\"
+});
+const {
+  sid
+} = domain.createStore(null, {
+  sid: \\"-f8txo\\"
+});
+const {
+  shortName
+} = domain.createStore(null, {
+  ɔ: {
+    name: 'foo'
+  },
+  sid: \\"1st3s\\"
 });"
 `;
 
@@ -358,6 +441,24 @@ const quux = createEffect('nice', {
 const f = () => createEffect({
   name: \\"f\\",
   sid: \\"y82cl8\\"
+});
+
+const {
+  sid
+} = createEffect({
+  sid: \\"el3ns6\\"
+});
+const {
+  name
+} = createEffect('foo', {
+  sid: \\"p03chb\\"
+});
+const {
+  shortName
+} = createEffect({
+  name: 'foo'
+}, {
+  sid: \\"ph4zhw\\"
 });"
 `;
 
@@ -383,6 +484,24 @@ const baz = createEvent({
 const f = () => createEvent({
   name: \\"f\\",
   sid: \\"vi2m03\\"
+});
+
+const {
+  sid
+} = createEvent({
+  sid: \\"-bimhsq\\"
+});
+const {
+  name
+} = createEvent('foo', {
+  sid: \\"-b1kvdo\\"
+});
+const {
+  shortName
+} = createEvent({
+  name: 'foo'
+}, {
+  sid: \\"-akj8d3\\"
 });"
 `;
 
@@ -421,6 +540,20 @@ const dod = createStore(null, {
 const f = a => createStore(a, {
   name: \\"f\\",
   sid: \\"42loz8\\"
+});
+
+const {
+  sid
+} = createStore(null, {
+  sid: \\"-u0iw5z\\"
+});
+const {
+  shortName
+} = createStore(null, {
+  ɔ: {
+    name: 'foo'
+  },
+  sid: \\"-tjh94j\\"
 });"
 `;
 
@@ -615,6 +748,20 @@ const dod = restore(foo, null, {
 const f = a => restore(foo, null, {
   name: \\"f\\",
   sid: \\"tcvrf2\\"
+});
+
+const {
+  sid
+} = restore(foo, null, {
+  sid: \\"duje3b\\"
+});
+const {
+  shortName
+} = restore(foo, null, {
+  ɔ: {
+    name: 'bar'
+  },
+  sid: \\"ebl14r\\"
 });"
 `;
 
