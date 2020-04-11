@@ -11,3 +11,7 @@ const barAlias = domain.createDomain('bazAlias')
 const {sid} = domain.createDomain()
 const {name} = domain.createDomain('foo')
 const {shortName} = domain.createDomain({name: 'foo'})
+
+domain.createDomain()
+
+domain.createDomain()

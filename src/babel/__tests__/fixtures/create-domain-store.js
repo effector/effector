@@ -22,3 +22,7 @@ const eAlias = domain.createStore('h', 4234)
 const fAlias = domain.createStore('h', {})
 const {sid} = domain.createStore(null)
 const {shortName} = domain.createStore(null, {name: 'foo'})
+
+domain.createStore(null)
+
+domain.createStore(null)

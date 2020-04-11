@@ -131,6 +131,12 @@ const {
   name: 'foo'
 }, {
   sid: \\"-hmr4vd\\"
+});
+createDomain({
+  sid: \\"-klzve2\\"
+});
+createDomain({
+  sid: \\"-kkwa7c\\"
 });"
 `;
 
@@ -174,6 +180,12 @@ const {
   name: 'foo'
 }, {
   sid: \\"tk5i6z\\"
+});
+domain.createDomain({
+  sid: \\"asytpf\\"
+});
+domain.createDomain({
+  sid: \\"au2ew5\\"
 });"
 `;
 
@@ -241,6 +253,12 @@ const {
   name: 'foo'
 }, {
   sid: \\"-6l0jq4\\"
+});
+domain.createEffect({
+  sid: \\"e7yw3e\\"
+});
+domain.createEffect({
+  sid: \\"ekm5qp\\"
 });"
 `;
 
@@ -308,6 +326,15 @@ const {
   name: 'foo'
 }, {
   sid: \\"76ma0d\\"
+});
+domain.createEvent({
+  sid: \\"-v9zudr\\"
+});
+domain.createEvent({
+  sid: \\"-uxckqg\\"
+});
+domain.createEvent('foo', {
+  sid: \\"-uw8zjq\\"
 });"
 `;
 
@@ -403,6 +430,12 @@ const {
     name: 'foo'
   },
   sid: \\"1st3s\\"
+});
+domain.createStore(null, {
+  sid: \\"l6xkh2\\"
+});
+domain.createStore(null, {
+  sid: \\"l815ns\\"
 });"
 `;
 
@@ -459,6 +492,12 @@ const {
   name: 'foo'
 }, {
   sid: \\"ph4zhw\\"
+});
+createEffect({
+  sid: \\"-gr1rsm\\"
+});
+createEffect({
+  sid: \\"-gpy6lw\\"
 });"
 `;
 
@@ -502,6 +541,12 @@ const {
   name: 'foo'
 }, {
   sid: \\"-akj8d3\\"
+});
+createEvent({
+  sid: \\"-4vb1bf\\"
+});
+createEvent({
+  sid: \\"-4u7g4p\\"
 });"
 `;
 
@@ -554,6 +599,12 @@ const {
     name: 'foo'
   },
   sid: \\"-tjh94j\\"
+});
+createStore(null, {
+  sid: \\"-nt8j9r\\"
+});
+createStore(null, {
+  sid: \\"-ns4y31\\"
 });"
 `;
 
@@ -762,6 +813,12 @@ const {
     name: 'bar'
   },
   sid: \\"ebl14r\\"
+});
+restore(foo, null, {
+  sid: \\"5t38ir\\"
+});
+restore(foo, null, {
+  sid: \\"5u6tph\\"
 });"
 `;
 

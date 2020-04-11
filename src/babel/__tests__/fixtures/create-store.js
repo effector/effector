@@ -13,3 +13,7 @@ const f = a => createStore(a)
 
 const {sid} = createStore(null)
 const {shortName} = createStore(null, {name: 'foo'})
+
+createStore(null)
+
+createStore(null)

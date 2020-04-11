@@ -102,36 +102,36 @@ module.exports = function(babel, options = {}) {
           const name = path.node.callee.name
           if (stores && storeCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setStoreNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setStoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
           if (events && eventCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.events.add(id.name)
             }
           }
           if (effects && effectCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.effects.add(id.name)
             }
           }
           if (domains && domainCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.domains.add(id.name)
             }
           }
           if (restores && restoreCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setRestoreNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setRestoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
@@ -184,27 +184,19 @@ module.exports = function(babel, options = {}) {
         if (t.isMemberExpression(path.node.callee)) {
           if (stores && isDomainMethod.store(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setStoreNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setStoreNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (events && isDomainMethod.event(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (effects && isDomainMethod.effect(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (domains && isDomainMethod.domain(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
         }
       },

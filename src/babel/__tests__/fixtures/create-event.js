@@ -10,3 +10,7 @@ const f = () => createEvent()
 const {sid} = createEvent()
 const {name} = createEvent('foo')
 const {shortName} = createEvent({name: 'foo'})
+
+createEvent()
+
+createEvent()

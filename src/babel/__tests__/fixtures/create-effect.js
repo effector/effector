@@ -19,3 +19,7 @@ const f = () => createEffect()
 const {sid} = createEffect()
 const {name} = createEffect('foo')
 const {shortName} = createEffect({name: 'foo'})
+
+createEffect()
+
+createEffect()

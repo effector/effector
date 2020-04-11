@@ -13,3 +13,7 @@ const f = a => restore(foo, null)
 
 const {sid} = restore(foo, null)
 const {shortName} = restore(foo, null, {name: 'bar'})
+
+restore(foo, null)
+
+restore(foo, null)
