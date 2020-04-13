@@ -293,19 +293,21 @@ function getIframe(): HTMLIFrameElement {
     const wrapListenerMethods = target => {
       if (!target.addEventListener.__original__) {
         const originalMethod = target.addEventListener.bind(target)
-        target.addEventListener = function addEventListener(type, fn, options) {
+        function addEventListener(type, fn, options) {
           originalMethod(type, fn, options)
           realmListener({type, target, fn, options})
         }
-        target.addEventListener.__original__ = originalMethod
+        addEventListener.__original__ = originalMethod
+        target.addEventListener = addEventListener
       }
       if (!target.removeEventListener.__original__) {
         const originalMethod = target.removeEventListener.bind(target)
-        target.removeEventListener = function removeEventListener(type, fn, options) {
+        function removeEventListener(type, fn, options) {
           originalMethod(type, fn, options)
           realmRemoveListener({type, target, fn, options})
         }
-        target.realmRemoveListener.__original__ = originalMethod
+        removeEventListener.__original__ = originalMethod
+        target.removeEventListener = removeEventListener
       }
     }
     const generateFrame = () => {
