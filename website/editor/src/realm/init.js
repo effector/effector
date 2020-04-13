@@ -16,9 +16,33 @@ import {
   realmClearTimeout,
   realmComponent,
   realmStatus,
+  realmListener,
+  realmRemoveListener,
 } from '.'
 
-import {intervals, timeouts, stats} from './state'
+import {intervals, timeouts, listeners, stats} from './state'
+
+listeners
+  .on(realmListener, (list, record) => [...list, record])
+  .on(realmRemoveListener, (list, {type, target, fn}) =>
+    list.filter(record => {
+      if (record.fn === fn && record.type === type && record.target === target)
+        return false
+      return true
+    }),
+  )
+  .on(changeSources, listeners => {
+    for (const {type, target, fn, options} of listeners) {
+      target.removeEventListener.__original__(type, fn, options)
+    }
+    return []
+  })
+  .on(selectVersion, listeners => {
+    for (const {type, target, fn, options} of listeners) {
+      target.removeEventListener.__original__(type, fn, options)
+    }
+    return []
+  })
 
 intervals
   .on(realmInterval, (state, id) => [...state, id])

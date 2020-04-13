@@ -7,7 +7,7 @@ import {selectVersion} from '../editor'
 import {version, sourceCode, compiledCode} from '../editor/state'
 import {typechecker} from '../settings/state'
 import {consoleMap} from '../logs'
-import {realmStatusApi} from '../realm'
+import {realmStatusApi, realmListener, realmRemoveListener} from '../realm'
 import {exec} from './runtime'
 import {getStackFrames} from './stackframe/getStackFrames'
 //$todo
@@ -290,7 +290,24 @@ function getIframe(): HTMLIFrameElement {
     iframe =
       ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
       document.createElement('iframe')
-
+    const wrapListenerMethods = target => {
+      if (!target.addEventListener.__original__) {
+        const originalMethod = target.addEventListener.bind(target)
+        target.addEventListener = function addEventListener(type, fn, options) {
+          originalMethod(type, fn, options)
+          realmListener({type, target, fn, options})
+        }
+        target.addEventListener.__original__ = originalMethod
+      }
+      if (!target.removeEventListener.__original__) {
+        const originalMethod = target.removeEventListener.bind(target)
+        target.removeEventListener = function removeEventListener(type, fn, options) {
+          originalMethod(type, fn, options)
+          realmRemoveListener({type, target, fn, options})
+        }
+        target.realmRemoveListener.__original__ = originalMethod
+      }
+    }
     const generateFrame = () => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
@@ -298,6 +315,10 @@ function getIframe(): HTMLIFrameElement {
       resetHead(iframe.contentDocument)
       iframe.contentDocument.body.innerHTML =
         '<div class="spectrum spectrum--lightest spectrum--medium" id="root"></div>'
+      wrapListenerMethods(iframe.contentDocument)
+      wrapListenerMethods(iframe.contentDocument.contentWindow)
+      wrapListenerMethods(iframe.contentDocument.body)
+      wrapListenerMethods(iframe.contentDocument.documentElement)
     }
     sourceCode.watch(generateFrame)
     selectVersion.watch(generateFrame)
