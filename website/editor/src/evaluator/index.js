@@ -291,6 +291,7 @@ function getIframe(): HTMLIFrameElement {
       ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
       document.createElement('iframe')
     const wrapListenerMethods = target => {
+      if (!target) return
       if (!target.addEventListener.__original__) {
         const originalMethod = target.addEventListener.bind(target)
         function addEventListener(type, fn, options) {
@@ -318,7 +319,7 @@ function getIframe(): HTMLIFrameElement {
       iframe.contentDocument.body.innerHTML =
         '<div class="spectrum spectrum--lightest spectrum--medium" id="root"></div>'
       wrapListenerMethods(iframe.contentDocument)
-      wrapListenerMethods(iframe.contentDocument.contentWindow)
+      wrapListenerMethods(iframe.contentWindow)
       wrapListenerMethods(iframe.contentDocument.body)
       wrapListenerMethods(iframe.contentDocument.documentElement)
     }
