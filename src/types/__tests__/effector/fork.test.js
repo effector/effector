@@ -53,13 +53,13 @@ describe('serialize cases (should fail)', () => {
     const values: {[sid: string]: any} = serialize(scope, {ignore: [event]})
 
     expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
+"
+--typescript--
+Type 'Event<void>' is missing the following properties from type 'Store<any>': reset, getState, on, off, and 2 more.
 
-      --flow--
-      no errors
-      "
-    `)
+--flow--
+no errors
+"
+`)
   })
 })
