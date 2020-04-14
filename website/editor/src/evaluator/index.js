@@ -318,10 +318,10 @@ function getIframe(): HTMLIFrameElement {
       resetHead(iframe.contentDocument)
       iframe.contentDocument.body.innerHTML =
         '<div class="spectrum spectrum--lightest spectrum--medium" id="root"></div>'
-      wrapListenerMethods(iframe.contentDocument)
-      wrapListenerMethods(iframe.contentWindow)
-      wrapListenerMethods(iframe.contentDocument.body)
-      wrapListenerMethods(iframe.contentDocument.documentElement)
+      //wrapListenerMethods(iframe.contentDocument)
+      //wrapListenerMethods(iframe.contentWindow)
+      //wrapListenerMethods(iframe.contentDocument.body)
+      //wrapListenerMethods(iframe.contentDocument.documentElement)
     }
     sourceCode.watch(generateFrame)
     selectVersion.watch(generateFrame)
