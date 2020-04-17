@@ -27,6 +27,8 @@ const $second = $first.map(fn)
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
+[Should be **pure**](../../glossary.md#pureness)
+
 #### Returns
 
 [_Store_](Store.md): New store
