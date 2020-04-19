@@ -119,7 +119,6 @@ const babelConfig = {
         [
           babelPlugin,
           {
-            exportMetadata: true,
             addLoc: true,
           },
         ],
