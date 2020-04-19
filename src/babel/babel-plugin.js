@@ -102,36 +102,36 @@ module.exports = function(babel, options = {}) {
           const name = path.node.callee.name
           if (stores && storeCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setStoreNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setStoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
           if (events && eventCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.events.add(id.name)
             }
           }
           if (effects && effectCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.effects.add(id.name)
             }
           }
           if (domains && domainCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
               state.domains.add(id.name)
             }
           }
           if (restores && restoreCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
+            setRestoreNameAfter(path, state, id, babel.types, smallConfig)
             if (id) {
-              setRestoreNameAfter(path, state, id, babel.types, smallConfig)
               state.stores.add(id.name)
             }
           }
@@ -184,27 +184,19 @@ module.exports = function(babel, options = {}) {
         if (t.isMemberExpression(path.node.callee)) {
           if (stores && isDomainMethod.store(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setStoreNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setStoreNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (events && isDomainMethod.event(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (effects && isDomainMethod.effect(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
           if (domains && isDomainMethod.domain(path)) {
             const id = findCandidateNameForExpression(path)
-            if (id) {
-              setEventNameAfter(path, state, id, babel.types, smallConfig)
-            }
+            setEventNameAfter(path, state, id, babel.types, smallConfig)
           }
         }
       },
@@ -395,7 +387,7 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
 function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
-  const displayName = nameNodeId.name
+  const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
   path.find(path => {
@@ -406,17 +398,12 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     }
   })
 
-  if (args && displayName) {
+  if (args) {
     if (!args[0]) return
     if (!args[1]) return
     const oldConfig = args[2]
     const configExpr = (args[2] = t.objectExpression([]))
 
-    const nameProp = t.objectProperty(
-      t.identifier('name'),
-      t.stringLiteral(displayName),
-    )
-
     const stableID = t.objectProperty(
       t.identifier('sid'),
       t.stringLiteral(
@@ -441,12 +428,18 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
       )
       configExpr.properties.push(locProp)
     }
-    configExpr.properties.push(nameProp)
+    if (displayName) {
+      const nameProp = t.objectProperty(
+        t.identifier('name'),
+        t.stringLiteral(displayName),
+      )
+      configExpr.properties.push(nameProp)
+    }
     configExpr.properties.push(stableID)
   }
 }
 function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
-  const displayName = nameNodeId.name
+  const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
   path.find(path => {
@@ -457,15 +450,10 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     }
   })
 
-  if (args && displayName) {
+  if (args) {
     if (!args[0]) return
     const oldConfig = args[1]
     const configExpr = (args[1] = t.objectExpression([]))
-
-    const nameProp = t.objectProperty(
-      t.identifier('name'),
-      t.stringLiteral(displayName),
-    )
 
     const stableID = t.objectProperty(
       t.identifier('sid'),
@@ -491,7 +479,13 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
       )
       configExpr.properties.push(locProp)
     }
-    configExpr.properties.push(nameProp)
+    if (displayName) {
+      const nameProp = t.objectProperty(
+        t.identifier('name'),
+        t.stringLiteral(displayName),
+      )
+      configExpr.properties.push(nameProp)
+    }
     configExpr.properties.push(stableID)
   }
 }
@@ -522,11 +516,6 @@ function setConfigForConfigurableMethod(
     args.length = 0
     const configExpr = t.objectExpression([])
 
-    const nameProp = t.objectProperty(
-      t.identifier('name'),
-      t.stringLiteral(displayName),
-    )
-
     const stableID = t.objectProperty(
       t.identifier('sid'),
       t.stringLiteral(
@@ -548,7 +537,13 @@ function setConfigForConfigurableMethod(
       )
       configExpr.properties.push(locProp)
     }
-    configExpr.properties.push(nameProp)
+    if (displayName) {
+      const nameProp = t.objectProperty(
+        t.identifier('name'),
+        t.stringLiteral(displayName),
+      )
+      configExpr.properties.push(nameProp)
+    }
     configExpr.properties.push(stableID)
     args[0] = t.objectExpression([
       t.objectProperty(t.identifier('ɔ'), commonArgs),
@@ -558,7 +553,7 @@ function setConfigForConfigurableMethod(
 }
 
 function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
-  const displayName = nameNodeId.name
+  const displayName = nameNodeId ? nameNodeId.name : ''
 
   let args
   let loc
@@ -570,15 +565,15 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     }
   })
 
-  if (args && displayName) {
-    if (!args[0]) args[0] = t.stringLiteral(displayName)
+  if (args) {
+    const firstArgument = args[0]
+    if (!firstArgument) {
+      if (displayName) {
+        args[0] = t.stringLiteral(displayName)
+      }
+    }
     const oldConfig = args[1]
-    const configExpr = (args[1] = t.objectExpression([]))
-
-    const nameProp = t.objectProperty(
-      t.identifier('name'),
-      t.stringLiteral(displayName),
-    )
+    const configExpr = (args[firstArgument ? 1 : 0] = t.objectExpression([]))
 
     const stableID = t.objectProperty(
       t.identifier('sid'),
@@ -604,7 +599,13 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
       )
       configExpr.properties.push(locProp)
     }
-    configExpr.properties.push(nameProp)
+    if (displayName) {
+      const nameProp = t.objectProperty(
+        t.identifier('name'),
+        t.stringLiteral(displayName),
+      )
+      configExpr.properties.push(nameProp)
+    }
     configExpr.properties.push(stableID)
   }
 }

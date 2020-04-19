@@ -10,3 +10,10 @@ const config = {option: 0}
 const dod = restore(foo, null, config)
 
 const f = a => restore(foo, null)
+
+const {sid} = restore(foo, null)
+const {shortName} = restore(foo, null, {name: 'bar'})
+
+restore(foo, null)
+
+restore(foo, null)

@@ -18,7 +18,10 @@ export function hydrate(domain: Domain, config: {values: ValueMap}): void
 /**
 serialize state on server
 */
-export function serialize(scope: Scope): {[sid: string]: any}
+export function serialize(
+  scope: Scope,
+  {ignore = []}: {ignore?: Array<Store<any>>} = {},
+): {[sid: string]: any}
 
 /** bind event to scope from .watch call */
 export function scopeBind<T>(unit: Unit<T>): (payload: T) => void

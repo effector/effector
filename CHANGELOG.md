@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.13.6
+
+- Fix cases with `effector/babel-plugin` when inability to determine unit name led to the absence of `sid` property
+
 ## effector 20.13.5
 
 - Extend typescript support for any to void forwarding: add support for forwarding to array of void units

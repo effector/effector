@@ -7,7 +7,7 @@ import {selectVersion} from '../editor'
 import {version, sourceCode, compiledCode} from '../editor/state'
 import {typechecker} from '../settings/state'
 import {consoleMap} from '../logs'
-import {realmStatusApi} from '../realm'
+import {realmStatusApi, realmListener, realmRemoveListener} from '../realm'
 import {exec} from './runtime'
 import {getStackFrames} from './stackframe/getStackFrames'
 //$todo
@@ -117,6 +117,17 @@ const fetchEffectorFork = createEffect({
   }
 })
 
+const fetchEffectorReactSSR = createEffect({
+  async handler(effector) {
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-react/ssr.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, `ssr.js`, {effector})
+  }
+})
+
 fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
@@ -155,20 +166,23 @@ export async function evaluator(code: string) {
   const effectorReact = await fetchEffectorReact(effector)
   let effectorDom
   let effectorFork
+  let effectorReactSSR
   if (version.getState() === 'master') {
     const additionalLibs = await Promise.all([
       fetchEffectorDom(effector),
       fetchEffectorFork(effector),
+      fetchEffectorReactSSR(effector)
     ])
     effectorDom = additionalLibs[0]
     effectorFork = additionalLibs[1]
+    effectorReactSSR = additionalLibs[2]
   }
   //$off
   const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork}],
+    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork, effectorReactSSR}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -249,6 +263,9 @@ const removeImportsPlugin = babel => ({
         case 'effector/fork':
           replaceModuleImports('effectorFork', path, babel)
           break
+        case 'effector-react/ssr':
+          replaceModuleImports('effectorReactSSR', path, babel)
+          break
         default:
           path.remove()
       }
@@ -273,7 +290,27 @@ function getIframe(): HTMLIFrameElement {
     iframe =
       ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
       document.createElement('iframe')
-
+    const wrapListenerMethods = target => {
+      if (!target) return
+      if (!target.addEventListener.__original__) {
+        const originalMethod = target.addEventListener.bind(target)
+        function addEventListener(type, fn, options) {
+          originalMethod(type, fn, options)
+          realmListener({type, target, fn, options})
+        }
+        addEventListener.__original__ = originalMethod
+        target.addEventListener = addEventListener
+      }
+      if (!target.removeEventListener.__original__) {
+        const originalMethod = target.removeEventListener.bind(target)
+        function removeEventListener(type, fn, options) {
+          originalMethod(type, fn, options)
+          realmRemoveListener({type, target, fn, options})
+        }
+        removeEventListener.__original__ = originalMethod
+        target.removeEventListener = removeEventListener
+      }
+    }
     const generateFrame = () => {
       if (iframe === null) return
       if (iframe.contentDocument.body === null) return
@@ -281,6 +318,10 @@ function getIframe(): HTMLIFrameElement {
       resetHead(iframe.contentDocument)
       iframe.contentDocument.body.innerHTML =
         '<div class="spectrum spectrum--lightest spectrum--medium" id="root"></div>'
+      //wrapListenerMethods(iframe.contentDocument)
+      //wrapListenerMethods(iframe.contentWindow)
+      //wrapListenerMethods(iframe.contentDocument.body)
+      //wrapListenerMethods(iframe.contentDocument.documentElement)
     }
     sourceCode.watch(generateFrame)
     selectVersion.watch(generateFrame)

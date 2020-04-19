@@ -158,7 +158,7 @@ type Domain = {
 ## Reducer
 
 ```typescript
-type StoreReducer<State, E> = (state: S, payload: E) => State | void
+type StoreReducer<State, E> = (state: State, payload: E) => State | void
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 ```
 
@@ -185,7 +185,7 @@ Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/
 
 ## Pureness
 
-Most of functions in api shouldn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than speaded across entire business logic
+Most of functions in api shouldn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
 
 **Correct**, imperative:
 

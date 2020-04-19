@@ -45,12 +45,18 @@ export function hydrate(domain, {values}) {
 /**
 serialize state on server
 */
-export function serialize({clones}) {
+export function serialize(
+  {clones},
+  {ignore = []}: {ignore?: Array<Store<any>>} = {},
+) {
   const result = {}
   for (const {meta, scope, reg} of clones) {
     if (meta.unit !== 'store') continue
     if (!meta.sid) continue
     result[meta.sid] = reg[scope.state.id].current
+  }
+  for (const {sid} of ignore) {
+    if (sid) delete result[sid]
   }
   return result
 }

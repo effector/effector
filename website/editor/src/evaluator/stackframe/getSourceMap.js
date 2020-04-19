@@ -76,7 +76,7 @@ function extractSourceMapUrl(
   const regex = /\/\/[#@] ?sourceMappingURL=([^\s'"]+)\s*$/gm
   let match = null
   for (;;) {
-    let next = regex.exec(fileContents)
+    const next = regex.exec(fileContents)
     if (next == null) {
       break
     }
@@ -112,7 +112,9 @@ async function getSourceMap(
     return new SourceMap(new SourceMapConsumer(sm))
   } else {
     const index = fileUri.lastIndexOf('/')
-    const url = fileUri.substring(0, index + 1) + sm
+    const url = sm.startsWith(fileUri)
+      ? sm
+      : fileUri.substring(0, index + 1) + sm
     const obj = await fetch(url).then(res => res.json())
     return new SourceMap(new SourceMapConsumer(obj))
   }
