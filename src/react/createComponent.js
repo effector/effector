@@ -5,6 +5,7 @@ import {type Store, is, combine, createEvent} from 'effector'
 import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import type {StoreView} from './index.h'
+import {withDisplayName} from './withDisplayName'
 
 export function createComponent<Props: {...}, State>(
   shape:
@@ -47,8 +48,7 @@ export function createComponent<Props: {...}, State>(
     propsRef.current = props
     return result
   }
-  RenderComponent.displayName = `${storeName}.View`
   RenderComponent.mounted = mounted
   RenderComponent.unmounted = unmounted
-  return RenderComponent
+  return withDisplayName(`${storeName}.View`, RenderComponent)
 }

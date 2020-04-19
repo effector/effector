@@ -1,9 +1,10 @@
 //@flow
 
 import * as React from 'react'
-import {createStoreConsumer} from './createStoreConsumer'
-
 import type {Store} from 'effector'
+
+import {createStoreConsumer} from './createStoreConsumer'
+import {withDisplayName} from './withDisplayName'
 
 export function createReactState<State: Object, Com: React.ComponentType<*>>(
   store: Store<State>,
@@ -15,6 +16,5 @@ export function createReactState<State: Object, Com: React.ComponentType<*>>(
   )
   const wrappedComponentName =
     Component.displayName || Component.name || 'Unknown'
-  ConnectedComponent.displayName = `Connect(${wrappedComponentName})`
-  return ConnectedComponent
+  return withDisplayName(`Connect(${wrappedComponentName})`, ConnectedComponent)
 }

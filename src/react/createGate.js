@@ -1,8 +1,9 @@
 //@flow
 
 import * as React from 'react'
-import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {createStore, createApi, launch, type Store, type Event} from 'effector'
+import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {withDisplayName} from './withDisplayName'
 
 export type Gate<Props = {||}> = Class<React.Component<Props>> &
   interface {
@@ -81,7 +82,6 @@ export function createGate<Props>(
     return null
   }
   GateComponent.predicate = () => Boolean(true)
-  GateComponent.displayName = `Gate:${name}`
   GateComponent.isOpen = Boolean(false)
   GateComponent.current = state.getState()
   GateComponent.open = open
@@ -151,5 +151,5 @@ export function createGate<Props>(
       params: [status, state, open, close, set],
     })
   }
-  return GateComponent
+  return withDisplayName(`Gate:${name}`, GateComponent)
 }
