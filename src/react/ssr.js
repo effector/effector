@@ -6,14 +6,15 @@ import {
   useStoreMap as commonUseStoreMap,
 } from './useStore'
 import {useList as commonUseList} from './useList'
+import {withDisplayName} from './withDisplayName'
 
-class Defer {
-  constructor() {
-    this.req = new Promise((rs, rj) => {
-      this.rs = rs
-      this.rj = rj
-    })
-  }
+function createDefer() {
+  const result = {}
+  result.req = new Promise((rs, rj) => {
+    result.rs = rs
+    result.rj = rj
+  })
+  return result
 }
 
 const Scope = React.createContext(null)
@@ -32,13 +33,10 @@ export function createStoreConsumer(store) {
 }
 
 export function createContextComponent(store, context, renderProp) {
-  const Consumer = createStoreConsumer(store)
-  return class RenderComponent extends React.Component {
-    static contextType = context
-    renderProp = state => renderProp(this.props, state, this.context)
-    render() {
-      return <Consumer>{this.renderProp}</Consumer>
-    }
+  return props => {
+    const ctx = React.useContext(context)
+    const state = useStore(store)
+    return renderProp(props, state, ctx)
   }
 }
 
@@ -53,8 +51,7 @@ export function createReactState(store, Component) {
   )
   const wrappedComponentName =
     Component.displayName || Component.name || 'Unknown'
-  ConnectedComponent.displayName = `Connect(${wrappedComponentName})`
-  return ConnectedComponent
+  return withDisplayName(`Connect(${wrappedComponentName})`, ConnectedComponent)
 }
 
 export function connect(Component) {
@@ -88,7 +85,7 @@ export function useEvent(event) {
   const unit = scope.find(event)
   const result = is.effect(event)
     ? params => {
-      const req = new Defer()
+      const req = createDefer()
       launch(unit, {params, req})
       return req.req
     }
