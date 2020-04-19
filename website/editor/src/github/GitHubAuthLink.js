@@ -79,7 +79,7 @@ const GitHubUserMenu = ({user, pending, ...props}) => {
         marginLeft: 40,
         alignItems: 'center',
         cursor: 'pointer',
-        zIndex: 100,
+        // zIndex: 100,
         paddingRight: 10,
         overflow: 'hidden',
         minWidth: 18,
@@ -137,7 +137,7 @@ export const GitHubAuthLink = ({token, ...props}) => {
        style={{
          alignSelf: 'center',
          marginLeft: 40,
-         zIndex: 100,
+         // zIndex: 100,
          paddingRight: 10,
          ...props.style,
        }}
@@ -168,7 +168,7 @@ export const GitHubAuth = () => {
       <div style={{
         alignSelf: 'center',
         marginLeft: 40,
-        zIndex: 100,
+        // zIndex: 100,
         paddingRight: 40,
       }}>
         <LoadingIcon />
