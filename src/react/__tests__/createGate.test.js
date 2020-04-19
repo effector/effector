@@ -131,9 +131,6 @@ Array [
     "field": false,
   },
   Object {
-    "field": false,
-  },
-  Object {
     "field": true,
   },
 ]

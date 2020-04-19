@@ -22,13 +22,35 @@ export function useGate<Props>(
   GateComponent: Gate<Props>,
   props?: Props = ({}: any),
 ) {
-  const propsRef = React.useRef(props)
-  propsRef.current = props
+  const propsRef = React.useRef(null)
   useIsomorphicLayoutEffect(() => {
     GateComponent.open(propsRef.current)
     return () => GateComponent.close(propsRef.current)
   }, [GateComponent])
-  GateComponent.set(props)
+  if (!shallowCompare(propsRef.current, props)) {
+    propsRef.current = props
+    GateComponent.set(props)
+  }
+}
+
+function shallowCompare(a, b) {
+  if (a === b) return true
+  if (
+    typeof a === 'object' &&
+    a !== null &&
+    typeof b === 'object' &&
+    b !== null
+  ) {
+    const aKeys = Object.keys(a)
+    const bKeys = Object.keys(b)
+    if (aKeys.length !== bKeys.length) return false
+    for (let i = 0; i < aKeys.length; i++) {
+      const key = aKeys[i]
+      if (a[key] !== b[key]) return false
+    }
+    return true
+  }
+  return false
 }
 
 export function createGate<Props>(
@@ -54,58 +76,48 @@ export function createGate<Props>(
     close: () => Boolean(false),
     destructor: () => Boolean(false),
   })
+  function GateComponent(props) {
+    useGate(GateComponent, props)
+    return null
+  }
+  GateComponent.predicate = () => Boolean(true)
+  GateComponent.displayName = `Gate:${name}`
+  GateComponent.isOpen = Boolean(false)
+  GateComponent.current = state.getState()
+  GateComponent.open = open
+  GateComponent.close = close
+  GateComponent.status = status
+  GateComponent.state = state
+  GateComponent.set = set
+  GateComponent.destructor = destructor
+  GateComponent.isTerminated = Boolean(false)
+  GateComponent.childGate = (childName: string = 'Subgate') => {
+    console.error('childGate is deprecated')
+    const gate = createGate(`${name}/${childName}`)
+    ;(gate: any).predicate = () => GateComponent.status.getState()
+    let isOpen = false
+    let isFeedback = false
+    gate.open.watch(() => {
+      if (!isFeedback) isOpen = true
+    })
+    gate.close.watch(() => {
+      if (!isFeedback) isOpen = false
+    })
 
-  class GateComponent extends React.PureComponent<Props> {
-    static predicate = () => Boolean(true)
-
-    static displayName = `Gate:${name}`
-    static isOpen = Boolean(false)
-    static current = state.getState()
-    static open = open
-    static close = close
-    static status = status
-    static state = state
-    static set = set
-    static destructor = destructor
-    static isTerminated = Boolean(false)
-    static childGate<Next>(childName: string = 'Subgate'): Gate<Next> {
-      console.error('childGate is deprecated')
-      const gate = createGate(`${name}/${childName}`)
-      ;(gate: any).predicate = () => GateComponent.status.getState()
-      let isOpen = false
-      let isFeedback = false
-      gate.open.watch(() => {
-        if (!isFeedback) isOpen = true
-      })
-      gate.close.watch(() => {
-        if (!isFeedback) isOpen = false
-      })
-
-      GateComponent.status.watch(status => {
-        isFeedback = true
-        if (isOpen && status && !gate.status.getState()) {
-          gate.open()
-        }
-        isFeedback = false
-      })
-      GateComponent.close.watch(() => {
-        isFeedback = true
-        gate.close()
-        isFeedback = false
-      })
-      GateComponent.destructor.watch(() => gate.destructor())
-      return gate
-    }
-    componentDidMount() {
-      GateComponent.open(this.props)
-    }
-    componentWillUnmount() {
-      GateComponent.close(this.props)
-    }
-    render() {
-      GateComponent.set(this.props)
-      return null
-    }
+    GateComponent.status.watch(status => {
+      isFeedback = true
+      if (isOpen && status && !gate.status.getState()) {
+        gate.open()
+      }
+      isFeedback = false
+    })
+    GateComponent.close.watch(() => {
+      isFeedback = true
+      gate.close()
+      isFeedback = false
+    })
+    GateComponent.destructor.watch(() => gate.destructor())
+    return gate
   }
   const unwatch = status.watch(status => (GateComponent.isOpen = status))
   const unwatch2 = state.watch(current => (GateComponent.current = current))
