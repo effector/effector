@@ -1,10 +1,11 @@
 //@flow
 
 import * as React from 'react'
-import {render, cleanup, container} from 'effector/fixtures/react'
-import {createGate, useGate} from '../createGate'
+import {render, cleanup, container, act} from 'effector/fixtures/react'
+import {createGate, useGate, useStore} from 'effector-react'
 
 import {argumentHistory} from 'effector/fixtures'
+import {createEvent, createStore} from 'effector'
 
 test('plain gate', async() => {
   const Gate = createGate('plain gate')
@@ -66,6 +67,78 @@ test('gate with props hook', async() => {
   expect(container.firstChild).toMatchInlineSnapshot(`<section />`)
   await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
+})
+
+describe('updates deduplication', () => {
+  test('with component', async() => {
+    const fn = jest.fn()
+    const Gate = createGate()
+    const update = createEvent()
+    const count = createStore(0).on(update, x => x + 1)
+
+    Gate.state.updates.watch(fn)
+
+    const Component = () => {
+      const x = useStore(count)
+      return (
+        <section>
+          <Gate field={x === 2} />
+          {x}
+        </section>
+      )
+    }
+    await render(<Component />)
+    await act(async() => {
+      update()
+    })
+    await act(async() => {
+      update()
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "field": false,
+  },
+  Object {
+    "field": true,
+  },
+]
+`)
+  })
+  test('with hook', async() => {
+    const fn = jest.fn()
+    const Gate = createGate()
+    const update = createEvent()
+    const count = createStore(0).on(update, x => x + 1)
+
+    Gate.state.updates.watch(fn)
+
+    const Component = () => {
+      const x = useStore(count)
+      useGate(Gate, {field: x === 2})
+      return <section>{x}</section>
+    }
+    await render(<Component />)
+    await act(async() => {
+      update()
+    })
+    await act(async() => {
+      update()
+    })
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+Array [
+  Object {
+    "field": false,
+  },
+  Object {
+    "field": false,
+  },
+  Object {
+    "field": true,
+  },
+]
+`)
+  })
 })
 
 test('gate properties', async() => {
