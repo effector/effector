@@ -4,6 +4,7 @@ import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {StoreView} from './index.h'
 import {withDisplayName} from './withDisplayName'
+import {throwError} from './throw'
 
 export function createComponent<Props, State>(
   shape:
@@ -21,7 +22,7 @@ export function createComponent<Props, State>(
   } else {
     if (typeof shape === 'object' && shape !== null) {
       store = combine(shape)
-    } else throw Error('shape should be a store or object with stores')
+    } else throwError('shape should be a store or object with stores')
   }
   let storeName = 'Unknown'
   //@ts-ignore

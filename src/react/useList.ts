@@ -3,6 +3,7 @@ import * as React from 'react'
 import {Store, is} from 'effector'
 import {useStoreMap} from './useStore'
 import {withDisplayName} from './withDisplayName'
+import {throwError} from './throw'
 
 export function useList<T>(
   list: Store<T[]>,
@@ -21,11 +22,10 @@ export function useList<T>(
   } else {
     fn = renderItem
   }
-  if (!is.store(list))
-    throw Error('expect useList first argument to be a store')
+  if (!is.store(list)) throwError('expect useList first argument to be a store')
   if (typeof fn !== 'function')
-    throw Error("expect useList's renderItem to be a function")
-  if (!Array.isArray(keys)) throw Error("expect useList's keys to be an array")
+    throwError("expect useList's renderItem to be a function")
+  if (!Array.isArray(keys)) throwError("expect useList's keys to be an array")
   const Item = React.useMemo(() => {
     const Item = withDisplayName(
       `${list.shortName || 'Unknown'}.Item`,

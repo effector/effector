@@ -1,11 +1,12 @@
 import {Store, is, clearNode, createStore, Subscription} from 'effector'
 import {useReducer, useMemo} from 'react'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
+import {throwError} from './throw'
 
 const stateReducer = (_: any, payload: any) => payload
 
 export function useStore<State>(store: Store<State>): State {
-  if (!is.store(store)) throw Error('expect useStore argument to be a store')
+  if (!is.store(store)) throwError('expect useStore argument to be a store')
   const dispatch = useReducer(stateReducer, undefined, store.getState)[1]
   const subscription = useMemo(() => {
     const subscription = store.updates.watch(upd => {
@@ -34,9 +35,9 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>({
   keys: Keys
   fn(state: State, keys: Keys): Result
 }): Result {
-  if (!is.store(store)) throw Error('useStoreMap expects a store')
-  if (!Array.isArray(keys)) throw Error('useStoreMap expects an array as keys')
-  if (typeof fn !== 'function') throw Error('useStoreMap expects a function')
+  if (!is.store(store)) throwError('useStoreMap expects a store')
+  if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
+  if (typeof fn !== 'function') throwError('useStoreMap expects a function')
   const result: Store<Result> = useMemo(
     () =>
       createStore(fn(store.getState(), keys)).on(store, (_, state) =>
