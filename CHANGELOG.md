@@ -2,6 +2,15 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.14.0
+
+- Add `ignore` parameter to `serialize` to skip stores during app state serialization [PR #325](https://github.com/zerobias/effector/pull/325) (thanks [@sergeysova](https://github.com/sergeysova))
+
+## effector-react 20.7.0
+
+- Use shallow compare for skipping updates with `useGate`, thereby making it consistent with `<Gate />`
+- Remove nesting from components, created by `createContextComponent` and `createReactState`, which previously were based on `createComponent`
+
 ## effector 20.13.6
 
 - Fix cases with `effector/babel-plugin` when inability to determine unit name led to the absence of `sid` property
