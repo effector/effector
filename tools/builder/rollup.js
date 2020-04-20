@@ -238,6 +238,7 @@ export async function rollupEffectorReact() {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
         es: dir(`npm/${name}/${name}.es.js`),
       },
+      inputExtension: 'ts',
     }),
     createSSR({file: {cjs: dir(`npm/${name}/ssr.js`)}}),
     createUmd(name, {
@@ -248,14 +249,16 @@ export async function rollupEffectorReact() {
         effector: 'effector',
         react: 'React',
       },
+      extension: 'ts',
     }),
-    createCompat(name),
+    createCompat(name, 'ts'),
   ])
 
   async function createSSR({file: {cjs}}: {|file: {|cjs: string|}|}) {
     const plugins = getPlugins(name)
     const pluginList = [
       plugins.resolve,
+      plugins.typescript,
       plugins.json,
       plugins.babel,
       plugins.sizeSnapshot,
@@ -265,7 +268,7 @@ export async function rollupEffectorReact() {
     ]
     const build = await rollup({
       onwarn,
-      input: dir(`packages/${name}/ssr.js`),
+      input: dir(`packages/${name}/ssr.ts`),
       external: ['react', 'vue', 'symbol-observable', 'effector'],
       plugins: pluginList,
     })

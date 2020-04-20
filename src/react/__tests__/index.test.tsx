@@ -1,9 +1,7 @@
-//@flow
-
 import * as React from 'react'
 import {act, render, container} from 'effector/fixtures/react'
 import {createStore, createEvent} from 'effector'
-import {connect} from '..'
+import {connect} from 'effector-react'
 
 test('connect api', async() => {
   const text = createStore('foo')

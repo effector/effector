@@ -1,19 +1,11 @@
-//@flow
-
 import * as React from 'react'
 import {argumentHistory} from 'effector/fixtures'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
-import {
-  type Store,
-  createStore,
-  combine,
-  createEvent,
-  createApi,
-} from 'effector'
-import {createComponent} from '..'
+import {Store, createStore, combine, createEvent, createApi} from 'effector'
+import {createComponent} from 'effector-react'
 
 describe('createComponent', () => {
-  test('combine', async() => {
+  test('combine', async () => {
     const a = createStore(0)
     const b = createStore('bar')
     const c = combine({a, b})
@@ -33,10 +25,10 @@ describe('createComponent', () => {
         bar
       </div>
     `)
-    await act(async() => {
-      //$todo
+    await act(async () => {
+      //@ts-ignore
       a.setState(2)
-      //$todo
+      //@ts-ignore
       b.setState('foo')
       c.watch(fn)
     })
@@ -55,17 +47,16 @@ describe('createComponent', () => {
     `)
   })
 
-  test('initial props', async() => {
+  test('initial props', async () => {
     type ListItem = {
-      text: string,
+      text: string
     }
-    const update = createEvent<{|
-      id: number,
-      data: ListItem,
-    |}>()
+    const update = createEvent<{
+      id: number
+      data: ListItem
+    }>()
     const list: Store<{
-      [key: number]: ListItem,
-      ...,
+      [key: number]: ListItem
     }> = createStore({}).on(update, (state, {id, data}) => ({
       ...state,
       [id]: {...state[id], ...data},
@@ -81,7 +72,7 @@ describe('createComponent', () => {
         Loading...
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       update({
         id: 24,
         data: {text: 'nice'},
@@ -96,14 +87,14 @@ describe('createComponent', () => {
 
   test('should throw', () => {
     expect(() => {
-      //$off
+      //@ts-ignore
       createComponent(50, (_, {a, b}) => a * b)
     }).toThrowErrorMatchingInlineSnapshot(
       `"shape should be a store or object with stores"`,
     )
   })
 
-  test('combine', async() => {
+  test('combine', async () => {
     const a = createStore(2)
     const b = createStore(2)
     const ObjectComponent = createComponent({a, b}, (_, {a, b}) => a * b)
@@ -111,15 +102,15 @@ describe('createComponent', () => {
     expect(container.firstChild).toMatchInlineSnapshot(`4`)
   })
 
-  test('mounted/unmounted events', async() => {
+  test('mounted/unmounted events', async () => {
     const text = createStore('foo')
     const fn = jest.fn()
     const Component = createComponent(text, () => null)
     Component.mounted.watch(fn)
     Component.unmounted.watch(fn)
     await render(<Component foo={1} />)
-    await act(async() => {
-      //$off
+    await act(async () => {
+      //@ts-ignore
       text.setState('bar')
     })
     await cleanup()
@@ -141,7 +132,7 @@ describe('createComponent', () => {
     `)
   })
 
-  test('mount event', async() => {
+  test('mount event', async () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
@@ -161,7 +152,7 @@ describe('createComponent', () => {
     ))
     Foo.mounted.watch(fn)
     await render(<Foo a="A" />)
-    await act(async() => {
+    await act(async () => {
       add(5)
     })
     await render(<Foo b="B" />)
@@ -180,7 +171,7 @@ describe('createComponent', () => {
       ]
     `)
   })
-  test('unmount event', async() => {
+  test('unmount event', async () => {
     const a = createStore(1)
     const b = createStore('bar')
     const {add} = createApi(a, {
@@ -200,7 +191,7 @@ describe('createComponent', () => {
     ))
     Foo.unmounted.watch(fn)
     await render(<Foo a="A" />)
-    await act(async() => {
+    await act(async () => {
       add(5)
     })
     await render(<Foo b="B" />)
@@ -220,7 +211,7 @@ describe('createComponent', () => {
     `)
   })
 
-  test('hooks', async() => {
+  test('hooks', async () => {
     const text = createStore('foo')
     const HookComponent = createComponent(text, (_, text) => {
       const [count, setCount] = React.useState(0)
@@ -252,7 +243,7 @@ describe('createComponent', () => {
   </button>
 </div>
 `)
-    await act(async() => {
+    await act(async () => {
       container.firstChild.querySelector('#increment').click()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -273,7 +264,7 @@ describe('createComponent', () => {
 </div>
 `)
   })
-  it('should not use props from failed renders', async() => {
+  it('should not use props from failed renders', async () => {
     const fn = jest.fn()
     const text = createStore('foo')
     const Foo = createComponent(text, (props, text) => {
@@ -288,7 +279,7 @@ describe('createComponent', () => {
     })
     Foo.unmounted.watch(fn)
     const error = console.error
-    //$off
+    //@ts-ignore
     console.error = function errorMock(...args) {
       args
     }
@@ -298,7 +289,7 @@ describe('createComponent', () => {
       await render(<Foo shouldFail={true} field="incorrect" />).catch(() => {})
       await cleanup()
     } finally {
-      //$off
+      //@ts-ignore
       console.error = error
     }
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`

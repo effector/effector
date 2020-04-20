@@ -1,8 +1,6 @@
-//@flow
+import {Store} from 'effector'
 
-import type {Store} from 'effector'
-
-import type {StoreConsumer} from './index.h'
+import {StoreConsumer} from './index.h'
 import {createComponent} from './createComponent'
 
 export function createStoreConsumer<State>(

@@ -1,39 +1,42 @@
-//@flow
-
 import * as React from 'react'
-import {type Store, is, combine, createEvent} from 'effector'
+import {Store, is, combine, createEvent} from 'effector'
 import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
-import type {StoreView} from './index.h'
+import {StoreView} from './index.h'
 import {withDisplayName} from './withDisplayName'
 
-export function createComponent<Props: {...}, State>(
+export function createComponent<Props, State>(
   shape:
     | Store<State>
-    | {+[key: string]: Store<any> | any, ...}
+    | {[key: string]: Store<any> | any}
     | ((props: Props) => Store<State>),
-  renderProp: (props: Props, state: State) => React.Node,
+  renderProp: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props> {
   let storeFn: (props: Props) => Store<any>
   let store: Store<any>
   if (is.store(shape)) {
-    store = (shape: any)
+    store = shape
   } else if (typeof shape === 'function') {
-    storeFn = shape
+    storeFn = shape as any
   } else {
     if (typeof shape === 'object' && shape !== null) {
-      //$todo
       store = combine(shape)
     } else throw Error('shape should be a store or object with stores')
   }
-  const storeName = store?.shortName ?? 'Unknown'
-  const mounted = createEvent(`${storeName}.View mounted`)
-  const unmounted = createEvent(`${storeName}.View unmounted`)
+  let storeName = 'Unknown'
+  //@ts-ignore
+  if (store && store.shortName) {
+    storeName = store.shortName
+  }
+  const mounted = createEvent<any>(`${storeName}.View mounted`)
+  const unmounted = createEvent<any>(`${storeName}.View unmounted`)
+
   //prettier-ignore
   const instanceFabric: (props: Props) => Store<any> =
     typeof shape === 'function'
-      ? (storeFn: any)
-      : (props => store)
+      //@ts-ignore
+      ? storeFn
+      : () => store
   function RenderComponent(props: Props) {
     const propsRef = React.useRef(props)
     const ownStore = React.useMemo(() => instanceFabric(props), [])

@@ -80,7 +80,11 @@ module.exports = {
         {
           react: {
             testEnvironment: 'jsdom',
-            testMatch: [`<rootDir>/src/react/**/*.test.js`],
+            testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+            transform: {
+              '^.+\\.jsx?$': 'babel-jest',
+              '^.+\\.tsx?$': 'babel-jest',
+            },
           },
         },
         {

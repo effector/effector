@@ -1,5 +1,3 @@
-//@flow
-
 export {createStoreConsumer} from './createStoreConsumer'
 
 export {createContextComponent} from './createContextComponent'

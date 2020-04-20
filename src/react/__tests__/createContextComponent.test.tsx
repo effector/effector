@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {createEvent, createStore} from 'effector'
 import {createContextComponent} from 'effector-react'

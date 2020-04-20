@@ -1,5 +1,3 @@
-//@flow
-
 import fetch from 'cross-fetch'
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
@@ -9,7 +7,7 @@ import {createDomain, forward, sample, attach} from 'effector'
 import {fork, allSettled, serialize, hydrate} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -101,8 +99,8 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-r5k0rx": "alice",
-      "i2cgp1": Array [
+      "-y3ctwb": "alice",
+      "3x4g6j": Array [
         "bob",
         "carol",
       ],
@@ -110,8 +108,8 @@ it('works', async() => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-r5k0rx": "bob",
-      "i2cgp1": Array [
+      "-y3ctwb": "bob",
+      "3x4g6j": Array [
         "alice",
       ],
     }
@@ -119,7 +117,7 @@ it('works', async() => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('attach support', async() => {
+test('attach support', async () => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -213,36 +211,36 @@ test('attach support', async() => {
 
   await render(<App root={bobScope} />)
   expect(container.firstChild).toMatchInlineSnapshot(`
-<h2>
-  bob
-</h2>
-`)
+    <h2>
+      bob
+    </h2>
+  `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
 Object {
-  "-emnm5v": "alice",
-  "8r4q44": "https://ssr.effector.dev/api",
-  "ndtnwz": Array [
+  "-ggkn4w": "https://ssr.effector.dev/api",
+  "-vjt6hb": Array [
     "bob",
     "carol",
   ],
+  "1tmqd0": "alice",
 }
 `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
 Object {
-  "-emnm5v": "bob",
-  "8r4q44": "https://ssr.effector.dev/api",
-  "ndtnwz": Array [
+  "-ggkn4w": "https://ssr.effector.dev/api",
+  "-vjt6hb": Array [
     "alice",
   ],
+  "1tmqd0": "bob",
 }
 `)
   expect(indirectCallFn).toBeCalled()
 })
 
-test('computed values support', async() => {
+test('computed values support', async () => {
   const app = createDomain()
 
-  const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
+  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
     {
       async handler(user) {
         const req = await fetch(`https://ssr.effector.dev/api/${user}`, {
@@ -303,11 +301,11 @@ test('computed values support', async() => {
 `)
 })
 
-test('allSettled effect calls', async() => {
+test('allSettled effect calls', async () => {
   const fn = jest.fn()
   const app = createDomain()
 
-  const fetchUser = app.createEffect<string, {name: string, friends: string[]}>(
+  const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
     {
       async handler(user) {
         const req = await fetch(`https://ssr.effector.dev/api/${user}`, {

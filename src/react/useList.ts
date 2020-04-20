@@ -1,7 +1,6 @@
-//@flow
 /* eslint-disable react-hooks/rules-of-hooks */
 import * as React from 'react'
-import {type Store, is} from 'effector'
+import {Store, is} from 'effector'
 import {useStoreMap} from './useStore'
 import {withDisplayName} from './withDisplayName'
 
@@ -9,12 +8,12 @@ export function useList<T>(
   list: Store<T[]>,
   renderItem:
     | {
-        keys?: any[],
-        fn(item: T, index: number): React.Node,
+        keys?: any[]
+        fn(item: T, index: number): React.ReactNode
       }
-    | ((item: T, index: number) => React.Node),
-): React.Node {
-  let keys = []
+    | ((item: T, index: number) => React.ReactNode),
+): React.ReactNode {
+  let keys = [] as any[]
   let fn
   if (typeof renderItem === 'object' && renderItem !== null) {
     if (renderItem.keys) keys = renderItem.keys
@@ -30,7 +29,7 @@ export function useList<T>(
   const Item = React.useMemo(() => {
     const Item = withDisplayName(
       `${list.shortName || 'Unknown'}.Item`,
-      ({index, keys}) => {
+      ({index, keys}: {index: number; keys: any[]}) => {
         const item = useStoreMap({
           store: list,
           keys: [index, ...keys],
@@ -49,7 +48,11 @@ export function useList<T>(
   const fnRef = React.useRef(fn)
   fnRef.current = fn
   const keysSelfMemo = React.useMemo(() => keys, keys)
-  return Array.from({length}, (_, i) => (
-    <Item index={i} key={i} keys={keysSelfMemo} />
-  ))
+  return Array.from({length}, (_, i) =>
+    React.createElement(Item, {
+      index: i,
+      key: i,
+      keys: keysSelfMemo,
+    }),
+  )
 }

@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {render, cleanup, container, act} from 'effector/fixtures/react'
 import {createGate, useGate, useStore} from 'effector-react'

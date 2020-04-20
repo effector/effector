@@ -1,10 +1,8 @@
-//@flow
-
 import * as React from 'react'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {createEvent, createStore, combine} from 'effector'
-import {createStoreConsumer} from '../createStoreConsumer'
+import {createStoreConsumer} from 'effector-react'
 
 test('createStoreComponent attempt', async() => {
   const store1 = createStore('foo')

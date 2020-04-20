@@ -1,6 +1,4 @@
-//@flow
-
-import type {Event} from 'effector'
+import {Event} from 'effector'
 
 /**
 bind event to scope

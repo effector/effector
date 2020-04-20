@@ -1,12 +1,9 @@
-//@flow
-
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 
 import {createStore, createEvent, restore} from 'effector'
 
-import {useList} from '../useList'
-import {useStore} from '../useStore'
+import {useList, useStore} from 'effector-react'
 
 it('should render store items', async() => {
   const list = createStore(['foo', 'bar', 'baz'])

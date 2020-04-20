@@ -1,9 +1,7 @@
-//@flow
-
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 import {createStore, createEvent, createEffect, createDomain} from 'effector'
-import {useStore, useStoreMap} from '../useStore'
+import {useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useStore', () => {

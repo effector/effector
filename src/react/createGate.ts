@@ -1,32 +1,29 @@
-//@flow
-
 import * as React from 'react'
-import {createStore, createApi, launch, type Store, type Event} from 'effector'
+import {createStore, createApi, launch, Store, Event} from 'effector'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {withDisplayName} from './withDisplayName'
 
-export type Gate<Props = {||}> = Class<React.Component<Props>> &
-  interface {
-    isOpen: boolean,
-    isTerminated: boolean,
-    open: Event<Props>,
-    close: Event<Props>,
-    status: Store<boolean>,
-    destructor: Event<void>,
-    current: Props,
-    state: Store<Props>,
-    set: Event<Props>,
-    childGate<Next>(childName?: string): Gate<Next>,
-  }
+export type Gate<Props = {}> = React.ComponentType<Props> & {
+  isOpen: boolean
+  isTerminated: boolean
+  open: Event<Props>
+  close: Event<Props>
+  status: Store<boolean>
+  destructor: Event<void>
+  current: Props
+  state: Store<Props>
+  set: Event<Props>
+  childGate<Next>(childName?: string): Gate<Next>
+}
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
-  props?: Props = ({}: any),
+  props: Props = {} as any,
 ) {
-  const propsRef = React.useRef(null)
+  const propsRef = React.useRef<any>(null)
   useIsomorphicLayoutEffect(() => {
     GateComponent.open(propsRef.current)
-    return () => GateComponent.close(propsRef.current)
+    return () => GateComponent.close(propsRef.current) as any
   }, [GateComponent])
   if (!shallowCompare(propsRef.current, props)) {
     propsRef.current = props
@@ -34,7 +31,7 @@ export function useGate<Props>(
   }
 }
 
-function shallowCompare(a, b) {
+function shallowCompare(a: any, b: any) {
   if (a === b) return true
   if (
     typeof a === 'object' &&
@@ -56,14 +53,17 @@ function shallowCompare(a, b) {
 
 export function createGate<Props>(
   name: string = 'gate',
-  defaultState: Props = ({}: any),
+  defaultState: Props = {} as any,
 ): Gate<Props> {
   let domain
   if (typeof name === 'object' && name !== null) {
     if ('defaultState' in name) {
+      //@ts-ignore
       defaultState = name.defaultState
     }
+    //@ts-ignore
     if (name.domain) domain = name.domain
+    //@ts-ignore
     name = name.name || 'gate'
   }
   const status = createStore(Boolean(false))
@@ -77,8 +77,8 @@ export function createGate<Props>(
     close: () => Boolean(false),
     destructor: () => Boolean(false),
   })
-  function GateComponent(props) {
-    useGate(GateComponent, props)
+  function GateComponent(props: Props) {
+    useGate(GateComponent as any, props)
     return null
   }
   GateComponent.predicate = () => Boolean(true)
@@ -94,7 +94,7 @@ export function createGate<Props>(
   GateComponent.childGate = (childName: string = 'Subgate') => {
     console.error('childGate is deprecated')
     const gate = createGate(`${name}/${childName}`)
-    ;(gate: any).predicate = () => GateComponent.status.getState()
+    ;(gate as any).predicate = () => GateComponent.status.getState()
     let isOpen = false
     let isFeedback = false
     gate.open.watch(() => {
@@ -147,7 +147,13 @@ export function createGate<Props>(
   if (domain) {
     const {hooks} = domain
     launch({
-      target: [hooks.store, hooks.store, hooks.event, hooks.event, hooks.event],
+      target: [
+        hooks.store,
+        hooks.store,
+        hooks.event,
+        hooks.event,
+        hooks.event,
+      ] as any,
       params: [status, state, open, close, set],
     })
   }
