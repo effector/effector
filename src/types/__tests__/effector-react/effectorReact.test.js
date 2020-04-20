@@ -50,28 +50,6 @@ test('createComponent', () => {
     Type 'string' is not assignable to type 'number'.
 
     --flow--
-    Could not decide which case to select, since case 1 [1] may work but if it doesn't case 3 [2] looks promising too. To fix add a type annotation to return [3] or to 'state' [4]
-      const Store = createComponent(createStore(0), (props, state) => {
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
-          declare export function createComponent<
-                     [1] ^^^^^^^^^^^^^^^^^^^^^^^^^...
-          declare export function createComponent<Props, State>(
-                     [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
-          const Store = createComponent(createStore(0), (props, state) => {
-                                                                     [3] ^
-          const Store = createComponent(createStore(0), (props, state) => {
-                                                            [4] ^^^^^
-    Could not decide which case to select, since case 1 [1] may work but if it doesn't case 2 [2] looks promising too. To fix add a type annotation to return [3] or to 'state' [4]
-      const InitialProps = createComponent(
-                           ^^^^^^^^^^^^^^^^...
-          declare export function createComponent<
-                     [1] ^^^^^^^^^^^^^^^^^^^^^^^^^...
-          declare export function createComponent<Props, State>(
-                     [2] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^...
-          (_, state) => {
-                   [3] ^
-          (_, state) => {
-          [4] ^^^^^
     Cannot assign 'initialProps.id' to 'createComponent_initialProps_check2'
       const createComponent_initialProps_check2: string = initialProps.id
                                                           ^^^^^^^^^^^^^^^
@@ -113,22 +91,7 @@ Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
   Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 
 --flow--
-Cannot call 'createGate'
-  const Foo = createGate<number>('foo')
-              ^^^^^^^^^^
-  number [1] is incompatible with object type [2] in type argument 'Props'
-      const Foo = createGate<number>('foo')
-                         [1] ^^^^^^
-      declare export function createGate<Props: {...}>(name?: string): Gate<Props>
-                                            [2] ^^^^^
-Cannot call 'useGate' with '1' bound to 'props'
-  useGate(Bar, 1)
-               ^
-  number [1] is incompatible with object type [2]
-      useGate(Bar, 1)
-               [1] ^
-      const Bar = createGate<{a: number}>('bar')
-                         [2] ^^^^^^^^^^^
+no errors
 "
 `)
 })
