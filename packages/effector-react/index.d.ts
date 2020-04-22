@@ -39,7 +39,7 @@ export function useList<T>(
         readonly fn: (item: T, index: number) => React.ReactNode
       }
     | ((item: T, index: number) => React.ReactNode),
-): React.ReactNode
+): JSX.Element
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 

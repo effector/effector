@@ -67,7 +67,7 @@ test('readonly array support', () => {
   `)
 })
 
-test('return value support usage as component', () => {
+test("usage as components' return value", () => {
   const users = createStore<User[]>([
     {
       username: 'alice',
@@ -94,8 +94,7 @@ test('return value support usage as component', () => {
   expect(typecheck).toMatchInlineSnapshot(`
 "
 --typescript--
-JSX element type 'ReactNode' is not a constructor function for JSX elements.
-  Type 'undefined' is not assignable to type 'Element | null'.
+no errors
 "
 `)
 })
