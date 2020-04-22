@@ -6,7 +6,7 @@ hide_title: true
 
 # `merge(unitsArray)`
 
-Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)), returns a new [_Event_](Event.md), which fires upon trigger of any of merged unitts.
+Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)), returns a new [_Event_](Event.md), which fires upon trigger of any of merged units.
 
 #### Arguments
 
@@ -34,7 +34,7 @@ bar(2)
 
 [Try it](https://share.effector.dev/WxUgr6dZ)
 
-> **Note:** however, array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
+> **Note:** Array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
 
 #### Example 2
 

@@ -6,7 +6,7 @@ hide_title: true
 
 # `createApi(store, api)`
 
-`createApi` is a short-hand for creating events attached to store
+`createApi` is a shorthand for creating events attached to store
 
 #### Arguments
 

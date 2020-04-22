@@ -7,7 +7,7 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 ## Event
 
-_Event_ is a function you can subscribe to. It can be intention to change store, fact about what happening in application, command to be executed, aggregated analytics trigger and so on.
+_Event_ is a function you can subscribe to. It can be an intention to change the store, some occurence in application, command to be executed, aggregated analytics trigger and so on.
 
 [Event]('./api/effector/Event.md) in api documentation
 
@@ -29,11 +29,11 @@ type Event<Payload> = {
 ```
 
 - `(payload)` calls `Event` with payload
-- [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to this event and calls given [`watcher`](#watcher)
+- [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to the event and calls provided [`watcher`](#watcher)
 - [map(fn)](./api/effector/Event.md#mapfn) creates new event, which will be called after the original event is called, applying the result of a fn as a payload
 - [filter({fn})](./api/effector/Event.md#filterfn) creates new event that will receive update only when given `fn` returns true
 - [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
-- [prepend(fn)](./api/effector/Event.md#prependfn) creates new event that preprocesses payload before calling original event
+- [prepend(fn)](./api/effector/Event.md#prependfn) creates new event that preprocesses payload before calling the original event
 
 ## Effect
 
@@ -41,11 +41,11 @@ _Effect_ is a container for async function.
 
 It can be safely used in place of the original async function.
 
-It returns promise with result of function call
+It returns promise with result of a function call
 
-The only requirement for function:
+The only requirement for the function:
 
-- **Should** have zero or one argument
+- **Must** have zero or one argument
 
 [Effect]('./api/effector/Effect.md) in api documentation
 
@@ -75,8 +75,8 @@ type Effect<Params, Done, Fail = Error> = {
 ```
 
 - `(payload)` calls `Effect` with payload and returns a Promise
-- [use(asyncFunction)](./api/effector/Effect.md#usehandler) injects async function into effect (can be called multiple times)
-- [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to this effect and calls given [`watcher`](#watcher) when effect starts
+- [use(asyncFunction)](./api/effector/Effect.md#usehandler) injects async function into the effect (can be called multiple times)
+- [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to the effect and calls provided [`watcher`](#watcher) when effect starts
 
 ## Store
 
@@ -185,7 +185,7 @@ Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/
 
 ## Pureness
 
-Most of functions in api shouldn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
+Most of functions in api mustn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
 
 **Correct**, imperative:
 

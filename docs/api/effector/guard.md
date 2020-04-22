@@ -7,7 +7,7 @@ hide_title: true
 # guard
 
 Method for conditional event routing.
-It provide a way to control one dataflow with the help of another: when the condition and the data are in different places, then we can use guard with stores as a filters to trigger events when condition state is true, thereby modulate signals without mixing them.
+It provides a way to control one dataflow with the help of another: when the condition and the data are in different places, we can use guard with stores as filters to trigger events when condition state is true, thereby modulate signals without mixing them.
 
 ## Formulae
 
@@ -18,8 +18,8 @@ guard({ source, filter, target? }): target
 When `source` is triggered, check `filter` for thruthy and call `target` with data from `source` if `true`.
 
 - If `target` is not passed, create [_Event_](Event.md) with type of `source` and return it from `guard()`
-- If `filter` is [_Store_](Store.md) check it value for `thruthy`
-- If `filter` is `Function` call it with data from `source` and check result for `thruthy`
+- If `filter` is [_Store_](Store.md), check it value for `thruthy`
+- If `filter` is `Function`, call it with data from `source` and check result for `thruthy`
 
 ## `guard({source, filter, target?})`
 
@@ -29,7 +29,7 @@ When `source` is triggered, check `filter` for thruthy and call `target` with da
 
 #### Returns
 
-[_Event_](Event.md), which fires upon clock is triggered
+[_Event_](Event.md), which fires upon clock trigger
 
 #### Example
 
@@ -60,7 +60,7 @@ guard({
 
 See [ui visualization](https://share.effector.dev/zLB4NwNV)
 
-Also, guard can accept common function predicate as a filter, to drop events before forwarding them to target
+Also, guard accepts a common function predicate as filter, to drop events before forwarding them to target
 
 #### Example 2
 

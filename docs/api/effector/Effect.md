@@ -59,7 +59,7 @@ const data = await fetchUserFx({id: 2})
 
 ### `use(handler)`
 
-Provides a function, which will be called when an effect is triggered.
+Provides a function, which will be called when effect is triggered.
 
 It will replace the previous function inside.
 
@@ -141,7 +141,7 @@ effectFx(20) // nothing, cause watcher unsubscribed
 
 ### `prepend(fn)`
 
-Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
 #### Formulae
 
@@ -195,7 +195,7 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ### `doneData`
 
-Event triggered with result of effect execution:
+Event, which is triggered with result of the effect execution:
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
 
@@ -219,7 +219,7 @@ effectFx(2) // => Done with result 3
 
 ### `failData`
 
-Event triggered with error thrown by effect:
+Event, which is triggered with error thrown by the effect:
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
 
@@ -243,7 +243,7 @@ effectFx(2) // => Fail with error 1
 
 ### `done`
 
-[_Event_](Event.md) triggered when _handler_ is _resolved_.
+[_Event_](Event.md), which is triggered when _handler_ is _resolved_.
 
 #### Properties
 
@@ -272,7 +272,7 @@ effectFx(2) // => Done with params 2 and result 3
 
 ### `fail`
 
-[_Event_](Event.md) triggered when handler is rejected or throws error.
+[_Event_](Event.md), which is triggered when handler is rejected or throws error.
 
 #### Properties
 
@@ -301,11 +301,11 @@ effectFx(2) // => Fail with params 2 and error 1
 
 ### `finally`
 
-Event triggered when handler is resolved, rejected or throws error.
+Event, which is triggered when handler is resolved, rejected or throws error.
 
 #### Properties
 
-[_Event_](Event.md) triggered with object of `status`, `params` and `error` or `result`:
+[_Event_](Event.md), which is triggered with object of `status`, `params` and `error` or `result`:
 
 1. `status` (_string_): A status of effect (`done` or `fail`)
 2. `params` (_Params_): An argument passed to effect call
@@ -336,7 +336,7 @@ fetchApiFx(100)
 ### `pending`
 
 [_Store_](Store.md) will update when `done` or `fail` are triggered.
-[_Store_](Store.md) contains a `true` value until the effect is resolved or rejected.
+[_Store_](Store.md) contains `true` value until the effect is resolved or rejected.
 
 #### Example
 

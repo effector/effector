@@ -5,7 +5,7 @@ title: Gate - a bridge between props and store
 
 Imagine you have the task of transferring something from react props to the effector store.
 Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
-In such a situation [`Gate`](https://effector.now.sh/en/api/effector-react/gate) will help.
+In a such situation [`Gate`](https://effector.now.sh/en/api/effector-react/gate) will help.
 
 In this example we will write code which will not go beyond our sandbox
 

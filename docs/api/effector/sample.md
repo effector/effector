@@ -19,7 +19,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 
 #### Type of the created `target`
 
-If `target` is not passed to `sample()` call, it will be created inside. The type of the unit described in the table below:
+If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
 
 | clock\source          | [_Store_](Store.md) | [_Event_](Event.md) | [_Effect_](Effect.md) |
 | --------------------- | ------------------- | ------------------- | --------------------- |
@@ -29,7 +29,7 @@ If `target` is not passed to `sample()` call, it will be created inside. The typ
 
 How to read it:
 
-1. You need to know type of the `source`, it is column
+1. You need to know type of the `source`, it is a column
 2. Type of the `clock` in the rows
 3. Match the column and the row
 
@@ -45,9 +45,9 @@ const event = sample({ source: $store, clock: event });
 
 ## `sample(sourceStore, clockEvent, fn?)`
 
-Overall this method can be used in order to link two nodes, resulting the third one, which will fire only upon `clock` node trigger.
+Overall this method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
-Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case when you need to handle some event with some store's state. Instead of using `store.getState()`, in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more appropriate to use `sample` method as described below.
+Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()` in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more suitable to use `sample` method as described below.
 
 #### Arguments
 
@@ -57,7 +57,7 @@ Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Q
 
 #### Returns
 
-[_Event_](Event.md), which fires upon clock is triggered
+[_Event_](Event.md), which fires upon clock trigger
 
 #### Example 1
 
@@ -109,7 +109,7 @@ Passes last `sourceEvent` invocation argument value and `clockEvent` value to `f
 
 #### Returns
 
-[_Event_](Event.md), which fires upon clock is triggered
+[_Event_](Event.md), which fires upon clock trigger
 
 #### Example
 
@@ -212,13 +212,13 @@ inc() // => Doe has 1 coins
 
 ## `sample({source, clock?, fn?, greedy?, target?})`
 
-Object-like arguments passing, working exactly the same as examples above do.
+Object-like arguments passing, works exactly the same as examples above do.
 
-`clock` - trigger node, if not passed the `source` is used as clock
+`clock` - trigger node, if not passed, the `source` is used as clock
 
-`greedy` modifier defines, whether sampler will wait of resolving calculation result, and will batch all updates, resulting only one trigger, either will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire, upon trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire upon the last linked node trigger.
+`greedy` modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
-`target` - can contain Unit, which accepts payload - returned by `fn`. If target passed, result will be the target itself. In case, target not passed, it's created "under the hood" and being returned as result of the function.
+`target` - can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
 
 #### Arguments
 
@@ -302,7 +302,7 @@ clickButton('click B')
 
 Shorthand for `sample({ source: sourceStore, clock: sourceStore })`, it can be used to make updates of `sourceStore` non-greedy, thus batching updates of `sourceStore`.
 
-This is especially useful if we are combining different stores, and resulting store switches its state multiple times within single update. `sample` ensures it will fire only upon the last state
+This is especially useful if we are combining different stores, which results in multiple store switches within single update. `sample` ensures it will fire only upon the last state
 
 #### Arguments
 

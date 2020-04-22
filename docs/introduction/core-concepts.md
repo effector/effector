@@ -26,9 +26,9 @@ data.watch(console.log)
 
 It can be safely used in place of the original async function.
 
-The only requirement for function:
+The only requirement for the function:
 
-- **Should** have zero or one argument
+- **Must** have zero or one argument
 
 ```js try
 const getUserFx = createEffect('get user').use(params => {

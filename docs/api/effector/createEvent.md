@@ -19,7 +19,7 @@ You can pass `name` if you want.
 
 #### Notes
 
-[Event](Event.md) - it is a function which called allow to change state, see Example 1 also it could be good opportunity to data extract, see Example 2 and we discuss it next section.
+[Event](Event.md) - it is a function which allows to change state when called, see Example 1, also it can be a good way to extract data, see Example 2 and we will discuss it the next section.
 
 #### Example 1
 
@@ -45,8 +45,8 @@ addNumber(10)
 
 [Try it](https://share.effector.dev/BlvDKg17)
 
-Let's talk about what happened. We created store and event (addNumber), and started to watch the store.<br/>
-You should pay attention to `addNumber(10)`. Whenever you will call `addNumber(10)` you may see in console how state will change.
+Let's talk about what happened. We created a store and an event (addNumber), and started watching the store.<br/>
+Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
 
 #### Example 2
 

@@ -71,7 +71,7 @@ const $form = createStore({}).on(setField, (s, {key, value}) => ({
 }))
 ```
 
-Next piece of code shows, how we can obtain a state in Effector, in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
+Next piece of code shows how we can obtain a state in Effector in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
 
 ```js
 sample({
@@ -82,7 +82,7 @@ sample({
 })
 ```
 
-So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, requiring some data transformation, before data appear in `setField` event.
+So far, so good, we've almost set up our model (events, effects and stores). Next thing is to create event, which will be used as `onChange` callback, which requires some data transformation, before data appear in `setField` event.
 
 ```js
 const handleChange = setField.prepend(e => ({
@@ -91,7 +91,7 @@ const handleChange = setField.prepend(e => ({
 })) // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
 ```
 
-Next, we have to deal with how should inputs work. [`useStoreMap`](/api/effector-react/useStoreMap) hook here prevents component rerender, upon non-relevant changes.
+Next, we have to deal with how inputs should work. [`useStoreMap`](/api/effector-react/useStoreMap) hook here prevents component rerender upon non-relevant changes.
 
 ```js
 const Field = ({name, type, label}) => {
@@ -115,7 +115,7 @@ const Field = ({name, type, label}) => {
 }
 ```
 
-And, finally, the `App` itself! Note, how we get rid of any business-logic in view layer. It's simplier to debug, to share logic, and even more: logic is framework independent now.
+And, finally, the `App` itself! Note, how we got rid of any business-logic in view layer. It's simpler to debug, to share logic, and even more: logic is framework independent now.
 
 ```js
 const App = () => (
@@ -173,7 +173,7 @@ This code is way shorter, yet has code duplication, lower scalability and less r
 
 #### Example 2
 
-This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which are dependent of stores, transform data passed between events.
+This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
 
 ```js try
 import React from 'react'
