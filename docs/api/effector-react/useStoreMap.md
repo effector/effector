@@ -6,7 +6,7 @@ hide_title: true
 
 # `useStoreMap({ store, keys, fn })`
 
-Creates hook function, which observes changes in selected part of store. Component will be updated only when selector function result will changed.
+Creates a hook function, which observes changes in selected part of store. Component will update only when selector function result will change.
 
 #### Arguments
 

@@ -114,7 +114,7 @@ changed(2)
 ### `watch(watcher)`
 
 Call `watcher` function each time when store is updated. <br/>
-If `trigger` not passed, run `watcher` on each event that linked with store.
+If `trigger` not passed, run `watcher` on each event that linked to the store.
 
 #### Formulae
 
@@ -127,7 +127,7 @@ const unwatch = $store.watch(watcher)
 
 #### Arguments
 
-1. `watcher` ([_Watcher_](../../glossary.md#watcher)): Watcher function that receives current store state as first argument
+1. `watcher` ([_Watcher_](../../glossary.md#watcher)): Watcher function that receives current store state as the first argument
 
 #### Returns
 
@@ -165,7 +165,7 @@ const unwatch = $store.watch(trigger, watcher)
 #### Arguments
 
 1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md): Trigger, which leads to call of `watcher`
-1. `watcher` (_Function_): Function that receives current store state as first argument and payload of trigger as second argument.
+1. `watcher` (_Function_): Function that receives current store state as the first argument and payload of trigger as the second argument.
 
 #### Returns
 
@@ -173,7 +173,7 @@ const unwatch = $store.watch(trigger, watcher)
 
 #### Example 1
 
-`.watch` trigger `watcher` when `foo` executed, because `foo` explicitly passed to `watch`. <br/>
+`.watch` trigger `watcher` when `foo` is executed, because `foo` is explicitly passed to `watch`. <br/>
 First argument of `watcher` is a state value, second is an event value.
 
 ```js try
@@ -201,8 +201,8 @@ foo(3)
 
 #### Example 2
 
-Here `.on(bar, ...)` changes the state between `foo` executes.
-But `.watch` reacts only on `foo` event
+Here `.on(bar, ...)` changes the state between `foo` executions.
+But `.watch` reacts only to `foo` event
 
 ```js try
 import {createEvent, createStore} from 'effector'
@@ -229,7 +229,7 @@ foo(3)
 
 #### Example 3
 
-Here `watch` reacts only on `incr` and `decr` because it explicitly used in `.on` calls. But not reacts on any other events.
+Here `watch` reacts only to `incr` and `decr` events, because it is explicitly used in `.on` calls. But doesn't react to any other event.
 
 ```js try
 import {createEvent, createStore} from 'effector'
@@ -255,8 +255,8 @@ another(200)
 
 #### Example with Effect
 
-Effect is an Event with 2 additional events such as `fail` and `done`.<br/>
-You can subscribe to triggering effect by `fail` and `done` events.
+Effect is an Event with 2 additional events: `fail` and `done`.<br/>
+You can subscribe to `fail` and `done` events of the effect.
 
 ```js try
 import {createEffect, createStore} from 'effector'
@@ -350,11 +350,11 @@ A state is reset when _Event_ or _Effect_ is called or another _Store_ is change
 $store.reset(...triggers)
 ```
 
-- When triggered any unit from `triggers` list, update `$store` with its default state, from `createStore(defaultState)`
+- When any unit from `triggers` list is triggered, update `$store` with its default state, from `createStore(defaultState)`
 
 #### Arguments
 
-1. `triggers` (_(Event | Effect | Store)[]_): any amount of [_Events_](Event.md), [_Effects_](Effect.md) or [_Stores_](Store.md)
+1. `triggers` (_(Event | Effect | Store)[]_): any number of [_Events_](Event.md), [_Effects_](Effect.md) or [_Stores_](Store.md)
 
 #### Returns
 
@@ -433,8 +433,8 @@ store.watch(console.log) // => 5
 
 ### `thru(fn)`
 
-Creates a new store. This method calls with a provide function that receives Store. Other words "escape hatch" for creating compose function, also making chains.
-For example, you want to make multiple, summary and divide operations. You can create these functions and provide them followed by a call `.thru`.
+Creates a new store. This method calls a function that receives Store. Other words it's an "escape hatch" for creating composed functions, and also making chains.
+For example, you want to make multiple, summary and divide operations. You can create these functions and use them in `.thru`.
 
 #### Formulae
 
@@ -500,7 +500,7 @@ $store.updates
 
 #### Returns
 
-[_Event_](Event.md): Event that represent updates of given store.
+[_Event_](Event.md): Event that represents updates of the given store.
 
 Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 
@@ -527,7 +527,7 @@ clicksAmount.updates.watch(amount => {
 
 #### Returns
 
-(_`string`_): ID or short name of store
+(_`string`_): ID or short name of the store
 
 <hr />
 
@@ -535,7 +535,7 @@ clicksAmount.updates.watch(amount => {
 
 #### Returns
 
-(_`State`_): Default state of store
+(_`State`_): Default state of the store
 
 #### Example
 

@@ -3,9 +3,9 @@ id: event
 title: Event
 ---
 
-_Event_ is an intention to change state. Let's imagine life situation, you come to a shop and on etiquette you should say "hello" - **intention**, then you say "hello" - **event**.
+_Event_ is an intention to change the state. Let's imagine life situation, you enter a shop and, according to etiquette, you have to say "hello" - **intention**, then you say "hello" - **event**.
 
-Event calls always returns its payload:
+Event calls always return its payload:
 
 ```js try
 import {createEvent} from 'effector'
@@ -24,7 +24,7 @@ console.log(event())
 
 ### `watch(watcher)`
 
-It is a function which allows you to follow the event or to create side-effects.
+It is a function which allows you to watch the event or to create side-effects.
 
 #### Formulae
 
@@ -109,7 +109,7 @@ userUpdated({name: 'john', role: 'admin'})
 
 Creates a new event, which will be called after the original event is called if `fn` returns `true`.
 
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to the concrete size of the sneakers model, besides you want to receive a notification if there will have and don't receive others. Therefore filtering is needed for that. Event filtering works the same. If the filter returns `true`, the event will be called.
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
 
 #### Formulae
 
@@ -154,17 +154,17 @@ numbers({x: 10}) // store will triggered
 
 ### `filterMap(fn)`
 
-Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.\
-Imagine you come to the product shop and you have let's say a task: you should buy 10 apples, but only red otherwise nothing.
+Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.  
+Imagine a situation, you come up to a grocery store and you have let's say a task: you need to buy 10 apples, but only those that are red, otherwise nothing.
 Let's consider by steps:
 
 1. Take one apple;
-2. Have a look red(put in a pack) or no(take another).
+2. Have a look, is it red(put in a pack) or not(take another).
 
-And you repeat this till no complete a task. Now think about it in Effector context and we consider the positive case:
+And you repeat this until you complete the task. Now think about it in the Effector terms and we consider the positive case:
 
 1. Take an apple - event;
-2. Have a look red or no - filter;
+2. Have a look,  red or no - filter;
 3. You keep it - map;
 4. Put in pack - event.
 5. Pack - store
@@ -242,7 +242,7 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ### `prepend(fn)`
 
-Creates an event, upon trigger it does send transformed data into source event. Works kind of like reverse `.map`. In the case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
 #### Formulae
 

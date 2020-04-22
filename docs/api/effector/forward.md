@@ -12,7 +12,7 @@ hide_title: true
 forward({ from, to }): Subscription
 ```
 
-When `from` triggered, send data from it to `to`.
+When `from`is triggered, send data from it to `to`.
 
 - `forward()` returns [_Subscription_] function, that can disconnect forward
 - if `from` is an array of Units, `to` will be triggered if any from `from` is triggered
@@ -25,11 +25,11 @@ Sends data from one entity to another.
 
 ### Arguments
 
-1. `from` ([_Event_] | [_Store_] | [_Effect_]): Source of data. Forward will listen for changes in this unit.
+1. `from` ([_Event_] | [_Store_] | [_Effect_]): Source of data. Forward will listen for changes of this unit.
 
-   - If passed an [_Event_], `to` will be triggered on each event trigger and passed event argument.
-   - If passed a [_Store_], `to` will be triggered on each store **change** and passed new value of the store.
-   - If passed an [_Effect_], `to` will be triggered on each effect call and passed effect parameter.
+   - If an [_Event_] is passed, `to` will be triggered on each event trigger and receives event argument.
+   - If a [_Store_] is passed, `to` will be triggered on each store **change** and receives new value of the store.
+   - If an [_Effect_] is passed, `to` will be triggered on each effect call and receives effect parameter.
 
 2. `to` ([_Event_] | [_Store_] | [_Effect_]): Target for data. Forward will trigger this unit with data from `from`.
 
@@ -77,7 +77,7 @@ It is the not better way to update store. In most cases you need [`store.on`](ht
 
 - Array can contain different type of units, but data type must fit together.
 
-**Data type of the `from` and `to` should be equal**
+**Data type of the `from` and `to` must be equal**
 
 [_Subscription_]: Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
 
@@ -132,7 +132,7 @@ forward({
 
 - Use [`store.on`](https://effector.now.sh/docs/api/effector/store#ontrigger-handler) to update store.
 - Be careful when forwarding store to another store.
-- Use [_Subscription_] with caution, because it breaks static connections and make debug harder.
+- Use [_Subscription_] with caution, because it breaks static connections and makes debug harder.
 
 [_effect_]: Effect.md
 [_store_]: Store.md

@@ -115,8 +115,8 @@ const App = () => (
 [Try it](https://share.effector.dev/OghlApl5)
 
 By default, useList rerenders only when some of its items were changed.
-However, sometimes we need to update items when some external value (e.g. props field or state of another store) is changed.
-In such cases, we need to tell react about our dependencies and pass keys explicitly.
+However, sometimes we need to update items when some external value (e.g. props field or state of another store) changes.
+In such case, we need to tell react about our dependencies and pass keys explicitly.
 
 #### Example 2
 
@@ -156,7 +156,7 @@ setTimeout(() => {
 
 ## `useList(store, {keys, fn})`
 
-Used when you need to pass dependencies to react (to update items when some of dependencies are changed)
+Used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
 
 #### Arguments
 

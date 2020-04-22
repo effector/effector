@@ -6,7 +6,7 @@ hide_title: true
 
 # `useStore(store)`
 
-Creates hook function, which subscribe to watcher, that observes changes in current store, so when recording results, the component will update automatically.
+Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
 
 #### Arguments
 

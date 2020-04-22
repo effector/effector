@@ -6,7 +6,7 @@ hide_title: true
 
 # `split(trigger, cases)`
 
-Pattern matching method, splits trigger unit (event, effect or store) into several events, which fire upon trigger matches its comparator function.
+Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its comparator function.
 
 #### Arguments
 
@@ -51,7 +51,7 @@ message({user: 'unregistered', text: 'hi'})
 
 [Try it](https://share.effector.dev/QXZsR5yM)
 
-> **Note:** the only first met match will trigger resulting event
+> **Note:** Only the first met match will trigger resulting event
 
 #### Example 2
 

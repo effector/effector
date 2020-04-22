@@ -62,7 +62,7 @@ export const $token = createStore<string | null>(null)
 export const $isAuthorized = $token.map((token) => token !== null)
 ```
 
-First of all we should define basic API methods, to call our backend:
+First of all, we define basic API methods, to call our backend:
 
 ```ts
 import { $token } from 'features/session'
@@ -96,10 +96,10 @@ const requestFx = createEffect<Request, any, Error>({
 })
 ```
 
-You can explicitly define `effect.done` type using something like [typed-contracts](https://github.com/bigslycat/typed-contracts#readme) to generate types from runtime validators. But here is not neccesary.
-Also `NetworkError` and `AccessRestrictedError` are custom classes that extended from `Error`, that should be used to handle custom errors on different layers (you can use any paradigm).
+You can explicitly define `effect.done` type using something like [typed-contracts](https://github.com/bigslycat/typed-contracts#readme) to generate types from runtime validators. But here it is not neccessary.
+Also `NetworkError` and `AccessRestrictedError` are custom classes that extend `Error`, that should be used to handle custom errors on different layers (you can use any paradigm).
 
-Okay, `requestFx` can be used to request any data using `POST`, `GET` and `PUT` with body as json object. Now you need to define method, that use backend uri and token.
+Okay, `requestFx` can be used to request any data using `POST`, `GET` and `PUT` with body as json object. Now you need to define method, that uses backend uri and token.
 
 ```ts
 interface RequestInternal {
@@ -147,7 +147,7 @@ const requestAuthorizedFx = attach({
 })
 ```
 
-Okay we have two service effects, to call non-authorized methods and authorized. Let's use it to create methods from introduction 2.
+Now we have two service effects to call non-authorized and authorized methods. Let's use it to create methods from introduction 2.
 
 ```ts
 export const postsList: Effect<void, Post[], Error> = attach({
@@ -175,9 +175,9 @@ export const postEdit: Effect<{ id: number; form: PostForm }> = attach({
 })
 ```
 
-As you can see, original `postEdit` have two arguments, but effect can have only one. That's because we need to wrap arguments to object with explicit arguments names.
+As you can see, original `postEdit` has two arguments, but effect can have only one. That's because we need to wrap arguments to object with explicit argument names.
 
-Now you can add listeners to `requestFx`, `requestInternalFx` and `requestAuthorizedFx` to handle all requests calls created with `attach()`. It can be handy when you creating some requests loader.
+Now you can add listeners to `requestFx`, `requestInternalFx` and `requestAuthorizedFx` to handle all request calls created with `attach()`. It can be handy when you create requests loader of some kind.
 For example:
 
 ```ts

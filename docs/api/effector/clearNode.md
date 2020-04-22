@@ -4,7 +4,7 @@ title: clearNode
 hide_title: true
 ---
 
-Method for destroy stores, events, effects, subscriptions and domains
+Method for destroying stores, events, effects, subscriptions and domains
 
 # `clearNode(unit, config?: {deep?: boolean}): void`
 
@@ -12,7 +12,7 @@ Method for destroy stores, events, effects, subscriptions and domains
 
 1. `unit` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)/[_Domain_](Domain.md)): unit to be erased
 2. `config: ({deep?: boolean})` (optional): config object
-   - `deep: boolean` (optional): erase node _and_ all of its computed values
+   - `deep: boolean` (optional): erase node _and_ all of its' computed values
 
 #### Returns
 
@@ -59,7 +59,7 @@ trigger()
 // no reaction
 inc()
 // no reaction!
-// all units, which depends on trigger, are erased
+// all units, which depend on trigger, are erased
 // including inc and store, because it depends on inc
 ```
 

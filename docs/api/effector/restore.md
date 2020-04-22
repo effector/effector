@@ -39,7 +39,7 @@ event('foo')
 
 ## `restore(effect, defaultState)`
 
-Creates a [_Store_](Store.md) from sucessful results of [_Effect_](Effect.md).
+Creates a [_Store_](Store.md) out of successful results of [_Effect_](Effect.md).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
 #### Arguments

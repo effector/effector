@@ -6,9 +6,9 @@ hide_title: true
 
 # attach
 
-Wrapper for [_effect_](Effect.md) which allow to map effect arguments and use data from [_stores_](Store.md).
+Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use data from [_stores_](Store.md).
 
-Use cases: declarative passing values from stores to effects and argument preprocessing.
+Use cases: declarative way to pass values from stores to effects and argument preprocessing.
 
 ## Formulae
 
@@ -143,7 +143,7 @@ Authorization: Bearer guest_token
 #### Arguments
 
 - `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams) => effectParams`): Function which receives new params and map them to params for wrapped `effect`, [should be **pure**](../../glossary.md#pureness). Works like [event.prepend](Event.md#prependfn)
+- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`, [should be **pure**](../../glossary.md#pureness). Works like [event.prepend](Event.md#prependfn)
 
 #### Returns
 
@@ -154,8 +154,8 @@ Authorization: Bearer guest_token
 #### Arguments
 
 - `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combine them to params for wrapped `effect`, [should be **pure**](../../glossary.md#pureness)
-- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores which values will be passed to second argument of `mapParams`
+- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`, [should be **pure**](../../glossary.md#pureness)
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
 
 #### Returns
 

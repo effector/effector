@@ -4,13 +4,13 @@ title: Usage with TypeScript
 sidebar_label: Usage with TypeScript
 ---
 
-**TypeScript** is a typed superset of JavaScript. It has become popular
+**TypeScript** is a typed superset of JavaScript. It became popular
 recently in applications due to the benefits it can bring. If you are new to
-TypeScript it is highly recommended to become familiar with it first before
+TypeScript, it is highly recommended to become familiar with it first, before
 proceeding. You can check out its documentation
 [here.](https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html)
 
-TypeScript has the potential to bring the following benefits to application:
+TypeScript has a potential to bring the following benefits to application:
 
 1. Type safety for state, stores and events
 2. Easy refactoring of typed code
@@ -25,7 +25,7 @@ the _system domain_ will focus on working with session information.
 
 The full source code is available on
 [codesandbox here](https://codesandbox.io/s/github/Laiff/react-ts-effector-example).
-Note that by going through this example yourself you will experience some of
+Note that, by going through this example yourself, you will experience some of
 the benefits of using TypeScript.
 
 ## Type checking state
@@ -131,7 +131,7 @@ export const MessageList = ChatDomain.store<Message[]>(initialState)
 The closest comparison for an event handler is a reducer that processes exactly
 one event. In this example, there is no need to declare the types with which
 the handler will be called, since the typescript has enough information to deduce
-all the necessary types, it can also guarantee the correctness of the return
+all the necessary types, it can also guarantee the correctness of the returned
 value from this handler.
 
 ```typescript
@@ -181,7 +181,7 @@ deleteMessageFx.use(MessageApi.deleteMessage)
 ```
 
 Then we can implement components which uses data from stores. And start
-operate with our effects.
+operating with our effects.
 
 ```typescript jsx
 // src/ChatHistory.tsx
