@@ -2,6 +2,41 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.7.1
+
+- Improve `useList` hook typings for typescript by allowing usage as components' return value (fix [DefinitelyTyped issue](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20356))
+
+This code now works without type errors:
+
+```tsx
+import {createStore} from 'effector'
+import {useList} from 'effector-react'
+
+const users = createStore<User[]>([
+  {
+    username: 'alice',
+    email: 'alice@example.com',
+    bio: '. . .',
+  },
+  {
+    username: 'bob',
+    email: 'bob@example.com',
+    bio: '~/ - /~',
+  },
+  {
+    username: 'carol',
+    email: 'carol@example.com',
+    bio: '- - -',
+  },
+])
+const UserList = () => useList(users, ({username}) => <p>{username}</p>)
+const App = () => (
+  <div>
+    <UserList />
+  </div>
+)
+```
+
 ## effector 20.14.0
 
 - Add `ignore` parameter to `serialize` to skip stores during app state serialization [PR #325](https://github.com/zerobias/effector/pull/325) (thanks [@sergeysova](https://github.com/sergeysova))
