@@ -123,7 +123,6 @@ $store.on([triggerA, triggerB, ...], handler)
 
 - When `triggerA` or `triggerB` is triggered, call `handler` with payload of the `triggerA` or `triggerB` and data of `$store`
 - Next update `$store` with result of `handler()` call and trigger all subscribers
-- All triggers merged with [_merge_](merge.md)
 - Any count of triggers can be passed to `triggers`
 
 #### Arguments
@@ -158,6 +157,9 @@ changedA(2)
 
 changedB(2)
 // => updated 4
+
+// You can unsubscribe from any trigger
+store.off(changedA)
 ```
 
 #### Unsubscribe example
@@ -169,7 +171,7 @@ const store = createStore(0)
 const changedA = createEvent()
 const changedB = createEvent()
 
-// If you want to unsubscribe later, better to manually merge
+// If you want to unsubscribe from all triggers simultaneously, better to manually merge
 const changed = merge([changedA, changedB])
 
 store.on(changed, (state, params) => state + params)

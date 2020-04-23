@@ -17,7 +17,6 @@ import {launch} from './kernel'
 import type {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
-import {merge} from './merge'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion, readTemplate} from './region'
@@ -192,7 +191,9 @@ export function createStore<State>(
       if (!Array.isArray(events)) {
         onEvent(events, fn)
       } else {
-        onEvent(merge(events), fn)
+        for (const event of events) {
+          onEvent(event, fn)
+        }
       }
       return store
     },
