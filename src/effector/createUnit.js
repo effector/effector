@@ -187,12 +187,14 @@ export function createStore<State>(
       for (const unit of units) store.on(unit, () => store.defaultState)
       return store
     },
-    on(event, fn) {
-      store.off(event)
-      getSubscribers(store).set(
-        event,
-        createSubscription(updateStore(event, store, 'on', true, fn)),
-      )
+    on(events, fn) {
+      if (!Array.isArray(events)) {
+        onEvent(events, fn)
+      } else {
+        for (const event of events) {
+          onEvent(event, fn)
+        }
+      }
       return store
     },
     off(unit) {
@@ -243,6 +245,13 @@ export function createStore<State>(
       return innerStore
     },
     [$$observable]: () => addObservableApi(store, {}),
+  }
+  function onEvent(event, fn) {
+    store.off(event)
+    getSubscribers(store).set(
+      event,
+      createSubscription(updateStore(event, store, 'on', true, fn)),
+    )
   }
   store.graphite = createNode({
     scope: {state: plainState},

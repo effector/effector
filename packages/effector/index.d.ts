@@ -16,9 +16,11 @@ type Tuple<T = unknown> = [T] | T[]
 type NoInfer<T> = [T][T extends any ? 0 : never]
 
 // Type for extention purpose. Represents combinable sample source.
-export type Combinable = { [key: string]: Store<any> } | Tuple<Store<any>>
+export type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
 // Helper type, which unwraps combinable sample source value.
-export type GetCombinedValue<T> = {[K in keyof T]: T[K] extends Store<infer U> ? U : never}
+export type GetCombinedValue<T> = {
+  [K in keyof T]: T[K] extends Store<infer U> ? U : never
+}
 
 export const version: string
 
@@ -144,6 +146,10 @@ export interface Store<State> extends Unit<State> {
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
   on<E>(
+    triggers: Unit<E>[],
+    handler: (state: State, payload: E) => State | void,
+  ): this
+  on<E>(
     trigger: Unit<E>,
     handler: (state: State, payload: E) => State | void,
   ): this
@@ -189,7 +195,10 @@ export class Domain implements Unit<any> {
   event<Payload = void>(name?: string): Event<Payload>
   event<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
   createEvent<Payload = void>(name?: string): Event<Payload>
-  createEvent<Payload = void>(config: {name?: string; sid?: string}): Event<Payload>
+  createEvent<Payload = void>(config: {
+    name?: string
+    sid?: string
+  }): Event<Payload>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
@@ -326,7 +335,10 @@ export function forward<T>(opts: {
   from: Unit<T & {}>
   to: Unit<T> | ReadonlyArray<Unit<T>>
 }): Subscription
-export function forward(opts: {from: Unit<any>; to: ReadonlyArray<Unit<void>>}): Subscription
+export function forward(opts: {
+  from: Unit<any>
+  to: ReadonlyArray<Unit<void>>
+}): Subscription
 export function forward(opts: {
   from: ReadonlyArray<Unit<any>>
   to: ReadonlyArray<Unit<void>>
@@ -394,8 +406,8 @@ export function createEffect<FN extends Function>(config: {
   ? Effect<
       Args['length'] extends 0 // does handler accept 0 arguments?
         ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length'] // is the first argument optional?
-        ? /**
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+          /**
            * Applying `infer` to a variadic arguments here we'll get `Args` of
            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
            * In case T is optional we get `T | undefined` back from `Args[0]`.
@@ -408,7 +420,7 @@ export function createEffect<FN extends Function>(config: {
            * other type (`any | undefined | void` becomes just `any`). And we
            * have similar situation also with the `unknown` type.
            */
-          Args[0] | void
+        ? Args[0] | void
         : Args[0],
       Done extends Promise<infer Async> ? Async : Done,
       Error
@@ -654,7 +666,7 @@ export function guard<A>(
 ): Unit<A>
 export function guard<A>(config: {
   source: Unit<A>
-  filter: ((value: A) => boolean)
+  filter: (value: A) => boolean
   target: Unit<void>
 }): Unit<void>
 export function guard(config: {
@@ -683,26 +695,46 @@ export function guard<A>(config: {
 
 type StoreShape = Store<any> | Combinable
 type GetShapeValue<T> = T extends Store<infer S> ? S : GetCombinedValue<T>
-type FXParams<FX extends Effect<any, any, any>> = FX extends Effect<infer P, any, any> ? P : never
-type FXResult<FX extends Effect<any, any, any>> = FX extends Effect<any, infer D, any> ? D : never
-type FXError<FX extends Effect<any, any, any>> = FX extends Effect<any, any, infer E> ? E : never
+type FXParams<FX extends Effect<any, any, any>> = FX extends Effect<
+  infer P,
+  any,
+  any
+>
+  ? P
+  : never
+type FXResult<FX extends Effect<any, any, any>> = FX extends Effect<
+  any,
+  infer D,
+  any
+>
+  ? D
+  : never
+type FXError<FX extends Effect<any, any, any>> = FX extends Effect<
+  any,
+  any,
+  infer E
+>
+  ? E
+  : never
 
-export function attach<Params, States extends StoreShape, FX extends Effect<any, any, any>>(
-  config: {
-    source: States
-    effect: FX
-    mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
-  }
-): Effect<Params, FXResult<FX>, FXError<FX>>
-export function attach<Params, FX extends Effect<any, any, any>>(
-  config: {
-    effect: FX
-    mapParams: (params: Params) => FXParams<FX>
-  }
-): Effect<Params, FXResult<FX>, FXError<FX>>
+export function attach<
+  Params,
+  States extends StoreShape,
+  FX extends Effect<any, any, any>
+>(config: {
+  source: States
+  effect: FX
+  mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
+}): Effect<Params, FXResult<FX>, FXError<FX>>
+export function attach<Params, FX extends Effect<any, any, any>>(config: {
+  effect: FX
+  mapParams: (params: Params) => FXParams<FX>
+}): Effect<Params, FXResult<FX>, FXError<FX>>
 
 export function withRegion(unit: Unit<any> | Step, cb: () => void): void
-export function combine<T extends Store<any>>(store: T): T extends Store<infer R> ? Store<[R]> : never
+export function combine<T extends Store<any>>(
+  store: T,
+): T extends Store<infer R> ? Store<[R]> : never
 export function combine<State extends Tuple>(
   shape: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
@@ -817,4 +849,6 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
   k: Store<K>,
   fn: (a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H, i: I, j: J, k: K) => R,
 ): Store<R>
-export function combine<T extends Tuple<Store<any>>>(...stores: T): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
+export function combine<T extends Tuple<Store<any>>>(
+  ...stores: T
+): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>

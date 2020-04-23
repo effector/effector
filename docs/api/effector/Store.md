@@ -111,6 +111,78 @@ changed(2)
 
 <hr />
 
+### `on(triggers[], handler)`
+
+Updates state when any from `triggers` is triggered by using `handler`.
+
+#### Formulae
+
+```ts
+$store.on([triggerA, triggerB, ...], handler)
+```
+
+- When `triggerA` or `triggerB` is triggered, call `handler` with payload of the `triggerA` or `triggerB` and data of `$store`
+- Next update `$store` with result of `handler()` call and trigger all subscribers
+- Any count of triggers can be passed to `triggers`
+
+#### Arguments
+
+1. `triggers` array of [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
+2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#pureness).
+   A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
+   - `state`: Current state of store
+   - `payload`: Value passed to event/effect call, or source if it passed as trigger
+
+#### Returns
+
+[_Store_](Store.md): Current store
+
+#### Example
+
+```js try
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const changedA = createEvent()
+const changedB = createEvent()
+
+store.on([changedA, changedB], (state, params) => state + params)
+
+store.watch(value => {
+  console.log('updated', value)
+})
+
+changedA(2)
+// => updated 2
+
+changedB(2)
+// => updated 4
+
+// You can unsubscribe from any trigger
+store.off(changedA)
+```
+
+#### Unsubscribe example
+
+```js try
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const changedA = createEvent()
+const changedB = createEvent()
+
+// If you want to unsubscribe from all triggers simultaneously, better to manually merge
+const changed = merge([changedA, changedB])
+
+store.on(changed, (state, params) => state + params)
+
+store.off(changed)
+```
+
+[Try it](https://share.effector.dev/bzdoyLHm)
+
+<hr />
+
 ### `watch(watcher)`
 
 Call `watcher` function each time when store is updated. <br/>
