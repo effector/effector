@@ -17,6 +17,7 @@ import {launch} from './kernel'
 import type {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
+import {merge} from './merge'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
 import {addToRegion, readTemplate} from './region'
@@ -187,12 +188,12 @@ export function createStore<State>(
       for (const unit of units) store.on(unit, () => store.defaultState)
       return store
     },
-    on(event, fn) {
-      store.off(event)
-      getSubscribers(store).set(
-        event,
-        createSubscription(updateStore(event, store, 'on', true, fn)),
-      )
+    on(events, fn) {
+      if (!Array.isArray(events)) {
+        onEvent(events, fn)
+      } else {
+        onEvent(merge(events), fn)
+      }
       return store
     },
     off(unit) {
@@ -243,6 +244,13 @@ export function createStore<State>(
       return innerStore
     },
     [$$observable]: () => addObservableApi(store, {}),
+  }
+  function onEvent(event, fn) {
+    store.off(event)
+    getSubscribers(store).set(
+      event,
+      createSubscription(updateStore(event, store, 'on', true, fn)),
+    )
   }
   store.graphite = createNode({
     scope: {state: plainState},
