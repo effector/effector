@@ -47,6 +47,20 @@ Just use `yarn test` and `yarn test:watch`.
 
 `yarn test --testPathPattern='types'` to run types tests, `yarn test --testPathPattern='types' -u` to update their inline snapshots. Public types are always placed in `packages/<library name>/*.d.ts`, for example, [here are public typings for effector](https://github.com/zerobias/effector/blob/master/packages/effector/index.d.ts)
 
+To add new type test, put that code to any file with type tests:
+
+```js
+test('test name', () => {
+  // any code here
+
+  expect(typecheck).toMatchInlineSnapshot()
+})
+```
+
+and run type tests. Inline snapshot will be filled with type errors (if any) for given code for both typescript and flow type systems.
+
+Note that your code must be compatible with both, except `.ts` and `.tsx` test files. 
+
 ### New Features
 
 Please open an issue with a proposal for a new feature or refactoring before starting on the work.
