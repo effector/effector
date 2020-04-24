@@ -188,12 +188,12 @@ export function createStore<State>(
       return store
     },
     on(events, fn) {
-      if (!Array.isArray(events)) {
-        onEvent(events, fn)
-      } else {
+      if (Array.isArray(events)) {
         for (const event of events) {
           onEvent(event, fn)
         }
+      } else {
+        onEvent(events, fn)
       }
       return store
     },
