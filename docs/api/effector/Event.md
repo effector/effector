@@ -269,14 +269,27 @@ import {createEvent} from 'effector'
 
 const nameChanged = createEvent()
 nameChanged.watch(name => console.log(`Current name is: ${name}`))
+/*
+  Event nameChanged was created at this point
+  in another  file or library and imported as is.
+  So we can`t create maped version of it, 
+  from inputChanged event, like this 👇
+  
+  const inputChanged = createEvent();
+  const  nameChanged = inputChanged.map(e => e.target.value);
+  
+  But we can create prepended inputChanged from nameChanged!
+*/
+const inputChanged = nameChanged.prepend(e => e.target.value)
+// event, which will be bound to DOM element
 
-const inputChanged = nameChanged.prepend(e => e.target.value) // event, which will be bound to DOM element
 const input = document.createElement('input')
 input.onchange = inputChanged
 
 document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
+
 ```
 
-[Try it](https://share.effector.dev/lVz4Wr1v)
+[Try it](https://share.effector.dev/1rHlEeTy)
