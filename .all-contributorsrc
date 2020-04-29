@@ -329,6 +329,17 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "kobzarvs",
+      "name": "Valeriy Kobzar",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/1615093?v=4",
+      "profile": "https://github.com/kobzarvs",
+      "contributions": [
+        "code",
+        "infra",
+        "ideas"
+      ]
     }
   ],
   "commitConvention": "none"
