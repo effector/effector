@@ -41,7 +41,10 @@
       "profile": "https://sergeysova.com",
       "contributions": [
         "doc",
-        "example"
+        "example",
+        "code",
+        "test",
+        "ideas"
       ]
     },
     {
@@ -80,7 +83,9 @@
       "avatar_url": "https://avatars0.githubusercontent.com/u/15704394?v=4",
       "profile": "https://github.com/hexagon141",
       "contributions": [
-        "doc"
+        "doc",
+        "code",
+        "example"
       ]
     },
     {
@@ -303,6 +308,26 @@
         "code",
         "ideas",
         "test"
+      ]
+    },
+    {
+      "login": "yumauri",
+      "name": "Victor",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/6583994?v=4",
+      "profile": "https://github.com/yumauri",
+      "contributions": [
+        "code",
+        "ideas",
+        "doc"
+      ]
+    },
+    {
+      "login": "zarabotaet",
+      "name": "Dmitrij Shuleshov",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/15930980?v=4",
+      "profile": "https://github.com/zarabotaet",
+      "contributions": [
+        "doc"
       ]
     }
   ],
