@@ -265,7 +265,8 @@ turnOff() // nothing has changed
 
 ## More examples
 
-- [Snake game (interactive A* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) [source code](https://github.com/dmitryshelomanov/snake)
+- [Snake game (interactive A* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
+- [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
 - [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
 - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
