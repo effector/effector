@@ -20,7 +20,7 @@ serialize state on server
 */
 export function serialize(
   scope: Scope,
-  {ignore = []}: {ignore?: Array<Store<any>>} = {},
+  {ignore = []}: {ignore?: Array<Store<any>>},
 ): {[sid: string]: any}
 
 /** bind event to scope from .watch call */
