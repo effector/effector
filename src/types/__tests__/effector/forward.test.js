@@ -309,6 +309,52 @@ Cannot call 'forward' with object literal bound to 'opts'
 "
 `)
   })
+  it('should forward from `Unit<*>` to array with mixed units', () => {
+    const from = createEvent<string>()
+    const to1 = createEvent<void>()
+    const to2 = createEvent<string>()
+    forward({from, to: [to1, to2]})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Event<string>' is not assignable to type 'Unit<void>'.
+      Types of property '__' are incompatible.
+        Type 'string' is not assignable to type 'void'.
+          Type 'Event<string>' is not assignable to type 'Unit<void>'.
+No overload matches this call.
+  The last overload gave the following error.
+    Type 'Event<string>' is not assignable to type 'Unit<void>'.
+      Types of property '__' are incompatible.
+        Type 'string' is not assignable to type 'void'.
+          Type 'Event<string>' is not assignable to type 'Unit<void>'.
+
+--flow--
+Cannot call 'forward' with object literal bound to 'opts'
+  forward({from, to: [to1, to2]})
+                     ^^^^^^^^^^
+  undefined [1] is incompatible with string [2] in type argument 'T' [3] of array element of property 'to'
+      const to1 = createEvent<void>()
+                          [1] ^^^^
+      const from = createEvent<string>()
+                           [2] ^^^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+Cannot call 'forward' with object literal bound to 'opts'
+  forward({from, to: [to1, to2]})
+                     ^^^^^^^^^^
+  string [1] is incompatible with undefined [2] in type argument 'T' [3] of array element of property 'to'
+      const to2 = createEvent<string>()
+                          [1] ^^^^^^
+      const to1 = createEvent<void>()
+                          [2] ^^^^
+      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                        [3] ^
+"
+`)
+  })
   it('should forward from `Unit<*>[]` to `Unit<void>`', () => {
     const from = createEvent<string>()
     const to = createEvent<void>()
