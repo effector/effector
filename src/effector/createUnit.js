@@ -3,7 +3,7 @@
 import $$observable from 'symbol-observable'
 
 import {is, isObject, isFunction, assertObject} from './is'
-import type {Store, Event, Effect} from './unit.h'
+import {Store, Event, Effect} from './unit.h'
 
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
@@ -12,9 +12,9 @@ import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch} from './kernel'
+import {launch, getCurrentPage} from './kernel'
 
-import type {Subscriber, Config} from './index.h'
+import {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
@@ -25,6 +25,7 @@ import {
   getConfig,
   getNestedConfig,
   getStoreState,
+  getGraph
 } from './getter'
 import {throwError} from './throw'
 
@@ -140,17 +141,25 @@ export function createEvent<Payload>(
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: event.parent,
     })
+    const template = readTemplate()
+    if (template) {
+      getGraph(contramapped).seq.push(template.upward)
+    }
     createComputation(contramapped, event, 'prepend', fn)
     applyParentEventHook(event, contramapped)
     return contramapped
   }
   addObservableApi(event, event)
+  const template = readTemplate()
+  if (template) {
+    getGraph(event).meta.nativeTemplate = template
+  }
   return addToRegion(event)
 }
 
 export function filterMapEvent(
   event: Event<any> | Effect<any, any, any>,
-  fn: any => any | void,
+  fn?: (val: any) => any
 ): any {
   return createEventFiltration(event, 'filterMap', fn, [
     step.compute({fn: callStack}),
@@ -175,7 +184,13 @@ export function createStore<State>(
     updates,
     defaultState,
     stateRef: plainState,
-    getState: bind(readRef, plainState),
+    getState() {
+      const currentPage = getCurrentPage()
+      if (!currentPage) return readRef(plainState)
+      if (currentPage.reg[plainState.id])
+        return readRef(currentPage.reg[plainState.id])
+      return readRef(plainState)
+    },
     setState(state) {
       launch({
         target: store,
@@ -239,7 +254,9 @@ export function createStore<State>(
       ]
       if (template) {
         if (!template.plain.includes(plainState)) {
-          linkNode.seq.unshift(template.loader)
+          if (!linkNode.seq.includes(template.loader)) {
+            linkNode.seq.unshift(template.loader)
+          }
         }
       }
       return innerStore
@@ -272,7 +289,9 @@ export function createStore<State>(
   })
   if (isStrict && defaultState === undefined)
     throwError("current state can't be undefined, use null instead")
-
+  if (template) {
+    getGraph(store).meta.nativeTemplate = template
+  }
   store.watch = store.subscribe = (
     eventOrFn: Event<any> | Function,
     fn?: Function,
@@ -329,23 +348,26 @@ const updateStore = (
   ]
   const template = readTemplate()
   if (template) {
+    node.unshift(template.loader)
     if (is.store(from)) {
       const ref = getStoreState(from)
-      let needToAddLoader = true
       if (!template.plain.includes(ref)) {
-        node.unshift(template.loader)
-        needToAddLoader = false
+        //if (!node.includes(template.loader)) {
+        //  node.unshift(template.loader)
+        //}
+        if (!template.closure.includes(ref)) {
+          template.closure.push(ref)
+        }
         if (!storeRef.before) storeRef.before = []
         storeRef.before.push({
           type: 'closure',
           of: ref,
         })
       }
-      // if (!template.plain.includes(storeRef)) {
-      //   if (needToAddLoader) node.unshift(template.loader)
-      // }
     } else {
-      node.unshift(template.loader)
+      //if (!node.includes(template.loader)) {
+      //  node.unshift(template.loader)
+      //}
     }
   }
   return createLinkNode(from, store, {

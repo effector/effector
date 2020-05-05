@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graphite, Graph} from './index.h'
+import {Graphite, Graph} from './index.h'
 import {readRef} from './stateRef'
 import {getGraph, getValue} from './getter'
 
@@ -123,15 +123,15 @@ const pushFirstHeapItem = (
 ) =>
   pushHeap(
     0,
-    ({
+    {
       a: null,
       b: null,
       node,
       parent,
       value,
-      page,
-    }: Stack),
-    type,
+      page
+    },
+    type
   )
 const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const priority = getPriority(type)
@@ -183,10 +183,12 @@ const getPriority = (t: PriorityTag) => {
 const barriers = new Set()
 
 let alreadyStarted = false
+let currentPage = null
+export const getCurrentPage = () => currentPage
 
 /** main execution method */
 const exec = () => {
-  const lastStartedState = alreadyStarted
+  const lastStartedState = {alreadyStarted, currentPage}
   alreadyStarted = true
   let stop
   let skip
@@ -197,7 +199,7 @@ const exec = () => {
   mem: while ((value = deleteMin())) {
     const {idx, stack, type} = value
     graph = stack.node
-    page = stack.page
+    currentPage = page = stack.page
     reg = (page ? page : graph).reg
     const local: Local = {
       fail: false,
@@ -234,10 +236,10 @@ const exec = () => {
             case 'value': value = data.store; break
             case 'store':
               if (!reg[data.store.id]) {
-                if (!page.parent) {
-                  page = null
+                // if (!page.parent) {
+                  stack.page = page = null
                   reg = graph.reg
-                }
+                // }
               }
               value = readRef(reg[data.store.id])
               break
@@ -295,22 +297,25 @@ const exec = () => {
       }
     }
   }
-  alreadyStarted = lastStartedState
+  alreadyStarted = lastStartedState.alreadyStarted
+  currentPage = lastStartedState.currentPage
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
-  let page = null
+  let page = currentPage
+  let stack = null
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
-    page = unit.page || page
+    page = 'page' in unit ? unit.page : page
+    if (unit.stack) stack = unit.stack
     unit = unit.target
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
-      pushFirstHeapItem('pure', page, getGraph(unit[i]), null, payload[i])
+      pushFirstHeapItem('pure', page, getGraph(unit[i]), stack, payload[i])
     }
   } else {
-    pushFirstHeapItem('pure', page, getGraph(unit), null, payload)
+    pushFirstHeapItem('pure', page, getGraph(unit), stack, payload)
   }
   if (upsert && alreadyStarted) return
   exec()
