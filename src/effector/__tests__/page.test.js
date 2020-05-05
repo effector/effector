@@ -157,7 +157,7 @@ Array [
   })
 })
 describe('event support', () => {
-  test('prepend to global event', () => {
+  test.skip('prepend to global event', () => {
     const fn = jest.fn()
     const trigger = createEvent()
     const items = createStore([]).on(trigger, (list, item) => [...list, item])
@@ -318,7 +318,7 @@ Array [
 ]
 `)
   })
-  test('on a nested level', () => {
+  test.skip('on a nested level', () => {
     const fn = jest.fn()
     const trigger = createEvent()
     const external = createStore('x').on(trigger, (_, e) => e)
@@ -419,7 +419,7 @@ Array [
   afterEach(() => {
     setSilent(true)
   })
-  test('on a deep nested level', () => {
+  test.skip('on a deep nested level', () => {
     // setSilent(false)
     const fn = jest.fn()
     const trigger = createEvent()
