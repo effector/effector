@@ -33,18 +33,17 @@ export type Config = {
 export type Graph = {
   next: Array<Graph>,
   seq: Array<Cmd>,
-  scope: {[string]: any, ...},
+  scope: {[key: string]: any},
   reg: {[id: string]: StateRef},
-  meta: {[tag: string]: any, ...},
+  meta: {[tag: string]: any},
   family: {
     type: 'regular' | 'crosslink' | 'domain',
     links: Graph[],
     owners: Graph[],
   },
-  ...
 }
 
-export type Graphite = {graphite: Graph, ...} | Graph
+export type Graphite = {graphite: Graph} | Graph
 
 export interface Unit {
   graphite: Graph;
@@ -52,13 +51,11 @@ export interface Unit {
 
 export type Subscriber<A> = {
   next?: (value: A) => void,
-  ...
 }
 
 export type Subscription = {
   /*::[[call]](): void,*/
   unsubscribe(): void,
-  ...
 }
 
 //prettier-ignore
@@ -109,7 +106,7 @@ export type Run = {
   id: ID,
   type: 'run',
   data: {
-    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any,
   },
   hasRef: false,
 }
@@ -118,7 +115,7 @@ export type Filter = {
   id: ID,
   type: 'filter',
   data: {
-    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => boolean,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => boolean,
   },
   hasRef: false,
 }
@@ -126,7 +123,7 @@ export type Compute = {
   id: ID,
   type: 'compute',
   data: {
-    fn: (data: any, scope: {[string]: any, ...}, reg: {a: any}) => any,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any,
   },
   hasRef: false,
 }

@@ -1,9 +1,9 @@
 //@flow
 
-import type {Store, Event, Effect, Domain} from './unit.h'
+import {Store, Event, Effect, Domain} from './unit.h'
 import {own} from './own'
 import {createNode} from './createNode'
-import type {Config} from './index.h'
+import {Config} from './index.h'
 import {
   createEvent,
   createStore,

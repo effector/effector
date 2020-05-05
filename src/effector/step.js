@@ -1,13 +1,5 @@
 //@flow
-import type {
-  StateRef,
-  Run,
-  Filter,
-  Compute,
-  Barrier,
-  Check,
-  Mov,
-} from './index.h'
+import {StateRef, Run, Filter, Compute, Barrier, Check, Mov} from './index.h'
 import {nextStepID} from './id'
 import {bind2} from './bind'
 
@@ -46,13 +38,13 @@ export const check: {
   changed: ({store}) => cmd('check', true, {type: 'changed', store}),
 }
 export const compute: (data: {
-  fn: (data: any, scope: {[string]: any}) => any,
+  fn: (data: any, scope: {[key: string]: any}) => any
 }) => Compute = bind2(cmd, 'compute', false)
 export const filter: (data: {
-  fn: (data: any, scope: {[string]: any}) => any,
+  fn: (data: any, scope: {[key: string]: any}) => any
 }) => Filter = bind2(cmd, 'filter', false)
 export const run: (data: {
-  fn: (data: any, scope: {[string]: any}) => any,
+  fn: (data: any, scope: {[key: string]: any}) => any
 }) => Run = bind2(cmd, 'run', false)
 export const update: (data: {
   store: StateRef,

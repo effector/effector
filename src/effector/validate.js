@@ -1,6 +1,6 @@
 //@flow
 
-import type {kind} from './index.h'
+import {kind} from './index.h'
 import {
   store as storeKind,
   event as eventKind,

@@ -1,6 +1,6 @@
 //@flow
 
-import type {Store} from './unit.h'
+import {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'

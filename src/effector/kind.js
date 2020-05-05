@@ -1,6 +1,6 @@
 //@flow
 
-import type {kind} from './index.h'
+import {kind} from './index.h'
 
 export const store: kind = 'store'
 export const event: kind = 'event'

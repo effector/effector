@@ -1,29 +1,14 @@
 //@flow
 
-import type {Store, Event, Effect, Domain} from './unit.h'
+import {Store, Event, Effect, Domain} from './unit.h'
 import {is} from './is'
 
 export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
 
-export const mapName = (unit: any, name: ?string) =>
+export const mapName = (unit: any, name?: string) =>
   name == null ? joinName(unit, ' → *') : name
 
-export function unitObjectName(
-  objOrArr:
-    | $ReadOnlyArray<
-        Store<any> | Event<any> | Effect<any, any, any> | any | null,
-      >
-    | {
-        [key: string]:
-          | Store<any>
-          | Event<any>
-          | Effect<any, any, any>
-          | any
-          | null,
-        ...,
-      },
-  method: string = 'combine',
-) {
+export function unitObjectName(objOrArr, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
@@ -71,7 +56,7 @@ export function createName(name: string, parent?: Domain): CompositeName {
   const shortName = name
   if (!parent) {
     if (name.length === 0) {
-      path = ([]: string[])
+      path = []
     } else {
       path = [name]
     }

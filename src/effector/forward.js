@@ -1,7 +1,7 @@
 //@flow
 import {getConfig, getNestedConfig} from './getter'
 import {createNode} from './createNode'
-import type {Subscription, Graphite, Cmd} from './index.h'
+import {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
 import {throwError} from './throw'
 import {addToRegion} from './region'
@@ -12,12 +12,12 @@ export const createLinkNode = (
   {
     node,
     scope,
-    meta,
-  }: {|
-    +node?: Array<Cmd | false | void | null>,
-    scope?: {[name: string]: any, ...},
-    meta?: {[name: string]: any, ...},
-  |},
+    meta
+  }: {
+    node?: Array<Cmd | false | void | null>,
+    scope?: {[name: string]: any},
+    meta?: {[name: string]: any}
+  }
 ) =>
   addToRegion(
     createNode({

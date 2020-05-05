@@ -1,7 +1,7 @@
 //@flow
 
 import $$observable from 'symbol-observable'
-import type {Event} from './unit.h'
+import {Event} from './unit.h'
 import {clearNode} from './clearNode'
 import {createEvent} from './createUnit'
 import {bind2} from './bind'

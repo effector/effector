@@ -1,5 +1,5 @@
 //@flow
-import type {
+import {
   Subscription,
   Subscriber,
   Graph,
@@ -8,7 +8,7 @@ import type {
   Unit,
   Config,
 } from './index.h'
-import type {CompositeName} from './naming'
+import {CompositeName} from './naming'
 
 export interface Event<E> extends Unit {
   /*::
@@ -20,7 +20,7 @@ export interface Event<E> extends Unit {
   create(payload: E, type: string, args: any[]): E;
   watch(watcher: (payload: E) => any): Subscription;
   map<T>(fn: (_: E) => T): Event<T>;
-  filter(config: {|fn(_: E): boolean|}): Event<E>;
+  filter(config: {fn(_: E): boolean}): Event<E>;
   filter<T>(fn: (_: E) => T | void): Event<T>;
   filterMap<T>(fn: (_: E) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => E): Event<Before>;
@@ -79,15 +79,15 @@ export interface Store<State> extends Unit {
       ) => Subscription
     )
   );
-  +kind: kind;
-  +defaultState: State;
-  +defaultConfig: Config;
+  kind: kind;
+  defaultState: State;
+  defaultConfig: Config;
   defaultShape?: Object;
   shortName: string;
   domainName?: CompositeName;
-  +sid: string | null;
-  +graphite: Graph;
-  +updates: Event<State>;
+  sid: string | null;
+  graphite: Graph;
+  updates: Event<State>;
   compositeName?: CompositeName;
 }
 
@@ -95,33 +95,33 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   /*::
   [[call]](payload: Params): Promise<Done>,
   */
-  done: Event<{|
+  done: Event<{
     params: Params,
-    result: Done,
-  |}>;
-  fail: Event<{|
+    result: Done
+  }>;
+  fail: Event<{
     params: Params,
-    error: Fail,
-  |}>;
+    error: Fail
+  }>;
   finally: Event<
-    | {|
-        +status: 'done',
-        +params: Params,
-        +result: Done,
-      |}
-    | {|
-        +status: 'fail',
-        +params: Params,
-        +error: *,
-      |},
+    | {
+        status: 'done',
+        params: Params,
+        result: Done
+      }
+    | {
+        status: 'fail',
+        params: Params,
+        error: *
+      }
   >;
   /*::+*/ id: string;
-  use: {|
+  use: {
     /*::
     [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
     */
-    getCurrent(): (params: Params) => Promise<Done>,
-  |};
+    getCurrent(): (params: Params) => Promise<Done>
+  };
   create(payload: Params, type: string, args: any[]): Params;
   pending: Store<boolean>;
   watch(watcher: (payload: Params) => any): Subscription;
@@ -130,7 +130,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
   subscribe(subscriber: Subscriber<Params>): Subscription;
   //prettier-ignore
-  //   +to: (
+  //   to: (
   //   & (<T>(
   //    store: Store<T>,
   //    reducer: (state: T, payload: Params) => T
@@ -139,7 +139,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   //  ),
   // epic<T>(fn: (_: Stream<Params>) => Stream<T>): Event<T>,
   getType(): string;
-  +kind: kind;
+  kind: kind;
   shortName: string;
   domainName?: CompositeName;
   graphite: Graph;

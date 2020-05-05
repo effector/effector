@@ -1,22 +1,9 @@
 //@flow
-import type {Store, Event, Effect} from './unit.h'
+import {Store, Event, Effect} from './unit.h'
 import {createStore} from './createUnit'
 import {is} from './is'
 import {forIn} from './forIn'
 
-//eslint-disable-next-line no-unused-vars
-declare export function restore<Done>(
-  event: Effect<any, Done, any>,
-  defaultState: Done,
-): Store<Done>
-declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-declare export function restore<State: {-[key: string]: Store<any> | any, ...}>(
-  obj: State,
-): $ObjMap<
-  State,
-  //prettier-ignore
-  <S>(field: Store<S> | S) => Store<S>,
->
 export function restore(obj: any, defaultState: any, config?: any): any {
   if (is.store(obj)) {
     return obj

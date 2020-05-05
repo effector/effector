@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graph, Graphite, Cmd, StateRef} from './index.h'
+import {Graph, Graphite, Cmd, StateRef} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 
 const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
@@ -38,22 +38,20 @@ export function createNode({
   meta = {},
   family: familyRaw = {type: 'regular'},
 }: {
-  +node?: Array<Cmd | false | void | null>,
-  +from?: Graphite | Graphite[],
-  +source?: Graphite | Graphite[],
-  +parent?: Graphite | Graphite[],
-  +to?: Graphite | Graphite[],
-  +target?: Graphite | Graphite[],
-  +child?: Graphite | Graphite[],
-  scope?: {[name: string]: any, ...},
-  meta?: {[name: string]: any, ...},
+  node?: Array<Cmd | false | void | null>,
+  from?: Graphite | Graphite[],
+  source?: Graphite | Graphite[],
+  parent?: Graphite | Graphite[],
+  to?: Graphite | Graphite[],
+  target?: Graphite | Graphite[],
+  child?: Graphite | Graphite[],
+  scope?: {[name: string]: any},
+  meta?: {[name: string]: any},
   family?: {
     type?: 'regular' | 'crosslink' | 'domain',
     links?: Graphite | Graphite[],
-    owners?: Graphite | Graphite[],
-    ...
-  },
-  ...
+    owners?: Graphite | Graphite[]
+  }
 }): Graph {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)

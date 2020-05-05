@@ -1,6 +1,6 @@
 //@flow
 
-import type {Effect} from './unit.h'
+import {Effect} from './unit.h'
 import {step} from './typedef'
 import {getGraph} from './getter'
 import {own} from './own'
@@ -17,8 +17,8 @@ import {isObject, isFunction} from './is'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
-  maybeConfig: any,
-): Effect<Payload, Done, *> {
+  maybeConfig: any
+) {
   const instance = createEvent(nameOrConfig, maybeConfig)
   let handler =
     instance.defaultConfig.handler ||

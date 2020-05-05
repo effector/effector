@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graph, Graphite} from './index.h'
+import {Graph, Graphite} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 
@@ -18,7 +18,7 @@ const removeFromNode = (currentNode, targetNode) => {
 const clearNodeNormalized = (
   targetNode: Graph,
   deep: boolean,
-  isDomainUnit,
+  isDomainUnit
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
@@ -48,11 +48,10 @@ const clearMap = (map: any) => map.clear()
 export const clearNode = (
   graphite: Graphite,
   {
-    deep,
+    deep
   }: {
-    deep?: boolean,
-    ...
-  } = {},
+    deep?: boolean
+  } = {}
 ) => {
   let isDomainUnit = false
   if (is.store(graphite)) {

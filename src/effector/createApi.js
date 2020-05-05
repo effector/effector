@@ -1,12 +1,12 @@
 //@flow
 
-import type {Store} from './unit.h'
+import {Store} from './unit.h'
 import {createEvent, applyParentEventHook} from './createUnit'
 import {forIn} from './forIn'
 
 export function createApi(
   store: Store<any>,
-  setters: {[string]: Function, ...},
+  setters: {[key: string]: Function}
 ) {
   const result = {}
   forIn(setters, (fn, key) => {

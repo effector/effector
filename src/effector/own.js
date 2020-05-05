@@ -1,6 +1,6 @@
 //@flow
 
-import type {Graphite} from './index.h'
+import {Graphite} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 
 export const own = (ownerUnit: Graphite, links: Graphite[]) => {
