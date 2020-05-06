@@ -529,31 +529,28 @@ const result = $store.thru(fn)
 ```js try
 import {createStore} from 'effector'
 
-const sum = value => value + 10
-const square = value => value * value
-const divide = value => value / 2
-
 const enhance = fn => store => store.map(fn)
 
-const store = createStore(0)
-const newStore = store
-  .thru(enhance(sum))
-  .thru(enhance(square))
-  .thru(enhance(divide))
-  .watch(state => console.log(`newStore: ${state}`))
+const store = createStore(1)
+
+console.log(store.thru(() => 'plain value'))
+
+// => plain value
+
+const newStore = store.thru(enhance(x => x + 1)).thru(enhance(x => x * 10))
+
+console.log(newStore)
+
+// => Store
+
+newStore.watch(state => {
+  console.log(`newStore: ${state}`)
+})
+
+// => newStore: 20
 ```
 
-Output
-
-```
-// sum: 10
-// square: 100
-// divide: 50
-
-> newStore: 50
-```
-
-[Try it](https://share.effector.dev/QCqXcCpQ)
+[Try it](https://share.effector.dev/A9T6JQZh)
 
 <hr />
 
