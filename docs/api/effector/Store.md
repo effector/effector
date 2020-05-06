@@ -505,8 +505,7 @@ store.watch(console.log) // => 5
 
 ### `thru(fn)`
 
-Creates a new store. This method calls a function that receives Store. Other words it's an "escape hatch" for creating composed functions, and also making chains.
-For example, you want to make multiple, summary and divide operations. You can create these functions and use them in `.thru`.
+Call function with the given store and return result as it is.
 
 #### Formulae
 
@@ -515,7 +514,7 @@ const $new = $store.thru(fn)
 ```
 
 - Call `fn` with `$store` as argument
-- Set result of the `fn()` call to `$new`
+- Return result of the `fn()` call
 
 #### Arguments
 
