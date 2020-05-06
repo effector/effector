@@ -1,4 +1,4 @@
-import {USE_PERF} from '../env'
+import {USE_PERF} from './env'
 
 export let beginMark: (label: string) => void
 export let endMark: (label: string) => void

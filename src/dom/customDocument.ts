@@ -1,8 +1,13 @@
-import {DOMElement} from './index.h'
+import {Env} from './index.h'
 const invalidToken = /[^a-zA-Z0-9\-]/g
 const invalidValue = /[\\<>"]/g
 const dataValue = /[A-Z]/g
 const escaped = /[&<>'"]/g
+
+function setNextSibling(target: DOMNode, sibling: DOMNode | null) {
+  target.sibling.right = sibling
+  target.nextSibling = sibling
+}
 
 class DOMNode {
   child: {
@@ -21,11 +26,13 @@ class DOMNode {
   }
   parent: DOMNode | null = null
   tagName = ''
+  nodeName = ''
   namespaceURI = 'http://www.w3.org/1999/xhtml' as const
   dataset = Object.create(null)
   style = new CSSStyle()
   value?: string
   firstChild: DOMNode | null = null
+  nextSibling: DOMNode | null = null
   transform = {
     baseVal: new DOMSVGTransformList(),
   }
@@ -33,27 +40,37 @@ class DOMNode {
   attributes: {[attributeName: string]: string} = Object.create(null)
   textContent: string | null = null
   __STATIC__ = true
-  appendChild(node: DOMNode): void {
+  cloneNode() {
+    const result = new DOMNode()
+    result.tagName = this.tagName
+    result.nodeName = this.nodeName
+    result.namespaceURI = this.namespaceURI
+    Object.assign(result.dataset, this.dataset)
+    Object.assign(result.style.properties, this.style.properties)
+    result.value = this.value
+    for (const {value} of this.transform.baseVal.items) {
+      const transform = new DOMSVGTransform()
+      transform.value = value
+      result.transform.baseVal.items.push(transform)
+    }
+    result.isFragment = this.isFragment
+    Object.assign(result.attributes, this.attributes)
+    result.textContent = this.textContent
+    return result
+  }
+  after(node: DOMNode): void {
+    if (this.sibling.right === node) return
     if (node.parent) node.remove()
-    if (node.isFragment && node.textContent === null) {
-      let child = node.firstChild
-      let nextChild
-      while (child) {
-        nextChild = child.sibling.right
-        this.appendChild(child)
-        child = nextChild
-      }
-      return
-    }
-    if (!this.child.last) {
-      this.child.first = node
-      this.firstChild = node
+    if (!this.parent) return
+    if (this.sibling.right) {
+      this.sibling.right.sibling.left = node
+      setNextSibling(node, this.sibling.right)
     } else {
-      this.child.last.sibling.right = node
-      node.sibling.left = this.child.last
+      this.parent.child.last = node
     }
-    this.child.last = node
-    node.parent = this
+    setNextSibling(this, node)
+    node.sibling.left = this
+    node.parent = this.parent
   }
   prepend(node: DOMNode): void {
     if (node.parent) node.remove()
@@ -62,19 +79,11 @@ class DOMNode {
       this.child.last = node
     } else {
       this.child.first!.sibling.left = node
-      node.sibling.right = this.child.first
+      setNextSibling(node, this.child.first)
     }
     this.child.first = node
     this.firstChild = node
     node.parent = this
-  }
-  contains(node: DOMNode): boolean {
-    let parent: DOMNode | null = node
-    while (parent) {
-      if (parent === this) return true
-      parent = parent.parent
-    }
-    return false
   }
   remove(): void {
     if (!this.parent) return
@@ -89,13 +98,13 @@ class DOMNode {
       this.sibling.right!.sibling.left = null
     } else if (parent.child.last === this) {
       parent.child.last = this.sibling.left
-      this.sibling.left!.sibling.right = null
+      setNextSibling(this.sibling.left!, null)
     } else {
       this.sibling.right!.sibling.left = this.sibling.left
-      this.sibling.left!.sibling.right = this.sibling.right
+      setNextSibling(this.sibling.left!, this.sibling.right)
     }
     this.sibling.left = null
-    this.sibling.right = null
+    setNextSibling(this, null)
     this.parent = null
   }
   addEventListener(key: string, fn: Function, options: object): void {}
@@ -120,20 +129,18 @@ class DOMNode {
       this.sibling.right!.sibling.left = node
     } else if (parent.child.last === this) {
       parent.child.last = node
-      this.sibling.left!.sibling.right = node
+      setNextSibling(this.sibling.left!, node)
     } else {
       this.sibling.right!.sibling.left = node
-      this.sibling.left!.sibling.right = node
+      setNextSibling(this.sibling.left!, node)
     }
     node.sibling.left = this.sibling.left
-    node.sibling.right = this.sibling.right
+    setNextSibling(node, this.sibling.right)
     node.parent = parent
     this.sibling.left = null
-    this.sibling.right = null
+    setNextSibling(this, null)
     this.parent = null
   }
-  focus(): void {}
-  blur(): void {}
   createSVGTransform(): DOMSVGTransform {
     return new DOMSVGTransform()
   }
@@ -143,6 +150,15 @@ class DOMNode {
       0,
       offset,
     )}${content}${this.textContent.slice(offset + length)}`
+  }
+  splitText(offset: number) {
+    if (typeof this.textContent !== 'string') return null
+    const node = new DOMNode()
+    node.nodeName = '#text'
+    node.textContent = this.textContent.slice(offset)
+    this.textContent = this.textContent.slice(0, offset)
+    this.after(node)
+    return node
   }
 }
 class CSSStyle {
@@ -227,42 +243,46 @@ function escapeContent(value: string) {
   return String(value).replace(escaped, escapeContentHandler)
 }
 
-export const body = new DOMNode()
-//@ts-ignore
-body.isBody = true
-export function createTextNode(text: string) {
-  const node = new DOMNode()
-  node.textContent = escapeContent(text)
-  return node
-}
-export function createElement(tag: string) {
-  const node = new DOMNode()
-  node.tagName = escapeTag(tag)
-  node.isFragment = false
-  return node
-}
-export function createElementNS(
-  namespace: 'http://www.w3.org/1999/xhtml' | 'http://www.w3.org/2000/svg',
-  tag: string,
-) {
-  switch (namespace) {
-    case 'http://www.w3.org/1999/xhtml':
-    case 'http://www.w3.org/2000/svg':
-      break
-    default:
-      namespace = 'http://www.w3.org/1999/xhtml'
+export function createEnv(): Env {
+  const document = {
+    createTextNode(text: string) {
+      const node = new DOMNode()
+      node.textContent = escapeContent(text)
+      node.nodeName = '#text'
+      return node
+    },
+    createElement(tag: string) {
+      const node = new DOMNode()
+      node.tagName = escapeTag(tag)
+      node.isFragment = false
+      return node
+    },
+    createElementNS(
+      namespace: 'http://www.w3.org/1999/xhtml' | 'http://www.w3.org/2000/svg',
+      tag: string,
+    ) {
+      switch (namespace) {
+        case 'http://www.w3.org/1999/xhtml':
+        case 'http://www.w3.org/2000/svg':
+          break
+        default:
+          namespace = 'http://www.w3.org/1999/xhtml'
+      }
+      const node = new DOMNode()
+      node.tagName = escapeTag(tag)
+      //@ts-ignore
+      node.namespaceURI = namespace
+      node.isFragment = false
+      return node
+    },
+    createDocumentFragment() {
+      return new DOMNode()
+    },
   }
-  const node = new DOMNode()
-  node.tagName = escapeTag(tag)
-  //@ts-ignore
-  node.namespaceURI = namespace
-  node.isFragment = false
-  return node
-}
-
-export function createDocumentFragment(): DOMNode & DOMElement {
-  //@ts-ignore
-  return new DOMNode()
+  return {
+    //@ts-ignore
+    document,
+  }
 }
 
 function renderPart(node: DOMNode, parts: string[]) {
@@ -312,15 +332,8 @@ function renderPart(node: DOMNode, parts: string[]) {
     const transforms = node.transform.baseVal.items.map(({value}) => value)
     parts.push(transforms.join(' '), '"')
   }
-  if (!node.firstChild) {
-    if (node.tagName === 'meta' || node.tagName === 'link') {
-      parts.push('>')
-    } else {
-      parts.push('/>')
-    }
-    return
-  }
   parts.push('>')
+  if (nonClosedTags.includes(node.tagName)) return
   let child: DOMNode | null = node.firstChild
   while (child) {
     renderPart(child, parts)
@@ -328,6 +341,24 @@ function renderPart(node: DOMNode, parts: string[]) {
   }
   parts.push('</', node.tagName, '>')
 }
+
+const nonClosedTags = [
+  'area',
+  'base',
+  'br',
+  'col',
+  'embed',
+  'hr',
+  'img',
+  'input',
+  'keygen',
+  'link',
+  'meta',
+  'param',
+  'source',
+  'track',
+  'wbr',
+]
 
 export function render(node: DOMNode) {
   const parts = [] as string[]
