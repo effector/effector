@@ -510,7 +510,7 @@ Call function with the given store and return result as it is.
 #### Formulae
 
 ```ts
-const $new = $store.thru(fn)
+const result = $store.thru(fn)
 ```
 
 - Call `fn` with `$store` as argument
