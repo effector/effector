@@ -66,6 +66,17 @@ type GetCombinedValue<T> = {
 }
 
 export function using(node: DOMElement, cb: () => any): void
+export function using(
+  node: DOMElement,
+  opts: {
+    fn: () => void
+    hydrate?: boolean
+    env?: {
+      document: Document
+    }
+    onComplete?: () => void
+  },
+): void
 
 export function spec(spec: {
   attr?: PropertyMap
