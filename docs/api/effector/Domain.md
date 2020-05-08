@@ -15,11 +15,31 @@ It is useful for logging or other side effects.
 
 #### Arguments
 
-1. `hook` (_Function_): Callback with created [Event](Event.md)
+1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Event](Event.md) and will be called during every [domain.createEvent](./Domain.md##createeventname) call
 
 #### Returns
 
 [_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+
+#### Example
+
+```js
+import {createDomain} from 'effector'
+
+const domain = createDomain()
+
+domain.onCreateEvent(event => {
+  console.log('new event created')
+})
+
+const a = domain.createEvent()
+// => new event created
+
+const b = domain.createEvent()
+// => new event created
+```
+
+[Try it](https://share.effector.dev/QCQpga6u)
 
 <hr />
 
