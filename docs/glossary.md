@@ -170,7 +170,7 @@ _Reducer_ calculates a new state given the previous state and an event. For stor
 type Watcher<T> = (update: T) => any
 ```
 
-_Watcher_ is used for **side effects**
+_Watcher_ is used for **side effects**. Accepted by [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and [domain.onCreate\* hooks](./api/effector/Domain.md#oncreateeventhook). Return value of a watcher is ignored.
 
 ## Subscription
 
