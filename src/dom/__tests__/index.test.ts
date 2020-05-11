@@ -699,7 +699,7 @@ describe('node reader', () => {
       await act()
     })
     expect(s1).toMatchInlineSnapshot(
-      `"<div></div><dl><dt>is connected</dt><dd>false</dd><dt>has parent</dt><dd>false</dd></dl>"`,
+      `"<div></div><dl><dt>is connected</dt><dd>true</dd><dt>has parent</dt><dd>true</dd></dl>"`,
     )
   })
 })
