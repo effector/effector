@@ -1159,9 +1159,13 @@ export function variant<T, K extends keyof T>({
     ? Record<T[K], (config: {store: Store<T>}) => void>
     : {
         [caseName: string]: (config: {store: Store<T>}) => void
-        __?: (config: {store: Store<T>}) => void
+        __: (config: {store: Store<T>}) => void
       }
 }) {
+  //prettier-ignore
+  const keyReader = typeof key === 'function'
+    ? key
+    : (value: any) => String(value[key])
   let defaultCase = false
   for (const caseName in cases) {
     if (caseName === '__') {
@@ -1170,7 +1174,7 @@ export function variant<T, K extends keyof T>({
     }
     route({
       source,
-      visible: value => String(value[key]) === caseName,
+      visible: value => keyReader(value) === caseName,
       fn: cases[caseName],
     })
   }
@@ -1178,7 +1182,7 @@ export function variant<T, K extends keyof T>({
     const nonDefaultCases = Object.keys(cases)
     route({
       source,
-      visible: value => !nonDefaultCases.includes(String(value[key])),
+      visible: value => !nonDefaultCases.includes(keyReader(value)),
       fn: (cases as any).__,
     })
   }
