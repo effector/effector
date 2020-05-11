@@ -12,7 +12,11 @@ export function retrieveCode(): string {
   const regExp = new RegExp(`${location.origin}/(.*)`)
   const [, slug] = regExp.exec(location.href)
 
-  if (/https:\/\/(.+\.)?effector\.dev/.test(location.origin)) {
+  const isProdDomain =
+    /https:\/\/(.+\.)?effector\.dev/.test(location.origin) ||
+    /^https:\/\/effector\.now\.sh$/.test(location.origin)
+
+  if (isProdDomain) {
     if ('__code__' in window) {
       const preloaded: {
         code: string,
@@ -24,19 +28,20 @@ export function retrieveCode(): string {
       return preloaded.code
     }
   } else if (!isAuthRedirectedUrl) {
-    if (slug) {
-      fetch(`https://effector-proxy.now.sh/api/get-code?slug=${slug}`)
-        .then(async res => {
+    if (slug && /^[a-zA-Z0-9]{8}$/.test(slug)) {
+      fetch(`https://effector-proxy.now.sh/api/get-code?slug=${slug}`).then(
+        async res => {
           try {
             const {status, data} = await res.json()
             if (status === 200) {
               const {code} = JSON.parse(decompress(data))
               return changeSources(code)
             }
-          } catch(e) {
+          } catch (e) {
             console.error(e)
           }
-        })
+        },
+      )
       setCurrentShareId(slug)
       return null
     }
