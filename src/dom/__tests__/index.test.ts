@@ -356,7 +356,7 @@ describe('list', () => {
     })
     expect(s1).toMatchInlineSnapshot(`"<li>alice</li><li>bob</li>"`)
   })
-  it.skip('insert its items before sibling nodes', async () => {
+  it('insert its items before sibling nodes', async () => {
     const [s1, s2] = await exec(async () => {
       const addUser = createEvent<string>()
       const users = createStore(['alice', 'bob']).on(addUser, (list, user) => [
