@@ -76,6 +76,7 @@ import {
   currentTemplate,
   currentLeaf,
 } from './template'
+import {remap} from './remap'
 
 const onMount = createEvent<{
   fns: Array<(node: DOMElement) => (() => void) | void>
@@ -1396,7 +1397,7 @@ export function list<T>(opts: any, maybeFn?: any) {
       opts.fn = maybeFn
     }
   }
-  const {fn: cb, key, source} = opts
+  const {fn: cb, key, source, fields = []} = opts
   const getID: (item: T, i: number) => string | number | symbol =
     key !== undefined
       ? typeof key === 'function'
@@ -1434,7 +1435,7 @@ export function list<T>(opts: any, maybeFn?: any) {
         isSvgRoot: false,
         namespace,
         fn({id, store}) {
-          cb({store, key: id})
+          cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
           const unmount = createEvent<void>()
           store.on(itemUpdater, (_, e) => e)
