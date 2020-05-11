@@ -5,21 +5,20 @@ import {login, logout, setToken} from './index'
 import {GITHUB_API_URL, GITHUB_GATEKEEPER_URL} from './config'
 import {userInfo} from './gql'
 
-
 type GQLParams = {
   query: string,
   variables?: {},
-  token?: TToken
+  token?: TToken,
 }
 
 type TUserInfoResult = {
   data: {
-    viewer: TGitHubUserInfo
-  }
+    viewer: TGitHubUserInfo,
+  },
 }
 
 export const auth = createEffect({
-  handler: async () => {
+  async handler() {
     const params = new URLSearchParams(location.search)
     const code = params.get('code')
     if (code) {
@@ -106,5 +105,6 @@ $githubToken
   .on(setToken, (state, token) => token)
   .reset(getUserInfo.fail, logout, login)
 
-
-auth()
+if (location.pathname === '/auth') {
+  auth()
+}
