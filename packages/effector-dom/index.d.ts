@@ -131,10 +131,24 @@ export function h(
   },
 ): void
 export function h(tag: DOMTag, cb: () => void): void
-export function variant<Case extends string>(
-  key: Store<Case>,
-  cases: Partial<{[K in Case]: () => void}>,
-): void
+export function variant<T, K extends keyof T>(config: {
+  source: Store<T>
+  key: K
+  cases: T[K] extends string
+    ? Partial<
+        Record<T[K], (config: {store: Store<T>}) => void> & {
+          __: (config: {store: Store<T>}) => void
+        }
+      >
+    : {
+        [caseName: string]: (config: {store: Store<T>}) => void
+        __: (config: {store: Store<T>}) => void
+      }
+}): void
+// export function variant<Case extends string>(
+//   key: Store<Case>,
+//   cases: Partial<{[K in Case]: () => void}>,
+// ): void
 export function list<T>(
   source: Store<T[]>,
   cb: (opts: {store: Store<T>; index: number; signal: Signal}) => void,
