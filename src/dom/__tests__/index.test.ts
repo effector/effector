@@ -569,11 +569,13 @@ test('variant', async () => {
     )
     using(el, () => {
       h('p', () => {
-        list(
-          {source: text, fields: ['type', 'text'], key: 'text'},
-          ({fields: [type, text]}) => {
-            h('div', () => {
-              variant(type, {
+        list({source: text, key: 'text'}, ({store}) => {
+          h('div', () => {
+            const text = remap(store, 'text')
+            variant({
+              source: store,
+              key: 'type',
+              cases: {
                 plain() {
                   h('span', {text})
                 },
@@ -583,10 +585,10 @@ test('variant', async () => {
                 italic() {
                   h('i', {text})
                 },
-              })
+              },
             })
-          },
-        )
+          })
+        })
       })
     })
     await act()
