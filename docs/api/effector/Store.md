@@ -458,13 +458,59 @@ reset() // changed 0
 
 <hr />
 
+### `reset(triggersArray)`
+
+Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](./merge.md) and [store.on(triggers[], fn)](./Store.md#ontriggers-handler)
+
+A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
+
+#### Formulae
+
+```ts
+$store.reset([triggerA, triggerB, ...])
+```
+
+- When any unit from `triggersArray` list is triggered, update `$store` with its default state, from `createStore(defaultState)`
+
+#### Arguments
+
+1. `triggersArray` (_(Event | Effect | Store)[]_): any number of [_Events_](Event.md), [_Effects_](Effect.md) or [_Stores_](Store.md)
+
+#### Returns
+
+[_Store_](Store.md): Current store
+
+#### Example
+
+```js try
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const increment = createEvent()
+const reset = createEvent()
+
+store.on(increment, state => state + 1).reset([reset])
+
+store.watch(state => console.log('changed', state))
+// changed 0
+// watch method calls its function immediately
+
+increment() // changed 1
+increment() // changed 2
+reset() // changed 0
+```
+
+[Try it](https://share.effector.dev/ot6R5ePc)
+
+<hr />
+
 ### `off(trigger)`
 
 ```ts
 $store.off(trigger)
 ```
 
-- Removes handler for given `trigger`, which was installed via [\$store.on](Store.md#ontrigger-handler)
+- Removes handler for given `trigger`, which was installed via [\$store.on](./Store.md#ontrigger-handler) or [\$store.reset](./Store.md#resettriggers)
 - If there was no handler for that `trigger`, this method will do nothing
 
 #### Arguments
