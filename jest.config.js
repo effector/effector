@@ -23,7 +23,6 @@ const watchPathIgnorePatterns = [
 ]
 const createDefaultConfig = () => ({
   automock: false,
-  browser: false,
   testEnvironment: 'node',
   transform: {
     '^.+\\.jsx?$': 'babel-jest',
@@ -57,7 +56,6 @@ module.exports = {
         {
           dom: {
             automock: false,
-            browser: false,
             testEnvironment: 'node',
             testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
             transform: {
@@ -109,7 +107,6 @@ module.exports = {
               `<rootDir>/src/types/__tests__/**/*.test.ts`,
               `<rootDir>/src/types/__tests__/**/*.test.tsx`,
             ],
-            browser: false,
             globalSetup: './src/types/src/globalSetup.js',
             globalTeardown: './src/types/src/globalTeardown.js',
             maxConcurrency: 25,
