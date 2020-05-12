@@ -169,7 +169,7 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 - [Why I choose Effector instead of Redux or MobX](https://dev.to/lessmess/why-i-choose-effector-instead-of-redux-or-mobx-3dl7)
 - [Effector — State Manager You Should Give a Try](https://itnext.io/effector-state-manager-you-should-give-a-try-b46b917e51cc)
 - [Effector vs. Vuex. Which storage management is better for VueJS app?](https://medium.com/blue-harvest-tech-blog/effector-vs-vuex-which-storage-management-is-better-for-vuejs-app-54f3c3257b53)
-- [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b) [![size-effector]][pho-effector]
+- [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
 
 ## Online playground
 
