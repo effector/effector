@@ -547,4 +547,13 @@ describe('domain support', () => {
       expect(argumentHistory(fn)).toEqual([1, 2])
     })
   })
+  it('should remove erased units from domain hooks', () => {
+    const fn = jest.fn()
+    const domain = createDomain()
+    const event = domain.createEvent()
+    clearNode(event)
+    domain.onCreateEvent(fn)
+    expect(domain.history.events.size).toBe(0)
+    expect(fn).not.toHaveBeenCalled()
+  })
 })
