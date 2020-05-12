@@ -96,7 +96,7 @@ describe('combine cases', () => {
   })
 })
 
-it('deduplicate outputs', async() => {
+it('deduplicate outputs', async () => {
   const fn = jest.fn()
   const fetchApi = createEffect({
     async handler() {
@@ -136,7 +136,7 @@ it('deduplicate outputs', async() => {
   `)
 })
 
-it('skip first duplicated update', async() => {
+it('skip first duplicated update', async () => {
   const fn = jest.fn()
   const changedToken = createEvent()
 
@@ -153,7 +153,7 @@ it('skip first duplicated update', async() => {
   `)
 })
 
-it('updates consistently', async() => {
+it('updates consistently', async () => {
   const fn = jest.fn()
   const e = createEvent()
 
@@ -210,4 +210,10 @@ it('updates consistently', async() => {
       "j",
     ]
   `)
+})
+
+it('validate amount of arguments', () => {
+  expect(() => {
+    combine()
+  }).toThrowErrorMatchingInlineSnapshot(`"at least one argument required"`)
 })
