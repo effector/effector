@@ -168,6 +168,7 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 
 - [Why I choose Effector instead of Redux or MobX](https://dev.to/lessmess/why-i-choose-effector-instead-of-redux-or-mobx-3dl7)
 - [Effector — State Manager You Should Give a Try](https://itnext.io/effector-state-manager-you-should-give-a-try-b46b917e51cc)
+- [Effector vs. Vuex. Which storage management is better for VueJS app?](https://medium.com/blue-harvest-tech-blog/effector-vs-vuex-which-storage-management-is-better-for-vuejs-app-54f3c3257b53)
 - [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b) [![size-effector]][pho-effector]
 
 ## Online playground
@@ -265,7 +266,7 @@ turnOff() // nothing has changed
 
 ## More examples
 
-- [Snake game (interactive A* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
+- [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
 - [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
 - [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
@@ -525,6 +526,7 @@ More articles about effector at patreon
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
