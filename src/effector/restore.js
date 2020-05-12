@@ -1,15 +1,15 @@
 //@flow
-import {Store, Event, Effect} from './unit.h'
 import {createStore} from './createUnit'
 import {is} from './is'
 import {forIn} from './forIn'
+import {getParent} from './getter'
 
 export function restore(obj: any, defaultState: any, config?: any): any {
   if (is.store(obj)) {
     return obj
   }
   if (is.unit(obj)) {
-    const domain = obj.parent
+    const domain = getParent(obj)
     let result
     if (is.event(obj)) {
       result = createStore(defaultState, {

@@ -1,5 +1,5 @@
 //@flow
-import {getValue, getGraph} from './getter'
+import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
 
 export const addToRegion = unit => {
@@ -21,6 +21,6 @@ export function withRegion(unit: any, cb: () => void) {
   try {
     return cb()
   } finally {
-    regionStack = regionStack.parent
+    regionStack = getParent(regionStack)
   }
 }

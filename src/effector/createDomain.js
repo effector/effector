@@ -14,12 +14,13 @@ import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {addToRegion} from './region'
 import {forIn} from './forIn'
+import {getParent} from './getter'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
-    if (!data.parent) {
+    if (!getParent(data)) {
       data.parent = node
       data.ownerSet = acc
     }
@@ -98,7 +99,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
       }),
     )
   addToRegion(result)
-  const parent = result.parent
+  const parent = getParent(result)
   if (parent) {
     forIn(result.hooks, (from, key) => {
       forward({from, to: parent.hooks[key]})

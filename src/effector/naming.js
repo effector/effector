@@ -1,7 +1,8 @@
 //@flow
 
-import {Store, Event, Effect, Domain} from './unit.h'
+import {Store, Domain} from './unit.h'
 import {is} from './is'
+import {getParent} from './getter'
 
 export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
 
@@ -31,7 +32,7 @@ export function unitObjectName(objOrArr, method: string = 'combine') {
 }
 
 export function setStoreName<State>(store: Store<State>, rawName: string) {
-  const compositeName = createName(rawName, store.parent)
+  const compositeName = createName(rawName, getParent(store))
   store.shortName = rawName
   if (!store.compositeName) {
     store.compositeName = compositeName

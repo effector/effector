@@ -1,7 +1,13 @@
 //@flow
 
 import {Graph, Graphite} from './index.h'
-import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
+import {
+  getGraph,
+  getOwners,
+  getLinks,
+  getSubscribers,
+  getParent,
+} from './getter'
 import {is} from './is'
 
 const removeItem = (list, item) => {
@@ -55,7 +61,7 @@ export const clearNode = (
 ) => {
   let isDomainUnit = false
   if (is.unit(graphite)) {
-    if (graphite.parent) {
+    if (getParent(graphite)) {
       graphite.ownerSet.delete(graphite)
     }
     if (is.store(graphite)) {

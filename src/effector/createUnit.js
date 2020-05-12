@@ -25,7 +25,8 @@ import {
   getConfig,
   getNestedConfig,
   getStoreState,
-  getGraph
+  getGraph,
+  getParent,
 } from './getter'
 import {throwError} from './throw'
 
@@ -39,7 +40,7 @@ const normalizeConfig = (part, config) => {
     if (part.loc) config.loc = part.loc
     if (part.sid) config.sid = part.sid
     if (part.handler) config.handler = part.handler
-    if (part.parent) config.parent = part.parent
+    if (getParent(part)) config.parent = getParent(part)
     if ('strict' in part) config.strict = part.strict
     if (part.named) config.named = part.named
     normalizeConfig(getNestedConfig(part), config)
@@ -47,8 +48,8 @@ const normalizeConfig = (part, config) => {
   return config
 }
 
-export const applyParentEventHook = ({parent}, target) => {
-  if (parent) parent.hooks.event(target)
+export const applyParentEventHook = (source, target) => {
+  if (getParent(source)) getParent(source).hooks.event(target)
 }
 
 let isStrict
@@ -139,7 +140,7 @@ export function createEvent<Payload>(
   event.filterMap = bind(filterMapEvent, event)
   event.prepend = fn => {
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
-      parent: event.parent,
+      parent: getParent(event),
     })
     const template = readTemplate()
     if (template) {
@@ -159,7 +160,7 @@ export function createEvent<Payload>(
 
 export function filterMapEvent(
   event: Event<any> | Effect<any, any, any>,
-  fn?: (val: any) => any
+  fn?: (val: any) => any,
 ): any {
   return createEventFiltration(event, 'filterMap', fn, [
     step.compute({fn: callStack}),

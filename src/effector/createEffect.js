@@ -2,7 +2,7 @@
 
 import {Effect} from './unit.h'
 import {step} from './typedef'
-import {getGraph} from './getter'
+import {getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch} from './kernel'
@@ -17,7 +17,7 @@ import {isObject, isFunction} from './is'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
-  maybeConfig: any
+  maybeConfig: any,
 ) {
   const instance = createEvent(nameOrConfig, maybeConfig)
   let handler =
@@ -102,7 +102,7 @@ export function createEffect<Payload, Done>(
     step.compute({
       fn(params, scope, stack) {
         // empty stack means that this node was launched directly
-        if (!stack.parent) return params
+        if (!getParent(stack)) return params
         return {
           params,
           req: {

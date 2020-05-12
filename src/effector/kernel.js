@@ -129,9 +129,9 @@ const pushFirstHeapItem = (
       node,
       parent,
       value,
-      page
+      page,
     },
-    type
+    type,
   )
 const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
   const priority = getPriority(type)
@@ -237,8 +237,8 @@ const exec = () => {
             case 'store':
               if (!reg[data.store.id]) {
                 // if (!page.parent) {
-                  stack.page = page = null
-                  reg = graph.reg
+                stack.page = page = null
+                reg = graph.reg
                 // }
               }
               value = readRef(reg[data.store.id])
