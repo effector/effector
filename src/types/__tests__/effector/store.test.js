@@ -6,7 +6,7 @@ import {
   createEffect,
   createApi,
   createStoreObject,
-  restoreEffect,
+  restore,
   combine,
   Store,
   Event,
@@ -168,7 +168,7 @@ test('combine', () => {
 })
 test('restore', () => {
   const eff = createEffect<{foo: number}, {bar: string}, any>()
-  const foo = restoreEffect(eff, {bar: ''})
+  const foo = restore(eff, {bar: ''})
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
