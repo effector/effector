@@ -169,6 +169,16 @@ test('gate properties hook', async() => {
 })
 
 describe('child gate', () => {
+  let error: any
+  beforeAll(() => {
+    error = console.error
+    console.error = function errorMock(...args: any[]) {
+      args
+    }
+  })
+  afterAll(() => {
+    console.error = error
+  })
   test('usage', async() => {
     const Gate = createGate('parent gate')
     const Child = Gate.childGate('child gate')

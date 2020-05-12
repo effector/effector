@@ -110,8 +110,15 @@ describe('effect.finally', () => {
 describe('createEffect with config', () => {
   it('supports empty config as second argument', async() => {
     const effect = createEffect('fx without handler', {})
-
-    await expect(effect('ok')).resolves.toBe(undefined)
+    const error = console.error
+    console.error = function errorMock(...args) {
+      args
+    }
+    try {
+      await expect(effect('ok')).resolves.toBe(undefined)
+    } finally {
+      console.error = error
+    }
   })
   it('supports default handler with config', async() => {
     const fn = jest.fn()
