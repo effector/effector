@@ -2,6 +2,63 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.15.0
+
+- Add support for array of units to `store.on` ([PR #328](https://github.com/zerobias/effector/pull/328))
+
+```js
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const changedA = createEvent()
+const changedB = createEvent()
+
+store.on([changedA, changedB], (state, params) => state + params)
+
+store.watch(value => {
+  console.log('updated', value)
+})
+
+changedA(2)
+// => updated 2
+
+changedB(2)
+// => updated 4
+
+// You can unsubscribe from any trigger
+store.off(changedA)
+```
+
+[Try it](https://share.effector.dev/iP0oM3NF)
+
+[Documentation for `store.on`](https://effector.now.sh/docs/api/effector/store#ontriggers-handler)
+
+- Add support for array of units to `store.reset` to make it consistent with [merge](https://effector.now.sh/docs/api/effector/merge) and [store.on](https://effector.now.sh/docs/api/effector/store#ontriggers-handler)
+
+```js
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const increment = createEvent()
+const reset = createEvent()
+
+store.on(increment, state => state + 1).reset([reset])
+
+store.watch(state => console.log('changed', state))
+// changed 0
+// watch method calls its function immediately
+
+increment() // changed 1
+increment() // changed 2
+reset() // changed 0
+```
+
+[Try it](https://share.effector.dev/ot6R5ePc)
+
+[Documentation for `store.reset`](https://effector.now.sh/docs/api/effector/store#resettriggersarray)
+
+- Remove units erased with `clearNode(unit)` from their parent domain hooks and history sets
+
 ## effector-react 20.7.1
 
 - Improve `useList` hook typings for typescript by allowing usage as components' return value (fix [DefinitelyTyped issue](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20356))
