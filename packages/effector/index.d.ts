@@ -142,6 +142,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
 
 export interface Store<State> extends Unit<State> {
   reset(...triggers: Array<Unit<any>>): this
+  reset(triggers: Array<Unit<any>>): this
   getState(): State
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
@@ -381,6 +382,7 @@ export function launch<T>(config: {
   target: Unit<T> | Step
   params: T
   defer?: boolean
+  page?: any
 }): void
 export function fromObservable<T>(observable: unknown): Event<T>
 
@@ -406,8 +408,8 @@ export function createEffect<FN extends Function>(config: {
   ? Effect<
       Args['length'] extends 0 // does handler accept 0 arguments?
         ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length']  // is the first argument optional?
-          /**
+        : 0 | 1 extends Args['length'] // is the first argument optional?
+        ? /**
            * Applying `infer` to a variadic arguments here we'll get `Args` of
            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
            * In case T is optional we get `T | undefined` back from `Args[0]`.
@@ -420,7 +422,7 @@ export function createEffect<FN extends Function>(config: {
            * other type (`any | undefined | void` becomes just `any`). And we
            * have similar situation also with the `unknown` type.
            */
-        ? Args[0] | void
+          Args[0] | void
         : Args[0],
       Done extends Promise<infer Async> ? Async : Done,
       Error

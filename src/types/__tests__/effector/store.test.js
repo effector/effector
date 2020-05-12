@@ -247,22 +247,54 @@ test('#map', () => {
   `)
 })
 
-test('#reset', () => {
-  const event = createEvent()
-  const store = createStore(0)
-  store.reset(event)
-  const computed = store.map(() => 'hello')
+describe('#reset', () => {
+  test('simple case', () => {
+    const event = createEvent()
+    const store = createStore(0)
+    store.reset(event)
+    const computed = store.map(() => 'hello')
 
-  computed.reset(event)
-  expect(typecheck).toMatchInlineSnapshot(`
-    "
-    --typescript--
-    no errors
+    computed.reset(event)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
 
-    --flow--
-    no errors
-    "
-  `)
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('.reset(a, b)', () => {
+    const a = createEvent<string>()
+    const b = createEvent<number>()
+    const store = createStore(0)
+    store.reset(a, b)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('.reset([a, b])', () => {
+    const a = createEvent<string>()
+    const b = createEvent<number>()
+    const store = createStore(0)
+    store.reset([a, b])
+    expect(typecheck).toMatchInlineSnapshot(`
+"
+--typescript--
+no errors
+
+--flow--
+no errors
+"
+`)
+  })
 })
 
 test('#on', () => {
