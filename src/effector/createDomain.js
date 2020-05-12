@@ -19,7 +19,10 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
-    if (!data.parent) data.parent = node
+    if (!data.parent) {
+      data.parent = node
+      data.ownerSet = acc
+    }
   })
   own(node, [trigger])
   return (hook: (data: any) => any) => {

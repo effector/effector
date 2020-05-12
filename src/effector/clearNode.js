@@ -18,7 +18,7 @@ const removeFromNode = (currentNode, targetNode) => {
 const clearNodeNormalized = (
   targetNode: Graph,
   deep: boolean,
-  isDomainUnit
+  isDomainUnit,
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
@@ -48,21 +48,26 @@ const clearMap = (map: any) => map.clear()
 export const clearNode = (
   graphite: Graphite,
   {
-    deep
+    deep,
   }: {
-    deep?: boolean
-  } = {}
+    deep?: boolean,
+  } = {},
 ) => {
   let isDomainUnit = false
-  if (is.store(graphite)) {
-    clearMap(getSubscribers(graphite))
-  } else if (is.domain(graphite)) {
-    isDomainUnit = true
-    const history = graphite.history
-    clearMap(history.events)
-    clearMap(history.effects)
-    clearMap(history.stores)
-    clearMap(history.domains)
+  if (is.unit(graphite)) {
+    if (graphite.parent) {
+      graphite.ownerSet.delete(graphite)
+    }
+    if (is.store(graphite)) {
+      clearMap(getSubscribers(graphite))
+    } else if (is.domain(graphite)) {
+      isDomainUnit = true
+      const history = graphite.history
+      clearMap(history.events)
+      clearMap(history.effects)
+      clearMap(history.stores)
+      clearMap(history.domains)
+    }
   }
   clearNodeNormalized(getGraph(graphite), !!deep, isDomainUnit)
 }
