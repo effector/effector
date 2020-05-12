@@ -3,6 +3,56 @@
 import {createStore, createEvent, forward} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+it('support spread of units', () => {
+  const fn = jest.fn()
+  const set = createEvent()
+  const a = createEvent()
+  const b = createEvent()
+  const store = createStore(0)
+    .on(set, (_, x) => x)
+    .reset(a, b)
+
+  store.updates.watch(fn)
+
+  set(1)
+  a()
+  set(2)
+  b()
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      1,
+      0,
+      2,
+      0,
+    ]
+  `)
+})
+
+it('support array of units', () => {
+  const fn = jest.fn()
+  const set = createEvent()
+  const a = createEvent()
+  const b = createEvent()
+  const store = createStore(0)
+    .on(set, (_, x) => x)
+    .reset([a, b])
+
+  store.updates.watch(fn)
+
+  set(1)
+  a()
+  set(2)
+  b()
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      1,
+      0,
+      2,
+      0,
+    ]
+  `)
+})
+
 describe('reset before computation', () => {
   test('reset before computation', () => {
     const fn = jest.fn()
