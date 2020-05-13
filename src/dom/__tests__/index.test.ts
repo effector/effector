@@ -119,10 +119,10 @@ it('support reactive style variables', async () => {
     })
   })
   expect(s1).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: var(--align); --align:start;\\">content</div>"`,
+    `"<div style=\\"justify-self: var(--align); --align: start;\\">content</div>"`,
   )
   expect(s2).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: var(--align); --align:center;\\">content</div>"`,
+    `"<div style=\\"justify-self: var(--align); --align: center;\\">content</div>"`,
   )
 })
 
