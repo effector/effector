@@ -54,7 +54,7 @@ module.exports = {
     boolean(process.env.DOM, false)
       ? [
         {
-          dom: {
+          domBrowser: {
             automock: false,
             testEnvironment: 'node',
             testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
