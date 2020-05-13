@@ -130,7 +130,7 @@ it('support text nodes', async () => {
   })
   expect(s1).toMatchInlineSnapshot(`""`)
 })
-describe.skip('support visible changes', () => {
+describe('support visible changes', () => {
   it('works with non-keyed list', async () => {
     const [s1, s2] = await exec(async () => {
       const setTeam = createEvent<'a' | 'b'>()
