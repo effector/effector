@@ -49,7 +49,7 @@ it('support visible as dom node property', async () => {
   expect(s1).toMatchInlineSnapshot(`"<p>a</p><p>c</p>"`)
   expect(s2).toMatchInlineSnapshot(`"<p>a</p><p>b</p><p>c</p>"`)
 })
-it.skip('support visible as list item property', async () => {
+it('support visible as list item property', async () => {
   const [s1, s2] = await exec(async () => {
     const toggleVisible = createEvent<string>()
     const text = createStore([
