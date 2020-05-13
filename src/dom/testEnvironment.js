@@ -27,7 +27,7 @@ const browserStackConfig = {
       // video: 'true',
     },
     browserName: 'Safari',
-    browserVersion: '13.1',
+    browserVersion: '12.1',
     // browserVersion: '79.0',
     // 'browserstack.localIdentifier': 'Test123',
     'browserstack.use_w3c': true,
