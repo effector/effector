@@ -347,9 +347,8 @@ export function h(tag: string, opts?: any) {
         onDomNodeCreation.watch(({leaf, value, hydration}) => {
           const leafData = leaf.data as LeafDataElement
           const visibleOp = leafData.ops.visible
+          const parentBlock = leafData.block
           if (hydration) {
-            const parentBlock = leafData.block
-
             forceSetOpValue(value, visibleOp)
             if (value) {
               const visibleSibling = findPreviousVisibleSibling(parentBlock)
@@ -368,31 +367,31 @@ export function h(tag: string, opts?: any) {
               parentBlock.value = foundElement
               parentBlock.parent.visible = true
             }
-            const svgRoot = elementTemplate.isSvgRoot
-              ? (parentBlock.value as any)
-              : null
-            draft.childTemplates.forEach(actor => {
-              mountChild({
-                parentBlockFragment: parentBlock.child.child,
-                leaf,
-                node: parentBlock.value,
-                actor,
-                svgRoot,
-              })
+          }
+          const svgRoot = elementTemplate.isSvgRoot
+            ? (parentBlock.value as any)
+            : null
+          draft.childTemplates.forEach(actor => {
+            mountChild({
+              parentBlockFragment: parentBlock.child.child,
+              leaf,
+              node: parentBlock.value,
+              actor,
+              svgRoot,
             })
-            if (value) {
-              if (leafData.needToCallNode) {
-                leafData.needToCallNode = false
-                launch({
-                  target: onMount,
-                  params: {
-                    element: leafData.block.value,
-                    fns: draft.node,
-                  },
-                  page: leaf.spawn,
-                  defer: true,
-                })
-              }
+          })
+          if (value) {
+            if (leafData.needToCallNode) {
+              leafData.needToCallNode = false
+              launch({
+                target: onMount,
+                params: {
+                  element: leafData.block.value,
+                  fns: draft.node,
+                },
+                page: leaf.spawn,
+                defer: true,
+              })
             }
           }
           launch({
@@ -1061,7 +1060,10 @@ export function spec(config: {
   ɔ?: any
 }) {
   const draft = currentActor!.draft
-  if (draft.type === 'list') return
+  if (draft.type === 'list') {
+    if (config.visible) draft.itemVisible = config.visible
+    return
+  }
   if (draft.type === 'listItem') return
   if (draft.type === 'using') return
   if (draft.type === 'route') return
@@ -1487,20 +1489,61 @@ export function list<T>(opts: any, maybeFn?: any) {
             removeItem(page, page.parent!.childSpawns[page.template.id])
             removeItem(page, page.template.pages)
           })
-          mount.watch(({node, leaf}) => {
-            //@ts-ignore
-            spawnState.setState({leaf})
-            const parentBlock = (leaf.data as any).block as LF
-            parentBlock.visible = true
-            draft.childTemplates.forEach(actor => {
-              mountChild({
-                parentBlockFragment: parentBlock.child,
-                leaf,
-                node,
-                actor,
+          if (draft.itemVisible) {
+            const mountAndVisible = sample({
+              source: draft.itemVisible,
+              clock: mount,
+              fn: (visible, {node, leaf}) => ({visible, node, leaf}),
+            })
+            mountAndVisible.watch(({visible, node, leaf}) => {
+              //@ts-ignore
+              spawnState.setState({leaf})
+              const parentBlock = (leaf.data as any).block as LF
+              parentBlock.visible = visible
+              draft.childTemplates.forEach(actor => {
+                mountChild({
+                  parentBlockFragment: parentBlock.child,
+                  leaf,
+                  node,
+                  actor,
+                })
               })
             })
-          })
+            const onVisibleChanges = sample({
+              source: mount,
+              clock: draft.itemVisible,
+              fn: ({node, leaf}, visible) => ({visible, node, leaf}),
+            })
+            onVisibleChanges.watch(({visible, node, leaf}) => {
+              const parentBlock = (leaf.data as any).block as LF
+              parentBlock.visible = visible
+              iterateChildLeafs(leaf, child => {
+                const data = child.data
+                switch (data.type) {
+                  case 'element':
+                    pushOpToQueue(visible, data.ops.visible)
+                    break
+                  default:
+                    console.log('unsupported type', data.type)
+                }
+              })
+            })
+          } else {
+            mount.watch(({node, leaf}) => {
+              //@ts-ignore
+              spawnState.setState({leaf})
+              const parentBlock = (leaf.data as any).block as LF
+              parentBlock.visible = true
+              draft.childTemplates.forEach(actor => {
+                mountChild({
+                  parentBlockFragment: parentBlock.child,
+                  leaf,
+                  node,
+                  actor,
+                })
+              })
+            })
+          }
           return {
             itemUpdater,
             mount,
@@ -1793,7 +1836,7 @@ function mountChild({
             priority: 'tree',
             runOp(value) {
               if (leaf.hydration) {
-                console.count('hydration')
+                // console.count('hydration')
               }
               if (value) {
                 appendChild(elementBlock)

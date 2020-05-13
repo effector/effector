@@ -270,6 +270,7 @@ export type RouteType = BindingsDraft & {
 export type ListType = BindingsDraft & {
   type: 'list'
   key: {type: 'index'} | {type: 'key'; key: string}
+  itemVisible?: Store<boolean>
 }
 
 export type ListItemType = {
