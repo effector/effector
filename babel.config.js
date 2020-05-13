@@ -23,7 +23,10 @@ const meta = {
   isCompat: false,
 }
 
+const isBrowserstackDomTest = !!process.env.DOM
+
 const typesTestsPath = join('types', '__tests__')
+const domTestsPath = join('dom', '__tests__')
 
 const aliases = {
   'effector/fixtures': 'fixtures',
@@ -46,6 +49,13 @@ const locationPlugin = resolvePath(
   'types',
   'src',
   'locationPlugin.js',
+)
+const jsdomTestPlugin = resolvePath(
+  __dirname,
+  'src',
+  'dom',
+  '__fixtures__',
+  'jsdomTestPlugin.js',
 )
 const babelConfig = {
   presets: [
@@ -99,6 +109,14 @@ const babelConfig = {
     return result
   },
   overrides: [
+    {
+      test(filename) {
+        return (
+          !isBrowserstackDomTest && filename && filename.includes(domTestsPath)
+        )
+      },
+      plugins: [jsdomTestPlugin],
+    },
     {
       test(filename) {
         return filename && filename.includes(typesTestsPath)

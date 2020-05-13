@@ -100,6 +100,18 @@ module.exports = {
             testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
           },
         },
+        {
+          dom: {
+            automock: false,
+            testEnvironment: 'node',
+            testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
+            transform: {
+              '^.+\\.jsx?$': 'babel-jest',
+              '^.+\\.ts?$': 'babel-jest',
+            },
+            testTimeout: 60e3,
+          },
+        },
         !boolean(process.env.NO_TYPE_TESTS, false) && {
           types: {
             testMatch: [
