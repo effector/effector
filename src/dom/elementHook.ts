@@ -1500,14 +1500,17 @@ export function list<T>(opts: any, maybeFn?: any) {
               spawnState.setState({leaf})
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible
-              draft.childTemplates.forEach(actor => {
-                mountChild({
-                  parentBlockFragment: parentBlock.child,
-                  leaf,
-                  node,
-                  actor,
+              parentBlock.childInitialized = visible
+              if (visible) {
+                draft.childTemplates.forEach(actor => {
+                  mountChild({
+                    parentBlockFragment: parentBlock.child,
+                    leaf,
+                    node,
+                    actor,
+                  })
                 })
-              })
+              }
             })
             const onVisibleChanges = sample({
               source: mount,
@@ -1517,6 +1520,20 @@ export function list<T>(opts: any, maybeFn?: any) {
             onVisibleChanges.watch(({visible, node, leaf}) => {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible
+              if (!parentBlock.childInitialized) {
+                if (visible) {
+                  parentBlock.childInitialized = true
+                  draft.childTemplates.forEach(actor => {
+                    mountChild({
+                      parentBlockFragment: parentBlock.child,
+                      leaf,
+                      node,
+                      actor,
+                    })
+                  })
+                }
+                return
+              }
               iterateChildLeafs(leaf, child => {
                 const data = child.data
                 switch (data.type) {
@@ -1534,6 +1551,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               spawnState.setState({leaf})
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = true
+              parentBlock.childInitialized = true
               draft.childTemplates.forEach(actor => {
                 mountChild({
                   parentBlockFragment: parentBlock.child,
@@ -1624,6 +1642,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 parent: null as any,
                 child: [],
               },
+              childInitialized: false,
               visible: false,
               left: null,
               right: null,

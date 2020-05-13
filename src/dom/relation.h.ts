@@ -139,6 +139,7 @@ export type LF = {
   parent: ListBlock
   child: FragmentBlock
   visible: boolean
+  childInitialized: boolean
   left: LF | null
   right: LF | null
 }
