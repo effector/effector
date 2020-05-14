@@ -63,7 +63,7 @@ module.exports = {
               '^.+\\.ts?$': 'babel-jest',
             },
             testTimeout: 60e3,
-            runner: './src/dom/testEnvironment.js',
+            runner: './src/dom/__fixtures__/browserstackTestRunner.js',
           },
         },
       ]

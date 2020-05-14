@@ -56,12 +56,14 @@ async function loadModules() {
     __dirname,
     '..',
     '..',
+    '..',
     'npm',
     'effector',
     'effector.cjs.js',
   )
   const effectorDomPath = resolve(
     __dirname,
+    '..',
     '..',
     '..',
     'npm',
