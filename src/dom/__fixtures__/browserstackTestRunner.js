@@ -85,10 +85,21 @@ module.exports = class BSTestRunner extends require('jest-runner') {
       tests,
       watcher,
       async test => {
-        const browser = await remote(browserStackConfig)
+        let browser
+        try {
+          browser = await remote(browserStackConfig)
+        } catch (error) {
+          console.error('remote() call error', error)
+          throw error
+        }
         const initBrowser = async() => {
-          await browser.url('about:blank')
-          await browser.execute(initPageRuntime, modulesList)
+          try {
+            await browser.url('about:blank')
+            await browser.execute(initPageRuntime, modulesList)
+          } catch (error) {
+            console.error('initBrowser error', error)
+            throw error
+          }
         }
         const {effector, dom} = await modulesReq
         const modulesList = [
