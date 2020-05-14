@@ -350,6 +350,7 @@ const updateStore = (
   const template = readTemplate()
   if (template) {
     node.unshift(template.loader)
+    node.push(template.upward)
     if (is.store(from)) {
       const ref = getStoreState(from)
       if (!template.plain.includes(ref)) {
