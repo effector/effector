@@ -82,7 +82,7 @@ export function spec(spec: {
   attr?: PropertyMap
   data?: PropertyMap
   transform?: Partial<TransformMap>
-  text?: DOMProperty | AttributeStore
+  text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
@@ -117,7 +117,7 @@ export function h(
     attr?: PropertyMap
     data?: PropertyMap
     transform?: Partial<TransformMap>
-    text?: DOMProperty | AttributeStore
+    text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
@@ -151,7 +151,7 @@ export function variant<T, K extends keyof T>(config: {
 // ): void
 export function list<T>(
   source: Store<T[]>,
-  cb: (opts: {store: Store<T>; index: number; signal: Signal}) => void,
+  cb: (opts: {store: Store<T>; key: Store<number>}) => void,
 ): void
 export function list<
   T,
@@ -170,8 +170,7 @@ export function list<
           ? Store<T[Query[K]]>
           : never
       }
-      key: T[K]
-      signal: Signal
+      key: Store<T[K]>
     }) => void
   },
   cb?: (opts: {
@@ -179,28 +178,20 @@ export function list<
     fields: {
       [K in keyof Query]: Query[K] extends keyof T ? Store<T[Query[K]]> : never
     }
-    key: T[K]
-    signal: Signal
+    key: Store<T[K]>
   }) => void,
 ): void
 export function list<T, K extends keyof T>(
-  {
-    key,
-    source,
-    reverse,
-  }: {
+  opts: {
     key: T[K] extends string | number | symbol ? K : never
     source: Store<T[]>
     visible?: (state: T) => boolean
-    reverse?: boolean
-    fn?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void
+    fn?: (opts: {store: Store<T>; key: Store<T[K]>}) => void
   },
-  cb?: (opts: {store: Store<T>; key: T[K]; signal: Signal}) => void,
+  cb?: (opts: {store: Store<T>; key: Store<T[K]>}) => void,
 ): void
 
 export function node(fn: (node: DOMElement) => void): void
-export function signalOwn<T>(value: T): T
-export function explicitUnmount(unmountOn: Event<any>): void
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
   store: Store<T>,
