@@ -30,7 +30,7 @@ jobs:
         name: install deps
       - run: yarn build
         name: build libs
-      - run: yarn test --maxWorkers=2
+      - run: yarn test --runInBand
         name: dom tests
         env:
           DOM: 'true'
