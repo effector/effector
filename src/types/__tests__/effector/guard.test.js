@@ -77,6 +77,12 @@ describe('guard(source, config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
+        Type 'Event<number>' is not assignable to type 'Event<string>'.
+          Types of property 'watch' are incompatible.
+            Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type 'number' is not assignable to type 'string'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
@@ -127,27 +133,27 @@ describe('guard(source, config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-No overload matches this call.
-  The last overload gave the following error.
-    Type 'Store<string>' is not assignable to type 'Unit<number>'.
-      Types of property '__' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
+                Types of property '__' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
 
---flow--
-Cannot call 'guard'
-  guard(trigger, {
-  ^^^^^
-  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-      const target: Store<string> = createStore('no')
-                      [1] ^^^^^^
-      const trigger: Event<number> = createEvent()
-                       [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+          --flow--
+          Cannot call 'guard'
+            guard(trigger, {
+            ^^^^^
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+                const target: Store<string> = createStore('no')
+                                [1] ^^^^^^
+                const trigger: Event<number> = createEvent()
+                                 [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
       })
     })
   })
@@ -176,11 +182,6 @@ Cannot call 'guard'
         "
         --typescript--
         Type 'Event<number>' is not assignable to type 'Event<string>'.
-          Types of property 'watch' are incompatible.
-            Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type 'number' is not assignable to type 'string'.
 
         --flow--
         Cannot assign 'guard(...)' to 'result'
@@ -224,25 +225,25 @@ Cannot call 'guard'
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-No overload matches this call.
-  The last overload gave the following error.
-    Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
---flow--
-Cannot call 'guard'
-  guard(trigger, {
-  ^^^^^
-  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-      const target: Store<string> = createStore('no')
-                      [1] ^^^^^^
-      const trigger: Event<number> = createEvent()
-                       [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+          --flow--
+          Cannot call 'guard'
+            guard(trigger, {
+            ^^^^^
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+                const target: Store<string> = createStore('no')
+                                [1] ^^^^^^
+                const trigger: Event<number> = createEvent()
+                                 [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
       })
     })
   })
@@ -384,25 +385,25 @@ describe('guard(config)', () => {
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-No overload matches this call.
-  The last overload gave the following error.
-    Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
---flow--
-Cannot call 'guard'
-  guard({
-  ^^^^^
-  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-      const target: Store<string> = createStore('no')
-                      [1] ^^^^^^
-      const trigger: Event<number> = createEvent()
-                       [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+          --flow--
+          Cannot call 'guard'
+            guard({
+            ^^^^^
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+                const target: Store<string> = createStore('no')
+                                [1] ^^^^^^
+                const trigger: Event<number> = createEvent()
+                                 [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
       })
     })
   })
@@ -482,25 +483,25 @@ Cannot call 'guard'
           target,
         })
         expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-No overload matches this call.
-  The last overload gave the following error.
-    Type 'Store<string>' is not assignable to type 'Unit<number>'.
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Store<string>' is not assignable to type 'Unit<number>'.
 
---flow--
-Cannot call 'guard'
-  guard({
-  ^^^^^
-  string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
-      const target: Store<string> = createStore('no')
-                      [1] ^^^^^^
-      const trigger: Event<number> = createEvent()
-                       [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+          --flow--
+          Cannot call 'guard'
+            guard({
+            ^^^^^
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+                const target: Store<string> = createStore('no')
+                                [1] ^^^^^^
+                const trigger: Event<number> = createEvent()
+                                 [2] ^^^^^^
+                export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                  [3] ^
+          "
+        `)
       })
       test('nullable type support', () => {
         const event = createEvent()
@@ -545,23 +546,23 @@ Cannot call 'guard'
             target,
           })
           expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+            "
+            --typescript--
+            no errors
 
---flow--
-Cannot call 'guard' with object literal bound to 'config'
-  guard({
-        ^...
-  undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
-      const target = createEvent<void>()
-                             [1] ^^^^
-      const source = createEvent<string>()
-                             [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+            --flow--
+            Cannot call 'guard' with object literal bound to 'config'
+              guard({
+                    ^...
+              undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
+                  const target = createEvent<void>()
+                                         [1] ^^^^
+                  const source = createEvent<string>()
+                                         [2] ^^^^^^
+                  export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                    [3] ^
+            "
+          `)
         })
         test('with function', () => {
           const source = createEvent<{pass: boolean}>()
@@ -573,23 +574,23 @@ Cannot call 'guard' with object literal bound to 'config'
             target,
           })
           expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+            "
+            --typescript--
+            no errors
 
---flow--
-Cannot call 'guard' with object literal bound to 'config'
-  guard({
-        ^...
-  undefined [1] is incompatible with object type [2] in type argument 'T' [3] of property 'target'
-      const target = createEvent<void>()
-                             [1] ^^^^
-      const source = createEvent<{pass: boolean}>()
-                             [2] ^^^^^^^^^^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+            --flow--
+            Cannot call 'guard' with object literal bound to 'config'
+              guard({
+                    ^...
+              undefined [1] is incompatible with object type [2] in type argument 'T' [3] of property 'target'
+                  const target = createEvent<void>()
+                                         [1] ^^^^
+                  const source = createEvent<{pass: boolean}>()
+                                         [2] ^^^^^^^^^^^^^^^
+                  export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                    [3] ^
+            "
+          `)
         })
       })
     })

@@ -286,14 +286,14 @@ describe('#reset', () => {
     const store = createStore(0)
     store.reset([a, b])
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-no errors
-"
-`)
+      --flow--
+      no errors
+      "
+    `)
   })
 })
 
@@ -339,30 +339,28 @@ test('#on triggers[] failing', () => {
 
   store.on([event, another], (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-No overload matches this call.
-  Overload 1 of 2, '(triggers: Unit<string>[], handler: (state: number, payload: string) => number | void): Store<number>', gave the following error.
-    Type 'Event<number>' is not assignable to type 'Unit<string>'.
-  Overload 2 of 2, '(trigger: Unit<unknown>, handler: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
-    Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
-      Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-Parameter 'state' implicitly has an 'any' type.
-Parameter 'payload' implicitly has an 'any' type.
+    "
+    --typescript--
+    No overload matches this call.
+      Overload 1 of 2, '(triggers: Unit<string>[], handler: (state: number, payload: string) => number | void): Store<number>', gave the following error.
+        Type 'Event<number>' is not assignable to type 'Unit<string>'.
+      Overload 2 of 2, '(trigger: Unit<unknown>, handler: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
+        Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
+          Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
 
---flow--
-Cannot call 'store.on' with array literal bound to 'triggers'
-  store.on([event, another], (state, payload) => state)
-           ^^^^^^^^^^^^^^^^
-  string [1] is incompatible with number [2] in type argument 'T' [3] of array element
-      const another = createStore('')
-                              [1] ^^
-      const event = createEvent<number>()
-                            [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+    --flow--
+    Cannot call 'store.on' with array literal bound to 'triggers'
+      store.on([event, another], (state, payload) => state)
+               ^^^^^^^^^^^^^^^^
+      string [1] is incompatible with number [2] in type argument 'T' [3] of array element
+          const another = createStore('')
+                                  [1] ^^
+          const event = createEvent<number>()
+                                [2] ^^^^^^
+          export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                            [3] ^
+    "
+  `)
 })
 
 test('#off', () => {

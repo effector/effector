@@ -35,11 +35,11 @@ describe('text', () => {
       --typescript--
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; transform?: Partial<TransformMap> | undefined; ... 5 more ...; handler?: Partial<...> | undefined; }): void', gave the following error.
-          Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Store<string> | Store<number> | Store<boolean> | Store<null> | Store<string | number> | Store<string | boolean> | ... 10 more ... | undefined'.
-            Type 'Store<{ value: string; } | null>' is not assignable to type 'Store<string>'.
+          Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Store<boolean> | Store<number> | Store<string> | Store<null> | Store<string | null> | Store<number | null> | ... 11 more ... | undefined'.
+            Type 'Store<{ value: string; } | null>' is not assignable to type 'Store<boolean>'.
               The types returned by 'getState()' are incompatible between these types.
-                Type '{ value: string; } | null' is not assignable to type 'string'.
-                  Type 'null' is not assignable to type 'string'.
+                Type '{ value: string; } | null' is not assignable to type 'boolean'.
+                  Type 'null' is not assignable to type 'boolean'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '{ text: Store<{ value: string; } | null>; }' is not assignable to parameter of type '() => void'.
             Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
@@ -60,12 +60,11 @@ describe('text', () => {
       --typescript--
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; transform?: Partial<TransformMap> | undefined; ... 5 more ...; handler?: Partial<...> | undefined; }): void', gave the following error.
-          Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'string | number | boolean | Store<string> | Store<number> | Store<boolean> | Store<null> | Store<string | number> | Store<string | boolean> | ... 10 more ... | undefined'.
-            Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'Store<string>'.
-              Types of property 'updates' are incompatible.
-                Type 'Event<\\"foo\\" | \\"bar\\">' is not assignable to type 'Event<string>'.
-                  Types of parameters 'payload' and 'payload' are incompatible.
-                    Type 'string' is not assignable to type '\\"foo\\" | \\"bar\\"'.
+          Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'string | number | boolean | Store<boolean> | Store<number> | Store<string> | Store<null> | Store<string | null> | Store<number | null> | ... 11 more ... | undefined'.
+            Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'Store<boolean>'.
+              The types returned by 'getState()' are incompatible between these types.
+                Type '\\"foo\\" | \\"bar\\"' is not assignable to type 'boolean'.
+                  Type '\\"foo\\"' is not assignable to type 'boolean'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '{ text: Store<\\"foo\\" | \\"bar\\">; }' is not assignable to parameter of type '() => void'.
             Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
