@@ -6,14 +6,17 @@ hide_title: true
 
 # sample
 
+This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
+
 ## Formulae
 
 ```ts
-sample({ source, clock, target, fn? }): target
+sample({ source, clock?, target?, fn? }): target
 ```
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
 
+- If the `clock` is not passed, sample will be trigged on every `target` update.
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
@@ -43,9 +46,95 @@ const event = sample({ source: $store, clock: event });
 // Because not all arguments are stores.
 ```
 
-## `sample(sourceStore, clockEvent, fn?)`
+## `sample({source, clock?, fn?, target?, greedy?})`
 
-Overall this method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
+Object-like arguments passing, works exactly the same as examples above do.
+
+`clock` - trigger node, if not passed, the `source` is used as clock
+
+`target` - can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
+
+`greedy` modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
+
+#### Arguments
+
+1. `params` (_Object_): Configuration object
+
+#### Returns
+
+([_Event_](Event.md)|[_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
+
+#### Example 1
+
+```js try
+import {sample, createStore, createEffect, createEvent} from 'effector'
+
+const $user = createStore({name: 'john', password: 'doe'})
+
+const signInFx = createEffect({handler: console.log})
+const submitForm = createEvent()
+
+const submitted = sample({
+  source: $user,
+  clock: submitForm,
+  fn: (user, params) => ({user, params}),
+  target: signInFx,
+})
+
+console.log(submitted === signInFx) // units are equal
+
+submitForm('foo')
+```
+
+[Try it](https://share.effector.dev/OPajzRNF)
+
+#### Example 2
+
+```js try
+import {createEvent, createStore, sample} from 'effector'
+
+const clickButton = createEvent()
+const closeModal = clickButton.map(() => 'close modal')
+
+const lastEvent = createStore(null)
+  .on(clickButton, (_, data) => data)
+  .on(closeModal, () => 'modal')
+
+lastEvent.updates.watch(data => {
+  // here we need everything
+  //console.log(`sending important analytics event: ${data}`)
+})
+
+lastEvent.updates.watch(data => {
+  //here we need only final value
+  //console.log(`render <div class="yourstatus">${data}</div>`)
+})
+
+const analyticReportsEnabled = createStore(false)
+
+const commonSampling = sample({
+  source: analyticReportsEnabled,
+  clock: merge([clickButton, closeModal]),
+  fn: (isEnabled, data) => ({isEnabled, data}),
+})
+
+const greedySampling = sample({
+  source: analyticReportsEnabled,
+  clock: merge([clickButton, closeModal]),
+  fn: (isEnabled, data) => ({isEnabled, data}),
+  greedy: true,
+})
+
+commonSampling.watch(data => console.log('non greedy update', data))
+greedySampling.watch(data => console.log('greedy update', data))
+
+clickButton('click A')
+clickButton('click B')
+```
+
+[Try it](https://share.effector.dev/yI70z0nd)
+
+## `sample(sourceStore, clockEvent, fn?)`
 
 Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()` in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more suitable to use `sample` method as described below.
 
@@ -209,94 +298,6 @@ inc() // => Doe has 1 coins
 ```
 
 [Try it](https://share.effector.dev/h3zED3yW)
-
-## `sample({source, clock?, fn?, greedy?, target?})`
-
-Object-like arguments passing, works exactly the same as examples above do.
-
-`clock` - trigger node, if not passed, the `source` is used as clock
-
-`greedy` modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
-
-`target` - can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
-
-#### Arguments
-
-1. `params` (_Object_): Configuration object
-
-#### Returns
-
-([_Event_](Event.md)|[_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
-
-#### Example 1
-
-```js try
-import {sample, createStore, createEffect, createEvent} from 'effector'
-
-const $user = createStore({name: 'john', password: 'doe'})
-
-const signInFx = createEffect({handler: console.log})
-const submitForm = createEvent()
-
-const submitted = sample({
-  source: $user,
-  clock: submitForm,
-  fn: (user, params) => ({user, params}),
-  target: signInFx,
-})
-
-console.log(submitted === signInFx) // units are equal
-
-submitForm('foo')
-```
-
-[Try it](https://share.effector.dev/OPajzRNF)
-
-#### Example 2
-
-```js try
-import {createEvent, createStore, sample} from 'effector'
-
-const clickButton = createEvent()
-const closeModal = clickButton.map(() => 'close modal')
-
-const lastEvent = createStore(null)
-  .on(clickButton, (_, data) => data)
-  .on(closeModal, () => 'modal')
-
-lastEvent.updates.watch(data => {
-  // here we need everything
-  //console.log(`sending important analytics event: ${data}`)
-})
-
-lastEvent.updates.watch(data => {
-  //here we need only final value
-  //console.log(`render <div class="yourstatus">${data}</div>`)
-})
-
-const analyticReportsEnabled = createStore(false)
-
-const commonSampling = sample({
-  source: analyticReportsEnabled,
-  clock: merge([clickButton, closeModal]),
-  fn: (isEnabled, data) => ({isEnabled, data}),
-})
-
-const greedySampling = sample({
-  source: analyticReportsEnabled,
-  clock: merge([clickButton, closeModal]),
-  fn: (isEnabled, data) => ({isEnabled, data}),
-  greedy: true,
-})
-
-commonSampling.watch(data => console.log('non greedy update', data))
-greedySampling.watch(data => console.log('greedy update', data))
-
-clickButton('click A')
-clickButton('click B')
-```
-
-[Try it](https://share.effector.dev/yI70z0nd)
 
 ## `sample(sourceStore)`
 
