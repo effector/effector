@@ -8,6 +8,9 @@ hide_title: true
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
+Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()` in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more suitable to use `sample` method.
+
+
 ## Formulae
 
 ```ts
@@ -20,7 +23,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
-#### Type of the created `target`
+### Type of the created `target`
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
 
@@ -48,21 +51,23 @@ const event = sample({ source: $store, clock: event });
 
 ## `sample({source, clock?, fn?, target?, greedy?})`
 
-Object-like arguments passing, works exactly the same as examples above do.
-
-`clock` - trigger node, if not passed, the `source` is used as clock
-
-`target` - can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
-
-`greedy` modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
-
 #### Arguments
 
 1. `params` (_Object_): Configuration object
 
+   * `source` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Source unit
+   * `clock?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Clock unit. If not passed, the `source` is used as clock.
+   * `fn?` (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+   * `target?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
+   * `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
+
+
+
+
 #### Returns
 
-([_Event_](Event.md)|[_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged
+([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
+[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
 
 #### Example 1
 
@@ -299,70 +304,11 @@ inc() // => Doe has 1 coins
 
 [Try it](https://share.effector.dev/h3zED3yW)
 
-## `sample(sourceStore)`
-
-Shorthand for `sample({ source: sourceStore, clock: sourceStore })`, it can be used to make updates of `sourceStore` non-greedy, thus batching updates of `sourceStore`.
-
-This is especially useful if we are combining different stores, which results in multiple store switches within single update. `sample` ensures it will fire only upon the last state
-
-#### Arguments
-
-1. `sourceStore` ([_Store_](Store.md)): Source store
-
-#### Returns
-
-[_Store_](Store.md) - Non-greedy store
-
-#### Example 1
-
-```js try
-import {createStore, createEffect, sample, combine} from 'effector'
-
-const data = [{name: 'physics', id: 1}]
-
-const fetchContentFx = createEffect({
-  handler: () => new Promise(resolve => setTimeout(() => resolve(data), 0)),
-})
-
-const $lessonIndex = createStore(0)
-const $allLessons = createStore([]).on(
-  fetchContentFx.doneData,
-  (_, result) => result,
-)
-
-const $lesson = combine(
-  $lessonIndex,
-  $allLessons,
-  (idx, lessons) => lessons[idx],
-)
-
-const $modal = combine({
-  isPending: fetchContentFx.pending,
-  content: $lesson,
-})
-
-const $batchedModal = sample($modal)
-
-$modal.updates.watch(v => console.log('modal update', v))
-//=> modal update { isPending: true, content: undefined })
-//=> modal update { isPending: false, content: undefined })
-//=> modal update { isPending: false, content: Object })
-// total 3 updates
-$batchedModal.updates.watch(v => console.log('batchedModal update', v))
-//=> batched modal update { isPending: true, content: undefined })
-//=> batched modal update { isPending: false, content: Object })
-// total 2 updates
-
-fetchContentFx()
-```
-
-[Try it](https://share.effector.dev/htQpg1LY)
-
 ## Objects and arrays of _Store_ in `sample({ source })`
 
 ### Object of stores
 
-`sample` can be called with object of (_Store_)[Store.md] as `source`:
+`sample` can be called with object of [_Store_](Store.md) as `source`:
 
 ```js try
 import { createStore, createEvent, sample } from 'effector'
@@ -387,7 +333,7 @@ target.watch((obj) => {
 
 ### Array of stores
 
-`sample` can be called with array of (_Store_)[Store.md] as `source`:
+`sample` can be called with array of [_Store_](Store.md) as `source`:
 
 ```js try
 import { createStore, createEvent, sample } from 'effector'
