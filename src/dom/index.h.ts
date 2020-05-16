@@ -8,7 +8,7 @@ export type Template = {
   plain: any[]
   closure: any[]
   watch: any[]
-  nameMap: {}
+  nameMap: Record<string, any>
   pages: Spawn[]
   childTemplates: Template[]
   loader: Filter

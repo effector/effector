@@ -6,6 +6,7 @@ import {
   createNode,
   withRegion,
   restore,
+  Step,
 } from 'effector'
 import {
   Leaf,
@@ -62,6 +63,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     closure: [],
     childTemplates: [],
     upward: step.filter({
+      //@ts-ignore
       fn(upd, scope, stack) {
         if (!stack.page) {
           console.error('context lost', stack)
@@ -78,7 +80,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
             currentStackPage = currentStackPage.parent
           }
         }
-        stack.node.next.forEach(node => {
+        stack.node.next.forEach((node: Step) => {
           const targetTemplate = node.meta.nativeTemplate
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
@@ -87,6 +89,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 params: upd,
                 defer: true,
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
+                //@ts-ignore
                 stack,
               })
             } else {
@@ -98,6 +101,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
               params: upd,
               defer: true,
               page: null,
+              //@ts-ignore
               stack,
             })
           }
@@ -106,13 +110,14 @@ export function createTemplate<Api extends {[method: string]: any}>({
       },
     }),
     loader: step.filter({
+      //@ts-ignore
       fn(upd, scope, stack) {
         if (stack.parent) {
           if (stack.page) {
             if (!stack.page.active) return false
             if (stack.page.template === template) return true
             if (stack.page.childSpawns[template.id]) {
-              stack.page.childSpawns[template.id].forEach(page => {
+              stack.page.childSpawns[template.id].forEach((page: Spawn) => {
                 launch({
                   params: upd,
                   target: stack.node,
@@ -193,7 +198,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   const actor: Actor<Api> = (currentActor = {
     template,
     node,
-    api: null,
+    api: null as any,
     draft,
     isSvgRoot,
     namespace,
@@ -211,7 +216,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   return actor
 }
 
-function getCurrent(ref) {
+function getCurrent(ref: {type?: string; current: any}) {
   switch (ref.type) {
     case 'list':
       return [...ref.current]
@@ -247,7 +252,7 @@ export function spawn(
   },
 ): Leaf {
   const template = actor.template
-  const page = {}
+  const page = {} as Record<string, any>
   const result: Spawn = {
     id: ++spawnID,
     fullID: '',
@@ -315,7 +320,7 @@ export function spawn(
       current: values[name],
     }
   }
-  function execRef(ref) {
+  function execRef(ref: any) {
     if (ref.before) {
       for (const cmd of ref.before) {
         switch (cmd.type) {
@@ -370,7 +375,11 @@ export function spawn(
     execRef(ref)
   }
 
-  function runWatchersFrom(list, state, page) {
+  function runWatchersFrom(
+    list: any[],
+    state: {i: number; stop: boolean},
+    page: Record<string, any>,
+  ) {
     state.stop = true
     let val
     try {
@@ -398,7 +407,7 @@ export function spawn(
   }
   if (actor.api) {
     for (const key in actor.api) {
-      api[key] = (params, defer = true) =>
+      api[key] = (params: any, defer = true) =>
         launch({
           target: actor.api[key],
           params,
