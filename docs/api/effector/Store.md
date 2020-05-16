@@ -99,6 +99,7 @@ store.on(changed, (state, params) => state + params)
 store.watch(value => {
   console.log('updated', value)
 })
+// => updated 0
 
 changed(2)
 // => updated 2
