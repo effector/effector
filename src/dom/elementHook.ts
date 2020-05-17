@@ -76,6 +76,11 @@ import {
   currentTemplate,
   currentLeaf,
 } from './template'
+import {
+  findParentDOMElement,
+  findPreviousVisibleSibling,
+  findPreviousVisibleSiblingBlock,
+} from './search'
 import {remap} from './remap'
 
 const onMount = createEvent<{
@@ -228,7 +233,7 @@ export function h(tag: string, opts?: any) {
         const map = draft.styleProp[i]
         for (const key in map) {
           if (key.startsWith('--')) {
-            merged.styleVar[key.slice(2)] = map[key]
+            merged.styleVar[key.slice(2)] = map[key]!
           } else {
             merged.styleProp[key] = map[key]
           }
@@ -279,7 +284,7 @@ export function h(tag: string, opts?: any) {
             value,
           })
         } else {
-          applyStyle(stencil, propName, value)
+          applyStyle(stencil, propName, value!)
         }
       }
       for (const field in merged.styleVar) {
@@ -770,128 +775,6 @@ function setInParentIndex(draft: BindingsDraft, template: Actor<any>) {
       break
   }
 }
-function findParentDOMElementBlock(
-  block: Exclude<Block, UsingBlock>,
-): UsingBlock | ElementBlock {
-  switch (block.type) {
-    case 'fragment':
-      switch (block.parent.type) {
-        case 'EF':
-        case 'UF':
-          return block.parent.parent
-      }
-      return findParentDOMElementBlock(block.parent.parent)
-    case 'route':
-      return findParentDOMElementBlock(block.parent.parent)
-    default:
-      return findParentDOMElementBlock(block.parent.parent)
-  }
-}
-function findParentDOMElement(
-  block: Exclude<Block, UsingBlock>,
-): DOMElement | null {
-  const child = findParentDOMElementBlock(block)
-  if (child) return child.value
-  return null
-}
-function findLastVisibleChildBlock(
-  block: FF | FE | FL | FT | FR | LF | RF,
-): ElementBlock | TextBlock | null {
-  if (!block.visible) return null
-  switch (block.type) {
-    case 'FE':
-    case 'FT':
-      return block.child
-    case 'FR':
-      return findLastVisibleChildBlock(block.child.child)
-    case 'LF':
-    case 'RF':
-    case 'FF': {
-      const childs = block.child.child
-      for (let i = childs.length - 1; i >= 0; i--) {
-        const child = childs[i]
-        const visibleChild = findLastVisibleChildBlock(child)
-        if (visibleChild) return visibleChild
-      }
-      return null
-    }
-    case 'FL': {
-      let child = block.child.lastChild
-      if (!child) return null
-      while (child) {
-        const visibleChild = findLastVisibleChildBlock(child)
-        if (visibleChild) return visibleChild
-        child = child.left
-      }
-      return null
-    }
-  }
-}
-function findPreviousVisibleSiblingBlock(
-  block: Exclude<Block, UsingBlock>,
-): TextBlock | ElementBlock | null {
-  if (block.type === 'fragment') {
-    switch (block.parent.type) {
-      case 'EF':
-      case 'UF':
-        return null
-      case 'RF': {
-        const parent = block.parent.parent.parent
-        const parentFragment = parent.parent
-        for (let i = parent.index - 1; i >= 0; i--) {
-          const sibling = parentFragment.child[i]
-          const visibleChild = findLastVisibleChildBlock(sibling)
-          if (visibleChild) return visibleChild
-        }
-        return findPreviousVisibleSiblingBlock(parentFragment)
-      }
-      case 'FF': {
-        const parent = block.parent
-        const parentFragment = parent.parent
-        for (let i = parent.index - 1; i >= 0; i--) {
-          const sibling = parentFragment.child[i]
-          const visibleChild = findLastVisibleChildBlock(sibling)
-          if (visibleChild) return visibleChild
-        }
-        return findPreviousVisibleSiblingBlock(parentFragment)
-      }
-      case 'LF': {
-        let sibling = block.parent.left
-        while (sibling) {
-          const visibleChild = findLastVisibleChildBlock(sibling)
-          if (visibleChild) return visibleChild
-          sibling = sibling.left
-        }
-        return findPreviousVisibleSiblingBlock(block.parent.parent)
-      }
-    }
-  }
-  if (block.type === 'route') {
-    const parentFragment = block.parent.parent
-    for (let i = block.parent.index - 1; i >= 0; i--) {
-      const sibling = parentFragment.child[i]
-      if (!sibling) continue
-      const visibleChild = findLastVisibleChildBlock(sibling)
-      if (visibleChild) return visibleChild
-    }
-    return findPreviousVisibleSiblingBlock(parentFragment)
-  }
-  const parentFragment = block.parent.parent
-  for (let i = block.parent.index - 1; i >= 0; i--) {
-    const sibling = parentFragment.child[i]
-    if (!sibling) continue
-    const visibleChild = findLastVisibleChildBlock(sibling)
-    if (visibleChild) return visibleChild
-  }
-  return findPreviousVisibleSiblingBlock(parentFragment)
-}
-function findPreviousVisibleSibling(
-  block: Exclude<Block, UsingBlock>,
-): DOMElement | Text | null {
-  const child = findPreviousVisibleSiblingBlock(block)
-  if (child) return child.value
-  return null
-}
 
 function appendChild(block: TextBlock | ElementBlock) {
   const visibleSibling = findPreviousVisibleSibling(block)
@@ -925,12 +808,14 @@ export function using(
 ): void
 export function using(node: DOMElement, opts: any): void {
   let cb: () => any
-  let onComplete: () => void
+  let onComplete: (() => void) | undefined
   let env: {
     document: Document
   }
   let hydrate: boolean
-  let onRoot: (config: {template: Actor<{mount: any}>; leaf: Leaf}) => void
+  let onRoot:
+    | ((config: {template: Actor<{mount: any}>; leaf: Leaf}) => void)
+    | undefined
   if (typeof opts === 'function') {
     cb = opts
     env = getDefaultEnv()
@@ -1083,7 +968,7 @@ export function spec(config: {
     } else {
       draft.text.push({
         index: firstIndex,
-        value: text,
+        value: text!,
       })
       draft.childCount += 1
     }
@@ -1380,6 +1265,67 @@ function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
       cb(childSpawn.leaf)
     }
   }
+}
+
+export function tree<
+  T,
+  ChildField extends keyof T,
+  KeyField extends keyof T
+>(config: {
+  source: Store<T[]>
+  key: T[KeyField] extends string ? KeyField : never
+  child: T[ChildField] extends T[] ? ChildField : never
+  fn: (config: {store: Store<T>; child: () => void}) => void
+}): void
+export function tree({
+  source,
+  key: keyField,
+  child: childField,
+  fn,
+}: {
+  source: Store<any[]>
+  key: string
+  child: string
+  fn: Function
+}) {
+  const env = currentActor!.env
+  const namespace = currentActor!.namespace
+  const fakeDraft: ListType = {
+    type: 'list',
+    key: {type: 'key', key: keyField},
+    childTemplates: [],
+    childCount: 0,
+    inParentIndex: -1,
+  }
+  const treeItemTemplate = createTemplate<{
+    itemUpdater: any
+    mount: LeafMountParams
+    unmount: any
+  }>({
+    name: 'tree item',
+    isSvgRoot: false,
+    namespace,
+    env,
+    draft: fakeDraft,
+    state: {store: null},
+    fn({store}) {
+      const itemUpdater = createEvent<any>()
+      const mount = createEvent<LeafMountParams>()
+      const unmount = createEvent<any>()
+
+      store.on(itemUpdater, (_, e) => e)
+
+      const childList = remap(store, childField)
+
+      fn({store, child() {}})
+
+      return {
+        itemUpdater,
+        mount,
+        unmount,
+      }
+    },
+  })
 }
 
 export function list<T, K extends keyof T>(config: {
@@ -1915,6 +1861,7 @@ function mountChild({
     parentLeaf: leaf,
     mountNode: node,
     svgRoot: svgRoot ? svgRoot : leaf.svgRoot,
+    //@ts-ignore
     leafData,
     opGroup,
     domSubtree,
