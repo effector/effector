@@ -45,7 +45,7 @@ const Field = ({name, type, label}) => {
 }
 
 const App = () => (
-  <form action="void(0)" onSubmit={submitted}>
+  <form action="javascript:void(0)" onSubmit={submitted}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
     <button type="submit">Submit!</button>
