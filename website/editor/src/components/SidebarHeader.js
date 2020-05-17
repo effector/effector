@@ -1,5 +1,3 @@
-// @flow
-
 import {styled} from 'linaria/react'
 
 export const SidebarHeader = styled.div`

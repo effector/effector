@@ -1,4 +1,3 @@
-//@flow
 /* eslint-disable no-unused-vars */
 
 const keyStrUriSafe =
@@ -47,8 +46,8 @@ export function compress(input?: string) {
   const updateCycle = (to, variant) => {
     for (i = 0; i < to; i++) {
       variant == 0 && contextUpdater(context_data_val << 1, value)
-      variant == 1
-        && contextUpdater((context_data_val << 1) | (value & 1), value >> 1)
+      variant == 1 &&
+        contextUpdater((context_data_val << 1) | (value & 1), value >> 1)
       variant == 2 && contextUpdater((context_data_val << 1) | value, 0)
     }
   }

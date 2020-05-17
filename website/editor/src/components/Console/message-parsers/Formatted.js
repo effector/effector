@@ -1,14 +1,12 @@
-//@flow
-
 import * as React from 'react'
 import {Root} from '../react-inspector/elements'
 
 import Format from '../devtools-parser'
 import ObjectTree from './Object'
 
-type Props = {|
+type Props = {
   data: any[],
-|}
+}
 
 class Formatted extends React.PureComponent<Props, any> {
   render() {

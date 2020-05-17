@@ -1,13 +1,10 @@
-//@flow
-
-import {attach, createEffect, type Effect} from 'effector'
+import {attach, createEffect, Effect} from 'effector'
 import md5 from 'js-md5'
 import {$githubUser} from './github/state'
 import {$shareDescription} from './share/state'
 import {addShare} from './share'
 import {sourceCode} from './editor/state'
 import {auth} from './github/init'
-
 
 const ENDPOINT = {
   DIST: 'y6776i4nfja2lnx3gbkbmlgr3i',
@@ -37,7 +34,7 @@ const request = data => {
 
 const WARNING_MUST_SIGNIN = 'Share not saved. You must be signed in!"'
 
-// type ShareCode = Effect<string, {|slug: string|}>
+// type ShareCode = Effect<string, {slug: string}>
 export const shareCode = attach({
   effect: createEffect('share code', {
     async handler({author, description, code}) {

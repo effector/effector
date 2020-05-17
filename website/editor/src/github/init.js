@@ -1,5 +1,5 @@
 import {attach, createEffect, Store} from 'effector'
-import type {TGitHubUserInfo, TToken} from './state'
+import {TGitHubUserInfo, TToken} from './state'
 import {$githubToken, $githubUser} from './state'
 import {login, logout, setToken} from './index'
 import {GITHUB_API_URL, GITHUB_GATEKEEPER_URL} from './config'

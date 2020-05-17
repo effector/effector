@@ -1,5 +1,3 @@
-//@flow
-
 const CACHE_NAME = 'try-effector-cache-v1'
 const urlsToCache = [
   '/',
@@ -21,9 +19,8 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => {
-      return (
-        response ||
+    caches.match(event.request).then(response => (
+      response ||
         fetch(event.request).then(response => {
           // Check if we received a valid response
           if (
@@ -45,7 +42,6 @@ self.addEventListener('fetch', event => {
 
           return response
         })
-      )
-    }),
+    )),
   )
 })

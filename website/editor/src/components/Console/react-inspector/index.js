@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {
   DOMInspector,
@@ -10,15 +8,15 @@ import {
 } from './fork'
 import ObjectPreview from './fork/object-inspector/ObjectPreview'
 
-import type {Context} from '../index.h'
-import type {Methods} from '../methods'
+import {Context} from '../index.h'
+import {Methods} from '../methods'
 import {Constructor, HTML, Root, Table} from './elements'
 import {theme} from '../theme/default'
 
-type Props = {|
+type Props = {
   method: Methods,
   data: any,
-|}
+}
 
 class CustomInspector extends React.PureComponent<Props, any> {
   render() {

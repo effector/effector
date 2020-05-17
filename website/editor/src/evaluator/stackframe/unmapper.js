@@ -1,5 +1,3 @@
-/* @flow */
-
 import StackFrame from './stack-frame'
 import {getSourceMap} from './getSourceMap'
 import {getLinesAround} from './getLinesAround'
@@ -26,12 +24,12 @@ function count(search: string, string: string): number {
  * @param {number} [fileContents=3] The number of lines to provide before and after the line specified in the <code>StackFrame</code>.
  */
 async function unmap(
-  _fileUri: string | {uri: string, contents: string, ...},
+  _fileUri: string | {uri: string, contents: string},
   frames: StackFrame[],
   contextLines: number = 3,
 ): Promise<StackFrame[]> {
   let fileContents = typeof _fileUri === 'object' ? _fileUri.contents : null
-  let fileUri = typeof _fileUri === 'object' ? _fileUri.uri : _fileUri
+  const fileUri = typeof _fileUri === 'object' ? _fileUri.uri : _fileUri
   if (fileContents == null) {
     fileContents = await fetch(fileUri).then(res => res.text())
   }

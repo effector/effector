@@ -1,12 +1,10 @@
-//@flow
-
 import * as React from 'react'
 import {createStore, createEvent} from 'effector'
 import {useStore} from 'effector-react'
 
 export function mediaQuery(
   query: string,
-): React.ComponentType<{children: React.Node, ...}> {
+): React.ComponentType<{children: React.ReactNode}> {
   const queryChange = createEvent('query change')
   const mediaQueryList = window.matchMedia(query)
   mediaQueryList.addListener(queryChange)

@@ -1,6 +1,6 @@
-// @flow
 
-import {createEvent, createEffect, type Effect} from 'effector'
+
+import {createEvent, createEffect, Effect} from 'effector'
 
 export const flowToggleChange = createEvent<SyntheticEvent<HTMLInputElement>>()
 

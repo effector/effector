@@ -1,7 +1,5 @@
-//@flow
-
 import {styled} from 'linaria/react'
-import type {Context} from './index.h'
+import {Context} from './index.h'
 import {theme} from './theme/default'
 
 /**
@@ -10,12 +8,12 @@ import {theme} from './theme/default'
  * @param type The method
  */
 const Themed = (style: string, method: string, styles) =>
-  styles[`LOG_${method.toUpperCase()}_${style.toUpperCase()}`]
-  || styles[`LOG_${style.toUpperCase()}`]
+  styles[`LOG_${method.toUpperCase()}_${style.toUpperCase()}`] ||
+  styles[`LOG_${style.toUpperCase()}`]
 
-type Props = {|
+type Props = {
   theme: Context,
-|}
+}
 
 const {styles} = theme
 

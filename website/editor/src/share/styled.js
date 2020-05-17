@@ -1,5 +1,3 @@
-//@flow
-
 import {styled} from 'linaria/react'
 
 export const Button = styled.button`
@@ -33,9 +31,9 @@ export const Button = styled.button`
   }
 
   &:disabled {
-    opacity: .65;
+    opacity: 0.65;
     background: hsl(213, 50%, 45%);
-    color: hsla(0,0%,90%,0.9);
+    color: hsla(0, 0%, 90%, 0.9);
     cursor: not-allowed;
   }
 `
@@ -60,7 +58,7 @@ export const ShareButton = styled(Button)`
   margin: 0;
   margin-left: 6px;
   white-space: nowrap;
-  transition: width .25s;
+  transition: width 0.25s;
 `
 
 export const ShareGroup = styled.div`

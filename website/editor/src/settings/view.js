@@ -1,5 +1,3 @@
-// @flow
-
 import * as React from 'react'
 import {useStore, useStoreMap, useList} from 'effector-react'
 import {styled} from 'linaria/react'
@@ -16,7 +14,6 @@ import {selectVersion} from '../editor'
 import {packageVersions, version} from '../editor/state'
 import {LoadingIcon} from '../components/Icons/LoadingIcon'
 
-
 export const PrettifyButton = () => {
   const {disabled, pending} = useStoreMap({
     store: prettier.pending,
@@ -27,21 +24,21 @@ export const PrettifyButton = () => {
     }),
   })
   return (
-    <Button disabled={disabled}
-            onClick={clickPrettify}
-            style={{
-              padding: 0,
-              flex: '0 0 100px',
-              height: 28,
-              lineHeight: 0,
-              margin: '0 10px 0 3px',
-              whiteSpace: 'nowrap',
-              display: 'flex',
-              alignItems: 'center',
-              fontSize: 14,
-              justifyContent: 'center',
-            }}
-    >
+    <Button
+      disabled={disabled}
+      onClick={clickPrettify}
+      style={{
+        padding: 0,
+        flex: '0 0 100px',
+        height: 28,
+        lineHeight: 0,
+        margin: '0 10px 0 3px',
+        whiteSpace: 'nowrap',
+        display: 'flex',
+        alignItems: 'center',
+        fontSize: 14,
+        justifyContent: 'center',
+      }}>
       {pending && <LoadingIcon style={{marginRight: 10}} />}
       Prettify
     </Button>

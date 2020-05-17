@@ -1,12 +1,10 @@
-//@flow
-
 import * as React from 'react'
 import {useStore, useList} from 'effector-react'
 import {styled} from 'linaria/react'
 
 import {typeErrors, typeHint} from './state'
 import {typeHoverToggle} from '../settings/state'
-import type {FlowMessage, FlowInfoTree} from './index.h'
+import {FlowMessage, FlowInfoTree} from './index.h'
 
 const lineHeight = 1.5
 const lines = 3

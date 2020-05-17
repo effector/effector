@@ -1,6 +1,4 @@
-//@flow
-
-import {createEvent, createEffect, type Event, type Effect} from 'effector'
+import {createEvent, createEffect, Event, Effect} from 'effector'
 
 export const evalEffect: Effect<string, any, any> = createEffect()
 

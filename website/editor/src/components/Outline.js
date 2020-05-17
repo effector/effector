@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {styled} from 'linaria/react'
 import {codeSetCursor} from '../editor'
@@ -40,10 +38,10 @@ const Item = styled.li`
 const mapper = (item, i) => {
   const loc = item?.defaultConfig?.loc
   const name =
-    item?.compositeName?.fullName
-    || item?.shortName
-    || item.id
-    || item.displayName
+    item?.compositeName?.fullName ||
+    item?.shortName ||
+    item.id ||
+    item.displayName
   const key = item.kind && item.id ? item.kind + item.id + name : name
   const onClick = () => {
     if (loc) codeSetCursor(loc)
@@ -67,13 +65,13 @@ const OutlineSection = ({list, title}) => {
   )
 }
 
-export default function({style, component, domain, event, effect, store}: $todo) {
+export default function({style, component, domain, event, effect, store}: any) {
   const isEmpty =
-    event.length === 0
-    && effect.length === 0
-    && store.length === 0
-    && domain.length === 0
-    && component.length === 0
+    event.length === 0 &&
+    effect.length === 0 &&
+    store.length === 0 &&
+    domain.length === 0 &&
+    component.length === 0
   return (
     <Outline id="outline-sidebar" style={style}>
       {isEmpty && (

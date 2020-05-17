@@ -1,5 +1,3 @@
-//@flow
-
 //$todo
 export function css(obj) {
   return parseCssObject(normalizeCssObject(obj))

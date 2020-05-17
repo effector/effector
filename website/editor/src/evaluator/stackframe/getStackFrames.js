@@ -1,6 +1,4 @@
-/* @flow */
-
-import type {StackFrame} from './stack-frame'
+import {StackFrame} from './stack-frame'
 import {parse} from './parser'
 import {map} from './mapper'
 import {unmap} from './unmapper'

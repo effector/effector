@@ -1,10 +1,7 @@
-//@flow
-
 import * as React from 'react'
 import {styled} from 'linaria/react'
-import {createStore, createEvent, type Store, type Event} from 'effector'
-import {createComponent, type StoreView} from 'effector-react'
-
+import {createStore, createEvent, Store, Event} from 'effector'
+import {createComponent, StoreView} from 'effector-react'
 
 export function Toggle({
   name,
@@ -15,18 +12,23 @@ export function Toggle({
 }: {
   name: string,
   checked: boolean,
-  onChange: (e: SyntheticEvent<HTMLInputElement>) => mixed,
-  ...
+  onChange: (e: SyntheticEvent<HTMLInputElement>) => any,
 }) {
   return (
-    <Input type="checkbox" checked={checked} onChange={onChange} name={name} style={style} size={size} />
+    <Input
+      type="checkbox"
+      checked={checked}
+      onChange={onChange}
+      name={name}
+      style={style}
+      size={size}
+    />
   )
 }
 
 Toggle.defaultProps = {
   checked: false,
-  onChange() {
-  },
+  onChange() {},
 }
 
 const toggeSizeSettings = {
@@ -97,7 +99,8 @@ const Input = styled.input`
     height: 100%;
     width: 100%;
     padding: 2px;
-    border-radius: ${props => toggeSizeSettings[props.size].before.borderRadius};
+    border-radius: ${props =>
+    toggeSizeSettings[props.size].before.borderRadius};
     top: 0;
     left: 0;
     box-sizing: content-box;

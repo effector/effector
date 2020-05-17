@@ -1,5 +1,3 @@
-/* @flow */
-
 import {ScriptLine} from './stack-frame'
 
 /**

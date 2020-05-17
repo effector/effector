@@ -1,5 +1,3 @@
-//@flow
-
 export default `
 const add = createEvent()
 const sub = createEvent()

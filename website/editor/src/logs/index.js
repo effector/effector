@@ -1,14 +1,14 @@
-// @flow
+
 
 import {createEvent} from 'effector'
-import type {Methods} from '../components/Console/methods'
+import {Methods} from '../components/Console/methods'
 import {presets} from './stylePresets'
 import {CLEAR_CONSOLE, PRINT_IN_GROUP} from './env'
 
-export const realmLog = createEvent<{|
+export const realmLog = createEvent<{
   method: Methods,
   args: any[],
-|}>('realm console.log call')
+}>('realm console.log call')
 
 export function consoleMap() {
   const console = {}
@@ -20,7 +20,7 @@ export function consoleMap() {
 }
 
 function logger(...args) {
-  const method: $off = this.toString()
+  const method = this.toString()
   realmLog({method, args})
 }
 

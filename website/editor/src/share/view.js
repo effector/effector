@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {useStore} from 'effector-react'
 import {shareCode} from '../graphql'
@@ -7,7 +5,12 @@ import {ShareButton, SharedUrl, ShareGroup} from './styled'
 import {canShare, clickShare, sharedUrl, sharing, urlRef} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
-import {handleInput, handleKeyDown, removeShare, setCurrentShareId} from './index'
+import {
+  handleInput,
+  handleKeyDown,
+  removeShare,
+  setCurrentShareId,
+} from './index'
 import {$currentShareId, $shareDescription} from './state'
 import {styled} from 'linaria/react'
 import {CopyIcon} from '../components/Icons/CopyIcon'
@@ -17,11 +20,13 @@ import {$sortedShareList} from './init'
 import {IconButton} from '../components/IconButton'
 import {theme} from '../components/Console/theme/default'
 
-
-const Save = (props) => {
+const Save = props => {
   const pending = useStore(shareCode.pending)
   return (
-    <ShareButton {...props} onClick={shareCode} disabled={props.disabled || pending}>
+    <ShareButton
+      {...props}
+      onClick={shareCode}
+      disabled={props.disabled || pending}>
       {pending && <LoadingIcon style={{marginRight: 10}} />}
       Save
     </ShareButton>
@@ -48,12 +53,12 @@ const Url = () => {
   )
 }
 
-
 const ShareItem = styled.a`
   display: block;
   padding: 5px 10px;
   border-bottom: 1px solid #eee;
-  border-left: 3px solid ${props => props.active ? 'var(--primary-color)' : 'transparent'};
+  border-left: 3px solid
+    ${props => (props.active ? 'var(--primary-color)' : 'transparent')};
 `
 
 const ShareRow = styled.div`
@@ -100,9 +105,17 @@ const ShareList = () => {
   const currentShareId = useStore($currentShareId)
 
   if (sortedShareList.length === 0) {
-    return <h2 style={{color: '#aaa', fontWeight: 'bold', textAlign: 'center', marginTop: 30}}>
-      No shares found by the author
-    </h2>
+    return (
+      <h2
+        style={{
+          color: '#aaa',
+          fontWeight: 'bold',
+          textAlign: 'center',
+          marginTop: 30,
+        }}>
+        No shares found by the author
+      </h2>
+    )
   }
 
   return sortedShareList.map(share => {
@@ -114,13 +127,16 @@ const ShareList = () => {
     const mm = String(d.getMinutes()).padStart(2, 0)
     const strDate = `${YYYY}-${MM}-${DD} ${HH}:${mm}`
 
-    const shareLink = (e) => {
+    const shareLink = e => {
       e.preventDefault()
       e.stopPropagation()
-      sharing({slug: share.slug, sharedUrl: `https://share.effector.dev/${share.slug}`})
+      sharing({
+        slug: share.slug,
+        sharedUrl: `https://share.effector.dev/${share.slug}`,
+      })
     }
 
-    const copyLink = (e) => {
+    const copyLink = e => {
       e.preventDefault()
       e.stopPropagation()
 
@@ -141,51 +157,46 @@ const ShareList = () => {
         onClick={() => setCurrentShareId(share.slug)}
         active={currentShareId === share.slug}
         href={`${location.origin}/${share.slug}`}
-        style={{color: currentShareId === share.slug ? 'var(--primary-color)' : '#333'}}
-      >
+        style={{
+          color:
+            currentShareId === share.slug ? 'var(--primary-color)' : '#333',
+        }}>
         <ShareRow>
           <ShareDescription>
             {share.description || `<${share.slug}>`}
           </ShareDescription>
           <div style={{marginLeft: 10, position: 'relative'}}>
-            {isShareAPISupported
-              ? (
-                <MiniButton title="Share" onClick={shareLink}>
-                  <ShareIcon width="20px" height="20px" />
-                </MiniButton>
-              )
-              : (
-                <MiniButton
-                  title="Copy to clipboard"
-                  onClick={copyLink}
-                >
-                  <CopyIcon width="20px" height="20px" />
-                </MiniButton>
-              )
-            }
-            <IconButton title="Delete"
-                        icon={theme.styles.TRASH_ICON}
-                        style={{
-                          position: 'absolute',
-                          right: 0,
-                          width: 24,
-                          height: 24,
-                          fill: 'red',
-                        }}
-                        onClick={e => {
-                          e.preventDefault()
-                          e.stopPropagation()
-                          if (confirm('Are you sure delete this share?')) {
-                            removeShare(share.slug)
-                          }
-                        }}
+            {isShareAPISupported ? (
+              <MiniButton title="Share" onClick={shareLink}>
+                <ShareIcon width="20px" height="20px" />
+              </MiniButton>
+            ) : (
+              <MiniButton title="Copy to clipboard" onClick={copyLink}>
+                <CopyIcon width="20px" height="20px" />
+              </MiniButton>
+            )}
+            <IconButton
+              title="Delete"
+              icon={theme.styles.TRASH_ICON}
+              style={{
+                position: 'absolute',
+                right: 0,
+                width: 24,
+                height: 24,
+                fill: 'red',
+              }}
+              onClick={e => {
+                e.preventDefault()
+                e.stopPropagation()
+                if (confirm('Are you sure delete this share?')) {
+                  removeShare(share.slug)
+                }
+              }}
             />
           </div>
         </ShareRow>
         <ShareRow>
-          <ShareDate>
-            {strDate}
-          </ShareDate>
+          <ShareDate>{strDate}</ShareDate>
         </ShareRow>
       </ShareItem>
     )
@@ -207,36 +218,39 @@ export const Share = () => {
 
   return (
     <ShareGroup>
-      <Section style={{
-        backgroundColor: '#f0f0f0',
-        padding: 10,
-        display: 'flex',
-        alignItems: 'center',
-        margin: 0,
-        border: 'none',
-        borderBottom: '1px solid #ddd',
-      }}>
-        <ValidatedInput type="text"
-                        className="share-description"
-                        style={{width: '100%', padding: 4, height: 32}}
-                        placeholder="Share description required"
-                        value={shareDescription || ''}
-                        onKeyDown={handleKeyDown}
-                        onChange={handleInput}
-                        autoFocus={false}
-                        required
+      <Section
+        style={{
+          backgroundColor: '#f0f0f0',
+          padding: 10,
+          display: 'flex',
+          alignItems: 'center',
+          margin: 0,
+          border: 'none',
+          borderBottom: '1px solid #ddd',
+        }}>
+        <ValidatedInput
+          type="text"
+          className="share-description"
+          style={{width: '100%', padding: 4, height: 32}}
+          placeholder="Share description required"
+          value={shareDescription || ''}
+          onKeyDown={handleKeyDown}
+          onChange={handleInput}
+          autoFocus={false}
+          required
         />
         <Save disabled={saving} />
       </Section>
 
-      <Section style={{
-        margin: 0,
-        padding: 0,
-        overflowY: 'auto',
-        borderTop: 'none',
-        borderBottom: 'none',
-        height: 'calc(100% - 54px)',
-      }}>
+      <Section
+        style={{
+          margin: 0,
+          padding: 0,
+          overflowY: 'auto',
+          borderTop: 'none',
+          borderBottom: 'none',
+          height: 'calc(100% - 54px)',
+        }}>
         <ShareList />
       </Section>
     </ShareGroup>

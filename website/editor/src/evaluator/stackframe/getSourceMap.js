@@ -1,5 +1,3 @@
-/* @flow */
-
 import {SourceMapConsumer} from 'source-map'
 
 /**
@@ -22,7 +20,7 @@ class SourceMap {
   getOriginalPosition(
     line: number,
     column: number,
-  ): {source: string, line: number, column: number, ...} {
+  ): {source: string, line: number, column: number} {
     const {
       line: l,
       column: c,
@@ -44,7 +42,7 @@ class SourceMap {
     source: string,
     line: number,
     column: number,
-  ): {line: number, column: number, ...} {
+  ): {line: number, column: number} {
     const {line: l, column: c} = this.__source_map.generatedPositionFor({
       source,
       line,

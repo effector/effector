@@ -1,9 +1,7 @@
-//@flow
-
 //$todo
 import {transform, registerPlugin, availablePlugins} from '@babel/standalone'
 
-export type BabelPlugin = string | [string, Object]
+export type BabelPlugin = string | [string, any]
 
 function writeStuckFlag(stuck: boolean) {
   try {
@@ -29,7 +27,7 @@ export async function exec({
   globalBlocks?: Object[],
   types?: 'flow' | 'typescript',
   filename?: string,
-  pluginRegistry?: {[name: string]: any, ...},
+  pluginRegistry?: {[name: string]: any},
   compile?: boolean,
   onCompileError?: (error: any) => any,
   onRuntimeError?: (error: any) => any,

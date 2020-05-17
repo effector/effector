@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import {
   createStore,
@@ -8,15 +6,14 @@ import {
   forward,
   sample,
   guard,
-  type Effect,
-  type Store,
-  type Event,
+  Effect,
+  Store,
+  Event,
 } from 'effector'
 import {sourceCode} from '../editor/state'
 import {shareCode} from '../graphql'
 import {isShareAPISupported} from '../device'
 import {setCurrentShareId} from './index'
-
 
 export const pressCtrlS = createEvent()
 
@@ -59,7 +56,7 @@ export const canShare: Store<boolean> = slug.map(url => url !== '')
 
 export const clickShare: Event<any> = createEvent()
 
-type Sharing = Effect<{|slug: string, sharedUrl: string|}, void>
+type Sharing = Effect<{slug: string, sharedUrl: string}, void>
 export const sharing: Sharing = createEffect('sharing url', {
   async handler({slug, sharedUrl}) {
     if (isShareAPISupported) {

@@ -1,4 +1,3 @@
-//@flow
 import {guard} from 'effector'
 //$todo
 import {flow, typeAtPos as _typeAtPos} from '@zerobias/codebox'

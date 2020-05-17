@@ -1,12 +1,10 @@
-//@flow
-
 import * as React from 'react'
-import type {Message} from '../index.h'
+import {Message} from '../index.h'
 import Linkify from 'linkifyjs/react'
 
-type Props = {|
+type Props = {
   log: Message,
-|}
+}
 
 function splitMessage(message: string): string {
   const breakIndex = message.indexOf('\n')

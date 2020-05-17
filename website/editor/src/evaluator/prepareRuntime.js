@@ -1,5 +1,3 @@
-//@flow
-
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import * as Effector from 'effector'
@@ -14,11 +12,7 @@ import {
 } from '../realm'
 import {consoleMap} from '../logs'
 
-export function prepareRuntime(
-  effector: typeof Effector,
-  effectorReact: typeof EffectorReact,
-  version: string,
-) {
+export function prepareRuntime(effector, effectorReact, version: string) {
   const api = {}
   apiMap(api, {
     createEvent: effector.createEvent,
@@ -60,21 +54,13 @@ function clearInterval(id) {
 function clearTimeout(id) {
   realmClearTimeout(id)
 }
-function setInterval<TArguments: Array<mixed>>(
-  callback: (...args: TArguments) => mixed,
-  timeout?: number,
-  ...args: TArguments
-) {
+function setInterval(callback: Function, timeout?: number, ...args: any[]) {
   const id = global.setInterval(callback, timeout, ...args)
   realmInterval(id)
   return id
 }
 
-function setTimeout<TArguments: Array<mixed>>(
-  callback: (...args: TArguments) => mixed,
-  timeout?: number,
-  ...args: TArguments
-) {
+function setTimeout(callback: Function, timeout?: number, ...args: any[]) {
   const id = global.setTimeout(callback, timeout, ...args)
   realmTimeout(id)
   return id

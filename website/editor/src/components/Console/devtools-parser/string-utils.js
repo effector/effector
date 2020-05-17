@@ -1,4 +1,3 @@
-// @flow
 // Taken from the source of chrome devtools:
 // https://github.com/ChromeDevTools/devtools-frontend/blob/master/front_end/platform/utilities.js#L805-L1006
 

@@ -1,12 +1,10 @@
-//@flow
 import {createLocalStore} from '../lib/createLocalStorage'
-
 
 export type TGitHubUserInfo = {
   databaseId: ?number,
   name: string,
   url: string,
-  avatarUrl: string
+  avatarUrl: string,
 }
 
 export const initialUserInfo: TGitHubUserInfo = {
@@ -18,7 +16,7 @@ export const initialUserInfo: TGitHubUserInfo = {
 
 export type TToken = string | null
 
-
-export const $csrf = createLocalStore<string>('csrf', '')
-export const $githubToken = createLocalStore<TToken>('github-token', null)
-export const $githubUser = createLocalStore<TGitHubUserInfo>('github-user', initialUserInfo)
+export const $csrf = createLocalStore < string > ('csrf', '')
+export const $githubToken = createLocalStore < TToken > ('github-token', null)
+export const $githubUser =
+  createLocalStore < TGitHubUserInfo > ('github-user', initialUserInfo)

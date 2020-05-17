@@ -1,5 +1,3 @@
-// @flow
-
 export type FlowErrorKind =
   | 'infer'
   | 'parse'
@@ -10,7 +8,7 @@ export type FlowErrorKind =
 
 export type FlowErrorSeverity = 'off' | 'error' | 'warning'
 
-export type FlowLocation = {|
+export type FlowLocation = {
   source: string | null,
   type:
     | 'LibFile'
@@ -19,24 +17,24 @@ export type FlowLocation = {|
     | 'JsonFile'
     | 'Builtins'
     | null,
-  start: {|
+  start: {
     line: number,
     column: number,
     offset?: number,
-  |},
-  end: {|
+  },
+  end: {
     line: number,
     column: number,
     offset?: number,
-  |},
-|}
+  },
+}
 
-export type FlowInfoTree = {|
+export type FlowInfoTree = {
   message: Array<FlowMessage>,
   children?: Array<FlowInfoTree>,
-|}
+}
 
-export type FlowMessage = {|
+export type FlowMessage = {
   context: string | null,
   descr: string,
   type: 'Blame' | 'Comment',
@@ -46,13 +44,13 @@ export type FlowMessage = {|
   endline: number,
   start: number,
   end: number,
-|}
+}
 
-export type FlowError = {|
+export type FlowError = {
   kind: FlowErrorKind,
   level: FlowErrorSeverity,
-  suppressions: Array<{|loc: FlowLocation|}>,
+  suppressions: Array<{loc: FlowLocation}>,
 
   extra?: Array<FlowInfoTree>,
   message: Array<FlowMessage>,
-|}
+}

@@ -1,5 +1,3 @@
-/* @flow */
-
 /** A container holding a script line. */
 class ScriptLine {
   /** The line number of this line of source. */

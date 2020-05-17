@@ -1,5 +1,3 @@
-//@flow
-
 import {clearConsole, realmLog} from '.'
 import {logs} from './state'
 import {changeSources, selectVersion} from '../editor'
@@ -47,10 +45,14 @@ logs
   .reset(selectVersion)
   .reset(clearConsole)
 
-window.addEventListener('keydown', e => {
-  if ((e.ctrlKey && e.code === 'KeyL') || (e.metaKey && e.code === 'KeyK')) {
-    e.preventDefault()
-    e.stopPropagation()
-    clearConsole()
-  }
-}, true)
+window.addEventListener(
+  'keydown',
+  e => {
+    if ((e.ctrlKey && e.code === 'KeyL') || (e.metaKey && e.code === 'KeyK')) {
+      e.preventDefault()
+      e.stopPropagation()
+      clearConsole()
+    }
+  },
+  true,
+)

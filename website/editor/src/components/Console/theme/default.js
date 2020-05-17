@@ -1,7 +1,5 @@
-//@flow
-
 import {chromeLight} from '../react-inspector/fork'
-import type {Theme} from '../index.h'
+import {Theme} from '../index.h'
 
 const styles = {
   ...chromeLight,

@@ -1,5 +1,3 @@
-//@flow
-
 import {combine, sample, forward} from 'effector'
 
 import {

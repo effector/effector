@@ -1,12 +1,10 @@
-//@flow
-
-import {createDomain, combine, type Store, createStore} from 'effector'
+import {createDomain, combine, Store, createStore} from 'effector'
 
 export const domain = createDomain('settings')
 
-export const flowToggle = domain.store<boolean>(false)
-export const tsToggle = domain.store<boolean>(false)
-export const typeHoverToggle = domain.store<boolean>(false)
+export const flowToggle = domain.store < boolean > false
+export const tsToggle = domain.store < boolean > false
+export const typeHoverToggle = domain.store < boolean > false
 export const typechecker: Store<'flow' | 'typescript' | null> = combine(
   tsToggle,
   flowToggle,
@@ -16,4 +14,4 @@ export const typechecker: Store<'flow' | 'typescript' | null> = combine(
     return null
   },
 )
-export const autoScrollLog = createStore<boolean>(true)
+export const autoScrollLog = createStore < boolean > true

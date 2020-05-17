@@ -1,6 +1,4 @@
-//@flow
-
-import {createEvent, createStore, type Store} from 'effector'
+import {createEvent, createStore, Store} from 'effector'
 
 export function mediaMatcher(query: string): Store<boolean> {
   const queryChange = createEvent('query change')

@@ -1,6 +1,4 @@
-// @flow
-
-import type {Store} from 'effector'
+import {Store} from 'effector'
 import {typechecker} from '../settings/state'
 
 export const mode: Store<

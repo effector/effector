@@ -1,5 +1,3 @@
-//@flow
-
 import {styled} from 'linaria/react'
 
 export const TabHeader = styled.li`
@@ -12,12 +10,13 @@ export const TabHeader = styled.li`
   padding: 7px 15px 5px 15px;
   margin: 0;
   background-color: ${({isActive}) => (isActive ? 'white' : 'inherit')};
-  border-bottom: ${({isActive}) => (isActive ? '3px solid #e95801' : '3px solid transparent')};
+  border-bottom: ${({isActive}) =>
+    isActive ? '3px solid #e95801' : '3px solid transparent'};
 `
 
 export const TabHeaderList = styled.ul`
   border-bottom: 1px solid #ddd;
-  
+
   list-style: none;
   margin: 0;
   padding: 0;

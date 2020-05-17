@@ -1,18 +1,16 @@
-//@flow
+import {createEvent, split, Event, Unit} from 'effector'
+import {StoreView} from 'effector-react'
 
-import {createEvent, split, type Event, type Unit} from 'effector'
-import type {StoreView} from 'effector-react'
-
-export const realmInvoke: Event<{|
+export const realmInvoke: Event<{
   method: string,
   params: Array<any>,
   instance: any,
-|}> = createEvent()
+}> = createEvent()
 
-export const realmStatus: Event<{|
+export const realmStatus: Event<{
   active: boolean,
   throwError: boolean,
-|}> = createEvent()
+}> = createEvent()
 
 export const realmStatusApi: {
   init: Event<void>,

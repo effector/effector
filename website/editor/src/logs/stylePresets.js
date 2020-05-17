@@ -1,5 +1,3 @@
-//@flow
-
 import {css} from './css'
 
 const boldWhiteMixin = {

@@ -1,4 +1,4 @@
-//@flow
+
 import * as React from 'react'
 import * as pathLibrary from 'path'
 import {createEffect, createStore} from 'effector'
@@ -23,7 +23,7 @@ const filename = createStore('repl.js').on(
     return 'repl.js'
   },
 )
-async function createRealm(sourceCode: string, filename, additionalLibs = {}): $todo {
+async function createRealm(sourceCode: string, filename, additionalLibs = {}): any {
   const realm = {}
   realm.process = {env: {NODE_ENV: 'development'}}
   realm.require = path => {
@@ -71,8 +71,8 @@ const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
 
 fetchEffector.fail.watch(() => selectVersion('master'))
 
-const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>('fetch babel plugin', {
-  async handler(ver): $todo {
+const fetchBabelPlugin = createEffect<string, {[key: string]: any}, any>('fetch babel plugin', {
+  async handler(ver): any {
     const url =
       ver === 'master'
         ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/@effector/babel-plugin/index.js'
@@ -85,8 +85,8 @@ const fetchBabelPlugin = createEffect<string, {[key: string]: any, ...}, mixed>(
   },
 })
 
-const fetchEffectorReact = createEffect<any, {[key: string]: any, ...}, mixed>('fetch effector-react', {
-  async handler(effector): $todo {
+const fetchEffectorReact = createEffect<any, {[key: string]: any}, any>('fetch effector-react', {
+  async handler(effector): any {
     const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-react/effector-react.cjs.js'
     const sourceMap = `${url}.map`
     const req = await fetch(url)

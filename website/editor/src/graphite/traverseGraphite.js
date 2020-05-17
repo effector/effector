@@ -1,12 +1,10 @@
-//@flow
-
-import type {Cmd} from './index.h'
+import {Cmd} from './index.h'
 
 type NoopCmd =
   | Cmd
-  | {|
+  | {
       type: 'noop',
-    |}
+    }
 
 function traverseCmd(cmd: Cmd): NoopCmd {
   switch (cmd.type) {
@@ -68,6 +66,6 @@ function traverseCmd(cmd: Cmd): NoopCmd {
 export function traverseGraphite(
   e: Array<Cmd> | Cmd,
 ): Array<NoopCmd> | NoopCmd {
-  if (Array.isArray(e)) return e.map<NoopCmd>(traverseCmd)
+  if (Array.isArray(e)) return e.map < NoopCmd > traverseCmd
   return traverseCmd(e)
 }

@@ -1,9 +1,6 @@
-//@flow
-
-import type {Store} from 'effector'
+import {Store} from 'effector'
 import {createStore} from 'effector'
 import throttle from 'lodash.throttle'
-
 
 export function createLocalStore<State>(
   name: string,
@@ -20,7 +17,9 @@ export function createLocalStore<State>(
   function load(key: string): State {
     try {
       const result: ?string = localStorage.getItem(key)
-      return result === null || result === undefined ? initialState : JSON.parse(result)
+      return result === null || result === undefined
+        ? initialState
+        : JSON.parse(result)
     } catch (e) {
       console.error(`Can't load store '${name}' from localStorage.`)
     }
@@ -31,8 +30,8 @@ export function createLocalStore<State>(
     storageKey?: string,
     prevent?: boolean,
     save?: Function,
-    unsavedState?: State
-  } = createStore<State>(initialState, {name})
+    unsavedState?: State,
+  } = createStore < State > (initialState, {name})
   store.setState(load(name))
   store.storageKey = name
   store.prevent = prevent
@@ -58,16 +57,21 @@ export function createLocalStore<State>(
   return store
 }
 
-createLocalStore.preventLeavePage = (e) => {
+createLocalStore.preventLeavePage = e => {
   e.preventDefault()
 
-  if (createLocalStore.stores.some(store => store.prevent && store.unsavedState !== undefined)) {
+  if (
+    createLocalStore.stores.some(
+      store => store.prevent && store.unsavedState !== undefined,
+    )
+  ) {
     e.returnValue = 'There is pending work. Sure you want to leave?'
   }
 
   setTimeout(() => {
     createLocalStore.stores.forEach(store => {
-      store.unsavedState !== undefined && store.save(store.storageKey, store.unsavedState)
+      store.unsavedState !== undefined &&
+        store.save(store.storageKey, store.unsavedState)
     })
   })
 

@@ -1,8 +1,6 @@
-//@flow
-
 import React from 'react'
 import {styled} from 'linaria/react'
-import type {StackFrame as StackFrameType} from '../../evaluator/stackframe/stack-frame'
+import {StackFrame as StackFrameType} from '../../evaluator/stackframe/stack-frame'
 
 const StackFrame = styled.div``
 
@@ -48,7 +46,7 @@ function getPrettyURL(
   return prettyURL.replace('webpack://', '.')
 }
 
-export default function({frame}: {frame: StackFrameType, ...}) {
+export default function({frame}: {frame: StackFrameType}) {
   const {
     fileName,
     lineNumber,

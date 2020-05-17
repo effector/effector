@@ -1,5 +1,3 @@
-//@flow
-
 import {String as StringUtils} from './string-utils'
 
 function createAppend(s: string) {

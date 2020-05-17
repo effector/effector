@@ -1,25 +1,24 @@
-//@flow
+import {Methods} from './methods'
 
-import type {Methods} from './methods'
-
-export type Message = {|
+export type Message = {
   method: Methods,
   data?: any[],
-|}
+}
 
-export type MessageProps = {|
+export type MessageProps = {
   log: Message,
-|}
+}
 
-export type Theme = {|
+export type Theme = {
   variant: Variants,
   styles: Styles,
-|}
+}
 
-export type Context = {|
-  ...Theme,
+export type Context = {
+  variant: Variants,
+  styles: Styles,
   method: Methods,
-|}
+}
 
 export type Styles = {
   // Log colors
@@ -98,14 +97,13 @@ export type Styles = {
   TABLE_DATA_BACKGROUND_SIZE?: any,
 
   [style: string]: any,
-  ...
 }
 
 export type Variants = 'light' | 'dark'
 
-export type Props = {|
+export type Props = {
   logs: Message[],
   variant?: Variants,
   styles?: Styles,
   filter?: Methods[],
-|}
+}

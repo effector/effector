@@ -1,4 +1,4 @@
-//@flow
+
 
 import * as React from 'react'
 import {createComponent} from 'effector-react'

@@ -1,5 +1,3 @@
-/* @flow */
-
 import React from 'react'
 
 const headerStyle = {
@@ -14,9 +12,9 @@ const headerStyle = {
   overflow: 'auto',
 }
 
-type HeaderPropType = {|
+type HeaderPropType = {
   headerText: string,
-|}
+}
 
 function Header(props: HeaderPropType) {
   return <div style={headerStyle}>{props.headerText}</div>

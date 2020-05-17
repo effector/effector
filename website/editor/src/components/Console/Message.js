@@ -1,7 +1,5 @@
-//@flow
-
 import * as React from 'react'
-import type {MessageProps} from './index.h'
+import {MessageProps} from './index.h'
 
 import {Message, Icon, Content} from './elements'
 
@@ -18,7 +16,10 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
   render() {
     const {log, last} = this.props
     return (
-      <Message data-method={log.method} method={log.method} id={last ? 'last-log-message' : undefined}>
+      <Message
+        data-method={log.method}
+        method={log.method}
+        id={last ? 'last-log-message' : undefined}>
         <Icon method={log.method} />
         <Content>{this.getNode()}</Content>
       </Message>
@@ -35,17 +36,17 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
 
     // Chrome formatting
     if (
-      log.data.length > 0
-      && typeof log.data[0] === 'string'
-      && log.data[0].indexOf('%') > -1
+      log.data.length > 0 &&
+      typeof log.data[0] === 'string' &&
+      log.data[0].indexOf('%') > -1
     ) {
       return <Formatted data={log.data} />
     }
 
     // Error panel
     if (
-      log.data.every(message => typeof message === 'string')
-      && log.method === 'error'
+      log.data.every(message => typeof message === 'string') &&
+      log.method === 'error'
     ) {
       return <ErrorPanel log={log} />
     }
@@ -69,7 +70,7 @@ class ConsoleMessage extends React.Component<MessageProps, any> {
           ]}
         />
       )
-    } else if (!(Array.isArray(log.data))) {
+    } else if (!Array.isArray(log.data)) {
       return (
         <Formatted
           data={[

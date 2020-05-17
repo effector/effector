@@ -1,19 +1,16 @@
-//@flow
-
 import {graphite, resetGraphiteState} from './domain'
 import {realmEvent, realmStore, realmEffect} from '../realm'
 
-import type {Graph, CompositeName, kind} from './index.h'
+import {Graph, CompositeName, kind} from './index.h'
 
 const graphiteInvokeSetter = (
   state,
   event: {
-    +kind: kind,
-    +id: string,
-    +compositeName?: CompositeName,
-    +shortName?: string,
-    +graphite: Graph,
-    ...
+    kind: kind,
+    id: string,
+    compositeName?: CompositeName,
+    shortName?: string,
+    graphite: Graph,
   },
 ) => {
   let result

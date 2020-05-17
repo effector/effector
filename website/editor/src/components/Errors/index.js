@@ -1,11 +1,9 @@
-//@flow
-
 import React from 'react'
 import Header from './Header'
 import StackFrame from './StackFrame'
 import {styled} from 'linaria/react'
 
-import type {StackFrame as StackFrameType} from '../../evaluator/stackframe/stack-frame'
+import {StackFrame as StackFrameType} from '../../evaluator/stackframe/stack-frame'
 
 const StackTrace = styled.div`
   //overflow: auto;
@@ -20,11 +18,11 @@ export default function Errors({
   isError,
   error,
   stackFrames,
-}: {|
+}: {
   isError: boolean,
   error: Error,
   stackFrames: StackFrameType[],
-|}) {
+}) {
   if (isError) {
     if (error !== Object(error)) {
       return (

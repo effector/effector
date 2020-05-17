@@ -1,4 +1,4 @@
-//@flow
+
 
 import defaultSourceCode from './defaultSourceCode'
 import defaultVersions from '../versions.json'
@@ -22,8 +22,7 @@ export function retrieveCode(): string {
         code: string,
         description: string,
         tags: string[],
-        ...
-      } = (window: any).__code__
+      } = window.__code__
       slug && setCurrentShareId(slug)
       return preloaded.code
     }

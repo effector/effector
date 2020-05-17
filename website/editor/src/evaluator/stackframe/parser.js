@@ -1,5 +1,3 @@
-/* @flow */
-
 import invariant from 'invariant'
 import StackFrame from './stack-frame'
 

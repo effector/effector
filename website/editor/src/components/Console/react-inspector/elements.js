@@ -1,11 +1,9 @@
-//@flow
-
 import {styled} from 'linaria/react'
-import type {Context} from '../index.h'
+import {Context} from '../index.h'
 
-type Props = {|
+type Props = {
   theme: Context,
-|}
+}
 
 /**
  * Object root
@@ -46,7 +44,7 @@ export const HTML = styled.span`
   display: inline-block;
 
   & div:hover {
-    background-color: rgba(255, 220, 158, .05) !important;
+    background-color: rgba(255, 220, 158, 0.05) !important;
     border-radius: 2px;
   }
 `

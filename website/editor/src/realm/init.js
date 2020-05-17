@@ -1,5 +1,3 @@
-//@flow
-
 import {is} from 'effector'
 
 import {changeSources, selectVersion} from '../editor'
