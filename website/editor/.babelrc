@@ -12,7 +12,13 @@
     "effector/babel-plugin-react"
   ],
   "presets": [
-    "@babel/preset-flow",
+    [
+      "@babel/preset-typescript",
+      {
+        "isTSX": true,
+        "allExtensions": true
+      }
+    ],
     "@babel/preset-react",
     [
       "@babel/preset-env",
