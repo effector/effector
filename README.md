@@ -2,12 +2,6 @@
 
 The state manager
 
-[![npm version](https://badge.fury.io/js/effector.svg)](https://badge.fury.io/js/effector) [ ![Codeship Status for zerobias/effector](https://app.codeship.com/projects/67f481f0-2c7e-0136-030e-1a8413355f0c/status?branch=master)](https://app.codeship.com/projects/288022) [![Build Status](https://semaphoreci.com/api/v1/zerobias/effector/branches/master/shields_badge.svg)](https://semaphoreci.com/zerobias/effector)
-[![Join the chat at https://
-.im/effector-js/community](https://img.shields.io/gitter/room/effector-js/community.svg?style=popout)](https://gitter.im/effector-js/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)
-![License](https://img.shields.io/npm/l/effector.svg?colorB=brightgreen&style=popout)
-
 ## Table of Contents
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -16,12 +10,10 @@ The state manager
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
-  - [Packages](#packages)
-    - [Web frameworks](#web-frameworks)
-    - [Babel plugins](#babel-plugins)
-    - [ReasonML/BuckleScript](#reasonmlbucklescript)
+- [Documentation](#documentation)
+- [Packages](#packages)
+- [Articles](#articles)
 - [Community](#community)
-- [Press](#press)
 - [Online playground](#online-playground)
 - [Examples](#examples)
   - [Increment/decrement with React](#incrementdecrement-with-react)
@@ -88,88 +80,49 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 - https://unpkg.com/effector-react/effector-react.cjs.js
 - https://unpkg.com/effector-vue/effector-vue.cjs.js
 
-### Packages
+## Documentation
 
-#### Web frameworks
+For additional information, guides and api reference visit [our documentation site](https://effector.now.sh/docs/introduction/core-concepts)
 
-|      Package       |             Version              |            Dependencies            |               Size               |
-| :----------------: | :------------------------------: | :--------------------------------: | :------------------------------: |
-|    [`effector`]    | [![npm-effector]][pack-effector] | [![deps-effector]][david-effector] | [![size-effector]][pho-effector] |
-| [`effector-react`] |    [![npm-react]][pack-react]    |    [![deps-react]][david-react]    |    [![size-react]][pho-react]    |
-|  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![deps-vue]][david-vue]      |      [![size-vue]][pho-vue]      |
+## Packages
 
-[`effector`]: https://github.com/zerobias/effector/tree/master/packages/effector
+|      Package       |             Version              |               Size               |
+| :----------------: | :------------------------------: | :------------------------------: |
+|    [`effector`]    | [![npm-effector]][pack-effector] | [![size-effector]][pho-effector] |
+| [`effector-react`] |    [![npm-react]][pack-react]    |    [![size-react]][pho-react]    |
+|  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![size-vue]][pho-vue]      |
+
+[`effector`]: https://effector.now.sh/docs/api/effector/effector
+[`effector-react`]: https://effector.now.sh/docs/api/effector-react/effector-react
+[`effector-vue`]: https://effector.now.sh/docs/api/effector-vue/effector-vue
 [npm-effector]: https://img.shields.io/npm/v/effector.svg?maxAge=3600
-[pack-effector]: https://npmjs.com/effector
-[deps-effector]: https://david-dm.org/zerobias/effector.svg?path=packages/effector
-[david-effector]: https://david-dm.org/zerobias/effector?path=packages/effector
-[size-effector]: https://img.shields.io/bundlephobia/minzip/effector
-[pho-effector]: https://bundlephobia.com/result?p=effector
-[`effector-react`]: https://github.com/zerobias/effector/tree/master/packages/effector-react
 [npm-react]: https://img.shields.io/npm/v/effector-react.svg?maxAge=3600
-[pack-react]: https://npmjs.com/effector-react
-[deps-react]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-react
-[david-react]: https://david-dm.org/zerobias/effector?path=packages/effector-react
-[size-react]: https://img.shields.io/bundlephobia/minzip/effector-react
-[pho-react]: https://bundlephobia.com/result?p=effector-react
-[`effector-vue`]: https://github.com/zerobias/effector/tree/master/packages/effector-vue
 [npm-vue]: https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600
+[pack-effector]: https://npmjs.com/effector
+[pack-react]: https://npmjs.com/effector-react
 [pack-vue]: https://npmjs.com/effector-vue
-[deps-vue]: https://david-dm.org/zerobias/effector.svg?path=packages/effector-vue
-[david-vue]: https://david-dm.org/zerobias/effector?path=packages/effector-vue
+[size-effector]: https://img.shields.io/bundlephobia/minzip/effector
+[size-react]: https://img.shields.io/bundlephobia/minzip/effector-react
 [size-vue]: https://img.shields.io/bundlephobia/minzip/effector-vue
+[pho-effector]: https://bundlephobia.com/result?p=effector
+[pho-react]: https://bundlephobia.com/result?p=effector-react
 [pho-vue]: https://bundlephobia.com/result?p=effector-vue
 
-#### Babel plugins
-
-|             Package              |                Version                 |               Dependencies               |
-| :------------------------------: | :------------------------------------: | :--------------------------------------: |
-|    [`@effector/babel-plugin`]    |       [![npm-babel]][pack-babel]       |       [![deps-babel]][david-babel]       |
-| [`@effector/babel-plugin-react`] | [![npm-babel-react]][pack-babel-react] | [![deps-babel-react]][david-babel-react] |
-
-[`@effector/babel-plugin`]: https://github.com/zerobias/effector/tree/master/packages/%40effector/babel-plugin
-[npm-babel]: https://img.shields.io/npm/v/@effector/babel-plugin.svg?maxAge=3600
-[pack-babel]: https://www.npmjs.com/package/@effector/babel-plugin
-[deps-babel]: https://david-dm.org/zerobias/effector.svg?path=packages/@effector/babel-plugin
-[david-babel]: https://david-dm.org/zerobias/effector?path=packages/@effector/babel-plugin
-[`@effector/babel-plugin-react`]: https://github.com/zerobias/effector/tree/master/packages/%40effector/babel-plugin-react
-[npm-babel-react]: https://img.shields.io/npm/v/@effector/babel-plugin-react.svg?maxAge=3600
-[pack-babel-react]: https://www.npmjs.com/package/@effector/babel-plugin-react
-[deps-babel-react]: https://david-dm.org/zerobias/effector.svg?path=packages/@effector/babel-plugin-react
-[david-babel-react]: https://david-dm.org/zerobias/effector?path=packages/@effector/babel-plugin-react
-
-#### ReasonML/BuckleScript
-
-|        Package        |             Version              |            Dependencies            |
-| :-------------------: | :------------------------------: | :--------------------------------: |
-|    [`bs-effector`]    |  [![npm-bs]][pack-bs-effector]   |       [![deps-bs]][david-bs]       |
-| [`bs-effector-react`] | [![npm-bs-react]][pack-bs-react] | [![deps-bs-react]][david-bs-react] |
-
-[`bs-effector`]: https://github.com/zerobias/effector/tree/master/packages/bs-effector
-[npm-bs]: https://img.shields.io/npm/v/bs-effector.svg?maxAge=3600
-[pack-bs-effector]: https://npmjs.com/bs-effector
-[deps-bs]: https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector
-[david-bs]: https://david-dm.org/zerobias/effector?path=packages/bs-effector
-[`bs-effector-react`]: https://github.com/zerobias/effector/tree/master/packages/bs-effector-react
-[npm-bs-react]: https://img.shields.io/npm/v/bs-effector-react.svg?maxAge=3600
-[pack-bs-react]: https://npmjs.com/bs-effector-react
-[deps-bs-react]: https://david-dm.org/zerobias/effector.svg?path=packages/bs-effector-react
-[david-bs-react]: https://david-dm.org/zerobias/effector?path=packages/bs-effector-react
-
-## Community
-
-- Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
-- [Twitter](https://twitter.com/effectorjs)
-- [Gitter](https://gitter.im/effector-js/community)
-- [Telegram](https://t.me/effector_en) (@effector_en)
-- [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
-
-## Press
+## Articles
 
 - [Why I choose Effector instead of Redux or MobX](https://dev.to/lessmess/why-i-choose-effector-instead-of-redux-or-mobx-3dl7)
 - [Effector — State Manager You Should Give a Try](https://itnext.io/effector-state-manager-you-should-give-a-try-b46b917e51cc)
 - [Effector vs. Vuex. Which storage management is better for VueJS app?](https://medium.com/blue-harvest-tech-blog/effector-vs-vuex-which-storage-management-is-better-for-vuejs-app-54f3c3257b53)
 - [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
+- [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
+
+## Community
+
+- [Twitter](https://twitter.com/effectorjs)
+- [Telegram](https://t.me/effector_en) (@effector_en)
+- [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
+- [Gitter](https://gitter.im/effector-js/community)
+- Add a [GitHub Topic `effector`](https://github.com/topics/effector) to your project's home page
 
 ## Online playground
 
