@@ -21,6 +21,8 @@ export const {Provider} = Scope
 
 function useScopeStore(store: any) {
   const scope = React.useContext(Scope) as any
+  if (!scope)
+    throw Error('No scope found, consider adding <Provider> to app root')
   return scope.find(store).meta.wrapped
 }
 
