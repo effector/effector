@@ -14,7 +14,7 @@ Quite a common case, when you need to handle some event with some store's state.
 ## Formulae
 
 ```ts
-sample({ source, clock?, target?, fn? }): target
+sample({ source, clock?, fn?, target?}): target
 ```
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
@@ -23,7 +23,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
-### Type of the created `target`
+## Type of the created `target`
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
 
@@ -51,25 +51,22 @@ const event = sample({ source: $store, clock: event });
 
 ## `sample({source, clock?, fn?, target?, greedy?})`
 
-#### Arguments
+### Arguments
 
-1. `params` (_Object_): Configuration object
+`params` (_Object_): Configuration object
 
    * `source` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Source unit
    * `clock?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Clock unit. If not passed, the `source` is used as clock.
-   * `fn?` (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+   * `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
    * `target?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
    * `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
-
-
-
-#### Returns
+### Returns
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
 
-#### Example 1
+### Example 1
 
 ```js try
 import {sample, createStore, createEffect, createEvent} from 'effector'
