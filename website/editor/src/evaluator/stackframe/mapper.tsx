@@ -64,7 +64,7 @@ export async function map(
   })
 }
 
-function settle(val: Array<Promise<*>> | Promise<*>): Promise<*> {
+function settle(val: Array<Promise<any>> | Promise<any>): Promise<any> {
   if (!Array.isArray(val)) val = [val]
   return Promise.all(
     val.map(p =>

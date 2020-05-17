@@ -10,13 +10,13 @@ const Link = styled.div`
 `
 
 function getPrettyURL(
-  sourceFileName: ?string,
-  sourceLineNumber: ?number,
-  sourceColumnNumber: ?number,
-  fileName: ?string,
-  lineNumber: ?number,
-  columnNumber: ?number,
-  compiled: boolean,
+  sourceFileName?: string,
+  sourceLineNumber?: number,
+  sourceColumnNumber?: number,
+  fileName?: string,
+  lineNumber?: number,
+  columnNumber?: number,
+  compiled?: boolean,
 ): string {
   let prettyURL
   if (!compiled && sourceFileName && typeof sourceLineNumber === 'number') {

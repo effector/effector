@@ -44,7 +44,7 @@ const tabs = {
   },
 }
 
-const TabHeaderTemplate = ({name}: {name: $Keys<typeof tabs>, ...}) => {
+const TabHeaderTemplate = ({name}) => {
   const isActive = useStoreMap({
     store: _tab,
     keys: [name],

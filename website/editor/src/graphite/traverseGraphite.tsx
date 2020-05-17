@@ -11,54 +11,53 @@ function traverseCmd(cmd: Cmd): NoopCmd {
     case 'barrier':
       return {
         id: cmd.id,
-        type: (cmd.type: 'barrier'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'update':
       return {
         id: cmd.id,
-        type: (cmd.type: 'update'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'run':
       return {
         id: cmd.id,
-        type: (cmd.type: 'run'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'filter':
       return {
         id: cmd.id,
-        type: (cmd.type: 'filter'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'emit':
       return {
         id: cmd.id,
-        type: (cmd.type: 'emit'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'compute':
       return {
         id: cmd.id,
-        type: (cmd.type: 'compute'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     case 'tap':
       return {
         id: cmd.id,
-        type: (cmd.type: 'tap'),
+        type: cmd.type,
         group: cmd.group,
         data: cmd.data,
       }
     default:
-      /*::;(cmd.type: empty)*/
       return {type: 'noop'}
   }
 }
@@ -66,6 +65,6 @@ function traverseCmd(cmd: Cmd): NoopCmd {
 export function traverseGraphite(
   e: Array<Cmd> | Cmd,
 ): Array<NoopCmd> | NoopCmd {
-  if (Array.isArray(e)) return e.map < NoopCmd > traverseCmd
+  if (Array.isArray(e)) return e.map(traverseCmd)
   return traverseCmd(e)
 }

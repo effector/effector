@@ -8,8 +8,6 @@ for (let i = 0; i < keyStrUriSafe.length; i++) {
   baseReverseDic[charAt(keyStrUriSafe, i)] = i
 }
 
-declare export function compress(input: string): string
-declare export function compress(input?: null | void): void
 export function compress(input?: string) {
   if (input == null) return ''
   let i
@@ -116,8 +114,6 @@ export function compress(input?: string) {
   return context_data.join('')
 }
 
-declare export function decompress(input: string): string
-declare export function decompress(input?: null | void): void
 export function decompress(input: string) {
   if (input == null) return ''
   if (input === '') return null

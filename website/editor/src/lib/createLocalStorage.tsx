@@ -16,7 +16,7 @@ export function createLocalStore<State>(
 
   function load(key: string): State {
     try {
-      const result: ?string = localStorage.getItem(key)
+      const result = localStorage.getItem(key)
       return result === null || result === undefined
         ? initialState
         : JSON.parse(result)

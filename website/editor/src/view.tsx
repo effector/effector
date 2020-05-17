@@ -34,7 +34,7 @@ export const OutlineView = createComponent({stats}, ({}, {stats}) => (
 const ErrorsView = createComponent(
   codeError,
   ({}, {isError, error, stackFrames}) => (
-    <Errors isError={isError} error={(error: any)} stackFrames={stackFrames} />
+    <Errors isError={isError} error={error} stackFrames={stackFrames} />
   ),
 )
 

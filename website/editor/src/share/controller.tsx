@@ -60,7 +60,7 @@ type Sharing = Effect<{slug: string, sharedUrl: string}, void>
 export const sharing: Sharing = createEffect('sharing url', {
   async handler({slug, sharedUrl}) {
     if (isShareAPISupported) {
-      await (navigator: any).share({
+      await navigator.share({
         title: `Share url ${slug}`,
         url: sharedUrl,
       })

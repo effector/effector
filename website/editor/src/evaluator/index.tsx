@@ -55,7 +55,7 @@ const cache = {
   '@effector/babel-plugin': new Map()
 }
 
-const fetchEffector = createEffect/*:: <string, *, *> */('fetch effector', {
+const fetchEffector = createEffect('fetch effector', {
   async handler(ver: string) {
     const url =
       ver === 'master'
@@ -145,7 +145,7 @@ function cacher(v, cache, fetcher) {
   return req
 }
 
-export const versionLoader = version.map/*::<*>*/(v => {
+export const versionLoader = version.map(v => {
   const data = {}
   for (const key in cache) {
     data[key] = cacher(v, cache[key], api[key])
@@ -288,7 +288,7 @@ let iframe: HTMLIFrameElement | null = null
 function getIframe(): HTMLIFrameElement {
   if (iframe === null) {
     iframe =
-      ((document.getElementById('dom'): any): HTMLIFrameElement | null) ||
+      document.getElementById('dom') ||
       document.createElement('iframe')
     const wrapListenerMethods = target => {
       if (!target) return
