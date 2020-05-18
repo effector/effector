@@ -24,7 +24,7 @@ title: API Reference
 - [forward({from, to})](./forward.md)
 - [merge([eventA, eventB])](./merge.md)
 - [split(event, cases)](./split.md)
-- [sample({source, clock, fn, target}](./sample.md)
+- [sample({source, clock, fn, target})](./sample.md)
 - [guard({source, filter, target})](./guard.md)
 - [attach({effect, mapParams, source?})](./attach.md)
 - [restore(event, defaultState)](./restore.md)
