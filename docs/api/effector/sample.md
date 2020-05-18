@@ -8,7 +8,7 @@ hide_title: true
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
-Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()` in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more suitable to use `sample` method.
+Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()`, which may cause race conditions and inconsistency of state, it is more suitable to use `sample` method.
 
 
 ## Formulae
@@ -51,255 +51,97 @@ const event = sample({ source: $store, clock: event });
 
 ## `sample({source, clock?, fn?, target?, greedy?})`
 
-### Arguments
+#### Arguments
 
 `params` (_Object_): Configuration object
 
-   * `source` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Source unit
-   * `clock?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): Clock unit. If not passed, the `source` is used as clock.
+   * `source` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Source unit.
+     * If event. Take last event invocation argument value. Event must be invoked at least once.
+     * If effect. Take last effect invocation argument value. Effect must be invoked at least once.
+     * If store. Take current store`s state.
+   * `clock?` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Clock unit. If not  passed, the `source` is used as clock.
+     * If event. Triger sampled unit, upon event is called.
+     * If effect. Triger sampled unit, upon effect is called.
+     * If store. Triger sampled unit, upon store is updated.
    * `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
-   * `target?` ([_Event_](Event.md) | [_Store_](Store.md) | [_Effect_](Effect.md)): can contain Unit, which accepts payload returned by `fn`. If target is passed, result will be the target itself. In case if target is not passed, it's created "under the hood" and being returned as result of the function.
+   * `target?` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): can contain Unit, which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
    * `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
-### Returns
+#### Returns
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
 
-### Example 1
+#### Example
 
 ```js try
-import {sample, createStore, createEffect, createEvent} from 'effector'
-
-const $user = createStore({name: 'john', password: 'doe'})
-
-const signInFx = createEffect({handler: console.log})
+const $userName = createStore('john')
+const signIn = createEffect({handler: console.log})
 const submitForm = createEvent()
 
-const submitted = sample({
-  source: $user,
-  clock: submitForm,
-  fn: (user, params) => ({user, params}),
-  target: signInFx,
+sample({
+  source: $userName, /* 2 */
+  clock: submitForm, /* 1 */
+  fn: (name, password) => ({name, password}), /* 3 */
+  target: signIn, /* 4 */
 })
 
-console.log(submitted === signInFx) // units are equal
-
-submitForm('foo')
+submitForm(12345678)
+// 1. when submitForm is called with params (12345678)
+// 2. take $userName store`s state ('john')
+// 3. transform payload from event (1) and current store`s state (2)
+// 4. triger effect signIn with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/OPajzRNF)
+[Try it](https://share.effector.dev/vAV3tMKV)
 
-#### Example 2
+## `sample(sourceUnit, clockUnit, fn?)`
 
-```js try
-import {createEvent, createStore, sample} from 'effector'
-
-const clickButton = createEvent()
-const closeModal = clickButton.map(() => 'close modal')
-
-const lastEvent = createStore(null)
-  .on(clickButton, (_, data) => data)
-  .on(closeModal, () => 'modal')
-
-lastEvent.updates.watch(data => {
-  // here we need everything
-  //console.log(`sending important analytics event: ${data}`)
-})
-
-lastEvent.updates.watch(data => {
-  //here we need only final value
-  //console.log(`render <div class="yourstatus">${data}</div>`)
-})
-
-const analyticReportsEnabled = createStore(false)
-
-const commonSampling = sample({
-  source: analyticReportsEnabled,
-  clock: merge([clickButton, closeModal]),
-  fn: (isEnabled, data) => ({isEnabled, data}),
-})
-
-const greedySampling = sample({
-  source: analyticReportsEnabled,
-  clock: merge([clickButton, closeModal]),
-  fn: (isEnabled, data) => ({isEnabled, data}),
-  greedy: true,
-})
-
-commonSampling.watch(data => console.log('non greedy update', data))
-greedySampling.watch(data => console.log('greedy update', data))
-
-clickButton('click A')
-clickButton('click B')
-```
-
-[Try it](https://share.effector.dev/yI70z0nd)
-
-## `sample(sourceStore, clockEvent, fn?)`
-
-Passes current `sourceStore`'s state and `clockEvent`'s value to `fn` handler. Quite a common case, when you need to handle some event with some store's state. Instead of using `store.getState()` in body of effect, which may cause race conditions and inconsistency of state at the moment of effect's handler invocation, it is more suitable to use `sample` method as described below.
+It is just another form of the `sample` invocation, with the same sense.
 
 #### Arguments
 
-1. `sourceStore` ([_Store_](Store.md)): Source store
-2. `clockEvent` ([_Event_](Event.md)): Clock(Trigger) event
-3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+* `sourceUnit` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Source unit.
+    * If event. Take last event invocation argument value. Event must be invoked at least once.
+    * If effect. Take last effect invocation argument value. Effect must be invoked at least once.
+    * If store. Take current store`s state.
+* `clockUnit` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Clock unit. If not  passed, the `source` is used as clock.
+    * If event. Triger sampled unit, upon event is called.
+    * If effect. Triger sampled unit, upon effect is called.
+    * If store. Triger sampled unit, upon store is updated.
+* `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 #### Returns
 
-[_Event_](Event.md), which fires upon clock trigger
-
-#### Example 1
-
-```js try
-import {createStore, createEvent, sample} from 'effector'
-
-const store = createStore('hello zerobias')
-const event = createEvent()
-
-const sampled = sample(store, event)
-sampled.watch(console.log)
-
-event() // => hello zerobias
-```
-
-[Try it](https://share.effector.dev/IMXnU270)
-
-#### Example 2
-
-```js try
-import {createStore, createEvent, sample} from 'effector'
-
-const login = createStore('peter')
-const sendMessage = createEvent()
-
-const fullMessage = sample(login, sendMessage, (login, text) => ({login, text}))
-
-fullMessage.watch(({login, text}) => {
-  console.log(`[${login}]: ${text}`)
-})
-
-sendMessage('hello')
-// => [peter]: hello
-sendMessage('how r u?')
-// => [peter]: how r u?
-```
-
-[Try it](https://share.effector.dev/0ZP1xn8d)
-
-## `sample(sourceEvent, clockEvent, fn?)`
-
-Passes last `sourceEvent` invocation argument value and `clockEvent` value to `fn` handler.
-
-#### Arguments
-
-1. `sourceEvent` (_Event_): Source event
-2. `clockEvent` (_Event_): Clock(Trigger) event
-3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
-
-#### Returns
-
-[_Event_](Event.md), which fires upon clock trigger
+([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
+[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
 
 #### Example
 
 ```js try
-import {createEvent, sample} from 'effector'
+const $userName = createStore('john')
+const signIn = createEffect({handler: console.log})
+const submitForm = createEvent()
 
-const event1 = createEvent()
-const event2 = createEvent()
-
-const sampled = sample(event1, event2, (a, b) => `${a} ${b}`)
-sampled.watch(console.log)
-
-event1('Hello')
-event2('World') // => Hello World
-event2('effector!') // => Hello effector!
-
-sampled('Can be invoked too!') // => Can be invoked too!
-```
-
-[Try it](https://share.effector.dev/vXKWDhwL)
-
-## `sample(event, store, fn?)`
-
-Passes last `event` invocation argument value and `store`'s updated state to `fn` handler.
-
-> **Note**: `event` must be invoked at least once.
-
-#### Arguments
-
-1. `event` (_Event_): Source event
-2. `store` (_Store_): Triggers sampled unit upon store update
-3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
-
-#### Returns
-
-[_Event_](Event.md), which fires upon clock is triggered
-
-#### Example
-
-```js try
-import {createEvent, createStore, sample} from 'effector'
-
-const event = createEvent()
-const inc = createEvent()
-const count = createStore(0).on(inc, state => state + 1)
-
-const sampled = sample(
-  event,
-  count,
-  (c, i) => `Current count is ${i}, last event invocation: ${c}`,
+const sampleUnit = sample(
+  $userName /* 2 */,
+  submitForm /* 1 */,
+  (name, password) => ({name, password}) /* 3 */
 )
-sampled.watch(console.log)
+/* 5 */
+forward({
+  from: sampleUnit,
+  to: signIn,
+})
 
-inc() // => nothing
-
-event('foo')
-inc() // => Current count is 2, last event invocation: foo
-
-event('bar')
-inc() // => Current count is 3, last event invocation: bar
+submitForm(12345678)
+// 1. when submitForm is called with params (12345678)
+// 2. take $userName store`s state ('john')
+// 3. transform payload from event (1) and current store`s state (2)
+// 4. when sampleUnit (event in this case) is trigered,
+//    send it payload to effect signIn with params received at the step (3)
 ```
-
-[Try it](https://share.effector.dev/L4nbGjxM)
-
-## `sample(sourceStore, clockStore, fn?)`
-
-Passes last `sourceStore`'s current state and `clockStore`'s updated state to `fn` handler, upon `clockStore`'s update.
-
-#### Arguments
-
-1. `sourceStore` (_Store_): Source store
-2. `clockStore` (_Store_): Triggers sampled unit upon store update
-3. `fn`? (_(source, clock) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness)
-
-#### Returns
-
-[_Store_](Store.md), which updates upon clock update
-
-#### Example
-
-```js try
-import {createEvent, createStore, sample} from 'effector'
-
-const inc = createEvent()
-const setName = createEvent()
-
-const name = createStore('John').on(setName, (_, v) => v)
-
-const clock = createStore(0).on(inc, i => i + 1)
-
-const sampled = sample(name, clock, (name, i) => `${name} has ${i} coins`)
-sampled.watch(console.log)
-// => John has 0 coins (initial store update triggered sampled store)
-
-setName('Doe')
-inc() // => Doe has 1 coins
-```
-
-[Try it](https://share.effector.dev/h3zED3yW)
+[Try it](https://share.effector.dev/rPupnEQS) 
 
 ## Objects and arrays of _Store_ in `sample({ source })`
 
@@ -358,3 +200,121 @@ target.watch(([a, b]) => {
 ```
 
 [Try it](https://share.effector.dev/aQPLBJ2j)
+
+
+<!-- ## Other examples
+
+### Example 2
+
+```js try
+import {createEvent, createStore, sample} from 'effector'
+
+const clickButton = createEvent()
+const closeModal = clickButton.map(() => 'close modal')
+
+const lastEvent = createStore(null)
+  .on(clickButton, (_, data) => data)
+  .on(closeModal, () => 'modal')
+
+lastEvent.updates.watch(data => {
+  // here we need everything
+  //console.log(`sending important analytics event: ${data}`)
+})
+
+lastEvent.updates.watch(data => {
+  //here we need only final value
+  //console.log(`render <div class="yourstatus">${data}</div>`)
+})
+
+const analyticReportsEnabled = createStore(false)
+
+const commonSampling = sample({
+  source: analyticReportsEnabled,
+  clock: merge([clickButton, closeModal]),
+  fn: (isEnabled, data) => ({isEnabled, data}),
+})
+
+const greedySampling = sample({
+  source: analyticReportsEnabled,
+  clock: merge([clickButton, closeModal]),
+  fn: (isEnabled, data) => ({isEnabled, data}),
+  greedy: true,
+})
+
+commonSampling.watch(data => console.log('non greedy update', data))
+greedySampling.watch(data => console.log('greedy update', data))
+
+clickButton('click A')
+clickButton('click B')
+```
+
+[Try it](https://share.effector.dev/yI70z0nd)
+
+### Example `sample(sourceEvent, clockEvent, fn?)`
+
+```js try
+import {createEvent, sample} from 'effector'
+
+const event1 = createEvent()
+const event2 = createEvent()
+
+const sampled = sample(event1, event2, (a, b) => `${a} ${b}`)
+sampled.watch(console.log)
+
+event1('Hello')
+event2('World') // => Hello World
+event2('effector!') // => Hello effector!
+
+sampled('Can be invoked too!') // => Can be invoked too!
+```
+
+[Try it](https://share.effector.dev/vXKWDhwL)
+
+### Example `sample(event, store, fn?)`
+
+```js try
+import {createEvent, createStore, sample} from 'effector'
+
+const event = createEvent()
+const inc = createEvent()
+const count = createStore(0).on(inc, state => state + 1)
+
+const sampled = sample(
+  event,
+  count,
+  (c, i) => `Current count is ${i}, last event invocation: ${c}`,
+)
+sampled.watch(console.log)
+
+inc() // => nothing
+
+event('foo')
+inc() // => Current count is 2, last event invocation: foo
+
+event('bar')
+inc() // => Current count is 3, last event invocation: bar
+```
+
+[Try it](https://share.effector.dev/L4nbGjxM)
+
+### Example `sample(sourceStore, clockStore, fn?)`
+
+```js try
+import {createEvent, createStore, sample} from 'effector'
+
+const inc = createEvent()
+const setName = createEvent()
+
+const name = createStore('John').on(setName, (_, v) => v)
+
+const clock = createStore(0).on(inc, i => i + 1)
+
+const sampled = sample(name, clock, (name, i) => `${name} has ${i} coins`)
+sampled.watch(console.log)
+// => John has 0 coins (initial store update triggered sampled store)
+
+setName('Doe')
+inc() // => Doe has 1 coins
+```
+
+[Try it](https://share.effector.dev/h3zED3yW) -->
