@@ -31,6 +31,9 @@ import {
   RouteType,
   Template,
   Spawn,
+  TreeType,
+  TreeItemType,
+  LeafDataTree,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -81,18 +84,8 @@ import {
   findPreviousVisibleSibling,
   findPreviousVisibleSiblingBlock,
 } from './search'
+import {mountChild, appendChild, onMount} from './mountChild'
 import {remap} from './remap'
-
-const onMount = createEvent<{
-  fns: Array<(node: DOMElement) => (() => void) | void>
-  element: DOMElement
-}>()
-
-onMount.watch(({fns, element}) => {
-  fns.forEach(fn => {
-    fn(element)
-  })
-})
 
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
@@ -769,21 +762,15 @@ function setInParentIndex(draft: BindingsDraft, template: Actor<any>) {
     case 'using':
     case 'route':
     case 'list':
+    case 'tree':
+    case 'treeItem':
       draft.inParentIndex = currentActor.draft.childCount
       currentActor.draft.childCount += 1
       currentActor.draft.childTemplates.push(template)
       break
+    default:
+      console.warn(`unexpected currentActor type ${currentActor.draft.type}`)
   }
-}
-
-function appendChild(block: TextBlock | ElementBlock) {
-  const visibleSibling = findPreviousVisibleSibling(block)
-  if (visibleSibling) {
-    visibleSibling.after(block.value)
-  } else {
-    findParentDOMElement(block)!.prepend(block.value)
-  }
-  block.parent.visible = true
 }
 
 function getDefaultEnv(): {
@@ -886,7 +873,6 @@ export function using(node: DOMElement, opts: any): void {
 
   const queue = createOpQueue({onComplete})
   const rootLeaf = spawn(usingTemplate, {
-    parentSpawn: currentLeaf ? currentLeaf.spawn : null,
     parentLeaf: currentLeaf || null,
     mountNode: node,
     svgRoot: usingTemplate.isSvgRoot
@@ -915,10 +901,15 @@ export function using(node: DOMElement, opts: any): void {
 
 export function node(cb: (node: DOMElement) => (() => void) | void) {
   const draft = currentActor!.draft
-  if (draft.type === 'list') return
-  if (draft.type === 'listItem') return
-  if (draft.type === 'using') return
-  if (draft.type === 'route') return
+  switch (draft.type) {
+    case 'list':
+    case 'listItem':
+    case 'using':
+    case 'route':
+    case 'tree':
+    case 'treeItem':
+      return
+  }
   draft.node.push(cb)
 }
 
@@ -945,13 +936,17 @@ export function spec(config: {
   ɔ?: any
 }) {
   const draft = currentActor!.draft
-  if (draft.type === 'list') {
-    if (config.visible) draft.itemVisible = config.visible
-    return
+  switch (draft.type) {
+    case 'list':
+      if (config.visible) draft.itemVisible = config.visible
+      return
+    case 'listItem':
+    case 'using':
+    case 'route':
+    case 'tree':
+    case 'treeItem':
+      return
   }
-  if (draft.type === 'listItem') return
-  if (draft.type === 'using') return
-  if (draft.type === 'route') return
   if (config.attr) draft.attr.push(config.attr)
   if (config.data) draft.data.push(config.data)
   if ('text' in config) {
@@ -1269,63 +1264,107 @@ function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
 
 export function tree<
   T,
-  ChildField extends keyof T,
-  KeyField extends keyof T
+  ChildField extends keyof T
+  // KeyField extends keyof T
 >(config: {
   source: Store<T[]>
-  key: T[KeyField] extends string ? KeyField : never
+  // key: T[KeyField] extends string ? KeyField : never
   child: T[ChildField] extends T[] ? ChildField : never
   fn: (config: {store: Store<T>; child: () => void}) => void
 }): void
 export function tree({
   source,
-  key: keyField,
+  // key: keyField,
   child: childField,
   fn,
 }: {
   source: Store<any[]>
-  key: string
+  // key: string
   child: string
   fn: Function
 }) {
   const env = currentActor!.env
   const namespace = currentActor!.namespace
-  const fakeDraft: ListType = {
-    type: 'list',
-    key: {type: 'key', key: keyField},
+  const treeDraft: TreeType = {
+    type: 'tree',
     childTemplates: [],
     childCount: 0,
     inParentIndex: -1,
   }
-  const treeItemTemplate = createTemplate<{
-    itemUpdater: any
+  const treeTemplate = createTemplate<{
     mount: LeafMountParams
     unmount: any
   }>({
-    name: 'tree item',
+    name: 'tree',
     isSvgRoot: false,
     namespace,
     env,
-    draft: fakeDraft,
-    state: {store: null},
-    fn({store}) {
-      const itemUpdater = createEvent<any>()
+    draft: treeDraft,
+    fn() {
       const mount = createEvent<LeafMountParams>()
       const unmount = createEvent<any>()
 
-      store.on(itemUpdater, (_, e) => e)
+      const treeItemDraft: TreeItemType = {
+        type: 'treeItem',
+        childTemplates: [],
+        childCount: 0,
+        inParentIndex: -1,
+      }
 
-      const childList = remap(store, childField)
+      const treeItemTemplate = createTemplate<{
+        itemUpdater: any
+        mount: LeafMountParams
+        unmount: any
+      }>({
+        name: 'tree item',
+        isSvgRoot: false,
+        namespace,
+        env,
+        draft: treeItemDraft,
+        state: {store: null},
+        fn({store}) {
+          const itemUpdater = createEvent<any>()
+          const mount = createEvent<LeafMountParams>()
+          const unmount = createEvent<any>()
 
-      fn({store, child() {}})
+          store.on(itemUpdater, (_, e) => e)
+
+          const childList = store.map(value => value[childField] || [])
+
+          fn({
+            store,
+            child() {
+              list(childList, ({store}) => {})
+            },
+          })
+
+          return {
+            itemUpdater,
+            mount,
+            unmount,
+          }
+        },
+      })
+
+      setInParentIndex(treeItemDraft, treeItemTemplate)
+
+      mount.watch(({leaf, node}) => {
+        const data = leaf.data as LeafDataTree
+        mountChild({
+          parentBlockFragment: data.block.child,
+          leaf,
+          node,
+          actor: treeItemTemplate,
+        })
+      })
 
       return {
-        itemUpdater,
         mount,
         unmount,
       }
     },
   })
+  setInParentIndex(treeDraft, treeTemplate)
 }
 
 export function list<T, K extends keyof T>(config: {
@@ -1526,7 +1565,6 @@ export function list<T>(opts: any, maybeFn?: any) {
           return {
             updates: data,
             node,
-            page: leaf.spawn,
             leaf,
             hydration: leaf.hydration,
           }
@@ -1540,7 +1578,6 @@ export function list<T>(opts: any, maybeFn?: any) {
         fn: ({node, leaf}, updates: T[]) => ({
           updates,
           node,
-          page: leaf.spawn,
           leaf,
           hydration: false,
         }),
@@ -1551,10 +1588,7 @@ export function list<T>(opts: any, maybeFn?: any) {
         source: updates,
         clock: updateTriggers,
         greedy: true,
-        fn(
-          records: ListItemType[],
-          {node, page, updates: input, leaf, hydration},
-        ) {
+        fn(records: ListItemType[], {node, updates: input, leaf, hydration}) {
           const parentBlock = (leaf.data as any).block as ListBlock
           beginMark('list update [' + source.shortName + ']')
           const skipNode: boolean[] = Array(input.length).fill(false)
@@ -1623,7 +1657,6 @@ export function list<T>(opts: any, maybeFn?: any) {
                       id,
                       store: value,
                     },
-                    parentSpawn: page,
                     parentLeaf: leaf,
                     mountNode: node,
                     svgRoot: leaf.svgRoot,
@@ -1664,7 +1697,6 @@ export function list<T>(opts: any, maybeFn?: any) {
                   id,
                   store: value,
                 },
-                parentSpawn: page,
                 parentLeaf: leaf,
                 mountNode: node,
                 svgRoot: leaf.svgRoot,
@@ -1708,165 +1740,6 @@ export function list<T>(opts: any, maybeFn?: any) {
     env,
   })
   setInParentIndex(draft, listTemplate)
-}
-
-function mountChild({
-  parentBlockFragment,
-  leaf,
-  node,
-  actor,
-  svgRoot,
-  values,
-}: {
-  parentBlockFragment: FragmentBlock
-  leaf: Leaf
-  node: DOMElement
-  actor: Actor<any>
-  svgRoot?: SVGSVGElement
-  values?: {[name: string]: any}
-}) {
-  let leafData: LeafData
-  const {draft} = actor
-  const {queue} = leaf.ops.group
-  const opGroup = createOpGroup(queue)
-  const parentDomSubtree = leaf.ops.domSubtree
-  let domSubtree = parentDomSubtree
-  switch (draft.type) {
-    case 'route': {
-      const routeBlock: RouteBlock = {
-        type: 'route',
-        parent: {
-          type: 'FR',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
-        child: {
-          type: 'RF',
-          parent: null as any,
-          child: {
-            type: 'fragment',
-            parent: null as any,
-            child: [],
-          },
-          visible: false,
-        },
-      }
-      routeBlock.parent.child = routeBlock
-      routeBlock.child.parent = routeBlock
-      routeBlock.child.child.parent = routeBlock.child
-      parentBlockFragment.child[draft.inParentIndex] = routeBlock.parent
-      leafData = {
-        type: 'route',
-        block: routeBlock,
-        ops: {
-          // visible:
-        },
-        initialized: false,
-      }
-      break
-    }
-    case 'element': {
-      const elementBlock: ElementBlock = {
-        type: 'element',
-        parent: {
-          type: 'FE',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: false,
-          index: draft.inParentIndex,
-        },
-        child: {
-          type: 'EF',
-          parent: null as any,
-          child: {
-            type: 'fragment',
-            parent: null as any,
-            child: [],
-          },
-        },
-        value: draft.stencil.cloneNode() as DOMElement,
-      }
-      elementBlock.parent.child = elementBlock
-      elementBlock.child.parent = elementBlock
-      elementBlock.child.child.parent = elementBlock.child
-      parentBlockFragment.child[draft.inParentIndex] = elementBlock.parent
-      leafData = {
-        type: 'element',
-        block: elementBlock,
-        ops: {
-          visible: createOp({
-            value: false,
-            priority: 'tree',
-            runOp(value) {
-              if (leaf.hydration) {
-                // console.count('hydration')
-              }
-              if (value) {
-                appendChild(elementBlock)
-                if ((leafData as any).needToCallNode) {
-                  ;(leafData as any).needToCallNode = false
-                  launch({
-                    target: onMount,
-                    params: {
-                      element: elementBlock.value,
-                      fns: draft.node,
-                    },
-                    page: childSpawn.spawn,
-                  })
-                }
-              } else {
-                elementBlock.value.remove()
-                elementBlock.parent.visible = false
-              }
-            },
-            group: parentDomSubtree,
-          }),
-        },
-        needToCallNode: draft.node.length > 0,
-      }
-      domSubtree = createOpGroup(queue)
-      break
-    }
-    case 'list': {
-      const listBlock: ListBlock = {
-        type: 'list',
-        parent: {
-          type: 'FL',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
-        child: [],
-        lastChild: null,
-      }
-      listBlock.parent.child = listBlock
-      parentBlockFragment.child[draft.inParentIndex] = listBlock.parent
-      leafData = {
-        type: 'list',
-        draft,
-        block: listBlock,
-      }
-      break
-    }
-    case 'using':
-    case 'listItem':
-      break
-  }
-  const childSpawn = spawn(actor, {
-    parentSpawn: leaf.spawn,
-    values,
-    parentLeaf: leaf,
-    mountNode: node,
-    svgRoot: svgRoot ? svgRoot : leaf.svgRoot,
-    //@ts-ignore
-    leafData,
-    opGroup,
-    domSubtree,
-    hydration: leaf.hydration,
-  })
 }
 
 function removeItem<T>(item: T, list?: T[]) {

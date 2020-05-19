@@ -22,6 +22,8 @@ import {
   OpGroup,
   Template,
   Spawn,
+  TreeType,
+  TreeItemType,
 } from './index.h'
 
 let templateID = 0
@@ -45,7 +47,14 @@ export function createTemplate<Api extends {[method: string]: any}>({
   state?: {[field: string]: any}
   name: string
   isSvgRoot: boolean
-  draft: ElementDraft | ListType | ListItemType | UsingDraft | RouteType
+  draft:
+    | ElementDraft
+    | ListType
+    | ListItemType
+    | UsingDraft
+    | RouteType
+    | TreeType
+    | TreeItemType
   namespace: NSType
   env: {
     document: Document
@@ -231,7 +240,6 @@ export function spawn(
   actor: Actor<any>,
   {
     values = {},
-    parentSpawn,
     parentLeaf,
     mountNode,
     svgRoot,
@@ -241,7 +249,6 @@ export function spawn(
     hydration,
   }: {
     values?: {[field: string]: any}
-    parentSpawn: Spawn | null
     parentLeaf: Leaf | null
     mountNode: DOMElement
     svgRoot: SVGSVGElement | null
@@ -251,6 +258,7 @@ export function spawn(
     hydration: boolean
   },
 ): Leaf {
+  const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
   const page = {} as Record<string, any>
   const result: Spawn = {

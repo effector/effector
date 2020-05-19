@@ -1,6 +1,13 @@
 import {Store, Event, Step, StateRef, Filter} from 'effector'
 
-import {ElementBlock, ListBlock, UsingBlock, LF, RouteBlock} from './relation.h'
+import {
+  ElementBlock,
+  ListBlock,
+  UsingBlock,
+  LF,
+  RouteBlock,
+  TreeBlock,
+} from './relation.h'
 
 export type Template = {
   id: number
@@ -109,7 +116,14 @@ export type Env = {
 export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   node: Step
   template: Template
-  draft: ElementDraft | ListType | ListItemType | UsingDraft | RouteType
+  draft:
+    | ElementDraft
+    | ListType
+    | ListItemType
+    | UsingDraft
+    | RouteType
+    | TreeType
+    | TreeItemType
   api: Api
   isSvgRoot: boolean
   namespace: NSType
@@ -209,6 +223,11 @@ export type LeafDataRoute = {
   initialized: boolean
 }
 
+export type LeafDataTree = {
+  type: 'tree'
+  block: TreeBlock
+}
+
 export type LeafDataElement = {
   type: 'element'
   block: ElementBlock
@@ -238,11 +257,19 @@ export type LeafData =
     }
   | LeafDataListItem
   | LeafDataRoute
+  | LeafDataTree
 
 export type Leaf = {
   spawn: Spawn
   parentLeaf: Leaf | null
-  draft: ElementDraft | ListType | ListItemType | UsingDraft | RouteType
+  draft:
+    | ElementDraft
+    | ListType
+    | ListItemType
+    | UsingDraft
+    | RouteType
+    | TreeType
+    | TreeItemType
   data: LeafData
   ops: {
     group: OpGroup
@@ -265,6 +292,14 @@ export type BindingsDraft = {
 
 export type RouteType = BindingsDraft & {
   type: 'route'
+}
+
+export type TreeType = BindingsDraft & {
+  type: 'tree'
+}
+
+export type TreeItemType = BindingsDraft & {
+  type: 'treeItem'
 }
 
 export type ListType = BindingsDraft & {
@@ -325,3 +360,5 @@ export type NodeType =
   | ListType
   | ListItemType
   | RouteType
+  | TreeType
+  | TreeItemType

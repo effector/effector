@@ -15,6 +15,7 @@ export {
   node,
   variant,
   route,
+  tree,
 } from './elementHook'
 
 export {remap} from './remap'

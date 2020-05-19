@@ -79,6 +79,14 @@ export function printTree(start: Block) {
         parseLevel(level.child.child, pad + 2)
         break
       }
+      case 'tree': {
+        lines.push({
+          pad,
+          text: `[Tree]`,
+        })
+        parseLevel(level.child, pad + 1)
+        break
+      }
     }
   }
   const results = [] as string[]

@@ -26,7 +26,7 @@ import {DOMElement} from './index.h'
 
 */
 
-export type ChildBlock = FF | FE | FL | FT | FR
+export type ChildBlock = FF | FE | FL | FT | FR | FTree
 
 export type Block =
   | FragmentBlock
@@ -35,6 +35,7 @@ export type Block =
   | TextBlock
   | ElementBlock
   | RouteBlock
+  | TreeBlock
 
 export type RouteBlock = {
   type: 'route'
@@ -44,7 +45,7 @@ export type RouteBlock = {
 
 export type FragmentBlock = {
   type: 'fragment'
-  parent: FF | UF | EF | LF | RF
+  parent: FF | UF | EF | LF | RF | TreeBlock
   child: ChildBlock[]
 }
 
@@ -72,6 +73,20 @@ export type UsingBlock = {
   type: 'using'
   child: UF
   value: DOMElement
+}
+
+export type TreeBlock = {
+  type: 'tree'
+  parent: FTree
+  child: FragmentBlock
+}
+
+export type FTree = {
+  type: 'FTree'
+  parent: FragmentBlock
+  child: TreeBlock
+  visible: boolean
+  index: number
 }
 
 export type RF = {
