@@ -136,7 +136,11 @@ export function variant<T, K extends keyof T>(config: {
   key: K
   cases: T[K] extends string
     ? Partial<
-        Record<T[K], (config: {store: Store<T>}) => void> & {
+        {
+          [F in T[K]]: (config: {
+            store: Store<Extract<T, {[P in K]: F}>>
+          }) => void
+        } & {
           __: (config: {store: Store<T>}) => void
         }
       >
@@ -190,6 +194,17 @@ export function list<T, K extends keyof T>(
   },
   cb?: (opts: {store: Store<T>; key: Store<T[K]>}) => void,
 ): void
+
+export function tree<
+  T,
+  ChildField extends keyof T
+  // KeyField extends keyof T
+>(config: {
+  source: Store<T[]>
+  // key: T[KeyField] extends string ? KeyField : never
+  child: T[ChildField] extends T[] ? ChildField : never
+  fn: (config: {store: Store<T>; child: () => void}) => void
+}): void
 
 export function node(fn: (node: DOMElement) => void): void
 
