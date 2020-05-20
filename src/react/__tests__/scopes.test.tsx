@@ -4,14 +4,14 @@ import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
 import {createDomain, forward, sample, attach} from 'effector'
 
-import {fork, allSettled, serialize, hydrate} from 'effector/fork'
+import {fork, allSettled, serialize, hydrate, Scope} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
 
 it('works', async () => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
-  const start = app.createEvent()
+  const start = app.createEvent<string>()
   const indirectCall = app.createEvent()
   const sendStats = app.createEffect({
     async handler(user) {
@@ -38,7 +38,7 @@ it('works', async () => {
   })
 
   const user = app.createStore('guest')
-  const friends = app.createStore([])
+  const friends = app.createStore<string[]>([])
   const friendsTotal = friends.map(list => list.length)
 
   user.on(fetchUser.doneData, (_, result) => result.name)
@@ -79,7 +79,7 @@ it('works', async () => {
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
   const Total = () => <small>Total: {useStore(friendsTotal)}</small>
 
-  const App = ({root}) => (
+  const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <User />
       <b>Friends:</b>
@@ -115,6 +115,45 @@ it('works', async () => {
     }
   `)
   expect(indirectCallFn).toBeCalled()
+})
+
+test('watch calls during hydration', async () => {
+  const storeWatchFn = jest.fn()
+  const eventWatchFn = jest.fn()
+
+  const app = createDomain()
+  const start = app.createEvent()
+
+  const store = app.store(-1).on(start, x => x + 1)
+
+  store.watch(storeWatchFn)
+  store.updates.watch(eventWatchFn)
+
+  hydrate(app, {
+    values: {
+      ...serialize(fork(app)),
+      [store.sid as string]: 0,
+    },
+  })
+
+  await allSettled(start, {
+    scope: fork(app),
+    params: null,
+  })
+
+  expect(argumentHistory(storeWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      -1,
+      0,
+      1,
+    ]
+  `)
+  expect(argumentHistory(eventWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      0,
+      1,
+    ]
+  `)
 })
 
 test('attach support', async () => {
@@ -216,24 +255,24 @@ test('attach support', async () => {
     </h2>
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
-Object {
-  "-ggkn4w": "https://ssr.effector.dev/api",
-  "-vjt6hb": Array [
-    "bob",
-    "carol",
-  ],
-  "1tmqd0": "alice",
-}
-`)
+    Object {
+      "-ayxt47": "alice",
+      "-t956m3": "https://ssr.effector.dev/api",
+      "gqs9qj": Array [
+        "bob",
+        "carol",
+      ],
+    }
+  `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
-Object {
-  "-ggkn4w": "https://ssr.effector.dev/api",
-  "-vjt6hb": Array [
-    "alice",
-  ],
-  "1tmqd0": "bob",
-}
-`)
+    Object {
+      "-ayxt47": "bob",
+      "-t956m3": "https://ssr.effector.dev/api",
+      "gqs9qj": Array [
+        "alice",
+      ],
+    }
+  `)
   expect(indirectCallFn).toBeCalled()
 })
 
@@ -288,17 +327,17 @@ test('computed values support', async () => {
   await render(<App root={clientScope} />)
 
   expect(container.firstChild).toMatchInlineSnapshot(`
-<section>
-  <b>
-    User: 
-    alice
-  </b>
-  <small>
-    Total: 
-    2
-  </small>
-</section>
-`)
+    <section>
+      <b>
+        User: 
+        alice
+      </b>
+      <small>
+        Total: 
+        2
+      </small>
+    </section>
+  `)
 })
 
 test('allSettled effect calls', async () => {
