@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "20.15.0",
+  "version": "20.15.1",
   "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.es.js",
@@ -43,14 +43,15 @@
     "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
   },
   "keywords": [
-    "state manager",
-    "reactive",
-    "functional",
-    "store",
-    "event",
-    "effect",
     "data",
-    "state"
+    "effect",
+    "event",
+    "functional",
+    "reactive",
+    "state manager",
+    "state-manager",
+    "state",
+    "store"
   ],
   "author": "Zero Bias",
   "maintainers": [

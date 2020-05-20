@@ -2,6 +2,42 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.15.1
+
+- Fix additional store updates during state hydration
+
+```js
+import {createDomain, forward} from 'effector'
+import {hydrate} from 'effector/fork'
+
+const app = createDomain()
+
+const username = app.createStore('guest')
+const saveUser = app.createEffect({
+  handler(value) {
+    console.log('saveUser now called only after store update', value)
+  },
+})
+
+forward({
+  from: username,
+  to: saveUser,
+})
+
+username.updates.watch(value => {
+  console.log('event watches now called only after store update', value)
+})
+
+hydrate(app, {
+  values: {
+    [username.sid]: 'alice',
+  },
+})
+// no event watches triggered yet and no effects called as we just hydrating app state
+```
+
+[Try it](https://share.effector.dev/ZKzbh01h)
+
 ## effector 20.15.0
 
 - Add support for array of units to `store.on` ([PR #328](https://github.com/zerobias/effector/pull/328))
