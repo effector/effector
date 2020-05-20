@@ -2,7 +2,7 @@ import fetch from 'cross-fetch'
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, forward, sample, attach} from 'effector'
+import {createDomain, forward, sample, attach, combine} from 'effector'
 
 import {fork, allSettled, serialize, hydrate, Scope} from 'effector/fork'
 import {Provider, useStore, useList} from 'effector-react/ssr'
@@ -117,45 +117,6 @@ it('works', async () => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('watch calls during hydration', async () => {
-  const storeWatchFn = jest.fn()
-  const eventWatchFn = jest.fn()
-
-  const app = createDomain()
-  const start = app.createEvent()
-
-  const store = app.store(-1).on(start, x => x + 1)
-
-  store.watch(storeWatchFn)
-  store.updates.watch(eventWatchFn)
-
-  hydrate(app, {
-    values: {
-      ...serialize(fork(app)),
-      [store.sid as string]: 0,
-    },
-  })
-
-  await allSettled(start, {
-    scope: fork(app),
-    params: null,
-  })
-
-  expect(argumentHistory(storeWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      -1,
-      0,
-      1,
-    ]
-  `)
-  expect(argumentHistory(eventWatchFn)).toMatchInlineSnapshot(`
-    Array [
-      0,
-      1,
-    ]
-  `)
-})
-
 test('attach support', async () => {
   const indirectCallFn = jest.fn()
 
@@ -256,24 +217,112 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-ayxt47": "alice",
-      "-t956m3": "https://ssr.effector.dev/api",
-      "gqs9qj": Array [
+      "-ggkn4w": "https://ssr.effector.dev/api",
+      "-vjt6hb": Array [
         "bob",
         "carol",
       ],
+      "1tmqd0": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-ayxt47": "bob",
-      "-t956m3": "https://ssr.effector.dev/api",
-      "gqs9qj": Array [
+      "-ggkn4w": "https://ssr.effector.dev/api",
+      "-vjt6hb": Array [
         "alice",
       ],
+      "1tmqd0": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
+})
+
+test('watch calls during hydration', async () => {
+  const fxHandlerFn = jest.fn()
+  const storeWatchFn = jest.fn()
+  const eventWatchFn = jest.fn()
+  const combineWatchFn = jest.fn()
+  const combineUpdatesWatchFn = jest.fn()
+
+  const app = createDomain()
+  const start = app.createEvent()
+  const fx = app.createEffect({
+    handler: fxHandlerFn,
+  })
+
+  const store = app.store(-1).on(start, x => x + 1)
+
+  forward({
+    from: store,
+    to: fx,
+  })
+
+  const combined = combine({a: store, b: store})
+
+  store.watch(storeWatchFn)
+  store.updates.watch(eventWatchFn)
+  combined.watch(combineWatchFn)
+  combined.updates.watch(combineUpdatesWatchFn)
+
+  hydrate(app, {
+    values: {
+      ...serialize(fork(app)),
+      [store.sid as string]: 0,
+    },
+  })
+
+  await allSettled(start, {
+    scope: fork(app),
+    params: null,
+  })
+
+  expect(argumentHistory(storeWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      -1,
+      0,
+      1,
+    ]
+  `)
+  expect(argumentHistory(eventWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      0,
+      1,
+    ]
+  `)
+  expect(argumentHistory(combineWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "a": -1,
+        "b": -1,
+      },
+      Object {
+        "a": 0,
+        "b": 0,
+      },
+      Object {
+        "a": 1,
+        "b": 1,
+      },
+    ]
+  `)
+  expect(argumentHistory(combineUpdatesWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "a": 0,
+        "b": 0,
+      },
+      Object {
+        "a": 1,
+        "b": 1,
+      },
+    ]
+  `)
+  expect(argumentHistory(fxHandlerFn)).toMatchInlineSnapshot(`
+    Array [
+      0,
+      1,
+    ]
+  `)
 })
 
 test('computed values support', async () => {
