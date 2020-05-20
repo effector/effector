@@ -285,7 +285,6 @@ test('watch calls during hydration', async () => {
   `)
   expect(argumentHistory(eventWatchFn)).toMatchInlineSnapshot(`
     Array [
-      0,
       1,
     ]
   `)
@@ -308,10 +307,6 @@ test('watch calls during hydration', async () => {
   expect(argumentHistory(combineUpdatesWatchFn)).toMatchInlineSnapshot(`
     Array [
       Object {
-        "a": 0,
-        "b": 0,
-      },
-      Object {
         "a": 1,
         "b": 1,
       },
@@ -319,7 +314,6 @@ test('watch calls during hydration', async () => {
   `)
   expect(argumentHistory(fxHandlerFn)).toMatchInlineSnapshot(`
     Array [
-      0,
       1,
     ]
   `)

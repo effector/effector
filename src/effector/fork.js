@@ -30,16 +30,82 @@ export function hydrate(domain, {values}) {
   values = normalizeValues(values)
   const valuesSidList = Object.getOwnPropertyNames(values)
   const units = flatGraph(domain)
-  for (const {meta, scope, reg} of units) {
-    if (meta.unit === 'store' && meta.sid && valuesSidList.includes(meta.sid)) {
-      reg[scope.state.id].current = values[meta.sid]
+  const storeWatches = []
+  const storeWatchesRefs = []
+  const refs = new Set()
+  const predefinedRefs = new Set()
+  for (const node of units) {
+    const {reg} = node
+    const {op, unit, sid} = node.meta
+    if (unit === 'store') {
+      if (sid && valuesSidList.includes(sid)) {
+        const {state} = node.scope
+        state.current = values[sid]
+        predefinedRefs.add(state)
+      }
+    }
+    if (op === 'watch') {
+      const owner = node.family.owners[0]
+      if (owner.meta.unit === 'store') {
+        storeWatches.push(node)
+        storeWatchesRefs.push(owner.scope.state)
+      }
+    }
+    for (const id in reg) {
+      refs.add(reg[id])
     }
   }
-  const nonComputedStores = [...domain.history.stores]
-  launch({
-    target: nonComputedStores,
-    params: nonComputedStores.map(store => store.getState()),
+  refs.forEach(ref => {
+    execRef(ref)
   })
+  launch({
+    target: storeWatches,
+    params: storeWatchesRefs.map(({current}) => current),
+  })
+
+  function execRef(ref) {
+    let isFresh = false
+    if (ref.before && !predefinedRefs.has(ref)) {
+      for (const cmd of ref.before) {
+        switch (cmd.type) {
+          case 'map': {
+            const from = cmd.from
+            ref.current = cmd.fn(from.current)
+            break
+          }
+          case 'field': {
+            const from = cmd.from
+            if (!isFresh) {
+              isFresh = true
+              if (Array.isArray(ref.current)) {
+                ref.current = [...ref.current]
+              } else {
+                ref.current = {...ref.current}
+              }
+            }
+            ref.current[cmd.field] = from.current
+            break
+          }
+          case 'closure':
+            break
+        }
+      }
+    }
+    if (!ref.after) return
+    const value = ref.current
+    for (const cmd of ref.after) {
+      const to = cmd.to
+      // if (predefinedRefs.has(to)) continue
+      switch (cmd.type) {
+        case 'copy':
+          to.current = value
+          break
+        case 'map':
+          to.current = cmd.fn(value)
+          break
+      }
+    }
+  }
 }
 
 /**
