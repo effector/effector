@@ -24,14 +24,15 @@ const common = {
 }
 
 const keywords = [
-  'state manager',
-  'reactive',
-  'functional',
-  'store',
-  'event',
-  'effect',
   'data',
+  'effect',
+  'event',
+  'functional',
+  'reactive',
+  'state manager',
+  'state-manager',
   'state',
+  'store',
 ]
 
 const version = {
