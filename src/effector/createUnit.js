@@ -38,7 +38,7 @@ const normalizeConfig = (part, config) => {
       else config.name = part.name
     }
     if (part.loc) config.loc = part.loc
-    if (part.sid) config.sid = part.sid
+    if (part.sid || part.sid === null) config.sid = part.sid
     if (part.handler) config.handler = part.handler
     if (getParent(part)) config.parent = getParent(part)
     if ('strict' in part) config.strict = part.strict
