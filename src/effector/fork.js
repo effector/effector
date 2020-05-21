@@ -222,12 +222,15 @@ export function allSettled(
   return defer.req
 }
 function flatGraph(unit) {
+  unit = getGraph(unit)
   const list = []
-  ;(function traverse(node) {
-    if (list.includes(node)) return
-    list.push(node)
-    forEachRelatedNode(node, traverse)
-  })(getGraph(unit))
+  const queue = [unit]
+  let current
+  while ((current = queue.shift())) {
+    if (list.includes(current)) continue
+    list.push(current)
+    forEachRelatedNode(current, child => queue.push(child))
+  }
   return list
 }
 /**

@@ -385,24 +385,26 @@ test('hydrate edge case', async () => {
     return xs.filter(x => x > gt)
   })
 
-  const forked = fork(app)
-  // console.log(...forked.clones.map(({meta}) => meta.unit || meta.op))
-  const values = {
-    ...serialize(forked),
-    [listsContainer$.sid as any]: {
-      a: [0, 1, 2, 3],
-      b: [1, 8, 5],
-    },
-  }
   hydrate(app, {
-    values,
+    values: {
+      ...serialize(fork(app)),
+      [listsContainer$.sid as any]: {
+        a: [0, 1, 2, 3],
+        b: [1, 8, 5],
+      },
+    },
   })
   expect(filteredA$.getState()).toMatchInlineSnapshot(`
     Array [
       3,
     ]
   `)
-  expect(filteredB$.getState()).toMatchInlineSnapshot(`Array []`)
+  expect(filteredB$.getState()).toMatchInlineSnapshot(`
+    Array [
+      8,
+      5,
+    ]
+  `)
 })
 
 test('computed values support', async () => {
