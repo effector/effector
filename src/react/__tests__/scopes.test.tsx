@@ -366,45 +366,75 @@ test('watch calls during hydration', async () => {
   `)
 })
 
-test('hydrate edge case', async () => {
-  const app = createDomain()
+describe('hydrate edge cases', () => {
+  test('#1', async () => {
+    const app = createDomain()
 
-  const listsContainer$ = app.createStore({
-    a: [],
-    b: [],
-  })
+    const listsContainer$ = app.createStore({
+      a: [],
+      b: [],
+    })
 
-  const greaterThan$ = app.createStore(2)
+    const greaterThan$ = app.createStore(2)
 
-  const listA$ = listsContainer$.map(x => x.a)
-  const filteredA$ = {combine}.combine(listA$, greaterThan$, (xs, gt) => {
-    return xs.filter(x => x > gt)
-  })
-  const listB$ = listsContainer$.map(x => x.b)
-  const filteredB$ = {combine}.combine(listB$, greaterThan$, (xs, gt) => {
-    return xs.filter(x => x > gt)
-  })
+    const listA$ = listsContainer$.map(x => x.a)
+    const filteredA$ = {combine}.combine(listA$, greaterThan$, (xs, gt) => {
+      return xs.filter(x => x > gt)
+    })
+    const listB$ = listsContainer$.map(x => x.b)
+    const filteredB$ = {combine}.combine(listB$, greaterThan$, (xs, gt) => {
+      return xs.filter(x => x > gt)
+    })
 
-  hydrate(app, {
-    values: {
-      ...serialize(fork(app)),
-      [listsContainer$.sid as any]: {
-        a: [0, 1, 2, 3],
-        b: [1, 8, 5],
+    hydrate(app, {
+      values: {
+        ...serialize(fork(app)),
+        [listsContainer$.sid as any]: {
+          a: [0, 1, 2, 3],
+          b: [1, 8, 5],
+        },
       },
-    },
+    })
+    expect(filteredA$.getState()).toMatchInlineSnapshot(`
+      Array [
+        3,
+      ]
+    `)
+    expect(filteredB$.getState()).toMatchInlineSnapshot(`
+      Array [
+        8,
+        5,
+      ]
+    `)
   })
-  expect(filteredA$.getState()).toMatchInlineSnapshot(`
-    Array [
-      3,
-    ]
-  `)
-  expect(filteredB$.getState()).toMatchInlineSnapshot(`
-    Array [
-      8,
-      5,
-    ]
-  `)
+  test('#2', async () => {
+    const app = createDomain()
+
+    const greaterThan = app.createStore(2)
+
+    const listsContainer = app.createStore({
+      a: [],
+      b: [],
+    })
+
+    const byType = listsContainer.map(val => val.a)
+    const filtered = combine(byType, greaterThan, (map, gt) =>
+      map.filter(x => x > gt),
+    )
+
+    const forked = fork(app)
+
+    hydrate(app, {
+      values: {
+        [listsContainer.sid as any]: {
+          a: [0, 1, 2, 3],
+          b: [1, 8, 5],
+        },
+      },
+    })
+
+    expect(filtered.getState()).toMatchInlineSnapshot(`Array []`)
+  })
 })
 
 test('computed values support', async () => {
