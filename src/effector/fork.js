@@ -123,6 +123,7 @@ export function serialize(
     if (!sid) continue
     if (sid in result) {
       delete result[sid]
+      console.error(`duplicated sid for unit ${meta.name}`)
       duplicatedSids.add(sid)
       continue
     }
