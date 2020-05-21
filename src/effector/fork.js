@@ -116,10 +116,18 @@ export function serialize(
   {ignore = []}: {ignore?: Array<Store<any>>} = {},
 ) {
   const result = {}
+  const duplicatedSids = new Set()
   for (const {meta, scope, reg} of clones) {
     if (meta.unit !== 'store') continue
-    if (!meta.sid) continue
-    result[meta.sid] = reg[scope.state.id].current
+    const {sid} = meta
+    if (!sid) continue
+    if (sid in result) {
+      delete result[sid]
+      duplicatedSids.add(sid)
+      continue
+    }
+    if (duplicatedSids.has(sid)) continue
+    result[sid] = reg[scope.state.id].current
   }
   for (const {sid} of ignore) {
     if (sid) delete result[sid]
