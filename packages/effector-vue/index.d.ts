@@ -6,21 +6,19 @@ import {
 import {ExtendedVue} from 'vue/types/vue'
 import {Store} from 'effector'
 
-type Inference<S> = S extends Store<infer State>
+type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? State
-  : S extends {[storeName: string]: Store<any>}
-  ? {[K in keyof S]: S[K] extends Store<infer U> ? U : never}
+  : EffectorState extends {[storeName: string]: Store<any>}
+  ? {[K in keyof EffectorState]: EffectorState[K] extends Store<infer U> ? U : never}
   : never
 
 type EffectorType = Store<any> | {[key: string]: Store<any>} | (() => Store<any>)
 
-type ExpandType<V extends Vue, S extends EffectorType> = S extends (this: V) => Store<infer STATE>
-  ? {state: STATE}
-  : S extends {[storeName: string]: Store<any>}
-    ? {[U in keyof S]: Inference<S[U]>}
-    : S extends Store<infer STATE>
-      ? {state: STATE}
-      : never
+type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State>) | Store<infer State>
+  ? {state: State}
+  : EffectorState extends {[storeName: string]: Store<any>}
+  ? {[Key in keyof EffectorState]: Inference<EffectorState[Key]>}
+  : never
 
 declare module 'vue/types/vue' {
   interface Vue {
@@ -29,24 +27,24 @@ declare module 'vue/types/vue' {
   }
 
   interface VueConstructor<V extends Vue> {
-    extend<S extends EffectorType, Data, Methods, Computed, PropNames extends string = never>(
-      options?: {effector?: S} & ThisTypedComponentOptionsWithArrayProps<
-        ExpandType<V, S> & V,
+    extend<EffectorState extends EffectorType, Data, Methods, Computed, PropNames extends string = never>(
+      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithArrayProps<
+        ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         PropNames
       >,
-    ): ExtendedVue<ExpandType<V, S> & V, Data, Methods, Computed, Record<PropNames, any>>
-    extend<S extends EffectorType, Data, Methods, Computed, Props>(
-      options?: {effector?: S} & ThisTypedComponentOptionsWithRecordProps<
-        ExpandType<V, S> & V,
+    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Record<PropNames, any>>
+    extend<EffectorState extends EffectorType, Data, Methods, Computed, Props>(
+      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithRecordProps<
+        ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         Props
       >,
-    ): ExtendedVue<ExpandType<V, S> & V, Data, Methods, Computed, Props>
+    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Props>
   }
 }
 

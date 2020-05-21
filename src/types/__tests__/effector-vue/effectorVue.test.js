@@ -4,16 +4,12 @@
 import {createStore} from 'effector'
 import {store} from 'effector-vue'
 
-
 const typecheck = '{global}'
 
 test('store', () => {
   const method: Function = store
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
     --flow--
     no errors
     "
