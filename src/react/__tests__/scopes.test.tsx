@@ -433,7 +433,11 @@ describe('hydrate edge cases', () => {
       },
     })
 
-    expect(filtered.getState()).toMatchInlineSnapshot(`Array []`)
+    expect(filtered.getState()).toMatchInlineSnapshot(`
+      Array [
+        3,
+      ]
+    `)
   })
 })
 

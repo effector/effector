@@ -32,7 +32,7 @@ export function hydrate(domain, {values}) {
   const units = flatGraph(domain)
   const storeWatches = []
   const storeWatchesRefs = []
-  const refs = new Set()
+  const refsMap = {}
   const predefinedRefs = new Set()
   for (const node of units) {
     const {reg} = node
@@ -52,17 +52,61 @@ export function hydrate(domain, {values}) {
       }
     }
     for (const id in reg) {
-      refs.add(reg[id])
+      refsMap[id] = reg[id]
     }
   }
-  refs.forEach(ref => {
-    execRef(ref)
+  const items = Object.values(refsMap)
+  const rawGraph = {}
+  for (const {id} of items) {
+    rawGraph[id] = []
+  }
+  //prettier-ignore
+  for (const {id, before, after} of items) {
+    before && before.forEach(cmd => {
+      rawGraph[cmd.from.id].push(id)
+    })
+    after && after.forEach(cmd => {
+      rawGraph[id].push(cmd.to.id)
+    })
+  }
+  const graph = {}
+  for (const id in rawGraph) {
+    graph[id] = [...new Set(rawGraph[id])]
+  }
+  const result = []
+  const visited = {}
+  const temp = {}
+  for (const node in graph) {
+    if (!visited[node] && !temp[node]) {
+      topologicalSortHelper(node, visited, temp, graph, result)
+    }
+  }
+  result.reverse().forEach(id => {
+    execRef(refsMap[id])
   })
+
+  function topologicalSortHelper(node, visited, temp, graph, result) {
+    temp[node] = true
+    const neighbors = graph[node]
+    for (let i = 0; i < neighbors.length; i++) {
+      const n = neighbors[i]
+      if (temp[n]) {
+        continue
+        // throw Error('found cycle in DAG')
+      }
+      if (!visited[n]) {
+        topologicalSortHelper(n, visited, temp, graph, result)
+      }
+    }
+    temp[node] = false
+    visited[node] = true
+    result.push(node)
+  }
+
   launch({
     target: storeWatches,
     params: storeWatchesRefs.map(({current}) => current),
   })
-
   function execRef(ref) {
     let isFresh = false
     if (ref.before && !predefinedRefs.has(ref)) {
@@ -222,15 +266,12 @@ export function allSettled(
   return defer.req
 }
 function flatGraph(unit) {
-  unit = getGraph(unit)
   const list = []
-  const queue = [unit]
-  let current
-  while ((current = queue.shift())) {
-    if (list.includes(current)) continue
-    list.push(current)
-    forEachRelatedNode(current, child => queue.push(child))
-  }
+  ;(function traverse(node) {
+    if (list.includes(node)) return
+    list.push(node)
+    forEachRelatedNode(node, traverse)
+  })(getGraph(unit))
   return list
 }
 /**
