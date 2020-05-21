@@ -6,10 +6,18 @@ import {
 import {ExtendedVue} from 'vue/types/vue'
 import {Store} from 'effector'
 
-type Inference<S> = S extends Store<infer State>
+type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? State
-  : S extends {[storeName: string]: Store<any>}
-  ? {[K in keyof S]: S[K] extends Store<infer U> ? U : never}
+  : EffectorState extends {[storeName: string]: Store<any>}
+  ? {[K in keyof EffectorState]: EffectorState[K] extends Store<infer U> ? U : never}
+  : never
+
+type EffectorType = Store<any> | {[key: string]: Store<any>} | (() => Store<any>)
+
+type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State>) | Store<infer State>
+  ? {state: State}
+  : EffectorState extends {[storeName: string]: Store<any>}
+  ? {[Key in keyof EffectorState]: Inference<EffectorState[Key]>}
   : never
 
 declare module 'vue/types/vue' {
@@ -19,30 +27,30 @@ declare module 'vue/types/vue' {
   }
 
   interface VueConstructor<V extends Vue> {
-    extend<S, Data, Methods, Computed, PropNames extends string = never>(
-      options?: ThisTypedComponentOptionsWithArrayProps<
-        S & V,
+    extend<EffectorState extends EffectorType, Data, Methods, Computed, PropNames extends string = never>(
+      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithArrayProps<
+        ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         PropNames
       >,
-    ): ExtendedVue<V, Data, Methods, Computed, Record<PropNames, any>>
-    extend<S, Data, Methods, Computed, Props>(
-      options?: ThisTypedComponentOptionsWithRecordProps<
-        S & V,
+    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Record<PropNames, any>>
+    extend<EffectorState extends EffectorType, Data, Methods, Computed, Props>(
+      options?: {effector?: EffectorState} & ThisTypedComponentOptionsWithRecordProps<
+        ExpandType<V, EffectorState> & V,
         Data,
         Methods,
         Computed,
         Props
       >,
-    ): ExtendedVue<V, Data, Methods, Computed, Props>
+    ): ExtendedVue<ExpandType<V, EffectorState> & V, Data, Methods, Computed, Props>
   }
 }
 
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
-    effector?: (this: V) => Store<any> | {[field: string]: Store<any>}
+    effector?: EffectorType
   }
 }
 
@@ -101,7 +109,7 @@ declare function createComponent<
     Props
   >,
   store?: S,
-): ExtendedVue<V, Data, Methods, Computed, Props>
+): ExtendedVue<Inference<S> & V, Data, Methods, Computed, Props>
 declare function createComponent<
   S extends {[field: string]: Store<any>},
   V extends Vue,
@@ -118,4 +126,4 @@ declare function createComponent<
     PropNames
   >,
   store?: S,
-): ExtendedVue<V, Data, Methods, Computed, PropNames>
+): ExtendedVue<Inference<S> & V, Data, Methods, Computed, PropNames>
