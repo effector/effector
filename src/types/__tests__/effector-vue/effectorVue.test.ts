@@ -92,6 +92,8 @@ describe('vue extend', () => {
     })
 
     test('function should pass typecheck', () => {
+      // Typescript type inference don't works as expected
+      // https://github.com/microsoft/TypeScript/issues/38623
       const $counter = createStore(1)
 
       Vue.extend({
@@ -108,12 +110,15 @@ describe('vue extend', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        no errors
+        'twice' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        Property 'state' does not exist on type '{ twice(): any; }'.
         "
       `)
     })
 
     test('function should fail typecheck', () => {
+      // Typescript type inference don't works as expected
+      // https://github.com/microsoft/TypeScript/issues/38623
       const $name = createStore('effector')
 
       Vue.extend({
@@ -130,7 +135,8 @@ describe('vue extend', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+        'twice' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
+        Property 'state' does not exist on type '{ twice(): any; }'.
         "
       `)
     })
@@ -182,13 +188,16 @@ describe('vue extend', () => {
     test('should pass typecheck', () => {
       const $counter = createStore(1)
 
-      createComponent({
-        methods: {
-          twice() {
-            return this.$counter * 2
+      createComponent(
+        {
+          methods: {
+            twice() {
+              return this.$counter * 2
+            },
           },
-        }
-      }, {$counter})
+        },
+        {$counter},
+      )
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
@@ -201,13 +210,16 @@ describe('vue extend', () => {
     test('should fail typecheck', () => {
       const $name = createStore('effector')
 
-      createComponent({
-        methods: {
-          twice() {
-            return this.$name * 2
+      createComponent(
+        {
+          methods: {
+            twice() {
+              return this.$name * 2
+            },
           },
-        }
-      }, {$name})
+        },
+        {$name},
+      )
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
