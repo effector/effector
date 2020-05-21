@@ -11,6 +11,13 @@ import {
 
 import {argumentHistory} from 'effector/fixtures'
 
+test('sid support', () => {
+  const source = createStore(null)
+  const sampled = sample({source, sid: 'foo'})
+
+  expect(sampled.sid).toBe('foo')
+})
+
 describe('temporal consistency', () => {
   test('in combination with guard, pass immediately', () => {
     const fn = jest.fn()

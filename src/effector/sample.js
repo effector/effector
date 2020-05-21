@@ -24,7 +24,7 @@ export function sample(...args): any {
     args = getNestedConfig(args[0])
   }
   let [source, clock, fn, greedy = false] = args
-
+  let sid
   //config case
   if (clock === undefined && 'source' in source) {
     if ('clock' in source && source.clock == null)
@@ -35,6 +35,7 @@ export function sample(...args): any {
     //optional target & name accepted only from config
     target = source.target
     name = source.name
+    sid = source.sid
     source = source.source
   }
   if (clock === undefined) {
@@ -55,7 +56,7 @@ export function sample(...args): any {
       const initialState = fn
         ? fn(readRef(getStoreState(source)), readRef(getStoreState(clock)))
         : readRef(getStoreState(source))
-      target = createStore(initialState, {name})
+      target = createStore(initialState, {name, sid})
     } else {
       target = createEvent(name)
       if (template) {
