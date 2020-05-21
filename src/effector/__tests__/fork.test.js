@@ -1,7 +1,7 @@
 //@noflow
 
 import {createDomain} from 'effector'
-import {fork, serialize} from 'effector/fork'
+import {fork, serialize, allSettled} from 'effector/fork'
 
 it('serialize stores to object of sid as keys', () => {
   const app = createDomain()
@@ -60,4 +60,16 @@ it('serialize stores in nested domain', () => {
       "c": null,
     }
 `)
+})
+
+test('allSettled first argument validation', async () => {
+  const app = createDomain()
+
+  await expect(
+    allSettled(null, {
+      scope: fork(app),
+    }),
+  ).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"first argument should be unit"`,
+  )
 })
