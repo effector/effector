@@ -248,6 +248,8 @@ export function allSettled(
     params: ctx,
   },
 ) {
+  if (!is.unit(start))
+    return Promise.reject(Error('first argument should be unit'))
   const defer = createDefer()
   forkInFlightCounter.scope.defers.push(defer)
   const contextStart = find(start)
