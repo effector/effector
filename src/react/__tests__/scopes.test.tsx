@@ -366,6 +366,45 @@ test('watch calls during hydration', async () => {
   `)
 })
 
+test('hydrate edge case', async () => {
+  const app = createDomain()
+
+  const listsContainer$ = app.createStore({
+    a: [],
+    b: [],
+  })
+
+  const greaterThan$ = app.createStore(2)
+
+  const listA$ = listsContainer$.map(x => x.a)
+  const filteredA$ = {combine}.combine(listA$, greaterThan$, (xs, gt) => {
+    return xs.filter(x => x > gt)
+  })
+  const listB$ = listsContainer$.map(x => x.b)
+  const filteredB$ = {combine}.combine(listB$, greaterThan$, (xs, gt) => {
+    return xs.filter(x => x > gt)
+  })
+
+  const forked = fork(app)
+  // console.log(...forked.clones.map(({meta}) => meta.unit || meta.op))
+  const values = {
+    ...serialize(forked),
+    [listsContainer$.sid as any]: {
+      a: [0, 1, 2, 3],
+      b: [1, 8, 5],
+    },
+  }
+  hydrate(app, {
+    values,
+  })
+  expect(filteredA$.getState()).toMatchInlineSnapshot(`
+    Array [
+      3,
+    ]
+  `)
+  expect(filteredB$.getState()).toMatchInlineSnapshot(`Array []`)
+})
+
 test('computed values support', async () => {
   const app = createDomain()
 
