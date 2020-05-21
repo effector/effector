@@ -409,7 +409,7 @@ function cloneGraph(unit, {values, deep}) {
   function findClone(unit) {
     unit = getGraph(unit)
     const index = list.indexOf(unit)
-    if (index === -1) throwError('not found')
+    if (index === -1) throwError('unit not found in forked scope')
     return clones[index]
   }
 }
