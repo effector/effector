@@ -243,6 +243,10 @@ test('watch calls during hydration', async () => {
   const eventWatchFn = jest.fn()
   const combineWatchFn = jest.fn()
   const combineUpdatesWatchFn = jest.fn()
+  const combineFnWatchFn = jest.fn()
+  const combineFnUpdatesWatchFn = jest.fn()
+  const mapWatchFn = jest.fn()
+  const mapUpdatesWatchFn = jest.fn()
 
   const app = createDomain()
   const start = app.createEvent()
@@ -258,11 +262,18 @@ test('watch calls during hydration', async () => {
   })
 
   const combined = combine({a: store, b: store})
+  const combinedFn = combine(store, store, (a, b) => ({a, b}))
+
+  const mapped = store.map(x => `"${x}"`)
 
   store.watch(storeWatchFn)
   store.updates.watch(eventWatchFn)
   combined.watch(combineWatchFn)
   combined.updates.watch(combineUpdatesWatchFn)
+  combinedFn.watch(combineFnWatchFn)
+  combinedFn.updates.watch(combineFnUpdatesWatchFn)
+  mapped.watch(mapWatchFn)
+  mapped.updates.watch(mapUpdatesWatchFn)
 
   hydrate(app, {
     values: {
@@ -310,6 +321,42 @@ test('watch calls during hydration', async () => {
         "a": 1,
         "b": 1,
       },
+    ]
+  `)
+  expect(argumentHistory(combineFnWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "a": -1,
+        "b": -1,
+      },
+      Object {
+        "a": 0,
+        "b": 0,
+      },
+      Object {
+        "a": 1,
+        "b": 1,
+      },
+    ]
+  `)
+  expect(argumentHistory(combineFnUpdatesWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "a": 1,
+        "b": 1,
+      },
+    ]
+  `)
+  expect(argumentHistory(mapWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      "\\"-1\\"",
+      "\\"0\\"",
+      "\\"1\\"",
+    ]
+  `)
+  expect(argumentHistory(mapUpdatesWatchFn)).toMatchInlineSnapshot(`
+    Array [
+      "\\"1\\"",
     ]
   `)
   expect(argumentHistory(fxHandlerFn)).toMatchInlineSnapshot(`
