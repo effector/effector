@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "20.4.0",
+  "version": "20.4.1",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.es.js",
@@ -35,14 +35,15 @@
   ],
   "keywords": [
     "vue",
-    "state manager",
-    "reactive",
-    "functional",
-    "store",
-    "event",
-    "effect",
     "data",
-    "state"
+    "effect",
+    "event",
+    "functional",
+    "reactive",
+    "state manager",
+    "state-manager",
+    "state",
+    "store"
   ],
   "author": "Zero Bias",
   "maintainers": [

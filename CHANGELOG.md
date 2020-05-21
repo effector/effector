@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 20.4.1
+
+- Improve typescript typings for usage via `Vue.extend` ([PR #343](https://github.com/zerobias/effector/pull/343))
+
 ## effector 20.15.1
 
 - Fix additional store updates during state hydration
