@@ -340,6 +340,16 @@
         "infra",
         "ideas"
       ]
+    },
+    {
+      "login": "Spoki4",
+      "name": "Ivan",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/2562688?v=4",
+      "profile": "https://github.com/Spoki4",
+      "contributions": [
+        "code",
+        "test"
+      ]
     }
   ],
   "commitConvention": "none"
