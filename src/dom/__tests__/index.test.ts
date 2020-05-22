@@ -268,7 +268,6 @@ describe('handler', () => {
 
       click.watch(e => {
         isPrevented = e.defaultPrevented
-        console.log(e, isPrevented)
       })
 
       using(el, () => {
@@ -291,7 +290,6 @@ describe('handler', () => {
 
       click.watch(e => {
         isPrevented = e.defaultPrevented
-        console.log(e, isPrevented)
       })
 
       using(el, () => {
