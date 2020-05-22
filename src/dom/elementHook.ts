@@ -697,7 +697,7 @@ export function h(tag: string, opts?: any) {
     },
     env,
   })
-  setInParentIndex(draft, elementTemplate)
+  setInParentIndex(elementTemplate)
   function readElement(leaf: Leaf) {
     return (leaf.data as LeafDataElement).block.value
   }
@@ -743,23 +743,6 @@ export function h(tag: string, opts?: any) {
       appendChild(textBlock)
     }
     return textBlock
-  }
-}
-function setInParentIndex(draft: BindingsDraft, template: Actor<any>) {
-  if (!currentActor) return
-  switch (currentActor.draft.type) {
-    case 'element':
-    case 'using':
-    case 'route':
-    case 'list':
-    case 'tree':
-    case 'treeItem':
-      draft.inParentIndex = currentActor.draft.childCount
-      currentActor.draft.childCount += 1
-      currentActor.draft.childTemplates.push(template)
-      break
-    default:
-      console.warn(`unexpected currentActor type ${currentActor.draft.type}`)
   }
 }
 
@@ -1159,7 +1142,7 @@ export function route<T>({
           })
         },
       })
-      setInParentIndex(childDraft, routeItemTemplate)
+      setInParentIndex(routeItemTemplate)
       const {onMount, onState: onVisibleChange} = mutualSample({
         mount,
         state,
@@ -1204,7 +1187,7 @@ export function route<T>({
       })
     },
   })
-  setInParentIndex(draft, routeTemplate)
+  setInParentIndex(routeTemplate)
 }
 
 function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
@@ -1291,7 +1274,7 @@ export function tree({
         },
       })
 
-      setInParentIndex(treeItemDraft, treeItemTemplate)
+      setInParentIndex(treeItemTemplate)
 
       mount.watch(({leaf, node}) => {
         const data = leaf.data as LeafDataTree
@@ -1304,7 +1287,7 @@ export function tree({
       })
     },
   })
-  setInParentIndex(treeDraft, treeTemplate)
+  setInParentIndex(treeTemplate)
 }
 
 export function list<T, K extends keyof T>(config: {
@@ -1652,7 +1635,27 @@ export function list<T>(opts: any, maybeFn?: any) {
     },
     env,
   })
-  setInParentIndex(draft, listTemplate)
+  setInParentIndex(listTemplate)
+}
+
+function setInParentIndex(template: Actor<any>) {
+  if (!currentActor) return
+  const {draft} = template
+  if (draft.type === 'listItem') return
+  switch (currentActor.draft.type) {
+    case 'element':
+    case 'using':
+    case 'route':
+    case 'list':
+    case 'tree':
+    case 'treeItem':
+      draft.inParentIndex = currentActor.draft.childCount
+      currentActor.draft.childCount += 1
+      currentActor.draft.childTemplates.push(template)
+      break
+    default:
+      console.warn(`unexpected currentActor type ${currentActor.draft.type}`)
+  }
 }
 
 function removeItem<T>(item: T, list?: T[]) {
