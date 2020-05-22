@@ -332,17 +332,14 @@ export function h(tag: string, opts?: any) {
         }
       }
       if (merged.visible) {
-        const value = merged.visible
-        const onValueUpdate = sample({
-          source: leaf,
-          clock: value,
-          fn: (leaf, value) => ({leaf, value, hydration: false}),
-          greedy: true,
-        })
-        const onDomNodeCreation = sample({
-          source: value,
-          clock: leaf,
-          fn: (value, leaf) => ({leaf, value, hydration: leaf.hydration}),
+        const {
+          onMount: onDomNodeCreation,
+          onState: onValueUpdate,
+        } = mutualSample({
+          mount: leaf,
+          state: merged.visible,
+          onMount: (value, leaf) => ({leaf, value, hydration: leaf.hydration}),
+          onState: (leaf, value) => ({leaf, value, hydration: false}),
           greedy: true,
         })
         onDomNodeCreation.watch(({leaf, value, hydration}) => {
@@ -1163,10 +1160,16 @@ export function route<T>({
         },
       })
       setInParentIndex(childDraft, routeItemTemplate)
-      const onValueUpdate = sample({
-        source: mount,
-        clock: state,
-        fn: ({leaf, node}, {visible, value}) => ({
+      const {onMount, onState: onVisibleChange} = mutualSample({
+        mount,
+        state,
+        onMount: ({visible, value}, {leaf, node}) => ({
+          leaf,
+          visible,
+          node,
+          value,
+        }),
+        onState: ({leaf, node}, {visible, value}) => ({
           leaf,
           visible,
           node,
@@ -1174,18 +1177,7 @@ export function route<T>({
         }),
         greedy: true,
       })
-      const onDomNodeCreation = sample({
-        source: state,
-        clock: mount,
-        fn: ({visible, value}, {leaf, node}) => ({
-          leaf,
-          visible,
-          node,
-          value,
-        }),
-        greedy: true,
-      })
-      merge([onDomNodeCreation, onValueUpdate]).watch(
+      merge([onMount, onVisibleChange]).watch(
         ({leaf, visible, value, node}) => {
           const data = leaf.data as LeafDataRoute
           data.block.child.visible = visible
@@ -1411,10 +1403,14 @@ export function list<T>(opts: any, maybeFn?: any) {
             removeItem(page, page.template.pages)
           })
           if (draft.itemVisible) {
-            const mountAndVisible = sample({
-              source: draft.itemVisible,
-              clock: mount,
-              fn: (visible, {node, leaf}) => ({visible, node, leaf}),
+            const {
+              onMount: mountAndVisible,
+              onState: onVisibleChanges,
+            } = mutualSample({
+              mount,
+              state: draft.itemVisible,
+              onMount: (visible, {node, leaf}) => ({visible, node, leaf}),
+              onState: ({node, leaf}, visible) => ({visible, node, leaf}),
             })
             mountAndVisible.watch(({visible, node, leaf}) => {
               //@ts-ignore
@@ -1429,11 +1425,6 @@ export function list<T>(opts: any, maybeFn?: any) {
                   node,
                 })
               }
-            })
-            const onVisibleChanges = sample({
-              source: mount,
-              clock: draft.itemVisible,
-              fn: ({node, leaf}, visible) => ({visible, node, leaf}),
             })
             onVisibleChanges.watch(({visible, node, leaf}) => {
               const parentBlock = (leaf.data as any).block as LF
@@ -1669,5 +1660,37 @@ function removeItem<T>(item: T, list?: T[]) {
   const index = list.indexOf(item)
   if (index !== -1) {
     list.splice(index, 1)
+  }
+}
+
+function mutualSample<Mount, State, T>({
+  mount,
+  state,
+  onMount,
+  onState,
+  greedy = false,
+}: {
+  mount: Event<Mount>
+  state: Store<State>
+  greedy?: boolean
+  onMount: (state: State, mount: Mount) => T
+  onState: (mount: Mount, state: State) => T
+}): {
+  onMount: Event<T>
+  onState: Event<T>
+} {
+  return {
+    onMount: sample({
+      source: state,
+      clock: mount,
+      fn: onMount,
+      greedy,
+    }),
+    onState: sample({
+      source: mount,
+      clock: state,
+      fn: onState,
+      greedy,
+    }),
   }
 }
