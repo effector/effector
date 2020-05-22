@@ -84,7 +84,12 @@ import {
   findPreviousVisibleSibling,
   findPreviousVisibleSiblingBlock,
 } from './search'
-import {mountChild, appendChild, onMount} from './mountChild'
+import {
+  mountChild,
+  appendChild,
+  onMount,
+  mountChildTemplates,
+} from './mountChild'
 import {remap} from './remap'
 
 export function h(tag: string): void
@@ -367,14 +372,11 @@ export function h(tag: string, opts?: any) {
           const svgRoot = elementTemplate.isSvgRoot
             ? (parentBlock.value as any)
             : null
-          draft.childTemplates.forEach(actor => {
-            mountChild({
-              parentBlockFragment: parentBlock.child.child,
-              leaf,
-              node: parentBlock.value,
-              actor,
-              svgRoot,
-            })
+          mountChildTemplates(draft, {
+            parentBlockFragment: parentBlock.child.child,
+            leaf,
+            node: parentBlock.value,
+            svgRoot,
           })
           if (value) {
             if (leafData.needToCallNode) {
@@ -665,14 +667,11 @@ export function h(tag: string, opts?: any) {
           const svgRoot = elementTemplate.isSvgRoot
             ? (parentBlock.value as any)
             : null
-          draft.childTemplates.forEach(actor => {
-            mountChild({
-              parentBlockFragment: parentBlock.child.child,
-              leaf,
-              node: parentBlock.value,
-              actor,
-              svgRoot,
-            })
+          mountChildTemplates(draft, {
+            parentBlockFragment: parentBlock.child.child,
+            leaf,
+            node: parentBlock.value,
+            svgRoot,
           })
           launch({
             target: domElementCreated,
@@ -832,13 +831,10 @@ export function using(node: DOMElement, opts: any): void {
       cb()
       mount.watch(({node, leaf}) => {
         const parentBlock = (leaf.data as any).block as UsingBlock
-        draft.childTemplates.forEach(actor => {
-          mountChild({
-            parentBlockFragment: parentBlock.child.child,
-            leaf,
-            node,
-            actor,
-          })
+        mountChildTemplates(draft, {
+          parentBlockFragment: parentBlock.child.child,
+          leaf,
+          node,
         })
       })
     },
@@ -1127,13 +1123,10 @@ export function route<T>({
           mount.watch(({leaf, node}) => {
             const data = leaf.data as LeafDataRoute
             data.block.child.visible = true
-            childDraft.childTemplates.forEach(actor => {
-              mountChild({
-                parentBlockFragment: data.block.child.child,
-                leaf,
-                node,
-                actor,
-              })
+            mountChildTemplates(childDraft, {
+              parentBlockFragment: data.block.child.child,
+              leaf,
+              node,
             })
           })
           onValueUpdate.watch(({leaf, visible, value}) => {
@@ -1435,13 +1428,10 @@ export function list<T>(opts: any, maybeFn?: any) {
               parentBlock.visible = visible
               parentBlock.childInitialized = visible
               if (visible) {
-                draft.childTemplates.forEach(actor => {
-                  mountChild({
-                    parentBlockFragment: parentBlock.child,
-                    leaf,
-                    node,
-                    actor,
-                  })
+                mountChildTemplates(draft, {
+                  parentBlockFragment: parentBlock.child,
+                  leaf,
+                  node,
                 })
               }
             })
@@ -1456,13 +1446,10 @@ export function list<T>(opts: any, maybeFn?: any) {
               if (!parentBlock.childInitialized) {
                 if (visible) {
                   parentBlock.childInitialized = true
-                  draft.childTemplates.forEach(actor => {
-                    mountChild({
-                      parentBlockFragment: parentBlock.child,
-                      leaf,
-                      node,
-                      actor,
-                    })
+                  mountChildTemplates(draft, {
+                    parentBlockFragment: parentBlock.child,
+                    leaf,
+                    node,
                   })
                 }
                 return
@@ -1485,13 +1472,10 @@ export function list<T>(opts: any, maybeFn?: any) {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = true
               parentBlock.childInitialized = true
-              draft.childTemplates.forEach(actor => {
-                mountChild({
-                  parentBlockFragment: parentBlock.child,
-                  leaf,
-                  node,
-                  actor,
-                })
+              mountChildTemplates(draft, {
+                parentBlockFragment: parentBlock.child,
+                leaf,
+                node,
               })
             })
           }

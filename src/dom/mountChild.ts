@@ -49,6 +49,34 @@ import {createOpGroup, createOp} from './plan'
 import {spawn} from './template'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
 
+export function mountChildTemplates(
+  draft: BindingsDraft,
+  {
+    parentBlockFragment,
+    leaf,
+    node,
+    svgRoot,
+    values,
+  }: {
+    parentBlockFragment: FragmentBlock
+    leaf: Leaf
+    node: DOMElement
+    svgRoot?: SVGSVGElement
+    values?: {[name: string]: any}
+  },
+) {
+  draft.childTemplates.forEach(actor => {
+    mountChild({
+      parentBlockFragment,
+      leaf,
+      node,
+      svgRoot,
+      values,
+      actor,
+    })
+  })
+}
+
 export function mountChild({
   parentBlockFragment,
   leaf,
@@ -224,7 +252,6 @@ export function mountChild({
     }
   }
   const childSpawn = spawn(actor, {
-    parentSpawn: leaf.spawn,
     values,
     parentLeaf: leaf,
     mountNode: node,
