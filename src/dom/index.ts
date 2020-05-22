@@ -19,3 +19,4 @@ export {
 } from './elementHook'
 
 export {remap} from './remap'
+export {text} from './text'

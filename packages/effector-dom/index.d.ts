@@ -219,3 +219,8 @@ export function remap<
   store: Store<T>,
   shape: S,
 ): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never}
+
+export function text(
+  words: TemplateStringsArray,
+  ...values: Array<DOMProperty | AttributeStore>
+): void
