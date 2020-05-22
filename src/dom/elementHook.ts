@@ -87,7 +87,7 @@ import {
 import {
   mountChild,
   appendChild,
-  onMount,
+  onMount as onMountSync,
   mountChildTemplates,
 } from './mountChild'
 import {remap} from './remap'
@@ -193,6 +193,14 @@ export function h(tag: string, opts?: any) {
     namespace: ns,
     fn(_, {mount, unmount}) {
       const domElementCreated = createEvent<Leaf>()
+      function valueElementMutualSample(value: Store<DOMProperty>) {
+        return mutualSample({
+          mount: domElementCreated,
+          state: value,
+          onMount: (value, leaf) => ({leaf, value}),
+          onState: (leaf, value) => ({leaf, value}),
+        })
+      }
       const leaf = mount.map(({leaf}) => leaf)
       if (hasCb) {
         cb()
@@ -332,17 +340,14 @@ export function h(tag: string, opts?: any) {
         }
       }
       if (merged.visible) {
-        const {
-          onMount: onDomNodeCreation,
-          onState: onValueUpdate,
-        } = mutualSample({
+        const {onMount, onState} = mutualSample({
           mount: leaf,
           state: merged.visible,
           onMount: (value, leaf) => ({leaf, value, hydration: leaf.hydration}),
           onState: (leaf, value) => ({leaf, value, hydration: false}),
           greedy: true,
         })
-        onDomNodeCreation.watch(({leaf, value, hydration}) => {
+        onMount.watch(({leaf, value, hydration}) => {
           const leafData = leaf.data as LeafDataElement
           const visibleOp = leafData.ops.visible
           const parentBlock = leafData.block
@@ -379,7 +384,7 @@ export function h(tag: string, opts?: any) {
             if (leafData.needToCallNode) {
               leafData.needToCallNode = false
               launch({
-                target: onMount,
+                target: onMountSync,
                 params: {
                   element: leafData.block.value,
                   fns: draft.node,
@@ -396,15 +401,13 @@ export function h(tag: string, opts?: any) {
             page: leaf.spawn,
           })
         })
-        merge([onValueUpdate, onDomNodeCreation]).watch(
-          ({leaf, value, hydration}) => {
-            const leafData = leaf.data as LeafDataElement
-            const visibleOp = leafData.ops.visible
-            if (!hydration) {
-              pushOpToQueue(value, visibleOp)
-            }
-          },
-        )
+        merge([onState, onMount]).watch(({leaf, value, hydration}) => {
+          const leafData = leaf.data as LeafDataElement
+          const visibleOp = leafData.ops.visible
+          if (!hydration) {
+            pushOpToQueue(value, visibleOp)
+          }
+        })
       }
       for (let i = 0; i < draft.seq.length; i++) {
         const item = draft.seq[i]
@@ -412,31 +415,20 @@ export function h(tag: string, opts?: any) {
           case 'visible':
             break
           case 'attr': {
-            const {field, value} = item
+            const {field} = item
             const immediate =
               field === 'value' ||
               field === 'checked' ||
               field === 'min' ||
               field === 'max'
-            const onValueUpdate = sample({
-              source: domElementCreated,
-              clock: value,
-              fn: (leaf, value) => ({leaf, value}),
-            })
-            const onDomNodeCreation = sample({
-              source: value,
-              clock: domElementCreated,
-              fn: (value, leaf) => ({leaf, value}),
-            })
+            const {onMount, onState} = valueElementMutualSample(item.value)
             if (immediate) {
-              merge([onValueUpdate, onDomNodeCreation]).watch(
-                ({leaf, value}) => {
-                  applyAttr(readElement(leaf), field, value)
-                },
-              )
+              merge([onState, onMount]).watch(({leaf, value}) => {
+                applyAttr(readElement(leaf), field, value)
+              })
             } else {
               const opID = draft.opsAmount++
-              onDomNodeCreation.watch(({value, leaf}) => {
+              onMount.watch(({value, leaf}) => {
                 const element = readElement(leaf)
                 const op = createOp({
                   value,
@@ -449,26 +441,17 @@ export function h(tag: string, opts?: any) {
                 leaf.ops.group.ops[opID] = op
                 applyAttr(element, field, value)
               })
-              onValueUpdate.watch(({value, leaf}) => {
+              onState.watch(({value, leaf}) => {
                 pushOpToQueue(value, leaf.ops.group.ops[opID])
               })
             }
             break
           }
           case 'data': {
-            const {field, value} = item
-            const onValueUpdate = sample({
-              source: domElementCreated,
-              clock: value,
-              fn: (leaf, value) => ({leaf, value}),
-            })
-            const onDomNodeCreation = sample({
-              source: value,
-              clock: domElementCreated,
-              fn: (value, leaf) => ({leaf, value}),
-            })
+            const {field} = item
+            const {onMount, onState} = valueElementMutualSample(item.value)
             const opID = draft.opsAmount++
-            onDomNodeCreation.watch(({value, leaf}) => {
+            onMount.watch(({value, leaf}) => {
               const element = readElement(leaf)
               const op = createOp({
                 value,
@@ -481,26 +464,17 @@ export function h(tag: string, opts?: any) {
               leaf.ops.group.ops[opID] = op
               applyDataAttr(element, field, value)
             })
-            onValueUpdate.watch(({value, leaf}) => {
+            onState.watch(({value, leaf}) => {
               pushOpToQueue(value, leaf.ops.group.ops[opID])
             })
             break
           }
           case 'style': {
             const opID = draft.opsAmount++
-            const {field, value} = item
-            const onValueUpdate = sample({
-              source: domElementCreated,
-              clock: value,
-              fn: (leaf, value) => ({leaf, value}),
-            })
-            const onDomNodeCreation = sample({
-              source: value,
-              clock: domElementCreated,
-              fn: (value, leaf) => ({leaf, value}),
-            })
+            const {field} = item
+            const {onMount, onState} = valueElementMutualSample(item.value)
 
-            onDomNodeCreation.watch(({value, leaf}) => {
+            onMount.watch(({value, leaf}) => {
               const element = readElement(leaf)
               const op = createOp({
                 value,
@@ -513,25 +487,16 @@ export function h(tag: string, opts?: any) {
               leaf.ops.group.ops[opID] = op
               applyStyle(element, field, value)
             })
-            onValueUpdate.watch(({value, leaf}) => {
+            onState.watch(({value, leaf}) => {
               pushOpToQueue(value, leaf.ops.group.ops[opID])
             })
             break
           }
           case 'styleVar': {
-            const {field, value} = item
-            const onValueUpdate = sample({
-              source: domElementCreated,
-              clock: value,
-              fn: (leaf, value) => ({leaf, value}),
-            })
-            const onDomNodeCreation = sample({
-              source: value,
-              clock: domElementCreated,
-              fn: (value, leaf) => ({leaf, value}),
-            })
+            const {field} = item
+            const {onMount, onState} = valueElementMutualSample(item.value)
             const opID = draft.opsAmount++
-            onDomNodeCreation.watch(({value, leaf}) => {
+            onMount.watch(({value, leaf}) => {
               const element = readElement(leaf)
               const op = createOp({
                 value,
@@ -544,7 +509,7 @@ export function h(tag: string, opts?: any) {
               leaf.ops.group.ops[opID] = op
               applyStyleVar(element, field, value)
             })
-            onValueUpdate.watch(({value, leaf}) => {
+            onState.watch(({value, leaf}) => {
               pushOpToQueue(value, leaf.ops.group.ops[opID])
             })
             break
@@ -680,7 +645,7 @@ export function h(tag: string, opts?: any) {
             if (leafData.needToCallNode) {
               leafData.needToCallNode = false
               launch({
-                target: onMount,
+                target: onMountSync,
                 params: {
                   element: leafData.block.value,
                   fns: draft.node,
