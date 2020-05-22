@@ -181,16 +181,14 @@ export function h(tag: string, opts?: any) {
     opsAmount: 1,
     node: [],
   }
-  const elementTemplate = createTemplate<{}>({
+  const elementTemplate = createTemplate({
     name: 'element',
     draft,
     isSvgRoot: tag === 'svg',
     namespace: ns,
-    fn() {
-      const mount = createEvent<LeafMountParams>()
+    fn(_, {mount, unmount}) {
       const domElementCreated = createEvent<Leaf>()
       const leaf = mount.map(({leaf}) => leaf)
-      const unmount = createEvent()
       if (hasCb) {
         cb()
       }
@@ -700,10 +698,6 @@ export function h(tag: string, opts?: any) {
           }
         }
       })
-      return {
-        mount,
-        unmount,
-      }
     },
     env,
   })
@@ -829,13 +823,12 @@ export function using(node: DOMElement, opts: any): void {
     inParentIndex: -1,
   }
 
-  const usingTemplate = createTemplate<{mount: any}>({
+  const usingTemplate = createTemplate({
     name: 'using',
     draft: draft as any,
     isSvgRoot: tag === 'svg',
     namespace: ns,
-    fn() {
-      const mount = createEvent<LeafMountParams>()
+    fn(_, {mount}) {
       cb()
       mount.watch(({node, leaf}) => {
         const parentBlock = (leaf.data as any).block as UsingBlock
@@ -848,9 +841,6 @@ export function using(node: DOMElement, opts: any): void {
           })
         })
       })
-      return {
-        mount,
-      }
     },
     env,
   })
@@ -1095,16 +1085,13 @@ export function route<T>({
     childCount: 0,
     inParentIndex: -1,
   }
-  const routeTemplate = createTemplate<{
-    mount: LeafMountParams
-    unmount: any
-  }>({
+  const routeTemplate = createTemplate({
     name: 'route',
     isSvgRoot: false,
     namespace: currentActor!.namespace,
     env: currentActor!.env,
     draft,
-    fn() {
+    fn(_, {mount, unmount}) {
       const state = source.map(value => ({
         value,
         visible: visibleFn(value),
@@ -1115,19 +1102,14 @@ export function route<T>({
         childCount: 0,
         inParentIndex: -1,
       }
-      const routeItemTemplate = createTemplate<{
-        mount: LeafMountParams
-        unmount: any
-      }>({
+      const routeItemTemplate = createTemplate({
         name: 'route item',
         isSvgRoot: false,
         namespace: currentActor!.namespace,
         env: currentActor!.env,
         draft: childDraft,
         state: {store: null},
-        fn({store}) {
-          const mount = createEvent<LeafMountParams>()
-          const unmount = createEvent<any>()
+        fn({store}, {mount, unmount}) {
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, upd) => upd)
           fn({store})
@@ -1185,15 +1167,9 @@ export function route<T>({
             removeItem(page, page.parent!.childSpawns[page.template.id])
             removeItem(page, page.template.pages)
           })
-          return {
-            mount,
-            unmount,
-          }
         },
       })
       setInParentIndex(childDraft, routeItemTemplate)
-      const mount = createEvent<LeafMountParams>()
-      const unmount = createEvent<any>()
       const onValueUpdate = sample({
         source: mount,
         clock: state,
@@ -1241,10 +1217,6 @@ export function route<T>({
         removeItem(page, page.parent!.childSpawns[page.template.id])
         removeItem(page, page.template.pages)
       })
-      return {
-        mount,
-        unmount,
-      }
     },
   })
   setInParentIndex(draft, routeTemplate)
@@ -1291,19 +1263,13 @@ export function tree({
     childCount: 0,
     inParentIndex: -1,
   }
-  const treeTemplate = createTemplate<{
-    mount: LeafMountParams
-    unmount: any
-  }>({
+  const treeTemplate = createTemplate({
     name: 'tree',
     isSvgRoot: false,
     namespace,
     env,
     draft: treeDraft,
-    fn() {
-      const mount = createEvent<LeafMountParams>()
-      const unmount = createEvent<any>()
-
+    fn(_, {mount, unmount}) {
       const treeItemDraft: TreeItemType = {
         type: 'treeItem',
         childTemplates: [],
@@ -1313,8 +1279,6 @@ export function tree({
 
       const treeItemTemplate = createTemplate<{
         itemUpdater: any
-        mount: LeafMountParams
-        unmount: any
       }>({
         name: 'tree item',
         isSvgRoot: false,
@@ -1322,10 +1286,8 @@ export function tree({
         env,
         draft: treeItemDraft,
         state: {store: null},
-        fn({store}) {
+        fn({store}, {mount, unmount}) {
           const itemUpdater = createEvent<any>()
-          const mount = createEvent<LeafMountParams>()
-          const unmount = createEvent<any>()
 
           store.on(itemUpdater, (_, e) => e)
 
@@ -1340,8 +1302,6 @@ export function tree({
 
           return {
             itemUpdater,
-            mount,
-            unmount,
           }
         },
       })
@@ -1357,11 +1317,6 @@ export function tree({
           actor: treeItemTemplate,
         })
       })
-
-      return {
-        mount,
-        unmount,
-      }
     },
   })
   setInParentIndex(treeDraft, treeTemplate)
@@ -1406,31 +1361,24 @@ export function list<T>(opts: any, maybeFn?: any) {
   const env = currentActor!.env
   const namespace = currentActor!.namespace
 
-  const listTemplate = createTemplate<{
-    unmount: any
-    mount: LeafMountParams
-  }>({
+  const listTemplate = createTemplate({
     name: 'list',
     draft,
     isSvgRoot: false,
     namespace,
-    fn() {
-      const template = createTemplate<{
+    fn(_, {mount, unmount}) {
+      const listItemTemplate = createTemplate<{
         itemUpdater: any
-        mount: LeafMountParams
-        unmount: any
       }>({
         name: 'list item',
         state: {id: -1, store: null},
         draft,
         isSvgRoot: false,
         namespace,
-        fn({id, store}) {
+        fn({id, store}, {mount, unmount}) {
           cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
-          const unmount = createEvent<void>()
           store.on(itemUpdater, (_, e) => e)
-          const mount = createEvent<LeafMountParams>()
           const spawnState = createStore<{leaf: Leaf}>({
             leaf: null as any,
           })
@@ -1549,15 +1497,12 @@ export function list<T>(opts: any, maybeFn?: any) {
           }
           return {
             itemUpdater,
-            mount,
-            unmount,
           }
         },
         env,
       })
       const updates = createStore<ListItemType[]>([])
       const mappedUpdates = source.map((x: any) => x)
-      const mount = createEvent<LeafMountParams>()
       const mountData = sample({
         source: source as Store<T[]>,
         clock: mount,
@@ -1652,7 +1597,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 onInit(value) {
                   if (!item.active) return
                   if (hydration) return
-                  item.instance = spawn(template, {
+                  item.instance = spawn(listItemTemplate, {
                     values: {
                       id,
                       store: value,
@@ -1692,7 +1637,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               parentBlock.lastChild = listItemBlock
             }
             if (hydration) {
-              item.instance = spawn(template, {
+              item.instance = spawn(listItemTemplate, {
                 values: {
                   id,
                   store: value,
@@ -1715,7 +1660,6 @@ export function list<T>(opts: any, maybeFn?: any) {
         },
         target: updates,
       })
-      const unmount = createEvent()
       const onRemove = sample({
         source: mount,
         clock: sample(updates, unmount) as Event<ListItemType[]>,
@@ -1735,7 +1679,6 @@ export function list<T>(opts: any, maybeFn?: any) {
         removeItem(page, page.parent!.childSpawns[page.template.id])
         removeItem(page, page.template.pages)
       })
-      return {mount, unmount}
     },
     env,
   })

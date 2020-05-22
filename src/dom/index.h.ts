@@ -125,6 +125,10 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
     | TreeType
     | TreeItemType
   api: Api
+  trigger: {
+    mount: Event<LeafMountParams>
+    unmount: Event<void>
+  }
   isSvgRoot: boolean
   namespace: NSType
   env: Env

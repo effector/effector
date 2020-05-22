@@ -7,6 +7,7 @@ import {
   withRegion,
   restore,
   Step,
+  createEvent,
 } from 'effector'
 import {
   Leaf,
@@ -24,6 +25,7 @@ import {
   Spawn,
   TreeType,
   TreeItemType,
+  LeafMountParams,
 } from './index.h'
 
 let templateID = 0
@@ -32,6 +34,59 @@ export let currentTemplate: Template | null = null
 export let currentLeaf: Leaf | null = null
 export let currentActor: Actor<any> | null = null
 
+export function createTemplate<Api extends {[method: string]: any}>(config: {
+  fn: (
+    state: {
+      [field: string]: Store<any>
+    },
+    triggers: {
+      mount: Event<LeafMountParams>
+      unmount: Event<void>
+    },
+  ) => {[K in keyof Api]: Event<Api[K]>}
+  state?: {[field: string]: any}
+  name: string
+  isSvgRoot: boolean
+  draft:
+    | ElementDraft
+    | ListType
+    | ListItemType
+    | UsingDraft
+    | RouteType
+    | TreeType
+    | TreeItemType
+  namespace: NSType
+  env: {
+    document: Document
+  }
+}): Actor<Api>
+//@ts-ignore
+export function createTemplate(config: {
+  fn: (
+    state: {
+      [field: string]: Store<any>
+    },
+    triggers: {
+      mount: Event<LeafMountParams>
+      unmount: Event<void>
+    },
+  ) => void
+  state?: {[field: string]: any}
+  name: string
+  isSvgRoot: boolean
+  draft:
+    | ElementDraft
+    | ListType
+    | ListItemType
+    | UsingDraft
+    | RouteType
+    | TreeType
+    | TreeItemType
+  namespace: NSType
+  env: {
+    document: Document
+  }
+}): Actor<any>
 export function createTemplate<Api extends {[method: string]: any}>({
   fn,
   state: values = {},
@@ -41,9 +96,15 @@ export function createTemplate<Api extends {[method: string]: any}>({
   namespace,
   env,
 }: {
-  fn: (state: {
-    [field: string]: Store<any>
-  }) => {[K in keyof Api]: Event<Api[K]>}
+  fn: (
+    state: {
+      [field: string]: Store<any>
+    },
+    triggers: {
+      mount: Event<LeafMountParams>
+      unmount: Event<void>
+    },
+  ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
   name: string
   isSvgRoot: boolean
@@ -208,6 +269,10 @@ export function createTemplate<Api extends {[method: string]: any}>({
     template,
     node,
     api: null as any,
+    trigger: {
+      mount: createEvent<LeafMountParams>(),
+      unmount: createEvent(),
+    },
     draft,
     isSvgRoot,
     namespace,
@@ -215,7 +280,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   })
   withRegion(node, () => {
     const state = restore(values)
-    actor.api = fn(state) as any
+    actor.api = fn(state, actor.trigger) as any
     template.nameMap = state
   })
   currentActor = parentActor
@@ -413,6 +478,20 @@ export function spawn(
       parentSpawn.childSpawns[id].push(...result.childSpawns[id])
     }
   }
+  api.mount = (params: any, defer = true) =>
+    launch({
+      target: actor.trigger.mount,
+      params,
+      defer,
+      page: result,
+    })
+  api.unmount = (params: any, defer = true) =>
+    launch({
+      target: actor.trigger.unmount,
+      params,
+      defer,
+      page: result,
+    })
   if (actor.api) {
     for (const key in actor.api) {
       api[key] = (params: any, defer = true) =>
@@ -423,9 +502,9 @@ export function spawn(
           page: result,
         })
     }
-    //@ts-ignore
-    leaf.spawn.api = api
   }
+  //@ts-ignore
+  leaf.spawn.api = api
   //@ts-ignore
   leaf.spawn.leaf = leaf
   leaf.api.mount({
