@@ -7,7 +7,6 @@ The state manager
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
@@ -119,6 +118,7 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Community
 
+- [awesome-effector](https://github.com/ilyalesik/awesome-effector) a curated list of awesome effector packages, videos and articles
 - [Twitter](https://twitter.com/effectorjs)
 - [Telegram](https://t.me/effector_en) (@effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
@@ -483,6 +483,7 @@ More articles about effector at patreon
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
