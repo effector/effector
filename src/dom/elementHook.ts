@@ -1378,12 +1378,7 @@ export function list<T>(opts: any, maybeFn?: any) {
           const onRemoveFromDOM = sample(spawnState, unmount)
           onRemoveFromDOM.watch(({leaf}) => {
             const listItemBlock = (leaf.data as any).block as LF
-            if (listItemBlock.parent.child.includes(listItemBlock)) {
-              listItemBlock.parent.child.splice(
-                listItemBlock.parent.child.indexOf(listItemBlock),
-                1,
-              )
-            }
+            removeItem(listItemBlock, listItemBlock.parent.child)
             const leftBlock = listItemBlock.left
             const rightBlock = listItemBlock.right
             if (leftBlock) {
