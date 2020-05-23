@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
-    "strictNullChecks": true,
-    "module": "esnext",
-    "target": "esnext",
-    "jsx": "react",
     "allowJs": true,
-    "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "esnext"],
-    "isolatedModules": false,
     "baseUrl": ".",
+    "isolatedModules": false,
+    "jsx": "react",
+    "lib": ["dom", "esnext"],
+    "module": "esnext",
     "noEmit": true,
-    "paths": {"~/*": ["./src/*"]}
+    "noImplicitAny": false,
+    "paths": {"~/*": ["./src/*"]},
+    "strictNullChecks": true,
+    "target": "esnext"
   },
   "files": ["src/typings/json.d.ts"],
   "exclude": ["./dist"],
