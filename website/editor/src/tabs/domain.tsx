@@ -1,6 +1,6 @@
 import {createStore, createApi} from 'effector'
 import {mediaMatcher} from '../mediaMatcher'
-import {createLocalStore} from '../lib/createLocalStorage'
+import {createLocalStore} from '~/lib/local-store'
 
 export type Tab =
   | 'graphite'
