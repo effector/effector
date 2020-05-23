@@ -32,9 +32,6 @@ const request = data => {
     })
 }
 
-const WARNING_MUST_SIGNIN = 'Share not saved. You must be signed in!"'
-
-// type ShareCode = Effect<string, {slug: string}>
 export const shareCode = attach({
   effect: createEffect('share code', {
     async handler({author, description, code}) {
