@@ -1,134 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>
-      Effector editor
-    </title>
-    <meta
-      name="viewport"
-      content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"
-    />
-    <meta name="description" content="Online code sharing editor" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="https://editor-prod.effector.dev/apple-touch-icon.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="https://editor-prod.effector.dev/favicon-32x32.png"
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href="https://editor-prod.effector.dev/favicon-16x16.png"
-    />
-    <link
-      rel="shortcut icon"
-      href="https://editor-prod.effector.dev/favicon.ico"
-    />
-    <link
-      rel="dns-prefetch"
-      href="https://effector--canary.s3-eu-west-1.amazonaws.com"
-    />
-    <link rel="dns-prefetch" href="https://unpkg.com" />
-    <meta name="apple-mobile-web-app-title" content="effector" />
-    <meta name="application-name" content="effector" />
-    <meta name="theme-color" content="#E95801" />
-    <meta name="docsearch:language" content="en" />
-    <meta property="og:title" content="Online code sharing editor" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://share.effector.dev" />
-    <meta property="og:description" content="Online code sharing editor" />
-    <meta
-      property="og:image"
-      content="https://editor-prod.effector.dev/img/comet.png"
-    />
-    <meta name="twitter:card" content="summary" />
-    <meta
-      name="twitter:image"
-      content="https://editor-prod.effector.dev/img/comet.png"
-    />
-    <link
-      rel="stylesheet"
-      href="https://editor-prod.effector.dev/css/main.css"
-    />
-    <link
-      rel="stylesheet"
-      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-core.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-lightest.css"
-    />
-    <script
-      type="text/javascript"
-      src="https://buttons.github.io/buttons.js"
-    ></script>
-    <script src="https://editor-prod.effector.dev/js/codetabs.js"></script>
-    <script></script>
-  </head>
-  <body>
-    <div class="fixedHeaderContainer">
-      <div class="headerWrapper wrapper">
-        <header>
-          <a href="/">
-            <img
-              class="logo"
-              src="https://editor-prod.effector.dev/img/comet.png"
-              alt="Effector"
-            />
-            <h2 class="headerTitleWithLogo">
-              Effector
-              <span id="version"></span>
-            </h2>
-          </a>
-          <div class="navigationWrapper navigationSlider">
-            <nav class="slidingNav">
-              <ul class="nav-site nav-site-internal">
-                <li class="">
-                  <a
-                    href="https://effector.now.sh/docs/introduction/installation"
-                    target="_self"
-                  >
-                    Docs
-                  </a>
-                </li>
-                <li class="">
-                  <a
-                    href="https://effector.now.sh/docs/api/effector/effector"
-                    target="_self"
-                    >API</a
-                  >
-                </li>
-                <li class="">
-                  <a href="https://changelog.effector.dev" target="_self"
-                    >Changelog</a
-                  >
-                </li>
-                <li class="">
-                  <a href="https://github.com/zerobias/effector" target="_self"
-                    >GitHub</a
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
-          <div id="auth-section"></div>
-        </header>
-      </div>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>
+    Effector Playground
+  </title>
+  <meta name="apple-mobile-web-app-title" content="effector" />
+  <meta name="application-name" content="effector" />
+  <meta name="description" content="Online code sharing editor" />
+  <meta name="docsearch:language" content="en" />
+  <meta name="theme-color" content="#E95801" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:image" content="https://editor-prod.effector.dev/img/comet.png" />
+  <meta name="viewport"
+    content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no" />
+  <meta property="og:description" content="Online code sharing editor" />
+  <meta property="og:image" content="https://editor-prod.effector.dev/img/comet.png" />
+  <meta property="og:title" content="Online code sharing editor" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://share.effector.dev" />
+  <link rel="apple-touch-icon" sizes="180x180" href="https://editor-prod.effector.dev/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="https://editor-prod.effector.dev/favicon-16x16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="https://editor-prod.effector.dev/favicon-32x32.png" />
+  <link rel="shortcut icon" href="https://editor-prod.effector.dev/favicon.ico" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+  <link rel="stylesheet" href="https://editor-prod.effector.dev/css/main.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-core.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@adobe/spectrum-css@2.x/dist/spectrum-lightest.css" />
+  <script src="https://editor-prod.effector.dev/js/codetabs.js"></script>
+  <script type="text/javascript" src="https://buttons.github.io/buttons.js"></script>
+</head>
+
+<body>
+  <div class="fixedHeaderContainer">
+    <div class="headerWrapper wrapper">
+      <header>
+        <a href="/">
+          <img class="logo" src="https://editor-prod.effector.dev/img/comet.png" alt="Effector" />
+          <h2 class="headerTitleWithLogo">
+            Effector
+            <span id="version"></span>
+          </h2>
+        </a>
+        <div class="navigationWrapper navigationSlider">
+          <nav class="slidingNav">
+            <ul class="nav-site nav-site-internal">
+              <li class="">
+                <a href="https://effector.now.sh/docs/introduction/installation" target="_self">
+                  Docs
+                </a>
+              </li>
+              <li class="">
+                <a href="https://effector.now.sh/docs/api/effector/effector" target="_self">API</a>
+              </li>
+              <li class="">
+                <a href="https://changelog.effector.dev" target="_self">Changelog</a>
+              </li>
+              <li class="">
+                <a href="https://github.com/zerobias/effector" target="_self">GitHub</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+        <div id="auth-section"></div>
+      </header>
     </div>
-    <div id="try-wrapper" class="navPusher"></div>
-    <div id="dimmer"></div>
-    <script src="./index.tsx"></script>
-  </body>
+  </div>
+  <div id="try-wrapper" class="navPusher"></div>
+  <div id="dimmer"></div>
+  <script src="./index.tsx"></script>
+</body>
+
 </html>
