@@ -10,6 +10,7 @@
     "lib": ["dom", "esnext"],
     "isolatedModules": false,
     "baseUrl": ".",
+    "noEmit": true,
     "paths": {"~/*": ["./src/*"]}
   },
   "exclude": ["./dist"],
