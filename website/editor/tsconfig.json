@@ -7,7 +7,10 @@
     "allowJs": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "esnext"]
+    "lib": ["dom", "esnext"],
+    "isolatedModules": false,
+    "baseUrl": ".",
+    "paths": {"~/*": ["./src/*"]}
   },
   "exclude": ["./dist"],
   "include": ["./src"]
