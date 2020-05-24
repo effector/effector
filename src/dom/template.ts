@@ -45,6 +45,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
+  defer?: boolean
   name: string
   isSvgRoot: boolean
   draft:
@@ -72,6 +73,7 @@ export function createTemplate(config: {
     },
   ) => void
   state?: {[field: string]: any}
+  defer?: boolean
   name: string
   isSvgRoot: boolean
   draft:
@@ -90,6 +92,7 @@ export function createTemplate(config: {
 export function createTemplate<Api extends {[method: string]: any}>({
   fn,
   state: values = {},
+  defer = false,
   name = '',
   draft,
   isSvgRoot,
@@ -106,6 +109,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
+  defer?: boolean
   name: string
   isSvgRoot: boolean
   draft:
@@ -278,11 +282,31 @@ export function createTemplate<Api extends {[method: string]: any}>({
     namespace,
     env,
   })
-  withRegion(node, () => {
-    const state = restore(values)
-    actor.api = fn(state, actor.trigger) as any
-    template.nameMap = state
-  })
+  if (!defer) {
+    withRegion(node, () => {
+      const state = restore(values)
+      actor.api = fn(state, actor.trigger) as any
+      template.nameMap = state
+    })
+  } else {
+    actor.deferredInit = () => {
+      const prevActor = currentActor
+      const prevTemplate = currentTemplate
+      currentActor = actor
+      currentTemplate = template
+      try {
+        withRegion(node, () => {
+          const state = restore(values)
+          actor.api = fn(state, actor.trigger) as any
+          template.nameMap = state
+        })
+      } finally {
+        currentActor = prevActor
+        currentTemplate = prevTemplate
+        actor.deferredInit = null
+      }
+    }
+  }
   currentActor = parentActor
   currentTemplate = parent
   //@ts-ignore

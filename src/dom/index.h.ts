@@ -132,6 +132,7 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   isSvgRoot: boolean
   namespace: NSType
   env: Env
+  deferredInit?: (() => void) | null
 }
 
 export type AsyncValue = {
