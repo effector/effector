@@ -81,6 +81,10 @@ function findLastVisibleChildBlock(
       }
       return null
     }
+    default: {
+      const _: never = block
+      return null
+    }
   }
 }
 export function findPreviousVisibleSiblingBlock(
@@ -129,6 +133,10 @@ export function findPreviousVisibleSiblingBlock(
           if (visibleChild) return visibleChild
         }
         return findPreviousVisibleSiblingBlock(parentFragment)
+      }
+      default: {
+        const _: never = block.parent
+        return null
       }
     }
   }
