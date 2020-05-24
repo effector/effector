@@ -26,6 +26,7 @@ import {
   TreeType,
   TreeItemType,
   LeafMountParams,
+  NodeDraft,
 } from './index.h'
 
 let templateID = 0
@@ -48,14 +49,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
   defer?: boolean
   name: string
   isSvgRoot: boolean
-  draft:
-    | ElementDraft
-    | ListType
-    | ListItemType
-    | UsingDraft
-    | RouteType
-    | TreeType
-    | TreeItemType
+  draft: NodeDraft
   namespace: NSType
   env: {
     document: Document
@@ -76,14 +70,7 @@ export function createTemplate(config: {
   defer?: boolean
   name: string
   isSvgRoot: boolean
-  draft:
-    | ElementDraft
-    | ListType
-    | ListItemType
-    | UsingDraft
-    | RouteType
-    | TreeType
-    | TreeItemType
+  draft: NodeDraft
   namespace: NSType
   env: {
     document: Document
@@ -112,14 +99,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   defer?: boolean
   name: string
   isSvgRoot: boolean
-  draft:
-    | ElementDraft
-    | ListType
-    | ListItemType
-    | UsingDraft
-    | RouteType
-    | TreeType
-    | TreeItemType
+  draft: NodeDraft
   namespace: NSType
   env: {
     document: Document

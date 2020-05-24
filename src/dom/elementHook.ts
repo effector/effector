@@ -7,6 +7,7 @@ import {
   createEvent,
   sample,
   merge,
+  restore,
 } from 'effector'
 
 import {
@@ -839,6 +840,8 @@ export function node(cb: (node: DOMElement) => (() => void) | void) {
     case 'route':
     case 'tree':
     case 'treeItem':
+    case 'rec':
+    case 'recItem':
       return
   }
   draft.node.push(cb)
@@ -876,6 +879,8 @@ export function spec(config: {
     case 'route':
     case 'tree':
     case 'treeItem':
+    case 'rec':
+    case 'recItem':
       return
   }
   if (config.attr) draft.attr.push(config.attr)
@@ -1164,6 +1169,43 @@ function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
       //@ts-ignore
       cb(childSpawn.leaf)
     }
+  }
+}
+
+export function rec<T extends Record<string, any>>({
+  defaults,
+  fn,
+}: {
+  defaults: {[K in keyof T]: Store<T[K]> | T[K]}
+  fn(state: {[K in keyof T]: Store<T[K]>}): void
+}): (opts: {state: Partial<{[K in keyof T]: Store<T[K]> | T[K]}>}) => void {
+  const defState = restore(defaults)
+  const env = currentActor!.env
+  const namespace = currentActor!.namespace
+  const treeDraft: TreeType = {
+    type: 'tree',
+    childTemplates: [],
+    childCount: 0,
+    inParentIndex: -1,
+  }
+  const treeTemplate = createTemplate({
+    name: 'tree',
+    isSvgRoot: false,
+    namespace,
+    env,
+    draft: treeDraft,
+    defer: true,
+    fn(state: any, {mount, unmount}) {
+      fn(state)
+    },
+  })
+  return ({state}) => {
+    if (treeTemplate.deferredInit) treeTemplate.deferredInit()
+    const completeState = restore({
+      ...defState,
+      ...state,
+    })
+    const {mount, unmount} = currentActor?.trigger!
   }
 }
 
@@ -1607,6 +1649,7 @@ function setInParentIndex(template: Actor<any>) {
   if (!currentActor) return
   const {draft} = template
   if (draft.type === 'listItem') return
+  if (draft.type === 'rec') return
   switch (currentActor.draft.type) {
     case 'element':
     case 'using':
@@ -1614,6 +1657,8 @@ function setInParentIndex(template: Actor<any>) {
     case 'list':
     case 'tree':
     case 'treeItem':
+    case 'rec':
+    case 'recItem':
       draft.inParentIndex = currentActor.draft.childCount
       currentActor.draft.childCount += 1
       currentActor.draft.childTemplates.push(template)

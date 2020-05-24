@@ -116,14 +116,7 @@ export type Env = {
 export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   node: Step
   template: Template
-  draft:
-    | ElementDraft
-    | ListType
-    | ListItemType
-    | UsingDraft
-    | RouteType
-    | TreeType
-    | TreeItemType
+  draft: NodeDraft
   api: Api
   trigger: {
     mount: Event<LeafMountParams>
@@ -267,14 +260,7 @@ export type LeafData =
 export type Leaf = {
   spawn: Spawn
   parentLeaf: Leaf | null
-  draft:
-    | ElementDraft
-    | ListType
-    | ListItemType
-    | UsingDraft
-    | RouteType
-    | TreeType
-    | TreeItemType
+  draft: NodeDraft
   data: LeafData
   ops: {
     group: OpGroup
@@ -293,6 +279,16 @@ export type BindingsDraft = {
   childTemplates: Actor<any>[]
   childCount: number
   inParentIndex: number
+}
+
+export type RecDraft = {
+  type: 'rec'
+  childTemplates: Actor<any>[]
+  childCount: number
+}
+
+export type RecItemDraft = BindingsDraft & {
+  type: 'recItem'
 }
 
 export type RouteType = BindingsDraft & {
@@ -359,7 +355,7 @@ export type UsingDraft = BindingsDraft & {
   type: 'using'
 }
 
-export type NodeType =
+export type NodeDraft =
   | ElementDraft
   | UsingDraft
   | ListType
@@ -367,3 +363,5 @@ export type NodeType =
   | RouteType
   | TreeType
   | TreeItemType
+  | RecDraft
+  | RecItemDraft
