@@ -10,7 +10,8 @@ import {
   realmClearInterval,
   realmClearTimeout,
 } from '../realm'
-import {consoleMap} from '../logs'
+// TODO: remove exact dependency on feature, use requirements in the future
+import {consoleMap} from '~/features/logs'
 
 export function prepareRuntime(effector, effectorReact, version: string) {
   const api = {}
