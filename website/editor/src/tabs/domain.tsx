@@ -1,5 +1,5 @@
 import {createStore, createApi} from 'effector'
-import {mediaMatcher} from '../mediaMatcher'
+import {createMediaMatcher} from '~/lib/media-query'
 import {createLocalStore} from '~/lib/local-store'
 
 export type Tab =
@@ -12,7 +12,7 @@ export type Tab =
   | 'gist'
   | 'errors'
 
-export const isDesktopChanges = mediaMatcher('(min-width: 700px)')
+export const isDesktopChanges = createMediaMatcher('(min-width: 700px)')
 
 export const tab =
   createLocalStore <

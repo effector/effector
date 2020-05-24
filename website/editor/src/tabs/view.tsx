@@ -7,11 +7,11 @@ import {flowToggle as _flowToggle} from '../settings/state'
 import {TypeErrorsView} from '../flow/view'
 import {Share} from '../share/view'
 import {TabHeader, TabHeaderList} from './styled'
-import {mediaQuery} from '../components/mediaQuery'
+import {createMediaQuery} from '~/lib/media-query'
 import {Gist} from '../github/view'
 
-export const SmallScreens = mediaQuery('(max-width: 699px)')
-export const DesktopScreens = mediaQuery('(min-width: 700px)')
+export const SmallScreens = createMediaQuery('(max-width: 699px)')
+export const DesktopScreens = createMediaQuery('(min-width: 700px)')
 
 const tabs = {
   editor: {
