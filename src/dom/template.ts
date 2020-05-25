@@ -274,6 +274,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
       const prevTemplate = currentTemplate
       currentActor = actor
       currentTemplate = template
+      actor.deferredInit = null
       try {
         withRegion(node, () => {
           const state = restore(values)
@@ -283,7 +284,6 @@ export function createTemplate<Api extends {[method: string]: any}>({
       } finally {
         currentActor = prevActor
         currentTemplate = prevTemplate
-        actor.deferredInit = null
       }
     }
   }
