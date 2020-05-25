@@ -206,6 +206,10 @@ export function tree<
   fn: (config: {store: Store<T>; child: () => void}) => void
 }): void
 
+export function rec<T>(
+  fn: (config: {state: Store<T>}) => void,
+): (opts: {state: Store<T>}) => void
+
 export function node(fn: (node: DOMElement) => void): void
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
