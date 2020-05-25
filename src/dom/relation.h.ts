@@ -26,7 +26,7 @@ import {DOMElement} from './index.h'
 
 */
 
-export type ChildBlock = FF | FE | FL | FT | FR | FTree
+export type ChildBlock = FF | FE | FL | FT | FR | FTree | FRecItem
 
 export type Block =
   | FragmentBlock
@@ -36,6 +36,7 @@ export type Block =
   | ElementBlock
   | RouteBlock
   | TreeBlock
+  | RecItemBlock
 
 export type RouteBlock = {
   type: 'route'
@@ -45,7 +46,7 @@ export type RouteBlock = {
 
 export type FragmentBlock = {
   type: 'fragment'
-  parent: FF | UF | EF | LF | RF | TreeBlock
+  parent: FF | UF | EF | LF | RF | TreeBlock | RecItemF
   child: ChildBlock[]
 }
 
@@ -157,4 +158,26 @@ export type LF = {
   childInitialized: boolean
   left: LF | null
   right: LF | null
+}
+
+/* rec blocks */
+
+export type RecItemBlock = {
+  type: 'recItem'
+  parent: FRecItem
+  child: RecItemF
+}
+
+export type RecItemF = {
+  type: 'RecItemF'
+  parent: RecItemBlock
+  child: FragmentBlock
+}
+
+export type FRecItem = {
+  type: 'FRecItem'
+  parent: FragmentBlock
+  child: RecItemBlock
+  visible: boolean
+  index: number
 }

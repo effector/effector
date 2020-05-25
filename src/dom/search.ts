@@ -11,8 +11,11 @@ import {
   LF,
   Block,
   RF,
+  RecItemF,
+  FRecItem,
   FR,
   FTree,
+  FragmentBlock,
 } from './relation.h'
 
 function findParentDOMElementBlock(
@@ -42,7 +45,7 @@ export function findParentDOMElement(
   return null
 }
 function findLastVisibleChildBlock(
-  block: FF | FE | FL | FT | FR | LF | RF | FTree,
+  block: FF | FE | FL | FT | FR | LF | RF | FTree | FRecItem,
 ): ElementBlock | TextBlock | null {
   if (!block.visible) return null
   switch (block.type) {
@@ -53,15 +56,12 @@ function findLastVisibleChildBlock(
       return findLastVisibleChildBlock(block.child.child)
     case 'LF':
     case 'RF':
-    case 'FF': {
-      const childs = block.child.child
-      for (let i = childs.length - 1; i >= 0; i--) {
-        const child = childs[i]
-        const visibleChild = findLastVisibleChildBlock(child)
-        if (visibleChild) return visibleChild
-      }
-      return null
-    }
+    case 'FF':
+      return findLastVisibleFragmentChild(block.child)
+    case 'FTree':
+      return findLastVisibleFragmentChild(block.child.child)
+    case 'FRecItem':
+      return findLastVisibleFragmentChild(block.child.child.child)
     case 'FL': {
       let child = block.child.lastChild
       if (!child) return null
@@ -72,20 +72,20 @@ function findLastVisibleChildBlock(
       }
       return null
     }
-    case 'FTree': {
-      const childs = block.child.child.child
-      for (let i = childs.length - 1; i >= 0; i--) {
-        const child = childs[i]
-        const visibleChild = findLastVisibleChildBlock(child)
-        if (visibleChild) return visibleChild
-      }
-      return null
-    }
     default: {
       const _: never = block
       return null
     }
   }
+}
+function findLastVisibleFragmentChild(fragment: FragmentBlock) {
+  const childs = fragment.child
+  for (let i = childs.length - 1; i >= 0; i--) {
+    const child = childs[i]
+    const visibleChild = findLastVisibleChildBlock(child)
+    if (visibleChild) return visibleChild
+  }
+  return null
 }
 export function findPreviousVisibleSiblingBlock(
   block: Exclude<Block, UsingBlock>,
@@ -95,6 +95,7 @@ export function findPreviousVisibleSiblingBlock(
       case 'EF':
       case 'UF':
         return null
+      case 'RecItemF':
       case 'RF': {
         const parent = block.parent.parent.parent
         const parentFragment = parent.parent
