@@ -42,6 +42,8 @@ import {
   FragmentBlock,
   RF,
   FR,
+  RecItemBlock,
+  RecBlock,
 } from './relation.h'
 
 import {createOpGroup, createOp} from './plan'
@@ -61,7 +63,7 @@ export function mountChildTemplates(
     parentBlockFragment: FragmentBlock
     leaf: Leaf
     node: DOMElement
-    svgRoot?: SVGSVGElement
+    svgRoot?: SVGSVGElement | null
     values?: {[name: string]: any}
   },
 ) {
@@ -89,7 +91,7 @@ export function mountChild({
   leaf: Leaf
   node: DOMElement
   actor: Actor<any>
-  svgRoot?: SVGSVGElement
+  svgRoot?: SVGSVGElement | null
   values?: {[name: string]: any}
 }) {
   let leafData: LeafData
@@ -246,6 +248,66 @@ export function mountChild({
     case 'using':
     case 'listItem':
       break
+    case 'rec': {
+      const recBlock: RecBlock = {
+        type: 'rec',
+        parent: {
+          type: 'FRec',
+          parent: parentBlockFragment,
+          child: null as any,
+          visible: true,
+          index: draft.inParentIndex,
+        },
+        child: {
+          type: 'RecF',
+          parent: null as any,
+          child: {
+            type: 'fragment',
+            parent: null as any,
+            child: [],
+          },
+        },
+      }
+      recBlock.parent.child = recBlock
+      recBlock.child.parent = recBlock
+      recBlock.child.child.parent = recBlock.child
+      parentBlockFragment.child[draft.inParentIndex] = recBlock.parent
+      leafData = {
+        type: 'rec',
+        block: recBlock,
+      }
+      break
+    }
+    case 'recItem': {
+      const recItemBlock: RecItemBlock = {
+        type: 'recItem',
+        parent: {
+          type: 'FRecItem',
+          parent: parentBlockFragment,
+          child: null as any,
+          visible: true,
+          index: draft.inParentIndex,
+        },
+        child: {
+          type: 'RecItemF',
+          parent: null as any,
+          child: {
+            type: 'fragment',
+            parent: null as any,
+            child: [],
+          },
+        },
+      }
+      recItemBlock.parent.child = recItemBlock
+      recItemBlock.child.parent = recItemBlock
+      recItemBlock.child.child.parent = recItemBlock.child
+      parentBlockFragment.child[draft.inParentIndex] = recItemBlock.parent
+      leafData = {
+        type: 'rec item',
+        block: recItemBlock,
+      }
+      break
+    }
     default: {
       //@ts-ignore
       console.warn(`unexpected draft type ${draft.type}`)

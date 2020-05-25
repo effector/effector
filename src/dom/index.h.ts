@@ -7,6 +7,8 @@ import {
   LF,
   RouteBlock,
   TreeBlock,
+  RecItemBlock,
+  RecBlock,
 } from './relation.h'
 
 export type Template = {
@@ -235,6 +237,16 @@ export type LeafDataElement = {
   needToCallNode: boolean
 }
 
+export type LeafDataRec = {
+  type: 'rec'
+  block: RecBlock
+}
+
+export type LeafDataRecItem = {
+  type: 'rec item'
+  block: RecItemBlock
+}
+
 export type LeafDataListItem = {
   type: 'list item'
   block: LF
@@ -256,6 +268,8 @@ export type LeafData =
   | LeafDataListItem
   | LeafDataRoute
   | LeafDataTree
+  | LeafDataRecItem
+  | LeafDataRec
 
 export type Leaf = {
   spawn: Spawn
@@ -285,6 +299,7 @@ export type RecDraft = {
   type: 'rec'
   childTemplates: Actor<any>[]
   childCount: number
+  inParentIndex: 0
 }
 
 export type RecItemDraft = BindingsDraft & {
