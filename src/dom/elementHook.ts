@@ -35,6 +35,10 @@ import {
   TreeType,
   TreeItemType,
   LeafDataTree,
+  RecItemDraft,
+  LeafDataRecItem,
+  RecDraft,
+  LeafDataRec,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -53,6 +57,7 @@ import {
   FragmentBlock,
   RF,
   FR,
+  FRec,
 } from './relation.h'
 
 import {
@@ -1172,40 +1177,96 @@ function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
   }
 }
 
-export function rec<T extends Record<string, any>>({
-  defaults,
-  fn,
-}: {
-  defaults: {[K in keyof T]: Store<T[K]> | T[K]}
-  fn(state: {[K in keyof T]: Store<T[K]>}): void
-}): (opts: {state: Partial<{[K in keyof T]: Store<T[K]> | T[K]}>}) => void {
-  const defState = restore(defaults)
+export function rec<T>(
+  fn: (config: {state: Store<T>}) => void,
+): (opts: {state: Store<T>}) => void {
   const env = currentActor!.env
   const namespace = currentActor!.namespace
-  const treeDraft: TreeType = {
-    type: 'tree',
+  const recDraft: RecDraft = {
+    type: 'rec',
     childTemplates: [],
     childCount: 0,
-    inParentIndex: -1,
+    inParentIndex: 0,
   }
-  const treeTemplate = createTemplate({
-    name: 'tree',
+  const recTemplate = createTemplate<{
+    itemUpdater: any
+  }>({
+    name: 'rec',
+    state: {store: null},
     isSvgRoot: false,
     namespace,
     env,
-    draft: treeDraft,
+    draft: recDraft,
     defer: true,
-    fn(state: any, {mount, unmount}) {
-      fn(state)
+    fn({store}, {mount, unmount}) {
+      fn({state: store})
+      const itemUpdater = createEvent<any>()
+      store.on(itemUpdater, (_, e) => e)
+      mount.watch(({node, leaf}) => {
+        const data = leaf.data as LeafDataRec
+        mountChildTemplates(recDraft, {
+          parentBlockFragment: data.block.child.child,
+          leaf,
+          node,
+        })
+      })
+      sample(mount, unmount).watch(({leaf}) => {
+        leaf.spawn.active = false
+        iterateChildLeafs(leaf, child => {
+          child.api.unmount()
+        })
+      })
+      return {itemUpdater}
     },
   })
   return ({state}) => {
-    if (treeTemplate.deferredInit) treeTemplate.deferredInit()
-    const completeState = restore({
-      ...defState,
-      ...state,
+    if (recTemplate.deferredInit) recTemplate.deferredInit()
+    // const {mount, unmount} = currentActor!.trigger
+    const {env, namespace} = currentActor!
+    const recItemDraft: RecItemDraft = {
+      type: 'recItem',
+      childTemplates: [],
+      childCount: 0,
+      inParentIndex: -1,
+    }
+    const recItemTemplate = createTemplate({
+      name: 'rec item',
+      isSvgRoot: false,
+      namespace,
+      env,
+      draft: recItemDraft,
+      fn(_, {mount, unmount}) {
+        const {onMount, onState} = mutualSample({
+          state,
+          mount,
+          onMount: (state, {leaf, node}) => ({state, leaf, node}),
+          onState: ({leaf, node}, state) => ({state, leaf, node}),
+          greedy: true,
+        })
+        sample(mount, unmount).watch(({leaf}) => {
+          leaf.spawn.active = false
+          iterateChildLeafs(leaf, child => {
+            child.api.unmount()
+          })
+        })
+        onState.watch(({state, leaf}) => {
+          iterateChildLeafs(leaf, child => {
+            child.api.itemUpdater(state)
+          })
+        })
+        onMount.watch(({node, leaf, state}) => {
+          const data = leaf.data as LeafDataRecItem
+          mountChild({
+            parentBlockFragment: data.block.child.child,
+            leaf,
+            node,
+            actor: recTemplate,
+            values: {store: state},
+          })
+        })
+      },
     })
-    const {mount, unmount} = currentActor?.trigger!
+    setInParentIndex(recItemTemplate)
   }
 }
 
@@ -1230,71 +1291,25 @@ export function tree({
   child: string
   fn: Function
 }) {
-  const env = currentActor!.env
-  const namespace = currentActor!.namespace
-  const treeDraft: TreeType = {
-    type: 'tree',
-    childTemplates: [],
-    childCount: 0,
-    inParentIndex: -1,
-  }
-  const treeTemplate = createTemplate({
-    name: 'tree',
-    isSvgRoot: false,
-    namespace,
-    env,
-    draft: treeDraft,
-    fn(_, {mount, unmount}) {
-      const treeItemDraft: TreeItemType = {
-        type: 'treeItem',
-        childTemplates: [],
-        childCount: 0,
-        inParentIndex: -1,
-      }
-
-      const treeItemTemplate = createTemplate<{
-        itemUpdater: any
-      }>({
-        name: 'tree item',
-        isSvgRoot: false,
-        namespace,
-        env,
-        draft: treeItemDraft,
-        state: {store: null},
-        fn({store}, {mount, unmount}) {
-          const itemUpdater = createEvent<any>()
-
-          store.on(itemUpdater, (_, e) => e)
-
-          const childList = store.map(value => value[childField] || [])
-
-          fn({
-            store,
-            child() {
-              list(childList, ({store}) => {})
-            },
-          })
-
-          return {
-            itemUpdater,
-          }
-        },
-      })
-
-      setInParentIndex(treeItemTemplate)
-
-      mount.watch(({leaf, node}) => {
-        const data = leaf.data as LeafDataTree
-        mountChild({
-          parentBlockFragment: data.block.child,
-          leaf,
-          node,
-          actor: treeItemTemplate,
+  const treeRec = rec<any[]>(({state}) => {
+    list({
+      source: state,
+      fn({store}) {
+        const childList = store.map(value => value[childField] || [])
+        fn({
+          store,
+          child() {
+            treeRec({
+              state: childList,
+            })
+          },
         })
-      })
-    },
+      },
+    })
   })
-  setInParentIndex(treeTemplate)
+  treeRec({
+    state: source,
+  })
 }
 
 export function list<T, K extends keyof T>(config: {
