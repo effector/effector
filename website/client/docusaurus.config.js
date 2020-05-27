@@ -122,6 +122,13 @@ module.exports = {
           showLastUpdateAuthor: false,
           // Equivalent to `enableUpdateTime`.
           showLastUpdateTime: true,
+          editUrl:
+            'https://github.com/zerobias/effector/edit/master/',
+        },
+        blog: {
+          showReadingTime: true,
+          editUrl:
+            'https://github.com/zerobias/effector/edit/master/website/client/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
