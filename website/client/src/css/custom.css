@@ -34,14 +34,3 @@
 .footer .footer__logo {
   max-width: 5rem;
 }
-
-@media (min-width: 997px) {
-  .main-wrapper > div > div > div {
-    height: calc(100vh - var(--ifm-navbar-height));
-    top: var(--ifm-navbar-height);
-    padding-top: 0;
-  }
-  .main-wrapper > div > div > div > div:first-child {
-    display: none !important;
-  }
-}

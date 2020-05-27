@@ -1,12 +1,17 @@
 ---
-author: dpr-dev
-authorURL: https://github.com/dpr-dev
+id: i18n
 title: Create custom i18n provider with effector and typescript
+author: dpr-dev
+authorURL: https://github.com/dpr-dev 
+author_image_url: https://avatars1.githubusercontent.com/u/23157659?v=4
+tags: [effector, i18n, typescript]
 ---
 
 Today I will show you how to create your own i18n solution with effector, typescript and react.
 
 codesandbox https://codesandbox.io/s/react-i18n-with-effector-and-ts-gtet4
+
+<!--truncate-->
 
 First of all, we should design the state of our provider, consisting of two parts: 
 - current language
@@ -60,7 +65,7 @@ export const setLanguage = createEvent<string>('@@i18n/language/set');
 
 <!--END_DOCUSAURUS_CODE_TABS-->
 
-Thereafter we should subscribe our stores to this events
+There after we should subscribe our stores to this events
 
 <!--DOCUSAURUS_CODE_TABS-->
 

@@ -7,11 +7,11 @@
     "now-build": "yarn build"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.48",
-    "@docusaurus/preset-classic": "2.0.0-alpha.48",
+    "@docusaurus/core": "2.0.0-alpha.55",
+    "@docusaurus/preset-classic": "2.0.0-alpha.55",
     "classnames": "^2.2.6",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "browserslist": {
     "production": [

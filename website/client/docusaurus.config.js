@@ -108,8 +108,7 @@ module.exports = {
     'https://buttons.github.io/buttons.js',
     'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.umd.js',
     '/js/splash.js',
-    '/js/try-button.js',
-    '/js/darkTheme.js',
+    '/js/try-button.js'
   ],
   stylesheets: ['/css/try-button.css'],
   presets: [
@@ -123,6 +122,13 @@ module.exports = {
           showLastUpdateAuthor: false,
           // Equivalent to `enableUpdateTime`.
           showLastUpdateTime: true,
+          editUrl:
+            'https://github.com/zerobias/effector/edit/master/',
+        },
+        blog: {
+          showReadingTime: true,
+          editUrl:
+            'https://github.com/zerobias/effector/edit/master/website/client/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

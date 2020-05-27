@@ -1,7 +1,12 @@
 ---
-author: Zero Bias
-authorURL: https://github.com/zerobias
+id: Media queries
 title: Media queries with effector
+author: Zero Bias
+author_title: Effector Core Team
+authorURL: https://github.com/zerobias
+author_image_url: https://avatars1.githubusercontent.com/u/15912112?v=4
+tags: [effector, media-queries]
+
 ---
 
 Hi!
@@ -26,6 +31,8 @@ const Button = () => (
 ```
 
 <!--END_DOCUSAURUS_CODE_TABS-->
+
+<!--truncate-->
 
 Media queries itself could been handled in such way:
 
