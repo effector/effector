@@ -31,6 +31,7 @@
     "effector-react": "./src/react",
     "effector-vue": "./src/vue",
     "effector-dom": "./src/dom",
+    "forest": "./src/dom",
     "@effector/forms": "./src/forms"
   },
   "devDependencies": {

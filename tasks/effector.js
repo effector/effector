@@ -140,8 +140,35 @@ export default {
         ],
         'server.d.ts',
       ]),
-    rollupEffectorDom,
+    () => rollupEffectorDom({name: 'effector-dom'}),
     publishScript('effector-dom'),
+  ],
+  forest: [
+    generatePackageJSON('forest'),
+    copyLicense('forest'),
+    () =>
+      Promise.all([
+        massCopy('packages/effector-dom', 'npm/forest', [
+          'README.md',
+          [
+            'index.d.ts',
+            [
+              'index.d.ts',
+              'forest.cjs.d.ts',
+              'forest.es.d.ts',
+              'forest.umd.d.ts',
+            ],
+          ],
+          'server.d.ts',
+        ]),
+        massCopy('packages/forest', 'npm/forest', ['package.json']),
+        massCopy('packages/effector-dom', 'packages/forest', [
+          'index.ts',
+          'server.ts',
+        ]),
+      ]),
+    () => rollupEffectorDom({name: 'forest'}),
+    publishScript('forest'),
   ],
 }
 

@@ -180,8 +180,7 @@ export async function rollupEffector() {
     createCompat(name),
   ])
 }
-export async function rollupEffectorDom() {
-  const name = 'effector-dom'
+export async function rollupEffectorDom({name}) {
   await Promise.all([
     createEsCjs(name, {
       file: {

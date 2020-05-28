@@ -37,6 +37,7 @@ npm/effector/**
 npm/effector-react/**
 npm/effector-vue/**
 npm/effector-dom/**
+npm/forest/**
 npm/bs-effector/**
 npm/bs-effector-react/**
 .merlin
