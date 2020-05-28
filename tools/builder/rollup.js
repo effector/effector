@@ -25,7 +25,10 @@ import {minifyConfig} from './minificationConfig'
 
 const compatNameCache = {}
 const onwarn = (warning, rollupWarn: any) => {
-  if (warning.code !== 'CIRCULAR_DEPENDENCY') {
+  if (
+    warning.code !== 'CIRCULAR_DEPENDENCY' &&
+    warning.code !== 'NON_EXISTENT_EXPORT'
+  ) {
     rollupWarn(warning)
   }
 }
