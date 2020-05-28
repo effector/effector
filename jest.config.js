@@ -57,7 +57,10 @@ module.exports = {
           domBrowser: {
             automock: false,
             testEnvironment: 'node',
-            testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
+            testMatch: [
+              '<rootDir>/src/dom/__tests__/**/*.test.ts',
+              '!<rootDir>/src/dom/__tests__/ssr/**',
+            ],
             transform: {
               '^.+\\.jsx?$': 'babel-jest',
               '^.+\\.ts?$': 'babel-jest',

@@ -27,6 +27,7 @@ const isBrowserstackDomTest = !!process.env.DOM
 
 const typesTestsPath = join('types', '__tests__')
 const domTestsPath = join('dom', '__tests__')
+const domSSRTestsPath = join('dom', '__tests__', 'ssr')
 
 const aliases = {
   'effector/fixtures': 'fixtures',
@@ -112,7 +113,10 @@ const babelConfig = {
     {
       test(filename) {
         return (
-          !isBrowserstackDomTest && filename && filename.includes(domTestsPath)
+          !isBrowserstackDomTest &&
+          filename &&
+          filename.includes(domTestsPath) &&
+          !filename.includes(domSSRTestsPath)
         )
       },
       plugins: [jsdomTestPlugin],
