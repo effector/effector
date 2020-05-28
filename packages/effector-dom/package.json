@@ -9,17 +9,18 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.12.2"
+    "effector": "^20.15.6"
   },
   "keywords": [
-    "state manager",
-    "reactive",
-    "functional",
-    "store",
-    "event",
-    "effect",
     "data",
+    "effect",
+    "event",
+    "functional",
+    "reactive",
+    "state manager",
+    "state-manager",
     "state",
+    "store",
     "dom",
     "view"
   ],

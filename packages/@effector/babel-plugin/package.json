@@ -13,7 +13,7 @@
     "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
   },
   "peerDependencies": {
-    "effector": "^20.11.5"
+    "effector": "^20.15.6"
   },
   "keywords": [
     "effector",

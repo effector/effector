@@ -30,7 +30,7 @@
     "compat.d.ts"
   ],
   "dependencies": {
-    "effector": "^20.11.5"
+    "effector": "^20.15.6"
   },
   "keywords": [
     "effector",

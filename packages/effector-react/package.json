@@ -38,14 +38,15 @@
   ],
   "keywords": [
     "react",
-    "state manager",
-    "reactive",
-    "functional",
-    "store",
-    "event",
-    "effect",
     "data",
-    "state"
+    "effect",
+    "event",
+    "functional",
+    "reactive",
+    "state manager",
+    "state-manager",
+    "state",
+    "store"
   ],
   "author": "Zero Bias",
   "maintainers": [
