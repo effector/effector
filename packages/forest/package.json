@@ -1,0 +1,47 @@
+{
+  "name": "forest",
+  "version": "0.16.0",
+  "description": "UI engine for web",
+  "main": "forest.cjs.js",
+  "module": "forest.es.js",
+  "umd:main": "forest.umd.js",
+  "jsnext:main": "forest.es.js",
+  "typings": "index.d.ts",
+  "dependencies": {},
+  "peerDependencies": {
+    "effector": "^20.15.6"
+  },
+  "keywords": [
+    "data",
+    "effect",
+    "event",
+    "functional",
+    "reactive",
+    "state manager",
+    "state-manager",
+    "state",
+    "store",
+    "dom",
+    "view"
+  ],
+  "author": "Zero Bias",
+  "maintainers": [
+    {
+      "name": "Zero Bias",
+      "email": "ribkatt@gmail.com"
+    }
+  ],
+  "sideEffects": false,
+  "license": "MIT",
+  "devDependencies": {},
+  "scripts": {},
+  "repository": "https://github.com/zerobias/effector",
+  "bugs": "https://github.com/zerobias/effector/issues",
+  "homepage": "https://effector.now.sh",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

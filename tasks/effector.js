@@ -149,7 +149,6 @@ export default {
     () =>
       Promise.all([
         massCopy('packages/effector-dom', 'npm/forest', [
-          'README.md',
           [
             'index.d.ts',
             [
@@ -161,7 +160,10 @@ export default {
           ],
           'server.d.ts',
         ]),
-        massCopy('packages/forest', 'npm/forest', ['package.json']),
+        massCopy('packages/forest', 'npm/forest', [
+          'README.md',
+          'package.json',
+        ]),
         massCopy('packages/effector-dom', 'packages/forest', [
           'index.ts',
           'server.ts',
