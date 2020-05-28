@@ -32,6 +32,7 @@ title: API Reference
 - [restore(obj)](./restore.md)
 - [is](./is.md)
 - [fromObservable(observable)](./fromObservable.md)
+- [withRegion](./withRegion.md)
 
 ## Babel plugin
 
