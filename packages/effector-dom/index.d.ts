@@ -128,6 +128,7 @@ export function h(
     handler?: Partial<
       {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
     >
+    fn?: () => void
   },
 ): void
 export function h(tag: DOMTag, cb: () => void): void
