@@ -1,6 +1,6 @@
 //@flow
 
-import {getConfig, getNestedConfig} from './getter'
+import {onConfigNesting} from './config'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createUnit'
@@ -14,10 +14,10 @@ import {throwError} from './throw'
 
 export function guard(source, config) {
   const meta = {op: 'guard'}
-  if (getNestedConfig(source)) {
-    meta.config = getConfig(source)
-    ;[source, config] = getNestedConfig(source)
-  }
+  onConfigNesting(source, (injectedData, userConfig) => {
+    meta.config = injectedData
+    ;[source, config] = userConfig
+  })
   if (!config) {
     config = source
     source = config.source

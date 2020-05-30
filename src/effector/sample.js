@@ -3,7 +3,8 @@ import {combine} from './combine'
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg, callARegStack} from './caller'
-import {getStoreState, getConfig, getNestedConfig, getGraph} from './getter'
+import {onConfigNesting} from './config'
+import {getStoreState, getGraph} from './getter'
 import {own} from './own'
 import {is} from './is'
 import {createStore} from './createUnit'
@@ -19,10 +20,10 @@ export function sample(...args): any {
   let target
   let name
   let metadata
-  if (getNestedConfig(args[0])) {
-    metadata = getConfig(args[0])
-    args = getNestedConfig(args[0])
-  }
+  onConfigNesting(args[0], (injectedData, userConfig) => {
+    metadata = injectedData
+    args = userConfig
+  })
   let [source, clock, fn, greedy = false] = args
   let sid
   //config case
@@ -64,7 +65,8 @@ export function sample(...args): any {
       }
     }
   }
-  const targetTemplate = isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
+  const targetTemplate =
+    isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   if (is.store(source)) {
     own(source, [
       createLinkNode(clock, target, {
@@ -78,7 +80,7 @@ export function sample(...args): any {
             to: fn ? 'a' : 'stack',
           }),
           fn && step.compute({fn: callARegStack}),
-          template && isUpward && template.upward
+          template && isUpward && template.upward,
         ],
         meta: {op: 'sample', sample: 'store'},
       }),
@@ -112,7 +114,7 @@ export function sample(...args): any {
       createLinkNode(clock, target, {
         scope: {
           fn,
-          targetTemplate
+          targetTemplate,
         },
         node: [
           template && template.loader,
@@ -127,7 +129,7 @@ export function sample(...args): any {
             to: 'a',
           }),
           fn && step.compute({fn: callStackAReg}),
-          template && isUpward && template.upward
+          template && isUpward && template.upward,
         ],
         meta: {op: 'sample', sample: 'clock'},
       }),

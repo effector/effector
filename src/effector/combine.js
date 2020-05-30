@@ -4,7 +4,8 @@ import {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef} from './stateRef'
 import {step} from './typedef'
-import {getStoreState, getConfig, getNestedConfig} from './getter'
+import {onConfigNesting} from './config'
+import {getStoreState} from './getter'
 import {is, isFunction} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
@@ -17,10 +18,10 @@ export function combine(...args: any[]): Store<any> {
   let handler
   let stores
   let config
-  if (getNestedConfig(args[0])) {
-    config = getConfig(args[0])
-    args = getNestedConfig(args[0])
-  }
+  onConfigNesting(args[0], (injectedData, userConfig) => {
+    config = injectedData
+    args = userConfig
+  })
   const rawHandler = args[args.length - 1]
   if (isFunction(rawHandler)) {
     stores = args.slice(0, -1)

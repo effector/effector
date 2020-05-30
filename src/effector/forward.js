@@ -1,5 +1,5 @@
 //@flow
-import {getConfig, getNestedConfig} from './getter'
+import {onConfigNesting} from './config'
 import {createNode} from './createNode'
 import {Subscription, Graphite, Cmd} from './index.h'
 import {createSubscription} from './subscription'
@@ -12,12 +12,12 @@ export const createLinkNode = (
   {
     node,
     scope,
-    meta
+    meta,
   }: {
     node?: Array<Cmd | false | void | null>,
     scope?: {[name: string]: any},
-    meta?: {[name: string]: any}
-  }
+    meta?: {[name: string]: any},
+  },
 ) =>
   addToRegion(
     createNode({
@@ -38,10 +38,10 @@ export const forward = (opts: {
   meta?: Object,
 }): Subscription => {
   let config
-  if (getNestedConfig(opts)) {
-    config = getConfig(opts)
-    opts = getNestedConfig(opts)
-  }
+  onConfigNesting(opts, (injectedData, userConfig) => {
+    config = injectedData
+    opts = userConfig
+  })
   const {from, to, meta = {op: 'forward'}} = opts
   if (!from || !to) throwError('from and to fields should be defined')
   if (config) meta.config = config
