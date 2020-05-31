@@ -3,6 +3,7 @@
 import {combine} from './combine'
 import {createEffect, onSettled} from './createEffect'
 import {applyParentEventHook} from './createUnit'
+import {onConfigNesting} from './config'
 import {getGraph, getStoreState} from './getter'
 import {own} from './own'
 import {is} from './is'
@@ -10,8 +11,12 @@ import {step} from './typedef'
 import {launch} from './kernel'
 import {addToReg} from './createNode'
 
-export function attach({source, effect, mapParams}) {
-  const attached = createEffect()
+export function attach(config) {
+  onConfigNesting(config, (injectedData, userConfig) => {
+    config = userConfig
+  })
+  const {source, effect, mapParams} = config
+  const attached = createEffect(config)
   const {runner} = getGraph(attached).scope
 
   let runnerSteps
