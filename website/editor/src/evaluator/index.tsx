@@ -258,6 +258,7 @@ const removeImportsPlugin = babel => ({
   visitor: {
     ImportDeclaration(path) {
       switch (path.node.source.value) {
+        case 'forest':
         case 'effector-dom':
           replaceModuleImports('effectorDom', path, babel)
           break
