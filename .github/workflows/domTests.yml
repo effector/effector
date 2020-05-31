@@ -1,11 +1,11 @@
-name: effector-dom browserstack tests
+name: forest browserstack tests
 
 on:
   push:
     branches:
       - master
     paths:
-      - 'src/dom/**'
+      - 'src/forest/**'
 
 jobs:
   build:
