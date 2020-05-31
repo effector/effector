@@ -14,6 +14,7 @@ module.exports = function(babel, options = {}) {
     samples,
     forwards,
     guards,
+    attaches,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -23,11 +24,11 @@ module.exports = function(babel, options = {}) {
     sampleCreators,
     forwardCreators,
     guardCreators,
+    attachCreators,
     domainMethods,
     exportMetadata,
     importName,
   } = normalizeOptions(options)
-  const attachCreators = new Set(['attach'])
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
   const isPropertyNameInRange = (range, path) =>
@@ -68,7 +69,7 @@ module.exports = function(babel, options = {}) {
               forwardCreators.add(localName)
             } else if (guardCreators.has(importedName)) {
               guardCreators.add(localName)
-            } else if (importedName === 'attach') {
+            } else if (attachCreators.has(importedName)) {
               attachCreators.add(localName)
             }
           }
@@ -182,7 +183,7 @@ module.exports = function(babel, options = {}) {
               true,
             )
           }
-          if (attachCreators.has(name)) {
+          if (attaches && attachCreators.has(name)) {
             setConfigForConfigurableMethod(
               path,
               state,
@@ -232,6 +233,7 @@ const normalizeOptions = options => {
       sample: [],
       forward: [],
       guard: [],
+      attach: [],
       domainMethods: {
         store: [],
         event: [],
@@ -249,6 +251,7 @@ const normalizeOptions = options => {
       sample: ['sample'],
       forward: ['forward'],
       guard: ['guard'],
+      attach: ['attach'],
       domainMethods: {
         store: ['store', 'createStore'],
         event: ['event', 'createEvent'],
@@ -282,6 +285,7 @@ const normalizeOptions = options => {
       samples: true,
       forwards: true,
       guards: true,
+      attaches: true,
     },
     result: {
       importName: new Set(
@@ -301,6 +305,7 @@ const normalizeOptions = options => {
       sampleCreators: new Set(options.sampleCreators || defaults.sample),
       forwardCreators: new Set(options.forwardCreators || defaults.forward),
       guardCreators: new Set(options.guardCreators || defaults.guard),
+      attachCreators: new Set(options.attachCreators || defaults.attach),
       domainMethods: readConfigShape(
         options.domainMethods,
         defaults.domainMethods,
