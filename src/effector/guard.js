@@ -14,7 +14,11 @@ import {throwError} from './throw'
 
 export function guard(source, config) {
   const meta = {op: 'guard'}
+  let rawName = 'guard'
   onConfigNesting(source, (injectedData, userConfig) => {
+    if (injectedData.name) {
+      rawName = injectedData.name
+    }
     meta.config = injectedData
     ;[source, config] = userConfig
   })
@@ -22,8 +26,8 @@ export function guard(source, config) {
     config = source
     source = config.source
   }
-  const {filter, greedy, name = 'guard'} = config
-  const target = config.target || createEvent(name)
+  const {filter, greedy, name = rawName} = config
+  const target = config.target || createEvent(name, meta.config)
   if (!is.unit(source)) source = combine(source)
 
   if (is.unit(filter)) {
