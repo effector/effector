@@ -27,6 +27,7 @@ module.exports = function(babel, options = {}) {
     exportMetadata,
     importName,
   } = normalizeOptions(options)
+  const attachCreators = new Set(['attach'])
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
   const isPropertyNameInRange = (range, path) =>
@@ -67,6 +68,8 @@ module.exports = function(babel, options = {}) {
               forwardCreators.add(localName)
             } else if (guardCreators.has(importedName)) {
               guardCreators.add(localName)
+            } else if (importedName === 'attach') {
+              attachCreators.add(localName)
             }
           }
         }
@@ -170,6 +173,16 @@ module.exports = function(babel, options = {}) {
             )
           }
           if (forwards && forwardCreators.has(name)) {
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              findCandidateNameForExpression(path),
+              babel.types,
+              smallConfig,
+              true,
+            )
+          }
+          if (attachCreators.has(name)) {
             setConfigForConfigurableMethod(
               path,
               state,

@@ -1,5 +1,56 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`babel-plugin should attach 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { attach, createEffect } from 'effector';
+const effect = createEffect({
+  name: \\"effect\\",
+  sid: \\"cqzl92\\"
+});
+const foo1 = attach({
+  ɔ: {
+    effect,
+    mapParams: _ => _
+  },
+  config: {
+    name: \\"foo1\\",
+    sid: \\"-ko4avk\\"
+  }
+});
+attach({
+  ɔ: {
+    effect,
+    mapParams: _ => _
+  },
+  config: {
+    sid: \\"tzqz4n\\"
+  }
+});
+const config = {
+  effect,
+  mapParams: _ => _
+};
+const foo2 = attach({
+  ɔ: config,
+  config: {
+    name: \\"foo2\\",
+    sid: \\"-4t7i6y\\"
+  }
+});
+
+const f = () => attach({
+  ɔ: {
+    effect,
+    mapParams: _ => _
+  },
+  config: {
+    name: \\"f\\",
+    sid: \\"hf8d25\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should combine 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
