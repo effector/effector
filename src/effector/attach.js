@@ -12,11 +12,13 @@ import {launch} from './kernel'
 import {addToReg} from './createNode'
 
 export function attach(config) {
+  let injected
   onConfigNesting(config, (injectedData, userConfig) => {
+    injected = injectedData
     config = userConfig
   })
   const {source, effect, mapParams} = config
-  const attached = createEffect(config)
+  const attached = createEffect(config, injected)
   const {runner} = getGraph(attached).scope
 
   let runnerSteps
