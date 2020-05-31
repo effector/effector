@@ -26,8 +26,16 @@ const meta = {
 const isBrowserstackDomTest = !!process.env.DOM
 
 const typesTestsPath = join('types', '__tests__')
-const domTestsPath = join('dom', '__tests__')
-const domSSRTestsPath = join('dom', '__tests__', 'ssr')
+
+const domTestsPath = join('forest', '__tests__')
+const domSSRTestsPath = join('forest', '__tests__', 'ssr')
+const jsdomTestPlugin = resolvePath(
+  __dirname,
+  'src',
+  'forest',
+  '__fixtures__',
+  'jsdomTestPlugin.js',
+)
 
 const aliases = {
   'effector/fixtures': 'fixtures',
@@ -51,13 +59,7 @@ const locationPlugin = resolvePath(
   'src',
   'locationPlugin.js',
 )
-const jsdomTestPlugin = resolvePath(
-  __dirname,
-  'src',
-  'dom',
-  '__fixtures__',
-  'jsdomTestPlugin.js',
-)
+
 const babelConfig = {
   presets: [
     ['@babel/preset-react', {useBuiltIns: true}],
@@ -132,7 +134,6 @@ const babelConfig = {
         return (
           filename &&
           filename.includes('__tests__') &&
-          !filename.includes('redux') &&
           !filename.includes('browserstack') &&
           !filename.includes('fromObservable')
         )

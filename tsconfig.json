@@ -16,6 +16,7 @@
       "effector": ["packages/effector"],
       "effector-react": ["packages/effector-react"],
       "effector-dom": ["packages/effector-dom"],
+      "forest": ["packages/effector-dom"],
       "effector-vue": ["packages/effector-vue"]
     }
   },

@@ -13,9 +13,8 @@ const watchPathIgnorePatterns = [
   '<rootDir>/integrations/',
   '<rootDir>/node_modules/',
   '<rootDir>/npm/',
-  '<rootDir>/recipies/',
+  '<rootDir>/recipes/',
   '<rootDir>/rfc/',
-  '<rootDir>/scripts/',
   '<rootDir>/stats/',
   '<rootDir>/tasks/',
   '<rootDir>/tools/',
@@ -47,26 +46,25 @@ module.exports = {
     '!**/*.test.js',
     '!<rootDir>/src/babel/**',
     '!<rootDir>/src/fixtures/**',
-    '!<rootDir>/src/redux/**',
   ],
   watchPathIgnorePatterns,
   projects: createProjectList(
     boolean(process.env.DOM, false)
       ? [
         {
-          domBrowser: {
+          forestBrowser: {
             automock: false,
             testEnvironment: 'node',
             testMatch: [
-              '<rootDir>/src/dom/__tests__/**/*.test.ts',
-              '!<rootDir>/src/dom/__tests__/ssr/**',
+              '<rootDir>/src/forest/__tests__/**/*.test.ts',
+              '!<rootDir>/src/forest/__tests__/ssr/**',
             ],
             transform: {
               '^.+\\.jsx?$': 'babel-jest',
               '^.+\\.ts?$': 'babel-jest',
             },
             testTimeout: 60e3,
-            runner: './src/dom/__fixtures__/browserstackTestRunner.js',
+            runner: './src/forest/__fixtures__/browserstackTestRunner.js',
           },
         },
       ]
@@ -104,10 +102,10 @@ module.exports = {
           },
         },
         {
-          dom: {
+          forest: {
             automock: false,
             testEnvironment: 'node',
-            testMatch: [`<rootDir>/src/dom/**/*.test.ts`],
+            testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
             transform: {
               '^.+\\.jsx?$': 'babel-jest',
               '^.+\\.ts?$': 'babel-jest',

@@ -1,1 +1,1 @@
-export * from '../../src/dom/server'
+export * from '../../src/forest/server'
