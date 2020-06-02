@@ -1,15 +1,16 @@
 const {resolve} = require('path')
 
-const babel = require('rollup-plugin-babel')
-const resolvePlugin = require('rollup-plugin-node-resolve')
-const commonjs = require('rollup-plugin-commonjs')
-const json = require('rollup-plugin-json')
+const {babel} = require('@rollup/plugin-babel')
+const {nodeResolve: resolvePlugin} = require('@rollup/plugin-node-resolve')
+const commonjs = require('@rollup/plugin-commonjs')
+const json = require('@rollup/plugin-json')
 
 const input = {
   input: resolve(__dirname, 'index.js'),
   plugins: [
     babel({
       babelrc: false,
+      skipPreflightCheck: true,
       presets: [
         '@babel/preset-flow',
         [
@@ -32,6 +33,7 @@ const input = {
         '@babel/plugin-proposal-nullish-coalescing-operator',
         ['@babel/plugin-proposal-class-properties', {loose: true}],
       ],
+      babelHelpers: 'bundled',
     }),
     json(),
     resolvePlugin(),
@@ -48,14 +50,14 @@ const input = {
     'sharp',
     'chalk',
     'rollup',
-    'rollup-plugin-json',
+    '@rollup/plugin-json',
     '@rollup/plugin-typescript',
     '@rollup/plugin-alias',
-    'rollup-plugin-babel',
-    'rollup-plugin-node-resolve',
+    '@rollup/plugin-babel',
+    '@rollup/plugin-node-resolve',
     'rollup-plugin-terser',
-    'rollup-plugin-commonjs',
-    'rollup-plugin-replace',
+    '@rollup/plugin-commonjs',
+    '@rollup/plugin-replace',
     'rollup-plugin-size-snapshot',
     'rollup-plugin-visualizer',
     'readable-stream',

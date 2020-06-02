@@ -1,22 +1,18 @@
 //@flow
 import {rollup} from 'rollup'
 //$off
-import babel from 'rollup-plugin-babel'
-import json from 'rollup-plugin-json'
+import {babel} from '@rollup/plugin-babel'
+import json from '@rollup/plugin-json'
 //$off
-import resolve from 'rollup-plugin-node-resolve'
+import resolve from '@rollup/plugin-node-resolve'
 //$off
 import {terser} from 'rollup-plugin-terser'
 //$off
-import commonjs from 'rollup-plugin-commonjs'
-//$off
-import replace from 'rollup-plugin-replace'
+import commonjs from '@rollup/plugin-commonjs'
 //$off
 import {sizeSnapshot} from 'rollup-plugin-size-snapshot'
 //$off
 import analyze from 'rollup-plugin-visualizer'
-//$off
-import typescript from '@rollup/plugin-typescript'
 import alias from '@rollup/plugin-alias'
 
 import graphPlugin from './moduleGraphGenerator'
@@ -43,24 +39,17 @@ const compatTarget = {
   ],
 }
 
+const extensions = ['.js', '.mjs', '.ts', '.tsx']
+
 const getPlugins = (name: string) => ({
   babel: babel({
-    runtimeHelpers: false,
+    babelHelpers: 'bundled',
+    skipPreflightCheck: true,
+    extensions,
     exclude: /(\.re|node_modules.*)/,
   }),
-  replace: replace({
-    'process.env.NODE_ENV': JSON.stringify('production'),
-  }),
-  typescript: typescript({
-    module: 'es2015',
-    target: 'esnext',
-    allowSyntheticDefaultImports: true,
-    lib: ['dom', 'esnext'],
-  }),
-  commonjs: commonjs({}),
-  resolve: resolve({
-    extensions: ['.js', '.ts', '.json'],
-  }),
+  commonjs: commonjs({extensions}),
+  resolve: resolve({extensions}),
   sizeSnapshot: sizeSnapshot({
     printInfo: false,
   }),
@@ -244,7 +233,7 @@ export async function rollupEffectorReact() {
     }),
     createSSR({file: {cjs: dir(`npm/${name}/ssr.js`)}}),
     createUmd(name, {
-      external: ['react', 'effector'],
+      external: ['react', 'effector', 'effector/compat'],
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: 'effectorReact',
       globals: {
@@ -260,7 +249,6 @@ export async function rollupEffectorReact() {
     const plugins = getPlugins(name)
     const pluginList = [
       plugins.resolve,
-      plugins.typescript,
       plugins.json,
       plugins.babel,
       plugins.sizeSnapshot,
@@ -271,7 +259,13 @@ export async function rollupEffectorReact() {
     const build = await rollup({
       onwarn,
       input: dir(`packages/${name}/ssr.ts`),
-      external: ['react', 'vue', 'symbol-observable', 'effector'],
+      external: [
+        'react',
+        'vue',
+        'symbol-observable',
+        'effector',
+        'effector/compat',
+      ],
       plugins: pluginList,
     })
     await build.write({
@@ -296,7 +290,7 @@ export async function rollupEffectorVue() {
       inputExtension: 'ts',
     }),
     createUmd(name, {
-      external: ['vue', 'effector'],
+      external: ['vue', 'effector', 'effector/compat'],
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: 'effectorVue',
       globals: {
@@ -319,10 +313,8 @@ async function createUmd(
     input: dir(`packages/${name}/index.${extension}`),
     plugins: [
       plugins.resolve,
-      plugins.typescript,
       plugins.json,
       plugins.babel,
-      plugins.replace,
       bundleEffector && plugins.alias,
       plugins.commonjs,
       plugins.sizeSnapshot,
@@ -350,14 +342,23 @@ async function createCompat(name, extension = 'js') {
   })
   const pluginList = [
     plugins.resolve,
-    plugins.typescript,
     plugins.json,
     babel({
-      runtimeHelpers: false,
+      babelHelpers: 'bundled',
+      extensions,
+      skipPreflightCheck: true,
       exclude: /(\.re|node_modules.*)/,
       babelrc: false,
       presets: [
-        '@babel/preset-flow',
+        extension === 'js'
+          ? '@babel/preset-flow'
+          : [
+            '@babel/preset-typescript',
+            {
+              isTSX: true,
+              allExtensions: true,
+            },
+          ],
         ['@babel/preset-react', {useBuiltIns: false}],
         [
           '@babel/preset-env',
@@ -388,6 +389,7 @@ async function createCompat(name, extension = 'js') {
         ],
       ],
     }),
+    plugins.commonjs,
     plugins.sizeSnapshot,
     terser({
       ...terserConfig,
@@ -455,7 +457,7 @@ async function createEsCjs(
   const plugins = getPlugins(input === 'index' ? name : input)
   const pluginList = [
     plugins.resolve,
-    plugins.typescript,
+    // plugins.typescript,
     plugins.json,
     plugins.babel,
     plugins.sizeSnapshot,
@@ -474,7 +476,14 @@ async function createEsCjs(
   const build = await rollup({
     onwarn,
     input: dir(`packages/${name}/${input}.${inputExtension}`),
-    external: ['react', 'vue', 'symbol-observable', 'effector', 'perf_hooks'],
+    external: [
+      'react',
+      'vue',
+      'symbol-observable',
+      'effector',
+      'effector/compat',
+      'perf_hooks',
+    ],
     plugins: pluginList,
   })
   await Promise.all([
