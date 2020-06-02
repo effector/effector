@@ -147,11 +147,113 @@ describe('protect external units from destroy', () => {
       ]
     `)
   })
+
   describe('difference in behavior with domains', () => {
     test('reference behavior', () => {
       const fn = jest.fn()
 
-      const node = createNode({})
+      function apply(fn) {
+        const unit = createNode({}) // <- node
+        let unsubscribe
+        withRegion(unit, () => {
+          unsubscribe = fn()
+        })
+        return () => {
+          unsubscribe && unsubscribe()
+          clearNode(unit)
+        }
+      }
+
+      const reset = createEvent()
+      const increment = createEvent()
+      const decrement = createEvent()
+      const counter = createStore(0).reset(reset)
+
+      // -> 0
+      counter.watch(fn)
+
+      let updateCounter
+
+      // -> 35
+      const stopInterval = apply(() => {
+        updateCounter = createEvent()
+        counter.on(updateCounter, (_, payload) => payload)
+        updateCounter(35)
+        return () => updateCounter(-1)
+      })
+      const stopInteraction = apply(() => {
+        counter.on(increment, state => state + 1)
+        counter.on(decrement, state => state - 1)
+      })
+
+      // -> 36
+      increment()
+      // -> 37
+      increment()
+      // -> 36
+      decrement()
+      // -> 42
+      updateCounter(42)
+      // -1
+      stopInterval()
+      // -> 0
+      increment()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      // -> 0
+      reset()
+      // nothing
+      updateCounter(11)
+      // nothing
+      updateCounter(12)
+      // -> -1
+      decrement()
+      // -> -2
+      decrement()
+      // -> 0
+      reset()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      stopInteraction()
+      // nothing
+      increment()
+      // nothing
+      increment()
+      // nothing
+      decrement()
+      // -> 0
+      reset()
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+              Array [
+                0,
+                35,
+                36,
+                37,
+                36,
+                42,
+                -1,
+                0,
+                1,
+                2,
+                0,
+                -1,
+                -2,
+                0,
+                1,
+                2,
+                0,
+              ]
+          `)
+    })
+    test('unexpected behavior', () => {
+      const fn = jest.fn()
+
+      const node = createNode({}) // <- node
 
       function apply(unit, fn) {
         let unsubscribe
@@ -174,6 +276,7 @@ describe('protect external units from destroy', () => {
 
       let updateCounter
 
+      // -> 35
       const stopInterval = apply(node, () => {
         updateCounter = createEvent()
         counter.on(updateCounter, (_, payload) => payload)
@@ -243,9 +346,8 @@ describe('protect external units from destroy', () => {
     test('domain behavior', () => {
       const fn = jest.fn()
 
-      const domain = createDomain()
-
-      function apply(unit, fn) {
+      function apply(fn) {
+        const unit = createDomain() // <- domain
         let unsubscribe
         withRegion(unit, () => {
           unsubscribe = fn()
@@ -266,13 +368,14 @@ describe('protect external units from destroy', () => {
 
       let updateCounter
 
-      const stopInterval = apply(domain, () => {
+      // -> 35
+      const stopInterval = apply(() => {
         updateCounter = createEvent()
         counter.on(updateCounter, (_, payload) => payload)
         updateCounter(35)
         return () => updateCounter(-1)
       })
-      const stopInteraction = apply(domain, () => {
+      const stopInteraction = apply(() => {
         counter.on(increment, state => state + 1)
         counter.on(decrement, state => state - 1)
       })
@@ -320,16 +423,16 @@ describe('protect external units from destroy', () => {
       reset()
 
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-        Array [
-          0,
-          35,
-          36,
-          37,
-          36,
-          42,
-          -1,
-        ]
-      `)
+              Array [
+                0,
+                35,
+                36,
+                37,
+                36,
+                42,
+                -1,
+              ]
+          `)
     })
   })
 })
