@@ -408,8 +408,8 @@ export function createEffect<FN extends Function>(config: {
   ? Effect<
       Args['length'] extends 0 // does handler accept 0 arguments?
         ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length'] // is the first argument optional?
-        ? /**
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+          /**
            * Applying `infer` to a variadic arguments here we'll get `Args` of
            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
            * In case T is optional we get `T | undefined` back from `Args[0]`.
@@ -422,7 +422,7 @@ export function createEffect<FN extends Function>(config: {
            * other type (`any | undefined | void` becomes just `any`). And we
            * have similar situation also with the `unknown` type.
            */
-          Args[0] | void
+        ? Args[0] | void
         : Args[0],
       Done extends Promise<infer Async> ? Async : Done,
       Error
@@ -639,6 +639,12 @@ export function sample<A extends Combinable, B, C>(config: {
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>
+export function sample<A extends Combinable, B, C>(config: {
+  source: A
+  clock: Unit<B>
+  target: Unit<C>
+  greedy?: boolean
+}): Unit<GetCombinedValue<A>>
 
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,

@@ -946,3 +946,40 @@ describe('without clock', () => {
     `)
   })
 })
+
+describe('without fn', () => {
+  test('source Unit, clock Unit, target Event with opt fn', () => {
+    const source = createStore({name: 'John'})
+    const target = createEvent<string>()
+    const clock = createEvent<string>()
+
+    sample({
+      source,
+      clock,
+      target,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ name: string; }>' is not assignable to type 'Combinable'.
+            Type 'Store<{ name: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ name: string; }>'.
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({
+               ^...
+        string [1] is incompatible with object literal [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
+            const target = createEvent<string>()
+                                   [1] ^^^^^^
+            const source = createStore({name: 'John'})
+                                   [2] ^^^^^^^^^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+})
