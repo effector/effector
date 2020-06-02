@@ -147,4 +147,189 @@ describe('protect external units from destroy', () => {
       ]
     `)
   })
+  describe('difference in behavior with domains', () => {
+    test('reference behavior', () => {
+      const fn = jest.fn()
+
+      const node = createNode({})
+
+      function apply(unit, fn) {
+        let unsubscribe
+        withRegion(unit, () => {
+          unsubscribe = fn()
+        })
+        return () => {
+          unsubscribe && unsubscribe()
+          clearNode(unit)
+        }
+      }
+
+      const reset = createEvent()
+      const increment = createEvent()
+      const decrement = createEvent()
+      const counter = createStore(0).reset(reset)
+
+      // -> 0
+      counter.watch(fn)
+
+      let updateCounter
+
+      const stopInterval = apply(node, () => {
+        updateCounter = createEvent()
+        counter.on(updateCounter, (_, payload) => payload)
+        updateCounter(35)
+        return () => updateCounter(-1)
+      })
+      const stopInteraction = apply(node, () => {
+        counter.on(increment, state => state + 1)
+        counter.on(decrement, state => state - 1)
+      })
+
+      // -> 36
+      increment()
+      // -> 37
+      increment()
+      // -> 36
+      decrement()
+      // -> 42
+      updateCounter(42)
+      // -1
+      stopInterval()
+      // -> 0
+      increment()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      // -> 0
+      reset()
+      // nothing
+      updateCounter(11)
+      // nothing
+      updateCounter(12)
+      // -> -1
+      decrement()
+      // -> -2
+      decrement()
+      // -> 0
+      reset()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      stopInteraction()
+      // nothing
+      increment()
+      // nothing
+      increment()
+      // nothing
+      decrement()
+      // -> 0
+      reset()
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          0,
+          35,
+          36,
+          37,
+          36,
+          42,
+          -1,
+          0,
+        ]
+      `)
+    })
+    test('domain behavior', () => {
+      const fn = jest.fn()
+
+      const domain = createDomain()
+
+      function apply(unit, fn) {
+        let unsubscribe
+        withRegion(unit, () => {
+          unsubscribe = fn()
+        })
+        return () => {
+          unsubscribe && unsubscribe()
+          clearNode(unit)
+        }
+      }
+
+      const reset = createEvent()
+      const increment = createEvent()
+      const decrement = createEvent()
+      const counter = createStore(0).reset(reset)
+
+      // -> 0
+      counter.watch(fn)
+
+      let updateCounter
+
+      const stopInterval = apply(domain, () => {
+        updateCounter = createEvent()
+        counter.on(updateCounter, (_, payload) => payload)
+        updateCounter(35)
+        return () => updateCounter(-1)
+      })
+      const stopInteraction = apply(domain, () => {
+        counter.on(increment, state => state + 1)
+        counter.on(decrement, state => state - 1)
+      })
+
+      // -> 36
+      increment()
+      // -> 37
+      increment()
+      // -> 36
+      decrement()
+      // -> 42
+      updateCounter(42)
+      // -1
+      stopInterval()
+      // -> 0
+      increment()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      // -> 0
+      reset()
+      // nothing
+      updateCounter(11)
+      // nothing
+      updateCounter(12)
+      // -> -1
+      decrement()
+      // -> -2
+      decrement()
+      // -> 0
+      reset()
+      // -> 1
+      increment()
+      // -> 2
+      increment()
+      stopInteraction()
+      // nothing
+      increment()
+      // nothing
+      increment()
+      // nothing
+      decrement()
+      // -> 0
+      reset()
+
+      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+        Array [
+          0,
+          35,
+          36,
+          37,
+          36,
+          42,
+          -1,
+        ]
+      `)
+    })
+  })
 })
