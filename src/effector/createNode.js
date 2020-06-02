@@ -50,9 +50,9 @@ export function createNode({
   family?: {
     type?: 'regular' | 'crosslink' | 'domain',
     links?: Graphite | Graphite[],
-    owners?: Graphite | Graphite[]
-  }
-}): Graph {
+    owners?: Graphite | Graphite[],
+  },
+} = {}): Graph {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
   const owners = arrifyNodes(familyRaw.owners)
