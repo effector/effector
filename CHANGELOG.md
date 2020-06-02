@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.7.3, effector-vue 20.4.2
+
+- Fix regression in `effector-react/compat` and `effector-vue/compat` compatibility with IE11
+
 ## effector-vue 20.4.1
 
 - Improve typescript typings for usage via `Vue.extend` ([PR #343](https://github.com/zerobias/effector/pull/343))
