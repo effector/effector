@@ -153,192 +153,52 @@ describe('protect external units from destroy', () => {
       const fn = jest.fn()
 
       function apply(fn) {
-        const unit = createNode({}) // <- node
-        let unsubscribe
-        withRegion(unit, () => {
-          unsubscribe = fn()
-        })
-        return () => {
-          unsubscribe && unsubscribe()
-          clearNode(unit)
-        }
+        const unit = createNode() // <- node
+        withRegion(unit, fn)
+        return () => clearNode(unit)
       }
 
+      const update = createEvent()
       const reset = createEvent()
       const increment = createEvent()
       const decrement = createEvent()
       const counter = createStore(0).reset(reset)
 
-      // -> 0
       counter.watch(fn)
 
-      let updateCounter
-
-      // -> 35
-      const stopInterval = apply(() => {
-        updateCounter = createEvent()
-        counter.on(updateCounter, (_, payload) => payload)
-        updateCounter(35)
-        return () => updateCounter(-1)
+      const stopUpdating = apply(() => {
+        counter.on(update, (_, payload) => payload)
       })
-      const stopInteraction = apply(() => {
+      const stopCounting = apply(() => {
         counter.on(increment, state => state + 1)
         counter.on(decrement, state => state - 1)
       })
 
-      // -> 36
       increment()
-      // -> 37
-      increment()
-      // -> 36
+      update(10)
+      stopUpdating()
       decrement()
-      // -> 42
-      updateCounter(42)
-      // -1
-      stopInterval()
-      // -> 0
+      update(20) // nothing
       increment()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      // -> 0
       reset()
-      // nothing
-      updateCounter(11)
-      // nothing
-      updateCounter(12)
-      // -> -1
+      update(30) // nothing
       decrement()
-      // -> -2
       decrement()
-      // -> 0
-      reset()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      stopInteraction()
-      // nothing
-      increment()
-      // nothing
-      increment()
-      // nothing
-      decrement()
-      // -> 0
-      reset()
-
-      expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-              Array [
-                0,
-                35,
-                36,
-                37,
-                36,
-                42,
-                -1,
-                0,
-                1,
-                2,
-                0,
-                -1,
-                -2,
-                0,
-                1,
-                2,
-                0,
-              ]
-          `)
-    })
-    test('unexpected behavior', () => {
-      const fn = jest.fn()
-
-      const node = createNode({}) // <- node
-
-      function apply(unit, fn) {
-        let unsubscribe
-        withRegion(unit, () => {
-          unsubscribe = fn()
-        })
-        return () => {
-          unsubscribe && unsubscribe()
-          clearNode(unit)
-        }
-      }
-
-      const reset = createEvent()
-      const increment = createEvent()
-      const decrement = createEvent()
-      const counter = createStore(0).reset(reset)
-
-      // -> 0
-      counter.watch(fn)
-
-      let updateCounter
-
-      // -> 35
-      const stopInterval = apply(node, () => {
-        updateCounter = createEvent()
-        counter.on(updateCounter, (_, payload) => payload)
-        updateCounter(35)
-        return () => updateCounter(-1)
-      })
-      const stopInteraction = apply(node, () => {
-        counter.on(increment, state => state + 1)
-        counter.on(decrement, state => state - 1)
-      })
-
-      // -> 36
-      increment()
-      // -> 37
-      increment()
-      // -> 36
-      decrement()
-      // -> 42
-      updateCounter(42)
-      // -1
-      stopInterval()
-      // -> 0
-      increment()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      // -> 0
-      reset()
-      // nothing
-      updateCounter(11)
-      // nothing
-      updateCounter(12)
-      // -> -1
-      decrement()
-      // -> -2
-      decrement()
-      // -> 0
-      reset()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      stopInteraction()
-      // nothing
-      increment()
-      // nothing
-      increment()
-      // nothing
-      decrement()
-      // -> 0
+      stopCounting()
+      increment() // nothing
+      decrement() // nothing
       reset()
 
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
         Array [
           0,
-          35,
-          36,
-          37,
-          36,
-          42,
+          1,
+          10,
+          9,
+          10,
+          0,
           -1,
+          -2,
           0,
         ]
       `)
@@ -348,91 +208,48 @@ describe('protect external units from destroy', () => {
 
       function apply(fn) {
         const unit = createDomain() // <- domain
-        let unsubscribe
-        withRegion(unit, () => {
-          unsubscribe = fn()
-        })
-        return () => {
-          unsubscribe && unsubscribe()
-          clearNode(unit)
-        }
+        withRegion(unit, fn)
+        return () => clearNode(unit)
       }
 
+      const update = createEvent()
       const reset = createEvent()
       const increment = createEvent()
       const decrement = createEvent()
       const counter = createStore(0).reset(reset)
 
-      // -> 0
       counter.watch(fn)
 
-      let updateCounter
-
-      // -> 35
-      const stopInterval = apply(() => {
-        updateCounter = createEvent()
-        counter.on(updateCounter, (_, payload) => payload)
-        updateCounter(35)
-        return () => updateCounter(-1)
+      const stopUpdating = apply(() => {
+        counter.on(update, (_, payload) => payload)
       })
-      const stopInteraction = apply(() => {
+      const stopCounting = apply(() => {
         counter.on(increment, state => state + 1)
         counter.on(decrement, state => state - 1)
       })
 
-      // -> 36
       increment()
-      // -> 37
-      increment()
-      // -> 36
+      update(10)
+      stopUpdating()
       decrement()
-      // -> 42
-      updateCounter(42)
-      // -1
-      stopInterval()
-      // -> 0
+      update(20) // nothing
       increment()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      // -> 0
       reset()
-      // nothing
-      updateCounter(11)
-      // nothing
-      updateCounter(12)
-      // -> -1
+      update(30) // nothing
       decrement()
-      // -> -2
       decrement()
-      // -> 0
-      reset()
-      // -> 1
-      increment()
-      // -> 2
-      increment()
-      stopInteraction()
-      // nothing
-      increment()
-      // nothing
-      increment()
-      // nothing
-      decrement()
-      // -> 0
+      stopCounting()
+      increment() // nothing
+      decrement() // nothing
       reset()
 
       expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-              Array [
-                0,
-                35,
-                36,
-                37,
-                36,
-                42,
-                -1,
-              ]
-          `)
+        Array [
+          0,
+          1,
+          10,
+        ]
+      `)
     })
   })
 })
