@@ -49,7 +49,7 @@ describe('combine cases (should pass)', () => {
       no errors
 
       --flow--
-      in the first argument: Either cannot get 'n.toFixed'
+      in the first argument: [invalid-tuple-map] Either cannot get 'n.toFixed'
         const store = combine([sn, ss]).map(([n, s]) => {
                                    ^^
         property 'toFixed' is missing in 'String' [1]. Or cannot get 'n.toFixed'
@@ -144,7 +144,7 @@ describe('combine cases (should pass)', () => {
       no errors
 
       --flow--
-      in the first argument: Either cannot get 'n.toFixed'
+      in the first argument: [invalid-tuple-map] Either cannot get 'n.toFixed'
         const store = combine([sn, ss], ([n, s]) => {
                                    ^^
         property 'toFixed' is missing in 'String' [1]. Or cannot get 'n.toFixed'
@@ -224,21 +224,21 @@ describe('combine cases (should pass)', () => {
     const B = createStore(1)
     const store: Store<[number, number, number]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'combine'
-  const store: Store<[number, number, number]> = combine(R, G, B)
-                                                 ^^^^^^^
-  a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
-      ): Store<State>
-     [1] ^^^^^^^^^^^^
-      fn: (a: A, b: B) => R,
-      [2] ^^^^^^^^^^^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'combine'
+        const store: Store<[number, number, number]> = combine(R, G, B)
+                                                       ^^^^^^^
+        a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]. [incompatible-call]
+            ): Store<State>
+           [1] ^^^^^^^^^^^^
+            fn: (a: A, b: B) => R,
+            [2] ^^^^^^^^^^^^^^^^^
+      "
+    `)
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
@@ -252,7 +252,7 @@ Cannot call 'combine'
       Cannot assign 'combine(...)' to 'store'
         const store: Store<[string]> = combine(Color)
                                        ^^^^^^^^^^^^^^
-        object type [1] is incompatible with tuple type [2] in type argument 'State' [3]
+        object type [1] is incompatible with tuple type [2] in type argument 'State' [3]. [incompatible-type-arg]
             ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             const store: Store<[string]> = combine(Color)
@@ -278,7 +278,7 @@ describe('error inference (should fail with number -> string error)', () => {
           Type '{ R: number; G: number; B: number; }' is not assignable to type '{ R: string; G: string; B: string; }'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<{R: string, G: string, B: string}> = combine({R, G, B})
                                                                          ^
         number [1] is incompatible with string [2] in property 'R' of type argument 'State' [3]
@@ -288,7 +288,7 @@ describe('error inference (should fail with number -> string error)', () => {
                                [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {
                                    [3] ^^^^^
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<{R: string, G: string, B: string}> = combine({R, G, B})
                                                                             ^
         number [1] is incompatible with string [2] in property 'G' of type argument 'State' [3]
@@ -298,7 +298,7 @@ describe('error inference (should fail with number -> string error)', () => {
                                           [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {
                                    [3] ^^^^^
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<{R: string, G: string, B: string}> = combine({R, G, B})
                                                                                ^
         number [1] is incompatible with string [2] in property 'B' of type argument 'State' [3]
@@ -324,7 +324,7 @@ describe('error inference (should fail with number -> string error)', () => {
           Type '[number, number, number]' is not assignable to type '[string, string, string]'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<[string, string, string]> = combine([R, G, B])
                                                                 ^
         number [1] is incompatible with string [2] in index 0 of type argument 'State' [3]
@@ -334,7 +334,7 @@ describe('error inference (should fail with number -> string error)', () => {
                             [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {
                                    [3] ^^^^^
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<[string, string, string]> = combine([R, G, B])
                                                                    ^
         number [1] is incompatible with string [2] in index 1 of type argument 'State' [3]
@@ -344,7 +344,7 @@ describe('error inference (should fail with number -> string error)', () => {
                                     [2] ^^^^^^
             declare export class Store<State> implements Unit<State> {
                                    [3] ^^^^^
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<[string, string, string]> = combine([R, G, B])
                                                                       ^
         number [1] is incompatible with string [2] in index 2 of type argument 'State' [3]
@@ -368,7 +368,7 @@ describe('error inference (should fail with number -> string error)', () => {
           Type '{ Color: string; }' is not assignable to type '{ Color: number; }'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<{Color: number}> = combine({Color})
                                                        ^^^^^
         string [1] is incompatible with number [2] in property 'Color' of type argument 'State' [3]
@@ -392,7 +392,7 @@ describe('error inference (should fail with number -> string error)', () => {
           Type '[string]' is not assignable to type '[number]'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<[number]> = combine([Color])
                                                 ^^^^^
         string [1] is incompatible with number [2] in index 0 of type argument 'State' [3]
@@ -425,7 +425,7 @@ describe('error inference (should fail with number -> string error)', () => {
           Type 'string' is not assignable to type 'number'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         {R, G, B},
                ^
         string [1] is incompatible with number [2] in type argument 'State' [3]. Or cannot call 'B.toString'
@@ -459,7 +459,7 @@ describe('error inference (should fail with number -> string error)', () => {
       Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         [R, G, B],
                ^
         string [1] is incompatible with number [2] in type argument 'State' [3]. Or cannot call 'B.toString'
@@ -484,7 +484,7 @@ describe('error inference (should fail with number -> string error)', () => {
       Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-obj-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine({Color}, ({Color}) => Color)
                                               ^^^^^
         string [1] is incompatible with number [2] in type argument 'State' [3]
@@ -506,7 +506,7 @@ describe('error inference (should fail with number -> string error)', () => {
       Type 'Store<string>' is not assignable to type 'Store<number>'.
 
       --flow--
-      in the first argument: Either cannot assign 'combine(...)' to 'store'
+      in the first argument: [invalid-tuple-map] Either cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine([Color], ([Color]) => Color)
                                               ^^^^^
         string [1] is incompatible with number [2] in type argument 'State' [3]
@@ -531,7 +531,7 @@ describe('error inference (should fail with number -> string error)', () => {
       Cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine(Color, Color => Color)
                                                              ^^^^^
-        string [1] is incompatible with number [2] in type argument 'State' [3]
+        string [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
             const Color = createStore('#e95801')
                                   [1] ^^^^^^^^^
             const store: Store<number> = combine(Color, Color => Color)
@@ -564,7 +564,7 @@ describe('error inference (should fail with number -> string error)', () => {
       Cannot assign 'combine(...)' to 'store'
         '#' +
         ^^^^^...
-        string [1] is incompatible with number [2] in type argument 'State' [3]
+        string [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
             '#' +
         [1] ^^^^^...
             const store: Store<number> = combine(
@@ -580,21 +580,21 @@ describe('error inference (should fail with number -> string error)', () => {
     const B = createStore(1)
     const store: Store<[string, string, string]> = combine(R, G, B)
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
+      "
+      --typescript--
+      Type 'Store<[number, number, number]>' is not assignable to type 'Store<[string, string, string]>'.
 
---flow--
-Cannot call 'combine'
-  const store: Store<[string, string, string]> = combine(R, G, B)
-                                                 ^^^^^^^
-  a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]
-      ): Store<State>
-     [1] ^^^^^^^^^^^^
-      fn: (a: A, b: B) => R,
-      [2] ^^^^^^^^^^^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'combine'
+        const store: Store<[string, string, string]> = combine(R, G, B)
+                                                       ^^^^^^^
+        a call signature declaring the expected parameter / return type is missing in 'Store' [1] but exists in function type [2]. [incompatible-call]
+            ): Store<State>
+           [1] ^^^^^^^^^^^^
+            fn: (a: A, b: B) => R,
+            [2] ^^^^^^^^^^^^^^^^^
+      "
+    `)
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
@@ -610,7 +610,7 @@ Cannot call 'combine'
       Cannot assign 'combine(...)' to 'store'
         const store: Store<number> = combine(Color)
                                      ^^^^^^^^^^^^^^
-        object type [1] is incompatible with number [2] in type argument 'State' [3]
+        object type [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
             ): Store<$ObjMap<State, <S>(field: Store<S> | S) => S>>
                  [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
             const store: Store<number> = combine(Color)

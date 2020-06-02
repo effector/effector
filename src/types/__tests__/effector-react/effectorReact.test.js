@@ -53,7 +53,7 @@ test('createComponent', () => {
     Cannot assign 'initialProps.id' to 'createComponent_initialProps_check2'
       const createComponent_initialProps_check2: string = initialProps.id
                                                           ^^^^^^^^^^^^^^^
-      number [1] is incompatible with string [2]
+      number [1] is incompatible with string [2]. [incompatible-type]
           (initialProps: {id: number}) => {
                           [1] ^^^^^^
           const createComponent_initialProps_check2: string = initialProps.id
@@ -61,7 +61,7 @@ test('createComponent', () => {
     Cannot get 'initialProps.unknownProp'
       initialProps.unknownProp
                    ^^^^^^^^^^^
-      property 'unknownProp' is missing in object type [1]
+      property 'unknownProp' is missing in object type [1]. [prop-missing]
           (initialProps: {id: number}) => {
                      [1] ^^^^^^^^^^^^
     "
@@ -83,15 +83,15 @@ test('createGate', () => {
     useGate(Baz, 1)
   }
   expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-Type 'number' does not satisfy the constraint 'object'.
-Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
-Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
-  Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+    "
+    --typescript--
+    Type 'number' does not satisfy the constraint 'object'.
+    Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
+    Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
+      Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
 
---flow--
-no errors
-"
-`)
+    --flow--
+    no errors
+    "
+  `)
 })

@@ -30,7 +30,7 @@ test('createStore', () => {
     Cannot assign 'createStore(...)' to 'createStore_store2'
       const createStore_store2: Store<string> = createStore(0)
                                                             ^
-      number [1] is incompatible with string [2] in type argument 'State' [3]
+      number [1] is incompatible with string [2] in type argument 'State' [3]. [incompatible-type-arg]
           const createStore_store2: Store<string> = createStore(0)
                                                             [1] ^
           const createStore_store2: Store<string> = createStore(0)
@@ -89,7 +89,7 @@ describe('createApi', () => {
       Cannot assign 'event' to 'createApi_check2'
         const createApi_check2: Event<string> = event
                                                 ^^^^^
-        string [1] is incompatible with number [2] in type argument 'Payload' [3]
+        string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
             const createApi_check2: Event<string> = event
                                       [1] ^^^^^^
             event: (n, x: number) => x,
@@ -118,7 +118,7 @@ describe('createApi', () => {
       Cannot call 'createApi' with object literal bound to 'api'
         event: (n, x) => x,
                          ^
-        string [1] is incompatible with number [2] in the return value of property 'event'
+        string [1] is incompatible with number [2] in the return value of property 'event'. [incompatible-call]
             const createApi_check3: Event<string> = event
                                       [1] ^^^^^^
             const store: Store<number> = createStore(0)
@@ -236,7 +236,7 @@ test('#map', () => {
     Cannot assign 'computed' to 'map_check2'
       const map_check2: Store<number> = computed
                                         ^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'State' [3]
+      string [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
           const map_check1: Store<string> = computed
                               [1] ^^^^^^
           const map_check2: Store<number> = computed
@@ -352,7 +352,7 @@ test('#on triggers[] failing', () => {
     Cannot call 'store.on' with array literal bound to 'triggers'
       store.on([event, another], (state, payload) => state)
                ^^^^^^^^^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'T' [3] of array element
+      string [1] is incompatible with number [2] in type argument 'T' [3] of array element. [incompatible-call]
           const another = createStore('')
                                   [1] ^^
           const event = createEvent<number>()

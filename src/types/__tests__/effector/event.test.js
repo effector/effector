@@ -67,7 +67,7 @@ test('#map', () => {
     Cannot assign 'computed' to 'event_map_check2'
       const event_map_check2: Event<number> = computed
                                               ^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'Payload' [3]
+      string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const computed = event.map(() => 'foo')
                                        [1] ^^^^^
           const event_map_check2: Event<number> = computed
@@ -77,7 +77,7 @@ test('#map', () => {
     Cannot assign 'computed' to 'event_map_check2'
       const event_map_check2: Event<number> = computed
                                               ^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'Payload' [3]
+      string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           computed('')
                [1] ^^
           const event_map_check2: Event<number> = computed
@@ -128,23 +128,23 @@ describe('#filterMap', () => {
       if (n % 2) return n.toString()
     })
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-Type 'Event<string>' is not assignable to type 'Event<number>'.
+      "
+      --typescript--
+      Type 'Event<string>' is not assignable to type 'Event<number>'.
 
---flow--
-Cannot assign 'event.filterMap(...)' to 'filteredEvent_error'
-  if (n % 2) return n.toString()
-                    ^^^^^^^^^^^^
-  string [1] is incompatible with number [2] in type argument 'Payload' [3]
-  <BUILTINS>/core.js
-      toString(radix?: number): string;
-                            [1] ^^^^^^
-      const filteredEvent_error: Event<number> = event.filterMap(n => {
-                                   [2] ^^^^^^
-      declare export class Event<Payload> implements Unit<Payload> {
-                             [3] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot assign 'event.filterMap(...)' to 'filteredEvent_error'
+        if (n % 2) return n.toString()
+                          ^^^^^^^^^^^^
+        string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
+        <BUILTINS>/core.js
+            toString(radix?: number): string;
+                                  [1] ^^^^^^
+            const filteredEvent_error: Event<number> = event.filterMap(n => {
+                                         [2] ^^^^^^
+            declare export class Event<Payload> implements Unit<Payload> {
+                                   [3] ^^^^^^^
+      "
+    `)
   })
 })

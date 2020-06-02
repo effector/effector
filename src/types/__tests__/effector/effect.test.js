@@ -205,7 +205,7 @@ describe('nested effects', () => {
         Cannot assign 'createEffect(...)' to 'parentEffect'
           const parentEffect: Effect<number, number> = createEffect(
                                                        ^^^^^^^^^^^^^...
-          number [1] is incompatible with string [2] in type argument 'Params' [3]
+          number [1] is incompatible with string [2] in type argument 'Params' [3]. [incompatible-type-arg]
               const parentEffect: Effect<number, number> = createEffect(
                                      [1] ^^^^^^
               const nestedEffect: Effect<string, string> = createEffect()
@@ -215,7 +215,7 @@ describe('nested effects', () => {
         Cannot assign 'createEffect(...)' to 'parentEffect'
           const parentEffect: Effect<number, number> = createEffect(
                                                        ^^^^^^^^^^^^^...
-          string [1] is incompatible with number [2] in type argument 'Done' [3]
+          string [1] is incompatible with number [2] in type argument 'Done' [3]. [incompatible-type-arg]
               const nestedEffect: Effect<string, string> = createEffect()
                                              [1] ^^^^^^
               const parentEffect: Effect<number, number> = createEffect(

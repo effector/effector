@@ -81,7 +81,7 @@
     "eslint-plugin-react": "^7.18.0",
     "eslint-plugin-react-hooks": "^2.3.0",
     "execa": "^1.0.0",
-    "flow-bin": "^0.125.1",
+    "flow-bin": "^0.126.0",
     "fs-extra": "^7.0.1",
     "jest": "^26.0.1",
     "js-yaml": "^3.13.1",

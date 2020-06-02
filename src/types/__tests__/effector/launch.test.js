@@ -36,7 +36,7 @@ test('launch(unit, payload)', () => {
     Cannot call 'launch'
       launch(foo, '')
       ^^^^^^
-      string [1] is incompatible with number [2]
+      string [1] is incompatible with number [2]. [incompatible-call]
           launch(foo, '')
                   [1] ^^
           const foo = createEvent<number>()
@@ -76,7 +76,7 @@ test('launch({target: unit})', () => {
     Cannot call 'launch' with object literal bound to 'config'
       launch({target: foo, params: ''})
              ^^^^^^^^^^^^^^^^^^^^^^^^^
-      number [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
+      number [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
           const foo = createEvent<number>()
                               [1] ^^^^^^
           launch({target: foo, params: ''})

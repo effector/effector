@@ -28,7 +28,7 @@ test('event by event', () => {
     Cannot assign 'c' to 'sample_ee_check2'
       const sample_ee_check2: Event<string> = c
                                               ^
-      number [1] is incompatible with string [2] in type argument 'Payload' [3]
+      number [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const a = createEvent<number>()
                             [1] ^^^^^^
           const sample_ee_check2: Event<string> = c
@@ -59,7 +59,7 @@ test('event by event with handler', () => {
     Cannot assign 'c' to 'sample_eeh_check2'
       const sample_eeh_check2: Event<string> = c
                                                ^
-      object type [1] is incompatible with string [2] in type argument 'Payload' [3]
+      object type [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const sample_eeh_check1: Event<{a: string, b: boolean}> = c
                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
           const sample_eeh_check2: Event<string> = c
@@ -86,7 +86,7 @@ test('store by event', () => {
     Cannot assign 'e' to 'sample_se_check2'
       const sample_se_check2: Event<string> = e
                                               ^
-      number [1] is incompatible with string [2] in type argument 'Payload' [3]
+      number [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const sample_se_check1: Event<number> = e
                                     [1] ^^^^^^
           const sample_se_check2: Event<string> = e
@@ -117,7 +117,7 @@ test('store by event with handler', () => {
     Cannot assign 'e' to 'sample_seh_check2'
       const sample_seh_check2: Event<string> = e
                                                ^
-      object type [1] is incompatible with string [2] in type argument 'Payload' [3]
+      object type [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const sample_seh_check1: Event<{a: string, b: boolean}> = e
                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
           const sample_seh_check2: Event<string> = e
@@ -144,7 +144,7 @@ test('effect by event', () => {
     Cannot assign 'g' to 'sample_efe_check2'
       const sample_efe_check2: Event<number> = g
                                                ^
-      string [1] is incompatible with number [2] in type argument 'Payload' [3]
+      string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const f = createEffect<string, any, any>()
                              [1] ^^^^^^
           const sample_efe_check2: Event<number> = g
@@ -175,7 +175,7 @@ test('effect by event with handler', () => {
     Cannot assign 'g' to 'sample_efeh_check2'
       const sample_efeh_check2: Event<number> = g
                                                 ^
-      object type [1] is incompatible with number [2] in type argument 'Payload' [3]
+      object type [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
           const sample_efeh_check1: Event<{a: string, b: boolean}> = g
                                       [1] ^^^^^^^^^^^^^^^^^^^^^^^
           const sample_efeh_check2: Event<number> = g
@@ -204,7 +204,7 @@ test('store by store', () => {
     Cannot assign 'c' to 'sample_ss_check2'
       const sample_ss_check2: Store<string> = c
                                               ^
-      boolean [1] is incompatible with string [2] in type argument 'State' [3]
+      boolean [1] is incompatible with string [2] in type argument 'State' [3]. [incompatible-type-arg]
           const sample_ss_check1: Store<boolean> = c
                                     [1] ^^^^^^^
           const sample_ss_check2: Store<string> = c
@@ -232,7 +232,7 @@ test('store by store with handler', () => {
     Cannot assign 'c' to 'sample_ssh_check2'
       const sample_ssh_check2: Store<string> = c
                                                ^
-      object type [1] is incompatible with string [2] in type argument 'State' [3]
+      object type [1] is incompatible with string [2] in type argument 'State' [3]. [incompatible-type-arg]
           const sample_ssh_check1: Store<{a: string, b: boolean}> = c
                                      [1] ^^^^^^^^^^^^^^^^^^^^^^^
           const sample_ssh_check2: Store<string> = c
@@ -268,7 +268,7 @@ describe('sample(Store<T>):Store<T>', () => {
       Cannot assign 'sample(...)' to 'sample_s_incorrect'
         const sample_s_incorrect: Store<number> = sample(a)
                                                   ^^^^^^^^^
-        string [1] is incompatible with number [2] in type argument 'State' [3]
+        string [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
             const a = createStore('')
                               [1] ^^
             const sample_s_incorrect: Store<number> = sample(a)
@@ -306,7 +306,7 @@ describe('sample(Store<T>):Store<T>', () => {
         Cannot assign 'sample(...)' to 'sample_s_edge_incorrect'
           const sample_s_edge_incorrect: Event<number> = sample(a, clock)
                                                          ^^^^^^^^^^^^^^^^
-          string [1] is incompatible with number [2] in type argument 'Payload' [3]
+          string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
               const a = createStore('')
                                 [1] ^^
               const sample_s_edge_incorrect: Event<number> = sample(a, clock)
@@ -377,7 +377,7 @@ describe('`target` forwarding', () => {
       Cannot call 'sample' with object literal bound to 'config'
         sample({source, clock, target})
                ^^^^^^^^^^^^^^^^^^^^^^^
-        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'. [prop-missing]
             const source = createStore({a: ''})
                                    [1] ^^^^^^^
             const target = createEvent<{a: string, b: string}>()
@@ -409,7 +409,7 @@ describe('`target` forwarding', () => {
       Cannot call 'sample' with object literal bound to 'config'
         sample({source, clock, fn, target})
                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'
+        property 'b' is missing in object literal [1] but exists in object type [2] in type argument 'T' [3] of property 'target'. [prop-missing]
             const fn = () => ({a: ''})
                           [1] ^^^^^^^
             const target = createEvent<{a: string, b: string}>()
@@ -481,7 +481,7 @@ describe('sample with implicit combine', () => {
       no errors
 
       --flow--
-      Cannot call 'sample' because: Either property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. Or property 'kind' is missing in object literal [1] but exists in 'Unit' [3] in property 'source'
+      Cannot call 'sample' because: [incompatible-call] Either property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. Or property 'kind' is missing in object literal [1] but exists in 'Unit' [3] in property 'source'
         const result = sample({
                        ^^^^^^
             source: {a, b},
@@ -503,37 +503,37 @@ describe('sample with implicit combine', () => {
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                   [2] ^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                                     [2] ^^^^^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports store objects as a source + mapping (should pass)', () => {
     const a = createStore(1)
@@ -546,21 +546,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample'
-  const result = sample({
-                 ^^^^^^
-  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-      source: {a, b},
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample'
+        const result = sample({
+                       ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. [incompatible-call]
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports a list of stores as a source + mapping (should pass)', () => {
     const a = createStore(1)
@@ -573,37 +573,37 @@ Cannot call 'sample'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                   [2] ^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                                     [2] ^^^^^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports store objects as a source + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -617,21 +617,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample'
-  const result = sample({
-                 ^^^^^^
-  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-      source: {a, b},
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample'
+        const result = sample({
+                       ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. [incompatible-call]
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports a list of stores as a source + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -645,37 +645,37 @@ Cannot call 'sample'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                   [2] ^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                                     [2] ^^^^^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports store objects as a source + mapping + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -690,21 +690,21 @@ Cannot call 'sample' with object literal bound to 'config'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample'
-  const result = sample({
-                 ^^^^^^
-  property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'
-      source: {a, b},
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample'
+        const result = sample({
+                       ^^^^^^
+        property 'kind' is missing in object literal [1] but exists in 'Unit' [2] in property 'source'. [incompatible-call]
+            source: {a, b},
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports a list of stores as a source + mapping + target forwarding (should pass)', () => {
     const a = createStore(1)
@@ -719,37 +719,37 @@ Cannot call 'sample'
     })
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                   [2] ^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                                                     [2] ^^^^^^^^^^^^^^^^^^^^
-Cannot call 'sample' with object literal bound to 'config'
-  source: [a, b],
-          ^^^^^^
-  property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'
-      source: [a, b],
-          [1] ^^^^^^
-      +source: Unit<A>,
-           [2] ^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'CovariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                         [2] ^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'ContravariantUnit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                                                           [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'sample' with object literal bound to 'config'
+        source: [a, b],
+                ^^^^^^
+        property 'kind' (did you mean 'find'?) is missing in array literal [1] but exists in 'Unit' [2] in property 'source'. [prop-missing]
+            source: [a, b],
+                [1] ^^^^^^
+            +source: Unit<A>,
+                 [2] ^^^^^^^
+      "
+    `)
   })
   it('supports store objects as a source (should pass) [non-config sample overload]', () => {
     const a = createStore(1)
@@ -763,7 +763,7 @@ Cannot call 'sample' with object literal bound to 'config'
       no errors
 
       --flow--
-      Cannot call 'sample' because: Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]
+      Cannot call 'sample' because: [incompatible-call] Either object literal [1] is incompatible with 'Store' [2]. Or object literal [1] is incompatible with 'Store' [3]
         const result = sample({a, b}, clock)
                        ^^^^^^
             const result = sample({a, b}, clock)
@@ -787,7 +787,7 @@ Cannot call 'sample' with object literal bound to 'config'
       no errors
 
       --flow--
-      Cannot call 'sample' because: Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]
+      Cannot call 'sample' because: [incompatible-call] Either array literal [1] is incompatible with 'Store' [2]. Or array literal [1] is incompatible with 'Store' [3]
         const result = sample([a, b], clock)
                        ^^^^^^
             const result = sample([a, b], clock)
@@ -810,21 +810,21 @@ Cannot call 'sample' with object literal bound to 'config'
     )
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample'
-  const result = sample(
-                 ^^^^^^
-  object literal [1] is incompatible with 'Store' [2]
-      {a, b},
-  [1] ^^^^^^
-      source: Store<A>,
-          [2] ^^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample'
+        const result = sample(
+                       ^^^^^^
+        object literal [1] is incompatible with 'Store' [2]. [incompatible-call]
+            {a, b},
+        [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
+      "
+    `)
   })
   it('supports a list of stores as a source + mapping (should pass) [non-config sample overload]', () => {
     const a = createStore(1)
@@ -837,21 +837,21 @@ Cannot call 'sample'
     )
 
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample'
-  const result = sample(
-                 ^^^^^^
-  array literal [1] is incompatible with 'Store' [2]
-      [a, b],
-  [1] ^^^^^^
-      source: Store<A>,
-          [2] ^^^^^^^^
-"
-`)
+      --flow--
+      Cannot call 'sample'
+        const result = sample(
+                       ^^^^^^
+        array literal [1] is incompatible with 'Store' [2]. [incompatible-call]
+            [a, b],
+        [1] ^^^^^^
+            source: Store<A>,
+                [2] ^^^^^^^^
+      "
+    `)
   })
 })
 
@@ -910,14 +910,14 @@ describe('without clock', () => {
       target: fx,
     })
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-no errors
-"
-`)
+      --flow--
+      no errors
+      "
+    `)
   })
   test('without fn, any to void', () => {
     const source = createEvent<string>()
@@ -927,22 +927,22 @@ no errors
       target,
     })
     expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
+      "
+      --typescript--
+      no errors
 
---flow--
-Cannot call 'sample' with object literal bound to 'config'
-  sample({
-         ^...
-  undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
-      const target = createEvent<void>()
-                             [1] ^^^^
-      const source = createEvent<string>()
-                             [2] ^^^^^^
-      export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                        [3] ^
-"
-`)
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({
+               ^...
+        undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
+            const target = createEvent<void>()
+                                   [1] ^^^^
+            const source = createEvent<string>()
+                                   [2] ^^^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
   })
 })

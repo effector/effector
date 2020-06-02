@@ -66,7 +66,7 @@ describe('split', () => {
           Cannot assign 'emptyList' to 'split_result__nofpos__user_defined_1'
             const split_result__nofpos__user_defined_1: Event<number> = emptyList
                                                                         ^^^^^^^^^
-            array type [1] is incompatible with number [2] in type argument 'Payload' [3]
+            array type [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
                 const source: Event<string[]> = createEvent()
                                 [1] ^^^^^^^^
                 const split_result__nofpos__user_defined_1: Event<number> = emptyList
@@ -76,7 +76,7 @@ describe('split', () => {
           Cannot assign 'oneElement' to 'split_result__nofpos__user_defined_2'
             const split_result__nofpos__user_defined_2: null = oneElement
                                                                ^^^^^^^^^^
-            'Event' [1] is incompatible with null [2]
+            'Event' [1] is incompatible with null [2]. [incompatible-type]
                 (h: (payload: S) => boolean) => Event<S>,
                                             [1] ^^^^^^^^
                 const split_result__nofpos__user_defined_2: null = oneElement
@@ -100,7 +100,7 @@ describe('split', () => {
           Cannot assign '__' to 'split_result__nofpos__defaults_1'
             const split_result__nofpos__defaults_1: Event<number> = __
                                                                     ^^
-            array type [1] is incompatible with number [2] in type argument 'Payload' [3]
+            array type [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
                 const source: Event<string[]> = createEvent()
                                 [1] ^^^^^^^^
                 const split_result__nofpos__defaults_1: Event<number> = __
@@ -126,7 +126,7 @@ describe('split', () => {
           Cannot assign '__' to 'split_result__nofpos__defaults_2'
             const split_result__nofpos__defaults_2: null = __
                                                            ^^
-            'Event' [1] is incompatible with null [2]
+            'Event' [1] is incompatible with null [2]. [incompatible-type]
                 (h: (payload: S) => boolean) => Event<S>,
                                             [1] ^^^^^^^^
                 const split_result__nofpos__defaults_2: null = __
@@ -160,7 +160,7 @@ describe('split', () => {
       Cannot call 'split'
         split(source, {
         ^^^^^
-        null [1] is incompatible with array type [2] in property 'wrongArg_1'
+        null [1] is incompatible with array type [2] in property 'wrongArg_1'. [incompatible-call]
             wrongArg_1: (list: null) => true,
                            [1] ^^^^
             const source: Event<string[]> = createEvent()
@@ -168,7 +168,7 @@ describe('split', () => {
       Cannot call 'split' with object literal bound to 'cases'
         wrongResult: list => null,
                              ^^^^
-        null [1] is incompatible with boolean [2] in the return value of property 'wrongResult'
+        null [1] is incompatible with boolean [2] in the return value of property 'wrongResult'. [incompatible-call]
             wrongResult: list => null,
                              [1] ^^^^
             +[name: string]: (payload: S) => boolean,
@@ -176,7 +176,7 @@ describe('split', () => {
       Cannot call 'split' with object literal bound to 'cases'
         wrongArg_1: (list: null) => true,
                            ^^^^
-        null [1] is incompatible with array type [2] in the first argument of property 'wrongArg_1'
+        null [1] is incompatible with array type [2] in the first argument of property 'wrongArg_1'. [incompatible-call]
             wrongArg_1: (list: null) => true,
                            [1] ^^^^
             const source: Event<string[]> = createEvent()
@@ -184,7 +184,7 @@ describe('split', () => {
       Cannot call 'split' with object literal bound to 'cases'
         wrongArg_2: (list: number[]) => true,
                            ^^^^^^
-        number [1] is incompatible with string [2] in array element of the first argument of property 'wrongArg_2'
+        number [1] is incompatible with string [2] in array element of the first argument of property 'wrongArg_2'. [incompatible-call]
             wrongArg_2: (list: number[]) => true,
                            [1] ^^^^^^
             const source: Event<string[]> = createEvent()

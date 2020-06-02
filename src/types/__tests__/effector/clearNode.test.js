@@ -77,7 +77,7 @@ test('clearNode(incorrect)', () => {
     Argument of type 'null' is not assignable to parameter of type 'Unit<any> | Step'.
 
     --flow--
-    Cannot call 'clearNode' with 'null' bound to 'unit' because: Either property 'kind' is missing in null [1] but exists in 'Unit' [2]. Or property 'family' is missing in null [1] but exists in 'Step' [3]
+    Cannot call 'clearNode' with 'null' bound to 'unit' because: [incompatible-call] Either property 'kind' is missing in null [1] but exists in 'Unit' [2]. Or property 'family' is missing in null [1] but exists in 'Step' [3]
       clearNode(null)
                 ^^^^
           clearNode(null)

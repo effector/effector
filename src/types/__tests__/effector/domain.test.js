@@ -19,7 +19,7 @@ test('createDomain', () => {
     Cannot call 'createDomain' with '234' bound to 'domainName'
       const domain3 = createDomain(234)
                                    ^^^
-      number [1] is incompatible with string [2]
+      number [1] is incompatible with string [2]. [incompatible-call]
           const domain3 = createDomain(234)
                                    [1] ^^^
           declare export function createDomain(domainName?: string): Domain
@@ -27,7 +27,7 @@ test('createDomain', () => {
     Cannot call 'createDomain' with object literal bound to 'domainName'
       const domain4 = createDomain({foo: true})
                                    ^^^^^^^^^^^
-      object literal [1] is incompatible with string [2]
+      object literal [1] is incompatible with string [2]. [incompatible-call]
           const domain4 = createDomain({foo: true})
                                    [1] ^^^^^^^^^^^
           declare export function createDomain(domainName?: string): Domain
@@ -145,7 +145,7 @@ describe('#effect', () => {
       Cannot call 'effect2' with '20' bound to 'payload'
         effect2(20)
                 ^^
-        number [1] is incompatible with string [2]
+        number [1] is incompatible with string [2]. [incompatible-call]
             effect2(20)
                 [1] ^^
             handler(params: string) {
@@ -153,7 +153,7 @@ describe('#effect', () => {
       Cannot call 'effect3' with '20' bound to 'payload'
         effect3(20)
                 ^^
-        number [1] is incompatible with string [2]
+        number [1] is incompatible with string [2]. [incompatible-call]
             effect3(20)
                 [1] ^^
             const effect1: Effect<string, number, Error> = domain.effect()
@@ -246,7 +246,7 @@ describe('#createEffect', () => {
       Cannot call 'effect2' with '20' bound to 'payload'
         effect2(20)
                 ^^
-        number [1] is incompatible with string [2]
+        number [1] is incompatible with string [2]. [incompatible-call]
             effect2(20)
                 [1] ^^
             handler(params: string) {
@@ -254,7 +254,7 @@ describe('#createEffect', () => {
       Cannot call 'effect3' with '20' bound to 'payload'
         effect3(20)
                 ^^
-        number [1] is incompatible with string [2]
+        number [1] is incompatible with string [2]. [incompatible-call]
             effect3(20)
                 [1] ^^
             const effect1: Effect<string, number, Error> = domain.createEffect()

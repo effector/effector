@@ -54,7 +54,7 @@ describe('guard(source, config)', () => {
                   Type 'string' is not assignable to type 'boolean'.
 
         --flow--
-        Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
+        Cannot call 'guard' because: [incompatible-call] Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
           guard(trigger, {filter: allow})
           ^^^^^
               const allow: Store<string> = createStore('no')
@@ -89,7 +89,7 @@ describe('guard(source, config)', () => {
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
-        Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
+        Cannot call 'guard' because: [incompatible-call] Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
           const result: Event<string> = guard(trigger, {filter: allow})
                                         ^^^^^
               const allow: Store<string> = createStore('no')
@@ -145,7 +145,7 @@ describe('guard(source, config)', () => {
           Cannot call 'guard'
             guard(trigger, {
             ^^^^^
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                 const target: Store<string> = createStore('no')
                                 [1] ^^^^^^
                 const trigger: Event<number> = createEvent()
@@ -187,7 +187,7 @@ describe('guard(source, config)', () => {
         Cannot assign 'guard(...)' to 'result'
           const result: Event<string> = guard(trigger, {filter: x => x > 0})
                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-          number [1] is incompatible with string [2] in type argument 'Payload' [3]
+          number [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
               const trigger: Event<number> = createEvent()
                                [1] ^^^^^^
               const result: Event<string> = guard(trigger, {filter: x => x > 0})
@@ -235,7 +235,7 @@ describe('guard(source, config)', () => {
           Cannot call 'guard'
             guard(trigger, {
             ^^^^^
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                 const target: Store<string> = createStore('no')
                                 [1] ^^^^^^
                 const trigger: Event<number> = createEvent()
@@ -307,7 +307,7 @@ describe('guard(config)', () => {
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
-        Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
+        Cannot call 'guard' because: [incompatible-call] Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
           guard({
           ^^^^^
               const allow: Store<string> = createStore('no')
@@ -339,7 +339,7 @@ describe('guard(config)', () => {
               Type 'Store<string>' is not assignable to type 'Store<boolean>'.
 
         --flow--
-        Cannot call 'guard' because: Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
+        Cannot call 'guard' because: [incompatible-call] Either string [1] is incompatible with boolean [2] in type argument 'State' [3] of property 'filter'. Or string [1] is incompatible with boolean [4] in type argument 'State' [3] of property 'filter'
           const result: Event<string> = guard({
                                         ^^^^^
               const allow: Store<string> = createStore('no')
@@ -395,7 +395,7 @@ describe('guard(config)', () => {
           Cannot call 'guard'
             guard({
             ^^^^^
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                 const target: Store<string> = createStore('no')
                                 [1] ^^^^^^
                 const trigger: Event<number> = createEvent()
@@ -443,7 +443,7 @@ describe('guard(config)', () => {
         Cannot assign 'guard(...)' to 'result'
           const result: Event<string> = guard({
                                         ^^^^^^^...
-          number [1] is incompatible with string [2] in type argument 'Payload' [3]
+          number [1] is incompatible with string [2] in type argument 'Payload' [3]. [incompatible-type-arg]
               const trigger: Event<number> = createEvent()
                                [1] ^^^^^^
               const result: Event<string> = guard({
@@ -493,7 +493,7 @@ describe('guard(config)', () => {
           Cannot call 'guard'
             guard({
             ^^^^^
-            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'
+            string [1] is incompatible with number [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                 const target: Store<string> = createStore('no')
                                 [1] ^^^^^^
                 const trigger: Event<number> = createEvent()
@@ -524,7 +524,7 @@ describe('guard(config)', () => {
           Cannot call 'guard' with object literal bound to 'config'
             guard({
                   ^...
-            string [1] is incompatible with null [2] in type argument 'T' [3] of property 'target'
+            string [1] is incompatible with null [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                 const target = createEvent<string>()
                                        [1] ^^^^^^
                 const source = createStore<string | null>('test').on(event, () => null)
@@ -554,7 +554,7 @@ describe('guard(config)', () => {
             Cannot call 'guard' with object literal bound to 'config'
               guard({
                     ^...
-              undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'
+              undefined [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                   const target = createEvent<void>()
                                          [1] ^^^^
                   const source = createEvent<string>()
@@ -582,7 +582,7 @@ describe('guard(config)', () => {
             Cannot call 'guard' with object literal bound to 'config'
               guard({
                     ^...
-              undefined [1] is incompatible with object type [2] in type argument 'T' [3] of property 'target'
+              undefined [1] is incompatible with object type [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
                   const target = createEvent<void>()
                                          [1] ^^^^
                   const source = createEvent<{pass: boolean}>()
