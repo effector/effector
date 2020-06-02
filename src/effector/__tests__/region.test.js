@@ -181,8 +181,6 @@ describe('protect external units from destroy', () => {
       update(20) // nothing
       increment()
       reset()
-      update(30) // nothing
-      decrement()
       decrement()
       stopCounting()
       increment() // nothing
@@ -198,7 +196,6 @@ describe('protect external units from destroy', () => {
           10,
           0,
           -1,
-          -2,
           0,
         ]
       `)
@@ -235,8 +232,6 @@ describe('protect external units from destroy', () => {
       update(20) // nothing
       increment()
       reset()
-      update(30) // nothing
-      decrement()
       decrement()
       stopCounting()
       increment() // nothing
