@@ -229,7 +229,7 @@ turnOff() // nothing has changed
 - [Forward data between effects](https://share.effector.dev/RYQ5z59Q)
 - [Range input component](https://share.effector.dev/oRB2iB8M)
 - [Modal dialog](https://share.effector.dev/B2ShiBzm)
-- [Conditional fitering](https://share.effector.dev/1EsAGMyq)
+- [Conditional filtering](https://share.effector.dev/1EsAGMyq)
 - [Request cancellation](https://share.effector.dev/W4I0ghLt)
 - [Dynamic form fields, saving and loading from localStorage with effects](https://share.effector.dev/Qxt0zAdd)
 - [Loading initial state from localStorage with domains](https://share.effector.dev/YbiBnyAD)
