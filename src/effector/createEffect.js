@@ -1,6 +1,5 @@
 //@flow
 
-import {Effect} from './unit.h'
 import {step} from './typedef'
 import {getGraph, getParent} from './getter'
 import {own} from './own'
@@ -14,6 +13,7 @@ import {
 } from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
+import {throwError} from './throw'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
@@ -30,6 +30,7 @@ export function createEffect<Payload, Done>(
   getGraph(instance).meta.onCopy = ['runner']
   getGraph(instance).meta.unit = instance.kind = 'effect'
   instance.use = fn => {
+    if (!isFunction(fn)) throwError('.use argument should be a function')
     handler = fn
     return instance
   }

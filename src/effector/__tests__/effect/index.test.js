@@ -10,7 +10,7 @@ import {
 import {delay, argumentHistory} from 'effector/fixtures'
 
 describe('effect({...})', () => {
-  test(`if used function will resolve`, async() => {
+  test(`if used function will resolve`, async () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
@@ -21,7 +21,7 @@ describe('effect({...})', () => {
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
-  test('if used function will throw', async() => {
+  test('if used function will throw', async () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
@@ -35,7 +35,7 @@ describe('effect({...})', () => {
 })
 
 describe('future', () => {
-  test(`if used function will resolve`, async() => {
+  test(`if used function will resolve`, async () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
@@ -46,7 +46,7 @@ describe('future', () => {
     await expect(effect('ok')).resolves.toBe('done!')
   })
 
-  test('if used function will throw', async() => {
+  test('if used function will throw', async () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
@@ -59,7 +59,7 @@ describe('future', () => {
 })
 
 describe('effect.finally', () => {
-  test(`if used function will resolve`, async() => {
+  test(`if used function will resolve`, async () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler({fail}) {
@@ -83,7 +83,7 @@ describe('effect.finally', () => {
     `)
   })
 
-  test('if used function will throw', async() => {
+  test('if used function will throw', async () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler({fail}) {
@@ -108,7 +108,7 @@ describe('effect.finally', () => {
   })
 })
 describe('createEffect with config', () => {
-  it('supports empty config as second argument', async() => {
+  it('supports empty config as second argument', async () => {
     const effect = createEffect('fx without handler', {})
     const error = console.error
     console.error = function errorMock(...args) {
@@ -120,7 +120,7 @@ describe('createEffect with config', () => {
       console.error = error
     }
   })
-  it('supports default handler with config', async() => {
+  it('supports default handler with config', async () => {
     const fn = jest.fn()
     const effect = createEffect('long request', {
       async handler(params) {
@@ -131,7 +131,7 @@ describe('createEffect with config', () => {
     })
     await expect(effect('ok')).resolves.toBe('done!')
   })
-  it('supports default handler without name', async() => {
+  it('supports default handler without name', async () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler(params) {
@@ -149,7 +149,7 @@ it('should return itself at .use call', () => {
   expect(effect.use(() => 'done!')).toBe(effect)
 })
 
-it('should handle both done and error in .finally', async() => {
+it('should handle both done and error in .finally', async () => {
   const fn = jest.fn()
   const effect = createEffect({
     async handler(params) {
@@ -178,7 +178,7 @@ it('should handle both done and error in .finally', async() => {
   `)
 })
 
-test('effect.doneData', async() => {
+test('effect.doneData', async () => {
   const fn = jest.fn()
   const fx = createEffect({
     handler: () => 'result',
@@ -187,7 +187,7 @@ test('effect.doneData', async() => {
   await fx()
   expect(argumentHistory(fn)).toEqual(['result'])
 })
-test('effect.failData', async() => {
+test('effect.failData', async () => {
   const fn = jest.fn()
   const fx = createEffect({
     handler() {
@@ -199,7 +199,7 @@ test('effect.failData', async() => {
   expect(argumentHistory(fn)).toEqual(['error'])
 })
 
-test('effect.pending is a boolean store', async() => {
+test('effect.pending is a boolean store', async () => {
   const fn = jest.fn()
   const fx = createEffect({
     async handler() {},
@@ -215,7 +215,7 @@ test('effect.pending is a boolean store', async() => {
   `)
 })
 
-it('should support forward', async() => {
+it('should support forward', async () => {
   const fnHandler = jest.fn()
   const fnWatcher = jest.fn()
   const fetchData = createEffect({
@@ -248,7 +248,7 @@ it('should support forward', async() => {
 })
 
 describe('execution order', () => {
-  it('should run watchers and promise resolvers in order', async() => {
+  it('should run watchers and promise resolvers in order', async () => {
     const fn = jest.fn()
     const fx = createEffect({
       handler() {
@@ -291,7 +291,7 @@ describe('execution order', () => {
       ]
     `)
   })
-  it('should run both .done and .finally at the same tick', async() => {
+  it('should run both .done and .finally at the same tick', async () => {
     const fn = jest.fn()
     const fx = createEffect({
       async handler() {
@@ -324,7 +324,7 @@ describe('execution order', () => {
   `)
   })
 
-  it('handle sync effect watchers in correct order', async() => {
+  it('handle sync effect watchers in correct order', async () => {
     const fn = jest.fn()
     const eff = createEffect({
       handler: () => [1, 2, 3],
@@ -339,7 +339,7 @@ describe('execution order', () => {
     ])
   })
 
-  it('should not override sync event updates', async() => {
+  it('should not override sync event updates', async () => {
     const fn = jest.fn()
     const uppercase = createEvent()
 
@@ -357,7 +357,7 @@ describe('execution order', () => {
     expect(argumentHistory(fn)).toEqual(['alice', 'bob', 'BOB'])
   })
 
-  test('effect.pending becomes false only after all concurrent requests will be settled', async() => {
+  test('effect.pending becomes false only after all concurrent requests will be settled', async () => {
     const fx = createEffect()
 
     expect(fx.pending.getState()).toBe(false)
@@ -372,4 +372,10 @@ describe('execution order', () => {
     await req2
     expect(fx.pending.getState()).toBe(false)
   })
+})
+
+it('should validate .use argument', () => {
+  expect(() => {
+    createEffect().use(null)
+  }).toThrowErrorMatchingInlineSnapshot(`".use argument should be a function"`)
 })
