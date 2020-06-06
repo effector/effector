@@ -23,8 +23,6 @@ import {
   OpGroup,
   Template,
   Spawn,
-  TreeType,
-  TreeItemType,
   LeafMountParams,
   NodeDraft,
 } from './index.h'

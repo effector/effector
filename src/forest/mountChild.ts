@@ -22,15 +22,12 @@ import {
   RouteType,
   Template,
   Spawn,
-  TreeType,
-  TreeItemType,
 } from './index.h'
 
 import {
   ElementBlock,
   ListBlock,
   TextBlock,
-  TreeBlock,
   UsingBlock,
   FF,
   FE,
@@ -217,31 +214,6 @@ export function mountChild({
         type: 'list',
         draft,
         block: listBlock,
-      }
-      break
-    }
-    case 'tree': {
-      const treeBlock: TreeBlock = {
-        type: 'tree',
-        parent: {
-          type: 'FTree',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
-        child: {
-          type: 'fragment',
-          parent: null as any,
-          child: [],
-        },
-      }
-      treeBlock.parent.child = treeBlock
-      treeBlock.child.parent = treeBlock
-      parentBlockFragment.child[draft.inParentIndex] = treeBlock.parent
-      leafData = {
-        type: 'tree',
-        block: treeBlock,
       }
       break
     }

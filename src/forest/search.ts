@@ -14,7 +14,6 @@ import {
   RecItemF,
   FRecItem,
   FR,
-  FTree,
   FragmentBlock,
   FRec,
 } from './relation.h'
@@ -28,8 +27,6 @@ function findParentDOMElementBlock(
         case 'EF':
         case 'UF':
           return block.parent.parent
-        case 'tree':
-          return findParentDOMElementBlock(block.parent.parent.parent)
       }
       return findParentDOMElementBlock(block.parent.parent)
     case 'route':
@@ -46,7 +43,7 @@ export function findParentDOMElement(
   return null
 }
 function findLastVisibleChildBlock(
-  block: FF | FE | FL | FT | FR | LF | RF | FTree | FRecItem | FRec,
+  block: FF | FE | FL | FT | FR | LF | RF | FRecItem | FRec,
 ): ElementBlock | TextBlock | null {
   if (!block.visible) return null
   switch (block.type) {
@@ -59,8 +56,6 @@ function findLastVisibleChildBlock(
     case 'RF':
     case 'FF':
       return findLastVisibleFragmentChild(block.child)
-    case 'FTree':
-      return findLastVisibleFragmentChild(block.child.child)
     case 'FRec':
     case 'FRecItem':
       return findLastVisibleFragmentChild(block.child.child.child)
@@ -127,16 +122,6 @@ export function findPreviousVisibleSiblingBlock(
           sibling = sibling.left
         }
         return findPreviousVisibleSiblingBlock(block.parent.parent)
-      }
-      case 'tree': {
-        const parent = block.parent.parent
-        const parentFragment = parent.parent
-        for (let i = parent.index - 1; i >= 0; i--) {
-          const sibling = parentFragment.child[i]
-          const visibleChild = findLastVisibleChildBlock(sibling)
-          if (visibleChild) return visibleChild
-        }
-        return findPreviousVisibleSiblingBlock(parentFragment)
       }
       default: {
         const _: never = block.parent

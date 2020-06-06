@@ -6,7 +6,6 @@ import {
   UsingBlock,
   LF,
   RouteBlock,
-  TreeBlock,
   RecItemBlock,
   RecBlock,
 } from './relation.h'
@@ -223,11 +222,6 @@ export type LeafDataRoute = {
   initialized: boolean
 }
 
-export type LeafDataTree = {
-  type: 'tree'
-  block: TreeBlock
-}
-
 export type LeafDataElement = {
   type: 'element'
   block: ElementBlock
@@ -267,7 +261,6 @@ export type LeafData =
     }
   | LeafDataListItem
   | LeafDataRoute
-  | LeafDataTree
   | LeafDataRecItem
   | LeafDataRec
 
@@ -308,14 +301,6 @@ export type RecItemDraft = BindingsDraft & {
 
 export type RouteType = BindingsDraft & {
   type: 'route'
-}
-
-export type TreeType = BindingsDraft & {
-  type: 'tree'
-}
-
-export type TreeItemType = BindingsDraft & {
-  type: 'treeItem'
 }
 
 export type ListType = BindingsDraft & {
@@ -376,7 +361,5 @@ export type NodeDraft =
   | ListType
   | ListItemType
   | RouteType
-  | TreeType
-  | TreeItemType
   | RecDraft
   | RecItemDraft

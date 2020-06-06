@@ -32,9 +32,6 @@ import {
   RouteType,
   Template,
   Spawn,
-  TreeType,
-  TreeItemType,
-  LeafDataTree,
   RecItemDraft,
   LeafDataRecItem,
   RecDraft,
@@ -843,8 +840,6 @@ export function node(cb: (node: DOMElement) => (() => void) | void) {
     case 'listItem':
     case 'using':
     case 'route':
-    case 'tree':
-    case 'treeItem':
     case 'rec':
     case 'recItem':
       return
@@ -882,8 +877,6 @@ export function spec(config: {
     case 'listItem':
     case 'using':
     case 'route':
-    case 'tree':
-    case 'treeItem':
     case 'rec':
     case 'recItem':
       return
@@ -1670,8 +1663,6 @@ function setInParentIndex(template: Actor<any>) {
     case 'using':
     case 'route':
     case 'list':
-    case 'tree':
-    case 'treeItem':
     case 'rec':
     case 'recItem':
       draft.inParentIndex = currentActor.draft.childCount
