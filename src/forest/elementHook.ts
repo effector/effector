@@ -348,7 +348,6 @@ export function h(tag: string, opts?: any) {
           state: merged.visible,
           onMount: (value, leaf) => ({leaf, value, hydration: leaf.hydration}),
           onState: (leaf, value) => ({leaf, value, hydration: false}),
-          greedy: true,
         })
         onMount.watch(({leaf, value, hydration}) => {
           const leafData = leaf.data as LeafDataElement
@@ -549,6 +548,7 @@ export function h(tag: string, opts?: any) {
               source: domElementCreated,
               clock: item.value,
               fn: (leaf, text) => ({leaf, text}),
+              greedy: true,
             }).watch(({leaf, text}) => {
               pushOpToQueue(text, leaf.ops.group.ops[opID])
             })
@@ -590,7 +590,11 @@ export function h(tag: string, opts?: any) {
           }
         }
       }
-      sample(leaf, unmount).watch(leaf => {
+      sample({
+        source: leaf,
+        clock: unmount,
+        greedy: true,
+      }).watch(leaf => {
         const {spawn} = leaf
         removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
         function halt(spawn: Spawn) {
@@ -1099,7 +1103,11 @@ export function route<T>({
               }
             })
           })
-          sample(mount, unmount).watch(({leaf}) => {
+          sample({
+            source: mount,
+            clock: unmount,
+            greedy: true,
+          }).watch(({leaf}) => {
             iterateChildLeafs(leaf, child => {
               child.api.unmount()
             })
@@ -1126,7 +1134,6 @@ export function route<T>({
           node,
           value,
         }),
-        greedy: true,
       })
       merge([onMount, onVisibleChange]).watch(
         ({leaf, visible, value, node}) => {
@@ -1144,7 +1151,11 @@ export function route<T>({
           }
         },
       )
-      sample(mount, unmount).watch(({leaf}) => {
+      sample({
+        source: mount,
+        clock: unmount,
+        greedy: true,
+      }).watch(({leaf}) => {
         iterateChildLeafs(leaf, child => {
           child.api.unmount()
         })
@@ -1203,7 +1214,11 @@ export function rec<T>(
           node,
         })
       })
-      sample(mount, unmount).watch(({leaf}) => {
+      sample({
+        source: mount,
+        clock: unmount,
+        greedy: true,
+      }).watch(({leaf}) => {
         leaf.spawn.active = false
         iterateChildLeafs(leaf, child => {
           child.api.unmount()
@@ -1234,9 +1249,12 @@ export function rec<T>(
           mount,
           onMount: (state, {leaf, node}) => ({state, leaf, node}),
           onState: ({leaf, node}, state) => ({state, leaf, node}),
-          greedy: true,
         })
-        sample(mount, unmount).watch(({leaf}) => {
+        sample({
+          source: mount,
+          clock: unmount,
+          greedy: true,
+        }).watch(({leaf}) => {
           leaf.spawn.active = false
           iterateChildLeafs(leaf, child => {
             child.api.unmount()
@@ -1365,7 +1383,11 @@ export function list<T>(opts: any, maybeFn?: any) {
           const spawnState = createStore<{leaf: Leaf}>({
             leaf: null as any,
           })
-          const onRemoveFromDOM = sample(spawnState, unmount)
+          const onRemoveFromDOM = sample({
+            source: spawnState,
+            clock: unmount,
+            greedy: true,
+          })
           onRemoveFromDOM.watch(({leaf}) => {
             const listItemBlock = (leaf.data as any).block as LF
             removeItem(listItemBlock, listItemBlock.parent.child)
@@ -1630,8 +1652,13 @@ export function list<T>(opts: any, maybeFn?: any) {
       })
       const onRemove = sample({
         source: mount,
-        clock: sample(updates, unmount) as Event<ListItemType[]>,
+        clock: sample({
+          source: updates,
+          clock: unmount,
+          greedy: true,
+        }) as Event<ListItemType[]>,
         fn: ({leaf}, records) => ({leaf, records}),
+        greedy: true,
       })
       onRemove.watch(({leaf, records}) => {
         for (let i = 0; i < records.length; i++) {
@@ -1687,11 +1714,9 @@ function mutualSample<Mount, State, T>({
   state,
   onMount,
   onState,
-  greedy = false,
 }: {
   mount: Event<Mount>
   state: Store<State>
-  greedy?: boolean
   onMount: (state: State, mount: Mount) => T
   onState: (mount: Mount, state: State) => T
 }): {
@@ -1703,13 +1728,13 @@ function mutualSample<Mount, State, T>({
       source: state,
       clock: mount,
       fn: onMount,
-      greedy,
+      greedy: true,
     }),
     onState: sample({
       source: mount,
       clock: state,
       fn: onState,
-      greedy,
+      greedy: true,
     }),
   }
 }
