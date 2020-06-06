@@ -16,28 +16,31 @@ using(document.body, () => {
 
     h('form', () => {
       spec({
-        handler: {submit},
+        handler: {
+          config: {prevent: true},
+          on: {submit},
+        },
         style: {
           display: 'flex',
-          flexDirection: 'column'
-        }
+          flexDirection: 'column',
+        },
       })
 
       h('input', {
         attr: {placeholder: 'Username'},
-        handler: {input: change('username')}
+        handler: {input: change('username')},
       })
 
       h('input', {
         attr: {type: 'password', placeholder: 'Password'},
-        handler: {input: change('password')}
+        handler: {input: change('password')},
       })
 
       h('button', {
         text: 'Submit',
         attr: {
-          disabled: state.map(values => !(values.username && values.password))
-        }
+          disabled: state.map(values => !(values.username && values.password)),
+        },
       })
     })
 
@@ -56,13 +59,12 @@ function formModel() {
 
   state.on(changed, (data, {name, value}) => ({...data, [name]: value}))
 
-  const change = name =>
-    changed.prepend(e => ({name, value: e.target.value}))
+  const change = name => changed.prepend(e => ({name, value: e.target.value}))
 
   sample({
     source: state,
     clock: submit,
-    fn: stringify
+    fn: stringify,
   }).watch(alert)
 
   return {change, submit, state}
@@ -72,3 +74,5 @@ function stringify(values) {
   return JSON.stringify(values, null, 2)
 }
 ```
+
+[Try it](https://share.effector.dev/e2FuOsag)
