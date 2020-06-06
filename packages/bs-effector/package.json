@@ -4,7 +4,7 @@
   "description": "Reason bindings for effector",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.15.6"
+    "effector": "^20.15.8"
   },
   "files": [
     "src/Effector.re",
