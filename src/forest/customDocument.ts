@@ -317,10 +317,13 @@ function renderPart(node: DOMNode, parts: string[]) {
     if (property.startsWith('--')) {
       styles.push(`${property}: ${node.style.properties[property]}`)
     } else {
-      const dashedProperty = property.replace(
-        /[A-Z]/,
+      let dashedProperty = property.replace(
+        /[A-Z]/g,
         char => `-${char.toLowerCase()}`,
       )
+      if (property.startsWith('webkit') || property.startsWith('moz')) {
+        dashedProperty = `-${dashedProperty}`
+      }
       styles.push(`${dashedProperty}: ${node.style.properties[property]}`)
     }
   }
