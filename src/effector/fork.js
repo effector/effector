@@ -27,14 +27,26 @@ export function hydrate(domain, {values}) {
   if (!isObject(values)) {
     throwError('values property should be an object')
   }
-  values = normalizeValues(values)
-  const valuesSidList = Object.getOwnPropertyNames(values)
-  const units = flatGraph(domain)
+
+  const {storeWatches, storeWatchesRefs} = fillValues({
+    flatGraphUnits: flatGraph(domain),
+    values: normalizeValues(values),
+    collectWatches: true,
+  })
+
+  launch({
+    target: storeWatches,
+    params: storeWatchesRefs.map(({current}) => current),
+  })
+}
+
+function fillValues({flatGraphUnits, values, collectWatches}) {
   const storeWatches = []
   const storeWatchesRefs = []
   const refsMap = {}
   const predefinedRefs = new Set()
-  for (const node of units) {
+  const valuesSidList = Object.getOwnPropertyNames(values)
+  for (const node of flatGraphUnits) {
     const {reg} = node
     const {op, unit, sid} = node.meta
     if (unit === 'store') {
@@ -44,7 +56,7 @@ export function hydrate(domain, {values}) {
         predefinedRefs.add(state)
       }
     }
-    if (op === 'watch') {
+    if (collectWatches && op === 'watch') {
       const owner = node.family.owners[0]
       if (owner.meta.unit === 'store') {
         storeWatches.push(node)
@@ -55,58 +67,16 @@ export function hydrate(domain, {values}) {
       refsMap[id] = reg[id]
     }
   }
-  const items = Object.values(refsMap)
-  const rawGraph = {}
-  for (const {id} of items) {
-    rawGraph[id] = []
-  }
-  //prettier-ignore
-  for (const {id, before, after} of items) {
-    before && before.forEach(cmd => {
-      rawGraph[cmd.from.id].push(id)
-    })
-    after && after.forEach(cmd => {
-      rawGraph[id].push(cmd.to.id)
-    })
-  }
-  const graph = {}
-  for (const id in rawGraph) {
-    graph[id] = [...new Set(rawGraph[id])]
-  }
-  const result = []
-  const visited = {}
-  const temp = {}
-  for (const node in graph) {
-    if (!visited[node] && !temp[node]) {
-      topologicalSortHelper(node, visited, temp, graph, result)
-    }
-  }
-  result.reverse().forEach(id => {
+  const refGraph = createRefGraph(refsMap)
+  const result = toposort(refGraph)
+  result.forEach(id => {
     execRef(refsMap[id])
   })
 
-  function topologicalSortHelper(node, visited, temp, graph, result) {
-    temp[node] = true
-    const neighbors = graph[node]
-    for (let i = 0; i < neighbors.length; i++) {
-      const n = neighbors[i]
-      if (temp[n]) {
-        continue
-        // throw Error('found cycle in DAG')
-      }
-      if (!visited[n]) {
-        topologicalSortHelper(n, visited, temp, graph, result)
-      }
-    }
-    temp[node] = false
-    visited[node] = true
-    result.push(node)
+  return {
+    storeWatches,
+    storeWatchesRefs,
   }
-
-  launch({
-    target: storeWatches,
-    params: storeWatchesRefs.map(({current}) => current),
-  })
   function execRef(ref) {
     let isFresh = false
     if (ref.before && !predefinedRefs.has(ref)) {
@@ -150,6 +120,24 @@ export function hydrate(domain, {values}) {
       }
     }
   }
+}
+
+function createRefGraph(refsMap) {
+  const items = Object.values(refsMap)
+  const refGraph = {}
+  for (const {id} of items) {
+    refGraph[id] = []
+  }
+  //prettier-ignore
+  for (const {id, before, after} of items) {
+    before && before.forEach(cmd => {
+      refGraph[cmd.from.id].push(id)
+    })
+    after && after.forEach(cmd => {
+      refGraph[id].push(cmd.to.id)
+    })
+  }
+  return refGraph
 }
 
 /**
@@ -207,7 +195,7 @@ function normalizeValues(values) {
   }
   return values
 }
-export function fork(domain, {values = {}, deep = true} = {}) {
+export function fork(domain, {values} = {}) {
   if (!is.domain(domain)) throwError('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
@@ -225,8 +213,121 @@ export function fork(domain, {values = {}, deep = true} = {}) {
       }
     })
   }
-  values = normalizeValues(values)
-  return cloneGraph(domain, {values, deep})
+  const needToFill = !!values
+  values = normalizeValues(values || {})
+  const forked = cloneGraph(domain)
+  if (needToFill) {
+    fillValues()
+  }
+  return forked
+
+  function fillValues() {
+    const sourceList = flatGraph(domain)
+    const sourceRefsMap = {}
+    const refsMap = {}
+    const predefinedRefs = new Set()
+    const valuesSidList = Object.getOwnPropertyNames(values)
+    for (const {reg} of sourceList) {
+      for (const id in reg) {
+        sourceRefsMap[id] = reg[id]
+      }
+    }
+    for (const node of forked.clones) {
+      const {reg} = node
+      const {unit, sid} = node.meta
+      if (unit === 'store') {
+        if (sid && valuesSidList.includes(sid)) {
+          const {state} = node.scope
+          reg[state.id].current = values[sid]
+          predefinedRefs.add(state)
+        }
+      }
+      for (const id in reg) {
+        refsMap[id] = reg[id]
+      }
+    }
+    const refGraph = createRefGraph(sourceRefsMap)
+    const result = toposort(refGraph)
+    result.forEach(id => {
+      execRef(refsMap[id], sourceRefsMap[id])
+    })
+
+    function execRef(ref, sourceRef) {
+      let isFresh = false
+      if (sourceRef && sourceRef.before && !predefinedRefs.has(ref)) {
+        for (const cmd of sourceRef.before) {
+          switch (cmd.type) {
+            case 'map': {
+              const from = refsMap[cmd.from.id]
+              ref.current = cmd.fn(from.current)
+              break
+            }
+            case 'field': {
+              const from = refsMap[cmd.from.id]
+              if (!isFresh) {
+                isFresh = true
+                if (Array.isArray(ref.current)) {
+                  ref.current = [...ref.current]
+                } else {
+                  ref.current = {...ref.current}
+                }
+              }
+              ref.current[cmd.field] = from.current
+              break
+            }
+            case 'closure':
+              break
+          }
+        }
+      }
+      if (!sourceRef || !sourceRef.after) return
+      const value = ref.current
+      for (const cmd of sourceRef.after) {
+        const to = refsMap[cmd.to.id]
+        // if (predefinedRefs.has(to)) continue
+        switch (cmd.type) {
+          case 'copy':
+            to.current = value
+            break
+          case 'map':
+            to.current = cmd.fn(value)
+            break
+        }
+      }
+    }
+  }
+}
+function toposort(rawGraph) {
+  const graph = {}
+  for (const id in rawGraph) {
+    graph[id] = [...new Set(rawGraph[id])]
+  }
+  const result = []
+  const visited = {}
+  const temp = {}
+  for (const node in graph) {
+    if (!visited[node] && !temp[node]) {
+      topologicalSortHelper(node, visited, temp, graph, result)
+    }
+  }
+  return result.reverse()
+  function topologicalSortHelper(node, visited, temp, graph, result) {
+    temp[node] = true
+    const neighbors = graph[node]
+    for (let i = 0; i < neighbors.length; i++) {
+      const n = neighbors[i]
+      if (temp[n]) {
+        continue
+        // throw Error('found cycle in DAG')
+      }
+      if (!visited[n]) {
+        topologicalSortHelper(n, visited, temp, graph, result)
+      }
+    }
+    temp[node] = false
+    visited[node] = true
+    result.push(node)
+  }
 }
 export function allSettled(
   start,
@@ -272,7 +373,7 @@ function flatGraph(unit) {
 everything we need to clone graph section
 reachable from given unit
 */
-function cloneGraph(unit, {values, deep}) {
+function cloneGraph(unit) {
   const list = flatGraph(unit)
   const refs = new Map()
   const scope = {
@@ -346,7 +447,7 @@ function cloneGraph(unit, {values, deep}) {
       if (!newRef) {
         newRef = {
           id: ref.id,
-          current: ref.id in values ? values[ref.id] : ref.current,
+          current: ref.current, //ref.id in values ? values[ref.id] : ref.current,
         }
         refs.set(ref, newRef)
       }
