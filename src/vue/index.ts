@@ -38,7 +38,10 @@ const effectorMixin: ComponentOptions<Vue> = {
         })
 
         computed[key] = () => reactive[key];
-        this.$options.computed = computed;
+        this.$options.computed = {
+          ...this.$options.computed,
+          ...computed
+        };
       } else if (typeof shape === 'object' && shape !== null) {
         const state: Record<string, Store<any>> = {};
         let nextID = 0;
@@ -68,7 +71,10 @@ const effectorMixin: ComponentOptions<Vue> = {
           computed[key] = () => reactive[key];
         }
 
-        this.$options.computed = computed;
+        this.$options.computed = {
+          ...this.$options.computed,
+          ...computed
+        };
       } else {
         throw Error('property should be Store')
       }
