@@ -299,7 +299,29 @@ describe('fork values support', () => {
       values: serialize(scope),
     })
 
-    expect(settings.getState()).not.toEqual({MAX_COUNT_CACHED_LOGS: 2})
-    expect(logsCache.getState()).not.toEqual(['LOG_MSG_MOCK'])
+    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
+  })
+  test('values as sid map', async() => {
+    const app = createDomain()
+
+    const logsCache = app.createStore([])
+    const settings = app.createStore({
+      MAX_COUNT_CACHED_LOGS: 12,
+    })
+
+    const scope = fork(app, {
+      values: {
+        [logsCache.sid]: ['LOG_MSG_MOCK'],
+        [settings.sid]: {MAX_COUNT_CACHED_LOGS: 2},
+      },
+    })
+
+    hydrate(app, {
+      values: serialize(scope),
+    })
+
+    expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
   })
 })
