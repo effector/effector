@@ -71,9 +71,16 @@ test('vue $watch', async() => {
 
 test('test SID if pass event to effector object', async() => {
   const evt = createEvent()
+  const mockCallback = jest.fn()
+
 
   const component = createComponent({
     template: '<div>{{ evt }}</div>',
+    watch: {
+      evt() {
+        mockCallback()
+      }
+    }
   }, {evt})
 
   const wrapper = shallowMount(component, {
@@ -82,8 +89,8 @@ test('test SID if pass event to effector object', async() => {
 
   evt()
   // @ts-ignore
-  console.log(wrapper.vm.evt)
-  expect(wrapper.vm.evt).not.toBeNull()
+  await wrapper.vm.$nextTick()
+  expect(mockCallback.mock.calls.length).toBe(1)
 })
 
 test('vue component watch option', async() => {
