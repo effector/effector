@@ -1,6 +1,8 @@
 import {Domain, Store, Effect, Unit} from 'effector'
 
-export interface Scope {}
+export interface Scope {
+  getState<T>(store: Store<T>): T
+}
 
 export type ValueMap = Map<Store<any>, any> | {[sid: string]: any}
 
