@@ -1,5 +1,5 @@
 import Vue, {VueConstructor} from 'vue'
-import {createEvent, restore, is, combine, Store, Subscription, Unit} from 'effector'
+import {createEvent, restore, is, combine, Store, Subscription, Event} from 'effector'
 
 export interface EffectorVue extends Vue {
   $watchAsStore: typeof watchAsStore
@@ -60,7 +60,7 @@ const effectorMixin: {
   beforeDestroy(): void
   _subscription?: Subscription
   $options: {
-    effector?: (() => Store<any>) | Store<any> | {[key: string]: Store<any>}
+    effector?: (() => Store<any>) | Store<any> | {[key: string]: Store<any> | Event<any>}
   }
   [key: string]: any
 } = {
@@ -71,6 +71,7 @@ const effectorMixin: {
       shape = shape.call(this)
     }
     if (shape) {
+      let nextID = 0;
       if (is.store(shape)) {
         //@ts-ignore
         Vue.util.defineReactive(this, key, shape.getState())
@@ -78,17 +79,11 @@ const effectorMixin: {
           this[key] = value
         })
       } else if (typeof shape === 'object' && shape !== null) {
-        const state = Object.keys(shape)
-          .reduce((acc, key) => {
-            const k = key as keyof typeof shape;
-            const v = shape![k];
-
-            return {
-              ...acc,
-              // @ts-ignore
-              [key]: is.store(v) ? v : restore(v.map(() => Date.now()), null)
-            }
-          }, {} as {[k: string]: Store<any>})
+        const state = {} as Record<string, Store<any>>;
+        for (const key in shape) {
+          const v = shape[key];
+          state[key] = is.store(v) ? v : restore(v.map(() => ++nextID), null);
+        }
 
         const store = combine(state)
         for (const key in state) {
