@@ -195,7 +195,7 @@ function normalizeValues(values) {
   }
   return values
 }
-export function fork(domain, {values} = {}) {
+export function fork(domain, {values, handlers} = {}) {
   if (!is.domain(domain)) throwError('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
@@ -218,6 +218,15 @@ export function fork(domain, {values} = {}) {
   const forked = cloneGraph(domain)
   if (needToFill) {
     fillValues()
+  }
+  if (handlers) {
+    handlers = normalizeValues(handlers)
+    const handlerKeys = Object.keys(handlers)
+    for (const {scope, meta} of forked.clones) {
+      if (meta.sid && handlerKeys.includes(meta.sid)) {
+        scope.runner.scope.getHandler = () => handlers[meta.sid]
+      }
+    }
   }
   return forked
 
