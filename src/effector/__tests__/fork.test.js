@@ -278,3 +278,28 @@ describe('hydrate edge cases', () => {
     `)
   })
 })
+
+describe('fork values support', () => {
+  test('values as js Map', async() => {
+    const app = createDomain()
+
+    const logsCache = app.createStore([])
+    const settings = app.createStore({
+      MAX_COUNT_CACHED_LOGS: 12,
+    })
+
+    const scope = fork(app, {
+      values: new Map([
+        [logsCache, ['LOG_MSG_MOCK']],
+        [settings, {MAX_COUNT_CACHED_LOGS: 2}],
+      ]),
+    })
+
+    hydrate(app, {
+      values: serialize(scope),
+    })
+
+    expect(settings.getState()).not.toEqual({MAX_COUNT_CACHED_LOGS: 2})
+    expect(logsCache.getState()).not.toEqual(['LOG_MSG_MOCK'])
+  })
+})
