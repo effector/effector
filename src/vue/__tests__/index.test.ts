@@ -21,6 +21,25 @@ test('show counter', () => {
   expect(wrapper.html()).toBe('<div>0</div>')
 })
 
+test('is store its [key] state', async() => {
+  const $counter = createStore(0)
+  const evt = createEvent()
+
+  $counter.on(evt, state => state + 1)
+
+  const wrapper = shallowMount({
+    template: '<div>{{ state }}</div>',
+    effector: $counter,
+  }, {localVue})
+
+  evt()
+
+  await wrapper.vm.$nextTick()
+
+  // @ts-ignore
+  expect(wrapper.vm.state).toBe(1)
+})
+
 test('show counter with createComponent', () => {
   const $counter = createStore(0)
   const componentWithWrapper = createComponent(

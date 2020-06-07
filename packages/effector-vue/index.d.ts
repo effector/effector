@@ -12,7 +12,7 @@ type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? {[K in keyof EffectorState]: EffectorState[K] extends Store<infer U> ? U : never}
   : never
 
-type EffectorType = Store<any> | {[key: string]: Store<any>} | (() => Store<any>)
+type EffectorType = Store<any> | {[key: string]: Store<any> | Event<any>} | (() => Store<any>)
 
 type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State>) | Store<infer State>
   ? {state: State}
@@ -24,6 +24,7 @@ declare module 'vue/types/vue' {
   interface Vue {
     $watchAsStore: typeof watchAsStore
     $store: typeof store
+    _clear?: Event<any>;
   }
 
   interface VueConstructor<V extends Vue> {
@@ -51,6 +52,7 @@ declare module 'vue/types/vue' {
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
     effector?: EffectorType
+    _clear?: Event<any>
   }
 }
 

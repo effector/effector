@@ -1,9 +1,9 @@
-import Vue, {VueConstructor} from 'vue'
-import {createEvent, restore, is, combine, Store, Subscription, Event} from 'effector'
+import Vue, {VueConstructor, ComponentOptions} from 'vue'
+import {createEvent, restore, is, combine, Store, withRegion, clearNode} from 'effector'
 
 export interface EffectorVue extends Vue {
-  $watchAsStore: typeof watchAsStore
-  $store: typeof store
+  $watchAsStore: typeof watchAsStore;
+  $store: typeof store;
 }
 
 export const VueEffector = (
@@ -13,6 +13,85 @@ export const VueEffector = (
   vue.mixin(effectorMixin)
   vue.prototype.$watchAsStore = watchAsStore
   vue.prototype.$store = store
+}
+
+const effectorMixin: ComponentOptions<Vue> = {
+  beforeCreate() {
+    let shape = this.$options.effector;
+
+    if (typeof shape === "function") shape = shape.call(this);
+    if (!shape) return;
+    if (!this.$options.computed) this.$options.computed = {}
+
+    this._clear = createEvent();
+    let computed: Record<string, () => any> = {};
+
+    withRegion(this._clear, () => {
+      if (is.store(shape)) {
+        const key = 'state';
+        const reactive = Vue.observable({
+          [key]: shape.getState()
+        })
+
+        shape.watch(value => {
+          reactive[key] = value;
+        })
+
+        computed[key] = () => reactive[key];
+        this.$options.computed = computed;
+      } else if (typeof shape === 'object' && shape !== null) {
+        const state: Record<string, Store<any>> = {};
+        let nextID = 0;
+
+        for(const key in shape) {
+          const v = shape[key];
+
+          if (is.store(v)) {
+            state[key] = v;
+          } else if (is.unit(v)) {
+            state[key] = restore(v.map(() => ++nextID), null);
+          } else {
+            throw Error('property should be Store or Unit (will be transform to Store<number>)');
+          }
+        }
+
+        const store = combine(state);
+        const reactive = Vue.observable(store.defaultState);
+
+        store.watch(value => {
+          for (const key in value) {
+            reactive[key] = value[key]
+          }
+        })
+
+        for (const key in reactive) {
+          computed[key] = () => reactive[key];
+        }
+
+        this.$options.computed = computed;
+      } else {
+        throw Error('property should be Store')
+      }
+    })
+  },
+
+  beforeDestroy() {
+    if (this._clear) {
+      clearNode(this._clear);
+    }
+  }
+}
+
+export function createComponent<S>(options: any, store?: S) {
+  return Vue.extend(
+    Object.assign(
+      {},
+      options,
+      store && {
+        effector: () => store
+      },
+    ),
+  )
 }
 
 function watchAsStore(
@@ -52,71 +131,4 @@ function store<State>(
   expOrFn: string | Function,
 ): Store<State> {
   return this.$watchAsStore(expOrFn).map(({newValue}) => newValue)
-}
-
-//@ts-ignore
-const effectorMixin: {
-  beforeCreate(): void
-  beforeDestroy(): void
-  _subscription?: Subscription
-  $options: {
-    effector?: (() => Store<any>) | Store<any> | {[key: string]: Store<any> | Event<any>}
-  }
-  [key: string]: any
-} = {
-  beforeCreate() {
-    const key = 'state'
-    let shape = this.$options.effector
-    if (typeof shape === 'function') {
-      shape = shape.call(this)
-    }
-    if (shape) {
-      let nextID = 0;
-      if (is.store(shape)) {
-        //@ts-ignore
-        Vue.util.defineReactive(this, key, shape.getState())
-        this._subscription = shape.watch(value => {
-          this[key] = value
-        })
-      } else if (typeof shape === 'object' && shape !== null) {
-        const state = {} as Record<string, Store<any>>;
-        for (const key in shape) {
-          const v = shape[key];
-          state[key] = is.store(v) ? v : restore(v.map(() => ++nextID), null);
-        }
-
-        const store = combine(state)
-        for (const key in state) {
-          //@ts-ignore
-          Vue.util.defineReactive(this, key, store.defaultState[key])
-        }
-        this._subscription = store.watch(value => {
-          for (const key in value) {
-            this[key] = value[key]
-          }
-        })
-      } else {
-        throw Error('property should be Store')
-      }
-    }
-  },
-  beforeDestroy() {
-    if (this._subscription) {
-      this._subscription.unsubscribe()
-    }
-  },
-}
-
-export function createComponent<S>(options: any, store?: S) {
-  return Vue.extend(
-    Object.assign(
-      {},
-      options,
-      store && {
-        effector() {
-          return store
-        },
-      },
-    ),
-  )
 }
