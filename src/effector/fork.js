@@ -499,6 +499,7 @@ function cloneGraph(unit) {
   return {
     clones,
     find: findClone,
+    getState: store => findClone(store).meta.wrapped.getState(),
     graphite: createNode({
       family: {
         type: 'domain',
