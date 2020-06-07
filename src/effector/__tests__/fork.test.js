@@ -325,3 +325,54 @@ describe('fork values support', () => {
     expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
   })
 })
+
+describe('fork handlers support', () => {
+  test('handlers as js Map', async() => {
+    const app = createDomain()
+
+    const fx = app.createEffect({handler: () => 'not to call'})
+
+    const acc = app
+      .createStore([])
+      .on(fx.doneData, (list, val) => [...list, val])
+
+    const scope = fork(app, {
+      handlers: new Map([[fx, () => 'fn']]),
+    })
+
+    await allSettled(fx, {
+      scope,
+    })
+
+    hydrate(app, {
+      values: serialize(scope),
+    })
+
+    expect(acc.getState()).toEqual(['fn'])
+  })
+  test('handlers as sid map', async() => {
+    const app = createDomain()
+
+    const fx = app.createEffect({handler: () => 'not to call'})
+
+    const acc = app
+      .createStore([])
+      .on(fx.doneData, (list, val) => [...list, val])
+
+    const scope = fork(app, {
+      handlers: {
+        [fx.sid]: () => 'fn',
+      },
+    })
+
+    await allSettled(fx, {
+      scope,
+    })
+
+    hydrate(app, {
+      values: serialize(scope),
+    })
+
+    expect(acc.getState()).toEqual(['fn'])
+  })
+})
