@@ -2,6 +2,56 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.16.0
+
+- Add support for `handlers` to `fork` to change effect handlers for forked scope (useful for testing)
+
+```typescript
+import {createDomain} from 'effector'
+import {fork, hydrate, serialize, allSettled} from 'effector/fork'
+
+//app
+const app = createDomain()
+const fetchFriends = app.createEffect<{limit: number}, string[]>({
+  async handler({limit}) {
+    /* some client-side data fetching */
+    return []
+  },
+})
+const user = app.createStore('guest')
+const friends = app
+  .createStore([])
+  .on(fetchFriends.doneData, (_, result) => result)
+
+/*
+  test to ensure that friends value is populated
+  after fetchFriends call
+*/
+const testScope = fork(app, {
+  values: {
+    [user.sid]: 'alice',
+  },
+  handlers: {
+    [fetchFriends.sid]: () => ['bob', 'carol'],
+  },
+})
+
+/* trigger computations in scope and await all called effects */
+await allSettled(fetchFriends, {
+  scope: testScope,
+  params: {limit: 10},
+})
+
+/* check value of store in scope */
+console.log(testScope.getState(friends))
+// => ['bob', 'carol']
+```
+
+[Try it](https://share.effector.dev/A31Dy2UK)
+
+- Add support for `scope.getState(store)` to access to store values in forked scopes
+- Fix `values` support for `fork`
+
 ## effector-react 20.7.3, effector-vue 20.4.2
 
 - Fix regression in `effector-react/compat` and `effector-vue/compat` compatibility with IE11
