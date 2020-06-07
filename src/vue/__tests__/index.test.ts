@@ -1,5 +1,5 @@
 import {shallowMount, createLocalVue} from '@vue/test-utils'
-import {createStore} from 'effector'
+import {createStore, createEvent} from 'effector'
 import Vue from 'vue'
 import {VueEffector, createComponent} from 'effector-vue'
 
@@ -67,6 +67,23 @@ test('vue $watch', async() => {
 
   expect(wrapper.vm.counter).toBe(1)
   expect(mockCallback.mock.calls.length).toBe(1)
+})
+
+test('test SID if pass event to effector object', async() => {
+  const evt = createEvent()
+
+  const component = createComponent({
+    template: '<div>{{ evt }}</div>',
+  }, {evt})
+
+  const wrapper = shallowMount(component, {
+    localVue
+  })
+
+  evt()
+  // @ts-ignore
+  console.log(wrapper.vm.evt)
+  expect(wrapper.vm.evt).not.toBeNull()
 })
 
 test('vue component watch option', async() => {

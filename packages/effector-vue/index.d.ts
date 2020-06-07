@@ -4,7 +4,7 @@ import {
   ThisTypedComponentOptionsWithRecordProps,
 } from 'vue/types/options'
 import {ExtendedVue} from 'vue/types/vue'
-import {Store} from 'effector'
+import {Store, Unit} from 'effector'
 
 type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? State
@@ -94,7 +94,7 @@ declare function createComponent<
 ): ExtendedVue<V, Data, Methods, Computed, PropNames>
 
 declare function createComponent<
-  S extends {[field: string]: Store<any>},
+  S extends {[field: string]: Store<any> | Unit<any>},
   V extends Vue,
   Data,
   Methods,
