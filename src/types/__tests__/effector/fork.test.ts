@@ -54,3 +54,95 @@ describe('serialize cases (should fail)', () => {
     `)
   })
 })
+
+describe('fork values', () => {
+  describe('without type annotations (should pass)', () => {
+    test('fork values as js Map', () => {
+      const app = createDomain()
+      const foo = app.createStore<number>(0)
+      const bar = app.createStore<string>('a')
+
+      const scope = fork(app, {
+        values: new Map([
+          [foo, 1],
+          [bar, 'b'],
+        ]),
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        No overload matches this call.
+          Overload 1 of 3, '(iterable: Iterable<readonly [Store<any>, any]>): Map<Store<any>, any>', gave the following error.
+            Argument of type '((number | Store<number>)[] | (string | Store<string>)[])[]' is not assignable to parameter of type 'Iterable<readonly [Store<any>, any]>'.
+              The types returned by '[Symbol.iterator]().next(...)' are incompatible between these types.
+                Type 'IteratorResult<(number | Store<number>)[] | (string | Store<string>)[], any>' is not assignable to type 'IteratorResult<readonly [Store<any>, any], any>'.
+                  Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorResult<readonly [Store<any>, any], any>'.
+                    Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorYieldResult<readonly [Store<any>, any]>'.
+                      Type '(number | Store<number>)[] | (string | Store<string>)[]' is not assignable to type 'readonly [Store<any>, any]'.
+                        Type '(number | Store<number>)[]' is missing the following properties from type 'readonly [Store<any>, any]': 0, 1
+        "
+      `)
+    })
+    test('fork values as sid map', () => {
+      const app = createDomain()
+      const foo = app.createStore<number>(0)
+      const bar = app.createStore<string>('a')
+
+      const scope = fork(app, {
+        values: {
+          [foo.sid]: 1,
+          [bar.sid]: 'b',
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
+        "
+      `)
+    })
+  })
+  describe('with type annotations', () => {
+    test('fork values as js Map', () => {
+      const app = createDomain()
+      const foo = app.createStore<number>(0)
+      const bar = app.createStore<string>('a')
+
+      const scope = fork(app, {
+        values: new Map<Store<any>, any>([
+          [foo, 1],
+          [bar, 'b'],
+        ]),
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+        "
+      `)
+    })
+    test('fork values as sid map', () => {
+      const app = createDomain()
+      const foo = app.createStore<number>(0)
+      const bar = app.createStore<string>('a')
+
+      const scope = fork(app, {
+        values: {
+          [foo.sid!]: 1,
+          [bar.sid!]: 'b',
+        },
+      })
+
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+        "
+      `)
+    })
+  })
+})
