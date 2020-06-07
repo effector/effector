@@ -344,11 +344,7 @@ describe('fork handlers support', () => {
       scope,
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(acc.getState()).toEqual(['fn'])
+    expect(scope.getState(acc)).toEqual(['fn'])
   })
   test('handlers as sid map', async() => {
     const app = createDomain()
@@ -369,10 +365,6 @@ describe('fork handlers support', () => {
       scope,
     })
 
-    hydrate(app, {
-      values: serialize(scope),
-    })
-
-    expect(acc.getState()).toEqual(['fn'])
+    expect(scope.getState(acc)).toEqual(['fn'])
   })
 })
