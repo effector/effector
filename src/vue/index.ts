@@ -23,9 +23,11 @@ const effectorMixin: ComponentOptions<Vue> = {
     if (!shape) return;
     if (!this.$options.computed) this.$options.computed = {}
 
+    // @ts-ignore
     this.__clear = createEvent();
     let computed: Record<string, () => any> = {};
 
+    // @ts-ignore
     withRegion(this.__clear, () => {
       if (is.store(shape)) {
         const key = 'state';
@@ -82,7 +84,9 @@ const effectorMixin: ComponentOptions<Vue> = {
   },
 
   beforeDestroy() {
+    // @ts-ignore
     if (this.__clear) {
+      // @ts-ignore
       clearNode(this.__clear);
     }
   }

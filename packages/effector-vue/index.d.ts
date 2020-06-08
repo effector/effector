@@ -24,7 +24,6 @@ declare module 'vue/types/vue' {
   interface Vue {
     $watchAsStore: typeof watchAsStore
     $store: typeof store
-    __clear?: Event<any>;
   }
 
   interface VueConstructor<V extends Vue> {
@@ -52,7 +51,6 @@ declare module 'vue/types/vue' {
 declare module 'vue/types/options' {
   interface ComponentOptions<V extends Vue> {
     effector?: EffectorType
-    __clear?: Event<any>
   }
 }
 
