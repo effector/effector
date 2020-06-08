@@ -23,10 +23,10 @@ const effectorMixin: ComponentOptions<Vue> = {
     if (!shape) return;
     if (!this.$options.computed) this.$options.computed = {}
 
-    this._clear = createEvent();
+    this.__clear = createEvent();
     let computed: Record<string, () => any> = {};
 
-    withRegion(this._clear, () => {
+    withRegion(this.__clear, () => {
       if (is.store(shape)) {
         const key = 'state';
         const reactive = Vue.observable({
@@ -82,8 +82,8 @@ const effectorMixin: ComponentOptions<Vue> = {
   },
 
   beforeDestroy() {
-    if (this._clear) {
-      clearNode(this._clear);
+    if (this.__clear) {
+      clearNode(this.__clear);
     }
   }
 }
