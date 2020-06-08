@@ -1,4 +1,4 @@
-import {shallowMount, createLocalVue} from '@vue/test-utils'
+import {shallowMount, createLocalVue, mount} from '@vue/test-utils'
 import {createStore, createEvent} from 'effector'
 import Vue from 'vue'
 import {VueEffector, createComponent} from 'effector-vue'
@@ -141,4 +141,88 @@ test('vue component watch option', async() => {
 
   expect(wrapper.vm.counter).toBe(1)
   expect(mockCallback.mock.calls.length).toBe(1)
+})
+
+test('is v-model works correct with state key on input', () => {
+  const expected = 'John Doe'
+
+  const $fullname = createStore('')
+  const component = Vue.extend({
+    template: `<div><input v-model="state" data-input></div>`,
+    effector: $fullname
+  })
+
+  const wrapper = shallowMount(component, {
+    localVue
+  })
+
+  wrapper.find('[data-input]').setValue(expected)
+
+  // @ts-ignore
+  expect(wrapper.vm.state).toBe(expected)
+})
+
+test('is v-model works correct with custom key on input', () => {
+  const expected = 'John Doe'
+
+  const $fullname = createStore('')
+  const component = Vue.extend({
+    template: `<div><input v-model="$fullname" data-input></div>`,
+    effector: {
+      $fullname
+    }
+  })
+
+  const wrapper = shallowMount(component, {
+    localVue
+  })
+
+  wrapper.find('[data-input]').setValue(expected)
+
+  // @ts-ignore
+  expect(wrapper.vm.$fullname).toBe(expected)
+})
+
+test('is v-model works with custom component', () => {
+  const expected = 'John Doe'
+  
+  const child = Vue.extend({
+    name: 'child',
+    template: `<div></div>`,
+    props: {
+      value: String,
+    },
+    methods: {
+      handleChange() {
+        this.$emit('input', expected)
+      }
+    }
+  })
+
+  const $fullname = createStore('')
+  const component = Vue.extend({
+    template: `
+      <div>
+        <child v-model="$fullname"/>
+      </div>
+    `,
+
+    components: {
+      child,
+    },
+
+    effector: {
+      $fullname
+    }
+  })
+
+  const wrapper = mount(component, {
+    localVue
+  })
+
+  // @ts-ignore
+  wrapper.findComponent({name: 'child'}).vm.handleChange()
+
+  // @ts-ignore
+  expect(wrapper.vm.$fullname).toBe(expected)
 })

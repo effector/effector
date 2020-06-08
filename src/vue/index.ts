@@ -1,5 +1,5 @@
 import Vue, {VueConstructor, ComponentOptions} from 'vue'
-import {createEvent, restore, is, combine, Store, withRegion, clearNode} from 'effector'
+import {createEvent, restore, is, combine, Store, withRegion, clearNode, forward} from 'effector'
 
 export interface EffectorVue extends Vue {
   $watchAsStore: typeof watchAsStore;
@@ -24,7 +24,10 @@ const effectorMixin: ComponentOptions<Vue> = {
     if (!this.$options.computed) this.$options.computed = {}
 
     this.__clear = createEvent();
-    let computed: Record<string, () => any> = {};
+
+    // @ts-ignore
+    this.__forwards = [];
+    let computed: Record<string, any> = {};
 
     withRegion(this.__clear, () => {
       if (is.store(shape)) {
@@ -33,11 +36,20 @@ const effectorMixin: ComponentOptions<Vue> = {
           [key]: shape.getState()
         })
 
+        const updated = createEvent();
+        const unwatch = forward({from: updated, to: shape})
+
+        // @ts-ignore
+        this.__forwards.push(unwatch);
         shape.watch(value => {
           reactive[key] = value;
         })
 
-        computed[key] = () => reactive[key];
+        computed[key] = {
+          get: () => reactive[key],
+          set: updated
+        };
+
         this.$options.computed = {
           ...this.$options.computed,
           ...computed
@@ -68,7 +80,15 @@ const effectorMixin: ComponentOptions<Vue> = {
         })
 
         for (const key in reactive) {
-          computed[key] = () => reactive[key];
+          const updated = createEvent();
+          const unwatch = forward({from: updated, to: state[key]});
+
+          // @ts-ignore
+          this.__forwards.push(unwatch);
+          computed[key] = {
+            get: () => reactive[key],
+            set: updated
+          };
         }
 
         this.$options.computed = {
@@ -84,6 +104,11 @@ const effectorMixin: ComponentOptions<Vue> = {
   beforeDestroy() {
     if (this.__clear) {
       clearNode(this.__clear);
+
+      // @ts-ignore
+      this.__forwards.forEach(unwatch => {
+        unwatch()
+      });
     }
   }
 }
