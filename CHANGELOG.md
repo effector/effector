@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.7.4
+
+- Improve [useStore](https://effector.now.sh/docs/api/effector-react/useStore) support for [React.StrictMode](https://reactjs.org/docs/strict-mode.html)
+
 ## effector-vue 20.5.0
 
 - Migrated from Vue.util.defineReactive to Vue.observable
@@ -30,17 +34,17 @@ export default Vue.extend({
 - Support v-model directive for scalar values
 
 ```js
-const $msg = createStore();
+const $msg = createStore()
 export default Vue.extend({
   effector: {
-    $msg
+    $msg,
   },
 })
 ```
 
 ```html
 <template>
-  <input v-model="$msg">
+  <input v-model="$msg" />
 </template>
 ```
 
