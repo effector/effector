@@ -2,6 +2,25 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 20.6.0
+
+- Support v-model directive for scalar values
+
+```js
+const $msg = createStore();
+export default Vue.extend({
+  effector: {
+    $msg
+  },
+})
+```
+
+```html
+<template>
+  <input v-model="$msg">
+</template>
+```
+
 ## effector-vue 20.5.0
 
 - Migrated from Vue.util.defineReactive to Vue.observable
