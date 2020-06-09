@@ -2,6 +2,33 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue
+
+- Migrated from Vue.util.defineReactive to Vue.observable
+- Effector stores will show in Vue devtools
+- Now we can add some units to effector object (will be return Store<number>)
+- Cosmetic improvements for support plugin in the future.
+
+```js
+
+const fx = createEffect({...});
+
+export default Vue.extend({
+  effector: {
+    isCompleted: fx.done
+  },
+
+  watch: {
+    isCompleted(sid) {
+      this.isPopupOpened = false;
+    }
+  },
+
+  data: () => ({
+    isPopupOpened: true,
+  })
+})
+
 ## effector-react 20.7.3, effector-vue 20.4.2
 
 - Fix regression in `effector-react/compat` and `effector-vue/compat` compatibility with IE11
