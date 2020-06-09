@@ -5,7 +5,7 @@ import {useStore, useStoreMap} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 
 describe('useStore', () => {
-  it('should render', async() => {
+  it('should render', async () => {
     const store = createStore('foo')
     const changeText = createEvent()
     store.on(changeText, (_, e) => e)
@@ -22,7 +22,7 @@ describe('useStore', () => {
         foo
       </span>
     `)
-    await act(async() => {
+    await act(async () => {
       changeText('bar')
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -33,7 +33,7 @@ describe('useStore', () => {
     `)
   })
 
-  it('should throw', async() => {
+  it('should throw', async () => {
     const fn = jest.fn()
     const ErrorDisplay = () => {
       try {
@@ -53,7 +53,7 @@ describe('useStore', () => {
     `)
   })
 
-  it('should retrigger only once after store change', async() => {
+  it('should retrigger only once after store change', async () => {
     const fn = jest.fn()
     const storeA = createStore('A')
     const storeB = createStore('B')
@@ -80,7 +80,7 @@ describe('useStore', () => {
         "A",
       ]
     `)
-    await act(async() => {
+    await act(async () => {
       changeCurrentStore(storeB)
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -90,7 +90,7 @@ describe('useStore', () => {
       ]
     `)
   })
-  it('should subscribe before any react hook will change store', async() => {
+  it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
     const fx = createEffect({
       handler: () => new Promise(rs => setTimeout(rs, 200)),
@@ -113,13 +113,13 @@ describe('useStore', () => {
       )
     }
 
-    await act(async() => {
+    await act(async () => {
       await render(<App />)
       await new Promise(rs => setTimeout(rs, 500))
     })
     expect(argumentHistory(fn)).toEqual([false, true, false])
   })
-  it('should support domains', async() => {
+  it('should support domains', async () => {
     const domain = createDomain()
     const toggle = domain.createEvent()
     const inc = domain.createEvent()
@@ -140,7 +140,7 @@ describe('useStore', () => {
         10
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       inc()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -148,7 +148,7 @@ describe('useStore', () => {
         11
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       toggle()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -156,7 +156,7 @@ describe('useStore', () => {
         21
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       inc()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -164,7 +164,7 @@ describe('useStore', () => {
         22
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       toggle()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -174,7 +174,7 @@ describe('useStore', () => {
     `)
   })
   describe('strict mode support', () => {
-    test('no strict mode', async() => {
+    test('no strict mode', async () => {
       const fetchItem = createEffect({
         handler: () =>
           new Promise<string>(rs => {
@@ -216,7 +216,7 @@ describe('useStore', () => {
           <p />
         </div>
       `)
-      await act(async() => {
+      await act(async () => {
         await new Promise(rs => setTimeout(rs, 100))
       })
       expect(container.firstChild).toMatchInlineSnapshot(`
@@ -230,7 +230,7 @@ describe('useStore', () => {
         </div>
       `)
     })
-    test('strict mode', async() => {
+    test('strict mode', async () => {
       const fetchItem = createEffect({
         handler: () =>
           new Promise<string>(rs => {
@@ -276,7 +276,7 @@ describe('useStore', () => {
           <p />
         </div>
       `)
-      await act(async() => {
+      await act(async () => {
         await new Promise(rs => setTimeout(rs, 100))
       })
       expect(container.firstChild).toMatchInlineSnapshot(`
@@ -284,14 +284,16 @@ describe('useStore', () => {
           <p>
             item
           </p>
-          <p />
+          <p>
+            item
+          </p>
         </div>
       `)
     })
   })
 })
 describe('useStoreMap', () => {
-  it('should render', async() => {
+  it('should render', async () => {
     const removeUser = createEvent()
     const changeUserAge = createEvent()
     const users = createStore({
@@ -350,7 +352,7 @@ describe('useStoreMap', () => {
         </li>
       </ul>
     `)
-    await act(async() => {
+    await act(async () => {
       changeUserAge({nickname: 'alex', age: 21})
     })
 
@@ -368,7 +370,7 @@ describe('useStoreMap', () => {
         </li>
       </ul>
     `)
-    await act(async() => {
+    await act(async () => {
       removeUser('alex')
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -381,7 +383,7 @@ describe('useStoreMap', () => {
       </ul>
     `)
   })
-  it('should support domains', async() => {
+  it('should support domains', async () => {
     const domain = createDomain()
     const toggle = domain.createEvent()
     const inc = domain.createEvent()
@@ -406,7 +408,7 @@ describe('useStoreMap', () => {
         10
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       inc()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -414,7 +416,7 @@ describe('useStoreMap', () => {
         11
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       toggle()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -422,7 +424,7 @@ describe('useStoreMap', () => {
         21
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       inc()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
@@ -430,7 +432,7 @@ describe('useStoreMap', () => {
         22
       </div>
     `)
-    await act(async() => {
+    await act(async () => {
       toggle()
     })
     expect(container.firstChild).toMatchInlineSnapshot(`
