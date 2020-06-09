@@ -173,6 +173,122 @@ describe('useStore', () => {
       </div>
     `)
   })
+  describe('strict mode support', () => {
+    test('no strict mode', async() => {
+      const fetchItem = createEffect({
+        handler: () =>
+          new Promise<string>(rs => {
+            setTimeout(() => {
+              rs('item')
+            }, 100)
+          }),
+      })
+      const item = createStore<string | null>(null).on(
+        fetchItem.doneData,
+        (_, value) => value,
+      )
+      const setActiveItem = createEvent<string | null>()
+      const activeItem = createStore<string | null>(null).on(
+        setActiveItem,
+        (_, val) => val,
+      )
+
+      const App = () => {
+        const val = useStore(item)
+        React.useEffect(() => {
+          setActiveItem(val)
+        }, [val])
+        React.useEffect(() => {
+          fetchItem()
+        }, [])
+        return (
+          <div>
+            <p>{useStore(item)}</p>
+            <p>{useStore(activeItem)}</p>
+          </div>
+        )
+      }
+
+      await render(<App />)
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          <p />
+          <p />
+        </div>
+      `)
+      await act(async() => {
+        await new Promise(rs => setTimeout(rs, 100))
+      })
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          <p>
+            item
+          </p>
+          <p>
+            item
+          </p>
+        </div>
+      `)
+    })
+    test('strict mode', async() => {
+      const fetchItem = createEffect({
+        handler: () =>
+          new Promise<string>(rs => {
+            setTimeout(() => {
+              rs('item')
+            }, 100)
+          }),
+      })
+      const item = createStore<string | null>(null).on(
+        fetchItem.doneData,
+        (_, value) => value,
+      )
+      const setActiveItem = createEvent<string | null>()
+      const activeItem = createStore<string | null>(null).on(
+        setActiveItem,
+        (_, val) => val,
+      )
+
+      const App = () => {
+        const val = useStore(item)
+        React.useEffect(() => {
+          setActiveItem(val)
+        }, [val])
+        React.useEffect(() => {
+          fetchItem()
+        }, [])
+        return (
+          <div>
+            <p>{useStore(item)}</p>
+            <p>{useStore(activeItem)}</p>
+          </div>
+        )
+      }
+
+      await render(
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>,
+      )
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          <p />
+          <p />
+        </div>
+      `)
+      await act(async() => {
+        await new Promise(rs => setTimeout(rs, 100))
+      })
+      expect(container.firstChild).toMatchInlineSnapshot(`
+        <div>
+          <p>
+            item
+          </p>
+          <p />
+        </div>
+      `)
+    })
+  })
 })
 describe('useStoreMap', () => {
   it('should render', async() => {
