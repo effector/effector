@@ -110,8 +110,7 @@ describe('vue extend', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        'twice' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-        Property 'state' does not exist on type '{ twice(): any; }'.
+        no errors
         "
       `)
     })
@@ -135,8 +134,7 @@ describe('vue extend', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        'twice' implicitly has return type 'any' because it does not have a return type annotation and is referenced directly or indirectly in one of its return expressions.
-        Property 'state' does not exist on type '{ twice(): any; }'.
+        The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
     })

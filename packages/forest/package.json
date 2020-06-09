@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.15.9"
+    "effector": "^20.16.0"
   },
   "keywords": [
     "data",
