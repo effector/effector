@@ -2,7 +2,7 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector-vue
+## effector-vue 20.5.0
 
 - Migrated from Vue.util.defineReactive to Vue.observable
 - Effector stores will show in Vue devtools
@@ -10,7 +10,6 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Cosmetic improvements for support plugin in the future.
 
 ```js
-
 const fx = createEffect({...});
 
 export default Vue.extend({
@@ -28,6 +27,7 @@ export default Vue.extend({
     isPopupOpened: true,
   })
 })
+```
 
 ## effector-react 20.7.3, effector-vue 20.4.2
 
