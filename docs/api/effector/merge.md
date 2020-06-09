@@ -68,10 +68,14 @@ const otherEvent = createEvent()
 const $foo = createStore(0).on(setFoo, (_, v) => v)
 
 const merged = merge([$foo, otherEvent])
+
 merged.watch(v => console.log(`merged event payload: ${v}`))
 
 setFoo(999)
+// => merged event payload: 999
+
 otherEvent('bar')
+// => merged event payload: bar
 ```
 
-[Try it](https://share.effector.dev/Rp9wuRvl)
+[Try it](https://share.effector.dev/pKkiyhVQ)
