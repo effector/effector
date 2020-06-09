@@ -2,7 +2,30 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
-## effector-vue 20.6.0
+## effector-vue 20.5.0
+
+- Migrated from Vue.util.defineReactive to Vue.observable
+- Effector stores will show in Vue devtools
+- Cosmetic improvements for support plugin in the future.
+
+- Now we can add some units to effector object (will be return Store<number>)
+
+```js
+const fx = createEffect({...});
+export default Vue.extend({
+  effector: {
+    isCompleted: fx.done
+  },
+  watch: {
+    isCompleted(sid) {
+      this.isPopupOpened = false;
+    }
+  },
+  data: () => ({
+    isPopupOpened: true,
+  })
+})
+```
 
 - Support v-model directive for scalar values
 
@@ -21,32 +44,55 @@ export default Vue.extend({
 </template>
 ```
 
-## effector-vue 20.5.0
+## effector 20.16.0
 
-- Migrated from Vue.util.defineReactive to Vue.observable
-- Effector stores will show in Vue devtools
-- Now we can add some units to effector object (will be return Store<number>)
-- Cosmetic improvements for support plugin in the future.
+- Add support for `handlers` to `fork` to change effect handlers for forked scope (useful for testing)
 
-```js
-const fx = createEffect({...});
+```typescript
+import {createDomain} from 'effector'
+import {fork, hydrate, serialize, allSettled} from 'effector/fork'
 
-export default Vue.extend({
-  effector: {
-    isCompleted: fx.done
+//app
+const app = createDomain()
+const fetchFriends = app.createEffect<{limit: number}, string[]>({
+  async handler({limit}) {
+    /* some client-side data fetching */
+    return []
   },
-
-  watch: {
-    isCompleted(sid) {
-      this.isPopupOpened = false;
-    }
-  },
-
-  data: () => ({
-    isPopupOpened: true,
-  })
 })
+const user = app.createStore('guest')
+const friends = app
+  .createStore([])
+  .on(fetchFriends.doneData, (_, result) => result)
+
+/*
+  test to ensure that friends value is populated
+  after fetchFriends call
+*/
+const testScope = fork(app, {
+  values: {
+    [user.sid]: 'alice',
+  },
+  handlers: {
+    [fetchFriends.sid]: () => ['bob', 'carol'],
+  },
+})
+
+/* trigger computations in scope and await all called effects */
+await allSettled(fetchFriends, {
+  scope: testScope,
+  params: {limit: 10},
+})
+
+/* check value of store in scope */
+console.log(testScope.getState(friends))
+// => ['bob', 'carol']
 ```
+
+[Try it](https://share.effector.dev/A31Dy2UK)
+
+- Add support for `scope.getState(store)` to access to store values in forked scopes
+- Fix `values` support for `fork`
 
 ## effector-react 20.7.3, effector-vue 20.4.2
 
