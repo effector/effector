@@ -2,6 +2,48 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 20.5.0
+
+- Migrated from Vue.util.defineReactive to Vue.observable
+- Effector stores will show in Vue devtools
+- Cosmetic improvements for support plugin in the future.
+
+- Now we can add some units to effector object (will be return Store<number>)
+
+```js
+const fx = createEffect({...});
+export default Vue.extend({
+  effector: {
+    isCompleted: fx.done
+  },
+  watch: {
+    isCompleted(sid) {
+      this.isPopupOpened = false;
+    }
+  },
+  data: () => ({
+    isPopupOpened: true,
+  })
+})
+```
+
+- Support v-model directive for scalar values
+
+```js
+const $msg = createStore();
+export default Vue.extend({
+  effector: {
+    $msg
+  },
+})
+```
+
+```html
+<template>
+  <input v-model="$msg">
+</template>
+```
+
 ## effector 20.16.0
 
 - Add support for `handlers` to `fork` to change effect handlers for forked scope (useful for testing)
