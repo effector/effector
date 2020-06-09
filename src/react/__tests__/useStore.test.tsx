@@ -95,6 +95,7 @@ describe('useStore', () => {
     const fx = createEffect({
       handler: () => new Promise(rs => setTimeout(rs, 200)),
     })
+    const count = createStore(0).on(fx, x => x + 1)
     const Inner = () => {
       React.useLayoutEffect(() => {
         fx()
@@ -103,13 +104,13 @@ describe('useStore', () => {
       return null
     }
     const App = () => {
-      const pending = useStore(fx.pending)
-      fn(pending)
+      const value = useStore(count)
+      fn(value)
       return (
-        <>
-          {String(pending).toUpperCase()}
+        <p>
+          Final value: {value}
           <Inner />
-        </>
+        </p>
       )
     }
 
@@ -117,7 +118,13 @@ describe('useStore', () => {
       await render(<App />)
       await new Promise(rs => setTimeout(rs, 500))
     })
-    expect(argumentHistory(fn)).toEqual([false, true, false])
+    expect(container.firstChild).toMatchInlineSnapshot(`
+      <p>
+        Final value: 
+        1
+      </p>
+    `)
+    expect(argumentHistory(fn)).toEqual([0, 1])
   })
   it('should support domains', async () => {
     const domain = createDomain()
