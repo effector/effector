@@ -4,19 +4,21 @@ import {
   ThisTypedComponentOptionsWithRecordProps,
 } from 'vue/types/options'
 import {ExtendedVue} from 'vue/types/vue'
-import {Store, Event} from 'effector'
+import {Store, Unit} from 'effector'
 
 type Inference<EffectorState> = EffectorState extends Store<infer State>
   ? State
   : EffectorState extends {[storeName: string]: Store<any>}
   ? {[K in keyof EffectorState]: EffectorState[K] extends Store<infer U> ? U : never}
-  : never
+  : EffectorState extends Unit<infer State>
+  ? number
+  : never;
 
-type EffectorType = Store<any> | {[key: string]: Store<any> | Event<any>} | (() => Store<any>)
+type EffectorType = Store<any> | {[key: string]: Store<any> | Unit<any>} | (() => Store<any> | Unit<any>)
 
-type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State>) | Store<infer State>
+type ExpandType<V extends Vue, EffectorState extends EffectorType> = EffectorState extends ((this: V) => Store<infer State> | Unit<infer State>) | Store<infer State> | Unit<infer State>
   ? {state: State}
-  : EffectorState extends {[storeName: string]: Store<any>}
+  : EffectorState extends {[storeName: string]: Store<any> | Unit<any>}
   ? {[Key in keyof EffectorState]: Inference<EffectorState[Key]>}
   : never
 
@@ -94,7 +96,7 @@ declare function createComponent<
 ): ExtendedVue<V, Data, Methods, Computed, PropNames>
 
 declare function createComponent<
-  S extends {[field: string]: Store<any> | Event<any>},
+  S extends {[field: string]: Store<any> | Unit<any>},
   V extends Vue,
   Data,
   Methods,
@@ -111,7 +113,7 @@ declare function createComponent<
   store?: S,
 ): ExtendedVue<Inference<S> & V, Data, Methods, Computed, Props>
 declare function createComponent<
-  S extends {[field: string]: Store<any> | Event<any>},
+  S extends {[field: string]: Store<any> | Unit<any>},
   V extends Vue,
   Data,
   Methods,
