@@ -10,7 +10,7 @@ Namespace for unit validators
 
 ## `is.store(value)`
 
-Checks if the passed object is [_store_](Store.md)
+Checks if given value is [_store_](Store.md)
 
 #### Returns
 
@@ -58,7 +58,7 @@ is.store(null)
 
 ## `is.event(value)`
 
-Checks if the passed object is [_event_](Event.md)
+Checks if given value is [_event_](Event.md)
 
 #### Returns
 
@@ -106,7 +106,7 @@ is.event(null)
 
 ## `is.effect(value)`
 
-Checks if the passed object is [_effect_](Effect.md)
+Checks if given value is [_effect_](Effect.md)
 
 #### Returns
 
@@ -145,7 +145,7 @@ is.effect(null)
 
 ## `is.domain(value)`
 
-Checks if the passed object is [_domain_](Domain.md)
+Checks if given value is [_domain_](Domain.md)
 
 #### Returns
 
@@ -184,7 +184,7 @@ is.domain(null)
 
 ## `is.unit(value)`
 
-Checks if the passed object is [_event_](Event.md), [_store_](Store.md), [_effect_](Effect.md) or [_domain_](Domain.md)
+Checks if given value is [_event_](Event.md), [_store_](Store.md), [_effect_](Effect.md) or [_domain_](Domain.md)
 
 #### Returns
 
