@@ -646,6 +646,12 @@ export function guard<Source, Result extends Source>(
     filter: (value: Source) => value is Result
   },
 ): EventAsReturnType<Result>
+export function guard<Source>(
+  source: Unit<Source>,
+  config: {
+    filter: typeof Boolean
+  },
+): EventAsReturnType<NonNullable<Source>>
 export function guard<A>(
   source: Unit<A>,
   config: {
@@ -659,6 +665,13 @@ export function guard<Source, Result extends Source>(
     target: Unit<Result>
   },
 ): Unit<Result>
+export function guard<Source>(
+  source: Unit<Source>,
+  config: {
+    filter: typeof Boolean
+    target: Unit<NonNullable<Source>>
+  },
+): Unit<NonNullable<Source>>
 export function guard<A>(
   source: Unit<A>,
   config: {
@@ -680,6 +693,10 @@ export function guard<Source, Result extends Source>(config: {
   source: Unit<Source>
   filter: (value: Source) => value is Result
 }): EventAsReturnType<Result>
+export function guard<Source>(config: {
+  source: Unit<Source>
+  filter: typeof Boolean
+}): EventAsReturnType<NonNullable<Source>>
 export function guard<A>(config: {
   source: Unit<A>
   filter: Store<boolean> | ((value: A) => boolean)
@@ -689,6 +706,11 @@ export function guard<Source, Result extends Source>(config: {
   filter: (value: Source) => value is Result
   target: Unit<Result>
 }): Unit<Result>
+export function guard<Source>(config: {
+  source: Unit<Source>
+  filter: typeof Boolean
+  target: Unit<NonNullable<Source>>
+}): Unit<NonNullable<Source>>
 export function guard<A>(config: {
   source: Unit<A>
   filter: Store<boolean> | ((value: A) => boolean)
