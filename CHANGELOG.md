@@ -2,6 +2,25 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.16.1
+
+- Allow typescript to refine type if `guard` got `Boolean` (a function) as `filter`
+
+```typescript
+import {createEvent, createStore, guard} from 'effector'
+
+type User = {name: string}
+
+const trigger = createEvent<User | null>()
+const user = createStore<User>({name: 'alice'})
+
+guard({
+  source: trigger,
+  filter: Boolean,
+  target: user,
+})
+```
+
 ## effector-react 20.7.4
 
 - Improve [useStore](https://effector.now.sh/docs/api/effector-react/useStore) support for [React.StrictMode](https://reactjs.org/docs/strict-mode.html)
