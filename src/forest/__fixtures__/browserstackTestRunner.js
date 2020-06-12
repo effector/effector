@@ -7,6 +7,8 @@ const {promises} = require('fs')
 // const jasmine2 = require('jest-jasmine2')
 const {remote} = require('webdriverio')
 
+const prettyHtml = require('../../fixtures/prettyHtml')
+
 const browserStackConfig = {
   user: process.env.BROWSERSTACK_USERNAME,
   key: process.env.BROWSERSTACK_ACCESS_KEY,
@@ -131,7 +133,10 @@ module.exports = class BSTestRunner extends require('jest-runner') {
           execFunc(`async () => {
             await (${typeof cb === 'function' ? cb.toString() : cb})()
             return domSnapshots
-          }`)
+          }`).then(result => {
+            if (Array.isArray(result)) return result.map(prettyHtml)
+            return result
+          })
 
         test.context.config = {
           ...test.context.config,

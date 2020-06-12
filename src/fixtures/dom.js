@@ -1,5 +1,7 @@
 import {JSDOM} from 'jsdom'
 
+import prettyHtml from './prettyHtml'
+
 export const provideGlobals = () => {
   const dom = new JSDOM(`<!DOCTYPE html><body><div id="root"></div></body>`, {
     pretendToBeVisual: true,
@@ -31,7 +33,7 @@ export const provideGlobals = () => {
     } finally {
       restoreDocument(oldDocument)
     }
-    return domSnapshots
+    return domSnapshots.map(prettyHtml)
   }
   const act = async cb => {
     if (cb) {
