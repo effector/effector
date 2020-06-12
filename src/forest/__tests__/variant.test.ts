@@ -151,14 +151,6 @@ test('nested variants', async () => {
           login() {
             h('header', () => {
               h('h1', {text: 'Login page'})
-              // h('button', {
-              //   text: 'Go /login/email',
-              //   handler: {click: goEmail}
-              // })
-              // h('button', {
-              //   text: 'Go /login/pass',
-              //   handler: {click: goPass}
-              // })
             })
             variant({
               source: step,
