@@ -50,17 +50,17 @@ describe('update store from nested block', () => {
       })
       expect(s1).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked:</b><b id=\\"b\\">b clicked:</b>
+        <b id='a'>a clicked:</b><b id='b'>b clicked:</b>
         "
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked: a</b><b id=\\"b\\">b clicked: a</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked: a</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked: a b</b><b id=\\"b\\">b clicked: a b</b>
+        <b id='a'>a clicked: a b</b><b id='b'>b clicked: a b</b>
         "
       `)
     })
@@ -111,20 +111,20 @@ describe('update store from nested block', () => {
       })
       expect(s1).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked:</b><b id=\\"Ab\\">Ab clicked:</b
-        ><b id=\\"Ba\\">Ba clicked:</b><b id=\\"Bb\\">Bb clicked:</b>
+        <b id='Aa'>Aa clicked:</b><b id='Ab'>Ab clicked:</b
+        ><b id='Ba'>Ba clicked:</b><b id='Bb'>Bb clicked:</b>
         "
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked: Aa</b><b id=\\"Ab\\">Ab clicked: Aa</b
-        ><b id=\\"Ba\\">Ba clicked:</b><b id=\\"Bb\\">Bb clicked:</b>
+        <b id='Aa'>Aa clicked: Aa</b><b id='Ab'>Ab clicked: Aa</b
+        ><b id='Ba'>Ba clicked:</b><b id='Bb'>Bb clicked:</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked: Aa</b><b id=\\"Ab\\">Ab clicked: Aa</b
-        ><b id=\\"Ba\\">Ba clicked: Bb</b><b id=\\"Bb\\">Bb clicked: Bb</b>
+        <b id='Aa'>Aa clicked: Aa</b><b id='Ab'>Ab clicked: Aa</b
+        ><b id='Ba'>Ba clicked: Bb</b><b id='Bb'>Bb clicked: Bb</b>
         "
       `)
     })
@@ -162,17 +162,17 @@ describe('update store from nested block', () => {
       })
       expect(s1).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked:</b><b id=\\"b\\">b clicked:</b>
+        <b id='a'>a clicked:</b><b id='b'>b clicked:</b>
         "
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked: a</b><b id=\\"b\\">b clicked: a</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked: a</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id=\\"a\\">a clicked: a b</b><b id=\\"b\\">b clicked: a b</b>
+        <b id='a'>a clicked: a b</b><b id='b'>b clicked: a b</b>
         "
       `)
     })
@@ -221,20 +221,20 @@ describe('update store from nested block', () => {
       })
       expect(s1).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked:</b><b id=\\"Ab\\">Ab clicked:</b
-        ><b id=\\"Ba\\">Ba clicked:</b><b id=\\"Bb\\">Bb clicked:</b>
+        <b id='Aa'>Aa clicked:</b><b id='Ab'>Ab clicked:</b
+        ><b id='Ba'>Ba clicked:</b><b id='Bb'>Bb clicked:</b>
         "
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked: Aa</b><b id=\\"Ab\\">Ab clicked: Aa</b
-        ><b id=\\"Ba\\">Ba clicked:</b><b id=\\"Bb\\">Bb clicked:</b>
+        <b id='Aa'>Aa clicked: Aa</b><b id='Ab'>Ab clicked: Aa</b
+        ><b id='Ba'>Ba clicked:</b><b id='Bb'>Bb clicked:</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id=\\"Aa\\">Aa clicked: Aa</b><b id=\\"Ab\\">Ab clicked: Aa</b
-        ><b id=\\"Ba\\">Ba clicked: Bb</b><b id=\\"Bb\\">Bb clicked: Bb</b>
+        <b id='Aa'>Aa clicked: Aa</b><b id='Ab'>Ab clicked: Aa</b
+        ><b id='Ba'>Ba clicked: Bb</b><b id='Bb'>Bb clicked: Bb</b>
         "
       `)
     })

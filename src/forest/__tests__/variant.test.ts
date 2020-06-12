@@ -179,8 +179,8 @@ test('nested variants', async () => {
   expect(s1).toMatchInlineSnapshot(`
     "
     <header>
-      <button id=\\"go_main\\">Go /main</button
-      ><button id=\\"go_login\\">Go /login</button>
+      <button id='go_main'>Go /main</button
+      ><button id='go_login'>Go /login</button>
     </header>
     <h1>Main page</h1>
     "
@@ -188,8 +188,8 @@ test('nested variants', async () => {
   expect(s2).toMatchInlineSnapshot(`
     "
     <header>
-      <button id=\\"go_main\\">Go /main</button
-      ><button id=\\"go_login\\">Go /login</button>
+      <button id='go_main'>Go /main</button
+      ><button id='go_login'>Go /login</button>
     </header>
     <header><h1>Login page</h1></header>
     <div>email</div>
@@ -198,8 +198,8 @@ test('nested variants', async () => {
   expect(s3).toMatchInlineSnapshot(`
     "
     <header>
-      <button id=\\"go_main\\">Go /main</button
-      ><button id=\\"go_login\\">Go /login</button>
+      <button id='go_main'>Go /main</button
+      ><button id='go_login'>Go /login</button>
     </header>
     <h1>Main page</h1>
     "
