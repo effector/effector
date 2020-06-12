@@ -50,21 +50,41 @@ it('support list sequences without keys', async () => {
       removeTeamAMember('carol')
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s2).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div><div>carol</div>"`,
-  )
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s3).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div><div>carol</div>"`,
-  )
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    <div>charlie</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s4).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>charlie</div><div>carol</div>"`,
-  )
+  expect(s4).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>charlie</div>
+    <div>carol</div>
+    "
+  `)
 })
 it('support list sequences with keys', async () => {
   const [s1, s2, s3, s4] = await exec(async () => {
@@ -102,21 +122,41 @@ it('support list sequences with keys', async () => {
       removeTeamAMember('carol')
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s2).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div><div>carol</div>"`,
-  )
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s3).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>carol</div><div>charlie</div><div>carol</div>"`,
-  )
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>carol</div>
+    <div>charlie</div>
+    <div>carol</div>
+    "
+  `)
 
-  expect(s4).toMatchInlineSnapshot(
-    `"<div>alice</div><div>bob</div><div>charlie</div><div>carol</div>"`,
-  )
+  expect(s4).toMatchInlineSnapshot(`
+    "
+    <div>alice</div>
+    <div>bob</div>
+    <div>charlie</div>
+    <div>carol</div>
+    "
+  `)
 })
 it('support text nodes', async () => {
   const [s1] = await exec(async () => {
@@ -128,7 +168,11 @@ it('support text nodes', async () => {
     })
     await act()
   })
-  expect(s1).toMatchInlineSnapshot(`""`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+
+    "
+  `)
 })
 describe('support visible changes', () => {
   it('works with non-keyed list', async () => {
@@ -239,7 +283,12 @@ it('create list from [fn] option', async () => {
     })
     await act()
   })
-  expect(s1).toMatchInlineSnapshot(`"<li>alice</li><li>bob</li>"`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <li>alice</li>
+    <li>bob</li>
+    "
+  `)
 })
 it('insert its items before sibling nodes', async () => {
   const [s1, s2] = await exec(async () => {
@@ -259,10 +308,19 @@ it('insert its items before sibling nodes', async () => {
       addUser('carol')
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<p>alice</p><p>bob</p><footer>Users</footer>"`,
-  )
-  expect(s2).toMatchInlineSnapshot(
-    `"<p>alice</p><p>bob</p><p>carol</p><footer>Users</footer>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <p>alice</p>
+    <p>bob</p>
+    <footer>Users</footer>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <p>alice</p>
+    <p>bob</p>
+    <p>carol</p>
+    <footer>Users</footer>
+    "
+  `)
 })

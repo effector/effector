@@ -35,9 +35,16 @@ it('works', async () => {
     })
     await act()
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<header><h1>App title</h1></header><ul><li>alice</li><li>bob</li><li>carol</li></ul>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <header><h1>App title</h1></header>
+    <ul>
+      <li>alice</li>
+      <li>bob</li>
+      <li>carol</li>
+    </ul>
+    "
+  `)
 })
 
 it('update content after store update', async () => {
@@ -54,8 +61,16 @@ it('update content after store update', async () => {
       updateText('updated')
     })
   })
-  expect(s1).toMatchInlineSnapshot(`"<div>text value</div>"`)
-  expect(s2).toMatchInlineSnapshot(`"<div>updated</div>"`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>text value</div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>updated</div>
+    "
+  `)
 })
 
 it('support reactive style properties', async () => {
@@ -76,27 +91,18 @@ it('support reactive style properties', async () => {
       updateAlign('center')
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: start;\\">content</div>"`,
-  )
-  expect(s2).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: center;\\">content</div>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div style=\\"justify-self: start;\\">content</div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div style=\\"justify-self: center;\\">content</div>
+    "
+  `)
 })
 
-it('works with browserstack', async () => {
-  const [s1] = await exec(async () => {
-    const text = createStore('effector-dom app')
-
-    using(el, () => {
-      h('div', {
-        text,
-      })
-    })
-    await act()
-  })
-  expect(s1).toBe('<div>effector-dom app</div>')
-})
 it('support reactive style variables', async () => {
   const [s1, s2] = await exec(async () => {
     const updateAlign = createEvent<string>()
@@ -118,12 +124,20 @@ it('support reactive style variables', async () => {
       updateAlign('center')
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: var(--align); --align: start;\\">content</div>"`,
-  )
-  expect(s2).toMatchInlineSnapshot(
-    `"<div style=\\"justify-self: var(--align); --align: center;\\">content</div>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div style=\\"justify-self: var(--align); --align: start;\\">
+      content
+    </div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div style=\\"justify-self: var(--align); --align: center;\\">
+      content
+    </div>
+    "
+  `)
 })
 
 it.skip('remove watch calls after node removal', async () => {
@@ -232,9 +246,17 @@ describe('node reader', () => {
       })
       await act()
     })
-    expect(s1).toMatchInlineSnapshot(
-      `"<div></div><dl><dt>is connected</dt><dd>true</dd><dt>has parent</dt><dd>true</dd></dl>"`,
-    )
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <div></div>
+      <dl>
+        <dt>is connected</dt>
+        <dd>true</dd>
+        <dt>has parent</dt>
+        <dd>true</dd>
+      </dl>
+      "
+    `)
   })
 })
 
@@ -323,6 +345,14 @@ it('support multiply text nodes', async () => {
       trigger()
     })
   })
-  expect(s1).toMatchInlineSnapshot(`"<div>aaabbb</div>"`)
-  expect(s2).toMatchInlineSnapshot(`"<div>ccccdddd</div>"`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>aaabbb</div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>ccccdddd</div>
+    "
+  `)
 })

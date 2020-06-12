@@ -146,7 +146,19 @@ test('tree', async () => {
     })
     await act()
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<h1><span>Title</span></h1><ul><li><b><span>Foo</span></b><span>: </span><span>item one</span></li><li><b><span>Bar</span></b><span>: </span><span>item two</span></li></ul>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <h1><span>Title</span></h1>
+    <ul>
+      <li>
+        <b><span>Foo</span></b
+        ><span>: </span><span>item one</span>
+      </li>
+      <li>
+        <b><span>Bar</span></b
+        ><span>: </span><span>item two</span>
+      </li>
+    </ul>
+    "
+  `)
 })

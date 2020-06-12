@@ -46,8 +46,19 @@ it('support visible as dom node property', async () => {
       toggleVisible('b')
     })
   })
-  expect(s1).toMatchInlineSnapshot(`"<p>a</p><p>c</p>"`)
-  expect(s2).toMatchInlineSnapshot(`"<p>a</p><p>b</p><p>c</p>"`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <p>a</p>
+    <p>c</p>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <p>a</p>
+    <p>b</p>
+    <p>c</p>
+    "
+  `)
 })
 it('support visible as list item property', async () => {
   const [s1, s2] = await exec(async () => {
@@ -82,8 +93,23 @@ it('support visible as list item property', async () => {
       toggleVisible('b')
     })
   })
-  expect(s1).toMatchInlineSnapshot(`"<div><p>a</p><p>c</p></div>"`)
-  expect(s2).toMatchInlineSnapshot(`"<div><p>a</p><p>b</p><p>c</p></div>"`)
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div>
+      <p>a</p>
+      <p>c</p>
+    </div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div>
+      <p>a</p>
+      <p>b</p>
+      <p>c</p>
+    </div>
+    "
+  `)
 })
 test('re-insertion order', async () => {
   const [s1, s2, s3] = await exec(async () => {
@@ -112,11 +138,25 @@ test('re-insertion order', async () => {
       toggleVisible()
     })
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<section><div>aside</div><div>content</div></section>"`,
-  )
-  expect(s2).toMatchInlineSnapshot(`"<section><div>content</div></section>"`)
-  expect(s3).toMatchInlineSnapshot(
-    `"<section><div>aside</div><div>content</div></section>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <section>
+      <div>aside</div>
+      <div>content</div>
+    </section>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <section><div>content</div></section>
+    "
+  `)
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <section>
+      <div>aside</div>
+      <div>content</div>
+    </section>
+    "
+  `)
 })
