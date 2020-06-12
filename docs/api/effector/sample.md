@@ -19,7 +19,7 @@ sample({ source, clock?, fn?, target?}): target
 
 When `clock` is triggered, read the value from `source` and trigger `target` with it.
 
-- If the `clock` is not passed, sample will be trigged on every `target` update.
+- If the `clock` is not passed, sample will be trigged on every `source` update.
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
