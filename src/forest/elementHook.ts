@@ -1092,16 +1092,20 @@ export function route<T>({
                 page: leaf.spawn,
               })
             }
-            iterateChildLeafs(leaf, child => {
+            const childLeafIterator = (child: Leaf) => {
               const data = child.data
               switch (data.type) {
                 case 'element':
                   pushOpToQueue(visible, data.ops.visible)
                   break
+                case 'route':
+                  iterateChildLeafs(child, childLeafIterator)
+                  break
                 default:
                   console.log('unsupported type', data.type)
               }
-            })
+            }
+            iterateChildLeafs(leaf, childLeafIterator)
           })
           sample({
             source: mount,

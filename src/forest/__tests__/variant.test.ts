@@ -210,7 +210,6 @@ test('nested variants', async () => {
       ><button id=\\"go_login\\">Go /login</button>
     </header>
     <h1>Main page</h1>
-    <div>email</div>
     "
   `)
 })
