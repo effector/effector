@@ -1,5 +1,5 @@
 import {render, createEnv} from './customDocument'
-import {using} from 'effector-dom'
+import {using} from 'forest'
 
 export function renderStatic(fn: () => void) {
   const env = createEnv()
