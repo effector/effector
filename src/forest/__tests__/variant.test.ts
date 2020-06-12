@@ -1,5 +1,5 @@
 import {BrowserObject} from 'webdriverio'
-import {createStore, createEvent} from 'effector'
+import {createStore, createEvent, createApi} from 'effector'
 import {h, using, list, remap, variant} from 'effector-dom'
 
 // let addGlobals: Function
@@ -116,4 +116,101 @@ test('with key function', async () => {
   expect(s2).toMatchInlineSnapshot(
     `"<p><div><span>Bold: </span></div><div><i>text</i></div></p>"`,
   )
+})
+
+test('nested variants', async () => {
+  const [s1, s2, s3] = await exec(async () => {
+    const currentRoute = createStore({name: 'main'})
+    const {goMain, goLogin} = createApi(currentRoute, {
+      goMain: () => ({name: 'main'}),
+      goLogin: () => ({name: 'login'}),
+    })
+
+    const step = createStore({name: 'email'})
+
+    using(el, () => {
+      h('header', () => {
+        h('button', {
+          attr: {id: 'go_main'},
+          text: 'Go /main',
+          handler: {click: goMain as any},
+        })
+        h('button', {
+          attr: {id: 'go_login'},
+          text: 'Go /login',
+          handler: {click: goLogin as any},
+        })
+      })
+      variant({
+        source: currentRoute,
+        key: 'name',
+        cases: {
+          main() {
+            h('h1', {text: 'Main page'})
+          },
+          login() {
+            h('header', () => {
+              h('h1', {text: 'Login page'})
+              // h('button', {
+              //   text: 'Go /login/email',
+              //   handler: {click: goEmail}
+              // })
+              // h('button', {
+              //   text: 'Go /login/pass',
+              //   handler: {click: goPass}
+              // })
+            })
+            variant({
+              source: step,
+              key: 'name',
+              cases: {
+                email() {
+                  h('div', {text: 'email'})
+                },
+                pass() {
+                  h('div', {text: 'pass'})
+                },
+              },
+            })
+          },
+        },
+      })
+    })
+    await act()
+    await act(() => {
+      document.getElementById('go_login')!.click()
+    })
+    await act(() => {
+      document.getElementById('go_main')!.click()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id=\\"go_main\\">Go /main</button
+      ><button id=\\"go_login\\">Go /login</button>
+    </header>
+    <h1>Main page</h1>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id=\\"go_main\\">Go /main</button
+      ><button id=\\"go_login\\">Go /login</button>
+    </header>
+    <header><h1>Login page</h1></header>
+    <div>email</div>
+    "
+  `)
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id=\\"go_main\\">Go /main</button
+      ><button id=\\"go_login\\">Go /login</button>
+    </header>
+    <h1>Main page</h1>
+    <div>email</div>
+    "
+  `)
 })
