@@ -141,12 +141,12 @@ test('rec visible support', async () => {
     })
     await act()
     //@ts-ignore
-    printLeaf(rootLeaf)
+    // printLeaf(rootLeaf)
     await act(() => {
       toggleNestedRows()
     })
     //@ts-ignore
-    printLeaf(rootLeaf)
+    // printLeaf(rootLeaf)
 
     function printLeaf(leaf: Leaf) {
       const rows = [] as string[]
