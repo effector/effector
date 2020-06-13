@@ -140,7 +140,7 @@ it('support reactive style variables', async () => {
   `)
 })
 
-it('remove watch calls after node removal', async () => {
+it.skip('remove watch calls after node removal', async () => {
   const [s1, s2, s3, s4] = await exec(async () => {
     const tick = createEvent<number>()
     const logRecord = createEvent<string>()
