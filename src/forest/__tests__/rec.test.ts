@@ -17,7 +17,7 @@ beforeEach(async () => {
   await initBrowser()
 }, 10e3)
 
-test('rec visible support', async () => {
+test.skip('rec visible support', async () => {
   const [s1, s2] = await exec(async () => {
     const toggleNestedRows = createEvent()
     const nestedRowsVisible = createStore(true).on(
@@ -176,7 +176,7 @@ test('rec visible support', async () => {
   `)
 })
 
-test('rec style update support', async () => {
+test.skip('rec style update support', async () => {
   const [s1, s2] = await exec(async () => {
     const toggleNestedRows = createEvent()
     const nestedRowsVisible = createStore(true).on(
