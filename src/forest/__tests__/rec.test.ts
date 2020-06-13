@@ -17,7 +17,7 @@ beforeEach(async () => {
   await initBrowser()
 }, 10e3)
 
-test.skip('rec visible support', async () => {
+test('rec visible support', async () => {
   const [s1, s2] = await exec(async () => {
     const toggleNestedRows = createEvent()
     const nestedRowsVisible = createStore(true).on(
@@ -175,9 +175,6 @@ test.skip('rec visible support', async () => {
           case 'route': {
             break
           }
-          case 'tree': {
-            break
-          }
           case 'rec item': {
             break
           }
@@ -209,10 +206,30 @@ test.skip('rec visible support', async () => {
       }
     }
   })
-  expect(s1).toMatchInlineSnapshot(
-    `"<div style=\\"--level: 0em;\\">a 0 visible</div><div style=\\"--level: 1em;\\">a_a 1 visible</div><div style=\\"--level: 1em;\\">a_b 1 visible</div><div style=\\"--level: 2em;\\">a_b_a 2 visible</div><div style=\\"--level: 0em;\\">b 0 visible</div><div style=\\"--level: 1em;\\">b_a 1 visible</div><div style=\\"--level: 1em;\\">b_b 1 visible</div><div style=\\"--level: 2em;\\">b_b_a 2 visible</div><div style=\\"--level: 0em;\\">c 0 visible</div>"`,
-  )
-  expect(s2).toMatchInlineSnapshot(
-    `"<div style=\\"--level: 0em;\\">a 0 visible</div><div style=\\"--level: 1em;\\">a_a 1 hidden</div><div style=\\"--level: 1em;\\">a_b 1 visible</div><div style=\\"--level: 2em;\\">a_b_a 2 visible</div><div style=\\"--level: 0em;\\">b 0 visible</div><div style=\\"--level: 1em;\\">b_a 1 hidden</div><div style=\\"--level: 1em;\\">b_b 1 visible</div><div style=\\"--level: 2em;\\">b_b_a 2 visible</div><div style=\\"--level: 0em;\\">c 0 visible</div>"`,
-  )
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <div style='--level: 0em;'>a 0 visible</div>
+    <div style='--level: 1em;'>a_a 1 visible</div>
+    <div style='--level: 1em;'>a_b 1 visible</div>
+    <div style='--level: 2em;'>a_b_a 2 visible</div>
+    <div style='--level: 0em;'>b 0 visible</div>
+    <div style='--level: 1em;'>b_a 1 visible</div>
+    <div style='--level: 1em;'>b_b 1 visible</div>
+    <div style='--level: 2em;'>b_b_a 2 visible</div>
+    <div style='--level: 0em;'>c 0 visible</div>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <div style='--level: 0em;'>a 0 visible</div>
+    <div style='--level: 1em;'>a_a 1 hidden</div>
+    <div style='--level: 1em;'>a_b 1 visible</div>
+    <div style='--level: 2em;'>a_b_a 2 visible</div>
+    <div style='--level: 0em;'>b 0 visible</div>
+    <div style='--level: 1em;'>b_a 1 hidden</div>
+    <div style='--level: 1em;'>b_b 1 visible</div>
+    <div style='--level: 2em;'>b_b_a 2 visible</div>
+    <div style='--level: 0em;'>c 0 visible</div>
+    "
+  `)
 })
