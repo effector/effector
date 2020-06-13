@@ -150,7 +150,7 @@ export function createEvent<Payload>(
     applyParentEventHook(event, contramapped)
     return contramapped
   }
-  addObservableApi(event, event)
+  addObservableApi(event)
   const template = readTemplate()
   if (template) {
     getGraph(event).meta.nativeTemplate = template
@@ -262,7 +262,24 @@ export function createStore<State>(
       }
       return innerStore
     },
-    [$$observable]: () => addObservableApi(store, {}),
+    watch(eventOrFn: Event<any> | Function, fn?: Function) {
+      if (!fn || !is.unit(eventOrFn)) {
+        if (!isFunction(eventOrFn))
+          throwError('watch requires function handler')
+        const template = readTemplate()
+        if (template) {
+          template.watch.push({
+            of: plainState,
+            fn: eventOrFn,
+          })
+        } else {
+          eventOrFn(store.getState())
+        }
+        return watchUnit(store, eventOrFn)
+      }
+      if (!isFunction(fn)) throwError('second argument should be a function')
+      return eventOrFn.watch(payload => fn(store.getState(), payload))
+    },
   }
   function onEvent(event, fn) {
     store.off(event)
@@ -293,41 +310,25 @@ export function createStore<State>(
   if (template) {
     getGraph(store).meta.nativeTemplate = template
   }
-  store.watch = store.subscribe = (
-    eventOrFn: Event<any> | Function,
-    fn?: Function,
-  ) => {
-    if (!fn || !is.unit(eventOrFn)) {
-      if (!isFunction(eventOrFn)) throwError('watch requires function handler')
-      const template = readTemplate()
-      if (template) {
-        template.watch.push({
-          of: plainState,
-          fn: eventOrFn,
-        })
-      } else {
-        eventOrFn(store.getState())
-      }
-      return watchUnit(store, eventOrFn)
-    }
-    if (!isFunction(fn)) throwError('second argument should be a function')
-    return eventOrFn.watch(payload => fn(store.getState(), payload))
-  }
+  addObservableApi(store)
   own(store, [updates])
   return addToRegion(store)
 }
 
-const addObservableApi = (unit, target) => {
-  target.subscribe = (observer: Subscriber<any>) => {
+const addObservableApi = unit => {
+  unit.subscribe = (observer: Subscriber<any>) => {
     assertObject(observer)
-    return unit.watch(upd => {
-      if (observer.next) {
-        observer.next(upd)
-      }
-    })
+    return unit.watch(
+      isFunction(observer)
+        ? observer
+        : upd => {
+            if (observer.next) {
+              observer.next(upd)
+            }
+          },
+    )
   }
-  target[$$observable] = () => target
-  return target
+  unit[$$observable] = () => unit
 }
 
 const updateStore = (
