@@ -1,7 +1,5 @@
 //@flow
 
-import {from, periodic} from 'most'
-
 import {combine, createDomain, createEvent, createStore} from 'effector'
 
 import {argumentHistory} from 'effector/fixtures'
@@ -233,7 +231,7 @@ test('no dull updates', () => {
   expect(fn3).toHaveBeenCalledTimes(5)
 })
 
-test('smoke', async() => {
+test('smoke', async () => {
   const used = jest.fn(x => Promise.resolve(x))
   const usedDone = jest.fn(x => Promise.resolve(x))
   const domain = createDomain()
@@ -248,58 +246,4 @@ test('smoke', async() => {
   await effect('foo')
   expect(used).toHaveBeenCalledTimes(1)
   expect(usedDone).toHaveBeenCalledTimes(1)
-})
-
-describe('port', () => {
-  test('port should work correctly', async() => {
-    const used = jest.fn()
-    const usedEff = jest.fn()
-    const domain = createDomain()
-    const event = domain.createEvent()
-    const eff = domain.createEvent()
-    event.watch(used)
-    eff.watch(usedEff)
-    const str$ = periodic(100)
-      .scan(a => a + 1, 0)
-      .take(10)
-
-    str$.map(event).drain()
-    await new Promise(rs => setTimeout(rs, 1500))
-    expect(used).toHaveBeenCalledTimes(10)
-
-    str$.map(eff).drain()
-    await new Promise(rs => setTimeout(rs, 1500))
-    expect(usedEff).toHaveBeenCalledTimes(10)
-  })
-})
-
-it('works with most use cases', async() => {
-  const fn = jest.fn()
-  const timeout = createEvent()
-  timeout.watch(fn)
-
-  await periodic(300)
-    .take(5)
-    .observe(() => timeout())
-
-  expect(fn).toHaveBeenCalledTimes(5)
-})
-
-test('subscription', async() => {
-  const fn = jest.fn()
-
-  const domain = createDomain()
-
-  const eff = domain.createEffect()
-  eff.use(() => {})
-  expect(() => {
-    from(eff).observe(fn)
-  }).not.toThrow()
-  const event = domain.createEvent()
-  expect(() => {
-    from(event).observe(fn)
-  }).not.toThrow()
-  await event('')
-  await eff('')
-  expect(fn).toHaveBeenCalledTimes(2)
 })

@@ -135,7 +135,7 @@ const babelConfig = {
           filename &&
           filename.includes('__tests__') &&
           !filename.includes('browserstack') &&
-          !filename.includes('fromObservable')
+          !filename.includes('observable')
         )
       },
       plugins: [
