@@ -74,6 +74,21 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
   unit.defaultConfig = config
   unit.thru = fn => fn(unit)
   unit.getType = () => compositeName.fullName
+  if (kind !== 'domain') {
+    unit.subscribe = (observer: Subscriber<any>) => {
+      assertObject(observer)
+      return unit.watch(
+        isFunction(observer)
+          ? observer
+          : upd => {
+              if (observer.next) {
+                observer.next(upd)
+              }
+            },
+      )
+    }
+    unit[$$observable] = () => unit
+  }
   isStrict = strict
   return {unit: kind, name, sid, named}
 }
@@ -150,7 +165,6 @@ export function createEvent<Payload>(
     applyParentEventHook(event, contramapped)
     return contramapped
   }
-  addObservableApi(event)
   const template = readTemplate()
   if (template) {
     getGraph(event).meta.nativeTemplate = template
@@ -310,25 +324,8 @@ export function createStore<State>(
   if (template) {
     getGraph(store).meta.nativeTemplate = template
   }
-  addObservableApi(store)
   own(store, [updates])
   return addToRegion(store)
-}
-
-const addObservableApi = unit => {
-  unit.subscribe = (observer: Subscriber<any>) => {
-    assertObject(observer)
-    return unit.watch(
-      isFunction(observer)
-        ? observer
-        : upd => {
-            if (observer.next) {
-              observer.next(upd)
-            }
-          },
-    )
-  }
-  unit[$$observable] = () => unit
 }
 
 const updateStore = (
