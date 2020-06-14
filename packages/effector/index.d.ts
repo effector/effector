@@ -155,7 +155,7 @@ export interface Store<State> extends Unit<State> {
     handler: (state: State, payload: E) => State | void,
   ): this
   off(trigger: Unit<any>): this
-  subscribe(listener: (state: State) => any): Subscription
+  subscribe(listener: Observer<State> | ((state: State) => any)): Subscription
   updates: Event<State>
   watch<E>(watcher: (state: State, payload: undefined) => any): Subscription
   watch<E>(
