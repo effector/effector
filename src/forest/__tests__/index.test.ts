@@ -103,6 +103,49 @@ it('support reactive style properties', async () => {
   `)
 })
 
+describe('node(event) + upward store update', () => {
+  test('with units inside using', async () => {
+    const result = await execFunc(async () => {
+      let result = '--'
+      using(el, () => {
+        const update = createEvent<string>()
+        const target = createStore('--').on(update, (_, upd) => upd)
+        target.watch(value => {
+          result = value
+        })
+        h('div', () => {
+          node(node => {
+            update(node.tagName)
+          })
+        })
+      })
+      await act()
+      return result
+    })
+    expect(result).toMatchInlineSnapshot(`"--"`)
+  })
+  test('with units in root', async () => {
+    const result = await execFunc(async () => {
+      let result = '--'
+      const update = createEvent<string>()
+      const target = createStore('--').on(update, (_, upd) => upd)
+      target.watch(value => {
+        result = value
+      })
+      using(el, () => {
+        h('div', () => {
+          node(node => {
+            update(node.tagName)
+          })
+        })
+      })
+      await act()
+      return result
+    })
+    expect(result).toMatchInlineSnapshot(`"DIV"`)
+  })
+})
+
 it('support reactive style variables', async () => {
   const [s1, s2] = await exec(async () => {
     const updateAlign = createEvent<string>()
