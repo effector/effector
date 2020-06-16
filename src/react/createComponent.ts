@@ -19,6 +19,7 @@ export function createComponent<Props, State>(
     store = shape
   } else if (typeof shape === 'function') {
     storeFn = shape as any
+    console.error('storeFactory is deprecated')
   } else {
     if (typeof shape === 'object' && shape !== null) {
       store = combine(shape)
