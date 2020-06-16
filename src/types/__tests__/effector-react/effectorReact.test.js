@@ -85,7 +85,6 @@ test('createGate', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Type '\\"foo\\"' has no properties in common with type '{ defaultState?: number | undefined; name?: string | undefined; }'.
     Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.

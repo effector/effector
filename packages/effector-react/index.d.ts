@@ -43,7 +43,7 @@ export function useList<T>(
 
 export function useGate<Props>(Gate: Gate<Props>, props?: Props): void
 
-export function createGate<Props extends object>(name?: string): Gate<Props>
+export function createGate<Props>(name?: string): Gate<Props>
 export function createGate<Props>(config: {
   defaultState?: Props
   name?: string
