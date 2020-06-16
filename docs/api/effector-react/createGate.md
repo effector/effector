@@ -4,17 +4,34 @@ title: createGate
 hide_title: true
 ---
 
-# `createGate(name?)`
+# createGate
+
+## `createGate(config?: {defaultState?, name?})`
+
+Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Gate.md#state) will be created with passed value
+
+#### Arguments
+
+`config` (_Object_): Optional configuration object
+
+- `defaultState`: Optional default state for [Gate.state](./Gate.md#state)
+- `name` (_string_): Optional name which will be used as name of created react component
+
+#### Returns
+
+[_Gate_](./Gate.md)
+
+## `createGate(name?)`
 
 Creates a [_`Gate`_](Gate.md)
 
 #### Arguments
 
-1. `name`? (_string_)
+1. `name`? (_string_): Optional name which will be used as name of created react component
 
 #### Returns
 
-(_`Gate`_)
+[_Gate_](./Gate.md)
 
 #### Example
 
