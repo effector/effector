@@ -8,7 +8,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 [createGate({defaultState}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-name)
 
-- Remove `object` rescriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
+- Remove `object` restriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
 
 ```typescript
 import {createGate} from 'effector-react'
