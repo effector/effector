@@ -2,6 +2,22 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.8.0
+
+- Add ability to define default `Gate` state in `createGate` via `defaultState` field
+
+[createGate({defaultState}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-name)
+
+- Remove `object` rescriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
+
+```typescript
+import {createGate} from 'effector-react'
+
+const RouteGate = createGate<string>()
+
+const UserGate = createGate({defaultState: 'guest'})
+```
+
 ## effector 20.16.1
 
 - Allow typescript to refine type if `guard` got `Boolean` (a function) as `filter`
