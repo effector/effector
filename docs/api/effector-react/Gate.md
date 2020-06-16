@@ -12,19 +12,19 @@ Gate can have two states:
 - **Open**, which means mounted
 - **Closed**, which means unmounted
 
-## Gate Methods
-
-### `childGate(childName?)`
-
-Returns child gate which won't render if parent gate is closed.
-
-#### Returns
-
-(Gate): Child gate
-
 <hr />
 
 ## Gate Properties
+
+### `state`
+
+Store with current state of given gate
+
+#### Returns
+
+(`Store<Props>`)
+
+<hr />
 
 ### `open`
 
@@ -53,15 +53,5 @@ Boolean store which show if given gate is mounted.
 #### Returns
 
 (`Store<boolean>`)
-
-<hr />
-
-### `state`
-
-Store with current state of given gate
-
-#### Returns
-
-(`Store<Props>`)
 
 <hr />
