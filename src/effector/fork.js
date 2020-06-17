@@ -9,7 +9,7 @@ import {throwError} from './throw'
 
 import {is, step, launch, createNode} from 'effector'
 
-const stack = []
+let forkPage
 
 /**
 hydrate state on client
@@ -162,24 +162,33 @@ export function serialize(
 
 /** invoke event in scope */
 export function invoke(unit, payload) {
-  if (stack.length === 0) {
+  if (!forkPage) {
     throwError('invoke cannot be called outside of forked .watch')
   }
-  launch(stack[stack.length - 1](unit), payload)
+  launch({
+    target: forkPage.find(unit),
+    params: payload,
+    forkPage,
+  })
 }
 
 /** bind event to scope */
 export function scopeBind(unit) {
-  if (stack.length === 0) {
+  if (!forkPage) {
     throwError('scopeBind cannot be called outside of forked .watch')
   }
-  const result = stack[stack.length - 1](unit)
+  const result = forkPage.find(unit)
+  const savedStack = forkPage
   return payload => {
-    launch(result, payload)
+    launch({
+      target: result,
+      params: payload,
+      forkPage: savedStack,
+    })
   }
 }
 function universalLaunch(unit, payload) {
-  if (stack.length > 0) {
+  if (forkPage) {
     invoke(unit, payload)
   } else {
     launch(unit, payload)
@@ -208,6 +217,12 @@ export function fork(domain, {values, handlers} = {}) {
     domain.onCreateEffect(effect => {
       effect.create = params => {
         const req = createDefer()
+        if (forkPage) {
+          const savedStack = forkPage
+          req.req.finally(() => {
+            forkPage = savedStack
+          })
+        }
         universalLaunch(effect, {params, req})
         return req.req
       }
@@ -338,25 +353,19 @@ function toposort(rawGraph) {
     result.push(node)
   }
 }
-export function allSettled(
-  start,
-  {
-    scope: {
-      find,
-      graphite: {
-        scope: {forkInFlightCounter},
-      },
-    },
-    params: ctx,
-  },
-) {
+export function allSettled(start, {scope, params: ctx}) {
   if (!is.unit(start))
     return Promise.reject(Error('first argument should be unit'))
   const defer = createDefer()
+  defer.parentFork = forkPage
+  const {forkInFlightCounter} = scope.graphite.scope
   forkInFlightCounter.scope.defers.push(defer)
-  const contextStart = find(start)
+  const contextStart = scope.find(start)
+
+  const launchUnits = [contextStart]
+  const launchParams = []
   if (is.effect(start)) {
-    launch(contextStart, {
+    launchParams.push({
       params: ctx,
       req: {
         rs() {},
@@ -364,9 +373,15 @@ export function allSettled(
       },
     })
   } else {
-    launch(contextStart, ctx)
+    launchParams.push(ctx)
   }
-  launch(forkInFlightCounter)
+  launchUnits.push(forkInFlightCounter)
+  launchParams.push(null)
+  launch({
+    target: launchUnits,
+    params: launchParams,
+    forkPage: scope,
+  })
   return defer.req
 }
 function flatGraph(unit) {
@@ -390,6 +405,12 @@ function cloneGraph(unit) {
     inFlight: 0,
     fxID: 0,
   }
+  const forkPageSetter = step.compute({
+    fn(data, _, stack) {
+      forkPage = stack.forkPage
+      return data
+    },
+  })
   const forkInFlightCounter = createNode({
     scope,
     node: [
@@ -415,6 +436,7 @@ function cloneGraph(unit) {
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
             defers.splice(0, defers.length).forEach(defer => {
+              forkPage = defer.parentFork
               defer.rs()
             })
           })
@@ -475,35 +497,21 @@ function cloneGraph(unit) {
       case 'store':
         node.meta.wrapped = wrapStore(node)
         break
+      case 'event':
+        node.seq.unshift(forkPageSetter)
+        break
       case 'effect':
         node.next.push(forkInFlightCounter)
+        node.seq.unshift(forkPageSetter)
         break
       case 'fx': {
         scope.finally.next.push(forkInFlightCounter)
-        const getHandler = scope.getHandler
-        const wrappedHandler = params => {
-          stack.push(findClone)
-          try {
-            return getHandler()(params)
-          } finally {
-            stack.pop()
-          }
-        }
-        scope.getHandler = () => wrappedHandler
+        node.seq.unshift(forkPageSetter)
         break
       }
-      case 'watch': {
-        const handler = scope.fn
-        scope.fn = data => {
-          stack.push(findClone)
-          try {
-            handler(data)
-          } finally {
-            stack.pop()
-          }
-        }
+      case 'watch':
+        node.seq.unshift(forkPageSetter)
         break
-      }
     }
   })
 
