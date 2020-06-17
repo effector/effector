@@ -296,17 +296,19 @@ export type Compute = {
     fn: (data: any, scope: {[field: string]: any}) => any
   }
 }
-export type Step = {
-  next: Array<Step>
+export type Node = {
+  next: Array<Node>
   seq: Array<Cmd>
   scope: {[field: string]: any}
   meta: {[field: string]: any}
   family: {
     type: 'regular' | 'crosslink'
-    links: Step[]
-    owners: Step[]
+    links: Node[]
+    owners: Node[]
   }
 }
+export type Step = Node
+
 export const step: {
   compute(data: {
     fn: (data: any, scope: {[field: string]: any}) => any
@@ -364,22 +366,22 @@ export function merge<T>(events: ReadonlyArray<Unit<T>>): Event<T>
 export function merge<T extends ReadonlyArray<Unit<any>>>(
   events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
-export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
+export function clearNode(unit: Unit<any> | Node, opts?: {deep?: boolean}): void
 export function createNode(opts?: {
   node?: Array<Cmd>
-  parent?: Array<Unit<any> | Step>
-  child?: Array<Unit<any> | Step>
+  parent?: Array<Unit<any> | Node>
+  child?: Array<Unit<any> | Node>
   scope?: {[field: string]: any}
   meta?: {[field: string]: any}
   family?: {
     type?: 'regular' | 'crosslink'
-    owners?: Unit<any> | Step | Array<Unit<any> | Step>
-    links?: Unit<any> | Step | Array<Unit<any> | Step>
+    owners?: Unit<any> | Node | Array<Unit<any> | Node>
+    links?: Unit<any> | Node | Array<Unit<any> | Node>
   }
-}): Step
-export function launch<T>(unit: Unit<T> | Step, payload: T): void
+}): Node
+export function launch<T>(unit: Unit<T> | Node, payload: T): void
 export function launch<T>(config: {
-  target: Unit<T> | Step
+  target: Unit<T> | Node
   params: T
   defer?: boolean
   page?: any
@@ -755,7 +757,7 @@ export function attach<Params, FX extends Effect<any, any, any>>(config: {
   mapParams: (params: Params) => FXParams<FX>
 }): Effect<Params, FXResult<FX>, FXError<FX>>
 
-export function withRegion(unit: Unit<any> | Step, cb: () => void): void
+export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(
   store: T,
 ): T extends Store<infer R> ? Store<[R]> : never
