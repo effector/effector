@@ -1095,20 +1095,7 @@ export function route<T>({
                 page: leaf.spawn,
               })
             }
-            const childLeafIterator = (child: Leaf) => {
-              const data = child.data
-              switch (data.type) {
-                case 'element':
-                  pushOpToQueue(visible, data.ops.visible)
-                  break
-                case 'route':
-                  iterateChildLeafs(child, childLeafIterator)
-                  break
-                default:
-                  console.log('unsupported type', data.type)
-              }
-            }
-            iterateChildLeafs(leaf, childLeafIterator)
+            changeChildLeafsVisible(visible, leaf)
           })
           sample({
             source: mount,
@@ -1174,6 +1161,25 @@ export function route<T>({
     },
   })
   setInParentIndex(routeTemplate)
+}
+
+function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
+  const childLeafIterator = (child: Leaf) => {
+    const data = child.data
+    switch (data.type) {
+      case 'element':
+        pushOpToQueue(visible, data.ops.visible)
+        break
+      case 'route':
+      case 'list':
+      case 'list item':
+        iterateChildLeafs(child, childLeafIterator)
+        break
+      default:
+        console.log('unsupported type', data.type)
+    }
+  }
+  iterateChildLeafs(leaf, childLeafIterator)
 }
 
 function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
@@ -1467,16 +1473,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 }
                 return
               }
-              iterateChildLeafs(leaf, child => {
-                const data = child.data
-                switch (data.type) {
-                  case 'element':
-                    pushOpToQueue(visible, data.ops.visible)
-                    break
-                  default:
-                    console.log('unsupported type', data.type)
-                }
-              })
+              changeChildLeafsVisible(visible, leaf)
             })
           } else {
             mount.watch(({node, leaf}) => {

@@ -279,8 +279,6 @@ test('list in variant', async () => {
       ><button id='go_chat'>Go /chat</button>
     </header>
     <h1>Main page</h1>
-    <div>first message</div>
-    <div>second message</div>
     "
   `)
 })
