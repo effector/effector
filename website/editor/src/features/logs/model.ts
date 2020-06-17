@@ -53,8 +53,17 @@ export function consoleMap(): Console {
   }
   console.assert = (condition, ...args) => {
     if (!condition) {
+      /* chrome behavior */
       if (args.length === 0) args = ['console.assert']
-      console.error('Assertion failed:', ...args)
+      /*
+        console substitutions like %s
+        works only in first argument of console.error
+      */
+      if (typeof args[0] === 'string') {
+        console.error(`Assertion failed: ${args[0]}`, ...args.slice(1))
+      } else {
+        console.error('Assertion failed:', ...args)
+      }
     }
   }
   return console
