@@ -391,7 +391,7 @@ describe('imperative call support', () => {
     expect(count.getState()).toBe(0)
   })
   describe('support imperative event calls in effects', () => {
-    it('sync effects', async () => {
+    test('sync effects', async () => {
       const app = createDomain()
 
       const inc = app.createEvent()
@@ -412,7 +412,7 @@ describe('imperative call support', () => {
       expect(scope.getState(count)).toBe(1)
       expect(count.getState()).toBe(0)
     })
-    it('start of async effects', async () => {
+    test('start of async effects', async () => {
       const app = createDomain()
 
       const inc = app.createEvent()
@@ -432,6 +432,219 @@ describe('imperative call support', () => {
 
       expect(scope.getState(count)).toBe(1)
       expect(count.getState()).toBe(0)
+    })
+  })
+  describe('support imperative effect calls in effects', () => {
+    test('simple case', async () => {
+      const app = createDomain()
+
+      const inc = app.createEffect({handler() {}})
+      const count = app.createStore(0).on(inc.done, x => x + 1)
+
+      const start = app.createEffect({
+        async handler() {
+          await inc()
+        },
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
+    })
+    describe('sequential', () => {
+      test('with sync inner effect', async () => {
+        const app = createDomain()
+
+        const inc = app.createEffect({handler() {}})
+        const count = app.createStore(0).on(inc.done, x => x + 1)
+
+        const start = app.createEffect({
+          async handler() {
+            await inc('inc 1')
+            await inc('inc 2')
+          },
+        })
+
+        const scope = fork(app)
+
+        await allSettled(start, {
+          scope,
+        })
+
+        expect(scope.getState(count)).toBe(2)
+        expect(count.getState()).toBe(0)
+      })
+      test('with async inner effect', async () => {
+        const app = createDomain()
+
+        const inc = app.createEffect({async handler() {}})
+        const count = app.createStore(0).on(inc.done, x => x + 1)
+
+        const start = app.createEffect({
+          async handler() {
+            await inc('inc 1')
+            await inc('inc 2')
+          },
+        })
+
+        const scope = fork(app)
+
+        await allSettled(start, {
+          scope,
+        })
+
+        expect(scope.getState(count)).toBe(2)
+        expect(count.getState()).toBe(0)
+      })
+    })
+    describe('parallel', () => {
+      test('with sync inner effect', async () => {
+        const app = createDomain()
+
+        const inc = app.createEffect({handler() {}})
+        const count = app.createStore(0).on(inc.done, x => x + 1)
+
+        const start = app.createEffect({
+          async handler() {
+            await Promise.all([inc(), inc()])
+          },
+        })
+
+        const scope = fork(app)
+
+        await allSettled(start, {
+          scope,
+        })
+
+        expect(scope.getState(count)).toBe(2)
+        expect(count.getState()).toBe(0)
+      })
+      test('with async inner effect', async () => {
+        const app = createDomain()
+
+        const inc = app.createEffect({async handler() {}})
+        const count = app.createStore(0).on(inc.done, x => x + 1)
+
+        const start = app.createEffect({
+          async handler() {
+            await Promise.all([inc(), inc()])
+          },
+        })
+
+        const scope = fork(app)
+
+        await allSettled(start, {
+          scope,
+        })
+
+        expect(scope.getState(count)).toBe(2)
+        expect(count.getState()).toBe(0)
+      })
+    })
+    test('with forward', async () => {
+      const app = createDomain()
+
+      const inc = app.createEffect({async handler() {}})
+      const count = app.createStore(0).on(inc.done, x => x + 1)
+
+      const start = app.createEffect({
+        async handler() {
+          await inc()
+        },
+      })
+
+      const next = app.createEffect({
+        async handler() {
+          await inc()
+        },
+      })
+
+      forward({from: start.doneData, to: next})
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(2)
+      expect(count.getState()).toBe(0)
+    })
+    test('scope isolation', async () => {
+      const app = createDomain()
+
+      const addWord = app.createEffect({handler: async word => word})
+      const words = app
+        .createStore([])
+        .on(addWord.doneData, (list, word) => [...list, word])
+
+      const start = app.createEffect({
+        async handler(word) {
+          await addWord(`${word} 1`)
+          await addWord(`${word} 2`)
+          return word
+        },
+      })
+
+      const next = app.createEffect({
+        async handler(word) {
+          await addWord(`${word} 3`)
+          await addWord(`${word} 4`)
+        },
+      })
+
+      forward({from: start.doneData, to: next})
+
+      const scopeA = fork(app)
+      const scopeB = fork(app)
+      const scopeC = fork(app)
+
+      await Promise.all([
+        allSettled(start, {
+          scope: scopeA,
+          params: 'A',
+        }),
+        allSettled(start, {
+          scope: scopeB,
+          params: 'B',
+        }),
+      ])
+
+      await allSettled(start, {
+        scope: scopeC,
+        params: 'C',
+      })
+
+      expect(scopeA.getState(words)).toMatchInlineSnapshot(`
+        Array [
+          "A 1",
+          "A 2",
+          "A 3",
+          "A 4",
+        ]
+      `)
+      expect(scopeB.getState(words)).toMatchInlineSnapshot(`
+        Array [
+          "B 1",
+          "B 2",
+          "B 3",
+          "B 4",
+        ]
+      `)
+      expect(scopeC.getState(words)).toMatchInlineSnapshot(`
+        Array [
+          "C 1",
+          "C 2",
+          "C 3",
+          "C 4",
+        ]
+      `)
+      expect(words.getState()).toEqual([])
     })
   })
 })
