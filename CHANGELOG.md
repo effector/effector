@@ -2,6 +2,77 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.17.0
+
+- Add support for nested effect calls in forked scope. Parallel requests are supported as well
+
+```js
+import {createDomain, forward} from 'effector'
+import {fork, allSettled} from 'effector/fork'
+
+const app = createDomain()
+
+const addWord = app.createEffect({handler: async word => word})
+const words = app
+  .createStore([])
+  .on(addWord.doneData, (list, word) => [...list, word])
+
+const start = app.createEffect({
+  async handler(word) {
+    await addWord(`${word}1`)
+    await addWord(`${word}2`)
+    return word
+  },
+})
+
+const next = app.createEffect({
+  async handler(word) {
+    await Promise.all([addWord(`${word}3`), addWord(`${word}4`)])
+  },
+})
+
+forward({from: start.doneData, to: next})
+
+const scopeA = fork(app)
+const scopeB = fork(app)
+const scopeC = fork(app)
+
+await Promise.all([
+  allSettled(start, {
+    scope: scopeA,
+    params: 'A',
+  }),
+  allSettled(start, {
+    scope: scopeB,
+    params: 'B',
+  }),
+])
+
+await allSettled(start, {
+  scope: scopeC,
+  params: 'C',
+})
+
+console.log(scopeA.getState(words))
+// => [A1, A2, A3, A4]
+console.log(scopeB.getState(words))
+// => [B1, B2, B3, B4]
+console.log(scopeC.getState(words))
+// => [C1, C2, C3, C4]
+```
+
+[Try it](https://share.effector.dev/MB9mMRAz)
+
+- Allow `createNode` to call without arguments
+
+```js
+import {createNode} from 'effector'
+
+const node = createNode()
+```
+
+- Make `Step` type alias for `Node`
+
 ## effector-react 20.8.0
 
 - Add ability to define default `Gate` state in `createGate` via `defaultState` field
