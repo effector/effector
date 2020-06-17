@@ -365,7 +365,7 @@ export function merge<T extends ReadonlyArray<Unit<any>>>(
   events: T,
 ): T[number] extends Unit<infer R> ? Event<R> : never
 export function clearNode(unit: Unit<any> | Step, opts?: {deep?: boolean}): void
-export function createNode(opts: {
+export function createNode(opts?: {
   node?: Array<Cmd>
   parent?: Array<Unit<any> | Step>
   child?: Array<Unit<any> | Step>

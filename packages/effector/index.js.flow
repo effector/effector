@@ -306,8 +306,8 @@ declare export function clearNode(
   unit: Unit<any> | Step,
   opts?: {deep?: boolean, ...},
 ): void
-declare export function createNode(opts: {|
-  +node: Array<Cmd>,
+declare export function createNode(opts?: {|
+  +node?: Array<Cmd>,
   +parent?: Array<Unit<any> | Step>,
   +child?: Array<Unit<any> | Step>,
   +scope?: {[field: string]: any, ...},
