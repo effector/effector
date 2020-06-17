@@ -63,13 +63,14 @@ export function createEffect<Payload, Done>(
     },
     node: [
       step.run({
-        fn({params, req}, {finally: anyway, getHandler}, {page}) {
+        fn({params, req}, {finally: anyway, getHandler}, {page, forkPage}) {
           const onResolve = onSettled({
             params,
             req,
             ok: true,
             anyway,
             page,
+            forkPage,
           })
           const onReject = onSettled({
             params,
@@ -77,6 +78,7 @@ export function createEffect<Payload, Done>(
             ok: false,
             anyway,
             page,
+            forkPage,
           })
           let result
           try {
@@ -114,11 +116,12 @@ export function createEffect<Payload, Done>(
       },
     }),
     step.run({
-      fn(upd, {runner}) {
+      fn(upd, {runner}, {forkPage}) {
         launch({
           target: runner,
           params: upd,
           defer: true,
+          forkPage,
         })
         return upd.params
       },
@@ -152,21 +155,21 @@ export function createEffect<Payload, Done>(
   return instance
 }
 
-export const onSettled = ({params, req, ok, anyway, page}) => data =>
+export const onSettled = ({params, req, ok, anyway, page, forkPage}) => data =>
   launch({
     target: [anyway, sidechain],
     params: [
       ok
         ? {
-          status: 'done',
-          params,
-          result: data,
-        }
+            status: 'done',
+            params,
+            result: data,
+          }
         : {
-          status: 'fail',
-          params,
-          error: data,
-        },
+            status: 'fail',
+            params,
+            error: data,
+          },
       {
         fn: ok ? req.rs : req.rj,
         value: data,
@@ -174,6 +177,7 @@ export const onSettled = ({params, req, ok, anyway, page}) => data =>
     ],
     defer: true,
     page,
+    forkPage,
   })
 
 const sidechain = createNode({

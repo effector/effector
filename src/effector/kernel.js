@@ -27,6 +27,7 @@ type Stack = {
   parent: Stack | null,
   node: Graph,
   page: {[id: string]: any} | null,
+  forkPage?: any,
 }
 
 /** Queue as linked list or skew heap */
@@ -120,6 +121,7 @@ const pushFirstHeapItem = (
   node: Graph,
   parent: Stack | null,
   value: any,
+  forkPage: any | void,
 ) =>
   pushHeap(
     0,
@@ -130,6 +132,7 @@ const pushFirstHeapItem = (
       parent,
       value,
       page,
+      forkPage,
     },
     type,
   )
@@ -184,11 +187,12 @@ const barriers = new Set()
 
 let alreadyStarted = false
 let currentPage = null
+let forkPage
 export const getCurrentPage = () => currentPage
 
 /** main execution method */
 const exec = () => {
-  const lastStartedState = {alreadyStarted, currentPage}
+  const lastStartedState = {alreadyStarted, currentPage, forkPage}
   alreadyStarted = true
   let stop
   let skip
@@ -200,6 +204,7 @@ const exec = () => {
     const {idx, stack, type} = value
     graph = stack.node
     currentPage = page = stack.page
+    forkPage = stack.forkPage
     reg = (page ? page : graph).reg
     const local: Local = {
       fail: false,
@@ -293,29 +298,40 @@ const exec = () => {
           graph.next[stepn],
           stack,
           getValue(stack),
+          stack.forkPage,
         )
       }
     }
   }
   alreadyStarted = lastStartedState.alreadyStarted
   currentPage = lastStartedState.currentPage
+  forkPage = lastStartedState.forkPage
 }
 export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
   let page = currentPage
   let stack = null
+  let forkedPage = forkPage
   if (unit.target) {
     payload = unit.params
     upsert = unit.defer
     page = 'page' in unit ? unit.page : page
     if (unit.stack) stack = unit.stack
+    forkedPage = unit.forkPage || forkedPage
     unit = unit.target
   }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
-      pushFirstHeapItem('pure', page, getGraph(unit[i]), stack, payload[i])
+      pushFirstHeapItem(
+        'pure',
+        page,
+        getGraph(unit[i]),
+        stack,
+        payload[i],
+        forkedPage,
+      )
     }
   } else {
-    pushFirstHeapItem('pure', page, getGraph(unit), stack, payload)
+    pushFirstHeapItem('pure', page, getGraph(unit), stack, payload, forkedPage)
   }
   if (upsert && alreadyStarted) return
   exec()
