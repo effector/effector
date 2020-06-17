@@ -46,13 +46,18 @@ window.addEventListener(
 )
 
 export function consoleMap(): Console {
-  const console: Partial<Console> = {}
+  const console = {} as Console
 
   for (const method in global.console) {
     console[method] = logger.bind(method)
   }
-
-  return console as Console
+  console.assert = (condition, ...args) => {
+    if (!condition) {
+      if (args.length === 0) args = ['console.assert']
+      console.error('Assertion failed:', ...args)
+    }
+  }
+  return console
 }
 
 function logger(this: any, ...args: any[]) {
