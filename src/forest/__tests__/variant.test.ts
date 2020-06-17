@@ -205,3 +205,82 @@ test('nested variants', async () => {
     "
   `)
 })
+
+test('list in variant', async () => {
+  const [s1, s2, s3] = await exec(async () => {
+    const messages = createStore(['first message', 'second message'])
+    const currentRoute = createStore({name: 'main'})
+    const {goMain, goChat} = createApi(currentRoute, {
+      goMain: () => ({name: 'main'}),
+      goChat: () => ({name: 'chat'}),
+    })
+
+    using(el, () => {
+      h('header', () => {
+        h('button', {
+          attr: {id: 'go_main'},
+          text: 'Go /main',
+          handler: {click: goMain as any},
+        })
+        h('button', {
+          attr: {id: 'go_chat'},
+          text: 'Go /chat',
+          handler: {click: goChat as any},
+        })
+      })
+      variant({
+        source: currentRoute,
+        key: 'name',
+        cases: {
+          main() {
+            h('h1', {text: 'Main page'})
+          },
+          chat() {
+            h('h1', {text: 'Chat page'})
+            list(messages, ({store}) => {
+              h('div', {text: store})
+            })
+          },
+        },
+      })
+    })
+    await act()
+    await act(() => {
+      document.getElementById('go_chat')!.click()
+    })
+    await act(() => {
+      document.getElementById('go_main')!.click()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id='go_main'>Go /main</button
+      ><button id='go_chat'>Go /chat</button>
+    </header>
+    <h1>Main page</h1>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id='go_main'>Go /main</button
+      ><button id='go_chat'>Go /chat</button>
+    </header>
+    <h1>Chat page</h1>
+    <div>first message</div>
+    <div>second message</div>
+    "
+  `)
+  expect(s3).toMatchInlineSnapshot(`
+    "
+    <header>
+      <button id='go_main'>Go /main</button
+      ><button id='go_chat'>Go /chat</button>
+    </header>
+    <h1>Main page</h1>
+    <div>first message</div>
+    <div>second message</div>
+    "
+  `)
+})
