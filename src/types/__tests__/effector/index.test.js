@@ -4,6 +4,33 @@ import {step, createNode, createEvent, Event, launch, split} from 'effector'
 
 const typecheck = '{global}'
 
+describe('createNode', () => {
+  test('createNode({})', () => {
+    const foo = createNode({})
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('createNode()', () => {
+    const foo = createNode()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+})
+
 describe('split', () => {
   describe('split infer result', () => {
     describe('split result no false-negative', () => {
