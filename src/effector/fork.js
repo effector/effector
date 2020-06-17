@@ -478,9 +478,20 @@ function cloneGraph(unit) {
       case 'effect':
         node.next.push(forkInFlightCounter)
         break
-      case 'fx':
+      case 'fx': {
         scope.finally.next.push(forkInFlightCounter)
+        const getHandler = scope.getHandler
+        const wrappedHandler = params => {
+          stack.push(findClone)
+          try {
+            return getHandler()(params)
+          } finally {
+            stack.pop()
+          }
+        }
+        scope.getHandler = () => wrappedHandler
         break
+      }
       case 'watch': {
         const handler = scope.fn
         scope.fn = data => {
