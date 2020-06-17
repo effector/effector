@@ -149,6 +149,7 @@ export function h(tag: string, opts?: any) {
       }
     }
   }
+  if (!currentActor) throw Error('h() called outside from using() closure')
   const env = currentActor!.env
   const parentNS = currentActor!.namespace
   let ns: NSType = parentNS
@@ -752,13 +753,14 @@ export function using(node: DOMElement, opts: any): void {
     cb = opts
     env = getDefaultEnv()
     hydrate = false
-  } else {
+  } else if (opts) {
     cb = opts.fn
     env = opts.env ? opts.env : getDefaultEnv()
     hydrate = opts.hydrate
     onComplete = opts.onComplete
     onRoot = opts.onRoot
-  }
+  } else throw Error('using() second argument is missing')
+  if (!node) throw Error('using() first argument is missing')
   const namespaceURI = node.namespaceURI
   const tag = node.tagName.toLowerCase()
   const ns: NSType =
@@ -1033,6 +1035,7 @@ export function route<T>({
     childCount: 0,
     inParentIndex: -1,
   }
+  if (!currentActor) throw Error('route() called outside from using() closure')
   const routeTemplate = createTemplate({
     name: 'route',
     isSvgRoot: false,
@@ -1362,7 +1365,7 @@ export function list<T>(opts: any, maybeFn?: any) {
     childCount: 0,
     inParentIndex: -1,
   }
-
+  if (!currentActor) throw Error('list() called outside from using() closure')
   const env = currentActor!.env
   const namespace = currentActor!.namespace
 
