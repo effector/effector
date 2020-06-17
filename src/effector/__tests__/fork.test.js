@@ -63,7 +63,7 @@ it('serialize stores in nested domain', () => {
 `)
 })
 
-test('allSettled first argument validation', async() => {
+test('allSettled first argument validation', async () => {
   const app = createDomain()
 
   await expect(
@@ -75,7 +75,7 @@ test('allSettled first argument validation', async() => {
   )
 })
 
-test('watch calls during hydration', async() => {
+test('watch calls during hydration', async () => {
   const fxHandlerFn = jest.fn()
   const storeWatchFn = jest.fn()
   const eventWatchFn = jest.fn()
@@ -205,7 +205,7 @@ test('watch calls during hydration', async() => {
 })
 
 describe('hydrate edge cases', () => {
-  test('#1', async() => {
+  test('#1', async () => {
     const app = createDomain()
 
     const listsContainer$ = app.createStore({
@@ -245,7 +245,7 @@ describe('hydrate edge cases', () => {
       ]
     `)
   })
-  test('#2', async() => {
+  test('#2', async () => {
     const app = createDomain()
 
     const greaterThan = app.createStore(2)
@@ -280,7 +280,7 @@ describe('hydrate edge cases', () => {
 })
 
 describe('fork values support', () => {
-  test('values as js Map', async() => {
+  test('values as js Map', async () => {
     const app = createDomain()
 
     const logsCache = app.createStore([])
@@ -302,7 +302,7 @@ describe('fork values support', () => {
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
     expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
   })
-  test('values as sid map', async() => {
+  test('values as sid map', async () => {
     const app = createDomain()
 
     const logsCache = app.createStore([])
@@ -327,7 +327,7 @@ describe('fork values support', () => {
 })
 
 describe('fork handlers support', () => {
-  test('handlers as js Map', async() => {
+  test('handlers as js Map', async () => {
     const app = createDomain()
 
     const fx = app.createEffect({handler: () => 'not to call'})
@@ -346,7 +346,7 @@ describe('fork handlers support', () => {
 
     expect(scope.getState(acc)).toEqual(['fn'])
   })
-  test('handlers as sid map', async() => {
+  test('handlers as sid map', async () => {
     const app = createDomain()
 
     const fx = app.createEffect({handler: () => 'not to call'})
@@ -366,5 +366,72 @@ describe('fork handlers support', () => {
     })
 
     expect(scope.getState(acc)).toEqual(['fn'])
+  })
+})
+
+describe('imperative call support', () => {
+  it('support imperative event calls in watchers', async () => {
+    const app = createDomain()
+
+    const inc = app.createEvent()
+    const count = app.createStore(0).on(inc, x => x + 1)
+
+    const start = app.createEvent()
+    start.watch(() => {
+      inc()
+    })
+
+    const scope = fork(app)
+
+    await allSettled(start, {
+      scope,
+    })
+
+    expect(scope.getState(count)).toBe(1)
+    expect(count.getState()).toBe(0)
+  })
+  describe('support imperative event calls in effects', () => {
+    it('sync effects', async () => {
+      const app = createDomain()
+
+      const inc = app.createEvent()
+      const count = app.createStore(0).on(inc, x => x + 1)
+
+      const start = app.createEffect({
+        handler() {
+          inc()
+        },
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
+    })
+    it('start of async effects', async () => {
+      const app = createDomain()
+
+      const inc = app.createEvent()
+      const count = app.createStore(0).on(inc, x => x + 1)
+
+      const start = app.createEffect({
+        async handler() {
+          inc()
+        },
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
+    })
   })
 })
