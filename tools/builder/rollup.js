@@ -428,6 +428,7 @@ async function createCompat(name, extension = 'js') {
       'symbol-observable',
       'effector',
       'effector/compat',
+      'forest'
     ],
     plugins: pluginList,
   })
@@ -483,6 +484,7 @@ async function createEsCjs(
       'effector',
       'effector/compat',
       'perf_hooks',
+      'forest'
     ],
     plugins: pluginList,
   })
