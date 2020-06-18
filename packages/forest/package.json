@@ -1,6 +1,6 @@
 {
   "name": "forest",
-  "version": "0.16.5",
+  "version": "0.16.6",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.es.js",
@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^20.16.2"
+    "effector": "^20.17.0"
   },
   "keywords": [
     "data",
