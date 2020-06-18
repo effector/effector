@@ -989,11 +989,14 @@ export function variant<T, K extends keyof T>({
       }
 }) {
   if (!is.unit(source)) throw Error('variant({source}) should be unit')
-  //prettier-ignore
-  const keyReader = typeof key === 'function'
-    ? key
-    : (value: any) => String(value[key])
+  let keyReader: (value: any) => any
+
+  if (typeof key === 'function') keyReader = key
+  else if (key == null) keyReader = (value: any) => String(value)
+  else keyReader = (value: any) => String(value[key])
+
   let defaultCase = false
+
   for (const caseName in cases) {
     if (caseName === '__') {
       defaultCase = true
