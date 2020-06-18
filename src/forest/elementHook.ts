@@ -941,7 +941,8 @@ export function handler(
   >,
 ): void
 export function handler(options: any, map?: any) {
-  const draft = currentActor!.draft
+  if (!currentActor) return
+  const draft = currentActor.draft
   if (draft.type !== 'element') {
     throw Error(
       `"handler" extension can be used only with element nodes, got "${draft.type}"`,
@@ -950,6 +951,9 @@ export function handler(options: any, map?: any) {
   if (map === undefined) {
     map = options
     options = {}
+  }
+  for (const key in map) {
+    if (!is.unit(map[key])) throw Error(`handler for "${key}" should be event`)
   }
   const {
     passive = true,
@@ -984,6 +988,7 @@ export function variant<T, K extends keyof T>({
         __: (config: {store: Store<T>}) => void
       }
 }) {
+  if (!is.unit(source)) throw Error('variant({source}) should be unit')
   //prettier-ignore
   const keyReader = typeof key === 'function'
     ? key
