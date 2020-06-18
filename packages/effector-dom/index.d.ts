@@ -211,6 +211,17 @@ export function rec<T>(
   fn: (config: {state: Store<T>}) => void,
 ): (opts: {state: Store<T>}) => void
 
+export function route<T>(config: {
+  source: Store<T>
+  visible: (value: T) => boolean
+  fn: (config: {store: Store<T>}) => void
+}): void
+export function route<T, S extends T>(config: {
+  source: Store<T>
+  visible: (value: T) => value is S
+  fn: (config: {store: Store<S>}) => void
+}): void
+
 export function node(fn: (node: DOMElement) => void): void
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
