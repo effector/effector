@@ -35,6 +35,15 @@ const ObjectPreview = ({data, maxProperties}) => {
     return <ObjectValue object={object} />
   }
 
+  // Cannot check using instanceof Error
+  if (
+    typeof object === 'object' &&
+    typeof object.stack === 'string' &&
+    typeof object.message === 'string'
+  ) {
+    return <span style={styles.preview}>{`${object.stack}`}</span>
+  }
+
   if (Array.isArray(object)) {
     return (
       <span style={styles.preview}>
