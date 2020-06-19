@@ -265,12 +265,29 @@ describe('update store from nested block', () => {
         })
         return updates
       })
-      expect(updates).toMatchInlineSnapshot(`
-        Array [
-          0,
-          1,
-        ]
-      `)
+      expect(updates).toEqual([0, 1])
     })
+  })
+})
+
+describe('watchers support', () => {
+  test('from global store', async () => {
+    const updates = await execFunc(async () => {
+      const updates = [] as number[]
+      const inc = createEvent()
+      const count = createStore(0).on(inc, x => x + 1)
+      using(el, {
+        fn() {
+          count.watch(e => {
+            updates.push(e)
+          })
+        },
+      })
+      await act(async () => {
+        inc()
+      })
+      return updates
+    })
+    expect(updates).toEqual([0, 1])
   })
 })
