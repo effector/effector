@@ -121,8 +121,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
           if (stack.parent && stack.parent.page) {
             stack.page = stack.parent.page
           } else {
-            console.error('context lost', stack)
-            return false
+            // console.error('context lost', stack)
+            return true
           }
         }
         if (!stack.page.active) return false
