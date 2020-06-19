@@ -39,7 +39,7 @@ const version = {
   effector: '20.17.0',
   'effector-react': '20.8.0',
   'effector-vue': '20.5.1',
-  forest: '0.16.6',
+  forest: '0.16.7',
   'effector-dom': '0.0.15',
 
   'bs-effector': '20.0.0',
