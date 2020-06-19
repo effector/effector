@@ -556,17 +556,17 @@ export function h(tag: string, opts?: any) {
             break
           }
           case 'handler': {
-            const nativeTemplate: Template | null =
+            const handlerTemplate: Template | null =
               //@ts-ignore
               item.handler.graphite.meta.nativeTemplate || null
             domElementCreated.watch(leaf => {
               let page: Spawn | null = null
-              if (nativeTemplate) {
-                let nativePageFound = false
+              if (handlerTemplate) {
+                let handlerPageFound = false
                 let currentPage: Spawn | null = leaf.spawn
-                while (!nativePageFound && currentPage) {
-                  if (currentPage.template === nativeTemplate) {
-                    nativePageFound = true
+                while (!handlerPageFound && currentPage) {
+                  if (currentPage.template === handlerTemplate) {
+                    handlerPageFound = true
                     page = currentPage
                   } else {
                     currentPage = currentPage.parent
