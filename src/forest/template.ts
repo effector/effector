@@ -306,7 +306,17 @@ function getCurrent(ref: {type?: string; current: any}) {
       return ref.current
   }
 }
-
+function findRefValue(
+  ref: {current: any; id: string},
+  targetLeaf: Leaf | null,
+) {
+  let currentLeaf = targetLeaf
+  while (currentLeaf && !currentLeaf.spawn.reg[ref.id]) {
+    currentLeaf = currentLeaf.parentLeaf
+  }
+  if (!currentLeaf) return ref.current
+  return currentLeaf.spawn.reg[ref.id].current
+}
 export function spawn(
   actor: Actor<any>,
   {
@@ -465,7 +475,11 @@ export function spawn(
       while (state.i < list.length) {
         val = list[state.i]
         state.i++
-        val.fn(page[val.of.id].current)
+        val.fn(
+          page[val.of.id]
+            ? page[val.of.id].current
+            : findRefValue(val.of, leaf.parentLeaf),
+        )
       }
     } catch (err) {
       console.error(err)
