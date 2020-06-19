@@ -238,5 +238,39 @@ describe('update store from nested block', () => {
         "
       `)
     })
+    test('handler + on edge case', async () => {
+      const updates = await execFunc(async () => {
+        const updates = [] as number[]
+        const count = createStore(0)
+
+        count.watch(upd => {
+          updates.push(upd)
+        })
+        await new Promise(rs => {
+          using(el, {
+            onComplete: rs,
+            fn() {
+              const click = createEvent<any>()
+              count.on(click, x => x + 1)
+              h('button', {
+                text: 'Store',
+                handler: {click},
+                attr: {id: 'click'},
+              })
+            },
+          })
+        })
+        await act(async () => {
+          el.querySelector<HTMLButtonElement>('#click')!.click()
+        })
+        return updates
+      })
+      expect(updates).toMatchInlineSnapshot(`
+        Array [
+          0,
+          1,
+        ]
+      `)
+    })
   })
 })
