@@ -118,8 +118,12 @@ export function createTemplate<Api extends {[method: string]: any}>({
       //@ts-ignore
       fn(upd, scope, stack) {
         if (!stack.page) {
-          console.error('context lost', stack)
-          return false
+          if (stack.parent && stack.parent.page) {
+            stack.page = stack.parent.page
+          } else {
+            console.error('context lost', stack)
+            return false
+          }
         }
         if (!stack.page.active) return false
         const stackTemplates = [stack.page.template]
