@@ -2,27 +2,28 @@ import React, {useEffect, useRef} from 'react'
 import {styled} from 'linaria/react'
 import debounce from 'lodash.debounce'
 
-
-const setBorder = dir => props => props.direction === dir ? `1px solid ${props.border}` : 'none'
+const setBorder = dir => props =>
+  props.direction === dir ? `1px solid ${props.border}` : 'none'
 
 const StyledSizer = styled.div`
   flex: 0 0 ${props => props.size};
-  width: ${props => props.direction === 'vertical' ? props.size : '100%'};
-  height: ${props => props.direction === 'horizontal' ? props.size : '100%'};
+  width: ${props => (props.direction === 'vertical' ? props.size : '100%')};
+  height: ${props => (props.direction === 'horizontal' ? props.size : '100%')};
   background-color: ${props => props.color};
-  cursor: ${props => props.direction === 'horizontal' ? 'row-resize' : 'col-resize'};
+  cursor: ${props =>
+    props.direction === 'horizontal' ? 'row-resize' : 'col-resize'};
   border-left: ${setBorder('vertical')};
   border-right: ${setBorder('vertical')};
   border-top: ${setBorder('horizontal')};
   border-bottom: ${setBorder('horizontal')};
   &:hover {
-    opacity: ${props => props.hover || .5};
+    opacity: ${props => props.hover || 0.5};
   }
 `
 
-const background = document.getElementById('dimmer')
+const background = document.getElementById('dimmer')!
 
-function getCoords(elem) {
+function getCoords(elem: Element) {
   var box = elem.getBoundingClientRect()
 
   return {
@@ -34,11 +35,11 @@ function getCoords(elem) {
 }
 
 let bodyUserSelect
-let params = {start: null, param: null}
+let params = {start: 0, param: 0}
 
 const saveSettings = debounce((key, value) => {
   try {
-    const settings = JSON.parse(localStorage.getItem('layout-settings')) || {}
+    const settings = JSON.parse(localStorage.getItem('layout-settings')!) || {}
     settings[key] = value
     localStorage.setItem('layout-settings', JSON.stringify(settings))
   } catch (e) {
@@ -48,7 +49,7 @@ const saveSettings = debounce((key, value) => {
 
 let lastClick = 0
 const DOUBLE_CLICK_TIMEOUT = 250
-let lastZoom = '0'
+let lastZoom = '0' as number | string
 
 const Sizer = ({
   direction,
@@ -64,24 +65,37 @@ const Sizer = ({
   min = 0,
   middle = 0,
   ...props
+}: {
+  direction: 'horizontal' | 'vertical'
+  cssVar: string
+  size: number | string
+  color: string
+  max: number | string
+  min: number | string
+  middle: number | string
+  children?: React.ReactChild
+  sign: 1 | -1
+  border?: string
+  style?: object
+  container?: any
 }) => {
-  const ref = useRef(null)
-  const handleMouseMove = e => {
+  const ref = useRef<HTMLDivElement>(null)
+  const handlePointerMove = (e: PointerEvent) => {
     const shift = (direction === 'vertical' ? e.pageX : e.pageY) - params.start
     const newValue = `${Math.floor(params.param + shift * sign)}px`
     document.body.style.setProperty(cssVar, newValue)
     saveSettings(cssVar, newValue)
   }
 
-  const handleMouseUp = e => {
-    document.removeEventListener('mousemove', handleMouseMove)
-    document.removeEventListener('mouseup', handleMouseUp)
+  const handlePointerUp = (e: PointerEvent) => {
+    document.removeEventListener('pointermove', handlePointerMove)
+    document.removeEventListener('pointerup', handlePointerUp)
     background.style.display = 'none'
     document.body.style['user-select'] = bodyUserSelect
   }
 
-  const handleMouseDown = e => {
-    const prevLastClick =  lastClick
+  const handleMouseDown = (e: PointerEvent) => {
+    const prevLastClick = lastClick
     lastClick = Date.now()
     if (Date.now() - prevLastClick < DOUBLE_CLICK_TIMEOUT) {
       const currentValue = String(document.body.style.getPropertyValue(cssVar))
@@ -101,13 +115,14 @@ const Sizer = ({
       saveSettings(cssVar, zoom)
       return
     }
-    background.style.cursor = direction === 'vertical' ? 'col-resize' : 'row-resize'
+    background.style.cursor =
+      direction === 'vertical' ? 'col-resize' : 'row-resize'
     background.style.display = 'block'
     bodyUserSelect = document.body.style['user-select'] || ''
     document.body.style['user-select'] = 'none'
 
-    document.addEventListener('mousemove', handleMouseMove)
-    document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('pointermove', handlePointerMove)
+    document.addEventListener('pointerup', handlePointerUp)
 
     if (direction === 'vertical') {
       params.start = e.pageX
@@ -119,9 +134,9 @@ const Sizer = ({
   }
 
   useEffect(() => {
-    ref.current.addEventListener('mousedown', handleMouseDown)
+    ref.current!.addEventListener('pointerdown', handleMouseDown)
     return () => {
-      ref.current.removeEventListener('mousedown', handleMouseDown)
+      ref.current!.removeEventListener('pointerdown', handleMouseDown)
     }
   }, [container])
 
@@ -134,8 +149,7 @@ const Sizer = ({
       border={border}
       size={size}
       style={style}
-      {...props}
-    >
+      {...props}>
       {children}
     </StyledSizer>
   )
