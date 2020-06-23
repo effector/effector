@@ -278,8 +278,7 @@ export function createStore<State>(
     },
     watch(eventOrFn: Event<any> | Function, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
-        if (!isFunction(eventOrFn))
-          throwError('watch requires function handler')
+        const subscription = watchUnit(store, eventOrFn)
         const template = readTemplate()
         if (template) {
           template.watch.push({
@@ -289,7 +288,7 @@ export function createStore<State>(
         } else {
           eventOrFn(store.getState())
         }
-        return watchUnit(store, eventOrFn)
+        return subscription
       }
       if (!isFunction(fn)) throwError('second argument should be a function')
       return eventOrFn.watch(payload => fn(store.getState(), payload))

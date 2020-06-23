@@ -6,12 +6,15 @@ import {createNode} from './createNode'
 import {Subscription, Unit} from './index.h'
 import {createSubscription} from './subscription'
 import {addToRegion} from './region'
+import {throwError} from './throw'
+import {isFunction} from './is'
 
 export const watchUnit = (
   unit: Unit,
   handler: (payload: any) => any,
-): Subscription =>
-  createSubscription(
+): Subscription => {
+  if (!isFunction(handler)) throwError('.watch argument should be a function')
+  return createSubscription(
     addToRegion(
       createNode({
         scope: {fn: handler},
@@ -24,3 +27,4 @@ export const watchUnit = (
       }),
     ),
   )
+}
