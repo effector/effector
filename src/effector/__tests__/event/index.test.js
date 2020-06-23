@@ -101,5 +101,7 @@ test('watch validation', () => {
   const trigger = createEvent()
   expect(() => {
     trigger.watch(NaN)
-  }).toThrowErrorMatchingInlineSnapshot()
+  }).toThrowErrorMatchingInlineSnapshot(
+    `".watch argument should be a function"`,
+  )
 })

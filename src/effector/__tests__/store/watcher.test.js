@@ -139,5 +139,7 @@ test('watch validation', () => {
   const store = createStore(null)
   expect(() => {
     store.watch(NaN)
-  }).toThrowErrorMatchingInlineSnapshot()
+  }).toThrowErrorMatchingInlineSnapshot(
+    `".watch argument should be a function"`,
+  )
 })
