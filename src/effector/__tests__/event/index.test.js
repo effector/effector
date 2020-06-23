@@ -96,3 +96,10 @@ test('event.thru(fn)', () => {
   const postclick = click.thru(event => event)
   expect(postclick).toBe(click)
 })
+
+test('watch validation', () => {
+  const trigger = createEvent()
+  expect(() => {
+    trigger.watch(NaN)
+  }).toThrowErrorMatchingInlineSnapshot()
+})

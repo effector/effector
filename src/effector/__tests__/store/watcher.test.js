@@ -134,3 +134,10 @@ it('support watchers for mapped storages', () => {
   event(4)
   expect(fn).toBeCalledTimes(2)
 })
+
+test('watch validation', () => {
+  const store = createStore(null)
+  expect(() => {
+    store.watch(NaN)
+  }).toThrowErrorMatchingInlineSnapshot()
+})
