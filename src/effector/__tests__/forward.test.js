@@ -1,6 +1,6 @@
 //@flow
 
-import {forward, createEvent, createStore} from 'effector'
+import {forward, createEvent, createStore, createNode} from 'effector'
 
 it('should forward data from one event to another', () => {
   const fn = jest.fn()
@@ -23,6 +23,23 @@ it('should forward data from one event to another', () => {
     ['should been forwarded [1]'],
     ['should been forwarded [2]'],
   ])
+})
+
+describe('raw nodes support', () => {
+  test('single ones', () => {
+    const from = createNode()
+    const to = createNode()
+    expect(() => {
+      forward({from, to})
+    }).not.toThrow()
+  })
+  test('arrays', () => {
+    const from = createNode()
+    const to = createNode()
+    expect(() => {
+      forward({from: [from], to: [to]})
+    }).not.toThrow()
+  })
 })
 
 it('should stop forwarding after unsubscribe', () => {
