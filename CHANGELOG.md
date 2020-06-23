@@ -2,6 +2,21 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.17.1
+
+- Add validation for `event.watch` watcher, this code now throw error as expected:
+
+```js
+import {createEvent} from 'effector'
+
+const trigger = createEvent()
+
+trigger.watch(NaN)
+// => Error: .watch argument should be a function
+```
+
+[Try it](https://share.effector.dev/6PasNTpe)
+
 ## effector 20.17.0
 
 - Add support for nested effect calls in forked scope. Parallel requests are supported as well
