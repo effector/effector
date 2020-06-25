@@ -494,15 +494,16 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-/* basic overloads */
-export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
+type Source<A> = Store<A> | Event<A> | Effect<A, any, any>
+
+// params
 export function sample<A>(
   source: Store<A>,
-  clock: Event<any> | Effect<any, any, any>,
-): Event<A>
+  clock?: Store<any>
+): Store<A>
 export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Unit<any>,
+  source: Source<A>,
+  clock?: Source<any>,
 ): Event<A>
 export function sample<A, B, C>(
   source: Store<A>,
@@ -511,76 +512,62 @@ export function sample<A, B, C>(
   greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
-  source: Unit<A>,
-  clock: Unit<B>,
+  source: Source<A>,
+  clock: Source<B>,
   fn: (source: A, clock: B) => C,
   greedy?: boolean,
 ): Event<C>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  fn: (source: A, clock: B) => NoInfer<C>
-  target: Unit<C>
-  greedy?: boolean
-}): Unit<C>
-export function sample<A, B>(config: {
-  source: Unit<A>
-  fn: (source: A) => NoInfer<B>
-  target: Unit<B>
-  greedy?: boolean
-}): Unit<B>
-export function sample<A>(config: {
-  source: Unit<NoInfer<A>>
-  clock: Unit<any>
-  target: Unit<A>
-  greedy?: boolean
-}): Unit<A>
-export function sample<A>(config: {
-  source: Unit<A>
-  target: Unit<A>
-  greedy?: boolean
-}): Unit<A>
-export function sample(config: {
-  source: Unit<any>
-  target: Unit<void>
-  greedy?: boolean
-}): Unit<void>
-export function sample<A, B, C>(config: {
-  source: Store<A>
-  clock: Store<B>
-  fn(source: A, clock: B): C
-  name?: string
-  greedy?: boolean
-}): Store<C>
-export function sample<A, B, C>(config: {
-  source: Unit<A>
-  clock: Unit<B>
-  fn(source: A, clock: B): C
-  name?: string
-  greedy?: boolean
-}): Event<C>
-export function sample<A>(config: {
+
+// config
+export function sample<A, T = Store<A>>(config: {
   source: Store<A>
   clock?: Store<any>
-  name?: string
-  greedy?: boolean
-}): Store<A>
-export function sample<A>(config: {
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A, T = Event<A>>(config: {
+  source: Source<A>,
+  clock?: Source<any>,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A, B, C, T = Store<C>>(config: {
+  source: Store<A>,
+  clock?: Store<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A, B, C, T = Event<C>>(config: {
+  source: Source<A>,
+  clock?: Source<B>,
+  fn: (source: A, clock: B) => C,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A, B, T = Store<B>>(config: {
   source: Store<A>
-  clock?: Event<any> | Effect<any, any, any>
-  name?: string
-  greedy?: boolean
-}): Event<A>
-export function sample<A>(config: {
-  source: Event<A> | Effect<A, any, any>
-  clock?: Unit<any>
-  name?: string
-  greedy?: boolean
-}): Event<A>
-/* overloads with implicit `combine` */
+  clock?: Store<any>
+  fn: (source: A, clock: any) => B,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A, B, T = Event<B>>(config: {
+  source: Source<A>,
+  clock?: Source<any>,
+  fn: (source: A, clock: any) => B,
+  greedy?: boolean,
+  target?: T
+}): T
+
+// Combinable
 export function sample<A extends Combinable>(
   source: A,
-  clock: Event<any> | Effect<any, any, any>,
+  clock?: Store<any>
+): Store<GetCombinedValue<A>>
+export function sample<A extends Combinable>(
+  source: A,
+  clock?: Source<any>,
 ): Event<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(
   source: A,
@@ -590,55 +577,51 @@ export function sample<A extends Combinable, B, C>(
 ): Store<C>
 export function sample<A extends Combinable, B, C>(
   source: A,
-  clock: Store<B>,
-  fn: (source: GetCombinedValue<A>, clock: B) => C,
-  greedy?: boolean,
-): Store<C>
-export function sample<A extends Combinable, B, C>(
-  source: A,
-  clock: Event<B> | Effect<B, any, any>,
+  clock: Source<B>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
   greedy?: boolean,
 ): Event<C>
-export function sample<A extends Combinable>(config: {
+
+export function sample<A extends Combinable, T = Store<GetCombinedValue<A>>>(config: {
+  source: A
+  clock?: Store<any>
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A extends Combinable, T = Event<GetCombinedValue<A>>>(config: {
+  source: A,
+  clock?: Source<any>,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A extends Combinable, B, C, T = Store<C>>(config: {
+  source: A,
+  clock: Store<B>,
+  fn: (source: GetCombinedValue<A>, clock: B) => C,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A extends Combinable, B, C, T = Event<C>>(config: {
+  source: A,
+  clock: Source<B>,
+  fn: (source: GetCombinedValue<A>, clock: B) => C,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A extends Combinable, B, T = Store<B>>(config: {
   source: A
   clock: Store<any>
-  name?: string
-  greedy?: boolean
-}): Store<GetCombinedValue<A>>
-export function sample<A extends Combinable>(config: {
-  source: A
-  clock: Event<any> | Effect<any, any, any>
-  name?: string
-  greedy?: boolean
-}): Event<GetCombinedValue<A>>
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Store<B>
-  fn(source: GetCombinedValue<A>, clock: B): C
-  name?: string
-  greedy?: boolean
-}): Store<C>
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Event<B> | Effect<B, any, any>
-  fn(source: GetCombinedValue<A>, clock: B): C
-  name?: string
-  greedy?: boolean
-}): Event<C>
-export function sample<A extends Combinable>(config: {
-  source: A
-  clock: Unit<any>
-  target: Unit<GetCombinedValue<A>>
-  greedy?: boolean
-}): Unit<GetCombinedValue<A>>
-export function sample<A extends Combinable, B, C>(config: {
-  source: A
-  clock: Unit<B>
-  fn(source: GetCombinedValue<A>, clock: B): C
-  target: Unit<C>
-  greedy?: boolean
-}): Unit<C>
+  fn: (source: GetCombinedValue<A>, clock: any) => B,
+  greedy?: boolean,
+  target?: T
+}): T
+export function sample<A extends Combinable, B, T = Event<B>>(config: {
+  source: A,
+  clock: Source<any>,
+  fn: (source: GetCombinedValue<A>, clock: any) => B,
+  greedy?: boolean,
+  target?: T
+}): T
 
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
