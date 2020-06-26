@@ -24,7 +24,7 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `target` is not passed, create it and return from `sample()`
 
 ## Schema
-![](https://i.gyazo.com/816de44ae183f442420e4f08e4b1f29c.mp4)
+![](https://s7.gifyu.com/images/ezgif.com-video-to-gif855ab4c69b9b103c.gif)
 
 ## Type of the created `target`
 
