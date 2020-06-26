@@ -23,6 +23,9 @@ When `clock` is triggered, read the value from `source` and trigger `target` wit
 - If the `fn` is passed, pass value from `source` through before passing to `target`
 - If the `target` is not passed, create it and return from `sample()`
 
+## Schema
+![](https://i.gyazo.com/816de44ae183f442420e4f08e4b1f29c.mp4)
+
 ## Type of the created `target`
 
 If `target` is not passed to `sample()` call, it will be created internally. The type of the unit is described in the table below:
@@ -70,7 +73,7 @@ const event = sample({ source: $store, clock: event });
 #### Returns
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
-[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
+[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
 
 #### Example
 
@@ -114,7 +117,7 @@ It is just another form of the `sample` invocation, with the same sense.
 #### Returns
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
-[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target). 
+[The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
 
 #### Example
 
@@ -141,7 +144,7 @@ submitForm(12345678)
 // 4. when sampleUnit (event in this case) is trigered,
 //    send it payload to effect signIn with params received at the step (3)
 ```
-[Try it](https://share.effector.dev/rPupnEQS) 
+[Try it](https://share.effector.dev/rPupnEQS)
 
 ## Objects and arrays of _Store_ in `sample({ source })`
 
