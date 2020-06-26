@@ -217,3 +217,15 @@ it('validate amount of arguments', () => {
     combine()
   }).toThrowErrorMatchingInlineSnapshot(`"at least one argument required"`)
 })
+
+it('validate shape', () => {
+  expect(() => {
+    combine(null)
+  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+  expect(() => {
+    combine('text')
+  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+  expect(() => {
+    combine(0, () => {})
+  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+})

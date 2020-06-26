@@ -6,7 +6,7 @@ import {createStateRef} from './stateRef'
 import {step} from './typedef'
 import {onConfigNesting} from './config'
 import {getStoreState} from './getter'
-import {is, isFunction} from './is'
+import {is, isFunction, isObject} from './is'
 import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
@@ -68,6 +68,8 @@ export function combine(...args: any[]): Store<any> {
       handler = spreadArgs(handler)
     }
   }
+  if (!isObject(structStoreShape))
+    throwError('shape should be an object')
   return storeCombination(
     Array.isArray(structStoreShape),
     structStoreShape,

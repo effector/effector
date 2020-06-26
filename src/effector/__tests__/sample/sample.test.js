@@ -555,3 +555,10 @@ test('array target', () => {
   expect(argumentHistory(fn1)).toEqual([0])
   expect(argumentHistory(fn2)).toEqual([0])
 })
+
+test('validate shape', () => {
+  expect(() => {
+    const clock = createEvent()
+    sample(0, clock)
+  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+})
