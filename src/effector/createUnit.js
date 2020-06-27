@@ -48,8 +48,12 @@ const normalizeConfig = (part, config) => {
   return config
 }
 
-export const applyParentEventHook = (source, target) => {
-  if (getParent(source)) getParent(source).hooks.event(target)
+export const applyParentHook = (
+  source,
+  target,
+  hookType: 'event' | 'effect' = 'event',
+) => {
+  if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
 let isStrict
@@ -162,7 +166,7 @@ export function createEvent<Payload>(
       getGraph(contramapped).seq.push(template.upward)
     }
     createComputation(contramapped, event, 'prepend', fn)
-    applyParentEventHook(event, contramapped)
+    applyParentHook(event, contramapped)
     return contramapped
   }
   const template = readTemplate()

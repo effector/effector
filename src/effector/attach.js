@@ -2,7 +2,7 @@
 
 import {combine} from './combine'
 import {createEffect, onSettled} from './createEffect'
-import {applyParentEventHook} from './createUnit'
+import {applyParentHook} from './createUnit'
 import {onConfigNesting} from './config'
 import {getGraph, getStoreState} from './getter'
 import {own} from './own'
@@ -79,6 +79,6 @@ export function attach(config) {
   runner.scope.effect = effect
   runner.meta.onCopy.push('effect')
   runner.seq.splice(0, 1, ...runnerSteps)
-  applyParentEventHook(effect, attached)
+  applyParentHook(effect, attached, 'effect')
   return attached
 }
