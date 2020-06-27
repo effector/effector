@@ -14,7 +14,13 @@ import {createNode} from './createNode'
 import {addToRegion, readTemplate} from './region'
 import {throwError} from './throw'
 
-export const shapeToStore = shape => (is.unit(shape) ? shape : combine(shape))
+const shapeToStore = (shape, deprecated) => {
+  if (!is.unit(shape)) {
+    shape = combine(shape)
+    if (deprecated) console.error('sample clock shape is deprecated')
+  }
+  return shape
+}
 
 export function sample(...args): any {
   let target
@@ -45,7 +51,7 @@ export function sample(...args): any {
   }
   name = metadata || name || source.shortName
   source = shapeToStore(source)
-  clock = shapeToStore(clock)
+  clock = shapeToStore(clock, true)
   if (typeof fn === 'boolean') {
     greedy = fn
     fn = null
