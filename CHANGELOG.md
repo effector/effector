@@ -2,6 +2,47 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 20.17.2
+
+- Add effects created via `attach` to domain effects, allowing these effects to be called within other effects when using `fork`
+
+```js
+import {createDomain, attach} from 'effector'
+import {fork, allSettled} from 'effector/fork'
+
+const app = createDomain()
+
+const add = app.createEffect({handler: _ => _})
+
+const count = app.createStore(2).on(add.doneData, (x, y) => x + y)
+
+const addWithCurrent = attach({
+  source: count,
+  effect: add,
+  mapParams: (params, current) => params + current,
+})
+
+const start = app.createEffect({
+  async handler(val) {
+    await addWithCurrent(val)
+  },
+})
+
+const scope = fork(app)
+
+await allSettled(start, {
+  scope,
+  params: 3,
+})
+
+console.log(scope.getState(count))
+// => 7
+```
+
+[Try it](https://share.effector.dev/IiDZW90x)
+
+- Add validation for `combine` first argument which should be store, object with stores or array with stores [PR #362](https://github.com/zerobias/effector/pull/362) (thanks [@doasync](https://github.com/doasync))
+
 ## effector 20.17.1
 
 - Add validation for `event.watch` watcher, this code now throw error as expected:
