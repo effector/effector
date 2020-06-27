@@ -8,6 +8,7 @@ import {
   createEffect,
   createApi,
   restore,
+  attach,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -227,6 +228,32 @@ describe('indirect child support', () => {
     const source = domain.createEvent()
     const prepended = source.prepend(() => {})
     expect(argumentHistory(fn)).toEqual([source, prepended])
+  })
+  describe('support attach', () => {
+    test('with source', () => {
+      const fn = jest.fn()
+      const domain = createDomain()
+      domain.onCreateEffect(e => fn(e))
+      const source = domain.createStore(null)
+      const fx = domain.createEffect()
+      const attached = attach({
+        source,
+        effect: fx,
+        mapParams: _ => _,
+      })
+      expect(argumentHistory(fn)).toEqual([fx, attached])
+    })
+    test('without source', () => {
+      const fn = jest.fn()
+      const domain = createDomain()
+      domain.onCreateEffect(e => fn(e))
+      const fx = domain.createEffect()
+      const attached = attach({
+        effect: fx,
+        mapParams: _ => _,
+      })
+      expect(argumentHistory(fn)).toEqual([fx, attached])
+    })
   })
 })
 

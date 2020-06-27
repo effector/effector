@@ -1,7 +1,7 @@
 //@noflow
 
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, forward, combine} from 'effector'
+import {createDomain, forward, combine, attach} from 'effector'
 import {fork, allSettled, serialize, hydrate} from 'effector/fork'
 
 it('serialize stores to object of sid as keys', () => {
@@ -574,6 +574,35 @@ describe('imperative call support', () => {
 
       expect(scope.getState(count)).toBe(2)
       expect(count.getState()).toBe(0)
+    })
+    test('attach imperative call', async () => {
+      const app = createDomain()
+
+      const add = app.createEffect({handler: _ => _})
+
+      const count = app.createStore(2).on(add.done, (x, y) => x + y)
+
+      const addWithCurrent = attach({
+        source: count,
+        effect: add,
+        mapParams: (params, current) => params + current,
+      })
+
+      const start = app.createEffect({
+        async handler(val) {
+          await addWithCurrent(val)
+        },
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+        params: 3,
+      })
+
+      expect(scope.getState(count)).toBe(7)
+      expect(count.getState()).toBe(2)
     })
     test('scope isolation', async () => {
       const app = createDomain()
