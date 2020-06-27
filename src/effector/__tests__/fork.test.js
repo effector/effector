@@ -580,7 +580,7 @@ describe('imperative call support', () => {
 
       const add = app.createEffect({handler: _ => _})
 
-      const count = app.createStore(2).on(add.done, (x, y) => x + y)
+      const count = app.createStore(2).on(add.doneData, (x, y) => x + y)
 
       const addWithCurrent = attach({
         source: count,
