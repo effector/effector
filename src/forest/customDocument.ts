@@ -275,9 +275,9 @@ export function createEnv(): Env {
       node.isFragment = false
       return node
     },
-    // createDocumentFragment() {
-    //   return new DOMNode()
-    // },
+    createDocumentFragment() {
+      return new DOMNode()
+    },
   }
   return {
     //@ts-ignore
