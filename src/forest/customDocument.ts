@@ -1,5 +1,5 @@
 import {Env} from './index.h'
-const invalidToken = /[^a-zA-Z0-9\-]/g
+const invalidToken = /[^a-zA-Z0-9\-_]/g
 const invalidValue = /[\\<>"]/g
 const dataValue = /[A-Z]/g
 const escaped = /[&<>'"]/g
