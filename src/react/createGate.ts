@@ -97,12 +97,14 @@ export function createGate<Props>(
     GateComponent.status.watch(status => {
       isFeedback = true
       if (isOpen && status && !gate.status.getState()) {
+        //@ts-ignore
         gate.open()
       }
       isFeedback = false
     })
     GateComponent.close.watch(() => {
       isFeedback = true
+      //@ts-ignore
       gate.close()
       isFeedback = false
     })

@@ -6,7 +6,8 @@ import {
 } from './useStore'
 import {useList as commonUseList} from './useList'
 import {withDisplayName} from './withDisplayName'
-import {Gate, useGate as commonUseGate} from './createGate'
+import {useGate as commonUseGate} from './createGate'
+import {Gate} from './index.h'
 
 function createDefer() {
   const result = {} as any
