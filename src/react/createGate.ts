@@ -1,20 +1,8 @@
 import * as React from 'react'
-import {createStore, createApi, launch, Store, Event} from 'effector'
+import {createStore, createApi, launch, Store} from 'effector'
+import {Gate} from './index.h'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {withDisplayName} from './withDisplayName'
-
-export type Gate<Props = {}> = React.ComponentType<Props> & {
-  isOpen: boolean
-  isTerminated: boolean
-  open: Event<Props>
-  close: Event<Props>
-  status: Store<boolean>
-  destructor: Event<void>
-  current: Props
-  state: Store<Props>
-  set: Event<Props>
-  childGate<Next>(childName?: string): Gate<Next>
-}
 
 export function useGate<Props>(
   GateComponent: Gate<Props>,
