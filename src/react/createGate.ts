@@ -54,8 +54,10 @@ export function createGate<Props>(
     //@ts-ignore
     name = name.name || 'gate'
   }
-  const status = createStore(Boolean(false))
-  const state: Store<Props> = createStore(defaultState)
+  //@ts-ignore
+  const status = createStore(Boolean(false), {named: 'status'})
+  //@ts-ignore
+  const state: Store<Props> = createStore(defaultState, {named: 'state'})
   const {set} = createApi(state, {
     set: (_, state) => state,
   })
