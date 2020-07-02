@@ -1,27 +1,9 @@
 import * as React from 'react'
-import {Store, Event, Effect} from 'effector'
+import {Event, Effect} from 'effector'
 
 import {Scope} from 'effector/fork'
 
-export function useStore<State>(store: Store<State>): State
-export function useStoreMap<
-  State,
-  Result,
-  Keys extends ReadonlyArray<any> | any[]
->(opts: {
-  readonly store: Store<State>
-  readonly keys: Keys
-  readonly fn: (state: State, keys: Keys) => Result
-}): Result
-export function useList<T>(
-  list: Store<T[]>,
-  renderItem:
-    | {
-        readonly keys?: any[]
-        readonly fn: (item: T, index: number) => React.ReactNode
-      }
-    | ((item: T, index: number) => React.ReactNode),
-): React.ReactNode
+export {useStore, useStoreMap, useList, useGate} from 'effector-react'
 
 export const Provider: React.Provider<Scope>
 
