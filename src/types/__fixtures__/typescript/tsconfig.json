@@ -46,6 +46,7 @@
     "paths": {
       "effector/fork": ["../../../../packages/effector/fork.d.ts"],
       "effector": ["../../../../packages/effector"],
+      "effector-react/ssr": ["../../../../packages/effector-react/ssr.d.ts"],
       "effector-react": ["../../../../packages/effector-react"],
       "effector-vue": ["../../../../packages/effector-vue"],
       "effector-dom": ["../../../../packages/effector-dom"],

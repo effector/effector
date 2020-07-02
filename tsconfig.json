@@ -12,8 +12,9 @@
     "lib": ["dom", "esnext"],
     "baseUrl": ".",
     "paths": {
-      "effector/fork": ["packages/effector/fork"],
+      "effector/fork": ["packages/effector/fork.d.ts"],
       "effector": ["packages/effector"],
+      "effector-react/ssr": ["packages/effector-react/ssr.d.ts"],
       "effector-react": ["packages/effector-react"],
       "effector-dom": ["packages/effector-dom"],
       "forest": ["packages/effector-dom"],
