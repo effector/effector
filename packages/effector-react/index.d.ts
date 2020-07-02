@@ -1,5 +1,5 @@
 import * as React from 'react'
-import {Store, Event, Effect} from 'effector'
+import {Store, Event, Effect, Domain} from 'effector'
 
 export type StoreConsumer<State> = React.ComponentType<{
   children: (state: State) => React.ReactNode
@@ -47,6 +47,7 @@ export function createGate<Props>(name?: string): Gate<Props>
 export function createGate<Props>(config: {
   defaultState?: Props
   name?: string
+  domain?: Domain
 }): Gate<Props>
 export function createGate<Props>(
   name: string,
