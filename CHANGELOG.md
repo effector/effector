@@ -2,6 +2,62 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 20.9.0
+
+- Export `useGate` with `fork` support from `effector-react/ssr`
+
+```tsx
+import {useGate, useStore, Provider} from 'effector-react/ssr'
+import {createGate} from 'effector-react'
+import {createDomain, forward} from 'effector'
+import {fork} from 'effector/fork'
+
+const app = createDomain()
+
+const activeChatGate = createGate({domain: app})
+
+const getMessagesFx = app.createEffect({
+  async handler({chatId}) {
+    return ['hi bob!', 'Hello, Alice']
+  },
+})
+const messagesAmount = app
+  .createStore(0)
+  .on(getMessagesFx.doneData, (_, messages) => messages.length)
+
+forward({
+  from: activeChatGate.open,
+  to: getMessagesFx,
+})
+
+const ChatPage = ({chatId}) => {
+  useGate(activeChatGate, {chatId})
+  return (
+    <div>
+      <header>Chat {chatId}</header>
+      <p>Messages total: {useStore(messagesAmount)}</p>
+    </div>
+  )
+}
+const App = ({root}) => (
+  <Provider value={root}>
+    <ChatPage chatId="chat01" />
+  </Provider>
+)
+
+const scope = fork(app)
+
+ReactDOM.render(<App root={scope} />, document.getElementById('root'))
+```
+
+[Try it](https://share.effector.dev/nxtytLnk)
+
+- Add `domain` optional field to `createGate` which will be used to create gate units (useful for ssr)
+
+[createGate({domain}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
+
+- Improve `useList` hook typings for typescript exported from `effector-react/ssr` by allowing usage as components' return value (fix [DefinitelyTyped issue](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20356))
+
 ## effector 20.17.2
 
 - Add effects created via `attach` to domain effects, allowing these effects to be called within other effects when using `fork`
@@ -133,7 +189,7 @@ const node = createNode()
 
 - Add ability to define default `Gate` state in `createGate` via `defaultState` field
 
-[createGate({defaultState}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-name)
+[createGate({defaultState}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
 
 - Remove `object` restriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
 
