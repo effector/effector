@@ -5,9 +5,10 @@ import {argumentHistory} from 'effector/fixtures'
 import {createDomain, forward, sample, attach, combine} from 'effector'
 
 import {fork, allSettled, serialize, hydrate, Scope} from 'effector/fork'
-import {Provider, useStore, useList} from 'effector-react/ssr'
+import {createGate} from 'effector-react'
+import {Provider, useStore, useList, useGate} from 'effector-react/ssr'
 
-it('works', async() => {
+it('works', async () => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
@@ -99,8 +100,8 @@ it('works', async() => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-y3ctwb": "alice",
-      "3x4g6j": Array [
+      "-xmb7i4": "alice",
+      "4e62kq": Array [
         "bob",
         "carol",
       ],
@@ -108,8 +109,8 @@ it('works', async() => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-y3ctwb": "bob",
-      "3x4g6j": Array [
+      "-xmb7i4": "bob",
+      "4e62kq": Array [
         "alice",
       ],
     }
@@ -117,11 +118,11 @@ it('works', async() => {
   expect(indirectCallFn).toBeCalled()
 })
 
-test('attach support', async() => {
+test('attach support', async () => {
   const indirectCallFn = jest.fn()
 
   const app = createDomain()
-  const start = app.createEvent()
+  const start = app.createEvent<string>()
   const indirectCall = app.createEvent()
   const sendStats = app.createEffect({
     async handler(user) {
@@ -134,7 +135,7 @@ test('attach support', async() => {
 
   const baseUrl = app.createStore('https://ssr.effector.dev/api')
 
-  const fetchJson = app.createEffect({
+  const fetchJson = app.createEffect<string, any>({
     async handler(url) {
       return (
         await fetch(url, {
@@ -198,7 +199,7 @@ test('attach support', async() => {
   const Friends = () => useList(friends, friend => <li>{friend}</li>)
   const Total = () => <small>Total: {useStore(friendsTotal)}</small>
 
-  const App = ({root}) => (
+  const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <User />
       <b>Friends:</b>
@@ -217,27 +218,27 @@ test('attach support', async() => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-ggkn4w": "https://ssr.effector.dev/api",
-      "-vjt6hb": Array [
+      "-fzj0qp": "https://ssr.effector.dev/api",
+      "-v2rk34": Array [
         "bob",
         "carol",
       ],
-      "1tmqd0": "alice",
+      "c8mf1a": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-ggkn4w": "https://ssr.effector.dev/api",
-      "-vjt6hb": Array [
+      "-fzj0qp": "https://ssr.effector.dev/api",
+      "-v2rk34": Array [
         "alice",
       ],
-      "1tmqd0": "bob",
+      "c8mf1a": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
 })
 
-test('computed values support', async() => {
+test('computed values support', async () => {
   const app = createDomain()
 
   const fetchUser = app.createEffect<string, {name: string; friends: string[]}>(
@@ -250,7 +251,7 @@ test('computed values support', async() => {
       },
     },
   )
-  const start = app.createEvent()
+  const start = app.createEvent<string>()
   forward({from: start, to: fetchUser})
   const name = app
     .createStore('guest')
@@ -263,7 +264,7 @@ test('computed values support', async() => {
 
   const Total = () => <small>Total: {useStore(friendsTotal)}</small>
   const User = () => <b>User: {useStore(name)}</b>
-  const App = ({root}) => (
+  const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <section>
         <User />
@@ -301,7 +302,74 @@ test('computed values support', async() => {
   `)
 })
 
-test('allSettled effect calls', async() => {
+test('useGate support', async () => {
+  const app = createDomain()
+  const getMessagesFx = app.createEffect<{chatId: string}, string[]>({
+    async handler({chatId}) {
+      return ['hi bob!', 'Hello, Alice']
+    },
+  })
+
+  const messagesAmount = app
+    .createStore(0)
+    .on(getMessagesFx.doneData, (_, messages) => messages.length)
+
+  const activeChatGate = createGate<{chatId: string}>({domain: app})
+
+  forward({from: activeChatGate.open, to: getMessagesFx})
+
+  const ChatPage = ({chatId}: {chatId: string}) => {
+    useGate(activeChatGate, {chatId})
+    return (
+      <div>
+        <header>Chat {chatId}</header>
+        <p>Messages total: {useStore(messagesAmount)}</p>
+      </div>
+    )
+  }
+  const App = ({root}: {root: Scope}) => (
+    <Provider value={root}>
+      <ChatPage chatId="chat01" />
+    </Provider>
+  )
+
+  const serverScope = fork(app)
+  await render(<App root={serverScope} />)
+
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <header>
+        Chat 
+        chat01
+      </header>
+      <p>
+        Messages total: 
+        2
+      </p>
+    </div>
+  `)
+
+  const clientScope = fork(app, {
+    values: serialize(serverScope),
+  })
+
+  await render(<App root={clientScope} />)
+
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <header>
+        Chat 
+        chat01
+      </header>
+      <p>
+        Messages total: 
+        2
+      </p>
+    </div>
+  `)
+})
+
+test('allSettled effect calls', async () => {
   const fn = jest.fn()
   const app = createDomain()
 

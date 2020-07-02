@@ -6,6 +6,7 @@ import {
 } from './useStore'
 import {useList as commonUseList} from './useList'
 import {withDisplayName} from './withDisplayName'
+import {Gate, useGate as commonUseGate} from './createGate'
 
 function createDefer() {
   const result = {} as any
@@ -24,6 +25,25 @@ function useScopeStore(store: any) {
   if (!scope)
     throw Error('No scope found, consider adding <Provider> to app root')
   return scope.find(store).meta.wrapped
+}
+
+export function useGate<Props>(
+  GateComponent: Gate<Props>,
+  props: Props = {} as any,
+) {
+  const open = useEvent(GateComponent.open)
+  const close = useEvent(GateComponent.close)
+  const set = useEvent(GateComponent.set)
+  const ForkedGate = React.useMemo(
+    () =>
+      ({
+        open,
+        close,
+        set,
+      } as Gate<Props>),
+    [GateComponent, open],
+  )
+  commonUseGate(ForkedGate, props)
 }
 
 export function createStoreConsumer(store: any) {
