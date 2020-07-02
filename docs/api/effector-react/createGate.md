@@ -6,7 +6,7 @@ hide_title: true
 
 # createGate
 
-## `createGate(config?: {defaultState?, name?})`
+## `createGate(config?: {defaultState?, domain?, name?})`
 
 Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Gate.md#state) will be created with passed value
 
