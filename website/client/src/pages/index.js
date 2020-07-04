@@ -1,5 +1,5 @@
 import React from 'react'
-import classnames from 'classnames'
+import clsx from 'clsx'
 import Layout from '@theme/Layout'
 // import CodeBlock from '@theme/CodeBlock'
 import Link from '@docusaurus/Link'
@@ -76,7 +76,7 @@ const features = [
 function Feature({imageUrl, title, description}) {
   const imgUrl = useBaseUrl(imageUrl)
   return (
-    <div className={classnames('col col--4', styles.feature)}>
+    <div className={clsx('col col--4', styles.feature)}>
       {imgUrl && (
         <div className="text--center">
           <img className={styles.featureImage} src={imgUrl} alt="" />
@@ -93,18 +93,18 @@ function Home() {
   const {siteConfig = {}} = context
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
-      <header className={classnames('hero ', styles.heroBanner)}>
+      <header className={clsx('hero ', styles.heroBanner)}>
         <div className="container">
           <div className="row">
             <div className="col col--6">
               <Code language="js">{codeExample}</Code>
             </div>
-            <div className={classnames('col col--6', styles.buttons)}>
+            <div className={clsx('col col--6', styles.buttons)}>
               <h1 className="hero__title">{siteConfig.title}</h1>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
               <div className={styles.buttons}>
                 <Link
-                  className={classnames(
+                  className={clsx(
                     'button button--outline button--primary button--lg',
                     styles.getStarted,
                   )}
@@ -112,7 +112,7 @@ function Home() {
                   Get Started
                 </Link>
                 <Link
-                  className={classnames(
+                  className={clsx(
                     'button button--outline button--secondary button--lg',
                     styles.getStarted,
                   )}
