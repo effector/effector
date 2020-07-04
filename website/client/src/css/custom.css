@@ -34,3 +34,7 @@
 .footer .footer__logo {
   max-width: 5rem;
 }
+
+body {
+  font-family: 'Lexend Deca', sans-serif;
+}

@@ -7,9 +7,9 @@
     "now-build": "yarn build"
   },
   "dependencies": {
-    "@docusaurus/core": "2.0.0-alpha.55",
-    "@docusaurus/preset-classic": "2.0.0-alpha.55",
-    "classnames": "^2.2.6",
+    "@docusaurus/core": "2.0.0-alpha.58",
+    "@docusaurus/preset-classic": "2.0.0-alpha.58",
+    "clsx": "1.1.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },

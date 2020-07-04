@@ -110,7 +110,7 @@ module.exports = {
     '/js/splash.js',
     '/js/try-button.js'
   ],
-  stylesheets: ['/css/try-button.css'],
+  stylesheets: ['/css/try-button.css', '/css/fonts.css'],
   presets: [
     [
       '@docusaurus/preset-classic',
