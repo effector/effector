@@ -1,8 +1,8 @@
 @font-face {
   font-family: 'Lexend Deca';
   src: local('Lexend Deca Regular'), local('Lexend Deca'),
-    url('static/fonts/LexendDeca-Regular.woff2') format('woff2'),
-    url('static/fonts/LexendDeca-Regular.ttf') format('ttf');
+    url('/static/fonts/LexendDeca-Regular.woff2') format('woff2'),
+    url('/static/fonts/LexendDeca-Regular.ttf') format('ttf');
   font-weight: 400;
   font-display: swap;
   font-style: normal;
