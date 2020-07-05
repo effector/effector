@@ -153,20 +153,23 @@ export async function rollupEffector() {
         es: dir(`npm/${name}/${name}.es.js`),
       },
       renderModuleGraph: true,
+      inputExtension: 'ts',
     }),
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/fork.js`),
       },
       input: 'fork',
+      inputExtension: 'ts',
     }),
     createUmd(name, {
       external: ['react', 'effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: name,
       globals: {},
+      extension: 'ts',
     }),
-    createCompat(name),
+    createCompat(name, 'ts'),
   ])
 }
 export async function rollupEffectorDom({name}) {

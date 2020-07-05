@@ -20,7 +20,7 @@
 [lints]
 
 [options]
-module.name_mapper='^effector$' -> '<PROJECT_ROOT>/../../../../packages/effector'
+module.name_mapper='^effector$' -> '<PROJECT_ROOT>/../../../../packages/effector/index.js.flow'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/../../../../packages/effector-react'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/../../../../packages/effector-vue'
 module.name_mapper='^\@effector/\(.+\)$' -> '<PROJECT_ROOT>/../../../../packages/\@effector/\1'

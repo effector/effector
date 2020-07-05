@@ -4,7 +4,7 @@ const {remove} = require('fs-extra')
 const REMOVE_REPORT = true
 const REMOVE_FIXTURES = true
 
-module.exports = async() => {
+module.exports = async () => {
   const fixtures = resolve(__dirname, '..', '__fixtures__')
   const reportDir = resolve(__dirname, '..', '.reports')
   const reqs = []

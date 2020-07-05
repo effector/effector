@@ -1,5 +1,3 @@
-//@flow
-
 const watchPathIgnorePatterns = [
   '<rootDir>/.effector/',
   '<rootDir>/.github/',
@@ -20,12 +18,16 @@ const watchPathIgnorePatterns = [
   '<rootDir>/tools/',
   '<rootDir>/website/',
 ]
+
+const transform = {
+  '^.+\\.jsx?$': 'babel-jest',
+  '^.+\\.tsx?$': 'babel-jest',
+}
+
 const createDefaultConfig = () => ({
   automock: false,
   testEnvironment: 'node',
-  transform: {
-    '^.+\\.jsx?$': 'babel-jest',
-  },
+  transform,
   // moduleNameMapper: {},
   modulePathIgnorePatterns: watchPathIgnorePatterns,
   testPathIgnorePatterns: watchPathIgnorePatterns,
@@ -59,10 +61,7 @@ module.exports = {
               '<rootDir>/src/forest/__tests__/**/*.test.ts',
               '!<rootDir>/src/forest/__tests__/ssr/**',
             ],
-            transform: {
-              '^.+\\.jsx?$': 'babel-jest',
-              '^.+\\.ts?$': 'babel-jest',
-            },
+            transform,
             testTimeout: 60e3,
             runner: './src/forest/__fixtures__/browserstackTestRunner.js',
           },
@@ -71,29 +70,23 @@ module.exports = {
       : [
         {
           effector: {
-            testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.js`],
+            testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
+            transform,
           },
         },
-        // 'forms',
         'babel',
         {
           react: {
             testEnvironment: 'jsdom',
             testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
-            transform: {
-              '^.+\\.jsx?$': 'babel-jest',
-              '^.+\\.tsx?$': 'babel-jest',
-            },
+            transform,
           },
         },
         {
           vue: {
             testEnvironment: 'jsdom',
             testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
-            transform: {
-              '^.+\\.jsx?$': 'babel-jest',
-              '^.+\\.ts?$': 'babel-jest',
-            },
+            transform,
           },
         },
         {
@@ -106,10 +99,7 @@ module.exports = {
             automock: false,
             testEnvironment: 'node',
             testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
-            transform: {
-              '^.+\\.jsx?$': 'babel-jest',
-              '^.+\\.ts?$': 'babel-jest',
-            },
+            transform,
             testTimeout: 60e3,
           },
         },
@@ -123,10 +113,7 @@ module.exports = {
             globalSetup: './src/types/src/globalSetup.js',
             globalTeardown: './src/types/src/globalTeardown.js',
             maxConcurrency: 25,
-            transform: {
-              '^.+\\.jsx?$': 'babel-jest',
-              '^.+\\.tsx?$': 'babel-jest',
-            },
+            transform,
           },
         },
       ],

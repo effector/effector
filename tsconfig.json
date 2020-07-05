@@ -13,6 +13,7 @@
     "baseUrl": ".",
     "paths": {
       "effector/fork": ["packages/effector/fork.d.ts"],
+      "effector/fixtures": ["src/fixtures/index.d.ts"],
       "effector": ["packages/effector/index.d.ts"],
       "effector-react/ssr": ["packages/effector-react/ssr.d.ts"],
       "effector-react": ["packages/effector-react/index.d.ts"],
