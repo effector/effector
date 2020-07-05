@@ -37,14 +37,14 @@ export function sample(...args: any): any {
     sid = source.sid
     source = source.source
   }
+  if (!is.unit(source)) {
+    source = combine(source)
+  }
   if (clock === undefined) {
     //still undefined!
     clock = source
   }
   name = metadata || name || source.shortName
-  if (!is.unit(source)) {
-    source = clock = combine(source)
-  }
   const template = readTemplate()
   const isUpward = !!target
   if (!target) {
