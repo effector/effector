@@ -6,7 +6,7 @@ import {bind2} from './bind'
 import {assertObject} from './is'
 import {throwError} from './throw'
 
-export function fromObservable<T>(observable: mixed): Event<T> {
+export function fromObservable<T>(observable: any): Event<T> {
   assertObject(observable)
   const observableItem =
     $$observable in observable ? observable[$$observable]() : observable
