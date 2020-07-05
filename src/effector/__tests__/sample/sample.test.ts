@@ -1,11 +1,4 @@
-import {
-  sample,
-  guard,
-  Kind,
-  createEvent,
-  createStore,
-  createEffect,
-} from 'effector'
+import {sample, guard, createEvent, createStore, createEffect} from 'effector'
 
 import {argumentHistory} from 'effector/fixtures'
 
@@ -124,19 +117,19 @@ it('should not accept undefined clocks', () => {
 describe('sample type', () => {
   test.each`
     source            | clock             | kind
-    ${createStore(0)} | ${createStore(0)} | ${Kind.store}
-    ${createStore(0)} | ${createEvent()}  | ${Kind.event}
-    ${createEvent()}  | ${createStore(0)} | ${Kind.event}
-    ${createEvent()}  | ${createEvent()}  | ${Kind.event}
+    ${createStore(0)} | ${createStore(0)} | ${'store'}
+    ${createStore(0)} | ${createEvent()}  | ${'event'}
+    ${createEvent()}  | ${createStore(0)} | ${'event'}
+    ${createEvent()}  | ${createEvent()}  | ${'event'}
   `(`$kind <- $source.kind by $clock.kind`, ({source, clock, kind}) => {
     expect(sample(source, clock).kind).toBe(kind)
   })
   test.each`
     source            | clock             | kind
-    ${createStore(0)} | ${createStore(0)} | ${Kind.store}
-    ${createStore(0)} | ${createEvent()}  | ${Kind.event}
-    ${createEvent()}  | ${createStore(0)} | ${Kind.event}
-    ${createEvent()}  | ${createEvent()}  | ${Kind.event}
+    ${createStore(0)} | ${createStore(0)} | ${'store'}
+    ${createStore(0)} | ${createEvent()}  | ${'event'}
+    ${createEvent()}  | ${createStore(0)} | ${'event'}
+    ${createEvent()}  | ${createEvent()}  | ${'event'}
   `(
     `$kind <- $source.kind by $clock.kind with handler`,
     ({source, clock, kind}) => {
@@ -175,11 +168,15 @@ describe('sample', () => {
       ({greedy, resultDirect, resultBacktracking}) => {
         test('direct order', () => {
           const fn = jest.fn()
-          const A = createEvent()
+          const A = createEvent<number>()
           const B = A.map(x => ({x}))
 
-          //@ts-ignore
-          sample(A, B, (A, B) => B, greedy).watch(e => fn(e))
+          sample({
+            source: A,
+            clock: B,
+            fn: (A, B) => B,
+            greedy,
+          }).watch(e => fn(e))
 
           A(1)
           A(2)
@@ -189,11 +186,15 @@ describe('sample', () => {
         })
         test('backtracking', () => {
           const fn = jest.fn()
-          const A = createEvent()
+          const A = createEvent<number>()
           const B = A.map(x => ({x}))
 
-          //@ts-ignore
-          sample(B, A, B => B, greedy).watch(e => fn(e))
+          sample({
+            source: B,
+            clock: A,
+            fn: B => B,
+            greedy,
+          }).watch(e => fn(e))
 
           A(1)
           A(2)
@@ -407,13 +408,22 @@ describe('sample', () => {
         'event call will not break watchers (greedy = $greedy)',
         async ({greedy}) => {
           const fn1 = jest.fn()
-          const hello = createEvent()
-          const run = createEvent()
+          const hello = createEvent<string>()
+          const run = createEvent<string>()
 
-          //@ts-ignore
-          sample(hello, run, (a, b) => ({a, b}), greedy).watch(() => {})
-          //@ts-ignore
-          sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
+          sample({
+            source: hello,
+            clock: run,
+            fn: (a, b) => ({a, b}),
+            greedy,
+          }).watch(() => {})
+
+          sample({
+            source: hello,
+            clock: run,
+            fn: (a, b) => ({a, b}),
+            greedy,
+          }).watch(e => fn1(e))
 
           run('R')
           hello('hello')
@@ -557,6 +567,7 @@ test('array target', () => {
 test('validate shape', () => {
   expect(() => {
     const clock = createEvent()
+    //@ts-ignore
     sample(0, clock)
   }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
 })
