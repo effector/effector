@@ -21,7 +21,7 @@ const shapeToStore = (shape, deprecated) => {
   return shape
 }
 
-export function sample(...args): any {
+export function sample(...args: any): any {
   let target
   let name
   let metadata
@@ -29,8 +29,9 @@ export function sample(...args): any {
     metadata = injectedData
     args = userConfig
   })
-  let [source, clock, fn, greedy = false] = args
+  let [source, clock, fn] = args
   let sid
+  let greedy
   //config case
   if (clock === undefined && 'source' in source) {
     if ('clock' in source && source.clock == null)
@@ -51,10 +52,6 @@ export function sample(...args): any {
   name = metadata || name || source.shortName
   source = shapeToStore(source)
   clock = shapeToStore(clock, true)
-  if (typeof fn === 'boolean') {
-    greedy = fn
-    fn = null
-  }
   const template = readTemplate()
   const isUpward = !!target
   if (!target) {

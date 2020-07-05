@@ -502,13 +502,11 @@ export function sample<A, B, C>(
   source: Store<A>,
   clock: Store<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
 ): Store<C>
 export function sample<A, B, C>(
   source: Unit<A>,
   clock: Unit<B>,
   fn: (source: A, clock: B) => C,
-  greedy?: boolean,
 ): Event<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
@@ -580,19 +578,16 @@ export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Store<B>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
-  greedy?: boolean,
 ): Store<C>
 export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Store<B>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
-  greedy?: boolean,
 ): Store<C>
 export function sample<A extends Combinable, B, C>(
   source: A,
   clock: Event<B> | Effect<B, any, any>,
   fn: (source: GetCombinedValue<A>, clock: B) => C,
-  greedy?: boolean,
 ): Event<C>
 export function sample<A extends Combinable>(config: {
   source: A
