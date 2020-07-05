@@ -1,5 +1,3 @@
-//@flow
-
 import {Graphite, Graph} from './index.h'
 import {readRef} from './stateRef'
 import {getGraph, getValue} from './getter'

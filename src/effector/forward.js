@@ -1,4 +1,3 @@
-//@flow
 import {onConfigNesting} from './config'
 import {createNode} from './createNode'
 import {Subscription, Graphite, Cmd} from './index.h'

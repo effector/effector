@@ -1,5 +1,3 @@
-//@flow
-
 import {Graphite, Graph} from './index.h'
 
 export const getGraph = (graph: Graphite): Graph => graph.graphite || graph

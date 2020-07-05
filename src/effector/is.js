@@ -1,5 +1,3 @@
-//@flow
-
 //eslint-disable-next-line
 export * as is from './validate'
 import {throwError} from './throw'

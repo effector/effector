@@ -1,4 +1,3 @@
-//@flow
 import {combine} from './combine'
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'

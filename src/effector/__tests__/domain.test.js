@@ -1,5 +1,3 @@
-//@flow
-
 import {
   createDomain,
   clearNode,
@@ -117,7 +115,7 @@ describe('domain name', () => {
   })
 })
 describe('config', () => {
-  test('domain.createEffect(config)', async() => {
+  test('domain.createEffect(config)', async () => {
     const fn = jest.fn()
     const domain = createDomain()
     const fx = domain.createEffect({

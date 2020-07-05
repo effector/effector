@@ -1,5 +1,3 @@
-//@flow
-
 import {Graph, Graphite, Cmd, StateRef} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 

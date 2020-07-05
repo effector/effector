@@ -1,5 +1,3 @@
-//@flow
-
 import {createStore} from 'effector'
 
 it('stack safe', () => {

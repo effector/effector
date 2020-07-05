@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent, createStore, createDomain, combine, sample} from 'effector'
 import {unitObjectName} from '../naming'
 

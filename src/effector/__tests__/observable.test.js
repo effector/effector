@@ -1,4 +1,3 @@
-//@flow
 import * as redux from 'redux'
 import {from, periodic} from 'most'
 import {

@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent, createStore, split, type Event} from 'effector'
 
 it('split event by matching conditions', () => {

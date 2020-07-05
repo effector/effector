@@ -1,5 +1,3 @@
-//@flow
-
 import {onConfigNesting} from './config'
 import {createLinkNode} from './forward'
 import {sample} from './sample'

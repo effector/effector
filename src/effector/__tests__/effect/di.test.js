@@ -1,4 +1,4 @@
-//@flow
+
 
 import {createEffect} from 'effector'
 import {delay, argumentHistory} from 'effector/fixtures'

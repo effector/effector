@@ -1,5 +1,3 @@
-//@flow
-
 import {kind} from './index.h'
 import {
   store as storeKind,

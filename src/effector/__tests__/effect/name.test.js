@@ -1,5 +1,3 @@
-//@flow
-
 import {createEffect, createDomain} from 'effector'
 
 test("should return it's own name on effect.getType()", () => {

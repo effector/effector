@@ -1,5 +1,3 @@
-//@flow
-
 import {Store, Domain} from './unit.h'
 import {is} from './is'
 import {getParent} from './getter'

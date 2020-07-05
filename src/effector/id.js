@@ -1,5 +1,3 @@
-//@flow
-
 const idCount = () => {
   let id = 0
   return () => (++id).toString(36)

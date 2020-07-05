@@ -1,5 +1,3 @@
-//@flow
-
 import {from} from 'most'
 import {createEvent} from 'effector'
 

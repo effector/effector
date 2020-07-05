@@ -1,9 +1,7 @@
-//@flow
-
 import {createStore, createEvent, forward, combine} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
-test('diamonds', async() => {
+test('diamonds', async () => {
   const fn = jest.fn()
   const trigger = createEvent()
   const nodeA = createStore(1).on(trigger, x => x + 1)
@@ -47,7 +45,7 @@ updated branches     └────┘                └────┘
                                 └────┘
 
 */
-test('olympic', async() => {
+test('olympic', async () => {
   const fn = jest.fn()
   const A = createEvent()
   const B = createStore('text')

@@ -1,5 +1,3 @@
-//@flow
-
 import {combine} from './combine'
 import {createEffect, onSettled} from './createEffect'
 import {applyParentHook} from './createUnit'

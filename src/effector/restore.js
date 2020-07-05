@@ -1,4 +1,3 @@
-//@flow
 import {createStore} from './createUnit'
 import {is} from './is'
 import {forIn} from './forIn'

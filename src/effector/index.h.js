@@ -1,5 +1,3 @@
-//@flow
-
 export type ID = string
 
 //prettier-ignore

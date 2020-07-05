@@ -1,5 +1,3 @@
-//@flow
-
 import {step} from './typedef'
 import {readRef} from './stateRef'
 

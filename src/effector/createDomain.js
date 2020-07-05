@@ -1,5 +1,3 @@
-//@flow
-
 import {Store, Event, Effect, Domain} from './unit.h'
 import {own} from './own'
 import {createNode} from './createNode'

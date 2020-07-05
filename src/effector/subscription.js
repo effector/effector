@@ -1,5 +1,3 @@
-//@flow
-
 import {Subscription, Graphite} from './index.h'
 import {bind2} from './bind'
 import {clearNode} from './clearNode'

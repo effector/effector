@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent} from 'effector'
 
 it('can use deep stack calls', () => {

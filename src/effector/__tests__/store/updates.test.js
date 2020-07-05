@@ -1,5 +1,3 @@
-//@flow
-
 import {createStore, is} from 'effector'
 
 test('store.updates is event', () => {

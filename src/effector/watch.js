@@ -1,5 +1,3 @@
-//@flow
-
 import {step} from './typedef'
 import {callStack} from './caller'
 import {createNode} from './createNode'

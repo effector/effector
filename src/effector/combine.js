@@ -1,5 +1,3 @@
-//@flow
-
 import {Store} from './unit.h'
 import {createStore} from './createUnit'
 import {createStateRef} from './stateRef'
@@ -68,8 +66,7 @@ export function combine(...args: any[]): Store<any> {
       handler = spreadArgs(handler)
     }
   }
-  if (!isObject(structStoreShape))
-    throwError('shape should be an object')
+  if (!isObject(structStoreShape)) throwError('shape should be an object')
   return storeCombination(
     Array.isArray(structStoreShape),
     structStoreShape,
@@ -172,14 +169,14 @@ const storeCombination = (
   rawShape.after = [
     fn
       ? {
-        type: 'map',
-        to: getStoreState(store),
-        fn,
-      }
+          type: 'map',
+          to: getStoreState(store),
+          fn,
+        }
       : {
-        type: 'copy',
-        to: getStoreState(store),
-      },
+          type: 'copy',
+          to: getStoreState(store),
+        },
   ]
   if (!template) {
     store.defaultState = fn

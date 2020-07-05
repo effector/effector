@@ -1,5 +1,3 @@
-//@flow
-
 import {createApi, restore, combine} from 'effector'
 
 test('create api', () => {

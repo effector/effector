@@ -1,5 +1,3 @@
-//@flow
-
 import {Store} from './unit.h'
 import {createEvent, applyParentHook} from './createUnit'
 import {forIn} from './forIn'

@@ -1,4 +1,3 @@
-//@flow
 import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
 

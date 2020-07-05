@@ -1,5 +1,3 @@
-//@flow
-
 import {getGraph} from './getter'
 import {bind} from './bind'
 import {createDefer} from './defer'

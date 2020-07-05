@@ -1,5 +1,3 @@
-//@flow
-
 import {createStore, createStoreObject} from 'effector'
 
 describe('createStoreObject', () => {

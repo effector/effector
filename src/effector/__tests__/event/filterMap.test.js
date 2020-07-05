@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent, type Event} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 import {show} from 'effector/fixtures/showstep'

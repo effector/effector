@@ -1,5 +1,3 @@
-//@flow
-
 import {
   createStore,
   createApi,
@@ -192,7 +190,7 @@ test('list', () => {
         |}> = segments
           .map(({updater, index}) => ({
             updater,
-            index: normalizeOffset<T>(index, state, []),
+            index: normalizeOffset < T > (index, state, []),
           }))
           .sort((a, b) => a.index - b.index)
         for (let i = 0; i < newSegments.length; i++) {
@@ -244,8 +242,8 @@ test('list', () => {
           to: number,
         |}> = segments
           .map(([indexA, indexB]) => ({
-            from: normalizeOffset<T>(indexA, state, []),
-            to: normalizeOffset<T>(indexB, state, []),
+            from: normalizeOffset < T > (indexA, state, []),
+            to: normalizeOffset < T > (indexB, state, []),
           }))
           .sort((a, b) => a.from - b.from)
         for (let i = 0; i < newSegments.length; i++) {
@@ -272,8 +270,8 @@ test('list', () => {
           to: number,
         |}> = segments
           .map(([indexA, indexB]) => ({
-            from: normalizeOffset<T>(indexA, state, []),
-            to: normalizeOffset<T>(indexB, state, []),
+            from: normalizeOffset < T > (indexA, state, []),
+            to: normalizeOffset < T > (indexB, state, []),
           }))
           .sort((a, b) => a.from - b.from)
         for (let i = 0; i < newSegments.length; i++) {
@@ -365,15 +363,13 @@ test('list', () => {
     list: $ReadOnlyArray<T>,
   ): Array<{|+entries: $ReadOnlyArray<T>, +offset: number|}> {
     return segments
-      .map(
-        ({
-          entries,
-          offset,
-        }): {|entries: $ReadOnlyArray<T>, offset: number|} => ({
-          entries,
-          offset: normalizeOffset<T>(offset, list, entries),
-        }),
-      )
+      .map(({entries, offset}): {|
+        entries: $ReadOnlyArray<T>,
+        offset: number,
+      |} => ({
+        entries,
+        offset: normalizeOffset < T > (offset, list, entries),
+      }))
       .sort((a, b) => a.offset - b.offset)
   }
 })

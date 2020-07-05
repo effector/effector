@@ -1,5 +1,3 @@
-//@flow
-
 import {StateRef} from './index.h'
 import {nextStepID} from './id'
 

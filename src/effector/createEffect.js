@@ -1,5 +1,3 @@
-//@flow
-
 import {step} from './typedef'
 import {getGraph, getParent} from './getter'
 import {own} from './own'

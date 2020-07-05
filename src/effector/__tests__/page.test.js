@@ -1,5 +1,3 @@
-//@flow
-
 import {createEvent, createStore, combine, launch} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 

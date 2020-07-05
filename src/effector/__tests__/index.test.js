@@ -1,5 +1,3 @@
-//@flow
-
 import {from} from 'most'
 
 import {
@@ -86,7 +84,7 @@ test('showcase', () => {
 })
 
 describe('symbol-observable support', () => {
-  test('from(store)', async() => {
+  test('from(store)', async () => {
     const fn = jest.fn()
     expect(() => {
       //@ts-ignore
@@ -109,7 +107,7 @@ describe('symbol-observable support', () => {
     expect(store1.getState()).toBe(2)
   })
   describe('from(effect)', () => {
-    test('without implementation', async() => {
+    test('without implementation', async () => {
       const fn = jest.fn()
       expect(() => {
         from(createEffect())
@@ -127,7 +125,7 @@ describe('symbol-observable support', () => {
       expect(argumentHistory(fn)).toEqual([0, 1, 2])
     })
 
-    test('with implementation', async() => {
+    test('with implementation', async () => {
       const fn = jest.fn()
       expect(() => {
         async function impl() {}
@@ -201,7 +199,7 @@ describe('store.on', () => {
     e1('baz')
     expect(store.getState()).toMatchObject({counter: 0, text: '', foo: 'baz'})
   })
-  test('store.on(effect)', async() => {
+  test('store.on(effect)', async () => {
     const counter = createStore(0)
     const text = createStore('')
     const store = combine({counter, text, foo: 0})

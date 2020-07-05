@@ -1,5 +1,3 @@
-//@flow
-
 import $$observable from 'symbol-observable'
 import {Event} from './unit.h'
 import {clearNode} from './clearNode'

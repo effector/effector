@@ -1,4 +1,3 @@
-//@flow
 import {
   Subscription,
   Subscriber,
@@ -97,30 +96,30 @@ export interface Effect<Params, Done, Fail = Error> extends Unit {
   */
   done: Event<{
     params: Params,
-    result: Done
+    result: Done,
   }>;
   fail: Event<{
     params: Params,
-    error: Fail
+    error: Fail,
   }>;
   finally: Event<
     | {
         status: 'done',
         params: Params,
-        result: Done
+        result: Done,
       }
     | {
         status: 'fail',
         params: Params,
-        error: *
-      }
+        error: *,
+      },
   >;
   /*::+*/ id: string;
   use: {
     /*::
     [[call]](asyncFunction: (params: Params) => Promise<Done> | Done): void,
     */
-    getCurrent(): (params: Params) => Promise<Done>
+    getCurrent(): (params: Params) => Promise<Done>,
   };
   create(payload: Params, type: string, args: any[]): Params;
   pending: Store<boolean>;

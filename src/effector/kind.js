@@ -1,5 +1,3 @@
-//@flow
-
 import {kind} from './index.h'
 
 export const store: kind = 'store'

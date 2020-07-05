@@ -1,4 +1,4 @@
-//@flow
+
 
 import {forward, createEvent, createStore, createNode} from 'effector'
 

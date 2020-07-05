@@ -1,5 +1,3 @@
-//@flow
-
 import $$observable from 'symbol-observable'
 
 import {is, isObject, isFunction, assertObject} from './is'

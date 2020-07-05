@@ -1,5 +1,3 @@
-//@flow
-
 import {createNode, withRegion, launch, restore, step} from 'effector'
 
 let SILENT = true

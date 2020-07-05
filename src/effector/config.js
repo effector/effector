@@ -1,5 +1,3 @@
-//@flow
-
 import {getConfig, getNestedConfig} from './getter'
 
 export const onConfigNesting = (
