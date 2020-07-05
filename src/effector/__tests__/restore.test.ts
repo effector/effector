@@ -1,49 +1,4 @@
-import {
-  restore,
-  restoreEvent,
-  restoreEffect,
-  restoreObject,
-  createEvent,
-  createEffect,
-  Effect,
-} from 'effector'
-
-describe('separate functions', () => {
-  test('restore object', () => {
-    const shape = restoreObject({
-      foo: 'foo',
-      bar: 0,
-    })
-    expect(shape.foo.getState()).toBe('foo')
-    expect(shape.bar.getState()).toBe(0)
-  })
-
-  test('restore event', () => {
-    const event = createEvent<string>()
-
-    const shape = restoreEvent(event, 'def')
-    expect(shape.getState()).toBe('def')
-    event('foo')
-    expect(shape.getState()).toBe('foo')
-  })
-
-  test('restore effect', async () => {
-    const fn = jest.fn()
-    const fx: Effect<string, number, string> = createEffect()
-    fx.use(text => text.length)
-    const shape = restoreEffect(fx, -1)
-    shape.watch(fn)
-    expect(shape.getState()).toBe(-1)
-    await fx('foo')
-    expect(shape.getState()).toBe(3)
-    expect(fn).toHaveBeenCalledTimes(2)
-    fx.use(() => {
-      throw 'err'
-    })
-    await expect(fx('bar')).rejects.toBe('err')
-    expect(fn).toHaveBeenCalledTimes(2)
-  })
-})
+import {restore, createEvent, createEffect, Effect} from 'effector'
 
 describe('single function', () => {
   test('restore object', () => {
@@ -83,7 +38,7 @@ describe('single function', () => {
   test('all together', () => {
     const keyPressed = createEvent<string>()
 
-    const calculate = createEffect()
+    const calculate = createEffect<number, string>()
     const shape = restore({
       index: 0,
       press: restore(keyPressed, ' '),
@@ -97,6 +52,7 @@ describe('single function', () => {
 test('babel plugin naming', () => {
   const event = createEvent()
   const foo = restore(event, null)
+  //@ts-ignore
   const bar = restore(event, null, {name: 'baz'})
   expect(foo.shortName).toBe('foo')
   expect(bar.shortName).toBe('baz')

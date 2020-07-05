@@ -33,9 +33,3 @@ export function restore(obj: any, defaultState: any, config?: any): any {
   })
   return result
 }
-
-export {
-  restore as restoreEvent,
-  restore as restoreEffect,
-  restore as restoreObject,
-}

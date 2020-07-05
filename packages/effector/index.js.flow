@@ -392,23 +392,6 @@ declare export function split<
   {...Obj, __: (payload: S) => boolean, ...},
   (h: (payload: S) => boolean) => Event<S>,
 >
-declare export function restoreObject<State: StoreObject>(
-  state: State,
-): $ObjMap<
-  State,
-  //prettier-ignore
-  <S>(field: Store<S> | S) => Store<S>,
->
-
-declare export function restoreEffect<Done>(
-  effect: Effect<any, Done, any>,
-  defaultState: Done,
-): Store<Done>
-
-declare export function restoreEvent<E>(
-  event: Event<E>,
-  defaultState: E,
-): Store<E>
 
 declare export function restore<Done>(
   effect: Effect<any, Done, any>,

@@ -1,7 +1,7 @@
 //@flow
 
 import faker from 'faker'
-import {type Effect, createEffect, createEvent, restoreEvent} from 'effector'
+import {type Effect, createEffect, createEvent, restore} from 'effector'
 import {createFormApi} from '../'
 
 describe('createFormApi', () => {
@@ -14,7 +14,7 @@ describe('createFormApi', () => {
       string,
       number,
     > = createEffect()
-    submitEffect.use(async() => 'foo')
+    submitEffect.use(async () => 'foo')
 
     submitEffect.watch(params => expect(params).toMatchSnapshot())
 
@@ -78,7 +78,7 @@ describe('createFormApi', () => {
       lastName: string,
     |}>()
     const generate = createEvent()
-    const initialValues = restoreEvent(generate, {
+    const initialValues = restore(generate, {
       firstName: faker.name.firstName(),
       lastName: faker.name.lastName(),
     }).map(() => ({

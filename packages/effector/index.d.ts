@@ -468,14 +468,6 @@ export function createApi<
     : any
 }
 
-export function restoreObject<State extends {[key: string]: Store<any> | any}>(
-  state: State,
-): {[K in keyof State]: State[K] extends Store<infer S> ? Store<S> : State[K]}
-export function restoreEffect<Done>(
-  effect: Effect<any, Done, any>,
-  defaultState: Done,
-): Store<Done>
-export function restoreEvent<E>(event: Event<E>, defaultState: E): Store<E>
 export function restore<Done>(
   effect: Effect<any, Done, any>,
   defaultState: Done,
