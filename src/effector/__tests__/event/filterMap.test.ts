@@ -1,4 +1,4 @@
-import {createEvent, type Event} from 'effector'
+import {createEvent, Event} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 import {show} from 'effector/fixtures/showstep'
 
@@ -18,7 +18,6 @@ describe('event.filterMap', () => {
     num(2)
     num('-1')
     num(4)
-    ;(evenNum: Event<number>) //Should not fail
 
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
@@ -52,9 +51,9 @@ describe('event.filterMap', () => {
       ]
     `)
 
-    //$todo
+    //@ts-ignore
     expect(show(num.graphite)).toMatchSnapshot('num event graph')
-    //$todo
+    //@ts-ignore
     expect(show(evenNum.graphite)).toMatchSnapshot('evenNum event graph')
   })
 })

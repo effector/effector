@@ -28,7 +28,7 @@ import {
 } from './getter'
 import {throwError} from './throw'
 
-const normalizeConfig = (part, config) => {
+const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
     normalizeConfig(getConfig(part), config)
     if (part.name != null) {
@@ -47,15 +47,20 @@ const normalizeConfig = (part, config) => {
 }
 
 export const applyParentHook = (
-  source,
-  target,
+  source: any,
+  target: any,
   hookType: 'event' | 'effect' = 'event',
 ) => {
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
 
-let isStrict
-export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
+let isStrict: boolean
+export const initUnit = (
+  kind: any,
+  unit: any,
+  rawConfigA: any,
+  rawConfigB?: any,
+) => {
   const config = normalizeConfig(
     {
       name: rawConfigB,
@@ -74,7 +79,7 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
-  unit.thru = fn => fn(unit)
+  unit.thru = (fn: Function) => fn(unit)
   unit.getType = () => compositeName.fullName
   if (kind !== 'domain') {
     unit.subscribe = (observer: Subscriber<any>) => {
@@ -82,7 +87,7 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
       return unit.watch(
         isFunction(observer)
           ? observer
-          : upd => {
+          : (upd: any) => {
               if (observer.next) {
                 observer.next(upd)
               }
@@ -96,14 +101,14 @@ export const initUnit = (kind, unit, rawConfigA, rawConfigB) => {
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
-const createComputation = (from, to, op, fn) =>
+const createComputation = (from: any, to: any, op: any, fn: Function) =>
   createLinkNode(from, to, {
     scope: {fn},
     node: [step.compute({fn: callStack})],
     meta: {op},
   })
 
-const createEventFiltration = (event, op, fn, node) => {
+const createEventFiltration = (event: any, op: string, fn: any, node: any) => {
   let config
   if (isObject(fn)) {
     config = fn
@@ -118,9 +123,9 @@ const createEventFiltration = (event, op, fn, node) => {
   return mapped
 }
 
-export function createEvent<Payload>(
+export function createEvent<Payload = any>(
   nameOrConfig: any,
-  maybeConfig: any,
+  maybeConfig?: any,
 ): Event<Payload> {
   const event: any = (payload: Payload, ...args: any[]) =>
     event.create(payload, args, args)
@@ -128,12 +133,12 @@ export function createEvent<Payload>(
     meta: initUnit('event', event, maybeConfig, nameOrConfig),
   })
   //eslint-disable-next-line no-unused-vars
-  event.create = (payload, _, args) => {
+  event.create = (payload: any, _: any, args: any) => {
     launch(event, payload)
     return payload
   }
   event.watch = bind(watchUnit, event)
-  event.map = (fn: Function) => {
+  event.map = (fn: any) => {
     let config
     let name
     if (isObject(fn)) {
@@ -145,7 +150,7 @@ export function createEvent<Payload>(
     createComputation(event, mapped, 'map', fn)
     return mapped
   }
-  event.filter = fn => {
+  event.filter = (fn: any) => {
     if (isFunction(fn)) {
       console.error('.filter(fn) is deprecated, use .filterMap instead')
       return filterMapEvent(event, fn)
@@ -155,7 +160,7 @@ export function createEvent<Payload>(
     ])
   }
   event.filterMap = bind(filterMapEvent, event)
-  event.prepend = fn => {
+  event.prepend = (fn: any) => {
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: getParent(event),
     })
@@ -208,18 +213,18 @@ export function createStore<State>(
         return readRef(currentPage.reg[plainState.id])
       return readRef(plainState)
     },
-    setState(state) {
+    setState(state: any) {
       launch({
         target: store,
         params: state,
         defer: true,
       })
     },
-    reset(...units) {
+    reset(...units: any[]) {
       for (const unit of units) store.on(unit, () => store.defaultState)
       return store
     },
-    on(events, fn) {
+    on(events: any, fn: Function) {
       if (Array.isArray(events)) {
         for (const event of events) {
           onEvent(event, fn)
@@ -229,7 +234,7 @@ export function createStore<State>(
       }
       return store
     },
-    off(unit) {
+    off(unit: any) {
       const currentSubscription = getSubscribers(store).get(unit)
       if (currentSubscription) {
         currentSubscription()
@@ -237,7 +242,7 @@ export function createStore<State>(
       }
       return store
     },
-    map(fn, firstState?: any) {
+    map(fn: any, firstState?: any) {
       let config
       let name
       if (isObject(fn)) {
@@ -278,7 +283,7 @@ export function createStore<State>(
       }
       return innerStore
     },
-    watch(eventOrFn: Event<any> | Function, fn?: Function) {
+    watch(eventOrFn: any, fn?: Function) {
       if (!fn || !is.unit(eventOrFn)) {
         const subscription = watchUnit(store, eventOrFn)
         const template = readTemplate()
@@ -293,10 +298,10 @@ export function createStore<State>(
         return subscription
       }
       if (!isFunction(fn)) throwError('second argument should be a function')
-      return eventOrFn.watch(payload => fn(store.getState(), payload))
+      return eventOrFn.watch((payload: any) => fn(store.getState(), payload))
     },
   }
-  function onEvent(event, fn) {
+  function onEvent(event: any, fn: Function) {
     store.off(event)
     getSubscribers(store).set(
       event,
@@ -330,9 +335,9 @@ export function createStore<State>(
 }
 
 const updateStore = (
-  from,
+  from: any,
   store: Store<any>,
-  op,
+  op: string,
   stateFirst: boolean,
   fn: Function,
 ) => {

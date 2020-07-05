@@ -1,12 +1,9 @@
-
-
-import {createEvent, type Event} from 'effector'
+import {createEvent} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
 test('event.create single argument', () => {
-  const foo = createEvent<number>()
+  const foo = createEvent<number>() as any
   const oldCreate = foo.create
-  //$off
   foo.create = jest.fn((payload, args) => oldCreate(payload, args))
   const baz = jest.fn()
   foo.watch(baz)
@@ -41,13 +38,10 @@ test('event.create single argument', () => {
   `)
 })
 
-type FnEvent<Fn> = Fn & Event<any>
-
 test('event.create multiple arguments', () => {
   const baz = jest.fn()
-  const bar: FnEvent<(number, string) => number> = createEvent<number>()
+  const bar = createEvent() as any
   const oldCreate = bar.create
-  //$todo
   bar.create = jest.fn((payload, args) => oldCreate([payload, ...args], []))
   bar.watch(baz)
   bar(-2, 'foo')

@@ -78,7 +78,7 @@ export function sample(...args): any {
         scope: {fn, targetTemplate},
         node: [
           template && template.loader,
-          //$off
+          //@ts-ignore
           !greedy && step.barrier({priority: 'sampler'}),
           step.mov({
             store: getStoreState(source),
@@ -126,7 +126,7 @@ export function sample(...args): any {
           step.update({store: clockState}),
           step.mov({store: hasSource}),
           step.filter({fn: hasSource => hasSource}),
-          //$off
+          //@ts-ignore
           !greedy && step.barrier({priority: 'sampler'}),
           step.mov({store: sourceState}),
           step.mov({

@@ -152,12 +152,12 @@ describe('sample', () => {
     const foo = createStore('')
     const bar = createStore('')
 
-    //$todo
+    //@ts-ignore
     sample({clock: foo, source: foo, target: bar})
   })
   it('handles object combination', () => {
     const foo = createStore('')
-    //$todo
+    //@ts-ignore
     sample({foo})
   })
   it('works with single source', () => {
@@ -178,7 +178,7 @@ describe('sample', () => {
           const A = createEvent()
           const B = A.map(x => ({x}))
 
-          //$todo
+          //@ts-ignore
           sample(A, B, (A, B) => B, greedy).watch(e => fn(e))
 
           A(1)
@@ -192,7 +192,7 @@ describe('sample', () => {
           const A = createEvent()
           const B = A.map(x => ({x}))
 
-          //$todo
+          //@ts-ignore
           sample(B, A, B => B, greedy).watch(e => fn(e))
 
           A(1)
@@ -318,12 +318,12 @@ describe('sample', () => {
       const clock = createStore(0)
       const result = sample(source, clock)
       result.watch(value => fn(value))
-      //$todo
+      //@ts-ignore
       clock.setState(1)
       expect(fn).not.toHaveBeenCalled()
       source('run')
       expect(fn).not.toHaveBeenCalled()
-      //$todo
+      //@ts-ignore
       clock.setState(2)
       expect(argumentHistory(fn)).toEqual(['run'])
     })
@@ -339,14 +339,14 @@ describe('sample', () => {
         }),
       )
       result.watch(value => fn(value))
-      //$todo
+      //@ts-ignore
       clock.setState(1)
       expect(fn).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
       source('run')
       expect(fn).not.toHaveBeenCalled()
       expect(handler).not.toHaveBeenCalled()
-      //$todo
+      //@ts-ignore
       clock.setState(2)
       expect(argumentHistory(fn)).toEqual([{source: 'run', clock: 2}])
       expect(argumentHistory(handler)).toEqual([{source: 'run', clock: 2}])
@@ -410,9 +410,9 @@ describe('sample', () => {
           const hello = createEvent()
           const run = createEvent()
 
-          //$todo
+          //@ts-ignore
           sample(hello, run, (a, b) => ({a, b}), greedy).watch(() => {})
-          //$todo
+          //@ts-ignore
           sample(hello, run, (a, b) => ({a, b}), greedy).watch(e => fn1(e))
 
           run('R')
@@ -454,7 +454,7 @@ describe('sample', () => {
       const stop = createEvent()
 
       const s1 = createStore(0)
-      //$todo
+      //@ts-ignore
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -467,7 +467,7 @@ describe('sample', () => {
       const stop = createStore(0)
 
       const s1 = createStore(0)
-      //$todo
+      //@ts-ignore
       s1.setState(1)
 
       const s2 = sample(s1, stop)
@@ -494,14 +494,14 @@ describe('sample', () => {
     const stop = createEvent()
 
     const s1 = createStore(0)
-    //$todo
+    //@ts-ignore
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => fn(value))
     expect(fn).toHaveBeenCalledTimes(0)
-    //$todo
+    //@ts-ignore
     s1.setState(2)
 
     stop('x')
@@ -513,19 +513,19 @@ describe('sample', () => {
     const stop = createStore(false)
 
     const s1 = createStore(0)
-    //$todo
+    //@ts-ignore
     s1.setState(1)
 
     const s2 = sample(s1, stop, (s1, stop) => ({s1, stop}))
 
     s2.watch(value => fn(value))
     expect(argumentHistory(fn)).toEqual([{s1: 1, stop: false}])
-    //$todo
+    //@ts-ignore
     s1.setState(2)
-    //$todo
+    //@ts-ignore
     s1.setState(0)
 
-    //$todo
+    //@ts-ignore
     stop.setState(true)
     expect(argumentHistory(fn)).toEqual([
       {s1: 1, stop: false},

@@ -2,11 +2,11 @@ import {from} from 'most'
 
 import {
   createStore,
-  type Store,
+  Store,
   combine,
   createEvent,
   createEffect,
-  type Event,
+  Event,
 } from 'effector'
 import {show} from 'effector/fixtures/showstep'
 import {argumentHistory} from 'effector/fixtures'
@@ -25,21 +25,21 @@ test('graphite', () => {
   foo(10)
   expect(fn).toHaveBeenCalledTimes(2)
   expect(store1.getState()).toBe('foo | 1 | 11')
-  //$todo
+  //@ts-ignore
   const showBar = show(bar.graphite)
 
   expect(showBar).toMatchSnapshot('show bar')
   unsub1()
-  //$todo
+  //@ts-ignore
   const showBar2 = show(bar.graphite)
   expect(showBar2).toMatchSnapshot('show bar')
   foo(100)
   expect(fn1).toHaveBeenCalledTimes(2)
-  //$todo
+  //@ts-ignore
   const showFoo = show(foo.graphite)
-  //$todo
+  //@ts-ignore
   const showStore = show(store1.graphite)
-  //$todo
+  //@ts-ignore
   const showStore2 = show(store2.graphite)
   expect(showFoo).toMatchSnapshot('show foo')
   expect(showStore).toMatchSnapshot('show store1')
@@ -69,11 +69,11 @@ test('showcase', () => {
   bar()
   bar()
 
-  //$todo
+  //@ts-ignore
   expect(show(a.graphite)).toMatchSnapshot('store a')
-  //$todo
+  //@ts-ignore
   expect(show(foo.graphite)).toMatchSnapshot('event foo')
-  //$todo
+  //@ts-ignore
   expect(show(mapped.graphite)).toMatchSnapshot('mapped')
   expect(fn).toHaveBeenCalledTimes(3)
   const first = createStore('s')

@@ -1,5 +1,3 @@
-// @flow
-
 import {merge, createEvent} from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 

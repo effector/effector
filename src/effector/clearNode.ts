@@ -20,7 +20,7 @@ const clearNodeNormalized = (
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
-  //$off
+  //@ts-ignore
   targetNode.scope = null
   let currentNode
   let list = getLinks(targetNode)
@@ -48,7 +48,7 @@ export const clearNode = (
   {
     deep,
   }: {
-    deep?: boolean,
+    deep?: boolean
   } = {},
 ) => {
   let isDomainUnit = false

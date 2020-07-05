@@ -14,7 +14,7 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //$todo
+    //@ts-ignore
     const store = combine({R, G, B})
     expect(store.getState()).toEqual({R: 233, G: 88, B: 1})
   })
@@ -22,19 +22,19 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //$todo
+    //@ts-ignore
     const store = combine([R, G, B])
     expect(store.getState()).toEqual([233, 88, 1])
   })
   test('combine({Color})', () => {
     const Color = createStore('#e95801')
-    //$todo
+    //@ts-ignore
     const store = combine({Color})
     expect(store.getState()).toEqual({Color: '#e95801'})
   })
   test('combine([Color])', () => {
     const Color = createStore('#e95801')
-    //$todo
+    //@ts-ignore
     const store = combine([Color])
     expect(store.getState()).toEqual(['#e95801'])
   })
@@ -42,7 +42,7 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //$todo
+    //@ts-ignore
     const store = combine({R, G, B}, ({R, G, B}) => rgbToHex(R, G, B))
     expect(store.getState()).toEqual('#e95801')
   })
@@ -50,19 +50,19 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //$todo
+    //@ts-ignore
     const store = combine([R, G, B], ([R, G, B]) => rgbToHex(R, G, B))
     expect(store.getState()).toEqual('#e95801')
   })
   test(`combine({Color}, ({Color}) => '~')`, () => {
     const Color = createStore('#e95801')
-    //$todo
+    //@ts-ignore
     const store = combine({Color}, ({Color}) => Color)
     expect(store.getState()).toEqual('#e95801')
   })
   test(`combine([Color], ([Color]) => '~')`, () => {
     const Color = createStore('#e95801')
-    //$todo
+    //@ts-ignore
     const store = combine([Color], ([Color]) => Color)
     expect(store.getState()).toEqual('#e95801')
   })
@@ -82,13 +82,13 @@ describe('combine cases', () => {
     const R = createStore(233)
     const G = createStore(88)
     const B = createStore(1)
-    //$todo
+    //@ts-ignore
     const store = combine(R, G, B)
     expect(store.getState()).toEqual([233, 88, 1])
   })
   test('combine(Color)', () => {
     const Color = createStore('#e95801')
-    //$todo
+    //@ts-ignore
     const store = combine(Color)
     expect(store.getState()).toEqual(['#e95801'])
   })

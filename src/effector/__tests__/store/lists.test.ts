@@ -1,15 +1,9 @@
-import {
-  createStore,
-  createApi,
-  type Event,
-  type Store,
-  createEvent,
-} from 'effector'
+import {createStore, createApi, Event, Store, createEvent} from 'effector'
 
 test('list', () => {
   const done = createEvent()
   const list = storeList([' >'])
-  const acc = createStore([])
+  const acc = createStore<string[][]>([])
   acc.watch(list.self, (acc, list) => {
     acc.push(list)
   })
@@ -68,74 +62,67 @@ test('list', () => {
 
   function storeList<T>(
     initials: Array<T>,
-  ): {|
-    +self: Store<$ReadOnlyArray<T>>,
-    +watch: $PropertyType<Store<Array<T>>, 'watch'>,
-    +on: $PropertyType<Store<Array<T>>, 'on'>,
-    // +self: $PropertyType<Store<Array<T>>, 'getState'>,
+  ): {
+    self: Store<Array<T>>
+    watch: Store<Array<T>>['watch']
+    on: Store<Array<T>>['on']
     swap: Event<
-      $ReadOnlyArray<
+      Array<
         [
-          number | ((list: $ReadOnlyArray<T>) => number),
-          number | ((list: $ReadOnlyArray<T>) => number),
-        ],
-      >,
-    >,
+          number | ((list: Array<T>) => number),
+          number | ((list: Array<T>) => number),
+        ]
+      >
+    >
     move: Event<
-      $ReadOnlyArray<
+      Array<
         [
-          number | ((list: $ReadOnlyArray<T>) => number),
-          number | ((list: $ReadOnlyArray<T>) => number),
-        ],
-      >,
-    >,
+          number | ((list: Array<T>) => number),
+          number | ((list: Array<T>) => number),
+        ]
+      >
+    >
     insert: Event<
-      $ReadOnlyArray<{|
-        +offset:
-          | number
-          | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-        +entries: $ReadOnlyArray<T>,
-      |}>,
-    >,
+      Array<{
+        offset: number | ((list: Array<T>, entries: Array<T>) => number)
+        entries: Array<T>
+      }>
+    >
     replace: Event<
-      $ReadOnlyArray<{|
-        +offset:
-          | number
-          | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-        +entries: $ReadOnlyArray<T>,
-      |}>,
-    >,
+      Array<{
+        offset: number | ((list: Array<T>, entries: Array<T>) => number)
+        entries: Array<T>
+      }>
+    >
     update: Event<
-      $ReadOnlyArray<{|
-        +index: number | ((list: $ReadOnlyArray<T>) => number),
-        +updater: (value: T) => T,
-      |}>,
-    >,
+      Array<{
+        index: number | ((list: Array<T>) => number)
+        updater: (value: T) => T
+      }>
+    >
     delete: Event<
-      $ReadOnlyArray<{|
-        +offset: number | ((list: $ReadOnlyArray<T>) => number),
-        +amount: number,
-      |}>,
-    >,
+      Array<{
+        offset: number | ((list: Array<T>) => number)
+        amount: number
+      }>
+    >
 
     // Simple actions
-    push: Event<$ReadOnlyArray<T>>,
-    unshift: Event<$ReadOnlyArray<T>>,
-    reverse: Event<void>,
-    shift: Event<void>,
-    pop: Event<void>,
-    clear: Event<void>,
-  |} {
+    push: Event<Array<T>>
+    unshift: Event<Array<T>>
+    reverse: Event<void>
+    shift: Event<void>
+    pop: Event<void>
+    clear: Event<void>
+  } {
     const store = createStore(initials)
     const reducers = {
       insert(
         state: Array<T>,
-        segments: $ReadOnlyArray<{|
-          +offset:
-            | number
-            | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-          +entries: $ReadOnlyArray<T>,
-        |}>,
+        segments: Array<{
+          offset: number | ((list: Array<T>, entries: Array<T>) => number)
+          entries: Array<T>
+        }>,
       ) {
         if (segments.length === 0) return state
         const store = []
@@ -157,12 +144,10 @@ test('list', () => {
       },
       replace(
         state: Array<T>,
-        segments: $ReadOnlyArray<{|
-          +offset:
-            | number
-            | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-          +entries: $ReadOnlyArray<T>,
-        |}>,
+        segments: Array<{
+          offset: number | ((list: Array<T>, entries: Array<T>) => number)
+          entries: Array<T>
+        }>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
@@ -177,20 +162,20 @@ test('list', () => {
       },
       update(
         state: Array<T>,
-        segments: $ReadOnlyArray<{|
-          +index: number | ((list: $ReadOnlyArray<T>) => number),
-          +updater: (value: T) => T,
-        |}>,
+        segments: Array<{
+          index: number | ((list: Array<T>) => number)
+          updater: (value: T) => T
+        }>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{|
-          index: number,
-          updater(value: T): T,
-        |}> = segments
+        const newSegments: Array<{
+          index: number
+          updater(value: T): T
+        }> = segments
           .map(({updater, index}) => ({
             updater,
-            index: normalizeOffset < T > (index, state, []),
+            index: normalizeOffset<T>(index, state, []),
           }))
           .sort((a, b) => a.index - b.index)
         for (let i = 0; i < newSegments.length; i++) {
@@ -201,10 +186,10 @@ test('list', () => {
       },
       delete(
         state: Array<T>,
-        segments: $ReadOnlyArray<{|
-          +offset: number | ((list: $ReadOnlyArray<T>) => number),
-          +amount: number,
-        |}>,
+        segments: Array<{
+          offset: number | ((list: Array<T>) => number)
+          amount: number
+        }>,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
@@ -228,22 +213,22 @@ test('list', () => {
       },
       move(
         state: Array<T>,
-        segments: $ReadOnlyArray<
+        segments: Array<
           [
-            number | ((list: $ReadOnlyArray<T>) => number),
-            number | ((list: $ReadOnlyArray<T>) => number),
-          ],
+            number | ((list: Array<T>) => number),
+            number | ((list: Array<T>) => number),
+          ]
         >,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{|
-          from: number,
-          to: number,
-        |}> = segments
+        const newSegments: Array<{
+          from: number
+          to: number
+        }> = segments
           .map(([indexA, indexB]) => ({
-            from: normalizeOffset < T > (indexA, state, []),
-            to: normalizeOffset < T > (indexB, state, []),
+            from: normalizeOffset<T>(indexA, state, []),
+            to: normalizeOffset<T>(indexB, state, []),
           }))
           .sort((a, b) => a.from - b.from)
         for (let i = 0; i < newSegments.length; i++) {
@@ -256,22 +241,22 @@ test('list', () => {
       },
       swap(
         state: Array<T>,
-        segments: $ReadOnlyArray<
+        segments: Array<
           [
-            number | ((list: $ReadOnlyArray<T>) => number),
-            number | ((list: $ReadOnlyArray<T>) => number),
-          ],
+            number | ((list: Array<T>) => number),
+            number | ((list: Array<T>) => number),
+          ]
         >,
       ) {
         if (segments.length === 0) return state
         const store = [...state]
-        const newSegments: Array<{|
-          from: number,
-          to: number,
-        |}> = segments
+        const newSegments: Array<{
+          from: number
+          to: number
+        }> = segments
           .map(([indexA, indexB]) => ({
-            from: normalizeOffset < T > (indexA, state, []),
-            to: normalizeOffset < T > (indexB, state, []),
+            from: normalizeOffset<T>(indexA, state, []),
+            to: normalizeOffset<T>(indexB, state, []),
           }))
           .sort((a, b) => a.from - b.from)
         for (let i = 0; i < newSegments.length; i++) {
@@ -336,16 +321,14 @@ test('list', () => {
 
       watch: model.store.watch,
       on: model.store.on,
-      //$off
+      //@ts-ignore
       self: model.store,
     }
   }
   function normalizeOffset<T>(
-    offsetRaw:
-      | number
-      | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-    list: $ReadOnlyArray<T>,
-    entries: $ReadOnlyArray<T>,
+    offsetRaw: number | ((list: Array<T>, entries: Array<T>) => number),
+    list: Array<T>,
+    entries: Array<T>,
   ): number {
     let offset
     if (typeof offsetRaw === 'function') offset = offsetRaw(list, entries)
@@ -354,21 +337,19 @@ test('list', () => {
     return offset
   }
   function sortSegments<T>(
-    segments: $ReadOnlyArray<{|
-      +entries: $ReadOnlyArray<T>,
-      +offset:
-        | number
-        | ((list: $ReadOnlyArray<T>, entries: $ReadOnlyArray<T>) => number),
-    |}>,
-    list: $ReadOnlyArray<T>,
-  ): Array<{|+entries: $ReadOnlyArray<T>, +offset: number|}> {
+    segments: Array<{
+      entries: Array<T>
+      offset: number | ((list: Array<T>, entries: Array<T>) => number)
+    }>,
+    list: Array<T>,
+  ): Array<{entries: Array<T>; offset: number}> {
     return segments
-      .map(({entries, offset}): {|
-        entries: $ReadOnlyArray<T>,
-        offset: number,
-      |} => ({
+      .map(({entries, offset}): {
+        entries: Array<T>
+        offset: number
+      } => ({
         entries,
-        offset: normalizeOffset < T > (offset, list, entries),
+        offset: normalizeOffset<T>(offset, list, entries),
       }))
       .sort((a, b) => a.offset - b.offset)
   }

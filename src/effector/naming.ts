@@ -11,13 +11,13 @@ export function unitObjectName(objOrArr, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
-  //$todo
+  //@ts-ignore
   for (const key in objOrArr) {
-    //$todo
+    //@ts-ignore
     const unit = objOrArr[key]
     if (unit != null) {
       name += comma
-      //$todo
+      //@ts-ignore
       name += is.unit(unit) ? unit.compositeName.fullName : unit.toString()
     }
     i += 1
@@ -43,9 +43,9 @@ export function setStoreName<State>(store: Store<State>, rawName: string) {
 }
 
 export type CompositeName = {
-  shortName: string,
-  fullName: string,
-  path: string[],
+  shortName: string
+  fullName: string
+  path: string[]
 }
 
 export function createName(name: string, parent?: Domain): CompositeName {

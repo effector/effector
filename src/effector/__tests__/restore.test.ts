@@ -1,5 +1,3 @@
-
-
 import {
   restore,
   restoreEvent,
@@ -7,13 +5,13 @@ import {
   restoreObject,
   createEvent,
   createEffect,
-  type Effect,
+  Effect,
 } from 'effector'
 
 describe('separate functions', () => {
   test('restore object', () => {
     const shape = restoreObject({
-      foo: ('foo': 'foo'),
+      foo: 'foo',
       bar: 0,
     })
     expect(shape.foo.getState()).toBe('foo')
@@ -29,7 +27,7 @@ describe('separate functions', () => {
     expect(shape.getState()).toBe('foo')
   })
 
-  test('restore effect', async() => {
+  test('restore effect', async () => {
     const fn = jest.fn()
     const fx: Effect<string, number, string> = createEffect()
     fx.use(text => text.length)
@@ -50,7 +48,7 @@ describe('separate functions', () => {
 describe('single function', () => {
   test('restore object', () => {
     const shape = restore({
-      foo: ('foo': 'foo'),
+      foo: 'foo',
       bar: 0,
     })
     expect(shape.foo.getState()).toBe('foo')
@@ -66,7 +64,7 @@ describe('single function', () => {
     expect(shape.getState()).toBe('foo')
   })
 
-  test('restore effect', async() => {
+  test('restore effect', async () => {
     const fn = jest.fn()
     const fx: Effect<string, number, string> = createEffect()
     fx.use(text => text.length)

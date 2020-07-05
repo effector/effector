@@ -1,4 +1,4 @@
-import {createEvent, createStore, split, type Event} from 'effector'
+import {createEvent, split, Event} from 'effector'
 
 it('split event by matching conditions', () => {
   const fn1 = jest.fn()
