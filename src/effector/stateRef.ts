@@ -1,7 +1,7 @@
 import {StateRef} from './index.h'
 import {nextStepID} from './id'
 
-export const createStateRef = (current: any): StateRef => ({
+export const createStateRef = (current?: any): StateRef => ({
   id: nextStepID(),
   current,
 })
