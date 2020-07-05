@@ -1,4 +1,11 @@
-import {sample, guard, createEvent, createStore, createEffect} from 'effector'
+import {
+  sample,
+  guard,
+  createEvent,
+  createStore,
+  createEffect,
+  is,
+} from 'effector'
 
 import {argumentHistory} from 'effector/fixtures'
 
@@ -570,4 +577,14 @@ test('validate shape', () => {
     //@ts-ignore
     sample(0, clock)
   }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+})
+
+test('source shape support', () => {
+  const sampled = sample({
+    source: {
+      source: createStore(0),
+    },
+    clock: createEvent(),
+  })
+  expect(is.event(sampled)).toBe(true)
 })
