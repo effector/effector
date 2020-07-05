@@ -86,7 +86,7 @@ import {createEffect, attach, createStore} from 'effector'
 
 const backendRequest = createEffect({
   async handler({token, data, resource}) {
-    const req = fetch(`https://example.com/api${resource}`, {
+    return fetch(`https://example.com/api${resource}`, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`,
