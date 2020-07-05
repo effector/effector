@@ -123,7 +123,7 @@ module.exports = {
           // Equivalent to `enableUpdateTime`.
           showLastUpdateTime: true,
           editUrl:
-            'https://github.com/zerobias/effector/edit/master/',
+            'https://github.com/zerobias/effector/edit/master/fix/relative-bug/',
         },
         blog: {
           showReadingTime: true,
