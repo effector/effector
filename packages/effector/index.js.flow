@@ -17,13 +17,6 @@ export type mixed_non_void =
   | {...}
   | $ReadOnlyArray<mixed>
 
-declare export var Kind: {|
-  +store: kind,
-  +event: kind,
-  +effect: kind,
-  +domain: kind,
-|}
-
 export type Observer<A> = {+next?: (value: A) => void, ...}
 
 export type Subscription = {

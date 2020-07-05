@@ -26,5 +26,3 @@ export {step} from './typedef'
 export {version} from './flags'
 export {withRegion} from './region'
 export {hydrate, serialize, scopeBind, fork, allSettled} from './fork'
-//eslint-disable-next-line
-export * as Kind from './kind'

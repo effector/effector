@@ -34,13 +34,6 @@ export type mixed_non_void =
   | {}
   | ReadonlyArray<unknown>
 
-export const Kind: {
-  readonly store: kind
-  readonly event: kind
-  readonly effect: kind
-  readonly domain: kind
-}
-
 export type Observer<A> = {
   readonly next?: (value: A) => void
   //error(err: Error): void
