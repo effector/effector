@@ -2,10 +2,11 @@ import {getGraph} from './getter'
 import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
-import {isObject} from './is'
+import {is, isObject} from './is'
 import {throwError} from './throw'
-
-import {is, step, launch, createNode} from 'effector'
+import {launch} from './kernel'
+import {createNode} from './createNode'
+import {step} from './typedef'
 
 let forkPage
 

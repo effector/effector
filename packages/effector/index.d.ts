@@ -861,3 +861,47 @@ export function combine<A, B, C, D, E, F, G, H, I, J, K, R>(
 export function combine<T extends Tuple<Store<any>>>(
   ...stores: T
 ): Store<{[K in keyof T]: T[K] extends Store<infer U> ? U : T[K]}>
+
+export interface Fork {
+  getState<T>(store: Store<T>): T
+}
+
+export {Fork as Scope}
+
+export type ValueMap = Map<Store<any>, any> | {[sid: string]: any}
+
+/**
+hydrate state on client
+
+const root = createDomain()
+hydrate(root, {
+  values: window.__initialState__
+})
+
+*/
+export function hydrate(domain: Domain, config: {values: ValueMap}): void
+
+/**
+serialize state on server
+*/
+export function serialize(
+  scope: Fork,
+  options?: {ignore?: Array<Store<any>>},
+): {[sid: string]: any}
+
+/** bind event to scope from .watch call */
+export function scopeBind<T>(unit: Unit<T>): (payload: T) => void
+
+export function fork(
+  domain: Domain,
+  config?: {
+    values?: ValueMap
+    handlers?: Map<Effect<any, any, any>, Function> | {[sid: string]: Function}
+  },
+): Fork
+
+/** run event in scope and wait for all triggered effects */
+export function allSettled<T>(
+  unit: Unit<T>,
+  config: {scope: Fork; params: T},
+): Promise<void>

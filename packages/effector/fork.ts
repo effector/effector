@@ -1,1 +1,1 @@
-export * from '../../src/effector/fork'
+export {hydrate, serialize, scopeBind, fork, allSettled} from 'effector'
