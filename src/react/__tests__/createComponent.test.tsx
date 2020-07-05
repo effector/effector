@@ -1,7 +1,7 @@
 import * as React from 'react'
 import {argumentHistory} from 'effector/fixtures'
 import {act, render, cleanup, container} from 'effector/fixtures/react'
-import {Store, createStore, combine, createEvent, createApi} from 'effector'
+import {createStore, combine, createEvent, createApi} from 'effector'
 import {createComponent} from 'effector-react'
 
 describe('createComponent', () => {
@@ -44,44 +44,6 @@ describe('createComponent', () => {
           "b": "foo",
         },
       ]
-    `)
-  })
-
-  test('initial props', async () => {
-    type ListItem = {
-      text: string
-    }
-    const update = createEvent<{
-      id: number
-      data: ListItem
-    }>()
-    const list: Store<{
-      [key: number]: ListItem
-    }> = createStore({}).on(update, (state, {id, data}) => ({
-      ...state,
-      [id]: {...state[id], ...data},
-    }))
-    const Foo = createComponent(
-      initialProps =>
-        list.map(list => list[initialProps.id] ?? {text: 'Loading...'}),
-      (_, state) => <div>{state.text}</div>,
-    )
-    await render(<Foo id={24} />)
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        Loading...
-      </div>
-    `)
-    await act(async () => {
-      update({
-        id: 24,
-        data: {text: 'nice'},
-      })
-    })
-    expect(container.firstChild).toMatchInlineSnapshot(`
-      <div>
-        nice
-      </div>
     `)
   })
 

@@ -5,23 +5,23 @@ import {createGate, useGate, useStore} from 'effector-react'
 import {argumentHistory} from 'effector/fixtures'
 import {createEvent, createStore} from 'effector'
 
-test('plain gate', async() => {
+test('plain gate', async () => {
   const Gate = createGate('plain gate')
-  expect(Gate.isOpen).toBe(false)
+  expect(Gate.status.getState()).toBe(false)
   await render(
     <section>
       <div>div</div>
       <Gate />
     </section>,
   )
-  expect(Gate.isOpen).toBe(true)
+  expect(Gate.status.getState()).toBe(true)
   await cleanup()
-  expect(Gate.isOpen).toBe(false)
+  expect(Gate.status.getState()).toBe(false)
 })
 
-test('plain gate hook', async() => {
+test('plain gate hook', async () => {
   const Gate = createGate('plain gate')
-  expect(Gate.isOpen).toBe(false)
+  expect(Gate.status.getState()).toBe(false)
   const Component = () => {
     useGate(Gate)
     return (
@@ -32,43 +32,39 @@ test('plain gate hook', async() => {
   }
   await render(<Component />)
 
-  expect(Gate.isOpen).toBe(true)
+  expect(Gate.status.getState()).toBe(true)
   await cleanup()
-  expect(Gate.isOpen).toBe(false)
+  expect(Gate.status.getState()).toBe(false)
 })
 
-test('gate with props', async() => {
+test('gate with props', async () => {
   const Gate = createGate('gate with props')
-  expect(Gate.current).toMatchObject({})
   await render(
     <section>
       <Gate foo="bar" />
     </section>,
   )
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
-  expect(Gate.current).toMatchObject({foo: 'bar'})
   expect(container.firstChild).toMatchInlineSnapshot(`<section />`)
   await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
-test('gate with props hook', async() => {
+test('gate with props hook', async () => {
   const Gate = createGate('gate with props')
-  expect(Gate.current).toMatchObject({})
   const Component = () => {
     useGate(Gate, {foo: 'bar'})
     return <section />
   }
   await render(<Component />)
   expect(Gate.state.getState()).toMatchObject({foo: 'bar'})
-  expect(Gate.current).toMatchObject({foo: 'bar'})
   expect(container.firstChild).toMatchInlineSnapshot(`<section />`)
   await cleanup()
   expect(Gate.state.getState()).toMatchObject({})
 })
 
 describe('updates deduplication', () => {
-  test('with component', async() => {
+  test('with component', async () => {
     const fn = jest.fn()
     const Gate = createGate()
     const update = createEvent()
@@ -86,10 +82,10 @@ describe('updates deduplication', () => {
       )
     }
     await render(<Component />)
-    await act(async() => {
+    await act(async () => {
       update()
     })
-    await act(async() => {
+    await act(async () => {
       update()
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -103,7 +99,7 @@ Array [
 ]
 `)
   })
-  test('with hook', async() => {
+  test('with hook', async () => {
     const fn = jest.fn()
     const Gate = createGate()
     const update = createEvent()
@@ -117,10 +113,10 @@ Array [
       return <section>{x}</section>
     }
     await render(<Component />)
-    await act(async() => {
+    await act(async () => {
       update()
     })
-    await act(async() => {
+    await act(async () => {
       update()
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
@@ -136,7 +132,7 @@ Array [
   })
 })
 
-test('gate properties', async() => {
+test('gate properties', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -152,7 +148,7 @@ test('gate properties', async() => {
   expect(argumentHistory(fn2)).toEqual([{}, {foo: 'bar'}, {}])
 })
 
-test('gate properties hook', async() => {
+test('gate properties hook', async () => {
   const Gate = createGate('gate properties')
   const fn1 = jest.fn()
   const fn2 = jest.fn()
@@ -166,72 +162,4 @@ test('gate properties hook', async() => {
   await cleanup()
   expect(argumentHistory(fn1)).toEqual([false, true, false])
   expect(argumentHistory(fn2)).toEqual([{}, {foo: 'bar'}, {}])
-})
-
-describe('child gate', () => {
-  let error: any
-  beforeAll(() => {
-    error = console.error
-    console.error = function errorMock(...args: any[]) {
-      args
-    }
-  })
-  afterAll(() => {
-    console.error = error
-  })
-  test('usage', async() => {
-    const Gate = createGate('parent gate')
-    const Child = Gate.childGate('child gate')
-
-    await render(
-      <section>
-        <Gate />
-        <div>
-          <Child />
-        </div>
-      </section>,
-    )
-    expect(Gate.isOpen).toBe(true)
-    expect(Child.isOpen).toBe(true)
-    expect(container.firstChild).toMatchInlineSnapshot(`
-<section>
-  <div />
-</section>
-`)
-    await cleanup()
-    expect(Gate.isOpen).toBe(false)
-    expect(Child.isOpen).toBe(false)
-  })
-  test('order edge case', async() => {
-    const Gate = createGate('parent gate')
-    const Child = Gate.childGate('child gate')
-
-    await render(
-      <section>
-        <div>
-          <Child />
-        </div>
-        <Gate />
-      </section>,
-    )
-    expect(Gate.isOpen).toBe(true)
-    expect(Child.isOpen).toBe(true)
-    await cleanup()
-    expect(Gate.isOpen).toBe(false)
-    expect(Child.isOpen).toBe(false)
-  })
-  test('parent prevent children from beeing open', async() => {
-    const Gate = createGate('parent gate')
-    const Child = Gate.childGate('child gate')
-
-    await render(
-      <section>
-        <Child />
-      </section>,
-    )
-
-    expect(Child.isOpen).toBe(false)
-    await cleanup()
-    expect(Child.isOpen).toBe(false)
-  })
 })

@@ -11,14 +11,9 @@ export type StoreView<State, Props> = ComponentType<Props> & {
 }
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {
-  isOpen: boolean
-  isTerminated: boolean
   open: Event<Props>
   close: Event<Props>
   status: Store<boolean>
-  destructor: Event<void>
-  current: Props
   state: Store<Props>
   set: Event<Props>
-  childGate<Next>(childName?: string): Gate<Next>
 }

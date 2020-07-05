@@ -62,80 +62,21 @@ export function createGate<Props>(
     set: (_, state) => state,
   })
 
-  const {open, close, destructor} = createApi(status, {
-    open: () => GateComponent.predicate() && Boolean(true),
+  const {open, close} = createApi(status, {
+    open: () => Boolean(true),
     close: () => Boolean(false),
-    destructor: () => Boolean(false),
   })
   function GateComponent(props: Props) {
     useGate(GateComponent as any, props)
     return null
   }
-  GateComponent.predicate = () => Boolean(true)
-  GateComponent.isOpen = Boolean(false)
-  GateComponent.current = state.getState()
   GateComponent.open = open
   GateComponent.close = close
   GateComponent.status = status
   GateComponent.state = state
   GateComponent.set = set
-  GateComponent.destructor = destructor
-  GateComponent.isTerminated = Boolean(false)
-  GateComponent.childGate = (childName: string = 'Subgate') => {
-    console.error('childGate is deprecated')
-    const gate = createGate(`${name}/${childName}`)
-    ;(gate as any).predicate = () => GateComponent.status.getState()
-    let isOpen = false
-    let isFeedback = false
-    gate.open.watch(() => {
-      if (!isFeedback) isOpen = true
-    })
-    gate.close.watch(() => {
-      if (!isFeedback) isOpen = false
-    })
-
-    GateComponent.status.watch(status => {
-      isFeedback = true
-      if (isOpen && status && !gate.status.getState()) {
-        //@ts-ignore
-        gate.open()
-      }
-      isFeedback = false
-    })
-    GateComponent.close.watch(() => {
-      isFeedback = true
-      //@ts-ignore
-      gate.close()
-      isFeedback = false
-    })
-    GateComponent.destructor.watch(() => gate.destructor())
-    return gate
-  }
-  const unwatch = status.watch(status => (GateComponent.isOpen = status))
-  const unwatch2 = state.watch(current => (GateComponent.current = current))
-  const unwatch3 = status.map(status => {
-    if (!status) GateComponent.current = defaultState
-    return null
-  })
   state.reset(close)
 
-  const setTerminated = destructor.watch(() => {
-    GateComponent.isTerminated = Boolean(true)
-  })
-  const unstate = () => {
-    GateComponent.status.off(GateComponent.open)
-    GateComponent.status.off(GateComponent.close)
-    GateComponent.status.off(GateComponent.destructor)
-  }
-
-  const undestruct = destructor.watch(() => {
-    undestruct()
-    unwatch()
-    unwatch2()
-    setTerminated()
-    unstate()
-    GateComponent.state.off(GateComponent.set)
-  })
   if (domain) {
     const {hooks} = domain
     launch({

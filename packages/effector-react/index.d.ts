@@ -6,15 +6,10 @@ export type StoreConsumer<State> = React.ComponentType<{
 }>
 
 export type Gate<Props = {}> = React.ComponentType<Props> & {
-  isOpen: boolean
-  isTerminated: boolean
   open: Event<Props>
   close: Event<Props>
   status: Store<boolean>
-  destructor: Event<void>
-  current: Props
   state: Store<Props>
-  childGate<Next>(childName?: string): Gate<Next>
 }
 export type StoreView<State, Props = {}> = React.ComponentType<Props> & {
   mounted: Event<{props: Props; state: State}>
@@ -54,10 +49,6 @@ export function createGate<Props>(
   defaultState: Props,
 ): Gate<Props>
 
-export function createComponent<Props, State>(
-  storeFactory: (initialProps: Props) => Store<State>,
-  view: (props: Props, state: State) => React.ReactNode,
-): StoreView<State, Props>
 export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => React.ReactNode,

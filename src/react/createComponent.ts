@@ -7,19 +7,12 @@ import {withDisplayName} from './withDisplayName'
 import {throwError} from './throw'
 
 export function createComponent<Props, State>(
-  shape:
-    | Store<State>
-    | {[key: string]: Store<any> | any}
-    | ((props: Props) => Store<State>),
+  shape: Store<State> | {[key: string]: Store<any> | any},
   renderProp: (props: Props, state: State) => React.ReactNode,
 ): StoreView<State, Props> {
-  let storeFn: (props: Props) => Store<any>
   let store: Store<any>
   if (is.store(shape)) {
     store = shape
-  } else if (typeof shape === 'function') {
-    storeFn = shape as any
-    console.error('storeFactory is deprecated')
   } else {
     if (typeof shape === 'object' && shape !== null) {
       store = combine(shape)
@@ -30,23 +23,16 @@ export function createComponent<Props, State>(
   if (store && store.shortName) {
     storeName = store.shortName
   }
-  const mounted = createEvent<any>(`${storeName}.View mounted`)
-  const unmounted = createEvent<any>(`${storeName}.View unmounted`)
+  const mounted = createEvent<any>()
+  const unmounted = createEvent<any>()
 
-  //prettier-ignore
-  const instanceFabric: (props: Props) => Store<any> =
-    typeof shape === 'function'
-      //@ts-ignore
-      ? storeFn
-      : () => store
   function RenderComponent(props: Props) {
     const propsRef = React.useRef(props)
-    const ownStore = React.useMemo(() => instanceFabric(props), [])
-    const state = useStore(ownStore)
+    const state = useStore(store)
     useIsomorphicLayoutEffect(() => {
-      mounted({props: propsRef.current, state: ownStore.getState()})
+      mounted({props: propsRef.current, state: store.getState()})
       return () => {
-        unmounted({props: propsRef.current, state: ownStore.getState()})
+        unmounted({props: propsRef.current, state: store.getState()})
       }
     }, [])
     const result = renderProp(props, state)

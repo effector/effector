@@ -18,15 +18,10 @@ export type StoreComponent<State> = ComponentType<{|
 |}>
 
 export type Gate<Props = {||}> = Class<Component<Props, {||}>> & {|
-  isOpen: boolean,
-  isTerminated: boolean,
   open: Event<Props>,
   close: Event<Props>,
   status: Store<boolean>,
-  destructor: Event<void>,
-  current: Props,
   state: Store<Props>,
-  childGate<Next>(childName?: string): Gate<Next>,
 |}
 
 export type StoreView<State, Props = {||}> = ComponentType<Props> & {|
@@ -88,10 +83,6 @@ declare export function createComponent<
   >,
   Props,
 >
-declare export function createComponent<Props, State>(
-  storeFactory: (initialProps: Props) => Store<State>,
-  view: (props: Props, state: State) => Node,
-): StoreView<State, Props>
 declare export function createComponent<Props, State>(
   store: Store<State>,
   view: (props: Props, state: State) => Node,

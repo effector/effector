@@ -23,47 +23,13 @@ test('createComponent', () => {
     return null
   })
 
-  const list = createStore<{
-    [key: number]: {
-      text: string,
-    },
-  }>({})
-  const InitialProps = createComponent(
-    (initialProps: {id: number}) => {
-      const createComponent_initialProps_check1: number = initialProps.id
-      const createComponent_initialProps_check2: string = initialProps.id
-      const createComponent_initialProps_check3: string =
-        initialProps.unknownProp
-      return list.map(list => list[initialProps.id] || {text: 'Loading...'})
-    },
-    (_, state) => {
-      const createComponent_initialProps_check4: string = state.text
-      const createComponent_initialProps_check5: number = state.text
-      return null
-    },
-  )
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Type 'number' is not assignable to type 'string'.
-    Property 'unknownProp' does not exist on type '{ id: number; }'.
-    Type 'string' is not assignable to type 'number'.
+    no errors
 
     --flow--
-    Cannot assign 'initialProps.id' to 'createComponent_initialProps_check2'
-      const createComponent_initialProps_check2: string = initialProps.id
-                                                          ^^^^^^^^^^^^^^^
-      number [1] is incompatible with string [2]. [incompatible-type]
-          (initialProps: {id: number}) => {
-                          [1] ^^^^^^
-          const createComponent_initialProps_check2: string = initialProps.id
-                                                 [2] ^^^^^^
-    Cannot get 'initialProps.unknownProp'
-      initialProps.unknownProp
-                   ^^^^^^^^^^^
-      property 'unknownProp' is missing in object type [1]. [prop-missing]
-          (initialProps: {id: number}) => {
-                     [1] ^^^^^^^^^^^^
+    no errors
     "
   `)
 })
