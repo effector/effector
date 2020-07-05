@@ -8,52 +8,54 @@ export type kind =
   | 'domain'
 
 export type StateRef = {
-  id: ID,
-  current: any,
+  id: ID
+  current: any
+  before?: any[]
+  after?: any[]
 }
 
 export type Config = {
   loc?: {
-    file: string,
-    column: number,
-    line: number,
-  },
-  sid?: string,
-  named?: string,
-  name?: string | Config,
-  ɔ?: Config,
-  config?: Config,
-  parent?: any,
-  strict?: boolean,
-  handler?: Function,
+    file: string
+    column: number
+    line: number
+  }
+  sid?: string
+  named?: string
+  name?: string | Config
+  ɔ?: Config
+  config?: Config
+  parent?: any
+  strict?: boolean
+  handler?: Function
 }
 
 export type Graph = {
-  next: Array<Graph>,
-  seq: Array<Cmd>,
-  scope: {[key: string]: any},
-  reg: {[id: string]: StateRef},
-  meta: {[tag: string]: any},
+  next: Array<Graph>
+  seq: Array<Cmd>
+  scope: {[key: string]: any}
+  reg: {[id: string]: StateRef}
+  meta: {[tag: string]: any}
   family: {
-    type: 'regular' | 'crosslink' | 'domain',
-    links: Graph[],
-    owners: Graph[],
-  },
+    type: 'regular' | 'crosslink' | 'domain'
+    links: Graph[]
+    owners: Graph[]
+  }
 }
 
 export type Graphite = {graphite: Graph} | Graph
 
 export interface Unit {
-  graphite: Graph;
+  graphite: Graph
 }
 
 export type Subscriber<A> = {
-  next?: (value: A) => void,
+  next?: (value: A) => void
 }
 
 export type Subscription = {
   /*::[[call]](): void,*/
-  unsubscribe(): void,
+  unsubscribe(): void
 }
 
 //prettier-ignore
@@ -66,62 +68,62 @@ export type Cmd =
   | Mov
 
 export type Mov = {
-  id: ID,
-  type: 'mov',
+  id: ID
+  type: 'mov'
   data: {
-    from: 'value' | 'store' | 'stack' | 'a' | 'b',
-    to: 'stack' | 'a' | 'b',
-    store: any,
-    target: any,
-  },
-  hasRef: boolean,
+    from: 'value' | 'store' | 'stack' | 'a' | 'b'
+    to: 'stack' | 'a' | 'b'
+    store: any
+    target: any
+  }
+  hasRef: boolean
 }
 export type Check = {
-  id: ID,
-  type: 'check',
+  id: ID
+  type: 'check'
   data:
     | {
-        type: 'defined',
+        type: 'defined'
       }
     | {
-        type: 'changed',
-        store: StateRef,
-      },
-  hasRef: boolean,
+        type: 'changed'
+        store: StateRef
+      }
+  hasRef: boolean
 }
 
 export type Barrier = {
-  id: ID,
-  type: 'barrier',
+  id: ID
+  type: 'barrier'
   data: {
-    barrierID: ID,
-    priority: 'barrier' | 'sampler',
-  },
-  hasRef: false,
+    barrierID: ID
+    priority: 'barrier' | 'sampler'
+  }
+  hasRef: false
 }
 
 export type Run = {
-  id: ID,
-  type: 'run',
+  id: ID
+  type: 'run'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any,
-  },
-  hasRef: false,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
+  }
+  hasRef: false
 }
 
 export type Filter = {
-  id: ID,
-  type: 'filter',
+  id: ID
+  type: 'filter'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => boolean,
-  },
-  hasRef: false,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => boolean
+  }
+  hasRef: false
 }
 export type Compute = {
-  id: ID,
-  type: 'compute',
+  id: ID
+  type: 'compute'
   data: {
-    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any,
-  },
-  hasRef: false,
+    fn: (data: any, scope: {[key: string]: any}, reg: {a: any}) => any
+  }
+  hasRef: false
 }

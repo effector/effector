@@ -11,42 +11,42 @@ type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
  * and index of next step in the executed Graph
  */
 type Layer = {
-  idx: number,
-  stack: Stack,
-  type: PriorityTag,
-  id: number,
+  idx: number
+  stack: Stack
+  type: PriorityTag
+  id: number
 }
 
 /** Call stack */
 type Stack = {
-  value: any,
-  a: any,
-  b: any,
-  parent: Stack | null,
-  node: Graph,
-  page: {[id: string]: any} | null,
-  forkPage?: any,
+  value: any
+  a: any
+  b: any
+  parent: Stack | null
+  node: Graph
+  page: {[id: string]: any} | null
+  forkPage?: any
 }
 
 /** Queue as linked list or skew heap */
 type QueueItem = {
   /** node value */
-  v: Layer,
+  v: Layer
   /** left node. always null in queue but used in skew heap */
-  l: QueueItem | null,
+  l: QueueItem | null
   /** right node */
-  r: QueueItem | null,
+  r: QueueItem | null
 }
 type QueueBucket = {
-  first: QueueItem | null,
-  last: QueueItem | null,
-  size: number,
+  first: QueueItem | null
+  last: QueueItem | null
+  size: number
 }
 
 /** Dedicated local metadata */
 type Local = {
-  fail: boolean,
-  scope: {[key: string]: any},
+  fail: boolean
+  scope: {[key: string]: any}
 }
 
 let heap: QueueItem | null = null
@@ -99,17 +99,17 @@ const deleteMin = () => {
        */
       if (i === 2 || i === 3) {
         list.size -= 1
-        const value = heap.v
-        heap = merge(heap.l, heap.r)
+        const value = heap!.v
+        heap = merge(heap!.l, heap!.r)
         return value
       }
       if (list.size === 1) {
         list.last = null
       }
       const item = list.first
-      list.first = item.r
+      list.first = item!.r
       list.size -= 1
-      return item.v
+      return item!.v
     }
   }
 }
@@ -144,7 +144,9 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
       type,
       id,
     },
+    //@ts-ignore
     l: 0,
+    //@ts-ignore
     r: 0,
   }
   /**
@@ -157,7 +159,7 @@ const pushHeap = (idx: number, stack: Stack, type: PriorityTag, id = 0) => {
     if (bucket.size === 0) {
       bucket.first = item
     } else {
-      bucket.last.r = item
+      bucket.last!.r = item
     }
     bucket.last = item
   }
@@ -184,8 +186,8 @@ const getPriority = (t: PriorityTag) => {
 const barriers = new Set()
 
 let alreadyStarted = false
-let currentPage = null
-let forkPage
+let currentPage: any = null
+let forkPage: any
 export const getCurrentPage = () => currentPage
 
 /** main execution method */
@@ -305,7 +307,7 @@ const exec = () => {
   currentPage = lastStartedState.currentPage
   forkPage = lastStartedState.forkPage
 }
-export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
+export const launch = (unit: any, payload?: any, upsert?: boolean) => {
   let page = currentPage
   let stack = null
   let forkedPage = forkPage
@@ -336,7 +338,7 @@ export const launch = (unit: Graphite, payload: any, upsert?: boolean) => {
 }
 
 /** try catch for external functions */
-const tryRun = (local: Local, {fn}, stack: Stack) => {
+const tryRun = (local: Local, {fn}: any, stack: Stack) => {
   try {
     return fn(getValue(stack), local.scope, stack)
   } catch (err) {
