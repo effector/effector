@@ -22,16 +22,13 @@ test('event.create single argument', () => {
       Array [
         100,
         Array [],
-        Array [],
       ],
       Array [
         200,
         Array [],
-        Array [],
       ],
       Array [
         300,
-        Array [],
         Array [],
       ],
     ]
@@ -70,24 +67,15 @@ test('event.create multiple arguments', () => {
         Array [
           "foo",
         ],
-        Array [
-          "foo",
-        ],
       ],
       Array [
         -3,
         Array [
           "bar",
         ],
-        Array [
-          "bar",
-        ],
       ],
       Array [
         -2,
-        Array [
-          "baz",
-        ],
         Array [
           "baz",
         ],

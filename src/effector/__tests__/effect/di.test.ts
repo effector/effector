@@ -10,9 +10,7 @@ test('effect.create single argument', async () => {
   //@ts-ignore
   const oldCreate = effect.create
   //@ts-ignore
-  effect.create = jest.fn((payload, fullName, args) =>
-    oldCreate(payload, fullName, args),
-  )
+  effect.create = jest.fn((payload, args) => oldCreate(payload, args))
   const baz = jest.fn()
   effect.done.watch(baz)
 
@@ -21,26 +19,23 @@ test('effect.create single argument', async () => {
   await effect(300)
 
   //@ts-ignore
-  await expect(effect.create.mock.calls).toMatchInlineSnapshot(`
+  expect(effect.create.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
         100,
-        Array [],
         Array [],
       ],
       Array [
         200,
         Array [],
-        Array [],
       ],
       Array [
         300,
         Array [],
-        Array [],
       ],
     ]
   `)
-  await expect(argumentHistory(baz)).toMatchInlineSnapshot(`
+  expect(argumentHistory(baz)).toMatchInlineSnapshot(`
     Array [
       Object {
         "params": 100,
@@ -63,9 +58,7 @@ function variadicEffect(name?: string) {
   //@ts-ignore
   const oldCreate = effect.create
   //@ts-ignore
-  effect.create = jest.fn((payload, fullName, args) =>
-    oldCreate([payload, ...args], fullName, []),
-  )
+  effect.create = jest.fn((payload, args) => oldCreate([payload, ...args], []))
   const oldUse = effect.use
   //@ts-ignore
   effect.use = handler => oldUse(payload => handler(...payload))
@@ -90,13 +83,10 @@ test('effect.create multiple arguments', async () => {
   await effect(200, 300)
   await effect(300, 400)
 
-  await expect(effect.create.mock.calls).toMatchInlineSnapshot(`
+  expect(effect.create.mock.calls).toMatchInlineSnapshot(`
     Array [
       Array [
         100,
-        Array [
-          200,
-        ],
         Array [
           200,
         ],
@@ -106,22 +96,16 @@ test('effect.create multiple arguments', async () => {
         Array [
           300,
         ],
-        Array [
-          300,
-        ],
       ],
       Array [
         300,
         Array [
           400,
         ],
-        Array [
-          400,
-        ],
       ],
     ]
   `)
-  await expect(argumentHistory(useSpy)).toMatchInlineSnapshot(`
+  expect(argumentHistory(useSpy)).toMatchInlineSnapshot(`
     Array [
       Object {
         "a": 100,
@@ -137,7 +121,7 @@ test('effect.create multiple arguments', async () => {
       },
     ]
   `)
-  await expect(argumentHistory(baz)).toMatchInlineSnapshot(`
+  expect(argumentHistory(baz)).toMatchInlineSnapshot(`
     Array [
       Object {
         "params": Array [
