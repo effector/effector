@@ -3,12 +3,7 @@ import {getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch} from './kernel'
-import {
-  createNamedEvent,
-  createStore,
-  createEvent,
-  filterMapEvent,
-} from './createUnit'
+import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {throwError} from './throw'
@@ -33,13 +28,13 @@ export function createEffect<Payload, Done>(
     return instance
   }
   const anyway = (instance.finally = createNamedEvent('finally'))
-  const done = (instance.done = filterMapEvent(anyway, {
+  const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
     fn({status, params, result}) {
       if (status === 'done') return {params, result}
     },
   }))
-  const fail = (instance.fail = filterMapEvent(anyway, {
+  const fail = (instance.fail = (anyway as any).filterMap({
     named: 'fail',
     fn({status, params, error}) {
       if (status === 'fail') return {params, error}
@@ -56,7 +51,7 @@ export function createEffect<Payload, Done>(
 
   const effectRunner = createNode({
     scope: {
-      getHandler: (instance.use.getCurrent = () => handler),
+      getHandler: instance.use.getCurrent = () => handler,
       finally: anyway,
     },
     node: [

@@ -76,10 +76,6 @@ export interface Event<Payload> extends Unit<Payload> {
     fn(payload: Payload): payload is T
   }): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
-  /**
-   * @deprecated This form is deprecated, use `filterMap` method instead.
-   */
-  filter<T>(fn: (payload: Payload) => T | undefined): Event<T>
   filterMap<T>(fn: (payload: Payload) => T | undefined): Event<T>
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription

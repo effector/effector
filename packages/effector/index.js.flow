@@ -55,10 +55,6 @@ declare export class Event<Payload> implements Unit<Payload> {
   filter(config: {|
     fn(payload: Payload): boolean,
   |}): Event<Payload>;
-  /**
-   * @deprecated This form is deprecated, use `filterMap` method instead.
-   */
-  filter<T>(fn: (payload: Payload) => T | void): Event<T>;
   filterMap<T>(fn: (payload: Payload) => T | void): Event<T>;
   prepend<Before>(fn: (_: Before) => Payload): Event<Before>;
   subscribe(observer: Observer<Payload>): Subscription;

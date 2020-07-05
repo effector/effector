@@ -1,7 +1,7 @@
 import $$observable from 'symbol-observable'
 
 import {is, isObject, isFunction, assertObject} from './is'
-import {Store, Event, Effect} from './unit.h'
+import {Store, Event} from './unit.h'
 
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
@@ -150,16 +150,15 @@ export function createEvent<Payload = any>(
     createComputation(event, mapped, 'map', fn)
     return mapped
   }
-  event.filter = (fn: any) => {
-    if (isFunction(fn)) {
-      console.error('.filter(fn) is deprecated, use .filterMap instead')
-      return filterMapEvent(event, fn)
-    }
-    return createEventFiltration(event, 'filter', fn.fn, [
+  event.filter = (fn: any) =>
+    createEventFiltration(event, 'filter', fn.fn, [
       step.filter({fn: callStack}),
     ])
-  }
-  event.filterMap = bind(filterMapEvent, event)
+  event.filterMap = (fn: any) =>
+    createEventFiltration(event, 'filterMap', fn, [
+      step.compute({fn: callStack}),
+      step.check.defined(),
+    ])
   event.prepend = (fn: any) => {
     const contramapped: Event<any> = createEvent('* → ' + event.shortName, {
       parent: getParent(event),
@@ -177,16 +176,6 @@ export function createEvent<Payload = any>(
     getGraph(event).meta.nativeTemplate = template
   }
   return addToRegion(event)
-}
-
-export function filterMapEvent(
-  event: Event<any> | Effect<any, any, any>,
-  fn?: (val: any) => any,
-): any {
-  return createEventFiltration(event, 'filterMap', fn, [
-    step.compute({fn: callStack}),
-    step.check.defined(),
-  ])
 }
 
 export function createStore<State>(
