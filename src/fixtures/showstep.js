@@ -1,6 +1,4 @@
 //@flow
-import type {Cmd} from '../effector/stdlib'
-import {blocks} from '../effector'
 
 const SHOW_FUN_SOURCE = false
 const printFn = (fn: Function) => {
@@ -9,7 +7,7 @@ const printFn = (fn: Function) => {
   if (SHOW_FUN_SOURCE) return fn.toString()
   return 'Function'
 }
-const showCmd = (_: Cmd) => {
+const showCmd = (_: any) => {
   const replacer = (key, val) => {
     if (key === 'meta') return
     if (_.type === 'filter' && key === 'fn') {

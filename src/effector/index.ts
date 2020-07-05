@@ -26,6 +26,4 @@ export {step} from './typedef'
 export {version} from './flags'
 export {withRegion} from './region'
 //eslint-disable-next-line
-export * as blocks from './blocks'
-//eslint-disable-next-line
 export * as Kind from './kind'
