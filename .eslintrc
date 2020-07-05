@@ -94,20 +94,7 @@ rules:
     - error
     - before: false
       after: true
-  indent:
-    - 2
-    - 2
-    - SwitchCase: 1
-  # operator-linebreak:
-  #   - warn
-  #   - after
-  #   - overrides:
-  #       '?': before
-  #       ':': before
-  #       '||': before
-  #       '|': before
-  #       '&': before
-  #       '&&': before
+  indent: off
   newline-per-chained-call:
     - error
   keyword-spacing:
@@ -126,8 +113,7 @@ rules:
     - before: true
       after: true
   space-before-function-paren:
-    - error
-    - never
+    - off
   rest-spread-spacing:
     - error
     - never
