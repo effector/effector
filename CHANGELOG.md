@@ -2,6 +2,114 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.0.0
+
+- Add object form of `split` for pattern-matching without additional forwards
+
+```js
+import {split, createEffect, createEvent} from 'effector'
+const messageReceived = createEvent()
+const showTextPopup = createEvent()
+const playAudio = createEvent()
+const reportUnknownMessageType = createEffect({
+  handler({type}) {
+    console.log('unknown message:', type)
+  },
+})
+
+split({
+  source: messageReceived,
+  match: {
+    text: msg => msg.type === 'text',
+    audio: msg => msg.type === 'audio',
+  },
+  cases: {
+    text: showTextPopup,
+    audio: playAudio,
+    __: reportUnknownMessageType,
+  },
+})
+
+showTextPopup.watch(({value}) => {
+  console.log('new message:', value)
+})
+
+messageReceived({
+  type: 'text',
+  value: 'Hello',
+})
+// => new message: Hello
+messageReceived({
+  type: 'image',
+  imageUrl: '...',
+})
+// => unknown message: image
+```
+
+[Try it](https://share.effector.dev/javsk7Hg)
+
+You can match directly to store api as well:
+
+```js
+import {split, createStore, createEvent, createApi} from 'effector'
+
+const textContent = createStore([])
+
+const messageReceived = createEvent()
+
+split({
+  source: messageReceived,
+  match: {
+    text: msg => msg.type === 'text',
+    audio: msg => msg.type === 'audio',
+  },
+  cases: createApi(textContent, {
+    text: (list, {value}) => [...list, value],
+    audio: (list, {duration}) => [...list, `audio ${duration} ms`],
+    __: list => [...list, 'unknown message'],
+  }),
+})
+
+textContent.watch(messages => {
+  console.log(messages)
+})
+
+messageReceived({
+  type: 'text',
+  value: 'Hello',
+})
+// => ['Hello']
+messageReceived({
+  type: 'image',
+  imageUrl: '...',
+})
+// => ['Hello', 'unknown message']
+messageReceived({
+  type: 'audio',
+  duration: 500,
+})
+// => ['Hello', 'unknown message', 'audio 500 ms']
+```
+
+[Try it](https://share.effector.dev/32FNNk8H)
+
+- Merge `effector/fork` into `effector`. Now all methods required for SSR are exported from the library itself, making `effector/fork` an alias
+- Make `Scope` type alias for `Fork`
+- Add support for es modules: `import {createStore} from 'effector/effector.mjs'`
+- Effect without a handler now throws an error during a call instead of calling `console.error` with undefined return, which was violating the type of effect
+- Remove `restore` aliases, `event.filter(fn)` alias for `event.filterMap(fn)`, `greedy` in `sample` as separate last argument and unused `blocks` and `Kind`
+
+## effector-react 21.0.0
+
+- Add support for es modules
+- Remove experimental `Gate.isOpen` plain property, which was incompatibile with concurrent mode and ssr, use `Gate.status` instead
+
+[Gate.status in documentation](https://effector.now.sh/docs/api/effector-react/gate#status)
+
+## effector-vue 21.0.0
+
+- Add support for es modules
+
 ## effector-react 20.9.0
 
 - Export `useGate` with `fork` support from `effector-react/ssr`

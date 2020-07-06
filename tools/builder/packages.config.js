@@ -36,10 +36,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '20.17.2',
-  'effector-react': '20.9.0',
-  'effector-vue': '20.5.1',
-  forest: '0.16.9',
+  effector: '21.0.0',
+  'effector-react': '21.0.0',
+  'effector-vue': '21.0.0',
+  forest: '0.17.0',
   'effector-dom': '0.0.15',
 
   'bs-effector': '20.0.0',
