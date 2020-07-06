@@ -1,4 +1,3 @@
-/// <reference types="symbol-observable" />
 
 /**
  * This tuple type is intended for use as a generic constraint to infer concrete
@@ -42,7 +41,6 @@ export type Observer<A> = {
 
 export type Observable<T> = {
   subscribe: (observer: Observer<T>) => Subscription
-  [Symbol.observable](): Observable<T>
 }
 
 export type Subscription = {
@@ -77,7 +75,6 @@ export interface Event<Payload> extends Unit<Payload> {
   compositeName: CompositeName
   sid: string | null
   shortName: string
-  [Symbol.observable](): Observable<Payload>
 }
 
 /**
@@ -126,7 +123,6 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   compositeName: CompositeName
   sid: string | null
   shortName: string
-  [Symbol.observable](): Observable<Params>
 }
 
 export interface Store<State> extends Unit<State> {
@@ -156,7 +152,6 @@ export interface Store<State> extends Unit<State> {
   compositeName: CompositeName
   shortName: string
   sid: string | null
-  [Symbol.observable](): Observable<State>
 }
 
 export const is: {
