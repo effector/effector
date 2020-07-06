@@ -434,11 +434,26 @@ export function setStoreName<State>(store: Store<State>, name: string): void
 export function createStoreObject<State>(
   defaultState: State,
 ): Store<{[K in keyof State]: State[K] extends Store<infer U> ? U : State[K]}>
-export function split<S, Obj extends {[name: string]: (payload: S) => boolean}>(
+
+export function split<
+  S,
+  Match extends {[name: string]: (payload: S) => boolean}
+>(config: {
+  source: Unit<S>
+  match: Match
+  cases: Partial<
+    {
+      [K in keyof Match]: Match[K] extends (p: any) => p is infer R
+        ? Unit<R>
+        : Unit<S>
+    } & {__: Unit<S>}
+  >
+}): void
+export function split<S, Match extends {[name: string]: (payload: S) => boolean}>(
   source: Unit<S>,
-  cases: Obj,
+  match: Match,
 ): {
-  [K in keyof Obj]: Obj[K] extends (p: any) => p is infer R
+  [K in keyof Match]: Match[K] extends (p: any) => p is infer R
     ? Event<R>
     : Event<S>
 } & {__: Event<S>}
