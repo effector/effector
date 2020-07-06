@@ -1,4 +1,4 @@
-import $$observable from 'symbol-observable'
+import {observableSymbol} from './observable'
 import {Event} from './unit.h'
 import {clearNode} from './clearNode'
 import {createEvent} from './createUnit'
@@ -9,10 +9,10 @@ import {throwError} from './throw'
 export function fromObservable<T>(observable: any): Event<T> {
   assertObject(observable)
   const observableItem =
-    $$observable in observable ? observable[$$observable]() : observable
+    observableSymbol in observable ? observable[observableSymbol]() : observable
   if (!observableItem.subscribe)
     throwError('expect observable to have .subscribe')
-  const event: Event<T> = createEvent()
+  const event = createEvent<T>()
   const disposer = bind2(clearNode, event, undefined)
   observableItem.subscribe({
     next: event,

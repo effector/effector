@@ -1,4 +1,4 @@
-import $$observable from 'symbol-observable'
+import {observableSymbol} from './observable'
 
 import {is, isObject, isFunction, assertObject} from './is'
 import {Store, Event} from './unit.h'
@@ -94,7 +94,7 @@ export const initUnit = (
             },
       )
     }
-    unit[$$observable] = () => unit
+    unit[observableSymbol] = () => unit
   }
   isStrict = strict
   return {unit: kind, name, sid, named}
@@ -124,7 +124,7 @@ const createEventFiltration = (event: any, op: string, fn: any, node: any) => {
 }
 
 export function createEvent<Payload = any>(
-  nameOrConfig: any,
+  nameOrConfig?: any,
   maybeConfig?: any,
 ): Event<Payload> {
   const event: any = (payload: Payload, ...args: any[]) =>

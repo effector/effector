@@ -88,9 +88,7 @@ export default {
     'umd:main': 'effector.umd.js',
     'jsnext:main': 'effector.es.js',
     typings: 'index.d.ts',
-    dependencies: {
-      'symbol-observable': '^1.2.0',
-    },
+    dependencies: {},
     files: [
       ...getFiles('effector'),
       ...compiledFile('fork'),
