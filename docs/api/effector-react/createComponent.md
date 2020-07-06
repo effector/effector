@@ -30,14 +30,14 @@ import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
 const counter = createStore(0)
-const incr = createEvent('increment')
+const increment = createEvent()
 
-counter.on(incr, n => n + 1)
+counter.on(increment, n => n + 1)
 
 const MyCounter = createComponent(counter, (props, state) => (
   <div>
     Counter: {state}
-    <button onClick={incr}>increment</button>
+    <button onClick={increment}>increment</button>
   </div>
 ))
 
@@ -49,4 +49,4 @@ const MyOwnComponent = () => {
 ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/EdhOYD25)
+[Try it](https://share.effector.dev/0G6X1V4c)
