@@ -6,6 +6,8 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 - Add object form of `split` for pattern-matching without additional forwards
 
+[`split` in documentation](https://effector.now.sh/docs/api/effector/split#splitsource-match-cases)
+
 ```js
 import {split, createEffect, createEvent} from 'effector'
 const messageReceived = createEvent()
