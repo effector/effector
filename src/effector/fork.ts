@@ -7,8 +7,10 @@ import {throwError} from './throw'
 import {launch} from './kernel'
 import {createNode} from './createNode'
 import {step} from './typedef'
+import {Domain, Store} from './unit.h'
+import {Graph, StateRef} from './index.h'
 
-let forkPage
+let forkPage: any
 
 /**
 hydrate state on client
@@ -19,7 +21,7 @@ hydrate(root, {
 })
 
 */
-export function hydrate(domain, {values}) {
+export function hydrate(domain: Domain, {values}: {values: any}) {
   if (!is.domain(domain)) {
     throwError('first argument of hydrate should be domain')
   }
@@ -39,10 +41,18 @@ export function hydrate(domain, {values}) {
   })
 }
 
-function fillValues({flatGraphUnits, values, collectWatches}) {
+function fillValues({
+  flatGraphUnits,
+  values,
+  collectWatches,
+}: {
+  flatGraphUnits: Graph[]
+  values: Record<string, any>
+  collectWatches: boolean
+}) {
   const storeWatches = []
   const storeWatchesRefs = []
-  const refsMap = {}
+  const refsMap = {} as Record<string, StateRef>
   const predefinedRefs = new Set()
   const valuesSidList = Object.getOwnPropertyNames(values)
   for (const node of flatGraphUnits) {
@@ -76,7 +86,7 @@ function fillValues({flatGraphUnits, values, collectWatches}) {
     storeWatches,
     storeWatchesRefs,
   }
-  function execRef(ref) {
+  function execRef(ref: StateRef) {
     let isFresh = false
     if (ref.before && !predefinedRefs.has(ref)) {
       for (const cmd of ref.before) {
@@ -121,9 +131,9 @@ function fillValues({flatGraphUnits, values, collectWatches}) {
   }
 }
 
-function createRefGraph(refsMap) {
+function createRefGraph(refsMap: Record<string, StateRef>) {
   const items = Object.values(refsMap)
-  const refGraph = {}
+  const refGraph = {} as Record<string, string[]>
   for (const {id} of items) {
     refGraph[id] = []
   }
@@ -143,10 +153,10 @@ function createRefGraph(refsMap) {
 serialize state on server
 */
 export function serialize(
-  {clones},
+  {clones}: any,
   {ignore = []}: {ignore?: Array<Store<any>>} = {},
 ) {
-  const result = {}
+  const result = {} as Record<string, any>
   for (const {meta, scope, reg} of clones) {
     if (meta.unit !== 'store') continue
     const {sid} = meta
@@ -160,7 +170,7 @@ export function serialize(
 }
 
 /** invoke event in scope */
-export function invoke(unit, payload) {
+export function invoke(unit: any, payload: any) {
   if (!forkPage) {
     throwError('invoke cannot be called outside of forked .watch')
   }
@@ -172,13 +182,13 @@ export function invoke(unit, payload) {
 }
 
 /** bind event to scope */
-export function scopeBind(unit) {
+export function scopeBind(unit: any) {
   if (!forkPage) {
     throwError('scopeBind cannot be called outside of forked .watch')
   }
   const result = forkPage.find(unit)
   const savedStack = forkPage
-  return payload => {
+  return (payload: any) => {
     launch({
       target: result,
       params: payload,
@@ -186,24 +196,27 @@ export function scopeBind(unit) {
     })
   }
 }
-function universalLaunch(unit, payload) {
+function universalLaunch(unit: any, payload: any) {
   if (forkPage) {
     invoke(unit, payload)
   } else {
     launch(unit, payload)
   }
 }
-function normalizeValues(values) {
+function normalizeValues(values: Map<Store<any>, any> | Record<string, any>) {
   if (values instanceof Map) {
-    const result = {}
+    const result = {} as Record<string, any>
     for (const [key, value] of values) {
-      result[key.sid] = value
+      result[key.sid!] = value
     }
     return result
   }
   return values
 }
-export function fork(domain, {values, handlers} = {}) {
+export function fork(
+  domain: Domain,
+  {values, handlers}: {values?: any; handlers?: any} = {},
+) {
   if (!is.domain(domain)) throwError('first argument of fork should be domain')
   if (!domain.graphite.meta.withScopes) {
     domain.graphite.meta.withScopes = true
@@ -246,8 +259,8 @@ export function fork(domain, {values, handlers} = {}) {
 
   function fillValues() {
     const sourceList = flatGraph(domain)
-    const sourceRefsMap = {}
-    const refsMap = {}
+    const sourceRefsMap = {} as Record<string, StateRef>
+    const refsMap = {} as Record<string, StateRef>
     const predefinedRefs = new Set()
     const valuesSidList = Object.getOwnPropertyNames(values)
     for (const {reg} of sourceList) {
@@ -275,7 +288,7 @@ export function fork(domain, {values, handlers} = {}) {
       execRef(refsMap[id], sourceRefsMap[id])
     })
 
-    function execRef(ref, sourceRef) {
+    function execRef(ref: StateRef, sourceRef?: StateRef) {
       let isFresh = false
       if (sourceRef && sourceRef.before && !predefinedRefs.has(ref)) {
         for (const cmd of sourceRef.before) {
@@ -320,21 +333,21 @@ export function fork(domain, {values, handlers} = {}) {
     }
   }
 }
-function toposort(rawGraph) {
-  const graph = {}
+function toposort(rawGraph: Record<string, string[]>) {
+  const graph = {} as Record<string, string[]>
   for (const id in rawGraph) {
     graph[id] = [...new Set(rawGraph[id])]
   }
-  const result = []
-  const visited = {}
-  const temp = {}
+  const result = [] as string[]
+  const visited = {} as Record<string, boolean>
+  const temp = {} as Record<string, boolean>
   for (const node in graph) {
     if (!visited[node] && !temp[node]) {
-      topologicalSortHelper(node, visited, temp, graph, result)
+      topologicalSortHelper(node)
     }
   }
   return result.reverse()
-  function topologicalSortHelper(node, visited, temp, graph, result) {
+  function topologicalSortHelper(node: string) {
     temp[node] = true
     const neighbors = graph[node]
     for (let i = 0; i < neighbors.length; i++) {
@@ -344,7 +357,7 @@ function toposort(rawGraph) {
         // throw Error('found cycle in DAG')
       }
       if (!visited[n]) {
-        topologicalSortHelper(n, visited, temp, graph, result)
+        topologicalSortHelper(n)
       }
     }
     temp[node] = false
@@ -352,10 +365,14 @@ function toposort(rawGraph) {
     result.push(node)
   }
 }
-export function allSettled(start, {scope, params: ctx}) {
+export function allSettled(
+  start: any,
+  {scope, params: ctx}: {scope: any; params?: any},
+) {
   if (!is.unit(start))
     return Promise.reject(Error('first argument should be unit'))
   const defer = createDefer()
+  //@ts-ignore
   defer.parentFork = forkPage
   const {forkInFlightCounter} = scope.graphite.scope
   forkInFlightCounter.scope.defers.push(defer)
@@ -383,8 +400,8 @@ export function allSettled(start, {scope, params: ctx}) {
   })
   return defer.req
 }
-function flatGraph(unit) {
-  const list = []
+function flatGraph(unit: any) {
+  const list = [] as Graph[]
   ;(function traverse(node) {
     if (list.includes(node)) return
     list.push(node)
@@ -396,7 +413,7 @@ function flatGraph(unit) {
 everything we need to clone graph section
 reachable from given unit
 */
-function cloneGraph(unit) {
+function cloneGraph(unit: any) {
   const list = flatGraph(unit)
   const refs = new Map()
   const scope = {
@@ -434,7 +451,7 @@ function cloneGraph(unit) {
           if (inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
-            defers.splice(0, defers.length).forEach(defer => {
+            defers.splice(0, defers.length).forEach((defer: any) => {
               forkPage = defer.parentFork
               defer.rs()
             })
@@ -452,7 +469,7 @@ function cloneGraph(unit) {
         type: step.type,
         data: Object.assign({}, step.data),
         hasRef: step.hasRef,
-      })),
+      })) as any,
       child: [...next],
       meta: Object.assign({}, meta),
       scope: Object.assign({}, scope),
@@ -517,7 +534,7 @@ function cloneGraph(unit) {
   return {
     clones,
     find: findClone,
-    getState: store => findClone(store).meta.wrapped.getState(),
+    getState: (store: any) => findClone(store).meta.wrapped.getState(),
     graphite: createNode({
       family: {
         type: 'domain',
@@ -527,7 +544,7 @@ function cloneGraph(unit) {
       scope: {forkInFlightCounter},
     }),
   }
-  function findClone(unit) {
+  function findClone(unit: any) {
     unit = getGraph(unit)
     const index = list.indexOf(unit)
     if (index === -1) throwError('unit not found in forked scope')
@@ -535,7 +552,7 @@ function cloneGraph(unit) {
   }
 }
 
-function wrapStore(node) {
+function wrapStore(node: Graph) {
   return {
     kind: 'store',
     getState: () => node.reg[node.scope.state.id].current,
@@ -546,7 +563,10 @@ function wrapStore(node) {
     family: node.family,
   }
 }
-function forEachRelatedNode({next, family, meta}, cb) {
+function forEachRelatedNode(
+  {next, family, meta}: Graph,
+  cb: (node: Graph, index: number, siblings: Graph[]) => void,
+) {
   if (meta.unit === 'fork' || meta.unit === 'forkInFlightCounter') return
   next.forEach(cb)
   family.owners.forEach(cb)
