@@ -120,8 +120,6 @@ const second = first.filter({fn})
 - When `first` is triggered, pass payload from `first` to `fn`
 - If `fn()` returns `true`, `second` will be triggered with payload from `first`
 
-<!-- You may ask, why object as argument? If you are interesting, welcome to advanced section -->
-
 #### Arguments
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
@@ -130,12 +128,20 @@ const second = first.filter({fn})
 
 [_Event_](Event.md): New event.
 
+:::note
+Object form is used because `event.filter(fn)` was an alias for [event.filterMap](./Event.md#filtermapfn)
+:::
+
+:::note
+[`guard`](./guard.md) method is the preferred filtering method
+:::
+
 #### Example
 
 ```js try
 import {createEvent, createStore} from 'effector'
 
-const numbers = createEvent('event with {x: number}')
+const numbers = createEvent()
 
 const positiveNumbers = numbers.filter({
   fn: ({x}) => x > 0,
@@ -143,12 +149,23 @@ const positiveNumbers = numbers.filter({
 
 const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
 
-numbers({x: 0}) // store won't triggered
-numbers({x: -10}) // store won't triggered
-numbers({x: 10}) // store will triggered
+lastPositive.watch(x => {
+  console.log('last positive:', x)
+})
+
+// => last positive: 0
+
+numbers({x: 0})
+// no reaction
+
+numbers({x: -10})
+// no reaction
+
+numbers({x: 10})
+// => last positive: 10
 ```
 
-[Try it](https://share.effector.dev/rfTLL4bo)
+[Try it](https://share.effector.dev/H2Iu4iJH)
 
 <hr />
 
@@ -164,7 +181,7 @@ Let's consider by steps:
 And you repeat this until you complete the task. Now think about it in the Effector terms and we consider the positive case:
 
 1. Take an apple - event;
-2. Have a look,  red or no - filter;
+2. Have a look, red or no - filter;
 3. You keep it - map;
 4. Put in pack - event.
 5. Pack - store
@@ -196,8 +213,8 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEvent, createStore} from 'effector'
 
-const openModal = createEvent('open that modal')
-const closeModal = createEvent('close that modal')
+const openModal = createEvent()
+const closeModal = createEvent()
 
 const openModalUnboxed = openModal.filterMap(ref => {
   if (ref.current) return ref.current
@@ -236,7 +253,7 @@ const App = () => (
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/IqDmMX3e)
+[Try it](https://share.effector.dev/abn4EMNa)
 
 <hr />
 
@@ -289,7 +306,6 @@ input.onchange = inputChanged
 document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
-
 ```
 
 [Try it](https://share.effector.dev/1rHlEeTy)

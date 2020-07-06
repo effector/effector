@@ -8,8 +8,8 @@ title: Core Concepts
 [_Event_] is an intention to change state.
 
 ```js try
-const event = createEvent() // unnamed event
-const onMessage = createEvent('message') // named event
+const event = createEvent()
+const onMessage = createEvent()
 
 const socket = new WebSocket('wss://echo.websocket.org')
 socket.onmessage = msg => onMessage(msg)

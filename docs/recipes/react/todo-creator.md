@@ -10,10 +10,10 @@ import {createStore, createEvent, sample} from 'effector'
 import {useStore, useList} from 'effector-react'
 
 function createTodoListApi(initial: string[] = []) {
-	const insert = createEvent<string>('insert');
-  const remove = createEvent<number>('remove');
-  const change = createEvent<string>('change');
-  const reset = createEvent<void>('reset');
+	const insert = createEvent<string>();
+  const remove = createEvent<number>();
+  const change = createEvent<string>();
+  const reset = createEvent<void>();
   const todos = createStore<string[]>(initial);
   const input = createStore<string>('');
   todos.on(insert, (state, value) => [...state, value]);
@@ -83,3 +83,5 @@ function App() {
 
 ReactDOM.render(<App/>, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/kctWL5O5)
