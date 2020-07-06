@@ -4,7 +4,7 @@ title: serialize
 hide_title: true
 ---
 
-# Serialize
+# serialize
 
 ```ts
 serialize(scope: Scope, { ignore?: Array<Store<any>> }): {[sid: string]: any}

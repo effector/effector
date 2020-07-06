@@ -48,6 +48,7 @@ const sidebar = {
         'api/effector/fork',
         'api/effector/serialize',
         'api/effector/hydrate',
+        'api/effector/scopeBind',
         'api/effector/babel-plugin',
       ],
     },

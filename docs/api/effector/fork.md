@@ -4,7 +4,7 @@ title: fork
 hide_title: true
 ---
 
-# Fork
+# fork
 
 ```ts
 fork(domain: Domain, { values?, handlers? }?): Scope
