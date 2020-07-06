@@ -10,7 +10,7 @@ import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, getCurrentPage} from './kernel'
+import {launch, currentPage} from './kernel'
 
 import {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
@@ -196,7 +196,6 @@ export function createStore<State>(
     defaultState,
     stateRef: plainState,
     getState() {
-      const currentPage = getCurrentPage()
       if (!currentPage) return readRef(plainState)
       if (currentPage.reg[plainState.id])
         return readRef(currentPage.reg[plainState.id])

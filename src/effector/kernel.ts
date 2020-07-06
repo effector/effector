@@ -186,9 +186,8 @@ const getPriority = (t: PriorityTag) => {
 const barriers = new Set()
 
 let alreadyStarted = false
-let currentPage: any = null
+export let currentPage: any = null
 let forkPage: any
-export const getCurrentPage = () => currentPage
 
 /** main execution method */
 const exec = () => {
