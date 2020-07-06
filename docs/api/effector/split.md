@@ -124,7 +124,7 @@ messageReceived({
 
 #### Example 1
 
-```js try
+```js
 import {createEvent, split} from 'effector'
 
 const message = createEvent()
@@ -162,7 +162,7 @@ Only the first met match will trigger resulting event
 
 #### Example 2
 
-```js try
+```js
 import {createEvent, split} from 'effector'
 
 const message = createEvent()

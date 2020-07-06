@@ -30,7 +30,7 @@ You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even thoug
 
 Create unnamed effect
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect({
@@ -48,7 +48,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 Create named effect
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect('fetch user repositories', {
@@ -66,7 +66,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 Set handler to effect after creating
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect()
@@ -84,7 +84,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 Watch effect status
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect({
@@ -127,7 +127,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 Change state
 
-```js try
+```js
 import {createStore, createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect({

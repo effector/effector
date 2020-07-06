@@ -26,7 +26,7 @@ Priority:
 
 Let's consider prioritize in the example below.
 
-```js try
+```js
 let count = 0
 const sideEffect = createEffect({
   handler() {

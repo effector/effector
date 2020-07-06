@@ -9,7 +9,7 @@ In a such situation [`Gate`](https://effector.now.sh/en/api/effector-react/gate)
 
 In this example we will write code which will not go beyond our sandbox
 
-```js try
+```js
 import {createStore, createEffect, forward} from 'effector'
 import {useStore, createGate} from 'effector-react'
 

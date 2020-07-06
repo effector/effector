@@ -20,7 +20,7 @@ A helper to call events within a scope (see [_fork_](fork)). Effector supports i
 
 We are going to call `changeLocation` inside `history.listen` callback so there is no way for effector to associate event with corresponding scope and we should explicitly bind event to scope using `scopeBind`
 
-```js try
+```js
 const installHistory = app.createEvent<any>()
 const changeLocation = app.createEvent<string>()
 

@@ -18,7 +18,7 @@ Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effe
 
 #### Example 1
 
-```js try
+```js
 import {createEvent, merge} from 'effector'
 
 const foo = createEvent()
@@ -40,7 +40,7 @@ Array can contain both events and stores. In this case, resulting event will fir
 
 #### Example 2
 
-```js try
+```js
 import {createEvent, createStore, merge} from 'effector'
 
 const setFoo = createEvent()
@@ -61,7 +61,7 @@ setBar(123) // => state changed to: 123
 
 #### Example 3
 
-```js try
+```js
 import {createEvent, createStore, merge} from 'effector'
 
 const setFoo = createEvent()

@@ -23,7 +23,7 @@ You can pass `name` if you want.
 
 #### Example 1
 
-```js try
+```js
 import {createStore, createEvent} from 'effector'
 const store = createStore(0)
 const addNumber = createEvent()
@@ -50,7 +50,7 @@ Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`
 
 #### Example 2
 
-```js try
+```js
 import {createEvent} from 'effector'
 
 const extractPartOfArray = createEvent()

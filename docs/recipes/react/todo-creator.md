@@ -3,7 +3,7 @@ id: todo-creator
 title: TODO creator
 ---
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent, sample} from 'effector'

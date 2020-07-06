@@ -18,20 +18,20 @@ A companion method for [_hydrate_](hydrate). Allows to get a serialized value fo
 2. `ignore` Optional array of [_Store_](Store.md) to be omited during serialization
 
 ### Returns
+
 An object with store values using sids as a keys
 
 ### Example
 
 Serialize forked instance state
 
-```js try
-import { createStore, createDomain, fork, serialize } from 'effector'
+```js
+import {createStore, createDomain, fork, serialize} from 'effector'
 
 const domain = createDomain()
 const store = domain.createStore(42)
 const scope = fork(domain)
 console.log(serialize(scope)) // => {[sid]: 42}
-
 ```
 
 [Try it](https://share.effector.dev/Qb2ywYqo)

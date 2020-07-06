@@ -23,7 +23,7 @@ You can use hooks in `createComponent` since effector-react@20.3.0.
 
 #### Example
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'

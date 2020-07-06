@@ -21,16 +21,16 @@ A companion method for [_serialize_](serialize). Hydrates provided values into c
 
 Populate store with a predefined value
 
-```js try
-import { createStore, createDomain, fork, serialize, hydrate } from 'effector'
+```js
+import {createStore, createDomain, fork, serialize, hydrate} from 'effector'
 
 const domain = createDomain()
 const store = domain.createStore(0)
 
 hydrate(domain, {
   values: {
-  	[store.sid]: 42
-  }
+    [store.sid]: 42,
+  },
 })
 
 console.log(store.getState()) // 42

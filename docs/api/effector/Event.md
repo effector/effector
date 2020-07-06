@@ -7,7 +7,7 @@ _Event_ is an intention to change the state. Let's imagine life situation, you e
 
 Event calls always return its payload:
 
-```js try
+```js
 import {createEvent} from 'effector'
 
 const event = createEvent()
@@ -47,7 +47,7 @@ const unwatch = event.watch(fn)
 
 #### Example
 
-```js try
+```js
 import {createEvent} from 'effector'
 
 const sayHi = createEvent()
@@ -86,7 +86,7 @@ const second = first.map(fn)
 
 #### Example
 
-```js try
+```js
 import {createEvent} from 'effector'
 
 const userUpdated = createEvent()
@@ -138,7 +138,7 @@ Object form is used because `event.filter(fn)` was an alias for [event.filterMap
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const numbers = createEvent()
@@ -208,7 +208,7 @@ const second = first.filterMap(fn)
 
 #### Example
 
-```jsx try
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEvent, createStore} from 'effector'
@@ -281,7 +281,7 @@ const second = first.prepend(fn)
 
 #### Example
 
-```js try
+```js
 import {createEvent} from 'effector'
 
 const nameChanged = createEvent()

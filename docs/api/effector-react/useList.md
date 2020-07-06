@@ -22,7 +22,7 @@ Every item will be memoized and updated only when their data changes.
 
 #### Example
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
@@ -51,7 +51,7 @@ ReactDOM.render(<Users />, document.getElementById('root'))
 
 [Try it](https://share.effector.dev/JZ35Jjyr)
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
@@ -120,7 +120,7 @@ In such case, we need to tell react about our dependencies and pass keys explici
 
 #### Example 2
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -170,12 +170,13 @@ import {useList} from 'effector-react'
 
 export const friends = createStore(['alice', 'bob'])
 
-export const FriendList = ({username}) => useList(friends, {
-  keys: [username],
-  fn: friend => (
-    <p>
-      {friend} is a friend of {username}
-    </p>
-  )
-})
+export const FriendList = ({username}) =>
+  useList(friends, {
+    keys: [username],
+    fn: friend => (
+      <p>
+        {friend} is a friend of {username}
+      </p>
+    ),
+  })
 ```

@@ -22,7 +22,7 @@ It works like a shortcut for `createStore(defaultState).on(event, (_, payload) =
 
 #### Example
 
-```js try
+```js
 import {createEvent, restore} from 'effector'
 
 const event = createEvent()
@@ -53,7 +53,7 @@ It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {res
 
 #### Example
 
-```js try
+```js
 import {createEffect, restore} from 'effector'
 
 const effect = createEffect({
@@ -84,7 +84,7 @@ Creates an object with stores from object with values
 
 #### Example
 
-```js try
+```js
 import {restore} from 'effector'
 
 const {foo, bar} = restore({

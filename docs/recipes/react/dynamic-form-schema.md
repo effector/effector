@@ -5,7 +5,7 @@ title: Dynamic form schema
 
 [Try it](https://share.effector.dev/1oOz6104)
 
-```js try
+```js
 const submitForm = createEvent()
 
 const saveFormFx = createEffect({

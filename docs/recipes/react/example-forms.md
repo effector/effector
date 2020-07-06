@@ -5,7 +5,7 @@ title: Forms
 
 #### Example 1
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
@@ -175,7 +175,7 @@ This code is way shorter, yet has code duplication, lower scalability and less r
 
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'

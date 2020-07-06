@@ -18,7 +18,7 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 
 #### Example
 
-```js try
+```js
 import {createStore, combine} from 'effector'
 
 const balance = createStore(0)
@@ -50,7 +50,7 @@ Formerly known as `createStoreObject`
 
 #### Example
 
-```js try
+```js
 import {createStore, combine} from 'effector'
 
 const r = createStore(255)
@@ -74,7 +74,7 @@ sum.watch(console.log) // => 510
 
 #### Example
 
-```js try
+```js
 import {createStore, combine} from 'effector'
 
 const r = createStore(255)

@@ -47,8 +47,8 @@ Sends data from one entity to another.
 
 Send store data to store
 
-```js try
-import { createStore, createEvent, forward } from 'effector'
+```js
+import {createStore, createEvent, forward} from 'effector'
 
 const $store = createStore(1)
 const event = createEvent()
@@ -58,7 +58,7 @@ forward({
   to: $store,
 })
 
-$store.watch((state) => console.log('store changed: ', state))
+$store.watch(state => console.log('store changed: ', state))
 // => store changed: 1
 
 event(200)
@@ -83,8 +83,8 @@ It is the not better way to update store. In most cases you need [`store.on`](ht
 
 ### Example
 
-```js try
-import { createEvent, forward } from 'effector'
+```js
+import {createEvent, forward} from 'effector'
 
 const firstSource = createEvent()
 const secondSource = createEvent()
@@ -97,8 +97,8 @@ forward({
   to: [firstTarget, secondTarget],
 })
 
-firstTarget.watch((e) => console.log('first target', e))
-secondTarget.watch((e) => console.log('second target', e))
+firstTarget.watch(e => console.log('first target', e))
+secondTarget.watch(e => console.log('second target', e))
 
 firstSource('A')
 // => first target A

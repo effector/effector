@@ -3,7 +3,7 @@ id: example-effects
 title: Effects
 ---
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 

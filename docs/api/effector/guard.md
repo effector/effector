@@ -33,18 +33,18 @@ When `source` is triggered, check `filter` for thruthy and call `target` with da
 
 #### Example
 
-```js try
-import { createStore, createEffect, createEvent, guard, sample } from 'effector'
+```js
+import {createStore, createEffect, createEvent, guard, sample} from 'effector'
 
 const clickRequest = createEvent()
 const fetchRequest = createEffect({
-  handler: (n) => new Promise((rs) => setTimeout(rs, 2500, n)),
+  handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
 })
 
-const clicks = createStore(0).on(clickRequest, (x) => x + 1)
-const requests = createStore(0).on(fetchRequest, (x) => x + 1)
+const clicks = createStore(0).on(clickRequest, x => x + 1)
+const requests = createStore(0).on(fetchRequest, x => x + 1)
 
-const isIdle = fetchRequest.pending.map((pending) => !pending)
+const isIdle = fetchRequest.pending.map(pending => !pending)
 
 /*
 on clickRequest, take current clicks value,
@@ -64,15 +64,15 @@ Also, guard accepts a common function predicate as filter, to drop events before
 
 #### Example 2
 
-```js try
-import { createEffect, createEvent, guard } from 'effector'
+```js
+import {createEffect, createEvent, guard} from 'effector'
 
 const searchUser = createEffect()
 const submitForm = createEvent()
 
 guard({
   source: submitForm,
-  filter: (user) => user.length > 0,
+  filter: user => user.length > 0,
   target: searchUser,
 })
 
@@ -91,12 +91,12 @@ submitForm('alice') // ~> searchUser('alice')
 
 #### Example
 
-```js try
-import { createEvent, createStore, createApi, guard } from 'effector'
+```js
+import {createEvent, createStore, createApi, guard} from 'effector'
 
 const trigger = createEvent()
 const $unlocked = createStore(true)
-const { lock, unlock } = createApi($unlocked, {
+const {lock, unlock} = createApi($unlocked, {
   lock: () => false,
   unlock: () => true,
 })
@@ -124,12 +124,12 @@ trigger('C')
 
 #### Example 2
 
-```js try
-import { createEvent, guard } from 'effector'
+```js
+import {createEvent, guard} from 'effector'
 
 const source = createEvent()
 const target = guard(source, {
-  filter: (x) => x > 0,
+  filter: x => x > 0,
 })
 
 target.watch(() => {

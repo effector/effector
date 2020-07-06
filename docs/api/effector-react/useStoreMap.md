@@ -23,7 +23,7 @@ Creates a hook function, which observes changes in selected part of store. Compo
 
 This hook is very useful for working with lists, especially with large ones.
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'effector'

@@ -17,8 +17,14 @@ The method is based on the idea of region-based memory managment (see https://en
 
 #### Example
 
-```js try
-import {createDomain, createEvent, restore, withRegion, clearNode} from 'effector'
+```js
+import {
+  createDomain,
+  createEvent,
+  restore,
+  withRegion,
+  clearNode,
+} from 'effector'
 
 const first = createEvent()
 const second = createEvent()
@@ -30,7 +36,7 @@ const domain = createDomain()
 withRegion(domain, () => {
   // Following links created with `forward` or `sample` are owned by provided unit `domain`
   // and will be disposed as soon as `clearNode` would be called on `domain`
-	forward({
+  forward({
     from: second,
     to: first,
   })

@@ -20,7 +20,7 @@ Creates a [store](Store.md).
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const addTodo = createEvent()

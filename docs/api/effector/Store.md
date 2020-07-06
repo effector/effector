@@ -35,7 +35,7 @@ If the function returns an old state or if it returns `undefined`, the new store
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const changed = createEvent()
@@ -88,7 +88,7 @@ $store.on(trigger, handler)
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -112,7 +112,7 @@ changed(2)
 
 #### Unsubscribe example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -159,7 +159,7 @@ $store.on([triggerA, triggerB, ...], handler)
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -210,7 +210,7 @@ const unwatch = $store.watch(watcher)
 
 #### Example
 
-```js try
+```js
 const add = createEvent()
 const store = createStore(0).on(add, (state, payload) => state + payload)
 
@@ -251,7 +251,7 @@ const unwatch = $store.watch(trigger, watcher)
 `.watch` trigger `watcher` when `foo` is executed, because `foo` is explicitly passed to `watch`. <br/>
 First argument of `watcher` is a state value, second is an event value.
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const foo = createEvent()
@@ -300,7 +300,7 @@ $store.reset(...triggers)
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -346,7 +346,7 @@ $store.reset([triggerA, triggerB, ...])
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -397,7 +397,7 @@ Returns current state of store
 
 #### Example
 
-```js try
+```js
 import {createEvent, createStore} from 'effector'
 
 const store = createStore(0)
@@ -438,7 +438,7 @@ const result = $store.thru(fn)
 
 #### Example
 
-```js try
+```js
 import {createStore} from 'effector'
 
 const enhance = fn => store => store.map(fn)
@@ -484,7 +484,7 @@ $store.updates
 
 Use case: watchers, which will not trigger immediately after creation (unlike [_store.watch_](Store.md#watchwatcher))
 
-```js try
+```js
 import {createStore, is} from 'effector'
 
 const clicksAmount = createStore(0)

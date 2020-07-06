@@ -17,7 +17,7 @@ It can be safely used in place of the original async function.
 
 #### Example
 
-```js try
+```js
 import {createEffect, createStore} from 'effector'
 
 const fetchUserFx = createEffect({
@@ -81,7 +81,7 @@ You must provide a handler either through [`.use`](Effect.md#usehandler) method 
 
 #### Example
 
-```js try
+```js
 const fetchUserReposFx = createEffect()
 
 fetchUserReposFx.use(async params => {
@@ -123,7 +123,7 @@ const unwatch = effect.watch(fn)
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const effectFx = createEffect({
@@ -177,7 +177,7 @@ Returns current handler of effect. Useful for testing.
 
 #### Example
 
-```js try
+```js
 const handlerA = () => 'A'
 const handlerB = () => 'B'
 
@@ -205,7 +205,7 @@ Event, which is triggered with result of the effect execution:
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const effectFx = createEffect({
@@ -229,7 +229,7 @@ Event, which is triggered with error thrown by the effect:
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const effectFx = createEffect()
@@ -258,7 +258,7 @@ Event triggered with object of `params` and `result`:
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const effectFx = createEffect({
@@ -287,7 +287,7 @@ Event triggered with object of `params` and `error`:
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const effectFx = createEffect()
@@ -318,7 +318,7 @@ Event, which is triggered when handler is resolved, rejected or throws error.
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fetchApiFx = createEffect({
@@ -344,7 +344,7 @@ fetchApiFx(100)
 
 #### Example
 
-```js try
+```js
 import React from 'react'
 import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
@@ -369,7 +369,7 @@ fetchApiFx(3000)
 
 It's a shorthand for common use case
 
-```js try
+```js
 import {createEffect, createStore} from 'effector'
 
 const fetchApiFx = createEffect()
@@ -387,7 +387,7 @@ const isLoading = createStore(false)
 
 #### Example
 
-```js try
+```js
 import {createEffect} from 'effector'
 
 const fx = createEffect({

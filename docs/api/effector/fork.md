@@ -18,6 +18,7 @@ The primary purpose of fork includes SSR (but is not limited to). Fork clones al
 1. `domain` ([_Domain_](Domain.md)): Original domain to clone, required
 2. `values` Optional object with either a mapping from store sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to store values or a Map where keys are [_Store_](Store.md) objects and values contains initial store value
 3. `handlers` Optional object with either a mapping from effect sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to effect handlers or a Map where keys are [_Effect_](Effect.md) objects and values contains handlers
+
 ### Returns
 
 `Scope` object containing information about cloned domain
@@ -32,15 +33,23 @@ interface Scope {
 
 Create two instances with indepented counter state
 
-```js try
-import { createStore, createEvent, createDomain, forward, fork, allSettled } from 'effector'
+```js
+import {
+  createStore,
+  createEvent,
+  createDomain,
+  forward,
+  fork,
+  allSettled,
+} from 'effector'
 
 const domain = createDomain()
 const inc = domain.createEvent()
 const dec = domain.createEvent()
-const $counter = domain.createStore(0)
-    .on(inc, value => value + 1)
-    .on(dec, value => value - 1)
+const $counter = domain
+  .createStore(0)
+  .on(inc, value => value + 1)
+  .on(dec, value => value - 1)
 
 const scopeA = fork(domain)
 const scopeB = fork(domain)
@@ -51,7 +60,6 @@ await allSettled(dec, {scope: scopeB})
 console.log($counter.getState()) // => 0
 console.log(scopeA.getState($counter)) // => 1
 console.log(scopeB.getState($counter)) // => -1
-
 ```
 
 [Try it](https://share.effector.dev/0grlV3bA)

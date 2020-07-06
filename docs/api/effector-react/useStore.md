@@ -18,7 +18,7 @@ Creates a hook function, which subscribes to watcher, that observes changes in t
 
 #### Example
 
-```js try
+```js
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createApi} from 'effector'

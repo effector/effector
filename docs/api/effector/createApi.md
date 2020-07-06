@@ -19,7 +19,7 @@ hide_title: true
 
 #### Example
 
-```js try
+```js
 import {createStore, createApi} from 'effector'
 
 const playerPosition = createStore(0)

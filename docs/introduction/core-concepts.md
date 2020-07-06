@@ -7,7 +7,7 @@ title: Core Concepts
 
 [_Event_] is an intention to change state.
 
-```js try
+```js
 const event = createEvent()
 const onMessage = createEvent()
 
@@ -30,7 +30,7 @@ The only requirement for the function:
 
 - **Must** have zero or one argument
 
-```js try
+```js
 const getUserFx = createEffect({
   async handler({id}) {
     const req = await fetch(`https://example.com/get-user/${params.id}`)
@@ -68,7 +68,7 @@ const data = await getUserFx({id: 2}) // handle promise
 
 [_Store_] is an object that holds the state tree. There can be multiple stores.
 
-```js try
+```js
 const users = createStore([]) // <-- Default state
   // add reducer for getUser.doneData event (fires when promise resolved)
   .on(getUserFx.doneData, (state, user) => [...state, user])
