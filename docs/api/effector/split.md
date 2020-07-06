@@ -4,14 +4,119 @@ title: split
 hide_title: true
 ---
 
-# `split(trigger, cases)`
+# split
 
-Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its comparator function.
+Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its matching function
+
+## `split({source, match, cases})`
 
 #### Arguments
 
-1. `trigger` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
-2. `cases` (_Object_): Schema of cases, which uses names of resulting events as keys, and comparator function*((value) => Boolean)*
+- `source` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
+- `match` (_Object_): Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
+- `cases` (_Object_): An object with units ([_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)) to which data will be passed from `source` if the corresponding matching function returns true
+
+#### Returns
+
+void
+
+#### Example 1
+
+```js
+import {split, createEffect, createEvent} from 'effector'
+const messageReceived = createEvent()
+const showTextPopup = createEvent()
+const playAudio = createEvent()
+const reportUnknownMessageType = createEffect({
+  handler({type}) {
+    console.log('unknown message:', type)
+  },
+})
+
+split({
+  source: messageReceived,
+  match: {
+    text: msg => msg.type === 'text',
+    audio: msg => msg.type === 'audio',
+  },
+  cases: {
+    text: showTextPopup,
+    audio: playAudio,
+    __: reportUnknownMessageType,
+  },
+})
+
+showTextPopup.watch(({value}) => {
+  console.log('new message:', value)
+})
+
+messageReceived({
+  type: 'text',
+  value: 'Hello',
+})
+// => new message: Hello
+messageReceived({
+  type: 'image',
+  imageUrl: '...',
+})
+// => unknown message: image
+```
+
+[Try it](https://share.effector.dev/javsk7Hg)
+
+#### Example 2
+
+You can match directly to store api as well:
+
+```js
+import {split, createStore, createEvent, createApi} from 'effector'
+
+const textContent = createStore([])
+
+const messageReceived = createEvent()
+
+split({
+  source: messageReceived,
+  match: {
+    text: msg => msg.type === 'text',
+    audio: msg => msg.type === 'audio',
+  },
+  cases: createApi(textContent, {
+    text: (list, {value}) => [...list, value],
+    audio: (list, {duration}) => [...list, `audio ${duration} ms`],
+    __: list => [...list, 'unknown message'],
+  }),
+})
+
+textContent.watch(messages => {
+  console.log(messages)
+})
+
+messageReceived({
+  type: 'text',
+  value: 'Hello',
+})
+// => ['Hello']
+messageReceived({
+  type: 'image',
+  imageUrl: '...',
+})
+// => ['Hello', 'unknown message']
+messageReceived({
+  type: 'audio',
+  duration: 500,
+})
+// => ['Hello', 'unknown message', 'audio 500 ms']
+```
+
+[Try it](https://share.effector.dev/32FNNk8H)
+
+## `split(source, cases)`
+
+#### Arguments
+
+1. `source` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
+2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
 #### Returns
 
