@@ -44,6 +44,10 @@ Creates a new [store](Store.md) that emits the set of latest store values from a
 
 [_Store_](Store.md): New store
 
+:::note
+Formerly known as `createStoreObject`
+:::
+
 #### Example
 
 ```js try
