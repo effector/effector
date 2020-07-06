@@ -187,7 +187,10 @@ const barriers = new Set()
 
 let alreadyStarted = false
 export let currentPage: any = null
-let forkPage: any
+export let forkPage: any
+export const setForkPage = (newForkPage: any) => {
+  forkPage = newForkPage
+}
 
 /** main execution method */
 const exec = () => {

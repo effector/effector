@@ -4,13 +4,11 @@ import {createDefer} from './defer'
 import {watchUnit} from './watch'
 import {is, isObject} from './is'
 import {throwError} from './throw'
-import {launch} from './kernel'
+import {launch, forkPage, setForkPage} from './kernel'
 import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
-
-let forkPage: any
 
 /**
 hydrate state on client
@@ -232,7 +230,7 @@ export function fork(
         if (forkPage) {
           const savedStack = forkPage
           req.req.finally(() => {
-            forkPage = savedStack
+            setForkPage(savedStack)
           })
         }
         universalLaunch(effect, {params, req})
@@ -423,7 +421,7 @@ function cloneGraph(unit: any) {
   }
   const forkPageSetter = step.compute({
     fn(data, _, stack) {
-      forkPage = stack.forkPage
+      setForkPage(stack.forkPage)
       return data
     },
   })
@@ -452,7 +450,7 @@ function cloneGraph(unit: any) {
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
             defers.splice(0, defers.length).forEach((defer: any) => {
-              forkPage = defer.parentFork
+              setForkPage(defer.parentFork)
               defer.rs()
             })
           })
