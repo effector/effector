@@ -42,81 +42,81 @@ const createDefaultConfig = () => ({
 module.exports = {
   collectCoverage: boolean(process.env.COVERAGE, false),
   collectCoverageFrom: [
-    '<rootDir>/src/**/*.js',
+    '<rootDir>/src/effector/**/*.ts',
+    '<rootDir>/src/react/**/*.ts',
+    '<rootDir>/src/forest/**/*.ts',
     '!**/node_modules/**',
     '!**/__tests__/**',
     '!**/*.test.js',
-    '!<rootDir>/src/babel/**',
-    '!<rootDir>/src/fixtures/**',
   ],
   watchPathIgnorePatterns,
   projects: createProjectList(
     boolean(process.env.DOM, false)
       ? [
-        {
-          forestBrowser: {
-            automock: false,
-            testEnvironment: 'node',
-            testMatch: [
-              '<rootDir>/src/forest/__tests__/**/*.test.ts',
-              '!<rootDir>/src/forest/__tests__/ssr/**',
-            ],
-            transform,
-            testTimeout: 60e3,
-            runner: './src/forest/__fixtures__/browserstackTestRunner.js',
+          {
+            forestBrowser: {
+              automock: false,
+              testEnvironment: 'node',
+              testMatch: [
+                '<rootDir>/src/forest/__tests__/**/*.test.ts',
+                '!<rootDir>/src/forest/__tests__/ssr/**',
+              ],
+              transform,
+              testTimeout: 60e3,
+              runner: './src/forest/__fixtures__/browserstackTestRunner.js',
+            },
           },
-        },
-      ]
+        ]
       : [
-        {
-          effector: {
-            testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
-            transform,
+          {
+            effector: {
+              testMatch: [`<rootDir>/src/effector/__tests__/**/*.test.ts`],
+              transform,
+            },
           },
-        },
-        'babel',
-        {
-          react: {
-            testEnvironment: 'jsdom',
-            testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
-            transform,
+          'babel',
+          {
+            react: {
+              testEnvironment: 'jsdom',
+              testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
+              transform,
+            },
           },
-        },
-        {
-          vue: {
-            testEnvironment: 'jsdom',
-            testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
-            transform,
+          {
+            vue: {
+              testEnvironment: 'jsdom',
+              testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
+              transform,
+            },
           },
-        },
-        {
-          reason: {
-            testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
+          {
+            reason: {
+              testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
+            },
           },
-        },
-        {
-          forest: {
-            automock: false,
-            testEnvironment: 'node',
-            testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
-            transform,
-            testTimeout: 60e3,
+          {
+            forest: {
+              automock: false,
+              testEnvironment: 'node',
+              testMatch: [`<rootDir>/src/forest/**/*.test.ts`],
+              transform,
+              testTimeout: 60e3,
+            },
           },
-        },
-        !boolean(process.env.NO_TYPE_TESTS, false) && {
-          types: {
-            testMatch: [
-              `<rootDir>/src/types/__tests__/**/*.test.js`,
-              `<rootDir>/src/types/__tests__/**/*.test.ts`,
-              `<rootDir>/src/types/__tests__/**/*.test.tsx`,
-            ],
-            globalSetup: './src/types/src/globalSetup.js',
-            globalTeardown: './src/types/src/globalTeardown.js',
-            maxConcurrency: 25,
-            transform,
+          !boolean(process.env.NO_TYPE_TESTS, false) && {
+            types: {
+              testMatch: [
+                `<rootDir>/src/types/__tests__/**/*.test.js`,
+                `<rootDir>/src/types/__tests__/**/*.test.ts`,
+                `<rootDir>/src/types/__tests__/**/*.test.tsx`,
+              ],
+              globalSetup: './src/types/src/globalSetup.js',
+              globalTeardown: './src/types/src/globalTeardown.js',
+              maxConcurrency: 25,
+              transform,
+            },
           },
-        },
-      ],
+        ],
   ),
 }
 
