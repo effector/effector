@@ -1,5 +1,6 @@
 import * as redux from 'redux'
 import {from, periodic} from 'most'
+import {from as rxjsFrom} from 'rxjs'
 import {
   fromObservable,
   createEvent,
@@ -205,7 +206,39 @@ test('subscription', async () => {
   expect(() => {
     from(event).observe(fn)
   }).not.toThrow()
-  await event('')
+  event()
   await eff('')
   expect(fn).toHaveBeenCalledTimes(2)
+})
+
+test('rxjs support', async () => {
+  const fn = jest.fn()
+  const event = createEvent<string>()
+  const event$ = rxjsFrom(event)
+  const targetEvent = fromObservable(event$)
+  targetEvent.watch(fn)
+  event('a')
+  event('b')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "a",
+      "b",
+    ]
+  `)
+})
+
+test('most support', async () => {
+  const fn = jest.fn()
+  const event = createEvent<string>()
+  const event$ = from(event)
+  const targetEvent = fromObservable(event$)
+  targetEvent.watch(fn)
+  event('a')
+  event('b')
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "a",
+      "b",
+    ]
+  `)
 })
