@@ -28,7 +28,7 @@ export default {
           [
             'index.d.ts',
             'effector.cjs.d.ts',
-            'effector.es.d.ts',
+            'effector.mjs.d.ts',
             'effector.umd.d.ts',
             'compat.d.ts',
           ],
@@ -40,7 +40,7 @@ export default {
           [
             'index.js.flow',
             'effector.cjs.js.flow',
-            'effector.es.js.flow',
+            // 'effector.mjs.flow',
             'effector.umd.js.flow',
             'compat.js.flow',
           ],
@@ -70,7 +70,7 @@ export default {
           [
             'index.d.ts',
             'effector-react.cjs.d.ts',
-            'effector-react.es.d.ts',
+            'effector-react.mjs.d.ts',
             'effector-react.umd.d.ts',
             'compat.d.ts',
           ],
@@ -83,7 +83,7 @@ export default {
           [
             'index.js.flow',
             'effector-react.cjs.js.flow',
-            'effector-react.es.js.flow',
+            // 'effector-react.es.js.flow',
             'effector-react.umd.js.flow',
             'compat.js.flow',
           ],
@@ -102,7 +102,7 @@ export default {
           [
             'index.d.ts',
             'effector-vue.cjs.d.ts',
-            'effector-vue.es.d.ts',
+            'effector-vue.mjs.d.ts',
             'effector-vue.umd.d.ts',
             'compat.d.ts',
           ],
@@ -114,7 +114,7 @@ export default {
           [
             'index.js.flow',
             'effector-vue.cjs.js.flow',
-            'effector-vue.es.js.flow',
+            // 'effector-vue.mjs.js.flow',
             'effector-vue.umd.js.flow',
           ],
         ],
@@ -154,7 +154,7 @@ export default {
             [
               'index.d.ts',
               'forest.cjs.d.ts',
-              'forest.es.d.ts',
+              'forest.mjs.d.ts',
               'forest.umd.d.ts',
             ],
           ],

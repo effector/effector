@@ -3,9 +3,9 @@
   "version": "0.16.9",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
-  "module": "forest.es.js",
+  "module": "forest.mjs",
   "umd:main": "forest.umd.js",
-  "jsnext:main": "forest.es.js",
+  "jsnext:main": "forest.mjs",
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {

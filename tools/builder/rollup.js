@@ -150,7 +150,7 @@ export async function rollupEffector() {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
-        es: dir(`npm/${name}/${name}.es.js`),
+        es: dir(`npm/${name}/${name}.mjs`),
       },
       renderModuleGraph: true,
       inputExtension: 'ts',
@@ -230,7 +230,7 @@ export async function rollupEffectorReact() {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
-        es: dir(`npm/${name}/${name}.es.js`),
+        es: dir(`npm/${name}/${name}.mjs`),
       },
       inputExtension: 'ts',
     }),
@@ -288,7 +288,7 @@ export async function rollupEffectorVue() {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
-        es: dir(`npm/${name}/${name}.es.js`),
+        es: dir(`npm/${name}/${name}.mjs`),
       },
       inputExtension: 'ts',
     }),
@@ -356,12 +356,12 @@ async function createCompat(name, extension = 'js') {
         extension === 'js'
           ? '@babel/preset-flow'
           : [
-            '@babel/preset-typescript',
-            {
-              isTSX: true,
-              allExtensions: true,
-            },
-          ],
+              '@babel/preset-typescript',
+              {
+                isTSX: true,
+                allExtensions: true,
+              },
+            ],
         ['@babel/preset-react', {useBuiltIns: false}],
         [
           '@babel/preset-env',
@@ -431,7 +431,7 @@ async function createCompat(name, extension = 'js') {
       'symbol-observable',
       'effector',
       'effector/compat',
-      'forest'
+      'forest',
     ],
     plugins: pluginList,
   })
@@ -487,7 +487,7 @@ async function createEsCjs(
       'effector',
       'effector/compat',
       'perf_hooks',
-      'forest'
+      'forest',
     ],
     plugins: pluginList,
   })
