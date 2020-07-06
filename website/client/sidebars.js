@@ -45,6 +45,7 @@ const sidebar = {
         'api/effector/createStoreObject',
         'api/effector/clearNode',
         'api/effector/withRegion',
+        'api/effector/fork',
         'api/effector/babel-plugin',
       ],
     },
