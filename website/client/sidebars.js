@@ -23,7 +23,7 @@ const sidebar = {
         },
         {
           type: 'category',
-          label: 'Unit definitions',
+          label: 'Unit types',
           items: [
             'api/effector/event',
             'api/effector/store',
@@ -42,15 +42,23 @@ const sidebar = {
         'api/effector/forward',
         'api/effector/is',
         'api/effector/fromObservable',
-        'api/effector/createStoreObject',
-        'api/effector/clearNode',
-        'api/effector/withRegion',
-        'api/effector/fork',
-        'api/effector/serialize',
-        'api/effector/hydrate',
-        'api/effector/allSettled',
-        'api/effector/scopeBind',
+        {
+          type: 'category',
+          label: 'Fork api',
+          items: [
+            'api/effector/fork',
+            'api/effector/serialize',
+            'api/effector/hydrate',
+            'api/effector/allSettled',
+            'api/effector/scopeBind',
+          ],
+        },
         'api/effector/babel-plugin',
+        {
+          type: 'category',
+          label: 'Low level api',
+          items: ['api/effector/clearNode', 'api/effector/withRegion'],
+        },
       ],
     },
     {
