@@ -15,10 +15,7 @@ export function createEffect<Payload, Done>(
   const instance = createEvent(nameOrConfig, maybeConfig)
   let handler =
     instance.defaultConfig.handler ||
-    (value => {
-      console.error(`no handler used in ${instance.getType()}`)
-      return Promise.resolve()
-    })
+    (() => throwError(`no handler used in ${instance.getType()}`))
 
   getGraph(instance).meta.onCopy = ['runner']
   getGraph(instance).meta.unit = instance.kind = 'effect'

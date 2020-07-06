@@ -6,14 +6,13 @@ import {
   forward,
   restore,
 } from 'effector'
-import {delay, argumentHistory} from 'effector/fixtures'
+import {argumentHistory} from 'effector/fixtures'
 
 describe('effect({...})', () => {
   test(`if used function will resolve`, async () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
-      await delay(500)
       fn(params)
       return 'done!'
     })
@@ -24,7 +23,6 @@ describe('effect({...})', () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
-      await delay(500)
       fn(params)
       throw 'fail!'
     })
@@ -38,7 +36,6 @@ describe('future', () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
-      await delay(500)
       fn(params)
       return 'done!'
     })
@@ -49,7 +46,6 @@ describe('future', () => {
     const fn = jest.fn()
     const effect = createEffect()
     effect.use(async params => {
-      await delay(500)
       fn(params)
       throw 'fail!'
     })
@@ -62,7 +58,6 @@ describe('effect.finally', () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler({fail}) {
-        await delay(100)
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
@@ -86,7 +81,6 @@ describe('effect.finally', () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler({fail}) {
-        await delay(100)
         if (fail) throw Error('[expected error]')
         return 'done!'
       },
@@ -106,24 +100,23 @@ describe('effect.finally', () => {
     `)
   })
 })
+test('effect without handler should throw an error during a call', async () => {
+  const effect = createEffect()
+  await expect(effect('ok')).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"no handler used in effect"`,
+  )
+})
 describe('createEffect with config', () => {
   it('supports empty config as second argument', async () => {
     const effect = createEffect('fx without handler', {})
-    const error = console.error
-    console.error = function errorMock(...args) {
-      args
-    }
-    try {
-      await expect(effect('ok')).resolves.toBe(undefined)
-    } finally {
-      console.error = error
-    }
+    await expect(effect('ok')).rejects.toThrowErrorMatchingInlineSnapshot(
+      `"no handler used in fx without handler"`,
+    )
   })
   it('supports default handler with config', async () => {
     const fn = jest.fn()
     const effect = createEffect('long request', {
       async handler(params) {
-        await delay(500)
         fn(params)
         return 'done!'
       },
@@ -134,7 +127,6 @@ describe('createEffect with config', () => {
     const fn = jest.fn()
     const effect = createEffect({
       async handler(params) {
-        await delay(500)
         fn(params)
         return 'done!'
       },
@@ -152,8 +144,7 @@ it('should handle both done and error in .finally', async () => {
   const fn = jest.fn()
   const effect = createEffect({
     async handler(params) {
-      await delay(500)
-      if (params === 'bar') throw new Error('error')
+      if (params === 'bar') throw Error('error')
       return 'done!'
     },
   })
