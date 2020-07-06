@@ -54,6 +54,8 @@ console.log('expect count to be 2', count === 2)
 
 [Try it](https://share.effector.dev/cyzh0THS)
 
-> **Note:** Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue).
+:::note
+Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue)
+:::
 
 We hope that this information cleared some things on how the library works

@@ -34,7 +34,9 @@ bar(2)
 
 [Try it](https://share.effector.dev/WxUgr6dZ)
 
-> **Note:** Array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
+:::tip
+Array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
+:::
 
 #### Example 2
 

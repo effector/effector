@@ -51,7 +51,9 @@ message({user: 'unregistered', text: 'hi'})
 
 [Try it](https://share.effector.dev/QXZsR5yM)
 
-> **Note:** Only the first met match will trigger resulting event
+:::note
+Only the first met match will trigger resulting event
+:::
 
 #### Example 2
 

@@ -18,9 +18,13 @@ Creates an [effect](Effect.md)
 
 [_Effect_](Effect.md): New effect
 
-> **Note**: You must provide a handler either through `handler` property in [createEffect](createEffect.md) or [`.use`](Effect.md#usehandler) method later, otherwise the error "no handler used in _%effect name%_" will appear in the console
+:::note
+You must provide a handler either through `handler` property in [createEffect](createEffect.md) or [`.use`](Effect.md#usehandler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
+:::
 
-> **Note**: You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even though it consists of _Events_ and _Stores_), since it's a complete entity on its own. This behavior will not be supported
+:::note
+You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even though it consists of _Events_ and _Stores_), since it's a complete entity on its own. This behavior will not be supported
+:::
 
 #### Examples
 

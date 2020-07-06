@@ -8,12 +8,14 @@ hide_title: true
 
 Creates store-based React component. The `createComponent` is useful for transfering logic and data of state to your View component.
 
-> **Note:** You can use hooks in `createComponent` since effector-react@20.3.0.
+:::tip
+You can use hooks in `createComponent` since effector-react@20.3.0.
+:::
 
 #### Arguments
 
-1. `store` (_Store | Object | Function_): `Store` or object of `Store`, or function which will be called with initial props.
-2. `render` (_Function_): Render function which will be called with props and state.
+1. `store` (_Store | Object_): `Store` or object of `Store`
+2. `render` (_Function_): Render function which will be called with props and state
 
 #### Returns
 
