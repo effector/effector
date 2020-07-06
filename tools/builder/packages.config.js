@@ -37,7 +37,7 @@ const keywords = [
 
 const version = {
   effector: '21.0.1',
-  'effector-react': '21.0.0',
+  'effector-react': '21.0.1',
   'effector-vue': '21.0.0',
   forest: '0.17.0',
   'effector-dom': '0.0.15',
@@ -116,7 +116,7 @@ export default {
     typings: 'index.d.ts',
     peerDependencies: {
       react: '^16.8.0',
-      effector: '^20.9.0',
+      effector: '^21.0.1',
     },
     files: [...getFiles('effector-react'), ...compiledFile('ssr'), 'ssr.d.ts'],
     keywords: ['react', ...keywords],

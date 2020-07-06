@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "21.0.0",
+  "version": "21.0.1",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
@@ -9,7 +9,7 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "react": "^16.8.0",
-    "effector": "^20.9.0"
+    "effector": "^21.0.1"
   },
   "files": [
     "README.md",
