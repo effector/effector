@@ -21,11 +21,10 @@
     "compat.js",
     "compat.js.map",
     "forms.cjs.js.flow",
-    "forms.es.js.flow",
     "forms.umd.js.flow",
     "compat.js.flow",
     "forms.cjs.d.ts",
-    "forms.es.d.ts",
+    "forms.mjs.d.ts",
     "forms.umd.d.ts",
     "compat.d.ts"
   ],

@@ -65,12 +65,12 @@ const getFiles = name => [
   ...compiledFile('compat'),
   //flow typings
   `${name}.cjs.js.flow`,
-  `${name}.es.js.flow`,
+  // `${name}.es.js.flow`,
   `${name}.umd.js.flow`,
   'compat.js.flow',
   //ts typings
   `${name}.cjs.d.ts`,
-  `${name}.es.d.ts`,
+  `${name}.mjs.d.ts`,
   `${name}.umd.d.ts`,
   'compat.d.ts',
 ]

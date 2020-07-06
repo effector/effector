@@ -25,11 +25,10 @@
     "compat.js",
     "compat.js.map",
     "effector-vue.cjs.js.flow",
-    "effector-vue.es.js.flow",
     "effector-vue.umd.js.flow",
     "compat.js.flow",
     "effector-vue.cjs.d.ts",
-    "effector-vue.es.d.ts",
+    "effector-vue.mjs.d.ts",
     "effector-vue.umd.d.ts",
     "compat.d.ts"
   ],
