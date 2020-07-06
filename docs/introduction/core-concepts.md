@@ -31,10 +31,11 @@ The only requirement for the function:
 - **Must** have zero or one argument
 
 ```js try
-const getUserFx = createEffect('get user').use(params => {
-  return fetch(`https://example.com/get-user/${params.id}`).then(res =>
-    res.json(),
-  )
+const getUserFx = createEffect({
+  async handler({id}) {
+    const req = await fetch(`https://example.com/get-user/${params.id}`)
+    return req.json()
+  },
 })
 
 // subscribe to effect call
@@ -55,7 +56,7 @@ getUserFx.fail.watch(({error, params}) => {
 })
 
 // you can replace function anytime
-getUserFx.use(() => promiseMock)
+getUserFx.use(() => 'test result')
 
 // call effect with your params
 getUserFx({id: 1})
