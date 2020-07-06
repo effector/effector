@@ -47,6 +47,7 @@ const sidebar = {
         'api/effector/withRegion',
         'api/effector/fork',
         'api/effector/serialize',
+        'api/effector/hydrate',
         'api/effector/babel-plugin',
       ],
     },
