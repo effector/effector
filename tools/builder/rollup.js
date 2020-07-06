@@ -177,7 +177,7 @@ export async function rollupEffectorDom({name}) {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
-        es: dir(`npm/${name}/${name}.es.js`),
+        es: dir(`npm/${name}/${name}.mjs`),
       },
       inputExtension: 'ts',
     }),
@@ -189,12 +189,14 @@ export async function rollupEffectorDom({name}) {
       inputExtension: 'ts',
     }),
     createUmd(name, {
-      external: [],
+      external: ['effector'],
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: name,
-      globals: {},
+      globals: {
+        effector: 'effector',
+      },
       extension: 'ts',
-      bundleEffector: true,
+      bundleEffector: false,
     }),
     // createCompat(name),
   ])
