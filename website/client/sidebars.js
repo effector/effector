@@ -119,7 +119,6 @@ const sidebar = {
     },
   ],
   'Advanced guide': ['advanced-guide/Computation priority'],
-  FAQ: ['faq'],
 }
 
 module.exports = {
