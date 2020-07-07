@@ -308,7 +308,7 @@ export async function rollupEffectorReact() {
         name,
         sourcemap: true,
         sourcemapPathTransform: getSourcemapPathTransform(name),
-        esModule: format === 'es',
+        externalLiveBindings: format === 'es',
       })
     }
   }
@@ -475,7 +475,7 @@ async function createCompat(name, extension = 'js') {
     name,
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
-    esModule: false,
+    externalLiveBindings: false,
   })
 }
 async function createEsCjs(
@@ -561,7 +561,7 @@ async function createEsCjs(
       name,
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
-      esModule: false,
+      externalLiveBindings: false,
     }),
     es &&
       buildEs.write({
