@@ -502,7 +502,7 @@ async function createEsCjs(
     pluginsCjs.analyzer,
     pluginsCjs.analyzerJSON,
   ]
-  const pluginsEsm = getPlugins(input === 'index' ? name : input)
+  const pluginsEsm = getPlugins(input === 'index' ? name : input, {isEsm: true})
   const pluginListEsm = [
     pluginsEsm.resolve,
     pluginsEsm.json,
