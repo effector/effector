@@ -8,6 +8,20 @@
   "jsnext:main": "effector.mjs",
   "typings": "index.d.ts",
   "dependencies": {},
+  "exports": {
+    ".": {
+      "require": "./effector.cjs.js",
+      "default": "./effector.mjs"
+    },
+    "./fork": {
+      "require": "./fork.js",
+      "default": "./fork.mjs"
+    },
+    "./babel-plugin": "./babel-plugin.js",
+    "./babel-plugin-react": "./babel-plugin-react.js",
+    "./plugin/defaultMetaVisitor": "./plugin/defaultMetaVisitor.js",
+    "./plugin/noopMetaVisitor": "./plugin/noopMetaVisitor.js"
+  },
   "files": [
     "README.md",
     "LICENSE",
@@ -30,6 +44,8 @@
     "compat.d.ts",
     "fork.js",
     "fork.js.map",
+    "fork.mjs",
+    "fork.mjs.map",
     "fork.d.ts",
     "babel-plugin.js",
     "babel-plugin-react.js",

@@ -41,7 +41,13 @@ const jsdomTestPlugin = resolvePath(
 const aliases = {
   'effector/fixtures': 'fixtures',
   '@effector/forms': 'forms',
-  'effector-react': 'react',
+  'effector-react'({isTest, isBuild, isCompat, isEsm}) {
+    if (isEsm) return 'effector-react/effector-react.mjs'
+    if (isCompat) return 'effector-react/compat'
+    if (isBuild) return null
+    if (isTest) return resolveFromSources('./react')
+    return resolveFromSources('../npm/effector-react')
+  },
   'effector-vue': 'vue',
   Builder: '../tools/builder',
   effector({isTest, isBuild, isCompat, isEsm}) {

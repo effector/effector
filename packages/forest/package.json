@@ -4,6 +4,16 @@
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.mjs",
+  "exports": {
+    ".": {
+      "require": "./forest.cjs.js",
+      "default": "./forest.mjs"
+    },
+    "./server": {
+      "require": "./server.js",
+      "default": "./server.mjs"
+    }
+  },
   "umd:main": "forest.umd.js",
   "jsnext:main": "forest.mjs",
   "typings": "index.d.ts",

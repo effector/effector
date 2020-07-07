@@ -41,13 +41,27 @@ const compatTarget = {
 
 const extensions = ['.js', '.mjs', '.ts', '.tsx']
 
-const getPlugins = (name: string) => ({
-  babel: babel({
-    babelHelpers: 'bundled',
-    skipPreflightCheck: true,
-    extensions,
-    exclude: /(\.re|node_modules.*)/,
-  }),
+const getPlugins = (name: string, {isEsm = false} = {}) => ({
+  babel: isEsm
+    ? babel({
+        babelHelpers: 'bundled',
+        extensions,
+        skipPreflightCheck: true,
+        exclude: /(\.re|node_modules.*)/,
+        babelrc: false,
+        ...require('../babel.config').generateConfig({
+          isBuild: true,
+          isTest: false,
+          isCompat: false,
+          isEsm: true,
+        }),
+      })
+    : babel({
+        babelHelpers: 'bundled',
+        skipPreflightCheck: true,
+        extensions,
+        exclude: /(\.re|node_modules.*)/,
+      }),
   commonjs: commonjs({extensions}),
   resolve: resolve({extensions}),
   sizeSnapshot: sizeSnapshot({
@@ -158,6 +172,7 @@ export async function rollupEffector() {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/fork.js`),
+        es: dir(`npm/${name}/fork.mjs`),
       },
       input: 'fork',
       inputExtension: 'ts',
@@ -184,6 +199,7 @@ export async function rollupEffectorDom({name}) {
     createEsCjs(name, {
       file: {
         cjs: dir(`npm/${name}/server.js`),
+        es: dir(`npm/${name}/server.mjs`),
       },
       input: 'server',
       inputExtension: 'ts',
@@ -236,7 +252,12 @@ export async function rollupEffectorReact() {
       },
       inputExtension: 'ts',
     }),
-    createSSR({file: {cjs: dir(`npm/${name}/ssr.js`)}}),
+    createSSR({
+      file: {
+        cjs: dir(`npm/${name}/ssr.js`),
+        es: dir(`npm/${name}/ssr.mjs`),
+      },
+    }),
     createUmd(name, {
       external: ['react', 'effector', 'effector/compat'],
       file: dir(`npm/${name}/${name}.umd.js`),
@@ -250,37 +271,46 @@ export async function rollupEffectorReact() {
     createCompat(name, 'ts'),
   ])
 
-  async function createSSR({file: {cjs}}: {|file: {|cjs: string|}|}) {
-    const plugins = getPlugins(name)
-    const pluginList = [
-      plugins.resolve,
-      plugins.json,
-      plugins.babel,
-      plugins.sizeSnapshot,
-      plugins.terser,
-      plugins.analyzer,
-      plugins.analyzerJSON,
-    ]
-    const build = await rollup({
-      onwarn,
-      input: dir(`packages/${name}/ssr.ts`),
-      external: [
-        'react',
-        'vue',
-        'symbol-observable',
-        'effector',
-        'effector/compat',
-      ],
-      plugins: pluginList,
-    })
-    await build.write({
-      file: cjs,
-      format: 'cjs',
-      freeze: false,
-      name,
-      sourcemap: true,
-      sourcemapPathTransform: getSourcemapPathTransform(name),
-    })
+  async function createSSR({
+    file: {cjs, es},
+  }: {
+    file: {cjs: string, es: string},
+  }) {
+    await Promise.all([runBuild(cjs, 'cjs'), runBuild(es, 'es')])
+    async function runBuild(file: string, format) {
+      const plugins = getPlugins(name, {isEsm: format === 'es'})
+      const pluginList = [
+        plugins.resolve,
+        plugins.json,
+        plugins.babel,
+        plugins.sizeSnapshot,
+        plugins.terser,
+        plugins.analyzer,
+        plugins.analyzerJSON,
+      ]
+      const build = await rollup({
+        onwarn,
+        input: dir(`packages/${name}/ssr.ts`),
+        external: [
+          'react',
+          'vue',
+          'symbol-observable',
+          'effector',
+          'effector/effector.mjs',
+          'effector/compat',
+        ],
+        plugins: pluginList,
+      })
+      await build.write({
+        file,
+        format,
+        freeze: false,
+        name,
+        sourcemap: true,
+        sourcemapPathTransform: getSourcemapPathTransform(name),
+        esModule: format === 'es',
+      })
+    }
   }
 }
 
@@ -445,6 +475,7 @@ async function createCompat(name, extension = 'js') {
     name,
     sourcemap: true,
     sourcemapPathTransform: getSourcemapPathTransform(name),
+    esModule: false,
   })
 }
 async function createEsCjs(
@@ -461,7 +492,6 @@ async function createEsCjs(
     inputExtension?: string,
   |},
 ) {
-  const {generateConfig} = require('../babel.config')
   const pluginsCjs = getPlugins(input === 'index' ? name : input)
   const pluginListCjs = [
     pluginsCjs.resolve,
@@ -476,19 +506,7 @@ async function createEsCjs(
   const pluginListEsm = [
     pluginsEsm.resolve,
     pluginsEsm.json,
-    babel({
-      babelHelpers: 'bundled',
-      extensions,
-      skipPreflightCheck: true,
-      exclude: /(\.re|node_modules.*)/,
-      babelrc: false,
-      ...generateConfig({
-        isBuild: true,
-        isTest: false,
-        isCompat: false,
-        isEsm: true,
-      }),
-    }),
+    pluginsEsm.babel,
     pluginsEsm.sizeSnapshot,
     pluginsEsm.terser,
     pluginsEsm.analyzer,
@@ -543,6 +561,7 @@ async function createEsCjs(
       name,
       sourcemap: true,
       sourcemapPathTransform: getSourcemapPathTransform(name),
+      esModule: false,
     }),
     es &&
       buildEs.write({

@@ -4,6 +4,16 @@
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
+  "exports": {
+    ".": {
+      "require": "./effector-react.cjs.js",
+      "default": "./effector-react.mjs"
+    },
+    "./ssr": {
+      "require": "./ssr.js",
+      "default": "./ssr.mjs"
+    }
+  },
   "umd:main": "effector-react.umd.js",
   "jsnext:main": "effector-react.mjs",
   "typings": "index.d.ts",
@@ -33,6 +43,8 @@
     "compat.d.ts",
     "ssr.js",
     "ssr.js.map",
+    "ssr.mjs",
+    "ssr.mjs.map",
     "ssr.d.ts"
   ],
   "keywords": [

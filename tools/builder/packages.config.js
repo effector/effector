@@ -51,6 +51,7 @@ const version = {
 }
 
 const compiledFile = name => [`${name}.js`, `${name}.js.map`]
+const esmFile = name => [`${name}.mjs`, `${name}.mjs.map`]
 
 const getFiles = name => [
   'README.md',
@@ -58,8 +59,7 @@ const getFiles = name => [
   'index.d.ts',
   'index.js.flow',
   //js files
-  `${name}.mjs`,
-  `${name}.mjs.map`,
+  ...esmFile(name),
   ...compiledFile(`${name}.cjs`),
   ...compiledFile(`${name}.umd`),
   ...compiledFile('compat'),
@@ -90,9 +90,24 @@ export default {
     'jsnext:main': 'effector.mjs',
     typings: 'index.d.ts',
     dependencies: {},
+    exports: {
+      '.': {
+        require: './effector.cjs.js',
+        default: './effector.mjs',
+      },
+      './fork': {
+        require: './fork.js',
+        default: './fork.mjs',
+      },
+      './babel-plugin': './babel-plugin.js',
+      './babel-plugin-react': './babel-plugin-react.js',
+      './plugin/defaultMetaVisitor': './plugin/defaultMetaVisitor.js',
+      './plugin/noopMetaVisitor': './plugin/noopMetaVisitor.js',
+    },
     files: [
       ...getFiles('effector'),
       ...compiledFile('fork'),
+      ...esmFile('fork'),
       'fork.d.ts',
       'babel-plugin.js',
       'babel-plugin-react.js',
@@ -111,6 +126,16 @@ export default {
     description: 'React bindings for effector',
     main: 'effector-react.cjs.js',
     module: 'effector-react.mjs',
+    exports: {
+      '.': {
+        require: './effector-react.cjs.js',
+        default: './effector-react.mjs',
+      },
+      './ssr': {
+        require: './ssr.js',
+        default: './ssr.mjs',
+      },
+    },
     'umd:main': 'effector-react.umd.js',
     'jsnext:main': 'effector-react.mjs',
     typings: 'index.d.ts',
@@ -118,7 +143,12 @@ export default {
       react: '^16.8.0',
       effector: '^21.0.1',
     },
-    files: [...getFiles('effector-react'), ...compiledFile('ssr'), 'ssr.d.ts'],
+    files: [
+      ...getFiles('effector-react'),
+      ...compiledFile('ssr'),
+      ...esmFile('ssr'),
+      'ssr.d.ts',
+    ],
     keywords: ['react', ...keywords],
     ...common,
   },
@@ -128,12 +158,18 @@ export default {
     description: 'Vue bindings for effector',
     main: 'effector-vue.cjs.js',
     module: 'effector-vue.mjs',
+    exports: {
+      '.': {
+        require: './effector-vue.cjs.js',
+        default: './effector-vue.mjs',
+      },
+    },
     'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.mjs',
     typings: 'index.d.ts',
     peerDependencies: {
       vue: '*',
-      effector: '*',
+      effector: '^21.0.1',
     },
     files: getFiles('effector-vue'),
     keywords: ['vue', ...keywords],
@@ -159,6 +195,16 @@ export default {
     description: 'UI engine for web',
     main: 'forest.cjs.js',
     module: 'forest.mjs',
+    exports: {
+      '.': {
+        require: './forest.cjs.js',
+        default: './forest.mjs',
+      },
+      './server': {
+        require: './server.js',
+        default: './server.mjs',
+      },
+    },
     'umd:main': 'forest.umd.js',
     'jsnext:main': 'forest.mjs',
     typings: 'index.d.ts',
