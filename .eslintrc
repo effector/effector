@@ -54,11 +54,7 @@ rules:
     - error
     - allowNamedFunctions: true
   object-shorthand:
-    - error
-    - always
-    - avoidQuotes: true
-      ignoreConstructors: true
-      avoidExplicitReturnArrows: true
+    - off
   no-extra-parens: 'off'
   multiline-ternary: 'off'
   arrow-body-style:
