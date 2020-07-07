@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {Store, is, combine, createEvent} from 'effector'
 import {useStore} from './useStore'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'

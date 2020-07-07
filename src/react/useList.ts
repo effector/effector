@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import * as React from 'react'
+import React from 'react'
 import {Store, is} from 'effector'
 import {useStoreMap} from './useStore'
 import {withDisplayName} from './withDisplayName'

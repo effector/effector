@@ -1,12 +1,12 @@
 import {Store, is, clearNode, createStore} from 'effector'
-import {useState, useRef, useMemo} from 'react'
+import React from 'react'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'
 import {throwError} from './throw'
 
 export function useStore<State>(store: Store<State>): State {
   if (!is.store(store)) throwError('expect useStore argument to be a store')
-  const currentStore = useRef(store)
-  const setState = useState(store.getState())[1]
+  const currentStore = React.useRef(store)
+  const setState = React.useState(store.getState())[1]
   useIsomorphicLayoutEffect(() => {
     if (currentStore.current === store) {
       setState(store.getState())
@@ -29,7 +29,7 @@ export function useStoreMap<State, Result, Keys extends ReadonlyArray<any>>({
   if (!is.store(store)) throwError('useStoreMap expects a store')
   if (!Array.isArray(keys)) throwError('useStoreMap expects an array as keys')
   if (typeof fn !== 'function') throwError('useStoreMap expects a function')
-  const result: Store<Result> = useMemo(
+  const result: Store<Result> = React.useMemo(
     () =>
       createStore(fn(store.getState(), keys)).on(store, (_, state) =>
         fn(state, keys),

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {createStore, createApi, launch, Store} from 'effector'
 import {Gate} from './index.h'
 import {useIsomorphicLayoutEffect} from './useIsomorphicLayoutEffect'

@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React from 'react'
 import {Store} from 'effector'
 
 import {useStore} from './useStore'
