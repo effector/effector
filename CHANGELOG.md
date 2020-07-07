@@ -2,6 +2,10 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.0.3, effector-react 21.0.4, effector-vue 21.0.3
+
+- Improve native es modules support, add [conditional exports](https://nodejs.org/dist/latest-v14.x/docs/api/esm.html#esm_conditional_exports) declarations
+
 ## effector 21.0.0
 
 - Add object form of `split` for pattern-matching without additional forwards
