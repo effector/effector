@@ -1,26 +1,27 @@
-//@noflow
-
 const {resolve: resolvePath, join} = require('path')
 
 module.exports = api => {
   api && api.cache && api.cache.never && api.cache.never()
   // const env = api.cache(() => process.env.NODE_ENV)
   return generateConfig(meta, babelConfig)
-
-  function generateConfig(meta, config) {
-    const result = {}
-    for (const key in config) {
-      const value = config[key]
-      result[key] = typeof value === 'function' ? value(meta) : value
-    }
-    return result
-  }
 }
+
+function generateConfig(meta, config = babelConfig) {
+  const result = {}
+  for (const key in config) {
+    const value = config[key]
+    result[key] = typeof value === 'function' ? value(meta) : value
+  }
+  return result
+}
+
+module.exports.generateConfig = generateConfig
 
 const meta = {
   isBuild: !!process.env.IS_BUILD,
   isTest: process.env.NODE_ENV === 'test',
   isCompat: false,
+  isEsm: false,
 }
 
 const isBrowserstackDomTest = !!process.env.DOM
@@ -43,7 +44,8 @@ const aliases = {
   'effector-react': 'react',
   'effector-vue': 'vue',
   Builder: '../tools/builder',
-  effector({isTest, isBuild, isCompat}) {
+  effector({isTest, isBuild, isCompat, isEsm}) {
+    if (isEsm) return 'effector/effector.mjs'
     if (isCompat) return 'effector/compat'
     if (isBuild) return null
     if (isTest) return resolveFromSources('./effector')
