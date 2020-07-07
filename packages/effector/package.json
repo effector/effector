@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "21.0.1",
+  "version": "21.0.2",
   "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -17,6 +17,8 @@
       "require": "./fork.js",
       "default": "./fork.mjs"
     },
+    "./compat": "./compat.js",
+    "./effector.umd": "./effector.umd.js",
     "./babel-plugin": "./babel-plugin.js",
     "./babel-plugin-react": "./babel-plugin-react.js",
     "./plugin/defaultMetaVisitor": "./plugin/defaultMetaVisitor.js",

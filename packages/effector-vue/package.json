@@ -1,6 +1,6 @@
 {
   "name": "effector-vue",
-  "version": "21.0.1",
+  "version": "21.0.2",
   "description": "Vue bindings for effector",
   "main": "effector-vue.cjs.js",
   "module": "effector-vue.mjs",
@@ -8,14 +8,16 @@
     ".": {
       "require": "./effector-vue.cjs.js",
       "default": "./effector-vue.mjs"
-    }
+    },
+    "./compat": "./compat.js",
+    "./effector-vue.umd": "./effector-react.umd.js"
   },
   "umd:main": "effector-vue.umd.js",
   "jsnext:main": "effector-vue.mjs",
   "typings": "index.d.ts",
   "peerDependencies": {
     "vue": "*",
-    "effector": "^21.0.1"
+    "effector": "^21.0.2"
   },
   "files": [
     "README.md",
