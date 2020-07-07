@@ -1,6 +1,6 @@
 {
   "name": "effector-react",
-  "version": "21.0.3",
+  "version": "21.0.4",
   "description": "React bindings for effector",
   "main": "effector-react.cjs.js",
   "module": "effector-react.mjs",
@@ -9,6 +9,7 @@
       "require": "./effector-react.cjs.js",
       "default": "./effector-react.mjs"
     },
+    "./effector-react.mjs": "./effector-react.mjs",
     "./ssr": {
       "require": "./ssr.js",
       "default": "./ssr.mjs"

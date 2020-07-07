@@ -1,6 +1,6 @@
 {
   "name": "effector",
-  "version": "21.0.2",
+  "version": "21.0.3",
   "description": "The state manager",
   "main": "effector.cjs.js",
   "module": "effector.mjs",
@@ -13,6 +13,7 @@
       "require": "./effector.cjs.js",
       "default": "./effector.mjs"
     },
+    "./effector.mjs": "./effector.mjs",
     "./fork": {
       "require": "./fork.js",
       "default": "./fork.mjs"

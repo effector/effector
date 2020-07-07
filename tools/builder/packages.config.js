@@ -36,10 +36,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '21.0.2',
-  'effector-react': '21.0.3',
-  'effector-vue': '21.0.2',
-  forest: '0.17.2',
+  effector: '21.0.3',
+  'effector-react': '21.0.4',
+  'effector-vue': '21.0.3',
+  forest: '0.17.3',
   'effector-dom': '0.0.15',
 
   'bs-effector': '20.0.0',
@@ -95,6 +95,7 @@ export default {
         require: './effector.cjs.js',
         default: './effector.mjs',
       },
+      './effector.mjs': './effector.mjs',
       './fork': {
         require: './fork.js',
         default: './fork.mjs',
@@ -133,6 +134,7 @@ export default {
         require: './effector-react.cjs.js',
         default: './effector-react.mjs',
       },
+      './effector-react.mjs': './effector-react.mjs',
       './ssr': {
         require: './ssr.js',
         default: './ssr.mjs',
@@ -167,6 +169,7 @@ export default {
         require: './effector-vue.cjs.js',
         default: './effector-vue.mjs',
       },
+      './effector-vue.mjs': './effector-vue.mjs',
       './compat': './compat.js',
       './effector-vue.umd': './effector-react.umd.js',
     },
@@ -206,6 +209,7 @@ export default {
         require: './forest.cjs.js',
         default: './forest.mjs',
       },
+      './forest.mjs': './forest.mjs',
       './server': {
         require: './server.js',
         default: './server.mjs',
