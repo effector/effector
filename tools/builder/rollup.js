@@ -389,6 +389,7 @@ async function createCompat(name, extension = 'js') {
               isBuild: true,
               isTest: false,
               isCompat: true,
+              isEsm: false,
             }),
           },
         ],
@@ -460,41 +461,82 @@ async function createEsCjs(
     inputExtension?: string,
   |},
 ) {
-  const plugins = getPlugins(input === 'index' ? name : input)
-  const pluginList = [
-    plugins.resolve,
-    // plugins.typescript,
-    plugins.json,
-    plugins.babel,
-    plugins.sizeSnapshot,
-    plugins.terser,
-    plugins.analyzer,
-    plugins.analyzerJSON,
+  const {generateConfig} = require('../babel.config')
+  const pluginsCjs = getPlugins(input === 'index' ? name : input)
+  const pluginListCjs = [
+    pluginsCjs.resolve,
+    pluginsCjs.json,
+    pluginsCjs.babel,
+    pluginsCjs.sizeSnapshot,
+    pluginsCjs.terser,
+    pluginsCjs.analyzer,
+    pluginsCjs.analyzerJSON,
+  ]
+  const pluginsEsm = getPlugins(input === 'index' ? name : input)
+  const pluginListEsm = [
+    pluginsEsm.resolve,
+    pluginsEsm.json,
+    babel({
+      babelHelpers: 'bundled',
+      extensions,
+      skipPreflightCheck: true,
+      exclude: /(\.re|node_modules.*)/,
+      babelrc: false,
+      ...generateConfig({
+        isBuild: true,
+        isTest: false,
+        isCompat: false,
+        isEsm: true,
+      }),
+    }),
+    pluginsEsm.sizeSnapshot,
+    pluginsEsm.terser,
+    pluginsEsm.analyzer,
+    pluginsEsm.analyzerJSON,
   ]
   if (renderModuleGraph) {
-    pluginList.push(
+    pluginListCjs.push(
       graphPlugin({
         output: 'modules.dot',
         exclude: 'effector/package.json',
       }),
     )
   }
-  const build = await rollup({
-    onwarn,
-    input: dir(`packages/${name}/${input}.${inputExtension}`),
-    external: [
-      'react',
-      'vue',
-      'symbol-observable',
-      'effector',
-      'effector/compat',
-      'perf_hooks',
-      'forest',
-    ],
-    plugins: pluginList,
-  })
+  const [buildCjs, buildEs] = await Promise.all([
+    rollup({
+      onwarn,
+      input: dir(`packages/${name}/${input}.${inputExtension}`),
+      external: [
+        'react',
+        'vue',
+        'symbol-observable',
+        'effector',
+        'effector/compat',
+        'effector/effector.mjs',
+        'perf_hooks',
+        'forest',
+      ],
+      plugins: pluginListCjs,
+    }),
+    es &&
+      rollup({
+        onwarn,
+        input: dir(`packages/${name}/${input}.${inputExtension}`),
+        external: [
+          'react',
+          'vue',
+          'symbol-observable',
+          'effector',
+          'effector/compat',
+          'effector/effector.mjs',
+          'perf_hooks',
+          'forest',
+        ],
+        plugins: pluginListEsm,
+      }),
+  ])
   await Promise.all([
-    build.write({
+    buildCjs.write({
       file: cjs,
       format: 'cjs',
       freeze: false,
@@ -503,7 +545,7 @@ async function createEsCjs(
       sourcemapPathTransform: getSourcemapPathTransform(name),
     }),
     es &&
-      build.write({
+      buildEs.write({
         file: es,
         format: 'es',
         freeze: false,
