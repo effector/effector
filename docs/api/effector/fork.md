@@ -10,7 +10,7 @@ hide_title: true
 fork(domain: Domain, { values?, handlers? }?): Scope
 ```
 
-Creates a copy of a provied domain allowing multiple instances of the same logic in the application.
+Creates a fully isolated instance of application.
 The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completly independent copy of all logic defined within domain.
 
 ### Arguments
