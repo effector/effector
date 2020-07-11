@@ -1,5 +1,4 @@
 import {styled} from 'linaria/react'
-import {Context} from './index.h'
 import {theme} from './theme/default'
 
 /**
@@ -11,16 +10,13 @@ const Themed = (style: string, method: string, styles) =>
   styles[`LOG_${method.toUpperCase()}_${style.toUpperCase()}`] ||
   styles[`LOG_${style.toUpperCase()}`]
 
-type Props = {
-  theme: Context,
-}
-
 const {styles} = theme
 
 /**
  * console-feed
  */
 export const Root = styled.div`
+  overflow-y: auto;
   word-break: break-word;
 `
 
