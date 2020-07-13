@@ -5,6 +5,7 @@ import debounce from 'lodash.debounce'
 
 import 'codemirror/lib/codemirror.css'
 import './styles.css'
+import './main.css'
 import {SidebarHeader} from './components/SidebarHeader'
 import Panel from './components/CodeMirrorPanel'
 import Errors from './components/Errors'
