@@ -39,23 +39,23 @@ const jsdomTestPlugin = resolvePath(
 )
 
 const aliases = {
-  'effector/fixtures': 'fixtures',
-  '@effector/forms': 'forms',
-  'effector-react'({isTest, isBuild, isCompat, isEsm}) {
-    if (isEsm) return 'effector-react/effector-react.mjs'
-    if (isCompat) return 'effector-react/compat'
-    if (isBuild) return null
-    if (isTest) return resolveFromSources('./react')
-    return resolveFromSources('../npm/effector-react')
+  'effector/fixtures': resolveFromSources('fixtures'),
+  '@effector/forms': resolveFromSources('forms'),
+  'effector-react': {
+    esm: 'effector-react/effector-react.mjs',
+    compat: 'effector-react/compat',
+    build: null,
+    test: null,
+    default: resolveFromSources('../npm/effector-react'),
   },
-  'effector-vue': 'vue',
-  Builder: '../tools/builder',
-  effector({isTest, isBuild, isCompat, isEsm}) {
-    if (isEsm) return 'effector/effector.mjs'
-    if (isCompat) return 'effector/compat'
-    if (isBuild) return null
-    if (isTest) return resolveFromSources('./effector')
-    return resolveFromSources('../npm/effector')
+  'effector-vue': resolveFromSources('vue'),
+  Builder: resolveFromSources('../tools/builder'),
+  effector: {
+    esm: 'effector/effector.mjs',
+    compat: 'effector/compat',
+    build: null,
+    test: null,
+    default: resolveFromSources('../npm/effector'),
   },
 }
 
@@ -102,6 +102,7 @@ const babelConfig = {
         'babel-plugin-module-resolver',
         {
           alias,
+          loglevel: 'silent',
         },
       ],
     ]
@@ -191,13 +192,25 @@ function parseAliases(meta, obj) {
       const name = value(meta)
       if (name === undefined || name === null) continue
       result[key] = name
+    } else if (typeof value === 'object' && value !== null) {
+      const name = applyPaths(value)
+      if (name === undefined || name === null) continue
+      result[key] = name
     } else {
       const name = value
       if (name === undefined || name === null) continue
-      result[key] = resolveFromSources(name)
+      result[key] = name
     }
   }
   return result
+
+  function applyPaths(paths) {
+    if (meta.isEsm) return paths.esm
+    if (meta.isCompat) return paths.compat
+    if (meta.isBuild) return paths.build
+    if (meta.isTest) return paths.test
+    return paths.default
+  }
 }
 function resolveFromSources(path) {
   return resolvePath(__dirname, 'src', path)

@@ -40,6 +40,22 @@ const compatTarget = {
 }
 
 const extensions = ['.js', '.mjs', '.ts', '.tsx']
+const externals = [
+  'effector',
+  'effector/effector.mjs',
+  'effector/compat',
+  'effector-react',
+  'effector-react/effector-react.mjs',
+  'effector-react/compat',
+  'effector-vue',
+  'effector-vue/effector-vue.mjs',
+  'effector-vue/compat',
+  'forest',
+  'forest/forest.mjs',
+  'forest/server',
+  'vue',
+  'react',
+]
 
 const getPlugins = (name: string, {isEsm = false} = {}) => ({
   babel: isEsm
@@ -178,7 +194,7 @@ export async function rollupEffector() {
       inputExtension: 'ts',
     }),
     createUmd(name, {
-      external: ['react', 'effector'],
+      external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: name,
       globals: {},
@@ -205,7 +221,7 @@ export async function rollupEffectorDom({name}) {
       inputExtension: 'ts',
     }),
     createUmd(name, {
-      external: ['effector'],
+      external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: name,
       globals: {
@@ -229,7 +245,7 @@ export async function rollupEffectorForms() {
       },
     }),
     createUmd(name, {
-      external: ['react', 'effector'],
+      external: externals,
       file: dir(`npm/${name}/forms.umd.js`),
       umdName: 'effectorForms',
       globals: {
@@ -259,7 +275,7 @@ export async function rollupEffectorReact() {
       },
     }),
     createUmd(name, {
-      external: ['react', 'effector', 'effector/compat'],
+      external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: 'effectorReact',
       globals: {
@@ -291,14 +307,7 @@ export async function rollupEffectorReact() {
       const build = await rollup({
         onwarn,
         input: dir(`packages/${name}/ssr.ts`),
-        external: [
-          'react',
-          'vue',
-          'symbol-observable',
-          'effector',
-          'effector/effector.mjs',
-          'effector/compat',
-        ],
+        external: externals,
         plugins: pluginList,
       })
       await build.write({
@@ -325,7 +334,7 @@ export async function rollupEffectorVue() {
       inputExtension: 'ts',
     }),
     createUmd(name, {
-      external: ['vue', 'effector', 'effector/compat'],
+      external: externals,
       file: dir(`npm/${name}/${name}.umd.js`),
       umdName: 'effectorVue',
       globals: {
@@ -421,6 +430,7 @@ async function createCompat(name, extension = 'js') {
               isCompat: true,
               isEsm: false,
             }),
+            loglevel: 'silent',
           },
         ],
       ],
@@ -458,14 +468,7 @@ async function createCompat(name, extension = 'js') {
   const build = await rollup({
     onwarn,
     input: dir(`packages/${name}/index.${extension}`),
-    external: [
-      'react',
-      'vue',
-      'symbol-observable',
-      'effector',
-      'effector/compat',
-      'forest',
-    ],
+    external: externals,
     plugins: pluginList,
   })
   await build.write({
@@ -524,32 +527,14 @@ async function createEsCjs(
     rollup({
       onwarn,
       input: dir(`packages/${name}/${input}.${inputExtension}`),
-      external: [
-        'react',
-        'vue',
-        'symbol-observable',
-        'effector',
-        'effector/compat',
-        'effector/effector.mjs',
-        'perf_hooks',
-        'forest',
-      ],
+      external: externals,
       plugins: pluginListCjs,
     }),
     es &&
       rollup({
         onwarn,
         input: dir(`packages/${name}/${input}.${inputExtension}`),
-        external: [
-          'react',
-          'vue',
-          'symbol-observable',
-          'effector',
-          'effector/compat',
-          'effector/effector.mjs',
-          'perf_hooks',
-          'forest',
-        ],
+        external: externals,
         plugins: pluginListEsm,
       }),
   ])

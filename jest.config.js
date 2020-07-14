@@ -81,20 +81,14 @@ module.exports = {
               testMatch: [`<rootDir>/src/react/**/*.test.tsx`],
               transform,
             },
-          },
-          {
             vue: {
               testEnvironment: 'jsdom',
               testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
               transform,
             },
-          },
-          {
             reason: {
               testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
             },
-          },
-          {
             forest: {
               automock: false,
               testEnvironment: 'node',
