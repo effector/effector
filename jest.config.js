@@ -8,7 +8,6 @@ const watchPathIgnorePatterns = [
   '<rootDir>/examples/',
   '<rootDir>/flow/',
   '<rootDir>/flow-typed/',
-  '<rootDir>/integrations/',
   '<rootDir>/node_modules/',
   '<rootDir>/npm/',
   '<rootDir>/recipes/',

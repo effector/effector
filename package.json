@@ -4,7 +4,6 @@
   "description": "The state manager",
   "private": true,
   "scripts": {
-    "integration": "sh integrations/webpack/run.sh",
     "browserstack": "npx jest --config='src/browserstack/jest.config.js' --runInBand",
     "build:bs": "bsb -make-world",
     "test": "npx jest --config=jest.config.js",

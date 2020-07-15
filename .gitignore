@@ -48,7 +48,6 @@ val/**
 .size-snapshot.json
 **/.cache/**
 tools/builder.js
-integrations/webpack/npm/**
 
 **/.reports/**
 **/.serverless/**

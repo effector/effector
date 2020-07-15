@@ -6,7 +6,6 @@ examples/*
 flow/**
 flow-typed/**
 forks/**
-integrations/**
 packages/**
 recipes/**
 rfc/**
