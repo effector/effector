@@ -908,3 +908,7 @@ export function allSettled<T>(
   unit: Unit<T>,
   config: {scope: Fork; params: T},
 ): Promise<void>
+export function allSettled(
+  unit: Unit<void>,
+  config: {scope: Fork},
+): Promise<void>
