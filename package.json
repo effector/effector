@@ -8,7 +8,6 @@
     "build:bs": "bsb -make-world",
     "test": "npx jest --config=jest.config.js",
     "coverage": "COVERAGE=yes jest --config=jest.config.js",
-    "bench": "node --expose-gc bench/bench.test.js",
     "build": "node tools/build",
     "test:watch": "npx jest --config=jest.config.js --watch",
     "doc:update-readme": "npx doctoc README.md"
