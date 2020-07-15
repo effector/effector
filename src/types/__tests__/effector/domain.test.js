@@ -297,7 +297,7 @@ describe('#createEffect', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      Parameter 'params' implicitly has an 'any' type.
 
       --flow--
       no errors
