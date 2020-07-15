@@ -15,9 +15,7 @@
   },
   "author": "Zero Bias",
   "license": "MIT",
-  "dependencies": {
-    "symbol-observable": "^1.2.0"
-  },
+  "dependencies": {},
   "maintainers": [
     {
       "name": "Zero Bias",
