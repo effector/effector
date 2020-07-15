@@ -67,6 +67,7 @@ test('allSettled first argument validation', async () => {
   const app = createDomain()
 
   await expect(
+    //@ts-ignore
     allSettled(null, {
       scope: fork(app),
     }),
@@ -116,13 +117,12 @@ test('watch calls during hydration', async () => {
   hydrate(app, {
     values: {
       ...serialize(fork(app)),
-      [store.sid]: 0,
+      [store.sid!]: 0,
     },
   })
 
   await allSettled(start, {
     scope: fork(app),
-    params: null,
   })
 
   expect(argumentHistory(storeWatchFn)).toMatchInlineSnapshot(`
@@ -227,7 +227,7 @@ describe('hydrate edge cases', () => {
     hydrate(app, {
       values: {
         ...serialize(fork(app)),
-        [listsContainer$.sid]: {
+        [listsContainer$.sid!]: {
           a: [0, 1, 2, 3],
           b: [1, 8, 5],
         },
@@ -264,7 +264,7 @@ describe('hydrate edge cases', () => {
 
     hydrate(app, {
       values: {
-        [listsContainer.sid]: {
+        [listsContainer.sid!]: {
           a: [0, 1, 2, 3],
           b: [1, 8, 5],
         },
@@ -283,16 +283,15 @@ describe('fork values support', () => {
   test('values as js Map', async () => {
     const app = createDomain()
 
-    const logsCache = app.createStore([])
+    const logsCache = app.createStore<string[]>([])
     const settings = app.createStore({
       MAX_COUNT_CACHED_LOGS: 12,
     })
 
     const scope = fork(app, {
-      values: new Map([
-        [logsCache, ['LOG_MSG_MOCK']],
-        [settings, {MAX_COUNT_CACHED_LOGS: 2}],
-      ]),
+      values: new Map()
+        .set(settings, {MAX_COUNT_CACHED_LOGS: 2})
+        .set(logsCache, ['LOG_MSG_MOCK']),
     })
 
     hydrate(app, {
@@ -312,8 +311,8 @@ describe('fork values support', () => {
 
     const scope = fork(app, {
       values: {
-        [logsCache.sid]: ['LOG_MSG_MOCK'],
-        [settings.sid]: {MAX_COUNT_CACHED_LOGS: 2},
+        [logsCache.sid!]: ['LOG_MSG_MOCK'],
+        [settings.sid!]: {MAX_COUNT_CACHED_LOGS: 2},
       },
     })
 
@@ -333,7 +332,7 @@ describe('fork handlers support', () => {
     const fx = app.createEffect({handler: () => 'not to call'})
 
     const acc = app
-      .createStore([])
+      .createStore<string[]>([])
       .on(fx.doneData, (list, val) => [...list, val])
 
     const scope = fork(app, {
@@ -352,12 +351,12 @@ describe('fork handlers support', () => {
     const fx = app.createEffect({handler: () => 'not to call'})
 
     const acc = app
-      .createStore([])
+      .createStore<string[]>([])
       .on(fx.doneData, (list, val) => [...list, val])
 
     const scope = fork(app, {
       handlers: {
-        [fx.sid]: () => 'fn',
+        [fx.sid!]: () => 'fn',
       },
     })
 
@@ -438,7 +437,7 @@ describe('imperative call support', () => {
     test('simple case', async () => {
       const app = createDomain()
 
-      const inc = app.createEffect({handler() {}})
+      const inc = app.createEffect<void, void>({handler() {}})
       const count = app.createStore(0).on(inc.done, x => x + 1)
 
       const start = app.createEffect({
@@ -465,8 +464,8 @@ describe('imperative call support', () => {
 
         const start = app.createEffect({
           async handler() {
-            await inc('inc 1')
-            await inc('inc 2')
+            await inc()
+            await inc()
           },
         })
 
@@ -487,8 +486,8 @@ describe('imperative call support', () => {
 
         const start = app.createEffect({
           async handler() {
-            await inc('inc 1')
-            await inc('inc 2')
+            await inc()
+            await inc()
           },
         })
 
@@ -578,18 +577,18 @@ describe('imperative call support', () => {
     test('attach imperative call', async () => {
       const app = createDomain()
 
-      const add = app.createEffect({handler: _ => _})
+      const add = app.createEffect({handler: (_: number) => _})
 
       const count = app.createStore(2).on(add.doneData, (x, y) => x + y)
 
       const addWithCurrent = attach({
         source: count,
         effect: add,
-        mapParams: (params, current) => params + current,
+        mapParams: (params: number, current) => params + current,
       })
 
       const start = app.createEffect({
-        async handler(val) {
+        async handler(val: number) {
           await addWithCurrent(val)
         },
       })
@@ -607,13 +606,13 @@ describe('imperative call support', () => {
     test('scope isolation', async () => {
       const app = createDomain()
 
-      const addWord = app.createEffect({handler: async word => word})
+      const addWord = app.createEffect({handler: async (word: string) => word})
       const words = app
-        .createStore([])
+        .createStore<string[]>([])
         .on(addWord.doneData, (list, word) => [...list, word])
 
       const start = app.createEffect({
-        async handler(word) {
+        async handler(word: string) {
           await addWord(`${word} 1`)
           await addWord(`${word} 2`)
           return word
@@ -621,7 +620,7 @@ describe('imperative call support', () => {
       })
 
       const next = app.createEffect({
-        async handler(word) {
+        async handler(word: string) {
           await addWord(`${word} 3`)
           await addWord(`${word} 4`)
         },
