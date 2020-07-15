@@ -676,3 +676,19 @@ describe('imperative call support', () => {
     })
   })
 })
+
+test('getState support', async () => {
+  const fn = jest.fn()
+  const app = createDomain()
+  const start = app.createEvent()
+  const store = app.createStore(0)
+  start.watch(() => {
+    fn(store.getState())
+  })
+  await allSettled(start, {
+    scope: fork(app, {
+      values: new Map([[store, 2]]),
+    }),
+  })
+  expect(fn).toHaveBeenLastCalledWith(0)
+})
