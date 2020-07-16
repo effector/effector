@@ -419,49 +419,50 @@ describe('`target` forwarding', () => {
       "
     `)
   })
+  describe('edge case for {} type', () => {
+    it('should fail when a target receives a more loose value type from a source', () => {
+      const source = createStore({})
+      const clock = createEvent()
+      const target = createEvent<{a: string, b: string}>()
 
-  it('should fail when a target receives a more loose value type from a source (edge case for {} type)', () => {
-    const source = createStore({})
-    const clock = createEvent()
-    const target = createEvent<{a: string, b: string}>()
+      sample({source, clock, target})
 
-    sample({source, clock, target})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<{}>' is not assignable to type 'Combinable'.
+              Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
+                Index signature is missing in type 'Store<{}>'.
 
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Combinable'.
-            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{}>'.
+        --flow--
+        no errors
+        "
+      `)
+    })
 
-      --flow--
-      no errors
-      "
-    `)
-  })
+    it('should fail when a target receives a more loose value type from a mapping fn', () => {
+      const source = createStore(null)
+      const clock = createEvent()
+      const fn = () => ({})
+      const target = createEvent<{a: string, b: string}>()
 
-  it('should fail when a target receives a more loose value type from a mapping fn (edge case for {} type)', () => {
-    const source = createStore(null)
-    const clock = createEvent()
-    const fn = () => ({})
-    const target = createEvent<{a: string, b: string}>()
+      sample({source, clock, fn, target})
 
-    sample({source, clock, fn, target})
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        No overload matches this call.
+          The last overload gave the following error.
+            Type 'Store<null>' is not assignable to type 'Combinable'.
+              Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
 
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        no errors
+        "
+      `)
+    })
   })
 })
 
