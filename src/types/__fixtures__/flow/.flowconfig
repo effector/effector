@@ -14,8 +14,6 @@
 
 [libs]
 ../../../../node_modules/@babel/types/lib/index.js.flow
-../../../../flow-typed/npm/redux_v4.x.x.js
-../../../../flow-typed/jest.js
 
 [lints]
 
