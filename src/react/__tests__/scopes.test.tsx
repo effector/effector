@@ -109,8 +109,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-xmb7i4": "alice",
-      "4e62kq": Array [
+      "-jeyjoa": "alice",
+      "iliqek": Array [
         "bob",
         "carol",
       ],
@@ -118,8 +118,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-xmb7i4": "bob",
-      "4e62kq": Array [
+      "-jeyjoa": "bob",
+      "iliqek": Array [
         "alice",
       ],
     }
@@ -227,21 +227,21 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-fzj0qp": "https://ssr.effector.dev/api",
-      "-v2rk34": Array [
+      "-1s6cwv": "https://ssr.effector.dev/api",
+      "-gvew9a": Array [
         "bob",
         "carol",
       ],
-      "c8mf1a": "alice",
+      "gi10l1": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-fzj0qp": "https://ssr.effector.dev/api",
-      "-v2rk34": Array [
+      "-1s6cwv": "https://ssr.effector.dev/api",
+      "-gvew9a": Array [
         "alice",
       ],
-      "c8mf1a": "bob",
+      "gi10l1": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
