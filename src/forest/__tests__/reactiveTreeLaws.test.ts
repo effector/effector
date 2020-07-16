@@ -1,5 +1,5 @@
-import {createStore, createEvent, sample, combine} from 'effector'
-import {h, using, list, spec} from 'effector-dom'
+import {createStore, createEvent, sample, combine, forward} from 'effector'
+import {h, using, list, node, spec} from 'effector-dom'
 
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
@@ -289,5 +289,76 @@ describe('watchers support', () => {
       return updates
     })
     expect(updates).toEqual([0, 1])
+  })
+})
+
+describe('store and event on a same level', () => {
+  test('on support', async () => {
+    const updates = await execFunc(async () => {
+      const updates = [] as number[]
+      await new Promise(rs => {
+        using(el, {
+          onComplete: rs,
+          fn() {
+            const delta = createStore(0)
+            const gotHeight = createEvent<number>()
+            delta.on(gotHeight, (_, x) => x)
+            delta.watch(x => {
+              updates.push(x)
+            })
+            h('div', {
+              text: '~/ - /~',
+              fn() {
+                node(() => {
+                  gotHeight(10)
+                })
+              },
+            })
+          },
+        })
+      })
+      return updates
+    })
+    expect(updates).toMatchInlineSnapshot(`
+      Array [
+        0,
+      ]
+    `)
+  })
+  test('forward support', async () => {
+    const updates = await execFunc(async () => {
+      const updates = [] as number[]
+      await new Promise(rs => {
+        using(el, {
+          onComplete: rs,
+          fn() {
+            const delta = createStore(0)
+            const gotHeight = createEvent<number>()
+            forward({
+              from: gotHeight,
+              to: delta,
+            })
+            delta.watch(x => {
+              updates.push(x)
+            })
+            h('div', {
+              text: '~/ - /~',
+              fn() {
+                node(() => {
+                  gotHeight(10)
+                })
+              },
+            })
+          },
+        })
+      })
+      return updates
+    })
+    expect(updates).toMatchInlineSnapshot(`
+      Array [
+        0,
+        10,
+      ]
+    `)
   })
 })
