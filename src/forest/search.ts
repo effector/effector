@@ -11,7 +11,7 @@ import {
   RF,
   RecItemF,
   FRecItem,
-  FR,
+  RouteBlock,
   FragmentBlock,
   FRec,
 } from './relation.h'
@@ -21,6 +21,7 @@ export function getParentBlock(block: Exclude<Block, UsingBlock>) {
     case 'text':
     case 'element':
     case 'list':
+    case 'route':
       return block.parent
     default:
       switch (block.parent.type) {
@@ -60,7 +61,7 @@ function findLastVisibleChildBlock(
     | ElementBlock
     | ListBlock
     | TextBlock
-    | FR
+    | RouteBlock
     | LF
     | RF
     | FRecItem
@@ -71,8 +72,8 @@ function findLastVisibleChildBlock(
     case 'text':
     case 'element':
       return block
-    case 'FR':
-      return findLastVisibleChildBlock(block.child.child)
+    case 'route':
+      return findLastVisibleChildBlock(block.child)
     case 'LF':
     case 'RF':
     case 'FF':
@@ -115,9 +116,18 @@ export function findPreviousVisibleSiblingBlock(
         case 'using':
           return null
         case 'RecF':
-        case 'RecItemF':
-        case 'RF': {
+        case 'RecItemF': {
           const parent = block.parent.parent.parent
+          const parentFragment = parent.parent
+          for (let i = parent.index - 1; i >= 0; i--) {
+            const sibling = parentFragment.child[i]
+            const visibleChild = findLastVisibleChildBlock(sibling)
+            if (visibleChild) return visibleChild
+          }
+          return findPreviousVisibleSiblingBlock(parentFragment)
+        }
+        case 'RF': {
+          const parent = block.parent.parent
           const parentFragment = parent.parent
           for (let i = parent.index - 1; i >= 0; i--) {
             const sibling = parentFragment.child[i]
@@ -152,6 +162,7 @@ export function findPreviousVisibleSiblingBlock(
       }
     case 'element':
     case 'text':
+    case 'route':
     case 'list': {
       const parentFragment = block.parent
       for (let i = block.index - 1; i >= 0; i--) {

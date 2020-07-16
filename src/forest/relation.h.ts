@@ -5,7 +5,7 @@ export type ChildBlock =
   | ElementBlock
   | ListBlock
   | TextBlock
-  | FR
+  | RouteBlock
   | FRecItem
   | FRec
 
@@ -21,8 +21,10 @@ export type Block =
 
 export type RouteBlock = {
   type: 'route'
-  parent: FR
+  parent: FragmentBlock
   child: RF
+  visible: boolean
+  index: number
 }
 
 export type FragmentBlock = {
@@ -69,14 +71,6 @@ export type RF = {
   child: FragmentBlock
   visible: boolean
   // index: number
-}
-
-export type FR = {
-  type: 'FR'
-  parent: FragmentBlock
-  child: RouteBlock
-  visible: boolean
-  index: number
 }
 
 export type FF = {

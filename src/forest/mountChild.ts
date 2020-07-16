@@ -35,7 +35,6 @@ import {
   Block,
   FragmentBlock,
   RF,
-  FR,
   RecItemBlock,
   RecBlock,
 } from './relation.h'
@@ -98,13 +97,7 @@ export function mountChild({
     case 'route': {
       const routeBlock: RouteBlock = {
         type: 'route',
-        parent: {
-          type: 'FR',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
+        parent: parentBlockFragment,
         child: {
           type: 'RF',
           parent: null as any,
@@ -115,11 +108,12 @@ export function mountChild({
           },
           visible: false,
         },
+        visible: true,
+        index: draft.inParentIndex,
       }
-      routeBlock.parent.child = routeBlock
       routeBlock.child.parent = routeBlock
       routeBlock.child.child.parent = routeBlock.child
-      parentBlockFragment.child[draft.inParentIndex] = routeBlock.parent
+      parentBlockFragment.child[draft.inParentIndex] = routeBlock
       leafData = {
         type: 'route',
         block: routeBlock,

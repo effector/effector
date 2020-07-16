@@ -40,6 +40,7 @@ export function printTree(start: Block) {
             case 'text':
             case 'element':
             case 'list':
+            case 'route':
               parseLevel(edge, pad + 2)
               break
             default:
