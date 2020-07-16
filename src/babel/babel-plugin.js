@@ -1,5 +1,3 @@
-//@noflow
-
 module.exports = function(babel, options = {}) {
   const {
     compressor,
@@ -224,41 +222,41 @@ module.exports = function(babel, options = {}) {
 const normalizeOptions = options => {
   const defaults = options.noDefaults
     ? {
-      store: [],
-      event: [],
-      effect: [],
-      domain: [],
-      restore: [],
-      combine: [],
-      sample: [],
-      forward: [],
-      guard: [],
-      attach: [],
-      domainMethods: {
         store: [],
         event: [],
         effect: [],
         domain: [],
-      },
-    }
+        restore: [],
+        combine: [],
+        sample: [],
+        forward: [],
+        guard: [],
+        attach: [],
+        domainMethods: {
+          store: [],
+          event: [],
+          effect: [],
+          domain: [],
+        },
+      }
     : {
-      store: ['createStore'],
-      event: ['createEvent'],
-      effect: ['createEffect'],
-      domain: ['createDomain'],
-      restore: ['restore'],
-      combine: ['combine'],
-      sample: ['sample'],
-      forward: ['forward'],
-      guard: ['guard'],
-      attach: ['attach'],
-      domainMethods: {
-        store: ['store', 'createStore'],
-        event: ['event', 'createEvent'],
-        effect: ['effect', 'createEffect'],
-        domain: ['domain', 'createDomain'],
-      },
-    }
+        store: ['createStore'],
+        event: ['createEvent'],
+        effect: ['createEffect'],
+        domain: ['createDomain'],
+        restore: ['restore'],
+        combine: ['combine'],
+        sample: ['sample'],
+        forward: ['forward'],
+        guard: ['guard'],
+        attach: ['attach'],
+        domainMethods: {
+          store: ['store', 'createStore'],
+          event: ['event', 'createEvent'],
+          effect: ['effect', 'createEffect'],
+          domain: ['domain', 'createDomain'],
+        },
+      }
   let exportMetadata
   if ('exportMetadata' in options) {
     if (typeof options.exportMetadata === 'function') {

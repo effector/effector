@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {createDomain, Store, fork, serialize} from 'effector'
 

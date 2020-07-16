@@ -1,5 +1,3 @@
-//@noflow
-
 const importName = 'effector-react'
 
 module.exports = function(babel, options = {}) {

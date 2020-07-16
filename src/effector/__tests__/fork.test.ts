@@ -1,5 +1,3 @@
-//@noflow
-
 import {argumentHistory} from 'effector/fixtures'
 import {
   createDomain,
