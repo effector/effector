@@ -1,6 +1,6 @@
 import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, combine} from 'effector'
-import {using, h, spec, text, list, rec, remap} from 'effector-dom'
+import {using, h, spec, text, list, rec, remap} from 'forest'
 import {Leaf} from '../index.h'
 
 // let addGlobals: Function

@@ -1,6 +1,6 @@
 import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, createApi} from 'effector'
-import {h, using, list, remap, variant} from 'effector-dom'
+import {h, using, list, remap, variant} from 'forest'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>

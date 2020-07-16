@@ -1,5 +1,5 @@
 import {createStore, createEvent, sample, combine, forward} from 'effector'
-import {h, using, list, node, spec} from 'effector-dom'
+import {h, using, list, node, spec} from 'forest'
 
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
