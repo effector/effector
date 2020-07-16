@@ -320,10 +320,28 @@ describe('sample(Store<T>):Store<T>', () => {
 })
 
 describe('`target` forwarding', () => {
-  it('should pass when a target receives a more strict (or equal) value type from a source', () => {
+  it('should pass when a target receives a more strict value type from a source', () => {
     const source = createStore({a: '', b: ''})
     const clock = createEvent()
     const target = createEvent<{a: string}>()
+
+    sample({source, clock, target})
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should pass when a target receives an equal value type from a source', () => {
+    const source = createStore<{a: string, b?: string}>({a: '', b: ''})
+    const clock = createEvent()
+    const target = createEvent<{a: string, b?: string}>()
 
     sample({source, clock, target})
 
