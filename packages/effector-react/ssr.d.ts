@@ -1,11 +1,9 @@
 import * as React from 'react'
-import {Event, Effect} from 'effector'
-
-import {Scope} from 'effector/fork'
+import {Event, Effect, Fork} from 'effector'
 
 export {useStore, useStoreMap, useList, useGate} from 'effector-react'
 
-export const Provider: React.Provider<Scope>
+export const Provider: React.Provider<Fork>
 
 /**
 bind event to scope
