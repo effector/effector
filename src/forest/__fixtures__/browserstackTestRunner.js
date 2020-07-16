@@ -63,18 +63,18 @@ async function loadModules() {
     'effector',
     'effector.cjs.js',
   )
-  const effectorDomPath = resolve(
+  const forestPath = resolve(
     __dirname,
     '..',
     '..',
     '..',
     'npm',
-    'effector-dom',
-    'effector-dom.cjs.js',
+    'forest',
+    'forest.cjs.js',
   )
   const [effector, dom] = await Promise.all([
     promises.readFile(effectorPath, 'utf8'),
-    promises.readFile(effectorDomPath, 'utf8'),
+    promises.readFile(forestPath, 'utf8'),
   ])
 
   return {effector, dom}
@@ -94,7 +94,7 @@ module.exports = class BSTestRunner extends require('jest-runner') {
           console.error('remote() call error', error)
           throw error
         }
-        const initBrowser = async() => {
+        const initBrowser = async () => {
           try {
             await browser.url('about:blank')
             await browser.execute(initPageRuntime, modulesList)
@@ -106,15 +106,11 @@ module.exports = class BSTestRunner extends require('jest-runner') {
         const {effector, dom} = await modulesReq
         const modulesList = [
           {
-            name: 'symbol-observable',
-            src: 'module.exports = "@@observable"',
-          },
-          {
             name: 'effector',
             src: effector,
           },
           {
-            name: 'effector-dom',
+            name: 'forest',
             src: dom,
           },
         ]
@@ -150,12 +146,12 @@ module.exports = class BSTestRunner extends require('jest-runner') {
         }
         return await onStart(test)
       },
-      async(test, result) => {
+      async (test, result) => {
         // console.log(test)
         await test.context.config.globals.browser.deleteSession()
         return await onResult(test, result)
       },
-      async(test, result) => {
+      async (test, result) => {
         // console.log(test)
         await test.context.config.globals.browser.deleteSession()
         return await onFailure(test, result)
@@ -220,18 +216,11 @@ function initPageRuntime(modules) {
   modules.forEach(evalModule)
   const {effector, dom} = addGlobals({
     effector: requireModule('effector'),
-    dom: requireModule('effector-dom'),
+    dom: requireModule('forest'),
   })
 
   addGlobals({
     _effector: effector,
-    _effectorDom: dom,
-    h: dom.h,
-    using: dom.using,
-    spec: dom.spec,
-    remap: dom.remap,
-    list: dom.list,
-    variant: dom.variant,
-    ...effector,
+    _forest: dom,
   })
 }
