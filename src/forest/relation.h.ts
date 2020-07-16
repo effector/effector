@@ -3,7 +3,7 @@ import {DOMElement} from './index.h'
 export type ChildBlock =
   | FF
   | ElementBlock
-  | FL
+  | ListBlock
   | TextBlock
   | FR
   | FRecItem
@@ -27,7 +27,7 @@ export type RouteBlock = {
 
 export type FragmentBlock = {
   type: 'fragment'
-  parent: FF | UF | ElementBlock | LF | RF | RecItemF | RecF
+  parent: FF | UsingBlock | ElementBlock | LF | RF | RecItemF | RecF
   child: ChildBlock[]
 }
 
@@ -42,9 +42,11 @@ export type ElementBlock = {
 
 export type ListBlock = {
   type: 'list'
-  parent: FL
+  parent: FragmentBlock
   child: LF[]
   lastChild: LF | null
+  visible: boolean
+  index: number
 }
 
 export type TextBlock = {
@@ -57,7 +59,7 @@ export type TextBlock = {
 
 export type UsingBlock = {
   type: 'using'
-  child: UF
+  child: FragmentBlock
   value: DOMElement
 }
 
@@ -83,20 +85,6 @@ export type FF = {
   child: FragmentBlock
   visible: boolean
   index: number
-}
-
-export type FL = {
-  type: 'FL'
-  parent: FragmentBlock
-  child: ListBlock
-  visible: boolean
-  index: number
-}
-
-export type UF = {
-  type: 'UF'
-  parent: UsingBlock
-  child: FragmentBlock
 }
 
 export type LF = {

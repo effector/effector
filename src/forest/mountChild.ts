@@ -30,7 +30,6 @@ import {
   TextBlock,
   UsingBlock,
   FF,
-  FL,
   LF,
   RouteBlock,
   Block,
@@ -186,18 +185,13 @@ export function mountChild({
     case 'list': {
       const listBlock: ListBlock = {
         type: 'list',
-        parent: {
-          type: 'FL',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
+        parent: parentBlockFragment,
         child: [],
         lastChild: null,
+        visible: true,
+        index: draft.inParentIndex,
       }
-      listBlock.parent.child = listBlock
-      parentBlockFragment.child[draft.inParentIndex] = listBlock.parent
+      parentBlockFragment.child[draft.inParentIndex] = listBlock
       leafData = {
         type: 'list',
         draft,

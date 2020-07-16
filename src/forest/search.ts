@@ -4,8 +4,8 @@ import {
   ElementBlock,
   TextBlock,
   UsingBlock,
+  ListBlock,
   FF,
-  FL,
   LF,
   Block,
   RF,
@@ -20,9 +20,15 @@ export function getParentBlock(block: Exclude<Block, UsingBlock>) {
   switch (block.type) {
     case 'text':
     case 'element':
+    case 'list':
       return block.parent
     default:
-      return block.parent.parent
+      switch (block.parent.type) {
+        case 'using':
+          return block.parent
+        default:
+          return block.parent.parent
+      }
   }
 }
 
@@ -33,9 +39,8 @@ function findParentDOMElementBlock(block: Block): UsingBlock | ElementBlock {
     case 'fragment':
       switch (block.parent.type) {
         case 'element':
+        case 'using':
           return block.parent
-        case 'UF':
-          return block.parent.parent
       }
     default:
       const _ = block
@@ -50,7 +55,16 @@ export function findParentDOMElement(
   return null
 }
 function findLastVisibleChildBlock(
-  block: FF | ElementBlock | FL | TextBlock | FR | LF | RF | FRecItem | FRec,
+  block:
+    | FF
+    | ElementBlock
+    | ListBlock
+    | TextBlock
+    | FR
+    | LF
+    | RF
+    | FRecItem
+    | FRec,
 ): ElementBlock | TextBlock | null {
   if (!block.visible) return null
   switch (block.type) {
@@ -66,8 +80,8 @@ function findLastVisibleChildBlock(
     case 'FRec':
     case 'FRecItem':
       return findLastVisibleFragmentChild(block.child.child.child)
-    case 'FL': {
-      let child = block.child.lastChild
+    case 'list': {
+      let child = block.lastChild
       if (!child) return null
       while (child) {
         const visibleChild = findLastVisibleChildBlock(child)
@@ -98,7 +112,7 @@ export function findPreviousVisibleSiblingBlock(
     case 'fragment':
       switch (block.parent.type) {
         case 'element':
-        case 'UF':
+        case 'using':
           return null
         case 'RecF':
         case 'RecItemF':
@@ -137,7 +151,8 @@ export function findPreviousVisibleSiblingBlock(
         }
       }
     case 'element':
-    case 'text': {
+    case 'text':
+    case 'list': {
       const parentFragment = block.parent
       for (let i = block.index - 1; i >= 0; i--) {
         const sibling = parentFragment.child[i]

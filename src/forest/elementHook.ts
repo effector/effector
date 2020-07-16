@@ -45,7 +45,6 @@ import {
   TextBlock,
   UsingBlock,
   FF,
-  FL,
   LF,
   RouteBlock,
   Block,
@@ -779,7 +778,7 @@ export function using(node: DOMElement, opts: any): void {
       mount.watch(({node, leaf}) => {
         const parentBlock = (leaf.data as any).block as UsingBlock
         mountChildTemplates(draft, {
-          parentBlockFragment: parentBlock.child.child,
+          parentBlockFragment: parentBlock.child,
           leaf,
           node,
         })
@@ -791,18 +790,13 @@ export function using(node: DOMElement, opts: any): void {
   const usingBlock: UsingBlock = {
     type: 'using',
     child: {
-      type: 'UF',
+      type: 'fragment',
       parent: null as any,
-      child: {
-        type: 'fragment',
-        parent: null as any,
-        child: [],
-      },
+      child: [],
     },
     value: node,
   }
   usingBlock.child.parent = usingBlock
-  usingBlock.child.child.parent = usingBlock.child
 
   const queue = createOpQueue({onComplete})
   const rootLeaf = spawn(usingTemplate, {

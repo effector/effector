@@ -39,6 +39,7 @@ export function printTree(start: Block) {
           switch (edge.type) {
             case 'text':
             case 'element':
+            case 'list':
               parseLevel(edge, pad + 2)
               break
             default:
@@ -52,7 +53,7 @@ export function printTree(start: Block) {
           pad,
           text: `[Using]`,
         })
-        parseLevel(level.child.child, pad + 1)
+        parseLevel(level.child, pad + 1)
         break
       }
       case 'list': {
