@@ -1,7 +1,6 @@
 // @flow
 /* eslint-disable no-unused-vars */
-import {createDomain, Store} from 'effector'
-import {fork, serialize} from 'effector/fork'
+import {createDomain, Store, fork, serialize} from 'effector'
 
 const typecheck = '{global}'
 

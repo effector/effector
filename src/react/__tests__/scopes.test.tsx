@@ -2,9 +2,18 @@ import fetch from 'cross-fetch'
 import * as React from 'react'
 import {render, container, act} from 'effector/fixtures/react'
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, forward, sample, attach, combine} from 'effector'
-
-import {fork, allSettled, serialize, hydrate, Scope} from 'effector/fork'
+import {
+  createDomain,
+  forward,
+  sample,
+  attach,
+  combine,
+  fork,
+  allSettled,
+  serialize,
+  hydrate,
+  Scope,
+} from 'effector'
 import {createGate} from 'effector-react'
 import {Provider, useStore, useList, useGate} from 'effector-react/ssr'
 

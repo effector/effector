@@ -1,8 +1,16 @@
 //@noflow
 
 import {argumentHistory} from 'effector/fixtures'
-import {createDomain, forward, combine, attach} from 'effector'
-import {fork, allSettled, serialize, hydrate} from 'effector/fork'
+import {
+  createDomain,
+  forward,
+  combine,
+  attach,
+  fork,
+  allSettled,
+  serialize,
+  hydrate,
+} from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
   const app = createDomain()
