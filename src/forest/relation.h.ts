@@ -1,32 +1,13 @@
 import {DOMElement} from './index.h'
 
-/*
-
-
-       │
-  parent F  L  U  T  E
-─child─┼────────────────▶
-     F │ FF LF UF -  EF
-     L │ FL -  -  -  -
-     U │ -  -  -  -  -
-     T │ FT -  -  -  -
-     E │ FE -  -  -  -
-       ▼
-
-
-       │
-  parent F  U  E  L
-─child─┼─────────────▶
-     F │ FF UF EF LF
-     E │ FE -  -  -
-     L │ FL -  -  -
-     T │ FT -  -  -
-       ▼
-
-
-*/
-
-export type ChildBlock = FF | FE | FL | FT | FR | FRecItem | FRec
+export type ChildBlock =
+  | FF
+  | ElementBlock
+  | FL
+  | TextBlock
+  | FR
+  | FRecItem
+  | FRec
 
 export type Block =
   | FragmentBlock
@@ -46,15 +27,17 @@ export type RouteBlock = {
 
 export type FragmentBlock = {
   type: 'fragment'
-  parent: FF | UF | EF | LF | RF | RecItemF | RecF
+  parent: FF | UF | ElementBlock | LF | RF | RecItemF | RecF
   child: ChildBlock[]
 }
 
 export type ElementBlock = {
   type: 'element'
-  parent: FE
-  child: EF
+  parent: FragmentBlock
+  child: FragmentBlock
   value: DOMElement
+  visible: boolean
+  index: number
 }
 
 export type ListBlock = {
@@ -66,8 +49,10 @@ export type ListBlock = {
 
 export type TextBlock = {
   type: 'text'
-  parent: FT
+  parent: FragmentBlock
   value: Text
+  visible: boolean
+  index: number
 }
 
 export type UsingBlock = {
@@ -100,14 +85,6 @@ export type FF = {
   index: number
 }
 
-export type FE = {
-  type: 'FE'
-  parent: FragmentBlock
-  child: ElementBlock
-  visible: boolean
-  index: number
-}
-
 export type FL = {
   type: 'FL'
   parent: FragmentBlock
@@ -116,23 +93,9 @@ export type FL = {
   index: number
 }
 
-export type FT = {
-  type: 'FT'
-  parent: FragmentBlock
-  child: TextBlock
-  visible: boolean
-  index: number
-}
-
 export type UF = {
   type: 'UF'
   parent: UsingBlock
-  child: FragmentBlock
-}
-
-export type EF = {
-  type: 'EF'
-  parent: ElementBlock
   child: FragmentBlock
 }
 

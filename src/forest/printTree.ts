@@ -1,9 +1,10 @@
 import {Block} from './relation.h'
+import {getParentBlock} from './search'
 
 export function printTree(start: Block) {
   let block = start
   while (block.type !== 'using') {
-    block = block.parent.parent
+    block = getParentBlock(block)
   }
   const lines = [] as {pad: number; text: string}[]
   parseLevel(block, 0)
@@ -22,7 +23,7 @@ export function printTree(start: Block) {
           pad,
           text: `[Element] ${tag}`,
         })
-        parseLevel(level.child.child, pad + 1)
+        parseLevel(level.child, pad + 1)
         break
       }
       case 'fragment': {
@@ -35,7 +36,14 @@ export function printTree(start: Block) {
             pad: pad + 1,
             text: `[${edge.type}] index ${edge.index} | visible ${edge.visible}`,
           })
-          parseLevel(edge.child, pad + 2)
+          switch (edge.type) {
+            case 'text':
+            case 'element':
+              parseLevel(edge, pad + 2)
+              break
+            default:
+              parseLevel(edge.child, pad + 2)
+          }
         })
         break
       }

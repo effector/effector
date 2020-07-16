@@ -45,9 +45,7 @@ import {
   TextBlock,
   UsingBlock,
   FF,
-  FE,
   FL,
-  FT,
   LF,
   RouteBlock,
   Block,
@@ -371,14 +369,14 @@ export function h(tag: string, opts?: any) {
                 emptyText.remove()
               }
               parentBlock.value = foundElement
-              parentBlock.parent.visible = true
+              parentBlock.visible = true
             }
           }
           const svgRoot = elementTemplate.isSvgRoot
             ? (parentBlock.value as any)
             : null
           mountChildTemplates(draft, {
-            parentBlockFragment: parentBlock.child.child,
+            parentBlockFragment: parentBlock.child,
             leaf,
             node: parentBlock.value,
             svgRoot,
@@ -632,13 +630,13 @@ export function h(tag: string, opts?: any) {
               emptyText.remove()
             }
             parentBlock.value = foundElement
-            parentBlock.parent.visible = true
+            parentBlock.visible = true
           }
           const svgRoot = elementTemplate.isSvgRoot
             ? (parentBlock.value as any)
             : null
           mountChildTemplates(draft, {
-            parentBlockFragment: parentBlock.child.child,
+            parentBlockFragment: parentBlock.child,
             leaf,
             node: parentBlock.value,
             svgRoot,
@@ -676,20 +674,15 @@ export function h(tag: string, opts?: any) {
   }
   function installTextNode(leaf: Leaf, value: string, childIndex: number) {
     const parentBlock = (leaf.data as any).block as ElementBlock
-    const parentBlockFragment = parentBlock.child.child
+    const parentBlockFragment = parentBlock.child
     const textBlock: TextBlock = {
       type: 'text',
-      parent: {
-        type: 'FT',
-        parent: parentBlockFragment,
-        child: null as any,
-        visible: false,
-        index: childIndex,
-      },
+      parent: parentBlockFragment,
+      visible: false,
+      index: childIndex,
       value: null as any,
     }
-    textBlock.parent.child = textBlock
-    parentBlockFragment.child[childIndex] = textBlock.parent
+    parentBlockFragment.child[childIndex] = textBlock
     if (leaf.hydration) {
       const siblingBlock = findPreviousVisibleSiblingBlock(textBlock)
       if (siblingBlock) {
@@ -710,7 +703,7 @@ export function h(tag: string, opts?: any) {
         textBlock.value = parentElement!.firstChild! as Text
         applyText(textBlock.value, value)
       }
-      textBlock.parent.visible = true
+      textBlock.visible = true
     } else {
       textBlock.value = env.document.createTextNode(value)
       appendChild(textBlock)

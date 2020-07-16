@@ -30,9 +30,7 @@ import {
   TextBlock,
   UsingBlock,
   FF,
-  FE,
   FL,
-  FT,
   LF,
   RouteBlock,
   Block,
@@ -136,28 +134,18 @@ export function mountChild({
     case 'element': {
       const elementBlock: ElementBlock = {
         type: 'element',
-        parent: {
-          type: 'FE',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: false,
-          index: draft.inParentIndex,
-        },
+        parent: parentBlockFragment,
         child: {
-          type: 'EF',
+          type: 'fragment',
           parent: null as any,
-          child: {
-            type: 'fragment',
-            parent: null as any,
-            child: [],
-          },
+          child: [],
         },
         value: draft.stencil.cloneNode() as DOMElement,
+        visible: false,
+        index: draft.inParentIndex,
       }
-      elementBlock.parent.child = elementBlock
       elementBlock.child.parent = elementBlock
-      elementBlock.child.child.parent = elementBlock.child
-      parentBlockFragment.child[draft.inParentIndex] = elementBlock.parent
+      parentBlockFragment.child[draft.inParentIndex] = elementBlock
       leafData = {
         type: 'element',
         block: elementBlock,
@@ -184,7 +172,7 @@ export function mountChild({
                 }
               } else {
                 elementBlock.value.remove()
-                elementBlock.parent.visible = false
+                elementBlock.visible = false
               }
             },
             group: parentDomSubtree,
@@ -305,7 +293,7 @@ export function appendChild(block: TextBlock | ElementBlock) {
   } else {
     findParentDOMElement(block)!.prepend(block.value)
   }
-  block.parent.visible = true
+  block.visible = true
 }
 
 export const onMount = createEvent<{
