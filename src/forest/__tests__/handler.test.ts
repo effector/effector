@@ -82,3 +82,27 @@ test('change passive property if prevent is [true]', async () => {
 
   expect(prevented).toMatchInlineSnapshot(`true`)
 })
+
+it('should support imperative preventDefault calls', async () => {
+  const prevented = await execFunc(async () => {
+    const click = createEvent<MouseEvent>()
+    let isPrevented = false
+
+    click.watch(e => {
+      e.preventDefault()
+      isPrevented = e.defaultPrevented
+    })
+
+    using(el, () => {
+      h('button', {
+        attr: {id: 'btn'},
+        handler: {click},
+      })
+    })
+    await act()
+    document.getElementById('btn')!.click()
+    return isPrevented
+  })
+
+  expect(prevented).toBe(true)
+})

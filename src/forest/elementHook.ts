@@ -959,7 +959,7 @@ export function handler(options: any, map?: any) {
     if (!is.unit(map[key])) throw Error(`handler for "${key}" should be event`)
   }
   const {
-    passive = true,
+    passive = false,
     capture = false,
     prevent = false,
     stop = false,
