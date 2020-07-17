@@ -1,6 +1,5 @@
-import {Store, Event, Step, Fork} from 'effector'
+import {Store, Event, Fork} from 'effector'
 
-export type Signal = Step
 export type StoreOrData<T> = Store<T> | T
 export type DOMProperty = string | number | null | boolean
 export type PropertyMap = {[field: string]: DOMProperty | AttributeStore}
@@ -9,38 +8,22 @@ export type StylePropertyMap = Partial<
     [K in keyof CSSStyleDeclaration]: DOMProperty | AttributeStore
   }
 >
-export type DOMTag = keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap
-export type TransformMap = {
-  translate:
-    | Store<{
-        x?: number
-        y?: number
-      }>
-    | {
-        x?: StoreOrData<number>
-        y?: StoreOrData<number>
-      }
-  scale:
-    | Store<{
-        x?: number
-        y?: number
-      }>
-    | {
-        x?: StoreOrData<number>
-        y?: StoreOrData<number>
-      }
-  rotate: StoreOrData<
-    | {
-        angle?: number
-        x?: number
-        y?: number
-      }
-    | number
-  >
-  skewX: StoreOrData<number>
-  skewY: StoreOrData<number>
-}
 
+export type HandlerMap =
+  | Partial<{[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}>
+  | {
+      config?: {
+        passive?: boolean
+        capture?: boolean
+        prevent?: boolean
+        stop?: boolean
+      }
+      on: Partial<
+        {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
+      >
+    }
+
+export type DOMTag = keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap
 export type DOMElement = HTMLElement | SVGElement
 export type AttributeStore =
   | Store<string>
@@ -82,18 +65,11 @@ export function using(
 export function spec(spec: {
   attr?: PropertyMap
   data?: PropertyMap
-  transform?: Partial<TransformMap>
   text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
-  focus?: {
-    focus?: Event<any>
-    blur?: Event<any>
-  }
-  handler?: Partial<
-    {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
-  >
+  handler?: HandlerMap
 }): void
 export function handler(
   map: Partial<
@@ -117,18 +93,11 @@ export function h(
   spec: {
     attr?: PropertyMap
     data?: PropertyMap
-    transform?: Partial<TransformMap>
     text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
-    focus?: {
-      focus?: Event<any>
-      blur?: Event<any>
-    }
-    handler?: Partial<
-      {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
-    >
+    handler?: HandlerMap
     fn?: () => void
   },
 ): void
