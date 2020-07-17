@@ -312,6 +312,16 @@ export function createTemplate<Api extends {[method: string]: any}>({
   return actor
 }
 
+export function getForkedUnit(unit: any, forkPage?: Fork) {
+  if (!forkPage) return unit
+  try {
+    //@ts-ignore
+    return forkPage.find(unit)
+  } catch (err) {
+    return unit
+  }
+}
+
 function getCurrent(ref: {type?: string; current: any}) {
   switch (ref.type) {
     case 'list':

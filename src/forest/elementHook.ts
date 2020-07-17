@@ -80,6 +80,7 @@ import {
   currentActor,
   currentTemplate,
   currentLeaf,
+  getForkedUnit,
 } from './template'
 import {
   findParentDOMElement,
@@ -581,9 +582,8 @@ export function h(tag: string, opts?: any) {
                 value => {
                   if (item.options.prevent) value.preventDefault()
                   if (item.options.stop) value.stopPropagation()
-                  console.log(leaf)
                   launch({
-                    target: item.handler,
+                    target: getForkedUnit(item.handler, leaf.forkPage),
                     params: value,
                     page,
                     //@ts-ignore

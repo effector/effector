@@ -218,18 +218,17 @@ test('fork isolation', async () => {
 
   await new Promise(rs => setTimeout(rs, 200))
 
-  console.log(title.getState())
-
   expect(prettyHtml(elA.innerHTML)).toMatchInlineSnapshot(`
     "
-    <h1>dashboard</h1>
+    <h1>loading...</h1>
     <button id='click'>A</button>
     "
   `)
   expect(prettyHtml(elB.innerHTML)).toMatchInlineSnapshot(`
     "
-    <h1>dashboard</h1>
+    <h1>loading...</h1>
     <button id='click'>B</button>
     "
   `)
+  expect(title.getState()).toBe('-')
 })
