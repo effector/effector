@@ -850,6 +850,7 @@ export function node(cb: (node: DOMElement) => (() => void) | void) {
     case 'route':
     case 'rec':
     case 'recItem':
+      console.error('node() hook supported only in h() nodes')
       return
   }
   draft.node.push(cb)
