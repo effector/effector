@@ -8,6 +8,7 @@ import {
   sample,
   merge,
   restore,
+  Fork,
 } from 'effector'
 
 import {
@@ -728,6 +729,7 @@ export function using(
     }
     onComplete?: () => void
     onRoot?: (config: {template: Actor<{mount: any}>; leaf: Leaf}) => void
+    scope?: Fork
   },
 ): void
 export function using(node: DOMElement, opts: any): void {

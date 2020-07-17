@@ -1,4 +1,4 @@
-import {Store, Event, Step} from 'effector'
+import {Store, Event, Step, Fork} from 'effector'
 
 export type Signal = Step
 export type StoreOrData<T> = Store<T> | T
@@ -75,6 +75,7 @@ export function using(
       document: Document
     }
     onComplete?: () => void
+    scope?: Fork
   },
 ): void
 
