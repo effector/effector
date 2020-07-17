@@ -1,4 +1,4 @@
-import {Store, Event, Step, StateRef, Filter} from 'effector'
+import {Store, Event, Step, StateRef, Filter, Fork} from 'effector'
 
 import {
   ElementBlock,

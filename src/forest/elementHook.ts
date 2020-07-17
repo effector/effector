@@ -9,6 +9,8 @@ import {
   merge,
   restore,
   Fork,
+  StateRef,
+  Node,
 } from 'effector'
 
 import {
@@ -717,7 +719,16 @@ function getDefaultEnv(): {
   if (typeof document !== 'undefined') return {document}
   throw Error('your environment has no document')
 }
-
+function collectScopeRefs(scope?: Fork) {
+  if (!scope) return
+  //@ts-ignore
+  const clones = scope.clones as any[]
+  const refs: Record<string, StateRef> = {}
+  for (const {reg} of clones) {
+    Object.assign(refs, reg)
+  }
+  return refs
+}
 export function using(node: DOMElement, cb: () => any): void
 export function using(
   node: DOMElement,
@@ -742,6 +753,7 @@ export function using(node: DOMElement, opts: any): void {
   let onRoot:
     | ((config: {template: Actor<{mount: any}>; leaf: Leaf}) => void)
     | undefined
+  let scope: Fork
   if (typeof opts === 'function') {
     cb = opts
     env = getDefaultEnv()
@@ -752,6 +764,7 @@ export function using(node: DOMElement, opts: any): void {
     hydrate = opts.hydrate
     onComplete = opts.onComplete
     onRoot = opts.onRoot
+    scope = opts.scope
   } else throw Error('using() second argument is missing')
   if (!node) throw Error('using() first argument is missing')
   const namespaceURI = node.namespaceURI
@@ -817,6 +830,7 @@ export function using(node: DOMElement, opts: any): void {
     opGroup: createOpGroup(queue),
     domSubtree: createOpGroup(queue),
     hydration: hydrate,
+    refMap: collectScopeRefs(scope!),
   })
 
   if (onRoot) {

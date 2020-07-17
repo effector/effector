@@ -8,6 +8,7 @@ import {
   restore,
   Step,
   createEvent,
+  StateRef,
 } from 'effector'
 import {
   Leaf,
@@ -328,6 +329,7 @@ export function spawn(
     opGroup,
     domSubtree,
     hydration,
+    refMap,
   }: {
     values?: {[field: string]: any}
     parentLeaf: Leaf | null
@@ -337,11 +339,12 @@ export function spawn(
     opGroup: OpGroup
     domSubtree: OpGroup
     hydration: boolean
+    refMap?: Record<string, StateRef>
   },
 ): Leaf {
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
-  const page = {} as Record<string, any>
+  const page = (refMap ? {...refMap} : {}) as Record<string, any>
   const result: Spawn = {
     id: ++spawnID,
     fullID: '',

@@ -35,12 +35,15 @@ test('fork support', async () => {
     scope,
   })
 
-  const htmlResult = await renderStatic(() => {
-    h('h1', {text: title})
+  const htmlResult = await renderStatic({
+    scope,
+    fn() {
+      h('h1', {text: title})
+    },
   })
   expect(prettyHtml(htmlResult)).toMatchInlineSnapshot(`
     "
-    <h1>-</h1>
+    <h1>contacts</h1>
     "
   `)
 })
@@ -69,9 +72,13 @@ test('hydration support (without html hydration)', async () => {
     values: serialize(scope),
   })
 
-  const htmlResult = await renderStatic(() => {
-    h('h1', {text: title})
+  const htmlResult = await renderStatic({
+    scope,
+    fn() {
+      h('h1', {text: title})
+    },
   })
+
   expect(prettyHtml(htmlResult)).toMatchInlineSnapshot(`
     "
     <h1>contacts</h1>
@@ -79,7 +86,7 @@ test('hydration support (without html hydration)', async () => {
   `)
 })
 
-test.skip('hydration support (with html hydration)', async () => {
+test('hydration support (with html hydration)', async () => {
   const app = createDomain()
   const fetchContent = app.createEffect({
     async handler() {
@@ -103,26 +110,45 @@ test.skip('hydration support (with html hydration)', async () => {
     scope,
   })
 
+  const htmlSource = await renderStatic({
+    scope,
+    fn: App,
+  })
+
   hydrate(app, {
     values: serialize(scope),
   })
-
-  const htmlSource = await renderStatic(App)
 
   const client = provideGlobals()
 
   client.el.innerHTML = htmlSource
 
-  await new Promise(rs => {
-    using(client.el, {
-      onComplete: rs,
-      hydrate: true,
-      fn: App,
-      env: {
-        document: client.document,
-      },
-    })
+  // await new Promise(rs => {
+  using(client.el, {
+    // onComplete: rs,
+    hydrate: true,
+    fn: App,
+    env: {
+      document: client.document,
+    },
   })
+  // })
 
-  expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot()
+  await new Promise(rs => setTimeout(rs, 200))
+
+  expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot(`
+    "
+    <h1>contacts</h1>
+    "
+  `)
+
+  await fetchContent()
+
+  await new Promise(rs => setTimeout(rs, 200))
+
+  expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot(`
+    "
+    <h1>dashboard</h1>
+    "
+  `)
 })
