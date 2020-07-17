@@ -393,6 +393,8 @@ export function h(tag: string, opts?: any) {
                 },
                 page: leaf.spawn,
                 defer: true,
+                //@ts-ignore
+                forkPage: leaf.forkPage,
               })
             }
           }
@@ -401,6 +403,8 @@ export function h(tag: string, opts?: any) {
             params: leaf,
             defer: true,
             page: leaf.spawn,
+            //@ts-ignore
+            forkPage: leaf.forkPage,
           })
         })
         merge([onState, onMount]).watch(({leaf, value, hydration}) => {
@@ -577,10 +581,13 @@ export function h(tag: string, opts?: any) {
                 value => {
                   if (item.options.prevent) value.preventDefault()
                   if (item.options.stop) value.stopPropagation()
+                  console.log(leaf)
                   launch({
                     target: item.handler,
                     params: value,
                     page,
+                    //@ts-ignore
+                    forkPage: leaf.forkPage,
                   })
                 },
                 item.domConfig,
@@ -647,6 +654,8 @@ export function h(tag: string, opts?: any) {
             params: leaf,
             defer: true,
             page: leaf.spawn,
+            //@ts-ignore
+            forkPage: leaf.forkPage,
           })
           if (leaf.hydration) {
             if (leafData.needToCallNode) {
@@ -659,6 +668,8 @@ export function h(tag: string, opts?: any) {
                 },
                 page: leaf.spawn,
                 defer: true,
+                //@ts-ignore
+                forkPage: leaf.forkPage,
               })
             }
           } else {
@@ -831,6 +842,7 @@ export function using(node: DOMElement, opts: any): void {
     domSubtree: createOpGroup(queue),
     hydration: hydrate,
     refMap: collectScopeRefs(scope!),
+    forkPage: scope!,
   })
 
   if (onRoot) {
@@ -1104,6 +1116,8 @@ export function route<T>({
                 params: value,
                 defer: true,
                 page: leaf.spawn,
+                //@ts-ignore
+                forkPage: leaf.forkPage,
               })
             }
             changeChildLeafsVisible(visible, leaf)
@@ -1614,6 +1628,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                     opGroup: group,
                     domSubtree: leaf.ops.domSubtree,
                     hydration,
+                    forkPage: leaf.forkPage,
                   })
                 },
               }),
@@ -1654,6 +1669,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                 opGroup: group,
                 domSubtree: leaf.ops.domSubtree,
                 hydration,
+                forkPage: leaf.forkPage,
               })
             }
           }

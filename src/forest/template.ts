@@ -9,6 +9,7 @@ import {
   Step,
   createEvent,
   StateRef,
+  Fork,
 } from 'effector'
 import {
   Leaf,
@@ -148,6 +149,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
                 //@ts-ignore
                 stack,
+                //@ts-ignore
+                forkPage: stack.forkPage,
               })
             } else {
               console.error('context drift', {stack, node})
@@ -160,6 +163,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
               page: null,
               //@ts-ignore
               stack,
+              //@ts-ignore
+              forkPage: stack.forkPage,
             })
           }
         })
@@ -180,6 +185,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   target: stack.node,
                   page,
                   defer: true,
+                  //@ts-ignore
+                  forkPage: stack.forkPage,
                 })
               })
             } else {
@@ -201,6 +208,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     target: stack.node,
                     page: null,
                     defer: true,
+                    //@ts-ignore
+                    forkPage: stack.forkPage,
                   })
                 } else {
                   launch({
@@ -208,6 +217,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     target: stack.node,
                     page: stackPages[targetPageIndex],
                     defer: true,
+                    //@ts-ignore
+                    forkPage: stack.forkPage,
                   })
                 }
               } else {
@@ -218,6 +229,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       target: stack.node,
                       page,
                       defer: true,
+                      //@ts-ignore
+                      forkPage: stack.forkPage,
                     })
                   } else {
                     // console.count('no page match')
@@ -232,6 +245,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 target: stack.node,
                 page,
                 defer: true,
+                //@ts-ignore
+                forkPage: stack.forkPage,
               })
             })
           }
@@ -330,6 +345,7 @@ export function spawn(
     domSubtree,
     hydration,
     refMap,
+    forkPage,
   }: {
     values?: {[field: string]: any}
     parentLeaf: Leaf | null
@@ -340,6 +356,7 @@ export function spawn(
     domSubtree: OpGroup
     hydration: boolean
     refMap?: Record<string, StateRef>
+    forkPage?: Fork
   },
 ): Leaf {
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
@@ -368,6 +385,7 @@ export function spawn(
     data: leafData,
     parentLeaf,
     hydration,
+    forkPage,
   }
   const previousSpawn = currentLeaf
   currentLeaf = leaf
@@ -507,6 +525,8 @@ export function spawn(
       params,
       defer,
       page: result,
+      //@ts-ignore
+      forkPage,
     })
   api.unmount = (params: any, defer = true) =>
     launch({
@@ -514,6 +534,8 @@ export function spawn(
       params,
       defer,
       page: result,
+      //@ts-ignore
+      forkPage,
     })
   if (actor.api) {
     for (const key in actor.api) {
@@ -523,6 +545,8 @@ export function spawn(
           params,
           defer,
           page: result,
+          //@ts-ignore
+          forkPage,
         })
     }
   }

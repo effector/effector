@@ -161,6 +161,8 @@ export function mountChild({
                       fns: draft.node,
                     },
                     page: childSpawn.spawn,
+                    //@ts-ignore
+                    forkPage: leaf.forkPage,
                   })
                 }
               } else {
@@ -271,6 +273,7 @@ export function mountChild({
     opGroup,
     domSubtree,
     hydration: leaf.hydration,
+    forkPage: leaf.forkPage,
   })
 }
 

@@ -152,3 +152,84 @@ test('hydration support (with html hydration)', async () => {
     "
   `)
 })
+
+test('fork isolation', async () => {
+  const app = createDomain()
+  const scopeName = app.createStore('--')
+  const click = app.createEvent<MouseEvent>()
+  const fetchContent = app.createEffect({
+    async handler() {
+      return {title: 'dashboard'}
+    },
+  })
+  const title = app
+    .createStore('-')
+    .on(fetchContent.doneData, (_, {title}) => title)
+
+  forward({
+    from: click,
+    to: fetchContent,
+  })
+
+  function App() {
+    h('h1', {text: title})
+    h('button', {
+      attr: {id: 'click'},
+      handler: {click},
+      text: scopeName,
+    })
+  }
+
+  const scopeA = fork(app, {
+    values: new Map().set(title, 'loading...').set(scopeName, 'A'),
+    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
+  })
+
+  const scopeB = fork(app, {
+    values: new Map().set(title, 'loading...').set(scopeName, 'B'),
+    handlers: new Map([[fetchContent, async () => ({title: 'profile'})]]),
+  })
+
+  const client = provideGlobals()
+
+  const elA = client.document.createElement('div')
+  const elB = client.document.createElement('div')
+  client.el.appendChild(elA)
+  client.el.appendChild(elB)
+
+  using(elA, {
+    scope: scopeA,
+    fn: App,
+    env: {
+      document: client.document,
+    },
+  })
+  using(elB, {
+    scope: scopeB,
+    fn: App,
+    env: {
+      document: client.document,
+    },
+  })
+
+  await new Promise(rs => setTimeout(rs, 200))
+
+  elA.querySelector('#click').click()
+
+  await new Promise(rs => setTimeout(rs, 200))
+
+  console.log(title.getState())
+
+  expect(prettyHtml(elA.innerHTML)).toMatchInlineSnapshot(`
+    "
+    <h1>dashboard</h1>
+    <button id='click'>A</button>
+    "
+  `)
+  expect(prettyHtml(elB.innerHTML)).toMatchInlineSnapshot(`
+    "
+    <h1>dashboard</h1>
+    <button id='click'>B</button>
+    "
+  `)
+})

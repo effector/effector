@@ -280,6 +280,7 @@ export type Leaf = {
   }
   svgRoot: SVGSVGElement | null
   hydration: boolean
+  forkPage?: Fork
 }
 
 export type BindingsDraft = {
