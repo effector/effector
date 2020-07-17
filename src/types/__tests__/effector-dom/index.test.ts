@@ -34,7 +34,7 @@ describe('text', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; transform?: Partial<TransformMap> | undefined; ... 6 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Store<boolean> | Store<number> | ... 15 more ... | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Store<boolean> | Store<number> | Store<string> | Store<null> | Store<string | null> | Store<number | null> | ... 11 more ... | undefined'.
             Type 'Store<{ value: string; } | null>' is not assignable to type 'Store<boolean>'.
               The types returned by 'getState()' are incompatible between these types.
@@ -59,7 +59,7 @@ describe('text', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; transform?: Partial<TransformMap> | undefined; ... 6 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Store<boolean> | Store<number> | ... 15 more ... | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'string | number | boolean | Store<boolean> | Store<number> | Store<string> | Store<null> | Store<string | null> | Store<number | null> | ... 11 more ... | undefined'.
             Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'Store<boolean>'.
               The types returned by 'getState()' are incompatible between these types.
@@ -97,7 +97,7 @@ describe('dom tag typecheck', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; transform?: Partial<TransformMap> | undefined; ... 6 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Store<boolean> | Store<number> | ... 15 more ... | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
