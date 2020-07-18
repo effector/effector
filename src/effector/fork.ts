@@ -460,7 +460,8 @@ function cloneGraph(unit: any) {
     meta: {unit: 'forkInFlightCounter'},
   })
 
-  const clones = list.map(({seq, next, meta, scope, family}) => {
+  const clones = list.map(node => {
+    const {seq, next, meta, scope, family} = node
     const result = createNode({
       node: seq.map(step => ({
         id: step.id,
@@ -469,7 +470,7 @@ function cloneGraph(unit: any) {
         hasRef: step.hasRef,
       })) as any,
       child: [...next],
-      meta: Object.assign({}, meta),
+      meta: Object.assign({forkOf: node}, meta),
       scope: Object.assign({}, scope),
     })
     result.family = {
