@@ -31,6 +31,7 @@ export type Config = {
 }
 
 export type Graph = {
+  id: ID
   next: Array<Graph>
   seq: Array<Cmd>
   scope: {[key: string]: any}

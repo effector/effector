@@ -1,11 +1,12 @@
 import {Graph, Graphite, Cmd, StateRef} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
+import {nextNodeID} from './id'
 
 const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
   const result = []
   if (Array.isArray(list)) {
     for (let i = 0; i < list.length; i++) {
-      if (Array.isArray(list[i])) result.push(...list[i])
+      if (Array.isArray(list[i])) result.push(...(list[i] as any))
       else result.push(list[i])
     }
   } else {
@@ -13,7 +14,10 @@ const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
   }
   return result.map(getGraph)
 }
-export const addToReg = ({hasRef, type, data}, reg) => {
+export const addToReg = (
+  {hasRef, type, data}: any,
+  reg: Record<string, StateRef>,
+) => {
   let store
   if (hasRef) {
     store = data.store
@@ -36,20 +40,20 @@ export function createNode({
   meta = {},
   family: familyRaw = {type: 'regular'},
 }: {
-  node?: Array<Cmd | false | void | null>,
-  from?: Graphite | Graphite[],
-  source?: Graphite | Graphite[],
-  parent?: Graphite | Graphite[],
-  to?: Graphite | Graphite[],
-  target?: Graphite | Graphite[],
-  child?: Graphite | Graphite[],
-  scope?: {[name: string]: any},
-  meta?: {[name: string]: any},
+  node?: Array<Cmd | false | void | null>
+  from?: Graphite | Graphite[]
+  source?: Graphite | Graphite[]
+  parent?: Graphite | Graphite[]
+  to?: Graphite | Graphite[]
+  target?: Graphite | Graphite[]
+  child?: Graphite | Graphite[]
+  scope?: {[name: string]: any}
+  meta?: {[name: string]: any}
   family?: {
-    type?: 'regular' | 'crosslink' | 'domain',
-    links?: Graphite | Graphite[],
-    owners?: Graphite | Graphite[],
-  },
+    type?: 'regular' | 'crosslink' | 'domain'
+    links?: Graphite | Graphite[]
+    owners?: Graphite | Graphite[]
+  }
 } = {}): Graph {
   const sources = arrifyNodes(parent)
   const links = arrifyNodes(familyRaw.links)
@@ -63,6 +67,7 @@ export function createNode({
     addToReg(item, reg)
   }
   const result: Graph = {
+    id: nextNodeID(),
     seq,
     next: arrifyNodes(child),
     meta,
