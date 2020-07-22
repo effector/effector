@@ -188,7 +188,7 @@ export function createStore<State>(
   const template = readTemplate()
   plainState.after = [{type: 'copy', to: oldState}]
   if (template) {
-    template.plain.push(plainState)
+    template.plain.push(plainState, oldState)
   }
   const store: any = {
     subscribers: new Map(),
