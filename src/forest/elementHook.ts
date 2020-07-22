@@ -53,7 +53,6 @@ import {
   Block,
   FragmentBlock,
   RF,
-  FRec,
 } from './relation.h'
 
 import {
@@ -1247,7 +1246,7 @@ export function rec<T>(
       mount.watch(({node, leaf}) => {
         const data = leaf.data as LeafDataRec
         mountChildTemplates(recDraft, {
-          parentBlockFragment: data.block.child.child,
+          parentBlockFragment: data.block.child,
           leaf,
           node,
         })

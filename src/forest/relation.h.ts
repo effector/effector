@@ -7,7 +7,7 @@ export type ChildBlock =
   | TextBlock
   | RouteBlock
   | RecItemBlock
-  | FRec
+  | RecBlock
 
 export type Block =
   | FragmentBlock
@@ -29,7 +29,7 @@ export type RouteBlock = {
 
 export type FragmentBlock = {
   type: 'fragment'
-  parent: FF | UsingBlock | ElementBlock | LF | RF | RecItemBlock | RecF
+  parent: FF | UsingBlock | ElementBlock | LF | RF | RecItemBlock | RecBlock
   child: ChildBlock[]
 }
 
@@ -99,24 +99,10 @@ export type RecItemBlock = {
   index: number
 }
 
-/* rec blocks */
-
 export type RecBlock = {
   type: 'rec'
-  parent: FRec
-  child: RecF
-}
-
-export type RecF = {
-  type: 'RecF'
-  parent: RecBlock
-  child: FragmentBlock
-}
-
-export type FRec = {
-  type: 'FRec'
   parent: FragmentBlock
-  child: RecBlock
+  child: FragmentBlock
   visible: boolean
   index: number
 }
