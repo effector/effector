@@ -1306,7 +1306,7 @@ export function rec<T>(
         onMount.watch(({node, leaf, state}) => {
           const data = leaf.data as LeafDataRecItem
           mountChild({
-            parentBlockFragment: data.block.child.child,
+            parentBlockFragment: data.block.child,
             leaf,
             node,
             actor: recTemplate,

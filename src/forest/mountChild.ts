@@ -231,27 +231,17 @@ export function mountChild({
     case 'recItem': {
       const recItemBlock: RecItemBlock = {
         type: 'recItem',
-        parent: {
-          type: 'FRecItem',
-          parent: parentBlockFragment,
-          child: null as any,
-          visible: true,
-          index: draft.inParentIndex,
-        },
+        parent: parentBlockFragment,
         child: {
-          type: 'RecItemF',
+          type: 'fragment',
           parent: null as any,
-          child: {
-            type: 'fragment',
-            parent: null as any,
-            child: [],
-          },
+          child: [],
         },
+        visible: true,
+        index: draft.inParentIndex,
       }
-      recItemBlock.parent.child = recItemBlock
       recItemBlock.child.parent = recItemBlock
-      recItemBlock.child.child.parent = recItemBlock.child
-      parentBlockFragment.child[draft.inParentIndex] = recItemBlock.parent
+      parentBlockFragment.child[draft.inParentIndex] = recItemBlock
       leafData = {
         type: 'rec item',
         block: recItemBlock,
