@@ -9,7 +9,7 @@ import {
   serialize,
   hydrate,
 } from 'effector'
-import {h, using, list, node, spec} from 'forest'
+import {h, using, list, node, spec, block} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-ignore
@@ -171,14 +171,21 @@ test('fork isolation', async () => {
     to: fetchContent,
   })
 
-  function App() {
-    h('h1', {text: title})
-    h('button', {
-      attr: {id: 'click'},
-      handler: {click},
-      text: scopeName,
-    })
-  }
+  const client = provideGlobals()
+
+  const App = block({
+    fn() {
+      h('h1', {text: title})
+      h('button', {
+        attr: {id: 'click'},
+        handler: {click},
+        text: scopeName,
+      })
+    },
+    env: {
+      document: client.document,
+    },
+  })
 
   const scopeA = fork(app, {
     values: new Map().set(title, 'loading...').set(scopeName, 'A'),
@@ -189,8 +196,6 @@ test('fork isolation', async () => {
     values: new Map().set(title, 'loading...').set(scopeName, 'B'),
     handlers: new Map([[fetchContent, async () => ({title: 'profile'})]]),
   })
-
-  const client = provideGlobals()
 
   const elA = client.document.createElement('div')
   const elB = client.document.createElement('div')
@@ -220,7 +225,7 @@ test('fork isolation', async () => {
 
   expect(prettyHtml(elA.innerHTML)).toMatchInlineSnapshot(`
     "
-    <h1>loading...</h1>
+    <h1>contacts</h1>
     <button id='click'>A</button>
     "
   `)
