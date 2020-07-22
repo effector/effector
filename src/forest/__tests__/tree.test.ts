@@ -31,10 +31,11 @@ type MDNode =
       type: 'listItem'
     }
 
+//prettier-ignore
 type MD = {
   value: MDNode
   child: MD[]
-}
+};
 
 test('tree', async () => {
   const [s1] = await exec(async () => {

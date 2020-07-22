@@ -17,15 +17,13 @@ beforeEach(async () => {
   await initBrowser()
 }, 10e3)
 
-test.skip('rec visible support', async () => {
-  const [s1, s2] = await exec(async () => {
+test('rec visible support', async () => {
+  const [s1, s2, s3] = await exec(async () => {
     const toggleNestedRows = createEvent()
     const nestedRowsVisible = createStore(true).on(
       toggleNestedRows,
       visible => !visible,
     )
-    //@ts-ignore
-    nestedRowsVisible.graphite.meta.trace = true
     type Item = {
       value: string
       child: Item[]
@@ -62,18 +60,9 @@ test.skip('rec visible support', async () => {
           },
           {
             value: 'b_b',
-            child: [
-              {
-                value: 'b_b_a',
-                child: [],
-              },
-            ],
+            child: [],
           },
         ],
-      },
-      {
-        value: 'c',
-        child: [],
       },
     ])
     const flatItems = items.map(list => {
@@ -104,31 +93,25 @@ test.skip('rec visible support', async () => {
               return visible
             },
           )
-          visible.updates.watch(e => {
-            console.log('visible update', e)
-          })
-          //@ts-ignore
-          visible.graphite.meta.trace = true
-          h('div', {
-            style: {marginLeft: 'var(--level, 0)'},
-            styleVar: {level: level.map(value => `${value}em`)},
-            // visible,
-            fn() {
-              text`${remap(item, 'value')} ${level} ${visible.map(
-                vis => (vis ? 'visible' : 'hidden') as string,
-              )}`
-            },
-          })
           const childs = combine(
             flatItems,
-            state,
-            (list, {item: {child}, level}) =>
+            item,
+            level,
+            (list, {child}, level) =>
               list
                 .filter(({value}) => child.includes(value))
                 .map(item => ({item, level: level + 1})),
           )
-          list(childs, ({store}) => {
-            Row({state: store})
+          h('div', {
+            // style: {marginLeft: '1em'},
+            visible,
+            fn() {
+              spec({text: [remap(item, 'value'), ' ', level]})
+
+              list(childs, ({store}) => {
+                Row({state: store})
+              })
+            },
           })
         })
         list(topLevelFlatItems, ({store}) => {
@@ -145,46 +128,45 @@ test.skip('rec visible support', async () => {
     await act(() => {
       toggleNestedRows()
     })
+    await act(() => {
+      toggleNestedRows()
+    })
     //@ts-ignore
     // printLeaf(rootLeaf)
   })
   expect(s1).toMatchInlineSnapshot(`
     "
-    <div style='--level: 0em;'>a 0 visible</div>
-    <div style='--level: 1em;'>a_a 1 visible</div>
-    <div style='--level: 1em;'>a_b 1 visible</div>
-    <div style='--level: 2em;'>a_b_a 2 visible</div>
-    <div style='--level: 0em;'>b 0 visible</div>
-    <div style='--level: 1em;'>b_a 1 visible</div>
-    <div style='--level: 1em;'>b_b 1 visible</div>
-    <div style='--level: 2em;'>b_b_a 2 visible</div>
-    <div style='--level: 0em;'>c 0 visible</div>
+    <div>
+      a 0
+      <div>a_a 1</div>
+      <div>
+        a_b 1
+        <div>a_b_a 2</div>
+      </div>
+    </div>
+    <div>
+      b 0
+      <div>b_a 1</div>
+      <div>b_b 1</div>
+    </div>
     "
   `)
   expect(s2).toMatchInlineSnapshot(`
     "
-    <div style='--level: 0em;'>a 0 visible</div>
-    <div style='--level: 1em;'>a_a 1 hidden</div>
-    <div style='--level: 1em;'>a_b 1 visible</div>
-    <div style='--level: 2em;'>a_b_a 2 visible</div>
-    <div style='--level: 0em;'>b 0 visible</div>
-    <div style='--level: 1em;'>b_a 1 hidden</div>
-    <div style='--level: 1em;'>b_b 1 visible</div>
-    <div style='--level: 2em;'>b_b_a 2 visible</div>
-    <div style='--level: 0em;'>c 0 visible</div>
+    <div>a 0</div>
+    <div>b 0</div>
     "
   `)
+  expect(s3).toBe(s1)
 })
 
-test.skip('rec style update support', async () => {
-  const [s1, s2] = await exec(async () => {
+test('rec style update support', async () => {
+  const [s1, s2, s3] = await exec(async () => {
     const toggleNestedRows = createEvent()
     const nestedRowsVisible = createStore(true).on(
       toggleNestedRows,
       visible => !visible,
     )
-    //@ts-ignore
-    nestedRowsVisible.graphite.meta.trace = true
     type Item = {
       value: string
       child: Item[]
@@ -221,18 +203,9 @@ test.skip('rec style update support', async () => {
           },
           {
             value: 'b_b',
-            child: [
-              {
-                value: 'b_b_a',
-                child: [],
-              },
-            ],
+            child: [],
           },
         ],
-      },
-      {
-        value: 'c',
-        child: [],
       },
     ])
     const flatItems = items.map(list => {
@@ -263,19 +236,16 @@ test.skip('rec style update support', async () => {
               return visible ? 'yes' : 'no'
             },
           )
-          visible.updates.watch(e => {
-            console.log('visible update', e)
-          })
-          //@ts-ignore
-          visible.graphite.meta.trace = true
           h('div', {
             style: {marginLeft: 'var(--level, 0)'},
             styleVar: {level: level.map(value => `${value}em`)},
             data: {visible},
             fn() {
-              text`${remap(item, 'value')} ${level} ${visible.map(
+              const value = remap(item, 'value')
+              const status = visible.map(
                 vis => (vis === 'yes' ? 'visible' : 'hidden') as string,
-              )}`
+              )
+              text`${value} ${level} ${status}`
             },
           })
           const childs = combine(
@@ -301,6 +271,9 @@ test.skip('rec style update support', async () => {
     await act()
     //@ts-ignore
     // printLeaf(rootLeaf)
+    await act(() => {
+      toggleNestedRows()
+    })
     await act(() => {
       toggleNestedRows()
     })
@@ -330,12 +303,6 @@ test.skip('rec style update support', async () => {
     <div data-visible='yes' style='--level: 1em;'>
       b_b 1 visible
     </div>
-    <div data-visible='yes' style='--level: 2em;'>
-      b_b_a 2 visible
-    </div>
-    <div data-visible='yes' style='--level: 0em;'>
-      c 0 visible
-    </div>
     "
   `)
   expect(s2).toMatchInlineSnapshot(`
@@ -346,11 +313,11 @@ test.skip('rec style update support', async () => {
     <div data-visible='no' style='--level: 1em;'>
       a_a 1 hidden
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
-      a_b 1 visible
+    <div data-visible='no' style='--level: 1em;'>
+      a_b 1 hidden
     </div>
-    <div data-visible='yes' style='--level: 2em;'>
-      a_b_a 2 visible
+    <div data-visible='no' style='--level: 2em;'>
+      a_b_a 2 hidden
     </div>
     <div data-visible='yes' style='--level: 0em;'>
       b 0 visible
@@ -358,17 +325,12 @@ test.skip('rec style update support', async () => {
     <div data-visible='no' style='--level: 1em;'>
       b_a 1 hidden
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
-      b_b 1 visible
-    </div>
-    <div data-visible='yes' style='--level: 2em;'>
-      b_b_a 2 visible
-    </div>
-    <div data-visible='yes' style='--level: 0em;'>
-      c 0 visible
+    <div data-visible='no' style='--level: 1em;'>
+      b_b 1 hidden
     </div>
     "
   `)
+  expect(s3).toBe(s1)
 })
 
 function printLeaf(leaf: Leaf) {
@@ -384,8 +346,8 @@ function printLeaf(leaf: Leaf) {
         break
       }
       case 'element': {
-        const {parent, value} = data.block
-        rows.push(`${tab}index: ${parent.index}`)
+        const {value, index} = data.block
+        rows.push(`${tab}index: ${index}`)
         rows.push(`${tab}text: ${value.textContent}`)
         break
       }
