@@ -39,6 +39,10 @@ import {
   LeafDataRecItem,
   RecDraft,
   LeafDataRec,
+  BlockDraft,
+  BlockItemDraft,
+  LeafDataBlock,
+  LeafDataBlockItem,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -862,6 +866,8 @@ export function node(cb: (node: DOMElement) => (() => void) | void) {
     case 'route':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
       console.error('node() hook supported only in h() nodes')
       return
   }
@@ -900,6 +906,8 @@ export function spec(config: {
     case 'route':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
       return
   }
   if (config.attr) draft.attr.push(config.attr)
@@ -1216,6 +1224,89 @@ function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
       //@ts-ignore
       cb(childSpawn.leaf)
     }
+  }
+}
+
+export function block({
+  fn,
+  env,
+  namespace = 'html',
+}: {
+  fn: () => void
+  env: any
+  namespace?: NSType
+}): () => void {
+  const blockDraft: BlockDraft = {
+    type: 'block',
+    childTemplates: [],
+    childCount: 0,
+    inParentIndex: 0,
+  }
+  const blockTemplate = createTemplate({
+    name: 'block',
+    isSvgRoot: false,
+    namespace,
+    env,
+    draft: blockDraft,
+    fn({}, {mount, unmount}) {
+      fn()
+      mount.watch(({node, leaf}) => {
+        const data = leaf.data as LeafDataBlock
+        mountChildTemplates(blockDraft, {
+          parentBlockFragment: data.block.child,
+          leaf,
+          node,
+        })
+      })
+      sample({
+        source: mount,
+        clock: unmount,
+        greedy: true,
+      }).watch(({leaf}) => {
+        leaf.spawn.active = false
+        iterateChildLeafs(leaf, child => {
+          child.api.unmount()
+        })
+      })
+    },
+  })
+  return () => {
+    const blockItemDraft: BlockItemDraft = {
+      type: 'blockItem',
+      childTemplates: [],
+      childCount: 0,
+      inParentIndex: -1,
+    }
+    const {env, namespace} = currentActor!
+    const blockItemTemplate = createTemplate({
+      name: 'block item',
+      isSvgRoot: false,
+      namespace,
+      env,
+      draft: blockItemDraft,
+      fn(_, {mount, unmount}) {
+        sample({
+          source: mount,
+          clock: unmount,
+          greedy: true,
+        }).watch(({leaf}) => {
+          leaf.spawn.active = false
+          iterateChildLeafs(leaf, child => {
+            child.api.unmount()
+          })
+        })
+        mount.watch(({node, leaf}) => {
+          const data = leaf.data as LeafDataBlockItem
+          mountChild({
+            parentBlockFragment: data.block.child,
+            leaf,
+            node,
+            actor: blockTemplate,
+          })
+        })
+      },
+    })
+    setInParentIndex(blockItemTemplate)
   }
 }
 
@@ -1723,6 +1814,8 @@ function setInParentIndex(template: Actor<any>) {
     case 'list':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
       draft.inParentIndex = currentActor.draft.childCount
       currentActor.draft.childCount += 1
       currentActor.draft.childTemplates.push(template)

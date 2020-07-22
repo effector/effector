@@ -37,6 +37,8 @@ import {
   RF,
   RecItemBlock,
   RecBlock,
+  BlockBlock,
+  BlockItemBlock,
 } from './relation.h'
 
 import {createOpGroup, createOp} from './plan'
@@ -235,6 +237,46 @@ export function mountChild({
       leafData = {
         type: 'rec item',
         block: recItemBlock,
+      }
+      break
+    }
+    case 'block': {
+      const block: BlockBlock = {
+        type: 'block',
+        parent: parentBlockFragment,
+        child: {
+          type: 'fragment',
+          parent: null as any,
+          child: [],
+        },
+        visible: true,
+        index: 0,
+      }
+      block.child.parent = block
+      parentBlockFragment.child[draft.inParentIndex] = block
+      leafData = {
+        type: 'block',
+        block,
+      }
+      break
+    }
+    case 'blockItem': {
+      const block: BlockItemBlock = {
+        type: 'blockItem',
+        parent: parentBlockFragment,
+        child: {
+          type: 'fragment',
+          parent: null as any,
+          child: [],
+        },
+        visible: true,
+        index: draft.inParentIndex,
+      }
+      block.child.parent = block
+      parentBlockFragment.child[draft.inParentIndex] = block
+      leafData = {
+        type: 'block item',
+        block: block,
       }
       break
     }

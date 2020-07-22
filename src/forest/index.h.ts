@@ -8,6 +8,8 @@ import {
   RouteBlock,
   RecItemBlock,
   RecBlock,
+  BlockBlock,
+  BlockItemBlock,
 } from './relation.h'
 
 export type Template = {
@@ -231,6 +233,16 @@ export type LeafDataElement = {
   needToCallNode: boolean
 }
 
+export type LeafDataBlock = {
+  type: 'block'
+  block: BlockBlock
+}
+
+export type LeafDataBlockItem = {
+  type: 'block item'
+  block: BlockItemBlock
+}
+
 export type LeafDataRec = {
   type: 'rec'
   block: RecBlock
@@ -263,6 +275,8 @@ export type LeafData =
   | LeafDataRoute
   | LeafDataRecItem
   | LeafDataRec
+  | LeafDataBlock
+  | LeafDataBlockItem
 
 export type Leaf = {
   spawn: Spawn
@@ -287,6 +301,17 @@ export type BindingsDraft = {
   childTemplates: Actor<any>[]
   childCount: number
   inParentIndex: number
+}
+
+export type BlockDraft = {
+  type: 'block'
+  childTemplates: Actor<any>[]
+  childCount: number
+  inParentIndex: 0
+}
+
+export type BlockItemDraft = BindingsDraft & {
+  type: 'blockItem'
 }
 
 export type RecDraft = {
@@ -364,3 +389,5 @@ export type NodeDraft =
   | RouteType
   | RecDraft
   | RecItemDraft
+  | BlockDraft
+  | BlockItemDraft

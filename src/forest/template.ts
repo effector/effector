@@ -175,11 +175,19 @@ export function createTemplate<Api extends {[method: string]: any}>({
       //@ts-ignore
       fn(upd, scope, stack) {
         if (stack.parent) {
+          const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
           if (stack.page) {
             if (!stack.page.active) return false
             if (stack.page.template === template) return true
             if (stack.page.childSpawns[template.id]) {
               stack.page.childSpawns[template.id].forEach((page: Spawn) => {
+                if (forkId) {
+                  if (
+                    !((page as any).leaf as Leaf).forkPage ||
+                    forkId !== (page as any).leaf.forkPage.graphite.id
+                  )
+                    return
+                }
                 launch({
                   params: upd,
                   target: getForkedUnit(stack.node, stack.forkPage),
@@ -223,6 +231,13 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 }
               } else {
                 template.pages.forEach(page => {
+                  if (forkId) {
+                    if (
+                      !((page as any).leaf as Leaf).forkPage ||
+                      forkId !== (page as any).leaf.forkPage.graphite.id
+                    )
+                      return
+                  }
                   if (page.fullID.startsWith(stack.page.fullID)) {
                     launch({
                       params: upd,
@@ -240,6 +255,13 @@ export function createTemplate<Api extends {[method: string]: any}>({
             }
           } else {
             template.pages.forEach(page => {
+              if (forkId) {
+                if (
+                  !((page as any).leaf as Leaf).forkPage ||
+                  forkId !== (page as any).leaf.forkPage.graphite.id
+                )
+                  return
+              }
               launch({
                 params: upd,
                 target: getForkedUnit(stack.node, stack.forkPage),

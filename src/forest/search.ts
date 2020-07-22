@@ -13,6 +13,8 @@ import {
   FragmentBlock,
   RecBlock,
   RecItemBlock,
+  BlockBlock,
+  BlockItemBlock,
 } from './relation.h'
 
 export function getParentBlock(block: Exclude<Block, UsingBlock>): Block {
@@ -23,10 +25,13 @@ export function getParentBlock(block: Exclude<Block, UsingBlock>): Block {
     case 'route':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
       return block.parent
     default:
       switch (block.parent.type) {
         case 'using':
+        case 'block':
           return block.parent
         default:
           return block.parent.parent
@@ -50,7 +55,7 @@ function findParentDOMElementBlock(block: Block): UsingBlock | ElementBlock {
   }
 }
 export function findParentDOMElement(
-  block: Exclude<Block, UsingBlock>,
+  block: Exclude<Block, UsingBlock | BlockBlock>,
 ): DOMElement | null {
   const child = findParentDOMElementBlock(block)
   if (child) return child.value
@@ -66,7 +71,9 @@ function findLastVisibleChildBlock(
     | LF
     | RF
     | RecItemBlock
-    | RecBlock,
+    | RecBlock
+    | BlockBlock
+    | BlockItemBlock,
 ): ElementBlock | TextBlock | null {
   if (!block.visible) return null
   switch (block.type) {
@@ -80,6 +87,8 @@ function findLastVisibleChildBlock(
     case 'FF':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
       return findLastVisibleFragmentChild(block.child)
     case 'list': {
       let child = block.lastChild
@@ -114,6 +123,7 @@ export function findPreviousVisibleSiblingBlock(
       switch (block.parent.type) {
         case 'element':
         case 'using':
+        case 'block':
           return null
         case 'RF': {
           const parent = block.parent.parent
@@ -127,6 +137,8 @@ export function findPreviousVisibleSiblingBlock(
         }
         case 'rec':
         case 'recItem':
+        case 'block':
+        case 'blockItem':
         case 'FF': {
           const parent = block.parent
           const parentFragment = parent.parent
@@ -156,6 +168,8 @@ export function findPreviousVisibleSiblingBlock(
     case 'route':
     case 'rec':
     case 'recItem':
+    case 'block':
+    case 'blockItem':
     case 'list': {
       const parentFragment = block.parent
       for (let i = block.index - 1; i >= 0; i--) {

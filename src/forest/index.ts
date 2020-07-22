@@ -17,6 +17,7 @@ export {
   route,
   tree,
   rec,
+  block,
 } from './elementHook'
 
 export {remap} from './remap'

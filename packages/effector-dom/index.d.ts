@@ -210,3 +210,5 @@ export function text(
   words: TemplateStringsArray,
   ...values: Array<DOMProperty | AttributeStore>
 ): void
+
+export function block(config: {fn: () => void; env: any}): () => void
