@@ -237,8 +237,7 @@ test('rec style update support', async () => {
             },
           )
           h('div', {
-            style: {marginLeft: 'var(--level, 0)'},
-            styleVar: {level: level.map(value => `${value}em`)},
+            style: {marginLeft: level.map(value => `${value}em`)},
             data: {visible},
             fn() {
               const value = remap(item, 'value')
@@ -282,50 +281,50 @@ test('rec style update support', async () => {
   })
   expect(s1).toMatchInlineSnapshot(`
     "
-    <div data-visible='yes' style='--level: 0em;'>
+    <div data-visible='yes' style='margin-left: 0em;'>
       a 0 visible
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
+    <div data-visible='yes' style='margin-left: 1em;'>
       a_a 1 visible
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
+    <div data-visible='yes' style='margin-left: 1em;'>
       a_b 1 visible
     </div>
-    <div data-visible='yes' style='--level: 2em;'>
+    <div data-visible='yes' style='margin-left: 2em;'>
       a_b_a 2 visible
     </div>
-    <div data-visible='yes' style='--level: 0em;'>
+    <div data-visible='yes' style='margin-left: 0em;'>
       b 0 visible
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
+    <div data-visible='yes' style='margin-left: 1em;'>
       b_a 1 visible
     </div>
-    <div data-visible='yes' style='--level: 1em;'>
+    <div data-visible='yes' style='margin-left: 1em;'>
       b_b 1 visible
     </div>
     "
   `)
   expect(s2).toMatchInlineSnapshot(`
     "
-    <div data-visible='yes' style='--level: 0em;'>
+    <div data-visible='yes' style='margin-left: 0em;'>
       a 0 visible
     </div>
-    <div data-visible='no' style='--level: 1em;'>
+    <div data-visible='no' style='margin-left: 1em;'>
       a_a 1 hidden
     </div>
-    <div data-visible='no' style='--level: 1em;'>
+    <div data-visible='no' style='margin-left: 1em;'>
       a_b 1 hidden
     </div>
-    <div data-visible='no' style='--level: 2em;'>
+    <div data-visible='no' style='margin-left: 2em;'>
       a_b_a 2 hidden
     </div>
-    <div data-visible='yes' style='--level: 0em;'>
+    <div data-visible='yes' style='margin-left: 0em;'>
       b 0 visible
     </div>
-    <div data-visible='no' style='--level: 1em;'>
+    <div data-visible='no' style='margin-left: 1em;'>
       b_a 1 hidden
     </div>
-    <div data-visible='no' style='--level: 1em;'>
+    <div data-visible='no' style='margin-left: 1em;'>
       b_b 1 hidden
     </div>
     "
