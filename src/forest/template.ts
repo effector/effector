@@ -143,7 +143,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
           if (targetTemplate) {
             if (stackTemplates.includes(targetTemplate)) {
               launch({
-                target: node,
+                target: getForkedUnit(node, stack.forkPage),
                 params: upd,
                 defer: true,
                 page: stackPages[stackTemplates.indexOf(targetTemplate)],
@@ -157,7 +157,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
             }
           } else {
             launch({
-              target: node,
+              target: getForkedUnit(node, stack.forkPage),
               params: upd,
               defer: true,
               page: null,
@@ -182,7 +182,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
               stack.page.childSpawns[template.id].forEach((page: Spawn) => {
                 launch({
                   params: upd,
-                  target: stack.node,
+                  target: getForkedUnit(stack.node, stack.forkPage),
                   page,
                   defer: true,
                   //@ts-ignore
@@ -205,7 +205,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 if (targetPageIndex === -1) {
                   launch({
                     params: upd,
-                    target: stack.node,
+                    target: getForkedUnit(stack.node, stack.forkPage),
                     page: null,
                     defer: true,
                     //@ts-ignore
@@ -214,7 +214,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                 } else {
                   launch({
                     params: upd,
-                    target: stack.node,
+                    target: getForkedUnit(stack.node, stack.forkPage),
                     page: stackPages[targetPageIndex],
                     defer: true,
                     //@ts-ignore
@@ -226,7 +226,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   if (page.fullID.startsWith(stack.page.fullID)) {
                     launch({
                       params: upd,
-                      target: stack.node,
+                      target: getForkedUnit(stack.node, stack.forkPage),
                       page,
                       defer: true,
                       //@ts-ignore
@@ -242,7 +242,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
             template.pages.forEach(page => {
               launch({
                 params: upd,
-                target: stack.node,
+                target: getForkedUnit(stack.node, stack.forkPage),
                 page,
                 defer: true,
                 //@ts-ignore
@@ -314,33 +314,44 @@ export function createTemplate<Api extends {[method: string]: any}>({
 
 export function getForkedUnit(unit: any, forkPage?: Fork) {
   if (!forkPage) return unit
-  try {
-    //@ts-ignore
-    return forkPage.find(unit)
-  } catch (err) {
-    return unit
-  }
+  unit = unit.graphite || unit
+  //@ts-ignore
+  return forkPage.nodeMap[unit.id] || unit
 }
 
-function getCurrent(ref: {type?: string; current: any}) {
+function getCurrent(
+  ref: {type?: string; current: any; id: string},
+  forkPage?: Fork,
+) {
+  let usedRef = ref
+  //@ts-ignore
+  if (forkPage && forkPage.reg[ref.id]) usedRef = forkPage.reg[ref.id]
   switch (ref.type) {
     case 'list':
-      return [...ref.current]
+      return [...usedRef.current]
     case 'shape':
-      return {...ref.current}
+      return {...usedRef.current}
     default:
-      return ref.current
+      return usedRef.current
   }
 }
 function findRefValue(
   ref: {current: any; id: string},
   targetLeaf: Leaf | null,
+  forkPage?: Fork,
 ) {
   let currentLeaf = targetLeaf
   while (currentLeaf && !currentLeaf.spawn.reg[ref.id]) {
     currentLeaf = currentLeaf.parentLeaf
   }
-  if (!currentLeaf) return ref.current
+  if (!currentLeaf) {
+    //@ts-ignore
+    if (forkPage && forkPage.reg[ref.id]) {
+      //@ts-ignore
+      return forkPage.reg[ref.id].current
+    }
+    return ref.current
+  }
   return currentLeaf.spawn.reg[ref.id].current
 }
 export function spawn(
@@ -423,13 +434,18 @@ export function spawn(
       }
       parent = parent.parent
     }
+    //@ts-ignore
+    if (!parent && forkPage && forkPage.reg[ref.id]) {
+      //@ts-ignore
+      closureRef = forkPage.reg[ref.id]
+    }
     page[ref.id] = closureRef
   }
 
   for (const ref of template.plain) {
     const next = {
       id: ref.id,
-      current: getCurrent(ref),
+      current: getCurrent(ref, forkPage),
     }
     page[ref.id] = next
   }
@@ -509,7 +525,7 @@ export function spawn(
         val.fn(
           page[val.of.id]
             ? page[val.of.id].current
-            : findRefValue(val.of, leaf.parentLeaf),
+            : findRefValue(val.of, leaf.parentLeaf, forkPage),
         )
       }
     } catch (err) {

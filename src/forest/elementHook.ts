@@ -729,15 +729,16 @@ function getDefaultEnv(): {
   if (typeof document !== 'undefined') return {document}
   throw Error('your environment has no document')
 }
-function collectScopeRefs(scope?: Fork) {
+function collectScopeRefs(scope?: any) {
   if (!scope) return
-  //@ts-ignore
-  const clones = scope.clones as any[]
-  const refs: Record<string, StateRef> = {}
-  for (const {reg} of clones) {
-    Object.assign(refs, reg)
+  if (!scope.nodeMap) {
+    const nodeMap: Record<string, any> = {}
+    for (const node of scope.clones) {
+      nodeMap[node.meta.forkOf.id] = node
+    }
+    scope.nodeMap = nodeMap
   }
-  return refs
+  return scope.reg
 }
 export function using(node: DOMElement, cb: () => any): void
 export function using(
