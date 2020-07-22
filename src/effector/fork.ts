@@ -480,7 +480,7 @@ function cloneGraph(unit: any) {
     }
     return result
   })
-
+  const page = {} as Record<string, StateRef>
   clones.forEach(node => {
     const {
       reg,
@@ -497,7 +497,7 @@ function cloneGraph(unit: any) {
         }
         refs.set(ref, newRef)
       }
-      reg[id] = newRef
+      page[id] = reg[id] = newRef
     }
     if (onCopy) {
       for (let j = 0; j < onCopy.length; j++) {
@@ -533,6 +533,7 @@ function cloneGraph(unit: any) {
   return {
     clones,
     find: findClone,
+    reg: page,
     getState: (store: any) => findClone(store).meta.wrapped.getState(),
     graphite: createNode({
       family: {
