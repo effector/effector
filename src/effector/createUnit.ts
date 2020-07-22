@@ -10,7 +10,7 @@ import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, currentPage} from './kernel'
+import {launch, currentPage, forkPage} from './kernel'
 
 import {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
@@ -190,16 +190,20 @@ export function createStore<State>(
   if (template) {
     template.plain.push(plainState, oldState)
   }
+  const plainStateId = plainState.id
   const store: any = {
     subscribers: new Map(),
     updates,
     defaultState,
     stateRef: plainState,
     getState() {
-      if (!currentPage) return readRef(plainState)
-      if (currentPage.reg[plainState.id])
-        return readRef(currentPage.reg[plainState.id])
-      return readRef(plainState)
+      let targetRef = plainState
+      if (currentPage && currentPage.reg[plainStateId]) {
+        targetRef = currentPage.reg[plainStateId]
+      } else if (forkPage && forkPage.reg[plainStateId]) {
+        targetRef = forkPage.reg[plainStateId]
+      }
+      return readRef(targetRef)
     },
     setState(state: any) {
       launch({

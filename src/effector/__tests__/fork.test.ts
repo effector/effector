@@ -696,5 +696,5 @@ test('getState support', async () => {
       values: new Map([[store, 2]]),
     }),
   })
-  expect(fn).toHaveBeenLastCalledWith(0)
+  expect(fn).toHaveBeenLastCalledWith(2)
 })
