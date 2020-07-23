@@ -67,7 +67,7 @@ const features = [
   },
   {
     title: 'Plain javascript',
-    imageUrl: 'img/laptop.svg',
+    imageUrl: 'img/js-logo.svg',
     description:
       'No decorators, no proxies, no classes required. Only you and your data.',
   },
