@@ -23,7 +23,7 @@ export function attach(config: any) {
   const runnerFn = (
     {params, req}: any,
     {finally: anyway, effect}: any,
-    {a: states, page}: any,
+    {a: states, page, forkPage}: any,
   ) =>
     launch({
       target: effect,
@@ -36,6 +36,7 @@ export function attach(config: any) {
             ok: true,
             anyway,
             page,
+            forkPage,
           }),
           rj: onSettled({
             params,
@@ -43,6 +44,7 @@ export function attach(config: any) {
             ok: false,
             anyway,
             page,
+            forkPage,
           }),
         },
       },
