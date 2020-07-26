@@ -13,9 +13,9 @@ export const createLinkNode = (
     scope,
     meta,
   }: {
-    node?: Array<Cmd | false | void | null>,
-    scope?: {[name: string]: any},
-    meta?: {[name: string]: any},
+    node?: Array<Cmd | false | void | null>
+    scope?: {[name: string]: any}
+    meta?: {[name: string]: any}
   },
 ) =>
   addToRegion(
@@ -32,9 +32,9 @@ export const createLinkNode = (
     }),
   )
 export const forward = (opts: {
-  from: Graphite | Graphite[],
-  to: Graphite | Graphite[],
-  meta?: Object,
+  from: Graphite | Graphite[]
+  to: Graphite | Graphite[]
+  meta?: Record<string, any>
 }): Subscription => {
   let config
   onConfigNesting(opts, (injectedData, userConfig) => {

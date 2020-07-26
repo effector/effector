@@ -7,7 +7,7 @@ export const joinName = (unit: any, tag: string) => '' + unit.shortName + tag
 export const mapName = (unit: any, name?: string) =>
   name == null ? joinName(unit, ' → *') : name
 
-export function unitObjectName(objOrArr, method: string = 'combine') {
+export function unitObjectName(objOrArr: any, method: string = 'combine') {
   let name = method + '('
   let comma = ''
   let i = 0
@@ -49,7 +49,7 @@ export type CompositeName = {
 }
 
 export function createName(name: string, parent?: Domain): CompositeName {
-  let path
+  let path: string[]
   let fullName
   let composite
   const shortName = name

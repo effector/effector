@@ -75,16 +75,18 @@ export function combine(...args: any[]): Store<any> {
   )
 }
 
-const spreadArgs = fn => list => fn(...list)
+const spreadArgs = (fn: Function) => (list: any[]) => fn(...list)
 
 const storeCombination = (
-  isArray,
+  isArray: boolean,
   obj: any,
   config?: string,
-  fn?: Function,
+  fn?: (upd: any) => any,
 ) => {
-  const clone = isArray ? list => list.slice() : obj => Object.assign({}, obj)
-  const defaultState = isArray ? [] : {}
+  const clone = isArray
+    ? (list: any) => list.slice()
+    : (obj: any) => Object.assign({}, obj)
+  const defaultState: any = isArray ? [] : {}
   const template = readTemplate()
   const stateNew = clone(defaultState)
   const rawShape = createStateRef(stateNew)
@@ -139,7 +141,7 @@ const storeCombination = (
       store: getStoreState(store),
     }),
   ]
-  const before = (rawShape.before = [])
+  const before: any[] = (rawShape.before = [])
   forIn(obj, (child, key) => {
     if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child

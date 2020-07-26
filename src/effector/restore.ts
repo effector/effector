@@ -22,12 +22,12 @@ export function restore(obj: any, defaultState: any, config?: any): any {
         parent: domain,
         name: obj.shortName,
         ɔ: config,
-      }).on(obj.done, (_, {result}) => result)
+      }).on(obj.done, (_: any, {result}: any) => result)
     }
     if (domain) domain.hooks.store(result)
     return result
   }
-  const result = {}
+  const result: Record<string, any> = {}
   forIn(obj, (value, key) => {
     result[key] = is.store(value) ? value : createStore(value, {name: key})
   })

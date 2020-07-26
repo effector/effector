@@ -14,7 +14,7 @@ import {addToRegion} from './region'
 import {forIn} from './forIn'
 import {getParent} from './getter'
 
-const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
+const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
@@ -28,7 +28,7 @@ const createHook = (trigger: Event<any>, acc: Set<any>, node) => {
   }
 }
 
-export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
+export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const domains: Set<Domain> = new Set()
   const stores: Set<Store<any>> = new Set()
   const effects: Set<Effect<any, any, any>> = new Set()
@@ -38,7 +38,7 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
     family: {type: 'domain'},
   })
 
-  const result = {
+  const result: any = {
     history: {
       domains,
       stores,
@@ -67,21 +67,21 @@ export function createDomain(nameOrConfig: any, maybeConfig: any): Domain {
   result.onCreateStore = createHook(store, stores, result)
   result.onCreateDomain = createHook(domain, domains, result)
 
-  result.createEvent = result.event = (nameOrConfig, config?: Config) =>
+  result.createEvent = result.event = (nameOrConfig: any, config?: Config) =>
     event(
       createEvent(nameOrConfig, {
         parent: result,
         config,
       }),
     )
-  result.createEffect = result.effect = (nameOrConfig, config?: Config) =>
+  result.createEffect = result.effect = (nameOrConfig: any, config?: Config) =>
     effect(
       createEffect(nameOrConfig, {
         parent: result,
         config,
       }),
     )
-  result.createDomain = result.domain = (nameOrConfig, config?: Config) =>
+  result.createDomain = result.domain = (nameOrConfig: any, config?: Config) =>
     createDomain({
       name: nameOrConfig,
       parent: result,

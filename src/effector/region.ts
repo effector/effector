@@ -1,12 +1,18 @@
 import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
 
-export const addToRegion = unit => {
+type RegionStack = {
+  parent: RegionStack | null
+  value: any
+  template: any
+}
+
+export const addToRegion = (unit: any) => {
   if (regionStack) own(getValue(regionStack), [unit])
   return unit
 }
 
-let regionStack = null
+let regionStack: RegionStack | null = null
 
 export const readTemplate = () => regionStack && regionStack.template
 

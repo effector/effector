@@ -10,8 +10,8 @@ import {createNode} from './createNode'
 import {addToRegion} from './region'
 import {throwError} from './throw'
 
-export function guard(source, config) {
-  const meta = {op: 'guard'}
+export function guard(source: any, config?: any) {
+  const meta: Record<string, any> = {op: 'guard'}
   let rawName = 'guard'
   onConfigNesting(source, (injectedData, userConfig) => {
     if (injectedData.name) {
@@ -50,7 +50,7 @@ export function guard(source, config) {
           },
         }),
       ),
-      fn: (guard, data) => ({guard, data}),
+      fn: (guard: any, data: any) => ({guard, data}),
       greedy,
       name,
     })

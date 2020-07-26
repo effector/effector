@@ -2,13 +2,13 @@ import {Graph, Graphite} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 
-const removeItem = (list, item) => {
+const removeItem = (list: any[], item: any) => {
   const pos = list.indexOf(item)
   if (pos !== -1) {
     list.splice(pos, 1)
   }
 }
-const removeFromNode = (currentNode, targetNode) => {
+const removeFromNode = (currentNode: Graph, targetNode: Graph) => {
   removeItem(currentNode.next, targetNode)
   removeItem(getOwners(currentNode), targetNode)
   removeItem(getLinks(currentNode), targetNode)
@@ -16,7 +16,7 @@ const removeFromNode = (currentNode, targetNode) => {
 const clearNodeNormalized = (
   targetNode: Graph,
   deep: boolean,
-  isDomainUnit,
+  isDomainUnit: boolean,
 ) => {
   targetNode.next.length = 0
   targetNode.seq.length = 0
@@ -52,11 +52,13 @@ export const clearNode = (
   } = {},
 ) => {
   let isDomainUnit = false
+  //@ts-ignore
   if (graphite.ownerSet) graphite.ownerSet.delete(graphite)
   if (is.store(graphite)) {
     clearMap(getSubscribers(graphite))
   } else if (is.domain(graphite)) {
     isDomainUnit = true
+    //@ts-ignore
     const history = graphite.history
     clearMap(history.events)
     clearMap(history.effects)

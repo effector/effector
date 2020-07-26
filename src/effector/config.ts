@@ -1,7 +1,7 @@
 import {getConfig, getNestedConfig} from './getter'
 
 export const onConfigNesting = (
-  rawConfig,
+  rawConfig: any,
   fn: (babelData: any, userConfig: any) => void,
 ) => {
   if (getNestedConfig(rawConfig)) {

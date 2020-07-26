@@ -10,6 +10,7 @@ export type kind =
 export type StateRef = {
   id: ID
   current: any
+  type?: 'list' | 'shape'
   before?: any[]
   after?: any[]
 }

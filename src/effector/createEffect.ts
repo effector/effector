@@ -12,14 +12,14 @@ export function createEffect<Payload, Done>(
   nameOrConfig: any,
   maybeConfig: any,
 ) {
-  const instance = createEvent(nameOrConfig, maybeConfig)
+  const instance: any = createEvent(nameOrConfig, maybeConfig)
   let handler =
     instance.defaultConfig.handler ||
     (() => throwError(`no handler used in ${instance.getType()}`))
 
   getGraph(instance).meta.onCopy = ['runner']
   getGraph(instance).meta.unit = instance.kind = 'effect'
-  instance.use = fn => {
+  instance.use = (fn: Function) => {
     if (!isFunction(fn)) throwError('.use argument should be a function')
     handler = fn
     return instance
@@ -27,23 +27,23 @@ export function createEffect<Payload, Done>(
   const anyway = (instance.finally = createNamedEvent('finally'))
   const done = (instance.done = (anyway as any).filterMap({
     named: 'done',
-    fn({status, params, result}) {
+    fn({status, params, result}: any) {
       if (status === 'done') return {params, result}
     },
   }))
   const fail = (instance.fail = (anyway as any).filterMap({
     named: 'fail',
-    fn({status, params, error}) {
+    fn({status, params, error}: any) {
       if (status === 'fail') return {params, error}
     },
   }))
   const doneData = (instance.doneData = done.map({
     named: 'doneData',
-    fn: ({result}) => result,
+    fn: ({result}: any) => result,
   }))
   const failData = (instance.failData = fail.map({
     named: 'failData',
-    fn: ({error}) => error,
+    fn: ({error}: any) => error,
   }))
 
   const effectRunner = createNode({
@@ -99,8 +99,8 @@ export function createEffect<Payload, Done>(
         return {
           params,
           req: {
-            rs(data) {},
-            rj(data) {},
+            rs(data: any) {},
+            rj(data: any) {},
           },
         }
       },
@@ -128,6 +128,7 @@ export function createEffect<Payload, Done>(
     .on(anyway, x => x - 1))
 
   const pending = (instance.pending = inFlight.map({
+    //@ts-ignore
     fn: amount => amount > 0,
     named: 'pending',
   }))
@@ -145,7 +146,24 @@ export function createEffect<Payload, Done>(
   return instance
 }
 
-export const onSettled = ({params, req, ok, anyway, page, forkPage}) => data =>
+export const onSettled = ({
+  params,
+  req,
+  ok,
+  anyway,
+  page,
+  forkPage,
+}: {
+  params: any
+  req: {
+    rs(_: any): any
+    rj(_: any): any
+  }
+  ok: boolean
+  anyway: any
+  page: any
+  forkPage: any
+}) => (data: any) =>
   launch({
     target: [anyway, sidechain],
     params: [

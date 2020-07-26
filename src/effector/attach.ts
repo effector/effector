@@ -9,7 +9,7 @@ import {step} from './typedef'
 import {launch} from './kernel'
 import {addToReg} from './createNode'
 
-export function attach(config) {
+export function attach(config: any) {
   let injected
   onConfigNesting(config, (injectedData, userConfig) => {
     injected = injectedData
@@ -21,9 +21,9 @@ export function attach(config) {
 
   let runnerSteps
   const runnerFn = (
-    {params, req},
-    {finally: anyway, effect},
-    {a: states, page},
+    {params, req}: any,
+    {finally: anyway, effect}: any,
+    {a: states, page}: any,
   ) =>
     launch({
       target: effect,
