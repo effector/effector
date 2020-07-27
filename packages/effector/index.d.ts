@@ -155,11 +155,11 @@ export interface Store<State> extends Unit<State> {
   map<T>(fn: (state: State, lastState?: T) => T): Store<T>
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
   on<E>(
-    triggers: Unit<E>[],
+    trigger: Unit<E>,
     handler: (state: State, payload: E) => State | void,
   ): this
   on<E>(
-    trigger: Unit<E>,
+    triggers: Unit<E>[],
     handler: (state: State, payload: E) => State | void,
   ): this
   off(trigger: Unit<any>): this

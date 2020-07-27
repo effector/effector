@@ -343,11 +343,11 @@ test('#on triggers[] failing', () => {
     "
     --typescript--
     No overload matches this call.
-      Overload 1 of 2, '(triggers: Unit<string>[], handler: (state: number, payload: string) => number | void): Store<number>', gave the following error.
-        Type 'Event<number>' is not assignable to type 'Unit<string>'.
-      Overload 2 of 2, '(trigger: Unit<unknown>, handler: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
+      Overload 1 of 2, '(trigger: Unit<unknown>, handler: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
         Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
           Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      Overload 2 of 2, '(triggers: Unit<string>[], handler: (state: number, payload: string) => number | void): Store<number>', gave the following error.
+        Type 'Event<number>' is not assignable to type 'Unit<string>'.
 
     --flow--
     Cannot call 'store.on' with array literal bound to 'triggers'
@@ -375,13 +375,7 @@ test('.on(sample()) inline', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    No overload matches this call.
-      Overload 1 of 2, '(triggers: Unit<unknown>[], handler: (state: string, payload: unknown) => string | void): Store<string>', gave the following error.
-        Argument of type 'Event<string>' is not assignable to parameter of type 'Unit<unknown>[]'.
-          Type 'Event<string>' is missing the following properties from type 'Unit<unknown>[]': pop, push, concat, join, and 26 more.
-      Overload 2 of 2, '(trigger: Unit<string>, handler: (state: string, payload: string) => string | void): Store<string>', gave the following error.
-        Type 'unknown' is not assignable to type 'string | void'.
-          Type 'unknown' is not assignable to type 'void'.
+    no errors
 
     --flow--
     no errors
