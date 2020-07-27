@@ -12,6 +12,7 @@ import {
   Event,
   /*::type*/ CompositeName,
   /*::type*/ kind,
+  sample,
 } from 'effector'
 
 const typecheck = '{global}'
@@ -359,6 +360,31 @@ test('#on triggers[] failing', () => {
                                 [2] ^^^^^^
           export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
                             [3] ^
+    "
+  `)
+})
+
+test('.on(sample()) inline', () => {
+  const store = createStore('111')
+  const event = createEvent<any>()
+
+  const anotherStore = createStore('123').on(
+    sample({source: store, clock: event}),
+    (_, str) => str,
+  )
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    No overload matches this call.
+      Overload 1 of 2, '(triggers: Unit<unknown>[], handler: (state: string, payload: unknown) => string | void): Store<string>', gave the following error.
+        Argument of type 'Event<string>' is not assignable to parameter of type 'Unit<unknown>[]'.
+          Type 'Event<string>' is missing the following properties from type 'Unit<unknown>[]': pop, push, concat, join, and 26 more.
+      Overload 2 of 2, '(trigger: Unit<string>, handler: (state: string, payload: string) => string | void): Store<string>', gave the following error.
+        Type 'unknown' is not assignable to type 'string | void'.
+          Type 'unknown' is not assignable to type 'void'.
+
+    --flow--
+    no errors
     "
   `)
 })
