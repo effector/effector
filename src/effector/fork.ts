@@ -531,6 +531,7 @@ function cloneGraph(unit: any) {
   })
 
   return {
+    cloneOf: unit,
     clones,
     find: findClone,
     reg: page,
