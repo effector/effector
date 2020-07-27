@@ -7,7 +7,7 @@ hide_title: true
 # serialize
 
 ```ts
-serialize(scope: Scope, { ignore?: Array<Store<any>> }): {[sid: string]: any}
+serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
 ```
 
 A companion method for [_hydrate_](hydrate). Allows to get a serialized value for all the store states within a forked domain. The main purpose is an application state serialization on the server side during SSR.
@@ -16,6 +16,7 @@ A companion method for [_hydrate_](hydrate). Allows to get a serialized value fo
 
 1. `scope` [_Scope_](fork): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](Store.md) to be omited during serialization
+3. `onlyChanges` Optional boolean flag to ignore stores which didn't changed in fork (prevent default values from being carried over network)
 
 ### Returns
 
