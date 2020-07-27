@@ -21,6 +21,29 @@ export type GetCombinedValue<T> = {
   [K in keyof T]: T[K] extends Store<infer U> ? U : never
 }
 
+export type StoreValue<T> = T extends Store<infer S> ? S : never
+export type EffectParams<FX extends Effect<any, any, any>> = FX extends Effect<
+  infer P,
+  any,
+  any
+>
+  ? P
+  : never
+export type EffectResult<FX extends Effect<any, any, any>> = FX extends Effect<
+  any,
+  infer D,
+  any
+>
+  ? D
+  : never
+export type EffectError<FX extends Effect<any, any, any>> = FX extends Effect<
+  any,
+  any,
+  infer E
+>
+  ? E
+  : never
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -735,27 +758,6 @@ export function guard<A>(config: {
 
 type StoreShape = Store<any> | Combinable
 type GetShapeValue<T> = T extends Store<infer S> ? S : GetCombinedValue<T>
-type FXParams<FX extends Effect<any, any, any>> = FX extends Effect<
-  infer P,
-  any,
-  any
->
-  ? P
-  : never
-type FXResult<FX extends Effect<any, any, any>> = FX extends Effect<
-  any,
-  infer D,
-  any
->
-  ? D
-  : never
-type FXError<FX extends Effect<any, any, any>> = FX extends Effect<
-  any,
-  any,
-  infer E
->
-  ? E
-  : never
 
 export function attach<
   Params,
@@ -764,12 +766,12 @@ export function attach<
 >(config: {
   source: States
   effect: FX
-  mapParams: (params: Params, states: GetShapeValue<States>) => FXParams<FX>
-}): Effect<Params, FXResult<FX>, FXError<FX>>
+  mapParams: (params: Params, states: GetShapeValue<States>) => EffectParams<FX>
+}): Effect<Params, EffectResult<FX>, EffectError<FX>>
 export function attach<Params, FX extends Effect<any, any, any>>(config: {
   effect: FX
-  mapParams: (params: Params) => FXParams<FX>
-}): Effect<Params, FXResult<FX>, FXError<FX>>
+  mapParams: (params: Params) => EffectParams<FX>
+}): Effect<Params, EffectResult<FX>, EffectError<FX>>
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(
