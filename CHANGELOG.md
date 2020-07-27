@@ -2,6 +2,67 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.1.0
+
+- Add `onlyChanges` option to `serialize` to ignore stores which didn't changed in fork (prevent default values from being carried over network)
+
+- Add type helpers for stores and effects: `StoreValue`, `EffectParams`, `EffectResult` and `EffectError`
+
+```typescript
+import {
+  createStore,
+  createEffect,
+  StoreValue,
+  EffectParams,
+  EffectResult,
+} from 'effector'
+
+const username = createStore('guest')
+
+const getUserFX = createEffect<number, {name: string}>()
+
+// string
+type Username = StoreValue<typeof username>
+
+// number
+type GetUserParams = EffectParams<typeof getUserFX>
+
+// {name: string}
+type User = EffectResult<typeof getUserFX>
+```
+
+- Allow `domain.createEffect` to infer type from given `handler` (that feature was already implemented for `createEffect` method), this code now typechecked as expected:
+
+```typescript
+import {createDomain} from 'effector'
+
+const app = createDomain()
+
+const voidFx = app.createEffect({
+  async handler() {},
+})
+
+await voidFx()
+```
+
+- Allow to call `allSettled` with void units without `params` field, this code now typechecked as expected:
+
+```typescript
+import {createDomain, fork, allSettled} from 'effector'
+
+const app = createDomain()
+
+const voidFx = app.createEffect({
+  async handler() {},
+})
+
+voidFx()
+
+const scope = fork(app)
+
+await allSettled(voidFx, {scope})
+```
+
 ## effector 21.0.3, effector-react 21.0.4, effector-vue 21.0.3
 
 - Improve native es modules support, add [conditional exports](https://nodejs.org/dist/latest-v14.x/docs/api/esm.html#esm_conditional_exports) declarations
