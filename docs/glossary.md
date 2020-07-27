@@ -9,7 +9,7 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 _Event_ is a function you can subscribe to. It can be an intention to change the store, some occurence in application, command to be executed, aggregated analytics trigger and so on.
 
-[Event]('./api/effector/Event.md) in api documentation
+[Event](./api/effector/Event.md) in api documentation
 
 ```typescript
 function createEvent<E>(eventName?: string): Event<E>
@@ -47,7 +47,7 @@ The only requirement for the function:
 
 - **Must** have zero or one argument
 
-[Effect]('./api/effector/Effect.md) in api documentation
+[Effect](./api/effector/Effect.md) in api documentation
 
 ```typescript
 function createEffect<Params, Done, Fail>(config?: {
@@ -83,7 +83,7 @@ type Effect<Params, Done, Fail = Error> = {
 _Store_ is an object that holds the state tree.
 There can be multiple stores.
 
-[Store]('./api/effector/Store.md) in api documentation
+[Store](./api/effector/Store.md) in api documentation
 
 ```typescript
 function createStore<State>(defaultState: State): Store<State>
@@ -123,7 +123,7 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 
 It is useful for logging or other side effects.
 
-[Domain]('./api/effector/Domain.md) in api documentation
+[Domain](./api/effector/Domain.md) in api documentation
 
 ```typescript
 function createDomain(domainName?: string): Domain
