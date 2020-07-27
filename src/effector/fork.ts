@@ -151,10 +151,21 @@ function createRefGraph(refsMap: Record<string, StateRef>) {
 serialize state on server
 */
 export function serialize(
-  {clones}: any,
-  {ignore = []}: {ignore?: Array<Store<any>>} = {},
+  {clones, getState, cloneOf}: any,
+  {
+    ignore = [],
+    onlyChanges,
+  }: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
   const result = {} as Record<string, any>
+  if (onlyChanges) {
+    ignore = [...ignore]
+    for (const store of cloneOf.history.stores) {
+      if (getState(store) === store.defaultState) {
+        ignore.push(store)
+      }
+    }
+  }
   for (const {meta, scope, reg} of clones) {
     if (meta.unit !== 'store') continue
     const {sid} = meta

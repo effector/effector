@@ -919,7 +919,7 @@ serialize state on server
 */
 export function serialize(
   scope: Fork,
-  options?: {ignore?: Array<Store<any>>},
+  options?: {ignore?: Array<Store<any>>; onlyChanges?: boolean},
 ): {[sid: string]: any}
 
 /** bind event to scope from .watch call */
