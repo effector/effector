@@ -22,17 +22,17 @@ export async function exec({
   onCompileComplete,
   onRuntimeComplete,
 }: {
-  realmGlobal: any,
-  code: string,
-  globalBlocks?: Object[],
-  types?: 'flow' | 'typescript',
-  filename?: string,
-  pluginRegistry?: {[name: string]: any},
-  compile?: boolean,
-  onCompileError?: (error: any) => any,
-  onRuntimeError?: (error: any) => any,
-  onCompileComplete?: (code: string, babelConfig: any) => any,
-  onRuntimeComplete?: () => any,
+  realmGlobal: any
+  code: string
+  globalBlocks?: Object[]
+  types?: 'flow' | 'typescript'
+  filename?: string
+  pluginRegistry?: {[name: string]: any}
+  compile?: boolean
+  onCompileError?: (error: any) => any
+  onRuntimeError?: (error: any) => any
+  onCompileComplete?: (code: string, babelConfig: any) => any
+  onRuntimeComplete?: () => any
 }) {
   const globalFull = Object.assign({}, ...[...globalBlocks].reverse())
   Object.assign(realmGlobal, globalFull)
@@ -81,8 +81,6 @@ function generateBabelConfig({types, filename}) {
   const plugins: BabelPlugin[] = [
     'transform-strict-mode',
     'syntax-bigint',
-    'syntax-dynamic-import',
-    // '@effector/repl-highlight',
     'proposal-numeric-separator',
     'proposal-nullish-coalescing-operator',
     'proposal-optional-chaining',
