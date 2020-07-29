@@ -86,7 +86,7 @@ function toDot(modules, output) {
     path = path.replace(cwd, '')
     path = path.replace('src/effector/', '')
     path = path.replace('src/', '')
-    path = path.replace('.js', '')
+    path = path.replace('.ts', '')
     path = path.replace(/(.+)\/index$/, '$1')
     return path
   }
@@ -273,7 +273,6 @@ type Opts = {
   exclude?: string,
   prune?: boolean,
   output: string,
-  ...
 }
 
 export default function plugin(options: Opts = {}): any {
