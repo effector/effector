@@ -7,7 +7,7 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 - Add array support for sample `clock` field which acts like a `merge` call
 
 ```typescript
-import {createStore, createEvent, createEffect, merge} from 'effector'
+import {createStore, createEvent, createEffect, sample, merge} from 'effector'
 
 const showNotification = createEvent<string>()
 const trigger = createEvent()
