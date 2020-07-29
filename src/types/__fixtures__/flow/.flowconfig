@@ -8,8 +8,6 @@
 ../../../../packages/effector-react/package.json
 ../../../../packages/effector-vue/index.js.flow
 ../../../../packages/effector-vue/package.json
-../../../../packages/@effector/forms/index.js.flow
-../../../../packages/@effector/forms/package.json
 ../../setupLocation.js
 
 [libs]
@@ -21,6 +19,5 @@
 module.name_mapper='^effector$' -> '<PROJECT_ROOT>/../../../../packages/effector/index.js.flow'
 module.name_mapper='^effector-react$' -> '<PROJECT_ROOT>/../../../../packages/effector-react'
 module.name_mapper='^effector-vue$' -> '<PROJECT_ROOT>/../../../../packages/effector-vue'
-module.name_mapper='^\@effector/\(.+\)$' -> '<PROJECT_ROOT>/../../../../packages/\@effector/\1'
 
 [strict]
