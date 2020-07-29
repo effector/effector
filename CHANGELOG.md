@@ -2,6 +2,36 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.2.0
+
+- Add array support for sample `clock` field which acts like a `merge` call
+
+```typescript
+import {createStore, createEvent, createEffect, merge} from 'effector'
+
+const showNotification = createEvent<string>()
+const trigger = createEvent()
+const fx = createEffect()
+const store = createStore('')
+
+// clock with array of units in clock
+sample({
+  source: store,
+  clock: [trigger, fx.doneData],
+  target: showNotification,
+})
+
+// clock with merged unit in clock
+sample({
+  source: store,
+  clock: merge([trigger, fx.doneData]),
+  target: showNotification,
+})
+```
+
+- Improve ide type hints support for `sample` in case of config form
+- Add `package.json` to package `exports` field (read more in [nodejs documentation](https://nodejs.org/api/esm.html#esm_package_entry_points))
+
 ## effector 21.1.0
 
 - Add `onlyChanges` option to `serialize` to ignore stores which didn't changed in fork (prevent default values from being carried over network)
