@@ -72,11 +72,11 @@ const fetchEffector = createEffect('fetch effector', {
 
 fetchEffector.fail.watch(() => selectVersion('master'))
 
-const fetchBabelPlugin = createEffect<string, {[key: string]: any}, any>('fetch babel plugin', {
-  async handler(ver): any {
+const fetchBabelPlugin = createEffect<string, {[key: string]: any}, any>({
+  async handler(ver) {
     const url =
       ver === 'master'
-        ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/@effector/babel-plugin/index.js'
+        ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/babel-plugin.js'
         : `https://unpkg.com/@effector/babel-plugin@latest/index.js`
     const sourceMap = `${url}.map`
     const req = await fetch(url)
@@ -86,8 +86,8 @@ const fetchBabelPlugin = createEffect<string, {[key: string]: any}, any>('fetch 
   },
 })
 
-const fetchEffectorReact = createEffect<any, {[key: string]: any}, any>('fetch effector-react', {
-  async handler(effector): any {
+const fetchEffectorReact = createEffect<any, {[key: string]: any}, any>({
+  async handler(effector) {
     const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-react/effector-react.cjs.js'
     const sourceMap = `${url}.map`
     const req = await fetch(url)
