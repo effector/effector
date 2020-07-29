@@ -42,9 +42,6 @@ const version = {
   forest: '0.18.0',
   'effector-dom': '0.0.15',
 
-  'bs-effector': '20.0.0',
-  'bs-effector-react': '20.0.0',
-
   '@effector/babel-plugin': '0.5.0',
   '@effector/babel-plugin-react': '0.2.1',
   '@effector/forms': '0.0.1',
@@ -223,28 +220,6 @@ export default {
     dependencies: {},
     peerDependencies: dependsOnEffector,
     keywords: [...keywords, 'dom', 'view'],
-    ...common,
-  },
-  'bs-effector': {
-    name: 'bs-effector',
-    version: version['bs-effector'],
-    description: 'Reason bindings for effector',
-    dependencies: {},
-    peerDependencies: dependsOnEffector,
-    files: ['src/Effector.re', 'bsconfig.json', 'LICENSE', 'README.md'],
-    keywords: ['bucklescript', 'reason', 'bsb', ...keywords],
-    ...common,
-  },
-  'bs-effector-react': {
-    name: 'bs-effector-react',
-    version: version['bs-effector-react'],
-    description: 'Reason bindings for effector-react',
-    peerDependencies: {
-      'reason-react': '*',
-      effector: '*',
-    },
-    files: ['src/EffectorReact.re', 'bsconfig.json', 'LICENSE', 'README.md'],
-    keywords: ['bucklescript', 'reason', 'bsb', ...keywords],
     ...common,
   },
   '@effector/babel-plugin': {

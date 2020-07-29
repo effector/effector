@@ -63,7 +63,7 @@ const getPlugins = (name: string, {isEsm = false} = {}) => ({
         babelHelpers: 'bundled',
         extensions,
         skipPreflightCheck: true,
-        exclude: /(\.re|node_modules.*)/,
+        exclude: /node_modules.*/,
         babelrc: false,
         ...require('../babel.config').generateConfig({
           isBuild: true,
@@ -76,7 +76,7 @@ const getPlugins = (name: string, {isEsm = false} = {}) => ({
         babelHelpers: 'bundled',
         skipPreflightCheck: true,
         extensions,
-        exclude: /(\.re|node_modules.*)/,
+        exclude: /node_modules.*/,
       }),
   commonjs: commonjs({extensions}),
   resolve: resolve({extensions}),
@@ -391,7 +391,7 @@ async function createCompat(name, extension = 'js') {
       babelHelpers: 'bundled',
       extensions,
       skipPreflightCheck: true,
-      exclude: /(\.re|node_modules.*)/,
+      exclude: /node_modules.*/,
       babelrc: false,
       presets: [
         extension === 'js'

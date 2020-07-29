@@ -1,6 +1,5 @@
 //@flow
 
-import bs from './bs'
 import babel from './babelPlugins'
 import forms from './forms'
 import effector from './effector'
@@ -12,7 +11,6 @@ export default {
     ...effector,
     ...babel,
     ...forms,
-    ...bs,
   },
   hooks,
 }

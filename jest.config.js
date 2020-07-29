@@ -30,10 +30,7 @@ const createDefaultConfig = () => ({
   // moduleNameMapper: {},
   modulePathIgnorePatterns: watchPathIgnorePatterns,
   testPathIgnorePatterns: watchPathIgnorePatterns,
-  transformIgnorePatterns: [
-    ...watchPathIgnorePatterns,
-    'node_modules/(?!(bs-platform)/)',
-  ],
+  transformIgnorePatterns: watchPathIgnorePatterns,
   watchPathIgnorePatterns,
   // roots: ['<rootDir>/src/'],
 })
@@ -84,9 +81,6 @@ module.exports = {
               testEnvironment: 'jsdom',
               testMatch: ['<rootDir>/src/vue/__tests__/**/*.test.ts'],
               transform,
-            },
-            reason: {
-              testMatch: [`<rootDir>/src/reason/**/*_test.bs.js`],
             },
             forest: {
               automock: false,
