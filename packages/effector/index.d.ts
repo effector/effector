@@ -538,26 +538,7 @@ export function restore<State extends {[key: string]: Store<any> | any}>(
 
 export function createDomain(domainName?: string): Domain
 
-/* basic overloads */
-export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
-export function sample<A>(
-  source: Store<A>,
-  clock: Event<any> | Effect<any, any, any>,
-): Event<A>
-export function sample<A>(
-  source: Event<A> | Effect<A, any, any>,
-  clock: Unit<any>,
-): Event<A>
-export function sample<A, B, C>(
-  source: Store<A>,
-  clock: Store<B>,
-  fn: (source: A, clock: B) => C,
-): Store<C>
-export function sample<A, B, C>(
-  source: Unit<A>,
-  clock: Unit<B>,
-  fn: (source: A, clock: B) => C,
-): Event<C>
+/* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
   clock: Unit<B>
@@ -619,6 +600,26 @@ export function sample<A>(config: {
   name?: string
   greedy?: boolean
 }): Event<A>
+/* basic overloads without config */
+export function sample<A>(source: Store<A>, clock?: Store<any>): Store<A>
+export function sample<A>(
+  source: Store<A>,
+  clock: Event<any> | Effect<any, any, any>,
+): Event<A>
+export function sample<A>(
+  source: Event<A> | Effect<A, any, any>,
+  clock: Unit<any>,
+): Event<A>
+export function sample<A, B, C>(
+  source: Store<A>,
+  clock: Store<B>,
+  fn: (source: A, clock: B) => C,
+): Store<C>
+export function sample<A, B, C>(
+  source: Unit<A>,
+  clock: Unit<B>,
+  fn: (source: A, clock: B) => C,
+): Event<C>
 /* overloads with implicit `combine` */
 export function sample<A extends Combinable>(
   source: A,
