@@ -175,29 +175,6 @@ export async function rollupEffectorDom({name}) {
   ])
 }
 
-export async function rollupEffectorForms() {
-  const name = '@effector/forms'
-
-  await Promise.all([
-    createEsCjs(name, {
-      file: {
-        cjs: dir(`npm/${name}/forms.cjs.js`),
-        es: dir(`npm/${name}/forms.es.js`),
-      },
-    }),
-    createUmd(name, {
-      external: externals,
-      file: dir(`npm/${name}/forms.umd.js`),
-      umdName: 'effectorForms',
-      globals: {
-        effector: 'effector',
-        react: 'React',
-      },
-    }),
-    createCompat(name),
-  ])
-}
-
 export async function rollupEffectorReact() {
   const name = 'effector-react'
 
