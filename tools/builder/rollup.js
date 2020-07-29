@@ -115,65 +115,6 @@ const getPlugins = (name: string, {isEsm = false} = {}) => ({
   }),
 })
 
-export async function rollupBabel() {
-  const name = '@effector/babel-plugin'
-  const plugins = getPlugins(name)
-  const terserConfig = minifyConfig({
-    beautify: true,
-  })
-  const build = await rollup({
-    input: dir('src/babel/babel-plugin'),
-    plugins: [
-      plugins.babel,
-      terser({
-        ...terserConfig,
-        compress: false,
-        mangle: false,
-        keep_classnames: true,
-        keep_fnames: true,
-        toplevel: false,
-      }),
-    ],
-    external: ['./plugin/defaultMetaVisitor.js'],
-  })
-  await build.write({
-    file: dir(`npm/${name}/index.js`),
-    format: 'cjs',
-    freeze: false,
-    name,
-    sourcemap: true,
-  })
-}
-
-export async function rollupBabelReact() {
-  const name = '@effector/babel-plugin-react'
-  const plugins = getPlugins(name)
-  const terserConfig = minifyConfig({
-    beautify: true,
-  })
-  const build = await rollup({
-    input: dir('src/babel/babel-plugin-react'),
-    plugins: [
-      plugins.babel,
-      terser({
-        ...terserConfig,
-        compress: false,
-        mangle: false,
-        keep_classnames: true,
-        keep_fnames: true,
-        toplevel: false,
-      }),
-    ],
-  })
-  await build.write({
-    file: dir(`npm/${name}/index.js`),
-    format: 'cjs',
-    freeze: false,
-    name,
-    sourcemap: true,
-  })
-}
-
 export async function rollupEffector() {
   const name = 'effector'
   await Promise.all([
