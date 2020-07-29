@@ -106,6 +106,7 @@ export default {
       './babel-plugin-react': './babel-plugin-react.js',
       './plugin/defaultMetaVisitor': './plugin/defaultMetaVisitor.js',
       './plugin/noopMetaVisitor': './plugin/noopMetaVisitor.js',
+      './package.json': './package.json',
     },
     files: [
       ...getFiles('effector'),

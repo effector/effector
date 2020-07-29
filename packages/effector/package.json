@@ -23,7 +23,8 @@
     "./babel-plugin": "./babel-plugin.js",
     "./babel-plugin-react": "./babel-plugin-react.js",
     "./plugin/defaultMetaVisitor": "./plugin/defaultMetaVisitor.js",
-    "./plugin/noopMetaVisitor": "./plugin/noopMetaVisitor.js"
+    "./plugin/noopMetaVisitor": "./plugin/noopMetaVisitor.js",
+    "./package.json": "./package.json"
   },
   "files": [
     "README.md",
