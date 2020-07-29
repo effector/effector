@@ -577,7 +577,7 @@ export function sample<A, B, C>(config: {
 }): Store<C>
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B>
+  clock: Unit<B> | ReadonlyArray<Unit<B>>
   fn(source: A, clock: B): C
   name?: string
   greedy?: boolean
@@ -590,13 +590,13 @@ export function sample<A>(config: {
 }): Store<A>
 export function sample<A>(config: {
   source: Store<A>
-  clock?: Event<any> | Effect<any, any, any>
+  clock?: Event<any> | Effect<any, any, any> | ReadonlyArray<Unit<any>>
   name?: string
   greedy?: boolean
 }): Event<A>
 export function sample<A>(config: {
   source: Event<A> | Effect<A, any, any>
-  clock?: Unit<any>
+  clock?: Unit<any> | ReadonlyArray<Unit<any>>
   name?: string
   greedy?: boolean
 }): Event<A>
@@ -648,7 +648,7 @@ export function sample<A extends Combinable>(config: {
 }): Store<GetCombinedValue<A>>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock: Event<any> | Effect<any, any, any>
+  clock: Event<any> | Effect<any, any, any> | ReadonlyArray<Unit<any>>
   name?: string
   greedy?: boolean
 }): Event<GetCombinedValue<A>>
@@ -661,7 +661,7 @@ export function sample<A extends Combinable, B, C>(config: {
 }): Store<C>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Event<B> | Effect<B, any, any>
+  clock: Event<B> | Effect<B, any, any> | ReadonlyArray<Unit<B>>
   fn(source: GetCombinedValue<A>, clock: B): C
   name?: string
   greedy?: boolean

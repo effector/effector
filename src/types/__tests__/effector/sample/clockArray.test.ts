@@ -168,12 +168,7 @@ describe('without target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Unit<{ a: string; b: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; }>': watch, map, filter, filterMap, and 7 more.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
+      no errors
       "
     `)
   })
@@ -191,11 +186,7 @@ describe('without target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Unit<{ a: string; b: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; }>': watch, map, filter, filterMap, and 7 more.
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type '{ source: { a: Store<string>; b: Store<string>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is not assignable to parameter of type '{ source: { a: Store<string>; b: Store<string>; }; clock: Unit<any> | readonly Unit<any>[]; fn: (source: GetCombinedValue<{ a: Store<string>; b: Store<string>; }>, clock: any) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
-            Type '{ source: { a: Store<string>; b: Store<string>; }; clock: (Event<any> | Event<void> | Event<string>)[]; }' is missing the following properties from type '{ source: { a: Store<string>; b: Store<string>; }; clock: Unit<any> | readonly Unit<any>[]; fn: (source: GetCombinedValue<{ a: Store<string>; b: Store<string>; }>, clock: any) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }': fn, target
+      no errors
       "
     `)
   })
@@ -213,14 +204,7 @@ describe('without target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Unit<{ a: string; b: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-      Property 'a' does not exist on type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]'.
-      Property 'b' does not exist on type 'any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any]'.
+      no errors
       "
     `)
   })
@@ -239,11 +223,7 @@ describe('without target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Type 'Unit<{ a: string; b: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
-      No overload matches this call.
-        The last overload gave the following error.
-          Argument of type '{ source: { a: Store<string>; b: Store<string>; }; clock: (Event<any> | Event<void> | Event<string>)[]; fn: ({ a, b }: { a: string; b: string; }, clock: any) => { a: string; b: string; clock: any; }; }' is not assignable to parameter of type '{ source: { a: Store<string>; b: Store<string>; }; clock: Unit<any> | readonly Unit<any>[]; fn: (source: GetCombinedValue<{ a: Store<string>; b: Store<string>; }>, clock: any) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
-            Property 'target' is missing in type '{ source: { a: Store<string>; b: Store<string>; }; clock: (Event<any> | Event<void> | Event<string>)[]; fn: ({ a, b }: { a: string; b: string; }, clock: any) => { a: string; b: string; clock: any; }; }' but required in type '{ source: { a: Store<string>; b: Store<string>; }; clock: Unit<any> | readonly Unit<any>[]; fn: (source: GetCombinedValue<{ a: Store<string>; b: Store<string>; }>, clock: any) => { ...; }; target: Unit<...>; greedy?: boolean | undefined; }'.
+      no errors
       "
     `)
   })
