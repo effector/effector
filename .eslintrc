@@ -2,21 +2,16 @@ parser: babel-eslint
 parserOptions:
   ecmaVersion: 2018
 extends:
-  # - 'plugin:flowtype/recommended'
   - 'plugin:react/recommended'
   - prettier
 plugins:
   - babel
-  - flowtype
   - jest
   - react
   - react-hooks
 settings:
-  flowtype:
-    onlyFilesWithFlowAnnotation: true
   react:
-    version: '16.7'
-    flowVersion: '0.91'
+    version: '16.13'
 env:
   node: true
   browser: false
@@ -25,12 +20,6 @@ env:
   jest: true
   jasmine: true
 rules:
-  # flowtype/no-weak-types: 'off'
-  # flowtype/generic-spacing: 'off'
-  # flowtype/space-after-type-colon: 'off'
-  flowtype/require-exact-type:
-    - error
-    - never
   react-hooks/rules-of-hooks: error
   react/react-in-jsx-scope: 'off'
   react/no-children-prop: 'off'
@@ -67,10 +56,6 @@ rules:
     - single
     - allowTemplateLiterals: true
       avoidEscape: true
-  # max-len:
-  #   - warn
-  #   - code: 80
-  #     tabWidth: 2
   key-spacing:
     - warn
     - beforeColon: false
@@ -100,10 +85,6 @@ rules:
     - words: true
       nonwords: false
   no-whitespace-before-property: error
-  # generator-star-spacing:
-  #   - error
-  #   - before: false
-  #     after: true
   arrow-spacing:
     - error
     - before: true
