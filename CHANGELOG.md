@@ -14,14 +14,14 @@ const trigger = createEvent()
 const fx = createEffect()
 const store = createStore('')
 
-// clock with array of units in clock
+// array of units in clock
 sample({
   source: store,
   clock: [trigger, fx.doneData],
   target: showNotification,
 })
 
-// clock with merged unit in clock
+// merged unit in clock
 sample({
   source: store,
   clock: merge([trigger, fx.doneData]),
