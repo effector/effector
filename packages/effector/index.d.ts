@@ -541,7 +541,7 @@ export function createDomain(domainName?: string): Domain
 /* basic overloads with config */
 export function sample<A, B, C>(config: {
   source: Unit<A>
-  clock: Unit<B>
+  clock: Unit<B> | ReadonlyArray<Unit<B>>
   fn: (source: A, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
@@ -554,7 +554,7 @@ export function sample<A, B>(config: {
 }): Unit<B>
 export function sample<A>(config: {
   source: Unit<NoInfer<A>>
-  clock: Unit<any>
+  clock: Unit<any> | ReadonlyArray<Unit<any>>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
@@ -668,14 +668,14 @@ export function sample<A extends Combinable, B, C>(config: {
 }): Event<C>
 export function sample<A extends Combinable>(config: {
   source: A
-  clock: Unit<any>
+  clock: Unit<any> | ReadonlyArray<Unit<any>>
   target: Unit<GetCombinedValue<A>>
   greedy?: boolean
 }): Unit<GetCombinedValue<A>>
 export function sample<A extends Combinable, B, C>(config: {
   source: A
-  clock: Unit<B>
-  fn(source: GetCombinedValue<A>, clock: B): C
+  clock: Unit<B> | ReadonlyArray<Unit<B>>
+  fn: (source: GetCombinedValue<A>, clock: B) => NoInfer<C>
   target: Unit<C>
   greedy?: boolean
 }): Unit<C>

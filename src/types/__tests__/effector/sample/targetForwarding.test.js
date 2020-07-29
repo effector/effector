@@ -114,6 +114,15 @@ it('should fail when a target receives a more loose value type from a mapping fn
         Type 'Store<null>' is not assignable to type 'Combinable'.
           Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
             Index signature is missing in type 'Store<null>'.
+              Type '() => { a: string; }' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: void) => { a: string; b: string; }'.
+                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Store<null>' is not assignable to type 'Combinable'.
+          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+            Index signature is missing in type 'Store<null>'.
+              Type '() => { a: string; }' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: void) => { a: string; b: string; }'.
+                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
 
     --flow--
     Cannot call 'sample' with object literal bound to 'config'
@@ -167,6 +176,14 @@ describe('edge case for {} type', () => {
         The last overload gave the following error.
           Type 'Store<null>' is not assignable to type 'Combinable'.
             Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: void) => { a: string; b: string; }'.
+                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<null>' is not assignable to type 'Combinable'.
+            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Type '() => {}' is not assignable to type '(source: any[] | GetCombinedValue<{ [key: string]: Store<any>; }> | [any], clock: void) => { a: string; b: string; }'.
+                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
 
       --flow--
       no errors

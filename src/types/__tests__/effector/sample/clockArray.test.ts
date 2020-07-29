@@ -27,18 +27,27 @@ describe('with target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type '(Event<any> | Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      No overload matches this call.
-        The last overload gave the following error.
-          Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type '(Event<any> | Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
+      no errors
+      "
+    `)
+  })
+  it('support clock array in cases without fn with combinable source (should pass)', () => {
+    const target = createEvent<{a: string; b: string}>()
+    const a = createStore('')
+    const b = createStore('')
+    const clockA = createEvent()
+    const clockB = createEvent<any>()
+    const clockC = createEvent<string>()
+
+    sample({
+      source: {a, b},
+      clock: [clockA, clockB, clockC],
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
       "
     `)
   })
@@ -58,21 +67,88 @@ describe('with target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
+      no errors
+      "
+    `)
+  })
+  it('support clock array in cases with fn and combinable source (should pass)', () => {
+    const target = createEvent<{a: string; b: string; clock: any}>()
+    const a = createStore('')
+    const b = createStore('')
+    const clockA = createEvent()
+    const clockB = createEvent<any>()
+    const clockC = createEvent<string>()
+
+    sample({
+      source: {a, b},
+      clock: [clockA, clockB, clockC],
+      fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+      "
+    `)
+  })
+  it('shoudl detect incorrect arguments in fn with combinable source (should fail)', () => {
+    const target = createEvent<{a: string; clock: any}>()
+    const a = createStore('')
+    const clockA = createEvent()
+    const clockB = createEvent<any>()
+    const clockC = createEvent<string>()
+
+    sample({
+      source: {a},
+      clock: [clockA, clockB, clockC],
+      fn: ({a}: {a: number}, clock: any) => ({a, clock}),
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<string>; }>, clock: any) => { a: string; clock: any; }'.
+            Types of parameters '__0' and 'source' are incompatible.
+              Type 'GetCombinedValue<{ a: Store<string>; }>' is not assignable to type '{ a: number; }'.
+                Types of property 'a' are incompatible.
+                  Type 'string' is not assignable to type 'number'.
+      "
+    `)
+  })
+  it('should detect too wide type of clocks (should fail)', () => {
+    const target = createEvent<{a: string; b: string; clock: string}>()
+    const source = createStore({a: '', b: ''})
+    const clockA = createEvent()
+    const clockC = createEvent<string>()
+
+    sample({
+      source,
+      clock: [clockA, clockC],
+      fn: ({a, b}: any, clock: string) => ({a, b, clock}),
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
             Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type '(Event<any> | Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<any>': kind, __
+                Type 'Event<void>' is not assignable to type 'Unit<string>'.
+                  Types of property '__' are incompatible.
+                    Type 'void' is not assignable to type 'string'.
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
             Type 'Store<{ a: string; b: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{ a: string; b: string; }>'.
-                Type '(Event<any> | Event<void> | Event<string>)[]' is missing the following properties from type 'Unit<any>': kind, __
-      Binding element 'a' implicitly has an 'any' type.
-      Binding element 'b' implicitly has an 'any' type.
-      Parameter 'clock' implicitly has an 'any' type.
+                Type 'Event<void>' is not assignable to type 'Unit<string>'.
+                  Types of property '__' are incompatible.
+                    Type 'void' is not assignable to type 'string'.
       "
     `)
   })
