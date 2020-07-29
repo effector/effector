@@ -21,14 +21,6 @@
     }
   ],
   "repository": "https://github.com/zerobias/effector",
-  "alias": {
-    "effector": "./src/effector/index.js",
-    "effector-react": "./src/react",
-    "effector-vue": "./src/vue",
-    "effector-dom": "./src/dom",
-    "forest": "./src/dom",
-    "@effector/forms": "./src/forms"
-  },
   "devDependencies": {
     "@babel/core": "^7.10.1",
     "@babel/helper-plugin-utils": "^7.10.1",

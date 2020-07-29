@@ -1,20 +1,19 @@
 //@flow
-import {resolve, join, dirname, extname, relative} from 'path'
+import {resolve, join, relative} from 'path'
 import * as fs from 'fs-extra'
 
 import execa from 'execa'
-import packageJson from '../../package.json'
 
-export const cliArgs: {|
-  current: Array<string>,
-  +original: $ReadOnlyArray<string>,
-|} = {
+export const cliArgs: {
+  current: string[],
+  original: string[],
+} = {
   current: process.argv.slice(2),
   original: process.argv.slice(2),
 }
 
 const root = process.cwd()
-export function dir(...paths: $ReadOnlyArray<string>): string {
+export function dir(...paths: string[]) {
   return resolve(root, ...paths)
 }
 
@@ -54,7 +53,7 @@ export function publishScript(name: string) {
       console.error(error)
     }
   }
-  return async() => {
+  return async () => {
     const args = [...cliArgs.original]
     if (args.length < 2) return
     const command = args.shift()
@@ -98,7 +97,7 @@ export function publishScript(name: string) {
 export function massCopy(
   from: string,
   to: string,
-  targets: Array<string | [string, string | $ReadOnlyArray<string>]>,
+  targets: Array<string | [string, string | string[]]>,
 ) {
   const jobs: [string, string][] = []
   for (const target of targets) {
@@ -123,11 +122,12 @@ export function massCopy(
 /**
  * @example ../../src/react/createComponent.js -> effector-react/createComponent.js
  */
-export const getSourcemapPathTransform = (name: string) =>
-  function sourcemapPathTransform(relativePath: string) {
-    let packagePath = join('../..', packageJson.alias[name])
-    if (extname(packagePath) !== '') {
-      packagePath = dirname(packagePath)
-    }
-    return `${name}/${relative(packagePath, relativePath)}`
-  }
+export function getSourcemapPathTransform(name: string) {
+  const nameWithoutSuffix = name
+    .replace('effector-', '')
+    .replace('@effector/', '')
+  const packageRoot = join('../..', 'src', nameWithoutSuffix)
+
+  return (relativePath: string) =>
+    `${name}/${relative(packageRoot, relativePath)}`
+}
