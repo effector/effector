@@ -71,28 +71,99 @@ describe('with target', () => {
       "
     `)
   })
-  it('support clock array in cases with fn and combinable source (should pass)', () => {
-    const target = createEvent<{a: string; b: string; clock: any}>()
-    const a = createStore('')
-    const b = createStore('')
-    const clockA = createEvent()
-    const clockB = createEvent<any>()
-    const clockC = createEvent<string>()
+  describe('support clock array in cases with fn and combinable source (should pass)', () => {
+    describe('with second argument in fn', () => {
+      test('with unification to any', () => {
+        const target = createEvent<{a: string; b: string; clock: any}>()
+        const a = createStore('')
+        const b = createStore('')
+        const clockA = createEvent()
+        const clockB = createEvent<any>()
+        const clockC = createEvent<string>()
 
-    sample({
-      source: {a, b},
-      clock: [clockA, clockB, clockC],
-      fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
-      target,
+        sample({
+          source: {a, b},
+          clock: [clockA, clockB, clockC],
+          fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          no errors
+          "
+        `)
+      })
+      test('without unification to any', () => {
+        const target = createEvent<{a: string; b: string; clock: any}>()
+        const a = createStore('')
+        const b = createStore('')
+        const clockA = createEvent()
+        const clockC = createEvent<string>()
+
+        sample({
+          source: {a, b},
+          clock: [clockA, clockC],
+          fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
     })
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      no errors
-      "
-    `)
+    describe('without second argument in fn', () => {
+      test('with unification to any', () => {
+        const target = createEvent<{a: string; b: string}>()
+        const a = createStore('')
+        const b = createStore('')
+        const clockA = createEvent()
+        const clockB = createEvent<any>()
+        const clockC = createEvent<string>()
+
+        sample({
+          source: {a, b},
+          clock: [clockA, clockB, clockC],
+          fn: ({a, b}: {a: string; b: string}) => ({a, b}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          no errors
+          "
+        `)
+      })
+      test('without unification to any', () => {
+        const target = createEvent<{a: string; b: string}>()
+        const a = createStore('')
+        const b = createStore('')
+        const clockA = createEvent()
+        const clockC = createEvent<string>()
+
+        sample({
+          source: {a, b},
+          clock: [clockA, clockC],
+          fn: ({a, b}: {a: string; b: string}) => ({a, b}),
+          target,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          No overload matches this call.
+            The last overload gave the following error.
+              Type 'Event<string>' is not assignable to type 'Unit<void>'.
+          "
+        `)
+      })
+    })
   })
-  it('shoudl detect incorrect arguments in fn with combinable source (should fail)', () => {
+  it('should detect incorrect arguments in fn with combinable source (should fail)', () => {
     const target = createEvent<{a: string; clock: any}>()
     const a = createStore('')
     const clockA = createEvent()
