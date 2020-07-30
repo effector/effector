@@ -72,94 +72,196 @@ describe('with target', () => {
     `)
   })
   describe('support clock array in cases with fn and combinable source (should pass)', () => {
-    describe('with second argument in fn', () => {
-      test('with unification to any', () => {
-        const target = createEvent<{a: string; b: string; clock: any}>()
-        const a = createStore('')
-        const b = createStore('')
-        const clockA = createEvent()
-        const clockB = createEvent<any>()
-        const clockC = createEvent<string>()
+    describe('with explicitly typed arguments', () => {
+      describe('with second argument in fn', () => {
+        test('with unification to any', () => {
+          const target = createEvent<{a: string; b: string; clock: any}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockB = createEvent<any>()
+          const clockC = createEvent<string>()
 
-        sample({
-          source: {a, b},
-          clock: [clockA, clockB, clockC],
-          fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
-          target,
+          sample({
+            source: {a, b},
+            clock: [clockA, clockB, clockC],
+            fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            no errors
+            "
+          `)
         })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          no errors
-          "
-        `)
+        test('without unification to any', () => {
+          const target = createEvent<{a: string; b: string; clock: any}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockC = createEvent<string>()
+
+          sample({
+            source: {a, b},
+            clock: [clockA, clockC],
+            fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            No overload matches this call.
+              The last overload gave the following error.
+                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            "
+          `)
+        })
       })
-      test('without unification to any', () => {
-        const target = createEvent<{a: string; b: string; clock: any}>()
-        const a = createStore('')
-        const b = createStore('')
-        const clockA = createEvent()
-        const clockC = createEvent<string>()
+      describe('without second argument in fn', () => {
+        test('with unification to any', () => {
+          const target = createEvent<{a: string; b: string}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockB = createEvent<any>()
+          const clockC = createEvent<string>()
 
-        sample({
-          source: {a, b},
-          clock: [clockA, clockC],
-          fn: ({a, b}: {a: string; b: string}, clock: any) => ({a, b, clock}),
-          target,
+          sample({
+            source: {a, b},
+            clock: [clockA, clockB, clockC],
+            fn: ({a, b}: {a: string; b: string}) => ({a, b}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            no errors
+            "
+          `)
         })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
-          "
-        `)
+        test('without unification to any', () => {
+          const target = createEvent<{a: string; b: string}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockC = createEvent<string>()
+
+          sample({
+            source: {a, b},
+            clock: [clockA, clockC],
+            fn: ({a, b}: {a: string; b: string}) => ({a, b}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            No overload matches this call.
+              The last overload gave the following error.
+                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            "
+          `)
+        })
       })
     })
-    describe('without second argument in fn', () => {
-      test('with unification to any', () => {
-        const target = createEvent<{a: string; b: string}>()
-        const a = createStore('')
-        const b = createStore('')
-        const clockA = createEvent()
-        const clockB = createEvent<any>()
-        const clockC = createEvent<string>()
+    describe('with implicitly typed arguments', () => {
+      describe('with second argument in fn', () => {
+        test('with unification to any', () => {
+          const target = createEvent<{a: string; b: string; clock: any}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockB = createEvent<any>()
+          const clockC = createEvent<string>()
 
-        sample({
-          source: {a, b},
-          clock: [clockA, clockB, clockC],
-          fn: ({a, b}: {a: string; b: string}) => ({a, b}),
-          target,
+          sample({
+            source: {a, b},
+            clock: [clockA, clockB, clockC],
+            fn: ({a, b}, clock) => ({a, b, clock}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            Binding element 'a' implicitly has an 'any' type.
+            Binding element 'b' implicitly has an 'any' type.
+            Parameter 'clock' implicitly has an 'any' type.
+            "
+          `)
         })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          no errors
-          "
-        `)
+        test('without unification to any', () => {
+          const target = createEvent<{a: string; b: string; clock: any}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockC = createEvent<string>()
+
+          sample({
+            source: {a, b},
+            clock: [clockA, clockC],
+            fn: ({a, b}, clock) => ({a, b, clock}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            No overload matches this call.
+              The last overload gave the following error.
+                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            Binding element 'a' implicitly has an 'any' type.
+            Binding element 'b' implicitly has an 'any' type.
+            Parameter 'clock' implicitly has an 'any' type.
+            "
+          `)
+        })
       })
-      test('without unification to any', () => {
-        const target = createEvent<{a: string; b: string}>()
-        const a = createStore('')
-        const b = createStore('')
-        const clockA = createEvent()
-        const clockC = createEvent<string>()
+      describe('without second argument in fn', () => {
+        test('with unification to any', () => {
+          const target = createEvent<{a: string; b: string}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockB = createEvent<any>()
+          const clockC = createEvent<string>()
 
-        sample({
-          source: {a, b},
-          clock: [clockA, clockC],
-          fn: ({a, b}: {a: string; b: string}) => ({a, b}),
-          target,
+          sample({
+            source: {a, b},
+            clock: [clockA, clockB, clockC],
+            fn: ({a, b}) => ({a, b}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            Binding element 'a' implicitly has an 'any' type.
+            Binding element 'b' implicitly has an 'any' type.
+            "
+          `)
         })
-        expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          No overload matches this call.
-            The last overload gave the following error.
-              Type 'Event<string>' is not assignable to type 'Unit<void>'.
-          "
-        `)
+        test('without unification to any', () => {
+          const target = createEvent<{a: string; b: string}>()
+          const a = createStore('')
+          const b = createStore('')
+          const clockA = createEvent()
+          const clockC = createEvent<string>()
+
+          sample({
+            source: {a, b},
+            clock: [clockA, clockC],
+            fn: ({a, b}) => ({a, b}),
+            target,
+          })
+          expect(typecheck).toMatchInlineSnapshot(`
+            "
+            --typescript--
+            No overload matches this call.
+              The last overload gave the following error.
+                Type 'Event<string>' is not assignable to type 'Unit<void>'.
+            Binding element 'a' implicitly has an 'any' type.
+            Binding element 'b' implicitly has an 'any' type.
+            "
+          `)
+        })
       })
     })
   })
