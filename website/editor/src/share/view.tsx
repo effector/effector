@@ -125,6 +125,11 @@ const ShareList = () => {
       month: 'long',
       day: 'numeric',
     })
+    const timeString = d.toLocaleTimeString(['en-US'], {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+    })
     const dateISO = d.toISOString()
 
     const shareLink = e => {
@@ -196,7 +201,9 @@ const ShareList = () => {
           </div>
         </ShareRow>
         <ShareRow>
-          <ShareDate dateTime={dateISO}>{dateString}</ShareDate>
+          <ShareDate dateTime={dateISO}>
+            {dateString} {timeString}
+          </ShareDate>
         </ShareRow>
       </ShareItem>
     )
