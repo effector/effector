@@ -69,7 +69,7 @@ const ShareRow = styled.div`
   align-items: center;
 `
 
-const ShareDate = styled.div`
+const ShareDate = styled.time`
   text-align: left;
   color: #999;
   font-size: 12px;
@@ -120,12 +120,12 @@ const ShareList = () => {
 
   return sortedShareList.map(share => {
     const d = new Date(share.created * 1000)
-    const DD = String(d.getDate()).padStart(2, 0)
-    const MM = String(d.getMonth()).padStart(2, 0)
-    const YYYY = String(d.getFullYear())
-    const HH = String(d.getHours()).padStart(2, 0)
-    const mm = String(d.getMinutes()).padStart(2, 0)
-    const strDate = `${YYYY}-${MM}-${DD} ${HH}:${mm}`
+    const dateString = d.toLocaleDateString(['en-US'], {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+    const dateISO = d.toISOString()
 
     const shareLink = e => {
       e.preventDefault()
@@ -196,7 +196,7 @@ const ShareList = () => {
           </div>
         </ShareRow>
         <ShareRow>
-          <ShareDate>{strDate}</ShareDate>
+          <ShareDate dateTime={dateISO}>{dateString}</ShareDate>
         </ShareRow>
       </ShareItem>
     )
