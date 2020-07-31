@@ -36,7 +36,7 @@ const HeaderContainer = (
                 key={column}
                 sorted={sorted && sortColumn === column}
                 sortAscending={sortAscending}
-                onClick={onTHClick.bind(this, column)}>
+                onClick={e => onTHClick(column, e)}>
                 {column}
               </TH>
             ))}
