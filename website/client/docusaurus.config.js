@@ -23,7 +23,7 @@ module.exports = {
         alt: 'Effector Logo',
         src: 'img/comet.png',
       },
-      links: [
+      items: [
         {to: 'docs/introduction/installation', label: 'Docs', position: 'left'},
         {to: 'docs/api/effector/effector', label: 'API', position: 'left'},
         {to: 'blog', label: 'Blog', position: 'left'},
