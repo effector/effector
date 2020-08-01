@@ -14,7 +14,7 @@ import {$githubUser} from '~/github/state'
 
 $currentShareId.on(setCurrentShareId, (_, id) => id)
 
-const keyDown = split(onKeyDown, {
+export const keyDown = split(onKeyDown, {
   Escape: key => key === 'Escape',
   Enter: key => key === 'Enter',
 })

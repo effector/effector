@@ -1,8 +1,8 @@
 import React, {useRef, useState} from 'react'
 import {useStore} from 'effector-react'
 import {getShareListByAuthor, shareCode} from '../graphql'
-import {ShareButton, SharedUrl, ShareGroup} from './styled'
-import {canShare, clickShare, sharedUrl, sharing, urlRef} from './controller'
+import {ShareButton, ShareGroup} from './styled'
+import {sharing} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
 import {handleInput, handleKeyDown, removeShare, setCurrentShareId, setFilterMode} from './index'
@@ -16,6 +16,7 @@ import {IconButton} from '../components/IconButton'
 import {theme} from '../components/Console/theme/default'
 import {getUserInfo} from '~/github/init'
 import {FilterIcon} from '~/share/filterIcon'
+import {$debouncedInput} from '~/share/debounceInput'
 
 
 const Save = props => {
@@ -235,6 +236,7 @@ export const Share = () => {
   const filterMode = useStore($filterMode)
   const [listMode, setMode] = useState(LIST_MODE)
   const descRef = useRef(null)
+  const debouncedInput = useStore($debouncedInput)
 
   return (
     <ShareGroup>
@@ -283,7 +285,7 @@ export const Share = () => {
           height: 'calc(100% - 42px)',
         }}>
         <ShareList filterMode={listMode === SEARCH_MODE && filterMode}
-                   description={(shareDescription || '').trim().toLowerCase()}
+                   description={(debouncedInput || '').trim().toLowerCase()}
         />
       </Section>
     </ShareGroup>
