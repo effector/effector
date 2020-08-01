@@ -370,3 +370,78 @@ it('support multiply text nodes', async () => {
     "
   `)
 })
+
+describe('dom namespaces', () => {
+  test('svg support', async () => {
+    const [s1] = await exec(async () => {
+      using(el, () => {
+        h('div', () => {
+          h('svg', {
+            attr: {width: 500},
+            fn() {
+              h('g', {
+                attr: {transform: 'translate(5 10)'},
+              })
+            },
+          })
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>
+        <svg xmlns='http://www.w3.org/2000/svg' width='500'>
+          <g transform='translate(5 10)'></g>
+        </svg>
+      </div>
+      "
+    `)
+  })
+  test('foreignObject support', async () => {
+    const [s1] = await exec(async () => {
+      using(el, () => {
+        h('div', () => {
+          h('svg', {
+            attr: {width: 500},
+            fn() {
+              h('g', {
+                attr: {transform: 'translate(5 10)'},
+                fn() {
+                  h('foreignObject', () => {
+                    h('div', {
+                      attr: {title: 'foreign child'},
+                      fn() {
+                        h('div', {
+                          attr: {title: 'nested child'},
+                        })
+                      },
+                    })
+                  })
+                },
+              })
+            },
+          })
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <div>
+        <svg xmlns='http://www.w3.org/2000/svg' width='500'>
+          <g transform='translate(5 10)'>
+            <foreignObject
+              ><div
+                xmlns='http://www.w3.org/1999/xhtml'
+                title='foreign child'
+              >
+                <div title='nested child'></div></div
+            ></foreignObject>
+          </g>
+        </svg>
+      </div>
+      "
+    `)
+  })
+})
