@@ -266,7 +266,7 @@ export const Share = () => {
           onKeyDown={handleKeyDown}
           onChange={handleInput}
           onFocus={() => setMode(SEARCH_MODE)}
-          onBlur={() => setMode(LIST_MODE)}
+          onBlur={() => setTimeout(() => setMode(LIST_MODE), 500)}
           autoFocus={false}
           // required
         />
