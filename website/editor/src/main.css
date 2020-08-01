@@ -580,7 +580,7 @@ blockquote {
   padding: 8px 0;
   position: fixed;
   width: 100%;
-  z-index: 9999;
+  z-index: 99999;
   transform: translateZ(0);
 }
 /*@media only screen and (min-width: 1024px) {*/
