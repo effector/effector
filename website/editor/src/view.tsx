@@ -39,12 +39,17 @@ const ErrorsView = createComponent(
   ),
 )
 
+const $displayOutline = combine(
+  tab,
+  isDesktopChanges,
+  (tab, isDesktop) => isDesktop || tab === 'editor',
+)
+
 const changeSourcesDebounced = debounce(changeSources, 500)
+
 const CodeView = createComponent(
   {
-    displayEditor: combine(tab, isDesktopChanges, (tab, isDesktop) =>
-      isDesktop ? true : tab === 'editor',
-    ),
+    displayEditor: $displayOutline,
     sourceCode,
     mode,
   },
@@ -99,12 +104,6 @@ const CodeView = createComponent(
       </div>
     )
   },
-)
-
-const $displayOutline = combine(
-  tab,
-  isDesktopChanges,
-  (tab, isDesktop) => isDesktop || tab === 'editor',
 )
 
 export default () => {
