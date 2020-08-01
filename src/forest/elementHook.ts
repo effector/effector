@@ -43,6 +43,7 @@ import {
   BlockItemDraft,
   LeafDataBlock,
   LeafDataBlockItem,
+  NodeDraft,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -1130,18 +1131,10 @@ export function route<T>({
             }
             changeChildLeafsVisible(visible, leaf)
           })
-          sample({
-            source: mount,
-            clock: unmount,
-            greedy: true,
-          }).watch(({leaf}) => {
-            iterateChildLeafs(leaf, child => {
-              child.api.unmount()
-            })
-            const {spawn: page} = leaf
-            page.active = false
-            removeItem(page, page.parent!.childSpawns[page.template.id])
-            removeItem(page, page.template.pages)
+          defineUnmount({
+            unmountSelf: true,
+            mount,
+            unmount,
           })
         },
       })
@@ -1178,18 +1171,10 @@ export function route<T>({
           }
         },
       )
-      sample({
-        source: mount,
-        clock: unmount,
-        greedy: true,
-      }).watch(({leaf}) => {
-        iterateChildLeafs(leaf, child => {
-          child.api.unmount()
-        })
-        const {spawn: page} = leaf
-        page.active = false
-        removeItem(page, page.parent!.childSpawns[page.template.id])
-        removeItem(page, page.template.pages)
+      defineUnmount({
+        unmountSelf: true,
+        mount,
+        unmount,
       })
     },
   })
@@ -1213,6 +1198,42 @@ function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
     }
   }
   iterateChildLeafs(leaf, childLeafIterator)
+}
+
+function defineUnmount({
+  unmountSelf = false,
+  mount,
+  unmount,
+}: {
+  unmountSelf?: boolean
+  mount: Event<LeafMountParams>
+  unmount: Event<void>
+}) {
+  sample({
+    source: mount,
+    clock: unmount,
+    greedy: true,
+  }).watch(
+    unmountSelf
+      ? ({leaf}) => {
+          unmountChildLeafs(leaf)
+          unmountOwnSpawn(leaf)
+        }
+      : ({leaf}) => {
+          unmountChildLeafs(leaf)
+        },
+  )
+}
+
+function unmountOwnSpawn({spawn}: Leaf) {
+  removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
+  removeItem(spawn, spawn.template.pages)
+}
+function unmountChildLeafs(leaf: Leaf) {
+  leaf.spawn.active = false
+  iterateChildLeafs(leaf, child => {
+    child.api.unmount()
+  })
 }
 
 function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
@@ -1258,15 +1279,9 @@ export function block({
           node,
         })
       })
-      sample({
-        source: mount,
-        clock: unmount,
-        greedy: true,
-      }).watch(({leaf}) => {
-        leaf.spawn.active = false
-        iterateChildLeafs(leaf, child => {
-          child.api.unmount()
-        })
+      defineUnmount({
+        mount,
+        unmount,
       })
     },
   })
@@ -1285,15 +1300,9 @@ export function block({
       env,
       draft: blockItemDraft,
       fn(_, {mount, unmount}) {
-        sample({
-          source: mount,
-          clock: unmount,
-          greedy: true,
-        }).watch(({leaf}) => {
-          leaf.spawn.active = false
-          iterateChildLeafs(leaf, child => {
-            child.api.unmount()
-          })
+        defineUnmount({
+          mount,
+          unmount,
         })
         mount.watch(({node, leaf}) => {
           const data = leaf.data as LeafDataBlockItem
@@ -1343,15 +1352,9 @@ export function rec<T>(
           node,
         })
       })
-      sample({
-        source: mount,
-        clock: unmount,
-        greedy: true,
-      }).watch(({leaf}) => {
-        leaf.spawn.active = false
-        iterateChildLeafs(leaf, child => {
-          child.api.unmount()
-        })
+      defineUnmount({
+        mount,
+        unmount,
       })
       return {itemUpdater}
     },
@@ -1379,15 +1382,9 @@ export function rec<T>(
           onMount: (state, {leaf, node}) => ({state, leaf, node}),
           onState: ({leaf, node}, state) => ({state, leaf, node}),
         })
-        sample({
-          source: mount,
-          clock: unmount,
-          greedy: true,
-        }).watch(({leaf}) => {
-          leaf.spawn.active = false
-          iterateChildLeafs(leaf, child => {
-            child.api.unmount()
-          })
+        defineUnmount({
+          mount,
+          unmount,
         })
         onState.watch(({state, leaf}) => {
           iterateChildLeafs(leaf, child => {
@@ -1543,13 +1540,8 @@ export function list<T>(opts: any, maybeFn?: any) {
             }
             listItemBlock.left = null
             listItemBlock.right = null
-            iterateChildLeafs(leaf, child => {
-              child.api.unmount()
-            })
-            const {spawn: page} = leaf
-            page.active = false
-            removeItem(page, page.parent!.childSpawns[page.template.id])
-            removeItem(page, page.template.pages)
+            unmountChildLeafs(leaf)
+            unmountOwnSpawn(leaf)
           })
           if (draft.itemVisible) {
             const {
@@ -1791,10 +1783,8 @@ export function list<T>(opts: any, maybeFn?: any) {
           }
           item.active = false
         }
-        const {spawn: page} = leaf
-        page.active = false
-        removeItem(page, page.parent!.childSpawns[page.template.id])
-        removeItem(page, page.template.pages)
+        leaf.spawn.active = false
+        unmountOwnSpawn(leaf)
       })
     },
     env,
