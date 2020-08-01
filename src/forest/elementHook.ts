@@ -167,15 +167,6 @@ export function h(tag: string, opts?: any) {
     type === 'svg'
       ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)
       : env.document.createElement(tag)
-  if (parentNS === 'foreignObject') {
-    node.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml')
-    ns = 'html'
-  } else if (tag === 'svg') {
-    node.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
-    ns = 'svg'
-  } else if (tag === 'foreignObject') {
-    ns = 'foreignObject'
-  }
   const stencil = node as DOMElement
   const draft: ElementDraft = {
     type: 'element',
@@ -194,6 +185,20 @@ export function h(tag: string, opts?: any) {
     opsAmount: 1,
     node: [],
   }
+  if (parentNS === 'foreignObject') {
+    draft.attr.push({
+      xmlns: 'http://www.w3.org/1999/xhtml',
+    })
+    ns = 'html'
+  } else if (tag === 'svg') {
+    draft.attr.push({
+      xmlns: 'http://www.w3.org/2000/svg',
+    })
+    ns = 'svg'
+  } else if (tag === 'foreignObject') {
+    ns = 'foreignObject'
+  }
+
   const elementTemplate = createTemplate({
     name: 'element',
     draft,
