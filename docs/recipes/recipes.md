@@ -6,7 +6,7 @@ hide_title: true
 
 # Recipes
 
+<!--- - [Design API layer](design-api-layer.md) --->
 - [Countdown timer](countdown.md)
-- [Design API layer](design-api-layer.md)
 - [Usage with TypeScript](usage-with-typescript.md)
 - [Usage with React Native](react-native/example.md)
