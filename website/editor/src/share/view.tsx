@@ -1,17 +1,12 @@
-import * as React from 'react'
+import React, {useRef, useState} from 'react'
 import {useStore} from 'effector-react'
-import {shareCode} from '../graphql'
+import {getShareListByAuthor, shareCode} from '../graphql'
 import {ShareButton, SharedUrl, ShareGroup} from './styled'
 import {canShare, clickShare, sharedUrl, sharing, urlRef} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
-import {
-  handleInput,
-  handleKeyDown,
-  removeShare,
-  setCurrentShareId,
-} from './index'
-import {$currentShareId, $shareDescription} from './state'
+import {handleInput, handleKeyDown, removeShare, setCurrentShareId, setFilterMode} from './index'
+import {$currentShareId, $filterMode, $shareDescription} from './state'
 import {styled} from 'linaria/react'
 import {CopyIcon} from '../components/Icons/CopyIcon'
 import {ShareIcon} from '../components/Icons/ShareIcon'
@@ -19,6 +14,9 @@ import {LoadingIcon} from '../components/Icons/LoadingIcon'
 import {$sortedShareList} from './init'
 import {IconButton} from '../components/IconButton'
 import {theme} from '../components/Console/theme/default'
+import {getUserInfo} from '~/github/init'
+import {FilterIcon} from '~/share/filterIcon'
+
 
 const Save = props => {
   const pending = useStore(shareCode.pending)
@@ -30,26 +28,6 @@ const Save = props => {
       {pending && <LoadingIcon style={{marginRight: 10}} />}
       Save
     </ShareButton>
-  )
-}
-
-const Copy = () => {
-  const shareAllowed = useStore(canShare)
-  return (
-    <ShareButton onClick={clickShare} disabled={!shareAllowed}>
-      {isShareAPISupported ? 'Share' : 'Copy to clipboard'}
-    </ShareButton>
-  )
-}
-
-const Url = () => {
-  const url = useStore(sharedUrl)
-  return (
-    url && (
-      <Section>
-        <SharedUrl ref={urlRef} value={url} readOnly />
-      </Section>
-    )
   )
 }
 
@@ -78,9 +56,15 @@ const ShareDate = styled.time`
 const ShareDescription = styled.div`
   flex: 1 1 100%;
   white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
   &:hover {
     color: var(--link-color);
   }
+  max-width: calc(100vw - 100px);
+  @media (min-width: 699px) {
+    max-width: calc(100% - 70px);
+  } 
 `
 
 const MiniButton = styled.button`
@@ -100,11 +84,20 @@ const MiniButton = styled.button`
   }
 `
 
-const ShareList = () => {
-  const sortedShareList = useStore($sortedShareList)
-  const currentShareId = useStore($currentShareId)
+const status = {
+  loading: 'Loading user share list...',
+  signing: 'Loading user info...',
+  empty: 'No shares found by the author',
+}
 
-  if (sortedShareList.length === 0) {
+const ShareList = ({filterMode, description}) => {
+  let sortedShareList = useStore($sortedShareList)
+  const currentShareId = useStore($currentShareId)
+  const loading = useStore(getShareListByAuthor.pending)
+  const signing = useStore(getUserInfo.pending)
+  const isEmpty = sortedShareList.length === 0
+
+  if (loading || signing || isEmpty) {
     return (
       <h2
         style={{
@@ -113,8 +106,22 @@ const ShareList = () => {
           textAlign: 'center',
           marginTop: 30,
         }}>
-        No shares found by the author
+        {loading
+          ? status.loading
+          : signing
+            ? status.signing
+            : status.empty
+        }
       </h2>
+    )
+  }
+
+  if (filterMode && description) {
+    sortedShareList = sortedShareList.filter(share =>
+      share?.description && (
+        share?.description?.trim().toLowerCase().indexOf(description) !== -1
+        || share?.code?.trim().toLowerCase().indexOf(description) !== -1
+      ),
     )
   }
 
@@ -168,7 +175,7 @@ const ShareList = () => {
         }}>
         <ShareRow>
           <ShareDescription>
-            {share.description || `<${share.slug}>`}
+            {typeof share.description === 'undefined' || share.description === null ? `<${share.slug}>` : share.description}
           </ShareDescription>
           <div style={{marginLeft: 10, position: 'relative'}}>
             {isShareAPISupported ? (
@@ -219,23 +226,38 @@ const ValidatedInput = styled.input`
   }
 `
 
+const LIST_MODE = 0
+const SEARCH_MODE = 1
+
 export const Share = () => {
   const shareDescription = useStore($shareDescription)
   const saving = useStore(shareCode.pending)
+  const filterMode = useStore($filterMode)
+  const [listMode, setMode] = useState(LIST_MODE)
+  const descRef = useRef(null)
 
   return (
     <ShareGroup>
       <Section
         style={{
           backgroundColor: '#f0f0f0',
-          padding: 10,
+          padding: 4,
           display: 'flex',
           alignItems: 'center',
           margin: 0,
           border: 'none',
           borderBottom: '1px solid #ddd',
         }}>
+        <FilterIcon
+          color={filterMode ? 'hsl(213,100%,46%)' : 'lightgray'}
+          style={{width: 20, margin: '0 10px', cursor: 'pointer'}}
+          onClick={() => {
+            setFilterMode(!filterMode)
+            setTimeout(() => descRef?.current?.focus())
+          }}
+        />
         <ValidatedInput
+          ref={descRef}
           type="text"
           className="share-description"
           style={{width: '100%', padding: 4, height: 32}}
@@ -243,8 +265,10 @@ export const Share = () => {
           value={shareDescription || ''}
           onKeyDown={handleKeyDown}
           onChange={handleInput}
+          onFocus={() => setMode(SEARCH_MODE)}
+          onBlur={() => setMode(LIST_MODE)}
           autoFocus={false}
-          required
+          // required
         />
         <Save disabled={saving} />
       </Section>
@@ -256,9 +280,11 @@ export const Share = () => {
           overflowY: 'auto',
           borderTop: 'none',
           borderBottom: 'none',
-          height: 'calc(100% - 54px)',
+          height: 'calc(100% - 42px)',
         }}>
-        <ShareList />
+        <ShareList filterMode={listMode === SEARCH_MODE && filterMode}
+                   description={(shareDescription || '').trim().toLowerCase()}
+        />
       </Section>
     </ShareGroup>
   )

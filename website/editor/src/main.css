@@ -583,11 +583,11 @@ blockquote {
   z-index: 9999;
   transform: translateZ(0);
 }
-@media only screen and (min-width: 1024px) {
-  .fixedHeaderContainer {
-    flex-shrink: 0;
-  }
-}
+/*@media only screen and (min-width: 1024px) {*/
+/*  .fixedHeaderContainer {*/
+/*    flex-shrink: 0;*/
+/*  }*/
+/*}*/
 .fixedHeaderContainer a {
   align-items: center;
   border: 0;
@@ -1059,10 +1059,20 @@ input::placeholder {
 .navPusher {
   left: 0;
   min-height: 100%;
-  padding-top: 100px;
   position: relative;
   z-index: 99;
+  padding-top: 50px;
 }
+
+.header-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.header-tabs {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .singleRowMobileNav.navPusher {
   padding-top: 50px;
 }
@@ -1077,18 +1087,26 @@ input::placeholder {
   transition: opacity 0.5s, width 0.1s 0.5s, height 0.1s 0.5s;
   width: 0;
 }
-@media screen and (min-width: 1024px) {
-  .navPusher {
-    display: flex;
-    flex-direction: column;
-    min-height: calc(100vh - 50px);
-    padding-top: 50px;
-  }
-  .navPusher,
-  .navPusher > :first-child {
-    flex-grow: 1;
-  }
-}
+
+/*@media screen and (max-width: 875px) {*/
+/*  .navPusher {*/
+/*    padding-top: 50px;*/
+/*  }*/
+/*}*/
+
+
+/*@media screen and (min-width: 1024px) {*/
+/*  .navPusher {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    min-height: calc(100vh - 50px);*/
+/*    padding-top: 100px;*/
+/*  }*/
+/*  .navPusher,*/
+/*  .navPusher > :first-child {*/
+/*    flex-grow: 1;*/
+/*  }*/
+/*}*/
 .sliderActive .navPusher:after {
   height: 100%;
   opacity: 1;
@@ -1149,7 +1167,7 @@ input::placeholder {
     flex-direction: row;
   }
 }
-@media only screen and (min-width: 1024px) {
+@media only screen and (min-width: 768px) {
   .navSearchWrapper {
     padding-left: 10px;
     position: relative;

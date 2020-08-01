@@ -3,14 +3,14 @@ import {
   onKeyDown,
   onTextChange,
   removeShare,
-  setCurrentShareId,
+  setCurrentShareId, setFilterMode,
 } from './index'
-import {$currentShareId, $shareDescription, $shareList} from './state'
+import md5 from 'js-md5'
+import {$currentShareId, $filterMode, $hiddenShareList, $shareDescription, $shareList} from './state'
 import {combine, forward, sample, split} from 'effector'
-import {shareCode} from '../graphql'
-import {$githubUser} from '../github/state'
-import {pressCtrlS} from './controller'
-import {tabApi} from '../tabs/domain'
+import {getShareListByAuthor, shareCode} from '~/graphql'
+import {$githubUser} from '~/github/state'
+
 
 $currentShareId.on(setCurrentShareId, (_, id) => id)
 
@@ -25,6 +25,24 @@ forward({
 })
 
 $shareDescription.on(onTextChange, (_, value) => value).reset(keyDown.Escape)
+
+$shareList.on(getShareListByAuthor.done, (state, {params, result}) => {
+  return {
+    ...state,
+    [params.author]: result.pages.sort((a, b) => a.created - b.created).reduce((acc, record) => {
+      const id = md5(record.code)
+      acc[id] = {
+        author: params.author,
+        slug: record.slug,
+        description: record.description,
+        created: record.created,
+        md5: id,
+        code: record.code
+      }
+      return acc
+    }, {}),
+  }
+})
 
 const sharesWithUser = combine({
   shareList: $shareList,
@@ -80,15 +98,18 @@ sample({
   }),
 })
 
-export const $sortedShareList = sharesWithUser.map(
-  ({shareList, githubUser}) => {
-    if (!(githubUser.databaseId in shareList)) return []
+$hiddenShareList.on(removeShare, (list, slug) => ({
+  ...list,
+  [slug]: true,
+}))
 
-    return Object.values(shareList[githubUser.databaseId] || {})
-      .filter(share => share.author === githubUser.databaseId)
-      .sort((a, b) => b.created - a.created)
-  },
-)
+export const $sortedShareList = combine(sharesWithUser, $hiddenShareList, ({shareList, githubUser}, hiddenShareList) => {
+  if (!(githubUser.databaseId in shareList)) return []
+
+  return Object.values(shareList[githubUser.databaseId] || {})
+    .filter(share => share.author === githubUser.databaseId && !hiddenShareList[share.slug])
+    .sort((a, b) => b.created - a.created)
+})
 
 // sample({
 //   source: $shareDescription,
@@ -99,3 +120,12 @@ export const $sortedShareList = sharesWithUser.map(
 //     }
 //   },
 // })
+
+$githubUser.watch(({databaseId}) => {
+  if (databaseId) {
+    getShareListByAuthor({author: databaseId})
+  }
+})
+
+
+$filterMode.on(setFilterMode, (_, value) => value)

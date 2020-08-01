@@ -72,3 +72,37 @@ export const shareCode = attach({
     code: sourceCode,
   }),
 })
+
+export const getShareListByAuthor = attach({
+  effect: createEffect('get share list', {
+    async handler({author}) {
+      if (!author) throw new Error('author required')
+
+      const {getCodePagesByAuthor} = await request({
+        query: `
+          query getShareListByAuthor($author: Int!) {
+            getCodePagesByAuthor(author: $author) {
+              pages {
+                slug
+                created
+                description
+                code
+              }
+            }
+          }
+      `,
+        variables: {
+          author,
+        },
+        operationName: 'getShareListByAuthor',
+      })
+      return getCodePagesByAuthor
+    },
+  }),
+  source: {
+    user: $githubUser,
+  },
+  mapParams: (params, {user}) => ({
+    author: user ? user.databaseId : null,
+  }),
+})

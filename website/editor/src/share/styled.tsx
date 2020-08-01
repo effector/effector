@@ -70,7 +70,7 @@ export const ShareGroup = styled.div`
 
   @media (max-width: 699px) {
     grid-column: 1 / span 1;
-    grid-row: 2 / span 1;
+    grid-row: 2 / span 2;
   }
 `
 

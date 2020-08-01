@@ -136,7 +136,7 @@ body {
   padding: 0;
 }
 
-@media (max-width: 699px) {
+@media (max-width: 767px) {
   .navPusher {
     padding-top: 50px;
   }
