@@ -18,9 +18,8 @@
       "effector": ["packages/effector/index.d.ts"],
       "effector-react/ssr": ["packages/effector-react/ssr.d.ts"],
       "effector-react": ["packages/effector-react/index.d.ts"],
-      "effector-dom": ["packages/effector-dom/index.d.ts"],
-      "forest/server": ["packages/effector-dom/server.d.ts"],
-      "forest": ["packages/effector-dom/index.d.ts"],
+      "forest/server": ["packages/forest/server.d.ts"],
+      "forest": ["packages/forest/index.d.ts"],
       "effector-vue": ["packages/effector-vue/index.d.ts"]
     }
   },

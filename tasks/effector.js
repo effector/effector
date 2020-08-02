@@ -122,33 +122,12 @@ export default {
     rollupEffectorVue,
     publishScript('effector-vue'),
   ],
-  'effector-dom': [
-    generatePackageJSON('effector-dom'),
-    copyLicense('effector-dom'),
-    () =>
-      massCopy('packages/effector-dom', 'npm/effector-dom', [
-        'README.md',
-        'package.json',
-        [
-          'index.d.ts',
-          [
-            'index.d.ts',
-            'effector-dom.cjs.d.ts',
-            'effector-dom.es.d.ts',
-            'effector-dom.umd.d.ts',
-          ],
-        ],
-        'server.d.ts',
-      ]),
-    () => rollupEffectorDom({name: 'effector-dom'}),
-    publishScript('effector-dom'),
-  ],
   forest: [
     generatePackageJSON('forest'),
     copyLicense('forest'),
     () =>
       Promise.all([
-        massCopy('packages/effector-dom', 'npm/forest', [
+        massCopy('packages/forest', 'npm/forest', [
           [
             'index.d.ts',
             [
@@ -163,10 +142,6 @@ export default {
         massCopy('packages/forest', 'npm/forest', [
           'README.md',
           'package.json',
-        ]),
-        massCopy('packages/effector-dom', 'packages/forest', [
-          'index.ts',
-          'server.ts',
         ]),
       ]),
     () => rollupEffectorDom({name: 'forest'}),

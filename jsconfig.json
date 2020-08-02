@@ -9,9 +9,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "effector": ["src/effector"],
+      "effector": ["packages/effector"],
       "effector/fork": ["packages/effector/fork"],
-      "effector-dom": ["packages/effector-dom"],
+      "forest": ["packages/forest"],
       "effector-vue": ["packages/effector-vue"],
       "effector/*": ["src/*"]
     }
