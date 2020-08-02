@@ -1,11 +1,11 @@
-import React, {useRef, useState} from 'react'
+import React, {useRef} from 'react'
 import {useStore} from 'effector-react'
 import {getShareListByAuthor, shareCode} from '../graphql'
 import {ShareButton, ShareGroup} from './styled'
 import {sharing} from './controller'
 import {Section} from '../settings/view'
 import {isShareAPISupported} from '../device'
-import {handleInput, handleKeyDown, removeShare, setCurrentShareId, setFilterMode} from './index'
+import {handleInput, handleKeyDown, onTextChange, removeShare, setCurrentShareId, setFilterMode} from './index'
 import {$currentShareId, $filterMode, $shareDescription} from './state'
 import {styled} from 'linaria/react'
 import {CopyIcon} from '../components/Icons/CopyIcon'
@@ -16,7 +16,8 @@ import {IconButton} from '../components/IconButton'
 import {theme} from '../components/Console/theme/default'
 import {getUserInfo} from '~/github/init'
 import {FilterIcon} from '~/share/filterIcon'
-import {$debouncedInput} from '~/share/debounceInput'
+import {$debouncedInput, resetInput} from '~/share/debounceInput'
+import {RemoveIcon} from '~/share/RemoveIcon'
 
 
 const Save = props => {
@@ -118,12 +119,10 @@ const ShareList = ({filterMode, description}) => {
   }
 
   if (filterMode && description) {
-    sortedShareList = sortedShareList.filter(share =>
-      share?.description && (
-        share?.description?.trim().toLowerCase().indexOf(description) !== -1
-        || share?.code?.trim().toLowerCase().indexOf(description) !== -1
-      ),
-    )
+    sortedShareList = sortedShareList.filter(share => share?.description && (
+      share?.description?.trim().toLowerCase().indexOf(description) !== -1
+      || share?.code?.trim().indexOf(description) !== -1
+    ))
   }
 
   return sortedShareList.map(share => {
@@ -227,14 +226,10 @@ const ValidatedInput = styled.input`
   }
 `
 
-const LIST_MODE = 0
-const SEARCH_MODE = 1
-
 export const Share = () => {
   const shareDescription = useStore($shareDescription)
   const saving = useStore(shareCode.pending)
   const filterMode = useStore($filterMode)
-  const [listMode, setMode] = useState(LIST_MODE)
   const descRef = useRef(null)
   const debouncedInput = useStore($debouncedInput)
 
@@ -258,20 +253,25 @@ export const Share = () => {
             setTimeout(() => descRef?.current?.focus())
           }}
         />
-        <ValidatedInput
-          ref={descRef}
-          type="text"
-          className="share-description"
-          style={{width: '100%', padding: 4, height: 32}}
-          placeholder="Share description required"
-          value={shareDescription || ''}
-          onKeyDown={handleKeyDown}
-          onChange={handleInput}
-          onFocus={() => setMode(SEARCH_MODE)}
-          onBlur={() => setTimeout(() => setMode(LIST_MODE), 500)}
-          autoFocus={false}
-          // required
-        />
+        <div style={{position: 'relative', width: '100%'}}>
+          <ValidatedInput
+            ref={descRef}
+            type="text"
+            className="share-description"
+            style={{width: '100%', padding: '4px 24px 4px 4px', height: 32}}
+            placeholder="Share description required"
+            value={shareDescription || ''}
+            onKeyDown={handleKeyDown}
+            onChange={handleInput}
+            autoFocus={false}
+            // required
+          />
+          <RemoveIcon
+            color="gray"
+            style={{width: 16, cursor: 'pointer', position: 'absolute', right: 4, top: 8}}
+            onClick={() => onTextChange('')}
+          />
+        </div>
         <Save disabled={saving} />
       </Section>
 
@@ -284,8 +284,8 @@ export const Share = () => {
           borderBottom: 'none',
           height: 'calc(100% - 42px)',
         }}>
-        <ShareList filterMode={listMode === SEARCH_MODE && filterMode}
-                   description={(debouncedInput || '').trim().toLowerCase()}
+        <ShareList filterMode={filterMode}
+                   description={debouncedInput.trim().toLowerCase()}
         />
       </Section>
     </ShareGroup>
