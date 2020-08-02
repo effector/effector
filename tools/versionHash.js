@@ -6,43 +6,48 @@ if (typeof versionHash !== 'string') throw Error('no VERSION_HASH/GITHUB_SHA')
 
 const shortHash = versionHash.slice(0, 8)
 
-const packagePath = resolve(__dirname, '..', 'npm/effector/package.json')
-
-const effectorPackage = readJSONSync(packagePath)
-
-effectorPackage.name = '@effector/canary'
-preparePackage(effectorPackage)
 const registry = process.env.VERSION_HASH_REGISTRY
 if (registry) {
-  prepareGithubPackage('@zerobias/effector', effectorPackage)
+  preparePackageFull({
+    path: 'effector',
+    name: '@zerobias/effector',
+    directory: 'effector',
+  })
   preparePackageFull({
     path: 'effector-react',
     name: '@zerobias/effector-react',
+    directory: 'react',
   })
   preparePackageFull({
-    path: 'effector-dom',
-    name: '@zerobias/effector-dom',
+    path: 'forest',
+    name: '@zerobias/forest',
+    directory: 'forest',
   })
-}
-function preparePackageFull({path, name}) {
-  const packagePath = resolve(__dirname, '..', 'npm', path, 'package.json')
-  const packageJson = readJSONSync(packagePath)
-  preparePackage(packageJson)
-  prepareGithubPackage(name, packageJson)
-  outputJSONSync(packagePath, packageJson, {
+} else {
+  const packagePath = resolve(__dirname, '..', 'npm/effector/package.json')
+  const effectorPackage = readJSONSync(packagePath)
+
+  effectorPackage.name = '@effector/canary'
+  effectorPackage.version = `${effectorPackage.version}-${shortHash}`
+  effectorPackage.repository = 'git://github.com/zerobias/effector.git'
+
+  outputJSONSync(packagePath, effectorPackage, {
     spaces: 2,
   })
 }
-function prepareGithubPackage(name, pkg) {
+function preparePackageFull({path, name, directory}) {
+  const packagePath = resolve(__dirname, '..', 'npm', path, 'package.json')
+  const pkg = readJSONSync(packagePath)
+  pkg.version = `${pkg.version}-${shortHash}`
+  pkg.repository = {
+    type: 'git',
+    url: 'git://github.com/zerobias/effector.git',
+    directory: `packages/${directory}`,
+  }
   pkg.publishConfig = pkg.publishConfig || {}
   pkg.publishConfig.registry = registry
   pkg.name = name
+  outputJSONSync(packagePath, pkg, {
+    spaces: 2,
+  })
 }
-function preparePackage(pkg) {
-  pkg.version = `${pkg.version}-${shortHash}`
-  pkg.repository = 'git://github.com/zerobias/effector.git'
-}
-
-outputJSONSync(packagePath, effectorPackage, {
-  spaces: 2,
-})
