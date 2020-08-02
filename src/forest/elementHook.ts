@@ -100,29 +100,6 @@ import {
 } from './mountChild'
 import {remap} from './remap'
 
-function printTemplateTree(actor: Actor<any>) {
-  const rows = [] as string[]
-  visit(actor, {level: 0})
-  function visit(actor: Actor<any>, {level}: {level: number}) {
-    const {draft} = actor
-    rows.push(`${' '.repeat(level)}${draft.type}`)
-    switch (draft.type) {
-      case 'listItem':
-        return
-      case 'blockItem':
-        draft.itemOf.childTemplates.forEach(child => {
-          visit(child, {level: level + 1})
-        })
-        return
-      default:
-    }
-    draft.childTemplates.forEach(child => {
-      visit(child, {level: level + 1})
-    })
-  }
-  console.log(rows.join(`\n`))
-}
-
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
 export function h(
@@ -880,7 +857,6 @@ export function using(node: DOMElement, opts: any): void {
   usingBlock.child.parent = usingBlock
 
   const queue = createOpQueue({onComplete})
-  printTemplateTree(usingTemplate)
   const rootLeaf = spawn(usingTemplate, {
     parentLeaf: currentLeaf || null,
     mountNode: node,
