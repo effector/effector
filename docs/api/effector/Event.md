@@ -301,11 +301,11 @@ const inputChanged = nameChanged.prepend(e => e.target.value)
 // event, which will be bound to DOM element
 
 const input = document.createElement('input')
-input.onchange = inputChanged
+input.oninput = inputChanged
 
 document.body.appendChild(input)
 // input something in input, and press Enter
 // => Current name is: something
 ```
 
-[Try it](https://share.effector.dev/1rHlEeTy)
+[Try it](https://share.effector.dev/F7Yc6YyF)
