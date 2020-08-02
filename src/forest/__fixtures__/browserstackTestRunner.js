@@ -19,7 +19,7 @@ const browserStackConfig = {
     'bstack:options': {
       os: 'OS X',
       osVersion: 'Mojave',
-      projectName: 'effector-dom',
+      projectName: 'forest',
       buildName: 'macos Safari',
       seleniumVersion: '3.141.59',
       userName: process.env.BROWSERSTACK_USERNAME,
