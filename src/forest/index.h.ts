@@ -62,7 +62,27 @@ export type HandlerRecord = {
     {[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}
   >
 }
-
+export type StaticOperationDef =
+  | {
+      type: 'attr'
+      field: string
+      value: DOMProperty
+    }
+  | {
+      type: 'data'
+      field: string
+      value: DOMProperty
+    }
+  | {
+      type: 'style'
+      field: string
+      value: DOMProperty
+    }
+  | {
+      type: 'styleVar'
+      field: string
+      value: DOMProperty
+    }
 type OperationDef =
   | {
       type: 'visible'
@@ -129,6 +149,7 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   namespace: NSType
   env: Env
   deferredInit?: (() => void) | null
+  isBlock: boolean
 }
 
 export type AsyncValue = {
@@ -279,6 +300,7 @@ export type LeafData =
   | LeafDataBlockItem
 
 export type Leaf = {
+  actor: Actor<any>
   spawn: Spawn
   parentLeaf: Leaf | null
   draft: NodeDraft
@@ -295,6 +317,7 @@ export type Leaf = {
   svgRoot: SVGSVGElement | null
   hydration: boolean
   forkPage?: Fork
+  env: Env
 }
 
 export type BindingsDraft = {
@@ -312,6 +335,7 @@ export type BlockDraft = {
 
 export type BlockItemDraft = BindingsDraft & {
   type: 'blockItem'
+  itemOf: BlockDraft
 }
 
 export type RecDraft = {
@@ -363,6 +387,7 @@ export type ElementDraft = BindingsDraft & {
   tag: string
   stencil: DOMElement
   seq: OperationDef[]
+  staticSeq: StaticOperationDef[]
   attr: PropertyMap[]
   data: PropertyMap[]
   text: Array<{

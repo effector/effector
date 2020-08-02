@@ -22,6 +22,7 @@ import {
   RouteType,
   Template,
   Spawn,
+  Env,
 } from './index.h'
 
 import {
@@ -45,6 +46,7 @@ import {createOpGroup, createOp} from './plan'
 
 import {spawn} from './template'
 import {findParentDOMElement, findPreviousVisibleSibling} from './search'
+import {applyStaticOps} from './bindings'
 
 export function mountChildTemplates(
   draft: BindingsDraft,
@@ -127,6 +129,37 @@ export function mountChild({
       break
     }
     case 'element': {
+      let element: DOMElement
+      if (actor.isBlock) {
+        let env: Env | void
+        let type: 'html' | 'svg' | void
+        let currentLeaf = leaf
+        while (currentLeaf && (!type || !env)) {
+          if (currentLeaf.actor.env) env = currentLeaf.actor.env
+          const {draft} = currentLeaf
+          if (draft.type === 'element') {
+            if (draft.tag === 'svg') {
+              type = 'svg'
+            } else if (draft.tag === 'foreignObject') {
+              type = 'html'
+            }
+          }
+          currentLeaf = currentLeaf.parentLeaf!
+        }
+        if (!type) type = 'html'
+        if (env) {
+          element =
+            type === 'svg'
+              ? env.document.createElementNS(
+                  'http://www.w3.org/2000/svg',
+                  draft.tag,
+                )
+              : env.document.createElement(draft.tag)
+          applyStaticOps(element, draft.staticSeq)
+        }
+      } else {
+        element = draft.stencil.cloneNode() as DOMElement
+      }
       const elementBlock: ElementBlock = {
         type: 'element',
         parent: parentBlockFragment,
@@ -135,7 +168,7 @@ export function mountChild({
           parent: null as any,
           child: [],
         },
-        value: draft.stencil.cloneNode() as DOMElement,
+        value: element!,
         visible: false,
         index: draft.inParentIndex,
       }

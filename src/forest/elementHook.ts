@@ -77,6 +77,7 @@ import {
   applyDataAttr,
   applyAttr,
   applyText,
+  applyStaticOps,
 } from './bindings'
 import {
   createTemplate,
@@ -98,6 +99,29 @@ import {
   mountChildTemplates,
 } from './mountChild'
 import {remap} from './remap'
+
+function printTemplateTree(actor: Actor<any>) {
+  const rows = [] as string[]
+  visit(actor, {level: 0})
+  function visit(actor: Actor<any>, {level}: {level: number}) {
+    const {draft} = actor
+    rows.push(`${' '.repeat(level)}${draft.type}`)
+    switch (draft.type) {
+      case 'listItem':
+        return
+      case 'blockItem':
+        draft.itemOf.childTemplates.forEach(child => {
+          visit(child, {level: level + 1})
+        })
+        return
+      default:
+    }
+    draft.childTemplates.forEach(child => {
+      visit(child, {level: level + 1})
+    })
+  }
+  console.log(rows.join(`\n`))
+}
 
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
@@ -163,11 +187,15 @@ export function h(tag: string, opts?: any) {
     type = 'svg'
     ns = 'svg'
   }
-  const node =
-    type === 'svg'
-      ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)
-      : env.document.createElement(tag)
-  const stencil = node as DOMElement
+  let node: DOMElement
+  if (!currentActor!.isBlock) {
+    node =
+      type === 'svg'
+        ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)
+        : env.document.createElement(tag)
+  }
+  //@ts-ignore
+  const stencil = node
   const draft: ElementDraft = {
     type: 'element',
     tag,
@@ -179,6 +207,7 @@ export function h(tag: string, opts?: any) {
     handler: [],
     stencil,
     seq: [],
+    staticSeq: [],
     childTemplates: [],
     childCount: 0,
     inParentIndex: -1,
@@ -277,7 +306,11 @@ export function h(tag: string, opts?: any) {
             value,
           })
         } else {
-          applyAttr(stencil, attr, value)
+          draft.staticSeq.push({
+            type: 'attr',
+            field: attr,
+            value,
+          })
         }
       }
       for (const data in merged.data) {
@@ -289,7 +322,11 @@ export function h(tag: string, opts?: any) {
             value,
           })
         } else {
-          applyDataAttr(stencil, data, value)
+          draft.staticSeq.push({
+            type: 'data',
+            field: data,
+            value,
+          })
         }
       }
       for (const propName in merged.styleProp) {
@@ -301,7 +338,11 @@ export function h(tag: string, opts?: any) {
             value,
           })
         } else {
-          applyStyle(stencil, propName, value!)
+          draft.staticSeq.push({
+            type: 'style',
+            field: propName,
+            value: value!,
+          })
         }
       }
       for (const field in merged.styleVar) {
@@ -313,7 +354,11 @@ export function h(tag: string, opts?: any) {
             value,
           })
         } else {
-          applyStyleVar(stencil, field, value)
+          draft.staticSeq.push({
+            type: 'styleVar',
+            field,
+            value,
+          })
         }
       }
       for (let i = 0; i < merged.text.length; i++) {
@@ -425,6 +470,7 @@ export function h(tag: string, opts?: any) {
           }
         })
       }
+      if (stencil) applyStaticOps(stencil, draft.staticSeq)
       for (let i = 0; i < draft.seq.length; i++) {
         const item = draft.seq[i]
         switch (item.type) {
@@ -709,7 +755,7 @@ export function h(tag: string, opts?: any) {
       if (siblingBlock) {
         switch (siblingBlock.type) {
           case 'text': {
-            textBlock.value = env.document.createTextNode(value)
+            textBlock.value = leaf.env.document.createTextNode(value)
             siblingBlock.value.after(textBlock.value)
             break
           }
@@ -726,7 +772,7 @@ export function h(tag: string, opts?: any) {
       }
       textBlock.visible = true
     } else {
-      textBlock.value = env.document.createTextNode(value)
+      textBlock.value = leaf.env.document.createTextNode(value)
       appendChild(textBlock)
     }
     return textBlock
@@ -834,6 +880,7 @@ export function using(node: DOMElement, opts: any): void {
   usingBlock.child.parent = usingBlock
 
   const queue = createOpQueue({onComplete})
+  printTemplateTree(usingTemplate)
   const rootLeaf = spawn(usingTemplate, {
     parentLeaf: currentLeaf || null,
     mountNode: node,
@@ -853,6 +900,7 @@ export function using(node: DOMElement, opts: any): void {
     hydration: hydrate,
     refMap: collectScopeRefs(scope!),
     forkPage: scope!,
+    env,
   })
 
   if (onRoot) {
@@ -1274,6 +1322,7 @@ export function block({
     namespace,
     env,
     draft: blockDraft,
+    isBlock: true,
     fn({}, {mount, unmount}) {
       fn()
       mount.watch(({node, leaf}) => {
@@ -1296,6 +1345,7 @@ export function block({
       childTemplates: [],
       childCount: 0,
       inParentIndex: -1,
+      itemOf: blockDraft,
     }
     const {env, namespace} = currentActor!
     const blockItemTemplate = createTemplate({

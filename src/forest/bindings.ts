@@ -1,4 +1,21 @@
-import {DOMElement} from './index.h'
+import {DOMElement, StaticOperationDef} from './index.h'
+
+const defMap = {
+  attr: applyAttr,
+  data: applyDataAttr,
+  style: applyStyle,
+  styleVar: applyStyleVar,
+}
+
+export function applyStaticOps(
+  element: DOMElement,
+  defs: StaticOperationDef[],
+) {
+  for (let i = 0; i < defs.length; i++) {
+    const {type, field, value} = defs[i]
+    defMap[type](element, field, value)
+  }
+}
 
 export function isFalse(val: any) {
   return (

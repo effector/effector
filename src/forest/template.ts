@@ -27,6 +27,7 @@ import {
   Spawn,
   LeafMountParams,
   NodeDraft,
+  Env,
 } from './index.h'
 
 let templateID = 0
@@ -75,6 +76,7 @@ export function createTemplate(config: {
   env: {
     document: Document
   }
+  isBlock?: boolean
 }): Actor<any>
 export function createTemplate<Api extends {[method: string]: any}>({
   fn,
@@ -85,6 +87,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   isSvgRoot,
   namespace,
   env,
+  isBlock = false,
 }: {
   fn: (
     state: {
@@ -104,6 +107,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
   env: {
     document: Document
   }
+  isBlock?: boolean
 }): Actor<Api> {
   const parentActor = currentActor
   const parent = currentTemplate
@@ -301,6 +305,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     isSvgRoot,
     namespace,
     env,
+    isBlock: isBlock || !!(parentActor && parentActor.isBlock),
   })
   if (!defer) {
     withRegion(node, () => {
@@ -389,6 +394,7 @@ export function spawn(
     hydration,
     refMap,
     forkPage,
+    env,
   }: {
     values?: {[field: string]: any}
     parentLeaf: Leaf | null
@@ -400,8 +406,10 @@ export function spawn(
     hydration: boolean
     refMap?: Record<string, StateRef>
     forkPage?: Fork
+    env?: Env
   },
 ): Leaf {
+  if (!env && parentLeaf) env = parentLeaf.env
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
   const page = (refMap ? {...refMap} : {}) as Record<string, any>
@@ -417,6 +425,7 @@ export function spawn(
   template.pages.push(result)
   const api = {} as any
   const leaf: Leaf = {
+    actor,
     spawn: result,
     api,
     draft: actor.draft,
@@ -429,6 +438,7 @@ export function spawn(
     parentLeaf,
     hydration,
     forkPage,
+    env: env!,
   }
   const previousSpawn = currentLeaf
   currentLeaf = leaf
