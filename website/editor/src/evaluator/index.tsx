@@ -97,14 +97,14 @@ const fetchEffectorReact = createEffect<any, {[key: string]: any}, any>({
   },
 })
 
-const fetchEffectorDom = createEffect({
+const fetchForest = createEffect({
   async handler(effector) {
-    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector-dom/effector-dom.cjs.js'
+    const url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/forest/forest.cjs.js'
     const sourceMap = `${url}.map`
     const req = await fetch(url)
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
-    return createRealm(text, `effector-dom.cjs.js`, {effector})
+    return createRealm(text, `forest.cjs.js`, {effector})
   }
 })
 const fetchEffectorFork = createEffect({
@@ -135,7 +135,7 @@ const api = {
   'effector': fetchEffector,
   'effector/fork': fetchEffectorFork,
   '@effector/babel-plugin': fetchBabelPlugin,
-  'effector-dom': fetchEffectorDom,
+  forest: fetchForest,
 }
 
 function cacher(v, cache, fetcher) {
@@ -165,16 +165,16 @@ export async function evaluator(code: string) {
     cache.effector.get(version.getState()),
   ])
   const effectorReact = await fetchEffectorReact(effector)
-  let effectorDom
+  let forest
   let effectorFork
   let effectorReactSSR
   if (version.getState() === 'master') {
     const additionalLibs = await Promise.all([
-      fetchEffectorDom(effector),
+      fetchForest(effector),
       fetchEffectorFork(effector),
       fetchEffectorReactSSR(effector)
     ])
-    effectorDom = additionalLibs[0]
+    forest = additionalLibs[0]
     effectorFork = additionalLibs[1]
     effectorReactSSR = additionalLibs[2]
   }
@@ -183,7 +183,7 @@ export async function evaluator(code: string) {
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env, {dom: effectorDom, effectorDom, effectorFork, effectorReactSSR}],
+    globalBlocks: [env, {dom: forest, forest, effectorFork, effectorReactSSR}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -260,7 +260,7 @@ const removeImportsPlugin = babel => ({
       switch (path.node.source.value) {
         case 'forest':
         case 'effector-dom':
-          replaceModuleImports('effectorDom', path, babel)
+          replaceModuleImports('forest', path, babel)
           break
         case 'effector/fork':
           replaceModuleImports('effectorFork', path, babel)
