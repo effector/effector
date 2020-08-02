@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import {createStore, Store} from 'effector'
-import {h, spec, list, using, remap} from 'effector-dom'
+import {h, spec, list, using, remap} from 'forest'
 
 const typecheck = '{global}'
 

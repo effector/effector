@@ -49,8 +49,8 @@
       "effector-react/ssr": ["../../../../packages/effector-react/ssr.d.ts"],
       "effector-react": ["../../../../packages/effector-react/index.d.ts"],
       "effector-vue": ["../../../../packages/effector-vue/index.d.ts"],
-      "effector-dom": ["../../../../packages/effector-dom/index.d.ts"],
-      "forest": ["../../../../packages/effector-dom/index.d.ts"]
+      "forest/server": ["../../../../packages/forest/server.d.ts"],
+      "forest": ["../../../../packages/forest/index.d.ts"]
     } /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */,
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [] /* List of folders to include type definitions from. */,
