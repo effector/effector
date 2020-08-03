@@ -247,7 +247,7 @@ export function createEnv(): Env {
   const document = {
     createTextNode(text: string) {
       const node = new DOMNode()
-      node.textContent = escapeContent(text)
+      node.textContent = String(text)
       node.nodeName = '#text'
       return node
     },
@@ -287,7 +287,11 @@ export function createEnv(): Env {
 
 function renderPart(node: DOMNode, parts: string[]) {
   if (node.textContent !== null) {
-    parts.push(node.textContent)
+    let textContent = node.textContent
+    if (!node.parent || node.parent.tagName !== 'script') {
+      textContent = escapeContent(textContent)
+    }
+    parts.push(textContent)
   }
   if (node.isFragment) {
     let child = node.firstChild

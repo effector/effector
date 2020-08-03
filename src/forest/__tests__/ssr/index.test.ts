@@ -174,7 +174,7 @@ describe('text content escaping', () => {
       })
     })
     expect(result).toMatchInlineSnapshot(
-      `"<script>window.__INITIAL_STATE__ = {&quot;foo&quot;: &quot;bar&quot;}</script>"`,
+      `"<script>window.__INITIAL_STATE__ = {\\"foo\\": \\"bar\\"}</script>"`,
     )
   })
 })
