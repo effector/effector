@@ -1,6 +1,6 @@
 {
   "name": "forest",
-  "version": "0.18.2",
+  "version": "0.18.3",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.mjs",
