@@ -20,20 +20,29 @@ title: API Reference
 ## Top-Level Exports
 
 - [combine(...stores, f)](./combine.md)
+- [attach({effect, mapParams, source?})](./attach.md)
 - [createApi(store, api)](./createApi.md)
 - [forward({from, to})](./forward.md)
 - [merge([eventA, eventB])](./merge.md)
-- [split(event, cases)](./split.md)
 - [sample({source, clock, fn, target})](./sample.md)
 - [guard({source, filter, target})](./guard.md)
-- [attach({effect, mapParams, source?})](./attach.md)
-- [restore(event, defaultState)](./restore.md)
-- [restore(effect, defaultState)](./restore.md)
-- [restore(obj)](./restore.md)
+- [split(event, cases)](./split.md)
 - [is](./is.md)
 - [fromObservable(observable)](./fromObservable.md)
-- [withRegion](./withRegion.md)
+
+## Fork api
+
+- [fork](./fork.md)
+- [serialize](./serialize.md)
+- [hydrate](./hydrate.md)
+- [allSettled](./allSettled.md)
+- [scopeBind](./scopeBind.md)
 
 ## Babel plugin
 
 - [effector/babel-plugin](./babel-plugin.md)
+
+## Low level api
+
+- [clearNode](./clearNode.md)
+- [withRegion](./withRegion.md)

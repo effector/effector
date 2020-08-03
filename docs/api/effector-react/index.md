@@ -3,16 +3,19 @@ id: effector-react
 title: API Reference
 ---
 
-### Top-Level Exports
+## Hooks
 
-- [createStoreConsumer(store)](createStoreConsumer.md)
-- [createComponent(store, render)](createComponent.md)
-- [createGate(name?)](createGate.md)
-- [useGate(GateComponent, props)](useGate.md)
-- [useStore(store)](useStore.md)
-- [useStoreMap({ store, keys, fn })](useStoreMap.md)
-- [useList(store, renderItem)](useList.md)
+- [useStore(store)](./useStore.md)
+- [useStoreMap({ store, keys, fn })](./useStoreMap.md)
+- [useList(store, renderItem)](./useList.md)
 
-### Gate API
+## Gate API
 
-- [Gate\<Props\>](Gate.md)
+- [Gate](Gate.md)
+- [createGate()](./createGate.md)
+- [useGate(GateComponent, props)](./useGate.md)
+
+## Top-Level Exports
+
+- [createComponent(store, render)](./createComponent.md)
+- [createStoreConsumer(store)](./createStoreConsumer.md)
