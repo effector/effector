@@ -33,9 +33,6 @@ class DOMNode {
   value?: string
   firstChild: DOMNode | null = null
   nextSibling: DOMNode | null = null
-  transform = {
-    baseVal: new DOMSVGTransformList(),
-  }
   isFragment = true
   attributes: {[attributeName: string]: string} = Object.create(null)
   textContent: string | null = null
@@ -48,11 +45,6 @@ class DOMNode {
     Object.assign(result.dataset, this.dataset)
     Object.assign(result.style.properties, this.style.properties)
     result.value = this.value
-    for (const {value} of this.transform.baseVal.items) {
-      const transform = new DOMSVGTransform()
-      transform.value = value
-      result.transform.baseVal.items.push(transform)
-    }
     result.isFragment = this.isFragment
     Object.assign(result.attributes, this.attributes)
     result.textContent = this.textContent
@@ -141,9 +133,6 @@ class DOMNode {
     setNextSibling(this, null)
     this.parent = null
   }
-  createSVGTransform(): DOMSVGTransform {
-    return new DOMSVGTransform()
-  }
   replaceData(offset: number, length: number, content: string) {
     if (typeof this.textContent !== 'string') return
     this.textContent = `${this.textContent.slice(
@@ -168,34 +157,6 @@ class CSSStyle {
   }
   removeProperty(property: string): void {
     delete this.properties[escapeTag(property)]
-  }
-}
-class DOMSVGTransformList {
-  items: DOMSVGTransform[] = []
-  appendItem(newItem: DOMSVGTransform) {
-    this.items.push(newItem)
-  }
-}
-class DOMSVGTransform {
-  value = ''
-  setTranslate(tx: number, ty: number): void {
-    this.value = `translate(${tx} ${ty})`
-  }
-  setScale(sx: number, sy: number): void {
-    this.value = `scale(${sx} ${sy})`
-  }
-  setRotate(angle: number, cx: number, cy: number): void {
-    if (cx !== 0 || cy !== 0) {
-      this.value = `rotate(${angle} ${cx} ${cy})`
-    } else {
-      this.value = `rotate(${angle})`
-    }
-  }
-  setSkewX(angle: number): void {
-    this.value = `skewX(${angle})`
-  }
-  setSkewY(angle: number): void {
-    this.value = `skewY(${angle})`
   }
 }
 function convertDataChar(char: string) {
@@ -333,11 +294,6 @@ function renderPart(node: DOMNode, parts: string[]) {
   }
   if (styles.length > 0) {
     parts.push(' ', 'style', '=', '"', styles.join(';'), '"')
-  }
-  if (node.transform.baseVal.items.length > 0) {
-    parts.push(' ', 'transform', '=', '"')
-    const transforms = node.transform.baseVal.items.map(({value}) => value)
-    parts.push(transforms.join(' '), '"')
   }
   parts.push('>')
   if (nonClosedTags.includes(node.tagName)) return
