@@ -3,6 +3,7 @@ const invalidToken = /[^a-zA-Z0-9\-_]/g
 const invalidValue = /[\\<>"]/g
 const dataValue = /[A-Z]/g
 const escaped = /[&<>'"]/g
+const scriptEscape = /<\/(\s|\\n)*script/gim
 
 function setNextSibling(target: DOMNode, sibling: DOMNode | null) {
   target.sibling.right = sibling
@@ -203,6 +204,9 @@ function escapeTagValue(value: string) {
 function escapeContent(value: string) {
   return String(value).replace(escaped, escapeContentHandler)
 }
+function escapeScriptContent(value: string) {
+  return value.replace(scriptEscape, '<\\/script')
+}
 
 export function createEnv(): Env {
   const document = {
@@ -297,10 +301,15 @@ function renderPart(node: DOMNode, parts: string[]) {
   }
   parts.push('>')
   if (nonClosedTags.includes(node.tagName)) return
+  const childParts: string[] = node.tagName === 'script' ? [] : parts
   let child: DOMNode | null = node.firstChild
   while (child) {
-    renderPart(child, parts)
+    renderPart(child, childParts)
     child = child.sibling.right
+  }
+  if (node.tagName === 'script') {
+    const rawScript = childParts.join('')
+    parts.push(escapeScriptContent(rawScript))
   }
   parts.push('</', node.tagName, '>')
 }

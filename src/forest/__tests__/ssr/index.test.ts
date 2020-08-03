@@ -177,6 +177,18 @@ describe('text content escaping', () => {
       `"<script>window.__INITIAL_STATE__ = {\\"foo\\": \\"bar\\"}</script>"`,
     )
   })
+  it('still escape "</script>" in script tag', async () => {
+    const app = createDomain()
+    const scriptText = app.createStore(JSON.stringify({foo: `</\nscript>`}))
+    const result = await renderStatic(() => {
+      h('script', () => {
+        text`window.__INITIAL_STATE__ = ${scriptText}; console.log('</script>')`
+      })
+    })
+    expect(result).toMatchInlineSnapshot(
+      `"<script>window.__INITIAL_STATE__ = {\\"foo\\":\\"<\\\\/script>\\"}; console.log('<\\\\/script>')</script>"`,
+    )
+  })
 })
 
 test('fork isolation', async () => {
