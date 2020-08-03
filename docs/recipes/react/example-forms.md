@@ -52,14 +52,18 @@ const App = () => (
   </form>
 )
 
+submitted.watch(e => {
+  e.preventDefault()
+})
+
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/2ksW0IsZ)
+[Try it](https://share.effector.dev/XtlunJZU)
 
 Let's break down the code above.
 
-These are just events & effects definitions. Simple.
+These are just events & effects definitions.
 
 ```js
 const sendFormFx = createEffect({handler: console.log})
@@ -127,6 +131,14 @@ const App = () => (
     <button type="submit">Submit!</button>
   </form>
 )
+```
+
+Prevent default html form submit behavior using react event from `submitted`
+
+```js
+submitted.watch(e => {
+  e.preventDefault()
+})
 ```
 
 Of course, there is much simplier way, to implement this, consider:
