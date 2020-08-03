@@ -9,7 +9,7 @@ import {
   serialize,
   hydrate,
 } from 'effector'
-import {h, using, list, node, spec, block} from 'forest'
+import {h, using, list, node, spec, block, text} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-ignore
@@ -151,6 +151,32 @@ test('hydration support (with html hydration)', async () => {
     <h1>dashboard</h1>
     "
   `)
+})
+describe('text content escaping', () => {
+  it('escape text content in common tags', async () => {
+    const app = createDomain()
+    const scriptText = app.createStore('{"foo": "bar"}')
+    const result = await renderStatic(() => {
+      h('span', () => {
+        text`window.__INITIAL_STATE__ = ${scriptText}`
+      })
+    })
+    expect(result).toMatchInlineSnapshot(
+      `"<span>window.__INITIAL_STATE__ = {&quot;foo&quot;: &quot;bar&quot;}</span>"`,
+    )
+  })
+  it('not escape text content in script tag', async () => {
+    const app = createDomain()
+    const scriptText = app.createStore('{"foo": "bar"}')
+    const result = await renderStatic(() => {
+      h('script', () => {
+        text`window.__INITIAL_STATE__ = ${scriptText}`
+      })
+    })
+    expect(result).toMatchInlineSnapshot(
+      `"<script>window.__INITIAL_STATE__ = {&quot;foo&quot;: &quot;bar&quot;}</script>"`,
+    )
+  })
 })
 
 test('fork isolation', async () => {
