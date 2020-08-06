@@ -4,7 +4,11 @@ title: merge
 hide_title: true
 ---
 
-# `merge(unitsArray)`
+:::note since
+effector 20.0.0
+:::
+
+### `merge(unitsArray)`
 
 Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)), returns a new [_Event_](Event.md), which fires upon trigger of any of merged units.
 
