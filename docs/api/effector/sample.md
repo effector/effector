@@ -147,6 +147,28 @@ submitForm(12345678)
 
 [Try it](https://share.effector.dev/rPupnEQS)
 
+## `sample({name?})`
+
+:::note since
+effector 20.4.0
+:::
+
+Each basic entity in Effector (event/effect/store/domain) may have a name.  
+You now can name sampled entities in the same manner as basic ones.
+
+```js
+import {createStore, sample} from 'effector'
+
+const foo = createStore(null)
+
+const sampled = sample({
+  source: foo,
+  name: 'sampled foo',
+})
+
+console.log(sampled.shortName) // 'sampled foo'
+```
+
 ## Objects and arrays of _Store_ in `sample({ source })`
 
 ### Object of stores
@@ -321,3 +343,5 @@ inc() // => Doe has 1 coins
 ```
 
 [Try it](https://share.effector.dev/h3zED3yW) -->
+
+
