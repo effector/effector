@@ -9,8 +9,7 @@ import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
-const codeExample = `
-import {createStore, createEvent} from 'effector'
+const codeExample = `import {createStore, createEvent} from 'effector'
 
 const add = createEvent()
 const sub = createEvent()
@@ -97,7 +96,7 @@ function Home() {
         <div className="container">
           <div className={clsx('row', styles.rowRevers)}>
 
-            <div className={clsx('col col--6', styles.buttons)}>
+            <div className={clsx('col col--6 margin-bottom--md', styles.buttons)}>
               <h1 className="hero__title">{siteConfig.title}</h1>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
               <div className={styles.buttons}>
@@ -110,9 +109,7 @@ function Home() {
                   Get Started
                 </Link>
                 <Link
-                  className={
-                    'button button--outline button--secondary button--lg'
-                  }
+                  className={'button button--outline button--secondary button--lg'}
                   to="https://share.effector.dev">
                   Try it out
                 </Link>
