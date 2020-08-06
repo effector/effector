@@ -118,7 +118,7 @@ const sidebar = {
       items: ['recipes/react-native/example'],
     },
   ],
-  'Advanced guide': ['advanced-guide/Computation priority'],
+  'Advanced guide': ['advanced-guide/computation-priority'],
 }
 
 module.exports = {
