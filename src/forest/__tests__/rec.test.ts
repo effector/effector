@@ -389,3 +389,65 @@ function printLeaf(leaf: Leaf) {
     }
   }
 }
+
+test('top level rec suppot', async () => {
+  //prettier-ignore
+  type Item = {id: number; title: string; child: Item[]};
+  const [s1] = await exec(async () => {
+    const Article = rec<Item>(({state}) => {
+      const [title, child] = remap(state, ['title', 'child'] as const)
+      h('div', () => {
+        h('header', {text: title})
+        list({
+          source: child,
+          key: 'id',
+          fn({store}) {
+            Article({state: store})
+          },
+        })
+      })
+    })
+    const item = createStore<Item>({
+      id: 0,
+      title: 'root',
+      child: [
+        {
+          id: 1,
+          title: 'a',
+          child: [],
+        },
+        {
+          id: 2,
+          title: 'b',
+          child: [
+            {
+              id: 3,
+              title: 'c',
+              child: [],
+            },
+          ],
+        },
+      ],
+    })
+    using(el, () => {
+      h('section', () => {
+        Article({state: item})
+      })
+    })
+    await act()
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <section>
+      <div>
+        <header>root</header>
+        <div><header>a</header></div>
+        <div>
+          <header>b</header>
+          <div><header>c</header></div>
+        </div>
+      </div>
+    </section>
+    "
+  `)
+})
