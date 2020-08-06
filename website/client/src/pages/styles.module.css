@@ -10,23 +10,23 @@
  * and scoped locally.
  */
 
-.heroBanner {
-  padding: 4rem 0;
-  position: relative;
-  overflow: hidden;
-}
-
-@media screen and (max-width: 966px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-}
-
 .buttons {
   display: flex;
   text-align: center;
   align-self: center;
   justify-content: center;
+}
+
+@media screen and (min-width: 966px) {
+  .buttons a {
+    width: 33%
+  }
+}
+
+@media screen and (max-width: 966px) {
+  .buttons a {
+    width: 50%
+  }
 }
 
 .features {
@@ -44,4 +44,8 @@
 
 .getStarted {
   margin-right: 8px;
+}
+
+.rowRevers {
+  flex-direction: row-reverse;
 }
