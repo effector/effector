@@ -1353,8 +1353,6 @@ export function block({
 export function rec<T>(
   fn: (config: {state: Store<T>}) => void,
 ): (opts: {state: Store<T>}) => void {
-  const env = currentActor!.env
-  const namespace = currentActor!.namespace
   const recDraft: RecDraft = {
     type: 'rec',
     childTemplates: [],
@@ -1367,10 +1365,11 @@ export function rec<T>(
     name: 'rec',
     state: {store: null},
     isSvgRoot: false,
-    namespace,
-    env,
+    namespace: null as any,
+    env: null as any,
     draft: recDraft,
     defer: true,
+    isBlock: true,
     fn({store}, {mount, unmount}) {
       fn({state: store})
       const itemUpdater = createEvent<any>()

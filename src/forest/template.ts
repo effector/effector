@@ -55,6 +55,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
   env: {
     document: Document
   }
+  isBlock?: boolean
 }): Actor<Api>
 //@ts-ignore
 export function createTemplate(config: {
