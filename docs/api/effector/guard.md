@@ -4,6 +4,10 @@ title: guard
 hide_title: true
 ---
 
+:::note since
+effector 20.4.0
+:::
+
 # guard
 
 Method for conditional event routing.
