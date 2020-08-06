@@ -4,6 +4,10 @@ title: split
 hide_title: true
 ---
 
+:::note since
+effector 20.0.0
+:::
+
 # split
 
 Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its matching function

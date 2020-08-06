@@ -305,6 +305,10 @@ effectFx(2) // => Fail with params 2 and error 1
 
 ### `finally`
 
+:::note since
+effector 20.0.0
+:::
+
 Event, which is triggered when handler is resolved, rejected or throws error.
 
 #### Properties
