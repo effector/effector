@@ -5,7 +5,7 @@ title: Forms
 
 #### Example 1
 
-```js
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
@@ -95,9 +95,9 @@ const handleChange = setField.prepend(e => ({
 })) // upon trigger `handleChange`, passed data will be transformed in a way, described in function above, and returning value will be passed to original `setField` event.
 ```
 
-Next, we have to deal with how inputs should work. [`useStoreMap`](/api/effector-react/useStoreMap) hook here prevents component rerender upon non-relevant changes.
+Next, we have to deal with how inputs should work. [`useStoreMap`](/api/effector-react/useStoreMap.md) hook here prevents component rerender upon non-relevant changes.
 
-```js
+```jsx
 const Field = ({name, type, label}) => {
   const value = useStoreMap({
     store: $form, // take $form's state
@@ -121,7 +121,7 @@ const Field = ({name, type, label}) => {
 
 And, finally, the `App` itself! Note, how we got rid of any business-logic in view layer. It's simpler to debug, to share logic, and even more: logic is framework independent now.
 
-```js
+```jsx
 const App = () => (
   <form
     action="void(0)"
@@ -143,7 +143,7 @@ submitted.watch(e => {
 
 Of course, there is much simplier way, to implement this, consider:
 
-```js
+```jsx
 const sendFormFx = createEffect({handler: () => console.log($store.getState())})
 const changed = createEvent()
 const $store = createStore({}).on(changed, (s, e) => ({
@@ -187,7 +187,7 @@ This code is way shorter, yet has code duplication, lower scalability and less r
 
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
 
-```js
+```jsx
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
