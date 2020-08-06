@@ -2,7 +2,7 @@ import {Graph, Graphite} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 
-const removeItem = (list: any[], item: any) => {
+export const removeItem = (list: any[], item: any) => {
   const pos = list.indexOf(item)
   if (pos !== -1) {
     list.splice(pos, 1)

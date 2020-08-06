@@ -9,6 +9,7 @@ import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
+import {removeItem} from './clearNode'
 
 /**
 hydrate state on client
@@ -76,7 +77,7 @@ function fillValues({
   }
   const refGraph = createRefGraph(refsMap)
   const result = toposort(refGraph)
-  result.forEach(id => {
+  forEach(result, id => {
     execRef(refsMap[id])
   })
 
@@ -137,10 +138,10 @@ function createRefGraph(refsMap: Record<string, StateRef>) {
   }
   //prettier-ignore
   for (const {id, before, after} of items) {
-    before && before.forEach(cmd => {
+    before && forEach(before, cmd => {
       refGraph[cmd.from.id].push(id)
     })
-    after && after.forEach(cmd => {
+    after && forEach(after, cmd => {
       refGraph[id].push(cmd.to.id)
     })
   }
@@ -271,10 +272,15 @@ export function fork(
     const sourceRefsMap = {} as Record<string, StateRef>
     const refsMap = {} as Record<string, StateRef>
     const predefinedRefs = new Set()
+    const templateOwnedRefs = new Set<string>()
     const valuesSidList = Object.getOwnPropertyNames(values)
-    for (const {reg} of sourceList) {
+    for (const {reg, meta} of sourceList) {
+      const {nativeTemplate} = meta
       for (const id in reg) {
         sourceRefsMap[id] = reg[id]
+        if (nativeTemplate) {
+          templateOwnedRefs.add(id)
+        }
       }
     }
     for (const node of forked.clones) {
@@ -292,8 +298,8 @@ export function fork(
       }
     }
     const refGraph = createRefGraph(sourceRefsMap)
-    const result = toposort(refGraph)
-    result.forEach(id => {
+    const result = toposort(refGraph, templateOwnedRefs)
+    forEach(result, id => {
       execRef(refsMap[id], sourceRefsMap[id])
     })
 
@@ -342,7 +348,7 @@ export function fork(
     }
   }
 }
-function toposort(rawGraph: Record<string, string[]>) {
+function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
   const graph = {} as Record<string, string[]>
   for (const id in rawGraph) {
     graph[id] = [...new Set(rawGraph[id])]
@@ -355,7 +361,23 @@ function toposort(rawGraph: Record<string, string[]>) {
       topologicalSortHelper(node)
     }
   }
-  return result.reverse()
+  result.reverse()
+  if (ignore && ignore.size > 0) {
+    const processed = [] as string[]
+    const ignored = [...ignore]
+    let item: string | void
+    while ((item = ignored.shift())) {
+      processed.push(item)
+      forEach(graph[item], child => {
+        if (processed.includes(child) || ignored.includes(child)) return
+        ignored.push(child)
+      })
+    }
+    forEach(processed, item => {
+      removeItem(result, item)
+    })
+  }
+  return result
   function topologicalSortHelper(node: string) {
     temp[node] = true
     const neighbors = graph[node]
@@ -460,7 +482,7 @@ function cloneGraph(unit: any) {
           if (inFlight > 0 || defers.length === 0) return
           Promise.resolve().then(() => {
             if (scope.fxID !== fxID) return
-            defers.splice(0, defers.length).forEach((defer: any) => {
+            forEach(defers.splice(0, defers.length), (defer: any) => {
               setForkPage(defer.parentFork)
               defer.rs()
             })
@@ -492,7 +514,7 @@ function cloneGraph(unit: any) {
     return result
   })
   const page = {} as Record<string, StateRef>
-  clones.forEach(node => {
+  forEach(clones, node => {
     const {
       reg,
       scope,
@@ -580,7 +602,16 @@ function forEachRelatedNode(
   cb: (node: Graph, index: number, siblings: Graph[]) => void,
 ) {
   if (meta.unit === 'fork' || meta.unit === 'forkInFlightCounter') return
-  next.forEach(cb)
-  family.owners.forEach(cb)
-  family.links.forEach(cb)
+  forEach(next, cb)
+  forEach(family.owners, cb)
+  forEach(family.links, cb)
+}
+
+function forEach<T>(
+  list: T[],
+  fn: (item: T, index: number, list: T[]) => void,
+): void
+function forEach<T>(list: Set<T>, fn: (item: T) => void): void
+function forEach(list: any, fn: Function) {
+  list.forEach(fn)
 }

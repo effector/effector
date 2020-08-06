@@ -69,7 +69,6 @@ test('block with rec and list', async () => {
   `)
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
-      null,
       Object {
         "id": 0,
         "login": "alice",
