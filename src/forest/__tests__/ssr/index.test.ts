@@ -1,15 +1,12 @@
-import {argumentHistory} from 'effector/fixtures'
 import {
   createDomain,
   forward,
-  combine,
-  attach,
   fork,
   allSettled,
   serialize,
   hydrate,
 } from 'effector'
-import {h, using, list, node, spec, block, text} from 'forest'
+import {h, using, block, text} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-ignore
@@ -273,88 +270,4 @@ test('fork isolation', async () => {
     "
   `)
   expect(title.getState()).toBe('-')
-})
-
-test('block nesting', async () => {
-  const app = createDomain()
-  const scopeName = app.createStore('--')
-  const click = app.createEvent<MouseEvent>()
-  const fetchContent = app.createEffect({
-    async handler() {
-      return {title: 'dashboard'}
-    },
-  })
-  const link = app
-    .createStore('#')
-    .on(fetchContent.doneData, (_, {title}) => `/${title}`)
-  const linkText = app
-    .createStore('-')
-    .on(fetchContent.doneData, (_, {title}) => title)
-  forward({
-    from: click,
-    to: fetchContent,
-  })
-
-  const client = provideGlobals()
-
-  const SameLink = block({
-    fn() {
-      h('a', {
-        attr: {href: link},
-        text: ['Open ', linkText],
-      })
-    },
-  })
-  const Nav = block({
-    fn() {
-      h('svg', () => {
-        SameLink()
-      })
-    },
-  })
-
-  const App = block({
-    fn() {
-      SameLink()
-      h('nav', {
-        fn: Nav,
-      })
-      h('button', {
-        attr: {id: 'click'},
-        handler: {click},
-        text: scopeName,
-      })
-    },
-  })
-
-  const scopeA = fork(app, {
-    values: new Map().set(link, '/').set(scopeName, 'A'),
-    handlers: new Map([[fetchContent, async () => ({title: 'contacts'})]]),
-  })
-
-  using(client.el, {
-    scope: scopeA,
-    fn: App,
-    env: {
-      document: client.document,
-    },
-  })
-
-  await new Promise(rs => setTimeout(rs, 200))
-
-  client.el.querySelector('#click')?.click()
-
-  await new Promise(rs => setTimeout(rs, 200))
-
-  expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot(`
-    "
-    <a href='/contacts'>Open contacts</a>
-    <nav>
-      <svg xmlns='http://www.w3.org/2000/svg'>
-        <a href='/contacts'>Open contacts</a>
-      </svg>
-    </nav>
-    <button id='click'>A</button>
-    "
-  `)
 })
