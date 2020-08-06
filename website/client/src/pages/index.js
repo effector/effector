@@ -83,7 +83,7 @@ function Feature({imageUrl, title, description}) {
         </div>
       )}
       <h3 className="text--center">{title}</h3>
-      <p>{description}</p>
+      <p className="text--center">{description}</p>
     </div>
   )
 }
@@ -93,12 +93,10 @@ function Home() {
   const {siteConfig = {}} = context
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline}>
-      <header className={clsx('hero ', styles.heroBanner)}>
+      <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
-          <div className="row">
-            <div className="col col--6">
-              <Code language="js">{codeExample}</Code>
-            </div>
+          <div className={clsx('row', styles.rowRevers)}>
+
             <div className={clsx('col col--6', styles.buttons)}>
               <h1 className="hero__title">{siteConfig.title}</h1>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
@@ -112,14 +110,16 @@ function Home() {
                   Get Started
                 </Link>
                 <Link
-                  className={clsx(
-                    'button button--outline button--secondary button--lg',
-                    styles.getStarted,
-                  )}
+                  className={
+                    'button button--outline button--secondary button--lg'
+                  }
                   to="https://share.effector.dev">
                   Try it out
                 </Link>
               </div>
+            </div>
+            <div className="col col--6">
+              <Code language="js">{codeExample}</Code>
             </div>
           </div>
         </div>
