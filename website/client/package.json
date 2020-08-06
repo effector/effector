@@ -4,6 +4,7 @@
     "build": "docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
+    "serve": "docusaurus serve",
     "now-build": "yarn build"
   },
   "dependencies": {
