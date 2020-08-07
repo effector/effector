@@ -57,7 +57,7 @@ const sidebar = {
         {
           type: 'category',
           label: 'Low level api',
-          items: ['api/effector/clearNode', 'api/effector/withRegion'],
+          items: ['api/effector/clearNode', 'api/effector/withRegion', 'api/effector/launch'],
         },
       ],
     },
