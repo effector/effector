@@ -1,10 +1,7 @@
 ---
 id: serialize
 title: serialize
-hide_title: true
 ---
-
-# serialize
 
 ```ts
 serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): {[sid: string]: any}
@@ -15,7 +12,7 @@ A companion method for [_hydrate_](hydrate). Allows to get a serialized value fo
 ### Arguments
 
 1. `scope` [_Scope_](fork): a scope object (forked instance)
-2. `ignore` Optional array of [_Store_](Store.md) to be omited during serialization
+2. `ignore` Optional array of [_Store_](Store.md) to be omitted during serialization (added 20.14.0)
 3. `onlyChanges` Optional boolean flag to ignore stores which didn't changed in fork (prevent default values from being carried over network)
 
 ### Returns
