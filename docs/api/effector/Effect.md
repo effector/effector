@@ -198,7 +198,9 @@ console.log(fx.use.getCurrent() === handlerB)
 ## Effect Properties
 
 ### `doneData`
-
+:::note since
+effector 20.12.0
+:::
 Event, which is triggered with result of the effect execution:
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
@@ -222,7 +224,9 @@ effectFx(2) // => Done with result 3
 [Try it](https://share.effector.dev/KXoTVGju)
 
 ### `failData`
-
+:::note since
+effector 20.12.0
+:::
 Event, which is triggered with error thrown by the effect:
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
@@ -305,6 +309,10 @@ effectFx(2) // => Fail with params 2 and error 1
 
 ### `finally`
 
+:::note since
+effector 20.0.0
+:::
+
 Event, which is triggered when handler is resolved, rejected or throws error.
 
 #### Properties
@@ -344,7 +352,7 @@ fetchApiFx(100)
 
 #### Example
 
-```js
+```jsx
 import React from 'react'
 import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
@@ -382,7 +390,9 @@ const isLoading = createStore(false)
 ```
 
 ### `inFlight`
-
+:::note since
+effector 20.11.0
+:::
 [_Store_](Store.md) which show how many effect calls aren't settled yet. Useful for rate limiting.
 
 #### Example

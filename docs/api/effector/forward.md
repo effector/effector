@@ -69,7 +69,12 @@ event(200)
 
 It is the not better way to update store. In most cases you need [`store.on`](https://effector.now.sh/docs/api/effector/store#ontrigger-handler)
 
-## `forward({ from: Array<Unit>, to: Array<Unit> })`
+## Support array in config field
+
+:::note since
+effector 20.6.0
+:::
+### `forward({ from: Array<Unit>, to: Array<Unit> })`
 
 1. `from` (`Array`<[_Event_] | [_Store_] | [_Effect_]>): List of units. When triggered one from list, `to` will be triggered with data from it.
    - Array can contain different type of units, but data type must fit together.

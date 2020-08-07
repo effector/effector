@@ -1,10 +1,7 @@
 ---
 id: sample
 title: sample
-hide_title: true
 ---
-
-# sample
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
@@ -147,10 +144,34 @@ submitForm(12345678)
 
 [Try it](https://share.effector.dev/rPupnEQS)
 
+## `sample({name?})`
+
+:::note since
+effector 20.4.0
+:::
+
+Each basic entity in Effector (event/effect/store/domain) may have a name.  
+You now can name sampled entities in the same manner as basic ones.
+
+```js
+import {createStore, sample} from 'effector'
+
+const foo = createStore(null)
+
+const sampled = sample({
+  source: foo,
+  name: 'sampled foo',
+})
+
+console.log(sampled.shortName) // 'sampled foo'
+```
+
 ## Objects and arrays of _Store_ in `sample({ source })`
 
 ### Object of stores
-
+:::note since
+effector 20.8.0
+:::
 `sample` can be called with object of [_Store_](Store.md) as `source`:
 
 ```js
@@ -175,7 +196,9 @@ target.watch(obj => {
 [Try it](https://share.effector.dev/hiGwHrX4)
 
 ### Array of stores
-
+:::note since
+effector 20.8.0
+:::
 `sample` can be called with array of [_Store_](Store.md) as `source`:
 
 ```js
@@ -204,6 +227,37 @@ target.watch(([a, b]) => {
 ```
 
 [Try it](https://share.effector.dev/aQPLBJ2j)
+
+### Support array in clock
+:::note since
+effector 21.2.0
+:::
+
+Support for sample clock field which acts like a merge call
+
+```js
+import {createStore, createEvent, createEffect, sample, merge} from 'effector'
+
+const showNotification = createEvent<string>()
+const trigger = createEvent()
+const fx = createEffect()
+const store = createStore('')
+
+// array of units in clock
+sample({
+  source: store,
+  clock: [trigger, fx.doneData],
+  target: showNotification,
+})
+
+// merged unit in clock
+sample({
+  source: store,
+  clock: merge([trigger, fx.doneData]),
+  target: showNotification,
+})
+```
+
 
 <!-- ## Other examples
 
@@ -321,3 +375,5 @@ inc() // => Doe has 1 coins
 ```
 
 [Try it](https://share.effector.dev/h3zED3yW) -->
+
+

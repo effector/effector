@@ -171,6 +171,10 @@ numbers({x: 10})
 
 ### `filterMap(fn)`
 
+:::note since
+effector 20.0.0
+:::
+
 Creates a new event, which will be called after the original event is called if `fn` returns a value other than **undefined**.  
 Imagine a situation, you come up to a grocery store and you have let's say a task: you need to buy 10 apples, but only those that are red, otherwise nothing.
 Let's consider by steps:

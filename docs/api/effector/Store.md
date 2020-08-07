@@ -132,7 +132,9 @@ store.off(changed)
 <hr />
 
 ### `on(triggers[], handler)`
-
+:::note since
+effector 20.15.0
+:::
 Updates state when any from `triggers` is triggered by using `handler`.
 
 #### Formulae
@@ -323,7 +325,9 @@ reset() // changed 0
 <hr />
 
 ### `reset(triggersArray)`
-
+:::note since
+effector 20.15.0
+:::
 Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](./merge.md) and [store.on(triggers[], fn)](./Store.md#ontriggers-handler)
 
 A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.

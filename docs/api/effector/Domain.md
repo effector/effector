@@ -10,7 +10,9 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 It is useful for logging or other side effects.
 
 ## Unit creators
-
+:::note since
+effector 20.7.0
+:::
 ### `createEvent(name?)`
 
 #### Arguments
@@ -57,6 +59,24 @@ It is useful for logging or other side effects.
 
 [_Domain_](Domain.md): New domain
 
+<hr />
+
+### `history`
+:::note since
+effector 20.3.0
+:::
+
+Read-only sets of events, effects, stores and subdomains
+
+```js
+import {createDomain} from 'effector'
+const domain = createDomain()
+const eventA = domain.event()
+const storeB = domain.store(0)
+console.log(domain.history)
+// => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
+```
+[Try it](https://share.effector.dev/HAG9a8nk)
 <hr />
 
 ### Aliases

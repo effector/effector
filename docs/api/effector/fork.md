@@ -1,17 +1,17 @@
 ---
 id: fork
 title: fork
-hide_title: true
 ---
 
-# fork
-
+:::note since
+effector 21.0.0
+:::
 ```ts
 fork(domain: Domain, { values?, handlers? }?): Scope
 ```
 
 Creates a fully isolated instance of application.
-The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completly independent copy of all logic defined within domain.
+The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completely independents copy of all logic defined within domain.
 
 ### Arguments
 
@@ -31,7 +31,7 @@ interface Scope {
 
 ### Example
 
-Create two instances with indepented counter state
+Create two instances with independent counter state
 
 ```js
 import {
@@ -63,3 +63,55 @@ console.log(scopeB.getState($counter)) // => -1
 ```
 
 [Try it](https://share.effector.dev/0grlV3bA)
+
+### Support Map in values
+:::note since
+effector 20.11.0
+:::
+```ts
+fork(domain: Domain, { values?: Map<Store, any> , handlers? }?): Scope
+```
+
+### Support change effects
+:::note since
+effector 20.16.0
+:::
+Support for handlers to fork to change effect handlers for forked scope `(useful for testing)`
+
+```js
+//app
+const app = createDomain()
+const fetchFriends = app.createEffect<{limit: number}, string[]>({
+  async handler({limit}) {
+    /* some client-side data fetching */
+    return []
+  },
+})
+const user = app.createStore('guest')
+const friends = app
+  .createStore([])
+  .on(fetchFriends.doneData, (_, result) => result)
+
+/*
+  test to ensure that friends value is populated
+  after fetchFriends call
+*/
+const testScope = fork(app, {
+  values: {
+    [user.sid]: 'alice',
+  },
+  handlers: {
+    [fetchFriends.sid]: () => ['bob', 'carol'],
+  },
+})
+
+/* trigger computations in scope and await all called effects */
+await allSettled(fetchFriends, {
+  scope: testScope,
+  params: {limit: 10},
+})
+
+/* check value of store in scope */
+console.log(testScope.getState(friends))
+// => ['bob', 'carol']
+```

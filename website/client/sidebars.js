@@ -57,7 +57,7 @@ const sidebar = {
         {
           type: 'category',
           label: 'Low level api',
-          items: ['api/effector/clearNode', 'api/effector/withRegion'],
+          items: ['api/effector/clearNode', 'api/effector/withRegion', 'api/effector/launch'],
         },
       ],
     },
@@ -118,7 +118,7 @@ const sidebar = {
       items: ['recipes/react-native/example'],
     },
   ],
-  'Advanced guide': ['advanced-guide/Computation priority'],
+  'Advanced guide': ['advanced-guide/computation-priority'],
 }
 
 module.exports = {

@@ -3,12 +3,15 @@ id: withRegion
 title: withRegion
 hide_title: true
 ---
+# withRegion
+:::note since
+effector 20.11.0
+:::
+### `withRegion(unit: Unit<T> | Step, cb: () => void)`
 
-# `withRegion(unit: Unit<T> | Step, cb: () => void)`
+The method allow to explicitly transfer ownership of all units (including links created with sample, forward, etc...) defined in the callback `cb` to `unit`. As an implication all the created links will be erased as soon as `clearNode` will be called on `unit`.
 
-The method allow to explicitly transfer ownership of all units (including links created with sample, forward, etc..) defined in the callback `cb` to `unit`. As an implication all the created links will be erased as soon as `clearNode` will be called on `unit`.
-
-The method is based on the idea of region-based memory managment (see https://en.wikipedia.org/wiki/Region-based_memory_management for reference)
+The method based on the idea of region-based memory management (see https://en.wikipedia.org/wiki/Region-based_memory_management for reference)
 
 #### Arguments
 
