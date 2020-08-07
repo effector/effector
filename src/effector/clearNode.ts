@@ -1,13 +1,8 @@
 import {Graph, Graphite} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
+import {removeItem} from './collection'
 
-export const removeItem = (list: any[], item: any) => {
-  const pos = list.indexOf(item)
-  if (pos !== -1) {
-    list.splice(pos, 1)
-  }
-}
 const removeFromNode = (currentNode: Graph, targetNode: Graph) => {
   removeItem(currentNode.next, targetNode)
   removeItem(getOwners(currentNode), targetNode)

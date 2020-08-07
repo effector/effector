@@ -9,7 +9,7 @@ import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
 import {readTemplate} from './region'
-import {forIn} from './forIn'
+import {forIn} from './collection'
 
 export function combine(...args: any[]): Store<any> {
   if (args.length === 0) throwError('at least one argument required')

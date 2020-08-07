@@ -1,6 +1,6 @@
 import {Event} from './unit.h'
 import {is} from './is'
-import {forIn} from './forIn'
+import {forIn} from './collection'
 import {forward} from './forward'
 
 export function split(

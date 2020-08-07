@@ -9,7 +9,7 @@ import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
-import {removeItem} from './clearNode'
+import {removeItem, forEach} from './collection'
 
 /**
 hydrate state on client
@@ -605,13 +605,4 @@ function forEachRelatedNode(
   forEach(next, cb)
   forEach(family.owners, cb)
   forEach(family.links, cb)
-}
-
-function forEach<T>(
-  list: T[],
-  fn: (item: T, index: number, list: T[]) => void,
-): void
-function forEach<T>(list: Set<T>, fn: (item: T) => void): void
-function forEach(list: any, fn: Function) {
-  list.forEach(fn)
 }

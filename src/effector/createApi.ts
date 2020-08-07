@@ -1,6 +1,6 @@
 import {Store, Event} from './unit.h'
 import {createEvent, applyParentHook} from './createUnit'
-import {forIn} from './forIn'
+import {forIn} from './collection'
 import {getParent} from './getter'
 
 export function createApi(

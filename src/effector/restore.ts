@@ -1,6 +1,6 @@
 import {createStore} from './createUnit'
 import {is} from './is'
-import {forIn} from './forIn'
+import {forIn} from './collection'
 import {getParent} from './getter'
 
 export function restore(obj: any, defaultState: any, config?: any): any {

@@ -11,7 +11,7 @@ import {
 import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {addToRegion} from './region'
-import {forIn} from './forIn'
+import {forIn} from './collection'
 import {getParent} from './getter'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
