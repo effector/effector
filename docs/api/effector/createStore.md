@@ -1,10 +1,11 @@
 ---
 id: createStore
 title: createStore
-hide_title: true
 ---
 
-# `createStore(defaultState, config?)`
+```ts
+createStore(defaultState, config?)
+```
 
 Creates a [store](Store.md).
 
