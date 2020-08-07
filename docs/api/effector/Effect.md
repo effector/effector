@@ -198,7 +198,9 @@ console.log(fx.use.getCurrent() === handlerB)
 ## Effect Properties
 
 ### `doneData`
-
+:::note since
+effector 20.12.0
+:::
 Event, which is triggered with result of the effect execution:
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
@@ -222,7 +224,9 @@ effectFx(2) // => Done with result 3
 [Try it](https://share.effector.dev/KXoTVGju)
 
 ### `failData`
-
+:::note since
+effector 20.12.0
+:::
 Event, which is triggered with error thrown by the effect:
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
