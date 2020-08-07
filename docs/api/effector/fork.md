@@ -1,11 +1,11 @@
 ---
 id: fork
 title: fork
-hide_title: true
 ---
 
-# fork
-
+:::note since
+effector 21.0.0
+:::
 ```ts
 fork(domain: Domain, { values?, handlers? }?): Scope
 ```
@@ -63,3 +63,5 @@ console.log(scopeB.getState($counter)) // => -1
 ```
 
 [Try it](https://share.effector.dev/0grlV3bA)
+
+
