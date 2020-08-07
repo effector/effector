@@ -1,28 +1,29 @@
 ---
 id: split
 title: split
-hide_title: true
 ---
 
 :::note since
 effector 20.0.0
 :::
 
-# split
-
 Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its matching function
 
-## `split({source, match, cases})`
+```ts
+split({source, match, cases})
+````
 
-#### Arguments
+### Arguments
 
 - `source` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
 - `match` (_Object_): Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
 - `cases` (_Object_): An object with units ([_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)) to which data will be passed from `source` if the corresponding matching function returns true
 
 #### Returns
-
+```ts
 void
+```
+
 
 #### Example 1
 
@@ -115,7 +116,13 @@ messageReceived({
 
 [Try it](https://share.effector.dev/32FNNk8H)
 
-## `split(source, cases)`
+### Split object form
+:::note since
+effector 21.0.0
+:::
+```ts
+split(source, cases)
+```
 
 #### Arguments
 
