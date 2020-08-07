@@ -71,3 +71,47 @@ effector 20.11.0
 ```ts
 fork(domain: Domain, { values?: Map<Store, any> , handlers? }?): Scope
 ```
+
+### Support change effects
+:::note since
+effector 20.16.0
+:::
+Support for handlers to fork to change effect handlers for forked scope `(useful for testing)`
+
+```js
+//app
+const app = createDomain()
+const fetchFriends = app.createEffect<{limit: number}, string[]>({
+  async handler({limit}) {
+    /* some client-side data fetching */
+    return []
+  },
+})
+const user = app.createStore('guest')
+const friends = app
+  .createStore([])
+  .on(fetchFriends.doneData, (_, result) => result)
+
+/*
+  test to ensure that friends value is populated
+  after fetchFriends call
+*/
+const testScope = fork(app, {
+  values: {
+    [user.sid]: 'alice',
+  },
+  handlers: {
+    [fetchFriends.sid]: () => ['bob', 'carol'],
+  },
+})
+
+/* trigger computations in scope and await all called effects */
+await allSettled(fetchFriends, {
+  scope: testScope,
+  params: {limit: 10},
+})
+
+/* check value of store in scope */
+console.log(testScope.getState(friends))
+// => ['bob', 'carol']
+```
