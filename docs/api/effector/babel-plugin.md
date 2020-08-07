@@ -86,3 +86,54 @@ getUsers.use(
     }),
 )
 ```
+### noDefaults 
+
+:::note since
+effector 20.2.0
+:::
+
+Option for effector/babel-plugin for making custom unit fabrics with clean configuration
+
+```json
+{
+  "plugins": [
+    ["effector/babel-plugin", {"addLoc": true}],
+    [
+      "effector/babel-plugin",
+      {
+        "importName": "@lib/createInputField",
+        "storeCreators": ["createInputField"],
+        "noDefaults": true
+      },
+      "createInputField"
+    ]
+  ]
+}
+```
+
+```js title="@lib/createInputField.js"
+
+import {createStore} from 'effector'
+import {resetForm} from './form'
+
+export function createInputField(defaultState, {sid, name}) {
+  return createStore(defaultState, {sid, name}).reset(resetForm)
+}
+```
+
+```js title="src/state.js"
+import {createInputField} from '@lib/createInputField'
+
+const foo = createInputField('-')
+/* 
+
+will be treated as store creator and compiled to
+
+const foo = createInputField('-', {
+  name: 'foo',
+  sid: 'z&si65'
+})
+
+*/
+
+```
