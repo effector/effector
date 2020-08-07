@@ -348,7 +348,7 @@ fetchApiFx(100)
 
 #### Example
 
-```js
+```jsx
 import React from 'react'
 import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
@@ -386,7 +386,9 @@ const isLoading = createStore(false)
 ```
 
 ### `inFlight`
-
+:::note since
+effector 20.11.0
+:::
 [_Store_](Store.md) which show how many effect calls aren't settled yet. Useful for rate limiting.
 
 #### Example
