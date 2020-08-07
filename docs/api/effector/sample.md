@@ -172,7 +172,9 @@ console.log(sampled.shortName) // 'sampled foo'
 ## Objects and arrays of _Store_ in `sample({ source })`
 
 ### Object of stores
-
+:::note since
+effector 20.8.0
+:::
 `sample` can be called with object of [_Store_](Store.md) as `source`:
 
 ```js
@@ -197,7 +199,9 @@ target.watch(obj => {
 [Try it](https://share.effector.dev/hiGwHrX4)
 
 ### Array of stores
-
+:::note since
+effector 20.8.0
+:::
 `sample` can be called with array of [_Store_](Store.md) as `source`:
 
 ```js
