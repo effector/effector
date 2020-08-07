@@ -11,7 +11,7 @@ fork(domain: Domain, { values?, handlers? }?): Scope
 ```
 
 Creates a fully isolated instance of application.
-The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completly independent copy of all logic defined within domain.
+The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completely independents copy of all logic defined within domain.
 
 ### Arguments
 
@@ -31,7 +31,7 @@ interface Scope {
 
 ### Example
 
-Create two instances with indepented counter state
+Create two instances with independent counter state
 
 ```js
 import {
@@ -64,4 +64,10 @@ console.log(scopeB.getState($counter)) // => -1
 
 [Try it](https://share.effector.dev/0grlV3bA)
 
-
+### Support Map in values
+:::note since
+effector 20.11.0
+:::
+```ts
+fork(domain: Domain, { values?: Map<Store, any> , handlers? }?): Scope
+```
