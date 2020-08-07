@@ -9,7 +9,7 @@ import {unitObjectName} from './naming'
 import {createLinkNode} from './forward'
 import {throwError} from './throw'
 import {readTemplate} from './region'
-import {forIn} from './collection'
+import {forIn, includes} from './collection'
 
 export function combine(...args: any[]): Store<any> {
   if (args.length === 0) throwError('at least one argument required')
@@ -161,7 +161,7 @@ const storeCombination = (
       from: childRef,
     })
     if (template) {
-      if (!template.plain.includes(childRef)) {
+      if (!includes(template.plain, childRef)) {
         linkNode.seq.unshift(template.loader)
       }
     }

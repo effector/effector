@@ -9,7 +9,7 @@ import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
-import {removeItem, forEach} from './collection'
+import {removeItem, forEach, includes} from './collection'
 
 /**
 hydrate state on client
@@ -58,7 +58,7 @@ function fillValues({
     const {reg} = node
     const {op, unit, sid} = node.meta
     if (unit === 'store') {
-      if (sid && valuesSidList.includes(sid)) {
+      if (sid && includes(valuesSidList, sid)) {
         const {state} = node.scope
         state.current = values[sid]
         predefinedRefs.add(state)
@@ -260,7 +260,7 @@ export function fork(
     handlers = normalizeValues(handlers)
     const handlerKeys = Object.keys(handlers)
     for (const {scope, meta} of forked.clones) {
-      if (meta.sid && handlerKeys.includes(meta.sid)) {
+      if (meta.sid && includes(handlerKeys, meta.sid)) {
         scope.runner.scope.getHandler = () => handlers[meta.sid]
       }
     }
@@ -287,7 +287,7 @@ export function fork(
       const {reg} = node
       const {unit, sid} = node.meta
       if (unit === 'store') {
-        if (sid && valuesSidList.includes(sid)) {
+        if (sid && includes(valuesSidList, sid)) {
           const {state} = node.scope
           reg[state.id].current = values[sid]
           predefinedRefs.add(state)
@@ -369,7 +369,7 @@ function toposort(rawGraph: Record<string, string[]>, ignore?: Set<string>) {
     while ((item = ignored.shift())) {
       processed.push(item)
       forEach(graph[item], child => {
-        if (processed.includes(child) || ignored.includes(child)) return
+        if (includes(processed, child) || includes(ignored, child)) return
         ignored.push(child)
       })
     }
@@ -434,7 +434,7 @@ export function allSettled(
 function flatGraph(unit: any) {
   const list = [] as Graph[]
   ;(function traverse(node) {
-    if (list.includes(node)) return
+    if (includes(list, node)) return
     list.push(node)
     forEachRelatedNode(node, traverse)
   })(getGraph(unit))

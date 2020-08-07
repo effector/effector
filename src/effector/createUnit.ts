@@ -26,6 +26,7 @@ import {
   getGraph,
   getParent,
 } from './getter'
+import {includes} from './collection'
 import {throwError} from './throw'
 
 const normalizeConfig = (part: any, config: any) => {
@@ -267,8 +268,8 @@ export function createStore<State>(
         },
       ]
       if (template) {
-        if (!template.plain.includes(plainState)) {
-          if (!linkNode.seq.includes(template.loader)) {
+        if (!includes(template.plain, plainState)) {
+          if (!includes(linkNode.seq, template.loader)) {
             linkNode.seq.unshift(template.loader)
           }
         }
@@ -349,11 +350,11 @@ const updateStore = (
     node.push(template.upward)
     if (is.store(from)) {
       const ref = getStoreState(from)
-      if (!template.plain.includes(ref)) {
-        //if (!node.includes(template.loader)) {
+      if (!includes(template.plain, ref)) {
+        //if (!includes(node, template.loader)) {
         //  node.unshift(template.loader)
         //}
-        if (!template.closure.includes(ref)) {
+        if (!includes(template.closure, ref)) {
           template.closure.push(ref)
         }
         if (!storeRef.before) storeRef.before = []
@@ -363,7 +364,7 @@ const updateStore = (
         })
       }
     } else {
-      //if (!node.includes(template.loader)) {
+      //if (!includes(node, template.loader)) {
       //  node.unshift(template.loader)
       //}
     }
