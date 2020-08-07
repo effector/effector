@@ -1,11 +1,11 @@
 ---
 id: attach
 title: attach
-hide_title: true
 ---
 
-# attach
-
+:::note since
+effector 20.13.0
+:::
 Wrapper for [_effect_](Effect.md), which allows to map effect arguments and use data from [_stores_](Store.md).
 
 Use cases: declarative way to pass values from stores to effects and argument preprocessing.
