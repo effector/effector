@@ -10,7 +10,9 @@ Domain can subscribe to event, effect, store or nested domain creation with `onC
 It is useful for logging or other side effects.
 
 ## Unit creators
-
+:::note since
+effector 20.7.0
+:::
 ### `createEvent(name?)`
 
 #### Arguments
