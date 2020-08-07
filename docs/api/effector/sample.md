@@ -1,10 +1,7 @@
 ---
 id: sample
 title: sample
-hide_title: true
 ---
-
-# sample
 
 This method can be used for linking two nodes, resulting the third one, which will fire only upon `clock` node trigger.
 
@@ -230,6 +227,37 @@ target.watch(([a, b]) => {
 ```
 
 [Try it](https://share.effector.dev/aQPLBJ2j)
+
+### Support array in clock
+:::note since
+effector 21.2.0
+:::
+
+Support for sample clock field which acts like a merge call
+
+```js
+import {createStore, createEvent, createEffect, sample, merge} from 'effector'
+
+const showNotification = createEvent<string>()
+const trigger = createEvent()
+const fx = createEffect()
+const store = createStore('')
+
+// array of units in clock
+sample({
+  source: store,
+  clock: [trigger, fx.doneData],
+  target: showNotification,
+})
+
+// merged unit in clock
+sample({
+  source: store,
+  clock: merge([trigger, fx.doneData]),
+  target: showNotification,
+})
+```
+
 
 <!-- ## Other examples
 
