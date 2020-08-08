@@ -363,11 +363,11 @@ function getCurrent(
       return usedRef.current
   }
 }
-function findRefValue(
+function findRef(
   ref: {current: any; id: string},
   targetLeaf: Leaf | null,
   forkPage?: Fork,
-) {
+): StateRef {
   let currentLeaf = targetLeaf
   while (currentLeaf && !currentLeaf.spawn.reg[ref.id]) {
     currentLeaf = currentLeaf.parentLeaf
@@ -376,11 +376,23 @@ function findRefValue(
     //@ts-ignore
     if (forkPage && forkPage.reg[ref.id]) {
       //@ts-ignore
-      return forkPage.reg[ref.id].current
+      return forkPage.reg[ref.id]
     }
-    return ref.current
+    return ref
   }
-  return currentLeaf.spawn.reg[ref.id].current
+  return currentLeaf.spawn.reg[ref.id]
+}
+function findRefValue(
+  ref: {current: any; id: string},
+  targetLeaf: Leaf | null,
+  forkPage?: Fork,
+) {
+  return findRef(ref, targetLeaf, forkPage).current
+}
+function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
+  if (!leaf.spawn.reg[ref.id]) {
+    leaf.spawn.reg[ref.id] = findRef(ref, leaf.parentLeaf, leaf.forkPage)
+  }
 }
 export function spawn(
   actor: Actor<any>,
@@ -413,7 +425,7 @@ export function spawn(
   if (!env && parentLeaf) env = parentLeaf.env
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
-  const page = (refMap ? {...refMap} : {}) as Record<string, any>
+  const page = (refMap ? {...refMap} : {}) as Record<string, StateRef>
   const result: Spawn = {
     id: ++spawnID,
     fullID: '',
@@ -454,10 +466,8 @@ export function spawn(
   } else {
     result.fullID = `${result.id}`
   }
-  if (parentSpawn) {
-    Object.assign(page, parentSpawn.reg)
-  }
-  for (const ref of template.closure) {
+  for (let i = 0; i < template.closure.length; i++) {
+    const ref = template.closure[i]
     let closureRef = ref
     let parent = result.parent
     findClosure: while (parent) {
@@ -475,7 +485,8 @@ export function spawn(
     page[ref.id] = closureRef
   }
 
-  for (const ref of template.plain) {
+  for (let i = 0; i < template.plain.length; i++) {
+    const ref = template.plain[i]
     const next = {
       id: ref.id,
       current: getCurrent(ref, forkPage),
@@ -491,40 +502,36 @@ export function spawn(
   }
   function execRef(ref: any) {
     if (ref.before) {
-      for (const cmd of ref.before) {
+      for (let i = 0; i < ref.before.length; i++) {
+        const cmd = ref.before[i]
         switch (cmd.type) {
           case 'map': {
             const from = cmd.from
-            if (!page[from.id]) {
-              page[from.id] = from
-            }
+            ensureLeafHasRef(from, leaf)
             page[ref.id].current = cmd.fn(page[from.id].current)
             break
           }
           case 'field': {
             const from = cmd.from
-            if (!page[from.id]) {
-              page[from.id] = from
-            }
+            ensureLeafHasRef(from, leaf)
             page[ref.id].current[cmd.field] = page[from.id].current
             break
           }
           case 'closure':
-            if (!page[cmd.of.id]) {
-              page[cmd.of.id] = cmd.of
-            }
+            ensureLeafHasRef(cmd.of, leaf)
             break
         }
       }
     }
     if (!ref.after) return
     const value = page[ref.id].current
-    for (const cmd of ref.after) {
+    for (let i = 0; i < ref.after.length; i++) {
+      const cmd = ref.after[i]
       const to = cmd.to
       if (!page[to.id]) {
         page[to.id] = {
           id: to.id,
-          current: to.current,
+          current: findRefValue(to, leaf.parentLeaf, forkPage),
         }
       }
       switch (cmd.type) {
@@ -537,12 +544,8 @@ export function spawn(
       }
     }
   }
-  for (const ref of template.closure) {
-    execRef(ref)
-  }
-  for (const ref of template.plain) {
-    execRef(ref)
-  }
+  template.closure.forEach(execRef)
+  template.plain.forEach(execRef)
 
   function runWatchersFrom(
     list: any[],
