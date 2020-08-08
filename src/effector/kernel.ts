@@ -191,6 +191,9 @@ export let forkPage: any
 export const setForkPage = (newForkPage: any) => {
   forkPage = newForkPage
 }
+export const setCurrentPage = (newPage: any) => {
+  currentPage = newPage
+}
 
 /** main execution method */
 const exec = () => {

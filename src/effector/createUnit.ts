@@ -10,7 +10,7 @@ import {callStackAReg, callARegStack, callStack} from './caller'
 import {bind} from './bind'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch, currentPage, forkPage} from './kernel'
+import {launch, currentPage, forkPage, setCurrentPage} from './kernel'
 
 import {Subscriber, Config} from './index.h'
 import {createName, mapName, joinName} from './naming'
@@ -124,12 +124,31 @@ const createEventFiltration = (event: any, op: string, fn: any, node: any) => {
   return mapped
 }
 
+function callCreate(unit: any, template: any, payload: any, args: any[]): any {
+  const oldPage = currentPage
+  let page = null
+  if (template) {
+    page = currentPage
+    while (page && page.template !== template) {
+      page = getParent(page)
+    }
+  }
+  setCurrentPage(page)
+  const result = unit.create(payload, args)
+  setCurrentPage(oldPage)
+  return result
+}
+
 export function createEvent<Payload = any>(
   nameOrConfig?: any,
   maybeConfig?: any,
 ): Event<Payload> {
-  const event: any = (payload: Payload, ...args: any[]) =>
-    event.create(payload, args)
+  const event: any = (payload: Payload, ...args: any[]) => {
+    if (currentPage) {
+      return callCreate(event, template, payload, args)
+    }
+    return event.create(payload, args)
+  }
   event.graphite = createNode({
     meta: initUnit('event', event, maybeConfig, nameOrConfig),
   })
