@@ -322,6 +322,7 @@ describe('store and event on a same level', () => {
     expect(updates).toMatchInlineSnapshot(`
       Array [
         0,
+        10,
       ]
     `)
   })

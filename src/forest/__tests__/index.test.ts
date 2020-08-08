@@ -122,7 +122,7 @@ describe('node(event) + upward store update', () => {
       await act()
       return result
     })
-    expect(result).toMatchInlineSnapshot(`"--"`)
+    expect(result).toMatchInlineSnapshot(`"DIV"`)
   })
   test('with units in root', async () => {
     const result = await execFunc(async () => {
