@@ -12,6 +12,7 @@ import {createLinkNode} from './forward'
 import {createNode} from './createNode'
 import {addToRegion, readTemplate} from './region'
 import {throwError} from './throw'
+import {includes} from './collection'
 
 export function sample(...args: any): any {
   let target
@@ -63,6 +64,7 @@ export function sample(...args: any): any {
   const targetTemplate =
     isUpward && is.unit(target) && getGraph(target).meta.nativeTemplate
   if (is.store(source)) {
+    const sourceRef = getStoreState(source)
     own(source, [
       createLinkNode(clock, target, {
         scope: {fn, targetTemplate},
@@ -71,7 +73,7 @@ export function sample(...args: any): any {
           //@ts-ignore
           !greedy && step.barrier({priority: 'sampler'}),
           step.mov({
-            store: getStoreState(source),
+            store: sourceRef,
             to: fn ? 'a' : 'stack',
           }),
           fn && step.compute({fn: callARegStack}),
@@ -80,6 +82,14 @@ export function sample(...args: any): any {
         meta: {op: 'sample', sample: 'store'},
       }),
     ])
+    if (template) {
+      if (
+        !includes(template.plain, sourceRef) &&
+        !includes(template.closure, sourceRef)
+      ) {
+        template.closure.push(sourceRef)
+      }
+    }
   } else {
     const hasSource = createStateRef(false)
     const sourceState = createStateRef()
