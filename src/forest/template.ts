@@ -353,7 +353,7 @@ function getCurrent(
 ) {
   let usedRef = ref
   //@ts-ignore
-  if (forkPage && forkPage.reg[ref.id]) usedRef = forkPage.reg[ref.id]
+  if (forkPage && regRef(forkPage, ref)) usedRef = regRef(forkPage, ref)
   switch (ref.type) {
     case 'list':
       return [...usedRef.current]
@@ -369,18 +369,18 @@ function findRef(
   forkPage?: Fork,
 ): StateRef {
   let currentLeaf = targetLeaf
-  while (currentLeaf && !currentLeaf.spawn.reg[ref.id]) {
+  while (currentLeaf && !regRef(currentLeaf.spawn, ref)) {
     currentLeaf = currentLeaf.parentLeaf
   }
   if (!currentLeaf) {
     //@ts-ignore
-    if (forkPage && forkPage.reg[ref.id]) {
+    if (forkPage && regRef(forkPage, ref)) {
       //@ts-ignore
-      return forkPage.reg[ref.id]
+      return regRef(forkPage, ref)
     }
     return ref
   }
-  return currentLeaf.spawn.reg[ref.id]
+  return regRef(currentLeaf.spawn, ref)
 }
 function findRefValue(
   ref: {current: any; id: string},
@@ -390,10 +390,12 @@ function findRefValue(
   return findRef(ref, targetLeaf, forkPage).current
 }
 function ensureLeafHasRef(ref: StateRef, leaf: Leaf) {
-  if (!leaf.spawn.reg[ref.id]) {
+  if (!regRef(leaf.spawn, ref)) {
     leaf.spawn.reg[ref.id] = findRef(ref, leaf.parentLeaf, leaf.forkPage)
   }
 }
+const regRef = (page: {reg: Record<string, StateRef>}, ref: StateRef) =>
+  page.reg[ref.id]
 export function spawn(
   actor: Actor<any>,
   {
@@ -472,16 +474,16 @@ export function spawn(
     let closureRef = ref
     let parent = result.parent
     findClosure: while (parent) {
-      if (ref.id in parent.reg) {
-        closureRef = parent.reg[ref.id]
+      if (regRef(parent, ref)) {
+        closureRef = regRef(parent, ref)
         break findClosure
       }
       parent = parent.parent
     }
     //@ts-ignore
-    if (!parent && forkPage && forkPage.reg[ref.id]) {
+    if (!parent && forkPage && regRef(forkPage, ref)) {
       //@ts-ignore
-      closureRef = forkPage.reg[ref.id]
+      closureRef = regRef(forkPage, ref)
     }
     page[ref.id] = closureRef
   }
