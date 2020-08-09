@@ -1536,11 +1536,8 @@ export function list<T>(opts: any, maybeFn?: any) {
           cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, e) => e)
-          const spawnState = createStore<{leaf: Leaf}>({
-            leaf: null as any,
-          })
           const onRemoveFromDOM = sample({
-            source: spawnState,
+            source: mount,
             clock: unmount,
             greedy: true,
           })
@@ -1584,8 +1581,6 @@ export function list<T>(opts: any, maybeFn?: any) {
               onState: ({node, leaf}, visible) => ({visible, node, leaf}),
             })
             mountAndVisible.watch(({visible, node, leaf}) => {
-              //@ts-ignore
-              spawnState.setState({leaf})
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible
               parentBlock.childInitialized = visible
@@ -1615,8 +1610,6 @@ export function list<T>(opts: any, maybeFn?: any) {
             })
           } else {
             mount.watch(({node, leaf}) => {
-              //@ts-ignore
-              spawnState.setState({leaf})
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = true
               parentBlock.childInitialized = true
@@ -1660,10 +1653,9 @@ export function list<T>(opts: any, maybeFn?: any) {
         }),
         greedy: true,
       })
-      const updateTriggers = merge([mountData, parentNodeUpdateSpawn])
       sample({
         source: updates,
-        clock: updateTriggers,
+        clock: [mountData, parentNodeUpdateSpawn],
         greedy: true,
         fn(records: ListItemType[], {node, updates: input, leaf, hydration}) {
           const parentBlock = (leaf.data as any).block as ListBlock
