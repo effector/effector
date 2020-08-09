@@ -160,8 +160,6 @@ test('block with list', async () => {
     fn: App,
   })
 
-  await new Promise(rs => setTimeout(rs, 200))
-
   expect(prettyHtml(result)).toMatchInlineSnapshot(`
     "
     <h1>List</h1>
@@ -238,5 +236,46 @@ test('block with rec and list', async () => {
         "login": "bob",
       },
     ]
+  `)
+})
+
+test('block order', async () => {
+  const Meta = block({
+    fn() {
+      h('meta', {
+        attr: {
+          charset: 'utf-8',
+        },
+      })
+    },
+  })
+  const Title = block({
+    fn() {
+      h('title', {
+        text: 'Title',
+      })
+    },
+  })
+  const Head = block({
+    fn() {
+      h('head', () => {
+        Meta()
+        Title()
+      })
+    },
+  })
+  const app = createDomain()
+
+  const result = await renderStatic({
+    scope: fork(app),
+    fn: Head,
+  })
+  expect(prettyHtml(result)).toMatchInlineSnapshot(`
+    "
+    <head>
+      <title>Title</title>
+      <meta charset='utf-8' />
+    </head>
+    "
   `)
 })
