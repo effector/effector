@@ -36,10 +36,10 @@ const keywords = [
 ]
 
 const version = {
-  effector: '21.2.1',
+  effector: '21.2.2',
   'effector-react': '21.0.4',
   'effector-vue': '21.0.3',
-  forest: '0.18.4',
+  forest: '0.19.0',
 }
 
 const compiledFile = name => [`${name}.js`, `${name}.js.map`]

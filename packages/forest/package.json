@@ -1,6 +1,6 @@
 {
   "name": "forest",
-  "version": "0.18.4",
+  "version": "0.19.0",
   "description": "UI engine for web",
   "main": "forest.cjs.js",
   "module": "forest.mjs",
@@ -21,7 +21,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^21.2.1"
+    "effector": "^21.2.2"
   },
   "keywords": [
     "data",
