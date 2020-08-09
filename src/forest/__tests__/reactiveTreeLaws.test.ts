@@ -432,9 +432,9 @@ describe('getState support', () => {
       }),
     ).toMatchInlineSnapshot(`
       Array [
-        null,
-        null,
-        null,
+        "alice",
+        "bob",
+        "carol",
       ]
     `)
   })

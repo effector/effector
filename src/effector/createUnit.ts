@@ -218,11 +218,18 @@ export function createStore<State>(
     stateRef: plainState,
     getState() {
       let targetRef = plainState
-      if (currentPage && currentPage.reg[plainStateId]) {
-        targetRef = currentPage.reg[plainStateId]
-      } else if (forkPage && forkPage.reg[plainStateId]) {
-        targetRef = forkPage.reg[plainStateId]
+      let reachedPage
+      if (currentPage) {
+        let page = currentPage
+        while (page && !page.reg[plainStateId]) {
+          page = getParent(page)
+        }
+        if (page) reachedPage = page
       }
+      if (!reachedPage && forkPage && forkPage.reg[plainStateId]) {
+        reachedPage = forkPage
+      }
+      if (reachedPage) targetRef = reachedPage.reg[plainStateId]
       return readRef(targetRef)
     },
     setState(state: any) {
