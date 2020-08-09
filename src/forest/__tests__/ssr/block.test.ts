@@ -116,8 +116,8 @@ test('block with list', async () => {
 
   const App = block({
     fn() {
-      const Item = rec<NestedList>(({state}) => {
-        const [title, child] = remap(state, ['title', 'child'] as const)
+      const Item = rec<NestedList>(({store}) => {
+        const [title, child] = remap(store, ['title', 'child'] as const)
         const typedChild = child.map(list =>
           list.length === 0
             ? ({type: 'empty'} as const)
@@ -139,7 +139,7 @@ test('block with list', async () => {
                     source: items,
                     key: 'id',
                     fn({store}) {
-                      Item({state: store})
+                      Item({store})
                     },
                   })
                 })
@@ -149,7 +149,7 @@ test('block with list', async () => {
         })
       })
       h('h1', {text: 'List'})
-      Item({state: rootItem})
+      Item({store: rootItem})
     },
   })
 

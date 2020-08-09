@@ -83,8 +83,8 @@ test('rec visible support', async () => {
     //@ts-ignore
     using(el, {
       fn() {
-        const Row = rec<{item: FlatItem; level: number}>(({state}) => {
-          const [level, item] = remap(state, ['level', 'item'] as const)
+        const Row = rec<{item: FlatItem; level: number}>(({store}) => {
+          const [level, item] = remap(store, ['level', 'item'] as const)
           const visible = combine(
             level,
             nestedRowsVisible,
@@ -109,13 +109,13 @@ test('rec visible support', async () => {
               spec({text: [remap(item, 'value'), ' ', level]})
 
               list(childs, ({store}) => {
-                Row({state: store})
+                Row({store})
               })
             },
           })
         })
         list(topLevelFlatItems, ({store}) => {
-          Row({state: store})
+          Row({store})
         })
       },
       onRoot({leaf}: {leaf: Leaf}) {
@@ -226,8 +226,8 @@ test('rec style update support', async () => {
     //@ts-ignore
     using(el, {
       fn() {
-        const Row = rec<{item: FlatItem; level: number}>(({state}) => {
-          const [level, item] = remap(state, ['level', 'item'] as const)
+        const Row = rec<{item: FlatItem; level: number}>(({store}) => {
+          const [level, item] = remap(store, ['level', 'item'] as const)
           const visible = combine(
             level,
             nestedRowsVisible,
@@ -249,18 +249,18 @@ test('rec style update support', async () => {
           })
           const childs = combine(
             flatItems,
-            state,
+            store,
             (list, {item: {child}, level}) =>
               list
                 .filter(({value}) => child.includes(value))
                 .map(item => ({item, level: level + 1})),
           )
           list(childs, ({store}) => {
-            Row({state: store})
+            Row({store})
           })
         })
         list(topLevelFlatItems, ({store}) => {
-          Row({state: store})
+          Row({store})
         })
       },
       onRoot({leaf}: {leaf: Leaf}) {
@@ -394,15 +394,15 @@ test('top level rec suppot', async () => {
   //prettier-ignore
   type Item = {id: number; title: string; child: Item[]};
   const [s1] = await exec(async () => {
-    const Article = rec<Item>(({state}) => {
-      const [title, child] = remap(state, ['title', 'child'] as const)
+    const Article = rec<Item>(({store}) => {
+      const [title, child] = remap(store, ['title', 'child'] as const)
       h('div', () => {
         h('header', {text: title})
         list({
           source: child,
           key: 'id',
           fn({store}) {
-            Article({state: store})
+            Article({store})
           },
         })
       })
@@ -431,7 +431,7 @@ test('top level rec suppot', async () => {
     })
     using(el, () => {
       h('section', () => {
-        Article({state: item})
+        Article({store: item})
       })
     })
     await act()

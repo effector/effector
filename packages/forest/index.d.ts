@@ -178,8 +178,8 @@ export function tree<
 }): void
 
 export function rec<T>(
-  fn: (config: {state: Store<T>}) => void,
-): (opts: {state: Store<T>}) => void
+  fn: (config: {store: Store<T>}) => void,
+): (opts: {store: Store<T>}) => void
 
 export function route<T>(config: {
   source: Store<T>

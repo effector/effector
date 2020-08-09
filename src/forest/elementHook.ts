@@ -1351,8 +1351,8 @@ export function block({
 }
 
 export function rec<T>(
-  fn: (config: {state: Store<T>}) => void,
-): (opts: {state: Store<T>}) => void {
+  fn: (config: {store: Store<T>; state?: Store<T>}) => void,
+): (opts: {store: Store<T>; state?: Store<T>}) => void {
   const recDraft: RecDraft = {
     type: 'rec',
     childTemplates: [],
@@ -1371,7 +1371,7 @@ export function rec<T>(
     defer: true,
     isBlock: true,
     fn({store}, {mount, unmount}) {
-      fn({state: store})
+      fn({store, state: store})
       const itemUpdater = createEvent<any>()
       store.on(itemUpdater, (_, e) => e)
       mount.watch(({node, leaf}) => {
@@ -1389,7 +1389,7 @@ export function rec<T>(
       return {itemUpdater}
     },
   })
-  return ({state}) => {
+  return ({store, state = store}) => {
     if (recTemplate.deferredInit) recTemplate.deferredInit()
     // const {mount, unmount} = currentActor!.trigger
     const {env, namespace} = currentActor!
@@ -1449,25 +1449,26 @@ export function tree<
 }): void
 export function tree({
   source,
-  // key: keyField,
+  key,
   child: childField,
   fn,
 }: {
   source: Store<any[]>
-  // key: string
+  key?: string
   child: string
   fn: Function
 }) {
-  const treeRec = rec<any[]>(({state}) => {
+  const treeRec = rec<any[]>(({store}) => {
     list({
-      source: state,
+      source: store,
+      key: key!,
       fn({store}) {
         const childList = store.map(value => value[childField] || [])
         fn({
           store,
           child() {
             treeRec({
-              state: childList,
+              store: childList,
             })
           },
         })
@@ -1475,7 +1476,7 @@ export function tree({
     })
   })
   treeRec({
-    state: source,
+    store: source,
   })
 }
 
