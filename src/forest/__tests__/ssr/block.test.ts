@@ -273,8 +273,8 @@ test('block order', async () => {
   expect(prettyHtml(result)).toMatchInlineSnapshot(`
     "
     <head>
-      <title>Title</title>
       <meta charset='utf-8' />
+      <title>Title</title>
     </head>
     "
   `)

@@ -123,7 +123,6 @@ export function findPreviousVisibleSiblingBlock(
       switch (block.parent.type) {
         case 'element':
         case 'using':
-        case 'block':
           return null
         case 'RF': {
           const parent = block.parent.parent
