@@ -425,7 +425,8 @@ export function spawn(
   if (!env && parentLeaf) env = parentLeaf.env
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
-  const page = (refMap ? {...refMap} : {}) as Record<string, StateRef>
+  // const page = (refMap ? {...refMap} : {}) as Record<string, StateRef>
+  const page = {} as Record<string, StateRef>
   const result: Spawn = {
     id: ++spawnID,
     fullID: '',
