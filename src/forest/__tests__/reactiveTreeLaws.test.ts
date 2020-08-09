@@ -521,6 +521,46 @@ describe('imperative calls support', () => {
       ]
     `)
   })
+  test('event from parent level watched on single child', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                const name = remap(store, 'name')
+                const trigger = createEvent()
+                h('li', () => {
+                  trigger.watch(() => {
+                    results.push(name.getState())
+                  })
+                  node(() => {
+                    trigger()
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        "alice",
+        "bob",
+        "carol",
+      ]
+    `)
+  })
   test('event from root level', async () => {
     expect(
       await execFunc(async () => {
