@@ -1356,9 +1356,20 @@ export function block({
   }
 }
 
+export function rec<T>(config: {
+  fn(config: {store: Store<T>}): void
+}): (opts: {store: Store<T>}) => void
 export function rec<T>(
   fn: (config: {store: Store<T>; state?: Store<T>}) => void,
+): (opts: {store: Store<T>; state?: Store<T>}) => void
+export function rec<T>(
+  fnOrConfig:
+    | {
+        fn(config: {store: Store<T>}): void
+      }
+    | ((config: {store: Store<T>; state?: Store<T>}) => void),
 ): (opts: {store: Store<T>; state?: Store<T>}) => void {
+  const fn = typeof fnOrConfig === 'function' ? fnOrConfig : fnOrConfig.fn
   const recDraft: RecDraft = {
     type: 'rec',
     childTemplates: [],

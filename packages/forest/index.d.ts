@@ -177,6 +177,9 @@ export function tree<
   fn: (config: {store: Store<T>; child: () => void}) => void
 }): void
 
+export function rec<T>(config: {
+  fn(config: {store: Store<T>}): void
+}): (opts: {store: Store<T>}) => void
 export function rec<T>(
   fn: (config: {store: Store<T>}) => void,
 ): (opts: {store: Store<T>}) => void
