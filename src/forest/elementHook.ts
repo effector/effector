@@ -766,7 +766,8 @@ function collectScopeRefs(scope?: any) {
   if (!scope) return
   if (!scope.nodeMap) {
     const nodeMap: Record<string, any> = {}
-    for (const node of scope.clones) {
+    for (let i = 0; i < scope.clones.length; i++) {
+      const node = scope.clones[i]
       nodeMap[node.meta.forkOf.id] = node
     }
     scope.nodeMap = nodeMap
@@ -884,6 +885,11 @@ export function using(node: DOMElement, opts: any): void {
       template: usingTemplate,
       leaf: rootLeaf,
     })
+  }
+  if (queue.onDrain && !queue.rafID) {
+    const rs = queue.onDrain
+    queue.onDrain = null
+    rs()
   }
 }
 
