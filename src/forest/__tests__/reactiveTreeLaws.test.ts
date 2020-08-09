@@ -1,5 +1,5 @@
 import {createStore, createEvent, sample, combine, forward} from 'effector'
-import {h, using, list, node, spec} from 'forest'
+import {h, using, list, node, spec, remap} from 'forest'
 
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
@@ -359,6 +359,207 @@ describe('store and event on a same level', () => {
       Array [
         0,
         10,
+      ]
+    `)
+  })
+})
+
+describe('getState support', () => {
+  test('store from same level', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                h('li', () => {
+                  const name = remap(store, 'name')
+                  spec({text: name})
+                  node(() => {
+                    results.push(name.getState())
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        "alice",
+        "bob",
+        "carol",
+      ]
+    `)
+  })
+  test('store from parent level', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                const name = remap(store, 'name')
+                h('li', () => {
+                  node(() => {
+                    results.push(name.getState())
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        null,
+        null,
+        null,
+      ]
+    `)
+  })
+})
+
+describe('imperative calls support', () => {
+  test('event from same level', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                h('li', () => {
+                  const name = remap(store, 'name')
+                  const trigger = createEvent()
+                  trigger.watch(() => {
+                    results.push(name.getState())
+                  })
+                  node(() => {
+                    trigger()
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        "alice",
+        "bob",
+        "carol",
+      ]
+    `)
+  })
+  test('event from parent level', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                const name = remap(store, 'name')
+                const trigger = createEvent()
+                trigger.watch(() => {
+                  results.push(name.getState())
+                })
+                h('li', () => {
+                  node(() => {
+                    trigger()
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        "alice",
+        "bob",
+        "carol",
+      ]
+    `)
+  })
+  test('event from root level', async () => {
+    expect(
+      await execFunc(async () => {
+        const results = [] as string[]
+        const users = createStore([
+          {id: 1, name: 'alice'},
+          {id: 2, name: 'bob'},
+          {id: 3, name: 'carol'},
+        ])
+        const trigger = createEvent()
+        using(el, () => {
+          h('ul', () => {
+            list({
+              source: users,
+              key: 'id',
+              fn({store}) {
+                const name = remap(store, 'name')
+                trigger.watch(() => {
+                  results.push(name.getState())
+                })
+                h('li', () => {
+                  node(() => {
+                    trigger()
+                  })
+                })
+              },
+            })
+          })
+        })
+        await act()
+        trigger()
+        return results
+      }),
+    ).toMatchInlineSnapshot(`
+      Array [
+        null,
+        null,
+        null,
+        null,
       ]
     `)
   })
