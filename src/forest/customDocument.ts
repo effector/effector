@@ -193,7 +193,9 @@ function escapeTag(value: string) {
     case 'hasOwnProperty':
     case 'toString':
     case 'valueOf':
-      return 'blacklisted'
+    case 'setProperty':
+    case 'removeProperty':
+      return 'forbidden'
     default:
       return value.replace(invalidToken, '')
   }
