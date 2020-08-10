@@ -220,7 +220,6 @@ export function h(tag: string, opts?: any) {
           onState: (leaf, value) => ({leaf, value}),
         })
       }
-      const leaf = mount.map(({leaf}) => leaf)
       if (hasCb) {
         cb()
       }
@@ -376,10 +375,14 @@ export function h(tag: string, opts?: any) {
       }
       if (merged.visible) {
         const {onMount, onState} = mutualSample({
-          mount: leaf,
+          mount,
           state: merged.visible,
-          onMount: (value, leaf) => ({leaf, value, hydration: leaf.hydration}),
-          onState: (leaf, value) => ({leaf, value, hydration: false}),
+          onMount: (value, {leaf}) => ({
+            leaf,
+            value,
+            hydration: leaf.hydration,
+          }),
+          onState: ({leaf}, value) => ({leaf, value, hydration: false}),
         })
         onMount.watch(({leaf, value, hydration}) => {
           const leafData = leaf.data as LeafDataElement
@@ -630,10 +633,10 @@ export function h(tag: string, opts?: any) {
         }
       }
       sample({
-        source: leaf,
+        source: mount,
         clock: unmount,
         greedy: true,
-      }).watch(leaf => {
+      }).watch(({leaf}) => {
         const {spawn} = leaf
         removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
         function halt(spawn: Spawn) {
