@@ -1,5 +1,5 @@
 import {Env} from './index.h'
-const invalidToken = /[^a-zA-Z0-9\-_]/g
+import {escapeTag} from './bindings'
 const invalidValue = /[\\<>"]/g
 const dataValue = /[A-Z]/g
 const escaped = /[&<>'"]/g
@@ -44,7 +44,7 @@ class DOMNode {
     result.nodeName = this.nodeName
     result.namespaceURI = this.namespaceURI
     Object.assign(result.dataset, this.dataset)
-    Object.assign(result.style.properties, this.style.properties)
+    Object.assign(result.style, this.style)
     result.value = this.value
     result.isFragment = this.isFragment
     Object.assign(result.attributes, this.attributes)
@@ -152,12 +152,13 @@ class DOMNode {
   }
 }
 class CSSStyle {
-  properties = Object.create(null)
   setProperty(property: string, value: string): void {
-    this.properties[escapeTag(property)] = escapeTagValue(value)
+    //@ts-ignore
+    this[escapeTag(property)] = escapeTagValue(value)
   }
   removeProperty(property: string): void {
-    delete this.properties[escapeTag(property)]
+    //@ts-ignore
+    delete this[escapeTag(property)]
   }
 }
 function convertDataChar(char: string) {
@@ -182,24 +183,7 @@ function escapeContentHandler(char: string) {
       return char
   }
 }
-function escapeTag(value: string) {
-  value = String(value)
-  switch (value) {
-    case '__proto__':
-    case '__defineGetter__':
-    case '__defineSetter__':
-    case 'constructor':
-    case 'prototype':
-    case 'hasOwnProperty':
-    case 'toString':
-    case 'valueOf':
-    case 'setProperty':
-    case 'removeProperty':
-      return 'forbidden'
-    default:
-      return value.replace(invalidToken, '')
-  }
-}
+
 function escapeTagValue(value: string) {
   return String(value).replace(invalidValue, '')
 }
@@ -284,9 +268,11 @@ function renderPart(node: DOMNode, parts: string[]) {
     )
   }
   const styles = [] as string[]
-  for (const property in node.style.properties) {
+  for (const property in node.style) {
+    //@ts-ignore
+    const value = node.style[property]
     if (property.startsWith('--')) {
-      styles.push(`${property}: ${node.style.properties[property]}`)
+      styles.push(`${property}: ${value}`)
     } else {
       let dashedProperty = property.replace(
         /[A-Z]/g,
@@ -295,7 +281,7 @@ function renderPart(node: DOMNode, parts: string[]) {
       if (property.startsWith('webkit') || property.startsWith('moz')) {
         dashedProperty = `-${dashedProperty}`
       }
-      styles.push(`${dashedProperty}: ${node.style.properties[property]}`)
+      styles.push(`${dashedProperty}: ${value}`)
     }
   }
   if (styles.length > 0) {

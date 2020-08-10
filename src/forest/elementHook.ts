@@ -78,6 +78,7 @@ import {
   applyAttr,
   applyText,
   applyStaticOps,
+  escapeTag,
 } from './bindings'
 import {
   createTemplate,
@@ -970,7 +971,14 @@ export function spec(config: {
       draft.childCount += 1
     }
   }
-  if (config.style) draft.styleProp.push(config.style)
+  if (config.style) {
+    const escaped = {} as StylePropertyMap
+    for (const field in config.style) {
+      //@ts-ignore
+      escaped[escapeTag(field)] = config.style[field]
+    }
+    draft.styleProp.push(escaped)
+  }
   if (config.styleVar) draft.styleVar.push(config.styleVar)
   if (config.visible) draft.visible = config.visible
   if (config.handler) {

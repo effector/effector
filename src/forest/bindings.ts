@@ -7,6 +7,25 @@ const defMap = {
   styleVar: applyStyleVar,
 }
 
+export function escapeTag(value: string) {
+  value = String(value)
+  switch (value) {
+    case '__proto__':
+    case '__defineGetter__':
+    case '__defineSetter__':
+    case 'constructor':
+    case 'prototype':
+    case 'hasOwnProperty':
+    case 'toString':
+    case 'valueOf':
+    case 'setProperty':
+    case 'removeProperty':
+      return 'forbidden'
+    default:
+      return value.replace(/[^a-zA-Z0-9\-_]/g, '')
+  }
+}
+
 export function applyStaticOps(
   element: DOMElement,
   defs: StaticOperationDef[],
