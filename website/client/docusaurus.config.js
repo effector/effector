@@ -124,6 +124,7 @@ module.exports = {
           showLastUpdateTime: true,
           editUrl:
             'https://github.com/zerobias/effector/edit/master/fix/relative-bug/',
+          remarkPlugins: [require('./src/plugins/remark-npm2yarn')],
         },
         blog: {
           showReadingTime: true,

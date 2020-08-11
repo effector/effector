@@ -3,34 +3,22 @@ id: installation
 title: Installation
 ---
 
-```bash
+```bash npm2yarn
 npm install --save effector
-```
-
-```bash
-yarn add effector
 ```
 
 ## Complementary packages
 
 ### For react
 
-```bash
+```bash npm2yarn
 npm install --save effector-react
-```
-
-```bash
-yarn add effector-react
 ```
 
 ### For vue
 
-```bash
+```bash npm2yarn
 npm install --save effector-vue
-```
-
-```bash
-yarn add effector-vue
 ```
 
 ### For svelte
