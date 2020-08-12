@@ -92,6 +92,18 @@ const status = {
   empty: 'No shares found by the author',
 }
 
+const dateStringFormatter = new Intl.DateTimeFormat(['en-US'], {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+})
+
+const timeStringFormatter = new Intl.DateTimeFormat(['en-US'], {
+  hour12: false,
+  hour: '2-digit',
+  minute: '2-digit',
+})
+
 const ShareList = ({filterMode, description}) => {
   let sortedShareList = useStore($sortedShareList)
   const currentShareId = useStore($currentShareId)
@@ -127,16 +139,8 @@ const ShareList = ({filterMode, description}) => {
 
   return sortedShareList.map(share => {
     const d = new Date(share.created * 1000)
-    const dateString = d.toLocaleDateString(['en-US'], {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-    const timeString = d.toLocaleTimeString(['en-US'], {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-    })
+    const dateString = dateStringFormatter.format(d)
+    const timeString = timeStringFormatter.format(d)
     const dateISO = d.toISOString()
 
     const shareLink = e => {
