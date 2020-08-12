@@ -42,7 +42,6 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
     },
     triggers: {
       mount: Event<Leaf>
-      unmount: Event<Leaf>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -64,7 +63,6 @@ export function createTemplate(config: {
     },
     triggers: {
       mount: Event<Leaf>
-      unmount: Event<Leaf>
     },
   ) => void
   state?: {[field: string]: any}
@@ -95,7 +93,6 @@ export function createTemplate<Api extends {[method: string]: any}>({
     },
     triggers: {
       mount: Event<Leaf>
-      unmount: Event<Leaf>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -131,7 +128,10 @@ export function createTemplate<Api extends {[method: string]: any}>({
             return true
           }
         }
-        if (!stack.page.active) return false
+        if (!stack.page.active) {
+          console.count('inactive page upward')
+          return false
+        }
         const stackTemplates = [stack.page.template]
         const stackPages = [stack.page]
         {
@@ -181,7 +181,10 @@ export function createTemplate<Api extends {[method: string]: any}>({
         if (stack.parent) {
           const forkId = stack.forkPage ? stack.forkPage.graphite.id : null
           if (stack.page) {
-            if (!stack.page.active) return false
+            if (!stack.page.active) {
+              console.count('inactive page loader')
+              return false
+            }
             if (stack.page.template === template) return true
             if (stack.page.childSpawns[template.id]) {
               stack.page.childSpawns[template.id].forEach((page: Spawn) => {
@@ -299,7 +302,6 @@ export function createTemplate<Api extends {[method: string]: any}>({
     api: null as any,
     trigger: {
       mount: createEvent<Leaf>(),
-      unmount: createEvent(),
     },
     draft,
     isSvgRoot,
@@ -587,15 +589,6 @@ export function spawn(
   api.mount = (params: any, defer = true) =>
     launch({
       target: actor.trigger.mount,
-      params,
-      defer,
-      page: result,
-      //@ts-ignore
-      forkPage,
-    })
-  api.unmount = (params: any, defer = true) =>
-    launch({
-      target: actor.trigger.unmount,
       params,
       defer,
       page: result,

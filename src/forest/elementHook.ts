@@ -43,6 +43,7 @@ import {
   LeafDataBlock,
   LeafDataBlockItem,
   NodeDraft,
+  LeafDataList,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
@@ -99,6 +100,94 @@ import {
   mountChildTemplates,
 } from './mountChild'
 import {remap} from './remap'
+
+function unmountChildLeafsNoEvent(leaf: Leaf) {
+  leaf.spawn.active = false
+  iterateChildLeafs(leaf, unmountLeafTree)
+}
+
+function unmountOwnSpawn({spawn}: Leaf) {
+  removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
+  removeItem(spawn, spawn.template.pages)
+}
+
+function unmountLeafTree(leaf: Leaf) {
+  const {spawn, data} = leaf
+  switch (data.type) {
+    case 'element': {
+      removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
+      function halt(spawn: Spawn) {
+        spawn.active = false
+        removeItem(spawn, spawn.template.pages)
+        for (const id in spawn.childSpawns) {
+          spawn.childSpawns[id].forEach(halt)
+        }
+      }
+      halt(spawn)
+
+      const visibleOp = data.ops.visible
+      pushOpToQueue(false, visibleOp)
+      break
+    }
+    case 'list': {
+      const records = data.records
+      for (let i = 0; i < records.length; i++) {
+        const item = records[i]
+
+        if (item.instance) {
+          unmountLeafTree(item.instance)
+        }
+        item.active = false
+      }
+      leaf.spawn.active = false
+      unmountOwnSpawn(leaf)
+      break
+    }
+    case 'list item': {
+      const listItemBlock = data.block
+      removeItem(listItemBlock, listItemBlock.parent.child)
+      const leftBlock = listItemBlock.left
+      const rightBlock = listItemBlock.right
+      if (leftBlock) {
+        leftBlock.right = rightBlock
+        if (!rightBlock && listItemBlock.parent.lastChild === listItemBlock) {
+          listItemBlock.parent.lastChild = leftBlock
+        }
+      }
+      if (rightBlock) {
+        rightBlock.left = leftBlock
+      }
+      if (
+        !leftBlock &&
+        !rightBlock &&
+        listItemBlock.parent.lastChild === listItemBlock
+      ) {
+        listItemBlock.parent.lastChild = null
+      }
+      listItemBlock.left = null
+      listItemBlock.right = null
+      unmountChildLeafsNoEvent(leaf)
+      unmountOwnSpawn(leaf)
+      break
+    }
+    // including route item
+    case 'route':
+      unmountChildLeafsNoEvent(leaf)
+      unmountOwnSpawn(leaf)
+      break
+    case 'block':
+    case 'block item':
+    case 'rec':
+    case 'rec item':
+      unmountChildLeafsNoEvent(leaf)
+      break
+    case 'using':
+      break
+    default: {
+      const _: never = data
+    }
+  }
+}
 
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
@@ -210,7 +299,7 @@ export function h(tag: string, opts?: any) {
     draft,
     isSvgRoot: tag === 'svg',
     namespace: ns,
-    fn(_, {mount, unmount}) {
+    fn(_, {mount}) {
       const domElementCreated = createEvent<Leaf>()
       function valueElementMutualSample(value: Store<DOMProperty>) {
         return mutualSample({
@@ -632,21 +721,6 @@ export function h(tag: string, opts?: any) {
           }
         }
       }
-      unmount.watch(leaf => {
-        const {spawn} = leaf
-        removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
-        function halt(spawn: Spawn) {
-          spawn.active = false
-          removeItem(spawn, spawn.template.pages)
-          for (const id in spawn.childSpawns) {
-            spawn.childSpawns[id].forEach(halt)
-          }
-        }
-        halt(spawn)
-
-        const visibleOp = (leaf.data as LeafDataElement).ops.visible
-        pushOpToQueue(false, visibleOp)
-      })
       mount.watch(leaf => {
         const leafData = leaf.data as LeafDataElement
 
@@ -1114,7 +1188,7 @@ export function route<T>({
     namespace: currentActor!.namespace,
     env: currentActor!.env,
     draft,
-    fn(_, {mount, unmount}) {
+    fn(_, {mount}) {
       const state = source.map(value => ({
         value,
         visible: visibleFn(value),
@@ -1132,7 +1206,7 @@ export function route<T>({
         env: currentActor!.env,
         draft: childDraft,
         state: {store: null},
-        fn({store}, {mount, unmount}) {
+        fn({store}, {mount}) {
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, upd) => upd)
           fn({store})
@@ -1169,7 +1243,6 @@ export function route<T>({
             }
             changeChildLeafsVisible(visible, leaf)
           })
-          defineUnmount(unmount, true)
         },
       })
       setInParentIndex(routeItemTemplate)
@@ -1200,7 +1273,6 @@ export function route<T>({
           data.initialized = true
         }
       })
-      defineUnmount(unmount, true)
     },
   })
   setInParentIndex(routeTemplate)
@@ -1223,30 +1295,6 @@ function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
     }
   }
   iterateChildLeafs(leaf, childLeafIterator)
-}
-
-function defineUnmount(unmount: Event<Leaf>, unmountSelf = false) {
-  unmount.watch(
-    unmountSelf
-      ? leaf => {
-          unmountOwnSpawn(leaf)
-          unmountChildLeafs(leaf)
-        }
-      : leaf => {
-          unmountChildLeafs(leaf)
-        },
-  )
-}
-
-function unmountOwnSpawn({spawn}: Leaf) {
-  removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
-  removeItem(spawn, spawn.template.pages)
-}
-function unmountChildLeafs(leaf: Leaf) {
-  leaf.spawn.active = false
-  iterateChildLeafs(leaf, child => {
-    child.api.unmount(child)
-  })
 }
 
 function iterateChildLeafs(leaf: Leaf, cb: (child: Leaf) => void) {
@@ -1283,7 +1331,7 @@ export function block({
     env,
     draft: blockDraft,
     isBlock: true,
-    fn({}, {mount, unmount}) {
+    fn({}, {mount}) {
       fn()
       mount.watch(leaf => {
         const data = leaf.data as LeafDataBlock
@@ -1292,7 +1340,6 @@ export function block({
           leaf,
         })
       })
-      defineUnmount(unmount)
     },
   })
   return () => {
@@ -1310,8 +1357,7 @@ export function block({
       namespace,
       env,
       draft: blockItemDraft,
-      fn(_, {mount, unmount}) {
-        defineUnmount(unmount)
+      fn(_, {mount}) {
         mount.watch(leaf => {
           const data = leaf.data as LeafDataBlockItem
           mountChild({
@@ -1357,7 +1403,7 @@ export function rec<T>(
     draft: recDraft,
     defer: true,
     isBlock: true,
-    fn({store}, {mount, unmount}) {
+    fn({store}, {mount}) {
       fn({store, state: store})
       const itemUpdater = createEvent<any>()
       store.on(itemUpdater, (_, e) => e)
@@ -1368,13 +1414,11 @@ export function rec<T>(
           leaf,
         })
       })
-      defineUnmount(unmount)
       return {itemUpdater}
     },
   })
   return ({store, state = store}) => {
     if (recTemplate.deferredInit) recTemplate.deferredInit()
-    // const {mount, unmount} = currentActor!.trigger
     const {env, namespace} = currentActor!
     const recItemDraft: RecItemDraft = {
       type: 'recItem',
@@ -1388,14 +1432,13 @@ export function rec<T>(
       namespace,
       env,
       draft: recItemDraft,
-      fn(_, {mount, unmount}) {
+      fn(_, {mount}) {
         const {onMount, onState} = mutualSample({
           state,
           mount,
           onMount: (state, leaf) => ({state, leaf}),
           onState: (leaf, state) => ({state, leaf}),
         })
-        defineUnmount(unmount)
         onState.watch(({state, leaf}) => {
           iterateChildLeafs(leaf, child => {
             child.api.itemUpdater(state)
@@ -1503,7 +1546,7 @@ export function list<T>(opts: any, maybeFn?: any) {
     draft,
     isSvgRoot: false,
     namespace,
-    fn(_, {mount, unmount}) {
+    fn(_, {mount}) {
       const listItemTemplate = createTemplate<{
         itemUpdater: any
       }>({
@@ -1512,39 +1555,10 @@ export function list<T>(opts: any, maybeFn?: any) {
         draft,
         isSvgRoot: false,
         namespace,
-        fn({id, store}, {mount, unmount}) {
+        fn({id, store}, {mount}) {
           cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, e) => e)
-          unmount.watch(leaf => {
-            const listItemBlock = (leaf.data as any).block as LF
-            removeItem(listItemBlock, listItemBlock.parent.child)
-            const leftBlock = listItemBlock.left
-            const rightBlock = listItemBlock.right
-            if (leftBlock) {
-              leftBlock.right = rightBlock
-              if (
-                !rightBlock &&
-                listItemBlock.parent.lastChild === listItemBlock
-              ) {
-                listItemBlock.parent.lastChild = leftBlock
-              }
-            }
-            if (rightBlock) {
-              rightBlock.left = leftBlock
-            }
-            if (
-              !leftBlock &&
-              !rightBlock &&
-              listItemBlock.parent.lastChild === listItemBlock
-            ) {
-              listItemBlock.parent.lastChild = null
-            }
-            listItemBlock.left = null
-            listItemBlock.right = null
-            unmountOwnSpawn(leaf)
-            unmountChildLeafs(leaf)
-          })
           if (draft.itemVisible) {
             const {
               onMount: mountAndVisible,
@@ -1628,7 +1642,8 @@ export function list<T>(opts: any, maybeFn?: any) {
         clock: [mountData, parentNodeUpdateSpawn],
         greedy: true,
         fn(records: ListItemType[], {updates: input, leaf, hydration}) {
-          const parentBlock = (leaf.data as any).block as ListBlock
+          const listData = (leaf as any).data as LeafDataList
+          const parentBlock = listData.block
           beginMark('list update [' + source.shortName + ']')
           const skipNode: boolean[] = Array(input.length).fill(false)
           const keys = input.map(getID)
@@ -1643,7 +1658,7 @@ export function list<T>(opts: any, maybeFn?: any) {
             } else {
               record.active = false
               if (record.instance) {
-                record.instance.api.unmount(record.instance)
+                unmountLeafTree(record.instance)
               }
               stopAsyncValue(record.asyncValue)
             }
@@ -1678,11 +1693,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               asyncValue: createAsyncValue({
                 value,
                 group,
-                onTerminate(wasActive) {
-                  // if (item.instance) {
-                  //   item.instance.api.unmount()
-                  // }
-                },
+                onTerminate(wasActive) {},
                 onChange(value) {
                   if (item.instance) {
                     item.instance.api.itemUpdater(value)
@@ -1752,27 +1763,10 @@ export function list<T>(opts: any, maybeFn?: any) {
           if (resultRecords.length === 0) {
             parentBlock.lastChild = null
           }
+          listData.records = resultRecords
           return resultRecords
         },
         target: updates,
-      })
-      const onRemove = sample({
-        source: updates,
-        clock: unmount,
-        greedy: true,
-        fn: (records, leaf) => ({leaf, records}),
-      })
-      onRemove.watch(({leaf, records}) => {
-        for (let i = 0; i < records.length; i++) {
-          const item = records[i]
-
-          if (item.instance) {
-            item.instance.api.unmount(item.instance)
-          }
-          item.active = false
-        }
-        leaf.spawn.active = false
-        unmountOwnSpawn(leaf)
       })
     },
     env,

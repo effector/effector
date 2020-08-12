@@ -226,6 +226,7 @@ export function mountChild({
         type: 'list',
         draft,
         block: listBlock,
+        records: [],
       }
       break
     }

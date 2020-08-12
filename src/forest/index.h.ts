@@ -143,7 +143,6 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   api: Api
   trigger: {
     mount: Event<Leaf>
-    unmount: Event<Leaf>
   }
   isSvgRoot: boolean
   namespace: NSType
@@ -274,6 +273,13 @@ export type LeafDataListItem = {
   block: LF
 }
 
+export type LeafDataList = {
+  type: 'list'
+  draft: ListType
+  block: ListBlock
+  records: ListItemType[]
+}
+
 export type LeafData =
   | {
       type: 'using'
@@ -282,11 +288,7 @@ export type LeafData =
       block: UsingBlock
     }
   | LeafDataElement
-  | {
-      type: 'list'
-      draft: ListType
-      block: ListBlock
-    }
+  | LeafDataList
   | LeafDataListItem
   | LeafDataRoute
   | LeafDataRecItem
@@ -306,7 +308,6 @@ export type Leaf = {
   }
   api: {
     mount(data: Leaf): void
-    unmount(data: Leaf): void
     itemUpdater(update: any): void
   }
   svgRoot: SVGSVGElement | null
