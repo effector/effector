@@ -143,7 +143,7 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   api: Api
   trigger: {
     mount: Event<LeafMountParams>
-    unmount: Event<void>
+    unmount: Event<LeafMountParams>
   }
   isSvgRoot: boolean
   namespace: NSType
@@ -311,13 +311,14 @@ export type Leaf = {
   }
   api: {
     mount(data: LeafMountParams): void
-    unmount(): void
+    unmount(data: LeafMountParams): void
     itemUpdater(update: any): void
   }
   svgRoot: SVGSVGElement | null
   hydration: boolean
   forkPage?: Fork
   env: Env
+  mountNode: DOMElement
 }
 
 export type BindingsDraft = {

@@ -633,11 +633,7 @@ export function h(tag: string, opts?: any) {
           }
         }
       }
-      sample({
-        source: mount,
-        clock: unmount,
-        greedy: true,
-      }).watch(({leaf}) => {
+      unmount.watch(({leaf}) => {
         const {spawn} = leaf
         removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
         function halt(spawn: Spawn) {
@@ -1177,11 +1173,7 @@ export function route<T>({
             }
             changeChildLeafsVisible(visible, leaf)
           })
-          defineUnmount({
-            unmountSelf: true,
-            mount,
-            unmount,
-          })
+          defineUnmount(unmount, true)
         },
       })
       setInParentIndex(routeItemTemplate)
@@ -1217,11 +1209,7 @@ export function route<T>({
           }
         },
       )
-      defineUnmount({
-        unmountSelf: true,
-        mount,
-        unmount,
-      })
+      defineUnmount(unmount, true)
     },
   })
   setInParentIndex(routeTemplate)
@@ -1246,20 +1234,8 @@ function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
   iterateChildLeafs(leaf, childLeafIterator)
 }
 
-function defineUnmount({
-  unmountSelf = false,
-  mount,
-  unmount,
-}: {
-  unmountSelf?: boolean
-  mount: Event<LeafMountParams>
-  unmount: Event<void>
-}) {
-  sample({
-    source: mount,
-    clock: unmount,
-    greedy: true,
-  }).watch(
+function defineUnmount(unmount: Event<LeafMountParams>, unmountSelf = false) {
+  unmount.watch(
     unmountSelf
       ? ({leaf}) => {
           unmountChildLeafs(leaf)
@@ -1278,7 +1254,10 @@ function unmountOwnSpawn({spawn}: Leaf) {
 function unmountChildLeafs(leaf: Leaf) {
   leaf.spawn.active = false
   iterateChildLeafs(leaf, child => {
-    child.api.unmount()
+    child.api.unmount({
+      leaf: child,
+      node: child.mountNode,
+    })
   })
 }
 
@@ -1326,10 +1305,7 @@ export function block({
           node,
         })
       })
-      defineUnmount({
-        mount,
-        unmount,
-      })
+      defineUnmount(unmount)
     },
   })
   return () => {
@@ -1348,10 +1324,7 @@ export function block({
       env,
       draft: blockItemDraft,
       fn(_, {mount, unmount}) {
-        defineUnmount({
-          mount,
-          unmount,
-        })
+        defineUnmount(unmount)
         mount.watch(({node, leaf}) => {
           const data = leaf.data as LeafDataBlockItem
           mountChild({
@@ -1410,10 +1383,7 @@ export function rec<T>(
           node,
         })
       })
-      defineUnmount({
-        mount,
-        unmount,
-      })
+      defineUnmount(unmount)
       return {itemUpdater}
     },
   })
@@ -1440,10 +1410,7 @@ export function rec<T>(
           onMount: (state, {leaf, node}) => ({state, leaf, node}),
           onState: ({leaf, node}, state) => ({state, leaf, node}),
         })
-        defineUnmount({
-          mount,
-          unmount,
-        })
+        defineUnmount(unmount)
         onState.watch(({state, leaf}) => {
           iterateChildLeafs(leaf, child => {
             child.api.itemUpdater(state)
@@ -1565,12 +1532,7 @@ export function list<T>(opts: any, maybeFn?: any) {
           cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, e) => e)
-          const onRemoveFromDOM = sample({
-            source: mount,
-            clock: unmount,
-            greedy: true,
-          })
-          onRemoveFromDOM.watch(({leaf}) => {
+          unmount.watch(({leaf}) => {
             const listItemBlock = (leaf.data as any).block as LF
             removeItem(listItemBlock, listItemBlock.parent.child)
             const leftBlock = listItemBlock.left
@@ -1702,7 +1664,10 @@ export function list<T>(opts: any, maybeFn?: any) {
             } else {
               record.active = false
               if (record.instance) {
-                record.instance.api.unmount()
+                record.instance.api.unmount({
+                  leaf: record.instance,
+                  node: record.instance.mountNode,
+                })
               }
               stopAsyncValue(record.asyncValue)
             }
@@ -1816,21 +1781,20 @@ export function list<T>(opts: any, maybeFn?: any) {
         target: updates,
       })
       const onRemove = sample({
-        source: mount,
-        clock: sample({
-          source: updates,
-          clock: unmount,
-          greedy: true,
-        }) as Event<ListItemType[]>,
-        fn: ({leaf}, records) => ({leaf, records}),
+        source: updates,
+        clock: unmount,
         greedy: true,
+        fn: (records, {leaf}) => ({leaf, records}),
       })
       onRemove.watch(({leaf, records}) => {
         for (let i = 0; i < records.length; i++) {
           const item = records[i]
 
           if (item.instance) {
-            item.instance.api.unmount()
+            item.instance.api.unmount({
+              leaf: item.instance,
+              node: item.instance.mountNode,
+            })
           }
           item.active = false
         }

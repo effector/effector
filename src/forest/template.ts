@@ -43,7 +43,7 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
     },
     triggers: {
       mount: Event<LeafMountParams>
-      unmount: Event<void>
+      unmount: Event<LeafMountParams>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -65,7 +65,7 @@ export function createTemplate(config: {
     },
     triggers: {
       mount: Event<LeafMountParams>
-      unmount: Event<void>
+      unmount: Event<LeafMountParams>
     },
   ) => void
   state?: {[field: string]: any}
@@ -96,7 +96,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     },
     triggers: {
       mount: Event<LeafMountParams>
-      unmount: Event<void>
+      unmount: Event<LeafMountParams>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -455,6 +455,7 @@ export function spawn(
     hydration,
     forkPage,
     env: env!,
+    mountNode,
   }
   const previousSpawn = currentLeaf
   currentLeaf = leaf
