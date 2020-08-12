@@ -283,7 +283,7 @@ export function mountChild({
           child: [],
         },
         visible: true,
-        index: 0,
+        index: draft.inParentIndex,
       }
       block.child.parent = block
       parentBlockFragment.child[draft.inParentIndex] = block

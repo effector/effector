@@ -17,7 +17,7 @@ import {
   BlockItemBlock,
 } from './relation.h'
 
-export function getParentBlock(block: Exclude<Block, UsingBlock>): Block {
+export function getParentBlock(block: Exclude<Block, UsingBlock>) {
   switch (block.type) {
     case 'text':
     case 'element':
@@ -28,7 +28,9 @@ export function getParentBlock(block: Exclude<Block, UsingBlock>): Block {
     case 'block':
     case 'blockItem':
       return block.parent
+    case 'fragment':
     default:
+      const _: 'fragment' = block.type
       switch (block.parent.type) {
         case 'using':
         case 'block':
@@ -50,7 +52,7 @@ function findParentDOMElementBlock(block: Block): UsingBlock | ElementBlock {
           return block.parent
       }
     default:
-      const _ = block
+      const _ = block.type
       return findParentDOMElementBlock(getParentBlock(block))
   }
 }

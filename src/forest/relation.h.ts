@@ -125,7 +125,7 @@ export type BlockBlock = {
   parent: FragmentBlock
   child: FragmentBlock
   visible: boolean
-  index: 0
+  index: number
 }
 
 export type BlockItemBlock = {
