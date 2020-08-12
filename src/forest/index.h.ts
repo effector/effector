@@ -142,8 +142,8 @@ export type Actor<Api extends {[method: string]: (params: any) => any}> = {
   draft: NodeDraft
   api: Api
   trigger: {
-    mount: Event<LeafMountParams>
-    unmount: Event<LeafMountParams>
+    mount: Event<Leaf>
+    unmount: Event<Leaf>
   }
   isSvgRoot: boolean
   namespace: NSType
@@ -231,11 +231,6 @@ export type OpGroup = {
   }
 }
 
-export type LeafMountParams = {
-  node: DOMElement
-  leaf: Leaf
-}
-
 export type LeafDataRoute = {
   type: 'route'
   block: RouteBlock
@@ -310,8 +305,8 @@ export type Leaf = {
     domSubtree: OpGroup
   }
   api: {
-    mount(data: LeafMountParams): void
-    unmount(data: LeafMountParams): void
+    mount(data: Leaf): void
+    unmount(data: Leaf): void
     itemUpdater(update: any): void
   }
   svgRoot: SVGSVGElement | null

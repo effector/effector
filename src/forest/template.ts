@@ -25,7 +25,6 @@ import {
   OpGroup,
   Template,
   Spawn,
-  LeafMountParams,
   NodeDraft,
   Env,
 } from './index.h'
@@ -42,8 +41,8 @@ export function createTemplate<Api extends {[method: string]: any}>(config: {
       [field: string]: Store<any>
     },
     triggers: {
-      mount: Event<LeafMountParams>
-      unmount: Event<LeafMountParams>
+      mount: Event<Leaf>
+      unmount: Event<Leaf>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -64,8 +63,8 @@ export function createTemplate(config: {
       [field: string]: Store<any>
     },
     triggers: {
-      mount: Event<LeafMountParams>
-      unmount: Event<LeafMountParams>
+      mount: Event<Leaf>
+      unmount: Event<Leaf>
     },
   ) => void
   state?: {[field: string]: any}
@@ -95,8 +94,8 @@ export function createTemplate<Api extends {[method: string]: any}>({
       [field: string]: Store<any>
     },
     triggers: {
-      mount: Event<LeafMountParams>
-      unmount: Event<LeafMountParams>
+      mount: Event<Leaf>
+      unmount: Event<Leaf>
     },
   ) => {[K in keyof Api]: Event<Api[K]>}
   state?: {[field: string]: any}
@@ -299,7 +298,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
     node,
     api: null as any,
     trigger: {
-      mount: createEvent<LeafMountParams>(),
+      mount: createEvent<Leaf>(),
       unmount: createEvent(),
     },
     draft,
@@ -620,10 +619,7 @@ export function spawn(
   leaf.spawn.api = api
   //@ts-ignore
   leaf.spawn.leaf = leaf
-  leaf.api.mount({
-    node: mountNode,
-    leaf,
-  })
+  leaf.api.mount(leaf)
   currentLeaf = previousSpawn
   return leaf
 }

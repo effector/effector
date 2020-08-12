@@ -15,7 +15,6 @@ import {
   ListType,
   Leaf,
   BindingsDraft,
-  LeafMountParams,
   LeafData,
   LeafDataElement,
   LeafDataRoute,
@@ -59,7 +58,7 @@ export function mountChildTemplates(
   }: {
     parentBlockFragment: FragmentBlock
     leaf: Leaf
-    node: DOMElement
+    node?: DOMElement
     svgRoot?: SVGSVGElement | null
     values?: {[name: string]: any}
   },
@@ -79,14 +78,14 @@ export function mountChildTemplates(
 export function mountChild({
   parentBlockFragment,
   leaf,
-  node,
+  node = leaf.mountNode,
   actor,
   svgRoot,
   values,
 }: {
   parentBlockFragment: FragmentBlock
   leaf: Leaf
-  node: DOMElement
+  node?: DOMElement
   actor: Actor<any>
   svgRoot?: SVGSVGElement | null
   values?: {[name: string]: any}

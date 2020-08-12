@@ -28,7 +28,6 @@ import {
   ListType,
   Leaf,
   BindingsDraft,
-  LeafMountParams,
   LeafData,
   LeafDataElement,
   LeafDataRoute,
@@ -378,12 +377,12 @@ export function h(tag: string, opts?: any) {
         const {onMount, onState} = mutualSample({
           mount,
           state: merged.visible,
-          onMount: (value, {leaf}) => ({
+          onMount: (value, leaf) => ({
             leaf,
             value,
             hydration: leaf.hydration,
           }),
-          onState: ({leaf}, value) => ({leaf, value, hydration: false}),
+          onState: (leaf, value) => ({leaf, value, hydration: false}),
         })
         onMount.watch(({leaf, value, hydration}) => {
           const leafData = leaf.data as LeafDataElement
@@ -633,7 +632,7 @@ export function h(tag: string, opts?: any) {
           }
         }
       }
-      unmount.watch(({leaf}) => {
+      unmount.watch(leaf => {
         const {spawn} = leaf
         removeItem(spawn, spawn.parent!.childSpawns[spawn.template.id])
         function halt(spawn: Spawn) {
@@ -648,7 +647,7 @@ export function h(tag: string, opts?: any) {
         const visibleOp = (leaf.data as LeafDataElement).ops.visible
         pushOpToQueue(false, visibleOp)
       })
-      mount.watch(({leaf}) => {
+      mount.watch(leaf => {
         const leafData = leaf.data as LeafDataElement
 
         if (!draft.visible) {
@@ -834,12 +833,11 @@ export function using(node: DOMElement, opts: any): void {
     namespace: ns,
     fn(_, {mount}) {
       cb()
-      mount.watch(({node, leaf}) => {
+      mount.watch(leaf => {
         const parentBlock = (leaf.data as any).block as UsingBlock
         mountChildTemplates(draft, {
           parentBlockFragment: parentBlock.child,
           leaf,
-          node,
         })
       })
     },
@@ -1141,21 +1139,19 @@ export function route<T>({
           const onValueUpdate = sample({
             source: mount,
             clock: state,
-            fn: ({leaf, node}, {visible, value}) => ({
+            fn: (leaf, {visible, value}) => ({
               leaf,
               visible,
-              node,
               value,
             }),
             greedy: true,
           })
-          mount.watch(({leaf, node}) => {
+          mount.watch(leaf => {
             const data = leaf.data as LeafDataRoute
             data.block.child.visible = true
             mountChildTemplates(childDraft, {
               parentBlockFragment: data.block.child.child,
               leaf,
-              node,
             })
           })
           onValueUpdate.watch(({leaf, visible, value}) => {
@@ -1180,35 +1176,30 @@ export function route<T>({
       const {onMount, onState: onVisibleChange} = mutualSample({
         mount,
         state,
-        onMount: ({visible, value}, {leaf, node}) => ({
+        onMount: ({visible, value}, leaf) => ({
           leaf,
           visible,
-          node,
           value,
         }),
-        onState: ({leaf, node}, {visible, value}) => ({
+        onState: (leaf, {visible, value}) => ({
           leaf,
           visible,
-          node,
           value,
         }),
       })
-      merge([onMount, onVisibleChange]).watch(
-        ({leaf, visible, value, node}) => {
-          const data = leaf.data as LeafDataRoute
-          data.block.child.visible = visible
-          if (visible && !data.initialized) {
-            mountChild({
-              parentBlockFragment: data.block.child.child,
-              leaf,
-              node,
-              actor: routeItemTemplate,
-              values: {store: value},
-            })
-            data.initialized = true
-          }
-        },
-      )
+      merge([onMount, onVisibleChange]).watch(({leaf, visible, value}) => {
+        const data = leaf.data as LeafDataRoute
+        data.block.child.visible = visible
+        if (visible && !data.initialized) {
+          mountChild({
+            parentBlockFragment: data.block.child.child,
+            leaf,
+            actor: routeItemTemplate,
+            values: {store: value},
+          })
+          data.initialized = true
+        }
+      })
       defineUnmount(unmount, true)
     },
   })
@@ -1234,14 +1225,14 @@ function changeChildLeafsVisible(visible: boolean, leaf: Leaf) {
   iterateChildLeafs(leaf, childLeafIterator)
 }
 
-function defineUnmount(unmount: Event<LeafMountParams>, unmountSelf = false) {
+function defineUnmount(unmount: Event<Leaf>, unmountSelf = false) {
   unmount.watch(
     unmountSelf
-      ? ({leaf}) => {
+      ? leaf => {
           unmountChildLeafs(leaf)
           unmountOwnSpawn(leaf)
         }
-      : ({leaf}) => {
+      : leaf => {
           unmountChildLeafs(leaf)
         },
   )
@@ -1254,10 +1245,7 @@ function unmountOwnSpawn({spawn}: Leaf) {
 function unmountChildLeafs(leaf: Leaf) {
   leaf.spawn.active = false
   iterateChildLeafs(leaf, child => {
-    child.api.unmount({
-      leaf: child,
-      node: child.mountNode,
-    })
+    child.api.unmount(child)
   })
 }
 
@@ -1297,12 +1285,11 @@ export function block({
     isBlock: true,
     fn({}, {mount, unmount}) {
       fn()
-      mount.watch(({node, leaf}) => {
+      mount.watch(leaf => {
         const data = leaf.data as LeafDataBlock
         mountChildTemplates(blockDraft, {
           parentBlockFragment: data.block.child,
           leaf,
-          node,
         })
       })
       defineUnmount(unmount)
@@ -1325,12 +1312,11 @@ export function block({
       draft: blockItemDraft,
       fn(_, {mount, unmount}) {
         defineUnmount(unmount)
-        mount.watch(({node, leaf}) => {
+        mount.watch(leaf => {
           const data = leaf.data as LeafDataBlockItem
           mountChild({
             parentBlockFragment: data.block.child,
             leaf,
-            node,
             actor: blockTemplate,
           })
         })
@@ -1375,12 +1361,11 @@ export function rec<T>(
       fn({store, state: store})
       const itemUpdater = createEvent<any>()
       store.on(itemUpdater, (_, e) => e)
-      mount.watch(({node, leaf}) => {
+      mount.watch(leaf => {
         const data = leaf.data as LeafDataRec
         mountChildTemplates(recDraft, {
           parentBlockFragment: data.block.child,
           leaf,
-          node,
         })
       })
       defineUnmount(unmount)
@@ -1407,8 +1392,8 @@ export function rec<T>(
         const {onMount, onState} = mutualSample({
           state,
           mount,
-          onMount: (state, {leaf, node}) => ({state, leaf, node}),
-          onState: ({leaf, node}, state) => ({state, leaf, node}),
+          onMount: (state, leaf) => ({state, leaf}),
+          onState: (leaf, state) => ({state, leaf}),
         })
         defineUnmount(unmount)
         onState.watch(({state, leaf}) => {
@@ -1416,12 +1401,11 @@ export function rec<T>(
             child.api.itemUpdater(state)
           })
         })
-        onMount.watch(({node, leaf, state}) => {
+        onMount.watch(({leaf, state}) => {
           const data = leaf.data as LeafDataRecItem
           mountChild({
             parentBlockFragment: data.block.child,
             leaf,
-            node,
             actor: recTemplate,
             values: {store: state},
           })
@@ -1532,7 +1516,7 @@ export function list<T>(opts: any, maybeFn?: any) {
           cb({store, key: id, fields: remap(store, fields)})
           const itemUpdater = createEvent<any>()
           store.on(itemUpdater, (_, e) => e)
-          unmount.watch(({leaf}) => {
+          unmount.watch(leaf => {
             const listItemBlock = (leaf.data as any).block as LF
             removeItem(listItemBlock, listItemBlock.parent.child)
             const leftBlock = listItemBlock.left
@@ -1568,10 +1552,10 @@ export function list<T>(opts: any, maybeFn?: any) {
             } = mutualSample({
               mount,
               state: draft.itemVisible,
-              onMount: (visible, {node, leaf}) => ({visible, node, leaf}),
-              onState: ({node, leaf}, visible) => ({visible, node, leaf}),
+              onMount: (visible, leaf) => ({visible, leaf}),
+              onState: (leaf, visible) => ({visible, leaf}),
             })
-            mountAndVisible.watch(({visible, node, leaf}) => {
+            mountAndVisible.watch(({visible, leaf}) => {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible
               parentBlock.childInitialized = visible
@@ -1579,11 +1563,10 @@ export function list<T>(opts: any, maybeFn?: any) {
                 mountChildTemplates(draft, {
                   parentBlockFragment: parentBlock.child,
                   leaf,
-                  node,
                 })
               }
             })
-            onVisibleChanges.watch(({visible, node, leaf}) => {
+            onVisibleChanges.watch(({visible, leaf}) => {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = visible
               if (!parentBlock.childInitialized) {
@@ -1592,7 +1575,6 @@ export function list<T>(opts: any, maybeFn?: any) {
                   mountChildTemplates(draft, {
                     parentBlockFragment: parentBlock.child,
                     leaf,
-                    node,
                   })
                 }
                 return
@@ -1600,14 +1582,13 @@ export function list<T>(opts: any, maybeFn?: any) {
               changeChildLeafsVisible(visible, leaf)
             })
           } else {
-            mount.watch(({node, leaf}) => {
+            mount.watch(leaf => {
               const parentBlock = (leaf.data as any).block as LF
               parentBlock.visible = true
               parentBlock.childInitialized = true
               mountChildTemplates(draft, {
                 parentBlockFragment: parentBlock.child,
                 leaf,
-                node,
               })
             })
           }
@@ -1622,10 +1603,9 @@ export function list<T>(opts: any, maybeFn?: any) {
       const mountData = sample({
         source: source as Store<T[]>,
         clock: mount,
-        fn: (data, {node, leaf}) => {
+        fn: (data, leaf) => {
           return {
             updates: data,
-            node,
             leaf,
             hydration: leaf.hydration,
           }
@@ -1636,9 +1616,8 @@ export function list<T>(opts: any, maybeFn?: any) {
       const parentNodeUpdateSpawn = sample({
         source: mountData,
         clock: mappedUpdates,
-        fn: ({node, leaf}, updates: T[]) => ({
+        fn: ({leaf}, updates: T[]) => ({
           updates,
-          node,
           leaf,
           hydration: false,
         }),
@@ -1648,7 +1627,7 @@ export function list<T>(opts: any, maybeFn?: any) {
         source: updates,
         clock: [mountData, parentNodeUpdateSpawn],
         greedy: true,
-        fn(records: ListItemType[], {node, updates: input, leaf, hydration}) {
+        fn(records: ListItemType[], {updates: input, leaf, hydration}) {
           const parentBlock = (leaf.data as any).block as ListBlock
           beginMark('list update [' + source.shortName + ']')
           const skipNode: boolean[] = Array(input.length).fill(false)
@@ -1664,10 +1643,7 @@ export function list<T>(opts: any, maybeFn?: any) {
             } else {
               record.active = false
               if (record.instance) {
-                record.instance.api.unmount({
-                  leaf: record.instance,
-                  node: record.instance.mountNode,
-                })
+                record.instance.api.unmount(record.instance)
               }
               stopAsyncValue(record.asyncValue)
             }
@@ -1721,7 +1697,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                       store: value,
                     },
                     parentLeaf: leaf,
-                    mountNode: node,
+                    mountNode: leaf.mountNode,
                     svgRoot: leaf.svgRoot,
                     leafData: item.leafData,
                     opGroup: group,
@@ -1762,7 +1738,7 @@ export function list<T>(opts: any, maybeFn?: any) {
                   store: value,
                 },
                 parentLeaf: leaf,
-                mountNode: node,
+                mountNode: leaf.mountNode,
                 svgRoot: leaf.svgRoot,
                 leafData: item.leafData,
                 opGroup: group,
@@ -1784,17 +1760,14 @@ export function list<T>(opts: any, maybeFn?: any) {
         source: updates,
         clock: unmount,
         greedy: true,
-        fn: (records, {leaf}) => ({leaf, records}),
+        fn: (records, leaf) => ({leaf, records}),
       })
       onRemove.watch(({leaf, records}) => {
         for (let i = 0; i < records.length; i++) {
           const item = records[i]
 
           if (item.instance) {
-            item.instance.api.unmount({
-              leaf: item.instance,
-              node: item.instance.mountNode,
-            })
+            item.instance.api.unmount(item.instance)
           }
           item.active = false
         }
