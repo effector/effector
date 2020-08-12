@@ -203,7 +203,7 @@ test('hydrate', async () => {
   `)
 })
 
-describe.skip('text content escaping', () => {
+describe('text content escaping', () => {
   it('escape text content in common tags', async () => {
     const app = createDomain()
     const scriptText = app.createStore('{"foo": "bar"}')
