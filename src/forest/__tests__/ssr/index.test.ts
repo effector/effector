@@ -6,7 +6,7 @@ import {
   serialize,
   hydrate,
 } from 'effector'
-import {h, using, block, text} from 'forest'
+import {h, using, block, text, spec, variant, rec, list, remap} from 'forest'
 import {renderStatic} from 'forest/server'
 import prettyHtml from 'effector/fixtures/prettyHtml'
 //@ts-ignore
@@ -149,7 +149,61 @@ test('hydration support (with html hydration)', async () => {
     "
   `)
 })
-describe('text content escaping', () => {
+
+test('hydrate', async () => {
+  const app = createDomain()
+  const rootItem = app.createStore(null)
+  const Item = rec<any>({
+    fn() {
+      h('div', {
+        text: 'root',
+      })
+    },
+  })
+  const Tag = block({
+    fn() {
+      h('span', {
+        text: 'SPAN',
+      })
+    },
+  })
+  const App = block({
+    fn() {
+      Tag()
+      h('h1', {text: 'List'})
+      Item({store: rootItem})
+    },
+  })
+
+  const htmlSource = await renderStatic({
+    scope: fork(app),
+    fn: App,
+  })
+  console.log(htmlSource)
+  const client = provideGlobals()
+
+  client.el.innerHTML = htmlSource
+  await new Promise(rs => {
+    using(client.el, {
+      scope: fork(app),
+      onComplete: rs,
+      fn: App,
+      env: {
+        document: client.document,
+      },
+      hydrate: true,
+    })
+  })
+  expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot(`
+    "
+    <span>SPAN</span>
+    <h1>root</h1>
+    <div>root</div>
+    "
+  `)
+})
+
+describe.skip('text content escaping', () => {
   it('escape text content in common tags', async () => {
     const app = createDomain()
     const scriptText = app.createStore('{"foo": "bar"}')
