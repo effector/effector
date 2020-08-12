@@ -1229,8 +1229,8 @@ function defineUnmount(unmount: Event<Leaf>, unmountSelf = false) {
   unmount.watch(
     unmountSelf
       ? leaf => {
-          unmountChildLeafs(leaf)
           unmountOwnSpawn(leaf)
+          unmountChildLeafs(leaf)
         }
       : leaf => {
           unmountChildLeafs(leaf)
@@ -1542,8 +1542,8 @@ export function list<T>(opts: any, maybeFn?: any) {
             }
             listItemBlock.left = null
             listItemBlock.right = null
-            unmountChildLeafs(leaf)
             unmountOwnSpawn(leaf)
+            unmountChildLeafs(leaf)
           })
           if (draft.itemVisible) {
             const {
