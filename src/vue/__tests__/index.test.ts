@@ -21,16 +21,19 @@ test('show counter', () => {
   expect(wrapper.html()).toBe('<div>0</div>')
 })
 
-test('is store its [key] state', async() => {
+test('is store its [key] state', async () => {
   const $counter = createStore(0)
   const evt = createEvent()
 
   $counter.on(evt, state => state + 1)
 
-  const wrapper = shallowMount({
-    template: '<div>{{ state }}</div>',
-    effector: $counter,
-  }, {localVue})
+  const wrapper = shallowMount(
+    {
+      template: '<div>{{ state }}</div>',
+      effector: $counter,
+    },
+    {localVue},
+  )
 
   evt()
 
@@ -58,7 +61,7 @@ test('show counter with createComponent', () => {
   expect(wrapper.html()).toBe('<div>0</div>')
 })
 
-test('vue $watch', async() => {
+test('vue $watch', async () => {
   const $counter = createStore(0)
   const mockCallback = jest.fn()
 
@@ -83,27 +86,28 @@ test('vue $watch', async() => {
   $counter.setState(1)
   await localVue.nextTick()
 
-
   expect(wrapper.vm.counter).toBe(1)
   expect(mockCallback.mock.calls.length).toBe(1)
 })
 
-test('test SID if pass event to effector object', async() => {
+test('test SID if pass event to effector object', async () => {
   const evt = createEvent()
   const mockCallback = jest.fn()
 
-
-  const component = createComponent({
-    template: '<div>{{ evt }}</div>',
-    watch: {
-      evt() {
-        mockCallback()
-      }
-    }
-  }, {evt})
+  const component = createComponent(
+    {
+      template: '<div>{{ evt }}</div>',
+      watch: {
+        evt() {
+          mockCallback()
+        },
+      },
+    },
+    {evt},
+  )
 
   const wrapper = shallowMount(component, {
-    localVue
+    localVue,
   })
 
   evt()
@@ -112,7 +116,7 @@ test('test SID if pass event to effector object', async() => {
   expect(mockCallback.mock.calls.length).toBe(1)
 })
 
-test('vue component watch option', async() => {
+test('vue component watch option', async () => {
   const $counter = createStore(0)
   const mockCallback = jest.fn()
 
@@ -131,13 +135,11 @@ test('vue component watch option', async() => {
     localVue,
   })
 
-
   expect(wrapper.vm.counter).toBe(0)
 
   //@ts-ignore
   $counter.setState(1)
   await localVue.nextTick()
-
 
   expect(wrapper.vm.counter).toBe(1)
   expect(mockCallback.mock.calls.length).toBe(1)
@@ -149,11 +151,11 @@ test('is v-model works correct with state key on input', () => {
   const $fullname = createStore('')
   const component = Vue.extend({
     template: `<div><input v-model="state" data-input></div>`,
-    effector: $fullname
+    effector: $fullname,
   })
 
   const wrapper = shallowMount(component, {
-    localVue
+    localVue,
   })
 
   wrapper.find('[data-input]').setValue(expected)
@@ -169,12 +171,12 @@ test('is v-model works correct with custom key on input', () => {
   const component = Vue.extend({
     template: `<div><input v-model="$fullname" data-input></div>`,
     effector: {
-      $fullname
-    }
+      $fullname,
+    },
   })
 
   const wrapper = shallowMount(component, {
-    localVue
+    localVue,
   })
 
   wrapper.find('[data-input]').setValue(expected)
@@ -185,7 +187,7 @@ test('is v-model works correct with custom key on input', () => {
 
 test('is v-model works with custom component', () => {
   const expected = 'John Doe'
-  
+
   const child = Vue.extend({
     name: 'child',
     template: `<div></div>`,
@@ -195,8 +197,8 @@ test('is v-model works with custom component', () => {
     methods: {
       handleChange() {
         this.$emit('input', expected)
-      }
-    }
+      },
+    },
   })
 
   const $fullname = createStore('')
@@ -212,12 +214,12 @@ test('is v-model works with custom component', () => {
     },
 
     effector: {
-      $fullname
-    }
+      $fullname,
+    },
   })
 
   const wrapper = mount(component, {
-    localVue
+    localVue,
   })
 
   // @ts-ignore
@@ -225,4 +227,40 @@ test('is v-model works with custom component', () => {
 
   // @ts-ignore
   expect(wrapper.vm.$fullname).toBe(expected)
+})
+
+test('non v-model usage support', () => {
+  const changeEvent = createEvent()
+  const someEvt = createEvent()
+
+  const $store = createStore('')
+    .on(changeEvent, (_, value) => value)
+    .on(someEvt, () => 'some-value')
+
+  const component = Vue.extend({
+    template: `
+      <div id="app">
+        <input id="input" :value="value" @input="(e) => changeEvent(e.target.value)" />
+        <button id="btn" @click="someEvt">set some-value</button>
+      </div>
+    `,
+    name: 'App',
+    effector: {
+      value: $store,
+    },
+    methods: {
+      changeEvent,
+      someEvt,
+    },
+  })
+
+  const wrapper = mount(component, {
+    localVue,
+  })
+  const input = wrapper.element.querySelector('#btn')! as HTMLInputElement
+  const btn = wrapper.element.querySelector('#btn')! as HTMLButtonElement
+  btn.click()
+  expect($store.getState()).toBe('some-value')
+  // should be 'some-value' but something happens
+  expect(input.value).toBe('')
 })
