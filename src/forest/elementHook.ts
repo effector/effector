@@ -7,10 +7,7 @@ import {
   createEvent,
   sample,
   merge,
-  restore,
   Fork,
-  StateRef,
-  Node,
 } from 'effector'
 
 import {
@@ -27,11 +24,9 @@ import {
   Actor,
   ListType,
   Leaf,
-  BindingsDraft,
-  LeafData,
   LeafDataElement,
   LeafDataRoute,
-  RouteType,
+  RouteDraft,
   Template,
   Spawn,
   RecItemDraft,
@@ -42,23 +37,13 @@ import {
   BlockItemDraft,
   LeafDataBlock,
   LeafDataBlockItem,
-  NodeDraft,
   LeafDataList,
+  LeafDataUsing,
+  LeafDataListItem,
 } from './index.h'
 import {beginMark, endMark} from './platform/mark'
 
-import {
-  ElementBlock,
-  ListBlock,
-  TextBlock,
-  UsingBlock,
-  FF,
-  LF,
-  RouteBlock,
-  Block,
-  FragmentBlock,
-  RF,
-} from './relation.h'
+import {ElementBlock, TextBlock, UsingBlock, LF} from './relation.h'
 
 import {
   pushOpToQueue,
@@ -102,6 +87,61 @@ import {
 import {remap} from './remap'
 import {iterateChildLeafs} from './iterateChildLeafs'
 import {unmountLeafTree} from './unmount'
+
+const mountFn = {
+  using(leaf: Leaf) {
+    const data = leaf.data as LeafDataUsing
+    const block = data.block
+    mountChildTemplates(data.draft, {
+      parentBlockFragment: block.child,
+      leaf,
+    })
+  },
+  routeItem(leaf: Leaf) {
+    const draft = leaf.draft as RouteDraft
+    const data = leaf.data as LeafDataRoute
+    data.block.child.visible = true
+    mountChildTemplates(draft, {
+      parentBlockFragment: data.block.child.child,
+      leaf,
+    })
+  },
+  block(leaf: Leaf) {
+    const draft = leaf.draft as BlockDraft
+    const data = leaf.data as LeafDataBlock
+    mountChildTemplates(draft, {
+      parentBlockFragment: data.block.child,
+      leaf,
+    })
+  },
+  blockItem(leaf: Leaf) {
+    const draft = leaf.draft as BlockItemDraft
+    const data = leaf.data as LeafDataBlockItem
+    mountChild({
+      parentBlockFragment: data.block.child,
+      leaf,
+      actor: draft.itemOf,
+    })
+  },
+  rec(leaf: Leaf) {
+    const draft = leaf.draft as RecDraft
+    const data = leaf.data as LeafDataRec
+    mountChildTemplates(draft, {
+      parentBlockFragment: data.block.child,
+      leaf,
+    })
+  },
+  listItem(leaf: Leaf) {
+    const data = leaf.data as LeafDataListItem
+    const block = data.block
+    block.visible = true
+    block.childInitialized = true
+    mountChildTemplates(data.listDraft, {
+      parentBlockFragment: block.child,
+      leaf,
+    })
+  },
+}
 
 export function h(tag: string): void
 export function h(tag: string, cb: () => void): void
@@ -816,18 +856,12 @@ export function using(node: DOMElement, opts: any): void {
 
   const usingTemplate = createTemplate({
     name: 'using',
-    draft: draft as any,
+    draft,
     isSvgRoot: tag === 'svg',
     namespace: ns,
     fn(_, {mount}) {
       cb()
-      mount.watch(leaf => {
-        const parentBlock = (leaf.data as any).block as UsingBlock
-        mountChildTemplates(draft, {
-          parentBlockFragment: parentBlock.child,
-          leaf,
-        })
-      })
+      mount.watch(mountFn.using)
     },
     env,
   })
@@ -1089,7 +1123,7 @@ export function route<T>({
   visible: (value: T) => boolean
   fn: (config: {store: Store<T>}) => void
 }) {
-  const draft: RouteType = {
+  const draft: RouteDraft = {
     type: 'route',
     childTemplates: [],
     childCount: 0,
@@ -1107,7 +1141,7 @@ export function route<T>({
         value,
         visible: visibleFn(value),
       }))
-      const childDraft: RouteType = {
+      const childDraft: RouteDraft = {
         type: 'route',
         childTemplates: [],
         childCount: 0,
@@ -1134,14 +1168,7 @@ export function route<T>({
             }),
             greedy: true,
           })
-          mount.watch(leaf => {
-            const data = leaf.data as LeafDataRoute
-            data.block.child.visible = true
-            mountChildTemplates(childDraft, {
-              parentBlockFragment: data.block.child.child,
-              leaf,
-            })
-          })
+          mount.watch(mountFn.routeItem)
           onValueUpdate.watch(({leaf, visible, value}) => {
             const data = leaf.data as LeafDataRoute
             data.block.child.visible = visible
@@ -1235,13 +1262,7 @@ export function block({
     isBlock: true,
     fn({}, {mount}) {
       fn()
-      mount.watch(leaf => {
-        const data = leaf.data as LeafDataBlock
-        mountChildTemplates(blockDraft, {
-          parentBlockFragment: data.block.child,
-          leaf,
-        })
-      })
+      mount.watch(mountFn.block)
     },
   })
   return () => {
@@ -1250,7 +1271,7 @@ export function block({
       childTemplates: [],
       childCount: 0,
       inParentIndex: -1,
-      itemOf: blockDraft,
+      itemOf: blockTemplate,
     }
     const {env, namespace} = currentActor!
     const blockItemTemplate = createTemplate({
@@ -1260,14 +1281,7 @@ export function block({
       env,
       draft: blockItemDraft,
       fn(_, {mount}) {
-        mount.watch(leaf => {
-          const data = leaf.data as LeafDataBlockItem
-          mountChild({
-            parentBlockFragment: data.block.child,
-            leaf,
-            actor: blockTemplate,
-          })
-        })
+        mount.watch(mountFn.blockItem)
       },
     })
     setInParentIndex(blockItemTemplate)
@@ -1309,13 +1323,7 @@ export function rec<T>(
       fn({store, state: store})
       const itemUpdater = createEvent<any>()
       store.on(itemUpdater, (_, e) => e)
-      mount.watch(leaf => {
-        const data = leaf.data as LeafDataRec
-        mountChildTemplates(recDraft, {
-          parentBlockFragment: data.block.child,
-          leaf,
-        })
-      })
+      mount.watch(mountFn.rec)
       return {itemUpdater}
     },
   })
@@ -1498,15 +1506,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               changeChildLeafsVisible(visible, leaf)
             })
           } else {
-            mount.watch(leaf => {
-              const parentBlock = (leaf.data as any).block as LF
-              parentBlock.visible = true
-              parentBlock.childInitialized = true
-              mountChildTemplates(draft, {
-                parentBlockFragment: parentBlock.child,
-                leaf,
-              })
-            })
+            mount.watch(mountFn.listItem)
           }
           return {
             itemUpdater,
@@ -1591,6 +1591,7 @@ export function list<T>(opts: any, maybeFn?: any) {
               leafData: {
                 type: 'list item',
                 block: listItemBlock,
+                listDraft: draft,
               },
               asyncValue: createAsyncValue({
                 value,

@@ -280,19 +280,21 @@ export type LeafDataList = {
   records: ListItemType[]
 }
 
+export type LeafDataUsing = {
+  type: 'using'
+  draft: UsingDraft
+  element: DOMElement
+  block: UsingBlock
+}
+
 export type LeafData =
-  | {
-      type: 'using'
-      draft: UsingDraft
-      element: DOMElement
-      block: UsingBlock
-    }
+  | LeafDataUsing
   | LeafDataElement
   | LeafDataList
   | LeafDataListItem
   | LeafDataRoute
-  | LeafDataRecItem
   | LeafDataRec
+  | LeafDataRecItem
   | LeafDataBlock
   | LeafDataBlockItem
 
@@ -332,7 +334,7 @@ export type BlockDraft = {
 
 export type BlockItemDraft = BindingsDraft & {
   type: 'blockItem'
-  itemOf: BlockDraft
+  itemOf: Actor<any>
 }
 
 export type RecDraft = {
@@ -346,7 +348,7 @@ export type RecItemDraft = BindingsDraft & {
   type: 'recItem'
 }
 
-export type RouteType = BindingsDraft & {
+export type RouteDraft = BindingsDraft & {
   type: 'route'
 }
 
@@ -408,7 +410,7 @@ export type NodeDraft =
   | UsingDraft
   | ListType
   | ListItemType
-  | RouteType
+  | RouteDraft
   | RecDraft
   | RecItemDraft
   | BlockDraft

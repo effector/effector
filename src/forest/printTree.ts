@@ -1,7 +1,7 @@
 import {Block} from './relation.h'
 import {getParentBlock} from './search'
 
-export function printTree(start: Block) {
+export function printTree(start: Block, {printFragment = true} = {}) {
   let block = start
   while (block.type !== 'using') {
     block = getParentBlock(block)
@@ -27,13 +27,18 @@ export function printTree(start: Block) {
         break
       }
       case 'fragment': {
-        lines.push({
-          pad,
-          text: `[Fragment]`,
-        })
+        let offset = 1
+        if (printFragment) {
+          lines.push({
+            pad,
+            text: `[Fragment]`,
+          })
+        } else {
+          offset = 0
+        }
         level.child.forEach(edge => {
           lines.push({
-            pad: pad + 1,
+            pad: pad + offset,
             text: `[${edge.type}] index ${edge.index} | visible ${edge.visible}`,
           })
           switch (edge.type) {
@@ -41,10 +46,10 @@ export function printTree(start: Block) {
             case 'element':
             case 'list':
             case 'route':
-              parseLevel(edge, pad + 2)
+              parseLevel(edge, pad + offset + 1)
               break
             default:
-              parseLevel(edge.child, pad + 2)
+              parseLevel(edge.child, pad + offset + 1)
           }
         })
         break

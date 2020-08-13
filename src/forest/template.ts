@@ -18,7 +18,7 @@ import {
   ListType,
   ListItemType,
   UsingDraft,
-  RouteType,
+  RouteDraft,
   NSType,
   DOMElement,
   LeafData,
