@@ -139,6 +139,8 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   pending: Store<boolean>
   inFlight: Store<number>
   watch(watcher: (payload: Params) => any): Subscription
+  filter(config: {fn(payload: Params): boolean}): Event<Params>
+  filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
   map<T>(fn: (params: Params) => T): Event<T>
   prepend<Before>(fn: (_: Before) => Params): Event<Before>
   subscribe(observer: Observer<Params>): Subscription
