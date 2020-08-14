@@ -1,4 +1,3 @@
-
 /**
  * This tuple type is intended for use as a generic constraint to infer concrete
  * tuple type of ANY length.
@@ -139,6 +138,9 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   pending: Store<boolean>
   inFlight: Store<number>
   watch(watcher: (payload: Params) => any): Subscription
+  filter<T extends Params>(config: {
+    fn(payload: Params): payload is T
+  }): Event<T>
   filter(config: {fn(payload: Params): boolean}): Event<Params>
   filterMap<T>(fn: (payload: Params) => T | undefined): Event<T>
   map<T>(fn: (params: Params) => T): Event<T>
@@ -229,21 +231,21 @@ export class Domain implements Unit<any> {
     ? Effect<
         Args['length'] extends 0 // does handler accept 0 arguments?
           ? void // works since TS v3.3.3
-          : 0 | 1 extends Args['length'] // is the first argument optional?
-          ? /**
-            * Applying `infer` to a variadic arguments here we'll get `Args` of
-            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
-            * In case T is optional we get `T | undefined` back from `Args[0]`.
-            * We lose information about argument's optionality, but we can make it
-            * optional again by appending `void` type, so the result type will be
-            * `T | undefined | void`.
-            *
-            * The disadvantage of this method is that we can't restore optonality
-            * in case of `params?: any` because in a union `any` type absorbs any
-            * other type (`any | undefined | void` becomes just `any`). And we
-            * have similar situation also with the `unknown` type.
-            */
-            Args[0] | void
+          : 0 | 1 extends Args['length']  // is the first argument optional?
+            /**
+             * Applying `infer` to a variadic arguments here we'll get `Args` of
+             * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
+             * In case T is optional we get `T | undefined` back from `Args[0]`.
+             * We lose information about argument's optionality, but we can make it
+             * optional again by appending `void` type, so the result type will be
+             * `T | undefined | void`.
+             *
+             * The disadvantage of this method is that we can't restore optonality
+             * in case of `params?: any` because in a union `any` type absorbs any
+             * other type (`any | undefined | void` becomes just `any`). And we
+             * have similar situation also with the `unknown` type.
+             */
+          ? Args[0] | void
           : Args[0],
         Done extends Promise<infer Async> ? Async : Done,
         Error
@@ -447,8 +449,8 @@ export function createEffect<FN extends Function>(config: {
   ? Effect<
       Args['length'] extends 0 // does handler accept 0 arguments?
         ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length'] // is the first argument optional?
-        ? /**
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+          /**
            * Applying `infer` to a variadic arguments here we'll get `Args` of
            * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
            * In case T is optional we get `T | undefined` back from `Args[0]`.
@@ -461,7 +463,7 @@ export function createEffect<FN extends Function>(config: {
            * other type (`any | undefined | void` becomes just `any`). And we
            * have similar situation also with the `unknown` type.
            */
-          Args[0] | void
+        ? Args[0] | void
         : Args[0],
       Done extends Promise<infer Async> ? Async : Done,
       Error
@@ -497,7 +499,10 @@ export function split<
     } & {__: Unit<S>}
   >
 }): void
-export function split<S, Match extends {[name: string]: (payload: S) => boolean}>(
+export function split<
+  S,
+  Match extends {[name: string]: (payload: S) => boolean}
+>(
   source: Unit<S>,
   match: Match,
 ): {

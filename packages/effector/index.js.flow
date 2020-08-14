@@ -92,6 +92,10 @@ declare export class Effect<Params, Done, Fail = Error>
   inFlight: Store<number>;
   watch(watcher: (payload: Params) => any): Subscription;
   prepend<Before>(fn: (_: Before) => Params): Event<Before>;
+  filter(config: {|
+    fn(payload: Params): boolean,
+  |}): Event<Params>;
+  filterMap<T>(fn: (payload: Params) => T | void): Event<T>;
   map<T>(fn: (params: Params) => T): Event<T>;
   subscribe(observer: Observer<Params>): Subscription;
   getType(): string;

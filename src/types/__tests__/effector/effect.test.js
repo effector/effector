@@ -3,6 +3,7 @@
 import {
   createEffect,
   Effect,
+  Event,
   /*::type*/ CompositeName,
   /*::type*/ kind,
 } from 'effector'
@@ -73,6 +74,107 @@ test('#use', () => {
     no errors
     "
   `)
+})
+
+describe('#filter', () => {
+  it('should filter values (should be ok)', () => {
+    const fx = createEffect<number, string, any>()
+    fx.use(params => String(params))
+
+    const filteredEvent: Event<number> = fx.filter({
+      fn: params => params % 2 === 0,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should return correct event type (should fail)', () => {
+    const fx = createEffect<number, string, any>()
+    fx.use(params => String(params))
+
+    const filteredEvent: Event<boolean> = fx.filter({
+      fn: params => params % 2 === 0,
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Type 'Event<number>' is not assignable to type 'Event<boolean>'.
+        Types of property 'watch' are incompatible.
+          Type '(watcher: (payload: number) => any) => Subscription' is not assignable to type '(watcher: (payload: boolean) => any) => Subscription'.
+            Types of parameters 'watcher' and 'watcher' are incompatible.
+              Types of parameters 'payload' and 'payload' are incompatible.
+                Type 'number' is not assignable to type 'boolean'.
+
+      --flow--
+      Cannot assign 'fx.filter(...)' to 'filteredEvent'
+        const filteredEvent: Event<boolean> = fx.filter({
+                                              ^^^^^^^^^^^...
+        number [1] is incompatible with boolean [2] in type argument 'Payload' [3]. [incompatible-type-arg]
+            const fx = createEffect<number, string, any>()
+                                [1] ^^^^^^
+            const filteredEvent: Event<boolean> = fx.filter({
+                                   [2] ^^^^^^^
+            declare export class Event<Payload> implements Unit<Payload> {
+                                   [3] ^^^^^^^
+      "
+    `)
+  })
+})
+
+describe('#filterMap', () => {
+  it('should filter and map values (should be ok)', () => {
+    const fx = createEffect<number | string | boolean, string, any>()
+    fx.use(params => String(params))
+
+    const filteredEvent: Event<string> = fx.filterMap(params => {
+      if (params !== false) {
+        return String(params)
+      }
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+
+  it('should return correct event type (should fail)', () => {
+    const fx = createEffect<string, string, any>()
+    fx.use(params => String(params))
+
+    const filteredEvent: Event<number | void> = fx.filterMap(params => {
+      if (params.length > 0) {
+        return params.length
+      }
+    })
+
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Type 'Event<number>' is not assignable to type 'Event<number | void>'.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'number | void' is not assignable to type 'number'.
+            Type 'void' is not assignable to type 'number'.
+
+      --flow--
+      no errors
+      "
+    `)
+  })
 })
 
 it('should pass', () => {
