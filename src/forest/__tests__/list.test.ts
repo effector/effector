@@ -1,6 +1,6 @@
 import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, restore, combine} from 'effector'
-import {h, using, list, remap, spec} from 'forest'
+import {h, using, list, remap, spec, variant, rec} from 'forest'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -323,4 +323,111 @@ it('insert its items before sibling nodes', async () => {
     <footer>Users</footer>
     "
   `)
+})
+
+it('support node unmounting', async () => {
+  //prettier-ignore
+  type User =
+    | {
+      id: number
+      name: string
+      status: 'user'
+    }
+    | {
+      id: number
+      name: string
+      status: 'admin'
+      roles: string[]
+    };
+  await execFunc(async () => {
+    const removeUser = createEvent<number>()
+    const removeUserRole = createEvent<{userId: number; role: string}>()
+    const users = createStore<User[]>([
+      {
+        id: 1,
+        name: 'alice',
+        status: 'user',
+      },
+      {
+        id: 2,
+        name: 'bob',
+        status: 'admin',
+        roles: ['moderator', 'qa'],
+      },
+      {
+        id: 3,
+        name: 'carol',
+        status: 'admin',
+        roles: ['qa'],
+      },
+      {
+        id: 4,
+        name: 'charlie',
+        status: 'user',
+      },
+    ])
+      .on(removeUser, (list, id) => list.filter(user => user.id !== id))
+      .on(removeUserRole, (list, {userId, role}) =>
+        list.map(user => {
+          if (user.status !== 'admin') return user
+          if (user.id !== userId) return user
+          return {
+            id: user.id,
+            name: user.name,
+            status: user.status,
+            roles: user.roles.filter(r => r !== role),
+          }
+        }),
+      )
+    const UserRec = rec<User>(({store}) => {
+      h('article', () => {
+        h('h2', {
+          text: remap(store, 'name'),
+        })
+        variant({
+          source: store,
+          key: 'status',
+          cases: {
+            user() {
+              h('div', {text: 'user'})
+            },
+            admin({store}) {
+              const roles = remap(store, 'roles')
+              h('div', {text: 'roles'})
+              h('ul', () => {
+                list(roles, ({store}) => {
+                  h('li', {text: store})
+                })
+              })
+            },
+          },
+        })
+      })
+    })
+
+    using(el, {
+      fn() {
+        list({
+          source: users,
+          key: 'id',
+          fn({store}) {
+            UserRec({store})
+          },
+        })
+      },
+    })
+    await act()
+    await act(async () => {
+      removeUserRole({
+        userId: 2,
+        role: 'qa',
+      })
+    })
+    await act(async () => {
+      removeUser(4)
+    })
+    await act(async () => {
+      removeUser(1)
+    })
+  })
 })
