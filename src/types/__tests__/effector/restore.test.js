@@ -161,7 +161,7 @@ describe('restore cases (should fail)', () => {
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
-            Type 'Effect<any, number, Error>' is missing the following properties from type 'Event<unknown>': filter, filterMap, thru
+            Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<unknown>'.
 
       --flow--
       Cannot call 'restore'
