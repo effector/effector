@@ -179,7 +179,6 @@ test('hydrate', async () => {
     scope: fork(app),
     fn: App,
   })
-  console.log(htmlSource)
   const client = provideGlobals()
 
   client.el.innerHTML = htmlSource
@@ -197,7 +196,7 @@ test('hydrate', async () => {
   expect(prettyHtml(client.el.innerHTML)).toMatchInlineSnapshot(`
     "
     <span>SPAN</span>
-    <h1>root</h1>
+    <h1>List</h1>
     <div>root</div>
     "
   `)

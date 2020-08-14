@@ -408,7 +408,6 @@ export function spawn(
     opGroup,
     domSubtree,
     hydration,
-    refMap,
     forkPage,
     env,
   }: {
@@ -420,7 +419,6 @@ export function spawn(
     opGroup: OpGroup
     domSubtree: OpGroup
     hydration: boolean
-    refMap?: Record<string, StateRef>
     forkPage?: Fork
     env?: Env
   },
@@ -428,7 +426,6 @@ export function spawn(
   if (!env && parentLeaf) env = parentLeaf.env
   const parentSpawn = parentLeaf ? parentLeaf.spawn : null
   const template = actor.template
-  // const page = (refMap ? {...refMap} : {}) as Record<string, StateRef>
   const page = {} as Record<string, StateRef>
   const result: Spawn = {
     id: ++spawnID,
@@ -587,7 +584,7 @@ export function spawn(
     }
   }
   api.mount = (params: any, defer = true) =>
-    launch({
+    runMount({
       target: actor.trigger.mount,
       params,
       defer,
@@ -615,4 +612,32 @@ export function spawn(
   leaf.api.mount(leaf)
   currentLeaf = previousSpawn
   return leaf
+}
+
+type MountQueue = {
+  parent: MountQueue | null
+  steps: any[]
+}
+
+let mountQueue: MountQueue | null = null
+
+function runMount(config: any) {
+  if (mountQueue) {
+    mountQueue.steps.push(config)
+    return
+  }
+  mountQueue = {
+    parent: mountQueue,
+    steps: [config],
+  }
+  let step: any
+  do {
+    while ((step = mountQueue.steps.shift())) {
+      mountQueue = {
+        parent: mountQueue,
+        steps: [],
+      }
+      launch(step)
+    }
+  } while ((mountQueue = mountQueue.parent))
 }

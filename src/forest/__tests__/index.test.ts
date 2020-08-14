@@ -1,6 +1,17 @@
 import {BrowserObject} from 'webdriverio'
 import {createStore, createEvent, restore, combine, sample} from 'effector'
-import {h, using, list, remap, spec, variant, node, handler} from 'forest'
+import {
+  h,
+  using,
+  list,
+  remap,
+  spec,
+  variant,
+  node,
+  handler,
+  rec,
+  block,
+} from 'forest'
 
 // let addGlobals: Function
 declare const act: (cb?: () => any) => Promise<void>
@@ -444,4 +455,67 @@ describe('dom namespaces', () => {
       "
     `)
   })
+})
+
+test('hydrate', async () => {
+  const [s1, s2] = await exec(async () => {
+    const inc = createEvent()
+    const count = createStore(0).on(inc, x => x + 1)
+    const rootItem = createStore(null)
+    const Item = rec<any>({
+      fn() {
+        h('div', {
+          text: 'root',
+        })
+      },
+    })
+    const Tag = block({
+      fn() {
+        h('span', {
+          text: 'SPAN',
+        })
+      },
+    })
+    const App = block({
+      fn() {
+        Tag()
+        h('h1', {text: 'List'})
+        Item({store: rootItem})
+        h('p', {
+          text: ['count = ', count],
+        })
+      },
+    })
+
+    el.innerHTML = `
+      <span>SPAN</span>
+      <h1>List</h1>
+      <div>root</div>
+      <p>count = 0</p>
+    `
+    using(el, {
+      fn: App,
+      hydrate: true,
+    })
+    await act()
+    await act(async () => {
+      inc()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <span>SPAN</span>
+    <h1>List</h1>
+    <div>root</div>
+    <p>count = 0</p>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <span>SPAN</span>
+    <h1>List</h1>
+    <div>root</div>
+    <p>count = 1</p>
+    "
+  `)
 })

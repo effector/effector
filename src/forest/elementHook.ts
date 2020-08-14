@@ -799,7 +799,6 @@ function collectScopeRefs(scope?: any) {
     }
     scope.nodeMap = nodeMap
   }
-  return scope.reg
 }
 export function using(node: DOMElement, cb: () => any): void
 export function using(
@@ -877,6 +876,7 @@ export function using(node: DOMElement, opts: any): void {
   }
   usingBlock.child.parent = usingBlock
 
+  collectScopeRefs(scope!)
   const queue = createOpQueue({onComplete})
   const rootLeaf = spawn(usingTemplate, {
     parentLeaf: currentLeaf || null,
@@ -895,7 +895,6 @@ export function using(node: DOMElement, opts: any): void {
     opGroup: createOpGroup(queue),
     domSubtree: createOpGroup(queue),
     hydration: hydrate,
-    refMap: collectScopeRefs(scope!),
     forkPage: scope!,
     env,
   })

@@ -271,6 +271,7 @@ export type LeafDataRecItem = {
 export type LeafDataListItem = {
   type: 'list item'
   block: LF
+  listDraft: ListType
 }
 
 export type LeafDataList = {
