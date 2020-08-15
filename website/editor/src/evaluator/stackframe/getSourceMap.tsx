@@ -20,7 +20,7 @@ class SourceMap {
   getOriginalPosition(
     line: number,
     column: number,
-  ): {source: string, line: number, column: number} {
+  ): {source: string; line: number; column: number} {
     const {
       line: l,
       column: c,
@@ -42,7 +42,7 @@ class SourceMap {
     source: string,
     line: number,
     column: number,
-  ): {line: number, column: number} {
+  ): {line: number; column: number} {
     const {line: l, column: c} = this.__source_map.generatedPositionFor({
       source,
       line,
@@ -110,9 +110,7 @@ async function getSourceMap(
     return new SourceMap(new SourceMapConsumer(sm))
   } else {
     const index = fileUri.lastIndexOf('/')
-    const url = sm.startsWith(fileUri)
-      ? sm
-      : fileUri.substring(0, index + 1) + sm
+    const url = fileUri.substring(0, index + 1) + sm
     const obj = await fetch(url).then(res => res.json())
     return new SourceMap(new SourceMapConsumer(obj))
   }
