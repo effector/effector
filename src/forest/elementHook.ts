@@ -600,11 +600,9 @@ export function h(tag: string, opts?: any) {
             break
           }
           case 'staticText': {
-            domElementCreated
-              .map(e => e)
-              .watch(leaf => {
-                installTextNode(leaf, item.value, item.childIndex)
-              })
+            domElementCreated.watch(leaf => {
+              installTextNode(leaf, item.value, item.childIndex)
+            })
             break
           }
           case 'dynamicText': {
