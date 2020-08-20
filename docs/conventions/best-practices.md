@@ -33,6 +33,19 @@ Any business logic could be split by models. You should create a folder for each
 Every domain consists of public interface and initialization file. So, public interface is `index.js` and initialization file is `init.js`.
 If you feel that your store declarations take up a lot of space then create an extra `state.js` for them. It would be public interface for domain stores.
 
+Imagine we have another responsibility scope with bigger public interface, so we added state.js to improve readability 
+```
+.
+└── models/
+    ├── users/
+    │   ├── index.js
+    │   └── init.js
+    └── auth/
+        ├── index.js
+        ├── state.js
+        └── init.js
+```
+
 Init file exports nothing, it only imports events, stores from different models. 
 This is a place where you initialize your effects, to keep other modules pure. Just after that, you start buildling the dataflow of the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
 Init files as well could contain imports from another models to deal with cross-model business-logic. 
