@@ -5,18 +5,54 @@ title: Best practices
 
 Effector provides you pretty powerful tooling to migrate all the remaining logic from views to your models(events, effects, stores and their connections in general)
 
-Here are some advices on buildling UI without stress:
+Here are some advices with code examples:
 
 ## Store handlers
 
-Despite your stores having an option to be mapped(`store.map`) multiple times, you definitely should avoid handling any events by a mapped store, since this is a big semantic inconsistency.
+To avoid semantic inconsistency  you handle all store updates with original store, not mapped ones since its values will be updated automatically.
+
+```js title="users/index.js"
+import {createStore, createEffect} from 'effector'
+
+export const fetchUsersFx = createEffect()
+
+//imagine initially we have users list as a key-value store
+export const $usersMap = createStore({}) 
+
+//we need array representaion for our UI tasks
+export const $users = $usersMap.map((usersMap) => Object.keys(usersMap).map((id) => usersMap[id])
+
+```
+
+
 
 ## File Structure
 
-Each model should contain from 2 to 3 files(depends on your preferences).
+Any business logic could be split by domains. You should create a folder for each domain in `/models` directory. 
 
-First of them is `index` file which exports only the public interface of your model. Public interface means your events and effects which are used in views directly.
+Every domain consists of public interface and initialization file. So, public interface is `index.js` and initialization file is `init.js`.
+If you feel that your store declarations take up a lot of space then create an extra `state.js` for them. It would be public interface for domain stores.
 
-The second one is `state` file which exports only model store and mapped stores based on it if they are present.
+Init file exports nothing, it only imports events, stores from different models. 
+This is a place where you initialize your effects, to keep other modules pure. Just after that, you start buildling the dataflow of the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
+Init files as well could contain imports from another domains to deal with cross-domain business-logic. 
 
-And the last is an `init` file. Init file exports nothing, it only imports events, stores from different models. This is a place where you initialize your effects, to keep other modules pure. Just after that, you start buildling the dataflow of the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
+```js title="users/init.js"
+import {forward} from 'effector'
+import {fetchUsersFx, $usersMap} from './'
+
+fetchUsersFx.use(async () => fetch('/users'))
+
+addUserFx.use(async (user) => fetch('/users', {
+  method: 'POST', 
+  body: JSON.stringify(user)
+}))
+
+$usersMap
+.on(fetchUsersFx.doneData, (_, users) => users)
+
+forward({
+  from: addUserFx.doneData,
+  to: fetchUsersFx
+})
+```
