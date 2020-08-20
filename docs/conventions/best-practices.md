@@ -20,7 +20,7 @@ export const fetchUsersFx = createEffect()
 export const $usersMap = createStore({}) 
 
 //we need array representaion for our UI tasks
-export const $users = $usersMap.map((usersMap) => Object.keys(usersMap).map((id) => usersMap[id])
+export const $users = $usersMap.map((usersMap) => Object.values(usersMap))
 
 ```
 
@@ -28,14 +28,14 @@ export const $users = $usersMap.map((usersMap) => Object.keys(usersMap).map((id)
 
 ## File Structure
 
-Any business logic could be split by domains. You should create a folder for each domain in `/models` directory. 
+Any business logic could be split by models. You should create a folder for each model by its scope of responsibility in `/models` directory. 
 
 Every domain consists of public interface and initialization file. So, public interface is `index.js` and initialization file is `init.js`.
 If you feel that your store declarations take up a lot of space then create an extra `state.js` for them. It would be public interface for domain stores.
 
 Init file exports nothing, it only imports events, stores from different models. 
 This is a place where you initialize your effects, to keep other modules pure. Just after that, you start buildling the dataflow of the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
-Init files as well could contain imports from another domains to deal with cross-domain business-logic. 
+Init files as well could contain imports from another models to deal with cross-model business-logic. 
 
 ```js title="users/init.js"
 import {forward} from 'effector'
