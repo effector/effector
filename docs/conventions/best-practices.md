@@ -30,10 +30,9 @@ export const $users = $usersMap.map((usersMap) => Object.values(usersMap))
 
 Any business logic could be split by models. You should create a folder for each model by its scope of responsibility in `/models` directory. 
 
-Every model consists of interface and initialization file. So, interface is `index.js` and initialization file is `init.js`.
-If you feel that your store declarations take up a lot of space then create an extra `state.js` for them. It would be interface for model stores.
+Every model consists of declarations and initialization file. So, declarations is `index.js` and initialization file is `init.js`.
 
-Imagine we have another responsibility scope with bigger interface, so we added state.js to improve readability 
+Imagine we have another responsibility scope with bigger `index.js`, so we had to separate store declarations into `state.js` to improve readability 
 ```
 .
 ├── components/
