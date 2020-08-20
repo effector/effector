@@ -3,7 +3,7 @@ id: best-practices
 title: Best practices
 ---
 
-Effector provides you pretty powerful tooling to migrate all the remaining logic from views to your models(events, effects, stores and their connections in general)
+Effector provides you pretty powerful tooling to migrate all the remaining logic from views to your models(events, effects, stores and its connections in general)
 
 Here are some advices with code examples:
 
