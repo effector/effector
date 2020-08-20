@@ -74,6 +74,7 @@ ReactDOM.render(
 
 Init file in model exports nothing, it **only** imports events, stores, effects from different models. 
 This is a place where you initialize your effects and store handlers, to keep other modules pure. Just after that, you start buildling the dataflow of the model (connecting Units aka `forward`, `sample`, `guard`, `merge`, `split`)
+
 Init files as well could contain imports from another models to deal with cross-model business-logic. 
 
 ```js title="models/users/init.js"
