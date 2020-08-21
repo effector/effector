@@ -229,7 +229,7 @@ test('is v-model works with custom component', () => {
   expect(wrapper.vm.$fullname).toBe(expected)
 })
 
-test('non v-model usage support', () => {
+test('non v-model usage support', async () => {
   const changeEvent = createEvent()
   const someEvt = createEvent()
 
@@ -257,10 +257,12 @@ test('non v-model usage support', () => {
   const wrapper = mount(component, {
     localVue,
   })
-  const input = wrapper.element.querySelector('#btn')! as HTMLInputElement
+  const input = wrapper.element.querySelector('#input')! as HTMLInputElement
   const btn = wrapper.element.querySelector('#btn')! as HTMLButtonElement
   btn.click()
+
+  await wrapper.vm.$nextTick()
+
   expect($store.getState()).toBe('some-value')
-  // should be 'some-value' but something happens
-  expect(input.value).toBe('')
+  expect(input.value).toBe('some-value')
 })
