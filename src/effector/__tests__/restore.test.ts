@@ -1,12 +1,20 @@
 import {restore, createEvent, createEffect, Effect} from 'effector'
 
-test('restore object', () => {
-  const shape = restore({
-    foo: 'foo',
-    bar: 0,
+describe('restore object', () => {
+  test('shape', () => {
+    const shape = restore({
+      foo: 'foo',
+      bar: 0,
+    })
+    expect(shape.foo.getState()).toBe('foo')
+    expect(shape.bar.getState()).toBe(0)
   })
-  expect(shape.foo.getState()).toBe('foo')
-  expect(shape.bar.getState()).toBe(0)
+  test('array', () => {
+    const arr = restore(['foo', 0] as const)
+    expect(arr[0].getState()).toBe('foo')
+    expect(arr[1].getState()).toBe(0)
+    expect(Array.isArray(arr)).toBe(true)
+  })
 })
 
 test('restore event', () => {
