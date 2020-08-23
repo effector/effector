@@ -27,7 +27,7 @@ export function restore(obj: any, defaultState: any, config?: any): any {
     if (domain) domain.hooks.store(result)
     return result
   }
-  const result: Record<string, any> = {}
+  const result: Record<string, any> = Array.isArray(obj) ? [] : {}
   forIn(obj, (value, key) => {
     result[key] = is.store(value) ? value : createStore(value, {name: key})
   })
