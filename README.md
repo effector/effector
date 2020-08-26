@@ -77,6 +77,7 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 **CDN**
 
 - https://unpkg.com/effector/effector.cjs.js
+- https://unpkg.com/effector/effector.mjs
 - https://unpkg.com/effector-react/effector-react.cjs.js
 - https://unpkg.com/effector-vue/effector-vue.cjs.js
 
