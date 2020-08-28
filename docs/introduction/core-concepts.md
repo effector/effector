@@ -32,7 +32,7 @@ The only requirement for the function:
 
 ```js
 const getUserFx = createEffect({
-  async handler({id}) {
+  async handler(params) {
     const req = await fetch(`https://example.com/get-user/${params.id}`)
     return req.json()
   },
