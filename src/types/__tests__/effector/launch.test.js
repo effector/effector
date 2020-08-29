@@ -30,7 +30,7 @@ test('launch(unit, payload)', () => {
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
-    Argument of type '\\"\\"' is not assignable to parameter of type 'number'.
+    Argument of type 'string' is not assignable to parameter of type 'number'.
 
     --flow--
     Cannot call 'launch'

@@ -137,7 +137,7 @@ describe('restore cases (should fail)', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Argument of type '\\"initial\\"' is not assignable to parameter of type 'null'.
+          Argument of type 'string' is not assignable to parameter of type 'number'.
 
       --flow--
       Cannot call 'restore'
@@ -160,8 +160,8 @@ describe('restore cases (should fail)', () => {
       --typescript--
       No overload matches this call.
         The last overload gave the following error.
-          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<unknown>'.
-            Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<unknown>'.
+          Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
+            Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<string>'.
 
       --flow--
       Cannot call 'restore'

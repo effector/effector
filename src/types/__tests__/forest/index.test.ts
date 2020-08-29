@@ -63,8 +63,8 @@ describe('text', () => {
           Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'string | number | boolean | Store<boolean> | Store<number> | Store<string> | Store<null> | Store<string | null> | Store<number | null> | ... 11 more ... | undefined'.
             Type 'Store<\\"foo\\" | \\"bar\\">' is not assignable to type 'Store<boolean>'.
               The types returned by 'getState()' are incompatible between these types.
-                Type '\\"foo\\" | \\"bar\\"' is not assignable to type 'boolean'.
-                  Type '\\"foo\\"' is not assignable to type 'boolean'.
+                Type 'string' is not assignable to type 'boolean'.
+                  Type 'string' is not assignable to type 'boolean'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '{ text: Store<\\"foo\\" | \\"bar\\">; }' is not assignable to parameter of type '() => void'.
             Object literal may only specify known properties, and 'text' does not exist in type '() => void'.
@@ -127,7 +127,8 @@ describe('remap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string | number>[]' is missing the following properties from type '[Store<string>, Store<number>]': 0, 1
+        Type 'Store<string | number>[]' is not assignable to type '[Store<string>, Store<number>]'.
+          Target requires 2 element(s) but source may have fewer.
         "
       `)
     })

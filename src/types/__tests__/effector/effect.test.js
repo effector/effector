@@ -409,7 +409,7 @@ describe('void params', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '1' is not assignable to parameter of type 'void'.
+      Argument of type 'number' is not assignable to parameter of type 'void'.
 
       --flow--
       no errors

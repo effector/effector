@@ -138,8 +138,8 @@ describe('#effect', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '20' is not assignable to parameter of type 'string'.
-      Argument of type '20' is not assignable to parameter of type 'string'.
+      Argument of type 'number' is not assignable to parameter of type 'string'.
+      Argument of type 'number' is not assignable to parameter of type 'string'.
 
       --flow--
       Cannot call 'effect2' with '20' bound to 'payload'
@@ -239,8 +239,8 @@ describe('#createEffect', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      Argument of type '20' is not assignable to parameter of type 'string'.
-      Argument of type '20' is not assignable to parameter of type 'string'.
+      Argument of type 'number' is not assignable to parameter of type 'string'.
+      Argument of type 'number' is not assignable to parameter of type 'string'.
 
       --flow--
       Cannot call 'effect2' with '20' bound to 'payload'

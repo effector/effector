@@ -78,7 +78,8 @@ describe('fork values', () => {
                   Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorResult<readonly [Store<any>, any], any>'.
                     Type 'IteratorYieldResult<(number | Store<number>)[] | (string | Store<string>)[]>' is not assignable to type 'IteratorYieldResult<readonly [Store<any>, any]>'.
                       Type '(number | Store<number>)[] | (string | Store<string>)[]' is not assignable to type 'readonly [Store<any>, any]'.
-                        Type '(number | Store<number>)[]' is missing the following properties from type 'readonly [Store<any>, any]': 0, 1
+                        Type '(number | Store<number>)[]' is not assignable to type 'readonly [Store<any>, any]'.
+                          Target requires 2 element(s) but source may have fewer.
         "
       `)
     })

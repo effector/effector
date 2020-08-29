@@ -97,8 +97,8 @@ describe('useStoreMap', () => {
         "
         --typescript--
         Type '[number, \\"email\\" | \\"username\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
-          Type '\\"email\\" | \\"username\\" | \\"bio\\"' is not assignable to type 'number'.
-            Type '\\"email\\"' is not assignable to type 'number'.
+          Type 'string' is not assignable to type 'number'.
+            Type 'string' is not assignable to type 'number'.
         Type 'unknown' is not assignable to type 'ReactNode'.
           Type 'unknown' is not assignable to type 'ReactPortal'.
         "
