@@ -36,6 +36,199 @@ test('createEffect', () => {
   `)
 })
 
+describe('single generic', () => {
+  type SyncFn = (_: string) => number
+  type AsyncFn = (_: string) => Promise<number>
+  describe('with config', () => {
+    describe('valid case', () => {
+      test('use sync generic, give sync handler', () => {
+        const foo: Effect<string, number> = createEffect<SyncFn>({
+          handler: (_: string) => 0,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          no errors
+
+          --flow--
+          Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+            const foo: Effect<string, number> = createEffect<SyncFn>({
+                                                ^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(
+                                                [1] ^^^^^^^^^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(config: {
+                                                [2] ^^^^^^^^^^^^^^^^^^^^
+          "
+        `)
+      })
+      test('use sync generic, give async handler', () => {
+        const foo: Effect<string, number> = createEffect<SyncFn>({
+          handler: async (_: string) => 0,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          Type 'Effect<SyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
+          Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
+            Type 'Promise<number>' is not assignable to type 'number'.
+
+          --flow--
+          Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+            const foo: Effect<string, number> = createEffect<SyncFn>({
+                                                ^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(
+                                                [1] ^^^^^^^^^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(config: {
+                                                [2] ^^^^^^^^^^^^^^^^^^^^
+          "
+        `)
+      })
+      test('use async generic, give sync handler', () => {
+        const foo: Effect<string, number> = createEffect<AsyncFn>({
+          handler: (_: string) => 0,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          Type 'Effect<AsyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
+            The types of 'done.watch' are incompatible between these types.
+              Type '(watcher: (payload: { params: AsyncFn; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
+                Types of parameters 'watcher' and 'watcher' are incompatible.
+                  Types of parameters 'payload' and 'payload' are incompatible.
+                    Type '{ params: AsyncFn; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
+          Type '(_: string) => number' is not assignable to type 'AsyncFn'.
+            Type 'number' is not assignable to type 'Promise<number>'.
+
+          --flow--
+          Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+            const foo: Effect<string, number> = createEffect<AsyncFn>({
+                                                ^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(
+                                                [1] ^^^^^^^^^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(config: {
+                                                [2] ^^^^^^^^^^^^^^^^^^^^
+          "
+        `)
+      })
+      test('use async generic, give async handler', () => {
+        const foo: Effect<string, number> = createEffect<AsyncFn>({
+          handler: async (_: string) => 0,
+        })
+        expect(typecheck).toMatchInlineSnapshot(`
+          "
+          --typescript--
+          no errors
+
+          --flow--
+          Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+            const foo: Effect<string, number> = createEffect<AsyncFn>({
+                                                ^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(
+                                                [1] ^^^^^^^^^^^^^^^^^^^^
+                declare export function createEffect<Params, Done, Fail>(config: {
+                                                [2] ^^^^^^^^^^^^^^^^^^^^
+          "
+        `)
+      })
+    })
+    test('config type mismatch (should fail)', () => {
+      const foo = createEffect<SyncFn>({
+        async handler(_: string) {
+          return '--'
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
+          Type 'Promise<string>' is not assignable to type 'number'.
+
+        --flow--
+        Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+          const foo = createEffect<SyncFn>({
+                      ^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(
+                                              [1] ^^^^^^^^^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(config: {
+                                              [2] ^^^^^^^^^^^^^^^^^^^^
+        "
+      `)
+    })
+    test('non-function generic', () => {
+      const foo: Effect<string, number> = createEffect<string>({
+        async handler(_: string) {
+          return '--'
+        },
+      })
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Type 'Effect<string, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
+          The types of 'done.watch' are incompatible between these types.
+            Type '(watcher: (payload: { params: string; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type '{ params: string; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
+        Type 'string' does not satisfy the constraint 'Function'.
+
+        --flow--
+        Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+          const foo: Effect<string, number> = createEffect<string>({
+                                              ^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(
+                                              [1] ^^^^^^^^^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(config: {
+                                              [2] ^^^^^^^^^^^^^^^^^^^^
+        "
+      `)
+    })
+  })
+  describe('without config', () => {
+    test('function generic', () => {
+      const foo: Effect<string, number> = createEffect<SyncFn>()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Type 'Effect<SyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
+          The types of 'done.watch' are incompatible between these types.
+            Type '(watcher: (payload: { params: SyncFn; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
+              Types of parameters 'watcher' and 'watcher' are incompatible.
+                Types of parameters 'payload' and 'payload' are incompatible.
+                  Type '{ params: SyncFn; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
+        Expected 1 arguments, but got 0.
+
+        --flow--
+        Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+          const foo: Effect<string, number> = createEffect<SyncFn>()
+                                              ^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(
+                                              [1] ^^^^^^^^^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(config: {
+                                              [2] ^^^^^^^^^^^^^^^^^^^^
+        "
+      `)
+    })
+    test('non-function generic', () => {
+      const foo = createEffect<string>()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Expected 1 arguments, but got 0.
+
+        --flow--
+        Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+          const foo = createEffect<string>()
+                      ^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(
+                                              [1] ^^^^^^^^^^^^^^^^^^^^
+              declare export function createEffect<Params, Done, Fail>(config: {
+                                              [2] ^^^^^^^^^^^^^^^^^^^^
+        "
+      `)
+    })
+  })
+})
+
 test('#(properties)', () => {
   const effect = createEffect()
   const kind1: kind = effect.kind
