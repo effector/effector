@@ -228,28 +228,6 @@ export function fork(
   {values, handlers}: {values?: any; handlers?: any} = {},
 ) {
   if (!is.domain(domain)) throwError('first argument of fork should be domain')
-  if (!domain.graphite.meta.withScopes) {
-    domain.graphite.meta.withScopes = true
-    domain.onCreateEvent(event => {
-      event.create = payload => {
-        universalLaunch(event, payload)
-        return payload
-      }
-    })
-    domain.onCreateEffect(effect => {
-      effect.create = params => {
-        const req = createDefer()
-        if (forkPage) {
-          const savedStack = forkPage
-          req.req.finally(() => {
-            setForkPage(savedStack)
-          })
-        }
-        universalLaunch(effect, {params, req})
-        return req.req
-      }
-    })
-  }
   const needToFill = !!values
   values = normalizeValues(values || {})
   const forked = cloneGraph(domain)

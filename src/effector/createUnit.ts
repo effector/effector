@@ -154,7 +154,8 @@ export function createEvent<Payload = any>(
   })
   //eslint-disable-next-line no-unused-vars
   event.create = (payload: any, _: any) => {
-    launch(event, payload)
+    const target = forkPage ? forkPage.find(event) : event
+    launch(target, payload)
     return payload
   }
   event.watch = bind(watchUnit, event)

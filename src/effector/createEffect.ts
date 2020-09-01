@@ -2,7 +2,7 @@ import {step} from './typedef'
 import {getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
-import {launch} from './kernel'
+import {launch, setForkPage, forkPage} from './kernel'
 import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
@@ -119,7 +119,16 @@ export function createEffect<Payload, Done>(
   )
   instance.create = (params: Payload) => {
     const req = createDefer()
-    launch(instance, {params, req})
+    const payload = {params, req}
+    if (forkPage) {
+      const savedFork = forkPage
+      req.req.finally(() => {
+        setForkPage(savedFork)
+      })
+      launch(forkPage.find(instance), payload)
+    } else {
+      launch(instance, payload)
+    }
     return req.req
   }
 
