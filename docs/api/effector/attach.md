@@ -13,7 +13,7 @@ Use cases: declarative way to pass values from stores to effects and argument pr
 ## Formulae
 
 ```ts
-attach({ effect, mapParams?, source? }): newEffect
+attach({ effect, mapParams?, source?, name? }): newEffect
 ```
 
 When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
