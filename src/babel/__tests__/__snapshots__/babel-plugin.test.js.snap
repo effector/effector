@@ -659,6 +659,54 @@ createStore(null, {
 });"
 `;
 
+exports[`babel-plugin should createApi 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, createEvent, createApi } from 'effector';
+const foo = createStore([], {
+  name: \\"foo\\",
+  sid: \\"-hmtdwm\\"
+});
+const bar = createEvent({
+  name: \\"bar\\",
+  sid: \\"bo1nrg\\"
+});
+const baz1 = createApi({
+  ɔ: [foo, {
+    reset: () => []
+  }],
+  config: {
+    sid: \\"i3pgik\\"
+  }
+});
+createApi({
+  ɔ: [foo, {
+    reset: () => []
+  }],
+  config: {
+    sid: \\"-3zehg3\\"
+  }
+});
+const spread = [foo, {
+  reset: () => []
+}];
+const baz4 = createApi({
+  ɔ: [...spread],
+  config: {
+    sid: \\"-ljq5ad\\"
+  }
+});
+
+const f = () => createApi({
+  ɔ: [foo, {
+    reset: () => []
+  }],
+  config: {
+    sid: \\"-klmwfe\\"
+  }
+});"
+`;
+
 exports[`babel-plugin should forward 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
@@ -945,6 +993,97 @@ const f = () => sample({
   config: {
     name: \\"f\\",
     sid: \\"hzwgc2\\"
+  }
+});"
+`;
+
+exports[`babel-plugin should split 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore, createEvent, split } from 'effector';
+const foo = createStore([], {
+  name: \\"foo\\",
+  sid: \\"-pyo7gi\\"
+});
+const bar = createEvent({
+  name: \\"bar\\",
+  sid: \\"-upfehc\\"
+});
+const baz1 = split({
+  ɔ: [foo, {
+    nonEmpty: list => list.length === 0
+  }],
+  config: {
+    sid: \\"-yuao1s\\"
+  }
+});
+split({
+  ɔ: [foo, {
+    nonEmpty: list => list.length === 0
+  }],
+  config: {
+    sid: \\"-13wt2v\\"
+  }
+});
+const baz2 = split({
+  ɔ: [{
+    source: foo,
+    match: {
+      nonEmpty: list => list.length === 0
+    },
+    cases: {
+      nonEmpty: bar
+    }
+  }],
+  config: {
+    sid: \\"-xw7f9e\\"
+  }
+});
+split({
+  ɔ: [{
+    source: foo,
+    match: {
+      nonEmpty: list => list.length === 0
+    },
+    cases: {
+      nonEmpty: bar
+    }
+  }],
+  config: {
+    sid: \\"xhp42d\\"
+  }
+});
+const spread = [foo, {
+  nonEmpty: list => list.length === 0
+}];
+const baz4 = split({
+  ɔ: [...spread],
+  config: {
+    sid: \\"-dyswqx\\"
+  }
+});
+const config = {
+  source: foo,
+  match: {
+    nonEmpty: list => list.length === 0
+  },
+  cases: {
+    nonEmpty: bar
+  }
+};
+const baz5 = split({
+  ɔ: [config],
+  config: {
+    sid: \\"-8hvba\\"
+  }
+});
+
+const f = () => split({
+  ɔ: [foo, {
+    nonEmpty: list => list.length === 0
+  }],
+  config: {
+    sid: \\"pldjp\\"
   }
 });"
 `;

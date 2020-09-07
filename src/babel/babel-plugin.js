@@ -13,6 +13,8 @@ module.exports = function(babel, options = {}) {
     forwards,
     guards,
     attaches,
+    splits,
+    apis,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -23,6 +25,8 @@ module.exports = function(babel, options = {}) {
     forwardCreators,
     guardCreators,
     attachCreators,
+    splitCreators,
+    apiCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -49,6 +53,7 @@ module.exports = function(babel, options = {}) {
             if (!s.imported) continue
             const importedName = s.imported.name
             const localName = s.local.name
+            if (importedName === localName) continue
             if (storeCreators.has(importedName)) {
               storeCreators.add(localName)
             } else if (eventCreators.has(importedName)) {
@@ -69,6 +74,10 @@ module.exports = function(babel, options = {}) {
               guardCreators.add(localName)
             } else if (attachCreators.has(importedName)) {
               attachCreators.add(localName)
+            } else if (splitCreators.has(importedName)) {
+              splitCreators.add(localName)
+            } else if (apiCreators.has(importedName)) {
+              apiCreators.add(localName)
             }
           }
         }
@@ -191,6 +200,26 @@ module.exports = function(babel, options = {}) {
               true,
             )
           }
+          if (splits && splitCreators.has(name)) {
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              null,
+              babel.types,
+              smallConfig,
+              false,
+            )
+          }
+          if (apis && apiCreators.has(name)) {
+            setConfigForConfigurableMethod(
+              path,
+              state,
+              null,
+              babel.types,
+              smallConfig,
+              false,
+            )
+          }
         }
 
         if (t.isMemberExpression(path.node.callee)) {
@@ -232,6 +261,8 @@ const normalizeOptions = options => {
         forward: [],
         guard: [],
         attach: [],
+        split: [],
+        createApi: [],
         domainMethods: {
           store: [],
           event: [],
@@ -250,6 +281,8 @@ const normalizeOptions = options => {
         forward: ['forward'],
         guard: ['guard'],
         attach: ['attach'],
+        split: ['split'],
+        createApi: ['createApi'],
         domainMethods: {
           store: ['store', 'createStore'],
           event: ['event', 'createEvent'],
@@ -284,6 +317,8 @@ const normalizeOptions = options => {
       forwards: true,
       guards: true,
       attaches: true,
+      splits: true,
+      apis: true,
     },
     result: {
       importName: new Set(
@@ -304,6 +339,8 @@ const normalizeOptions = options => {
       forwardCreators: new Set(options.forwardCreators || defaults.forward),
       guardCreators: new Set(options.guardCreators || defaults.guard),
       attachCreators: new Set(options.attachCreators || defaults.attach),
+      splitCreators: new Set(options.splitCreators || defaults.split),
+      apiCreators: new Set(options.apiCreators || defaults.createApi),
       domainMethods: readConfigShape(
         options.domainMethods,
         defaults.domainMethods,
