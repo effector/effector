@@ -7,6 +7,18 @@ title: Installation
 npm install --save effector
 ```
 
+### For deno
+
+Import `effector.mjs` from any CDN
+
+```typescript
+import {createStore} from 'https://unpkg.com/effector/effector.mjs'
+```
+
+:::note since
+effector 21.0.0
+:::
+
 ## Complementary packages
 
 ### For react
@@ -25,15 +37,15 @@ npm install --save effector-vue
 
 Svelte works with effector out of the box, no additional packages needed. See [word chain](https://github.com/today-/citycatch) game application written with svelte and effector.
 
-### For old devices
+## Compatibility
+
 :::note since
 effector 20.1.0
 :::
 
-Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel.
-Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
+Use `effector/compat`, `effector-react/compat` and `effector-vue/compat` modules to support IE11 and Chrome 47 (Smart TV browser) without babel.
 
 ```diff
-- import {} from 'effector'
-+ import {} from 'effector/compat'
+- import {createStore} from 'effector'
++ import {createStore} from 'effector/compat'
 ```
