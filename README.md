@@ -119,7 +119,7 @@ For additional information, guides and api reference visit [our documentation si
 
 ## Community
 
-- [awesome-effector](https://github.com/ilyalesik/awesome-effector) a curated list of awesome effector packages, videos and articles
+- [awesome-effector](https://github.com/effector/awesome-effector) a curated list of awesome effector packages, videos and articles
 - [Twitter](https://twitter.com/effectorjs)
 - [Telegram](https://t.me/effector_en) (@effector_en)
 - [Telegram 🇷🇺](https://t.me/effector_ru) (@effector_ru)
@@ -136,13 +136,13 @@ Code sharing, Typescript and react supported out of the box; and of course, it [
 
 ### Increment/decrement with React
 
-```js
+```jsx
 import {createStore, createEvent} from 'effector'
 import {useStore} from 'effector-react'
 
-const increment = createEvent('increment')
-const decrement = createEvent('decrement')
-const resetCounter = createEvent('reset counter')
+const increment = createEvent()
+const decrement = createEvent()
+const resetCounter = createEvent()
 
 const counter = createStore(0)
   .on(increment, state => state + 1)
@@ -170,7 +170,7 @@ const App = () => {
 }
 ```
 
-[Run example](https://share.effector.dev/3R0iqNYe)
+[Run example](https://share.effector.dev/qVLO42Cs)
 
 <hr />
 
@@ -283,12 +283,10 @@ It can be safely used in place of the original async function.
 ```js
 import {createEffect} from 'effector'
 
-const fetchUserReposFx = createEffect({
-  async handler({name}) {
-    const url = `https://api.github.com/users/${name}/repos`
-    const req = await fetch(url)
-    return req.json()
-  },
+const fetchUserReposFx = createEffect(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 
 // subscribe to pending store status
@@ -328,7 +326,7 @@ fetchUserReposFx.use(requestMock)
 const result = await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Run example](https://share.effector.dev/hlNcL8ma)
+[Run example](https://share.effector.dev/iMJILHbh)
 
 ### Store
 
