@@ -13,7 +13,7 @@ Use cases: declarative way to pass values from stores to effects and argument pr
 ## Formulae
 
 ```ts
-attach({ effect, mapParams, source? }): newEffect
+attach({ effect, mapParams?, source? }): newEffect
 ```
 
 When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
@@ -24,7 +24,7 @@ When `newEffect` is called, call `mapParams` with params of the `newEffect` and 
 ### Short example
 
 ```js
-import { createEffect, attach } from 'effector'
+import {createEffect, attach} from 'effector'
 
 const original = createEffect({
   handler: (params) => {
@@ -138,7 +138,22 @@ Authorization: Bearer guest_token
 // => client analytics: sent 2 requests
 ```
 
+## `attach({effect, source})`
+
+Create effect which will trigger given one with values from `source` stores
+
+#### Arguments
+
+- `effect` ([_Effect_](Effect.md)): Wrapped effect
+- `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
+
+#### Returns
+
+[_Effect_](Effect.md): New effect
+
 ## `attach({effect, mapParams})`
+
+Create effect which will trigger given one by transforming params by `mapParams` function
 
 #### Arguments
 
@@ -151,6 +166,8 @@ Authorization: Bearer guest_token
 
 ## `attach({effect, mapParams, source})`
 
+Create effect which will read values from `source` stores, pass them with params to `mapParams` function and call `effect` with result
+
 #### Arguments
 
 - `effect` ([_Effect_](Effect.md)): Wrapped effect
@@ -160,3 +177,7 @@ Authorization: Bearer guest_token
 #### Returns
 
 [_Effect_](Effect.md): New effect
+
+:::note
+If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
+:::
