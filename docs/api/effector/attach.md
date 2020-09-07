@@ -26,37 +26,33 @@ When `newEffect` is called, call `mapParams` with params of the `newEffect` and 
 ```js
 import {createEffect, attach} from 'effector'
 
-const original = createEffect({
-  handler: (params) => {
-    console.log("Original effect called with", params)
-  }
+const original = createEffect(params => {
+  console.log('Original effect called with', params)
 })
 
 const created = attach({
   effect: original,
-  mapParams: (params) => {
-    console.log("Created effect called with", params)
-    return { wrapped: params }
-  }
+  mapParams: params => {
+    console.log('Created effect called with', params)
+    return {wrapped: params}
+  },
 })
 
-created("HELLO")
+await created('HELLO')
 
 // => Created effect called with "HELLO"
 // => Original effect called with { wrapped: "HELLO" }
 ```
 
-[Try it](https://share.effector.dev/VcTZZlF1)
+[Try it](https://share.effector.dev/MpAfRBRi)
 
 ### Short example with source
 
 ```js
 import {createEffect, attach} from 'effector'
 
-const original = createEffect({
-  handler: params => {
-    console.log('Original effect called with', params)
-  },
+const original = createEffect(params => {
+  console.log('Original effect called with', params)
 })
 
 const data = createStore(8900)
@@ -70,30 +66,27 @@ const created = attach({
   },
 })
 
-created('HELLO')
+await created('HELLO')
 
 // => Created effect called with "HELLO" and data 8900
 // => Original effect called with {wrapped: "HELLO", data: 8900}
 ```
 
-[Try it](https://share.effector.dev/IYtQCWAU)
-
+[Try it](https://share.effector.dev/3y20Z4I3)
 
 ### Long example
 
 ```js
 import {createEffect, attach, createStore} from 'effector'
 
-const backendRequest = createEffect({
-  async handler({token, data, resource}) {
-    return fetch(`https://example.com/api${resource}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(data),
-    })
-  },
+const backendRequest = createEffect(async ({token, data, resource}) => {
+  return fetch(`https://example.com/api${resource}`, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  })
 })
 
 const requestsSend = createStore(0).on(backendRequest, total => total + 1)

@@ -56,19 +56,17 @@ It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {res
 ```js
 import {createEffect, restore} from 'effector'
 
-const effect = createEffect({
-  handler: () => 'foo',
-})
+const effect = createEffect(() => 'foo')
 const store = restore(effect, 'default')
 
 store.watch(state => console.log('state: ', state))
-// state: default
+// => state: default
 
-effect()
-// state: foo
+await effect()
+// => state: foo
 ```
 
-[Try it](https://share.effector.dev/CuOQT4Lq)
+[Try it](https://share.effector.dev/tP6RQsri)
 
 ## `restore(obj)`
 

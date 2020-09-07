@@ -20,11 +20,9 @@ It can be safely used in place of the original async function.
 ```js
 import {createEffect, createStore} from 'effector'
 
-const fetchUserFx = createEffect({
-  async handler({id}) {
-    const res = await fetch(`https://example.com/users/${id}`)
-    return res.json()
-  },
+const fetchUserFx = createEffect(async ({id}) => {
+  const res = await fetch(`https://example.com/users/${id}`)
+  return res.json()
 })
 
 const users = createStore([]) // Default state
@@ -44,7 +42,7 @@ fetchUserFx.fail.watch(({error, params}) => {
 })
 
 // you can replace function anytime
-fetchUserFx.use(anotherHandler)
+fetchUserFx.use(function anotherHandler() {})
 
 // call effect with your params
 fetchUserFx({id: 1})
@@ -53,7 +51,7 @@ fetchUserFx({id: 1})
 const data = await fetchUserFx({id: 2})
 ```
 
-[Try it](https://share.effector.dev/am85AiZf)
+[Try it](https://share.effector.dev/7sfYga4o)
 
 ## Effect Methods
 
@@ -126,20 +124,21 @@ const unwatch = effect.watch(fn)
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect({
-  handler: value => value,
-})
+const effectFx = createEffect(value => value)
 
 const unsubscribe = effectFx.watch(payload => {
   console.log('called with', payload)
   unsubscribe()
 })
 
-effectFx(10) // => called with 10
-effectFx(20) // nothing, cause watcher unsubscribed
+await effectFx(10)
+// => called with 10
+
+await effectFx(20)
+// no reaction
 ```
 
-[Try it](https://share.effector.dev/qK7m6pt7)
+[Try it](https://share.effector.dev/Q8ZlN0Ce)
 
 <hr />
 
@@ -198,6 +197,7 @@ console.log(fx.use.getCurrent() === handlerB)
 ## Effect Properties
 
 ### `doneData`
+
 :::note since
 effector 20.12.0
 :::
@@ -210,20 +210,20 @@ Event, which is triggered with result of the effect execution:
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect({
-  handler: value => Promise.resolve(value + 1),
-})
+const effectFx = createEffect(value => Promise.resolve(value + 1))
 
 effectFx.doneData.watch(result => {
   console.log('Done with result', result)
 })
 
-effectFx(2) // => Done with result 3
+await effectFx(2)
+// => Done with result 3
 ```
 
-[Try it](https://share.effector.dev/KXoTVGju)
+[Try it](https://share.effector.dev/KvC1KWYe)
 
 ### `failData`
+
 :::note since
 effector 20.12.0
 :::
@@ -265,18 +265,17 @@ Event triggered with object of `params` and `result`:
 ```js
 import {createEffect} from 'effector'
 
-const effectFx = createEffect({
-  handler: value => Promise.resolve(value + 1),
-})
+const effectFx = createEffect(value => Promise.resolve(value + 1))
 
 effectFx.done.watch(({params, result}) => {
   console.log('Done with params', params, 'and result', result)
 })
 
-effectFx(2) // => Done with params 2 and result 3
+await effectFx(2)
+// => Done with params 2 and result 3
 ```
 
-[Try it](https://share.effector.dev/b4lNYXPs)
+[Try it](https://share.effector.dev/guHlMj5l)
 
 ### `fail`
 
@@ -390,6 +389,7 @@ const isLoading = createStore(false)
 ```
 
 ### `inFlight`
+
 :::note since
 effector 20.11.0
 :::

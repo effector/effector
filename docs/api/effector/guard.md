@@ -41,9 +41,9 @@ When `source` is triggered, check `filter` for thruthy and call `target` with da
 import {createStore, createEffect, createEvent, guard, sample} from 'effector'
 
 const clickRequest = createEvent()
-const fetchRequest = createEffect({
-  handler: n => new Promise(rs => setTimeout(rs, 2500, n)),
-})
+const fetchRequest = createEffect(
+  n => new Promise(rs => setTimeout(rs, 2500, n)),
+)
 
 const clicks = createStore(0).on(clickRequest, x => x + 1)
 const requests = createStore(0).on(fetchRequest, x => x + 1)

@@ -18,11 +18,9 @@ const $user = createStore({})
 Your effects should be postfixed by the `Fx` postfix. It will let you differentiate your effects from the events.
 
 ```js
-const fetchUserFx = createEffect({
-  async handler() {
-    const res = await fetch('my pretty url')
-    return res.json()
-  },
+const fetchUserFx = createEffect(async () => {
+  const res = await fetch('my pretty url')
+  return res.json()
 })
 ```
 

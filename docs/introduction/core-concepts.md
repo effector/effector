@@ -31,11 +31,9 @@ The only requirement for the function:
 - **Must** have zero or one argument
 
 ```js
-const getUserFx = createEffect({
-  async handler(params) {
-    const req = await fetch(`https://example.com/get-user/${params.id}`)
-    return req.json()
-  },
+const getUserFx = createEffect(async params => {
+  const req = await fetch(`https://example.com/get-user/${params.id}`)
+  return req.json()
 })
 
 // subscribe to effect call

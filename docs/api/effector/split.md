@@ -11,7 +11,7 @@ Pattern matching method, splits trigger unit (event, effect or store) into sever
 
 ```ts
 split({source, match, cases})
-````
+```
 
 ### Arguments
 
@@ -20,10 +20,10 @@ split({source, match, cases})
 - `cases` (_Object_): An object with units ([_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)) to which data will be passed from `source` if the corresponding matching function returns true
 
 #### Returns
+
 ```ts
 void
 ```
-
 
 #### Example 1
 
@@ -32,10 +32,8 @@ import {split, createEffect, createEvent} from 'effector'
 const messageReceived = createEvent()
 const showTextPopup = createEvent()
 const playAudio = createEvent()
-const reportUnknownMessageType = createEffect({
-  handler({type}) {
-    console.log('unknown message:', type)
-  },
+const reportUnknownMessageType = createEffect(({type}) => {
+  console.log('unknown message:', type)
 })
 
 split({
@@ -67,7 +65,7 @@ messageReceived({
 // => unknown message: image
 ```
 
-[Try it](https://share.effector.dev/javsk7Hg)
+[Try it](https://share.effector.dev/W6VYZbfH)
 
 #### Example 2
 
@@ -117,9 +115,11 @@ messageReceived({
 [Try it](https://share.effector.dev/32FNNk8H)
 
 ### Split object form
+
 :::note since
 effector 21.0.0
 :::
+
 ```ts
 split(source, cases)
 ```

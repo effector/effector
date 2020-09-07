@@ -33,11 +33,9 @@ Let's consider prioritize in the example below.
 
 ```js
 let count = 0
-const sideEffect = createEffect({
-  handler() {
-    // side effect 1
-    count += 1
-  },
+const sideEffect = createEffect(() => {
+  // side effect 1
+  count += 1
 })
 
 sideEffect.done.watch(() => {
@@ -57,7 +55,7 @@ console.log('expect count to be 2', count === 2)
 // which defer any side effect long after setState call itself
 ```
 
-[Try it](https://share.effector.dev/cyzh0THS)
+[Try it](https://share.effector.dev/IRAmt9Uq)
 
 :::note
 Whenever library notices side effect in a pure function it moves it to the end of the [**priority queue**](https://en.wikipedia.org/wiki/Priority_queue)
