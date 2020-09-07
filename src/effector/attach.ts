@@ -28,11 +28,25 @@ export function attach(config: any) {
     {params, req}: any,
     {finally: anyway, effect}: any,
     {a: states, page, forkPage}: any,
-  ) =>
+  ) => {
+    const rj = onSettled({
+      params,
+      req,
+      ok: false,
+      anyway,
+      page,
+      forkPage,
+    })
+    let computedParams
+    try {
+      computedParams = mapParams(params, states)
+    } catch (err) {
+      return rj(err)
+    }
     launch({
       target: effect,
       params: {
-        params: mapParams(params, states),
+        params: computedParams,
         req: {
           rs: onSettled({
             params,
@@ -42,20 +56,13 @@ export function attach(config: any) {
             page,
             forkPage,
           }),
-          rj: onSettled({
-            params,
-            req,
-            ok: false,
-            anyway,
-            page,
-            forkPage,
-          }),
+          rj,
         },
       },
       page,
       defer: true,
     })
-
+  }
   if (source) {
     let state
     if (is.store(source)) state = source

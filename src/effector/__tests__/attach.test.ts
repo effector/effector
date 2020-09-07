@@ -249,3 +249,18 @@ it('throw error if no source nor mapParams provided', async () => {
     `"either \`mapParams\` or \`source\` should be defined"`,
   )
 })
+
+it('handle fatal errors in mapParams', async () => {
+  const fn = jest.fn()
+  const effect = createEffect((n: number) => {
+    fn(n)
+  })
+  const fx = attach({
+    effect,
+    mapParams: (params: string) => params.length,
+  })
+  //@ts-ignore
+  await expect(fx(null)).rejects.toThrowErrorMatchingInlineSnapshot(
+    `"Cannot read property 'length' of null"`,
+  )
+})
