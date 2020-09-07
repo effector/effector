@@ -391,15 +391,9 @@ function makeTrace(fileNameIdentifier, lineNumber, columnNumber, t) {
     columnNumber != null ? columnNumber : -1,
   )
 
-  const fileProperty = t.objectProperty(
-    t.identifier('file'),
-    fileNameIdentifier,
-  )
-  const lineProperty = t.objectProperty(t.identifier('line'), fileLineLiteral)
-  const columnProperty = t.objectProperty(
-    t.identifier('column'),
-    fileColumnLiteral,
-  )
+  const fileProperty = property(t, 'file', fileNameIdentifier)
+  const lineProperty = property(t, 'line', fileLineLiteral)
+  const columnProperty = property(t, 'column', fileColumnLiteral)
   return t.objectExpression([fileProperty, lineProperty, columnProperty])
 }
 function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
@@ -420,36 +414,32 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     const oldConfig = args[2]
     const configExpr = (args[2] = t.objectExpression([]))
 
-    const stableID = t.objectProperty(
-      t.identifier('sid'),
-      t.stringLiteral(
-        generateStableID(
-          state.file.opts.root,
-          state.filename,
-          displayName,
-          loc.line,
-          loc.column,
-          compressor,
-        ),
+    const stableID = stringProperty(
+      t,
+      'sid',
+      generateStableID(
+        state.file.opts.root,
+        state.filename,
+        displayName,
+        loc.line,
+        loc.column,
+        compressor,
       ),
     )
 
     if (oldConfig) {
-      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      configExpr.properties.push(property(t, 'ɔ', oldConfig))
     }
     if (addLoc) {
-      const locProp = t.objectProperty(
-        t.identifier('loc'),
+      const locProp = property(
+        t,
+        'loc',
         makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
       )
       configExpr.properties.push(locProp)
     }
     if (displayName) {
-      const nameProp = t.objectProperty(
-        t.identifier('name'),
-        t.stringLiteral(displayName),
-      )
-      configExpr.properties.push(nameProp)
+      configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
   }
@@ -471,36 +461,32 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     const oldConfig = args[1]
     const configExpr = (args[1] = t.objectExpression([]))
 
-    const stableID = t.objectProperty(
-      t.identifier('sid'),
-      t.stringLiteral(
-        generateStableID(
-          state.file.opts.root,
-          state.filename,
-          displayName,
-          loc.line,
-          loc.column,
-          compressor,
-        ),
+    const stableID = stringProperty(
+      t,
+      'sid',
+      generateStableID(
+        state.file.opts.root,
+        state.filename,
+        displayName,
+        loc.line,
+        loc.column,
+        compressor,
       ),
     )
 
     if (oldConfig) {
-      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      configExpr.properties.push(property(t, 'ɔ', oldConfig))
     }
     if (addLoc) {
-      const locProp = t.objectProperty(
-        t.identifier('loc'),
+      const locProp = property(
+        t,
+        'loc',
         makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
       )
       configExpr.properties.push(locProp)
     }
     if (displayName) {
-      const nameProp = t.objectProperty(
-        t.identifier('name'),
-        t.stringLiteral(displayName),
-      )
-      configExpr.properties.push(nameProp)
+      configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
   }
@@ -532,38 +518,34 @@ function setConfigForConfigurableMethod(
     args.length = 0
     const configExpr = t.objectExpression([])
 
-    const stableID = t.objectProperty(
-      t.identifier('sid'),
-      t.stringLiteral(
-        generateStableID(
-          state.file.opts.root,
-          state.filename,
-          displayName,
-          loc.line,
-          loc.column,
-          compressor,
-        ),
+    const stableID = stringProperty(
+      t,
+      'sid',
+      generateStableID(
+        state.file.opts.root,
+        state.filename,
+        displayName,
+        loc.line,
+        loc.column,
+        compressor,
       ),
     )
 
     if (addLoc) {
-      const locProp = t.objectProperty(
-        t.identifier('loc'),
+      const locProp = property(
+        t,
+        'loc',
         makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
       )
       configExpr.properties.push(locProp)
     }
     if (displayName) {
-      const nameProp = t.objectProperty(
-        t.identifier('name'),
-        t.stringLiteral(displayName),
-      )
-      configExpr.properties.push(nameProp)
+      configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
     args[0] = t.objectExpression([
-      t.objectProperty(t.identifier('ɔ'), commonArgs),
-      t.objectProperty(t.identifier('config'), configExpr),
+      property(t, 'ɔ', commonArgs),
+      property(t, 'config', configExpr),
     ])
   }
 }
@@ -591,36 +573,32 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     const oldConfig = args[1]
     const configExpr = (args[firstArgument ? 1 : 0] = t.objectExpression([]))
 
-    const stableID = t.objectProperty(
-      t.identifier('sid'),
-      t.stringLiteral(
-        generateStableID(
-          state.file.opts.root,
-          state.filename,
-          displayName,
-          loc.line,
-          loc.column,
-          compressor,
-        ),
+    const stableID = stringProperty(
+      t,
+      'sid',
+      generateStableID(
+        state.file.opts.root,
+        state.filename,
+        displayName,
+        loc.line,
+        loc.column,
+        compressor,
       ),
     )
 
     if (oldConfig) {
-      configExpr.properties.push(t.objectProperty(t.identifier('ɔ'), oldConfig))
+      configExpr.properties.push(property(t, 'ɔ', oldConfig))
     }
     if (addLoc) {
-      const locProp = t.objectProperty(
-        t.identifier('loc'),
+      const locProp = property(
+        t,
+        'loc',
         makeTrace(state.fileNameIdentifier, loc.line, loc.column, t),
       )
       configExpr.properties.push(locProp)
     }
     if (displayName) {
-      const nameProp = t.objectProperty(
-        t.identifier('name'),
-        t.stringLiteral(displayName),
-      )
-      configExpr.properties.push(nameProp)
+      configExpr.properties.push(stringProperty(t, 'name', displayName))
     }
     configExpr.properties.push(stableID)
   }
@@ -653,4 +631,12 @@ function hashCode(s) {
   if (s.length > 0)
     while (i < s.length) h = ((h << 5) - h + s.charCodeAt(i++)) | 0
   return h.toString(36)
+}
+
+function property(t, field, content) {
+  return t.objectProperty(t.identifier(field), content)
+}
+
+function stringProperty(t, field, value) {
+  return property(t, field, t.stringLiteral(value))
 }
