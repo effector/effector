@@ -12,7 +12,6 @@ import {readTemplate} from './region'
 import {forIn, includes} from './collection'
 
 export function combine(...args: any[]): Store<any> {
-  if (args.length === 0) throwError('at least one argument required')
   let handler
   let stores
   let config

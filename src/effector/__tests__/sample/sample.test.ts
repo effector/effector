@@ -576,7 +576,7 @@ test('validate shape', () => {
     const clock = createEvent()
     //@ts-ignore
     sample(0, clock)
-  }).toThrowErrorMatchingInlineSnapshot(`"shape should be an object"`)
+  }).toThrowErrorMatchingInlineSnapshot(`"expect first argument be an object"`)
 })
 
 test('source shape support', () => {

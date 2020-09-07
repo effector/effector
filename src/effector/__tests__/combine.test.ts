@@ -213,7 +213,7 @@ it('updates consistently', async () => {
 it('validate amount of arguments', () => {
   expect(() => {
     combine()
-  }).toThrowErrorMatchingInlineSnapshot(`"at least one argument required"`)
+  }).toThrowErrorMatchingInlineSnapshot(`"expect first argument be an object"`)
 })
 
 it('validate shape', () => {

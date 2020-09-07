@@ -8,5 +8,5 @@ export const isFunction = (value: any) => typeof value === 'function'
 
 export const assertObject = (value: any) => {
   if (!isObject(value) && !isFunction(value))
-    throwError('expect value to be an object') // or function
+    throwError('expect first argument be an object') // or function
 }
