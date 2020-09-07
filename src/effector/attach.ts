@@ -16,9 +16,10 @@ export function attach(config: any) {
     injected = injectedData
     config = userConfig
   })
-  const {source, effect, mapParams} = config
+  let {source, effect, mapParams} = config
   if (!source && !mapParams)
     throwError('either `mapParams` or `source` should be defined')
+  if (!mapParams) mapParams = (_: any, source: any) => source
   const attached = createEffect(config, injected)
   const {runner} = getGraph(attached).scope
 

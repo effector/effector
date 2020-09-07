@@ -224,6 +224,22 @@ it('support source shape', async () => {
   `)
 })
 
+it('pass source to inner effect if no mapParams provided', async () => {
+  const fn = jest.fn()
+
+  const request = createEffect((token: string) => {
+    fn(token)
+    return 'ok'
+  })
+  const token = createStore('foo')
+
+  const fx = attach({
+    source: token,
+    effect: request,
+  })
+  await expect(fx()).resolves.toBe('ok')
+})
+
 it('throw error if no source nor mapParams provided', async () => {
   const fx = createEffect<string, void>()
   expect(() => {
