@@ -56,7 +56,7 @@ const secureRequest = attach({
 - Add babel plugin support for `split` and `createApi`
 - Add `name` field to `attach` typings
 - Add `.filter` and `.filterMap` to effect typings ([PR #376](https://github.com/zerobias/effector/pull/376))
-- Improve config validation for `forward`, `attach`, `sample` and `guard`: attempt to call these methods withoout arguments will lead to error with user-friendly description
+- Improve config validation for `forward`, `attach`, `sample` and `guard`: attempt to call these methods without arguments will lead to error with user-friendly description
 - Improve fork api support for stores and events
 
 ## effector 21.2.0
