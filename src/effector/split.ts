@@ -2,24 +2,26 @@ import {Event} from './unit.h'
 import {is} from './is'
 import {forIn} from './collection'
 import {forward} from './forward'
+import {processArgsToConfig} from './config'
 
-export function split(
-  unit: any,
-  match: {[key: string]: (s: any) => boolean},
-): any {
-  const result = {} as Record<string, Event<any>>
+export function split(...args: any[]): any {
   let cases: any
+  let [[unit, match], metadata] = processArgsToConfig(args)
   const knownCases = !match
   if (knownCases) {
     cases = unit.cases
     match = unit.match
     unit = unit.source
   }
+  const result = {} as Record<string, Event<any>>
   let current: Event<any> = is.store(unit) ? unit.updates : unit
   forIn(match, (fn, key) => {
-    result[key] = current.filter({fn})
+    //@ts-ignore
+    result[key] = current.filter({fn, config: metadata})
+    //@ts-ignore
     current = current.filter({
       fn: data => !fn(data),
+      config: metadata,
     })
   })
   result.__ = current

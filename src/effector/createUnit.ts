@@ -173,7 +173,7 @@ export function createEvent<Payload = any>(
     return mapped
   }
   event.filter = (fn: any) =>
-    createEventFiltration(event, 'filter', fn.fn, [
+    createEventFiltration(event, 'filter', fn.fn ? fn : fn.fn, [
       step.filter({fn: callStack}),
     ])
   event.filterMap = (fn: any) =>
