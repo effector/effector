@@ -223,3 +223,13 @@ it('support source shape', async () => {
     ]
   `)
 })
+
+it('throw error if no source nor mapParams provided', async () => {
+  const fx = createEffect<string, void>()
+  expect(() => {
+    //@ts-ignore
+    attach({effect: fx})
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"either \`mapParams\` or \`source\` should be defined"`,
+  )
+})

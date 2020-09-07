@@ -8,6 +8,7 @@ import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
 import {addToReg} from './createNode'
+import {throwError} from './throw'
 
 export function attach(config: any) {
   let injected
@@ -16,6 +17,8 @@ export function attach(config: any) {
     config = userConfig
   })
   const {source, effect, mapParams} = config
+  if (!source && !mapParams)
+    throwError('either `mapParams` or `source` should be defined')
   const attached = createEffect(config, injected)
   const {runner} = getGraph(attached).scope
 
