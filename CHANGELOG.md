@@ -2,6 +2,63 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.3.0
+
+- Add support for `createEffect(handler)`
+
+[createEffect(handler) in documentation](https://effector.now.sh/docs/api/effector/createEffect#createeffecthandler)
+
+```js
+import {createEffect} from 'effector'
+
+const fetchUserReposFx = createEffect(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
+})
+
+fetchUserReposFx.done.watch(({params, result}) => {
+  console.log(result)
+})
+
+await fetchUserReposFx({name: 'zerobias'})
+```
+
+[Try it](https://share.effector.dev/7K23rdej)
+
+- Add support for `attach({source, effect})` without `mapParams`: in case with `source` and `effect` only, inner effect will be triggered with `source` values
+
+[attach({effect, source}) in documentation](https://effector.now.sh/docs/api/effector/attach#attacheffect-source)
+
+```js
+import {createStore, createEffect, attach} from 'effector'
+const request = createEffect()
+const token = createStore('')
+const secureRequest = attach({effect: request, source: token})
+```
+
+it's a shorthand for common use case:
+
+```js
+import {createStore, createEffect, attach} from 'effector'
+const request = createEffect()
+const token = createStore('')
+const secureRequest = attach({
+  effect: request,
+  source: token,
+  mapParams: (_, source) => source,
+})
+```
+
+[Try it](https://share.effector.dev/lManajHQ)
+
+- Handle throws in `attach` `mapParams` field: errors happened in `mapParams` function will force attached effect to fail
+- Add babel plugin support for `split` and `createApi`
+- Add `name` field to `attach` typings
+- Add `.filter` and `.filterMap` to effect typings ([PR #376](https://github.com/zerobias/effector/pull/376))
+- Improve config validation for `forward`, `attach`, `sample` and `guard`: attempt to call these methods withoout arguments will lead to error with user-friendly description
+- Improve fork api support for stores and events
+
 ## effector 21.2.0
 
 - Add array support for sample `clock` field which acts like a `merge` call
