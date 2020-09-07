@@ -452,7 +452,7 @@ function cloneGraph(unit: any) {
     ],
     meta: {unit: 'forkInFlightCounter'},
   })
-
+  const nodeMap = {} as Record<string, Graph>
   const clones = list.map(node => {
     const {seq, next, meta, scope, family} = node
     const result = createNode({
@@ -471,6 +471,7 @@ function cloneGraph(unit: any) {
       links: [...family.links],
       owners: [...family.owners],
     }
+    nodeMap[node.id] = result
     return result
   })
   const page = {} as Record<string, StateRef>
@@ -525,6 +526,7 @@ function cloneGraph(unit: any) {
 
   return {
     cloneOf: unit,
+    nodeMap,
     clones,
     find: findClone,
     reg: page,
