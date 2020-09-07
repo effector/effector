@@ -17,4 +17,4 @@ Consider using [hooks api](./index.md#hooks) in modern projects
 
 #### Returns
 
-((Store) => Component): Function, which accepts a store and return component with store fields merged in props
+`(Store) => Component`: Function, which accepts a store and return component with store fields merged in props
