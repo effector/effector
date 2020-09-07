@@ -4,14 +4,14 @@ import {argumentHistory} from 'effector/fixtures'
 it('map params and results by provided functions', async () => {
   const fn = jest.fn()
   const requestFX = createEffect({
-    handler(x) {
+    handler(x: number) {
       fn({tag: 'effect handler', data: x})
       return {x}
     },
   })
   const attached = attach({
     effect: requestFX,
-    mapParams: word => word.length,
+    mapParams: (word: string) => word.length,
   })
   requestFX.watch(data => {
     fn({tag: 'request.watch', data})
@@ -75,7 +75,7 @@ it('map params and results by provided functions', async () => {
 it('support source store', async () => {
   const fn = jest.fn()
   const requestFX = createEffect({
-    handler(data) {
+    handler(data: {url: string; token: string}) {
       fn({tag: 'effect handler', data})
       return 'result'
     },
@@ -84,7 +84,7 @@ it('support source store', async () => {
   const attached = attach({
     source: token,
     effect: requestFX,
-    mapParams: (url, token) => ({url, token}),
+    mapParams: (url: string, token) => ({url, token}),
   })
   requestFX.watch(data => {
     fn({tag: 'request.watch', data})
@@ -150,7 +150,7 @@ it('support source store', async () => {
 it('support source shape', async () => {
   const fn = jest.fn()
   const requestFX = createEffect({
-    handler(data) {
+    handler(data: {url: string; token: string}) {
       fn({tag: 'effect handler', data})
       return 'result'
     },
@@ -160,7 +160,7 @@ it('support source shape', async () => {
   const attached = attach({
     source: {token, count: callCounter},
     effect: requestFX,
-    mapParams: (url, {token}) => ({url, token}),
+    mapParams: (url: string, {token}) => ({url, token}),
   })
   requestFX.watch(data => {
     fn({tag: 'request.watch', data})
