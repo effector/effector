@@ -4,67 +4,71 @@ title: createEffect
 hide_title: true
 ---
 
-# `createEffect(name?, { handler })`
+# `createEffect(handler?)`
 
-Creates an [effect](Effect.md)
+Creates an [effect](Effect.md) with given handler
 
 #### Arguments
 
-1. `name`? (_string_): Effect name
-2. `params`? (_Params_): Setup effect
-   - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+1. `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
 #### Returns
 
 [_Effect_](Effect.md): New effect
 
 :::note
-You must provide a handler either through `handler` property in [createEffect](createEffect.md) or [`.use`](Effect.md#usehandler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
+You must provide a handler either in [createEffect](createEffect.md) or in [`.use`](Effect.md#usehandler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
 :::
 
 :::note
 You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even though it consists of _Events_ and _Stores_), since it's a complete entity on its own. This behavior will not be supported
 :::
 
+:::note since
+effector 21.3.0
+:::
+
 #### Examples
 
-Create unnamed effect
+##### Create effect with handler
 
 ```js
 import {createEffect} from 'effector'
 
-const fetchUserReposFx = createEffect({
-  handler: async ({name}) => {
-    const url = `https://api.github.com/users/${name}/repos`
-    const req = await fetch(url)
-    return req.json()
-  },
+const fetchUserReposFx = createEffect(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
+})
+
+fetchUserReposFx.done.watch(({params, result}) => {
+  console.log(result)
 })
 
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/6pNaXVyU)
+[Try it](https://share.effector.dev/7K23rdej)
 
-Create named effect
+##### Change state on effect completion
 
 ```js
-import {createEffect} from 'effector'
+import {createStore, createEffect} from 'effector'
 
-const fetchUserReposFx = createEffect('fetch user repositories', {
-  handler: async ({name}) => {
-    const url = `https://api.github.com/users/${name}/repos`
-    const req = await fetch(url)
-    return req.json()
-  },
+const fetchUserReposFx = createEffect(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
+
+const repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos)
 
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/8oirbvPY)
+[Try it](https://share.effector.dev/niIXnoC4)
 
-Set handler to effect after creating
+##### Set handler to effect after creating
 
 ```js
 import {createEffect} from 'effector'
@@ -82,17 +86,15 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
 
-Watch effect status
+##### Watch effect status
 
 ```js
 import {createEffect} from 'effector'
 
-const fetchUserReposFx = createEffect({
-  handler: async ({name}) => {
-    const url = `https://api.github.com/users/${name}/repos`
-    const req = await fetch(url)
-    return req.json()
-  },
+const fetchUserReposFx = createEffect(async ({name}) => {
+  const url = `https://api.github.com/users/${name}/repos`
+  const req = await fetch(url)
+  return req.json()
 })
 
 fetchUserReposFx.pending.watch(pending => {
@@ -123,24 +125,39 @@ fetchUserReposFx.finally.watch(({params, status, result, error}) => {
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/f3JDMpAB)
+[Try it](https://share.effector.dev/LeurvtYA)
 
-Change state
+# `createEffect({ handler, name? })`
+
+Creates an [effect](Effect.md)
+
+#### Arguments
+
+1. `params`? (_Params_): Setup effect
+   - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
+   - `name`? (_string_): Optional effect name
+
+#### Returns
+
+[_Effect_](Effect.md): New effect
+
+#### Examples
+
+##### Create named effect
 
 ```js
-import {createStore, createEffect} from 'effector'
+import {createEffect} from 'effector'
 
 const fetchUserReposFx = createEffect({
-  handler: async ({name}) => {
+  name: 'fetch user repositories',
+  async handler({name}) {
     const url = `https://api.github.com/users/${name}/repos`
     const req = await fetch(url)
     return req.json()
   },
 })
 
-const repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos)
-
 await fetchUserReposFx({name: 'zerobias'})
 ```
 
-[Try it](https://share.effector.dev/wxUCfzN5)
+[Try it](https://share.effector.dev/GynSzKee)
