@@ -34,6 +34,7 @@ const normalizeConfig = (part: any, config: any) => {
     normalizeConfig(getConfig(part), config)
     if (part.name != null) {
       if (isObject(part.name)) normalizeConfig(part.name, config)
+      else if (isFunction(part.name)) config.handler = part.name
       else config.name = part.name
     }
     if (part.loc) config.loc = part.loc

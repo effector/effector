@@ -8,6 +8,17 @@ import {
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
+describe('createEffect(handler) support', () => {
+  test('with babel plugin', async () => {
+    const fx = createEffect(async (str: string) => str.length)
+    await expect(fx('ok')).resolves.toBe(2)
+    expect(fx.shortName).toBe('fx')
+  })
+  test('without babel plugin', async () => {
+    const fx = {_: createEffect}._(async (str: string) => str.length)
+    await expect(fx('ok')).resolves.toBe(2)
+  })
+})
 describe('effect({...})', () => {
   test(`if used function will resolve`, async () => {
     const fn = jest.fn()

@@ -223,6 +223,17 @@ export class Domain implements Unit<any> {
     sid?: string
     name?: string
   }): Effect<Params, Done, Fail>
+  createEffect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
+    ? Effect<
+        Args['length'] extends 0 // does handler accept 0 arguments?
+          ? void
+          : 0 | 1 extends Args['length']  // is the first argument optional?
+          ? Args[0] | void
+          : Args[0],
+        Done extends Promise<infer Async> ? Async : Done,
+        Error
+      >
+    : never
   createEffect<FN extends Function>(config: {
     name?: string
     handler: FN
@@ -230,21 +241,8 @@ export class Domain implements Unit<any> {
   }): FN extends (...args: infer Args) => infer Done
     ? Effect<
         Args['length'] extends 0 // does handler accept 0 arguments?
-          ? void // works since TS v3.3.3
+          ? void
           : 0 | 1 extends Args['length']  // is the first argument optional?
-            /**
-             * Applying `infer` to a variadic arguments here we'll get `Args` of
-             * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
-             * In case T is optional we get `T | undefined` back from `Args[0]`.
-             * We lose information about argument's optionality, but we can make it
-             * optional again by appending `void` type, so the result type will be
-             * `T | undefined | void`.
-             *
-             * The disadvantage of this method is that we can't restore optonality
-             * in case of `params?: any` because in a union `any` type absorbs any
-             * other type (`any | undefined | void` becomes just `any`). And we
-             * have similar situation also with the `unknown` type.
-             */
           ? Args[0] | void
           : Args[0],
         Done extends Promise<infer Async> ? Async : Done,
@@ -433,6 +431,17 @@ export function createEvent<E = void>(config: {
   sid?: string
 }): Event<E>
 
+export function createEffect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
+  ? Effect<
+      Args['length'] extends 0 // does handler accept 0 arguments?
+        ? void
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+        ? Args[0] | void
+        : Args[0],
+      Done extends Promise<infer Async> ? Async : Done,
+      Error
+    >
+  : never
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
@@ -440,7 +449,6 @@ export function createEffect<Params, Done, Fail = Error>(
     sid?: string
   },
 ): Effect<Params, Done, Fail>
-
 export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
@@ -775,11 +783,21 @@ export function attach<
   source: States
   effect: FX
   mapParams: (params: Params, states: GetShapeValue<States>) => EffectParams<FX>
+  name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
 export function attach<Params, FX extends Effect<any, any, any>>(config: {
   effect: FX
   mapParams: (params: Params) => EffectParams<FX>
+  name?: string
 }): Effect<Params, EffectResult<FX>, EffectError<FX>>
+export function attach<
+  States extends StoreShape,
+  FX extends Effect<GetShapeValue<States>, any, any>
+>(config: {
+  source: States
+  effect: FX
+  name?: string
+}): Effect<void, EffectResult<FX>, EffectError<FX>>
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(

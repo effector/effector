@@ -68,9 +68,13 @@ describe('single generic', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Effect<SyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
-          Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
-            Type 'Promise<number>' is not assignable to type 'number'.
+          No overload matches this call.
+            Overload 1 of 4, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+              Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
+                Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
+            Overload 2 of 4, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+              Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
+                Type 'Promise<number>' is not assignable to type 'number'.
 
           --flow--
           Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
@@ -90,14 +94,13 @@ describe('single generic', () => {
         expect(typecheck).toMatchInlineSnapshot(`
           "
           --typescript--
-          Type 'Effect<AsyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
-            The types of 'done.watch' are incompatible between these types.
-              Type '(watcher: (payload: { params: AsyncFn; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
-                Types of parameters 'watcher' and 'watcher' are incompatible.
-                  Types of parameters 'payload' and 'payload' are incompatible.
-                    Type '{ params: AsyncFn; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
-          Type '(_: string) => number' is not assignable to type 'AsyncFn'.
-            Type 'number' is not assignable to type 'Promise<number>'.
+          No overload matches this call.
+            Overload 1 of 4, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
+              Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
+                Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
+            Overload 2 of 4, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+              Type '(_: string) => number' is not assignable to type 'AsyncFn'.
+                Type 'number' is not assignable to type 'Promise<number>'.
 
           --flow--
           Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
@@ -140,8 +143,13 @@ describe('single generic', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
-          Type 'Promise<string>' is not assignable to type 'number'.
+        No overload matches this call.
+          Overload 1 of 4, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+            Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
+              Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
+          Overload 2 of 4, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
+              Type 'Promise<string>' is not assignable to type 'number'.
 
         --flow--
         Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
@@ -163,12 +171,6 @@ describe('single generic', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Effect<string, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
-          The types of 'done.watch' are incompatible between these types.
-            Type '(watcher: (payload: { params: string; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type '{ params: string; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
         Type 'string' does not satisfy the constraint 'Function'.
 
         --flow--
@@ -189,12 +191,6 @@ describe('single generic', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Effect<SyncFn, unknown, unknown>' is not assignable to type 'Effect<string, number, Error>'.
-          The types of 'done.watch' are incompatible between these types.
-            Type '(watcher: (payload: { params: SyncFn; result: unknown; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: string; result: number; }) => any) => Subscription'.
-              Types of parameters 'watcher' and 'watcher' are incompatible.
-                Types of parameters 'payload' and 'payload' are incompatible.
-                  Type '{ params: SyncFn; result: unknown; }' is not assignable to type '{ params: string; result: number; }'.
         Expected 1 arguments, but got 0.
 
         --flow--
