@@ -1,7 +1,6 @@
 ---
 id: createEffect
 title: createEffect
-hide_title: true
 ---
 
 # `createEffect(handler?)`
@@ -28,9 +27,9 @@ You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even thoug
 effector 21.3.0
 :::
 
-#### Examples
+## Examples
 
-##### Create effect with handler
+### Create effect with handler
 
 ```js
 import {createEffect} from 'effector'
@@ -50,7 +49,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/7K23rdej)
 
-##### Change state on effect completion
+### Change state on effect completion
 
 ```js
 import {createStore, createEffect} from 'effector'
@@ -68,7 +67,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/niIXnoC4)
 
-##### Set handler to effect after creating
+### Set handler to effect after creating
 
 ```js
 import {createEffect} from 'effector'
@@ -86,7 +85,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
 
-##### Watch effect status
+### Watch effect status
 
 ```js
 import {createEffect} from 'effector'
@@ -141,9 +140,9 @@ Creates an [effect](Effect.md)
 
 [_Effect_](Effect.md): New effect
 
-#### Examples
+## Examples
 
-##### Create named effect
+### Create named effect
 
 ```js
 import {createEffect} from 'effector'
