@@ -2,7 +2,7 @@ import {combine} from './combine'
 import {step} from './typedef'
 import {createStateRef, readRef} from './stateRef'
 import {callStackAReg, callARegStack} from './caller'
-import {onConfigNesting} from './config'
+import {processArgsToConfig} from './config'
 import {getStoreState, getGraph} from './getter'
 import {own} from './own'
 import {is} from './is'
@@ -17,12 +17,7 @@ import {includes} from './collection'
 export function sample(...args: any): any {
   let target
   let name
-  let metadata
-  onConfigNesting(args[0], (injectedData, userConfig) => {
-    metadata = injectedData
-    args = userConfig
-  })
-  let [source, clock, fn] = args
+  let [[source, clock, fn], metadata] = processArgsToConfig(args)
   let sid
   let greedy
   //config case

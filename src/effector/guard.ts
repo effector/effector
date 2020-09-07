@@ -1,4 +1,4 @@
-import {onConfigNesting} from './config'
+import {processArgsToConfig} from './config'
 import {createLinkNode} from './forward'
 import {sample} from './sample'
 import {createEvent} from './createUnit'
@@ -10,16 +10,14 @@ import {createNode} from './createNode'
 import {addToRegion} from './region'
 import {throwError} from './throw'
 
-export function guard(source: any, config?: any) {
+export function guard(...args: any[]) {
   const meta: Record<string, any> = {op: 'guard'}
   let rawName = 'guard'
-  onConfigNesting(source, (injectedData, userConfig) => {
-    if (injectedData.name) {
-      rawName = injectedData.name
-    }
-    meta.config = injectedData
-    ;[source, config] = userConfig
-  })
+  let [[source, config], metadata] = processArgsToConfig(args)
+  if (metadata) {
+    meta.config = metadata
+    if (metadata.name) rawName = metadata.name
+  }
   if (!config) {
     config = source
     source = config.source

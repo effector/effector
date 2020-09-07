@@ -10,3 +10,12 @@ export const onConfigNesting = (
     fn(getConfig(rawConfig), getNestedConfig(rawConfig))
   }
 }
+
+export const processArgsToConfig = (args: any[]): [any[], any | void] => {
+  let metadata
+  onConfigNesting(args[0], (injected, config) => {
+    metadata = injected
+    args = config
+  })
+  return [args, metadata]
+}
