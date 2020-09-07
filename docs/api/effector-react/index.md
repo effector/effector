@@ -19,7 +19,7 @@ title: API Reference
 
 - [createComponent(store, render)](./createComponent.md)
 - [createStoreConsumer(store)](./createStoreConsumer.md) render props style
-- [connect(Component)(store)](./connect.md) "connect" style
+- [connect(store)(Component)](./connect.md) "connect" style
 
 ## effector-react/ssr API
 

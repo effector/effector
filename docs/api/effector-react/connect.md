@@ -9,6 +9,20 @@ Wrapper for [useStore](./useStore.md) to use during migration from redux and cla
 Consider using [hooks api](./index.md#hooks) in modern projects
 :::
 
+## `connect(Store)(Component): Component`
+
+:::note since
+effector-react 21.0.5
+:::
+
+#### Arguments
+
+1. `Store` ([Store](../effector/Store.md)): store or object with stores
+
+#### Returns
+
+`(Component) => Component`: Function, which accepts react component and return component with store fields merged in props
+
 ## `connect(Component)(Store): Component`
 
 #### Arguments

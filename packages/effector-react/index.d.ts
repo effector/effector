@@ -73,6 +73,10 @@ export function createContextComponent<Props, State, Context>(
 export function connect<
   State extends object,
   Com extends React.ComponentType<any>
+>(store: Store<State>): (Component: Com) => React.ComponentType<State>
+export function connect<
+  State extends object,
+  Com extends React.ComponentType<any>
 >(Component: Com): (store: Store<State>) => React.ComponentType<State>
 
 export function createStoreConsumer<State>(
