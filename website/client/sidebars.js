@@ -57,7 +57,11 @@ const sidebar = {
         {
           type: 'category',
           label: 'Low level api',
-          items: ['api/effector/clearNode', 'api/effector/withRegion', 'api/effector/launch'],
+          items: [
+            'api/effector/clearNode',
+            'api/effector/withRegion',
+            'api/effector/launch',
+          ],
         },
       ],
     },
@@ -73,13 +77,31 @@ const sidebar = {
             'api/effector-react/useStore',
             'api/effector-react/useStoreMap',
             'api/effector-react/useList',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Gate API',
+          items: [
+            'api/effector-react/gate',
+            'api/effector-react/createGate',
             'api/effector-react/useGate',
           ],
         },
-        'api/effector-react/createComponent',
-        'api/effector-react/gate',
-        'api/effector-react/createGate',
-        'api/effector-react/createStoreConsumer',
+        {
+          type: 'category',
+          label: 'Top-level exports',
+          items: [
+            'api/effector-react/createComponent',
+            'api/effector-react/createStoreConsumer',
+            'api/effector-react/connect',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'effector-react/ssr api',
+          items: ['api/effector-react/useEvent'],
+        },
       ],
     },
     {

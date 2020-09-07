@@ -18,4 +18,9 @@ title: API Reference
 ## Top-Level Exports
 
 - [createComponent(store, render)](./createComponent.md)
-- [createStoreConsumer(store)](./createStoreConsumer.md)
+- [createStoreConsumer(store)](./createStoreConsumer.md) render props style
+- [connect(Component)(store)](./connect.md) "connect" style
+
+## effector-react/ssr API
+
+- [useEvent(unit)](./useEvent.md)
