@@ -698,3 +698,17 @@ test('getState support', async () => {
   })
   expect(fn).toHaveBeenLastCalledWith(2)
 })
+
+test('setState support', async () => {
+  const app = createDomain()
+  const start = app.createEvent()
+  const store = app.createStore(0)
+  start.watch(() => {
+    //@ts-ignore
+    store.setState(1)
+  })
+  const scope = fork(app)
+  await allSettled(start, {scope})
+  expect(scope.getState(store)).toBe(1)
+  expect(store.getState()).not.toBe(1)
+})

@@ -235,8 +235,13 @@ export function createStore<State>(
       return readRef(targetRef)
     },
     setState(state: any) {
+      let target
+      if (forkPage) {
+        target = forkPage.nodeMap[getGraph(store).id]
+      }
+      if (!target) target = store
       launch({
-        target: store,
+        target,
         params: state,
         defer: true,
       })
