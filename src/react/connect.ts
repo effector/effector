@@ -7,7 +7,7 @@ export const connect = <State>(Component: React.ComponentType<any>) => (
   store: Store<State>,
 ) => {
   let View: any = Component
-  if (is.store(Component) || Object.values(Component).every(is.store)) {
+  if (typeof Component !== 'function') {
     View = store
     store = Component as any
   }

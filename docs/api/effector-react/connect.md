@@ -12,7 +12,7 @@ Consider using [hooks api](./index.md#hooks) in modern projects
 ## `connect(Store)(Component): Component`
 
 :::note since
-effector-react 21.0.5
+effector-react 21.0.6
 :::
 
 #### Arguments
