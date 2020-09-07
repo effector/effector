@@ -179,18 +179,6 @@ export function serialize(
   return result
 }
 
-/** invoke event in scope */
-export function invoke(unit: any, payload: any) {
-  if (!forkPage) {
-    throwError('invoke cannot be called outside of forked .watch')
-  }
-  launch({
-    target: forkPage.find(unit),
-    params: payload,
-    forkPage,
-  })
-}
-
 /** bind event to scope */
 export function scopeBind(unit: any) {
   if (!forkPage) {
@@ -206,13 +194,7 @@ export function scopeBind(unit: any) {
     })
   }
 }
-function universalLaunch(unit: any, payload: any) {
-  if (forkPage) {
-    invoke(unit, payload)
-  } else {
-    launch(unit, payload)
-  }
-}
+
 function normalizeValues(values: Map<Store<any>, any> | Record<string, any>) {
   if (values instanceof Map) {
     const result = {} as Record<string, any>
