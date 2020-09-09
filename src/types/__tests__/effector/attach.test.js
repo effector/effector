@@ -62,3 +62,28 @@ test('without source', () => {
     "
   `)
 })
+
+test('mapParams without arguments (should pass)', () => {
+  const effect = createEffect((word: string) => word.length)
+  const fx = attach({
+    effect,
+    mapParams: () => 'foo',
+  })
+  const assert_type: Effect<void, number> = fx
+  fx()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    Type 'Effect<unknown, number, Error>' is not assignable to type 'Effect<void, number, Error>'.
+      The types of 'done.watch' are incompatible between these types.
+        Type '(watcher: (payload: { params: unknown; result: number; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: void; result: number; }) => any) => Subscription'.
+          Types of parameters 'watcher' and 'watcher' are incompatible.
+            Types of parameters 'payload' and 'payload' are incompatible.
+              Type '{ params: unknown; result: number; }' is not assignable to type '{ params: void; result: number; }'.
+    Expected 1 arguments, but got 0.
+
+    --flow--
+    no errors
+    "
+  `)
+})
