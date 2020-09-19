@@ -4,7 +4,7 @@ const sidebar = {
     'introduction/core-concepts',
     'glossary',
     'introduction/prior-art',
-    { type: 'link', href: 'https://github.com/zerobias/effector#more-examples', label: 'Examples' },
+    'introduction/examples'
   ],
   API: [
     {
