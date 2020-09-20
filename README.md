@@ -238,7 +238,7 @@ turnOff() // nothing has changed
 - [Update on scroll with `guard`](https://share.effector.dev/avjCFH22)
 - [Night theme switcher component](https://share.effector.dev/4MU8H3YW)
 - [Computed bounce menu animation](https://share.effector.dev/ZXEtGBBq)
-- [Values history](https://share.effector.dev/ghHZZHci)
+- [Values history](https://share.effector.dev/NsPi84mV)
 - [Read default state from backend](https://share.effector.dev/hA3WTBIT)
 - [Requests cache](https://share.effector.dev/jvE7r0By)
 - [Watch last two store state values](https://share.effector.dev/LRVsYhIc)
