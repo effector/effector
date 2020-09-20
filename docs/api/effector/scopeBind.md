@@ -10,7 +10,7 @@ hide_title: true
 scopeBind<T>(event: Event<T>): (payload: T) => void
 ```
 
-A helper to call events within a scope (see [_fork_](fork)). Effector supports imperative event calling inside watchers but sometimes you should bind events to the scope explicitly, e.g. when calling events within a setTimeout/setInterval callbacks.
+A method to bind event or effect to a [scope](./Scope.md) to be called lated. Effector supports imperative event calling inside watchers but sometimes you should bind events to the scope explicitly, e.g. when calling events within a setTimeout/setInterval callbacks.
 
 ### Arguments
 

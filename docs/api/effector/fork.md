@@ -21,13 +21,7 @@ The primary purpose of fork includes SSR (but is not limited to). Fork clones al
 
 ### Returns
 
-`Scope` object containing information about cloned domain
-
-```ts
-interface Scope {
-  getState<T>(store: Store<T>): T
-}
-```
+[_Scope_](./Scope.md) object containing information about cloned domain
 
 ### Example
 

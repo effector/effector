@@ -32,6 +32,7 @@ title: API Reference
 
 ## Fork api
 
+- [Scope](./Scope.md)
 - [fork](./fork.md)
 - [serialize](./serialize.md)
 - [hydrate](./hydrate.md)

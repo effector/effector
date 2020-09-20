@@ -4,7 +4,7 @@ const sidebar = {
     'introduction/core-concepts',
     'glossary',
     'introduction/prior-art',
-    'introduction/examples'
+    'introduction/examples',
   ],
   API: [
     {
@@ -47,6 +47,7 @@ const sidebar = {
           type: 'category',
           label: 'Fork api',
           items: [
+            'api/effector/scope',
             'api/effector/fork',
             'api/effector/serialize',
             'api/effector/hydrate',
