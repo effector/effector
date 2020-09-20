@@ -151,7 +151,7 @@ Create effect which will trigger given one by transforming params by `mapParams`
 #### Arguments
 
 - `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`, [should be **pure**](../../glossary.md#pureness). Works like [event.prepend](Event.md#prependfn)
+- `mapParams` (`(newParams) => effectParams`): Function which receives new params and maps them to the params of the wrapped `effect`. Works like [event.prepend](Event.md#prependfn). Errors happened in `mapParams` function will force attached effect to fail
 
 #### Returns
 
@@ -164,7 +164,7 @@ Create effect which will read values from `source` stores, pass them with params
 #### Arguments
 
 - `effect` ([_Effect_](Effect.md)): Wrapped effect
-- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`, [should be **pure**](../../glossary.md#pureness)
+- `mapParams` (`(newParams, values) => effectParams`): Function which receives new params and current value of `source` and combines them to the params of the wrapped `effect`. Errors happened in `mapParams` function will force attached effect to fail
 - `source` ([_Store_](Store.md) | `{[key: string]: Store}`): Store or object with stores, values of which will be passed to the second argument of `mapParams`
 
 #### Returns
