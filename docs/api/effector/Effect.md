@@ -59,10 +59,18 @@ const data = await fetchUserFx({id: 2})
 
 Provides a function, which will be called when effect is triggered.
 
-It will replace the previous function inside.
+#### Formulae
+
+```ts
+effect.use(fn)
+```
+
+- Set handler `fn` for `effect`
+- If `effect` was handler before, it will be replaced
+- Hint: current handler can be extracted with [`effect.use.getCurrent()`](#usegetcurrent)
 
 :::note
-You must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise effect will throw with "no handler used in _%effect name%_" error
+You must provide a handler either through [`.use`](Effect.md#usehandler) method or `handler` property in [createEffect](createEffect.md), otherwise effect will throw with "no handler used in _%effect name%_" error when effect will be called
 :::
 
 :::tip See also
@@ -152,9 +160,7 @@ Creates an event, upon trigger it sends transformed data into the source event. 
 const event = effect.prepend(fn)
 ```
 
-- When `event` is triggered
-- Call `fn` with payload from `event`
-- Call `effect` with result of `fn()`
+- When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with result of `fn()`
 
 #### Arguments
 
@@ -169,6 +175,16 @@ const event = effect.prepend(fn)
 ### `use.getCurrent()`
 
 Returns current handler of effect. Useful for testing.
+
+#### Formulae
+
+```ts
+fn = effect.use.getCurrent()
+```
+
+- Returns current handler for `effect`
+- If no handler was assigned to `effect`, default handler will be returned ([that throws an error](https://share.effector.dev/8PBjt3TL))
+- Hint: to set a new handler use [`effect.use(handler)`](#usehandler)
 
 #### Returns
 
@@ -198,10 +214,23 @@ console.log(fx.use.getCurrent() === handlerB)
 
 ### `doneData`
 
+Event, which is triggered with result of the effect execution:
+
+#### Formulae
+
+```ts
+event = effect.doneData
+```
+
+- `doneData` is an event, that triggered when `effect` is successfully resolved with `result` from [`.done`](#done)
+
+:::caution Important
+Do not manually call this event. It is event that depends on effect.
+:::
+
 :::note since
 effector 20.12.0
 :::
-Event, which is triggered with result of the effect execution:
 
 [_Event_](Event.md) triggered when _handler_ is _resolved_.
 
@@ -224,10 +253,23 @@ await effectFx(2)
 
 ### `failData`
 
+Event, which is triggered with error thrown by the effect
+
+#### Formulae
+
+```ts
+event = effect.failData
+```
+
+- `failData` is an event, that triggered when `effect` is rejected with `error` from [`.fail`](#fail)
+
+:::caution Important
+Do not manually call this event. It is event that depends on effect.
+:::
+
 :::note since
 effector 20.12.0
 :::
-Event, which is triggered with error thrown by the effect:
 
 [_Event_](Event.md) triggered when handler is rejected or throws error.
 
@@ -252,6 +294,11 @@ effectFx(2) // => Fail with error 1
 ### `done`
 
 [_Event_](Event.md), which is triggered when _handler_ is _resolved_.
+
+
+:::caution Important
+Do not manually call this event. It is event that depends on effect.
+:::
 
 #### Properties
 
@@ -280,6 +327,11 @@ await effectFx(2)
 ### `fail`
 
 [_Event_](Event.md), which is triggered when handler is rejected or throws error.
+
+
+:::caution Important
+Do not manually call this event. It is event that depends on effect.
+:::
 
 #### Properties
 
@@ -314,6 +366,10 @@ effector 20.0.0
 
 Event, which is triggered when handler is resolved, rejected or throws error.
 
+:::caution Important
+Do not manually call this event. It is event that depends on effect.
+:::
+
 #### Properties
 
 [_Event_](Event.md), which is triggered with object of `status`, `params` and `error` or `result`:
@@ -346,8 +402,17 @@ fetchApiFx(100)
 
 ### `pending`
 
-[_Store_](Store.md) will update when `done` or `fail` are triggered.
-[_Store_](Store.md) contains `true` value until the effect is resolved or rejected.
+#### Formulae
+
+```ts
+$store = effect.pending
+```
+- [`$store`](Store.md) will update when `done` or `fail` are triggered
+- [`$store`](Store.md) contains `true` value until the effect is resolved or rejected
+
+:::caution Important
+Do not modify `$store` value! It is derived store and should be in predictable state.
+:::
 
 #### Example
 
@@ -389,6 +454,20 @@ const isLoading = createStore(false)
 ```
 
 ### `inFlight`
+
+#### Formulae
+
+```ts
+$count = effect.inFlight
+```
+
+- [Store](Store.md) `$count` will be `0` if no calls of `effect` in pending state, its default state
+- On each call of `effect` state in `$count` store will be increased
+- When effect resolves to any state(done or fail) state in `$count` store will be decreased
+
+:::caution Important
+Do not modify `$store` value! It is derived store and should be in predictable state.
+:::
 
 :::note since
 effector 20.11.0
