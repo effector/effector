@@ -83,11 +83,19 @@ effector 21.3.0
 
 ### `history`
 
+Contains mutable read-only sets of units inside domain.
+
+#### Formulae
+
+```ts
+const { stores, events, domains, effects } = domain.history;
+```
+
+- When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
+
 :::note since
 effector 20.3.0
 :::
-
-Read-only sets of events, effects, stores and subdomains
 
 ```js
 import {createDomain} from 'effector'
@@ -132,6 +140,16 @@ An alias for [domain.createDomain](./Domain.md#createdomainname)
 
 ### `onCreateEvent(hook)`
 
+#### Formulae
+
+```ts
+domain.onCreateEvent((event) => {})
+```
+
+- Function passed to `onCreateEvent` called every time, as new event created in `domain`
+- Function called with `event` as first argument
+- Result of function call is ignored
+
 #### Arguments
 
 1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Event](./Event.md) and will be called during every [domain.createEvent](./Domain.md#createeventname) call
@@ -163,6 +181,16 @@ const b = domain.createEvent()
 <hr />
 
 ### `onCreateEffect(hook)`
+
+#### Formulae
+
+```ts
+domain.onCreateEffect((effect) => {})
+```
+
+- Function passed to `onCreateEffect` called every time, as new effect created in `domain`
+- Function called with `effect` as first argument
+- Result of function call is ignored
 
 #### Arguments
 
@@ -196,6 +224,16 @@ const b = domain.createEffect()
 
 ### `onCreateStore(hook)`
 
+#### Formulae
+
+```ts
+domain.onCreateStore(($store) => {})
+```
+
+- Function passed to `onCreateStore` called every time, as new store created in `domain`
+- Function called with `$store` as first argument
+- Result of function call is ignored
+
 #### Arguments
 
 1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Store](./Store.md) and will be called during every [domain.createStore](./Domain.md#createstoredefaultstate) call
@@ -227,6 +265,16 @@ const b = domain.createEffect(null)
 <hr />
 
 ### `onCreateDomain(hook)`
+
+#### Formulae
+
+```ts
+domain.onCreateDomain((domain) => {})
+```
+
+- Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
+- Function called with `domain` as first argument
+- Result of function call is ignored
 
 #### Arguments
 
