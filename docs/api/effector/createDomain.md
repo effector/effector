@@ -24,10 +24,10 @@ import {createDomain} from 'effector'
 const domain = createDomain() // Unnamed domain
 const httpDomain = createDomain('http') // Named domain
 
-const statusCode = httpDomain.event('status code')
-const download = httpDomain.effect('download')
-const apiDomain = httpDomain.domain('api') // nested domain
-const data = httpDomain.store({status: -1})
+const statusCodeChanged = httpDomain.createEvent('status code changed')
+const downloadFx = httpDomain.createEffect('download')
+const apiDomain = httpDomain.createDomain('api') // nested domain
+const $data = httpDomain.createStore({status: -1})
 ```
 
 [Try it](https://share.effector.dev/lSgrvzGL)
