@@ -10,7 +10,7 @@ This method allows you to get state from each passed store and **combine** it to
 
 ## `combine(...stores, fn)`
 
-### Formulae
+#### Formulae
 
 ```ts
 $result = combine($first, $second, $third, ..., (first, second, third, ...) => result)
@@ -21,11 +21,11 @@ $result = combine($first, $second, $third, ..., (first, second, third, ...) => r
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-### Returns
+#### Returns
 
 [_Store_](Store.md): New store
 
-### Example
+#### Example
 
 ```js
 import {createStore, combine} from 'effector'
@@ -47,7 +47,7 @@ arrStores.watch(console.log) // => [0, 'zerobias']
 
 ## `combine({ A, B, C }, fn?)`
 
-### Formulae
+#### Formulae
 
 ```ts
 $result = combine({ A: $first, B: $second, C: $third }, ({ A, B, C }) => result)
@@ -58,7 +58,7 @@ $result = combine({ A: $first, B: $second, C: $third }, ({ A, B, C }) => result)
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-### Formulae without `fn`
+#### Formulae without `fn`
 
 ```ts
 $result = combine({ A: $first, B: $second, C: $third })
@@ -68,7 +68,7 @@ $result = combine({ A: $first, B: $second, C: $third })
 - Store `$result` will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
-### Returns
+#### Returns
 
 [_Store_](Store.md): New store
 
@@ -76,7 +76,7 @@ $result = combine({ A: $first, B: $second, C: $third })
 Formerly known as `createStoreObject`
 :::
 
-### Example
+#### Example
 
 ```js
 import {createStore, combine} from 'effector'
@@ -97,7 +97,7 @@ sum.watch(console.log) // => 510
 ## `combine([A, B, C], fn?)`
 
 
-### Formulae
+#### Formulae
 
 ```ts
 $result = combine([$first, $second, $third], ([A, B, C]) => result)
@@ -108,7 +108,7 @@ $result = combine([$first, $second, $third], ([A, B, C]) => result)
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-### Formulae without `fn`
+#### Formulae without `fn`
 
 ```ts
 $result = combine([$first, $second, $third])
@@ -119,11 +119,11 @@ $result = combine([$first, $second, $third])
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
 
-### Returns
+#### Returns
 
 [_Store_](Store.md): New store
 
-### Example
+#### Example
 
 ```js
 import {createStore, combine} from 'effector'
