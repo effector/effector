@@ -216,7 +216,7 @@ console.log(fx.use.getCurrent() === handlerB)
 
 Event, which is triggered with result of the effect execution:
 
-### Formulae
+#### Formulae
 
 ```ts
 event = effect.doneData
@@ -255,7 +255,7 @@ await effectFx(2)
 
 Event, which is triggered with error thrown by the effect
 
-### Formulae
+#### Formulae
 
 ```ts
 event = effect.failData
@@ -402,7 +402,7 @@ fetchApiFx(100)
 
 ### `pending`
 
-### Formulae
+#### Formulae
 
 ```ts
 $store = effect.pending
@@ -455,7 +455,7 @@ const isLoading = createStore(false)
 
 ### `inFlight`
 
-### Formulae
+#### Formulae
 
 ```ts
 $count = effect.inFlight
