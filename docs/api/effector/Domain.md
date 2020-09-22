@@ -85,7 +85,7 @@ effector 21.3.0
 
 Contains mutable read-only sets of units inside domain.
 
-### Formulae
+#### Formulae
 
 ```ts
 const { stores, events, domains, effects } = domain.history;
