@@ -6,11 +6,20 @@ hide_title: true
 
 # combine
 
-Store combinator
+This method allows you to get state from each passed store and **combine** it to single value and save to single store, that updates every time like each passed store.
 
 ## `combine(...stores, fn)`
 
-Creates a new [store](Store.md) that emits the set of latest store values from all input stores
+#### Formulae
+
+```ts
+$result = combine($first, $second, $third, ..., (first, second, third, ...) => result)
+```
+
+- After call `combine`, state of each store is extracted and passed to function arguments, `result` of a function call will be state of store `$result`
+- Any amount of stores can be passed to `combine`, but latest argument always should be function-reducer that returns new state
+- If function returned the same `result` as previous, store `$result` will not be triggered
+- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
 #### Returns
 
@@ -38,7 +47,26 @@ arrStores.watch(console.log) // => [0, 'zerobias']
 
 ## `combine({ A, B, C }, fn?)`
 
-Creates a new [store](Store.md) that emits the set of latest store values from all input stores
+#### Formulae
+
+```ts
+$result = combine({ A: $first, B: $second, C: $third }, ({ A, B, C }) => result)
+```
+
+- Read state from stores `$first`, `$second`, `$third` and assign it to properties `A`, `B`, `C` accordingly, calls function with that object
+- The `result` of the function call saved in `$result` store
+- If function returned the same `result` as previous, store `$result` will not be triggered
+- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
+
+#### Formulae without `fn`
+
+```ts
+$result = combine({ A: $first, B: $second, C: $third })
+```
+
+- Read state from stores `$first`, `$second`, `$third` and assign it to properties `A`, `B`, `C` accordingly, that object will be saved to `$result` store
+- Store `$result` will be updated on each update of passed stores
+- If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
 #### Returns
 
@@ -67,6 +95,29 @@ sum.watch(console.log) // => 510
 [Try it](https://share.effector.dev/9AckAVg7)
 
 ## `combine([A, B, C], fn?)`
+
+
+#### Formulae
+
+```ts
+$result = combine([$first, $second, $third], ([A, B, C]) => result)
+```
+
+- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, calls function with that array
+- The `result` of the function call saved in `$result` store
+- If function returned the same `result` as previous, store `$result` will not be triggered
+- If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
+
+#### Formulae without `fn`
+
+```ts
+$result = combine([$first, $second, $third])
+```
+
+- Read state from stores `$first`, `$second`, `$third` and assign it to array with the same order as passed stores, that array will be saved to `$result` store
+- Store `$result` will be updated on each update of passed stores
+- If several stores updated at the same time (during one tick) there will be single update of `$result` store
+
 
 #### Returns
 
