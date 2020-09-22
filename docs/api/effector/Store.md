@@ -502,7 +502,7 @@ console.log($store.defaultState === 'DEFAULT')
 // => true
 ```
 
-<hr />
+## Utility methods
 
 ### `getState()`
 
