@@ -391,34 +391,6 @@ $store.off(trigger)
 
 <hr />
 
-### `getState()`
-
-Returns current state of store
-
-#### Returns
-
-(_`State`_): Current state of the store
-
-#### Example
-
-```js
-import {createEvent, createStore} from 'effector'
-
-const store = createStore(0)
-const updated = createEvent()
-
-store.on(updated, (state, value) => state + value)
-
-updated(2)
-updated(3)
-
-store.watch(console.log) // => 5
-```
-
-[Try it](https://share.effector.dev/gmXolqQL)
-
-<hr />
-
 ### `thru(fn)`
 
 Call function with the given store and return result as it is.
@@ -529,3 +501,36 @@ const $store = createStore('DEFAULT')
 console.log($store.defaultState === 'DEFAULT')
 // => true
 ```
+
+<hr />
+
+### `getState()`
+
+Returns current state of store
+
+:::caution You don't need this method!
+`getState()` gives rise to difficult to debug imperative code and kind of race condition.
+Prefer declarative [`sample`](sample.md) to pass data from store and [`attach`](attach.md) for effects
+:::
+
+#### Returns
+
+(_`State`_): Current state of the store
+
+#### Example
+
+```js
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const updated = createEvent()
+
+store.on(updated, (state, value) => state + value)
+
+updated(2)
+updated(3)
+
+store.watch(console.log) // => 5
+```
+
+[Try it](https://share.effector.dev/gmXolqQL)
