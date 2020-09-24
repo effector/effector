@@ -35,9 +35,46 @@ type Event<Payload> = {
 - [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
 - [prepend(fn)](./api/effector/Event.md#prependfn) creates new event that preprocesses payload before calling the original event
 
+## Store
+
+_Store_ is an object that holds state value.
+There can be multiple stores.
+
+[Store](./api/effector/Store.md) in api documentation
+
+```typescript
+function createStore<State>(defaultState: State): Store<State>
+```
+
+- [createStore(defaultState)](./api/effector/createStore.md) creates new store
+- [combine(stores)](./api/effector/combine.md) combines multiple stores into one
+
+```typescript
+type Store<State> = {
+  on<E>(
+    trigger: Event<E> | Effect<E, any, any> | Store<E>,
+    reducer: (state: State, payload: E) => State | void,
+  ): this
+  map<T>(fn: (_: State) => T): Store<T>
+  reset(
+    ...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>
+  ): this
+  watch<E>(watcher: (state: State) => any): Subscription
+  updates: Event<State>
+  defaultState: State
+}
+```
+
+- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store when event occurs
+- [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
+- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default when event occurs
+- [watch(watcher)](./api/effector/Store.md#watchwatcher) calls given [`watcher`](#watcher) with current state
+- [updates](./api/effector/Store.md#updates) is `event` for watch `store` changes only
+- [defaultState](./api/effector/Store.md#defaultstate) initial state of given store
+
 ## Effect
 
-_Effect_ is a container for async function.
+_Effect_ is a container for side effects, possibly async, with linked events and stores to subscribe.
 
 It can be safely used in place of the original async function.
 
@@ -75,45 +112,8 @@ type Effect<Params, Done, Fail = Error> = {
 ```
 
 - `(payload)` calls `Effect` with payload and returns a Promise
-- [use(asyncFunction)](./api/effector/Effect.md#usehandler) injects async function into the effect (can be called multiple times)
+- [use(function)](./api/effector/Effect.md#usehandler) injects function into the effect (can be called multiple times)
 - [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to the effect and calls provided [`watcher`](#watcher) when effect starts
-
-## Store
-
-_Store_ is an object that holds state value.
-There can be multiple stores.
-
-[Store](./api/effector/Store.md) in api documentation
-
-```typescript
-function createStore<State>(defaultState: State): Store<State>
-```
-
-- [createStore(defaultState)](./api/effector/createStore.md) creates new store
-- [combine(stores)](./api/effector/combine.md) combines multiple stores into one
-
-```typescript
-type Store<State> = {
-  on<E>(
-    trigger: Event<E> | Effect<E, any, any> | Store<E>,
-    reducer: (state: State, payload: E) => State | void,
-  ): this
-  map<T>(fn: (_: State) => T): Store<T>
-  reset(
-    ...triggers: Array<Event<any> | Effect<any, any, any> | Store<any>>
-  ): this
-  watch<E>(watcher: (state: State) => any): Subscription
-  updates: Event<State>
-  defaultState: State
-}
-```
-
-- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store when event occurs
-- [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
-- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default when event occurs
-- [watch(watcher)](./api/effector/Store.md#watchwatcher) calls given [`watcher`](#watcher) with current state
-- [updates](./api/effector/Store.md#updates) is `event` for watch `store` changes only
-- [defaultState](./api/effector/Store.md#defaultstate) initial state of given store
 
 ## Domain
 

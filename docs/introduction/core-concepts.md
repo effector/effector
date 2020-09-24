@@ -5,7 +5,7 @@ title: Core Concepts
 
 ## Event
 
-[_Event_] is an intention to change state.
+[_Event_] is an intention to do something: start a computation, send a message to another application section or update states.
 
 ```js
 const event = createEvent()
@@ -20,15 +20,26 @@ const data = onMessage.map(msg => msg.data).map(JSON.parse)
 data.watch(console.log)
 ```
 
+## Store
+
+[_Store_] is an object that holds state value. There can be multiple stores.
+
+```js
+const users = createStore([]) // <-- Default state
+  // add reducer for getUser.doneData event (fires when promise resolved)
+  .on(getUserFx.doneData, (state, user) => [...state, user])
+
+const messages = createStore([])
+  // from WebSocket
+  .on(data, (state, message) => [...state, message])
+
+users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
+messages.watch(console.log)
+```
+
 ## Effect
 
-[_Effect_] is a container for async function.
-
-It can be safely used in place of the original async function.
-
-The only requirement for the function:
-
-- **Must** have zero or one argument
+[_Effect_] is a container for side effects, possibly async with linked events and stores to subscribe.
 
 ```js
 const getUserFx = createEffect(async params => {
@@ -60,23 +71,6 @@ getUserFx.use(() => 'test result')
 getUserFx({id: 1})
 
 const data = await getUserFx({id: 2}) // handle promise
-```
-
-## Store
-
-[_Store_] is an object that holds state value. There can be multiple stores.
-
-```js
-const users = createStore([]) // <-- Default state
-  // add reducer for getUser.doneData event (fires when promise resolved)
-  .on(getUserFx.doneData, (state, user) => [...state, user])
-
-const messages = createStore([])
-  // from WebSocket
-  .on(data, (state, message) => [...state, message])
-
-users.watch(console.log) // [{id: 1, ...}, {id: 2, ...}]
-messages.watch(console.log)
 ```
 
 [_store_]: ../api/effector/Store.md
