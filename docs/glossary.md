@@ -80,7 +80,7 @@ type Effect<Params, Done, Fail = Error> = {
 
 ## Store
 
-_Store_ is an object that holds the state tree.
+_Store_ is an object that holds state value.
 There can be multiple stores.
 
 [Store](./api/effector/Store.md) in api documentation

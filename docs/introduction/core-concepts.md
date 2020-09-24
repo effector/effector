@@ -64,7 +64,7 @@ const data = await getUserFx({id: 2}) // handle promise
 
 ## Store
 
-[_Store_] is an object that holds the state tree. There can be multiple stores.
+[_Store_] is an object that holds state value. There can be multiple stores.
 
 ```js
 const users = createStore([]) // <-- Default state
