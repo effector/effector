@@ -3,7 +3,6 @@ const sidebar = {
     'introduction/installation',
     'introduction/core-concepts',
     'glossary',
-    'introduction/prior-art',
     'introduction/examples',
   ],
   API: [
@@ -142,7 +141,10 @@ const sidebar = {
       items: ['recipes/react-native/example'],
     },
   ],
-  'Advanced guide': ['advanced-guide/computation-priority'],
+  'Advanced guide': [
+    'advanced-guide/computation-priority',
+    'advanced-guide/prior-art',
+  ],
 }
 
 module.exports = {
