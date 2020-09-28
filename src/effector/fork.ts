@@ -375,8 +375,14 @@ export function allSettled(
     launchParams.push({
       params: ctx,
       req: {
-        rs() {},
-        rj() {},
+        rs(value: any) {
+          //@ts-ignore
+          defer.value = {status: 'done', value}
+        },
+        rj(value: any) {
+          //@ts-ignore
+          defer.value = {status: 'fail', value}
+        },
       },
     })
   } else {
@@ -444,7 +450,7 @@ function cloneGraph(unit: any) {
             if (scope.fxID !== fxID) return
             forEach(defers.splice(0, defers.length), (defer: any) => {
               setForkPage(defer.parentFork)
-              defer.rs()
+              defer.rs(defer.value)
             })
           })
         },
