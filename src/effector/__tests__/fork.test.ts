@@ -712,3 +712,27 @@ test('setState support', async () => {
   expect(scope.getState(store)).toBe(1)
   expect(store.getState()).not.toBe(1)
 })
+
+describe('allSettled return value', () => {
+  test('in case of effect resolving', async () => {
+    const app = createDomain()
+    const fx = app.createEffect(async () => 'ok')
+    const scope = fork(app)
+    const result = await allSettled(fx, {scope})
+    expect(result).toEqual({status: 'done', value: 'ok'})
+  })
+  test('in case of effect rejecting', async () => {
+    const app = createDomain()
+    const fx = app.createEffect(async () => Promise.reject('err'))
+    const scope = fork(app)
+    const result = await allSettled(fx, {scope})
+    expect(result).toEqual({status: 'fail', value: 'err'})
+  })
+  test('in case of event call', async () => {
+    const app = createDomain()
+    const event = app.createEvent()
+    const scope = fork(app)
+    const result = await allSettled(event, {scope})
+    expect(result).toBe(undefined)
+  })
+})
