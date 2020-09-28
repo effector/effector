@@ -4,6 +4,7 @@ const sidebar = {
     'introduction/core-concepts',
     'glossary',
     'introduction/examples',
+    'ecosystem',
   ],
   API: [
     {
