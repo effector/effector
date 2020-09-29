@@ -7,6 +7,8 @@ _Gate_ is a hook for conditional rendering, based on current value (or values) i
 
 This allows you to send props back to _Store_ to create feedback loop.
 
+Gate can be used via [useGate](./useGate.md) hook or as component with props (`<Gate history={history} />`). Gate stores and events can be used in the application as regular units
+
 Gate can have two states:
 
 - **Open**, which means mounted
@@ -18,7 +20,7 @@ Gate can have two states:
 
 ### `state`
 
-Store with current state of given gate
+Store with current state of given gate. State came from second argument of [useGate](./useGate.md) and from props when rendering gate as component
 
 #### Returns
 
