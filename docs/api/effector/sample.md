@@ -63,7 +63,7 @@ const event = sample({source: $store, clock: event})
   - If event. Triger sampled unit, upon event is called.
   - If effect. Triger sampled unit, upon effect is called.
   - If store. Triger sampled unit, upon store is updated.
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 - `target?` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): can contain Unit, which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
 - `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
@@ -109,7 +109,7 @@ It is just another form of the `sample` invocation, with the same sense.
   - If event. Triger sampled unit, upon event is called.
   - If effect. Triger sampled unit, upon effect is called.
   - If store. Triger sampled unit, upon store is updated.
-- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#pureness). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
+- `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
 #### Returns
 
@@ -169,6 +169,7 @@ console.log(sampled.shortName) // 'sampled foo'
 ## Objects and arrays of _Store_ in `sample({ source })`
 
 ### Object of stores
+
 :::note since
 effector 20.8.0
 :::
@@ -196,6 +197,7 @@ target.watch(obj => {
 [Try it](https://share.effector.dev/hiGwHrX4)
 
 ### Array of stores
+
 :::note since
 effector 20.8.0
 :::
@@ -229,6 +231,7 @@ target.watch(([a, b]) => {
 [Try it](https://share.effector.dev/aQPLBJ2j)
 
 ### Support array in clock
+
 :::note since
 effector 21.2.0
 :::
@@ -257,7 +260,6 @@ sample({
   target: showNotification,
 })
 ```
-
 
 <!-- ## Other examples
 
@@ -375,5 +377,3 @@ inc() // => Doe has 1 coins
 ```
 
 [Try it](https://share.effector.dev/h3zED3yW) -->
-
-

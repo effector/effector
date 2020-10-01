@@ -164,7 +164,7 @@ const event = effect.prepend(fn)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 
@@ -187,7 +187,7 @@ const second = first.map(fn)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 

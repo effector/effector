@@ -78,7 +78,7 @@ const second = first.map(fn)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 
@@ -122,7 +122,7 @@ const second = first.filter({fn})
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 
@@ -204,7 +204,7 @@ const second = first.filterMap(fn)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 
@@ -277,7 +277,7 @@ const second = first.prepend(fn)
 
 #### Arguments
 
-1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
 #### Returns
 

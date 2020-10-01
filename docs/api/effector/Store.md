@@ -27,7 +27,7 @@ const $second = $first.map(fn)
 
 If the function returns an old state or if it returns `undefined`, the new store will not be updated.
 
-[Should be **pure**](../../glossary.md#pureness)
+[Should be **pure**](../../glossary.md#purity)
 
 #### Returns
 
@@ -77,7 +77,7 @@ $store.on(trigger, handler)
 #### Arguments
 
 1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
-2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#pureness).
+2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `params`: Parameters passed to event call
@@ -132,6 +132,7 @@ store.off(changed)
 <hr />
 
 ### `on(triggers[], handler)`
+
 :::note since
 effector 20.15.0
 :::
@@ -150,7 +151,7 @@ $store.on([triggerA, triggerB, ...], handler)
 #### Arguments
 
 1. `triggers` array of [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
-2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#pureness).
+2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `payload`: Value passed to event/effect call, or source if it passed as trigger
@@ -325,6 +326,7 @@ reset() // changed 0
 <hr />
 
 ### `reset(triggersArray)`
+
 :::note since
 effector 20.15.0
 :::
