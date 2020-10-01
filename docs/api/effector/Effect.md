@@ -172,6 +172,51 @@ const event = effect.prepend(fn)
 
 <hr />
 
+### `map(fn)`
+
+Creates a new event, which will be called after the original effect is called, applying the result of a `fn` as a payload. It is special function which allows you to decompose dataflow, extract or transform data.
+
+#### Formulae
+
+```ts
+const second = first.map(fn)
+```
+
+- When `first` is triggered, pass payload from `first` to `fn`
+- Trigger `second` with the result of the `fn()` call as payload
+
+#### Arguments
+
+1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#pureness).
+
+#### Returns
+
+[_Event_](Event.md): New event.
+
+#### Example
+
+```js
+import {createEffect} from 'effector'
+
+const userUpdate = createEffect(({name, role}) => {
+  console.log(name, role)
+})
+const userNameUpdated = userUpdate.map(({name}) => name) // you may decompose dataflow with .map() method
+const userRoleUpdated = userUpdate.map(({role}) => role.toUpperCase()) // either way you can transform data
+
+userNameUpdated.watch(name => console.log(`User's name is [${name}] now`))
+userRoleUpdated.watch(role => console.log(`User's role is [${role}] now`))
+
+await userUpdate({name: 'john', role: 'admin'})
+// => User's name is [john] now
+// => User's role is [ADMIN] now
+// => john admin
+```
+
+[Try it](https://share.effector.dev/MmBBKXZe)
+
+<hr />
+
 ### `use.getCurrent()`
 
 Returns current handler of effect. Useful for testing.
@@ -295,7 +340,6 @@ effectFx(2) // => Fail with error 1
 
 [_Event_](Event.md), which is triggered when _handler_ is _resolved_.
 
-
 :::caution Important
 Do not manually call this event. It is event that depends on effect.
 :::
@@ -327,7 +371,6 @@ await effectFx(2)
 ### `fail`
 
 [_Event_](Event.md), which is triggered when handler is rejected or throws error.
-
 
 :::caution Important
 Do not manually call this event. It is event that depends on effect.
@@ -407,6 +450,7 @@ fetchApiFx(100)
 ```ts
 $store = effect.pending
 ```
+
 - [`$store`](Store.md) will update when `done` or `fail` are triggered
 - [`$store`](Store.md) contains `true` value until the effect is resolved or rejected
 
