@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import {createDomain, Store, fork, serialize} from 'effector'
+import {createDomain, Store, fork, serialize, allSettled} from 'effector'
 
 const typecheck = '{global}'
 
@@ -143,5 +143,62 @@ describe('fork values', () => {
         "
       `)
     })
+  })
+})
+
+describe('allSettled', () => {
+  test('event', () => {
+    const app = createDomain()
+    const event = app.createEvent<number>()
+    const req: Promise<void> = allSettled(event, {
+      scope: fork(app),
+      params: 0,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+      "
+    `)
+  })
+  test('void event', () => {
+    const app = createDomain()
+    const event = app.createEvent()
+    const req: Promise<void> = allSettled(event, {
+      scope: fork(app),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+      "
+    `)
+  })
+  test('effect', () => {
+    const app = createDomain()
+    const fx = app.createEffect((x: number) => x.toString())
+    const req: Promise<void> = allSettled(fx, {
+      scope: fork(app),
+      params: 0,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+      "
+    `)
+  })
+  test('void effect', () => {
+    const app = createDomain()
+    const fx = app.createEffect(() => 'ok')
+    const req: Promise<void> = allSettled(fx, {
+      scope: fork(app),
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+      "
+    `)
   })
 })
