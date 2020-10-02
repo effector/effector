@@ -123,7 +123,6 @@ const sidebar = {
     'recipes/countdown',
     //'recipes/design-api-layer',
     'recipes/usage-with-typescript',
-    'recipes/react-native/example',
     {
       type: 'category',
       label: 'React',
@@ -135,12 +134,8 @@ const sidebar = {
         'recipes/react/todo-creator',
         'recipes/react/dynamic-form-schema',
         'recipes/react/todo-with-validation',
+        'recipes/react-native/example',
       ],
-    },
-    {
-      type: 'category',
-      label: 'React Native',
-      items: ['recipes/react-native/example'],
     },
   ],
   'Advanced guide': [
