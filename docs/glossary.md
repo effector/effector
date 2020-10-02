@@ -7,7 +7,7 @@ This is a glossary of the core terms in Effector, along with their type signatur
 
 ## Event
 
-_Event_ is a function you can subscribe to. It can be an intention to change the store, some occurence in application, command to be executed, aggregated analytics trigger and so on.
+_Event_ is a function you can subscribe to. It can be an intention to change the store, indication of something happening in the application, a command to be executed, aggregated analytics trigger and so on.
 
 [Event](./api/effector/Event.md) in api documentation
 
@@ -30,14 +30,14 @@ type Event<Payload> = {
 
 - `(payload)` calls `Event` with payload
 - [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to the event and calls provided [`watcher`](#watcher)
-- [map(fn)](./api/effector/Event.md#mapfn) creates new event, which will be called after the original event is called, applying the result of a fn as a payload
-- [filter({fn})](./api/effector/Event.md#filterfn) creates new event that will receive update only when given `fn` returns true
-- [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates new event that will receive value, returned by given `fn`, but only when it returns anything but undefined. Use cases: extract value from react's refs; statically typed filters;
-- [prepend(fn)](./api/effector/Event.md#prependfn) creates new event that preprocesses payload before calling the original event
+- [map(fn)](./api/effector/Event.md#mapfn) creates a new event, which will be trigger after the original event was triggered, transforming the payload with provided `fn`
+- [filter({pred})](./api/effector/Event.md#filterfn) creates a new event that will tigger only if provided `pred` function returns `true`
+- [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates a new event that will be triggered with the result of `fn` applied to the payload, but only if the result is not `undefined`. Use cases: extract value from react's refs; statically typed filters;
+- [prepend(fn)](./api/effector/Event.md#prependfn) creates a new event that will trigger the original event with a payload transformed by `fn`
 
 ## Store
 
-_Store_ is an object that holds state value.
+_Store_ is an object that holds state.
 There can be multiple stores.
 
 [Store](./api/effector/Store.md) in api documentation
@@ -46,7 +46,7 @@ There can be multiple stores.
 function createStore<State>(defaultState: State): Store<State>
 ```
 
-- [createStore(defaultState)](./api/effector/createStore.md) creates new store
+- [createStore(defaultState)](./api/effector/createStore.md) creates a new store
 - [combine(stores)](./api/effector/combine.md) combines multiple stores into one
 
 ```typescript
@@ -65,16 +65,17 @@ type Store<State> = {
 }
 ```
 
-- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store when event occurs
+- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store whenever an event occurs
 - [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
-- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default when event occurs
-- [watch(watcher)](./api/effector/Store.md#watchwatcher) calls given [`watcher`](#watcher) with current state
-- [updates](./api/effector/Store.md#updates) is `event` for watch `store` changes only
-- [defaultState](./api/effector/Store.md#defaultstate) initial state of given store
+- [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default whenever any of the triggers occur
+- [watch(watcher)](./api/effector/Store.md#watchwatcher) registers a [`watcher`](#watcher) to be called with the new state when the store is updated
+- [updates](./api/effector/Store.md#updates) is an `event` that triggers when the `store` is updated
+- [defaultState](./api/effector/Store.md#defaultstate) initial state of the given store
 
 ## Effect
 
-_Effect_ is a container for side effects, possibly async, with linked events and stores to subscribe.
+_Effect_ is a container for (possibly async) side effects.
+It exposes special events and stores, such as `pending`, `done`, `fail`, `finally`, etc...
 
 It can be safely used in place of the original async function.
 
@@ -92,7 +93,7 @@ function createEffect<Params, Done, Fail>(config?: {
 }): Effect<Params, Done, Fail>
 ```
 
-- [createEffect(config)](./api/effector/createEffect.md) creates effect
+- [createEffect(config)](./api/effector/createEffect.md) creates an ffect
 
 ```typescript
 type Effect<Params, Done, Fail = Error> = {
@@ -111,15 +112,15 @@ type Effect<Params, Done, Fail = Error> = {
 }
 ```
 
-- `(payload)` calls `Effect` with payload and returns a Promise
-- [use(function)](./api/effector/Effect.md#usehandler) injects function into the effect (can be called multiple times)
+- `(payload)` starts the `Effect` with payload and returns a Promise
+- [use(function)](./api/effector/Effect.md#usehandler) replaces the handler in the effect (can be called multiple times)
 - [watch(watcher)](./api/effector/Effect.md#watchwatcher) listens to the effect and calls provided [`watcher`](#watcher) when effect starts
 
 ## Domain
 
 _Domain_ is a namespace for your events, stores and effects.
 
-Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
+Domains are notified when events, stores, effects, or nested domains are created via `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods. 
 
 It is useful for logging or other side effects.
 
@@ -129,7 +130,7 @@ It is useful for logging or other side effects.
 function createDomain(domainName?: string): Domain
 ```
 
-- [createDomain(domainName)](./api/effector/createDomain.md) creates new domain
+- [createDomain(domainName)](./api/effector/createDomain.md) creates a new domain
 
 ```typescript
 type Domain = {
@@ -146,14 +147,14 @@ type Domain = {
 }
 ```
 
-- [onCreateEvent(hook)](./api/effector/Domain.md#oncreateeventhook) calls hook when nested [`Event`](#Event) created
-- [onCreateEffect(hook)](./api/effector/Domain.md#oncreateeffecthook) calls hook when nested [`Effect`](#Effect) created
-- [onCreateStore(hook)](./api/effector/Domain.md#oncreatestorehook) calls hook when nested [`Store`](#Store) created
-- [onCreateDomain(hook)](./api/effector/Domain.md#oncreatedomainhook) calls hook when nested [`Domain`](#Domain) created
-- [createEvent(name)](./api/effector/Domain.md#createeventname) is the function that creates [`Event`](#Event)
-- [createEffect(name)](./api/effector/Domain.md#createeffectname) is the function that creates [`Effect`](#Effect)
-- [createStore(defaultState)](./api/effector/Domain.md#createstoredefaultstate) is the function that creates [`Store`](#Store)
-- [createDomain(name)](./api/effector/Domain.md#createdomainname) creates nested [`Domain`](#Domain)
+- [onCreateEvent(hook)](./api/effector/Domain.md#oncreateeventhook) calls the hook when nested [`Event`](#Event) is created
+- [onCreateEffect(hook)](./api/effector/Domain.md#oncreateeffecthook) calls the hook when nested [`Effect`](#Effect) is created
+- [onCreateStore(hook)](./api/effector/Domain.md#oncreatestorehook) calls the hook when nested [`Store`](#Store) is created
+- [onCreateDomain(hook)](./api/effector/Domain.md#oncreatedomainhook) calls the hook when nested [`Domain`](#Domain) is created
+- [createEvent(name)](./api/effector/Domain.md#createeventname) creates a domain-bound [`Event`](#Event)
+- [createEffect(name)](./api/effector/Domain.md#createeffectname) creates a domain-bound [`Effect`](#Effect)
+- [createStore(defaultState)](./api/effector/Domain.md#createstoredefaultstate) creates a domain-bound [`Store`](#Store)
+- [createDomain(name)](./api/effector/Domain.md#createdomainname) creates a nested, domain-bound [`Domain`](#Domain)
 
 ## Reducer
 
@@ -162,7 +163,7 @@ type StoreReducer<State, E> = (state: State, payload: E) => State | void
 type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
 ```
 
-_Reducer_ calculates a new state given the previous state and an event. For stores, if reducer returns undefined or the same state (===), then there will be no update for given store.
+_Reducer_ calculates a new state given the previous state and an event's payload. For stores, if reducer returns undefined or the same state (===), then there will be no update for a given store.
 
 ## Watcher
 
@@ -185,7 +186,7 @@ Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/
 
 ## Purity
 
-Most of functions in api mustn't call other events or effects: it's easier to reason about application dataflow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
+Most of functions in api must not call other events or effects: it's easier to reason about application's data flow when imperative triggers are grouped inside watchers and effect handlers rather than spread across entire business logic.
 
 **Correct**, imperative:
 
