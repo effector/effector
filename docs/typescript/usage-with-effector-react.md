@@ -1,7 +1,6 @@
 ---
-id: usage-with-typescript
-title: Usage with TypeScript
-sidebar_label: Usage with TypeScript
+id: usage-with-effector-react
+title: Usage with effector-react
 ---
 
 **TypeScript** is a typed superset of JavaScript. It became popular
@@ -73,13 +72,13 @@ part of the application.
 ```typescript
 // src/effector/chat/domain.ts
 
-export const ChatDomain = createDomain()
+export const chatDomain = createDomain()
 ```
 
 ```typescript
 // src/effector/system/domain.ts
 
-export const SystemDomain = createDomain()
+export const systemDomain = createDomain()
 ```
 
 ## Type checking events and effects
@@ -90,9 +89,9 @@ reactions and events for sync reactions.
 ```typescript
 // src/effector/chat/events.ts
 
-export const sendMessage = ChatDomain.effect<Message, Message, Error>()
+export const sendMessage = chatDomain.createEffect<Message, Message, Error>()
 
-export const deleteMessage = ChatDomain.effect<Message, Message, Error>()
+export const deleteMessage = chatDomain.createEffect<Message, Message, Error>()
 ```
 
 Each effect must be provided with a handler function that will provide final
@@ -101,7 +100,7 @@ processing. You can connect them at any time, so leave it for further action.
 ```typescript
 // src/effector/system/events.ts
 
-export const updateSession = SystemDomain.event<SystemState>()
+export const updateSession = systemDomain.createEvent<SystemState>()
 ```
 
 ## Type checking for stores
@@ -121,7 +120,8 @@ const initialState: Message[] = [
   },
 ]
 
-export const MessageList = ChatDomain.store<Message[]>(initialState)
+export const $messageList = chatDomain
+  .createStore<Message[]>(initialState)
   .on(sendMessage.doneData, (state, message) => [...state, message])
   .on(deleteMessage.doneData, (state, result) =>
     state.filter(message => message.id !== result.id),
@@ -143,9 +143,9 @@ const initialState: SystemState = {
   userName: '',
 }
 
-export const SystemStore = SystemDomain.store<SystemState>(
-  initialState,
-).on(updateSession, (state, payload) => ({...state, ...payload}))
+export const $systemStore = systemDomain
+  .createStore<SystemState>(initialState)
+  .on(updateSession, (state, payload) => ({...state, ...payload}))
 ```
 
 ## Usage with `effector-react`
@@ -187,7 +187,7 @@ operating with our effects.
 // src/ChatHistory.tsx
 
 export const ChatHistory: React.FC = () => {
-  const messages = useStore(MessageList)
+  const messages = useStore($messageList)
 
   return (
     <div className="chat-history">
@@ -210,12 +210,12 @@ the forward method is used. Here is an example of such use in the component.
 ```typescript jsx
 // src/ChatInterface.tsx
 
-const onSend = ChatDomain.event<string>()
+const onSend = chatDomain.createEvent<string>()
 
 forward({
   from: onSend.map<Message>(message => ({
     id: oid(),
-    user: SystemStore.getState().userName,
+    user: $systemStore.getState().userName,
     timestamp: new Date().getTime(),
     message,
   })),
@@ -223,7 +223,7 @@ forward({
 })
 
 const ChatInterface: React.FC = () => {
-  const {userName} = useStore(SystemStore)
+  const {userName} = useStore($systemStore)
 
   const [message, updateMessage] = useState('')
 
@@ -232,8 +232,6 @@ const ChatInterface: React.FC = () => {
       send()
     }
   }
-
-  const send = () => onSend(message)
 
   return (
     <div className="chat-interface">
@@ -245,7 +243,7 @@ const ChatInterface: React.FC = () => {
         className="chat-input"
         placeholder="Type a message..."
       />
-      <button onClick={send}>Send</button>
+      <button onClick={() => onSend(message)}>Send</button>
     </div>
   )
 }
