@@ -118,7 +118,10 @@ const sidebar = {
     },
   ],
   Conventions: ['conventions/naming', 'conventions/best-practices'],
-  'TypeScript guide': ['typescript/usage-with-effector-react'],
+  'TypeScript guide': [
+    'typescript/typing-effector',
+    'typescript/usage-with-effector-react',
+  ],
   Recipes: [
     'recipes/recipes',
     'recipes/countdown',
