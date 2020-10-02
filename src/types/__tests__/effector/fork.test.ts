@@ -177,7 +177,9 @@ describe('allSettled', () => {
   test('effect', () => {
     const app = createDomain()
     const fx = app.createEffect((x: number) => x.toString())
-    const req: Promise<void> = allSettled(fx, {
+    const req: Promise<
+      {status: 'done'; value: string} | {status: 'fail'; value: Error}
+    > = allSettled(fx, {
       scope: fork(app),
       params: 0,
     })
@@ -191,7 +193,9 @@ describe('allSettled', () => {
   test('void effect', () => {
     const app = createDomain()
     const fx = app.createEffect(() => 'ok')
-    const req: Promise<void> = allSettled(fx, {
+    const req: Promise<
+      {status: 'done'; value: string} | {status: 'fail'; value: Error}
+    > = allSettled(fx, {
       scope: fork(app),
     })
     expect(typecheck).toMatchInlineSnapshot(`

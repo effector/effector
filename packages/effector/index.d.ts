@@ -959,7 +959,15 @@ export function fork(
   },
 ): Fork
 
-/** run event in scope and wait for all triggered effects */
+/** run effect or event in scope and wait for all triggered effects */
+export function allSettled<FX extends Effect<any, any, any>>(
+  unit: FX,
+  config: {scope: Fork; params: EffectParams<FX>},
+): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
+export function allSettled<FX extends Effect<void, any, any>>(
+  unit: FX,
+  config: {scope: Fork},
+): Promise<{status: 'done', value: EffectResult<FX>} | {status: 'fail'; value: EffectError<FX>}>
 export function allSettled<T>(
   unit: Unit<T>,
   config: {scope: Fork; params: T},
