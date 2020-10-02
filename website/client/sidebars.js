@@ -118,11 +118,10 @@ const sidebar = {
     },
   ],
   Conventions: ['conventions/naming', 'conventions/best-practices'],
+  'Usage with TypeScript': ['typescript/usage-with-typescript'],
   Recipes: [
     'recipes/recipes',
     'recipes/countdown',
-    //'recipes/design-api-layer',
-    'recipes/usage-with-typescript',
     {
       type: 'category',
       label: 'React',
