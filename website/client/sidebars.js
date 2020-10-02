@@ -128,7 +128,7 @@ const sidebar = {
       type: 'category',
       label: 'React',
       items: [
-        'recipes/react/example',
+        'recipes/react/counter',
         'recipes/react/example-effects',
         'recipes/react/example-forms',
         'recipes/react/gate',
