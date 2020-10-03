@@ -31,7 +31,7 @@ type Event<Payload> = {
 - `(payload)` calls `Event` with payload
 - [watch(watcher)](./api/effector/Event.md#watchwatcher) listens to the event and calls provided [`watcher`](#watcher)
 - [map(fn)](./api/effector/Event.md#mapfn) creates a new event, which will be trigger after the original event was triggered, transforming the payload with provided `fn`
-- [filter({pred})](./api/effector/Event.md#filterfn) creates a new event that will tigger only if provided `pred` function returns `true`
+- [filter({fn})](./api/effector/Event.md#filterfn) creates a new event that will tigger only if provided `fn` function returns `true`
 - [filterMap(fn)](./api/effector/Event.md#filtermapfn) creates a new event that will be triggered with the result of `fn` applied to the payload, but only if the result is not `undefined`. Use cases: extract value from react's refs; statically typed filters;
 - [prepend(fn)](./api/effector/Event.md#prependfn) creates a new event that will trigger the original event with a payload transformed by `fn`
 
@@ -93,7 +93,7 @@ function createEffect<Params, Done, Fail>(config?: {
 }): Effect<Params, Done, Fail>
 ```
 
-- [createEffect(config)](./api/effector/createEffect.md) creates an ffect
+- [createEffect(config)](./api/effector/createEffect.md) creates an effect
 
 ```typescript
 type Effect<Params, Done, Fail = Error> = {
