@@ -456,6 +456,37 @@ describe('void params', () => {
       "
     `)
   })
+  describe('with createEffect(handler)', () => {
+    test('void params should allow only call without arguments', () => {
+      const fx = createEffect(() => 'ok')
+      fx()
+      fx(1)
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+    test('optional params should allow call with and without arguments', () => {
+      const fx = createEffect((params = 1) => 'ok')
+      const assert: Effect<number | void, 'ok'> = fx
+      fx()
+      fx(1)
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
 })
 describe('nested effects', () => {
   describe('with handler', () => {
