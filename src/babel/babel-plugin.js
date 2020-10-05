@@ -360,6 +360,7 @@ const normalizeOptions = options => {
               'effector/compat',
               'effector-root',
               'effector-root/compat',
+              'effector-logger',
               '@zerobias/effector',
             ],
       ),
