@@ -876,10 +876,7 @@ const e = createEvent({
   name: \\"e\\",
   sid: \\"-s0v3ue\\"
 });
-const reduxStore = createStore(() => 0, {
-  name: \\"reduxStore\\",
-  sid: \\"-mmcts9\\"
-});"
+const reduxStore = createStore(() => 0);"
 `;
 
 exports[`babel-plugin should restore 1`] = `

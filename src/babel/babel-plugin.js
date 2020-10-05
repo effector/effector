@@ -41,8 +41,25 @@ module.exports = function(babel, options = {}) {
     effect: isPropertyNameInRange.bind(null, domainMethods.effect),
     domain: isPropertyNameInRange.bind(null, domainMethods.domain),
   }
+  const creatorsList = [
+    storeCreators,
+    eventCreators,
+    effectCreators,
+    domainCreators,
+    restoreCreators,
+    combineCreators,
+    sampleCreators,
+    forwardCreators,
+    guardCreators,
+    attachCreators,
+    splitCreators,
+    apiCreators,
+  ]
   const plugin = {
     name: '@effector/babel-plugin',
+    pre() {
+      this.effector_ignoredImports = new Set()
+    },
     visitor: {
       ImportDeclaration(path) {
         const source = path.node.source.value
@@ -80,6 +97,15 @@ module.exports = function(babel, options = {}) {
               apiCreators.add(localName)
             }
           }
+        } else {
+          for (let i = 0; i < specifiers.length; i++) {
+            const s = specifiers[i]
+            if (!s.imported) continue
+            const localName = s.local.name
+            if (creatorsList.some(set => set.has(localName))) {
+              this.effector_ignoredImports.add(localName)
+            }
+          }
         }
       },
 
@@ -109,7 +135,10 @@ module.exports = function(babel, options = {}) {
         if (!state.effects) state.effects = new Set()
         if (!state.domains) state.domains = new Set()
 
-        if (t.isIdentifier(path.node.callee)) {
+        if (
+          t.isIdentifier(path.node.callee) &&
+          !this.effector_ignoredImports.has(path.node.callee.name)
+        ) {
           const name = path.node.callee.name
           if (stores && storeCreators.has(name)) {
             const id = findCandidateNameForExpression(path)
