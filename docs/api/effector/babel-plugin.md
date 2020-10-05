@@ -1,10 +1,7 @@
 ---
 id: babel-plugin
 title: Babel plugin
-hide_title: true
 ---
-
-# effector/babel-plugin
 
 Built-in plugin for babel, which can be used for ssr and debugging. It inserts a name of a unit, inferred from variable name and `sid` (stable identifier), computed from location in the source code.
 
@@ -31,6 +28,7 @@ In the simplest case, it can be used without any configuration:
   "plugins": ["effector/babel-plugin"]
 }
 ```
+
 ### .sid
 
 :::note since
@@ -86,13 +84,18 @@ getUsers.use(
     }),
 )
 ```
-### noDefaults 
+
+## Configuration
+
+### noDefaults
+
+> `noDefaults: boolean`
 
 :::note since
 effector 20.2.0
 :::
 
-Option for effector/babel-plugin for making custom unit fabrics with clean configuration
+Option for effector/babel-plugin for making custom unit fabrics with clean configuration.
 
 ```json
 {
@@ -112,7 +115,6 @@ Option for effector/babel-plugin for making custom unit fabrics with clean confi
 ```
 
 ```js title="@lib/createInputField.js"
-
 import {createStore} from 'effector'
 import {resetForm} from './form'
 
@@ -135,5 +137,16 @@ const foo = createInputField('-', {
 })
 
 */
-
 ```
+
+## importName
+
+> `importName: string | string[]`
+
+Specify import to process by plugin. By default has value `["effector", "effector/compat"]`
+
+## addLoc
+
+> `addLoc: boolean`
+
+Add location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger)
