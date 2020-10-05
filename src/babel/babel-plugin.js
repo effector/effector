@@ -355,7 +355,13 @@ const normalizeOptions = options => {
           ? Array.isArray(options.importName)
             ? options.importName
             : [options.importName]
-          : ['effector', '@zerobias/effector'],
+          : [
+              'effector',
+              'effector/compat',
+              'effector-root',
+              'effector-root/compat',
+              '@zerobias/effector',
+            ],
       ),
       exportMetadata,
       storeCreators: new Set(options.storeCreators || defaults.store),
