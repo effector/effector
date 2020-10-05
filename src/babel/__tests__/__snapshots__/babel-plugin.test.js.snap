@@ -863,6 +863,21 @@ const f = () => guard({
 });"
 `;
 
+exports[`babel-plugin should imports 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createStore as createStoreEffector } from 'effector';
+import { createStore } from 'redux';
+const x = createStoreEffector(0, {
+  name: \\"x\\",
+  sid: \\"-x1t9c8\\"
+});
+const reduxStore = createStore(() => 0, {
+  name: \\"reduxStore\\",
+  sid: \\"-n3eg6g\\"
+});"
+`;
+
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow
