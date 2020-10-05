@@ -69,10 +69,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 4, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 5, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-            Overload 2 of 4, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 5, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
 
@@ -95,10 +95,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 4, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 5, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
-            Overload 2 of 4, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 5, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
 
@@ -144,10 +144,10 @@ describe('single generic', () => {
         "
         --typescript--
         No overload matches this call.
-          Overload 1 of 4, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+          Overload 1 of 5, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
             Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
               Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-          Overload 2 of 4, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+          Overload 2 of 5, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.
 
@@ -474,6 +474,45 @@ describe('void params', () => {
     test('optional params should allow call with and without arguments', () => {
       const fx = createEffect((params = 1) => 'ok')
       const assert: Effect<number | void, 'ok'> = fx
+      fx()
+      fx(1)
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        no errors
+
+        --flow--
+        no errors
+        "
+      `)
+    })
+  })
+  describe('with createEffect<P, D, F>(handler)', () => {
+    test('void params should allow only call without arguments', () => {
+      const fx = createEffect<void, string, TypeError>(() => 'ok')
+      fx()
+      fx(1)
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+
+        --flow--
+        Cannot call 'fx' with '1' bound to 'payload'
+          fx(1)
+             ^
+          number [1] is incompatible with undefined [2]. [incompatible-call]
+              fx(1)
+             [1] ^
+              const fx = createEffect<void, string, TypeError>(() => 'ok')
+                                  [2] ^^^^
+        "
+      `)
+    })
+    test('optional params should allow call with and without arguments', () => {
+      const fx = createEffect<number | void, 'ok', TypeError>(
+        (params = 1) => 'ok',
+      )
       fx()
       fx(1)
       expect(typecheck).toMatchInlineSnapshot(`

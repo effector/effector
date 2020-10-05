@@ -223,6 +223,9 @@ export class Domain implements Unit<any> {
       >
     : never
   effect<Params, Done, Fail = Error>(
+    handler: (params: Params) => Done | Promise<Done>,
+  ): Effect<Params, Done, Fail>
+  effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
       handler?: (params: Params) => Promise<Done> | Done
@@ -245,6 +248,9 @@ export class Domain implements Unit<any> {
         Error
       >
     : never
+  createEffect<Params, Done, Fail = Error>(
+    handler: (params: Params) => Done | Promise<Done>,
+  ): Effect<Params, Done, Fail>
   createEffect<FN extends Function>(config: {
     name?: string
     handler: FN
@@ -453,6 +459,9 @@ export function createEffect<FN extends Function>(handler: FN): FN extends (...a
       Error
     >
   : never
+export function createEffect<Params, Done, Fail = Error>(
+  handler: (params: Params) => Done | Promise<Done>,
+): Effect<Params, Done, Fail>
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
