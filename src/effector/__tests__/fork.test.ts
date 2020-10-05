@@ -735,6 +735,36 @@ describe('allSettled return value', () => {
     const result = await allSettled(event, {scope})
     expect(result).toBe(undefined)
   })
+  describe('attach support', () => {
+    test('throw in original effect', async () => {
+      const app = createDomain()
+      const original = app.createEffect<void, any>(async () =>
+        Promise.reject('err'),
+      )
+      const fx = attach({
+        effect: original,
+        mapParams: (_: void) => {},
+      })
+      const scope = fork(app)
+      const result = await allSettled(fx, {scope})
+      expect(result).toEqual({status: 'fail', value: 'err'})
+    })
+    test('throw in mapParams', async () => {
+      const app = createDomain()
+      const original = app.createEffect<void, any>(async () =>
+        Promise.reject('err'),
+      )
+      const fx = attach({
+        effect: original,
+        mapParams(_: void) {
+          throw 'mapParams error'
+        },
+      })
+      const scope = fork(app)
+      const result = await allSettled(fx, {scope})
+      expect(result).toEqual({status: 'fail', value: 'mapParams error'})
+    })
+  })
 })
 
 describe('watch on unit inside effect handler', () => {
