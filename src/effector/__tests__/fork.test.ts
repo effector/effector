@@ -736,3 +736,66 @@ describe('allSettled return value', () => {
     expect(result).toBe(undefined)
   })
 })
+
+describe('watch on unit inside effect handler', () => {
+  test('resolve effect by calling event from outside', async () => {
+    const app = createDomain()
+    const early = app.createEvent<string>()
+    const fx = app.createEffect(
+      (fxPayload: any) =>
+        new Promise(resolve => {
+          const timeout = setTimeout(resolve, 50, fxPayload)
+          const unsub = early.watch(eventPayload => {
+            unsub()
+            clearTimeout(timeout)
+            resolve(eventPayload)
+          })
+        }),
+    )
+    const $state = app
+      .createStore(0)
+      .on(fx.doneData, (_, payload: any) => payload)
+    const scope = fork(app)
+    await Promise.all([
+      allSettled(fx, {scope, params: 'EFFECT_RESOLVED'}),
+      allSettled(early, {scope, params: 'EARLY_BY_EVENT'}),
+    ])
+    expect(scope.getState($state)).toBe('EARLY_BY_EVENT')
+  })
+
+  test('do not affect different forks', async () => {
+    const app = createDomain()
+    const early = app.createEvent<string>()
+    const fx = app.createEffect(
+      (fxPayload: any) =>
+        new Promise(resolve => {
+          const timeout = setTimeout(resolve, 50, fxPayload)
+          const unsub = early.watch(eventPayload => {
+            unsub()
+            clearTimeout(timeout)
+            resolve(eventPayload)
+          })
+        }),
+    )
+    const $state = app
+      .createStore(0)
+      .on(fx.doneData, (_, payload: any) => payload)
+    const scope1 = fork(app)
+    const scope2 = fork(app)
+    const promise1 = allSettled(fx, {
+      scope: scope1,
+      params: '1_RESOLVED_EFFECT',
+    })
+    const promise1early = allSettled(early, {
+      scope: scope1,
+      params: '1_EARLY_BY_EVENT',
+    })
+    const promise2 = allSettled(fx, {
+      scope: scope2,
+      params: '2_RESOLVED_EFFECT',
+    })
+    await Promise.all([promise1, promise1early, promise2])
+    expect(scope1.getState($state)).toBe('1_EARLY_BY_EVENT')
+    expect(scope2.getState($state)).toBe('2_RESOLVED_EFFECT')
+  })
+})
