@@ -2,6 +2,33 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.4.0
+
+- Add support for return status to `allSettled`. When `allSettled` is called with `Effect`, it return object with `value` and `status` fields ([discussion](https://github.com/zerobias/effector/issues/385))
+
+```js
+import {createDomain, fork, allSettled} from 'effector'
+const app = createDomain()
+const fx = app.createEffect(() => 'ok')
+const result = await allSettled(fx, {scope: fork(app)})
+// => {status: 'done', value: 'ok'}
+```
+
+[Try it](https://share.effector.dev/h8m4zT0k)
+
+- Allow to expicitly define return/error types in `createEffect(handler)`
+
+```typescript
+const fx = createEffect<number, string, Error>(x => x.toString())
+// fx has type Effect<number, string, Error>
+```
+
+- Add types for `domain.effect(handler)`
+
+- Fix effector/babel-plugin behavior in case when methods like `createStore` are imported from unrelated library and should be ignored. Import library could be defined by [importName](https://effector.now.sh/docs/api/effector/babel-plugin#importname) config field
+
+- Improve fork api support for watchers
+
 ## effector 21.3.0
 
 - Add support for `createEffect(handler)`
