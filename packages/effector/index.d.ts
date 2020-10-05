@@ -211,6 +211,17 @@ export class Domain implements Unit<any> {
     name?: string
     sid?: string
   }): Event<Payload>
+  effect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
+    ? Effect<
+        Args['length'] extends 0 // does handler accept 0 arguments?
+          ? void
+          : 0 | 1 extends Args['length']  // is the first argument optional?
+          ? Args[0] | void
+          : Args[0],
+        Done extends Promise<infer Async> ? Async : Done,
+        Error
+      >
+    : never
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
