@@ -139,13 +139,13 @@ const foo = createInputField('-', {
 */
 ```
 
-## importName
+### importName
 
 > `importName: string | string[]`
 
 Specify import to process by plugin. By default has value `["effector", "effector/compat"]`
 
-## addLoc
+### addLoc
 
 > `addLoc: boolean`
 
