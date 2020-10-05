@@ -3,9 +3,27 @@ id: typing-effector
 title: Typing effector
 ---
 
+## createEvent
+
+By default, this methos returns `Event<void>`.
+
+```typescript
+const event = createEvent()
+// event has type Event<void>
+event()
+```
+
+Event type can be defined as generic
+
+```typescript
+const event = createEvent<number>()
+// event has type Event<number>
+event(0)
+```
+
 ## createEffect
 
-Typescript can infer effect result type from given handler, but argument should be defined either in handler argument or as generic type
+Typescript can infer effect result type from given handler, but argument type should be defined either in handler argument or as generic type
 
 ```typescript
 const sendMessageFx = createEffect(async (params: {text: string}) => {
