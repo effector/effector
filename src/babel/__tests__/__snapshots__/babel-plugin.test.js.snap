@@ -872,9 +872,13 @@ const x = createStoreEffector(0, {
   name: \\"x\\",
   sid: \\"-x1t9c8\\"
 });
+const e = createEvent({
+  name: \\"e\\",
+  sid: \\"-s0v3ue\\"
+});
 const reduxStore = createStore(() => 0, {
   name: \\"reduxStore\\",
-  sid: \\"-n3eg6g\\"
+  sid: \\"-mmcts9\\"
 });"
 `;
 
