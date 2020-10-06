@@ -368,6 +368,7 @@ const normalizeOptions = options => {
               'effector-root',
               'effector-root/compat',
               'effector-logger',
+              'trail/runtime',
               '@zerobias/effector',
             ],
       ),
