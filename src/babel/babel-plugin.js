@@ -55,58 +55,65 @@ module.exports = function(babel, options = {}) {
     splitCreators,
     apiCreators,
   ]
+  const importVisitor = {
+    ImportDeclaration(path) {
+      const source = path.node.source.value
+      const specifiers = path.node.specifiers
+      if (importName.has(source)) {
+        for (let i = 0; i < specifiers.length; i++) {
+          const s = specifiers[i]
+          if (!s.imported) continue
+          const importedName = s.imported.name
+          const localName = s.local.name
+          if (importedName === localName) continue
+          if (storeCreators.has(importedName)) {
+            storeCreators.add(localName)
+          } else if (eventCreators.has(importedName)) {
+            eventCreators.add(localName)
+          } else if (effectCreators.has(importedName)) {
+            effectCreators.add(localName)
+          } else if (domainCreators.has(importedName)) {
+            domainCreators.add(localName)
+          } else if (restoreCreators.has(importedName)) {
+            restoreCreators.add(localName)
+          } else if (combineCreators.has(importedName)) {
+            combineCreators.add(localName)
+          } else if (sampleCreators.has(importedName)) {
+            sampleCreators.add(localName)
+          } else if (forwardCreators.has(importedName)) {
+            forwardCreators.add(localName)
+          } else if (guardCreators.has(importedName)) {
+            guardCreators.add(localName)
+          } else if (attachCreators.has(importedName)) {
+            attachCreators.add(localName)
+          } else if (splitCreators.has(importedName)) {
+            splitCreators.add(localName)
+          } else if (apiCreators.has(importedName)) {
+            apiCreators.add(localName)
+          }
+        }
+      } else {
+        for (let i = 0; i < specifiers.length; i++) {
+          const s = specifiers[i]
+          if (!s.imported) continue
+          const localName = s.local.name
+          if (creatorsList.some(set => set.has(localName))) {
+            this.effector_ignoredImports.add(localName)
+          }
+        }
+      }
+    },
+  }
   const plugin = {
     name: '@effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
     },
     visitor: {
-      ImportDeclaration(path) {
-        const source = path.node.source.value
-        const specifiers = path.node.specifiers
-        if (importName.has(source)) {
-          for (let i = 0; i < specifiers.length; i++) {
-            const s = specifiers[i]
-            if (!s.imported) continue
-            const importedName = s.imported.name
-            const localName = s.local.name
-            if (importedName === localName) continue
-            if (storeCreators.has(importedName)) {
-              storeCreators.add(localName)
-            } else if (eventCreators.has(importedName)) {
-              eventCreators.add(localName)
-            } else if (effectCreators.has(importedName)) {
-              effectCreators.add(localName)
-            } else if (domainCreators.has(importedName)) {
-              domainCreators.add(localName)
-            } else if (restoreCreators.has(importedName)) {
-              restoreCreators.add(localName)
-            } else if (combineCreators.has(importedName)) {
-              combineCreators.add(localName)
-            } else if (sampleCreators.has(importedName)) {
-              sampleCreators.add(localName)
-            } else if (forwardCreators.has(importedName)) {
-              forwardCreators.add(localName)
-            } else if (guardCreators.has(importedName)) {
-              guardCreators.add(localName)
-            } else if (attachCreators.has(importedName)) {
-              attachCreators.add(localName)
-            } else if (splitCreators.has(importedName)) {
-              splitCreators.add(localName)
-            } else if (apiCreators.has(importedName)) {
-              apiCreators.add(localName)
-            }
-          }
-        } else {
-          for (let i = 0; i < specifiers.length; i++) {
-            const s = specifiers[i]
-            if (!s.imported) continue
-            const localName = s.local.name
-            if (creatorsList.some(set => set.has(localName))) {
-              this.effector_ignoredImports.add(localName)
-            }
-          }
-        }
+      Program: {
+        enter(path, state) {
+          path.traverse(importVisitor, state)
+        },
       },
 
       CallExpression(path, state) {
