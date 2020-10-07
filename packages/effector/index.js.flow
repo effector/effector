@@ -517,6 +517,10 @@ declare export function attach<Params, FXParams, FXResult, FXError>(config: {|
   +mapParams: (params: Params) => FXParams,
 |}): Effect<Params, FXResult, FXError>
 
+declare export function attach<Params, FXParams, FXResult, FXError>(config: {|
+  +effect: Effect<FXParams, FXResult, FXError>,
+|}): Effect<Params, FXResult, FXError>
+
 declare export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 
 declare export function combine<State: StoreObject>(

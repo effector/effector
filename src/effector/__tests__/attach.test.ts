@@ -244,7 +244,6 @@ it('if no source nor mapParams provided just create new derived effect', async (
   const fn = jest.fn()
   const $counter = createStore(0)
   const originalFx = createEffect((params: number) => params * 10)
-  // @ts-expect-error no types yet
   const derivedFx = attach({effect: originalFx})
 
   $counter.on(originalFx.doneData, (counter, value) => counter + value)
