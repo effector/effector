@@ -818,6 +818,11 @@ export function attach<
   effect: FX
   name?: string
 }): Effect<void, EffectResult<FX>, EffectError<FX>>
+export function attach<
+  FX extends Effect<any, any, any>,
+>(config: {
+  effect: FX
+}): Effect<EffectParams<FX>, EffectResult<FX>, EffectError<FX>>
 
 export function withRegion(unit: Unit<any> | Node, cb: () => void): void
 export function combine<T extends Store<any>>(

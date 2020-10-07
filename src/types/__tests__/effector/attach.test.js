@@ -87,3 +87,17 @@ test('mapParams without arguments (should pass)', () => {
     "
   `)
 })
+
+test('without source and mapParams', () => {
+  const effect: Effect<number, string, boolean> = createEffect()
+  const fx: Effect<number, string, boolean> = attach({effect})
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
