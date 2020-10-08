@@ -148,3 +148,77 @@ describe('#filterMap', () => {
     `)
   })
 })
+test('void function interop (should pass)', () => {
+  /*::
+  type unknown = any;
+  type never = any;
+  */
+  const voidFn: () => void = createEvent<void>()
+  const voidFn1: () => void = createEvent</*:: typeof */undefined>()
+  const voidFn2: () => void = createEvent<any>()
+  const voidFn3: () => void = createEvent<never>()
+  const voidFn4: () => void = createEvent<unknown>()
+  const event = createEvent()
+  event()
+  const event1 = createEvent</*:: typeof */undefined>()
+  event1()
+  const event2 = createEvent<any>()
+  event2()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+test('call event without params', () => {
+  const event1 = createEvent<number>()
+  event1()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+
+    --flow--
+    Cannot call 'event1'
+      event1()
+      ^^^^^^
+      function [1] requires another argument. [incompatible-call]
+          (payload: Payload): Payload;
+      [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    "
+  `)
+})
+test('call event without params (unknown)', () => {
+  /*:: type unknown = any; */
+  // Expects 1 unknown argument
+  const event3 = createEvent<unknown>()
+  event3()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+
+    --flow--
+    no errors
+    "
+  `)
+})
+test('call event without params (never)', () => {
+  /*:: type never = any; */
+  // Should never be called
+  const event2 = createEvent<never>()
+  event2()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    The 'this' context of type 'void' is not assignable to method's 'this' of type 'never'.
+
+    --flow--
+    no errors
+    "
+  `)
+})
