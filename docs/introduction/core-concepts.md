@@ -44,6 +44,7 @@ Rephrasing that in a more technical way of things Effect is anything that could 
 Could network requests lead to exception? For sure.
 Could timers lead to exception? Yes.
 Could third-party API's(eg. maps) lead to exception? Of course.
+Could work with local Storage lead to exception? Yes[link to mdn] 
 Could even for-loops with custom throw inside lead to exception? Yeah!
 
 These situations require a container which could produce `.done` event in case if side-effect managed to avoid exceptions and `.fail` event if not.
