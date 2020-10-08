@@ -83,6 +83,7 @@ export type CompositeName = {
 
 export interface Event<Payload> extends Unit<Payload> {
   (payload: Payload): Payload
+  (this: Payload extends void ? void : `Error: Expected 1 argument, but got 0`): void
   watch(watcher: (payload: Payload) => any): Subscription
   map<T>(fn: (payload: Payload) => T): Event<T>
   filter<T extends Payload>(config: {
