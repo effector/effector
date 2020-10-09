@@ -16,37 +16,19 @@ What do we need to build a system?
 
 ## Event
  
-System is like an organism. How does it work? 
-`Events` trigger with arbitrary values and our system reacts to them. 
-Not actions but events since from an application point of view it receives it from the outside world. 
-Internal meaning of events could be different: intention to change the state or message from one responsibility scope of an application to another.
+`Event` is a function with arbitrary values which represents intention to change the state or message from one responsibility scope of an application to another.
 
 ## Store
 
-For sure we need to store values somehow. 
-Curious approach that stores are actually memoized events which are able to skip duplicate values. 
-Second point is that stores should be as light as possible with possibility to combine them as we need.
-Last but not the least, Updates are sent only when need. No selectors around. By design.
+`Store` is a memoized event which is able to skip duplicate values. 
 
 ## Effect
 
-Last in a trinity but the most important one. 
-As mentioned above understanding of observer's point is a key. Effect means any side-effects for the level of business logic(our system).
-Rephrasing that in a more technical way of things Effect is anything that could lead to exceptions.
-
-Could network requests lead to exception? For sure.
-Could timers lead to exception? Yes.
-Could third-party API's(eg. maps) lead to exception? Of course.
-Could work with local Storage lead to exception? Yes[link to mdn] 
-Could even for-loops with custom throw inside lead to exception? Yeah!
-
-These situations require a container which could produce `.done` event in case if side-effect managed to avoid exceptions and `.fail` event if not.
-For common cases Effect produces `.finally` event to cover behavior completely. 
-As side-effects could not be resolved just in time sometimes Effect provides `.pending` boolean store field for managing loading indicators and etc.
+Effect is a container for any kind of side effects(network requests, third-party APIs etc.), possibly async with linked events and stores to subscribe
 
 
 
-Any of these elements is a `regular unit` which are effector fundamentals.
+Any of these elements is a `regular unit` which effector are based on.
 
 <!-- ## Event
 
