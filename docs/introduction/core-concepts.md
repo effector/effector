@@ -16,7 +16,7 @@ What do we need to build a system?
 
 ## Event
  
-`Event` is a function with arbitrary values which represents intention to change the state or message from one responsibility scope of an application to another.
+`Event` is a function with arbitrary values which represents intention to change the state or messaging between system parts.
 
 ## Store
 
