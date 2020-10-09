@@ -240,14 +240,50 @@ it('pass source to inner effect if no mapParams provided', async () => {
   await expect(fx()).resolves.toBe('ok')
 })
 
-it('throw error if no source nor mapParams provided', async () => {
-  const fx = createEffect<string, void>()
-  expect(() => {
-    //@ts-ignore
-    attach({effect: fx})
-  }).toThrowErrorMatchingInlineSnapshot(
-    `"either \`mapParams\` or \`source\` should be defined"`,
-  )
+it('if no source nor mapParams provided just create new derived effect', async () => {
+  const fn = jest.fn()
+  const $counter = createStore(0)
+  const originalFx = createEffect((params: number) => params * 10)
+  const derivedFx = attach({effect: originalFx})
+
+  $counter.on(originalFx.doneData, (counter, value) => counter + value)
+  $counter.on(derivedFx.doneData, (counter, value) => counter - value)
+
+  derivedFx.watch(params => {
+    fn({effect: 'derivedFx', params})
+  })
+  derivedFx.doneData.watch(data => {
+    fn({effect: 'derivedFx.doneData', data})
+  })
+  originalFx.watch(params => {
+    fn({effect: 'originalFx', params})
+  })
+  originalFx.doneData.watch(data => {
+    fn({effect: 'originalFx.doneData', data})
+  })
+
+  await derivedFx(3)
+  expect($counter.getState()).toBe(0)
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      Object {
+        "effect": "derivedFx",
+        "params": 3,
+      },
+      Object {
+        "effect": "originalFx",
+        "params": 3,
+      },
+      Object {
+        "data": 30,
+        "effect": "originalFx.doneData",
+      },
+      Object {
+        "data": 30,
+        "effect": "derivedFx.doneData",
+      },
+    ]
+  `)
 })
 
 it('handle fatal errors in mapParams', async () => {
