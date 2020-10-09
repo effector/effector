@@ -350,6 +350,16 @@
         "code",
         "test"
       ]
+    },
+    {
+      "login": "oas89",
+      "name": "Aleksandr Osipov",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/5285065?v=4",
+      "profile": "https://github.com/oas89",
+      "contributions": [
+        "doc",
+        "test"
+      ]
     }
   ],
   "commitConvention": "none"
