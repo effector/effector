@@ -14,7 +14,7 @@ const sidebar = {
       type: 'category',
       label: 'effector',
       items: [
-        'api/effector/',
+        'api/effector/index',
         {
           type: 'category',
           label: 'Unit creators',

@@ -61,7 +61,7 @@ module.exports = {
             },
             {
               label: 'API',
-              to: 'docs/api/effector/effector',
+              to: 'docs/api/effector/',
             },
             {
               label: 'Changelog',
