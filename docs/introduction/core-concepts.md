@@ -5,21 +5,14 @@ title: Core Concepts
 
 How to build applications? What are they all about?
 
-Application itself as a definition not that meaningful word nowadays. 
-React.js released at 2013. Seven years from now. 
-Back then we had "applications" have it now and still struggling.
-The approach is outdated, it's time for developers not only being the king of applications but look inside what is going on
-And finally find out that application is actually the system.
-System of events which just reacts on events occurrance.
+Looking inside it is possible to make an observation that applications are actually systems.
+System which just reacts on events occurrance.
 
-What do we need to build a system? Let's start from naive approach:
+What do we need to build a system?
 
 - Store object to save values around
 - Events that take data and send it further
 - And some other kind of events which occurrance dependant from external circumstances (e.g. a successful or unsuccessful request to the server)
-
-But this is still not clear. Getting closer to the point we are inside the system. 
-This position is depend on obsersver's point. It's the key to the understanding.
 
 ## Event
  
