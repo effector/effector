@@ -1,8 +1,8 @@
 const sidebar = {
-  Installation: {
+  Installation: [{
     type: 'ref',
     id: 'installation', // Document id (string).
-  },
+  }],
   Introduction: [
     'introduction/core-concepts',
     'introduction/glossary',
