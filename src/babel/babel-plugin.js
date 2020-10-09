@@ -30,6 +30,7 @@ module.exports = function(babel, options = {}) {
     domainMethods,
     exportMetadata,
     importName,
+    reactSsr,
   } = normalizeOptions(options)
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
@@ -100,6 +101,11 @@ module.exports = function(babel, options = {}) {
           if (creatorsList.some(set => set.has(localName))) {
             this.effector_ignoredImports.add(localName)
           }
+        }
+      }
+      if (reactSsr) {
+        if (source === 'effector-react' || source === 'effector-react/compat') {
+          path.node.source.value = 'effector-react/ssr'
         }
       }
     },
@@ -342,6 +348,7 @@ const normalizeOptions = options => {
   return readConfigFlags({
     options,
     properties: {
+      reactSsr: false,
       filename: true,
       stores: true,
       events: true,

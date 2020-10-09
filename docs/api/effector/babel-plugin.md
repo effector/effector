@@ -48,6 +48,7 @@ export const getUser = createEffect({sid: 'GET /user'})
 console.log(getUsers.sid)
 // => GET /user
 ```
+
 ```js title="worker.js"
 import {getUsers} from './common.js'
 
@@ -150,3 +151,13 @@ Specify import to process by plugin. By default has value `["effector", "effecto
 > `addLoc: boolean`
 
 Add location to methods' calls. Used by devtools, for example [effector-logger](https://github.com/effector/logger)
+
+### reactSsr
+
+> `reactSsr: boolean`
+
+:::note since
+effector 21.5.0
+:::
+
+Replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase.
