@@ -2,6 +2,12 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.5.0
+
+- Add support for `attach({effect})` to create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior (PR [#396](https://github.com/zerobias/effector/pull/396) and [#397](https://github.com/zerobias/effector/pull/397) (thanks [@sergeysova](https://github.com/sergeysova) and [@oas89](https://github.com/oas89)))
+
+- Add `reactSsr` option to `effector/babel-plugin` to replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase
+
 ## effector 21.4.0
 
 - Add support for return status to `allSettled`. When `allSettled` is called with `Effect`, it return object with `value` and `status` fields ([discussion](https://github.com/zerobias/effector/issues/385))
