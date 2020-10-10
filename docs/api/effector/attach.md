@@ -174,3 +174,19 @@ Create effect which will read values from `source` stores, pass them with params
 :::note
 If `mapParams` throw an error, it will trigger `fail` event and nested `effect` will not be called at all
 :::
+
+## `attach({effect})`
+
+Create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior.
+
+#### Arguments
+
+- `effect` ([_Effect_](Effect.md)): Wrapped effect
+
+#### Returns
+
+[_Effect_](Effect.md): New effect
+
+:::note since
+effector 21.5.0
+:::
