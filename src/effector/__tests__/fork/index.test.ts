@@ -1,4 +1,4 @@
-import {createDomain, forward, attach, fork, allSettled} from 'effector'
+import {createDomain, forward, attach, fork, allSettled, launch} from 'effector'
 
 describe('imperative call support', () => {
   it('support imperative event calls in watchers', async () => {
@@ -400,4 +400,25 @@ describe('watch on unit inside effect handler', () => {
     expect(scope1.getState($state)).toBe('1_EARLY_BY_EVENT')
     expect(scope2.getState($state)).toBe('2_RESOLVED_EFFECT')
   })
+})
+
+test('forked scope update itself on new domain units access', async () => {
+  const fn = jest.fn()
+  const app = createDomain()
+  app.createEvent()
+  const scope = fork(app)
+  const newEvent = app.createEvent()
+  newEvent.watch(() => {
+    fn()
+  })
+  expect(() => {
+    //@ts-ignore
+    const node = scope.find(newEvent)
+    launch({
+      target: node,
+      //@ts-ignore
+      forkPage: scope,
+    })
+  }).toThrow()
+  expect(fn).not.toBeCalled()
 })
