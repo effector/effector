@@ -377,6 +377,7 @@ const normalizeOptions = options => {
               'effector-logger',
               'trail/runtime',
               '@zerobias/effector',
+              '@effector/effector',
             ],
       ),
       exportMetadata,
