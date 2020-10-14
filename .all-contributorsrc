@@ -1,6 +1,6 @@
 {
   "projectName": "effector",
-  "projectOwner": "zerobias",
+  "projectOwner": "effector",
   "repoType": "github",
   "files": [
     "README.md"
@@ -360,7 +360,21 @@
         "doc",
         "test"
       ]
+    },
+    {
+      "login": "popuguytheparrot",
+      "name": "popuguy",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/19804652?v=4",
+      "profile": "https://github.com/popuguytheparrot",
+      "contributions": [
+        "doc",
+        "infra",
+        "ideas"
+      ]
     }
   ],
-  "commitConvention": "none"
+  "commitConvention": "none",
+  "repoHost": "https://github.com",
+  "skipCi": true,
+  "contributorsPerLine": 7
 }
