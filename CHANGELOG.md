@@ -4,13 +4,13 @@ See also [separate changelogs for each library](https://changelog.effector.dev/)
 
 ## effector 21.5.0
 
-- Add support for `attach({effect})` to create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior (PR [#396](https://github.com/zerobias/effector/pull/396) and [#397](https://github.com/zerobias/effector/pull/397) (thanks [@sergeysova](https://github.com/sergeysova) and [@oas89](https://github.com/oas89)))
+- Add support for `attach({effect})` to create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior (PR [#396](https://github.com/effector/effector/pull/396) and [#397](https://github.com/effector/effector/pull/397) (thanks [@sergeysova](https://github.com/sergeysova) and [@oas89](https://github.com/oas89)))
 
 - Add `reactSsr` option to `effector/babel-plugin` to replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase
 
 ## effector 21.4.0
 
-- Add support for return status to `allSettled`. When `allSettled` is called with `Effect`, it return object with `value` and `status` fields ([discussion](https://github.com/zerobias/effector/issues/385))
+- Add support for return status to `allSettled`. When `allSettled` is called with `Effect`, it return object with `value` and `status` fields ([discussion](https://github.com/effector/effector/issues/385))
 
 ```js
 import {createDomain, fork, allSettled} from 'effector'
@@ -88,7 +88,7 @@ const secureRequest = attach({
 - Handle throws in `attach` `mapParams` field: errors happened in `mapParams` function will force attached effect to fail
 - Add babel plugin support for `split` and `createApi`
 - Add `name` field to `attach` typings
-- Add `.filter` and `.filterMap` to effect typings ([PR #376](https://github.com/zerobias/effector/pull/376))
+- Add `.filter` and `.filterMap` to effect typings ([PR #376](https://github.com/effector/effector/pull/376))
 - Improve config validation for `forward`, `attach`, `sample` and `guard`: attempt to call these methods without arguments will lead to error with user-friendly description
 - Improve fork api support for stores and events
 
@@ -392,7 +392,7 @@ console.log(scope.getState(count))
 
 [Try it](https://share.effector.dev/IiDZW90x)
 
-- Add validation for `combine` first argument which should be store, object with stores or array with stores [PR #362](https://github.com/zerobias/effector/pull/362) (thanks [@doasync](https://github.com/doasync))
+- Add validation for `combine` first argument which should be store, object with stores or array with stores [PR #362](https://github.com/effector/effector/pull/362) (thanks [@doasync](https://github.com/doasync))
 
 ## effector 20.17.1
 
@@ -617,7 +617,7 @@ console.log(testScope.getState(friends))
 
 ## effector-vue 20.4.1
 
-- Improve typescript typings for usage via `Vue.extend` ([PR #343](https://github.com/zerobias/effector/pull/343))
+- Improve typescript typings for usage via `Vue.extend` ([PR #343](https://github.com/effector/effector/pull/343))
 
 ## effector 20.15.1
 
@@ -657,7 +657,7 @@ hydrate(app, {
 
 ## effector 20.15.0
 
-- Add support for array of units to `store.on` ([PR #328](https://github.com/zerobias/effector/pull/328))
+- Add support for array of units to `store.on` ([PR #328](https://github.com/effector/effector/pull/328))
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -749,7 +749,7 @@ const App = () => (
 
 ## effector 20.14.0
 
-- Add `ignore` parameter to `serialize` to skip stores during app state serialization [PR #325](https://github.com/zerobias/effector/pull/325) (thanks [@sergeysova](https://github.com/sergeysova))
+- Add `ignore` parameter to `serialize` to skip stores during app state serialization [PR #325](https://github.com/effector/effector/pull/325) (thanks [@sergeysova](https://github.com/sergeysova))
 
 ## effector-react 20.7.0
 
@@ -894,7 +894,7 @@ export function createInputField(defaultState, {sid, name}) {
 import {createInputField} from '@lib/createInputField'
 
 const foo = createInputField('-')
-/* 
+/*
 
 will be treated as store creator and compiled to
 
@@ -931,7 +931,7 @@ sample({
 
 ## effector-vue 20.4.0
 
-- Add support for vue component watch option ([PR #313](https://github.com/zerobias/effector/pull/313)) (thanks [@Fl0pZz](https://github.com/Fl0pZz))
+- Add support for vue component watch option ([PR #313](https://github.com/effector/effector/pull/313)) (thanks [@Fl0pZz](https://github.com/Fl0pZz))
 
 ```js
 import {createStore} from 'effector'
@@ -1157,8 +1157,8 @@ This solution requires `effector/babel-plugin` in babel configuration:
 }
 ```
 
-[Example application with express](https://github.com/zerobias/effector/tree/master/examples/react-ssr)
-[Serverless example](https://github.com/zerobias/effector/tree/master/examples/serverless-ssr)
+[Example application with express](https://github.com/effector/effector/tree/master/examples/react-ssr)
+[Serverless example](https://github.com/effector/effector/tree/master/examples/serverless-ssr)
 
 - Add events created with `createApi`, stores created with `restore` and events created with `.prepend` to domain of given source units
 
@@ -1206,13 +1206,13 @@ event()
 ## effector-react 20.5.2
 
 - Add ability to infer `fn` argument types without `as const` in `useStoreMap`.
-  In [effector-react 20.0.3](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-react-2003) we introduced an improvement for `useStoreMap` types, which helps to infer types of `fn` arguments from `keys`. And now `useStoreMap` types improved even more: every item in second argument will have its own type even without `as const`, out from a box
+  In [effector-react 20.0.3](https://github.com/effector/effector/blob/master/CHANGELOG.md#effector-react-2003) we introduced an improvement for `useStoreMap` types, which helps to infer types of `fn` arguments from `keys`. And now `useStoreMap` types improved even more: every item in second argument will have its own type even without `as const`, out from a box
 
-[Type tests](https://github.com/zerobias/effector/blob/5176da5791cc1fa454e89a508e9fc0d5abc3705c/src/types/__tests__/effector-react/useStoreMap.test.tsx#L106)
+[Type tests](https://github.com/effector/effector/blob/5176da5791cc1fa454e89a508e9fc0d5abc3705c/src/types/__tests__/effector-react/useStoreMap.test.tsx#L106)
 
 [useStoreMap in docs](https://effector.now.sh/api/effector-react/useStoreMap)
 
-[PR #274](https://github.com/zerobias/effector/pull/274) (thanks [@abliarsar](https://github.com/abliarsar))
+[PR #274](https://github.com/effector/effector/pull/274) (thanks [@abliarsar](https://github.com/abliarsar))
 
 ```typescript
 import React from 'react'
@@ -1333,18 +1333,18 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 ## effector 20.7.0
 
-- Add `domain.createStore` as alias for `domain.store` ([proposal](https://github.com/zerobias/effector/issues/186))
+- Add `domain.createStore` as alias for `domain.store` ([proposal](https://github.com/effector/effector/issues/186))
 - Add `domain.createEvent` as alias for `domain.event`
 - Add `domain.createEffect` as alias for `domain.effect`
 - Add `domain.createDomain` as alias for `domain.domain`
 
 ## effector 20.6.2
 
-- Improve `sample` typings for typescript (PR [#248](https://github.com/zerobias/effector/pull/248), fix [#247](https://github.com/zerobias/effector/issues/247)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+- Improve `sample` typings for typescript (PR [#248](https://github.com/effector/effector/pull/248), fix [#247](https://github.com/effector/effector/issues/247)) (thanks [@bloadvenro](https://github.com/bloadvenro))
 
 ## effector 20.6.1, effector-react 20.4.1, effector-vue 20.3.2
 
-- Add typescript typings for [compat builds](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2010)
+- Add typescript typings for [compat builds](https://github.com/effector/effector/blob/master/CHANGELOG.md#effector-2010)
 - Improve built-in source maps
 
 ## effector 20.6.0
@@ -1463,12 +1463,12 @@ sample({
 
 ## effector 20.4.1
 
-- Improve `forward` typings for typescript (PR [#229](https://github.com/zerobias/effector/pull/229), fix [#174](https://github.com/zerobias/effector/issues/174)) (thanks [@bloadvenro](https://github.com/bloadvenro))
-- Add typescript typings for `clearNode(domain)`, introduced in [effector 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-2020)
+- Improve `forward` typings for typescript (PR [#229](https://github.com/effector/effector/pull/229), fix [#174](https://github.com/effector/effector/issues/174)) (thanks [@bloadvenro](https://github.com/bloadvenro))
+- Add typescript typings for `clearNode(domain)`, introduced in [effector 20.2.0](https://github.com/effector/effector/blob/master/CHANGELOG.md#effector-2020)
 
 ## effector-vue 20.2.1
 
-- Add typescript typings for object shape, introduced in [effector-vue 20.2.0](https://github.com/zerobias/effector/blob/master/CHANGELOG.md#effector-vue-2020)
+- Add typescript typings for object shape, introduced in [effector-vue 20.2.0](https://github.com/effector/effector/blob/master/CHANGELOG.md#effector-vue-2020)
 
 ```js
 const counter = createStore(0)
@@ -1501,7 +1501,7 @@ const isIdle = fetchRequest.pending.map(pending => !pending)
 /*
 on clickRequest, take current clicks value,
 and call fetchRequest with it
-if isIdle value is true 
+if isIdle value is true
 */
 guard({
   source: sample(clicks, clickRequest),
@@ -1530,8 +1530,8 @@ submitForm('') // nothing happens
 submitForm('alice') // ~> searchUser('alice')
 ```
 
-[Type inference](https://github.com/zerobias/effector/blob/master/src/types/__tests__/effector/guard.test.js)
-[Implementation tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/guard.test.js)
+[Type inference](https://github.com/effector/effector/blob/master/src/types/__tests__/effector/guard.test.js)
+[Implementation tests](https://github.com/effector/effector/blob/master/src/effector/__tests__/guard.test.js)
 
 - Introduce `name` property in `sample` parameters list
 
@@ -1553,8 +1553,8 @@ console.log(sampled.shortName) // 'sampled foo'
 
 ## effector 20.3.2
 
-- Allow typescript to refine type with `split` method ([PR](https://github.com/zerobias/effector/pull/215))
-- Improve type inference of effects with optional arguments in Typescript ([PR](https://github.com/zerobias/effector/pull/214))
+- Allow typescript to refine type with `split` method ([PR](https://github.com/effector/effector/pull/215))
+- Improve type inference of effects with optional arguments in Typescript ([PR](https://github.com/effector/effector/pull/214))
 - Ensure that effect handler is called only after effect update itself, thereby preventing side-effects from interrupting pure computations
 
 ```js
@@ -1762,9 +1762,9 @@ getUsers.use(
 
 The key is that sid can be autogenerated by `effector/babel-plugin` with default config and it will be stable between builds
 
-See [example project](https://github.com/zerobias/effector/tree/master/examples/worker-rpc)
+See [example project](https://github.com/effector/effector/tree/master/examples/worker-rpc)
 
-- Add support for implicit void params in `createEffect` for typescript [#106](https://github.com/zerobias/effector/issues/106)
+- Add support for implicit void params in `createEffect` for typescript [#106](https://github.com/effector/effector/issues/106)
 
 ```typescript
 const handler = () => console.log()
@@ -1782,11 +1782,11 @@ effect()
 
 ## effector-react 20.2.2, effector-vue 20.1.2
 
-- `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/zerobias/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/zerobias/effector/issues/173))
+- `effector-react`, `effector-vue` and `effector` itself have [compat](https://github.com/effector/effector/releases/tag/effector%4020.1.0) builds for compatibility with old devices without babel. In such versions, it should import `effector/compat`, not just `effector` (Fix [#173](https://github.com/effector/effector/issues/173))
 
 ## effector 20.1.2
 
-- Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/zerobias/effector/pull/170)
+- Allow typescript to refine type of payload if `event.filter({fn})` got a predicate function as a callback [PR](https://github.com/effector/effector/pull/170)
 
 ```typescript
 import {createEvent} from 'effector'
@@ -1803,7 +1803,7 @@ str.watch(value => value.slice()) // OK now
 num.watch(value => value.toFixed(2)) // OK now
 ```
 
-- Allow typescript to refine type with `is` methods [PR](https://github.com/zerobias/effector/pull/169)
+- Allow typescript to refine type with `is` methods [PR](https://github.com/effector/effector/pull/169)
 
 ```typescript
 import {is} from 'effector'
@@ -1815,7 +1815,7 @@ function getEvent(obj: unknown) {
 }
 ```
 
-- Add new fields to definition of graph nodes ([discussion](https://github.com/zerobias/effector/issues/91#issuecomment-511397503))
+- Add new fields to definition of graph nodes ([discussion](https://github.com/effector/effector/issues/91#issuecomment-511397503))
 
 ## effector 20.1.1
 
@@ -1829,8 +1829,8 @@ function getEvent(obj: unknown) {
 
 ## effector 20.1.0
 
-- Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/zerobias/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
-- Improve typescript typings for `sample` (thanks [@abliarsar](https://github.com/abliarsar)) (PR [#156](https://github.com/zerobias/effector/pull/156))
+- Add `effector/compat` module to use with Smart TV (Chrome 47) apps without babel (fix [#152](https://github.com/effector/effector/issues/152)). Starting with this release, the library code is tested by browserstack.com for compatibility with our targets, including smart tv
+- Improve typescript typings for `sample` (thanks [@abliarsar](https://github.com/abliarsar)) (PR [#156](https://github.com/effector/effector/pull/156))
 - Fix webpack issue, which generated incorrect code with some ancient targets (IE10)
 
 ## effector-react 20.2.0
@@ -2087,7 +2087,7 @@ Vue adapter for effector 20
 
 ## effector-react 19.1.2
 
-- Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/zerobias/effector/issues/118)
+- Add `useStoreMap` hook to select part from a store. [Motivation](https://github.com/effector/effector/issues/118)
 
 ```js
 import {createStore} from 'effector'
@@ -2144,7 +2144,7 @@ event(2) // => x = 2
 
 ## effector-vue 19.0.1
 
-- Fix typescript typings [#116](https://github.com/zerobias/effector/pull/116)
+- Fix typescript typings [#116](https://github.com/effector/effector/pull/116)
 
 ## effector, effector-react, effector-vue 19.0.0
 
@@ -2153,7 +2153,7 @@ To indicate the stability of the project, we adopting semantic versioning and ha
 ## effector 0.18.10-0.18.11
 
 - Implement event `store.updates`, representing updates of given store. Use case: watchers, which will not trigger immediately after creation (unlike `store.watch`)
-  > [see spec for `store.updates` in tests](https://github.com/zerobias/effector/blob/master/src/effector/store/__tests__/updates.test.js)
+  > [see spec for `store.updates` in tests](https://github.com/effector/effector/blob/master/src/effector/store/__tests__/updates.test.js)
 
 ```js
 import {createStore, is} from 'effector'
@@ -2175,7 +2175,7 @@ clicksAmount.updates.watch(amount => {
 ## effector 0.18.9
 
 - Allow `clearNode` to erase information from the node itself, in addition to the existing opportunity to erase subscribers (thanks @artalar)
-  > [use cases for `clearNode` checked in tests](https://github.com/zerobias/effector/blob/master/src/effector/__tests__/clearNode.test.js)
+  > [use cases for `clearNode` checked in tests](https://github.com/effector/effector/blob/master/src/effector/__tests__/clearNode.test.js)
 
 ## effector 0.18.7-0.18.8
 
@@ -2551,7 +2551,7 @@ import {version} from 'effector'
 console.log(version)
 ```
 
-- Add effect handler to domain [4c6ae8](https://github.com/zerobias/effector/commit/4c6ae801b301067473f583b490eefde7b3287afc)
+- Add effect handler to domain [4c6ae8](https://github.com/effector/effector/commit/4c6ae801b301067473f583b490eefde7b3287afc)
 
 - Add `Unit<T>` as common interface implemented by `Event`, `Effect` and `Store`
 
@@ -2588,9 +2588,9 @@ const store = createStore('value', {
 
 - Improve naming for chrome performance timeline
 
-- Fix typescript typings [#45](https://github.com/zerobias/effector/issues/45)
+- Fix typescript typings [#45](https://github.com/effector/effector/issues/45)
 
-- Fix `event.prepend` bug [#35](https://github.com/zerobias/effector/issues/35)
+- Fix `event.prepend` bug [#35](https://github.com/effector/effector/issues/35)
 
 ## 0.18.2
 

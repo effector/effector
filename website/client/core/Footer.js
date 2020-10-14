@@ -30,12 +30,12 @@ module.exports = function Footer({config}) {
         </div>
         <div>
           <h5>More</h5>
-          <a href="https://github.com/zerobias/effector">GitHub</a>
+          <a href="https://github.com/effector/effector">GitHub</a>
           <a
             className="github-button"
             href={config.repoUrl}
             data-icon="octicon-star"
-            data-count-href="/zerobias/effector/stargazers"
+            data-count-href="/effector/effector/stargazers"
             data-show-count="true"
             data-count-aria-label="# stargazers on GitHub"
             aria-label="Star this project on GitHub">

@@ -2,7 +2,7 @@
 
 Provided by [browserstack open source support](https://www.browserstack.com/open-source) programm
 
-Run on each commmit on [CI](https://semaphoreci.com/zerobias/effector/branches/master)
+Run on each commmit on [CI](https://semaphoreci.com/effector/effector/branches/master)
 
 ## Usage
 
@@ -10,12 +10,11 @@ Run on each commmit on [CI](https://semaphoreci.com/zerobias/effector/branches/m
 yarn browserstack
 ```
 
-This is an alias for running jest tests with [that](https://github.com/zerobias/effector/blob/master/src/browserstack/jest.config.js) config
+This is an alias for running jest tests with [that](https://github.com/effector/effector/blob/master/src/browserstack/jest.config.js) config
 
 ```bash
 npx jest --config='src/browserstack/jest.config.js' --runInBand
 ```
-
 
 These tests expects `.env` file with variables `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY`
 

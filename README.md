@@ -130,7 +130,7 @@ For additional information, guides and api reference visit [our documentation si
 
 You can try effector in [our repl](https://share.effector.dev)
 
-Code sharing, Typescript and react supported out of the box; and of course, it [built with effector](https://github.com/zerobias/effector/tree/master/website/editor/src)
+Code sharing, Typescript and react supported out of the box; and of course, it [built with effector](https://github.com/effector/effector/tree/master/website/editor/src)
 
 ## Examples
 
@@ -223,7 +223,7 @@ turnOff() // nothing has changed
 
 - [Snake game (interactive A\* algorithm visualisation)](https://dmitryshelomanov.github.io/snake/) ([source code](https://github.com/dmitryshelomanov/snake))
 - [Ballcraft game](https://ballcraft.now.sh/) ([source code](https://github.com/kobzarvs/effector-craftball))
-- [Client-server interaction with effects](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) Github
+- [Client-server interaction with effects](https://github.com/effector/effector/tree/master/examples/worker-rpc) Github
 - [Reddit reader](https://share.effector.dev/T5CyxSFl) With effects for data fetching and effector-react hooks
 - [Lists rendering](https://share.effector.dev/OlakwECa) With `useList` hook
 - [Dynamic typing status](https://share.effector.dev/tAnzG5oJ)
@@ -245,7 +245,7 @@ turnOff() // nothing has changed
 - [Stores from react context](https://codesandbox.io/s/pensive-euler-i4qs5) Codesandbox
 - [Basic todolist example](https://codesandbox.io/s/vmx6wxww43) Codesandbox
 - [RealWorld app](https://github.com/mg901/react-effector-realworld-example-app) ([RealWorld apps](https://github.com/gothinkster/realworld))
-- [Recent users projects](https://github.com/zerobias/effector/network/dependents)
+- [Recent users projects](https://github.com/effector/effector/network/dependents)
 
 ## API
 
@@ -403,7 +403,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 [Run example](https://share.effector.dev/PgwRuYja)
 
-> See also [worker-rpc](https://github.com/zerobias/effector/tree/master/examples/worker-rpc) example, which uses shared domain for effects
+> See also [worker-rpc](https://github.com/effector/effector/tree/master/examples/worker-rpc) example, which uses shared domain for effects
 
 ### Learn more
 
@@ -422,7 +422,7 @@ More articles about effector at patreon
 
 ## Tested with browserstack
 
-[![Tested with browserstack](https://raw.githubusercontent.com/zerobias/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
+[![Tested with browserstack](https://raw.githubusercontent.com/effector/effector/master/website/media/Browserstack-logo.svg?sanitize=true)](https://BrowserStack.com)
 
 ## Contributors
 

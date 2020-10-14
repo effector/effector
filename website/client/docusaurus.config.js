@@ -43,7 +43,7 @@ module.exports = {
           position: 'right',
         },
         {
-          href: 'https://github.com/zerobias/effector',
+          href: 'https://github.com/effector/effector',
           label: 'GitHub',
           position: 'right',
         },
@@ -91,7 +91,7 @@ module.exports = {
           items: [
             {
               label: 'Github',
-              to: 'https://github.com/zerobias/effector',
+              to: 'https://github.com/effector/effector',
             },
           ],
         },
@@ -99,7 +99,7 @@ module.exports = {
       logo: {
         alt: 'Effector - the state manager',
         src: 'img/comet.png',
-        href: 'https://github.com/zerobias/effector',
+        href: 'https://github.com/effector/effector',
       },
       copyright: `Copyright © ${new Date().getFullYear()} zerobias`,
     },
@@ -108,7 +108,7 @@ module.exports = {
     'https://buttons.github.io/buttons.js',
     'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.umd.js',
     '/js/splash.js',
-    '/js/try-button.js'
+    '/js/try-button.js',
   ],
   stylesheets: ['/css/try-button.css', '/css/fonts.css'],
   presets: [
@@ -123,13 +123,13 @@ module.exports = {
           // Equivalent to `enableUpdateTime`.
           showLastUpdateTime: true,
           editUrl:
-            'https://github.com/zerobias/effector/edit/master/fix/relative-bug/',
+            'https://github.com/effector/effector/edit/master/fix/relative-bug/',
           remarkPlugins: [require('./src/plugins/remark-npm2yarn')],
         },
         blog: {
           showReadingTime: true,
           editUrl:
-            'https://github.com/zerobias/effector/edit/master/website/client/',
+            'https://github.com/effector/effector/edit/master/website/client/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),

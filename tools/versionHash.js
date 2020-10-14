@@ -10,12 +10,12 @@ const registry = process.env.VERSION_HASH_REGISTRY
 if (registry) {
   preparePackageFull({
     path: 'effector',
-    name: '@zerobias/effector',
+    name: '@effector/effector',
     directory: 'effector',
   })
   preparePackageFull({
     path: 'effector-react',
-    name: '@zerobias/effector-react',
+    name: '@effector/effector-react',
     directory: 'react',
   })
   preparePackageFull({
@@ -29,7 +29,7 @@ if (registry) {
 
   effectorPackage.name = '@effector/canary'
   effectorPackage.version = `${effectorPackage.version}-${shortHash}`
-  effectorPackage.repository = 'git://github.com/zerobias/effector.git'
+  effectorPackage.repository = 'git://github.com/effector/effector.git'
 
   outputJSONSync(packagePath, effectorPackage, {
     spaces: 2,
@@ -41,7 +41,7 @@ function preparePackageFull({path, name, directory}) {
   pkg.version = `${pkg.version}-${shortHash}`
   pkg.repository = {
     type: 'git',
-    url: 'git://github.com/zerobias/effector.git',
+    url: 'git://github.com/effector/effector.git',
     directory: `packages/${directory}`,
   }
   pkg.publishConfig = pkg.publishConfig || {}

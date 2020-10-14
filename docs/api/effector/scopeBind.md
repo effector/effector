@@ -33,4 +33,4 @@ installHistory.watch(history => {
 })
 ```
 
-[See full example](https://github.com/zerobias/effector/blob/master/examples/react-ssr/src/app.tsx#L128)
+[See full example](https://github.com/effector/effector/blob/master/examples/react-ssr/src/app.tsx#L128)

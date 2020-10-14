@@ -17,7 +17,7 @@ Actually, pure computation cannot be observed out of the scope, therefore the de
 
 Priority:
 
-[Source code](https://github.com/zerobias/effector/blob/master/src/effector/kernel.ts#L169)
+[Source code](https://github.com/effector/effector/blob/master/src/effector/kernel.ts#L169)
 
 ```
 1. child -> forward
