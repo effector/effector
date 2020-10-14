@@ -12,8 +12,8 @@ const common = {
   license: 'MIT',
   devDependencies: {},
   scripts: {},
-  repository: 'https://github.com/zerobias/effector',
-  bugs: 'https://github.com/zerobias/effector/issues',
+  repository: 'https://github.com/effector/effector',
+  bugs: 'https://github.com/effector/effector/issues',
   homepage: 'https://effector.now.sh',
   engines: {
     node: '>=6.0.0',

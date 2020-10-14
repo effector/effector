@@ -20,7 +20,7 @@
       "email": "ribkatt@gmail.com"
     }
   ],
-  "repository": "https://github.com/zerobias/effector",
+  "repository": "https://github.com/effector/effector",
   "devDependencies": {
     "@babel/core": "^7.10.1",
     "@babel/helper-plugin-utils": "^7.10.1",

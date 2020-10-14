@@ -1,8 +1,8 @@
 FROM node:11.9.0-stretch
 
 LABEL "maintainer"="goodmind <andwebar@gmail.com>"
-LABEL "repository"="http://github.com/zerobias/effector"
-LABEL "homepage"="http://github.com/zerobias/effector"
+LABEL "repository"="http://github.com/effector/effector"
+LABEL "homepage"="http://github.com/effector/effector"
 
 LABEL "com.github.actions.name"="Docusaurus Deploy"
 LABEL "com.github.actions.description"="Deploy Docusaurus to Github Pages."
