@@ -52,6 +52,15 @@ describe('fork values support', () => {
     expect(settings.getState()).toEqual({MAX_COUNT_CACHED_LOGS: 2})
     expect(logsCache.getState()).toEqual(['LOG_MSG_MOCK'])
   })
+  test('values validation', async () => {
+    const app = createDomain()
+
+    expect(() => {
+      fork(app, {
+        values: new Map().set(null, () => {}),
+      })
+    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
+  })
 })
 
 describe('fork handlers support', () => {
@@ -94,5 +103,14 @@ describe('fork handlers support', () => {
     })
 
     expect(scope.getState(acc)).toEqual(['fn'])
+  })
+  test('handlers validation', async () => {
+    const app = createDomain()
+
+    expect(() => {
+      fork(app, {
+        handlers: new Map().set(null, () => {}),
+      })
+    }).toThrowErrorMatchingInlineSnapshot(`"Map key should be a unit"`)
   })
 })

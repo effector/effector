@@ -199,6 +199,7 @@ function normalizeValues(values: Map<Store<any>, any> | Record<string, any>) {
   if (values instanceof Map) {
     const result = {} as Record<string, any>
     for (const [key, value] of values) {
+      if (!is.unit(key)) throwError('Map key should be a unit')
       result[key.sid!] = value
     }
     return result
