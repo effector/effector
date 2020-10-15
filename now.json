@@ -6,8 +6,7 @@
   "alias": ["effector.now.sh"],
   "build": {
     "env": {
-      "SITE_URL": "https://effector.now.sh",
-      "ALGOLIA_API_KEY": "@algolia_effector_key"
+      "SITE_URL": "https://effector.now.sh"
     }
   },
   "builds": [
