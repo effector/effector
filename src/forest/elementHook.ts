@@ -88,6 +88,7 @@ import {
 import {remap} from './remap'
 import {iterateChildLeafs} from './iterateChildLeafs'
 import {unmountLeafTree} from './unmount'
+import {assert} from './assert'
 
 const mountFn = {
   using(leaf: Leaf) {
@@ -198,7 +199,7 @@ export function h(tag: string, opts?: any) {
       }
     }
   }
-  if (!currentActor) throw Error('h() called outside from using() closure')
+  assert(currentActor, 'h() called outside from using() closure')
   const env = currentActor!.env
   const parentNS = currentActor!.namespace
   let ns: NSType = parentNS
@@ -836,7 +837,7 @@ export function using(node: DOMElement, opts: any): void {
     onRoot = opts.onRoot
     scope = opts.scope
   } else throw Error('using() second argument is missing')
-  if (!node) throw Error('using() first argument is missing')
+  assert(node, 'using() first argument is missing')
   const namespaceURI = node.namespaceURI
   const tag = node.tagName.toLowerCase()
   const ns: NSType =
@@ -1027,17 +1028,16 @@ export function handler(
 export function handler(options: any, map?: any) {
   if (!currentActor) return
   const draft = currentActor.draft
-  if (draft.type !== 'element') {
-    throw Error(
-      `"handler" extension can be used only with element nodes, got "${draft.type}"`,
-    )
-  }
+  assert(
+    draft.type === 'element',
+    `"handler" extension can be used only with element nodes, got "${draft.type}"`,
+  )
   if (map === undefined) {
     map = options
     options = {}
   }
   for (const key in map) {
-    if (!is.unit(map[key])) throw Error(`handler for "${key}" should be event`)
+    assert(is.unit(map[key]), `handler for "${key}" should be event`)
   }
   const {
     passive = false,
@@ -1072,7 +1072,7 @@ export function variant<T, K extends keyof T>({
         __: (config: {store: Store<T>}) => void
       }
 }) {
-  if (!is.unit(source)) throw Error('variant({source}) should be unit')
+  assert(is.unit(source), 'variant({source}) should be unit')
   let keyReader: (value: any) => any
 
   if (typeof key === 'function') keyReader = key
@@ -1126,7 +1126,7 @@ export function route<T>({
   visible: Store<boolean> | ((value: T) => boolean)
   fn: (config: {store: Store<T>}) => void
 }) {
-  if (!currentActor) throw Error('route() called outside from using() closure')
+  assert(currentActor, 'route() called outside from using() closure')
   const draft: RouteDraft = {
     type: 'route',
     childTemplates: [],
