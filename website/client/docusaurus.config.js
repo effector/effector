@@ -4,7 +4,7 @@ module.exports = {
   url: process.env.SITE_URL || 'https://effector.now.sh',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
-  organizationName: 'zerobias', // Usually your GitHub org/user name.
+  organizationName: 'effector', // Usually your GitHub org/user name.
   projectName: 'effector', // Usually your repo name.
   themeConfig: {
     sidebarCollapsible: false,
@@ -104,13 +104,8 @@ module.exports = {
       copyright: `Copyright © ${new Date().getFullYear()} zerobias`,
     },
   },
-  scripts: [
-    'https://buttons.github.io/buttons.js',
-    'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/effector.umd.js',
-    '/js/splash.js',
-    '/js/try-button.js',
-  ],
-  stylesheets: ['/css/try-button.css', '/css/fonts.css'],
+  scripts: [],
+  stylesheets: ['/css/fonts.css'],
   presets: [
     [
       '@docusaurus/preset-classic',
