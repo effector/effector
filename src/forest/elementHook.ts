@@ -88,7 +88,7 @@ import {
 import {remap} from './remap'
 import {iterateChildLeafs} from './iterateChildLeafs'
 import {unmountLeafTree} from './unmount'
-import {assert} from './assert'
+import {assert, assertClosure} from './assert'
 
 const mountFn = {
   using(leaf: Leaf) {
@@ -199,9 +199,9 @@ export function h(tag: string, opts?: any) {
       }
     }
   }
-  assert(currentActor, 'h() called outside from using() closure')
-  const env = currentActor!.env
-  const parentNS = currentActor!.namespace
+  assertClosure(currentActor, 'h')
+  const env = currentActor.env
+  const parentNS = currentActor.namespace
   let ns: NSType = parentNS
   let type = 'html'
   ns = type = parentNS === 'svg' ? 'svg' : 'html'
@@ -210,7 +210,7 @@ export function h(tag: string, opts?: any) {
     ns = 'svg'
   }
   let node: DOMElement
-  if (!currentActor!.isBlock) {
+  if (!currentActor.isBlock) {
     node =
       type === 'svg'
         ? env.document.createElementNS('http://www.w3.org/2000/svg', tag)
@@ -913,7 +913,8 @@ export function using(node: DOMElement, opts: any): void {
 }
 
 export function node(cb: (node: DOMElement) => (() => void) | void) {
-  const draft = currentActor!.draft
+  assertClosure(currentActor, 'node')
+  const draft = currentActor.draft
   switch (draft.type) {
     case 'list':
     case 'listItem':
@@ -951,7 +952,8 @@ export function spec(config: {
     | Partial<{[K in keyof HTMLElementEventMap]: Event<HTMLElementEventMap[K]>}>
   ɔ?: any
 }) {
-  const draft = currentActor!.draft
+  assertClosure(currentActor, 'spec')
+  const draft = currentActor.draft
   switch (draft.type) {
     case 'list':
       if (config.visible) draft.itemVisible = config.visible
@@ -1072,6 +1074,7 @@ export function variant<T, K extends keyof T>({
         __: (config: {store: Store<T>}) => void
       }
 }) {
+  assertClosure(currentActor, 'variant')
   assert(is.unit(source), 'variant({source}) should be unit')
   let keyReader: (value: any) => any
 
@@ -1126,18 +1129,19 @@ export function route<T>({
   visible: Store<boolean> | ((value: T) => boolean)
   fn: (config: {store: Store<T>}) => void
 }) {
-  assert(currentActor, 'route() called outside from using() closure')
+  assertClosure(currentActor, 'route')
   const draft: RouteDraft = {
     type: 'route',
     childTemplates: [],
     childCount: 0,
     inParentIndex: -1,
   }
+  const {env, namespace} = currentActor
   const routeTemplate = createTemplate({
     name: 'route',
     isSvgRoot: false,
-    namespace: currentActor!.namespace,
-    env: currentActor!.env,
+    namespace,
+    env,
     draft,
     fn(_, {mount}) {
       let state: Store<{
@@ -1162,8 +1166,8 @@ export function route<T>({
       const routeItemTemplate = createTemplate({
         name: 'route item',
         isSvgRoot: false,
-        namespace: currentActor!.namespace,
-        env: currentActor!.env,
+        namespace,
+        env,
         draft: childDraft,
         state: {store: null},
         fn({store}, {mount}) {
@@ -1278,6 +1282,7 @@ export function block({
     },
   })
   return () => {
+    assertClosure(currentActor, '(block instance)')
     const blockItemDraft: BlockItemDraft = {
       type: 'blockItem',
       childTemplates: [],
@@ -1285,7 +1290,7 @@ export function block({
       inParentIndex: -1,
       itemOf: blockTemplate,
     }
-    const {env, namespace} = currentActor!
+    const {env, namespace} = currentActor
     const blockItemTemplate = createTemplate({
       name: 'block item',
       isSvgRoot: false,
@@ -1340,8 +1345,10 @@ export function rec<T>(
     },
   })
   return ({store, state = store}) => {
+    assertClosure(currentActor, '(rec instance)')
+    const {env, namespace} = currentActor
     if (recTemplate.deferredInit) recTemplate.deferredInit()
-    const {env, namespace} = currentActor!
+
     const recItemDraft: RecItemDraft = {
       type: 'recItem',
       childTemplates: [],
@@ -1438,6 +1445,7 @@ export function list<T>(
   fn: (opts: {store: Store<T>; id: Store<number>}) => void,
 ): void
 export function list<T>(opts: any, maybeFn?: any) {
+  assertClosure(currentActor, 'list')
   if (typeof maybeFn === 'function') {
     if (is.unit(opts)) {
       opts = {source: opts, fn: maybeFn}
@@ -1459,9 +1467,7 @@ export function list<T>(opts: any, maybeFn?: any) {
     childCount: 0,
     inParentIndex: -1,
   }
-  if (!currentActor) throw Error('list() called outside from using() closure')
-  const env = currentActor!.env
-  const namespace = currentActor!.namespace
+  const {env, namespace} = currentActor
 
   const listTemplate = createTemplate({
     name: 'list',
