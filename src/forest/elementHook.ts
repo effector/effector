@@ -7,6 +7,7 @@ import {
   createEvent,
   sample,
   merge,
+  combine,
   Fork,
 } from 'effector'
 
@@ -1111,22 +1112,27 @@ export function route<T, S extends T>(config: {
   visible: (value: T) => value is S
   fn: (config: {store: Store<S>}) => void
 }): void
+export function route<T>(config: {
+  source: Store<T>
+  visible: Store<boolean>
+  fn: (config: {store: Store<T>}) => void
+}): void
 export function route<T>({
   source,
-  visible: visibleFn,
+  visible,
   fn,
 }: {
   source: Store<T>
-  visible: (value: T) => boolean
+  visible: Store<boolean> | ((value: T) => boolean)
   fn: (config: {store: Store<T>}) => void
 }) {
+  if (!currentActor) throw Error('route() called outside from using() closure')
   const draft: RouteDraft = {
     type: 'route',
     childTemplates: [],
     childCount: 0,
     inParentIndex: -1,
   }
-  if (!currentActor) throw Error('route() called outside from using() closure')
   const routeTemplate = createTemplate({
     name: 'route',
     isSvgRoot: false,
@@ -1134,10 +1140,19 @@ export function route<T>({
     env: currentActor!.env,
     draft,
     fn(_, {mount}) {
-      const state = source.map(value => ({
-        value,
-        visible: visibleFn(value),
-      }))
+      let state: Store<{
+        value: T
+        visible: boolean
+      }>
+      if (is.store(visible)) {
+        state = combine({value: source, visible})
+      } else {
+        const visibleFn = visible as (value: T) => boolean
+        state = source.map(value => ({
+          value,
+          visible: visibleFn(value),
+        }))
+      }
       const childDraft: RouteDraft = {
         type: 'route',
         childTemplates: [],

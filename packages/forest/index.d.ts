@@ -194,6 +194,11 @@ export function route<T, S extends T>(config: {
   visible: (value: T) => value is S
   fn: (config: {store: Store<S>}) => void
 }): void
+export function route<T>(config: {
+  source: Store<T>
+  visible: Store<boolean>
+  fn: (config: {store: Store<T>}) => void
+}): void
 
 export function node(fn: (node: DOMElement) => void): void
 
