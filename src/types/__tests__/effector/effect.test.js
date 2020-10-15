@@ -135,6 +135,37 @@ describe('createEffect(handler)', () => {
       "
     `)
   })
+  test('edge case with function in params', () => {
+    type Params = (x: number) => string
+    const fx1: Effect<Params, string> = createEffect<Params, string>(fn =>
+      fn(0),
+    )
+    const fx2: Effect<Params, string> = createEffect<Params, string>(
+      (fn: Params) => fn(0),
+    )
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx1: Effect<Params, string> = createEffect<Params, string>(fn =>
+                                            ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx2: Effect<Params, string> = createEffect<Params, string>(
+                                            ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      "
+    `)
+  })
 })
 
 describe('single generic', () => {

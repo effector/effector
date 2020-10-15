@@ -238,10 +238,10 @@ export class Domain implements Unit<any> {
     sid?: string
   }): Event<Payload>
   effect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
-  effect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   effect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
   ): Effect<Params, Done, Fail>
+  effect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   effect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
@@ -255,10 +255,10 @@ export class Domain implements Unit<any> {
     name?: string
   }): Effect<Params, Done, Fail>
   createEffect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
-  createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   createEffect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
   ): Effect<Params, Done, Fail>
+  createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   createEffect<FN extends Function>(config: {
     name?: string
     handler: FN
@@ -447,10 +447,10 @@ export function createEvent<E = void>(config: {
 }): Event<E>
 
 export function createEffect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
-export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
 export function createEffect<Params, Done, Fail = Error>(
   handler: (params: Params) => Done | Promise<Done>,
 ): Effect<Params, Done, Fail>
+export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
