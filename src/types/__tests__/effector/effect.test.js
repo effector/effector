@@ -36,6 +36,87 @@ test('createEffect', () => {
   `)
 })
 
+describe('createEffect(handler)', () => {
+  test('createEffect<P, D>(handler)', () => {
+    const fx1: Effect<string, number> = createEffect<string, number>(
+      word => word.length,
+    )
+    const fx2: Effect<string, number> = createEffect<string, number>(
+      (word: string) => word.length,
+    )
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx1: Effect<string, number> = createEffect<string, number>(
+                                            ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx2: Effect<string, number> = createEffect<string, number>(
+                                            ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      "
+    `)
+  })
+  test('createEffect<P, D, F>(handler)', () => {
+    //prettier-ignore
+    const fx1: Effect<string, number, TypeError> = createEffect<string, number, TypeError>(word => word.length)
+    //prettier-ignore
+    const fx2: Effect<string, number, TypeError> = createEffect<string, number, TypeError>((word: string) => word.length)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('createEffect<typeof handler>(handler)', () => {
+    const handler = (word: string) => word.length
+    const fx: Effect<string, number> = createEffect<typeof handler>(handler)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx: Effect<string, number> = createEffect<typeof handler>(handler)
+                                           ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      "
+    `)
+  })
+  test('type inference support', () => {
+    const fx: Effect<string, number> = createEffect(
+      (word: string) => word.length,
+    )
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+})
+
 describe('single generic', () => {
   type SyncFn = (_: string) => number
   type AsyncFn = (_: string) => Promise<number>
