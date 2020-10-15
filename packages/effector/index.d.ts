@@ -43,6 +43,31 @@ export type EffectError<FX extends Effect<any, any, any>> = FX extends Effect<
   ? E
   : never
 
+type EffectByHandler<FN extends Function, Fail> = FN extends (...args: infer Args) => infer Done
+  ? Effect<
+      Args['length'] extends 0 // does handler accept 0 arguments?
+        ? void // works since TS v3.3.3
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+          /**
+           * Applying `infer` to a variadic arguments here we'll get `Args` of
+           * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
+           * In case T is optional we get `T | undefined` back from `Args[0]`.
+           * We lose information about argument's optionality, but we can make it
+           * optional again by appending `void` type, so the result type will be
+           * `T | undefined | void`.
+           *
+           * The disadvantage of this method is that we can't restore optonality
+           * in case of `params?: any` because in a union `any` type absorbs any
+           * other type (`any | undefined | void` becomes just `any`). And we
+           * have similar situation also with the `unknown` type.
+           */
+        ? Args[0] | void
+        : Args[0],
+      Done extends Promise<infer Async> ? Async : Done,
+      Fail
+    >
+  : never
+
 export const version: string
 
 export type kind = 'store' | 'event' | 'effect' | 'domain'
@@ -212,17 +237,8 @@ export class Domain implements Unit<any> {
     name?: string
     sid?: string
   }): Event<Payload>
-  effect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
-    ? Effect<
-        Args['length'] extends 0 // does handler accept 0 arguments?
-          ? void
-          : 0 | 1 extends Args['length']  // is the first argument optional?
-          ? Args[0] | void
-          : Args[0],
-        Done extends Promise<infer Async> ? Async : Done,
-        Error
-      >
-    : never
+  effect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
+  effect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   effect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
   ): Effect<Params, Done, Fail>
@@ -238,17 +254,8 @@ export class Domain implements Unit<any> {
     sid?: string
     name?: string
   }): Effect<Params, Done, Fail>
-  createEffect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
-    ? Effect<
-        Args['length'] extends 0 // does handler accept 0 arguments?
-          ? void
-          : 0 | 1 extends Args['length']  // is the first argument optional?
-          ? Args[0] | void
-          : Args[0],
-        Done extends Promise<infer Async> ? Async : Done,
-        Error
-      >
-    : never
+  createEffect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
+  createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
   createEffect<Params, Done, Fail = Error>(
     handler: (params: Params) => Done | Promise<Done>,
   ): Effect<Params, Done, Fail>
@@ -256,17 +263,7 @@ export class Domain implements Unit<any> {
     name?: string
     handler: FN
     sid?: string
-  }): FN extends (...args: infer Args) => infer Done
-    ? Effect<
-        Args['length'] extends 0 // does handler accept 0 arguments?
-          ? void
-          : 0 | 1 extends Args['length']  // is the first argument optional?
-          ? Args[0] | void
-          : Args[0],
-        Done extends Promise<infer Async> ? Async : Done,
-        Error
-      >
-    : never
+  }): EffectByHandler<FN, Error>
   createEffect<Params, Done, Fail = Error>(
     name?: string,
     config?: {
@@ -449,28 +446,8 @@ export function createEvent<E = void>(config: {
   sid?: string
 }): Event<E>
 
-export function createEffect<FN extends Function>(handler: FN): FN extends (...args: infer Args) => infer Done
-  ? Effect<
-      Args['length'] extends 0 // does handler accept 0 arguments?
-        ? void
-        : 0 | 1 extends Args['length']  // is the first argument optional?
-        ? Args[0] | void
-        : Args[0],
-      Done extends Promise<infer Async> ? Async : Done,
-      Error
-    >
-  : never
-export function createEffect<FN extends Function, Fail>(handler: FN): FN extends (...args: infer Args) => infer Done
-  ? Effect<
-      Args['length'] extends 0 // does handler accept 0 arguments?
-        ? void
-        : 0 | 1 extends Args['length']  // is the first argument optional?
-        ? Args[0] | void
-        : Args[0],
-      Done extends Promise<infer Async> ? Async : Done,
-      Fail
-    >
-  : never
+export function createEffect<FN extends Function>(handler: FN): EffectByHandler<FN, Error>
+export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
 export function createEffect<Params, Done, Fail = Error>(
   handler: (params: Params) => Done | Promise<Done>,
 ): Effect<Params, Done, Fail>
@@ -485,30 +462,7 @@ export function createEffect<FN extends Function>(config: {
   name?: string
   handler: FN
   sid?: string
-}): FN extends (...args: infer Args) => infer Done
-  ? Effect<
-      Args['length'] extends 0 // does handler accept 0 arguments?
-        ? void // works since TS v3.3.3
-        : 0 | 1 extends Args['length']  // is the first argument optional?
-          /**
-           * Applying `infer` to a variadic arguments here we'll get `Args` of
-           * shape `[T]` or `[T?]`, where T(?) is a type of handler `params`.
-           * In case T is optional we get `T | undefined` back from `Args[0]`.
-           * We lose information about argument's optionality, but we can make it
-           * optional again by appending `void` type, so the result type will be
-           * `T | undefined | void`.
-           *
-           * The disadvantage of this method is that we can't restore optonality
-           * in case of `params?: any` because in a union `any` type absorbs any
-           * other type (`any | undefined | void` becomes just `any`). And we
-           * have similar situation also with the `unknown` type.
-           */
-        ? Args[0] | void
-        : Args[0],
-      Done extends Promise<infer Async> ? Async : Done,
-      Error
-    >
-  : never
+}): EffectByHandler<FN, Error>
 export function createEffect<Params, Done, Fail = Error>(config: {
   name?: string
   handler?: (params: Params) => Promise<Done> | Done
