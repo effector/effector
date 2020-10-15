@@ -460,6 +460,17 @@ export function createEffect<FN extends Function>(handler: FN): FN extends (...a
       Error
     >
   : never
+export function createEffect<FN extends Function, Fail>(handler: FN): FN extends (...args: infer Args) => infer Done
+  ? Effect<
+      Args['length'] extends 0 // does handler accept 0 arguments?
+        ? void
+        : 0 | 1 extends Args['length']  // is the first argument optional?
+        ? Args[0] | void
+        : Args[0],
+      Done extends Promise<infer Async> ? Async : Done,
+      Fail
+    >
+  : never
 export function createEffect<Params, Done, Fail = Error>(
   handler: (params: Params) => Done | Promise<Done>,
 ): Effect<Params, Done, Fail>

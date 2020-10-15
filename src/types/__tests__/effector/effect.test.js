@@ -101,6 +101,26 @@ describe('createEffect(handler)', () => {
       "
     `)
   })
+  test('createEffect<typeof handler, Error>(handler)', () => {
+    const handler = (word: string) => word.length
+    //prettier-ignore
+    const fx: Effect<string, number, TypeError> = createEffect<typeof handler, TypeError>(handler)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
+        const fx: Effect<string, number, TypeError> = createEffect<typeof handler, TypeError>(handler)
+                                                      ^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(
+                                            [1] ^^^^^^^^^^^^^^^^^^^^
+            declare export function createEffect<Params, Done, Fail>(config: {
+                                            [2] ^^^^^^^^^^^^^^^^^^^^
+      "
+    `)
+  })
   test('type inference support', () => {
     const fx: Effect<string, number> = createEffect(
       (word: string) => word.length,
@@ -150,10 +170,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 5, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 6, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-            Overload 2 of 5, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 6, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
 
@@ -176,10 +196,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 5, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 6, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
-            Overload 2 of 5, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 6, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
 
@@ -225,10 +245,10 @@ describe('single generic', () => {
         "
         --typescript--
         No overload matches this call.
-          Overload 1 of 5, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+          Overload 1 of 6, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
             Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
               Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-          Overload 2 of 5, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+          Overload 2 of 6, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.
 
