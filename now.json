@@ -77,6 +77,13 @@
       }
     },
     {
+      "src": "/docs/api/effector",
+      "status": 301,
+      "headers": {
+        "Location": "https://effector.now.sh/docs/api/effector/effector"
+      }
+    },
+    {
       "src": "/en/(.*)",
       "status": 301,
       "headers": {
