@@ -409,7 +409,7 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 - [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
 - [API docs](https://effector.now.sh/en/api/effector/effector)
-- [Usage with TypeScript](https://effector.now.sh/en/recipes/usage-with-typescript)
+- [Usage with TypeScript](https://effector.now.sh/docs/typescript/typing-effector)
 - [Glossary](https://effector.now.sh/en/glossary)
 - [Changelog](https://changelog.effector.dev)
 
