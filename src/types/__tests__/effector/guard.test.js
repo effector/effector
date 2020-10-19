@@ -888,3 +888,20 @@ describe('guard(config)', () => {
     })
   })
 })
+
+test('guard return type supports union types', () => {
+  const trigger: Event<{a: 1} | {a: 2}> = createEvent()
+  const allow = createStore<boolean>(false)
+
+  const result: Event<{a: 1} | {a: 2}> = guard(trigger, {filter: allow})
+
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})

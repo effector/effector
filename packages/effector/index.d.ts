@@ -133,7 +133,7 @@ export interface Event<Payload> extends Unit<Payload> {
  * `Event<T>`. This happens because `Event` has a callable signature. With `Unit<T>`
  * as the return type we won't see any problems.
  */
-type EventAsReturnType<Payload> = Payload extends any ? Event<Payload> : never
+type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
 
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
   (payload: Params): Promise<Done>
