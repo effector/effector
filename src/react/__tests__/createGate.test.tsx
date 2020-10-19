@@ -3,7 +3,7 @@ import {render, cleanup, container, act} from 'effector/fixtures/react'
 import {createGate, useGate, useStore} from 'effector-react'
 
 import {argumentHistory} from 'effector/fixtures'
-import {createEvent, createStore} from 'effector'
+import {createEvent, createStore, forward} from 'effector'
 
 test('plain gate', async () => {
   const Gate = createGate('plain gate')
@@ -89,15 +89,15 @@ describe('updates deduplication', () => {
       update()
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "field": false,
-  },
-  Object {
-    "field": true,
-  },
-]
-`)
+      Array [
+        Object {
+          "field": false,
+        },
+        Object {
+          "field": true,
+        },
+      ]
+    `)
   })
   test('with hook', async () => {
     const fn = jest.fn()
@@ -120,15 +120,15 @@ Array [
       update()
     })
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "field": false,
-  },
-  Object {
-    "field": true,
-  },
-]
-`)
+      Array [
+        Object {
+          "field": false,
+        },
+        Object {
+          "field": true,
+        },
+      ]
+    `)
   })
 })
 
@@ -162,4 +162,63 @@ test('gate properties hook', async () => {
   await cleanup()
   expect(argumentHistory(fn1)).toEqual([false, true, false])
   expect(argumentHistory(fn2)).toEqual([{}, {foo: 'bar'}, {}])
+})
+
+test('setState warning', async () => {
+  const oldConsoleError = console.error
+  const fn = jest.fn()
+  console.error = (...args: any[]) => {
+    fn(args.join(', '))
+    oldConsoleError.call(console, ...args)
+  }
+  const setText = createEvent<string>()
+  const gate = createGate<string>()
+  const store = createStore('').on(setText, (_, text) => text)
+  forward({
+    from: gate.state,
+    to: setText,
+  })
+  function Test({changeText}: {changeText: Function}) {
+    const text = useStore(store)
+    return (
+      <div>
+        <button
+          id="button"
+          onClick={() => {
+            changeText(Math.random().toString(16))
+          }}>
+          update
+        </button>
+        {text}
+      </div>
+    )
+  }
+  function App() {
+    const [text, setText] = React.useState(Math.random().toString(16))
+    useGate(gate, text)
+
+    return (
+      <div className="App">
+        <h1>Hello CodeSandbox</h1>
+        <h2>Start editing to see some magic happen!</h2>
+        <Test changeText={setText} />
+      </div>
+    )
+  }
+  await render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+  )
+  await act(async () => {
+    container.querySelector('#button').click()
+  })
+  console.error = oldConsoleError
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "Warning: Cannot update a component (\`%s\`) while rendering a different component (\`%s\`). To locate the bad setState() call inside \`%s\`, follow the stack trace as described in https://fb.me/setstate-in-render%s, Test, App, App, 
+        in App
+        in StrictMode",
+    ]
+  `)
 })
