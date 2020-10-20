@@ -1,7 +1,7 @@
 module.exports = {
   title: 'Effector',
   tagline: 'The state manager',
-  url: process.env.SITE_URL || 'https://effector.now.sh',
+  url: process.env.SITE_URL || 'https://effector.dev',
   baseUrl: '/',
   favicon: 'img/favicon.ico',
   organizationName: 'effector', // Usually your GitHub org/user name.

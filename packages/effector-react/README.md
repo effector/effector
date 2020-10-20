@@ -48,7 +48,7 @@ const Form = () => {
 
 [Try it](https://share.effector.dev/vwTDZXOA)
 
-[useStore](https://effector.now.sh/docs/api/effector-react/useStore) in docs
-[createStore](https://effector.now.sh/docs/api/effector/createStore) in docs
-[combine](https://effector.now.sh/docs/api/effector/combine) in docs
-[createEvent](https://effector.now.sh/docs/api/effector/createEvent) in docs
+[useStore](https://effector.dev/docs/api/effector-react/useStore) in docs
+[createStore](https://effector.dev/docs/api/effector/createStore) in docs
+[combine](https://effector.dev/docs/api/effector/combine) in docs
+[createEvent](https://effector.dev/docs/api/effector/createEvent) in docs

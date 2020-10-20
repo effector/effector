@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /try
 
-Sitemap: https://effector.now.sh/sitemap.xml
+Sitemap: https://effector.dev/sitemap.xml

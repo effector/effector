@@ -83,7 +83,7 @@ Svelte works with effector out from a box, no additional packages needed. See [w
 
 ## Documentation
 
-For additional information, guides and api reference visit [our documentation site](https://effector.now.sh/docs/introduction/core-concepts)
+For additional information, guides and api reference visit [our documentation site](https://effector.dev/docs/introduction/core-concepts)
 
 ## Packages
 
@@ -93,9 +93,9 @@ For additional information, guides and api reference visit [our documentation si
 | [`effector-react`] |    [![npm-react]][pack-react]    |    [![size-react]][pho-react]    |
 |  [`effector-vue`]  |      [![npm-vue]][pack-vue]      |      [![size-vue]][pho-vue]      |
 
-[`effector`]: https://effector.now.sh/docs/api/effector/effector
-[`effector-react`]: https://effector.now.sh/docs/api/effector-react/effector-react
-[`effector-vue`]: https://effector.now.sh/docs/api/effector-vue/effector-vue
+[`effector`]: https://effector.dev/docs/api/effector/effector
+[`effector-react`]: https://effector.dev/docs/api/effector-react/effector-react
+[`effector-vue`]: https://effector.dev/docs/api/effector-vue/effector-vue
 [npm-effector]: https://img.shields.io/npm/v/effector.svg?maxAge=3600
 [npm-react]: https://img.shields.io/npm/v/effector-react.svg?maxAge=3600
 [npm-vue]: https://img.shields.io/npm/v/effector-vue.svg?maxAge=3600
@@ -374,7 +374,7 @@ c.watch(console.log)
 // => {a: 1, b: "b"}
 ```
 
-See [`combine`](http://effector.now.sh/api/effector/combine) in docs
+See [`combine`](http://effector.dev/api/effector/combine) in docs
 
 [Run example](https://share.effector.dev/MuLF8xGB)
 
@@ -399,7 +399,7 @@ const pageStore = mainPage.createStore(0)
 // => new store: 0
 ```
 
-See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
+See [`Domain`](http://effector.dev/api/effector/domain) in docs
 
 [Run example](https://share.effector.dev/PgwRuYja)
 
@@ -407,10 +407,10 @@ See [`Domain`](http://effector.now.sh/api/effector/domain) in docs
 
 ### Learn more
 
-- [Core concepts](https://effector.now.sh/en/introduction/core-concepts)
-- [API docs](https://effector.now.sh/en/api/effector/effector)
-- [Usage with TypeScript](https://effector.now.sh/docs/typescript/typing-effector)
-- [Glossary](https://effector.now.sh/en/glossary)
+- [Core concepts](https://effector.dev/en/introduction/core-concepts)
+- [API docs](https://effector.dev/en/api/effector/effector)
+- [Usage with TypeScript](https://effector.dev/docs/typescript/typing-effector)
+- [Glossary](https://effector.dev/en/glossary)
 - [Changelog](https://changelog.effector.dev)
 
 ![Effector Diagram](./diagram.png)
@@ -484,6 +484,7 @@ More articles about effector at patreon
 
 <!-- markdownlint-enable -->
 <!-- prettier-ignore-end -->
+
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License

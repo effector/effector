@@ -11,7 +11,7 @@ Be kind and objective when writing in text. Thanks!
 
 **What is the current behavior:**
 
-**Please provide the steps to reproduce and if possible a minimal demo of the problem via https://effector.now.sh/try, https://codesandbox.io or similar**
+**Please provide the steps to reproduce and if possible a minimal demo of the problem via https://share.effector.dev, https://codesandbox.io or similar**
 
 **What is the expected behavior:**
 

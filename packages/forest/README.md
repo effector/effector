@@ -81,7 +81,7 @@ function stringify(values) {
 
 ### using
 
-Start an application from given root dom node. Can accept forked [Scope](https://effector.now.sh/docs/api/effector/scope). Set `hydrate: true` to reuse `root` html content (useful for ssr)
+Start an application from given root dom node. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope). Set `hydrate: true` to reuse `root` html content (useful for ssr)
 
 ```typescript
 function using(root: DOMElement, fn: () => void): void
@@ -227,7 +227,7 @@ function list<T>(config: {
 
 ### variant
 
-Mount one of given cases by selecting a specific one by the current value of the `key` field of `source` store value. Type of `store` in `cases` functions will be inferred from a case type. Optional default case - `__` (like in [split](https://effector.now.sh/docs/api/effector/split))
+Mount one of given cases by selecting a specific one by the current value of the `key` field of `source` store value. Type of `store` in `cases` functions will be inferred from a case type. Optional default case - `__` (like in [split](https://effector.dev/docs/api/effector/split))
 
 ```typescript
 function variant<T>(config: {
@@ -285,7 +285,7 @@ function block(config: {fn: () => void}): () => void
 
 ### renderStatic
 
-Method from `forest/server` to render given application to string. Can accept forked [Scope](https://effector.now.sh/docs/api/effector/scope), in which case `fn` childs must be wrapped in [block](#block) to ensure that all units are created before [fork](https://effector.now.sh/docs/api/effector/fork) call
+Method from `forest/server` to render given application to string. Can accept forked [Scope](https://effector.dev/docs/api/effector/scope), in which case `fn` childs must be wrapped in [block](#block) to ensure that all units are created before [fork](https://effector.dev/docs/api/effector/fork) call
 
 ```typescript
 function renderStatic(fn: () => void): Promise<string>

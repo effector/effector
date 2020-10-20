@@ -14,7 +14,7 @@ const common = {
   scripts: {},
   repository: 'https://github.com/effector/effector',
   bugs: 'https://github.com/effector/effector/issues',
-  homepage: 'https://effector.now.sh',
+  homepage: 'https://effector.dev',
   engines: {
     node: '>=6.0.0',
   },

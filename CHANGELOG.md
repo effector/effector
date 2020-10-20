@@ -31,7 +31,7 @@ const fx = createEffect<number, string, Error>(x => x.toString())
 
 - Add types for `domain.effect(handler)`
 
-- Fix effector/babel-plugin behavior in case when methods like `createStore` are imported from unrelated library and should be ignored. Import library could be defined by [importName](https://effector.now.sh/docs/api/effector/babel-plugin#importname) config field
+- Fix effector/babel-plugin behavior in case when methods like `createStore` are imported from unrelated library and should be ignored. Import library could be defined by [importName](https://effector.dev/docs/api/effector/babel-plugin#importname) config field
 
 - Improve fork api support for watchers
 
@@ -39,7 +39,7 @@ const fx = createEffect<number, string, Error>(x => x.toString())
 
 - Add support for `createEffect(handler)`
 
-[createEffect(handler) in documentation](https://effector.now.sh/docs/api/effector/createEffect#createeffecthandler)
+[createEffect(handler) in documentation](https://effector.dev/docs/api/effector/createEffect#createeffecthandler)
 
 ```js
 import {createEffect} from 'effector'
@@ -61,7 +61,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 - Add support for `attach({source, effect})` without `mapParams`: in case with `source` and `effect` only, inner effect will be triggered with `source` values
 
-[attach({effect, source}) in documentation](https://effector.now.sh/docs/api/effector/attach#attacheffect-source)
+[attach({effect, source}) in documentation](https://effector.dev/docs/api/effector/attach#attacheffect-source)
 
 ```js
 import {createStore, createEffect, attach} from 'effector'
@@ -191,7 +191,7 @@ await allSettled(voidFx, {scope})
 
 - Add object form of `split` for pattern-matching without additional forwards
 
-[`split` in documentation](https://effector.now.sh/docs/api/effector/split#splitsource-match-cases)
+[`split` in documentation](https://effector.dev/docs/api/effector/split#splitsource-match-cases)
 
 ```js
 import {split, createEffect, createEvent} from 'effector'
@@ -291,7 +291,7 @@ messageReceived({
 - Add support for es modules
 - Remove experimental `Gate.isOpen` plain property, which was incompatibile with concurrent mode and ssr, use `Gate.status` instead
 
-[Gate.status in documentation](https://effector.now.sh/docs/api/effector-react/gate#status)
+[Gate.status in documentation](https://effector.dev/docs/api/effector-react/gate#status)
 
 ## effector-vue 21.0.0
 
@@ -349,7 +349,7 @@ ReactDOM.render(<App root={scope} />, document.getElementById('root'))
 
 - Add `domain` optional field to `createGate` which will be used to create gate units (useful for ssr)
 
-[createGate({domain}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
+[createGate({domain}) in documentation](https://effector.dev/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
 
 - Improve `useList` hook typings for typescript exported from `effector-react/ssr` by allowing usage as components' return value (fix [DefinitelyTyped issue](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/20356))
 
@@ -484,7 +484,7 @@ const node = createNode()
 
 - Add ability to define default `Gate` state in `createGate` via `defaultState` field
 
-[createGate({defaultState}) in documentation](https://effector.now.sh/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
+[createGate({defaultState}) in documentation](https://effector.dev/docs/api/effector-react/createGate#creategateconfig-defaultstate-domain-name)
 
 - Remove `object` restriction from `createGate` `Props` type in typescript, as it becomes useless with introduction of `useGate`. This code now passes type checking successfully
 
@@ -517,7 +517,7 @@ guard({
 
 ## effector-react 20.7.4
 
-- Improve [useStore](https://effector.now.sh/docs/api/effector-react/useStore) support for [React.StrictMode](https://reactjs.org/docs/strict-mode.html)
+- Improve [useStore](https://effector.dev/docs/api/effector-react/useStore) support for [React.StrictMode](https://reactjs.org/docs/strict-mode.html)
 
 ## effector-vue 20.5.0
 
@@ -684,9 +684,9 @@ store.off(changedA)
 
 [Try it](https://share.effector.dev/iP0oM3NF)
 
-[Documentation for `store.on`](https://effector.now.sh/docs/api/effector/store#ontriggers-handler)
+[Documentation for `store.on`](https://effector.dev/docs/api/effector/store#ontriggers-handler)
 
-- Add support for array of units to `store.reset` to make it consistent with [merge](https://effector.now.sh/docs/api/effector/merge) and [store.on](https://effector.now.sh/docs/api/effector/store#ontriggers-handler)
+- Add support for array of units to `store.reset` to make it consistent with [merge](https://effector.dev/docs/api/effector/merge) and [store.on](https://effector.dev/docs/api/effector/store#ontriggers-handler)
 
 ```js
 import {createEvent, createStore} from 'effector'
@@ -708,7 +708,7 @@ reset() // changed 0
 
 [Try it](https://share.effector.dev/ot6R5ePc)
 
-[Documentation for `store.reset`](https://effector.now.sh/docs/api/effector/store#resettriggersarray)
+[Documentation for `store.reset`](https://effector.dev/docs/api/effector/store#resettriggersarray)
 
 - Remove units erased with `clearNode(unit)` from their parent domain hooks and history sets
 
@@ -860,7 +860,7 @@ Authorization: Bearer guest_token
 // => client analytics: sent 2 requests
 ```
 
-[Documentation for `attach`](https://effector.now.sh/docs/api/effector/attach)
+[Documentation for `attach`](https://effector.dev/docs/api/effector/attach)
 
 - Add `noDefaults` option for `effector/babel-plugin` for making custom unit fabrics with clean configuration
 
@@ -991,9 +991,9 @@ const apiResultOld = merge([
 
 [Try it](https://share.effector.dev/Zae5MZHU)
 
-[Documentation for `effect.doneData`](https://effector.now.sh/docs/api/effector/effect#donedata)
+[Documentation for `effect.doneData`](https://effector.dev/docs/api/effector/effect#donedata)
 
-[Documentation for `effect.failData`](https://effector.now.sh/docs/api/effector/effect#faildata)
+[Documentation for `effect.failData`](https://effector.dev/docs/api/effector/effect#faildata)
 
 ## effector 20.11.0
 
@@ -1025,7 +1025,7 @@ await Promise.all([req1, req2])
 
 [Try it](https://share.effector.dev/tSAhu4Kt)
 
-[Documentation for `effect.inFlight`](https://effector.now.sh/docs/api/effector/effect#inflight)
+[Documentation for `effect.inFlight`](https://effector.dev/docs/api/effector/effect#inflight)
 
 - Introduce `withRegion`: region-based memory management tool, which attach units (stores, events and effects) and watchers, created inside given callback to lifecycle of owner unit to be erased together with it.
 
@@ -1210,7 +1210,7 @@ event()
 
 [Type tests](https://github.com/effector/effector/blob/5176da5791cc1fa454e89a508e9fc0d5abc3705c/src/types/__tests__/effector-react/useStoreMap.test.tsx#L106)
 
-[useStoreMap in docs](https://effector.now.sh/api/effector-react/useStoreMap)
+[useStoreMap in docs](https://effector.dev/api/effector-react/useStoreMap)
 
 [PR #274](https://github.com/effector/effector/pull/274) (thanks [@abliarsar](https://github.com/abliarsar))
 
@@ -2170,7 +2170,7 @@ clicksAmount.updates.watch(amount => {
 })
 ```
 
-[Try it](https://effector.now.sh/try?version=0.18.10&code=JYWwDg9gTgLgBAbwMZQKYEMaoMo2qgGjmAGcBfOAMyghDgHJVLLUk8p6AoTpCAOxLwkAG2BIA1iQCCICAFc+8ALxwUGLLnwAKAAwBKTqQB0qAG6pFWkWMkz5io3LAATTKhJ64Aei9wlAPjgYKDlUbmsJaVkFGCMAd0wkAAstdGjFP0CETjhVfhIIYVQjYQgAcy16OOBhYTgAI1QgqGAystQ0Z2IQEFRnYDdhAE8iEiG+JHoiNPsYAzIDHlFIuxjHFzcSeMSUmZjMxBy8gULi0oqqmrq+CHhG5tb2zrgFIpISOEF8OFN0YVDiB9kug+O1nFM4HtFPM9EA)
+[Try it](https://share.effector.dev/cHkiPTtQ)
 
 ## effector 0.18.9
 
@@ -2226,7 +2226,7 @@ const isLoading = createStore(false)
   .on(fetchApi.fail, () => false)
 ```
 
-[Try it](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0FEBm+6KcAvgvjFGAgOTqHFyy2iSyKobboDC10AHbpBZClRr1GJWAFpuJVuGjwEAJSwlx1OgrisUUQQGdEROCgAWAQQggEAXgRosOAkRIAKJMAQJLmIIAJgA26DAAXAieggCUjgB8CMIA7ggAChIgxuieGMZQIQBu6IkIOXAAKuDoUACucHnoBcXoADTJsbFtwKSxwMDmVrYgAHQQIkEgggDmoynYVp6GJoXooyFQM-3AK6YIADJQmFOzjs7cOPzswqKeQzZ245PTMx2eEFQQxh0Twa-xBxJTy+BB-U4zBAAMihCAAPBAEkcTq9Rmi4QB6RHALoDB4jTwARgArAAGUk7PaIWwQc6eQHA4AASDhUyKCVBfjhACMGsxBAgjLwQiAUABrBxIellfF2IlkimkBIoEXihDMBB1CBBHiY3lwfkcvxc5EQjFG+EYtkcylGfZUKCIJxBKAoOpgERwUYuHi4MIeu60Nm0fout0Br3cqBBACeo0wEHBvEsIBCQTyUEdOw0mBIABEAPIAWVGGGC4U8cJp5o6DrgsSAA)
+[Try it](https://share.effector.dev/AupKHTcS)
 
 - Introduce `sample`. Sample allows to integrate rapidly changed values with common ui states
 
@@ -2266,7 +2266,7 @@ const App = () => (
 )
 ```
 
-[see sample in action here](https://effector.now.sh/try?version=master&code=FASwtgDg9gTgLgAgN4GMYFMCGd0GU6zoA0CaWOAogG7oB2cJAzppADboC+CAZjFGAgDk6bt3QoCMQaEixEqDNnQBhftFp04XXvyEixE2AFpFE6eGjwEAJSwSefAYNNxzsq7cwSAIgHkAsg66znZwRgAm-NLAKFC0jIhwICgA1tSaCAC8pIqUNPQAFACUMXEJCEmpWTnkeJLoBQAMJQCQAHRxBZVp+QwIBbRFWQB8CLQIANQIAIwlwIzocACS9OgwVJisXck9miTTjYcIAPQIAGzNwKXxiGBQAK4Lyqw71WRK6YUlsTekL6mMN65OqEJqtDq0Ap3R4qf4pEgDIaZUbjKazK4-crMNjocLVbEQdjbVIkFBwxgI7qk8lI0YFJDABAVHbUnYU4AcIpzTGIfxxECSIG1VSyDSFAnscIIiB8CAU5BUv5szkjfqMhAAHggw3VTI1ACNht0AFya46GpDdDi6zX6mDHHVMvWGsls00a83DVDk61647a4BcjFlRAAQQgEGqxVVBWALQ14RAVEdTo1fNoAtgDptBvucAI4zizx2mSQ0KecI4w1dVQICHuEHCSg9+rzBZTHsTycDwd+fCgiGykRQ9zAmja70o7DHhUEXcEJWHo-H+qg4QAnm1MBG6OFlAALECscIFftwOaeHwBNoYWjhNYFDXhiAOkhnopAA)
+[see sample in action here](https://share.effector.dev/oyymGkcS)
 
 [Sampling (signal processing)](<https://en.wikipedia.org/wiki/Sampling_(signal_processing)>)
 
@@ -2304,7 +2304,7 @@ Plugins are available out from a box
 }
 ```
 
-[see plugins in action](https://effector.now.sh/try?version=master&code=MYewdgzgLgBFCWUA2BTGBeGwBOKCGUKAylCLgBQDkA7ikqALYqUCUAUG6JCKgHRIgA5lWhkUvCAAsyUAHJ4mlADRxEfKTPlN2ncNCxJ4wANYAVNWkw58hAKIA3FGCjkdXCD3EDhlFI+cS0thyCswqwIYm5sjiGsFaKG56sNGoGFi4BCgAwiAMAA7gTi4IMSrk+dgg+RAqpagsGAB8MORsMDAAPJIAjDDg2ZHG6ADeEUZmFgC+TSP1KFOdAPS9TWwsSdx83lS5BUUBACbwEPlIeACeCcowqeLHp+dXoexAA)
+[see plugins in action](https://share.effector.dev/pMOmdWFI)
 
 - Add support for passing events and effects to watchers
 
