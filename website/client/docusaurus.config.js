@@ -84,10 +84,6 @@ module.exports = {
               label: 'Telegram',
               href: 'https://t.me/effector_en',
             },
-            {
-              label: 'Youtube',
-              href: 'https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q',
-            }
           ],
         },
         {
@@ -96,6 +92,10 @@ module.exports = {
             {
               label: 'Github',
               to: 'https://github.com/effector/effector',
+            },
+            {
+              label: 'Youtube',
+              href: 'https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q',
             },
           ],
         },
