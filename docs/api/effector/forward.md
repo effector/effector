@@ -67,13 +67,14 @@ event(200)
 
 [Try it](https://share.effector.dev/UeJbgRG9)
 
-It is the not better way to update store. In most cases you need [`store.on`](https://effector.now.sh/docs/api/effector/store#ontrigger-handler)
+It is the not better way to update store. In most cases you need [`store.on`](https://effector.dev/docs/api/effector/store#ontrigger-handler)
 
 ## Support array in config field
 
 :::note since
 effector 20.6.0
 :::
+
 ### `forward({ from: Array<Unit>, to: Array<Unit> })`
 
 1. `from` (`Array`<[_Event_] | [_Store_] | [_Effect_]>): List of units. When triggered one from list, `to` will be triggered with data from it.
@@ -135,7 +136,7 @@ forward({
 
 ## Recommendation
 
-- Use [`store.on`](https://effector.now.sh/docs/api/effector/store#ontrigger-handler) to update store.
+- Use [`store.on`](https://effector.dev/docs/api/effector/store#ontrigger-handler) to update store.
 - Be careful when forwarding store to another store.
 - Use [_Subscription_] with caution, because it breaks static connections and makes debug harder.
 

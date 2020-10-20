@@ -2,9 +2,9 @@ const CACHE_NAME = 'try-effector-cache-v1'
 const urlsToCache = [
   '/',
   '/index.html',
-  'https://effector.now.sh/css/main.css',
-  'https://effector.now.sh/img/comet.png',
-  'https://effector.now.sh/js/codetabs.js',
+  'https://effector.dev/css/main.css',
+  'https://effector.dev/img/comet.png',
+  'https://effector.dev/js/codetabs.js',
 ]
 
 self.addEventListener('install', event => {
@@ -19,8 +19,9 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request).then(response => (
-      response ||
+    caches.match(event.request).then(
+      response =>
+        response ||
         fetch(event.request).then(response => {
           // Check if we received a valid response
           if (
@@ -41,7 +42,7 @@ self.addEventListener('fetch', event => {
           })
 
           return response
-        })
-    )),
+        }),
+    ),
   )
 })

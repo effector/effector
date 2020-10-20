@@ -22,11 +22,11 @@ https://gitpod.io/#https://github.com/effector/effector
 
 ### Structure
 
-- `docs` is a directory with .md files to build [effector.now.sh](https://effector.now.sh)
+- `docs` is a directory with .md files to build [effector.dev](https://effector.dev)
 - `src` contains all source files of effector, effector-react, ...
 - `packages` contains all files required to publish npm-packages
 - `tasks` is a directory with scripts to build npm-packages
-- `website` contains source files of [effector.now.sh](https://effector.now.sh)
+- `website` contains source files of [effector.dev](https://effector.dev)
 
 ### `yarn build`
 
