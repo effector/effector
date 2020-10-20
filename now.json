@@ -4,12 +4,30 @@
     "silent": true
   },
   "alias": ["effector.now.sh"],
+  "build": {
+    "env": {
+      "SITE_URL": "https://effector.now.sh"
+    }
+  },
+  "builds": [
+    {
+      "src": "website/media/*.*",
+      "use": "@now/static"
+    }
+  ],
   "routes": [
     {
       "src": "/try/(.*)",
       "status": 301,
       "headers": {
         "Location": "https://share.effector.dev/$1"
+      }
+    },
+    {
+      "src": "/try",
+      "status": 301,
+      "headers": {
+        "Location": "https://share.effector.dev"
       }
     },
     {
