@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Effector',
+  title: 'effector',
   tagline: 'The state manager',
   url: process.env.SITE_URL || 'https://effector.dev',
   baseUrl: '/',
@@ -18,9 +18,9 @@ module.exports = {
       indexName: 'effector',
     },
     navbar: {
-      title: 'Effector',
+      title: 'effector',
       logo: {
-        alt: 'Effector Logo',
+        alt: 'effector Logo',
         src: 'img/comet.png',
       },
       items: [
@@ -84,6 +84,10 @@ module.exports = {
               label: 'Telegram',
               href: 'https://t.me/effector_en',
             },
+            {
+              label: 'Youtube',
+              href: 'https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q',
+            }
           ],
         },
         {
@@ -97,7 +101,7 @@ module.exports = {
         },
       ],
       logo: {
-        alt: 'Effector - the state manager',
+        alt: 'effector - the state manager',
         src: 'img/comet.png',
         href: 'https://github.com/effector/effector',
       },
