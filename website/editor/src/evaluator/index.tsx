@@ -144,7 +144,7 @@ const fetchPatronum = createEffect({
     const req = await fetch(url)
     let text = await req.text()
     text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
-    return createRealm(text, `ssr.js`, {effector})
+    return createRealm(text, `patronum.js`, {effector})
   }
 })
 
