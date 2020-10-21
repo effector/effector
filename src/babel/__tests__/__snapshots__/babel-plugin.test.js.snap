@@ -885,6 +885,38 @@ function foo() {
 import { createStore as createEffect } from 'redux';"
 `;
 
+exports[`babel-plugin should merge 1`] = `
+"var _effectorFileName = \\"\\";
+//@flow
+import { createEvent, merge } from 'effector';
+const foo = createEvent({
+  name: \\"foo\\",
+  sid: \\"xl5qm7\\"
+});
+const a = merge([foo], {
+  name: \\"a\\",
+  sid: \\"gykm4k\\"
+});
+const b = merge([foo], {
+  ɔ: {},
+  name: \\"b\\",
+  sid: \\"xgvq0y\\"
+});
+const {
+  sid
+} = merge([foo], {
+  sid: \\"-f56bdd\\"
+});
+merge([foo], {
+  sid: \\"lh67eb\\"
+});
+const args = [[foo]];
+const c = merge(...args, {
+  name: \\"c\\",
+  sid: \\"fp5o1j\\"
+});"
+`;
+
 exports[`babel-plugin should restore 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow

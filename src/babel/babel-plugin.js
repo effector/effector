@@ -15,6 +15,7 @@ module.exports = function(babel, options = {}) {
     attaches,
     splits,
     apis,
+    merges,
     storeCreators,
     eventCreators,
     effectCreators,
@@ -27,6 +28,7 @@ module.exports = function(babel, options = {}) {
     attachCreators,
     splitCreators,
     apiCreators,
+    mergeCreators,
     domainMethods,
     exportMetadata,
     importName,
@@ -55,6 +57,7 @@ module.exports = function(babel, options = {}) {
     attachCreators,
     splitCreators,
     apiCreators,
+    mergeCreators,
   ]
   const importVisitor = {
     ImportDeclaration(path) {
@@ -91,6 +94,8 @@ module.exports = function(babel, options = {}) {
             splitCreators.add(localName)
           } else if (apiCreators.has(importedName)) {
             apiCreators.add(localName)
+          } else if (mergeCreators.has(importedName)) {
+            mergeCreators.add(localName)
           }
         }
       } else {
@@ -111,7 +116,7 @@ module.exports = function(babel, options = {}) {
     },
   }
   const plugin = {
-    name: '@effector/babel-plugin',
+    name: 'effector/babel-plugin',
     pre() {
       this.effector_ignoredImports = new Set()
     },
@@ -262,6 +267,15 @@ module.exports = function(babel, options = {}) {
               false,
             )
           }
+          if (merges && mergeCreators.has(name)) {
+            setStoreNameAfter(
+              path,
+              state,
+              findCandidateNameForExpression(path),
+              babel.types,
+              smallConfig,
+            )
+          }
         }
 
         if (t.isMemberExpression(path.node.callee)) {
@@ -305,6 +319,7 @@ const normalizeOptions = options => {
         attach: [],
         split: [],
         createApi: [],
+        merge: [],
         domainMethods: {
           store: [],
           event: [],
@@ -325,6 +340,7 @@ const normalizeOptions = options => {
         attach: ['attach'],
         split: ['split'],
         createApi: ['createApi'],
+        merge: ['merge'],
         domainMethods: {
           store: ['store', 'createStore'],
           event: ['event', 'createEvent'],
@@ -362,6 +378,7 @@ const normalizeOptions = options => {
       attaches: true,
       splits: true,
       apis: true,
+      merges: true,
     },
     result: {
       importName: new Set(
@@ -393,6 +410,7 @@ const normalizeOptions = options => {
       attachCreators: new Set(options.attachCreators || defaults.attach),
       splitCreators: new Set(options.splitCreators || defaults.split),
       apiCreators: new Set(options.apiCreators || defaults.createApi),
+      mergeCreators: new Set(options.mergeCreators || defaults.merge),
       domainMethods: readConfigShape(
         options.domainMethods,
         defaults.domainMethods,
