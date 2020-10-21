@@ -12,6 +12,8 @@ hydrate(domain: Domain, { values: Map<Store<any>, any> | {[sid: string]: any} })
 
 A companion method for [_serialize_](serialize). Hydrates provided values into corresponding stores within a provided domain. The main purpose is an application state hydration on the client side after SSR.
 
+You need to make sure, that the store is created beforehand, otherwise, the hydration might fail. This could be the case, if you store initalization / hydration scripts separate from stores' creation.
+
 ### Arguments
 
 1. `domain`: a [_Domain_](Domain.md) object
