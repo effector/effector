@@ -26,8 +26,6 @@ export class CustomInspector extends React.PureComponent<Props, any> {
     const dom = data instanceof HTMLElement
     const table = method === 'table'
 
-    console.log('INSPECTOR', {method, data, styles, dom})
-
     return (
       <Root data-type={table ? 'table' : dom ? 'html' : 'object'}>
         {table ? (

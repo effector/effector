@@ -16,8 +16,6 @@ const logParsedAdded = logHappened.map(parseLog)
 export const autoScrollEnableClicked = createEvent()
 export const autoScrollDisableClicked = createEvent()
 
-logParsedAdded.watch(console.info)
-
 export const $autoScrollLog = restore(requirements.autoScrollLogChanged, true)
 export const $logs = createStore<Log[]>([])
 
