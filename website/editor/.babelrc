@@ -1,8 +1,7 @@
 {
   "plugins": [
     "@babel/plugin-proposal-export-namespace-from",
-    "effector/babel-plugin",
-    "effector/babel-plugin-react"
+    "effector/babel-plugin"
   ],
   "presets": [
     [
