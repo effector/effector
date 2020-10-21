@@ -1,7 +1,8 @@
 {
   "plugins": [
-    "@babel/plugin-proposal-export-namespace-from",
-    "effector/babel-plugin"
+    "effector/babel-plugin",
+    "@babel/plugin-proposal-optional-chaining",
+    "@babel/plugin-proposal-nullish-coalescing-operator"
   ],
   "presets": [
     [
