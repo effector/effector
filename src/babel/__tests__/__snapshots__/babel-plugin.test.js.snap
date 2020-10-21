@@ -707,6 +707,48 @@ const f = () => createApi({
 });"
 `;
 
+exports[`babel-plugin should fabrics 1`] = `
+"var _effectorFileName = \\"\\";
+import { createStore } from 'effector';
+const foo = customFabric('x', {
+  name: \\"foo\\",
+  sid: \\"u78wuj\\"
+});
+const bar = customFabric(null, {
+  name: \\"bar\\",
+  sid: \\"-9x1a90\\"
+});
+const config = ['x'];
+const baz = customFabric(...config, {
+  name: \\"baz\\",
+  sid: \\"upirap\\"
+});
+customFabric('x', {
+  sid: \\"5epugs\\"
+});
+const bam = customFabric('x', {
+  ɔ: {
+    name: 'bm'
+  },
+  name: \\"bam\\",
+  sid: \\"-untb2f\\"
+});
+
+function customFabric(params, {
+  sid
+} = {}) {
+  return createStore({
+    params,
+    x: 0
+  }, {
+    ɔ: {
+      sid
+    },
+    sid: \\"5hgtnc\\"
+  });
+}"
+`;
+
 exports[`babel-plugin should forward 1`] = `
 "var _effectorFileName = \\"\\";
 //@flow

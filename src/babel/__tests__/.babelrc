@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["../babel-plugin", {"filename": false}],
+    ["../babel-plugin", {"filename": false, "fabrics": ["customFabric"]}],
     ["../babel-plugin-react", {"filename": false}]
   ]
 }

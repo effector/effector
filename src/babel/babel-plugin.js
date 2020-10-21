@@ -30,10 +30,12 @@ module.exports = function(babel, options = {}) {
     apiCreators,
     mergeCreators,
     domainMethods,
+    fabrics,
     exportMetadata,
     importName,
     reactSsr,
   } = normalizeOptions(options)
+  const fabricsUsed = fabrics.size > 0
   const smallConfig = {compressor, addLoc}
   const {types: t} = babel
   const isPropertyNameInRange = (range, path) =>
@@ -113,6 +115,18 @@ module.exports = function(babel, options = {}) {
           path.node.source.value = 'effector-react/ssr'
         }
       }
+      if (fabricsUsed) {
+        for (let i = 0; i < specifiers.length; i++) {
+          const s = specifiers[i]
+          if (!s.imported) continue
+          const importedName = s.imported.name
+          const localName = s.local.name
+          if (importedName === localName) continue
+          if (fabrics.has(importedName)) {
+            fabrics.add(localName)
+          }
+        }
+      }
     },
   }
   const plugin = {
@@ -153,127 +167,144 @@ module.exports = function(babel, options = {}) {
         if (!state.effects) state.effects = new Set()
         if (!state.domains) state.domains = new Set()
 
-        if (
-          t.isIdentifier(path.node.callee) &&
-          !this.effector_ignoredImports.has(path.node.callee.name)
-        ) {
-          const name = path.node.callee.name
-          if (stores && storeCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setStoreNameAfter(path, state, id, babel.types, smallConfig)
-            if (id) {
-              state.stores.add(id.name)
+        if (t.isIdentifier(path.node.callee)) {
+          if (!this.effector_ignoredImports.has(path.node.callee.name)) {
+            const name = path.node.callee.name
+            if (stores && storeCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setStoreNameAfter(
+                path,
+                state,
+                id,
+                babel.types,
+                smallConfig,
+                false,
+              )
+              if (id) {
+                state.stores.add(id.name)
+              }
+            }
+            if (events && eventCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
+              if (id) {
+                state.events.add(id.name)
+              }
+            }
+            if (effects && effectCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
+              if (id) {
+                state.effects.add(id.name)
+              }
+            }
+            if (domains && domainCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setEventNameAfter(path, state, id, babel.types, smallConfig)
+              if (id) {
+                state.domains.add(id.name)
+              }
+            }
+            if (restores && restoreCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setRestoreNameAfter(path, state, id, babel.types, smallConfig)
+              if (id) {
+                state.stores.add(id.name)
+              }
+            }
+            if (combines && combineCreators.has(name)) {
+              const id = findCandidateNameForExpression(path)
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                id,
+                babel.types,
+                smallConfig,
+                false,
+              )
+              if (id) {
+                state.stores.add(id.name)
+              }
+            }
+            if (samples && sampleCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                findCandidateNameForExpression(path),
+                babel.types,
+                smallConfig,
+                false,
+              )
+            }
+            if (guards && guardCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                findCandidateNameForExpression(path),
+                babel.types,
+                smallConfig,
+                false,
+              )
+            }
+            if (forwards && forwardCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                findCandidateNameForExpression(path),
+                babel.types,
+                smallConfig,
+                true,
+              )
+            }
+            if (attaches && attachCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                findCandidateNameForExpression(path),
+                babel.types,
+                smallConfig,
+                true,
+              )
+            }
+            if (splits && splitCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                null,
+                babel.types,
+                smallConfig,
+                false,
+              )
+            }
+            if (apis && apiCreators.has(name)) {
+              setConfigForConfigurableMethod(
+                path,
+                state,
+                null,
+                babel.types,
+                smallConfig,
+                false,
+              )
+            }
+            if (merges && mergeCreators.has(name)) {
+              setStoreNameAfter(
+                path,
+                state,
+                findCandidateNameForExpression(path),
+                babel.types,
+                smallConfig,
+                false,
+              )
             }
           }
-          if (events && eventCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-            if (id) {
-              state.events.add(id.name)
-            }
-          }
-          if (effects && effectCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-            if (id) {
-              state.effects.add(id.name)
-            }
-          }
-          if (domains && domainCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setEventNameAfter(path, state, id, babel.types, smallConfig)
-            if (id) {
-              state.domains.add(id.name)
-            }
-          }
-          if (restores && restoreCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setRestoreNameAfter(path, state, id, babel.types, smallConfig)
-            if (id) {
-              state.stores.add(id.name)
-            }
-          }
-          if (combines && combineCreators.has(name)) {
-            const id = findCandidateNameForExpression(path)
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              id,
-              babel.types,
-              smallConfig,
-              false,
-            )
-            if (id) {
-              state.stores.add(id.name)
-            }
-          }
-          if (samples && sampleCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              findCandidateNameForExpression(path),
-              babel.types,
-              smallConfig,
-              false,
-            )
-          }
-          if (guards && guardCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              findCandidateNameForExpression(path),
-              babel.types,
-              smallConfig,
-              false,
-            )
-          }
-          if (forwards && forwardCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              findCandidateNameForExpression(path),
-              babel.types,
-              smallConfig,
-              true,
-            )
-          }
-          if (attaches && attachCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              findCandidateNameForExpression(path),
-              babel.types,
-              smallConfig,
-              true,
-            )
-          }
-          if (splits && splitCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              null,
-              babel.types,
-              smallConfig,
-              false,
-            )
-          }
-          if (apis && apiCreators.has(name)) {
-            setConfigForConfigurableMethod(
-              path,
-              state,
-              null,
-              babel.types,
-              smallConfig,
-              false,
-            )
-          }
-          if (merges && mergeCreators.has(name)) {
+          if (fabricsUsed && fabrics.has(path.node.callee.name)) {
             setStoreNameAfter(
               path,
               state,
               findCandidateNameForExpression(path),
               babel.types,
               smallConfig,
+              true,
             )
           }
         }
@@ -281,7 +312,7 @@ module.exports = function(babel, options = {}) {
         if (t.isMemberExpression(path.node.callee)) {
           if (stores && isDomainMethod.store(path)) {
             const id = findCandidateNameForExpression(path)
-            setStoreNameAfter(path, state, id, babel.types, smallConfig)
+            setStoreNameAfter(path, state, id, babel.types, smallConfig, false)
           }
           if (events && isDomainMethod.event(path)) {
             const id = findCandidateNameForExpression(path)
@@ -326,6 +357,7 @@ const normalizeOptions = options => {
           effect: [],
           domain: [],
         },
+        fabrics: [],
       }
     : {
         store: ['createStore'],
@@ -347,6 +379,7 @@ const normalizeOptions = options => {
           effect: ['effect', 'createEffect'],
           domain: ['domain', 'createDomain'],
         },
+        fabrics: [],
       }
   let exportMetadata
   if ('exportMetadata' in options) {
@@ -415,6 +448,7 @@ const normalizeOptions = options => {
         options.domainMethods,
         defaults.domainMethods,
       ),
+      fabrics: new Set(options.fabrics || defaults.fabrics),
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },
@@ -551,7 +585,14 @@ function setRestoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     configExpr.properties.push(stableID)
   }
 }
-function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
+function setStoreNameAfter(
+  path,
+  state,
+  nameNodeId,
+  t,
+  {addLoc, compressor},
+  fillFirstArg,
+) {
   const displayName = nameNodeId ? nameNodeId.name : ''
   let args
   let loc
@@ -564,7 +605,10 @@ function setStoreNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
   })
 
   if (args) {
-    if (!args[0]) return
+    if (!args[0]) {
+      if (!fillFirstArg) return
+      args[0] = t.nullLiteral()
+    }
     const oldConfig = args[1]
     const configExpr = (args[1] = t.objectExpression([]))
 
