@@ -137,6 +137,17 @@ const fetchEffectorReactSSR = createEffect({
   }
 })
 
+const fetchPatronum = createEffect({
+  async handler(effector) {
+    const url = 'https://unpkg.com/patronum/patronum.cjs.js'
+    const sourceMap = `${url}.map`
+    const req = await fetch(url)
+    let text = await req.text()
+    text = text.replace(/\/\/\# sourceMappingURL\=.*$/m, `//${tag}MappingURL=${sourceMap}`)
+    return createRealm(text, `ssr.js`, {effector})
+  }
+})
+
 fetchBabelPlugin.fail.watch(() => selectVersion('master'))
 
 const api = {
@@ -176,22 +187,25 @@ export async function evaluator(code: string) {
   let forest
   let effectorFork
   let effectorReactSSR
+  let patronum
   if (version.getState() === 'master') {
     const additionalLibs = await Promise.all([
       fetchForest(effector),
       fetchEffectorFork(effector),
-      fetchEffectorReactSSR(effector)
+      fetchEffectorReactSSR(effector),
+      fetchPatronum(effector)
     ])
     forest = additionalLibs[0]
     effectorFork = additionalLibs[1]
     effectorReactSSR = additionalLibs[2]
+    patronum = additionalLibs[3]
   }
   //$off
   const env = prepareRuntime(effector, effectorReact, version.getState())
   return exec({
     code,
     realmGlobal: getIframe().contentWindow,
-    globalBlocks: [env, {dom: forest, forest, effectorFork, effectorReactSSR}],
+    globalBlocks: [env, {dom: forest, forest, effectorFork, effectorReactSSR, patronum}],
     filename: filename.getState(),
     types: typechecker.getState() || 'typescript',
     pluginRegistry: {
@@ -276,8 +290,15 @@ const removeImportsPlugin = babel => ({
         case 'effector-react/ssr':
           replaceModuleImports('effectorReactSSR', path, babel)
           break
+        case 'patronum':
+          replaceModuleImports('patronum', path, babel)
+          break;
         default:
-          path.remove()
+          // TODO: import actual module after patronum refactoring to ES Modules
+          if (path.node.source.value.indexOf('patronum/') === 0) {
+            replaceModuleImports('patronum', path, babel)
+          }
+          else path.remove()
       }
     },
     ExportDefaultDeclaration(path) {
