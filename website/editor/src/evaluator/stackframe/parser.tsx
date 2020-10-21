@@ -1,7 +1,10 @@
-import invariant from 'invariant'
 import StackFrame from './stack-frame'
 
 const regexExtractLocation = /\(?(.+?)(?::(\d+))?(?::(\d+))?\)?$/
+
+function invariant(cond: any, message?: string): asserts cond {
+  if (!cond) throw Error(message)
+}
 
 function extractLocation(token: string): [string, number, number] {
   const match = regexExtractLocation.exec(token)

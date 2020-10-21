@@ -19,7 +19,6 @@
     "@types/babel__core": "^7.1.9",
     "@types/babel__standalone": "^7.1.2",
     "@types/codemirror": "^0.0.93",
-    "@types/invariant": "^2.2.33",
     "@types/js-md5": "^0.4.2",
     "@types/linkifyjs": "^2.1.3",
     "@types/lodash.debounce": "^4.0.6",
