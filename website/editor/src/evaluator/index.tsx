@@ -74,10 +74,18 @@ fetchEffector.fail.watch(() => selectVersion('master'))
 
 const fetchBabelPlugin = createEffect<string, {[key: string]: any}, any>({
   async handler(ver) {
-    const url =
-      ver === 'master'
-        ? 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/babel-plugin.js'
-        : `https://unpkg.com/@effector/babel-plugin@latest/index.js`
+    let url: string
+    if (ver === 'master') {
+      url = 'https://effector--canary.s3-eu-west-1.amazonaws.com/effector/babel-plugin.js'
+    } else {
+      let [major, minor = '', patch = ''] = ver.split('.')
+      patch = patch.split('-')[0]
+      if (major === '0' && (parseInt(minor) < 18 || (minor === '18' && parseInt(patch) < 7))) {
+        url = `https://unpkg.com/@effector/babel-plugin@latest/index.js`
+      } else {
+        url = `https://unpkg.com/effector@${ver}/babel-plugin.js`
+      }
+    }
     const sourceMap = `${url}.map`
     const req = await fetch(url)
     let text = await req.text()
