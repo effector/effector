@@ -201,10 +201,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 6, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => Promise<number>; }' is not assignable to parameter of type 'SyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-            Overload 2 of 6, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => Promise<number>' is not assignable to type 'SyncFn'.
                 Type 'Promise<number>' is not assignable to type 'number'.
 
@@ -227,10 +227,10 @@ describe('single generic', () => {
           "
           --typescript--
           No overload matches this call.
-            Overload 1 of 6, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
+            Overload 1 of 7, '(handler: AsyncFn): Effect<string, number, Error>', gave the following error.
               Argument of type '{ handler: (_: string) => number; }' is not assignable to parameter of type 'AsyncFn'.
                 Object literal may only specify known properties, and 'handler' does not exist in type 'AsyncFn'.
-            Overload 2 of 6, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+            Overload 2 of 7, '(config: { name?: string | undefined; handler: AsyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
               Type '(_: string) => number' is not assignable to type 'AsyncFn'.
                 Type 'number' is not assignable to type 'Promise<number>'.
 
@@ -276,10 +276,10 @@ describe('single generic', () => {
         "
         --typescript--
         No overload matches this call.
-          Overload 1 of 6, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
+          Overload 1 of 7, '(handler: SyncFn): Effect<string, number, Error>', gave the following error.
             Argument of type '{ handler(_: string): Promise<string>; }' is not assignable to parameter of type 'SyncFn'.
               Object literal may only specify known properties, and 'handler' does not exist in type 'SyncFn'.
-          Overload 2 of 6, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
+          Overload 2 of 7, '(config: { name?: string | undefined; handler: SyncFn; sid?: string | undefined; }): Effect<string, number, Error>', gave the following error.
             Type '(_: string) => Promise<string>' is not assignable to type 'SyncFn'.
               Type 'Promise<string>' is not assignable to type 'number'.
 
@@ -323,7 +323,7 @@ describe('single generic', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Expected 1 arguments, but got 0.
+        Expected 1-2 arguments, but got 0.
 
         --flow--
         Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
@@ -341,7 +341,7 @@ describe('single generic', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Expected 1 arguments, but got 0.
+        Expected 1-2 arguments, but got 0.
 
         --flow--
         Cannot call 'createEffect' because: [incompatible-call] Either cannot use function type [1] with fewer than 3 type arguments. Or cannot use function type [2] with fewer than 3 type arguments
@@ -526,20 +526,37 @@ it('should allow any value', () => {
   `)
 })
 describe('void params', () => {
-  it('should allow only calls without arguments', () => {
-    const handler = async () => 'ok'
-    const effect = createEffect({handler})
-    effect(1)
-    effect()
-    expect(typecheck).toMatchInlineSnapshot(`
-      "
-      --typescript--
-      Argument of type 'number' is not assignable to parameter of type 'void'.
+  describe('should allow only calls without arguments', () => {
+    test('createEffect(config)', () => {
+      const handler = async () => 'ok'
+      const effect = createEffect({handler})
+      effect(1)
+      effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Argument of type 'number' is not assignable to parameter of type 'void'.
 
-      --flow--
-      no errors
-      "
-    `)
+        --flow--
+        no errors
+        "
+      `)
+    })
+    test('createEffect(name, config)', () => {
+      const handler = async () => 'ok'
+      const effect = createEffect('effect', {handler})
+      effect(1)
+      effect()
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Argument of type 'number' is not assignable to parameter of type 'void'.
+
+        --flow--
+        no errors
+        "
+      `)
+    })
   })
   describe('with handler', () => {
     test('handler returns void', () => {

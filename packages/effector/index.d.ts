@@ -451,6 +451,10 @@ export function createEffect<Params, Done, Fail = Error>(
   handler: (params: Params) => Done | Promise<Done>,
 ): Effect<Params, Done, Fail>
 export function createEffect<FN extends Function, Fail>(handler: FN): EffectByHandler<FN, Fail>
+export function createEffect<FN extends Function>(name: string, config: {
+  handler: FN
+  sid?: string
+}): EffectByHandler<FN, Error>
 export function createEffect<Params, Done, Fail = Error>(
   effectName?: string,
   config?: {
