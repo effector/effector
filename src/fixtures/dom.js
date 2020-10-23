@@ -1,7 +1,10 @@
 import {JSDOM} from 'jsdom'
 
 import prettyHtml from './prettyHtml'
-
+function getGlobal() {
+  if (typeof globalThis !== 'undefined') return globalThis
+  if (typeof global !== 'undefined') return global
+}
 export const provideGlobals = () => {
   const dom = new JSDOM(`<!DOCTYPE html><body><div id="root"></div></body>`, {
     pretendToBeVisual: true,
@@ -10,12 +13,12 @@ export const provideGlobals = () => {
   const window = dom.window
   const el = document.getElementById('root')
   const installDocument = () => {
-    const oldDocument = globalThis.document
-    globalThis.document = document
+    const oldDocument = getGlobal().document
+    getGlobal().document = document
     return oldDocument
   }
   const restoreDocument = oldDocument => {
-    globalThis.document = oldDocument
+    getGlobal().document = oldDocument
   }
   const domSnapshots = []
   const execFunc = async cb => {
