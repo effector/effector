@@ -413,8 +413,6 @@ See [`Domain`](http://effector.dev/api/effector/domain) in docs
 - [Glossary](https://effector.dev/en/glossary)
 - [Changelog](https://changelog.effector.dev)
 
-![Effector Diagram](./diagram.png)
-
 ## Support us
 
 More articles about effector at patreon
