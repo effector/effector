@@ -548,9 +548,13 @@ function cloneGraph(unit: any) {
     }),
   }
   function findClone(unit: any) {
-    unit = getGraph(unit)
-    const index = list.indexOf(unit)
-    if (index === -1) throwError('unit not found in forked scope')
+    const node = getGraph(unit)
+    const index = list.indexOf(node)
+    if (index === -1) {
+      let unitName = 'unit'
+      if (unit !== node && unit.id !== unit.shortName) unitName = unit.shortName
+      throwError(`${unitName} not found in forked scope`)
+    }
     return clones[index]
   }
 }
