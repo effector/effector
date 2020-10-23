@@ -53,6 +53,7 @@ const externals = [
   'forest',
   'forest/forest.mjs',
   'forest/server',
+  '@vue/reactivity',
   'vue',
   'react',
 ]
@@ -249,6 +250,14 @@ export async function rollupEffectorVue() {
         cjs: dir(`npm/${name}/${name}.cjs.js`),
         es: dir(`npm/${name}/${name}.mjs`),
       },
+      inputExtension: 'ts',
+    }),
+    createEsCjs(name, {
+      file: {
+        cjs: dir(`npm/${name}/composition.cjs`),
+        es: dir(`npm/${name}/composition.mjs`),
+      },
+      input: 'composition',
       inputExtension: 'ts',
     }),
     createUmd(name, {

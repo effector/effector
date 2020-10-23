@@ -107,6 +107,10 @@ export default {
             'compat.d.ts',
           ],
         ],
+        [
+          'composition.d.ts',
+          ['composition.d.ts', 'composition.cjs.d.ts', 'composition.mjs.d.ts'],
+        ],
         'README.md',
         'package.json',
         [

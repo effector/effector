@@ -9,7 +9,12 @@
       "require": "./effector-vue.cjs.js",
       "default": "./effector-vue.mjs"
     },
+    "./composition": {
+      "require": "./composition.cjs.js",
+      "default": "./composition.mjs"
+    },
     "./effector-vue.mjs": "./effector-vue.mjs",
+    "./composition.mjs": "./composition.mjs",
     "./compat": "./compat.js",
     "./effector-vue.umd": "./effector-react.umd.js"
   },
@@ -18,7 +23,8 @@
   "typings": "index.d.ts",
   "peerDependencies": {
     "vue": "*",
-    "effector": "^21.0.2"
+    "effector": "^21.0.2",
+    "@vue/reactivity": "^3.0.2"
   },
   "files": [
     "README.md",
@@ -39,7 +45,14 @@
     "effector-vue.cjs.d.ts",
     "effector-vue.mjs.d.ts",
     "effector-vue.umd.d.ts",
-    "compat.d.ts"
+    "compat.d.ts",
+    "composition.cjs.js",
+    "composition.cjs.js.map",
+    "composition.mjs",
+    "composition.mjs.map",
+    "composition.d.ts",
+    "composition.mjs.d.ts",
+    "composition.cjs.d.ts"
   ],
   "keywords": [
     "vue",
