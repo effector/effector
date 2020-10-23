@@ -168,8 +168,7 @@ test('setState warning', async () => {
   const oldConsoleError = console.error
   const fn = jest.fn()
   console.error = (...args: any[]) => {
-    fn(args.join(', '))
-    oldConsoleError.call(console, ...args)
+    fn(args.slice(0, -1).join(', '))
   }
   const setText = createEvent<string>()
   const gate = createGate<string>()
@@ -216,9 +215,7 @@ test('setState warning', async () => {
   console.error = oldConsoleError
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
-      "Warning: Cannot update a component (\`%s\`) while rendering a different component (\`%s\`). To locate the bad setState() call inside \`%s\`, follow the stack trace as described in https://fb.me/setstate-in-render%s, Test, App, App, 
-        in App
-        in StrictMode",
+      "Warning: Cannot update a component (\`%s\`) while rendering a different component (\`%s\`). To locate the bad setState() call inside \`%s\`, follow the stack trace as described in https://fb.me/setstate-in-render%s, Test, App, App",
     ]
   `)
 })
