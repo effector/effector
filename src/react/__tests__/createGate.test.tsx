@@ -215,7 +215,7 @@ test('setState warning', async () => {
   console.error = oldConsoleError
   expect(argumentHistory(fn)).toMatchInlineSnapshot(`
     Array [
-      "Warning: Cannot update a component (\`%s\`) while rendering a different component (\`%s\`). To locate the bad setState() call inside \`%s\`, follow the stack trace as described in https://fb.me/setstate-in-render%s, Test, App, App",
+      "Warning: Cannot update a component (\`%s\`) while rendering a different component (\`%s\`). To locate the bad setState() call inside \`%s\`, follow the stack trace as described in https://reactjs.org/link/setstate-in-render%s, Test, App, App",
     ]
   `)
 })
