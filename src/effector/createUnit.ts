@@ -17,7 +17,7 @@ import {createName, mapName, joinName} from './naming'
 import {createLinkNode} from './forward'
 import {watchUnit} from './watch'
 import {createSubscription} from './subscription'
-import {addToRegion, readTemplate} from './region'
+import {addToRegion, readTemplate, readSidRoot} from './region'
 import {
   getSubscribers,
   getConfig,
@@ -71,9 +71,10 @@ export const initUnit = (
     {},
   )
   const id = nextUnitID()
-  const {parent = null, sid = null, strict = true, named = null} = config
+  let {parent = null, sid = null, strict = true, named = null} = config
   const name = named ? named : config.name || (kind === 'domain' ? '' : id)
   const compositeName = createName(name, parent)
+  sid = readSidRoot(sid)
   unit.kind = kind
   unit.id = id
   unit.sid = sid

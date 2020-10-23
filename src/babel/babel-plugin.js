@@ -37,7 +37,8 @@ module.exports = function(babel, options = {}) {
   } = normalizeOptions(options)
   const fabricsUsed = fabrics.size > 0
   const smallConfig = {compressor, addLoc}
-  const {types: t} = babel
+  const {types: t, template} = babel
+  let fabricTemplate
   const isPropertyNameInRange = (range, path) =>
     range.has(path.node.callee.property.name)
   const isDomainMethod = {
@@ -61,6 +62,20 @@ module.exports = function(babel, options = {}) {
     apiCreators,
     mergeCreators,
   ]
+  function addFabricImport(path) {
+    const programPath = path.find(path => path.isProgram())
+    programPath.node.body.unshift(
+      t.importDeclaration(
+        [
+          t.importSpecifier(
+            t.identifier('withFabric'),
+            t.identifier('withFabric'),
+          ),
+        ],
+        t.stringLiteral('effector'),
+      ),
+    )
+  }
   const importVisitor = {
     ImportDeclaration(path) {
       const source = path.node.source.value
@@ -116,14 +131,31 @@ module.exports = function(babel, options = {}) {
         }
       }
       if (fabricsUsed) {
-        for (let i = 0; i < specifiers.length; i++) {
-          const s = specifiers[i]
-          if (!s.imported) continue
-          const importedName = s.imported.name
-          const localName = s.local.name
-          if (importedName === localName) continue
-          if (fabrics.has(importedName)) {
-            fabrics.add(localName)
+        const {extname} = require('path')
+        let normalizedSource = source
+        const ext = extname(source)
+        if (ext.length > 0)
+          normalizedSource = normalizedSource.slice(0, -ext.length)
+        if (fabrics.has(normalizedSource)) {
+          if (!this.effector_fabricMap) {
+            this.effector_fabricMap = new Map()
+            addFabricImport(path)
+            if (!fabricTemplate) {
+              fabricTemplate = template(
+                'withFabric({sid: SID,fn:()=>FN,name:NAME})',
+              )
+            }
+          }
+          for (let i = 0; i < specifiers.length; i++) {
+            const s = specifiers[i]
+            if (!s.imported) continue
+            const importedName = s.imported.name
+            const localName = s.local.name
+            this.effector_fabricMap.set(localName, {
+              localName,
+              importedName,
+              source: normalizedSource,
+            })
           }
         }
       }
@@ -168,8 +200,8 @@ module.exports = function(babel, options = {}) {
         if (!state.domains) state.domains = new Set()
 
         if (t.isIdentifier(path.node.callee)) {
-          if (!this.effector_ignoredImports.has(path.node.callee.name)) {
-            const name = path.node.callee.name
+          const name = path.node.callee.name
+          if (!this.effector_ignoredImports.has(name)) {
             if (stores && storeCreators.has(name)) {
               const id = findCandidateNameForExpression(path)
               setStoreNameAfter(
@@ -297,14 +329,41 @@ module.exports = function(babel, options = {}) {
               )
             }
           }
-          if (fabricsUsed && fabrics.has(path.node.callee.name)) {
-            setStoreNameAfter(
-              path,
-              state,
-              findCandidateNameForExpression(path),
-              babel.types,
-              smallConfig,
-              true,
+          if (
+            fabricsUsed &&
+            this.effector_fabricMap &&
+            this.effector_fabricMap.has(name) &&
+            !path.node.effector_isFabric
+          ) {
+            const {
+              source,
+              importedName,
+              localName,
+            } = this.effector_fabricMap.get(name)
+            path.node.effector_isFabric = true
+            const idNode = findCandidateNameForExpression(path)
+            const resultName = idNode ? idNode.name : ''
+            let loc
+            path.find(path => {
+              if (path.isCallExpression()) {
+                loc = path.node.loc.start
+                return true
+              }
+            })
+            const sid = generateStableID(
+              state.file.opts.root,
+              state.filename,
+              resultName,
+              loc.line,
+              loc.column,
+              compressor,
+            )
+            path.replaceWith(
+              fabricTemplate({
+                SID: JSON.stringify(sid),
+                FN: path.node,
+                NAME: JSON.stringify(resultName),
+              }),
             )
           }
         }

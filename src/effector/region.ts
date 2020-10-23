@@ -1,10 +1,12 @@
 import {getValue, getGraph, getParent} from './getter'
 import {own} from './own'
+import {createNode} from './createNode'
 
 type RegionStack = {
   parent: RegionStack | null
   value: any
   template: any
+  sidRoot?: string
 }
 
 export const addToRegion = (unit: any) => {
@@ -15,17 +17,44 @@ export const addToRegion = (unit: any) => {
 let regionStack: RegionStack | null = null
 
 export const readTemplate = () => regionStack && regionStack.template
+export const readSidRoot = (sid?: string | null) => {
+  if (sid && regionStack && regionStack.sidRoot)
+    sid = `${regionStack.sidRoot}ɔ${sid}`
+  return sid
+}
 
 export function withRegion(unit: any, cb: () => void) {
+  const unitMeta = getGraph(unit).meta
   regionStack = {
     parent: regionStack,
     value: unit,
-    template:
-      getGraph(unit).meta.template || (regionStack && regionStack.template),
+    template: unitMeta.template || readTemplate(),
+    sidRoot: unitMeta.sidRoot || (regionStack && regionStack.sidRoot),
   }
   try {
     return cb()
   } finally {
     regionStack = getParent(regionStack)
   }
+}
+
+export const withFabric = ({
+  sid,
+  name,
+  loc,
+  fn,
+}: {
+  sid: string
+  name?: string
+  loc?: any
+  fn: () => any
+}) => {
+  const sidNode = createNode({
+    meta: {
+      sidRoot: readSidRoot(sid),
+      name,
+      loc,
+    },
+  })
+  return withRegion(sidNode, fn)
 }

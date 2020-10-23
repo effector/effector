@@ -709,44 +709,43 @@ const f = () => createApi({
 
 exports[`babel-plugin should fabrics 1`] = `
 "var _effectorFileName = \\"\\";
-import { createStore } from 'effector';
-const foo = customFabric('x', {
-  name: \\"foo\\",
-  sid: \\"u78wuj\\"
+import { withFabric } from \\"effector\\";
+import { a } from '../a';
+import { a1 } from './a';
+import { b } from './b';
+import { c } from 'c/d';
+import { e } from '~/e';
+import { f } from '@/f';
+import f1 from '@/f';
+import { g } from '../g';
+import { g1 } from '../g.ts';
+import { g2 } from './g.ts';
+const a_val = a(0);
+const a1_val = withFabric({
+  sid: \\"smjn5l\\",
+  fn: () => a1(0),
+  name: \\"a1_val\\"
 });
-const bar = customFabric(null, {
-  name: \\"bar\\",
-  sid: \\"-9x1a90\\"
+const b_val = b(0);
+const c_val = withFabric({
+  sid: \\"22mp8r\\",
+  fn: () => c(0),
+  name: \\"c_val\\"
 });
-const config = ['x'];
-const baz = customFabric(...config, {
-  name: \\"baz\\",
-  sid: \\"upirap\\"
+const e_val = withFabric({
+  sid: \\"phby3w\\",
+  fn: () => e(0),
+  name: \\"e_val\\"
 });
-customFabric('x', {
-  sid: \\"5epugs\\"
+const f_val = withFabric({
+  sid: \\"-xlwo8k\\",
+  fn: () => f(0),
+  name: \\"f_val\\"
 });
-const bam = customFabric('x', {
-  ɔ: {
-    name: 'bm'
-  },
-  name: \\"bam\\",
-  sid: \\"-untb2f\\"
-});
-
-function customFabric(params, {
-  sid
-} = {}) {
-  return createStore({
-    params,
-    x: 0
-  }, {
-    ɔ: {
-      sid
-    },
-    sid: \\"5hgtnc\\"
-  });
-}"
+const f1_val = f1(0);
+const g_val = g(0);
+const g1_val = g1(0);
+const g2_val = g2(0);"
 `;
 
 exports[`babel-plugin should forward 1`] = `
