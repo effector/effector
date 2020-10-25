@@ -200,10 +200,12 @@ module.exports = function(babel, options = {}) {
 
       CallExpression(path, state) {
         addFileNameIdentifier(addLoc, enableFileName, t, path, state)
-        if (!state.stores) state.stores = new Set()
-        if (!state.events) state.events = new Set()
-        if (!state.effects) state.effects = new Set()
-        if (!state.domains) state.domains = new Set()
+        if (exportMetadata) {
+          if (!state.stores) state.stores = new Set()
+          if (!state.events) state.events = new Set()
+          if (!state.effects) state.effects = new Set()
+          if (!state.domains) state.domains = new Set()
+        }
 
         if (t.isIdentifier(path.node.callee)) {
           const name = path.node.callee.name
@@ -218,35 +220,35 @@ module.exports = function(babel, options = {}) {
                 smallConfig,
                 false,
               )
-              if (id) {
+              if (exportMetadata && id) {
                 state.stores.add(id.name)
               }
             }
             if (events && eventCreators.has(name)) {
               const id = findCandidateNameForExpression(path)
               setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (id) {
+              if (exportMetadata && id) {
                 state.events.add(id.name)
               }
             }
             if (effects && effectCreators.has(name)) {
               const id = findCandidateNameForExpression(path)
               setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (id) {
+              if (exportMetadata && id) {
                 state.effects.add(id.name)
               }
             }
             if (domains && domainCreators.has(name)) {
               const id = findCandidateNameForExpression(path)
               setEventNameAfter(path, state, id, babel.types, smallConfig)
-              if (id) {
+              if (exportMetadata && id) {
                 state.domains.add(id.name)
               }
             }
             if (restores && restoreCreators.has(name)) {
               const id = findCandidateNameForExpression(path)
               setRestoreNameAfter(path, state, id, babel.types, smallConfig)
-              if (id) {
+              if (exportMetadata && id) {
                 state.stores.add(id.name)
               }
             }
@@ -260,7 +262,7 @@ module.exports = function(babel, options = {}) {
                 smallConfig,
                 false,
               )
-              if (id) {
+              if (exportMetadata && id) {
                 state.stores.add(id.name)
               }
             }
