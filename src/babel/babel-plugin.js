@@ -559,20 +559,18 @@ const normalizeOptions = options => {
 }
 function createMetadataVisitor(plugin, exportMetadata) {
   const {join, relative} = require('path')
-  plugin.visitor.Program = {
-    exit(_, state) {
-      const metadata = join(
-        state.file.opts.root,
-        '.effector',
-        relative(state.file.opts.root, state.filename) + '.json',
-      )
-      exportMetadata(metadata, {
-        stores: Array.from(state.stores),
-        effects: Array.from(state.effects),
-        domains: Array.from(state.domains),
-        events: Array.from(state.events),
-      })
-    },
+  plugin.visitor.Program.exit = function exit(_, state) {
+    const metadata = join(
+      state.file.opts.root,
+      '.effector',
+      relative(state.file.opts.root, state.filename) + '.json',
+    )
+    exportMetadata(metadata, {
+      stores: Array.from(state.stores),
+      effects: Array.from(state.effects),
+      domains: Array.from(state.domains),
+      events: Array.from(state.events),
+    })
   }
 }
 // function addImportDeclaration(path, t, names) {
