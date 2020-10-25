@@ -23,7 +23,7 @@ fetchFx()
 
 In the simplest case, it can be used without any configuration:
 
-```json
+```json title=".babelrc"
 {
   "plugins": ["effector/babel-plugin"]
 }
@@ -98,7 +98,7 @@ effector 20.2.0
 
 Option for effector/babel-plugin for making custom unit fabrics with clean configuration.
 
-```json
+```json title=".babelrc"
 {
   "plugins": [
     ["effector/babel-plugin", {"addLoc": true}],
