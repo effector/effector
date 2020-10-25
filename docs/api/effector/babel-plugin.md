@@ -170,7 +170,7 @@ Replace imports from `effector-react` to `effector-react/ssr`. Useful for buildi
 effector 21.6.0
 :::
 
-Accepts array of module names which exports will be treated as custom factories therefore each function call will provide unique prefix for `sid` properties of units inside them. Used for SSR support, not required for client-only application
+Accepts array of module names which exports will be treated as custom factories therefore each function call will provide unique prefix for [sids](./babel-plugin.md#sid) of units inside them. Useful for SSR support, not required for client-only application
 
 - Factories can have any amount of arguments.
 
@@ -216,4 +216,4 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx)
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 ```
 
-Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory function so each store created by it has its own `sid` and will be handled by [serialize](./serialize.md) independently, although without `factories` they will share the same `sid`
+Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory function so each store created by it has its own [sid](./babel-plugin.md#sid) and will be handled by [serialize](./serialize.md) independently, although without `factories` they will share the same `sid`
