@@ -1,4 +1,4 @@
-import Vue, {VueConstructor, ComponentOptions} from 'vue'
+import Vue, {VueConstructor, ComponentOptions} from 'vue-legacy'
 import {createEvent, restore, is, combine, Store, withRegion, clearNode, forward, Unit} from 'effector'
 
 export interface EffectorVue extends Vue {

@@ -1,7 +1,9 @@
-import {shallowMount, createLocalVue, mount} from '@vue/test-utils'
+import {shallowMount, createLocalVue, mount} from 'vue-test-utils-legacy'
 import {createStore, createEvent} from 'effector'
-import Vue from 'vue'
+import Vue from 'vue-legacy'
 import {VueEffector, createComponent} from 'effector-vue'
+
+jest.mock('vue', () => require('vue-legacy'))
 
 const localVue = createLocalVue()
 localVue.use(VueEffector)
