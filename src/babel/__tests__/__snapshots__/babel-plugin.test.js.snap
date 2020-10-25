@@ -720,13 +720,17 @@ import f1 from '@/f';
 import { g } from '../g';
 import { g1 } from '../g.ts';
 import { g2 } from './g.ts';
-const a_val = a(0);
-const a1_val = withFabric({
-  sid: \\"smjn5l\\",
-  fn: () => a1(0),
-  name: \\"a1_val\\"
+const a_val = withFabric({
+  sid: \\"-ma5ses\\",
+  fn: () => a(0),
+  name: \\"a_val\\"
 });
-const b_val = b(0);
+const a1_val = a1(0);
+const b_val = withFabric({
+  sid: \\"-9v8qdx\\",
+  fn: () => b(0),
+  name: \\"b_val\\"
+});
 const c_val = withFabric({
   sid: \\"22mp8r\\",
   fn: () => c(0),
@@ -742,9 +746,21 @@ const f_val = withFabric({
   fn: () => f(0),
   name: \\"f_val\\"
 });
-const f1_val = f1(0);
-const g_val = g(0);
-const g1_val = g1(0);
+const f1_val = withFabric({
+  sid: \\"wob97z\\",
+  fn: () => f1(0),
+  name: \\"f1_val\\"
+});
+const g_val = withFabric({
+  sid: \\"-l6zm7p\\",
+  fn: () => g(0),
+  name: \\"g_val\\"
+});
+const g1_val = withFabric({
+  sid: \\"-r4nl9l\\",
+  fn: () => g1(0),
+  name: \\"g1_val\\"
+});
 const g2_val = g2(0);"
 `;
 

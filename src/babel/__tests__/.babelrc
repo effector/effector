@@ -4,7 +4,14 @@
       "../babel-plugin",
       {
         "filename": false,
-        "fabrics": ["./a", "./fixtures/b", "c/d", "~/e", "@/f", "./g.ts"]
+        "fabrics": [
+          "./src/babel/__tests__/a",
+          "src/babel/__tests__/fixtures/b",
+          "c/d",
+          "~/e",
+          "@/f",
+          "./src/babel/__tests__/g.ts"
+        ]
       }
     ],
     ["../babel-plugin-react", {"filename": false}]

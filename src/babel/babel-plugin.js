@@ -35,7 +35,10 @@ module.exports = function(babel, options = {}) {
     importName,
     reactSsr,
   } = normalizeOptions(options)
-  const fabricsUsed = fabrics.size > 0
+  const fabricsUsed = fabrics.length > 0
+  const hasRelativeFabrics = fabrics.some(
+    fab => fab.startsWith('./') || fab.startsWith('../'),
+  )
   const smallConfig = {compressor, addLoc}
   const {types: t, template} = babel
   let fabricTemplate
@@ -77,7 +80,7 @@ module.exports = function(babel, options = {}) {
     )
   }
   const importVisitor = {
-    ImportDeclaration(path) {
+    ImportDeclaration(path, state) {
       const source = path.node.source.value
       const specifiers = path.node.specifiers
       if (importName.has(source)) {
@@ -131,12 +134,31 @@ module.exports = function(babel, options = {}) {
         }
       }
       if (fabricsUsed) {
-        const {extname} = require('path')
+        const rootPath = state.file.opts.root || ''
+        if (!this.effector_fabricPaths) {
+          if (hasRelativeFabrics) {
+            const {resolve} = require('path')
+            this.effector_fabricPaths = fabrics.map(fab => {
+              if (fab.startsWith('./') || fab.startsWith('../')) {
+                const resolvedFab = resolve(rootPath, fab)
+                return stripRoot(rootPath, resolvedFab, true)
+              }
+              return fab
+            })
+          } else {
+            this.effector_fabricPaths = fabrics
+          }
+        }
         let normalizedSource = source
-        const ext = extname(source)
-        if (ext.length > 0)
-          normalizedSource = normalizedSource.slice(0, -ext.length)
-        if (fabrics.has(normalizedSource)) {
+        if (normalizedSource.startsWith('.')) {
+          const {resolve, parse} = require('path')
+          const currentFile = state.filename || ''
+          const {dir} = parse(currentFile)
+          const resolvedImport = resolve(dir, normalizedSource)
+          normalizedSource = stripRoot(rootPath, resolvedImport, true)
+        }
+        normalizedSource = stripExtension(normalizedSource)
+        if (this.effector_fabricPaths.includes(normalizedSource)) {
           if (!this.effector_fabricMap) {
             this.effector_fabricMap = new Map()
             addFabricImport(path)
@@ -148,8 +170,9 @@ module.exports = function(babel, options = {}) {
           }
           for (let i = 0; i < specifiers.length; i++) {
             const s = specifiers[i]
-            if (!s.imported) continue
-            const importedName = s.imported.name
+            const isDefaultImport = t.isImportDefaultSpecifier(s)
+            if (!s.imported && !isDefaultImport) continue
+            const importedName = isDefaultImport ? 'default' : s.imported.name
             const localName = s.local.name
             this.effector_fabricMap.set(localName, {
               localName,
@@ -176,7 +199,7 @@ module.exports = function(babel, options = {}) {
       CallExpression(path, state) {
         if (addLoc && !state.fileNameIdentifier) {
           const fileName = enableFileName
-            ? stripRoot(state.file.opts.root || '', state.filename || '')
+            ? stripRoot(state.file.opts.root || '', state.filename || '', false)
             : ''
 
           const fileNameIdentifier = path.scope.generateUidIdentifier(
@@ -507,7 +530,7 @@ const normalizeOptions = options => {
         options.domainMethods,
         defaults.domainMethods,
       ),
-      fabrics: new Set(options.fabrics || defaults.fabrics),
+      fabrics: (options.fabrics || defaults.fabrics).map(stripExtension),
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },
@@ -534,7 +557,6 @@ const normalizeOptions = options => {
     return new Set(array || defaults)
   }
 }
-
 function createMetadataVisitor(plugin, exportMetadata) {
   const {join, relative} = require('path')
   plugin.visitor.Program = {
@@ -813,12 +835,22 @@ function setEventNameAfter(path, state, nameNodeId, t, {addLoc, compressor}) {
     configExpr.properties.push(stableID)
   }
 }
-function stripRoot(babelRoot, fileName) {
+function stripExtension(path) {
+  const {extname} = require('path')
+  const ext = extname(path)
+  if (ext.length > 0) {
+    path = path.slice(0, -ext.length)
+  }
+  return path
+}
+function stripRoot(babelRoot, fileName, omitFirstSlash) {
   const {sep, normalize} = require('path')
   const rawPath = fileName.replace(babelRoot, '')
-  const normalizedPath = normalize(rawPath)
-    .split(sep)
-    .join('/')
+  let normalizedSeq = normalize(rawPath).split(sep)
+  if (omitFirstSlash && normalizedSeq.length > 0 && normalizedSeq[0] === '') {
+    normalizedSeq = normalizedSeq.slice(1)
+  }
+  const normalizedPath = normalizedSeq.join('/')
   return normalizedPath
 }
 /**
@@ -832,7 +864,7 @@ function generateStableID(
   column,
   compressor,
 ) {
-  const normalizedPath = stripRoot(babelRoot, fileName)
+  const normalizedPath = stripRoot(babelRoot, fileName, false)
   return compressor(`${varName} ${normalizedPath} [${line}, ${column}]`)
 }
 function hashCode(s) {
