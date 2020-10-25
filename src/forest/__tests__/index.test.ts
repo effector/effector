@@ -519,3 +519,89 @@ test('hydrate', async () => {
     "
   `)
 })
+
+test('template match bug', async () => {
+  const [s1, s2] = await exec(async () => {
+    const initial = Array.from({length: 15}, (_, id) => ({
+      id: `id_${id}`,
+      data: (id * 1000).toString(36),
+    }))
+
+    const patch = createEvent<{id: string; data: string}>()
+    const $list = createStore(initial).on(patch, (list, {id, data}) => {
+      return list.map(item => {
+        if (item.id === id) return {id, data}
+        return item
+      })
+    })
+
+    using(el, () => {
+      h('ul', () => {
+        list($list, ({store}) => {
+          const click = createEvent<MouseEvent>()
+          sample({
+            source: store,
+            clock: click,
+            fn: ({id}) => ({id, data: 'PATCHED'}),
+            target: patch,
+          })
+          const [id, data] = remap(store, ['id', 'data'] as const)
+          h('li', {
+            attr: {id},
+            handler: {click},
+            fn() {
+              h('u', {text: data})
+            },
+          })
+        })
+      })
+    })
+    await act()
+    await act(async () => {
+      const li = el.querySelector('#id_0')! as HTMLElement
+      li.click()
+    })
+  })
+  expect(s1).toMatchInlineSnapshot(`
+    "
+    <ul>
+      <li id='id_0'><u>0</u></li>
+      <li id='id_1'><u>rs</u></li>
+      <li id='id_2'><u>1jk</u></li>
+      <li id='id_3'><u>2bc</u></li>
+      <li id='id_4'><u>334</u></li>
+      <li id='id_5'><u>3uw</u></li>
+      <li id='id_6'><u>4mo</u></li>
+      <li id='id_7'><u>5eg</u></li>
+      <li id='id_8'><u>668</u></li>
+      <li id='id_9'><u>6y0</u></li>
+      <li id='id_10'><u>7ps</u></li>
+      <li id='id_11'><u>8hk</u></li>
+      <li id='id_12'><u>99c</u></li>
+      <li id='id_13'><u>a14</u></li>
+      <li id='id_14'><u>asw</u></li>
+    </ul>
+    "
+  `)
+  expect(s2).toMatchInlineSnapshot(`
+    "
+    <ul>
+      <li id='id_0'><u>PATCHED</u></li>
+      <li id='id_1'><u>rs</u></li>
+      <li id='id_2'><u>1jk</u></li>
+      <li id='id_3'><u>2bc</u></li>
+      <li id='id_4'><u>334</u></li>
+      <li id='id_5'><u>3uw</u></li>
+      <li id='id_6'><u>4mo</u></li>
+      <li id='id_7'><u>5eg</u></li>
+      <li id='id_8'><u>668</u></li>
+      <li id='id_9'><u>6y0</u></li>
+      <li id='id_10'><u>7ps</u></li>
+      <li id='id_11'><u>8hk</u></li>
+      <li id='id_12'><u>99c</u></li>
+      <li id='id_13'><u>a14</u></li>
+      <li id='id_14'><u>asw</u></li>
+    </ul>
+    "
+  `)
+})
