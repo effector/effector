@@ -164,7 +164,9 @@ module.exports = function(babel, options = {}) {
             addFabricImport(path)
             if (!fabricTemplate) {
               fabricTemplate = template(
-                'withFabric({sid: SID,fn:()=>FN,name:NAME})',
+                addLoc
+                  ? 'withFabric({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                  : 'withFabric({sid: SID,fn:()=>FN})',
               )
             }
           }
@@ -197,26 +199,7 @@ module.exports = function(babel, options = {}) {
       },
 
       CallExpression(path, state) {
-        if (addLoc && !state.fileNameIdentifier) {
-          const fileName = enableFileName
-            ? stripRoot(state.file.opts.root || '', state.filename || '', false)
-            : ''
-
-          const fileNameIdentifier = path.scope.generateUidIdentifier(
-            '_effectorFileName',
-          )
-          // babel bug https://github.com/babel/babel/issues/9496
-          if (path.hub) {
-            const scope = path.hub.getScope()
-            if (scope) {
-              scope.push({
-                id: fileNameIdentifier,
-                init: t.stringLiteral(fileName),
-              })
-            }
-          }
-          state.fileNameIdentifier = fileNameIdentifier
-        }
+        addFileNameIdentifier(addLoc, enableFileName, t, path, state)
         if (!state.stores) state.stores = new Set()
         if (!state.events) state.events = new Set()
         if (!state.effects) state.effects = new Set()
@@ -355,8 +338,8 @@ module.exports = function(babel, options = {}) {
           if (
             fabricsUsed &&
             this.effector_fabricMap &&
-            this.effector_fabricMap.has(name) &&
-            !path.node.effector_isFabric
+            !path.node.effector_isFabric &&
+            this.effector_fabricMap.has(name)
           ) {
             const {
               source,
@@ -381,13 +364,21 @@ module.exports = function(babel, options = {}) {
               loc.column,
               compressor,
             )
-            path.replaceWith(
-              fabricTemplate({
-                SID: JSON.stringify(sid),
-                FN: path.node,
-                NAME: JSON.stringify(resultName),
-              }),
-            )
+            const fabricConfig = {
+              SID: JSON.stringify(sid),
+              FN: path.node,
+            }
+            if (addLoc) {
+              fabricConfig.NAME = JSON.stringify(resultName)
+              fabricConfig.METHOD = JSON.stringify(importedName)
+              fabricConfig.LOC = makeTrace(
+                state.fileNameIdentifier,
+                loc.line,
+                loc.column,
+                t,
+              )
+            }
+            path.replaceWith(fabricTemplate(fabricConfig))
           }
         }
 
@@ -416,6 +407,28 @@ module.exports = function(babel, options = {}) {
     createMetadataVisitor(plugin, exportMetadata)
   }
   return plugin
+}
+function addFileNameIdentifier(addLoc, enableFileName, t, path, state) {
+  if (addLoc && !state.fileNameIdentifier) {
+    const fileName = enableFileName
+      ? stripRoot(state.file.opts.root || '', state.filename || '', false)
+      : ''
+
+    const fileNameIdentifier = path.scope.generateUidIdentifier(
+      '_effectorFileName',
+    )
+    // babel bug https://github.com/babel/babel/issues/9496
+    if (path.hub) {
+      const scope = path.hub.getScope()
+      if (scope) {
+        scope.push({
+          id: fileNameIdentifier,
+          init: t.stringLiteral(fileName),
+        })
+      }
+    }
+    state.fileNameIdentifier = fileNameIdentifier
+  }
 }
 const normalizeOptions = options => {
   const defaults = options.noDefaults

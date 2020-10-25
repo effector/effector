@@ -42,11 +42,13 @@ export const withFabric = ({
   sid,
   name,
   loc,
+  method,
   fn,
 }: {
   sid: string
   name?: string
   loc?: any
+  method?: string
   fn: () => any
 }) => {
   const sidNode = createNode({
@@ -54,6 +56,7 @@ export const withFabric = ({
       sidRoot: readSidRoot(sid),
       name,
       loc,
+      method,
     },
   })
   return withRegion(sidNode, fn)

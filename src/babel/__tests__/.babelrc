@@ -3,7 +3,8 @@
     [
       "../babel-plugin",
       {
-        "filename": false,
+        "filename": true,
+        "addLoc": true,
         "fabrics": [
           "./src/babel/__tests__/a",
           "src/babel/__tests__/fixtures/b",
@@ -13,7 +14,6 @@
           "./src/babel/__tests__/g.ts"
         ]
       }
-    ],
-    ["../babel-plugin-react", {"filename": false}]
+    ]
   ]
 }
