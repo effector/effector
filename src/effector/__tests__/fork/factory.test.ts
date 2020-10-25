@@ -1,7 +1,7 @@
 import {createDomain, fork, serialize} from 'effector'
-import {createField, createFieldset} from './fabric'
+import {createField, createFieldset} from './factory'
 
-test('fabric support', async () => {
+test('factory support', async () => {
   const app = createDomain()
   const username = createField(app, 'username', 'guest')
   const age = createField(app, 'age', 0)
@@ -10,13 +10,13 @@ test('fabric support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "-schy1zɔ5qq8yr": 21,
-      "mgvfe4ɔ5qq8yr": "alice",
+      "-hti17gɔ-77rc2s": 21,
+      "8zvwfdɔ-77rc2s": "alice",
     }
   `)
 })
 
-test('nested fabric support', async () => {
+test('nested factory support', async () => {
   const app = createDomain()
   const form = createFieldset(app, () => [
     createField(app, 'username', 'guest'),
@@ -27,12 +27,12 @@ test('nested fabric support', async () => {
   })
   expect(serialize(scope)).toMatchInlineSnapshot(`
     Object {
-      "il394nɔ-g68ocvɔ5qq8yr": 21,
-      "il394nɔ-g6sgy8ɔ5qq8yr": "alice",
-      "il394nɔrx96kl": Object {
+      "-g0d896ɔ-99fk0y": Object {
         "age": 21,
         "username": "alice",
       },
+      "-g0d896ɔ10gcehɔ-77rc2s": "alice",
+      "-g0d896ɔ1104zuɔ-77rc2s": 21,
     }
   `)
 })
