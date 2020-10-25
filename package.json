@@ -92,7 +92,6 @@
     "typescript": "^4.0.3",
     "viz.js": "^2.1.2",
     "vue": "^2.6.12",
-    "vue-legacy": "npm:vue@2.6.12",
     "vue-next": "npm:vue@^3.0.2",
     "vue-template-compiler": "^2.6.12",
     "vue-test-utils-legacy": "npm:@vue/test-utils@^1.1.0",
