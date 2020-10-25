@@ -152,7 +152,7 @@ const babelConfig = {
           babelPlugin,
           {
             addLoc: true,
-            fabrics: ['src/effector/__tests__/fork/fabric'],
+            factories: ['src/effector/__tests__/fork/factory'],
           },
         ],
       ],

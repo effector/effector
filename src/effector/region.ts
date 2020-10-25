@@ -38,7 +38,7 @@ export function withRegion(unit: any, cb: () => void) {
   }
 }
 
-export const withFabric = ({
+export const withFactory = ({
   sid,
   name,
   loc,

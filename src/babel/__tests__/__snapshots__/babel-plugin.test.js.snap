@@ -1252,9 +1252,9 @@ const f = () => createApi({
 });"
 `;
 
-exports[`babel-plugin should fabrics 1`] = `
-"var _effectorFileName = \\"/src/babel/__tests__/fixtures/fabrics.js\\";
-import { withFabric } from \\"effector\\";
+exports[`babel-plugin should factories 1`] = `
+"var _effectorFileName = \\"/src/babel/__tests__/fixtures/factories.js\\";
+import { withFactory } from \\"effector\\";
 import { a } from '../a';
 import { a1 } from './a';
 import { b } from './b';
@@ -1265,8 +1265,8 @@ import f1 from '@/f';
 import { g } from '../g';
 import { g1 } from '../g.ts';
 import { g2 } from './g.ts';
-const a_val = withFabric({
-  sid: \\"-ma5ses\\",
+const a_val = withFactory({
+  sid: \\"dty8di\\",
   fn: () => a(0),
   name: \\"a_val\\",
   method: \\"a\\",
@@ -1277,8 +1277,8 @@ const a_val = withFabric({
   }
 });
 const a1_val = a1(0);
-const b_val = withFabric({
-  sid: \\"-9v8qdx\\",
+const b_val = withFactory({
+  sid: \\"p7ee5h\\",
   fn: () => b(0),
   name: \\"b_val\\",
   method: \\"b\\",
@@ -1288,8 +1288,8 @@ const b_val = withFabric({
     column: 14
   }
 });
-const c_val = withFabric({
-  sid: \\"22mp8r\\",
+const c_val = withFactory({
+  sid: \\"-yxb4fv\\",
   fn: () => c(0),
   name: \\"c_val\\",
   method: \\"c\\",
@@ -1299,8 +1299,8 @@ const c_val = withFabric({
     column: 14
   }
 });
-const e_val = withFabric({
-  sid: \\"phby3w\\",
+const e_val = withFactory({
+  sid: \\"-dljo2i\\",
   fn: () => e(0),
   name: \\"e_val\\",
   method: \\"e\\",
@@ -1310,8 +1310,8 @@ const e_val = withFabric({
     column: 14
   }
 });
-const f_val = withFabric({
-  sid: \\"-xlwo8k\\",
+const f_val = withFactory({
+  sid: \\"-2p54oq\\",
   fn: () => f(0),
   name: \\"f_val\\",
   method: \\"f\\",
@@ -1321,8 +1321,8 @@ const f_val = withFabric({
     column: 14
   }
 });
-const f1_val = withFabric({
-  sid: \\"wob97z\\",
+const f1_val = withFactory({
+  sid: \\"o30e09\\",
   fn: () => f1(0),
   name: \\"f1_val\\",
   method: \\"default\\",
@@ -1332,8 +1332,8 @@ const f1_val = withFabric({
     column: 15
   }
 });
-const g_val = withFabric({
-  sid: \\"-l6zm7p\\",
+const g_val = withFactory({
+  sid: \\"8ob139\\",
   fn: () => g(0),
   name: \\"g_val\\",
   method: \\"g\\",
@@ -1343,8 +1343,8 @@ const g_val = withFabric({
     column: 14
   }
 });
-const g1_val = withFabric({
-  sid: \\"-r4nl9l\\",
+const g1_val = withFactory({
+  sid: \\"31ltu9\\",
   fn: () => g1(0),
   name: \\"g1_val\\",
   method: \\"g1\\",

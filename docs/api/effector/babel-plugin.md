@@ -96,7 +96,7 @@ getUsers.use(
 effector 20.2.0
 :::
 
-Option for effector/babel-plugin for making custom unit fabrics with clean configuration.
+Option for effector/babel-plugin for making custom unit factories with clean configuration.
 
 ```json title=".babelrc"
 {
@@ -162,25 +162,25 @@ effector 21.5.0
 
 Replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase.
 
-### fabrics
+### factories
 
-> `fabrics: string[]`
+> `factories: string[]`
 
 :::note since
 effector 21.6.0
 :::
 
-Accepts array of module names which exports will be treated as custom fabrics therefore each function call will provide unique prefix for `sid` properties of units inside them
+Accepts array of module names which exports will be treated as custom factories therefore each function call will provide unique prefix for `sid` properties of units inside them
 
-- Fabrics can have any amount of arguments.
+- Factories can have any amount of arguments.
 
-- Fabrics can create any amount of units.
+- Factories can create any amount of units.
 
-- Fabrics can call another fabrics from other modules.
+- Factories can call another factories from other modules.
 
-- Modules with fabrics can export any amount of functions.
+- Modules with factories can export any amount of functions.
 
-- Fabrics should be compiled with `effector/babel-plugin` as well as code which use them.
+- Factories should be compiled with `effector/babel-plugin` as well as code which use them.
 
 #### Example
 
@@ -190,7 +190,7 @@ Accepts array of module names which exports will be treated as custom fabrics th
     [
       "effector/babel-plugin",
       {
-        "fabrics": ["src/createEffectStatus", "~/createCommonPending"]
+        "factories": ["src/createEffectStatus", "~/createCommonPending"]
       }
     ]
   ]
@@ -216,4 +216,4 @@ export const $fetchUserStatus = createEffectStatus(fetchUserFx)
 export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
 ```
 
-Import `createEffectStatus` from `'./createEffectStatus'` was treated as fabric function so each store created by it has its own `sid` and will be handled by [serialize](./serialize.md) independently, although without `fabrics` they will share the same `sid`
+Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory function so each store created by it has its own `sid` and will be handled by [serialize](./serialize.md) independently, although without `factories` they will share the same `sid`

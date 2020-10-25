@@ -30,18 +30,18 @@ module.exports = function(babel, options = {}) {
     apiCreators,
     mergeCreators,
     domainMethods,
-    fabrics,
+    factories,
     exportMetadata,
     importName,
     reactSsr,
   } = normalizeOptions(options)
-  const fabricsUsed = fabrics.length > 0
-  const hasRelativeFabrics = fabrics.some(
+  const factoriesUsed = factories.length > 0
+  const hasRelativeFactories = factories.some(
     fab => fab.startsWith('./') || fab.startsWith('../'),
   )
   const smallConfig = {compressor, addLoc}
   const {types: t, template} = babel
-  let fabricTemplate
+  let factoryTemplate
   const isPropertyNameInRange = (range, path) =>
     range.has(path.node.callee.property.name)
   const isDomainMethod = {
@@ -65,14 +65,14 @@ module.exports = function(babel, options = {}) {
     apiCreators,
     mergeCreators,
   ]
-  function addFabricImport(path) {
+  function addFactoryImport(path) {
     const programPath = path.find(path => path.isProgram())
     programPath.node.body.unshift(
       t.importDeclaration(
         [
           t.importSpecifier(
-            t.identifier('withFabric'),
-            t.identifier('withFabric'),
+            t.identifier('withFactory'),
+            t.identifier('withFactory'),
           ),
         ],
         t.stringLiteral('effector'),
@@ -133,12 +133,12 @@ module.exports = function(babel, options = {}) {
           path.node.source.value = 'effector-react/ssr'
         }
       }
-      if (fabricsUsed) {
+      if (factoriesUsed) {
         const rootPath = state.file.opts.root || ''
-        if (!this.effector_fabricPaths) {
-          if (hasRelativeFabrics) {
+        if (!this.effector_factoryPaths) {
+          if (hasRelativeFactories) {
             const {resolve} = require('path')
-            this.effector_fabricPaths = fabrics.map(fab => {
+            this.effector_factoryPaths = factories.map(fab => {
               if (fab.startsWith('./') || fab.startsWith('../')) {
                 const resolvedFab = resolve(rootPath, fab)
                 return stripRoot(rootPath, resolvedFab, true)
@@ -146,7 +146,7 @@ module.exports = function(babel, options = {}) {
               return fab
             })
           } else {
-            this.effector_fabricPaths = fabrics
+            this.effector_factoryPaths = factories
           }
         }
         let normalizedSource = source
@@ -158,15 +158,15 @@ module.exports = function(babel, options = {}) {
           normalizedSource = stripRoot(rootPath, resolvedImport, true)
         }
         normalizedSource = stripExtension(normalizedSource)
-        if (this.effector_fabricPaths.includes(normalizedSource)) {
-          if (!this.effector_fabricMap) {
-            this.effector_fabricMap = new Map()
-            addFabricImport(path)
-            if (!fabricTemplate) {
-              fabricTemplate = template(
+        if (this.effector_factoryPaths.includes(normalizedSource)) {
+          if (!this.effector_factoryMap) {
+            this.effector_factoryMap = new Map()
+            addFactoryImport(path)
+            if (!factoryTemplate) {
+              factoryTemplate = template(
                 addLoc
-                  ? 'withFabric({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
-                  : 'withFabric({sid: SID,fn:()=>FN})',
+                  ? 'withFactory({sid: SID,fn:()=>FN,name:NAME,method:METHOD,loc:LOC})'
+                  : 'withFactory({sid: SID,fn:()=>FN})',
               )
             }
           }
@@ -176,7 +176,7 @@ module.exports = function(babel, options = {}) {
             if (!s.imported && !isDefaultImport) continue
             const importedName = isDefaultImport ? 'default' : s.imported.name
             const localName = s.local.name
-            this.effector_fabricMap.set(localName, {
+            this.effector_factoryMap.set(localName, {
               localName,
               importedName,
               source: normalizedSource,
@@ -338,17 +338,17 @@ module.exports = function(babel, options = {}) {
             }
           }
           if (
-            fabricsUsed &&
-            this.effector_fabricMap &&
-            !path.node.effector_isFabric &&
-            this.effector_fabricMap.has(name)
+            factoriesUsed &&
+            this.effector_factoryMap &&
+            !path.node.effector_isFactory &&
+            this.effector_factoryMap.has(name)
           ) {
             const {
               source,
               importedName,
               localName,
-            } = this.effector_fabricMap.get(name)
-            path.node.effector_isFabric = true
+            } = this.effector_factoryMap.get(name)
+            path.node.effector_isFactory = true
             const idNode = findCandidateNameForExpression(path)
             const resultName = idNode ? idNode.name : ''
             let loc
@@ -366,21 +366,21 @@ module.exports = function(babel, options = {}) {
               loc.column,
               compressor,
             )
-            const fabricConfig = {
+            const factoryConfig = {
               SID: JSON.stringify(sid),
               FN: path.node,
             }
             if (addLoc) {
-              fabricConfig.NAME = JSON.stringify(resultName)
-              fabricConfig.METHOD = JSON.stringify(importedName)
-              fabricConfig.LOC = makeTrace(
+              factoryConfig.NAME = JSON.stringify(resultName)
+              factoryConfig.METHOD = JSON.stringify(importedName)
+              factoryConfig.LOC = makeTrace(
                 state.fileNameIdentifier,
                 loc.line,
                 loc.column,
                 t,
               )
             }
-            path.replaceWith(fabricTemplate(fabricConfig))
+            path.replaceWith(factoryTemplate(factoryConfig))
           }
         }
 
@@ -454,7 +454,7 @@ const normalizeOptions = options => {
           effect: [],
           domain: [],
         },
-        fabrics: [],
+        factories: [],
       }
     : {
         store: ['createStore'],
@@ -476,7 +476,7 @@ const normalizeOptions = options => {
           effect: ['effect', 'createEffect'],
           domain: ['domain', 'createDomain'],
         },
-        fabrics: [],
+        factories: [],
       }
   let exportMetadata
   if ('exportMetadata' in options) {
@@ -545,7 +545,7 @@ const normalizeOptions = options => {
         options.domainMethods,
         defaults.domainMethods,
       ),
-      fabrics: (options.fabrics || defaults.fabrics).map(stripExtension),
+      factories: (options.factories || defaults.factories).map(stripExtension),
       addLoc: Boolean(options.addLoc),
       compressor: options.compressSid === false ? str => str : hashCode,
     },

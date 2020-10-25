@@ -5,7 +5,7 @@
       {
         "filename": true,
         "addLoc": true,
-        "fabrics": [
+        "factories": [
           "./src/babel/__tests__/a",
           "src/babel/__tests__/fixtures/b",
           "c/d",
