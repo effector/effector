@@ -1,6 +1,6 @@
 {
   "name": "effector-dev",
-  "version": "0.0.1",
+  "version": "1.25.2",
   "description": "The state manager",
   "private": true,
   "scripts": {
@@ -46,8 +46,10 @@
     "@types/core-js": "^2.5.4",
     "@types/jest": "^26.0.15",
     "@types/react": "^16.9.53",
+    "@vue/compiler-dom": "^3.0.2",
     "@vue/composition-api": "^1.0.0-beta.18",
     "@vue/reactivity": "^3.0.2",
+    "@vue/runtime-core": "^3.0.2",
     "@vue/test-utils": "^1.1.0",
     "@wdio/cli": "^5.18.6",
     "babel-eslint": "^10.1.0",
@@ -90,7 +92,11 @@
     "typescript": "^4.0.3",
     "viz.js": "^2.1.2",
     "vue": "^2.6.12",
+    "vue-legacy": "npm:vue@2.6.12",
+    "vue-next": "npm:vue@^3.0.2",
     "vue-template-compiler": "^2.6.12",
+    "vue-test-utils-legacy": "npm:@vue/test-utils@^1.1.0",
+    "vue-test-utils-next": "npm:@vue/test-utils@^2.0.0-beta.7",
     "webdriverio": "^5.18.6"
   },
   "engines": {
