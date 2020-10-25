@@ -161,3 +161,59 @@ effector 21.5.0
 :::
 
 Replace imports from `effector-react` to `effector-react/ssr`. Useful for building both server-side and client-side builds from the same codebase.
+
+### fabrics
+
+> `fabrics: string[]`
+
+:::note since
+effector 21.6.0
+:::
+
+Accepts array of module names which exports will be treated as custom fabrics therefore each function call will provide unique prefix for `sid` properties of units inside them
+
+- Fabrics can have any amount of arguments.
+
+- Fabrics can create any amount of units.
+
+- Fabrics can call another fabrics from other modules.
+
+- Modules with fabrics can export any amount of functions.
+
+- Fabrics should be compiled with `effector/babel-plugin` as well as code which use them.
+
+#### Example
+
+```json title=".babelrc"
+{
+  "plugins": [
+    [
+      "effector/babel-plugin",
+      {
+        "fabrics": ["src/createEffectStatus", "~/createCommonPending"]
+      }
+    ]
+  ]
+}
+```
+
+```js title="./src/createEffectStatus.js"
+import {rootDomain} from './rootDomain'
+
+export function createEffectStatus(fx) {
+  const $status = rootDomain
+    .createStore('init')
+    .on(fx.finally, (_, {status}) => status)
+  return $status
+}
+```
+
+```js title="./src/statuses.js"
+import {createEffectStatus} from './createEffectStatus'
+import {fetchUserFx, fetchFriendsFx} from './api'
+
+export const $fetchUserStatus = createEffectStatus(fetchUserFx)
+export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
+```
+
+Import `createEffectStatus` from `'./createEffectStatus'` was treated as fabric function so each store created by it has its own `sid` and will be handled by [serialize](./serialize.md) independently, although without `fabrics` they will share the same `sid`
