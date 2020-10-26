@@ -5,26 +5,22 @@ title: Gate - a bridge between props and store
 
 Imagine you have the task of transferring something from react props to the effector store.
 Suppose you pass the history object from the react-router to the store, or pass some callbacks from render-props.
-In a such situation [`Gate`](https://effector.dev/en/api/effector-react/gate) will help.
-
-In this example we will write code which will not go beyond our sandbox
+In a such situation [`Gate`](https://effector.dev/docs/api/effector-react/gate) will help.
 
 ```js
 import {createStore, createEffect, forward} from 'effector'
 import {useStore, createGate} from 'effector-react'
 
 // Effect for api request
-const getTodoFx = createEffect({
-  async handler({id}) {
-    const req = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
-    return req.json()
-  },
+const getTodoFx = createEffect(async ({id}) => {
+  const req = await fetch(`https://jsonplaceholder.typicode.com/todos/${id}`)
+  return req.json()
 })
 
 // Our main store
 const $todo = createStore(null).on(getTodoFx.doneData, (_, result) => result)
 
-const TodoGate = createGate('gate with props')
+const TodoGate = createGate()
 
 // We callgetTodoFx effect every time Gate updates its state.
 forward({from: TodoGate.state, to: getTodoFx})
@@ -54,26 +50,21 @@ function Todo() {
   )
 }
 
-// Something that's not easy to get out of react
-function ComponentWithRenderProp({children}) {
-  return children(React.useState(0))
-}
-
-function App() {
+const App = () => {
+  // value which need to be accessed outside from react
+  const [id, setId] = React.useState(0)
   return (
-    <ComponentWithRenderProp>
-      {([id, setId]) => (
-        <>
-          <button onClick={() => setId(id + 1)}>Get next Todo</button>
-          {/*In this situation, we have the ability to simultaneously
-          render a component and make a request, rather than wait for the component*/}
-          <TodoGate id={id} />
-          <Todo />
-        </>
-      )}
-    </ComponentWithRenderProp>
+    <>
+      <button onClick={() => setId(id + 1)}>Get next Todo</button>
+      {/*In this situation, we have the ability to simultaneously
+      render a component and make a request, rather than wait for the component*/}
+      <TodoGate id={id} />
+      <Todo />
+    </>
   )
 }
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
+
+[Try it](https://share.effector.dev/9v1FdQus)
