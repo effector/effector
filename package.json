@@ -47,7 +47,6 @@
     "@types/jest": "^26.0.15",
     "@types/react": "^16.9.53",
     "@vue/compiler-dom": "^3.0.2",
-    "@vue/composition-api": "^1.0.0-beta.18",
     "@vue/reactivity": "^3.0.2",
     "@vue/runtime-core": "^3.0.2",
     "@vue/test-utils": "^1.1.0",
