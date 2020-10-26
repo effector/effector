@@ -3,7 +3,7 @@ id: example-forms
 title: Forms
 ---
 
-#### Example 1
+## Example 1
 
 ```jsx
 import React from 'react'
@@ -11,7 +11,9 @@ import ReactDOM from 'react-dom'
 import {createEffect, createStore, createEvent, sample} from 'effector'
 import {useStore, useStoreMap} from 'effector-react'
 
-const sendFormFx = createEffect({handler: console.log})
+const sendFormFx = createEffect(params => {
+  console.log(params)
+})
 const submitted = createEvent()
 const setField = createEvent()
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
@@ -45,7 +47,7 @@ const Field = ({name, type, label}) => {
 }
 
 const App = () => (
-  <form action="javascript:void(0)" onSubmit={submitted}>
+  <form onSubmit={submitted}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
     <button type="submit">Submit!</button>
@@ -59,14 +61,16 @@ submitted.watch(e => {
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/XtlunJZU)
+[Try it](https://share.effector.dev/nfObKoO1)
 
 Let's break down the code above.
 
 These are just events & effects definitions.
 
 ```js
-const sendFormFx = createEffect({handler: console.log})
+const sendFormFx = createEffect(params => {
+  console.log(params)
+})
 const submitted = createEvent() // will be used further, and indicates, we have an intention to submit form
 const setField = createEvent() //has intention to change $form's state in a way, defined in reducer further
 const $form = createStore({}).on(setField, (s, {key, value}) => ({
@@ -124,7 +128,6 @@ And, finally, the `App` itself! Note, how we got rid of any business-logic in vi
 ```jsx
 const App = () => (
   <form
-    action="void(0)"
     onSubmit={submitted /*note, there is an event, which is clock for sample*/}>
     <Field name="login" label="Login" />
     <Field name="password" type="password" label="Password" />
@@ -141,49 +144,7 @@ submitted.watch(e => {
 })
 ```
 
-Of course, there is much simplier way, to implement this, consider:
-
-```jsx
-const sendFormFx = createEffect({handler: () => console.log($store.getState())})
-const changed = createEvent()
-const $store = createStore({}).on(changed, (s, e) => ({
-  ...s,
-  [e.target.name]: e.target.value,
-}))
-
-const App = () => {
-  const values = useStore($store)
-
-  return (
-    <form
-      action="void(0)"
-      onSubmit={sendFormFx /*note, there is an effect itself*/}>
-      <input
-        name="login"
-        label="Login"
-        onChange={changed}
-        value={values.login || ''}
-      />
-      <input
-        name="password"
-        type="password"
-        label="Password"
-        onChange={changed}
-        value={values.password || ''}
-      />
-      <button type="submit">Submit!</button>
-    </form>
-  )
-}
-
-ReactDOM.render(<App />, document.getElementById('root'))
-```
-
-[Try it](https://share.effector.dev/GBYkPuX2)
-
-This code is way shorter, yet has code duplication, lower scalability and less reusable. In some cases, usage of `getState` may cause state inconsistence, race conditions.
-
-#### Example 2
+## Example 2
 
 This example shows, how you can manage state with uncontrolled form, handling loading of data, create components which dependend on stores, transform data passed between events.
 
@@ -193,12 +154,17 @@ import ReactDOM from 'react-dom'
 import {createEffect, createStore} from 'effector'
 import {useStore, createComponent} from 'effector-react'
 
-const sendFormFx = createEffect({
-  //defining simple Effect, which results a string in 3 seconds
-  handler: formData =>
+//defining simple Effect, which results a string in 3 seconds
+const sendFormFx = createEffect(
+  formData =>
     new Promise(rs =>
-      setTimeout(rs, 3000, `Signed in as [${formData.get('name')}]`),
+      setTimeout(rs, 1000, `Signed in as [${formData.get('name')}]`),
     ),
+)
+
+//applying side-effect, upon sendFormFx `doneData`
+sendFormFx.doneData.watch(result => {
+  console.log(result)
 })
 
 const Loader = () => {
@@ -208,7 +174,7 @@ const Loader = () => {
 }
 
 const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
-  //approach #2: implicit store usage, hooks are unsupported yet
+  //approach #2: implicit store usage
   <button disabled={loading} type="submit">
     Submit
   </button>
@@ -216,22 +182,22 @@ const SubmitButton = createComponent(sendFormFx.pending, (props, loading) => (
 
 const onSubmit = sendFormFx.prepend(e => new FormData(e.target)) //transforming upcoming data, from DOM Event to FormData
 
-const App = () => {
-  React.useEffect(() => sendFormFx.done.watch(({result}) => alert(result)), []) //applying side-effect, upon sendFormFx `done`
+onSubmit.watch(e => {
+  e.preventDefault()
+})
 
-  return (
-    <form action="javascript:void(0)" onSubmit={onSubmit}>
-      Login: <input name="name" />
-      <br />
-      Password: <input name="password" type="password" />
-      <br />
-      <Loader />
-      <SubmitButton />
-    </form>
-  )
-}
+const App = () => (
+  <form onSubmit={onSubmit}>
+    Login: <input name="name" />
+    <br />
+    Password: <input name="password" type="password" />
+    <br />
+    <Loader />
+    <SubmitButton />
+  </form>
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/hIfXZ1Kg)
+[Try it](https://share.effector.dev/yhE6HfCt)
