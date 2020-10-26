@@ -169,7 +169,7 @@ export default {
       './effector-vue.mjs': './effector-vue.mjs',
       './composition.mjs': './composition.mjs',
       './compat': './compat.js',
-      './effector-vue.umd': './effector-react.umd.js',
+      './effector-vue.umd': './effector-vue.umd.js',
     },
     'umd:main': 'effector-vue.umd.js',
     'jsnext:main': 'effector-vue.mjs',
