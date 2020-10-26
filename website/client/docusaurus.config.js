@@ -99,7 +99,7 @@ module.exports = {
             },
             {
               label: 'Hosted by Netlify',
-              href: 'netlify.com',
+              href: 'https://netlify.com',
             },
           ],
         },
