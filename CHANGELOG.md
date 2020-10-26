@@ -2,6 +2,63 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.6.0
+
+- Add support for user-defined factories in fork api. Starting from this release, application developers can use their own functions and be sure that their content will be properly serialized and hydrated by fork api.
+  New field `factories` in `effector/babel-plugin` accepts array of module names which exports will be treated as custom factories therefore each function call will provide unique prefix for `sid` properties of units inside them
+
+```json title=".babelrc"
+{
+  "plugins": [
+    [
+      "effector/babel-plugin",
+      {
+        "factories": ["src/createEffectStatus", "~/createCommonPending"]
+      }
+    ]
+  ]
+}
+```
+
+```js title="./src/createEffectStatus.js"
+import {rootDomain} from './rootDomain'
+
+export function createEffectStatus(fx) {
+  const $status = rootDomain
+    .createStore('init')
+    .on(fx.finally, (_, {status}) => status)
+  return $status
+}
+```
+
+```js title="./src/statuses.js"
+import {createEffectStatus} from './createEffectStatus'
+import {fetchUserFx, fetchFriendsFx} from './api'
+
+export const $fetchUserStatus = createEffectStatus(fetchUserFx)
+export const $fetchFriendsStatus = createEffectStatus(fetchFriendsFx)
+```
+
+Import `createEffectStatus` from `'./createEffectStatus'` was treated as factory function so each store created by it has its own `sid` and will be handled by serialize independently, although without `factories` they will share the same `sid`
+
+[factories in documentation](https://effector.dev/docs/api/effector/babel-plugin#factories)
+
+- Add user-friendly unit name in fork api error messages when given unit is not found in scope. This improves error messages in both `effector` and `effector-react`
+
+- Add validation for `values` and `handlers` fields in `fork` and for `values` field in `hydrate`
+
+- Add type support for `createEffect<typeof handler, Error>(handler)` to infer `Params` and `Done` types from given `handler` and provide custom `Fail` type at the same time
+
+[createEffect and custom errors](https://effector.dev/docs/typescript/typing-effector#createeffect-and-custom-errors) in documentation
+
+- Improve `guard` return type inference (PR [#406](https://github.com/effector/effector/pull/406) (thanks [@doasync](https://github.com/doasync)))
+
+- Fix void params support for `createEffect(name, config)` (issue [#404](https://github.com/effector/effector/issues/404))
+
+- Allow to use `Event<void>` in cases when only `() => void` is accepted (PR [#400](https://github.com/effector/effector/pull/400) (thanks [@doasync](https://github.com/doasync)))
+
+- Add support for `merge` to `effector/babel-plugin`
+
 ## effector 21.5.0
 
 - Add support for `attach({effect})` to create effect which will call `effect` with params as it is. That allow to create separate effects with shared behavior (PR [#396](https://github.com/effector/effector/pull/396) and [#397](https://github.com/effector/effector/pull/397) (thanks [@sergeysova](https://github.com/sergeysova) and [@oas89](https://github.com/oas89)))
@@ -862,7 +919,7 @@ Authorization: Bearer guest_token
 
 [Documentation for `attach`](https://effector.dev/docs/api/effector/attach)
 
-- Add `noDefaults` option for `effector/babel-plugin` for making custom unit fabrics with clean configuration
+- Add `noDefaults` option for `effector/babel-plugin` for making custom unit factories with clean configuration
 
 ```json
 {
