@@ -76,7 +76,9 @@ const event = sample({source: $store, clock: event})
 
 ```js
 const $userName = createStore('john')
-const signIn = createEffect({handler: console.log})
+const signIn = createEffect(params => {
+  console.log(params)
+})
 const submitForm = createEvent()
 
 sample({
@@ -93,7 +95,7 @@ submitForm(12345678)
 // 4. triger effect signIn with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/vAV3tMKV)
+[Try it](https://share.effector.dev/jRBTnrsv)
 
 ## `sample(sourceUnit, clockUnit, fn?)`
 
@@ -120,7 +122,9 @@ It is just another form of the `sample` invocation, with the same sense.
 
 ```js
 const $userName = createStore('john')
-const signIn = createEffect({handler: console.log})
+const signIn = createEffect(params => {
+  console.log(params)
+})
 const submitForm = createEvent()
 
 const sampleUnit = sample(
@@ -142,7 +146,7 @@ submitForm(12345678)
 //    send it payload to effect signIn with params received at the step (3)
 ```
 
-[Try it](https://share.effector.dev/rPupnEQS)
+[Try it](https://share.effector.dev/WO6UT8bV)
 
 ## `sample({name?})`
 

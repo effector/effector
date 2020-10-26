@@ -241,7 +241,7 @@ fn = effect.use.getCurrent()
 const handlerA = () => 'A'
 const handlerB = () => 'B'
 
-const fx = createEffect({handler: handlerA})
+const fx = createEffect(handlerA)
 
 console.log(fx.use.getCurrent() === handlerA)
 // => true
@@ -251,7 +251,7 @@ console.log(fx.use.getCurrent() === handlerB)
 // => true
 ```
 
-[Try it](https://share.effector.dev/mtY4Ny0n)
+[Try it](https://share.effector.dev/CM6hgtOM)
 
 <hr />
 
@@ -427,9 +427,9 @@ Do not manually call this event. It is event that depends on effect.
 ```js
 import {createEffect} from 'effector'
 
-const fetchApiFx = createEffect({
-  handler: ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
-})
+const fetchApiFx = createEffect(
+  ms => new Promise(resolve => setTimeout(resolve, ms, `${ms} ms`)),
+)
 
 fetchApiFx.finally.watch(console.log)
 
@@ -441,7 +441,7 @@ fetchApiFx(100)
 // => {status: 'fail', error: Error, params: 100}
 ```
 
-[Try it](https://share.effector.dev/x4NVEQc9)
+[Try it](https://share.effector.dev/CGMI4F9E)
 
 ### `pending`
 
@@ -465,9 +465,9 @@ import React from 'react'
 import {createEffect} from 'effector'
 import {useStore} from 'effector-react'
 
-const fetchApiFx = createEffect({
-  handler: ms => new Promise(resolve => setTimeout(resolve, ms)),
-})
+const fetchApiFx = createEffect(
+  ms => new Promise(resolve => setTimeout(resolve, ms)),
+)
 
 fetchApiFx.pending.watch(console.log)
 
@@ -481,7 +481,7 @@ ReactDOM.render(<Loading />, document.getElementById('root'))
 fetchApiFx(3000)
 ```
 
-[Try it](https://share.effector.dev/SNO0sZMR)
+[Try it](https://share.effector.dev/wDMQKqhl)
 
 It's a shorthand for common use case
 
@@ -523,9 +523,7 @@ effector 20.11.0
 ```js
 import {createEffect} from 'effector'
 
-const fx = createEffect({
-  handler: () => new Promise(rs => setTimeout(rs, 500)),
-})
+const fx = createEffect(() => new Promise(rs => setTimeout(rs, 500)))
 
 fx.inFlight.watch(amount => {
   console.log('in-flight requests:', amount)
@@ -544,4 +542,4 @@ await Promise.all([req1, req2])
 // => 0
 ```
 
-[Try it](https://share.effector.dev/tSAhu4Kt)
+[Try it](https://share.effector.dev/XsM8fZXa)
