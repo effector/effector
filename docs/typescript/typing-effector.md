@@ -32,14 +32,42 @@ const sendMessageFx = createEffect(async (params: {text: string}) => {
 })
 // sendMessageFx has type Effect<{text: string}, string>
 
-const sendWarningFx = createEffect<{warn: string}, string>({
-  async handler({warn}) {
-    // ...
-    return 'ok'
-  },
+const sendWarningFx = createEffect<{warn: string}, string>(async ({warn}) => {
+  // ...
+  return 'ok'
 })
 // sendWarningFx has type Effect<{warn: string}, string>
 ```
+
+## createEffect and custom errors
+
+When you need custom error types (`Fail` type in `Effect`) you can define all generics explicitly:
+
+```typescript
+const sendWarningFx = createEffect<{warn: string}, string, AxiosError>(
+  async ({warn}) => {
+    // ...
+    return 'ok'
+  },
+)
+// sendWarningFx has type Effect<{warn: string}, string, AxiosError>
+```
+
+In case when effect's handler is defined before effect itself you can allow typescript to infer type of `Params` and `Done` by using `typeof handler` in first generic and optionally provide `Fail` type as second one
+
+```typescript
+const sendMessage = async (params: {text: string}) => {
+  // ...
+  return 'ok'
+}
+
+const sendMessageFx = createEffect<typeof sendMessage, AxiosError>(sendMessage)
+// sendMessageFx has type Effect<{text: string}, string, AxiosError>
+```
+
+:::note since
+effector 21.6.0
+:::
 
 ## event.prepend
 
