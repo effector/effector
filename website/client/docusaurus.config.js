@@ -97,6 +97,10 @@ module.exports = {
               label: 'Youtube',
               href: 'https://www.youtube.com/channel/UCm8PRc_yjz3jXHH0JylVw1Q',
             },
+            {
+              label: 'Hosted by Netlify',
+              href: 'netlify.com',
+            },
           ],
         },
       ],
