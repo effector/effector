@@ -15,7 +15,13 @@ import {
   Scope,
 } from 'effector'
 import {createGate} from 'effector-react'
-import {Provider, useStore, useList, useGate} from 'effector-react/ssr'
+import {
+  Provider,
+  useStore,
+  useList,
+  useGate,
+  useEvent,
+} from 'effector-react/ssr'
 
 it('works', async () => {
   const indirectCallFn = jest.fn()
@@ -109,8 +115,8 @@ it('works', async () => {
 
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-jeyjoa": "alice",
-      "iliqek": Array [
+      "-gkotb4": "alice",
+      "lfsgrq": Array [
         "bob",
         "carol",
       ],
@@ -118,8 +124,8 @@ it('works', async () => {
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-jeyjoa": "bob",
-      "iliqek": Array [
+      "-gkotb4": "bob",
+      "lfsgrq": Array [
         "alice",
       ],
     }
@@ -227,21 +233,21 @@ test('attach support', async () => {
   `)
   expect(serialize(aliceScope)).toMatchInlineSnapshot(`
     Object {
-      "-1s6cwv": "https://ssr.effector.dev/api",
-      "-gvew9a": Array [
+      "-e155w4": Array [
         "bob",
         "carol",
       ],
-      "gi10l1": "alice",
+      "b01fqe": "https://ssr.effector.dev/api",
+      "ta8t8a": "alice",
     }
   `)
   expect(serialize(bobScope)).toMatchInlineSnapshot(`
     Object {
-      "-1s6cwv": "https://ssr.effector.dev/api",
-      "-gvew9a": Array [
+      "-e155w4": Array [
         "alice",
       ],
-      "gi10l1": "bob",
+      "b01fqe": "https://ssr.effector.dev/api",
+      "ta8t8a": "bob",
     }
   `)
   expect(indirectCallFn).toBeCalled()
@@ -404,4 +410,57 @@ test('allSettled effect calls', async () => {
       console.error(err)
     })
   expect(fn).toBeCalled()
+})
+
+test('useEvent and effect calls', async () => {
+  const app = createDomain()
+  const inc = app.createEvent()
+  const count = app.createStore(0).on(inc, x => x + 1)
+  const fx = app.createEffect(async () => {
+    inc()
+  })
+  const scope = fork(app)
+  const App = () => {
+    const fxe = useEvent(fx)
+    const x = useStore(count)
+    return (
+      <div>
+        <button id="btn" onClick={() => fxe()}>
+          clicked {x} times
+        </button>
+      </div>
+    )
+  }
+  await render(
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  )
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="btn"
+      >
+        clicked 
+        0
+         times
+      </button>
+    </div>
+  `)
+  await act(async () => {
+    container.firstChild.querySelector('#btn').click()
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <button
+        id="btn"
+      >
+        clicked 
+        0
+         times
+      </button>
+    </div>
+  `)
+  expect(count.getState()).toBe(0)
+  expect(scope.getState(count)).toBe(1)
 })
