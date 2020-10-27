@@ -192,7 +192,6 @@ store.off(changedA)
 ### `watch(watcher)`
 
 Call `watcher` function each time when store is updated. <br/>
-If `trigger` not passed, run `watcher` on each event that linked to the store.
 
 #### Formulae
 
