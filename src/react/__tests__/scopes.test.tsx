@@ -456,7 +456,7 @@ test('useEvent and effect calls', async () => {
         id="btn"
       >
         clicked 
-        0
+        1
          times
       </button>
     </div>

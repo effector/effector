@@ -110,11 +110,13 @@ export function useEvent(event: any) {
   const result = is.effect(event)
     ? (params: any) => {
         const req = createDefer()
-        launch(unit, {params, req})
+        //@ts-ignore
+        launch({target: unit, params: {params, req}, forkPage: scope})
         return req.req
       }
     : (payload: any) => {
-        launch(unit, payload)
+        //@ts-ignore
+        launch({target: unit, params: payload, forkPage: scope})
         return payload
       }
   return React.useCallback(result, [scope, event])
