@@ -58,7 +58,10 @@ const externals = [
   'react',
 ]
 
-const getPlugins = (name: string, {isEsm = false} = {}) => ({
+const getPlugins = (
+  name: string,
+  {isEsm = false, replaceVueReactivity = false} = {},
+) => ({
   babel: isEsm
     ? babel({
         babelHelpers: 'bundled',
@@ -71,6 +74,7 @@ const getPlugins = (name: string, {isEsm = false} = {}) => ({
           isTest: false,
           isCompat: false,
           isEsm: true,
+          replaceVueReactivity,
         }),
       })
     : babel({
@@ -259,6 +263,7 @@ export async function rollupEffectorVue() {
       },
       input: 'composition',
       inputExtension: 'ts',
+      replaceVueReactivity: true,
     }),
     createUmd(name, {
       external: externals,
@@ -415,11 +420,13 @@ async function createEsCjs(
     renderModuleGraph = false,
     input = 'index',
     inputExtension = 'js',
+    replaceVueReactivity = false,
   }: {|
     file: {|es?: string, cjs: string|},
     renderModuleGraph?: boolean,
     input?: string,
     inputExtension?: string,
+    replaceVueReactivity?: boolean,
   |},
 ) {
   const pluginsCjs = getPlugins(input === 'index' ? name : input)
@@ -432,7 +439,10 @@ async function createEsCjs(
     pluginsCjs.analyzer,
     pluginsCjs.analyzerJSON,
   ]
-  const pluginsEsm = getPlugins(input === 'index' ? name : input, {isEsm: true})
+  const pluginsEsm = getPlugins(input === 'index' ? name : input, {
+    isEsm: true,
+    replaceVueReactivity,
+  })
   const pluginListEsm = [
     pluginsEsm.resolve,
     pluginsEsm.json,

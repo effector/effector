@@ -118,6 +118,15 @@ const babelConfig = {
       )
       result.unshift(constToLetPlugin)
     }
+    if (meta.replaceVueReactivity) {
+      const replaceVuePlugin = resolvePath(
+        __dirname,
+        'src',
+        'babel',
+        'vueImports.js',
+      )
+      result.unshift(replaceVuePlugin)
+    }
     return result
   },
   overrides: [
