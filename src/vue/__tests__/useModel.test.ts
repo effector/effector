@@ -1,48 +1,41 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {useStore, useModel} from 'effector-vue/composition'
+import {useModel} from 'effector-vue/composition'
 import {createEvent, createStore} from 'effector'
 import {shallowMount} from 'vue-test-utils-next'
 
 jest.mock('vue', () => require('vue-next'))
 
-it('list of primitive values rendered correct', () => {
-  const length = 3
-  const $numbers = createStore(Array.from({length}, (_, idx) => idx))
-  const wrapper = shallowMount({
-    template: `
-      <ul id="app">
-        <li v-for="(n, key) in numbers" :key="key" data-test="item">{{n}}</li>
-      </ul>
-    `,
-    setup() {
-      const numbers = useStore($numbers)
-      return {numbers}
-    }
+
+it('updated value of input if store changed from outside', async () => {
+  const updated = createEvent()
+  const $user = createStore({
+    skills: [
+      {name: 'HTML', points: 10}
+    ]
   })
-  expect(wrapper.findAll('[data-test="item"]')).toHaveLength(length)
-})
-
-it('add new item and re-render list', async () => {
-  const userAdded = createEvent()
-  const $users = createStore([{name: 'John', surname: 'Doe'}])
-
-  $users.on(userAdded, (state) => [...state, {name: 'Alan', surname: 'Doe'}])
+  $user
+  .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
 
   const wrapper = shallowMount({
     template: `
-      <ul id="app">
-        <li v-for="(item, key) in users" :key="key" data-test="item">{{item.name}}</li>
-      </ul>
+      <div>
+        <input v-model="user.skills[0].points" data-test="skills.points">
+      </div>
     `,
     setup() {
-      const users = useStore($users)
-      return {users}
+      const user = useModel($user)
+      return {user}
     }
   })
-  userAdded()
+  await wrapper.find('[data-test="skills.points"]').setValue(15)
+  expect($user.getState()).toEqual({
+    skills: [{name: 'HTML', points: '15'}]
+  })
+  updated()
 
   await wrapper.vm.$nextTick()
-  expect(wrapper.findAll('[data-test="item"]')).toHaveLength(2)
+  // @ts-ignore
+  expect(wrapper.find('[data-test="skills.points"]').element.value).toBe('20')
 })
 
 it('[v-model] works correct with scalar values', async () => {
@@ -85,38 +78,6 @@ it('[v-model] works correct with objects', async () => {
     name: 'John',
     surname: 'Doe',
   })
-})
-
-it('updated value of input if store changed from outside', async () => {
-  const updated = createEvent()
-  const $user = createStore({
-    skills: [
-      {name: 'HTML', points: 10}
-    ]
-  })
-  $user
-  .on(updated, (state) => ({...state, skills: [{name: 'HTML', points: 20}]}))
-
-  const wrapper = shallowMount({
-    template: `
-      <div>
-        <input v-model="user.skills[0].points" data-test="skills.points">
-      </div>
-    `,
-    setup() {
-      const user = useModel($user)
-      return {user}
-    }
-  })
-  await wrapper.find('[data-test="skills.points"]').setValue(15)
-  expect($user.getState()).toEqual({
-    skills: [{name: 'HTML', points: '15'}]
-  })
-  updated()
-
-  await wrapper.vm.$nextTick()
-  // @ts-ignore
-  expect(wrapper.find('[data-test="skills.points"]').element.value).toBe('20')
 })
 
 it('[v-model] works correct with checkboxes (like vue-3 way)', async () => {
