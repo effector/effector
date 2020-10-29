@@ -21,7 +21,7 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^21.5.0"
+    "effector": "^21.6.0"
   },
   "keywords": [
     "data",
