@@ -1,5 +1,5 @@
 ---
-id: i18n
+slug: i18n
 title: Create custom i18n provider with effector and typescript
 author: dpr-dev
 authorURL: https://github.com/dpr-dev 
