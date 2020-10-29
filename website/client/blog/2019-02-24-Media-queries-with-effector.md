@@ -1,5 +1,5 @@
 ---
-id: Media queries
+slug: Media queries
 title: Media queries with effector
 author: Zero Bias
 author_title: Effector Core Team
