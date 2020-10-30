@@ -178,6 +178,7 @@ export default {
       vue: '*',
       effector: '^21.0.2',
       '@vue/reactivity': '^3.0.2',
+      '@vue/runtime-core': '^3.0.2',
     },
     files: [
       ...getFiles('effector-vue'),
