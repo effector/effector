@@ -167,15 +167,10 @@ The most obvious example is a component mount (a mount is suddenly an event) to 
 
 ```js
 sample({
-
   source: $store,
-
   clock: mount,
-
-  fn: someCombinatorFn
-
+  fn: someCombinatorFn,
   target: effectFx
-
 })
 ```
 
