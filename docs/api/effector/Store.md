@@ -61,23 +61,23 @@ changed('hello world')
 
 <hr />
 
-### `on(trigger, handler)`
+### `on(trigger, reducer)`
 
-Updates state when `trigger` is triggered by using `handler`. For each trigger, last installed handler will override previous handlers (useful for dynamic behavior).
+Updates state when `trigger` is triggered by using [`reducer`](../../glossary.md#reducer). For each trigger, last installed reducer will override previous reducers (useful for dynamic behavior).
 
 #### Formulae
 
 ```ts
-$store.on(trigger, handler)
+$store.on(trigger, reducer)
 ```
 
-- When `trigger` is triggered, call `handler` with payload of the `trigger` and data of `$store`
-- Next update `$store` with result of `handler()` call and trigger all subscribers
+- When `trigger` is triggered, call `reducer` with payload of the `trigger` and data of `$store`
+- Next update `$store` with result of `reducer` call and trigger all subscribers
 
 #### Arguments
 
-1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
-2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
+1. `trigger` [_Event_](Event.md), [_Effect_](Effect.md) or another [_Store_](./Store.md)
+2. `reducer` [_Reducer_](../../glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `params`: Parameters passed to event call
@@ -131,27 +131,27 @@ store.off(changed)
 
 <hr />
 
-### `on(triggers[], handler)`
+### `on(triggers[], reducer)`
 
 :::note since
 effector 20.15.0
 :::
-Updates state when any from `triggers` is triggered by using `handler`.
+Updates state when any from `triggers` is triggered by using [`reducer`](../../glossary.md#reducer).
 
 #### Formulae
 
 ```ts
-$store.on([triggerA, triggerB, ...], handler)
+$store.on([triggerA, triggerB, ...], reducer)
 ```
 
-- When `triggerA` or `triggerB` is triggered, call `handler` with payload of the `triggerA` or `triggerB` and data of `$store`
-- Next update `$store` with result of `handler()` call and trigger all subscribers
+- When `triggerA` or `triggerB` is triggered, call `reducer` with payload of the `triggerA` or `triggerB` and data of `$store`
+- Next update `$store` with result of `reducer` call and trigger all subscribers
 - Any count of triggers can be passed to `triggers`
 
 #### Arguments
 
 1. `triggers` array of [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)
-2. `handler` (_Function_): Reducer function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
+2. `reducer` [_Reducer_](../../glossary.md#reducer): Function that receives `state` and `params` and returns a new state, [should be **pure**](../../glossary.md#purity).
    A store cannot hold an `undefined` value. If a reducer function returns `undefined`, the store will not be updated.
    - `state`: Current state of store
    - `payload`: Value passed to event/effect call, or source if it passed as trigger
@@ -329,7 +329,7 @@ reset() // changed 0
 :::note since
 effector 20.15.0
 :::
-Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](./merge.md) and [store.on(triggers[], fn)](./Store.md#ontriggers-handler)
+Resets store state to the default value. An overload for arrays of units, which make `reset` consistent with [merge](./merge.md) and [store.on(triggers[], fn)](./Store.md#ontriggers-reducer)
 
 A state is reset when _Event_ or _Effect_ is called or another _Store_ is changed.
 
@@ -379,8 +379,8 @@ reset() // changed 0
 $store.off(trigger)
 ```
 
-- Removes handler for given `trigger`, which was installed via [\$store.on](./Store.md#ontrigger-handler) or [\$store.reset](./Store.md#resettriggers)
-- If there was no handler for that `trigger`, this method will do nothing
+- Removes reducer for given `trigger`, which was installed via [\$store.on](./Store.md#ontrigger-reducer) or [\$store.reset](./Store.md#resettriggers)
+- If there was no reducer for that `trigger`, this method will do nothing
 
 #### Arguments
 

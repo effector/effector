@@ -343,10 +343,10 @@ test('#on triggers[] failing', () => {
     "
     --typescript--
     No overload matches this call.
-      Overload 1 of 2, '(trigger: Unit<unknown>, handler: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
+      Overload 1 of 2, '(trigger: Unit<unknown>, reducer: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
         Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
           Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
-      Overload 2 of 2, '(triggers: Unit<string>[], handler: (state: number, payload: string) => number | void): Store<number>', gave the following error.
+      Overload 2 of 2, '(triggers: Unit<string>[], reducer: (state: number, payload: string) => number | void): Store<number>', gave the following error.
         Type 'Event<number>' is not assignable to type 'Unit<string>'.
 
     --flow--

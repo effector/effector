@@ -136,7 +136,7 @@ export interface Event<Payload> extends Unit<Payload> {
 type EventAsReturnType<Payload> = any extends Payload ? Event<Payload> : never
 
 export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
-  (payload: Params): Promise<Done>
+  (params: Params): Promise<Done>
   readonly done: Event<{params: Params; result: Done}>
   readonly doneData: Event<Done>
   readonly fail: Event<{params: Params; error: Fail}>
@@ -154,7 +154,7 @@ export interface Effect<Params, Done, Fail = Error> extends Unit<Params> {
       }
   >
   readonly use: {
-    (asyncFunction: (params: Params) => Promise<Done> | Done): Effect<
+    (handler: (params: Params) => Promise<Done> | Done): Effect<
       Params,
       Done,
       Fail
@@ -186,11 +186,11 @@ export interface Store<State> extends Unit<State> {
   map<T>(fn: (state: State, lastState: T) => T, firstState: T): Store<T>
   on<E>(
     trigger: Unit<E>,
-    handler: (state: State, payload: E) => State | void,
+    reducer: (state: State, payload: E) => State | void,
   ): this
   on<E>(
     triggers: Unit<E>[],
-    handler: (state: State, payload: E) => State | void,
+    reducer: (state: State, payload: E) => State | void,
   ): this
   off(trigger: Unit<any>): this
   subscribe(listener: Observer<State> | ((state: State) => any)): Subscription

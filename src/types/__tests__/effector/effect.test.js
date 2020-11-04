@@ -382,13 +382,13 @@ test('#use', () => {
   const effect1 = createEffect()
   const foo = createEffect<number, string, any>()
 
-  effect1.use(params => Promise.resolve('foo'))
+  effect1.use(arg => Promise.resolve('foo'))
   effect1.use(foo)
   expect(typecheck).toMatchInlineSnapshot(`
     "
     --typescript--
     Argument of type 'Effect<number, string, any>' is not assignable to parameter of type '(params: unknown) => unknown'.
-      Types of parameters 'payload' and 'params' are incompatible.
+      Types of parameters 'params' and 'params' are incompatible.
         Type 'unknown' is not assignable to type 'number'.
 
     --flow--

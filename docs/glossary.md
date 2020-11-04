@@ -65,7 +65,7 @@ type Store<State> = {
 }
 ```
 
-- [on(event, reducer)](./api/effector/Store.md#ontrigger-handler) calls [`reducer`](#reducer) on store whenever an event occurs
+- [on(event, reducer)](./api/effector/Store.md#ontrigger-reducer) calls [`reducer`](#reducer) on store whenever an event occurs
 - [map(fn)](./api/effector/Store.md#mapfn-state-state-laststate-t--t) creates computed store from given one
 - [reset(...triggers)](./api/effector/Store.md#resettriggers) resets state to default whenever any of the triggers occur
 - [watch(watcher)](./api/effector/Store.md#watchwatcher) registers a [`watcher`](#watcher) to be called with the new state when the store is updated
