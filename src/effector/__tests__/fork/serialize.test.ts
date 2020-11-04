@@ -1,4 +1,4 @@
-import {createDomain, fork, serialize} from 'effector'
+import {allSettled, combine, createDomain, fork, serialize} from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
   const app = createDomain()
@@ -57,4 +57,35 @@ it('serialize stores in nested domain', () => {
       "c": null,
     }
 `)
+})
+
+it('skip unchanged objects with onlyChanges: true', async () => {
+  const app = createDomain()
+  const newMessage = app.createEvent()
+  const messages = app.createStore(0).on(newMessage, x => x + 1)
+  const user = app.createStore({name: 'guest'})
+  const stats = combine({messages, user})
+  const scope = fork(app)
+  expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    Object {
+      "r5bjmg": Object {
+        "messages": 0,
+        "user": Object {
+          "name": "guest",
+        },
+      },
+    }
+  `)
+  await allSettled(newMessage, {scope})
+  expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+    Object {
+      "-vrrwv0": 1,
+      "r5bjmg": Object {
+        "messages": 1,
+        "user": Object {
+          "name": "guest",
+        },
+      },
+    }
+  `)
 })
