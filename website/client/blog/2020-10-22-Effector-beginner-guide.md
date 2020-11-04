@@ -1,6 +1,6 @@
 ---
 slug: effector-beginner-guide
-title: Effector's begginer guide
+title: Effector's beginner guide
 author: Yan Lobat
 author_title: Effector team member
 authorURL: https://github.com/yanlobat
@@ -8,13 +8,13 @@ author_image_url: https://avatars2.githubusercontent.com/u/5307423?s=460&u=d1a4c
 tags: [effector, guide, dataflow]
 ---
 
-In this article I will answer repetitive questions and resolve common misunderstandings about the state manager effector.js
+In this article, I will answer repetitive questions and resolve common misunderstandings about the state manager effector.js
 
 <!--truncate-->
 
 Why do you need it at all? Because it's a tool that can actually help ease frontend engineer's routine. After all, it will be possible to forget almost completely about props, its types, business logic inside components, learning a dozen other operators, using proxies or decorators, and at the same time to get the most powerful tool on the market for **data flow** management, providing only functions and objects.
 
-The only problem is to get the available introduction to the technology because you need to rebuild the mindset a bit. I believe I have found the way to a softer introduction, so I released a complete instruction in this post.
+The only problem is to get the available introduction to technology because you need to rebuild the mindset a bit. I believe I have found the way to a softer introduction, so I released a complete instruction in this post.
 
 ## The application is a system
 
@@ -37,22 +37,22 @@ Just 5 steps and led to this thesis. Good!
 ## Back to effector
 
 
-I specifically highlighted the word dataflow in the beginning. Since state-management is more familiar one in JavaScript ecosystem. This leads to misunderstandings. A state is just a unit for building business logic.
+I specifically highlighted the word dataflow in the beginning. Since state-management is a more familiar one in the JavaScript ecosystem. This leads to misunderstandings. A state is just a unit for building business logic.
 
-Speaking of units. The Effector provides four units that you can use to build business logic of any complexity: event, store, effect and domain.
+Speaking of units. The Effector provides four units that you can use to build business logic of any complexity: event, store, effect, and domain.
 
 
 ## Units:Event
 
 The first and most important. The fact is that we, as frontline operators, live in an *event-driven* environment (DOM). When building the business logic of web applications (those next to DOM) it would be strange to focus on a different model.
 
-Even during the planning with management(PO's, CEO's etc) we could hear phrasing like: "User enters the page and our cool new feature HAPPENS!" (implicit meaning events)
+Even during the planning with management(PO's, CEO's etc), we could hear phrasing like: "User enters the page and our cool new feature HAPPENS!" (implicit meaning events)
 
 Determination of the [event](https://dictionary.cambridge.org/us/dictionary/english/event) from the dictionary.
 
 ## Units:Store
 
-An object for storing values. Default value has to be set (any value **except** undefined). When a repeated value (equivalent to the previous one) arrives, store **will not** trigger an update. 
+An object for storing values. The default value has to be set (any value **except** undefined). When a repeated value (equivalent to the previous one) arrives, store **will not** trigger an update. 
 
 The handler for incoming events is a reducer (we **do not** mutate the current state), in case of an undefined return in the handler, the update **will not** trigger.
 
@@ -62,7 +62,7 @@ Taking into account the previous approach with the responsibility scopes, the fo
 
 Independent easy stores for each responsibility scope. 
 
-[Combining](https://effector.now.sh/docs/api/effector/combine) them will not be difficult if necessary.
+[Combining](https://effector.now.sh/docs/api/effector/combine) will not be difficult if necessary.
 
 ## Units:Effect
 
@@ -89,7 +89,7 @@ When could we catch exceptions?
 
 The effect provides us with a handler in which all such questionable code fragments will be stored. 
 
-Thus, by executing handler function, the effect emits an event about success ([.done](https://effector.dev/docs/api/effector/effect#done)) or about failure ([.fail](https://effector.dev/docs/api/effector/effect/#fail)). During the execution, a Boolean [.pending](https://effector.dev/docs/api/effector/effect/#pending) field is also available, which will clearly indicate whether or not the effect is in progress. 
+Thus, by executing the handler function, the effect emits an event about success ([.done](https://effector.dev/docs/api/effector/effect#done)) or about failure ([.fail](https://effector.dev/docs/api/effector/effect/#fail)). During the execution, a Boolean [.pending](https://effector.dev/docs/api/effector/effect/#pending) field is also available, which will clearly indicate whether or not the effect is in progress. 
 
 For those who don't care about the outcome, the [.finally](https://effector.dev/docs/api/effector/effect/#finally) event is kindly provided and is **always** emitted.
 
@@ -113,7 +113,7 @@ P.S. domains are required for SSR, as well as when writing tests that cover most
 Events distribute data on our system. 
 From time to time we need to prepare this data: add some static value to the data or multiply the number that came into the data by two. 
 
-For such tasks there are three things can be needed:
+For such tasks there are three things that can be needed:
 
 1) Perhaps the most "flat" version for data preparation between the regular unit which is a sender and the regular unit which is a receiver is the **fn** field in the [sample](https://effector.dev/docs/api/effector/sample) operator. But I will return to it in a couple of chapters, because everything is in order.
 
@@ -133,7 +133,7 @@ Usecase? For example, you need a store in the form of an associative array (key-
 
 ## Dataflow. Beginning
 
-We have managed to touch upon how to process data within one regular unit. What about when there are more than one unit?
+We have managed to touch upon how to process data within one regular unit. What about when there is more than one unit?
 
 That's where the most interesting part starts - declarative connection of the units! 
 The first simplest operator is [forward](https://effector.dev/docs/api/effector/forward). 
@@ -141,7 +141,7 @@ Its api is quite clear: fields from and to, receiving any regular unit. Its exec
 
 ## Dataflow. Filtering
 
-We have data processing, as well as simple unit connection. What if units do not want to connect without following some rules? Here comes to the [guard](https://effector.dev/docs/api/effector/guard). An operator with three fields: source, filter, target.
+We have data processing, as well as a simple unit connection. What if units do not want to connect without following some rules? Here comes to the [guard](https://effector.dev/docs/api/effector/guard). An operator with three fields: source, filter, target.
 
 Source is a regular unit that initiates communication. 
 
@@ -167,15 +167,10 @@ The most obvious example is a component mount (a mount is suddenly an event) to 
 
 ```js
 sample({
-
   source: $store,
-
   clock: mount,
-
-  fn: someCombinatorFn
-
+  fn: someCombinatorFn,
   target: effectFx
-
 })
 ```
 
@@ -212,7 +207,7 @@ P.S. If you feel that the responsibility scope files are starting to grow a lot,
 
 P.P.S I also described in a more detailed way [here](https://effector.dev/docs/conventions/best-practices/)
 
-## Reuse and environment dependent code
+## Reuse and environment-dependent code
 
 From time to time, there are situations where we may use some features for our dataflow or even events for multiple responsibility scopes.
 
@@ -224,7 +219,7 @@ The same story with bindings. Bindings for the reaction provide such a thing as 
 
 You should create them in your responsibility scope, called an application as well. Because this is a specific code for a particular application.
 
-Same story with the init file. Those links where the trigger of a gate (mount, component annuity or component renderer, where the gate has updated its properties) is the initiator should be placed there(/app/init). 
+Same story with the init file. Those links where the trigger of a gate (mount, component annuity, or component renderer, where the gate has updated its properties) is the initiator should be placed there(/app/init). 
 
 
 Thus, during testing, you will see clearly which events should be called explicitly (there is no view layer like react in business logic tests).
@@ -237,7 +232,7 @@ Talking about business logic testing with normal coverage rather than single tes
 
 1) We, as developers, can create one domain for the whole system. 
 
-2) Replace the explicit imports of createEvent, createStore, createEffect with myDomain.createEvent and so on. This way the whole system becomes patronized by a single domain and can be forked - `fork(domain, config)`
+2) Replace the explicit imports of createEvent, createStore, createEffect with myDomain.createEvent, and so on. This way the whole system becomes patronized by a single domain and can be forked - `fork(domain, config)`
 
 3) This function takes on the domain and the optional config, where you can explicitly specify handlers for which effects you want to mock the `handlers` key, as well as explicitly specify the values of stores for tests with the `values` key
 
@@ -252,4 +247,4 @@ Talking about business logic testing with normal coverage rather than single tes
 ## Project to start with
 
 I think without practical examples it was a bit difficult for you to take it.
-For such purposes, at the end of the summer I made a [workshop application](https://github.com/YanLobat/effector-workshop) for Odessa.js and everyone.  It is broken down into branches. In the master of the boilerplate, and then you can navigate through the chapters, looking into the pull requests, looking at what has changed.
+For such purposes, at the end of the summer, I made a [workshop application](https://github.com/YanLobat/effector-workshop) for Odessa.js and everyone.  It is broken down into branches. In the master of the boilerplate, and then you can navigate through the chapters, looking into the pull requests, looking at what has changed.
