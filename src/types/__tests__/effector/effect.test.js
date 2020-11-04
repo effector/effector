@@ -487,6 +487,9 @@ describe('#filterMap', () => {
       "
       --typescript--
       Type 'Event<number>' is not assignable to type 'Event<number | void>'.
+        Types of parameters 'payload' and 'payload' are incompatible.
+          Type 'number | void' is not assignable to type 'number'.
+            Type 'void' is not assignable to type 'number'.
 
       --flow--
       no errors

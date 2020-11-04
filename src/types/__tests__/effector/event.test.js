@@ -222,3 +222,79 @@ test('call event without params (never)', () => {
     "
   `)
 })
+test('assign event to a function (should pass)', () => {
+  const fn1: (event: number) => number = createEvent<number>()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+test('assign event to a function (should fail)', () => {
+  /*:: type unknown = any; */
+  const fn1: (event: number) => unknown = createEvent<string>()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    Type 'Event<string>' is not assignable to type '(event: number) => unknown'.
+      Types of parameters 'payload' and 'event' are incompatible.
+        Type 'number' is not assignable to type 'string'.
+
+    --flow--
+    Cannot assign 'createEvent<...>()' to 'fn1'
+      const fn1: (event: number) => unknown = createEvent<string>()
+                                              ^^^^^^^^^^^^^^^^^^^^^
+      string [1] is incompatible with number [2] in the first argument. [incompatible-type]
+          const fn1: (event: number) => unknown = createEvent<string>()
+                                                          [1] ^^^^^^
+          const fn1: (event: number) => unknown = createEvent<string>()
+                         [2] ^^^^^^
+    "
+  `)
+})
+test('createEvent edge case', () => {
+  // Default type is inferred
+  const fn: (event: number) => number = createEvent()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+test('void function edge case (should fail)', () => {
+  /*:: type unknown = any; */
+  // Typed event is assignable to a void function
+  const voidFn: () => void = createEvent<number>()
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    Cannot assign 'createEvent<...>()' to 'voidFn'
+      const voidFn: () => void = createEvent<number>()
+                                 ^^^^^^^^^^^^^^^^^^^^^
+      function type [1] requires another argument from function type [2]. [incompatible-type]
+          (payload: Payload): Payload;
+      [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          const voidFn: () => void = createEvent<number>()
+                    [2] ^^^^^^^^^^
+    Cannot assign 'createEvent<...>()' to 'voidFn'
+      const voidFn: () => void = createEvent<number>()
+                                 ^^^^^^^^^^^^^^^^^^^^^
+      number [1] is incompatible with undefined [2] in the return value. [incompatible-type]
+          const voidFn: () => void = createEvent<number>()
+                                             [1] ^^^^^^
+          const voidFn: () => void = createEvent<number>()
+                          [2] ^^^^
+    "
+  `)
+})
