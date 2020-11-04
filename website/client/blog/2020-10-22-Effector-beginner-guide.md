@@ -12,9 +12,9 @@ In this article I will answer repetitive questions and resolve common misunderst
 
 <!--truncate-->
 
-Why do you need it at all? Because it's a tool that can actually help ease frontend engineer's routine . After all, it will be possible to forget almost completely about props, its types, business logic inside components, learning a dozen other operators, using proxies or decorators, and at the same time to get the most powerful tool on the market for data flow management, providing only functions and objects.
+Why do you need it at all? Because it's a tool that can actually help ease frontend engineer's routine. After all, it will be possible to forget almost completely about props, its types, business logic inside components, learning a dozen other operators, using proxies or decorators, and at the same time to get the most powerful tool on the market for **data flow** management, providing only functions and objects.
 
-The only problem is to get the available introduction to the technology because you need to rebuild the mindset a bit. I believe I have found the way to a softer "entry", so I released a complete instruction in this post.
+The only problem is to get the available introduction to the technology because you need to rebuild the mindset a bit. I believe I have found the way to a softer introduction, so I released a complete instruction in this post.
 
 ## The application is a system
 
@@ -22,7 +22,7 @@ Yes, this is a really important detail in understanding and why all this is nece
 
 Let's try to get to this thesis step by step:
 
-1) Are the applications whole by nature?
+1) Are the applications whole by nature? Yes
 
 2) Can applications be divided according to a certain feature? Yes
 
@@ -37,14 +37,14 @@ Just 5 steps and led to this thesis. Good!
 ## Back to effector
 
 
-I specifically highlighted the word dataflow in the beginning. Since state-management is more familar one in javascript ecosystem. This leads to misunderstandings. A state is just an unit for building business logic.
+I specifically highlighted the word dataflow in the beginning. Since state-management is more familiar one in JavaScript ecosystem. This leads to misunderstandings. A state is just a unit for building business logic.
 
-Speaking of units. The Effector provides four units that you can use to build a business logic of any complexity: event, store, effect and domain.
+Speaking of units. The Effector provides four units that you can use to build business logic of any complexity: event, store, effect and domain.
 
 
 ## Units:Event
 
-The first and most important. The fact is that we, as frontline operators, live in an event-driven environment (DOM). When building the business logic of web applications (those next to DOM) it would be strange to focus on a different model.
+The first and most important. The fact is that we, as frontline operators, live in an *event-driven* environment (DOM). When building the business logic of web applications (those next to DOM) it would be strange to focus on a different model.
 
 Even during the planning with management(PO's, CEO's etc) we could hear phrasing like: "User enters the page and our cool new feature HAPPENS!" (implicit meaning events)
 
@@ -52,13 +52,14 @@ Determination of the [event](https://dictionary.cambridge.org/us/dictionary/engl
 
 ## Units:Store
 
-An object for storing values. Default value has to be set (any value except undefined). When a repeated value (equivalent to the previous one) arrives, store will not trigger an update. 
+An object for storing values. Default value has to be set (any value **except** undefined). When a repeated value (equivalent to the previous one) arrives, store **will not** trigger an update. 
 
-The handler for incoming events is a reducer (we do not mutate the current state), in case of an undefined return in the handler, the update will not trigger.
+The handler for incoming events is a reducer (we **do not** mutate the current state), in case of an undefined return in the handler, the update **will not** trigger.
 
 Taking into account the previous approach with the responsibility scopes, the following recommendation can be made: 
 
-No single stores for the entire application. I am serious. 
+*No single stores for the entire application. I am serious.*
+
 Independent easy stores for each responsibility scope. 
 
 [Combining](https://effector.now.sh/docs/api/effector/combine) them will not be difficult if necessary.
@@ -74,7 +75,7 @@ Technically, effect has at least one of these attributes:
 - being influenced by the environment (process.env)
 
 
-But, conceptually, if an event is a thing that successfully triggers all the time, then the effect also provides a way to handle exceptions (i.e. no guarantee that the handler will be completed successfully).
+But, conceptually, if an event is a thing that successfully triggers **every time**, then the effect also provides a way to handle **exceptions** (i.e. no guarantee that the handler will be completed successfully).
 
 When could we catch exceptions?
 
@@ -84,13 +85,13 @@ When could we catch exceptions?
 
 -interaction with third-party API
 
--a random code fragment where a developer need to write an explicit throw
+-a random code fragment where a developer needs  to write an explicit throw
 
 The effect provides us with a handler in which all such questionable code fragments will be stored. 
 
-Thus, by executing handler function, the effect emits an event about success (.done) or about failure (.fail). During the execution, a Boolean .pending field is also available, which will clearly indicate whether or not the effect is in progress. 
+Thus, by executing handler function, the effect emits an event about success ([.done](https://effector.dev/docs/api/effector/effect#done)) or about failure ([.fail](https://effector.dev/docs/api/effector/effect/#fail)). During the execution, a Boolean [.pending](https://effector.dev/docs/api/effector/effect/#pending) field is also available, which will clearly indicate whether or not the effect is in progress. 
 
-For those who don't care about the outcome, the .finally event is kindly provided and is always emitted.
+For those who don't care about the outcome, the [.finally](https://effector.dev/docs/api/effector/effect/#finally) event is kindly provided and is **always** emitted.
 
 ## Regular units
 
@@ -98,12 +99,12 @@ All three units mentioned above are regular.
 
 This is an important clarification as this term will be used for the short term from now.
 
-## Units:domain
+## Units:Domain
 
 Domain is a namespace for all regular units. 
 
 It provides hooks for creating regular units that are linked to this domain. This is useful for bulk operations. 
-A domain can be freely created within a domain. All units within a domain can be output through domain.history.
+A domain can be freely created within a domain. All units within a domain can be output through [domain.history](https://effector.dev/docs/api/effector/domain#history).
 
 P.S. domains are required for SSR, as well as when writing tests that cover most of our system scenarios.
 
@@ -114,17 +115,17 @@ From time to time we need to prepare this data: add some static value to the dat
 
 For such tasks there are three things can be needed:
 
-1) Perhaps the most "flat" version for data preparation between the regular unit which is a sender and the regular unit which is a reciever is the fn field in the sample operator. But I will return to it in a couple of chapters, because everything is in order.
+1) Perhaps the most "flat" version for data preparation between the regular unit which is a sender and the regular unit which is a receiver is the **fn** field in the [sample](https://effector.dev/docs/api/effector/sample) operator. But I will return to it in a couple of chapters, because everything is in order.
 
-2) The other options are methods of the event itself. The first of them, event.map, allows to transform payload, which came to the event as you like with only one limitation: the function-transformer must be clean (i.e., it does not contain side effects). This event method will return a new event, which will be directly related to the original immediate call as soon as the original was triggered.
+2) The other options are methods of the event itself. The first of them, [event.map](https://effector.dev/docs/api/effector/event#mapfn), allows to transform payload, which came to the event as you like with only one limitation: the function-transformer must be clean (i.e., it does not contain side effects). This event method will return a new event, which will be directly related to the original immediate call as soon as the original was triggered.
 
-3) And the last option is event.prepend. If we interact with .map as a post-processor, then .prepend, on the contrary, will be the pre-processor to the original event. Accordingly, it will return an event that will execute a transformer function and then immediately call the original event. What is the use for this? 
+3) And the last option is [event.prepend](https://effector.dev/docs/api/effector/event#prependfn). If we interact with .map as a post-processor, then .prepend, on the contrary, will be the pre-processor to the original event. Accordingly, it will return an event that will execute a transformer function and then immediately call the original event. What is the use for this? 
 
 For example, the effect of getting the balance of a certain currency. The handler is the same for all currencies, the difference will only be in the static code of the currency. Thus, it is possible to create a set of "prepended" events, the function-transformer of which pushes the static values of the currency in the call argument and solve the problem.
 
 ## Store data preparation
 
-Data from stores are also worth to be prepared sometimes. Store like an event has a .map method, where you can transform the store data according to the function inside. Such a store is called a computed store. 
+Data from stores are also worth to be prepared sometimes. Store like an event has a [store.map](https://effector.dev/docs/api/effector/store#mapfn-state-state-laststate-t--t) method, where you can transform the store data according to the function inside. Such a store is called a computed store. 
 
 It will be calculated only if the original one is updated. No more and no less. 
 
@@ -135,22 +136,22 @@ Usecase? For example, you need a store in the form of an associative array (key-
 We have managed to touch upon how to process data within one regular unit. What about when there are more than one unit?
 
 That's where the most interesting part starts - declarative connection of the units! 
-The first simplest operator is forward. 
+The first simplest operator is [forward](https://effector.dev/docs/api/effector/forward). 
 Its api is quite clear: fields from and to, receiving any regular unit. Its execution means that the to field is explicitly subscribed to a trigger (change of value in the store or event call) of the field from and will be triggered respectively afterwards.
 
 ## Dataflow. Filtering
 
-We have data processing, as well as simple unit connection. What if units do not want to connect without following some rules? Here comes to the guard. An operator with three fields: source, filter, target.
+We have data processing, as well as simple unit connection. What if units do not want to connect without following some rules? Here comes to the [guard](https://effector.dev/docs/api/effector/guard). An operator with three fields: source, filter, target.
 
 Source is a regular unit that initiates communication. 
 
-Filter is the rule in their communication. It either accepts a predicate function that checks the data coming from the source is truthly. In addition to the predicate function can take a Boolean store.
+Filter is the rule in their communication. It either accepts a predicate function that checks the data coming from the source is truthy. In addition to the predicate function can take a Boolean store.
 
-Target is a regular unit that receives data from the source as soon as the filter returns truthly values.
+Target is a regular unit that receives data from the source as soon as the filter returns truthy values.
 
 
 
-But what if the filtering is not enough and you need not only filter but transform payload in some way in case of truthly? The event.filterMap will help you here.
+But what if the filtering is not enough and you need not only filter but transform payload in some way in case of truthy? The event.filterMap will help you here.
 
 
 Okay, this is all cool, but you're looking at 1-to-1 unit links, but what if one event needs to connect to many events with different conditions depending on the recipient?
@@ -171,6 +172,8 @@ sample({
 
   clock: mount,
 
+  fn: someCombinatorFn
+
   target: effectFx
 
 })
@@ -178,7 +181,7 @@ sample({
 
 Clock is the key field. This is where the necessary signal is placed.
 
-As I promised before, we will return to the way of data preparation through sample.
+As I promised before, we will return to the way of data preparation through [sample](https://effector.dev/docs/api/effector/sample).
 
 The thing is that besides these three fields, there is an optional field fn in the sample - combinator function. It accepts two arguments. payload from source and payload from clock (if not - undefined). Further, we are free to combine and transform these values according to the task at hand, without going beyond the purity of this function, of course.
 
@@ -192,7 +195,7 @@ Each responsibility scope contains 2 files (less often than 3, when the store(s)
 
 The first is an index file with declarations of all the units of the effector (createEvent, createStore, createEffect). 
 
-The second one is an init file, which will not export anything, but only import it. The content of this file is the following:
+The second one is an init file, which **will not export anything**, but only import it. The content of this file is the following:
 
 1) Effect handlers
 
@@ -203,16 +206,18 @@ The second one is an init file, which will not export anything, but only import 
 
 So, in the root of the folder with all business logic, we create a root init-file, import into it init files from all responsibility scopes. Then we import this root file into the root of the application and initialize the graph of the entire application statically! 
 
-Have we built a graph? It turns out that we have.
+Have we built a graph? It turns out that we have. 
 
-P. S. If you feel that the responsibility scope files are starting to grow a lot, it's not a bad approach, but rather you missed the moment when the responsibility scope turned into several ones.
+P.S. If you feel that the responsibility scope files are starting to grow a lot, it's not a bad approach, but rather you missed the moment when the responsibility scope turned into several ones.
+
+P.P.S I also described in a more detailed way [here](https://effector.dev/docs/conventions/best-practices/)
 
 ## Reuse and environment dependent code
 
 From time to time, there are situations where we may use some features for our dataflow or even events for multiple responsibility scopes.
 
 What can we do? Where to put it? In utils? 
-No way! 
+*No way!*
 We have a responsibility scope called app! Just like the others, it stores a code specific to the responsibility scope called the application. 
 
 The same story with bindings. Bindings for the reaction provide such a thing as Gate. Where to create them? In a specific responsibility scope or in a view?
