@@ -2,7 +2,7 @@
 slug: effector-beginner-guide
 title: Effector's begginer guide
 author: Yan Lobat
-author_title: Chief dude officer
+author_title: Effector team member
 authorURL: https://github.com/yanlobat
 author_image_url: https://avatars2.githubusercontent.com/u/5307423?s=460&u=d1a4c1f6823836eeb66f6291eb5e84a4fc1c51ce&v=4
 tags: [effector, guide, dataflow]
