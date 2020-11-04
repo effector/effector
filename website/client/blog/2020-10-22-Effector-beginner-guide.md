@@ -1,6 +1,6 @@
 ---
 slug: effector-beginner-guide
-title: Effector's beginтer guide
+title: Effector's beginner guide
 author: Yan Lobat
 author_title: Effector team member
 authorURL: https://github.com/yanlobat
