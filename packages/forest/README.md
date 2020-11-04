@@ -303,6 +303,28 @@ function remap<T>(store: Store<T>, keys: string[]): Store<any>[]
 function remap<T>(store: Store<T>, key: string): Store<any>
 ```
 
+### val
+
+Helper for joininig [properties](#Property) to single string with template literals. If only [plain values](#PlainProperty) are passed, the method returns `string`
+
+```typescript
+function val(words: TemplateStringsArray, ...values: Property[]): Store<string>
+
+function val(words: TemplateStringsArray, ...values: PlainProperty[]): string
+```
+
+**Example**
+
+```typescript
+const x = createStore(10)
+const y = 20
+h('g', {
+  attr: {
+    transform: val`translate(${x} ${y})`,
+  },
+})
+```
+
 ## Type terms
 
 ### PlainProperty

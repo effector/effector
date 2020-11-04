@@ -1,4 +1,4 @@
-import {Store, Event, Fork} from 'effector'
+import {Store, Event, Scope} from 'effector'
 
 export type StoreOrData<T> = Store<T> | T
 export type DOMProperty = string | number | null | boolean
@@ -58,7 +58,7 @@ export function using(
       document: Document
     }
     onComplete?: () => void
-    scope?: Fork
+    scope?: Scope
   },
 ): void
 
@@ -200,7 +200,14 @@ export function route<T>(config: {
   fn: (config: {store: Store<T>}) => void
 }): void
 
+export function block(config: {fn: () => void}): () => void
+
 export function node(fn: (node: DOMElement) => void): void
+
+export function text(
+  words: TemplateStringsArray,
+  ...values: Array<DOMProperty | AttributeStore>
+): void
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
   store: Store<T>,
@@ -214,9 +221,11 @@ export function remap<
   shape: S,
 ): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never}
 
-export function text(
+export function val(
+  words: TemplateStringsArray,
+  ...values: Array<string | number>
+): string
+export function val(
   words: TemplateStringsArray,
   ...values: Array<DOMProperty | AttributeStore>
-): void
-
-export function block(config: {fn: () => void}): () => void
+): Store<string>

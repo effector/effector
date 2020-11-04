@@ -22,3 +22,4 @@ export {
 
 export {remap} from './remap'
 export {text} from './text'
+export {val} from './val'
