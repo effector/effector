@@ -256,6 +256,72 @@ test('assign event to a function (should fail)', () => {
     "
   `)
 })
+describe('event as function argument', () => {
+  test('direct pass', () => {
+    function fn(arg: (_: number) => number) {}
+    const event = createEvent<string>()
+    fn(event)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Argument of type 'Event<string>' is not assignable to parameter of type '(_: number) => number'.
+        Types of parameters 'payload' and '_' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+
+      --flow--
+      Cannot call 'fn' with 'event' bound to 'arg'
+        fn(event)
+           ^^^^^
+        string [1] is incompatible with number [2] in the first argument. [incompatible-call]
+            const event = createEvent<string>()
+                                  [1] ^^^^^^
+            function fn(arg: (_: number) => number) {}
+                             [2] ^^^^^^
+      Cannot call 'fn' with 'event' bound to 'arg'
+        fn(event)
+           ^^^^^
+        string [1] is incompatible with number [2] in the return value. [incompatible-call]
+            const event = createEvent<string>()
+                                  [1] ^^^^^^
+            function fn(arg: (_: number) => number) {}
+                                        [2] ^^^^^^
+      "
+    `)
+  })
+  test('indirect pass', () => {
+    function fn(arg: (_: number) => number) {}
+    const event = createEvent<string>()
+    fn(e => event(e))
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        Overload 1 of 2, '(payload: string): string', gave the following error.
+          Argument of type 'number' is not assignable to parameter of type 'string'.
+        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: string | undefined): void', gave the following error.
+          The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+
+      --flow--
+      Cannot call 'fn' with function bound to 'arg'
+        fn(e => event(e))
+                ^^^^^^^^
+        string [1] is incompatible with number [2] in the return value. [incompatible-call]
+            const event = createEvent<string>()
+                                  [1] ^^^^^^
+            function fn(arg: (_: number) => number) {}
+                                        [2] ^^^^^^
+      Cannot call 'event' with 'e' bound to 'payload'
+        fn(e => event(e))
+                      ^
+        number [1] is incompatible with string [2]. [incompatible-call]
+            function fn(arg: (_: number) => number) {}
+                             [1] ^^^^^^
+            const event = createEvent<string>()
+                                  [2] ^^^^^^
+      "
+    `)
+  })
+})
 test('createEvent edge case', () => {
   // Default type is inferred
   const fn: (event: number) => number = createEvent()
