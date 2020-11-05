@@ -116,7 +116,7 @@ export interface Event<Payload> extends Unit<Payload> {
   }): Event<T>
   filter(config: {fn(payload: Payload): boolean}): Event<Payload>
   filterMap<T>(fn: (payload: Payload) => T | undefined): Event<T>
-  prepend<Before>(fn: (_: Before) => Payload): Event<Before>
+  prepend<Before = void>(fn: (_: Before) => Payload): Event<Before>
   subscribe(observer: Observer<Payload>): Subscription
   thru<U>(fn: (event: Event<Payload>) => U): U
   getType(): string
