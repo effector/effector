@@ -257,6 +257,27 @@ describe('#prepend', () => {
       "
     `)
   })
+  test('void target event edge case', () => {
+    const event: Event<void> = createEvent()
+    const prepended = event.prepend((arg: number) => 'foo') // returns string
+    prepended(1)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'event.prepend' with function bound to 'fn'
+        const prepended = event.prepend((arg: number) => 'foo') // returns string
+                                                         ^^^^^
+        string [1] is incompatible with undefined [2] in the return value. [incompatible-call]
+            const prepended = event.prepend((arg: number) => 'foo') // returns string
+                                                         [1] ^^^^^
+            const event: Event<void> = createEvent()
+                           [2] ^^^^
+      "
+    `)
+  })
 })
 test('void function interop (should pass)', () => {
   /*::
