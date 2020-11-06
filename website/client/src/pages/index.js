@@ -114,6 +114,7 @@ function Home() {
                   Try it out
                 </Link>
               </div>
+              <div>Explainer <a href="https://www.youtube.com/watch?v=rslADuhtF4Y">Video</a>/<a href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">Article</a></div>
             </div>
             <div className="col col--6">
               <Code language="js">{codeExample}</Code>
