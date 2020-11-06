@@ -1,11 +1,18 @@
 ---
 id: createEffect
 title: createEffect
+description: Method for creating an effect
 ---
 
-# `createEffect(handler?)`
+Method for creating an [effect](./Effect.md)
 
-Creates an [effect](Effect.md) with given handler
+# createEffect with handler
+
+Creates an effect with given handler
+
+```typescript
+createEffect(handler?)
+```
 
 #### Arguments
 
@@ -13,14 +20,10 @@ Creates an [effect](Effect.md) with given handler
 
 #### Returns
 
-[_Effect_](Effect.md): New effect
+[_Effect_](./Effect.md): New effect
 
 :::note
 You must provide a handler either in [createEffect](createEffect.md) or in [`.use`](Effect.md#usehandler) method later, otherwise effect will throw with "no handler used in _%effect name%_" error
-:::
-
-:::note
-You are not supposed to [`Forward`](forward.md) to parts of _Effect_ (even though it consists of _Events_ and _Stores_), since it's a complete entity on its own. This behavior will not be supported
 :::
 
 :::note since
@@ -126,13 +129,17 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/LeurvtYA)
 
-# `createEffect({ handler, name? })`
+# createEffect with config
 
-Creates an [effect](Effect.md)
+Creates an effect with handler and name from given config object
+
+```typescript
+createEffect({handler, name})
+```
 
 #### Arguments
 
-1. `params`? (_Params_): Setup effect
+1. `config`? (_Params_): effect
    - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
    - `name`? (_string_): Optional effect name
 

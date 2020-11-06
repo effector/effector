@@ -1,13 +1,14 @@
 ---
 id: createStore
 title: createStore
+description: createStore is a method for creating a store
 ---
+
+Method for creating a [store](./Store.md)
 
 ```ts
 createStore(defaultState, config?)
 ```
-
-Creates a [store](Store.md).
 
 #### Arguments
 

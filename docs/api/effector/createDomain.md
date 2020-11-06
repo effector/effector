@@ -1,20 +1,22 @@
 ---
 id: createDomain
 title: createDomain
-hide_title: true
+description: createDomain is a method for creating a domain
 ---
 
-# `createDomain(name?)`
+Creates a [domain](./Domain.md)
 
-Creates a [domain](Domain.md)
+```typescript
+createDomain(name?)
+```
 
 #### Arguments
 
-1. `name`? (_string_): [Domain](Domain.md) name
+1. `name`? (_string_): domain name
 
 #### Returns
 
-[_Domain_](Domain.md): New domain
+[_Domain_](./Domain.md): New domain
 
 #### Example
 

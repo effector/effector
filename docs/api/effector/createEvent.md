@@ -1,25 +1,26 @@
 ---
 id: createEvent
 title: createEvent
-hide_title: true
+description: createEvent is a method for creating an event
 ---
 
-# `createEvent(name?)`
+Method for creating an [event](./Event.md)
 
-Creates an [Event](Event.md). In other words you create intention.<br/>
-You can pass `name` if you want.
+```ts
+createEvent(name?)
+```
 
 #### Arguments
 
-1. `name`? (_string_): [Event](Event.md) name.
+1. `name`? (_string_): Event name
 
 #### Returns
 
-[_Event_](Event.md): New event
+[_Event_](./Event.md): New event
 
 #### Notes
 
-[Event](Event.md) - it is a function which allows to change state when called, see Example 1, also it can be a good way to extract data, see Example 2 and we will discuss it the next section.
+[Event](./Event.md) - it is a function which allows to change state when called (see [example 1](#example-1)) also it can be a good way to extract data (see [example 2](#example-2))
 
 #### Example 1
 
