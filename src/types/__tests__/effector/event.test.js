@@ -148,6 +148,137 @@ describe('#filterMap', () => {
     `)
   })
 })
+describe('#prepend', () => {
+  test('infer argument type', () => {
+    const event = createEvent<string>()
+    const prepended = event.prepend((arg: number) => 'foo')
+    prepended(1)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('infer void type', () => {
+    const event = createEvent<string>()
+    const prepended = event.prepend<void>(() => 'foo')
+    prepended()
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('infer optional type', () => {
+    const event = createEvent<string>()
+    const prepended = event.prepend((arg?: number) => 'foo')
+    prepended()
+    prepended(1)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('argument type mismatch', () => {
+    const event = createEvent<string>()
+    const prepended = event.prepend((arg: number) => 'foo')
+    prepended('')
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        Overload 1 of 2, '(payload: number): number', gave the following error.
+          Argument of type 'string' is not assignable to parameter of type 'number'.
+        Overload 2 of 2, '(this: \\"Error: Expected 1 argument, but got 0\\", payload?: number | undefined): void', gave the following error.
+          The 'this' context of type 'void' is not assignable to method's 'this' of type '\\"Error: Expected 1 argument, but got 0\\"'.
+
+      --flow--
+      Cannot call 'prepended' with empty string bound to 'payload'
+        prepended('')
+                  ^^
+        string [1] is incompatible with number [2]. [incompatible-call]
+            prepended('')
+                  [1] ^^
+            const prepended = event.prepend((arg: number) => 'foo')
+                                              [2] ^^^^^^
+      "
+    `)
+  })
+  test('void type mismatch', () => {
+    const event = createEvent<string>()
+    const prepended = event.prepend(() => 'foo')
+    prepended('')
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        Overload 1 of 2, '(payload: void): void', gave the following error.
+          Argument of type 'string' is not assignable to parameter of type 'void'.
+        Overload 2 of 2, '(this: void, payload?: void | undefined): void', gave the following error.
+          Argument of type '\\"\\"' is not assignable to parameter of type 'void | undefined'.
+
+      --flow--
+      no errors
+      "
+    `)
+  })
+  test('target event type mismatch', () => {
+    const event = createEvent<number>()
+    const prepended = event.prepend((arg: boolean) => 'foo')
+    prepended(true)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      Argument of type '(arg: boolean) => string' is not assignable to parameter of type '(_: boolean) => number'.
+        Type 'string' is not assignable to type 'number'.
+
+      --flow--
+      Cannot call 'event.prepend' with function bound to 'fn'
+        const prepended = event.prepend((arg: boolean) => 'foo')
+                                                          ^^^^^
+        string [1] is incompatible with number [2] in the return value. [incompatible-call]
+            const prepended = event.prepend((arg: boolean) => 'foo')
+                                                          [1] ^^^^^
+            const event = createEvent<number>()
+                                  [2] ^^^^^^
+      "
+    `)
+  })
+  test('void target event edge case', () => {
+    const event: Event<void> = createEvent()
+    const prepended = event.prepend((arg: number) => 'foo') // returns string
+    prepended(1)
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'event.prepend' with function bound to 'fn'
+        const prepended = event.prepend((arg: number) => 'foo') // returns string
+                                                         ^^^^^
+        string [1] is incompatible with undefined [2] in the return value. [incompatible-call]
+            const prepended = event.prepend((arg: number) => 'foo') // returns string
+                                                         [1] ^^^^^
+            const event: Event<void> = createEvent()
+                           [2] ^^^^
+      "
+    `)
+  })
+})
 test('void function interop (should pass)', () => {
   /*::
   type unknown = any;
