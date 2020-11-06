@@ -3,11 +3,9 @@ id: split
 title: split
 ---
 
-:::note since
-effector 20.0.0
-:::
+Choose one of cases by matching functions. It "splits" source unit into several events, which fires when payload matches their matching function. Works like pattern matching for payload values
 
-Pattern matching method, splits trigger unit (event, effect or store) into several events, which fires when trigger matches its matching function
+## split with cases
 
 ```ts
 split({source, match, cases})
@@ -24,6 +22,10 @@ split({source, match, cases})
 ```ts
 void
 ```
+
+:::note since
+effector 21.0.0
+:::
 
 #### Example 1
 
@@ -114,14 +116,10 @@ messageReceived({
 
 [Try it](https://share.effector.dev/32FNNk8H)
 
-### Split object form
-
-:::note since
-effector 21.0.0
-:::
+## split without explicit cases
 
 ```ts
-split(source, cases)
+split(source, match)
 ```
 
 **Arguments**
@@ -131,7 +129,11 @@ split(source, cases)
 
 **Returns**
 
-(Object) - Object, having keys, defined in `cases` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
+(Object) - Object, having keys, defined in `match` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
+
+:::note since
+effector 20.0.0
+:::
 
 #### Example 1
 
