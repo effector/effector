@@ -110,25 +110,6 @@ changed(2)
 
 [Try it](https://share.effector.dev/O0JnDtIl)
 
-#### Unsubscribe example
-
-```js
-import {createEvent, createStore} from 'effector'
-
-const store = createStore(0)
-const changedA = createEvent()
-const changedB = createEvent()
-
-// If you want to unsubscribe from all triggers simultaneously, better to manually merge
-const changed = merge([changedA, changedB])
-
-store.on(changed, (state, params) => state + params)
-
-store.off(changed)
-```
-
-[Try it](https://share.effector.dev/bzdoyLHm)
-
 <hr />
 
 ### `on(triggers[], reducer)`
@@ -389,6 +370,25 @@ $store.off(trigger)
 #### Returns
 
 [_Store_](Store.md): Current store
+
+#### Example
+
+```js
+import {createEvent, createStore} from 'effector'
+
+const store = createStore(0)
+const changedA = createEvent()
+const changedB = createEvent()
+
+// If you want to unsubscribe from all triggers simultaneously, better to manually merge
+const changed = merge([changedA, changedB])
+
+store.on(changed, (state, params) => state + params)
+
+store.off(changed)
+```
+
+[Try it](https://share.effector.dev/bzdoyLHm)
 
 <hr />
 
