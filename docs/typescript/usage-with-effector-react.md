@@ -150,8 +150,8 @@ export const $systemStore = systemDomain
 
 ## Usage with `effector-react`
 
-While Effector React is a separate library from effector itself, it is commonly
-used with react. For this reason, we will go through how Effector React
+While `effector-react` is a separate library from effector itself, it is commonly
+used with react. For this reason, we will go through how effector React
 works with TypeScript using the same example used previously in this section.
 
 Events and effects you can use directly in yours components and to get access

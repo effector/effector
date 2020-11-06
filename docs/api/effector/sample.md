@@ -154,7 +154,7 @@ submitForm(12345678)
 effector 20.4.0
 :::
 
-Each basic entity in Effector (event/effect/store/domain) may have a name.  
+Each basic entity in effector (event/effect/store/domain) may have a name.  
 You now can name sampled entities in the same manner as basic ones.
 
 ```js

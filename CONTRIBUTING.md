@@ -1,6 +1,6 @@
 # Contributing
 
-We are open to and grateful for, any contributions made by the community. By contributing to Effector, you agree to abide by the [code of conduct](https://github.com/effector/effector/blob/master/CODE_OF_CONDUCT.md).
+We are open to and grateful for, any contributions made by the community. By contributing to effector, you agree to abide by the [code of conduct](https://github.com/effector/effector/blob/master/CODE_OF_CONDUCT.md).
 
 ## Reporting Issues and Asking Questions
 

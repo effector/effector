@@ -1592,7 +1592,7 @@ submitForm('alice') // ~> searchUser('alice')
 
 - Introduce `name` property in `sample` parameters list
 
-Each basic entity in Effector (event/effect/store/domain) may have a name. You now can name sampled entities in the same
+Each basic entity in effector (event/effect/store/domain) may have a name. You now can name sampled entities in the same
 manner as basic ones.
 
 ```js

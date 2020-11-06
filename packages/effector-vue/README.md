@@ -1,1 +1,1 @@
-# Effector-vue
+# effector-vue

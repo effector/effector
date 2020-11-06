@@ -186,7 +186,7 @@ Let's consider by steps:
 1. Take one apple;
 2. Have a look, is it red(put in a pack) or not(take another).
 
-And you repeat this until you complete the task. Now think about it in the Effector terms and we consider the positive case:
+And you repeat this until you complete the task. Now think about it in the effector terms and we consider the positive case:
 
 1. Take an apple - event;
 2. Have a look, red or no - filter;

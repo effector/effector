@@ -3,7 +3,7 @@ id: glossary
 title: Glossary
 ---
 
-This is a glossary of the core terms in Effector, along with their type signatures. The types are documented using [TypeScript notation](http://typescriptlang.org).
+This is a glossary of the core terms in effector, along with their type signatures. The types are documented using [TypeScript notation](http://typescriptlang.org).
 
 ## Event
 

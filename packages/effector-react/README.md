@@ -1,4 +1,4 @@
-# Effector-react
+# effector-react
 
 React bindings for [effector](https://www.npmjs.com/package/effector)
 

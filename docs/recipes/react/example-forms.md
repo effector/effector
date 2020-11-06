@@ -79,7 +79,7 @@ const $form = createStore({}).on(setField, (s, {key, value}) => ({
 }))
 ```
 
-Next piece of code shows how we can obtain a state in Effector in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
+Next piece of code shows how we can obtain a state in effector in a right way. This kind of state retrieving provides state consistency, and removes any possible race conditions, which can occur in some cases, when using `getState`.
 
 ```js
 sample({

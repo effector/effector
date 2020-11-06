@@ -15,4 +15,4 @@ Be kind and objective when writing in text. Thanks!
 
 **What is the expected behavior:**
 
-**Which versions of Effector packages, and which browser and OS are affected by this issue? Did this work in previous versions of Effector?:**
+**Which versions of effector packages, and which browser and OS are affected by this issue? Did this work in previous versions of effector?:**
