@@ -116,10 +116,19 @@ function Home() {
                   Try it out
                 </Link>
               </div>
-              <div>
+              <div style={{marginTop: '30px'}}>
                 Explainer{' '}
-                <a href="https://www.youtube.com/watch?v=rslADuhtF4Y">Video</a>/
-                <a href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.youtube.com/watch?v=rslADuhtF4Y">
+                  Video
+                </a>
+                /
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">
                   Article
                 </a>
               </div>
