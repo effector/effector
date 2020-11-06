@@ -55,16 +55,16 @@ const event = sample({source: $store, clock: event})
 
 `params` (_Object_): Configuration object
 
-- `source` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Source unit.
+- `source`: Source [unit](../../glossary.md#common-unit)
   - If event. Take last event invocation argument value. Event must be invoked at least once.
   - If effect. Take last effect invocation argument value. Effect must be invoked at least once.
   - If store. Take current store`s state.
-- `clock?` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Clock unit. If not passed, the `source` is used as clock.
+- `clock?`: Clock [unit](../../glossary.md#common-unit). **If not passed, source is used as clock**
   - If event. Triger sampled unit, upon event is called.
   - If effect. Triger sampled unit, upon effect is called.
   - If store. Triger sampled unit, upon store is updated.
 - `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
-- `target?` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): can contain Unit, which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
+- `target?`: Target [unit](../../glossary.md#common-unit), which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
 - `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
 #### Returns
@@ -103,11 +103,11 @@ It is just another form of the `sample` invocation, with the same sense.
 
 #### Arguments
 
-- `sourceUnit` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Source unit.
+- `sourceUnit`: Source [unit](../../glossary.md#common-unit)
   - If event. Take last event invocation argument value. Event must be invoked at least once.
   - If effect. Take last effect invocation argument value. Effect must be invoked at least once.
   - If store. Take current store`s state.
-- `clockUnit` ([_Event_](Event.md) | [_Effect_](Effect.md) | [_Store_](Store.md)): Clock unit. If not passed, the `source` is used as clock.
+- `clockUnit`: Clock [unit](../../glossary.md#common-unit). If not passed, `source` is used as clock
   - If event. Triger sampled unit, upon event is called.
   - If effect. Triger sampled unit, upon effect is called.
   - If store. Triger sampled unit, upon store is updated.
@@ -154,7 +154,7 @@ submitForm(12345678)
 effector 20.4.0
 :::
 
-Each basic entity in effector (event/effect/store/domain) may have a name.  
+Every [unit](../../glossary.md#unit) in effector may have a name.  
 You now can name sampled entities in the same manner as basic ones.
 
 ```js

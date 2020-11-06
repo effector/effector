@@ -15,9 +15,9 @@ split({source, match, cases})
 
 ### Arguments
 
-- `source` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
-- `match` (_Object_): Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
-- `cases` (_Object_): An object with units ([_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md)) to which data will be passed from `source` if the corresponding matching function returns true
+- `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
+- `match`: Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
+- `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` if the corresponding matching function returns true
 
 #### Returns
 
@@ -126,7 +126,7 @@ split(source, cases)
 
 #### Arguments
 
-1. `source` (_Event | Effect | Store_): [_Event_](Event.md), [_Effect_](Effect.md) or [_Store_](Store.md) unit-trigger.
+1. `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
 2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
 #### Returns

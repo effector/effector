@@ -184,7 +184,7 @@ is.domain(null)
 
 ## `is.unit(value)`
 
-Checks if given value is [_event_](Event.md), [_store_](Store.md), [_effect_](Effect.md) or [_domain_](Domain.md)
+Checks if given value is [unit](../../glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md) or [domain](./Domain.md)
 
 #### Returns
 
