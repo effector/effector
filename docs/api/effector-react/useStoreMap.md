@@ -3,7 +3,9 @@ id: useStoreMap
 title: useStoreMap
 ---
 
-React hook, which subscribes to [store](../effector/Store.md) and transforms its value with given funtion. Component will update only when selector function result will change. Common use case: subscribe to changes in selected part of store only
+React hook, which subscribes to [store](../effector/Store.md) and transforms its value with given function. Component will update only when selector function result will change
+
+Common use case: subscribe to changes in selected part of store only
 
 ```ts
 useStoreMap({store, keys, fn})
