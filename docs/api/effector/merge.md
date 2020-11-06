@@ -1,24 +1,30 @@
 ---
 id: merge
 title: merge
-hide_title: true
+description: merge is a method for creating an event triggered by given units
 ---
+
+Merges array of units (events, effects or stores), returns a new event, which fires upon trigger of any of given units
+
+```ts
+merge(unitsArray)
+```
 
 :::note since
 effector 20.0.0
 :::
 
-### `merge(unitsArray)`
+**Arguments**
 
-Merges array of `units` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)), returns a new [_Event_](Event.md), which fires upon trigger of any of merged units.
+1. `unitsArray` (Array<[Store](./Store.md)|[Event](./Event.md)|[Effect](./Effect.md)>): Array of units to be merged
 
-#### Arguments
+**Returns**
 
-1. `unitsArray` (Array<[_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)>): Array of units to be merged.
+[_Event_](./Event.md): New event, which fires when any of given units is triggered
 
-#### Returns
-
-[_Event_](Event.md), which fires upon any of merged units was triggered
+:::tip
+In case of store, resulting event will fire upon store updates
+:::
 
 #### Example 1
 
@@ -37,10 +43,6 @@ bar(2)
 ```
 
 [Try it](https://share.effector.dev/WxUgr6dZ)
-
-:::tip
-Array can contain both events and stores. In this case, resulting event will fire, upon trigger of merged events, or upon store updates.
-:::
 
 #### Example 2
 
