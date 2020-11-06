@@ -1,9 +1,10 @@
 ---
 id: domain
 title: Domain
+description: Domain, its methods and properties
 ---
 
-_Domain_ is a namespace for your events, stores and effects.
+Domain is a namespace for your events, stores and effects.
 
 Domain can subscribe to event, effect, store or nested domain creation with `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
 
@@ -88,7 +89,7 @@ Contains mutable read-only sets of units inside domain.
 #### Formulae
 
 ```ts
-const { stores, events, domains, effects } = domain.history;
+const {stores, events, domains, effects} = domain.history
 ```
 
 - When any kind of units created inside domain, it appears in set with the name of type(stores, events, domains, effects) in the same order as created
@@ -143,7 +144,7 @@ An alias for [domain.createDomain](./Domain.md#createdomainname)
 #### Formulae
 
 ```ts
-domain.onCreateEvent((event) => {})
+domain.onCreateEvent(event => {})
 ```
 
 - Function passed to `onCreateEvent` called every time, as new event created in `domain`
@@ -152,11 +153,11 @@ domain.onCreateEvent((event) => {})
 
 #### Arguments
 
-1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Event](./Event.md) and will be called during every [domain.createEvent](./Domain.md#createeventname) call
+1. `hook` ([_Watcher_]): A function that receives [Event](./Event.md) and will be called during every [domain.createEvent](./Domain.md#createeventname) call
 
 #### Returns
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_]: Unsubscribe function.
 
 #### Example
 
@@ -185,7 +186,7 @@ const b = domain.createEvent()
 #### Formulae
 
 ```ts
-domain.onCreateEffect((effect) => {})
+domain.onCreateEffect(effect => {})
 ```
 
 - Function passed to `onCreateEffect` called every time, as new effect created in `domain`
@@ -194,11 +195,11 @@ domain.onCreateEffect((effect) => {})
 
 #### Arguments
 
-1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Effect](./Effect.md) and will be called during every [domain.createEffect](./Domain.md#createeffectname) call
+1. `hook` ([_Watcher_]): A function that receives [Effect](./Effect.md) and will be called during every [domain.createEffect](./Domain.md#createeffectname) call
 
 #### Returns
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_]: Unsubscribe function.
 
 #### Example
 
@@ -227,7 +228,7 @@ const b = domain.createEffect()
 #### Formulae
 
 ```ts
-domain.onCreateStore(($store) => {})
+domain.onCreateStore($store => {})
 ```
 
 - Function passed to `onCreateStore` called every time, as new store created in `domain`
@@ -236,11 +237,11 @@ domain.onCreateStore(($store) => {})
 
 #### Arguments
 
-1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Store](./Store.md) and will be called during every [domain.createStore](./Domain.md#createstoredefaultstate) call
+1. `hook` ([_Watcher_]): A function that receives [Store](./Store.md) and will be called during every [domain.createStore](./Domain.md#createstoredefaultstate) call
 
 #### Returns
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_]: Unsubscribe function.
 
 #### Example
 
@@ -269,7 +270,7 @@ const b = domain.createEffect(null)
 #### Formulae
 
 ```ts
-domain.onCreateDomain((domain) => {})
+domain.onCreateDomain(domain => {})
 ```
 
 - Function passed to `onCreateDomain` called every time, as sub domain created in `domain`
@@ -278,11 +279,11 @@ domain.onCreateDomain((domain) => {})
 
 #### Arguments
 
-1. `hook` ([_Watcher_](../../glossary.md#watcher)): A function that receives [Domain](./Domain.md) and will be called during every [domain.createDomain](./Domain.md#createdomainname) call
+1. `hook` ([_Watcher_]): A function that receives [Domain](./Domain.md) and will be called during every [domain.createDomain](./Domain.md#createdomainname) call
 
 #### Returns
 
-[_Subscription_](../../glossary.md#subscription): Unsubscribe function.
+[_Subscription_]: Unsubscribe function.
 
 #### Example
 
@@ -305,3 +306,6 @@ const b = domain.createDomain()
 [Try it](https://share.effector.dev/dvBLiwHf)
 
 <hr />
+
+[_watcher_]: ../../glossary.md#watcher
+[_subscription_]: ../../glossary.md#subscription

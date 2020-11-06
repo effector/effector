@@ -1,6 +1,7 @@
 ---
 id: effect
 title: Effect
+description: Effect, its methods and properties
 ---
 
 **Effect** is a container for async function.
@@ -256,6 +257,10 @@ console.log(fx.use.getCurrent() === handlerB)
 <hr />
 
 ## Effect Properties
+
+:::note
+You are not supposed to [forward](./forward.md) to parts of effect (even though it consists of events and stores), since it's a complete entity on its own. This behavior will not be supported
+:::
 
 ### `doneData`
 

@@ -1,6 +1,10 @@
 ---
 id: store
 title: Store
+keywords:
+  - store
+  - unit
+description: Store, its methods and properties
 ---
 
 _Store_ is an object that holds the state value.
