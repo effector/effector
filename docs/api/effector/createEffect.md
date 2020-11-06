@@ -6,7 +6,7 @@ description: Method for creating an effect
 
 Method for creating an [effect](./Effect.md)
 
-# createEffect with handler
+## createEffect with handler
 
 Creates an effect with given handler
 
@@ -30,9 +30,9 @@ You must provide a handler either in [createEffect](createEffect.md) or in [`.us
 effector 21.3.0
 :::
 
-## Examples
+### Examples
 
-### Create effect with handler
+#### Create effect with handler
 
 ```js
 import {createEffect} from 'effector'
@@ -70,7 +70,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/niIXnoC4)
 
-### Set handler to effect after creating
+#### Set handler to effect after creating
 
 ```js
 import {createEffect} from 'effector'
@@ -88,7 +88,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/e1QPH9Uq)
 
-### Watch effect status
+#### Watch effect status
 
 ```js
 import {createEffect} from 'effector'
@@ -129,7 +129,7 @@ await fetchUserReposFx({name: 'zerobias'})
 
 [Try it](https://share.effector.dev/LeurvtYA)
 
-# createEffect with config
+## createEffect with config
 
 Creates an effect with handler and name from given config object
 
@@ -147,9 +147,9 @@ createEffect({handler, name})
 
 [_Effect_](Effect.md): New effect
 
-## Examples
+### Examples
 
-### Create named effect
+#### Create named effect
 
 ```js
 import {createEffect} from 'effector'
