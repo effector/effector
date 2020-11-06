@@ -1,17 +1,18 @@
 ---
 id: useStoreMap
 title: useStoreMap
-hide_title: true
 ---
 
-# `useStoreMap({ store, keys, fn })`
+React hook, which subscribes to [store](../effector/Store.md) and transforms its value with given funtion. Component will update only when selector function result will change. Common use case: subscribe to changes in selected part of store only
 
-Creates a hook function, which observes changes in selected part of store. Component will update only when selector function result will change.
+```ts
+useStoreMap({store, keys, fn})
+```
 
 **Arguments**
 
 1. `params` (_Object_): Configuration object
-   - `store` (_Store_): Source store
+   - `store`: Source [store](../effector/Store.md)
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(store, keys) => result_): Selector function to receive part of source store
 
@@ -24,10 +25,8 @@ Creates a hook function, which observes changes in selected part of store. Compo
 This hook is very useful for working with lists, especially with large ones.
 
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
-import {createComponent, useStoreMap} from 'effector-react'
+import {useStore, useStoreMap} from 'effector-react'
 
 const data = [
   {
@@ -65,11 +64,10 @@ const User = ({id}) => {
   )
 }
 
-const UserList = createComponent($ids, (_, ids) =>
-  ids.map(id => <User key={id} id={id} />),
-)
-
-ReactDOM.render(<UserList />, document.getElementById('root'))
+const UserList = () => {
+  const ids = useStore($ids)
+  return ids.map(id => <User key={id} id={id} />)
+}
 ```
 
-[Try it](https://share.effector.dev/Y0bu6bPv)
+[Try it](https://share.effector.dev/cAZWHCit)

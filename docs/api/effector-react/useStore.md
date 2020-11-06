@@ -1,16 +1,17 @@
 ---
 id: useStore
 title: useStore
-hide_title: true
 ---
 
-# `useStore(store)`
+React hook, which subscribes to [store](../effector/Store.md) and returns its current value, so when store is updated, the component will update automatically.
 
-Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
+```ts
+useStore(store: Store<T>): T
+```
 
 **Arguments**
 
-1. `store` (_Store_)
+1. `store`: [Store](../effector/Store.md)
 
 **Returns**
 
@@ -19,8 +20,6 @@ Creates a hook function, which subscribes to watcher, that observes changes in t
 #### Example
 
 ```js
-import React from 'react'
-import ReactDOM from 'react-dom'
 import {createStore, createApi} from 'effector'
 import {useStore} from 'effector-react'
 
@@ -31,7 +30,7 @@ const {increment, decrement} = createApi(counter, {
   decrement: state => state - 1,
 })
 
-const Counter = () => {
+export const Counter = () => {
   const state = useStore(counter)
   return (
     <div>
@@ -41,8 +40,6 @@ const Counter = () => {
     </div>
   )
 }
-
-ReactDOM.render(<Counter />, document.getElementById('root'))
 ```
 
 [Try it](https://share.effector.dev/4aFc0s3d)
