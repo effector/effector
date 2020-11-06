@@ -95,8 +95,8 @@ function Home() {
       <header className={clsx('hero', styles.heroBanner)}>
         <div className="container">
           <div className={clsx('row', styles.rowRevers)}>
-
-            <div className={clsx('col col--6 margin-bottom--md', styles.buttons)}>
+            <div
+              className={clsx('col col--6 margin-bottom--md', styles.buttons)}>
               <h1 className="hero__title">{siteConfig.title}</h1>
               <p className="hero__subtitle">{siteConfig.tagline}</p>
               <div className={styles.buttons}>
@@ -109,12 +109,20 @@ function Home() {
                   Get Started
                 </Link>
                 <Link
-                  className={'button button--outline button--secondary button--lg'}
+                  className={
+                    'button button--outline button--secondary button--lg'
+                  }
                   to="https://share.effector.dev">
                   Try it out
                 </Link>
               </div>
-              <div>Explainer <a href="https://www.youtube.com/watch?v=rslADuhtF4Y">Video</a>/<a href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">Article</a></div>
+              <div>
+                Explainer{' '}
+                <a href="https://www.youtube.com/watch?v=rslADuhtF4Y">Video</a>/
+                <a href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">
+                  Article
+                </a>
+              </div>
             </div>
             <div className="col col--6">
               <Code language="js">{codeExample}</Code>
