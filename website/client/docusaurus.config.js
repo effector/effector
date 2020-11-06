@@ -141,3 +141,6 @@ module.exports = {
     ],
   ],
 }
+if (!process.env.ALGOLIA_API_KEY) {
+  delete module.exports.themeConfig.algolia
+}
