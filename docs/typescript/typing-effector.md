@@ -1,7 +1,10 @@
 ---
 id: typing-effector
 title: Typing effector
+description: Best practices for writing well-typed code
 ---
+
+Best practices for writing well-typed code
 
 ## createEvent
 
