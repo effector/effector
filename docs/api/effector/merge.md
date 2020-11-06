@@ -16,7 +16,7 @@ effector 20.0.0
 
 **Arguments**
 
-1. `units` ([Array\<Unit>](../../glossary.md#common-unit)): Array of units to be merged
+1. `units` ([Unit\[\]](../../glossary.md#common-unit)): Array of units to be merged
 
 **Returns**
 
