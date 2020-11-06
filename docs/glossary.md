@@ -120,7 +120,7 @@ type Effect<Params, Done, Fail = Error> = {
 
 _Domain_ is a namespace for your events, stores and effects.
 
-Domains are notified when events, stores, effects, or nested domains are created via `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods. 
+Domains are notified when events, stores, effects, or nested domains are created via `onCreateEvent`, `onCreateStore`, `onCreateEffect`, `onCreateDomain` methods.
 
 It is useful for logging or other side effects.
 
@@ -156,33 +156,14 @@ type Domain = {
 - [createStore(defaultState)](./api/effector/Domain.md#createstoredefaultstate) creates a domain-bound [`Store`](#Store)
 - [createDomain(name)](./api/effector/Domain.md#createdomainname) creates a nested, domain-bound [`Domain`](#Domain)
 
-## Reducer
+## Unit
 
-```typescript
-type StoreReducer<State, E> = (state: State, payload: E) => State | void
-type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
-```
+Data type used to describe business logic of applications. Most of the effector methods deal with unit processing.
+Three are four units types: [store], [event], [effect] and [domain]
 
-_Reducer_ calculates a new state given the previous state and an event's payload. For stores, if reducer returns undefined or the same state (===), then there will be no update for a given store.
+## Common unit
 
-## Watcher
-
-```typescript
-type Watcher<T> = (update: T) => any
-```
-
-_Watcher_ is used for **side effects**. Accepted by [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and [domain.onCreate\* hooks](./api/effector/Domain.md#oncreateeventhook). Return value of a watcher is ignored.
-
-## Subscription
-
-```typescript
-type Subscription = {
-  (): void
-  unsubscribe(): void
-}
-```
-
-Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+Common units can be used to trigger updates of other units. There are three common unit types: [store], [event] and [effect]. **When a method accepts units, it means that it accepts events, effects, and stores** a source of reactive updates
 
 ## Purity
 
@@ -245,3 +226,36 @@ const loginSize = login.map(login => {
   return login.length
 })
 ```
+
+## Reducer
+
+```typescript
+type StoreReducer<State, E> = (state: State, payload: E) => State | void
+type EventOrEffectReducer<T, E> = (state: T, payload: E) => T
+```
+
+_Reducer_ calculates a new state given the previous state and an event's payload. For stores, if reducer returns undefined or the same state (===), then there will be no update for a given store.
+
+## Watcher
+
+```typescript
+type Watcher<T> = (update: T) => any
+```
+
+_Watcher_ is used for **side effects**. Accepted by [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and [domain.onCreate\* hooks](./api/effector/Domain.md#oncreateeventhook). Return value of a watcher is ignored.
+
+## Subscription
+
+```typescript
+type Subscription = {
+  (): void
+  unsubscribe(): void
+}
+```
+
+Function, returned by [forward](./api/effector/forward.md), [event.watch](./api/effector/Event.md#watchwatcher), [store.watch](./api/effector/Store.md#watchwatcher) and some others methods. Used for cancelling a subscription. After first call, subscription will do nothing
+
+[effect]: ./api/effector/Effect.md
+[store]: ./api/effector/Store.md
+[event]: ./api/effector/Event.md
+[domain]: ./api/effector/Domain.md
