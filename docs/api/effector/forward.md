@@ -1,51 +1,51 @@
 ---
 id: forward
 title: forward
-hide_title: true
+description: Method to create connection between units in a declarative way. Sends updates from one set of units to another
 ---
 
-# forward
+Method to create connection between units in a declarative way. Sends updates from one set of units to another
 
 ## Formulae
 
 ```ts
-forward({ from, to }): Subscription
+forward({
+  from: Unit | Unit[],
+  to: Unit | Unit[]
+}): Subscription
 ```
 
-When `from`is triggered, send data from it to `to`.
+**Arguments**
 
-- `forward()` returns [_Subscription_] function, that can disconnect forward
-- if `from` is an array of Units, `to` will be triggered if any from `from` is triggered
-- if `to` is an array of Units, when `to` is triggered, each of `to` will be triggered too
-- _Unit_ is an interface, that implemented by [_Event_], [_Store_], [_Effect_]
+1. `from` ([Unit | Unit\[\]](../../glossary.md#common-unit)): Source of updates. Forward will listen for changes of these units
 
-## `forward({ from: Unit, to: Unit })`
+   - if an [_Event_] is passed, `to` will be triggered on each event trigger and receives event argument
+   - if a [_Store_] is passed, `to` will be triggered on each store **change** and receives new value of the store
+   - if an [_Effect_] is passed, `to` will be triggered on each effect call and receives effect parameter
+   - if an array of [units](../../glossary.md#common-unit) is passed, `to` will be triggered when any unit in `from` array is triggered
 
-Sends data from one entity to another.
+2. `to` ([Unit | Unit\[\]](../../glossary.md#common-unit)): Target for updates. `forward` will trigger these units with data from `from`
+   - if passed an [_Event_], it will be triggered with data from `from` unit
+   - if passed a [_Store_], data from `from` unit will be written to store and **trigger its update**
+   - if passed an [_Effect_], it will be called with data from `from` unit as parameter
+   - if `to` is an array of [units](../../glossary.md#common-unit), each unit in that array will be triggered
 
-### Arguments
+**Returns**
 
-1. `from` ([_Event_] | [_Store_] | [_Effect_]): Source of data. Forward will listen for changes of this unit.
+[Subscription](../../glossary.md#subscription): Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
 
-   - If an [_Event_] is passed, `to` will be triggered on each event trigger and receives event argument.
-   - If a [_Store_] is passed, `to` will be triggered on each store **change** and receives new value of the store.
-   - If an [_Effect_] is passed, `to` will be triggered on each effect call and receives effect parameter.
+:::note since
+Arrays of units are supported since [effector 20.6.0](https://changelog.effector.dev/#effector-20-6-0)
+:::
 
-2. `to` ([_Event_] | [_Store_] | [_Effect_]): Target for data. Forward will trigger this unit with data from `from`.
+## Recommendation
 
-   - If passed an [_Event_], it will be triggered with data from `from` unit.
-   - If passed a [_Store_], data from `from` unit will be written to store and **trigger its update**.
-   - If passed an [_Effect_], it will be called with data from `from` unit as parameter.
+- Arrays can contain different type of units, but their data types should match
+- Use subscription with caution, because it breaks static connections and makes debug harder
 
-**Data type of the `from` and `to` should be equal**
+## Examples
 
-### Returns
-
-[_Subscription_]: Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
-
-### Example
-
-Send store data to store
+### Send store updates to another store
 
 ```js
 import {createStore, createEvent, forward} from 'effector'
@@ -67,27 +67,7 @@ event(200)
 
 [Try it](https://share.effector.dev/UeJbgRG9)
 
-It is the not better way to update store. In most cases you need [`store.on`](https://effector.dev/docs/api/effector/store#ontrigger-handler)
-
-## Support array in config field
-
-:::note since
-effector 20.6.0
-:::
-
-### `forward({ from: Array<Unit>, to: Array<Unit> })`
-
-1. `from` (`Array`<[_Event_] | [_Store_] | [_Effect_]>): List of units. When triggered one from list, `to` will be triggered with data from it.
-   - Array can contain different type of units, but data type must fit together.
-2. `to` (`Array`<[_Event_] | [_Store_] | [_Effect_]>): List of targets. When unit from `from` is triggered, each unit from `to` is called with data from unit `from`.
-
-- Array can contain different type of units, but data type must fit together.
-
-**Data type of the `from` and `to` must be equal**
-
-[_Subscription_]: Unsubscribe function. It breaks connection between `from` and `to`. After call, `to` will not be triggered anymore.
-
-### Example
+### Forward between arrays of units
 
 ```js
 import {createEvent, forward} from 'effector'
@@ -116,31 +96,6 @@ secondSource('B')
 
 [Try it](https://share.effector.dev/8aVpg8nU)
 
-## Combination
-
-Also, you can combine array with simple unit:
-
-```js
-forward({
-  from: singleSource,
-  to: [$store, event, effect],
-})
-
-// Another example
-
-forward({
-  from: [firstSource, secondSource, $store],
-  to: [event, effect, anotherEffect],
-})
-```
-
-## Recommendation
-
-- Use [`store.on`](https://effector.dev/docs/api/effector/store#ontrigger-handler) to update store.
-- Be careful when forwarding store to another store.
-- Use [_Subscription_] with caution, because it breaks static connections and makes debug harder.
-
 [_effect_]: Effect.md
 [_store_]: Store.md
 [_event_]: Event.md
-[_subscription_]: ../../glossary.md#subscription
