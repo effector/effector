@@ -8,11 +8,11 @@ hide_title: true
 
 The `createStoreConsumer` creates a consumer who is watching for changes in the store. Based on _Render Props_ technique.
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_)
 
-#### Returns
+**Returns**
 
 (_`React.Component`_)
 

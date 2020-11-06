@@ -12,7 +12,7 @@ scopeBind<T>(event: Event<T>): (payload: T) => void
 
 A method to bind event or effect to a [scope](./Scope.md) to be called lated. effector supports imperative event calling inside watchers but sometimes you should bind events to the scope explicitly, e.g. when calling events within a setTimeout/setInterval callbacks.
 
-### Arguments
+**Arguments**
 
 1. `event` [_Event_](Event.md) to be bound to the scope
 

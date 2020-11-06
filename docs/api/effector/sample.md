@@ -51,7 +51,7 @@ const event = sample({source: $store, clock: event})
 
 ## `sample({source, clock?, fn?, target?, greedy?})`
 
-#### Arguments
+**Arguments**
 
 `params` (_Object_): Configuration object
 
@@ -67,7 +67,7 @@ const event = sample({source: $store, clock: event})
 - `target?`: Target [unit](../../glossary.md#common-unit), which accepts payload returned by `fn`. In case if target is not passed, it's created "under the hood" and being returned as result of the `sample()` call.
 - `greedy?` (true | false) Modifier defines whether sampler will wait for resolving calculation result, and will batch all updates, resulting only one trigger, or will be triggered upon every linked node invocation, e.g. if `greedy` is `true`, `sampler` will fire on trigger of every node, linked to clock, whereas `non-greedy sampler(greedy: false)` will fire only upon the last linked node trigger.
 
-#### Returns
+**Returns**
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).
@@ -101,7 +101,7 @@ submitForm(12345678)
 
 It is just another form of the `sample` invocation, with the same sense.
 
-#### Arguments
+**Arguments**
 
 - `sourceUnit`: Source [unit](../../glossary.md#common-unit)
   - If event. Take last event invocation argument value. Event must be invoked at least once.
@@ -113,7 +113,7 @@ It is just another form of the `sample` invocation, with the same sense.
   - If store. Triger sampled unit, upon store is updated.
 - `fn?` (_(sourceData, clockData) => result_): Optional combinator function, [should be **pure**](../../glossary.md#purity). Since, this handler is supposed to organize data flow, you should avoid declaring side-effects here. It's more appropriate to place it in `watch` method for sampled node.
 
-#### Returns
+**Returns**
 
 ([_Event_](Event.md) | [_Store_](Store.md)) - Unit, which fires/updates upon `clock` is trigged, if `source` is not passed.
 [The type of returned unit depends on the types of clock and source.](#type-of-the-created-target).

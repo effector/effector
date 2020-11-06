@@ -9,11 +9,11 @@ hide_title: true
 Creates a hook function, which subscribes to watcher, that observes changes in the current **readonly**` store, so when recording results, the component will update automatically.
 You can mutate this data **only from createEvent**
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_)
 
-#### Returns
+**Returns**
 
 _readonly(State)_
 
@@ -32,13 +32,13 @@ const {increment, decrement} = createApi($counter, {
 
 export default {
   setup() {
-    const counter = useStore($counter);
+    const counter = useStore($counter)
 
     return {
       counter,
       increment,
-      decrement
+      decrement,
     }
-  }
+  },
 }
 ```

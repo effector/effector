@@ -13,7 +13,7 @@ allSettled<T>(unit: Effect<T, Done, Fail>, {scope: Scope, params?: T}): Promise<
 
 Call provided unit in scope and wait for finishing all the triggered effects.
 
-### Arguments
+**Arguments**
 
 1. `unit`: [_Event_](Event.md) or [_Effect_](./Effect.md) to be called
 2. `scope`: [_Scope_](./Scope.md)

@@ -8,14 +8,14 @@ hide_title: true
 
 Creates a hook function, which observes changes in selected part of store. Component will update only when selector function result will change.
 
-#### Arguments
+**Arguments**
 
 1. `params` (_Object_): Configuration object
    - `store` (_Store_): Source store
    - `keys` (_Array_): This argument will be passed to React.useMemo to avoid unnecessary updates
    - `fn` (_(store, keys) => result_): Selector function to receive part of source store
 
-#### Returns
+**Returns**
 
 (_State_)
 

@@ -9,23 +9,24 @@ Methods available on `Vue` prototype after you enable this plugin.
 
 ### `$watchAsStore(expOrFn, options?)`
 
-#### Arguments
+**Arguments**
 
 1. `expOrFn` (_string | Function_): Expression only accepts dot-delimited paths. For more complex expressions, use a function instead.
 2. `options`? (_Object_)
-  - `deep`? (_boolean_)
-  - `immediate`? (_boolean_)
 
-#### Returns
+- `deep`? (_boolean_)
+- `immediate`? (_boolean_)
+
+**Returns**
 
 (_`Store`_)
 
 ### `$store(expOrFn)`
 
-#### Arguments
+**Arguments**
 
 1. `expOrFn` (_string | Function_): Expression only accepts dot-delimited paths. For more complex expressions, use a function instead.
 
-#### Returns
+**Returns**
 
 (_`Store`_)

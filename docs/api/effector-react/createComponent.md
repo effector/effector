@@ -12,12 +12,12 @@ Creates store-based React component. The `createComponent` is useful for transfe
 You can use hooks in `createComponent` since effector-react@20.3.0.
 :::
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store | Object_): `Store` or object of `Store`
 2. `render` (_Function_): Render function which will be called with props and state
 
-#### Returns
+**Returns**
 
 (_`React.Component`_)
 

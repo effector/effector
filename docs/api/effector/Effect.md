@@ -8,11 +8,11 @@ description: Effect, its methods and properties
 
 It can be safely used in place of the original async function.
 
-#### Arguments
+**Arguments**
 
 1. `params` (_Params_): parameters passed to effect
 
-#### Returns
+**Returns**
 
 (_`Promise`_)
 
@@ -78,11 +78,11 @@ You must provide a handler either through [`.use`](Effect.md#usehandler) method 
 [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
 :::
 
-#### Arguments
+**Arguments**
 
 1. `handler` (_Function_): Function, that receives the first argument passed to an effect call.
 
-#### Returns
+**Returns**
 
 ([_Effect_](Effect.md)): The same effect
 
@@ -120,11 +120,11 @@ const unwatch = effect.watch(fn)
 - Call `fn` on each `effect` call, pass payload of `effect` as argument to `fn`
 - When `unwatch` is called, stop calling `fn`
 
-#### Arguments
+**Arguments**
 
 1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
 
-#### Returns
+**Returns**
 
 [_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
@@ -163,11 +163,11 @@ const event = effect.prepend(fn)
 
 - When `event` is triggered, call `fn` with payload from `event`, then trigger `effect` with result of `fn()`
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 
@@ -186,11 +186,11 @@ const second = first.map(fn)
 - When `first` is triggered, pass payload from `first` to `fn`
 - Trigger `second` with the result of the `fn()` call as payload
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 
@@ -232,7 +232,7 @@ fn = effect.use.getCurrent()
 - If no handler was assigned to `effect`, default handler will be returned ([that throws an error](https://share.effector.dev/8PBjt3TL))
 - Hint: to set a new handler use [`effect.use(handler)`](#usehandler)
 
-#### Returns
+**Returns**
 
 (_Function_): Current handler, defined by `handler` property or via `use` call.
 

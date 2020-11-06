@@ -8,12 +8,12 @@ hide_title: true
 
 `effector-vue` plugin
 
-#### Arguments
+**Arguments**
 
 1. `Vue` (_class Vue_): Vue class
 2. `options` (_Object_): Plugin options
 
-#### Returns
+**Returns**
 
 (_`void`_)
 

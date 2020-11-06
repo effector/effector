@@ -7,7 +7,7 @@ title: ComponentOptions
 
 ### `effector`
 
-#### Returns
+**Returns**
 
 (_`Function | Object | Store`_): `Store` or object of `Store`, or function which will be called with Component instance as `this`
 

@@ -8,11 +8,11 @@ hide_title: true
 
 Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_)
 
-#### Returns
+**Returns**
 
 (_State_)
 

@@ -5,11 +5,11 @@ title: fromObservable
 
 Creates an event containing all items from an Observable.
 
-#### Arguments
+**Arguments**
 
 1. `observable` (_Observable_)
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event
 

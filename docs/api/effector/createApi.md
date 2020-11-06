@@ -8,12 +8,12 @@ hide_title: true
 
 `createApi` is a shorthand for creating events attached to store
 
-#### Arguments
+**Arguments**
 
 1. `store` [_Store_](Store.md)
 2. `api` (_Object_) Object with [_reducers_](../../glossary.md#reducer)
 
-### Returns
+**Returns**
 
 (_`Object`_) Object with [events](Event.md)
 

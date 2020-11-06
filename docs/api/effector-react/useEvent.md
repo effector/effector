@@ -7,11 +7,11 @@ Bind event to current fork to use in dom event handlers. Used **only** with ssr,
 
 ## `useEvent(unit)`
 
-#### Arguments
+**Arguments**
 
 1. `unit` ([_Event_](../effector/Event.md) or [_Effect_](../effector/Effect.md)): Event or effect which will be binded to current `scope`
 
-#### Returns
+**Returns**
 
 (Function): Function to pass to event handlers. Will trigger given unit in current scope
 

@@ -18,11 +18,11 @@ effector 20.7.0
 
 ### `createEvent(name?)`
 
-#### Arguments
+**Arguments**
 
 1. `name`? (_string_): event name
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event
 
@@ -32,11 +32,11 @@ effector 20.7.0
 
 Creates an [effect](Effect.md) with given handler
 
-#### Arguments
+**Arguments**
 
 1. `handler`? (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
-#### Returns
+**Returns**
 
 [_Effect_](Effect.md): A container for async function.
 
@@ -48,11 +48,11 @@ effector 21.3.0
 
 ### `createEffect(name?)`
 
-#### Arguments
+**Arguments**
 
 1. `name`? (_string_): effect name
 
-#### Returns
+**Returns**
 
 [_Effect_](Effect.md): A container for async function.
 
@@ -60,11 +60,11 @@ effector 21.3.0
 
 ### `createStore(defaultState)`
 
-#### Arguments
+**Arguments**
 
 1. `defaultState` (_State_): store default state
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 
@@ -72,11 +72,11 @@ effector 21.3.0
 
 ### `createDomain(name?)`
 
-#### Arguments
+**Arguments**
 
 1. `name`? (_string_): domain name
 
-#### Returns
+**Returns**
 
 [_Domain_](Domain.md): New domain
 
@@ -151,11 +151,11 @@ domain.onCreateEvent(event => {})
 - Function called with `event` as first argument
 - Result of function call is ignored
 
-#### Arguments
+**Arguments**
 
 1. `hook` ([_Watcher_]): A function that receives [Event](./Event.md) and will be called during every [domain.createEvent](./Domain.md#createeventname) call
 
-#### Returns
+**Returns**
 
 [_Subscription_]: Unsubscribe function.
 
@@ -193,11 +193,11 @@ domain.onCreateEffect(effect => {})
 - Function called with `effect` as first argument
 - Result of function call is ignored
 
-#### Arguments
+**Arguments**
 
 1. `hook` ([_Watcher_]): A function that receives [Effect](./Effect.md) and will be called during every [domain.createEffect](./Domain.md#createeffectname) call
 
-#### Returns
+**Returns**
 
 [_Subscription_]: Unsubscribe function.
 
@@ -235,11 +235,11 @@ domain.onCreateStore($store => {})
 - Function called with `$store` as first argument
 - Result of function call is ignored
 
-#### Arguments
+**Arguments**
 
 1. `hook` ([_Watcher_]): A function that receives [Store](./Store.md) and will be called during every [domain.createStore](./Domain.md#createstoredefaultstate) call
 
-#### Returns
+**Returns**
 
 [_Subscription_]: Unsubscribe function.
 
@@ -277,11 +277,11 @@ domain.onCreateDomain(domain => {})
 - Function called with `domain` as first argument
 - Result of function call is ignored
 
-#### Arguments
+**Arguments**
 
 1. `hook` ([_Watcher_]): A function that receives [Domain](./Domain.md) and will be called during every [domain.createDomain](./Domain.md#createdomainname) call
 
-#### Returns
+**Returns**
 
 [_Subscription_]: Unsubscribe function.
 

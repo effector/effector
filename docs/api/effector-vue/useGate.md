@@ -8,12 +8,12 @@ hide_title: true
 
 Creates a [_`Gate`_](Gate.md)
 
-#### Arguments
+**Arguments**
 
 1. `GateComponent` (_Gate_)
 2. `props` (_Props_)
 
-#### Returns
+**Returns**
 
 (_`void`_)
 

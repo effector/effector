@@ -41,11 +41,11 @@ const unwatch = event.watch(fn)
 
 <!--If you want to know, when watch is called, welcome to advanced section-->
 
-#### Arguments
+**Arguments**
 
 1. `watcher` ([_Watcher_](../../glossary.md#watcher)): A function that receives `payload`.
 
-#### Returns
+**Returns**
 
 [_Subscription_](../../glossary.md#subscription): Unsubscribe function.
 
@@ -80,11 +80,11 @@ const second = first.map(fn)
 - When `first` is triggered, pass payload from `first` to `fn`
 - Trigger `second` with the result of the `fn()` call as payload
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 
@@ -124,11 +124,11 @@ const second = first.filter({fn})
 - When `first` is triggered, pass payload from `first` to `fn`
 - If `fn()` returns `true`, `second` will be triggered with payload from `first`
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 
@@ -206,11 +206,11 @@ const second = first.filterMap(fn)
   - If `fn()` returned `undefined` do not trigger `second`
   - If `fn()` returned some data, trigger `second` with data from `fn()`
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 
@@ -279,11 +279,11 @@ const second = first.prepend(fn)
 - Call `fn` with payload from `second`
 - Trigger `first` with result of `fn()`
 
-#### Arguments
+**Arguments**
 
 1. `fn` (_Function_): A function that receives `payload`, [should be **pure**](../../glossary.md#purity).
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md): New event.
 

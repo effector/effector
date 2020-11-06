@@ -24,7 +24,7 @@ $result = combine(
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 
@@ -50,7 +50,7 @@ arrStores.watch(console.log) // => [0, 'zerobias']
 
 ## `combine({ A, B, C }, fn?)`
 
-#### Formulae 
+#### Formulae
 
 ```ts
 $result = combine({a: $first, b: $second, c: $third})
@@ -71,7 +71,7 @@ $result = combine({a: $first, b: $second, c: $third}, ({a, b, c}) => result)
 - If function returned the same `result` as previous, store `$result` will not be triggered
 - If several stores updated at the same time (during one tick) there will be single call of function and single update of `$result` store
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 
@@ -99,7 +99,6 @@ sum.watch(console.log) // => 510
 
 ## `combine([A, B, C], fn?)`
 
-
 #### Formulae
 
 ```ts
@@ -121,8 +120,7 @@ $result = combine([$first, $second, $third])
 - Store `$result` will be updated on each update of passed stores
 - If several stores updated at the same time (during one tick) there will be single update of `$result` store
 
-
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 

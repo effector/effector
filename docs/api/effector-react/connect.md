@@ -15,20 +15,20 @@ Consider using [hooks api](./index.md#hooks) in modern projects
 effector-react 21.0.6
 :::
 
-#### Arguments
+**Arguments**
 
 1. `Store` ([Store](../effector/Store.md)): store or object with stores
 
-#### Returns
+**Returns**
 
 `(Component) => Component`: Function, which accepts react component and return component with store fields merged in props
 
 ## `connect(Component)(Store): Component`
 
-#### Arguments
+**Arguments**
 
 1. `Component` (React.ComponentType): react component
 
-#### Returns
+**Returns**
 
 `(Store) => Component`: Function, which accepts a store and return component with store fields merged in props

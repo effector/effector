@@ -13,13 +13,13 @@ Pattern matching method, splits trigger unit (event, effect or store) into sever
 split({source, match, cases})
 ```
 
-### Arguments
+**Arguments**
 
 - `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
 - `match`: Object with the functions-matches to which the data sent to the source will be sequentially matched. If one of the functions returns true, then the data will be sent to the corresponding `cases[fieldName]` (if there is one), if none of the functions returns true, then the data will be sent to `cases.__` (if there is one)
 - `cases`: Object with [units](../../glossary.md#common-unit) to which data will be passed from `source` if the corresponding matching function returns true
 
-#### Returns
+**Returns**
 
 ```ts
 void
@@ -124,12 +124,12 @@ effector 21.0.0
 split(source, cases)
 ```
 
-#### Arguments
+**Arguments**
 
 1. `source`: [Unit](../../glossary.md#common-unit) which will trigger computation in `split`
 2. `match` (_Object_): Schema of cases, which uses names of resulting events as keys, and matching function*((value) => Boolean)*
 
-#### Returns
+**Returns**
 
 (Object) - Object, having keys, defined in `cases` argument, plus `__`(two underscores) - which stands for `default` (no matches met) case.
 

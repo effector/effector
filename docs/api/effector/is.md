@@ -12,7 +12,7 @@ Namespace for unit validators
 
 Checks if given value is [_store_](Store.md)
 
-#### Returns
+**Returns**
 
 boolean
 
@@ -60,7 +60,7 @@ is.store(null)
 
 Checks if given value is [_event_](Event.md)
 
-#### Returns
+**Returns**
 
 boolean
 
@@ -108,7 +108,7 @@ is.event(null)
 
 Checks if given value is [_effect_](Effect.md)
 
-#### Returns
+**Returns**
 
 boolean
 
@@ -147,7 +147,7 @@ is.effect(null)
 
 Checks if given value is [_domain_](Domain.md)
 
-#### Returns
+**Returns**
 
 boolean
 
@@ -186,7 +186,7 @@ is.domain(null)
 
 Checks if given value is [unit](../../glossary.md#unit): [store](./Store.md), [event](./Event.md), [effect](./Effect.md) or [domain](./Domain.md)
 
-#### Returns
+**Returns**
 
 boolean
 

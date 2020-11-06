@@ -11,12 +11,12 @@ hide_title: true
 Hook function for efficient rendering of list store.
 Every item will be memoized and updated only when their data changes.
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_): Store **should be array**
 2. `renderItem` (_Function_): Render function which will be called for every item in list
 
-#### Returns
+**Returns**
 
 (_React.Node_)
 
@@ -158,7 +158,7 @@ setTimeout(() => {
 
 Used when you need to pass dependencies to react (to update items when some of its dependencies are changed)
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_): Store **should be array**
 2. `keys` (_Array_): Array of dependencies, which will be passed to react by `useList`

@@ -11,12 +11,12 @@ hide_title: true
 Creates a [_Store_](Store.md) from [_Event_](Event.md).
 It works like a shortcut for `createStore(defaultState).on(event, (_, payload) => payload)`
 
-#### Arguments
+**Arguments**
 
 1. `event` [_Event_](Event.md)
 2. `defaultState` (_Payload_)
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 
@@ -42,12 +42,12 @@ event('foo')
 Creates a [_Store_](Store.md) out of successful results of [_Effect_](Effect.md).
 It works like a shortcut for `createStore(defaultState).on(effect.done, (_, {result}) => result)`
 
-#### Arguments
+**Arguments**
 
 1. `effect` [_Effect_](Effect.md)
 2. `defaultState` (_Done_)
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 
@@ -72,11 +72,11 @@ await effect()
 
 Creates an object with stores from object with values
 
-#### Arguments
+**Arguments**
 
 1. `obj` (_State_)
 
-#### Returns
+**Returns**
 
 [_Store_](Store.md): New store
 

@@ -10,11 +10,11 @@ Creates a [domain](./Domain.md)
 createDomain(name?)
 ```
 
-#### Arguments
+**Arguments**
 
 1. `name`? (_string_): domain name
 
-#### Returns
+**Returns**
 
 [_Domain_](./Domain.md): New domain
 

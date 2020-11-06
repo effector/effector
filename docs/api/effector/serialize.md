@@ -9,13 +9,13 @@ serialize(scope: Scope, { ignore?: Array<Store<any>>; onlyChanges?: boolean }): 
 
 A companion method for [_fork_](./fork.md). Allows to get a serialized value for all the store states within a [scope](./Scope.md). The main purpose is an application state serialization on the server side during SSR.
 
-### Arguments
+**Arguments**
 
 1. `scope` [_Scope_](./Scope.md): a scope object (forked instance)
 2. `ignore` Optional array of [_Store_](Store.md) to be omitted during serialization (added 20.14.0)
 3. `onlyChanges` Optional boolean flag to ignore stores which didn't changed in fork (prevent default values from being carried over network)
 
-### Returns
+**Returns**
 
 An object with store values using sids as a keys
 

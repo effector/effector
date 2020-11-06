@@ -6,6 +6,7 @@ title: fork
 :::note since
 effector 21.0.0
 :::
+
 ```ts
 fork(domain: Domain, { values?, handlers? }?): Scope
 ```
@@ -13,13 +14,13 @@ fork(domain: Domain, { values?, handlers? }?): Scope
 Creates a fully isolated instance of application.
 The primary purpose of fork includes SSR (but is not limited to). Fork clones all the units and connections between them leading to completely independents copy of all logic defined within domain.
 
-### Arguments
+**Arguments**
 
 1. `domain` ([_Domain_](Domain.md)): Original domain to clone, required
 2. `values` Optional object with either a mapping from store sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to store values or a Map where keys are [_Store_](Store.md) objects and values contains initial store value
 3. `handlers` Optional object with either a mapping from effect sids ([_babel-plugin_](babel-plugin.md) is required to allow `sid` generation) to effect handlers or a Map where keys are [_Effect_](Effect.md) objects and values contains handlers
 
-### Returns
+**Returns**
 
 [_Scope_](./Scope.md) object containing information about cloned domain
 
@@ -59,14 +60,17 @@ console.log(scopeB.getState($counter)) // => -1
 [Try it](https://share.effector.dev/0grlV3bA)
 
 ### Support Map in values
+
 :::note since
 effector 20.11.0
 :::
+
 ```ts
 fork(domain: Domain, { values?: Map<Store, any> , handlers? }?): Scope
 ```
 
 ### Support change effects
+
 :::note since
 effector 20.16.0
 :::

@@ -9,11 +9,11 @@ hide_title: true
 Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
 Basically this hook use when need to work with forms (`v-model`)
 
-#### Arguments
+**Arguments**
 
 1. `store` (_Store_)
 
-#### Returns
+**Returns**
 
 (_State_)
 
@@ -42,12 +42,13 @@ export default {
 
 ```html
 <div id="app">
-  <input type="text" v-model="user.name">
-  <input type="text" v-model="user.surname">
+  <input type="text" v-model="user.name" />
+  <input type="text" v-model="user.surname" />
 
   <div>
-    <input type="checkbox" v-model="user.skills" value="HTML">
-    <input type="checkbox" v-model="user.skills" value="CSS">
-    <input type="checkbox" v-model="user.skills" value="JS">
+    <input type="checkbox" v-model="user.skills" value="HTML" />
+    <input type="checkbox" v-model="user.skills" value="CSS" />
+    <input type="checkbox" v-model="user.skills" value="JS" />
   </div>
 </div>
+```

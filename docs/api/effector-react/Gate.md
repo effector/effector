@@ -22,7 +22,7 @@ Gate can have two states:
 
 Store with current state of given gate. State came from second argument of [useGate](./useGate.md) and from props when rendering gate as component
 
-#### Returns
+**Returns**
 
 (`Store<Props>`)
 
@@ -30,7 +30,7 @@ Store with current state of given gate. State came from second argument of [useG
 
 ### `open`
 
-#### Returns
+**Returns**
 
 Event which will be called during gate mounting
 
@@ -40,7 +40,7 @@ Event which will be called during gate mounting
 
 ### `close`
 
-#### Returns
+**Returns**
 
 Event which will be called during gate unmounting.
 
@@ -52,7 +52,7 @@ Event which will be called during gate unmounting.
 
 Boolean store which show if given gate is mounted.
 
-#### Returns
+**Returns**
 
 (`Store<boolean>`)
 

@@ -10,11 +10,11 @@ Method for creating an [event](./Event.md)
 createEvent(name?)
 ```
 
-#### Arguments
+**Arguments**
 
 1. `name`? (_string_): Event name
 
-#### Returns
+**Returns**
 
 [_Event_](./Event.md): New event
 

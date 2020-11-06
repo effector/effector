@@ -10,7 +10,7 @@ hide_title: true
 
 Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Gate.md#state) will be created with passed value
 
-#### Arguments
+**Arguments**
 
 `config` (_Object_): Optional configuration object
 
@@ -18,7 +18,7 @@ Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Ga
 - `domain?` ([_Domain_](../effector/Domain.md)): Optional domain which will be used to create gate units ([Gate.open](./Gate.md#open) event, [Gate.state](./Gate.md#state) store and so on)
 - `name?` (_string_): Optional name which will be used as name of created react component
 
-#### Returns
+**Returns**
 
 [_Gate_](./Gate.md)
 
@@ -28,7 +28,7 @@ Creates a [_`Gate`_](./Gate.md), if `defaultState` is defined, [Gate.state](./Ga
 import {createGate, useGate} from 'effector-vue/composition'
 
 const ListGate = createGate({
-  name: 'Gate with required props'
+  name: 'Gate with required props',
 })
 
 const ListItem = {
@@ -40,12 +40,12 @@ const ListItem = {
   props: {
     id: {
       type: STring,
-      required: true
-    }
+      required: true,
+    },
   },
   setup(props) {
     useGate(ListGate, () => props.id)
-  }
+  },
 }
 
 const app = {
@@ -55,14 +55,13 @@ const app = {
     </div>
   `,
   components: {
-    ListItem
+    ListItem,
   },
   setup() {
-    const id = ref('1');
+    const id = ref('1')
     return {id}
-  }
+  },
 }
-
 
 Gate.state.watch(state => {
   console.log('current state', state)

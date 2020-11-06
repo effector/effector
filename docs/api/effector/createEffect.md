@@ -14,11 +14,11 @@ Creates an effect with given handler
 createEffect(handler?)
 ```
 
-#### Arguments
+**Arguments**
 
 1. `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
 
-#### Returns
+**Returns**
 
 [_Effect_](./Effect.md): New effect
 
@@ -137,13 +137,13 @@ Creates an effect with handler and name from given config object
 createEffect({handler, name})
 ```
 
-#### Arguments
+**Arguments**
 
 1. `config`? (_Params_): effect
    - `handler` (_Function_): function to handle effect calls, also can be set with [`use(handler)`](#use)
    - `name`? (_string_): Optional effect name
 
-#### Returns
+**Returns**
 
 [_Effect_](Effect.md): New effect
 

@@ -27,11 +27,11 @@ When `source` is triggered, check `filter` for thruthy and call `target` with da
 
 ## `guard({source, filter, target?})`
 
-#### Arguments
+**Arguments**
 
 1. `params` (_Object_): Configuration object
 
-#### Returns
+**Returns**
 
 [_Event_](Event.md), which fires upon clock trigger
 
@@ -88,7 +88,7 @@ submitForm('alice') // ~> searchUser('alice')
 
 ## `guard(source, {filter: booleanStore})`
 
-#### Arguments
+**Arguments**
 
 1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
 1. `filter` ([_Store_](Store.md)): Filter store
@@ -121,7 +121,7 @@ trigger('C')
 
 ## `guard(source, {filter: predicate})`
 
-#### Arguments
+**Arguments**
 
 1. `source` ([_Store_](Store.md)/[_Event_](Event.md)/[_Effect_](Effect.md)): Source unit. Will trigger given guard on updates
 2. `filter` (_(payload) => Boolean_): Predicate function, [should be **pure**](../../glossary.md#purity)

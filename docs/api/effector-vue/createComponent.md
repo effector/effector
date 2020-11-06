@@ -5,12 +5,12 @@ title: createComponent
 
 # `createComponent(componentOptions, store?)`
 
-#### Arguments
+**Arguments**
 
 1. `componentOptions` (_Object_): component options ( hooks, methods, computed properties )
 2. `store` (_Object_): Store object from effector
 
-#### Returns
+**Returns**
 
 (_`vue component`_)
 
@@ -24,22 +24,25 @@ title: createComponent
 
 ```js
 // component.vue
-import { createComponent } from 'effector-vue'
+import {createComponent} from 'effector-vue'
 
-const $counter = createStore(0);
-const { update } = createApi($counter, {
+const $counter = createStore(0)
+const {update} = createApi($counter, {
   update: (_, value: number) => value,
 })
 
-export default createComponent({
-  name: "Counter",
+export default createComponent(
+  {
+    name: 'Counter',
 
-  methods: {
-    update,
-    handleClick() {
-      const value = this.$counter + 1; // this.$counter <- number ( typescript tips )
-      this.update(value);
-    }
+    methods: {
+      update,
+      handleClick() {
+        const value = this.$counter + 1 // this.$counter <- number ( typescript tips )
+        this.update(value)
+      },
+    },
   },
-}, { $counter })
+  {$counter},
+)
 ```
