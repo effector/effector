@@ -118,19 +118,19 @@ function Home() {
               </div>
               <div style={{marginTop: '30px'}}>
                 Explainer{' '}
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://www.youtube.com/watch?v=rslADuhtF4Y">
+                <Link
+                  to="https://www.youtube.com/watch?v=rslADuhtF4Y"
+                  id="explainer_video_link"
+                  key="explainer_video_link">
                   Video
-                </a>
+                </Link>
                 /
-                <a
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  href="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4">
+                <Link
+                  to="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4"
+                  id="explainer_article_link"
+                  key="explainer_article_link">
                   Article
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col col--6">
