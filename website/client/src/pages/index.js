@@ -122,14 +122,16 @@ function Home() {
                   to="https://www.youtube.com/watch?v=rslADuhtF4Y"
                   id="explainer_video_link"
                   key="explainer_video_link">
-                  Video
+                  video
                 </Link>
-                /
+              </div>
+              <div style={{marginTop: '10px'}}>
+                Explainer{' '}
                 <Link
                   to="https://dev.to/yanlobat/effector-s-beginner-guide-3jl4"
                   id="explainer_article_link"
                   key="explainer_article_link">
-                  Article
+                  article
                 </Link>
               </div>
             </div>
