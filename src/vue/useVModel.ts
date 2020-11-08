@@ -3,7 +3,7 @@ import {onMounted, onUnmounted, ref, watch} from 'vue-next'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {deepCopy} from './lib/deepCopy'
 
-export function useModel<T>(store: Store<T>) {
+export function useVModel<T>(store: Store<T>) {
   const _ = ref(deepCopy(store.getState()))
 
   let isSelfUpdate = false

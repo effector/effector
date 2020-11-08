@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import {useModel} from 'effector-vue/composition'
+import {useVModel} from 'effector-vue/composition'
 import {createEvent, createStore} from 'effector'
 import {shallowMount} from 'vue-test-utils-next'
 
@@ -23,7 +23,7 @@ it('updated value of input if store changed from outside', async () => {
       </div>
     `,
     setup() {
-      const user = useModel($user)
+      const user = useVModel($user)
       return {user}
     }
   })
@@ -45,7 +45,7 @@ it('[v-model] works correct with scalar values', async () => {
       <div><input v-model="username" data-test="field"></div>
     `,
     setup() {
-      const username = useModel($username)
+      const username = useVModel($username)
       return {username}
     }
   })
@@ -67,7 +67,7 @@ it('[v-model] works correct with objects', async () => {
       </div>
     `,
     setup() {
-      const user = useModel($user)
+      const user = useVModel($user)
       return {user}
     }
   })
@@ -80,7 +80,7 @@ it('[v-model] works correct with objects', async () => {
   })
 })
 
-it('reset useModel', async () => {
+it('reset useVModel', async () => {
   const model = {
     name: '',
     surname: '',
@@ -96,7 +96,7 @@ it('reset useModel', async () => {
       </div>
     `,
     setup() {
-      const user = useModel($user)
+      const user = useVModel($user)
       return {user}
     }
   })
@@ -118,7 +118,7 @@ it('[v-model] works correct with checkboxes (like vue-3 way)', async () => {
       <input type="checkbox" v-model="skills" data-test="skills" value="JS">
     `,
     setup() {
-      const skills = useModel($skills)
+      const skills = useVModel($skills)
       return {skills}
     }
   })
@@ -138,7 +138,7 @@ it('[v-model] works correct with radio (like vue-3 way)', async () => {
       <input type="radio" name="gender" v-model="gender" data-test="gender" value="male">
     `,
     setup() {
-      const gender = useModel($gender)
+      const gender = useVModel($gender)
       return {gender}
     }
   })
