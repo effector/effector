@@ -80,6 +80,34 @@ it('[v-model] works correct with objects', async () => {
   })
 })
 
+it('reset useModel', async () => {
+  const model = {
+    name: '',
+    surname: '',
+  }
+  const reset = createEvent()
+  const $user = createStore(model).reset(reset)
+
+  const wrapper = shallowMount({
+    template: `
+      <div>
+        <input v-model="user.name" data-test="name">
+        <input v-model="user.surname" data-test="surname">
+      </div>
+    `,
+    setup() {
+      const user = useModel($user)
+      return {user}
+    }
+  })
+
+  await wrapper.find('[data-test="name"]').setValue('John')
+  await wrapper.find('[data-test="surname"]').setValue('Doe')
+  reset()
+  await wrapper.vm.$nextTick()
+  expect($user.getState()).toEqual(model)
+})
+
 it('[v-model] works correct with checkboxes (like vue-3 way)', async () => {
   const $skills = createStore([])
 
