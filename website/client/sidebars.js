@@ -117,6 +117,7 @@ const sidebar = {
           type: 'category',
           label: 'Gate API',
           items: [
+            'api/effector-vue/gate',
             'api/effector-vue/createGate',
             'api/effector-vue/useGate',
           ],
