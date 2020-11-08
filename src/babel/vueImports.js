@@ -42,6 +42,10 @@ module.exports = function(babel) {
       pkg: '@vue/reactivity',
       val: 'reactivity',
     },
+    {
+      pkg: '@vue/runtime-core',
+      val: 'runtimeCore',
+    },
   ])
   return {
     name: 'vue-imports',
