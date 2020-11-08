@@ -93,6 +93,9 @@ const babelConfig = {
   ],
   plugins(meta) {
     const alias = parseAliases(meta, aliases)
+    if (meta.replaceVueNext) {
+      alias['vue-next'] = 'vue'
+    }
     const result = [
       '@babel/plugin-proposal-export-namespace-from',
       '@babel/plugin-proposal-optional-chaining',

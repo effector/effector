@@ -61,7 +61,7 @@ const externals = [
 
 const getPlugins = (
   name: string,
-  {isEsm = false, replaceVueReactivity = false} = {},
+  {isEsm = false, replaceVueReactivity = false, replaceVueNext = false} = {},
 ) => ({
   babel: isEsm
     ? babel({
@@ -76,6 +76,7 @@ const getPlugins = (
           isCompat: false,
           isEsm: true,
           replaceVueReactivity,
+          replaceVueNext,
         }),
       })
     : babel({
@@ -83,6 +84,15 @@ const getPlugins = (
         skipPreflightCheck: true,
         extensions,
         exclude: /node_modules.*/,
+        babelrc: false,
+        ...require('../babel.config').generateConfig({
+          isBuild: true,
+          isTest: false,
+          isCompat: false,
+          isEsm: false,
+          replaceVueReactivity,
+          replaceVueNext,
+        }),
       }),
   commonjs: commonjs({extensions}),
   resolve: resolve({extensions}),
@@ -430,7 +440,9 @@ async function createEsCjs(
     replaceVueReactivity?: boolean,
   |},
 ) {
-  const pluginsCjs = getPlugins(input === 'index' ? name : input)
+  const pluginsCjs = getPlugins(input === 'index' ? name : input, {
+    replaceVueNext: true,
+  })
   const pluginListCjs = [
     pluginsCjs.resolve,
     pluginsCjs.json,
@@ -443,6 +455,7 @@ async function createEsCjs(
   const pluginsEsm = getPlugins(input === 'index' ? name : input, {
     isEsm: true,
     replaceVueReactivity,
+    replaceVueNext: true,
   })
   const pluginListEsm = [
     pluginsEsm.resolve,
