@@ -1,3 +1,3 @@
 export {useStore} from './useStore'
-export {useModel} from './useModel'
+export {useVModel} from './useVModel'
 export {createGate, useGate} from './createGate'

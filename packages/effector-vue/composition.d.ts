@@ -18,6 +18,6 @@ type Gate<Props> = {
 };
 
 export function useStore<T>(store: Store<T>): DeepReadonly<UnwrapNestedRefs<T>>
-export function useModel<T>(store: Store<T>): Ref<UnwrapRef<T>>
+export function useVModel<T>(store: Store<T>): Ref<UnwrapRef<T>>
 export function createGate<Props>(config?: GateConfig<Props>): Gate<Props>
 export function useGate<Props>(GateComponent: Gate<Props>, cb?: () => Props): void

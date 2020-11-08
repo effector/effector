@@ -113,6 +113,22 @@ const sidebar = {
         'api/effector-vue/effector-vue',
         'api/effector-vue/vue-effector',
         'api/effector-vue/component-options',
+        {
+          type: 'category',
+          label: 'Gate API',
+          items: [
+            'api/effector-vue/createGate',
+            'api/effector-vue/useGate',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Hooks',
+          items: [
+            'api/effector-vue/useStore',
+            'api/effector-vue/useVModel',
+          ],
+        },
         'api/effector-vue/vue',
       ],
     },

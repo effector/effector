@@ -1,10 +1,10 @@
 ---
-id: useModel
-title: useModel
+id: useVModel
+title: useVModel
 hide_title: true
 ---
 
-# `useModel(store)`
+# `useVModel(store)`
 
 Creates a hook function, which subscribes to watcher, that observes changes in the current store, so when recording results, the component will update automatically.
 Basically this hook use when need to work with forms (`v-model`)
@@ -21,7 +21,7 @@ Basically this hook use when need to work with forms (`v-model`)
 
 ```js
 import {createStore, createApi} from 'effector'
-import {useModel} from 'effector-vue/composition'
+import {useVModel} from 'effector-vue/composition'
 
 const $user = createStore({
   name: '',
@@ -31,7 +31,7 @@ const $user = createStore({
 
 export default {
   setup() {
-    const user = useModel($user);
+    const user = useVModel($user);
 
     return {
       user

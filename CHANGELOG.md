@@ -2,6 +2,11 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-vue 21.1.0
+
+- Add support for vue@next (vue 3)
+- `useStore` `useVModel` `useGate` `createGate` [see docs](https://effector.dev/docs/api/effector-vue/effector-vue)
+
 ## effector 21.6.0
 
 - Add support for user-defined factories in fork api. Starting from this release, application developers can use their own functions and be sure that their content will be properly serialized and hydrated by fork api.

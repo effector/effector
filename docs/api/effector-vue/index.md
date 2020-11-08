@@ -22,7 +22,7 @@ title: API Reference
 ### Hooks
 
 - [useStore(store)](./useStore.md)
-- [useModel(store)](./useModel.md)
+- [useVModel(store)](./useVModel.md)
 
 ### Gate API
 

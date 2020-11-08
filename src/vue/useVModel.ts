@@ -1,10 +1,10 @@
 import {Store, Subscription} from 'effector'
-import {onMounted, onUnmounted, ref, watch} from '@vue/runtime-core'
+import {onMounted, onUnmounted, ref, watch} from 'vue-next'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {deepCopy} from './lib/deepCopy'
 
-export function useModel<T>(store: Store<T>) {
-  const _ = ref(store.getState())
+export function useVModel<T>(store: Store<T>) {
+  const _ = ref(deepCopy(store.getState()))
 
   let isSelfUpdate = false
   let fromEvent = false
@@ -17,8 +17,7 @@ export function useModel<T>(store: Store<T>) {
       }
 
       fromEvent = true
-      // @ts-ignore
-      _.value = deepCopy(payload)
+      _.value = ref(deepCopy(payload)).value
     })
   })
 
@@ -32,7 +31,7 @@ export function useModel<T>(store: Store<T>) {
       isSelfUpdate = true
 
       if (!fromEvent) {
-        const raw = unwrapProxy(value)
+        const raw = ref(unwrapProxy(value)).value
         // @ts-ignore
         store.setState(deepCopy(raw))
       }
