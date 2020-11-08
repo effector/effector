@@ -16,8 +16,8 @@ title: API Reference
 ### Vue API
 
 - [Vue](Vue.md)
-  - [$watchAsStore](Vue.md#$watchAsStore)
-  - [$store](Vue.md#$store)
+  - [$watchAsStore](Vue.md#$watchAsStore) _(deprecated)_
+  - [$store](Vue.md#$store) _(deprecated)_
 
 ### Hooks
 

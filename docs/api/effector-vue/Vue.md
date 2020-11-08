@@ -7,7 +7,7 @@ Methods available on `Vue` prototype after you enable this plugin.
 
 ## Vue Methods
 
-### `$watchAsStore(expOrFn, options?)`
+### `$watchAsStore(expOrFn, options?)` _(deprecated)_
 
 **Arguments**
 
@@ -21,7 +21,7 @@ Methods available on `Vue` prototype after you enable this plugin.
 
 (_`Store`_)
 
-### `$store(expOrFn)`
+### `$store(expOrFn)` _(deprecated)_
 
 **Arguments**
 
