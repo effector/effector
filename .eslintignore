@@ -19,4 +19,3 @@ tools/builder.js
 src/model-gen/**
 website/editor/src/mode/javascript.js
 website/editor/src/mode/jsx.js
-src/vue/__tests__/integrations
