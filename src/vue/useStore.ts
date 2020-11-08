@@ -7,7 +7,7 @@ export function useStore<T>(store: Store<T>) {
   const _ = shallowRef(store.getState())
 
   onMounted(() => {
-    unwatch = store.watch(value => {
+    unwatch = store.updates.watch(value => {
       _.value = value
     })
   })
