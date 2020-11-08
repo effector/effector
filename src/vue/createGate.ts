@@ -1,5 +1,4 @@
-import {computed, ComputedRef} from '@vue/reactivity'
-import {onMounted, onUnmounted, watch, WatchStopHandle} from '@vue/runtime-core'
+import {computed, ComputedRef, onMounted, onUnmounted, watch, WatchStopHandle} from 'vue-next'
 import {createApi, launch, createStore} from 'effector'
 import {Gate, GateConfig} from './composition.h'
 import {deepCopy} from './lib/deepCopy'

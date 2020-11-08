@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import {shallowMount} from 'vue-test-utils-next'
 import {useStore, useGate, createGate} from 'effector-vue/composition'
-import {reactive, ref} from '@vue/reactivity'
+import {reactive, ref} from 'vue-next'
 import {createEvent, createStore} from 'effector'
 
 jest.mock('vue', () => require('vue-next'))

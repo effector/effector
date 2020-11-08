@@ -1,5 +1,5 @@
 import {Store, Subscription} from 'effector'
-import {onMounted, onUnmounted, ref, watch} from '@vue/runtime-core'
+import {onMounted, onUnmounted, ref, watch} from 'vue-next'
 import {unwrapProxy} from './lib/unwrapProxy'
 import {deepCopy} from './lib/deepCopy'
 
