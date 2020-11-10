@@ -21,6 +21,16 @@ const common = {
   publishConfig: {
     access: 'public',
   },
+  funding: [
+    {
+      type: 'patreon',
+      url: 'https://www.patreon.com/zero_bias',
+    },
+    {
+      type: 'opencollective',
+      url: 'https://opencollective.com/effector',
+    },
+  ],
 }
 
 const keywords = [
