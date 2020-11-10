@@ -933,7 +933,7 @@ hydrate(root, {
 })
 
 */
-export function hydrate(domain: Domain, config: {values: ValueMap}): void
+export function hydrate(domainOrScope: Domain | Fork, config: {values: ValueMap}): void
 
 /**
 serialize state on server

@@ -211,3 +211,23 @@ describe('hydrate edge cases', () => {
     `)
   })
 })
+
+test('scope support', async () => {
+  const fn = jest.fn()
+
+  const app = createDomain()
+  const name = app.createStore('guest')
+  name.updates.watch(fn)
+
+  const scope = fork(app, {values: new Map([[name, 'alice']])})
+
+  hydrate(scope, {values: new Map([[name, 'bob']])})
+
+  expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+    Array [
+      "bob",
+    ]
+  `)
+  expect(scope.getState(name)).toMatchInlineSnapshot(`"bob"`)
+  expect(name.getState()).toMatchInlineSnapshot(`"guest"`)
+})

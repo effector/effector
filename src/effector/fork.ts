@@ -9,7 +9,7 @@ import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
-import {removeItem, forEach, includes} from './collection'
+import {removeItem, forEach, includes, forIn} from './collection'
 
 /**
 hydrate state on client
@@ -21,22 +21,41 @@ hydrate(root, {
 
 */
 export function hydrate(domain: Domain, {values}: {values: any}) {
-  if (!is.domain(domain)) {
-    throwError('first argument of hydrate should be domain')
+  const isScope = isObject(domain) && (domain as any).cloneOf
+  if (!is.domain(domain) && !isScope) {
+    throwError('first argument of hydrate should be domain or scope')
   }
   if (!isObject(values)) {
     throwError('values property should be an object')
   }
-
-  const {storeWatches, storeWatchesRefs} = fillValues({
-    flatGraphUnits: flatGraph(domain),
-    values: normalizeValues(values),
-    collectWatches: true,
-  })
+  const normalizedValues = normalizeValues(values)
+  let storeWatches: Graph[]
+  let storeWatchesRefs: any[]
+  if (isScope) {
+    storeWatches = []
+    storeWatchesRefs = []
+    forIn(normalizedValues, (val, sid) => {
+      //@ts-ignore
+      const node = domain.sidMap[sid]
+      if (node) {
+        storeWatches.push(node)
+        storeWatchesRefs.push(val)
+      }
+    })
+  } else {
+    const fillResult = fillValues({
+      flatGraphUnits: flatGraph(domain),
+      values: normalizedValues,
+      collectWatches: true,
+    })
+    storeWatches = fillResult.storeWatches
+    storeWatchesRefs = fillResult.storeWatchesRefs.map(({current}) => current)
+  }
 
   launch({
     target: storeWatches,
-    params: storeWatchesRefs.map(({current}) => current),
+    params: storeWatchesRefs,
+    forkPage: isScope ? domain : false,
   })
 }
 
@@ -460,6 +479,7 @@ function cloneGraph(unit: any) {
     meta: {unit: 'forkInFlightCounter'},
   })
   const nodeMap = {} as Record<string, Graph>
+  const sidMap = {} as Record<string, Graph>
   const clones = list.map(node => {
     const {seq, next, meta, scope, family} = node
     const result = createNode({
@@ -479,6 +499,7 @@ function cloneGraph(unit: any) {
       owners: [...family.owners],
     }
     nodeMap[node.id] = result
+    if (meta.sid) sidMap[meta.sid] = result
     return result
   })
   const page = {} as Record<string, StateRef>
@@ -534,6 +555,7 @@ function cloneGraph(unit: any) {
   return {
     cloneOf: unit,
     nodeMap,
+    sidMap,
     clones,
     find: findClone,
     reg: page,
