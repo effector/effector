@@ -2,6 +2,12 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector 21.7.0
+
+- Add support for scopes to `hydrate`, to provide a way to fill additional values to existing scope (happens during SSG navigation in next.js)
+
+- Improve `prepend` type inference (PR [#415](https://github.com/effector/effector/pull/415) (thanks [@doasync](https://github.com/doasync)))
+
 ## effector-vue 21.1.0
 
 - Add support for vue@next (vue 3)
