@@ -685,6 +685,44 @@ export function sample<A extends Combinable, B, C>(config: {
   greedy?: boolean
 }): Unit<C>
 
+export function guard<Source, Result extends Source>(config: {
+  source: Unit<Source>
+  filter: (value: Source) => value is Result
+}): EventAsReturnType<Result>
+export function guard<Source>(config: {
+  source: Unit<Source>
+  filter: typeof Boolean
+}): EventAsReturnType<NonNullable<Source>>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: Store<boolean> | ((value: A) => boolean)
+}): EventAsReturnType<A>
+export function guard<Source, Result extends Source>(config: {
+  source: Unit<Source>
+  filter: (value: Source) => value is Result
+  target: Unit<Result>
+}): Unit<Result>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: (value: A) => boolean
+  target: Unit<void>
+}): Unit<void>
+export function guard(config: {
+  source: Unit<any>
+  filter: Store<boolean>
+  target: Unit<void>
+}): Unit<void>
+export function guard<Source>(config: {
+  source: Unit<Source>
+  filter: typeof Boolean
+  target: Unit<NonNullable<Source>>
+}): Unit<NonNullable<Source>>
+export function guard<A>(config: {
+  source: Unit<A>
+  filter: Store<boolean> | ((value: A) => boolean)
+  target: Unit<A>
+}): Unit<A>
+
 export function guard<Source, Result extends Source>(
   source: Unit<Source>,
   config: {
@@ -724,43 +762,6 @@ export function guard<A>(
     target: Unit<A>
   },
 ): Unit<A>
-export function guard<A>(config: {
-  source: Unit<A>
-  filter: (value: A) => boolean
-  target: Unit<void>
-}): Unit<void>
-export function guard(config: {
-  source: Unit<any>
-  filter: Store<boolean>
-  target: Unit<void>
-}): Unit<void>
-export function guard<Source, Result extends Source>(config: {
-  source: Unit<Source>
-  filter: (value: Source) => value is Result
-}): EventAsReturnType<Result>
-export function guard<Source>(config: {
-  source: Unit<Source>
-  filter: typeof Boolean
-}): EventAsReturnType<NonNullable<Source>>
-export function guard<A>(config: {
-  source: Unit<A>
-  filter: Store<boolean> | ((value: A) => boolean)
-}): EventAsReturnType<A>
-export function guard<Source, Result extends Source>(config: {
-  source: Unit<Source>
-  filter: (value: Source) => value is Result
-  target: Unit<Result>
-}): Unit<Result>
-export function guard<Source>(config: {
-  source: Unit<Source>
-  filter: typeof Boolean
-  target: Unit<NonNullable<Source>>
-}): Unit<NonNullable<Source>>
-export function guard<A>(config: {
-  source: Unit<A>
-  filter: Store<boolean> | ((value: A) => boolean)
-  target: Unit<A>
-}): Unit<A>
 
 type StoreShape = Store<any> | Combinable
 type GetShapeValue<T> = T extends Store<infer S> ? S : GetCombinedValue<T>

@@ -471,6 +471,7 @@ describe('guard(config)', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
+        Type 'Event<number>' is not assignable to type 'Event<string>'.
         No overload matches this call.
           The last overload gave the following error.
             Type 'Store<string>' is not assignable to type 'Store<boolean> | ((value: number) => boolean)'.
