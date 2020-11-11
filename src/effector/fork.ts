@@ -482,7 +482,7 @@ function cloneGraph(unit: any) {
   const nodeMap = {} as Record<string, Graph>
   const sidMap = {} as Record<string, Graph>
   const clones = list.map(node => {
-    const {seq, next, meta, scope, family} = node
+    const {seq, next, meta, scope} = node
     const result = createNode({
       node: seq.map(step => ({
         id: step.id,
@@ -495,9 +495,9 @@ function cloneGraph(unit: any) {
       scope: {...scope},
     })
     result.family = {
-      type: family.type,
-      links: [...family.links],
-      owners: [...family.owners],
+      type: node.family.type,
+      links: [...getLinks(node)],
+      owners: [...getOwners(node)],
     }
     nodeMap[node.id] = result
     if (meta.sid) sidMap[meta.sid] = result
