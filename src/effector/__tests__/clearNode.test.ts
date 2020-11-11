@@ -6,8 +6,9 @@ import {
   createStore,
   sample,
   combine,
+  createEffect,
 } from 'effector'
-import {argumentHistory} from 'effector/fixtures/index'
+import {argumentHistory} from 'effector/fixtures'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
@@ -543,6 +544,118 @@ describe('domain support', () => {
       clock()
       expect(argumentHistory(fn2)).toEqual([0, 1, 2])
       expect(argumentHistory(fn)).toEqual([1, 2])
+    })
+  })
+  describe('clearNode(domain) should not propagate through .on', () => {
+    test('to store without domain', async () => {
+      const fn1 = jest.fn()
+      const fn2 = jest.fn()
+      const domain1 = createDomain()
+      const inc = createEffect(() => 1)
+      const dec = createEvent()
+      const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+      const store2 = createStore(0)
+        .on(inc.doneData, x => x + 1)
+        .on(dec, x => x - 1)
+      store2.watch(fn1)
+      inc.doneData.watch(fn2)
+      clearNode(domain1)
+      await inc()
+      await inc()
+      dec()
+      expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+        Array [
+          0,
+          1,
+          2,
+          1,
+        ]
+      `)
+      expect(fn2).toBeCalledTimes(2)
+    })
+    describe('to sibling domain', () => {
+      test('through effect without domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const domain1 = createDomain()
+        const domain2 = createDomain()
+        const inc = createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = domain2
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        await inc()
+        await inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            1,
+            2,
+            1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(2)
+      })
+      test('through effect in sibling domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const domain1 = createDomain()
+        const domain2 = createDomain()
+        const inc = domain2.createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = domain2
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        await inc()
+        await inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            1,
+            2,
+            1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(2)
+      })
+      test('through effect in target domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const domain1 = createDomain()
+        const domain2 = createDomain()
+        const inc = domain1.createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = domain2
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        inc()
+        inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            -1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(0)
+      })
     })
   })
   it('should remove erased units from domain hooks', () => {

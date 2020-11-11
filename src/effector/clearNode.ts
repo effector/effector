@@ -26,14 +26,22 @@ const clearNodeNormalized = (
       (isDomainUnit && !targetNode.meta.sample) ||
       currentNode.family.type === 'crosslink'
     ) {
-      clearNodeNormalized(currentNode, deep, isDomainUnit)
+      clearNodeNormalized(
+        currentNode,
+        deep,
+        currentNode.meta.op !== 'on' && isDomainUnit,
+      )
     }
   }
   list = getOwners(targetNode)
   while ((currentNode = list.pop())) {
     removeFromNode(currentNode, targetNode)
     if (isDomainUnit && currentNode.family.type === 'crosslink') {
-      clearNodeNormalized(currentNode, deep, isDomainUnit)
+      clearNodeNormalized(
+        currentNode,
+        deep,
+        currentNode.meta.op !== 'on' && isDomainUnit,
+      )
     }
   }
 }
