@@ -487,12 +487,12 @@ function cloneGraph(unit: any) {
       node: seq.map(step => ({
         id: step.id,
         type: step.type,
-        data: Object.assign({}, step.data),
+        data: {...step.data},
         hasRef: step.hasRef,
       })) as any,
       child: [...next],
-      meta: Object.assign({forkOf: node}, meta),
-      scope: Object.assign({}, scope),
+      meta: {forkOf: node, ...meta},
+      scope: {...scope},
     })
     result.family = {
       type: family.type,

@@ -83,9 +83,7 @@ const storeCombination = (
   config?: string,
   fn?: (upd: any) => any,
 ) => {
-  const clone = isArray
-    ? (list: any) => list.slice()
-    : (obj: any) => Object.assign({}, obj)
+  const clone = isArray ? (list: any) => list.slice() : (obj: any) => ({...obj})
   const defaultState: any = isArray ? [] : {}
   const template = readTemplate()
   const stateNew = clone(defaultState)
