@@ -201,13 +201,13 @@ describe('protect external units from destroy', () => {
     test('domain behavior', () => {
       const fn = jest.fn()
 
-      function apply(fn) {
+      function apply(fn: () => void) {
         const unit = createDomain() // <- domain
         withRegion(unit, fn)
         return () => clearNode(unit)
       }
 
-      const update = createEvent()
+      const update = createEvent<number>()
       const reset = createEvent()
       const increment = createEvent()
       const decrement = createEvent()
@@ -241,6 +241,11 @@ describe('protect external units from destroy', () => {
           0,
           1,
           10,
+          9,
+          10,
+          0,
+          -1,
+          0,
         ]
       `)
     })
