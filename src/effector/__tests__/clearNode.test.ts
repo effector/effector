@@ -13,7 +13,7 @@ import {argumentHistory} from 'effector/fixtures'
 
 it('will deactivate event', () => {
   const fn = jest.fn()
-  const event = createEvent()
+  const event = createEvent<number>()
   event.watch(x => fn(x))
   clearNode(event)
   event(1)
@@ -26,14 +26,15 @@ it('will deactivate store', () => {
   store.watch(x => fn(x))
   expect(fn).toBeCalledTimes(1)
   clearNode(store)
+  //@ts-ignore
   store.setState(1)
   expect(fn).toBeCalledTimes(1)
 })
 
 it('will not broke subscribers', () => {
   const fn = jest.fn()
-  const eventA = createEvent()
-  const eventB = createEvent()
+  const eventA = createEvent<number>()
+  const eventB = createEvent<number>()
   eventB.watch(e => fn(e))
 
   forward({
@@ -65,9 +66,11 @@ test('deep cleaning', () => {
   //please be careful with {deep: true}
   //it will destroy everything related to that node
   clearNode(source, {deep: true})
+  //@ts-ignore
   source.setState(1) //nothing happens
   expect(fn1).toBeCalledTimes(1)
   expect(fn2).toBeCalledTimes(1)
+  //@ts-ignore
   target.setState(2) //dead as well
   expect(fn2).toBeCalledTimes(1)
 })
@@ -80,15 +83,17 @@ describe('itermediate steps should not stay', () => {
       fn(x)
       return x
     })
+    //@ts-ignore
     source.setState(1)
     expect(fn).toBeCalledTimes(2)
     clearNode(target)
+    //@ts-ignore
     source.setState(2)
     expect(fn).toBeCalledTimes(2)
   })
   it('support event.map', () => {
     const fn = jest.fn()
-    const source = createEvent()
+    const source = createEvent<number>()
     const target = source.map(x => {
       fn(x)
       return x
@@ -164,8 +169,8 @@ describe('based on clearNode', () => {
   })
   it('will not clear connected units after forward will be destroyed', () => {
     const fn = jest.fn()
-    const eventA = createEvent()
-    const eventB = createEvent()
+    const eventA = createEvent<number>()
+    const eventB = createEvent<number>()
     const unsub = forward({
       from: eventA,
       to: eventB,
@@ -183,7 +188,7 @@ describe('based on clearNode', () => {
   })
   it('will not clear unit after .watch will be destroyed', () => {
     const fn = jest.fn()
-    const event = createEvent()
+    const event = createEvent<number>()
     const unsub = event.watch(() => {})
     event.watch(fn)
     event(0)
@@ -215,12 +220,13 @@ describe('based on clearNode', () => {
   it('will not clear node, connected via forward to destroyed one', () => {
     const fn = jest.fn()
     const store = createStore(0)
-    const event = createEvent()
+    const event = createEvent<number>()
     event.watch(fn)
     forward({
       from: store.updates,
       to: event,
     })
+    //@ts-ignore
     store.setState(1)
     event(2)
     clearNode(store)
@@ -242,8 +248,10 @@ describe('based on clearNode', () => {
       from: store.updates,
       to: event,
     })
+    //@ts-ignore
     store.setState(1)
     clearNode(event)
+    //@ts-ignore
     store.setState(2)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
@@ -276,8 +284,8 @@ describe('domain support', () => {
   it('will not clear connected units after forward will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const eventA = domain.createEvent()
-    const eventB = domain.createEvent()
+    const eventA = domain.createEvent<number>()
+    const eventB = domain.createEvent<number>()
     const unsub = forward({
       from: eventA,
       to: eventB,
@@ -296,7 +304,7 @@ describe('domain support', () => {
   it('will not clear unit after .watch will be destroyed', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const event = domain.createEvent()
+    const event = domain.createEvent<number>()
     const unsub = event.watch(() => {})
     event.watch(fn)
     event(0)
@@ -330,12 +338,13 @@ describe('domain support', () => {
     const fn = jest.fn()
     const domain = createDomain()
     const store = domain.createStore(0)
-    const event = domain.createEvent()
+    const event = domain.createEvent<number>()
     event.watch(fn)
     forward({
       from: store.updates,
       to: event,
     })
+    //@ts-ignore
     store.setState(1)
     event(2)
     clearNode(store)
@@ -358,8 +367,10 @@ describe('domain support', () => {
       from: store.updates,
       to: event,
     })
+    //@ts-ignore
     store.setState(1)
     clearNode(event)
+    //@ts-ignore
     store.setState(2)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
       Array [
@@ -371,8 +382,8 @@ describe('domain support', () => {
   it('will not clear event after clearNode call at its prepended event', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const event = domain.createEvent()
-    const prepended = event.prepend(_ => _)
+    const event = domain.createEvent<number>()
+    const prepended = event.prepend<number>(_ => _)
     event.watch(fn)
 
     clearNode(prepended)
@@ -382,7 +393,7 @@ describe('domain support', () => {
   test('child should not survive clearNode(domain) call', () => {
     const fn = jest.fn()
     const domain = createDomain()
-    const event = domain.createEvent()
+    const event = domain.createEvent<number>()
     event.watch(fn)
     event(1)
     clearNode(domain)
@@ -395,7 +406,7 @@ describe('domain support', () => {
         const fn = jest.fn()
         const domain = createDomain()
         const event = createEvent<number>()
-        const event2 = domain.createEvent()
+        const event2 = domain.createEvent<number>()
         forward({
           from: event,
           to: event2,
@@ -410,8 +421,8 @@ describe('domain support', () => {
         const fn = jest.fn()
         const domain = createDomain()
         const event = createEvent<number>()
-        const event2 = domain.createEvent()
-        const event3 = domain.createEvent()
+        const event2 = domain.createEvent<number>()
+        const event3 = domain.createEvent<number>()
         forward({
           from: [event, event2],
           to: event3,
@@ -461,13 +472,13 @@ describe('domain support', () => {
     test('with sample', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
-      const store = createStore(null)
-      const event = createEvent()
+      const store = createStore<number | null>(null)
+      const event = createEvent<number>()
       store.on(event, (_, e) => e)
       store.watch(fn)
 
       const domain = createDomain()
-      const eventInDomain = domain.createEvent()
+      const eventInDomain = domain.createEvent<number>()
       eventInDomain.watch(fn2)
       sample({
         source: store,
@@ -487,13 +498,13 @@ describe('domain support', () => {
     test('with combine', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
-      const store = createStore(null)
-      const event = createEvent()
+      const store = createStore<number | null>(null)
+      const event = createEvent<number>()
       store.on(event, (_, e) => e)
       store.watch(fn)
 
       const domain = createDomain()
-      const storeInDomain = domain.createStore(null)
+      const storeInDomain = domain.createStore<number | null>(null)
       storeInDomain.on(event, (_, e) => e)
       storeInDomain.watch(fn2)
       combine({store, storeInDomain})
@@ -563,8 +574,8 @@ describe('domain support', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
 
-      const event1 = createEvent()
-      const event2 = createEvent()
+      const event1 = createEvent<number>()
+      const event2 = createEvent<number>()
       const storeA = createStore(0).on(event1, (_, v) => v)
 
       const storeB = createStore(0).on(event2, (_, v) => v)
@@ -600,14 +611,14 @@ describe('domain support', () => {
       const fn = jest.fn()
       const fn2 = jest.fn()
       const store = createStore(0)
-      const source = createEvent()
+      const source = createEvent<number>()
       const clock = createEvent()
 
       source.watch(fn)
       store.watch(fn2)
 
       const domain = createDomain()
-      const eventInDomain = domain.createEvent()
+      const eventInDomain = domain.createEvent<number>()
 
       sample({
         source: eventInDomain,
