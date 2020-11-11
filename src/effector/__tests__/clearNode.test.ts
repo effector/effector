@@ -7,6 +7,7 @@ import {
   sample,
   combine,
   createEffect,
+  split,
 } from 'effector'
 import {argumentHistory} from 'effector/fixtures'
 
@@ -392,8 +393,8 @@ describe('domain support', () => {
     describe('with forward', () => {
       test('from', () => {
         const fn = jest.fn()
-        const event = createEvent()
         const domain = createDomain()
+        const event = createEvent<number>()
         const event2 = domain.createEvent()
         forward({
           from: event,
@@ -405,14 +406,48 @@ describe('domain support', () => {
         event(1)
         expect(argumentHistory(fn)).toEqual([0, 1])
       })
+      test('from array', () => {
+        const fn = jest.fn()
+        const domain = createDomain()
+        const event = createEvent<number>()
+        const event2 = domain.createEvent()
+        const event3 = domain.createEvent()
+        forward({
+          from: [event, event2],
+          to: event3,
+        })
+        event.watch(fn)
+        event(0)
+        clearNode(domain)
+        event(1)
+        expect(argumentHistory(fn)).toEqual([0, 1])
+      })
       test('to', () => {
         const fn = jest.fn()
-        const event = createEvent()
         const domain = createDomain()
-        const event2 = domain.createEvent()
+        const event = createEvent<number>()
+        const event2 = domain.createEvent<number>()
         forward({
           from: event2,
           to: event,
+        })
+        event.watch(fn)
+        event(0)
+        event2(1)
+        clearNode(domain)
+        event(2)
+        event2(3)
+        expect(argumentHistory(fn)).toEqual([0, 1, 2])
+      })
+      test('to array', () => {
+        const fn = jest.fn()
+        const domain = createDomain()
+        const event = createEvent<number>()
+        const event2 = domain.createEvent<number>()
+        const event3 = domain.createEvent<number>()
+        forward({
+          from: event2,
+          to: [event, event3],
         })
         event.watch(fn)
         event(0)
@@ -470,6 +505,57 @@ describe('domain support', () => {
       event(2)
       expect(argumentHistory(fn2)).toEqual([null, 1])
       expect(argumentHistory(fn)).toEqual([null, 1, 2])
+    })
+    describe('with split', () => {
+      test('from domain source to non-domain target', () => {
+        const fn = jest.fn()
+        const domain = createDomain()
+        const source = domain.createEvent<number>()
+        const target = createEvent<number>()
+        split({
+          source,
+          match: {even: x => x % 2 === 0},
+          cases: {even: target},
+        })
+        target.watch(fn)
+        clearNode(domain)
+        source(2)
+        target(4)
+        expect(argumentHistory(fn)).toEqual([4])
+      })
+      test('from non-domain source to domain target', () => {
+        const fn = jest.fn()
+        const domain = createDomain()
+        const source = createEvent<number>()
+        const target = domain.createEvent<number>()
+        split({
+          source,
+          match: {even: x => x % 2 === 0},
+          cases: {even: target},
+        })
+        source.watch(fn)
+        clearNode(domain)
+        source(2)
+        target(4)
+        expect(argumentHistory(fn)).toEqual([2])
+      })
+      test('from domain source to domain target', () => {
+        const fn = jest.fn()
+        const domain1 = createDomain()
+        const domain2 = createDomain()
+        const source = domain1.createEvent<number>()
+        const target = domain2.createEvent<number>()
+        split({
+          source,
+          match: {even: x => x % 2 === 0},
+          cases: {even: target},
+        })
+        target.watch(fn)
+        clearNode(domain1)
+        source(2)
+        target(4)
+        expect(argumentHistory(fn)).toEqual([4])
+      })
     })
   })
   describe('clearNode(domain) should not affect sample targets', () => {
@@ -639,6 +725,90 @@ describe('domain support', () => {
         const dec = createEvent()
         const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
         const store2 = domain2
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        inc()
+        inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            -1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(0)
+      })
+    })
+    describe('to parent domain', () => {
+      test('through effect without domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const rootDomain = createDomain()
+        const domain1 = rootDomain.createDomain()
+        const inc = createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = rootDomain
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        await inc()
+        await inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            1,
+            2,
+            1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(2)
+      })
+      test('through effect in root domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const rootDomain = createDomain()
+        const domain1 = rootDomain.createDomain()
+        const inc = rootDomain.createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = rootDomain
+          .createStore(0)
+          .on(inc.doneData, x => x + 1)
+          .on(dec, x => x - 1)
+        store2.watch(fn1)
+        inc.doneData.watch(fn2)
+        clearNode(domain1)
+        await inc()
+        await inc()
+        dec()
+        expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+          Array [
+            0,
+            1,
+            2,
+            1,
+          ]
+        `)
+        expect(fn2).toBeCalledTimes(2)
+      })
+      test('through effect in target domain', async () => {
+        const fn1 = jest.fn()
+        const fn2 = jest.fn()
+        const rootDomain = createDomain()
+        const domain1 = rootDomain.createDomain()
+        const inc = domain1.createEffect(() => 1)
+        const dec = createEvent()
+        const store1 = domain1.createStore(0).on(inc.doneData, x => x + 1)
+        const store2 = rootDomain
           .createStore(0)
           .on(inc.doneData, x => x + 1)
           .on(dec, x => x - 1)
