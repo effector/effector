@@ -116,6 +116,7 @@ For additional information, guides and api reference visit [our documentation si
 - [Effector vs. Vuex. Which storage management is better for VueJS app?](https://medium.com/blue-harvest-tech-blog/effector-vs-vuex-which-storage-management-is-better-for-vuejs-app-54f3c3257b53)
 - [Powerful and fast state manager](https://codeburst.io/effector-state-manager-6ee2e72e8e0b)
 - [Testing api calls with effects and stores](https://www.patreon.com/posts/testing-api-with-32415095)
+- [Effector's beginner guide](https://dev.to/yanlobat/effector-s-beginner-guide-3jl4)
 
 ## Community
 
