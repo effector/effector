@@ -1,5 +1,5 @@
 import {step} from './typedef'
-import {getGraph, getParent} from './getter'
+import {getForkPage, getGraph, getParent} from './getter'
 import {own} from './own'
 import {createNode} from './createNode'
 import {launch, setForkPage, forkPage} from './kernel'
@@ -7,6 +7,7 @@ import {createNamedEvent, createStore, createEvent} from './createUnit'
 import {createDefer} from './defer'
 import {isObject, isFunction} from './is'
 import {throwError} from './throw'
+import {EFFECT} from './tag'
 
 export function createEffect<Payload, Done>(
   nameOrConfig: any,
@@ -18,7 +19,7 @@ export function createEffect<Payload, Done>(
     (() => throwError(`no handler used in ${instance.getType()}`))
   const node = getGraph(instance)
   node.meta.onCopy = ['runner']
-  node.meta.unit = instance.kind = 'effect'
+  node.meta.unit = instance.kind = EFFECT
   instance.use = (fn: Function) => {
     if (!isFunction(fn)) throwError('.use argument should be a function')
     handler = fn
@@ -53,22 +54,20 @@ export function createEffect<Payload, Done>(
     },
     node: [
       step.run({
-        fn({params, req}, {finally: anyway, getHandler}, {page, forkPage}) {
+        fn({params, req}, {finally: anyway, getHandler}, stack) {
           const onResolve = onSettled({
             params,
             req,
             ok: true,
             anyway,
-            page,
-            forkPage,
+            stack,
           })
           const onReject = onSettled({
             params,
             req,
             ok: false,
             anyway,
-            page,
-            forkPage,
+            stack,
           })
           let result
           try {
@@ -106,12 +105,12 @@ export function createEffect<Payload, Done>(
       },
     }),
     step.run({
-      fn(upd, {runner}, {forkPage}) {
+      fn(upd, {runner}, stack) {
         launch({
           target: runner,
           params: upd,
           defer: true,
-          forkPage,
+          forkPage: getForkPage(stack),
         })
         return upd.params
       },
@@ -160,8 +159,7 @@ export const onSettled = ({
   req,
   ok,
   anyway,
-  page,
-  forkPage,
+  stack,
 }: {
   params: any
   req: {
@@ -170,8 +168,7 @@ export const onSettled = ({
   }
   ok: boolean
   anyway: any
-  page: any
-  forkPage: any
+  stack: any
 }) => (data: any) =>
   launch({
     target: [anyway, sidechain],
@@ -193,8 +190,8 @@ export const onSettled = ({
       },
     ],
     defer: true,
-    page,
-    forkPage,
+    page: stack.page,
+    forkPage: getForkPage(stack),
   })
 
 const sidechain = createNode({

@@ -1,4 +1,4 @@
-import {getGraph} from './getter'
+import {getForkPage, getGraph, getLinks, getOwners} from './getter'
 import {bind} from './bind'
 import {createDefer} from './defer'
 import {watchUnit} from './watch'
@@ -10,6 +10,7 @@ import {step} from './typedef'
 import {Domain, Store} from './unit.h'
 import {Graph, StateRef} from './index.h'
 import {removeItem, forEach, includes, forIn} from './collection'
+import {DOMAIN, STORE, EVENT, EFFECT, SAMPLER, MAP, FORK_COUNTER} from './tag'
 
 /**
 hydrate state on client
@@ -76,7 +77,7 @@ function fillValues({
   for (const node of flatGraphUnits) {
     const {reg} = node
     const {op, unit, sid} = node.meta
-    if (unit === 'store') {
+    if (unit === STORE) {
       if (sid && includes(valuesSidList, sid)) {
         const {state} = node.scope
         state.current = values[sid]
@@ -85,7 +86,7 @@ function fillValues({
     }
     if (collectWatches && op === 'watch') {
       const owner = node.family.owners[0]
-      if (owner.meta.unit === 'store') {
+      if (owner.meta.unit === STORE) {
         storeWatches.push(node)
         storeWatchesRefs.push(owner.scope.state)
       }
@@ -109,7 +110,7 @@ function fillValues({
     if (ref.before && !predefinedRefs.has(ref)) {
       for (const cmd of ref.before) {
         switch (cmd.type) {
-          case 'map': {
+          case MAP: {
             const from = cmd.from
             ref.current = cmd.fn(from.current)
             break
@@ -141,7 +142,7 @@ function fillValues({
         case 'copy':
           to.current = value
           break
-        case 'map':
+        case MAP:
           to.current = cmd.fn(value)
           break
       }
@@ -187,7 +188,7 @@ export function serialize(
     }
   }
   for (const {meta, scope, reg} of clones) {
-    if (meta.unit !== 'store') continue
+    if (meta.unit !== STORE) continue
     const {sid} = meta
     if (!sid) continue
     result[sid] = reg[scope.state.id].current
@@ -266,7 +267,7 @@ export function fork(
     for (const node of forked.clones) {
       const {reg} = node
       const {unit, sid} = node.meta
-      if (unit === 'store') {
+      if (unit === STORE) {
         if (sid && includes(valuesSidList, sid)) {
           const {state} = node.scope
           reg[state.id].current = values[sid]
@@ -288,7 +289,7 @@ export function fork(
       if (sourceRef && sourceRef.before && !predefinedRefs.has(ref)) {
         for (const cmd of sourceRef.before) {
           switch (cmd.type) {
-            case 'map': {
+            case MAP: {
               const from = refsMap[cmd.from.id]
               ref.current = cmd.fn(from.current)
               break
@@ -320,7 +321,7 @@ export function fork(
           case 'copy':
             to.current = value
             break
-          case 'map':
+          case MAP:
             to.current = cmd.fn(value)
             break
         }
@@ -440,7 +441,7 @@ function cloneGraph(unit: any) {
   }
   const forkPageSetter = step.compute({
     fn(data, _, stack) {
-      setForkPage(stack.forkPage)
+      setForkPage(getForkPage(stack))
       return data
     },
   })
@@ -461,7 +462,7 @@ function cloneGraph(unit: any) {
           }
         },
       }),
-      step.barrier({priority: 'sampler'}),
+      step.barrier({priority: SAMPLER}),
       step.run({
         fn(_, scope) {
           const {inFlight, defers, fxID} = scope
@@ -476,7 +477,7 @@ function cloneGraph(unit: any) {
         },
       }),
     ],
-    meta: {unit: 'forkInFlightCounter'},
+    meta: {unit: FORK_COUNTER},
   })
   const nodeMap = {} as Record<string, Graph>
   const sidMap = {} as Record<string, Graph>
@@ -531,13 +532,13 @@ function cloneGraph(unit: any) {
     })
     const itemTag = op || unit
     switch (itemTag) {
-      case 'store':
+      case STORE:
         node.meta.wrapped = wrapStore(node)
         break
-      case 'event':
+      case EVENT:
         node.seq.unshift(forkPageSetter)
         break
-      case 'effect':
+      case EFFECT:
         node.next.push(forkInFlightCounter)
         node.seq.unshift(forkPageSetter)
         break
@@ -562,7 +563,7 @@ function cloneGraph(unit: any) {
     getState: (store: any) => findClone(store).meta.wrapped.getState(),
     graphite: createNode({
       family: {
-        type: 'domain',
+        type: DOMAIN,
         links: [forkInFlightCounter, ...clones],
       },
       meta: {unit: 'fork'},
@@ -583,7 +584,7 @@ function cloneGraph(unit: any) {
 
 function wrapStore(node: Graph) {
   return {
-    kind: 'store',
+    kind: STORE,
     getState: () => node.reg[node.scope.state.id].current,
     updates: {
       watch: bind(watchUnit, node),
@@ -593,11 +594,12 @@ function wrapStore(node: Graph) {
   }
 }
 function forEachRelatedNode(
-  {next, family, meta}: Graph,
+  node: Graph,
   cb: (node: Graph, index: number, siblings: Graph[]) => void,
 ) {
-  if (meta.unit === 'fork' || meta.unit === 'forkInFlightCounter') return
-  forEach(next, cb)
-  forEach(family.owners, cb)
-  forEach(family.links, cb)
+  const unit = node.meta.unit
+  if (unit === 'fork' || unit === FORK_COUNTER) return
+  forEach(node.next, cb)
+  forEach(getOwners(node), cb)
+  forEach(getLinks(node), cb)
 }

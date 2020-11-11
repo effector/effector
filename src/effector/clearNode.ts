@@ -2,6 +2,7 @@ import {Graph, Graphite} from './index.h'
 import {getGraph, getOwners, getLinks, getSubscribers} from './getter'
 import {is} from './is'
 import {removeItem} from './collection'
+import {CROSSLINK} from './tag'
 
 const removeFromNode = (currentNode: Graph, targetNode: Graph) => {
   removeItem(currentNode.next, targetNode)
@@ -24,7 +25,7 @@ const clearNodeNormalized = (
     if (
       deep ||
       (isDomainUnit && !targetNode.meta.sample) ||
-      currentNode.family.type === 'crosslink'
+      currentNode.family.type === CROSSLINK
     ) {
       clearNodeNormalized(
         currentNode,
@@ -36,7 +37,7 @@ const clearNodeNormalized = (
   list = getOwners(targetNode)
   while ((currentNode = list.pop())) {
     removeFromNode(currentNode, targetNode)
-    if (isDomainUnit && currentNode.family.type === 'crosslink') {
+    if (isDomainUnit && currentNode.family.type === CROSSLINK) {
       clearNodeNormalized(
         currentNode,
         deep,

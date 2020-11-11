@@ -13,6 +13,7 @@ import {forward} from './forward'
 import {addToRegion} from './region'
 import {forIn} from './collection'
 import {getParent} from './getter'
+import {DOMAIN} from './tag'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
   trigger.watch(data => {
@@ -35,7 +36,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
   const events: Set<Event<any>> = new Set()
 
   const node = createNode({
-    family: {type: 'domain'},
+    family: {type: DOMAIN},
   })
 
   const result: any = {
@@ -48,7 +49,7 @@ export function createDomain(nameOrConfig: any, maybeConfig?: any): Domain {
     graphite: node,
   }
 
-  node.meta = initUnit('domain', result, maybeConfig, nameOrConfig)
+  node.meta = initUnit(DOMAIN, result, maybeConfig, nameOrConfig)
   const [event, effect, store, domain] = [
     'onEvent',
     'onEffect',

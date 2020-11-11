@@ -8,6 +8,7 @@ import {is} from './is'
 import {step} from './typedef'
 import {launch} from './kernel'
 import {addToReg} from './createNode'
+import {STORE, EFFECT, REG_A} from './tag'
 
 export function attach(config: any) {
   let injected
@@ -27,19 +28,18 @@ export function attach(config: any) {
   const runnerFn = (
     {params, req}: any,
     {finally: anyway, effect}: any,
-    {a: states, page, forkPage}: any,
+    stack: any,
   ) => {
     const rj = onSettled({
       params,
       req,
       ok: false,
       anyway,
-      page,
-      forkPage,
+      stack,
     })
     let computedParams
     try {
-      computedParams = mapParams(params, states)
+      computedParams = mapParams(params, stack.a)
     } catch (err) {
       return rj(err)
     }
@@ -53,13 +53,12 @@ export function attach(config: any) {
             req,
             ok: true,
             anyway,
-            page,
-            forkPage,
+            stack,
           }),
           rj,
         },
       },
-      page,
+      page: stack.page,
       defer: true,
     })
   }
@@ -71,9 +70,9 @@ export function attach(config: any) {
       own(attached, [state])
     }
     const readStateRef = step.mov({
-      from: 'store',
+      from: STORE,
       store: getStoreState(state),
-      to: 'a',
+      to: REG_A,
     })
     runnerSteps = [
       /* let another side-effects run first */
@@ -88,8 +87,8 @@ export function attach(config: any) {
     runnerSteps = [step.run({fn: runnerFn})]
   }
   runner.scope.effect = effect
-  runner.meta.onCopy.push('effect')
+  runner.meta.onCopy.push(EFFECT)
   runner.seq.splice(0, 1, ...runnerSteps)
-  applyParentHook(effect, attached, 'effect')
+  applyParentHook(effect, attached, EFFECT)
   return attached
 }

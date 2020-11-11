@@ -1,6 +1,16 @@
-import {Graphite, Graph} from './index.h'
+import {Graph} from './index.h'
 import {readRef} from './stateRef'
-import {getGraph, getValue} from './getter'
+import {getForkPage, getGraph, getValue} from './getter'
+import {
+  STORE,
+  EFFECT,
+  SAMPLER,
+  STACK,
+  BARRIER,
+  VALUE,
+  FILTER,
+  REG_A,
+} from './tag'
 
 /** Names of priority groups */
 type PriorityTag = 'child' | 'pure' | 'barrier' | 'sampler' | 'effect'
@@ -64,7 +74,7 @@ const merge = (a: QueueItem | null, b: QueueItem | null): QueueItem | null => {
      */
     (isSameType && a.v.id > b.v.id) ||
     /** if first node is "sampler" and second node is "barrier" */
-    (!isSameType && a.v.type === 'sampler')
+    (!isSameType && a.v.type === SAMPLER)
   ) {
     ret = a
     a = b
@@ -172,11 +182,11 @@ const getPriority = (t: PriorityTag) => {
       return 0
     case 'pure':
       return 1
-    case 'barrier':
+    case BARRIER:
       return 2
-    case 'sampler':
+    case SAMPLER:
       return 3
-    case 'effect':
+    case EFFECT:
       return 4
     default:
       return -1
@@ -209,7 +219,7 @@ const exec = () => {
     const {idx, stack, type} = value
     graph = stack.node
     currentPage = page = stack.page
-    forkPage = stack.forkPage
+    forkPage = getForkPage(stack)
     reg = (page ? page : graph).reg
     const local: Local = {
       fail: false,
@@ -220,7 +230,7 @@ const exec = () => {
       const step = graph.seq[stepn]
       const data = step.data
       switch (step.type) {
-        case 'barrier': {
+        case BARRIER: {
           let id = data.barrierID
           if (page) {
             id = `${page.fullID}_${id}`
@@ -240,11 +250,13 @@ const exec = () => {
           let value
           //prettier-ignore
           switch (data.from) {
-            case 'stack': value = getValue(stack); break
-            case 'a': value = stack.a; break
-            case 'b': value = stack.b; break
-            case 'value': value = data.store; break
-            case 'store':
+            case STACK: value = getValue(stack); break
+            case REG_A: /** fall-through case */
+            case 'b':
+              value = stack[data.from]
+              break
+            case VALUE: value = data.store; break
+            case STORE:
               if (!reg[data.store.id]) {
                 // if (!page.parent) {
                 stack.page = page = null
@@ -256,10 +268,12 @@ const exec = () => {
           }
           //prettier-ignore
           switch (data.to) {
-            case 'stack': stack.value = value; break
-            case 'a': stack.a = value; break
-            case 'b': stack.b = value; break
-            case 'store':
+            case STACK: stack.value = value; break
+            case REG_A: /** fall-through case */
+            case 'b':
+              stack[data.to] = value
+              break
+            case STORE:
               reg[data.target.id].current = value
               break
           }
@@ -275,7 +289,7 @@ const exec = () => {
               break
           }
           break
-        case 'filter':
+        case FILTER:
           /**
            * handled edge case: if step.fn will throw,
            * tryRun will return null
@@ -285,8 +299,8 @@ const exec = () => {
           break
         case 'run':
           /** exec 'compute' step when stepn === idx */
-          if (stepn !== idx || type !== 'effect') {
-            pushHeap(stepn, stack, 'effect')
+          if (stepn !== idx || type !== EFFECT) {
+            pushHeap(stepn, stack, EFFECT)
             continue mem
           }
         case 'compute':
@@ -303,14 +317,14 @@ const exec = () => {
           graph.next[stepn],
           stack,
           getValue(stack),
-          stack.forkPage,
+          getForkPage(stack),
         )
       }
     }
   }
   alreadyStarted = lastStartedState.alreadyStarted
   currentPage = lastStartedState.currentPage
-  forkPage = lastStartedState.forkPage
+  forkPage = getForkPage(lastStartedState)
 }
 export const launch = (unit: any, payload?: any, upsert?: boolean) => {
   let page = currentPage
@@ -320,8 +334,8 @@ export const launch = (unit: any, payload?: any, upsert?: boolean) => {
     payload = unit.params
     upsert = unit.defer
     page = 'page' in unit ? unit.page : page
-    if (unit.stack) stack = unit.stack
-    forkedPage = unit.forkPage || forkedPage
+    if (unit[STACK]) stack = unit[STACK]
+    forkedPage = getForkPage(unit) || forkedPage
     unit = unit.target
   }
   if (Array.isArray(unit)) {

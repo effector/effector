@@ -10,6 +10,7 @@ import {createLinkNode} from './forward'
 import {throwError} from './throw'
 import {readTemplate} from './region'
 import {forIn, includes} from './collection'
+import {BARRIER, MAP, REG_A, VALUE} from './tag'
 
 export function combine(...args: any[]): Store<any> {
   let handler
@@ -101,7 +102,7 @@ const storeCombination = (
     step.check.defined(),
     step.mov({
       store: rawShape,
-      to: 'a',
+      to: REG_A,
     }),
     //prettier-ignore
     step.filter({
@@ -120,17 +121,17 @@ const storeCombination = (
       },
     }),
     step.mov({
-      from: 'a',
+      from: REG_A,
       target: rawShape,
     }),
     step.mov({
-      from: 'value',
+      from: VALUE,
       store: false,
       target: isFresh,
     }),
-    step.barrier({priority: 'barrier'}),
+    step.barrier({priority: BARRIER}),
     step.mov({
-      from: 'value',
+      from: VALUE,
       store: true,
       target: isFresh,
     }),
@@ -170,7 +171,7 @@ const storeCombination = (
   rawShape.after = [
     fn
       ? {
-          type: 'map',
+          type: MAP,
           to: getStoreState(store),
           fn,
         }

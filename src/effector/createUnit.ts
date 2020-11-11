@@ -28,6 +28,7 @@ import {
 } from './getter'
 import {includes} from './collection'
 import {throwError} from './throw'
+import {DOMAIN, STORE, EVENT, MAP, FILTER, REG_A} from './tag'
 
 const normalizeConfig = (part: any, config: any) => {
   if (isObject(part)) {
@@ -51,7 +52,7 @@ const normalizeConfig = (part: any, config: any) => {
 export const applyParentHook = (
   source: any,
   target: any,
-  hookType: 'event' | 'effect' = 'event',
+  hookType: 'event' | 'effect' = EVENT,
 ) => {
   if (getParent(source)) getParent(source).hooks[hookType](target)
 }
@@ -70,21 +71,25 @@ export const initUnit = (
     },
     {},
   )
+  const isDomain = kind === DOMAIN
   const id = nextUnitID()
   let {parent = null, sid = null, strict = true, named = null} = config
-  const name = named ? named : config.name || (kind === 'domain' ? '' : id)
+  const name = named ? named : config.name || (isDomain ? '' : id)
   const compositeName = createName(name, parent)
-  sid = readSidRoot(sid)
-  unit.kind = kind
-  unit.id = id
-  unit.sid = sid
-  unit.shortName = name
+
+  const meta: Record<string, any> = {
+    unit: unit.kind = kind,
+    name: unit.shortName = name,
+    sid: unit.sid = readSidRoot(sid),
+    named,
+    unitId: unit.id = id,
+  }
   unit.parent = parent
   unit.compositeName = compositeName
   unit.defaultConfig = config
   unit.thru = (fn: Function) => fn(unit)
   unit.getType = () => compositeName.fullName
-  if (kind !== 'domain') {
+  if (!isDomain) {
     unit.subscribe = (observer: Subscriber<any>) => {
       assertObject(observer)
       return unit.watch(
@@ -98,9 +103,11 @@ export const initUnit = (
       )
     }
     unit[observableSymbol] = () => unit
+    const template = readTemplate()
+    if (template) meta.nativeTemplate = template
   }
   isStrict = strict
-  return {unit: kind, name, sid, named}
+  return meta
 }
 export const createNamedEvent = (named: string) => createEvent({named})
 
@@ -152,7 +159,7 @@ export function createEvent<Payload = any>(
     return event.create(payload, args)
   }
   event.graphite = createNode({
-    meta: initUnit('event', event, maybeConfig, nameOrConfig),
+    meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
   })
   //eslint-disable-next-line no-unused-vars
   event.create = (payload: any, _: any) => {
@@ -170,11 +177,11 @@ export function createEvent<Payload = any>(
       fn = fn.fn
     }
     const mapped = createEvent(mapName(event, name), config)
-    createComputation(event, mapped, 'map', fn)
+    createComputation(event, mapped, MAP, fn)
     return mapped
   }
   event.filter = (fn: any) =>
-    createEventFiltration(event, 'filter', fn.fn ? fn : fn.fn, [
+    createEventFiltration(event, FILTER, fn.fn ? fn : fn.fn, [
       step.filter({fn: callStack}),
     ])
   event.filterMap = (fn: any) =>
@@ -195,9 +202,6 @@ export function createEvent<Payload = any>(
     return contramapped
   }
   const template = readTemplate()
-  if (template) {
-    getGraph(event).meta.nativeTemplate = template
-  }
   return addToRegion(event)
 }
 
@@ -292,11 +296,11 @@ export function createStore<State>(
         config,
         strict: false,
       })
-      const linkNode = updateStore(store, innerStore, 'map', false, fn)
+      const linkNode = updateStore(store, innerStore, MAP, false, fn)
 
       getStoreState(innerStore).before = [
         {
-          type: 'map',
+          type: MAP,
           fn,
           from: plainState,
         },
@@ -350,13 +354,10 @@ export function createStore<State>(
       }),
     ],
     child: updates,
-    meta: initUnit('store', store, props),
+    meta: initUnit(STORE, store, props),
   })
   if (isStrict && defaultState === undefined)
     throwError("current state can't be undefined, use null instead")
-  if (template) {
-    getGraph(store).meta.nativeTemplate = template
-  }
   own(store, [updates])
   return addToRegion(store)
 }
@@ -370,7 +371,7 @@ const updateStore = (
 ) => {
   const storeRef = getStoreState(store)
   const node = [
-    step.mov({store: storeRef, to: 'a'}),
+    step.mov({store: storeRef, to: REG_A}),
     step.compute({
       fn: stateFirst ? callARegStack : callStackAReg,
     }),

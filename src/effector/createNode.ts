@@ -1,6 +1,7 @@
 import {Graph, Graphite, Cmd, StateRef} from './index.h'
 import {getGraph, getOwners, getLinks} from './getter'
 import {nextNodeID} from './id'
+import {CROSSLINK, STORE} from './tag'
 
 const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
   const result = []
@@ -23,7 +24,7 @@ export const addToReg = (
     store = data.store
     reg[store.id] = store
   }
-  if (type === 'mov' && data.to === 'store') {
+  if (type === 'mov' && data.to === STORE) {
     store = data.target
     reg[store.id] = store
   }
@@ -73,7 +74,7 @@ export function createNode({
     meta,
     scope,
     family: {
-      type: familyRaw.type || 'crosslink',
+      type: familyRaw.type || CROSSLINK,
       links,
       owners,
     },

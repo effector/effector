@@ -13,6 +13,7 @@ import {createNode} from './createNode'
 import {addToRegion, readTemplate} from './region'
 import {throwError} from './throw'
 import {includes} from './collection'
+import {REG_A, SAMPLE, SAMPLER, STACK, STORE, VALUE} from './tag'
 
 export function sample(...args: any): any {
   let target
@@ -66,15 +67,15 @@ export function sample(...args: any): any {
         node: [
           template && template.loader,
           //@ts-ignore
-          !greedy && step.barrier({priority: 'sampler'}),
+          !greedy && step.barrier({priority: SAMPLER}),
           step.mov({
             store: sourceRef,
-            to: fn ? 'a' : 'stack',
+            to: fn ? REG_A : STACK,
           }),
           fn && step.compute({fn: callARegStack}),
           template && isUpward && template.upward,
         ],
-        meta: {op: 'sample', sample: 'store'},
+        meta: {op: SAMPLE, sample: STORE},
       }),
     ])
     if (template) {
@@ -98,7 +99,7 @@ export function sample(...args: any): any {
         node: [
           step.update({store: sourceState}),
           step.mov({
-            from: 'value',
+            from: VALUE,
             store: true,
             target: hasSource,
           }),
@@ -107,7 +108,7 @@ export function sample(...args: any): any {
           owners: [source, target, clock],
           links: target,
         },
-        meta: {op: 'sample', sample: 'source'},
+        meta: {op: SAMPLE, sample: 'source'},
       }),
     )
     own(source, [
@@ -122,16 +123,16 @@ export function sample(...args: any): any {
           step.mov({store: hasSource}),
           step.filter({fn: hasSource => hasSource}),
           //@ts-ignore
-          !greedy && step.barrier({priority: 'sampler'}),
+          !greedy && step.barrier({priority: SAMPLER}),
           step.mov({store: sourceState}),
           step.mov({
             store: clockState,
-            to: 'a',
+            to: REG_A,
           }),
           fn && step.compute({fn: callStackAReg}),
           template && isUpward && template.upward,
         ],
-        meta: {op: 'sample', sample: 'clock'},
+        meta: {op: SAMPLE, sample: 'clock'},
       }),
     ])
   }
