@@ -14,7 +14,8 @@ const browserStackConfig = {
   key: process.env.BROWSERSTACK_ACCESS_KEY,
   services: ['browserstack'],
   // browserstackLocal: true,
-  updateJob: false,
+  updateJob: true,
+  strict: true,
   capabilities: {
     'bstack:options': {
       os: 'OS X',
@@ -41,7 +42,7 @@ const browserStackConfig = {
   logLevel: 'warn',
   coloredLogs: true,
   screenshotPath: './errorShots/',
-  waitforTimeout: 10000,
+  waitforTimeout: 20000,
   connectionRetryTimeout: 90000,
   connectionRetryCount: 3,
   host: 'hub.browserstack.com',
@@ -81,83 +82,109 @@ async function loadModules() {
 }
 
 module.exports = class BSTestRunner extends require('jest-runner') {
+  constructor(...args) {
+    super(...args)
+    this.isSerial = true
+    this.__PRIVATE_UNSTABLE_API_supportsEventEmitters__ = false
+  }
   async runTests(tests, watcher, onStart, onResult, onFailure, options) {
     const modulesReq = loadModules()
-    return await super.runTests(
-      tests,
-      watcher,
-      async test => {
-        let browser
-        try {
-          browser = await remote(browserStackConfig)
-        } catch (error) {
-          console.error('remote() call error', error)
-          throw error
-        }
-        const initBrowser = async () => {
+    const browserReq = remote(browserStackConfig)
+    let browserInstance
+    try {
+      return await super.runTests(
+        tests,
+        watcher,
+        async test => {
+          let browser
           try {
-            await browser.url('about:blank')
-            await browser.execute(initPageRuntime, modulesList)
+            browser = browserInstance = await browserReq
           } catch (error) {
-            console.error('initBrowser error', error)
+            console.error('remote() call error', error)
+            if (error && error.message)
+              throw Error(`remote error: ${error.message}`)
             throw error
           }
-        }
-        const {effector, dom} = await modulesReq
-        const modulesList = [
-          {
-            name: 'effector',
-            src: effector,
-          },
-          {
-            name: 'forest',
-            src: dom,
-          },
-        ]
-        // if (browser.isChrome) browser.takeHeapSnapshot
-        const execFunc = async cb => {
-          const result = await browser.executeAsync(
-            execAsyncCode,
-            typeof cb === 'function' ? cb.toString() : cb,
-          )
-          if (Object(result).error) {
-            throw result.error
+          const initBrowser = async () => {
+            try {
+              await browser.url('about:blank')
+              await browser.execute(initPageRuntime, modulesList)
+            } catch (error) {
+              console.error('initBrowser error', error)
+              throw error
+            }
           }
-          return result
-        }
-        const exec = cb =>
-          execFunc(`async () => {
+          const {effector, dom} = await modulesReq
+          const modulesList = [
+            {
+              name: 'effector',
+              src: effector,
+            },
+            {
+              name: 'forest',
+              src: dom,
+            },
+          ]
+          // if (browser.isChrome) browser.takeHeapSnapshot
+          const execFunc = async cb => {
+            const result = await browser.executeAsync(
+              execAsyncCode,
+              typeof cb === 'function' ? cb.toString() : cb,
+            )
+            if (Object(result).error) {
+              throw result.error
+            }
+            return result
+          }
+          const exec = cb =>
+            execFunc(`async () => {
             await (${typeof cb === 'function' ? cb.toString() : cb})()
             return domSnapshots
           }`).then(result => {
-            if (Array.isArray(result)) return result.map(prettyHtml)
-            return result
-          })
-
-        test.context.config = {
-          ...test.context.config,
-          globals: {
-            ...test.context.config.globals,
-            browser,
-            execFunc,
-            exec,
-            initBrowser,
-          },
-        }
-        return await onStart(test)
-      },
-      async (test, result) => {
-        // console.log(test)
-        await test.context.config.globals.browser.deleteSession()
-        return await onResult(test, result)
-      },
-      async (test, result) => {
-        // console.log(test)
-        await test.context.config.globals.browser.deleteSession()
-        return await onFailure(test, result)
-      },
-      options,
-    )
+              if (Array.isArray(result)) return result.map(prettyHtml)
+              return result
+            })
+          test.context.config = {
+            ...test.context.config,
+            globals: {
+              ...test.context.config.globals,
+              browser,
+              execFunc,
+              exec,
+              initBrowser,
+            },
+          }
+          if (typeof onStart === 'function') return await onStart(test)
+          return test
+        },
+        async (test, result) => {
+          // console.log(test)
+          // await test.context.config.globals.browser.deleteSession()
+          if (typeof onResult === 'function')
+            return await onResult(test, result)
+          return result
+        },
+        async (test, result) => {
+          // console.log(test)
+          console.error('onFailure result:', result)
+          // try {
+          //   await test.context.config.globals.browser.deleteSession()
+          // } catch (error) {
+          //   console.error(`onFailure session error: ${error && error.message}`)
+          // }
+          if (typeof onFailure === 'function')
+            return await onFailure(test, result)
+          return result
+        },
+        options,
+      )
+    } finally {
+      if (browserInstance) {
+        try {
+          await browserInstance.deleteSession()
+        } catch (err) {}
+      }
+    }
   }
 }
 async function execAsyncCode(cb, done) {

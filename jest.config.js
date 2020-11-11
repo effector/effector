@@ -58,7 +58,7 @@ module.exports = {
                 '!<rootDir>/src/forest/__tests__/ssr/**',
               ],
               transform,
-              testTimeout: 60e3,
+              testTimeout: 120e3,
               runner: './src/forest/__fixtures__/browserstackTestRunner.js',
             },
           },
