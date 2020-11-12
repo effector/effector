@@ -1,2 +1,3 @@
 /en/* /docs/:splat 301
 /api/* /docs/api/:splat 301
+/docs /docs/api/effector/effector 301
