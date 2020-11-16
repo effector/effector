@@ -13,6 +13,10 @@ interface Scope {
 }
 ```
 
+:::note
+Imperative effects calls are supported in effect handlers but **not** in `watch` functions
+:::
+
 ## Scope methods
 
 ### `getState`
