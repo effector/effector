@@ -30,6 +30,26 @@ describe('imperative call support', () => {
     expect(scope.getState(count)).toBe(1)
     expect(count.getState()).toBe(0)
   })
+  it.skip('not support imperative effect calls in watchers', async () => {
+    const app = createDomain()
+
+    const inc = app.createEffect(() => {})
+    const count = app.createStore(0).on(inc.done, x => x + 1)
+
+    const start = app.createEvent()
+    start.watch(() => {
+      inc()
+    })
+
+    const scope = fork(app)
+
+    await allSettled(start, {
+      scope,
+    })
+
+    expect(scope.getState(count)).toBe(1)
+    expect(count.getState()).toBe(0)
+  })
   describe('support imperative event calls in effects', () => {
     test('sync effects', async () => {
       const app = createDomain()
@@ -246,15 +266,16 @@ describe('imperative call support', () => {
     })
     test('scope isolation', async () => {
       const app = createDomain()
-
+      const pushWord = app.createEvent<string>()
       const addWord = app.createEffect({handler: async (word: string) => word})
       const words = app
         .createStore<string[]>([])
-        .on(addWord.doneData, (list, word) => [...list, word])
+        .on([addWord.doneData, pushWord], (list, word) => [...list, word])
 
       const start = app.createEffect({
         async handler(word: string) {
           await addWord(`${word} 1`)
+          pushWord(`${word} 1.5`)
           await addWord(`${word} 2`)
           return word
         },
@@ -263,6 +284,7 @@ describe('imperative call support', () => {
       const next = app.createEffect({
         async handler(word: string) {
           await addWord(`${word} 3`)
+          pushWord(`${word} 3.5`)
           await addWord(`${word} 4`)
         },
       })
@@ -292,24 +314,30 @@ describe('imperative call support', () => {
       expect(scopeA.getState(words)).toMatchInlineSnapshot(`
         Array [
           "A 1",
+          "A 1.5",
           "A 2",
           "A 3",
+          "A 3.5",
           "A 4",
         ]
       `)
       expect(scopeB.getState(words)).toMatchInlineSnapshot(`
         Array [
           "B 1",
+          "B 1.5",
           "B 2",
           "B 3",
+          "B 3.5",
           "B 4",
         ]
       `)
       expect(scopeC.getState(words)).toMatchInlineSnapshot(`
         Array [
           "C 1",
+          "C 1.5",
           "C 2",
           "C 3",
+          "C 3.5",
           "C 4",
         ]
       `)
