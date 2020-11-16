@@ -2,10 +2,10 @@ import {Store, Event, Scope} from 'effector'
 
 export type StoreOrData<T> = Store<T> | T
 export type DOMProperty = string | number | null | boolean
-export type PropertyMap = {[field: string]: DOMProperty | AttributeStore}
+export type PropertyMap = {[field: string]: DOMProperty | AttributeStoreInput}
 export type StylePropertyMap = Partial<
   {
-    [K in keyof CSSStyleDeclaration]: DOMProperty | AttributeStore
+    [K in keyof CSSStyleDeclaration]: DOMProperty | AttributeStoreInput
   }
 >
 
@@ -25,22 +25,12 @@ export type HandlerMap =
 
 export type DOMTag = keyof HTMLElementTagNameMap | keyof SVGElementTagNameMap
 export type DOMElement = HTMLElement | SVGElement
-export type AttributeStore =
-  | Store<string>
-  | Store<number>
-  | Store<boolean>
-  | Store<null>
-  | Store<string | number>
-  | Store<string | boolean>
-  | Store<string | null>
-  | Store<number | boolean>
-  | Store<number | null>
-  | Store<boolean | null>
-  | Store<string | number | boolean>
-  | Store<string | number | null>
-  | Store<string | boolean | null>
-  | Store<number | boolean | null>
-  | Store<string | number | boolean | null>
+export type AttributeStore = Store<string | number | boolean | null>
+
+type AttributeStoreInput = Omit<
+  AttributeStore,
+  'updates' | 'reset' | 'on' | 'off' | 'thru'
+>
 
 type Tuple<T = unknown> = [T] | T[]
 type Combinable = {[key: string]: Store<any>} | Tuple<Store<any>>
@@ -65,7 +55,7 @@ export function using(
 export function spec(spec: {
   attr?: PropertyMap
   data?: PropertyMap
-  text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
+  text?: DOMProperty | AttributeStoreInput | Array<DOMProperty | AttributeStoreInput>
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
@@ -93,7 +83,7 @@ export function h(
   spec: {
     attr?: PropertyMap
     data?: PropertyMap
-    text?: DOMProperty | AttributeStore | Array<DOMProperty | AttributeStore>
+    text?: DOMProperty | AttributeStoreInput | Array<DOMProperty | AttributeStoreInput>
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
@@ -206,7 +196,7 @@ export function node(fn: (node: DOMElement) => void): void
 
 export function text(
   words: TemplateStringsArray,
-  ...values: Array<DOMProperty | AttributeStore>
+  ...values: Array<DOMProperty | AttributeStoreInput>
 ): void
 
 export function remap<T extends {[field: string]: any}, S extends keyof T>(
@@ -227,5 +217,5 @@ export function val(
 ): string
 export function val(
   words: TemplateStringsArray,
-  ...values: Array<DOMProperty | AttributeStore>
+  ...values: Array<DOMProperty | AttributeStoreInput>
 ): Store<string>
