@@ -49,7 +49,7 @@ const version = {
   effector: '21.7.2',
   'effector-react': '21.0.8',
   'effector-vue': '21.1.0',
-  forest: '0.19.4',
+  forest: '0.19.5',
 }
 
 const compiledFile = name => [`${name}.js`, `${name}.js.map`]
