@@ -176,6 +176,8 @@ Accepts array of module names which exports will be treated as custom factories 
 
 - Factories can create any amount of units.
 
+- Factories can call any effector methods.
+
 - Factories can call another factories from other modules.
 
 - Modules with factories can export any amount of functions.
