@@ -7,8 +7,7 @@ keywords:
 description: Store, its methods and properties
 ---
 
-_Store_ is an object that holds the state value.
-There can be multiple stores.
+_Store_ is an object that holds the state value. Store is updated when it receives a value that is not equal (`!==`) to current one and to `undefined`
 
 ## Store Methods
 
