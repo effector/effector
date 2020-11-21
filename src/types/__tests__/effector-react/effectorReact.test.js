@@ -1,8 +1,8 @@
 // @flow
 /* eslint-disable no-unused-vars */
 import * as React from 'react'
-import {createStore} from 'effector'
-import {createComponent, createGate, useGate} from 'effector-react'
+import {createStore, createEvent, createEffect} from 'effector'
+import {createComponent, createGate, useGate, useEvent} from 'effector-react'
 
 const typecheck = '{global}'
 
@@ -54,6 +54,53 @@ test('createGate', () => {
     Argument of type '1' is not assignable to parameter of type '{ a: number; } | undefined'.
     Argument of type '{}' is not assignable to parameter of type '{ a: number; }'.
       Property 'a' is missing in type '{}' but required in type '{ a: number; }'.
+
+    --flow--
+    no errors
+    "
+  `)
+})
+
+test('useEvent of Event', () => {
+  const runEvent: (payload: number) => number = useEvent(createEvent<number>())
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+
+test('useEvent of Effect', () => {
+  const runEffect: (payload: number) => Promise<string> = useEvent(
+    createEffect<number, string, Error>(),
+  )
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
+
+test('useEvent of object', () => {
+  const handlers: {
+    foo: (payload: number) => number,
+    bar: (payload: number) => Promise<string>,
+  } = useEvent({
+    foo: createEvent<number>(),
+    bar: createEffect<number, string, Error>(),
+  })
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
 
     --flow--
     no errors

@@ -464,3 +464,101 @@ test('useEvent and effect calls', async () => {
   expect(count.getState()).toBe(0)
   expect(scope.getState(count)).toBe(1)
 })
+
+test('object in useEvent', async () => {
+  const app = createDomain()
+  const inc = app.createEvent()
+  const dec = app.createEvent()
+  const fx = app.createEffect(async () => {
+    return 100
+  })
+  const count = app
+    .createStore(0)
+    .on(inc, x => x + 1)
+    .on(dec, x => x - 1)
+    .on(fx.doneData, (x, v) => x + v)
+  const scope = fork(app)
+  const App = () => {
+    const hndl = useEvent({fx, inc, dec})
+    const x = useStore(count)
+    return (
+      <div>
+        <span id="value">current value: {x}</span>
+        <button id="fx" onClick={() => hndl.fx()}>
+          fx
+        </button>
+        <button id="inc" onClick={() => hndl.inc()}>
+          inc
+        </button>
+        <button id="dec" onClick={() => hndl.dec()}>
+          dec
+        </button>
+      </div>
+    )
+  }
+  await render(
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  )
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <span
+        id="value"
+      >
+        current value: 
+        0
+      </span>
+      <button
+        id="fx"
+      >
+        fx
+      </button>
+      <button
+        id="inc"
+      >
+        inc
+      </button>
+      <button
+        id="dec"
+      >
+        dec
+      </button>
+    </div>
+  `)
+  await act(async () => {
+    container.firstChild.querySelector('#fx').click()
+    container.firstChild.querySelector('#inc').click()
+    container.firstChild.querySelector('#inc').click()
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <span
+        id="value"
+      >
+        current value: 
+        102
+      </span>
+      <button
+        id="fx"
+      >
+        fx
+      </button>
+      <button
+        id="inc"
+      >
+        inc
+      </button>
+      <button
+        id="dec"
+      >
+        dec
+      </button>
+    </div>
+  `)
+  await act(async () => {
+    container.firstChild.querySelector('#dec').click()
+  })
+  expect(count.getState()).toBe(0)
+  expect(scope.getState(count)).toBe(101)
+})
