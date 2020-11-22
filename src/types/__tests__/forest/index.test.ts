@@ -122,8 +122,7 @@ describe('remap', () => {
       expect(typecheck).toMatchInlineSnapshot(`
         "
         --typescript--
-        Type 'Store<string | number>[]' is not assignable to type '[Store<string>, Store<number>]'.
-          Target requires 2 element(s) but source may have fewer.
+        no errors
         "
       `)
     })
