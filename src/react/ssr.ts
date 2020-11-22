@@ -99,25 +99,40 @@ export function useStoreMap({store, keys, fn}: any) {
   })
 }
 
+function resolveUnit(unit: any, scope: any) {
+  const localUnit = scope.find(unit)
+  return is.effect(unit)
+    ? (params: any) => {
+        const req = createDefer()
+        //@ts-ignore
+        launch({target: localUnit, params: {params, req}, forkPage: scope})
+        return req.req
+      }
+    : (payload: any) => {
+        //@ts-ignore
+        launch({target: localUnit, params: payload, forkPage: scope})
+        return payload
+      }
+}
+
 /**
 bind event to scope
 
 works like React.useCallback, but for scopes
 */
-export function useEvent(event: any) {
+export function useEvent(eventObject: any) {
   const scope = React.useContext(Scope) as any
-  const unit = scope.find(event)
-  const result = is.effect(event)
-    ? (params: any) => {
-        const req = createDefer()
-        //@ts-ignore
-        launch({target: unit, params: {params, req}, forkPage: scope})
-        return req.req
-      }
-    : (payload: any) => {
-        //@ts-ignore
-        launch({target: unit, params: payload, forkPage: scope})
-        return payload
-      }
-  return React.useCallback(result, [scope, event])
+  const isShape = !is.unit(eventObject) && typeof eventObject === 'object'
+  const events = isShape ? eventObject : {event: eventObject}
+
+  return React.useMemo(() => {
+    if (is.unit(eventObject)) {
+      return resolveUnit(eventObject, scope)
+    }
+    const shape = Array.isArray(eventObject) ? [] : ({} as any)
+    for (const key in eventObject) {
+      shape[key] = resolveUnit(eventObject[key], scope)
+    }
+    return shape
+  }, [scope, ...Object.keys(events), ...Object.values(events)])
 }
