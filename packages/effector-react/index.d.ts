@@ -92,6 +92,15 @@ export function useEvent<T>(event: Event<T>): (payload: T) => T
 export function useEvent<T, R>(
   fx: Effect<T, R, any>,
 ): (payload: T) => Promise<R>
+export function useEvent<List extends (Event<any> | Effect<any, any>)[]>(
+  list: [...List],
+): {
+  [Key in keyof List]: List[Key] extends Event<infer T>
+    ? (payload: T) => T
+    : List[Key] extends Effect<infer P, infer D, any>
+    ? (payload: P) => Promise<D>
+    : never
+}
 export function useEvent<
   Shape extends Record<string, Event<any> | Effect<any, any, any>>
 >(

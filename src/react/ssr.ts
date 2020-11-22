@@ -129,7 +129,7 @@ export function useEvent(eventObject: any) {
     if (is.unit(eventObject)) {
       return resolveUnit(eventObject, scope)
     }
-    const shape = {} as any
+    const shape = Array.isArray(eventObject) ? [] : ({} as any)
     for (const key in eventObject) {
       shape[key] = resolveUnit(eventObject[key], scope)
     }

@@ -277,8 +277,8 @@ test('computed values support', async () => {
     .on(fetchUser.done, (_, {result}) => result.friends)
   const friendsTotal = friends.map(list => list.length)
 
-  const Total = () => <small>Total: {useStore(friendsTotal)}</small>
-  const User = () => <b>User: {useStore(name)}</b>
+  const Total = () => <small>Total:{useStore(friendsTotal)}</small>
+  const User = () => <b>User:{useStore(name)}</b>
   const App = ({root}: {root: Scope}) => (
     <Provider value={root}>
       <section>
@@ -306,11 +306,11 @@ test('computed values support', async () => {
   expect(container.firstChild).toMatchInlineSnapshot(`
     <section>
       <b>
-        User: 
+        User:
         alice
       </b>
       <small>
-        Total: 
+        Total:
         2
       </small>
     </section>
@@ -337,8 +337,8 @@ test('useGate support', async () => {
     useGate(activeChatGate, {chatId})
     return (
       <div>
-        <header>Chat {chatId}</header>
-        <p>Messages total: {useStore(messagesAmount)}</p>
+        <header>Chat:{chatId}</header>
+        <p>Messages total:{useStore(messagesAmount)}</p>
       </div>
     )
   }
@@ -354,11 +354,11 @@ test('useGate support', async () => {
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <header>
-        Chat 
+        Chat:
         chat01
       </header>
       <p>
-        Messages total: 
+        Messages total:
         2
       </p>
     </div>
@@ -373,11 +373,11 @@ test('useGate support', async () => {
   expect(container.firstChild).toMatchInlineSnapshot(`
     <div>
       <header>
-        Chat 
+        Chat:
         chat01
       </header>
       <p>
-        Messages total: 
+        Messages total:
         2
       </p>
     </div>
@@ -426,7 +426,7 @@ test('useEvent and effect calls', async () => {
     return (
       <div>
         <button id="btn" onClick={() => fxe()}>
-          clicked {x} times
+          clicked-{x}-times
         </button>
       </div>
     )
@@ -441,9 +441,9 @@ test('useEvent and effect calls', async () => {
       <button
         id="btn"
       >
-        clicked 
+        clicked-
         0
-         times
+        -times
       </button>
     </div>
   `)
@@ -455,9 +455,9 @@ test('useEvent and effect calls', async () => {
       <button
         id="btn"
       >
-        clicked 
+        clicked-
         1
-         times
+        -times
       </button>
     </div>
   `)
@@ -483,7 +483,7 @@ test('object in useEvent', async () => {
     const x = useStore(count)
     return (
       <div>
-        <span id="value">current value: {x}</span>
+        <span id="value">current value:{x}</span>
         <button id="fx" onClick={() => hndl.fx()}>
           fx
         </button>
@@ -506,7 +506,7 @@ test('object in useEvent', async () => {
       <span
         id="value"
       >
-        current value: 
+        current value:
         0
       </span>
       <button
@@ -536,7 +536,105 @@ test('object in useEvent', async () => {
       <span
         id="value"
       >
-        current value: 
+        current value:
+        102
+      </span>
+      <button
+        id="fx"
+      >
+        fx
+      </button>
+      <button
+        id="inc"
+      >
+        inc
+      </button>
+      <button
+        id="dec"
+      >
+        dec
+      </button>
+    </div>
+  `)
+  await act(async () => {
+    container.firstChild.querySelector('#dec').click()
+  })
+  expect(count.getState()).toBe(0)
+  expect(scope.getState(count)).toBe(101)
+})
+
+test('array in useEvent', async () => {
+  const app = createDomain()
+  const inc = app.createEvent()
+  const dec = app.createEvent()
+  const fx = app.createEffect(async () => {
+    return 100
+  })
+  const count = app
+    .createStore(0)
+    .on(inc, x => x + 1)
+    .on(dec, x => x - 1)
+    .on(fx.doneData, (x, v) => x + v)
+  const scope = fork(app)
+  const App = () => {
+    const [a, b, c] = useEvent([fx, inc, dec])
+    const x = useStore(count)
+    return (
+      <div>
+        <span id="value">current value:{x}</span>
+        <button id="fx" onClick={() => a()}>
+          fx
+        </button>
+        <button id="inc" onClick={() => b()}>
+          inc
+        </button>
+        <button id="dec" onClick={() => c()}>
+          dec
+        </button>
+      </div>
+    )
+  }
+  await render(
+    <Provider value={scope}>
+      <App />
+    </Provider>,
+  )
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <span
+        id="value"
+      >
+        current value:
+        0
+      </span>
+      <button
+        id="fx"
+      >
+        fx
+      </button>
+      <button
+        id="inc"
+      >
+        inc
+      </button>
+      <button
+        id="dec"
+      >
+        dec
+      </button>
+    </div>
+  `)
+  await act(async () => {
+    container.firstChild.querySelector('#fx').click()
+    container.firstChild.querySelector('#inc').click()
+    container.firstChild.querySelector('#inc').click()
+  })
+  expect(container.firstChild).toMatchInlineSnapshot(`
+    <div>
+      <span
+        id="value"
+      >
+        current value:
         102
       </span>
       <button

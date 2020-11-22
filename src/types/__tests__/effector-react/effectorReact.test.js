@@ -107,3 +107,19 @@ test('useEvent of object', () => {
     "
   `)
 })
+
+test('useEvent of array', () => {
+  const handlers: [
+    (payload: number) => number,
+    (payload: number) => Promise<string>,
+  ] = useEvent([createEvent<number>(), createEffect<number, string, Error>()])
+  expect(typecheck).toMatchInlineSnapshot(`
+    "
+    --typescript--
+    no errors
+
+    --flow--
+    no errors
+    "
+  `)
+})
