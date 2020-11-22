@@ -55,7 +55,10 @@ export function using(
 export function spec(spec: {
   attr?: PropertyMap
   data?: PropertyMap
-  text?: DOMProperty | AttributeStoreInput | Array<DOMProperty | AttributeStoreInput>
+  text?:
+    | DOMProperty
+    | AttributeStoreInput
+    | Array<DOMProperty | AttributeStoreInput>
   visible?: Store<boolean>
   style?: StylePropertyMap
   styleVar?: PropertyMap
@@ -83,7 +86,10 @@ export function h(
   spec: {
     attr?: PropertyMap
     data?: PropertyMap
-    text?: DOMProperty | AttributeStoreInput | Array<DOMProperty | AttributeStoreInput>
+    text?:
+      | DOMProperty
+      | AttributeStoreInput
+      | Array<DOMProperty | AttributeStoreInput>
     visible?: Store<boolean>
     style?: StylePropertyMap
     styleVar?: PropertyMap
@@ -199,17 +205,29 @@ export function text(
   ...values: Array<DOMProperty | AttributeStoreInput>
 ): void
 
-export function remap<T extends {[field: string]: any}, S extends keyof T>(
+export function remap<T extends Record<string, any>, Key extends keyof T>(
   store: Store<T>,
-  key: S,
-): Store<T[S]>
+  key: Key,
+): Store<T[Key]>
+export function remap<T extends Record<string, any>, Names extends string[]>(
+  store: Store<T>,
+  names: [...Names],
+): {
+  [Key in keyof Names]: Names[Key] extends keyof T
+    ? Store<T[Names[Key]]>
+    : never
+}
 export function remap<
-  T extends {[field: string]: any},
-  S extends {[field: number]: keyof T} | {[field: string]: keyof T}
+  T extends Record<string, any>,
+  Shape extends {[field: number]: keyof T} | {[field: string]: keyof T}
 >(
   store: Store<T>,
-  shape: S,
-): {[K in keyof S]: S[K] extends keyof T ? Store<T[S[K]]> : never}
+  shape: Shape,
+): {
+  [Key in keyof Shape]: Shape[Key] extends keyof T
+    ? Store<T[Shape[Key]]>
+    : never
+}
 
 export function val(
   words: TemplateStringsArray,
