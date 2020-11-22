@@ -53,11 +53,11 @@ ReactDOM.render(
 
 **Arguments**
 
-1. `shape` Object of ([_Event_](../effector/Event.md) or [_Effect_](../effector/Effect.md)): Events or effects as object values which will be binded to current `scope`
+1. `shape` Object or array of ([_Event_](../effector/Event.md) or [_Effect_](../effector/Effect.md)): Events or effects as object values which will be binded to current `scope`
 
 **Returns**
 
-(Object): Functions as object values with the same names as argument to pass to event handlers. Will trigger given unit in current scope
+(Object or Array): List of functions with the same names or keys as argument to pass to event handlers. Will trigger given unit in current scope
 
 ### Example
 
@@ -78,6 +78,8 @@ const $count = app
 const App = () => {
   const count = useStore($count)
   const handler = useEvent({inc, dec})
+  // or
+  const [a, b] = useEvent([inc, dec])
   return (
     <>
       <p>Count: {count}</p>
