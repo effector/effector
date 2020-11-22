@@ -53,7 +53,7 @@ ReactDOM.render(
 
 **Arguments**
 
-1. `shape` Object or array of ([_Event_](../effector/Event.md) or [_Effect_](../effector/Effect.md)): Events or effects as object values which will be binded to current `scope`
+1. `shape` Object or array of ([_Event_](../effector/Event.md) or [_Effect_](../effector/Effect.md)): Events or effects as values which will be bound to the current `scope`
 
 **Returns**
 
