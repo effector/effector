@@ -209,7 +209,10 @@ export function remap<T extends Record<string, any>, Key extends keyof T>(
   store: Store<T>,
   key: Key,
 ): Store<T[Key]>
-export function remap<T extends Record<string, any>, Names extends string[]>(
+export function remap<
+  T extends Record<string, any>,
+  Names extends Array<keyof T>
+>(
   store: Store<T>,
   names: [...Names],
 ): {

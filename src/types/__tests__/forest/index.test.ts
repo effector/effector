@@ -139,5 +139,20 @@ describe('remap', () => {
         "
       `)
     })
+    test('incorrect types (should fail)', () => {
+      const shape = createStore({foo: 'ok', bar: 0, baz: null})
+      const [foo, bar] = remap(shape, ['foo', 'bar'])
+      const foo1: Store<number> = foo
+      const foo2: Store<string> = foo
+      const bar1: Store<number> = bar
+      const bar2: Store<string> = bar
+      expect(typecheck).toMatchInlineSnapshot(`
+        "
+        --typescript--
+        Type 'Store<string>' is not assignable to type 'Store<number>'.
+        Type 'Store<number>' is not assignable to type 'Store<string>'.
+        "
+      `)
+    })
   })
 })
