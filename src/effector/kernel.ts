@@ -195,7 +195,8 @@ const getPriority = (t: PriorityTag) => {
 
 const barriers = new Set()
 
-let alreadyStarted = false
+let isRoot = true
+export let isWatch = false
 export let currentPage: any = null
 export let forkPage: any
 export const setForkPage = (newForkPage: any) => {
@@ -207,8 +208,8 @@ export const setCurrentPage = (newPage: any) => {
 
 /** main execution method */
 const exec = () => {
-  const lastStartedState = {alreadyStarted, currentPage, forkPage}
-  alreadyStarted = true
+  const lastStartedState = {isRoot, currentPage, forkPage, isWatch}
+  isRoot = false
   let stop
   let skip
   let graph
@@ -304,7 +305,9 @@ const exec = () => {
             continue mem
           }
         case 'compute':
+          isWatch = graph.meta.op === 'watch'
           stack.value = tryRun(local, data, stack)
+          isWatch = lastStartedState.isWatch
           break
       }
       stop = local.fail || skip
@@ -322,7 +325,7 @@ const exec = () => {
       }
     }
   }
-  alreadyStarted = lastStartedState.alreadyStarted
+  isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
 }
@@ -352,7 +355,7 @@ export const launch = (unit: any, payload?: any, upsert?: boolean) => {
   } else {
     pushFirstHeapItem('pure', page, getGraph(unit), stack, payload, forkedPage)
   }
-  if (upsert && alreadyStarted) return
+  if (upsert && !isRoot) return
   exec()
 }
 

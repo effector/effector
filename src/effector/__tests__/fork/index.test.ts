@@ -30,25 +30,49 @@ describe('imperative call support', () => {
     expect(scope.getState(count)).toBe(1)
     expect(count.getState()).toBe(0)
   })
-  it.skip('not support imperative effect calls in watchers', async () => {
-    const app = createDomain()
+  describe('support imperative effect calls in watchers', () => {
+    test('with sync effects', async () => {
+      const app = createDomain()
 
-    const inc = app.createEffect(() => {})
-    const count = app.createStore(0).on(inc.done, x => x + 1)
+      const inc = app.createEffect(() => {})
+      const count = app.createStore(0).on(inc.done, x => x + 1)
 
-    const start = app.createEvent()
-    start.watch(() => {
-      inc()
+      const start = app.createEvent()
+      start.watch(() => {
+        inc()
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
     })
+    test('with async effects', async () => {
+      const app = createDomain()
 
-    const scope = fork(app)
+      const inc = app.createEffect(async () => {
+        await new Promise(rs => setTimeout(rs, 100))
+      })
+      const count = app.createStore(0).on(inc.done, x => x + 1)
 
-    await allSettled(start, {
-      scope,
+      const start = app.createEvent()
+      start.watch(() => {
+        inc()
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
     })
-
-    expect(scope.getState(count)).toBe(1)
-    expect(count.getState()).toBe(0)
   })
   describe('support imperative event calls in effects', () => {
     test('sync effects', async () => {
