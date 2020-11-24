@@ -245,7 +245,11 @@ export function createTemplate<Api extends {[method: string]: any}>({
                     )
                       return
                   }
-                  if (page.fullID.startsWith(stack.page.fullID)) {
+                  const fullID = stack.page.fullID
+                  if (
+                    page.fullID === fullID ||
+                    page.fullID.startsWith(`${fullID}_`)
+                  ) {
                     launch({
                       params: upd,
                       target: getForkedUnit(stack.node, stack.forkPage),
