@@ -2,6 +2,39 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 21.1.0
+
+- Add support for object and array of events to `useEvent`. It's a shorthand for calling several `useEvent` at once (PR [#425](https://github.com/effector/effector/pull/425) by [@sergeysova](https://github.com/sergeysova))
+
+```jsx
+export function ExampleComponent() {
+  const handlers = useEvent({emailChanged, passwordChanged})
+
+  return (
+    <div>
+      <input onChange={handlers.emailChanged} />
+      <input onChange={handlers.passwordChanged} />
+    </div>
+  )
+}
+```
+
+```jsx
+export function ExampleComponent() {
+  const [changeEmail, changePassword] = useEvent([
+    emailChanged,
+    passwordChanged,
+  ])
+
+  return (
+    <div>
+      <input onChange={changeEmail} />
+      <input onChange={changePassword} />
+    </div>
+  )
+}
+```
+
 ## effector 21.7.0
 
 - Add support for scopes to `hydrate`, to provide a way to fill additional values to existing scope (happens during SSG navigation in next.js)
