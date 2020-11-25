@@ -13,8 +13,49 @@ interface Scope {
 }
 ```
 
-:::note
-Imperative effects calls are supported in effect handlers but **not** in `watch` functions
+## Imperative effects calls with scope
+
+Imperative effects calls are supported in effect handlers but **not** in `watch` functions.
+
+When effect call another effects then it should call only effects, not common async functions:
+
+**Correct**, effect without inner effects:
+
+```js
+const delayFx = app.createEffect(async () => {
+  await new Promise(rs => setTimeout(rs, 80))
+})
+```
+
+**Correct**, effect with inner effects:
+
+```js
+const authUserFx = app.createEffect()
+const sendMessageFx = app.createEffect()
+
+const sendWithAuthFx = app.createEffect(async () => {
+  await authUserFx()
+  await delayFx()
+  await sendMessageFx()
+})
+```
+
+**Incorrect**, effect with inner effects:
+
+```js
+const sendWithAuthFx = app.createEffect(async () => {
+  await authUserFx()
+  //WRONG! wrap that in effect
+  await new Promise(rs => setTimeout(rs, 80))
+  //context lost
+  await sendMessageFx()
+})
+```
+
+So, any effect might either call another effects or perform some async computations but not both.
+
+:::tip
+Consider using [attach](./attach.md) instead of imperative call
 :::
 
 ## Scope methods
