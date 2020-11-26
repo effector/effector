@@ -371,7 +371,9 @@ module.exports = function(babel, options = {}) {
               FN: path.node,
             }
             if (addLoc) {
-              factoryConfig.NAME = JSON.stringify(resultName)
+              factoryConfig.NAME = JSON.stringify(
+                !resultName || resultName === '' ? 'none' : resultName,
+              )
               factoryConfig.METHOD = JSON.stringify(importedName)
               factoryConfig.LOC = makeTrace(
                 state.fileNameIdentifier,
