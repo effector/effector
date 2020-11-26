@@ -198,6 +198,7 @@ module.exports = function(babel, options = {}) {
     post() {
       this.effector_ignoredImports.clear()
       this.effector_needFactoryImport = false
+      this.effector_factoryImportAdded = false
       if (this.effector_factoryMap) {
         this.effector_factoryMap.clear()
         delete this.effector_factoryMap
@@ -210,11 +211,6 @@ module.exports = function(babel, options = {}) {
       Program: {
         enter(path, state) {
           path.traverse(importVisitor, state)
-        },
-        exit(path) {
-          if (this.effector_needFactoryImport) {
-            addFactoryImport(path)
-          }
         },
       },
 
@@ -363,6 +359,10 @@ module.exports = function(babel, options = {}) {
             !path.node.effector_isFactory &&
             this.effector_factoryMap.has(name)
           ) {
+            if (!this.effector_factoryImportAdded) {
+              this.effector_factoryImportAdded = true
+              addFactoryImport(path)
+            }
             const {
               source,
               importedName,
