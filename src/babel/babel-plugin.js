@@ -67,7 +67,8 @@ module.exports = function(babel, options = {}) {
   ]
   function addFactoryImport(path) {
     const programPath = path.find(path => path.isProgram())
-    programPath.node.body.unshift(
+    const [newPath] = programPath.unshiftContainer(
+      'body',
       t.importDeclaration(
         [
           t.importSpecifier(
@@ -78,6 +79,9 @@ module.exports = function(babel, options = {}) {
         t.stringLiteral('effector'),
       ),
     )
+    newPath.get('specifiers').forEach(specifier => {
+      programPath.scope.registerBinding('module', specifier)
+    })
   }
   const importVisitor = {
     ImportDeclaration(path, state) {
@@ -159,9 +163,9 @@ module.exports = function(babel, options = {}) {
         }
         normalizedSource = stripExtension(normalizedSource)
         if (this.effector_factoryPaths.includes(normalizedSource)) {
+          this.effector_needFactoryImport = true
           if (!this.effector_factoryMap) {
             this.effector_factoryMap = new Map()
-            addFactoryImport(path)
             if (!factoryTemplate) {
               factoryTemplate = template(
                 addLoc
@@ -191,10 +195,26 @@ module.exports = function(babel, options = {}) {
     pre() {
       this.effector_ignoredImports = new Set()
     },
+    post() {
+      this.effector_ignoredImports.clear()
+      this.effector_needFactoryImport = false
+      if (this.effector_factoryMap) {
+        this.effector_factoryMap.clear()
+        delete this.effector_factoryMap
+      }
+      if (this.effector_factoryPaths) {
+        delete this.effector_factoryPaths
+      }
+    },
     visitor: {
       Program: {
         enter(path, state) {
           path.traverse(importVisitor, state)
+        },
+        exit(path) {
+          if (this.effector_needFactoryImport) {
+            addFactoryImport(path)
+          }
         },
       },
 
