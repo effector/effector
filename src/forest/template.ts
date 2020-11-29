@@ -164,7 +164,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
               target: getForkedUnit(node, stack.forkPage),
               params: upd,
               defer: true,
-              page: null,
+              page: stack.page,
               //@ts-ignore
               stack,
               //@ts-ignore
@@ -221,7 +221,7 @@ export function createTemplate<Api extends {[method: string]: any}>({
                   launch({
                     params: upd,
                     target: getForkedUnit(stack.node, stack.forkPage),
-                    page: null,
+                    page: stack.page,
                     defer: true,
                     //@ts-ignore
                     forkPage: stack.forkPage,
@@ -259,7 +259,18 @@ export function createTemplate<Api extends {[method: string]: any}>({
                       forkPage: stack.forkPage,
                     })
                   } else {
-                    // console.count('no page match')
+                    if (fullID.startsWith(`${page.fullID}_`)) {
+                      launch({
+                        params: upd,
+                        target: getForkedUnit(stack.node, stack.forkPage),
+                        page: stack.page,
+                        defer: true,
+                        //@ts-ignore
+                        forkPage: stack.forkPage,
+                      })
+                    } else {
+                      // console.count('no page match')
+                    }
                   }
                 })
               }

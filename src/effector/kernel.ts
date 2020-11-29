@@ -1,6 +1,6 @@
 import {Graph} from './index.h'
 import {readRef} from './stateRef'
-import {getForkPage, getGraph, getValue} from './getter'
+import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
   STORE,
   EFFECT,
@@ -264,6 +264,7 @@ const exec = () => {
                 reg = graph.reg
                 // }
               }
+              // value = getPageRef(page, graph, data.store.id).current
               value = readRef(reg[data.store.id])
               break
           }
@@ -275,7 +276,7 @@ const exec = () => {
               stack[data.to] = value
               break
             case STORE:
-              reg[data.target.id].current = value
+              getPageRef(page, graph, data.target.id).current = value
               break
           }
           break
@@ -286,7 +287,9 @@ const exec = () => {
               skip = getValue(stack) === undefined
               break
             case 'changed':
-              skip = getValue(stack) === readRef(reg[data.store.id])
+              skip =
+                getValue(stack) ===
+                readRef(getPageRef(page, graph, data.store.id))
               break
           }
           break
@@ -328,6 +331,15 @@ const exec = () => {
   isRoot = lastStartedState.isRoot
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
+}
+const getPageRef = (page: any, graph: Graph, id: string) => {
+  if (page) {
+    while (page && !page.reg[id]) {
+      page = getParent(page)
+    }
+    if (page) return page.reg[id]
+  }
+  return graph.reg[id]
 }
 export const launch = (unit: any, payload?: any, upsert?: boolean) => {
   let page = currentPage

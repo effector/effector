@@ -654,6 +654,8 @@ export function h(tag: string, opts?: any) {
                     currentPage = currentPage.parent
                   }
                 }
+              } else {
+                page = leaf.spawn
               }
               readElement(leaf).addEventListener(
                 item.for,

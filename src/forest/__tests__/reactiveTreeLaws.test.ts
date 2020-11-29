@@ -55,12 +55,12 @@ describe('update store from nested block', () => {
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id='a'>a clicked: a</b><b id='b'>b clicked: a</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked:</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id='a'>a clicked: a b</b><b id='b'>b clicked: a b</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked: b</b>
         "
       `)
     })
@@ -167,12 +167,12 @@ describe('update store from nested block', () => {
       `)
       expect(s2).toMatchInlineSnapshot(`
         "
-        <b id='a'>a clicked: a</b><b id='b'>b clicked: a</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked:</b>
         "
       `)
       expect(s3).toMatchInlineSnapshot(`
         "
-        <b id='a'>a clicked: a b</b><b id='b'>b clicked: a b</b>
+        <b id='a'>a clicked: a</b><b id='b'>b clicked: a b</b>
         "
       `)
     })
@@ -433,8 +433,6 @@ test('event from root, sample and nested store', async () => {
   })
   expect(itemUpdates).toMatchInlineSnapshot(`
     Array [
-      "foo",
-      "bar",
       "baz",
     ]
   `)
