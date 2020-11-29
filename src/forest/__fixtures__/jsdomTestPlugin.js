@@ -1,6 +1,7 @@
 module.exports = babel => {
   const {types: t, template} = babel
-  const handledMethods = ['test', 'it']
+  const handledFunctions = ['test', 'it']
+  const handledMethods = ['only', 'skip']
   const provideGlobalsTemplate = template(
     'const {document, window, el, execFunc, exec, act} = provideGlobals()',
   )
@@ -24,9 +25,20 @@ module.exports = babel => {
           initBrowserTemplate(),
         )
       },
-      CallExpression(path) {
-        if (!handledMethods.includes(path.node.callee.name)) return
-        const body = path.node.arguments[1].body.body
+      CallExpression({node}) {
+        const callee = node.callee
+        if (!handledFunctions.includes(callee.name)) {
+          if (
+            !t.isMemberExpression(callee) ||
+            !t.isIdentifier(callee.object) ||
+            !t.isIdentifier(callee.property) ||
+            !handledFunctions.includes(callee.object.name) ||
+            !handledMethods.includes(callee.property.name)
+          ) {
+            return
+          }
+        }
+        const body = node.arguments[1].body.body
         const tryWrapper = t.tryStatement(
           t.blockStatement([...body]),
           null,
