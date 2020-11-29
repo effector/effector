@@ -14,19 +14,20 @@ on:
       - 'bsconfig.json'
 jobs:
   common-tests:
-    name: Test on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-
+    name: Test
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn
-        name: install deps
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install deps
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - run: yarn test
         name: tests
   publish-github:
@@ -38,8 +39,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - run: yarn
-        name: install deps
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install deps
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - run: yarn build
         name: build effector
       - name: set npm config
