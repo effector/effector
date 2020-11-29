@@ -7,6 +7,7 @@ The state manager
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Introduction](#introduction)
   - [Effector follows five basic principles:](#effector-follows-five-basic-principles)
 - [Installation](#installation)
@@ -15,6 +16,7 @@ The state manager
 - [Articles](#articles)
 - [Community](#community)
 - [Online playground](#online-playground)
+- [DevTools](#devtools)
 - [Examples](#examples)
   - [Increment/decrement with React](#incrementdecrement-with-react)
   - [Hello world with events and nodejs](#hello-world-with-events-and-nodejs)
@@ -131,7 +133,11 @@ For additional information, guides and api reference visit [our documentation si
 
 You can try effector in [our repl](https://share.effector.dev)
 
-Code sharing, Typescript and react supported out of the box; and of course, it [built with effector](https://github.com/effector/effector/tree/master/website/editor/src)
+Code sharing, Typescript and react supported out of the box. [REPL repository](https://github.com/effector/repl)
+
+## DevTools
+
+Use [effector-logger](https://github.com/effector/logger) for printing updates to console, displaying current store values with ui or connecting application to redux devtools
 
 ## Examples
 
