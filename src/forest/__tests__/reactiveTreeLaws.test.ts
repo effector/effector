@@ -1,4 +1,12 @@
-import {createStore, createEvent, sample, combine, forward} from 'effector'
+import {
+  createStore,
+  createEvent,
+  sample,
+  combine,
+  forward,
+  Event,
+  Store,
+} from 'effector'
 import {h, using, list, node, spec, remap} from 'forest'
 
 declare const act: (cb?: () => any) => Promise<void>
@@ -363,81 +371,155 @@ describe('store and event on a same level', () => {
     `)
   })
 })
+describe('event from root, sample and nested store', () => {
+  it('works when nested store is used', async () => {
+    const {itemUpdates} = await execFunc(async () => {
+      const itemUpdates = [] as string[]
+      const htmlSnapshots = [] as string[]
+      const selectItem = createEvent<string>()
 
-test('event from root, sample and nested store', async () => {
-  const {itemUpdates} = await execFunc(async () => {
-    const itemUpdates = [] as string[]
-    const htmlSnapshots = [] as string[]
-    const selectItem = createEvent<string>()
+      const currentFile = createStore('foo').on(selectItem, (_, file) => file)
 
-    const currentFile = createStore('foo').on(selectItem, (_, file) => file)
+      const openFile = createEvent<any>()
 
-    const openFile = createEvent<any>()
+      const files = createStore([{id: 'foo'}, {id: 'bar'}, {id: 'baz'}])
 
-    const files = createStore([{id: 'foo'}, {id: 'bar'}, {id: 'baz'}])
-
-    selectItem.watch(e => {
-      itemUpdates.push(e)
-    })
-    await new Promise((rs: any) => {
-      using(el, {
-        fn() {
-          h('ul', () => {
-            list({
-              source: files,
-              key: 'id',
-              fields: ['id'],
-              fn({fields: [id]}) {
-                h('li', {
-                  fn() {
-                    spec({text: id})
-                    sample({
-                      source: id,
-                      clock: openFile,
-                      target: selectItem,
-                    })
-                    const selected = combine(
-                      id,
-                      currentFile,
-                      (file, selectedFile) => file === selectedFile,
-                    )
-                    h('button', {
-                      handler: {click: openFile},
-                      attr: {disabled: selected, id},
-                      text: 'open',
-                    })
-                    h('span', {
-                      visible: selected,
-                      text: 'selected',
-                    })
-                  },
-                })
-              },
-            })
-          })
-        },
-        onComplete: rs,
+      selectItem.watch(e => {
+        itemUpdates.push(e)
       })
-    })
+      await new Promise((rs: any) => {
+        using(el, {
+          fn() {
+            h('ul', () => {
+              list({
+                source: files,
+                key: 'id',
+                fields: ['id'],
+                fn({fields: [id]}) {
+                  h('li', {
+                    fn() {
+                      spec({text: id})
+                      sample({
+                        source: id,
+                        clock: openFile,
+                        target: selectItem,
+                      })
+                      const selected = combine(
+                        id,
+                        currentFile,
+                        (file, selectedFile) => file === selectedFile,
+                      )
+                      h('button', {
+                        handler: {click: openFile},
+                        attr: {disabled: selected, id},
+                        text: 'open',
+                      })
+                      h('span', {
+                        visible: selected,
+                        text: 'selected',
+                      })
+                    },
+                  })
+                },
+              })
+            })
+          },
+          onComplete: rs,
+        })
+      })
 
-    await act(async () => {
-      el.querySelector<HTMLButtonElement>('#baz')!.click()
-    })
-    htmlSnapshots.push(el.innerHTML)
-    await act(async () => {
-      el.querySelector<HTMLButtonElement>('#baz')!.click()
-    })
-    htmlSnapshots.push(el.innerHTML)
+      await act(async () => {
+        el.querySelector<HTMLButtonElement>('#baz')!.click()
+      })
+      htmlSnapshots.push(el.innerHTML)
+      await act(async () => {
+        el.querySelector<HTMLButtonElement>('#baz')!.click()
+      })
+      htmlSnapshots.push(el.innerHTML)
 
-    return {itemUpdates, htmlSnapshots}
+      return {itemUpdates, htmlSnapshots}
+    })
+    expect(itemUpdates).toMatchInlineSnapshot(`
+      Array [
+        "baz",
+      ]
+    `)
   })
-  expect(itemUpdates).toMatchInlineSnapshot(`
-    Array [
-      "baz",
-    ]
-  `)
-})
+  it('works when nested store is not used', async () => {
+    const {itemUpdates} = await execFunc(async () => {
+      const itemUpdates = [] as string[]
+      const htmlSnapshots = [] as string[]
+      const selectItem = createEvent<string>()
 
+      const currentFile = createStore('foo').on(selectItem, (_, file) => file)
+
+      const openFile = createEvent<any>()
+
+      const files = createStore([{id: 'foo'}, {id: 'bar'}, {id: 'baz'}])
+
+      selectItem.watch(e => {
+        itemUpdates.push(e)
+      })
+      await new Promise((rs: any) => {
+        using(el, {
+          fn() {
+            h('ul', () => {
+              list({
+                source: files,
+                key: 'id',
+                fields: ['id'],
+                fn({fields: [id]}) {
+                  h('li', {
+                    fn() {
+                      spec({text: id})
+                      sample({
+                        source: id,
+                        clock: openFile,
+                        target: selectItem,
+                      })
+
+                      const selected = combine(
+                        id,
+                        currentFile,
+                        (file, selectedFile) => file === selectedFile,
+                      )
+                      h('button', {
+                        handler: {click: openFile},
+                        attr: {disabled: selected},
+                        text: 'open',
+                      })
+                      h('span', {
+                        visible: selected,
+                        text: 'selected',
+                      })
+                    },
+                  })
+                },
+              })
+            })
+          },
+          onComplete: rs,
+        })
+      })
+      const [, , baz] = [...el.querySelectorAll('button')]
+      await act(async () => {
+        baz.click()
+      })
+      htmlSnapshots.push(el.innerHTML)
+      await act(async () => {
+        baz.click()
+      })
+      htmlSnapshots.push(el.innerHTML)
+
+      return {itemUpdates, htmlSnapshots}
+    })
+    expect(itemUpdates).toMatchInlineSnapshot(`
+      Array [
+        "baz",
+      ]
+    `)
+  })
+})
 describe('getState support', () => {
   test('store from same level', async () => {
     expect(

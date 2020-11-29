@@ -260,8 +260,8 @@ const exec = () => {
             case STORE:
               if (!reg[data.store.id]) {
                 // if (!page.parent) {
-                stack.page = page = null
-                reg = graph.reg
+                stack.page = page = getPageForRef(page, data.store.id)
+                reg = page ? page.reg : graph.reg
                 // }
               }
               // value = getPageRef(page, graph, data.store.id).current
@@ -332,14 +332,18 @@ const exec = () => {
   currentPage = lastStartedState.currentPage
   forkPage = getForkPage(lastStartedState)
 }
-const getPageRef = (page: any, graph: Graph, id: string) => {
+const getPageForRef = (page: any, id: string) => {
   if (page) {
     while (page && !page.reg[id]) {
       page = getParent(page)
     }
-    if (page) return page.reg[id]
+    if (page) return page
   }
-  return graph.reg[id]
+  return null
+}
+const getPageRef = (page: any, graph: Graph, id: string) => {
+  const pageForRef = getPageForRef(page, id)
+  return (pageForRef ? pageForRef : graph).reg[id]
 }
 export const launch = (unit: any, payload?: any, upsert?: boolean) => {
   let page = currentPage
