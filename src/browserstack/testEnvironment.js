@@ -30,6 +30,7 @@ module.exports = class WebdriverEnvironment extends require('jest-environment-no
     const bsLocal = new Local()
     this.global.staticServer = server
     this.global.bsLocal = bsLocal
+    this.global.pageBaseUrl = this.options.baseUrl
     const bsArgs = {
       key: this.options.key,
     }
@@ -51,7 +52,9 @@ module.exports = class WebdriverEnvironment extends require('jest-environment-no
   }
   async teardown() {
     if (this.global.browser) {
-      await this.global.browser.deleteSession()
+      try {
+        await this.global.browser.deleteSession()
+      } catch (err) {}
     }
     if (this.global.bsLocal) {
       await new Promise((rs, rj) => {
