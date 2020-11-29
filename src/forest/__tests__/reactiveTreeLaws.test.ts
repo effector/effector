@@ -17,7 +17,7 @@ describe('update store from nested block', () => {
       const [s1, s2, s3] = await exec(async () => {
         const title = createStore('clicked:')
         const items = createStore(['a', 'b'])
-        await new Promise(rs => {
+        await new Promise((rs: any) => {
           using(el, {
             fn() {
               list(items, ({store}) => {
@@ -68,7 +68,7 @@ describe('update store from nested block', () => {
       const [s1, s2, s3] = await exec(async () => {
         const blocks = createStore(['A', 'B'])
         const items = createStore(['a', 'b'])
-        await new Promise(rs => {
+        await new Promise((rs: any) => {
           using(el, {
             fn() {
               list(blocks, ({store: block}) => {
@@ -134,7 +134,7 @@ describe('update store from nested block', () => {
       const [s1, s2, s3] = await exec(async () => {
         const title = createStore('clicked:')
         const items = createStore(['a', 'b'])
-        await new Promise(rs => {
+        await new Promise((rs: any) => {
           using(el, {
             fn() {
               list(items, ({store}) => {
@@ -180,7 +180,7 @@ describe('update store from nested block', () => {
       const [s1, s2, s3] = await exec(async () => {
         const blocks = createStore(['A', 'B'])
         const items = createStore(['a', 'b'])
-        await new Promise(rs => {
+        await new Promise((rs: any) => {
           using(el, {
             fn() {
               list(blocks, ({store: block}) => {
@@ -246,7 +246,7 @@ describe('update store from nested block', () => {
         count.watch(upd => {
           updates.push(upd)
         })
-        await new Promise(rs => {
+        await new Promise((rs: any) => {
           using(el, {
             onComplete: rs,
             fn() {
@@ -296,7 +296,7 @@ describe('store and event on a same level', () => {
   test('on support', async () => {
     const updates = await execFunc(async () => {
       const updates = [] as number[]
-      await new Promise(rs => {
+      await new Promise((rs: any) => {
         using(el, {
           onComplete: rs,
           fn() {
@@ -329,7 +329,7 @@ describe('store and event on a same level', () => {
   test('forward support', async () => {
     const updates = await execFunc(async () => {
       const updates = [] as number[]
-      await new Promise(rs => {
+      await new Promise((rs: any) => {
         using(el, {
           onComplete: rs,
           fn() {
