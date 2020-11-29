@@ -15,19 +15,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Get yarn cache
-        id: yarn-cache
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v1
-        env:
-          cache-name: root-deps
+      - uses: actions/cache@v2
         with:
-          path: ${{ steps.yarn-cache.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ env.cache-name }}-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-${{ env.cache-name }}-
-      - run: yarn
-        name: install deps
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install deps
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - run: yarn build
         name: build libs
       - run: yarn test --runInBand
