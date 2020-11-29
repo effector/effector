@@ -15,8 +15,13 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: install
-        run: yarn
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - name: Install deps
+        if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
       - name: set npm config
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN && npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
         env:
