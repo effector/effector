@@ -2,6 +2,32 @@
 
 See also [separate changelogs for each library](https://changelog.effector.dev/)
 
+## effector-react 21.2.0
+
+- Add `createGate` implementation to `effector-react/ssr`
+
+```jsx
+import {createDomain} from 'effector'
+import {createGate, useGate} from 'effector-react/ssr'
+
+const app = createDomain()
+
+const currentRouteGate = createGate({
+  domain: app,
+  defaultState: 'dashboard',
+})
+
+export const Layout = ({routeName, children}) => {
+  useGate(currentRouteGate, routeName)
+  return (
+    <>
+      <h1>{routeName}</h1>
+      {children}
+    </>
+  )
+}
+```
+
 ## effector-react 21.1.0
 
 - Add support for object and array of events to `useEvent`. It's a shorthand for calling several `useEvent` at once (PR [#425](https://github.com/effector/effector/pull/425) by [@sergeysova](https://github.com/sergeysova))
