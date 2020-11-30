@@ -1,9 +1,10 @@
 import * as React from 'react'
-import {Event, Effect, Fork} from 'effector'
+import {Event, Effect, Scope, Domain} from 'effector'
+import {Gate} from 'effector-react'
 
 export {useStore, useStoreMap, useList, useGate} from 'effector-react'
 
-export const Provider: React.Provider<Fork>
+export const Provider: React.Provider<Scope>
 
 /**
 bind event to scope
@@ -34,3 +35,9 @@ export function useEvent<
     ? (payload: P) => Promise<D>
     : never
 }
+
+export function createGate<State>(config: {
+  domain: Domain
+  defaultState?: State
+  name?: string
+}): Gate<State>

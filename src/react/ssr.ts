@@ -1,12 +1,12 @@
 import React from 'react'
-import {is, launch} from 'effector'
+import {Domain, is, launch} from 'effector'
 import {
   useStore as commonUseStore,
   useStoreMap as commonUseStoreMap,
 } from './useStore'
 import {useList as commonUseList} from './useList'
 import {withDisplayName} from './withDisplayName'
-import {useGate as commonUseGate} from './createGate'
+import {useGate as commonUseGate, createGateImplementation} from './createGate'
 import {Gate} from './index.h'
 
 function createDefer() {
@@ -26,6 +26,22 @@ function useScopeStore(store: any) {
   if (!scope)
     throw Error('No scope found, consider adding <Provider> to app root')
   return scope.find(store).meta.wrapped
+}
+
+export function createGate<Props>(config: {
+  domain: Domain
+  defaultState: Props
+  name?: string
+}) {
+  if (!config || !is.domain(config.domain))
+    throw Error('config.domain should exists')
+
+  return createGateImplementation({
+    domain: config.domain,
+    name: config.name,
+    defaultState: 'defaultState' in config ? config.defaultState : {},
+    hook: useGate,
+  })
 }
 
 export function useGate<Props>(
