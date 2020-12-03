@@ -441,7 +441,7 @@ function cloneGraph(unit: any) {
   }
   const forkPageSetter = step.compute({
     fn(data, _, stack) {
-      setForkPage(getForkPage(stack))
+      //setForkPage(getForkPage(stack))
       return data
     },
   })
