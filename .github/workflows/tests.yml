@@ -62,13 +62,16 @@ jobs:
           name: effector-packages-${{ github.run_id  }}
       - name: upload packages
         run: aws s3 sync ./npm s3://effector--canary/ --acl=public-read --delete --exclude '.git/*'
+      - name: calculate target dir
+        # 2260 - last build id in semaphore, 824 - corresponding github run
+        run: |
+          echo ::set-env name=TARGET_DIR::$(($RUN_NUMBER-824+2260))
+        env:
+          RUN_NUMBER: ${{ github.run_number }}
       - name: upload size report
         run: |
           aws s3 sync ./stats s3://effector-size-report/ --acl=public-read --delete --exclude '.git/*'
           aws s3 sync ./stats s3://effector-size-report-archive/$TARGET_DIR --acl=public-read --exclude '.git/*'
-        env:
-          # 2260 - last build id in semaphore, 824 - corresponding github run
-          TARGET_DIR: ${{ github.run_number - 824 + 2260 }}
   upload-coverage:
     name: Upload coverage stats
     needs: common-tests
