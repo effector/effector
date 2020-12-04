@@ -4,7 +4,7 @@ import {createDefer} from './defer'
 import {watchUnit} from './watch'
 import {is, isObject} from './is'
 import {throwError} from './throw'
-import {launch, forkPage, setForkPage} from './kernel'
+import {launch, forkPage, setForkPage, currentPage} from './kernel'
 import {createNode} from './createNode'
 import {step} from './typedef'
 import {Domain, Store} from './unit.h'
@@ -69,12 +69,12 @@ function fillValues({
   values: Record<string, any>
   collectWatches: boolean
 }) {
-  const storeWatches = []
-  const storeWatchesRefs = []
+  const storeWatches: Graph[] = []
+  const storeWatchesRefs: StateRef[] = []
   const refsMap = {} as Record<string, StateRef>
   const predefinedRefs = new Set()
   const valuesSidList = Object.getOwnPropertyNames(values)
-  for (const node of flatGraphUnits) {
+  forEach(flatGraphUnits, node => {
     const {reg} = node
     const {op, unit, sid} = node.meta
     if (unit === STORE) {
@@ -91,10 +91,10 @@ function fillValues({
         storeWatchesRefs.push(owner.scope.state)
       }
     }
-    for (const id in reg) {
-      refsMap[id] = reg[id]
-    }
-  }
+    forIn(reg, (ref, id) => {
+      refsMap[id] = ref
+    })
+  })
   const refGraph = createRefGraph(refsMap)
   const result = toposort(refGraph)
   forEach(result, id => {
@@ -108,7 +108,7 @@ function fillValues({
   function execRef(ref: StateRef) {
     let isFresh = false
     if (ref.before && !predefinedRefs.has(ref)) {
-      for (const cmd of ref.before) {
+      forEach(ref.before, cmd => {
         switch (cmd.type) {
           case MAP: {
             const from = cmd.from
@@ -131,11 +131,11 @@ function fillValues({
           case 'closure':
             break
         }
-      }
+      })
     }
     if (!ref.after) return
     const value = ref.current
-    for (const cmd of ref.after) {
+    forEach(ref.after, cmd => {
       const to = cmd.to
       // if (predefinedRefs.has(to)) continue
       switch (cmd.type) {
@@ -146,25 +146,25 @@ function fillValues({
           to.current = cmd.fn(value)
           break
       }
-    }
+    })
   }
 }
 
 function createRefGraph(refsMap: Record<string, StateRef>) {
   const items = Object.values(refsMap)
   const refGraph = {} as Record<string, string[]>
-  for (const {id} of items) {
+  forEach(items, ({id}) => {
     refGraph[id] = []
-  }
+  })
   //prettier-ignore
-  for (const {id, before, after} of items) {
+  forEach(items, ({id, before, after}) => {
     before && forEach(before, cmd => {
       refGraph[cmd.from.id].push(id)
     })
     after && forEach(after, cmd => {
       refGraph[id].push(cmd.to.id)
     })
-  }
+  })
   return refGraph
 }
 
@@ -181,21 +181,21 @@ export function serialize(
   const result = {} as Record<string, any>
   if (onlyChanges) {
     ignore = [...ignore]
-    for (const store of cloneOf.history.stores) {
+    forEach(cloneOf.history.stores, (store: Store<any>) => {
       if (getState(store) === store.defaultState) {
         ignore.push(store)
       }
-    }
+    })
   }
-  for (const {meta, scope, reg} of clones) {
-    if (meta.unit !== STORE) continue
+  forEach(clones, ({meta, scope, reg}) => {
+    if (meta.unit !== STORE) return
     const {sid} = meta
-    if (!sid) continue
+    if (!sid) return
     result[sid] = reg[scope.state.id].current
-  }
-  for (const {sid} of ignore) {
+  })
+  forEach(ignore, ({sid}) => {
     if (sid) delete result[sid]
-  }
+  })
   return result
 }
 
@@ -240,11 +240,11 @@ export function fork(
   if (handlers) {
     handlers = normalizeValues(handlers)
     const handlerKeys = Object.keys(handlers)
-    for (const {scope, meta} of forked.clones) {
+    forEach(forked.clones, ({scope, meta}) => {
       if (meta.sid && includes(handlerKeys, meta.sid)) {
         scope.runner.scope.getHandler = () => handlers[meta.sid]
       }
-    }
+    })
   }
   return forked
 
@@ -255,16 +255,16 @@ export function fork(
     const predefinedRefs = new Set()
     const templateOwnedRefs = new Set<string>()
     const valuesSidList = Object.getOwnPropertyNames(values)
-    for (const {reg, meta} of sourceList) {
+    forEach(sourceList, ({reg, meta}) => {
       const {nativeTemplate} = meta
-      for (const id in reg) {
-        sourceRefsMap[id] = reg[id]
+      forIn(reg, (ref, id) => {
+        sourceRefsMap[id] = ref
         if (nativeTemplate) {
           templateOwnedRefs.add(id)
         }
-      }
-    }
-    for (const node of forked.clones) {
+      })
+    })
+    forEach(forked.clones, node => {
       const {reg} = node
       const {unit, sid} = node.meta
       if (unit === STORE) {
@@ -274,10 +274,10 @@ export function fork(
           predefinedRefs.add(state)
         }
       }
-      for (const id in reg) {
-        refsMap[id] = reg[id]
-      }
-    }
+      forIn(reg, (ref, id) => {
+        refsMap[id] = ref
+      })
+    })
     const refGraph = createRefGraph(sourceRefsMap)
     const result = toposort(refGraph, templateOwnedRefs)
     forEach(result, id => {
@@ -287,7 +287,7 @@ export function fork(
     function execRef(ref: StateRef, sourceRef?: StateRef) {
       let isFresh = false
       if (sourceRef && sourceRef.before && !predefinedRefs.has(ref)) {
-        for (const cmd of sourceRef.before) {
+        forEach(sourceRef.before, cmd => {
           switch (cmd.type) {
             case MAP: {
               const from = refsMap[cmd.from.id]
@@ -310,11 +310,11 @@ export function fork(
             case 'closure':
               break
           }
-        }
+        })
       }
       if (!sourceRef || !sourceRef.after) return
       const value = ref.current
-      for (const cmd of sourceRef.after) {
+      forEach(sourceRef.after, cmd => {
         const to = refsMap[cmd.to.id]
         // if (predefinedRefs.has(to)) continue
         switch (cmd.type) {
@@ -325,7 +325,7 @@ export function fork(
             to.current = cmd.fn(value)
             break
         }
-      }
+      })
     }
   }
 }
@@ -510,8 +510,7 @@ function cloneGraph(unit: any) {
       scope,
       meta: {onCopy, op, unit},
     } = node
-    for (const id in reg) {
-      const ref = reg[id]
+    forIn(reg, (ref, id) => {
       let newRef = refs.get(ref)
       if (!newRef) {
         newRef = {
@@ -521,11 +520,11 @@ function cloneGraph(unit: any) {
         refs.set(ref, newRef)
       }
       page[id] = reg[id] = newRef
-    }
+    })
     if (onCopy) {
-      for (let j = 0; j < onCopy.length; j++) {
-        scope[onCopy[j]] = findClone(scope[onCopy[j]])
-      }
+      forEach(onCopy, (copyField: string) => {
+        scope[copyField] = findClone(scope[copyField])
+      })
     }
     forEachRelatedNode(node, (node, i, siblings) => {
       siblings[i] = findClone(node)
