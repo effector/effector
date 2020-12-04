@@ -108,7 +108,7 @@ jobs:
         run: yarn install --frozen-lockfile
       - uses: actions/download-artifact@v2
         with:
-          name: effector-packages-${{ github.run_id  }}
+          name: effector-packages-${{ github.run_id }}
       - run: yarn browserstack
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.browserstack_username }}
@@ -117,7 +117,7 @@ jobs:
         if: failure()
         run: echo 'cannot run compat tests'
   publish-github:
-    needs: common-tests
+    needs: [common-tests, build-packages]
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
     steps:
@@ -130,6 +130,9 @@ jobs:
           key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
       - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+      - uses: actions/download-artifact@v2
+        with:
+          name: effector-packages-${{ github.run_id }}
       - name: set npm config
         run: npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
         env:
