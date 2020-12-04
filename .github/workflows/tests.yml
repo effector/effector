@@ -11,7 +11,6 @@ on:
       - 'jest.config.js'
       - 'package.json'
       - 'yarn.lock'
-      - 'bsconfig.json'
 jobs:
   common-tests:
     name: Test
@@ -19,17 +18,101 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with:
-          node-version: 12
+        with: {node-version: 12}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Install deps
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
       - run: yarn test
-        name: tests
+  build-packages:
+    name: Build packages
+    needs: common-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with: {node-version: 12}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - run: yarn build
+      - uses: actions/upload-artifact@v2
+        with:
+          name: effector-packages-${{ github.run_id  }}
+          path: |
+            npm/**
+            stats/**
+  publish-canary:
+    needs: build-packages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/')
+    env:
+      AWS_DEFAULT_REGION: eu-west-1
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_build_uploader_access_key }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws_build_uploader_access_key_id }}
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/download-artifact@v2
+        with:
+          name: effector-packages-${{ github.run_id  }}
+      - name: upload packages
+        run: aws s3 sync ./npm s3://effector--canary/ --acl=public-read --delete --exclude '.git/*'
+      - name: upload size report
+        run: |
+          aws s3 sync ./stats s3://effector-size-report/ --acl=public-read --delete --exclude '.git/*'
+          aws s3 sync ./stats s3://effector-size-report-archive/$TARGET_DIR --acl=public-read --exclude '.git/*'
+        env:
+          # 2260 - last build id in semaphore, 824 - corresponding github run
+          TARGET_DIR: ${{ github.run_number - 824 + 2260 }}
+  upload-coverage:
+    name: Upload coverage stats
+    needs: common-tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with: {node-version: 12}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - run: yarn coverage
+      - run: aws s3 sync ./coverage/lcov-report s3://effector-coverage/ --acl=public-read --delete --exclude '.git/*'
+        env:
+          AWS_DEFAULT_REGION: eu-west-1
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.aws_build_uploader_access_key }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.aws_build_uploader_access_key_id }}
+  compat-tests:
+    name: Compat tests
+    needs: [common-tests, build-packages]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with: {node-version: 12}
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+      - uses: actions/download-artifact@v2
+        with:
+          name: effector-packages-${{ github.run_id  }}
+      - run: yarn browserstack
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.browserstack_username }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.browserstack_access_key }}
+      - name: compat tests fallback
+        if: failure()
+        run: echo 'cannot run compat tests'
   publish-github:
     needs: common-tests
     runs-on: ubuntu-latest
@@ -37,17 +120,13 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
-        with:
-          node-version: 12
+        with: {node-version: 12}
       - uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: node-12-modules-${{ hashFiles('**/yarn.lock') }}
-      - name: Install deps
-        if: steps.yarn-cache.outputs.cache-hit != 'true'
+      - if: steps.yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
-      - run: yarn build
-        name: build effector
       - name: set npm config
         run: npm config set //npm.pkg.github.com/:_authToken $GITHUB_TOKEN
         env:
