@@ -162,10 +162,10 @@ export function createEvent<Payload = any>(
     meta: initUnit(EVENT, event, maybeConfig, nameOrConfig),
   })
   //eslint-disable-next-line no-unused-vars
-  event.create = (payload: any, _: any) => {
+  event.create = (params: any, _: any) => {
     const target = forkPage ? forkPage.find(event) : event
-    launch(target, payload)
-    return payload
+    launch(target, params)
+    return params
   }
   event.watch = bind(watchUnit, event)
   event.map = (fn: any) => {

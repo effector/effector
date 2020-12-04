@@ -14,13 +14,8 @@ import {addToRegion} from './region'
 import {forIn} from './collection'
 import {getParent} from './getter'
 import {DOMAIN} from './tag'
-import {launch} from './kernel'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
-  trigger.create = payload => {
-    launch(trigger, payload)
-    return payload
-  }
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
