@@ -63,9 +63,9 @@ jobs:
       - name: upload packages
         run: aws s3 sync ./npm s3://effector--canary/ --acl=public-read --delete --exclude '.git/*'
       - name: calculate target dir
+        shell: bash
         # 2260 - last build id in semaphore, 824 - corresponding github run
-        run: |
-          echo ::set-env name=TARGET_DIR::$(($RUN_NUMBER-824+2260))
+        run: echo "TARGET_DIR=$(($RUN_NUMBER-824+2260))" >> $GITHUB_ENV
         env:
           RUN_NUMBER: ${{ github.run_number }}
       - name: upload size report
