@@ -196,7 +196,7 @@ export const onSettled = ({
     forkPage: getForkPage(stack),
   })
 
-const sidechain = createNode({
+export const sidechain = createNode({
   node: [
     step.run({
       fn({fn, value}) {
