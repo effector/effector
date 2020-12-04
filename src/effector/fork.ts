@@ -204,15 +204,24 @@ export function scopeBind(unit: any) {
   if (!forkPage) {
     throwError('scopeBind cannot be called outside of forked .watch')
   }
-  const result = forkPage.find(unit)
-  const savedStack = forkPage
-  return (payload: any) => {
-    launch({
-      target: result,
-      params: payload,
-      forkPage: savedStack,
-    })
-  }
+  const savedForkPage = forkPage
+  const localUnit = forkPage.find(unit)
+  return is.effect(unit)
+    ? (params: any) => {
+        const req = createDefer()
+        launch({
+          target: localUnit,
+          params: {
+            params,
+            req,
+          },
+          forkPage: savedForkPage,
+        })
+      }
+    : (params: any) => {
+        launch({target: localUnit, params, forkPage: savedForkPage})
+        return params
+      }
 }
 
 function normalizeValues(values: Map<Store<any>, any> | Record<string, any>) {
