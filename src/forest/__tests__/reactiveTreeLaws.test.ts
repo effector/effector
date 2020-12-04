@@ -9,6 +9,8 @@ import {
 } from 'effector'
 import {h, using, list, node, spec, remap} from 'forest'
 
+import prettyHtml from 'effector/fixtures/prettyHtml'
+
 declare const act: (cb?: () => any) => Promise<void>
 declare const initBrowser: () => Promise<void>
 declare const el: HTMLElement
@@ -446,7 +448,7 @@ describe('event from root, sample and nested store', () => {
     `)
   })
   it('works when nested store is not used', async () => {
-    const {itemUpdates} = await execFunc(async () => {
+    const {itemUpdates, htmlSnapshots} = await execFunc(async () => {
       const itemUpdates = [] as string[]
       const htmlSnapshots = [] as string[]
       const selectItem = createEvent<string>()
@@ -490,7 +492,7 @@ describe('event from root, sample and nested store', () => {
                       })
                       h('span', {
                         visible: selected,
-                        text: 'selected',
+                        text: [id, ' selected'],
                       })
                     },
                   })
@@ -517,6 +519,21 @@ describe('event from root, sample and nested store', () => {
       Array [
         "baz",
       ]
+    `)
+    expect(prettyHtml(htmlSnapshots[0])).toMatchInlineSnapshot(`
+      "
+      <ul>
+        <li>
+          foo<button disabled='true'>open</button
+          ><span>foo selected</span>
+        </li>
+        <li>bar<button>open</button></li>
+        <li>
+          baz<button disabled='true'>open</button
+          ><span>baz selected</span>
+        </li>
+      </ul>
+      "
     `)
   })
 })
