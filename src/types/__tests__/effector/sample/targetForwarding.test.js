@@ -152,7 +152,11 @@ describe('should fail when nullable field passed to strict target', () => {
     expect(typecheck).toMatchInlineSnapshot(`
       "
       --typescript--
-      no errors
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
 
       --flow--
       Cannot call 'sample' with object literal bound to 'config'

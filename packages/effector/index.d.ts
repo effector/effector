@@ -564,7 +564,7 @@ export function sample<A>(config: {
   greedy?: boolean
 }): Unit<A>
 export function sample<A>(config: {
-  source: Unit<A>
+  source: Unit<NoInfer<A>>
   target: Unit<A>
   greedy?: boolean
 }): Unit<A>
