@@ -138,6 +138,72 @@ it('should fail when a target receives a more loose value type from a mapping fn
     "
   `)
 })
+describe('should fail when nullable field passed to strict target', () => {
+  test('without clock', () => {
+    const source = createStore<{foo: string, bar: string | null}>({
+      foo: '',
+      bar: null,
+    })
+    const target = createEffect<{foo: string, bar: string}, void, Error>()
+    sample({
+      source,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      no errors
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({
+               ^...
+        string [1] is incompatible with null [2] in property 'bar' of type argument 'T' [3] of property 'target'. [incompatible-call]
+            const target = createEffect<{foo: string, bar: string}, void, Error>()
+                                                       [1] ^^^^^^
+            const source = createStore<{foo: string, bar: string | null}>({
+                                                               [2] ^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+  test('with clock store', () => {
+    const source = createStore<{foo: string, bar: string | null}>({
+      foo: '',
+      bar: null,
+    })
+    const clock = createStore<string | null>(null)
+    const target = createEffect<{foo: string, bar: string}, void, Error>()
+    sample({
+      source,
+      clock,
+      target,
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      --typescript--
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+
+      --flow--
+      Cannot call 'sample' with object literal bound to 'config'
+        sample({
+               ^...
+        string [1] is incompatible with null [2] in property 'bar' of type argument 'T' [3] of property 'target'. [incompatible-call]
+            const target = createEffect<{foo: string, bar: string}, void, Error>()
+                                                       [1] ^^^^^^
+            const source = createStore<{foo: string, bar: string | null}>({
+                                                               [2] ^^^^
+            export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
+                              [3] ^
+      "
+    `)
+  })
+})
 describe('edge case for {} type', () => {
   it('should fail when a target receives a more loose value type from a source', () => {
     const source = createStore({})
