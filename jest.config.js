@@ -59,7 +59,8 @@ module.exports = {
               ],
               transform,
               testTimeout: 120e3,
-              runner: './src/forest/__fixtures__/browserstackTestRunner.js',
+              runner:
+                './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
             },
           },
         ]

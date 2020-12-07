@@ -32,9 +32,8 @@ const domTestsPath = join('forest', '__tests__')
 const domSSRTestsPath = join('forest', '__tests__', 'ssr')
 const jsdomTestPlugin = resolvePath(
   __dirname,
-  'src',
-  'forest',
-  '__fixtures__',
+  'tools',
+  'remoteDeviceTestRunner',
   'jsdomTestPlugin.js',
 )
 

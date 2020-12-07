@@ -7,7 +7,7 @@ const {promises} = require('fs')
 // const jasmine2 = require('jest-jasmine2')
 const {remote} = require('webdriverio')
 
-const prettyHtml = require('../../fixtures/prettyHtml')
+const prettyHtml = require('../../src/fixtures/prettyHtml')
 
 const browserStackConfig = {
   user: process.env.BROWSERSTACK_USERNAME,
@@ -59,14 +59,12 @@ async function loadModules() {
     __dirname,
     '..',
     '..',
-    '..',
     'npm',
     'effector',
     'effector.cjs.js',
   )
   const forestPath = resolve(
     __dirname,
-    '..',
     '..',
     '..',
     'npm',
