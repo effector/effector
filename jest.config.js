@@ -35,6 +35,83 @@ const createDefaultConfig = () => ({
   // roots: ['<rootDir>/src/'],
 })
 
+const compatBrowsers = [
+  {
+    name: 'IE 11',
+    effectorBuild: 'compat',
+    needPolyfill: true,
+    noAsyncAwait: true,
+    capabilitiesTag: 'ie',
+    capabilities: {
+      'bstack:options': {
+        os: 'Windows',
+        osVersion: '7',
+        projectName: 'effector-compat',
+        buildName: 'IE 11',
+        seleniumVersion: '3.141.59',
+        ie: {
+          noFlash: 'true',
+          driver: '3.141.59',
+        },
+      },
+      browserName: 'IE',
+      browserVersion: '11.0',
+    },
+  },
+  {
+    name: 'Chrome TV',
+    effectorBuild: 'compat',
+    needPolyfill: false,
+    noAsyncAwait: true,
+    capabilitiesTag: 'chromeTV',
+    capabilities: {
+      'bstack:options': {
+        os: 'OS X',
+        osVersion: 'Mojave',
+        projectName: 'effector-compat',
+        buildName: 'Chrome TV',
+        seleniumVersion: '3.141.59',
+      },
+      browserName: 'Chrome',
+      browserVersion: '47.0',
+      // 'browserstack.localIdentifier': 'Test123',
+    },
+  },
+  {
+    name: 'iPhone XS',
+    effectorBuild: 'cjs',
+    needPolyfill: false,
+    capabilitiesTag: 'ios',
+    capabilities: {
+      'bstack:options': {
+        osVersion: '12',
+        deviceName: 'iPhone XS',
+        realMobile: 'true',
+        projectName: 'effector-compat',
+        buildName: 'iPhone XS',
+        deviceOrientation: 'portrait',
+      },
+    },
+  },
+  {
+    name: 'macos Safari',
+    effectorBuild: 'cjs',
+    needPolyfill: false,
+    capabilitiesTag: 'macos',
+    capabilities: {
+      'bstack:options': {
+        os: 'OS X',
+        osVersion: 'Mojave',
+        projectName: 'effector-compat',
+        buildName: 'macos Safari',
+        seleniumVersion: '3.141.59',
+      },
+      browserName: 'Safari',
+      browserVersion: '12.1',
+    },
+  },
+]
+
 module.exports = {
   collectCoverage: boolean(process.env.COVERAGE, false),
   collectCoverageFrom: [
@@ -44,6 +121,7 @@ module.exports = {
     '!**/node_modules/**',
     '!**/__tests__/**',
     '!**/*.test.js',
+    '!**/*.test.ts',
   ],
   watchPathIgnorePatterns,
   projects: createProjectList(
@@ -53,17 +131,35 @@ module.exports = {
             forestBrowser: {
               automock: false,
               testEnvironment: 'node',
-              testMatch: [
-                '<rootDir>/src/forest/__tests__/**/*.test.ts',
-                '!<rootDir>/src/forest/__tests__/ssr/**',
-              ],
+              testMatch: ['<rootDir>/src/forest/__tests__/**/*.test.ts'],
+              testPathIgnorePatterns: ['<rootDir>/src/forest/__tests__/ssr/'],
               transform,
               testTimeout: 120e3,
               runner:
                 './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
+              globals: {
+                needForest: true,
+                effectorBuild: 'cjs',
+                needPolyfill: false,
+                capabilitiesTag: 'forest',
+                noAsyncAwait: false,
+                capabilities: {
+                  'bstack:options': {
+                    os: 'OS X',
+                    osVersion: 'Mojave',
+                    projectName: 'forest',
+                    buildName: 'macos Safari',
+                    seleniumVersion: '3.141.59',
+                  },
+                  browserName: 'Safari',
+                  browserVersion: '12.1',
+                },
+              },
             },
           },
         ]
+      : boolean(process.env.COMPAT, false)
+      ? [createCompatProjects(compatBrowsers)]
       : [
           {
             effector: {
@@ -141,6 +237,36 @@ function createProjectList(items) {
     }
   }
   return list
+}
+
+function createCompatProjects(browsers) {
+  const projects = {}
+  for (const {
+    name,
+    effectorBuild,
+    needPolyfill,
+    capabilitiesTag,
+    capabilities,
+    noAsyncAwait = false,
+  } of browsers) {
+    projects[`compat/${name}`] = {
+      automock: false,
+      testEnvironment: 'node',
+      testMatch: ['<rootDir>/src/compat/**/*.test.ts'],
+      transform,
+      testTimeout: 120e3,
+      runner: './tools/remoteDeviceTestRunner/browserstackTestRunner.js',
+      globals: {
+        needForest: false,
+        effectorBuild,
+        needPolyfill,
+        capabilitiesTag,
+        capabilities,
+        noAsyncAwait,
+      },
+    }
+  }
+  return projects
 }
 
 function boolean(

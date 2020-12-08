@@ -154,7 +154,7 @@ const babelConfig = {
         return (
           filename &&
           filename.includes('__tests__') &&
-          !filename.includes('browserstack') &&
+          !filename.includes('compat') &&
           !filename.includes('observable')
         )
       },

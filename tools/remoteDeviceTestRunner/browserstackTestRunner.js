@@ -1,4 +1,4 @@
-/*eslint-disable max-len, no-eval*/
+/*eslint-disable max-len, no-eval, prefer-arrow-callback, no-var*/
 require('dotenv').config()
 
 const {resolve} = require('path')
@@ -6,8 +6,6 @@ const {promises} = require('fs')
 
 // const jasmine2 = require('jest-jasmine2')
 const {remote} = require('webdriverio')
-
-const prettyHtml = require('../../src/fixtures/prettyHtml')
 
 const browserStackConfig = {
   user: process.env.BROWSERSTACK_USERNAME,
@@ -18,19 +16,19 @@ const browserStackConfig = {
   strict: true,
   capabilities: {
     'bstack:options': {
-      os: 'OS X',
-      osVersion: 'Mojave',
-      projectName: 'forest',
-      buildName: 'macos Safari',
-      seleniumVersion: '3.141.59',
+      // os: 'OS X',
+      // osVersion: 'Mojave',
+      // projectName: 'forest',
+      // buildName: 'macos Safari',
+      // seleniumVersion: '3.141.59',
       userName: process.env.BROWSERSTACK_USERNAME,
       accessKey: process.env.BROWSERSTACK_ACCESS_KEY,
       // local: 'true',
       // debug: 'true',
       // video: 'true',
     },
-    browserName: 'Safari',
-    browserVersion: '12.1',
+    // browserName: 'Safari',
+    // browserVersion: '12.1',
     // browserVersion: '79.0',
     // 'browserstack.localIdentifier': 'Test123',
     'browserstack.use_w3c': true,
@@ -48,35 +46,88 @@ const browserStackConfig = {
   host: 'hub.browserstack.com',
 }
 
+function createBrowserstackConfig(capabilities) {
+  return {
+    ...browserStackConfig,
+    capabilities: {
+      ...browserStackConfig.capabilities,
+      ...capabilities,
+      'bstack:options': {
+        ...browserStackConfig.capabilities['bstack:options'],
+        ...capabilities['bstack:options'],
+      },
+    },
+  }
+}
+
 if (!browserStackConfig.user || !browserStackConfig.key) {
   throw Error(
     `BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY env variables must be set`,
   )
 }
 
-async function loadModules() {
-  const effectorPath = resolve(
-    __dirname,
-    '..',
-    '..',
-    'npm',
-    'effector',
-    'effector.cjs.js',
-  )
-  const forestPath = resolve(
-    __dirname,
-    '..',
-    '..',
-    'npm',
-    'forest',
-    'forest.cjs.js',
-  )
-  const [effector, dom] = await Promise.all([
-    promises.readFile(effectorPath, 'utf8'),
-    promises.readFile(forestPath, 'utf8'),
-  ])
+const effectorCjsPath = resolve(
+  __dirname,
+  '..',
+  '..',
+  'npm',
+  'effector',
+  'effector.cjs.js',
+)
+const effectorCompatPath = resolve(
+  __dirname,
+  '..',
+  '..',
+  'npm',
+  'effector',
+  'compat.js',
+)
+const forestPath = resolve(
+  __dirname,
+  '..',
+  '..',
+  'npm',
+  'forest',
+  'forest.cjs.js',
+)
 
-  return {effector, dom}
+const polyfillPath = resolve(
+  __dirname,
+  '..',
+  '..',
+  'node_modules',
+  '@babel',
+  'polyfill',
+  'dist',
+  'polyfill.js',
+)
+
+const moduleRequests = {
+  cjs: {
+    path: effectorCjsPath,
+  },
+  compat: {
+    path: effectorCompatPath,
+  },
+  forest: {
+    path: forestPath,
+  },
+  polyfill: {
+    path: polyfillPath,
+  },
+}
+
+function moduleRequest(name, field, result) {
+  if (!moduleRequests[name].req) {
+    moduleRequests[name].req = promises.readFile(
+      moduleRequests[name].path,
+      'utf8',
+    )
+  }
+  moduleRequests[name].req.then(code => {
+    result[field] = code
+  })
+  return moduleRequests[name].req
 }
 
 module.exports = class BSTestRunner extends require('jest-runner') {
@@ -86,17 +137,30 @@ module.exports = class BSTestRunner extends require('jest-runner') {
     this.__PRIVATE_UNSTABLE_API_supportsEventEmitters__ = false
   }
   async runTests(tests, watcher, onStart, onResult, onFailure, options) {
-    const modulesReq = loadModules()
-    const browserReq = remote(browserStackConfig)
-    let browserInstance
+    const browserRequests = {}
+    function requestBrowser(tag, config) {
+      if (!browserRequests[tag]) {
+        browserRequests[tag] = remote(createBrowserstackConfig(config))
+      }
+      return browserRequests[tag]
+    }
+    const browserInstances = []
     try {
       return await super.runTests(
         tests,
         watcher,
         async test => {
+          const {
+            needForest,
+            effectorBuild,
+            needPolyfill,
+            capabilitiesTag,
+            capabilities,
+            noAsyncAwait,
+          } = test.context.config.globals
           let browser
           try {
-            browser = browserInstance = await browserReq
+            browser = await requestBrowser(capabilitiesTag, capabilities)
           } catch (error) {
             console.error('remote() call error', error)
             if (error && error.message)
@@ -112,23 +176,68 @@ module.exports = class BSTestRunner extends require('jest-runner') {
               throw error
             }
           }
-          const {effector, dom} = await modulesReq
-          const modulesList = [
-            {
-              name: 'effector',
-              src: effector,
-            },
-            {
+
+          const libs = {}
+          const moduleRequests = []
+          if (needPolyfill) {
+            moduleRequests.push(moduleRequest('polyfill', 'polyfill', libs))
+          }
+          moduleRequests.push(moduleRequest(effectorBuild, 'effector', libs))
+          if (needForest) {
+            moduleRequests.push(moduleRequest('forest', 'forest', libs))
+          }
+          await Promise.all(moduleRequests)
+          const modulesList = []
+          if (needPolyfill) {
+            modulesList.push({
+              name: 'polyfill',
+              src: libs.polyfill,
+            })
+          }
+          modulesList.push({
+            name: 'effector',
+            src: libs.effector,
+          })
+          if (needForest) {
+            modulesList.push({
               name: 'forest',
-              src: dom,
-            },
-          ]
+              src: libs.forest,
+            })
+          }
           // if (browser.isChrome) browser.takeHeapSnapshot
           const execFunc = async cb => {
-            const result = await browser.executeAsync(
-              execAsyncCode,
-              typeof cb === 'function' ? cb.toString() : cb,
-            )
+            let cbText = typeof cb === 'function' ? cb.toString() : cb
+            if (noAsyncAwait) {
+              const {transformSync} = require('@babel/core')
+              cbText = transformSync(cbText, {
+                babelrc: false,
+                filename: 'execFunc.js',
+                sourceType: 'script',
+                sourceMaps: false,
+                presets: [
+                  [
+                    '@babel/preset-env',
+                    {
+                      loose: true,
+                      useBuiltIns: 'entry',
+                      corejs: 3,
+                      modules: false,
+                      shippedProposals: true,
+                      targets: ['Chrome 47', 'IE 11'],
+                    },
+                  ],
+                ],
+                plugins: [
+                  [
+                    'babel-plugin-transform-async-to-promises',
+                    {
+                      inlineHelpers: true,
+                    },
+                  ],
+                ],
+              }).code.slice(1, -2)
+            }
+            const result = await browser.executeAsync(execAsyncCode, cbText)
             if (Object(result).error) {
               throw result.error
             }
@@ -139,7 +248,10 @@ module.exports = class BSTestRunner extends require('jest-runner') {
             await (${typeof cb === 'function' ? cb.toString() : cb})()
             return domSnapshots
           }`).then(result => {
-              if (Array.isArray(result)) return result.map(prettyHtml)
+              if (Array.isArray(result)) {
+                const prettyHtml = require('../../src/fixtures/prettyHtml')
+                return result.map(prettyHtml)
+              }
               return result
             })
           test.context.config = {
@@ -156,20 +268,12 @@ module.exports = class BSTestRunner extends require('jest-runner') {
           return test
         },
         async (test, result) => {
-          // console.log(test)
-          // await test.context.config.globals.browser.deleteSession()
           if (typeof onResult === 'function')
             return await onResult(test, result)
           return result
         },
         async (test, result) => {
-          // console.log(test)
           console.error('onFailure result:', result)
-          // try {
-          //   await test.context.config.globals.browser.deleteSession()
-          // } catch (error) {
-          //   console.error(`onFailure session error: ${error && error.message}`)
-          // }
           if (typeof onFailure === 'function')
             return await onFailure(test, result)
           return result
@@ -177,34 +281,61 @@ module.exports = class BSTestRunner extends require('jest-runner') {
         options,
       )
     } finally {
-      if (browserInstance) {
-        try {
-          await browserInstance.deleteSession()
-        } catch (err) {}
-      }
+      await Promise.all(
+        browserInstances.map(async browser => {
+          try {
+            await browser.deleteSession()
+          } catch (err) {}
+        }),
+      )
     }
   }
 }
-async function execAsyncCode(cb, done) {
+function execAsyncCode(cb, done) {
   console.log('cb', cb)
   try {
-    done(await eval(`(${cb})()`))
+    var evaluated = eval('(' + cb + ')()')
+    return Promise.resolve(evaluated)
+      .then(function(result) {
+        done(result)
+      })
+      .catch(function(error) {
+        document.body.innerHTML =
+          '<h1>' +
+          JSON.stringify(error.message) +
+          '</h1><h2>' +
+          JSON.stringify(error) +
+          '</h2>'
+        //prettier-ignore
+        console.log('error! (async)', JSON.stringify(error.message), JSON.stringify(error))
+        done({error: error})
+      })
   } catch (error) {
-    console.log('error!', error.message)
-    done({error})
+    document.body.innerHTML =
+      '<h1>' +
+      JSON.stringify(error.message) +
+      '</h1><h2>' +
+      JSON.stringify(error) +
+      '</h2>'
+    //prettier-ignore
+    console.log('error! (sync)', JSON.stringify(error.message), JSON.stringify(error))
+    done({error: error})
+    return Promise.resolve()
   }
 }
 function initPageRuntime(modules) {
-  const loadedModules = {}
-  const domSnapshots = (window.domSnapshots = [])
-  window.requireModule = window.require = path => {
+  var loadedModules = {}
+  var domSnapshots = (window.domSnapshots = [])
+  window.requireModule = window.require = function(path) {
     if (path in loadedModules) return loadedModules[path]
-    throw Error(`module "${path}" not found`)
+    throw Error('module "' + path + '" not found')
   }
-  const evalModule = (window.evalModule = ({name, src}) => {
-    const exports = {}
+  var evalModule = (window.evalModule = function(mod) {
+    var name = mod.name
+    var src = mod.src
+    var exports = {}
     window.exports = exports
-    window.module = {exports}
+    window.module = {exports: exports}
     try {
       eval(src)
       loadedModules[name] = window.module.exports
@@ -217,35 +348,47 @@ function initPageRuntime(modules) {
     }
     return loadedModules[name]
   })
-  const addGlobals = (window.addGlobals = shape => {
-    for (const key in shape) {
+  var addGlobals = (window.addGlobals = function(shape) {
+    Object.keys(shape).forEach(function(key) {
       window[key] = shape[key]
-    }
+    })
     return shape
   })
-  const el = document.createElement('div')
+  var el = document.createElement('div')
   el.id = 'root'
   document.body.appendChild(el)
+  //prettier-ignore
   addGlobals({
-    el,
-    readHTML: () => el.innerHTML,
+    el: el,
+    readHTML: function () {return el.innerHTML},
     _effectorFileName: 'no_file',
-    async act(cb) {
+    act: function act(cb) {
       if (cb) {
-        await cb()
+        try {
+          var cbResult = Promise.resolve(cb())
+          return cbResult
+            .then(function() {
+              return new Promise(function (rs) {setTimeout(rs, 500)})
+            })
+            .then(function () {
+              domSnapshots.push(el.innerHTML)
+            })
+        } catch (err) {
+          return Promise.reject(err)
+        }
       }
-      await new Promise(rs => setTimeout(rs, 500))
-      domSnapshots.push(el.innerHTML)
-    },
+      return new Promise(function (rs) {setTimeout(rs, 500)})
+        .then(function() {
+          domSnapshots.push(el.innerHTML)
+        })
+    }
   })
   modules.forEach(evalModule)
-  const {effector, dom} = addGlobals({
-    effector: requireModule('effector'),
-    dom: requireModule('forest'),
-  })
-
+  //prettier-ignore
   addGlobals({
-    _effector: effector,
-    _forest: dom,
+    effector: loadedModules.effector,
+    forest: loadedModules.forest || null,
+    _effector: loadedModules.effector,
+    _forest: loadedModules.forest || null
   })
 }

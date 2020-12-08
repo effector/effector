@@ -10,12 +10,6 @@ Run on each commmit on [CI](https://semaphoreci.com/effector/effector/branches/m
 yarn browserstack
 ```
 
-This is an alias for running jest tests with [that](https://github.com/effector/effector/blob/master/src/browserstack/jest.config.js) config
-
-```bash
-npx jest --config='src/browserstack/jest.config.js' --runInBand
-```
-
 These tests expects `.env` file with variables `BROWSERSTACK_USERNAME` and `BROWSERSTACK_ACCESS_KEY`
 
 ```
