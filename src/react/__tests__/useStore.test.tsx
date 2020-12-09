@@ -90,6 +90,27 @@ describe('useStore', () => {
       ]
     `)
   })
+  it('should always retrigger, when store contains function', async () => {
+    const fn = jest.fn()
+    const changeStore = createEvent()
+    const $store = createStore(() => 0).on(changeStore, (_, p) => p)
+
+    const Display = () => {
+      const store = useStore($store)
+      fn()
+      return null
+    }
+
+    await render(<Display />)
+
+    expect(fn).toHaveBeenCalledTimes(1)
+    
+    await act(async () => {
+      changeStore(() => 0)
+    })
+
+    expect(fn).toHaveBeenCalledTimes(2)
+  })
   it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
     const fx = createEffect({
