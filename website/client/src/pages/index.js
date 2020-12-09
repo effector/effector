@@ -14,21 +14,22 @@ const codeExample = `import {createEvent, createStore, createEffect, sample} fro
 const nextPost = createEvent()
 
 const getCommentsFx = createEffect(async postId => {
-  const url = \`https://jsonplaceholder.typicode.com/posts/\${postId}/comments\`
-  const req = await fetch(url)
+  const url = \`posts/\${postId}/comments\`
+  const base = 'https://jsonplaceholder.typicode.com'
+  const req = await fetch(\`\${base}\/\${url}\`)
   return req.json()
 })
 
-const $currentPost = createStore(1)
-	.on(getCommentsFx.done, (_, {params: postId}) => postId)
-
 const $postComments = createStore([])
-	.on(getCommentsFx.doneData, (_, posts) => posts)
+  .on(getCommentsFx.doneData, (_, posts) => posts)
+
+const $currentPost = createStore(1)
+  .on(getCommentsFx.done, (_, {params: postId}) => postId)
 
 const $status = combine(
   $currentPost, $postComments, getCommentsFx.pending,
   (postId, comments, isLoading) => isLoading
-  	? 'Loading post...'
+    ? 'Loading post...'
     : \`Post \${postId} has \${comments.length} comments\`
 )
 
@@ -148,7 +149,7 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="col col--6">
+            <div className="col col--6" style={{fontSize: 'calc(var(--ifm-code-font-size) * 0.9)'}}>
               <Code language="js">{codeExample}</Code>
             </div>
           </div>
