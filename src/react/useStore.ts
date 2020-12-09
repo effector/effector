@@ -9,10 +9,19 @@ export function useStore<State>(store: Store<State>): State {
   const setState = React.useState(store.getState())[1]
   useIsomorphicLayoutEffect(() => {
     if (currentStore.current === store) {
-      setState(store.getState())
+      const currentState = store.getState()
+      setState(
+        typeof currentState === 'function' ? () => currentState : currentState,
+      )
     }
     currentStore.current = store
-    return store.updates.watch(setState)
+    return store.updates.watch(newState => {
+      // check if function in store
+      if (typeof newState === 'function') {
+        newState = () => newState
+      }
+      setState(newState)
+    })
   }, [store])
   return store.getState()
 }
