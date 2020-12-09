@@ -98,18 +98,22 @@ describe('useStore', () => {
     const Display = () => {
       const store = useStore($store)
       fn()
-      return null
+      return store()
     }
 
     await render(<Display />)
 
-    expect(fn).toHaveBeenCalledTimes(1)
+    expect(container.firstChild).toMatchInlineSnapshot(`0`)
+    
+    expect(fn).toHaveBeenCalledTimes(2)
     
     await act(async () => {
-      changeStore(() => 0)
+      changeStore(() => 1)
     })
 
-    expect(fn).toHaveBeenCalledTimes(2)
+    expect(container.firstChild).toMatchInlineSnapshot(`1`)
+
+    expect(fn).toHaveBeenCalledTimes(3)
   })
   it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
