@@ -9,32 +9,45 @@ import styles from './styles.module.css'
 
 import {Code} from '../components/Code'
 
-const codeExample = `import {createStore, createEvent} from 'effector'
+const codeExample = `import {createEvent, createStore, createEffect, sample} from 'effector'
 
-const add = createEvent()
-const sub = createEvent()
-const reset = createEvent()
+const nextPost = createEvent()
 
-const counter = createStore(0)
-  .on(add, (count, n) => count + n)
-  .on(sub, (count, n) => count - n)
-  .reset(reset)
+const getCommentsFx = createEffect(async postId => {
+  const url = \`https://jsonplaceholder.typicode.com/posts/\${postId}/comments\`
+  const req = await fetch(url)
+  return req.json()
+})
 
-counter.watch(n => console.log('counter:', n))
-// counter: 0
-add.watch(n => console.log('add', n))
-sub.watch(n => console.log('subtract', n))
-reset.watch(() => console.log('reset counter'))
+const $currentPost = createStore(1)
+	.on(getCommentsFx.done, (_, {params: postId}) => postId)
 
-add(5)
-// add 5
-// counter: 5
-sub(1)
-// subtract 1
-// counter: 4
-reset()
-// reset counter
-// counter: 0
+const $postComments = createStore([])
+	.on(getCommentsFx.doneData, (_, posts) => posts)
+
+const $status = combine(
+  $currentPost, $postComments, getCommentsFx.pending,
+  (postId, comments, isLoading) => isLoading
+  	? 'Loading post...'
+    : \`Post \${postId} has \${comments.length} comments\`
+)
+
+sample({
+  source: $currentPost,
+  clock: nextPost,
+  fn: postId => postId + 1,
+  target: getCommentsFx,
+})
+
+$status.watch(status => {
+  console.log(status)
+})
+// => Post 1 has 0 comments
+
+nextPost()
+
+// => Loading post... 
+// => Post 2 has 5 comments 
 `
 
 const features = [
