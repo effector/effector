@@ -16,7 +16,6 @@ export function useStore<State>(store: Store<State>): State {
     }
     currentStore.current = store
     return store.updates.watch(newState => {
-      // check if function in store
       if (typeof newState === 'function') {
         newState = () => newState
       }
