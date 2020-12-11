@@ -1,12 +1,15 @@
 ---
 id: createApi
 title: createApi
-hide_title: true
 ---
 
-# `createApi(store, api)`
+`createApi` is a shorthand for creating [events](./Event.md) attached to [store](./Store.md) by providing object with [_reducers_](../../glossary.md#reducer) for them. If source `store` belongs to some [domain](./Domain.md) then new events will belong to it as well
 
-`createApi` is a shorthand for creating events attached to store
+## Formulae
+
+```ts
+createApi(store, api): objectWithEvents
+```
 
 **Arguments**
 
@@ -17,7 +20,7 @@ hide_title: true
 
 (_`Object`_) Object with [events](Event.md)
 
-#### Example
+### Example
 
 ```js
 import {createStore, createApi} from 'effector'

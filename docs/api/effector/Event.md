@@ -107,22 +107,23 @@ userUpdated({name: 'john', role: 'admin'})
 
 [Try it](https://share.effector.dev/duDut6nR)
 
-<hr/>
+<hr />
 
-### `filter({fn})`
+### `prepend(fn)`
 
-Creates a new event, which will be called after the original event is called if `fn` returns `true`.
+Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
 
-Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
+If original event belongs to some [domain](./Domain.md) then new event will belong to it as well
 
 #### Formulae
 
 ```ts
-const second = first.filter({fn})
+const second = first.prepend(fn)
 ```
 
-- When `first` is triggered, pass payload from `first` to `fn`
-- If `fn()` returns `true`, `second` will be triggered with payload from `first`
+- When `second` event is triggered
+- Call `fn` with payload from `second`
+- Trigger `first` with result of `fn()`
 
 **Arguments**
 
@@ -132,44 +133,36 @@ const second = first.filter({fn})
 
 [_Event_](Event.md): New event.
 
-:::note
-Object form is used because `event.filter(fn)` was an alias for [event.filterMap](./Event.md#filtermapfn)
-:::
-
-:::note
-[`guard`](./guard.md) method is the preferred filtering method
-:::
-
 #### Example
 
 ```js
-import {createEvent, createStore} from 'effector'
+import {createEvent} from 'effector'
 
-const numbers = createEvent()
+const nameChanged = createEvent()
+nameChanged.watch(name => console.log(`Current name is: ${name}`))
+/*
+  Event nameChanged was created at this point
+  in another  file or library and imported as is.
+  So we can`t create maped version of it, 
+  from inputChanged event, like this 👇
+  
+  const inputChanged = createEvent();
+  const  nameChanged = inputChanged.map(e => e.target.value);
+  
+  But we can create prepended inputChanged from nameChanged!
+*/
+const inputChanged = nameChanged.prepend(e => e.target.value)
+// event, which will be bound to DOM element
 
-const positiveNumbers = numbers.filter({
-  fn: ({x}) => x > 0,
-})
+const input = document.createElement('input')
+input.oninput = inputChanged
 
-const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
-
-lastPositive.watch(x => {
-  console.log('last positive:', x)
-})
-
-// => last positive: 0
-
-numbers({x: 0})
-// no reaction
-
-numbers({x: -10})
-// no reaction
-
-numbers({x: 10})
-// => last positive: 10
+document.body.appendChild(input)
+// input something in input, and press Enter
+// => Current name is: something
 ```
 
-[Try it](https://share.effector.dev/H2Iu4iJH)
+[Try it](https://share.effector.dev/F7Yc6YyF)
 
 <hr />
 
@@ -263,21 +256,22 @@ ReactDOM.render(<App />, document.getElementById('root'))
 
 [Try it](https://share.effector.dev/abn4EMNa)
 
-<hr />
+<hr/>
 
-### `prepend(fn)`
+### `filter({fn})`
 
-Creates an event, upon trigger it sends transformed data into the source event. Works kind of like reverse `.map`. In case of `.prepend` data transforms **before the original event occurs** and in the case of `.map`, data transforms **after original event occurred**.
+Creates a new event, which will be called after the original event is called if `fn` returns `true`.
+
+Let's assume a standard situation when you want to buy sneakers in the shop, but there is no size. You subscribe to a particular size of the sneakers model, and in addition, you want to receive a notification if they have it, and ignore any other notification. Therefore filtering can be helpful for that. Event filtering works in the same way. If filter returns `true`, the event will be called.
 
 #### Formulae
 
 ```ts
-const second = first.prepend(fn)
+const second = first.filter({fn})
 ```
 
-- When `second` event is triggered
-- Call `fn` with payload from `second`
-- Trigger `first` with result of `fn()`
+- When `first` is triggered, pass payload from `first` to `fn`
+- If `fn()` returns `true`, `second` will be triggered with payload from `first`
 
 **Arguments**
 
@@ -287,33 +281,41 @@ const second = first.prepend(fn)
 
 [_Event_](Event.md): New event.
 
+:::note
+Object form is used because `event.filter(fn)` was an alias for [event.filterMap](./Event.md#filtermapfn)
+:::
+
+:::note
+[`guard`](./guard.md) method is the preferred filtering method
+:::
+
 #### Example
 
 ```js
-import {createEvent} from 'effector'
+import {createEvent, createStore} from 'effector'
 
-const nameChanged = createEvent()
-nameChanged.watch(name => console.log(`Current name is: ${name}`))
-/*
-  Event nameChanged was created at this point
-  in another  file or library and imported as is.
-  So we can`t create maped version of it, 
-  from inputChanged event, like this 👇
-  
-  const inputChanged = createEvent();
-  const  nameChanged = inputChanged.map(e => e.target.value);
-  
-  But we can create prepended inputChanged from nameChanged!
-*/
-const inputChanged = nameChanged.prepend(e => e.target.value)
-// event, which will be bound to DOM element
+const numbers = createEvent()
 
-const input = document.createElement('input')
-input.oninput = inputChanged
+const positiveNumbers = numbers.filter({
+  fn: ({x}) => x > 0,
+})
 
-document.body.appendChild(input)
-// input something in input, and press Enter
-// => Current name is: something
+const lastPositive = createStore(0).on(positiveNumbers, (n, {x}) => x)
+
+lastPositive.watch(x => {
+  console.log('last positive:', x)
+})
+
+// => last positive: 0
+
+numbers({x: 0})
+// no reaction
+
+numbers({x: -10})
+// no reaction
+
+numbers({x: 10})
+// => last positive: 10
 ```
 
-[Try it](https://share.effector.dev/F7Yc6YyF)
+[Try it](https://share.effector.dev/H2Iu4iJH)

@@ -19,7 +19,8 @@ attach({ effect, mapParams?, source?, name? }): newEffect
 When `newEffect` is called, call `mapParams` with params of the `newEffect` and data from `source`, then call original `effect`
 
 - If `attach` called without `source`, `mapParams` will be called only with params of the `newEffect`
-- `attach()` always returns new [_Effect_](Effect.md)
+- `attach` always returns new [effect](Effect.md)
+- If original `effect` belongs to some [domain](./Domain.md) then `newEffect` will belong to it as well
 
 ### Short example
 
