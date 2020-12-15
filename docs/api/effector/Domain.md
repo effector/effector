@@ -254,14 +254,11 @@ domain.onCreateStore(store => {
   console.log('new store created')
 })
 
-const a = domain.createStore(null)
-// => new store created
-
-const b = domain.createEffect(null)
+const $a = domain.createStore(null)
 // => new store created
 ```
 
-[Try it](https://share.effector.dev/LuYhaYJS)
+[Try it](https://share.effector.dev/OGlYOtfz)
 
 <hr />
 
