@@ -26,10 +26,14 @@ module.exports = {
       items: [
         {to: 'docs/introduction/installation', label: 'Docs', position: 'left'},
         {to: 'docs/api/effector/effector', label: 'API', position: 'left'},
-        {to: 'blog', label: 'Blog', position: 'left'},
+        {
+          href: 'https://www.patreon.com/zero_bias',
+          label: 'Blog',
+          position: 'left',
+        },
         {
           href: 'https://share.effector.dev',
-          label: 'Try',
+          label: 'REPL',
           position: 'left',
         },
         {
@@ -66,6 +70,10 @@ module.exports = {
             {
               label: 'Changelog',
               to: 'https://changelog.effector.dev',
+            },
+            {
+              href: 'https://www.patreon.com/zero_bias',
+              label: 'Blog',
             },
           ],
         },
