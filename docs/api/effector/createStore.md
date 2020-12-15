@@ -7,7 +7,7 @@ description: createStore is a method for creating a store
 Method for creating a [store](./Store.md)
 
 ```ts
-createStore(defaultState, config?)
+createStore<T>(defaultState: T, config?: {name?: string}): Store<T>
 ```
 
 **Arguments**
@@ -28,21 +28,22 @@ import {createEvent, createStore} from 'effector'
 const addTodo = createEvent()
 const clearTodos = createEvent()
 
-const todos = createStore([])
-todos
-  // Add reducer
+const $todos = createStore([])
+  // Will update store when addTodo is fired
   .on(addTodo, (state, todo) => [...state, todo])
   // Will reset store to default state when clearTodos is fired
   .reset(clearTodos)
 
-// Create derived store
-const selectedTodos = todos.map(todos => {
+// Create mapped store
+const $selectedTodos = $todos.map(todos => {
   return todos.filter(todo => !!todo.selected)
 })
-// Handle side effects
-todos.watch(state => {
-  console.log(state)
+
+$todos.watch(state => {
+  console.log('todos', state)
 })
+
+// => todos []
 ```
 
-[Try it](https://share.effector.dev/dFRb1kxi)
+[Try it](https://share.effector.dev/tquiUgdq)

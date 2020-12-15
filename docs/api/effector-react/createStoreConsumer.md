@@ -19,18 +19,17 @@ The `createStoreConsumer` creates a consumer who is watching for changes in the 
 #### Example
 
 ```js
-import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore} from 'effector'
 import {createStoreConsumer} from 'effector-react'
 
-const firstName = createStore('Alan')
+const $firstName = createStore('Alan')
 
-const FirstName = createStoreConsumer(firstName)
+const FirstName = createStoreConsumer($firstName)
 
 const App = () => <FirstName>{name => <h1>{name}</h1>}</FirstName>
 
 ReactDOM.render(<App />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/2cAXCcbU)
+[Try it](https://share.effector.dev/HbH1tpzQ)

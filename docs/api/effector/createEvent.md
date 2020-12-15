@@ -7,7 +7,8 @@ description: createEvent is a method for creating an event
 Method for creating an [event](./Event.md)
 
 ```ts
-createEvent(name?)
+createEvent<T>(name?): Event<T>
+createEvent(name?): Event<void>
 ```
 
 **Arguments**
@@ -26,10 +27,11 @@ createEvent(name?)
 
 ```js
 import {createStore, createEvent} from 'effector'
-const store = createStore(0)
+
 const addNumber = createEvent()
-store.on(addNumber, (state, number) => state + number)
-store.watch(state => {
+const $store = createStore(0).on(addNumber, (state, number) => state + number)
+
+$store.watch(state => {
   console.log('state', state)
 })
 // => 0
@@ -44,9 +46,9 @@ addNumber(10)
 // => 30
 ```
 
-[Try it](https://share.effector.dev/BlvDKg17)
+[Try it](https://share.effector.dev/0OeoZMPc)
 
-Let's talk about what happened. We created a store and an event (addNumber), and started watching the store.<br/>
+We created a store and an event (addNumber), and started watching the store.<br/>
 Notice the function call `addNumber(10)`. Whenever you will call `addNumber(10)`, you can look at the console and see how state changes.
 
 #### Example 2

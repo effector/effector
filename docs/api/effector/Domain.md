@@ -102,12 +102,12 @@ effector 20.3.0
 import {createDomain} from 'effector'
 const domain = createDomain()
 const eventA = domain.event()
-const storeB = domain.store(0)
+const $storeB = domain.store(0)
 console.log(domain.history)
 // => {stores: Set{storeB}, events: Set{eventA}, domains: Set, effects: Set}
 ```
 
-[Try it](https://share.effector.dev/HAG9a8nk)
+[Try it](https://share.effector.dev/flIV7Fja)
 
 <hr />
 

@@ -63,12 +63,21 @@ const fetchUserReposFx = createEffect(async ({name}) => {
   return req.json()
 })
 
-const repos = createStore([]).on(fetchUserReposFx.doneData, (_, repos) => repos)
+const $repos = createStore([]).on(
+  fetchUserReposFx.doneData,
+  (_, repos) => repos,
+)
+
+$repos.watch(repos => {
+  console.log(`${repos.length} repos`)
+})
+// => 0 repos
 
 await fetchUserReposFx({name: 'zerobias'})
+// => 26 repos
 ```
 
-[Try it](https://share.effector.dev/niIXnoC4)
+[Try it](https://share.effector.dev/uAJFC1XM)
 
 #### Set handler to effect after creating
 

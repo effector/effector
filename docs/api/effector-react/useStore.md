@@ -23,18 +23,18 @@ useStore(store: Store<T>): T
 import {createStore, createApi} from 'effector'
 import {useStore} from 'effector-react'
 
-const counter = createStore(0)
+const $counter = createStore(0)
 
-const {increment, decrement} = createApi(counter, {
+const {increment, decrement} = createApi($counter, {
   increment: state => state + 1,
   decrement: state => state - 1,
 })
 
-export const Counter = () => {
-  const state = useStore(counter)
+const App = () => {
+  const counter = useStore($counter)
   return (
     <div>
-      {state}
+      {counter}
       <button onClick={increment}>Increment</button>
       <button onClick={decrement}>Decrement</button>
     </div>
@@ -42,4 +42,4 @@ export const Counter = () => {
 }
 ```
 
-[Try it](https://share.effector.dev/4aFc0s3d)
+[Try it](https://share.effector.dev/DHzp3z4r)

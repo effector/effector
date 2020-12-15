@@ -24,17 +24,16 @@ You can use hooks in `createComponent` since effector-react@20.3.0.
 #### Example
 
 ```js
-import React from 'react'
 import ReactDOM from 'react-dom'
 import {createStore, createEvent} from 'effector'
 import {createComponent} from 'effector-react'
 
-const counter = createStore(0)
+const $counter = createStore(0)
 const increment = createEvent()
 
-counter.on(increment, n => n + 1)
+$counter.on(increment, n => n + 1)
 
-const MyCounter = createComponent(counter, (props, state) => (
+const MyCounter = createComponent($counter, (props, state) => (
   <div>
     Counter: {state}
     <button onClick={increment}>increment</button>
@@ -49,4 +48,4 @@ const MyOwnComponent = () => {
 ReactDOM.render(<MyOwnComponent />, document.getElementById('root'))
 ```
 
-[Try it](https://share.effector.dev/0G6X1V4c)
+[Try it](https://share.effector.dev/kJoLGB6g)
