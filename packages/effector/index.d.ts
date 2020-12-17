@@ -21,6 +21,8 @@ export type GetCombinedValue<T> = {
 }
 
 export type StoreValue<T> = T extends Store<infer S> ? S : never
+export type EventPayload<T> = T extends Event<infer P> ? P : never
+export type UnitValue<T> = T extends Unit<infer V> ? V : never
 export type EffectParams<FX extends Effect<any, any, any>> = FX extends Effect<
   infer P,
   any,
