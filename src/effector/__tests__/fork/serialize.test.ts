@@ -59,33 +59,59 @@ it('serialize stores in nested domain', () => {
 `)
 })
 
-it('skip unchanged objects with onlyChanges: true', async () => {
-  const app = createDomain()
-  const newMessage = app.createEvent()
-  const messages = app.createStore(0).on(newMessage, x => x + 1)
-  const user = app.createStore({name: 'guest'})
-  const stats = combine({messages, user})
-  const scope = fork(app)
-  expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
-    Object {
-      "r5bjmg": Object {
-        "messages": 0,
-        "user": Object {
-          "name": "guest",
+describe('onlyChanges', () => {
+  it('avoid serializing combined stores when they are not changed', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const messages = app.createStore(0).on(newMessage, x => x + 1)
+    const stats = combine({messages})
+    const scope = fork(app)
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "r5bjo6": Object {
+          "messages": 0,
         },
-      },
-    }
-  `)
-  await allSettled(newMessage, {scope})
-  expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
-    Object {
-      "-vrrwv0": 1,
-      "r5bjmg": Object {
-        "messages": 1,
-        "user": Object {
-          "name": "guest",
+      }
+    `)
+    await allSettled(newMessage, {scope})
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-vaq9x0": 1,
+        "r5bjo6": Object {
+          "messages": 1,
         },
-      },
-    }
-  `)
+      }
+    `)
+  })
+  it('skip unchanged objects', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const messages = app.createStore(0).on(newMessage, x => x + 1)
+    const scope = fork(app)
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
+      `Object {}`,
+    )
+    await allSettled(newMessage, {scope})
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-gmbzoz": 1,
+      }
+    `)
+  })
+
+  it('keep store in serialization when it returns to default state', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0)
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app)
+    await allSettled(newMessage, {scope})
+    await allSettled(resetMessages, {scope})
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
+      `Object {}`,
+    )
+  })
 })
