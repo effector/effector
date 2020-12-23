@@ -41,6 +41,7 @@ const normalizeConfig = (part: any, config: any) => {
     if (part.loc) config.loc = part.loc
     if (part.sid || part.sid === null) config.sid = part.sid
     if (part.handler) config.handler = part.handler
+    if (part.updateFilter) config.updateFilter = part.updateFilter
     if (getParent(part)) config.parent = getParent(part)
     if ('strict' in part) config.strict = part.strict
     if (part.named) config.named = part.named
@@ -336,9 +337,13 @@ export function createStore<State>(
     store.off(event)
     getSubscribers(store).set(
       event,
-      createSubscription(updateStore(event, store, 'on', true, fn)),
+      createSubscription(
+        updateStore(event, store, 'on', true, fn, updateFilter),
+      ),
     )
   }
+  const meta = initUnit(STORE, store, props)
+  const updateFilter = store.defaultConfig.updateFilter
   store.graphite = createNode({
     scope: {state: plainState},
     node: [
@@ -346,6 +351,11 @@ export function createStore<State>(
       step.check.changed({
         store: oldState,
       }),
+      updateFilter && step.mov({store: oldState, to: REG_A}),
+      updateFilter &&
+        step.filter({
+          fn: (update, _, {a}) => updateFilter(update, a),
+        }),
       step.update({
         store: plainState,
       }),
@@ -354,7 +364,7 @@ export function createStore<State>(
       }),
     ],
     child: updates,
-    meta: initUnit(STORE, store, props),
+    meta,
   })
   if (isStrict && defaultState === undefined)
     throwError("current state can't be undefined, use null instead")
@@ -368,6 +378,7 @@ const updateStore = (
   op: string,
   stateFirst: boolean,
   fn: Function,
+  updateFilter?: Function,
 ) => {
   const storeRef = getStoreState(store)
   const node = [
@@ -377,6 +388,10 @@ const updateStore = (
     }),
     step.check.defined(),
     step.check.changed({store: storeRef}),
+    updateFilter &&
+      step.filter({
+        fn: (update, _, {a}) => updateFilter(update, a),
+      }),
     step.update({store: storeRef}),
   ]
   const template = readTemplate()

@@ -78,7 +78,9 @@ export interface Store<State> extends Unit {
   );
   kind: kind
   defaultState: State
-  defaultConfig: Config
+  defaultConfig: Config & {
+    updateFilter?: (update: State, current: State) => boolean
+  }
   defaultShape?: Object
   shortName: string
   domainName?: CompositeName

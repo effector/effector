@@ -7,7 +7,11 @@ description: createStore is a method for creating a store
 Method for creating a [store](./Store.md)
 
 ```ts
-createStore<T>(defaultState: T, config?: {name?: string}): Store<T>
+createStore<T>(defaultState: T): Store<T>
+createStore<T>(defaultState: T, config: {
+  name?: string
+  updateFilter?: (update: T, current: T) => boolean
+}): Store<T>
 ```
 
 **Arguments**
@@ -15,6 +19,7 @@ createStore<T>(defaultState: T, config?: {name?: string}): Store<T>
 1. `defaultState` (_State_): Default state
 2. `config` (_Object_): Optional configuration
    - `name` (_String_): Name for the store. Babel plugin can set it from the variable name, if not passed explicitly in config.
+   - `updateFilter` (_Function_): Function which prevent store from update when returns `false`. Accepts update as first argument and current state as second argument. Redundant for most cases since store already ensure that update is not `undefined` and not equal (`!==`) to current state
 
 **Returns**
 

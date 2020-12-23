@@ -160,21 +160,21 @@ describe('.watch', () => {
     newWord('long word')
     expect(fn).toHaveBeenCalledTimes(3)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "event": 1,
-    "store": 7,
-  },
-  Object {
-    "event": 2,
-    "store": 7,
-  },
-  Object {
-    "event": 3,
-    "store": 8,
-  },
-]
-`)
+      Array [
+        Object {
+          "event": 1,
+          "store": 7,
+        },
+        Object {
+          "event": 2,
+          "store": 7,
+        },
+        Object {
+          "event": 3,
+          "store": 8,
+        },
+      ]
+    `)
   })
   it('supports effects', () => {
     const fn = jest.fn()
@@ -204,21 +204,21 @@ Array [
     newWord('long word')
     expect(fn).toHaveBeenCalledTimes(3)
     expect(argumentHistory(fn)).toMatchInlineSnapshot(`
-Array [
-  Object {
-    "event": 1,
-    "store": 7,
-  },
-  Object {
-    "event": 2,
-    "store": 7,
-  },
-  Object {
-    "event": 3,
-    "store": 8,
-  },
-]
-`)
+      Array [
+        Object {
+          "event": 1,
+          "store": 7,
+        },
+        Object {
+          "event": 2,
+          "store": 7,
+        },
+        Object {
+          "event": 3,
+          "store": 8,
+        },
+      ]
+    `)
   })
 })
 
@@ -262,5 +262,71 @@ describe('.off', () => {
     const newWord = createEvent()
     const a = createStore('word').on(newWord, (_, word) => word)
     expect(a.off(newWord)).toBe(a)
+  })
+})
+
+describe('updateFilter', () => {
+  let consoleError: any
+  beforeEach(() => {
+    consoleError = console.error
+    console.error = () => {}
+  })
+  afterEach(() => {
+    console.error = consoleError
+  })
+  it('prevent store from updates when returns false', () => {
+    const fn = jest.fn()
+    const moveTo = createEvent<{x: number; y: number}>()
+    const position = createStore(
+      {x: 0, y: 0},
+      {
+        updateFilter: (upd, {x, y}) => upd.x !== x || upd.y !== y,
+      },
+    ).on(moveTo, (_, upd) => upd)
+    position.updates.watch(fn)
+    moveTo({x: 1, y: 1})
+    moveTo({x: 1, y: 1})
+    moveTo({x: 1, y: 2})
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "x": 1,
+          "y": 1,
+        },
+        Object {
+          "x": 1,
+          "y": 2,
+        },
+      ]
+    `)
+  })
+  it('prevent store from updates when throws', () => {
+    const fn = jest.fn()
+    const moveTo = createEvent<{x: number; y: number}>()
+    const position = createStore(
+      {x: 0, y: 0},
+      {
+        updateFilter(upd, {x, y}) {
+          if (upd.x === x && upd.y === y) throw Error('failure')
+          return true
+        },
+      },
+    ).on(moveTo, (_, upd) => upd)
+    position.updates.watch(fn)
+    moveTo({x: 1, y: 1})
+    moveTo({x: 1, y: 1})
+    moveTo({x: 1, y: 2})
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "x": 1,
+          "y": 1,
+        },
+        Object {
+          "x": 1,
+          "y": 2,
+        },
+      ]
+    `)
   })
 })

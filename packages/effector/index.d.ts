@@ -477,7 +477,11 @@ export function createEffect<Params, Done, Fail = Error>(config: {
 
 export function createStore<State>(
   defaultState: State,
-  config?: {name?: string; sid?: string},
+  config?: {
+    name?: string;
+    sid?: string
+    updateFilter?: (update: State, current: State) => boolean
+  },
 ): Store<State>
 export function setStoreName<State>(store: Store<State>, name: string): void
 
