@@ -66,13 +66,9 @@ describe('onlyChanges', () => {
     const messages = app.createStore(0).on(newMessage, x => x + 1)
     const stats = combine({messages})
     const scope = fork(app)
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
-      Object {
-        "r5bjo6": Object {
-          "messages": 0,
-        },
-      }
-    `)
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
+      `Object {}`,
+    )
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
@@ -94,7 +90,7 @@ describe('onlyChanges', () => {
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-gmbzoz": 1,
+        "-2ezbv5": 1,
       }
     `)
   })
@@ -110,8 +106,10 @@ describe('onlyChanges', () => {
     const scope = fork(app)
     await allSettled(newMessage, {scope})
     await allSettled(resetMessages, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
-      `Object {}`,
-    )
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "84c305": 0,
+      }
+    `)
   })
 })

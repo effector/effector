@@ -172,25 +172,20 @@ function createRefGraph(refsMap: Record<string, StateRef>) {
 serialize state on server
 */
 export function serialize(
-  {clones, getState, cloneOf}: any,
+  {clones, changedStores}: any,
   {
     ignore = [],
     onlyChanges,
   }: {ignore?: Array<Store<any>>; onlyChanges?: boolean} = {},
 ) {
   const result = {} as Record<string, any>
-  if (onlyChanges) {
-    ignore = [...ignore]
-    forEach(cloneOf.history.stores, (store: Store<any>) => {
-      if (getState(store) === store.defaultState) {
-        ignore.push(store)
-      }
-    })
-  }
   forEach(clones, ({meta, scope, reg}) => {
     if (meta.unit !== STORE) return
     const {sid} = meta
     if (!sid) return
+    if (onlyChanges) {
+      if (!changedStores.has(meta.forkOf.id)) return
+    }
     result[sid] = reg[scope.state.id].current
   })
   forEach(ignore, ({sid}) => {
@@ -448,10 +443,11 @@ function cloneGraph(unit: any) {
     inFlight: 0,
     fxID: 0,
   }
-  const forkPageSetter = step.compute({
-    fn(data, _, stack) {
-      //setForkPage(getForkPage(stack))
-      return data
+  const changedStores = new Set<string>()
+  const putStoreToChanged = step.compute({
+    fn(upd, _, stack) {
+      changedStores.add(stack.node.meta.forkOf.id)
+      return upd
     },
   })
   const forkInFlightCounter = createNode({
@@ -542,27 +538,25 @@ function cloneGraph(unit: any) {
     switch (itemTag) {
       case STORE:
         node.meta.wrapped = wrapStore(node)
+        if (node.meta.sid) node.seq.push(putStoreToChanged)
         break
-      case EVENT:
-        node.seq.unshift(forkPageSetter)
-        break
+      // case EVENT:
+      //   break
       case EFFECT:
         node.next.push(forkInFlightCounter)
-        node.seq.unshift(forkPageSetter)
         break
       case 'fx': {
         scope.finally.next.push(forkInFlightCounter)
-        node.seq.unshift(forkPageSetter)
         break
       }
-      case 'watch':
-        node.seq.unshift(forkPageSetter)
-        break
+      // case 'watch':
+      //   break
     }
   })
 
   return {
     cloneOf: unit,
+    changedStores,
     nodeMap,
     sidMap,
     clones,
