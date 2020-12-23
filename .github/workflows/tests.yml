@@ -143,11 +143,7 @@ jobs:
           VERSION_HASH_REGISTRY: https://npm.pkg.github.com/
       - name: publish effector on github
         run: cd npm/effector && npm publish
-      - name: publish effector fallback
-        if: failure()
-        run: echo 'cannot publish effector to github'
+        continue-on-error: true
       - name: publish effector-react on github
         run: cd npm/effector-react && npm publish
-      - name: publish effector-react fallback
-        if: failure()
-        run: echo 'cannot publish effector-react to github'
+        continue-on-error: true
