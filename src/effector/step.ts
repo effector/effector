@@ -21,7 +21,7 @@ export const barrier: (data: {priority?: 'barrier' | 'sampler'}) => Barrier = ({
   })
 export const mov: (data: {
   from?: 'value' | 'store' | 'stack' | 'a' | 'b'
-  to?: 'stack' | 'a' | 'b'
+  to?: 'stack' | 'a' | 'b' | 'store'
   store?: any
   target?: any
 }) => Mov = ({from = STORE, store, target, to = target ? STORE : STACK}) =>

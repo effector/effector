@@ -3,7 +3,9 @@ import {getGraph, getOwners, getLinks} from './getter'
 import {nextNodeID} from './id'
 import {CROSSLINK, STORE} from './tag'
 
-const arrifyNodes = (list: Graphite | Graphite[] = []): Graph[] => {
+const arrifyNodes = (
+  list: Graphite | Array<Graphite | Graphite[]> = [],
+): Graph[] => {
   const result = []
   if (Array.isArray(list)) {
     for (let i = 0; i < list.length; i++) {
@@ -53,7 +55,7 @@ export function createNode({
   family?: {
     type?: 'regular' | 'crosslink' | 'domain'
     links?: Graphite | Graphite[]
-    owners?: Graphite | Graphite[]
+    owners?: Graphite | Array<Graphite | Graphite[]>
   }
 } = {}): Graph {
   const sources = arrifyNodes(parent)

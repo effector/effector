@@ -140,7 +140,7 @@ const storeCombination = (
     }),
   ]
   const before: any[] = (rawShape.before = [])
-  forIn(obj, (child, key) => {
+  forIn(obj, (child: Store<any> | any, key) => {
     if (!is.store(child)) {
       stateNew[key] = defaultState[key] = child
       return

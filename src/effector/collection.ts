@@ -1,4 +1,7 @@
-export const forIn = (obj: any, cb: (value: any, key: string) => void) => {
+export function forIn<T>(
+  obj: Record<string, T>,
+  cb: (value: T, key: string) => void,
+) {
   for (const key in obj) {
     cb(obj[key], key)
   }

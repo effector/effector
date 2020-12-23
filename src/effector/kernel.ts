@@ -1,4 +1,4 @@
-import {Graph} from './index.h'
+import {Graph, Graphite} from './index.h'
 import {readRef} from './stateRef'
 import {getForkPage, getGraph, getParent, getValue} from './getter'
 import {
@@ -345,7 +345,17 @@ const getPageRef = (page: any, graph: Graph, id: string) => {
   const pageForRef = getPageForRef(page, id)
   return (pageForRef ? pageForRef : graph).reg[id]
 }
-export const launch = (unit: any, payload?: any, upsert?: boolean) => {
+
+export function launch(config: {
+  target: Graphite | Graphite[]
+  params?: any
+  defer?: boolean
+  page?: any
+  forkPage?: any
+  stack?: Stack
+}): void
+export function launch(unit: Graphite, payload?: any, upsert?: boolean): void
+export function launch(unit: any, payload?: any, upsert?: boolean) {
   let page = currentPage
   let stack = null
   let forkedPage = forkPage

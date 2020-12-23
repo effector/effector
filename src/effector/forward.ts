@@ -7,7 +7,7 @@ import {addToRegion} from './region'
 
 export const createLinkNode = (
   parent: Graphite,
-  child: Graphite,
+  child: Graphite | Graphite[],
   {
     node,
     scope,
