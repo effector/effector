@@ -10,7 +10,7 @@ test('createStore throw on undefined', () => {
 describe('.map', () => {
   it('supports basic mapping', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */()
+    const newWord = createEvent<string>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -91,7 +91,7 @@ describe('.map', () => {
 describe('.watch', () => {
   it('supports functions', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */()
+    const newWord = createEvent<string>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -112,7 +112,7 @@ describe('.watch', () => {
   })
   it('returns unsubscribe function', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */()
+    const newWord = createEvent<string>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -135,8 +135,8 @@ describe('.watch', () => {
   })
   it('supports events', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */('new word')
-    const spyEvent = createEvent()
+    const newWord = createEvent<string>('new word')
+    const spyEvent = createEvent<number>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
@@ -178,7 +178,7 @@ Array [
   })
   it('supports effects', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */('new word')
+    const newWord = createEvent<string>('new word')
     const spyEvent = createEffect()
     spyEvent.use(args => args)
     const a = createStore('word').on(newWord, (_, word) => word)
@@ -225,7 +225,7 @@ Array [
 describe('.off', () => {
   it('allows to unsubscribe store from event', () => {
     const fn = jest.fn()
-    const newWord = createEvent/*:: <string> */()
+    const newWord = createEvent<string>()
     const a = createStore('word').on(newWord, (_, word) => word)
 
     const b = a.map(word => word.length)
