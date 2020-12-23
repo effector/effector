@@ -343,11 +343,11 @@ export function createStore<State>(
     scope: {state: plainState},
     node: [
       step.check.defined(),
-      step.update({
-        store: plainState,
-      }),
       step.check.changed({
         store: oldState,
+      }),
+      step.update({
+        store: plainState,
       }),
       step.update({
         store: oldState,

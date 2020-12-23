@@ -16,8 +16,8 @@ exports[`graphite: show bar 1`] = `
         Node {
           seq: [
             check: defined,
-            mov: stack store,
             check: changed,
+            mov: stack store,
             mov: stack store
           ],
           next: [
@@ -34,8 +34,8 @@ exports[`graphite: show bar 1`] = `
                 Node {
                   seq: [
                     check: defined,
-                    mov: stack store,
                     check: changed,
+                    mov: stack store,
                     mov: stack store
                   ],
                   next: [
@@ -74,8 +74,8 @@ exports[`graphite: show bar 2`] = `
         Node {
           seq: [
             check: defined,
-            mov: stack store,
             check: changed,
+            mov: stack store,
             mov: stack store
           ],
           next: [
@@ -92,8 +92,8 @@ exports[`graphite: show bar 2`] = `
                 Node {
                   seq: [
                     check: defined,
-                    mov: stack store,
                     check: changed,
+                    mov: stack store,
                     mov: stack store
                   ],
                   next: [
@@ -134,8 +134,8 @@ exports[`graphite: show foo 1`] = `
                 Node {
                   seq: [
                     check: defined,
-                    mov: stack store,
                     check: changed,
+                    mov: stack store,
                     mov: stack store
                   ],
                   next: [
@@ -152,8 +152,8 @@ exports[`graphite: show foo 1`] = `
                         Node {
                           seq: [
                             check: defined,
-                            mov: stack store,
                             check: changed,
+                            mov: stack store,
                             mov: stack store
                           ],
                           next: [
@@ -178,8 +178,8 @@ exports[`graphite: show store1 1`] = `
 "Node {
   seq: [
     check: defined,
-    mov: stack store,
     check: changed,
+    mov: stack store,
     mov: stack store
   ],
   next: [
@@ -196,8 +196,8 @@ exports[`graphite: show store1 1`] = `
         Node {
           seq: [
             check: defined,
-            mov: stack store,
             check: changed,
+            mov: stack store,
             mov: stack store
           ],
           next: [
@@ -214,8 +214,8 @@ exports[`graphite: show store2 1`] = `
 "Node {
   seq: [
     check: defined,
-    mov: stack store,
     check: changed,
+    mov: stack store,
     mov: stack store
   ],
   next: [
@@ -240,8 +240,8 @@ exports[`showcase: event foo 1`] = `
         Node {
           seq: [
             check: defined,
-            mov: stack store,
             check: changed,
+            mov: stack store,
             mov: stack store
           ],
           next: [
@@ -267,8 +267,8 @@ exports[`showcase: event foo 1`] = `
                 Node {
                   seq: [
                     check: defined,
-                    mov: stack store,
                     check: changed,
+                    mov: stack store,
                     mov: stack store
                   ],
                   next: [
@@ -285,8 +285,8 @@ exports[`showcase: event foo 1`] = `
                         Node {
                           seq: [
                             check: defined,
-                            mov: stack store,
                             check: changed,
+                            mov: stack store,
                             mov: stack store
                           ],
                           next: [
@@ -317,8 +317,8 @@ exports[`showcase: mapped 1`] = `
 "Node {
   seq: [
     check: defined,
-    mov: stack store,
     check: changed,
+    mov: stack store,
     mov: stack store
   ],
   next: [
@@ -337,8 +337,8 @@ exports[`showcase: store a 1`] = `
 "Node {
   seq: [
     check: defined,
-    mov: stack store,
     check: changed,
+    mov: stack store,
     mov: stack store
   ],
   next: [
@@ -364,8 +364,8 @@ exports[`showcase: store a 1`] = `
         Node {
           seq: [
             check: defined,
-            mov: stack store,
             check: changed,
+            mov: stack store,
             mov: stack store
           ],
           next: [
@@ -382,8 +382,8 @@ exports[`showcase: store a 1`] = `
                 Node {
                   seq: [
                     check: defined,
-                    mov: stack store,
                     check: changed,
+                    mov: stack store,
                     mov: stack store
                   ],
                   next: [
