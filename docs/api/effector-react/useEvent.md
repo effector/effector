@@ -3,7 +3,7 @@ id: useEvent
 title: useEvent
 ---
 
-Bind event to current fork to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
+Bind event to current fork instance to use in dom event handlers. Used **only** with ssr, in application without forks `useEvent` will do nothing
 
 ## `useEvent(unit)`
 
