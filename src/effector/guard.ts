@@ -22,10 +22,10 @@ export function guard(...args: any[]) {
     config = source
     source = config.source
   }
-  const {filter, greedy, name = rawName} = config
+  const {filter, greedy, clock, name = rawName} = config
   const target = config.target || createEvent(name, meta.config)
   if (!is.unit(source)) source = combine(source)
-
+  if (clock) source = sample({source, clock, greedy})
   if (is.unit(filter)) {
     sample({
       source: filter,
@@ -43,7 +43,7 @@ export function guard(...args: any[]) {
           child: target,
           meta,
           family: {
-            owners: [source, filter, target],
+            owners: [source, filter, target, ...[].concat(clock ? clock : [])],
             links: target,
           },
         }),

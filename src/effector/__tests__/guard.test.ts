@@ -180,3 +180,49 @@ test('temporal consistency', () => {
 
   expect(argumentHistory(fn)).toEqual([2])
 })
+
+describe('clock support', () => {
+  it('support event as clock', () => {
+    const fn = jest.fn()
+    const trigger = createEvent()
+    const target = createEvent<number>()
+    const source = createStore(1).on(target, x => x + 1)
+    target.watch(fn)
+    guard({
+      source,
+      clock: trigger,
+      filter: createStore(true),
+      target,
+    })
+    trigger()
+    trigger()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+  it('support arrays as clock', () => {
+    const fn = jest.fn()
+    const trigger1 = createEvent()
+    const trigger2 = createEvent()
+    const target = createEvent<number>()
+    const source = createStore(1).on(target, x => x + 1)
+    target.watch(fn)
+    guard({
+      source,
+      clock: [trigger1, trigger2],
+      filter: createStore(true),
+      target,
+    })
+    trigger1()
+    trigger2()
+    expect(argumentHistory(fn)).toMatchInlineSnapshot(`
+      Array [
+        1,
+        2,
+      ]
+    `)
+  })
+})
