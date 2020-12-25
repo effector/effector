@@ -60,14 +60,16 @@
     "./plugin/defaultMetaVisitor.js": "./plugin/noopMetaVisitor.js"
   },
   "keywords": [
-    "data",
-    "effect",
-    "event",
-    "functional",
-    "reactive",
+    "state management",
     "state manager",
-    "state-manager",
+    "algebraic effects",
+    "model",
+    "reactive",
     "state",
+    "frp",
+    "event",
+    "effect",
+    "functional",
     "store"
   ],
   "author": "Zero Bias",

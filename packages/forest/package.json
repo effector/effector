@@ -21,17 +21,19 @@
   "typings": "index.d.ts",
   "dependencies": {},
   "peerDependencies": {
-    "effector": "^21.7.3"
+    "effector": "^21.7.5"
   },
   "keywords": [
-    "data",
-    "effect",
-    "event",
-    "functional",
-    "reactive",
+    "state management",
     "state manager",
-    "state-manager",
+    "algebraic effects",
+    "model",
+    "reactive",
     "state",
+    "frp",
+    "event",
+    "effect",
+    "functional",
     "store",
     "dom",
     "view"

@@ -34,14 +34,16 @@ const common = {
 }
 
 const keywords = [
-  'data',
-  'effect',
-  'event',
-  'functional',
-  'reactive',
+  'state management',
   'state manager',
-  'state-manager',
+  'algebraic effects',
+  'model',
+  'reactive',
   'state',
+  'frp',
+  'event',
+  'effect',
+  'functional',
   'store',
 ]
 
@@ -158,7 +160,7 @@ export default {
       ...esmFile('ssr'),
       'ssr.d.ts',
     ],
-    keywords: ['react', ...keywords],
+    keywords: ['react', 'hooks', ...keywords],
     ...common,
   },
   'effector-vue': {
@@ -198,7 +200,7 @@ export default {
       'composition.mjs.d.ts',
       'composition.cjs.d.ts',
     ],
-    keywords: ['vue', ...keywords],
+    keywords: ['vue', 'composition api', ...keywords],
     ...common,
   },
   forest: {
