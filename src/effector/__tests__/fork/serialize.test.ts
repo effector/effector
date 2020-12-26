@@ -156,13 +156,13 @@ describe('onlyChanges', () => {
     })
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-1tyq3w": 0,
+        "-vvhbi": 0,
       }
     `)
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-1tyq3w": 1,
+        "-vvhbi": 1,
       }
     `)
   })
