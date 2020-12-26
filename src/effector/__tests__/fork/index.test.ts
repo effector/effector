@@ -52,27 +52,27 @@ describe('imperative call support', () => {
       expect(count.getState()).toBe(0)
     })
     test('with async effects', async () => {
-      const app = createDomain()
+        const app = createDomain()
 
-      const inc = app.createEffect(async () => {
-        await new Promise(rs => setTimeout(rs, 100))
+        const inc = app.createEffect(async () => {
+          await new Promise(rs => setTimeout(rs, 100))
+        })
+        const count = app.createStore(0).on(inc.done, x => x + 1)
+
+        const start = app.createEvent()
+        start.watch(() => {
+          inc()
+        })
+
+        const scope = fork(app)
+
+        await allSettled(start, {
+          scope,
+        })
+
+        expect(scope.getState(count)).toBe(1)
+        expect(count.getState()).toBe(0)
       })
-      const count = app.createStore(0).on(inc.done, x => x + 1)
-
-      const start = app.createEvent()
-      start.watch(() => {
-        inc()
-      })
-
-      const scope = fork(app)
-
-      await allSettled(start, {
-        scope,
-      })
-
-      expect(scope.getState(count)).toBe(1)
-      expect(count.getState()).toBe(0)
-    })
   })
   describe('support imperative event calls in effects', () => {
     test('sync effects', async () => {
@@ -368,6 +368,24 @@ describe('imperative call support', () => {
       expect(words.getState()).toEqual([])
     })
   })
+})
+
+test('call fx().catch(() => {}) from effect should not be unhandled', async () => {
+  const app = createDomain()
+  const timeout = app.createEffect((n: number) => {
+    const errPromise = new Promise((rs, rj) => {
+      setTimeout(rj, n, Error('timeout'))
+    })
+    return errPromise
+  })
+  const delay = app.createEffect(async (n: number) => {
+    await new Promise(rs => setTimeout(rs, n))
+  })
+  const fx = app.createEffect(async () => {
+    await Promise.race([delay(50), timeout(100).catch(() => {})])
+  })
+  const scope = fork(app)
+  await allSettled(fx, {scope})
 })
 
 test('getState support', async () => {
