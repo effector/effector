@@ -12,10 +12,24 @@ import {createEffect} from './createEffect'
 import {forward} from './forward'
 import {addToRegion} from './region'
 import {forIn} from './collection'
-import {getParent} from './getter'
+import {getGraph, getParent} from './getter'
 import {DOMAIN} from './tag'
+import {launch} from './kernel'
+import {step} from './typedef'
 
 const createHook = (trigger: Event<any>, acc: Set<any>, node: any) => {
+  trigger.create = res => {
+    launch(trigger, res)
+    return res
+  }
+  getGraph(trigger).seq.push(
+    step.compute({
+      fn(upd, _, stack) {
+        stack.forkPage = null
+        return upd
+      },
+    }),
+  )
   trigger.watch(data => {
     own(node, [data])
     acc.add(data)
