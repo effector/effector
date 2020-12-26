@@ -367,6 +367,9 @@ export function launch(unit: any, payload?: any, upsert?: boolean) {
     forkedPage = getForkPage(unit) || forkedPage
     unit = unit.target
   }
+  if (forkedPage && forkPage && forkedPage !== forkPage) {
+    forkPage = null
+  }
   if (Array.isArray(unit)) {
     for (let i = 0; i < unit.length; i++) {
       pushFirstHeapItem(
