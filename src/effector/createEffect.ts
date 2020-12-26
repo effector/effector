@@ -122,9 +122,11 @@ export function createEffect<Payload, Done>(
     if (forkPage) {
       if (!isWatch) {
         const savedFork = forkPage
-        req.req.finally(() => {
-          setForkPage(savedFork)
-        })
+        req.req
+          .finally(() => {
+            setForkPage(savedFork)
+          })
+          .catch(() => {})
       }
       launch(forkPage.find(instance), payload)
     } else {
