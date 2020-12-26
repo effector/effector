@@ -468,14 +468,6 @@ describe('imperative call support', () => {
     })
     test('concurrency 3', async () => {
       const app = createDomain()
-      // app.onCreateEffect((eff: any) => {
-      //   const oldCreate = eff.create
-      //   eff.create = (...args: any[]) => {
-      //     const req = oldCreate(...args)
-      //     return req.catch(() => {})
-      //     // return req
-      //   }
-      // })
       const delay = app.createEffect(async (n: number) => {
         await new Promise(rs => setTimeout(rs, n))
       })
@@ -483,23 +475,12 @@ describe('imperative call support', () => {
         const errPromise = new Promise((_, rj) => {
           setTimeout(rj, n, Error('timeout'))
         })
-        // const errPromise = new Promise((rs, rj) => {
-        //   setTimeout(rs, n, Error('timeout'))
-        // })
-        // return errPromise
-        //   .then(() => {
-        //     console.count('timeout')
-        //   })
-        //   .catch(() => {
-        //     console.count('timeout')
-        //   })
         return errPromise
       })
-      // timeout.graphite.meta.noUnhandled = true
       const fx = app.createEffect(async () => {
         await Promise.race([delay(50), timeout(100)])
         await Promise.race([delay(50), timeout(100)])
-        // timeout(100)
+        timeout(10)
       })
       const count = app.createStore(0).on(fx.finally, x => x + 1)
       const delayCount = app.createStore(0).on(delay.finally, x => x + 1)
@@ -564,17 +545,17 @@ describe('imperative call support', () => {
           "a": Object {
             "count": 5,
             "delayCount": 10,
-            "timeoutCount": 10,
+            "timeoutCount": 15,
           },
           "b": Object {
             "count": 4,
             "delayCount": 8,
-            "timeoutCount": 8,
+            "timeoutCount": 12,
           },
           "c": Object {
             "count": 4,
             "delayCount": 8,
-            "timeoutCount": 8,
+            "timeoutCount": 12,
           },
         }
       `)
