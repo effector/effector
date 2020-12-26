@@ -130,9 +130,11 @@ describe('onlyChanges', () => {
     const scope = fork(app, {
       values: new Map([[messages, 1]]),
     })
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
-      `Object {}`,
-    )
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-vnswy5": 1,
+      }
+    `)
     await allSettled(resetMessages, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
@@ -152,9 +154,11 @@ describe('onlyChanges', () => {
     hydrate(scope, {
       values: new Map([[messages, 0]]),
     })
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
-      `Object {}`,
-    )
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-1tyq3w": 0,
+      }
+    `)
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {

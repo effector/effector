@@ -41,6 +41,7 @@ export function hydrate(domain: Domain, {values}: {values: any}) {
       if (node) {
         storeWatches.push(node)
         storeWatchesRefs.push(val)
+        ;(domain as any).changedStores.add(node.meta.forkOf.id)
       }
     })
   } else {
@@ -276,6 +277,7 @@ export function fork(
           const {state} = node.scope
           reg[state.id].current = values[sid]
           predefinedRefs.add(state)
+          forked.changedStores.add(node.meta.forkOf.id)
         }
       }
       forIn(reg, (ref, id) => {
