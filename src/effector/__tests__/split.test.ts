@@ -54,7 +54,7 @@ describe('split(source, match)', () => {
 })
 
 describe('split(config)', () => {
-  it('match by conditions', () => {
+  test('match by condition functions', () => {
     const fn1 = jest.fn()
     const fn2 = jest.fn()
     const fn3 = jest.fn()
@@ -70,6 +70,209 @@ describe('split(config)', () => {
         text: (msg): msg is Text => msg.type === 'text',
         audio: (msg): msg is Audio => msg.type === 'audio',
       },
+      cases: {
+        text: showTextPopup,
+        audio: playAudio,
+        __: reportUnknownMessageType,
+      },
+    })
+
+    showTextPopup.watch(fn1)
+    playAudio.watch(fn2)
+    reportUnknownMessageType.use(fn3)
+
+    messageReceived({
+      type: 'text',
+      value: 'Hello',
+    })
+    messageReceived({
+      type: 'image',
+      imageUrl: '...',
+    })
+    messageReceived({
+      type: 'audio',
+      duration: 500,
+    })
+
+    expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+      ]
+    `)
+  })
+  test('match by condition stores', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const fn3 = jest.fn()
+
+    const messageReceived = createEvent<Message>()
+    const showTextPopup = createEvent<Text>()
+    const playAudio = createEvent<Audio>()
+    const reportUnknownMessageType = createEffect<Message, void>()
+
+    const textIsSelected = createStore(false).on(
+      messageReceived,
+      (_, msg) => msg.type === 'text',
+    )
+    const audioIsSelected = createStore(false).on(
+      messageReceived,
+      (_, msg) => msg.type === 'audio',
+    )
+
+    split({
+      source: messageReceived,
+      match: {
+        text: textIsSelected,
+        audio: audioIsSelected,
+      },
+      cases: {
+        text: showTextPopup,
+        audio: playAudio,
+        __: reportUnknownMessageType,
+      },
+    })
+
+    showTextPopup.watch(fn1)
+    playAudio.watch(fn2)
+    reportUnknownMessageType.use(fn3)
+
+    messageReceived({
+      type: 'text',
+      value: 'Hello',
+    })
+    messageReceived({
+      type: 'image',
+      imageUrl: '...',
+    })
+    messageReceived({
+      type: 'audio',
+      duration: 500,
+    })
+
+    expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+      ]
+    `)
+  })
+  test('match by case function', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const fn3 = jest.fn()
+
+    const messageReceived = createEvent<Message>()
+    const showTextPopup = createEvent<Text>()
+    const playAudio = createEvent<Audio>()
+    const reportUnknownMessageType = createEffect<Message, void>()
+
+    split({
+      source: messageReceived,
+      match: msg => msg.type,
+      cases: {
+        text: showTextPopup,
+        audio: playAudio,
+        __: reportUnknownMessageType,
+      },
+    })
+
+    showTextPopup.watch(fn1)
+    playAudio.watch(fn2)
+    reportUnknownMessageType.use(fn3)
+
+    messageReceived({
+      type: 'text',
+      value: 'Hello',
+    })
+    messageReceived({
+      type: 'image',
+      imageUrl: '...',
+    })
+    messageReceived({
+      type: 'audio',
+      duration: 500,
+    })
+
+    expect(argumentHistory(fn1)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "type": "text",
+          "value": "Hello",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn2)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "duration": 500,
+          "type": "audio",
+        },
+      ]
+    `)
+    expect(argumentHistory(fn3)).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "imageUrl": "...",
+          "type": "image",
+        },
+      ]
+    `)
+  })
+  test('match by case store', () => {
+    const fn1 = jest.fn()
+    const fn2 = jest.fn()
+    const fn3 = jest.fn()
+
+    const messageReceived = createEvent<Message>()
+    const showTextPopup = createEvent<Text>()
+    const playAudio = createEvent<Audio>()
+    const reportUnknownMessageType = createEffect<Message, void>()
+
+    const messageType = createStore<Message['type']>('system').on(
+      messageReceived,
+      (_, {type}) => type,
+    )
+
+    split({
+      source: messageReceived,
+      match: messageType,
       cases: {
         text: showTextPopup,
         audio: playAudio,
