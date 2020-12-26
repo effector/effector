@@ -150,17 +150,15 @@ describe('onlyChanges', () => {
       .reset(resetMessages)
     const scope = fork(app)
     hydrate(scope, {
-      values: new Map([[messages, 1]]),
+      values: new Map([[messages, 0]]),
     })
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
+      `Object {}`,
+    )
+    await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
         "-1tyq3w": 1,
-      }
-    `)
-    await allSettled(resetMessages, {scope})
-    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
-      Object {
-        "-1tyq3w": 0,
       }
     `)
   })
