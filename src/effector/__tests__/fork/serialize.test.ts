@@ -1,4 +1,11 @@
-import {allSettled, combine, createDomain, fork, serialize} from 'effector'
+import {
+  allSettled,
+  combine,
+  createDomain,
+  fork,
+  hydrate,
+  serialize,
+} from 'effector'
 
 it('serialize stores to object of sid as keys', () => {
   const app = createDomain()
@@ -72,8 +79,8 @@ describe('onlyChanges', () => {
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-vaq9x0": 1,
-        "r5bjo6": Object {
+        "-i1guvk": 1,
+        "-umj39i": Object {
           "messages": 1,
         },
       }
@@ -90,7 +97,7 @@ describe('onlyChanges', () => {
     await allSettled(newMessage, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "-2ezbv5": 1,
+        "aua36b": 1,
       }
     `)
   })
@@ -108,7 +115,52 @@ describe('onlyChanges', () => {
     await allSettled(resetMessages, {scope})
     expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
       Object {
-        "84c305": 0,
+        "bfnfri": 0,
+      }
+    `)
+  })
+  it('keep store in serialization when it filled with fork values', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0)
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app, {
+      values: new Map([[messages, 1]]),
+    })
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(
+      `Object {}`,
+    )
+    await allSettled(resetMessages, {scope})
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-vnswy5": 0,
+      }
+    `)
+  })
+  it('keep store in serialization when it filled with hydrate values', async () => {
+    const app = createDomain()
+    const newMessage = app.createEvent()
+    const resetMessages = app.createEvent()
+    const messages = app
+      .createStore(0)
+      .on(newMessage, x => x + 1)
+      .reset(resetMessages)
+    const scope = fork(app)
+    hydrate(scope, {
+      values: new Map([[messages, 1]]),
+    })
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-1tyq3w": 1,
+      }
+    `)
+    await allSettled(resetMessages, {scope})
+    expect(serialize(scope, {onlyChanges: true})).toMatchInlineSnapshot(`
+      Object {
+        "-1tyq3w": 0,
       }
     `)
   })
