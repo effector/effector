@@ -11,9 +11,9 @@ import {argumentHistory} from 'effector/fixtures'
 
 test('use case', () => {
   const clickRequest = createEvent()
-  const fetchRequest = createEffect({
-    handler: n => new Promise(rs => setTimeout(rs, 500, n)),
-  })
+  const fetchRequest = createEffect<number, number>(
+    n => new Promise(rs => setTimeout(rs, 500, n)),
+  )
   const clicks = createStore(0).on(clickRequest, x => x + 1)
 
   const isIdle = fetchRequest.pending.map(pending => !pending)
@@ -57,7 +57,7 @@ describe('without target', () => {
   })
   it('supports store guards', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<string>()
     const unlocked = createStore(true)
     const {lock, unlock} = createApi(unlocked, {
       lock: () => false,
@@ -79,7 +79,7 @@ describe('without target', () => {
 
   it('supports function predicate', () => {
     const fn = jest.fn()
-    const source = createEvent()
+    const source = createEvent<number>()
     const target = guard(source, {
       filter: x => x > 0,
     })
@@ -95,7 +95,7 @@ describe('without target', () => {
 describe('with target', () => {
   it('supports store guards', () => {
     const fn = jest.fn()
-    const trigger = createEvent()
+    const trigger = createEvent<string>()
     const target = createEvent()
     const unlocked = createStore(true)
     const {lock, unlock} = createApi(unlocked, {
@@ -121,7 +121,7 @@ describe('with target', () => {
 
   it('supports function predicate', () => {
     const fn = jest.fn()
-    const source = createEvent()
+    const source = createEvent<number>()
     const target = createEvent()
     target.watch(fn)
 
@@ -142,6 +142,7 @@ describe('source as object support', () => {
     expect(() => {
       guard({
         source: {
+          //@ts-ignore
           a: createStore(0),
           b: createStore(0),
         },
@@ -153,6 +154,7 @@ describe('source as object support', () => {
     expect(() => {
       guard({
         source: {
+          //@ts-ignore
           a: createStore(0),
           b: createStore(0),
         },
@@ -164,12 +166,15 @@ describe('source as object support', () => {
 
 test('temporal consistency', () => {
   const fn = jest.fn()
-  const trigger = createEvent()
-  const target = createEvent()
+  const trigger = createEvent<number>()
+  const target = createEvent<number>()
   const filter = trigger.map(x => x > 0)
   guard({
+    //@ts-ignore
     source: trigger,
+    //@ts-ignore
     filter,
+    //@ts-ignore
     target,
   })
 
