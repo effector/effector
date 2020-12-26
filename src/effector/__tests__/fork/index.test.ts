@@ -52,27 +52,27 @@ describe('imperative call support', () => {
       expect(count.getState()).toBe(0)
     })
     test('with async effects', async () => {
-        const app = createDomain()
+      const app = createDomain()
 
-        const inc = app.createEffect(async () => {
-          await new Promise(rs => setTimeout(rs, 100))
-        })
-        const count = app.createStore(0).on(inc.done, x => x + 1)
-
-        const start = app.createEvent()
-        start.watch(() => {
-          inc()
-        })
-
-        const scope = fork(app)
-
-        await allSettled(start, {
-          scope,
-        })
-
-        expect(scope.getState(count)).toBe(1)
-        expect(count.getState()).toBe(0)
+      const inc = app.createEffect(async () => {
+        await new Promise(rs => setTimeout(rs, 100))
       })
+      const count = app.createStore(0).on(inc.done, x => x + 1)
+
+      const start = app.createEvent()
+      start.watch(() => {
+        inc()
+      })
+
+      const scope = fork(app)
+
+      await allSettled(start, {
+        scope,
+      })
+
+      expect(scope.getState(count)).toBe(1)
+      expect(count.getState()).toBe(0)
+    })
   })
   describe('support imperative event calls in effects', () => {
     test('sync effects', async () => {
@@ -366,6 +366,272 @@ describe('imperative call support', () => {
         ]
       `)
       expect(words.getState()).toEqual([])
+    })
+    test('concurrency', async () => {
+      const app = createDomain()
+      let i = 0
+      const inc = app.createEffect(async () => {
+        await new Promise(rs => {
+          switch (i++) {
+            case 0:
+              return setTimeout(rs, 100)
+            case 1:
+              return setTimeout(rs, 10)
+            case 2:
+              return setTimeout(rs, 50)
+            default:
+              i = 1
+              return setTimeout(rs, 100)
+          }
+        })
+      })
+      const count = app.createStore(0).on(inc.done, x => x + 1)
+
+      const start = app.createEvent()
+      start.watch(() => {
+        inc()
+      })
+
+      const scopeA = fork(app)
+      const scopeB = fork(app)
+      const scopeC = fork(app)
+      await Promise.all([
+        allSettled(start, {scope: scopeA}).then(() =>
+          allSettled(start, {scope: scopeC}),
+        ),
+        allSettled(start, {scope: scopeA}).then(() =>
+          allSettled(start, {scope: scopeB}),
+        ),
+      ])
+      await Promise.all([
+        allSettled(start, {scope: scopeA}),
+        allSettled(start, {scope: scopeB}).then(() =>
+          allSettled(start, {scope: scopeC}),
+        ),
+      ])
+      await Promise.all([
+        allSettled(start, {scope: scopeB}),
+        allSettled(start, {scope: scopeA}),
+        allSettled(start, {scope: scopeC}),
+      ])
+
+      expect(scopeA.getState(count)).toBe(4)
+      expect(scopeB.getState(count)).toBe(3)
+      expect(scopeC.getState(count)).toBe(3)
+      expect(count.getState()).toBe(0)
+    })
+    test('concurrency 2', async () => {
+      const app = createDomain()
+      // app.onCreateEffect((eff: any) => {
+      //   const oldCreate = eff.create
+      //   eff.create = (...args: any[]) => {
+      //     const req = oldCreate(...args)
+      //     req.catch(() => {})
+      //     return req
+      //   }
+      // })
+      const delay = app.createEffect(async (n: number) => {
+        await new Promise(rs => setTimeout(rs, n))
+      })
+      const timeout = app.createEffect((n: number) => {
+        // const errPromise = new Promise((_, rj) => {
+        //   setTimeout(rj, n, Error('timeout'))
+        // })
+        const errPromise = new Promise((rs, rj) => {
+          setTimeout(rs, n, Error('timeout'))
+        })
+        errPromise.catch(() => {
+          console.count('timeout')
+        })
+        errPromise.then(() => {
+          console.count('timeout')
+        })
+        return errPromise
+      })
+      const fx = app.createEffect(async () => {
+        await Promise.race([delay(50), timeout(100)])
+        // await Promise.race([delay(50), timeout(100)])
+      })
+      const count = app.createStore(0).on(fx.finally, x => x + 1)
+      const delayCount = app.createStore(0).on(delay.finally, x => x + 1)
+      const timeoutCount = app.createStore(0).on(timeout.finally, x => x + 1)
+
+      const scopeA = fork(app)
+      const scopeB = fork(app)
+      const scopeC = fork(app)
+      await Promise.all([
+        allSettled(fx, {scope: scopeA}),
+        // allSettled(fx, {scope: scopeB}),
+        // allSettled(fx, {scope: scopeC}),
+      ])
+      // await Promise.all([
+      //   allSettled(fx, {scope: scopeA}).then(() =>
+      //     allSettled(fx, {scope: scopeC}),
+      //   ),
+      //   allSettled(fx, {scope: scopeA}).then(() =>
+      //     allSettled(fx, {scope: scopeB}),
+      //   ),
+      // ])
+      // await Promise.all([
+      //   allSettled(fx, {scope: scopeA}),
+      //   allSettled(fx, {scope: scopeB}).then(() =>
+      //     allSettled(fx, {scope: scopeC}),
+      //   ),
+      // ])
+      // await Promise.all([
+      //   allSettled(fx, {scope: scopeB}),
+      //   allSettled(fx, {scope: scopeA}),
+      //   allSettled(fx, {scope: scopeC}),
+      // ])
+
+      expect({
+        a: {
+          count: scopeA.getState(count),
+          delayCount: scopeA.getState(delayCount),
+          timeoutCount: scopeA.getState(timeoutCount),
+        },
+        // b: {
+        //   count: scopeB.getState(count),
+        //   delayCount: scopeB.getState(delayCount),
+        //   timeoutCount: scopeC.getState(timeoutCount),
+        // },
+        // c: {
+        //   count: scopeC.getState(count),
+        //   delayCount: scopeC.getState(delayCount),
+        //   timeoutCount: scopeC.getState(timeoutCount),
+        // },
+        __: {
+          count: count.getState(),
+          delayCount: delayCount.getState(),
+          timeoutCount: timeoutCount.getState(),
+        },
+      }).toMatchInlineSnapshot(`
+        Object {
+          "__": Object {
+            "count": 0,
+            "delayCount": 0,
+            "timeoutCount": 0,
+          },
+          "a": Object {
+            "count": 1,
+            "delayCount": 1,
+            "timeoutCount": 1,
+          },
+        }
+      `)
+    })
+    test('concurrency 3', async () => {
+      const app = createDomain()
+      // app.onCreateEffect((eff: any) => {
+      //   const oldCreate = eff.create
+      //   eff.create = (...args: any[]) => {
+      //     const req = oldCreate(...args)
+      //     return req.catch(() => {})
+      //     // return req
+      //   }
+      // })
+      const delay = app.createEffect(async (n: number) => {
+        await new Promise(rs => setTimeout(rs, n))
+      })
+      const timeout = app.createEffect((n: number) => {
+        const errPromise = new Promise((_, rj) => {
+          setTimeout(rj, n, Error('timeout'))
+        })
+        // const errPromise = new Promise((rs, rj) => {
+        //   setTimeout(rs, n, Error('timeout'))
+        // })
+        // return errPromise
+        //   .then(() => {
+        //     console.count('timeout')
+        //   })
+        //   .catch(() => {
+        //     console.count('timeout')
+        //   })
+        return errPromise
+      })
+      // timeout.graphite.meta.noUnhandled = true
+      const fx = app.createEffect(async () => {
+        await Promise.race([delay(50), timeout(100)])
+        await Promise.race([delay(50), timeout(100)])
+        // timeout(100)
+      })
+      const count = app.createStore(0).on(fx.finally, x => x + 1)
+      const delayCount = app.createStore(0).on(delay.finally, x => x + 1)
+      const timeoutCount = app.createStore(0).on(timeout.finally, x => x + 1)
+
+      const scopeA = fork(app)
+      const scopeB = fork(app)
+      const scopeC = fork(app)
+      await Promise.all([
+        allSettled(fx, {scope: scopeA}),
+        allSettled(fx, {scope: scopeB}),
+        allSettled(fx, {scope: scopeC}),
+      ])
+      await Promise.all([
+        allSettled(fx, {scope: scopeA}).then(() =>
+          allSettled(fx, {scope: scopeC}),
+        ),
+        allSettled(fx, {scope: scopeA}).then(() =>
+          allSettled(fx, {scope: scopeB}),
+        ),
+      ])
+      await Promise.all([
+        allSettled(fx, {scope: scopeA}),
+        allSettled(fx, {scope: scopeB}).then(() =>
+          allSettled(fx, {scope: scopeC}),
+        ),
+      ])
+      await Promise.all([
+        allSettled(fx, {scope: scopeB}),
+        allSettled(fx, {scope: scopeA}),
+        allSettled(fx, {scope: scopeC}),
+      ])
+
+      expect({
+        a: {
+          count: scopeA.getState(count),
+          delayCount: scopeA.getState(delayCount),
+          timeoutCount: scopeA.getState(timeoutCount),
+        },
+        b: {
+          count: scopeB.getState(count),
+          delayCount: scopeB.getState(delayCount),
+          timeoutCount: scopeB.getState(timeoutCount),
+        },
+        c: {
+          count: scopeC.getState(count),
+          delayCount: scopeC.getState(delayCount),
+          timeoutCount: scopeC.getState(timeoutCount),
+        },
+        __: {
+          count: count.getState(),
+          delayCount: delayCount.getState(),
+          timeoutCount: timeoutCount.getState(),
+        },
+      }).toMatchInlineSnapshot(`
+        Object {
+          "__": Object {
+            "count": 0,
+            "delayCount": 0,
+            "timeoutCount": 0,
+          },
+          "a": Object {
+            "count": 5,
+            "delayCount": 10,
+            "timeoutCount": 10,
+          },
+          "b": Object {
+            "count": 4,
+            "delayCount": 8,
+            "timeoutCount": 8,
+          },
+          "c": Object {
+            "count": 4,
+            "delayCount": 8,
+            "timeoutCount": 8,
+          },
+        }
+      `)
     })
   })
 })
