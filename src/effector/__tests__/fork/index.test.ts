@@ -422,67 +422,23 @@ describe('imperative call support', () => {
     })
     test('concurrency 2', async () => {
       const app = createDomain()
-      // app.onCreateEffect((eff: any) => {
-      //   const oldCreate = eff.create
-      //   eff.create = (...args: any[]) => {
-      //     const req = oldCreate(...args)
-      //     req.catch(() => {})
-      //     return req
-      //   }
-      // })
       const delay = app.createEffect(async (n: number) => {
         await new Promise(rs => setTimeout(rs, n))
       })
       const timeout = app.createEffect((n: number) => {
-        // const errPromise = new Promise((_, rj) => {
-        //   setTimeout(rj, n, Error('timeout'))
-        // })
-        const errPromise = new Promise((rs, rj) => {
-          setTimeout(rs, n, Error('timeout'))
+        return new Promise((rs, rj) => {
+          setTimeout(rj, n, Error('timeout'))
         })
-        errPromise.catch(() => {
-          console.count('timeout')
-        })
-        errPromise.then(() => {
-          console.count('timeout')
-        })
-        return errPromise
       })
       const fx = app.createEffect(async () => {
         await Promise.race([delay(50), timeout(100)])
-        // await Promise.race([delay(50), timeout(100)])
       })
       const count = app.createStore(0).on(fx.finally, x => x + 1)
       const delayCount = app.createStore(0).on(delay.finally, x => x + 1)
       const timeoutCount = app.createStore(0).on(timeout.finally, x => x + 1)
 
       const scopeA = fork(app)
-      const scopeB = fork(app)
-      const scopeC = fork(app)
-      await Promise.all([
-        allSettled(fx, {scope: scopeA}),
-        // allSettled(fx, {scope: scopeB}),
-        // allSettled(fx, {scope: scopeC}),
-      ])
-      // await Promise.all([
-      //   allSettled(fx, {scope: scopeA}).then(() =>
-      //     allSettled(fx, {scope: scopeC}),
-      //   ),
-      //   allSettled(fx, {scope: scopeA}).then(() =>
-      //     allSettled(fx, {scope: scopeB}),
-      //   ),
-      // ])
-      // await Promise.all([
-      //   allSettled(fx, {scope: scopeA}),
-      //   allSettled(fx, {scope: scopeB}).then(() =>
-      //     allSettled(fx, {scope: scopeC}),
-      //   ),
-      // ])
-      // await Promise.all([
-      //   allSettled(fx, {scope: scopeB}),
-      //   allSettled(fx, {scope: scopeA}),
-      //   allSettled(fx, {scope: scopeC}),
-      // ])
+      await allSettled(fx, {scope: scopeA})
 
       expect({
         a: {
@@ -490,16 +446,6 @@ describe('imperative call support', () => {
           delayCount: scopeA.getState(delayCount),
           timeoutCount: scopeA.getState(timeoutCount),
         },
-        // b: {
-        //   count: scopeB.getState(count),
-        //   delayCount: scopeB.getState(delayCount),
-        //   timeoutCount: scopeC.getState(timeoutCount),
-        // },
-        // c: {
-        //   count: scopeC.getState(count),
-        //   delayCount: scopeC.getState(delayCount),
-        //   timeoutCount: scopeC.getState(timeoutCount),
-        // },
         __: {
           count: count.getState(),
           delayCount: delayCount.getState(),
