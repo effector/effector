@@ -12,7 +12,7 @@ import {
 const typecheck = '{global}'
 
 describe('with target', () => {
-  it('support clock array in cases without fn (should pass)', () => {
+  it('without fn (should pass)', () => {
     const target = createEvent<{a: string; b: string}>()
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
@@ -31,7 +31,7 @@ describe('with target', () => {
       "
     `)
   })
-  it('support clock array in cases without fn with combinable source (should pass)', () => {
+  it('without fn with combinable source (should pass)', () => {
     const target = createEvent<{a: string; b: string}>()
     const a = createStore('')
     const b = createStore('')
@@ -51,7 +51,7 @@ describe('with target', () => {
       "
     `)
   })
-  it('support clock array in cases with fn (should pass)', () => {
+  it('with fn (should pass)', () => {
     const target = createEvent<{a: string; b: string; clock: any}>()
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
@@ -71,7 +71,7 @@ describe('with target', () => {
       "
     `)
   })
-  describe('support clock array in cases with fn and combinable source (should pass)', () => {
+  describe('with fn and combinable source (should pass)', () => {
     describe('with explicitly typed arguments', () => {
       describe('with second argument in fn', () => {
         test('with unification to any', () => {
@@ -328,7 +328,7 @@ describe('with target', () => {
 })
 
 describe('without target', () => {
-  it('support clock array in cases without fn (should pass)', () => {
+  it('without fn (should pass)', () => {
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
     const clockB = createEvent<any>()
@@ -345,7 +345,7 @@ describe('without target', () => {
       "
     `)
   })
-  it('support clock array in cases without fn with combinable source (should pass)', () => {
+  it('without fn with combinable source (should pass)', () => {
     const a = createStore('')
     const b = createStore('')
     const clockA = createEvent()
@@ -363,7 +363,7 @@ describe('without target', () => {
       "
     `)
   })
-  it('support clock array in cases with fn (should pass)', () => {
+  it('with fn (should pass)', () => {
     const source = createStore({a: '', b: ''})
     const clockA = createEvent()
     const clockB = createEvent<any>()
@@ -381,7 +381,7 @@ describe('without target', () => {
       "
     `)
   })
-  it('support clock array in cases with fn and combinable source (should pass)', () => {
+  it('with fn and combinable source (should pass)', () => {
     const a = createStore('')
     const b = createStore('')
     const clockA = createEvent()
@@ -400,7 +400,7 @@ describe('without target', () => {
       "
     `)
   })
-  it('shoudl detect incorrect arguments in fn with combinable source (should fail)', () => {
+  it('should detect incorrect arguments in fn with combinable source (should fail)', () => {
     const a = createStore('')
     const clockA = createEvent()
     const clockB = createEvent<any>()
