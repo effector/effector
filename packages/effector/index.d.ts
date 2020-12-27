@@ -491,7 +491,7 @@ export function createStoreObject<State>(
 
 export function split<
   S,
-  Match extends {[name: string]: (payload: S) => boolean}
+  Match extends {[name: string]: ((payload: S) => boolean) | Store<boolean>}
 >(config: {
   source: Unit<S>
   match: Match
@@ -514,6 +514,20 @@ export function split<
     ? Event<R>
     : Event<S>
 } & {__: Event<S>}
+export function split<S, Match extends ((p: S) => keyof any)>(config: {
+  source: Unit<S>
+  cases: ReturnType<Match> extends infer CaseSet
+    ? Partial<Record<(CaseSet extends string ? CaseSet : never) | '__', Unit<S>>>
+    : never
+  match: Match
+}): void
+export function split<S, Match extends Unit<keyof any>>(config: {
+  source: Unit<S>
+  cases: Match extends Unit<infer CaseSet>
+    ? Partial<Record<(CaseSet extends string ? CaseSet : never) | '__', Unit<S>>>
+    : never
+  match: Match
+}): void
 
 export function createApi<
   S,
