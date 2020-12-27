@@ -128,7 +128,7 @@ function h(
 ): void
 ```
 
-> See also: [PropertyMap](#PropertyMap), [Property](#Property)
+> See also: [PropertyMap](#propertymap), [Property](#property)
 
 **Config fields**:
 
@@ -145,7 +145,7 @@ function h(
 }
 ```
 
-- **text**: add text to element as [property](#Property) or array of properties
+- **text**: add text to element as [property](#property) or array of properties
 
 - **visible**: node will be presented in dom tree while store value is `true`. Useful for conditional rendering
 
@@ -251,7 +251,7 @@ function route<T>(config: {
 
 ### text
 
-Use template literals to add text to dom node. Accept any [properties](#Property)
+Use template literals to add text to dom node. Accept any [properties](#property)
 
 ```typescript
 function text(words: TemplateStringsArray, ...values: Property[]): void
@@ -305,7 +305,7 @@ function remap<T>(store: Store<T>, key: string): Store<any>
 
 ### val
 
-Helper for joininig [properties](#Property) to single string with template literals. If only [plain values](#PlainProperty) are passed, the method returns `string`
+Helper for joininig [properties](#property) to single string with template literals. If only [plain values](#plainproperty) are passed, the method returns `string`
 
 ```typescript
 function val(words: TemplateStringsArray, ...values: Property[]): Store<string>
@@ -337,7 +337,7 @@ type PlainProperty = string | number | null | boolean
 
 ### Property
 
-In most cases [dom properties](#PlainProperty) can be wrapped in stores, thereby making result value dynamic
+In most cases [dom properties](#plainproperty) can be wrapped in stores, thereby making result value dynamic
 
 ```typescript
 type Property = PlainProperty | Store<PlainProperty>
@@ -345,7 +345,7 @@ type Property = PlainProperty | Store<PlainProperty>
 
 ### PropertyMap
 
-Object with [dom properties](#Property), possibly reactive
+Object with [dom properties](#plainproperty), possibly reactive
 
 ```typescript
 type PropertyMap = {[field: string]: Property}
