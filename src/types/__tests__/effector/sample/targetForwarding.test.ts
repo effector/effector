@@ -65,9 +65,18 @@ it('should fail when a target receives a more loose value type from a source', (
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<{ a: string; }>' is not assignable to type 'Combinable'.
-          Type 'Store<{ a: string; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+        Type 'Store<{ a: string; }>' is not assignable to type 'CombineSource<any>'.
+          Type 'Store<{ a: string; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
             Index signature is missing in type 'Store<{ a: string; }>'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
+    No overload matches this call.
+      The last overload gave the following error.
+        Type 'Store<{ a: string; }>' is not assignable to type 'CombineSource<any>'.
+          Type 'Store<{ a: string; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
+            Index signature is missing in type 'Store<{ a: string; }>'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
     "
   `)
 })
@@ -84,18 +93,18 @@ it('should fail when a target receives a more loose value type from a mapping fn
     "
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+        Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+          Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
             Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
     No overload matches this call.
       The last overload gave the following error.
-        Type 'Store<null>' is not assignable to type 'Combinable'.
-          Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
+        Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+          Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
             Index signature is missing in type 'Store<null>'.
-              Type '() => { a: string; }' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
-                Property 'b' is missing in type '{ a: string; }' but required in type '{ a: string; b: string; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
     "
   `)
 })
@@ -114,9 +123,18 @@ describe('should fail when nullable field passed to strict target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+                Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[Unit<any>]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+                Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[Unit<any>]'.
       "
     `)
   })
@@ -136,9 +154,18 @@ describe('should fail when nullable field passed to strict target', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'Combinable'.
-            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+                Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[Unit<any>]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{ foo: string; bar: string | null; }>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{ foo: string; bar: string | null; }>'.
+                Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Effect<{ foo: string; bar: string; }, void, Error>' is not assignable to type '[Unit<any>]'.
       "
     `)
   })
@@ -155,9 +182,18 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<{}>' is not assignable to type 'Combinable'.
-            Type 'Store<{}>' is not assignable to type '{ [key: string]: Store<any>; }'.
+          Type 'Store<{}>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{}>' is not assignable to type '{ [x: string]: Store<any>; }'.
               Index signature is missing in type 'Store<{}>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
+      No overload matches this call.
+        The last overload gave the following error.
+          Type 'Store<{}>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<{}>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Index signature is missing in type 'Store<{}>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                  Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
       "
     `)
   })
@@ -174,16 +210,16 @@ describe('edge case for {} type', () => {
       "
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
       No overload matches this call.
         The last overload gave the following error.
-          Type 'Store<null>' is not assignable to type 'Combinable'.
-            Type 'Store<null>' is not assignable to type '{ [key: string]: Store<any>; }'.
-              Type '() => {}' is not assignable to type '(source: any[] | [any] | GetCombinedValue<{ [key: string]: Store<any>; }>, clock: void) => { a: string; b: string; }'.
-                Type '{}' is missing the following properties from type '{ a: string; b: string; }': a, b
+          Type 'Store<null>' is not assignable to type 'CombineSource<any>'.
+            Type 'Store<null>' is not assignable to type '{ [x: string]: Store<any>; }'.
+              Type 'Event<{ a: string; b: string; }>' is not assignable to type 'Tuple<Unit<any>>'.
+                Type 'Event<{ a: string; b: string; }>' is not assignable to type '[Unit<any>]'.
       "
     `)
   })
