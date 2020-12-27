@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {createStore, createEvent, guard, Store, Event} from 'effector'
 const typecheck = '{global}'

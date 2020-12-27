@@ -1,4 +1,3 @@
-//@flow
 module.exports = function setupLocation(
   file /*: string*/,
   loc /*: {

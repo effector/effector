@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {combine, createDomain, clearNode, Effect} from 'effector'
 

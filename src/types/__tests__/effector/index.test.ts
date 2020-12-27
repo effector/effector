@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {step, createNode, createEvent, Event, launch, split} from 'effector'
 

@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {restore, createEvent, createEffect, createStore, Store} from 'effector'
 

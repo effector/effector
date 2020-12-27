@@ -1,4 +1,3 @@
-// @flow
 /* eslint-disable no-unused-vars */
 import {createStore, createEffect, attach, Effect} from 'effector'
 

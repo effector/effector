@@ -1,5 +1,3 @@
-//@flow
-
 import {combine, createStore, Store} from 'effector'
 
 const typecheck = '{global}'
