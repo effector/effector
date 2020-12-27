@@ -11,6 +11,7 @@ import {
   handler,
   rec,
   block,
+  text,
 } from 'forest'
 
 // let addGlobals: Function
@@ -604,4 +605,74 @@ test('template match bug', async () => {
     </ul>
     "
   `)
+})
+
+describe('text``', () => {
+  it('support template literals', async () => {
+    const [s1] = await exec(async () => {
+      const name = createStore('alice')
+      const nbsp = '\u00A0'
+      using(el, () => {
+        h('span', () => {
+          text`username${nbsp}: ${name}`
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <span>username&nbsp;: alice</span>
+      "
+    `)
+  })
+  test('text(store) edge case', async () => {
+    const [s1] = await exec(async () => {
+      const name = createStore('alice')
+      using(el, () => {
+        h('span', () => {
+          //@ts-ignore
+          text(name)
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <span>alice</span>
+      "
+    `)
+  })
+  test('text(string) edge case', async () => {
+    const [s1] = await exec(async () => {
+      using(el, () => {
+        h('span', () => {
+          //@ts-ignore
+          text('alice')
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <span>alice</span>
+      "
+    `)
+  })
+  test('text(array) edge case', async () => {
+    const [s1] = await exec(async () => {
+      const name = createStore('alice')
+      using(el, () => {
+        h('span', () => {
+          //@ts-ignore
+          text(['username: ', name])
+        })
+      })
+      await act()
+    })
+    expect(s1).toMatchInlineSnapshot(`
+      "
+      <span>username: alice</span>
+      "
+    `)
+  })
 })
