@@ -7,15 +7,11 @@ module.exports = function setupLocation(
 }*/,
 ) {
   //@ts-ignore
-  const {ts, flow, fileTypes} = require('./.reports/type-report-full.json')
+  const {ts, fileTypes} = require('./.reports/type-report-full.json')
   const reportList = []
   if (fileTypes.ts.includes(file) || fileTypes.both.includes(file)) {
     const tsErr = matchTypecheckerMessages(ts, file, loc)
-    reportList.push(`\n--typescript--\n${tsErr}\n`)
-  }
-  if (fileTypes.flow.includes(file) || fileTypes.both.includes(file)) {
-    const flowErr = matchTypecheckerMessages(flow, file, loc)
-    reportList.push(`\n--flow--\n${flowErr}\n`)
+    reportList.push(`\n${tsErr}\n`)
   }
   return reportList.join('')
 }

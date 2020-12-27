@@ -12,10 +12,7 @@ module.exports = async () => {
     reqs.push(remove(reportDir))
   }
   if (REMOVE_FIXTURES) {
-    reqs.push(
-      remove(resolve(fixtures, '.flow')),
-      remove(resolve(fixtures, '.typescript')),
-    )
+    reqs.push(remove(resolve(fixtures, '.typescript')))
   }
   await Promise.all(reqs)
 }
