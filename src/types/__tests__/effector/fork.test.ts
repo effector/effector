@@ -13,7 +13,6 @@ describe('serialize cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -29,7 +28,6 @@ describe('serialize cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -46,7 +44,6 @@ describe('serialize cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Type 'Event<void>' is missing the following properties from type 'Store<any>': reset, getState, on, off, and 2 more.
       "
     `)
@@ -69,7 +66,6 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           Overload 1 of 3, '(iterable: Iterable<readonly [Store<any>, any]>): Map<Store<any>, any>', gave the following error.
             Argument of type '((number | Store<number>)[] | (string | Store<string>)[])[]' is not assignable to parameter of type 'Iterable<readonly [Store<any>, any]>'.
@@ -97,7 +93,6 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
         "
@@ -119,7 +114,6 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -138,7 +132,6 @@ describe('fork values', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -156,7 +149,6 @@ describe('allSettled', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -169,7 +161,6 @@ describe('allSettled', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -185,7 +176,6 @@ describe('allSettled', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -200,7 +190,6 @@ describe('allSettled', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)

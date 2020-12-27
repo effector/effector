@@ -15,14 +15,10 @@ describe('restore cases (should pass)', () => {
     restored = store
 
     expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          no errors
-
-          --flow--
-          no errors
-          "
-      `)
+      "
+      no errors
+      "
+    `)
   })
   test('restore(Event<number>, null): Store<number|null>', () => {
     const ev = createEvent<number>()
@@ -35,18 +31,7 @@ describe('restore cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
-
-      --flow--
-      Cannot call 'restore'
-        let restored = restore(ev, null)
-                       ^^^^^^^
-        'Event' [1] is incompatible with 'Effect' [2]. [incompatible-call]
-            declare export function createEvent<E>(eventName?: string): Event<E>
-                                                                    [1] ^^^^^^^^
-            effect: Effect<any, Done, any>,
-                [2] ^^^^^^^^^^^^^^^^^^^^^^
       "
     `)
   })
@@ -60,14 +45,10 @@ describe('restore cases (should pass)', () => {
     restored = store
 
     expect(typecheck).toMatchInlineSnapshot(`
-          "
-          --typescript--
-          no errors
-
-          --flow--
-          no errors
-          "
-      `)
+      "
+      no errors
+      "
+    `)
   })
   test('restore(Effect<any,number,Error>, null): Store<number|null>', () => {
     const eff = createEffect<any, number, Error>()
@@ -80,18 +61,7 @@ describe('restore cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
-
-      --flow--
-      Cannot call 'restore'
-        let restored = restore(eff, null)
-                       ^^^^^^^
-        'Effect' [1] is incompatible with 'Event' [2]. [incompatible-call]
-            ): Effect<Params, Done, Fail>
-           [1] ^^^^^^^^^^^^^^^^^^^^^^^^^^
-            declare export function restore<E>(event: Event<E>, defaultState: E): Store<E>
-                                                  [2] ^^^^^^^^
       "
     `)
   })
@@ -106,10 +76,10 @@ describe('restore cases (should pass)', () => {
     let restored = restore(dictionary)
 
     let shape: {
-      n: Store<number>,
-      s: Store<string>,
-      b: Store<boolean>,
-      l: Store<string>,
+      n: Store<number>
+      s: Store<string>
+      b: Store<boolean>
+      l: Store<string>
     }
 
     shape = restored
@@ -117,10 +87,6 @@ describe('restore cases (should pass)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -134,20 +100,9 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'string' is not assignable to parameter of type 'number'.
-
-      --flow--
-      Cannot call 'restore'
-        restore(ev, 'initial')
-        ^^^^^^^
-        string [1] is incompatible with number [2]. [incompatible-call]
-            restore(ev, 'initial')
-                    [1] ^^^^^^^^^
-            const ev = createEvent<number>()
-                               [2] ^^^^^^
       "
     `)
   })
@@ -157,21 +112,10 @@ describe('restore cases (should fail)', () => {
 
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         The last overload gave the following error.
           Argument of type 'Effect<any, number, Error>' is not assignable to parameter of type 'Event<string>'.
             Property 'thru' is missing in type 'Effect<any, number, Error>' but required in type 'Event<string>'.
-
-      --flow--
-      Cannot call 'restore'
-        restore(eff, 'initial')
-        ^^^^^^^
-        string [1] is incompatible with number [2]. [incompatible-call]
-            restore(eff, 'initial')
-                     [1] ^^^^^^^^^
-            const eff = createEffect<any, number, Error>()
-                                      [2] ^^^^^^
       "
     `)
   })

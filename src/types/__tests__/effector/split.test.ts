@@ -12,7 +12,6 @@ it('should infer type by given predicate', () => {
   const shouldBeOk: Event<number> = onlyNumbers
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     no errors
     "
   `)

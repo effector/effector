@@ -45,7 +45,6 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -61,7 +60,6 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         Tuple type 'readonly [number]' of length '1' has no element at index '1'.
         "
       `)
@@ -79,7 +77,6 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -95,7 +92,6 @@ describe('useStoreMap', () => {
       }
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         Type '[number, \\"email\\" | \\"username\\" | \\"bio\\"]' is not assignable to type '[number, number]'.
           Type 'string' is not assignable to type 'number'.
             Type 'string' is not assignable to type 'number'.
@@ -116,7 +112,6 @@ describe('useStoreMap', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)

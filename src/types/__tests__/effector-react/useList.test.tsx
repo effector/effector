@@ -33,7 +33,6 @@ test('plain array support', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     no errors
     "
   `)
@@ -61,7 +60,6 @@ test('readonly array support', () => {
 
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     no errors
     "
   `)
@@ -92,9 +90,8 @@ test("usage as components' return value", () => {
     </div>
   )
   expect(typecheck).toMatchInlineSnapshot(`
-"
---typescript--
-no errors
-"
-`)
+    "
+    no errors
+    "
+  `)
 })

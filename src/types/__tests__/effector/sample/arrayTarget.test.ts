@@ -45,7 +45,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -67,7 +66,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -87,7 +85,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -107,7 +104,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -127,7 +123,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -149,7 +144,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -169,7 +163,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -189,7 +182,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -209,7 +201,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -229,7 +220,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -249,7 +239,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -269,7 +258,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -289,7 +277,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -309,7 +296,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -329,7 +315,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -349,7 +334,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -369,7 +353,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -396,7 +379,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -438,7 +420,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>' is not assignable to type 'Combinable'.
@@ -477,7 +458,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -490,7 +470,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; }>[]' is not assignable to type 'Unit<unknown>'.
@@ -507,7 +486,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: number; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -522,7 +500,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -535,7 +512,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: string; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -548,7 +524,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<{ a: number; b: string; }>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -565,7 +540,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<{ a: number; }> | Event<{ a: number; b: number; }>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -585,7 +559,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>[]' is not assignable to type 'Unit<unknown>'.
@@ -603,7 +576,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.
@@ -618,7 +590,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -635,7 +606,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[number, number]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -650,7 +620,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<[string]>[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -663,7 +632,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<[number]> | Event<[string]>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
@@ -683,7 +651,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type 'Event<number>[]' is not assignable to type 'Unit<unknown>'.
@@ -701,7 +668,6 @@ describe('sample multitarget support', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         No overload matches this call.
           The last overload gave the following error.
             Type '(Event<number> | Event<string | number>)[]' is not assignable to type 'Unit<unknown>'.

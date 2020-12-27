@@ -11,27 +11,8 @@ test('createDomain', () => {
   const domain4 = createDomain({foo: true})
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Argument of type '234' is not assignable to parameter of type 'string | undefined'.
     Argument of type '{ foo: boolean; }' is not assignable to parameter of type 'string'.
-
-    --flow--
-    Cannot call 'createDomain' with '234' bound to 'domainName'
-      const domain3 = createDomain(234)
-                                   ^^^
-      number [1] is incompatible with string [2]. [incompatible-call]
-          const domain3 = createDomain(234)
-                                   [1] ^^^
-          declare export function createDomain(domainName?: string): Domain
-                                                        [2] ^^^^^^
-    Cannot call 'createDomain' with object literal bound to 'domainName'
-      const domain4 = createDomain({foo: true})
-                                   ^^^^^^^^^^^
-      object literal [1] is incompatible with string [2]. [incompatible-call]
-          const domain4 = createDomain({foo: true})
-                                   [1] ^^^^^^^^^^^
-          declare export function createDomain(domainName?: string): Domain
-                                                        [2] ^^^^^^
     "
   `)
 })
@@ -42,10 +23,6 @@ describe('#event', () => {
     const event = domain.event<string>()
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -55,10 +32,6 @@ describe('#event', () => {
     const event = domain.event<string>('event')
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -68,10 +41,6 @@ describe('#event', () => {
     const event = domain.event<string>({name: 'event'})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -83,10 +52,6 @@ describe('#createEvent', () => {
     const event = domain.createEvent<string>()
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -96,10 +61,6 @@ describe('#createEvent', () => {
     const event = domain.createEvent<string>('event')
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -109,10 +70,6 @@ describe('#createEvent', () => {
     const event = domain.createEvent<string>({name: 'event'})
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -137,27 +94,8 @@ describe('#effect', () => {
     effect3(20)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Argument of type 'number' is not assignable to parameter of type 'string'.
       Argument of type 'number' is not assignable to parameter of type 'string'.
-
-      --flow--
-      Cannot call 'effect2' with '20' bound to 'payload'
-        effect2(20)
-                ^^
-        number [1] is incompatible with string [2]. [incompatible-call]
-            effect2(20)
-                [1] ^^
-            handler(params: string) {
-                        [2] ^^^^^^
-      Cannot call 'effect3' with '20' bound to 'payload'
-        effect3(20)
-                ^^
-        number [1] is incompatible with string [2]. [incompatible-call]
-            effect3(20)
-                [1] ^^
-            const effect1: Effect<string, number, Error> = domain.effect()
-                              [2] ^^^^^^
       "
     `)
   })
@@ -166,10 +104,6 @@ describe('#effect', () => {
     const fx = domain.effect()
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -179,10 +113,6 @@ describe('#effect', () => {
     const fx = domain.effect('fx')
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -195,10 +125,6 @@ describe('#effect', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -210,10 +136,6 @@ describe('#effect', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -238,27 +160,8 @@ describe('#createEffect', () => {
     effect3(20)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Argument of type 'number' is not assignable to parameter of type 'string'.
       Argument of type 'number' is not assignable to parameter of type 'string'.
-
-      --flow--
-      Cannot call 'effect2' with '20' bound to 'payload'
-        effect2(20)
-                ^^
-        number [1] is incompatible with string [2]. [incompatible-call]
-            effect2(20)
-                [1] ^^
-            handler(params: string) {
-                        [2] ^^^^^^
-      Cannot call 'effect3' with '20' bound to 'payload'
-        effect3(20)
-                ^^
-        number [1] is incompatible with string [2]. [incompatible-call]
-            effect3(20)
-                [1] ^^
-            const effect1: Effect<string, number, Error> = domain.createEffect()
-                              [2] ^^^^^^
       "
     `)
   })
@@ -267,10 +170,6 @@ describe('#createEffect', () => {
     const fx = domain.createEffect()
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -280,10 +179,6 @@ describe('#createEffect', () => {
     const fx = domain.createEffect('fx')
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -296,11 +191,7 @@ describe('#createEffect', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Parameter 'params' implicitly has an 'any' type.
-
-      --flow--
-      no errors
       "
     `)
   })
@@ -311,10 +202,6 @@ describe('#createEffect', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -347,10 +234,6 @@ test('#onCreateStore', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)

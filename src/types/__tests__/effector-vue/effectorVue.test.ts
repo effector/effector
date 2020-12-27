@@ -22,7 +22,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -43,7 +42,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -65,7 +63,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -85,7 +82,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -109,7 +105,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -133,7 +128,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -155,7 +149,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -175,7 +168,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)
@@ -199,7 +191,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -221,7 +212,6 @@ describe('vue extend', () => {
 
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         "
       `)

@@ -16,7 +16,6 @@ describe('text', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -32,7 +31,6 @@ describe('text', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Pick<AttributeStore, \\"map\\" | \\"kind\\" | \\"__\\" | \\"watch\\" | \\"subscribe\\" | \\"compositeName\\" | \\"sid\\" | \\"shortName\\" | \\"getState\\" | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined'.
@@ -61,7 +59,6 @@ describe('text', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -77,7 +74,6 @@ describe('dom tag typecheck', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -90,7 +86,6 @@ describe('dom tag typecheck', () => {
     }
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
@@ -107,7 +102,6 @@ describe('remap', () => {
     const foo: Store<string> = remap(shape, 'foo')
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -121,7 +115,6 @@ describe('remap', () => {
       ])
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -134,7 +127,6 @@ describe('remap', () => {
       ] as const)
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         no errors
         "
       `)
@@ -148,7 +140,6 @@ describe('remap', () => {
       const bar2: Store<string> = bar
       expect(typecheck).toMatchInlineSnapshot(`
         "
-        --typescript--
         Type 'Store<string>' is not assignable to type 'Store<number>'.
         Type 'Store<number>' is not assignable to type 'Store<string>'.
         "

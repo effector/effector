@@ -16,10 +16,6 @@ describe('with source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -35,10 +31,6 @@ describe('with source', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -54,10 +46,6 @@ test('without source', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -73,7 +61,6 @@ test('mapParams without arguments (should pass)', () => {
   fx()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Type 'Effect<unknown, number, Error>' is not assignable to type 'Effect<void, number, Error>'.
       The types of 'done.watch' are incompatible between these types.
         Type '(watcher: (payload: { params: unknown; result: number; }) => any) => Subscription' is not assignable to type '(watcher: (payload: { params: void; result: number; }) => any) => Subscription'.
@@ -81,9 +68,6 @@ test('mapParams without arguments (should pass)', () => {
             Types of parameters 'payload' and 'payload' are incompatible.
               Type '{ params: unknown; result: number; }' is not assignable to type '{ params: void; result: number; }'.
     Expected 1 arguments, but got 0.
-
-    --flow--
-    no errors
     "
   `)
 })
@@ -93,10 +77,6 @@ test('without source and mapParams', () => {
   const fx: Effect<number, string, boolean> = attach({effect})
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)

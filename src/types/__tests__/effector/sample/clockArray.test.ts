@@ -26,7 +26,6 @@ describe('with target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -46,7 +45,6 @@ describe('with target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -66,7 +64,6 @@ describe('with target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -90,7 +87,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             no errors
             "
           `)
@@ -110,7 +106,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             No overload matches this call.
               The last overload gave the following error.
                 Type 'Event<string>' is not assignable to type 'Unit<void>'.
@@ -135,7 +130,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             no errors
             "
           `)
@@ -155,7 +149,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             No overload matches this call.
               The last overload gave the following error.
                 Type 'Event<string>' is not assignable to type 'Unit<void>'.
@@ -182,7 +175,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             Binding element 'a' implicitly has an 'any' type.
             Binding element 'b' implicitly has an 'any' type.
             Parameter 'clock' implicitly has an 'any' type.
@@ -204,7 +196,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             No overload matches this call.
               The last overload gave the following error.
                 Type 'Event<string>' is not assignable to type 'Unit<void>'.
@@ -232,7 +223,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             Binding element 'a' implicitly has an 'any' type.
             Binding element 'b' implicitly has an 'any' type.
             "
@@ -253,7 +243,6 @@ describe('with target', () => {
           })
           expect(typecheck).toMatchInlineSnapshot(`
             "
-            --typescript--
             No overload matches this call.
               The last overload gave the following error.
                 Type 'Event<string>' is not assignable to type 'Unit<void>'.
@@ -280,7 +269,6 @@ describe('with target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         The last overload gave the following error.
           Type '({ a }: { a: number; }, clock: any) => { a: number; clock: any; }' is not assignable to type '(source: GetCombinedValue<{ a: Store<string>; }>, clock: any) => { a: string; clock: any; }'.
@@ -305,7 +293,6 @@ describe('with target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       No overload matches this call.
         The last overload gave the following error.
           Type 'Store<{ a: string; b: string; }>' is not assignable to type 'Combinable'.
@@ -340,7 +327,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -358,7 +344,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -376,7 +361,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -395,7 +379,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       no errors
       "
     `)
@@ -413,7 +396,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Type 'Unit<{ a: string; clock: any; }>' is missing the following properties from type 'Event<{ a: string; clock: any; }>': watch, map, filter, filterMap, and 7 more.
       No overload matches this call.
         The last overload gave the following error.
@@ -437,7 +419,6 @@ describe('without target', () => {
     })
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Type 'Unit<{ a: string; b: string; clock: string; }>' is missing the following properties from type 'Event<{ a: string; b: string; clock: string; }>': watch, map, filter, filterMap, and 7 more.
       No overload matches this call.
         The last overload gave the following error.

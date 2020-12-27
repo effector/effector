@@ -22,22 +22,9 @@ test('createStore', () => {
   const createStore_store2: Store<string> = createStore(0)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Type 'Store<number>' is not assignable to type 'Store<string>'.
       The types returned by 'getState()' are incompatible between these types.
         Type 'number' is not assignable to type 'string'.
-
-    --flow--
-    Cannot assign 'createStore(...)' to 'createStore_store2'
-      const createStore_store2: Store<string> = createStore(0)
-                                                            ^
-      number [1] is incompatible with string [2] in type argument 'State' [3]. [incompatible-type-arg]
-          const createStore_store2: Store<string> = createStore(0)
-                                                            [1] ^
-          const createStore_store2: Store<string> = createStore(0)
-                                      [2] ^^^^^^
-          declare export class Store<State> implements Unit<State> {
-                                 [3] ^^^^^
     "
   `)
 })
@@ -51,10 +38,6 @@ test('createStoreObject', () => {
   c.off(ev)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -68,10 +51,6 @@ describe('createApi', () => {
     const createApi_check1: Event<number> = event
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -83,20 +62,7 @@ describe('createApi', () => {
     const createApi_check2: Event<string> = event
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Type 'Event<number>' is not assignable to type 'Event<string>'.
-
-      --flow--
-      Cannot assign 'event' to 'createApi_check2'
-        const createApi_check2: Event<string> = event
-                                                ^^^^^
-        string [1] is incompatible with number [2] in type argument 'Payload' [3]. [incompatible-type-arg]
-            const createApi_check2: Event<string> = event
-                                      [1] ^^^^^^
-            event: (n, x: number) => x,
-                      [2] ^^^^^^
-            declare export class Event<Payload> implements Unit<Payload> {
-                                   [3] ^^^^^^^
       "
     `)
   })
@@ -107,23 +73,12 @@ describe('createApi', () => {
     const createApi_check3: Event<string> = event
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
       Type 'Event<void>' is not assignable to type 'Event<string>'.
         Types of property 'watch' are incompatible.
           Type '(watcher: (payload: void) => any) => Subscription' is not assignable to type '(watcher: (payload: string) => any) => Subscription'.
             Types of parameters 'watcher' and 'watcher' are incompatible.
               Types of parameters 'payload' and 'payload' are incompatible.
                 Type 'void' is not assignable to type 'string'.
-
-      --flow--
-      Cannot call 'createApi' with object literal bound to 'api'
-        event: (n, x) => x,
-                         ^
-        string [1] is incompatible with number [2] in the return value of property 'event'. [incompatible-call]
-            const createApi_check3: Event<string> = event
-                                      [1] ^^^^^^
-            const store: Store<number> = createStore(0)
-                           [2] ^^^^^^
       "
     `)
   })
@@ -141,10 +96,6 @@ test('createApi voids', () => {
   api.multiply() // Expected 1 arguments, but got 0.
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -159,10 +110,6 @@ test('combine', () => {
   c.off(ev)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -172,10 +119,6 @@ test('restore', () => {
   const foo = restore(eff, {bar: ''})
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -195,10 +138,6 @@ test('#(properties)', () => {
   const defaultState1: string = computed.defaultState
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -212,10 +151,6 @@ test('#getState', () => {
   const state1: string = computed.getState()
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -230,20 +165,7 @@ test('#map', () => {
   const map_check2: Store<number> = computed
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Type 'Store<string>' is not assignable to type 'Store<number>'.
-
-    --flow--
-    Cannot assign 'computed' to 'map_check2'
-      const map_check2: Store<number> = computed
-                                        ^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'State' [3]. [incompatible-type-arg]
-          const map_check1: Store<string> = computed
-                              [1] ^^^^^^
-          const map_check2: Store<number> = computed
-                              [2] ^^^^^^
-          declare export class Store<State> implements Unit<State> {
-                                 [3] ^^^^^
     "
   `)
 })
@@ -258,10 +180,6 @@ describe('#reset', () => {
     computed.reset(event)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -273,10 +191,6 @@ describe('#reset', () => {
     store.reset(a, b)
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -288,10 +202,6 @@ describe('#reset', () => {
     store.reset([a, b])
     expect(typecheck).toMatchInlineSnapshot(`
       "
-      --typescript--
-      no errors
-
-      --flow--
       no errors
       "
     `)
@@ -307,10 +217,6 @@ test('#on', () => {
   computed.on(event, (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -324,10 +230,6 @@ test('#on triggers[]', () => {
   store.on([event, another], (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -341,25 +243,12 @@ test('#on triggers[] failing', () => {
   store.on([event, another], (state, payload) => state)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     No overload matches this call.
       Overload 1 of 2, '(trigger: Unit<unknown>, reducer: (state: number, payload: unknown) => number | void): Store<number>', gave the following error.
         Argument of type '(Store<string> | Event<number>)[]' is not assignable to parameter of type 'Unit<unknown>'.
           Type '(Store<string> | Event<number>)[]' is missing the following properties from type 'Unit<unknown>': kind, __
       Overload 2 of 2, '(triggers: Unit<string>[], reducer: (state: number, payload: string) => number | void): Store<number>', gave the following error.
         Type 'Event<number>' is not assignable to type 'Unit<string>'.
-
-    --flow--
-    Cannot call 'store.on' with array literal bound to 'triggers'
-      store.on([event, another], (state, payload) => state)
-               ^^^^^^^^^^^^^^^^
-      string [1] is incompatible with number [2] in type argument 'T' [3] of array element. [incompatible-call]
-          const another = createStore('')
-                                  [1] ^^
-          const event = createEvent<number>()
-                                [2] ^^^^^^
-          export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                            [3] ^
     "
   `)
 })
@@ -374,10 +263,6 @@ test('.on(sample()) inline', () => {
   )
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -392,10 +277,6 @@ test('#off', () => {
   computed.off(event)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -411,10 +292,6 @@ test('#subscribe', () => {
   computed.subscribe(() => {})
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -442,10 +319,6 @@ test('#watch', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)
@@ -466,10 +339,6 @@ test('#thru', () => {
   })
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
-    no errors
-
-    --flow--
     no errors
     "
   `)

@@ -29,18 +29,7 @@ test('launch(unit, payload)', () => {
   launch(customNode, 100)
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Argument of type 'string' is not assignable to parameter of type 'number'.
-
-    --flow--
-    Cannot call 'launch'
-      launch(foo, '')
-      ^^^^^^
-      string [1] is incompatible with number [2]. [incompatible-call]
-          launch(foo, '')
-                  [1] ^^
-          const foo = createEvent<number>()
-                              [2] ^^^^^^
     "
   `)
 })
@@ -69,20 +58,7 @@ test('launch({target: unit})', () => {
   launch({target: customNode, params: 100})
   expect(typecheck).toMatchInlineSnapshot(`
     "
-    --typescript--
     Type 'string' is not assignable to type 'number'.
-
-    --flow--
-    Cannot call 'launch' with object literal bound to 'config'
-      launch({target: foo, params: ''})
-             ^^^^^^^^^^^^^^^^^^^^^^^^^
-      number [1] is incompatible with string [2] in type argument 'T' [3] of property 'target'. [incompatible-call]
-          const foo = createEvent<number>()
-                              [1] ^^^^^^
-          launch({target: foo, params: ''})
-                                   [2] ^^
-          export interface Unit<T> extends CovariantUnit<T>, ContravariantUnit<T> {
-                            [3] ^
     "
   `)
 })
