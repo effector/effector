@@ -34,9 +34,9 @@ describe('text', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"sid\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
-          Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Pick<AttributeStore, \\"map\\" | \\"kind\\" | \\"__\\" | \\"getState\\" | \\"subscribe\\" | \\"watch\\" | \\"defaultState\\" | \\"compositeName\\" | \\"shortName\\" | \\"sid\\"> | (string | ... 3 more ... | null)[] | null | undefined'.
-            Type 'Store<{ value: string; } | null>' is not assignable to type 'Pick<AttributeStore, \\"map\\" | \\"kind\\" | \\"__\\" | \\"getState\\" | \\"subscribe\\" | \\"watch\\" | \\"defaultState\\" | \\"compositeName\\" | \\"shortName\\" | \\"sid\\">'.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+          Type 'Store<{ value: string; } | null>' is not assignable to type 'string | number | boolean | Pick<AttributeStore, \\"map\\" | \\"kind\\" | \\"__\\" | \\"watch\\" | \\"subscribe\\" | \\"compositeName\\" | \\"sid\\" | \\"shortName\\" | \\"getState\\" | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined'.
+            Type 'Store<{ value: string; } | null>' is not assignable to type 'Pick<AttributeStore, \\"map\\" | \\"kind\\" | \\"__\\" | \\"watch\\" | \\"subscribe\\" | \\"compositeName\\" | \\"sid\\" | \\"shortName\\" | \\"getState\\" | \\"defaultState\\">'.
               Types of property 'map' are incompatible.
                 Type '{ <T>(fn: (state: { value: string; } | null, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: { value: string; } | null, lastState: T) => T, firstState: T): Store<...>; }' is not assignable to type '{ <T>(fn: (state: DOMProperty, lastState?: T | undefined) => T): Store<T>; <T>(fn: (state: DOMProperty, lastState: T) => T, firstState: T): Store<...>; }'.
                   Types of parameters 'fn' and 'fn' are incompatible.
@@ -92,7 +92,7 @@ describe('dom tag typecheck', () => {
       "
       --typescript--
       No overload matches this call.
-        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"sid\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
+        Overload 1 of 2, '(tag: DOMTag, spec: { attr?: PropertyMap | undefined; data?: PropertyMap | undefined; text?: string | number | boolean | Pick<AttributeStore, \\"map\\" | ... 8 more ... | \\"defaultState\\"> | (string | ... 3 more ... | null)[] | null | undefined; ... 4 more ...; fn?: (() => void) | undefined; }): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
         Overload 2 of 2, '(tag: DOMTag, cb: () => void): void', gave the following error.
           Argument of type '\\"damn\\"' is not assignable to parameter of type 'DOMTag'.
