@@ -90,7 +90,7 @@ describe('useStore', () => {
       ]
     `)
   })
-  it('should always retrigger, when store contains function', async () => {
+  it('should correct work, when store contains function', async () => {
     const fn = jest.fn()
     const changeStore = createEvent()
     const $store = createStore(() => 0).on(changeStore, (_, p) => p)
@@ -104,16 +104,14 @@ describe('useStore', () => {
     await render(<Display />)
 
     expect(container.firstChild).toMatchInlineSnapshot(`0`)
-    
-    expect(fn).toHaveBeenCalledTimes(2)
+    expect(fn).toHaveBeenCalledTimes(1)
     
     await act(async () => {
       changeStore(() => 1)
     })
 
     expect(container.firstChild).toMatchInlineSnapshot(`1`)
-
-    expect(fn).toHaveBeenCalledTimes(3)
+    expect(fn).toHaveBeenCalledTimes(2)
   })
   it('should subscribe before any react hook will change store', async () => {
     const fn = jest.fn()
