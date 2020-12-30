@@ -80,3 +80,52 @@ test('without source and mapParams (should pass)', () => {
     "
   `)
 })
+
+describe('difference in message quality between inferred types and explicit generics', () => {
+  test('type mismatch between original effect and mapParams [explicit] (should fail)', () => {
+    const original = createEffect((params: string) => {
+      console.log('Original effect called with', params)
+    })
+
+    const data = createStore(8900)
+
+    const created = attach<number, typeof data, typeof original>({
+      effect: original,
+      source: data,
+      mapParams: (params, data) => {
+        console.log('Created effect called with', params, 'and data', data)
+        return {wrapped: params, data}
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      Type '(params: number, data: number) => { wrapped: number; data: number; }' is not assignable to type '(params: number, states: number) => string'.
+        Type '{ wrapped: number; data: number; }' is not assignable to type 'string'.
+      "
+    `)
+  })
+  test('type mismatch between original effect and mapParams [inferred] (should fail)', () => {
+    const original = createEffect((params: string) => {
+      console.log('Original effect called with', params)
+    })
+
+    const data = createStore(8900)
+
+    const created = attach({
+      effect: original,
+      source: data,
+      mapParams: (params, data) => {
+        console.log('Created effect called with', params, 'and data', data)
+        return {wrapped: params, data}
+      },
+    })
+    expect(typecheck).toMatchInlineSnapshot(`
+      "
+      No overload matches this call.
+        The last overload gave the following error.
+          Argument of type '{ effect: Effect<string, void, Error>; source: Store<number>; mapParams: (params: unknown, data: number) => { wrapped: unknown; data: number; }; }' is not assignable to parameter of type '{ effect: Effect<string, void, Error>; }'.
+            Object literal may only specify known properties, and 'source' does not exist in type '{ effect: Effect<string, void, Error>; }'.
+      "
+    `)
+  })
+})
